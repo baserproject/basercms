@@ -1,0 +1,1891 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: cakephp 1.2.0.7692 RC3\n"
+"POT-Creation-Date: 2008-10-08 16:39+0900\n"
+"PO-Revision-Date: \n"
+"Last-Translator: ryuji egashira <egashira@e-catchup.jp>\n"
+"Language-Team: catchup <info@e-catchup.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: \app\models\datasources\dbo\dbo_csv.php:1208
+msgid "DboCsv::describe : Can't find Connection"
+msgstr "接続を見つける事ができませんでした。"
+
+#: \app\models\datasources\dbo\dbo_csv.php:1442
+#: \cake\libs\model\datasources\dbo_source.php:731
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:948
+msgid "SQL Error in model %s:"
+msgstr "モデル %s: でSQLエラー"
+
+#: \app\models\datasources\dbo\dbo_csv.php:1824
+#: \cake\libs\model\datasources\dbo_source.php:2211;2268
+#: \cake\libs\model\datasources\dbo\dbo_mysql.php:589
+msgid "Invalid schema object"
+msgstr "無効なスキーマオブジェクト"
+
+#: \app\views\errors\error404.ctp:30
+#: \cake\libs\view\errors\error404.ctp:29
+#: \cake\libs\view\errors\missing_action.ctp:29;33
+#: \cake\libs\view\errors\missing_component_class.ctp:29;33
+#: \cake\libs\view\errors\missing_component_file.ctp:29;33
+#: \cake\libs\view\errors\missing_connection.ctp:29;33
+#: \cake\libs\view\errors\missing_controller.ctp:29;33
+#: \cake\libs\view\errors\missing_helper_class.ctp:29;33
+#: \cake\libs\view\errors\missing_helper_file.ctp:29;33
+#: \cake\libs\view\errors\missing_layout.ctp:29;33
+#: \cake\libs\view\errors\missing_model.ctp:29;33
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:29;33
+#: \cake\libs\view\errors\missing_table.ctp:29
+#: \cake\libs\view\errors\missing_view.ctp:29;33
+#: \cake\libs\view\errors\private_action.ctp:29
+#: \cake\libs\view\errors\scaffold_error.ctp:29
+msgid "Error"
+msgstr "エラー"
+
+#: \app\views\errors\error404.ctp:31
+#: \cake\console\error.php:86
+#: \cake\libs\view\errors\error404.ctp:30
+msgid "The requested address %s was not found on this server."
+msgstr "リクエストされたアドレス %s はこのサーバにありませんでした。"
+
+#: \app\views\helpers\form_ex.php:545
+#: \cake\libs\view\helpers\form.php:1764
+msgid "January"
+msgstr "1月"
+
+#: \app\views\helpers\form_ex.php:546
+#: \cake\libs\view\helpers\form.php:1765
+msgid "February"
+msgstr "2月"
+
+#: \app\views\helpers\form_ex.php:547
+#: \cake\libs\view\helpers\form.php:1766
+msgid "March"
+msgstr "3月"
+
+#: \app\views\helpers\form_ex.php:548
+#: \cake\libs\view\helpers\form.php:1767
+msgid "April"
+msgstr "4月"
+
+#: \app\views\helpers\form_ex.php:549
+#: \cake\libs\view\helpers\form.php:1768
+msgid "May"
+msgstr "5月"
+
+#: \app\views\helpers\form_ex.php:550
+#: \cake\libs\view\helpers\form.php:1769
+msgid "June"
+msgstr "6月"
+
+#: \app\views\helpers\form_ex.php:551
+#: \cake\libs\view\helpers\form.php:1770
+msgid "July"
+msgstr "7月"
+
+#: \app\views\helpers\form_ex.php:552
+#: \cake\libs\view\helpers\form.php:1771
+msgid "August"
+msgstr "8月"
+
+#: \app\views\helpers\form_ex.php:553
+#: \cake\libs\view\helpers\form.php:1772
+msgid "September"
+msgstr "9月"
+
+#: \app\views\helpers\form_ex.php:554
+#: \cake\libs\view\helpers\form.php:1773
+msgid "October"
+msgstr "10月"
+
+#: \app\views\helpers\form_ex.php:555
+#: \cake\libs\view\helpers\form.php:1774
+msgid "November"
+msgstr "11月"
+
+#: \app\views\helpers\form_ex.php:556
+#: \cake\libs\view\helpers\form.php:1775
+msgid "December"
+msgstr "12月"
+
+#: \app\webroot\test.php:101
+#: \cake\console\libs\templates\skel\webroot\test.php:101
+msgid "Debug setting does not allow access to this url."
+msgstr "デバッグ設定はこのURLにアクセスすることを許可していません。"
+
+#: \cake\console\error.php:98
+msgid "Missing Controller '%s'"
+msgstr "コントローラ '%s' がありません"
+
+#: \cake\console\error.php:109
+msgid "Missing Method '%s' in '%s'"
+msgstr "メソッド '%s' が '%s' にありません"
+
+#: \cake\console\error.php:120
+msgid "Trying to access private method '%s' in '%s'"
+msgstr "'%2$s' のプライベートメソッド '%1$s' にアクセスしようとしています"
+
+#: \cake\console\error.php:131
+msgid "Missing database table '%s' for model '%s'"
+msgstr "モデル '%2$s' のデータベーステーブル '%1$s' がありません"
+
+#: \cake\console\error.php:142
+msgid "Missing Database"
+msgstr "データベースがありません"
+
+#: \cake\console\error.php:153
+msgid "Missing View '%s' for '%s' in '%s'"
+msgstr "'%3s' で '%2$s' のビュー '%1$s' がありません"
+
+#: \cake\console\error.php:164
+msgid "Missing Layout '%s'"
+msgstr "レイアウト '%s' がありません"
+
+#: \cake\console\error.php:175
+msgid "Missing Database Connection. Try 'cake bake'"
+msgstr "データベース接続がありません。'cake bake' を試してください"
+
+#: \cake\console\error.php:186
+msgid "Missing Helper file '%s' for '%s'"
+msgstr "'%2$s' のヘルパーファイル '%1$s' がありません"
+
+#: \cake\console\error.php:197
+msgid "Missing Helper class '%s' in '%s'"
+msgstr "ヘルパークラス '%s' が '%s' にありません"
+
+#: \cake\console\error.php:208
+msgid "Missing Component file '%s' for '%s'"
+msgstr "'%2$s' のコンポーネントファイル '%1$s' がありません"
+
+#: \cake\console\error.php:219
+msgid "Missing Component class '%s' in '%s'"
+msgstr "コンポーネントクラス '%s' が '%s' にありません"
+
+#: \cake\console\error.php:230
+msgid "Missing model '%s'"
+msgstr "モデル '%s' がありません"
+
+#: \cake\console\libs\acl.php:80
+msgid "Error: Your current Cake configuration is set to"
+msgstr "エラー: 現在のCakeの設定では、ACLの実装を"
+
+#: \cake\console\libs\acl.php:81
+msgid "an ACL implementation other than DB. Please change"
+msgstr "データベース以外に設定されています。このスクリプトを"
+
+#: \cake\console\libs\acl.php:82
+msgid "your core config to reflect your decision to use"
+msgstr "実行しようとする前に、DbAclを使うというあなたの決定を"
+
+#: \cake\console\libs\acl.php:83
+msgid "DbAcl before attempting to use this script"
+msgstr "反映させるためにコア設定を変更してください。"
+
+#: \cake\console\libs\acl.php:85
+msgid "Current ACL Classname: %s"
+msgstr "現在のACLクラス名: %s"
+
+#: \cake\console\libs\acl.php:93
+#: \cake\console\libs\bake.php:75
+#: \cake\console\libs\i18n.php:64
+msgid "Your database configuration was not found. Take a moment to create one."
+msgstr "データベース設定が見つかりませんでした。まずそれを作成してください。"
+
+#: \cake\console\libs\acl.php:112
+msgid "Available ACL commands:"
+msgstr "利用可能なACLコマンド:"
+
+#: \cake\console\libs\acl.php:124
+msgid "For help, run the 'help' command.  For help on a specific command, run 'help <command>'"
+msgstr "ヘルプを見るには、'help' コマンド。コマンド固有のヘルプを見るには、'help <コマンド>'。"
+
+#: \cake\console\libs\acl.php:153
+msgid "Could not find parent node using reference \"%s\""
+msgstr "\"%s\" を参照して親ノードを見つけることができませんでした"
+
+#: \cake\console\libs\acl.php:171
+msgid "/ can not be used as an alias!"
+msgstr "/ をエイリアスとして使うことはできません！"
+
+#: \cake\console\libs\acl.php:171
+msgid "\\t/ is the root, please supply a sub alias"
+msgstr "\\t/ はルートです、別名を指定してください。"
+
+#: \cake\console\libs\acl.php:179
+msgid "New %s '%s' created.\n"
+msgstr "新規 %s '%s' が作成されました\n"
+
+#: \cake\console\libs\acl.php:181
+msgid "There was a problem creating a new %s '%s'."
+msgstr "新規 %s '%s' を作成中に問題がありました。"
+
+#: \cake\console\libs\acl.php:194
+msgid "Node Not Deleted"
+msgstr "ノードは削除されませんでした"
+
+#: \cake\console\libs\acl.php:194
+msgid "There was an error deleting the %s. Check that the node exists"
+msgstr "%s を削除中にエラーがありました。ノードが存在するか確認してください。"
+
+#: \cake\console\libs\acl.php:196
+msgid "%s deleted"
+msgstr "%s は削除されました"
+
+#: \cake\console\libs\acl.php:216
+msgid "Error in setting new parent. Please make sure the parent node exists, and is not a descendant of the node specified."
+msgstr "新しい親設定でエラーが発生しました。親ノードが存在していて、指定されたノードの子でないことを確認してください。"
+
+#: \cake\console\libs\acl.php:218
+msgid "Node parent set to %s"
+msgstr "ノードの親に %s を設定しました"
+
+#: \cake\console\libs\acl.php:233
+msgid "Supplied Node '%s' not found"
+msgstr "指定されたノード '%s' が見つかりません"
+
+#: \cake\console\libs\acl.php:233;317;319;461
+msgid "No tree returned."
+msgstr "ツリーがありませんでした。"
+
+#: \cake\console\libs\acl.php:249
+msgid "%s is allowed."
+msgstr "%s は許可されています。"
+
+#: \cake\console\libs\acl.php:251
+msgid "%s is not allowed."
+msgstr "%s は許可されていません。"
+
+#: \cake\console\libs\acl.php:264
+msgid "Permission granted."
+msgstr "パーミッションが与えられました。"
+
+#: \cake\console\libs\acl.php:266
+msgid "Permission was not granted."
+msgstr "パーミッションは与えられませんでした。"
+
+#: \cake\console\libs\acl.php:279
+msgid "Permission denied."
+msgstr "パーミッションが拒否されました。"
+
+#: \cake\console\libs\acl.php:281
+msgid "Permission was not denied."
+msgstr "パーミッションは拒否されませんでした。"
+
+#: \cake\console\libs\acl.php:294
+msgid "Permission inherited."
+msgstr "パーミッションが継承されました。"
+
+#: \cake\console\libs\acl.php:296
+msgid "Permission was not inherited."
+msgstr "パーミッションは継承されませんでした。"
+
+#: \cake\console\libs\acl.php:317;319;461
+#: \cake\console\libs\api.php:96
+#: \cake\libs\folder.php:590
+msgid "%s not found"
+msgstr "%s が見つかりません"
+
+#: \cake\console\libs\acl.php:360
+msgid "Usage: cake acl <command> <arg1> <arg2>..."
+msgstr "使用方法: cake acl <コマンド> <引数1> <引数2>"
+
+#: \cake\console\libs\acl.php:362
+msgid "Commands:"
+msgstr "コマンド:"
+
+#: \cake\console\libs\acl.php:366
+msgid "Creates a new ACL object <node> under the parent specified by <parent>, an id/alias."
+msgstr "<親>(ID/エイリアス名)によって指定される親の下で、新しいACLオブジェクト<ノード>を作成します。"
+
+#: \cake\console\libs\acl.php:367
+msgid "The <parent> and <node> references can be in one of the following formats:"
+msgstr "<親>と<ノード>の関係は、次のフォーマットの1つであることができます:"
+
+#: \cake\console\libs\acl.php:368
+msgid "<model>.<id> - The node will be bound to a specific record of the given model"
+msgstr "<モデル>.<ID> - ノードは、与えられたモデルの特定のレコードに結び付きます"
+
+#: \cake\console\libs\acl.php:369
+msgid "<alias> - The node will be given a string alias (or path, in the case of <parent>),"
+msgstr "<エイリアス> - ノードは、エイリアス名 (またはパス[<親>の場合])を与えられます"
+
+#: \cake\console\libs\acl.php:370
+msgid "i.e. 'John'.  When used with <parent>, this takes the form of an alias path,"
+msgstr "例えば、'John'。<親>として使用されるとき、これはエイリアスパスの形をとります。"
+
+#: \cake\console\libs\acl.php:371
+msgid "i.e. <group>/<subgroup>/<parent>."
+msgstr "<グループ>/<サブグループ>/<親>"
+
+#: \cake\console\libs\acl.php:372
+msgid "To add a node at the root level, enter 'root' or '/' as the <parent> parameter."
+msgstr "ルートレベルにノードを追加するには、<親>パラメータとして'root'または'/'に入ってください。"
+
+#: \cake\console\libs\acl.php:375
+msgid "Deletes the ACL object with the given <node> reference (see 'create' for info on node references)."
+msgstr "ACLオブジェクトと与えられた <ノード> 参照を削除します。 (ノード参照の情報は 'create' を見てください)"
+
+#: \cake\console\libs\acl.php:378
+msgid "Moves the ACL object specified by <node> beneath the parent ACL object specified by <parent>."
+msgstr "<親> で指定される親ACLオブジェクトの下に <ノード> で指定されるACLオブジェクトを移動します。"
+
+#: \cake\console\libs\acl.php:379
+msgid "To identify the node and parent, use the row id."
+msgstr "ノードと親を特定するために列IDを使用してください。"
+
+#: \cake\console\libs\acl.php:382
+msgid "Returns the path to the ACL object specified by <node>. This command"
+msgstr "<ノード>によって指定されるACLオブジェクトのパスを返します。"
+
+#: \cake\console\libs\acl.php:383
+msgid "is useful in determining the inhertiance of permissions for a certain"
+msgstr "このコマンドはツリーの特定のオブジェクトのパーミッションの継承を"
+
+#: \cake\console\libs\acl.php:384
+msgid "object in the tree."
+msgstr "明らかにするのに役立ちます。"
+
+#: \cake\console\libs\acl.php:385;389;395;401;406;411
+msgid "For more detailed parameter usage info, see help for the 'create' command."
+msgstr "より詳細なパラメータの使用方法は、'create' コマンドのヘルプを見てください"
+
+#: \cake\console\libs\acl.php:387;391;397;403
+msgid "or"
+msgstr "or"
+
+#: \cake\console\libs\acl.php:388
+msgid "Use this command to check ACL permissions."
+msgstr "ACLのパーミッションを調べるにはこのコマンドを使ってください。"
+
+#: \cake\console\libs\acl.php:392
+msgid "Use this command to grant ACL permissions. Once executed, the ARO"
+msgstr "ACLのパーミッションを許可するには、このコマンドを使用してください。"
+
+#: \cake\console\libs\acl.php:393
+msgid "specified (and its children, if any) will have ALLOW access to the"
+msgstr "一度実行されると、指定されたARO(とその子)は、指定されたACOアクションにアクセスを許可します。"
+
+#: \cake\console\libs\acl.php:394;400
+msgid "specified ACO action (and the ACO's children, if any)."
+msgstr "(ACOの子があったとしても)"
+
+#: \cake\console\libs\acl.php:398
+msgid "Use this command to deny ACL permissions. Once executed, the ARO"
+msgstr "ACLのパーミッションを拒否するには、このコマンドを使用してください。"
+
+#: \cake\console\libs\acl.php:399
+msgid "specified (and its children, if any) will have DENY access to the"
+msgstr "一度実行されると、指定されたARO(とその子)は、指定されたACOアクションにアクセスを拒否します。"
+
+#: \cake\console\libs\acl.php:404
+msgid "Use this command to force a child ARO object to inherit its"
+msgstr "子のAROオブジェクトにその親からのパーミッション設定を継承させるには、"
+
+#: \cake\console\libs\acl.php:405
+msgid "permissions settings from its parent."
+msgstr "このコマンドを使用してください。"
+
+#: \cake\console\libs\acl.php:409
+msgid "The view command will return the ARO or ACO tree. The optional"
+msgstr "このビューコマンドはAROまたはACOツリーを返します。オプションの"
+
+#: \cake\console\libs\acl.php:410
+msgid "id/alias parameter allows you to return only a portion of the requested tree."
+msgstr "ID/エイリアス パラメータは指定された部分のツリーだけを返すことができます。"
+
+#: \cake\console\libs\acl.php:414
+msgid "Uses this command : cake schema run create DbAcl"
+msgstr "このコマンドを使用 : Cakeスキーマが動き、 DbAcl を作成します"
+
+#: \cake\console\libs\acl.php:417
+msgid "Displays this help message, or a message on a specific command."
+msgstr "このヘルプメッセージまたは指定されたコマンドのメッセージを表示します。"
+
+#: \cake\console\libs\acl.php:428
+msgid "Command '%s' not found"
+msgstr "コマンド '%s' が見つかりません"
+
+#: \cake\console\libs\acl.php:441
+msgid "Missing/Unknown node type: '%s'"
+msgstr "存在しないか未知のノードタイプ: '%s'"
+
+#: \cake\console\libs\acl.php:441
+msgid "Please specify which ACL object type you wish to create."
+msgstr "作成したいACLオブジェクトタイプについて指定してください。"
+
+#: \cake\console\libs\api.php:105
+msgid "%s::%s() could not be found"
+msgstr "%s::%s() が見つかりません"
+
+#: \cake\console\libs\api.php:122
+msgid "Select a number to see the more information about a specific method. q to quit. l to list."
+msgstr "特定のメソッドについての詳細な情報を見るには、数字を選択してください。q で終了。l で一覧。"
+
+#: \cake\console\libs\api.php:124
+msgid "Done"
+msgstr "完了"
+
+#: \cake\console\libs\api.php:195
+msgid "%s could not be found"
+msgstr "%s が見つかりません"
+
+#: \cake\console\libs\bake.php:57
+#: \cake\console\libs\tasks\plugin.php:98
+msgid ""
+"%s directory could not be found.\n"
+"Be sure you have created %s"
+msgstr ""
+"%s ディレクトリが見つかりません。\n"
+"%s が作成されていなければなりません。"
+
+#: \cake\console\libs\bake.php:88
+msgid "What would you like to Bake?"
+msgstr "何をbakeしたいですか？"
+
+#: \cake\console\libs\bake.php:109
+msgid "You have made an invalid selection. Please choose a type of class to Bake by entering D, M, V, or C."
+msgstr "無効な選択がされました。D, M, V, C を押してクラスの種類を選択してください。"
+
+#: \cake\console\libs\bake.php:151
+msgid "%s Model was baked."
+msgstr "%s モデルがbakeされました。"
+
+#: \cake\console\libs\bake.php:161
+msgid "%s Controller was baked."
+msgstr "%s コントローラがbakeされました。"
+
+#: \cake\console\libs\bake.php:170
+msgid "Bake All complete"
+msgstr "bakeが全て完了しました。"
+
+#: \cake\console\libs\bake.php:173
+msgid "Bake All could not continue without a valid model"
+msgstr "bakeは有効なモデルなしでは続行できませんでした。"
+
+#: \cake\console\libs\i18n.php:75
+msgid "I18n Shell"
+msgstr "i18n シェル"
+
+#: \cake\console\libs\i18n.php:77
+msgid "[E]xtract POT file from sources"
+msgstr "[E]ソースからPOTファイルを抽出"
+
+#: \cake\console\libs\i18n.php:78
+msgid "[I]nitialize i18n database table"
+msgstr "[I]i18nデータベーステーブルを初期化"
+
+#: \cake\console\libs\i18n.php:79
+msgid "[H]elp"
+msgstr "[H]ヘルプ"
+
+#: \cake\console\libs\i18n.php:80
+msgid "[Q]uit"
+msgstr "[Q]終了"
+
+#: \cake\console\libs\i18n.php:82
+msgid "What would you like to do?"
+msgstr "何をしたいですか？"
+
+#: \cake\console\libs\i18n.php:97
+msgid "You have made an invalid selection. Please choose a command to execute by entering E, I, H, or Q."
+msgstr "無効な選択がされました。E, I, H, Q を押して実行するコマンドを選択してください。"
+
+#: \cake\console\libs\i18n.php:118
+msgid "I18n Shell:"
+msgstr "i18n シェル:"
+
+#: \cake\console\libs\i18n.php:120
+msgid "I18n Shell initializes i18n database table for your application"
+msgstr "i18nシェルはi18nデータベーステーブルをアプリケーション用に初期化し、"
+
+#: \cake\console\libs\i18n.php:121
+msgid "and generates .pot file(s) with translations."
+msgstr "翻訳とともに .potファイル を生成します。"
+
+#: \cake\console\libs\i18n.php:123
+msgid "usage:"
+msgstr "使用方法: "
+
+#: \cake\console\libs\schema.php:109
+msgid "Schema could not be found"
+msgstr "スキーマが見つかりません"
+
+#: \cake\console\libs\schema.php:174;177
+msgid "Schema file: %s generated"
+msgstr "スキーマファイル %s が生成されました"
+
+#: \cake\console\libs\schema.php:192
+msgid "Schema could not be loaded"
+msgstr "スキーマが読み込めませんでした"
+
+#: \cake\console\libs\schema.php:211
+msgid "SQL dump file created in %s"
+msgstr "SQLダンプファイルが %s に作成されました"
+
+#: \cake\console\libs\schema.php:214
+msgid "SQL dump could not be created"
+msgstr "SQLダンプファイルが作成されませんでした"
+
+#: \cake\console\libs\schema.php:246
+msgid "Performing a dry run."
+msgstr "事前テストをしています。"
+
+#: \cake\console\libs\schema.php:258
+msgid "%s could not be loaded"
+msgstr "%s が読み込めませんでした"
+
+#: \cake\console\libs\schema.php:275
+msgid "command not found"
+msgstr "コマンドが見つかりません"
+
+#: \cake\console\libs\schema.php:300;346
+msgid "Schema is up to date."
+msgstr "スキーマは最新です。"
+
+#: \cake\console\libs\schema.php:304
+msgid "The following table(s) will be dropped."
+msgstr "以下のテーブルは削除されます。"
+
+#: \cake\console\libs\schema.php:307
+msgid "Are you sure you want to drop the table(s)?"
+msgstr "本当にテーブルを削除しますか？"
+
+#: \cake\console\libs\schema.php:312
+msgid "The following table(s) will be created."
+msgstr "以下のテーブルが作成されます。"
+
+#: \cake\console\libs\schema.php:315
+msgid "Are you sure you want to create the table(s)?"
+msgstr "本当にテーブルを作成しますか？"
+
+#: \cake\console\libs\schema.php:320
+msgid "End create."
+msgstr "作成が終了しました。"
+
+#: \cake\console\libs\schema.php:350
+msgid "The following statements will run."
+msgstr "以下の一覧が実行されます。"
+
+#: \cake\console\libs\schema.php:352
+msgid "Are you sure you want to alter the tables?"
+msgstr "本当にテーブルを更新しますか？"
+
+#: \cake\console\libs\schema.php:354
+msgid "Updating Database..."
+msgstr "データベースを更新中…"
+
+#: \cake\console\libs\schema.php:358
+msgid "End update."
+msgstr "更新が終了しました。"
+
+#: \cake\console\libs\schema.php:367
+msgid "Sql could not be run"
+msgstr "SQLは実行されません"
+
+#: \cake\console\libs\schema.php:377
+msgid "%s is up to date."
+msgstr "%s は最新です。"
+
+#: \cake\console\libs\schema.php:380
+msgid "Dry run for %s :"
+msgstr "%s の事前テスト"
+
+#: \cake\console\libs\schema.php:395
+msgid "%s updated."
+msgstr "%s は更新されました。"
+
+#: \cake\console\libs\shell.php:418
+msgid "Creating file %s"
+msgstr "ファイル %s を作成しています"
+
+#: \cake\console\libs\shell.php:420
+msgid "File exists, overwrite?"
+msgstr "ファイルが存在します、上書きしますか？"
+
+#: \cake\console\libs\shell.php:422
+msgid "Quitting."
+msgstr "終了しています。"
+
+#: \cake\console\libs\shell.php:425
+msgid "Skip"
+msgstr "スキップ"
+
+#: \cake\console\libs\shell.php:436
+msgid "Wrote"
+msgstr "保存"
+
+#: \cake\console\libs\shell.php:439
+msgid "Error! Could not write to"
+msgstr "エラー！書き込みできません: "
+
+#: \cake\console\libs\tasks\controller.php:127
+msgid "Would you like to build your controller interactively?"
+msgstr "コントローラを対話式に作成したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:129
+msgid "Warning: Choosing no will overwrite the %sController."
+msgstr "警告: 何も選ばないと %sController が上書きされます。"
+
+#: \cake\console\libs\tasks\controller.php:136
+msgid "Would you like to use scaffolding?"
+msgstr "scaffold を使用したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:140;166
+msgid "Would you like to include some basic class methods (index(), add(), view(), edit())?"
+msgstr "いくつかの基本的なクラスメソッド（index(), add(), view(), edit()）を読み込みたいですか？"
+
+#: \cake\console\libs\tasks\controller.php:143;169
+msgid "Would you like to create the methods for admin routing?"
+msgstr "管理ルーティングのためのメソッドを作成したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:146
+msgid "Would you like this controller to use other helpers besides HtmlHelper and FormHelper?"
+msgstr "このコントローラに HtmlHelper と FormHelper 以外の他のヘルパーを使用したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:149
+msgid ""
+"Please provide a comma separated list of the other helper names you'd like to use.\n"
+"Example: 'Ajax, Javascript, Time'"
+msgstr "使用したい他のヘルパー名をコンマ区切りで入力してください。（例: 'Ajax, Javascript, Time'）"
+
+#: \cake\console\libs\tasks\controller.php:153
+msgid "Would you like this controller to use any components?"
+msgstr "このコントローラにコンポーネントを使用したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:156
+msgid ""
+"Please provide a comma separated list of the component names you'd like to use.\n"
+"Example: 'Acl, Security, RequestHandler'"
+msgstr "使用したい他のコンポーネント名をコンマ区切りで入力してください。（例: 'Acl, Security, RequestHandler'）"
+
+#: \cake\console\libs\tasks\controller.php:161
+msgid "Would you like to use Sessions?"
+msgstr "セッションを使用したいですか？"
+
+#: \cake\console\libs\tasks\controller.php:221
+#: \cake\console\libs\tasks\model.php:205
+msgid "Look okay?"
+msgstr "これでいいですか？"
+
+#: \cake\console\libs\tasks\controller.php:250
+msgid "You must have a model for this class to build scaffold methods. Please try again."
+msgstr "このクラスにscaffoldメソッドを作成するには、モデルがなければなりません。やり直してください。"
+
+#: \cake\console\libs\tasks\controller.php:511
+#: \cake\console\libs\tasks\model.php:762
+msgid "Your database does not have any tables."
+msgstr "データベースにはテーブルがありません。"
+
+#: \cake\console\libs\tasks\controller.php:538
+msgid "Enter a number from the list above, type in the name of another controller, or 'q' to exit"
+msgstr "上のリストから数字を選択するか、他のコントローラ名を入力、または'q'で終了してください"
+
+#: \cake\console\libs\tasks\controller.php:541
+#: \cake\console\libs\tasks\model.php:793
+msgid "Exit"
+msgstr "終了"
+
+#: \cake\console\libs\tasks\controller.php:546
+msgid "Error:"
+msgstr "エラー: "
+
+#: \cake\console\libs\tasks\controller.php:547
+msgid ""
+"The Controller name you supplied was empty, or the number \n"
+"you selected was not an option. Please try again."
+msgstr ""
+"入力されたコントローラ名が空か、または選択された数字が一覧にありません。\n"
+"やり直してください。"
+
+#: \cake\console\libs\tasks\model.php:103
+msgid "Use Database Config"
+msgstr "使用するデータベース設定"
+
+#: \cake\console\libs\tasks\model.php:114
+msgid "Given your model named '%s', Cake would expect a database table named %s"
+msgstr "入力されたモデル名は '%s'、Cake がデータベーステーブル名を %s とするでしょう"
+
+#: \cake\console\libs\tasks\model.php:115
+msgid "Do you want to use this table?"
+msgstr "このテーブルを使用しますか？"
+
+#: \cake\console\libs\tasks\model.php:119;126
+msgid "What is the name of the table (enter \"null\" to use NO table)?"
+msgstr "テーブル名は何ですか？ (\"null\" でテーブルを使用しない)"
+
+#: \cake\console\libs\tasks\model.php:133
+msgid "Would you like to supply validation criteria for the fields in your model?"
+msgstr "モデルのフィールドにバリデーションを設定したいですか？"
+
+#: \cake\console\libs\tasks\model.php:146
+msgid "What is the primaryKey?"
+msgstr "主キー (primaryKey) は何ですか？"
+
+#: \cake\console\libs\tasks\model.php:154
+msgid "Would you like to define model associations (hasMany, hasOne, belongsTo, etc.)?"
+msgstr "モデルアソシエーション (hasMany, hasOne, belongsTo, 他) を定義したいですか？"
+
+#: \cake\console\libs\tasks\model.php:161
+msgid "The following Model will be created:"
+msgstr "以下のモデルが作成されます。"
+
+#: \cake\console\libs\tasks\model.php:312
+msgid "One moment while the associations are detected."
+msgstr "アソシエーションが検出されるのは一瞬です。"
+
+#: \cake\console\libs\tasks\model.php:395
+msgid "None found."
+msgstr "見つかりません。"
+
+#: \cake\console\libs\tasks\model.php:397
+msgid "Please confirm the following associations:"
+msgstr "以下のアソシエーションを確認してください。"
+
+#: \cake\console\libs\tasks\model.php:418
+msgid "This is a self join. Use %s as the alias"
+msgstr "これは自己結合です。%s をエイリアスとして使用します。"
+
+#: \cake\console\libs\tasks\model.php:421
+msgid "Specify an alternate alias."
+msgstr "代替のエイリアスを指定してください。"
+
+#: \cake\console\libs\tasks\model.php:433
+msgid "Would you like to define some additional model associations?"
+msgstr "追加のモデルアソシエーションを定義しますか？"
+
+#: \cake\console\libs\tasks\model.php:439
+msgid "What is the association type?"
+msgstr "アソシエーションの種類は何ですか？"
+
+#: \cake\console\libs\tasks\model.php:444;479
+msgid "Enter a number"
+msgstr "数字を入力"
+
+#: \cake\console\libs\tasks\model.php:447
+msgid "The selection you entered was invalid. Please enter a number between 1 and 4."
+msgstr "入力された選択は無効です。1 ～ 4 の数字を入力してください。"
+
+#: \cake\console\libs\tasks\model.php:452
+msgid "For the following options be very careful to match your setup exactly. Any spelling mistakes will cause errors."
+msgstr "以下のオプションは非常に注意して、正確にセットアップ環境に合わせてください。書き間違いがエラーを引き起こします。"
+
+#: \cake\console\libs\tasks\model.php:454
+msgid "What is the alias for this association?"
+msgstr "このアソシエーションのエイリアスは何ですか？"
+
+#: \cake\console\libs\tasks\model.php:455
+msgid "What className will %s use?"
+msgstr "%s はどんなクラス名 (className) を使いますか？"
+
+#: \cake\console\libs\tasks\model.php:469
+msgid "What is the table for this model?"
+msgstr "このモデルのためのテーブルは何ですか？"
+
+#: \cake\console\libs\tasks\model.php:475
+msgid "A helpful List of possible keys"
+msgstr "役に立つキーのリスト"
+
+#: \cake\console\libs\tasks\model.php:479
+msgid "What is the foreignKey?"
+msgstr "foreignKey は何ですか？"
+
+#: \cake\console\libs\tasks\model.php:485
+msgid "What is the foreignKey? Specify your own."
+msgstr "外部キー (foreignKey) は何ですか？自身を指定してください。"
+
+#: \cake\console\libs\tasks\model.php:488
+msgid "What is the associationForeignKey?"
+msgstr "associationForeignKey は何ですか？"
+
+#: \cake\console\libs\tasks\model.php:489
+msgid "What is the joinTable?"
+msgstr "joinTable は何ですか？"
+
+#: \cake\console\libs\tasks\model.php:501
+msgid "Define another association?"
+msgstr "他のアソシエーションを定義しますか？"
+
+#: \cake\console\libs\tasks\model.php:769
+msgid "Possible Models based on your current database:"
+msgstr "現在のデータベースに基づくモデル:"
+
+#: \cake\console\libs\tasks\model.php:790
+msgid "Enter a number from the list above, type in the name of another model, or 'q' to exit"
+msgstr "上のリストから数字を選択するか、他のモデル名を入力、または'q'で終了してください"
+
+#: \cake\console\libs\tasks\model.php:798
+msgid "The model name you supplied was empty, or the number you selected was not an option. Please try again."
+msgstr ""
+"入力されたモデル名が空か、または選択された数字が一覧にありません。\n"
+"やり直してください。"
+
+#: \cake\console\libs\tasks\plugin.php:114
+msgid "Enter the name of the plugin in CamelCase format"
+msgstr "プラグインの名前をCamelCaseフォーマットで入力してください"
+
+#: \cake\console\libs\tasks\plugin.php:118
+msgid "An error occured trying to bake: %s in %s"
+msgstr "bake中にエラーが発生しました: %2$s の %1$s"
+
+#: \cake\console\libs\tasks\plugin.php:142
+#: \cake\console\libs\tasks\project.php:150
+msgid "Do you want verbose output?"
+msgstr "処理内容の出力を行いたいですか？"
+
+#: \cake\console\libs\tasks\plugin.php:179
+#: \cake\console\libs\tasks\project.php:155
+msgid "Created: %s in %s"
+msgstr "作成: %2$s の %1$s"
+
+#: \cake\console\libs\tasks\project.php:83
+msgid "Welcome page created"
+msgstr "Welcomeページが作成されました"
+
+#: \cake\console\libs\tasks\project.php:85
+msgid "The Welcome page was NOT created"
+msgstr "Welcomeページが作成されませんでした"
+
+#: \cake\console\libs\tasks\project.php:89
+msgid "Random hash key created for 'Security.salt'"
+msgstr "'Security.salt' 用にランダムなハッシュキーが作成されました。"
+
+#: \cake\console\libs\tasks\project.php:91
+msgid "Unable to generate random hash for 'Security.salt', you should change it in %s"
+msgstr "'Security.salt' 用のランダムなハッシュを生成できませんでした。%s のそれを変更してください。"
+
+#: \cake\console\libs\tasks\project.php:96
+msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/index.php"
+msgstr "webroot/index.php の CAKE_CORE_INCLUDE_PATH に %s を設定しました"
+
+#: \cake\console\libs\tasks\project.php:97
+msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/test.php"
+msgstr "webroot/test.php の CAKE_CORE_INCLUDE_PATH に %s を設定しました"
+
+#: \cake\console\libs\tasks\project.php:98
+msgid "Remember to check these value after moving to production server"
+msgstr "商用サーバに移動した後に、これらの値をチェックするのを忘れないでください"
+
+#: \cake\console\libs\tasks\project.php:100
+msgid "Unable to set CAKE_CORE_INCLUDE_PATH, you should change it in %s"
+msgstr "CAKE_CORE_INCLUDE_PATH を設定できません。%s のそれを変更してください"
+
+#: \cake\console\libs\tasks\project.php:104
+msgid "Could not set permissions on %s"
+msgstr "%s にパーミッションを設定できません。"
+
+#: \cake\console\libs\tasks\project.php:105
+msgid "chmod -R 0777 %s"
+msgstr "chmod -R 777 %s"
+
+#: \cake\console\libs\tasks\project.php:130
+msgid ""
+"What is the path to the directory layout you wish to copy?\n"
+"Example: %s"
+msgstr ""
+"コピーしたいレイアウトディレクトリのパスは何ですか？\n"
+"例: %s"
+
+#: \cake\console\libs\tasks\project.php:132
+msgid "The directory path you supplied was empty. Please try again."
+msgstr "入力されたディレクトリのパスは空です。やり直してください。"
+
+#: \cake\console\libs\tasks\project.php:135
+msgid "Directory path does not exist please choose another:"
+msgstr "ディレクトリのパスが存在しないので別の選択をしてください:"
+
+#: \cake\console\libs\tasks\test.php:104
+msgid "Enter the class to test or (q)uit"
+msgstr "テストするクラスに入るか、(q)終了"
+
+#: \cake\console\libs\tasks\test.php:112
+msgid "Enter the name for the test or (q)uit"
+msgstr "テストの名前を入力するか、(q)終了"
+
+#: \cake\console\libs\tasks\test.php:116
+msgid "Enter a test case or (q)uit"
+msgstr "テストケースに入るか、(q)終了"
+
+#: \cake\console\libs\tasks\test.php:122
+msgid "Test baked"
+msgstr "テストbake完了"
+
+#: \cake\console\libs\tasks\test.php:178
+msgid "Is this correct?"
+msgstr "これは正しいですか？"
+
+#: \cake\console\libs\tasks\view.php:238
+msgid "Controller not found"
+msgstr "コントローラが見つかりません"
+
+#: \cake\console\libs\tasks\view.php:248
+msgid ""
+"The file '%s' could not be found.\n"
+"In order to bake a view, you'll need to first create the controller."
+msgstr ""
+"ファイル '%s' が見つかりませんでした。\n"
+"ビューをbakeするためには、はじめにコントローラを作成する必要があります。"
+
+#: \cake\console\libs\tasks\view.php:349
+msgid "Template for %s could not be found"
+msgstr "%s のテンプレートが見つかりませんでした"
+
+#: \cake\console\libs\templates\skel\views\layouts\default.ctp:32
+#: \cake\libs\view\layouts\default.ctp:32
+#: \cake\tests\test_app\views\layouts\default.ctp:32
+msgid "CakePHP: the rapid development php framework:"
+msgstr "CakePHP: PHP Rapid Development （高速開発）フレームワーク:"
+
+#: \cake\console\libs\templates\skel\views\layouts\default.ctp:46;57
+#: \cake\libs\view\layouts\default.ctp:46;57
+#: \cake\tests\test_app\views\layouts\default.ctp:44;55
+msgid "CakePHP: the rapid development php framework"
+msgstr "CakePHP: PHP Rapid Development （高速開発）フレームワーク"
+
+#: \cake\libs\cache.php:471
+msgid "Method write() not implemented in %s"
+msgstr "メソッド write() が %s に実装されていません"
+
+#: \cake\libs\cache.php:481
+msgid "Method read() not implemented in %s"
+msgstr "メソッド read() が %s に実装されていません"
+
+#: \cake\libs\class_registry.php:150
+msgid "(ClassRegistry::init() could not create instance of %1$s class %2$s "
+msgstr "(ClassRegistry::init() クラス %2$s の %1$s インスタンスを作成できませんでした。"
+
+#: \cake\libs\class_registry.php:160
+msgid "(ClassRegistry::init() Attempted to create instance of a class with a numeric name"
+msgstr "数字の名前でクラスのインスタンスを作成することを試みます"
+
+#: \cake\libs\configure.php:394
+msgid "Configure::load() - no variable $config found in %s.php"
+msgstr "Configure::load() - %s.php の中に 変数 $config がありません"
+
+#: \cake\libs\configure.php:617
+msgid "Can't find application core file. Please create %score.php, and make sure it is readable by PHP."
+msgstr "アプリケーションのコアファイルが見つかりません。%score.php を作成し、それがPHPで読み込める必要があります。"
+
+#: \cake\libs\configure.php:621
+msgid "Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP."
+msgstr "アプリケーションのブートストラップファイルが見つかりません。%sbootstrap.php を作成し、それがPHPで読み込める必要があります。"
+
+#: \cake\libs\debugger.php:541
+msgid "Please change the value of 'Security.salt' in app/config/core.php to a salt value specific to your application"
+msgstr "app/config/core.php の 'Security.salt' の値をアプリーション固有のランダムな値に変更してください。"
+
+#: \cake\libs\error.php:155
+msgid "Not Found"
+msgstr "見つかりませんでした。"
+
+#: \cake\libs\error.php:174
+#: \cake\libs\view\errors\missing_controller.ctp:27
+msgid "Missing Controller"
+msgstr "コントローラがありません"
+
+#: \cake\libs\error.php:192
+msgid "Missing Method in Controller"
+msgstr "コントローラにメソッドがありません"
+
+#: \cake\libs\error.php:208
+msgid "Trying to access private method in class"
+msgstr "クラスのプライベートメソッドにアクセスしようとしています"
+
+#: \cake\libs\error.php:224
+#: \cake\libs\view\errors\missing_table.ctp:27
+msgid "Missing Database Table"
+msgstr "データベーステーブルがありません"
+
+#: \cake\libs\error.php:238
+msgid "Scaffold Missing Database Connection"
+msgstr "Scaffoldのデータベース接続がありません"
+
+#: \cake\libs\error.php:255
+#: \cake\libs\view\errors\missing_view.ctp:27
+msgid "Missing View"
+msgstr "ビューがありません"
+
+#: \cake\libs\error.php:271
+#: \cake\libs\view\errors\missing_layout.ctp:27
+msgid "Missing Layout"
+msgstr "レイアウトがありません"
+
+#: \cake\libs\error.php:286
+#: \cake\libs\view\errors\missing_connection.ctp:27
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:27
+msgid "Missing Database Connection"
+msgstr "データベースへの接続がありません"
+
+#: \cake\libs\error.php:302
+#: \cake\libs\view\errors\missing_helper_file.ctp:27
+msgid "Missing Helper File"
+msgstr "ヘルパーファイルがありません"
+
+#: \cake\libs\error.php:318
+#: \cake\libs\view\errors\missing_helper_class.ctp:27
+msgid "Missing Helper Class"
+msgstr "ヘルパークラスがありません"
+
+#: \cake\libs\error.php:335
+#: \cake\libs\view\errors\missing_component_file.ctp:27
+msgid "Missing Component File"
+msgstr "コンポーネントファイルがありません"
+
+#: \cake\libs\error.php:352
+#: \cake\libs\view\errors\missing_component_class.ctp:27
+msgid "Missing Component Class"
+msgstr "コンポーネントクラスがありません"
+
+#: \cake\libs\error.php:367
+#: \cake\libs\view\errors\missing_model.ctp:27
+msgid "Missing Model"
+msgstr "モデルがありません"
+
+#: \cake\libs\folder.php:367;388
+msgid "%s changed to %s"
+msgstr "%s は %s に変更されました"
+
+#: \cake\libs\folder.php:371;390
+msgid "%s NOT changed to %s"
+msgstr "%s は %s に変更されませんでした"
+
+#: \cake\libs\folder.php:468
+msgid "%s is a file"
+msgstr "%s はファイルです"
+
+#: \cake\libs\folder.php:478;627
+msgid "%s created"
+msgstr "%s が作成されました"
+
+#: \cake\libs\folder.php:482
+msgid "%s NOT created"
+msgstr "%s が作成されませんでした"
+
+#: \cake\libs\folder.php:549;565
+msgid "%s removed"
+msgstr "%s は削除されました"
+
+#: \cake\libs\folder.php:551;562
+msgid "%s NOT removed"
+msgstr "%s は削除されませんでした"
+
+#: \cake\libs\folder.php:599
+msgid "%s not writable"
+msgstr "%s は書き込み可能ではありません"
+
+#: \cake\libs\folder.php:614
+msgid "%s copied to %s"
+msgstr "%s は %s にコピーされました"
+
+#: \cake\libs\folder.php:616
+msgid "%s NOT copied to %s"
+msgstr "%s は %s にコピーされませんでした"
+
+#: \cake\libs\folder.php:631
+msgid "%s not created"
+msgstr "%s は作成されませんでした"
+
+#: \cake\libs\http_socket.php:449
+msgid "HttpSocket::decodeBody - Unknown encoding: %s. Activate quirks mode to surpress error."
+msgstr "HttpSocket::decodeBody - 不明なエンコード: %s。エラーを抑制するには Quirksモード を有効にしてください。"
+
+#: \cake\libs\http_socket.php:474
+msgid "HttpSocket::decodeChunkedBody - Could not parse malformed chunk. Activate quirks mode to do this."
+msgstr "HttpSocket::decodeChunkedBody - 異常なチャンクをパースできませんでした。Quirksモード を有効にしてください。"
+
+#: \cake\libs\http_socket.php:731
+msgid "HttpSocket::buildRequestLine - Passed an invalid request line string. Activate quirks mode to do this."
+msgstr "HttpSocket::buildRequestLine - 無効なリクエスト文字列を無視しました。Quirksモード を有効にしてください。"
+
+#: \cake\libs\http_socket.php:746
+msgid "HttpSocket::buildRequestLine - The \"*\" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs."
+msgstr "HttpSocket::buildRequestLine - \"*\" アスタリスク文字は次のメソッドだけに許可されます: %s。HTTP/1.1仕様以外で動かすにはQuirksモード を有効にしてください。"
+
+#: \cake\libs\overloadable_php4.php:82;134
+#: \cake\libs\overloadable_php5.php:57;82
+msgid "Magic method handler call__ not defined in %s"
+msgstr "マジックメソッドハンドラ call__ が %s で定義されていません"
+
+#: \cake\libs\security.php:177
+msgid "You cannot use an empty key for Security::cipher()"
+msgstr "Security::cipher() に空のキーを使用することはできません"
+
+#: \cake\libs\session.php:469
+msgid "You must set the all Configure::write('Session.*') in core.php to use database storage"
+msgstr "core.php の全ての Configure::write('Session.*') にデータベースストレージを設定しなければなりません"
+
+#: \cake\libs\validation.php:355
+msgid "You must define the $operator parameter for Validation::comparison()"
+msgstr "Validation::comparison() の $operator パラメータを定義してください"
+
+#: \cake\libs\validation.php:379
+msgid "You must define a regular expression for Validation::custom()"
+msgstr "Validation::custom() の正規表現を定義してください"
+
+#: \cake\libs\cache\file.php:262
+msgid "%s is not writable"
+msgstr "%s は書き込み可能ではありません"
+
+#: \cake\libs\controller\controller.php:288
+msgid "Controller::__construct() : Can not get or parse my own class name, exiting."
+msgstr "Controller::__construct() : このクラスの名前を取得、またはパースできません。終了します。"
+
+#: \cake\libs\controller\controller.php:648
+#: \cake\libs\controller\components\auth.php:476
+msgid "%s::isAuthorized() is not defined."
+msgstr "%s::isAuthorized() は定義されていません。"
+
+#: \cake\libs\controller\controller.php:912
+msgid "Controller::paginate() - can't find model %1$s in controller %2$sController"
+msgstr "Controller::paginate() - モデル %1$s がコントローラ %2$sController に見つかりません"
+
+#: \cake\libs\controller\scaffold.php:175
+msgid "Scaffold :: "
+msgstr "Scaffold :: "
+
+#: \cake\libs\controller\scaffold.php:218;221
+msgid "No id set for %s::view()"
+msgstr "%s::view() の id が設定されていません"
+
+#: \cake\libs\controller\scaffold.php:271
+msgid "updated"
+msgstr "更新"
+
+#: \cake\libs\controller\scaffold.php:274
+msgid "saved"
+msgstr "保存"
+
+#: \cake\libs\controller\scaffold.php:285;288
+msgid "Invalid id for %s::edit()"
+msgstr "%s::edit() の 無効なidです"
+
+#: \cake\libs\controller\scaffold.php:301;304
+msgid "The %1$s has been %2$s"
+msgstr "%1$s は %2$s されました"
+
+#: \cake\libs\controller\scaffold.php:311
+msgid "Please correct errors below."
+msgstr "下記のエラーを修正してください。"
+
+#: \cake\libs\controller\scaffold.php:350;353
+msgid "No id set for %s::delete()"
+msgstr "%s::delete() の id が設定されていません"
+
+#: \cake\libs\controller\scaffold.php:359;362
+msgid "The %1$s with id: %2$d has been deleted."
+msgstr "%1$s with id: %2$d は削除されました。"
+
+#: \cake\libs\controller\scaffold.php:366;369
+msgid "There was an error deleting the %1$s with id: %2$d"
+msgstr "削除の時、エラーが起きました。 the %1$s with id: %2$d"
+
+#: \cake\libs\controller\components\acl.php:58
+msgid "Could not find %s."
+msgstr "%s が見つかりません。"
+
+#: \cake\libs\controller\components\acl.php:211
+msgid "[acl_base] The AclBase class constructor has been called, or the class was instantiated. This class must remain abstract. Please refer to the Cake docs for ACL configuration."
+msgstr "[acl_base] AclBase クラスのコンストラクタが呼ばれたか、クラスのインスタンスが作成されました。このクラスは abstract のままにしなければなりません。Cake ドキュメントの ACL 設定を設定してください。"
+
+#: \cake\libs\controller\components\acl.php:296
+msgid "ACO permissions key %s does not exist in DbAcl::check()"
+msgstr "ACO のパーミッションキー %s が、 DbAcl::check() に存在しません"
+
+#: \cake\libs\controller\components\acl.php:369
+msgid "DbAcl::allow() - Invalid node"
+msgstr "DbAcl::allow() - 無効なノード"
+
+#: \cake\libs\controller\components\auth.php:357
+msgid "Could not find AclComponent. Please include Acl in Controller::$components."
+msgstr "AclComponent が見つかりません。Acl に Controller::$components をインクルードしてください。"
+
+#: \cake\libs\controller\components\auth.php:390
+msgid "Could not find $userModel. Please set AuthComponent::$userModel in beforeFilter()."
+msgstr "$userModel が見つかりません。beforeFilter() に AuthComponent::$userModel をセットしてください。"
+
+#: \cake\libs\controller\components\auth.php:400
+msgid "Login failed. Invalid username or password."
+msgstr "ログイン失敗。ユーザ名またはパスワードが無効です。"
+
+#: \cake\libs\controller\components\auth.php:401
+msgid "You are not authorized to access that location."
+msgstr "その場所にアクセスする許可がありません。"
+
+#: \cake\libs\controller\components\auth.php:451
+msgid "Auth::startup() - Attempted access of un-mapped action \"%1$s\" in controller \"%2$s\""
+msgstr "auth::startup() - コントローラ \"%2$s\" のマップされていないアクション \"%1$s\" にアクセスを試みます。"
+
+#: \cake\libs\controller\components\auth.php:470
+msgid "Could not find %s. Set AuthComponent::$object in beforeFilter() or pass a valid object"
+msgstr "%s が見つかりません。beforeFilter() に AuthComponent::$object をセットするか、有効なオブジェクトを通してください。"
+
+#: \cake\libs\controller\components\auth.php:484
+msgid "Auth::isAuthorized() - $authorize is set to an incorrect value.  Allowed settings are: \"actions\", \"crud\", \"model\" or null."
+msgstr "Auth::isAuthorized() - $authorize に不正な値が設定されています。許された設定: \"actions\", \"crud\", \"model\" または null"
+
+#: \cake\libs\controller\components\auth.php:716
+msgid "Auth::getModel() - Model is not set or could not be found"
+msgstr "Auth::getModel() - モデルが設定されていないか、見つかりません。"
+
+#: \cake\libs\controller\components\security.php:303
+msgid "SecurityComponent::loginCredentials() - Server does not support digest authentication"
+msgstr "SecurityComponent::loginCredentials() - サーバがダイジェスト認証をサポートしていません"
+
+#: \cake\libs\model\connection_manager.php:114
+msgid "ConnectionManager::getDataSource - Non-existent data source %s"
+msgstr "ConnectionManager::getDataSource - データソース %s が存在しません"
+
+#: \cake\libs\model\connection_manager.php:182
+msgid "Unable to load DataSource file %s.php"
+msgstr "データソースファイル %s.php を読むことができません"
+
+#: \cake\libs\model\model.php:855
+msgid "(Model::getColumnTypes) Unable to build model field data. If you are using a model without a database table, try implementing schema()"
+msgstr "(Model::getColumnTypes) モデルのフィールドデータを作成できません。もしデータベーステーブル無しのモデルを使用している場合、schema() を実行してみてください。"
+
+#: \cake\libs\model\model.php:2236
+msgid "This field cannot be left blank"
+msgstr "このフィールドは空白にはできません"
+
+#: \cake\libs\model\model.php:2595
+msgid "Invalid join model settings in %s"
+msgstr "%s で無効なJOINモデル設定です"
+
+#: \cake\libs\model\behaviors\containable.php:342
+msgid "Model \"%s\" is not associated with model \"%s\""
+msgstr "モデル \"%s\" はモデル \"%s\" とアソシエーションできません"
+
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:560
+msgid "Must specify table to operate on constraints"
+msgstr "制約を作用させるためには、テーブルを指定してけなければなりません"
+
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:618
+msgid "DboOracle::constraint() accepts only enable, disable, or list"
+msgstr "DboOracle::constraint() enableまたは disable, list のみ受け付けます"
+
+#: \cake\libs\view\helper.php:148
+msgid "Method %1$s::%2$s does not exist"
+msgstr "メソッド %1$s::%2$s が存在しません"
+
+#: \cake\libs\view\view.php:393
+msgid "Error in view %s, got: <blockquote>%s</blockquote>"
+msgstr "ビュー %s でエラーです： <blockquote>%s</blockquote>"
+
+#: \cake\libs\view\view.php:458
+msgid "Error in layout %s, got: <blockquote>%s</blockquote>"
+msgstr "レイアウト %s でエラーです： <blockquote>%s</blockquote>"
+
+#: \cake\libs\view\elements\dump.ctp:28
+msgid "Controller dump:"
+msgstr "コントローラのダンプ:"
+
+#: \cake\libs\view\errors\missing_action.ctp:27
+msgid "Missing Method in %s"
+msgstr "%s にメソッドがありません"
+
+#: \cake\libs\view\errors\missing_action.ctp:30
+msgid "The action %1$s is not defined in controller %2$s"
+msgstr "アクション %1$s が、コントローラ %2$s に定義されていません"
+
+#: \cake\libs\view\errors\missing_action.ctp:34
+msgid "Create %1$s%2$s in file: %3$s."
+msgstr "%1$s%2$s を %3$s に作成してください。"
+
+#: \cake\libs\view\errors\missing_action.ctp:51
+#: \cake\libs\view\errors\missing_component_class.ctp:44
+#: \cake\libs\view\errors\missing_component_file.ctp:44
+#: \cake\libs\view\errors\missing_connection.ctp:37
+#: \cake\libs\view\errors\missing_controller.ctp:45
+#: \cake\libs\view\errors\missing_helper_class.ctp:44
+#: \cake\libs\view\errors\missing_helper_file.ctp:44
+#: \cake\libs\view\errors\missing_layout.ctp:37
+#: \cake\libs\view\errors\missing_model.ctp:46
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:37
+#: \cake\libs\view\errors\missing_table.ctp:33
+#: \cake\libs\view\errors\missing_view.ctp:37
+#: \cake\libs\view\errors\private_action.ctp:33
+#: \cake\libs\view\errors\scaffold_error.ctp:33
+msgid "Notice"
+msgstr "注意"
+
+#: \cake\libs\view\errors\missing_action.ctp:52
+#: \cake\libs\view\errors\missing_connection.ctp:38
+msgid "If you want to customize this error message, create %s."
+msgstr "このエラーメッセージをカスタマイズしたい場合は、 %s を作成してください。"
+
+#: \cake\libs\view\errors\missing_component_class.ctp:30
+msgid "Component class %1$s in %2$s was not found."
+msgstr "%2$s に設定されているコンポーネントクラス %1$s が見つかりません。"
+
+#: \cake\libs\view\errors\missing_component_class.ctp:34
+#: \cake\libs\view\errors\missing_component_file.ctp:34
+#: \cake\libs\view\errors\missing_model.ctp:34
+msgid "Create the class %s in file: %s"
+msgstr "クラス %s を %s に作成してください。"
+
+#: \cake\libs\view\errors\missing_component_class.ctp:45
+#: \cake\libs\view\errors\missing_component_file.ctp:45
+#: \cake\libs\view\errors\missing_controller.ctp:46
+#: \cake\libs\view\errors\missing_helper_class.ctp:45
+#: \cake\libs\view\errors\missing_helper_file.ctp:45
+#: \cake\libs\view\errors\missing_layout.ctp:38
+#: \cake\libs\view\errors\missing_model.ctp:47
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:38
+#: \cake\libs\view\errors\missing_table.ctp:34
+#: \cake\libs\view\errors\missing_view.ctp:38
+#: \cake\libs\view\errors\private_action.ctp:34
+#: \cake\libs\view\errors\scaffold_error.ctp:34
+msgid "If you want to customize this error message, create %s"
+msgstr "このエラーメッセージをカスタマイズしたい場合は、 %s を作成してください"
+
+#: \cake\libs\view\errors\missing_component_file.ctp:30
+msgid "The component file was not found."
+msgstr "コンポーネントファイルが見つかりません。"
+
+#: \cake\libs\view\errors\missing_connection.ctp:30
+msgid "%s requires a database connection"
+msgstr "%s はデータベースへの接続が必要です"
+
+#: \cake\libs\view\errors\missing_connection.ctp:34
+msgid "Confirm you have created the file : %s."
+msgstr "ファイル %s を作成したことを確認してください。"
+
+#: \cake\libs\view\errors\missing_controller.ctp:30
+msgid "%s could not be found."
+msgstr "%s が見つかりません。"
+
+#: \cake\libs\view\errors\missing_controller.ctp:34
+msgid "Create the class %s below in file: %s"
+msgstr "クラス %s を %s ファイル内に作成してください。"
+
+#: \cake\libs\view\errors\missing_helper_class.ctp:30
+msgid "The helper class <em>%s</em> can not be found or does not exist."
+msgstr "ヘルパークラス <em>%s</em> が見つからないか、存在しません。"
+
+#: \cake\libs\view\errors\missing_helper_class.ctp:34
+#: \cake\libs\view\errors\missing_helper_file.ctp:34
+msgid "Create the class below in file: %s"
+msgstr "ファイル %s に下記のクラスを作成してください"
+
+#: \cake\libs\view\errors\missing_helper_file.ctp:30
+msgid "The helper file %s can not be found or does not exist."
+msgstr "ヘルパーファイル %s が見つからないか、存在しません。"
+
+#: \cake\libs\view\errors\missing_layout.ctp:30
+msgid "The layout file %s can not be found or does not exist."
+msgstr "レイアウトファイル %s が見つからないか、存在しません。"
+
+#: \cake\libs\view\errors\missing_layout.ctp:34
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:34
+#: \cake\libs\view\errors\missing_view.ctp:34
+msgid "Confirm you have created the file: %s"
+msgstr "ファイル %s を作成したことを確認してください"
+
+#: \cake\libs\view\errors\missing_model.ctp:30
+msgid "<em>%s</em> could not be found."
+msgstr "<em>%s</em> が見つかりません。"
+
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:30
+msgid "Scaffold requires a database connection"
+msgstr "Scaffold にはデータベース接続が必要です"
+
+#: \cake\libs\view\errors\missing_table.ctp:30
+msgid "Database table %1$s for model %2$s was not found."
+msgstr "モデル %2$s のデータベーステーブル %1$s が見つかりません。"
+
+#: \cake\libs\view\errors\missing_view.ctp:30
+msgid "The view for %1$s%2$s was not found."
+msgstr "ビュー %1$s%2$s が見つかりません。"
+
+#: \cake\libs\view\errors\private_action.ctp:27
+msgid "Private Method in %s"
+msgstr "%s のプライベートメソッド"
+
+#: \cake\libs\view\errors\private_action.ctp:30
+msgid "%s%s cannot be accessed directly."
+msgstr "%s%s には直接アクセスできません。"
+
+#: \cake\libs\view\errors\scaffold_error.ctp:27
+msgid "Scaffold Error"
+msgstr "Scaffold エラー"
+
+#: \cake\libs\view\errors\scaffold_error.ctp:30
+msgid "Method _scaffoldError in was not found in the controller"
+msgstr "メソッド _scaffoldError がコントローラに見つかりません。"
+
+#: \cake\libs\view\helpers\form.php:277;1057
+#: \cake\libs\view\scaffolds\edit.ctp:31
+msgid "Submit"
+msgstr "実行"
+
+#: \cake\libs\view\helpers\form.php:405
+msgid "Error in field %s"
+msgstr "フィールド %s でエラーです"
+
+#: \cake\libs\view\helpers\form.php:496
+msgid "New"
+msgstr "新規"
+
+#: \cake\libs\view\helpers\form.php:498
+#: \cake\libs\view\scaffolds\index.ctp:68
+#: \cake\libs\view\scaffolds\view.ctp:147
+msgid "Edit"
+msgstr "編集"
+
+#: \cake\libs\view\helpers\session.php:178
+msgid "You can not write to a Session from the view"
+msgstr "ビューからのセッションを書き込むことができません"
+
+#: \cake\libs\view\helpers\text.php:335
+msgid "(TextHelper::flay) Deprecated: the Flay library is no longer supported and will be removed in a future version."
+msgstr "(TextHelper::flay) 非推奨: Flayライブラリは長くサポートされず、将来のバージョンでは削除されるでしょう。"
+
+#: \cake\libs\view\helpers\time.php:112
+msgid "Today, %s"
+msgstr "本日"
+
+#: \cake\libs\view\helpers\time.php:114
+msgid "Yesterday, %s"
+msgstr "昨日"
+
+#: \cake\libs\view\helpers\time.php:424
+msgid "on %s"
+msgstr " - %s の %s (%s:%d)"
+
+#: \cake\libs\view\helpers\time.php:458
+msgid "%s ago"
+msgstr "%s前"
+
+#: \cake\libs\view\helpers\time.php:486
+msgid "days"
+msgstr "日"
+
+#: \cake\libs\view\helpers\time.php:428
+msgid "year"
+msgstr "年"
+
+#: \cake\libs\view\helpers\time.php:429;434
+msgid "month"
+msgstr "月毎"
+
+#: \cake\libs\view\helpers\time.php:430;435;439
+msgid "week"
+msgstr "週日"
+
+#: \cake\libs\view\helpers\time.php:431;436;440;443
+msgid "day"
+msgstr "%s 日"
+
+#: \cake\libs\view\helpers\time.php:444;447
+msgid "hour"
+msgstr "%s 時間"
+
+#: \cake\libs\view\helpers\time.php:448;451
+msgid "minute"
+msgstr "1 分"
+
+#: \cake\libs\view\helpers\time.php:454
+msgid "second"
+msgstr "第２"
+
+#: \cake\libs\view\pages\home.ctp:27
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:104
+msgid "Release Notes for CakePHP %s."
+msgstr "CakePHP %s リリースノート"
+
+#: \cake\libs\view\pages\home.ctp:28
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:105
+msgid "Read the release notes and get the latest version"
+msgstr "リリースノートを読んで最新版を取得する"
+
+#: \cake\libs\view\pages\home.ctp:38
+#: \cake\tests\test_app\views\pages\home.ctp:12
+msgid "Your tmp directory is writable."
+msgstr "tmp ディレクトリに書き込めます。"
+
+#: \cake\libs\view\pages\home.ctp:42
+#: \cake\tests\test_app\views\pages\home.ctp:16
+msgid "Your tmp directory is NOT writable."
+msgstr "tmp ディレクトリに書き込めません。"
+
+#: \cake\libs\view\pages\home.ctp:52
+#: \cake\tests\test_app\views\pages\home.ctp:26
+msgid "The %s is being used for caching. To change the config edit APP/config/core.php "
+msgstr "%s がキャッシュに使われています。設定を変更するには APP/config/core.php を編集してください。"
+
+#: \cake\libs\view\pages\home.ctp:56
+#: \cake\tests\test_app\views\pages\home.ctp:30
+msgid "Your cache is NOT working. Please check the settings in APP/config/core.php"
+msgstr "キャッシュが働いていません。APP/config/core.php 内の設定を確認してください。"
+
+#: \cake\libs\view\pages\home.ctp:66
+#: \cake\tests\test_app\views\pages\home.ctp:40
+msgid "Your database configuration file is present."
+msgstr "データベース設定ファイルが存在します。"
+
+#: \cake\libs\view\pages\home.ctp:71
+#: \cake\tests\test_app\views\pages\home.ctp:45
+msgid "Your database configuration file is NOT present."
+msgstr "データベース設定ファイルが存在しません。"
+
+#: \cake\libs\view\pages\home.ctp:73
+#: \cake\tests\test_app\views\pages\home.ctp:47
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:79
+msgid "Rename config/database.php.default to config/database.php"
+msgstr "config/database.php.default を config/database.php にリネームしてください。"
+
+#: \cake\libs\view\pages\home.ctp:88
+#: \cake\tests\test_app\views\pages\home.ctp:62
+msgid "Cake is able to connect to the database."
+msgstr "Cake はデータベースに接続可能です。"
+
+#: \cake\libs\view\pages\home.ctp:92
+#: \cake\tests\test_app\views\pages\home.ctp:66
+msgid "Cake is NOT able to connect to the database."
+msgstr "Cake はデータベースに接続不可能です。"
+
+#: \cake\libs\view\pages\home.ctp:98
+#: \cake\tests\test_app\views\pages\home.ctp:72
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:106
+msgid "Editing this Page"
+msgstr "このページを編集"
+
+#: \cake\libs\view\pages\home.ctp:101
+msgid ""
+"To change the content of this page, edit: APP/views/pages/home.ctp.<br />\n"
+"To change its layout, edit: APP/views/layouts/default.ctp.<br />\n"
+"You can also add some CSS styles for your pages at: APP/webroot/css."
+msgstr ""
+"このページの内容を変更するには、APP/views/pages/home.ctp を編集してください。<br />\n"
+"レイアウトを変更するには、APP/views/layouts/default.ctp を編集してください。<br />\n"
+"CSS スタイルシートを APP/webroot/css. に追加できます。"
+
+#: \cake\libs\view\pages\home.ctp:106
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:113
+msgid "Getting Started"
+msgstr "はじめに"
+
+#: \cake\libs\view\pages\home.ctp:109
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:115
+msgid "The 15 min Blog Tutorial"
+msgstr "15分ブログチュートリアル"
+
+#: \cake\libs\view\pages\home.ctp:111
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:119
+msgid "More about Cake"
+msgstr "Cake に関するその他の情報"
+
+#: \cake\libs\view\pages\home.ctp:113
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:121
+msgid "CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC."
+msgstr "CakePHP は、 PHP の rapid development フレームワークです。Active Record, Association Data Mapping, Front Controller, MVC といった、よく知られているデザインパターンを使用しています。"
+
+#: \cake\libs\view\pages\home.ctp:116
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:124
+msgid "Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility."
+msgstr "私たちの主要な目標は、すべてのレベルの PHP ユーザが、堅牢な WEB アプリケーションをすばやく開発でき、しかも柔軟性を失わないような、構造化されたフレームワークを提供することです。"
+
+#: \cake\libs\view\pages\home.ctp:120
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:127
+msgid "Cake Software Foundation"
+msgstr "Cake Software Foundation"
+
+#: \cake\libs\view\pages\home.ctp:121
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:128
+msgid "Promoting development related to CakePHP"
+msgstr "CakePHP による開発の振興"
+
+#: \cake\libs\view\pages\home.ctp:122
+msgid "The Show"
+msgstr "The Show"
+
+#: \cake\libs\view\pages\home.ctp:123
+msgid "The Show is a weekly live internet radio broadcast where we discuss CakePHP-related topics and answer questions live via IRC, Skype, and telephone."
+msgstr "私たちがCakePHP関連の話題を議論し、IRC、Skype、電話などによって質問に答える、毎週のインターネットラジオ放送番組。"
+
+#: \cake\libs\view\pages\home.ctp:124
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:129
+msgid "The Bakery"
+msgstr "The Bakery"
+
+#: \cake\libs\view\pages\home.ctp:125
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:130
+msgid "Everything CakePHP"
+msgstr "CakePHP の関連情報サイト"
+
+#: \cake\libs\view\pages\home.ctp:126
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:131
+msgid "Book Store"
+msgstr "ブックストア"
+
+#: \cake\libs\view\pages\home.ctp:127
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:132
+msgid "Recommended Software Books"
+msgstr "お勧めのソフトウェア書籍"
+
+#: \cake\libs\view\pages\home.ctp:128
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:133
+msgid "CakeSchwag"
+msgstr "CakeSchwag"
+
+#: \cake\libs\view\pages\home.ctp:129
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:134
+msgid "Get your own CakePHP gear - Doughnate to Cake"
+msgstr "CakePHP グッズを購入できます - Cake に寄付。"
+
+#: \cake\libs\view\pages\home.ctp:130
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:135
+msgid "CakePHP"
+msgstr "CakePHP"
+
+#: \cake\libs\view\pages\home.ctp:131
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:136
+msgid "The Rapid Development Framework"
+msgstr "Rapid Development （高速開発）フレームワーク"
+
+#: \cake\libs\view\pages\home.ctp:132
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:137
+msgid "CakePHP Manual"
+msgstr "CakePHP マニュアル"
+
+#: \cake\libs\view\pages\home.ctp:133
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:138
+msgid "Your Rapid Development Cookbook"
+msgstr "高速開発のクッキングブック"
+
+#: \cake\libs\view\pages\home.ctp:134
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:139
+msgid "CakePHP API"
+msgstr "CakePHP API"
+
+#: \cake\libs\view\pages\home.ctp:135
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:140
+msgid "Docblock Your Best Friend"
+msgstr "開発の最良の友"
+
+#: \cake\libs\view\pages\home.ctp:136
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:141
+msgid "CakeForge"
+msgstr "CakeForge"
+
+#: \cake\libs\view\pages\home.ctp:137
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:142
+msgid "Open Development for CakePHP"
+msgstr "CakePHP のオープン開発"
+
+#: \cake\libs\view\pages\home.ctp:138
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:143
+msgid "CakePHP Trac"
+msgstr "CakePHP Trac"
+
+#: \cake\libs\view\pages\home.ctp:139
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:144
+msgid "For the Development of CakePHP (Tickets, SVN browser, Roadmap, Changelogs)"
+msgstr "CakePHP の開発用 (Tickets, SVN browser, Roadmap, Changelogs)"
+
+#: \cake\libs\view\pages\home.ctp:140
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:145
+msgid "CakePHP Google Group"
+msgstr "CakePHP Google グループ"
+
+#: \cake\libs\view\pages\home.ctp:141
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:146
+msgid "Community mailing list"
+msgstr "コミュニティメーリングリスト"
+
+#: \cake\libs\view\pages\home.ctp:143
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:148
+msgid "Live chat about CakePHP"
+msgstr "CakePHP の Live chat"
+
+#: \cake\libs\view\scaffolds\edit.ctp:37
+#: \cake\libs\view\scaffolds\index.ctp:69
+#: \cake\libs\view\scaffolds\view.ctp:148
+msgid "Delete"
+msgstr "削除"
+
+#: \cake\libs\view\scaffolds\edit.ctp:37
+#: \cake\libs\view\scaffolds\index.ctp:69
+#: \cake\libs\view\scaffolds\view.ctp:60;148
+msgid "Are you sure you want to delete"
+msgstr "本当に削除しますか"
+
+#: \cake\libs\view\scaffolds\edit.ctp:39
+msgid "List"
+msgstr "リスト"
+
+#: \cake\libs\view\scaffolds\edit.ctp:45
+#: \cake\libs\view\scaffolds\index.ctp:91
+#: \cake\libs\view\scaffolds\view.ctp:61;68
+msgid "List %s"
+msgstr "%s の一覧を表示"
+
+#: \cake\libs\view\scaffolds\edit.ctp:46
+#: \cake\libs\view\scaffolds\index.ctp:92
+#: \cake\libs\view\scaffolds\view.ctp:62;69;157
+msgid "New %s"
+msgstr "%s を新規作成"
+
+#: \cake\libs\view\scaffolds\index.ctp:39
+msgid "Actions"
+msgstr "アクション"
+
+#: \cake\libs\view\scaffolds\index.ctp:67
+#: \cake\libs\view\scaffolds\view.ctp:146
+msgid "View"
+msgstr "表示"
+
+#: \cake\libs\view\scaffolds\index.ctp:79
+msgid "previous"
+msgstr "戻る"
+
+#: \cake\libs\view\scaffolds\index.ctp:81
+msgid "next"
+msgstr "次へ"
+
+#: \cake\libs\view\scaffolds\view.ctp:28
+msgid "View %s"
+msgstr "%s を表示"
+
+#: \cake\libs\view\scaffolds\view.ctp:59;100
+msgid "Edit %s"
+msgstr "%s を編集"
+
+#: \cake\libs\view\scaffolds\view.ctp:60
+msgid "Delete %s"
+msgstr "%s を削除"
+
+#: \cake\libs\view\scaffolds\view.ctp:81;120
+msgid "Related %s"
+msgstr "%s に関連"
+
+#: \cake\tests\cases\libs\file.test.php:410
+msgid "[FileTest] Skipping %s because \"%s\" not writeable!"
+msgstr "[ファイルテスト] \"%2$s\" が書込み可能でないため、 %s をスキップしています。"
+
+#: \cake\tests\cases\libs\i18n.test.php:1876
+msgid "No Translation needed"
+msgstr "翻訳は必要ありません"
+
+#: \cake\tests\cases\libs\i18n.test.php:1887
+msgid "this is a \"quoted string\""
+msgstr "パスが文字列でありません"
+
+#: \cake\tests\cases\libs\i18n.test.php:1896
+msgid "Plural Rule 1"
+msgstr "複数形の規則"
+
+#: \cake\tests\cases\libs\i18n.test.php:1919
+msgid "Plural Rule 1 (from core)"
+msgstr "複数形の規則1 (コアより)"
+
+#: \cake\tests\cases\libs\i18n.test.php:1908
+msgid "%d = 1"
+msgstr "%d = 1"
+
+#: \cake\tests\cases\libs\i18n.test.php:1930
+msgid "%d = 1 (from core)"
+msgstr "%d = 1 (コアより)"
+
+#: \cake\tests\cases\libs\view\helpers\form.test.php:1550
+msgid "Le login doit contenir au moins 2 caractères"
+msgstr " "
+
+#: \cake\tests\test_app\views\pages\home.ctp:75
+msgid ""
+"To change the content of this page, edit: %s\n"
+"\t\tTo change its layout, edit: %s\n"
+"\t\tYou can also add some CSS styles for your pages at: %s"
+msgstr ""
+"このページの内容を編集するには、%s を編集\n"
+"\t\tレイアウトを変更するには、%s を編集\n"
+"\t\tCSSスタイルシートを %s に追加することもできます"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:31
+msgid "Your tmp directory is "
+msgstr "tmp ディレクトリは"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:33
+msgid "writable."
+msgstr "書込可能です。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:35
+msgid "NOT writable."
+msgstr "書込可能ではありません。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:44
+msgid "Your cache is "
+msgstr "キャッシュは"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:46
+msgid "set up and initialized properly."
+msgstr "セットアップされ、正しく初期化されます。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:49
+msgid " is being used to cache, to change this edit config/core.php "
+msgstr "がキャッシュに使われています。変更するには、config/core.php を編集してください"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:59
+msgid "NOT working."
+msgstr "働いていません。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:62
+msgid "Edit: config/core.php to insure you have the newset version of this file and the variable $cakeCache set properly"
+msgstr "編集: config/core.php このファイルの最新のバージョンを変数 $cakeCache にセットしていることを保障します"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:71
+msgid "Your database configuration file is "
+msgstr "データベース設定ファイルは"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:74
+msgid "present."
+msgstr "存在します。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:77
+msgid "NOT present."
+msgstr "存在しません。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:93
+msgid "Cake"
+msgstr "Cake"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:95
+msgid " is able to "
+msgstr " はデータベースに接続可能"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:97
+msgid " is NOT able to "
+msgstr " はデータベースに接続不可能"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:99
+msgid "connect to the database."
+msgstr "です。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:108
+msgid "To change the content of this page, create: /app/views/pages/home.ctp."
+msgstr "このページの内容を変更するには、/app/views/pages/home.ctp を作成してください。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:109
+msgid "To change its layout, create: /app/views/layouts/default.ctp."
+msgstr "レイアウトを変更するには、/app/views/layouts/default.ctp を作成してください。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:110
+msgid "See the views section of the manual for more info."
+msgstr "詳細な情報はマニュアルのビューの項目を見てください。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:111
+msgid "You can also add some CSS styles for your pages at: app/webroot/css/."
+msgstr "CSSスタイルシートを app/webroot/css/ に追加することもできます。"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:116
+msgid "Cook up Web sites fast with CakePHP"
+msgstr "CakePHPで早くWebサイトを作ってください"
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:117
+msgid "Create an interactive production wiki using PHP"
+msgstr "PHPを使ってインタラクティブな製品wikiを作ってください"
+

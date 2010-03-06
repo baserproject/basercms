@@ -1,0 +1,81 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * ヘッダー
+ * ※ ヘッダーの枠組み(#footer)に関する設定はlayout.cssに記述
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+/* headMain
+----------------------------------------------- */
+#headMain {
+	background: url(images/bg_header.jpg) no-repeat left top;
+	width:900px;
+	margin:0 auto;
+	height:60px;
+}
+#headMain h1 {
+	padding:0;
+	margin:0;
+}
+#headMain h1 a{
+	display:block;
+	width:300px;
+	height:60px;
+	text-indent:-3000px;
+}
+
+/* グローバルメニュー
+----------------------------------------------- */
+#glbMenus{
+	margin:15px 0;
+	background: url(images/bg_global_menu.gif) no-repeat left top;
+	height:40px;
+}
+#globalMenu .first{
+	padding-left:20px;
+}
+#globalMenu li{
+	float:left;
+	height:40px;
+    display:inline;
+}
+#globalMenu li a{
+    float: left;
+	display:block;
+	height:30px;
+	padding:10px 40px 0 40px;
+	text-align:center;
+	font-size:12px;
+	line-height:20px;
+	text-decoration:none;
+	color:#000000;
+	font-weight:bold;
+}
+#globalMenu a:hover{
+	padding-top:11px;
+	height:29px;
+	color:#333333;
+}
+
+/* フォントチェンジャー
+----------------------------------------------- */
+#fontChanger{
+	text-align:right;
+	color:#ffffff;
+}
+

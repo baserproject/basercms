@@ -1,0 +1,1951 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  Revision: 7690 \cake\libs\model\datasources\dbo_source.php
+#  Revision: 7690 \cake\libs\model\datasources\dbo\dbo_oracle.php
+#  Revision: 7690 \cake\libs\model\datasources\dbo\dbo_mysql.php
+#  Revision: 7118 \app\views\errors\error404.ctp
+#  Revision: 7118 \cake\libs\view\errors\error404.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_action.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_component_class.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_component_file.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_connection.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_controller.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_helper_class.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_helper_file.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_layout.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_model.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_scaffolddb.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_table.ctp
+#  Revision: 6311 \cake\libs\view\errors\missing_view.ctp
+#  Revision: 6311 \cake\libs\view\errors\private_action.ctp
+#  Revision: 6311 \cake\libs\view\errors\scaffold_error.ctp
+#  Revision: 7118 \cake\console\error.php
+#  Revision: 7690 \cake\libs\view\helpers\form.php
+#  Revision: 7296 \app\webroot\test.php
+#  Revision: 7296 \cake\console\libs\templates\skel\webroot\test.php
+#  Revision: 7118 \cake\console\libs\acl.php
+#  Revision: 7125 \cake\console\libs\bake.php
+#  Revision: 7118 \cake\console\libs\i18n.php
+#  Revision: 7118 \cake\console\libs\api.php
+#  Revision: 7690 \cake\libs\folder.php
+#  Revision: 7690 \cake\console\libs\tasks\plugin.php
+#  Revision: 7690 \cake\console\libs\schema.php
+#  Revision: 7296 \cake\console\libs\shell.php
+#  Revision: 7690 \cake\console\libs\tasks\controller.php
+#  Revision: 7690 \cake\console\libs\tasks\model.php
+#  Revision: 7690 \cake\console\libs\tasks\project.php
+#  Revision: 7690 \cake\console\libs\tasks\test.php
+#  Revision: 7690 \cake\console\libs\tasks\view.php
+#  Revision: 7690 \cake\console\libs\templates\skel\views\layouts\default.ctp
+#  Revision: 7690 \cake\libs\view\layouts\default.ctp
+#  Revision: 7690 \cake\tests\test_app\views\layouts\default.ctp
+#  Revision: 7690 \cake\libs\cache.php
+#  Revision: 7690 \cake\libs\class_registry.php
+#  Revision: 7690 \cake\libs\configure.php
+#  Revision: 7690 \cake\libs\debugger.php
+#  Revision: 7690 \cake\libs\error.php
+#  Revision: 7296 \cake\libs\http_socket.php
+#  Revision: 6311 \cake\libs\overloadable_php4.php
+#  Revision: 6311 \cake\libs\overloadable_php5.php
+#  Revision: 7690 \cake\libs\security.php
+#  Revision: 7690 \cake\libs\session.php
+#  Revision: 7690 \cake\libs\validation.php
+#  Revision: 7690 \cake\libs\cache\file.php
+#  Revision: 7690 \cake\libs\controller\controller.php
+#  Revision: 7690 \cake\libs\controller\components\auth.php
+#  Revision: 7690 \cake\libs\controller\scaffold.php
+#  Revision: 7690 \cake\libs\controller\components\acl.php
+#  Revision: 7690 \cake\libs\controller\components\security.php
+#  Revision: 7690 \cake\libs\model\connection_manager.php
+#  Revision: 7690 \cake\libs\model\model.php
+#  Revision: 7690 \cake\libs\model\behaviors\containable.php
+#  Revision: 7690 \cake\libs\view\helper.php
+#  Revision: 7690 \cake\libs\view\view.php
+#  Revision: 6311 \cake\libs\view\elements\dump.ctp
+#  Revision: 7296 \cake\libs\view\scaffolds\edit.ctp
+#  Revision: 7296 \cake\libs\view\scaffolds\index.ctp
+#  Revision: 7690 \cake\libs\view\scaffolds\view.ctp
+#  Revision: 7296 \cake\libs\view\helpers\session.php
+#  Revision: 7690 \cake\libs\view\helpers\text.php
+#  Revision: 7690 \cake\libs\view\helpers\time.php
+#  Revision: 7690 \cake\libs\view\pages\home.ctp
+#  Revision: 7296 \cake\tests\test_app\views\posts\test_nocache_tags.ctp
+#  Revision: 7690 \cake\tests\cases\libs\file.test.php
+#  Revision: 7690 \cake\tests\cases\libs\i18n.test.php
+#  Revision: 7690 \cake\tests\cases\libs\view\helpers\form.test.php
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-10-08 16:39+0900\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: \app\models\datasources\dbo\dbo_csv.php:1208
+msgid "DboCsv::describe : Can't find Connection"
+msgstr ""
+
+#: \app\models\datasources\dbo\dbo_csv.php:1442
+#: \cake\libs\model\datasources\dbo_source.php:731
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:948
+msgid "SQL Error in model %s:"
+msgstr ""
+
+#: \app\models\datasources\dbo\dbo_csv.php:1824
+#: \cake\libs\model\datasources\dbo_source.php:2211;2268
+#: \cake\libs\model\datasources\dbo\dbo_mysql.php:589
+msgid "Invalid schema object"
+msgstr ""
+
+#: \app\views\errors\error404.ctp:30
+#: \cake\libs\view\errors\error404.ctp:29
+#: \cake\libs\view\errors\missing_action.ctp:29;33
+#: \cake\libs\view\errors\missing_component_class.ctp:29;33
+#: \cake\libs\view\errors\missing_component_file.ctp:29;33
+#: \cake\libs\view\errors\missing_connection.ctp:29;33
+#: \cake\libs\view\errors\missing_controller.ctp:29;33
+#: \cake\libs\view\errors\missing_helper_class.ctp:29;33
+#: \cake\libs\view\errors\missing_helper_file.ctp:29;33
+#: \cake\libs\view\errors\missing_layout.ctp:29;33
+#: \cake\libs\view\errors\missing_model.ctp:29;33
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:29;33
+#: \cake\libs\view\errors\missing_table.ctp:29
+#: \cake\libs\view\errors\missing_view.ctp:29;33
+#: \cake\libs\view\errors\private_action.ctp:29
+#: \cake\libs\view\errors\scaffold_error.ctp:29
+msgid "Error"
+msgstr ""
+
+#: \app\views\errors\error404.ctp:31
+#: \cake\console\error.php:86
+#: \cake\libs\view\errors\error404.ctp:30
+msgid "The requested address %s was not found on this server."
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:545
+#: \cake\libs\view\helpers\form.php:1764
+msgid "January"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:546
+#: \cake\libs\view\helpers\form.php:1765
+msgid "February"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:547
+#: \cake\libs\view\helpers\form.php:1766
+msgid "March"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:548
+#: \cake\libs\view\helpers\form.php:1767
+msgid "April"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:549
+#: \cake\libs\view\helpers\form.php:1768
+msgid "May"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:550
+#: \cake\libs\view\helpers\form.php:1769
+msgid "June"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:551
+#: \cake\libs\view\helpers\form.php:1770
+msgid "July"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:552
+#: \cake\libs\view\helpers\form.php:1771
+msgid "August"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:553
+#: \cake\libs\view\helpers\form.php:1772
+msgid "September"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:554
+#: \cake\libs\view\helpers\form.php:1773
+msgid "October"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:555
+#: \cake\libs\view\helpers\form.php:1774
+msgid "November"
+msgstr ""
+
+#: \app\views\helpers\form_ex.php:556
+#: \cake\libs\view\helpers\form.php:1775
+msgid "December"
+msgstr ""
+
+#: \app\webroot\test.php:101
+#: \cake\console\libs\templates\skel\webroot\test.php:101
+msgid "Debug setting does not allow access to this url."
+msgstr ""
+
+#: \cake\console\error.php:98
+msgid "Missing Controller '%s'"
+msgstr ""
+
+#: \cake\console\error.php:109
+msgid "Missing Method '%s' in '%s'"
+msgstr ""
+
+#: \cake\console\error.php:120
+msgid "Trying to access private method '%s' in '%s'"
+msgstr ""
+
+#: \cake\console\error.php:131
+msgid "Missing database table '%s' for model '%s'"
+msgstr ""
+
+#: \cake\console\error.php:142
+msgid "Missing Database"
+msgstr ""
+
+#: \cake\console\error.php:153
+msgid "Missing View '%s' for '%s' in '%s'"
+msgstr ""
+
+#: \cake\console\error.php:164
+msgid "Missing Layout '%s'"
+msgstr ""
+
+#: \cake\console\error.php:175
+msgid "Missing Database Connection. Try 'cake bake'"
+msgstr ""
+
+#: \cake\console\error.php:186
+msgid "Missing Helper file '%s' for '%s'"
+msgstr ""
+
+#: \cake\console\error.php:197
+msgid "Missing Helper class '%s' in '%s'"
+msgstr ""
+
+#: \cake\console\error.php:208
+msgid "Missing Component file '%s' for '%s'"
+msgstr ""
+
+#: \cake\console\error.php:219
+msgid "Missing Component class '%s' in '%s'"
+msgstr ""
+
+#: \cake\console\error.php:230
+msgid "Missing model '%s'"
+msgstr ""
+
+#: \cake\console\libs\acl.php:80
+msgid "Error: Your current Cake configuration is set to"
+msgstr ""
+
+#: \cake\console\libs\acl.php:81
+msgid "an ACL implementation other than DB. Please change"
+msgstr ""
+
+#: \cake\console\libs\acl.php:82
+msgid "your core config to reflect your decision to use"
+msgstr ""
+
+#: \cake\console\libs\acl.php:83
+msgid "DbAcl before attempting to use this script"
+msgstr ""
+
+#: \cake\console\libs\acl.php:85
+msgid "Current ACL Classname: %s"
+msgstr ""
+
+#: \cake\console\libs\acl.php:93
+#: \cake\console\libs\bake.php:75
+#: \cake\console\libs\i18n.php:64
+msgid "Your database configuration was not found. Take a moment to create one."
+msgstr ""
+
+#: \cake\console\libs\acl.php:112
+msgid "Available ACL commands:"
+msgstr ""
+
+#: \cake\console\libs\acl.php:124
+msgid "For help, run the 'help' command.  For help on a specific command, run 'help <command>'"
+msgstr ""
+
+#: \cake\console\libs\acl.php:153
+msgid "Could not find parent node using reference \"%s\""
+msgstr ""
+
+#: \cake\console\libs\acl.php:171
+msgid "/ can not be used as an alias!"
+msgstr ""
+
+#: \cake\console\libs\acl.php:171
+msgid "\\t/ is the root, please supply a sub alias"
+msgstr ""
+
+#: \cake\console\libs\acl.php:179
+msgid "New %s '%s' created.\n"
+msgstr ""
+
+#: \cake\console\libs\acl.php:181
+msgid "There was a problem creating a new %s '%s'."
+msgstr ""
+
+#: \cake\console\libs\acl.php:194
+msgid "Node Not Deleted"
+msgstr ""
+
+#: \cake\console\libs\acl.php:194
+msgid "There was an error deleting the %s. Check that the node exists"
+msgstr ""
+
+#: \cake\console\libs\acl.php:196
+msgid "%s deleted"
+msgstr ""
+
+#: \cake\console\libs\acl.php:216
+msgid "Error in setting new parent. Please make sure the parent node exists, and is not a descendant of the node specified."
+msgstr ""
+
+#: \cake\console\libs\acl.php:218
+msgid "Node parent set to %s"
+msgstr ""
+
+#: \cake\console\libs\acl.php:233
+msgid "Supplied Node '%s' not found"
+msgstr ""
+
+#: \cake\console\libs\acl.php:233;317;319;461
+msgid "No tree returned."
+msgstr ""
+
+#: \cake\console\libs\acl.php:249
+msgid "%s is allowed."
+msgstr ""
+
+#: \cake\console\libs\acl.php:251
+msgid "%s is not allowed."
+msgstr ""
+
+#: \cake\console\libs\acl.php:264
+msgid "Permission granted."
+msgstr ""
+
+#: \cake\console\libs\acl.php:266
+msgid "Permission was not granted."
+msgstr ""
+
+#: \cake\console\libs\acl.php:279
+msgid "Permission denied."
+msgstr ""
+
+#: \cake\console\libs\acl.php:281
+msgid "Permission was not denied."
+msgstr ""
+
+#: \cake\console\libs\acl.php:294
+msgid "Permission inherited."
+msgstr ""
+
+#: \cake\console\libs\acl.php:296
+msgid "Permission was not inherited."
+msgstr ""
+
+#: \cake\console\libs\acl.php:317;319;461
+#: \cake\console\libs\api.php:96
+#: \cake\libs\folder.php:590
+msgid "%s not found"
+msgstr ""
+
+#: \cake\console\libs\acl.php:360
+msgid "Usage: cake acl <command> <arg1> <arg2>..."
+msgstr ""
+
+#: \cake\console\libs\acl.php:362
+msgid "Commands:"
+msgstr ""
+
+#: \cake\console\libs\acl.php:366
+msgid "Creates a new ACL object <node> under the parent specified by <parent>, an id/alias."
+msgstr ""
+
+#: \cake\console\libs\acl.php:367
+msgid "The <parent> and <node> references can be in one of the following formats:"
+msgstr ""
+
+#: \cake\console\libs\acl.php:368
+msgid "<model>.<id> - The node will be bound to a specific record of the given model"
+msgstr ""
+
+#: \cake\console\libs\acl.php:369
+msgid "<alias> - The node will be given a string alias (or path, in the case of <parent>),"
+msgstr ""
+
+#: \cake\console\libs\acl.php:370
+msgid "i.e. 'John'.  When used with <parent>, this takes the form of an alias path,"
+msgstr ""
+
+#: \cake\console\libs\acl.php:371
+msgid "i.e. <group>/<subgroup>/<parent>."
+msgstr ""
+
+#: \cake\console\libs\acl.php:372
+msgid "To add a node at the root level, enter 'root' or '/' as the <parent> parameter."
+msgstr ""
+
+#: \cake\console\libs\acl.php:375
+msgid "Deletes the ACL object with the given <node> reference (see 'create' for info on node references)."
+msgstr ""
+
+#: \cake\console\libs\acl.php:378
+msgid "Moves the ACL object specified by <node> beneath the parent ACL object specified by <parent>."
+msgstr ""
+
+#: \cake\console\libs\acl.php:379
+msgid "To identify the node and parent, use the row id."
+msgstr ""
+
+#: \cake\console\libs\acl.php:382
+msgid "Returns the path to the ACL object specified by <node>. This command"
+msgstr ""
+
+#: \cake\console\libs\acl.php:383
+msgid "is useful in determining the inhertiance of permissions for a certain"
+msgstr ""
+
+#: \cake\console\libs\acl.php:384
+msgid "object in the tree."
+msgstr ""
+
+#: \cake\console\libs\acl.php:385;389;395;401;406;411
+msgid "For more detailed parameter usage info, see help for the 'create' command."
+msgstr ""
+
+#: \cake\console\libs\acl.php:387;391;397;403
+msgid "or"
+msgstr ""
+
+#: \cake\console\libs\acl.php:388
+msgid "Use this command to check ACL permissions."
+msgstr ""
+
+#: \cake\console\libs\acl.php:392
+msgid "Use this command to grant ACL permissions. Once executed, the ARO"
+msgstr ""
+
+#: \cake\console\libs\acl.php:393
+msgid "specified (and its children, if any) will have ALLOW access to the"
+msgstr ""
+
+#: \cake\console\libs\acl.php:394;400
+msgid "specified ACO action (and the ACO's children, if any)."
+msgstr ""
+
+#: \cake\console\libs\acl.php:398
+msgid "Use this command to deny ACL permissions. Once executed, the ARO"
+msgstr ""
+
+#: \cake\console\libs\acl.php:399
+msgid "specified (and its children, if any) will have DENY access to the"
+msgstr ""
+
+#: \cake\console\libs\acl.php:404
+msgid "Use this command to force a child ARO object to inherit its"
+msgstr ""
+
+#: \cake\console\libs\acl.php:405
+msgid "permissions settings from its parent."
+msgstr ""
+
+#: \cake\console\libs\acl.php:409
+msgid "The view command will return the ARO or ACO tree. The optional"
+msgstr ""
+
+#: \cake\console\libs\acl.php:410
+msgid "id/alias parameter allows you to return only a portion of the requested tree."
+msgstr ""
+
+#: \cake\console\libs\acl.php:414
+msgid "Uses this command : cake schema run create DbAcl"
+msgstr ""
+
+#: \cake\console\libs\acl.php:417
+msgid "Displays this help message, or a message on a specific command."
+msgstr ""
+
+#: \cake\console\libs\acl.php:428
+msgid "Command '%s' not found"
+msgstr ""
+
+#: \cake\console\libs\acl.php:441
+msgid "Missing/Unknown node type: '%s'"
+msgstr ""
+
+#: \cake\console\libs\acl.php:441
+msgid "Please specify which ACL object type you wish to create."
+msgstr ""
+
+#: \cake\console\libs\api.php:105
+msgid "%s::%s() could not be found"
+msgstr ""
+
+#: \cake\console\libs\api.php:122
+msgid "Select a number to see the more information about a specific method. q to quit. l to list."
+msgstr ""
+
+#: \cake\console\libs\api.php:124
+msgid "Done"
+msgstr ""
+
+#: \cake\console\libs\api.php:195
+msgid "%s could not be found"
+msgstr ""
+
+#: \cake\console\libs\bake.php:57
+#: \cake\console\libs\tasks\plugin.php:98
+msgid "%s directory could not be found.\nBe sure you have created %s"
+msgstr ""
+
+#: \cake\console\libs\bake.php:88
+msgid "What would you like to Bake?"
+msgstr ""
+
+#: \cake\console\libs\bake.php:109
+msgid "You have made an invalid selection. Please choose a type of class to Bake by entering D, M, V, or C."
+msgstr ""
+
+#: \cake\console\libs\bake.php:151
+msgid "%s Model was baked."
+msgstr ""
+
+#: \cake\console\libs\bake.php:161
+msgid "%s Controller was baked."
+msgstr ""
+
+#: \cake\console\libs\bake.php:170
+msgid "Bake All complete"
+msgstr ""
+
+#: \cake\console\libs\bake.php:173
+msgid "Bake All could not continue without a valid model"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:75
+msgid "I18n Shell"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:77
+msgid "[E]xtract POT file from sources"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:78
+msgid "[I]nitialize i18n database table"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:79
+msgid "[H]elp"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:80
+msgid "[Q]uit"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:82
+msgid "What would you like to do?"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:97
+msgid "You have made an invalid selection. Please choose a command to execute by entering E, I, H, or Q."
+msgstr ""
+
+#: \cake\console\libs\i18n.php:118
+msgid "I18n Shell:"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:120
+msgid "I18n Shell initializes i18n database table for your application"
+msgstr ""
+
+#: \cake\console\libs\i18n.php:121
+msgid "and generates .pot file(s) with translations."
+msgstr ""
+
+#: \cake\console\libs\i18n.php:123
+msgid "usage:"
+msgstr ""
+
+#: \cake\console\libs\schema.php:109
+msgid "Schema could not be found"
+msgstr ""
+
+#: \cake\console\libs\schema.php:174;177
+msgid "Schema file: %s generated"
+msgstr ""
+
+#: \cake\console\libs\schema.php:192
+msgid "Schema could not be loaded"
+msgstr ""
+
+#: \cake\console\libs\schema.php:211
+msgid "SQL dump file created in %s"
+msgstr ""
+
+#: \cake\console\libs\schema.php:214
+msgid "SQL dump could not be created"
+msgstr ""
+
+#: \cake\console\libs\schema.php:246
+msgid "Performing a dry run."
+msgstr ""
+
+#: \cake\console\libs\schema.php:258
+msgid "%s could not be loaded"
+msgstr ""
+
+#: \cake\console\libs\schema.php:275
+msgid "command not found"
+msgstr ""
+
+#: \cake\console\libs\schema.php:300;346
+msgid "Schema is up to date."
+msgstr ""
+
+#: \cake\console\libs\schema.php:304
+msgid "The following table(s) will be dropped."
+msgstr ""
+
+#: \cake\console\libs\schema.php:307
+msgid "Are you sure you want to drop the table(s)?"
+msgstr ""
+
+#: \cake\console\libs\schema.php:312
+msgid "The following table(s) will be created."
+msgstr ""
+
+#: \cake\console\libs\schema.php:315
+msgid "Are you sure you want to create the table(s)?"
+msgstr ""
+
+#: \cake\console\libs\schema.php:320
+msgid "End create."
+msgstr ""
+
+#: \cake\console\libs\schema.php:350
+msgid "The following statements will run."
+msgstr ""
+
+#: \cake\console\libs\schema.php:352
+msgid "Are you sure you want to alter the tables?"
+msgstr ""
+
+#: \cake\console\libs\schema.php:354
+msgid "Updating Database..."
+msgstr ""
+
+#: \cake\console\libs\schema.php:358
+msgid "End update."
+msgstr ""
+
+#: \cake\console\libs\schema.php:367
+msgid "Sql could not be run"
+msgstr ""
+
+#: \cake\console\libs\schema.php:377
+msgid "%s is up to date."
+msgstr ""
+
+#: \cake\console\libs\schema.php:380
+msgid "Dry run for %s :"
+msgstr ""
+
+#: \cake\console\libs\schema.php:395
+msgid "%s updated."
+msgstr ""
+
+#: \cake\console\libs\shell.php:418
+msgid "Creating file %s"
+msgstr ""
+
+#: \cake\console\libs\shell.php:420
+msgid "File exists, overwrite?"
+msgstr ""
+
+#: \cake\console\libs\shell.php:422
+msgid "Quitting."
+msgstr ""
+
+#: \cake\console\libs\shell.php:425
+msgid "Skip"
+msgstr ""
+
+#: \cake\console\libs\shell.php:436
+msgid "Wrote"
+msgstr ""
+
+#: \cake\console\libs\shell.php:439
+msgid "Error! Could not write to"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:127
+msgid "Would you like to build your controller interactively?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:129
+msgid "Warning: Choosing no will overwrite the %sController."
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:136
+msgid "Would you like to use scaffolding?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:140;166
+msgid "Would you like to include some basic class methods (index(), add(), view(), edit())?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:143;169
+msgid "Would you like to create the methods for admin routing?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:146
+msgid "Would you like this controller to use other helpers besides HtmlHelper and FormHelper?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:149
+msgid "Please provide a comma separated list of the other helper names you'd like to use.\nExample: 'Ajax, Javascript, Time'"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:153
+msgid "Would you like this controller to use any components?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:156
+msgid "Please provide a comma separated list of the component names you'd like to use.\nExample: 'Acl, Security, RequestHandler'"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:161
+msgid "Would you like to use Sessions?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:221
+#: \cake\console\libs\tasks\model.php:205
+msgid "Look okay?"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:250
+msgid "You must have a model for this class to build scaffold methods. Please try again."
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:511
+#: \cake\console\libs\tasks\model.php:762
+msgid "Your database does not have any tables."
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:538
+msgid "Enter a number from the list above, type in the name of another controller, or 'q' to exit"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:541
+#: \cake\console\libs\tasks\model.php:793
+msgid "Exit"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:546
+msgid "Error:"
+msgstr ""
+
+#: \cake\console\libs\tasks\controller.php:547
+msgid "The Controller name you supplied was empty, or the number \nyou selected was not an option. Please try again."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:103
+msgid "Use Database Config"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:114
+msgid "Given your model named '%s', Cake would expect a database table named %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:115
+msgid "Do you want to use this table?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:119;126
+msgid "What is the name of the table (enter \"null\" to use NO table)?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:133
+msgid "Would you like to supply validation criteria for the fields in your model?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:146
+msgid "What is the primaryKey?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:154
+msgid "Would you like to define model associations (hasMany, hasOne, belongsTo, etc.)?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:161
+msgid "The following Model will be created:"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:312
+msgid "One moment while the associations are detected."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:395
+msgid "None found."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:397
+msgid "Please confirm the following associations:"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:418
+msgid "This is a self join. Use %s as the alias"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:421
+msgid "Specify an alternate alias."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:433
+msgid "Would you like to define some additional model associations?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:439
+msgid "What is the association type?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:444;479
+msgid "Enter a number"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:447
+msgid "The selection you entered was invalid. Please enter a number between 1 and 4."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:452
+msgid "For the following options be very careful to match your setup exactly. Any spelling mistakes will cause errors."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:454
+msgid "What is the alias for this association?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:455
+msgid "What className will %s use?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:469
+msgid "What is the table for this model?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:475
+msgid "A helpful List of possible keys"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:479
+msgid "What is the foreignKey?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:485
+msgid "What is the foreignKey? Specify your own."
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:488
+msgid "What is the associationForeignKey?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:489
+msgid "What is the joinTable?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:501
+msgid "Define another association?"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:769
+msgid "Possible Models based on your current database:"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:790
+msgid "Enter a number from the list above, type in the name of another model, or 'q' to exit"
+msgstr ""
+
+#: \cake\console\libs\tasks\model.php:798
+msgid "The model name you supplied was empty, or the number you selected was not an option. Please try again."
+msgstr ""
+
+#: \cake\console\libs\tasks\plugin.php:114
+msgid "Enter the name of the plugin in CamelCase format"
+msgstr ""
+
+#: \cake\console\libs\tasks\plugin.php:118
+msgid "An error occured trying to bake: %s in %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\plugin.php:142
+#: \cake\console\libs\tasks\project.php:150
+msgid "Do you want verbose output?"
+msgstr ""
+
+#: \cake\console\libs\tasks\plugin.php:179
+#: \cake\console\libs\tasks\project.php:155
+msgid "Created: %s in %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:83
+msgid "Welcome page created"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:85
+msgid "The Welcome page was NOT created"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:89
+msgid "Random hash key created for 'Security.salt'"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:91
+msgid "Unable to generate random hash for 'Security.salt', you should change it in %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:96
+msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/index.php"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:97
+msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/test.php"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:98
+msgid "Remember to check these value after moving to production server"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:100
+msgid "Unable to set CAKE_CORE_INCLUDE_PATH, you should change it in %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:104
+msgid "Could not set permissions on %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:105
+msgid "chmod -R 0777 %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:130
+msgid "What is the path to the directory layout you wish to copy?\nExample: %s"
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:132
+msgid "The directory path you supplied was empty. Please try again."
+msgstr ""
+
+#: \cake\console\libs\tasks\project.php:135
+msgid "Directory path does not exist please choose another:"
+msgstr ""
+
+#: \cake\console\libs\tasks\test.php:104
+msgid "Enter the class to test or (q)uit"
+msgstr ""
+
+#: \cake\console\libs\tasks\test.php:112
+msgid "Enter the name for the test or (q)uit"
+msgstr ""
+
+#: \cake\console\libs\tasks\test.php:116
+msgid "Enter a test case or (q)uit"
+msgstr ""
+
+#: \cake\console\libs\tasks\test.php:122
+msgid "Test baked\n"
+msgstr ""
+
+#: \cake\console\libs\tasks\test.php:178
+msgid "Is this correct?"
+msgstr ""
+
+#: \cake\console\libs\tasks\view.php:238
+msgid "Controller not found"
+msgstr ""
+
+#: \cake\console\libs\tasks\view.php:248
+msgid "The file '%s' could not be found.\nIn order to bake a view, you'll need to first create the controller."
+msgstr ""
+
+#: \cake\console\libs\tasks\view.php:349
+msgid "Template for %s could not be found"
+msgstr ""
+
+#: \cake\console\libs\templates\skel\views\layouts\default.ctp:32
+#: \cake\libs\view\layouts\default.ctp:32
+#: \cake\tests\test_app\views\layouts\default.ctp:32
+msgid "CakePHP: the rapid development php framework:"
+msgstr ""
+
+#: \cake\console\libs\templates\skel\views\layouts\default.ctp:46;57
+#: \cake\libs\view\layouts\default.ctp:46;57
+#: \cake\tests\test_app\views\layouts\default.ctp:44;55
+msgid "CakePHP: the rapid development php framework"
+msgstr ""
+
+#: \cake\libs\cache.php:471
+msgid "Method write() not implemented in %s"
+msgstr ""
+
+#: \cake\libs\cache.php:481
+msgid "Method read() not implemented in %s"
+msgstr ""
+
+#: \cake\libs\class_registry.php:150
+msgid "(ClassRegistry::init() could not create instance of %1$s class %2$s "
+msgstr ""
+
+#: \cake\libs\class_registry.php:160
+msgid "(ClassRegistry::init() Attempted to create instance of a class with a numeric name"
+msgstr ""
+
+#: \cake\libs\configure.php:394
+msgid "Configure::load() - no variable $config found in %s.php"
+msgstr ""
+
+#: \cake\libs\configure.php:617
+msgid "Can't find application core file. Please create %score.php, and make sure it is readable by PHP."
+msgstr ""
+
+#: \cake\libs\configure.php:621
+msgid "Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP."
+msgstr ""
+
+#: \cake\libs\debugger.php:541
+msgid "Please change the value of 'Security.salt' in app/config/core.php to a salt value specific to your application"
+msgstr ""
+
+#: \cake\libs\error.php:155
+msgid "Not Found"
+msgstr ""
+
+#: \cake\libs\error.php:174
+#: \cake\libs\view\errors\missing_controller.ctp:27
+msgid "Missing Controller"
+msgstr ""
+
+#: \cake\libs\error.php:192
+msgid "Missing Method in Controller"
+msgstr ""
+
+#: \cake\libs\error.php:208
+msgid "Trying to access private method in class"
+msgstr ""
+
+#: \cake\libs\error.php:224
+#: \cake\libs\view\errors\missing_table.ctp:27
+msgid "Missing Database Table"
+msgstr ""
+
+#: \cake\libs\error.php:238
+msgid "Scaffold Missing Database Connection"
+msgstr ""
+
+#: \cake\libs\error.php:255
+#: \cake\libs\view\errors\missing_view.ctp:27
+msgid "Missing View"
+msgstr ""
+
+#: \cake\libs\error.php:271
+#: \cake\libs\view\errors\missing_layout.ctp:27
+msgid "Missing Layout"
+msgstr ""
+
+#: \cake\libs\error.php:286
+#: \cake\libs\view\errors\missing_connection.ctp:27
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:27
+msgid "Missing Database Connection"
+msgstr ""
+
+#: \cake\libs\error.php:302
+#: \cake\libs\view\errors\missing_helper_file.ctp:27
+msgid "Missing Helper File"
+msgstr ""
+
+#: \cake\libs\error.php:318
+#: \cake\libs\view\errors\missing_helper_class.ctp:27
+msgid "Missing Helper Class"
+msgstr ""
+
+#: \cake\libs\error.php:335
+#: \cake\libs\view\errors\missing_component_file.ctp:27
+msgid "Missing Component File"
+msgstr ""
+
+#: \cake\libs\error.php:352
+#: \cake\libs\view\errors\missing_component_class.ctp:27
+msgid "Missing Component Class"
+msgstr ""
+
+#: \cake\libs\error.php:367
+#: \cake\libs\view\errors\missing_model.ctp:27
+msgid "Missing Model"
+msgstr ""
+
+#: \cake\libs\folder.php:367;388
+msgid "%s changed to %s"
+msgstr ""
+
+#: \cake\libs\folder.php:371;390
+msgid "%s NOT changed to %s"
+msgstr ""
+
+#: \cake\libs\folder.php:468
+msgid "%s is a file"
+msgstr ""
+
+#: \cake\libs\folder.php:478;627
+msgid "%s created"
+msgstr ""
+
+#: \cake\libs\folder.php:482
+msgid "%s NOT created"
+msgstr ""
+
+#: \cake\libs\folder.php:549;565
+msgid "%s removed"
+msgstr ""
+
+#: \cake\libs\folder.php:551;562
+msgid "%s NOT removed"
+msgstr ""
+
+#: \cake\libs\folder.php:599
+msgid "%s not writable"
+msgstr ""
+
+#: \cake\libs\folder.php:614
+msgid "%s copied to %s"
+msgstr ""
+
+#: \cake\libs\folder.php:616
+msgid "%s NOT copied to %s"
+msgstr ""
+
+#: \cake\libs\folder.php:631
+msgid "%s not created"
+msgstr ""
+
+#: \cake\libs\http_socket.php:449
+msgid "HttpSocket::decodeBody - Unknown encoding: %s. Activate quirks mode to surpress error."
+msgstr ""
+
+#: \cake\libs\http_socket.php:474
+msgid "HttpSocket::decodeChunkedBody - Could not parse malformed chunk. Activate quirks mode to do this."
+msgstr ""
+
+#: \cake\libs\http_socket.php:731
+msgid "HttpSocket::buildRequestLine - Passed an invalid request line string. Activate quirks mode to do this."
+msgstr ""
+
+#: \cake\libs\http_socket.php:746
+msgid "HttpSocket::buildRequestLine - The \"*\" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs."
+msgstr ""
+
+#: \cake\libs\overloadable_php4.php:82;134
+#: \cake\libs\overloadable_php5.php:57;82
+msgid "Magic method handler call__ not defined in %s"
+msgstr ""
+
+#: \cake\libs\security.php:177
+msgid "You cannot use an empty key for Security::cipher()"
+msgstr ""
+
+#: \cake\libs\session.php:469
+msgid "You must set the all Configure::write('Session.*') in core.php to use database storage"
+msgstr ""
+
+#: \cake\libs\validation.php:355
+msgid "You must define the $operator parameter for Validation::comparison()"
+msgstr ""
+
+#: \cake\libs\validation.php:379
+msgid "You must define a regular expression for Validation::custom()"
+msgstr ""
+
+#: \cake\libs\cache\file.php:262
+msgid "%s is not writable"
+msgstr ""
+
+#: \cake\libs\controller\controller.php:288
+msgid "Controller::__construct() : Can not get or parse my own class name, exiting."
+msgstr ""
+
+#: \cake\libs\controller\controller.php:648
+#: \cake\libs\controller\components\auth.php:476
+msgid "%s::isAuthorized() is not defined."
+msgstr ""
+
+#: \cake\libs\controller\controller.php:912
+msgid "Controller::paginate() - can't find model %1$s in controller %2$sController"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:175
+msgid "Scaffold :: "
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:218;221
+msgid "No id set for %s::view()"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:271
+msgid "updated"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:274
+msgid "saved"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:285;288
+msgid "Invalid id for %s::edit()"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:301;304
+msgid "The %1$s has been %2$s"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:311
+msgid "Please correct errors below."
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:350;353
+msgid "No id set for %s::delete()"
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:359;362
+msgid "The %1$s with id: %2$d has been deleted."
+msgstr ""
+
+#: \cake\libs\controller\scaffold.php:366;369
+msgid "There was an error deleting the %1$s with id: %2$d"
+msgstr ""
+
+#: \cake\libs\controller\components\acl.php:58
+msgid "Could not find %s."
+msgstr ""
+
+#: \cake\libs\controller\components\acl.php:211
+msgid "[acl_base] The AclBase class constructor has been called, or the class was instantiated. This class must remain abstract. Please refer to the Cake docs for ACL configuration."
+msgstr ""
+
+#: \cake\libs\controller\components\acl.php:296
+msgid "ACO permissions key %s does not exist in DbAcl::check()"
+msgstr ""
+
+#: \cake\libs\controller\components\acl.php:369
+msgid "DbAcl::allow() - Invalid node"
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:357
+msgid "Could not find AclComponent. Please include Acl in Controller::$components."
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:390
+msgid "Could not find $userModel. Please set AuthComponent::$userModel in beforeFilter()."
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:400
+msgid "Login failed. Invalid username or password."
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:401
+msgid "You are not authorized to access that location."
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:451
+msgid "Auth::startup() - Attempted access of un-mapped action \"%1$s\" in controller \"%2$s\""
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:470
+msgid "Could not find %s. Set AuthComponent::$object in beforeFilter() or pass a valid object"
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:484
+msgid "Auth::isAuthorized() - $authorize is set to an incorrect value.  Allowed settings are: \"actions\", \"crud\", \"model\" or null."
+msgstr ""
+
+#: \cake\libs\controller\components\auth.php:716
+msgid "Auth::getModel() - Model is not set or could not be found"
+msgstr ""
+
+#: \cake\libs\controller\components\security.php:303
+msgid "SecurityComponent::loginCredentials() - Server does not support digest authentication"
+msgstr ""
+
+#: \cake\libs\model\connection_manager.php:114
+msgid "ConnectionManager::getDataSource - Non-existent data source %s"
+msgstr ""
+
+#: \cake\libs\model\connection_manager.php:182
+msgid "Unable to load DataSource file %s.php"
+msgstr ""
+
+#: \cake\libs\model\model.php:855
+msgid "(Model::getColumnTypes) Unable to build model field data. If you are using a model without a database table, try implementing schema()"
+msgstr ""
+
+#: \cake\libs\model\model.php:2236
+msgid "This field cannot be left blank"
+msgstr ""
+
+#: \cake\libs\model\model.php:2595
+msgid "Invalid join model settings in %s"
+msgstr ""
+
+#: \cake\libs\model\behaviors\containable.php:342
+msgid "Model \"%s\" is not associated with model \"%s\""
+msgstr ""
+
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:560
+msgid "Must specify table to operate on constraints"
+msgstr ""
+
+#: \cake\libs\model\datasources\dbo\dbo_oracle.php:618
+msgid "DboOracle::constraint() accepts only enable, disable, or list"
+msgstr ""
+
+#: \cake\libs\view\helper.php:148
+msgid "Method %1$s::%2$s does not exist"
+msgstr ""
+
+#: \cake\libs\view\view.php:393
+msgid "Error in view %s, got: <blockquote>%s</blockquote>"
+msgstr ""
+
+#: \cake\libs\view\view.php:458
+msgid "Error in layout %s, got: <blockquote>%s</blockquote>"
+msgstr ""
+
+#: \cake\libs\view\elements\dump.ctp:28
+msgid "Controller dump:"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_action.ctp:27
+msgid "Missing Method in %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_action.ctp:30
+msgid "The action %1$s is not defined in controller %2$s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_action.ctp:34
+msgid "Create %1$s%2$s in file: %3$s."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_action.ctp:51
+#: \cake\libs\view\errors\missing_component_class.ctp:44
+#: \cake\libs\view\errors\missing_component_file.ctp:44
+#: \cake\libs\view\errors\missing_connection.ctp:37
+#: \cake\libs\view\errors\missing_controller.ctp:45
+#: \cake\libs\view\errors\missing_helper_class.ctp:44
+#: \cake\libs\view\errors\missing_helper_file.ctp:44
+#: \cake\libs\view\errors\missing_layout.ctp:37
+#: \cake\libs\view\errors\missing_model.ctp:46
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:37
+#: \cake\libs\view\errors\missing_table.ctp:33
+#: \cake\libs\view\errors\missing_view.ctp:37
+#: \cake\libs\view\errors\private_action.ctp:33
+#: \cake\libs\view\errors\scaffold_error.ctp:33
+msgid "Notice"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_action.ctp:52
+#: \cake\libs\view\errors\missing_connection.ctp:38
+msgid "If you want to customize this error message, create %s."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_component_class.ctp:30
+msgid "Component class %1$s in %2$s was not found."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_component_class.ctp:34
+#: \cake\libs\view\errors\missing_component_file.ctp:34
+#: \cake\libs\view\errors\missing_model.ctp:34
+msgid "Create the class %s in file: %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_component_class.ctp:45
+#: \cake\libs\view\errors\missing_component_file.ctp:45
+#: \cake\libs\view\errors\missing_controller.ctp:46
+#: \cake\libs\view\errors\missing_helper_class.ctp:45
+#: \cake\libs\view\errors\missing_helper_file.ctp:45
+#: \cake\libs\view\errors\missing_layout.ctp:38
+#: \cake\libs\view\errors\missing_model.ctp:47
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:38
+#: \cake\libs\view\errors\missing_table.ctp:34
+#: \cake\libs\view\errors\missing_view.ctp:38
+#: \cake\libs\view\errors\private_action.ctp:34
+#: \cake\libs\view\errors\scaffold_error.ctp:34
+msgid "If you want to customize this error message, create %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_component_file.ctp:30
+msgid "The component file was not found."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_connection.ctp:30
+msgid "%s requires a database connection"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_connection.ctp:34
+msgid "Confirm you have created the file : %s."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_controller.ctp:30
+msgid "%s could not be found."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_controller.ctp:34
+msgid "Create the class %s below in file: %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_helper_class.ctp:30
+msgid "The helper class <em>%s</em> can not be found or does not exist."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_helper_class.ctp:34
+#: \cake\libs\view\errors\missing_helper_file.ctp:34
+msgid "Create the class below in file: %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_helper_file.ctp:30
+msgid "The helper file %s can not be found or does not exist."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_layout.ctp:30
+msgid "The layout file %s can not be found or does not exist."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_layout.ctp:34
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:34
+#: \cake\libs\view\errors\missing_view.ctp:34
+msgid "Confirm you have created the file: %s"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_model.ctp:30
+msgid "<em>%s</em> could not be found."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_scaffolddb.ctp:30
+msgid "Scaffold requires a database connection"
+msgstr ""
+
+#: \cake\libs\view\errors\missing_table.ctp:30
+msgid "Database table %1$s for model %2$s was not found."
+msgstr ""
+
+#: \cake\libs\view\errors\missing_view.ctp:30
+msgid "The view for %1$s%2$s was not found."
+msgstr ""
+
+#: \cake\libs\view\errors\private_action.ctp:27
+msgid "Private Method in %s"
+msgstr ""
+
+#: \cake\libs\view\errors\private_action.ctp:30
+msgid "%s%s cannot be accessed directly."
+msgstr ""
+
+#: \cake\libs\view\errors\scaffold_error.ctp:27
+msgid "Scaffold Error"
+msgstr ""
+
+#: \cake\libs\view\errors\scaffold_error.ctp:30
+msgid "Method _scaffoldError in was not found in the controller"
+msgstr ""
+
+#: \cake\libs\view\helpers\form.php:277;1057
+#: \cake\libs\view\scaffolds\edit.ctp:31
+msgid "Submit"
+msgstr ""
+
+#: \cake\libs\view\helpers\form.php:405
+msgid "Error in field %s"
+msgstr ""
+
+#: \cake\libs\view\helpers\form.php:496
+msgid "New"
+msgstr ""
+
+#: \cake\libs\view\helpers\form.php:498
+#: \cake\libs\view\scaffolds\index.ctp:68
+#: \cake\libs\view\scaffolds\view.ctp:147
+msgid "Edit"
+msgstr ""
+
+#: \cake\libs\view\helpers\session.php:178
+msgid "You can not write to a Session from the view"
+msgstr ""
+
+#: \cake\libs\view\helpers\text.php:335
+msgid "(TextHelper::flay) Deprecated: the Flay library is no longer supported and will be removed in a future version."
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:112
+msgid "Today, %s"
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:114
+msgid "Yesterday, %s"
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:424
+msgid "on %s"
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:458
+msgid "%s ago"
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:486
+msgid "days"
+msgstr ""
+
+#: \cake\libs\view\helpers\time.php:428
+msgid "year"
+msgid_plural "years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:429;434
+msgid "month"
+msgid_plural "months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:430;435;439
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:431;436;440;443
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:444;447
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:448;451
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\helpers\time.php:454
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\libs\view\pages\home.ctp:27
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:104
+msgid "Release Notes for CakePHP %s."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:28
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:105
+msgid "Read the release notes and get the latest version"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:38
+#: \cake\tests\test_app\views\pages\home.ctp:12
+msgid "Your tmp directory is writable."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:42
+#: \cake\tests\test_app\views\pages\home.ctp:16
+msgid "Your tmp directory is NOT writable."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:52
+#: \cake\tests\test_app\views\pages\home.ctp:26
+msgid "The %s is being used for caching. To change the config edit APP/config/core.php "
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:56
+#: \cake\tests\test_app\views\pages\home.ctp:30
+msgid "Your cache is NOT working. Please check the settings in APP/config/core.php"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:66
+#: \cake\tests\test_app\views\pages\home.ctp:40
+msgid "Your database configuration file is present."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:71
+#: \cake\tests\test_app\views\pages\home.ctp:45
+msgid "Your database configuration file is NOT present."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:73
+#: \cake\tests\test_app\views\pages\home.ctp:47
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:79
+msgid "Rename config/database.php.default to config/database.php"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:88
+#: \cake\tests\test_app\views\pages\home.ctp:62
+msgid "Cake is able to connect to the database."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:92
+#: \cake\tests\test_app\views\pages\home.ctp:66
+msgid "Cake is NOT able to connect to the database."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:98
+#: \cake\tests\test_app\views\pages\home.ctp:72
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:106
+msgid "Editing this Page"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:101
+msgid "To change the content of this page, edit: APP/views/pages/home.ctp.<br />\nTo change its layout, edit: APP/views/layouts/default.ctp.<br />\nYou can also add some CSS styles for your pages at: APP/webroot/css."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:106
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:113
+msgid "Getting Started"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:109
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:115
+msgid "The 15 min Blog Tutorial"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:111
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:119
+msgid "More about Cake"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:113
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:121
+msgid "CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:116
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:124
+msgid "Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:120
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:127
+msgid "Cake Software Foundation"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:121
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:128
+msgid "Promoting development related to CakePHP"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:122
+msgid "The Show"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:123
+msgid "The Show is a weekly live internet radio broadcast where we discuss CakePHP-related topics and answer questions live via IRC, Skype, and telephone."
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:124
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:129
+msgid "The Bakery"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:125
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:130
+msgid "Everything CakePHP"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:126
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:131
+msgid "Book Store"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:127
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:132
+msgid "Recommended Software Books"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:128
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:133
+msgid "CakeSchwag"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:129
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:134
+msgid "Get your own CakePHP gear - Doughnate to Cake"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:130
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:135
+msgid "CakePHP"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:131
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:136
+msgid "The Rapid Development Framework"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:132
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:137
+msgid "CakePHP Manual"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:133
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:138
+msgid "Your Rapid Development Cookbook"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:134
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:139
+msgid "CakePHP API"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:135
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:140
+msgid "Docblock Your Best Friend"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:136
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:141
+msgid "CakeForge"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:137
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:142
+msgid "Open Development for CakePHP"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:138
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:143
+msgid "CakePHP Trac"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:139
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:144
+msgid "For the Development of CakePHP (Tickets, SVN browser, Roadmap, Changelogs)"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:140
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:145
+msgid "CakePHP Google Group"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:141
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:146
+msgid "Community mailing list"
+msgstr ""
+
+#: \cake\libs\view\pages\home.ctp:143
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:148
+msgid "Live chat about CakePHP"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\edit.ctp:37
+#: \cake\libs\view\scaffolds\index.ctp:69
+#: \cake\libs\view\scaffolds\view.ctp:148
+msgid "Delete"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\edit.ctp:37
+#: \cake\libs\view\scaffolds\index.ctp:69
+#: \cake\libs\view\scaffolds\view.ctp:60;148
+msgid "Are you sure you want to delete"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\edit.ctp:39
+msgid "List"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\edit.ctp:45
+#: \cake\libs\view\scaffolds\index.ctp:91
+#: \cake\libs\view\scaffolds\view.ctp:61;68
+msgid "List %s"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\edit.ctp:46
+#: \cake\libs\view\scaffolds\index.ctp:92
+#: \cake\libs\view\scaffolds\view.ctp:62;69;157
+msgid "New %s"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\index.ctp:39
+msgid "Actions"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\index.ctp:67
+#: \cake\libs\view\scaffolds\view.ctp:146
+msgid "View"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\index.ctp:79
+msgid "previous"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\index.ctp:81
+msgid "next"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\view.ctp:28
+msgid "View %s"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\view.ctp:59;100
+msgid "Edit %s"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\view.ctp:60
+msgid "Delete %s"
+msgstr ""
+
+#: \cake\libs\view\scaffolds\view.ctp:81;120
+msgid "Related %s"
+msgstr ""
+
+#: \cake\tests\cases\libs\file.test.php:410
+msgid "[FileTest] Skipping %s because \"%s\" not writeable!"
+msgstr ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1876
+msgid "No Translation needed"
+msgstr ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1887
+msgid "this is a \"quoted string\""
+msgstr ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1896
+msgid "Plural Rule 1"
+msgstr ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1919
+msgid "Plural Rule 1 (from core)"
+msgstr ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1908
+msgid "%d = 1"
+msgid_plural "%d = 0 or > 1"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\tests\cases\libs\i18n.test.php:1930
+msgid "%d = 1 (from core)"
+msgid_plural "%d = 0 or > 1 (from core)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: \cake\tests\cases\libs\view\helpers\form.test.php:1550
+msgid "Le login doit contenir au moins 2 caractères"
+msgstr ""
+
+#: \cake\tests\test_app\views\pages\home.ctp:75
+msgid "To change the content of this page, edit: %s\n\t\tTo change its layout, edit: %s\n\t\tYou can also add some CSS styles for your pages at: %s"
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:31
+msgid "Your tmp directory is "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:33
+msgid "writable."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:35
+msgid "NOT writable."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:44
+msgid "Your cache is "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:46
+msgid "set up and initialized properly."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:49
+msgid " is being used to cache, to change this edit config/core.php "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:59
+msgid "NOT working."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:62
+msgid "Edit: config/core.php to insure you have the newset version of this file and the variable $cakeCache set properly"
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:71
+msgid "Your database configuration file is "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:74
+msgid "present."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:77
+msgid "NOT present."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:93
+msgid "Cake"
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:95
+msgid " is able to "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:97
+msgid " is NOT able to "
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:99
+msgid "connect to the database."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:108
+msgid "To change the content of this page, create: /app/views/pages/home.ctp."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:109
+msgid "To change its layout, create: /app/views/layouts/default.ctp."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:110
+msgid "See the views section of the manual for more info."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:111
+msgid "You can also add some CSS styles for your pages at: app/webroot/css/."
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:116
+msgid "Cook up Web sites fast with CakePHP"
+msgstr ""
+
+#: \cake\tests\test_app\views\posts\test_nocache_tags.ctp:117
+msgid "Create an interactive production wiki using PHP"
+msgstr ""
+

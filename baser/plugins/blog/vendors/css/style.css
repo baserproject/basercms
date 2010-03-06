@@ -1,0 +1,58 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * ブログ
+ * 
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.plugins.blog.vendors.css
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+/* 公開ページ
+---------------------------------------------------*/
+.blog-description {
+	margin-left:30px;
+}
+.post{
+	margin-left:20px;
+	margin-right:20px;
+	margin-bottom:30px;
+}
+.post-body,
+#post-detail{
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:30px;
+	line-height:2em;
+}
+.meta {
+	background-color:#F3F3F3;
+	color:#999999;
+	font-size:0.85em;
+	padding-bottom:5px;
+	padding-right:10px;
+	padding-top:5px;
+	text-align:right;
+}
+.page-numbers .disabled {
+    display:none;
+}
+.page-numbers {
+    text-align:right;
+}
+.more {
+	text-align:right;
+	margin:20px 10px 40px 10px;
+}

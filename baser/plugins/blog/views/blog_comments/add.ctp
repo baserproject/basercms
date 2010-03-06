@@ -1,0 +1,1 @@
+<?php $baser->element('blog_comment',array('dbData'=>$dbData)) ?>

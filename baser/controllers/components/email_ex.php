@@ -1,0 +1,269 @@
+<?php
+/* SVN FILE: $Id$ */
+/**
+ * Email 拡張モデル
+ * 
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.plugins.feed.models
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+/**
+ * Include files
+ */
+App::import('Component','Email');
+/**
+ * Email 拡張モデル
+ *
+ * @package			baser.plugins.feed.controller.components
+ *
+ */
+class EmailExComponent extends EmailComponent{
+/**
+ * Send an email using the specified content, template and layout
+ *
+ * @param	mixed	$content Either an array of text lines, or a string with contents
+ * @param	string	$template Template to use when sending email
+ * @param	string	$layout Layout to use to enclose email body
+ * @return	boolean	Success
+ * @access	public
+ */
+	function send($content = null, $template = null, $layout = null) {
+		$this->__createHeader();
+
+		if ($template) {
+			$this->template = $template;
+		}
+
+		if ($layout) {
+			$this->layout = $layout;
+		}
+
+		if (is_array($content)) {
+			$content = implode("\n", $content) . "\n";
+		}
+
+		$message = $this->__wrap($content);
+
+		if ($this->template === null) {
+			$message = $this->__formatMessage($message);
+		} else {
+			$message = $this->__renderTemplate($message);
+		}
+
+		$message[] = '';
+
+		foreach($message as $key => $line){
+			// 文字コード変換
+			$enc = mb_detect_encoding($line);
+			$message[$key] = mb_convert_encoding($line,$this->charset,$enc);
+		}
+
+		$this->__message = $message;
+
+
+		if (!empty($this->attachments)) {
+			$this->__attachFiles();
+		}
+
+		if (!is_null($this->__boundary)) {
+			$this->__message[] = '';
+			$this->__message[] = '--' . $this->__boundary . '--';
+			$this->__message[] = '';
+		}
+
+		if ($this->_debug) {
+			return $this->__debug();
+		}
+		$__method = '__' . $this->delivery;
+		$sent = $this->$__method();
+
+		$this->__header = array();
+		$this->__message = array();
+
+		return $sent;
+	}
+/**
+ * Wrap the message using EmailComponent::$lineLength
+ *
+ * @param 	string 	$message Message to wrap
+ * @return 	string 	Wrapped message
+ * @access 	private
+ */
+	function __wrap($message) {
+
+		$message = $this->__strip($message, true);
+
+		// MODIFIED 2008/6/22 egashira
+		//$message = str_replace(array("\r\n","\r","\n"), "", $message);
+		//$message = str_replace("<br />", "\n", $message);
+
+		// MODIFIED 2008/6/7/1
+		// CakePHPは、PHPの閉じタグの直後の改行を削除する仕様だという事がわかった。
+		// メールなど、明示的な改行タグがないものについては、PHP閉じタグの直後に半角スペースなど
+		// を挿入する事により、改行が有効となる。よってテンプレート側で対応する事にし、
+		// 処理を元にに戻した。
+		$message = str_replace(array("\r\n","\r"), "\n", $message);
+
+
+		$lines = explode("\n", $message);
+		$formatted = array();
+
+		if ($this->_lineLength !== null) {
+			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
+			$this->lineLength = $this->_lineLength;
+		}
+		foreach ($lines as $line) {
+			if(substr($line, 0, 1) == '.') {
+				$line = '.' . $line;
+			}
+			$enc = mb_detect_encoding($line);
+			$formatted = array_merge($formatted, $this->mbFold($line,$this->lineLength,$enc));
+		}
+        $formatted[] = '';
+		return $formatted;
+	}
+/**
+ * Encode the specified string using the current charset
+ *
+ * @param 	string	$subject String to encode
+ * @return 	string	Encoded string
+ * @access	private
+ */
+	function __encode($subject) {
+		$subject = $this->__strip($subject);
+
+		if (low($this->charset) !== 'iso-8859-15') {
+
+			// 2008/6/22 MODIFIED egashira
+			$enc = mb_detect_encoding($subject);
+			$_enc = mb_internal_encoding();
+			mb_internal_encoding($enc);
+
+			/*
+			$start = "=?" . $this->charset . "?B?";
+			$end = "?=";
+			$spacer = $end . "\n " . $start;
+
+			$length = 75 - strlen($start) - strlen($end);
+			$length = $length - ($length % 4);
+
+			$subject = base64_encode($subject);
+			$subject = chunk_split($subject, $length, $spacer);
+			$spacer = preg_quote($spacer);
+			$subject = preg_replace("/" . $spacer . "$/", "", $subject);
+			$subject = $start . $subject . $end;
+			*/
+
+			$subject = mb_encode_mimeheader($subject,$this->charset,'B', "\n");
+
+			// 2008/6/22 MODIFIED egashira
+			mb_internal_encoding($_enc);
+
+		}
+		return $subject;
+	}
+	/**
+	 * マルチバイト文字を考慮したfolding(折り畳み)処理
+	 *
+	 * @param mixed $str foldingを行う文字列or文字列の配列
+	 *                   文字列に改行が含まれている場合は改行位置でも分割される
+	 * @param integer $width 一行の幅(バイト数)。4以上でなければならない
+	 * @param string $encoding $strの文字エンコーディング
+	 *                         省略した場合は内部文字エンコーディングを使用する
+	 * @return array 一行ずつに分けた文字列の配列
+	 *
+	 * NOTE: いわゆる半角/全角といった見た目ではなく、
+	 *       バイト数によって処理が行われるので、文字エンコーディングによって
+	 *       結果が変わる可能性がある。
+	 *
+	 *       例えば半角カナはShift-JISでは1バイトだが、EUC-JPでは2バイトなので、
+	 *       $width=10の場合Shift-JISなら10文字だが、EUC-JPでは5文字になる。
+	 *
+	 *       全角/半角といった見た目で処理をするにはmb_strwidth()を利用した
+	 *       実装が必要となる。
+	 *
+	 * TODO: 日本語禁則処理(Japanese Hyphenation)
+	 *       行頭禁則文字は濁点/半濁点の応用でいけるので
+	 *       行末禁則文字の処理を加えれば対応できそう
+	 *
+	 *       ……と思ったけど、禁則文字が$widthを超える分だけ並んでたら
+	 *       どうすればいいんだろう
+	 *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
+	 *       強制的に$widthで改行する、とか？
+	 */
+	function mbFold($str, $width, $encoding = null)
+	{
+		assert('$width >= 4');
+
+		if (!isset($str)) {
+			return null;
+		}
+
+		if (!isset($encoding)) {
+			$encoding = mb_internal_encoding();
+		}
+
+		// 元々の配列も文字列中の改行もとにかく展開してひとつの配列にする
+		$strings = array();
+		foreach ((array)$str as $s) {
+			// NOTE: 何故かmb_split()だと改行でうまく分割できない
+			//       どうせメジャーなエンコーディングなら制御コードは
+			//       leading byteにもtrailing byteにもかぶらないので
+			//       preg_split()で良しとする ※JISはアウト
+			// NOTE: mb_regex_encoding()を適切に設定してやることで
+			//       mb_split()でも正常に分割できるようになったが、
+			//       何故かmb_regex_encoding()がJISを受け入れてくれない
+			$strings = array_merge($strings,
+							preg_split('/\x0d\x0a|\x0d|\x0a/', $s));
+		}
+
+		$lines = array();
+		foreach ($strings as $string) {
+			// 1文字ずつに分解して足していって、
+			// バイト数が$widthを超えたら次の行に回す
+			$len = mb_strlen($string, $encoding);
+			for ($i = 0, $line = ''; $i < $len; $i++) {
+				$char = mb_substr($string, $i, 1, $encoding);
+
+				// 濁点や半濁点が続いていた場合のいい加減な禁則処理
+				// ものすごく日本語依存...
+				// TODO: Unicodeの結合文字の判定とかで汎用的に処理したい
+				if ($i + 1 < $len) {
+					$next = mb_substr($string, $i + 1, 1, $encoding);
+					$uc = mb_convert_encoding($next, 'UCS-2', $encoding);
+					if (in_array($uc, array("\x30\x99", "\x30\x9B", "\x30\x9C",
+											"\xFF\x9E", "\xFF\x9F")))
+					{
+						$char .= $next;
+						$i++;
+					}
+				}
+
+				if (strlen($line . $char) > $width) {
+					$lines[] = $line;
+					$line = $char;
+				} else {
+					$line .= $char;
+				}
+
+			}
+			$lines[] = $line;   // 端数or空行
+		}
+
+		return $lines;
+	}
+
+}
+?>

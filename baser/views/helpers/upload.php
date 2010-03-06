@@ -1,0 +1,277 @@
+<?php
+/* SVN FILE: $Id$ */
+/**
+ * アップロードヘルパー
+ * 
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.view.helpers
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+/**
+ * Include files
+ */
+App::import('Helper', 'Form');
+/**
+ * アップロードヘルパー
+ *
+ * @package			baser.views.helpers
+ */
+class UploadHelper extends FormHelper {
+/**
+ * ファイルインプットボックス出力
+ * 画像の場合は画像タグ、その他の場合はファイルへのリンク
+ * そして削除用のチェックボックスを表示する
+ * [カスタムオプション]
+ * imgsize・・・画像のサイズを指定する
+ * @param string $fieldName
+ * @param array $options
+ * @return string
+ * @access public
+ */
+	function file($fieldName, $options = array()) {
+
+        $linkOptions = $_options = array('imgsize'=>'midium','rel'=>'','title'=>'');
+        $options = $this->_initInputField($fieldName, Set::merge($_options,$options));
+
+        $linkOptions['imgsize'] = $options['imgsize'];
+        $linkOptions['rel'] = $options['rel'];
+        $linkOptions['title'] = $options['title'];
+        unset($options['imgsize']);
+        unset($options['rel']);
+        unset($options['title']);
+        
+		$view =& ClassRegistry::getObject('view');
+		$_field = $view->entity();
+        $modelName = $_field[0];
+        $field = $_field[1];
+
+        if (ClassRegistry::isKeySet($modelName)) {
+            $model =& ClassRegistry::getObject($modelName);
+        }else{
+            return;
+        }
+
+        $fileLinkTag = $this->fileLink($fieldName, $linkOptions);
+        $fileTag = parent::file($fieldName,$options);
+        $delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
+        $hiddenValue = $this->value($fieldName.'_');
+		$fileValue = $this->value($fieldName);
+        if(is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue){
+            $hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$hiddenValue));
+        }else{
+            $hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$this->value($fieldName)));
+        }
+        $out = $fileTag;
+        if($fileLinkTag){
+            $out .= '<br />'.$delCheckTag.$hiddenTag.'<br />'.$fileLinkTag;
+        }
+
+        return $out;
+
+	}
+/**
+ * ファイルへのリンクを取得する
+ * @param string $fieldName
+ * @param array $options
+ * @return string
+ */
+    function fileLink($fieldName, $options = array()){
+
+        $_options = array('imgsize'=>'midium','rel'=>'','title'=>'');
+        $options = $this->_initInputField($fieldName, Set::merge($_options,$options));
+        $view =& ClassRegistry::getObject('view');
+        $tmp = false;
+        $_field = $view->entity();
+        $modelName = $_field[0];
+        $field = $_field[1];
+        if (ClassRegistry::isKeySet($modelName)) {
+            $model =& ClassRegistry::getObject($modelName);
+        }else{
+            return;
+        }
+
+        $imgsize = $options['imgsize'];
+        $rel = $options['rel'];
+        $title = $options['title'];
+        unset($options['imgsize']);
+        unset($options['rel']);
+        unset($options['title']);
+        $basePath = $this->base.DS.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
+
+        if(empty($options['value'])){
+			$value = $this->value($fieldName);
+        }else{
+            $value = $options['value'];
+        }
+
+        if(is_array($value)){
+            if(empty($value['session_key']) && empty($value['name'])){
+                $data = $model->findById($model->id);
+                if(!empty($data[$model->alias][$field])){
+                    $value = $data[$model->alias][$field];
+                }else{
+                    $value = '';
+                }
+            }else{
+				if(isset($value['session_key'])){
+					$tmp = true;
+					$value = $value['session_key'];
+					$basePath = $this->base.DS.'uploads'.DS.'tmp'.DS;
+				}
+            }
+        }
+
+        /* ファイルのパスを取得 */
+        /* 画像の場合はサイズを指定する */
+        if(isset($model->actsAs['Upload']['saveDir'])){
+            if($value && !is_array($value)){
+                $uploadSettings = $model->actsAs['Upload']['fields'][$field];
+                if($uploadSettings['type']=='image'){
+                    $options = array('imgsize'=>$imgsize,'rel'=>$rel,'title'=>$title);
+                    if($tmp){
+                        $options['tmp'] = true;
+                    }
+                    $fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<br />'.$value;
+                }else{
+                    $filePath = $basePath.$value;
+                    $fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<br />'.$value;
+                }
+            }else{
+                $fileLinkTag = $value;
+            }
+        }else{
+            return false;
+        }
+        return $fileLinkTag;
+        
+    }
+/**
+ * アップロードした画像のタグをリンク付きで出力する
+ * Uploadビヘイビアの設定による
+ * 上から順に大きい画像を並べている事が前提で
+ * 指定したサイズ内で最大の画像を出力
+ * リンク先は存在する最大の画像へのリンクとなる
+ * @param string $fieldName
+ * @param string $fileName
+ * @param array $options
+ * @return string
+ */
+    function uploadImage($fieldName, $fileName, $options){
+		if(is_array($fileName)){
+			return '';
+		}
+        $_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true);
+        $options = Set::merge($_options,$options);
+		$imgOptions = array();
+		$link = true;
+        $tmp = false;
+        
+        $imgsize = $options['imgsize'];
+		if(isset($options['alt'])){
+			$imgOptions['alt'] = $options['alt'];
+			unset($options['alt']);
+		}
+		if(isset($options['width'])){
+			$imgOptions['width'] = $options['width'];
+			unset($options['width']);
+		}
+		if(isset($options['height'])){
+			$imgOptions['height'] = $options['height'];
+			unset($options['height']);
+		}
+        unset($options['imgsize']);
+		if(isset($options['noimage'])){
+			if(!$fileName) $fileName = $options['noimage'];
+			unset($options['noimage']);
+		}
+		if(isset($options['link'])){
+			$link = $options['link'];
+			unset($options['link']);
+		}
+
+		$_field = split('\.',$fieldName);
+        $modelName = $_field[0];
+        $field = $_field[1];
+
+		if (ClassRegistry::isKeySet($modelName)) {
+            $model =& ClassRegistry::getObject($modelName);
+        }else{
+            return;
+        }
+
+        $fileUrl = $this->base.DS.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
+        $filePath = WWW_ROOT.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
+        $copySettings = $model->actsAs['Upload']['fields'][$field]['imagecopy'];
+
+		if(isset($options['tmp'])){
+            $tmp = true;
+            $link = false;
+            $fileUrl = $this->base.DS.'uploads'.DS.'tmp'.DS;
+            unset($options['tmp']);
+        }
+        
+        $check = false;
+        $maxSizeExists = false;
+        $mostSizeExists = false;
+
+        foreach($copySettings as $key => $copySetting){
+
+            if($key == $imgsize){
+                $check = true;
+            }
+
+            $imgPrefix = '';
+            $imgSuffix = '';
+            if(isset($copySetting['suffix']))
+                $imgSuffix = $copySetting['suffix'];
+            if(isset($copySetting['prefix']))
+                $imgPrefix = $copySetting['prefix'];
+            $pathinfo = pathinfo($fileName);
+            $ext = $pathinfo['extension'];
+            $basename = basename($fileName,'.'.$ext);
+
+            if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)){
+                if($check && !$mostSizeExists){
+                    $mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
+                    $mostSizeExists = true;
+                }
+                if(!$maxSizeExists){
+                    $maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
+                    $maxSizeExists = true;
+                }
+            }elseif($tmp && $check){
+                // 指定した横幅でIMGタグベースでリサイズ
+                $imgOptions['width']=$copySetting['width'];
+                break;
+            }
+        }
+        
+        if(!isset($mostSizeUrl)){
+            $mostSizeUrl = $fileUrl.$fileName;
+        }
+        if(!isset($maxSizeUrl)){
+            $maxSizeUrl = $fileUrl.$fileName;
+        }
+
+        if($link){
+            return $this->Html->link($this->Html->image($mostSizeUrl,$imgOptions),$maxSizeUrl,$options);
+        }else{
+            return $this->Html->image($mostSizeUrl.'?'.rand(),$imgOptions);
+        }
+        
+        
+    }
+}
+?>

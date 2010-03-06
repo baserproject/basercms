@@ -1,0 +1,48 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * メールフォーム
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.plugins.mail.vendors.css
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+#mail table{
+	margin-left:15px;
+	margin-right:15px;
+	display:block;
+	width:auto;
+}
+#mail .col-input{
+	width:240px!important;
+}
+#mail .col-description{
+	font-size:10px;
+}
+.error-message,.message{
+	color:#C00;
+}
+.message{
+	color:#C00;
+	margin:10px;
+}
+input.form-error{
+	background-color:#FFF0F0;
+}
+.submit{
+	text-align:center;
+	margin-top:20px;
+	margin-bottom:20px;
+}

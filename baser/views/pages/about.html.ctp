@@ -1,0 +1,44 @@
+<?php
+/* SVN FILE: $Id$ */
+/**
+ * 会社案内
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+?>
+<?php $baser->setTitle('会社案内') ?>
+<?php $baser->setDescription('BaserCMS inc.の会社案内ページ') ?>
+
+<h2 class="contents-head">会社案内</h2>
+
+<h3 class="contents-head">会社データ</h3>
+
+<div class="section">
+<table class="row-table-01" cellspacing="0" cellpadding="0">
+<tr><th width="150">会社名</th><td>Baser CMS inc.  [デモ]</td></tr>
+<tr><th>設立</th><td>2009年11月</td></tr>
+<tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>
+<tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />
+WEBサイト制作事業（ダミー）<br />
+WEBシステム開発事業（ダミー）</td></tr>
+</table>
+</div>
+
+
+<h3 class="contents-head">アクセスマップ</h3>
+<div class="section">
+<?php echo $this->renderElement('googlemaps'); ?>
+</div>

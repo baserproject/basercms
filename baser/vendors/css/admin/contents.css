@@ -1,0 +1,530 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * コンテンツ用の設定。全ての下層ページから読み込まれる。
+ * 
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2009, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi 
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+/* to-top
+----------------------------------------------- */
+.to-top
+{
+	clear:both;
+	text-align:right;
+	padding-right:15px;
+	padding-top:40px;
+	padding-bottom:20px;
+}
+.to-top a{
+	padding-left:15px;
+	background:url(images/bg_blt_top.gif) no-repeat left center;
+	font-size:10px;
+}
+.to-top a:visited
+{
+	color:#435C18;
+}
+.to-top a:hover
+{
+	color:#CC3300;
+}
+
+/* loginUser
+----------------------------------------------- */
+#loginUser{
+	width:200px;
+	float:right;
+	color:#688A00;
+	font-size:10px;
+	text-align:right;	
+}
+#loginUser span{
+	background:url("images/bg_user_icon.gif") no-repeat left center;
+	padding-left:20px;	
+}
+#loginUser span a{
+        text-decoration:underline;
+}
+
+/* flashMessage
+----------------------------------------------- */
+#flashMessage,
+#authMessage,
+.no-data
+{
+	padding:10px;
+	width:80%;
+	margin:15px auto!important;
+	background-color:#FCF5EB;
+	color:#C00;
+	font-weight:normal;
+}
+
+/* button
+----------------------------------------------- */
+.button{
+	display:-moz-inline-box;
+	width:156px;
+	height:36px;
+	color:#FFFFFF;
+	cursor:pointer;
+	display:inline-block;
+	line-height:36px;
+	text-decoration:none;
+	vertical-align:middle;
+	font-size:12px;
+	border:none;
+	text-align:center;
+}
+.button:hover{
+	text-decoration:none;
+	color:#FFFFFF;
+	background-position:0 -36px;
+}
+.btn-orange
+{
+	background:url(images/bg_btn_orange.gif) no-repeat left top;
+}
+.btn-gray
+{
+	background:url(images/bg_btn_gray.gif) no-repeat left top;
+}
+.btn-red
+{
+	background:url(images/bg_btn_red.gif) no-repeat left top;
+}
+.btn-green
+{
+	background:url(images/bg_btn_green.gif) no-repeat left top;
+}
+.button-s{
+	display:-moz-inline-box;
+	width:40px;
+	height:20px;
+	color:#FFFFFF;
+	cursor:pointer;
+	display:inline-block;
+	line-height:20px;
+	text-decoration:none;
+	vertical-align:middle;
+	font-size:10px;
+}
+.button-s:hover{
+	text-decoration:none;
+	color:#FFFFFF;
+	background-position:0 -20px;
+}
+.btn-orange-s
+{
+	background:url(images/bg_btn_orange_s.gif) no-repeat left top;
+}
+.btn-gray-s
+{
+	background:url(images/bg_btn_gray_s.gif) no-repeat left top;
+}
+.btn-red-s
+{
+	background:url(images/bg_btn_red_s.gif) no-repeat left top;
+}
+.btn-green-s
+{
+	background:url(images/bg_btn_green_s.gif) no-repeat left top;
+}
+
+/* contentsBody
+----------------------------------------------- */
+#contentsBody
+{
+	padding:0 20px;
+}
+#contentsBody p,
+#contentsBody ul
+{
+	margin-left: 15px;
+	margin-bottom:10px;
+	line-height:2em;
+}
+#contentsBody h2
+{
+	background:url(images/bg_main_head.jpg) no-repeat left top;
+	padding-left:25px;
+	padding-top:10px;
+	padding-bottom:10px;
+	font-size:16px;
+	height:20px;
+	color:#688A00;
+}
+#contentsBody h3{
+	background:url(images/bg_box_blt_01.gif) left 10px no-repeat;
+	padding-top:10px;
+	padding-left:30px;
+	margin-left:15px;
+	line-height:26px;
+	margin-top:0px;
+	margin-bottom:0px;
+    height:26px;
+}
+#contentsBody h4{
+	border-bottom:1px solid #669900;
+	padding:5px 15px;
+	margin-right:10px;
+	margin-left:10px;
+	line-height:26px;
+	margin-top:0px;
+	margin-bottom:15px;
+	color:#669900;
+}
+#contentsBody .section{
+	margin-left:50px;
+	margin-right:50px;
+	margin-bottom:20px;
+}
+#contentsBody ul
+{
+	margin-left:20px;
+}
+#contentsBody ul li
+{
+	background:url(images/bg_blt_02.gif) no-repeat left 5px;
+	padding-left:20px;
+	margin-bottom:5px;
+}
+#contentsBody ul li ul li
+{
+	list-style:disc;
+	padding-left:0px;
+	background:none;
+	margin-bottom:0px;
+}
+
+/* navigation
+----------------------------------------------- */
+#navigation
+{
+	font-size:10px;
+	padding:5px 10px;
+	border-bottom:1px dashed #CCCCCC;
+	background-color:#FFFFFF;
+}
+#pankuzu{
+	width:700px;
+	float:left;
+}
+#navigation a
+{
+	text-decoration:none;
+}
+#navigation strong
+{
+	font-weight:normal;
+	background-color:#EDF8C9;
+	color:#688A00;
+	padding:2px;
+}
+
+
+/* menu
+----------------------------------------------- */
+.menu h2
+{
+	background:url(images/bg_blt_01.gif) no-repeat 10px center;
+	font-family:Arial, Helvetica, sans-serif;
+	padding:5px 30px 5px 35px;
+	font-size:12px;
+	border-bottom:1px solid #cccccc;
+	margin-bottom:0px;
+	vertical-align:bottom;
+	font-size:10px;
+}
+.menu p
+{
+	padding:0 10px;
+}
+.menu ul
+{
+	border-bottom:1px solid #FFFFFF;
+}
+.menu ul li a
+{
+	background:url(images/bg_menu_btn.gif) no-repeat;
+	width:140px;
+	height:40px;
+	display:table-cell;
+	padding-left:30px;
+    padding-right:10px;
+	/*padding-top:12px;*/
+	text-decoration:none;
+	font-size:11px;
+	line-height:18px;
+    vertical-align:middle;
+
+}
+* html .menu ul li a{/* IE 6 */
+	display:inline;
+	zoom:1;
+}
+*:first-child+html .menu ul li a{/* IE 7 */
+	display:inline;
+	zoom:1;
+}
+
+.menu ul li a:visited
+{
+	color:#688A00;
+}
+.menu ul li a:hover,
+.menu li.on a
+{
+	background-position:left -40px;
+	color:#FFFFFF!important;
+}
+
+/* side-navi
+----------------------------------------------- */
+.side-navi h2
+{
+	background:url(images/bg_blt_01.gif) no-repeat 10px 4px;
+	font-family:Arial, Helvetica, sans-serif;
+	padding:5px 30px 5px 35px;
+	font-size:10px;
+	margin-bottom:0px;
+	vertical-align:bottom;
+}
+.side-navi ul
+{
+	margin-left:25px;
+}
+.side-navi ul li
+{
+	background:url(images/bg_blt_02.gif) no-repeat left 5px;
+	padding-left:20px;
+	line-height:20px!important;
+	font-size:10px;
+}
+
+/* pagination
+----------------------------------------------- */
+.pagination
+{
+	margin:10px 5px;
+	font-size:10px;
+}
+.pagination a
+{
+
+}
+.pagination .current
+{
+	font-style:normal;
+	background-color:#E2E2E2;
+	padding:1px 3px;
+}
+.page-result
+{
+	float:right;
+}
+.page-numbers .disabled
+{
+	display:none;
+}
+select.multiple{
+	font-family:"ＭＳ ゴシック", "Osaka－等幅";
+	font-size:12px;
+	padding:5px;
+	height:220px;
+}
+select.multiple option{
+	margin:5px 0px;
+}
+
+/* JsonTagView
+----------------------------------------------- */
+#JsonTagView img{
+	vertical-align:baseline;
+	margin-right:5px;
+	cursor:pointer;
+}
+#JsonTagView ul li{
+	float:left;
+	background:none;
+	margin-right:20px;
+	padding:0px;
+}
+
+/* JsonTagView.freezed
+----------------------------------------------- */
+#JsonTagView ul.freezed li{
+	list-style:disc;
+	list-style-position:inside;
+}
+
+/* ログインフォーム
+----------------------------------------------- */
+#login .box-01{
+	margin:50px auto 0px auto!important;
+	width:340px;
+	text-align:center;
+}
+#login h3{
+	background:none;
+	text-align:center;
+	padding:6px 0px;
+	font-size:100%;
+	margin-bottom:0px;
+}
+#login p{
+	font-size:12px;
+}
+#login table,
+#login td{
+	border:0px;
+}
+#login table{
+	display:inline;
+}
+#login .memory{
+	text-align:center;
+	margin-top:10px;
+}
+
+/* インストール
+----------------------------------------------- */
+.check{
+  background:   url(images/ok.png) no-repeat;
+  width:        20px;
+  height:       21px;
+  margin-left:  -25px;
+  margin-top:   0px;
+  float:        left;
+  position:     relative;
+}
+.failed{
+  background:   url(images/failed.png) no-repeat;
+  width:        16px;
+  height:       21px;
+  margin-left:  -27px;
+  margin-top:   -5px;
+  float:        left;
+  position:     relative;
+}
+
+/* CKEditor
+----------------------------------------------- */
+#cke_dialog_background_cover{
+    background-color:black!important;
+}
+.cke_editor td{
+    padding:0!important;
+}
+
+/* contextMenu
+----------------------------------------------- */
+.contextMenu{
+    position:absolute!important;
+    padding:0!important;
+    margin:0!important;
+}
+.contextMenu li{
+    background:none!important;
+    padding:0!important;
+}
+
+/* function-box
+----------------------------------------------- */
+.function-box{
+	background-color:#eFeFeF !important;
+	margin-top:5px;
+	margin-bottom:20px;
+	padding:10px 10px;
+}
+.function-box small{
+	font-weight:bold;
+}
+
+/* installations
+----------------------------------------------- */
+#installations form label{
+    font-weight:bold;
+}
+#installations form small{
+    line-height:0.9em;
+    padding-left:4px;
+}
+
+/* calendar
+----------------------------------------------- */
+.blog-calendar table{
+    margin-left:15px;
+}
+.blog-calendar th{
+    border-bottom:1px solid #e2e2e2;
+}
+.blog-calendar th,
+.blog-calendar td
+{
+    padding:2px 3px;
+    font-size:12px;
+}
+.blog-calendar .sunday{
+    color:#ff6633;
+}
+.blog-calendar .saturday{
+    color:#3366FF;
+}
+.blog-calendar .today{
+    background-color:#e2e2e2;
+}
+
+/* BlogComment
+----------------------------------------------- */
+#BlogComment{
+    margin-top:40px;
+    padding:0 10px;
+}
+#BlogCommentList{
+    padding:10px 20px;
+    margin-top:20px;
+}
+#BlogCommentAddForm{
+    padding:10px 20px;
+}
+#BlogCommentList .comment{
+    padding-bottom:8px;
+    border-bottom:1px dashed #CCCCCC;
+    margin-bottom:20px;
+}
+
+/* edit-link
+----------------------------------------------- */
+.edit-link{
+    padding:10px;
+    display:block;
+}
+
+/* UpdateMessage
+----------------------------------------------- */
+#UpdateMessage {
+    margin-top: 3px;
+    background-color: #dd3300;
+    padding:6px 15px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: center;
+}
+#UpdateMessage a{
+    color: #FFFFFF;
+}
