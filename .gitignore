@@ -1,4 +1,4 @@
-app/plugins/uploader
+app/plugins/uploader/
 .htaccess
 app/config/database.php
 app/config/install.php
