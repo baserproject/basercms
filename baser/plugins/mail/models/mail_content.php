@@ -119,7 +119,7 @@ class MailContent extends MailAppModel {
         $data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
         $data['MailContent']['layout_template'] = 'default';
         $data['MailContent']['form_template'] = 'default';
-        $data['MailContent']['mail_template'] = 'default';
+        $data['MailContent']['mail_template'] = 'mail_default';
         $data['MailContent']['use_description'] = 1;
         return $data;
 
