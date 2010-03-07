@@ -201,7 +201,8 @@ class BlogPostsController extends BlogAppController{
                 $message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				$this->redirect('/admin/blog/blog_posts/index/'.$blogContentId);
+				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+				//$this->redirect('/admin/blog/blog_posts/index/'.$blogContentId);
 			}else{
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -245,7 +246,8 @@ class BlogPostsController extends BlogAppController{
                 $message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				$this->redirect('/admin/blog/blog_posts/index/'.$blogContentId);
+				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+				//$this->redirect('/admin/blog/blog_posts/index/'.$blogContentId);
 			}else{
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
