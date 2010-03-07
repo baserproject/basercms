@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -352,7 +352,7 @@ class L10n extends Object {
 		} else if ($language !== null && isset($this->__l10nCatalog[$language])) {
 			$langKey = $language;
 		} else if (defined('DEFAULT_LANGUAGE')) {
-			$langKey = DEFAULT_LANGUAGE;
+			$langKey = $language = DEFAULT_LANGUAGE;
 		}
 
 		if ($langKey !== null && isset($this->__l10nCatalog[$langKey])) {
@@ -393,7 +393,7 @@ class L10n extends Object {
  * @access private
  */
 	function __autoLanguage() {
-		$_detectableLanguages = split('[,;]', env('HTTP_ACCEPT_LANGUAGE'));
+		$_detectableLanguages = preg_split('/[,;]/', env('HTTP_ACCEPT_LANGUAGE'));
 		foreach ($_detectableLanguages as $key => $langKey) {
 			$langKey = strtolower($langKey);
 			if (strpos($langKey, '_') !== false) {

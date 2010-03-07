@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -254,7 +254,7 @@ class Configure extends Object {
  *     'key1' => 'value of the Configure::One[key1]',
  *     'key2' => 'value of the Configure::One[key2]'
  * );
- * 
+ *
  * Configure::write(array(
  *     'One.key1' => 'value of the Configure::One[key1]',
  *     'One.key2' => 'value of the Configure::One[key2]'
@@ -373,7 +373,7 @@ class Configure extends Object {
 		$_this =& Configure::getInstance();
 		$name = $_this->__configVarNames($var);
 
-		if (count($name) > 1) {
+		if (isset($name[1])) {
 			unset($_this->{$name[0]}[$name[1]]);
 		} else {
 			unset($_this->{$name[0]});
@@ -459,20 +459,7 @@ class Configure extends Object {
 		$content = '';
 
 		foreach ($data as $key => $value) {
-			$content .= "\$config['$type']['$key']";
-
-			if (is_array($value)) {
-				$content .= " = array(";
-
-				foreach ($value as $key1 => $value2) {
-					$value2 = addslashes($value2);
-					$content .= "'$key1' => '$value2', ";
-				}
-				$content .= ");\n";
-			} else {
-				$value = addslashes($value);
-				$content .= " = '$value';\n";
-			}
+			$content .= "\$config['$type']['$key'] = " . var_export($value, true) . ";\n";
 		}
 		if (is_null($type)) {
 			$write = false;
@@ -652,10 +639,6 @@ class Configure extends Object {
 				trigger_error(sprintf(__("Can't find application core file. Please create %score.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
 			}
 
-			if (!include(CONFIGS . 'bootstrap.php')) {
-				trigger_error(sprintf(__("Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
-			}
-
 			if (Configure::read('Cache.disable') !== true) {
 				$cache = Cache::config('default');
 
@@ -692,6 +675,11 @@ class Configure extends Object {
 				}
 				Cache::config('default');
 			}
+
+			if (!include(CONFIGS . 'bootstrap.php')) {
+				trigger_error(sprintf(__("Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
+			}
+
 			Configure::buildPaths(compact(
 				'modelPaths', 'viewPaths', 'controllerPaths', 'helperPaths', 'componentPaths',
 				'behaviorPaths', 'pluginPaths', 'vendorPaths', 'localePaths', 'shellPaths'

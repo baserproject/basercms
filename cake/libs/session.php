@@ -11,13 +11,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -151,6 +151,8 @@ class CakeSession extends Object {
 			if (strpos($this->host, ':') !== false) {
 				$this->host = substr($this->host, 0, strpos($this->host, ':'));
 			}
+		}
+		if (isset($_SESSION) || $start === true) {
 			if (!class_exists('Security')) {
 				App::import('Core', 'Security');
 			}
@@ -518,7 +520,7 @@ class CakeSession extends Object {
 					$config = CONFIGS . Configure::read('Session.save') . '.php';
 
 					if (is_file($config)) {
-						require_once ($config);
+						require($config);
 					}
 				}
 			break;
@@ -590,15 +592,15 @@ class CakeSession extends Object {
 	function __regenerateId() {
 		$oldSessionId = session_id();
 		if ($oldSessionId) {
-			$sessionpath = session_save_path();
-			if (empty($sessionpath)) {
-				$sessionpath = "/tmp";
-			}
-			if (session_id() != "" || isset($_COOKIE[session_name()])) {
+			if (session_id() != ''|| isset($_COOKIE[session_name()])) {
 				setcookie(Configure::read('Session.cookie'), '', time() - 42000, $this->path);
 			}
 			session_regenerate_id(true);
 			if (PHP_VERSION < 5.1) {
+				$sessionPath = session_save_path();
+				if (empty($sessionPath)) {
+					$sessionPath = '/tmp';
+				}
 				$newSessid = session_id();
 
 				if (function_exists('session_write_close')) {
@@ -608,7 +610,7 @@ class CakeSession extends Object {
 				session_id($oldSessionId);
 				session_start();
 				session_destroy();
-				$file = $sessionpath . DS . "sess_$oldSessionId";
+				$file = $sessionPath . DS . 'sess_' . $oldSessionId;
 				@unlink($file);
 				$this->__initSession();
 				session_id($newSessid);

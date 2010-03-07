@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
@@ -355,7 +355,7 @@ class FormHelper extends AppHelper {
 				}
 			}
 		}
-		$field = join('.', $field);
+		$field = implode('.', $field);
 		if (!in_array($field, $this->fields)) {
 			if ($value !== null) {
 				return $this->fields[$field] = $value;
@@ -408,11 +408,10 @@ class FormHelper extends AppHelper {
 			if (is_array($text) && is_numeric($error) && $error > 0) {
 				$error--;
 			}
-			if (is_array($text) && isset($text[$error])) {
-				$text = $text[$error];
-			} elseif (is_array($text)) {
+			if (is_array($text)) {
 				$options = array_merge($options, $text);
-				$text = null;
+				$text = isset($text[$error]) ? $text[$error] : null;
+				unset($options[$error]);
 			}
 
 			if ($text != null) {
@@ -475,13 +474,24 @@ class FormHelper extends AppHelper {
 		));
 	}
 /**
- * Will display all the fields passed in an array expects fieldName as an array key
- * replaces generateFields
+ * Generate a set of inputs for `$fields`.  If $fields is null the current model
+ * will be used.
  *
+ * In addition to controller fields output, `$fields` can be used to control legend
+ * and fieldset rendering with the `fieldset` and `legend` keys. 
+ * `$form->inputs(array('legend' => 'My legend'));` Would generate an input set with 
+ * a custom legend.  You can customize individual inputs through `$fields` as well.
+ * 
+ * {{{
+ *	$form->inputs(array(
+ *		'name' => array('label' => 'custom label')
+ *	));
+ * }}}
+ *
+ * @param mixed $fields An array of fields to generate inputs for, or null.
+ * @param array $blacklist a simple array of fields to skip.
+ * @return string Completed form inputs.
  * @access public
- * @param array $fields works well with Controller::generateFields() or on its own;
- * @param array $blacklist a simple array of fields to skip
- * @return output
  */
 	function inputs($fields = null, $blacklist = null) {
 		$fieldset = $legend = true;
@@ -575,7 +585,7 @@ class FormHelper extends AppHelper {
 	function input($fieldName, $options = array()) {
 		$view =& ClassRegistry::getObject('view');
 		$this->setEntity($fieldName);
-		$entity = join('.', $view->entity());
+		$entity = implode('.', $view->entity());
 
 		$defaults = array('before' => null, 'between' => null, 'after' => null);
 		$options = array_merge($defaults, $options);
@@ -698,9 +708,13 @@ class FormHelper extends AppHelper {
 
 		if ($label !== false) {
 			$labelAttributes = $this->domId(array(), 'for');
-			if (in_array($options['type'], array('date', 'datetime'))) {
-				$labelAttributes['for'] .= 'Month';
-			} else if ($options['type'] === 'time') {
+			if ($options['type'] === 'date' || $options['type'] === 'datetime') {
+				if (isset($options['dateFormat']) && $options['dateFormat'] === 'NONE') {
+					$labelAttributes['for'] .= 'Hour';
+				} else {
+					$labelAttributes['for'] .= 'Month';
+				}
+			} elseif ($options['type'] === 'time') {
 				$labelAttributes['for'] .= 'Hour';
 			}
 
@@ -754,10 +768,10 @@ class FormHelper extends AppHelper {
 			unset($options['dateFormat']);
 		}
 
-		$type	 = $options['type'];
-		$before	 = $options['before'];
+		$type = $options['type'];
+		$before = $options['before'];
 		$between = $options['between'];
-		$after	 = $options['after'];
+		$after = $options['after'];
 		unset($options['type'], $options['before'], $options['between'], $options['after']);
 
 		switch ($type) {
@@ -938,7 +952,7 @@ class FormHelper extends AppHelper {
 				'id' => $attributes['id'] . '_', 'value' => '', 'name' => $attributes['name']
 			));
 		}
-		$out = $hidden . join($inbetween, $out);
+		$out = $hidden . implode($inbetween, $out);
 
 		if ($legend) {
 			$out = sprintf(
@@ -1707,7 +1721,10 @@ class FormHelper extends AppHelper {
 			}
 
 			if ($name !== null) {
-				if ((!$selectedIsEmpty && $selected == $name) || ($selectedIsArray && in_array($name, $selected))) {
+				if (
+					(!$selectedIsArray && !$selectedIsEmpty && (string)$selected == (string)$name) || 
+					($selectedIsArray && in_array($name, $selected))
+				) {
 					if ($attributes['style'] === 'checkbox') {
 						$htmlOptions['checked'] = true;
 					} else {

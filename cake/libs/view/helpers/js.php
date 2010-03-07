@@ -6,13 +6,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2006-2008, Cake Software Foundation, Inc.
+ * Copyright 2006-2010, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2006-2008, Cake Software Foundation, Inc.
+ * @copyright     Copyright 2006-2010, Cake Software Foundation, Inc.
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
@@ -128,7 +128,7 @@ class JsHelper extends Overloadable2 {
 				$options['requestHeaders'] = array();
 			}
 			if (is_array($options['update'])) {
-				$options['update'] = join(' ', $options['update']);
+				$options['update'] = implode(' ', $options['update']);
 			}
 			$options['requestHeaders']['X-Update'] = $options['update'];
 		} else {
@@ -257,9 +257,9 @@ class JsHelper extends Overloadable2 {
 		}
 
 		if (!$numeric) {
-			$rt = '{' . join(', ', $out) . '}';
+			$rt = '{' . implode(', ', $out) . '}';
 		} else {
-			$rt = '[' . join(', ', $out) . ']';
+			$rt = '[' . implode(', ', $out) . ']';
 		}
 		$rt = $prefix . $rt . $postfix;
 
@@ -445,7 +445,7 @@ class JsHelperObject {
 			}
 			$options[] = $key . ':' . $val;
 		}
-		return join(', ', $options);
+		return implode(', ', $options);
 	}
 }
 ?>

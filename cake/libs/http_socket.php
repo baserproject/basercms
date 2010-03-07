@@ -6,13 +6,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -564,7 +564,8 @@ class HttpSocket extends CakeSocket {
 		$stripIfEmpty = array(
 			'query' => '?%query',
 			'fragment' => '#%fragment',
-			'user' => '%user:%pass@'
+			'user' => '%user:%pass@',
+			'host' => '%host:%port/'
 		);
 
 		foreach ($stripIfEmpty as $key => $strip) {
@@ -577,7 +578,6 @@ class HttpSocket extends CakeSocket {
 		if (array_key_exists($uri['scheme'], $defaultPorts) && $defaultPorts[$uri['scheme']] == $uri['port']) {
 			$uriTemplate = str_replace(':%port', null, $uriTemplate);
 		}
-
 		foreach ($uri as $property => $value) {
 			$uriTemplate = str_replace('%'.$property, $value, $uriTemplate);
 		}
@@ -672,7 +672,7 @@ class HttpSocket extends CakeSocket {
 
 			foreach ($items as $item) {
 				if (strpos($item, '=') !== false) {
-					list($key, $value) = explode('=', $item);
+					list($key, $value) = explode('=', $item, 2);
 				} else {
 					$key = $item;
 					$value = null;
@@ -738,7 +738,7 @@ class HttpSocket extends CakeSocket {
 		$request['uri'] = $this->buildUri($request['uri'], '/%path?%query');
 
 		if (!$this->quirksMode && $request['uri'] === '*' && !in_array($request['method'], $asteriskMethods)) {
-			trigger_error(sprintf(__('HttpSocket::buildRequestLine - The "*" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs.', true), join(',', $asteriskMethods)), E_USER_WARNING);
+			trigger_error(sprintf(__('HttpSocket::buildRequestLine - The "*" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs.', true), implode(',', $asteriskMethods)), E_USER_WARNING);
 			return false;
 		}
 		return $request['method'].' '.$request['uri'].' '.$versionToken.$this->lineBreak;
@@ -776,7 +776,7 @@ class HttpSocket extends CakeSocket {
 		$returnHeader = '';
 		foreach ($header as $field => $contents) {
 			if (is_array($contents) && $mode == 'standard') {
-				$contents = join(',', $contents);
+				$contents = implode(',', $contents);
 			}
 			foreach ((array)$contents as $content) {
 				$contents = preg_replace("/\r\n(?![\t ])/", "\r\n ", $content);
@@ -854,7 +854,7 @@ class HttpSocket extends CakeSocket {
 		foreach ((array)$header['Set-Cookie'] as $cookie) {
 			if (strpos($cookie, '";"') !== false) {
 				$cookie = str_replace('";"', "{__cookie_replace__}", $cookie);
-				$parts  = str_replace("{__cookie_replace__}", '";"', preg_split('/\;/', $cookie));
+				$parts  = str_replace("{__cookie_replace__}", '";"', explode(';', $cookie));
 			} else {
 				$parts = preg_split('/\;[ \t]*/', $cookie);
 			}
@@ -921,7 +921,7 @@ class HttpSocket extends CakeSocket {
  * @todo Test $chars parameter
  */
 	function unescapeToken($token, $chars = null) {
-		$regex = '/"(['.join('', $this->__tokenEscapeChars(true, $chars)).'])"/';
+		$regex = '/"(['.implode('', $this->__tokenEscapeChars(true, $chars)).'])"/';
 		$token = preg_replace($regex, '\\1', $token);
 		return $token;
 	}
@@ -934,7 +934,7 @@ class HttpSocket extends CakeSocket {
  * @todo Test $chars parameter
  */
 	function escapeToken($token, $chars = null) {
-		$regex = '/(['.join('', $this->__tokenEscapeChars(true, $chars)).'])/';
+		$regex = '/(['.implode('', $this->__tokenEscapeChars(true, $chars)).'])/';
 		$token = preg_replace($regex, '"\\1"', $token);
 		return $token;
 	}

@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -243,8 +243,8 @@ class Inflector extends Object {
 		extract($_this->pluralRules);
 
 		if (!isset($regexUninflected) || !isset($regexIrregular)) {
-			$regexUninflected = __enclose(join( '|', $uninflected));
-			$regexIrregular = __enclose(join( '|', array_keys($irregular)));
+			$regexUninflected = __enclose(implode( '|', $uninflected));
+			$regexIrregular = __enclose(implode( '|', array_keys($irregular)));
 			$_this->pluralRules['regexUninflected'] = $regexUninflected;
 			$_this->pluralRules['regexIrregular'] = $regexIrregular;
 		}
@@ -305,6 +305,7 @@ class Inflector extends Object {
 			'/(m)en$/i' => '\1an',
 			'/(c)hildren$/i' => '\1\2hild',
 			'/(n)ews$/i' => '\1\2ews',
+			'/eaus$/' => 'eau',
 			'/^(.*us)$/' => '\\1',
 			'/s$/i' => '');
 
@@ -382,8 +383,8 @@ class Inflector extends Object {
 		extract($_this->singularRules);
 
 		if (!isset($regexUninflected) || !isset($regexIrregular)) {
-			$regexUninflected = __enclose(join( '|', $uninflected));
-			$regexIrregular = __enclose(join( '|', array_keys($irregular)));
+			$regexUninflected = __enclose(implode( '|', $uninflected));
+			$regexIrregular = __enclose(implode( '|', array_keys($irregular)));
 			$_this->singularRules['regexUninflected'] = $regexUninflected;
 			$_this->singularRules['regexIrregular'] = $regexIrregular;
 		}
@@ -480,7 +481,7 @@ class Inflector extends Object {
 	function variable($string) {
 		$string = Inflector::camelize(Inflector::underscore($string));
 		$replace = strtolower(substr($string, 0, 1));
-		return preg_replace('/\\w/', $replace, $string, 1);
+		return $replace . substr($string, 1);
 	}
 /**
  * Returns a string with all spaces converted to underscores (by default), accented

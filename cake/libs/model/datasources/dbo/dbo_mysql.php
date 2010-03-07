@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.model.datasources.dbo
@@ -86,6 +86,40 @@ class DboMysqlBase extends DboSource {
 		'boolean' => array('name' => 'tinyint', 'limit' => '1')
 	);
 /**
+ * Returns an array of the fields in given table name.
+ *
+ * @param string $tableName Name of database table to inspect
+ * @return array Fields in table. Keys are name and type
+ */
+	function describe(&$model) {
+		$cache = parent::describe($model);
+		if ($cache != null) {
+			return $cache;
+		}
+		$fields = false;
+		$cols = $this->query('DESCRIBE ' . $this->fullTableName($model));
+
+		foreach ($cols as $column) {
+			$colKey = array_keys($column);
+			if (isset($column[$colKey[0]]) && !isset($column[0])) {
+				$column[0] = $column[$colKey[0]];
+			}
+			if (isset($column[0])) {
+				$fields[$column[0]['Field']] = array(
+					'type' => $this->column($column[0]['Type']),
+					'null' => ($column[0]['Null'] == 'YES' ? true : false),
+					'default' => $column[0]['Default'],
+					'length' => $this->length($column[0]['Type']),
+				);
+				if (!empty($column[0]['Key']) && isset($this->index[$column[0]['Key']])) {
+					$fields[$column[0]['Field']]['key'] = $this->index[$column[0]['Key']];
+				}
+			}
+		}
+		$this->__cacheDescription($this->fullTableName($model, false), $fields);
+		return $fields;
+	}
+/**
  * Generates and executes an SQL UPDATE statement for given model, fields, and values.
  *
  * @param Model $model
@@ -107,7 +141,7 @@ class DboMysqlBase extends DboSource {
 
 		$alias = $joins = false;
 		$fields = $this->_prepareUpdateFields($model, $combined, empty($conditions), !empty($conditions));
-		$fields = join(', ', $fields);
+		$fields = implode(', ', $fields);
 		$table = $this->fullTableName($model);
 
 		if (!empty($conditions)) {
@@ -247,7 +281,7 @@ class DboMysqlBase extends DboSource {
 					}
 				}
 				$colList = array_merge($colList, $this->_alterIndexes($curTable, $indexes));
-				$out .= "\t" . join(",\n\t", $colList) . ";\n\n";
+				$out .= "\t" . implode(",\n\t", $colList) . ";\n\n";
 			}
 		}
 		return $out;
@@ -305,7 +339,7 @@ class DboMysqlBase extends DboSource {
 					}
 				}
 				if (is_array($value['column'])) {
-					$out .= 'KEY '. $name .' (' . join(', ', array_map(array(&$this, 'name'), $value['column'])) . ')';
+					$out .= 'KEY '. $name .' (' . implode(', ', array_map(array(&$this, 'name'), $value['column'])) . ')';
 				} else {
 					$out .= 'KEY '. $name .' (' . $this->name($value['column']) . ')';
 				}
@@ -324,10 +358,57 @@ class DboMysqlBase extends DboSource {
 	function insertMulti($table, $fields, $values) {
 		$table = $this->fullTableName($table);
 		if (is_array($fields)) {
-			$fields = join(', ', array_map(array(&$this, 'name'), $fields));
+			$fields = implode(', ', array_map(array(&$this, 'name'), $fields));
 		}
 		$values = implode(', ', $values);
 		$this->query("INSERT INTO {$table} ({$fields}) VALUES {$values}");
+	}
+/**
+ * Converts database-layer column types to basic types
+ *
+ * @param string $real Real database-layer column type (i.e. "varchar(255)")
+ * @return string Abstract column type (i.e. "string")
+ */
+	function column($real) {
+		if (is_array($real)) {
+			$col = $real['name'];
+			if (isset($real['limit'])) {
+				$col .= '('.$real['limit'].')';
+			}
+			return $col;
+		}
+
+		$col = str_replace(')', '', $real);
+		$limit = $this->length($real);
+		if (strpos($col, '(') !== false) {
+			list($col, $vals) = explode('(', $col);
+		}
+
+		if (in_array($col, array('date', 'time', 'datetime', 'timestamp'))) {
+			return $col;
+		}
+		if (($col == 'tinyint' && $limit == 1) || $col == 'boolean') {
+			return 'boolean';
+		}
+		if (strpos($col, 'int') !== false) {
+			return 'integer';
+		}
+		if (strpos($col, 'char') !== false || $col == 'tinytext') {
+			return 'string';
+		}
+		if (strpos($col, 'text') !== false) {
+			return 'text';
+		}
+		if (strpos($col, 'blob') !== false || $col == 'binary') {
+			return 'binary';
+		}
+		if (strpos($col, 'float') !== false || strpos($col, 'double') !== false || strpos($col, 'decimal') !== false) {
+			return 'float';
+		}
+		if (strpos($col, 'enum') !== false) {
+			return "enum($vals)";
+		}
+		return 'text';
 	}
 }
 
@@ -367,26 +448,34 @@ class DboMysql extends DboMysqlBase {
  */
 	function connect() {
 		$config = $this->config;
-		$connect = $config['connect'];
 		$this->connected = false;
 
 		if (!$config['persistent']) {
 			$this->connection = mysql_connect($config['host'] . ':' . $config['port'], $config['login'], $config['password'], true);
+			$config['connect'] = 'mysql_connect';
 		} else {
-			$this->connection = $connect($config['host'] . ':' . $config['port'], $config['login'], $config['password']);
+			$this->connection = mysql_pconnect($config['host'] . ':' . $config['port'], $config['login'], $config['password']);
 		}
 
 		if (mysql_select_db($config['database'], $this->connection)) {
 			$this->connected = true;
 		}
 
-		if (isset($config['encoding']) && !empty($config['encoding'])) {
+		if (!empty($config['encoding'])) {
 			$this->setEncoding($config['encoding']);
 		}
 
 		$this->_useAlias = (bool)version_compare(mysql_get_server_info($this->connection), "4.1", ">=");
 
 		return $this->connected;
+	}
+/**
+ * Check whether the MySQL extension is installed/loaded
+ *
+ * @return boolean
+ **/
+	function enabled() {
+		return extension_loaded('mysql');
 	}
 /**
  * Disconnects from database.
@@ -433,40 +522,6 @@ class DboMysql extends DboMysqlBase {
 			parent::listSources($tables);
 			return $tables;
 		}
-	}
-/**
- * Returns an array of the fields in given table name.
- *
- * @param string $tableName Name of database table to inspect
- * @return array Fields in table. Keys are name and type
- */
-	function describe(&$model) {
-		$cache = parent::describe($model);
-		if ($cache != null) {
-			return $cache;
-		}
-		$fields = false;
-		$cols = $this->query('DESCRIBE ' . $this->fullTableName($model));
-
-		foreach ($cols as $column) {
-			$colKey = array_keys($column);
-			if (isset($column[$colKey[0]]) && !isset($column[0])) {
-				$column[0] = $column[$colKey[0]];
-			}
-			if (isset($column[0])) {
-				$fields[$column[0]['Field']] = array(
-					'type'		=> $this->column($column[0]['Type']),
-					'null'		=> ($column[0]['Null'] == 'YES' ? true : false),
-					'default'	=> $column[0]['Default'],
-					'length'	=> $this->length($column[0]['Type']),
-				);
-				if (!empty($column[0]['Key']) && isset($this->index[$column[0]['Key']])) {
-					$fields[$column[0]['Field']]['key']	= $this->index[$column[0]['Key']];
-				}
-			}
-		}
-		$this->__cacheDescription($this->fullTableName($model, false), $fields);
-		return $fields;
 	}
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
@@ -560,53 +615,6 @@ class DboMysql extends DboMysqlBase {
 		}
 
 		return null;
-	}
-/**
- * Converts database-layer column types to basic types
- *
- * @param string $real Real database-layer column type (i.e. "varchar(255)")
- * @return string Abstract column type (i.e. "string")
- */
-	function column($real) {
-		if (is_array($real)) {
-			$col = $real['name'];
-			if (isset($real['limit'])) {
-				$col .= '('.$real['limit'].')';
-			}
-			return $col;
-		}
-
-		$col = str_replace(')', '', $real);
-		$limit = $this->length($real);
-		if (strpos($col, '(') !== false) {
-			list($col, $vals) = explode('(', $col);
-		}
-
-		if (in_array($col, array('date', 'time', 'datetime', 'timestamp'))) {
-			return $col;
-		}
-		if (($col == 'tinyint' && $limit == 1) || $col == 'boolean') {
-			return 'boolean';
-		}
-		if (strpos($col, 'int') !== false) {
-			return 'integer';
-		}
-		if (strpos($col, 'char') !== false || $col == 'tinytext') {
-			return 'string';
-		}
-		if (strpos($col, 'text') !== false) {
-			return 'text';
-		}
-		if (strpos($col, 'blob') !== false || $col == 'binary') {
-			return 'binary';
-		}
-		if (strpos($col, 'float') !== false || strpos($col, 'double') !== false || strpos($col, 'decimal') !== false) {
-			return 'float';
-		}
-		if (strpos($col, 'enum') !== false) {
-			return "enum($vals)";
-		}
-		return 'text';
 	}
 /**
  * Enter description here...

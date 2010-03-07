@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.model.datasources
@@ -287,42 +287,50 @@ class DataSource extends Object {
 		return false;
 	}
 /**
+ * Used to create new records. The "C" CRUD.
+ *
  * To-be-overridden in subclasses.
  *
- * @param unknown_type $model
- * @param unknown_type $fields
- * @param unknown_type $values
- * @return unknown
+ * @param Model $model The Model to be created.
+ * @param array $fields An Array of fields to be saved.
+ * @param array $values An Array of values to save.
+ * @return boolean success
  */
 	function create(&$model, $fields = null, $values = null) {
 		return false;
 	}
 /**
+ * Used to read records from the Datasource. The "R" in CRUD
+ *
  * To-be-overridden in subclasses.
  *
- * @param unknown_type $model
- * @param unknown_type $queryData
- * @return unknown
+ * @param Model $model The model being read.
+ * @param array $queryData An array of query data used to find the data you want
+ * @return mixed
  */
 	function read(&$model, $queryData = array()) {
 		return false;
 	}
 /**
+ * Update a record(s) in the datasource.
+ *
  * To-be-overridden in subclasses.
  *
- * @param unknown_type $model
- * @param unknown_type $fields
- * @param unknown_type $values
- * @return unknown
+ * @param Model $model Instance of the model class being updated
+ * @param array $fields Array of fields to be updated
+ * @param array $values Array of values to be update $fields to.
+ * @return boolean Success
  */
 	function update(&$model, $fields = null, $values = null) {
 		return false;
 	}
 /**
+ * Delete a record(s) in the datasource.
+ *
  * To-be-overridden in subclasses.
  *
- * @param unknown_type $model
- * @param unknown_type $id
+ * @param Model $model The model class having record(s) deleted
+ * @param mixed $id Primary key of the model 
  */
 	function delete(&$model, $id = null) {
 		if ($id == null) {
@@ -355,6 +363,16 @@ class DataSource extends Object {
  */
 	function lastAffected($source = null) {
 		return false;
+	}
+/**
+ * Check whether the conditions for the Datasource being available
+ * are satisfied.  Often used from connect() to check for support
+ * before establishing a connection.
+ *
+ * @return boolean Whether or not the Datasources conditions for use are met.
+ **/
+	function enabled() {
+		return true;
 	}
 /**
  * Returns true if the DataSource supports the given interface (method)

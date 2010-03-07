@@ -8,13 +8,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.model.dbo
@@ -127,8 +127,17 @@ class DboFirebird extends DboSource {
 		$connect = $config['connect'];
 
 		$this->connected = false;
+
 		$this->connection = $connect($config['host'] . ':' . $config['database'], $config['login'], $config['password']);
 		$this->connected = true;
+	}
+/**
+ * Check that the interbase extension is loaded
+ *
+ * @return boolean
+ **/
+	function enabled() {
+		return extension_loaded('interbase');
 	}
 /**
  * Disconnects from database.

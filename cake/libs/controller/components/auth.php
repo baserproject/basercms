@@ -9,13 +9,13 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.controller.components
@@ -262,10 +262,6 @@ class AuthComponent extends Object {
  * @access public
  */
 	function startup(&$controller) {
-		$methods = array_flip($controller->methods);
-		$action = strtolower($controller->params['action']);
-		$allowedActions = array_map('strtolower', $this->allowedActions);
-
 		$isErrorOrTests = (
 			strtolower($controller->name) == 'cakeerror' ||
 			(strtolower($controller->name) == 'tests' && Configure::read() > 0)
@@ -274,6 +270,8 @@ class AuthComponent extends Object {
 			return true;
 		}
 
+		$methods = array_flip($controller->methods);
+		$action = strtolower($controller->params['action']);
 		$isMissingAction = (
 			$controller->scaffold === false &&
 			!isset($methods[$action])
@@ -296,6 +294,7 @@ class AuthComponent extends Object {
 		$url = Router::normalize($url);
 		$loginAction = Router::normalize($this->loginAction);
 
+		$allowedActions = array_map('strtolower', $this->allowedActions);
 		$isAllowed = (
 			$this->allowedActions == array('*') ||
 			in_array($action, $allowedActions)
@@ -421,10 +420,10 @@ class AuthComponent extends Object {
 			return false;
 		}
 		$defaults = array(
-			'loginAction' => Router::normalize(array(
-				'controller'=> Inflector::underscore(Inflector::pluralize($this->userModel)),
+			'loginAction' => array(
+				'controller' => Inflector::underscore(Inflector::pluralize($this->userModel)),
 				'action' => 'login'
-			)),
+			),
 			'sessionKey' => 'Auth.' . $this->userModel,
 			'logoutRedirect' => $this->loginAction,
 			'loginError' => __('Login failed. Invalid username or password.', true),
