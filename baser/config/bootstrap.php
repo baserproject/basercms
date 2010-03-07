@@ -29,7 +29,6 @@
  */
 	require ROOT.DS.'baser'.DS.'config'.DS.'paths.php';
     require BASER.'basics.php';
-	App::import('Core', 'Dispatcher', array('file'=>'../baser/dispatcher.php'));   // dispatcherハック
 	App::import('Core', 'ConnectionManager', array('file'=>'../baser/models/connection_manager.php'));   // ConnectionManagerハック
 /**
  * ベース URL を編集
