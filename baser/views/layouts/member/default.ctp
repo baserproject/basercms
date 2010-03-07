@@ -36,7 +36,7 @@
 <?php $baser->js(array('jquery-1.3.1.min','functions','styleswitcher')) ?>
 <?php $baser->scripts() ?>
 </head>
-<body>
+<body id="<?php $baser->contentsName() ?>">
 
 
 <!-- begin page -->

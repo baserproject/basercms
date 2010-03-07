@@ -29,7 +29,7 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 </head>
-<body bgcolor="#FFFFFF">
+<body bgcolor="#FFFFFF" id="<?php $baser->contentsName() ?>">
 <div style="color:#333333;margin:3px">
 <div style="display:-wap-marquee;text-align:center;background-color:#8ABE08;">
 <span style="color:white;"><?php echo $baser->siteConfig['name'] ?></span>
