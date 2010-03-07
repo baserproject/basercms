@@ -469,11 +469,93 @@ class BaserHelper extends AppHelper {
         }
         return ($baserRev > $siteRev);
     }
+/**
+ * アップデート用のメッセージを出力する
+ * @return void
+ */
     function updateMessage(){
         if($this->checkUpdate()){
             $updateLink = $this->Html->link('ここ','/installations/update');
             echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
         }
     }
+/**
+ * コンテンツ名を出力する
+ * @return void
+ */
+	function contentsName(){
+		echo $this->getContentsName();
+	}
+/**
+ * コンテンツ名を取得する
+ * ・キャメルケースで取得
+ * ・URLのコントローラー名までを取得
+ * ・ページの場合は、カテゴリ名（カテゴリがない場合はdefault）
+  * @return string
+ */
+	function getContentsName(){
+
+		$prefix = '';
+		$plugin = '';
+		$controller = '';
+		$action = '';
+		$pass = '';
+		$url0 = '';
+		$url1 = '';
+		$url2 = '';
+
+		if(!empty($this->params['prefix'])){
+			$prefix = $this->params['prefix'];
+		}
+		if(!empty($this->params['plugin'])){
+			$plugin = $this->params['plugin'];
+		}
+		$controller = $this->params['controller'];
+		if($prefix){
+			$action = str_replace($prefix.'_','',$this->params['action']).'_';
+		}else{
+			$action = $this->params['action'];
+		}
+		if(!empty($this->params['pass'][0])){
+			$pass = $this->params['pass'][0];
+		}
+		$url = split('/',$this->params['url']['url']);
+		if(isset($url[0])){
+			$url0 = $url[0];
+		}
+		if(isset($url[1])){
+			$url1 = $url[1];
+		}
+		if(isset($url[2])){
+			$url2 = $url[2];
+		}
+		
+		// ページ機能の場合
+		if($controller=='pages' && $action=='display'){
+			$pass = str_replace('.html','',str_replace('pages/','',$pass));
+			$pass = split('/',$pass);
+			if(count($pass) >= 2){
+				$controller = $pass[0];
+			}else{
+				$controller = 'default';
+			}
+		}
+
+		// プラグインルーティングの場合
+		if($url1==$action && $url2!=$action && $plugin){
+			$plugin = '';
+			$controller = $url0;
+		}
+
+		if($prefix)	$prefix .= '_';
+		if($plugin) $plugin .= '_';
+		if($controller) $controller .= '_';
+
+		$contentsName = $prefix.$plugin.$controller;
+		$contentsName = Inflector::camelize($contentsName);
+
+		return $contentsName;
+		
+	}
 }
 ?>
