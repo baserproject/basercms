@@ -9,13 +9,13 @@
  * PHP versions 4 and %
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.app.config
@@ -53,18 +53,5 @@
  *  $singularRules = array('/(s)tatuses$/i' => '\1\2tatus', '/(matr)ices$/i' =>'\1ix','/(vert|ind)ices$/i')
  */
 	$singularRules = array();
-/**
- * This is a key only array of singular words that should not be inflected.
- * You should not have to change this value below if you do change it use same format
- * as the $uninflectedPlural above.
- */
-	$uninflectedSingular = $uninflectedPlural;
-/**
- * This is a key => value array of singular irregular words.
- * Most of the time this will be a reverse of the above $irregularPlural array
- * You should not have to change this value below if you do change it use same format
- *
- * $irregularSingular = array('atlases' => 'atlas', 'beefs' => 'beef', 'brothers' => 'brother')
- */
-	$irregularSingular = array_flip($irregularPlural);
+
 ?>
