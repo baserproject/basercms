@@ -173,7 +173,8 @@ class PagesController extends AppController {
                     $this->deleteViewCache();
                     $this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
                     $this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
-                    $this->redirect('/admin/pages/index');
+					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+					//$this->redirect('/admin/pages/index');
                 }else{
                     $this->Session->setFlash('保存中にエラーが発生しました。');
                 }
@@ -217,7 +218,8 @@ class PagesController extends AppController {
                     $this->deleteViewCache();
                     $this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
                     $this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
-                    $this->redirect(array('action'=>'admin_index'));
+                    // 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+					//$this->redirect(array('action'=>'admin_index'));
                 }else{
                     $this->Session->setFlash('保存中にエラーが発生しました。');
                 }
