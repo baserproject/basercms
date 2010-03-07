@@ -44,7 +44,7 @@
 </div>
 
 <!-- pagination -->
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>
 
 <?php
 // TODO PHP4環境にてCakePHPでエレメント内で設定したプロパティを引き継げない問題があるので
@@ -110,6 +110,6 @@ $paginator->options = array('url' => $this->passedArgs);
 <?php endif; ?>
 </table>
 
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>
 
 <div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>

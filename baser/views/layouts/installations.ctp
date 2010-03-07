@@ -58,7 +58,7 @@
 
 
         <!-- begin header -->
-        <?php echo $this->renderElement('installations_header') ?>
+        <?php $baser->element('installations_header') ?>
         <!-- end header -->
 
 
@@ -68,7 +68,7 @@
 
             <!-- navigation -->
             <!--<div id="navigation">
-            <?php echo $this->renderElement('navi',array('title_for_element'=>$title_for_layout)); ?>
+            <?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
             </div>-->
 
 
@@ -103,7 +103,7 @@
 
 
             <!-- begin beta -->
-            <?php echo $this->renderElement('sidebar') ?>
+            <?php $baser->element('sidebar') ?>
             <!-- end beta -->
 
 
@@ -117,7 +117,7 @@
 
 
         <!-- begin footer -->
-        <?php echo $this->renderElement('footer') ?>
+        <?php $baser->element('footer') ?>
         <!-- end footer -->
 
 

@@ -30,7 +30,7 @@
 
 <?php /* フォーム本体 */ ?>
 <table cellpadding="0" cellspacing="0" class="row-table-01">
-<?php echo $this->renderElement('mail_input',array('blockStart'=>1)) ?>
+<?php $baser->element('mail_input',array('blockStart'=>1)) ?>
 </table>
 	
 	

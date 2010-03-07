@@ -22,7 +22,7 @@
 ?>
 
 <!-- pagination -->
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>
 
 
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableBlogComments">
@@ -86,4 +86,4 @@
 <?php endif; ?>
 </table>
 
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>

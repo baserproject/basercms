@@ -21,7 +21,7 @@
  */
 ?>
 <!-- pagination -->
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>
 
 
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableUsers">
@@ -64,7 +64,7 @@
 </table>
 
 
-<?php echo $this->renderElement('paginations'.DS.'default'); ?>
+<?php $baser->pagination('default',array(),null,false) ?>
 
 
 <div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

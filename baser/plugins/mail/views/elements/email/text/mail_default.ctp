@@ -37,7 +37,7 @@
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ お問い合わせ内容 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-<?php echo $this->renderElement('email/text/mail_data') ?> 
+<?php $baser->element('email/text/mail_data') ?>
  
  
  
