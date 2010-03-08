@@ -170,11 +170,12 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()){
 				if($this->Page->save($this->data,false)){
+					$id = $this->Page->getLastInsertId();
                     $this->deleteViewCache();
                     $this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
                     $this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
-					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
-					//$this->redirect('/admin/pages/index');
+					// 編集画面にリダイレクト
+					$this->redirect('/admin/pages/edit/'.$id);
                 }else{
                     $this->Session->setFlash('保存中にエラーが発生しました。');
                 }
