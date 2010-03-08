@@ -1,10 +1,9 @@
-app/plugins/uploader
 .htaccess
 app/config/database.php
 app/config/install.php
 app/db/*
 !app/db/empty
-app/tmp/cache/cake_core_paths
+app/plugins/uploader/
 app/tmp/cache/models/*
 !app/tmp/cache/models/empty
 app/tmp/cache/persistent/*
@@ -14,7 +13,7 @@ app/tmp/cache/views/*
 app/tmp/csv/
 app/tmp/logs/*
 !app/tmp/logs/empty
-app/views/pages/*
+app/views/pages/
 app/webroot/files/*
 !app/webroot/files/empty
 app/webroot/themed/demo/pages/*
