@@ -565,7 +565,9 @@ class AppModel extends Model
     function addField($addFieldName,$column){
         $this->_schema=null;
         $db =& ConnectionManager::getDataSource($this->useDbConfig);
-        return $db->addColumn($this,$addFieldName,$column);
+        $ret = $db->addColumn($this,$addFieldName,$column);
+		$this->deleteModelCache();
+		return $ret;
     }
 /**
  * フィールドを変更する
@@ -578,7 +580,9 @@ class AppModel extends Model
     function editField($oldFieldName,$newFieldName,$column=null){
         $this->_schema=null;
         $db =& ConnectionManager::getDataSource($this->useDbConfig);
-        return $db->editColumn($this,$oldFieldName,$newFieldName,$column);
+        $ret = $db->editColumn($this,$oldFieldName,$newFieldName,$column);
+		$this->deleteModelCache();
+		return $ret;
     }
 /**
  * フィールドを削除する
@@ -589,7 +593,9 @@ class AppModel extends Model
     function deleteField($delFieldName){
         $this->_schema=null;
         $db =& ConnectionManager::getDataSource($this->useDbConfig);
-        return $db->deleteColumn($this,$delFieldName);
+        $ret = $db->deleteColumn($this,$delFieldName);
+		$this->deleteModelCache();
+		return $ret;
     }
 /**
  * テーブルの存在チェックを行う
@@ -733,5 +739,20 @@ class AppModel extends Model
 		return true;
 	
 	}
+/**
+ * Modelキャッシュを削除する
+ * @return void
+ * @access public
+ */
+    function deleteModelCache(){
+        App::import('Core','Folder');
+        $folder = new Folder(CACHE.'models'.DS);
+        $caches = $folder->read(true,true);
+        foreach($caches[1] as $cache){
+			if(basename($cache) != 'empty'){
+				@unlink(CACHE.'models'.DS.$cache);
+			}
+        }
+    }
 }
 ?>
