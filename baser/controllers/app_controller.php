@@ -417,28 +417,65 @@ class AppController extends Controller{
         return $mode;
     }
 /**
- * メールコンポーネントの初期設定
+ * メールを送信する
  *
  * @param	mixed	mailform
  * @return	void
  * @access	protected
  */
- 	function _mailSetting($to,$from,$fromName,$title,$template,$data = null){
+ 	function sendmail($to,$from,$fromName,$title,$template,$data = null){
 
+		if(!isset($this->EmailEx)){
+			return false;
+		}
+		
 		$this->EmailEx->reset();
-	    $this->EmailEx->charset='ISO-2022-JP';
-	    $this->EmailEx->return = $from;
-	    $this->EmailEx->replyTo = $from;
-        $this->EmailEx->from = $fromName . '<'.$from.'>';
-        $this->EmailEx->to = '<'.$to.'>';
+		$this->EmailEx->to = $to;
         $this->EmailEx->subject = $title;
+		if($from && $fromName){
+			$this->EmailEx->return = $from;
+			$this->EmailEx->replyTo = $from;
+			$this->EmailEx->from = $fromName . '<'.$from.'>';
+		}elseif($from){
+			$this->EmailEx->return = $from;
+			$this->EmailEx->replyTo = $from;
+			$this->EmailEx->from = $from;
+		}else{
+			$this->EmailEx->return = $to;
+			$this->EmailEx->replyTo = $to;
+			$this->EmailEx->from = $to;
+		}
+
+		if(Configure::read('Mobile.on')){
+			$this->EmailEx->template = 'mobile'.DS.$template;
+		}else{
+			$this->EmailEx->template = $template;
+		}
+		
 	    $this->EmailEx->sendAs = 'text';		// text or html or both
 	    $this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-        $this->EmailEx->delivery = "mail";
-        $this->EmailEx->template = $template;
+		// TODO SMTPの設定は、サイト基本設定でできるようにする
+		$this->EmailEx->charset='ISO-2022-JP';
+		/*if($mailConfig['smtp_host']){
+			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
+			$this->EmailEx->smtpOptions = array('host'	=>$mailConfig['smtp_host'],
+													  'port'	=>25,
+													  'timeout'	=>30,
+													  'username'=>$mailConfig['smtp_username'],
+													  'password'=>$mailConfig['smtp_password']);
+		}else{*/
+			$this->EmailEx->delivery = "mail";
+		//}
+		if(Configure::read('Mobile.on')){
+			$this->EmailEx->template = 'mobile'.DS.$template;
+		}else{
+			$this->EmailEx->template = $template;
+		}
         if($data){
-            $this->set('data',$data);
+            $this->set($data);
         }
+
+		$this->EmailEx->send();
 
 	}
 }
