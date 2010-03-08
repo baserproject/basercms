@@ -52,7 +52,7 @@ class BlogComment extends BlogAppModel {
 	function beforeValidate(){
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => '>> お名前は必ず入力して下さい'));
+											'message' => '>> お名前を入力して下さい'));
 		$this->validate['message'] = array(array('rule' => VALID_NOT_EMPTY,
 											'message' => ">> コメントを入力して下さい"));
 		return true;
@@ -66,6 +66,34 @@ class BlogComment extends BlogAppModel {
 	function getDefaultValue(){
 		$data[$this->name]['name'] = 'NO NAME';
 		return $data;
+	}
+/**
+ * コメントを追加する
+ * @param array $data
+ * @param string $contentId
+ * @param string $postNo
+ * @return boolean
+ */
+	function add($data,$contentId,$postId,$commentApprove){
+
+		if(isset($data['BlogComment'])){
+			$data = $data['BlogComment'];
+		}
+
+		// サニタイズ
+		$data['message'] = Sanitize::html($data['message']);
+		$data['blog_post_id'] = $postId;
+		$data['blog_content_id'] = $contentId;
+		if($commentApprove){
+			$data['status'] = false;
+		}else{
+			$data['status'] = true;
+		}
+		
+		$data['no'] = $this->getMax('no',array('blog_content_id'=>$contentId))+1;
+		$this->create($data);
+		return $this->save();
+		
 	}
 }
 ?>
