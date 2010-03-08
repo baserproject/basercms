@@ -46,3 +46,5 @@ $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
+
+<?php $baser->element('blog_comments') ?>
