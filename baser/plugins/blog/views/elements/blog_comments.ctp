@@ -53,7 +53,7 @@
                             comment.hide();
                             $("#BlogCommentList").append(comment);
                             comment.show(500);
-                            resultMessage = '送信が完了しました。';
+                            resultMessage = 'コメントの送信が完了しました。';
                         <?php endif ?>
                         $("#ResultMessage").html(resultMessage);
                         $("#ResultMessage").show('slide',{direction:"up"},500);
