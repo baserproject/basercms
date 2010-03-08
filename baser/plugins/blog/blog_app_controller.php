@@ -30,6 +30,25 @@ App::import('Controller', 'Plugins');
  */
 class BlogAppController extends PluginsController
 {
-
+/**
+ * コメントを管理者メールへメール送信する
+ * @param array $data
+ */
+	function _sendComment(){
+		
+		if(!$this->data || empty($this->siteConfigs['email'])){
+			return false;
+		}else{
+			$data = $this->data;
+			$data['SiteConfig'] = $this->siteConfigs;
+		}
+		$to = $this->siteConfigs['email'];
+		$from = $this->siteConfigs['email'];
+		$fromName = $this->siteConfigs['name'];
+		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
+		$template = 'blog_comment';
+		$this->sendmail($to, $from, $fromName, $title, $template, $data);
+		
+	}
 }
 ?>
