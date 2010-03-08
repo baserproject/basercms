@@ -55,7 +55,7 @@ class BlogCommentsController extends BlogAppController{
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure','RequestHandler');
+    var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -257,32 +257,15 @@ class BlogCommentsController extends BlogAppController{
  * @param string $blogPostId
  */
     function add($blogContentId,$blogPostId){
-
         if(!$this->data || !$blogContentId || !$blogPostId){
             $this->notFound();
         }else{
-
-            // サニタイズ
-            $this->data['BlogComment'][$message] = Sanitize::html($this->data['BlogComment'][$message]);
-            
-            $this->data['BlogComment']['blog_post_id'] = $blogPostId;
-            $this->data['BlogComment']['blog_content_id'] = $blogContentId;
-            if($this->blogContent['BlogContent']['comment_approve']){
-                $this->data['BlogComment']['status'] = false;
-            }else{
-                $this->data['BlogComment']['status'] = true;
-            }
-            $this->data['BlogComment']['no'] = $this->BlogComment->getMax('no',array('blog_content_id'=>$blogContentId))+1;
-
-            $this->BlogComment->create($this->data);
-
-            $result = $this->BlogComment->save();
+			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
             if($result){
+				$this->_sendComment();
                 $this->set('dbData',$result['BlogComment']);
             }
-
         }
-
     }
 }
 ?>
