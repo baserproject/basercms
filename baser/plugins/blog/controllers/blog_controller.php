@@ -52,7 +52,7 @@ class BlogController extends BlogAppController{
 /**
  * コンポーネント
  */
- 	var $components = array('RequestHandler');
+ 	var $components = array('RequestHandler','EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -301,6 +301,32 @@ class BlogController extends BlogAppController{
 
         /* 単ページ */
 		}else{
+
+			if($this->data){
+
+				// blog_post_idを取得
+				$conditions["BlogPost.no"] = $id;
+				$conditions['BlogPost.status'] = true;
+				$conditions["BlogPost.blog_content_id"] = $contentId;
+				$postId = $this->BlogPost->field('id',$conditions);
+				if(!$postId){
+					$this->notFound();
+				}
+
+				if($this->BlogPost->BlogComment->add($this->data,$contentId,$postId,$this->blogContent['BlogContent']['comment_approve'])){
+					$this->_sendComment();
+					if($this->blogContent['BlogContent']['comment_approve']){
+						$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
+					}else{
+						$commentMessage = 'コメントの送信が完了しました。';
+					}
+					$this->data = null;
+				}else{
+					$commentMessage = 'コメントの送信に失敗しました。';
+				}
+				$this->set('commentMessage',$commentMessage);
+
+			}
 
             $conditions["BlogPost.no"] = $id;
             if(!$this->preview){
