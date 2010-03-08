@@ -575,7 +575,8 @@ class Message extends MailAppModel {
 		$file->write($fields, 'w', true);
 		$file->close();
         chmod($fileName,0666);
-        Cache::clear();
+        //Cache::clear();
+		$this->deleteModelCache();
 
 		return true;
 
@@ -619,7 +620,8 @@ class Message extends MailAppModel {
         }
 
 		$ret = $db->execute($sql);
-        Cache::clear();
+        //Cache::clear();
+		$this->deleteModelCache();
         return $ret;
 
 	}
@@ -641,7 +643,8 @@ class Message extends MailAppModel {
 		if($ret && $source == 'messages'){
 			$ret = $this->_createCsv($source);
 		}
-        Cache::clear();
+        //Cache::clear();
+		$this->deleteModelCache();
 		return $ret;
 
 	}
@@ -683,8 +686,8 @@ class Message extends MailAppModel {
 			$ret = $this->_createTable($source);
 		}
 
-        Cache::clear();
-
+        //Cache::clear();
+		$this->deleteModelCache();
 		return $ret;
 
 	}
@@ -704,7 +707,8 @@ class Message extends MailAppModel {
 		if($ret && $contentName == 'messages'){
 			$ret = $this->_createCsv($contentName);
 		}
-        Cache::clear();
+        //Cache::clear();
+		$this->deleteModelCache();
 		return $ret;
 
 	}
@@ -723,7 +727,8 @@ class Message extends MailAppModel {
 		if($ret && $contentName == 'messages'){
 			$ret = $this->_createTable($contentName);
 		}
-        Cache::clear();
+        //Cache::clear();
+		$this->deleteModelCache();
 		return $ret;
 
 	}
