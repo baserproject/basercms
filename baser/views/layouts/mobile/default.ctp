@@ -1,16 +1,16 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [モバイル] レイアウト
+ * [モバイル] レイアウ�?
  * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2009, Catchup, Inc.
+ * Copyright 2008 - 2010, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2009, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2010, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
@@ -41,7 +41,7 @@
 
 <br />
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
-<span style="color:#8ABE08">◆ </span><?php echo $html->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
+<span style="color:#8ABE08">�? </span><?php echo $html->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
 <center><font size="1">(C)BaserCMS</font></center>
 </div>

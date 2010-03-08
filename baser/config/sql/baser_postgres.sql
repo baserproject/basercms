@@ -3,11 +3,11 @@
 -- BaserCMS インストール SQL（PostgreSQL）
 --
 -- BaserCMS :  Based Website Development Project <http://basercms.net>
--- Copyright 2008 - 2009, Catchup, Inc.
+-- Copyright 2008 - 2010, Catchup, Inc.
 --								9-5 nagao 3-chome, fukuoka-shi
 --								fukuoka, Japan 814-0123
 --
--- @copyright		Copyright 2008 - 2009, Catchup, Inc.
+-- @copyright		Copyright 2008 - 2010, Catchup, Inc.
 -- @link			http://basercms.net BaserCMS Project
 -- @version			$Revision$
 -- @modifiedby		$LastChangedBy$
