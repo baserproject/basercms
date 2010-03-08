@@ -116,6 +116,10 @@ class PluginsController extends AppController {
             return null;
         }
         
+		if(!isset($this->params['url']['url'])){
+			return null;
+		}
+									   
         $url = split('/',$this->params['url']['url']);
         if($url[0]!=Configure::read('Mobile.prefix')){
             $url = $url[0];
