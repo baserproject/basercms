@@ -86,6 +86,7 @@
 <?php if($this->action == 'admin_add'): ?>
 	<?php echo $freeze->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
+	<?php $baser->link('確　認',array('controller'=>'blog','action'=>'preview', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')), array('class'=>'btn-green button','target'=>'_blank')) ?>
 	<?php echo $freeze->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php echo $html->link('削除する',array('action'=>'delete', $blogContent['BlogContent']['id'], $freeze->value('BlogPost.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $freeze->value('BlogPost.name')),false); ?>
 <?php endif ?>
