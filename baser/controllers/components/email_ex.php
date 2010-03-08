@@ -61,7 +61,10 @@ class EmailExComponent extends EmailComponent{
 		} else {
 			$message = $this->__renderTemplate($message);
 		}
-
+		
+		// テンプレート内の変数がラップされるように再ラップ
+		$message = $this->___wrap($message);
+		
 		$message[] = '';
 
 		foreach($message as $key => $line){
@@ -116,10 +119,19 @@ class EmailExComponent extends EmailComponent{
 		// 処理を元にに戻した。
 		$message = str_replace(array("\r\n","\r"), "\n", $message);
 
-
 		$lines = explode("\n", $message);
-		$formatted = array();
+		
+		return $this->___wrap($lines);
 
+	}
+/**
+ * テンプレートを整形後に再度ラップする必要があるのでラップ処理の部分だけを分離
+ * @param array $lines
+ * @return array
+ */
+	function ___wrap($lines){
+		
+		$formatted = array();
 		if ($this->_lineLength !== null) {
 			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
 			$this->lineLength = $this->_lineLength;
@@ -133,6 +145,7 @@ class EmailExComponent extends EmailComponent{
 		}
         $formatted[] = '';
 		return $formatted;
+		
 	}
 /**
  * Encode the specified string using the current charset
