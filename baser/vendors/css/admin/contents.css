@@ -528,3 +528,10 @@ select.multiple option{
 #UpdateMessage a{
     color: #FFFFFF;
 }
+
+/* map
+----------------------------------------------- */
+#map .sitename{
+	color:#360;
+	font-weight: bold;
+}

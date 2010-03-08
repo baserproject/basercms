@@ -26,7 +26,7 @@ $_height = 400;
 $_zoom = 16;
 $_mapId = 'map';
 $_address = $baser->siteConfig['address'];
-$_markerText = '<font color="#360"><strong>'.$baser->siteConfig['name'].'</strong></font>';
+$_markerText = '<span class="sitename">'.$baser->siteConfig['name'].'</span><br /><span class="address">'.$_address.'</span>';
 if(isset($width)) $_width = $width;
 if(isset($height)) $_height = $height;
 if(isset($zoom)) $_zoom = $zoom;
@@ -38,7 +38,7 @@ $googlemaps->googlemapsKey = $baser->siteConfig['googlemaps_key'];
 $googlemaps->mapId = $_mapId;
 $googlemaps->zoom = $_zoom;
 $googlemaps->title = $baser->siteConfig['name'];
-$googlemaps->markerText = $_markerText.'<br />'.$_address;
+$googlemaps->markerText = $_markerText;
 if(!$googlemaps->load($_address,$_width,$_height)){
 	echo 'Google Mpas を読み込めません。管理画面で正しいgooglemapsキー、住所が設定されているか確認してください。';
 }
