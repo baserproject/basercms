@@ -77,6 +77,13 @@
 		<?php echo $formEx->error('Permission.auth') ?>
 	</td>
 </tr>
+<tr>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.status', '利用状態') ?></th>
+	<td class="col-input">
+		<?php echo $formEx->radio('Permission.status', $textEx->booleanStatusList(), array('legend'=>false,'separator'=>'　')) ?>
+		<?php echo $formEx->error('Permission.status') ?>
+	</td>
+</tr>
 </table>
 
 <div class="align-center">

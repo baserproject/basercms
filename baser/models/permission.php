@@ -161,6 +161,9 @@ class Permission extends AppModel {
 		}
 		$ret = true;
 		foreach($permissions as $permission){
+			if(!$permission['Permission']['status']){
+				continue;
+			}
 			if($permission['Permission']['url']!='/'){
 				$pattern = preg_replace('/^\//is', '', $permission['Permission']['url']);
 			}else{

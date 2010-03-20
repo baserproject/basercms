@@ -75,7 +75,9 @@
 <?php if(!empty($listDatas)): ?>
 <?php $count=0; ?>
 <?php foreach($listDatas as $listData): ?>
-	<?php if ($count%2 === 0): ?>
+	<?php if (!$listData['Permission']['status']): ?>
+		<?php $class=' class="disablerow"'; ?>
+	<?php elseif ($count%2 === 0): ?>
 		<?php $class=' class="altrow"'; ?>
 	<?php else: ?>
 		<?php $class=''; ?>
