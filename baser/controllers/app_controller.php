@@ -119,6 +119,8 @@ class AppController extends Controller{
 
         parent::__construct();
 
+		$base = baseUrl();
+		
         // サイト基本設定の読み込み
         if(file_exists(CONFIGS.'database.php')){
             $dbConfig = new DATABASE_CONFIG();
@@ -132,7 +134,6 @@ class AppController extends Controller{
                 }
 
                 // テーマの設定
-                $base = baseUrl();
                 if($base){
                     $reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
                 }else{
