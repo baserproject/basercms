@@ -37,6 +37,10 @@ if (file_exists(CONFIGS.'database.php'))
 		Router::connect('/'.$mobilePrefix.'/', array('prefix' => 'mobile','controller' => 'pages', 'action'=>'display', 'pages/'.'index.html'));
 	}
 /**
+ * 管理画面トップページ
+ */
+	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard'));
+/**
  * ページ機能拡張
  * .html付きのアクセスの場合、pagesコントローラーを呼び出す
  */

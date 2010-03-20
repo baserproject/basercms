@@ -229,13 +229,15 @@ class AppController extends Controller{
 
 		// 権限チェック
 		if(isset($this->Auth)){
-			$user = $this->Auth->user();
-			$Permission = ClassRegistry::init('Permission');
-			if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])){
-				$this->notFound();
+			$params = Router::parse($this->params['url']['url']);
+			if(!empty($params['prefix'])){
+				$user = $this->Auth->user();
+				$Permission = ClassRegistry::init('Permission');
+				if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])){
+					$this->redirect('/'.$params['prefix']);
+				}
 			}
 		}
-
 	}
 /**
  * beforeRender
