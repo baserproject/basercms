@@ -171,6 +171,38 @@ class User extends AppModel {
 			
 	}
 /**
+ * ユーザーリストを取得する
+ * 認証ユーザーのみのリストを取得する場合は引数を指定する
+ * @param array $authUser 
+ */
+	function getUserList($authUser=null){
+
+		if($authUser && $authUser['User']['user_group_id']!=1){
+			if($authUser['User']['real_name_2']){
+				$name = $authUser['User']['real_name_1']." ".$authUser['User']['real_name_2'];
+			}else{
+				$name = $authUser['User']['real_name_1'];
+			}
+			return array($authUser['User']['id']=>$name);
+		}
+
+		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name2')));
+		$list = array();
+        if ($users) {
+			// 苗字が同じ場合にわかりにくいので、foreachで生成
+			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
+			foreach($users as $key => $user){
+				if($user['User']['real_name_2']){
+					$name = $user['User']['real_name_1']." ".$user['User']['real_name_2'];
+				}else{
+					$name = $user['User']['real_name_1'];
+				}
+				$list[$user['User']['id']] = $name;
+			}
+		}
+		return $list;
+	}
+/**
  * フォームの初期値を設定する
  * 
  * @return	array	初期値データ

@@ -102,7 +102,8 @@ class BlogPost extends BlogAppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue(){
+	function getDefaultValue($authUser){
+		$data[$this->name]['user_id'] = $authUser['User']['id'];
 		$data[$this->name]['posts_date'] = date('Y/m/d H:i:s');
 		$data[$this->name]['status'] = 0;
 		return $data;
