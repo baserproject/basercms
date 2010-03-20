@@ -97,7 +97,7 @@
     <p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
     <?php else: ?>
         <?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-        <?php echo $html->link('削除する', array('action'=>'delete', $form->value('User.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('User.name')),false); ?>
+        <?php $baser->link('削除する', array('action'=>'delete', $form->value('User.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('User.name')),false); ?>
     <?php endif ?>
 	</form>
 <?php else: ?>

@@ -25,11 +25,11 @@
 <ul>
 
 <?php if($this->params['controller'] == 'blog_posts' || $this->params['controller'] == 'blog_categories' || $this->params['controller'] == 'blog_comments'): ?>
-<li><?php echo $html->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
-<li><?php echo $html->link($blogContent['BlogContent']['title'].'基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?></li>
+<li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
+<li><?php $baser->link($blogContent['BlogContent']['title'].'基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?></li>
 <?php endif ?>
-<li><?php echo $html->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
-<li><?php echo $html->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
-<!--<li><?php echo $html->link('ブログプラグイン基本設定',array('controller'=>'blog_configs','action'=>'form')) ?></li>-->
+<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
+<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
+<!--<li><?php $baser->link('ブログプラグイン基本設定',array('controller'=>'blog_configs','action'=>'form')) ?></li>-->
 </ul>
 </div>

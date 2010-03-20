@@ -39,13 +39,13 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
         <td class="operation-button">
-            <?php echo $html->link('確認','/'.$listData['BlogContent']['name'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-            <?php echo $html->link('管理',array('controller'=>'blog_posts','action'=>'index', $listData['BlogContent']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $listData['BlogContent']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $listData['BlogContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('削除を行うと関連する記事やカテゴリは全て削除されてしまい元に戻す事はできません。\n本当に「%s」を削除してもいいですか？', $listData['BlogContent']['title']),false); ?>
+            <?php $baser->link('確認','/'.$listData['BlogContent']['name'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+            <?php $baser->link('管理',array('controller'=>'blog_posts','action'=>'index', $listData['BlogContent']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $listData['BlogContent']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $listData['BlogContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('削除を行うと関連する記事やカテゴリは全て削除されてしまい元に戻す事はできません。\n本当に「%s」を削除してもいいですか？', $listData['BlogContent']['title']),false); ?>
 		</td>
         <td><?php echo $listData['BlogContent']['id']; ?></td>
-		<td><?php echo $html->link($listData['BlogContent']['name'],array('action'=>'edit',$listData['BlogContent']['id'])); ?></td>
+		<td><?php $baser->link($listData['BlogContent']['name'],array('action'=>'edit',$listData['BlogContent']['id'])); ?></td>
 		<td><?php echo $listData['BlogContent']['title'] ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['BlogContent']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['BlogContent']['modified']); ?></td>
@@ -57,4 +57,4 @@
 <?php endif; ?>
 </table>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

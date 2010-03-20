@@ -43,13 +43,16 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-			<?php echo $html->link('編集',array('action'=>'edit', $listData['UserGroup']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php if($listData['UserGroup']['name']!='admins'): ?>
-				<?php echo $html->link('削除', array('action'=>'delete', $listData['UserGroup']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['UserGroup']['title']),false); ?>
+				<?php $baser->link('権限', array('controller'=>'permissions','action'=>'index', $listData['UserGroup']['id']), array('class'=>'btn-red-s button-s'),null,false); ?>
 			<?php endif ?>
+			<?php $baser->link('編集',array('action'=>'edit', $listData['UserGroup']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php if($listData['UserGroup']['name']!='admins'): ?>
+				<?php $baser->link('削除', array('action'=>'delete', $listData['UserGroup']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['UserGroup']['title']),false); ?>
+			<?php endif ?>			
 		</td>
         <td><?php echo $listData['UserGroup']['id']; ?></td>
-		<td><?php echo $html->link($listData['UserGroup']['name'],array('action'=>'edit', $listData['UserGroup']['id'])); ?></td>
+		<td><?php $baser->link($listData['UserGroup']['name'],array('action'=>'edit', $listData['UserGroup']['id'])); ?></td>
 		<td><?php echo $listData['UserGroup']['title']; ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['UserGroup']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['UserGroup']['modified']); ?></td>
@@ -64,4 +67,4 @@
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

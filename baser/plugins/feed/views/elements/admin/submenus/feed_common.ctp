@@ -23,7 +23,7 @@
 <div class="side-navi">
 <h2>フィード設定<br />共通メニュー</h2>
 <ul>
-<li><?php echo $html->link('フィード設定一覧',array('action'=>'index')) ?></li>
-<li><?php echo $html->link('新規フィード設定を登録',array('action'=>'add')) ?></li>
+<li><?php $baser->link('フィード設定一覧',array('action'=>'index')) ?></li>
+<li><?php $baser->link('新規フィード設定を登録',array('action'=>'add')) ?></li>
 </ul>
 </div>

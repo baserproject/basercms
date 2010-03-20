@@ -81,6 +81,6 @@
 	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php echo $html->link('削除する',array('action'=>'delete', $form->value('PageCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('PageCategory.name')),false); ?>
+	<?php $baser->link('削除する',array('action'=>'delete', $form->value('PageCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('PageCategory.name')),false); ?>
 <?php endif ?>
 </div>

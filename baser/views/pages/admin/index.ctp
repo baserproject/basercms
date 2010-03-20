@@ -73,9 +73,9 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-            <?php echo $html->link('確認',array('action'=>'preview', $dbData['Page']['id']),array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
+            <?php $baser->link('確認',array('action'=>'preview', $dbData['Page']['id']),array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
 		</td>
         <td><?php echo $dbData['Page']['no']; ?></td>
         <td>
@@ -83,7 +83,7 @@
                 <?php echo $dbData['PageCategory']['title']; ?>
             <?php endif; ?>
 		</td>
-		<td><?php echo $html->link($dbData['Page']['name'],array('action'=>'edit', $dbData['Page']['id'])); ?></td>
+		<td><?php $baser->link($dbData['Page']['name'],array('action'=>'edit', $dbData['Page']['id'])); ?></td>
 		<td><?php echo $dbData['Page']['title']; ?></td>
 		<td style="text-align:center"><?php echo $textEx->booleanMark($dbData['Page']['status']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['Page']['created']); ?></td>
@@ -98,4 +98,4 @@
 
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

@@ -39,13 +39,13 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-            <?php echo $html->link('確認',array('admin'=>false,'plugin'=>'','controller'=>$listData['MailContent']['name'],'action'=>'index'),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-            <?php echo $html->link('管理',array('controller'=>'mail_fields','action'=>'index', $listData['MailContent']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $listData['MailContent']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $listData['MailContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailContent']['title']),false); ?>
+            <?php $baser->link('確認',array('admin'=>false,'plugin'=>'','controller'=>$listData['MailContent']['name'],'action'=>'index'),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+            <?php $baser->link('管理',array('controller'=>'mail_fields','action'=>'index', $listData['MailContent']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $listData['MailContent']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $listData['MailContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailContent']['title']),false); ?>
 		</td>
         <td><?php echo $listData['MailContent']['id']; ?></td>
-		<td><?php echo $html->link($listData['MailContent']['name'],array('action'=>'edit',$listData['MailContent']['id'])); ?></td>
+		<td><?php $baser->link($listData['MailContent']['name'],array('action'=>'edit',$listData['MailContent']['id'])); ?></td>
 		<td><?php echo $listData['MailContent']['title'] ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['MailContent']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['MailContent']['modified']); ?></td>
@@ -58,4 +58,4 @@
 </table>
 
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

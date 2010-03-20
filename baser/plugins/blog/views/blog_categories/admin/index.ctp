@@ -39,12 +39,12 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-            <?php echo $html->link('確認',$blog->getCategoryUrl($dbData['BlogCategory']['id']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。', $dbData['BlogCategory']['name']),false); ?>
+            <?php $baser->link('確認',$blog->getCategoryUrl($dbData['BlogCategory']['id']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。', $dbData['BlogCategory']['name']),false); ?>
 		</td>
         <td><?php echo $dbData['BlogCategory']['no'] ?></td>
-        <td><?php echo $html->link($dbData['BlogCategory']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?></td>
+        <td><?php $baser->link($dbData['BlogCategory']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?></td>
 		<td><?php echo $dbData['BlogCategory']['title'] ?></td>
         <td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['created']); ?></td>
 		<td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['modified']); ?></td>
@@ -56,4 +56,4 @@
 <p class="no-data">データが見つかりませんでした。</p>
 <?php endif; ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>

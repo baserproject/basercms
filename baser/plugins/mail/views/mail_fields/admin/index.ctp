@@ -44,14 +44,14 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
         <td class="operation-button">
-			<?php echo $html->link('コピー',array('action'=>'copy', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $mailContent['MailContent']['id'],$listData['MailField']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailField']['name']),false); ?>
-			<?php echo $html->link('▲',array('action'=>'index',$mailContent['MailContent']['id'],'sortup'=>$listData['MailField']['id'])) ?>
-			<?php echo $html->link('▼',array('action'=>'index',$mailContent['MailContent']['id'],'sortdown'=>$listData['MailField']['id'])) ?>
+			<?php $baser->link('コピー',array('action'=>'copy', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $mailContent['MailContent']['id'],$listData['MailField']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailField']['name']),false); ?>
+			<?php $baser->link('▲',array('action'=>'index',$mailContent['MailContent']['id'],'sortup'=>$listData['MailField']['id'])) ?>
+			<?php $baser->link('▼',array('action'=>'index',$mailContent['MailContent']['id'],'sortdown'=>$listData['MailField']['id'])) ?>
 		</td>
         <td><?php echo $listData['MailField']['no'] ?></td>
-		<td><?php echo $html->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?></td>
+		<td><?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?></td>
 		<td><?php echo $listData['MailField']['name']; ?></td>
 		<td><?php echo $listData['MailField']['group_field'] ?></td>
 		<td><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
@@ -68,6 +68,6 @@
 
 
 <p class="align-center">
-<?php echo $html->link('新規登録',array('action'=>'add',$mailContent['MailContent']['id']),array('class'=>'btn-red button')) ?>
-<?php echo $html->link('受信メールCSV',array('action'=>'download_csv', $mailContent['MailContent']['id']),array('class'=>'btn-orange button'),null,false) ?>
+<?php $baser->link('新規登録',array('action'=>'add',$mailContent['MailContent']['id']),array('class'=>'btn-red button')) ?>
+<?php $baser->link('受信メールCSV',array('action'=>'download_csv', $mailContent['MailContent']['id']),array('class'=>'btn-orange button'),null,false) ?>
 </p>

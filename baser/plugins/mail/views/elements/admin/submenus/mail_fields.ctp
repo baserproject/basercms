@@ -23,7 +23,7 @@
 <div class="side-navi">
 <h2>メールフィールド<br />管理メニュー</h2>
 <ul>
-<li><?php echo $html->link('フィールド一覧',array('controller'=>'mail_fields','action'=>'index',$mailContent['MailContent']['id'])) ?></li>
-<li><?php echo $html->link('新規フィールドを登録',array('controller'=>'mail_fields','action'=>'add',$mailContent['MailContent']['id'])) ?></li>
+<li><?php $baser->link('フィールド一覧',array('controller'=>'mail_fields','action'=>'index',$mailContent['MailContent']['id'])) ?></li>
+<li><?php $baser->link('新規フィールドを登録',array('controller'=>'mail_fields','action'=>'add',$mailContent['MailContent']['id'])) ?></li>
 </ul>
 </div>

@@ -40,20 +40,20 @@
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
             <?php if($listData['Plugin']['admin_link']): ?>
-                <?php echo $html->link('管理',$listData['Plugin']['admin_link'],array('class'=>'btn-red-s button-s'),null,false) ?>
+                <?php $baser->link('管理',$listData['Plugin']['admin_link'],array('class'=>'btn-red-s button-s'),null,false) ?>
             <?php endif; ?>
             <?php if($listData['Plugin']['id']): ?>
-                <?php echo $html->link('編集',array('action'=>'edit', $listData['Plugin']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-                <?php echo $html->link('無効', array('action'=>'delete', $listData['Plugin']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。', $listData['Plugin']['name']),false); ?>
+                <?php $baser->link('編集',array('action'=>'edit', $listData['Plugin']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+                <?php $baser->link('無効', array('action'=>'delete', $listData['Plugin']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。', $listData['Plugin']['name']),false); ?>
             <?php elseif(!$listData['Plugin']['id']): ?>
-                <?php echo $html->link('登録',array('action'=>'add', $listData['Plugin']['name']),array('class'=>'btn-red-s button-s'),null,false) ?>
-                <?php echo $html->link('削除', array('action'=>'delete_file', $listData['Plugin']['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\nプラグインフォルダ内のファイルも全て削除されますが、データベースに保存した情報は削除されずそのまま残ります。', $listData['Plugin']['name']),false); ?>
+                <?php $baser->link('登録',array('action'=>'add', $listData['Plugin']['name']),array('class'=>'btn-red-s button-s'),null,false) ?>
+                <?php $baser->link('削除', array('action'=>'delete_file', $listData['Plugin']['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\nプラグインフォルダ内のファイルも全て削除されますが、データベースに保存した情報は削除されずそのまま残ります。', $listData['Plugin']['name']),false); ?>
             <?php endif; ?>
 		</td>
         <td><?php echo $listData['Plugin']['id'] ?></td>
 		<td>
             <?php if($listData['Plugin']['id']): ?>
-                <?php echo $html->link($listData['Plugin']['name'],array('action'=>'edit',$listData['Plugin']['id'])) ?>
+                <?php $baser->link($listData['Plugin']['name'],array('action'=>'edit',$listData['Plugin']['id'])) ?>
             <?php else: ?>
                 <?php echo $listData['Plugin']['name'] ?>
             <?php endif ?>

@@ -23,7 +23,7 @@
 <h2 class="contents-head">メンバーダッシュボード</h2>
 
 <div class="float-left">
-    <ul class="section"><li><?php echo $html->link('ログアウト','/member/users/logout') ?></li></ul>
+    <ul class="section"><li><?php $baser->link('ログアウト','/member/users/logout') ?></li></ul>
 </div>
 
 <div class="float-right">

@@ -108,8 +108,8 @@
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 <?php else: ?>
-	<?php echo $html->link('編集する',array('action'=>'edit',$form->value('FeedConfig.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php echo $html->link('削除する',array('action'=>'delete', $form->value('FeedConfig.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('FeedConfig.name')),false); ?>
+	<?php $baser->link('編集する',array('action'=>'edit',$form->value('FeedConfig.id')),array('class'=>'btn-orange button'),null,false) ?>　
+	<?php $baser->link('削除する',array('action'=>'delete', $form->value('FeedConfig.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('FeedConfig.name')),false); ?>
 <?php endif ?>
 </div>
 
@@ -133,13 +133,13 @@
 <?php foreach($feedConfig['FeedDetail'] as $feedDetail): ?>
   <tr>
 	<td class="operation-button">
-        <?php echo $html->link('確認',$feedDetail['url'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-        <?php echo $html->link('編集',array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-		<?php echo $html->link('削除', array('controller'=>'feed_details','action'=>'delete', $form->value('FeedConfig.id'),$feedDetail['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedDetail['name']),false); ?>
+        <?php $baser->link('確認',$feedDetail['url'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+        <?php $baser->link('編集',array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+		<?php $baser->link('削除', array('controller'=>'feed_details','action'=>'delete', $form->value('FeedConfig.id'),$feedDetail['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedDetail['name']),false); ?>
 	</td>
     <td>
 	<?php if($feedDetail['url']): ?>
-	<?php echo $html->link($feedDetail['name'],array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id'])) ?>
+	<?php $baser->link($feedDetail['name'],array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id'])) ?>
 	<?php else: ?>
 	<?php echo $feedDetail['name'] ?>
 	<?php endif; ?>
@@ -157,7 +157,7 @@
 
 
 <div class="submit">
-	<?php echo $html->link('追加する',array('controller'=>'feed_details','action'=>'add', $form->value('FeedConfig.id')),array('class'=>'btn-red button'),null,false) ?>　
+	<?php $baser->link('追加する',array('controller'=>'feed_details','action'=>'add', $form->value('FeedConfig.id')),array('class'=>'btn-red button'),null,false) ?>　
 </div>
 
 <?php if($this->action == 'admin_edit'): ?>

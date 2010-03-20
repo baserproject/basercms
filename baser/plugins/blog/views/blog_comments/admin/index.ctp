@@ -49,32 +49,32 @@
        <td class="operation-button">
             <?php if(!empty($this->params['pass'][1])): ?>
                 <?php if($dbData['BlogComment']['status']): ?>
-                    <?php echo $html->link('非公開', array('action'=>'unpublish', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-orange-s button-s'), sprintf('NO %s を非公開にします。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
+                    <?php $baser->link('非公開', array('action'=>'unpublish', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-orange-s button-s'), sprintf('NO %s を非公開にします。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
                 <?php else: ?>
-                    <?php echo $html->link('公開', array('action'=>'publish', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-green-s button-s'), sprintf('NO %s を公開します。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
+                    <?php $baser->link('公開', array('action'=>'publish', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-green-s button-s'), sprintf('NO %s を公開します。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
                 <?php endif ?>
-                <?php echo $html->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-gray-s button-s'), sprintf('NO %s を本当に削除してもいいですか？', $dbData['BlogComment']['no']),false); ?>
+                <?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'],$dbData['BlogComment']['blog_post_id'],$dbData['BlogComment']['id']), array('class'=>'btn-gray-s button-s'), sprintf('NO %s を本当に削除してもいいですか？', $dbData['BlogComment']['no']),false); ?>
             <?php else: ?>
                 <?php if($dbData['BlogComment']['status']): ?>
-                    <?php echo $html->link('非公開', array('action'=>'unpublish', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-orange-s button-s'), sprintf('NO %s を非公開にします。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
+                    <?php $baser->link('非公開', array('action'=>'unpublish', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-orange-s button-s'), sprintf('NO %s を非公開にします。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
                 <?php else: ?>
-                    <?php echo $html->link('公開', array('action'=>'publish', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-green-s button-s'), sprintf('NO %s を公開します。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
+                    <?php $baser->link('公開', array('action'=>'publish', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-green-s button-s'), sprintf('NO %s を公開します。よろしいですか？', $dbData['BlogComment']['no']),false); ?>
                 <?php endif ?>
-                <?php echo $html->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-gray-s button-s'), sprintf('NO %s を本当に削除してもいいですか？', $dbData['BlogComment']['no']),false); ?>
+                <?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'],0,$dbData['BlogComment']['id']), array('class'=>'btn-gray-s button-s'), sprintf('NO %s を本当に削除してもいいですか？', $dbData['BlogComment']['no']),false); ?>
             <?php endif ?>
 		</td>
 		<td><?php echo $dbData['BlogComment']['no'] ?></td>
 		<td><?php if(!empty($dbData['BlogComment']['url'])): ?>
-                <?php echo $html->link($dbData['BlogComment']['name'],$dbData['BlogComment']['url'],array('target'=>'_blank')) ?>
+                <?php $baser->link($dbData['BlogComment']['name'],$dbData['BlogComment']['url'],array('target'=>'_blank')) ?>
             <?php else: ?>
                 <?php echo $dbData['BlogComment']['name'] ?>
             <?php endif ?>
         </td>
         <td><?php if(!empty($dbData['BlogComment']['email'])): ?>
-                <?php echo $html->link($dbData['BlogComment']['email'],'mailto:'.$dbData['BlogComment']['email']) ?>
+                <?php $baser->link($dbData['BlogComment']['email'],'mailto:'.$dbData['BlogComment']['email']) ?>
             <?php endif; ?>
 		</td>
-        <td><strong><?php echo $html->link($dbData['BlogPost']['name'],'/admin/blog/blog_posts/edit/'.$blogContent['BlogContent']['id'].'/'.$dbData['BlogPost']['id']) ?></strong><br />
+        <td><strong><?php $baser->link($dbData['BlogPost']['name'],'/admin/blog/blog_posts/edit/'.$blogContent['BlogContent']['id'].'/'.$dbData['BlogPost']['id']) ?></strong><br />
             <?php echo $dbData['BlogComment']['message'] ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['BlogComment']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['BlogComment']['modified']); ?></td>

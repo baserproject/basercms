@@ -41,11 +41,11 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-			<?php echo $html->link('編集',array('action'=>'edit', $dbData['PageCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $dbData['PageCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),false); ?>
+			<?php $baser->link('編集',array('action'=>'edit', $dbData['PageCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $dbData['PageCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),false); ?>
 		</td>
         <td><?php echo $dbData['PageCategory']['no']; ?></td>
-		<td><?php echo $html->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?></td>
+		<td><?php $baser->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?></td>
         <td><?php echo $dbData['PageCategory']['title']; ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['PageCategory']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['PageCategory']['modified']); ?></td>
@@ -60,4 +60,4 @@
 
 <?php //$baser->element('paginations'.DS.'default'); ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

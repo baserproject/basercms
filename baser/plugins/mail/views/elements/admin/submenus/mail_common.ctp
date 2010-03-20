@@ -24,11 +24,11 @@
 <h2>メールフォーム<br />共通メニュー</h2>
 <ul>
 <?php if(($this->params['controller'] == 'mail_fields') && $this->action=='admin_index'): ?>
-<li><?php echo $html->link('公開ページ確認',array('admin'=>false,'plugin'=>'','controller'=>$mailContent['MailContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
-<li><?php echo $html->link($mailContent['MailContent']['title'].'基本設定',array('controller'=>'mail_contents','action'=>'edit',$mailContent['MailContent']['id'])) ?></li>
+<li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>'','controller'=>$mailContent['MailContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
+<li><?php $baser->link($mailContent['MailContent']['title'].'基本設定',array('controller'=>'mail_contents','action'=>'edit',$mailContent['MailContent']['id'])) ?></li>
 <?php endif ?>
-<li><?php echo $html->link('メールプラグイン基本設定',array('controller'=>'mail_configs','action'=>'form')) ?></li>
-<li><?php echo $html->link('メールフォーム一覧',array('controller'=>'mail_contents','action'=>'index')) ?></li>
-<li><?php echo $html->link('新規メールフォームを登録',array('controller'=>'mail_contents','action'=>'add')) ?></li>
+<li><?php $baser->link('メールプラグイン基本設定',array('controller'=>'mail_configs','action'=>'form')) ?></li>
+<li><?php $baser->link('メールフォーム一覧',array('controller'=>'mail_contents','action'=>'index')) ?></li>
+<li><?php $baser->link('新規メールフォームを登録',array('controller'=>'mail_contents','action'=>'add')) ?></li>
 </ul>
 </div>

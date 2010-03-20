@@ -33,4 +33,4 @@
     <li>編集したファイルをサーバーにアップロードします。</li>
 </ul>
 
-<p><small><?php echo $html->link('≫ BaserCMSを初期化するにはコチラから','/installations/reset') ?></small></p>
+<p><small><?php $baser->link('≫ BaserCMSを初期化するにはコチラから','/installations/reset') ?></small></p>

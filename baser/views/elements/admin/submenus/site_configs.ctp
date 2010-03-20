@@ -23,11 +23,11 @@
 <div class="side-navi">
     <h2>システム設定<br />共通メニュー</h2>
     <ul>
-        <li><?php echo $html->link('サイト基本設定',array('controller'=>'site_configs','action'=>'form')) ?></li>
-        <li><?php echo $html->link('グローバルメニュー設定',array('controller'=>'global_menus','action'=>'index')) ?></li>
-        <li><?php echo $html->link('プラグイン設定',array('controller'=>'plugins','action'=>'index')) ?></li>
+        <li><?php $baser->link('サイト基本設定',array('controller'=>'site_configs','action'=>'form')) ?></li>
+        <li><?php $baser->link('グローバルメニュー設定',array('controller'=>'global_menus','action'=>'index')) ?></li>
+        <li><?php $baser->link('プラグイン設定',array('controller'=>'plugins','action'=>'index')) ?></li>
         <?php if(isset($backupEnabled)): ?>
-            <li><?php echo $html->link('データバックアップ',array('action'=>'backup_data',1)) ?></li>
+            <li><?php $baser->link('データバックアップ',array('action'=>'backup_data',1)) ?></li>
         <?php endif ?>
     </ul>
 </div>

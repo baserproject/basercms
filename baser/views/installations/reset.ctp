@@ -44,6 +44,6 @@
     <?php echo $form->end(array('label'=>'初期化する','class'=>'button btn-gray')) ?>
 <?php else: ?>
     <div class="align-center">
-    <?php echo $html->link('インストール実行','/',array('class'=>'button btn-red')) ?>
+    <?php $baser->link('インストール実行','/',array('class'=>'button btn-red')) ?>
     </div>
 <?php endif ?>

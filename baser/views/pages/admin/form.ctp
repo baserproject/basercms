@@ -108,6 +108,6 @@
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php $baser->link('確　認',array('action'=>'preview', $formEx->value('Page.id')), array('class'=>'btn-green button','target'=>'_blank')) ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php echo $html->link('削除する',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
+	<?php $baser->link('削除する',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
 <?php endif ?>
 </div>

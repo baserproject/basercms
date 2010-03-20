@@ -62,7 +62,7 @@
 <div class="align-center">
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-	<?php echo $html->link('削除する', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('UserGroup.name')),false); ?>
+	<?php $baser->link('削除する', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('UserGroup.name')),false); ?>
 	</form>
 <?php else: ?>
 	<?php echo $form->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>

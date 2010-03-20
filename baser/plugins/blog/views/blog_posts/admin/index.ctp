@@ -78,12 +78,12 @@ $paginator->options = array('url' => $this->passedArgs);
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
        <td class="operation-button">
-            <?php echo $html->link('確認',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],$post['BlogPost']['no']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $post['BlogPost']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $post['BlogPost']['name']),false); ?>
+            <?php $baser->link('確認',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],$post['BlogPost']['no']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $post['BlogPost']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $post['BlogPost']['name']),false); ?>
 		</td>
 		<td><?php echo $post['BlogPost']['no']; ?></td>
-		<td><?php echo $html->link($post['BlogPost']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id'])) ?></td>
+		<td><?php $baser->link($post['BlogPost']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id'])) ?></td>
         <td>
             <?php if(!empty($post['BlogCategory']['title'])): ?>
                 <?php echo $post['BlogCategory']['title']; ?>
@@ -94,7 +94,7 @@ $paginator->options = array('url' => $this->passedArgs);
         <?php if($blogContent['BlogContent']['comment_use']): ?>
             <td><?php $comment = count($post['BlogComment']) ?>
                 <?php if($comment): ?>
-                    <?php echo $html->link($comment,array('controller'=>'blog_comments','action'=>'index',$blogContent['BlogContent']['id'],$post['BlogPost']['id'])) ?>
+                    <?php $baser->link($comment,array('controller'=>'blog_comments','action'=>'index',$blogContent['BlogContent']['id'],$post['BlogPost']['id'])) ?>
                 <?php else: ?>
                     <?php echo $comment ?>
                 <?php endif ?>
@@ -112,4 +112,4 @@ $paginator->options = array('url' => $this->passedArgs);
 
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>

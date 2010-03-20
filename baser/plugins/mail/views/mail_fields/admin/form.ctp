@@ -301,7 +301,7 @@ jQuery(function($) {
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 <?php else: ?>
-	<?php echo $html->link('編集する',array('action'=>'edit',$form->value('MailField.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php echo $html->link('削除する',array('action'=>'delete', $form->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('MailField.name')),false); ?>
+	<?php $baser->link('編集する',array('action'=>'edit',$form->value('MailField.id')),array('class'=>'btn-orange button'),null,false) ?>　
+	<?php $baser->link('削除する',array('action'=>'delete', $form->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('MailField.name')),false); ?>
 <?php endif ?>
 </div>

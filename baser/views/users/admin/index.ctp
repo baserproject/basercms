@@ -45,11 +45,11 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-			<?php echo $html->link('編集',array('action'=>'edit', $user['User']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $user['User']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $user['User']['name']),false); ?>
+			<?php $baser->link('編集',array('action'=>'edit', $user['User']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $user['User']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $user['User']['name']),false); ?>
 		</td>
         <td><?php echo $user['User']['id']; ?></td>
-		<td><?php echo $html->link($user['User']['name'],array('action'=>'edit', $user['User']['id'])); ?></td>
+		<td><?php $baser->link($user['User']['name'],array('action'=>'edit', $user['User']['id'])); ?></td>
 		<td><?php echo $user['User']['real_name_1']; ?></td>
 		<td><?php echo $user['User']['real_name_2']; ?></td>
 		<td><?php echo $textEx->listValue('User.user_group_id',$user['User']['user_group_id']); ?></td>
@@ -67,4 +67,4 @@
 <?php $baser->pagination('default',array(),null,false) ?>
 
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

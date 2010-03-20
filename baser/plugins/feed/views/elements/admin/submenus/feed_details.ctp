@@ -24,10 +24,10 @@
 <h2>フィードメニュー</h2>
 <ul>
 <?php if($this->params['controller']=='feed_details'): ?>
-<li><?php echo $html->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedDetail.feed_config_id'))) ?></li>
-<li><?php echo $html->link('フィード設定に戻る',array('controller'=>'feed_configs','action'=>'edit',$form->value('FeedDetail.feed_config_id'))) ?></li>
+<li><?php $baser->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedDetail.feed_config_id'))) ?></li>
+<li><?php $baser->link('フィード設定に戻る',array('controller'=>'feed_configs','action'=>'edit',$form->value('FeedDetail.feed_config_id'))) ?></li>
 <?php else: ?>
-<li><?php echo $html->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedConfig.id'))) ?></li>
+<li><?php $baser->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedConfig.id'))) ?></li>
 <?php endif; ?>
 </ul>
 </div>

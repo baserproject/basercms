@@ -44,12 +44,12 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
         <td class="operation-button">
-            <?php echo $html->link('確認','/admin/feed/feed_configs/preview/'.$feedConfig['FeedConfig']['id'],array("target"=>"_blank",'class'=>'btn-green-s button-s')) ?>
-			<?php echo $html->link('編集',array('action'=>'edit', $feedConfig['FeedConfig']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php echo $html->link('削除', array('action'=>'delete', $feedConfig['FeedConfig']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedConfig['FeedConfig']['name']),false); ?>
+            <?php $baser->link('確認','/admin/feed/feed_configs/preview/'.$feedConfig['FeedConfig']['id'],array("target"=>"_blank",'class'=>'btn-green-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $feedConfig['FeedConfig']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $feedConfig['FeedConfig']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedConfig['FeedConfig']['name']),false); ?>
 		</td>
 		<td><?php echo $feedConfig['FeedConfig']['id']; ?></td>
-		<td><?php echo $html->link($feedConfig['FeedConfig']['name'],array('action'=>'edit', $feedConfig['FeedConfig']['id'])) ?></td>
+		<td><?php $baser->link($feedConfig['FeedConfig']['name'],array('action'=>'edit', $feedConfig['FeedConfig']['id'])) ?></td>
 		<td><?php echo $feedConfig['FeedConfig']['template']; ?></td>
 		<td><?php echo $feedConfig['FeedConfig']['display_number'] ?></td>
 		<td><?php echo $timeEx->format('Y-m-d',$feedConfig['FeedConfig']['created']); ?></td>
@@ -64,4 +64,4 @@
 
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
