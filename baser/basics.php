@@ -63,11 +63,6 @@
  */
 	function verpoint($version){
 		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)){
-			var_dump($version);
-			var_dump($maches[1]);
-			var_dump($maches[2]);
-			var_dump($maches[3]);
-
 			return $maches[1]*100 + $maches[2]*10 + $maches[3];
 		}else{
 			return 0;
