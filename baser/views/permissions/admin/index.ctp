@@ -48,6 +48,7 @@
     <th>NO</th>
 	<th>設定名</th>
 	<th>URL設定</th>
+	<th>権限</th>
 	<th>登録日</th>
 	<th>更新日</th>
 </tr>
@@ -61,14 +62,17 @@
 	<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-			<?php echo $html->link('編集',array('action'=>'edit', $listData['Permission']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $listData['Permission']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php if($listData['Permission']['name']!='admins'): ?>
-				<?php echo $html->link('削除', array('action'=>'delete', $listData['Permission']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['Permission']['name']),false); ?>
+				<?php $baser->link('削除', array('action'=>'delete', $listData['Permission']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['Permission']['name']),false); ?>
 			<?php endif ?>
+			<?php $baser->link('▲',array('action'=>'index','sortup'=>$listData['Permission']['id'])) ?>
+			<?php $baser->link('▼',array('action'=>'index','sortdown'=>$listData['Permission']['id'])) ?>
 		</td>
-        <td><?php echo $listData['Permission']['id']; ?></td>
-		<td><?php echo $html->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?></td>
+        <td><?php echo $listData['Permission']['no']; ?></td>
+		<td><?php $baser->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?></td>
 		<td><?php echo $listData['Permission']['url']; ?></td>
+		<td class="align-center"><?php echo $textEx->arrayValue($listData['Permission']['auth'],array(0=>'×',1=>'〇')) ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['Permission']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['Permission']['modified']); ?></td>
 	</tr>
@@ -79,4 +83,4 @@
 <?php endif; ?>
 </table>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

@@ -36,6 +36,7 @@ class BaserHelper extends AppHelper {
 	var $_content = null;			// コンテンツ
 	var $_categoryTitleOn = true;
     var $Page = null;
+	var $Permission = null;
 /**
  * コンストラクタ
  *
@@ -44,21 +45,30 @@ class BaserHelper extends AppHelper {
  */
 	function __construct() {
 		$this->_view =& ClassRegistry::getObject('view');
-		if (ClassRegistry::isKeySet('SiteConfig')) {
-            // エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-            $db =& ConnectionManager::getDataSource('baser');
-            if ($db->isInterfaceSupported('listSources')) {
-                $sources = $db->listSources();
-                if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'site_configs'), array_map('strtolower', $sources))) {
-                    $siteConfigClass = ClassRegistry::getObject('SiteConfig');
-                    $siteConfig = $siteConfigClass->findExpanded();
-                    if($siteConfig){
-                        $this->siteConfig = $siteConfig;
-                    }
-                }
-            }
-		}
+		// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+		$db =& ConnectionManager::getDataSource('baser');
+		if ($db->isInterfaceSupported('listSources')) {
+			$sources = $db->listSources();
 
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'site_configs'), array_map('strtolower', $sources))) {
+				if (ClassRegistry::isKeySet('SiteConfig')) {
+					$siteConfigClass = ClassRegistry::getObject('SiteConfig');
+					$siteConfig = $siteConfigClass->findExpanded();
+					if($siteConfig){
+						$this->siteConfig = $siteConfig;
+					}
+				}
+			}
+
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
+				if (ClassRegistry::isKeySet('Permissions')) {
+					$this->Permission = ClassRegistry::getObject('Permission');
+				}else{
+					$this->Permission = ClassRegistry::init('Permission');
+				}
+			}
+		}
+		
 	}
 /**
  * afterRender
@@ -426,7 +436,17 @@ class BaserHelper extends AppHelper {
  * aタグを取得するだけのラッパー
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+
+		if(!empty($this->_view->viewVars['user']['user_group_id'])){
+			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
+			
+			$_url = $this->getUrl($url);
+			if(!$this->Permission->check($_url,$userGroupId)){
+				return '';
+			}
+		}
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		
 	}
 /**
  * charsetを出力するだけのラッパー

@@ -50,6 +50,13 @@ class Permission extends AppModel {
  	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
                                                         'foreignKey'=>'user_group_id'));
 /**
+ * permissions
+ * ログインしているユーザーの拒否URLリスト
+ * キャッシュ用
+ * @var array
+ */
+	var $permissions = array();
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -90,6 +97,14 @@ class Permission extends AppModel {
 		
 	}
 /**
+ * 初期値を取得する
+ * @return array
+ */
+	function getDefaultValue(){
+		$data['Permission']['auth'] = 0;
+		return $data;
+	}
+/**
  * コントロールソースを取得する
  *
  * @param	string	フィールド名
@@ -98,14 +113,68 @@ class Permission extends AppModel {
  */
 	function getControlSource($field = null){
 
-		$controlSources['user_group_id'] = $this->UserGroup->find('list');
-
+		$controlSources['user_group_id'] = $this->UserGroup->find('list',array('conditions'=>array('UserGroup.id <>'=>1)));
+		$controlSources['auth'] = array('0'=>'不可','1'=>'可');
 		if(isset($controlSources[$field])){
 			return $controlSources[$field];
 		}else{
 			return false;
 		}
 
+	}
+/**
+ * beforeSave
+ * @param array $options
+ */
+	function beforeSave($options){
+		if(isset($this->data['Permission'])){
+			$data = $this->data['Permission'];
+		}else{
+			$data = $this->data;
+		}
+		if(isset($data['url'])){
+			if(preg_match('/^[^\/]/is',$data['url'])){
+				$data['url'] = '/'.$data['url'];
+			}
+		}
+		$this->data['Permission'] = $data;
+		return true;
+	}
+/**
+ * 権限チェックを行う
+ * @param string $userGroupId
+ * @param array $params
+ */
+	function check($url, $userGroupId){
+
+		if(!$this->permissions){
+			$conditions = array('Permission.user_group_id' => $userGroupId);
+			$this->permissions = $this->find('all',array('conditions'=>$conditions,'order'=>'sort','recursive'=>-1));
+			if(!$this->permissions){
+				return true;
+			}
+		}
+		$permissions = $this->permissions;
+
+		if($url!='/'){
+			$url = preg_replace('/^\//is', '', $url);
+		}
+		$ret = true;
+		foreach($permissions as $permission){
+			if($permission['Permission']['url']!='/'){
+				$pattern = preg_replace('/^\//is', '', $permission['Permission']['url']);
+			}else{
+				$pattern = $permission['Permission']['url'];
+			}
+			$pattern = addslashes($pattern);
+			$pattern = str_replace('/', '\/', $pattern);
+			$pattern = '/^'.str_replace('*', '.*?', $pattern).'$/is';
+			if(preg_match($pattern, $url)){
+				$ret = $permission['Permission']['auth'];
+			}
+		}
+		return $ret;
+		
 	}
 }
 ?>

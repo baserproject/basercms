@@ -227,6 +227,15 @@ class AppController extends Controller{
             $this->layout = "ajax";
         }
 
+		// 権限チェック
+		if(isset($this->Auth)){
+			$user = $this->Auth->user();
+			$Permission = ClassRegistry::init('Permission');
+			if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])){
+				$this->notFound();
+			}
+		}
+
 	}
 /**
  * beforeRender
