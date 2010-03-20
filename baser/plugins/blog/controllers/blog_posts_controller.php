@@ -92,7 +92,7 @@ class BlogPostsController extends BlogAppController{
             $this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
             $this->navis = am($this->navis,array($this->blogContent['BlogContent']['title'].'管理'=>'/admin/blog/blog_posts/index/'.$this->params['pass'][0]));
             if($this->params['prefix']=='admin'){
-                $this->subMenuElements = array('blog_posts','blog_categories','blog_common','plugins');
+                $this->subMenuElements = array('blog_posts','blog_categories','blog_common');
             }
         }
 	}

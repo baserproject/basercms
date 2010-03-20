@@ -89,7 +89,7 @@ class MailConfigsController extends MailAppController {
 		}
 		
 		/* 表示設定 */
-        $this->subMenuElements = array('mail_common','plugins');
+        $this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールプラグイン基本設定';
 		
 	}

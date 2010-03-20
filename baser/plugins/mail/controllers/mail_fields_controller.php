@@ -116,7 +116,7 @@ class MailFieldsController extends MailAppController{
 		$conditions = array('MailField.mail_content_id'=>$mailContentId);
         $listDatas = $this->MailField->findAll($conditions, null, 'MailField.sort');
         $this->set('listDatas',$listDatas);
-        $this->subMenuElements = array('mail_fields','mail_common','plugins');
+        $this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド一覧';
         
     }
@@ -151,7 +151,7 @@ class MailFieldsController extends MailAppController{
 
         }
 
-        $this->subMenuElements = array('mail_fields','mail_common','plugins');
+        $this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] 新規メールフィールド登録';
 		$this->set('controlSource',$this->MailField->getControlSource());
         $this->render('form');
@@ -192,7 +192,7 @@ class MailFieldsController extends MailAppController{
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('mail_fields','mail_common','plugins');
+        $this->subMenuElements = array('mail_fields','mail_common');
 		$this->set('controlSource',$this->MailField->getControlSource());
 		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド編集：　'.$this->data['MailField']['name'];
 		$this->render('form');

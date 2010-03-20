@@ -108,7 +108,7 @@ class BlogCommentsController extends BlogAppController{
 
         $this->navis = am($this->navis,$navis);
         if(!empty($this->params['prefix']) && $this->params['prefix']=='admin'){
-            $this->subMenuElements = array('blog_posts','blog_categories','blog_common','plugins');
+            $this->subMenuElements = array('blog_posts','blog_categories','blog_common');
         }
         
 	}

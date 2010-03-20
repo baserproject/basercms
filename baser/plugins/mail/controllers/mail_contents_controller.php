@@ -82,7 +82,7 @@ class MailContentsController extends MailAppController{
 
         $listDatas = $this->MailContent->findAll();
         $this->set('listDatas',$listDatas);
-        $this->subMenuElements = array('mail_common','plugins');
+        $this->subMenuElements = array('mail_common');
         $this->pageTitle = 'メールフォーム一覧';
 
     }
@@ -121,7 +121,7 @@ class MailContentsController extends MailAppController{
 			}
 
         }
-        $this->subMenuElements = array('mail_common','plugins');
+        $this->subMenuElements = array('mail_common');
         $this->render('form');
 
     }
@@ -166,7 +166,7 @@ class MailContentsController extends MailAppController{
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('mail_common','plugins');
+        $this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
 		$this->render('form');
 

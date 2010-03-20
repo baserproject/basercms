@@ -81,7 +81,7 @@ class BlogContentsController extends BlogAppController{
     function beforeFilter(){
         parent::beforeFilter();
         if($this->params['prefix']=='admin'){
-            $this->subMenuElements = array('blog_common','plugins');
+            $this->subMenuElements = array('blog_common');
         }
     }
 /**
