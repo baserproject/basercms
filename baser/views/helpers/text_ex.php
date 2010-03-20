@@ -397,5 +397,29 @@ class TextExHelper extends TextHelper {
 		}
 		return '';
 	}
+/**
+ * boolean型用のリストを有効、無効で出力
+ *
+ * @return	array	可/不可リスト
+ * @access	public
+ */
+	function booleanStatusList(){
+
+		return array(0=>"無効",1=>"有効");
+
+	}
+/**
+ * boolean型用を無効・有効で出力
+ *
+ * @param	boolean
+ * @return	string	無効/有効
+ * @access	public
+ */
+	function booleanStatus($value){
+
+		$list = $this->booleanStatusList();
+		return $list[(int)$value];
+
+	}
 }
 ?>
