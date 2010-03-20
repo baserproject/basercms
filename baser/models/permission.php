@@ -102,6 +102,7 @@ class Permission extends AppModel {
  */
 	function getDefaultValue(){
 		$data['Permission']['auth'] = 0;
+		$data['Permission']['status'] = 1;
 		return $data;
 	}
 /**
