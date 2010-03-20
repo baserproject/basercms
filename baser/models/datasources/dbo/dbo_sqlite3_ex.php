@@ -43,7 +43,10 @@ class DboSqlite3Ex extends DboSqlite3 {
 		}else{
 			$tableName = $this->config['prefix'].Inflector::tableize($model);
 		}
-        $this->execute("ALTER TABLE ".$tableName." ADD ".$addFieldName." ".$this->buildColumn($column));
+		if(empty($column['name'])){
+			$column['name'] = $addFieldName;
+		}
+        $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
     }
 /**
  * カラムを変更する

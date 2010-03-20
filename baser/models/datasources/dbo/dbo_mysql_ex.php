@@ -35,7 +35,10 @@ class DboMysqlEx extends DboMysql {
 		}else{
 			$tableName = $this->config['prefix'].Inflector::tableize($model);
 		}
-        return $this->execute("ALTER TABLE ".$tableName." ADD ".$newFieldName." ".$this->buildColumn($column));
+		if(empty($column['name'])){
+			$column['name'] = $addFieldName;
+		}
+        return $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
     }
 /**
  * カラムを変更する
