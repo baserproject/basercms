@@ -96,6 +96,7 @@ class UsersController extends AppController {
  * @return boolean
  */
     function admin_login_exec(){
+		
         if(!$this->data){
             return false;
         }
@@ -242,7 +243,7 @@ class UsersController extends AppController {
 		if($dbDatas){
 			$this->set('users',$dbDatas);
 		}
-        $this->subMenuElements = array('users');
+        $this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー一覧';
 		
 	}
@@ -275,7 +276,7 @@ class UsersController extends AppController {
 		}
 		
 		/* 表示設定 */
-        $this->subMenuElements = array('users');
+        $this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->render('form');
 		
@@ -322,7 +323,7 @@ class UsersController extends AppController {
 		}
 		
 		/* 表示設定 */
-        $this->subMenuElements = array('users');
+        $this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->render('form');
 		
