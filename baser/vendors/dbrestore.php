@@ -139,7 +139,7 @@ class DbRestore {
 			return false;
         }
 
-                $templine = '';
+		$templine = '';
         // ファイル読み込み
         $lines = file($inputFilename);
 
