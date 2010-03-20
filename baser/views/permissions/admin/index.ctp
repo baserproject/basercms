@@ -48,7 +48,7 @@
     <th>NO</th>
 	<th>設定名</th>
 	<th>URL設定</th>
-	<th>権限</th>
+	<th>アクセス</th>
 	<th>登録日</th>
 	<th>更新日</th>
 </tr>

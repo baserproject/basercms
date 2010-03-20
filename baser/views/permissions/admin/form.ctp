@@ -69,7 +69,7 @@
 	</td>
 </tr>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.auth', '権限') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.auth', 'アクセス') ?></th>
 	<td class="col-input">
 		<?php echo $formEx->radio('Permission.auth', $formEx->getControlSource('auth'),array('legend'=>false,'separator'=>'　')) ?>
 		<?php echo $formEx->error('Permission.auth') ?>
