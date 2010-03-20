@@ -99,7 +99,9 @@
                 <!-- begin contentsBody -->
                 <div id="contentsBody">
 
+					<?php if($this->name != 'CakeError'): ?>
                     <h2><?php $baser->contentsTitle() ?></h2>
+					<?php endif ?>
                     <?php $baser->flash() ?>
                     <?php $baser->content() ?>
 
