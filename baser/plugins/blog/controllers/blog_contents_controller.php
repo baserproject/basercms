@@ -149,6 +149,7 @@ class BlogContentsController extends BlogAppController{
 
 		if(empty($this->data)){
 			$this->data = $this->BlogContent->read(null, $id);
+			$this->set('blogContent',$this->data);
 		}else{
 
 			/* 更新処理 */
@@ -164,6 +165,7 @@ class BlogContentsController extends BlogAppController{
 		}
 
 		/* 表示設定 */
+		$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
         $this->set('themes',$this->SiteConfig->getThemes());
 		$this->pageTitle = 'ブログ設定編集：'.$this->data['BlogContent']['title'];
 		$this->render('form');

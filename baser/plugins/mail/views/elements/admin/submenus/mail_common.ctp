@@ -23,7 +23,9 @@
 <div class="side-navi">
 <h2>メールフォーム<br />共通メニュー</h2>
 <ul>
-<?php if(($this->params['controller'] == 'mail_fields') && $this->action=='admin_index'): ?>
+<?php if(isset($mailContent) &&
+			($this->params['controller'] == 'mail_fields' ||
+			$this->params['controller'] == 'mail_contents')): ?>
 <li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>'','controller'=>$mailContent['MailContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
 <li><?php $baser->link($mailContent['MailContent']['title'].'基本設定',array('controller'=>'mail_contents','action'=>'edit',$mailContent['MailContent']['id'])) ?></li>
 <?php endif ?>

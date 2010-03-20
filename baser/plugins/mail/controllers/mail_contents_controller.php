@@ -142,6 +142,7 @@ class MailContentsController extends MailAppController{
 
 		if(empty($this->data)){
 			$this->data = $this->MailContent->read(null, $id);
+			$this->set('mailContent',$this->data);
 		}else{
             $old = $this->MailContent->read(null,$id);
             if(!$this->data['MailContent']['sender_1_']){
@@ -166,7 +167,7 @@ class MailContentsController extends MailAppController{
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('mail_common');
+        $this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
 		$this->render('form');
 
