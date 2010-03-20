@@ -449,6 +449,11 @@ class InstallationsController extends AppController
         } else {
             $this->set('adminUsername', 'admin');
         }
+		if (isset($postdata['installation']['admin_email'])){
+			$this->set('adminEmail', $postdata['installation']['admin_email']);
+		} else {
+			$this->set('adminEmail', '');
+		}
 
         $db = &ConnectionManager::create('baser',array( 'driver' => $dbType,
                                                         'persistent' => false,

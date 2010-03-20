@@ -55,9 +55,13 @@ if (file_exists(CONFIGS.'database.php'))
  * プラグイン名の書き換え
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
  */
+	
 	$PluginContent = ClassRegistry::init('PluginContent');
 	if($PluginContent){
-		$PluginContent->addRoute($parameter);
+		$cn = ConnectionManager::getInstance();
+		if(!empty($cn->config->baser['driver'])){
+			$PluginContent->addRoute($parameter);
+		}
 	}
 /**
  * メンバー
