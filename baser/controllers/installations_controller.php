@@ -991,13 +991,13 @@ class InstallationsController extends AppController
         /* バージョンを解析 */
         $baserVersion = $this->getBaserVersion();
         $baserVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$baserVersion);
-        $baserRev = revision($baserVersion);
+        $baserVerpoint = verpoint($baserVersion);
         if(isset($this->siteConfigs['version'])){
             $siteVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
-            $siteRev = revision($this->siteConfigs['version']);
+            $siteVerpoint = verpoint($this->siteConfigs['version']);
         }else{
             $siteVer = 'バージョンなし';
-            $siteRev = 0;
+            $siteVerpoint = 0;
         }
 
         /* スクリプトを走査 */
@@ -1009,7 +1009,7 @@ class InstallationsController extends AppController
             foreach ($files[1] as $file){
                 if(preg_match("/(.*?)\.php$/is", $file , $matches)){
                     $scriptRev = $matches[1];
-                    if($scriptRev > $siteRev && $scriptRev <= $baserRev){
+                    if($scriptRev > $siteVerpoint && $scriptRev <= $baserVerpoint){
                         $scriptNum++;
                         $scripts[] = $file;
                     }
