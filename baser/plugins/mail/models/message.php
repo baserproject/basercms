@@ -741,7 +741,7 @@ class Message extends MailAppModel {
     function addField($contentName, $fieldName){
 
         $this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-        $ret = parent::addField($fieldName,array('type'=>'TEXT'));
+        $ret = parent::addField($fieldName,array('type'=>'text'));
         return $ret;
 
     }
@@ -754,7 +754,7 @@ class Message extends MailAppModel {
     function editField($contentName, $oldFieldName,$newfieldName){
 
         $this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-        $ret = parent::editField($oldFieldName,$newfieldName,array('type'=>'TEXT'));
+        $ret = parent::editField($oldFieldName,$newfieldName,array('type'=>'text'));
         return $ret;
 
     }
