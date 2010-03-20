@@ -196,7 +196,10 @@ class DboSqlite3Ex extends DboSqlite3 {
         $sql = 'CREATE TABLE '.$tableName .'(';
         $fields = '';
         foreach($schema as $key => $field){
-            $sql .= $key." ".$this->buildColumn($field).',';
+			if(empty($field['name'])){
+				$field['name'] = $key;
+			}
+            $sql .= $this->buildColumn($field).',';
         }
         $sql = substr($sql,0,strlen($sql)-1) . ');';
         return $this->execute($sql);

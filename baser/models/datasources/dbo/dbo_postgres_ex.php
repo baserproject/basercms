@@ -29,7 +29,7 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function addColumn(&$model,$addFieldName,$column){
+    function addColumn($model,$addFieldName,$column){
 		if(is_object($model)){
 			$tableName = $model->tablePrefix.$model->table;
 		}else{
@@ -49,7 +49,7 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function editColumn(&$model,$oldFieldName,$newFieldName,$column=null){
+    function editColumn($model,$oldFieldName,$newFieldName,$column=null){
 		if(is_object($model)){
 			$tableName = $model->tablePrefix.$model->table;
 		}else{

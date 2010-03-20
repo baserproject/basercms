@@ -161,6 +161,10 @@ class DboSqlite3 extends DboSource {
 
 		$cache = parent::listSources();
 		if ($cache != null) {
+			// >>> ADD 2010/03/19 egashira
+			// 接続をフルパスに戻す
+			$this->config['database'] = $db;
+			// <<<
 			return $cache;
 		}
 
@@ -170,6 +174,10 @@ class DboSqlite3 extends DboSource {
 		//pr($result);
 
 		if (!$result || empty($result)) {
+			// >>> ADD 2010/03/19 egashira
+			// 接続をフルパスに戻す
+			$this->config['database'] = $db;
+			// <<<
 			return array();
 		} else {
 			$tables = array();
