@@ -447,7 +447,7 @@ class BaserHelper extends AppHelper {
 		if(!empty($this->_view->viewVars['user']['user_group_id'])){
 			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
 			
-			$_url = $this->getUrl($url);
+			$_url = str_replace($this->base, '', $this->getUrl($url));
 			if(isset($this->Permission) && !$this->Permission->check($_url,$userGroupId)){
 				if($forceTitle){
 					return "<span>$title</span>";
