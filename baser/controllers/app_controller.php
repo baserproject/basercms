@@ -131,7 +131,7 @@ class AppController extends Controller{
                     $SiteConfig->saveKeyValue($data);
                 }
 
-                // テーマの設定（管理画面じゃない場合
+                // テーマの設定
                 $base = baseUrl();
                 if($base){
                     $reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
@@ -141,6 +141,7 @@ class AppController extends Controller{
                 if(!preg_match($reg,$_SERVER['REQUEST_URI'])){
                     $this->theme = $this->siteConfigs['theme'];
                 }
+				
             }
 
         }
@@ -152,7 +153,16 @@ class AppController extends Controller{
                 $this->layoutPath = 'mobile';
                 $this->helpers[] = 'Mobile';
             }
-            
+
+			if($base){
+				$reg = '/^'.str_replace('/','\/',$base).'admin/i';
+			}else{
+				$reg = '/^\/admin/i';
+			}
+			if(preg_match($reg,$_SERVER['REQUEST_URI'])){
+				$this->layoutPath = 'admin';
+			}
+			
         }
 
         if(Configure::read('Mobile.on')){
