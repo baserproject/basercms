@@ -161,8 +161,7 @@ class User extends AppModel {
  */
 	function getControlSource($field = null){
 
-		$UserGroup = ClassRegistry::init('UserGroup');
-		$controlSources['user_group_id'] = $UserGroup->find('list');
+		$controlSources['user_group_id'] = $this->UserGroup->find('list');
 		
 		if(isset($controlSources[$field])){
 			return $controlSources[$field];
