@@ -89,7 +89,8 @@ class PermissionsController extends AppController {
                 $this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
             }else{
                 $this->Session->del('Filter.Permission.user_group_id');
-                $this->data['Permission']['user_group_id'] = '1';
+                $this->Permission->getMax('user_group_id',array('id <>'=>1));
+                $this->data['Permission']['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));;
             }
         }
 
