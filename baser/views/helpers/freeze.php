@@ -182,7 +182,7 @@ class FreezeHelper extends FormExHelper {
 			$options = array(0=>'',1=>$title);
 			return $this->freezeControll($fieldName, $options,$attributes);
 		}else{
-			return parent::checkbox($fieldName,$attributes).parent::label($fieldName, $title);
+			return parent::checkbox($fieldName,$attributes);
 		}
 	}
 /**

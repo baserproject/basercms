@@ -598,12 +598,17 @@ DOC_END;
         }else{
             $output='';
         }
-        
+		/* label を追加 */
+        if(!empty($options['label'])){
+			$label = '&nbsp;'.parent::label($fieldName, $options['label']);
+		}else{
+			$label = '';
+		}
 		return $this->output($output . sprintf(
 			$this->Html->tags['checkbox'],
 			$options['name'],
 			$this->_parseAttributes($options, array('name'), null, ' ')
-		));
+		)).$label;
 	}
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements

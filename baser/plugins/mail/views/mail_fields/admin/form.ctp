@@ -160,7 +160,7 @@ jQuery(function($) {
 	</tr>
 	<tr id="rowNotEmpty">
 		<th class="col-head"><?php echo $formEx->label('MailField.not_empty', '必須マーク') ?></th>
-		<td class="col-input"><?php echo $formEx->checkbox('MailField.not_empty', '項目見出しに必須マークを表示する') ?><?php echo $formEx->error('MailField.not_empty') ?>
+		<td class="col-input"><?php echo $formEx->checkbox('MailField.not_empty', array('label'=>'項目見出しに必須マークを表示する')) ?><?php echo $formEx->error('MailField.not_empty') ?>
             <?php echo $html->image('help.png',array('id'=>'helpNotEmpty','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextNotEmpty" class="helptext">グループの場合、２番目以降のフィールドは不要です。</div>
             &nbsp;
