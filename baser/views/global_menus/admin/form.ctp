@@ -25,6 +25,7 @@
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php echo $formEx->create('GlobalMenu') ?>
+<?php echo $formEx->hidden('GlobalMenu.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
