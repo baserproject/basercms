@@ -385,5 +385,17 @@ class TextExHelper extends TextHelper {
 		$values = split($separator,$value);
 		return $values;
 	}
+/**
+ * 配列とキーを指定して値を取得する
+ * @param mixed $value
+ * @param array $array
+ * @return mixied
+ */
+	function arrayValue($key,$array){
+		if(isset($array[(int)$key])){
+			return $array[(int)$key];
+		}
+		return '';
+	}
 }
 ?>
