@@ -35,7 +35,7 @@
 	</tr>
 <?php endif; ?>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.name', '設定名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.name', 'ルール名') ?></th>
 	<td class="col-input">
 		<?php echo $formEx->text('Permission.name', array('size'=>20,'maxlength'=>255)) ?>
 		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
