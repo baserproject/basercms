@@ -23,7 +23,7 @@
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
-
+<h2><?php $baser->contentsTitle() ?></h2>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableFeedConfigs">
 <tr>
 	<th>操作</th>

@@ -20,10 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * Include files
- */
-App::import('Helper','Freeze',true,BASER_HELPERS);
-/**
  * グローバルメニューコントローラー
  *
  * @package			baser.controllers
@@ -56,7 +52,7 @@ class GlobalMenusController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Time','Freeze');
+	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *

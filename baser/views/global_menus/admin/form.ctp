@@ -20,32 +20,34 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $freeze->create('GlobalMenu') ?>
+<?php echo $formEx->create('GlobalMenu') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('GlobalMenu.id', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('GlobalMenu.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('GlobalMenu.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('GlobalMenu.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('GlobalMenu.name', 'メニュー名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('GlobalMenu.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('GlobalMenu.name') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.name', 'メニュー名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('GlobalMenu.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('GlobalMenu.name') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('GlobalMenu.menu_type', 'タイプ') ?></th>
-		<td class="col-input"><?php echo $freeze->select('GlobalMenu.menu_type', $formEx->getControlSource('GlobalMenu.menu_type'),null,array(),false) ?><?php echo $form->error('GlobalMenu.menu_type') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.menu_type', 'タイプ') ?></th>
+		<td class="col-input"><?php echo $formEx->select('GlobalMenu.menu_type', $formEx->getControlSource('GlobalMenu.menu_type'),null,array(),false) ?><?php echo $formEx->error('GlobalMenu.menu_type') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('GlobalMenu.link', 'リンクURL') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.link', 'リンクURL') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('GlobalMenu.link', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->text('GlobalMenu.link', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpLink','class'=>'help','alt'=>'ヘルプ')) ?>
-			<?php echo $form->error('GlobalMenu.link') ?>
+			<?php echo $formEx->error('GlobalMenu.link') ?>
             <div id="helptextLink" class="helptext">
                 先頭にスラッシュつけたルートパスで入力して下さい。<br />(例) /admin/global/index
             </div>
@@ -55,8 +57,8 @@
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('GlobalMenu.status', '利用状態') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->radio('GlobalMenu.status', $textEx->booleanDoList("利用"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
-            <?php echo $freeze->error('GlobalMenu.status') ?>
+            <?php echo $formEx->radio('GlobalMenu.status', $textEx->booleanDoList("利用"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+            <?php echo $formEx->error('GlobalMenu.status') ?>
             &nbsp;
 		</td>
 	</tr>
@@ -64,11 +66,9 @@
 
 <div class="submit">
     <?php if($this->action == 'admin_add'): ?>
-        <?php echo $freeze->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-    <?php elseif ($this->action == 'admin_edit'): ?>
-        <?php echo $freeze->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+        <?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
     <?php else: ?>
-        <?php $baser->link('編集する',array('action'=>'edit',$form->value('GlobalMenu.id')),array('class'=>'btn-orange button'),null,false) ?>　
-        <?php $baser->link('削除する',array('action'=>'delete', $form->value('GlobalMenu.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('GlobalMenu.name')),false); ?>
+        <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+		<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('GlobalMenu.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('GlobalMenu.name')),false); ?>
     <?php endif ?>
 </div>

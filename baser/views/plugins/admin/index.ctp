@@ -20,6 +20,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePlugins">
 <tr>
 	<th>操作</th>

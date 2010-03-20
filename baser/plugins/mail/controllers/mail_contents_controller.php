@@ -48,7 +48,7 @@ class MailContentsController extends MailAppController{
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html','TimeEx','Freeze','TextEx');
+	var $helpers = array('Html','TimeEx','FormEx','TextEx');
 /**
  * コンポーネント
  *

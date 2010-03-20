@@ -24,32 +24,33 @@
 <p style="text-align:right"><a href="#headHowTo">フィードの読み込み方法 &gt;&gt;</a></p>
 <?php endif ?>
 
+<h2><?php $baser->contentsTitle() ?></h2>
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $form->create('FeedConfig') ?>
+<?php echo $formEx->create('FeedConfig') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('FeedConfig.id', 'NO') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('FeedConfig.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('FeedConfig.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('FeedConfig.name', 'フィード設定名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('FeedConfig.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $form->error('FeedConfig.name', '>> フィード設定名を入力して下さい') ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.name', 'フィード設定名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('FeedConfig.name', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->error('FeedConfig.name', '>> フィード設定名を入力して下さい') ?>
             &nbsp;
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('FeedConfig.display_number', '表示件数') ?></th>
+		<th class="col-head"><?php echo $formEx->label('FeedConfig.display_number', '表示件数') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('FeedConfig.display_number', array('size'=>10,'maxlength'=>3)) ?>件
-            <?php echo $form->error('FeedConfig.display_number') ?>&nbsp;
+            <?php echo $formEx->text('FeedConfig.display_number', array('size'=>10,'maxlength'=>3)) ?>件
+            <?php echo $formEx->error('FeedConfig.display_number') ?>&nbsp;
         </td>
 	</tr>
 </table>
@@ -60,9 +61,9 @@
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
-		<th class="col-head"><?php echo $form->label('FeedConfig.feed_title_index', 'フィードタイトルリスト') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('FeedConfig.feed_title_index', array('cols'=>36,'rows'=>3)) ?>
-            <?php echo $form->error('FeedConfig.feed_title_index', '>> フィードタイトルリストの形式が不正です') ?>
+		<th class="col-head"><?php echo $formEx->label('FeedConfig.feed_title_index', 'フィードタイトルリスト') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.feed_title_index', array('cols'=>36,'rows'=>3)) ?>
+            <?php echo $formEx->error('FeedConfig.feed_title_index', '>> フィードタイトルリストの形式が不正です') ?>
             <?php echo $html->image('help.png',array('id'=>'helpFeedTitleIndex','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextFeedTitleIndex" class="helptext">
                 <ul>
@@ -75,10 +76,10 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
+		<th class="col-head"><?php echo $formEx->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->textarea('FeedConfig.category_index', array('cols'=>36,'rows'=>3)) ?>
-            <?php echo $form->error('FeedConfig.category_index', '>> カテゴリリストの形式が不正です') ?>
+            <?php echo $formEx->textarea('FeedConfig.category_index', array('cols'=>36,'rows'=>3)) ?>
+            <?php echo $formEx->error('FeedConfig.category_index', '>> カテゴリリストの形式が不正です') ?>
             <?php echo $html->image('help.png',array('id'=>'helpCategoryIndex','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCategoryIndex" class="helptext">
             <ul>
@@ -90,10 +91,10 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('FeedConfig.template', 'テンプレート') ?></th>
+		<th class="col-head"><?php echo $formEx->label('FeedConfig.template', 'テンプレート') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('FeedConfig.template', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $form->error('FeedConfig.template', '>> テンプレートを入力して下さい') ?>
+            <?php echo $formEx->text('FeedConfig.template', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->error('FeedConfig.template', '>> テンプレートを入力して下さい') ?>
             <?php echo $html->image('help.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTemplate" class="helptext">
                 テンプレートを変更する場合は、/app/plugins/feed/views/feed/ 内にテンプレートを設置します。
@@ -104,12 +105,10 @@
 </table>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
-	<?php $baser->link('編集する',array('action'=>'edit',$form->value('FeedConfig.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php $baser->link('削除する',array('action'=>'delete', $form->value('FeedConfig.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('FeedConfig.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('FeedConfig.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('FeedConfig.name')),false); ?>
 <?php endif ?>
 </div>
 
@@ -134,12 +133,12 @@
   <tr>
 	<td class="operation-button">
         <?php $baser->link('確認',$feedDetail['url'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
-        <?php $baser->link('編集',array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-		<?php $baser->link('削除', array('controller'=>'feed_details','action'=>'delete', $form->value('FeedConfig.id'),$feedDetail['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedDetail['name']),false); ?>
+        <?php $baser->link('編集',array('controller'=>'feed_details','action'=>'edit', $formEx->value('FeedConfig.id'),$feedDetail['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+		<?php $baser->link('削除', array('controller'=>'feed_details','action'=>'delete', $formEx->value('FeedConfig.id'),$feedDetail['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedDetail['name']),false); ?>
 	</td>
     <td>
 	<?php if($feedDetail['url']): ?>
-	<?php $baser->link($feedDetail['name'],array('controller'=>'feed_details','action'=>'edit', $form->value('FeedConfig.id'),$feedDetail['id'])) ?>
+	<?php $baser->link($feedDetail['name'],array('controller'=>'feed_details','action'=>'edit', $formEx->value('FeedConfig.id'),$feedDetail['id'])) ?>
 	<?php else: ?>
 	<?php echo $feedDetail['name'] ?>
 	<?php endif; ?>
@@ -157,7 +156,7 @@
 
 
 <div class="submit">
-	<?php $baser->link('追加する',array('controller'=>'feed_details','action'=>'add', $form->value('FeedConfig.id')),array('class'=>'btn-red button'),null,false) ?>　
+	<?php $baser->link('追加する',array('controller'=>'feed_details','action'=>'add', $formEx->value('FeedConfig.id')),array('class'=>'btn-red button'),null,false) ?>　
 </div>
 
 <?php if($this->action == 'admin_edit'): ?>

@@ -20,33 +20,31 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($this->action == 'admin_view'): ?>
-<?php $freeze->freeze(); ?>
-<?php endif; ?>
+<h2><?php $baser->contentsTitle() ?></h2>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $form->create('Plugin',array('url'=>array($this->data['Plugin']['name']))) ?>
+<?php echo $formEx->create('Plugin',array('url'=>array($this->data['Plugin']['name']))) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('Plugin.id', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('Plugin.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('Plugin.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('Plugin.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Plugin.name', 'プラグイン名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?><?php echo $form->error('Plugin.name') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.name', 'プラグイン名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?><?php echo $formEx->error('Plugin.name') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Plugin.title', 'タイトル') ?></th>
-		<td class="col-input"><?php echo $freeze->text('Plugin.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('Plugin.title') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.title', 'タイトル') ?></th>
+		<td class="col-input"><?php echo $formEx->text('Plugin.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('Plugin.title') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Plugin.admin_link', '管理URL') ?></th>
-		<td class="col-input"><?php echo $freeze->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('Plugin.admin_link') ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.admin_link', '管理URL') ?></th>
+		<td class="col-input"><?php echo $formEx->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('Plugin.admin_link') ?>
             <?php echo $html->image('help.png',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextAdminLink" class="helptext">
                 先頭にスラッシュをつけたルートパスで入力して下さい。<br />(例) /admin/plugins/index
@@ -57,11 +55,9 @@
 </table>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
-	<?php $baser->link('編集する',array('action'=>'edit',$form->value('Plugin.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php $baser->link('削除する',array('action'=>'delete', $form->value('Plugin.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('Plugin.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Plugin.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Plugin.name')),false); ?>
 <?php endif ?>
 </div>

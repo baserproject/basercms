@@ -24,6 +24,9 @@
 <?php if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 } ?>
+
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <div id="login">
 <div class="box-01">
 <div class="box-head">

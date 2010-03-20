@@ -20,6 +20,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <div class="float-left">
 
     <div id="ranking" class="box-01">

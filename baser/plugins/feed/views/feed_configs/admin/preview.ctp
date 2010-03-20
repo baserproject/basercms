@@ -20,4 +20,5 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
 <?php echo $javascript->link('/feed/ajax/'.$id) ?>

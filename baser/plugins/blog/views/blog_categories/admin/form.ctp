@@ -20,35 +20,34 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($this->action == 'admin_view'): ?>
-<?php $freeze->freeze(); ?>
-<?php endif; ?>
+
+<h2><?php $baser->contentsTitle() ?></h2>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-    <?php echo $form->create('BlogCategory',array('url'=>'/admin/blog/blog_categories/add/'.$blogContent['BlogContent']['id'])) ?>
+    <?php echo $formEx->create('BlogCategory',array('url'=>'/admin/blog/blog_categories/add/'.$blogContent['BlogContent']['id'])) ?>
 <?php elseif($this->action=='admin_edit'): ?>
-    <?php echo $form->create('BlogCategory',array('url'=>'/admin/blog/blog_categories/edit/'.$blogContent['BlogContent']['id'].'/'.$form->value('BlogCategory.id'))) ?>
+    <?php echo $formEx->create('BlogCategory',array('url'=>'/admin/blog/blog_categories/edit/'.$blogContent['BlogContent']['id'].'/'.$formEx->value('BlogCategory.id'))) ?>
 <?php endif; ?>
-<?php echo $form->hidden('BlogCategory.id') ?>
+<?php echo $formEx->hidden('BlogCategory.id') ?>
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('BlogCategory.no', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('BlogCategory.no', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('BlogCategory.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('BlogCategory.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('BlogCategory.name', 'ブログカテゴリ名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogCategory.name', 'ブログカテゴリ名') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('BlogCategory.name', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->text('BlogCategory.name', array('size'=>40,'maxlength'=>255)) ?>
 			<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-			<?php echo $form->error('BlogCategory.name') ?>
+			<?php echo $formEx->error('BlogCategory.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
                     <li>URLに利用されます</li>
@@ -58,21 +57,19 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('BlogCategory.title', 'ブログカテゴリタイトル') ?></th>
-		<td class="col-input"><?php echo $freeze->text('BlogCategory.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('BlogCategory.title') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('BlogCategory.title', 'ブログカテゴリタイトル') ?></th>
+		<td class="col-input"><?php echo $formEx->text('BlogCategory.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('BlogCategory.title') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
-		<td class="col-input"><?php echo $freeze->select('BlogCategory.parent_id', $freeze->getControlSource('BlogCategory.parent_id',array('blogContentId'=>$blogContent['BlogContent']['id'],'excludeParentId'=>$form->value('BlogCategory.id'))),null,array('escape'=>false),'なし') ?><?php echo $form->error('BlogCategory.parent_id') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
+		<td class="col-input"><?php echo $formEx->select('BlogCategory.parent_id', $formEx->getControlSource('BlogCategory.parent_id',array('blogContentId'=>$blogContent['BlogContent']['id'],'excludeParentId'=>$formEx->value('BlogCategory.id'))),null,array('escape'=>false),'なし') ?><?php echo $formEx->error('BlogCategory.parent_id') ?>&nbsp;</td>
 	</tr>
 </table>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
-	<?php $baser->link('編集する',array('action'=>'edit', $blogContent['BlogContent']['id'], $form->value('BlogCategory.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php $baser->link('削除する',array('action'=>'delete', $blogContent['BlogContent']['id'], $form->value('BlogCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('BlogCategory.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogCategory.name')),false); ?>
 <?php endif ?>
 </div>

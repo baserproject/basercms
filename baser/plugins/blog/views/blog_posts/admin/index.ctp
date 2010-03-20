@@ -28,6 +28,7 @@
     });
 </script>
 
+<h2><?php $baser->contentsTitle() ?></h2>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="BlogPostFilter">検索</a></h3>
 <div class="function-box corner10" id="BlogPostFilterBody" style="display:none">
     <?php echo $formEx->create('BlogPost',array('url'=>array('action'=>'index',$blogContent['BlogContent']['id']))) ?>

@@ -20,27 +20,29 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $form->create('PageCategory') ?>
-<?php echo $form->hidden('PageCategory.id') ?>
-<?php echo $form->hidden('PageCategory.no') ?>
-<?php echo $form->hidden('PageCategory.theme') ?>
+<?php echo $formEx->create('PageCategory') ?>
+<?php echo $formEx->hidden('PageCategory.id') ?>
+<?php echo $formEx->hidden('PageCategory.no') ?>
+<?php echo $formEx->hidden('PageCategory.theme') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('PageCategory.no', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.no', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('PageCategory.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('PageCategory.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('PageCategory.name', 'ページカテゴリー名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('PageCategory.name', 'ページカテゴリー名') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('PageCategory.name', array('size'=>40,'maxlength'=>255)) ?>
+			<?php echo $formEx->text('PageCategory.name', array('size'=>40,'maxlength'=>255)) ?>
 			<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-			<?php echo $form->error('PageCategory.name') ?>
+			<?php echo $formEx->error('PageCategory.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
                     <li>ページカテゴリ名はURLで利用します</li>
@@ -50,11 +52,11 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('PageCategory.title', 'ページカテゴリータイトル') ?></th>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.title', 'ページカテゴリータイトル') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('PageCategory.title', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->text('PageCategory.title', array('size'=>40,'maxlength'=>255)) ?>
 			<?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('PageCategory.title') ?>
+            <?php echo $formEx->error('PageCategory.title') ?>
 			<div id="helptextTitle" class="helptext">
 				<ul>
                     <li>ページカテゴリタイトルはTitleタグに利用します。</li>
@@ -63,11 +65,11 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('PageCategory.parent_id', '親カテゴリ') ?></th>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.parent_id', '親カテゴリ') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->select('PageCategory.parent_id', $freeze->getControlSource('parent_id',array('excludeParentId'=>$form->value('PageCategory.id'))),null,array('escape'=>false),'なし') ?>
+            <?php echo $formEx->select('PageCategory.parent_id', $formEx->getControlSource('parent_id',array('excludeParentId'=>$formEx->value('PageCategory.id'))),null,array('escape'=>false),'なし') ?>
             <?php echo $html->image('help.png',array('id'=>'helpParentId','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('PageCategory.parent_id') ?>
+            <?php echo $formEx->error('PageCategory.parent_id') ?>
 			<div id="helptextParentId" class="helptext">
 				<ul>
                     <li>カテゴリの下の階層にカテゴリを作成するには親カテゴリを選択します。</li>
@@ -78,9 +80,9 @@
 </table>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削除する',array('action'=>'delete', $form->value('PageCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('PageCategory.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('PageCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('PageCategory.name')),false); ?>
 <?php endif ?>
 </div>

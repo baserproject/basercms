@@ -20,12 +20,14 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <!--<h3>基本項目</h3>-->
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $form->create('User') ?>
 <?php echo $form->hidden('User.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $form->label('User.id', 'NO') ?></th>
 		<td class="col-input">
@@ -97,7 +99,7 @@
     <p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
     <?php else: ?>
         <?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-        <?php $baser->link('削除する', array('action'=>'delete', $form->value('User.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('User.name')),false); ?>
+        <?php $baser->link('削　除', array('action'=>'delete', $form->value('User.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('User.name')),false); ?>
     <?php endif ?>
 	</form>
 <?php else: ?>

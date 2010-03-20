@@ -28,6 +28,8 @@
     });
 </script>
 
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PermissionsSearch">検索</a></h3>
 <div class="function-box corner10" id="PermissionsSearchBody">
     <?php echo $formEx->create('Permission',array('url'=>array('action'=>'index'),'type'=>'get')) ?>

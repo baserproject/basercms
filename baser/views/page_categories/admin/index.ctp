@@ -20,8 +20,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<!-- pagination -->
-<?php //$baser->element('paginations'.DS.'default'); ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePageCategoryCategories">
 <tr>
 	<th>操作</th>
@@ -56,8 +56,5 @@
     <tr><td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td></tr>
 <?php endif; ?>
 </table>
-
-
-<?php //$baser->element('paginations'.DS.'default'); ?>
 
 <div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

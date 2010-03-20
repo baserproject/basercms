@@ -20,6 +20,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 

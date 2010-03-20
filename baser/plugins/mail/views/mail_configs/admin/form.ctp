@@ -20,6 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>

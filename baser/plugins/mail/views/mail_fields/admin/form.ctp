@@ -20,10 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($this->action == 'admin_view'): ?>
-<?php $freeze->freeze(); ?>
-<?php endif; ?>
-
 <script type="text/javascript">
 jQuery(function($) {
 
@@ -103,47 +99,49 @@ jQuery(function($) {
 });
 </script>
 
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php /* MailContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-    <?php echo $form->create('MailField',array('url'=>'/admin/mail/mail_fields/add/'.$mailContent['MailContent']['id'])) ?>
+    <?php echo $formEx->create('MailField',array('url'=>'/admin/mail/mail_fields/add/'.$mailContent['MailContent']['id'])) ?>
 <?php elseif($this->action=='admin_edit'): ?>
-    <?php echo $form->create('MailField',array('url'=>'/admin/mail/mail_fields/edit/'.$mailContent['MailContent']['id'].'/'.$form->value('MailField.id'))) ?>
+    <?php echo $formEx->create('MailField',array('url'=>'/admin/mail/mail_fields/edit/'.$mailContent['MailContent']['id'].'/'.$formEx->value('MailField.id'))) ?>
 <?php endif; ?>
-<?php echo $form->hidden('MailField.id') ?>
+<?php echo $formEx->hidden('MailField.id') ?>
 <h3>基本項目</h3>
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('MailField.no', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('MailField.no', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('MailField.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>
+			<?php echo $formEx->text('MailField.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr id="rowFieldName">
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailField.field_name', 'フィールド名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.field_name', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.field_name') ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.field_name', 'フィールド名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.field_name', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.field_name') ?>
             <?php echo $html->image('help.png',array('id'=>'helpFieldName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextFieldName" class="helptext">重複しない半角英数字で入力して下さい。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr id="rowName">
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailField.name', '項目名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.name') ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.name', '項目名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.name') ?>
             <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextName" class="helptext">項目を特定しやすいわかりやすい名前を入力して下さい。日本語可。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr id="rowType">
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailField.type', 'タイプ') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.type', 'タイプ') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->select('MailField.type', $controlSource['type']) ?>
-            <?php echo $form->error('MailField.type') ?>
+            <?php echo $formEx->select('MailField.type', $controlSource['type']) ?>
+            <?php echo $formEx->error('MailField.type') ?>
             <?php echo $html->image('help.png',array('id'=>'helpType','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextType" class="helptext">
                 自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。
@@ -151,8 +149,8 @@ jQuery(function($) {
 		</td>
 	</tr>
 	<tr id="rowHead">
-		<th class="col-head"><?php echo $form->label('MailField.head', '項目見出し') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.head', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.head') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.head', '項目見出し') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.head', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.head') ?>
             <?php echo $html->image('help.png',array('id'=>'helpHead','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextHead" class="helptext">
                 グループの場合、２番目以降のフィールドは不要です。
@@ -161,36 +159,36 @@ jQuery(function($) {
         </td>
 	</tr>
 	<tr id="rowNotEmpty">
-		<th class="col-head"><?php echo $form->label('MailField.not_empty', '必須マーク') ?></th>
-		<td class="col-input"><?php echo $freeze->checkbox('MailField.not_empty', '項目見出しに必須マークを表示する') ?><?php echo $form->error('MailField.not_empty') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.not_empty', '必須マーク') ?></th>
+		<td class="col-input"><?php echo $formEx->checkbox('MailField.not_empty', '項目見出しに必須マークを表示する') ?><?php echo $formEx->error('MailField.not_empty') ?>
             <?php echo $html->image('help.png',array('id'=>'helpNotEmpty','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextNotEmpty" class="helptext">グループの場合、２番目以降のフィールドは不要です。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr id="rowValid">
-		<th class="col-head"><?php echo $form->label('MailField.valid', '入力チェック') ?></th>
-		<td class="col-input"><?php echo $freeze->select('MailField.valid', $controlSource['valid']) ?><?php echo $form->error('MailField.valid') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.valid', '入力チェック') ?></th>
+		<td class="col-input"><?php echo $formEx->select('MailField.valid', $controlSource['valid']) ?><?php echo $formEx->error('MailField.valid') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowAttention">
-		<th class="col-head"><?php echo $form->label('MailField.attention', '注意書き') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.attention', array('cols'=>35,'rows'=>3)) ?><?php echo $form->error('MailField.attention') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.attention', '注意書き') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.attention', array('cols'=>35,'rows'=>3)) ?><?php echo $formEx->error('MailField.attention') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowBeforeAttachment">
-		<th class="col-head"><?php echo $form->label('MailField.before_attachment', '前見出し') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.before_attachment', array('cols'=>35,'rows'=>3)) ?><?php echo $form->error('MailField.before_attachment') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.before_attachment', '前見出し') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.before_attachment', array('cols'=>35,'rows'=>3)) ?><?php echo $formEx->error('MailField.before_attachment') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowAfterAttachment">
-		<th class="col-head"><?php echo $form->label('MailField.after_attachment', '後見出し') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.after_attachment', array('cols'=>35,'rows'=>3)) ?><?php echo $form->error('MailField.after_attachment') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.after_attachment', '後見出し') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.after_attachment', array('cols'=>35,'rows'=>3)) ?><?php echo $formEx->error('MailField.after_attachment') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowDescription">
-		<th class="col-head"><?php echo $form->label('MailField.description', '説明文') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.description', array('cols'=>35,'rows'=>3)) ?><?php echo $form->error('MailField.description') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.description', '説明文') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.description', array('cols'=>35,'rows'=>3)) ?><?php echo $formEx->error('MailField.description') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowSource">
-		<th class="col-head"><?php echo $form->label('MailField.source', '選択リスト') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.source',array('cols'=>35,'rows'=>4)) ?><?php echo $form->error('MailField.source') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.source', '選択リスト') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.source',array('cols'=>35,'rows'=>4)) ?><?php echo $formEx->error('MailField.source') ?>
             <?php echo $html->image('help.png',array('id'=>'helpSource','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextSource" class="helptext">
                 <ul>
@@ -203,20 +201,20 @@ jQuery(function($) {
         </td>
 	</tr>
 	<tr id="rowSize">
-		<th class="col-head"><?php echo $form->label('MailField.size', '表示サイズ') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.size', array('size'=>10,'maxlength'=>255)) ?><?php echo $form->error('MailField.size') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.size', '表示サイズ') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.size', array('size'=>10,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.size') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowRows">
-		<th class="col-head"><?php echo $form->label('MailField.rows', '行数') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.rows', array('size'=>10,'maxlength'=>255)) ?><?php echo $form->error('MailField.rows') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.rows', '行数') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.rows', array('size'=>10,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.rows') ?>
             <?php echo $html->image('help.png',array('id'=>'helpRows','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextRows" class="helptext">テキストボックスの場合の行数を指定します。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr id="rowMaxlength">
-		<th class="col-head"><?php echo $form->label('MailField.maxlength', '最大値') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.maxlength', array('size'=>10,'maxlength'=>255)) ?>文字<?php echo $form->error('MailField.maxlength') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.maxlength', '最大値') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.maxlength', array('size'=>10,'maxlength'=>255)) ?>文字<?php echo $formEx->error('MailField.maxlength') ?>&nbsp;</td>
 	</tr>
 </table>
 
@@ -226,13 +224,13 @@ jQuery(function($) {
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
     <tr id="rowValidEx">
-		<th class="col-head"><?php echo $form->label('MailField.valid_ex', '拡張入力チェック') ?></th>
-		<td class="col-input"><?php echo $freeze->select('MailField.valid_ex', $controlSource['valid_ex']) ?><?php echo $form->error('MailField.valid_ex') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.valid_ex', '拡張入力チェック') ?></th>
+		<td class="col-input"><?php echo $formEx->select('MailField.valid_ex', $controlSource['valid_ex']) ?><?php echo $formEx->error('MailField.valid_ex') ?>&nbsp;</td>
 	</tr>
 
 	<tr id="rowGroupField">
-		<th class="col-head"><?php echo $form->label('MailField.group_field', 'グループ名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.group_field', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.group_field') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.group_field', 'グループ名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.group_field', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.group_field') ?>
             <?php echo $html->image('help.png',array('id'=>'helpGroupField','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextGroupField" class="helptext">
                 <ul>
@@ -244,8 +242,8 @@ jQuery(function($) {
         </td>
 	</tr>
 	<tr id="rowGroupValid">
-		<th class="col-head"><?php echo $form->label('MailField.group_valid', 'グループ入力チェック') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.group_valid', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.group_valid') ?>
+		<th class="col-head"><?php echo $formEx->label('MailField.group_valid', 'グループ入力チェック') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.group_valid', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.group_valid') ?>
             <?php echo $html->image('help.png',array('id'=>'helpGroupValid','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextGroupValid" class="helptext">
                 <ul>
@@ -258,38 +256,38 @@ jQuery(function($) {
         </td>
 	</tr>
 	<tr id="rowOptions">
-		<th class="col-head"><?php echo $form->label('MailField.options', 'オプション') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.options', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.options') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.options', 'オプション') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.options', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.options') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowClass">
-		<th class="col-head"><?php echo $form->label('MailField.class', 'クラス名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.class', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.class') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.class', 'クラス名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.class', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.class') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowSeparator">
-		<th class="col-head"><?php echo $form->label('MailField.separator', '区切り文字') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailField.separator', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailField.separator') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.separator', '区切り文字') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailField.separator', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailField.separator') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowDefault">
-		<th class="col-head"><?php echo $form->label('MailField.default_value', '初期値') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailField.default_value', array('cols'=>35,'rows'=>2)) ?><?php echo $form->error('MailField.default_value') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.default_value', '初期値') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailField.default_value', array('cols'=>35,'rows'=>2)) ?><?php echo $formEx->error('MailField.default_value') ?>&nbsp;</td>
 	</tr>
 
 	<tr id="rowAutoConvert">
-		<th class="col-head"><?php echo $form->label('MailField.auto_convert', '自動変換') ?></th>
-		<td class="col-input"><?php echo $freeze->select('MailField.auto_convert', $controlSource['auto_convert']) ?><?php echo $form->error('MailField.auto_convert') ?>&nbsp;</td>
+		<th class="col-head"><?php echo $formEx->label('MailField.auto_convert', '自動変換') ?></th>
+		<td class="col-input"><?php echo $formEx->select('MailField.auto_convert', $controlSource['auto_convert']) ?><?php echo $formEx->error('MailField.auto_convert') ?>&nbsp;</td>
 	</tr>
 	<tr id="rowUseField">
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailField.use_field', 'フィールドの利用') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.use_field', 'フィールドの利用') ?></th>
 		<td class="col-input">
-		<?php echo $freeze->radio('MailField.use_field', $textEx->booleanDoList("利用"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
-		<?php echo $form->error('MailField.use_field') ?>&nbsp;
+		<?php echo $formEx->radio('MailField.use_field', $textEx->booleanDoList("利用"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+		<?php echo $formEx->error('MailField.use_field') ?>&nbsp;
 		</td>
 	</tr>
 	<tr id="rowNoSend">
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailField.no_send', 'メール送信') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.no_send', 'メール送信') ?></th>
 		<td class="col-input">
-		<?php echo $freeze->radio('MailField.no_send', array(0=>'送信する',1=>'送信しない'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
-		<?php echo $form->error('MailField.no_send') ?>&nbsp;
+		<?php echo $formEx->radio('MailField.no_send', array(0=>'送信する',1=>'送信しない'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+		<?php echo $formEx->error('MailField.no_send') ?>&nbsp;
 		</td>
 	</tr>
 </table>
@@ -297,11 +295,9 @@ jQuery(function($) {
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
-	<?php $baser->link('編集する',array('action'=>'edit',$form->value('MailField.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php $baser->link('削除する',array('action'=>'delete', $form->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('MailField.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('MailField.name')),false); ?>
 <?php endif ?>
 </div>

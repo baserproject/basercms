@@ -20,6 +20,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php echo $formEx->create('Page') ?>
@@ -108,6 +110,6 @@
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php $baser->link('確　認',array('action'=>'preview', $formEx->value('Page.id')), array('class'=>'btn-green button','target'=>'_blank')) ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削除する',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
 <?php endif ?>
 </div>

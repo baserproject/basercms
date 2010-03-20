@@ -20,11 +20,13 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?></h2>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Permission') ?>
 <?php echo $formEx->hidden('Permission.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Permission.id', 'NO') ?></th>
 		<td class="col-input">
@@ -80,7 +82,7 @@
 <div class="align-center">
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $formEx->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削除する', array('action'=>'delete', $formEx->value('Permission.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Permission.name')),false); ?>
+	<?php $baser->link('削　除', array('action'=>'delete', $formEx->value('Permission.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Permission.name')),false); ?>
 	</form>
 <?php else: ?>
 	<?php echo $formEx->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>

@@ -20,10 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * Include files
- */
-App::import('Helper','Freeze',true,BASER_HELPERS);
-/**
  * Plugin 拡張クラス
  *
  * プラグインのコントローラーより継承して利用する
@@ -58,7 +54,7 @@ class PluginsController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Time','Freeze');
+	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *

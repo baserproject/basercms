@@ -48,7 +48,7 @@ class BlogContentsController extends BlogAppController{
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html','TimeEx','Freeze');
+	var $helpers = array('Html','TimeEx','FormEx');
 /**
  * コンポーネント
  *

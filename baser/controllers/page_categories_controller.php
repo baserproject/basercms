@@ -39,7 +39,7 @@ class PageCategoriesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('TextEx', 'Freeze');
+	var $helpers = array('TextEx', 'FormEx');
 /**
  * This controller does not use a model
  *

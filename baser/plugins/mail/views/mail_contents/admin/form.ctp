@@ -43,29 +43,27 @@ function mailContentSender1ClickHandler(){
     }
 }
 </script>
-<?php if($this->action == 'admin_view'): ?>
-<?php $freeze->freeze(); ?>
-<?php endif; ?>
 
+<h2><?php $baser->contentsTitle() ?></h2>
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $form->create('MailContent') ?>
+<?php echo $formEx->create('MailContent') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('MailContent.id', 'NO') ?></th>
+		<th class="col-head"><?php echo $formEx->label('MailContent.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('MailContent.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $formEx->text('MailContent.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.name', 'メールフォームアカウント名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.name', array('size'=>40,'maxlength'=>255)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.name', 'メールフォームアカウント名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.name', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.name') ?>
+            <?php echo $formEx->error('MailContent.name') ?>
             <div id="helptextName" class="helptext">
             <ul>
                 <li>メールフォームのURLに利用します。<br />(例)メールフォームIDが test の場合・・・http://example/test/form</li>
@@ -76,50 +74,50 @@ function mailContentSender1ClickHandler(){
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.title', 'メールフォームタイトル') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailContent.title') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.title', 'メールフォームタイトル') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailContent.title') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.sender_1', '送信先メールアドレス') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.sender_1', '送信先メールアドレス') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->radio('MailContent.sender_1_',array('0'=>'管理者用メールアドレスに送信する','1'=>'別のメールアドレスに送信する'),array('legend'=>false,'separator'=>'<br />')) ?><br />
-            <?php echo $freeze->text('MailContent.sender_1', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $form->error('MailContent.sender_1') ?>&nbsp;
+            <?php echo $formEx->radio('MailContent.sender_1_',array('0'=>'管理者用メールアドレスに送信する','1'=>'別のメールアドレスに送信する'),array('legend'=>false,'separator'=>'<br />')) ?><br />
+            <?php echo $formEx->text('MailContent.sender_1', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->error('MailContent.sender_1') ?>&nbsp;
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.sender_name', '送信先名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.sender_name', '送信先名') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('MailContent.sender_name', array('size'=>40,'maxlength'=>255)) ?>
+            <?php echo $formEx->text('MailContent.sender_name', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpSenderName','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.sender_name') ?>
+            <?php echo $formEx->error('MailContent.sender_name') ?>
             <div id="helptextSenderName" class="helptext">自動返信メールの送信者に表示します。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.subject_user', '自動返信メール<br />件名<br />[ユーザー宛]') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailContent.subject_user', array('cols'=>35,'rows'=>2)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.subject_user', '自動返信メール<br />件名<br />[ユーザー宛]') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_user', array('cols'=>35,'rows'=>2)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpSubjectUser','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.subject_user') ?>
+            <?php echo $formEx->error('MailContent.subject_user') ?>
             <div id="helptextSubjectUser" class="helptext">ユーザー宛の自動返信メールの件名に表示します。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.subject_admin', '自動送信メール<br />件名<br />[管理者宛]') ?></th>
-		<td class="col-input"><?php echo $freeze->textarea('MailContent.subject_admin', array('cols'=>35,'rows'=>2)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.subject_admin', '自動送信メール<br />件名<br />[管理者宛]') ?></th>
+		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_admin', array('cols'=>35,'rows'=>2)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpSubjectAdmin','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.subject_admin') ?>
+            <?php echo $formEx->error('MailContent.subject_admin') ?>
             <div id="helptextSubjectAdmin" class="helptext">管理者宛の自動送信メールの件名に表示します。</div>
             &nbsp;
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('MailContent.redirect_url', 'リダイレクトURL') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.redirect_url', array('size'=>40,'maxlength'=>255)) ?>
+		<th class="col-head"><?php echo $formEx->label('MailContent.redirect_url', 'リダイレクトURL') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.redirect_url', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpRedirectUrl','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.redirect_url') ?>
+            <?php echo $formEx->error('MailContent.redirect_url') ?>
             <div id="helptextRedirectUrl" class="helptext">
                 <ul>
                     <li>メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。</li>
@@ -137,18 +135,18 @@ function mailContentSender1ClickHandler(){
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
-		<th class="col-head"><?php echo $form->label('MailContent.sender_2', 'CC用送信先メールアドレス') ?></th>
+		<th class="col-head"><?php echo $formEx->label('MailContent.sender_2', 'CC用送信先メールアドレス') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('MailContent.sender_2', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('MailContent.sender_2') ?>&nbsp;
+            <?php echo $formEx->text('MailContent.sender_2', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailContent.sender_2') ?>&nbsp;
             <?php echo $html->image('help.png',array('id'=>'helpSender2','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextSender2" class="helptext">CC（カーボンコピー）用のメールアドレスを指定します。</div>
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.layout_template', 'レイアウトテンプレート名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.layout_template', array('size'=>40,'maxlength'=>255)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.layout_template', 'レイアウトテンプレート名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.layout_template', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpLayoutTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.layout_template') ?>
+            <?php echo $formEx->error('MailContent.layout_template') ?>
             <div id="helptextLayoutTemplate" class="helptext">
                 <ul>
                     <li>メールフォームの外枠のテンプレート名を指定します。</li>
@@ -159,10 +157,10 @@ function mailContentSender1ClickHandler(){
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.form_template', 'メールフォームテンプレート名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.form_template', array('size'=>40,'maxlength'=>255)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.form_template', 'メールフォームテンプレート名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.form_template', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpFormTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.form_template') ?>
+            <?php echo $formEx->error('MailContent.form_template') ?>
             <div id="helptextFormTemplate" class="helptext">
                 <ul>
                     <li>メールフォーム本体のテンプレート名を指定します。</li>
@@ -173,10 +171,10 @@ function mailContentSender1ClickHandler(){
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('MailContent.mail_template', '送信メールテンプレート名') ?></th>
-		<td class="col-input"><?php echo $freeze->text('MailContent.mail_template', array('size'=>40,'maxlength'=>255)) ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.mail_template', '送信メールテンプレート名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('MailContent.mail_template', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpMailTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
-            <?php echo $form->error('MailContent.mail_template') ?>
+            <?php echo $formEx->error('MailContent.mail_template') ?>
             <div id="helptextMailTemplate" class="helptext">
                 <ul>
                     <li>送信するメールのテンプレート名を指定します。</li>
@@ -190,11 +188,9 @@ function mailContentSender1ClickHandler(){
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $form->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
-	<?php $baser->link('編集する',array('action'=>'edit',$form->value('MailContent.id')),array('class'=>'btn-orange button'),null,false) ?>　
-	<?php $baser->link('削除する',array('action'=>'delete', $form->value('MailContent.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('MailContent.name')),false); ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('MailContent.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('MailContent.name')),false); ?>
 <?php endif ?>
 </div>

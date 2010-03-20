@@ -28,6 +28,7 @@
     });
 </script>
 
+<h2><?php $baser->contentsTitle() ?></h2>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
 <div class="function-box corner10" id="PageFilterBody" style="display:none">
     <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
