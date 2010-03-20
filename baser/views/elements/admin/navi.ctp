@@ -21,15 +21,15 @@
  */
 
 if ($this->viewPath != 'dashboard'){
-    $html->addCrumb('ダッシュボード',array('plugin'=>null,'controller'=>'dashboard'));
+    $baser->addCrumb('ダッシュボード',array('plugin'=>null,'controller'=>'dashboard'));
 }
 if (!empty($navis)){
     foreach($navis as $key => $navi){
-        $html->addCrumb($key,$navi);
+        $baser->addCrumb($key,$navi);
     }
 }
 if ($title_for_element){
-    $html->addCrumb('<strong>'.$title_for_element.'</strong>');
+    $baser->addCrumb('<strong>'.$title_for_element.'</strong>');
 }
-echo $html->getCrumbs(' &gt; ');
+$baser->crumbs(' &gt; ');
 ?>

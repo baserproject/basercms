@@ -436,13 +436,22 @@ class BaserHelper extends AppHelper {
  * aタグを取得するだけのラッパー
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
-
+		if(isset($htmlAttributes['forceTitle'])){
+			$forceTitle = $htmlAttributes['forceTitle'];
+			unset($htmlAttributes['forceTitle']);
+		}else{
+			$forceTitle = false;
+		}
 		if(!empty($this->_view->viewVars['user']['user_group_id'])){
 			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
 			
 			$_url = $this->getUrl($url);
 			if(!$this->Permission->check($_url,$userGroupId)){
-				return '';
+				if($forceTitle){
+					return "<span>$title</span>";
+				}else{
+					return '';
+				}
 			}
 		}
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
@@ -576,6 +585,45 @@ class BaserHelper extends AppHelper {
 
 		return $contentsName;
 		
+	}
+/**
+ * パンくずリストを出力する
+ * アクセス制限がかかっているリンクはテキストのみ表示する
+ * 
+ * @param  string  $separator Text to separate crumbs.
+ * @param  string  $startText This will be the first crumb, if false it defaults to first crumb in array
+ * @return string
+ */
+	function crumbs($separator = '&raquo;', $startText = false) {
+		if (!empty($this->Html->_crumbs)) {
+			$out = array();
+			if ($startText) {
+				$out[] = $this->getLink($startText, '/');
+			}
+
+			foreach ($this->Html->_crumbs as $crumb) {
+				if (!empty($crumb[1])) {
+					$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
+				} else {
+					$out[] = $crumb[0];
+				}
+			}
+			echo $this->output(implode($separator, $out));
+		}
+	}
+/**
+ * パンくずリストに要素を追加する
+ * アクセス制限がかかっているリンクの場合でもタイトルを表示できるオプションを付加
+ * $options に forceTitle を指定する事で表示しない設定も可能
+ * 
+ * @param string $name Text for link
+ * @param string $link URL for link (if empty it won't be a link)
+ * @param mixed $options Link attributes e.g. array('id'=>'selected')
+ */
+	function addCrumb($name, $link = null, $options = null) {
+		$_options = array('forceTitle'=>true);
+		$options = am($_options,$options);
+		$this->Html->_crumbs[] = array($name, $link, $options);
 	}
 }
 ?>
