@@ -48,7 +48,7 @@ class User extends AppModel {
  * @access	public
  */
  	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
-                                                        'foreignKey'=>'usre_group_iduser'));
+                                                        'foreignKey'=>'user_group_id'));
 /**
  * beforeValidate
  *
