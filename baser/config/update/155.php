@@ -1,47 +1,92 @@
 <?php
+/* SVN FILE: $Id$ */
+/**
+ * 1.5.5 アップデートスクリプト
+ * アクセス制限機能実装によるDB変更
+ *
+ * [メモ]
+ * UserモデルにUserGroupモデルをbelongsToで関連付けていたが、
+ * SQLite3 の editColumn メソッドでは、内部的にモデルの初期化を行っている為、
+ * 初期化時にUserGroupモデルがないというエラーが発生してしまう。
+ * editColumn は必ずテーブル生成の後に行う事
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2010, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.config.update
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+/**
+ * DB接続を取得
+ */
+$db =& ConnectionManager::getDataSource('baser');
 
-$db = ConnectionManager::getDataSource('baser');
-
-/* users テーブルの authority_group を user_group_id にカラム名変更 */
-$userGroupIdCol = array('name'=>'user_group_id','type'=>'integer','length'=>4);
-if($db->editColumn('User','authority_group','user_group_id',$userGroupIdCol)){
-	$updateMessage[] = 'ユーザーモデルのフィールド名称を authority_group から user_group_id に変更しました。';
-}
-
-/* user_groups テーブルを追加 */
+/**
+ * user_groups テーブルを追加
+ */
 if($db->createTableSchema(array('model'=>'UserGroup','path'=>BASER_CONFIGS.'sql'))){
-	$updateMessage[] = 'ユーザーグループテーブルの生成に成功しました。';
+	$updateMessage[] = '■ ユーザーグループテーブルの生成に成功しました。';
 }else{
-	$updateMessage[] = 'ユーザーグループテーブルの生成に失敗しました。';
+	$updateMessage[] = '■ ユーザーグループテーブルの生成に失敗しました。<br />'.
+						'手動で user_groups テーブルを生成してください。';
 }
 
-/* permissions テーブルを追加 */
+/**
+ * permissions テーブルを追加
+ */
 if($db->createTableSchema(array('model'=>'Permission','path'=>BASER_CONFIGS.'sql'))){
-	$updateMessage[] = 'アクセス制限設定テーブルの生成に成功しました。';
+	$updateMessage[] = '■ アクセス制限設定テーブルの生成に成功しました。';
 }else{
-	$updateMessage[] = 'アクセス制限設定テーブルの生成に失敗しました。';
+	$updateMessage[] = '■ アクセス制限設定テーブルの生成に失敗しました。<br />'.
+						'手動で permissions テーブルを生成してください。';
 }
 
-/* キャッシュを削除 */
-$this->deleteCache();
+/**
+ * 再接続
+ */
 $db->reconnect($db->config);
 
-/* users テーブルの authority_group を 1 (admin)に書き換え */
-$User = ClassRegistry::init('User');
-/*App::import('Model','User');
+/**
+ * users テーブルの authority_group を user_group_id にカラム名変更
+ */
+$userGroupIdCol = array('name'=>'user_group_id','type'=>'integer','length'=>4);
+if($db->editColumn('User','authority_group','user_group_id',$userGroupIdCol)){
+	$updateMessage[] = '■ ユーザーテーブルのフィールド名称を authority_group から user_group_id に変更しました。';
+}else{
+	$updateMessage[] = '■ ユーザーテーブルのフィールド名称変更に失敗しました。<br />'.
+						' authority_group を user_group_id に手動で変更してください。';
+}
+
+/**
+ * users テーブルの authority_group を 1 (admin)に書き換え
+ */
+//$User = ClassRegistry::init('User'); // フィールドリネームしたのでClassRegistryは使わない
+App::import('Model','User');
 $User = new User();
-$User->belongsTo = array();*/
 $users = $User->find('all');
 foreach($users as $user){
 	$user['User']['user_group_id']='1';
 	if($User->save($user)){
-		$updateMessage[] = 'ユーザー: '.$user['User']['name'].' を管理者グループに所属させました。';
+		$updateMessage[] = '■ ユーザー: '.$user['User']['name'].' を管理者グループに所属させました。';
 	}else{
-		$updateMessage[] = 'ユーザーデータの更新に失敗しました。';
+		$updateMessage[] = '■ ユーザーデータの更新に失敗しました。<br />'.
+							'手動で、一人のユーザーを管理者グループに所属させてください。';
 	}
 }
 
-/* user_groups テーブルの初期データを追加 */
+/**
+ * user_groups テーブルの初期データを追加
+ */
 $UserGroup = ClassRegistry::init('UserGroup');
 $datas = array(0=>array('UserGroup'=>array('name'=>'admins','title'=>'管理者')),
 			   1=>array('UserGroup'=>array('name'=>'operators','title'=>'運営者')));
@@ -53,12 +98,15 @@ foreach($datas as $data){
 	}
 }
 if($ret){
-	$updateMessage[] = 'ユーザーグループデータの登録に成功しました。';
+	$updateMessage[] = '■ ユーザーグループデータの登録に成功しました。';
 }else{
-	$updateMessage[] = 'ユーザーグループデータの登録に失敗しました。';
+	$updateMessage[] = '■ ユーザーグループデータの登録に失敗しました。.<br />'.
+						'手動でユーザーグループデータを登録してください。';
 }
 
-/* permissions テーブルの初期データを追加 */
+/**
+ * permissions テーブルの初期データを追加
+ */
 $Permission = ClassRegistry::init('Permission');
 $datas = array(0=>array('Permission'=>array('no'=>'1','sort'=>'1','name'=>'アクセス制限設定','user_group_id'=>'2','url'=>'/admin/permissions*','auth'=>'0','status'=>'1')),
 				1=>array('Permission'=>array('no'=>'2','sort'=>'2','name'=>'システム設定','user_group_id'=>'2','url'=>'/admin/site_configs*','auth'=>'0','status'=>'1')),
@@ -83,11 +131,15 @@ foreach($datas as $data){
 	}
 }
 if($ret){
-	$updateMessage[] = 'アクセス制限設定データの登録に成功しました。';
+	$updateMessage[] = '■ アクセス制限設定データの登録に成功しました。';
 }else{
-	$updateMessage[] = 'アクセス制限設定データの登録に失敗しました。';
+	$updateMessage[] = '■ アクセス制限設定データの登録に失敗しました。<br />'.
+						'手動でアクセス制限設定データを登録してください。';
 }
 
-/* 処理完了 */
-$updateMessage[] = 'データベースの更新が完了しました。';
+/**
+ * 処理完了
+ */
+$updateMessage[] = '----- データベースの更新が完了しました -----';
+$this->log($updateMessage,'install');
 ?>
