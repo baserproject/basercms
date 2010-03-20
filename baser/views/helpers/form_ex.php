@@ -728,7 +728,7 @@ DOC_END;
 			unset($attributes['escape']);
 		}
 		$attributes = $this->_initInputField($fieldName, array_merge(
-			$attributes, array('secure' => false)
+			(array)$attributes, array('secure' => false)
 		));
 
 		if (is_string($options) && isset($this->__options[$options])) {
