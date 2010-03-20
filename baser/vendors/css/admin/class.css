@@ -403,8 +403,47 @@ table.cake-sql-log tr td
     margin-left:10px;
     margin-bottom:8px;
 }
-img.help{
+img.help,
+img.slide-trigger{
     margin-bottom: 5px;
+}
+.help-box{
+	background-color:#FFFFEC;
+	margin-top:5px;
+	margin-bottom:20px;
+	padding:10px 10px;
+}
+/* example-box
+----------------------------------------------- */
+.example-box{
+	margin-top:10px;
+	margin-bottom:10px;
+	padding:10px 10px;
+	background-color: #FFFFFF;
+}
+.example-box .head{
+	margin-top:10px;
+	font-weight: bold;
+}
+.example-box ol{
+	margin-top:10px;
+	margin-bottom: 10px;
+	list-style-position: inside;
+	margin-left:20px;
+}
+.example-box ol li{
+	margin-bottom: 5px;
+}
+/* function-box
+----------------------------------------------- */
+.function-box{
+	background-color:#eFeFeF !important;
+	margin-top:5px;
+	margin-bottom:20px;
+	padding:10px 10px;
+}
+.function-box small{
+	font-weight:bold;
 }
 
 /* cakePHP parts

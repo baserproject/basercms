@@ -443,18 +443,6 @@ select.multiple option{
     padding:0!important;
 }
 
-/* function-box
------------------------------------------------ */
-.function-box{
-	background-color:#eFeFeF !important;
-	margin-top:5px;
-	margin-bottom:20px;
-	padding:10px 10px;
-}
-.function-box small{
-	font-weight:bold;
-}
-
 /* installations
 ----------------------------------------------- */
 #installations form label{
