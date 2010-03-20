@@ -37,8 +37,13 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function addColumn(&$model,$addFieldName,$column){
-        $this->execute("ALTER TABLE ".$model->tablePrefix.$model->table." ADD ".$this->columnSql($addFieldName, $column));
+    function addColumn($model,$addFieldName,$column){
+		if(is_object($model)){
+			$tableName = $model->tablePrefix.$model->table;
+		}else{
+			$tableName = $this->config['prefix'].Inflector::tableize($model);
+		}
+        $this->execute("ALTER TABLE ".$tableName." ADD ".$addFieldName." ".$this->buildColumn($column));
     }
 /**
  * カラムを変更する
@@ -49,17 +54,19 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function editColumn(&$model,$oldFieldName,$newfieldName,$column=null){
+    function editColumn($model,$oldFieldName,$newfieldName,$column=null){
 
+		if(!is_object($model)){
+			$model = ClassRegistry::init($model);
+		}
+		
         $schema = $model->schema();
         $tableName = $model->tablePrefix.$model->table;
 
-        //$this->begin($model);
         $this->execute('BEGIN TRANSACTION;');
 
         // リネームして一時テーブル作成
         if(!$this->renameTable($tableName,$tableName.'_temp')){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
@@ -75,7 +82,6 @@ class DboSqlite3Ex extends DboSqlite3 {
         
         // フィールドを変更した新しいテーブルを作成
         if(!$this->createTable($tableName,$newSchema)){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
@@ -84,19 +90,16 @@ class DboSqlite3Ex extends DboSqlite3 {
         $sql = 'INSERT INTO '.$tableName.' SELECT '.$this->convertCsvFieldsFromSchema($schema).' FROM '.$tableName.'_temp';
         $sql = str_replace($oldFieldName,$oldFieldName.' AS '.$newfieldName,$sql);
         if(!$this->execute($sql)){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
 
         // 一時テーブルを削除
         if(!$this->dropTable($tableName.'_temp')){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
 
-        //$this->commit($model);
         $this->execute('COMMIT;');
         return true;
         
@@ -109,17 +112,19 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function deleteColumn(&$model,$delFieldName){
-
+    function deleteColumn($model,$delFieldName){
+		
+		if(!is_object($model)){
+			$model = ClassRegistry::init($model);
+		}
+		
+		$tableName = $model->tablePrefix.$model->table;
         $schema = $model->schema();
-        $tableName = $model->tablePrefix.$model->table;
 
-        //$this->begin($model);
         $this->execute('BEGIN TRANSACTION;');
 
         // リネームして一時テーブル作成
         if(!$this->renameTable($tableName,$tableName.'_temp')){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
@@ -127,26 +132,22 @@ class DboSqlite3Ex extends DboSqlite3 {
         // フィールドを削除した新しいテーブルを作成
         unset($schema[$delFieldName]);
         if(!$this->createTable($tableName,$schema)){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
 
         // データの移動
         if(!$this->moveData($tableName.'_temp',$tableName,$schema)){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
 
         // 一時テーブルを削除
         if(!$this->dropTable($tableName.'_temp')){
-            //$this->rollback($model);
             $this->execute('ROLLBACK;');
             return false;
         }
 
-        //$this->commit($model);
         $this->execute('COMMIT;');
         return true;
         
@@ -192,7 +193,7 @@ class DboSqlite3Ex extends DboSqlite3 {
         $sql = 'CREATE TABLE '.$tableName .'(';
         $fields = '';
         foreach($schema as $key => $field){
-            $sql .= $this->columnSql($key,$field).',';
+            $sql .= $key." ".$this->buildColumn($field).',';
         }
         $sql = substr($sql,0,strlen($sql)-1) . ');';
         return $this->execute($sql);
@@ -210,32 +211,5 @@ class DboSqlite3Ex extends DboSqlite3 {
         }
         return substr($fields,0,strlen($fields)-1);
     }
-/**
- * カラム用のSQLを生成する
- * @param model $filedName
- * @param array $column
- * @return string $sql
- * @access public
- */
-    function columnSql($filedName,$column){
 
-        $sql = $filedName;
-        if(!empty($column['type'])){
-            $sql .= " ".$column['type'];
-        }
-        if(!empty($column['length'])){
-            $sql .= " (".$column['length'].")";
-        }
-        if(isset($column['null']) && $column['null']){
-            $sql .= ' NOT NULL';
-        }
-        if(!empty($column['default'])){
-            $sql .= " DEFAULT ".$column['default'];
-        }
-        if(!empty($column['key']) && $column['key'] == 'primary'){
-            $sql .= " PRIMARY KEY";
-        }
-        return $sql;
-        
-    }
 }
