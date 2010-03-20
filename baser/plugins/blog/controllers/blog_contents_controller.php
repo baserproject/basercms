@@ -208,7 +208,9 @@ class BlogContentsController extends BlogAppController{
  * @access  protected
  */
     function _getDefaultValue(){
-
+		
+		$data['BlogContent']['comment_use'] = true;
+		$data['BlogContent']['comment_approve'] = false;
         $data['BlogContent']['layout'] = 'default';
         $data['BlogContent']['template'] = 'default';
         $data['BlogContent']['theme'] = 'default';
