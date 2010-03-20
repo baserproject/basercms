@@ -66,7 +66,7 @@ class UserGroupsController extends AppController {
  * @var		string
  * @access 	public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
+	var $navis = array('ユーザー管理'=>'/admin/users/index',
                         'ユーザーグループ管理'=>'/admin/user_groups/index');
 /**
  * ユーザーグループの一覧を表示する
