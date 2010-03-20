@@ -45,6 +45,12 @@ class Page extends AppModel {
                             'PageCategory' =>   array(  'className'=>'PageCategory',
                                                         'foreignKey'=>'page_category_id'));
 /**
+ * 更新前のページファイルのパス
+ * @var	string
+ * @access public
+ */
+	var $oldPath = '';
+/**
  * beforeValidate
  * @return	boolean
  * @access	public
