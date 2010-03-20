@@ -187,7 +187,7 @@ class BlogPostsController extends BlogAppController{
 		}
         
 		if(empty($this->data)){
-			$this->data = $this->BlogPost->getDefaultValue();
+			$this->data = $this->BlogPost->getDefaultValue($this->Auth->user());
 		}else{
 
             $this->data['BlogPost']['blog_content_id'] = $blogContentId;
@@ -210,15 +210,7 @@ class BlogPostsController extends BlogAppController{
 		}
 
 		// 表示設定
-		$users = $this->BlogPost->User->find("all");
-		if ($users) {
-			// 苗字が同じ場合にわかりにくいので、foreachで生成
-			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
-			foreach($users as $key => $user){
-				$_users[$user['User']['id']] = $user['User']['real_name_1']." ".$user['User']['real_name_2'];
-			}
-			$this->set('users',$_users);
-		}
+        $this->set('users',$this->BlogPost->User->getUserList($this->Auth->user()));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
 		
@@ -255,17 +247,7 @@ class BlogPostsController extends BlogAppController{
 		}
 		
 		// 表示設定
-		$users = $this->BlogPost->User->find("all");
-		$_users = array();
-        if ($users) {
-			// 苗字が同じ場合にわかりにくいので、foreachで生成
-			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
-			foreach($users as $key => $user){
-				$_users[$user['User']['id']] = $user['User']['real_name_1']." ".$user['User']['real_name_2'];
-			}
-			
-		}
-        $this->set('users',$_users);
+		$this->set('users',$this->BlogPost->User->getUserList());
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->data['BlogPost']['name'];
 		$this->render('form');
 		
