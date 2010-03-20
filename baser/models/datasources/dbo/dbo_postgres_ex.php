@@ -30,7 +30,12 @@ class DboPostgresEx extends DboPostgres {
  * @access public
  */
     function addColumn(&$model,$addFieldName,$column){
-        return $this->execute("ALTER TABLE ".$model->tablePrefix.$model->table." ADD ".$this->columnSql($addFieldName, $column));
+		if(is_object($model)){
+			$tableName = $model->tablePrefix.$model->table;
+		}else{
+			$tableName = $this->config['prefix'].Inflector::tableize($model);
+		}
+        return $this->execute("ALTER TABLE ".$tableName." ADD ".$addFieldName." ".$this->buildColumn($column));
     }
 /**
  * カラムを変更する
@@ -42,7 +47,12 @@ class DboPostgresEx extends DboPostgres {
  * @access public
  */
     function editColumn(&$model,$oldFieldName,$newFieldName,$column=null){
-        return $this->execute("ALTER TABLE ".$model->tablePrefix.$model->table." RENAME ".$oldFieldName." TO ".$newFieldName,$column);
+		if(is_object($model)){
+			$tableName = $model->tablePrefix.$model->table;
+		}else{
+			$tableName = $this->config['prefix'].Inflector::tableize($model);
+		}
+        return $this->execute("ALTER TABLE ".$tableName." RENAME ".$oldFieldName." TO ".$newFieldName);
     }
 /**
  * カラムを削除する
@@ -52,37 +62,13 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function deleteColumn(&$model,$delFieldName){
-        return $this->execute("ALTER TABLE ".$model->tablePrefix.$model->table." DROP ".$delFieldName);
-    }
-/**
- * カラム用のSQLを生成する
- * @param model $filedName
- * @param array $column
- * @return string $sql
- * @access public
- */
-    function columnSql($filedName,$column){
-
-        $sql = $filedName;
-        if(!empty($column['type'])){
-            $sql .= " ".$column['type'];
-        }
-        if(!empty($column['length'])){
-            $sql .= " (".$column['length'].")";
-        }
-        if(isset($column['null']) && $column['null']){
-            $sql .= ' NOT NULL';
-        }
-        if(!empty($column['default'])){
-            $sql .= " DEFAULT ".$column['default'];
-        }
-        // TODO 確認要
-        /*if(!empty($column['key']) || $column['key'] == 'primary'){
-            $sql .= " auto_increment";
-        }*/
-        return $sql;
-        
+    function deleteColumn($model,$delFieldName){
+		if(is_object($model)){
+			$tableName = $model->tablePrefix.$model->table;
+		}else{
+			$tableName = $this->config['prefix'].Inflector::tableize($model);
+		}
+        return $this->execute("ALTER TABLE ".$tableName." DROP ".$delFieldName);
     }
     
 }
