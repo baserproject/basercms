@@ -243,7 +243,7 @@ class UsersController extends AppController {
 		if($dbDatas){
 			$this->set('users',$dbDatas);
 		}
-        $this->subMenuElements = array('users', 'user_groups');
+        $this->subMenuElements = array('users', 'user_groups', 'permissions');
 		$this->pageTitle = 'ユーザー一覧';
 		
 	}
@@ -276,7 +276,7 @@ class UsersController extends AppController {
 		}
 		
 		/* 表示設定 */
-        $this->subMenuElements = array('users', 'user_groups');
+        $this->subMenuElements = array('users', 'user_groups', 'permissions');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->render('form');
 		
@@ -323,7 +323,7 @@ class UsersController extends AppController {
 		}
 		
 		/* 表示設定 */
-        $this->subMenuElements = array('users', 'user_groups');
+        $this->subMenuElements = array('users', 'user_groups', 'permissions');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->render('form');
 		

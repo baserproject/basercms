@@ -21,7 +21,7 @@
  */
 ?>
 <div class="side-navi">
-    <h2>アクセス拒否設定<br />管理メニュー</h2>
+    <h2>アクセス制限設定<br />管理メニュー</h2>
     <ul>
         <li><?php $baser->link('一覧を表示する',array('controller'=>'permissions', 'action'=>'admin_index')) ?></li>
         <li><?php $baser->link('新規に登録する',array('controller'=>'permissions', 'action'=>'admin_add')) ?></li>
