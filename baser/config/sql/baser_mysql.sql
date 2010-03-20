@@ -233,3 +233,65 @@ CREATE TABLE IF NOT EXISTS `bc_page_categories` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `bc_user_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `bc_user_groups` (
+  `id` int(8) NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  `title` varchar(50) default NULL,
+  `modified` datetime default NULL,
+  `created` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータをダンプしています `bc_user_groups`
+--
+
+INSERT INTO `bc_user_groups` (`name`,`title`, `created`, `modified`) VALUES
+('admins','管理者',NOW(),NOW()),
+('operators','運営者',NOW(),NOW());
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `bc_permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `bc_permissions` (
+  `id` int(8) NOT NULL auto_increment,
+  `no` int(8) default NULL,
+  `sort` int(8) default NULL,
+  `name` varchar(255) default NULL,
+  `user_group_id` int(8) default NULL,
+  `url` varchar(255) default NULL,
+  `auth` tinyint(1) default NULL,
+  `status` tinyint(1) default NULL,
+  `modified` datetime default NULL,
+  `created` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータをダンプしています `bc_permissions`
+--
+
+INSERT INTO `bc_permissions` (`no`,`sort`, `name`, `user_group_id` ,`url`, `auth`, `status`, `created`, `modified`) VALUES
+('1','1','アクセス制限設定','2','/admin/permissions*','0','1',NOW(),NOW()),
+('2','2','システム設定','2','/admin/site_configs*','0','1',NOW(),NOW()),
+('3','3','グローバルメニュー管理','2','/admin/global_menus*','0','1',NOW(),NOW()),
+('4','4','プラグイン管理','2','/admin/plugins*','0','1',NOW(),NOW()),
+('5','5','ユーザー管理','2','/admin/users*','0','1',NOW(),NOW()),
+('6','6','ユーザー編集','2','/admin/users/edit*','1','1',NOW(),NOW()),
+('7','7','ユーザー編集','2','/admin/users/logout','1','1',NOW(),NOW()),
+('8','8','ブログ管理','2','/admin/blog/blog_contents*','0','1',NOW(),NOW()),
+('9','9','ブログ編集','2','/admin/blog/blog_contents/edit*','1','1',NOW(),NOW()),
+('10','10','メールフォーム基本設定','2','/admin/mail/mail_configs*','0','1',NOW(),NOW()),
+('11','11','メールフォーム管理','2','/admin/mail/mail_contents*','0','1',NOW(),NOW()),
+('12','12','メールフォーム編集','2','/admin/mail/mail_contents/edit*','1','1',NOW(),NOW()),
+('13','13','フィード管理','2','/admin/feed/feed_configs*','0','1',NOW(),NOW()),
+('14','14','ページテンプレート読込','2','/admin/pages/entry_page_files','0','1',NOW(),NOW());

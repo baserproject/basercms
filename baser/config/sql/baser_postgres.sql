@@ -239,3 +239,66 @@ CREATE TABLE "public"."bc_page_categories" (
   PRIMARY KEY  ("id")
 ) WITHOUT OIDS;
 ALTER table "public"."bc_page_categories" SET WITHOUT CLUSTER;
+
+--
+-- テーブルの構造 "bc_user_groups"
+--
+CREATE SEQUENCE bc_user_groups_id_seq;
+CREATE TABLE "public"."bc_user_groups" (
+  "id" int8 NOT NULL default nextval('bc_user_groups_id_seq'),
+  "name" varchar(50) default NULL,
+  "title" varchar(50) default NULL,
+  "modified" timestamp default NULL,
+  "created" timestamp default NULL,
+  PRIMARY KEY  ("id")
+) WITHOUT OIDS;
+ALTER table "public"."bc_user_groups" SET WITHOUT CLUSTER;
+
+--
+-- テーブルのデータをダンプしています "bc_user_groups"
+--
+
+INSERT INTO "bc_user_groups" ("name","title", "created", "modified") VALUES
+('admins','管理者',NOW(),NOW()),
+('operators','運営者',NOW(),NOW());
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 "bc_permissions"
+--
+CREATE SEQUENCE bc_permissions_id_seq;
+CREATE TABLE "public"."bc_permissions" (
+  "id" int8 NOT NULL default nextval('bc_permissions_id_seq'),
+  "no" int8 default NULL,
+  "sort" int8 default NULL,
+  "name" varchar(255) default NULL,
+  "user_group_id" int8 default NULL,
+  "url" varchar(255) default NULL,
+  "auth" boolean default NULL,
+  "status" boolean default NULL,
+  "modified" timestamp default NULL,
+  "created" timestamp default NULL,
+  PRIMARY KEY  ("id")
+) WITHOUT OIDS;
+ALTER table "public"."bc_permissions" SET WITHOUT CLUSTER;
+
+--
+-- テーブルのデータをダンプしています "bc_permissions"
+--
+
+INSERT INTO "bc_permissions" ("no","sort", "name", "user_group_id" ,"url", "auth", "status", "created", "modified") VALUES
+('1','1','アクセス制限設定','2','/admin/permissions*',false,true,NOW(),NOW()),
+('2','2','システム設定','2','/admin/site_configs*',false,true,NOW(),NOW()),
+('3','3','グローバルメニュー管理','2','/admin/global_menus*',false,true,NOW(),NOW()),
+('4','4','プラグイン管理','2','/admin/plugins*',false,true,NOW(),NOW()),
+('5','5','ユーザー管理','2','/admin/users*',false,true,NOW(),NOW()),
+('6','6','ユーザー編集','2','/admin/users/edit*',true,true,NOW(),NOW()),
+('7','7','ユーザー編集','2','/admin/users/logout',true,true,NOW(),NOW()),
+('8','8','ブログ管理','2','/admin/blog/blog_contents*',false,true,NOW(),NOW()),
+('9','9','ブログ編集','2','/admin/blog/blog_contents/edit*',true,true,NOW(),NOW()),
+('10','10','メールフォーム基本設定','2','/admin/mail/mail_configs*',false,true,NOW(),NOW()),
+('11','11','メールフォーム管理','2','/admin/mail/mail_contents*',false,true,NOW(),NOW()),
+('12','12','メールフォーム編集','2','/admin/mail/mail_contents/edit*',true,true,NOW(),NOW()),
+('13','13','フィード管理','2','/admin/feed/feed_configs*',false,true,NOW(),NOW()),
+('14','14','ページテンプレート読込','2','/admin/pages/entry_page_files',false,true,NOW(),NOW());
