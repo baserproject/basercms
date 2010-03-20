@@ -46,29 +46,31 @@ class BaserHelper extends AppHelper {
 	function __construct() {
 		$this->_view =& ClassRegistry::getObject('view');
 		// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-		$db =& ConnectionManager::getDataSource('baser');
-		if ($db->isInterfaceSupported('listSources')) {
-			$sources = $db->listSources();
+		$cn = ConnectionManager::getInstance();
+		if(file_exists(CONFIGS.'database.php') && !empty($cn->config->baser['driver'])){
+			$db =& ConnectionManager::getDataSource('baser');
+			if ($db->isInterfaceSupported('listSources')) {
+				$sources = $db->listSources();
 
-			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'site_configs'), array_map('strtolower', $sources))) {
-				if (ClassRegistry::isKeySet('SiteConfig')) {
-					$siteConfigClass = ClassRegistry::getObject('SiteConfig');
-					$siteConfig = $siteConfigClass->findExpanded();
-					if($siteConfig){
-						$this->siteConfig = $siteConfig;
+				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'site_configs'), array_map('strtolower', $sources))) {
+					if (ClassRegistry::isKeySet('SiteConfig')) {
+						$siteConfigClass = ClassRegistry::getObject('SiteConfig');
+						$siteConfig = $siteConfigClass->findExpanded();
+						if($siteConfig){
+							$this->siteConfig = $siteConfig;
+						}
+					}
+				}
+
+				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
+					if (ClassRegistry::isKeySet('Permissions')) {
+						$this->Permission = ClassRegistry::getObject('Permission');
+					}else{
+						$this->Permission = ClassRegistry::init('Permission');
 					}
 				}
 			}
-
-			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
-				if (ClassRegistry::isKeySet('Permissions')) {
-					$this->Permission = ClassRegistry::getObject('Permission');
-				}else{
-					$this->Permission = ClassRegistry::init('Permission');
-				}
-			}
 		}
-		
 	}
 /**
  * afterRender
