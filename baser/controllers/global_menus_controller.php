@@ -98,12 +98,12 @@ class GlobalMenusController extends AppController {
             }
         }
 
-			if(!empty($this->params['named']['sortup'])){
-				$this->GlobalMenu->sortup($this->params['named']['sortup'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
-			}
-			if(!empty($this->params['named']['sortdown'])){
-				$this->GlobalMenu->sortdown($this->params['named']['sortdown'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
-			}
+		if(!empty($this->params['named']['sortup'])){
+			$this->GlobalMenu->sortup($this->params['named']['sortup'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
+		}
+		if(!empty($this->params['named']['sortdown'])){
+			$this->GlobalMenu->sortdown($this->params['named']['sortdown'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
+		}
 			
         /* 条件を生成 */
         $conditions = array();
@@ -134,12 +134,12 @@ class GlobalMenusController extends AppController {
     function admin_add(){
 
         if(!$this->data){
-            $this->data['GlobalMenu']['sort'] = $this->GlobalMenu->getMax('sort',array('menu_type'=>'default'))+1;
             $this->data['GlobalMenu']['status'] = 0;
         }else{
 
 			/* 登録処理 */
             $this->data['GlobalMenu']['no'] = $this->GlobalMenu->getMax('no',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
+			$this->data['GlobalMenu']['sort'] = $this->GlobalMenu->getMax('sort',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
 			$this->GlobalMenu->create($this->data);
 
 			// データを保存
