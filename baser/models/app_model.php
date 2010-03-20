@@ -69,6 +69,7 @@ class AppModel extends Model
  * @access	public
  */
 	var $plugin = '';
+	var $useDbConfig = 'baser';
 /**
  * コンストラクタ
  *
@@ -77,7 +78,7 @@ class AppModel extends Model
  */
     function __construct($id = false, $table = null, $ds = null) {
 
-        if($this->useDbConfig && $this->name){
+        if($this->useDbConfig && ($this->name || !empty($id['name']))){
 
             // DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
             // Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
