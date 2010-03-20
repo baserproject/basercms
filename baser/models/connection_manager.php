@@ -24,7 +24,12 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-uses ('model' . DS . 'datasources' . DS . 'datasource');
+// >>> 2010/03/19 MODIFY ryuring
+// baser フォルダ内の DataSource を参照
+//uses ('model' . DS . 'datasources' . DS . 'datasource');
+// ---
+App::import('Core', 'DataSource', array('file'=>'..'.DS.'baser'.DS.'models'.DS.'datasources'.DS.'datasource.php'));
+// <<<
 config('database');
 
 /**
