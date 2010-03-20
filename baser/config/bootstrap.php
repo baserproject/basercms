@@ -29,9 +29,10 @@
  */
 	require ROOT.DS.'baser'.DS.'config'.DS.'paths.php';
     require BASER.'basics.php';
-	// ConnectionManagerハック
+	/* ConnectionManager ハック */
 	// baserフォルダ内のデータソースも走査するようにした
-	App::import('Core', 'ConnectionManager', array('file'=>'../baser/models/connection_manager.php'));   
+	// DataSource も baser フォルダ内を参照
+	App::import('Core', 'ConnectionManager', array('file'=>'..'.DS.'baser'.DS.'models'.DS.'connection_manager.php'));	
 /**
  * ベース URL を編集
  * エックスサーバーではSCRIPT_NAMEが正常に取得できなかったのでここで書き換える
