@@ -47,7 +47,7 @@ if($this->action == 'admin_view'){
 	<tr>
 		<th class="col-head"><?php echo $form->label('GlobalMenu.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $freeze->text('GlobalMenu.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $freeze->text('GlobalMenu.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
@@ -86,7 +86,7 @@ if($this->action == 'admin_view'){
     <?php elseif ($this->action == 'admin_edit'): ?>
         <?php echo $freeze->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
     <?php else: ?>
-        <?php echo $html->link('編集する',array('action'=>'edit',$form->value('GlobalMenu.id')),array('class'=>'btn-orange button'),null,false) ?>　
-        <?php echo $html->link('削除する',array('action'=>'delete', $form->value('GlobalMenu.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('GlobalMenu.name')),false); ?>
+        <?php $baser->link('編集する',array('action'=>'edit',$form->value('GlobalMenu.id')),array('class'=>'btn-orange button'),null,false) ?>　
+        <?php $baser->link('削除する',array('action'=>'delete', $form->value('GlobalMenu.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('GlobalMenu.name')),false); ?>
     <?php endif ?>
 </div>
