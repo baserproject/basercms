@@ -19,6 +19,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if($this->action=='admin_edit' && count($users)){
+	$userIdOption = array('disabled'=>'disabled');
+}else{
+	$userIdOption = array();
+}
 ?>
 <h2><?php $baser->contentsTitle() ?></h2>
 
@@ -64,8 +69,9 @@
 	</tr>
     <?php endif ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogPost.user_id', '投稿者') ?></th>
-		<td class="col-input"><?php echo $formEx->select('BlogPost.user_id',$users) ?><?php echo $formEx->error('BlogPost.user_id') ?>&nbsp;</td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.user_id', '投稿者') ?></th>
+		<td class="col-input"><?php echo $formEx->select('BlogPost.user_id',$users,null,$userIdOption) ?><?php echo $formEx->error('BlogPost.user_id') ?>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
