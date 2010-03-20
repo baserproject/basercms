@@ -23,7 +23,7 @@
  * Include files
  */
 /**
- * メニューモデル
+ * プラグインモデル
  *
  * @package			baser.models
  */
