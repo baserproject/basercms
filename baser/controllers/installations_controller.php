@@ -562,7 +562,7 @@ class InstallationsController extends AppController
             }
 
          }else{
-				$this->Session->setFlash("データベースに接続できませんでした。");
+			 $this->Session->setFlash("データベースに接続できませんでした。");
 		 }
 
     }
@@ -993,6 +993,8 @@ class InstallationsController extends AppController
 
         $this->pageTitle = 'WEBサイトアップデート';
 
+		$this->deleteCache();
+		
         /* バージョンを解析 */
         $baserVersion = $this->getBaserVersion();
         $baserVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$baserVersion);
