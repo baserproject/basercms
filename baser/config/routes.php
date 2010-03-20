@@ -213,7 +213,7 @@ if (file_exists(CONFIGS.'database.php'))
 /**
  * メンバー用
  */
- 	Router::connect('/member/:controller/:action/*', array('prefix' => 'member','member'=>true));
+ 	//Router::connect('/member/:controller/:action/*', array('prefix' => 'member','member'=>true));
 /**
  * 携帯ルーティング
  */
