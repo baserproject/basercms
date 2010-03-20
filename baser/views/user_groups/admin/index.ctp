@@ -24,7 +24,7 @@
 <?php $baser->pagination('default',array(),null,false) ?>
 
 <!-- list -->
-<table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="UserGroupGroupsTable">
+<table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="UserGroupsTable">
 <tr>
 	<th>操作</th>
     <th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'id'); ?></th>
