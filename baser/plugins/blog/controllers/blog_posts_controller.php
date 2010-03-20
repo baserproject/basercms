@@ -159,7 +159,7 @@ class BlogPostsController extends BlogAppController{
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
                             	'fields'=>array(),
-                            	'order'=>'BlogPost.id',
+                            	'order'=>'BlogPost.no DESC',
                             	'limit'=>10
                             	);
 
@@ -210,7 +210,7 @@ class BlogPostsController extends BlogAppController{
 		}
 
 		// 表示設定
-		$users = $this->BlogPost->User->find("all",array('conditions'=>array('authority_group'=>"1")));
+		$users = $this->BlogPost->User->find("all");
 		if ($users) {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成
 			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
@@ -255,7 +255,7 @@ class BlogPostsController extends BlogAppController{
 		}
 		
 		// 表示設定
-		$users = $this->BlogPost->User->find("all",array('conditions'=>array('authority_group'=>"1")));
+		$users = $this->BlogPost->User->find("all");
 		$_users = array();
         if ($users) {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成
