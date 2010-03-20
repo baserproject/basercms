@@ -73,7 +73,9 @@ class PluginHookHelper extends AppHelper{
         foreach($pluginHooks as $key => $pluginHook){
             $this->pluginHooks[$key] =& new $pluginHook();
             for ($j = 0; $j < $c; $j++) {
-                $this->pluginHooks[$key]->{$vars[$j]} = $view->{$vars[$j]};
+				if(isset($view->{$vars[$j]})){
+					$this->pluginHooks[$key]->{$vars[$j]} = $view->{$vars[$j]};
+				}
             }
         }
 
