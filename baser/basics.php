@@ -155,9 +155,11 @@
 			$query = $_SERVER['QUERY_STRING'];
 			if(!empty($query) && strpos($query, '=')){
 				$aryPath = explode('=',$query);
-			}
-			if($aryPath[0]=='url'){
-				$parameter = $aryPath[1];
+				if($aryPath[0]=='url'){
+					$parameter = $aryPath[1];
+				}
+			}else{
+				$parameter = '';
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
