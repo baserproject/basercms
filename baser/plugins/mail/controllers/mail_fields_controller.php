@@ -272,7 +272,7 @@ class MailFieldsController extends MailAppController{
         // メッセージ用
         $oldName = $mailField['MailField']['name'];
 
-        // 項目名とフィールド名は識別用に(n)形式のナンバーを付加する
+        // 項目名とフィールド名は識別用に__n形式のナンバーを付加する
 		$mailField['MailField']['field_name'] = $this->__getNewValueOnCopy('field_name',$mailField['MailField']['field_name']);
         $mailField['MailField']['name'] = $this->__getNewValueOnCopy('name',$mailField['MailField']['name']);
         $mailField['MailField']['no'] = $this->MailField->getMax('no',array('MailField.mail_content_id'=>$mailContentId))+1;
@@ -307,24 +307,25 @@ class MailFieldsController extends MailAppController{
 	function __getNewValueOnCopy($fieldName,$oldValue){
 
 		// プレフィックスを削除したフィールド名を取得
-		$baseValue = preg_replace("/__[0-9]+$/s","",$oldValue);
+		$baseValue = preg_replace("/\::[0-9]+$/s","",$oldValue);
 		$baseValue = trim($baseValue);
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-		$conditions = array('MailField.'.$fieldName.' LIKE'=>$baseValue.'%');
+		$conditions = array('MailField.'.$fieldName.' LIKE'=>$baseValue.'%',
+							'MailField.mail_content_id'=>$this->mailContent['MailContent']['id']);
 		$datas = $this->MailField->findAll($conditions,$fieldName);
 		$prefixNo = 1;
         
 		foreach($datas as $data){
 
 			$lastPrefix = str_replace($baseValue,'',$data['MailField'][$fieldName]);
-			if(preg_match("/^__([0-9]+)$/s",$lastPrefix,$matches)){
+			if(preg_match("/^\::([0-9]+)$/s",$lastPrefix,$matches)){
 				$no = (int)$matches[1];
 				if($no > $prefixNo) $prefixNo = $no;
 			}
 
 		}
-		return $baseValue.'__'.($prefixNo+1).'';
+		return $baseValue.'::'.($prefixNo+1).'';
 
     }
 /**
