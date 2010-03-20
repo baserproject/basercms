@@ -418,18 +418,29 @@ class DboCsv extends DboSource {
 
 	}
 /**
+ * Reconnects to database server with optional new settings
+ * CSVの場合は切断するだけ
+ * @param array $config An array defining the new configuration settings
+ * @return boolean True on success, false on failure
+ */
+	function reconnect($config = null) {
+		$this->disconnect();
+		$this->setConfig($config);
+		$this->_sources = null;
+	}
+/**
  * 接続処理
  * 
  * @param <type> $tableName
  * @return <type>
  */
-    function _connect($tableName,$lock=true,$plugin=null){
+    function _connect($tableName,$lock=true,$plugin=null,$force = false){
 
         $config = $this->config;
 		// CSVファイルのパスを取得
 		$this->csvName[$tableName] = $config['database'].DS.$tableName.'.csv';
 		
-		if(file_exists($this->csvName[$tableName])){
+		if(file_exists($this->csvName[$tableName]) || $force){
 			if($lock){
 				$this->connection[$tableName] = $this->csvConnectByLocked($this->csvName[$tableName]);
 			}else{
@@ -523,7 +534,9 @@ class DboCsv extends DboSource {
         if(!is_dir(TMP."csv")){
             mkdir(TMP."csv",0777);
         }
-		copy($file,TMP."csv".DS.basename($file).".bak");
+		if(file_exists($file)){
+			copy($file,TMP."csv".DS.basename($file).".bak");
+		}
 
 		// ファイルを開く
 		$fp = fopen($file,'ab+');
@@ -581,7 +594,7 @@ class DboCsv extends DboSource {
 	function csvQuery($sql){
 
 		// SQL文を解析して、CSV操作用のクエリデータを生成する
-		$queryData = $this->perseSql($sql);
+		$queryData = $this->parseSql($sql);
         if(isset($queryData['crud'])){
             switch ($queryData['crud']){
 
@@ -597,6 +610,9 @@ class DboCsv extends DboSource {
                 case "delete":
                     $ret = $this->deleteCsv($queryData);
                     break;
+				case "build":
+					$ret = $this->buildCsv($queryData);
+					break;
             }
         }else{
             $ret = true;
@@ -767,6 +783,18 @@ class DboCsv extends DboSource {
 
 	}
 /**
+ * CSVテーブルを生成する
+ * 
+ * @param array $queryData
+ */
+	function buildCsv($queryData){
+
+		$this->_connect($queryData['tableName'],true,null,true);
+		$head = $this->_getCsvHead($queryData['fields']);
+		return fwrite($this->connection[$queryData['tableName']], $head);
+
+	}
+/**
  * CSVファイルを更新する
  *
  * @param 	array 	クエリデータ
@@ -891,9 +919,12 @@ class DboCsv extends DboSource {
  * CSV用のヘッダを取得する
  * @return string
  */
-    function _getCsvHead(){
+    function _getCsvHead($fields = null){
+		if(!$fields){
+			$fields = $this->_csvFields;
+		}
 		$head = "";
-		foreach($this->_csvFields as $field){
+		foreach($fields as $field){
 			$head .= "\"".$field . "\",";
 		}
 		return substr($head,0,strlen($head)-1) . "\r\n";
@@ -980,7 +1011,11 @@ class DboCsv extends DboSource {
  * @param Model $model
  * @param String $fieldName
  */
-    function editColumn(&$model,$oldFieldName,$fieldName){
+    function editColumn($model,$oldFieldName,$fieldName){
+
+		if(!is_object($model)){
+			$model = ClassRegistry::init($model);
+		}
 
  		// DB接続
 		if(!$this->connect($model,true)){
@@ -1018,7 +1053,6 @@ class DboCsv extends DboSource {
         if($records){
             foreach($records as $key => $record){
                 $_record = $this->_convertRecord($record);
-                $_record[] = "";
                 $body .= implode(",",$_record)."\r\n";
             }
         }
@@ -1101,9 +1135,9 @@ class DboCsv extends DboSource {
  * @return 	array	configs
  * @access	public
  */
-	function perseSql($sql){
+	function parseSql($sql){
 
-		$perseData = array('conditions'=>array(),
+		$parseData = array('conditions'=>array(),
 						'fields'=>array(),
 						'joins'=>array(),
 						'limit'=>null,
@@ -1117,52 +1151,58 @@ class DboCsv extends DboSource {
 		$readPattern = "/SELECT(.+)FROM(.+)WHERE(.+?)(ORDER\sBY.+|LIMIT.+|)$/si";
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
-
+		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
+		
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)){
-			$perseData['crud'] = 'create';
-			$perseData['tableName'] = $this->_perseSqlTableName($matches[1]);
-			$perseData['className'] = $this->_perseSqlModelName($perseData['tableName']);
-			$perseData = array_merge($perseData,$this->_perseSqlValuesFromCreate($matches[2],$matches[3]));
+			$parseData['crud'] = 'create';
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
+			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
+			$parseData = array_merge($parseData,$this->_parseSqlValuesFromCreate($matches[2],$matches[3]));
 				
-			// READ
+		// READ
 		}elseif(preg_match($readPattern,$sql,$matches)){
-			$perseData['crud'] = 'read';
-			$perseData['fields'] = $this->_perseSqlFields($matches[1]);
-			$perseData['tableName'] = $this->_perseSqlTableName($matches[2]);
-			$perseData['className'] = $this->_perseSqlModelName($perseData['tableName']);
-			$perseData['conditions'] = $this->_perseSqlCondition($matches[3],$perseData['fields']);
+			$parseData['crud'] = 'read';
+			$parseData['fields'] = $this->_parseSqlFields($matches[1]);
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[2]);
+			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
+			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
 				
 			if(isset($matches[4])){
 				$etc = $matches[4];
 				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$etc,$matches2)){
-					$perseData['order'] = $this->_perseSqlOrder($matches2[1]);
+					$parseData['order'] = $this->_parseSqlOrder($matches2[1]);
 				}
 				if(preg_match("/LIMIT(.+)$/s",$etc,$matches3)){
-					$perseData = array_merge($perseData,$this->_perseSqlLimit($matches3[1]));
+					$parseData = array_merge($parseData,$this->_parseSqlLimit($matches3[1]));
 				}
 			}
 
-			// UPDATE
+		// UPDATE
 		}elseif(preg_match($updatePattern,$sql,$matches)){
 				
-			$perseData['crud'] = 'update';
-			$perseData['tableName'] = $this->_perseSqlTableName($matches[1]);
-			$perseData['className'] = $this->_perseSqlModelName($perseData['tableName']);
-			$perseData = array_merge($perseData,$this->_perseSqlValuesFromUpdate($matches[2]));
-			$perseData['conditions'] = $this->_perseSqlCondition($matches[3],$perseData['fields']);
+			$parseData['crud'] = 'update';
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
+			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
+			$parseData = array_merge($parseData,$this->_parseSqlValuesFromUpdate($matches[2]));
+			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
 				
-			// DELETE
+		// DELETE
 		}elseif(preg_match($deletePattern,$sql,$matches)){
 				
-			$perseData['crud'] = 'delete';
-			$perseData['tableName'] = $this->_perseSqlTableName($matches[1]);
-			$perseData['className'] = $this->_perseSqlModelName($perseData['tableName']);
-			$perseData['conditions'] = $this->_perseSqlCondition($matches[2],$perseData['fields']);
-				
+			$parseData['crud'] = 'delete';
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
+			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
+			$parseData['conditions'] = $this->_parseSqlCondition($matches[2],$parseData['fields']);
+
+		// BUILD (CREATE TABLE)
+		}elseif(preg_match($buildPattern,$sql,$matches)){
+			$parseData['crud'] = 'build';
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
+			$parseData['fields'] = $this->_parseSqlFieldsFromBuild($matches[2]);
 		}
 
-		return $perseData;
+		return $parseData;
 
 	}
 /**
@@ -1172,7 +1212,7 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールド名リスト
  * @access 	protected
  */
-	function _perseSqlFields($fields){
+	function _parseSqlFields($fields){
 		$aryFields = split(",",$fields);
 		foreach($aryFields as $key => $field){
 			if(strpos($field,".")!==false){
@@ -1190,13 +1230,34 @@ class DboCsv extends DboSource {
 		return $aryFields;
 	}
 /**
+ * CREATE TABLE 文のフィールド名を配列に変換する
+ *
+ * @param 	string 	SQL statement
+ * @return 	array 	フィールド名リスト
+ * @access 	protected
+ */
+	function _parseSqlFieldsFromBuild($sql){
+
+		$arySql = split(",",$sql);
+		$fields = array();
+		foreach($arySql as $key => $value){
+			if(strpos($value,'PRIMARY KEY')===false){
+				if(preg_match('/`([^`]+)`/is',$value,$matches)){
+					$fields[] = $matches[1];
+				}
+			}
+		}
+		return $fields;
+
+	}
+/**
  * SQL文のフィールド名と値を配列に変換する（INSERT文用）
  *
  * @param 	string 	SQL statement
  * @return 	array 	フィールドリスト
  * @access 	protected
  */
-	function _perseSqlValuesFromCreate($fields,$values){
+	function _parseSqlValuesFromCreate($fields,$values){
 
 		$fields = str_replace("`","",$fields);
 		$values = str_replace('\,','{CM}',$values);
@@ -1209,9 +1270,9 @@ class DboCsv extends DboSource {
 			$datas[$arrFields[$i]] = $this->_convertField($arrValues[$i],false);
 		}
 
-		$perseData['values'] = $datas;
-		$perseData['fields'] = $arrFields;
-		return $perseData;
+		$parseData['values'] = $datas;
+		$parseData['fields'] = $arrFields;
+		return $parseData;
 
 	}
 /**
@@ -1221,7 +1282,7 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールドリスト
  * @access 	protected
  */
-	function _perseSqlValuesFromUpdate($sql){
+	function _parseSqlValuesFromUpdate($sql){
 
 		$fields = array();
 		$values = array();
@@ -1243,10 +1304,10 @@ class DboCsv extends DboSource {
 			$values[$fieldName] = $this->_convertField($value,false);
 			$fields[] = $fieldName;
 		}
-		$perseData['values'] = $values;
-		$perseData['fields'] = $fields;
+		$parseData['values'] = $values;
+		$parseData['fields'] = $fields;
 
-		return $perseData;
+		return $parseData;
 
 	}
 /**
@@ -1258,7 +1319,7 @@ class DboCsv extends DboSource {
  * @return	string 	モデル名
  * @access 	protected
  */
-	function _perseSqlTableName($tables){
+	function _parseSqlTableName($tables){
 
 		$tables = str_replace("`","",$tables);
 
@@ -1279,7 +1340,7 @@ class DboCsv extends DboSource {
  * @return	string 	モデル名
  * @access 	protected
  */
-	function _perseSqlModelName($tableName){
+	function _parseSqlModelName($tableName){
 
 		return Inflector::classify(str_replace($this->config['prefix'],'',$tableName));
 
@@ -1292,7 +1353,7 @@ class DboCsv extends DboSource {
  * @return 	string	eval用の検索条件
  * @access 	protected
  */
-	function _perseSqlCondition($conditions,$fields){
+	function _parseSqlCondition($conditions,$fields){
 		 
 		if(is_array($conditions)){
 			foreach($conditions as $key => $condition){
@@ -1371,7 +1432,7 @@ class DboCsv extends DboSource {
  * @return 	array	offset/limit/page 格納した配列
  * @access 	protected
  */
-	function _perseSqlLimit($limit){
+	function _parseSqlLimit($limit){
 		 
 		$_config = split(",",$limit);
 		if(!empty($_config[1])){
@@ -1398,7 +1459,7 @@ class DboCsv extends DboSource {
  * @return 	array	並び替え条件リスト
  * @access 	protected
  */
-	function _perseSqlOrder($strOrder){
+	function _parseSqlOrder($strOrder){
 
 		$strOrder = preg_replace("/`[^`]+?`\./s","",$strOrder);
 		$strOrder = str_replace("`","",$strOrder);
