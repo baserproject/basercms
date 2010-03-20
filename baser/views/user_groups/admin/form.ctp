@@ -51,7 +51,7 @@
 	</td>
 </tr>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.$form', 'ユーザーグループ名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.title', 'ユーザーグループ名') ?></th>
 	<td class="col-input">
 		<?php echo $form->text('UserGroup.title', array('size'=>20,'maxlength'=>255)) ?>
 		<?php echo $form->error('UserGroup.title') ?>
