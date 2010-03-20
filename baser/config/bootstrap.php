@@ -97,7 +97,61 @@
 /**
  * モバイルルーティングの設定をする
  */
+	$mobilePrefix = 'm';
 	if(!Configure::read('Mobile.prefix')){
-		Configure::write('Mobile.prefix', 'm');
+		Configure::write('Mobile.prefix', $mobilePrefix);
 	}
+/**
+ * パラメーター取得
+ * モバイル判定
+ */
+	$parameter = getParamsFromEnv();	// 環境変数からパラメータを取得
+	$mobileOn = false;
+	$mobilePlugin = false;
+
+    if(!empty($parameter)){
+
+        $parameters = explode('/',$parameter);
+        if($parameters[0] == $mobilePrefix){
+
+            $parameter = str_replace($mobilePrefix.'/','',$parameter);
+            $mobileOn = true;
+
+			if(!empty($parameters[1])){
+				App::import('Core','Folder');
+				$pluginFolder = new Folder(APP.'plugins');
+				$_plugins = $pluginFolder->read(true,true);
+				$plugins = $_plugins[0];
+				foreach($plugins as $plugin){
+					if($parameters[1] == $plugin){
+						$mobilePlugin = true;
+						break;
+					}
+				}
+			}
+        }
+    }
+	Configure::write('Baser.urlParam',$parameter);
+	Configure::write('Mobile.on',$mobileOn);
+	Configure::write('Mobile.plugin',$mobilePlugin);
+/**
+ * 簡易携帯リダイレクト
+ */
+    if(!$mobileOn){
+		$baseUrl = baseUrl();
+        $mobileAgents = array('Googlebot-Mobile','Y!J-SRD','Y!J-MBS','DoCoMo','SoftBank','Vodafone','J-PHONE','UP.Browser');
+        foreach($mobileAgents as $mobileAgent){
+            if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $mobileAgent) !== false){
+                if(empty($_SERVER['HTTPS'])){
+                    $protocol = 'http';
+                }else{
+                    $protocol = 'https';
+                }
+                $redirectUrl = $protocol . '://'.$_SERVER['HTTP_HOST'].$baseUrl.$mobilePrefix.'/'.$parameter;
+                header("HTTP/1.1 301 Moved Permanently");
+                header("Location: ".$redirectUrl);
+                exit();
+            }
+        }
+    }
 ?>

@@ -136,4 +136,28 @@
 		}
 
 	}
+/**
+ * baseUrlを除外したURLのパラメーターを取得する
+ * 先頭のスラッシュは除外する
+ */
+	function getParamsFromEnv(){
+		$appBaseUrl = Configure::read('App.baseUrl');
+		$parameter = '';
+		if($appBaseUrl){
+			$base = dirname($appBaseUrl);
+			if(strpos($_SERVER['REQUEST_URI'], $appBaseUrl) !== false){
+				$parameter = str_replace($appBaseUrl,'',$_SERVER['REQUEST_URI']);
+			}else{
+				// トップページ
+				$parameter = str_replace($base.'/','',$_SERVER['REQUEST_URI']);
+			}
+		}else{
+			$query = $_SERVER['QUERY_STRING'];
+			if(!empty($query) && strpos($query, '=')){
+				$aryPath = explode('=',$query);
+			}
+		}
+		$parameter = preg_replace('/^\//','',$parameter);
+		return $parameter;
+	}
 ?>
