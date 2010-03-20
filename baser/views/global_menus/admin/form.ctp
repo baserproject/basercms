@@ -19,26 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if($this->action == 'admin_view'){
-    $freeze->freeze();
-}
 ?>
-<script type="text/javascript">
-    $(function(){
-       $("#GlobalMenuMenuType").change(function(){
-           $.ajax({
-               'url': '/admin/global_menus/get_max_sort/'+$("#GlobalMenuMenuType").val(),
-               'type': 'GET',
-               'success': function(data){
-                   if(data){
-                       $("#GlobalMenuSort").val(data);
-                   }
-               }
-           });
-       });
-    });
-</script>
-
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php echo $freeze->create('GlobalMenu') ?>
@@ -62,8 +43,9 @@ if($this->action == 'admin_view'){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('GlobalMenu.link', 'リンクURL') ?></th>
 		<td class="col-input">
-            <?php echo $freeze->text('GlobalMenu.link', array('size'=>40,'maxlength'=>255)) ?><?php echo $form->error('GlobalMenu.link') ?>
+            <?php echo $freeze->text('GlobalMenu.link', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpLink','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $form->error('GlobalMenu.link') ?>
             <div id="helptextLink" class="helptext">
                 先頭にスラッシュつけたルートパスで入力して下さい。<br />(例) /admin/global/index
             </div>

@@ -66,15 +66,15 @@
         <?php endif; ?>
         <tr<?php echo $class; ?>>
             <td class="operation-button">
-                <?php echo $html->link('編集',array('action'=>'edit', $listData['GlobalMenu']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-                <?php echo $html->link('削除', array('action'=>'delete', $listData['GlobalMenu']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['GlobalMenu']['name']),false); ?>
-								<?php echo $html->link('▲',array('action'=>'index','sortup'=>$listData['GlobalMenu']['id'])) ?>
-								<?php echo $html->link('▼',array('action'=>'index','sortdown'=>$listData['GlobalMenu']['id'])) ?>
+                <?php $baser->link('編集',array('action'=>'edit', $listData['GlobalMenu']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+                <?php $baser->link('削除', array('action'=>'delete', $listData['GlobalMenu']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['GlobalMenu']['name']),false); ?>
+				<?php $baser->link('▲',array('action'=>'index','sortup'=>$listData['GlobalMenu']['id'])) ?>
+				<?php $baser->link('▼',array('action'=>'index','sortdown'=>$listData['GlobalMenu']['id'])) ?>
             </td>
             <td><?php echo $listData['GlobalMenu']['no']; ?></td>
             <td><?php echo $textEx->listValue('GlobalMenu.menu_type',$listData['GlobalMenu']['menu_type']); ?></td>
-            <td><?php echo $html->link($listData['GlobalMenu']['name'],array('action'=>'edit',$listData['GlobalMenu']['id'])); ?></td>
-            <td><?php echo $html->link($listData['GlobalMenu']['link'],$listData['GlobalMenu']['link'],array('target'=>'_blank')); ?></td>
+            <td><?php $baser->link($listData['GlobalMenu']['name'],array('action'=>'edit',$listData['GlobalMenu']['id'])); ?></td>
+            <td><?php $baser->link($listData['GlobalMenu']['link'],$listData['GlobalMenu']['link'],array('target'=>'_blank')); ?></td>
             <td><?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['created']); ?></td>
             <td><?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['modified']); ?></td>
         </tr>
@@ -85,4 +85,4 @@
     <?php endif; ?>
 </table>
 
-<div class="align-center"><?php echo $html->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>

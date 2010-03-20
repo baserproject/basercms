@@ -162,13 +162,6 @@ class GlobalMenusController extends AppController {
 
     }
 /**
- * 並び替え番号の最大値+1を取得する
- * @param string $menu_type
- */
-    function admin_get_max_sort($menu_type = 'default'){
-        $this->set('result',$this->GlobalMenu->getMax('sort',array('menu_type'=>$menu_type))+1);
-    }
-/**
  * [ADMIN] 編集処理
  *
  @ @param	int		ID
