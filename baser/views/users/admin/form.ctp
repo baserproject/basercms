@@ -51,6 +51,11 @@
 	</td>
 </tr>
 <tr>
+	<th class="col-head"><?php echo $form->label('User.user_group_id', 'グループ') ?></th>
+	<td class="col-input"><?php echo $form->select('User.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?>
+        <?php echo $form->error('User.user_group_id', '>> グループを選択して下さい') ?>&nbsp;</td>
+</tr>
+<tr>
 	<th class="col-head">
 		<?php if($this->action == 'admin_add'): ?>
 		<span class="required">*</span>&nbsp;
@@ -72,17 +77,13 @@
 		<?php echo $form->error('User.password') ?>&nbsp;
 	</td>
 </tr>
+
 </table>
 
 <div style="display:none">
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
-<tr>
-	<th class="col-head"><?php echo $form->label('User.authority_group', 'グループ') ?></th>
-	<td class="col-input"><?php echo $form->select('User.authority_group', $formEx->getControlSource('authority_group'),$form->value('User.authority_group')) ?>
-        <?php echo $form->error('User.authority_group', '>> グループを選択して下さい') ?>&nbsp;</td>
-</tr>
-<tr>
+<tr style="display:none">
 	<th class="col-head"><?php echo $form->label('User.email', 'Eメール') ?></th>
 	<td class="col-input"><?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?>
         <?php echo $form->error('User.email', '>> Eメールの形式が不正です') ?>&nbsp;</td>

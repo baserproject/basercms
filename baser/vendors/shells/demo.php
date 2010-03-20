@@ -38,7 +38,7 @@ class DemoShell extends Shell {
 			$user['User']['password_1'] = Security::hash('demodemo', null, true);
 			$user['User']['password_2'] = $user['User']['password_1'];
 			$user['User']['real_name_1'] = 'admin';
-			$user['User']['authority_group'] = 1;
+			$user['User']['user_group_id'] = 1;
 			$this->User->create($user);
 			if(!$this->User->save()) $ret = false;
 			
@@ -46,7 +46,7 @@ class DemoShell extends Shell {
 			$user['User']['password_1'] = Security::hash('demodemo', null, true);
 			$user['User']['password_2'] = $user['User']['password_1'];
 			$user['User']['real_name_1'] = 'member';
-			$user['User']['authority_group'] = 2;
+			$user['User']['user_group_id'] = 2;
 			$this->User->create($user);
 			if(!$this->User->save()) $ret = false;
 			

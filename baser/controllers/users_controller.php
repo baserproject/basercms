@@ -233,7 +233,7 @@ class UsersController extends AppController {
 		/* データ取得 */
 		$this->paginate = array('conditions'=>array(),
                             	'fields'=>array(),
-                            	'order'=>'User.authority_group,User.id',
+                            	'order'=>'User.user_group_id,User.id',
                             	'limit'=>10
                             	);
 		$dbDatas = $this->paginate('User');

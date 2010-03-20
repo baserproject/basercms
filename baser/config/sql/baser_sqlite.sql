@@ -177,7 +177,7 @@ CREATE TABLE bc_users (
   real_name_1 text default NULL,
   real_name_2 text default NULL,
   email text default NULL,
-  authority_group integer default NULL,
+  user_group_id integer default NULL,
   created text default NULL,
   modified text default NULL
 );

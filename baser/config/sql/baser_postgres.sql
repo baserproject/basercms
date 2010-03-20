@@ -175,7 +175,7 @@ CREATE TABLE "public"."bc_users" (
   "real_name_1" varchar(50) default NULL,
   "real_name_2" varchar(50) default NULL,
   "email" varchar(255) default NULL,
-  "authority_group" int8 default NULL,
+  "user_group_id" int4 default NULL,
   "created" timestamp default NULL,
   "modified" timestamp default NULL,
   PRIMARY KEY  ("id")

@@ -31,7 +31,7 @@
 	<th><?php echo $paginator->sort(array('asc'=>'アカウント名 ▼','desc'=>'アカウント名 ▲'),'name'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'姓 ▼','desc'=>'姓 ▲'),'real_name_1'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'名 ▼','desc'=>'名 ▲'),'real_name_2'); ?></th>
-	<!--<th><?php echo $paginator->sort(array('asc'=>'グループ ▼','desc'=>'グループ ▲'),'authority_group'); ?></th>-->
+	<th><?php echo $paginator->sort(array('asc'=>'グループ ▼','desc'=>'グループ ▲'),'user_group_id'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'登録日 ▼','desc'=>'登録日 ▲'),'created'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
 </tr>
@@ -52,7 +52,7 @@
 		<td><?php echo $html->link($user['User']['name'],array('action'=>'edit', $user['User']['id'])); ?></td>
 		<td><?php echo $user['User']['real_name_1']; ?></td>
 		<td><?php echo $user['User']['real_name_2']; ?></td>
-		<!--<td><?php echo $textEx->listValue('User.authority_group',$user['User']['authority_group']); ?></td>-->
+		<td><?php echo $textEx->listValue('User.user_group_id',$user['User']['user_group_id']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$user['User']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$user['User']['modified']); ?></td>
 	</tr>

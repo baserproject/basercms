@@ -57,8 +57,7 @@ class  AuthConfigureComponent extends Object {
 			if(strpos($controller->Auth->Session->read('Auth.redirect'),'admin')===false){
 				$controller->Auth->Session->write('Auth.redirect',null);
 			}
-			// ログイン条件
-			$controller->Auth->userScope = array('User.authority_group'=>1);
+
 			// ログイン後にリダイレクトするURL
 			$controller->Auth->loginRedirect = '/admin/dashboard/index';
 			// ログインアクション
@@ -75,8 +74,7 @@ class  AuthConfigureComponent extends Object {
 			if(strpos($controller->Auth->Session->read('Auth.redirect'),'member')===false){
 				$controller->Auth->Session->write('Auth.redirect',null);
 			}
-			// ログイン条件
-			$controller->Auth->userScope = array('User.authority_group'=>2);
+
 			// ログイン後にリダイレクトするURL
 			$controller->Auth->loginRedirect = '/member/dashboard/index';
 			// ログインアクション
@@ -107,7 +105,12 @@ class  AuthConfigureComponent extends Object {
         }
 
     }
-    
+/**
+ * beforeFilter
+ */
+	function beforeFilter(&$controller) {
+		//$controller->Auth->userScope = array('User.user_group_id'=>1);
+	}
 }
 
 ?>

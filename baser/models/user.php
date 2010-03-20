@@ -43,6 +43,13 @@ class User extends AppModel {
  */
     var $useDbConfig = 'baser';
 /**
+ * belongsTo
+ * @var 	array
+ * @access	public
+ */
+ 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
+                                                        'foreignKey'=>'usre_group_iduser'));
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -79,10 +86,8 @@ class User extends AppModel {
 											'message' => ">> Eメールの形式が不正です",
 											'required' => true));*/
 											
-		$this->validate['authority_group'] =array(array('rule' => array('between',1,2),
-											'message' => ">> グループを選択して下さい"),
-										array('rule' => 'numeric',
-											'message' => '>> グループは数字である必要があります'));
+		$this->validate['user_group_id'] =	array(	array('rule' => VALID_NOT_EMPTY,
+															'message' => ">> グループを選択して下さい"));
 		return true;
 		
 	}
@@ -155,8 +160,9 @@ class User extends AppModel {
  * @access	public
  */
 	function getControlSource($field = null){
-		
-		$controlSources['authority_group'] = array(1=>'admin',2=>'member');
+
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$controlSources['user_group_id'] = $UserGroup->find('list');
 		
 		if(isset($controlSources[$field])){
 			return $controlSources[$field];
@@ -173,7 +179,7 @@ class User extends AppModel {
  */
 	function getDefaultValue(){
 		
-		$data[$this->name]['authority_group'] = 1;
+		$data[$this->name]['user_group_id'] = 1;
 		return $data;
 		
 	}

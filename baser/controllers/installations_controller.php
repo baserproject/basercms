@@ -619,7 +619,7 @@ class InstallationsController extends AppController
             } else {
                 $date = date('Y-m-d H:i:s');
             }
-            $db->execute("insert into ".$this->Session->read('dbPrefix')."users (name,real_name_1,real_name_2,password,email,authority_group,created,modified) values ('{$admin}','{$admin}','','".$hashedPassword."','',1,'".$date."','".$date."')");
+            $db->execute("insert into ".$this->Session->read('dbPrefix')."users (name,real_name_1,real_name_2,password,email,user_group_id,created,modified) values ('{$admin}','{$admin}','','".$hashedPassword."','',1,'".$date."','".$date."')");
 
             // CSVの際には、作成日の更新を行う
             if($this->Session->read('dbType') == 'csv'){

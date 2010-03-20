@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `bc_users` (
   `real_name_1` varchar(50) default NULL,
   `real_name_2` varchar(50) default NULL,
   `email` varchar(255) default NULL,
-  `authority_group` int(11) default NULL,
+  `user_group_id` int(4) default NULL,
   `created` datetime default NULL,
   `modified` datetime default NULL,
   PRIMARY KEY  (`id`)
