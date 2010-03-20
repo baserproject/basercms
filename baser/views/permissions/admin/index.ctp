@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] パーミッション一覧
+ * [管理画面] アクセス拒否設定一覧
  *
  * PHP versions 4 and 5
  *
@@ -20,6 +20,26 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        <?php if($form->value('Permission.open')): ?>
+            $("#PermissionsSearchBody").show();
+        <?php endif ?>
+    });
+</script>
+
+<h3><a href="javascript:void(0);" class="slide-trigger" id="PermissionsSearch">検索</a></h3>
+<div class="function-box corner10" id="PermissionsSearchBody">
+    <?php echo $formEx->create('Permission',array('url'=>array('action'=>'index'),'type'=>'get')) ?>
+    <p>
+        <small>ユーザーグループ</small>
+        <?php echo $formEx->select('Permission.user_group_id',  $formEx->getControlSource('user_group_id'),null,array(),false) ?>　
+    </p>
+    <?php echo $formEx->hidden('Permission.open',array('value'=>true)) ?>
+    <div class="align-center">
+        <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?>
+    </div>
+</div>
 
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="PermissionsTable">
@@ -27,7 +47,7 @@
 	<th>操作</th>
     <th>NO</th>
 	<th>設定名</th>
-	<th>設定</th>
+	<th>URL設定</th>
 	<th>登録日</th>
 	<th>更新日</th>
 </tr>
@@ -48,7 +68,7 @@
 		</td>
         <td><?php echo $listData['Permission']['id']; ?></td>
 		<td><?php echo $html->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?></td>
-		<td><?php echo $listData['Permission']['setting']; ?></td>
+		<td><?php echo $listData['Permission']['url']; ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['Permission']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$listData['Permission']['modified']); ?></td>
 	</tr>

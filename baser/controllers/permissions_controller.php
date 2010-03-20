@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * パーミッションコントローラー
+ * アクセス拒否設定コントローラー
  * 
  * PHP versions 4 and 5
  *
@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * パーミッションコントローラー
+ * アクセス拒否設定コントローラー
  *
  * @package			baser.controllers
  */
@@ -68,21 +68,40 @@ class PermissionsController extends AppController {
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
 						'ユーザーグループ管理'=>'/admin/user_group/index',
-                        'パーミッション管理'=>'/admin/permissions/index');
+                        'アクセス拒否設定管理'=>'/admin/permissions/index');
 /**
- * パーミッションの一覧を表示する
+ * アクセス拒否設定の一覧を表示する
  *
  * @return  void
  * @access  public
  */
     function admin_index(){
 
+		/* セッション処理 */
+        if(!empty($this->params['url']['user_group_id'])){
+            $this->Session->write('Filter.Permission.user_group_id',$this->params['url']['user_group_id']);
+			$this->data['Permission']['user_group_id'] = $this->params['url']['user_group_id'];
+        }else{
+            if($this->Session->check('Filter.Permission.user_group_id')){
+                $this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
+            }else{
+                $this->Session->del('Filter.Permission.user_group_id');
+                $this->data['Permission']['user_group_id'] = '1';
+            }
+        }
+
+		/* 条件を生成 */
+        $conditions = array();
+        if(!empty($this->data['Permission']['user_group_id'])){
+            $conditions['Permission.user_group_id'] = $this->data['Permission']['user_group_id'];
+        }
+
 		/* データ取得 */
-		$listDatas = $this->Permission->find('all',array('order'=>'Permission.id'));
+		$listDatas = $this->Permission->find('all',array('conditions'=>$conditions, 'order'=>'Permission.id'));
 		
 		/* 表示設定 */
         $this->set('listDatas',$listDatas);
-		$this->pageTitle = 'パーミッション一覧';
+		$this->pageTitle = 'アクセス拒否設定一覧';
 
     }
 /**
@@ -99,7 +118,7 @@ class PermissionsController extends AppController {
 			$this->Permission->create($this->data);
 			if($this->Permission->save()){
                 $this->deleteViewCache();
-                $message = '新規パーミッション「'.$this->data['Permission']['title'].'」を追加しました。';
+                $message = '新規アクセス拒否設定「'.$this->data['Permission']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
@@ -110,7 +129,7 @@ class PermissionsController extends AppController {
         }
 
         /* 表示設定 */
-        $this->pageTitle = '新規パーミッション登録';
+        $this->pageTitle = '新規アクセス拒否設定登録';
         $this->render('form');
 
     }
@@ -135,7 +154,7 @@ class PermissionsController extends AppController {
 
 			/* 更新処理 */
 			if($this->Permission->save($this->data)){
-                $message = 'パーミッション「'.$this->data['Permission']['name'].'」を更新しました。';
+                $message = 'アクセス拒否設定「'.$this->data['Permission']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
 				$this->redirect(array('action'=>'index',$id));
@@ -146,7 +165,7 @@ class PermissionsController extends AppController {
 		}
 
 		/* 表示設定 */
-        $this->pageTitle = 'パーミッション編集：'.$this->data['Permission']['title'];
+        $this->pageTitle = 'アクセス拒否設定編集：'.$this->data['Permission']['name'];
 		$this->render('form');
 
 	}
@@ -170,7 +189,7 @@ class PermissionsController extends AppController {
 
 		/* 削除処理 */
 		if($this->Permission->del($id)) {
-            $message = 'パーミッション「'.$post['Permission']['title'].'」 を削除しました。';
+            $message = 'アクセス拒否設定「'.$post['Permission']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Permission->saveDbLog($message);
 		}else{

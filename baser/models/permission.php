@@ -43,6 +43,13 @@ class Permission extends AppModel {
  */
     var $useDbConfig = 'baser';
 /**
+ * belongsTo
+ * @var 	array
+ * @access	public
+ */
+ 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
+                                                        'foreignKey'=>'user_group_id'));
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -50,60 +57,54 @@ class Permission extends AppModel {
  */
 	function beforeValidate(){
 
-		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 設定名を入力して下さい"));
+		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> 設定名を入力して下さい"));
+		$this->validate['user_group_id'] =	array(array('rule' => VALID_NOT_EMPTY,
+														'message' => ">> ユーザーグループを選択して下さい"));
+		$this->validate['url'] = array(	array(	'rule' => VALID_NOT_EMPTY,
+													'message' => ">> 設定を入力して下さい"),
+											array(	'rule' => 'checkUrl',
+													'message' => '>> アクセス拒否として設定できるのは認証ページだけです。'));
 		return true;
 
 	}
 /**
- * afterFind
- * @param mixed $results
- * @param boolean $primary
+ * 設定をチェックする
+ *
+ * @return boolean True if the operation should continue, false if it should abort
+ * @access public
  */
-	function afterFind($results, $primary = false){
-		if($results){
-			if(isset($results[$this->alias])){
-				$results[$key] = $this->construct($result);
-			}else{
-				foreach($results as $key => $result){
-					$results[$key][$this->alias]['setting'] = $this->deconstructSetting($result);
-				}
-			}
+	function checkUrl($check){
+
+		if(!$check[key($check)]){
+			return true;
 		}
-		return $results;
+
+		$params = Router::parse($check[key($check)]);
+		if(empty($params['prefix'])){
+			$this->invalidate('setting','>> アクセス拒否として設定できるのは認証ページだけです。');
+			return false;
+		}
+
+		return true;
+		
 	}
 /**
- * 設定フィールドを結合する
- * @param array $data
- * @return string
+ * コントロールソースを取得する
+ *
+ * @param	string	フィールド名
+ * @return	array	コントロールソース
+ * @access	public
  */
-	function deconstructSetting($data){
-		if (!is_array($data)) {
-			return $data;
+	function getControlSource($field = null){
+
+		$controlSources['user_group_id'] = $this->UserGroup->find('list');
+
+		if(isset($controlSources[$field])){
+			return $controlSources[$field];
+		}else{
+			return false;
 		}
-		if(isset($data[$this->alias])){
-			$data = $data[$this->alias];
-		}
-		$setting = '';
-		if($data['prefix']!='-'){
-			$setting = '/'.$data['prefix'];
-		}
-		if($data['plugin']!='-'){
-			$setting .= '/'.$data['plugin'];
-		}
-		if($data['controller']!='-'){
-			$setting .= '/'.$data['controller'];
-		}
-		if($data['action']!='-'){
-			$setting .= '/'.$data['action'];
-		}
-		if($data['pass1']!='-'){
-			$setting .= '/'.$data['pass1'];
-		}
-		if($data['pass2']!='-'){
-			$setting .= '/'.$data['pass2'];
-		}
-		return $setting;
 
 	}
 }

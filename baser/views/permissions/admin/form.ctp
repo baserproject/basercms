@@ -21,40 +21,36 @@
  */
 ?>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $form->create('UserGroup') ?>
-<?php echo $form->hidden('UserGroup.id') ?>
+<?php echo $form->create('Permission') ?>
+<?php echo $form->hidden('Permission.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_view' || $this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('UserGroup.id', 'NO') ?></th>
+		<th class="col-head"><?php echo $form->label('Permission.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $form->text('UserGroup.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
+			<?php echo $form->text('Permission.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
 	</tr>
 <?php endif; ?>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.name', '識別名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Permission.name', '設定名') ?></th>
 	<td class="col-input">
-		<?php if($form->value('UserGroup.name')=='admins'): ?>
-			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>
-		<?php else: ?>
-			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255)) ?>
-		<?php endif ?>
-		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-		<?php echo $form->error('UserGroup.name') ?>
-        <div id="helptextName" class="helptext">
-            <ul>
-                <li>半角英数字で入力して下さい。</li>
-				<li>識別名 admin は変更できません。</li>
-            </ul>
-        </div>
+		<?php echo $form->text('Permission.name', array('size'=>20,'maxlength'=>255)) ?>
+		<?php echo $form->error('Permission.name') ?>
 	</td>
 </tr>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.$form', 'ユーザーグループ名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Permission.user_group_id', 'ユーザーグループ') ?></th>
 	<td class="col-input">
-		<?php echo $form->text('UserGroup.title', array('size'=>20,'maxlength'=>255)) ?>
-		<?php echo $form->error('UserGroup.title') ?>
+		<?php echo $form->select('Permission.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?>
+		<?php echo $form->error('Permission.user_group_id') ?>
+	</td>
+</tr>
+<tr>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('Permission.url', 'URL設定') ?></th>
+	<td class="col-input">
+		<?php echo $form->text('Permission.url', array('size'=>60,'maxlength'=>255)) ?>
+		<?php echo $form->error('Permission.url') ?>
 	</td>
 </tr>
 </table>
@@ -62,7 +58,7 @@
 <div class="align-center">
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-	<?php echo $html->link('削除する', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('UserGroup.name')),false); ?>
+	<?php echo $html->link('削除する', array('action'=>'delete', $form->value('Permission.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('Permission.name')),false); ?>
 	</form>
 <?php else: ?>
 	<?php echo $form->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>

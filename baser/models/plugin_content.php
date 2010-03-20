@@ -63,5 +63,49 @@ class PluginContent extends AppModel {
 		return true;
         
 	}
+/**
+ * プラグイン名の書き換え
+ *
+ * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
+ * 一つのプラグインで二つのコンテンツを設置した場合に利用する。
+ * あらかじめ、plugin_contentsテーブルに、URLに使う名前とコンテンツを特定する。
+ * プラグインごとの一意のキー[content_id]を保存しておく。
+ *
+ * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
+ * Router::connectの引数として値を与えると、$html->linkなどで、
+ * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
+ */
+	function addRoute($url){
+
+		if(!$url){
+			return false;
+		}
+
+		$mobilePrefix = Configure::read('Mobile.prefix');
+		$mobileOn = Configure::read('Mobile.on');
+		$pluginContents = $this->findAll();
+		if(!$pluginContents){
+			return false;
+		}
+
+		$url = preg_replace('/^\//','',$url);
+		if(strpos($url, '/') !== false){
+			$_path = split('/',$url);
+		}else{
+			$_path[0] = $url;
+			$_path[1] = '';
+		}
+		
+		foreach($pluginContents as $pluginContent ){
+			if($pluginContent['PluginContent']['name']){
+				if($_path[0]!=$mobilePrefix && $_path[0] == $pluginContent['PluginContent']['name']){
+					Router::connect('/'.$pluginContent['PluginContent']['name'].'/:action/*',array('plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
+				}elseif($mobileOn && $_path[1]==$pluginContent['PluginContent']['name']){
+					Router::connect('/'.$mobilePrefix.'/'.$pluginContent['PluginContent']['name'].'/:action/*',array('prefix' => 'mobile','plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
+				}
+			}
+		}
+
+	}
 }
 ?>
