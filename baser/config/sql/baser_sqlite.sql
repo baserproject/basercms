@@ -200,8 +200,8 @@ CREATE TABLE bc_pages (
   theme text default NULL,
   status boolean default NULL,
   url text default NULL,
-  modified datetime default NULL,
-  created datetime default NULL
+  modified text default NULL,
+  created text default NULL
 );
 
 --
@@ -324,8 +324,8 @@ CREATE TABLE bc_page_categories (
   title text default NULL,
   sort integer default NULL,
   theme text default NULL,
-  modified datetime default NULL,
-  created datetime default NULL
+  modified text default NULL,
+  created text default NULL
 );
 
 --
@@ -336,8 +336,8 @@ CREATE TABLE  bc_user_groups (
   id integer NOT NULL PRIMARY KEY,
   name text default NULL,
   title text default NULL,
-  modified datetime default NULL,
-  created datetime default NULL);
+  modified text default NULL,
+  created text default NULL);
 
 --
 -- テーブルのデータをダンプしています bc_user_groups
@@ -363,8 +363,8 @@ CREATE TABLE  bc_permissions (
   url text default NULL,
   auth boolean default NULL,
   status boolean default NULL,
-  modified datetime default NULL,
-  created datetime default NULL);
+  modified text default NULL,
+  created text default NULL);
 
 --
 -- テーブルのデータをダンプしています bc_permissions
