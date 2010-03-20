@@ -38,7 +38,7 @@ class DboMysqlEx extends DboMysql {
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
-        return $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
+        return $this->execute("ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column));
     }
 /**
  * カラムを変更する
@@ -58,7 +58,7 @@ class DboMysqlEx extends DboMysql {
 		if(empty($column['name'])){
 			$column['name'] = $newFieldName;
 		}
-        return $this->execute("ALTER TABLE ".$tableName." CHANGE `".$oldFieldName."` ".$this->buildColumn($column));
+        return $this->execute("ALTER TABLE `".$tableName."` CHANGE `".$oldFieldName."` ".$this->buildColumn($column));
     }
 /**
  * カラムを削除する
@@ -74,7 +74,7 @@ class DboMysqlEx extends DboMysql {
 		}else{
 			$tableName = $this->config['prefix'].Inflector::tableize($model);
 		}
-        return $this->execute("ALTER TABLE ".$tableName." DROP ".$delFieldName);
+        return $this->execute("ALTER TABLE `".$tableName."` DROP `".$delFieldName."`");
     }
     
 }

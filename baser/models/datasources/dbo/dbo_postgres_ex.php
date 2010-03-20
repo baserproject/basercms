@@ -38,7 +38,7 @@ class DboPostgresEx extends DboPostgres {
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
-        return $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
+        return $this->execute('"ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
     }
 /**
  * カラムを変更する
@@ -55,7 +55,7 @@ class DboPostgresEx extends DboPostgres {
 		}else{
 			$tableName = $this->config['prefix'].Inflector::tableize($model);
 		}
-        return $this->execute("ALTER TABLE ".$tableName." RENAME ".$oldFieldName." TO ".$newFieldName);
+        return $this->execute('ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"');
     }
 /**
  * カラムを削除する
@@ -71,7 +71,7 @@ class DboPostgresEx extends DboPostgres {
 		}else{
 			$tableName = $this->config['prefix'].Inflector::tableize($model);
 		}
-        return $this->execute("ALTER TABLE ".$tableName." DROP ".$delFieldName);
+        return $this->execute('ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"');
     }
     
 }
