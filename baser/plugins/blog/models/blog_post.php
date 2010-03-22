@@ -77,8 +77,7 @@ class BlogPost extends BlogAppModel {
                                                     'message' => ">> 投稿日を入力して下さい",
                                                     'required' => true));
 		$this->validate['user_id'] = array(array(   'rule' => array('minLength',1),
-                                                    'message' => ">> 投稿者を選択して下さい",
-                                                    'required' => true));
+                                                    'message' => ">> 投稿者を選択して下さい"));
 		return true;
 	}
 /**
