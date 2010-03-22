@@ -52,7 +52,7 @@ class BlogController extends BlogAppController{
 /**
  * コンポーネント
  */
- 	var $components = array('RequestHandler','EmailEx');
+ 	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -84,10 +84,10 @@ class BlogController extends BlogAppController{
  */
 	function beforeFilter(){
 
+		parent::beforeFilter();
+
 		/* 認証設定 */
 		$this->Auth->allow('index','mobile_index','archives','mobile_archives');
-
-		parent::beforeFilter();
 
         if(empty($this->contentId)){
             $this->contentId = $this->params['pass'][0];
