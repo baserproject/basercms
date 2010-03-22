@@ -52,8 +52,8 @@ class UserGroup extends AppModel {
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
 											'message' => ">> グループ識別名を入力して下さい"),
-										array('rule' => 'alphaNumeric',
-											'message' => '>> グループ識別名は半角英数字のみ入力して下さい'));
+										array('rule' => 'halfText',
+											'message' => '>> グループ識別名は半角のみで入力して下さい'));
 		$this->validate['title'] = array(array('rule' => VALID_NOT_EMPTY,
 											'message' => ">> グループ名を入力して下さい"));
 		return true;

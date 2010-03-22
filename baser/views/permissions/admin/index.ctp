@@ -28,23 +28,23 @@
     });
 </script>
 
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpPermissions','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
-<div class="help-box corner10 display-none" id="helpPermissionsBody">
-<h4>ユーザーヘルプ</h4>
-<p>サイト運営者には必要最低限のメニューしか表示しないなど、ユーザーグループごとのアクセス制限をかける事でシンプルなインターフェイスを実現する事ができます。<br />
-	画面下の「新規登録」ボタンより新しいルールを追加します。</p>
-<ul>
-	<li>ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスできるようになっています。</li>
-	<li>複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先されます。</li>
-	<li>URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。</li>
-	<li>管理者グループ「admins」には、アクセス制限の設定はできません。</li>
-</ul>
-<div class="example-box">
-	<div class="head">（例）ページ管理全体は許可しないが、特定のページ「NO: ２」のみ許可を与える場合</div>
-	<ol>
-		<li>1つ目のルールとして、　/admin/pages*　を「不可」として追加します。</li>
-		<li>2つ目のルールとして、　/admin/pages/edit/2　を「可」として追加します。</li>
-	</ol>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>サイト運営者には必要最低限のメニューしか表示しないなど、ユーザーグループごとのアクセス制限をかける事でシンプルなインターフェイスを実現する事ができます。<br />
+		画面下の「新規登録」ボタンより新しいルールを追加します。</p>
+	<ul>
+		<li>ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスできるようになっています。</li>
+		<li>複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先されます。</li>
+		<li>URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。</li>
+		<li>管理者グループ「admins」には、アクセス制限の設定はできません。</li>
+	</ul>
+	<div class="example-box">
+		<div class="head">（例）ページ管理全体は許可しないが、特定のページ「NO: ２」のみ許可を与える場合</div>
+		<ol>
+			<li>1つ目のルールとして、　/admin/pages*　を「不可」として追加します。</li>
+			<li>2つ目のルールとして、　/admin/pages/edit/2　を「可」として追加します。</li>
+		</ol>
 	</div>
 </div>
 

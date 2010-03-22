@@ -20,7 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ユーザー管理ではログインする事ができるユーザーの管理を行う事ができます。<br />新しいユーザーを登録するには「新規登録」ボタンをクリックします。</p>
+</div>
 
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>

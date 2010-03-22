@@ -20,7 +20,21 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ユーザーグループを指定してアクセス制限を登録します。</p>
+	<ul>
+		<li>ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスできるようになっています。</li>
+		<li>URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度に設定を行う事ができます。</li>
+	</ul>
+	<div class="example-box">
+		<p class="head">（例）ページ管理全体を許可しない設定</p>
+		<p>　/admin/pages*</p>
+		<p class="head">（例）ブログコンテンツNO:2 の管理を許可しない設定</p>
+		<p>　/admin/blog/*/*/2</p>
+	</div>
+</div>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Permission') ?>
@@ -35,21 +49,21 @@
 	</tr>
 <?php endif; ?>
 <tr>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.user_group_id', 'ユーザーグループ') ?></th>
+	<td class="col-input">
+		<?php echo $formEx->select('Permission.user_group_id', $formEx->getControlSource('user_group_id'),null,array(),false) ?>
+		<?php echo $formEx->error('Permission.user_group_id') ?>
+	</td>
+</tr>
+<tr>
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.name', 'ルール名') ?></th>
 	<td class="col-input">
 		<?php echo $formEx->text('Permission.name', array('size'=>20,'maxlength'=>255)) ?>
 		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 		<?php echo $form->error('Permission.name') ?>
 		<div id="helptextName" class="helptext">
-			設定を特定できるわかりやすい名称を入力してください。
+			ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。
 		</div>
-	</td>
-</tr>
-<tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.user_group_id', 'ユーザーグループ') ?></th>
-	<td class="col-input">
-		<?php echo $formEx->select('Permission.user_group_id', $formEx->getControlSource('user_group_id'),null,array(),false) ?>
-		<?php echo $formEx->error('Permission.user_group_id') ?>
 	</td>
 </tr>
 <tr>

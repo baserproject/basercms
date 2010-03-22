@@ -20,7 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ユーザーグループは、グループごとにコンテンツへのアクセス制限をかける際に利用します。<br />
+		サイト運営者にはニュースリリースの発信のみ行わせたい場合などにログインユーザーのグループ分けを行うと便利です。</p>
+	<ul>
+		<li>アクセス制限をかけるには<?php $baser->link('アクセス制限設定管理',array('controller'=>'permissions','action'=>'index')) ?>より行います。</li>
+		<li>管理者グループのアクセス制限設定、削除、識別名の変更はできません。</li>
+	</ul>
+</div>
 
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
