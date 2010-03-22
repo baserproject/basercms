@@ -239,7 +239,7 @@ class BlogPostsController extends BlogAppController{
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
 				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
-				//$this->redirect('/admin/blog/blog_posts/index/'.$blogContentId);
+				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else{
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
