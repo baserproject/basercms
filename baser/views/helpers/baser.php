@@ -321,10 +321,10 @@ class BaserHelper extends AppHelper {
  * @param boolean $loadHelpers
  * @return string
  */
-    function getElement($name, $params = array(), $loadHelpers = false, $autoPrefix = true){
+    function getElement($name, $params = array(), $loadHelpers = false, $subDir = true){
 
-        if(!empty($this->params['prefix']) && $autoPrefix){
-            $name = $this->params['prefix'].DS.$name;
+        if(!empty($this->_view->subDir) && $subDir){
+            $name = $this->_view->subDir.DS.$name;
         }
         return $this->_view->element($name, $params, $loadHelpers);
     }
@@ -336,8 +336,8 @@ class BaserHelper extends AppHelper {
  * @param boolean $loadHelpers
  * @return void
  */
-	function element($name, $params = array(), $loadHelpers = false, $autoPrefix = true) {
-		echo $this->getElement($name, $params, $loadHelpers, $autoPrefix);
+	function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
+		echo $this->getElement($name, $params, $loadHelpers, $subDir);
 	}
 /**
  * ページネーションを出力する
@@ -438,6 +438,12 @@ class BaserHelper extends AppHelper {
  * aタグを取得するだけのラッパー
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+		if(!empty($htmlAttributes['prefix'])){
+			if(!empty($this->params['prefix'])){
+				$url[$this->params['prefix']] = true;
+			}
+			unset($htmlAttributes['prefix']);
+		}
 		if(isset($htmlAttributes['forceTitle'])){
 			$forceTitle = $htmlAttributes['forceTitle'];
 			unset($htmlAttributes['forceTitle']);
