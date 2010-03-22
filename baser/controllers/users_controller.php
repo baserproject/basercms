@@ -84,7 +84,7 @@ class UsersController extends AppController {
 	function beforeFilter(){
 		
 		/* 認証設定 */
-		$this->Auth->allow('admin_login','member_login','admin_login_exec');
+		$this->Auth->allow('admin_login','admin_login_exec');
 
 		parent::beforeFilter();
 	
@@ -117,11 +117,11 @@ class UsersController extends AppController {
 		/* 他の画面からの遷移の処理 */
 		if (empty($this->data)) {
 	        // セッションが残っている場合は自動ログイン
-	        if (isset($_SESSION['Auth']['AdminUser']['name'])){
+	        if (isset($_SESSION['Auth']['User']['name'])){
 	            $this->redirect(array('controller'=>'dashboard'));
 	        }
 			// クッキーがある場合には自動ログイン
-	        $cookie = $this->Cookie->read('Auth.AdminUser');
+	        $cookie = $this->Cookie->read('Auth.User');
 	        if (!is_null($cookie)) {
 	            if ($this->Auth->login($cookie)) {
 					$this->Session->del('Message.auth');
@@ -137,7 +137,7 @@ class UsersController extends AppController {
                 $cookie = array();
                 $cookie['name'] = $this->data['User']['name'];
                 $cookie['password'] = $this->data['User']['password'];				// ハッシュ化されている
-                $this->Cookie->write('Auth.AdminUser', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+                $this->Cookie->write('Auth.User', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
                 unset($this->data['User']['save']);
             }else{
 				$this->Cookie->destroy();
@@ -161,66 +161,9 @@ class UsersController extends AppController {
 	function admin_logout(){
 		
 		$this->Auth->logout();
-		$this->Cookie->del('Auth.AdminUser');
+		$this->Cookie->del('Auth.User');
 		$this->Session->setFlash('ログアウトしました');
 		$this->redirect(array('action'=>'login'));
-		
-	}
-/**
- * [MEMBER] メンバーログイン画面
- *
- * @return	void
- * @access 	public
- */
-	function member_login(){
-
-		/* 他の画面からの遷移の処理 */
-		if (empty($this->data)) {
-	        // セッションが残っている場合は自動ログイン
-	        if (isset($_SESSION['Auth']['MypageUser']['name'])){
-	            $this->redirect(array('controller'=>'dashboard','member'=>true));
-	        }
-			// クッキーがある場合には自動ログイン
-	        $cookie = $this->Cookie->read('Auth.MypageUser');
-	        if (!is_null($cookie)) {
-	            if ($this->Auth->login($cookie)) {
-					$this->Session->del('Message.auth');
-	                $this->redirect($this->Auth->redirect());
-	            }
-	        }
-	    }
-
-	    /* ログインフォームからの処理 */
-        if ($user = $this->Auth->user()) {
-            if (!empty($this->data['User']['saved'])) {
-                $cookie = array();
-                $cookie['name'] = $this->data['User']['name'];
-                $cookie['password'] = $this->data['User']['password'];				// ハッシュ化されている
-                $this->Cookie->write('Auth.MypageUser', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
-                unset($this->data['User']['save']);
-            }
-			$this->Session->setFlash("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
-        	$this->redirect($this->Auth->redirect());
-        }
-
-		// view 設定
-        $this->navis = array();
-		$this->subMenuElements = array('default');
-		$this->pageTitle = 'メンバーログイン';		
-		
-	}
-/**
- * [MEMBER] メンバーログアウト
- * 
- * @return	void
- * @access 	public
- */
-	function member_logout(){
-		
-		$this->Auth->logout();
-		$this->Cookie->del('Auth.MypageUser');
-		$this->Session->setFlash('ログアウトしました');
-		$this->redirect(array('member'=>true,'action'=>'login'));
 		
 	}
 /**

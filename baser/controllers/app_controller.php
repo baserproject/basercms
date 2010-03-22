@@ -191,28 +191,20 @@ class AppController extends Controller{
 
         parent::beforeFilter();
 
+		/* 認証設定 */
+		if(isset($this->AuthConfigure)){
+			$this->AuthConfigure->setting($this->params['prefix']);
+		}
+		
         // 送信データの文字コードを内部エンコーディングに変換
         $this->__convertEncodingHttpInput();
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
-		if(isset($this->params['admin'])){
-			//$this->layout = 'admin'.DS.'default';
-            $this->layoutPath = 'admin';
-            $this->subDir = 'admin';
-
-		}elseif(isset($this->params['prefix'])){
-			if($this->params['prefix'] == 'member'){
-                $this->layoutPath = 'member';
-                $this->subDir = 'member';
-			}elseif($this->params['prefix'] == 'mobile'){
-				$this->layoutPath = 'mobile';
+		if(isset($this->params['prefix'])){
+			$this->layoutPath = $this->params['prefix'];
+			$this->subDir = $this->params['prefix'];
+			if($this->params['prefix'] == 'mobile'){
 				$this->helpers[] = 'Mobile';
-				$this->subDir = 'mobile';
-				//$this->uses[] = 'EmojiData';
-				//$this->components[] = 'Emoji';
-			}else{
-                $this->layoutPath = $this->params['prefix'];
-                $this->subDir = $this->params['prefix'];
             }
 		}
 
@@ -326,8 +318,8 @@ class AppController extends Controller{
 		$this->set('navis',$this->navis);                       // パンくずなび
 
 		/* ログインユーザー */
-		if (isset ($_SESSION['Auth']['AdminUser'])) {
-			$this->set('user',$_SESSION['Auth']['AdminUser']);
+		if (isset ($_SESSION['Auth']['User'])) {
+			$this->set('user',$_SESSION['Auth']['User']);
 		}
 
 		/* 携帯用絵文字データの読込 */

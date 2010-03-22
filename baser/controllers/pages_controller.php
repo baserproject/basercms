@@ -81,9 +81,9 @@ class PagesController extends AppController {
 		// モバイルの場合は、モバイルヘルパーでxhtml+xmlで
 		// コンテンツヘッダを出力する必要がある為、キャッシュは利用しない
         // adminは更新前提なのでキャッシュは利用しない
-        // AdminUserでログイン時は、編集ページへのリンクが表示されるのでキャッシュは利用しない
-        $noCache = array('mobile','admin','member');
-		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['AdminUser'])){
+        // ログイン時は、編集ページへのリンクが表示されるのでキャッシュは利用しない
+        $noCache = array('mobile','admin');
+		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['User'])){
 			$this->helpers[] = 'Cache';
 			clearCache('pages');
 		}

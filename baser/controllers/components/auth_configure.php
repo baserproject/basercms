@@ -26,6 +26,8 @@
  * @package			baser.controllers.components
  */
 class  AuthConfigureComponent extends Object {
+
+	var $controller = null;
 /**
  * initialize
  *
@@ -34,83 +36,61 @@ class  AuthConfigureComponent extends Object {
  * @access	public
  */
     function initialize(&$controller) {
-
-        $this->setting($controller);
-        
+        $this->controller = $controller;
     }
 /**
  * 認証設定
  *
- * @param   object  $controller
- * @return 	void
+ * @param   string  prefix
+ * @return 	boolean
  * @access	public
  */
-    function setting(&$controller) {
+    function setting($prefix) {
 
-		$cookie = $controller->Cookie->read($controller->Auth->sessionKey);
-
-		/* 認証設定 */
-		if(!empty($controller->params['admin'])){
-
-			$redirect = $controller->Auth->Session->read('Auth.redirect');
-			// 記録された過去のリダイレクト先が管理者ページ以外の場合はリセット
-			if(strpos($controller->Auth->Session->read('Auth.redirect'),'admin')===false){
-				$controller->Auth->Session->write('Auth.redirect',null);
-			}
-
-			// ログイン後にリダイレクトするURL
-			$controller->Auth->loginRedirect = '/admin/dashboard/index';
-			// ログインアクション
-			$controller->Auth->loginAction = '/admin/users/login';
-			// セッション識別
-			$controller->Auth->sessionKey = 'Auth.AdminUser';
-
-			if(isset($cookie['Auth']['AdminUser']))
-				$authCookie = $cookie['Auth']['AdminUser'];
-
-		}elseif(isset($controller->params['prefix']) && $controller->params['prefix'] == 'member'){
-
-			// 記録された過去のリダイレクト先がメンバーマイページ以外の場合はリセット
-			if(strpos($controller->Auth->Session->read('Auth.redirect'),'member')===false){
-				$controller->Auth->Session->write('Auth.redirect',null);
-			}
-
-			// ログイン後にリダイレクトするURL
-			$controller->Auth->loginRedirect = '/member/dashboard/index';
-			// ログインアクション
-			$controller->Auth->loginAction = '/member/users/login';
-			// セッション識別
-			$controller->Auth->sessionKey = 'Auth.MypageUser';
-
-			if(isset($cookie['Auth']['MypageUser']))
-				$authCookie = $cookie['Auth']['MypageUser'];
-
+		if(!$prefix){
+			return false;
 		}
 
+		/* 認証設定 */
+
+		$redirect = $this->controller->Auth->Session->read('Auth.redirect');
+		// 記録された過去のリダイレクト先が管理者ページ以外の場合はリセット
+		if(strpos($redirect, $prefix)===false){
+			$this->controller->Auth->Session->write('Auth.redirect',null);
+		}
+
+		// ログイン後にリダイレクトするURL
+		$this->controller->Auth->loginRedirect = '/'.$prefix;
+		// ログインアクション
+		$this->controller->Auth->loginAction = '/'.$prefix.'/users/login';
+		// セッション識別
+		$this->controller->Auth->sessionKey = 'Auth.User';
+
+		$cookie = $this->controller->Cookie->read($this->controller->Auth->sessionKey);
+
+		if(isset($cookie['Auth']['User']))
+			$authCookie = $cookie['Auth']['User'];
+		
 		// オートリダイレクトをOFF
-		$controller->Auth->autoRedirect = false;
+		$this->controller->Auth->autoRedirect = false;
 		// エラーメッセージ
-		$controller->Auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力して下さい。';
+		$this->controller->Auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力して下さい。';
 		// 権限が無いactionを実行した際のエラーメッセージ
-		$controller->Auth->authError = '該当のページを開くにはログインする必要があります。';
+		$this->controller->Auth->authError = '該当のページを開くにはログインする必要があります。';
 		//ユーザIDとパスワードのフィールドを指定
-		$controller->Auth->fields = array('username' => 'name', 'password' => 'password');
+		$this->controller->Auth->fields = array('username' => 'name', 'password' => 'password');
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
-		//$controller->Auth->userModel = 'User';
+		//$this->controller->Auth->userModel = 'User';
 
 		// クッキーがある場合には認証なし
-        if ((!empty($authCookie) && $controller->Auth->login($authCookie))||Configure::read('debug')>0) {
-            $controller->Session->del('Message.auth');
-			$controller->Auth->allow();
+        if ((!empty($authCookie) && $this->controller->Auth->login($authCookie))||Configure::read('debug')>0) {
+            $this->controller->Session->del('Message.auth');
+			$this->controller->Auth->allow();
         }
 
+		return true;
+		
     }
-/**
- * beforeFilter
- */
-	function beforeFilter(&$controller) {
-		//$controller->Auth->userScope = array('User.user_group_id'=>1);
-	}
-}
 
+}
 ?>

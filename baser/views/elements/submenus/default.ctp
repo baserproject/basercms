@@ -23,7 +23,6 @@
 <div class="side-navi">
     <h2>ログインメニュー</h2>
     <ul>
-        <li><?php $baser->link('メンバーログイン',array('plugin'=>null,'member'=>true,'controller'=>'users','action'=>'login'),array('target'=>'_blank')) ?></li>
         <li><?php $baser->link('管理者ログイン',array('plugin'=>null,'admin'=>true,'controller'=>'users','action'=>'login'),array('target'=>'_blank')) ?></li>
     </ul>
 </div>

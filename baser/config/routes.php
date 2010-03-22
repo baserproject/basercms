@@ -64,10 +64,6 @@ if (file_exists(CONFIGS.'database.php'))
 		}
 	}
 /**
- * メンバー
- */
-	//Router::connect('/member/:controller/:action/*', array('prefix' => 'member','member'=>true));
-/**
  * 携帯ルーティング
  */
 		if($mobileOn){

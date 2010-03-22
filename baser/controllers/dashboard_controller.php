@@ -86,20 +86,6 @@ class DashboardController extends AppController{
 		$this->set('viewDblogs',$this->Dblog->findAll("","","created desc",12));
         
 	}
-/**
- * [MEMBER] メンバーダッシュボードページを表示する
- *
- * @return 	void
- * @access	public
- */
-	function member_index(){
-
-		/* 表示設定 */
-		$this->subMenuElements = array('default');
-		$this->controllerTitle = '';
-		$this->pageTitle = 'メンバーダッシュボード';
-
-	}
 
 }
 ?>
