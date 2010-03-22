@@ -82,7 +82,7 @@
                         <span>只今デバッグ中</span>
                     <?php else: ?>
                         <span><?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
-                        &nbsp;/ &nbsp;<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
+                        &nbsp;| &nbsp;<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
                         </span>
                     <?php endif; ?>
                     </div>
