@@ -92,7 +92,7 @@ class BlogContentsController extends BlogAppController{
  */
     function admin_index(){
 
-        $listDatas = $this->BlogContent->findAll();
+        $listDatas = $this->BlogContent->find('all',array('order'=>array('BlogContent.id')));
         $this->set('listDatas',$listDatas);
         $this->pageTitle = 'ブログ一覧';
         
