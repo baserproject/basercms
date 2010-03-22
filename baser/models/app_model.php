@@ -22,29 +22,6 @@
 /**
  * Include files
  */
-/* SVN FILE: $Id: app_model.php 152 2010-02-14 11:04:32Z ryuring $ */
-/**
- * AppModel 拡張クラス
- * FEEDBACK
- * PHP versions 4 and 5
- *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
- *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
- * @package			baser.models
- * @since			Baser v 0.1.0
- * @version			$Revision: 152 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2010-02-14 20:04:32 +0900 (日, 14 2 2010) $
- * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
- */
 uses('sanitize');
 /**
  * AppModel 拡張クラス
