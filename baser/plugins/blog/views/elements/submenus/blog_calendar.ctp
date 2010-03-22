@@ -94,9 +94,9 @@ else{
 //カレンダーを表示するHTML
 print '<table class="blog-calendar"><tr><td colspan=7>';
 print "<center>";
-print $html->link($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),null,null,false);
+print $baser->getLink($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),array('prefix'=>true),null,false);
 print "　".$year."年".$month."月　";
-print $html->link($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),null,null,false);
+print $baser->getLink($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),array('prefix'=>true),null,false);
 print "</td></tr>";
 
 print '
@@ -127,7 +127,7 @@ for($i=1;$i<=$num;$i++){
 			print "<td>&nbsp;</td>";
 		}
 		
-		$data = check($i,$w,$year,$month,$day,$entryDates,$html,$blogContent);
+		$data = check($i,$w,$year,$month,$day,$entryDates,$baser,$blogContent);
 		print "$data";
 		if($w==6){
 			print "</tr>";
@@ -138,7 +138,7 @@ for($i=1;$i<=$num;$i++){
 		if($w==0){
 			print "<tr>";
 		}
-		$data = check($i,$w,$year,$month,$day,$entryDates,$html,$blogContent);
+		$data = check($i,$w,$year,$month,$day,$entryDates,$baser,$blogContent);
 		print "$data";
 		if($w==6){
 			print "</tr>";
@@ -149,17 +149,17 @@ for($i=1;$i<=$num;$i++){
 print "</table>";
 
 //特定の日付の場合の処理
-function check($i,$w,$year,$month,$day,$entryDates,$html,$blogContent){
+function check($i,$w,$year,$month,$day,$entryDates,$baser,$blogContent){
 	
 	if(in_array(date('Y-m-d',strtotime($year.'-'.$month.'-'.$i)),$entryDates)){
 		if(date('Y-m-d') == date('Y-m-d',strtotime($year.'-'.$month.'-'.$i))){
-			$change = '<td class="today">'.$html->link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,null,false).'</td>';									   
+			$change = '<td class="today">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}elseif($w==0){
-			$change = '<td class="sunday">'.$html->link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,null,false).'</td>';
+			$change = '<td class="sunday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}elseif($w==6){
-			$change = '<td class="saturday">'.$html->link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,null,false).'</td>';
+			$change = '<td class="saturday">'.$baser->Link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}else{
-			$change = '<td>'.$html->link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,null,false).'</td>';
+			$change = '<td>'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}
 	}else{
 		if(date('Y-m-d') == date('Y-m-d',strtotime($year.'-'.$month.'-'.$i))){
