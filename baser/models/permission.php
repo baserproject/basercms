@@ -86,8 +86,14 @@ class Permission extends AppModel {
 		if(!$check[key($check)]){
 			return true;
 		}
-
-		$params = Router::parse($check[key($check)]);
+		$url = $check[key($check)];
+		if(preg_match('/^[^\/]/is',$url)){
+			$url = '/'.$url;
+		}
+		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)){
+			$url = $matches[1].'/'.'*';
+		}
+		$params = Router::parse($url);
 		if(empty($params['prefix'])){
 			$this->invalidate('setting','>> アクセス拒否として設定できるのは認証ページだけです。');
 			return false;
