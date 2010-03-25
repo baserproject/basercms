@@ -124,8 +124,8 @@ class AppHelper extends Helper
 
         // >>>
         // - $webPath = "{$this->webroot}" . $file;
-        if(file_exists(WWW_ROOT . $file)){
-            $webPath = "{$this->webroot}" . $file;
+		if(file_exists(WWW_ROOT . $file)){
+            $webPath = $this->base.DS. $file;
         }else{
             $webPath = Router::url('/'.$file);
         }
@@ -141,12 +141,15 @@ class AppHelper extends Helper
 				$path = WWW_ROOT . $this->themeWeb  . $file;
 			}
 			if (file_exists($path)) {
-				$webPath = "{$this->webroot}" . $this->themeWeb . $file;
+				$webPath = $this->base .'/'. $this->themeWeb . $file;
 			}
 		}
-        
+
 		if (strpos($webPath, '//') !== false) {
 			return str_replace('//', '/', $webPath);
+		}
+		if (strpos($webPath, '\\') !== false){
+			$webPath = str_replace("\\",'/',$webPath);
 		}
 		return $webPath;
 	}
