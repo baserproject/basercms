@@ -20,7 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>WEBページとして表示させる「ページ」の登録を行います。</p>
+	<ul>
+		<li>Word間隔でWEBページの作成を行う事ができます。</li>
+		<li>タイトル・説明文には、ページを特徴づけるキーワードを入れましょう。<br />
+			検索エンジン対策として有用です。</li>
+		<li>ページを作成してもすぐに公開しない場合は、公開状態を「公開しない」にしておきます。</li>
+		<li>「公開しない」にしたページを確認するには、画面下の「確認」ボタン、または、一覧の「確認」ボタンをクリックします。</li>
+	</ul>
+</div>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
@@ -55,7 +66,8 @@
             <div id="helptextName" class="helptext">
                 <ul>
                     <li>ページ名はURLに利用します。</li>
-                    <li>.htmlなどの拡張子はつけず純粋なページ名を入力します。</li>
+                    <li>.htmlなどの拡張子はつけず純粋なページ名を半角で入力します。</li>
+					<li>日本語の入力が可能です。</li>
                 </ul>
             </div>
         </td>
@@ -67,10 +79,11 @@
             <?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTitle" class="helptext">
                 <ul>
-                    <li>タイトルはTitleタグに利用します。</li>
-                    <li>タイトルには、システム設定で設定されたWEBサイト名が自動的に追加されます。</li>
+                    <li>タイトルはTitleタグに利用し、ブラウザのタイトルバーに表示されます。</li>
                     <li>タイトルタグの出力するには、レイアウトテンプレートに次のように記述します。<br />
-                        &lt;?php $baser->title() ?&gt;</li>
+                        &lt;?php $baser->title() ?&gt;<br />
+					<small>※ タイトルには、<a href="/admin/site_configs/form">サイト基本設定</a>で設定されたWEBサイト名が自動的に追加されます。<br />
+					トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
                 </ul>
             </div>
         </td>
@@ -82,8 +95,11 @@
             <?php echo $html->image('help.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextDescription" class="helptext">
                 <ul>
-                    <li>説明文はMetaタグのdescriptionに利用します。</li>
+                    <li>説明文はMetaタグのdescription属性に利用されます。</li>
                     <li>他のページと重複しない説明文を推奨します。</li>
+					<li>Metaタグを出力する場合は、レイアウトテンプレートに次のように記述します。<br />
+					 &lt;?php $baser->description() ?&gt;<br />
+					<small>※ 省略した場合、上記タグでは<a href="/admin/site_configs/form">サイト基本設定</a>で設定された説明文が出力されます。</small></li>
                 </ul>
             </div>
         </td>

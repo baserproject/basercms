@@ -28,7 +28,29 @@
     });
 </script>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ページ管理では、ブログやメールフォーム以外のWEBページを管理する事ができます。</p>
+	<ul>
+		<li>新しいページを登録するには、画面下の「新規登録」ボタンをクリックします。</li>
+		<li>公開状態を設定する事ができ、一覧各ページ横の「確認」ボタンをクリックすると非公開のページも確認する事ができます。</li>
+		<li>各ページは分類分け用の「カテゴリ」に属させる事ができ、階層構造のURLを実現できます。</li>
+		<li>管理画面内では、公開状態、カテゴリによりページの検索を行う事ができます。<br />
+			検索するには、すぐ下の「検索」をクリックして検索条件を表示させます。</li>
+		<li>オーサリングツールでの制作に慣れている方向けに、ファイルをアップロードしてデータベースに一括で読み込む機能を備えています。<br />
+			ページを読み込むには、特定のフォルダにページテンプレートをアップロードして、サイドメニューの「ページテンプレート読込」を実行します。<br />
+			<a href="http://basercms.net/manuals/designers/10.html" target="_blank">≫ ページテンプレート読込について</a></li>
+	</ul>
+	<div class="example-box">
+		<div class="head">（例）ページ名「about」として作成したページを表示させる為のURL</div>
+		<p>http://[BaserCMS設置URL]/about.html</p>
+		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
+		<p>http://[BaserCMS設置URL]/company/about.html</p>
+	</div>
+</div>
+
+
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
 <div class="function-box corner10" id="PageFilterBody" style="display:none">
     <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
@@ -38,7 +60,7 @@
         <small>カテゴリ</small>
         <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
     <?php endif ?>
-    <small>公開設定</small>
+    <small>公開状態</small>
         <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　
     </p>
         <?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>

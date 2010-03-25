@@ -20,7 +20,19 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>WEBサイトの基本設定を行います。<br />
+	各項目のヘルプメッセージをご確認ください。</p>
+	<ul>
+		<li>サイドメニューの「グローバルメニュー設定」から、公開ページ、管理画面のグローバルメニューの設定ができます。</li>
+		<li>サイドメニューの「プラグイン設定」から、各種プラグインの管理を行う事ができます。</li>
+		<li>サイドメニューの「データバックアップ」から、データベースに格納されたデータのバックアップを行う事ができます。<br />
+			<small>※ BaserCMS1.5.5 では、PostgreSQLのバックアップは未実装です。データベースより直接バックアップを作成してください。</small></li>
+	</ul>
+</div>
+
 <h3>基本項目</h3>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $form->create('SiteConfig',array('action'=>'form')) ?>

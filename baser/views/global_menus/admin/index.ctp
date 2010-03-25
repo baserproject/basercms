@@ -28,7 +28,20 @@
     });
 </script>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>公開ページ、管理画面のグローバルメニューの管理ができます。<br />
+	管理画面をカスタマイズする場合には有用ですが、公開ページでは、このグローバルメニューを必ずしも利用しなければならないというわけではありません。
+	凝ったデザインのグローバルメニューが必要な場合や、
+	グローバルメニューを可変させる必要がない場合等は、直接HTMLのコードを書いた方が柔軟に対応できるかもしれません。</p>
+	<ul>
+		<li>一覧は、タイプ・公開状態により絞り込みができます。</li>
+		<li>公開ページでグローバルメニューを出力するには、テンプレート上に次のコードを記述します。リストタグで出力されます。<br />
+			&lt;?php $baser->element('global_menu') ?&gt;</li>
+		<li>各グローバルメニューアイテム左の▲▼をクリックする事で並び順を変更する事ができます。</li>
+	</ul>
+</div>
 
 <h3><a href="javascript:void(0);" class="slide-trigger" id="GlobalMenuSearch">検索</a></h3>
 <div class="function-box corner10" id="GlobalMenuSearchBody" style="display:none">
@@ -36,7 +49,7 @@
     <p>
         <small>タイプ</small>
         <?php echo $formEx->select('GlobalMenu.menu_type',  $formEx->getControlSource('menu_type'),null,array(),false) ?>　
-        <small>公開設定</small>
+        <small>利用状態</small>
         <?php echo $formEx->select('GlobalMenu.status', $textEx->booleanMarkList()) ?>　
     </p>
     <?php echo $formEx->hidden('GlobalMenu.open',array('value'=>true)) ?>

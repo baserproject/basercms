@@ -20,7 +20,13 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>プラグイン設定の登録・変更を行います。<br />
+	新しいプラグインを入手した場合は、そのままの内容で登録しても大丈夫です。
+	プラグイン一覧の「管理」ボタンをクリックした際に表示するページを変更する場合は「管理URL」を変更します。</p>
+</div>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 

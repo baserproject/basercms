@@ -20,7 +20,21 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>BaserCMSのプラグインの管理を行います。<br />
+	メールフォーム・フィードリーダー・ブログの３つのプラグインは標準プラグインとして同梱されており、
+	インストールも完了しています。各プラグインの「管理」ボタンから各プラグインの管理が行えます。</p>
+	<div class="example-box">
+		<div class="head">新しいプラグインのインストール方法</div>
+		<ol>
+			<li>app/plugins/ フォルダに、入手したプラグインのフォルダをアップロードします。</li>
+			<li>プラグイン一覧に、新しいプラグインが表示されますので、その行の「登録」ボタンをクリックします。</li>
+			<li>登録画面が表示されますので、表示内容に問題がなければ「登録」ボタンをクリックします。</li>
+		</ol>
+	</div>
+</div>
 
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePlugins">
 <tr>

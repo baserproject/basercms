@@ -20,8 +20,17 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
-
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ページをグルーピングする為のカテゴリの登録を行います。<br />
+	ページカテゴリータイトルはTitleタグとして利用されますので、カテゴリを特定するキーワードを登録しましょう。検索エンジン対策として有用です。</p>
+	<div class="example-box">
+		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページのタイトル</div>
+		<p>※「company」のページカテゴリタイトルを「会社案内」、「about」のタイトルを「コンセプト」として登録</p>
+		<p>「コンセプト｜会社案内｜サイトタイトル」</p>
+	</div>
+</div>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php echo $formEx->create('PageCategory') ?>
@@ -59,7 +68,7 @@
             <?php echo $formEx->error('PageCategory.title') ?>
 			<div id="helptextTitle" class="helptext">
 				<ul>
-                    <li>ページカテゴリタイトルはTitleタグに利用します。</li>
+                    <li>ページカテゴリタイトルはTitleタグとして出力されます。</li>
 				</ul>
 			</div>
         </td>
