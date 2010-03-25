@@ -26,9 +26,9 @@
 	<?php if($this->params['controller'] == 'blog_categories' && $this->action=='admin_index'): ?>
         <!--<li><?php $baser->link('カテゴリプレビュー',array('admin'=>false,'controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],'category',$form->value('BlogCategory.id')),array('target'=>'_blank')) ?></li>-->
 	<?php elseif($this->params['controller'] == 'blog_categories' && $this->action != 'admin_add'): ?>
-        <li><?php $baser->link('カテゴリプレビュー',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],'category',$form->value('BlogCategory.id')),array('target'=>'_blank')) ?></li>
+        <!--<li><?php $baser->link('カテゴリプレビュー',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],'category',$form->value('BlogCategory.id')),array('target'=>'_blank')) ?></li>-->
     <?php endif; ?>
-    <li><?php $baser->link('カテゴリ一覧',array('controller'=>'blog_categories','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
-    <li><?php $baser->link('新規カテゴリを登録',array('controller'=>'blog_categories','action'=>'add',$blogContent['BlogContent']['id'])) ?></li>
+    <li><?php $baser->link('ブログカテゴリ一覧',array('controller'=>'blog_categories','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
+    <li><?php $baser->link('新規ブログカテゴリを登録',array('controller'=>'blog_categories','action'=>'add',$blogContent['BlogContent']['id'])) ?></li>
 </ul>
 </div>

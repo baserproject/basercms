@@ -20,7 +20,19 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>メールフォームプラグインでは複数のメールフォームの登録が可能です。</p>
+	<ul>
+		<li>新しいメールフォームを登録するには、画面下の「新規登録」ボタンをクリックします。</li>
+		<li>各メールフォームの表示を確認するには、「確認」ボタンをクリックします。</li>
+		<li>各メールフォームの内容を変更するには、「管理」ボタンをクリックします。</li>
+		<li>各メールフォームの送信先メールアドレスなど、基本設定を変更するには、「編集」ボタンをクリックします。</li>
+		<li>メールフォームプラグインの基本設定を変更するには、サイドメニューの「メールプラグイン基本設定」をクリックします。</li>
+	</ul>
+</div>
+
 
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableMailContents">
 <tr>

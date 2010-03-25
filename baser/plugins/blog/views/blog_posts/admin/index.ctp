@@ -28,7 +28,20 @@
     });
 </script>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ブログ記事の管理が行えます。</p>
+	<ul>
+		<li>新しい記事を登録するには、画面下の「新規登録」ボタンをクリックします。</li>
+		<li>ブログの表示を確認するには、サイドメニューの「公開ページ確認」をクリックします。</li>
+		<li>各記事の表示を確認するには、対象記事の「確認」ボタンをクリックします。</li>
+		<li>ブログのコメントを確認するには、サイドメニューの「コメント一覧」をクリックするか、各記事のコメント欄の数字をクリックします。</li>
+		<li>ブログのカテゴリを登録するには、サイドメニューの「新規カテゴリを登録」をクリックします。</li>
+	</ul>
+</div>
+
+
 <h3><a href="javascript:void(0);" class="slide-trigger" id="BlogPostFilter">検索</a></h3>
 <div class="function-box corner10" id="BlogPostFilterBody" style="display:none">
     <?php echo $formEx->create('BlogPost',array('url'=>array('action'=>'index',$blogContent['BlogContent']['id']))) ?>

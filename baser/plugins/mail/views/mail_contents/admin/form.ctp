@@ -44,7 +44,17 @@ function mailContentSender1ClickHandler(){
 }
 </script>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>メールフォームコンテンツの基本設定を登録します。<br />
+	各項目のヘルプメッセージを確認し登録を完了させてください。<br />
+	メールフォームごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br />
+	<small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br />
+	<a href="http://basercms.net/manuals/designers/6.html" target="_blank">≫ メールフォームのテンプレートを変更する</a></p>
+</div>
+
+
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
@@ -66,7 +76,7 @@ function mailContentSender1ClickHandler(){
             <?php echo $formEx->error('MailContent.name') ?>
             <div id="helptextName" class="helptext">
             <ul>
-                <li>メールフォームのURLに利用します。<br />(例)メールフォームIDが test の場合・・・http://example/test/form</li>
+                <li>メールフォームのURLに利用します。<br />(例)メールフォームIDが test の場合・・・http://[BaserCMS設置URL]/test/index</li>
                 <li>半角英数字で入力して下さい。</li>
             </ul>
             </div>
@@ -150,7 +160,7 @@ function mailContentSender1ClickHandler(){
             <div id="helptextLayoutTemplate" class="helptext">
                 <ul>
                     <li>メールフォームの外枠のテンプレート名を指定します。</li>
-                    <li>新しいテンプレートを利用するには、<br />/app/plugins/mail/views/layouts に、拡張子ctpで保存してここで指定します。</li>
+					<li>半角で入力してください。</li>
                 </ul>
             </div>
             &nbsp;

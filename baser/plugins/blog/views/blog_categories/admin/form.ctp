@@ -20,8 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ブログ記事をグルーピングする為のカテゴリ登録を行います。<br />
+	ブログカテゴリータイトルはTitleタグとして利用されますので、カテゴリを特定するキーワードを登録しましょう。検索エンジン対策として有用です。<br />
+	また、各カテゴリは親カテゴリを指定する事ができ、細かく分類分けが可能です。</p>
+	<div class="example-box">
+		<div class="head">（例）カテゴリ「ニュースリリース」に属する、ブログ記事「新商品を発表しました」のタイトル</div>
+		<p>「新商品を発表しました｜ニュースリリース｜サイトタイトル」</p>
+	</div>
+</div>
 
-<h2><?php $baser->contentsTitle() ?></h2>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 

@@ -19,7 +19,17 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-<h2><?php $baser->contentsTitle() ?></h2>
+?>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ブログ記事の登録を行います。</p>
+	<ul>
+		<li>Word間隔でブログ記事の作成を行う事ができます。</li>
+		<li>記事を作成してもすぐに公開しない場合は、公開状態を「公開しない」にしておきます。</li>
+		<li>「公開しない」にした記事を確認するには、画面下の「確認」ボタン、または、一覧の「確認」ボタンをクリックします。</li>
+	</ul>
+</div>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 

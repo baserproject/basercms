@@ -20,8 +20,17 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ブログコンテンツの基本設定を登録します。<br />
+	各項目のヘルプメッセージを確認し登録を完了させてください。<br />
+	ブログごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br />
+	<small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br />
+	<a href="http://basercms.net/manuals/designers/5.html" target="_blank">≫ ブログのテンプレートを変更する</a></p>
+</div>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>

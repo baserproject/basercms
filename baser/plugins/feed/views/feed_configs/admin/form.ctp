@@ -24,8 +24,22 @@
 <p style="text-align:right"><a href="#headHowTo">フィードの読み込み方法 &gt;&gt;</a></p>
 <?php endif ?>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>フィード設定の基本項目を入力します。<br />
+	フィードごとにデザインを変更する場合には、画面下の「オプション」をクリックしてテンプレート名を変更します。<br />
+	<small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br />
+	<a href="http://basercms.net/manuals/designers/7.html" target="_blank">≫ フィード読み込み部分のテンプレートを変更する</a></p>
+	<ul>
+		<li>一つの設定につき、フィードは複数登録する事ができます。複数登録した場合は、複数のフィードを合わせた上で日付順に並び替えられます。</li>
+		<li>フィードを追加するには、画面下の「読込フィード一覧」の「追加する」ボタンをクリックします。</li>
+	</ul>
+</div>
+
+
 <h3>基本項目</h3>
+
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
@@ -42,12 +56,18 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.name', 'フィード設定名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('FeedConfig.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $formEx->error('FeedConfig.name', '>> フィード設定名を入力して下さい') ?>
-            &nbsp;
+            <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+            <div id="helptextName" class="helptext">
+                <ul>
+                    <li>日本語が利用できます。</li>
+                    <li>識別でき、わかりやすい設定名を入力します。</li>
+                </ul>
+            </div>
+            <?php echo $formEx->error('FeedConfig.name') ?>
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('FeedConfig.display_number', '表示件数') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.display_number', '表示件数') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('FeedConfig.display_number', array('size'=>10,'maxlength'=>3)) ?>件
             <?php echo $formEx->error('FeedConfig.display_number') ?>&nbsp;
@@ -63,7 +83,6 @@
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedConfig.feed_title_index', 'フィードタイトルリスト') ?></th>
 		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.feed_title_index', array('cols'=>36,'rows'=>3)) ?>
-            <?php echo $formEx->error('FeedConfig.feed_title_index', '>> フィードタイトルリストの形式が不正です') ?>
             <?php echo $html->image('help.png',array('id'=>'helpFeedTitleIndex','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextFeedTitleIndex" class="helptext">
                 <ul>
@@ -72,14 +91,13 @@
                     <li>また、先頭から順に「feed_title_no」としてインデックス番号が割り振られます。</li>
                 </ul>
             </div>
-            &nbsp;
+			<?php echo $formEx->error('FeedConfig.feed_title_index') ?>
         </td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
 		<td class="col-input">
             <?php echo $formEx->textarea('FeedConfig.category_index', array('cols'=>36,'rows'=>3)) ?>
-            <?php echo $formEx->error('FeedConfig.category_index', '>> カテゴリリストの形式が不正です') ?>
             <?php echo $html->image('help.png',array('id'=>'helpCategoryIndex','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCategoryIndex" class="helptext">
             <ul>
@@ -87,19 +105,21 @@
                 <li>先頭から順に「category_no」としてインデックス番号が割り振られます。</li>
             </ul>
             </div>
-            &nbsp;
+            <?php echo $formEx->error('FeedConfig.category_index') ?>
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('FeedConfig.template', 'テンプレート') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.template', 'テンプレート名') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('FeedConfig.template', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $formEx->error('FeedConfig.template', '>> テンプレートを入力して下さい') ?>
             <?php echo $html->image('help.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTemplate" class="helptext">
-                テンプレートを変更する場合は、/app/plugins/feed/views/feed/ 内にテンプレートを設置します。
+                <ul>
+                    <li>出力するフィードのテンプレート名を指定します。</li>
+                    <li>半角で入力してください。</li>
+                </ul>
             </div>
-            &nbsp;
+			<?php echo $formEx->error('FeedConfig.template') ?>
         </td>
 	</tr>
 </table>
@@ -123,8 +143,8 @@
   <tr>
   	<th scope="col">操作</th>
     <th scope="col">フィード名</th>
-    <th scope="col">キャッシュ時間</th>
     <th scope="col">カテゴリフィルター</th>
+    <th scope="col">キャッシュ時間</th>
     <th scope="col">登録日</th>
     <th scope="col">更新日</th>
   </tr>

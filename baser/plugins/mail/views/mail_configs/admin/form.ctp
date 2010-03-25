@@ -20,7 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>メールフォームプラグインの基本設定を登録します。<br />
+	各項目のヘルプメッセージを確認し登録を完了させてください。<br />
+	<ul>
+		<li>文字コードは基本的に変更する必要はありません。</li>
+		<li>SMTPの設定は、サーバーがsendmailをサポートしていない場合等に入力します。</li>
+	</ul>
+</div>
+
+
 <h3>基本項目</h3>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>

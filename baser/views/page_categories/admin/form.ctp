@@ -23,14 +23,17 @@
 <h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
-	<p>ページをグルーピングする為のカテゴリの登録を行います。<br />
-	ページカテゴリータイトルはTitleタグとして利用されますので、カテゴリを特定するキーワードを登録しましょう。検索エンジン対策として有用です。</p>
+	<p>ページをグルーピングする為のカテゴリ登録を行います。<br />
+	ページカテゴリータイトルはTitleタグとして利用されますので、カテゴリを特定するキーワードを登録しましょう。検索エンジン対策として有用です。<br />
+	また、各カテゴリは親カテゴリを指定する事ができ、細かく分類分けが可能です。</p>
 	<div class="example-box">
 		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページのタイトル</div>
 		<p>※「company」のページカテゴリタイトルを「会社案内」、「about」のタイトルを「コンセプト」として登録</p>
 		<p>「コンセプト｜会社案内｜サイトタイトル」</p>
 	</div>
 </div>
+
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <?php echo $formEx->create('PageCategory') ?>

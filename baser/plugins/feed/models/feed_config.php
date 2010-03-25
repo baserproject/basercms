@@ -64,6 +64,10 @@ class FeedConfig extends FeedAppModel {
 		$this->validate['display_number'] = array(array('rule' => 'numeric',
 											'message' => ">> 数値を入力して下さい",
 											'required' => true));
+		$this->validate['template'] = array(array('rule' => VALID_NOT_EMPTY,
+											'message' => ">> テンプレート名を入力して下さい"),
+										array('rule' => 'halfText',
+											'message' => '>> テンプレート名は半角のみで入力して下さい'));
 		return true;
 	}
 /**

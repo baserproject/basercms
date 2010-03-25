@@ -20,7 +20,19 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>メールフォームの各フィールド（項目）の管理が行えます。</p>
+	<ul>
+		<li>新しいフィールドを登録するには、画面下の「新規登録」ボタンをクリックします。</li>
+		<li>メールフォームの表示を確認するには、サイドメニューの「公開ページ確認」をクリックします。</li>
+		<li>各フィールド左の▲▼をクリックする事で並び順を変更する事ができます。</li>
+		<li>フィールドの設定をそのままコピーするにはコピーしたいフィールド左の「コピー」ボタンをクリックします。</li>
+		<li>メールフォームより受信した内容は、画面下の「受信メールCSV」よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事ができます。</li>
+	</ul>
+</div>
+
 
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableMailFields">
 <tr>

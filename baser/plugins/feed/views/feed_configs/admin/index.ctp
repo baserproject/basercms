@@ -20,10 +20,23 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>フィードリーダープラグインでは、RSSフィードを読み込み、整形した上で出力する事ができます。</p>
+	<ul>
+		<li>フィード設定は複数登録する事ができ、任意の場所に貼り付ける事ができます。</li>
+		<li>他サイトのRSSフィードも読み込む事ができます。</li>
+		<li>設定ごとにデザインを変更する事ができます。</li>
+		<li>新しいフィード設定を登録するには、画面下の「新規登録」ボタンをクリックします。</li>
+	</ul>
+</div>
+
+
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableFeedConfigs">
 <tr>
 	<th>操作</th>

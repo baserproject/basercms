@@ -99,7 +99,17 @@ jQuery(function($) {
 });
 </script>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>メールフォームのフィールド（項目）の登録を行います。<br />
+	項目のタイプをはじめ、入力チェックの設定等、便利な機能を用意しています。<br />
+	各項目の詳細については、各ヘルプメッセージを確認してください。</p>
+	<ul>
+		<li>一時的に利用しない場合には、画面下のオプションをクリックし、フィールドの利用を「利用しない」に設定します。</li>
+	</ul>
+</div>
+
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 

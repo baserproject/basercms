@@ -20,7 +20,17 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>ブログ記事に対するコメントの管理が行えます。</p>
+	<ul>
+		<li>コメントが投稿された場合、サイト基本設定で設定された管理者メールアドレスに通知メールが送信されます。</li>
+		<li>コメントが投稿された場合、コメント承認機能を利用している場合は、コメントのステータスは「非公開」となっています。
+		内容を確認して問題なければ、「公開」ボタンをクリックします。</li>
+	</ul>
+</div>
+
 
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
