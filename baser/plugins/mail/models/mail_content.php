@@ -62,27 +62,31 @@ class MailContent extends MailAppModel {
  */
 	function beforeValidate(){
 
-		$this->validate['name'] = array(array('rule' => 'halfText',
-											'message' => '>> メールフォームアカウント名は半角のみ入力して下さい。'),
-                                        array('rule' => array('isUnique'),
-											'message' => '入力されたメールフォームアカウント名は既に使用されています。'));
-		$this->validate['title'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> メールフォームタイトルを入力して下さい。"));
-		$this->validate['sender_name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 送信先名を入力して下さい"));
-		$this->validate['subject_user'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 自動返信メール件名[ユーザー宛]を入力して下さい。"));
-		$this->validate['subject_admin'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 自動送信メール件名[管理者宛]を入力して下さい。"));
-        $this->validate['layout_template'] = array(array('rule' => 'halfText',
-											'message' => '>> レイアウトテンプレート名は半角で入力して下さい。'));
-		$this->validate['form_template'] = array(array('rule' => 'halfText',
-											'message' => ">> メールフォームテンプレート名は半角で入力して下さい。"));
-		$this->validate['mail_template'] = array(array('rule' => 'halfText',
-											'message' => ">> 送信メールテンプレートは半角で入力して下さい。"));
-        $this->validate['sender_1'] = array(array('rule' => 'email',
-                                            'allowEmpty' => true,
-                                            'message' => '>> 送信先メールアドレスの形式が不正です。'));
+		$this->validate['name'] = array(array(	'rule' => 'halfText',
+												'message' => '>> メールフォームアカウント名は半角のみで入力して下さい。',
+												'allowEmpty'=>false),
+                                        array(	'rule' => array('isUnique'),
+												'message' => '入力されたメールフォームアカウント名は既に使用されています。'));
+		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> メールフォームタイトルを入力して下さい。"));
+		$this->validate['sender_name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+														'message' => ">> 送信先名を入力して下さい"));
+		$this->validate['subject_user'] = array(array(	'rule' => VALID_NOT_EMPTY,
+														'message' => ">> 自動返信メール件名[ユーザー宛]を入力して下さい。"));
+		$this->validate['subject_admin'] = array(array(	'rule' => VALID_NOT_EMPTY,
+														'message' => ">> 自動送信メール件名[管理者宛]を入力して下さい。"));
+        $this->validate['layout_template'] = array(array(	'rule' => 'halfText',
+															'message' => '>> レイアウトテンプレート名は半角のみで入力して下さい。',
+															'allowEmpty'=>false));
+		$this->validate['form_template'] = array(array(	'rule' => 'halfText',
+														'message' => ">> メールフォームテンプレート名は半角のみで入力して下さい。",
+														'allowEmpty'=>false));
+		$this->validate['mail_template'] = array(array(	'rule' => 'halfText',
+														'message' => ">> 送信メールテンプレートは半角のみで入力して下さい。",
+														'allowEmpty'=>false));
+        $this->validate['sender_1'] = array(array(	'rule' => 'email',
+													'allowEmpty' => true,
+													'message' => '>> 送信先メールアドレスの形式が不正です。'));
         
         if($this->data['MailContent']['sender_1_']){
             $this->validate['sender_1'] = array(array('rule' => 'email',

@@ -58,13 +58,13 @@
 			<div id="helptextName" class="helptext">
 				<ul>
                     <li>ページカテゴリ名はURLで利用します</li>
-					<li>半角英数字で入力して下さい</li>
+					<li>半角のみで入力して下さい</li>
 				</ul>
 			</div>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('PageCategory.title', 'ページカテゴリータイトル') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('PageCategory.title', 'ページカテゴリータイトル') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('PageCategory.title', array('size'=>40,'maxlength'=>255)) ?>
 			<?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>

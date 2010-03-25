@@ -34,6 +34,26 @@ class MailField extends MailAppModel {
  */
 	var $name = 'MailField';
 /**
+ * beforeValidate
+ *
+ * @return	void
+ * @access	public
+ */
+	function beforeValidate(){
+
+		$this->validate['field_name'] = array(array('rule' => 'halfText',
+													'message' => '>> フィールド名は半角のみで入力して下さい。',
+													'allowEmpty'=>false),
+												array(	'rule'=>'duplicateMailField',
+														'message' => '>> 入力されたフィールド名は既に登録されています'));
+		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> 項目名を入力して下さい。"));
+		$this->validate['type'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> タイプを入力して下さい"));
+
+		return true;
+	}
+/**
  * コントロールソースを取得する
  *
  * @return	array	source
@@ -67,6 +87,26 @@ class MailField extends MailAppModel {
 			return $source;
 		}			
 	}
+/**
+ * 同じ名称のフィールド名がないかチェックする
+ * 同じメールコンテンツが条件
+ * @param array $check
+ * @return boolean
+ */
+    function duplicateMailField($check){
 
+        $conditions = array('MailField.'.key($check)=>$check[key($check)],
+                            'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']);
+        if($this->exists()){
+            $conditions['NOT'] = array('MailField.id'=>$this->id);
+        }
+		$ret = $this->find($conditions);
+		if($ret){
+			return false;
+		}else{
+			return true;
+		}
+
+    }
 }
 ?>

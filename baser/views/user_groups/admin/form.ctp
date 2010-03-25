@@ -39,9 +39,9 @@
 	</tr>
 <?php endif; ?>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.name', '識別名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.name', 'ユーザーグループ名') ?></th>
 	<td class="col-input">
-		<?php if($form->value('UserGroup.name')=='admins'): ?>
+		<?php if($form->value('UserGroup.name')=='admins' && $this->action == 'admin_edit'): ?>
 			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>
 		<?php else: ?>
 			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255)) ?>
@@ -49,7 +49,7 @@
 		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextName" class="helptext">
             <ul>
-                <li>重複しない識別名称を半角英数字で入力して下さい。</li>
+                <li>重複しない識別名称を半角のみで入力して下さい。</li>
 				<li>識別名 admin は変更できません。</li>
             </ul>
         </div>
@@ -57,7 +57,7 @@
 	</td>
 </tr>
 <tr>
-	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.title', 'ユーザーグループ名') ?></th>
+	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.title', '表示名') ?></th>
 	<td class="col-input">
 		<?php echo $form->text('UserGroup.title', array('size'=>20,'maxlength'=>255)) ?>
 		<?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>

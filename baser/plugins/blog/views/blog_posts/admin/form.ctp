@@ -78,12 +78,12 @@
 		<?php if($this->action=='admin_edit' && count($users)): ?>
 			<?php echo $users[$formEx->value('User.id')] ?>
 		<?php else: ?>
-			<?php echo $formEx->select('BlogPost.user_id',$users,null) ?><?php echo $formEx->error('BlogPost.user_id') ?>
+			<?php echo $formEx->select('BlogPost.user_id',$users,null,null,false) ?><?php echo $formEx->error('BlogPost.user_id') ?>
 		<?php endif ?>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
 		<td class="col-input">
             <?php echo $formEx->radio('BlogPost.status', $textEx->booleanDoList("公開"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
             <?php echo $formEx->error('BlogPost.status') ?>
@@ -91,7 +91,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogPost.posts_date', '投稿日') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.posts_date', '投稿日') ?></th>
 		<td class="col-input">
             <?php echo $formEx->dateTimePicker('BlogPost.posts_date',array('size'=>12,'maxlength'=>10),true) ?>
             <?php echo $formEx->error('BlogPost.posts_date') ?>

@@ -72,7 +72,7 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('GlobalMenu.status', '利用状態') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.status', '利用状態') ?></th>
 		<td class="col-input">
             <?php echo $formEx->radio('GlobalMenu.status', $textEx->booleanDoList("利用"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
             <?php echo $formEx->error('GlobalMenu.status') ?>

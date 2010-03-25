@@ -61,13 +61,13 @@
 			<div id="helptextName" class="helptext">
 				<ul>
                     <li>URLに利用されます</li>
-					<li>半角英数字で入力して下さい</li>
+					<li>半角のみで入力して下さい</li>
 				</ul>
 			</div>
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogCategory.title', 'ブログカテゴリタイトル') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogCategory.title', 'ブログカテゴリタイトル') ?></th>
 		<td class="col-input"><?php echo $formEx->text('BlogCategory.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('BlogCategory.title') ?>&nbsp;</td>
 	</tr>
 	<tr>

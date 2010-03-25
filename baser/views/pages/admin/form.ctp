@@ -112,7 +112,7 @@
         </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('Page.status', '公開状態') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?></th>
 		<td class="col-input">
             <?php echo $formEx->radio('Page.status', $textEx->booleanDoList("公開"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
             <?php echo $formEx->error('Page.status') ?>

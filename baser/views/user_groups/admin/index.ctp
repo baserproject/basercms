@@ -39,8 +39,8 @@
 <tr>
 	<th>操作</th>
     <th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'id'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'識別名 ▼','desc'=>'識別名 ▲'),'name'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'グループ名 ▼','desc'=>'グループ名 ▲'),'title'); ?></th>
+	<th><?php echo $paginator->sort(array('asc'=>'ユーザーグループ名 ▼','desc'=>'識別名 ▲'),'name'); ?></th>
+	<th><?php echo $paginator->sort(array('asc'=>'表示名 ▼','desc'=>'グループ名 ▲'),'title'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'登録日 ▼','desc'=>'登録日 ▲'),'created'); ?></th>
 	<th><?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
 </tr>

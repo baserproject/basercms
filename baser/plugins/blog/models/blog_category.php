@@ -70,10 +70,13 @@ class BlogCategory extends BlogAppModel {
 		$this->validate['name'] = array(array(  'rule' => array('minLength',1),
                                                 'message' => ">> ブログカテゴリー名を入力して下さい",
                                                 'required' => true),
-										array(  'rule' => 'alphaNumeric',
-                                                'message' => '>> ブログカテゴリー名は半角英数字のみ入力して下さい'),
+										array(  'rule' => 'halfText',
+                                                'message' => '>> ブログカテゴリー名は半角のみで入力して下さい'),
                                         array(  'rule' => array('duplicateBlogCategory'),
-                                                'message' => '>> 入力されたニックネームは既に登録されています'));
+                                                'message' => '>> 入力されたブログカテゴリは既に登録されています'));
+		$this->validate['title'] = array(array(  'rule' => array('minLength',1),
+                                                'message' => ">> ブログカテゴリータイトルを入力して下さい",
+                                                'required' => true));
 		return true;
 	}
 /**
@@ -125,12 +128,10 @@ class BlogCategory extends BlogAppModel {
  */
     function duplicateBlogCategory($check){
 
-        $parentId = $this->data['BlogCategory']['parent_id'];
-
-        $conditions = array($this->name.'.'.key($check)=>$check[key($check)],
+        $conditions = array('BlogCategory.'.key($check)=>$check[key($check)],
                             'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
         if($this->exists()){
-            $conditions['NOT'] = array('$this->name'.'.id'=>$this->id);
+            $conditions['NOT'] = array('BlogCategory.id'=>$this->id);
         }
 		$ret = $this->find($conditions);
 		if($ret){

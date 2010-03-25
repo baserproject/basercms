@@ -50,12 +50,14 @@ class UserGroup extends AppModel {
  */
 	function beforeValidate(){
 
-		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> グループ識別名を入力して下さい"),
-										array('rule' => 'halfText',
-											'message' => '>> グループ識別名は半角のみで入力して下さい'));
-		$this->validate['title'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> グループ名を入力して下さい"));
+		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> ユーザーグループ名を入力して下さい"),
+										array(	'rule' => 'halfText',
+												'message' => '>> ユーザーグループは半角のみで入力して下さい'),
+										array(	'rule' => array('duplicate','name'),
+												'message' => '>> 既に登録のあるユーザーグループ名です'));
+		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> 表示名を入力して下さい"));
 		return true;
 
 	}

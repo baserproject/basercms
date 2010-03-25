@@ -59,35 +59,33 @@ class User extends AppModel {
 		
 		
 		
-		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> アカウント名を入力して下さい"),
-										array('rule' => 'halfText',
-											'message' => '>> アカウント名は半角のみで入力して下さい'));
+		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+												'message' => ">> アカウント名を入力して下さい"),
+										array(	'rule' => 'halfText',
+												'message' => '>> アカウント名は半角のみで入力して下さい'),
+										array(	'rule' => array('duplicate','name'),
+												'message' => '>> 既に登録のあるアカウント名です'));
 											
-		$this->validate['real_name_1'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 名前[姓]を入力して下さい"));
+		$this->validate['real_name_1'] = array(array(	'rule' => VALID_NOT_EMPTY,
+														'message' => ">> 名前[姓]を入力して下さい"));
 											
-		/*$this->validate['real_name_2'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> 名前[名]を入力して下さい"));*/
+		/*$this->validate['real_name_2'] = array(array(	'rule' => VALID_NOT_EMPTY,
+														'message' => ">> 名前[名]を入力して下さい"));*/
 	
-        $this->validate['password'] = array(
-										'minLength' => array(
-											'rule' => array('minLength',6),
-											'allowEmpty' => false,
-											'message' => '>> パスワードは６文字以上で入力して下さい。'
-											),
-										'alphaNumeric' => array(
-											'rule' => 'alphaNumeric',
-										'message' => '>> パスワードは半角英数字のみで入力して下さい'
-										)
-									);
+        $this->validate['password'] = array('minLength' => array(
+												'rule' => array('minLength',6),
+												'allowEmpty' => false,
+												'message' => '>> パスワードは６文字以上で入力して下さい。'),
+											'alphaNumeric' => array(
+												'rule' => 'alphaNumeric',
+												'message' => '>> パスワードは半角英数字のみで入力して下さい'));
 	
-/*		$this->validate['email'] = array(array('rule' => array('email'),
-											'message' => ">> Eメールの形式が不正です",
-											'required' => true));*/
+/*		$this->validate['email'] = array(array(	'rule' => array('email'),
+												'message' => ">> Eメールの形式が不正です",
+												'required' => true));*/
 											
-		$this->validate['user_group_id'] =	array(	array('rule' => VALID_NOT_EMPTY,
-															'message' => ">> グループを選択して下さい"));
+		$this->validate['user_group_id'] =	array(array('rule' => VALID_NOT_EMPTY,
+														'message' => ">> グループを選択して下さい"));
 		return true;
 		
 	}

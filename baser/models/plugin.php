@@ -42,5 +42,22 @@ class Plugin extends AppModel {
  * @access  public
  */
     var $useDbConfig = 'baser';
+/**
+ * beforeValidate
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeValidate(){
+
+		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
+												'message' => ">> プラグイン名を入力して下さい。",
+												'required' => true));
+		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
+												'message' => ">> 表示名を入力して下さい。",
+												'required' => true));
+		return true;
+
+	}
 }
 ?>

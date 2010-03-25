@@ -41,30 +41,27 @@
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <tr>
-<th><span class="required">*</span>&nbsp;<?php echo $form->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
+<th><?php echo $form->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_name', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.site_name') ?>
         <?php echo $html->image('help.png',array('id'=>'helpSiteName','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteName" class="helptext">自動送信メールの署名に挿入されます。</div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.site_name') ?>
     </td>
 </tr>
 <tr>
-<th><span class="required">*</span>&nbsp;<?php echo $form->label('MailConfig.site_url', '署名：WEBサイトURL') ?></th>
+<th><?php echo $form->label('MailConfig.site_url', '署名：WEBサイトURL') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_url', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.site_url') ?>
         <?php echo $html->image('help.png',array('id'=>'helpSiteUrl','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteUrl" class="helptext">自動送信メールの署名に挿入されます。</div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.site_url') ?>
     </td>
 </tr>
 <tr>
 <th><?php echo $form->label('MailConfig.site_email', '署名：Eメール') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_email', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.site_email') ?>
         <?php echo $html->image('help.png',array('id'=>'helpSiteEmail','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteEmail" class="helptext">
             <ul>
@@ -72,27 +69,25 @@
                 <li>メールの送信先ではありません。</li>
             </ul>
         </div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.site_email') ?>
     </td>
 </tr>
 <tr>
 <th><?php echo $form->label('MailConfig.site_tel', '署名：電話番号') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_tel', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.site_tel') ?>
         <?php echo $html->image('help.png',array('id'=>'helpSiteTel','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteTel" class="helptext">自動送信メールの署名に挿入されます。</div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.site_tel') ?>
     </td>
 </tr>
 <tr>
 <th><?php echo $form->label('MailConfig.site_fax', '署名：FAX番号') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_fax', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.site_fax') ?>
         <?php echo $html->image('help.png',array('id'=>'helpSiteFax','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteFax" class="helptext">自動送信メールの署名に挿入されます。</div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.site_fax') ?>
     </td>
 </tr>
 </table>
@@ -103,13 +98,12 @@
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 <tr>
-	<th><?php echo $form->label('MailConfig.encode', '文字コード') ?></th>
+	<th><span class="required">*</span>&nbsp;<?php echo $form->label('MailConfig.encode', '文字コード') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.encode', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $form->error('MailConfig.encode') ?>
         <?php echo $html->image('help.png',array('id'=>'helpEncode','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextEncode" class="helptext">送信メールの文字コード</div>
-        &nbsp;
+        <?php echo $form->error('MailConfig.encode') ?>
     </td>
 </tr>
 <tr>

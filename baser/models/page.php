@@ -241,7 +241,11 @@ class Page extends AppModel {
             return true;
         }else{
             $conditions['Page.name'] = $this->data['Page']['name'];
-            $conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
+			if(empty($this->data['Page']['page_category_id'])){
+				$conditions['Page.page_category_id'] = NULL;
+			}else{
+				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
+			}
             $conditions['Page.theme'] = $this->data['Page']['theme'];
             if(!$this->find($conditions)){
                 return true;

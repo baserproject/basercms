@@ -127,7 +127,7 @@
     </td>
 </tr>
 <tr>
-<th class="col-head"><?php echo $form->label('SiteConfig.mode', '制作・開発モード') ?></th>
+<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.mode', '制作・開発モード') ?></th>
 	<td class="col-input">
     	<?php echo $form->select('SiteConfig.mode', $formEx->getControlSource('mode'),null,null,false) ?>
         <?php echo $html->image('help.png',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>

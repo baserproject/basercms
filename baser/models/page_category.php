@@ -69,13 +69,16 @@ class PageCategory extends AppModel {
  */
 	function beforeValidate(){
 
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-											'message' => ">> カテゴリ名を入力して下さい。",
-											'required' => true),
-										array('rule' => 'alphaNumeric',
-											'message' => '>> ページカテゴリー名は半角英数字のみ入力して下さい'),
+		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
+												'message' => ">> ページカテゴリ名を入力して下さい。",
+												'required' => true),
+										array(	'rule' => 'halfText',
+												'message' => '>> ページカテゴリー名は半角のみで入力して下さい'),
                                         array(  'rule' => array('duplicatePageCategory'),
-                                                'message' => '>> 入力されたニックネームは、同一階層に既に登録されています'));
+                                                'message' => '>> 入力されたページカテゴリー名は、同一階層に既に登録されています'));
+		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
+												'message' => ">> ページカテゴリタイトルを入力して下さい。",
+												'required' => true));
 		return true;
 
 	}
@@ -118,12 +121,14 @@ class PageCategory extends AppModel {
         $parents = $this->generatetreelist($conditions);
         $controlSources['parent_id'] = array();
         foreach($parents as $key => $parent){
-            if(preg_match("/^([_]+)/i",$parent,$matches)){
-                $parent = preg_replace("/^[_]+/i",'',$parent);
-                $prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-                $parent = $prefix.'└'.$parent;
-            }
-            $controlSources['parent_id'][$key] = $parent;
+			if($parent){
+				if(preg_match("/^([_]+)/i",$parent,$matches)){
+					$parent = preg_replace("/^[_]+/i",'',$parent);
+					$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+					$parent = $prefix.'└'.$parent;
+				}
+				$controlSources['parent_id'][$key] = $parent;
+			}
         }
 
 		if(isset($controlSources[$field])){

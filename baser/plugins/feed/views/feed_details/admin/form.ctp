@@ -57,12 +57,12 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedDetail.name', 'フィード詳細名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('FeedDetail.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $formEx->error('FeedDetail.name', '>> フィード詳細名を入力して下さい') ?>&nbsp;</td>
+            <?php echo $formEx->error('FeedDetail.name') ?>&nbsp;</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.url', 'フィードURL') ?></th>
 		<td class="col-input"><?php echo $formEx->text('FeedDetail.url', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $formEx->error('FeedDetail.url', '>> フィードURLの形式が不正です') ?>&nbsp;
+            <?php echo $formEx->error('FeedDetail.url') ?>&nbsp;
 		</td>
 	</tr>
 </table>
@@ -76,7 +76,7 @@
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.cache_time', 'キャッシュ時間') ?></th>
 		<td class="col-input">
             <?php echo $formEx->select('FeedDetail.cache_time', $formEx->getControlSource('cache_time')) ?>
-            <?php echo $formEx->error('FeedDetail.cache_time', '>> キャッシュ時間を入力して下さい。') ?>
+            <?php echo $formEx->error('FeedDetail.cache_time') ?>
             <?php echo $html->image('help.png',array('id'=>'helpCacheTime','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCacheTime" class="helptext">
                 負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択して下さい。<br />
@@ -86,7 +86,7 @@
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.category_filter', 'カテゴリフィルター') ?></th>
 		<td class="col-input"><?php echo $formEx->text('FeedDetail.category_filter', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $formEx->error('FeedDetail.category_filter', '>> カテゴリフィルターの形式が不正です') ?>
+            <?php echo $formEx->error('FeedDetail.category_filter') ?>
             <?php echo $html->image('help.png',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCategoryFilter" class="helptext">
                 <ul>
