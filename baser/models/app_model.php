@@ -642,7 +642,7 @@ class AppModel extends Model
     function halfText($check){
         $value = $check[key($check)];
         $len = strlen($value);
-        $mblen = mb_strlen($value);
+        $mblen = mb_strlen($value,'UTF-8');
 		if($len != $mblen){
 			return false;
 		}
