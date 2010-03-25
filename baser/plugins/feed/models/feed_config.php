@@ -70,8 +70,9 @@ class FeedConfig extends FeedAppModel {
  * 初期値を取得
  */
  	function getDefaultValue(){
-	
-		$data['FeedConfig']['jquery'] = 0;
+
+		$data['FeedConfig']['display_number'] = '5';
+		$data['FeedConfig']['template'] = 'default';
 		return $data;
 	
 	}
