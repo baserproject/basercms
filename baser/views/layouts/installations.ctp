@@ -28,11 +28,11 @@
 <?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - BaserCMS -
 </title>
 <?php echo $html->meta('description','BaserCMSのインストーラー') ?>
-<?php echo $html->meta('icon') ?>
-<?php echo $html->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php echo $html->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php echo $html->css('font_large','stylesheet',array('title'=>'large')) ?>
-<?php echo $html->css('import') ?>
+<?php $baser->icon() ?>
+<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
+<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
+<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
+<?php $baser->css('import') ?>
 <?php $baser->css(array('jquery-ui-1.7.2/ui.all','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
 <?php $baser->js(array('jquery-1.3.2.min',
