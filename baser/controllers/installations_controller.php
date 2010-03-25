@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * インストーラーコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -133,7 +133,7 @@ class InstallationsController extends AppController
 				header('Location: '.$this->base.'/installations/'.$this->action);
 			}
 		}
-
+		$this->theme = null;
     }
 /**
  * Step 1: ウェルカムページ
@@ -189,7 +189,7 @@ class InstallationsController extends AppController
 		}else{
 			$modrewriteinstalled = false;
 		}
-        
+
         // メインディレクトリの書き込み権限
 		$htaccesswritable=is_writable(dirname(APP)) && is_writable(APP) && is_writable(WWW_ROOT);
 		// .htaccessの存在チェック
@@ -200,7 +200,7 @@ class InstallationsController extends AppController
         $this->set('phpcurrentmemorylimit', $phpCurrentMemoryLimit);
 		$this->set('phpmemoryok', $phpMemoryOk);
 		$this->set('apachegetmodules',$apachegetmodules);
-        $this->set('modrewriteinstalled', $modrewriteinstalled);       
+        $this->set('modrewriteinstalled', $modrewriteinstalled);
         $this->set('configdirwritable', $configdirwritable);
         $this->set('corefilewritable',$corefilewritable);
         $this->set('htaccesswritable', $htaccesswritable);
@@ -237,35 +237,28 @@ class InstallationsController extends AppController
         $dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
         $sqlite = false;
         if(function_exists('sqlite_libversion') && is_writable(APP.'db')){
-            if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')){
-                // PDOクラスの生成にて実際に接続してみて接続できれば接続可能とする
-                // → PHP4の場合エラーとなってしまうので try catch は一旦コメントアウト
-                // TODO PDOの動作状況についてはもう少し調査が必要
-                //try{
-                    $pdo = new PDO('sqlite:'.TMP.'tmp.db');
-                    $pdo = null;
-                    unlink(TMP.'tmp.db');
-                    
-                    /* /app/db/sqliteフォルダ確認＆生成 */
-                    if(is_dir(APP.'db'.DS.'sqlite')){
-                        if(is_writable(APP.'db'.DS.'sqlite')){
-                            $sqlite = true;
-                        }else{
-                            if(chmod(APP.'db'.DS.'sqlite',0777)){
-                                $sqlite = true;
-                            }
-                        }
+        	$pdoDrivers = PDO::getAvailableDrivers();
+            if(class_exists('PDO') &&
+            		version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=') &&
+            		in_array('sqlite',$pdoDrivers)){
+
+                /* /app/db/sqliteフォルダ確認＆生成 */
+                if(is_dir(APP.'db'.DS.'sqlite')){
+                    if(is_writable(APP.'db'.DS.'sqlite')){
+                        $sqlite = true;
                     }else{
-                        if(mkdir(APP.'db'.DS.'sqlite') && chmod(APP.'db'.DS.'sqlite',0777)){
+                        if(chmod(APP.'db'.DS.'sqlite',0777)){
                             $sqlite = true;
                         }
                     }
-                    if($sqlite){
-                        $dbsource['sqlite3'] = 'SQLite3';
+                }else{
+                    if(mkdir(APP.'db'.DS.'sqlite') && chmod(APP.'db'.DS.'sqlite',0777)){
+                        $sqlite = true;
                     }
-                //}catch(PDOException $e) {
-                    
-                //}
+                }
+                if($sqlite){
+                    $dbsource['sqlite3'] = 'SQLite3';
+                }
 
             }else{
                 // TODO SQLite2 は AlTER TABLE できないので、実装には、テーブル構造の解析が必要になる。
@@ -277,7 +270,7 @@ class InstallationsController extends AppController
                 //$dbsource['sqlite'] = 'SQLite';
             }
         }
-        
+
         $csv = false;
         if(is_writable(APP.'db')){
             /* /app/db/csvフォルダ確認＆生成 */
@@ -308,12 +301,12 @@ class InstallationsController extends AppController
                     $csv = true;
                 }
             }
-            
+
             if($csv){
                 $dbsource['csv'] = 'CSV';
             }
 		}
-		
+
 		$this->set('dbsource', $dbsource);
 
 		/* DBタイプ */
@@ -407,10 +400,10 @@ class InstallationsController extends AppController
                     $this->Session->setFlash('データベースへの接続に成功しました。');
                     $this->set('blDBSettingsOK',$blDBSettingsOK);
                 }
-                
+
             }
 
-            
+
 
         /* 「次のステップへ」クリック時 */
         } elseif (isset($params['data']['buttonclicked']) &&
@@ -643,7 +636,7 @@ class InstallationsController extends AppController
                     }
                 }
             }
-            
+
             // ログイン
             $extra['data']['User']['name'] = $admin;
             $extra['data']['User']['password'] = $password;
@@ -655,7 +648,7 @@ class InstallationsController extends AppController
 
         }
 
-        
+
 
         // demo用テーマを配置する
         /*$targetPath = WWW_ROOT.'themed'.DS.'demo'.DS;
@@ -994,7 +987,7 @@ class InstallationsController extends AppController
         $this->pageTitle = 'WEBサイトアップデート';
 
 		$this->deleteCache();
-		
+
         /* バージョンを解析 */
         $baserVersion = $this->getBaserVersion();
         $baserVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$baserVersion);
@@ -1049,7 +1042,7 @@ class InstallationsController extends AppController
         $this->set('siteVer',$siteVer);
         $this->set('baserVer',$baserVer);
         $this->set('scriptNum',$scriptNum);
-        
+
     }
 }
 ?>
