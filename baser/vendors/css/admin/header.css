@@ -3,7 +3,7 @@
 /**
  * ヘッダー
  * ※ ヘッダーの枠組み(#header)に関する設定はlayout.cssに記述
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -47,15 +47,15 @@
 	background:url(images/bg_glb_menu.jpg) no-repeat;
 	height:62px;
 }
-#globalMenu a:hover{
+.global-menu a:hover{
 	color:#FFFFFF;
 }
-#globalMenu li{
+.global-menu li{
 	float:left;
 	height:54px;
 	display:inline;
 }
-#globalMenu li a{
+.global-menu li a{
 	float: left;
 	display:block;
 	height:37px;
@@ -66,15 +66,15 @@
 	font-size:12px;
 	line-height:20px;
 }
-#globalMenu a{
+.global-menu a{
 	text-decoration:none;
 	color:#FFFFFF;
 }
-#globalMenu a:hover{
+.global-menu a:hover{
 	color:#CCCCCC;
 	padding-top:18px;
 	height:36px;
 }
-#globalMenu .first{
+.global-menu .first{
 	padding-left:30px;
 }

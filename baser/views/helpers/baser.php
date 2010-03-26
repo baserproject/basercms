@@ -431,13 +431,13 @@ class BaserHelper extends AppHelper {
 /**
  * aタグを表示するだけのラッパー関数
  */
-	function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+	function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 	}
 /**
  * aタグを取得するだけのラッパー
  */
-	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 		if(!empty($htmlAttributes['prefix'])){
 			if(!empty($this->params['prefix'])){
 				$url[$this->params['prefix']] = true;
@@ -490,7 +490,7 @@ class BaserHelper extends AppHelper {
  */
     function editPage($id){
         if(!empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')){
-            echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank','class'=>'edit-link')).'</div>';
+            echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank')).'</div>';
         }
     }
 /**

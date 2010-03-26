@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * グロバールメニュー
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -20,18 +20,19 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<ul id="globalMenu" class="clearfix">
+<ul class="global-menu clearfix">
 <?php if(empty($menuType)) $menuType = '' ?>
     <?php $globalMenus = $baser->getGlobalMenus($menuType) ?>
     <?php if(!empty($globalMenus)): ?>
         <?php foreach($globalMenus as $key => $globalMenu): ?>
+						<?php $no = sprintf('%02d',$key+1) ?>
             <?php if($globalMenu['GlobalMenu']['status']): ?>
                 <?php if($key == 0): ?>
-                    <?php $class = ' class="first"' ?>
+                    <?php $class = ' class="first menu'.$no.'"' ?>
                 <?php elseif($key == count($globalMenus) - 1): ?>
-                    <?php $class = ' class="last"' ?>
+                    <?php $class = ' class="last menu'.$no.'"' ?>
                 <?php else: ?>
-                    <?php $class = '' ?>
+                    <?php $class = ' class="menu'.$no.'"' ?>
                 <?php endif ?>
                 <?php if($this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
                     <li<?php echo $class ?>><?php echo str_replace('/index.php','',$html->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>

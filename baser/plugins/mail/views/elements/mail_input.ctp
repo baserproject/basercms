@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * メールフォーム本体
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -75,7 +75,9 @@ if (!empty($mailFields)) {
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) || 
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$record))) {
-				
+				if (!$freezed && $description) {
+					echo $html->image('img_icon_help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
+				}
 				if ($field['group_valid']) {
 					if ($form->error("Message." . $field['group_field'] . "_format", "check")) {
 						echo $form->error("Message." . $field['group_field'] . "_format", ">> 形式が不正です");
@@ -86,7 +88,6 @@ if (!empty($mailFields)) {
 					$form->error("Message." . $field['group_field'] . "_not_complate", ">> 入力データが不完全です");
 				}
 				if (!$freezed && $description) {
-					echo $html->image('help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
 					echo '<div id="'.Inflector::variable('helptext_'.$field['field_name']) . '" class="helptext">'. $description .'</div>';
 				}
 				echo '</td></tr>';

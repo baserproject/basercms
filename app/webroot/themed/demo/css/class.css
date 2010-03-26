@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * 共通クラス（idセレクタに依存しないもの）
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -92,7 +92,7 @@
 }
 .clearfix:after 
 {
-	content: ".";
+	content: " ";
 	display: block;
 	clear: both;
 	height: 0;

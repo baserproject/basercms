@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * [管理画面] ページ フォーム
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -53,7 +53,8 @@
     <?php if($categories): ?>
     <tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Page.page_category_id',$categories,null,array('escape'=>false)) ?><?php echo $formEx->error('Page.page_category_id') ?>&nbsp;</td>
+		<td class="col-input"><?php echo $formEx->select('Page.page_category_id',$categories,null,array('escape'=>false)) ?>
+		<?php echo $formEx->error('Page.page_category_id') ?>&nbsp;</td>
 	</tr>
     <?php else: ?>
         <?php echo $formEx->hidden('Page.page_category_id') ?>
@@ -61,21 +62,22 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.name', 'ページ名') ?></th>
 		<td class="col-input">
-            <?php echo $formEx->text('Page.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('Page.name') ?>
+            <?php echo $formEx->text('Page.name', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextName" class="helptext">
                 <ul>
                     <li>ページ名はURLに利用します。</li>
                     <li>.htmlなどの拡張子はつけず純粋なページ名を半角で入力します。</li>
-					<li>日本語の入力が可能です。</li>
+										<li>日本語の入力が可能です。</li>
                 </ul>
             </div>
+						<?php echo $formEx->error('Page.name') ?>
         </td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.title', 'タイトル') ?></th>
 		<td class="col-input">
-            <?php echo $formEx->text('Page.title', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('Page.title') ?>
+            <?php echo $formEx->text('Page.title', array('size'=>40,'maxlength'=>255)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTitle" class="helptext">
                 <ul>
@@ -86,12 +88,13 @@
 					トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
                 </ul>
             </div>
+						<?php echo $formEx->error('Page.title') ?>
         </td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.description', '説明文') ?></th>
 		<td class="col-input">
-            <?php echo $formEx->textarea('Page.description', array('cols'=>60,'rows'=>2)) ?><?php echo $formEx->error('Page.description') ?>
+            <?php echo $formEx->textarea('Page.description', array('cols'=>60,'rows'=>2)) ?>
             <?php echo $html->image('help.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextDescription" class="helptext">
                 <ul>
@@ -102,6 +105,7 @@
 					<small>※ 省略した場合、上記タグではサイト基本設定で設定された説明文が出力されます。</small></li>
                 </ul>
             </div>
+						<?php echo $formEx->error('Page.description') ?>
         </td>
 	</tr>
 	<tr>
