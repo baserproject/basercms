@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>プラグイン設定の登録・変更を行います。<br />
@@ -53,7 +53,7 @@
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Plugin.admin_link', '管理URL') ?></th>
 		<td class="col-input"><?php echo $formEx->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextAdminLink" class="helptext">
                 先頭にスラッシュをつけたルートパスで入力して下さい。<br />(例) /admin/plugins/index
             </div>

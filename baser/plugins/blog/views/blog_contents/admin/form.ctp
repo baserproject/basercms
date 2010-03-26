@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ブログコンテンツの基本設定を登録します。<br />
@@ -48,7 +48,7 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.name', 'ブログアカウント名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('BlogContent.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCategoryFilter" class="helptext">
                 <ul>
                     <li>ブログのURLに利用します。<br />(例)ブログIDが test の場合・・・http://example/test/</li>
@@ -86,7 +86,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.comment_approve', 'コメント承認機能') ?></th>
 		<td class="col-input">
             <?php echo $formEx->radio('BlogContent.comment_approve', $textEx->booleanDoList('利用'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpCommentApprove','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCommentApprove','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextCommentApprove" class="helptext">
                 承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。
             </div>
@@ -96,7 +96,7 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.layout', 'レイアウトテンプレート名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('BlogContent.layout', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextLayout" class="helptext">
                 <ul>
                     <li>ブログの外枠のテンプレート名を指定します。初期値：default</li>
@@ -110,7 +110,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.template', 'コンテンツテンプレート名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->text('BlogContent.template', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTemplate" class="helptext">
                 <ul>
                     <li>ブログの内枠のテンプレート名を指定します。初期値：default</li>

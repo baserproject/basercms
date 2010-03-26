@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ページをグルーピングする為のカテゴリ登録を行います。<br />
@@ -53,7 +53,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('PageCategory.name', 'ページカテゴリー名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->text('PageCategory.name', array('size'=>40,'maxlength'=>255)) ?>
-			<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 			<?php echo $formEx->error('PageCategory.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
@@ -67,7 +67,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('PageCategory.title', 'ページカテゴリータイトル') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('PageCategory.title', array('size'=>40,'maxlength'=>255)) ?>
-			<?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
             <?php echo $formEx->error('PageCategory.title') ?>
 			<div id="helptextTitle" class="helptext">
 				<ul>
@@ -80,7 +80,7 @@
 		<th class="col-head"><?php echo $formEx->label('PageCategory.parent_id', '親カテゴリ') ?></th>
 		<td class="col-input">
             <?php echo $formEx->select('PageCategory.parent_id', $formEx->getControlSource('parent_id',array('excludeParentId'=>$formEx->value('PageCategory.id'))),null,array('escape'=>false),'なし') ?>
-            <?php echo $html->image('help.png',array('id'=>'helpParentId','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpParentId','class'=>'help','alt'=>'ヘルプ')) ?>
             <?php echo $formEx->error('PageCategory.parent_id') ?>
 			<div id="helptextParentId" class="helptext">
 				<ul>

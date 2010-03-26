@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ログインするユーザーのグループを登録します。コンテンツへの権限がわかりやすい名称で登録します。</p>
@@ -46,7 +46,7 @@
 		<?php else: ?>
 			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255)) ?>
 		<?php endif ?>
-		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+		<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextName" class="helptext">
             <ul>
                 <li>重複しない識別名称を半角のみで入力して下さい。</li>
@@ -60,7 +60,7 @@
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.title', '表示名') ?></th>
 	<td class="col-input">
 		<?php echo $form->text('UserGroup.title', array('size'=>20,'maxlength'=>255)) ?>
-		<?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
+		<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextTitle" class="helptext">
 			日本語が入力できますのでわかりやすい名称を入力します。
         </div>

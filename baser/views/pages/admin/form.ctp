@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>WEBページとして表示させる「ページ」の登録を行います。</p>
@@ -63,7 +63,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.name', 'ページ名') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('Page.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextName" class="helptext">
                 <ul>
                     <li>ページ名はURLに利用します。</li>
@@ -78,7 +78,7 @@
 		<th class="col-head"><?php echo $formEx->label('Page.title', 'タイトル') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('Page.title', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextTitle" class="helptext">
                 <ul>
                     <li>タイトルはTitleタグに利用し、ブラウザのタイトルバーに表示されます。</li>
@@ -95,7 +95,7 @@
 		<th class="col-head"><?php echo $formEx->label('Page.description', '説明文') ?></th>
 		<td class="col-input">
             <?php echo $formEx->textarea('Page.description', array('cols'=>60,'rows'=>2)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextDescription" class="helptext">
                 <ul>
                     <li>説明文はMetaタグのdescription属性に利用されます。</li>

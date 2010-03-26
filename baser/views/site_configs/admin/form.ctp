@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>WEBサイトの基本設定を行います。<br />
@@ -42,7 +42,7 @@
 <th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.name', 'WEBサイト名') ?></th>
 	<td class="col-input">
         <?php echo $form->text('SiteConfig.name', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
         <?php echo $form->error('SiteConfig.name') ?>
         <div id="helptextName" class="helptext">
             <ul>
@@ -57,7 +57,7 @@
 <th class="col-head"><?php echo $form->label('SiteConfig.keyword', 'サイト基本キーワード') ?></th>
 	<td class="col-input">
         <?php echo $form->text('SiteConfig.keyword', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpKeyword','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpKeyword','class'=>'help','alt'=>'ヘルプ')) ?>
         <?php echo $form->error('SiteConfig.keyword') ?>
         <div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />&lt;?php $baser->keywords() ?&gt; で出力します。</div>
         &nbsp;
@@ -67,7 +67,7 @@
 <th class="col-head"><?php echo $form->label('SiteConfig.description', 'サイト基本説明文') ?></th>
 	<td class="col-input">
         <?php echo $form->textarea('SiteConfig.description', array('cols'=>36,'rows'=>5,'style'=>'width:80%')) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
         <?php echo $form->error('SiteConfig.description') ?>
         <div id="helptextDescription" class="helptext">テンプレートで利用する場合は、<br />&lt;?php $baser->description() ?&gt; で出力します。</div>
         &nbsp;
@@ -91,7 +91,7 @@
 <th class="col-head"><?php echo $form->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
 	<td class="col-input">
         <?php echo $form->text('SiteConfig.address', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpAddress','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAddress','class'=>'help','alt'=>'ヘルプ')) ?>
         <?php echo $form->error('SiteConfig.address') ?>
         <div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所を入力して下さい。</div>
         &nbsp;
@@ -101,7 +101,7 @@
 <th class="col-head"><?php echo $form->label('SiteConfig.googlemaps_key', 'GoogleMapsキー') ?></th>
 	<td class="col-input">
         <?php echo $form->text('SiteConfig.googlemaps_key', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpGooglemapsKey','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpGooglemapsKey','class'=>'help','alt'=>'ヘルプ')) ?>
         <?php echo $form->error('SiteConfig.googlemaps_key') ?>
         <div id="helptextGooglemapsKey" class="helptext">
             GoogleMaps利用時のAPIキーを指定します。<br />
@@ -115,7 +115,7 @@
 <th class="col-head"><?php echo $form->label('SiteConfig.theme', 'テーマ') ?></th>
 	<td class="col-input">
     	<?php echo $form->select('SiteConfig.theme', $themes,null,null,'なし') ?>
-        <?php echo $html->image('help.png',array('id'=>'helpTheme','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTheme','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextTheme" class="helptext">
             公開ページのデザインテーマを指定します。<br />
             テーマを追加する場合には、<br />
@@ -130,7 +130,7 @@
 <th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.mode', '制作・開発モード') ?></th>
 	<td class="col-input">
     	<?php echo $form->select('SiteConfig.mode', $formEx->getControlSource('mode'),null,null,false) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextDebug" class="helptext">
             制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
             ※ CakePHPのデバッグモードを指します。<br />

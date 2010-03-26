@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ユーザーグループを指定してアクセス制限を登録します。</p>
@@ -59,7 +59,7 @@
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.name', 'ルール名') ?></th>
 	<td class="col-input">
 		<?php echo $formEx->text('Permission.name', array('size'=>20,'maxlength'=>255)) ?>
-		<?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+		<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 		<?php echo $form->error('Permission.name') ?>
 		<div id="helptextName" class="helptext">
 			ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。
@@ -70,7 +70,7 @@
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.url', 'URL設定') ?></th>
 	<td class="col-input">
 		<?php echo $formEx->text('Permission.url', array('size'=>40,'maxlength'=>255)) ?>
-		<?php echo $html->image('help.png',array('id'=>'helpUrl','class'=>'help','alt'=>'ヘルプ')) ?>
+		<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpUrl','class'=>'help','alt'=>'ヘルプ')) ?>
 		<?php echo $form->error('Permission.url') ?>
 		<div id="helptextUrl" class="helptext">
 			<ul>

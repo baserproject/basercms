@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>公開ページ・管理画面のどちらかのタイプを選択してグローバルメニューのアイテムを登録します。<br />
@@ -46,7 +46,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.name', 'メニュー名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->text('GlobalMenu.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextName" class="helptext">
 				<ul>
 					<li>日本語が利用できます。</li>
@@ -64,7 +64,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.link', 'リンクURL') ?></th>
 		<td class="col-input">
             <?php echo $formEx->text('GlobalMenu.link', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpLink','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLink','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextLink" class="helptext">
                 先頭にスラッシュつけたルートパスで入力して下さい。<br />(例) /admin/global/index
             </div>

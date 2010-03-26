@@ -99,7 +99,7 @@ jQuery(function($) {
 });
 </script>
 
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>メールフォームのフィールド（項目）の登録を行います。<br />
@@ -134,7 +134,7 @@ jQuery(function($) {
 	<tr id="rowFieldName">
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.field_name', 'フィールド名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.field_name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpFieldName','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFieldName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextFieldName" class="helptext">重複しない半角英数字で入力して下さい。</div>
             <?php echo $formEx->error('MailField.field_name') ?>
         </td>
@@ -142,7 +142,7 @@ jQuery(function($) {
 	<tr id="rowName">
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.name', '項目名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.name', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextName" class="helptext">項目を特定しやすいわかりやすい名前を入力して下さい。日本語可。</div>
             <?php echo $formEx->error('MailField.name') ?>
         </td>
@@ -151,7 +151,7 @@ jQuery(function($) {
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.type', 'タイプ') ?></th>
 		<td class="col-input">
             <?php echo $formEx->select('MailField.type', $controlSource['type']) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpType','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpType','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextType" class="helptext">
                 自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。
             </div>
@@ -161,7 +161,7 @@ jQuery(function($) {
 	<tr id="rowHead">
 		<th class="col-head"><?php echo $formEx->label('MailField.head', '項目見出し') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.head', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpHead','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpHead','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextHead" class="helptext">
                 グループの場合、２番目以降のフィールドは不要です。
             </div>
@@ -171,7 +171,7 @@ jQuery(function($) {
 	<tr id="rowNotEmpty">
 		<th class="col-head"><?php echo $formEx->label('MailField.not_empty', '必須マーク') ?></th>
 		<td class="col-input"><?php echo $formEx->checkbox('MailField.not_empty', array('label'=>'項目見出しに必須マークを表示する')) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpNotEmpty','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpNotEmpty','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextNotEmpty" class="helptext">グループの場合、２番目以降のフィールドは不要です。</div>
             <?php echo $formEx->error('MailField.not_empty') ?>
         </td>
@@ -199,7 +199,7 @@ jQuery(function($) {
 	<tr id="rowSource">
 		<th class="col-head"><?php echo $formEx->label('MailField.source', '選択リスト') ?></th>
 		<td class="col-input"><?php echo $formEx->textarea('MailField.source',array('cols'=>35,'rows'=>4)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpSource','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSource','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextSource" class="helptext">
                 <ul>
                     <li>ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定します。</li>
@@ -218,7 +218,7 @@ jQuery(function($) {
 	<tr id="rowRows">
 		<th class="col-head"><?php echo $formEx->label('MailField.rows', '行数') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.rows', array('size'=>10,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpRows','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpRows','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextRows" class="helptext">テキストボックスの場合の行数を指定します。</div>
             <?php echo $formEx->error('MailField.rows') ?>
         </td>
@@ -244,7 +244,7 @@ jQuery(function($) {
 	<tr id="rowGroupField">
 		<th class="col-head"><?php echo $formEx->label('MailField.group_field', 'グループ名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.group_field', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpGroupField','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpGroupField','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextGroupField" class="helptext">
                 <ul>
                     <li>各項目を同じグループとするには同じグループ名を入力します。</li>
@@ -257,7 +257,7 @@ jQuery(function($) {
 	<tr id="rowGroupValid">
 		<th class="col-head"><?php echo $formEx->label('MailField.group_valid', 'グループ入力チェック') ?></th>
 		<td class="col-input"><?php echo $formEx->text('MailField.group_valid', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('help.png',array('id'=>'helpGroupValid','class'=>'help','alt'=>'ヘルプ')) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpGroupValid','class'=>'help','alt'=>'ヘルプ')) ?>
             <div id="helptextGroupValid" class="helptext">
                 <ul>
                     <li>グループで連帯して入力チェックを行うには同じグループ名を入力します。</li>

@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ログイン用のユーザーアカウントを登録する事ができます。<br />
@@ -44,7 +44,7 @@
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.name', 'アカウント名') ?></th>
 	<td class="col-input">
 		<?php echo $form->text('User.name', array('size'=>20,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextName" class="helptext">
 			半角のみで入力してください。
 		</div>
@@ -56,7 +56,7 @@
 	<td class="col-input">
 		<small>[姓]</small> <?php echo $form->text('User.real_name_1', array('size'=>12,'maxlength'=>255)) ?> 
         <small>[名]</small> <?php echo $form->text('User.real_name_2', array('size'=>12,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextRealName1" class="helptext">
 			「名」は省略する事ができます。
 		</div>
@@ -69,7 +69,7 @@
 	<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.user_group_id', 'グループ') ?></th>
 	<td class="col-input">
 		<?php echo $form->select('User.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpUserGroupId','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpUserGroupId','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextUserGroupId" class="helptext">
 			ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>より新しいグループを追加しアクセス制限の設定をおこないます。
 		</div>
@@ -87,7 +87,7 @@
 		<small>[パスワードは変更する場合のみ入力してください]</small><br />
 		<?php echo $form->password('User.password_1', array('size'=>20,'maxlength'=>255)) ?>
 		<?php echo $form->password('User.password_2', array('size'=>20,'maxlength'=>255)) ?>&nbsp;
-        <?php echo $html->image('help.png',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextPassword" class="helptext">
             <ul>
                 <li><?php if($this->action == "admin_edit"): ?>パスワードの変更をする場合は、<?php endif; ?>確認の為２回入力して下さい。</li>

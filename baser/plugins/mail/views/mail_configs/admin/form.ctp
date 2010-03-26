@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>メールフォームプラグインの基本設定を登録します。<br />
@@ -44,7 +44,7 @@
 <th><?php echo $form->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_name', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSiteName','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSiteName','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteName" class="helptext">自動送信メールの署名に挿入されます。</div>
         <?php echo $form->error('MailConfig.site_name') ?>
     </td>
@@ -53,7 +53,7 @@
 <th><?php echo $form->label('MailConfig.site_url', '署名：WEBサイトURL') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_url', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSiteUrl','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSiteUrl','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteUrl" class="helptext">自動送信メールの署名に挿入されます。</div>
         <?php echo $form->error('MailConfig.site_url') ?>
     </td>
@@ -62,7 +62,7 @@
 <th><?php echo $form->label('MailConfig.site_email', '署名：Eメール') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_email', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSiteEmail','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSiteEmail','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteEmail" class="helptext">
             <ul>
                 <li>自動送信メールの署名に挿入されます。</li>
@@ -76,7 +76,7 @@
 <th><?php echo $form->label('MailConfig.site_tel', '署名：電話番号') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_tel', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSiteTel','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSiteTel','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteTel" class="helptext">自動送信メールの署名に挿入されます。</div>
         <?php echo $form->error('MailConfig.site_tel') ?>
     </td>
@@ -85,7 +85,7 @@
 <th><?php echo $form->label('MailConfig.site_fax', '署名：FAX番号') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.site_fax', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSiteFax','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSiteFax','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSiteFax" class="helptext">自動送信メールの署名に挿入されます。</div>
         <?php echo $form->error('MailConfig.site_fax') ?>
     </td>
@@ -101,7 +101,7 @@
 	<th><span class="required">*</span>&nbsp;<?php echo $form->label('MailConfig.encode', '文字コード') ?></th>
 	<td class="col-input">
         <?php echo $form->text('MailConfig.encode', array('size'=>35,'maxlength'=>255)) ?>
-        <?php echo $html->image('help.png',array('id'=>'helpEncode','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpEncode','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextEncode" class="helptext">送信メールの文字コード</div>
         <?php echo $form->error('MailConfig.encode') ?>
     </td>
@@ -111,7 +111,7 @@
 	<td class="col-input">
         <?php echo $form->text('MailConfig.smtp_host', array('size'=>35,'maxlength'=>255)) ?>
         <?php echo $form->error('MailConfig.smtp_host') ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSmtpHost','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSmtpHost','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
         &nbsp;
     </td>
@@ -121,7 +121,7 @@
 	<td class="col-input">
         <?php echo $form->text('MailConfig.smtp_username', array('size'=>35,'maxlength'=>255)) ?>
         <?php echo $form->error('MailConfig.smtp_username') ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSmtpUsername','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSmtpUsername','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
         &nbsp;
     </td>
@@ -131,7 +131,7 @@
 	<td class="col-input">
         <?php echo $form->text('MailConfig.smtp_password', array('size'=>35,'maxlength'=>255)) ?>
         <?php echo $form->error('MailConfig.smtp_password') ?>
-        <?php echo $html->image('help.png',array('id'=>'helpSmtpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
+        <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSmtpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
         <div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
         &nbsp;
     </td>
