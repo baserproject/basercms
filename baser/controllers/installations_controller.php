@@ -236,11 +236,11 @@ class InstallationsController extends AppController
 		/* DBソース */
         $dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
         $sqlite = false;
-        if(function_exists('sqlite_libversion') && is_writable(APP.'db')){
+        if(function_exists('sqlite_libversion') && is_writable(APP.'db')  &&
+				class_exists('PDO') &&
+            	version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')){
         	$pdoDrivers = PDO::getAvailableDrivers();
-            if(class_exists('PDO') &&
-            		version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=') &&
-            		in_array('sqlite',$pdoDrivers)){
+            if(in_array('sqlite',$pdoDrivers)){
 
                 /* /app/db/sqliteフォルダ確認＆生成 */
                 if(is_dir(APP.'db'.DS.'sqlite')){

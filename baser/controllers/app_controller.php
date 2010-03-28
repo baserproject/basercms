@@ -192,7 +192,7 @@ class AppController extends Controller{
         parent::beforeFilter();
 
 		/* 認証設定 */
-		if(isset($this->AuthConfigure)){
+		if(isset($this->AuthConfigure) && !empty($this->params['prefix'])){
 			$this->AuthConfigure->setting($this->params['prefix']);
 		}
 		
