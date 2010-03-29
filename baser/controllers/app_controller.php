@@ -355,7 +355,7 @@ class AppController extends Controller{
         $folder = new Folder(CACHE.'views'.DS);
         $caches = $folder->read(true,true);
         foreach($caches[1] as $cache){
-            if(strpos($cache,'.php') !== false){
+            if(strpos($cache,'.php') !== false || strpos($cache,'.rss') !== false){
                 @unlink(CACHE.'views'.DS.$cache);
             }
         }
