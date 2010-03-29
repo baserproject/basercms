@@ -682,7 +682,7 @@ class InstallationsController extends AppController
         /* mod_rewrite 設定 */
 		$htaccessEnabled = $htaccess1 = $htaccess3 = false;
 
-		if (!file_exists(dirname(APP).DS.'.htaccess') && !file_exists(APP.'webroot'.DS.'.htaccess')) {
+		if (!file_exists(dirname(APP).DS.'.htaccess')) {
 
 			if ($this->Session->read('modrewritesupport')) {
 
