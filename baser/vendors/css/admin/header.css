@@ -48,7 +48,7 @@
 	height:62px;
 }
 .global-menu a:hover{
-	color:#FFFFFF;
+	color:#FFFFFF!important;
 }
 .global-menu li{
 	float:left;
