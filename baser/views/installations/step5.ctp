@@ -44,7 +44,9 @@
 			また、.htaccessの自動設定を利用する為に権限を変更した場合も権限の変更を推奨します。
 			<ul>
 				<li><?php echo str_replace($_SERVER['DOCUMENT_ROOT'],'',ROOT).DS ?></li>
+				<?php if(ROOT.DS != WWW_ROOT):?>
 				<li><?php echo str_replace($_SERVER['DOCUMENT_ROOT'],'',WWW_ROOT) ?></li>
+				<?php endif ?>
 			</ul>
 		</div>
 	<?php endif ?>

@@ -40,6 +40,7 @@ class InstallationsController extends AppController
     var $layout = "installations";								// レイアウト
     var $helpers = array('Html', 'Form', 'Javascript', 'Time'); // ヘルパー
 	var $uses = null;											// モデル
+	var $webrootExists = false;
 /**
  * データベースエラーハンドラ
  *
@@ -114,7 +115,11 @@ class InstallationsController extends AppController
 			$this->webroot = DS;
 		}
 
-		if(file_exists(dirname(APP).DS.'.htaccess') && file_exists(APP.'webroot'.DS.'.htaccess')){
+		if(is_dir(APP.'webroot')){
+			$this->webrootExists = true;
+		}
+
+		if(file_exists(dirname(APP).DS.'.htaccess') && (!$this->webrootExists || file_exists(APP.'webroot'.DS.'.htaccess'))){
 			if(strpos($this->base, '/app/webroot/index.php') !== false){
                 $this->base = str_replace('/app/webroot/index.php','',$this->base);
             }elseif(strpos($this->base, '/index.php') !== false){
@@ -193,7 +198,7 @@ class InstallationsController extends AppController
         // メインディレクトリの書き込み権限
 		$htaccesswritable=is_writable(dirname(APP)) && is_writable(APP) && is_writable(WWW_ROOT);
 		// .htaccessの存在チェック
-		$htaccessExists=file_exists(dirname(APP).DS.'.htaccess') && file_exists(APP.'webroot'.DS.'.htaccess');
+		$htaccessExists=file_exists(dirname(APP).DS.'.htaccess') && (!$this->webrootExists || file_exists(APP.'webroot'.DS.'.htaccess'));
 
 		/* viewに変数をセット */
         $this->set('phpminimummemorylimit', PHP_MINIMUM_MEMORY_LIMIT);

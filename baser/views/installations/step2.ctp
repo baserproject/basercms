@@ -144,7 +144,11 @@ echo $html->css('import');
 				アップロード確認OK
 			<?php else: ?>
 				アップロード未確認<br />
+				<?php if(ROOT.DS != WWW_ROOT):?>
                 <small>有効にするには下記の<strong style="color:red">２箇所</strong>のフォルダ内の 「htaccess.txt」 ファイルの名称を<strong style="color:red">それぞれ</strong> 「.htaccess」 へ変更してあらかじめアップロードし、「アップロード確認実行」ボタンをクリックしてください。</small>
+				<?php else: ?>
+				<small>有効にするには下記のフォルダ内の 「htaccess.txt」 ファイルの名称を「.htaccess」 へ変更してあらかじめアップロードし、「アップロード確認実行」ボタンをクリックしてください。</small>
+				<?php endif ?>
 				<ul>
 					<li><small>/ フォルダ(BaserCMSの最上位となるフォルダ)</small></li>
 					<?php if(ROOT.DS != WWW_ROOT):?>
