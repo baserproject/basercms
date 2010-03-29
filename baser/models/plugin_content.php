@@ -98,9 +98,9 @@ class PluginContent extends AppModel {
 		
 		foreach($pluginContents as $pluginContent ){
 			if($pluginContent['PluginContent']['name']){
-				if($_path[0]!=$mobilePrefix && $_path[0] == $pluginContent['PluginContent']['name']){
+				if(!$mobileOn && $_path[0] == $pluginContent['PluginContent']['name']){
 					Router::connect('/'.$pluginContent['PluginContent']['name'].'/:action/*',array('plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
-				}elseif($mobileOn && $_path[1]==$pluginContent['PluginContent']['name']){
+				}elseif($mobileOn && $_path[0]==$pluginContent['PluginContent']['name']){
 					Router::connect('/'.$mobilePrefix.'/'.$pluginContent['PluginContent']['name'].'/:action/*',array('prefix' => 'mobile','plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
 				}
 			}
