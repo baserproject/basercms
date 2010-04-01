@@ -32,7 +32,7 @@
             $_url = $_SERVER['REQUEST_URI'];
             $baseUrl = $appBaseUrl.'/';
         }else{
-            $_baseUrl = str_replace(DS,'/',preg_replace('/^\//i','',str_replace(docRoot(),'',ROOT)));
+            $_baseUrl = str_replace(DS,'/',preg_replace("/^\\".DS."/i",'',str_replace(docRoot(),'',ROOT)));
             if($_baseUrl){
                 $baseUrl = '/'.$_baseUrl.'/';
             }else{
@@ -47,7 +47,8 @@
  * @return string   ドキュメントルートの絶対パス
  */
     function docRoot(){
-        return str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
+    	$docRoot = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
+        return str_replace('/', DS, $docRoot);
     }
 /**
  * リビジョンを取得する
