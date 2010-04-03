@@ -26,7 +26,7 @@
 	<?php $no = sprintf('%02d',$key+1) ?>
 	<?php if($key == 0): ?>
 			<?php $class = ' class="clearfix first feed'.$no.'"' ?>
-	<?php elseif($key == count($globalMenus) - 1): ?>
+	<?php elseif($key == count($items) - 1): ?>
 			<?php $class = ' class="clearfix last feed'.$no.'"' ?>
 	<?php else: ?>
 			<?php $class = ' class="clearfix feed'.$no.'"' ?>
