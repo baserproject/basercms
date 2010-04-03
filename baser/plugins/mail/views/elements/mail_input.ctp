@@ -76,7 +76,7 @@ if (!empty($mailFields)) {
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) || 
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$record))) {
 				if (!$freezed && $description) {
-					echo $html->image('img_icon_img_icon_help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
+					echo $html->image('img_icon_help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
 				}
 				if ($field['group_valid']) {
 					if ($form->error("Message." . $field['group_field'] . "_format", "check")) {
