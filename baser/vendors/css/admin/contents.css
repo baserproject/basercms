@@ -453,49 +453,6 @@ select.multiple option{
     padding-left:4px;
 }
 
-/* calendar
------------------------------------------------ */
-.blog-calendar table{
-    margin-left:15px;
-}
-.blog-calendar th{
-    border-bottom:1px solid #e2e2e2;
-}
-.blog-calendar th,
-.blog-calendar td
-{
-    padding:2px 3px;
-    font-size:12px;
-}
-.blog-calendar .sunday{
-    color:#ff6633;
-}
-.blog-calendar .saturday{
-    color:#3366FF;
-}
-.blog-calendar .today{
-    background-color:#e2e2e2;
-}
-
-/* BlogComment
------------------------------------------------ */
-#BlogComment{
-    margin-top:40px;
-    padding:0 10px;
-}
-#BlogCommentList{
-    padding:10px 20px;
-    margin-top:20px;
-}
-#BlogCommentAddForm{
-    padding:10px 20px;
-}
-#BlogCommentList .comment{
-    padding-bottom:8px;
-    border-bottom:1px dashed #CCCCCC;
-    margin-bottom:20px;
-}
-
 /* edit-link
 ----------------------------------------------- */
 .edit-link{

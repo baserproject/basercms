@@ -20,11 +20,14 @@
  * @license			http://basercms.net/license/index.html
  */
 
-/* 公開ページ
+/* blog-description
 ---------------------------------------------------*/
 .blog-description {
 	margin-left:30px;
 }
+
+/* post
+---------------------------------------------------*/
 .post{
 	margin-left:20px;
 	margin-right:20px;
@@ -37,6 +40,13 @@
 	margin-bottom:30px;
 	line-height:2em;
 }
+.more {
+	text-align:right;
+	margin:20px 10px 40px 10px;
+}
+
+/* meta
+---------------------------------------------------*/
 .meta {
 	background-color:#F3F3F3;
 	color:#999999;
@@ -46,13 +56,67 @@
 	padding-top:5px;
 	text-align:right;
 }
+
+/* page-numbers
+---------------------------------------------------*/
 .page-numbers .disabled {
     display:none;
 }
 .page-numbers {
     text-align:right;
 }
-.more {
-	text-align:right;
-	margin:20px 10px 40px 10px;
+
+/* no-data
+----------------------------------------------- */
+.no-data{
+	text-align:center;
+}
+
+/* calendar
+----------------------------------------------- */
+.blog-calendar table{
+    margin-left:15px;
+}
+.blog-calendar th{
+    border-bottom:1px solid #e2e2e2;
+}
+.blog-calendar th,
+.blog-calendar td
+{
+    padding:2px 3px;
+    font-size:12px;
+}
+.blog-calendar .sunday{
+    color:#ff6633;
+}
+.blog-calendar .saturday{
+    color:#3366FF;
+}
+.blog-calendar .today{
+    background-color:#e2e2e2;
+}
+
+/* BlogComment
+----------------------------------------------- */
+#BlogComment{
+    margin-top:40px;
+    padding:0 10px;
+}
+#BlogCommentList{
+    padding:10px 20px;
+    margin-top:20px;
+}
+#BlogCommentAddForm{
+    padding:10px 20px;
+}
+#BlogCommentList .comment{
+    padding-bottom:8px;
+    border-bottom:1px dashed #CCCCCC;
+    margin-bottom:20px;
+}
+
+/* contentsNavi
+----------------------------------------------- */
+#contentsNavi{
+    text-align:center;
 }
