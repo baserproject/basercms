@@ -55,7 +55,6 @@
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.content', '本文') ?></th>
-		<!--<td class="col-input"><?php //echo $formEx->nicEdit('BlogPost.content', array('cols'=>60,'rows'=>16),true) ?><?php //echo $formEx->error('BlogPost.content') ?>&nbsp;</td>-->
         <td class="col-input">
             <?php echo $ckeditor->textarea('BlogPost.content',array('cols'=>60, 'rows'=>20)) ?>
             <?php echo $formEx->error('BlogPost.content') ?>&nbsp;
@@ -75,7 +74,7 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.user_id', '投稿者') ?></th>
 		<td class="col-input">
-		<?php if($this->action=='admin_edit' && count($users)): ?>
+		<?php if($this->action=='admin_edit' && count($users) && $user['user_group_id']!=1): ?>
 			<?php echo $users[$formEx->value('User.id')] ?>
 		<?php else: ?>
 			<?php echo $formEx->select('BlogPost.user_id',$users,null,null,false) ?><?php echo $formEx->error('BlogPost.user_id') ?>
