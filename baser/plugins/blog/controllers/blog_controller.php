@@ -89,9 +89,6 @@ class BlogController extends BlogAppController{
 		/* 認証設定 */
 		$this->Auth->allow('index','mobile_index','archives','mobile_archives');
 
-        if(empty($this->contentId)){
-            $this->contentId = $this->params['pass'][0];
-        }
 		$this->blogContent = $this->BlogContent->read(null,$this->contentId);
 
 		$this->subMenuElements = array('default');
