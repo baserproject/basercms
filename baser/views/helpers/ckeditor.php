@@ -99,8 +99,9 @@ class CkeditorHelper extends AppHelper {
      * @param array $tinyoptions Array of TinyMCE attributes for this textarea
      * @return string JavaScript code to initialise the TinyMCE area
      */
-    function _build($fieldName, $ckoptions = array()) {
+    function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
+				$jscode = '';
         if(strpos($fieldName,'.')){
             list($model,$field) = explode('.',$fieldName);
         }else{
@@ -130,7 +131,42 @@ class CkeditorHelper extends AppHelper {
                                              array( 'Maximize', 'ShowBlocks','Source')
                                              ));
         $ckoptions = array_merge($_ckoptions,$ckoptions);
-        return $this->Javascript->codeBlock("var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );");
+				
+				if(!$styles){
+					$styles = array(
+											array(	'name' => '青見出し(h3)',
+															'element' => 'h3',
+															'styles' => array('color'=>'Blue')),
+											array(	'name' => '赤見出し(h3)',
+															'element' => 'h3',
+															'styles' => array('color' => 'Red')),
+											array(	'name' => '黄マーカー(span)',
+															'element' => 'span',
+															'styles' => array('background-color' => 'Yellow')),
+											array(	'name' => '緑マーカー(span)',
+															'element' => 'span',
+															'styles' => array('background-color' => 'Lime')),
+											array(	'name' => '大文字(big)',
+															'element' => 'big'),
+											array(	'name' => '小文字(small)',
+															'element' => 'small'),
+											array( 	'name' => 'コード(code)',
+															'element' => 'code'),
+											array( 	'name' => '削除文(del)',
+															'element' => 'del'),
+											array( 	'name' => '挿入文(ins)',
+															'element' => 'ins'),
+											array(	'name' => '引用(cite)',
+															'element' => 'cite'),
+											array( 	'name' => 'インライン(q)',
+															'element' => 'q')
+										);
+				}
+				$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
+				$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
+				$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
+				$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";			
+				return $this->Javascript->codeBlock($jscode);
     }
     /**
      * CKEditorのテキストエリアを出力する（textarea）
@@ -139,8 +175,8 @@ class CkeditorHelper extends AppHelper {
      * @param array $options
      * @return string 
      */
-    function textarea($fieldName, $options = array(), $editorOptions = array()) {
-        return $this->Form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions);
+    function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+        return $this->Form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
     }
     /**
      * CKEditorのテキストエリアを出力する（input）
@@ -149,9 +185,9 @@ class CkeditorHelper extends AppHelper {
      * @param array $tinyoptions
      * @return string
      */
-    function input($fieldName, $options = array(), $editorOptions = array()) {
+    function input($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
         $options['type'] = 'textarea';
-        return $this->Form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions);
+        return $this->Form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
     }
 }
 ?>
