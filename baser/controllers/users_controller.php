@@ -118,7 +118,7 @@ class UsersController extends AppController {
 		if (empty($this->data)) {
 	        // セッションが残っている場合は自動ログイン
 	        if (isset($_SESSION['Auth']['User']['name'])){
-	            $this->redirect(array('controller'=>'dashboard'));
+	            $this->redirect($this->Auth->loginRedirect);
 	        }
 			// クッキーがある場合には自動ログイン
 	        $cookie = $this->Cookie->read('Auth.User');
