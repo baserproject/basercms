@@ -75,14 +75,16 @@
 
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 <div id="BlogComment">
-	<?php if(!empty($post['BlogComment'])): ?>
+	
     <h4 class="contents-head">この記事へのコメント</h4>
     <div id="BlogCommentList">
-		<?php foreach($post['BlogComment'] as $comment): ?>
-			<?php $baser->element('blog_comment',array('dbData'=>$comment)) ?>
-		<?php endforeach ?>
+		<?php if(!empty($post['BlogComment'])): ?>
+			<?php foreach($post['BlogComment'] as $comment): ?>
+				<?php $baser->element('blog_comment',array('dbData'=>$comment)) ?>
+			<?php endforeach ?>
+		<?php endif ?>
     </div>
-	 <?php endif ?>
+	 
     <h4 class="contents-head">コメントを送る</h4>
     <?php echo $formEx->create('BlogComment',array('url'=>array($blogContent['BlogContent']['id'],$post['BlogPost']['id']))) ?>
         <table cellpadding="0" cellspacing="0" class="row-table-01">
