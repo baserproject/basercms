@@ -318,13 +318,13 @@ class MailController extends MailAppController{
 		if(!empty($userMail)){
        	$data['other']['mode'] = 'user';
 			$this->_mailSetting($mailConfig,$mailContent['mail_template']);
-			$this->_sendmail($userMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_user'],null,$data);
+			$this->_sendmail($userMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_user'],null,null,$data);
 	  	}
 
 		// 管理者に送信
 		$data['other']['mode'] = 'admin';
 		$this->_mailSetting($mailConfig,$mailContent['mail_template']);
-		$this->_sendmail($adminMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_admin'],$mailContent['sender_2'],$data);
+		$this->_sendmail($adminMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_admin'],$userMail,$mailContent['sender_2'],$data);
 
 	}
 /**
@@ -371,18 +371,26 @@ class MailController extends MailAppController{
  * @return boolean          送信結果
  * @access protected
  */
-    function _sendmail($to,$from,$fromName,$title,$cc = null,$data = null){
+    function _sendmail($to,$from,$fromName,$title,$reply = null, $cc = null,$data = null){
 
 		$this->EmailEx->to = $to;
 		$this->EmailEx->subject = $title;
 		
 		if($from && $fromName){
 			$this->EmailEx->return = $from;
-			$this->EmailEx->replyTo = $from;
+			if($reply){
+				$this->EmailEx->replyTo = $reply;
+			}else{
+				$this->EmailEx->replyTo = $from;
+			}
 			$this->EmailEx->from = $fromName . '<'.$from.'>';
 		}elseif($from){
 			$this->EmailEx->return = $from;
-			$this->EmailEx->replyTo = $from;
+			if($reply){
+				$this->EmailEx->replyTo = $reply;
+			}else{
+				$this->EmailEx->replyTo = $from;
+			}
 			$this->EmailEx->from = $from;
 		}else{
 			$this->EmailEx->return = $to;
