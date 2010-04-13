@@ -157,7 +157,7 @@ function check($i,$w,$year,$month,$day,$entryDates,$baser,$blogContent){
 		}elseif($w==0){
 			$change = '<td class="sunday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}elseif($w==6){
-			$change = '<td class="saturday">'.$baser->Link($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
+			$change = '<td class="saturday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}else{
 			$change = '<td>'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
 		}
