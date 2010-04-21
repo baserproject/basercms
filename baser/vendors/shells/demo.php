@@ -21,7 +21,7 @@
  */
 class DemoShell extends Shell {
 	
-	var $uses = array('User','SiteConfig');
+	var $uses = array('User','SiteConfig','Page');
 //	var $components = array('Auth');
 /**
  * デモ用のCSVデータを初期化する
@@ -42,7 +42,7 @@ class DemoShell extends Shell {
 			$this->User->create($user);
 			if(!$this->User->save()) $ret = false;
 			
-			$user['User']['name'] = 'member';
+			$user['User']['name'] = 'operator';
 			$user['User']['password_1'] = Security::hash('demodemo', null, true);
 			$user['User']['password_2'] = $user['User']['password_1'];
 			$user['User']['real_name_1'] = 'member';
@@ -56,14 +56,25 @@ class DemoShell extends Shell {
 				$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
 				$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
                 $siteConfig['demo_on'] = true;
-				if($this->SiteConfig->saveKeyValue($siteConfig)){
-					echo "デモデータの初期化に成功しました\n";
+				$ret = $this->SiteConfig->saveKeyValue($siteConfig);
+				if($ret){
+					$pages = $this->Page->find('all');
+					foreach($pages as $page){
+						if(!$this->Page->save($page)){
+							$ret = false;
+						}
+					}
+					if($ret){
+						echo "デモデータの初期化に成功しました\n";
+					} else {
+						echo "ページテンプレートの更新に失敗しました\n";
+					}
 				}else{
 					echo "システム設定の更新に失敗しました\n";
 				}
 				
 			}else{
-				echo "ユーザー「member」の作成に失敗しました\n";
+				echo "ユーザー「operator」の作成に失敗しました\n";
 			}
 			
 		}else{
