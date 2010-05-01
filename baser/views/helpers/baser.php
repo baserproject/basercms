@@ -346,12 +346,12 @@ class BaserHelper extends AppHelper {
  * @param boolean $loadHelpers
  * @return <type>
  */
-    function pagination($name = 'default', $params = array(), $loadHelpers = false, $autoPrefix = true){
+    function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true){
         if(!$name){
             $name = 'default';
         }
         $file = 'paginations'.DS.$name;
-        echo $this->getElement($file,$params,$loadHelpers, $autoPrefix);
+        echo $this->getElement($file,$params,$loadHelpers, $subDir);
     }
 /**
  * コンテンツを出力する
@@ -494,7 +494,7 @@ class BaserHelper extends AppHelper {
         }
     }
 /**
- * アップデート処理が必要がチェックする
+ * アップデート処理が必要かチェックする
  * @return boolean
  */
     function checkUpdate(){
