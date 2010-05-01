@@ -75,13 +75,21 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($demopagesdirwritable) echo 'check'; else echo'failed'; ?>'></div>
+			<?php if(ROOT.DS != WWW_ROOT):?>
 			/app/webroot/themed/demo/pages フォルダの書き込み権限（Demoテーマのページ機能用）
+			<?php else: ?>
+			/themed/demo/pages フォルダの書き込み権限（Demoテーマのページ機能用）
+			<?php endif ?>
 			<p style='color:#888888;'>
 			<?php if ($demopagesdirwritable): ?>
 				書き込み可
 			<?php else: ?>
 				書き込み不可<br />
-				<small>/app/webroot/themed/demo/pages フォルダに書き込み権限が必要です</small>
+				<?php if(ROOT.DS != WWW_ROOT):?>
+					<small>/app/webroot/themed/demo/pages フォルダに書き込み権限が必要です</small>
+				<?php else: ?>
+					<small>/themed/demo/pages フォルダに書き込み権限が必要です</small>
+				<?php endif ?>
 			<?php endif ?>
 			</p>
 		</li>
