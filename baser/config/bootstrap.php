@@ -60,6 +60,10 @@
  */
 	@putenv("TZ=JST-9");
 /**
+ * 文字コードの検出順を指定
+ */
+	mb_detect_order("eucJP-win,UTF-8,SJIS-win");
+/**
  * Baserパス追加
  */
     $modelPaths[] = BASER_MODELS;
