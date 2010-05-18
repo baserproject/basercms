@@ -655,7 +655,7 @@ class BaserHelper extends AppHelper {
 			$Page->unbindModel(array('belongsTo'=>array('PageCategory')));
 			return $Page->find('all',array('conditions'=>$conditions,
 											'fields'=>array('title','url'),
-											'sort'=>'Page.sort'));
+											'order'=>'Page.sort'));
 		}else{
 			return false;
 		}
