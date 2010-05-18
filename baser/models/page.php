@@ -140,7 +140,7 @@ class Page extends AppModel {
             }
             $newFile->close();
             unset($newFile);
-            chmod($newPath, 0666);
+            @chmod($newPath, 0666);
             return true;
         }else{
             return false;
