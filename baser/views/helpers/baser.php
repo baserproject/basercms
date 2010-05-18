@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id: baser.php 220 2010-05-01 22:02:59Z ryuring $ */
+/* SVN FILE: $Id$ */
 /**
  * Baserヘルパー
  *
@@ -15,9 +15,9 @@
  * @package			cake
  * @subpackage		baser.app.view.helpers
  * @since			Baser v 0.1.0
- * @version			$Revision: 220 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2010-05-02 07:02:59 +0900 (日, 02 5 2010) $
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
