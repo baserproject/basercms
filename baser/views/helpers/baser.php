@@ -640,5 +640,25 @@ class BaserHelper extends AppHelper {
 		$options = am($_options,$options);
 		$this->Html->_crumbs[] = array($name, $link, $options);
 	}
+/**
+ * ページリストを取得する
+ * @param string $categoryId
+ * @return mixed boolean / array
+ */
+	function getPageList($categoryId=null){
+		if (ClassRegistry::isKeySet('Page')) {
+			$Page = ClassRegistry::getObject('Page');
+			$conditions = array('Page.status'=>1);
+			if(!is_null($categoryId)){
+				$conditions['Page.page_category_id'] = $categoryId;
+			}
+			$Page->unbindModel(array('belongsTo'=>array('PageCategory')));
+			return $Page->find('all',array('conditions'=>$conditions,
+											'fields'=>array('title','url'),
+											'sort'=>'Page.sort'));
+		}else{
+			return false;
+		}
+	}
 }
 ?>
