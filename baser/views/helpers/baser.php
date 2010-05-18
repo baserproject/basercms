@@ -586,7 +586,7 @@ class BaserHelper extends AppHelper {
 		}
 
 		// プラグインルーティングの場合
-		if($url1==$action && $url2!=$action && $plugin) {
+		if((($url1==''&&$action=='index')||($url1==$action)) && $url2!=$action && $plugin) {
 			$plugin = '';
 			$controller = $url0;
 		}
