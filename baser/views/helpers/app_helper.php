@@ -113,7 +113,21 @@ class AppHelper extends Helper
  */
 	function webroot($file) {
 
-        // 2009/10/6 MODIFY egashira
+		// 2010/05/19 ADD ryuring
+		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
+		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
+		// >>>
+		$dir = Configure::read('App.dir');
+		$webroot = Configure::read('App.webroot');
+		if (strpos($this->webroot, $dir) === false) {
+			$this->webroot .= $dir . '/' ;
+		}
+		if (strpos($this->webroot, $webroot) === false) {
+			$this->webroot .= $webroot . '/';
+		}
+		//<<<
+		
+        // 2009/10/6 MODIFY ryuring
         // Rewriteモジュールが利用できない場合、$html->css / $javascript->link では、
         // app/webroot/を付加してURLを生成してしまう為、vendors 内のパス解決ができない。
         // URLの取得方法をRouterに変更
@@ -123,7 +137,8 @@ class AppHelper extends Helper
         // ファイルの存在チェックを行い存在しない場合のみRouterを利用するように変更した。
 
         // >>>
-        // - $webPath = "{$this->webroot}" . $file;
+		// $webPath = "{$this->webroot}" . $file;
+        // ---
 		if(file_exists(WWW_ROOT . $file)){
             $webPath = $this->base.DS. $file;
         }else{
@@ -141,16 +156,18 @@ class AppHelper extends Helper
 				$path = WWW_ROOT . $this->themeWeb  . $file;
 			}
 			if (file_exists($path)) {
-				$webPath = $this->base .'/'. $this->themeWeb . $file;
+				$webPath = "{$this->webroot}" . $this->themeWeb . $file;
 			}
 		}
 
 		if (strpos($webPath, '//') !== false) {
 			return str_replace('//', '/', $webPath);
 		}
+		// >>> ADD
 		if (strpos($webPath, '\\') !== false){
 			$webPath = str_replace("\\",'/',$webPath);
 		}
+		// <<<
 		return $webPath;
 	}
 }
