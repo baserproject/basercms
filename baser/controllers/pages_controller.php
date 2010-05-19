@@ -477,7 +477,7 @@ class PagesController extends AppController {
  */
     function mobile_display() {
         $path = func_get_args();
-        call_user_func_array( array( $this, 'display' ), $path );
+        call_user_func_array( array( &$this, 'display' ), $path );
     }
 /**
  * [PUBLIC] WEBページをプレビュー
