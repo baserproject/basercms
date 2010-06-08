@@ -69,6 +69,25 @@ class SiteConfigsController extends AppController {
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
 /**
+ * Folder Object
+ *
+ * @var Folder
+ */
+	var $Folder;
+
+/**
+ *
+ */
+	function beforeFilter() {
+
+		parent::beforeFilter();
+
+		// init Folder
+		$this->Folder =& new Folder();
+		$this->Folder->mode = 0777;
+	}
+
+/**
  * [ADMIN] サイト基本設定
  *
  * @return	void
@@ -101,7 +120,7 @@ class SiteConfigsController extends AppController {
 		}
 
         // バックアップ機能を実装しているデータベースの場合のみバックアップへのリンクを表示
-        $enableBackupDb = array('sqlite','sqlite3','mysql','csv');
+        $enableBackupDb = array('sqlite','sqlite3','mysql','csv','postgres');
         $dbConfigs = new DATABASE_CONFIG();
         $dbConfig = $dbConfigs->{'baser'};
         $driver = str_replace('_ex','',$dbConfig['driver']);
@@ -129,49 +148,39 @@ class SiteConfigsController extends AppController {
  */
 	function admin_backup_data($blnClearOldArchives = false){
 
-		$backupDir = TMP.'backup'.DS;
-		if(!file_exists($backupDir)){
-			mkdir($backupDir);
-			chmod($backupDir,0777);
-		}
-		$backupPath = $backupDir . 'database'.DS;
-		if(!file_exists($backupPath)){
-			mkdir($backupPath);
-			chmod($backupPath,0777);
-		}
+		$backupDir = TMP . 'backup' . DS;
+		$this->Folder->create($backupDir);
+
+		$backupPath = $backupDir . 'database' . DS;
+		$this->Folder->create($backupPath);
+
 		$dbConfigs = new DATABASE_CONFIG();
-		foreach($dbConfigs as $key => $dbConfig){
-			if($key != 'test'){
-				$this->{str_replace('Ex','','_backup'.Inflector::camelize($dbConfig['driver']))}($dbConfig,$backupPath);
+		foreach ($dbConfigs as $key => $dbConfig) {
+
+			$backupMethodName = preg_replace('/Ex$/', '', '_backup' . Inflector::camelize($dbConfig['driver']));
+
+			if($key != 'test' && method_exists($this, $backupMethodName)){
+				call_user_func_array(array($this, $backupMethodName), array($dbConfig, $backupPath, $key));
 			}
+
 		}
 		// ZIP圧縮して出力
 		App::import('Vendor','createzip');
 		$createZip = new createDirZip;
-		$createZip->get_files_from_folder($backupPath,'/');
+		$createZip->get_files_from_folder($backupPath, '/');
 
-		$archiveDir = $backupDir.'archives'.DS;
-		if(!file_exists($archiveDir)){
-			mkdir($archiveDir);
-			chmod($archiveDir,0777);
+		$archiveDir = $backupDir . 'archives' . DS;
+		$this->Folder->create($archiveDir);
+
+		if($blnClearOldArchives){
+			$this->Folder->delete($archiveDir);
+			$this->Folder->create($archiveDir);
 		}
 
-		$fileName = $archiveDir.date('Ymd_His').'_backup.zip';
+		$fileName = $archiveDir . date('Ymd_His') . '_backup.zip';
 		$fd = fopen ($fileName, "wb");
 		$out = fwrite ($fd, $createZip->getZippedfile());
 		fclose ($fd);
-
-		if($blnClearOldArchives){
-			$dir = dir($archiveDir);
-			while(($file = $dir->read()) !== false){
-				if($file != '.' && $file != '..'){
-					$_file = $archiveDir.$file;
-					if($_file != $fileName){
-						@unlink($_file);
-					}
-				}
-			}
-		}
 
 		$createZip->forceDownload($fileName);
 		exit();
@@ -192,14 +201,8 @@ class SiteConfigsController extends AppController {
 		$csvPath = APP.'db'.DS.$csvDir;
 		$_savePath = $savePath.$csvDir;
 
-		if(!file_exists($savePath)){
-			mkdir($savePath);
-			chmod($savePath,0777);
-		}
-		if(!file_exists($_savePath)){
-			mkdir($_savePath);
-			chmod($_savePath,0777);
-		}
+		$this->Folder->create($savePath);
+		$this->Folder->create($_savePath);
 
 		return $this->_backupDir($csvPath,$_savePath);
 
@@ -218,14 +221,8 @@ class SiteConfigsController extends AppController {
         $dbName = basename($config['database']);
 		$_savePath = $savePath.$dir;
 
-		if(!file_exists($savePath)){
-			mkdir($savePath);
-			chmod($savePath,0777);
-		}
-		if(!file_exists($_savePath)){
-			mkdir($_savePath);
-			chmod($_savePath,0777);
-		}
+		$this->Folder->create($savePath);
+		$this->Folder->create($_savePath);
 
         return copy($path,$_savePath.DS.$dbName);
 
@@ -249,10 +246,7 @@ class SiteConfigsController extends AppController {
 				$_targetPath = $targetPath.DS.$file;
 				$_savePath = $savePath.DS.$file;
 				if(is_dir($_targetPath)){
-					if(!file_exists($_savePath)){
-						mkdir($_savePath);
-						chmod($_savePath,0777);
-					}
+					$this->Folder->create($_savePath);
 					$this->_backupDir($_targetPath,$_savePath);
 				}else{
 					copy($_targetPath,$_savePath);
@@ -274,10 +268,7 @@ class SiteConfigsController extends AppController {
 	function _backupMysql($config,$savePath){
 
 		$_savePath = $savePath.'mysql'.DS;
-		if(!file_exists($_savePath)){
-			mkdir($_savePath);
-			chmod($_savePath,0777);
-		}
+		$this->Folder->create($_savePath);
 
 		App::import('Vendor','mysqldump');
 		$connection = @mysql_connect($config['host'],$config['login'],$config['password']);
@@ -300,6 +291,28 @@ class SiteConfigsController extends AppController {
 	function _backupMysqlLog($config,$savePath){
 
         $this->_backupMysql($config,$savePath);
+
+	}
+/**
+ * PostgreSQLのデータをバックアップ
+ * TODO DBOに移行する
+ * @param	array	データベース設定情報
+ * @param	string	保存先パス
+ * @return 	boolean
+ * @access	protected
+ */
+	function _backupPostgres($config, $savePath, $key) {
+
+		$_savePath = $savePath . 'postgres' . DS;
+		$this->Folder->create($_savePath);
+
+		App::import('Vendor', 'SqlDumper', array('file' => 'sql_dumper' . DS . 'sql_dumper.php'));
+
+		/* @var SqlDumper $sqlDumpr */
+		$sqlDumper =& ClassRegistry::init('SqlDumper', 'Vendor');
+		$sqlDumper->file_prefix = '';
+		$sqlDumper->file_suffix = '_' . $config['database'] . '.sql';
+		$sqlDumper->process($key, null, $_savePath);
 
 	}
 }
