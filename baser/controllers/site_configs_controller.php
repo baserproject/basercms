@@ -141,9 +141,11 @@ class SiteConfigsController extends AppController {
  *
  * データベースのバックアップを [app/tmp/backup/database]に保存し、
  * zip形式にアーカイブした状態でダウンロードできる
+ *
  * TODO 現在、PostgreSQLの場合、DB接続設定ごとにファイルが生成されるが、
  * 他のDBについては、１回で全てのDBのデータを出力する仕様となってしまっている。
  * 同じDBの場合はただの上書き。違うDBを利用した場合には、正常にバックアップがとれない。
+ * 
  * @param	boolean	バックアップアーカイブをクリアする場合は、true を設定
  * @return 	void
  * @access	public
