@@ -489,7 +489,7 @@ class Message extends MailAppModel {
 			$dbData['mailFields'][$key]['MailField']['after_attachment'] = strip_tags($value['MailField']['after_attachment'],"<br>");
 			$dbData['mailFields'][$key]['MailField']['head'] = strip_tags($value['MailField']['head'],"<br>");
 			$dbData['mailFields'][$key]['MailField']['after_attachment'] = str_replace("<br />","\n",$dbData['mailFields'][$key]['MailField']['after_attachment']);
-			$dbData['mailFields'][$key]['MailField']['head'] = str_replace('<br />',"\n",$dbData['mailFields'][$key]['MailField']['head']);
+			$dbData['mailFields'][$key]['MailField']['head'] = str_replace('<br />',"",$dbData['mailFields'][$key]['MailField']['head']);
 		}
 		foreach($this->mailFields as $mailField){
 			if(!empty($dbData['message'][$mailField['MailField']['field_name']])){
