@@ -70,6 +70,10 @@ class EmailExComponent extends EmailComponent{
 		foreach($message as $key => $line){
 			// 文字コード変換
 			$enc = mb_detect_encoding($line);
+			// 半角カタカナを全角カタカナに変換
+			if (low($this->charset) !== 'jis') {
+				$line = mb_convert_kana($line, 'K', $enc);
+			}
 			$message[$key] = mb_convert_encoding($line,$this->charset,$enc);
 		}
 
