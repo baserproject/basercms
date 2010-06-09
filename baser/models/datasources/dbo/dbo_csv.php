@@ -77,7 +77,7 @@ class DboCsv extends DboSource {
 /**
  * 接続状態
  *
- * @var boolean
+ * @var		boolean
  * @access 	public
  */
 	var $connected = false;
@@ -97,11 +97,10 @@ class DboCsv extends DboSource {
 	var $_lastInsertId = '';
 /**
  * 基本SQLコマンドの一覧
- *
  * 未実装
  *
  * @var 	array
- * @access protected
+ * @access	protected
  */
 	var $_command = array();
 	/*var $_commands = array(
@@ -123,26 +122,26 @@ class DboCsv extends DboSource {
  * @access	protected
  */
 	var $_baseConfig = array(
-		'database' => 'cake'
-		);
+			'database' => 'cake'
+	);
 /**
- * MySQL column definition
+ * column definition
  *
  * @var 	array
  * @access	public
  */
 	var $columns = array(
-	'primary_key' => array('name' => 'NOT NULL AUTO_INCREMENT'),
-	'string' => array('name' => 'varchar', 'limit' => '255'),
-	'text' => array('name' => 'text'),
-	'integer' => array('name' => 'int', 'limit' => '11', 'formatter' => 'intval'),
-	'float' => array('name' => 'float', 'formatter' => 'floatval'),
-	'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-	'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-	'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
-	'date' => array('name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'),
-	'binary' => array('name' => 'blob'),
-	'boolean' => array('name' => 'tinyint', 'limit' => '1')
+			'primary_key' => array('name' => 'NOT NULL AUTO_INCREMENT'),
+			'string' => array('name' => 'varchar', 'limit' => '255'),
+			'text' => array('name' => 'text'),
+			'integer' => array('name' => 'int', 'limit' => '11', 'formatter' => 'intval'),
+			'float' => array('name' => 'float', 'formatter' => 'floatval'),
+			'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
+			'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
+			'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
+			'date' => array('name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'),
+			'binary' => array('name' => 'blob'),
+			'boolean' => array('name' => 'tinyint', 'limit' => '1')
 	);
 /**
  * コンストラクタ
@@ -171,7 +170,7 @@ class DboCsv extends DboSource {
 	function read(&$model, $queryData = array(), $recursive = null) {
 
 		// DB接続
-		if(!$this->connect($model,false)){
+		if(!$this->connect($model,false)) {
 			return false;
 		}
 		$queryData = $this->__scrubQueryData($queryData);
@@ -262,8 +261,8 @@ class DboCsv extends DboSource {
  */
 	function create(&$model, $fields = null, $values = null) {
 
- 		// DB接続
-		if(!$this->connect($model,true)){
+		// DB接続
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
@@ -316,12 +315,12 @@ class DboCsv extends DboSource {
 	function update(&$model, $fields = array(), $values = null, $conditions = null) {
 
 		// DB接続
-		if(!$this->connect($model,true)){
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
 		$this->_csvFields = array_keys($model->schema());
-		
+
 		if ($values == null) {
 			$combined = $fields;
 		} else {
@@ -363,13 +362,13 @@ class DboCsv extends DboSource {
 	function delete(&$model, $conditions = null) {
 
 		// DB接続
-		if(!$this->connect($model,true)){
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
 		$this->_csvFields = array_keys($model->schema());
-		
-		
+
+
 		$alias = $this->name($model->alias);
 		$table = $this->fullTableName($model);
 		$joins = implode(' ', $this->_getJoins($model));
@@ -404,17 +403,17 @@ class DboCsv extends DboSource {
 	function connect(&$model,$lock=true) {
 
 		$config = $this->config;
-        $tableName = $this->fullTableName($model,false);
+		$tableName = $this->fullTableName($model,false);
 		$this->connected[$tableName] = false;
 
-        if(!$this->_connect($tableName,$lock,$model->plugin)){
+		if(!$this->_connect($tableName,$lock,$model->plugin)) {
 
-            // 接続が見つからない場合はエラー
+			// 接続が見つからない場合はエラー
 			//die (__("DboCsv::connect : Can't find Connection : ".$model->tablePrefix.$model->table));
 			$this->cakeError('missingConnection', array(array('className' => $model->alias)));
-		}else{
-            return true;
-        }
+		}else {
+			return true;
+		}
 
 	}
 /**
@@ -430,58 +429,62 @@ class DboCsv extends DboSource {
 	}
 /**
  * 接続処理
- * 
- * @param <type> $tableName
- * @return <type>
+ *
+ * @param	string	$tableName
+ * @param	boolean	$lock
+ * @param	string	$plugin
+ * @param	boolean	$force
+ * @return	mixed	ファイルポインタ / false
+ * @access	protected
  */
-    function _connect($tableName,$lock=true,$plugin=null,$force = false){
+	function _connect($tableName,$lock=true,$plugin=null,$force = false) {
 
-        $config = $this->config;
+		$config = $this->config;
 		// CSVファイルのパスを取得
 		$this->csvName[$tableName] = $config['database'].DS.$tableName.'.csv';
-		
-		if(file_exists($this->csvName[$tableName]) || $force){
-			if($lock){
+
+		if(file_exists($this->csvName[$tableName]) || $force) {
+			if($lock) {
 				$this->connection[$tableName] = $this->csvConnectByLocked($this->csvName[$tableName]);
-			}else{
+			}else {
 				$this->connection[$tableName] = $this->csvConnect($this->csvName[$tableName]);
 			}
 		}
-		if($this->connection[$tableName] !== false){
+		if($this->connection[$tableName] !== false) {
 			$this->connected[$tableName] = true;
 		}
 		if (isset($config['encoding']) && !empty($config['encoding'])) {
 			$this->setEncoding($config['encoding']);
 		}
-        return $this->connected[$tableName];
-    }
+		return $this->connected[$tableName];
+	}
 /**
  * CSVファイルのファイルリソースを開放する
- * 
+ *
  * @param	string	テーブル名
  * @return	boolean	開放できたら True を返す
  * @access	public
  */
 	function disconnect($tableName = null) {
-		
+
 		// TODO 必要かも
 		//@mysql_free_result($this->results);
-		
-		if($tableName){
+
+		if($tableName) {
 			$index = $tableName;
-		}else{
+		}else {
 			$index = 0;
 		}
-		if($this->csvCloseByLocked($this->connection[$index])){
-			
+		if($this->csvCloseByLocked($this->connection[$index])) {
+
 			unset($this->connected[$index]);
 			unset($this->csvName[$index]);
 			return true;
-			
-		}else{
+
+		}else {
 			return false;
 		}
-		
+
 	}
 /**
  * データベースに接続できているかチェックする
@@ -491,17 +494,17 @@ class DboCsv extends DboSource {
  * @access	public
  */
 	function isConnected($tableName = null) {
-		
-		if($this->connected){
-			if($tableName){
+
+		if($this->connected) {
+			if($tableName) {
 				return $this->connected[$tableName];
-			}else{
+			}else {
 				return $this->connected[0];
 			}
-		}else{
+		}else {
 			return false;
 		}
-	
+
 	}
 /**
  * CSVファイルを開く
@@ -510,7 +513,7 @@ class DboCsv extends DboSource {
  * @return 	stream	CSVファイルへのポインタ
  * @access	public
  */
-	function csvConnect($file){
+	function csvConnect($file) {
 
 		// ファイルを開く
 		$fp = fopen($file,'r');
@@ -526,25 +529,25 @@ class DboCsv extends DboSource {
  * @return 	stream	CSVファイルへのポインタ
  * @access	public
  */
-	function csvConnectByLocked($file){
-		 
+	function csvConnectByLocked($file) {
+
 		/* 念の為バックアップ */
-        // TODO すぐに上書きされてしまうので意味がないかも
-        // 上書きしないように一意の名称でバックアップをとるとゴミが溜まりすぎる
-        if(!is_dir(TMP."csv")){
-            mkdir(TMP."csv",0777);
-        }
-		if(file_exists($file)){
+		// TODO すぐに上書きされてしまうので意味がないかも
+		// 上書きしないように一意の名称でバックアップをとるとゴミが溜まりすぎる
+		if(!is_dir(TMP."csv")) {
+			mkdir(TMP."csv",0777);
+		}
+		if(file_exists($file)) {
 			copy($file,TMP."csv".DS.basename($file).".bak");
 		}
 
 		// ファイルを開く
 		$fp = fopen($file,'ab+');
-		 
-		if(!$fp){
+
+		if(!$fp) {
 			return false;
 		}
-		
+
 		//バッファを0に指定（排他制御の保証）
 		stream_set_write_buffer($fp,0);
 		//ファイルのロック
@@ -560,9 +563,9 @@ class DboCsv extends DboSource {
  * @return 	void	開放に成功した場合には true を返す
  * @access	public
  */
-	function csvCloseByLocked(&$fp){
+	function csvCloseByLocked(&$fp) {
 		$ret = false;
-		if($fp){
+		if($fp) {
 			//ロックの開放
 			flock($fp, LOCK_UN);
 			//ファイルのクローズ
@@ -591,32 +594,32 @@ class DboCsv extends DboSource {
  * @return 	mixed 	配列の結果セットまたは、true/false
  * @access	public
  */
-	function csvQuery($sql){
+	function csvQuery($sql) {
 
 		// SQL文を解析して、CSV操作用のクエリデータを生成する
 		$queryData = $this->parseSql($sql);
-        if(isset($queryData['crud'])){
-            switch ($queryData['crud']){
+		if(isset($queryData['crud'])) {
+			switch ($queryData['crud']) {
 
-                case "create":
-                    $ret = $this->createCsv($queryData);
-                    break;
-                case "read":
-                    $ret = $this->readCsv($queryData);
-                    break;
-                case "update":
-                    $ret = $this->updateCsv($queryData);
-                    break;
-                case "delete":
-                    $ret = $this->deleteCsv($queryData);
-                    break;
+				case "create":
+					$ret = $this->createCsv($queryData);
+					break;
+				case "read":
+					$ret = $this->readCsv($queryData);
+					break;
+				case "update":
+					$ret = $this->updateCsv($queryData);
+					break;
+				case "delete":
+					$ret = $this->deleteCsv($queryData);
+					break;
 				case "build":
 					$ret = $this->buildCsv($queryData);
 					break;
-            }
-        }else{
-            $ret = true;
-        }
+			}
+		}else {
+			$ret = true;
+		}
 		return $ret;
 
 	}
@@ -627,109 +630,109 @@ class DboCsv extends DboSource {
  * @return 	mixed	array / false result
  * @access 	public
  */
-	function readCsv($queryData){
+	function readCsv($queryData) {
 
-        $queryData = am($queryData,array('option'=>''));
-        
+		$queryData = am($queryData,array('option'=>''));
+
 		/* COUNTフィールドの確認 */
-		if(preg_match("/^COUNT\(\*\)\sAS\scount$/s",trim($queryData['fields'][0]))){
+		if(preg_match("/^COUNT\(\*\)\sAS\scount$/s",trim($queryData['fields'][0]))) {
 			$queryData['fields'] = null;
 			$queryData['option'] = 'count';
 		}
-        /* MAXフィールドの確認（１フィールドのみ対応） */
-		if(preg_match("/^MAX\((.+?)\)\sAS\s(.*?)$/s",trim($queryData['fields'][0]),$matches)){
-            $queryData['fields'] = null;
-            $maxField = $matches[1];
-            $maxAsField = $matches[2];
+		/* MAXフィールドの確認（１フィールドのみ対応） */
+		if(preg_match("/^MAX\((.+?)\)\sAS\s(.*?)$/s",trim($queryData['fields'][0]),$matches)) {
+			$queryData['fields'] = null;
+			$maxField = $matches[1];
+			$maxAsField = $matches[2];
 			$queryData['option'] = 'max';
 		}
 
 		/* CSVファイルを配列として読み込む */
 		$records = $this->_readCsvFile($queryData['tableName']);
-        // 文字コードを変換
-        mb_convert_variables($this->endcoding,"SJIS",$records);
+		// 文字コードを変換
+		mb_convert_variables($this->endcoding,"SJIS",$records);
 
 		/* ソート処理（１フィールドのみ対応） */
-		if(!empty($queryData['order'][0])){
+		if(!empty($queryData['order'][0])) {
 			list($sortField,$direct) = split(" ",$queryData['order'][0]);
 			qsort($records, 0, count($records)-1, $sortField,strtoupper($direct));
 		}
 
 		/* ページ指定がある場合は、取得開始件数を計算 */
-		if($queryData['page']){
+		if($queryData['page']) {
 			$begin = ($queryData['page'] - 1) * $queryData['limit'] + 1;
 		}
-        
+
 		/* データのフィルタリング */
 		$count=0;
 		$matchCount=0;
 		$maxId = 0;
-        $maxValue = 0;
-		if($records){
-			foreach($records as $record){
+		$maxValue = 0;
+		if($records) {
+			foreach($records as $record) {
 
 				// IDの最大値を取得
-				if($record['id']>$maxId){
+				if($record['id']>$maxId) {
 					$maxId = $record['id'];
 				}
 
-				// 条件に合致しない場合は取得せず次へ			
-				if(!empty($queryData['conditions']) && !eval($queryData['conditions'])){
-					continue;
-				}
-					
-				$matchCount++;
-				if(isset($begin) && $matchCount < $begin){
+				// 条件に合致しない場合は取得せず次へ
+				if(!empty($queryData['conditions']) && !eval($queryData['conditions'])) {
 					continue;
 				}
 
-                if($queryData['option'] == 'max'){
-                    if($record[$maxField] > $maxValue){
-                        $maxValue = $record[$maxField];
-                    }
-                    continue;
-                }
-                
+				$matchCount++;
+				if(isset($begin) && $matchCount < $begin) {
+					continue;
+				}
+
+				if($queryData['option'] == 'max') {
+					if($record[$maxField] > $maxValue) {
+						$maxValue = $record[$maxField];
+					}
+					continue;
+				}
+
 				// フィールド指定がある場合は指定されたフィールドのみ取得
-				if($queryData['fields']){
-					foreach($queryData['fields'] as $field){
-						if(!empty($record[$field])){
+				if($queryData['fields']) {
+					foreach($queryData['fields'] as $field) {
+						if(!empty($record[$field])) {
 							$result[$field] = $record[$field];
-						}else{
+						}else {
 							$result[$field] = '';
 						}
 					}
 					$results[] = $result;
-				}else{
+				}else {
 					$results[] = $record;
 				}
 
 				$count++;
 				// 件数制限がある場合は、件数を超えた時点で抜ける
 				if($queryData['limit'] && $count>=$queryData['limit'])
-				break;
+					break;
 
 			}
-            
+
 		}
-        
+
 		$this->_resultTable = $queryData["className"];
 		$this->_maxId = $maxId;
 		$this->_count = $count;
 
 		// カウントオプションの場合は件数を返す
-		if(!empty($queryData['option']) && $queryData['option'] == 'count'){
+		if(!empty($queryData['option']) && $queryData['option'] == 'count') {
 			return array(0=>array('count'=>$this->_count));
 		}
 
-        // MAXオプションの場合は指定フィールドの最大値を返す
-		if(!empty($queryData['option']) && $queryData['option'] == 'max'){
+		// MAXオプションの場合は指定フィールドの最大値を返す
+		if(!empty($queryData['option']) && $queryData['option'] == 'max') {
 			return array(0=>array($maxAsField=>$maxValue));
 		}
 
-		if(isset($results)){
+		if(isset($results)) {
 			return $results;
-		}else{
+		}else {
 			return  array();
 		}
 
@@ -741,20 +744,20 @@ class DboCsv extends DboSource {
  * @return 	boolen 	true/false
  * @access 	public
  */
-	function createCsv($queryData){
-		 
+	function createCsv($queryData) {
+
 		// 主キーがない場合のauto処理
-		if(empty($queryData['values']['id'])){
+		if(empty($queryData['values']['id'])) {
 			$this->readCsv($queryData);
 			$queryData['values']['id'] = $this->_maxId+1;
 			$this->_lastInsertId = $queryData['values']['id'];
 		}
 
 		// カラムをテーブル情報どおりに並べる
-		foreach($this->_csvFields  as $field){
-			if(isset($queryData['values'][$field])){
+		foreach($this->_csvFields  as $field) {
+			if(isset($queryData['values'][$field])) {
 				$tmpData[$field]=$queryData['values'][$field];
-			}else{
+			}else {
 				$tmpData[$field]=null;
 			}
 		}
@@ -765,12 +768,12 @@ class DboCsv extends DboSource {
 
 		// 最後の行に改行がなかったら改行を追加する
 		// もっといい方法があれば・・・
-		if(!preg_match("/\n$/s",$csv)){
+		if(!preg_match("/\n$/s",$csv)) {
 			$csv .= "\r\n";
 		}
 
-        // 新しいレコードを追加
-        mb_convert_variables("SJIS",$this->endcoding,$tmpData);
+		// 新しいレコードを追加
+		mb_convert_variables("SJIS",$this->endcoding,$tmpData);
 		$csv .= implode(",",$tmpData)."\r\n";
 
 		// ファイルサイズを0に
@@ -784,10 +787,10 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSVテーブルを生成する
- * 
+ *
  * @param array $queryData
  */
-	function buildCsv($queryData){
+	function buildCsv($queryData) {
 
 		$this->_connect($queryData['tableName'],true,null,true);
 		$head = $this->_getCsvHead($queryData['fields']);
@@ -801,37 +804,37 @@ class DboCsv extends DboSource {
  * @return 	boolen 	true/false
  * @access 	public
  */
-	function updateCsv($queryData){
+	function updateCsv($queryData) {
 
 		$records = $this->_readCsvFile($queryData['tableName']);
 
 		// ヘッダーの生成
 		$head = $this->_getCsvHead();
 
-        mb_convert_variables("SJIS",$this->endcoding,$queryData['values']);
+		mb_convert_variables("SJIS",$this->endcoding,$queryData['values']);
 
 		// データの生成
 		$body="";
-        if($records){
-            foreach($records as $key => $record){
-                // 更新対象のレコードのみ更新
-                if(eval($queryData['conditions'])){
-                    $record = $this->_convertRecord($record);
-                    // 更新対象のフィールドのみ更新
-                    foreach($queryData['values'] as $key => $field){
-                        // TODO TreeBehaviourが演算を使うので対応する為の苦肉の策→他の方法があれば変更する
-                        if(preg_match('/^"\{'.$key.'\}\s*([\+\-\/\*]+)\s*([\-0-9]+)"$/is', trim($field), $matches)){
-                            eval('$field = '.$record[$key].' '.$matches[1].' '.$matches[2].';');
-                        }
-                        $record[$key] = $field;
-                    }
-                }else{
-                    // 既存データをCSV用にコンバートする
-                    $record = $this->_convertRecord($record);
-                }
-                $body .= implode(",",$record)."\r\n";
-            }
-        }
+		if($records) {
+			foreach($records as $key => $record) {
+				// 更新対象のレコードのみ更新
+				if(eval($queryData['conditions'])) {
+					$record = $this->_convertRecord($record);
+					// 更新対象のフィールドのみ更新
+					foreach($queryData['values'] as $key => $field) {
+						// TODO TreeBehaviourが演算を使うので対応する為の苦肉の策→他の方法があれば変更する
+						if(preg_match('/^"\{'.$key.'\}\s*([\+\-\/\*]+)\s*([\-0-9]+)"$/is', trim($field), $matches)) {
+							eval('$field = '.$record[$key].' '.$matches[1].' '.$matches[2].';');
+						}
+						$record[$key] = $field;
+					}
+				}else {
+					// 既存データをCSV用にコンバートする
+					$record = $this->_convertRecord($record);
+				}
+				$body .= implode(",",$record)."\r\n";
+			}
+		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
@@ -849,7 +852,7 @@ class DboCsv extends DboSource {
  * @return 	boolean	true/false
  * @access 	public
  */
-	function deleteCsv($queryData){
+	function deleteCsv($queryData) {
 
 		$records = $this->_readCsvFile($queryData['tableName']);
 
@@ -858,9 +861,9 @@ class DboCsv extends DboSource {
 
 		// ボディを生成
 		$body = '';
-		foreach($records as $key => $record){
-			if(!eval($queryData['conditions'])){
-                $record = $this->_convertRecord($record);
+		foreach($records as $key => $record) {
+			if(!eval($queryData['conditions'])) {
+				$record = $this->_convertRecord($record);
 				$body .= implode(",",$record)."\r\n";
 			}
 		}
@@ -879,21 +882,21 @@ class DboCsv extends DboSource {
  *
  * @param	string	テーブル名
  * @return 	array	配列の結果セット
- * @access 	public
+ * @access 	protected
  */
-	function _readCsvFile($tableName=null){
+	function _readCsvFile($tableName=null) {
 
-		if($tableName){
+		if($tableName) {
 			$index = $tableName;
-		}else{
+		}else {
 			$index = 0;
 		}
 
-        if(!isset($this->connection[$index])){
-            if(!$this->_connect($tableName)){
-                return false;
-            }
-        }
+		if(!isset($this->connection[$index])) {
+			if(!$this->_connect($tableName)) {
+				return false;
+			}
+		}
 
 		$records = null;
 		$count=0;
@@ -904,11 +907,11 @@ class DboCsv extends DboSource {
 		$this->_csvFields = fgetcsv($this->connection[$index],10240);
 
 		while(($record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
-            $_record = array();
+			$_record = array();
 			// 配列の添え字をフィールド名に変換
-            foreach($record as $key => $value){
-                $_record[$this->_csvFields[$key]] = $value;
-            }
+			foreach($record as $key => $value) {
+				$_record[$this->_csvFields[$key]] = $value;
+			}
 			$records[] = $_record;
 		}
 
@@ -917,217 +920,222 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSV用のヘッダを取得する
- * @return string
+ * 
+ * @param	array
+ * @return	string
+ * @access	protected
  */
-    function _getCsvHead($fields = null){
-		if(!$fields){
+	function _getCsvHead($fields = null) {
+		if(!$fields) {
 			$fields = $this->_csvFields;
 		}
 		$head = "";
-		foreach($fields as $field){
+		foreach($fields as $field) {
 			$head .= "\"".$field . "\",";
 		}
 		return substr($head,0,strlen($head)-1) . "\r\n";
-    }
+	}
 /**
  * CSV用のフィールドデータに変換する
+ * 
  * @param string $value
  * @param boolean $dc （ " を "" に変換するか）
  * @return string
  */
-    function _convertField($value,$dc = true){
-        if($dc){
-            $value = str_replace('"','""',$value);
-        }
-        $value = trim(trim($value),"\'");
-        $value = str_replace("\\'","'",$value);
-        $value = str_replace('{CM}',',',$value);
-        $value = '"'.$value.'"';
-        return $value;
-    }
+	function _convertField($value,$dc = true) {
+		if($dc) {
+			$value = str_replace('"','""',$value);
+		}
+		$value = trim(trim($value),"\'");
+		$value = str_replace("\\'","'",$value);
+		$value = str_replace('{CM}',',',$value);
+		$value = '"'.$value.'"';
+		return $value;
+	}
 /**
  * CSV用のレコードデータに変換する
+ * 
  * @param array $record
  * @return array
  */
-    function _convertRecord($record){
-        foreach($record as $field => $value){
-            $record[$field] = $this->_convertField($value);
-        }
-        return $record;
-    }
+	function _convertRecord($record) {
+		foreach($record as $field => $value) {
+			$record[$field] = $this->_convertField($value);
+		}
+		return $record;
+	}
 /**
  * フィールドを追加する
- * 
+ *
  * @param Model $model
  * @param String $fieldName
  */
-    function addColumn(&$model,$fieldName){
-        
- 		// DB接続
-		if(!$this->connect($model,true)){
+	function addColumn(&$model,$fieldName) {
+
+		// DB接続
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
-        // 全てのフィールドを取得
-        $this->cacheSources = false;
-        $schema = $model->schema();
-        if($schema){
-            $this->_csvFields = array_keys($schema);
-            if(in_array($fieldName,$this->_csvFields)){
-                return false;
-            }
-        }else{
-            $this->_csvFields = array();
-        }
+		// 全てのフィールドを取得
+		$this->cacheSources = false;
+		$schema = $model->schema();
+		if($schema) {
+			$this->_csvFields = array_keys($schema);
+			if(in_array($fieldName,$this->_csvFields)) {
+				return false;
+			}
+		}else {
+			$this->_csvFields = array();
+		}
 
-        $this->_csvFields[] = $fieldName;
+		$this->_csvFields[] = $fieldName;
 		$head = $this->_getCsvHead();
 
-        // 全てのレコードを取得
-        $records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
-        $body="";
-        if($records){
-            foreach($records as $key => $record){
-                $_record = $this->_convertRecord($record);
-                $_record[] = "";
-                $body .= implode(",",$_record)."\r\n";
-            }
-        }
-        
+		// 全てのレコードを取得
+		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$body="";
+		if($records) {
+			foreach($records as $key => $record) {
+				$_record = $this->_convertRecord($record);
+				$_record[] = "";
+				$body .= implode(",",$_record)."\r\n";
+			}
+		}
+
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
 
-        $this->disconnect($model->tablePrefix.$model->useTable);
+		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
-        
-    }
+
+	}
 /**
  * フィールドを編集する
  *
  * @param Model $model
  * @param String $fieldName
  */
-    function editColumn($model,$oldFieldName,$fieldName){
+	function editColumn($model,$oldFieldName,$fieldName) {
 
-		if(!is_object($model)){
+		if(!is_object($model)) {
 			$model = ClassRegistry::init($model);
 		}
 
- 		// DB接続
-		if(!$this->connect($model,true)){
+		// DB接続
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
-        // 全てのフィールドを取得
-        $this->cacheSources = false;
-        $schema = $model->schema();
+		// 全てのフィールドを取得
+		$this->cacheSources = false;
+		$schema = $model->schema();
 
-        if($schema){
-            $this->_csvFields = array_keys($schema);
-            if(!in_array($oldFieldName,$this->_csvFields)){
-                return false;
-            }
-        }else{
-            $this->_csvFields = array();
-        }
+		if($schema) {
+			$this->_csvFields = array_keys($schema);
+			if(!in_array($oldFieldName,$this->_csvFields)) {
+				return false;
+			}
+		}else {
+			$this->_csvFields = array();
+		}
 
-        // キーを取得
-        while ($field = current($this->_csvFields)) {
-            if ($field == $oldFieldName) {
-                $key = key($this->_csvFields);
-            }
-            next($this->_csvFields);
-        }
+		// キーを取得
+		while ($field = current($this->_csvFields)) {
+			if ($field == $oldFieldName) {
+				$key = key($this->_csvFields);
+			}
+			next($this->_csvFields);
+		}
 
-        // ヘッダーの生成
-        $this->_csvFields[$key] = $fieldName;
-        $head = $this->_getCsvHead();
-        
-        // 全てのレコードを取得
-        $records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
-        $body="";
-        if($records){
-            foreach($records as $key => $record){
-                $_record = $this->_convertRecord($record);
-                $body .= implode(",",$_record)."\r\n";
-            }
-        }
-        
+		// ヘッダーの生成
+		$this->_csvFields[$key] = $fieldName;
+		$head = $this->_getCsvHead();
+
+		// 全てのレコードを取得
+		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$body="";
+		if($records) {
+			foreach($records as $key => $record) {
+				$_record = $this->_convertRecord($record);
+				$body .= implode(",",$_record)."\r\n";
+			}
+		}
+
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
-        $this->disconnect($model->tablePrefix.$model->useTable);
+		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
 
-    }
+	}
 /**
  * フィールドを削除する
  *
  * @param Model $model
  * @param String $fieldName
  */
-    function deleteColumn(&$model,$fieldName){
+	function deleteColumn(&$model,$fieldName) {
 
- 		// DB接続
-        $this->cacheSources = false;
-		if(!$this->connect($model,true)){
+		// DB接続
+		$this->cacheSources = false;
+		if(!$this->connect($model,true)) {
 			return false;
 		}
 
-        // 全てのフィールドを取得
-        $schema = $model->schema();
+		// 全てのフィールドを取得
+		$schema = $model->schema();
 
-        if($schema){
-            $this->_csvFields = array_keys($schema);
-            if(!in_array($fieldName,$this->_csvFields)){
-                return false;
-            }
-        }else{
-            $this->_csvFields = array();
-        }
+		if($schema) {
+			$this->_csvFields = array_keys($schema);
+			if(!in_array($fieldName,$this->_csvFields)) {
+				return false;
+			}
+		}else {
+			$this->_csvFields = array();
+		}
 
-        // キーを取得
-        while ($field = current($this->_csvFields)) {
-            if ($field == $fieldName) {
-                $key = key($this->_csvFields);
-            }
-            next($this->_csvFields);
-        }
+		// キーを取得
+		while ($field = current($this->_csvFields)) {
+			if ($field == $fieldName) {
+				$key = key($this->_csvFields);
+			}
+			next($this->_csvFields);
+		}
 
-        if(!isset($key)){
-            return false;
-        }
+		if(!isset($key)) {
+			return false;
+		}
 
-        // ヘッダーの生成
-        unset($this->_csvFields[$key]);
-        $head = $this->_getCsvHead();
+		// ヘッダーの生成
+		unset($this->_csvFields[$key]);
+		$head = $this->_getCsvHead();
 
-        // 全てのレコードを取得
-        $records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
-        $body="";
-        if($records){
-            foreach($records as $key => $record){
-                $_record = $this->_convertRecord($record);
-                unset($_record[$fieldName]);
-                $body .= implode(",",$_record)."\r\n";
-            }
-        }
-        
+		// 全てのレコードを取得
+		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$body="";
+		if($records) {
+			foreach($records as $key => $record) {
+				$_record = $this->_convertRecord($record);
+				unset($_record[$fieldName]);
+				$body .= implode(",",$_record)."\r\n";
+			}
+		}
+
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
-        $this->disconnect($model->tablePrefix.$model->useTable);
+		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
 
-    }
+	}
 /**
  * SQLデータのCSV処理用の解析を行う
  *
@@ -1135,68 +1143,68 @@ class DboCsv extends DboSource {
  * @return 	array	configs
  * @access	public
  */
-	function parseSql($sql){
+	function parseSql($sql) {
 
 		$parseData = array('conditions'=>array(),
-						'fields'=>array(),
-						'joins'=>array(),
-						'limit'=>null,
-						'offset'=>null,
-						'order'=>array(),
-						'page'=>null,
-						'group'=>array(),
-						'recursive'=>null);
+				'fields'=>array(),
+				'joins'=>array(),
+				'limit'=>null,
+				'offset'=>null,
+				'order'=>array(),
+				'page'=>null,
+				'group'=>array(),
+				'recursive'=>null);
 
 		$createPattern = "/INSERT INTO[\s]*([^\s]+)[\s]*\(([^\)]+)\)[\s]*VALUES[\s]*\((.+)\)[\s]*$/si";
 		$readPattern = "/SELECT(.+)FROM(.+)WHERE(.+?)(ORDER\sBY.+|LIMIT.+|)$/si";
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
-		
+
 		// CREATE
-		if(preg_match($createPattern,$sql,$matches)){
+		if(preg_match($createPattern,$sql,$matches)) {
 			$parseData['crud'] = 'create';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData = array_merge($parseData,$this->_parseSqlValuesFromCreate($matches[2],$matches[3]));
-				
-		// READ
-		}elseif(preg_match($readPattern,$sql,$matches)){
+
+			// READ
+		}elseif(preg_match($readPattern,$sql,$matches)) {
 			$parseData['crud'] = 'read';
 			$parseData['fields'] = $this->_parseSqlFields($matches[1]);
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[2]);
 			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
-				
-			if(isset($matches[4])){
+
+			if(isset($matches[4])) {
 				$etc = $matches[4];
-				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$etc,$matches2)){
+				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$etc,$matches2)) {
 					$parseData['order'] = $this->_parseSqlOrder($matches2[1]);
 				}
-				if(preg_match("/LIMIT(.+)$/s",$etc,$matches3)){
+				if(preg_match("/LIMIT(.+)$/s",$etc,$matches3)) {
 					$parseData = array_merge($parseData,$this->_parseSqlLimit($matches3[1]));
 				}
 			}
 
-		// UPDATE
-		}elseif(preg_match($updatePattern,$sql,$matches)){
-				
+			// UPDATE
+		}elseif(preg_match($updatePattern,$sql,$matches)) {
+
 			$parseData['crud'] = 'update';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData = array_merge($parseData,$this->_parseSqlValuesFromUpdate($matches[2]));
 			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
-				
-		// DELETE
-		}elseif(preg_match($deletePattern,$sql,$matches)){
-				
+
+			// DELETE
+		}elseif(preg_match($deletePattern,$sql,$matches)) {
+
 			$parseData['crud'] = 'delete';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData['conditions'] = $this->_parseSqlCondition($matches[2],$parseData['fields']);
 
-		// BUILD (CREATE TABLE)
-		}elseif(preg_match($buildPattern,$sql,$matches)){
+			// BUILD (CREATE TABLE)
+		}elseif(preg_match($buildPattern,$sql,$matches)) {
 			$parseData['crud'] = 'build';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['fields'] = $this->_parseSqlFieldsFromBuild($matches[2]);
@@ -1212,17 +1220,17 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールド名リスト
  * @access 	protected
  */
-	function _parseSqlFields($fields){
+	function _parseSqlFields($fields) {
 		$aryFields = split(",",$fields);
-		foreach($aryFields as $key => $field){
-			if(strpos($field,".")!==false){
-                if(preg_match('/MAX\((.*?)\)\sAS\s`(.*?)`/s',$field,$matches)){
-                    list($modelName,$fieldName) = explode(".",$matches[1]);
-                    $fieldName = 'MAX('.$fieldName.') AS '.$matches[2];
-                }else{
-                    list($modelName,$fieldName) = explode(".",$field);
-                }
-			}else{
+		foreach($aryFields as $key => $field) {
+			if(strpos($field,".")!==false) {
+				if(preg_match('/MAX\((.*?)\)\sAS\s`(.*?)`/s',$field,$matches)) {
+					list($modelName,$fieldName) = explode(".",$matches[1]);
+					$fieldName = 'MAX('.$fieldName.') AS '.$matches[2];
+				}else {
+					list($modelName,$fieldName) = explode(".",$field);
+				}
+			}else {
 				$fieldName = $field;
 			}
 			$aryFields[$key] = trim(str_replace("`","",$fieldName));
@@ -1236,13 +1244,13 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールド名リスト
  * @access 	protected
  */
-	function _parseSqlFieldsFromBuild($sql){
+	function _parseSqlFieldsFromBuild($sql) {
 
 		$arySql = split(",",$sql);
 		$fields = array();
-		foreach($arySql as $key => $value){
-			if(strpos($value,'PRIMARY KEY')===false){
-				if(preg_match('/`([^`]+)`/is',$value,$matches)){
+		foreach($arySql as $key => $value) {
+			if(strpos($value,'PRIMARY KEY')===false) {
+				if(preg_match('/`([^`]+)`/is',$value,$matches)) {
 					$fields[] = $matches[1];
 				}
 			}
@@ -1257,16 +1265,16 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールドリスト
  * @access 	protected
  */
-	function _parseSqlValuesFromCreate($fields,$values){
+	function _parseSqlValuesFromCreate($fields,$values) {
 
 		$fields = str_replace("`","",$fields);
 		$values = str_replace('\,','{CM}',$values);
 		$values = str_replace("\"",'""',$values);
-		
+
 		$arrFields = explode(",",$fields);
 		$arrValues = explode(",",$values);
 
-		for($i=0;$i<count($arrFields);$i++){
+		for($i=0;$i<count($arrFields);$i++) {
 			$datas[$arrFields[$i]] = $this->_convertField($arrValues[$i],false);
 		}
 
@@ -1282,25 +1290,25 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールドリスト
  * @access 	protected
  */
-	function _parseSqlValuesFromUpdate($sql){
+	function _parseSqlValuesFromUpdate($sql) {
 
 		$fields = array();
 		$values = array();
 		// エスケープされたカンマを一旦変換
 		$sql = str_replace('\,','{CM}',$sql);
 		$sql = str_replace("\"",'""',$sql);
-		
+
 		$arrSql = explode(",",$sql);
-		foreach($arrSql as $field){
+		foreach($arrSql as $field) {
 			list($fieldName,$value) = explode("=",$field,2);
-            if(strpos($value,$fieldName) !== false){
-                $value = str_replace($fieldName,'{FIELDNAME}',$value);
-            }
-            if(strpos($fieldName,'.') !== false){
-                list($modelName,$fieldName) = explode('.',$fieldName);
-            }
+			if(strpos($value,$fieldName) !== false) {
+				$value = str_replace($fieldName,'{FIELDNAME}',$value);
+			}
+			if(strpos($fieldName,'.') !== false) {
+				list($modelName,$fieldName) = explode('.',$fieldName);
+			}
 			$fieldName = trim(str_replace("`","",$fieldName));
-            $value = str_replace('{FIELDNAME}','{'.$fieldName.'}',$value);
+			$value = str_replace('{FIELDNAME}','{'.$fieldName.'}',$value);
 			$values[$fieldName] = $this->_convertField($value,false);
 			$fields[] = $fieldName;
 		}
@@ -1312,35 +1320,33 @@ class DboCsv extends DboSource {
 	}
 /**
  * テーブル名を解析する
- *
  * TODO 現時点では単一のみ実装
  *
  * @param 	string	SQL
  * @return	string 	モデル名
  * @access 	protected
  */
-	function _parseSqlTableName($tables){
+	function _parseSqlTableName($tables) {
 
 		$tables = str_replace("`","",$tables);
 
-		if(strpos($tables,"AS") !== false){
+		if(strpos($tables,"AS") !== false) {
 			list($tableName,$modelName) = split("AS",$tables);
-		}else{
+		}else {
 			$tableName = trim($tables);
 		}
 		return trim($tableName);
-		
+
 	}
 /**
  * モデル名を解析する
- *
  * TODO 現時点では単一のみ実装
  *
  * @param 	string	SQL
  * @return	string 	モデル名
  * @access 	protected
  */
-	function _parseSqlModelName($tableName){
+	function _parseSqlModelName($tableName) {
 
 		return Inflector::classify(str_replace($this->config['prefix'],'',$tableName));
 
@@ -1353,75 +1359,75 @@ class DboCsv extends DboSource {
  * @return 	string	eval用の検索条件
  * @access 	protected
  */
-	function _parseSqlCondition($conditions,$fields){
-		 
-		if(is_array($conditions)){
-			foreach($conditions as $key => $condition){
-				if(!isset($tmpConditions)){
+	function _parseSqlCondition($conditions,$fields) {
+
+		if(is_array($conditions)) {
+			foreach($conditions as $key => $condition) {
+				if(!isset($tmpConditions)) {
 					$tmpConditions = $key."=='".$condition."'";
-				}else{
+				}else {
 					$tmpConditions .= " && ".$key."==".$condition;
 				}
 			}
 			$conditions = $tmpConditions;
 		}
-		 
+
 		$conditions = preg_replace("/`[^`]+?`\./s","",$conditions);
 		$conditions = str_replace("\"","'",$conditions);
-        $conditions = str_replace("%","*",$conditions); // TODO LIKEの後の''に囲まれた%のみ*に変換するようにする
+		$conditions = str_replace("%","*",$conditions); // TODO LIKEの後の''に囲まれた%のみ*に変換するようにする
 		$conditions = preg_replace("/(\s+)and(\s+)/s","$1AND$2",$conditions);
 		$conditions = preg_replace("/(\s+)or(\s+)/s","$1OR$2",$conditions);
 		$conditions = preg_replace("/(\s+)like(\s+)/s","$1LIKE$2",$conditions);
 		$conditions = preg_replace("/(\s+)AND(\s+)/s","$1&&$2",$conditions);
 		$conditions = preg_replace("/(\s+)OR(\s+)/s","$1||$2",$conditions);
 		$conditions = str_replace('<>','!=',$conditions);
-        $conditions = str_replace('IS NULL',"== ''",$conditions);
-        $conditions = preg_replace("/YEAR\((.*?)\)/si","date('Y',strtotime($1))",$conditions);
-        $conditions = preg_replace("/MONTH\((.*?)\)/si","date('m',strtotime($1))",$conditions);
-        $conditions = preg_replace("/DAY\((.*?)\)/si","date('d',strtotime($1))",$conditions);
+		$conditions = str_replace('IS NULL',"== ''",$conditions);
+		$conditions = preg_replace("/YEAR\((.*?)\)/si","date('Y',strtotime($1))",$conditions);
+		$conditions = preg_replace("/MONTH\((.*?)\)/si","date('m',strtotime($1))",$conditions);
+		$conditions = preg_replace("/DAY\((.*?)\)/si","date('d',strtotime($1))",$conditions);
 		$conditions = preg_replace('/([^<>])=+/s','$1==',$conditions);
-        $conditions = preg_replace("/([`a-z0-9_]+)\s+NOT\s+LIKE\s+\'(.*?)\'/s","!preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
+		$conditions = preg_replace("/([`a-z0-9_]+)\s+NOT\s+LIKE\s+\'(.*?)\'/s","!preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+LIKE\s+\'(.*?)\'/s","preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
-        // BETWEEN（数字のみ対応）
-        $conditions = preg_replace("/([`a-z0-9_]+)\s+BETWEEN\s+([0-9]+?)\s+&&\s+([0-9]+?)/s","$1 >= $2 && $1 <= $3",$conditions);
+		// BETWEEN（数字のみ対応）
+		$conditions = preg_replace("/([`a-z0-9_]+)\s+BETWEEN\s+([0-9]+?)\s+&&\s+([0-9]+?)/s","$1 >= $2 && $1 <= $3",$conditions);
 
-        // IN句
-		if(preg_match("/([`a-z0-9_]+?)\sIN\s\((.*?)\)/s",$conditions,$matches)){
+		// IN句
+		if(preg_match("/([`a-z0-9_]+?)\sIN\s\((.*?)\)/s",$conditions,$matches)) {
 			$fieldName = $matches[1];
 			$values = explode(",",$matches[2]);
 			$in_conditions = "";
-			foreach($values as $value){
-				if($in_conditions){
+			foreach($values as $value) {
+				if($in_conditions) {
 					$in_conditions .= " || ".$fieldName . " == " . $value;
-				}else{
+				}else {
 					$in_conditions = $fieldName . " == " . $value;
 				}
 			}
 			$conditions = preg_replace("/[`a-z0-9_]+?\sIN\s\(.*?\)/s",$in_conditions,$conditions);
 		}
 
-        // TODO NOT句（２重カッコに対応できていない）
-        $befores = array('&&','||','==','!=','>','>=','<','<=','NOT');
-        $afters = array('||','&&','!=','==','<=','<','>=','>','');
-        if(preg_match("/(NOT\s*?\(.*?\))/s",$conditions,$matches)){
-            $_conditions = $matches[1];
-            foreach($befores as $key => $before){
-                $_conditions = str_replace($before,'{'.$key.'}',$_conditions);
-            }
-            foreach($afters as $key => $after){
-                $_conditions = str_replace('{'.$key.'}',$after,$_conditions);
-            }
-            $conditions = preg_replace("/NOT\s*?\(.*?\)/s",$_conditions,$conditions);
-        }
-        
-		if(isset($this->_csvFields)){
-			foreach($this->_csvFields as $fieldName){
+		// TODO NOT句（２重カッコに対応できていない）
+		$befores = array('&&','||','==','!=','>','>=','<','<=','NOT');
+		$afters = array('||','&&','!=','==','<=','<','>=','>','');
+		if(preg_match("/(NOT\s*?\(.*?\))/s",$conditions,$matches)) {
+			$_conditions = $matches[1];
+			foreach($befores as $key => $before) {
+				$_conditions = str_replace($before,'{'.$key.'}',$_conditions);
+			}
+			foreach($afters as $key => $after) {
+				$_conditions = str_replace('{'.$key.'}',$after,$_conditions);
+			}
+			$conditions = preg_replace("/NOT\s*?\(.*?\)/s",$_conditions,$conditions);
+		}
+
+		if(isset($this->_csvFields)) {
+			foreach($this->_csvFields as $fieldName) {
 				$conditions = preg_replace("/(^|[^a-z0-9_])`".$fieldName."`([^a-z0-9_]*)/s","$1\$record['".$fieldName."']$2",$conditions);
 			}
 		}
-        //$conditions = str_replace("`","",$conditions);
+		//$conditions = str_replace("`","",$conditions);
 		$conditions = 'if (' . $conditions . ') return true;';
-		
+
 		return $conditions;
 
 	}
@@ -1432,39 +1438,38 @@ class DboCsv extends DboSource {
  * @return 	array	offset/limit/page 格納した配列
  * @access 	protected
  */
-	function _parseSqlLimit($limit){
-		 
+	function _parseSqlLimit($limit) {
+
 		$_config = split(",",$limit);
-		if(!empty($_config[1])){
+		if(!empty($_config[1])) {
 			$config['offset'] = trim($_config[0]);
 			$config['limit'] = trim($_config[1]);
-		}else{
+		}else {
 			$config['offset'] = 0;
 			$config['limit'] = trim($_config[0]);
 		}
-		 
+
 		$config['page'] = floor(($config['offset']+1)/$config['limit']);
-		if(($config['offset']+1)%$config['limit']>0){
+		if(($config['offset']+1)%$config['limit']>0) {
 			$config['page']++;
 		}
 		return $config;
-		 
+
 	}
 /**
  * ORDER を解析
- *
  * TOOD 現在、Orderを指定できるフィールドは１フィールドのみ
  *
  * @param	string	SQL Order
  * @return 	array	並び替え条件リスト
  * @access 	protected
  */
-	function _parseSqlOrder($strOrder){
+	function _parseSqlOrder($strOrder) {
 
 		$strOrder = preg_replace("/`[^`]+?`\./s","",$strOrder);
 		$strOrder = str_replace("`","",$strOrder);
 		$aryOrders = split(",",$strOrder);
-		foreach($aryOrders as $key =>$order){
+		foreach($aryOrders as $key =>$order) {
 			$_aryOrders[]=trim($order);
 		}
 		return $_aryOrders;
@@ -1474,27 +1479,27 @@ class DboCsv extends DboSource {
  * テーブルの全てのリストを取得する
  * @return array Array of tablenames in the database
  */
-	 function listSources() {
+	function listSources() {
 
-        $cache = parent::listSources();
-        if ($cache != null) {
-            return $cache;
-        }
-        $folder = new Folder($this->config['database']);
-        $result = $folder->read(true,true);
+		$cache = parent::listSources();
+		if ($cache != null) {
+			return $cache;
+		}
+		$folder = new Folder($this->config['database']);
+		$result = $folder->read(true,true);
 
-        if (empty($result[1])) {
-            return array();
-        } else {
-            $tables = array();
-            foreach($result[1] as $csv) {
-                $tables[] = str_replace('.csv','',$csv);
-            }
-            parent::listSources($tables);
-            return $tables;
-        }
-        
-    }
+		if (empty($result[1])) {
+			return array();
+		} else {
+			$tables = array();
+			foreach($result[1] as $csv) {
+				$tables[] = str_replace('.csv','',$csv);
+			}
+			parent::listSources($tables);
+			return $tables;
+		}
+
+	}
 /**
  * フィールド情報を取得する
  *
@@ -1503,7 +1508,7 @@ class DboCsv extends DboSource {
  * @access 	public
  */
 	function describe(&$model) {
-			
+
 		$cache = parent::describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -1512,55 +1517,55 @@ class DboCsv extends DboSource {
 
 		// 接続されていない場合は、一時的に接続してヘッダーを取得
 		// （モデルの初期化時など）
-		if(empty($this->connected[$model->tablePrefix.$model->table])){
+		if(empty($this->connected[$model->tablePrefix.$model->table])) {
 			$this->connect($model,false);
-				
-			if(empty($this->connection[$model->tablePrefix.$model->table])){
+
+			if(empty($this->connection[$model->tablePrefix.$model->table])) {
 				die (__("DboCsv::describe : Can't find Connection"));
 			}
-				
+
 			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
 			$this->disconnect($model->tablePrefix.$model->table);
-		}else{
-            // TODO 処理を見直す
-            // ファイルリソースがあるにも関わらずデータの取得ができない場合がある。（インストール時に再現）
-            // 取り急ぎの対応として一旦接続を切って再接続している。
-            // ファイルのロック処理？かもしれない。接続を一旦解除しているので他の部分に影響している可能性もある。
+		}else {
+			// TODO 処理を見直す
+			// ファイルリソースがあるにも関わらずデータの取得ができない場合がある。（インストール時に再現）
+			// 取り急ぎの対応として一旦接続を切って再接続している。
+			// ファイルのロック処理？かもしれない。接続を一旦解除しているので他の部分に影響している可能性もある。
 			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
-            if(!$cols){
-                $this->disconnect($model->tablePrefix.$model->table);
-                $this->connect($model,false);
-                $cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
-            }
+			if(!$cols) {
+				$this->disconnect($model->tablePrefix.$model->table);
+				$this->connect($model,false);
+				$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
+			}
 		}
 
 		$cols = str_replace("\"","",$cols); // ダブルコーテーションを削除
 
-        if(!$cols){
-            return null;
-        }
-        
+		if(!$cols) {
+			return null;
+		}
+
 		foreach ($cols as $column) {
-            if($column){
-                if($column == 'created'|| $column == 'modified' || substr($column, strlen($column)-5,5)=="_date"){
-                    $fields[$column] = array(
-                        'type'		=> $this->column("datetime"),
-                        'null'		=> true,
-                        'default'	=> "",
-                        'length'	=> $this->length("datetime"),
-                    );
-                }else{
-                    $fields[$column] = array(
-                        'type'		=> $this->column("text"),
-                        'null'		=> true,
-                        'default'	=> "",
-                        'length'	=> $this->length("text"),
-                    );
-                }
-                if($column == 'id' && isset($this->index[$column])) {
-                    $fields[$column]['key']	= $this->index[$column];
-                }
-            }
+			if($column) {
+				if($column == 'created'|| $column == 'modified' || substr($column, strlen($column)-5,5)=="_date") {
+					$fields[$column] = array(
+							'type'		=> $this->column("datetime"),
+							'null'		=> true,
+							'default'	=> "",
+							'length'	=> $this->length("datetime"),
+					);
+				}else {
+					$fields[$column] = array(
+							'type'		=> $this->column("text"),
+							'null'		=> true,
+							'default'	=> "",
+							'length'	=> $this->length("text"),
+					);
+				}
+				if($column == 'id' && isset($this->index[$column])) {
+					$fields[$column]['key']	= $this->index[$column];
+				}
+			}
 		}
 		$this->__cacheDescription($this->fullTableName($model, false), $fields);
 
@@ -1597,8 +1602,8 @@ class DboCsv extends DboSource {
 			case 'integer':
 			case 'float':
 				if ((is_int($data) || is_float($data)) || (
-				is_numeric($data) && strpos($data, ',') === false &&
-				$data[0] != '0' && strpos($data, 'e') === false
+						is_numeric($data) && strpos($data, ',') === false &&
+								$data[0] != '0' && strpos($data, 'e') === false
 				)) {
 					return $data;
 				}
@@ -1615,7 +1620,7 @@ class DboCsv extends DboSource {
  * @return 	string 	エスケープ処理を行ったデータ
  * @access 	public
  */
-	function escapeString($value){
+	function escapeString($value) {
 
 		$value = str_replace("'","\'",$value);
 		$value = str_replace(",","\,",$value);
@@ -1624,7 +1629,6 @@ class DboCsv extends DboSource {
 	}
 /**
  * Returns a formatted error message from previous database operation.
- *
  * TODO 未サポート
  *
  * @return string Error message with error number
@@ -1639,7 +1643,6 @@ class DboCsv extends DboSource {
 /**
  * Returns number of affected rows in previous database operation. If no previous operation exists,
  * this returns false.
- *
  * TODO 未サポート
  *
  * @return integer Number of affected rows
@@ -1650,13 +1653,12 @@ class DboCsv extends DboSource {
 		 if ($this->_result) {
 		 return mysql_affected_rows($this->connection);
 		 }
-		 */
+		*/
 		return null;
 	}
 /**
  * Returns number of rows in previous resultset. If no previous resultset exists,
  * this returns false.
- *
  * TODO 未検証
  *
  * @return integer Number of rows in resultset
@@ -1677,16 +1679,15 @@ class DboCsv extends DboSource {
  */
 	function lastInsertId($source = null) {
 
-		if(!empty($this->_lastInsertId)){
+		if(!empty($this->_lastInsertId)) {
 			return $this->_lastInsertId;
-		}else{
+		}else {
 			return null;
 		}
 
 	}
 /**
  * Converts database-layer column types to basic types
- *
  * TODO 未検証
  *
  * @param string $real Real database-layer column type (i.e. "varchar(255)")
@@ -1754,14 +1755,14 @@ class DboCsv extends DboSource {
  * @access 	public
  */
 	function queryAssociation(&$model, &$linkModel, $type, $association, $assocData, &$queryData, $external = false, &$resultSet, $recursive, $stack) {
-				
+
 		// DB接続
-		if(!$this->connect($linkModel,false)){
+		if(!$this->connect($linkModel,false)) {
 			return false;
 		}
 		// 全てのフィールドを取得
 		$this->_csvFields = array_keys($linkModel->schema());
-		
+
 		if ($query = $this->generateAssociationQuery($model, $linkModel, $type, $association, $assocData, $queryData, $external, $resultSet)) {
 			if (!isset($resultSet) || !is_array($resultSet)) {
 				if (Configure::read() > 0) {
@@ -1874,8 +1875,8 @@ class DboCsv extends DboSource {
 
 						foreach($fetch as $j => $data) {
 							if (
-								(isset($data[$with]) && $data[$with][$foreignKey] === $row[$model->alias][$model->primaryKey]) &&
-								(!in_array($data[$with][$joinKeys[1]], $uniqueIds))
+							(isset($data[$with]) && $data[$with][$foreignKey] === $row[$model->alias][$model->primaryKey]) &&
+									(!in_array($data[$with][$joinKeys[1]], $uniqueIds))
 							) {
 								$uniqueIds[] = $data[$with][$joinKeys[1]];
 
@@ -1904,7 +1905,7 @@ class DboCsv extends DboSource {
 
 		// 接続を解除
 		$this->disconnect($linkModel->tablePrefix.$linkModel->table);
-		
+
 	}
 /**
  * 全ての結果セットを返す
@@ -1923,7 +1924,7 @@ class DboCsv extends DboSource {
 
 		if ($this->execute($sql)) {
 			$out = array();
-				
+
 			reset($this->_result);
 			while ($item = $this->fetchRow()) {
 				$out[] = $item;
@@ -1979,8 +1980,8 @@ class DboCsv extends DboSource {
 
 		// 要素がない場合は戻る
 		if(!$row = current($results))
-		return;
-			
+			return;
+
 		reset($row);
 
 		while ($_row = each($row)) {
@@ -2024,7 +2025,6 @@ class DboCsv extends DboSource {
 	}
 /**
  * エンコーディングを返す
- *
  * TODO 現在SJIS固定
  *
  * @return	string	csv encoding
@@ -2035,7 +2035,6 @@ class DboCsv extends DboSource {
 	}
 /**
  * Inserts multiple values into a table
- *
  * TODO 未検証
  *
  * @param	string	$table
@@ -2054,7 +2053,6 @@ class DboCsv extends DboSource {
 	}
 /**
  * Returns an array of the indexes in given table name.
- *
  * TODO 未検証
  *
  * @param	string	$model Name of model to inspect
@@ -2084,8 +2082,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
- *
- * 未サポート
+ * TODO 未サポート
  *
  * @param	mixed	$compare
  * @param	string	$table
@@ -2093,11 +2090,10 @@ class DboCsv extends DboSource {
  * @access 	public
  */
 	function alterSchema($compare, $table = null) {
-        return false;
+		return false;
 	}
 /**
  * Generate a MySQL "drop table" statement for the given Schema object
- *
  * TODO 未サポート
  *
  * @param	object	$schema An instance of a subclass of CakeSchema
@@ -2111,53 +2107,53 @@ class DboCsv extends DboSource {
 	}
 }
 /**
- * クイックソート
- *
- * TODO GLOBAL グローバルな関数として再配置する必要あり
- *
- * @param	array	$int_array = ソートする配列
- * @param	int		$left = 開始位置（0で決め打ち）
- * @param	int		$right = 終了位置（$int_arrayの要素数：決め打ち）
- * @param	string	$flag = ソート対象の配列要素
- * @param	string	$order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
- * @return	array	ソート後の配列
- */
-	function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
-		if ($left >= $right) {
-			return;
-		}
-		swap ($int_array, $left, intval(($left+$right)/2));
-		$last = $left;
-		for ($i = $left + 1; $i <= $right; $i++) {
-			if($flag) {
-				if($order=="DESC") {
-					if ($int_array[$i]["".$flag.""] > $int_array[$left]["".$flag.""]) {
-						swap($int_array, ++$last, $i);
-					}
-				} else {
-					if ($int_array[$i]["".$flag.""] < $int_array[$left]["".$flag.""]) {
-						swap($int_array, ++$last, $i);
-					}
+* クイックソート
+*
+* TODO GLOBAL グローバルな関数として再配置する必要あり
+*
+* @param	array	$int_array = ソートする配列
+* @param	int		$left = 開始位置（0で決め打ち）
+* @param	int		$right = 終了位置（$int_arrayの要素数：決め打ち）
+* @param	string	$flag = ソート対象の配列要素
+* @param	string	$order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
+* @return	array	ソート後の配列
+*/
+function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
+	if ($left >= $right) {
+		return;
+	}
+	swap ($int_array, $left, intval(($left+$right)/2));
+	$last = $left;
+	for ($i = $left + 1; $i <= $right; $i++) {
+		if($flag) {
+			if($order=="DESC") {
+				if ($int_array[$i]["".$flag.""] > $int_array[$left]["".$flag.""]) {
+					swap($int_array, ++$last, $i);
 				}
 			} else {
-				if($order=="DESC") {
-					if ($int_array[$i] > $int_array[$left]) {
-						swap($int_array, ++$last, $i);
-					}
-				} else {
-					if ($int_array[$i] < $int_array[$left]) {
-						swap($int_array, ++$last, $i);
-					}
+				if ($int_array[$i]["".$flag.""] < $int_array[$left]["".$flag.""]) {
+					swap($int_array, ++$last, $i);
+				}
+			}
+		} else {
+			if($order=="DESC") {
+				if ($int_array[$i] > $int_array[$left]) {
+					swap($int_array, ++$last, $i);
+				}
+			} else {
+				if ($int_array[$i] < $int_array[$left]) {
+					swap($int_array, ++$last, $i);
 				}
 			}
 		}
-		swap($int_array, $left, $last);
-		qsort($int_array, $left, $last-1, $flag = $flag, $order = $order);
-		qsort($int_array, $last+1, $right, $flag = $flag, $order = $order);
 	}
+	swap($int_array, $left, $last);
+	qsort($int_array, $left, $last-1, $flag = $flag, $order = $order);
+	qsort($int_array, $last+1, $right, $flag = $flag, $order = $order);
+}
 /**
  * swap
- * 
+ *
  * qsort で利用される
  * TODO GLOBAL グローバルな関数として再配置する必要あり
  *
@@ -2166,11 +2162,11 @@ class DboCsv extends DboSource {
  * @param	string
  * @return	void
  */
-	function swap(&$v, $i, $j) {
-		$temp = $v[$i];
-		$v[$i] = $v[$j];
-		$v[$j] = $temp;
-	}
+function swap(&$v, $i, $j) {
+	$temp = $v[$i];
+	$v[$i] = $v[$j];
+	$v[$j] = $temp;
+}
 /**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
  *
@@ -2182,24 +2178,24 @@ class DboCsv extends DboSource {
  * @param 	string	enclosure
  * @return	mixed	ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
  */
-    function fgetcsv_reg (&$handle, $length = null, $d = ',', $e = '"') {
-        $d = preg_quote($d);
-        $e = preg_quote($e);
-        $_line = "";
-		$eof = false;
-        while (($eof != true)and(!feof($handle))) {
-            $_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
-            $itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
-            if ($itemcnt % 2 == 0) $eof = true;
-        }
-        $_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
-        $_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
-        preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-        $_csv_data = $_csv_matches[1];
-        for($_csv_i=0;$_csv_i<count($_csv_data);$_csv_i++){
-            $_csv_data[$_csv_i]=preg_replace('/^'.$e.'(.*)'.$e.'$/s','$1',$_csv_data[$_csv_i]);
-            $_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
-        }
-        return empty($_line) ? false : $_csv_data;
-    }
+function fgetcsv_reg (&$handle, $length = null, $d = ',', $e = '"') {
+	$d = preg_quote($d);
+	$e = preg_quote($e);
+	$_line = "";
+	$eof = false;
+	while (($eof != true)and(!feof($handle))) {
+		$_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
+		$itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
+		if ($itemcnt % 2 == 0) $eof = true;
+	}
+	$_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
+	$_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
+	preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+	$_csv_data = $_csv_matches[1];
+	for($_csv_i=0;$_csv_i<count($_csv_data);$_csv_i++) {
+		$_csv_data[$_csv_i]=preg_replace('/^'.$e.'(.*)'.$e.'$/s','$1',$_csv_data[$_csv_i]);
+		$_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
+	}
+	return empty($_line) ? false : $_csv_data;
+}
 ?>
