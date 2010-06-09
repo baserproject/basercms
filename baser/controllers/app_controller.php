@@ -231,7 +231,6 @@ class AppController extends Controller {
 				}
 			}
 		}
-		$this->deleteAllCache();
 	}
 /**
  * beforeRender
