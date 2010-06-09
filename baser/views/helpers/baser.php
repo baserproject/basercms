@@ -653,9 +653,10 @@ class BaserHelper extends AppHelper {
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
 			$Page->unbindModel(array('belongsTo'=>array('PageCategory')));
-			return $Page->find('all',array('conditions'=>$conditions,
+			$pages = $Page->find('all',array('conditions'=>$conditions,
 											'fields'=>array('title','url'),
 											'order'=>'Page.sort'));
+			return Set::extract('/Page/.',$pages);
 		}else{
 			return false;
 		}
