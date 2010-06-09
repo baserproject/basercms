@@ -198,7 +198,6 @@ class BlogPostsController extends BlogAppController{
 			// データを保存
 			if($this->BlogPost->save()){
 				$id = $this->BlogPost->getLastInsertId();
-				$this->deleteViewCache();
                 $message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
@@ -236,7 +235,6 @@ class BlogPostsController extends BlogAppController{
 			$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
 			// データを保存
 			if($this->BlogPost->save($this->data)){
-				$this->deleteViewCache();
                 $message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);

@@ -76,16 +76,15 @@ class PagesController extends AppController {
  */
 	function beforeFilter() {
 
-		/* 認証設定 */
-		$this->Auth->allow('display','mobile_display');
-
 		parent::beforeFilter();
+
+		// 認証設定
+		$this->Auth->allow('display','mobile_display');
 
 		// モバイルの場合は、モバイルヘルパーでxhtml+xmlで
 		// コンテンツヘッダを出力する必要がある為、キャッシュは利用しない
-		// adminは更新前提なのでキャッシュは利用しない
-		// ログイン時は、編集ページへのリンクが表示されるのでキャッシュは利用しない
-		$noCache = array('mobile','admin');
+		// TODO キャッシュを利用する方法を検討する
+		$noCache = array('mobile');
 		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['User'])) {
 			$this->helpers[] = 'Cache';
 			clearCache('pages');
@@ -174,7 +173,6 @@ class PagesController extends AppController {
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
 					$id = $this->Page->getLastInsertId();
-					$this->deleteViewCache();
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					// 編集画面にリダイレクト
@@ -219,7 +217,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
-					$this->deleteViewCache();
+					$this->deleteViewCache($this->data['Page']['url']);
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト

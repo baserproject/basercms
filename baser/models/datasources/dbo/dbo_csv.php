@@ -648,6 +648,9 @@ class DboCsv extends DboSource {
 		}
 
 		/* CSVファイルを配列として読み込む */
+		// TODO ここでは、全データを読み込む仕様となっているので大量のデータを扱う場合、メモリに負荷がかかってしまう。
+		// 並び替えを実行した上で、指定件数を取り出すという要件を実現する為、こういう仕様となっている。
+		// 何か解決策があれば・・・
 		$records = $this->_readCsvFile($queryData['tableName']);
 		// 文字コードを変換
 		mb_convert_variables($this->endcoding,"SJIS",$records);

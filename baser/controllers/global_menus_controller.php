@@ -140,7 +140,7 @@ class GlobalMenusController extends AppController {
 
 			// データを保存
 			if($this->GlobalMenu->save()){
-                $this->deleteViewCache();
+                clearCache();
                 $message = '新規グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
@@ -178,7 +178,7 @@ class GlobalMenusController extends AppController {
 
 			/* 更新処理 */
 			if($this->GlobalMenu->save($this->data)){
-                $this->deleteViewCache();
+                clearCache();
                 $message = 'グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
@@ -215,7 +215,7 @@ class GlobalMenusController extends AppController {
 
 		/* 削除処理 */
 		if($this->GlobalMenu->del($id)) {
-            $this->deleteViewCache();
+            clearCache();
             $message = 'グローバルメニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->GlobalMenu->saveDbLog($message);

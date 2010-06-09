@@ -102,7 +102,6 @@ class UserGroupsController extends AppController {
 			/* 登録処理 */
 			$this->UserGroup->create($this->data);
 			if($this->UserGroup->save()){
-                $this->deleteViewCache();
                 $message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);

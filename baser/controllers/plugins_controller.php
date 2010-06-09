@@ -243,7 +243,8 @@ class PluginsController extends AppController {
 
 			// データを保存
 			if($this->Plugin->save()){
-                $this->deleteCache();
+                Cache::clear(false,'_cake_model_');
+				Cache::clear(false,'_cake_core_');
                 $message = '新規プラグイン「'.$this->data['Plugin']['title'].'」を BaserCMS に登録しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);

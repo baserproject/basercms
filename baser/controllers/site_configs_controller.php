@@ -112,7 +112,6 @@ class SiteConfigsController extends AppController {
 				$this->SiteConfig->saveKeyValue($this->data);
 
 				// ビューのキャッシュを削除
-				$this->deleteViewCache();
 				$this->writeDebug($mode);
 				$this->Session->setFlash('システム設定を保存しました。');
 				$this->redirect(array('action'=>'form'));

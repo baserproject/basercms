@@ -150,7 +150,7 @@ class InstallationsController extends AppController {
 
 		// キャッシュファイルを削除する（デバッグ用）
 		if(is_writable(CACHE)) {
-			$this->deleteCache();
+			$this->deleteAllCache();
 		}
 
 	}
@@ -897,7 +897,7 @@ class InstallationsController extends AppController {
 
 			$message = implode('<br />', $messages);
 
-			$this->deleteCache();
+			$this->deleteAllCache();
 			$this->Session->setFlash($message);
 			$complete = true;
 
@@ -991,7 +991,7 @@ class InstallationsController extends AppController {
 
 		$this->pageTitle = 'WEBサイトアップデート';
 
-		$this->deleteCache();
+		$this->deleteAllCache();
 
 		/* バージョンを解析 */
 		$baserVersion = $this->getBaserVersion();

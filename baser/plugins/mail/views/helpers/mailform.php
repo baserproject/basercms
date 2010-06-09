@@ -148,6 +148,7 @@ class MailformHelper extends FreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['empty']);
 				unset($attributes['size']);
+				$attributes['maxlength'] = '0';
 				$out = $this->textarea($fieldName, $attributes);
 				break;
 			case 'hidden':

@@ -32,8 +32,8 @@ App::import('Core', 'AppError', array('file'=>'../baser/app_error.php'));
  *
  * @package			baser.controllers
  */
-class AppController extends Controller{
-    var $view = 'App';
+class AppController extends Controller {
+	var $view = 'App';
 /**
  * ヘルパー
  *
@@ -43,11 +43,11 @@ class AppController extends Controller{
 // TODO 見直し
 	var $helpers = array('Html', 'HtmlEx', 'Form', 'Javascript', 'Baser', 'XmlEx', 'PluginHook');
 /**
-* レイアウト
-*
-* @var 		string
-* @access	public
-*/
+ * レイアウト
+ *
+ * @var 		string
+ * @access	public
+ */
 	var $layout = 'default';
 /**
  * モデル
@@ -55,7 +55,7 @@ class AppController extends Controller{
  * @var mixed
  * @access protected
  */
-    var $uses = array('GlobalMenu');
+	var $uses = array('GlobalMenu');
 /**
  * コンポーネント
  *
@@ -69,7 +69,7 @@ class AppController extends Controller{
  * @var		string
  * @access	public
  */
- 	var $subDir = null;
+	var $subDir = null;
 /**
  * サブメニューエレメント
  *
@@ -90,87 +90,87 @@ class AppController extends Controller{
  * @var		string
  * @access	public
  */
- 	var $siteDescription = '';
+	var $siteDescription = '';
 /**
  * コンテンツタイトル
  *
  * @var     string
  * @access  public
  */
-    var $contentsTitle = '';
+	var $contentsTitle = '';
 /**
  * 有効プラグイン
  * @var     array
  * @access  public
  */
-    var $enablePlugins = array();
+	var $enablePlugins = array();
 /**
  * サイトコンフィグデータ
- * @var array 
+ * @var array
  */
-    var $siteConfigs = array();
+	var $siteConfigs = array();
 /**
  * コンストラクタ
  *
  * @return	void
  * @access	private
  */
-	function __construct(){
+	function __construct() {
 
-        parent::__construct();
+		parent::__construct();
 
 		$base = baseUrl();
-		
-        // サイト基本設定の読み込み
-        if(file_exists(CONFIGS.'database.php')){
-            $dbConfig = new DATABASE_CONFIG();
-            if($dbConfig->baser['driver']){
-                $SiteConfig = ClassRegistry::init('SiteConfig','Model');
-                $this->siteConfigs = $SiteConfig->findExpanded();
 
-                if(empty($this->siteConfigs['version'])){
-                    $data['SiteConfig']['version'] = $this->getBaserVersion();
-                    $SiteConfig->saveKeyValue($data);
-                }
+		// サイト基本設定の読み込み
+		if(file_exists(CONFIGS.'database.php')) {
+			$dbConfig = new DATABASE_CONFIG();
+			if($dbConfig->baser['driver']) {
+				$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+				$this->siteConfigs = $SiteConfig->findExpanded();
 
-                // テーマの設定
-                if($base){
-                    $reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
-                }else{
-                    $reg = '/^\/(installations)/i';
-                }
-                if(!preg_match($reg,$_SERVER['REQUEST_URI'])){
-                    $this->theme = $this->siteConfigs['theme'];
-                }
-				
-            }
+				if(empty($this->siteConfigs['version'])) {
+					$data['SiteConfig']['version'] = $this->getBaserVersion();
+					$SiteConfig->saveKeyValue($data);
+				}
 
-        }
+				// テーマの設定
+				if($base) {
+					$reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
+				}else {
+					$reg = '/^\/(installations)/i';
+				}
+				if(!preg_match($reg,$_SERVER['REQUEST_URI'])) {
+					$this->theme = $this->siteConfigs['theme'];
+				}
 
-        // TODO beforeFilterでも定義しているので整理する
-        if($this->name == 'CakeError'){
-            // モバイルのエラー用
-            if(Configure::read('Mobile.on')){
-                $this->layoutPath = 'mobile';
-                $this->helpers[] = 'Mobile';
-            }
+			}
 
-			if($base){
+		}
+
+		// TODO beforeFilterでも定義しているので整理する
+		if($this->name == 'CakeError') {
+			// モバイルのエラー用
+			if(Configure::read('Mobile.on')) {
+				$this->layoutPath = 'mobile';
+				$this->helpers[] = 'Mobile';
+			}
+
+			if($base) {
 				$reg = '/^'.str_replace('/','\/',$base).'admin/i';
-			}else{
+			}else {
 				$reg = '/^\/admin/i';
 			}
-			if(preg_match($reg,$_SERVER['REQUEST_URI'])){
+			if(preg_match($reg,$_SERVER['REQUEST_URI'])) {
 				$this->layoutPath = 'admin';
 			}
-			
-        }
 
-        if(Configure::read('Mobile.on')){
-            if(isset($this->siteConfigs['mobile_on']) && !$this->siteConfigs['mobile_on']){
-                $this->notFound();
-            }
-        }
+		}
+
+		if(Configure::read('Mobile.on')) {
+			if(isset($this->siteConfigs['mobile_on']) && !$this->siteConfigs['mobile_on']) {
+				$this->notFound();
+			}
+		}
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->params['prefix']を利用できない為。
@@ -187,50 +187,51 @@ class AppController extends Controller{
  * @return	void
  * @access	public
  */
-	function beforeFilter(){
+	function beforeFilter() {
 
-        parent::beforeFilter();
+		parent::beforeFilter();
 
 		/* 認証設定 */
-		if(isset($this->AuthConfigure) && !empty($this->params['prefix'])){
+		if(isset($this->AuthConfigure) && !empty($this->params['prefix'])) {
 			$this->AuthConfigure->setting($this->params['prefix']);
 		}
-		
-        // 送信データの文字コードを内部エンコーディングに変換
-        $this->__convertEncodingHttpInput();
+
+		// 送信データの文字コードを内部エンコーディングに変換
+		$this->__convertEncodingHttpInput();
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
-		if(isset($this->params['prefix'])){
+		if(isset($this->params['prefix'])) {
 			$this->layoutPath = $this->params['prefix'];
 			$this->subDir = $this->params['prefix'];
-			if($this->params['prefix'] == 'mobile'){
+			if($this->params['prefix'] == 'mobile') {
 				$this->helpers[] = 'Mobile';
-            }
+			}
 		}
 
 		// Ajax
 		if(isset($this->RequestHandler) && $this->RequestHandler->isAjax()) {
-            // キャッシュ対策
-            header("Cache-Control: no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+			// キャッシュ対策
+			header("Cache-Control: no-cache, must-revalidate");
+			header("Cache-Control: post-check=0, pre-check=0", false);
+			header("Pragma: no-cache");
 
-            // デバックを出力しない。
-            Configure::write('debug', 0);
-            $this->layout = "ajax";
-        }
+			// デバックを出力しない。
+			Configure::write('debug', 0);
+			$this->layout = "ajax";
+		}
 
 		// 権限チェック
-		if(isset($this->Auth)){
+		if(isset($this->Auth)) {
 			$params = Router::parse($this->params['url']['url']);
-			if(!empty($params['prefix'])){
+			if(!empty($params['prefix'])) {
 				$user = $this->Auth->user();
 				$Permission = ClassRegistry::init('Permission');
-				if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])){
+				if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])) {
 					$this->redirect('/'.$params['prefix']);
 				}
 			}
 		}
+		$this->deleteAllCache();
 	}
 /**
  * beforeRender
@@ -238,21 +239,21 @@ class AppController extends Controller{
  * @return	void
  * @access	public
  */
-	function beforeRender(){
+	function beforeRender() {
 
-        parent::beforeRender();
-        
-        // モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
-        // エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
-        // 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。
-        // エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
-        if($this->name == 'CakeError'){
-            ClassRegistry::removeObject('view');
-        }
-		
+		parent::beforeRender();
+
+		// モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
+		// エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
+		// 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。
+		// エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
+		if($this->name == 'CakeError') {
+			ClassRegistry::removeObject('view');
+		}
+
 		$this->__loadDataToView();
 		$this->set('contentsTitle',$this->contentsTitle);
-        $this->set('baserVersion',$this->getBaserVersion());
+		$this->set('baserVersion',$this->getBaserVersion());
 
 	}
 /**
@@ -261,11 +262,11 @@ class AppController extends Controller{
  * @return	void
  * @access	public
  */
-  	function notFound() {
+	function notFound() {
 
-    	$this->cakeError('error404', array(array($this->here)));
+		$this->cakeError('error404', array(array($this->here)));
 
-  	}
+	}
 /**
  * 配列の文字コードを変換する
  *
@@ -282,9 +283,9 @@ class AppController extends Controller{
 				$data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
 			} else {
 
-				if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile'){
+				if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile') {
 					$inenc = 'SJIS';
-				}else{
+				}else {
 					$inenc = mb_detect_encoding($value);
 				}
 
@@ -311,7 +312,7 @@ class AppController extends Controller{
  * @return	void
  * @access	private
  */
-	function __loadDataToView(){
+	function __loadDataToView() {
 
 		$this->set('declareXml',Configure::read('declareXml'));	// XML宣言
 		$this->set('subMenuElements',$this->subMenuElements);	// サブメニューエレメント
@@ -323,9 +324,9 @@ class AppController extends Controller{
 		}
 
 		/* 携帯用絵文字データの読込 */
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)){
-    		//$emojiData = $this->EmojiData->findAll();
-		    //$this->set('emoji',$this->Emoji->EmojiData($emojiData));
+		if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
+			//$emojiData = $this->EmojiData->findAll();
+			//$this->set('emoji',$this->Emoji->EmojiData($emojiData));
 		}
 
 	}
@@ -334,32 +335,37 @@ class AppController extends Controller{
  *
  * @return string Baserバージョン
  */
-    function getBaserVersion(){
-        App::import('File');
-        $versionFile = new File(BASER.'VERSION.txt');
-        $versionData = $versionFile->read();
-        $aryVersionData = split("\n",$versionData);
-        if(!empty($aryVersionData[0])){
-            return $aryVersionData[0];
-        }else{
-            return false;
-        }
-    }
+	function getBaserVersion() {
+		App::import('File');
+		$versionFile = new File(BASER.'VERSION.txt');
+		$versionData = $versionFile->read();
+		$aryVersionData = split("\n",$versionData);
+		if(!empty($aryVersionData[0])) {
+			return $aryVersionData[0];
+		}else {
+			return false;
+		}
+	}
 /**
  * Viewキャッシュを削除する
- * @return void
- * @access public
+ * URLを指定しない場合は全てのViewキャッシュを削除する
+ * @param	$url
+ * @return	void
+ * @access	public
  */
-    function deleteViewCache(){
-        App::import('Core','Folder');
-        $folder = new Folder(CACHE.'views'.DS);
-        $caches = $folder->read(true,true);
-        foreach($caches[1] as $cache){
-            if($cache != 'empty'){
-                @unlink(CACHE.'views'.DS.$cache);
-            }
-        }
-    }
+	function deleteViewCache($url=null) {
+		if ($url == '/' || '/index.html') {
+			$path = 'home';
+		}elseif($path) {
+			$path = $url;
+		}
+		if($path) {
+			$cache = strtolower(Inflector::slug($path));
+			clearCache($cache);
+		}else {
+			clearCache();
+		}
+	}
 /**
  * http経由で送信されたデータを変換する
  * とりあえず、UTF-8で固定
@@ -367,69 +373,57 @@ class AppController extends Controller{
  * @return	void
  * @access	private
  */
-	function __convertEncodingHttpInput(){
+	function __convertEncodingHttpInput() {
 
 		// TODO Cakeマニュアルに合わせた方がよいかも
-		if(isset($this->params['form'])){
+		if(isset($this->params['form'])) {
 			$this->params['form'] = $this->_autoConvertEncodingByArray($this->params['form'],'UTF-8');
 		}
 
-		if(isset($this->params['data'])){
+		if(isset($this->params['data'])) {
 			$this->params['data'] = $this->_autoConvertEncodingByArray($this->params['data'],'UTF-8');
 		}
 
-    }
+	}
 /**
- * キャッシュファイルを削除する
+ * キャッシュファイルを全て削除する
  */
-    function deleteCache(){
-        App::import('Core','Folder');
-        $folder = new Folder(CACHE);
-
-        $files = $folder->read(true,true,true);
-        foreach($files[1] as $file){
-            @unlink($file);
-        }
-        foreach($files[0] as $dir){
-            $folder = new Folder($dir);
-            $caches = $folder->read(true,true,true);
-            foreach($caches[1] as $file){
-                if(basename($file) != 'empty'){
-                    @unlink($file);
-                }
-            }
-        }
-    }
+	function deleteAllCache() {
+		Cache::clear();
+		Cache::clear(false,'_cake_core_');
+		Cache::clear(false,'_cake_model_');
+		clearCache();	// viewキャッシュを削除
+	}
 /**
  * /app/core.php のデバッグモードを書き換える
  * @param int $mode
  */
-    function writeDebug($mode){
-        $file = new File(CONFIGS.'core.php');
-        $core = $file->read(false,'w');
-        if($core){
-            $core = preg_replace('/Configure::write\(\'debug\',[\s\-0-9]+?\)\;/is',"Configure::write('debug', ".$mode.");",$core);
-            $file->write($core);
-            $file->close();
-            return true;
-        }else{
-            $file->close();
-            return false;
-        }
-    }
+	function writeDebug($mode) {
+		$file = new File(CONFIGS.'core.php');
+		$core = $file->read(false,'w');
+		if($core) {
+			$core = preg_replace('/Configure::write\(\'debug\',[\s\-0-9]+?\)\;/is',"Configure::write('debug', ".$mode.");",$core);
+			$file->write($core);
+			$file->close();
+			return true;
+		}else {
+			$file->close();
+			return false;
+		}
+	}
 /**
  * /app/core.phpのデバッグモードを取得する
  * @return string $mode
  */
-    function readDebug(){
-        $mode = '';
-        $file = new File(CONFIGS.'core.php');
-        $core = $file->read(false,'r');
-        if(preg_match('/Configure::write\(\'debug\',([\s\-0-9]+?)\)\;/is',$core,$matches)){
-            $mode = trim($matches[1]);
-        }
-        return $mode;
-    }
+	function readDebug() {
+		$mode = '';
+		$file = new File(CONFIGS.'core.php');
+		$core = $file->read(false,'r');
+		if(preg_match('/Configure::write\(\'debug\',([\s\-0-9]+?)\)\;/is',$core,$matches)) {
+			$mode = trim($matches[1]);
+		}
+		return $mode;
+	}
 /**
  * メールを送信する
  *
@@ -437,37 +431,37 @@ class AppController extends Controller{
  * @return	void
  * @access	protected
  */
- 	function sendmail($to,$from,$fromName,$title,$template,$data = null){
+	function sendmail($to,$from,$fromName,$title,$template,$data = null) {
 
-		if(!isset($this->EmailEx)){
+		if(!isset($this->EmailEx)) {
 			return false;
 		}
-		
+
 		$this->EmailEx->reset();
 		$this->EmailEx->to = $to;
-        $this->EmailEx->subject = $title;
-		if($from && $fromName){
+		$this->EmailEx->subject = $title;
+		if($from && $fromName) {
 			$this->EmailEx->return = $from;
 			$this->EmailEx->replyTo = $from;
 			$this->EmailEx->from = $fromName . '<'.$from.'>';
-		}elseif($from){
+		}elseif($from) {
 			$this->EmailEx->return = $from;
 			$this->EmailEx->replyTo = $from;
 			$this->EmailEx->from = $from;
-		}else{
+		}else {
 			$this->EmailEx->return = $to;
 			$this->EmailEx->replyTo = $to;
 			$this->EmailEx->from = $to;
 		}
 
-		if(Configure::read('Mobile.on')){
+		if(Configure::read('Mobile.on')) {
 			$this->EmailEx->template = 'mobile'.DS.$template;
-		}else{
+		}else {
 			$this->EmailEx->template = $template;
 		}
-		
-	    $this->EmailEx->sendAs = 'text';		// text or html or both
-	    $this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
+
+		$this->EmailEx->sendAs = 'text';		// text or html or both
+		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		// TODO SMTPの設定は、サイト基本設定でできるようにする
 		$this->EmailEx->charset='ISO-2022-JP';
 		/*if($mailConfig['smtp_host']){
@@ -478,16 +472,16 @@ class AppController extends Controller{
 													  'username'=>$mailConfig['smtp_username'],
 													  'password'=>$mailConfig['smtp_password']);
 		}else{*/
-			$this->EmailEx->delivery = "mail";
+		$this->EmailEx->delivery = "mail";
 		//}
-		if(Configure::read('Mobile.on')){
+		if(Configure::read('Mobile.on')) {
 			$this->EmailEx->template = 'mobile'.DS.$template;
-		}else{
+		}else {
 			$this->EmailEx->template = $template;
 		}
-        if($data){
-            $this->set($data);
-        }
+		if($data) {
+			$this->set($data);
+		}
 
 		$this->EmailEx->send();
 
