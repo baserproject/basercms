@@ -138,7 +138,7 @@ INSERT INTO "bc__mail_fields" ( "mail_content_id", "no", "name", "field_name", "
 (1, 13,'市区町村・番地', 'address_2', 'text', '住所', '', '', '<br />', '', 30, 0, 200, '', '', '', '', '', 'address', '', '', '', '', false, true, false, 13, NOW(), NOW()),
 (1, 14,'建物名', 'address_3', 'text', '住所', '', '', '', '', 30, 0, 200, '', '', '', '', '', 'address', '', '', '', '', false, true, false, 14, NOW(), NOW()),
 (1, 15,'お問い合わせ項目', 'category', 'multi_check', 'お問い合わせ項目', '', '', '', '資料請求|問い合わせ|その他', 0, 0, 0, '', '', '', '', '', '', '', '', 'VALID_NOT_UNCHECKED', '', true, true, false, 15, NOW(), NOW()),
-(1, 16,'お問い合わせ内容', 'message', 'textarea', 'お問い合わせ内容', '', '', '', '', 48, 12, 0, '', '', '', '', '', '', '', '', '', '', false, true, false, 16, NOW(), NOW()),
+(1, 16,'お問い合わせ内容', 'message', 'textarea', 'お問い合わせ内容', '', '', '', '', 48, 12, NULL, '', '', '', '', '', '', '', '', '', '', false, true, false, 16, NOW(), NOW()),
 (1, 17,'ルート', 'root', 'select', 'どうやってこのサイトをお知りになりましたか？', '', '', '<br />', '検索エンジン|web広告|紙面広告|求人案内|その他', 0, 0, 0, '', '', '', '', '', 'root', '', 'VALID_NOT_EMPTY', '', '', true, true, false, 17, NOW(), NOW()),
 (1, 18,'ルートその他', 'root_etc', 'text', '', '<br />[その他を選択された場合は内容をご入力下さい。]', '', '', '', 30, 0, 50, '', '', '', '', '', 'root', '', '', '', '', false, true, false, 18, NOW(), NOW());
 
