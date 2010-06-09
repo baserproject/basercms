@@ -138,13 +138,17 @@
 			session_start();
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
-				if (!$parameter) {
-					$path = 'home';
+				if (!$parameter || $parameter == 'index.html') {
+					if(Configure::read('App.baseUrl', $scriptName)){
+						clearCache('index_php');
+						clearCache('index_php_index_html');
+					}else{
+						clearCache('home');
+						clearCache('index_html');
+					}
 				}else{
-					$path = $parameter;
+					clearCache(strtolower(Inflector::slug($parameter)));
 				}
-				$cacheName = strtolower(Inflector::slug($path));
-				clearCache($cacheName);
 			}
 		}
 	}
