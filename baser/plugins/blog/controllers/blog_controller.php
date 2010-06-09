@@ -89,7 +89,11 @@ class BlogController extends BlogAppController{
 		/* 認証設定 */
 		$this->Auth->allow('index','mobile_index','archives','mobile_archives');
 
-		$this->blogContent = $this->BlogContent->read(null,$this->contentId);
+		if($this->contentId){
+			$this->blogContent = $this->BlogContent->read(null,$this->contentId);
+		}else{
+			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
+		}
 
 		$this->subMenuElements = array('default');
 		$this->navis = array($this->blogContent['BlogContent']['title']=>'/'.$this->blogContent['BlogContent']['name'].'/index');
@@ -206,31 +210,41 @@ class BlogController extends BlogAppController{
 		$year="";
 		$month="";
 		$day="";
-		if(empty($pass[1])){
-			$type = "";
-			$id = $pass[0];
-            if(!$id) $this->notFound();
-		}elseif($pass[0] == 'category'){
-			$type='category';
-			$conditions = array('BlogCategory.blog_content_id'=>$this->contentId,'BlogCategory.name'=>$pass[count($pass)-1]);
-			$categoryId = $this->BlogCategory->field('id',$conditions);
-            if(!$categoryId) $this->notFound();
-		}elseif($pass[0] == 'date'){
-            $type='date';
-            $year = $pass[1];
-            $month = @$pass[2];
-            $day = @$pass[3];
-            if(!$year && !$month && !$day) $this->notFound();
-        }
+		$id = "";
 
 		// コンテンツID取得
         if($this->contentId) {
             $contentId = $this->contentId;
-        }else{
-            // TODO ブログの数を確認し、一つであればそのIDを格納し、記事が複数の場合はnotFoundとする？
-            // もしくは、デフォルト設定させるか、idが一番小さいものをデフォルトとするか。
-            $contentId = 1;
-        }
+		}
+		if($pass[0] == 'category'){
+			$type='category';
+			$conditions = array('BlogCategory.blog_content_id'=>$this->contentId,'BlogCategory.name'=>$pass[count($pass)-1]);
+			$categoryId = $this->BlogCategory->field('id',$conditions);
+			if(!$categoryId) $this->notFound();
+		}elseif($pass[0] == 'date'){
+			$type='date';
+			$year = $pass[1];
+			$month = @$pass[2];
+			$day = @$pass[3];
+			if(!$year && !$month && !$day) $this->notFound();
+		}elseif($this->preview){
+            $contentId = $pass[0];
+			$type = "";
+			if(!empty($pass[1])){
+				$id = $pass[1];
+			}
+            if(!$id && empty($this->data['BlogPost'])){
+				$this->notFound();
+			}
+		}else{
+			$type = "";
+			if(!empty($pass[0])){
+				$id = $pass[0];
+			}
+            if(!$id) {
+				$this->notFound();
+			}
+		}
 
 		/*** カテゴリ一覧 ***/
 		if($type=='category'){
@@ -299,7 +313,7 @@ class BlogController extends BlogAppController{
         /* 単ページ */
 		}else{
 
-			if($this->data){
+			if(isset($this->data['BlogComment'])){
 
 				// blog_post_idを取得
 				$conditions["BlogPost.no"] = $id;
@@ -325,20 +339,27 @@ class BlogController extends BlogAppController{
 
 			}
 
-            $conditions["BlogPost.no"] = $id;
-            if(!$this->preview){
-                $conditions['BlogPost.status'] = true;
-            }
-            $conditions["BlogPost.blog_content_id"] = $contentId;
-			$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
-			$post = $this->BlogPost->find($conditions);
-			if(!$post){
-				$this->notFound();
+            if($this->preview && isset($this->data['BlogPost'])){
+				$post['BlogPost'] = $this->data['BlogPost'];
+            }else{
+				if(!$this->preview){
+					$conditions['BlogPost.status'] = true;
+				}
+				$conditions["BlogPost.no"] = $id;
+				$conditions["BlogPost.blog_content_id"] = $contentId;
+				$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
+				$post = $this->BlogPost->find($conditions);
+				if(!$post){
+					$this->notFound();
+				}
 			}
 
 			$this->set('post',$post);
 			$this->pageTitle = $post['BlogPost']['name'];
             $single = true;
+			if($this->preview){
+				$this->blogContent['BlogContent']['comment_use'] = false;
+			}
             $template = $this->blogContent['BlogContent']['template'].DS.'single';
 
 		}
@@ -393,7 +414,6 @@ class BlogController extends BlogAppController{
         $this->subDir = '';
         $this->params['prefix'] = '';
         $this->theme = $this->siteConfigs['theme'];
-        array_shift($this->params['pass']);
         $this->setAction('archives');
 
 	}

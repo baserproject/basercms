@@ -20,6 +20,15 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function(){
+	$("#BtnPreview").click(function(){
+		$("#BlogPostForm").attr('action','<?php echo $this->base ?>/admin/blog/preview/<?php echo $blogContent['BlogContent']['id'] ?>');
+		$("#BlogPostForm").attr('target','_blank');
+		$("#BlogPostForm").submit();
+	});
+});
+</script>
 <h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
@@ -35,11 +44,12 @@
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-    <?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/add/'.$blogContent['BlogContent']['id'])) ?>
+    <?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/add/'.$blogContent['BlogContent']['id'],'id'=>'BlogPostForm')) ?>
 <?php elseif($this->action=='admin_edit'): ?>
-    <?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/edit/'.$blogContent['BlogContent']['id'].'/'.$formEx->value('BlogPost.id'))) ?>
+    <?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/edit/'.$blogContent['BlogContent']['id'].'/'.$formEx->value('BlogPost.id'),'id'=>'BlogPostForm')) ?>
 <?php endif; ?>
 <?php echo $formEx->hidden('BlogPost.id') ?>
+<?php echo $formEx->hidden('BlogPost.blog_content_id',array('value'=>$blogContent['BlogContent']['id'])) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
@@ -102,7 +112,7 @@
 <?php if($this->action == 'admin_add'): ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php $baser->link('確　認',array('controller'=>'blog','action'=>'preview', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.no')), array('class'=>'btn-green button','target'=>'_blank')) ?>
+	<?php echo $formEx->end(array('label'=>'確　認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),false); ?>
 <?php endif ?>
