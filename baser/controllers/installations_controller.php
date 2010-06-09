@@ -215,7 +215,7 @@ class InstallationsController extends AppController {
 
 		/* ダミーのデータベース設定ファイルを保存 */
 		$this->_writeDatabaseConfig('', 'localhost', '', 'dummy', 'dummy', 'dummy', '', '');
-		$this->Session->write('modrewritesupport', ($modrewriteinstalled && $htaccesswritable));
+		$this->Session->write('Installation.modrewritesupport', ($modrewriteinstalled && $htaccesswritable));
 
 	}
 /**
@@ -412,14 +412,14 @@ class InstallationsController extends AppController {
 				$params['data']['buttonclicked']=='createdb') {
 
 			/* データベース設定をセッションに保存する */
-			$this->Session->write('dbType', $postdata['installation']['dbType']);
-			$this->Session->write('dbHost', $postdata['installation']['dbHost']);
-			$this->Session->write('dbPort', $postdata['installation']['dbPort']);
-			$this->Session->write('dbUsername', $postdata['installation']['dbUsername']);
-			$this->Session->write('dbPassword', $postdata['installation']['dbPassword']);
-			$this->Session->write('dbPrefix', $postdata['installation']['dbPrefix']);
-			$this->Session->write('dbDBName', $database);
-			$this->Session->write('dbSchema',$postdata['installation']['dbSchema']);
+			$this->Session->write('Installation.dbType', $postdata['installation']['dbType']);
+			$this->Session->write('Installation.dbHost', $postdata['installation']['dbHost']);
+			$this->Session->write('Installation.dbPort', $postdata['installation']['dbPort']);
+			$this->Session->write('Installation.dbUsername', $postdata['installation']['dbUsername']);
+			$this->Session->write('Installation.dbPassword', $postdata['installation']['dbPassword']);
+			$this->Session->write('Installation.dbPrefix', $postdata['installation']['dbPrefix']);
+			$this->Session->write('Installation.dbDBName', $database);
+			$this->Session->write('Installation.dbSchema',$postdata['installation']['dbSchema']);
 			$this->autoRender = false;
 			$this->redirect('step4');
 
@@ -435,7 +435,7 @@ class InstallationsController extends AppController {
 	function step4() {
 
 		$this->pageTitle = 'BaserCMSのインストール [ステップ４]';
-		$dbType = $this->Session->read('dbType');
+		$dbType = $this->Session->read('Installation.dbType');
 		App::import('ConnectionManager');
 		App::import('Vendor','dbrestore');
 
@@ -452,13 +452,13 @@ class InstallationsController extends AppController {
 
 		$db = &ConnectionManager::create('baser',array( 'driver' => $dbType,
 				'persistent' => false,
-				'host' => $this->Session->read('dbHost'),
-				'port' => $this->Session->read('dbPort'),
-				'login' => $this->Session->read('dbUsername'),
-				'password' => $this->Session->read('dbPassword'),
-				'database' => $this->Session->read('dbDBName'),
-				'schema' => $this->Session->read('dbSchema'),
-				'prefix' =>  $this->Session->read('dbPrefix'),
+				'host' => $this->Session->read('Installation.dbHost'),
+				'port' => $this->Session->read('Installation.dbPort'),
+				'login' => $this->Session->read('Installation.dbUsername'),
+				'password' => $this->Session->read('Installation.dbPassword'),
+				'database' => $this->Session->read('Installation.dbDBName'),
+				'schema' => $this->Session->read('Installation.dbSchema'),
+				'prefix' =>  $this->Session->read('Installation.dbPrefix'),
 				'encoding' => 'utf8'));
 
 		/* データベースを構築する */
@@ -467,9 +467,9 @@ class InstallationsController extends AppController {
 				case 'mysql':
 				case 'mysqli':
 				// 文字コードの設定を行う
-					$db->execute('ALTER DATABASE '.$db->startQuote.$this->Session->read('dbDBName').$db->endQuote.' CHARACTER SET utf8 COLLATE utf8_unicode_ci');
+					$db->execute('ALTER DATABASE '.$db->startQuote.$this->Session->read('Installation.dbDBName').$db->endQuote.' CHARACTER SET utf8 COLLATE utf8_unicode_ci');
 					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('dbDBName'), $this->Session->read('dbHost'), $this->Session->read('dbUsername'), $this->Session->read('dbPassword'),$this->Session->read('dbPort'));
+					$dbRestore->connect($this->Session->read('Installation.dbDBName'), $this->Session->read('Installation.dbHost'), $this->Session->read('Installation.dbUsername'), $this->Session->read('Installation.dbPassword'),$this->Session->read('Installation.dbPort'));
 					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_'.$dbType.'.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_'.$dbType.'.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_'.$dbType.'.sql');
@@ -479,7 +479,7 @@ class InstallationsController extends AppController {
 				case 'postgres':
 				// 文字コードの設定を行う
 					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('dbDBName'), $this->Session->read('dbHost'), $this->Session->read('dbUsername'), $this->Session->read('dbPassword'),$this->Session->read('dbPort'));
+					$dbRestore->connect($this->Session->read('Installation.dbDBName'), $this->Session->read('Installation.dbHost'), $this->Session->read('Installation.dbUsername'), $this->Session->read('Installation.dbPassword'),$this->Session->read('Installation.dbPort'));
 					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_'.$dbType.'.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_'.$dbType.'.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_'.$dbType.'.sql');
@@ -490,17 +490,17 @@ class InstallationsController extends AppController {
 				case 'sqlite3':
 
 					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('dbDBName'));
+					$dbRestore->connect($this->Session->read('Installation.dbDBName'));
 					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_sqlite.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_sqlite.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_sqlite.sql');
 					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql'.DS.'blog_sqlite.sql');
-					chmod($this->Session->read('dbDBName'),0666);
+					chmod($this->Session->read('Installation.dbDBName'),0666);
 					break;
 
 				case 'csv':
-					$dbPrefix = $this->Session->read('dbPrefix');
-					$targetDir = $this->Session->read('dbDBName').DS;
+					$dbPrefix = $this->Session->read('Installation.dbPrefix');
+					$targetDir = $this->Session->read('Installation.dbDBName').DS;
 					if(!is_dir(APP.'db'.DS.'csv')) {
 						mkdir(APP.'db'.DS.'csv',0777);
 						chmod(APP.'db'.DS.'csv',0777);
@@ -580,29 +580,29 @@ class InstallationsController extends AppController {
 		$installCoreData = array("<?php","Configure::write('Security.salt', '".$salt ."');");
 
 		// データベース設定ファイルに設定内容を書き込む
-		$this->_writeDatabaseConfig($this->Session->read('dbType'),
-				$this->Session->read('dbHost'),
-				$this->Session->read('dbPort'),
-				$this->Session->read('dbUsername'),
-				$this->Session->read('dbPassword'),
-				$this->Session->read('dbDBName'),
-				$this->Session->read('dbPrefix'),
-				$this->Session->read('dbSchema'));
+		$this->_writeDatabaseConfig($this->Session->read('Installation.dbType'),
+				$this->Session->read('Installation.dbHost'),
+				$this->Session->read('Installation.dbPort'),
+				$this->Session->read('Installation.dbUsername'),
+				$this->Session->read('Installation.dbPassword'),
+				$this->Session->read('Installation.dbDBName'),
+				$this->Session->read('Installation.dbPrefix'),
+				$this->Session->read('Installation.dbSchema'));
 
 		/* ユーザーを生成 */
 		App::import('ConnectionManager');
-		$db = &ConnectionManager::create('baser',array('driver' => $this -> Session->read('dbType'),
+		$db = &ConnectionManager::create('baser',array('driver' => $this -> Session->read('Installation.dbType'),
 				'persistent' => false,
-				'host' => $this->Session->read('dbHost'),
-				'port' => $this->Session->read('dbPort'),
-				'login' => $this->Session->read('dbUsername'),
-				'password' => $this->Session->read('dbPassword'),
-				'database' => $this->Session->read('dbDBName'),
-				'schema' => $this->Session->read('dbSchema'),
-				'prefix' =>  $this->Session->read('dbPrefix'),
+				'host' => $this->Session->read('Installation.dbHost'),
+				'port' => $this->Session->read('Installation.dbPort'),
+				'login' => $this->Session->read('Installation.dbUsername'),
+				'password' => $this->Session->read('Installation.dbPassword'),
+				'database' => $this->Session->read('Installation.dbDBName'),
+				'schema' => $this->Session->read('Installation.dbSchema'),
+				'prefix' =>  $this->Session->read('Installation.dbPrefix'),
 				'encoding' => 'utf8'));
 
-		if ($db->connected ||  $this->Session->read('dbType') == 'csv') {
+		if ($db->connected ||  $this->Session->read('Installation.dbType') == 'csv') {
 
 			App::import('Model','SiteConfig');
 			$siteConfig['SiteConfig']['email'] = $postdata['installation']['admin_email'];
@@ -614,22 +614,22 @@ class InstallationsController extends AppController {
 			$admin = $postdata['installation']['admin_username'];
 			$password = $postdata['installation']['admin_password'];
 			$hashedPassword = Security::hash($password,null,true);
-			if ($this->Session->read('dbType')=='sqlite' || $this->Session->read('dbType') =='sqlite3') {
+			if ($this->Session->read('Installation.dbType')=='sqlite' || $this->Session->read('Installation.dbType') =='sqlite3') {
 				$date = date('Y/m/d H:i:s');
 			} else {
 				$date = date('Y-m-d H:i:s');
 			}
-			$db->execute("insert into ".$this->Session->read('dbPrefix')."users (name,real_name_1,real_name_2,password,email,user_group_id,created,modified) values ('{$admin}','{$admin}','','".$hashedPassword."','',1,'".$date."','".$date."')");
+			$db->execute("insert into ".$this->Session->read('Installation.dbPrefix')."users (name,real_name_1,real_name_2,password,email,user_group_id,created,modified) values ('{$admin}','{$admin}','','".$hashedPassword."','',1,'".$date."','".$date."')");
 
 			// CSVの際には、作成日の更新を行う
-			if($this->Session->read('dbType') == 'csv') {
-				$folder = new Folder($this->Session->read('dbDBName'));
+			if($this->Session->read('Installation.dbType') == 'csv') {
+				$folder = new Folder($this->Session->read('Installation.dbDBName'));
 				$files = $folder->read(true,true);
 				foreach($files[1] as $file) {
 					// TODO 上記で一度インサートしてハンドリングしているせいか、usersに更新をかけるとヘッダーの定義がsite_configsになってしまう。
 					// 日付の更新は上でできているのでとりあえず除外する。
-					if($file != 'empty' && $file != $this->Session->read('dbPrefix').'users.csv') {
-						if($file == $this->Session->read('dbPrefix').'_blog_posts.csv') {
+					if($file != 'empty' && $file != $this->Session->read('Installation.dbPrefix').'users.csv') {
+						if($file == $this->Session->read('Installation.dbPrefix').'_blog_posts.csv') {
 							$sql = "UPDATE ".str_replace(".csv",'',$file)." SET posts_date='".date('Y-m-d H:i:s')."',created='".date('Y-m-d H:i:s')."', modified='".date('Y-m-d H:i:s')."' WHERE 1=1";
 						}else {
 							$sql = "UPDATE ".str_replace(".csv",'',$file)." SET created='".date('Y-m-d H:i:s')."', modified='".date('Y-m-d H:i:s')."' WHERE 1=1";
@@ -638,12 +638,13 @@ class InstallationsController extends AppController {
 					}
 				}
 			}
-
+			// ログインするとセッションが初期化されてしまうので一旦取得しておく
+			$installationSetting = $this->Session->read('Installation');
 			// ログイン
 			$extra['data']['User']['name'] = $admin;
 			$extra['data']['User']['password'] = $password;
 			$this->requestAction('/admin/users/login_exec', $extra);
-
+			$this->Session->write('Installation', $installationSetting);
 			if ($db->error) {
 				$this->set('usercreateerror','管理ユーザーを作成できませんでした。: '.$db->error);
 			}
@@ -681,7 +682,7 @@ class InstallationsController extends AppController {
 
 		if (!file_exists(dirname(APP).DS.'.htaccess')) {
 
-			if ($this->Session->read('modrewritesupport')) {
+			if ($this->Session->read('Installation.modrewritesupport')) {
 
 				/* /.htaccess */
 				if (copy(dirname(APP).DS.'htaccess.txt',dirname(APP).DS.'.htaccess')===false) {
@@ -915,18 +916,18 @@ class InstallationsController extends AppController {
 	function _resetDatabase() {
 
 		/* データベース設定を取得 */
-		$dbType = $this->Session->read('dbType');
+		$dbType = $this->Session->read('Installation.dbType');
 		if($dbType) {
 			// インストール途中の場合はセッションから取得
-			$db = &ConnectionManager::create('test',array(  'driver' => $this->Session->read('dbType'),
+			$db = &ConnectionManager::create('test',array(  'driver' => $this->Session->read('Installation.dbType'),
 					'persistent' => false,
-					'host' => $this->Session->read('dbHost'),
-					'port' => $this->Session->read('dbPort'),
-					'login' => $this->Session->read('dbUsername'),
-					'password' => $this->Session->read('dbPassword'),
-					'database' => $this->Session->read('dbDBName'),
-					'schema' => $this->Session->read('dbSchema'),
-					'prefix' =>  $this->Session->read('dbPrefix'),
+					'host' => $this->Session->read('Installation.dbHost'),
+					'port' => $this->Session->read('Installation.dbPort'),
+					'login' => $this->Session->read('Installation.dbUsername'),
+					'password' => $this->Session->read('Installation.dbPassword'),
+					'database' => $this->Session->read('Installation.dbDBName'),
+					'schema' => $this->Session->read('Installation.dbSchema'),
+					'prefix' =>  $this->Session->read('Installation.dbPrefix'),
 					'encoding' => 'utf8'));
 			$dbConfig = $db->config;
 		}elseif(class_exists('DATABASE_CONFIG')) {
