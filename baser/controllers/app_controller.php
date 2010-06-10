@@ -162,6 +162,7 @@ class AppController extends Controller {
 			}
 			if(preg_match($reg,$_SERVER['REQUEST_URI'])) {
 				$this->layoutPath = 'admin';
+				$this->subDir = 'admin';
 			}
 
 		}
