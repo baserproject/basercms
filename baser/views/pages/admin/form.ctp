@@ -20,6 +20,15 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function(){
+	$("#BtnPreview").click(function(){
+		$("#PageForm").attr('action','<?php echo $this->base ?>/admin/pages/preview');
+		$("#PageForm").attr('target','_blank');
+		$("#PageForm").submit();
+	});
+});
+</script>
 <h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
@@ -35,7 +44,7 @@
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
-<?php echo $formEx->create('Page') ?>
+<?php echo $formEx->create('Page',array('id'=>'PageForm')) ?>
 <?php echo $formEx->hidden('Page.id') ?>
 <?php echo $formEx->hidden('Page.no') ?>
 <?php echo $formEx->hidden('Page.sort') ?>
@@ -125,10 +134,10 @@
 	</tr>
 </table>
 <div class="submit">
+<?php echo $formEx->end(array('label'=>'確　認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 <?php if($this->action == 'admin_add'): ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php $baser->link('確　認',array('action'=>'preview', $formEx->value('Page.id')), array('class'=>'btn-green button','target'=>'_blank')) ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
 <?php endif ?>

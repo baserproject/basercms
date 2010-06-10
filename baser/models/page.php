@@ -225,7 +225,9 @@ class Page extends AppModel {
         $tag = '<!-- BaserPageTagBegin -->'."\n";
         $tag .= '<?php $baser->setTitle(\''.$title.'\') ?>'."\n";
         $tag .= '<?php $baser->setDescription(\''.$description.'\') ?>'."\n";
-        $tag .= '<?php $baser->editPage('.$id.') ?>'."\n";
+		if($id){
+			$tag .= '<?php $baser->editPage('.$id.') ?>'."\n";
+		}
         $tag .= '<!-- BaserPageTagEnd -->'."\n";
         return $tag . $contents;
     }

@@ -62,13 +62,6 @@ class PagesController extends AppController {
  */
 	var $cacheAction = 3600;
 /**
- * プレビューフラグ
- * 
- * @var		boolean
- * @access	protected
- */
-	var $_preview = false;
-/**
  * beforeFilter
  *
  * @return	void
@@ -335,7 +328,7 @@ class PagesController extends AppController {
 
 		// 公開制限を確認
 		// TODO モバイルはページ機能を未実装の為制限をかけない→実装する
-		if((!Configure::read('Mobile.on') && $ext) && !$this->_preview) {
+		if((!Configure::read('Mobile.on') && $ext)) {
 			$conditions = array('Page.status'=>true,'Page.url'=>$url);
 			if(isset($this->siteConfigs['theme'])) {
 				$conditions['Page.theme'] = $this->siteConfigs['theme'];
@@ -371,29 +364,38 @@ class PagesController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_preview($id) {
+	function admin_preview($id = null) {
 
-		if(!$id) {
-			$this->notFound();
+		if($id){
+			$conditions = array('Page.id' => $id);
+			$page = $this->Page->find($conditions);
+		}elseif(isset($this->data['Page'])){
+			$page = $this->data;
+			$page['Page']['url'] = $this->Page->getPageUrl($page);
 		}
-
-		$conditions = array('Page.id' => $id);
-		$page = $this->Page->find($conditions);
-
+		
 		if(!$page) {
 			$this->notFound();
 		}
 
-		$path[0] = 'pages/'.$page['Page']['url'];
+		// 一時ファイルとしてビューを保存
+		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
+		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
+		$path = TMP.'pages_preview.ctp';
+		$file = new File($path);
+		$file->open('w');
+		$file->append($contents);
+		$file->close();
+		unset($file);
+		@chmod($path, 0666);
 
-		$this->_preview = true;
 		$this->layoutPath = '';
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
 		$this->params['url']['url'] = preg_replace('/^\//i','',$page['Page']['url']);
 		$this->theme = $this->siteConfigs['theme'];
-		call_user_func_array( array( $this, 'display' ), $path );
+		$this->render('display',null,TMP.'pages_preview.ctp');
 
 	}
 /**
