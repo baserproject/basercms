@@ -580,7 +580,7 @@ class BaserHelper extends AppHelper {
 		}
 		$controller = $this->params['controller'];
 		if($prefix) {
-			$action = str_replace($prefix.'_','',$this->params['action']).'_';
+			$action = str_replace($prefix.'_','',$this->params['action']);
 		}else {
 			$action = $this->params['action'];
 		}
