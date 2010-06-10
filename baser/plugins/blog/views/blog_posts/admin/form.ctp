@@ -110,9 +110,9 @@ $(function(){
 </table>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
+	<?php echo $formEx->end(array('label'=>'確　認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->end(array('label'=>'確　認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),false); ?>
 <?php endif ?>
