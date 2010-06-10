@@ -64,12 +64,21 @@ class BaserHelper extends AppHelper {
 				}
 
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
-					if (ClassRegistry::isKeySet('Permissions')) {
+					if (ClassRegistry::isKeySet('Permission')) {
 						$this->Permission = ClassRegistry::getObject('Permission');
 					}else {
 						$this->Permission = ClassRegistry::init('Permission');
 					}
 				}
+
+				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'pages'), array_map('strtolower', $sources))) {
+					if (ClassRegistry::isKeySet('Page')) {
+						$this->Page = ClassRegistry::getObject('Page');
+					}else {
+						$this->Page = ClassRegistry::init('Page');
+					}
+				}
+				
 			}
 		}
 	}
@@ -457,18 +466,33 @@ class BaserHelper extends AppHelper {
 		}else {
 			$forceTitle = false;
 		}
-		if(!empty($this->_view->viewVars['user']['user_group_id'])) {
-			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
+		
+		$_url = str_replace($this->base, '', $this->getUrl($url));
+		$enabled = true;
 
-			$_url = str_replace($this->base, '', $this->getUrl($url));
-			if(isset($this->Permission) && !$this->Permission->check($_url,$userGroupId)) {
-				if($forceTitle) {
-					return "<span>$title</span>";
-				}else {
-					return '';
-				}
+		// 認証チェック
+		if(isset($this->Permission) && !empty($this->_view->viewVars['user']['user_group_id'])) {
+			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
+			if(!$this->Permission->check($_url,$userGroupId)) {
+				$enabled = false;
 			}
 		}
+
+		// ページ公開チェック
+		if(isset($this->Page)){
+			if(!$this->Page->checkPublish($_url)){
+				$enabled = false;
+			}
+		}
+		
+		if(!$enabled){
+			if($forceTitle) {
+				return "<span>$title</span>";
+			}else {
+				return '';
+			}
+		}
+		
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 	}
@@ -646,14 +670,13 @@ class BaserHelper extends AppHelper {
  * @return mixed boolean / array
  */
 	function getPageList($categoryId=null){
-		if (ClassRegistry::isKeySet('Page')) {
-			$Page = ClassRegistry::getObject('Page');
+		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
 			if(!is_null($categoryId)){
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
-			$Page->unbindModel(array('belongsTo'=>array('PageCategory')));
-			$pages = $Page->find('all',array('conditions'=>$conditions,
+			$this->Page->unbindModel(array('belongsTo'=>array('PageCategory')));
+			$pages = $this->Page->find('all',array('conditions'=>$conditions,
 											'fields'=>array('title','url'),
 											'order'=>'Page.sort'));
 			return Set::extract('/Page/.',$pages);

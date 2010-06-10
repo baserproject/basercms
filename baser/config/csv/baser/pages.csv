@@ -71,23 +71,23 @@ WEBシステム開発事業（ダミー）</td></tr>
 	公開ページ</h3>
 <ul class=""section"">
 	<li>
-<?php echo $html->link('ホーム','/') ?>	</li>
+<?php $baser->link('ホーム','/') ?>	</li>
 	<li>
-<?php echo $html->link('会社案内','/about.html') ?>	</li>
+<?php $baser->link('会社案内','/about.html') ?>	</li>
 	<li>
-<?php echo $html->link('サービス','/service.html') ?>	</li>
+<?php $baser->link('サービス','/service.html') ?>	</li>
 	<li>
-<?php echo $html->link('新着情報','/news/') ?>	</li>
+<?php $baser->link('新着情報','/news/') ?>	</li>
 	<li>
-<?php echo $html->link('お問い合わせ','/contact/index') ?>	</li>
+<?php $baser->link('お問い合わせ','/contact/index') ?>	</li>
 	<li>
-<?php echo $html->link('サイトマップ','/sitemap.html') ?>	</li>
+<?php $baser->link('サイトマップ','/sitemap.html') ?>	</li>
 </ul>
 <h3 class=""contents-head"">
 	非公開ページ</h3>
 <ul class=""section"">
 <li>
-	<?php echo $html->link('管理者ログイン','/admin/users/login') ?>	</li>
+	<?php $baser->link('管理者ログイン','/admin/users/login') ?>	</li>
 </ul>
 <p class=""customize-navi corner10"">
 	<small>公開する際には非公開ページは削除をおすすめします。</small>
