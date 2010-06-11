@@ -551,8 +551,8 @@ class BaserHelper extends AppHelper {
  * コンテンツ名を出力する
  * @return void
  */
-	function contentsName() {
-		echo $this->getContentsName();
+	function contentsName($detail = false) {
+		echo $this->getContentsName($detail);
 	}
 /**
  * コンテンツ名を取得する
@@ -561,7 +561,7 @@ class BaserHelper extends AppHelper {
  * ・ページの場合は、カテゴリ名（カテゴリがない場合はdefault）
  * @return string
  */
-	function getContentsName() {
+	function getContentsName($detail = false) {
 
 		$prefix = '';
 		$plugin = '';
@@ -585,7 +585,7 @@ class BaserHelper extends AppHelper {
 			$action = $this->params['action'];
 		}
 		if(!empty($this->params['pass'][0])) {
-			$pass = $this->params['pass'][0];
+			$pass = $this->params['pass'];
 		}
 		$url = split('/',$this->params['url']['url']);
 		if(isset($url[0])) {
@@ -600,12 +600,16 @@ class BaserHelper extends AppHelper {
 
 		// ページ機能の場合
 		if($controller=='pages' && $action=='display') {
-			$pass = str_replace('.html','',str_replace('pages/','',$pass));
-			$pass = split('/',$pass);
-			if(count($pass) >= 2) {
-				$controller = $pass[0];
-			}else {
-				$controller = 'default';
+			$pageUrl = str_replace('pages/','',$this->params['pass'][0]);
+			$pos = strpos($pageUrl,'.html');
+			if($pos !== false){
+				$pageUrl = substr($pageUrl, 0, $pos);
+			}
+			if(!$detail){
+				$aryPageUrl = split('/',$pageUrl);
+				$controller = $aryPageUrl[0];
+			} else {
+				return Inflector::camelize(str_replace('/', '_', $pageUrl));
 			}
 		}
 
@@ -618,12 +622,60 @@ class BaserHelper extends AppHelper {
 		if($prefix)	$prefix .= '_';
 		if($plugin) $plugin .= '_';
 		if($controller) $controller .= '_';
+		if($action) $action .= '_';
 
 		$contentsName = $prefix.$plugin.$controller;
+
+		if($detail){
+			$contentsName .= $action;
+			if($pass){
+				$contentsName .= '_'.implode('_', $pass);
+			}
+		}
+		
 		$contentsName = Inflector::camelize($contentsName);
 
 		return $contentsName;
 
+	}
+	function getContentsName2($detail = false){
+
+		$url = 'archives/index.html?test=1&test2=2';
+		$url = split('\?',$url);
+		$url = split('\.',$url[0]);
+		if($detail){
+			return Inflector::camelize(str_replace('/','_',$url[0]));
+		}
+
+		$aryUrl = split('/',$url[0]);
+		$prefix = '';
+		$plugin = '';
+		$controller = '';
+		$action = '';
+		$pass = '';
+
+		if(!empty($this->params['prefix'])) {
+			$prefix = $this->params['prefix'];
+		}
+		if(!empty($this->params['plugin'])) {
+			$plugin = $this->params['plugin'];
+		}
+		$controller = $this->params['controller'];
+		if($prefix) {
+			$action = str_replace($prefix.'_','',$this->params['action']);
+		}else {
+			$action = $this->params['action'];
+		}
+		if(!empty($this->params['pass'][0])) {
+			$pass = $this->params['pass'][0];
+		}
+
+		if($prefix){
+			$contentsName = $prefix.$aryUrl[1];
+		}
+
+		return $contentsName;
+		
 	}
 /**
  * パンくずリストを出力する
