@@ -29,6 +29,26 @@
 	// DataSource も baser フォルダ内を参照
 	App::import('Core', 'ConnectionManager', array('file'=>'..'.DS.'baser'.DS.'models'.DS.'connection_manager.php'));
 /**
+ * Baserパス追加
+ */
+	$modelPaths[] = BASER_MODELS;
+	$behaviorPaths[] = BASER_BEHAVIORS;
+	$controllerPaths[] = BASER_CONTROLLERS;
+	$componentPaths[] = BASER_COMPONENTS;
+	$viewPaths[] = BASER_VIEWS;
+	$viewPaths[] = WWW_ROOT;
+	$helperPaths[] = BASER_HELPERS;
+	$pluginPaths[] = BASER_PLUGINS;
+	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
+	// $html->css / $javascript->link 等では、/app/webroot/css/style.css というURLが生成される。
+	// 上記理由により以下のとおり変更
+	// ・HelperのwebrootメソッドをRouter::urlでパス解決をするように変更し、/index.php/css/style.css というURLを生成させる。
+	// ・走査URLをvendorsだけではなく、app/webroot内も追加
+	$vendorPaths[] = WWW_ROOT;
+	$vendorPaths[] = BASER_VENDORS;
+	$localePaths[] = BASER_LOCALES;
+	//$shellPaths[];
+/**
  * デフォルトタイトル設定
  * インストールの際のエラー時等DB接続まえのエラーで利用
  */
@@ -55,6 +75,14 @@
  */
 	if (file_exists(CONFIGS . 'install.php'))
 		include_once CONFIGS . 'install.php';
+	$baseUrl = baseUrl();
+/**
+ * vendors内の静的ファイルの読み込みの場合はスキップ
+ */
+	if(preg_match('/^(img|css|js)/is', str_replace($baseUrl, '', $_SERVER['REQUEST_URI']))){
+		Configure::write('Baser.Asset',true);
+		return;
+	}
 /**
  * タイムゾーン設定
  */
@@ -63,26 +91,6 @@
  * 文字コードの検出順を指定
  */
 	mb_detect_order("eucJP-win,UTF-8,SJIS-win");
-/**
- * Baserパス追加
- */
-	$modelPaths[] = BASER_MODELS;
-	$behaviorPaths[] = BASER_BEHAVIORS;
-	$controllerPaths[] = BASER_CONTROLLERS;
-	$componentPaths[] = BASER_COMPONENTS;
-	$viewPaths[] = BASER_VIEWS;
-	$viewPaths[] = WWW_ROOT;
-	$helperPaths[] = BASER_HELPERS;
-	$pluginPaths[] = BASER_PLUGINS;
-	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
-	// $html->css / $javascript->link 等では、/app/webroot/css/style.css というURLが生成される。
-	// 上記理由により以下のとおり変更
-	// ・HelperのwebrootメソッドをRouter::urlでパス解決をするように変更し、/index.php/css/style.css というURLを生成させる。
-	// ・走査URLをvendorsだけではなく、app/webroot内も追加
-	$vendorPaths[] = WWW_ROOT;
-	$vendorPaths[] = BASER_VENDORS;
-	$localePaths[] = BASER_LOCALES;
-	//$shellPaths[];
 /**
  * モバイルルーティング設定
  */
@@ -139,7 +147,7 @@
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
 				if (!$parameter || $parameter == 'index.html') {
-					if(Configure::read('App.baseUrl', $scriptName)){
+					if(Configure::read('App.baseUrl')){
 						clearCache('index_php');
 						clearCache('index_php_index_html');
 					}else{
@@ -156,7 +164,6 @@
  * 簡易携帯リダイレクト
  */
 	if(!$mobileOn) {
-		$baseUrl = baseUrl();
 		// TODO 管理画面で設定できるようにする
 		$mobileAgents = array('Googlebot-Mobile','Y!J-SRD','Y!J-MBS','DoCoMo','SoftBank','Vodafone','J-PHONE','UP.Browser');
 		foreach($mobileAgents as $mobileAgent) {

@@ -254,6 +254,7 @@ class AppController extends Controller {
 		$this->__loadDataToView();
 		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
+		$this->set('siteConfig',$this->siteConfigs);
 
 	}
 /**

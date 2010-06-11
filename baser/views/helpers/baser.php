@@ -53,16 +53,6 @@ class BaserHelper extends AppHelper {
 			if ($db->isInterfaceSupported('listSources')) {
 				$sources = $db->listSources();
 
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'site_configs'), array_map('strtolower', $sources))) {
-					if (ClassRegistry::isKeySet('SiteConfig')) {
-						$siteConfigClass = ClassRegistry::getObject('SiteConfig');
-						$siteConfig = $siteConfigClass->findExpanded();
-						if($siteConfig) {
-							$this->siteConfig = $siteConfig;
-						}
-					}
-				}
-
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
 					if (ClassRegistry::isKeySet('Permission')) {
 						$this->Permission = ClassRegistry::getObject('Permission');
@@ -77,6 +67,10 @@ class BaserHelper extends AppHelper {
 					}else {
 						$this->Page = ClassRegistry::init('Page');
 					}
+				}
+
+				if(isset($this->_view->viewVars['siteConfig'])){
+					$this->siteConfig = $this->_view->viewVars['siteConfig'];
 				}
 				
 			}

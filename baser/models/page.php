@@ -52,9 +52,9 @@ class Page extends AppModel {
 	var $oldPath = '';
 /**
  * 非公開URLリスト
- * @var array;
+ * @var mixed;
  */
-	var $_unpublishes = array();
+	var $_unpublishes = -1;
 /**
  * beforeValidate
  * @return	boolean
@@ -291,10 +291,11 @@ class Page extends AppModel {
  */
 	function checkPublish($url) {
 
-		if(!$this->_unpublishes) {
+		if($this->_unpublishes == -1) {
 			$conditions = array('Page.status' => false);
 			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
 			if(!$pages) {
+				$this->_unpublishes = array();
 				return true;
 			}
 			$this->_unpublishes = Set::extract('/Page/url', $pages);

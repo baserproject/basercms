@@ -20,8 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * Include files
+ * vendors内の静的ファイルの読み込みの場合はスキップ
  */
+if(Configure::read('Baser.Asset')){
+	return;
+}
 if (file_exists(CONFIGS.'database.php'))
 {
 	$parameter = Configure::read('Baser.urlParam');
