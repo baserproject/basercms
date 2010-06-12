@@ -210,7 +210,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
-					$this->deleteViewCache($this->data['Page']['url']);
+					clearViewCache($this->data['Page']['url']);
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト

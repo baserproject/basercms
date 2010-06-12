@@ -348,69 +348,6 @@ class AppController extends Controller {
 		}
 	}
 /**
- * Viewキャッシュを削除する
- * URLを指定しない場合は全てのViewキャッシュを削除する
- * @param	$url
- * @return	void
- * @access	public
- */
-	function deleteViewCache($url=null,$ext='.php') {
-		
-		if (($url == '/' || '/index.html') && $ext == '.php') {
-			if(Configure::read('App.baseUrl', $scriptName)){
-				clearCache('index_php');
-				clearCache('index_php_index_html');
-			}else{
-				clearCache('home');
-				clearCache('index_html');
-			}
-		}elseif($url) {
-			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
-		}else {
-			/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
-			clearCache();*/
-			App::import('Core','Folder');
-			$folder = new Folder(CACHE.'views'.DS);
-			$files = $folder->read(true,true);
-			foreach($files[1] as $file){
-				if($file != 'empty'){
-					@unlink(CACHE.'views'.DS.$file);
-				}
-			}
-		}
-		
-	}
-/**
- * キャッシュファイルを全て削除する
- */
-	function deleteAllCache() {
-
-		/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
-		Cache::clear();
-		Cache::clear(false,'_cake_core_');
-		Cache::clear(false,'_cake_model_');
-		clearCache();
-		*/
-
-        App::import('Core','Folder');
-        $folder = new Folder(CACHE);
-
-        $files = $folder->read(true,true,true);
-        foreach($files[1] as $file){
-            @unlink($file);
-        }
-        foreach($files[0] as $dir){
-            $folder = new Folder($dir);
-            $caches = $folder->read(true,true,true);
-            foreach($caches[1] as $file){
-                if(basename($file) != 'empty'){
-                    @unlink($file);
-                }
-            }
-        }
-
-	}
-/**
  * http経由で送信されたデータを変換する
  * とりあえず、UTF-8で固定
  *

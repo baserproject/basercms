@@ -136,7 +136,7 @@
  */
 	if(Configure::read('debug') > 0) {
 		Configure::write('Cache.check', false);
-		clearCache();
+		clearViewCache();
 	}else {
 		if(Configure::read('Session.start')) {
 			// 管理ユーザーでログインしている場合、ページ機能の編集ページへのリンクを表示する為、キャッシュをオフにする。
@@ -146,17 +146,7 @@
 			session_start();
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
-				if (!$parameter || $parameter == 'index.html') {
-					if(Configure::read('App.baseUrl')){
-						clearCache('index_php');
-						clearCache('index_php_index_html');
-					}else{
-						clearCache('home');
-						clearCache('index_html');
-					}
-				}else{
-					clearCache(strtolower(Inflector::slug($parameter)));
-				}
+				clearViewCache('/'.$parameter);
 			}
 		}
 	}
