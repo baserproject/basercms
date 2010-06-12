@@ -38,7 +38,7 @@ class PluginHookComponent extends Object{
     	    $dbConfig = new DATABASE_CONFIG();
 	        if(!$dbConfig->baser['driver']) return;
 		}
-		
+
 		if(!empty($controller->enablePlugins)){
 			$plugins = $controller->enablePlugins;
 		}else{
@@ -61,7 +61,7 @@ class PluginHookComponent extends Object{
             }
 
 		}
-        
+
         /* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
         $pluginHooks = array();
         foreach($plugins as $plugin){
@@ -70,7 +70,7 @@ class PluginHookComponent extends Object{
                 $pluginHooks[] = $pluginName.'HookComponent';
             }
         }
-        
+
         /* プラグインフックを初期化 */
         foreach($pluginHooks as $pluginHook){
             $this->pluginHooks[] =& new $pluginHook();
@@ -82,7 +82,7 @@ class PluginHookComponent extends Object{
                 $this->pluginHooks[$key]->initialize($controller);
             }
         }
-        
+
 	}
 /**
  * startup

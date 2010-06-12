@@ -95,7 +95,7 @@ class PluginContent extends AppModel {
 			$_path[0] = $url;
 			$_path[1] = '';
 		}
-		
+
 		foreach($pluginContents as $pluginContent ){
 			if($pluginContent['PluginContent']['name']){
 				if(!$mobileOn && $_path[0] == $pluginContent['PluginContent']['name']){

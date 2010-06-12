@@ -232,6 +232,7 @@ class AppController extends Controller {
 				}
 			}
 		}
+
 	}
 /**
  * beforeRender

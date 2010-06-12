@@ -53,9 +53,9 @@ class Permission extends AppModel {
  * permissions
  * ログインしているユーザーの拒否URLリスト
  * キャッシュ用
- * @var array
+ * @var mixed
  */
-	var $permissions = array();
+	var $permissions = -1;
 /**
  * beforeValidate
  *
@@ -154,13 +154,17 @@ class Permission extends AppModel {
  */
 	function check($url, $userGroupId){
 
-		if(!$this->permissions){
+		if($this->permissions === -1){
 			$conditions = array('Permission.user_group_id' => $userGroupId);
-			$this->permissions = $this->find('all',array('conditions'=>$conditions,'order'=>'sort','recursive'=>-1));
-			if(!$this->permissions){
+			$permissions = $this->find('all',array('conditions'=>$conditions,'order'=>'sort','recursive'=>-1));
+			if($permissions){
+				$this->permissions = $permissions;
+			}else{
+				$this->permissions = array();
 				return true;
 			}
 		}
+		
 		$permissions = $this->permissions;
 
 		if($url!='/'){
