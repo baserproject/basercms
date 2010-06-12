@@ -19,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$baser->cacheHeader();
 ?>
 document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('/feed/img/ajax-loader.gif',array('alt'=>'loading now...','style'=>'display:block;margin:auto')) ?></div>');
 

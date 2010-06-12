@@ -20,7 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php echo $html->css('login',null,null,false) ?>
 <?php if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 } ?>

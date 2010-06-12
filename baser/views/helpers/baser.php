@@ -730,5 +730,16 @@ class BaserHelper extends AppHelper {
 			return false;
 		}
 	}
+/**
+ * ブラウザにキャッシュさせる為のヘッダーを出力する
+ */
+	function cacheHeader(){
+		header('Cache-Control: max-age=' . 86400);
+		header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", filemtime(WWW_ROOT.'index.php') ) . " GMT" );
+		if (session_id()) { //session_startしている場合
+			header('Expires: ' . gmdate( "D, d M Y H:i:s", filemtime(WWW_ROOT.'index.php')+86400 ) . " GMT");
+			header('Pragma: ');
+		}
+	}
 }
 ?>
