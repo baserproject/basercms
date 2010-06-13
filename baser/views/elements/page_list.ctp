@@ -33,10 +33,10 @@ if(!empty($pages)){
 		}else{
 			$class = ' class="page'.$no.'"';
 		}
-		if($this->base == '/index.php' && $page['Page']['url'] == '/'){
-			echo '<li'.$class.'>'.str_replace('/index.php','',$html->getLink($page['Page']['title'],$page['Page']['url'])).'</li>';
+		if($this->base == '/index.php' && $page['url'] == '/'){
+			echo '<li'.$class.'>'.str_replace('/index.php','',$html->getLink($page['title'],$page['url'])).'</li>';
 		}else{
-			echo '<li'.$class.'>'.$baser->getLink($page['Page']['title'],$page['Page']['url']).'</li>';
+			echo '<li'.$class.'>'.$baser->getLink($page['title'],$page['url']).'</li>';
 		}
 	}
 }
