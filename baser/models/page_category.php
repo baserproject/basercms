@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: page_category.php 309 2010-06-13 11:57:06Z ryuring $ */
 /**
  * ページカテゴリーモデル
  *
@@ -14,9 +14,9 @@
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @version			$Revision: 309 $
+ * @modifiedby		$LastChangedBy: ryuring $
+ * @lastmodified	$Date: 2010-06-13 20:57:06 +0900 (日, 13 6 2010) $
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -62,6 +62,13 @@ class PageCategory extends AppModel {
                                         'exclusive'=>false,
                                         'finderQuery'=>''));
 /**
+ * カテゴリIDリスト
+ * ※ キャッシュ用
+ * var		mixed
+ * access	protected
+ */
+		var $_categoryIds = -1;
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -102,12 +109,12 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function getControlSource($field = null,$options = array()){
-        
+
         if(ClassRegistry::isKeySet('SiteConfig')){
             $SiteConfig = ClassRegistry::getObject('SiteConfig');
             $controlSources['theme'] = $SiteConfig->getThemes();
         }
-        
+
         $conditions['PageCategory.theme'] = $this->validationParams['theme'];
         if(!empty($options['excludeParentId'])){
             $children = $this->children($options['excludeParentId']);
@@ -232,7 +239,7 @@ class PageCategory extends AppModel {
             }
         }
         return true;
-        
+
     }
 /**
  * 関連するページデータをカテゴリ無所属に変更し保存する
@@ -256,5 +263,32 @@ class PageCategory extends AppModel {
         }
         return $ret;
     }
+/**
+ * ページカテゴリIDを取得する
+ *
+ * @param		int			$categoryNo
+ * @param		string	$theme
+ * @return	$mixed	array / false
+ */
+	function getCategoryId($categoryNo,$theme){
+		if($this->_categoryIds === -1){
+			$conditions = array('PageCategory.theme'=>$theme);
+			$this->unbindModel(array('hasMany'=>array('Page')));
+			$pageCategories = $this->find('all',array('conditions'=>$conditions,'fields'=>array('id','no')));
+			if($pageCategories){
+				$this->_categoryIds = array();
+				foreach($pageCategories as $pageCateogry){
+					$this->_categoryIds[$pageCateogry['PageCategory']['no']] = $pageCateogry['PageCategory']['id'];
+				}
+			}else{
+				$this->_categoryIds = array();
+			}
+		}
+		if(isset($this->_categoryIds[$categoryNo])){
+			return $this->_categoryIds[$categoryNo];
+		}else{
+			return false;
+		}
+	}
 }
 ?>

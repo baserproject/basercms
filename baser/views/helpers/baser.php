@@ -69,10 +69,18 @@ class BaserHelper extends AppHelper {
 					}
 				}
 
+				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'page_categories'), array_map('strtolower', $sources))) {
+					if (ClassRegistry::isKeySet('PageCategory')) {
+						$this->PageCategory = ClassRegistry::getObject('PageCategory');
+					}else {
+						$this->PageCategory = ClassRegistry::init('PageCategory');
+					}
+				}
+
 				if(isset($this->_view->viewVars['siteConfig'])){
 					$this->siteConfig = $this->_view->viewVars['siteConfig'];
 				}
-				
+
 			}
 		}
 	}
@@ -460,7 +468,7 @@ class BaserHelper extends AppHelper {
 		}else {
 			$forceTitle = false;
 		}
-		
+
 		$_url = str_replace($this->base, '', $this->getUrl($url));
 		$enabled = true;
 
@@ -478,7 +486,7 @@ class BaserHelper extends AppHelper {
 				$enabled = false;
 			}
 		}
-		
+
 		if(!$enabled){
 			if($forceTitle) {
 				return "<span>$title</span>";
@@ -486,7 +494,7 @@ class BaserHelper extends AppHelper {
 				return '';
 			}
 		}
-		
+
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 	}
@@ -626,7 +634,7 @@ class BaserHelper extends AppHelper {
 				$contentsName .= '_'.implode('_', $pass);
 			}
 		}
-		
+
 		$contentsName = Inflector::camelize($contentsName);
 
 		return $contentsName;
@@ -669,7 +677,7 @@ class BaserHelper extends AppHelper {
 		}
 
 		return $contentsName;
-		
+
 	}
 /**
  * パンくずリストを出力する
@@ -715,10 +723,11 @@ class BaserHelper extends AppHelper {
  * @param string $categoryId
  * @return mixed boolean / array
  */
-	function getPageList($categoryId=null){
+	function getPageList($categoryNo=null){
 		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
-			if(!is_null($categoryId)){
+			if($categoryNo){
+				$categoryId = $this->PageCategory->getCategoryId($categoryNo,$this->siteConfig['theme']);
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
 			$this->Page->unbindModel(array('belongsTo'=>array('PageCategory')));
