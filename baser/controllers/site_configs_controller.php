@@ -110,8 +110,6 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['mode']);
 				unset($this->data['SiteConfig']['id']);
 				$this->SiteConfig->saveKeyValue($this->data);
-
-				// ビューのキャッシュを削除
 				$this->writeDebug($mode);
 				$this->Session->setFlash('システム設定を保存しました。');
 				$this->redirect(array('action'=>'form'));

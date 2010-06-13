@@ -28,6 +28,7 @@ $(function(){
 		$("#BlogPostForm").attr('target','_blank');
 		$("#BlogPostForm").submit();
 		$("#BlogPostForm").attr('action',action);
+		return false;
 	});
 });
 </script>

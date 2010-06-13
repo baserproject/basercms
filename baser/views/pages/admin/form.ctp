@@ -28,6 +28,7 @@ $(function(){
 		$("#PageForm").attr('target','_blank');
 		$("#PageForm").submit();
 		$("#PageForm").attr('action',action);
+		return false;
 	});
 });
 </script>
