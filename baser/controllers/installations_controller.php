@@ -866,7 +866,10 @@ class InstallationsController extends AppController {
 	function reset() {
 
 		$this->pageTitle = 'BaserCMSの初期化';
-
+		$this->layoutPath = 'admin';
+		$this->layout = 'default';
+		$this->subDir = 'admin';
+		
 		if($this->data['Installation']['reset']) {
 
 			if(file_exists(CONFIGS.'database.php')) {
@@ -991,7 +994,9 @@ class InstallationsController extends AppController {
 	function update() {
 
 		$this->pageTitle = 'WEBサイトアップデート';
-
+		$this->layoutPath = 'admin';
+		$this->layout = 'default';
+		$this->subDir = 'admin';
 		clearAllCache();
 
 		/* バージョンを解析 */

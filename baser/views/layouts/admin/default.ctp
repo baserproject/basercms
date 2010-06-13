@@ -67,7 +67,8 @@
 
             <!-- begin navigation -->
             <div id="navigation" class="clearfix">
-
+				
+				<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
                 <div id="pankuzu">
                     <?php if($this->params['url']['url'] != 'admin/users/login'): ?>
                         <?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
@@ -75,12 +76,13 @@
                         <?php $baser->element('navi',array('title_for_element'=>$title_for_layout),false,false); ?>
                     <?php endif; ?>
                 </div>
-
+				<?php endif ?>
+				
                 <?php if($this->params['url']['url'] != 'admin/users/login'): ?>
                     <div id="loginUser">
                     <?php if(Configure::read('debug')>0): ?>
                         <span>只今デバッグ中</span>
-                    <?php else: ?>
+                    <?php elseif($this->params['controller']!='installations' && $this->action != 'update'): ?>
                         <span><?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
                         &nbsp;| &nbsp;<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
                         </span>
@@ -90,7 +92,10 @@
 
             </div>
             <!-- end navigation -->
-            <?php $baser->updateMessage() ?>
+
+			<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
+				<?php $baser->updateMessage() ?>
+			<?php endif ?>
 
             <!-- begin alfa -->
             <div id="alfa" >
