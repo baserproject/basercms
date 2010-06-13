@@ -651,9 +651,10 @@ class DboCsv extends DboSource {
 		// TODO ここでは、全データを読み込む仕様となっているので大量のデータを扱う場合、メモリに負荷がかかってしまう。
 		// 並び替えを実行した上で、指定件数を取り出すという要件を実現する為、こういう仕様となっている。
 		// 何か解決策があれば・・・
-		$records = $this->_readCsvFile($queryData['tableName']);
-		// 文字コードを変換
-		mb_convert_variables($this->endcoding,"SJIS",$records);
+		if(empty($queryData['conditions'])){
+			$queryData['conditions'] = null;
+		}
+		$records = $this->_readCsvFile($queryData['tableName'],$queryData['conditions']);
 
 		/* ソート処理（１フィールドのみ対応） */
 		if(!empty($queryData['order'][0])) {
@@ -669,20 +670,9 @@ class DboCsv extends DboSource {
 		/* データのフィルタリング */
 		$count=0;
 		$matchCount=0;
-		$maxId = 0;
 		$maxValue = 0;
 		if($records) {
 			foreach($records as $record) {
-
-				// IDの最大値を取得
-				if($record['id']>$maxId) {
-					$maxId = $record['id'];
-				}
-
-				// 条件に合致しない場合は取得せず次へ
-				if(!empty($queryData['conditions']) && !eval($queryData['conditions'])) {
-					continue;
-				}
 
 				$matchCount++;
 				if(isset($begin) && $matchCount < $begin) {
@@ -720,7 +710,6 @@ class DboCsv extends DboSource {
 		}
 
 		$this->_resultTable = $queryData["className"];
-		$this->_maxId = $maxId;
 		$this->_count = $count;
 
 		// カウントオプションの場合は件数を返す
@@ -751,8 +740,7 @@ class DboCsv extends DboSource {
 
 		// 主キーがない場合のauto処理
 		if(empty($queryData['values']['id'])) {
-			$this->readCsv($queryData);
-			$queryData['values']['id'] = $this->_maxId+1;
+			$queryData['values']['id'] = $this->_getMaxId($queryData['tableName'])+1;
 			$this->_lastInsertId = $queryData['values']['id'];
 		}
 
@@ -814,8 +802,6 @@ class DboCsv extends DboSource {
 		// ヘッダーの生成
 		$head = $this->_getCsvHead();
 
-		mb_convert_variables("SJIS",$this->endcoding,$queryData['values']);
-
 		// データの生成
 		$body="";
 		if($records) {
@@ -842,8 +828,10 @@ class DboCsv extends DboSource {
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
+		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$queryData['tableName']], $head.$body);
+		$ret = fwrite($this->connection[$queryData['tableName']], $csvData);
 
 		return $ret;
 
@@ -874,8 +862,10 @@ class DboCsv extends DboSource {
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
+		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$queryData['tableName']], $head.$body);
+		$ret = fwrite($this->connection[$queryData['tableName']], $csvData);
 
 		return $ret;
 
@@ -884,10 +874,11 @@ class DboCsv extends DboSource {
  * CSVファイルを配列として読み込む
  *
  * @param	string	テーブル名
+ * @param	string	検索条件
  * @return 	array	配列の結果セット
  * @access 	protected
  */
-	function _readCsvFile($tableName=null) {
+	function _readCsvFile($tableName = null, $conditions = null) {
 
 		if($tableName) {
 			$index = $tableName;
@@ -909,17 +900,63 @@ class DboCsv extends DboSource {
 		rewind($this->connection[$index]);
 		$this->_csvFields = fgetcsv($this->connection[$index],10240);
 
-		while(($record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
-			$_record = array();
+		while(($_record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
+			$record = array();
 			// 配列の添え字をフィールド名に変換
-			foreach($record as $key => $value) {
-				$_record[$this->_csvFields[$key]] = $value;
+			foreach($_record as $key => $value) {
+				$record[$this->_csvFields[$key]] = $value;
 			}
-			$records[] = $_record;
+			// 文字コードを変換
+			mb_convert_variables($this->endcoding,"SJIS",$record);
+			// 条件に合致しない場合は取得せず次へ
+			if($conditions && !eval($conditions)) {
+				continue;
+			}
+			$records[] = $record;
 		}
 
 		return $records;
 
+	}
+/**
+ * IDの最大値を取得する
+ * @param	string	$tableName
+ * @return	int		$id
+ */
+	function _getMaxId($tableName){
+		
+		if($tableName) {
+			$index = $tableName;
+		}else {
+			$index = 0;
+		}
+
+		if(!isset($this->connection[$index])) {
+			if(!$this->_connect($tableName)) {
+				return false;
+			}
+		}
+
+		$maxId=0;
+
+		// ヘッダ取得
+		rewind($this->connection[$index]);
+		$this->_csvFields = fgetcsv($this->connection[$index],10240);
+		$idNum = '';
+		foreach($this->_csvFields as $key => $value){
+			if($value == 'id'){
+				$idNum = $key;
+				break;
+			}
+		}
+
+		while(($record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
+			if($record[$idNum]>=$maxId){
+				$maxId = $record[$idNum];
+			}
+		}
+		return $maxId;
+		
 	}
 /**
  * CSV用のヘッダを取得する
@@ -1009,8 +1046,10 @@ class DboCsv extends DboSource {
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
+		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
+		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
 
 		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
@@ -1071,8 +1110,10 @@ class DboCsv extends DboSource {
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
+		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+		
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
+		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
 		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
 
@@ -1132,9 +1173,9 @@ class DboCsv extends DboSource {
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
-
+		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $head.$body);
+		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
 		$this->disconnect($model->tablePrefix.$model->useTable);
 		return $ret;
 
