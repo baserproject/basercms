@@ -171,9 +171,9 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='.php') {
+	function clearViewCache($url=null,$ext='') {
 
-		if (($url == '/' || $url == '/index.html') && $ext == '.php') {
+		if (($url == '/' || $url == '/index.html')) {
 			if(Configure::read('App.baseUrl')){
 				clearCache('index_php');
 				clearCache('index_php_index_html');
@@ -189,7 +189,13 @@
 			$files = $folder->read(true,true);
 			foreach($files[1] as $file){
 				if($file != 'empty'){
-					@unlink(CACHE.'views'.DS.$file);
+					if($ext){
+						if(preg_match('/'.str_replace('.', '\.', $ext).'$/is', $file)){
+							@unlink(CACHE.'views'.DS.$file);
+						}
+					}else{
+						@unlink(CACHE.'views'.DS.$file);
+					}
 				}
 			}
 		}

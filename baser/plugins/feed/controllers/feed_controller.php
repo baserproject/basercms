@@ -182,7 +182,7 @@ class FeedController extends FeedAppController{
         $items = array_slice($items, 0, $feedConfig['FeedConfig']['display_number']);
 
         /* キャッシュを設定 */
-        if(isset($_SESSION['Auth']['AdminUser'])){
+        if(isset($_SESSION['Auth']['User'])){
             $this->cacheAction = 0;
         }else{
             $this->cacheAction = $cacheTime;
