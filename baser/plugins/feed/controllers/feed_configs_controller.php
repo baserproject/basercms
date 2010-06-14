@@ -232,6 +232,18 @@ class FeedConfigsController extends FeedAppController{
         $this->pageTitle = 'プレビュー：'.$this->FeedConfig->field('name',array('FeedConfig.id'=>$id));
         $this->set('id',$id);
     }
+/**
+ * フィードのキャッシュを削除する
+ * @return	void
+ * @access	public
+ */
+	function admin_delete_cache(){
+		$baseUrl = Configure::read('App.baseUrl');
+		clearViewCache(null,'rss');
+		clearViewCache($baseUrl.'/feed/index');
+		$this->Session->setFlash('フィードのキャッシュを削除しました。');
+		$this->redirect('/admin/feed/feed_configs/index');
+	}
 }
 
 ?>
