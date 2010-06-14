@@ -158,8 +158,9 @@ INSERT INTO "bc_site_configs" ("name", "value", "created", "modified") VALUES
 ('address',NULL, NOW(), NOW()),
 ('googlemaps_key', NULL, NOW(), NOW()),
 ('theme','demo', NOW(), NOW()),
-('email','', NOW(), NOW());
-
+('email','', NOW(), NOW()),
+('twitter_username','basercms', NOW(), NOW()),
+('twitter_count','3', NOW(), NOW());
 
 -- --------------------------------------------------------
 

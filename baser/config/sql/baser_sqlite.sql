@@ -163,6 +163,10 @@ INSERT INTO bc_site_configs (name, value, created, modified) VALUES
 ('theme', 'demo',datetime('now', 'localtime'),datetime('now', 'localtime'));
 INSERT INTO bc_site_configs (name, value, created, modified) VALUES
 ('email', '',datetime('now', 'localtime'),datetime('now', 'localtime'));
+INSERT INTO bc_site_configs (name, value, created, modified) VALUES
+('twitter_username', 'basercms',datetime('now', 'localtime'),datetime('now', 'localtime'));
+INSERT INTO bc_site_configs (name, value, created, modified) VALUES
+('twitter_count', '3',datetime('now', 'localtime'),datetime('now', 'localtime'));
 
 -- --------------------------------------------------------
 
