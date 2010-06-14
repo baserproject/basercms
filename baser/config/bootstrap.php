@@ -148,7 +148,6 @@
 			if(isset($_SESSION['Auth']['User']) && (!$parameter || preg_match('/\.html$/is', $parameter))) {
 				Configure::write('Cache.check', false);
 				clearViewCache('/'.$parameter);
-				clearViewCache(null,'rss');
 			}
 		}
 	}
