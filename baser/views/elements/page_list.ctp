@@ -19,7 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pages = $baser->getPageList($categoryId);
+$pages = $baser->getPageList($categoryNo);
 ?>
 <ul class="clearfix">
 <?php
@@ -34,7 +34,7 @@ if(!empty($pages)){
 			$class = ' class="page'.$no.'"';
 		}
 		if($this->base == '/index.php' && $page['url'] == '/'){
-			echo '<li'.$class.'>'.str_replace('/index.php','',$html->getLink($page['title'],$page['url'])).'</li>';
+			echo '<li'.$class.'>'.str_replace('/index.php','',$baser->getLink($page['title'],$page['url'])).'</li>';
 		}else{
 			echo '<li'.$class.'>'.$baser->getLink($page['title'],$page['url']).'</li>';
 		}

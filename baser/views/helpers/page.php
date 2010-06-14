@@ -26,6 +26,7 @@
  */
 class PageHelper extends Helper {
     var $Page = null;
+	var $data = array();
 /**
  * construct
  */
