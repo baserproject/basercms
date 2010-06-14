@@ -42,7 +42,7 @@ if (file_exists(CONFIGS.'database.php'))
 /**
  * 管理画面トップページ
  */
-	Router::connect('admin', array('admin'=>true, 'controller' => 'users', 'action', 'login'));
+	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard', 'action'=> 'index'));
 /**
  * ページ機能拡張
  * .html付きのアクセスの場合、pagesコントローラーを呼び出す
