@@ -276,12 +276,82 @@ h4.contents-head{
 .customize-navi{
     background-color:#f2ffde;
     padding:10px;
-    margin: 10px;
+    margin: 10px 0 10px 0;
 }
 
 /* map
 ----------------------------------------------- */
 #map .sitename{
 	color:#360;
+	font-weight: bold;
+}
+
+/* tweet
+----------------------------------------------- */
+.tweet h2{
+	color:#FFFFFF;
+	margin-top:0;
+	font-size: 2em;
+	padding-left:0;
+	margin-left:0;
+	background: none;
+}
+.tweet h2 a{
+	font-size: 12px;
+	color:#FFFFFF;
+	text-decoration: none;
+}
+.tweet h2 a:hover{
+	text-decoration:underline;
+}
+.tweet, .query {
+	font-size: 0.9em;
+	background-color: #BBDD53;
+	padding:10px;
+}
+.tweet .tweet_list,
+.query .tweet_list {
+	-webkit-border-radius: .5em;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: #FFFFFF;
+}
+.tweet .tweet_list .awesome,
+.tweet .tweet_list .epic,
+.query .tweet_list .awesome,
+.query .tweet_list .epic {
+	text-transform: uppercase;
+}
+.tweet .tweet_list li,
+.query .tweet_list li {
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: .7em;
+	background: none;
+}
+.tweet .tweet_list .tweet_even,
+.query .tweet_list .tweet_even {
+	background-color: #f2ffde;
+}
+.tweet .tweet_list .tweet_avatar,
+.query .tweet_list .tweet_avatar {
+	padding-right: .5em;
+	float: left;
+}
+.tweet .tweet_list .tweet_avatar img,
+.query .tweet_list .tweet_avatar img {
+	vertical-align: middle;
+}
+.tweet_time a{
+	color:#999999;
+	font-size: 9px;
+	text-decoration:none;
+}
+.tweet_time a:hover{
+	text-decoration:underline;
+}
+.loading{
+	color:#FFFFFF;
 	font-weight: bold;
 }

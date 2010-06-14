@@ -21,7 +21,7 @@
 ?>
 
 <div class="side-navi">
-	<p style="margin-bottom:20px">
+	<p style="margin-bottom:20px;text-align: center">
 		<a href="http://basercms.net" target="_blank"><img src="http://www.e-catchup.jp/img/bnr_basercms.jpg" alt="コーポレートサイトにちょうどいいCMS、BaserCMS"/></a>
 	</p>
 	<h2>ログインメニュー</h2>
