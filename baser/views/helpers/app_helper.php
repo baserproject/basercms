@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -24,7 +24,7 @@
  */
 /**
  * Helper 拡張クラス
- * 
+ *
  * @package			baser.view.helpers
  */
 class AppHelper extends Helper
@@ -126,7 +126,7 @@ class AppHelper extends Helper
 			$this->webroot .= $webroot . '/';
 		}
 		//<<<
-		
+
         // 2009/10/6 MODIFY ryuring
         // Rewriteモジュールが利用できない場合、$html->css / $javascript->link では、
         // app/webroot/を付加してURLを生成してしまう為、vendors 内のパス解決ができない。
@@ -140,7 +140,7 @@ class AppHelper extends Helper
 		// $webPath = "{$this->webroot}" . $file;
         // ---
 		if(file_exists(WWW_ROOT . $file)){
-            $webPath = $this->base.DS. $file;
+            $webPath = $this->webroot.$file;
         }else{
             $webPath = Router::url('/'.$file);
         }
