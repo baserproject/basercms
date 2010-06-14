@@ -426,13 +426,19 @@ class BaserHelper extends AppHelper {
  * CSSタグを出力するだけのラッパー
  */
 	function css($path, $rel = null, $htmlAttributes = array(), $inline = true) {
-		echo $this->Html->css($path, $rel, $htmlAttributes, $inline);
+		$ret = $this->Html->css($path, $rel, $htmlAttributes, $inline);
+		if($inline){
+			echo $ret;
+		}
 	}
 /**
  * Javascriptのlinkタグを出力するだけのラッパー
  */
 	function js($url, $inline = true) {
-		echo $this->Javascript->link($url, $inline);
+		$ret = $this->Javascript->link($url, $inline);
+		if($inline){
+			echo $ret;
+		}
 	}
 /**
  * imageタグを出力するだけのラッパー
