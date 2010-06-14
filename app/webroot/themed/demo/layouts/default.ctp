@@ -39,7 +39,7 @@
 									'i18n/ui.datepicker-ja',
 									'jquery.bt.min',
 									'jquery.corner',
-                                    'jquery.colorbox-min.js',
+                                    'jquery.colorbox-min',
 									'functions',
 									'styleswitcher',
 									'startup')) ?>
