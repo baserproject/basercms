@@ -53,7 +53,16 @@ class AppView extends ThemeView {
 			$prefix = $this->params['prefix'];
 			$name = str_replace($prefix.'_','',$this->action);
 		}
-		return parent::_getViewFileName($name);
+		if($this->name == 'CakeError' && $this->viewPath == 'errors'){
+			// CakeErrorの場合はサブフォルダを除外
+			$subDir = $this->subDir;
+			$this->subDir = '';
+			$fileName = parent::_getViewFileName($name);
+			$this->subDir = $subDir;
+			return $fileName;
+		}else{
+			return parent::_getViewFileName($name);
+		}
 		
 	}
 

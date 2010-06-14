@@ -15,6 +15,8 @@
     <?php echo $form->end(array('label'=>'アップデート実行','class'=>'button btn-red')) ?>
 <?php else: ?>
     <p>WEBサイトのバージョンは最新です。</p>
+	<?php if($_SESSION['Auth']['User']): ?>
     <p><?php $baser->link('≫ ダッシュボードに移動する','/admin/dashboard/index') ?></p>
+	<?php endif ?>
 <?php endif ?>
 </div>
