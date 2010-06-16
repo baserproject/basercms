@@ -35,20 +35,20 @@ $db =& ConnectionManager::getDataSource('baser');
  * user_groups テーブルを追加
  */
 if($db->createTableSchema(array('model'=>'UserGroup','path'=>BASER_CONFIGS.'sql'))){
-	$updateMessage[] = '■ ユーザーグループテーブルの生成に成功しました。';
+	$this->setUpdateMessage('ユーザーグループテーブルの生成に成功しました。');
 }else{
-	$updateMessage[] = '■ ユーザーグループテーブルの生成に失敗しました。<br />'.
-						'手動で user_groups テーブルを生成してください。';
+	$this->setUpdateMessage('ユーザーグループテーブルの生成に失敗しました。<br />'.
+						'手動で user_groups テーブルを生成してください。');
 }
 
 /**
  * permissions テーブルを追加
  */
 if($db->createTableSchema(array('model'=>'Permission','path'=>BASER_CONFIGS.'sql'))){
-	$updateMessage[] = '■ アクセス制限設定テーブルの生成に成功しました。';
+	$this->setUpdateMessage('アクセス制限設定テーブルの生成に成功しました。');
 }else{
-	$updateMessage[] = '■ アクセス制限設定テーブルの生成に失敗しました。<br />'.
-						'手動で permissions テーブルを生成してください。';
+	$this->setUpdateMessage('アクセス制限設定テーブルの生成に失敗しました。<br />'.
+						'手動で permissions テーブルを生成してください。');
 }
 
 /**
@@ -61,10 +61,10 @@ $db->reconnect($db->config);
  */
 $userGroupIdCol = array('name'=>'user_group_id','type'=>'integer','length'=>4);
 if($db->editColumn('User','authority_group','user_group_id',$userGroupIdCol)){
-	$updateMessage[] = '■ ユーザーテーブルのフィールド名称を authority_group から user_group_id に変更しました。';
+	$this->setUpdateMessage('ユーザーテーブルのフィールド名称を authority_group から user_group_id に変更しました。');
 }else{
-	$updateMessage[] = '■ ユーザーテーブルのフィールド名称変更に失敗しました。<br />'.
-						' authority_group を user_group_id に手動で変更してください。';
+	$this->setUpdateMessage('ユーザーテーブルのフィールド名称変更に失敗しました。<br />'.
+						' authority_group を user_group_id に手動で変更してください。');
 }
 
 /**
@@ -77,10 +77,10 @@ $users = $User->find('all');
 foreach($users as $user){
 	$user['User']['user_group_id']='1';
 	if($User->save($user)){
-		$updateMessage[] = '■ ユーザー: '.$user['User']['name'].' を管理者グループに所属させました。';
+		$this->setUpdateMessage('ユーザー: '.$user['User']['name'].' を管理者グループに所属させました。');
 	}else{
-		$updateMessage[] = '■ ユーザーデータの更新に失敗しました。<br />'.
-							'手動で、一人のユーザーを管理者グループに所属させてください。';
+		$this->setUpdateMessage('ユーザーデータの更新に失敗しました。<br />'.
+							'手動で、一人のユーザーを管理者グループに所属させてください。');
 	}
 }
 
@@ -98,10 +98,10 @@ foreach($datas as $data){
 	}
 }
 if($ret){
-	$updateMessage[] = '■ ユーザーグループデータの登録に成功しました。';
+	$this->setUpdateMessage('ユーザーグループデータの登録に成功しました。');
 }else{
-	$updateMessage[] = '■ ユーザーグループデータの登録に失敗しました。.<br />'.
-						'手動でユーザーグループデータを登録してください。';
+	$this->setUpdateMessage('ユーザーグループデータの登録に失敗しました。.<br />'.
+						'手動でユーザーグループデータを登録してください。');
 }
 
 /**
@@ -131,15 +131,10 @@ foreach($datas as $data){
 	}
 }
 if($ret){
-	$updateMessage[] = '■ アクセス制限設定データの登録に成功しました。';
+	$this->setUpdateMessage('アクセス制限設定データの登録に成功しました。');
 }else{
-	$updateMessage[] = '■ アクセス制限設定データの登録に失敗しました。<br />'.
-						'手動でアクセス制限設定データを登録してください。';
+	$this->setUpdateMessage('アクセス制限設定データの登録に失敗しました。<br />'.
+						'手動でアクセス制限設定データを登録してください。');
 }
 
-/**
- * 処理完了
- */
-$updateMessage[] = '----- データベースの更新が完了しました -----';
-$this->log($updateMessage,'install');
 ?>

@@ -537,13 +537,13 @@ class BaserHelper extends AppHelper {
  * @return boolean
  */
 	function checkUpdate() {
-		$baserRev = revision($this->_view->viewVars['baserVersion']);
+		$baserVerpoint = verpoint($this->_view->viewVars['baserVersion']);
 		if(isset($this->siteConfig['version'])) {
-			$siteRev = revision($this->siteConfig['version']);
+			$siteVerpoint = verpoint($this->siteConfig['version']);
 		}else {
-			$siteRev = 0;
+			$siteVerpoint = 0;
 		}
-		return ($baserRev > $siteRev);
+		return ($baserVerpoint > $siteVerpoint);
 	}
 /**
  * アップデート用のメッセージを出力する

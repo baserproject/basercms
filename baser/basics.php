@@ -60,11 +60,14 @@
     }
 /**
  * バージョンを特定する一意の数値を取得する
+ * ２つ目以降のバージョン番号は３桁として結合
+ * 1.5.9 => 1005009
+ * ※ ２つ目以降のバージョン番号は999までとする
  * @param string $version
  */
 	function verpoint($version){
 		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)){
-			return $maches[1]*100 + $maches[2]*10 + $maches[3];
+			return $maches[1]*1000000 + $maches[2]*1000 + $maches[3];
 		}else{
 			return 0;
 		}

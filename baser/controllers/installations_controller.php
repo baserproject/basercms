@@ -40,6 +40,7 @@ class InstallationsController extends AppController {
 	var $helpers = array('Html', 'Form', 'Javascript', 'Time'); // ヘルパー
 	var $uses = null;											// モデル
 	var $webrootExists = false;
+	var $_updateMessage = array();								// アップデートメッセージ
 /**
  * データベースエラーハンドラ
  *
@@ -1019,8 +1020,8 @@ class InstallationsController extends AppController {
 		if(!empty($files[1])) {
 			foreach ($files[1] as $file) {
 				if(preg_match("/(.*?)\.php$/is", $file , $matches)) {
-					$scriptRev = $matches[1];
-					if($scriptRev > $siteVerpoint && $scriptRev <= $baserVerpoint) {
+					$scriptVerpoint = $matches[1];
+					if(($scriptVerpoint > $siteVerpoint && $scriptVerpoint <= $baserVerpoint)||$matches[1]=='latest') {
 						$scriptNum++;
 						$scripts[] = $file;
 					}
@@ -1030,10 +1031,15 @@ class InstallationsController extends AppController {
 
 		/* スクリプト実行 */
 		if($this->data) {
-			asort($scripts);
-			$updateMessage = array();
-			foreach($scripts as $script) {
-				include BASER_CONFIGS.'update'.DS.$script;
+			
+			$this->setUpdateMessage($baserVersion.' へのアップデートを開始します。', true);
+
+			if($scripts){
+				asort($scripts);
+				foreach($scripts as $script) {
+					$this->setUpdateMessage('アップデートプログラム '.$script.' を実行します。', true, true);
+					include BASER_CONFIGS.'update'.DS.$script;
+				}
 			}
 
 			/* サイト基本設定にバージョンを保存 */
@@ -1041,13 +1047,11 @@ class InstallationsController extends AppController {
 			$data['SiteConfig']['version'] = $baserVersion;
 			$SiteConfigClass->saveKeyValue($data);
 
-			if($updateMessage) {
-				$updateMessage[] = '';
-			}
-			$updateMessage[] = 'アップデートが完了しました。';
-			$this->Session->setFlash(implode('<br />',$updateMessage));
-
+			$this->setUpdateMessage($baserVersion.' へのアップデートが完了しました。', true, true);
+			$this->Session->setFlash($this->getUpadteMessage());
+			$this->log($this->_updateMessage,'install');
 			$this->redirect(array('action'=>'update'));
+			
 		}
 
 		$this->set('siteVer',$siteVer);
@@ -1055,5 +1059,34 @@ class InstallationsController extends AppController {
 		$this->set('scriptNum',$scriptNum);
 
 	}
+/**
+ * アップデートメッセージをセットする
+ * 
+ * @param	string		$message
+ * @param	boolean		$head			見出しとして設定する
+ * @param	boolean		$beforeBreak	前の行で改行する
+ * @return	void
+ * @access	public
+ */
+	function setUpdateMessage($message, $head = false, $beforeBreak = false){
+		if($beforeBreak){
+			$this->_updateMessage[] = '';
+		}
+		if($head){
+			$message = '----- '.$message.' -----';
+		}else{
+			$message = '　* '.$message;
+		}
+		$this->_updateMessage[] = $message;
+	}
+/**
+ * アップデートメッセージを取得する
+ * 改行区切り
+ * @return string
+ */
+	function getUpadteMessage(){
+		return implode('<br />',$this->_updateMessage);
+	}
+
 }
 ?>
