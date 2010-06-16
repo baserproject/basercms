@@ -155,8 +155,8 @@ class BlogController extends BlogAppController{
         $this->BlogPost->unbindModel(array('belongsTo'=>array('BlogContent')));
 		$this->paginate = array('conditions'=>$conditions,
 								'fields'=>array(),
-								'order'=>'BlogPost.posts_date DESC',
-								'limit'=>10
+								'order'=>'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
+								'limit'=>$this->blogContent['BlogContent']['list_count']
 								);
 		$this->set('posts', $this->paginate('BlogPost'));
 
@@ -256,8 +256,8 @@ class BlogController extends BlogAppController{
             $conditions['BlogPost.blog_content_id'] = $contentId;
 			$this->paginate = array('conditions'=>$conditions,
 									'fields'=>array(),
-									'order'=>'BlogPost.posts_date DESC,BlogPost.id DESC',
-									'limit'=>10
+									'order'=>'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
+									'limit'=>$this->blogContent['BlogContent']['list_count']
 									);
 			$this->BlogPost->recursive = 1;
 			$posts = $this->paginate('BlogPost');
@@ -298,8 +298,8 @@ class BlogController extends BlogAppController{
 
 			$this->paginate = array('conditions'=>$conditions,
 									'fields'=>array(),
-									'order'=>'BlogPost.posts_date DESC,BlogPost.id DESC',
-									'limit'=>10
+									'order'=>'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'].',BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
+									'limit'=>$this->blogContent['BlogContent']['list_count']
 									);
 			$this->BlogPost->recursive = 1;
 			$posts = $this->paginate('BlogPost');

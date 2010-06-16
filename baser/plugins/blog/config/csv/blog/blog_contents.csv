@@ -1,2 +1,2 @@
-"id","name","title","description","layout","template","theme","status","comment_use","comment_approve","created","modified"
-"1","news","ニュースリリース","Baser CMS inc. [デモ] の最新のニュースリリースをお届けします。","default","default","","1","1","0","",""
+"id","name","title","description","layout","template","theme","status","list_count","list_direction","comment_use","comment_approve","created","modified"
+"1","news","ニュースリリース","Baser CMS inc. [デモ] の最新のニュースリリースをお届けします。","default","default","","1","10","DESC","1","0","",""

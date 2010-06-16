@@ -85,6 +85,11 @@ class BlogContent extends BlogAppModel {
 		$this->validate['template'] = array(array(	'rule' => 'halfText',
 													'message' => ">> コンテンツテンプレート名は半角で入力して下さい",
 													'allowEmpty'=>false));
+		$this->validate['list_count'] = array(array(	'rule' => 'halfText',
+													'message' => ">> 一覧表示件数は半角で入力して下さい。",
+													'allowEmpty'=>false));
+		$this->validate['list_direction'] = array(array(	'rule' => VALID_NOT_EMPTY,
+													'message' => ">> 一覧に表示する順番を指定して下さい。"));
 		return true;
 	}
 /**

@@ -39,7 +39,7 @@
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogContent.id', 'ID') ?></th>
+		<th class="col-head"><?php echo $formEx->label('BlogContent.id', 'NO') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->text('BlogContent.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
 		</td>
@@ -75,6 +75,34 @@
 
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', '一覧表示件数') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->text('BlogContent.list_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp;
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpListCount','class'=>'help','alt'=>'ヘルプ')) ?>
+            <div id="helptextListCount" class="helptext">
+                <ul>
+                    <li>公開サイトの一覧に表示する件数を指定します。</li>
+                    <li>半角数字で入力して下さい。</li>
+                </ul>
+            </div>
+            <?php echo $formEx->error('BlogContent.list_count') ?>
+        </td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('BlogContent.list_direction', '一覧に表示する順番') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->select('BlogContent.list_direction', array('DESC'=>'新しい記事順', 'ASC'=>'古い記事順'),null,null,false) ?>
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpListDirection','class'=>'help','alt'=>'ヘルプ')) ?>
+            <div id="helptextListDirection" class="helptext">
+                <ul>
+                    <li>公開サイトの一覧における記事の並び方向を指定します。</li>
+					<li>新しい・古いの判断は投稿日が基準となります。</li>
+                </ul>
+            </div>
+            <?php echo $formEx->error('BlogContent.list_direction') ?>
+        </td>
+	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.comment_use', 'コメント受付機能') ?></th>
 		<td class="col-input">
