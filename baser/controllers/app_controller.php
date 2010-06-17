@@ -129,8 +129,8 @@ class AppController extends Controller {
 				$this->siteConfigs = $SiteConfig->findExpanded();
 
 				if(empty($this->siteConfigs['version'])) {
-					$data['SiteConfig']['version'] = $this->getBaserVersion();
-					$SiteConfig->saveKeyValue($data);
+					$this->siteConfigs['version'] = $this->getBaserVersion();
+					$SiteConfig->saveKeyValue($this->siteConfigs);
 				}
 
 				// テーマの設定
