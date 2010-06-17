@@ -646,45 +646,6 @@ class BaserHelper extends AppHelper {
 		return $contentsName;
 
 	}
-	function getContentsName2($detail = false){
-
-		$url = 'archives/index.html?test=1&test2=2';
-		$url = split('\?',$url);
-		$url = split('\.',$url[0]);
-		if($detail){
-			return Inflector::camelize(str_replace('/','_',$url[0]));
-		}
-
-		$aryUrl = split('/',$url[0]);
-		$prefix = '';
-		$plugin = '';
-		$controller = '';
-		$action = '';
-		$pass = '';
-
-		if(!empty($this->params['prefix'])) {
-			$prefix = $this->params['prefix'];
-		}
-		if(!empty($this->params['plugin'])) {
-			$plugin = $this->params['plugin'];
-		}
-		$controller = $this->params['controller'];
-		if($prefix) {
-			$action = str_replace($prefix.'_','',$this->params['action']);
-		}else {
-			$action = $this->params['action'];
-		}
-		if(!empty($this->params['pass'][0])) {
-			$pass = $this->params['pass'][0];
-		}
-
-		if($prefix){
-			$contentsName = $prefix.$aryUrl[1];
-		}
-
-		return $contentsName;
-
-	}
 /**
  * パンくずリストを出力する
  * アクセス制限がかかっているリンクはテキストのみ表示する
