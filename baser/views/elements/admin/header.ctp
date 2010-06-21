@@ -42,7 +42,7 @@
         <?php if($this->params['url']['url'] != 'admin/users/login' &&
 					$this->params['url']['url'] != 'installations/update' &&
 					($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
-            <?php $baser->element('global_menu',array('menuType'=>'admin'),false,false) ?>
+            <?php $baser->element('global_menu',array('menuType'=>'admin')) ?>
         <?php endif; ?>
     </div>
 
