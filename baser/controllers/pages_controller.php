@@ -345,32 +345,34 @@ class PagesController extends AppController {
 			$categories[$path[$i]] = '';
 			$conditions['or'][] = array('PageCategory.name'=>$path[$i]);
 		}
-		$this->PageCategory->hasMany['Page']['conditions'] = array('Page.status'=>true);
-		$pageCategories = $this->PageCategory->find('all',array('fields'=>array('name','title'),'conditions'=>$conditions));
-		foreach($pageCategories as $pageCategory){
-			if(!empty($pageCategory['Page'])){
-				$categoryPageUrl = '';
-				foreach($pageCategory['Page'] as $page){
-					if($page['name'] == 'index'){
-						$categoryPageUrl = $page['url'];
+		if($conditions){
+			$this->PageCategory->hasMany['Page']['conditions'] = array('Page.status'=>true);
+			$pageCategories = $this->PageCategory->find('all',array('fields'=>array('name','title'),'conditions'=>$conditions));
+			foreach($pageCategories as $pageCategory){
+				if(!empty($pageCategory['Page'])){
+					$categoryPageUrl = '';
+					foreach($pageCategory['Page'] as $page){
+						if($page['name'] == 'index'){
+							$categoryPageUrl = $page['url'];
+						}
 					}
 				}
+				if(!$categoryPageUrl){
+					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title']);
+				}else{
+					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title'],
+																				'url'=>$categoryPageUrl);
+				}
 			}
-			if(!$categoryPageUrl){
-				$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title']);
-			}else{
-				$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title'],
-																			'url'=>$categoryPageUrl);
+			foreach ($categories as $category){
+				if($category['url']){
+					$this->navis[$category['title']] = $category['url'];
+				}else{
+					$this->navis[$category['title']] = '';
+				}
 			}
 		}
-		foreach ($categories as $category){
-			if($category['url']){
-				$this->navis[$category['title']] = $category['url'];
-			}else{
-				$this->navis[$category['title']] = '';
-			}
-		}
-
+		
 		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
