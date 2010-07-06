@@ -53,7 +53,7 @@ class PageCategory extends AppModel {
  * hasMany
  * @var array
  */
-    var $hasMany = array('Page' => array('className'=>'page',
+    var $hasMany = array('Page' => array('className'=>'Page',
                                         'conditions'=>'',
                                         'order'=>'Page.id',
                                         'limit'=>'',

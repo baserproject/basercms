@@ -35,7 +35,7 @@ class BaserHelper extends AppHelper {
 	var $helpers = array('Html','Javascript','Session','XmlEx');
 	var $_content = null;			// コンテンツ
 	var $_categoryTitleOn = true;
-	var $_categoryTitle = null;
+	var $_categoryTitle = true;
 	var $Page = null;
 	var $Permission = null;
 /**
@@ -220,9 +220,18 @@ class BaserHelper extends AppHelper {
 		}
 		if(!empty($this->_view->viewVars['subpage']) && $this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
-				$PageCategory =& ClassRegistry::getObject('PageCategory','Model');
+				// MODIFIED 2010/07/06 ryuring
+				// $this->_views->viewVars['navis'] より取得するようにした
+				// >>>
+				/*$PageCategory =& ClassRegistry::getObject('PageCategory','Model');
 				$categoryName = $PageCategory->field('title',array('name'=>$this->_view->viewVars['page']));
-				$title .= $separator.$categoryName;
+				$title .= $separator.$categoryName;*/
+				// ---
+				$navis = array_reverse($this->_view->viewVars['navis']);
+				foreach($navis as $navi => $url){
+					$title.= $separator.$navi;
+				}
+				// <<<
 			}else {
 				$title .= $separator.$this->_categoryTitle;
 			}

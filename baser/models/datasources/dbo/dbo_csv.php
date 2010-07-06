@@ -1447,7 +1447,7 @@ class DboCsv extends DboSource {
 					$in_conditions = $fieldName . " == " . $value;
 				}
 			}
-			$conditions = preg_replace("/[`a-z0-9_]+?\sIN\s\(.*?\)/s",$in_conditions,$conditions);
+			$conditions = preg_replace("/[`a-z0-9_]+?\sIN\s\(.*?\)/s",'('.$in_conditions.')',$conditions);
 		}
 
 		// TODO NOT句（２重カッコに対応できていない）
