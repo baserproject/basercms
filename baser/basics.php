@@ -174,7 +174,7 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='') {
+	function clearViewCache($url=null,$ext='.php') {
 
 		if (($url == '/' || $url == '/index.html')) {
 			if(Configure::read('App.baseUrl')){
