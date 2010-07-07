@@ -405,7 +405,7 @@ table.cake-sql-log tr td
 }
 img.help,
 img.slide-trigger{
-    margin-bottom: 5px;
+    padding: 5px;
 	cursor:pointer;
 }
 .help-box{
