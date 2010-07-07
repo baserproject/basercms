@@ -142,11 +142,16 @@ class BlogController extends BlogAppController{
         }
 
 		if ($this->RequestHandler->isRss()) {
+			Configure::write('debug', 0);
 			$this->set('channel', array('title' => $this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name'],
 										'description' => $this->blogContent['BlogContent']['description']));
 			$this->layout = 'default';
+			$limit = $this->blogContent['BlogContent']['feed_count'];
+			$template = 'index';
 		}else{
 			$this->layout = $this->blogContent['BlogContent']['layout'];
+			$limit = $this->blogContent['BlogContent']['list_count'];
+			$template = $this->blogContent['BlogContent']['template'].DS.'index';
 		}
 
 		/* ブログ記事一覧を取得 */
@@ -156,18 +161,17 @@ class BlogController extends BlogAppController{
 		$this->paginate = array('conditions'=>$conditions,
 								'fields'=>array(),
 								'order'=>'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
-								'limit'=>$this->blogContent['BlogContent']['list_count']
+								'limit'=>$limit
 								);
 		$this->set('posts', $this->paginate('BlogPost'));
 
-        /* カテゴリ一覧を取得 */
+        // カテゴリ一覧を取得
         $this->set('categories',$this->BlogCategory->findAll(array('BlogCategory.blog_content_id'=>$contentId)));
-        /* 月別アーカイブ一覧を取得 */
+        // 月別アーカイブ一覧を取得
         $this->set('blogDates',$this->BlogPost->getBlogDates($contentId));
-		/* 最近の投稿一覧を取得 */
+		// 最近の投稿一覧を取得
 		$this->set('recentEntries',$this->BlogPost->find('all',array('fields'=>array('no','name'),'conditions'=>array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$contentId),'limit'=>5, 'order'=>'posts_date DESC','recursive'=>-1)));
-
-		/* カレンダー用データを取得 */
+		// カレンダー用データを取得
 		$this->set('entryDates',$this->BlogPost->getEntryDates($contentId,"",""));
 
 		/* 表示設定 */
@@ -175,13 +179,7 @@ class BlogController extends BlogAppController{
 		$this->set('single',false);
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
 		$this->navis = array();
-
-        if ($this->RequestHandler->isRss()) {
-            Configure::write('debug', 0);
-            $this->render('index');
-        }else{
-            $this->render($this->blogContent['BlogContent']['template'].DS.'index');
-        }
+		$this->render($template);
 
 	}
 /**

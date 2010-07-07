@@ -31,8 +31,9 @@
  * bc__blog_contents テーブル フィールド追加
  */
 	$this->setUpdateMessage('blog_contents テーブルの構造を更新します。',true, true);
-	$cols = array(array('name'=>'list_count','type'=>'integer','length'=>4),
-				array('name'=>'list_direction', 'type'=>'string', 'length'=>4));
+	$cols = array(	array('name'=>'list_count','type'=>'integer','length'=>4),
+					array('name'=>'list_direction', 'type'=>'string', 'length'=>4),
+					array('name'=>'feed_count','type'=>'integer','length'=>4));
 	foreach($cols as $col){
 		if($db->addColumn('BlogContents',$col['name'],$col)){
 			$this->setUpdateMessage($col['name'].' フィールドを追加しました。');
@@ -58,6 +59,7 @@
 		foreach($blogContents as $blogContent){
 			$blogContent['BlogContent']['list_direction'] = 'DESC';
 			$blogContent['BlogContent']['list_count'] = 10;
+			$blogContent['BlogContent']['feed_count'] = 10;
 			$BlogContent->set($blogContent);
 			if($BlogContent->save()){
 				$this->setUpdateMessage($blogContent['BlogContent']['name'].' の更新に成功しました。');

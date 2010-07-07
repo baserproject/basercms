@@ -104,6 +104,21 @@
         </td>
 	</tr>
 	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', 'RSSフィード出力件数') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->text('BlogContent.feed_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp;
+            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFeedCount','class'=>'help','alt'=>'ヘルプ')) ?>
+            <div id="helptextFeedCount" class="helptext">
+                <ul>
+                    <li>RSSフィードに出力する件数を指定します。</li>
+                    <li>半角数字で入力して下さい。</li>
+					<li>RSSフィードのURLは <?php $baser->link($baser->getUrl('http://'.env('HTTP_HOST').'/'.$formEx->value('BlogContent.name').'/index.rss'),'/'.$formEx->value('BlogContent.name').'/index.rss',array('target'=>'_blank')) ?> となります。</li>
+                </ul>
+            </div>
+            <?php echo $formEx->error('BlogContent.feed_count') ?>
+        </td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.comment_use', 'コメント受付機能') ?></th>
 		<td class="col-input">
             <?php echo $formEx->radio('BlogContent.comment_use', $textEx->booleanDoList('利用'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>

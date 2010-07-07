@@ -71,6 +71,7 @@ CREATE TABLE bc__blog_contents (
   status integer default NULL,
   list_count integer default NULL,
   list_direction text default NULL,
+  feed_count integer default NULL,
   comment_use boolean default NULL,
   comment_approve boolean default NULL,
   created text default NULL,
@@ -81,8 +82,8 @@ CREATE TABLE bc__blog_contents (
 -- テーブルのデータをダンプしています bc__blog_contents
 --
 
-INSERT INTO bc__blog_contents (name, title, description, layout, template, theme, status, list_count, list_direction, comment_use, comment_approve, created, modified) VALUES
-('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', '', 1, 10, 'DESC', 1, 0, datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT INTO bc__blog_contents (name, title, description, layout, template, theme, status, list_count, list_direction, feed_count, comment_use, comment_approve, created, modified) VALUES
+('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', '', 1, 10, 'DESC', 10, 1, 0, datetime('now', 'localtime'), datetime('now', 'localtime'));
 
 -- --------------------------------------------------------
 

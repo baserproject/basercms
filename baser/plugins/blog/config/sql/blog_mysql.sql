@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `bc__blog_contents` (
   `status` tinyint(2) default NULL,
   `list_count` int(4) default NULL,
   `list_direction` varchar(4) default NULL,
+  `feed_count` int(4) default NULL,
   `comment_use` tinyint(2) default NULL,
   `comment_approve` tinyint(2) default NULL,
   `created` datetime default NULL,
@@ -92,8 +93,8 @@ CREATE TABLE IF NOT EXISTS `bc__blog_contents` (
 -- テーブルのデータをダンプしています `bc__blog_contents`
 --
 
-INSERT INTO `bc__blog_contents` (`name`, `title`, `description`, `layout`, `template`, `theme`, `status`, `list_count`, `list_direction`, `comment_use`, `comment_approve`, `created`, `modified`) VALUES
-('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', '', 1, 10, 'DESC', 1, 0, NOW(), NOW());
+INSERT INTO `bc__blog_contents` (`name`, `title`, `description`, `layout`, `template`, `theme`, `status`, `list_count`, `list_direction`, `feed_count`, `comment_use`, `comment_approve`, `created`, `modified`) VALUES
+('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', '', 1, 10, 'DESC', 10, 1, 0, NOW(), NOW());
 
 -- --------------------------------------------------------
 
