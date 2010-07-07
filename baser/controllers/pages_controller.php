@@ -105,6 +105,14 @@ class PagesController extends AppController {
 				$this->Session->del('Filter.Page.status');
 			}
 		}
+		
+		// 並び替え処理
+		if(!empty($this->params['named']['sortup'])){
+			$this->Page->sortup($this->params['named']['sortup'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
+		}
+		if(!empty($this->params['named']['sortdown'])){
+			$this->Page->sortdown($this->params['named']['sortdown'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
+		}
 
 		/* 条件を生成 */
 		$conditions = array();
@@ -129,7 +137,7 @@ class PagesController extends AppController {
 
 		$this->paginate = array('conditions'=>$conditions,
 				'fields'=>array(),
-				'order'=>'Page.id',
+				'order'=>'Page.sort',
 				'limit'=>10
 		);
 		$this->set('dbDatas',$this->paginate('Page'));
