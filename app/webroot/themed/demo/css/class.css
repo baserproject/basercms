@@ -234,3 +234,19 @@ table.cake-sql-log tr td
 {
 	text-align:center;
 }
+/* help text
+----------------------------------------------- */
+.bt-content a:visited,
+.bt-content a:link{
+    color:#688A00;
+}
+.bt-content ul li{
+    list-style:disc;
+    list-style-position:outside;
+    margin-left:10px;
+    margin-bottom:8px;
+}
+img.help{
+    padding: 5px;
+	cursor:pointer;
+}
