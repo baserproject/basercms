@@ -316,6 +316,6 @@ jQuery(function($) {
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('MailField.name')),false); ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $mailContent['MailContent']['id'], $formEx->value('MailField.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('MailField.name')),false); ?>
 <?php endif ?>
 </div>
