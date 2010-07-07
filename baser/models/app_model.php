@@ -73,11 +73,7 @@ class AppModel extends Model
 					$AppController = new AppController();
 					session_start();
 					$_SESSION['Message']['flash'] = array('message'=>'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはBaserCMSを初期化してください。','layout'=>'default');
-					if(strpos(Configure::read('App.baseUrl'),'index.php') !== false){
-						$AppController->redirect('/index.php/installations/reset');
-					}else{
-						$AppController->redirect('/installations/reset');
-					}
+					$AppController->redirect(baseUrl().'installations/reset');
 				}
             }
             
