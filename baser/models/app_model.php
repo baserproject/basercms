@@ -60,8 +60,25 @@ class AppModel extends Model
             // DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
             // Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
             $cm =& ConnectionManager::getInstance();
-            if(isset($cm->config->baser['driver']) && $cm->config->baser['driver'] != ''){
-                parent::__construct($id, $table, $ds);
+            if(isset($cm->config->baser['driver'])){
+				if($cm->config->baser['driver'] != ''){
+					parent::__construct($id, $table, $ds);
+				}elseif($cm->config->baser['login']=='dummy' &&
+						$cm->config->baser['password']=='dummy' &&
+						$cm->config->baser['database'] == 'dummy' &&
+						Configure::read('Baser.urlParam')==''){
+					// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
+					// 初期化ページにリダイレクトする
+					App::import('Controller','App');
+					$AppController = new AppController();
+					session_start();
+					$_SESSION['Message']['flash'] = array('message'=>'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはBaserCMSを初期化してください。','layout'=>'default');
+					if(strpos(Configure::read('App.baseUrl'),'index.php') !== false){
+						$AppController->redirect('/index.php/installations/reset');
+					}else{
+						$AppController->redirect('/installations/reset');
+					}
+				}
             }
             
         }
