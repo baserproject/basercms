@@ -2,7 +2,16 @@ BaserCMS 1.5.9
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // +---------------------------------------------------------------------------------------------------+ //
-// + Release Notes
+// BaserCMS Release Notes
+//
+// BaserCMS :  Based Website Development Project (http://basercms.net)
+// Copyright 2008 - 2010, Catchup, Inc. (http://www.e-catchup.jp)
+//
+// @copyright		Copyright 2008 - 2010, Catchup, Inc.
+// @link			http://basercms.net
+// @package			baser
+// @since			BaserCMS v 0.1.0
+// @license			http://basercms.net/license/index.html
 // +---------------------------------------------------------------------------------------------------+ //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
