@@ -990,7 +990,12 @@ class InstallationsController extends AppController {
 
 	}
 /**
- * アップデートを実行する
+ * アップデート実行
+ * アップデートプログラムは、/baser/config/update/ に次の形式で格納する
+ * {メジャー番号}{3桁のマイナー番号}{3桁のパッチ番号}.php
+ * （例）1.5.10 → 1005010.php
+ * @return void
+ * @access public
  */
 	function update() {
 
