@@ -55,13 +55,6 @@ class PagesController extends AppController {
  */
 	var $uses = array('Page', 'PageCategory');
 /**
- * キャッシュ時間
- * 
- * @var		int / boolean
- * @access	public
- */
-	var $cacheAction = 3600;
-/**
  * beforeFilter
  *
  * @return	void
@@ -76,11 +69,10 @@ class PagesController extends AppController {
 
 		// モバイルの場合は、モバイルヘルパーでxhtml+xmlで
 		// コンテンツヘッダを出力する必要がある為、キャッシュは利用しない
-		// TODO キャッシュを利用する方法を検討する
 		$noCache = array('mobile');
 		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['User'])) {
 			$this->helpers[] = 'Cache';
-			clearCache('pages');
+			$this->cacheAction = '1 month'; // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
 		}
 
 		// バリデーション用の値をセット
