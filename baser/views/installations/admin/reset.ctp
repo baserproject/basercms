@@ -44,6 +44,7 @@
     <?php echo $form->hidden('Installation.reset',array('value'=>true)) ?>
     <?php echo $form->end(array('label'=>'初期化する','class'=>'button btn-gray')) ?>
 <?php else: ?>
+	<p>引き続きBaserCMSのインストールを行うには、「インストール実行」ボタンをクリックしてください。</p>
     <div class="align-center">
     <?php $baser->link('インストール実行','/',array('class'=>'button btn-red')) ?>
     </div>

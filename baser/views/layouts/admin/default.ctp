@@ -70,6 +70,7 @@
                 <div id="pankuzu">
                     <?php if($this->params['url']['url'] != 'admin/users/login' &&
 							$this->params['url']['url'] != 'installations/update' &&
+							$this->params['url']['url'] != 'installations/reset' &&
 							($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
                         <?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
                     <?php else: ?>
@@ -79,6 +80,7 @@
 				
                 <?php if($this->params['url']['url'] != 'admin/users/login' && 
 							$this->params['url']['url'] != 'installations/update' &&
+							$this->params['url']['url'] != 'installations/reset' &&
 							($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
                     <div id="loginUser">
                     <?php if(Configure::read('debug')>0): ?>
