@@ -90,7 +90,7 @@
 /**
  * 文字コードの検出順を指定
  */
-	mb_detect_order("eucJP-win,UTF-8,SJIS-win");
+	mb_detect_order("ASCII,JIS,UTF-8,SJIS-win,EUC-JP");
 /**
  * モバイルルーティング設定
  */
