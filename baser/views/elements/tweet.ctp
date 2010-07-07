@@ -26,7 +26,6 @@
 		var username = '<?php echo $baser->siteConfig['twitter_username'] ?>';
 		var count = '<?php echo $baser->siteConfig['twitter_count'] ?>';
 		if(!username){
-			alert('Twitterのアカウントが設定されてません。\nサイト基本設定より設定してください。');
 			$('.tweet').hide();
 			return;
 		}
