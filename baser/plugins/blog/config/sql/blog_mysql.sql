@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `bc__blog_contents` (
   `theme` varchar(20) default NULL,
   `status` tinyint(2) default NULL,
   `list_count` int(4) default NULL,
-  `list_direction varchar(4) default NULL,
+  `list_direction` varchar(4) default NULL,
   `comment_use` tinyint(2) default NULL,
   `comment_approve` tinyint(2) default NULL,
   `created` datetime default NULL,
