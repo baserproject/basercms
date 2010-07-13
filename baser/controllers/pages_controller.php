@@ -122,13 +122,17 @@ class PagesController extends AppController {
 		// 子カテゴリも検索条件に入れる
 		$pageCategoryIds = array($this->data['Page']['page_category_id']);
 		if(!empty($this->data['Page']['page_category_id'])) {
-			$children = $this->PageCategory->children($this->data['Page']['page_category_id']);
-			if($children) {
-				foreach($children as $child) {
-					$pageCategoryIds[] = $child['PageCategory']['id'];
+			if($this->data['Page']['page_category_id'] != 'noncat'){
+				$children = $this->PageCategory->children($this->data['Page']['page_category_id']);
+				if($children) {
+					foreach($children as $child) {
+						$pageCategoryIds[] = $child['PageCategory']['id'];
+					}
 				}
+				$conditions['Page.page_category_id'] = $pageCategoryIds;
+			}else{
+				$conditions['Page.page_category_id'] = '';
 			}
-			$conditions['Page.page_category_id'] = $pageCategoryIds;
 		}
 		// ステータス
 		if(isset($this->data['Page']['status']) && $this->data['Page']['status'] !== '') {

@@ -19,6 +19,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$pageCategories = $formEx->getControlSource('Page.page_category_id');
+$pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -55,7 +57,6 @@
 <div class="function-box corner10" id="PageFilterBody" style="display:none">
     <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
     <p>
-    <?php $pageCategories = $formEx->getControlSource('Page.page_category_id') ?>
     <?php if($pageCategories): ?>
         <small>カテゴリ</small>
         <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
