@@ -30,12 +30,13 @@
 /**
  * bc__blog_contents テーブル フィールド追加
  */
+	$BlogContent = ClassRegistry::init('Blog.BlogContent');
 	$this->setUpdateMessage('blog_contents テーブルの構造を更新します。',true, true);
 	$cols = array(	array('name'=>'list_count','type'=>'integer','length'=>4),
 					array('name'=>'list_direction', 'type'=>'string', 'length'=>4),
 					array('name'=>'feed_count','type'=>'integer','length'=>4));
 	foreach($cols as $col){
-		if($db->addColumn('BlogContents',$col['name'],$col)){
+		if($db->addColumn($BlogContent,$col['name'],$col)){
 			$this->setUpdateMessage($col['name'].' フィールドを追加しました。');
 		}else{
 			$this->setUpdateMessage($col['name'].' フィールドを追加しようとして失敗しました。<br />'.
@@ -52,7 +53,6 @@
  * bc__blog_contents テーブル データ更新
  */
 	$this->setUpdateMessage('blog_contents テーブルのデータを更新します。',true, true);
-	App::import('Model', 'Blog.BlogContent');
 	$BlogContent = new BlogContent();
 	$blogContents = $BlogContent->find('all');
 	if($blogContents){

@@ -29,12 +29,8 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function addColumn($model,$addFieldName,$column){
-		if(is_object($model)){
-			$tableName = $model->tablePrefix.$model->table;
-		}else{
-			$tableName = $this->config['prefix'].Inflector::tableize($model);
-		}
+    function addColumn(&$model,$addFieldName,$column){
+		$tableName = $model->tablePrefix.$model->table;
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
@@ -49,12 +45,8 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function editColumn($model,$oldFieldName,$newFieldName,$column=null){
-		if(is_object($model)){
-			$tableName = $model->tablePrefix.$model->table;
-		}else{
-			$tableName = $this->config['prefix'].Inflector::tableize($model);
-		}
+    function editColumn(&$model,$oldFieldName,$newFieldName,$column=null){
+		$tableName = $model->tablePrefix.$model->table;
         return $this->execute('ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"');
     }
 /**
@@ -65,12 +57,8 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function deleteColumn($model,$delFieldName){
-		if(is_object($model)){
-			$tableName = $model->tablePrefix.$model->table;
-		}else{
-			$tableName = $this->config['prefix'].Inflector::tableize($model);
-		}
+    function deleteColumn(&$model,$delFieldName){
+		$tableName = $model->tablePrefix.$model->table;
         return $this->execute('ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"');
     }
     

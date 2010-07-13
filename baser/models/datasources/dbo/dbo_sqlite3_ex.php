@@ -37,12 +37,8 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function addColumn($model,$addFieldName,$column){
-		if(is_object($model)){
-			$tableName = $model->tablePrefix.$model->table;
-		}else{
-			$tableName = $this->config['prefix'].Inflector::tableize($model);
-		}
+    function addColumn(&$model,$addFieldName,$column){
+		$tableName = $model->tablePrefix.$model->table;
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
@@ -57,11 +53,7 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function editColumn($model,$oldFieldName,$newfieldName,$column=null){
-
-		if(!is_object($model)){
-			$model = ClassRegistry::init($model);
-		}
+    function editColumn(&$model,$oldFieldName,$newfieldName,$column=null){
 		
         $schema = $model->schema();
         $tableName = $model->tablePrefix.$model->table;
@@ -115,11 +107,7 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function deleteColumn($model,$delFieldName){
-		
-		if(!is_object($model)){
-			$model = ClassRegistry::init($model);
-		}
+    function deleteColumn(&$model,$delFieldName){
 		
 		$tableName = $model->tablePrefix.$model->table;
         $schema = $model->schema();

@@ -404,6 +404,11 @@ class DboCsv extends DboSource {
 
 		$config = $this->config;
 		$tableName = $this->fullTableName($model,false);
+
+		if($this->isConnected($tableName)){
+			return true;
+		}
+		
 		$this->connected[$tableName] = false;
 
 		if(!$this->_connect($tableName,$lock,$model->plugin)) {
@@ -460,29 +465,37 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSVファイルのファイルリソースを開放する
- *
+ * テーブル名の指定がない場合は全て開放する
  * @param	string	テーブル名
  * @return	boolean	開放できたら True を返す
  * @access	public
  */
 	function disconnect($tableName = null) {
 
-		// TODO 必要かも
+		// TODO 必要か確認
 		//@mysql_free_result($this->results);
 
 		if($tableName) {
-			$index = $tableName;
+			if(empty($this->connection[$tableName])){
+				// 接続がない場合は既に切断されているとみなしてtrueを返す
+				return true;
+			}else{
+				if($this->csvCloseByLocked($this->connection[$tableName])) {
+					unset($this->connected[$tableName]);
+					unset($this->csvName[$tableName]);
+					return true;
+				}else{
+					return false;
+				}
+			}
 		}else {
-			$index = 0;
-		}
-		if($this->csvCloseByLocked($this->connection[$index])) {
-
-			unset($this->connected[$index]);
-			unset($this->csvName[$index]);
-			return true;
-
-		}else {
-			return false;
+			if($this->csvCloseByLocked($this->connection)) {
+				unset($this->connected);
+				unset($this->csvName);
+				return true;
+			}else {
+				return false;
+			}
 		}
 
 	}
@@ -557,13 +570,31 @@ class DboCsv extends DboSource {
 
 	}
 /**
- * ロック状態のCSVファイルを解除した上で開放する
- *
- * @param	stream	CSVファイルへのパス
+ * ロック状態のCSVファイルを解除した上で開放する（配列対応）
+ * @param	mixid	stream OR array
  * @return 	void	開放に成功した場合には true を返す
  * @access	public
  */
 	function csvCloseByLocked(&$fp) {
+		if(is_array($fp)){
+			$ret = true;
+			foreach($fp as $key => $value){
+				if(isset($fp[$key]) && !$this->__csvCloseByLocked($fp[$key])){
+					$ret = false;
+				}
+			}
+			return $ret;
+		}else{
+			return $this->__csvCloseByLocked($fp);
+		}
+	}
+/**
+ * ロック状態のCSVファイルを解除した上で開放する
+ * @param	stream	ファイルストリーム
+ * @return 	void	開放に成功した場合には true を返す
+ * @access	private
+ */
+	function __csvCloseByLocked(&$fp) {
 		$ret = false;
 		if($fp) {
 			//ロックの開放
@@ -573,7 +604,6 @@ class DboCsv extends DboSource {
 			$fp = null;
 		}
 		return $ret;
-
 	}
 /**
  * 与えられたSQLステートメントを実行する
@@ -1010,8 +1040,8 @@ class DboCsv extends DboSource {
  * @param Model $model
  * @param String $fieldName
  */
-	function addColumn(&$model,$fieldName) {
-
+	function addColumn(&$model,$fieldName,$column=null) {
+		
 		// DB接続
 		if(!$this->connect($model,true)) {
 			return false;
@@ -1061,11 +1091,7 @@ class DboCsv extends DboSource {
  * @param Model $model
  * @param String $fieldName
  */
-	function editColumn($model,$oldFieldName,$fieldName) {
-
-		if(!is_object($model)) {
-			$model = ClassRegistry::init($model);
-		}
+	function editColumn(&$model,$oldFieldName,$fieldName,$column=null) {
 
 		// DB接続
 		if(!$this->connect($model,true)) {
