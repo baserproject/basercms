@@ -203,7 +203,7 @@ class PageCategory extends AppModel {
             }
         }
 
-        return $path.$categoryName.DS;
+        return $path.$categoryName;
 
     }
 /**
