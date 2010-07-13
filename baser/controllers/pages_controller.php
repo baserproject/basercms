@@ -369,7 +369,7 @@ class PagesController extends AppController {
 				}
 			}
 			foreach ($categories as $category){
-				if($category['url']){
+				if(!empty($category['url'])){
 					$this->navis[$category['title']] = $category['url'];
 				}else{
 					$this->navis[$category['title']] = '';

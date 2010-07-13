@@ -509,10 +509,12 @@ class DboCsv extends DboSource {
 	function isConnected($tableName = null) {
 
 		if($this->connected) {
-			if($tableName) {
+			if($tableName && !empty($this->connected[$tableName])) {
 				return $this->connected[$tableName];
-			}else {
+			}else if(!empty($this->connected[0])){
 				return $this->connected[0];
+			}else{
+				return false;
 			}
 		}else {
 			return false;
