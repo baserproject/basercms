@@ -214,7 +214,7 @@ class Page extends AppModel {
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
-					$url .= $category['PageCategory']['name'].DS;
+					$url .= $category['PageCategory']['name'].'/';
 				}
 			}
 		}
