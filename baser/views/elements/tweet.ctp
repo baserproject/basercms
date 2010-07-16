@@ -39,6 +39,7 @@
             count: count,
 			intro_text: '<h2>Twitter <a href="http://twitter.com/'+username+'">@'+username+'</a></h2>',
             auto_join_text_default: "",
+			auto_join_text_reply: "",
             loading_text: "loading tweets..."
         });
     });
