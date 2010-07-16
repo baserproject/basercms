@@ -282,6 +282,8 @@ class PagesController extends AppController {
 				$pagesPath = BASER_VIEWS.'pages';
 			}
 		}
+		
+		$this->Page->saveFile = false;
 		$result = $this->_entryPageFiles($pagesPath);
 
 		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
@@ -490,7 +492,8 @@ class PagesController extends AppController {
 			$file = new File($file);
 			$contents = $file->read();
 			$file->close();
-
+			$file = null;
+			
 			// タイトル取得・置換
 			$titleReg = '/<\?php\s+?\$baser->setTitle\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($titleReg,$contents,$matches)) {

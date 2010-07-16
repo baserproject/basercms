@@ -51,6 +51,14 @@ class Page extends AppModel {
  */
 	var $oldPath = '';
 /**
+ * ファイル保存可否
+ * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
+ * テンプレート読み込み時などはfalseにして保存しないようにする
+ * @var		boolean
+ * @access	public
+ */
+	var $fileSave = true;
+/**
  * 非公開URLリスト
  * @var mixed;
  */
@@ -93,19 +101,23 @@ class Page extends AppModel {
  */
 	function beforeSave() {
 
+		if(!$this->fileSave){
+			return true;
+		}
+		
+		// 保存前のページファイルのパスを取得
 		if($this->exists()) {
 			$this->oldPath = $this->_getPageFilePath($this->find(array('Page.id'=>$this->data['Page']['id'])));
 		}else {
 			$this->oldPath = '';
 		}
 
-		// 新しいページファイルのパスを取得する
+		// 新しいページファイルのパスが開けるかチェックする
 		$newPath = $this->_getPageFilePath($this->data);
-		// ファイルに保存
 		$newFile = new File($newPath);
-
 		if($newFile->open('w')) {
 			$newFile->close();
+			$newFile = null;
 			return true;
 		}else {
 			return false;
@@ -118,6 +130,9 @@ class Page extends AppModel {
  */
 	function afterSave() {
 
+		if(!$this->fileSave){
+			return true;
+		}
 		/*if(!$this->data['Page']['status']){
             $this->delFile($this->data);
             return true;
