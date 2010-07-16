@@ -45,5 +45,5 @@
     });
 </script>
 <div class="side-navi">
-	<div class="tweet corner10"></div>
+	<div class="tweet"></div>
 </div>
