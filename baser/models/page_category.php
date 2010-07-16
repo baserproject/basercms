@@ -154,7 +154,7 @@ class PageCategory extends AppModel {
         // 新しいページファイルのパスを取得する
         $newPath = $this->_getPageDirPath($this->data);
         if($this->exists()){
-            $oldPath = $this->_getPageDirPath($this->find(array('id'=>$this->id)));
+            $oldPath = $this->_getPageDirPath($this->find('first',array('conditions'=>array('id'=>$this->id))));
             if($newPath != $oldPath){
                 $dir = new Folder();
                 $ret = $dir->move(array('to'=>$newPath,'from'=>$oldPath,'chmod'=>0777));
@@ -173,6 +173,37 @@ class PageCategory extends AppModel {
         return $ret;
 
     }
+/**
+ * afterSave
+ * @param	boolean	$created
+ * @access	public
+ */
+	function afterSave($created){
+		if(!$created){
+			$this->updateRelatedPageUrl($this->data['PageCategory']['id']);
+		}
+	}
+/**
+ * 関連するページデータのURLを更新する
+ * @param	string	$id
+ * @return	void
+ * @access	public
+ */
+	function updateRelatedPageUrl($id){
+		if(!$id){
+			return;
+		}
+		$dbData = $this->find('first',array('conditions'=>array('id'=>$id)));
+		// ページデータのURLを更新
+		if(!empty($dbData['Page'])){
+			$this->Page->saveFile = false;
+			foreach($dbData['Page'] as $page){
+				$page['url'] = $this->Page->getPageUrl($page);
+				$this->Page->set($page);
+				$this->Page->save();
+			}
+		}
+	}
 /**
  * ページカテゴリのパスを取得する
  * @param array $data

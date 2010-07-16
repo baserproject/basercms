@@ -223,9 +223,14 @@ class Page extends AppModel {
  * @return string
  */
 	function getPageUrl($data) {
-		$categoryId = $data['Page']['page_category_id'];
+
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+		$categoryId = $data['page_category_id'];
 		$url = '/';
 		if($categoryId) {
+			$this->PageCategory->cacheQueries = false;
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
@@ -233,7 +238,7 @@ class Page extends AppModel {
 				}
 			}
 		}
-		return $url.$data['Page']['name'].'.html';
+		return $url.$data['name'].'.html';
 	}
 /**
  * Baserが管理するタグを追加する
