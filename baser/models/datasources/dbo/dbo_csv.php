@@ -1055,7 +1055,7 @@ class DboCsv extends DboSource {
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
 			if(in_array($fieldName,$this->_csvFields)) {
-				return false;
+				return $this->editColumn($model, $fieldName, $fieldName, $column);
 			}
 		}else {
 			$this->_csvFields = array();

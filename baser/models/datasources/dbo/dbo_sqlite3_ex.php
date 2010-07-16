@@ -42,6 +42,10 @@ class DboSqlite3Ex extends DboSqlite3 {
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
+		$schema = $model->schema();
+		if(isset($schema[$addFieldName])){
+			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
+		}
         $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
     }
 /**

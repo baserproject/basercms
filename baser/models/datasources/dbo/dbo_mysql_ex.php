@@ -34,6 +34,10 @@ class DboMysqlEx extends DboMysql {
 		if(empty($column['name'])){
 			$column['name'] = $addFieldName;
 		}
+		$schema = $model->schema();
+		if(isset($schema[$addFieldName])){
+			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
+		}
         return $this->execute("ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column));
     }
 /**
