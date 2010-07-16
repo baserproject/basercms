@@ -257,7 +257,7 @@ class BlogCommentsController extends BlogAppController{
  * @param string $blogPostId
  */
     function add($blogContentId,$blogPostId){
-        if(!$this->data || !$blogContentId || !$blogPostId){
+        if(!$this->data || !$blogContentId || !$blogPostId || !$this->blogContent['BlogContent']['comment_use']){
             $this->notFound();
         }else{
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
