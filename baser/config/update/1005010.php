@@ -39,7 +39,7 @@
 		if($db->addColumn($BlogContent,$col['name'],$col)){
 			$this->setUpdateMessage($col['name'].' フィールドを追加しました。');
 		}else{
-			$this->setUpdateMessage($col['name'].' フィールドを追加しようとして失敗しました。<br />'.
+			$this->setUpdateMessage($col['name'].' フィールドを追加しようとして失敗しました。'.
 								$col['name'].' フィールドを手動で変更してください。');
 		}
 	}
@@ -64,7 +64,7 @@
 			if($BlogContent->save()){
 				$this->setUpdateMessage($blogContent['BlogContent']['name'].' の更新に成功しました。');
 			}else{
-				$this->setUpdateMessage($blogContent['BlogContent']['name'].' の更新に失敗しました。<br />手動で'.$blogContent['BlogContent']['name'].'を更新してください。');
+				$this->setUpdateMessage($blogContent['BlogContent']['name'].' の更新に失敗しました。手動で'.$blogContent['BlogContent']['name'].'を更新してください。');
 			}
 		}
 	}
