@@ -1080,7 +1080,7 @@ class InstallationsController extends AppController {
 		if($head){
 			$message = '----- '.$message.' -----';
 		}else{
-			$message = '　* '.$message;
+			$message = '* '.$message;
 		}
 		$this->_updateMessage[] = $message;
 	}
