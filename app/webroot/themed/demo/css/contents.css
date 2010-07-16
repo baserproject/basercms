@@ -203,6 +203,9 @@ h4.contents-head{
 
 /* calendar
 ----------------------------------------------- */
+.blog-calendar table{
+	width:220px;
+}
 .blog-calendar th{
     border-bottom:1px solid #e2e2e2;
 }
