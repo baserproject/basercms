@@ -79,5 +79,5 @@ $(document).ready(function(){
     if($('#flashMessage').corner) $('#flashMessage').corner("10px");
 	if($('#authMessage').corner) $('#authMessage').corner("10px");
     if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
-    
+    DD_belatedPNG.fix('.slide-trigger,.help');
 });
