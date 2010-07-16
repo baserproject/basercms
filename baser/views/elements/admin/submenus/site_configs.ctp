@@ -29,5 +29,6 @@
         <?php if(isset($backupEnabled)): ?>
             <li><?php $baser->link('データバックアップ',array('action'=>'backup_data',1)) ?></li>
         <?php endif ?>
+		<li><?php $baser->link('サーバーキャッシュ削除',array('controller'=>'site_configs','action'=>'del_cache')) ?></li>
     </ul>
 </div>

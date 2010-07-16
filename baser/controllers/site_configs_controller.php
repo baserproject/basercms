@@ -111,7 +111,10 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['id']);
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
-				$this->Session->setFlash('システム設定を保存しました。');
+				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']){
+					clearViewCache();
+				}
+				//$this->Session->setFlash('システム設定を保存しました。');
 				$this->redirect(array('action'=>'form'));
 			}
 		}
@@ -132,6 +135,15 @@ class SiteConfigsController extends AppController {
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 
+	}
+/**
+ * キャッシュファイルを全て削除する
+ * @access	public
+ */
+	function admin_del_cache(){
+		clearAllCache();
+		$this->Session->setFlash('サーバーキャッシュを削除しました。');
+		$this->redirect(array('action'=>'form'));
 	}
 /**
  * [ADMIN] バックアップデータを作成する
