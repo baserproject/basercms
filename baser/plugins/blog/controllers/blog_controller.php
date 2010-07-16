@@ -366,7 +366,7 @@ class BlogController extends BlogAppController{
 
         /* カテゴリ一覧を取得 */
         $this->BlogCategory->recursive = -1;
-        $this->set('categories',$this->BlogCategory->find('threaded',array('conditions'=>array('BlogCategory.blog_content_id'=>$contentId))));
+        $this->set('categories',$this->BlogCategory->find('all',array('conditions'=>array('BlogCategory.blog_content_id'=>$contentId))));
 
         /* 月別アーカイブ一覧を取得 */
         $this->set('blogDates',$this->BlogPost->getBlogDates($contentId));
