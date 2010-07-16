@@ -145,6 +145,9 @@ table
 
 /* フォームパーツ
 ----------------------------------------------- */
+form{
+	display:inline;
+}
 input,textarea,select{
 	font-family:"ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック",Arial,sans-serif;
 	margin:3px 2px;

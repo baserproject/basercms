@@ -128,6 +128,9 @@
 	color:#FFFFFF;
 	background-position:0 -20px;
 }
+.button-s:visited{
+	color:#FFFFFF;
+}
 .btn-orange-s
 {
 	background:url(images/bg_btn_orange_s.gif) no-repeat left top;
@@ -303,6 +306,7 @@
 	font-size:10px;
 	margin-bottom:0px;
 	vertical-align:bottom;
+	width:115px;
 }
 .side-navi ul
 {
@@ -314,6 +318,7 @@
 	padding-left:20px;
 	line-height:20px!important;
 	font-size:10px;
+	width:135px;
 }
 
 /* pagination
