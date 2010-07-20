@@ -79,7 +79,7 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-	if(preg_match('/^(img|css|js)/is', str_replace($baseUrl, '', $_SERVER['REQUEST_URI']))){
+	if(preg_match('/^(img|css|js)/is', str_replace($baseUrl, '', $_SERVER['REQUEST_URI']))) {
 		Configure::write('Baser.Asset',true);
 		return;
 	}
