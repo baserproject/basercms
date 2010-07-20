@@ -56,7 +56,7 @@
 		<td class="operation-button"><?php $baser->link('確認',array('admin'=>false,'plugin'=>'','controller'=>$listData['MailContent']['name'],'action'=>'index'),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
 			<?php $baser->link('管理',array('controller'=>'mail_fields','action'=>'index', $listData['MailContent']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $listData['MailContent']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $listData['MailContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailContent']['title']),false); ?></td>
+			<?php $baser->link('削除', array('action'=>'delete', $listData['MailContent']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $listData['MailContent']['title']),false); ?></td>
 		<td><?php echo $listData['MailContent']['id']; ?></td>
 		<td><?php $baser->link($listData['MailContent']['name'],array('action'=>'edit',$listData['MailContent']['id'])); ?></td>
 		<td><?php echo $listData['MailContent']['title'] ?></td>

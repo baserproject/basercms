@@ -167,6 +167,6 @@ function mailContentSender1ClickHandler(){
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 	<?php else: ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('MailContent.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('MailContent.name')),false); ?>
+	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('MailContent.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $formEx->value('MailContent.name')),false); ?>
 	<?php endif ?>
 </div>
