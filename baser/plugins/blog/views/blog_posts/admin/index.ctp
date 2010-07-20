@@ -87,7 +87,7 @@ $paginator->options = array('url' => $this->passedArgs);
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button"><?php $baser->link('確認',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],$post['BlogPost']['no']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+		<td class="operation-button"><?php $baser->link('確認','/'.$blogContent['BlogContent']['name'].'/archives/'.$post['BlogPost']['no'],array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $post['BlogPost']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $post['BlogPost']['name']),false); ?></td>
 		<td><?php echo $post['BlogPost']['no']; ?></td>

@@ -87,7 +87,8 @@ $(document).ready(function(){
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button"><?php $baser->link('確認',array('action'=>'preview', $dbData['Page']['id']),array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
+		<td class="operation-button">
+			<?php $baser->link('確認',$dbData['Page']['url'],array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
 			<?php $baser->link('▲',array('action'=>'index','sortup'=>$dbData['Page']['id'])) ?>
