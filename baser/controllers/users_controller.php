@@ -45,7 +45,7 @@ class UsersController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('User','GlobalMenu');
+	var $uses = array('User','GlobalMenu','UserGroup');
 /**
  * ヘルパー
  *
@@ -84,9 +84,11 @@ class UsersController extends AppController {
 
 		/* 認証設定 */
 		$this->Auth->allow('admin_login','admin_login_exec');
-
 		parent::beforeFilter();
-
+		if($this->params['prefix']=='admin'){
+			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
+		}
+		
 	}
 /**
  * ログイン処理を行う

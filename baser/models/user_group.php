@@ -105,5 +105,17 @@ class UserGroup extends AppModel {
 		}
 		return $ret;
 	}
+/**
+ * 管理者グループ以外のグループが存在するかチェックする
+ * @return	boolean
+ * @access	void
+ */
+	function checkOtherAdmins(){
+		if($this->find('first',array('conditions'=>array('UserGroup.id <>'=>1)))) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }
 ?>

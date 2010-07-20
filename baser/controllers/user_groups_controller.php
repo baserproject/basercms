@@ -69,6 +69,17 @@ class UserGroupsController extends AppController {
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
 			'ユーザーグループ管理'=>'/admin/user_groups/index');
 /**
+ * beforeFilter
+ * @return	void
+ * @access	public
+ */
+	function beforeFilter () {
+		parent::beforeFilter();
+		if($this->params['prefix']=='admin'){
+			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
+		}
+	}
+/**
  * ユーザーグループの一覧を表示する
  *
  * @return  void

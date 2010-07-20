@@ -70,6 +70,17 @@ class PermissionsController extends AppController {
 			'ユーザーグループ管理'=>'/admin/user_group/index',
 			'アクセス制限設定管理'=>'/admin/permissions/index');
 /**
+ * beforeFilter
+ * @return	void
+ * @access	public
+ */
+	function beforeFilter () {
+		parent::beforeFilter();
+		if($this->params['prefix']=='admin'){
+			$this->set('usePermission',true);
+		}
+	}
+/**
  * アクセス制限設定の一覧を表示する
  *
  * @return  void

@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
+<?php if($usePermission): ?>
 <div class="side-navi">
 	<h2>アクセス制限設定<br />
 		管理メニュー</h2>
@@ -33,3 +33,4 @@
 		</li>
 	</ul>
 </div>
+<?php endif ?>
