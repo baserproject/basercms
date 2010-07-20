@@ -33,7 +33,7 @@
 		</li>
 		<?php if($this->params['controller']=='feed_configs' && $this->action == 'admin_index'): ?>
 		<li>
-			<?php $baser->link('キャッシュを削除',array('action'=>'delete_cache'), null,'フィードのキャッシュを本当に削除してもいいですか？') ?>
+			<?php $baser->link('キャッシュを削除',array('action'=>'delete_cache'), null,'フィードのキャッシュを削除します。いいですか？') ?>
 		</li>
 		<?php endif ?>
 	</ul>
