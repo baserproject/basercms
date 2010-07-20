@@ -28,11 +28,7 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
-<?php $baser->css('import') ?>
-<?php $baser->css('colorbox/colorbox') ?>
+<?php $baser->css(array('import','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js('excanvas') ?><![endif]-->
 <?php $baser->js(array(	'jquery-1.3.2.min',
 									'jquery-ui-1.7.2.custom.min',
