@@ -537,7 +537,7 @@ class BaserHelper extends AppHelper {
  * @return void
  */
 	function editPage($id) {
-		if(!empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
 			echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank')).'</div>';
 		}
 	}

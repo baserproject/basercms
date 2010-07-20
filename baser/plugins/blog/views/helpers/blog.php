@@ -252,7 +252,7 @@ class BlogHelper extends AppHelper {
  * @param string $id
  */
 	function editPost($blogContentId,$blogPostId) {
-		if(!empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
 			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'blog','controller'=>'blog_posts','action'=>'edit',$blogContentId,$blogPostId),array('target'=>'_blank')).'</div>';
 		}
 	}
