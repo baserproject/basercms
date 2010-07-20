@@ -413,7 +413,7 @@ class AppModel extends Model {
 				$sql = "SET NAMES ".Configure::read('internalEncodingByMySql');
 				mysql_query($sql);
 				$dbRestore = new DbRestore('mysql');
-				$dbRestore->connect($config['database'], $config['host'], $config['login'], $config['password'],$cofig['port']);
+				$dbRestore->connect($config['database'], $config['host'], $config['login'], $config['password'],$config['port']);
 				return $dbRestore->doRestore($source);
 				break;
 
