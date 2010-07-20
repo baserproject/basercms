@@ -20,7 +20,9 @@
  * @license			http://basercms.net/license/index.html
  */
 $pageCategories = $formEx->getControlSource('Page.page_category_id');
-$pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
+if($pageCategories){
+	$pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
+}
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
