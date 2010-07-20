@@ -123,7 +123,9 @@ class BlogPostsController extends BlogAppController {
 
 		/* セッション処理 */
 		if($this->data) {
-			$this->Session->write('Filter.BlogPost.blog_category_id',$this->data['BlogPost']['blog_category_id']);
+			if(isset($this->data['BlogPost']['blog_category_id'])){
+				$this->Session->write('Filter.BlogPost.blog_category_id',$this->data['BlogPost']['blog_category_id']);
+			}
 			$this->Session->write('Filter.BlogPost.status',$this->data['BlogPost']['status']);
 		}else {
 			if($this->Session->check('Filter.BlogPost.blog_category_id')) {
@@ -141,8 +143,8 @@ class BlogPostsController extends BlogAppController {
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 		// ページカテゴリ
 		// 子カテゴリも検索条件に入れる
-		$blogCategoryIds = array($this->data['BlogPost']['blog_category_id']);
 		if(!empty($this->data['BlogPost']['blog_category_id'])) {
+			$blogCategoryIds = array($this->data['BlogPost']['blog_category_id']);
 			$children = $this->BlogCategory->children($this->data['BlogPost']['blog_category_id']);
 			if($children) {
 				foreach($children as $child) {

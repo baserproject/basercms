@@ -19,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$blogCategories = $formEx->getControlSource('blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -44,7 +45,12 @@ $(document).ready(function(){
 </div>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="BlogPostFilter">検索</a></h3>
 <div class="function-box corner10" id="BlogPostFilterBody" style="display:none"> <?php echo $formEx->create('BlogPost',array('url'=>array('action'=>'index',$blogContent['BlogContent']['id']))) ?>
-	<p> <small>カテゴリ</small> <?php echo $formEx->select('BlogPost.blog_category_id',  $formEx->getControlSource('blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id'])),null,array('escape'=>false)) ?>　 <small>公開設定</small> <?php echo $formEx->select('BlogPost.status', $textEx->booleanMarkList()) ?>　 </p>
+	<p>
+		<?php if($blogCategories): ?>
+		<small>カテゴリ</small> <?php echo $formEx->select('BlogPost.blog_category_id', $blogCategories, null, array('escape'=>false)) ?>　
+		<?php endif ?>
+		<small>公開設定</small> <?php echo $formEx->select('BlogPost.status', $textEx->booleanMarkList()) ?>　
+	</p>
 	<?php echo $formEx->hidden('BlogPost.open',array('value'=>true)) ?>
 	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
 </div>
@@ -89,7 +95,11 @@ $paginator->options = array('url' => $this->passedArgs);
 		<td><?php if(!empty($post['BlogCategory']['title'])): ?>
 			<?php echo $post['BlogCategory']['title']; ?>
 			<?php endif; ?></td>
-		<td><?php echo $post['User']['real_name_1']." ".$post['User']['real_name_2']; ?></td>
+		<td>
+			<?php if(!empty($post['User'])): ?>
+			<?php echo $post['User']['real_name_1']." ".$post['User']['real_name_2']; ?>
+			<?php endif ?>
+		</td>
 		<td style="text-align:center"><?php echo $textEx->booleanMark($post['BlogPost']['status']); ?></td>
 		<?php if($blogContent['BlogContent']['comment_use']): ?>
 		<td><?php $comment = count($post['BlogComment']) ?>
