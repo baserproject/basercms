@@ -130,6 +130,10 @@
 .button-s:visited{
 	color:#FFFFFF;
 }
+.button-s small{
+	color:#FFFFFF;
+	line-height:22px;
+}
 .btn-orange-s
 {
 	background:url(images/bg_btn_orange_s.gif) no-repeat left top;
@@ -483,4 +487,15 @@ select.multiple option{
 #map .sitename{
 	color:#360;
 	font-weight: bold;
+}
+
+/* help
+----------------------------------------------- */
+#helpAdminBody li,
+#helpAdminBody p{
+	line-height:1.5em;
+}
+#helpAdminBody ul{
+	margin-left:30px;
+	margin-bottom:25px;
 }
