@@ -35,6 +35,9 @@
 		<li>メールフォームより受信した内容は、画面下の「受信メールCSV」よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事ができます。</li>
 	</ul>
 </div>
+
+<p><strong>このメールフォームのURL：<?php $baser->link($baser->getUri('/'.$mailContent['MailContent']['name'].'/index'),'/'.$mailContent['MailContent']['name'].'/index',array('target'=>'_blank')) ?></strong></p>
+
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableMailFields">
 	<tr>
 		<th>操作</th>

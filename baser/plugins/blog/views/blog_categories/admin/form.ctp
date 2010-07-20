@@ -34,6 +34,11 @@
 		<p>「新商品を発表しました｜ニュースリリース｜サイトタイトル」</p>
 	</div>
 </div>
+
+<?php if($this->action == 'admin_edit'): ?>
+<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.no')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.no'),array('target'=>'_blank')) ?></strong></p>
+<?php endif ?>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>

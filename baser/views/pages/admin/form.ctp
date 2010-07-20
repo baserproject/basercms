@@ -48,6 +48,15 @@ $(function(){
 		<li>「公開しない」にしたページを確認するには、画面下の「確認」ボタン、または、一覧の「確認」ボタンをクリックします。</li>
 	</ul>
 </div>
+
+<?php if($this->action == 'admin_edit'): ?>
+	<?php if($formEx->value('Page.status')): ?>
+<p><strong>このページのURL：<?php $baser->link($baser->getUri('/'.$formEx->value('Page.url')),'/'.$formEx->value('Page.url'),array('target'=>'_blank')) ?></strong></p>
+	<?php else: ?>
+<p><strong>このページのURL：<?php echo $baser->getUri('/'.$formEx->value('Page.url')) ?></strong></p>
+	<?php endif ?>
+<?php endif ?>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Page',array('id'=>'PageForm')) ?> <?php echo $formEx->hidden('Page.id') ?> <?php echo $formEx->hidden('Page.no') ?> <?php echo $formEx->hidden('Page.sort') ?> <?php echo $formEx->hidden('Page.theme') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
@@ -117,11 +126,11 @@ $(function(){
 </table>
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
+	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
 	<?php endif ?>
 </div>

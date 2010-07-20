@@ -46,6 +46,15 @@ $(function(){
 		<li>「公開しない」にした記事を確認するには、画面下の「確認」ボタン、または、一覧の「確認」ボタンをクリックします。</li>
 	</ul>
 </div>
+
+<?php if($this->action == 'admin_edit'): ?>
+	<?php if($formEx->value('BlogPost.status')): ?>
+	<p><strong>この記事のURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no')),'/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no'),array('target'=>'_blank')) ?></strong></p>
+	<?php else: ?>
+	<p><strong>この記事のURL：<?php echo $baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no')) ?></strong></p>
+	<?php endif ?>
+<?php endif ?>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
@@ -99,9 +108,11 @@ $(function(){
 </table>
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?> <?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
+	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
+	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),false); ?>
 	<?php endif ?>
 </div>

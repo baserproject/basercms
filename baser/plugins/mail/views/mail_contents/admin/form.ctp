@@ -55,6 +55,11 @@ function mailContentSender1ClickHandler(){
 		<small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br />
 		<a href="http://basercms.net/manuals/designers/6.html" target="_blank">≫ メールフォームのテンプレートを変更する</a></p>
 </div>
+
+<?php if($this->action == 'admin_edit'): ?>
+<p><strong>このメールフォームのURL：<?php $baser->link($baser->getUri('/'.$mailContent['MailContent']['name'].'/index'),'/'.$mailContent['MailContent']['name'].'/index',array('target'=>'_blank')) ?></strong></p>
+<?php endif ?>
+
 <h3>基本項目</h3>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('MailContent') ?>

@@ -169,6 +169,18 @@ class PageCategoriesController extends AppController {
 
 		}
 
+		$indexPage = array();
+		if(isset($this->data['Page'])){
+			foreach($this->data['Page'] as $page){
+				if($page['name']=='index'){
+					$indexPage['url'] = $page['url'];
+					$indexPage['status'] = $page['status'];
+					break;
+				}
+			}
+		}
+		$this->set('indexPage',$indexPage);
+
 		/* 表示設定 */
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページカテゴリー情報編集';

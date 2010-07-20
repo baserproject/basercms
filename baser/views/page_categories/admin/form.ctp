@@ -35,6 +35,15 @@
 		<p>「コンセプト｜会社案内｜サイトタイトル」</p>
 	</div>
 </div>
+
+<?php if($this->action == 'admin_edit' && $indexPage): ?>
+	<?php if($indexPage['status']): ?>
+	<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/'.$indexPage['url']),'/'.$indexPage['url'],array('target'=>'_blank')) ?></strong></p>
+	<?php else: ?>
+	<p><strong>このカテゴリのURL：<?php echo $baser->getUri('/'.$indexPage['url']) ?></strong></p>
+	<?php endif ?>
+<?php endif ?>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('PageCategory') ?> <?php echo $formEx->hidden('PageCategory.id') ?> <?php echo $formEx->hidden('PageCategory.no') ?> <?php echo $formEx->hidden('PageCategory.theme') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">

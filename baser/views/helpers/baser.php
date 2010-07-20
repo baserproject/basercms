@@ -726,5 +726,22 @@ class BaserHelper extends AppHelper {
 			header('Pragma: ');
 		}
 	}
+/**
+ * httpから始まるURLを取得する
+ * @param <type> $url
+ * @return <type>
+ */
+	function getUri($url){
+		if(preg_match('/^http/is', $url)) {
+			return $url;
+		}else {
+			if(empty($_SERVER['HTTPS'])) {
+				$protocol = 'http';
+			}else {
+				$protocol = 'https';
+			}
+			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url);
+		}
+	}
 }
 ?>
