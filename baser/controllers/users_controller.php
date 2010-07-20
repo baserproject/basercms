@@ -286,8 +286,9 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if($this->User->find('count') == 1) {
-			$this->Session->setFlash('全てのユーザーを削除する事はできません。');
+		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
+				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
+			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
