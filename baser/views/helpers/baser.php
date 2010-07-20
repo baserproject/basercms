@@ -227,7 +227,7 @@ class BaserHelper extends AppHelper {
 				$categoryName = $PageCategory->field('title',array('name'=>$this->_view->viewVars['page']));
 				$title .= $separator.$categoryName;*/
 				// ---
-				$navis = array_reverse($this->_view->viewVars['navis']);
+				$navis = array_reverse($this->_view->viewVars['navis'],true);
 				foreach($navis as $navi => $url) {
 					$title.= $separator.$navi;
 				}
