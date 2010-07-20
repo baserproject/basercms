@@ -166,7 +166,7 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		$_url = array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives',implode(DS,$path));
-		if(!empty($this->params['prefix'])){
+		if(!empty($this->params['prefix']) && $this->params['prefix'] != 'admin'){
 			$_url[$this->params['prefix']] = true;
 		}
 		$url = Router::url($_url);
