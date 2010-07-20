@@ -183,7 +183,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function admin_add($blogContentId) {
 
-		if(!$blogContentId) {
+		if(!$blogContentId || !$this->blogContent) {
 			$this->Session->setFlash('無効な処理です。');
 			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
 		}
