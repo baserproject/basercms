@@ -192,6 +192,7 @@ class Page extends AppModel {
 		}
 
 		if($categoryId) {
+			$this->PageCategory->cacheQueries = false;
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
