@@ -626,7 +626,7 @@ class AppModel extends Model
 
         $conditions = array($this->name.'.'.key($check)=>$check[key($check)]);
         if($this->exists()){
-            $conditions['NOT'] = array('$this->name'.'.id'=>$this->id);
+            $conditions['NOT'] = array($this->name.'.id'=>$this->id);
         }
 		$ret = $this->find($conditions);
 		if($ret){
