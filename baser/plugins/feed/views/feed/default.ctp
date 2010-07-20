@@ -20,6 +20,10 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<cake:nocache>
+<?php $baser->cacheHeader() ?>
+</cake:nocache>
+
 <?php if(!empty($items)): ?>
 <ul>
 <?php foreach($items as $key => $item): ?>
