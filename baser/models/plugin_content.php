@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,34 +34,34 @@ class PluginContent extends AppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'PluginContent';
+	var $name = 'PluginContent';
 /**
  * データベース接続
  *
  * @var     string
  * @access  public
  */
-    var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * beforeValidate
  *
  * @return	void
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => 'alphaNumeric',
-											'message' => '>> コンテンツ名は半角英数字のみ入力して下さい'),
-                                        array('rule' => array('isUnique'),
-											'message' => '>> 入力されたコンテンツ名は既に使用されています。'));
+						'message' => '>> コンテンツ名は半角英数字のみ入力して下さい'),
+				array('rule' => array('isUnique'),
+						'message' => '>> 入力されたコンテンツ名は既に使用されています。'));
 		$this->validate['content_id'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> コンテンツIDを入力して下さい"));
+						'message' => ">> コンテンツIDを入力して下さい"));
 		$this->validate['plugin'] = array(array('rule' => 'alphaNumeric',
-											'message' => '>> プラグイン名は半角英数字のみ入力して下さい'),
-                                          array('rule' => VALID_NOT_EMPTY,
-											'message' => '>> プラグイン名を入力して下さい'));
+						'message' => '>> プラグイン名は半角英数字のみ入力して下さい'),
+				array('rule' => VALID_NOT_EMPTY,
+						'message' => '>> プラグイン名を入力して下さい'));
 		return true;
-        
+
 	}
 /**
  * プラグイン名の書き換え
@@ -75,32 +75,32 @@ class PluginContent extends AppModel {
  * Router::connectの引数として値を与えると、$html->linkなどで、
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
  */
-	function addRoute($url){
+	function addRoute($url) {
 
-		if(!$url){
+		if(!$url) {
 			return false;
 		}
 
 		$mobilePrefix = Configure::read('Mobile.prefix');
 		$mobileOn = Configure::read('Mobile.on');
 		$pluginContents = $this->findAll();
-		if(!$pluginContents){
+		if(!$pluginContents) {
 			return false;
 		}
 
 		$url = preg_replace('/^\//','',$url);
-		if(strpos($url, '/') !== false){
+		if(strpos($url, '/') !== false) {
 			$_path = split('/',$url);
-		}else{
+		}else {
 			$_path[0] = $url;
 			$_path[1] = '';
 		}
 
-		foreach($pluginContents as $pluginContent ){
-			if($pluginContent['PluginContent']['name']){
-				if(!$mobileOn && $_path[0] == $pluginContent['PluginContent']['name']){
+		foreach($pluginContents as $pluginContent ) {
+			if($pluginContent['PluginContent']['name']) {
+				if(!$mobileOn && $_path[0] == $pluginContent['PluginContent']['name']) {
 					Router::connect('/'.$pluginContent['PluginContent']['name'].'/:action/*',array('plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
-				}elseif($mobileOn && $_path[0]==$pluginContent['PluginContent']['name']){
+				}elseif($mobileOn && $_path[0]==$pluginContent['PluginContent']['name']) {
 					Router::connect('/'.$mobilePrefix.'/'.$pluginContent['PluginContent']['name'].'/:action/*',array('prefix' => 'mobile','plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
 				}
 			}

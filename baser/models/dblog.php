@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -31,27 +31,27 @@ class Dblog extends AppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'Dblog';
+	var $name = 'Dblog';
 /**
  * データベース接続
  *
  * @var     string
  * @access  public
  */
-        var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * beforeValidate
  *
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
-		
+	function beforeValidate() {
+
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-											'message' => ">> ログ内容を入力して下さい",
-											'required' => true));
+						'message' => ">> ログ内容を入力して下さい",
+						'required' => true));
 		return true;
-		
+
 	}
 
 }

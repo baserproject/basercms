@@ -6,7 +6,7 @@
  * 一つのプラグインに複数のコンテンツを持つ場合に、一つのコンテンツに対し
  * [http://example/コンテンツ名/コントローラー/アクション]形式のURLでアクセスする為のビヘイビア
  * プラグインコンテンツテーブルへの自動的なデータの追加と削除を実装する。
- * 
+ *
  * 以下が必須項目
  * ◆ /app/config/plugin.php
  * ◆ /app/models/plugin_content.php
@@ -20,7 +20,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -43,7 +43,7 @@ class PluginContentBehavior extends ModelBehavior {
  *
  * @var Model
  */
-    var $PluginContent = null;
+	var $PluginContent = null;
 /**
  * setup
  *
@@ -63,59 +63,59 @@ class PluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-    function beforeSave(&$model,$options){
+	function beforeSave(&$model,$options) {
 
-        if(!$model->exists()){
-           $ret = $this->PluginContent->find(array('PluginContent.name'=>$model->data[$model->alias]['name']));
-           if($ret){
-               // 新規登録で既に登録されている場合は、重複エラーとする
-               $model->invalidate('name','既に登録されています。');
-               return false;
-           }
-        }
-        return true;
-        
-    }
+		if(!$model->exists()) {
+			$ret = $this->PluginContent->find(array('PluginContent.name'=>$model->data[$model->alias]['name']));
+			if($ret) {
+				// 新規登録で既に登録されている場合は、重複エラーとする
+				$model->invalidate('name','既に登録されています。');
+				return false;
+			}
+		}
+		return true;
+
+	}
 /**
  * afterSave
  *
  * @param	Model	$model
- * @param	
+ * @param
  * @return	void
  * @access	public
  */
 	function afterSave(&$model, $created) {
 
-        // プラグイン名を取得
-        $pluginName = $this->getPluginName($model->alias);
-        // コンテンツIDを取得
-        if($created){
-            $contentId = $model->getLastInsertId();
-        }else{
-            $contentId = $model->data[$model->alias]['id'];
-        }
+		// プラグイン名を取得
+		$pluginName = $this->getPluginName($model->alias);
+		// コンテンツIDを取得
+		if($created) {
+			$contentId = $model->getLastInsertId();
+		}else {
+			$contentId = $model->data[$model->alias]['id'];
+		}
 
-        /*** プラグインコンテンツを取得 ***/
-        $conditions = array('PluginContent.content_id'=>$contentId,
-                            'PluginContent.plugin'=>$pluginName);
-        $pluginContent = $this->PluginContent->find($conditions);
-        if(!$pluginContent){
-            $pluginContent = array();
-        }
+		/*** プラグインコンテンツを取得 ***/
+		$conditions = array('PluginContent.content_id'=>$contentId,
+				'PluginContent.plugin'=>$pluginName);
+		$pluginContent = $this->PluginContent->find($conditions);
+		if(!$pluginContent) {
+			$pluginContent = array();
+		}
 
-        /*** データを更新 ***/
-        $pluginContent['PluginContent']['plugin'] = $pluginName;
-        $pluginContent['PluginContent']['content_id'] = $contentId;
-        $pluginContent['PluginContent']['name'] = $model->data[$model->alias]['name'];
+		/*** データを更新 ***/
+		$pluginContent['PluginContent']['plugin'] = $pluginName;
+		$pluginContent['PluginContent']['content_id'] = $contentId;
+		$pluginContent['PluginContent']['name'] = $model->data[$model->alias]['name'];
 
-        /*** データを保存 ***/
-        if(isset($pluginContent['PluginContent']['id'])){
-            $this->PluginContent->set($pluginContent);
-        }else{
-            $this->PluginContent->create($pluginContent);
-        }
-        $ret = $this->PluginContent->save();
-		
+		/*** データを保存 ***/
+		if(isset($pluginContent['PluginContent']['id'])) {
+			$this->PluginContent->set($pluginContent);
+		}else {
+			$this->PluginContent->create($pluginContent);
+		}
+		$ret = $this->PluginContent->save();
+
 	}
 /**
  * beforeDelete
@@ -125,29 +125,29 @@ class PluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-    function beforeDelete(&$model){
+	function beforeDelete(&$model) {
 
-        // プラグインコンテンツを自動削除する
-        $this->PluginContent->deleteAll(array('name'=>$model->data[$model->alias]['name']));
+		// プラグインコンテンツを自動削除する
+		$this->PluginContent->deleteAll(array('name'=>$model->data[$model->alias]['name']));
 
-    }
+	}
 /**
  * プラグイン名を取得する
- * 
+ *
  * モデル名から文字列「Content」を除外した「プラグイン名」を取得
  *
  * @param   string モデル名
  * @return string プラグイン名
  */
-    function getPluginName($modelName){
+	function getPluginName($modelName) {
 
-        if(strpos($modelName,'Content')===false){
-            return strtolower($modelName);
-        }else{
-            return strtolower(str_replace('Content','',$modelName));
-        }
+		if(strpos($modelName,'Content')===false) {
+			return strtolower($modelName);
+		}else {
+			return strtolower(str_replace('Content','',$modelName));
+		}
 
-    }
-	
+	}
+
 }
 ?>

@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,21 +34,21 @@ class Permission extends AppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'Permission';
+	var $name = 'Permission';
 /**
  * データベース接続
  *
  * @var     string
  * @access  public
  */
-    var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * belongsTo
  * @var 	array
  * @access	public
  */
- 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
-                                                        'foreignKey'=>'user_group_id'));
+	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
+							'foreignKey'=>'user_group_id'));
 /**
  * permissions
  * ログインしているユーザーの拒否URLリスト
@@ -62,16 +62,16 @@ class Permission extends AppModel {
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-												'message' => ">> 設定名を入力して下さい"));
+						'message' => ">> 設定名を入力して下さい"));
 		$this->validate['user_group_id'] =	array(array('rule' => VALID_NOT_EMPTY,
-														'message' => ">> ユーザーグループを選択して下さい"));
+						'message' => ">> ユーザーグループを選択して下さい"));
 		$this->validate['url'] = array(	array(	'rule' => VALID_NOT_EMPTY,
-													'message' => ">> 設定を入力して下さい"),
-											array(	'rule' => 'checkUrl',
-													'message' => '>> アクセス拒否として設定できるのは認証ページだけです。'));
+						'message' => ">> 設定を入力して下さい"),
+				array(	'rule' => 'checkUrl',
+						'message' => '>> アクセス拒否として設定できるのは認証ページだけです。'));
 		return true;
 
 	}
@@ -81,32 +81,32 @@ class Permission extends AppModel {
  * @return boolean True if the operation should continue, false if it should abort
  * @access public
  */
-	function checkUrl($check){
+	function checkUrl($check) {
 
-		if(!$check[key($check)]){
+		if(!$check[key($check)]) {
 			return true;
 		}
 		$url = $check[key($check)];
-		if(preg_match('/^[^\/]/is',$url)){
+		if(preg_match('/^[^\/]/is',$url)) {
 			$url = '/'.$url;
 		}
-		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)){
+		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)) {
 			$url = $matches[1].'/'.'*';
 		}
 		$params = Router::parse($url);
-		if(empty($params['prefix'])){
+		if(empty($params['prefix'])) {
 			$this->invalidate('setting','>> アクセス拒否として設定できるのは認証ページだけです。');
 			return false;
 		}
 
 		return true;
-		
+
 	}
 /**
  * 初期値を取得する
  * @return array
  */
-	function getDefaultValue(){
+	function getDefaultValue() {
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
 		return $data;
@@ -118,13 +118,13 @@ class Permission extends AppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null){
+	function getControlSource($field = null) {
 
 		$controlSources['user_group_id'] = $this->UserGroup->find('list',array('conditions'=>array('UserGroup.id <>'=>1)));
 		$controlSources['auth'] = array('0'=>'不可','1'=>'可');
-		if(isset($controlSources[$field])){
+		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
-		}else{
+		}else {
 			return false;
 		}
 
@@ -133,14 +133,14 @@ class Permission extends AppModel {
  * beforeSave
  * @param array $options
  */
-	function beforeSave($options){
-		if(isset($this->data['Permission'])){
+	function beforeSave($options) {
+		if(isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
-		}else{
+		}else {
 			$data = $this->data;
 		}
-		if(isset($data['url'])){
-			if(preg_match('/^[^\/]/is',$data['url'])){
+		if(isset($data['url'])) {
+			if(preg_match('/^[^\/]/is',$data['url'])) {
 				$data['url'] = '/'.$data['url'];
 			}
 		}
@@ -152,43 +152,43 @@ class Permission extends AppModel {
  * @param string $userGroupId
  * @param array $params
  */
-	function check($url, $userGroupId){
+	function check($url, $userGroupId) {
 
-		if($this->permissions === -1){
+		if($this->permissions === -1) {
 			$conditions = array('Permission.user_group_id' => $userGroupId);
 			$permissions = $this->find('all',array('conditions'=>$conditions,'order'=>'sort','recursive'=>-1));
-			if($permissions){
+			if($permissions) {
 				$this->permissions = $permissions;
-			}else{
+			}else {
 				$this->permissions = array();
 				return true;
 			}
 		}
-		
+
 		$permissions = $this->permissions;
 
-		if($url!='/'){
+		if($url!='/') {
 			$url = preg_replace('/^\//is', '', $url);
 		}
 		$ret = true;
-		foreach($permissions as $permission){
-			if(!$permission['Permission']['status']){
+		foreach($permissions as $permission) {
+			if(!$permission['Permission']['status']) {
 				continue;
 			}
-			if($permission['Permission']['url']!='/'){
+			if($permission['Permission']['url']!='/') {
 				$pattern = preg_replace('/^\//is', '', $permission['Permission']['url']);
-			}else{
+			}else {
 				$pattern = $permission['Permission']['url'];
 			}
 			$pattern = addslashes($pattern);
 			$pattern = str_replace('/', '\/', $pattern);
 			$pattern = '/^'.str_replace('*', '.*?', $pattern).'$/is';
-			if(preg_match($pattern, $url)){
+			if(preg_match($pattern, $url)) {
 				$ret = $permission['Permission']['auth'];
 			}
 		}
 		return $ret;
-		
+
 	}
 }
 ?>

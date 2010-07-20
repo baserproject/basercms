@@ -101,10 +101,10 @@ class Page extends AppModel {
  */
 	function beforeSave() {
 
-		if(!$this->fileSave){
+		if(!$this->fileSave) {
 			return true;
 		}
-		
+
 		// 保存前のページファイルのパスを取得
 		if($this->exists()) {
 			$this->oldPath = $this->_getPageFilePath($this->find(array('Page.id'=>$this->data['Page']['id'])));
@@ -130,7 +130,7 @@ class Page extends AppModel {
  */
 	function afterSave() {
 
-		if(!$this->fileSave){
+		if(!$this->fileSave) {
 			return true;
 		}
 		/*if(!$this->data['Page']['status']){
@@ -224,7 +224,7 @@ class Page extends AppModel {
  */
 	function getPageUrl($data) {
 
-		if(isset($data['Page'])){
+		if(isset($data['Page'])) {
 			$data = $data['Page'];
 		}
 		$categoryId = $data['page_category_id'];
@@ -324,6 +324,6 @@ class Page extends AppModel {
 		return !in_array($url,$this->_unpublishes);
 
 	}
-	
+
 }
 ?>

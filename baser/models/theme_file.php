@@ -20,14 +20,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-class ThemeFile extends AppModel{
+class ThemeFile extends AppModel {
 /**
  * クラス名
  *
  * @var		string
  * @access 	public
  */
-   	var $name = 'ThemeFile';
+	var $name = 'ThemeFile';
 /**
  * use table
  * @var		boolean
@@ -40,15 +40,15 @@ class ThemeFile extends AppModel{
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-												'message' => ">> テーマファイル名を入力して下さい。",
-												'required' => true),
-										array(	'rule' => 'halfText',
-												'message' => '>> テーマファイル名は半角のみで入力して下さい'),
-                                        array(  'rule' => array('duplicateThemeFile'),
-                                                'message' => '>> 入力されたテーマファイル名は、同一階層に既に存在します'));
+						'message' => ">> テーマファイル名を入力して下さい。",
+						'required' => true),
+				array(	'rule' => 'halfText',
+						'message' => '>> テーマファイル名は半角のみで入力して下さい'),
+				array(  'rule' => array('duplicateThemeFile'),
+						'message' => '>> 入力されたテーマファイル名は、同一階層に既に存在します'));
 	}
 /**
  * フォルダの重複チェック
@@ -56,17 +56,17 @@ class ThemeFile extends AppModel{
  * @return	boolean
  */
 	function duplicateThemeFile ($check) {
-		
-		if(!$check[key($check)]){
+
+		if(!$check[key($check)]) {
 			return true;
 		}
 		$targetPath = $this->data['ThemeFile']['parent'].DS.$check[key($check)];
-		if(is_dir($targetPath)){
+		if(is_dir($targetPath)) {
 			return false;
-		}else{
+		}else {
 			return true;
 		}
-		
+
 	}
 }
 ?>

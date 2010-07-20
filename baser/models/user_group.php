@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,30 +34,30 @@ class UserGroup extends AppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'UserGroup';
+	var $name = 'UserGroup';
 /**
  * データベース接続
  *
  * @var     string
  * @access  public
  */
-    var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * beforeValidate
  *
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-												'message' => ">> ユーザーグループ名を入力して下さい"),
-										array(	'rule' => 'halfText',
-												'message' => '>> ユーザーグループは半角のみで入力して下さい'),
-										array(	'rule' => array('duplicate','name'),
-												'message' => '>> 既に登録のあるユーザーグループ名です'));
+						'message' => ">> ユーザーグループ名を入力して下さい"),
+				array(	'rule' => 'halfText',
+						'message' => '>> ユーザーグループは半角のみで入力して下さい'),
+				array(	'rule' => array('duplicate','name'),
+						'message' => '>> 既に登録のあるユーザーグループ名です'));
 		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
-												'message' => ">> 表示名を入力して下さい"));
+						'message' => ">> 表示名を入力して下さい"));
 		return true;
 
 	}

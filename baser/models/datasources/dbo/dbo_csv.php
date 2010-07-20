@@ -405,10 +405,10 @@ class DboCsv extends DboSource {
 		$config = $this->config;
 		$tableName = $this->fullTableName($model,false);
 
-		if($this->isConnected($tableName)){
+		if($this->isConnected($tableName)) {
 			return true;
 		}
-		
+
 		$this->connected[$tableName] = false;
 
 		if(!$this->_connect($tableName,$lock,$model->plugin)) {
@@ -476,15 +476,15 @@ class DboCsv extends DboSource {
 		//@mysql_free_result($this->results);
 
 		if($tableName) {
-			if(empty($this->connection[$tableName])){
+			if(empty($this->connection[$tableName])) {
 				// 接続がない場合は既に切断されているとみなしてtrueを返す
 				return true;
-			}else{
+			}else {
 				if($this->csvCloseByLocked($this->connection[$tableName])) {
 					unset($this->connected[$tableName]);
 					unset($this->csvName[$tableName]);
 					return true;
-				}else{
+				}else {
 					return false;
 				}
 			}
@@ -511,9 +511,9 @@ class DboCsv extends DboSource {
 		if($this->connected) {
 			if($tableName && !empty($this->connected[$tableName])) {
 				return $this->connected[$tableName];
-			}else if(!empty($this->connected[0])){
+			}else if(!empty($this->connected[0])) {
 				return $this->connected[0];
-			}else{
+			}else {
 				return false;
 			}
 		}else {
@@ -578,15 +578,15 @@ class DboCsv extends DboSource {
  * @access	public
  */
 	function csvCloseByLocked(&$fp) {
-		if(is_array($fp)){
+		if(is_array($fp)) {
 			$ret = true;
-			foreach($fp as $key => $value){
-				if(isset($fp[$key]) && !$this->__csvCloseByLocked($fp[$key])){
+			foreach($fp as $key => $value) {
+				if(isset($fp[$key]) && !$this->__csvCloseByLocked($fp[$key])) {
 					$ret = false;
 				}
 			}
 			return $ret;
-		}else{
+		}else {
 			return $this->__csvCloseByLocked($fp);
 		}
 	}
@@ -683,7 +683,7 @@ class DboCsv extends DboSource {
 		// TODO ここでは、全データを読み込む仕様となっているので大量のデータを扱う場合、メモリに負荷がかかってしまう。
 		// 並び替えを実行した上で、指定件数を取り出すという要件を実現する為、こういう仕様となっている。
 		// 何か解決策があれば・・・
-		if(empty($queryData['conditions'])){
+		if(empty($queryData['conditions'])) {
 			$queryData['conditions'] = null;
 		}
 		$records = $this->_readCsvFile($queryData['tableName'],$queryData['conditions']);
@@ -955,8 +955,8 @@ class DboCsv extends DboSource {
  * @param	string	$tableName
  * @return	int		$id
  */
-	function _getMaxId($tableName){
-		
+	function _getMaxId($tableName) {
+
 		if($tableName) {
 			$index = $tableName;
 		}else {
@@ -975,24 +975,24 @@ class DboCsv extends DboSource {
 		rewind($this->connection[$index]);
 		$this->_csvFields = fgetcsv($this->connection[$index],10240);
 		$idNum = '';
-		foreach($this->_csvFields as $key => $value){
-			if($value == 'id'){
+		foreach($this->_csvFields as $key => $value) {
+			if($value == 'id') {
 				$idNum = $key;
 				break;
 			}
 		}
 
 		while(($record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
-			if($record[$idNum]>=$maxId){
+			if($record[$idNum]>=$maxId) {
 				$maxId = $record[$idNum];
 			}
 		}
 		return $maxId;
-		
+
 	}
 /**
  * CSV用のヘッダを取得する
- * 
+ *
  * @param	array
  * @return	string
  * @access	protected
@@ -1009,7 +1009,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSV用のフィールドデータに変換する
- * 
+ *
  * @param string $value
  * @param boolean $dc （ " を "" に変換するか）
  * @return string
@@ -1026,7 +1026,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSV用のレコードデータに変換する
- * 
+ *
  * @param array $record
  * @return array
  */
@@ -1043,7 +1043,7 @@ class DboCsv extends DboSource {
  * @param String $fieldName
  */
 	function addColumn(&$model,$fieldName,$column=null) {
-		
+
 		// DB接続
 		if(!$this->connect($model,true)) {
 			return false;
@@ -1139,7 +1139,7 @@ class DboCsv extends DboSource {
 		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
 
 		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
-		
+
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
 		$this->disconnect($model->tablePrefix.$model->useTable);
@@ -2179,50 +2179,50 @@ class DboCsv extends DboSource {
 	}
 }
 /**
-* クイックソート
-*
-* TODO GLOBAL グローバルな関数として再配置する必要あり
-*
-* @param	array	$int_array = ソートする配列
-* @param	int		$left = 開始位置（0で決め打ち）
-* @param	int		$right = 終了位置（$int_arrayの要素数：決め打ち）
-* @param	string	$flag = ソート対象の配列要素
-* @param	string	$order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
-* @return	array	ソート後の配列
-*/
-function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
-	if ($left >= $right) {
-		return;
-	}
-	swap ($int_array, $left, intval(($left+$right)/2));
-	$last = $left;
-	for ($i = $left + 1; $i <= $right; $i++) {
-		if($flag) {
-			if($order=="DESC") {
-				if ($int_array[$i]["".$flag.""] > $int_array[$left]["".$flag.""]) {
-					swap($int_array, ++$last, $i);
+ * クイックソート
+ *
+ * TODO GLOBAL グローバルな関数として再配置する必要あり
+ *
+ * @param	array	$int_array = ソートする配列
+ * @param	int		$left = 開始位置（0で決め打ち）
+ * @param	int		$right = 終了位置（$int_arrayの要素数：決め打ち）
+ * @param	string	$flag = ソート対象の配列要素
+ * @param	string	$order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
+ * @return	array	ソート後の配列
+ */
+	function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
+		if ($left >= $right) {
+			return;
+		}
+		swap ($int_array, $left, intval(($left+$right)/2));
+		$last = $left;
+		for ($i = $left + 1; $i <= $right; $i++) {
+			if($flag) {
+				if($order=="DESC") {
+					if ($int_array[$i]["".$flag.""] > $int_array[$left]["".$flag.""]) {
+						swap($int_array, ++$last, $i);
+					}
+				} else {
+					if ($int_array[$i]["".$flag.""] < $int_array[$left]["".$flag.""]) {
+						swap($int_array, ++$last, $i);
+					}
 				}
 			} else {
-				if ($int_array[$i]["".$flag.""] < $int_array[$left]["".$flag.""]) {
-					swap($int_array, ++$last, $i);
-				}
-			}
-		} else {
-			if($order=="DESC") {
-				if ($int_array[$i] > $int_array[$left]) {
-					swap($int_array, ++$last, $i);
-				}
-			} else {
-				if ($int_array[$i] < $int_array[$left]) {
-					swap($int_array, ++$last, $i);
+				if($order=="DESC") {
+					if ($int_array[$i] > $int_array[$left]) {
+						swap($int_array, ++$last, $i);
+					}
+				} else {
+					if ($int_array[$i] < $int_array[$left]) {
+						swap($int_array, ++$last, $i);
+					}
 				}
 			}
 		}
+		swap($int_array, $left, $last);
+		qsort($int_array, $left, $last-1, $flag = $flag, $order = $order);
+		qsort($int_array, $last+1, $right, $flag = $flag, $order = $order);
 	}
-	swap($int_array, $left, $last);
-	qsort($int_array, $left, $last-1, $flag = $flag, $order = $order);
-	qsort($int_array, $last+1, $right, $flag = $flag, $order = $order);
-}
 /**
  * swap
  *
@@ -2234,11 +2234,11 @@ function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
  * @param	string
  * @return	void
  */
-function swap(&$v, $i, $j) {
-	$temp = $v[$i];
-	$v[$i] = $v[$j];
-	$v[$j] = $temp;
-}
+	function swap(&$v, $i, $j) {
+		$temp = $v[$i];
+		$v[$i] = $v[$j];
+		$v[$j] = $temp;
+	}
 /**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
  *
@@ -2250,24 +2250,24 @@ function swap(&$v, $i, $j) {
  * @param 	string	enclosure
  * @return	mixed	ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
  */
-function fgetcsv_reg (&$handle, $length = null, $d = ',', $e = '"') {
-	$d = preg_quote($d);
-	$e = preg_quote($e);
-	$_line = "";
-	$eof = false;
-	while (($eof != true)and(!feof($handle))) {
-		$_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
-		$itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
-		if ($itemcnt % 2 == 0) $eof = true;
+	function fgetcsv_reg (&$handle, $length = null, $d = ',', $e = '"') {
+		$d = preg_quote($d);
+		$e = preg_quote($e);
+		$_line = "";
+		$eof = false;
+		while (($eof != true)and(!feof($handle))) {
+			$_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
+			$itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
+			if ($itemcnt % 2 == 0) $eof = true;
+		}
+		$_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
+		$_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
+		preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+		$_csv_data = $_csv_matches[1];
+		for($_csv_i=0;$_csv_i<count($_csv_data);$_csv_i++) {
+			$_csv_data[$_csv_i]=preg_replace('/^'.$e.'(.*)'.$e.'$/s','$1',$_csv_data[$_csv_i]);
+			$_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
+		}
+		return empty($_line) ? false : $_csv_data;
 	}
-	$_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
-	$_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
-	preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-	$_csv_data = $_csv_matches[1];
-	for($_csv_i=0;$_csv_i<count($_csv_data);$_csv_i++) {
-		$_csv_data[$_csv_i]=preg_replace('/^'.$e.'(.*)'.$e.'$/s','$1',$_csv_data[$_csv_i]);
-		$_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
-	}
-	return empty($_line) ? false : $_csv_data;
-}
 ?>

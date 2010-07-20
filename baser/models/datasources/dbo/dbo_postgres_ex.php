@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * PostgreSQL DBO拡張
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -29,17 +29,17 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function addColumn(&$model,$addFieldName,$column){
+	function addColumn(&$model,$addFieldName,$column) {
 		$tableName = $model->tablePrefix.$model->table;
-		if(empty($column['name'])){
+		if(empty($column['name'])) {
 			$column['name'] = $addFieldName;
 		}
 		$schema = $model->schema();
-		if(isset($schema[$addFieldName])){
+		if(isset($schema[$addFieldName])) {
 			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
 		}
-        return $this->execute('"ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
-    }
+		return $this->execute('"ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
+	}
 /**
  * カラムを変更する
  * @param model $model
@@ -49,10 +49,10 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function editColumn(&$model,$oldFieldName,$newFieldName,$column=null){
+	function editColumn(&$model,$oldFieldName,$newFieldName,$column=null) {
 		$tableName = $model->tablePrefix.$model->table;
-        return $this->execute('ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"');
-    }
+		return $this->execute('ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"');
+	}
 /**
  * カラムを削除する
  * @param model $model
@@ -61,10 +61,10 @@ class DboPostgresEx extends DboPostgres {
  * @return boolean
  * @access public
  */
-    function deleteColumn(&$model,$delFieldName){
+	function deleteColumn(&$model,$delFieldName) {
 		$tableName = $model->tablePrefix.$model->table;
-        return $this->execute('ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"');
-    }
-    
+		return $this->execute('ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"');
+	}
+
 }
 ?>

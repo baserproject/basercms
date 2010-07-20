@@ -37,17 +37,17 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function addColumn(&$model,$addFieldName,$column){
+	function addColumn(&$model,$addFieldName,$column) {
 		$tableName = $model->tablePrefix.$model->table;
-		if(empty($column['name'])){
+		if(empty($column['name'])) {
 			$column['name'] = $addFieldName;
 		}
 		$schema = $model->schema();
-		if(isset($schema[$addFieldName])){
+		if(isset($schema[$addFieldName])) {
 			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
 		}
-        $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
-    }
+		$this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
+	}
 /**
  * カラムを変更する
  * @param model $model
@@ -57,52 +57,52 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function editColumn(&$model,$oldFieldName,$newfieldName,$column=null){
-		
-        $schema = $model->schema();
-        $tableName = $model->tablePrefix.$model->table;
+	function editColumn(&$model,$oldFieldName,$newfieldName,$column=null) {
 
-        $this->execute('BEGIN TRANSACTION;');
+		$schema = $model->schema();
+		$tableName = $model->tablePrefix.$model->table;
 
-        // リネームして一時テーブル作成
-        if(!$this->renameTable($tableName,$tableName.'_temp')){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		$this->execute('BEGIN TRANSACTION;');
 
-        // スキーマのキーを変更（並び順を変えないように）
-        $newSchema = array();
-        foreach($schema as $key => $field){
-            if($key == $oldFieldName){
-                $key = $newfieldName;
-            }
-            $newSchema[$key] = $field;
-        }
-        
-        // フィールドを変更した新しいテーブルを作成
-        if(!$this->createTable($tableName,$newSchema)){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// リネームして一時テーブル作成
+		if(!$this->renameTable($tableName,$tableName.'_temp')) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        // データの移動
-        $sql = 'INSERT INTO '.$tableName.' SELECT '.$this->convertCsvFieldsFromSchema($schema).' FROM '.$tableName.'_temp';
-        $sql = str_replace($oldFieldName,$oldFieldName.' AS '.$newfieldName,$sql);
-        if(!$this->execute($sql)){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// スキーマのキーを変更（並び順を変えないように）
+		$newSchema = array();
+		foreach($schema as $key => $field) {
+			if($key == $oldFieldName) {
+				$key = $newfieldName;
+			}
+			$newSchema[$key] = $field;
+		}
 
-        // 一時テーブルを削除
-        if(!$this->dropTable($tableName.'_temp')){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// フィールドを変更した新しいテーブルを作成
+		if(!$this->createTable($tableName,$newSchema)) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        $this->execute('COMMIT;');
-        return true;
-        
-    }
+		// データの移動
+		$sql = 'INSERT INTO '.$tableName.' SELECT '.$this->convertCsvFieldsFromSchema($schema).' FROM '.$tableName.'_temp';
+		$sql = str_replace($oldFieldName,$oldFieldName.' AS '.$newfieldName,$sql);
+		if(!$this->execute($sql)) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
+
+		// 一時テーブルを削除
+		if(!$this->dropTable($tableName.'_temp')) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
+
+		$this->execute('COMMIT;');
+		return true;
+
+	}
 /**
  * カラムを削除する
  * @param model $model
@@ -111,52 +111,52 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-    function deleteColumn(&$model,$delFieldName){
-		
+	function deleteColumn(&$model,$delFieldName) {
+
 		$tableName = $model->tablePrefix.$model->table;
-        $schema = $model->schema();
+		$schema = $model->schema();
 
-        $this->execute('BEGIN TRANSACTION;');
+		$this->execute('BEGIN TRANSACTION;');
 
-        // リネームして一時テーブル作成
-        if(!$this->renameTable($tableName,$tableName.'_temp')){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// リネームして一時テーブル作成
+		if(!$this->renameTable($tableName,$tableName.'_temp')) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        // フィールドを削除した新しいテーブルを作成
-        unset($schema[$delFieldName]);
-        if(!$this->createTable($tableName,$schema)){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// フィールドを削除した新しいテーブルを作成
+		unset($schema[$delFieldName]);
+		if(!$this->createTable($tableName,$schema)) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        // データの移動
-        if(!$this->moveData($tableName.'_temp',$tableName,$schema)){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// データの移動
+		if(!$this->moveData($tableName.'_temp',$tableName,$schema)) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        // 一時テーブルを削除
-        if(!$this->dropTable($tableName.'_temp')){
-            $this->execute('ROLLBACK;');
-            return false;
-        }
+		// 一時テーブルを削除
+		if(!$this->dropTable($tableName.'_temp')) {
+			$this->execute('ROLLBACK;');
+			return false;
+		}
 
-        $this->execute('COMMIT;');
-        return true;
-        
-    }
+		$this->execute('COMMIT;');
+		return true;
+
+	}
 /**
  * テーブル名を変更する
  * @param string $sourceTableName
  * @param string $targetTableName
  * @return boolean
  */
-    function renameTable($sourceTableName,$targetTableName){
-        $sql = 'ALTER TABLE '.$sourceTableName.' RENAME TO '.$targetTableName;
-        return $this->execute($sql);
-    }
+	function renameTable($sourceTableName,$targetTableName) {
+		$sql = 'ALTER TABLE '.$sourceTableName.' RENAME TO '.$targetTableName;
+		return $this->execute($sql);
+	}
 /**
  * テーブルからテーブルへデータを移動する
  * @param string $sourceTableName
@@ -164,50 +164,51 @@ class DboSqlite3Ex extends DboSqlite3 {
  * @param array $schema
  * @return booelan
  */
-    function moveData($sourceTableName,$targetTableName,$schema){
-        $sql = 'INSERT INTO '.$targetTableName.' SELECT '.$this->convertCsvFieldsFromSchema($schema).' FROM '.$sourceTableName;
-        return $this->execute($sql);
-    }
+	function moveData($sourceTableName,$targetTableName,$schema) {
+		$sql = 'INSERT INTO '.$targetTableName.' SELECT '.$this->convertCsvFieldsFromSchema($schema).' FROM '.$sourceTableName;
+		return $this->execute($sql);
+	}
 /**
  * テーブルを削除する
  * @param string $tableName
  * @return boolean
  */
-    function dropTable($tableName){
-        $sql = 'drop table '.$tableName;
-        return $this->execute($sql);
-    }
+	function dropTable($tableName) {
+		$sql = 'drop table '.$tableName;
+		return $this->execute($sql);
+	}
 /**
  * テーブルを作成する
  * @param string $tableName
  * @param array $schema
  * @return boolean
  */
-    function createTable($tableName,$schema){
-        
-        $sql = 'CREATE TABLE '.$tableName .'(';
-        $fields = '';
-        foreach($schema as $key => $field){
-			if(empty($field['name'])){
+	function createTable($tableName,$schema) {
+
+		$sql = 'CREATE TABLE '.$tableName .'(';
+		$fields = '';
+		foreach($schema as $key => $field) {
+			if(empty($field['name'])) {
 				$field['name'] = $key;
 			}
-            $sql .= $this->buildColumn($field).',';
-        }
-        $sql = substr($sql,0,strlen($sql)-1) . ');';
-        return $this->execute($sql);
+			$sql .= $this->buildColumn($field).',';
+		}
+		$sql = substr($sql,0,strlen($sql)-1) . ');';
+		return $this->execute($sql);
 
-    }
+	}
 /**
  * スキーマ情報よりCSV形式のフィールドリストを取得する
  * @param array $schema
  * @return string
  */
-    function convertCsvFieldsFromSchema($schema){
-        $fields = '';
-        foreach($schema as $key => $field){
-            $fields .= $key.',';
-        }
-        return substr($fields,0,strlen($fields)-1);
-    }
+	function convertCsvFieldsFromSchema($schema) {
+		$fields = '';
+		foreach($schema as $key => $field) {
+			$fields .= $key.',';
+		}
+		return substr($fields,0,strlen($fields)-1);
+	}
 
 }
+?>

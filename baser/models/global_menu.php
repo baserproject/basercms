@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,26 +34,26 @@ class GlobalMenu extends AppModel {
  * @var     string
  * @access  public
  */
-    var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * クラス名
  *
  * @var		string
  * @access 	public
  */
-   	var $name = 'GlobalMenu';
+	var $name = 'GlobalMenu';
 /**
  * beforeValidate
  *
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> メニュー名を入力して下さい"));
+						'message' => ">> メニュー名を入力して下さい"));
 		$this->validate['link'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => '>> リンクURLを入力して下さい'));
+						'message' => '>> リンクURLを入力して下さい'));
 		return true;
 
 	}
@@ -64,12 +64,12 @@ class GlobalMenu extends AppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null){
-        
-        $controlSources['menu_type'] = array('default'=>'公開ページ','admin'=>'管理画面');
+	function getControlSource($field = null) {
+
+		$controlSources['menu_type'] = array('default'=>'公開ページ','admin'=>'管理画面');
 		return $controlSources[$field];
 
 	}
-    
+
 }
 ?>

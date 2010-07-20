@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,28 +34,28 @@ class Plugin extends AppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'Plugin';
+	var $name = 'Plugin';
 /**
  * データベース接続
  *
  * @var     string
  * @access  public
  */
-    var $useDbConfig = 'baser';
+	var $useDbConfig = 'baser';
 /**
  * beforeValidate
  *
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-												'message' => ">> プラグイン名を入力して下さい。",
-												'required' => true));
+						'message' => ">> プラグイン名を入力して下さい。",
+						'required' => true));
 		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
-												'message' => ">> 表示名を入力して下さい。",
-												'required' => true));
+						'message' => ">> 表示名を入力して下さい。",
+						'required' => true));
 		return true;
 
 	}
