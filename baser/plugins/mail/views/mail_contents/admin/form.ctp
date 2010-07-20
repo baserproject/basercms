@@ -32,6 +32,30 @@ $(function(){
 			$("#MailContentSender10").attr('checked',true);
 		}
 	}
+	$("#EditLayout").click(function(){
+		if(confirm('メールフォーム設定を保存して、レイアウトテンプレート '+$("#MailContentLayoutTemplate").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#MailContentEditLayout").val(true);
+			$("#MailContentEditMailForm").val(false);
+			$("#MailContentEditMail").val(false);
+			$("#MailContentEditForm").submit();
+		}
+	});
+	$("#EditForm").click(function(){
+		if(confirm('メールフォーム設定を保存して、メールフォームテンプレート '+$("#MailContentFormTemplate").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#MailContentEditLayout").val(false);
+			$("#MailContentEditMailForm").val(true);
+			$("#MailContentEditMail").val(false);
+			$("#MailContentEditForm").submit();
+		}
+	});
+	$("#EditMail").click(function(){
+		if(confirm('メールフォーム設定を保存して、送信メールテンプレート '+$("#MailContentMailTemplate").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#MailContentEditLayout").val(false);
+			$("#MailContentEditMailForm").val(false);
+			$("#MailContentEditMail").val(true);
+			$("#MailContentEditForm").submit();
+		}
+	});
 	mailContentSender1ClickHandler();
 });
 
@@ -130,33 +154,52 @@ function mailContentSender1ClickHandler(){
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.layout_template', 'レイアウトテンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.layout_template', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayoutTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.layout_template') ?>
+		<td class="col-input">
+			<?php echo $formEx->select('MailContent.layout_template',$mail->getLayoutTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('MailContent.edit_layout') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditLayout')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayoutTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.layout_template') ?>
 			<div id="helptextLayoutTemplate" class="helptext">
 				<ul>
-					<li>メールフォームの外枠のテンプレート名を指定します。</li>
-					<li>半角で入力してください。</li>
+					<li>メールフォームの外枠のテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.form_template', 'メールフォームテンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.form_template', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFormTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.form_template') ?>
+		<td class="col-input">
+			<?php echo $formEx->select('MailContent.form_template',$mail->getFormTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('MailContent.edit_mail_form') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditForm')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFormTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.form_template') ?>
 			<div id="helptextFormTemplate" class="helptext">
 				<ul>
-					<li>メールフォーム本体のテンプレート名を指定します。</li>
-					<li>半角で入力してください。</li>
+					<li>メールフォーム本体のテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.mail_template', '送信メールテンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.mail_template', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpMailTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.mail_template') ?>
+		<td class="col-input">
+			<?php echo $formEx->select('MailContent.mail_template',$mail->getMailTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('MailContent.edit_mail') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditMail')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpMailTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('MailContent.mail_template') ?>
 			<div id="helptextMailTemplate" class="helptext">
 				<ul>
-					<li>送信するメールのテンプレート名を指定します。</li>
-					<li>半角で入力してください。</li>
+					<li>送信するメールのテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			&nbsp; </td>

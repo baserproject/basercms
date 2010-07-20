@@ -48,7 +48,7 @@ class MailContentsController extends MailAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html','TimeEx','FormEx','TextEx');
+	var $helpers = array('Html','TimeEx','FormEx','TextEx', 'Mail.Mail');
 /**
  * コンポーネント
  *
@@ -159,7 +159,17 @@ class MailContentsController extends MailAppController {
 				$message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->MailContent->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+
+				if($this->data['MailContent']['edit_layout']){
+					$this->redirectEditLayout($this->data['MailContent']['layout_template']);
+				}elseif ($this->data['MailContent']['edit_mail_form']) {
+					$this->redirectEditForm($this->data['MailContent']['form_template']);
+				}elseif ($this->data['MailContent']['edit_mail']) {
+					$this->redirectEditMail($this->data['MailContent']['mail_template']);
+				}else{
+					$this->redirect(array('action'=>'index'));
+				}
+
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -171,6 +181,88 @@ class MailContentsController extends MailAppController {
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
 		$this->render('form');
 
+	}
+/**
+ * レイアウト編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditLayout($template){
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
+		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
+						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target)){
+				foreach($sorces as $source){
+					if(file_exists($source)){
+						copy($source,$target);
+						chmod($target,0666);
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
+	}
+/**
+ * メール編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditMail($template){
+		$type = 'elements';
+		$path = 'email'.DS.'text'.DS.$template.'.ctp';
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
+		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$type.DS.$path);
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target)){
+				foreach($sorces as $source){
+					if(file_exists($source)){
+						$folder = new Folder();
+						$folder->create(dirname($target), 0777);
+						copy($source,$target);
+						chmod($target,0666);
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],$type,$path));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
+	}
+/**
+ * メールフォーム編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditForm($template){
+		$path = 'mail'.DS.$template;
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
+		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target.DS.'index.ctp')){
+				foreach($sorces as $source){
+					if(is_dir($source)){
+						$folder = new Folder();
+						$folder->create(dirname($target), 0777);
+						$folder->copy(array('from'=>$source,'to'=>$target,'chmod'=>0777,'skip'=>array('_notes')));
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.DS.'index.ctp'));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
 	}
 /**
  * [ADMIN] 削除処理

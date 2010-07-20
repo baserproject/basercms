@@ -308,5 +308,78 @@ class BlogHelper extends AppHelper {
 		}
 
 	}
+/**
+ * レイアウトテンプレートを取得
+ * コンボボックスのソースとして利用
+ * @return	array
+ * @access	public
+ */
+	function getLayoutTemplates() {
+
+		$templatesPathes = array();
+		if($this->Baser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'layouts'.DS;
+		}
+		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
+														BASER_VIEWS.'layouts'.DS));
+		
+		$_templates = array();
+		foreach($templatesPathes as $templatesPath){
+			$folder = new Folder($templatesPath);
+			$files = $folder->read(true, true);
+			$foler = null;
+			if($files[1]){
+				if($_templates){
+					$_templates = am($_templates,$files[1]);
+				}else{
+					$_templates = $files[1];
+				}
+			}
+		}
+		$templates = array();
+		foreach($_templates as $template){
+			if($template != 'installations.ctp'){
+				$template = basename($template, '.ctp');
+				$templates[$template] = $template;
+			}
+		}
+		return $templates;
+	}
+/**
+ * ブログテンプレートを取得
+ * コンボボックスのソースとして利用
+ * @return	array
+ * @access	public
+ */
+	function getBlogTemplates() {
+
+		$templatesPathes = array();
+		if($this->Baser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'blog'.DS;
+		}
+		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;
+		
+		$_templates = array();
+		foreach($templatesPathes as $templatePath){
+			$folder = new Folder($templatePath);
+			$files = $folder->read(true, true);
+			$foler = null;
+			if($files[0]){
+				if($_templates){
+					$_templates = am($_templates,$files[0]);
+				}else{
+					$_templates = $files[0];
+				}
+			}
+		}
+		$templates = array();
+		foreach($_templates as $template){
+			if($template != 'rss' && $template != 'mobile'){
+				$templates[$template] = $template;
+			}
+		}
+		return $templates;
+	}
+
 }
 ?>

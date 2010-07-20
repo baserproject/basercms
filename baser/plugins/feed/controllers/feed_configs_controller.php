@@ -48,7 +48,7 @@ class FeedConfigsController extends FeedAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('TextEx','TimeEx','FormEx');
+	var $helpers = array('TextEx','TimeEx','FormEx','Feed.Feed');
 /**
  * コンポーネント
  *
@@ -170,7 +170,12 @@ class FeedConfigsController extends FeedAppController {
 
 				$this->Session->setFlash('フィード「'.$this->data['FeedConfig']['name'].'」を更新しました。');
 				$this->FeedConfig->saveDbLog('フィード「'.$this->data['FeedConfig']['name'].'」を更新しました。');
-				$this->redirect('/admin/feed/feed_configs/index');
+
+				if($this->data['FeedConfig']['edit_template']){
+					$this->redirectEditTemplate($this->data['FeedConfig']['template']);
+				}else{
+					$this->redirect(array('action'=>'index'));
+				}
 
 			}else {
 
@@ -185,6 +190,34 @@ class FeedConfigsController extends FeedAppController {
 		$this->pageTitle = 'フィード設定情報編集';
 		$this->render('form');
 
+	}
+/**
+ * テンプレート編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditTemplate($template){
+		$path = 'feed'.DS.$template.'.ctp';
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
+		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target)){
+				foreach($sorces as $source){
+					if(file_exists($source)){
+						$folder = new Folder();
+						$folder->create(dirname($target), 0777);
+						copy($source,$target);
+						chmod($target,0666);
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
 	}
 /**
  * [ADMIN] 削除

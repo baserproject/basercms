@@ -269,6 +269,8 @@ class BlogCommentsController extends BlogAppController {
 			if($result) {
 				$this->_sendComment();
 				$this->set('dbData',$result['BlogComment']);
+			}else{
+				$this->set('dbData',false);
 			}
 		}
 	}

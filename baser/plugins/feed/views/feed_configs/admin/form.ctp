@@ -20,8 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($this->action == 'admin_edit'): ?>
+<script type="text/javascript">
+$(function(){
+	$("#EditTemplate").click(function(){
+		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#FeedConfigEditTemplate").val(true);
+			$("#FeedConfigEditForm").submit();
+		}
+	});
+});
+</script>
 
+<?php if($this->action == 'admin_edit'): ?>
 <p style="text-align:right"><a href="#headHowTo">フィードの読み込み方法 &gt;&gt;</a></p>
 <?php endif ?>
 <h2>
@@ -91,11 +101,17 @@
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.template', 'テンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('FeedConfig.template', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->select('FeedConfig.template',$feed->getTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('FeedConfig.edit_template') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditTemplate')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextTemplate" class="helptext">
 				<ul>
-					<li>出力するフィードのテンプレート名を指定します。</li>
-					<li>半角で入力してください。</li>
+					<li>出力するフィードのテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			<?php echo $formEx->error('FeedConfig.template') ?></td>

@@ -48,7 +48,7 @@ class BlogContentsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html','TimeEx','FormEx');
+	var $helpers = array('Html','TimeEx','FormEx','Blog.Blog');
 /**
  * コンポーネント
  *
@@ -157,7 +157,15 @@ class BlogContentsController extends BlogAppController {
 				$message = 'ブログ「'.$this->data['BlogContent']['title'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogContent->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$id));
+
+				if($this->data['BlogContent']['edit_layout_template']){
+					$this->redirectEditLayout($this->data['BlogContent']['layout']);
+				}elseif ($this->data['BlogContent']['edit_blog_template']) {
+					$this->redirectEditBlog($this->data['BlogContent']['template']);
+				}else{
+					$this->redirect(array('action'=>'index',$id));
+				}
+				
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -170,6 +178,59 @@ class BlogContentsController extends BlogAppController {
 		$this->pageTitle = 'ブログ設定編集：'.$this->data['BlogContent']['title'];
 		$this->render('form');
 
+	}
+/**
+ * レイアウト編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditLayout($template){
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
+		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
+						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target)){
+				foreach($sorces as $source){
+					if(file_exists($source)){
+						copy($source,$target);
+						chmod($target,0666);
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
+	}
+/**
+ * ブログテンプレート編集画面にリダイレクトする
+ * @param	string	$template
+ * @return	void
+ * @access	public
+ */
+	function redirectEditBlog($template){
+		$path = 'blog'.DS.$template;
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
+		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.$path);
+		if($this->siteConfigs['theme']){
+			if(!file_exists($target.DS.'index.ctp')){
+				foreach($sorces as $source){
+					if(is_dir($source)){
+						$folder = new Folder();
+						$folder->create(dirname($target), 0777);
+						$folder->copy(array('from'=>$source,'to'=>$target,'chmod'=>0777,'skip'=>array('_notes')));
+						break;
+					}
+				}
+			}
+			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.DS.'index.ctp'));
+		}else{
+			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->redirect(array('action'=>'index'));
+		}
 	}
 /**
  * [ADMIN] 削除処理

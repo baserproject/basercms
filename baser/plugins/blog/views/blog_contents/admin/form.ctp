@@ -20,6 +20,24 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function(){
+	$("#EditLayoutTemplate").click(function(){
+		if(confirm('ブログ設定を保存して、レイアウトテンプレート '+$("#BlogContentLayout").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#BlogContentEditLayoutTemplate").val(true);
+			$("#BlogContentEditBlogTemplate").val(false);
+			$("#BlogContentEditForm").submit();
+		}
+	});
+	$("#EditBlogTemplate").click(function(){
+		if(confirm('ブログ設定を保存して、コンテンツテンプレート '+$("#BlogContentTemplate").val()+' の編集画面に移動します。よろしいですか？')){
+			$("#BlogContentEditLayoutTemplate").val(false);
+			$("#BlogContentEditBlogTemplate").val(true);
+			$("#BlogContentEditForm").submit();
+		}
+	});
+});
+</script>
 
 <h2>
 	<?php $baser->contentsTitle() ?>
@@ -118,22 +136,34 @@
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.layout', 'レイアウトテンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogContent.layout', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->select('BlogContent.layout',$blog->getLayoutTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('BlogContent.edit_layout_template') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditLayoutTemplate')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextLayout" class="helptext">
 				<ul>
-					<li>ブログの外枠のテンプレート名を指定します。初期値：default</li>
-					<li>半角英数字で入力して下さい。</li>
+					<li>ブログの外枠のテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			<?php echo $formEx->error('BlogContent.layout') ?></td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.template', 'コンテンツテンプレート名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogContent.template', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->select('BlogContent.template',$blog->getBlogTemplates(),null,array(),false) ?>
+			<?php echo $formEx->hidden('BlogContent.edit_blog_template') ?>
+			<?php if($this->action == 'admin_edit'): ?>
+			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditBlogTemplate')) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextTemplate" class="helptext">
 				<ul>
-					<li>ブログの内枠のテンプレート名を指定します。初期値：default</li>
-					<li>半角英数字で入力して下さい。</li>
+					<li>ブログの本体のテンプレートを指定します。</li>
+					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
 			<?php echo $formEx->error('BlogContent.template') ?></td>
