@@ -6,9 +6,6 @@ h1 {
 	color:#000;
 	text-align: left;
 }
-h2 {
-	text-align: left;
-}
 td,
 th {
 	padding:5px;
@@ -39,7 +36,7 @@ h2 {
 	color:#000000;
 }
 #contentsBody h2.pageTitle {
-	background:url(/css/admin/images/bg_main_head.jpg) no-repeat left top;
+	background:url(<?php echo $baser->getUrl('/css/admin/images/bg_main_head.jpg') ?>) no-repeat left top;
 	padding-left:25px;
 	padding-top:10px;
 	padding-bottom:10px;
