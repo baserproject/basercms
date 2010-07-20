@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('/blog/css/style',null,null,false);
-$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
+//$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
 $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 

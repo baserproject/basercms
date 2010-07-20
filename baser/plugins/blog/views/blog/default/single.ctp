@@ -20,7 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('/blog/css/style',null,null,false);
-$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
 $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>

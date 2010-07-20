@@ -260,7 +260,17 @@ class BlogController extends BlogAppController {
 			$this->BlogPost->recursive = 1;
 			$posts = $this->paginate('BlogPost');
 			$this->set('posts',$posts);
-			$this->pageTitle = $this->BlogCategory->field('title',array('BlogCategory.id'=>$categoryId));
+
+			// ナビゲーションを設定
+			$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
+			if(count($blogCategories) > 1){
+				foreach($blogCategories as $key => $blogCategory) {
+					if($key < count($blogCategories) -1 ) {
+						$this->navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
+					}
+				}
+			}
+			$this->pageTitle = $blogCategories[count($blogCategories)-1]['BlogCategory']['title'];
 			$single = false;
 			$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 
@@ -349,6 +359,16 @@ class BlogController extends BlogAppController {
 				$post = $this->BlogPost->find($conditions);
 				if(!$post) {
 					$this->notFound();
+				}
+			}
+
+			// ナビゲーションを設定
+			if($post['BlogPost']['blog_category_id']) {
+				$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
+				if($blogCategories) {
+					foreach($blogCategories as $blogCategory) {
+						$this->navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
+					}
 				}
 			}
 

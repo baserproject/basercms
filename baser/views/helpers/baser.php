@@ -218,7 +218,7 @@ class BaserHelper extends AppHelper {
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
-		if(!empty($this->_view->viewVars['subpage']) && $this->_categoryTitleOn && $this->_categoryTitle) {
+		if($this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
 				// MODIFIED 2010/07/06 ryuring
 				// $this->_views->viewVars['navis'] より取得するようにした
