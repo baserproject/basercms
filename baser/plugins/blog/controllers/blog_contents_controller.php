@@ -214,6 +214,8 @@ class BlogContentsController extends BlogAppController{
         $data['BlogContent']['layout'] = 'default';
         $data['BlogContent']['template'] = 'default';
         $data['BlogContent']['theme'] = 'default';
+		$data['BlogContent']['list_count'] = 10;
+		$data['BlogContent']['feed_count'] = 10;
         return $data;
         
     }
