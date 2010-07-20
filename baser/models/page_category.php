@@ -280,8 +280,43 @@ class PageCategory extends AppModel {
 	function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
 		$id = $this->data['PageCategory']['id'];
+		if($this->releaseRelatedPagesRecursive($id)){
+			$path = $this->_getPageDirPath($this->find('first',array('conditions'=>array('id'=>$id))));
+			$folder = new Folder();
+			$folder->delete($path);
+			return true;
+		}else {
+			return false;
+		}
+	}
+/**
+ * 関連するページのカテゴリを解除する（再帰的）
+ * @param	int		$categoryId
+ * @return	boolean
+ * @access	public
+ */
+	function releaseRelatedPagesRecursive($categoryId) {
+		if(!$this->releaseRelatedPages($categoryId)){
+			return false;
+		}
+		$children = $this->children($categoryId);
+		$ret = true;
+		foreach($children as $child) {
+			if(!$this->releaseRelatedPages($child['PageCategory']['id'])) {
+				$ret = false;
+			}
+		}
+		return $ret;
+	}
+/**
+ * 関連するページのカテゴリを解除する
+ * @param	int		$categoryId
+ * @return	boolean
+ * @access	public
+ */
+	function releaseRelatedPages($categoryId) {
 		$this->Page->unBindModel(array('belongsTo'=>array('PageCategory')));
-		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$id)));
+		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId)));
 		$ret = true;
 		if($pages) {
 			foreach($pages as $page) {
