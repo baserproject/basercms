@@ -54,7 +54,7 @@
 		<td class="col-input"><?php echo $formEx->text('FeedDetail.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('FeedDetail.name') ?>&nbsp;</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('FeedDetail.url', 'フィードURL') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedDetail.url', 'フィードURL') ?></th>
 		<td class="col-input"><?php echo $formEx->text('FeedDetail.url', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('FeedDetail.url') ?>&nbsp; </td>
 	</tr>
 </table>
@@ -83,5 +83,6 @@
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
 	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
+	<?php $baser->link('削除', array('action'=>'delete', $formEx->value('FeedConfig.id'), $formEx->value('FeedDetail.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('FeedConfig.name')),false); ?>
 	<?php endif ?>
 </div>
