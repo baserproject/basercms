@@ -590,7 +590,7 @@ class Message extends MailAppModel {
  */
 	function _createTable($contentName) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 
 		$tableName = $this->getTablePrefixByContentName($contentName).'messages';
 		// TODO ドライバーに移動させる事
@@ -778,7 +778,7 @@ class Message extends MailAppModel {
  */
 	function getTablePrefixByContentName($contentName) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 		if($contentName != 'messages') {
 			$prefix = $db->config['prefix'].$contentName."_";
 		}else {
