@@ -108,6 +108,9 @@ class FeedDetailsController extends FeedAppController {
 
 		}else {
 
+			if(!preg_match('/^http/is', $this->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->data['FeedDetail']['url'])){
+				$this->data['FeedDetail']['url'] = '/'.$this->data['FeedDetail']['url'];
+			}
 			$this->FeedDetail->create($this->data);
 
 			// データを保存
@@ -148,8 +151,12 @@ class FeedDetailsController extends FeedAppController {
 		if(empty($this->data)) {
 			$this->data = $this->FeedDetail->read(null, $id);
 		}else {
+			if(!preg_match('/^http/is', $this->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->data['FeedDetail']['url'])){
+				$this->data['FeedDetail']['url'] = '/'.$this->data['FeedDetail']['url'];
+			}
+			$this->FeedDetail->set($this->data);
 			// データを保存
-			if($this->FeedDetail->save($this->data)) {
+			if($this->FeedDetail->save()) {
 				$this->Session->setFlash('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
 				$this->FeedDetail->saveDbLog('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
 				$this->redirect(array('controller'=>'feed_configs','action'=>'admin_edit', $feedConfigId, $id.'#headFeedDetail'));

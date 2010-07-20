@@ -135,6 +135,9 @@ class GlobalMenusController extends AppController {
 		}else {
 
 			/* 登録処理 */
+			if(!preg_match('/^http/is', $this->data['GlobalMenu']['link']) && !preg_match('/^\//is', $this->data['GlobalMenu']['link'])){
+				$this->data['GlobalMenu']['link'] = '/'.$this->data['GlobalMenu']['link'];
+			}
 			$this->data['GlobalMenu']['no'] = $this->GlobalMenu->getMax('no',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
 			$this->data['GlobalMenu']['sort'] = $this->GlobalMenu->getMax('sort',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
 			$this->GlobalMenu->create($this->data);
@@ -178,7 +181,11 @@ class GlobalMenusController extends AppController {
 		}else {
 
 			/* 更新処理 */
-			if($this->GlobalMenu->save($this->data)) {
+			if(!preg_match('/^http/is', $this->data['GlobalMenu']['link']) && !preg_match('/^\//is', $this->data['GlobalMenu']['link'])){
+				$this->data['GlobalMenu']['link'] = '/'.$this->data['GlobalMenu']['link'];
+			}
+			$this->GlobalMenu->set($this->data);
+			if($this->GlobalMenu->save()) {
 				clearViewCache();
 				$message = 'グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);

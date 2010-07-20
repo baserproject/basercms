@@ -233,6 +233,9 @@ class PluginsController extends AppController {
 			}
 
 		}else {
+			if(!preg_match('/^http/is', $this->data['Plugin']['admin_link']) && !preg_match('/^\//is', $this->data['Plugin']['admin_link'])){
+				$this->data['Plugin']['admin_link'] = '/'.$this->data['Plugin']['admin_link'];
+			}
 			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'install.php')) {
 				include APP.'plugins'.DS.$name.DS.'config'.DS.'install.php';
 			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'install.php')) {
@@ -279,9 +282,12 @@ class PluginsController extends AppController {
 		if(empty($this->data)) {
 			$this->data = $this->Plugin->read(null, $id);
 		}else {
-
+			if(!preg_match('/^http/is', $this->data['Plugin']['admin_link']) && !preg_match('/^\//is', $this->data['Plugin']['admin_link'])){
+				$this->data['Plugin']['admin_link'] = '/'.$this->data['Plugin']['admin_link'];
+			}
+			$this->Plugin->set($this->data);
 			/* 更新処理 */
-			if($this->Plugin->save($this->data)) {
+			if($this->Plugin->save()) {
 				$message = 'プラグイン「'.$this->data['Plugin']['title'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);
