@@ -148,16 +148,18 @@ class BlogCategory extends BlogAppModel {
  */
 	function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
-		$id = $this->data['BlogCategory']['id'];
-		$this->BlogPost->unBindModel(array('belongsTo'=>array('BlogCategory')));
-		$datas = $this->BlogPost->find('all',array('conditions'=>array('BlogPost.blog_category_id'=>$id)));
 		$ret = true;
-		if($datas) {
-			foreach($datas as $data) {
-				$data['BlogPost']['blog_category_id'] = '';
-				$this->BlogPost->set($data);
-				if(!$this->BlogPost->save()) {
-					$ret = false;
+		if(!empty($this->data['BlogCategory']['id'])){
+			$id = $this->data['BlogCategory']['id'];
+			$this->BlogPost->unBindModel(array('belongsTo'=>array('BlogCategory')));
+			$datas = $this->BlogPost->find('all',array('conditions'=>array('BlogPost.blog_category_id'=>$id)));
+			if($datas) {
+				foreach($datas as $data) {
+					$data['BlogPost']['blog_category_id'] = '';
+					$this->BlogPost->set($data);
+					if(!$this->BlogPost->save()) {
+						$ret = false;
+					}
 				}
 			}
 		}
