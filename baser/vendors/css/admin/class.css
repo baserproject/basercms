@@ -21,132 +21,102 @@
 
 /* display
 ----------------------------------------------- */
-.display-none
-{
+.display-none {
 	display:none;
 }
 /* text
 ----------------------------------------------- */
-.weight-bold
-{
+.weight-bold {
 	font-weight:bold;
 }
-.size-small
-{
+.size-small {
 	font-size:small;
 }
-.size-medium
-{
+.size-medium {
 	font-size:medium;
 }
-.size-large
-{
+.size-large {
 	font-size:large;
 }
-.align-left
-{
+.align-left {
 	text-align:left;
 }
-
-.align-right
-{
+.align-right {
 	text-align:right;
 }
-.align-center
-{
+.align-center {
 	text-align:center !important;
 }
-
 /* float
 ----------------------------------------------- */
-.float-left
-{
+.float-left {
 	float:left;
 }
-.float-right
-{
+.float-right {
 	float:right;
 }
-
 /* img
 ----------------------------------------------- */
-.img-right
-{
+.img-right {
 	float:right;
 	margin-left:10px;
 	margin-bottom:10px;
 }
-.img-left
-{
+.img-left {
 	float:left;
 	margin-right:10px;
 	margin-bottom:10px;
 }
-
 /* clear
 ----------------------------------------------- */
-.clear
-{
+.clear {
 	clear:both;
 }
-.clearfix:after 
-{
+.clearfix:after {
 	content: ".";
 	display: block;
 	clear: both;
 	height: 0;
 }
-.clearfix 
-{
+.clearfix {
 	display: inline-block;
 }
-.clearfix 
-{
-	display: block; 
+.clearfix {
+	display: block;
 }
-
 /* table共通
 ----------------------------------------------- */
-tr.disablerow td
-{
+tr.disablerow td {
 	background-color: #DFDFDF!important;
 }
-tr.activerow td
-{
+tr.activerow td {
 	background-color:#FFCFDC!important;
 }
-tr.altrow td
-{
+tr.altrow td {
 	background-color:#F3FFD7!important;
 }
-td.col-input{
-	/*width:280px;*/
+td.col-input {
+/*width:280px;*/
 }
-td ul{
+td ul {
 	margin-left:0px!important;
 	line-height:1.2em!important;
 }
 .operation-button {
-    text-align:center!important;
-    padding:0;
-    margin:0;
-    white-space:nowrap;
-    vertical-align:middle;
+	text-align:center!important;
+	padding:0;
+	margin:0;
+	white-space:nowrap;
+	vertical-align:middle;
 }
-
-
-
 /* row-table-01
 ----------------------------------------------- */
-table.row-table-01
-{
+table.row-table-01 {
 	border-top-width:1px;
 	border-top-style:dashed;
 	border-top-color:#CCC;
 }
-
-.row-table-01 td
-{
+.row-table-01 td {
 	line-height:18px;
 	border-bottom-width:1px;
 	border-bottom-style:dashed;
@@ -154,9 +124,7 @@ table.row-table-01
 	padding:10px 5px;
 	background:#FFF;
 }
-
-.row-table-01 th
-{
+.row-table-01 th {
 	color:#333;
 	text-align:left;
 	font-weight:normal;
@@ -166,12 +134,9 @@ table.row-table-01
 	border-bottom-color:#CCC;
 	padding:10px 20px;
 }
-
-
 /* admin-row-table-01
 ----------------------------------------------- */
-table.admin-row-table-01
-{
+table.admin-row-table-01 {
 	width:100%;
 	color:#333;
 	background-color: #fff;
@@ -181,8 +146,7 @@ table.admin-row-table-01
 	white-space: normal;
 	border-collapse:separate;
 }
-table.admin-row-table-01 th
-{
+table.admin-row-table-01 th {
 	text-align: right;
 	padding:4px 8px;
 	font-weight:normal;
@@ -192,8 +156,7 @@ table.admin-row-table-01 th
 	font-size:0.85em;
 	color:#669900;
 }
-table.admin-row-table-01 tr td
-{
+table.admin-row-table-01 tr td {
 	/*background-color: #ffffff;*/
 	padding:6px 8px;
 	vertical-align:top;
@@ -202,11 +165,9 @@ table.admin-row-table-01 tr td
 	border-bottom-style: solid;
 	border-bottom-color: #ccc;
 }
-
 /* admin-col-table-01
 ----------------------------------------------- */
-table.admin-col-table-01
-{
+table.admin-col-table-01 {
 	width:100%;
 	color:#333;
 	background-color: #fff;
@@ -217,8 +178,7 @@ table.admin-col-table-01
 	border-collapse:separate;
 	border-bottom:2px solid #690;
 }
-table.admin-col-table-01 th
-{
+table.admin-col-table-01 th {
 	padding:4px 8px;
 	font-weight:normal;
 	font-size:0.85em;
@@ -227,32 +187,27 @@ table.admin-col-table-01 th
 	border-bottom:2px solid #690;
 	border-right:1px solid #690;
 }
-table.admin-col-table-01 th a
-{
+table.admin-col-table-01 th a {
 	text-decoration:none;
 	color:#690;
 }
-table.admin-col-table-01 th a:hover
-{
+table.admin-col-table-01 th a:hover {
 	color:#CC0000;
 	text-decoration:underline;
 }
-table.admin-col-table-01 th small
-{
+table.admin-col-table-01 th small {
 	font-size:8px;
 }
-table.admin-col-table-01 tr td{
+table.admin-col-table-01 tr td {
 	background-color: #FFFFFF;
 	padding:6px 8px;
 	vertical-align:top;
 	text-align: left;
-    font-size: 0.9em;
+	font-size: 0.9em;
 }
-
 /* table.cake-sql-log
 ----------------------------------------------- */
-table.cake-sql-log 
-{
+table.cake-sql-log {
 	width:90%;
 	border-top: 1px solid #ccc;
 	border-left: 1px solid #ccc;
@@ -267,13 +222,11 @@ table.cake-sql-log
 	border-collapse:separate;
 	margin:20px auto;
 }
-table.cake-sql-log caption
-{
+table.cake-sql-log caption {
 	font-weight:bold;
 	text-align:center;
 }
-table.cake-sql-log th 
-{
+table.cake-sql-log th {
 	background-color: #e2e2e2;
 	padding:4px 8px;
 	font-weight:bold;
@@ -292,8 +245,7 @@ table.cake-sql-log th
 	border-left-color: #FFFFFF;
 	font-size:0.8em;
 }
-table.cake-sql-log tr td 
-{
+table.cake-sql-log tr td {
 	background-color: #F7F7F7;
 	padding:6px 8px;
 	vertical-align:top;
@@ -306,34 +258,27 @@ table.cake-sql-log tr td
 	border-bottom-color: #ccc;
 	font-size:0.8em;
 }
-
 /* box-01
 ----------------------------------------------- */
-.box-01
-{
+.box-01 {
 	margin-bottom:20px;
 }
-.box-01 .box-head
-{
+.box-01 .box-head {
 	background:url(images/bg_box_head_01.gif) left top no-repeat;
 	width:340px;
 	height:38px;
 }
-.box-01 .box-body
-{
+.box-01 .box-body {
 	background:url(images/bg_box_body_01.gif) left top repeat-y;
 	width:290px;
 	padding:25px 25px 5px 25px;
 }
-.box-01 .box-foot
-{
+.box-01 .box-foot {
 	background:url(images/bg_box_foot_01.gif) left top no-repeat;
 	width:340px;
 	height:15px;
-
 }
-.box-01 .box-head h3
-{
+.box-01 .box-head h3 {
 	background:url(images/bg_box_blt_01.gif) left 10px no-repeat;
 	padding-top:10px;
 	padding-left:30px;
@@ -343,76 +288,64 @@ table.cake-sql-log tr td
 	margin-bottom:0px;
 }
 .box-01 .box-body ol,
-.box-01 .box-body ul
-{
+.box-01 .box-body ul {
 	margin-left:0px!important;
 	padding-left:0px!important;
 }
-.box-01 .box-body li
-{
+.box-01 .box-body li {
 	margin-left:0px!important;
 	margin-bottom:5px;
 }
-.box-01 .box-body ol li
-{
+.box-01 .box-body ol li {
 	list-style-position:inside!important;
 }
-
 /* box-02
 ----------------------------------------------- */
-.box-02
-{
+.box-02 {
 	border:1px dotted #CCC;
 	padding:10px;
 	background:#EEE;
 }
-
 /* box-03
 ----------------------------------------------- */
-.box-03
-{
+.box-03 {
 	border:1px dotted #F77303;
 	padding:10px;
 	color: #F77303;
 	background-color: #FFF5E8;
 }
-
 /* box-04
 ----------------------------------------------- */
-.box-04 
-{
-    margin: 0 auto 20px auto;
-    padding: 20px 15px;
-    border: 5px solid #ccc;
+.box-04 {
+	margin: 0 auto 20px auto;
+	padding: 20px 15px;
+	border: 5px solid #ccc;
 }
-
 /* box-05
 ----------------------------------------------- */
-.box-05 
-{
+.box-05 {
 	background:#F0F0F0 none repeat scroll 0%;
 	margin:15px auto 15pt;
 	padding:15px 20px;
 }
-
 /* help text
 ----------------------------------------------- */
 .bt-content a:visited,
-.bt-content a:link{
-    color:#688A00;
+.bt-content a:link {
+	color:#688A00;
 }
-.bt-content ul li{
-    list-style:disc;
-    list-style-position:outside;
-    margin-left:10px;
-    margin-bottom:8px;
+.bt-content ul li {
+	list-style:disc;
+	list-style-position:outside;
+	margin-left:10px;
+	margin-bottom:8px;
 }
 img.help,
-img.slide-trigger{
-    padding: 5px;
+img.slide-trigger {
+	padding: 5px;
 	cursor:pointer;
 }
-.help-box{
+.help-box {
 	background-color:#FFFFEC;
 	margin-top:5px;
 	margin-bottom:20px;
@@ -420,69 +353,61 @@ img.slide-trigger{
 }
 /* example-box
 ----------------------------------------------- */
-.example-box{
+.example-box {
 	margin-top:10px;
 	margin-bottom:10px;
 	padding:10px 10px;
 	background-color: #FFFFFF;
 }
-.example-box .head{
+.example-box .head {
 	margin-top:10px;
 	font-weight: bold;
 }
-.example-box ol{
+.example-box ol {
 	margin-top:10px;
 	margin-bottom: 10px;
 	list-style-position: inside;
 	margin-left:20px;
 }
-.example-box ol li{
+.example-box ol li {
 	margin-bottom: 5px;
 }
 /* function-box
 ----------------------------------------------- */
-.function-box{
+.function-box {
 	background-color:#eFeFeF !important;
 	margin-top:5px;
 	margin-bottom:20px;
 	padding:10px 10px;
 }
-.function-box small{
+.function-box small {
 	font-weight:bold;
 }
-
 /* cakePHP parts
 ----------------------------------------------- */
-.error-message
-{
+.error-message {
 	color:#C30;
 }
-.required
-{
+.required {
 	color:#C00!important;
 	font-size:16px;
 }
-.form-error
-{
+.form-error {
 	background:#F8E2DE;
 }
-.message
-{
+.message {
 	color:#F30;
 	font-weight:bold;
 	margin:20px;
 }
-.error
-{
+.error {
 	color:#C00;
 }
-.error em
-{
+.error em {
 	color:#06C;
 	font-style:normal;
 	font-weight:bold;
 }
-.submit
-{
+.submit {
 	text-align:center;
 }

@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -28,9 +28,7 @@ App::import('Controller', 'Plugins');
  *
  * @package			baser.plugins.feed
  */
-class FeedAppController extends PluginsController
-{
+class FeedAppController extends PluginsController {
 
 }
-
 ?>

@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -31,35 +31,34 @@ App::import('Helper', 'Form');
 class ArrayHelper extends AppHelper {
 /**
  * 配列の最初の要素かどうか調べる
- * 
+ *
  * @param 	array	配列
- * @param 	mixed	要素	
+ * @param 	mixed	要素
  * @return 	boolean
  * @access	public
  */
-	function first($array,$value){
-		if($array[0]===$value){
+	function first($array,$value) {
+		if($array[0]===$value) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	}
 /**
  * 配列の最後の要素かどうか調べる
- * 
+ *
  * @param 	array	配列
- * @param 	mixed	要素	
+ * @param 	mixed	要素
  * @return 	boolean
  * @access	public
  */
-	function last($array,$value){
-		if($array[count($array)-1]===$value){
+	function last($array,$value) {
+		if($array[count($array)-1]===$value) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 	}
-	
-}
 
+}
 ?>

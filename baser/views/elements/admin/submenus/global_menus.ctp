@@ -20,10 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi">
-    <h2>グローバルメニュー<br />管理メニュー</h2>
-    <ul>
-        <li><?php $baser->link('グローバルメニュー一覧',array('controller'=>'global_menus','action'=>'index')) ?></li>
-        <li><?php $baser->link('新規メニューを登録',array('controller'=>'global_menus','action'=>'add')) ?></li>
-    </ul>
+	<h2>グローバルメニュー<br />
+		管理メニュー</h2>
+	<ul>
+		<li>
+			<?php $baser->link('グローバルメニュー一覧',array('controller'=>'global_menus','action'=>'index')) ?>
+		</li>
+		<li>
+			<?php $baser->link('新規メニューを登録',array('controller'=>'global_menus','action'=>'add')) ?>
+		</li>
+	</ul>
 </div>

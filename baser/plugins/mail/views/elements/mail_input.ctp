@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * メールフォーム本体
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -26,15 +26,15 @@ if (!isset($blockEnd)) {
 }
 
 if (!empty($mailFields)) {
-	
+
 	foreach ($mailFields as $key => $record) {
-		
+
 		$field = $record['MailField'];
 		$iteration++;
 		if ($field['use_field'] && ($blockStart && $iteration >= $blockStart) && (!$blockEnd || $iteration <= $blockEnd)) {
-					
+
 			$next_key = $key + 1;
-			
+
 			/* 項目名 */
 			if ($group_field != $field['group_field']  || (!$group_field && !$field['group_field'])) {
 				$description = $field['description'];
@@ -43,12 +43,12 @@ if (!empty($mailFields)) {
 					echo ' style="display:none"';
 				}
 				echo '><th class="col-head" width="150">'.$form->label("Message." . $field['field_name'] . "", $field['head']);
-				if($field['not_empty']){
+				if($field['not_empty']) {
 					echo '<span class="required">*</span>';
 				}
 				echo '</th><td class="col-input">';
 			}
-			
+
 			/* 入力欄 */
 			if (!$freezed || $mailform->value("Message." . $field['field_name'])) {
 				echo $field['before_attachment'];
@@ -65,15 +65,15 @@ if (!empty($mailFields)) {
 			if (!$field['group_valid']) {
 				if($form->error("Message." . $field['field_name'] . "_format", "check")) {
 					echo $form->error("Message." . $field['field_name'] . "_format", ">> 形式が不正です");
-				}else{
+				}else {
 					echo $form->error("Message." . $field['field_name'] . "", ">> 必須項目です");
 				}
 			}
-			
+
 			/* 説明欄 */
 			if (($array->last($mailFields,$record)) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
-					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) || 
+					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$record))) {
 				if (!$freezed && $description) {
 					echo $html->image('img_icon_help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));

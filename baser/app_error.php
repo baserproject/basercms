@@ -32,14 +32,14 @@ class AppError extends ErrorHandler {
  * クラスが見つからない
  * @param array $params
  */
-    function missingClass($params){
-        if($params['className']){
-            $this->controller->set('className',$params['className']);
-        }
-        if($params['notice']){
-            $this->controller->set('notice', $params['notice']);
-        }
-        $this->_outputMessage('missing_class');
-    }
+	function missingClass($params) {
+		if($params['className']) {
+			$this->controller->set('className',$params['className']);
+		}
+		if($params['notice']) {
+			$this->controller->set('notice', $params['notice']);
+		}
+		$this->_outputMessage('missing_class');
+	}
 }
 ?>

@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * メールコンテンツコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -27,7 +27,7 @@
  *
  * @package			baser.plugins.mail.controllers
  */
-class MailContentsController extends MailAppController{
+class MailContentsController extends MailAppController {
 /**
  * クラス名
  *
@@ -55,7 +55,7 @@ class MailContentsController extends MailAppController{
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
@@ -63,8 +63,8 @@ class MailContentsController extends MailAppController{
  * @access 	public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
-                        'プラグイン設定'=>'/admin/plugins/index',
-                        'メールフォーム管理'=>'/admin/mail/mail_contents/index');
+			'プラグイン設定'=>'/admin/plugins/index',
+			'メールフォーム管理'=>'/admin/mail/mail_contents/index');
 /**
  * サブメニューエレメント
  *
@@ -78,53 +78,53 @@ class MailContentsController extends MailAppController{
  * @return  void
  * @access  public
  */
-    function admin_index(){
+	function admin_index() {
 
-        $listDatas = $this->MailContent->findAll();
-        $this->set('listDatas',$listDatas);
-        $this->subMenuElements = array('mail_common');
-        $this->pageTitle = 'メールフォーム一覧';
+		$listDatas = $this->MailContent->findAll();
+		$this->set('listDatas',$listDatas);
+		$this->subMenuElements = array('mail_common');
+		$this->pageTitle = 'メールフォーム一覧';
 
-    }
+	}
 /**
  * [ADMIN] メールフォーム追加
  *
  * @return  void
  * @access  public
  */
-    function admin_add(){
+	function admin_add() {
 
-        $this->pageTitle = '新規メールフォーム登録';
+		$this->pageTitle = '新規メールフォーム登録';
 
-        if(!$this->data){
-            $this->data = $this->MailContent->getDefaultValue();
-        }else{
+		if(!$this->data) {
+			$this->data = $this->MailContent->getDefaultValue();
+		}else {
 
 			/* 登録処理 */
-            if(!$this->data['MailContent']['sender_1_']){
-                $this->data['MailContent']['sender_1'] = '';
-            }
+			if(!$this->data['MailContent']['sender_1_']) {
+				$this->data['MailContent']['sender_1'] = '';
+			}
 			$this->MailContent->create($this->data);
 
 			/* データを保存 */
-			if($this->MailContent->save()){
+			if($this->MailContent->save()) {
 
-                // 新しいメッセージテーブルを作成
-                $this->Message->createTable($this->data['MailContent']['name']);
+				// 新しいメッセージテーブルを作成
+				$this->Message->createTable($this->data['MailContent']['name']);
 
-                $message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
+				$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->MailContent->saveDbLog($message);
 				$this->redirect(array('controller'=>'mail_contents','action'=>'index'));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
-        }
-        $this->subMenuElements = array('mail_common');
-        $this->render('form');
+		}
+		$this->subMenuElements = array('mail_common');
+		$this->render('form');
 
-    }
+	}
 /**
  * [ADMIN] 編集処理
  *
@@ -132,7 +132,7 @@ class MailContentsController extends MailAppController{
  * @return	void
  * @access 	public
  */
-	function admin_edit($id){
+	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
@@ -140,39 +140,38 @@ class MailContentsController extends MailAppController{
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		if(empty($this->data)){
+		if(empty($this->data)) {
 			$this->data = $this->MailContent->read(null, $id);
 			$this->set('mailContent',$this->data);
-		}else{
-            $old = $this->MailContent->read(null,$id);
-            if(!$this->data['MailContent']['sender_1_']){
-                $this->data['MailContent']['sender_1'] = '';
-            }
+		}else {
+			$old = $this->MailContent->read(null,$id);
+			if(!$this->data['MailContent']['sender_1_']) {
+				$this->data['MailContent']['sender_1'] = '';
+			}
 			/* 更新処理 */
-			if($this->MailContent->save($this->data)){
+			if($this->MailContent->save($this->data)) {
 
-                // メッセージテーブルの名前を変更
-                if($old['MailContent']['name'] != $this->data['MailContent']['name']){
-                    $this->Message->renameTable($old['MailContent']['name'],$this->data['MailContent']['name']);
-                }
+				// メッセージテーブルの名前を変更
+				if($old['MailContent']['name'] != $this->data['MailContent']['name']) {
+					$this->Message->renameTable($old['MailContent']['name'],$this->data['MailContent']['name']);
+				}
 
-                $message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
+				$message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->MailContent->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('mail_fields','mail_common');
+		$this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
 		$this->render('form');
 
 	}
-
 /**
  * [ADMIN] 削除処理
  *
@@ -194,20 +193,19 @@ class MailContentsController extends MailAppController{
 		/* 削除処理 */
 		if($this->MailContent->del($id)) {
 
-            // メッセージテーブルを削除
-            $this->Message->deleteTable($mailContent['MailContent']['name']);
+			// メッセージテーブルを削除
+			$this->Message->deleteTable($mailContent['MailContent']['name']);
 
-            $message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
+			$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->MailContent->saveDbLog($message);
-            
-		}else{
+
+		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
 		$this->redirect(array('action'=>'index'));
 
 	}
-
 }
 ?>

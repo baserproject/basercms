@@ -19,29 +19,30 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-#mail table{
+#mail table {
 	margin-left:15px;
 	margin-right:15px;
 	display:block;
 	width:auto;
 }
-#mail .col-input{
+#mail .col-input {
 	width:240px!important;
 }
-#mail .col-description{
+#mail .col-description {
 	font-size:10px;
 }
-.error-message,.message{
+.error-message,
+.message {
 	color:#C00;
 }
-.message{
+.message {
 	color:#C00;
 	margin:10px;
 }
-input.form-error{
+input.form-error {
 	background-color:#FFF0F0;
 }
-.submit{
+.submit {
 	text-align:center;
 	margin-top:20px;
 	margin-bottom:20px;

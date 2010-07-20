@@ -20,13 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi blog-monthly-archives">
-<h2><?php echo '月別アーカイブ' ?></h2>
-<?php if(!empty($blogDates)): ?>
-    <ul>
-    <?php foreach($blogDates as $blogDate): ?>
-        <li><?php $baser->link($blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')',array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?></li>
-    <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+	<h2><?php echo '月別アーカイブ' ?></h2>
+	<?php if(!empty($blogDates)): ?>
+	<ul>
+		<?php foreach($blogDates as $blogDate): ?>
+		<li>
+			<?php $baser->link($blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')',array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif; ?>
 </div>

@@ -21,12 +21,14 @@
  */
 ?>
 
-<p>WEBサイト基本制作支援プロジェクト「BaserCMS」のインストールを開始します。<br />よろしければ「次のステップ」ボタンをクリックして下さい。</p>
-<p>SQLite3（PHP5のみ）やBaserCMS標準のCSVデータベースを利用すれば、<br />インストールにデータベースサーバーは必要ありません。</p>
-<p<small>※ 膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。</small></p>
-
+<p>WEBサイト基本制作支援プロジェクト「BaserCMS」のインストールを開始します。<br />
+	よろしければ「次のステップ」ボタンをクリックして下さい。</p>
+<p>SQLite3（PHP5のみ）やBaserCMS標準のCSVデータベースを利用すれば、<br />
+	インストールにデータベースサーバーは必要ありません。</p>
+<p<small>※ 膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。</small>
+</p>
 <div>
-    <form action="<?php echo $this->base ?>/installations/step2" method="post">
-          <button class='btn-red button' id='startbtn' type='submit' ><span>次のステップ</span></button>
+	<form action="<?php echo $this->base ?>/installations/step2" method="post">
+		<button class='btn-red button' id='startbtn' type='submit' ><span>次のステップ</span></button>
 	</form>
 </div>

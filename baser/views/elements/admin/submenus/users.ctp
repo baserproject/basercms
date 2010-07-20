@@ -20,10 +20,15 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi">
-    <h2>ユーザー管理メニュー</h2>
-    <ul>
-        <li><?php $baser->link('一覧を表示する',array('controller'=>'users', 'action'=>'admin_index')) ?></li>
-        <li><?php $baser->link('新規に登録する',array('controller'=>'users', 'action'=>'admin_add')) ?></li>
-    </ul>
+	<h2>ユーザー管理メニュー</h2>
+	<ul>
+		<li>
+			<?php $baser->link('一覧を表示する',array('controller'=>'users', 'action'=>'admin_index')) ?>
+		</li>
+		<li>
+			<?php $baser->link('新規に登録する',array('controller'=>'users', 'action'=>'admin_add')) ?>
+		</li>
+	</ul>
 </div>

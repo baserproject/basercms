@@ -26,15 +26,14 @@
 @import "admin/contents.css";
 @import "admin/header.css";
 @import "admin/footer.css";
-
-body{
-    background:url(images/bg_body_red.jpg) repeat-x left top;
-    background-color:#FFDBD9;
+body {
+	background:url(images/bg_body_red.jpg) repeat-x left top;
+	background-color:#FFDBD9;
 }
-#page{
+#page {
 	background: url(images/bg_page_red.gif) repeat-y;
 }
-#gradationShadow{
+#gradationShadow {
 	background: url(images/bg_gradation_shadow_red.jpg) no-repeat;
 }
 #header {
@@ -43,6 +42,6 @@ body{
 #footer {
 	background: url(images/bg_footer_red.jpg) no-repeat;
 }
-#glbMenus{
+#glbMenus {
 	background:url(images/bg_glb_menu_red.jpg) no-repeat;
 }

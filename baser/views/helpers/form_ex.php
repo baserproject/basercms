@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * FormHelper 拡張クラス
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -35,21 +35,21 @@ class FormExHelper extends FormHelper {
  * @var		array
  * @access	public
  */
-	var $helpers = array('Html','TimeEx',"TextEx","Javascript");	
+	var $helpers = array('Html','TimeEx',"TextEx","Javascript");
 /**
  * 都道府県用のSELECTタグを表示する
- * 
+ *
  * @param 	string	$fieldName Name attribute of the SELECT
  * @param 	mixed 	$selected Selected option
  * @param 	array 	$attributes Array of HTML options for the opening SELECT element
  * @return 	string 	都道府県用のSELECTタグ
  * @access 	public
  */
-	function prefTag($fieldName, $selected = null, $attributes = array()){
+	function prefTag($fieldName, $selected = null, $attributes = array()) {
 
 		$pref = $this->TextEx->prefList();
 		return $this->select($fieldName, $pref, $selected, $attributes, false);
-		
+
 	}
 /**
  * dateTime 拡張
@@ -69,7 +69,7 @@ class FormExHelper extends FormHelper {
  * @access 	public
  */
 	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
-		
+
 		// $nengoを追加
 		$year = $month = $day = $hour = $min = $meridian = $nengo = null;
 
@@ -120,7 +120,7 @@ class FormExHelper extends FormHelper {
 				}
 			}
 		}
-		
+
 		$elements = array('Day','Month','Year','Hour','Minute','Meridian');
 		$defaults = array('minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true);
 		$attributes = array_merge($defaults, (array) $attributes);
@@ -161,31 +161,31 @@ class FormExHelper extends FormHelper {
 		$opt = '';
 
 		if ($dateFormat != 'NONE') {
-		
-			if(substr($dateFormat,0,1)=="W"){
+
+			if(substr($dateFormat,0,1)=="W") {
 				//$this->options['year'] = $this->getWarekiYears($attributes['minYear'],$attributes['maxYear']);
 			}
-		
+
 			$selects = array();
 			foreach (preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
 				switch ($char) {
 					case 'W':
 						$selects[] = $this->nengo($fieldName, $nengo, $selectYearAttr, $showEmpty);
-					break;
+						break;
 					case 'Y':
-						if(substr($dateFormat,0,1)=="W"){
+						if(substr($dateFormat,0,1)=="W") {
 							$selects[] = $this->wyear($fieldName,$year)."年";
-						}else{
+						}else {
 							$selects[] = $this->year($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
 						}
-					break;
+						break;
 					case 'M':
 						$selectMonthAttr['monthNames'] = $monthNames;
 						$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty)."月";
-					break;
+						break;
 					case 'D':
 						$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty)."日";
-					break;
+						break;
 				}
 			}
 			$opt = implode($separator, $selects);
@@ -194,18 +194,18 @@ class FormExHelper extends FormHelper {
 		switch($timeFormat) {
 			case '24':
 				$opt .= $this->hour($fieldName, true, $hour, $selectHourAttr, $showEmpty) . ':' .
-				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty);
-			break;
+						$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty);
+				break;
 			case '12':
 				$selectMinuteAttr['interval'] = $interval;
 				$opt .= $this->hour($fieldName, false, $hour, $selectHourAttr, $showEmpty) . ':' .
-				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty) . ' ' .
-				$this->meridian($fieldName, $meridian, $selectMeridianAttr, $showEmpty);
-			break;
+						$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty) . ' ' .
+						$this->meridian($fieldName, $meridian, $selectMeridianAttr, $showEmpty);
+				break;
 			case 'NONE':
 			default:
 				$opt .= '';
-			break;
+				break;
 		}
 		return $opt;
 	}
@@ -256,8 +256,8 @@ class FormExHelper extends FormHelper {
  * @return	string
  * @access	public
  */
-	function wyear($fieldName,$selected){
-			
+	function wyear($fieldName,$selected) {
+
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
 				extract($value);
@@ -282,9 +282,9 @@ class FormExHelper extends FormHelper {
 			$selectedYear = "";
 			$selectedWyear = "";
 		}
-		
+
 		return $this->text($fieldName.".wyear",array("size"=>4,"value"=>$selectedWyear)).$this->hidden($fieldName.".year",array("size"=>4,"value"=>$selectedYear));
-		
+
 	}
 /**
  * コントロールソースを取得する
@@ -295,19 +295,19 @@ class FormExHelper extends FormHelper {
  * @return 	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field,$options = array()){
+	function getControlSource($field,$options = array()) {
 
-		if(strpos($field,'.') !== false){
+		if(strpos($field,'.') !== false) {
 			list($modelName,$field) = explode('.',$field);
 		}
-		if(!empty($modelName)){
+		if(!empty($modelName)) {
 			$model =& ClassRegistry::getObject($modelName);
-		}else{
+		}else {
 			$model =& ClassRegistry::getObject($this->model());
 		}
-		if($model){
+		if($model) {
 			return $model->getControlSource($field,$options);
-		}else{
+		}else {
 			return false;
 		}
 
@@ -321,27 +321,27 @@ class FormExHelper extends FormHelper {
  * @param mixed $order
  * @return mixed    リストまたは、false
  */
-    function generateList($modelName,$conditions = array(),$fields = array(),$order = array()){
+	function generateList($modelName,$conditions = array(),$fields = array(),$order = array()) {
 
-        $model =& ClassRegistry::getObject($modelName);
+		$model =& ClassRegistry::getObject($modelName);
 
-        if($fields){
-            list($idField,$displayField) = $fields;
-        }else{
-            $idField = 'id';
-            $displayField = $model->getDisplayField();
-            $fields = array($idField,$displayField);
-        }
-        
-        $list = $model->findAll($conditions,$fields,$order);
+		if($fields) {
+			list($idField,$displayField) = $fields;
+		}else {
+			$idField = 'id';
+			$displayField = $model->getDisplayField();
+			$fields = array($idField,$displayField);
+		}
 
-        if($list){
-            return Set::combine($list,"{n}.".$modelName.".".$idField,"{n}.".$modelName.".".$displayField);
-        }else{
-            return null;
-        }
-        
-    }
+		$list = $model->findAll($conditions,$fields,$order);
+
+		if($list) {
+			return Set::combine($list,"{n}.".$modelName.".".$idField,"{n}.".$modelName.".".$displayField);
+		}else {
+			return null;
+		}
+
+	}
 /**
  * JsonList
  *
@@ -349,8 +349,8 @@ class FormExHelper extends FormHelper {
  * @return 	array	属性
  * @access	public
  */
-	function jsonList($field,$attributes){
-	
+	function jsonList($field,$attributes) {
+
 		am(array("imgSrc"=>"","ajaxAddAction"=>"","ajaxDelAction"=>""),$attributes);
 		// JsonDb用Hiddenタグ
 		$out = $this->hidden('Json.'.$field.'.db');
@@ -360,20 +360,20 @@ class FormExHelper extends FormHelper {
 		$out .= $this->button('追加',array('id'=>'btnAdd'.$field));
 		// リスト表示用ビュー
 		$out .= '<div id="Json'.$field.'View"></div>';
-        
+
 		// javascript
 		$out .= '<script type="text/javascript"><!--'."\n".
-					'jQuery(function(){'."\n".
- 					'var json_List = new JsonList({"dbId":"Json'.$field.'Db","viewId":"JsonTagView","addButtonId":"btnAdd'.$field.'",'."\n".
-								'"deleteButtonType":"img","deleteButtonSrc":"'.$attributes['imgSrc'].'","deleteButtonRollOver":true,'."\n".
-								'"ajaxAddAction":"'.$attributes['ajaxAddAction'].'",'."\n".
-								'"ajaxDelAction":"'.$attributes['ajaxDelAction'].'"});'."\n".
-								'json_List.loadData();'."\n".
-					'});'."\n".
-					'//--></script>';
+				'jQuery(function(){'."\n".
+				'var json_List = new JsonList({"dbId":"Json'.$field.'Db","viewId":"JsonTagView","addButtonId":"btnAdd'.$field.'",'."\n".
+				'"deleteButtonType":"img","deleteButtonSrc":"'.$attributes['imgSrc'].'","deleteButtonRollOver":true,'."\n".
+				'"ajaxAddAction":"'.$attributes['ajaxAddAction'].'",'."\n".
+				'"ajaxDelAction":"'.$attributes['ajaxDelAction'].'"});'."\n".
+				'json_List.loadData();'."\n".
+				'});'."\n".
+				'//--></script>';
 
 		return $out;
-		
+
 	}
 /**
  * カレンダーコントロール付きのテキストフィールド
@@ -385,19 +385,19 @@ class FormExHelper extends FormHelper {
  * @return	string	html
  * @access 	public
  */
-	function datepicker($fieldName, $attributes = array()){
+	function datepicker($fieldName, $attributes = array()) {
 
 		if (!isset($attributes['value'])) {
-            $value = $this->value($fieldName);
-		}else{
-            $value = $attributes['value'];
+			$value = $this->value($fieldName);
+		}else {
+			$value = $attributes['value'];
 		}
 
-        if($value){
-            $attributes['value'] = date('Y/m/d',strtotime($this->TimeEx->format('Y/m/d',$value)));
-        }else{
-            unset($attributes['value']);
-        }
+		if($value) {
+			$attributes['value'] = date('Y/m/d',strtotime($this->TimeEx->format('Y/m/d',$value)));
+		}else {
+			unset($attributes['value']);
+		}
 
 		$this->setEntity($fieldName);
 		$id = $this->domId($fieldName);
@@ -405,12 +405,12 @@ class FormExHelper extends FormHelper {
 		// テキストボックス
 		$input = $this->text($fieldName,$attributes);
 
-        // javascript
-        $script = "<script type=\"text/javascript\">";
-        $script .= 'jQuery(function($){';
-        $script .= '$("#'.$id.'").datepicker()';
-        $script .= '});';
-        $script .= "</script>";
+		// javascript
+		$script = "<script type=\"text/javascript\">";
+		$script .= 'jQuery(function($){';
+		$script .= '$("#'.$id.'").datepicker()';
+		$script .= '});';
+		$script .= "</script>";
 
 		$out = $input."\n".$script;
 		return $out;
@@ -422,26 +422,26 @@ class FormExHelper extends FormHelper {
  * @param array $attributes
  * @return string
  */
-    function dateTimePicker($fieldName, $attributes = array()){
+	function dateTimePicker($fieldName, $attributes = array()) {
 
-        $timeAttributes = array('size'=>8,'maxlength'=>8);
+		$timeAttributes = array('size'=>8,'maxlength'=>8);
 		if (!isset($attributes['value'])) {
-            $value = $this->value($fieldName);
-		}else{
-            $value = $attributes['value'];
-            unset($attributes['value']);
+			$value = $this->value($fieldName);
+		}else {
+			$value = $attributes['value'];
+			unset($attributes['value']);
 		}
-        if($value){
-            $dateValue = date('Y/m/d',strtotime($value));
-            $timeValue = date('H:i:s',strtotime($value));
-            $attributes['value']=$dateValue;
-            $timeAttributes['value']=$timeValue;
-        }
-        $dateTag = $this->datepicker($fieldName.'_date', $attributes);
-        $timeTag = $this->text($fieldName.'_time', $timeAttributes);
-        $hiddenTag = $this->hidden($fieldName, array('value'=>$value));
-        $domId = $this->domId();
-        $_script = <<< DOC_END
+		if($value) {
+			$dateValue = date('Y/m/d',strtotime($value));
+			$timeValue = date('H:i:s',strtotime($value));
+			$attributes['value']=$dateValue;
+			$timeAttributes['value']=$timeValue;
+		}
+		$dateTag = $this->datepicker($fieldName.'_date', $attributes);
+		$timeTag = $this->text($fieldName.'_time', $timeAttributes);
+		$hiddenTag = $this->hidden($fieldName, array('value'=>$value));
+		$domId = $this->domId();
+		$_script = <<< DOC_END
 $(function(){
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
@@ -450,9 +450,9 @@ $(function(){
    }
 });
 DOC_END;
-        $script = $this->Javascript->codeBlock($_script,array('inline'=>false));
-        return $dateTag.$timeTag.$hiddenTag;
-    }
+		$script = $this->Javascript->codeBlock($_script,array('inline'=>false));
+		return $dateTag.$timeTag.$hiddenTag;
+	}
 /**
  * Generates option lists for common <select /> menus
  *
@@ -479,20 +479,20 @@ DOC_END;
 					$data[$i] = sprintf('%02d', $i);
 					$i += $interval;
 				}
-			break;
+				break;
 			case 'hour':
 				for ($i = 1; $i <= 12; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-			break;
+				break;
 			case 'hour24':
 				for ($i = 0; $i <= 23; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-			break;
+				break;
 			case 'meridian':
 				$data = array('am' => 'am', 'pm' => 'pm');
-			break;
+				break;
 			case 'day':
 				if (!isset($options['min'])) {
 					$min = 1;
@@ -504,12 +504,12 @@ DOC_END;
 					$max = 31;
 				} else {
 					$max = $options['max'];
- 				}
+				}
 
 				for ($i = $min; $i <= $max; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-			break;
+				break;
 			case 'month':
 				if ($options['monthNames']) {
 					$data['01'] = __('January', true);
@@ -529,7 +529,7 @@ DOC_END;
 						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
 					}
 				}
-			break;
+				break;
 			case 'year':
 				$current = intval(date('Y'));
 
@@ -551,10 +551,10 @@ DOC_END;
 					$data[$i] = $i;
 				}
 				$data = array_reverse($data, true);
-			break;
+				break;
 			case 'nengo':
 				$data = $this->TimeEx->getNengos();
-			break;
+				break;
 		}
 		$this->__options[$name] = $data;
 		return $this->__options[$name];
@@ -575,10 +575,10 @@ DOC_END;
  */
 	function checkbox($fieldName, $options = array()) {
 
-        /* hiddenをデフォルトオプションに追加 */
-        $options = array_merge(array('hidden' => true), $options);
-        $hidden = $options['hidden'];
-        unset($options['hidden']);
+		/* hiddenをデフォルトオプションに追加 */
+		$options = array_merge(array('hidden' => true), $options);
+		$hidden = $options['hidden'];
+		unset($options['hidden']);
 
 		$options = $this->_initInputField($fieldName, $options);
 		$value = current($this->value());
@@ -589,26 +589,26 @@ DOC_END;
 			$options['checked'] = 'checked';
 		}
 
-        // hiddenオプションがある場合のみ、hiddenタグを出力
-        if($hidden){
-            $output = $this->hidden($fieldName, array(
-                'id' => $options['id'] . '_', 'name' => $options['name'],
-                'value' => '0', 'secure' => false
-    		));
-        }else{
-            $output='';
-        }
+		// hiddenオプションがある場合のみ、hiddenタグを出力
+		if($hidden) {
+			$output = $this->hidden($fieldName, array(
+					'id' => $options['id'] . '_', 'name' => $options['name'],
+					'value' => '0', 'secure' => false
+			));
+		}else {
+			$output='';
+		}
 		/* label を追加 */
-        if(!empty($options['label'])){
+		if(!empty($options['label'])) {
 			$label = '&nbsp;'.parent::label($fieldName, $options['label']);
-		}else{
+		}else {
 			$label = '';
 		}
 		return $this->output($output . sprintf(
-			$this->Html->tags['checkbox'],
-			$options['name'],
-			$this->_parseAttributes($options, array('name'), null, ' ')
-		)).$label;
+				$this->Html->tags['checkbox'],
+				$options['name'],
+				$this->_parseAttributes($options, array('name'), null, ' ')
+				)).$label;
 	}
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
@@ -633,7 +633,7 @@ DOC_END;
 					$parents[] = $name;
 				}
 				$select = array_merge($select, $this->__selectOptions(
-					$title, $selected, $parents, $showParents, $attributes
+						$title, $selected, $parents, $showParents, $attributes
 				));
 
 				if (!empty($name)) {
@@ -667,7 +667,7 @@ DOC_END;
 						$htmlOptions['value'] = $name;
 
 						$tagName = Inflector::camelize(
-							$this->model() . '_' . $this->field().'_'.Inflector::underscore($name)
+								$this->model() . '_' . $this->field().'_'.Inflector::underscore($name)
 						);
 						$htmlOptions['id'] = $tagName;
 						$label = array('for' => $tagName);
@@ -683,19 +683,19 @@ DOC_END;
 						}
 						$label = $this->label(null, $title, $label);
 						$item = sprintf(
-							$this->Html->tags['checkboxmultiple'], $name,
-							$this->Html->_parseAttributes($htmlOptions)
+								$this->Html->tags['checkboxmultiple'], $name,
+								$this->Html->_parseAttributes($htmlOptions)
 						);
-                        // checkboxのdivを外せるオプションを追加
-                        if(isset($attributes['div']) && $attributes['div']===false){
-                            $select[] = $item.$label;
-                        }else{
-                            $select[] = $this->Html->div($attributes['class'], $item . $label);
-                        }
+						// checkboxのdivを外せるオプションを追加
+						if(isset($attributes['div']) && $attributes['div']===false) {
+							$select[] = $item.$label;
+						}else {
+							$select[] = $this->Html->div($attributes['class'], $item . $label);
+						}
 					} else {
 						$select[] = sprintf(
-							$this->Html->tags['selectoption'],
-							$name, $this->Html->_parseAttributes($htmlOptions), $title
+								$this->Html->tags['selectoption'],
+								$name, $this->Html->_parseAttributes($htmlOptions), $title
 						);
 					}
 				}
@@ -733,7 +733,7 @@ DOC_END;
 			unset($attributes['escape']);
 		}
 		$attributes = $this->_initInputField($fieldName, array_merge(
-			(array)$attributes, array('secure' => false)
+				(array)$attributes, array('secure' => false)
 		));
 
 		if (is_string($options) && isset($this->__options[$options])) {
@@ -760,10 +760,10 @@ DOC_END;
 			} else {
 				$tag = $this->Html->tags['selectmultiplestart'];
 			}
-            // multiplecheckboxの場合にhiddenをつけないオプションを追加
-            if(!isset($attributes['hidden']) || $attributes['hidden']!==false){
-                $select[] = $this->hidden(null, array('value' => '', 'id' => null));
-            }
+			// multiplecheckboxの場合にhiddenをつけないオプションを追加
+			if(!isset($attributes['hidden']) || $attributes['hidden']!==false) {
+				$select[] = $this->hidden(null, array('value' => '', 'id' => null));
+			}
 		} else {
 			$tag = $this->Html->tags['selectstart'];
 		}
@@ -771,12 +771,12 @@ DOC_END;
 		if (!empty($tag)) {
 			$this->__secure();
 			$select[] = sprintf($tag, $attributes['name'], $this->_parseAttributes(
-				$attributes, array('name', 'value'))
+					$attributes, array('name', 'value'))
 			);
 		}
 		$emptyMulti = (
-			$showEmpty !== null && $showEmpty !== false &&
-			!(empty($showEmpty) && (isset($attributes) && array_key_exists('multiple', $attributes)))
+				$showEmpty !== null && $showEmpty !== false &&
+						!(empty($showEmpty) && (isset($attributes) && array_key_exists('multiple', $attributes)))
 		);
 
 		if ($emptyMulti) {
@@ -788,21 +788,21 @@ DOC_END;
 			$options = array_reverse($options, true);
 		}
 
-        // divを追加すぐ下の__selectOptionsのみで利用
-        if(isset($attributes['div'])){
-						if($attributes['div']=='false'){
-							$attributes['div'] = false;
-						}
-            $div = $attributes['div'];
-        }else{
-            $div = null;
-        }
+		// divを追加すぐ下の__selectOptionsのみで利用
+		if(isset($attributes['div'])) {
+			if($attributes['div']=='false') {
+				$attributes['div'] = false;
+			}
+			$div = $attributes['div'];
+		}else {
+			$div = null;
+		}
 		$select = array_merge($select, $this->__selectOptions(
-			array_reverse($options, true),
-			$selected,
-			array(),
-			$showParents,
-			array('escape' => $escapeOptions, 'style' => $style, 'div' => $div)
+				array_reverse($options, true),
+				$selected,
+				array(),
+				$showParents,
+				array('escape' => $escapeOptions, 'style' => $style, 'div' => $div)
 		));
 
 		if ($style == 'checkbox') {
@@ -811,8 +811,8 @@ DOC_END;
 			$select[] = $this->Html->tags['selectend'];
 		}
 
-        // 解除ボタンを追加（jQuery必須)
-        if(isset($attributes['multiple']) && $attributes['multiple'] === true){
+		// 解除ボタンを追加（jQuery必須)
+		if(isset($attributes['multiple']) && $attributes['multiple'] === true) {
 			list($model,$field) = explode(".",$fieldName);
 			$tagName = Inflector::camelize($model . '_' . $field);
 			$out = '<script type="text/javascript">';
@@ -824,43 +824,43 @@ DOC_END;
 			$out .= "</script>";
 			$out .= '<input type="button" name="'.$tagName.'Clear" id="'.$tagName.'Clear" value="　解　除　" />';
 			return $this->output(implode("\n", $select))."<br />".$out;
-		}else{
-            if(!empty($attributes['separator'])){
-                $separator = $attributes['separator'];
-            }else{
-                $separator = "\n";
-            }
+		}else {
+			if(!empty($attributes['separator'])) {
+				$separator = $attributes['separator'];
+			}else {
+				$separator = "\n";
+			}
 			return $this->output(implode($separator, $select));
 		}
 
 
-		
+
 	}
 /**
  * 文字列保存用複数選択コントロール
  * @param string $fieldName
- * @param array $options 
+ * @param array $options
  * @param mixed $selected
  * @param array $attributes
  * @param mixed $showEmpty
  * @return string
  */
-    function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = ''){
+	function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 
-        $_attributes = array('separator'=>'<br />','quotes'=>true);
-        $attributes = Set::merge($_attributes,$attributes);
+		$_attributes = array('separator'=>'<br />','quotes'=>true);
+		$attributes = Set::merge($_attributes,$attributes);
 
-        $quotes = $attributes['quotes'];
-        unset($attributes['quotes']);
+		$quotes = $attributes['quotes'];
+		unset($attributes['quotes']);
 
-        $_options = $this->_initInputField($fieldName, $options);
-        if(empty($attributes['multiple'])) $attributes['multiple'] = 'checkbox';
-        $id = $_options['id'];
-        $_id = $_options['id'].'_';
-        $name = $_options['name'];
-        $out = '<span id="'.$_id.'">'.$this->select($fieldName.'_', $options, $selected, $attributes, $showEmpty).'</span>';
-        $out .= $this->hidden($fieldName);
-        $script = <<< DOC_END
+		$_options = $this->_initInputField($fieldName, $options);
+		if(empty($attributes['multiple'])) $attributes['multiple'] = 'checkbox';
+		$id = $_options['id'];
+		$_id = $_options['id'].'_';
+		$name = $_options['name'];
+		$out = '<span id="'.$_id.'">'.$this->select($fieldName.'_', $options, $selected, $attributes, $showEmpty).'</span>';
+		$out .= $this->hidden($fieldName);
+		$script = <<< DOC_END
 $(document).ready(function() {
     aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
     for(key in aryValue){
@@ -878,9 +878,9 @@ $(document).ready(function() {
     });
 });
 DOC_END;
-        $out .= $this->Javascript->codeBlock($script);
-        return $out;
-    }
+		$out .= $this->Javascript->codeBlock($script);
+		return $out;
+	}
 /**
  * 日付タグ
  * 和暦実装
@@ -899,5 +899,4 @@ DOC_END;
 		
 	}*/
 }
-
 ?>

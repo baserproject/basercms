@@ -23,28 +23,23 @@ $baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
 $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>
 
-
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<div style="text-align:center;background-color:#8ABE08;">
-    <span style="color:white;"><?php echo $baser->getContentsTitle(); ?></span>
-</div>
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $baser->getContentsTitle(); ?></span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
-
 <?php if(!empty($post)): ?>
-
-    <?php $blog->postContent($post) ?>
-    <br />
-    <p align="right">
-    <?php $blog->category($post) ?><br />
-    <?php $blog->postDate($post) ?><br />
-    <?php $blog->author($post) ?>
-    </p>
-    <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-    <br />
-
+<?php $blog->postContent($post) ?>
+<br />
+<p align="right">
+	<?php $blog->category($post) ?>
+	<br />
+	<?php $blog->postDate($post) ?>
+	<br />
+	<?php $blog->author($post) ?>
+</p>
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<br />
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
-
 <?php $baser->element('blog_comments') ?>

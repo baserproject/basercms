@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,26 +34,31 @@ class FeedDetail extends FeedAppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'FeedDetail';
-    var $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
-                                            'conditions' => '',
-                                            'order'=> '',
-                                            'foreignKey' => 'feed_config_id'
-                                            ));
+	var $name = 'FeedDetail';
+/**
+ * belongsTo
+ * @var		array
+ * @access	public
+ */
+	var $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
+							'conditions' => '',
+							'order'=> '',
+							'foreignKey' => 'feed_config_id'
+	));
 /**
  * beforeValidate
  *
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
-		
+	function beforeValidate() {
+
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-											'message' => ">> フィード詳細名を入力して下さい",
-											'required' => true));
+						'message' => ">> フィード詳細名を入力して下さい",
+						'required' => true));
 		$this->validate['url'] = array(array('rule' => array('minLength',1),
-											'message' => ">> フィードURLを入力して下さい",
-											'required' => true));
+						'message' => ">> フィードURLを入力して下さい",
+						'required' => true));
 		return true;
 	}
 /**
@@ -63,13 +68,13 @@ class FeedDetail extends FeedAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null){
+	function getControlSource($field = null) {
 
-        $controlSources['cache_time'] = array('+1 minute'=>'1分',
-                                              '+30 minutes'=>'30分',
-                                              '+1 hour'=>'1時間',
-                                              '+6 hours'=>'6時間',
-                                              '+24 hours'=>'1日');
+		$controlSources['cache_time'] = array('+1 minute'=>'1分',
+				'+30 minutes'=>'30分',
+				'+1 hour'=>'1時間',
+				'+6 hours'=>'6時間',
+				'+24 hours'=>'1日');
 		return $controlSources[$field];
 
 	}
@@ -79,14 +84,14 @@ class FeedDetail extends FeedAppModel {
  * @retun array $data
  * @access public
  */
-    function getDefaultValue($feedConfigId){
+	function getDefaultValue($feedConfigId) {
 
-        $feedConfig = $this->FeedConfig->find(array('FeedConfig.id'=>$feedConfigId));
-        $data[$this->name]['feed_config_id'] = $feedConfigId;
-        $data[$this->name]['name'] = $feedConfig['FeedConfig']['name'];
-        $data[$this->name]['cache_time'] = '+30 minutes';
-        return $data;
-        
-    }
+		$feedConfig = $this->FeedConfig->find(array('FeedConfig.id'=>$feedConfigId));
+		$data[$this->name]['feed_config_id'] = $feedConfigId;
+		$data[$this->name]['name'] = $feedConfig['FeedConfig']['name'];
+		$data[$this->name]['cache_time'] = '+30 minutes';
+		return $data;
+
+	}
 }
 ?>

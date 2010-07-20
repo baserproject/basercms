@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,62 +34,62 @@ class BlogContent extends BlogAppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'BlogContent';
+	var $name = 'BlogContent';
 /**
  * behaviors
  *
  * @var 	array
  * @access 	public
  */
-    var $actsAs = array('PluginContent');
+	var $actsAs = array('PluginContent');
 /**
  * hasMany
  *
  * @var		array
  * @access 	public
  */
- 	var $hasMany = array('BlogPost'=>
-							array('className'=>'Blog.BlogPost',
-									'order'=>'id DESC',
-									'limit'=>10,
-									'foreignKey'=>'blog_content_id',
-									'dependent'=>true,
-									'exclusive'=>false,
-									'finderQuery'=>''),
-                         'BlogCategory'=>
-                            array('className'=>'Blog.BlogCategory',
-                                    'order'=>'id',
-                                    'limit'=>10,
-                                    'foreignKey'=>'blog_content_id',
-                                    'dependent'=>true,
-                                    'exclusive'=>false,
-                                    'finderQuery'=>''));
+	var $hasMany = array('BlogPost'=>
+			array('className'=>'Blog.BlogPost',
+							'order'=>'id DESC',
+							'limit'=>10,
+							'foreignKey'=>'blog_content_id',
+							'dependent'=>true,
+							'exclusive'=>false,
+							'finderQuery'=>''),
+			'BlogCategory'=>
+			array('className'=>'Blog.BlogCategory',
+							'order'=>'id',
+							'limit'=>10,
+							'foreignKey'=>'blog_content_id',
+							'dependent'=>true,
+							'exclusive'=>false,
+							'finderQuery'=>''));
 /**
  * beforeValidate
  *
  * @return	void
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => 'halfText',
-												'message' => '>> ブログアカウント名は半角のみ入力して下さい',
-												'allowEmpty'=>false),
-                                        array(	'rule' => array('isUnique'),
-												'message' => '入力されたブログアカウント名は既に使用されています。'));
+						'message' => '>> ブログアカウント名は半角のみ入力して下さい',
+						'allowEmpty'=>false),
+				array(	'rule' => array('isUnique'),
+						'message' => '入力されたブログアカウント名は既に使用されています。'));
 		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
-												'message' => ">> ブログタイトルを入力して下さい"));
+						'message' => ">> ブログタイトルを入力して下さい"));
 		$this->validate['layout'] = array(array('rule' => 'halfText',
-												'message' => '>> レイアウトテンプレート名は半角で入力して下さい',
-												'allowEmpty'=>false));
+						'message' => '>> レイアウトテンプレート名は半角で入力して下さい',
+						'allowEmpty'=>false));
 		$this->validate['template'] = array(array(	'rule' => 'halfText',
-													'message' => ">> コンテンツテンプレート名は半角で入力して下さい",
-													'allowEmpty'=>false));
+						'message' => ">> コンテンツテンプレート名は半角で入力して下さい",
+						'allowEmpty'=>false));
 		$this->validate['list_count'] = array(array(	'rule' => 'halfText',
-													'message' => ">> 一覧表示件数は半角で入力して下さい。",
-													'allowEmpty'=>false));
+						'message' => ">> 一覧表示件数は半角で入力して下さい。",
+						'allowEmpty'=>false));
 		$this->validate['list_direction'] = array(array(	'rule' => VALID_NOT_EMPTY,
-													'message' => ">> 一覧に表示する順番を指定して下さい。"));
+						'message' => ">> 一覧に表示する順番を指定して下さい。"));
 		return true;
 	}
 /**
@@ -99,15 +99,14 @@ class BlogContent extends BlogAppModel {
  * @return	boolean
  * @access	public
  */
-	function alphaNumeric($check){
+	function alphaNumeric($check) {
 
-		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])){
+		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
 
 	}
-    
 }
 ?>

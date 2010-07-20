@@ -29,16 +29,21 @@
  *
  */
 class MailHelper extends TextExHelper {
-    var $helpers = array('Baser');
+/**
+ * ヘルパー
+ * @var		array
+ * @access	public
+ */
+	var $helpers = array('Baser');
 /**
  * メールフィールド一覧ページへのリンクを張る
  * @param string $mailContentId
  */
-    function indexFields($mailContentId){
-        if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('Mobile.on')){
-            echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
-        }
-    }
+	function indexFields($mailContentId) {
+		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
+			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
+		}
+	}
 }
 
 ?>

@@ -22,19 +22,22 @@
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-    <?php echo $form->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'confirm')) ?>
+<?php echo $form->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'confirm')) ?>
 <?php else: ?>
-    <?php echo $form->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'submit')) ?>
+<?php echo $form->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'submit')) ?>
 <?php endif; ?>
-
-
 <?php /* フォーム本体 */ ?>
 <?php echo $baser->element('mail_input',array('blockStart'=>1)) ?>
 
-<br /><br />
+<br />
+<br />
 <?php /* 送信ボタン */ ?>
 <?php if($freezed): ?>
-    <center><?php echo $form->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button"))  ?></center>
+<center>
+	<?php echo $form->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button"))  ?>
+</center>
 <?php elseif($this->action != 'submit'): ?>
-    <center><?php echo $form->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button"))  ?></center>
+<center>
+	<?php echo $form->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button"))  ?>
+</center>
 <?php endif; ?>

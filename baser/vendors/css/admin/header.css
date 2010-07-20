@@ -21,41 +21,39 @@
  */
 
 #header a,
-#header a:visited{
+#header a:visited {
 	color:#FFFFFF;
 }
-#header a:hover{
+#header a:hover {
 	color:#FFCC00;
 }
 /* フォントチェンジャー
 ----------------------------------------------- */
-#fontChanger{
+#fontChanger {
 	text-align:right;
 	color:#ffffff;
 }
-
 /* headMain
 ----------------------------------------------- */
-#headMain{
+#headMain {
 	height:72px;
 	margin:0 30px;
 }
-
 /* グローバルメニュー
 ----------------------------------------------- */
-#glbMenus{
+#glbMenus {
 	background:url(images/bg_glb_menu.jpg) no-repeat;
 	height:62px;
 }
-.global-menu a:hover{
+.global-menu a:hover {
 	color:#FFFFFF!important;
 }
-.global-menu li{
+.global-menu li {
 	float:left;
 	height:54px;
 	display:inline;
 }
-.global-menu li a{
+.global-menu li a {
 	float: left;
 	display:block;
 	height:37px;
@@ -66,15 +64,15 @@
 	font-size:12px;
 	line-height:20px;
 }
-.global-menu a{
+.global-menu a {
 	text-decoration:none;
 	color:#FFFFFF;
 }
-.global-menu a:hover{
+.global-menu a:hover {
 	color:#CCCCCC;
 	padding-top:18px;
 	height:36px;
 }
-.global-menu .first{
+.global-menu .first {
 	padding-left:30px;
 }

@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -28,17 +28,16 @@ App::import('Controller', 'Plugins');
  *
  * @package			baser.plugins.blog
  */
-class BlogAppController extends PluginsController
-{
+class BlogAppController extends PluginsController {
 /**
  * コメントを管理者メールへメール送信する
  * @param array $data
  */
-	function _sendComment(){
-		
-		if(!$this->data || empty($this->siteConfigs['email'])){
+	function _sendComment() {
+
+		if(!$this->data || empty($this->siteConfigs['email'])) {
 			return false;
-		}else{
+		}else {
 			$data = $this->data;
 			$data['SiteConfig'] = $this->siteConfigs;
 		}
@@ -48,7 +47,7 @@ class BlogAppController extends PluginsController
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
 		$template = 'blog_comment';
 		$this->sendmail($to, $from, $fromName, $title, $template, $data);
-		
+
 	}
 }
 ?>

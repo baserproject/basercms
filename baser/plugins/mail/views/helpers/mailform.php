@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * メールフォームヘルパー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -32,7 +32,7 @@ App::import('Helper', 'Freeze');
 class MailformHelper extends FreezeHelper {
 /**
  * メールフィールドのデータよりコントロールを生成する
- * 
+ *
  * @param	string	コントロールタイプ
  * @param	string	フィールド文字列
  * @param	array	コントロールソース
@@ -40,11 +40,11 @@ class MailformHelper extends FreezeHelper {
  * @return	string	htmlタグ
  * @access	public
  */
-	function control($type,$fieldName,$options, $attributes = array()){
-		
+	function control($type,$fieldName,$options, $attributes = array()) {
+
 		$attributes['escape'] = false;
-		
-		switch($type){
+
+		switch($type) {
 
 			case 'text':
 				unset($attributes['separator']);
@@ -60,27 +60,27 @@ class MailformHelper extends FreezeHelper {
 				unset($attributes['empty']);
 				$attributes['legend'] = false;
 				$attributes['div'] = true;
-				if(!empty($attributes['separator'])){
+				if(!empty($attributes['separator'])) {
 					$attributes['separator'] = $attributes['separator'];
-				}else{
+				}else {
 					$attributes['separator'] = "&nbsp;&nbsp;";
 				}
 				$out = $this->radio($fieldName, $options, $attributes);
 				break;
-				
+
 			case 'select':
 				unset($attributes['size']);
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
-				if(isset($attributes['empty'])){
+				if(isset($attributes['empty'])) {
 					$showEmpty = $attributes['empty'];
-				}else{
+				}else {
 					$showEmpty = true;
 				}
 				$out = $this->select($fieldName, $options, null, $attributes, $showEmpty);
 				break;
-				
+
 			case 'pref':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -90,16 +90,16 @@ class MailformHelper extends FreezeHelper {
 				$out = $this->prefTag($fieldName, null, $attributes);
 				break;
 
-            case 'autozip':
+			case 'autozip':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-                $address1 = $this->__name(array(),$options[1]);
-                $address2 = $this->__name(array(),$options[2]);
-                $attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
+				$address1 = $this->__name(array(),$options[1]);
+				$address2 = $this->__name(array(),$options[2]);
+				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
 				$out = $this->Javascript->link('ajaxzip3.js').$this->text($fieldName,$attributes);
-                break;
-                
+				break;
+
 			case 'check':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -107,14 +107,14 @@ class MailformHelper extends FreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['empty']);
 				$out = $this->checkbox($fieldName, $attributes);
-				break;		
+				break;
 
 			case 'multi_check':
 				unset($attributes['size']);
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
-				if($this->freezed){
+				if($this->freezed) {
 					unset($attributes['separator']);
 				}
 				$attributes['multiple'] = 'checkbox';
@@ -142,7 +142,7 @@ class MailformHelper extends FreezeHelper {
 				$attributes['separator'] = ' ';
 				$out = $this->dateTime($fieldName,'WYMD',null,null,$attributes);
 				break;
-				
+
 			case 'textarea':
 				$attributes['cols'] = $attributes['size'];
 				unset($attributes['separator']);
@@ -157,8 +157,7 @@ class MailformHelper extends FreezeHelper {
 				$out = $this->hidden($fieldName, $attributes);
 		}
 		return $out;
-		
+
 	}
-	
 }
 ?>

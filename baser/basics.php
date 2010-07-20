@@ -4,7 +4,7 @@
  * BaserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -26,38 +26,38 @@
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
  * @return string   ベースURL
  */
-    function baseUrl(){
-        $appBaseUrl = Configure::read('App.baseUrl');
-        if($appBaseUrl){
-            $_url = $_SERVER['REQUEST_URI'];
-            $baseUrl = $appBaseUrl.'/';
-        }else{
-            $_baseUrl = str_replace(DS,'/',preg_replace("/^\\".DS."/i",'',str_replace(docRoot(),'',ROOT)));
-            if($_baseUrl){
-                $baseUrl = '/'.$_baseUrl.'/';
-            }else{
-                $baseUrl = '/';
-            }
-        }
-        return $baseUrl;
-    }
+	function baseUrl() {
+		$appBaseUrl = Configure::read('App.baseUrl');
+		if($appBaseUrl) {
+			$_url = $_SERVER['REQUEST_URI'];
+			$baseUrl = $appBaseUrl.'/';
+		}else {
+			$_baseUrl = str_replace(DS,'/',preg_replace("/^\\".DS."/i",'',str_replace(docRoot(),'',ROOT)));
+			if($_baseUrl) {
+				$baseUrl = '/'.$_baseUrl.'/';
+			}else {
+				$baseUrl = '/';
+			}
+		}
+		return $baseUrl;
+	}
 /**
  * ドキュメントルートを取得する
  * サブドメインの場合など、$_SERVER['DOCUMENT_ROOT'] が正常に取得できない場合に利用する
  * @return string   ドキュメントルートの絶対パス
  */
-    function docRoot(){
-    	$docRoot = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
-        return str_replace('/', DS, $docRoot);
-    }
+	function docRoot() {
+		$docRoot = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
+		return str_replace('/', DS, $docRoot);
+	}
 /**
  * リビジョンを取得する
  * @param string    BaserCMS形式のバージョン表記　（例）BaserCMS 1.5.3.1600 beta
  * @return string   リビジョン番号
  */
-    function revision($version){
-        return preg_replace("/BaserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
-    }
+	function revision($version) {
+		return preg_replace("/BaserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
+	}
 /**
  * バージョンを特定する一意の数値を取得する
  * ２つ目以降のバージョン番号は３桁として結合
@@ -65,10 +65,10 @@
  * ※ ２つ目以降のバージョン番号は999までとする
  * @param string $version
  */
-	function verpoint($version){
-		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)){
+	function verpoint($version) {
+		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
 			return $maches[1]*1000000 + $maches[2]*1000 + $maches[3];
-		}else{
+		}else {
 			return 0;
 		}
 	}
@@ -81,53 +81,53 @@
 	function decodeContent($content,$fileName=null) {
 
 		$contentsMaping=array(
-	      "image/gif" => "gif",
-	      "image/jpeg" => "jpg",
-	      "image/pjpeg" => "jpg",
-	      "image/x-png" => "png",
-	      "image/jpg" => "jpg",
-	      "image/png" => "png",
-	      "application/x-shockwave-flash" => "swf",
-	      /*"application/pdf" => "pdf",*/ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
-	      "application/pgp-signature" => "sig",
-	      "application/futuresplash" => "spl",
-	      "application/msword" => "doc",
-	      "application/postscript" => "ai",
-	      "application/x-bittorrent" => "torrent",
-	      "application/x-dvi" => "dvi",
-	      "application/x-gzip" => "gz",
-	      "application/x-ns-proxy-autoconfig" => "pac",
-	      "application/x-shockwave-flash" => "swf",
-	      "application/x-tgz" => "tar.gz",
-	      "application/x-tar" => "tar",
-	      "application/zip" => "zip",
-	      "audio/mpeg" => "mp3",
-	      "audio/x-mpegurl" => "m3u",
-	      "audio/x-ms-wma" => "wma",
-	      "audio/x-ms-wax" => "wax",
-	      "audio/x-wav" => "wav",
-	      "image/x-xbitmap" => "xbm",
-	      "image/x-xpixmap" => "xpm",
-	      "image/x-xwindowdump" => "xwd",
-	      "text/css" => "css",
-	      "text/html" => "html",
-	      "text/javascript" => "js",
-	      "text/plain" => "txt",
-	      "text/xml" => "xml",
-	      "video/mpeg" => "mpeg",
-	      "video/quicktime" => "mov",
-	      "video/x-msvideo" => "avi",
-	      "video/x-ms-asf" => "asf",
-	      "video/x-ms-wmv" => "wmv"
+				"image/gif" => "gif",
+				"image/jpeg" => "jpg",
+				"image/pjpeg" => "jpg",
+				"image/x-png" => "png",
+				"image/jpg" => "jpg",
+				"image/png" => "png",
+				"application/x-shockwave-flash" => "swf",
+				/*"application/pdf" => "pdf",*/ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
+				"application/pgp-signature" => "sig",
+				"application/futuresplash" => "spl",
+				"application/msword" => "doc",
+				"application/postscript" => "ai",
+				"application/x-bittorrent" => "torrent",
+				"application/x-dvi" => "dvi",
+				"application/x-gzip" => "gz",
+				"application/x-ns-proxy-autoconfig" => "pac",
+				"application/x-shockwave-flash" => "swf",
+				"application/x-tgz" => "tar.gz",
+				"application/x-tar" => "tar",
+				"application/zip" => "zip",
+				"audio/mpeg" => "mp3",
+				"audio/x-mpegurl" => "m3u",
+				"audio/x-ms-wma" => "wma",
+				"audio/x-ms-wax" => "wax",
+				"audio/x-wav" => "wav",
+				"image/x-xbitmap" => "xbm",
+				"image/x-xpixmap" => "xpm",
+				"image/x-xwindowdump" => "xwd",
+				"text/css" => "css",
+				"text/html" => "html",
+				"text/javascript" => "js",
+				"text/plain" => "txt",
+				"text/xml" => "xml",
+				"video/mpeg" => "mpeg",
+				"video/quicktime" => "mov",
+				"video/x-msvideo" => "avi",
+				"video/x-ms-asf" => "asf",
+				"video/x-ms-wmv" => "wmv"
 		);
 
 		if (isset($contentsMaping[$content])) {
 			return $contentsMaping[$content];
 		} elseif($fileName) {
 			$info = pathinfo($fileName);
-			if(!empty($info['extension'])){
+			if(!empty($info['extension'])) {
 				return $info['extension'];
-			}else{
+			}else {
 				return false;
 			}
 		} else {
@@ -139,25 +139,25 @@
  * baseUrlを除外したURLのパラメーターを取得する
  * 先頭のスラッシュは除外する
  */
-	function getParamsFromEnv(){
+	function getParamsFromEnv() {
 		$appBaseUrl = Configure::read('App.baseUrl');
 		$parameter = '';
-		if($appBaseUrl){
+		if($appBaseUrl) {
 			$base = dirname($appBaseUrl);
-			if(strpos($_SERVER['REQUEST_URI'], $appBaseUrl) !== false){
+			if(strpos($_SERVER['REQUEST_URI'], $appBaseUrl) !== false) {
 				$parameter = str_replace($appBaseUrl,'',$_SERVER['REQUEST_URI']);
-			}else{
+			}else {
 				// トップページ
 				$parameter = str_replace($base.'/','',$_SERVER['REQUEST_URI']);
 			}
-		}else{
+		}else {
 			$query = $_SERVER['QUERY_STRING'];
-			if(!empty($query) && strpos($query, '=')){
+			if(!empty($query) && strpos($query, '=')) {
 				$aryPath = explode('=',$query);
-				if($aryPath[0]=='url'){
+				if($aryPath[0]=='url') {
 					$parameter = $aryPath[1];
 				}
-			}else{
+			}else {
 				$parameter = '';
 			}
 		}
@@ -169,7 +169,7 @@
  * URLを指定しない場合は全てのViewキャッシュを削除する
  * 全て削除する場合、標準の関数clearCacheだとemptyファイルまで削除されてしまい、
  * 開発時に不便なのでFolderクラスで削除
- * 
+ *
  * @param	$url
  * @return	void
  * @access	public
@@ -177,10 +177,10 @@
 	function clearViewCache($url=null,$ext='.php') {
 
 		if (($url == '/' || $url == '/index.html')) {
-			if(Configure::read('App.baseUrl')){
+			if(Configure::read('App.baseUrl')) {
 				clearCache('index_php');
 				clearCache('index_php_index_html');
-			}else{
+			}else {
 				clearCache('home');
 				clearCache('index_html');
 			}
@@ -190,13 +190,13 @@
 			App::import('Core','Folder');
 			$folder = new Folder(CACHE.'views'.DS);
 			$files = $folder->read(true,true);
-			foreach($files[1] as $file){
-				if($file != 'empty'){
-					if($ext){
-						if(preg_match('/'.str_replace('.', '\.', $ext).'$/is', $file)){
+			foreach($files[1] as $file) {
+				if($file != 'empty') {
+					if($ext) {
+						if(preg_match('/'.str_replace('.', '\.', $ext).'$/is', $file)) {
 							@unlink(CACHE.'views'.DS.$file);
 						}
-					}else{
+					}else {
 						@unlink(CACHE.'views'.DS.$file);
 					}
 				}
@@ -210,28 +210,28 @@
 	function clearAllCache() {
 
 		/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
-		Cache::clear();
-		Cache::clear(false,'_cake_core_');
-		Cache::clear(false,'_cake_model_');
-		clearCache();
+			Cache::clear();
+			Cache::clear(false,'_cake_core_');
+			Cache::clear(false,'_cake_model_');
+			clearCache();
 		*/
 
-        App::import('Core','Folder');
-        $folder = new Folder(CACHE);
+		App::import('Core','Folder');
+		$folder = new Folder(CACHE);
 
-        $files = $folder->read(true,true,true);
-        foreach($files[1] as $file){
-            @unlink($file);
-        }
-        foreach($files[0] as $dir){
-            $folder = new Folder($dir);
-            $caches = $folder->read(true,true,true);
-            foreach($caches[1] as $file){
-                if(basename($file) != 'empty'){
-                    @unlink($file);
-                }
-            }
-        }
+		$files = $folder->read(true,true,true);
+		foreach($files[1] as $file) {
+			@unlink($file);
+		}
+		foreach($files[0] as $dir) {
+			$folder = new Folder($dir);
+			$caches = $folder->read(true,true,true);
+			foreach($caches[1] as $file) {
+				if(basename($file) != 'empty') {
+					@unlink($file);
+				}
+			}
+		}
 
 	}
 ?>

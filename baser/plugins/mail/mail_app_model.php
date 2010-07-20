@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -18,7 +18,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */		
+ */
 /**
  * includes
  */
@@ -27,8 +27,7 @@
  *
  * @package			baser.plugins.mail
  */
-class MailAppModel extends AppModel
-{
+class MailAppModel extends AppModel {
 /**
  * The name of the DataSource connection that this Model uses
  *
@@ -38,27 +37,27 @@ class MailAppModel extends AppModel
 	var $useDbConfig = 'plugin';
 /**
  * プラグイン名
- */	
+ */
 	var $plugin = 'Mail';
 /**
  * データの消毒をおこなう
  * @return array
  */
-	function sanitizeData($datas){
+	function sanitizeData($datas) {
 
-		foreach ($datas as $key => $data){
-			
-			if(!is_array($data)){
-				
+		foreach ($datas as $key => $data) {
+
+			if(!is_array($data)) {
+
 				// エラー時用のサニタイズ処理を一旦元の形式に復元した上で再度サイニタイズ処理をかける。
 				$data = str_replace("&lt;!--","<!--",$data);
-				
+
 				$data = htmlspecialchars($data);
 				//$data = str_replace("\n","<br />",$data);
 				$datas[$key] = $data;
-				
+
 			}
-			
+
 		}
 		return $datas;
 	}
@@ -66,9 +65,9 @@ class MailAppModel extends AppModel
  * サニタイズされたデータを復元する
  * @return array
  */
-	function restoreData($datas){
-		foreach ($datas as $key => $data){
-			if(!is_array($data)){
+	function restoreData($datas) {
+		foreach ($datas as $key => $data) {
+			if(!is_array($data)) {
 				$data = str_replace("<br />","",$data);
 				$data = str_replace('&lt;','<',$data);
 				$data = str_replace('&gt;','>',$data);
@@ -81,5 +80,4 @@ class MailAppModel extends AppModel
 	}
 
 }
-
 ?>

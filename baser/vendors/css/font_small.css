@@ -19,9 +19,12 @@
  * @license			http://basercms.net/license/index.html
  */
 
-body{
+body {
 	font-size:80%!important;
 }
-p,dd,li,td{
+p,
+dd,
+li,
+td {
 	line-height:150%!important;
 }

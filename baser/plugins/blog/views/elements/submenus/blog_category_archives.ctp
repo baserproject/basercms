@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi blog-categories-archives">
-<h2><?php echo $blogContent['BlogContent']['title'] ?>カテゴリー</h2>
-<?php echo $blog->getCategoryList($categories) ?>
-</div>
+	<h2><?php echo $blogContent['BlogContent']['title'] ?>カテゴリー</h2>
+	<?php echo $blog->getCategoryList($categories) ?> </div>

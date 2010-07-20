@@ -25,23 +25,33 @@
  * @package			baser.views.helpers
  */
 class PageHelper extends Helper {
-    var $Page = null;
+/**
+ * ページモデル
+ * @var		Page
+ * @access	public
+ */
+	var $Page = null;
+/**
+ * data
+ * @var		array
+ * @access	public
+ */
 	var $data = array();
 /**
  * construct
  */
 	function  __construct() {
-		if(ClassRegistry::isKeySet('Page')){
+		if(ClassRegistry::isKeySet('Page')) {
 			$this->Page = ClassRegistry::getObject('Page');
-		}else{
+		}else {
 			$this->Page =& ClassRegistry::init('Page','Model');
 		}
 	}
 /**
  * beforeRender
  */
-	function beforeRender(){
-		if(isset($this->params['pass'][0])){
+	function beforeRender() {
+		if(isset($this->params['pass'][0])) {
 			$url = str_replace('pages','',$this->params['pass'][0]);
 			$this->data = $this->Page->findByUrl($url);
 		}
@@ -51,17 +61,17 @@ class PageHelper extends Helper {
  * @param array $page
  * @return string
  */
-    function url($page){
-        return $this->Page->getPageUrl($page);
-    }
+	function url($page) {
+		return $this->Page->getPageUrl($page);
+	}
 /**
  * 現在のページが所属するカテゴリデータを取得する
  * @return array
  */
-	function getCategory(){
-		if(isset($this->data['PageCategory'])){
+	function getCategory() {
+		if(isset($this->data['PageCategory'])) {
 			return $this->data['PageCategory'];
-		}else{
+		}else {
 			return false;
 		}
 	}

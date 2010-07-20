@@ -20,52 +20,46 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
+<h2>
+	<?php $baser->contentsTitle() ?>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>プラグイン設定の登録・変更を行います。<br />
-	新しいプラグインを入手した場合は、そのままの内容で登録しても大丈夫です。
-	プラグイン一覧の「管理」ボタンをクリックした際に表示するページを変更する場合は「管理URL」を変更します。</p>
+		新しいプラグインを入手した場合は、そのままの内容で登録しても大丈夫です。
+		プラグイン一覧の「管理」ボタンをクリックした際に表示するページを変更する場合は「管理URL」を変更します。</p>
 </div>
-
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-
 <?php echo $formEx->create('Plugin',array('url'=>array($this->data['Plugin']['name']))) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<?php if($this->action == 'admin_edit'): ?>
+	<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Plugin.id', 'NO') ?></th>
-		<td class="col-input">
-			<?php echo $formEx->text('Plugin.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp;
-		</td>
+		<td class="col-input"><?php echo $formEx->text('Plugin.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
 	</tr>
-<?php endif; ?>
+	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.name', 'プラグイン名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?>
-		<?php echo $formEx->error('Plugin.name') ?>&nbsp;</td>
+		<td class="col-input"><?php echo $formEx->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?> <?php echo $formEx->error('Plugin.name') ?>&nbsp;</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.title', '表示名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.title', array('size'=>40,'maxlength'=>255)) ?>
-		<?php echo $formEx->error('Plugin.title') ?>&nbsp;</td>
+		<td class="col-input"><?php echo $formEx->text('Plugin.title', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('Plugin.title') ?>&nbsp;</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Plugin.admin_link', '管理URL') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?>
-            <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
-            <div id="helptextAdminLink" class="helptext">
-                先頭にスラッシュをつけたルートパスで入力して下さい。<br />(例) /admin/plugins/index
-            </div>
-            <?php echo $formEx->error('Plugin.admin_link') ?>
-        </td>
+		<td class="col-input"><?php echo $formEx->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextAdminLink" class="helptext"> 先頭にスラッシュをつけたルートパスで入力して下さい。<br />
+				(例) /admin/plugins/index </div>
+			<?php echo $formEx->error('Plugin.admin_link') ?></td>
 	</tr>
 </table>
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
+	<?php if($this->action == 'admin_add'): ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-<?php else: ?>
+	<?php else: ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Plugin.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Plugin.name')),false); ?>
-<?php endif ?>
+	<?php endif ?>
 </div>

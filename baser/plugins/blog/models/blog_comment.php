@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,27 +34,27 @@ class BlogComment extends BlogAppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'BlogComment';
+	var $name = 'BlogComment';
 /**
  * belongsTo
  *
  * @var 	array
  * @access	public
  */
- 	var $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
-                                                        'foreignKey'=>'blog_post_id'));
+	var $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
+							'foreignKey'=>'blog_post_id'));
 /**
  * beforeValidate
  *
  * @return	void
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => '>> お名前を入力して下さい'));
+						'message' => '>> お名前を入力して下さい'));
 		$this->validate['message'] = array(array('rule' => VALID_NOT_EMPTY,
-											'message' => ">> コメントを入力して下さい"));
+						'message' => ">> コメントを入力して下さい"));
 		return true;
 	}
 /**
@@ -63,7 +63,7 @@ class BlogComment extends BlogAppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue(){
+	function getDefaultValue() {
 		$data[$this->name]['name'] = 'NO NAME';
 		return $data;
 	}
@@ -74,9 +74,9 @@ class BlogComment extends BlogAppModel {
  * @param string $postNo
  * @return boolean
  */
-	function add($data,$contentId,$postId,$commentApprove){
+	function add($data,$contentId,$postId,$commentApprove) {
 
-		if(isset($data['BlogComment'])){
+		if(isset($data['BlogComment'])) {
 			$data = $data['BlogComment'];
 		}
 
@@ -84,16 +84,16 @@ class BlogComment extends BlogAppModel {
 		$data['message'] = Sanitize::html($data['message']);
 		$data['blog_post_id'] = $postId;
 		$data['blog_content_id'] = $contentId;
-		if($commentApprove){
+		if($commentApprove) {
 			$data['status'] = false;
-		}else{
+		}else {
 			$data['status'] = true;
 		}
-		
+
 		$data['no'] = $this->getMax('no',array('blog_content_id'=>$contentId))+1;
 		$this->create($data);
 		return $this->save();
-		
+
 	}
 }
 ?>

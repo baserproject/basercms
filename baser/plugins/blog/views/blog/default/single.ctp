@@ -25,17 +25,25 @@ $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false
 $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>
 
-<h2 class="contents-head"><?php $blog->title() ?></h2>
-<h3 class="contents-head"><?php $baser->contentsTitle() ?></h3>
-
+<h2 class="contents-head">
+	<?php $blog->title() ?>
+</h2>
+<h3 class="contents-head">
+	<?php $baser->contentsTitle() ?>
+</h3>
 <div class="post">
-	<?php $blog->postContent($post) ?>	
-	<div class="meta">
-		<span><?php $blog->category($post) ?>&nbsp;<?php $blog->postDate($post) ?>&nbsp;<?php $blog->author($post) ?></span>
-	</div>		
+	<?php $blog->postContent($post) ?>
+	<div class="meta"> <span>
+		<?php $blog->category($post) ?>
+		&nbsp;
+		<?php $blog->postDate($post) ?>
+		&nbsp;
+		<?php $blog->author($post) ?>
+		</span> </div>
 </div>
 <div id="contentsNavi">
-   <?php $blog->prevLink($post) ?>&nbsp;｜&nbsp;<?php $blog->nextLink($post) ?>
+	<?php $blog->prevLink($post) ?>
+	&nbsp;｜&nbsp;
+	<?php $blog->nextLink($post) ?>
 </div>
-
 <?php $baser->element('blog_comments') ?>

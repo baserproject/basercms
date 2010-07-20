@@ -20,20 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div id="errorPage">
-    <h2>クラスが見つかりません</h2>
-    <p class="error">
-        <strong><?php __('Error'); ?>: </strong>
-        <?php echo " <em>{$className}</em>"?> クラスが見つかりません。
-    </p>
-    <p class="error">
-        <strong><?php __('Error'); ?>: </strong>
-        <?php echo " <em>{$className}</em>"?> クラスを定義するか、読み込まれているか確認して下さい。
-    </p>
-    <?php if($notice): ?>
-        <p class="notice">
-            <strong><?php __('Notice'); ?>: </strong>
-            <?php echo $notice ?>
-        </p>
-    <?php endif ?>
+	<h2>クラスが見つかりません</h2>
+	<p class="error"> <strong>
+		<?php __('Error'); ?>
+		: </strong> <?php echo " <em>{$className}</em>"?> クラスが見つかりません。 </p>
+	<p class="error"> <strong>
+		<?php __('Error'); ?>
+		: </strong> <?php echo " <em>{$className}</em>"?> クラスを定義するか、読み込まれているか確認して下さい。 </p>
+	<?php if($notice): ?>
+	<p class="notice"> <strong>
+		<?php __('Notice'); ?>
+		: </strong> <?php echo $notice ?> </p>
+	<?php endif ?>
 </div>

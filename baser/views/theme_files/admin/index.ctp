@@ -32,13 +32,17 @@ $(function(){
 });
 </script>
 
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2>
+	<?php $baser->contentsTitle() ?>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ここでは各テーマファイルの閲覧、編集、削除等を行う事ができます。<br />
-	なお、テーマ「core」は、BaserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
+		なお、テーマ「core」は、BaserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
 	<ul>
-		<li>上層のフォルダへ移動するには、<?php $baser->img('up.png',array('alt'=>'上へ','width'=>18)) ?>ボタンをクリックします。（現在の位置がテーマフォルダの最上層の場合は表示されません）</li>
+		<li>上層のフォルダへ移動するには、
+			<?php $baser->img('up.png',array('alt'=>'上へ','width'=>18)) ?>
+			ボタンをクリックします。（現在の位置がテーマフォルダの最上層の場合は表示されません）</li>
 		<li>新しいフォルダを作成するには、「フォルダ新規作成」ボタンをクリックします。</li>
 		<li>新しいテーマファイルを作成するには、「ファイル新規作成」ボタンをクリックします。</li>
 		<li>ご自分のパソコン内のファイルをアップロードするには、「選択」ボタンをクリックし、対象のファイルを選択します。</li>
@@ -57,77 +61,75 @@ $(function(){
 		<li>Javascript：Javascriptファイル</li>
 	</ul>
 </div>
-
 <p><strong>現在の位置：<?php echo $currentPath ?>
-<?php if(!$writable): ?>
+	<?php if(!$writable): ?>
 	　<span style="color:#FF3300">[書込不可]</span>
-<?php endif ?>
-</strong>
-</p>
+	<?php endif ?>
+	</strong> </p>
 <p>
-<?php if($path): ?>
+	<?php if($path): ?>
 	<?php $baser->link($baser->getImg('up.png',array('alt'=>'上へ')),array('action'=>'index', $theme,$plugin, $type, dirname($path))) ?>
-<?php endif ?>
+	<?php endif ?>
 </p>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableUsers">
-<tr>
-	<th>操作</th>
-	<th>フォルダ名／テーマファイル名</th>
-</tr>
-<?php if(!empty($themeFiles)): ?>
-<?php $count=0; ?>
-<?php foreach($themeFiles as $themeFile): ?>
-	<?php if ($count%2 === 0): ?>
-		<?php $class=' class="altrow"' ?>
-	<?php else: ?>
-		<?php $class=''; ?>
-	<?php endif; ?>
+	<tr>
+		<th>操作</th>
+		<th>フォルダ名／テーマファイル名</th>
+	</tr>
+	<?php if(!empty($themeFiles)): ?>
+		<?php $count=0; ?>
+		<?php foreach($themeFiles as $themeFile): ?>
+			<?php if ($count%2 === 0): ?>
+				<?php $class=' class="altrow"' ?>
+			<?php else: ?>
+				<?php $class=''; ?>
+			<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
 			<?php if($themeFile['type']=='folder'): ?>
-				<?php $baser->link('開く',array('action'=>'index', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-green-s button-s')) ?>
+			<?php $baser->link('開く',array('action'=>'index', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-green-s button-s')) ?>
 			<?php endif ?>
 			<?php if($writable): ?>
-				<?php $baser->link('コピー',array('action'=>'copy', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-red-s button-s')) ?>
+			<?php $baser->link('コピー',array('action'=>'copy', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-red-s button-s')) ?>
 				<?php if($themeFile['type']=='folder'): ?>
-					<?php $baser->link('編集',array('action'=>'edit_folder', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-orange-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit_folder', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-orange-s button-s')) ?>
 				<?php else: ?>
-					<?php $baser->link('編集',array('action'=>'edit', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-orange-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-orange-s button-s')) ?>
 				<?php endif ?>
-				<?php $baser->link('削除', array('action'=>'del', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $themeFile['name']),false); ?>
+			<?php $baser->link('削除', array('action'=>'del', $theme, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $themeFile['name']),false); ?>
 			<?php else: ?>
 				<?php if($themeFile['type']=='folder'): ?>
-					<?php $baser->link('表示',array('action'=>'view_folder', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s')) ?>
+			<?php $baser->link('表示',array('action'=>'view_folder', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s')) ?>
 				<?php else: ?>
-					<?php $baser->link('表示',array('action'=>'view', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s')) ?>
+			<?php $baser->link('表示',array('action'=>'view', $theme, $plugin, $type, $path, $themeFile['name']), array('class'=>'btn-gray-s button-s')) ?>
 				<?php endif ?>
-			<?php endif ?>
-		</td>
-        <td>
+			<?php endif ?></td>
+		<td>
 			<?php if(preg_match('/.+?(\.png|\.gif|\.jpg)$/is',$themeFile['name'])): ?>
-				<?php $baser->link($baser->getImg(array('action'=>'img_thumb',100, 100, $theme, $plugin, $type, $path, $themeFile['name']),array('alt'=>$themeFile['name'])),array('action'=>'img',$theme,$plugin,$type, $path,$themeFile['name']),array('rel'=>'colorbox','title'=>$themeFile['name'],'style'=>'display:block;padding:10px;float:left;background-color:#FFFFFF'),null,false) ?>　
-				<?php echo $themeFile['name'] ?>
+			<?php $baser->link($baser->getImg(array('action'=>'img_thumb',100, 100, $theme, $plugin, $type, $path, $themeFile['name']),array('alt'=>$themeFile['name'])),array('action'=>'img',$theme,$plugin,$type, $path,$themeFile['name']),array('rel'=>'colorbox','title'=>$themeFile['name'],'style'=>'display:block;padding:10px;float:left;background-color:#FFFFFF'),null,false) ?>
+			<?php echo $themeFile['name'] ?>
 			<?php elseif($themeFile['type'] == 'folder'): ?>
-				<?php $baser->img('folder.png',array('alt'=>$themeFile['name'])) ?>　<?php echo $themeFile['name'] ?>/
+			<?php $baser->img('folder.png',array('alt'=>$themeFile['name'])) ?>
+			<?php echo $themeFile['name'] ?>/
 			<?php else: ?>
-				<?php $baser->img('file.png',array('alt'=>$themeFile['name'])) ?>　<?php echo $themeFile['name'] ?>
-			<?php endif ?>
-		</td>
+			<?php $baser->img('file.png',array('alt'=>$themeFile['name'])) ?>
+			<?php echo $themeFile['name'] ?>
+			<?php endif ?></td>
 	</tr>
-	<?php $count++; ?>
-<?php endforeach; ?>
-<?php else: ?>
-    <tr><td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td></tr>
-<?php endif; ?>
+			<?php $count++; ?>
+		<?php endforeach; ?>
+	<?php else: ?>
+	<tr>
+		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
+	</tr>
+	<?php endif; ?>
 </table>
 <div class="align-center">
-<?php if($writable): ?>
-	<?php echo $formEx->create('ThemeFile',array('id'=>'ThemeFileUpload','url'=>array('action'=>'upload',$theme,$plugin,$type,$path),'enctype' => 'multipart/form-data')) ?>
-	<?php echo $formEx->file('ThemeFile.file',array()) ?>
-	<?php echo $formEx->end() ?>
+	<?php if($writable): ?>
+	<?php echo $formEx->create('ThemeFile',array('id'=>'ThemeFileUpload','url'=>array('action'=>'upload',$theme,$plugin,$type,$path),'enctype' => 'multipart/form-data')) ?> <?php echo $formEx->file('ThemeFile.file',array()) ?> <?php echo $formEx->end() ?>
 	<?php $baser->link('フォルダ新規作成',array('action'=>'add_folder',$theme,$type,$path),array('class'=>'btn-orange button')) ?>
-<?php endif ?>
-<?php if(($path || $type != 'etc') && $type != 'img' && $writable): ?>
+	<?php endif ?>
+	<?php if(($path || $type != 'etc') && $type != 'img' && $writable): ?>
 	<?php $baser->link('ファイル新規作成',array('action'=>'add',$theme,$type,$path),array('class'=>'btn-red button')) ?>
-<?php endif ?>
+	<?php endif ?>
 </div>

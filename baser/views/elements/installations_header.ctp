@@ -20,23 +20,17 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div id="header">
-
-    <div id="headMain">
-
-        <h1>コーポレートサイトにちょうどいいCMS - BaserCMS -</h1>
-        <p id="fontChanger">フォントサイズ：
-            <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜
-            <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜
-            <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a>
-        </p>
-    </div>
-
-    <div id="glbMenus">
-        <h2 class="display-none">グローバルメニュー</h2>
-        <ul>
-            <li id="glbMenuBtnLeft">&nbsp;<li>
-        </ul>
-    </div>
-
+	<div id="headMain">
+		<h1>コーポレートサイトにちょうどいいCMS - BaserCMS -</h1>
+		<p id="fontChanger">フォントサイズ： <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜ <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜ <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a> </p>
+	</div>
+	<div id="glbMenus">
+		<h2 class="display-none">グローバルメニュー</h2>
+		<ul>
+			<li id="glbMenuBtnLeft">&nbsp;
+			<li>
+		</ul>
+	</div>
 </div>

@@ -20,20 +20,28 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<div class="side-navi">
-<h2>ブログ共通メニュー</h2>
-<ul>
 
-<?php if(	isset($blogContent) &&
+<div class="side-navi">
+	<h2>ブログ共通メニュー</h2>
+	<ul>
+		<?php if(	isset($blogContent) &&
 			($this->params['controller'] == 'blog_posts' ||
 			$this->params['controller'] == 'blog_categories' ||
 			$this->params['controller'] == 'blog_comments' ||
 			$this->params['controller'] == 'blog_contents')): ?>
-<li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
-<li><?php $baser->link($blogContent['BlogContent']['title'].'基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?></li>
-<?php endif ?>
-<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
-<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
-<!--<li><?php $baser->link('ブログプラグイン基本設定',array('controller'=>'blog_configs','action'=>'form')) ?></li>-->
-</ul>
+		<li>
+			<?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?>
+		</li>
+		<li>
+			<?php $baser->link($blogContent['BlogContent']['title'].'基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?>
+		</li>
+		<?php endif ?>
+		<li>
+			<?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?>
+		</li>
+		<li>
+			<?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?>
+		</li>
+		<!--<li><?php $baser->link('ブログプラグイン基本設定',array('controller'=>'blog_configs','action'=>'form')) ?></li>-->
+	</ul>
 </div>

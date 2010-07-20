@@ -20,16 +20,17 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<div style="text-align:center;background-color:#8ABE08;">
-<span style="color:white;"><?php $baser->contentsTitle() ?></span>
-</div>
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">
+	<?php $baser->contentsTitle() ?>
+	</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
-
 <?php if(Configure::read('debug')>0): ?>
 <?php $this->addScript($html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']))); ?>
 <?php endif; ?>
 メール送信完了<br />
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-お問い合わせ頂きありがとうございました。<br />確認次第、ご連絡させて頂きます。<br />
+お問い合わせ頂きありがとうございました。<br />
+確認次第、ご連絡させて頂きます。<br />

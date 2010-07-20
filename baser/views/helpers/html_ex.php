@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -42,7 +42,7 @@ class HtmlExHelper extends HtmlHelper {
  * @return	void
  * @access	private
  */
-	function __construct(){
+	function __construct() {
 
 		parent::__construct();
 
@@ -52,14 +52,13 @@ class HtmlExHelper extends HtmlHelper {
 	}
 /**
  * 画像の即時反映用のパラメータとして乱数を出力
- * 
+ *
  * @return	int		乱数
  * @access	public
  */
-	function rand(){
+	function rand() {
 		return rand();
 	}
-	
-}
 
+}
 ?>

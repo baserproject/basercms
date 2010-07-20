@@ -32,4 +32,4 @@ $paginator->options = array('url' => $this->passedArgs);
 		<?php echo $paginator->next('>>', null, null, array('class'=>'disabled','tag'=>'span')) ?>　
 		<?php echo $paginator->last('>|') ?>
 	</div>
-</div> 
+</div>

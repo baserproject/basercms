@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -42,7 +42,7 @@ class TimeExHelper extends TimeHelper {
  * @return	array	年号リスト
  * @access	public
  */
-	function getNengos(){
+	function getNengos() {
 		return $this->nengos;
 	}
 /**
@@ -52,16 +52,15 @@ class TimeExHelper extends TimeHelper {
  * @return	array	和暦データ
  * @access	public
  */
-	function convertWareki($date)
-	{
-		if(strtotime($date)==-1){
+	function convertWareki($date) {
+		if(strtotime($date)==-1) {
 			list($y,$m,$d) = explode("-",$date);
 			$ymd = $y.$m.$d;
-		}else{
+		}else {
 			$ymd = date('Ymd',strtotime($date));
 			$y = date('Y',strtotime($date));
 		}
-		
+
 		if ($ymd <= "19120729") {
 			$g = $this->nengos['m'];
 			$n = "m";
@@ -89,35 +88,35 @@ class TimeExHelper extends TimeHelper {
  * @return	string	西暦
  * @access	public
  */
-	function convertSeireki($aryDate){
-	
-		if(!$aryDate['month'] || !$aryDate['day'] || !$aryDate['wyear']){
+	function convertSeireki($aryDate) {
+
+		if(!$aryDate['month'] || !$aryDate['day'] || !$aryDate['wyear']) {
 			return null;
 		}
-		
-		switch ($aryDate['nengo']){
-		
-		case "m":
-			$aryDate["year"] = $aryDate["wyear"] + 1867;
-		break;
 
-		case "t":
-			$aryDate["year"] = $aryDate["wyear"] + 1911;
-		break;
-			
-		case "s":
-			$aryDate["year"] = $aryDate["wyear"] + 1925;
-		break;
-		
-		case "h":
-			$aryDate["year"] = $aryDate["wyear"] + 1988;		
-		break;
-		
+		switch ($aryDate['nengo']) {
+
+			case "m":
+				$aryDate["year"] = $aryDate["wyear"] + 1867;
+				break;
+
+			case "t":
+				$aryDate["year"] = $aryDate["wyear"] + 1911;
+				break;
+
+			case "s":
+				$aryDate["year"] = $aryDate["wyear"] + 1925;
+				break;
+
+			case "h":
+				$aryDate["year"] = $aryDate["wyear"] + 1988;
+				break;
+
 		}
-		if(checkdate($aryDate['month'],$aryDate['day'],$aryDate['year'])){
+		if(checkdate($aryDate['month'],$aryDate['day'],$aryDate['year'])) {
 			return $aryDate["year"]."/".$aryDate['month']."/".$aryDate['day'];
 		}
-		
+
 	}
 /**
  * 文字列から時間（分）を取得
@@ -126,16 +125,16 @@ class TimeExHelper extends TimeHelper {
  * @return	mixed	分/null
  * @access	public
  */
-	function minutes($strDate){
-		
+	function minutes($strDate) {
+
 		$time = strtotime($strDate,0);
 		$minutes = $time / 60;
-		if($minutes){
+		if($minutes) {
 			return $minutes . '分';
-		}else{
+		}else {
 			return null;
 		}
-	
+
 	}
 /**
  * format 拡張
@@ -148,11 +147,11 @@ class TimeExHelper extends TimeHelper {
  */
 	function format($format = 'Y-m-d', $date, $invalid = false, $userOffset = null) {
 
-		if($date != "00:00:00" && (!$date||$date === 0)){
+		if($date != "00:00:00" && (!$date||$date === 0)) {
 			return "";
 		}
 
-		return parent::format($format,$date,$invalid,$userOffset);	
+		return parent::format($format,$date,$invalid,$userOffset);
 
 	}
 /**
@@ -166,21 +165,20 @@ class TimeExHelper extends TimeHelper {
  * @return	boolean	経過有無
  * @access	public
  */
-	function pastDays($date,$days){
-		
+	function pastDays($date,$days) {
+
 		if(!$date) return true;
 		$pastDate = strtotime($date);
 		if(!$pastDate) return true;
 		$_days = $days * 60 * 60 * 24;
 
-		if(time() > ($pastDate + $_days)){
+		if(time() > ($pastDate + $_days)) {
 			return true;
-		}else{
+		}else {
 			return false;
 		}
-		
+
 	}
-	
 }
 
 ?>

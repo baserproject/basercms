@@ -20,13 +20,13 @@
  * @license			http://basercms.net/license/index.html
  */
 if(!empty($paginator)){
-    $this->passedArgs['action'] = str_replace('mobile_','',$this->passedArgs['action']);
-    $this->passedArgs['plugin'] = '';
-    $paginator->options = array('url' => $this->passedArgs);
+	$this->passedArgs['action'] = str_replace('mobile_','',$this->passedArgs['action']);
+	$this->passedArgs['plugin'] = '';
+	$paginator->options = array('url' => $this->passedArgs);
 	if($paginator->counter(array('format'=>'%pages%'))>1){
-        echo $paginator->prev('<<', null, null, null).'&nbsp;';
-        echo $paginator->numbers(array('separator'=>'&nbsp;','modulus'=>4)).'&nbsp;';
-        echo $paginator->next('>>', null, null, null);
+		echo $paginator->prev('<<', null, null, null).'&nbsp;';
+		echo $paginator->numbers(array('separator'=>'&nbsp;','modulus'=>4)).'&nbsp;';
+		echo $paginator->next('>>', null, null, null);
 	}
 }
 ?>

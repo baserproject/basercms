@@ -27,7 +27,7 @@
  *
  * @package			baser.plugins.blog.controllers
  */
-class BlogCommentsController extends BlogAppController{
+class BlogCommentsController extends BlogAppController {
 /**
  * クラス名
  *
@@ -55,7 +55,7 @@ class BlogCommentsController extends BlogAppController{
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
+	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -63,8 +63,8 @@ class BlogCommentsController extends BlogAppController{
  * @access 	public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
-                        'プラグイン設定'=>'/admin/plugins/index',
-                        'ブログ管理'=>'/admin/blog/blog_contents/index');
+			'プラグイン設定'=>'/admin/plugins/index',
+			'ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
@@ -78,39 +78,39 @@ class BlogCommentsController extends BlogAppController{
  * @return	void
  * @access 	public
  */
-	function beforeFilter(){
-        
+	function beforeFilter() {
+
 		parent::beforeFilter();
 
-        $this->Auth->allow('add');
-        
-        $navis = array();
-        if(!empty($this->params['pass'][1])){
+		$this->Auth->allow('add');
 
-            $dbDatas = $this->BlogPost->read(null,$this->params['pass'][1]);
-            if(!$dbDatas){
-                $this->notFound();
-            }
-            $this->blogPost['BlogPost'] = $dbDatas['BlogPost'];
-            $this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
-            $navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
-            $navis[$this->blogPost['BlogPost']['name']] = '/admin/blog/blog_posts/edit/'.$this->blogContent['BlogContent']['id'].'/'.$this->blogPost['BlogPost']['id'];
-            
-        }elseif(!empty($this->params['pass'][0])){
+		$navis = array();
+		if(!empty($this->params['pass'][1])) {
 
-            $dbDatas = $this->BlogPost->BlogContent->read(null,$this->params['pass'][0]);
-            $this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
-            $navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
+			$dbDatas = $this->BlogPost->read(null,$this->params['pass'][1]);
+			if(!$dbDatas) {
+				$this->notFound();
+			}
+			$this->blogPost['BlogPost'] = $dbDatas['BlogPost'];
+			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
+			$navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
+			$navis[$this->blogPost['BlogPost']['name']] = '/admin/blog/blog_posts/edit/'.$this->blogContent['BlogContent']['id'].'/'.$this->blogPost['BlogPost']['id'];
 
-        }else{
-            $this->notFound();
-        }
+		}elseif(!empty($this->params['pass'][0])) {
 
-        $this->navis = am($this->navis,$navis);
-        if(!empty($this->params['prefix']) && $this->params['prefix']=='admin'){
-            $this->subMenuElements = array('blog_posts','blog_categories','blog_common');
-        }
-        
+			$dbDatas = $this->BlogPost->BlogContent->read(null,$this->params['pass'][0]);
+			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
+			$navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
+
+		}else {
+			$this->notFound();
+		}
+
+		$this->navis = am($this->navis,$navis);
+		if(!empty($this->params['prefix']) && $this->params['prefix']=='admin') {
+			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
+		}
+
 	}
 /**
  * beforeRender
@@ -118,7 +118,7 @@ class BlogCommentsController extends BlogAppController{
  * @return	void
  * @access 	public
  */
-	function beforeRender(){
+	function beforeRender() {
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
 	}
@@ -128,27 +128,27 @@ class BlogCommentsController extends BlogAppController{
  * @return	void
  * @access 	public
  */
-	function admin_index($blogContentId,$blogPostId=null){
-        
-        /* 検索条件 */
-        if($blogPostId){
-            $conditions['BlogComment.blog_post_id'] = $blogPostId;
-            $this->pageTitle = '記事 ['.$this->blogPost['BlogPost']['name'].'] のコメント一覧';
-        }else{
-            $conditions['BlogComment.blog_content_id'] = $blogContentId;
-            $this->pageTitle = 'ブログ ['.$this->blogContent['BlogContent']['title'].'] のコメント一覧';
-        }
+	function admin_index($blogContentId,$blogPostId=null) {
+
+		/* 検索条件 */
+		if($blogPostId) {
+			$conditions['BlogComment.blog_post_id'] = $blogPostId;
+			$this->pageTitle = '記事 ['.$this->blogPost['BlogPost']['name'].'] のコメント一覧';
+		}else {
+			$conditions['BlogComment.blog_content_id'] = $blogContentId;
+			$this->pageTitle = 'ブログ ['.$this->blogContent['BlogContent']['title'].'] のコメント一覧';
+		}
 
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-                            	'fields'=>array(),
-                            	'order'=>'BlogComment.id',
-                            	'limit'=>10
-                            	);
+				'fields'=>array(),
+				'order'=>'BlogComment.id',
+				'limit'=>10
+		);
 
 		$dbDatas = $this->paginate('BlogComment');
 		$this->set('dbDatas',$dbDatas);
-		
+
 
 	}
 /**
@@ -161,28 +161,28 @@ class BlogCommentsController extends BlogAppController{
 	function admin_delete($blogContentId,$blogPostId,$id = null) {
 
 		/* 除外処理 */
-        if(!$blogContentId || !$id){
-            $this->notFound();
-        }
+		if(!$blogContentId || !$id) {
+			$this->notFound();
+		}
 
 		/* 削除処理 */
 		if($this->BlogComment->del($id)) {
-            if(isset($this->blogPost['BlogPost']['name'])){
-                $message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを削除しました。';
-            }else{
-                $message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを削除しました。';
-            }
+			if(isset($this->blogPost['BlogPost']['name'])) {
+				$message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを削除しました。';
+			}else {
+				$message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを削除しました。';
+			}
 			$this->Session->setFlash($message);
 			$this->BlogComment->saveDbLog($message);
-		}else{
+		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-        if($blogPostId){
-            $this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
-        }else{
-            $this->redirect(array('action'=>'index',$blogContentId));
-        }
+		if($blogPostId) {
+			$this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
+		}else {
+			$this->redirect(array('action'=>'index',$blogContentId));
+		}
 
 	}
 /**
@@ -191,81 +191,81 @@ class BlogCommentsController extends BlogAppController{
  * @param string $blogPostId
  * @param string $blogCommentId
  */
-    function admin_publish($blogContentId,$blogPostId,$blogCommentId){
-        
-        if(!$blogContentId || !$blogCommentId){
-            $this->notFound();
-        }
-        $blogComment['id'] = $blogCommentId;
-        $blogComment['status'] = true;
-        $this->BlogComment->set($blogComment);
-        if($this->BlogComment->save()){
-            if(isset($this->blogPost['BlogPost']['name'])){
-                $message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを公開状態に設定しました。';
-            }else{
-                $message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを公開状態に設定しました。';
-            }
+	function admin_publish($blogContentId,$blogPostId,$blogCommentId) {
+
+		if(!$blogContentId || !$blogCommentId) {
+			$this->notFound();
+		}
+		$blogComment['id'] = $blogCommentId;
+		$blogComment['status'] = true;
+		$this->BlogComment->set($blogComment);
+		if($this->BlogComment->save()) {
+			if(isset($this->blogPost['BlogPost']['name'])) {
+				$message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを公開状態に設定しました。';
+			}else {
+				$message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを公開状態に設定しました。';
+			}
 			$this->Session->setFlash($message);
 			$this->BlogComment->saveDbLog($message);
-        }else{
-            $this->Session->setFlash('データベース処理中にエラーが発生しました。');
-        }
+		}else {
+			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		}
 
-        if($blogPostId){
-            $this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
-        }else{
-            $this->redirect(array('action'=>'index',$blogContentId));
-        }
-        
-    }
+		if($blogPostId) {
+			$this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
+		}else {
+			$this->redirect(array('action'=>'index',$blogContentId));
+		}
+
+	}
 /**
  * [ADMIN] コメントを非公開状態に設定する
  * @param string $blogContentId
  * @param string $blogPostId
  * @param string $blogCommentId
  */
-    function admin_unpublish($blogContentId,$blogPostId,$blogCommentId){
-        if(!$blogContentId || !$blogCommentId){
-            $this->notFound();
-        }
-        $blogComment['id'] = $blogCommentId;
-        $blogComment['status'] = false;
-        $this->BlogComment->set($blogComment);
-        if($this->BlogComment->save()){
-            if(isset($this->blogPost['BlogPost']['name'])){
-                $message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを非公開状態に設定しました。';
-            }else{
-                $message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを非公開状態に設定しました。';
-            }
+	function admin_unpublish($blogContentId,$blogPostId,$blogCommentId) {
+		if(!$blogContentId || !$blogCommentId) {
+			$this->notFound();
+		}
+		$blogComment['id'] = $blogCommentId;
+		$blogComment['status'] = false;
+		$this->BlogComment->set($blogComment);
+		if($this->BlogComment->save()) {
+			if(isset($this->blogPost['BlogPost']['name'])) {
+				$message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを非公開状態に設定しました。';
+			}else {
+				$message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを非公開状態に設定しました。';
+			}
 
 			$this->Session->setFlash($message);
 			$this->BlogComment->saveDbLog($message);
-        }else{
-            $this->Session->setFlash('データベース処理中にエラーが発生しました。');
-        }
+		}else {
+			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		}
 
-        if($blogPostId){
-            $this->redirect(array('action'=>'admin_index',$blogContentId,$blogPostId));
-        }else{
-            $this->redirect(array('action'=>'admin_index',$blogContentId));
-        }
+		if($blogPostId) {
+			$this->redirect(array('action'=>'admin_index',$blogContentId,$blogPostId));
+		}else {
+			$this->redirect(array('action'=>'admin_index',$blogContentId));
+		}
 
-    }
+	}
 /**
  * ブログコメントを登録する
  * @param string $blogContentId
  * @param string $blogPostId
  */
-    function add($blogContentId,$blogPostId){
-        if(!$this->data || !$blogContentId || !$blogPostId || !$this->blogContent['BlogContent']['comment_use']){
-            $this->notFound();
-        }else{
+	function add($blogContentId,$blogPostId) {
+		if(!$this->data || !$blogContentId || !$blogPostId || !$this->blogContent['BlogContent']['comment_use']) {
+			$this->notFound();
+		}else {
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
-            if($result){
+			if($result) {
 				$this->_sendComment();
-                $this->set('dbData',$result['BlogComment']);
-            }
-        }
-    }
+				$this->set('dbData',$result['BlogComment']);
+			}
+		}
+	}
 }
 ?>

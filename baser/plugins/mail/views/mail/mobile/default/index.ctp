@@ -20,16 +20,15 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<div style="text-align:center;background-color:#8ABE08;">
-<span style="color:white;"><?php $baser->contentsTitle() ?></span>
-</div>
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">
+	<?php $baser->contentsTitle() ?>
+	</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
-
 入力フォーム
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <font size="1"><font color="#FF0000">*</font> 印の項目は必須となりますので、必ず入力して下さい。</font>
-
 <?php $baser->flash() ?>
 <?php $baser->element('mail_form') ?>

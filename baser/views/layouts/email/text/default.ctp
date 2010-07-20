@@ -19,4 +19,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-echo $content_for_layout;?>
+echo $content_for_layout; ?>

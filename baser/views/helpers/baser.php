@@ -77,7 +77,7 @@ class BaserHelper extends AppHelper {
 					}
 				}
 
-				if(isset($this->_view->viewVars['siteConfig'])){
+				if(isset($this->_view->viewVars['siteConfig'])) {
 					$this->siteConfig = $this->_view->viewVars['siteConfig'];
 				}
 
@@ -228,7 +228,7 @@ class BaserHelper extends AppHelper {
 				$title .= $separator.$categoryName;*/
 				// ---
 				$navis = array_reverse($this->_view->viewVars['navis']);
-				foreach($navis as $navi => $url){
+				foreach($navis as $navi => $url) {
 					$title.= $separator.$navi;
 				}
 				// <<<
@@ -436,7 +436,7 @@ class BaserHelper extends AppHelper {
  */
 	function css($path, $rel = null, $htmlAttributes = array(), $inline = true) {
 		$ret = $this->Html->css($path, $rel, $htmlAttributes, $inline);
-		if($inline){
+		if($inline) {
 			echo $ret;
 		}
 	}
@@ -445,7 +445,7 @@ class BaserHelper extends AppHelper {
  */
 	function js($url, $inline = true) {
 		$ret = $this->Javascript->link($url, $inline);
-		if($inline){
+		if($inline) {
 			echo $ret;
 		}
 	}
@@ -496,13 +496,13 @@ class BaserHelper extends AppHelper {
 		}
 
 		// ページ公開チェック
-		if(isset($this->Page)){
-			if(!$this->Page->checkPublish($_url)){
+		if(isset($this->Page)) {
+			if(!$this->Page->checkPublish($_url)) {
 				$enabled = false;
 			}
 		}
 
-		if(!$enabled){
+		if(!$enabled) {
 			if($forceTitle) {
 				return "<span>$title</span>";
 			}else {
@@ -619,10 +619,10 @@ class BaserHelper extends AppHelper {
 		if($controller=='pages' && $action=='display') {
 			$pageUrl = str_replace('pages/','',$this->params['pass'][0]);
 			$pos = strpos($pageUrl,'.html');
-			if($pos !== false){
+			if($pos !== false) {
 				$pageUrl = substr($pageUrl, 0, $pos);
 			}
-			if(!$detail){
+			if(!$detail) {
 				$aryPageUrl = split('/',$pageUrl);
 				$controller = $aryPageUrl[0];
 			} else {
@@ -643,9 +643,9 @@ class BaserHelper extends AppHelper {
 
 		$contentsName = $prefix.$plugin.$controller;
 
-		if($detail){
+		if($detail) {
 			$contentsName .= $action;
-			if($pass){
+			if($pass) {
 				$contentsName .= '_'.implode('_', $pass);
 			}
 		}
@@ -699,26 +699,26 @@ class BaserHelper extends AppHelper {
  * @param string $categoryId
  * @return mixed boolean / array
  */
-	function getPageList($categoryNo=null){
+	function getPageList($categoryNo=null) {
 		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
-			if($categoryNo){
+			if($categoryNo) {
 				$categoryId = $this->PageCategory->getCategoryId($categoryNo,$this->siteConfig['theme']);
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
 			$this->Page->unbindModel(array('belongsTo'=>array('PageCategory')));
 			$pages = $this->Page->find('all',array('conditions'=>$conditions,
-											'fields'=>array('title','url'),
-											'order'=>'Page.sort'));
+					'fields'=>array('title','url'),
+					'order'=>'Page.sort'));
 			return Set::extract('/Page/.',$pages);
-		}else{
+		}else {
 			return false;
 		}
 	}
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  */
-	function cacheHeader(){
+	function cacheHeader() {
 		header('Cache-Control: max-age=' . 86400);
 		header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", filemtime(WWW_ROOT.'index.php') ) . " GMT" );
 		if (session_id()) { //session_startしている場合

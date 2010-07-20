@@ -20,28 +20,22 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div id="header">
-
-    <div id="headMain">
-        
-        <?php if(isset($baser->siteConfig['name'])): ?>
-            <h1><?php $baser->link($baser->siteConfig['name'],'/') ?></h1>
-        <?php else: ?>
-            <h1><?php echo Configure::read('Baser.title') ?></h1>
-        <?php endif ?>
-            
-        <?php if(isset($javascript)): ?>
-            <p id="fontChanger">フォントサイズ：
-                <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜
-                <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜
-                <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a>
-            </p>
-        <?php endif; ?>
-    </div>
-
-    <div id="glbMenus">
-        <h2 class="display-none">グローバルメニュー</h2>
-        <?php $baser->element('global_menu',array(),false,false) ?>
-    </div>
-
+	<div id="headMain">
+		<?php if(isset($baser->siteConfig['name'])): ?>
+		<h1>
+			<?php $baser->link($baser->siteConfig['name'],'/') ?>
+		</h1>
+		<?php else: ?>
+		<h1><?php echo Configure::read('Baser.title') ?></h1>
+		<?php endif ?>
+		<?php if(isset($javascript)): ?>
+		<p id="fontChanger">フォントサイズ： <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜ <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜ <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a> </p>
+		<?php endif; ?>
+	</div>
+	<div id="glbMenus">
+		<h2 class="display-none">グローバルメニュー</h2>
+		<?php $baser->element('global_menu',array(),false,false) ?>
+	</div>
 </div>

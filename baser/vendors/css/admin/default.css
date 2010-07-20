@@ -26,15 +26,14 @@
 	padding:0px;
 }
 body {
-	font-family:"ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック",Arial,sans-serif;
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
 	text-align: center;
 	font-size:small;
 	background:url(images/bg_body.jpg) repeat-x left top;
 	color:#333333;
-    background-color:#EDF8C9;
-	/*background-color:#E19284;*/
+	background-color:#EDF8C9;/*background-color:#E19284;*/
 }
-pre{
+pre {
 	background-color:#FFFFFF;
 	text-align:left;
 	border-top:1px solid #cccccc;
@@ -72,99 +71,83 @@ h6 {
 h7 {
 	margin:10px 0px;
 }
-
 /* 段落
 ----------------------------------------------- */
-p{
+p {
 	margin:0px;
 	line-height: 150%;
 }
-
 /* 画像
 ----------------------------------------------- */
 img {
 	border: none;
 	vertical-align:bottom;	/* IEで画像の下にできる隙間をつめる為に必要 */
-    margin:auto;
+	margin:auto;
 }
-
 /* リンク
 ----------------------------------------------- */
-:link    {
+:link {
 	color:#688A00;
 }
 :visited {
 	color: #669900;
 }
-a:hover   {
+a:hover {
 	color:#CC3300;
 	text-decoration: underline;
 }
-a:active  {
+a:active {
 	color: #FF9900;
 }
-
 /* リスト
 ----------------------------------------------- */
-ul,dl{
+ul,
+dl {
 	margin:0;
 	padding:0;
 	line-height:normal;
 	list-style-type:none;
 }
-dl
-{
-
+dl {
 }
-dt
-{
-
+dt {
 }
-dd
-{
-
+dd {
 }
-
 /* 強調
 ----------------------------------------------- */
-strong 
-{
-
+strong {
 }
-em 
-{
-
+em {
 }
-
 /* テーブル
 ----------------------------------------------- */
-table 
-{
+table {
 	border-collapse: collapse;
 }
-
 /* フォームパーツ
 ----------------------------------------------- */
-form{
+form {
 	display:inline;
 }
-input,textarea,select{
-	font-family:"ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック",Arial,sans-serif;
+input,
+textarea,
+select {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
 	margin:3px 2px;
 	padding: 3px 1px;
 	font-size:1.0em;
 }
 input[type=submit],
 input[type=reset],
-input[type=button]
-{
-	font-family:"ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック",Arial,sans-serif;
+input[type=button] {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
 }
-select{
+select {
 	padding: 1px;
 }
 /* その他
 ----------------------------------------------- */
-small{
+small {
 	color:#AA8800;
 }

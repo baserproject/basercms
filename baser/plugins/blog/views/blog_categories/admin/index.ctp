@@ -20,50 +20,50 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
+<h2>
+	<?php $baser->contentsTitle() ?>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ブログカテゴリは、ブログ記事を分類分けする際に利用します。<br />
-	また、各カテゴリは子カテゴリを持つ事ができるようになっています。</p>
+		また、各カテゴリは子カテゴリを持つ事ができるようになっています。</p>
 </div>
-
-
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableBlogCategorys">
-<tr>
-	<th style="width:122px">操作</th>
-    <th>NO</th>
-	<th>ブログカテゴリ名</th>
-    <th>ブログカテゴリタイトル</th>
-	<th>登録日</th>
-	<th>更新日</th>
-</tr>
-<?php if(!empty($dbDatas)): ?>
-<?php $count=0; ?>
-<?php foreach($dbDatas as $dbData): ?>
-	<?php if ($count%2 === 0): ?>
-		<?php $class=' class="altrow"'; ?>
-	<?php else: ?>
-		<?php $class=''; ?>
-	<?php endif; ?>
+	<tr>
+		<th style="width:122px">操作</th>
+		<th>NO</th>
+		<th>ブログカテゴリ名</th>
+		<th>ブログカテゴリタイトル</th>
+		<th>登録日</th>
+		<th>更新日</th>
+	</tr>
+	<?php if(!empty($dbDatas)): ?>
+		<?php $count=0; ?>
+		<?php foreach($dbDatas as $dbData): ?>
+			<?php if ($count%2 === 0): ?>
+				<?php $class=' class="altrow"'; ?>
+			<?php else: ?>
+				<?php $class=''; ?>
+			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button">
-            <?php $baser->link('確認',$blog->getCategoryUrl($dbData['BlogCategory']['id']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
+		<td class="operation-button"><?php $baser->link('確認',$blog->getCategoryUrl($dbData['BlogCategory']['id']),array('target'=>'_blank','class'=>'btn-green-s button-s')) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。', $dbData['BlogCategory']['name']),false); ?>
-		</td>
-        <td><?php echo $dbData['BlogCategory']['no'] ?></td>
-        <td><?php $baser->link($dbData['BlogCategory']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?></td>
+			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。', $dbData['BlogCategory']['name']),false); ?></td>
+		<td><?php echo $dbData['BlogCategory']['no'] ?></td>
+		<td><?php $baser->link($dbData['BlogCategory']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?></td>
 		<td><?php echo $dbData['BlogCategory']['title'] ?></td>
-        <td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['created']); ?></td>
+		<td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['created']); ?></td>
 		<td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['modified']); ?></td>
 	</tr>
-	<?php $count++; ?>
-<?php endforeach; ?>
-<?php else: ?>
-<tr><td colspan="6">
-	<p class="no-data">データが見つかりませんでした。</p>
-</td></tr>
-<?php endif; ?>
+			<?php $count++; ?>
+		<?php endforeach; ?>
+	<?php else: ?>
+	<tr>
+		<td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td>
+	</tr>
+	<?php endif; ?>
 </table>
-
-<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>
+<div class="align-center">
+	<?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?>
+</div>

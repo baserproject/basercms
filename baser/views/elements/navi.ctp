@@ -20,16 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 if ($this->viewPath == 'home'){
-    echo '<strong>ホーム</strong>';
+	echo '<strong>ホーム</strong>';
 }else{
-    if (!empty($navis)){
-        foreach($navis as $key => $navi){
-            $html->addCrumb($key,$navi);
-        }
-    }
-    if ($this->viewPath != 'home' && $title_for_element){
-        $html->addCrumb('<strong>'.$title_for_element.'</strong>');
-    }
-    echo $html->getCrumbs(' &gt; ','ホーム');
+	if (!empty($navis)){
+		foreach($navis as $key => $navi){
+			$html->addCrumb($key,$navi);
+		}
+	}
+	if ($this->viewPath != 'home' && $title_for_element){
+		$html->addCrumb('<strong>'.$title_for_element.'</strong>');
+	}
+	echo $html->getCrumbs(' &gt; ','ホーム');
 }
 ?>

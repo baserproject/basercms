@@ -23,14 +23,16 @@ $pageCategories = $formEx->getControlSource('Page.page_category_id');
 $pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
 ?>
 <script type="text/javascript">
-    $(document).ready(function(){
-        <?php if($form->value('Page.open')): ?>
-            $("#PageFilterBody").show();
-        <?php endif ?>
-    });
+$(document).ready(function(){
+	<?php if($form->value('Page.open')): ?>
+	$("#PageFilterBody").show();
+	<?php endif ?>
+});
 </script>
 
-<h2><?php $baser->contentsTitle() ?>&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2>
+	<?php $baser->contentsTitle() ?>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ページ管理では、ブログやメールフォーム以外のWEBページを管理する事ができます。</p>
@@ -51,77 +53,64 @@ $pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
 		<p>http://[BaserCMS設置URL]/company/about.html</p>
 	</div>
 </div>
-
-
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
-<div class="function-box corner10" id="PageFilterBody" style="display:none">
-    <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
-    <p>
-    <?php if($pageCategories): ?>
-        <small>カテゴリ</small>
-        <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
-    <?php endif ?>
-    <small>公開状態</small>
-        <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　
-    </p>
-        <?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
-    <div class="align-center">
-        <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?>
-    </div>
+<div class="function-box corner10" id="PageFilterBody" style="display:none"> <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
+	<p>
+		<?php if($pageCategories): ?>
+		<small>カテゴリ</small> <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
+		<?php endif ?>
+		<small>公開状態</small> <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　 </p>
+	<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
+	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
 </div>
-
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
-
-
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePages">
-<tr>
-	<th>操作</th>
-    <th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'no'); ?></th>
-    <th><?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'page_category_id'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'ページ名 ▼','desc'=>'ページ名 ▲'),'name'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'title'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'公開状態 ▼','desc'=>'公開状態 ▲'),'description'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'登録日 ▼','desc'=>'登録日 ▲'),'created'); ?></th>
-	<th><?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
-</tr>
-<?php if(!empty($dbDatas)): ?>
-<?php $count=0; ?>
-<?php foreach($dbDatas as $dbData): ?>
-	<?php if (!$dbData['Page']['status']): ?>
-		<?php $class=' class="disablerow"'; ?>
-	<?php elseif ($count%2 === 0): ?>
-		<?php $class=' class="altrow"'; ?>
-	<?php else: ?>
-		<?php $class=''; ?>
-	<?php endif; ?>
+	<tr>
+		<th>操作</th>
+		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'no'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'page_category_id'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'ページ名 ▼','desc'=>'ページ名 ▲'),'name'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'title'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'公開状態 ▼','desc'=>'公開状態 ▲'),'description'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'登録日 ▼','desc'=>'登録日 ▲'),'created'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
+	</tr>
+	<?php if(!empty($dbDatas)): ?>
+		<?php $count=0; ?>
+		<?php foreach($dbDatas as $dbData): ?>
+			<?php if (!$dbData['Page']['status']): ?>
+				<?php $class=' class="disablerow"'; ?>
+			<?php elseif ($count%2 === 0): ?>
+				<?php $class=' class="altrow"'; ?>
+			<?php else: ?>
+				<?php $class=''; ?>
+			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button">
-            <?php $baser->link('確認',array('action'=>'preview', $dbData['Page']['id']),array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
+		<td class="operation-button"><?php $baser->link('確認',array('action'=>'preview', $dbData['Page']['id']),array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
 			<?php $baser->link('▲',array('action'=>'index','sortup'=>$dbData['Page']['id'])) ?>
-			<?php $baser->link('▼',array('action'=>'index','sortdown'=>$dbData['Page']['id'])) ?>
-		</td>
-        <td><?php echo $dbData['Page']['no']; ?></td>
-        <td>
-            <?php if(!empty($dbData['PageCategory']['title'])): ?>
-                <?php echo $dbData['PageCategory']['title']; ?>
-            <?php endif; ?>
-		</td>
+			<?php $baser->link('▼',array('action'=>'index','sortdown'=>$dbData['Page']['id'])) ?></td>
+		<td><?php echo $dbData['Page']['no']; ?></td>
+		<td><?php if(!empty($dbData['PageCategory']['title'])): ?>
+			<?php echo $dbData['PageCategory']['title']; ?>
+			<?php endif; ?></td>
 		<td><?php $baser->link($dbData['Page']['name'],array('action'=>'edit', $dbData['Page']['id'])); ?></td>
 		<td><?php echo $dbData['Page']['title']; ?></td>
 		<td style="text-align:center"><?php echo $textEx->booleanMark($dbData['Page']['status']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['Page']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['Page']['modified']); ?></td>
 	</tr>
-	<?php $count++; ?>
-<?php endforeach; ?>
-<?php else: ?>
-    <tr><td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td></tr>
-<?php endif; ?>
+			<?php $count++; ?>
+		<?php endforeach; ?>
+	<?php else: ?>
+	<tr>
+		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
+	</tr>
+	<?php endif; ?>
 </table>
-
 <?php $baser->pagination('default',array(),null,false) ?>
-
-<div class="align-center"><?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?></div>
+<div class="align-center">
+	<?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?>
+</div>

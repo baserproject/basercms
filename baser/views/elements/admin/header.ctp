@@ -20,30 +20,24 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div id="header">
-
-    <div id="headMain">
-
-        <?php if(isset($baser->siteConfig['name'])): ?>
-            <h1><?php $baser->link($baser->siteConfig['name'],'/',array('target'=>'_blank')) ?></h1>
-        <?php else: ?>
-            <h1><?php echo Configure::read('Baser.title') ?></h1>
-        <?php endif ?>
-
-        <p id="fontChanger">フォントサイズ：
-            <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜
-            <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜
-            <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a>
-        </p>
-    </div>
-
-    <div id="glbMenus">
-        <h2 class="display-none">グローバルメニュー</h2>
-        <?php if($this->params['url']['url'] != 'admin/users/login' &&
+	<div id="headMain">
+		<?php if(isset($baser->siteConfig['name'])): ?>
+		<h1>
+			<?php $baser->link($baser->siteConfig['name'],'/',array('target'=>'_blank')) ?>
+		</h1>
+		<?php else: ?>
+		<h1><?php echo Configure::read('Baser.title') ?></h1>
+		<?php endif ?>
+		<p id="fontChanger">フォントサイズ： <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜ <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜ <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a> </p>
+	</div>
+	<div id="glbMenus">
+		<h2 class="display-none">グローバルメニュー</h2>
+		<?php if($this->params['url']['url'] != 'admin/users/login' &&
 					$this->params['url']['url'] != 'installations/update' &&
 					($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
-            <?php $baser->element('global_menu',array('menuType'=>'admin')) ?>
-        <?php endif; ?>
-    </div>
-
+		<?php $baser->element('global_menu',array('menuType'=>'admin')) ?>
+		<?php endif; ?>
+	</div>
 </div>

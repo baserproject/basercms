@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -27,8 +27,7 @@
  *
  * @package			baser.plugins.blog
  */
-class BlogAppModel extends AppModel
-{
+class BlogAppModel extends AppModel {
 /**
  * The name of the DataSource connection that this Model uses
  *

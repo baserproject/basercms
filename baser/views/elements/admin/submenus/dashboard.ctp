@@ -20,9 +20,12 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi">
-    <h2>ダッシュボードメニュー</h2>
-    <ul>
-        <li><?php $baser->link('ユーザーを追加する',array('controller'=>'users','action'=>'add')) ?></li>
-    </ul>
+	<h2>ダッシュボードメニュー</h2>
+	<ul>
+		<li>
+			<?php $baser->link('ユーザーを追加する',array('controller'=>'users','action'=>'add')) ?>
+		</li>
+	</ul>
 </div>

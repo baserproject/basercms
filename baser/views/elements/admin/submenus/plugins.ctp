@@ -20,9 +20,12 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi">
-    <h2>プラグイン設定メニュー</h2>
-    <ul>
-        <li><?php $baser->link('プラグイン一覧',array('plugin'=>null,'controller'=>'plugins','action'=>'index')) ?></li>
-    </ul>
+	<h2>プラグイン設定メニュー</h2>
+	<ul>
+		<li>
+			<?php $baser->link('プラグイン一覧',array('plugin'=>null,'controller'=>'plugins','action'=>'index')) ?>
+		</li>
+	</ul>
 </div>

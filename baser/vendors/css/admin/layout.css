@@ -21,19 +21,17 @@
 
 /* page
 ----------------------------------------------- */
-#page{
+#page {
 	background: url(images/bg_page.gif) repeat-y;
 	margin:0 auto;
 	width: 980px;
 	text-align: left;
 }
-
 /* gradationShadow
 ----------------------------------------------- */
-#gradationShadow{
+#gradationShadow {
 	background: url(images/bg_gradation_shadow.jpg) no-repeat;
 }
-
 /* header
 ----------------------------------------------- */
 #header {
@@ -42,7 +40,6 @@
 	background: url(images/bg_header.jpg) no-repeat;
 	width:980px;
 }
-
 /* footer
 ----------------------------------------------- */
 #footer {
@@ -54,26 +51,24 @@
 	text-align:right;
 	color:#ffffff;
 }
-
 /* contents
 ----------------------------------------------- */
 #contents {
 	padding:0px 30px;
 }
-
 /* alfa, beta
 ----------------------------------------------- */
-#alfa,#beta{
+#alfa,
+#beta {
 	position: relative;
 	float:left;
-
 	display: inline;
 }
-#alfa{
+#alfa {
 	width:740px;
 	left:180px;
 }
-#beta{
+#beta {
 	width:180px;
 	left:-740px;
 }

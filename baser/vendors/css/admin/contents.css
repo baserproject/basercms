@@ -21,61 +21,54 @@
 
 /* to-top
 ----------------------------------------------- */
-.to-top
-{
+.to-top {
 	clear:both;
 	text-align:right;
 	padding-right:15px;
 	padding-top:40px;
 	padding-bottom:20px;
 }
-.to-top a{
+.to-top a {
 	padding-left:15px;
 	background:url(images/bg_blt_top.gif) no-repeat left center;
 	font-size:10px;
 }
-.to-top a:visited
-{
+.to-top a:visited {
 	color:#435C18;
 }
-.to-top a:hover
-{
+.to-top a:hover {
 	color:#CC3300;
 }
-
 /* loginUser
 ----------------------------------------------- */
-#loginUser{
+#loginUser {
 	width:200px;
 	float:right;
 	color:#688A00;
 	font-size:10px;
-	text-align:right;	
+	text-align:right;
 }
-#loginUser span{
+#loginUser span {
 	background:url("images/bg_user_icon.gif") no-repeat left center;
-	padding-left:20px;	
+	padding-left:20px;
 }
-#loginUser span a{
-        text-decoration:underline;
+#loginUser span a {
+	text-decoration:underline;
 }
-
 /* flashMessage
 ----------------------------------------------- */
 #flashMessage,
 #authMessage,
-.no-data
-{
+.no-data {
 	padding:10px;
 	margin:15px auto!important;
 	background-color:#FCF5EB;
 	color:#C00;
 	font-weight:normal;
 }
-
 /* button
 ----------------------------------------------- */
-.button{
+.button {
 	display:-moz-inline-box;
 	width:156px;
 	height:36px;
@@ -89,28 +82,24 @@
 	border:none;
 	text-align:center;
 }
-.button:hover{
+.button:hover {
 	text-decoration:none;
 	color:#FFFFFF;
 	background-position:0 -36px;
 }
-.btn-orange
-{
+.btn-orange {
 	background:url(images/bg_btn_orange.gif) no-repeat left top;
 }
-.btn-gray
-{
+.btn-gray {
 	background:url(images/bg_btn_gray.gif) no-repeat left top;
 }
-.btn-red
-{
+.btn-red {
 	background:url(images/bg_btn_red.gif) no-repeat left top;
 }
-.btn-green
-{
+.btn-green {
 	background:url(images/bg_btn_green.gif) no-repeat left top;
 }
-.button-s{
+.button-s {
 	display:-moz-inline-box;
 	width:40px;
 	height:20px;
@@ -122,50 +111,42 @@
 	vertical-align:middle;
 	font-size:10px;
 }
-.button-s:hover{
+.button-s:hover {
 	text-decoration:none;
 	color:#FFFFFF;
 	background-position:0 -20px;
 }
-.button-s:visited{
+.button-s:visited {
 	color:#FFFFFF;
 }
-.button-s small{
+.button-s small {
 	color:#FFFFFF;
 	line-height:22px;
 }
-.btn-orange-s
-{
+.btn-orange-s {
 	background:url(images/bg_btn_orange_s.gif) no-repeat left top;
 }
-.btn-gray-s
-{
+.btn-gray-s {
 	background:url(images/bg_btn_gray_s.gif) no-repeat left top;
 }
-.btn-red-s
-{
+.btn-red-s {
 	background:url(images/bg_btn_red_s.gif) no-repeat left top;
 }
-.btn-green-s
-{
+.btn-green-s {
 	background:url(images/bg_btn_green_s.gif) no-repeat left top;
 }
-
 /* contentsBody
 ----------------------------------------------- */
-#contentsBody
-{
+#contentsBody {
 	padding:0 20px;
 }
 #contentsBody p,
-#contentsBody ul
-{
+#contentsBody ul {
 	margin-left: 15px;
 	margin-bottom:10px;
 	line-height:2em;
 }
-#contentsBody h2
-{
+#contentsBody h2 {
 	background:url(images/bg_main_head.jpg) no-repeat left top;
 	padding-left:25px;
 	padding-top:10px;
@@ -174,7 +155,7 @@
 	height:20px;
 	color:#688A00;
 }
-#contentsBody h3{
+#contentsBody h3 {
 	background:url(images/bg_box_blt_01.gif) left 10px no-repeat;
 	padding-top:10px;
 	padding-left:30px;
@@ -182,9 +163,9 @@
 	line-height:26px;
 	margin-top:0px;
 	margin-bottom:0px;
-    height:26px;
+	height:26px;
 }
-#contentsBody h4{
+#contentsBody h4 {
 	border-bottom:1px solid #669900;
 	padding:5px 15px;
 	margin-right:10px;
@@ -194,59 +175,49 @@
 	margin-bottom:15px;
 	color:#669900;
 }
-#contentsBody .section{
+#contentsBody .section {
 	margin-left:50px;
 	margin-right:50px;
 	margin-bottom:20px;
 }
-#contentsBody ul
-{
+#contentsBody ul {
 	margin-left:20px;
 }
-#contentsBody ul li
-{
+#contentsBody ul li {
 	background:url(images/bg_blt_02.gif) no-repeat left 5px;
 	padding-left:20px;
 	margin-bottom:5px;
 }
-#contentsBody ul li ul li
-{
+#contentsBody ul li ul li {
 	list-style:disc;
 	padding-left:0px;
 	background:none;
 	margin-bottom:0px;
 }
-
 /* navigation
 ----------------------------------------------- */
-#navigation
-{
+#navigation {
 	font-size:10px;
 	padding:5px 10px;
 	border-bottom:1px dashed #CCCCCC;
 	background-color:#FFFFFF;
 }
-#pankuzu{
+#pankuzu {
 	width:700px;
 	float:left;
 }
-#navigation a
-{
+#navigation a {
 	text-decoration:none;
 }
-#navigation strong
-{
+#navigation strong {
 	font-weight:normal;
 	background-color:#EDF8C9;
 	color:#688A00;
 	padding:2px;
 }
-
-
 /* menu
 ----------------------------------------------- */
-.menu h2
-{
+.menu h2 {
 	background:url(images/bg_blt_01.gif) no-repeat 10px center;
 	font-family:Arial, Helvetica, sans-serif;
 	padding:5px 30px 5px 35px;
@@ -256,53 +227,44 @@
 	vertical-align:bottom;
 	font-size:10px;
 }
-.menu p
-{
+.menu p {
 	padding:0 10px;
 }
-.menu ul
-{
+.menu ul {
 	border-bottom:1px solid #FFFFFF;
 }
-.menu ul li a
-{
+.menu ul li a {
 	background:url(images/bg_menu_btn.gif) no-repeat;
 	width:140px;
 	height:40px;
 	display:table-cell;
 	padding-left:30px;
-    padding-right:10px;
+	padding-right:10px;
 	/*padding-top:12px;*/
 	text-decoration:none;
 	font-size:11px;
 	line-height:18px;
-    vertical-align:middle;
-
+	vertical-align:middle;
 }
-* html .menu ul li a{/* IE 6 */
+* html .menu ul li a {/* IE 6 */
 	display:inline;
 	zoom:1;
 }
-*:first-child+html .menu ul li a{/* IE 7 */
+*:first-child+html .menu ul li a {/* IE 7 */
 	display:inline;
 	zoom:1;
 }
-
-.menu ul li a:visited
-{
+.menu ul li a:visited {
 	color:#688A00;
 }
 .menu ul li a:hover,
-.menu li.on a
-{
+.menu li.on a {
 	background-position:left -40px;
 	color:#FFFFFF!important;
 }
-
 /* side-navi
 ----------------------------------------------- */
-.side-navi h2
-{
+.side-navi h2 {
 	background:url(images/bg_blt_01.gif) no-repeat 10px 4px;
 	font-family:Arial, Helvetica, sans-serif;
 	padding:5px 30px 5px 35px;
@@ -311,191 +273,171 @@
 	vertical-align:bottom;
 	width:115px;
 }
-.side-navi ul
-{
+.side-navi ul {
 	margin-left:25px;
 }
-.side-navi ul li
-{
+.side-navi ul li {
 	background:url(images/bg_blt_02.gif) no-repeat left 5px;
 	padding-left:20px;
 	line-height:20px!important;
 	font-size:10px;
 	width:135px;
 }
-
 /* pagination
 ----------------------------------------------- */
-.pagination
-{
+.pagination {
 	margin:10px 5px;
 	font-size:10px;
 }
-.pagination a
-{
-
+.pagination a {
 }
-.pagination .current
-{
+.pagination .current {
 	font-style:normal;
 	background-color:#E2E2E2;
 	padding:1px 3px;
 }
-.page-result
-{
+.page-result {
 	float:right;
 }
-.page-numbers .disabled
-{
+.page-numbers .disabled {
 	display:none;
 }
-select.multiple{
+select.multiple {
 	font-family:"ＭＳ ゴシック", "Osaka－等幅";
 	font-size:12px;
 	padding:5px;
 	height:220px;
 }
-select.multiple option{
+select.multiple option {
 	margin:5px 0px;
 }
-
 /* JsonTagView
 ----------------------------------------------- */
-#JsonTagView img{
+#JsonTagView img {
 	vertical-align:baseline;
 	margin-right:5px;
 	cursor:pointer;
 }
-#JsonTagView ul li{
+#JsonTagView ul li {
 	float:left;
 	background:none;
 	margin-right:20px;
 	padding:0px;
 }
-
 /* JsonTagView.freezed
 ----------------------------------------------- */
-#JsonTagView ul.freezed li{
+#JsonTagView ul.freezed li {
 	list-style:disc;
 	list-style-position:inside;
 }
-
 /* ログインフォーム
 ----------------------------------------------- */
-#login .box-01{
+#login .box-01 {
 	margin:50px auto 0px auto!important;
 	width:340px;
 	text-align:center;
 }
-#login h3{
+#login h3 {
 	background:none;
 	text-align:center;
 	padding:6px 0px;
 	font-size:100%;
 	margin-bottom:0px;
 }
-#login p{
+#login p {
 	font-size:12px;
 }
 #login table,
-#login td{
+#login td {
 	border:0px;
 }
-#login table{
+#login table {
 	display:inline;
 }
-#login .memory{
+#login .memory {
 	text-align:center;
 	margin-top:10px;
 }
-
 /* インストール
 ----------------------------------------------- */
-.check{
-  background:   url(images/ok.png) no-repeat;
-  width:        20px;
-  height:       21px;
-  margin-left:  -25px;
-  margin-top:   0px;
-  float:        left;
-  position:     relative;
+.check {
+	background:   url(images/ok.png) no-repeat;
+	width:        20px;
+	height:       21px;
+	margin-left:  -25px;
+	margin-top:   0px;
+	float:        left;
+	position:     relative;
 }
-.failed{
-  background:   url(images/failed.png) no-repeat;
-  width:        16px;
-  height:       21px;
-  margin-left:  -27px;
-  margin-top:   -5px;
-  float:        left;
-  position:     relative;
+.failed {
+	background:   url(images/failed.png) no-repeat;
+	width:        16px;
+	height:       21px;
+	margin-left:  -27px;
+	margin-top:   -5px;
+	float:        left;
+	position:     relative;
 }
-
 /* CKEditor
 ----------------------------------------------- */
-#cke_dialog_background_cover{
-    background-color:black!important;
+#cke_dialog_background_cover {
+	background-color:black!important;
 }
-.cke_editor td{
-    padding:0!important;
+.cke_editor td {
+	padding:0!important;
 }
-
 /* contextMenu
 ----------------------------------------------- */
-.contextMenu{
-    position:absolute!important;
-    padding:0!important;
-    margin:0!important;
+.contextMenu {
+	position:absolute!important;
+	padding:0!important;
+	margin:0!important;
 }
-.contextMenu li{
-    background:none!important;
-    padding:0!important;
+.contextMenu li {
+	background:none!important;
+	padding:0!important;
 }
-
 /* installations
 ----------------------------------------------- */
-#installations form label{
-    font-weight:bold;
+#installations form label {
+	font-weight:bold;
 }
-#installations form small{
-    line-height:0.9em;
-    padding-left:4px;
+#installations form small {
+	line-height:0.9em;
+	padding-left:4px;
 }
-
 /* edit-link
 ----------------------------------------------- */
-.edit-link{
-    padding:10px;
-    display:block;
+.edit-link {
+	padding:10px;
+	display:block;
 }
-
 /* UpdateMessage
 ----------------------------------------------- */
 #UpdateMessage {
-    margin-top: 3px;
-    background-color: #dd3300;
-    padding:6px 15px;
-    color: #FFFFFF;
-    font-weight: bold;
-    text-align: center;
+	margin-top: 3px;
+	background-color: #dd3300;
+	padding:6px 15px;
+	color: #FFFFFF;
+	font-weight: bold;
+	text-align: center;
 }
-#UpdateMessage a{
-    color: #FFFFFF;
+#UpdateMessage a {
+	color: #FFFFFF;
 }
-
 /* map
 ----------------------------------------------- */
-#map .sitename{
+#map .sitename {
 	color:#360;
 	font-weight: bold;
 }
-
 /* help
 ----------------------------------------------- */
 #helpAdminBody li,
-#helpAdminBody p{
+#helpAdminBody p {
 	line-height:1.5em;
 }
-#helpAdminBody ul{
+#helpAdminBody ul {
 	margin-left:30px;
 	margin-bottom:25px;
 }

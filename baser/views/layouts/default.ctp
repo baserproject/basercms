@@ -34,87 +34,69 @@
 <?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
 <?php $baser->css('import') ?>
 <!--[if IE]><?php $baser->js('excanvas') ?><![endif]-->
-<?php $baser->js(array('jquery-1.3.2.min',
-                            'jquery-ui-1.7.2.custom.min',
-                            'i18n/ui.datepicker-ja',
-                            'jquery.bt.min',
-                            'jquery.colorbox-min',
-                            'jquery.corner',
-                            'functions',
-                            'styleswitcher',
-                            'startup')) ?>
+<?php $baser->js(array(
+	'jquery-1.3.2.min',
+	'jquery-ui-1.7.2.custom.min',
+	'i18n/ui.datepicker-ja',
+	'jquery.bt.min',
+	'jquery.colorbox-min',
+	'jquery.corner',
+	'functions',
+	'styleswitcher',
+	'startup')) ?>
 <?php $baser->scripts() ?>
 </head>
 <body id="<?php $baser->contentsName() ?>">
 
-
 <!-- begin page -->
 <div id="page">
 
-
 	<!-- begin gradationShadow -->
 	<div id="gradationShadow">
-	
 	
 		<!-- begin header -->
 		<?php $baser->element('header') ?>
 		<!-- end header -->
 		
-		
 		<!-- begin contents -->
 		<div id="contents">
 		
-			
 			<!-- navigation -->
 			<div id="navigation">
 				<?php $baser->element('navi',array('title_for_element'=>$baser->getContentsTitle())); ?>
 			</div>
 			
-			
 			<!-- begin alfa -->
 			<div id="alfa" >
 			
-			
 				<!-- begin contentsBody -->
 				<div id="contentsBody">
-				
-                    <?php $baser->flash() ?>
-                    <?php $baser->content() ?>
-				
+					<?php $baser->flash() ?>
+					<?php $baser->content() ?>
 				</div>
 				<!-- end contentsBody -->
-			
-			
+				
 			</div>
 			<!-- end alfa -->
-			
 			
 			<!-- begin beta -->
 			<?php $baser->element('sidebar') ?>
 			<!-- end beta -->
 			
+			<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
 			
-			<div class="to-top">
-				<a href="#page">このページの先頭へ戻る</a>
-			</div>
-		
-		
 		</div>
 		<!-- end contents -->
-		
 		
 		<!-- begin footer -->
 		<?php $baser->element('footer') ?>
 		<!-- end footer -->
 		
-	
 	</div>
 	<!-- end gradationShadow -->
-
-
+	
 </div>
 <!-- end page -->
-
 
 <?php echo $cakeDebug; ?>
 </body>

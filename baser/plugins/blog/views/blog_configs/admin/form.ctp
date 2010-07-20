@@ -20,16 +20,14 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+
+<h2>
+	<?php $baser->contentsTitle() ?>
+</h2>
 <h3>WordPressデータの取り込み</h3>
 <p>WordPressから出力したXMLデータを取込みます。（<a href="http://ja.wordpress.org/" target="_blank">WordPress</a> 2.8.4 のみ動作確認済）</p>
 <?php echo $form->create('BlogPost',array('action'=>'import','enctype'=>'multipart/form-data')) ?>
-<div class="align-center">
-<?php echo $form->select('Import.blog_content_id',$blogContentList) ?>
-<?php echo $form->select('Import.user_id',$userList) ?>
-<?php echo $form->file('Import.file') ?>
-<?php echo $form->end(array('label'=>'取り込む','div'=>false,'class'=>'btn-orange button')) ?>
-</div>
+<div class="align-center"> <?php echo $form->select('Import.blog_content_id',$blogContentList) ?> <?php echo $form->select('Import.user_id',$userList) ?> <?php echo $form->file('Import.file') ?> <?php echo $form->end(array('label'=>'取り込む','div'=>false,'class'=>'btn-orange button')) ?> </div>
 <!--
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $form->create('BlogConfig',array('action'=>'form')) ?>

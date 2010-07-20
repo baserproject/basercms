@@ -24,170 +24,170 @@ class CkeditorHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-    var $helpers = array('Javascript', 'Form');
+	var $helpers = array('Javascript', 'Form');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
  * @var boolean
  */
-    var $_script = false;
-    /**
-     * Adds the tiny_mce.js file and constructs the options
-     * 'Source' //ソース
-     * 'Save' //保存
-     * 'NewPage' //新しいページ
-     * 'Preview' //プレビュー
-     * 'Templates' //テンプレート
-     * 'Cut' //切り取り
-     * 'Copy' //コピー
-     * 'Paste' //貼り付け
-     * 'PasteText' //プレーンテキスト貼り付け
-     * 'PasteFromWord' //ワードから貼り付け
-     * 'Print' //印刷
-     * 'SpellChecker' //スペルチェック
-     * 'Scayt' //スペルチェック設定
-     * 'Undo' //元に戻す
-     * 'Redo' //やり直し
-     * 'Find' //検索
-     * 'Replace' //置き換え
-     * 'SelectAll' //すべて選択
-     * 'RemoveFormat' //フォーマット削除
-     * 'Form' //フォーム
-     * 'Checkbox' //チェックボックス
-     * 'Radio' //ラジオボタン
-     * 'TextField' //1行テキスト
-     * 'Textarea' //テキストエリア
-     * 'Select' //選択フィールド
-     * 'Button' //ボタン
-     * 'ImageButton' //画像ボタン
-     * 'HiddenField' //不可視フィールド
-     * 'Bold' //太字
-     * 'Italic' //斜体
-     * 'Underline' //下線
-     * 'Strike' //打ち消し線
-     * 'Subscript' //添え字
-     * 'Superscript' //上付き文字
-     * 'NumberedList' //段落番号
-     * 'BulletedList' //箇条書き
-     * 'Outdent' //インデント解除
-     * 'Indent' //インデント
-     * 'Blockquote' //ブロック引用
-     * 'JustifyLeft' //左揃え
-     * 'JustifyCenter' //中央揃え
-     * 'JustifyRight' //右揃え
-     * 'JustifyBlock' //両端揃え
-     * 'Link' //リンク挿入／編集
-     * 'Unlink' //リンク解除
-     * 'Anchor' //アンカー挿入／編集
-     * 'Image' //イメージ
-     * 'Flash' //FLASH
-     * 'Table' //テーブル
-     * 'HorizontalRule' //横罫線
-     * 'Smiley' //絵文字
-     * 'SpecialChar' //特殊文字
-     * 'PageBreak' //改ページ挿入
-     * 'Styles' //スタイル
-     * 'Format' //フォーマット
-     * 'Font' //フォント
-     * 'FontSize' //フォントサイズ
-     * 'TextColor' //テキスト色
-     * 'BGColor' //背景色
-     * 'Maximize' //最大化
-     * 'ShowBlocks' //ブロック表示
-     * 'About' //CKEditorバージョン情報
-     * @param string $fieldName Name of a field, like this "Modelname.fieldname", "Modelname/fieldname" is deprecated
-     * @param array $tinyoptions Array of TinyMCE attributes for this textarea
-     * @return string JavaScript code to initialise the TinyMCE area
-     */
-    function _build($fieldName, $ckoptions = array(), $styles = array()) {
+	var $_script = false;
+/**
+ * Adds the tiny_mce.js file and constructs the options
+ * 'Source' //ソース
+ * 'Save' //保存
+ * 'NewPage' //新しいページ
+ * 'Preview' //プレビュー
+ * 'Templates' //テンプレート
+ * 'Cut' //切り取り
+ * 'Copy' //コピー
+ * 'Paste' //貼り付け
+ * 'PasteText' //プレーンテキスト貼り付け
+ * 'PasteFromWord' //ワードから貼り付け
+ * 'Print' //印刷
+ * 'SpellChecker' //スペルチェック
+ * 'Scayt' //スペルチェック設定
+ * 'Undo' //元に戻す
+ * 'Redo' //やり直し
+ * 'Find' //検索
+ * 'Replace' //置き換え
+ * 'SelectAll' //すべて選択
+ * 'RemoveFormat' //フォーマット削除
+ * 'Form' //フォーム
+ * 'Checkbox' //チェックボックス
+ * 'Radio' //ラジオボタン
+ * 'TextField' //1行テキスト
+ * 'Textarea' //テキストエリア
+ * 'Select' //選択フィールド
+ * 'Button' //ボタン
+ * 'ImageButton' //画像ボタン
+ * 'HiddenField' //不可視フィールド
+ * 'Bold' //太字
+ * 'Italic' //斜体
+ * 'Underline' //下線
+ * 'Strike' //打ち消し線
+ * 'Subscript' //添え字
+ * 'Superscript' //上付き文字
+ * 'NumberedList' //段落番号
+ * 'BulletedList' //箇条書き
+ * 'Outdent' //インデント解除
+ * 'Indent' //インデント
+ * 'Blockquote' //ブロック引用
+ * 'JustifyLeft' //左揃え
+ * 'JustifyCenter' //中央揃え
+ * 'JustifyRight' //右揃え
+ * 'JustifyBlock' //両端揃え
+ * 'Link' //リンク挿入／編集
+ * 'Unlink' //リンク解除
+ * 'Anchor' //アンカー挿入／編集
+ * 'Image' //イメージ
+ * 'Flash' //FLASH
+ * 'Table' //テーブル
+ * 'HorizontalRule' //横罫線
+ * 'Smiley' //絵文字
+ * 'SpecialChar' //特殊文字
+ * 'PageBreak' //改ページ挿入
+ * 'Styles' //スタイル
+ * 'Format' //フォーマット
+ * 'Font' //フォント
+ * 'FontSize' //フォントサイズ
+ * 'TextColor' //テキスト色
+ * 'BGColor' //背景色
+ * 'Maximize' //最大化
+ * 'ShowBlocks' //ブロック表示
+ * 'About' //CKEditorバージョン情報
+ * @param string $fieldName Name of a field, like this "Modelname.fieldname", "Modelname/fieldname" is deprecated
+ * @param array $tinyoptions Array of TinyMCE attributes for this textarea
+ * @return string JavaScript code to initialise the TinyMCE area
+ */
+	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
-				$jscode = '';
-        if(strpos($fieldName,'.')){
-            list($model,$field) = explode('.',$fieldName);
-        }else{
-            $field = $fieldName;
-        }
+		$jscode = '';
+		if(strpos($fieldName,'.')) {
+			list($model,$field) = explode('.',$fieldName);
+		}else {
+			$field = $fieldName;
+		}
 
-        if (!$this->_script) {
-            $this->_script = true;
-            $this->Javascript->link('/js/ckeditor/ckeditor.js', false);
-        }
-        $_ckoptions = array('language' => 'ja',
-                            'skin' => 'kama',
-                            'width' => '600px',
-                            'height' => '300px',
-                            'collapser' => false,
-                            'baseFloatZIndex' => 900,
-                            'toolbar'=>array(array('Cut', 'Copy', 'Paste', '-',
-                                                    'Undo', 'Redo', '-',
-                                                    'Bold', 'Italic', 'Underline', 'Strike', '-',
-                                                    'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
-                                                    'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-                                                    'Smiley', 'Table', 'HorizontalRule', '-'),
-                                             array( 'Styles', 'Format', 'Font', 'FontSize',
-                                                    'TextColor', 'BGColor', '-', 
-                                                    'Link', 'Unlink', '-',
-                                                    'Image'),
-                                             array( 'Maximize', 'ShowBlocks','Source')
-                                             ));
-        $ckoptions = array_merge($_ckoptions,$ckoptions);
-				
-				if(!$styles){
-					$styles = array(
-											array(	'name' => '青見出し(h3)',
-															'element' => 'h3',
-															'styles' => array('color'=>'Blue')),
-											array(	'name' => '赤見出し(h3)',
-															'element' => 'h3',
-															'styles' => array('color' => 'Red')),
-											array(	'name' => '黄マーカー(span)',
-															'element' => 'span',
-															'styles' => array('background-color' => 'Yellow')),
-											array(	'name' => '緑マーカー(span)',
-															'element' => 'span',
-															'styles' => array('background-color' => 'Lime')),
-											array(	'name' => '大文字(big)',
-															'element' => 'big'),
-											array(	'name' => '小文字(small)',
-															'element' => 'small'),
-											array( 	'name' => 'コード(code)',
-															'element' => 'code'),
-											array( 	'name' => '削除文(del)',
-															'element' => 'del'),
-											array( 	'name' => '挿入文(ins)',
-															'element' => 'ins'),
-											array(	'name' => '引用(cite)',
-															'element' => 'cite'),
-											array( 	'name' => 'インライン(q)',
-															'element' => 'q')
-										);
-				}
-				$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
-				$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
-				$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
-				$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";			
-				return $this->Javascript->codeBlock($jscode);
-    }
-    /**
-     * CKEditorのテキストエリアを出力する（textarea）
-     * @param string $fieldName
-     * @param array $options
-     * @param array $options
-     * @return string 
-     */
-    function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
-        return $this->Form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
-    }
-    /**
-     * CKEditorのテキストエリアを出力する（input）
-     * @param string $fieldName
-     * @param array $options
-     * @param array $tinyoptions
-     * @return string
-     */
-    function input($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
-        $options['type'] = 'textarea';
-        return $this->Form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
-    }
+		if (!$this->_script) {
+			$this->_script = true;
+			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
+		}
+		$_ckoptions = array('language' => 'ja',
+				'skin' => 'kama',
+				'width' => '600px',
+				'height' => '300px',
+				'collapser' => false,
+				'baseFloatZIndex' => 900,
+				'toolbar'=>array(array('Cut', 'Copy', 'Paste', '-',
+								'Undo', 'Redo', '-',
+								'Bold', 'Italic', 'Underline', 'Strike', '-',
+								'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
+								'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+								'Smiley', 'Table', 'HorizontalRule', '-'),
+						array( 'Styles', 'Format', 'Font', 'FontSize',
+								'TextColor', 'BGColor', '-',
+								'Link', 'Unlink', '-',
+								'Image'),
+						array( 'Maximize', 'ShowBlocks','Source')
+		));
+		$ckoptions = array_merge($_ckoptions,$ckoptions);
+
+		if(!$styles) {
+			$styles = array(
+					array(	'name' => '青見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color'=>'Blue')),
+					array(	'name' => '赤見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color' => 'Red')),
+					array(	'name' => '黄マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Yellow')),
+					array(	'name' => '緑マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Lime')),
+					array(	'name' => '大文字(big)',
+							'element' => 'big'),
+					array(	'name' => '小文字(small)',
+							'element' => 'small'),
+					array( 	'name' => 'コード(code)',
+							'element' => 'code'),
+					array( 	'name' => '削除文(del)',
+							'element' => 'del'),
+					array( 	'name' => '挿入文(ins)',
+							'element' => 'ins'),
+					array(	'name' => '引用(cite)',
+							'element' => 'cite'),
+					array( 	'name' => 'インライン(q)',
+							'element' => 'q')
+			);
+		}
+		$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
+		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
+		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
+		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		return $this->Javascript->codeBlock($jscode);
+	}
+/**
+ * CKEditorのテキストエリアを出力する（textarea）
+ * @param string $fieldName
+ * @param array $options
+ * @param array $options
+ * @return string
+ */
+	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+		return $this->Form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+	}
+/**
+ * CKEditorのテキストエリアを出力する（input）
+ * @param string $fieldName
+ * @param array $options
+ * @param array $tinyoptions
+ * @return string
+ */
+	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+		$options['type'] = 'textarea';
+		return $this->Form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+	}
 }
 ?>

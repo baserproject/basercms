@@ -21,9 +21,9 @@
  */
 ?>
 <?php // TODO コード整理する事 ?>
-<div class="side-navi blog-calendar">
-<h2>カレンダー</h2>
 
+<div class="side-navi blog-calendar">
+	<h2>カレンダー</h2>
 <?php
 //本日の日付を取得する
 $time = time();

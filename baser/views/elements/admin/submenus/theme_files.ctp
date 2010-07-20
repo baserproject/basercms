@@ -31,12 +31,15 @@ if($theme == 'core'){
 }
 ?>
 <?php foreach($themeFiles as $themeFile): ?>
+
 <div class="side-navi">
-    <h2><?php echo $themeFile['title'] ?> テーマ管理メニュー</h2>
-    <ul>
+	<h2><?php echo $themeFile['title'] ?> テーマ管理メニュー</h2>
+	<ul>
 		<?php foreach($types as $key => $type): ?>
-		<li><?php $baser->link($type.' 一覧',array('action'=>'index',$theme,$themeFile['name'],$key)) ?></li>
+		<li>
+			<?php $baser->link($type.' 一覧',array('action'=>'index',$theme,$themeFile['name'],$key)) ?>
+		</li>
 		<?php endforeach ?>
-    </ul>
+	</ul>
 </div>
 <?php endforeach ?>

@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -34,49 +34,49 @@ class BlogCategory extends BlogAppModel {
  * @var		string
  * @access 	public
  */
-   	var $name = 'BlogCategory';
+	var $name = 'BlogCategory';
 /**
  * バリデーション設定
  * @var array
  */
-    var $validationParams = array();
+	var $validationParams = array();
 /**
  * actsAs
  * @var array
  */
-    var $actsAs = array('Tree');
+	var $actsAs = array('Tree');
 /**
  * hasMany
  *
  * @var		array
  * @access 	public
  */
- 	var $hasMany = array('BlogPost'=>
-							array('className'=>'Blog.BlogPost',
-									'order'=>'id DESC',
-									'limit'=>10,
-									'foreignKey'=>'blog_category_id',
-									'dependent'=>false,
-									'exclusive'=>false,
-									'finderQuery'=>''));
+	var $hasMany = array('BlogPost'=>
+			array('className'=>'Blog.BlogPost',
+							'order'=>'id DESC',
+							'limit'=>10,
+							'foreignKey'=>'blog_category_id',
+							'dependent'=>false,
+							'exclusive'=>false,
+							'finderQuery'=>''));
 /**
  * beforeValidate
  *
  * @return	void
  * @access	public
  */
-	function beforeValidate(){
-		
+	function beforeValidate() {
+
 		$this->validate['name'] = array(array(  'rule' => array('minLength',1),
-                                                'message' => ">> ブログカテゴリー名を入力して下さい",
-                                                'required' => true),
-										array(  'rule' => 'halfText',
-                                                'message' => '>> ブログカテゴリー名は半角のみで入力して下さい'),
-                                        array(  'rule' => array('duplicateBlogCategory'),
-                                                'message' => '>> 入力されたブログカテゴリは既に登録されています'));
+						'message' => ">> ブログカテゴリー名を入力して下さい",
+						'required' => true),
+				array(  'rule' => 'halfText',
+						'message' => '>> ブログカテゴリー名は半角のみで入力して下さい'),
+				array(  'rule' => array('duplicateBlogCategory'),
+						'message' => '>> 入力されたブログカテゴリは既に登録されています'));
 		$this->validate['title'] = array(array(  'rule' => array('minLength',1),
-                                                'message' => ">> ブログカテゴリータイトルを入力して下さい",
-                                                'required' => true));
+						'message' => ">> ブログカテゴリータイトルを入力して下さい",
+						'required' => true));
 		return true;
 	}
 /**
@@ -86,36 +86,36 @@ class BlogCategory extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()){
+	function getControlSource($field = null,$options = array()) {
 
-        if($field == 'parent_id' && !isset($options['blogContentId'])){
-            return false;
-        }
+		if($field == 'parent_id' && !isset($options['blogContentId'])) {
+			return false;
+		}
 
-        $conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
-        if(!empty($options['excludeParentId'])){
-            $children = $this->children($options['excludeParentId']);
-            $excludeIds = array($options['excludeParentId']);
-            foreach($children as $child){
-                $excludeIds[] = $child['BlogCategory']['id'];
-            }
-            $conditions['NOT']['BlogCategory.id'] = $excludeIds;
-        }
-        
-        $parents = $this->generatetreelist($conditions);
-        $controlSources['parent_id'] = array();
-        foreach($parents as $key => $parent){
-            if(preg_match("/^([_]+)/i",$parent,$matches)){
-                $parent = preg_replace("/^[_]+/i",'',$parent);
-                $prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-                $parent = $prefix.'└'.$parent;
-            }
-            $controlSources['parent_id'][$key] = $parent;
-        }
+		$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
+		if(!empty($options['excludeParentId'])) {
+			$children = $this->children($options['excludeParentId']);
+			$excludeIds = array($options['excludeParentId']);
+			foreach($children as $child) {
+				$excludeIds[] = $child['BlogCategory']['id'];
+			}
+			$conditions['NOT']['BlogCategory.id'] = $excludeIds;
+		}
 
-		if(isset($controlSources[$field])){
+		$parents = $this->generatetreelist($conditions);
+		$controlSources['parent_id'] = array();
+		foreach($parents as $key => $parent) {
+			if(preg_match("/^([_]+)/i",$parent,$matches)) {
+				$parent = preg_replace("/^[_]+/i",'',$parent);
+				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+				$parent = $prefix.'└'.$parent;
+			}
+			$controlSources['parent_id'][$key] = $parent;
+		}
+
+		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
-		}else{
+		}else {
 			return false;
 		}
 
@@ -126,42 +126,42 @@ class BlogCategory extends BlogAppModel {
  * @param array $check
  * @return boolean
  */
-    function duplicateBlogCategory($check){
+	function duplicateBlogCategory($check) {
 
-        $conditions = array('BlogCategory.'.key($check)=>$check[key($check)],
-                            'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
-        if($this->exists()){
-            $conditions['NOT'] = array('BlogCategory.id'=>$this->id);
-        }
+		$conditions = array('BlogCategory.'.key($check)=>$check[key($check)],
+				'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
+		if($this->exists()) {
+			$conditions['NOT'] = array('BlogCategory.id'=>$this->id);
+		}
 		$ret = $this->find($conditions);
-		if($ret){
+		if($ret) {
 			return false;
-		}else{
+		}else {
 			return true;
 		}
 
-    }
+	}
 /**
  * 関連する記事データをカテゴリ無所属に変更し保存する
  * @param <type> $cascade
  * @return <type>
  */
-    function beforeDelete($cascade = true) {
-        parent::beforeDelete($cascade);
-        $id = $this->data['BlogCategory']['id'];
-        $this->BlogPost->unBindModel(array('belongsTo'=>array('BlogCategory')));
-        $datas = $this->BlogPost->find('all',array('conditions'=>array('BlogPost.blog_category_id'=>$id)));
-        $ret = true;
-        if($datas){
-            foreach($datas as $data){
-                $data['BlogPost']['blog_category_id'] = '';
-                $this->BlogPost->set($data);
-                if(!$this->BlogPost->save()){
-                    $ret = false;
-                }
-            }
-        }
-        return $ret;
-    }
+	function beforeDelete($cascade = true) {
+		parent::beforeDelete($cascade);
+		$id = $this->data['BlogCategory']['id'];
+		$this->BlogPost->unBindModel(array('belongsTo'=>array('BlogCategory')));
+		$datas = $this->BlogPost->find('all',array('conditions'=>array('BlogPost.blog_category_id'=>$id)));
+		$ret = true;
+		if($datas) {
+			foreach($datas as $data) {
+				$data['BlogPost']['blog_category_id'] = '';
+				$this->BlogPost->set($data);
+				if(!$this->BlogPost->save()) {
+					$ret = false;
+				}
+			}
+		}
+		return $ret;
+	}
 }
 ?>

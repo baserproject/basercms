@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -39,11 +39,11 @@ class MailConfig extends MailAppModel {
  * @return	boolean
  * @access	public
  */
-	function beforeValidate(){
+	function beforeValidate() {
 
 		$this->validate['encode'] = array(array('rule' => array('minLength',1),
-												'message' => ">> 文字コードを入力して下さい。",
-												'required' => true));
+						'message' => ">> 文字コードを入力して下さい。",
+						'required' => true));
 		return true;
 
 	}

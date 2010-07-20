@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * モバイルヘルパー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -27,34 +27,34 @@
 class MobileHelper extends Helper {
 /**
  * afterLayout
- * 
+ *
  * @return	void
  * @access	public
  */
-    function afterLayout() {
+	function afterLayout() {
 
 		/* 出力データをSJISに変換 */
 		$view =& ClassRegistry::getObject('view');
 
-        if(isset($this->params['url']['ext']) && $this->params['url']['ext'] == 'rss'){
-            $rss = true;
-        }else{
-            $rss = false;
-        }
+		if(isset($this->params['url']['ext']) && $this->params['url']['ext'] == 'rss') {
+			$rss = true;
+		}else {
+			$rss = false;
+		}
 
-        if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text'){
+		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
 
 			header("Content-type: application/xhtml+xml");
 
-            $out = $view->output;
-            $out = mb_convert_kana($out, "rak", "UTF-8");
-            $out = mb_convert_encoding($out, "SJIS", "UTF-8");
-            $view->output = $out;
+			$out = $view->output;
+			$out = mb_convert_kana($out, "rak", "UTF-8");
+			$out = mb_convert_encoding($out, "SJIS", "UTF-8");
+			$view->output = $out;
 
 			// キャッシュを再保存
 			$caching = (
-				isset($view->loaded['cache']) &&
-				(($view->cacheAction != false)) && (Configure::read('Cache.check') === true)
+					isset($view->loaded['cache']) &&
+							(($view->cacheAction != false)) && (Configure::read('Cache.check') === true)
 			);
 			if ($caching) {
 				if (is_a($view->loaded['cache'], 'CacheHelper')) {
@@ -70,8 +70,8 @@ class MobileHelper extends Helper {
 				}
 			}
 			Configure::write('debug',0);
-		
-        }
-    }
+
+		}
+	}
 }
 ?>

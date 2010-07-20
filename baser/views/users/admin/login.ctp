@@ -24,29 +24,29 @@
     $session->flash('auth');
 } ?>
 
-<h2><?php $baser->contentsTitle() ?></h2>
-
+<h2>
+	<?php $baser->contentsTitle() ?>
+</h2>
 <div id="login">
-<div class="box-01">
-<div class="box-head">
-<h3>アカウント／パスワードを入力して下さい</h3>
+	<div class="box-01">
+		<div class="box-head">
+			<h3>アカウント／パスワードを入力して下さい</h3>
+		</div>
+		<div class="box-body"> <?php echo $form->create('User',array('action'=>'login')) ?>
+			<table border="0">
+				<tr>
+					<td style="text-align:right">アカウント&nbsp;</td>
+					<td style="text-align:left"><?php echo $form->text('User.name',array('size'=>20)) ?></td>
+				</tr>
+				<tr>
+					<td style="text-align:right">パスワード&nbsp;</td>
+					<td style="text-align:left"><?php echo $form->password('User.password',array('size'=>20)) ?></td>
+				</tr>
+			</table>
+			<br />
+			<br />
+			<p> <?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　 <?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?> </p>
+		</div>
+		<div class="box-foot"> &nbsp; </div>
+	</div>
 </div>
-<div class="box-body">
-<?php echo $form->create('User',array('action'=>'login')) ?>
-
-<table border="0">
-<tr><td style="text-align:right">アカウント&nbsp;</td><td style="text-align:left"><?php echo $form->text('User.name',array('size'=>20)) ?></td></tr>
-<tr><td style="text-align:right">パスワード&nbsp;</td><td style="text-align:left"><?php echo $form->password('User.password',array('size'=>20)) ?></td></tr>
-</table>
-<br /><br />
-<p>
-<?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　
-<?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?>
-</p>
-</div>
-<div class="box-foot">
-&nbsp;
-</div>
-</div>
-</div>
-

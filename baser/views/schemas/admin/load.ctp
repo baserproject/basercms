@@ -20,18 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2><?php $baser->contentsTitle() ?></h2>
+
+<h2>
+	<?php $baser->contentsTitle() ?>
+</h2>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $form->create('Schema',array('action'=>'load')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-<tr>
-<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.mode', 'モデル名') ?></th>
-	<td class="col-input">
-    	<?php echo $form->text('Schema.model') ?>
-		<?php echo $form->error('Schema.model') ?>
-    </td>
-</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.mode', 'モデル名') ?></th>
+		<td class="col-input"><?php echo $form->text('Schema.model') ?> <?php echo $form->error('Schema.model') ?></td>
+	</tr>
 </table>
-<div class="align-center">
-<?php echo $form->end(array('label'=>'読　込','div'=>false,'class'=>'btn-red button')) ?>
-</div>
+<div class="align-center"> <?php echo $form->end(array('label'=>'読　込','div'=>false,'class'=>'btn-red button')) ?> </div>

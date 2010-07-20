@@ -20,13 +20,16 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <div class="side-navi blog-recent-entries">
-<h2>最近の投稿</h2>
-<?php if($recentEntries): ?>
-    <ul>
-    <?php foreach($recentEntries as $recentEntry): ?>
-        <li><?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no']),array('prefix'=>true)) ?></li>
-    <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+	<h2>最近の投稿</h2>
+	<?php if($recentEntries): ?>
+	<ul>
+		<?php foreach($recentEntries as $recentEntry): ?>
+		<li>
+			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no']),array('prefix'=>true)) ?>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif; ?>
 </div>

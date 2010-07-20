@@ -22,28 +22,29 @@
 ?>
 <?php $baser->js('jquery.tweet') ?>
 <script type='text/javascript'>
-    $(document).ready(function(){
-		var username = '<?php echo $baser->siteConfig['twitter_username'] ?>';
-		var count = '<?php echo $baser->siteConfig['twitter_count'] ?>';
-		if(!username){
-			$('.tweet').hide();
-			return;
-		}
-		if(!count){
-			count = 3;
-		}
-        $(".tweet").tweet({
-            username: username,
-            join_text: "auto",
-            avatar_size: 48,
-            count: count,
-			intro_text: '<h2>Twitter <a href="http://twitter.com/'+username+'">@'+username+'</a></h2>',
-            auto_join_text_default: "",
-			auto_join_text_reply: "",
-            loading_text: "loading tweets..."
-        });
-    });
+$(document).ready(function(){
+	var username = '<?php echo $baser->siteConfig['twitter_username'] ?>';
+	var count = '<?php echo $baser->siteConfig['twitter_count'] ?>';
+	if(!username){
+		$('.tweet').hide();
+		return;
+	}
+	if(!count){
+		count = 3;
+	}
+	$(".tweet").tweet({
+		username: username,
+		join_text: "auto",
+		avatar_size: 48,
+		count: count,
+		intro_text: '<h2>Twitter <a href="http://twitter.com/'+username+'">@'+username+'</a></h2>',
+		auto_join_text_default: "",
+		auto_join_text_reply: "",
+		loading_text: "loading tweets..."
+	});
+});
 </script>
+
 <div class="side-navi">
 	<div class="tweet"></div>
 </div>
