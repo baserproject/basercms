@@ -132,6 +132,11 @@ class MailFieldsController extends MailAppController {
  */
 	function admin_add($mailContentId) {
 
+		if(!$mailContentId || !$this->mailContent) {
+			$this->Session->setFlash('無効な処理です。');
+			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+		}
+		
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValue();
 		}else {
@@ -337,6 +342,11 @@ class MailFieldsController extends MailAppController {
  * @param <type> $mailContentId
  */
 	function admin_download_csv($mailContentId) {
+
+		if(!$mailContentId || !$this->mailContent) {
+			$this->Session->setFlash('無効な処理です。');
+			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+		}
 
 		$this->Message->alias = Inflector::camelize($this->mailContent['MailContent']['name'].'_message');
 		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'].'_';

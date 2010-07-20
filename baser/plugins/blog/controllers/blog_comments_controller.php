@@ -130,6 +130,11 @@ class BlogCommentsController extends BlogAppController {
  */
 	function admin_index($blogContentId,$blogPostId=null) {
 
+		if(!$blogContentId || empty($this->blogContent['BlogContent'])) {
+			$this->Session->setFlash('無効な処理です。');
+			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+		}
+		
 		/* 検索条件 */
 		if($blogPostId) {
 			$conditions['BlogComment.blog_post_id'] = $blogPostId;
@@ -257,7 +262,7 @@ class BlogCommentsController extends BlogAppController {
  * @param string $blogPostId
  */
 	function add($blogContentId,$blogPostId) {
-		if(!$this->data || !$blogContentId || !$blogPostId || !$this->blogContent['BlogContent']['comment_use']) {
+		if(!$this->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
 			$this->notFound();
 		}else {
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
