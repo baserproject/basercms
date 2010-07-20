@@ -129,8 +129,13 @@ class PermissionsController extends AppController {
 			$this->data = $this->Permission->getDefaultValue();
 		}else {
 			/* 登録処理 */
-			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
-			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
+			if(isset($this->data['Permission']['user_group_id'])){
+				$userGroupId = $this->data['Permission']['user_group_id'];
+			}else{
+				$userGroupId = null;
+			}
+			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$userGroupId))+1;
+			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$userGroupId))+1;
 			$this->Permission->create($this->data);
 			if($this->Permission->save()) {
 				$message = '新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。';

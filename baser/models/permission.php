@@ -64,11 +64,13 @@ class Permission extends AppModel {
  */
 	function beforeValidate() {
 
-		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
+		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
 						'message' => ">> 設定名を入力して下さい"));
-		$this->validate['user_group_id'] =	array(array('rule' => VALID_NOT_EMPTY,
-						'message' => ">> ユーザーグループを選択して下さい"));
-		$this->validate['url'] = array(	array(	'rule' => VALID_NOT_EMPTY,
+		$this->validate['user_group_id'] =	array(array('rule' => array('minLength',1),
+						'message' => ">> ユーザーグループを選択して下さい",
+						'required'=>true
+						));
+		$this->validate['url'] = array(	array(	'rule' => array('minLength',1),
 						'message' => ">> 設定を入力して下さい"),
 				array(	'rule' => 'checkUrl',
 						'message' => '>> アクセス拒否として設定できるのは認証ページだけです。'));
