@@ -43,6 +43,26 @@ class UserGroup extends AppModel {
  */
 	var $useDbConfig = 'baser';
 /**
+ * hasMany
+ *
+ * @var		array
+ * @access 	public
+ */
+	var $hasMany = array('Permission'=>
+			array('className'=>'Permission',
+							'order'=>'id',
+							'foreignKey'=>'user_group_id',
+							'dependent'=>true,
+							'exclusive'=>false,
+							'finderQuery'=>''),
+			'User'=>
+			array('className'=>'User',
+							'order'=>'id',
+							'foreignKey'=>'user_group_id',
+							'dependent'=>false,
+							'exclusive'=>false,
+							'finderQuery'=>''));
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -60,6 +80,30 @@ class UserGroup extends AppModel {
 						'message' => ">> 表示名を入力して下さい"));
 		return true;
 
+	}
+/**
+ * 関連するユーザーを管理者グループに変更し保存する
+ * @param <type> $cascade
+ * @return <type>
+ */
+	function beforeDelete($cascade = true) {
+		parent::beforeDelete($cascade);
+		$ret = true;
+		if(!empty($this->data['UserGroup']['id'])){
+			$id = $this->data['UserGroup']['id'];
+			$this->User->unBindModel(array('belongsTo'=>array('UserGroup')));
+			$datas = $this->User->find('all',array('conditions'=>array('User.user_group_id'=>$id)));
+			if($datas) {
+				foreach($datas as $data) {
+					$data['User']['user_group_id'] = 1;
+					$this->User->set($data);
+					if(!$this->User->save()) {
+						$ret = false;
+					}
+				}
+			}
+		}
+		return $ret;
 	}
 }
 ?>

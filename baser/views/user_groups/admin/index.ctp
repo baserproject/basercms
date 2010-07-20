@@ -61,7 +61,7 @@
 			<?php endif ?>
 			<?php $baser->link('編集',array('action'=>'edit', $listData['UserGroup']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php if($listData['UserGroup']['name']!='admins'): ?>
-			<?php $baser->link('削除', array('action'=>'delete', $listData['UserGroup']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['UserGroup']['title']),false); ?>
+			<?php $baser->link('削除', array('action'=>'delete', $listData['UserGroup']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。', $listData['UserGroup']['title']),false); ?>
 			<?php endif ?></td>
 		<td><?php echo $listData['UserGroup']['id']; ?></td>
 		<td><?php $baser->link($listData['UserGroup']['name'],array('action'=>'edit', $listData['UserGroup']['id'])); ?></td>

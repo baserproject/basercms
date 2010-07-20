@@ -63,7 +63,9 @@
 <div class="align-center">
 	<?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削　除', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('UserGroup.name')),false); ?>
+	<?php if ($form->value('UserGroup.name')!='admins'): ?>
+		<?php $baser->link('削　除', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。', $form->value('UserGroup.name')),false); ?>
+	<?php endif ?>
 	</form>
 	<?php else: ?>
 	<?php echo $form->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>
