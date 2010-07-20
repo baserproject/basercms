@@ -64,7 +64,7 @@ class SiteConfigsController extends AppController {
 /**
  * ぱんくずナビ
  *
- * @var		string
+ * @var		array
  * @access 	public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
@@ -74,9 +74,10 @@ class SiteConfigsController extends AppController {
  * @var Folder
  */
 	var $Folder;
-
 /**
  * beforeFilter
+ * @return	void
+ * @access	public
  */
 	function beforeFilter() {
 
@@ -85,7 +86,7 @@ class SiteConfigsController extends AppController {
 		// init Folder
 		$this->Folder =& new Folder();
 		$this->Folder->mode = 0777;
-		
+
 	}
 /**
  * [ADMIN] サイト基本設定
@@ -111,10 +112,10 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['id']);
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
-				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']){
+				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
 					clearViewCache();
 				}
-				//$this->Session->setFlash('システム設定を保存しました。');
+				$this->Session->setFlash('システム設定を保存しました。');
 				$this->redirect(array('action'=>'form'));
 			}
 		}
@@ -138,9 +139,10 @@ class SiteConfigsController extends AppController {
 	}
 /**
  * キャッシュファイルを全て削除する
+ * @return	void
  * @access	public
  */
-	function admin_del_cache(){
+	function admin_del_cache() {
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
 		$this->redirect(array('action'=>'form'));
@@ -154,7 +156,7 @@ class SiteConfigsController extends AppController {
  * TODO 現在、PostgreSQLの場合、DB接続設定ごとにファイルが生成されるが、
  * 他のDBについては、１回で全てのDBのデータを出力する仕様となってしまっている。
  * 同じDBの場合はただの上書き。違うDBを利用した場合には、正常にバックアップがとれない。
- * 
+ *
  * @param	boolean	バックアップアーカイブをクリアする場合は、true を設定
  * @return 	void
  * @access	public
@@ -197,6 +199,16 @@ class SiteConfigsController extends AppController {
 		exit();
 
 	}
+/**
+ * [ADMIN] PHPINFOを表示する
+ * @return void
+ * @access public
+ */
+	function admin_phpinfo() {
+		$this->pageTitle = 'PHP設定情報';
+		$this->subMenuElements = array('site_configs');
+	}
+
 /**
  * MySqlのデータをバックアップ
  * TODO SQLDumperに移行する
@@ -310,6 +322,6 @@ class SiteConfigsController extends AppController {
 		return true;
 
 	}
-	
+
 }
 ?>
