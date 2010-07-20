@@ -13,12 +13,6 @@
  */
 class Imageresizer {
 /**
- * テンポラリーファイルパス
- * @var		string
- * @access 	public
- */
-	var $_tempDir;
-/**
  * Constructor.
  */
 	function Imageresizer() {
@@ -31,7 +25,7 @@ class Imageresizer {
  * @param 	int		高さ
  * @return 	boolean
  */
-	function resize($imgPath,$savePath,$newWidth=null,$newHeight=null,$trimming = false) {
+	function resize($imgPath,$savePath='',$newWidth=null,$newHeight=null,$trimming = false) {
 
 		// 元画像のサイズを取得
 		$imginfo = getimagesize($imgPath);
@@ -110,13 +104,17 @@ class Imageresizer {
 		$newImage = $this->_copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming);
 		imagedestroy($srcImage);
 
-		if(file_exists($savePath)){
+		if($savePath && file_exists($savePath)){
 			@unlink($savePath);
 		}
 
 		switch($image_type){
 		case IMAGETYPE_GIF:
-			imagegif($newImage,$savePath);
+			if($savePath){
+				imagegif($newImage,$savePath);
+			}else{
+				imagegif($newImage);
+			}
 			break;
 
 		case IMAGETYPE_JPEG:
@@ -124,7 +122,11 @@ class Imageresizer {
 			break;
 
 		case IMAGETYPE_PNG:
-			imagepng($newImage,$savePath);
+			if($savePath){
+				imagepng($newImage,$savePath);
+			}else{
+				imagepng($newImage);
+			}
 			break;
         
 		default:
@@ -132,7 +134,10 @@ class Imageresizer {
 		}
 		
 		imagedestroy($newImage);
-		chmod($savePath,0666);
+
+		if($savePath){
+			chmod($savePath,0666);
+		}
 
 		return true;
 
@@ -180,11 +185,10 @@ class Imageresizer {
 
 		//新しい画像を生成
 		$image = imagecreatetruecolor($width, $height);
-
-		//黒を設定
-		$black = imagecolorallocate($image, 255,255,255);
-		imagefilledrectangle($image,0,0,$width,$height,$black);
-
+		$color = imagecolorallocatealpha($image, 255, 255, 255, 0);
+		imagealphablending($image, true);
+		imagesavealpha($image, true);
+		imagefill($image, 0, 0, $color);
 		return $image;
 
 	}

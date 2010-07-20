@@ -25,10 +25,12 @@
     <ul>
         <li><?php $baser->link('サイト基本設定',array('controller'=>'site_configs','action'=>'form')) ?></li>
         <li><?php $baser->link('グローバルメニュー設定',array('controller'=>'global_menus','action'=>'index')) ?></li>
+		<li><?php $baser->link('テーマ設定', array('controller'=>'themes','action'=>'index')) ?></li>
         <li><?php $baser->link('プラグイン設定',array('controller'=>'plugins','action'=>'index')) ?></li>
         <?php if(isset($backupEnabled)): ?>
             <li><?php $baser->link('データバックアップ',array('action'=>'backup_data',1)) ?></li>
         <?php endif ?>
 		<li><?php $baser->link('サーバーキャッシュ削除',array('controller'=>'site_configs','action'=>'del_cache')) ?></li>
+		<li><?php $baser->link('PHP設定情報',array('controller'=>'site_configs','action'=>'phpinfo')) ?></li>
     </ul>
 </div>

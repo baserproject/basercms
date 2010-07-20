@@ -111,6 +111,10 @@ tr.disablerow td
 {
 	background-color: #DFDFDF!important;
 }
+tr.activerow td
+{
+	background-color:#FFCFDC!important;
+}
 tr.altrow td
 {
 	background-color:#F3FFD7!important;
