@@ -16,7 +16,7 @@ class Imageresizer {
  * Constructor.
  */
 	function Imageresizer() {
-    }
+	}
 /**
  * 画像をリサイズする
  * @param 	string	ソースファイルのパス
@@ -41,62 +41,62 @@ class Imageresizer {
 		}*/
 
 		// 元となる画像のオブジェクトを生成
-		switch($image_type){
-		case IMAGETYPE_GIF:
-			$srcImage = @imagecreatefromgif($imgPath);
-			break;
+		switch($image_type) {
+			case IMAGETYPE_GIF:
+				$srcImage = @imagecreatefromgif($imgPath);
+				break;
 
-		case IMAGETYPE_JPEG:
-			$srcImage = @imagecreatefromjpeg($imgPath);
-			break;
+			case IMAGETYPE_JPEG:
+				$srcImage = @imagecreatefromjpeg($imgPath);
+				break;
 
-		case IMAGETYPE_PNG:
-			$srcImage = @imagecreatefrompng($imgPath);
-			break;
-        
-		default:
-			return false;
+			case IMAGETYPE_PNG:
+				$srcImage = @imagecreatefrompng($imgPath);
+				break;
+
+			default:
+				return false;
 		}
 
-		if(!$srcImage){
+		if(!$srcImage) {
 			return false;
 		}
 
 		// 新しい画像のサイズを取得
-		if(!$newWidth){
+		if(!$newWidth) {
 
-			if($srcHeight < $newHeight){
+			if($srcHeight < $newHeight) {
 				$rate = 1;
-			}else{
+			}else {
 				$rate = $srcHeight / $newHeight;
 			}
 
-		}elseif(!$newHeight){
+		}elseif(!$newHeight) {
 
-			if($srcWidth < $newWidth){
+			if($srcWidth < $newWidth) {
 				$rate = 1;
-			}else{
+			}else {
 				$rate = $srcWidth / $newWidth;
 			}
 
-		}else{
+		}else {
 
 			$w = $srcWidth / $newWidth;
 			$h = $srcHeight / $newHeight;
-			if($w < 1 && $h < 1){
+			if($w < 1 && $h < 1) {
 				$rate = 1;
-			}elseif($w > $h){
+			}elseif($w > $h) {
 				$rate = $w;
-			}else{
+			}else {
 				$rate = $h;
 			}
 
 		}
 
-        if(!$trimming){
-            $newWidth = $srcWidth / $rate;
-            $newHeight = $srcHeight / $rate;
-        }
+		if(!$trimming) {
+			$newWidth = $srcWidth / $rate;
+			$newHeight = $srcHeight / $rate;
+		}
 
 		// 新しい画像のベースを作成
 		$newImage = $this->_createBaseImange($newWidth,$newHeight);
@@ -104,38 +104,38 @@ class Imageresizer {
 		$newImage = $this->_copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming);
 		imagedestroy($srcImage);
 
-		if($savePath && file_exists($savePath)){
+		if($savePath && file_exists($savePath)) {
 			@unlink($savePath);
 		}
 
-		switch($image_type){
-		case IMAGETYPE_GIF:
-			if($savePath){
-				imagegif($newImage,$savePath);
-			}else{
-				imagegif($newImage);
-			}
-			break;
+		switch($image_type) {
+			case IMAGETYPE_GIF:
+				if($savePath) {
+					imagegif($newImage,$savePath);
+				}else {
+					imagegif($newImage);
+				}
+				break;
 
-		case IMAGETYPE_JPEG:
-			imagejpeg($newImage,$savePath,100);
-			break;
+			case IMAGETYPE_JPEG:
+				imagejpeg($newImage,$savePath,100);
+				break;
 
-		case IMAGETYPE_PNG:
-			if($savePath){
-				imagepng($newImage,$savePath);
-			}else{
-				imagepng($newImage);
-			}
-			break;
-        
-		default:
-			return false;
+			case IMAGETYPE_PNG:
+				if($savePath) {
+					imagepng($newImage,$savePath);
+				}else {
+					imagepng($newImage);
+				}
+				break;
+
+			default:
+				return false;
 		}
-		
+
 		imagedestroy($newImage);
 
-		if($savePath){
+		if($savePath) {
 			chmod($savePath,0666);
 		}
 
@@ -154,23 +154,23 @@ class Imageresizer {
  */
 	function _copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming = false) {
 
-        if($trimming){
-            if($srcWidth > $srcHeight){
-                $x = ($srcWidth - $srcHeight) / 2;
-                $y = 0;
-                $srcWidth = $srcHeight;
-            }elseif($srcWidth < $srcHeight){
-                $x = 0;
-                $y = ($srcHeight - $srcWidth) / 2;
-                $srcHeight = $srcWidth;
-            }else{
-                $x = 0;
-                $y = 0;
-            }
-        }else{
-            $x = 0;
-            $y = 0;
-        }
+		if($trimming) {
+			if($srcWidth > $srcHeight) {
+				$x = ($srcWidth - $srcHeight) / 2;
+				$y = 0;
+				$srcWidth = $srcHeight;
+			}elseif($srcWidth < $srcHeight) {
+				$x = 0;
+				$y = ($srcHeight - $srcWidth) / 2;
+				$srcHeight = $srcWidth;
+			}else {
+				$x = 0;
+				$y = 0;
+			}
+		}else {
+			$x = 0;
+			$y = 0;
+		}
 		imagecopyresampled($newImage, $srcImage, 0, 0, $x, $y, $newWidth, $newHeight, $srcWidth, $srcHeight);
 		return $newImage;
 
