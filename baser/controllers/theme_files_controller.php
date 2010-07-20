@@ -21,6 +21,12 @@
  */
 class ThemeFilesController extends AppController {
 /**
+ * クラス名
+ * @var		string
+ * @access	public
+ */
+	var $name = 'ThemeFiles';
+/**
  * モデル
  *
  * @var 	array
@@ -71,6 +77,10 @@ class ThemeFilesController extends AppController {
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 
+		if(!$theme){
+			$this->notFound();
+		}
+		
 		// タイトル設定
 		$pageTitle = Inflector::camelize($theme);
 		if($plugin) {
