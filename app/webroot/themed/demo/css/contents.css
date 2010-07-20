@@ -131,7 +131,7 @@ h4.contents-head{
 	padding-left:20px;	
 }
 #loginUser span a{
-        text-decoration:underline;
+	text-decoration:underline;
 }
 
 /* box-01
@@ -191,21 +191,21 @@ h4.contents-head{
 	width:220px;
 }
 .blog-calendar th{
-    border-bottom:1px solid #e2e2e2;
+	border-bottom:1px solid #e2e2e2;
 }
 .blog-calendar th,
 .blog-calendar td
 {
-    padding:3px 5px;
+	padding:3px 5px;
 }
 .blog-calendar .sunday{
-    color:#ff6633;
+	color:#ff6633;
 }
 .blog-calendar .saturday{
-    color:#3366FF;
+	color:#3366FF;
 }
 .blog-calendar .today{
-    background-color:#e2e2e2;
+	background-color:#e2e2e2;
 }
 
 /* no-data
@@ -217,53 +217,53 @@ h4.contents-head{
 /* BlogComment
 ----------------------------------------------- */
 #BlogComment{
-    margin-top:40px;
-    padding:0 10px;
+	margin-top:40px;
+	padding:0 10px;
 }
 #BlogCommentList{
-    padding:10px 20px;
-    margin-top:20px;
+	padding:10px 20px;
+	margin-top:20px;
 }
 #BlogCommentAddForm{
-    padding:10px 20px;
+	padding:10px 20px;
 }
 #BlogCommentList .comment{
-    padding-bottom:8px;
-    border-bottom:1px dashed #CCCCCC;
-    margin-bottom:20px;
+	padding-bottom:8px;
+	border-bottom:1px dashed #CCCCCC;
+	margin-bottom:20px;
 }
 
 /* map
 ----------------------------------------------- */
 #map{
-    margin-left:30px;
-    margin-bottom:30px;
+	margin-left:30px;
+	margin-bottom:30px;
 }
 
 /* edit-link
 ----------------------------------------------- */
 .edit-link{
-    padding:10px;
+	padding:10px;
 }
 
 /* contentsNavi
 ----------------------------------------------- */
 #contentsNavi{
-    text-align:center;
+	text-align:center;
 }
 
 /* bt-content
 ----------------------------------------------- */
 .bt-content small{
-    color:#688A00;
+	color:#688A00;
 }
 
 /* bt-content
 ----------------------------------------------- */
 .customize-navi{
-    background-color:#f2ffde;
-    padding:10px;
-    margin: 10px 0 10px 0;
+	background-color:#f2ffde;
+	padding:10px;
+	margin: 10px 0 10px 0;
 }
 
 /* map

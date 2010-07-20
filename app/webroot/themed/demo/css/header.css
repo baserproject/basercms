@@ -36,10 +36,10 @@
 .global-menu li{
 	float:left;
 	height:40px;
-    display:inline;
+	display:inline;
 }
 .global-menu li a{
-    float: left;
+	float: left;
 	display:block;
 	height:30px;
 	padding:10px 40px 0 40px;

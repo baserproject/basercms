@@ -30,7 +30,7 @@
  *
  * 先に読み込んだ設定から適用されるので Baser の routes 設定を上書きしたい場合はこれより上部に記述します。
  */
-require BASER_CONFIGS . 'routes.php';
+	require BASER_CONFIGS . 'routes.php';
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
  * its action called 'display', and we pass a param to select the view file
