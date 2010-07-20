@@ -28,8 +28,6 @@
 </div>
 
 
-<?php if(!empty($dbDatas)): ?>
-
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableBlogCategorys">
 <tr>
 	<th style="width:122px">操作</th>
@@ -39,6 +37,7 @@
 	<th>登録日</th>
 	<th>更新日</th>
 </tr>
+<?php if(!empty($dbDatas)): ?>
 <?php $count=0; ?>
 <?php foreach($dbDatas as $dbData): ?>
 	<?php if ($count%2 === 0): ?>
@@ -60,9 +59,11 @@
 	</tr>
 	<?php $count++; ?>
 <?php endforeach; ?>
-</table>
 <?php else: ?>
-<p class="no-data">データが見つかりませんでした。</p>
+<tr><td colspan="6">
+	<p class="no-data">データが見つかりませんでした。</p>
+</td></tr>
 <?php endif; ?>
+</table>
 
 <div class="align-center"><?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?></div>
