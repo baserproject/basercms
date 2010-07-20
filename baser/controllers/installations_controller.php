@@ -1073,8 +1073,8 @@ class InstallationsController extends AppController {
  * @return	void
  * @access	public
  */
-	function setUpdateMessage($message, $head = false, $beforeBreak = false){
-		if($beforeBreak){
+	function setUpdateMessage($message, $head = false, $beforeBreak = false) {
+		if($beforeBreak) {
 			$this->_updateMessage[] = '';
 		}
 		if($head){
@@ -1089,7 +1089,7 @@ class InstallationsController extends AppController {
  * 改行区切り
  * @return string
  */
-	function getUpadteMessage(){
+	function getUpadteMessage() {
 		return implode('<br />',$this->_updateMessage);
 	}
 

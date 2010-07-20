@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * ページカテゴリーコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -53,23 +53,23 @@ class PageCategoriesController extends AppController {
  * @var     array
  * @access  public
  */
-        var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure');
 /**
  * beforeFilter
  *
  * @return	void
  * @access 	public
  */
-	function beforeFilter(){
+	function beforeFilter() {
 
 		/* 認証設定 */
-        //$this->Auth->allow();
+		//$this->Auth->allow();
 
 		parent::beforeFilter();
 
-        // バリデーション用の値をセット
-        $this->PageCategory->validationParams['theme'] = $this->siteConfigs['theme'];
-	
+		// バリデーション用の値をセット
+		$this->PageCategory->validationParams['theme'] = $this->siteConfigs['theme'];
+
 	}
 /**
  * [ADMIN] ページカテゴリーリスト
@@ -77,58 +77,58 @@ class PageCategoriesController extends AppController {
  * @return	void
  * @access 	public
  */
-    function admin_index(){
+	function admin_index() {
 
-        $conditions = array('PageCategory.theme' => $this->siteConfigs['theme']);
-        $_dbDatas = $this->PageCategory->generatetreelist($conditions);
-        $dbDatas = array();
-        foreach($_dbDatas as $key => $dbData){
-            $category = $this->PageCategory->find(array('PageCategory.id'=>$key));
-            if(preg_match("/^([_]+)/i",$dbData,$matches)){
-                $prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-                $category['PageCategory']['title'] = $prefix.'└'.$category['PageCategory']['title'];
-            }
-            $dbDatas[] = $category;
-        }
-        $this->set('dbDatas',$dbDatas);
+		$conditions = array('PageCategory.theme' => $this->siteConfigs['theme']);
+		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+		$dbDatas = array();
+		foreach($_dbDatas as $key => $dbData) {
+			$category = $this->PageCategory->find(array('PageCategory.id'=>$key));
+			if(preg_match("/^([_]+)/i",$dbData,$matches)) {
+				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+				$category['PageCategory']['title'] = $prefix.'└'.$category['PageCategory']['title'];
+			}
+			$dbDatas[] = $category;
+		}
+		$this->set('dbDatas',$dbDatas);
 		/* 表示設定 */
-        $this->subMenuElements = array('pages','page_categories');
-        $this->pageTitle = 'ページカテゴリー一覧';
+		$this->subMenuElements = array('pages','page_categories');
+		$this->pageTitle = 'ページカテゴリー一覧';
 
-    }
+	}
 /**
  * [ADMIN] ページカテゴリー情報登録
  *
  * @return	void
  * @access 	public
  */
-	function admin_add(){
+	function admin_add() {
 
-		if(empty($this->data)){
+		if(empty($this->data)) {
 			$this->data = $this->PageCategory->getDefaultValue($this->siteConfigs['theme']);
-            $this->data['PageCategory']['theme'] = $this->siteConfigs['theme'];
-		}else{
+			$this->data['PageCategory']['theme'] = $this->siteConfigs['theme'];
+		}else {
 
 			/* 登録処理 */
-            $this->data['PageCategory']['no'] = $this->PageCategory->getMax('no',array('theme'=>$this->siteConfigs['theme']))+1;
+			$this->data['PageCategory']['no'] = $this->PageCategory->getMax('no',array('theme'=>$this->siteConfigs['theme']))+1;
 			$this->PageCategory->create($this->data);
 
-			if($this->PageCategory->validates()){
-				if($this->PageCategory->save($this->data,false)){
-                    $this->Session->setFlash('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
-                    $this->PageCategory->saveDbLog('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
-                    $this->redirect('/admin/page_categories/index');
-                }else{
-                    $this->Session->setFlash('保存中にエラーが発生しました。');
-                }
-			}else{
+			if($this->PageCategory->validates()) {
+				if($this->PageCategory->save($this->data,false)) {
+					$this->Session->setFlash('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
+					$this->PageCategory->saveDbLog('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
+					$this->redirect('/admin/page_categories/index');
+				}else {
+					$this->Session->setFlash('保存中にエラーが発生しました。');
+				}
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('pages','page_categories');
+		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '新規ページカテゴリー登録';
 		$this->render('form');
 
@@ -140,7 +140,7 @@ class PageCategoriesController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_edit($id){
+	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
@@ -148,29 +148,29 @@ class PageCategoriesController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		if(empty($this->data)){
+		if(empty($this->data)) {
 			$this->data = $this->PageCategory->read(null, $id);
-		}else{
+		}else {
 
 			/* 更新処理 */
 			$this->PageCategory->set($this->data);
 
-			if($this->PageCategory->validates()){
-                if($this->PageCategory->save($this->data,false)){
-                    $this->Session->setFlash('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
-                    $this->PageCategory->saveDbLog('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
-                    $this->redirect(array('action'=>'admin_index'));
-                }else{
-                    $this->Session->setFlash('保存中にエラーが発生しました。');
-                }
-			}else{
+			if($this->PageCategory->validates()) {
+				if($this->PageCategory->save($this->data,false)) {
+					$this->Session->setFlash('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
+					$this->PageCategory->saveDbLog('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
+					$this->redirect(array('action'=>'admin_index'));
+				}else {
+					$this->Session->setFlash('保存中にエラーが発生しました。');
+				}
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-        $this->subMenuElements = array('pages','page_categories');
+		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページカテゴリー情報編集';
 		$this->render('form');
 
@@ -197,7 +197,7 @@ class PageCategoriesController extends AppController {
 		if($this->PageCategory->del($id)) {
 			$this->Session->setFlash('ページカテゴリー: '.$page['PageCategory']['name'].' を削除しました。');
 			$this->PageCategory->saveDbLog('ページカテゴリー「'.$page['PageCategory']['name'].'」を削除しました。');
-		}else{
+		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 

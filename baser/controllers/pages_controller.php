@@ -105,12 +105,12 @@ class PagesController extends AppController {
 				$this->Session->del('Filter.Page.status');
 			}
 		}
-		
+
 		// 並び替え処理
-		if(!empty($this->params['named']['sortup'])){
+		if(!empty($this->params['named']['sortup'])) {
 			$this->Page->sortup($this->params['named']['sortup'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
 		}
-		if(!empty($this->params['named']['sortdown'])){
+		if(!empty($this->params['named']['sortdown'])) {
 			$this->Page->sortdown($this->params['named']['sortdown'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
 		}
 
@@ -122,7 +122,7 @@ class PagesController extends AppController {
 		// 子カテゴリも検索条件に入れる
 		$pageCategoryIds = array($this->data['Page']['page_category_id']);
 		if(!empty($this->data['Page']['page_category_id'])) {
-			if($this->data['Page']['page_category_id'] != 'noncat'){
+			if($this->data['Page']['page_category_id'] != 'noncat') {
 				$children = $this->PageCategory->children($this->data['Page']['page_category_id']);
 				if($children) {
 					foreach($children as $child) {
@@ -130,7 +130,7 @@ class PagesController extends AppController {
 					}
 				}
 				$conditions['Page.page_category_id'] = $pageCategoryIds;
-			}else{
+			}else {
 				$conditions['Page.page_category_id'] = '';
 			}
 		}
@@ -266,7 +266,7 @@ class PagesController extends AppController {
 	}
 /**
  * [ADMIN] ページファイルを登録する
- * 
+ *
  * @return	void
  * @access	public
  */
@@ -282,7 +282,7 @@ class PagesController extends AppController {
 				$pagesPath = BASER_VIEWS.'pages';
 			}
 		}
-		
+
 		$this->Page->saveFile = false;
 		$result = $this->_entryPageFiles($pagesPath);
 
@@ -291,7 +291,6 @@ class PagesController extends AppController {
 		$this->redirect(array('action'=>'admin_index'));
 
 	}
-
 /**
  * ビューを表示する
  *
@@ -347,38 +346,38 @@ class PagesController extends AppController {
 		// ナビゲーションを取得
 		$categories = array();
 		$conditions = array();
-		for($i=0;$i<count($path)-1;$i++){
+		for($i=0;$i<count($path)-1;$i++) {
 			$categories[$path[$i]] = '';
 			$conditions['or'][] = array('PageCategory.name'=>$path[$i]);
 		}
-		if($conditions){
+		if($conditions) {
 			$this->PageCategory->hasMany['Page']['conditions'] = array('Page.status'=>true);
 			$pageCategories = $this->PageCategory->find('all',array('fields'=>array('name','title'),'conditions'=>$conditions));
-			foreach($pageCategories as $pageCategory){
-				if(!empty($pageCategory['Page'])){
+			foreach($pageCategories as $pageCategory) {
+				if(!empty($pageCategory['Page'])) {
 					$categoryPageUrl = '';
-					foreach($pageCategory['Page'] as $page){
-						if($page['name'] == 'index'){
+					foreach($pageCategory['Page'] as $page) {
+						if($page['name'] == 'index') {
 							$categoryPageUrl = $page['url'];
 						}
 					}
 				}
-				if(!$categoryPageUrl){
+				if(!$categoryPageUrl) {
 					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title']);
-				}else{
+				}else {
 					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title'],
-																				'url'=>$categoryPageUrl);
+							'url'=>$categoryPageUrl);
 				}
 			}
-			foreach ($categories as $category){
-				if(!empty($category['url'])){
+			foreach ($categories as $category) {
+				if(!empty($category['url'])) {
 					$this->navis[$category['title']] = $category['url'];
-				}else{
+				}else {
 					$this->navis[$category['title']] = '';
 				}
 			}
 		}
-		
+
 		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
@@ -406,14 +405,14 @@ class PagesController extends AppController {
  */
 	function admin_preview($id = null) {
 
-		if($id){
+		if($id) {
 			$conditions = array('Page.id' => $id);
 			$page = $this->Page->find($conditions);
-		}elseif(isset($this->data['Page'])){
+		}elseif(isset($this->data['Page'])) {
 			$page = $this->data;
 			$page['Page']['url'] = $this->Page->getPageUrl($page);
 		}
-		
+
 		if(!$page) {
 			$this->notFound();
 		}
@@ -441,7 +440,7 @@ class PagesController extends AppController {
 /**
  * ページファイルを登録する
  * ※ 再帰処理
- * 
+ *
  * @param	string	$pagePath
  * @param	string	$parentCategoryId
  * @return	array	処理結果 all / success
@@ -493,7 +492,7 @@ class PagesController extends AppController {
 			$contents = $file->read();
 			$file->close();
 			$file = null;
-			
+
 			// タイトル取得・置換
 			$titleReg = '/<\?php\s+?\$baser->setTitle\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($titleReg,$contents,$matches)) {

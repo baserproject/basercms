@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * ユーザーグループコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -30,8 +30,8 @@ class UserGroupsController extends AppController {
  *
  * @var     string
  * @access  public
- */    
-    var $name = 'UserGroups';
+ */
+	var $name = 'UserGroups';
 /**
  * モデル
  *
@@ -45,7 +45,7 @@ class UserGroupsController extends AppController {
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure');
 /**
  * ヘルパ
  *
@@ -67,56 +67,56 @@ class UserGroupsController extends AppController {
  * @access 	public
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
-                        'ユーザーグループ管理'=>'/admin/user_groups/index');
+			'ユーザーグループ管理'=>'/admin/user_groups/index');
 /**
  * ユーザーグループの一覧を表示する
  *
  * @return  void
  * @access  public
  */
-    function admin_index(){
+	function admin_index() {
 
 		/* データ取得 */
 		$this->paginate = array('conditions'=>array(),
-                            	'fields'=>array(),
-                            	'order'=>'UserGroup.id',
-                            	'limit'=>10
-                            	);
+				'fields'=>array(),
+				'order'=>'UserGroup.id',
+				'limit'=>10
+		);
 		$listDatas = $this->paginate('UserGroup');
 
 		/* 表示設定 */
-        $this->set('listDatas',$listDatas);
+		$this->set('listDatas',$listDatas);
 		$this->pageTitle = 'ユーザーグループ一覧';
 
-    }
+	}
 /**
  * [ADMIN] 登録処理
  *
  * @return  void
  * @access  public
  */
-    function admin_add(){
+	function admin_add() {
 
-        if($this->data){
+		if($this->data) {
 
 			/* 登録処理 */
 			$this->UserGroup->create($this->data);
-			if($this->UserGroup->save()){
-                $message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
+			if($this->UserGroup->save()) {
+				$message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
-        }
+		}
 
-        /* 表示設定 */
-        $this->pageTitle = '新規ユーザーグループ登録';
-        $this->render('form');
+		/* 表示設定 */
+		$this->pageTitle = '新規ユーザーグループ登録';
+		$this->render('form');
 
-    }
+	}
 /**
  * [ADMIN] 編集処理
  *
@@ -124,7 +124,7 @@ class UserGroupsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_edit($id){
+	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -132,24 +132,24 @@ class UserGroupsController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		if(empty($this->data)){
+		if(empty($this->data)) {
 			$this->data = $this->UserGroup->read(null, $id);
-		}else{
+		}else {
 
 			/* 更新処理 */
-			if($this->UserGroup->save($this->data)){
-                $message = 'ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。';
+			if($this->UserGroup->save($this->data)) {
+				$message = 'ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
 				$this->redirect(array('action'=>'index',$id));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-        $this->pageTitle = 'ユーザーグループ編集：'.$this->data['UserGroup']['title'];
+		$this->pageTitle = 'ユーザーグループ編集：'.$this->data['UserGroup']['title'];
 		$this->render('form');
 
 	}
@@ -173,10 +173,10 @@ class UserGroupsController extends AppController {
 
 		/* 削除処理 */
 		if($this->UserGroup->del($id)) {
-            $message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
+			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->UserGroup->saveDbLog($message);
-		}else{
+		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 

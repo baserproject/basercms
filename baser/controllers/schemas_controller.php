@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * スキーマコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -30,8 +30,8 @@ class SchemasController extends AppController {
  *
  * @var     string
  * @access  public
- */    
-    var $name = 'Schemas';
+ */
+	var $name = 'Schemas';
 /**
  * モデル
  *
@@ -45,49 +45,49 @@ class SchemasController extends AppController {
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure');
 /**
  * モデル名からスキーマファイルを生成する
  *
  * @return  void
  * @access  public
  */
-    function admin_write(){
+	function admin_write() {
 
-		if($this->data){
-			if(!$this->data['Schema']['model']){
+		if($this->data) {
+			if(!$this->data['Schema']['model']) {
 				$this->Session->setFlash('モデル名を入力してください。');
-			}else{
+			}else {
 				$db =& ConnectionManager::getDataSource('baser');
-				if($db->writeSchema(array('model'=>$this->data['Schema']['model'],'path'=>BASER_CONFIGS.'sql'))){
+				if($db->writeSchema(array('model'=>$this->data['Schema']['model'],'path'=>BASER_CONFIGS.'sql'))) {
 					$this->data = null;
 					$this->Session->setFlash('スキーマファイルを生成しました。');
-				}else{
+				}else {
 					$this->Session->setFlash('スキーマファイルの生成に失敗しました。');
 				}
 			}
 		}
-		
+
 		/* 表示設定 */
 		$this->pageTitle = 'スキーマファイル生成';
-		
-    }
+
+	}
 /**
  * スキーマファイルを読み込みテーブルを生成する
  *
  * @return  void
  * @access  public
  */
-	function admin_load(){
-		if($this->data){
-			if(!$this->data['Schema']['model']){
+	function admin_load() {
+		if($this->data) {
+			if(!$this->data['Schema']['model']) {
 				$this->Session->setFlash('モデル名を入力してください。');
-			}else{
+			}else {
 				$db =& ConnectionManager::getDataSource('baser');
-				if($db->createTableSchema(array('model'=>$this->data['Schema']['model'],'path'=>BASER_CONFIGS.'sql'))){
+				if($db->createTableSchema(array('model'=>$this->data['Schema']['model'],'path'=>BASER_CONFIGS.'sql'))) {
 					$this->data = null;
 					$this->Session->setFlash('スキーマファイルを読み込みしました。');
-				}else{
+				}else {
 					$this->Session->setFlash('スキーマファイルの読み込みに失敗しました。');
 				}
 			}

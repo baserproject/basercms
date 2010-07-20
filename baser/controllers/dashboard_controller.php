@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * ダッシュボードコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -29,7 +29,7 @@
  *
  * @package			baser.controllers
  */
-class DashboardController extends AppController{
+class DashboardController extends AppController {
 /**
  * クラス名
  *
@@ -78,13 +78,13 @@ class DashboardController extends AppController{
  * @return 	void
  * @access	public
  */
-	function admin_index(){
+	function admin_index() {
 
 		/* 表示設定 */
 		$this->subMenuElements = array("dashboard");
 		$this->pageTitle = '管理者ダッシュボード';
 		$this->set('viewDblogs',$this->Dblog->findAll("","","created desc",12));
-        
+
 	}
 
 }

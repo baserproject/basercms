@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * Email 拡張モデル
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -29,7 +29,7 @@ App::import('Component','Email');
  * @package			baser.plugins.feed.controller.components
  *
  */
-class EmailExComponent extends EmailComponent{
+class EmailExComponent extends EmailComponent {
 /**
  * Send an email using the specified content, template and layout
  *
@@ -61,13 +61,13 @@ class EmailExComponent extends EmailComponent{
 		} else {
 			$message = $this->__renderTemplate($message);
 		}
-		
+
 		// テンプレート内の変数がラップされるように再ラップ
 		$message = $this->___wrap($message);
-		
+
 		$message[] = '';
 
-		foreach($message as $key => $line){
+		foreach($message as $key => $line) {
 			// 文字コード変換
 			$enc = mb_detect_encoding($line);
 			// 半角カタカナを全角カタカナに変換
@@ -124,7 +124,7 @@ class EmailExComponent extends EmailComponent{
 		$message = str_replace(array("\r\n","\r"), "\n", $message);
 
 		$lines = explode("\n", $message);
-		
+
 		return $this->___wrap($lines);
 
 	}
@@ -133,8 +133,8 @@ class EmailExComponent extends EmailComponent{
  * @param array $lines
  * @return array
  */
-	function ___wrap($lines){
-		
+	function ___wrap($lines) {
+
 		$formatted = array();
 		if ($this->_lineLength !== null) {
 			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
@@ -147,9 +147,9 @@ class EmailExComponent extends EmailComponent{
 			$enc = mb_detect_encoding($line);
 			$formatted = array_merge($formatted, $this->mbFold($line,$this->lineLength,$enc));
 		}
-        $formatted[] = '';
+		$formatted[] = '';
 		return $formatted;
-		
+
 	}
 /**
  * Encode the specified string using the current charset
@@ -191,37 +191,36 @@ class EmailExComponent extends EmailComponent{
 		}
 		return $subject;
 	}
-	/**
-	 * マルチバイト文字を考慮したfolding(折り畳み)処理
-	 *
-	 * @param mixed $str foldingを行う文字列or文字列の配列
-	 *                   文字列に改行が含まれている場合は改行位置でも分割される
-	 * @param integer $width 一行の幅(バイト数)。4以上でなければならない
-	 * @param string $encoding $strの文字エンコーディング
-	 *                         省略した場合は内部文字エンコーディングを使用する
-	 * @return array 一行ずつに分けた文字列の配列
-	 *
-	 * NOTE: いわゆる半角/全角といった見た目ではなく、
-	 *       バイト数によって処理が行われるので、文字エンコーディングによって
-	 *       結果が変わる可能性がある。
-	 *
-	 *       例えば半角カナはShift-JISでは1バイトだが、EUC-JPでは2バイトなので、
-	 *       $width=10の場合Shift-JISなら10文字だが、EUC-JPでは5文字になる。
-	 *
-	 *       全角/半角といった見た目で処理をするにはmb_strwidth()を利用した
-	 *       実装が必要となる。
-	 *
-	 * TODO: 日本語禁則処理(Japanese Hyphenation)
-	 *       行頭禁則文字は濁点/半濁点の応用でいけるので
-	 *       行末禁則文字の処理を加えれば対応できそう
-	 *
-	 *       ……と思ったけど、禁則文字が$widthを超える分だけ並んでたら
-	 *       どうすればいいんだろう
-	 *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
-	 *       強制的に$widthで改行する、とか？
-	 */
-	function mbFold($str, $width, $encoding = null)
-	{
+/**
+ * マルチバイト文字を考慮したfolding(折り畳み)処理
+ *
+ * @param mixed $str foldingを行う文字列or文字列の配列
+ *                   文字列に改行が含まれている場合は改行位置でも分割される
+ * @param integer $width 一行の幅(バイト数)。4以上でなければならない
+ * @param string $encoding $strの文字エンコーディング
+ *                         省略した場合は内部文字エンコーディングを使用する
+ * @return array 一行ずつに分けた文字列の配列
+ *
+ * NOTE: いわゆる半角/全角といった見た目ではなく、
+ *       バイト数によって処理が行われるので、文字エンコーディングによって
+ *       結果が変わる可能性がある。
+ *
+ *       例えば半角カナはShift-JISでは1バイトだが、EUC-JPでは2バイトなので、
+ *       $width=10の場合Shift-JISなら10文字だが、EUC-JPでは5文字になる。
+ *
+ *       全角/半角といった見た目で処理をするにはmb_strwidth()を利用した
+ *       実装が必要となる。
+ *
+ * TODO: 日本語禁則処理(Japanese Hyphenation)
+ *       行頭禁則文字は濁点/半濁点の応用でいけるので
+ *       行末禁則文字の処理を加えれば対応できそう
+ *
+ *       ……と思ったけど、禁則文字が$widthを超える分だけ並んでたら
+ *       どうすればいいんだろう
+ *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
+ *       強制的に$widthで改行する、とか？
+ */
+	function mbFold($str, $width, $encoding = null) {
 		assert('$width >= 4');
 
 		if (!isset($str)) {
@@ -243,7 +242,7 @@ class EmailExComponent extends EmailComponent{
 			//       mb_split()でも正常に分割できるようになったが、
 			//       何故かmb_regex_encoding()がJISを受け入れてくれない
 			$strings = array_merge($strings,
-							preg_split('/\x0d\x0a|\x0d|\x0a/', $s));
+					preg_split('/\x0d\x0a|\x0d|\x0a/', $s));
 		}
 
 		$lines = array();
@@ -261,8 +260,7 @@ class EmailExComponent extends EmailComponent{
 					$next = mb_substr($string, $i + 1, 1, $encoding);
 					$uc = mb_convert_encoding($next, 'UCS-2', $encoding);
 					if (in_array($uc, array("\x30\x99", "\x30\x9B", "\x30\x9C",
-											"\xFF\x9E", "\xFF\x9F")))
-					{
+					"\xFF\x9E", "\xFF\x9F"))) {
 						$char .= $next;
 						$i++;
 					}

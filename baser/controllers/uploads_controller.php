@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * アップロードコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -24,22 +24,33 @@
  * @package			baser.controllers
  */
 class UploadsController extends AppController {
-    var $name = 'Uploads';
-    var $uses = array();
+/**
+ * クラス名
+ *
+ * @var		string
+ * @access	public
+ */
+	var $name = 'Uploads';
+/**
+ * モデル
+ * @var		array
+ * @access	public
+ */
+	var $uses = array();
 /**
  * セッションに保存した一時ファイルを出力する
  * @param string $name
  */
-    function tmp($name){
-        Configure::write('debug',0);
-        $type = $this->Session->read('Upload.'.$name.'_type');
-        $ext = decodeContent($type,$name);
-        if($ext != 'gif' && $ext != 'jpg' && $ext != 'png'){
-            Header("Content-disposition: attachment; filename=".$name);
-        }
-        Header("Content-type: ".$type."; name=".$name);
-        echo $this->Session->read('Upload.'.$name);
-        exit();
-    }
+	function tmp($name) {
+		Configure::write('debug',0);
+		$type = $this->Session->read('Upload.'.$name.'_type');
+		$ext = decodeContent($type,$name);
+		if($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
+			Header("Content-disposition: attachment; filename=".$name);
+		}
+		Header("Content-type: ".$type."; name=".$name);
+		echo $this->Session->read('Upload.'.$name);
+		exit();
+	}
 }
 ?>

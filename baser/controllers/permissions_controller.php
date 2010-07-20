@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * アクセス制限設定コントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -30,8 +30,8 @@ class PermissionsController extends AppController {
  *
  * @var     string
  * @access  public
- */    
-    var $name = 'Permissions';
+ */
+	var $name = 'Permissions';
 /**
  * モデル
  *
@@ -45,7 +45,7 @@ class PermissionsController extends AppController {
  * @var     array
  * @access  public
  */
-    var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure');
 /**
  * ヘルパ
  *
@@ -67,86 +67,87 @@ class PermissionsController extends AppController {
  * @access 	public
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
-						'ユーザーグループ管理'=>'/admin/user_group/index',
-                        'アクセス制限設定管理'=>'/admin/permissions/index');
+			'ユーザーグループ管理'=>'/admin/user_group/index',
+			'アクセス制限設定管理'=>'/admin/permissions/index');
 /**
  * アクセス制限設定の一覧を表示する
  *
  * @return  void
  * @access  public
  */
-    function admin_index($userGroupId=null){
+	function admin_index($userGroupId=null) {
 
 		/* セッション処理 */
-		if($userGroupId){
+		if($userGroupId) {
 			$this->Session->write('Filter.Permission.user_group_id',$userGroupId);
 			$this->data['Permission']['user_group_id'] = $userGroupId;
-		}elseif(!empty($this->params['url']['user_group_id'])){
-            $this->Session->write('Filter.Permission.user_group_id',$this->params['url']['user_group_id']);
+		}elseif(!empty($this->params['url']['user_group_id'])) {
+			$this->Session->write('Filter.Permission.user_group_id',$this->params['url']['user_group_id']);
 			$this->data['Permission']['user_group_id'] = $this->params['url']['user_group_id'];
-        }else{
-            if($this->Session->check('Filter.Permission.user_group_id')){
-                $this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
-            }else{
-                $this->Session->del('Filter.Permission.user_group_id');
-                $this->Permission->getMax('user_group_id',array('id <>'=>1));
-                $this->data['Permission']['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));;
-            }
-        }
+		}else {
+			if($this->Session->check('Filter.Permission.user_group_id')) {
+				$this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
+			}else {
+				$this->Session->del('Filter.Permission.user_group_id');
+				$this->Permission->getMax('user_group_id',array('id <>'=>1));
+				$this->data['Permission']['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));
+				;
+			}
+		}
 
 		/* 並び替え処理 */
-		if(!empty($this->params['named']['sortup'])){
+		if(!empty($this->params['named']['sortup'])) {
 			$this->Permission->sortup($this->params['named']['sortup'],array('Permission.user_group_id'=>$this->data['Permission']['user_group_id']));
 		}
-		if(!empty($this->params['named']['sortdown'])){
+		if(!empty($this->params['named']['sortdown'])) {
 			$this->Permission->sortdown($this->params['named']['sortdown'],array('Permission.user_group_id'=>$this->data['Permission']['user_group_id']));
 		}
 
 		/* 条件を生成 */
-        $conditions = array();
-        if(!empty($this->data['Permission']['user_group_id'])){
-            $conditions['Permission.user_group_id'] = $this->data['Permission']['user_group_id'];
-        }
+		$conditions = array();
+		if(!empty($this->data['Permission']['user_group_id'])) {
+			$conditions['Permission.user_group_id'] = $this->data['Permission']['user_group_id'];
+		}
 
 		/* データ取得 */
 		$listDatas = $this->Permission->find('all',array('conditions'=>$conditions, 'order'=>'Permission.sort'));
-		
+
 		/* 表示設定 */
-        $this->set('listDatas',$listDatas);
+		$this->set('listDatas',$listDatas);
 		$this->pageTitle = 'アクセス制限設定一覧';
 
-    }
+	}
 /**
  * [ADMIN] 登録処理
  *
  * @return  void
  * @access  public
  */
-    function admin_add(){
+	function admin_add() {
 
-        if(!$this->data){
+		if(!$this->data) {
 			$this->data = $this->Permission->getDefaultValue();
-		}else{
+		}else {
 			/* 登録処理 */
 			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
 			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
 			$this->Permission->create($this->data);
-			if($this->Permission->save()){
-                $message = '新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。';
+			if($this->Permission->save()) {
+				$message = '新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
-        }
+		}
 
-        /* 表示設定 */
-        $this->pageTitle = '新規アクセス制限設定登録';
-        $this->render('form');
+		/* 表示設定 */
+		$this->pageTitle = '新規アクセス制限設定登録';
+		$this->render('form');
 
-    }
+	}
 /**
  * [ADMIN] 編集処理
  *
@@ -154,7 +155,7 @@ class PermissionsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_edit($id){
+	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -162,24 +163,24 @@ class PermissionsController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		if(empty($this->data)){
+		if(empty($this->data)) {
 			$this->data = $this->Permission->read(null, $id);
-		}else{
+		}else {
 
 			/* 更新処理 */
-			if($this->Permission->save($this->data)){
-                $message = 'アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。';
+			if($this->Permission->save($this->data)) {
+				$message = 'アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
-			}else{
+			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-        $this->pageTitle = 'アクセス制限設定編集：'.$this->data['Permission']['name'];
+		$this->pageTitle = 'アクセス制限設定編集：'.$this->data['Permission']['name'];
 		$this->render('form');
 
 	}
@@ -203,10 +204,10 @@ class PermissionsController extends AppController {
 
 		/* 削除処理 */
 		if($this->Permission->del($id)) {
-            $message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
+			$message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Permission->saveDbLog($message);
-		}else{
+		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 

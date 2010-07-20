@@ -26,7 +26,11 @@
  * @package			baser.controllers.components
  */
 class  AuthConfigureComponent extends Object {
-
+/**
+ * コントローラー
+ * @var		Controller
+ * @access	public
+ */
 	var $controller = null;
 /**
  * initialize
@@ -35,9 +39,9 @@ class  AuthConfigureComponent extends Object {
  * @return 	void
  * @access	public
  */
-    function initialize(&$controller) {
-        $this->controller = $controller;
-    }
+	function initialize(&$controller) {
+		$this->controller = $controller;
+	}
 /**
  * 認証設定
  *
@@ -45,9 +49,9 @@ class  AuthConfigureComponent extends Object {
  * @return 	boolean
  * @access	public
  */
-    function setting($prefix) {
+	function setting($prefix) {
 
-		if(!$prefix){
+		if(!$prefix) {
 			return false;
 		}
 
@@ -55,7 +59,7 @@ class  AuthConfigureComponent extends Object {
 
 		$redirect = $this->controller->Auth->Session->read('Auth.redirect');
 		// 記録された過去のリダイレクト先が管理者ページ以外の場合はリセット
-		if(strpos($redirect, $prefix)===false){
+		if(strpos($redirect, $prefix)===false) {
 			$this->controller->Auth->Session->write('Auth.redirect',null);
 		}
 
@@ -70,7 +74,7 @@ class  AuthConfigureComponent extends Object {
 
 		if(isset($cookie['Auth']['User']))
 			$authCookie = $cookie['Auth']['User'];
-		
+
 		// オートリダイレクトをOFF
 		$this->controller->Auth->autoRedirect = false;
 		// エラーメッセージ
@@ -83,14 +87,14 @@ class  AuthConfigureComponent extends Object {
 		//$this->controller->Auth->userModel = 'User';
 
 		// クッキーがある場合には認証なし
-        if ((!empty($authCookie) && $this->controller->Auth->login($authCookie))||Configure::read('debug')>0) {
-            $this->controller->Session->del('Message.auth');
+		if ((!empty($authCookie) && $this->controller->Auth->login($authCookie))||Configure::read('debug')>0) {
+			$this->controller->Session->del('Message.auth');
 			$this->controller->Auth->allow();
-        }
+		}
 
 		return true;
-		
-    }
+
+	}
 
 }
 ?>
