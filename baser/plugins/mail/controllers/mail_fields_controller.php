@@ -106,6 +106,11 @@ class MailFieldsController extends MailAppController {
  */
 	function admin_index($mailContentId) {
 
+		if(!$mailContentId || !$this->mailContent) {
+			$this->Session->setFlash('無効な処理です。');
+			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+		}
+		
 		if(!empty($this->params['named']['sortup'])) {
 			$this->MailField->sortup($this->params['named']['sortup'],array('MailField.mail_content_id'=>$mailContentId));
 		}
