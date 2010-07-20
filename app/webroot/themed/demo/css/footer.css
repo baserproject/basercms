@@ -6,41 +6,40 @@
 
 /* コピーライト
 ----------------------------------------------- */
-#copyright{
+#copyright {
 	margin:60px auto 10px;
 	padding-right:15px;
 	font-size:10px;
 	font-family:Arial, Helvetica, sans-serif;
 	vertical-align:middle;
 }
-#copyright img{
+#copyright img {
 	vertical-align:middle;
 	padding:0;
 	margin-left:5px;
 }
-
 /* フッターグローバルメニュー
 ----------------------------------------------- */
-#footer #globalMenu{
+#footer #globalMenu {
 	margin-top:10px;
 	padding-left:15px;
 }
-#footer #globalMenu li a{
+#footer #globalMenu li a {
 	display:inline;
 	text-decoration:underline;
 	font-size:0.85em;
 }
-#footer #globalMenu li{
+#footer #globalMenu li {
 	height:auto;
-    font-size:11px;
+	font-size:11px;
 }
-#footer #globalMenu .first{
+#footer #globalMenu .first {
 	padding-left:0;
 }
-#footer #globalMenu a{
+#footer #globalMenu a {
 	padding-left:10px;
 	padding-right:10px;
 }
-#footer #globalMenu .first a{
+#footer #globalMenu .first a {
 	padding-left:0;
 }

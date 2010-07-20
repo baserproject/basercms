@@ -6,8 +6,8 @@
 <cake:nocache>
 	<?php $baser->cacheHeader() ?>
 </cake:nocache>
-
 <?php if(!empty($items)): ?>
+
 <ul>
 	<?php foreach($items as $key => $item): ?>
 		<?php $no = sprintf('%02d',$key+1) ?>
@@ -18,10 +18,8 @@
 		<?php else: ?>
 			<?php $class = ' class="clearfix feed'.$no.'"' ?>
 		<?php endif ?>
-	<li<?php echo $class ?>>
-		<span class="date"><?php echo date("Y-m-d",strtotime($item['pubDate']['value'])); ?></span><br />
-		<span class="title"><a href="<?php echo $item['link']['value']; ?>"><?php echo $item['title']['value']; ?></a></span>
-	</li>
+	<li<?php echo $class ?>> <span class="date"><?php echo date("Y-m-d",strtotime($item['pubDate']['value'])); ?></span><br />
+		<span class="title"><a href="<?php echo $item['link']['value']; ?>"><?php echo $item['title']['value']; ?></a></span> </li>
 	<?php endforeach; ?>
 </ul>
 <?php else: ?>

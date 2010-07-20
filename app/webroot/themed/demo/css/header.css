@@ -16,29 +16,28 @@
 	padding:0;
 	margin:0;
 }
-#headMain h1 a{
+#headMain h1 a {
 	display:block;
 	width:300px;
 	height:60px;
 	text-indent:-3000px;
 }
-
 /* グローバルメニュー
 ----------------------------------------------- */
-#glbMenus{
+#glbMenus {
 	margin:15px 0;
 	background: url(images/bg_global_menu.gif) no-repeat left top;
 	height:40px;
 }
-.global-menu .first{
+.global-menu .first {
 	padding-left:20px;
 }
-.global-menu li{
+.global-menu li {
 	float:left;
 	height:40px;
 	display:inline;
 }
-.global-menu li a{
+.global-menu li a {
 	float: left;
 	display:block;
 	height:30px;
@@ -50,19 +49,17 @@
 	color:#000000;
 	font-weight:bold;
 }
-.global-menu a:hover{
+.global-menu a:hover {
 	padding-top:11px;
 	height:29px;
 	color:#333333;
 }
-.global-menu a:visited{
+.global-menu a:visited {
 	color:#000000;
 }
-
 /* フォントチェンジャー
 ----------------------------------------------- */
-#fontChanger{
+#fontChanger {
 	text-align:right;
 	color:#ffffff;
 }
-

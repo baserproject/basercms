@@ -5,95 +5,72 @@
 
 /* display
 ----------------------------------------------- */
-.display-none
-{
+.display-none {
 	display:none;
 }
-
 /* text
 ----------------------------------------------- */
-.weight-bold
-{
+.weight-bold {
 	font-weight:bold;
 }
-.size-small
-{
+.size-small {
 	font-size:small;
 }
-.size-medium
-{
+.size-medium {
 	font-size:medium;
 }
-.size-large
-{
+.size-large {
 	font-size:large;
 }
-.align-left
-{
+.align-left {
 	text-align:left;
 }
-
-.align-right
-{
+.align-right {
 	text-align:right;
 }
-.align-center
-{
+.align-center {
 	text-align:center !important;
 }
-
 /* float
 ----------------------------------------------- */
-.float-left
-{
+.float-left {
 	float:left;
 }
-.float-right
-{
+.float-right {
 	float:right;
 }
-
 /* img
 ----------------------------------------------- */
-.img-right
-{
+.img-right {
 	float:right;
 	margin-left:10px;
 	margin-bottom:10px;
 }
-.img-left
-{
+.img-left {
 	float:left;
 	margin-right:10px;
 	margin-bottom:10px;
 }
-
 /* clear
 ----------------------------------------------- */
-.clear
-{
+.clear {
 	clear:both;
 }
-.clearfix:after 
-{
+.clearfix:after {
 	content: " ";
 	display: block;
 	clear: both;
 	height: 0;
 }
-.clearfix 
-{
+.clearfix {
 	display: inline-block;
 }
-.clearfix 
-{
-	display: block; 
+.clearfix {
+	display: block;
 }
-
 /* row-table-01
 ----------------------------------------------- */
-table.row-table-01
-{
+table.row-table-01 {
 	width:100%;
 	color:#333;
 	background-color: #fff;
@@ -103,8 +80,7 @@ table.row-table-01
 	white-space: normal;
 	border-collapse:separate;
 }
-table.row-table-01 th
-{
+table.row-table-01 th {
 	text-align: right;
 	padding:4px 8px;
 	font-weight:normal;
@@ -114,8 +90,7 @@ table.row-table-01 th
 	font-size:0.85em;
 	color:#669900;
 }
-table.row-table-01 tr td
-{
+table.row-table-01 tr td {
 	background-color: #ffffff;
 	padding:10px 8px;
 	vertical-align:top;
@@ -124,11 +99,9 @@ table.row-table-01 tr td
 	border-bottom-style: solid;
 	border-bottom-color: #ccc;
 }
-
 /* table.cake-sql-log
 ----------------------------------------------- */
-table.cake-sql-log 
-{
+table.cake-sql-log {
 	width:90%;
 	border-top: 1px solid #ccc;
 	border-left: 1px solid #ccc;
@@ -143,13 +116,11 @@ table.cake-sql-log
 	border-collapse:separate;
 	margin:20px auto;
 }
-table.cake-sql-log caption
-{
+table.cake-sql-log caption {
 	font-weight:bold;
 	text-align:center;
 }
-table.cake-sql-log th 
-{
+table.cake-sql-log th {
 	background-color: #e2e2e2;
 	padding:4px 8px;
 	font-weight:bold;
@@ -168,8 +139,7 @@ table.cake-sql-log th
 	border-left-color: #FFFFFF;
 	font-size:0.8em;
 }
-table.cake-sql-log tr td 
-{
+table.cake-sql-log tr td {
 	background-color: #F7F7F7;
 	padding:6px 8px;
 	vertical-align:top;
@@ -182,55 +152,47 @@ table.cake-sql-log tr td
 	border-bottom-color: #ccc;
 	font-size:0.8em;
 }
-
 /* cakePHP parts
 ----------------------------------------------- */
-.error-message
-{
+.error-message {
 	color:#C30;
 }
-.required
-{
+.required {
 	color:#C00!important;
 	font-size:16px;
 }
-.form-error
-{
+.form-error {
 	background:#F8E2DE;
 }
-.message
-{
+.message {
 	color:#F30;
 	font-weight:bold;
 	margin:20px;
 }
-.error
-{
+.error {
 	color:#C00;
 }
-.error em
-{
+.error em {
 	color:#06C;
 	font-style:normal;
 	font-weight:bold;
 }
-.submit
-{
+.submit {
 	text-align:center;
 }
 /* help text
 ----------------------------------------------- */
 .bt-content a:visited,
-.bt-content a:link{
+.bt-content a:link {
 	color:#688A00;
 }
-.bt-content ul li{
+.bt-content ul li {
 	list-style:disc;
 	list-style-position:outside;
 	margin-left:10px;
 	margin-bottom:8px;
 }
-img.help{
+img.help {
 	padding: 5px;
 	cursor:pointer;
 }

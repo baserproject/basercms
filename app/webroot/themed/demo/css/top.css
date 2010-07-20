@@ -5,21 +5,20 @@
 
 /* 標準設定を上書き
 ----------------------------------------------- */
-#contentsBody{
+#contentsBody {
 	width:900px;
 }
-#alfa{
+#alfa {
 	width:auto;
 }
-
 /* NEWS
 ----------------------------------------------- */
-#newsHead01{
+#newsHead01 {
 	height:25px;
 	background:url(images/bg_top_head_01.gif) no-repeat left top;
 	text-indent:-3000px;
 }
-#newsHead02{
+#newsHead02 {
 	height:25px;
 	background:url(images/bg_top_head_02.gif) no-repeat left top;
 	text-indent:-3000px;
@@ -30,10 +29,10 @@
 	display: inline;/* IEバグ対応 */
 	float:left;
 }
-.news .body{
+.news .body {
 	padding:10px 20px;
 }
-.news li{
+.news li {
 	background:url(images/bg_list_circle.gif) no-repeat left 7px;
 	padding-left:15px;
 	margin-bottom:10px;

@@ -5,40 +5,37 @@
 
 /* page
 ----------------------------------------------- */
-#page{
+#page {
 	width:900px;
 	margin:0 auto;
 	text-align: left;
 }
-
 /* contents
 ----------------------------------------------- */
 #contents {
-
 }
 #contentsBody {
 	margin:0 auto;
 }
-
 /* alfa, beta
 ----------------------------------------------- */
-#alfa,#beta{
+#alfa,
+#beta {
 	position: relative;
 	float:left;
 	display: inline;
 }
-#alfa{
+#alfa {
 	width:650px;
 	left:0px;
-    padding-bottom:50px;
+	padding-bottom:50px;
 }
-#beta{
+#beta {
 	width:230px;
 	left:0px;
 	padding-left:20px;
 	padding-bottom:50px;
 }
-
 /* header
 ----------------------------------------------- */
 #header {
@@ -47,26 +44,44 @@
 	text-align: left;
 	background: url(images/bg_header.jpg) no-repeat;
 }
-
 /* footer
 ----------------------------------------------- */
-html, body, #page {height: 100%;}
-body > #page {height: auto; min-height: 100%;}
-#contents {padding-bottom: 135px;}  /* must be same height as the footer */
-#footer {position: relative;
+html,
+body,
+#page {
+	height: 100%;
+}
+body > #page {
+	height: auto;
+	min-height: 100%;
+}
+#contents {
+	padding-bottom: 135px;
+}  /* must be same height as the footer */
+#footer {
+	position: relative;
 	margin-top: -125px; /* negative value of footer height */
 	height: 135px;
-	clear:both;}
+	clear:both;
+}
 /* CLEAR FIX*/
-.clearfix:after {content: ".";
+.clearfix:after {
+	content: ".";
 	display: block;
 	height: 0;
 	clear: both;
-	visibility: hidden;}
-.clearfix {display: inline-block;}
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
 /* Hides from IE-mac \*/
-* html .clearfix { height: 1%;}
-.clearfix {display: block;}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
 /* End hide from IE-mac */
 #footer {
 	border-top:5px solid #cccccc;
