@@ -897,10 +897,19 @@ class InstallationsController extends AppController {
 			$themeFolder = new Folder(WWW_ROOT.'themed');
 			$themeFiles = $themeFolder->read(true,true,true);
 			foreach($themeFiles[0] as $theme){
-				$folder = new Folder($theme.DS.'pages');
-				$folder->delete();
-				$folder->create($theme.DS.'pages',0777);
-				$folder = null;
+				$pagesFolder = new Folder($theme.DS.'pages');
+				$pathes = $pagesFolder->read(true,true,true);
+				foreach($pathes[0] as $path){
+					$folder = new Folder($path);
+					$folder->delete();
+					$folder = null;
+				}
+				foreach($pathes[1] as $path){
+					if(basename($path) != 'empty') {
+						unlink($path);
+					}
+				}
+				$pagesFolder = null;
 			}
 			$themeFolder = null;
 
