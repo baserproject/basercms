@@ -88,18 +88,6 @@ class PageCategory extends AppModel {
 
 	}
 /**
- * フォームの初期値を設定する
- *
- * @return	array	初期値データ
- * @access	public
- */
-	function getDefaultValue() {
-
-		$data[$this->name]['no'] = $this->getMax('no')+1;
-		return $data;
-
-	}
-/**
  * コントロールソースを取得する
  *
  * @param	string	フィールド名

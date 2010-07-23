@@ -86,9 +86,7 @@ class PageCategoriesController extends AppController {
  */
 	function admin_add() {
 
-		if(empty($this->data)) {
-			$this->data = $this->PageCategory->getDefaultValue();
-		}else {
+		if(!empty($this->data)) {
 
 			/* 登録処理 */
 			$this->PageCategory->create($this->data);
