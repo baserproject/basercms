@@ -416,8 +416,11 @@ class BaserHelper extends AppHelper {
 /**
  * XMLヘッダを出力する
  */
-	function xmlHeader() {
-		echo $this->XmlEx->header();
+	function xmlHeader($attrib = array()) {
+		if(empty($attrib['encoding']) && Configure::read('Mobile.on')){
+			$attrib['encoding'] = 'Shift-JIS';
+		}
+		echo $this->XmlEx->header($attrib)."\n";
 	}
 /**
  * アイコンタグを出力するだけのラッパー
@@ -517,6 +520,9 @@ class BaserHelper extends AppHelper {
  * charsetを出力するだけのラッパー
  */
 	function charset($charset = null) {
+		if(!$charset && Configure::read('Mobile.on')){
+			$charset = 'Shift-JIS';
+		}
 		echo $this->Html->charset($charset);
 	}
 /**

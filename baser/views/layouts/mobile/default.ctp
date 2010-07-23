@@ -19,29 +19,31 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$baser->xmlHeader();
+$baser->docType();
 ?>
-<?php echo "<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>\n" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />
+<?php $baser->charset() ?>
 <?php $baser->title() ?>
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 </head>
 <body bgcolor="#FFFFFF" id="<?php $baser->contentsName() ?>">
 <div style="color:#333333;margin:3px">
-	<div style="display:-wap-marquee;text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $baser->siteConfig['name'] ?></span> </div>
+	<div style="display:-wap-marquee;text-align:center;background-color:#FF6600;"> <span style="color:white;"><?php echo $baser->siteConfig['name'] ?></span> </div>
 	<center>
-		<span style="color:#8ABE08;font-weight:bold">BaserCMS</span>
+		<span style="color:#FF6600;">Let's BaserCMS!</span>
 	</center>
-	<hr size="2" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:2px solid #8ABE08;" />
+	<hr size="2" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:2px solid #FF6600;" />
 	<?php echo $content_for_layout; ?> <br />
-	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
-	<span style="color:#8ABE08">�? </span>
+	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:1px solid #FF6600;" />
+	<span style="color:#FF6600">◆ </span>
 	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
-	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
+	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:1px solid #FF6600;" />
 	<center>
+		<?php $baser->img('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")); ?>
+		<?php $baser->img('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")); ?>
 		<font size="1">(C)BaserCMS</font>
 	</center>
 </div>
