@@ -60,6 +60,7 @@ class Page extends AppModel {
 	var $fileSave = true;
 /**
  * 非公開URLリスト
+ * キャッシュ用
  * @var mixed;
  */
 	var $_unpublishes = -1;
@@ -86,11 +87,9 @@ class Page extends AppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue($theme) {
-
-		$data[$this->name]['no'] = $this->getMax('no',array('theme'=>$theme))+1;
-		$data[$this->name]['sort'] = $this->getMax('sort',array('theme'=>$theme))+1;
-		$data[$this->name]['theme'] = $theme;
+	function getDefaultValue() {
+		
+		$data[$this->name]['sort'] = $this->getMax('sort')+1;
 		$data[$this->name]['status'] = false;
 		return $data;
 
@@ -133,19 +132,46 @@ class Page extends AppModel {
 		if(!$this->fileSave) {
 			return true;
 		}
-		/*if(!$this->data['Page']['status']){
-            $this->delFile($this->data);
-            return true;
-        }*/
-
+		
+		$data = $this->data['Page'];
 		// タイトルタグと説明文を追加
-		if(empty($this->data['Page']['id'])) {
-			$this->data['Page']['id'] = $this->getInsertID();
+		if(empty($data['id'])) {
+			$data['id'] = $this->getInsertID();
 		}
-		$contents = $this->addBaserPageTag($this->data['Page']['id'], $this->data['Page']['contents'], $this->data['Page']['title'],$this->data['Page']['description']);
+
+		return $this->createPageTemplate($data);
+
+	}
+/**
+ * DBデータを元にページテンプレートを全て生成する
+ * @return	boolean
+ * @access	public
+ */
+	function createAllPageTemplate(){
+		$pages = $this->find('all');
+		$result = true;
+		foreach($pages as $page){
+			if(!$this->createPageTemplate($page)){
+				$result = false;
+			}
+		}
+		return $result;
+	}
+/**
+ * ページテンプレートを生成する
+ * @param	array	$data ページデータ
+ * @return	boolean
+ * @access	public
+ */
+	function createPageTemplate($data){
+
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'],$data['description']);
 
 		// 新しいページファイルのパスを取得する
-		$newPath = $this->_getPageFilePath($this->data);
+		$newPath = $this->_getPageFilePath($data);
 
 		// ファイルに保存
 		$newFile = new File($newPath);
@@ -165,7 +191,7 @@ class Page extends AppModel {
 		}else {
 			return false;
 		}
-
+		
 	}
 /**
  * ページファイルのディレクトリを取得する
@@ -174,9 +200,16 @@ class Page extends AppModel {
  */
 	function _getPageFilePath($data) {
 
-		$file = $data['Page']['name'];
-		$categoryId = $data['Page']['page_category_id'];
-		$theme = $data['Page']['theme'];
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+
+		$file = $data['name'];
+		$categoryId = $data['page_category_id'];
+		$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		$SiteConfig->cacheQueries = false;
+		$siteConfig = $SiteConfig->findExpanded();
+		$theme = $siteConfig['theme'];
 
 		// pagesディレクトリのパスを取得
 		if($theme) {
@@ -204,7 +237,7 @@ class Page extends AppModel {
 				}
 			}
 		}
-		return $path.$file.'.html.ctp';
+		return $path.$file.'.ctp';
 
 	}
 /**
@@ -239,7 +272,7 @@ class Page extends AppModel {
 				}
 			}
 		}
-		return $url.$data['name'].'.html';
+		return $url.$data['name'];
 	}
 /**
  * Baserが管理するタグを追加する
@@ -274,7 +307,6 @@ class Page extends AppModel {
 			}else {
 				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
 			}
-			$conditions['Page.theme'] = $this->data['Page']['theme'];
 			if(!$this->find($conditions)) {
 				return true;
 			}else {
@@ -293,7 +325,6 @@ class Page extends AppModel {
 
 		if(ClassRegistry::isKeySet('SiteConfig')) {
 			$SiteConfig = ClassRegistry::getObject('SiteConfig');
-			$controlSources['theme'] = $SiteConfig->getThemes();
 		}
 		$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id');
 
@@ -325,6 +356,127 @@ class Page extends AppModel {
 		return !in_array($url,$this->_unpublishes);
 
 	}
+/**
+ * ページファイルを登録する
+ * ※ 再帰処理
+ *
+ * @param	string	$pagePath
+ * @param	string	$parentCategoryId
+ * @return	array	処理結果 all / success
+ * @access	protected
+ */
+	function entryPageFiles($targetPath,$parentCategoryId = '') {
 
+		$this->Page->saveFile = false;
+		$folder = new Folder($targetPath);
+		$files = $folder->read(true,true,true);
+		$insert = 0;
+		$update = 0;
+		$all = 0;
+
+		// カテゴリの取得・登録
+		$categoryName = basename($targetPath);
+		$pageCategoryId = '';
+		if($categoryName != 'pages') {
+			$categoryId = $this->PageCategory->getIdByPath($targetPath);
+			if($categoryId) {
+				$pageCategoryId = $categoryId;
+			}else {
+				$pageCategory['PageCategory']['parent_id'] = $parentCategoryId;
+				$pageCategory['PageCategory']['name'] = $categoryName;
+				$pageCategory['PageCategory']['title'] = $categoryName;
+				$pageCategory['PageCategory']['sort'] = $this->PageCategory->getMax('sort')+1;
+				$this->PageCategory->cacheQueries = false;
+				$this->PageCategory->create($pageCategory);
+				if($this->PageCategory->save()) {
+					$pageCategoryId = $this->PageCategory->getInsertID();
+				}
+			}
+		}else {
+			$categoryName = '';
+		}
+
+		// ファイル読み込み・ページ登録
+		if(!$files[1]) $files[1] = array();
+		foreach($files[1] as $file) {
+
+			if(preg_match('/\.ctp$/is',$file) === false) {
+				continue;
+			}
+
+			$pageName = basename($file, '.ctp');
+			$file = new File($file);
+			$contents = $file->read();
+			$file->close();
+			$file = null;
+
+			// タイトル取得・置換
+			$titleReg = '/<\?php\s+?\$baser->setTitle\(\'(.*?)\'\)\s+?\?>/is';
+			if(preg_match($titleReg,$contents,$matches)) {
+				$title = trim($matches[1]);
+				$contents = preg_replace($titleReg,'',$contents);
+			}else {
+				$title = Inflector::camelize($pageName);
+			}
+
+			// 説明文取得・置換
+			$descriptionReg = '/<\?php\s+?\$baser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
+			if(preg_match($descriptionReg,$contents,$matches)) {
+				$description = trim($matches[1]);
+				$contents = preg_replace($descriptionReg,'',$contents);
+			}else {
+				$description = '';
+			}
+
+			// PageTagコメントの削除
+			$pageTagReg = '/<\!\-\- BaserPageTagBegin \-\->.*?<\!\-\- BaserPageTagEnd \-\->/is';
+			$contents = preg_replace($pageTagReg,'',$contents);
+
+			$conditions['Page.name'] = $pageName;
+			if($pageCategoryId) {
+				$conditions['Page.page_category_id'] = $pageCategoryId;
+			}else{
+				$conditions['Page.page_category_id'] = '';
+			}
+			$page = $this->find($conditions);
+			if($page) {
+				$page['Page']['title'] = $title;
+				$page['Page']['description'] = $description;
+				$page['Page']['contents'] = $contents;
+				$this->set($page);
+				if($this->save()) {
+					$update++;
+				}
+			}else {
+				$page = $this->getDefaultValue();
+				$page['Page']['name'] = $pageName;
+				$page['Page']['title'] = $title;
+				$page['Page']['description'] = $description;
+				$page['Page']['contents'] = $contents;
+				$page['Page']['page_category_id'] = $pageCategoryId;
+				$page['Page']['url'] = $this->getPageUrl($page);
+				$this->create($page);
+				if($this->save()) {
+					$insert++;
+				}
+			}
+			$all++;
+		}
+
+		// フォルダー内の登録
+		if(!$files[0]) $files[0] = array();
+		foreach($files[0] as $file) {
+			$folderName = basename($file);
+			if($folderName != '_notes' && $folderName != 'admin') {
+				$result = $this->entryPageFiles($file,$pageCategoryId);
+				$insert += $result['insert'];
+				$update += $result['update'];
+				$all += $result['all'];
+			}
+		}
+
+		return array('all'=>$all,'insert'=>$insert,'update'=>$update);
+
+	}
 }
 ?>

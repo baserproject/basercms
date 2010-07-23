@@ -45,7 +45,7 @@ $(function(){
 		<li>タイトル・説明文には、ページを特徴づけるキーワードを入れましょう。<br />
 			検索エンジン対策として有用です。</li>
 		<li>ページを作成してもすぐに公開しない場合は、公開状態を「公開しない」にしておきます。</li>
-		<li>「公開しない」にしたページを確認するには、画面下の「確認」ボタン、または、一覧の「確認」ボタンをクリックします。</li>
+		<li>「公開しない」にしたページを確認するには、画面下の「確認」ボタンをクリックします。</li>
 	</ul>
 </div>
 
@@ -58,12 +58,13 @@ $(function(){
 <?php endif ?>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $formEx->create('Page',array('id'=>'PageForm')) ?> <?php echo $formEx->hidden('Page.id') ?> <?php echo $formEx->hidden('Page.no') ?> <?php echo $formEx->hidden('Page.sort') ?> <?php echo $formEx->hidden('Page.theme') ?>
+<?php echo $formEx->create('Page',array('id'=>'PageForm')) ?>
+<?php echo $formEx->hidden('Page.sort') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('Page.no', 'NO') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Page.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
+		<th class="col-head"><?php echo $formEx->label('Page.id', 'NO') ?></th>
+		<td class="col-input"><?php echo $formEx->text('Page.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
 	</tr>
 	<?php endif; ?>
 	<?php $categories = $formEx->getControlSource('page_category_id') ?>
@@ -81,7 +82,7 @@ $(function(){
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>ページ名はURLに利用します。</li>
-					<li>.htmlなどの拡張子はつけず純粋なページ名を半角で入力します。</li>
+					<li>.htmlなどの拡張子は不要です。</li>
 					<li>日本語の入力が可能です。</li>
 				</ul>
 			</div>

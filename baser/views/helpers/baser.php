@@ -306,9 +306,9 @@ class BaserHelper extends AppHelper {
  */
 	function isTop() {
 		return ($this->params['url']['url'] == '/' ||
-						$this->params['url']['url'] == 'index.html' ||
+						$this->params['url']['url'] == 'index' ||
 						$this->params['url']['url'] == Configure::read('Mobile.prefix').'/' ||
-						$this->params['url']['url'] == Configure::read('Mobile.prefix').'/pages/index.html');
+						$this->params['url']['url'] == Configure::read('Mobile.prefix').'/index');
 	}
 /**
  * webrootを出力する為だけのラッパー
@@ -699,11 +699,10 @@ class BaserHelper extends AppHelper {
  * @param string $categoryId
  * @return mixed boolean / array
  */
-	function getPageList($categoryNo=null) {
+	function getPageList($categoryId=null) {
 		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
-			if($categoryNo) {
-				$categoryId = $this->PageCategory->getCategoryId($categoryNo,$this->siteConfig['theme']);
+			if($categoryId) {
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
 			$this->Page->unbindModel(array('belongsTo'=>array('PageCategory')));

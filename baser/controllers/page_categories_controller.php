@@ -55,23 +55,6 @@ class PageCategoriesController extends AppController {
  */
 	var $components = array('Auth','Cookie','AuthConfigure');
 /**
- * beforeFilter
- *
- * @return	void
- * @access 	public
- */
-	function beforeFilter() {
-
-		/* 認証設定 */
-		//$this->Auth->allow();
-
-		parent::beforeFilter();
-
-		// バリデーション用の値をセット
-		$this->PageCategory->validationParams['theme'] = $this->siteConfigs['theme'];
-
-	}
-/**
  * [ADMIN] ページカテゴリーリスト
  *
  * @return	void
@@ -79,8 +62,7 @@ class PageCategoriesController extends AppController {
  */
 	function admin_index() {
 
-		$conditions = array('PageCategory.theme' => $this->siteConfigs['theme']);
-		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+		$_dbDatas = $this->PageCategory->generatetreelist();
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
 			$category = $this->PageCategory->find(array('PageCategory.id'=>$key));
@@ -105,12 +87,10 @@ class PageCategoriesController extends AppController {
 	function admin_add() {
 
 		if(empty($this->data)) {
-			$this->data = $this->PageCategory->getDefaultValue($this->siteConfigs['theme']);
-			$this->data['PageCategory']['theme'] = $this->siteConfigs['theme'];
+			$this->data = $this->PageCategory->getDefaultValue();
 		}else {
 
 			/* 登録処理 */
-			$this->data['PageCategory']['no'] = $this->PageCategory->getMax('no',array('theme'=>$this->siteConfigs['theme']))+1;
 			$this->PageCategory->create($this->data);
 
 			if($this->PageCategory->validates()) {

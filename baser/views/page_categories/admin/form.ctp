@@ -45,12 +45,12 @@
 <?php endif ?>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $formEx->create('PageCategory') ?> <?php echo $formEx->hidden('PageCategory.id') ?> <?php echo $formEx->hidden('PageCategory.no') ?> <?php echo $formEx->hidden('PageCategory.theme') ?>
+<?php echo $formEx->create('PageCategory') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('PageCategory.no', 'NO') ?></th>
-		<td class="col-input"><?php echo $formEx->text('PageCategory.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.id', 'NO') ?></th>
+		<td class="col-input"><?php echo $formEx->text('PageCategory.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
 	</tr>
 	<?php endif; ?>
 	<tr>
@@ -58,8 +58,8 @@
 		<td class="col-input"><?php echo $formEx->text('PageCategory.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('PageCategory.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
-					<li>ページカテゴリ名はURLで利用します</li>
-					<li>半角のみで入力して下さい</li>
+					<li>ページカテゴリ名はURLで利用します。</li>
+					<li>日本語の入力が可能です。</li>
 				</ul>
 			</div></td>
 	</tr>

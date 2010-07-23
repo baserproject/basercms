@@ -24,6 +24,6 @@ $pageCategory = $page->getCategory();
 <?php if($pageCategory): ?>
 <div id="local-navi">
 	<h2><?php echo $pageCategory['title'] ?></h2>
-	<?php $baser->element('page_list',array('categoryNo'=>$pageCategory['no'])) ?>
+	<?php $baser->element('page_list',array('categoryNo'=>$pageCategory['id'])) ?>
 </div>
 <?php endif ?>

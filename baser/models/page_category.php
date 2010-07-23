@@ -36,7 +36,6 @@ class PageCategory extends AppModel {
  * バリデーション設定
  * @var array
  */
-	var $validationParams = array();
 /**
  * データベース接続
  *
@@ -62,12 +61,13 @@ class PageCategory extends AppModel {
 							'exclusive'=>false,
 							'finderQuery'=>''));
 /**
- * カテゴリIDリスト
- * ※ キャッシュ用
- * var		mixed
- * access	protected
+ * ページカテゴリフォルダのパスリスト
+ * キーはカテゴリID
+ * キャッシュ用
+ * @var		mixed
+ * @access	protected
  */
-	var $_categoryIds = -1;
+	var $_pageCategoryPathes = -1;
 /**
  * beforeValidate
  *
@@ -79,8 +79,6 @@ class PageCategory extends AppModel {
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
 						'message' => ">> ページカテゴリ名を入力して下さい。",
 						'required' => true),
-				array(	'rule' => 'halfText',
-						'message' => '>> ページカテゴリー名は半角のみで入力して下さい'),
 				array(  'rule' => array('duplicatePageCategory'),
 						'message' => '>> 入力されたページカテゴリー名は、同一階層に既に登録されています'));
 		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
@@ -95,9 +93,9 @@ class PageCategory extends AppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue($theme) {
+	function getDefaultValue() {
 
-		$data[$this->name]['no'] = $this->getMax('no',array('theme'=>$theme))+1;
+		$data[$this->name]['no'] = $this->getMax('no')+1;
 		return $data;
 
 	}
@@ -112,10 +110,8 @@ class PageCategory extends AppModel {
 
 		if(ClassRegistry::isKeySet('SiteConfig')) {
 			$SiteConfig = ClassRegistry::getObject('SiteConfig');
-			$controlSources['theme'] = $SiteConfig->getThemes();
 		}
-
-		$conditions['PageCategory.theme'] = $this->validationParams['theme'];
+		$conditions = array();
 		if(!empty($options['excludeParentId'])) {
 			$children = $this->children($options['excludeParentId']);
 			$excludeIds = array($options['excludeParentId']);
@@ -152,9 +148,9 @@ class PageCategory extends AppModel {
 	function beforeSave() {
 
 		// 新しいページファイルのパスを取得する
-		$newPath = $this->_getPageDirPath($this->data);
+		$newPath = $this->createPageCategoryFolder($this->data);
 		if($this->exists()) {
-			$oldPath = $this->_getPageDirPath($this->find('first',array('conditions'=>array('id'=>$this->id))));
+			$oldPath = $this->createPageCategoryFolder($this->find('first',array('conditions'=>array('id'=>$this->id))));
 			if($newPath != $oldPath) {
 				$dir = new Folder();
 				$ret = $dir->move(array('to'=>$newPath,'from'=>$oldPath,'chmod'=>0777));
@@ -184,36 +180,37 @@ class PageCategory extends AppModel {
 		}
 	}
 /**
- * 関連するページデータのURLを更新する
- * @param	string	$id
- * @return	void
+ * ページカテゴリのフォルダを生成してパスを返す
+ * @param	array	$data	ページカテゴリデータ
+ * @return	mixid	カテゴリのパス / false
  * @access	public
  */
-	function updateRelatedPageUrl($id) {
-		if(!$id) {
-			return;
-		}
-		$dbData = $this->find('first',array('conditions'=>array('id'=>$id)));
-		// ページデータのURLを更新
-		if(!empty($dbData['Page'])) {
-			$this->Page->saveFile = false;
-			foreach($dbData['Page'] as $page) {
-				$page['url'] = $this->Page->getPageUrl($page);
-				$this->Page->set($page);
-				$this->Page->save();
-			}
+	function createPageCategoryFolder($data) {
+		$path = $this->getPageCategoryFolderPath($data);
+		$folder = new Folder();
+		if($folder->create($path, 0777)){
+			return $path;
+		}else{
+			return false;
 		}
 	}
 /**
- * ページカテゴリのパスを取得する
- * @param array $data
- * @return string
+ * カテゴリフォルダのパスを取得する
+ * @param	array	$data	ページカテゴリデータ
+ * @return	string	$path
+ * @access	public
  */
-	function _getPageDirPath($data) {
+	function getPageCategoryFolderPath($data) {
 
-		$theme = $data['PageCategory']['theme'];
-		$categoryName = $data['PageCategory']['name'];
-		$parentId = $data['PageCategory']['parent_id'];
+		if(isset($data['PageCategory'])) {
+			$data = $data['PageCategory'];
+		}
+		
+		$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		$siteConfig = $SiteConfig->findExpanded();
+		$theme = $siteConfig['theme'];
+		$categoryName = $data['name'];
+		$parentId = $data['parent_id'];
 
 		if($theme) {
 			$path = WWW_ROOT.'themed'.DS.$theme.DS.'pages'.DS;
@@ -226,16 +223,11 @@ class PageCategory extends AppModel {
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
 					$path .= $category['PageCategory']['name'].DS;
-					if(!is_dir($path)) {
-						mkdir($path,0777);
-						chmod($path,0777);
-					}
 				}
 			}
 		}
-
 		return $path.$categoryName;
-
+		
 	}
 /**
  * 同一階層に同じニックネームのカテゴリがないかチェックする
@@ -246,8 +238,6 @@ class PageCategory extends AppModel {
 	function duplicatePageCategory($check) {
 
 		$parentId = $this->data['PageCategory']['parent_id'];
-
-		$conditions['PageCategory.theme'] = $this->validationParams['theme'];
 		if($parentId) {
 			$conditions['PageCategory.parent_id'] = $parentId;
 		}else {
@@ -281,7 +271,7 @@ class PageCategory extends AppModel {
 		parent::beforeDelete($cascade);
 		$id = $this->data['PageCategory']['id'];
 		if($this->releaseRelatedPagesRecursive($id)){
-			$path = $this->_getPageDirPath($this->find('first',array('conditions'=>array('id'=>$id))));
+			$path = $this->createPageCategoryFolder($this->find('first',array('conditions'=>array('id'=>$id))));
 			$folder = new Folder();
 			$folder->delete($path);
 			return true;
@@ -315,12 +305,12 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function releaseRelatedPages($categoryId) {
-		$this->Page->unBindModel(array('belongsTo'=>array('PageCategory')));
-		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId)));
+		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId),'recursive'=>-1));
 		$ret = true;
 		if($pages) {
 			foreach($pages as $page) {
 				$page['Page']['page_category_id'] = '';
+				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
 				if(!$this->Page->save()) {
 					$ret = false;
@@ -330,29 +320,68 @@ class PageCategory extends AppModel {
 		return $ret;
 	}
 /**
- * ページカテゴリIDを取得する
- *
- * @param		int			$categoryNo
- * @param		string	$theme
- * @return	$mixed	array / false
+ * 関連するページデータのURLを更新する
+ * @param	string	$id
+ * @return	void
+ * @access	public
  */
-	function getCategoryId($categoryNo,$theme) {
-		if($this->_categoryIds === -1) {
-			$conditions = array('PageCategory.theme'=>$theme);
-			$this->unbindModel(array('hasMany'=>array('Page')));
-			$pageCategories = $this->find('all',array('conditions'=>$conditions,'fields'=>array('id','no')));
-			if($pageCategories) {
-				$this->_categoryIds = array();
-				foreach($pageCategories as $pageCateogry) {
-					$this->_categoryIds[$pageCateogry['PageCategory']['no']] = $pageCateogry['PageCategory']['id'];
-				}
-			}else {
-				$this->_categoryIds = array();
+	function updateRelatedPageUrlRecursive($categoryId) {
+		if(!$this->releaseRelatedPages($categoryId)){
+			return false;
+		}
+		$children = $this->children($categoryId);
+		$ret = true;
+		foreach($children as $child) {
+			if(!$this->updateRelatedPageUrl($child['PageCategory']['id'])) {
+				$ret = false;
 			}
 		}
-		if(isset($this->_categoryIds[$categoryNo])) {
-			return $this->_categoryIds[$categoryNo];
-		}else {
+		return $ret;
+	}
+/**
+ * 関連するページデータのURLを更新する
+ * @param	string	$id
+ * @return	void
+ * @access	public
+ */
+	function updateRelatedPageUrl($id) {
+		if(!$id) {
+			return;
+		}
+		$pages = $this->Page->find('first',array('conditions'=>array('Page.page_category_id'=>$id),'recursive'=>-1));
+		$result = true;
+		// ページデータのURLを更新
+		if($pages) {
+			$this->Page->saveFile = false;
+			foreach($pages as $page) {
+				$page['url'] = $this->Page->getPageUrl($page);
+				$this->Page->set($page);
+				if(!$this->Page->save()){
+					$result = false;
+				}
+			}
+		}
+		return $result;
+	}
+/**
+ * カテゴリフォルダのパスから対象となるデータが存在するかチェックする
+ * 存在する場合は id を返す
+ * @param	string	$path
+ * @return	mixed
+ */
+	function getIdByPath($path) {
+		if($this->_pageCategoryPathes == -1) {
+			$this->_pageCategoryPathes = array();
+			$pageCategories = $this->find('all');
+			if($pageCategories) {
+				foreach($pageCategories as $pageCategory) {
+					$this->_pageCategoryPathes[$pageCategory['PageCategory']['id']] = $this->getPageCategoryFolderPath($pageCategory);
+				}
+			}
+		}
+		if(in_array($path, $this->_pageCategoryPathes)) {
+			return array_search($path,$this->_pageCategoryPathes);
+		}else{
 			return false;
 		}
 	}

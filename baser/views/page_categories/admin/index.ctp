@@ -30,7 +30,7 @@
 		また、各カテゴリは子カテゴリを持つ事ができるようになっています。</p>
 	<div class="example-box">
 		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
-		<p>http://[BaserCMS設置URL]/company/about.html</p>
+		<p>http://[BaserCMS設置URL]/company/about</p>
 	</div>
 </div>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePageCategoryCategories">
@@ -53,7 +53,7 @@
 	<tr<?php echo $class; ?>>
 		<td class="operation-button"><?php $baser->link('編集',array('action'=>'edit', $dbData['PageCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['PageCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),false); ?></td>
-		<td><?php echo $dbData['PageCategory']['no']; ?></td>
+		<td><?php echo $dbData['PageCategory']['id']; ?></td>
 		<td><?php $baser->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?></td>
 		<td><?php echo $dbData['PageCategory']['title']; ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['PageCategory']['created']); ?></td>

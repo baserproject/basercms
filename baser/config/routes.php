@@ -34,9 +34,9 @@ if (file_exists(CONFIGS.'database.php')) {
  * トップページ
  */
 	if(!$mobileOn) {
-		Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'pages/'.'index.html'));
+		Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'index'));
 	}else {
-		Router::connect('/'.$mobilePrefix.'/', array('prefix' => 'mobile','controller' => 'pages', 'action'=>'display', 'pages/'.'index.html'));
+		Router::connect('/'.$mobilePrefix.'/', array('prefix' => 'mobile','controller' => 'pages', 'action'=>'display', 'index'));
 	}
 /**
  * 管理画面トップページ
@@ -44,13 +44,41 @@ if (file_exists(CONFIGS.'database.php')) {
 	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard', 'action'=> 'index'));
 /**
  * ページ機能拡張
- * .html付きのアクセスの場合、pagesコントローラーを呼び出す
+ * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
+ * それを /xxx で呼び出す為のルーティング
  */
+	/* 1.5.9以前との互換性の為残しておく */
+	// .html付きのアクセスの場合、pagesコントローラーを呼び出す
 	if(strpos($parameter, '.html') !== false) {
 		if($mobileOn) {
 			Router::connect('/'.$mobilePrefix.'/.*?\.html', array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}else {
 			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
+		}
+	}else{
+		/* 1.5.10 以降 */
+		$Page = ClassRegistry::init('Page');
+		if($Page){
+			if(preg_match('/\/$/is', $parameter)) {
+				$_parameters = urldecode(array($parameter.'index'));
+			}else{
+				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
+			}
+			foreach ($_parameters as $_parameter){
+				if(!$mobileOn){
+					$conditions = array('Page.status'=>true,'Page.url'=>'/'.$_parameter);
+				}else{
+					$conditions = array('Page.status'=>true,'Page.url'=>'/mobile/'.$_parameter);
+				}
+				if($Page->field('id',$conditions)){
+					if(!$mobileOn){
+						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+					}else{
+						Router::connect('/'.$mobilePrefix.'/'.$parameter, am(array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display',$parameter),split('/',$_parameter)));
+					}
+					break;
+				}
+			}
 		}
 	}
 /**

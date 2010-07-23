@@ -894,6 +894,16 @@ class InstallationsController extends AppController {
 				}
 			}
 
+			$themeFolder = new Folder(WWW_ROOT.'themed');
+			$themeFiles = $themeFolder->read(true,true,true);
+			foreach($themeFiles[0] as $theme){
+				$folder = new Folder($theme.DS.'pages');
+				$folder->delete();
+				$folder->create($theme.DS.'pages',0777);
+				$folder = null;
+			}
+			$themeFolder = null;
+
 			if($messages) {
 				$messages[] = '手動でサーバー上より上記ファイルを削除して初期化を完了させてください。';
 			}

@@ -41,7 +41,7 @@ class SiteConfigsController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('GlobalMenu');
+	var $uses = array('SiteConfig','GlobalMenu','Page');
 /**
  * コンポーネント
  *
@@ -114,6 +114,10 @@ class SiteConfigsController extends AppController {
 				$this->writeDebug($mode);
 				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
 					clearViewCache();
+					if(!$this->Page->createAllPageTemplate()){
+						$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+						$this->redirect(array('action'=>'form'));
+					}
 				}
 				$this->Session->setFlash('システム設定を保存しました。');
 				$this->redirect(array('action'=>'form'));

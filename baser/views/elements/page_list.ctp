@@ -19,7 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pages = $baser->getPageList($categoryNo);
+$pages = $baser->getPageList($categoryId);
 ?>
 <ul class="clearfix">
 <?php

@@ -46,13 +46,13 @@ $(document).ready(function(){
 			検索するには、すぐ下の「検索」をクリックして検索条件を表示させます。</li>
 		<li>オーサリングツールでの制作に慣れている方向けに、ファイルをアップロードしてデータベースに一括で読み込む機能を備えています。<br />
 			ページを読み込むには、特定のフォルダにページテンプレートをアップロードして、サイドメニューの「ページテンプレート読込」を実行します。<br />
-			<a href="http://basercms.net/manuals/designers/10.html" target="_blank">≫ ページテンプレート読込について</a></li>
+			<a href="http://basercms.net/manuals/etc/5.html" target="_blank">≫ ページテンプレート読込について</a></li>
 	</ul>
 	<div class="example-box">
 		<div class="head">（例）ページ名「about」として作成したページを表示させる為のURL</div>
-		<p>http://[BaserCMS設置URL]/about.html</p>
+		<p>http://[BaserCMS設置URL]/about</p>
 		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
-		<p>http://[BaserCMS設置URL]/company/about.html</p>
+		<p>http://[BaserCMS設置URL]/company/about</p>
 	</div>
 </div>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
@@ -70,7 +70,7 @@ $(document).ready(function(){
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePages">
 	<tr>
 		<th>操作</th>
-		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'no'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'id'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'page_category_id'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'ページ名 ▼','desc'=>'ページ名 ▲'),'name'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'title'); ?></th>
@@ -95,7 +95,7 @@ $(document).ready(function(){
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
 			<?php $baser->link('▲',array('action'=>'index','sortup'=>$dbData['Page']['id'])) ?>
 			<?php $baser->link('▼',array('action'=>'index','sortdown'=>$dbData['Page']['id'])) ?></td>
-		<td><?php echo $dbData['Page']['no']; ?></td>
+		<td><?php echo $dbData['Page']['id']; ?></td>
 		<td><?php if(!empty($dbData['PageCategory']['title'])): ?>
 			<?php echo $dbData['PageCategory']['title']; ?>
 			<?php endif; ?></td>
