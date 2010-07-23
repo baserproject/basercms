@@ -307,6 +307,11 @@ class PagesController extends AppController {
 			$ext = '.html';
 		}
 
+		// モバイルディレクトリへのアクセスは Not Found
+		if($path[0]=='mobile'){
+			$this->notFound();
+		}
+
 		$count = count($path);
 		if (!$count) {
 			$this->redirect('/');
