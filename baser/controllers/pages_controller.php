@@ -410,6 +410,10 @@ class PagesController extends AppController {
 			$this->notFound();
 		}
 
+		if(preg_match('/^\/mobile\//is', $page['Page']['url'])){
+			Configure::write('Mobile.on',true);
+		}
+
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
@@ -421,11 +425,16 @@ class PagesController extends AppController {
 		unset($file);
 		@chmod($path, 0666);
 
-		$this->layoutPath = '';
+		if(!Configure::read('Mobile.on')){
+			$this->layoutPath = '';
+		}else{
+			$this->layoutPath = 'mobile';
+			$this->helpers[] = 'mobile';
+		}
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
-		$this->params['url']['url'] = preg_replace('/^\//i','',$page['Page']['url']);
+		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview.ctp');
 
