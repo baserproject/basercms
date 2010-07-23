@@ -176,13 +176,27 @@
  */
 	function clearViewCache($url=null,$ext='.php') {
 
-		if (($url == '/' || $url == '/index.html')) {
-			if(Configure::read('App.baseUrl')) {
-				clearCache('index_php');
-				clearCache('index_php_index_html');
-			}else {
-				clearCache('home');
-				clearCache('index_html');
+		$url = preg_replace('/^\/mobile/is', '/m', $url);
+		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
+			$homes = array('','index','index_html');
+			foreach($homes as $home){
+				if(preg_match('/^\/m/is',$url)){
+					if($home){
+						$home = 'm_'.$home;
+					}else{
+						$home = 'm';
+					}
+				}
+				if(Configure::read('App.baseUrl')) {
+					if($home){
+						$home = 'index_php_'.$home;
+					}else{
+						$home = 'index_php';
+					}
+				}elseif(!$home){
+					$home = 'home';
+				}
+				clearCache($home);
 			}
 		}elseif($url) {
 			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
