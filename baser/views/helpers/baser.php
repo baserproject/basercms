@@ -432,7 +432,7 @@ class BaserHelper extends AppHelper {
  * DOC TYPE を出力するだけのラッパー
  */
 	function docType($type = 'xhtml-trans') {
-		echo $this->Html->docType($type);
+		echo $this->Html->docType($type)."\n";
 	}
 /**
  * CSSタグを出力するだけのラッパー
