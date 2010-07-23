@@ -68,11 +68,11 @@ CREATE TABLE IF NOT EXISTS `bc_global_menus` (
 
 INSERT INTO `bc_global_menus` (`no`, `sort`, `status`, `name`, `link`, `menu_type`, `created`, `modified`) VALUES
 ('1','1','1','ホーム', '/', 'default', NOW(), NOW()),
-('2','2','1','会社案内', '/about.html', 'default', NOW(), NOW()),
-('3','3','1','サービス', '/service.html', 'default', NOW(), NOW()),
+('2','2','1','会社案内', '/about', 'default', NOW(), NOW()),
+('3','3','1','サービス', '/service', 'default', NOW(), NOW()),
 ('4','4','1','ニュースリリース', '/news/index', 'default', NOW(), NOW()),
 ('5','5','1','お問い合せ', '/contact/index', 'default', NOW(), NOW()),
-('6','6','1','サイトマップ', '/sitemap.html', 'default', NOW(), NOW()),
+('6','6','1','サイトマップ', '/sitemap', 'default', NOW(), NOW()),
 ('1','1','1','ダッシュボード', '/admin/dashboard/index', 'admin', NOW(), NOW()),
 ('2','2','1','ユーザー管理', '/admin/users/index', 'admin', NOW(), NOW()),
 ('3','3','1','ニュース管理', '/admin/blog/blog_posts/index/1', 'admin', NOW(), NOW()),
@@ -189,14 +189,12 @@ CREATE TABLE IF NOT EXISTS `bc_users` (
 
 CREATE TABLE IF NOT EXISTS `bc_pages` (
   `id` int(8) NOT NULL auto_increment,
-  `no` int(8) default NULL,
   `sort` int(8) default NULL,
   `name` varchar(50) default NULL,
   `title` varchar(255) default NULL,
   `description` varchar(255) default NULL,
   `contents` text collate utf8_unicode_ci,
   `page_category_id` int(8) default NULL,
-  `theme` varchar(50) default NULL,
   `status` tinyint(1) default NULL,
   `url` text collate utf8_unicode_ci,
   `modified` datetime default NULL,
@@ -208,11 +206,12 @@ CREATE TABLE IF NOT EXISTS `bc_pages` (
 -- テーブルのデータをダンプしています `bc_pages`
 --
 
-INSERT INTO `bc_pages` (`no`,`sort`,`name`, `title`, `description`, `contents`, `page_category_id`, `theme`, `status`,`url`, `created`, `modified`) VALUES
- ('1','1','index',null,null,'<?php echo $html->css(\'top\',null,null,false) ?>\n\n\n<div id=\"news\" class=\"clearfix\">\n<div class=\"news\" style=\"margin-right:28px;\">\n<h2 id=\"newsHead01\">NEWS RELEASE</h2>\n<div class=\"body\">\n<script type=\"text/javascript\" src=\"<?php $baser->root() ?>feed/ajax/1\"></script>\n</div>\n</div>\n\n\n<div class=\"news\">\n<h2 id=\"newsHead02\">BaserCMS NEWS</h2>\n<div class=\"body\">\n<script type=\"text/javascript\" src=\"<?php $baser->root() ?>feed/ajax/2\"></script>\n</div>\n</div>\n</div>',null,'demo','1', '/index.html', NOW(), NOW()),
- ('2','2','about','会社案内','BaserCMS inc.の会社案内ページ','<h2 class=\"contents-head\">会社案内</h2>\n\n<h3 class=\"contents-head\">会社データ</h3>\n\n<div class=\"section\">\n<table class=\"row-table-01\" cellspacing=\"0\" cellpadding=\"0\">\n<tr><th width=\"150\">会社名</th><td>BaserCMS inc.  [デモ]</td></tr>\n<tr><th>設立</th><td>2009年11月</td></tr>\n<tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>\n<tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />\nWEBサイト制作事業（ダミー）<br />\nWEBシステム開発事業（ダミー）</td></tr>\n</table>\n</div>\n\n\n<h3 class=\"contents-head\">アクセスマップ</h3>\n<?php $baser->element(\'googlemaps\') ?>\n',null,'demo','1', '/about.html', NOW(), NOW()),
- ('3','3','service','サービス','BaserCMS inc.のサービス紹介ページ。','<h2 class=\"contents-head\">サービス</h2>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>',null,'demo','1', '/service.html', NOW(), NOW()),
- ('4','4','sitemap','サイトマップ','BaserCMS inc.のサイトマップページ','<h2 class=\"contents-head\">\n	サイトマップ</h2>\n<h3 class=\"contents-head\">\n	公開ページ</h3>\n<ul class=\"section\">\n	<li>\n<?php $baser->link(\'ホーム\',\'/\') ?>	</li>\n	<li>\n<?php $baser->link(\'会社案内\',\'/about.html\') ?>	</li>\n	<li>\n<?php $baser->link(\'サービス\',\'/service.html\') ?>	</li>\n	<li>\n<?php $baser->link(\'新着情報\',\'/news/\') ?>	</li>\n	<li>\n<?php $baser->link(\'お問い合わせ\',\'/contact/index\') ?>	</li>\n	<li>\n<?php $baser->link(\'サイトマップ\',\'/sitemap.html\') ?>	</li>\n</ul>\n<h3 class=\"contents-head\">\n	非公開ページ</h3>\n<ul class=\"section\">\n<li>\n	<?php $baser->link(\'管理者ログイン\',\'/admin/users/login\') ?>	</li>\n</ul>\n<p class=\"customize-navi corner10\">\n	<small>公開する際には非公開ページは削除をおすすめします。</small>\n</p>',null,'demo','1', '/sitemap.html', NOW(), NOW());
+INSERT INTO `bc_pages` (`sort`,`name`, `title`, `description`, `contents`, `page_category_id`, `status`,`url`, `created`, `modified`) VALUES
+ ('1','index',null,null,'<?php echo $html->css(\'top\',null,null,false) ?>\n\n\n<div id=\"news\" class=\"clearfix\">\n<div class=\"news\" style=\"margin-right:28px;\">\n<h2 id=\"newsHead01\">NEWS RELEASE</h2>\n<div class=\"body\">\n<script type=\"text/javascript\" src=\"<?php $baser->root() ?>feed/ajax/1\"></script>\n</div>\n</div>\n\n\n<div class=\"news\">\n<h2 id=\"newsHead02\">BaserCMS NEWS</h2>\n<div class=\"body\">\n<script type=\"text/javascript\" src=\"<?php $baser->root() ?>feed/ajax/2\"></script>\n</div>\n</div>\n</div>',null,'1', '/index', NOW(), NOW()),
+ ('2','about','会社案内','BaserCMS inc.の会社案内ページ','<h2 class=\"contents-head\">会社案内</h2>\n\n<h3 class=\"contents-head\">会社データ</h3>\n\n<div class=\"section\">\n<table class=\"row-table-01\" cellspacing=\"0\" cellpadding=\"0\">\n<tr><th width=\"150\">会社名</th><td>BaserCMS inc.  [デモ]</td></tr>\n<tr><th>設立</th><td>2009年11月</td></tr>\n<tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>\n<tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />\nWEBサイト制作事業（ダミー）<br />\nWEBシステム開発事業（ダミー）</td></tr>\n</table>\n</div>\n\n\n<h3 class=\"contents-head\">アクセスマップ</h3>\n<?php $baser->element(\'googlemaps\') ?>\n',null,'1', '/about', NOW(), NOW()),
+ ('3','service','サービス','BaserCMS inc.のサービス紹介ページ。','<h2 class=\"contents-head\">サービス</h2>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>\n\n<div class=\"section\">\n<p>\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\nサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。\n</p>\n</div>',null,'1', '/service', NOW(), NOW()),
+ ('4','sitemap','サイトマップ','BaserCMS inc.のサイトマップページ','<h2 class=\"contents-head\">\n	サイトマップ</h2>\n<h3 class=\"contents-head\">\n	公開ページ</h3>\n<ul class=\"section\">\n	<li>\n<?php $baser->link(\'ホーム\',\'/\') ?>	</li>\n	<li>\n<?php $baser->link(\'会社案内\',\'/about\') ?>	</li>\n	<li>\n<?php $baser->link(\'サービス\',\'/service\') ?>	</li>\n	<li>\n<?php $baser->link(\'新着情報\',\'/news/\') ?>	</li>\n	<li>\n<?php $baser->link(\'お問い合わせ\',\'/contact/index\') ?>	</li>\n	<li>\n<?php $baser->link(\'サイトマップ\',\'/sitemap\') ?>	</li>\n</ul>\n<h3 class=\"contents-head\">\n	非公開ページ</h3>\n<ul class=\"section\">\n<li>\n	<?php $baser->link(\'管理者ログイン\',\'/admin/users/login\') ?>	</li>\n</ul>\n<p class=\"customize-navi corner10\">\n	<small>公開する際には非公開ページは削除をおすすめします。</small>\n</p>',null,'1', '/sitemap', NOW(), NOW()),
+ ('5','index',null,null,'<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<div style=\"text-align:center;background-color:#8ABE08;\"> <span style=\"color:white;\">メインメニュー</span> </div>\n<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<span style=\"color:#8ABE08\">◆</span>\n<?php $baser->link(\'ニュースリリース\',array(\'controller\'=>\'news\',\'action\'=>\'index\')) ?>\n<br />\n<span style=\"color:#8ABE08\">◆</span>\n<?php $baser->link(\'お問い合わせ\',array(\'controller\'=>\'contact\',\'action\'=>\'index\')) ?>\n<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<div style=\"text-align:center;background-color:#8ABE08;\"> <span style=\"color:white;\">NEWS RELEASE</span> </div>\n<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<?php echo mb_convert_encoding(file_get_contents(\'http://\'.$_SERVER[\'HTTP_HOST\'].$baser->getUrl(\'/\'.Configure::read(\'Mobile.prefix\').\'/feed/index/1\')),\'UTF-8\',\'SJIS\'); ?> <br />\n<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<div style=\"text-align:center;background-color:#8ABE08;\"> <span style=\"color:white;\">BaserCMS NEWS</span> </div>\n<hr size=\"1\" style=\"width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;\" />\n<?php echo mb_convert_encoding(file_get_contents(\'http://\'.$_SERVER[\'HTTP_HOST\'].$baser->getUrl(\'/\'.Configure::read(\'Mobile.prefix\').\'/feed/index/2\')),\'UTF-8\',\'SJIS\'); ?>','1','0', '/mobile/index', NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -222,18 +221,23 @@ INSERT INTO `bc_pages` (`no`,`sort`,`name`, `title`, `description`, `contents`, 
 
 CREATE TABLE IF NOT EXISTS `bc_page_categories` (
   `id` int(8) NOT NULL auto_increment,
-  `no` int(8) default NULL,
   `parent_id` int(8) default NULL,
   `lft` int(8) default NULL,
   `rght` int(8) default NULL,
   `name` varchar(50) default NULL,
   `title` varchar(255) default NULL,
   `sort` int(8) default NULL,
-  `theme` varchar(50) default NULL,
   `modified` datetime default NULL,
   `created` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータをダンプしています bc_page_categories
+--
+
+INSERT INTO `bc_page_categories` (`parent_id`, `lft`, `rght`, `name`, `title`, `sort`, `created`, `modified`) VALUES
+ (null, '1', '2', 'mobile', 'モバイル', '1', NOW(), NOW());
 
 -- --------------------------------------------------------
 
