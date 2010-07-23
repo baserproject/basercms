@@ -78,7 +78,7 @@ if(!empty($cn->config->baser['driver'])) {
 					if(!$mobileOn){
 						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{
-						Router::connect('/'.$mobilePrefix.'/'.$parameter, am(array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display',$parameter),split('/',$_parameter)));
+						Router::connect('/'.$mobilePrefix.'/'.$parameter, am(array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}
 					break;
 				}
