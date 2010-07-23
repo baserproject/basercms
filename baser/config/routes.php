@@ -35,14 +35,6 @@ if(!empty($cn->config->baser['driver'])) {
 	$mobilePrefix = Configure::read('Mobile.prefix');
 	$mobilePlugin = Configure::read('Mobile.plugin');
 /**
- * トップページ
- */
-	if(!$mobileOn) {
-		Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'index'));
-	}else {
-		Router::connect('/'.$mobilePrefix.'/', array('prefix' => 'mobile','controller' => 'pages', 'action'=>'display', 'index'));
-	}
-/**
  * 管理画面トップページ
  */
 	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard', 'action'=> 'index'));
@@ -63,8 +55,10 @@ if(!empty($cn->config->baser['driver'])) {
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
-			if(preg_match('/\/$/is', $parameter)) {
-				$_parameters = urldecode(array($parameter.'index'));
+			if(!$parameter){
+				$_parameters = array('index');
+			}elseif(preg_match('/\/$/is', $parameter)) {
+				$_parameters = array(urldecode($parameter.'index'));
 			}else{
 				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
 			}
