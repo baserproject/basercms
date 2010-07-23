@@ -220,6 +220,7 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', $this->data['Page']['url']));
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ情報編集';
 		$this->render('form');

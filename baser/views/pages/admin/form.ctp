@@ -51,9 +51,9 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 	<?php if($formEx->value('Page.status')): ?>
-<p><strong>このページのURL：<?php $baser->link($baser->getUri('/'.$formEx->value('Page.url')),'/'.$formEx->value('Page.url'),array('target'=>'_blank')) ?></strong></p>
+<p><strong>このページのURL：<?php $baser->link($baser->getUri('/'.$url),'/'.$url,array('target'=>'_blank')) ?></strong></p>
 	<?php else: ?>
-<p><strong>このページのURL：<?php echo $baser->getUri('/'.$formEx->value('Page.url')) ?></strong></p>
+<p><strong>このページのURL：<?php echo $baser->getUri('/'.$url) ?></strong></p>
 	<?php endif ?>
 <?php endif ?>
 

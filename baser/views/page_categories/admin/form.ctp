@@ -85,7 +85,7 @@
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>
 	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php elseif ($this->action == 'admin_edit' && $formEx->value('PageCategory.name')!='mobile'): ?>
 	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
 	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('PageCategory.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $formEx->value('PageCategory.name')),false); ?>
 	<?php endif ?>

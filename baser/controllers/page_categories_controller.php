@@ -153,7 +153,7 @@ class PageCategoriesController extends AppController {
 		if(isset($this->data['Page'])){
 			foreach($this->data['Page'] as $page){
 				if($page['name']=='index'){
-					$indexPage['url'] = $page['url'];
+					$indexPage['url'] = preg_replace('/^\/mobile\//is', '/m/', $page['url']);
 					$indexPage['status'] = $page['status'];
 					break;
 				}
