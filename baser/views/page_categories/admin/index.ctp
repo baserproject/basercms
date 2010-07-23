@@ -58,7 +58,13 @@
 			<?php endif ?>
 		</td>
 		<td><?php echo $dbData['PageCategory']['id']; ?></td>
-		<td><?php $baser->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?></td>
+		<td>
+			<?php if($dbData['PageCategory']['name']!='mobile'): ?>
+			<?php $baser->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?>
+			<?php else: ?>
+			<?php echo $dbData['PageCategory']['name'] ?>
+			<?php endif ?>
+		</td>
 		<td><?php echo $dbData['PageCategory']['title']; ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['PageCategory']['created']); ?></td>
 		<td><?php echo $timeEx->format('y-m-d',$dbData['PageCategory']['modified']); ?></td>
