@@ -51,8 +51,12 @@
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button"><?php $baser->link('編集',array('action'=>'edit', $dbData['PageCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $dbData['PageCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),false); ?></td>
+		<td class="operation-button">
+			<?php if($dbData['PageCategory']['name']!='mobile'): ?>
+			<?php $baser->link('編集',array('action'=>'edit', $dbData['PageCategory']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $dbData['PageCategory']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),false); ?>
+			<?php endif ?>
+		</td>
 		<td><?php echo $dbData['PageCategory']['id']; ?></td>
 		<td><?php $baser->link($dbData['PageCategory']['name'],array('action'=>'edit', $dbData['PageCategory']['id'])); ?></td>
 		<td><?php echo $dbData['PageCategory']['title']; ?></td>
