@@ -25,7 +25,11 @@
 if(Configure::read('Baser.Asset')) {
 	return;
 }
+
 if (file_exists(CONFIGS.'database.php')) {
+	$cn = ConnectionManager::getInstance();
+}
+if(!empty($cn->config->baser['driver'])) {
 	$parameter = Configure::read('Baser.urlParam');
 	$mobileOn = Configure::read('Mobile.on');
 	$mobilePrefix = Configure::read('Mobile.prefix');
@@ -87,10 +91,7 @@ if (file_exists(CONFIGS.'database.php')) {
  */
 	$PluginContent = ClassRegistry::init('PluginContent');
 	if($PluginContent) {
-		$cn = ConnectionManager::getInstance();
-		if(!empty($cn->config->baser['driver'])) {
-			$PluginContent->addRoute($parameter);
-		}
+		$PluginContent->addRoute($parameter);
 	}
 /**
  * 携帯ルーティング
