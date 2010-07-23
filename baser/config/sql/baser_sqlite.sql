@@ -57,15 +57,15 @@ CREATE TABLE bc_global_menus (
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
 ('1','1','1','ホーム', '/', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
-('2','2','1','会社案内', '/about.html', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
+('2','2','1','会社案内', '/about', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
-('3','3','1','サービス', '/service.html', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
+('3','3','1','サービス', '/service', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
 ('4','4','1','ニュースリリース', '/news/index', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
 ('5','5','1','お問い合せ', '/contact/index', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
-('6','6','1','サイトマップ', '/sitemap.html', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
+('6','6','1','サイトマップ', '/sitemap', 'default', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
 ('1','1','1','ダッシュボード', '/admin/dashboard/index', 'admin', datetime('now', 'localtime'), datetime('now', 'localtime'));
 INSERT INTO bc_global_menus (no, sort, status, name, link, menu_type, created, modified) VALUES
@@ -194,14 +194,12 @@ CREATE TABLE bc_users (
 
 CREATE TABLE bc_pages (
   id integer NOT NULL PRIMARY KEY,
-  no integer default NULL,
   sort integer default NULL,
   name text default NULL,
   title text default NULL,
   description text default NULL,
   contents text default NULL,
   page_category_id integer default NULL,
-  theme text default NULL,
   status boolean default NULL,
   url text default NULL,
   modified datetime default NULL,
@@ -212,10 +210,8 @@ CREATE TABLE bc_pages (
 -- テーブルのデータをダンプしています bc_pages
 --
 
-INSERT into bc_pages (no, sort, name, title, description, contents, page_category_id, theme, status, url, created, modified) VALUES
- ('1','1','index',null,null,'<?php echo $html->css(''top'',null,null,false) ?>
-
-
+INSERT into bc_pages (sort, name, title, description, contents, page_category_id, status, url, created, modified) VALUES
+ ('1','index',null,null,'<?php echo $html->css(''top'',null,null,false) ?>
 <div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
 <h2 id="newsHead01">NEWS RELEASE</h2>
@@ -224,17 +220,16 @@ INSERT into bc_pages (no, sort, name, title, description, contents, page_categor
 </div>
 </div>
 
-
 <div class="news">
 <h2 id="newsHead02">BaserCMS NEWS</h2>
 <div class="body">
 <script type="text/javascript" src="<?php $baser->root() ?>feed/ajax/2"></script>
 </div>
 </div>
-</div>',null,'','1', '/index.html', datetime('now', 'localtime'), datetime('now', 'localtime'));
-
-INSERT into bc_pages (no, sort, name, title, description, contents, page_category_id, theme, status, url, created, modified) VALUES
- ('2','2','about','会社案内','BaserCMS inc.の会社案内ページ','<h2 class="contents-head">会社案内</h2>
+</div>
+',null, '1', '/index', datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT into bc_pages (sort, name, title, description, contents, page_category_id, status, url, created, modified) VALUES
+ ('2','about','会社案内','BaserCMS inc.の会社案内ページ','<h2 class="contents-head">会社案内</h2>
 
 <h3 class="contents-head">会社データ</h3>
 
@@ -252,9 +247,9 @@ WEBシステム開発事業（ダミー）</td></tr>
 
 <h3 class="contents-head">アクセスマップ</h3>
 <?php $baser->element(''googlemaps'') ?>
-',null,'','1', '/about.html', datetime('now', 'localtime'), datetime('now', 'localtime'));
-INSERT into bc_pages (no, sort, name, title, description, contents, page_category_id, theme, status, url, created, modified) VALUES
- ('3','3','service','サービス','BaserCMS inc.のサービス紹介ページ。','<h2 class="contents-head">サービス</h2>
+',null, '1', '/about', datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT into bc_pages (sort, name, title, description, contents, page_category_id, status, url, created, modified) VALUES
+ ('3','service','サービス','BaserCMS inc.のサービス紹介ページ。','<h2 class="contents-head">サービス</h2>
 
 <div class="section">
 <p>
@@ -281,9 +276,9 @@ INSERT into bc_pages (no, sort, name, title, description, contents, page_categor
 サービスの案内文が入ります。サービスの案内文が入ります。サービスの案内文が入ります。
 サービスの案内文が入ります。サービスの案内文が入ります。サービスの案内文が入ります。
 </p>
-</div>',null,'','1', '/service.html', datetime('now', 'localtime'), datetime('now', 'localtime'));
-INSERT into bc_pages (no, sort, name, title, description, contents, page_category_id, theme, status, url, created, modified) VALUES
- ('4','4','sitemap','サイトマップ','BaserCMS inc.のサイトマップページ','<h2 class="contents-head">
+</div>',null, '1', '/service', datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT into bc_pages (sort, name, title, description, contents, page_category_id, status, url, created, modified) VALUES
+ ('4','sitemap','サイトマップ','BaserCMS inc.のサイトマップページ','<h2 class="contents-head">
 	サイトマップ</h2>
 <h3 class="contents-head">
 	公開ページ</h3>
@@ -291,15 +286,15 @@ INSERT into bc_pages (no, sort, name, title, description, contents, page_categor
 	<li>
 <?php $baser->link(''ホーム'',''/'') ?>	</li>
 	<li>
-<?php $baser->link(''会社案内'',''/about.html'') ?>	</li>
+<?php $baser->link(''会社案内'',''/about'') ?>	</li>
 	<li>
-<?php $baser->link(''サービス'',''/service.html'') ?>	</li>
+<?php $baser->link(''サービス'',''/service'') ?>	</li>
 	<li>
 <?php $baser->link(''新着情報'',''/news/'') ?>	</li>
 	<li>
 <?php $baser->link(''お問い合わせ'',''/contact/index'') ?>	</li>
 	<li>
-<?php $baser->link(''サイトマップ'',''/sitemap.html'') ?>	</li>
+<?php $baser->link(''サイトマップ'',''/sitemap'') ?>	</li>
 </ul>
 <h3 class="contents-head">
 	非公開ページ</h3>
@@ -309,7 +304,26 @@ INSERT into bc_pages (no, sort, name, title, description, contents, page_categor
 </ul>
 <p class="customize-navi corner10">
 	<small>公開する際には非公開ページは削除をおすすめします。</small>
-</p>',null,'','1', '/sitemap.html', datetime('now', 'localtime'), datetime('now', 'localtime'));
+</p>
+',null ,'1', '/sitemap', datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT into bc_pages (sort, name, title, description, contents, page_category_id, status, url, created, modified) VALUES
+ ('5','index',null,null,'<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<span style="color:#8ABE08">◆</span>
+<?php $baser->link(''ニュースリリース'',array(''controller''=>''news'',''action''=>''index'')) ?>
+<br />
+<span style="color:#8ABE08">◆</span>
+<?php $baser->link(''お問い合わせ'',array(''controller''=>''contact'',''action''=>''index'')) ?>
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">NEWS RELEASE</span> </div>
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<?php echo mb_convert_encoding(file_get_contents(''http://''.$_SERVER[''HTTP_HOST''].$baser->getUrl(''/''.Configure::read(''Mobile.prefix'').''/feed/index/1'')),''UTF-8'',''SJIS''); ?> <br />
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">BaserCMS NEWS</span> </div>
+<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+<?php echo mb_convert_encoding(file_get_contents(''http://''.$_SERVER[''HTTP_HOST''].$baser->getUrl(''/''.Configure::read(''Mobile.prefix'').''/feed/index/2'')),''UTF-8'',''SJIS''); ?>
+','1','0', '/mobile/index',  datetime('now', 'localtime'),  datetime('now', 'localtime'));
 
 -- --------------------------------------------------------
 
@@ -319,17 +333,24 @@ INSERT into bc_pages (no, sort, name, title, description, contents, page_categor
 
 CREATE TABLE bc_page_categories (
   id integer NOT NULL PRIMARY KEY,
-  no integer default NULL,
   parent_id integer default NULL,
   lft integer default NULL,
   rght integer default NULL,
   name text default NULL,
   title text default NULL,
   sort integer default NULL,
-  theme text default NULL,
   modified datetime default NULL,
   created datetime default NULL
 );
+
+--
+-- テーブルのデータをダンプしています bc_page_categories
+--
+
+INSERT into bc_page_categories (parent_id, lft, rght, name, title, sort, created, modified) VALUES
+ (null, '1', '2', 'mobile', 'モバイル', '1', datetime('now', 'localtime'), datetime('now', 'localtime'));
+
+-- --------------------------------------------------------
 
 --
 -- テーブルの構造 bc_user_groups
