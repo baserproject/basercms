@@ -67,9 +67,7 @@ class PagesController extends AppController {
 		// 認証設定
 		$this->Auth->allow('display','mobile_display');
 
-		// モバイルの場合は、モバイルヘルパーでxhtml+xmlで
-		// コンテンツヘッダを出力する必要がある為、キャッシュは利用しない
-		$noCache = array('mobile');
+		$noCache = array();
 		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['User'])) {
 			$this->helpers[] = 'Cache';
 			$this->cacheAction = '1 month'; // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
@@ -327,13 +325,11 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
-
 		// 公開制限を確認
-		// TODO モバイルはページ機能を未実装の為制限をかけない→実装する
 		// 1.5.10 で、拡張子なしを標準に変更
 		// 拡張子なしの場合は、route.phpで認証がかかる為、ここでは処理を行わない
 		// 1.5.9 以前との互換性の為残しておく
-		if((!Configure::read('Mobile.on') && $ext)) {
+		if(($ext)) {
 			$conditions = array('Page.status'=>true,'Page.url'=>$url);
 			if(!$this->Page->find($conditions, array('Page.id'), null, -1)) {
 				$this->notFound();

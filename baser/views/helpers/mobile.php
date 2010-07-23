@@ -44,14 +44,10 @@ class MobileHelper extends Helper {
 
 		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
 
-			header("Content-type: application/xhtml+xml");
-
-			$out = $view->output;
-			$out = mb_convert_kana($out, "rak", "UTF-8");
-			$out = mb_convert_encoding($out, "SJIS", "UTF-8");
-			$view->output = $out;
-
-			// キャッシュを再保存
+			$view->output = mb_convert_kana($view->output, "rak", "UTF-8");
+			$view->output = mb_convert_encoding($view->output, "SJIS", "UTF-8");
+			
+			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
 					isset($view->loaded['cache']) &&
 							(($view->cacheAction != false)) && (Configure::read('Cache.check') === true)
@@ -68,10 +64,20 @@ class MobileHelper extends Helper {
 					$cache->cacheAction = $view->cacheAction;
 					$cache->cache($___viewFn, $view->output, true);
 				}
+			} else{
+				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
+				// nocache タグが残ってしまってエラーになるので除去する
+				$view->output = str_replace('<cake:nocache>','',$view->output);
+				$view->output = str_replace('</cake:nocache>','',$view->output);
 			}
-			Configure::write('debug',0);
-
 		}
+		
+	}
+/**
+ * コンテンツタイプを出力
+ */
+	function header(){
+		header("Content-type: application/xhtml+xml");
 	}
 }
 ?>
