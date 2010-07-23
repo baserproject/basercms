@@ -21,7 +21,7 @@
  */
 $pageCategories = $formEx->getControlSource('Page.page_category_id');
 if($pageCategories){
-	$pageCategories = array('noncat'=>'カテゴリなし')+$pageCategories;
+	$pageCategories = array('noncat'=>'カテゴリなし','pconly'=>'PCページのみ')+$pageCategories;
 }
 ?>
 <script type="text/javascript">

@@ -90,7 +90,9 @@ class PagesController extends AppController {
 			if($this->Session->check('Filter.Page.page_category_id')) {
 				$this->data['Page']['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
 			}else {
-				$this->Session->del('Filter.Page.page_category_id');
+				//$this->Session->del('Filter.Page.page_category_id');
+				$this->Session->write('Filter.Page.page_category_id','pconly');
+				$this->data['Page']['page_category_id'] = 'pconly';
 			}
 			if($this->Session->check('Filter.Page.status')) {
 				$this->data['Page']['status'] = $this->Session->read('Filter.Page.status');
@@ -113,7 +115,10 @@ class PagesController extends AppController {
 		// 子カテゴリも検索条件に入れる
 		$pageCategoryIds = array($this->data['Page']['page_category_id']);
 		if(!empty($this->data['Page']['page_category_id'])) {
-			if($this->data['Page']['page_category_id'] != 'noncat') {
+			if($this->data['Page']['page_category_id'] == 'pconly') {
+				$conditions['or'] = array(array('Page.page_category_id <>'=>1),
+											array('Page.page_category_id'=>null));
+			}elseif($this->data['Page']['page_category_id'] != 'noncat') {
 				$children = $this->PageCategory->children($this->data['Page']['page_category_id']);
 				if($children) {
 					foreach($children as $child) {
