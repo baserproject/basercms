@@ -52,8 +52,9 @@ class PageHelper extends Helper {
  */
 	function beforeRender() {
 		if(isset($this->params['pass'][0])) {
-			$url = str_replace('pages','',$this->params['pass'][0]);
-			$this->data = $this->Page->findByUrl($url);
+			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
+			//$this->data = $this->Page->findByUrl('/'.impload('/',$this->params['pass'][0]));
+			$this->data = $this->Page->findByUrl('/'.Configure::read('Baser.urlParam'));
 		}
 	}
 /**
