@@ -76,7 +76,6 @@ CREATE TABLE "public"."bc__blog_contents" (
   "description" varchar(255) default NULL,
   "layout" varchar(20) default NULL,
   "template" varchar(20) default NULL,
-  "theme" varchar(20) default NULL,
   "status" boolean default NULL,
   "list_count" int4 default NULL,
   "list_direction" varchar(4) default NULL,
@@ -94,8 +93,8 @@ ALTER table "public"."bc__blog_contents" SET WITHOUT CLUSTER;
 -- テーブルのデータをダンプしています "bc__blog_contents"
 --
 
-INSERT INTO "bc__blog_contents" ("name", "title", "description", "layout", "template", "theme", "status", "list_count", "list_direction", "feed_count", "comment_use", "comment_approve", "created", "modified") VALUES
-('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', '', true, 10, 'DESC', 10, true, false, NOW(), NOW());
+INSERT INTO "bc__blog_contents" ("name", "title", "description", "layout", "template", "status", "list_count", "list_direction", "feed_count", "comment_use", "comment_approve", "created", "modified") VALUES
+('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', true, 10, 'DESC', 10, true, false, NOW(), NOW());
 
 -- --------------------------------------------------------
 
