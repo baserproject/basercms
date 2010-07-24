@@ -42,7 +42,6 @@
 	'jquery.bt.min',
 	'jquery.colorbox-min',
 	'jquery.corner',
-	'DD_belatedPNG_0.0.8a-min',
 	'functions',
 	'styleswitcher',
 	'startup')) ?>
