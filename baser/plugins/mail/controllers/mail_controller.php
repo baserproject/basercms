@@ -48,14 +48,14 @@ class MailController extends MailAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Mailform','Javascript','Array','TimeEx','Maildata','Mailfield','Mail');
+	var $helpers = array('Freeze','Mailform','Javascript','Array','TimeEx','Maildata','Mailfield','Mail');
 /**
  * Array of components a controller will use
  *
  * @var 	array
  * @access 	public
  */
-	var $components = array('Email','EmailEx');
+	var $components = array('Email','EmailEx','Security');
 /**
  * CSS
  *
@@ -129,6 +129,8 @@ class MailController extends MailAppController {
 
 		$this->subMenuElements = array('default');
 
+		$this->Security->requireAuth('submit');
+		
 	}
 /**
  * [PUBIC] フォームを表示する

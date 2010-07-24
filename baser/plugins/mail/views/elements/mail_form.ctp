@@ -22,9 +22,9 @@
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-<?php echo $form->create(null,array('url'=>'/'.$mailContent['MailContent']['name'].'/confirm')) ?>
+<?php echo $mailform->create('Message',array('url'=>'/'.$mailContent['MailContent']['name'].'/confirm')) ?>
 <?php else: ?>
-<?php echo $form->create(null,array('url'=>'/'.$mailContent['MailContent']['name'].'/submit')) ?>
+<?php echo $mailform->create('Message',array('url'=>'/'.$mailContent['MailContent']['name'].'/submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 
@@ -37,9 +37,8 @@
 	<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
 	<?php endif; ?>
 	<?php if($freezed): ?>
-	<input name="back" value="戻る" type="button" onclick="history.back(); return false;" class="btn-gray button" />
-	　 <?php echo $form->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button"))  ?>
+	　 <?php echo $mailform->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button"))  ?>
 	<?php elseif($this->action != 'submit'): ?>
-	<?php echo $form->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button"))  ?>
+	<?php echo $mailform->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button"))  ?>
 	<?php endif; ?>
 </div>

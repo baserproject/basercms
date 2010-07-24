@@ -733,7 +733,7 @@ DOC_END;
 			unset($attributes['escape']);
 		}
 		$attributes = $this->_initInputField($fieldName, array_merge(
-				(array)$attributes, array('secure' => false)
+			(array)$attributes, array('secure' => false)
 		));
 
 		if (is_string($options) && isset($this->__options[$options])) {
@@ -754,35 +754,32 @@ DOC_END;
 		}
 
 		if (isset($attributes) && array_key_exists('multiple', $attributes)) {
-			if ($attributes['multiple'] === 'checkbox') {
-				$tag = $this->Html->tags['checkboxmultiplestart'];
-				$style = 'checkbox';
-			} else {
-				$tag = $this->Html->tags['selectmultiplestart'];
-			}
+			$style = ($attributes['multiple'] === 'checkbox') ? 'checkbox' : null;
+			$template = ($style) ? 'checkboxmultiplestart' : 'selectmultiplestart';
+			$tag = $this->Html->tags[$template];
 			// multiplecheckboxの場合にhiddenをつけないオプションを追加
 			if(!isset($attributes['hidden']) || $attributes['hidden']!==false) {
-				$select[] = $this->hidden(null, array('value' => '', 'id' => null));
+				$select[] = $this->hidden(null, array('value' => '', 'id' => null, 'secure' => false));
 			}
 		} else {
 			$tag = $this->Html->tags['selectstart'];
 		}
 
-		if (!empty($tag)) {
+		if (!empty($tag) || isset($template)) {
 			$this->__secure();
 			$select[] = sprintf($tag, $attributes['name'], $this->_parseAttributes(
-					$attributes, array('name', 'value'))
+				$attributes, array('name', 'value'))
 			);
 		}
 		$emptyMulti = (
-				$showEmpty !== null && $showEmpty !== false &&
-						!(empty($showEmpty) && (isset($attributes) && array_key_exists('multiple', $attributes)))
+			$showEmpty !== null && $showEmpty !== false && !(
+				empty($showEmpty) && (isset($attributes) &&
+				array_key_exists('multiple', $attributes))
+			)
 		);
 
 		if ($emptyMulti) {
-			if ($showEmpty === true) {
-				$showEmpty = '';
-			}
+			$showEmpty = ($showEmpty === true) ? '' : $showEmpty;
 			$options = array_reverse($options, true);
 			$options[''] = $showEmpty;
 			$options = array_reverse($options, true);
@@ -798,18 +795,15 @@ DOC_END;
 			$div = null;
 		}
 		$select = array_merge($select, $this->__selectOptions(
-				array_reverse($options, true),
-				$selected,
-				array(),
-				$showParents,
-				array('escape' => $escapeOptions, 'style' => $style, 'div' => $div)
+			array_reverse($options, true),
+			$selected,
+			array(),
+			$showParents,
+			array('escape' => $escapeOptions, 'style' => $style, 'div' => $div)
 		));
 
-		if ($style == 'checkbox') {
-			$select[] = $this->Html->tags['checkboxmultipleend'];
-		} else {
-			$select[] = $this->Html->tags['selectend'];
-		}
+		$template = ($style == 'checkbox') ? 'checkboxmultipleend' : 'selectend';
+		$select[] = $this->Html->tags[$template];
 
 		// 解除ボタンを追加（jQuery必須)
 		if(isset($attributes['multiple']) && $attributes['multiple'] === true) {
@@ -832,9 +826,6 @@ DOC_END;
 			}
 			return $this->output(implode($separator, $select));
 		}
-
-
-
 	}
 /**
  * 文字列保存用複数選択コントロール
@@ -880,6 +871,72 @@ $(document).ready(function() {
 DOC_END;
 		$out .= $this->Javascript->codeBlock($script);
 		return $out;
+	}
+/**
+ * Creates a hidden input field.
+ *
+ * @param string $fieldName Name of a field, in the form"Modelname.fieldname"
+ * @param array $options Array of HTML attributes.
+ * @return string
+ * @access public
+ */
+	function hidden($fieldName, $options = array()) {
+		$secure = true;
+
+		if (isset($options['secure'])) {
+			$secure = $options['secure'];
+			unset($options['secure']);
+		}
+
+		// 2010/07/24 ryuring
+		// セキュリティコンポーネントのトークン生成の仕様として、
+		// ・hiddenタグ以外はフィールド情報のみ
+		// ・hiddenタグはフィールド情報と値
+		// をキーとして生成するようになっている。
+		// その場合、生成の元のなる値は、multipleを想定されておらず、先頭の値のみとなるが
+		// multiple な hiddenタグの場合、送信される値は配列で送信されるので値違いで認証がとおらない。
+		// という事で、multiple の場合は、あくまでhiddenタグ以外のようにフィールド情報のみを
+		// トークンのキーとする事で認証を通すようにする。
+		// >>> ADD
+		if(!empty($options['multiple'])){
+			$secure = false;
+			$this->__secure();
+		}
+		// <<<
+		
+		$options = $this->_initInputField($fieldName, array_merge(
+			$options, array('secure' => false)
+		));
+		$model = $this->model();
+
+		if ($fieldName !== '_method' && $model !== '_Token' && $secure) {
+			$this->__secure(null, '' . $options['value']);
+		}
+		
+		// 2010/07/24 ryuring
+		// 配列用のhiddenタグを出力できるオプションを追加
+		// >>> ADD
+		if(!empty($options['multiple'])){
+			$tagType = 'hiddenmultiple';
+			$options['id'] = null;
+			unset($options['multiple']);
+		} else {
+			$tagType = 'hidden';
+		}
+		// <<<
+		// >>> MODIFY
+		/*return $this->output(sprintf(
+		$this->Html->tags['hidden'],
+			$options['name'],
+			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
+		));*/
+		// ---
+		return $this->output(sprintf(
+			$this->Html->tags[$tagType],
+			$options['name'],
+			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
+		));
+		// <<<
 	}
 /**
  * 日付タグ

@@ -42,7 +42,7 @@ if (!empty($mailFields)) {
 				if ($field['type'] == 'hidden') {
 					echo ' style="display:none"';
 				}
-				echo '><th class="col-head" width="150">'.$form->label("Message." . $field['field_name'] . "", $field['head']);
+				echo '><th class="col-head" width="150">'.$mailform->label("Message." . $field['field_name'] . "", $field['head']);
 				if($field['not_empty']) {
 					echo '<span class="required">*</span>';
 				}
@@ -63,10 +63,10 @@ if (!empty($mailFields)) {
 				echo $field['after_attachment'];
 			}
 			if (!$field['group_valid']) {
-				if($form->error("Message." . $field['field_name'] . "_format", "check")) {
-					echo $form->error("Message." . $field['field_name'] . "_format", ">> 形式が不正です");
+				if($mailform->error("Message." . $field['field_name'] . "_format", "check")) {
+					echo $mailform->error("Message." . $field['field_name'] . "_format", ">> 形式が不正です");
 				}else {
-					echo $form->error("Message." . $field['field_name'] . "", ">> 必須項目です");
+					echo $mailform->error("Message." . $field['field_name'] . "", ">> 必須項目です");
 				}
 			}
 
@@ -79,13 +79,13 @@ if (!empty($mailFields)) {
 					echo $html->image('img_icon_help.png',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
 				}
 				if ($field['group_valid']) {
-					if ($form->error("Message." . $field['group_field'] . "_format", "check")) {
-						echo $form->error("Message." . $field['group_field'] . "_format", ">> 形式が不正です");
+					if ($mailform->error("Message." . $field['group_field'] . "_format", "check")) {
+						echo $mailform->error("Message." . $field['group_field'] . "_format", ">> 形式が不正です");
 					} else {
-						echo $form->error("Message." . $field['group_field'] . "", ">> 必須項目です");
+						echo $mailform->error("Message." . $field['group_field'] . "", ">> 必須項目です");
 					}
-					echo $form->error("Message." . $field['group_field'] . "_not_same", ">> 入力データが一致していません");
-					$form->error("Message." . $field['group_field'] . "_not_complate", ">> 入力データが不完全です");
+					echo $mailform->error("Message." . $field['group_field'] . "_not_same", ">> 入力データが一致していません");
+					$mailform->error("Message." . $field['group_field'] . "_not_complate", ">> 入力データが不完全です");
 				}
 				if (!$freezed && $description) {
 					echo '<div id="'.Inflector::variable('helptext_'.$field['field_name']) . '" class="helptext">'. $description .'</div>';
