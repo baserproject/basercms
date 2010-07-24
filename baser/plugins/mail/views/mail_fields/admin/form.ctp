@@ -44,7 +44,7 @@ jQuery(function($) {
 				$("#rowSize").show();
 				$("#rowRows").hide();$("#MailFieldRows").val('');
 				$("#rowMaxlength").show();
-				$("#rowSource").hide();
+				$("#rowSource").hide();$("#MailFieldSource").val('');
 				$("#rowAutoConvert").show();
 				$("#rowSeparator").hide();$("#MailFieldSeparator").val('');
 				break;
@@ -57,7 +57,7 @@ jQuery(function($) {
 				$("#rowSeparator").hide();$("#MailFieldSeparator").val('');
 				break;
 			case 'radio':
-			case 'multi':
+			case 'multi_check':
 				$("#rowSize").hide();$("#MailFieldSize").val('');
 				$("#rowRows").hide();$("#MailFieldRows").val('');
 				$("#rowMaxlength").hide();$("#MailFieldMaxlength").val('');
