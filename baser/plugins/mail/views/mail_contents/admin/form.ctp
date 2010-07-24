@@ -70,7 +70,7 @@ function mailContentSender1ClickHandler(){
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>メールフォームコンテンツの基本設定を登録します。<br />
@@ -96,7 +96,7 @@ function mailContentSender1ClickHandler(){
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.name', 'メールフォームアカウント名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.name') ?>
+		<td class="col-input"><?php echo $formEx->text('MailContent.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>メールフォームのURLに利用します。<br />
@@ -117,25 +117,25 @@ function mailContentSender1ClickHandler(){
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.sender_name', '送信先名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.sender_name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSenderName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.sender_name') ?>
+		<td class="col-input"><?php echo $formEx->text('MailContent.sender_name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSenderName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.sender_name') ?>
 			<div id="helptextSenderName" class="helptext">自動返信メールの送信者に表示します。</div>
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.subject_user', '自動返信メール<br />件名<br />[ユーザー宛]') ?></th>
-		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_user', array('cols'=>35,'rows'=>2)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSubjectUser','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.subject_user') ?>
+		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_user', array('cols'=>35,'rows'=>2)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSubjectUser','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.subject_user') ?>
 			<div id="helptextSubjectUser" class="helptext">ユーザー宛の自動返信メールの件名に表示します。</div>
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.subject_admin', '自動送信メール<br />件名<br />[管理者宛]') ?></th>
-		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_admin', array('cols'=>35,'rows'=>2)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSubjectAdmin','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.subject_admin') ?>
+		<td class="col-input"><?php echo $formEx->textarea('MailContent.subject_admin', array('cols'=>35,'rows'=>2)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSubjectAdmin','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.subject_admin') ?>
 			<div id="helptextSubjectAdmin" class="helptext">管理者宛の自動送信メールの件名に表示します。</div>
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('MailContent.redirect_url', 'リダイレクトURL') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.redirect_url', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpRedirectUrl','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.redirect_url') ?>
+		<td class="col-input"><?php echo $formEx->text('MailContent.redirect_url', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpRedirectUrl','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.redirect_url') ?>
 			<div id="helptextRedirectUrl" class="helptext">
 				<ul>
 					<li>メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。</li>
@@ -149,7 +149,7 @@ function mailContentSender1ClickHandler(){
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('MailContent.sender_2', 'CC用送信先メールアドレス') ?></th>
-		<td class="col-input"><?php echo $formEx->text('MailContent.sender_2', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailContent.sender_2') ?>&nbsp; <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpSender2','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('MailContent.sender_2', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('MailContent.sender_2') ?>&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSender2','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextSender2" class="helptext">CC（カーボンコピー）用のメールアドレスを指定します。</div></td>
 	</tr>
 	<tr>
@@ -160,7 +160,7 @@ function mailContentSender1ClickHandler(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditLayout')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayoutTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.layout_template') ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpLayoutTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.layout_template') ?>
 			<div id="helptextLayoutTemplate" class="helptext">
 				<ul>
 					<li>メールフォームの外枠のテンプレートを指定します。</li>
@@ -177,7 +177,7 @@ function mailContentSender1ClickHandler(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditForm')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFormTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.form_template') ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpFormTemplate','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('MailContent.form_template') ?>
 			<div id="helptextFormTemplate" class="helptext">
 				<ul>
 					<li>メールフォーム本体のテンプレートを指定します。</li>
@@ -194,7 +194,7 @@ function mailContentSender1ClickHandler(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditMail')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpMailTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpMailTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
 			<?php echo $formEx->error('MailContent.mail_template') ?>
 			<div id="helptextMailTemplate" class="helptext">
 				<ul>

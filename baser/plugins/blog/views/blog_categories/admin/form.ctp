@@ -23,7 +23,7 @@
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ブログ記事をグルーピングする為のカテゴリ登録を行います。<br />
@@ -56,7 +56,7 @@
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogCategory.name', 'ブログカテゴリ名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogCategory.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('BlogCategory.name') ?>
+		<td class="col-input"><?php echo $formEx->text('BlogCategory.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('BlogCategory.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>URLに利用されます</li>

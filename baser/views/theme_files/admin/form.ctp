@@ -24,7 +24,7 @@ $imgExts = array('png','gif','jpg');
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>テーマファイルを分類する為のフォルダの作成・編集・削除が行えます。</p>
@@ -48,7 +48,7 @@ $imgExts = array('png','gif','jpg');
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('ThemeFile.name', 'ファイル名') ?></th>
 		<td class="col-input">
 			<?php if($this->action != 'admin_view'): ?>
-			<?php echo $formEx->text('ThemeFile.name', array('size'=>30,'maxlength'=>255)) ?> .<?php echo $formEx->value('ThemeFile.ext') ?><?php echo $formEx->hidden('ThemeFile.ext') ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->text('ThemeFile.name', array('size'=>30,'maxlength'=>255)) ?> .<?php echo $formEx->value('ThemeFile.ext') ?><?php echo $formEx->hidden('ThemeFile.ext') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>テーマファイル名は半角で入力してください。</li>

@@ -41,7 +41,7 @@ $(function(){
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ブログコンテンツの基本設定を登録します。<br />
@@ -67,7 +67,7 @@ $(function(){
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.name', 'ブログアカウント名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogContent.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('BlogContent.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCategoryFilter" class="helptext">
 				<ul>
 					<li>ブログのURLに利用します。<br />
@@ -90,7 +90,7 @@ $(function(){
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', '一覧表示件数') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogContent.list_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp; <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpListCount','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('BlogContent.list_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpListCount','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextListCount" class="helptext">
 				<ul>
 					<li>公開サイトの一覧に表示する件数を指定します。</li>
@@ -101,7 +101,7 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogContent.list_direction', '一覧に表示する順番') ?></th>
-		<td class="col-input"><?php echo $formEx->select('BlogContent.list_direction', array('DESC'=>'新しい記事順', 'ASC'=>'古い記事順'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpListDirection','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->select('BlogContent.list_direction', array('DESC'=>'新しい記事順', 'ASC'=>'古い記事順'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpListDirection','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextListDirection" class="helptext">
 				<ul>
 					<li>公開サイトの一覧における記事の並び方向を指定します。</li>
@@ -112,7 +112,7 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', 'RSSフィード出力件数') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogContent.feed_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp; <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFeedCount','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('BlogContent.feed_count', array('size'=>20,'maxlength'=>255)) ?>&nbsp;件&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpFeedCount','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextFeedCount" class="helptext">
 				<ul>
 					<li>RSSフィードに出力する件数を指定します。</li>
@@ -130,7 +130,7 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.comment_approve', 'コメント承認機能') ?></th>
-		<td class="col-input"><?php echo $formEx->radio('BlogContent.comment_approve', $textEx->booleanDoList('利用'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCommentApprove','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->radio('BlogContent.comment_approve', $textEx->booleanDoList('利用'),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCommentApprove','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCommentApprove" class="helptext"> 承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。 </div>
 			<?php echo $formEx->error('BlogContent.comment_approve') ?></td>
 	</tr>
@@ -142,7 +142,7 @@ $(function(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditLayoutTemplate')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpLayout','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextLayout" class="helptext">
 				<ul>
 					<li>ブログの外枠のテンプレートを指定します。</li>
@@ -159,7 +159,7 @@ $(function(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditBlogTemplate')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextTemplate" class="helptext">
 				<ul>
 					<li>ブログの本体のテンプレートを指定します。</li>

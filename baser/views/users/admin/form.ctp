@@ -23,7 +23,7 @@
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ログイン用のユーザーアカウントを登録する事ができます。<br />
@@ -41,20 +41,20 @@
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.name', 'アカウント名') ?></th>
-		<td class="col-input"><?php echo $form->text('User.name', array('size'=>20,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $form->text('User.name', array('size'=>20,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextName" class="helptext"> 半角のみで入力してください。 </div>
 			<?php echo $form->error('User.name') ?>&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.real_name_1', '名前') ?></th>
-		<td class="col-input"><small>[姓]</small> <?php echo $form->text('User.real_name_1', array('size'=>12,'maxlength'=>255)) ?> <small>[名]</small> <?php echo $form->text('User.real_name_2', array('size'=>12,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><small>[姓]</small> <?php echo $form->text('User.real_name_1', array('size'=>12,'maxlength'=>255)) ?> <small>[名]</small> <?php echo $form->text('User.real_name_2', array('size'=>12,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			<?php echo $form->error('User.real_name_1', '>> 姓を入力して下さい') ?> <?php echo $form->error('User.real_name_2', '>> 名を入力して下さい') ?>&nbsp;
 			&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.user_group_id', 'グループ') ?></th>
-		<td class="col-input"><?php echo $form->select('User.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpUserGroupId','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $form->select('User.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpUserGroupId','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 				より新しいグループを追加しアクセス制限の設定をおこないます。 </div>
@@ -66,7 +66,7 @@
 			<?php endif; ?>
 			<?php echo $form->label('User.password_1', 'パスワード') ?> </th>
 		<td class="col-input"><small>[パスワードは変更する場合のみ入力してください]</small><br />
-			<?php echo $form->password('User.password_1', array('size'=>20,'maxlength'=>255)) ?> <?php echo $form->password('User.password_2', array('size'=>20,'maxlength'=>255)) ?>&nbsp; <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $form->password('User.password_1', array('size'=>20,'maxlength'=>255)) ?> <?php echo $form->password('User.password_2', array('size'=>20,'maxlength'=>255)) ?>&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextPassword" class="helptext">
 				<ul>
 					<li>

@@ -36,7 +36,7 @@ $(function(){
 <?php endif ?>
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>フィード設定の基本項目を入力します。<br />
@@ -60,7 +60,7 @@ $(function(){
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('FeedConfig.name', 'フィード設定名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('FeedConfig.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('FeedConfig.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>日本語が利用できます。</li>
@@ -78,7 +78,7 @@ $(function(){
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedConfig.feed_title_index', 'フィードタイトルリスト') ?></th>
-		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.feed_title_index', array('cols'=>36,'rows'=>3)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpFeedTitleIndex','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.feed_title_index', array('cols'=>36,'rows'=>3)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpFeedTitleIndex','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextFeedTitleIndex" class="helptext">
 				<ul>
 					<li>一つの表示フィードに対し、複数のフィードを読み込む際、フィードタイトルを表示させたい場合は、フィードタイトルを「|」で区切って入力して下さい。</li>
@@ -90,7 +90,7 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
-		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.category_index', array('cols'=>36,'rows'=>3)) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCategoryIndex','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->textarea('FeedConfig.category_index', array('cols'=>36,'rows'=>3)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCategoryIndex','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCategoryIndex" class="helptext">
 				<ul>
 					<li>カテゴリにインデックス番号を割り当てたい場合は、カテゴリ名を「|」で区切って入力して下さい。</li>
@@ -107,7 +107,7 @@ $(function(){
 			<?php if($this->action == 'admin_edit'): ?>
 			<?php $baser->link('≫ 編集する','javascript:void(0)',array('id'=>'EditTemplate')) ?>
 			<?php endif ?>
-			<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTemplate','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextTemplate" class="helptext">
 				<ul>
 					<li>出力するフィードのテンプレートを指定します。</li>

@@ -23,7 +23,7 @@
 
 <h2>
 	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>フィードの登録を行います。キャッシュ時間やカテゴリによる絞り込みの設定が行えます。</p>
@@ -62,13 +62,13 @@
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.cache_time', 'キャッシュ時間') ?></th>
-		<td class="col-input"><?php echo $formEx->select('FeedDetail.cache_time', $formEx->getControlSource('cache_time')) ?> <?php echo $formEx->error('FeedDetail.cache_time') ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCacheTime','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->select('FeedDetail.cache_time', $formEx->getControlSource('cache_time')) ?> <?php echo $formEx->error('FeedDetail.cache_time') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCacheTime','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCacheTime" class="helptext"> 負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択して下さい。<br />
 			</div>
 			&nbsp; </td>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.category_filter', 'カテゴリフィルター') ?></th>
-		<td class="col-input"><?php echo $formEx->text('FeedDetail.category_filter', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('FeedDetail.category_filter') ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->text('FeedDetail.category_filter', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('FeedDetail.category_filter') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCategoryFilter','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCategoryFilter" class="helptext">
 				<ul>
 					<li>特定のカテゴリのみ絞込みたい場合は、カテゴリ名を入力して下さい。</li>
