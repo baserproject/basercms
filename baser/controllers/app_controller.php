@@ -316,7 +316,6 @@ class AppController extends Controller {
  */
 	function __loadDataToView() {
 
-		$this->set('declareXml',Configure::read('declareXml'));	// XML宣言
 		$this->set('subMenuElements',$this->subMenuElements);	// サブメニューエレメント
 		$this->set('navis',$this->navis);                       // パンくずなび
 
