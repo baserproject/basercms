@@ -52,7 +52,7 @@ class BlogController extends BlogAppController {
 /**
  * コンポーネント
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
+	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx', 'Security');
 /**
  * ぱんくずナビ
  *

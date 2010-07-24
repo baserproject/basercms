@@ -55,7 +55,7 @@ class BlogCommentsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx');
+	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx','Security');
 /**
  * ぱんくずナビ
  *
@@ -110,6 +110,8 @@ class BlogCommentsController extends BlogAppController {
 		if(!empty($this->params['prefix']) && $this->params['prefix']=='admin') {
 			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 		}
+
+		$this->Security->requireAuth('add');
 
 	}
 /**
