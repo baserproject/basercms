@@ -730,6 +730,9 @@ class DboCsv extends DboSource {
 				// フィールド指定がある場合は指定されたフィールドのみ取得
 				if($queryData['fields']) {
 					foreach($queryData['fields'] as $field) {
+						if(!isset($record[$field])){
+							break;
+						}
 						if(!empty($record[$field])) {
 							$result[$field] = $record[$field];
 						}else {
@@ -1254,9 +1257,9 @@ class DboCsv extends DboSource {
 		// READ
 		}elseif(preg_match($readPattern,$sql,$matches)) {
 			$parseData['crud'] = 'read';
-			$parseData['fields'] = $this->_parseSqlFields($matches[1]);
-			$parseData['tableName'] = $this->_parseSqlTableName($matches[2]);
 			$parseData['className'] = $this->_parseSqlClassName($matches[1]);
+			$parseData['fields'] = $this->_parseSqlFields($matches[1],$parseData['className']);
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[2]);
 			//$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
 			if(isset($matches[3])){
 				$options = $matches[3];
@@ -1304,7 +1307,7 @@ class DboCsv extends DboSource {
  * @return 	array 	フィールド名リスト
  * @access 	protected
  */
-	function _parseSqlFields($fields) {
+	function _parseSqlFields($fields,$modelName) {
 		$aryFields = split(",",$fields);
 		foreach($aryFields as $key => $field) {
 			if(preg_match('/(max|MAX)\((.*?)\)\sAS\s(.*)/s',$field,$matches)) {
@@ -1324,9 +1327,16 @@ class DboCsv extends DboSource {
 					list($model,$field) = explode(".",$field);
 				}
 			}
-			$aryFields[$key] = trim(str_replace("`","",$field));
+			if(isset($model)){
+				if(trim(str_replace('`','',$model))==$modelName){
+					$aryFields[$key] = trim(str_replace("`","",$field));
+				}else{
+					unset($aryFields[$key]);
+				}
+			}else{
+				$aryFields[$key] = trim(str_replace("`","",$field));
+			}
 		}
-
 		return $aryFields;
 		
 	}
