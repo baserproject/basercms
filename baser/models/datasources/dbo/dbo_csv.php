@@ -1656,7 +1656,6 @@ class DboCsv extends DboSource {
 		if(!$cols) {
 			return null;
 		}
-
 		foreach ($cols as $column) {
 			if($column) {
 				if($column == 'created'|| $column == 'modified' || substr($column, strlen($column)-5,5)=="_date") {
@@ -1665,6 +1664,15 @@ class DboCsv extends DboSource {
 							'null'		=> true,
 							'default'	=> "",
 							'length'	=> $this->length("datetime"),
+					);
+				}elseif($column == 'id') {
+					// CSVの場合、フィールド名 id は主キーで int(4) 固定とする
+					$type = 'int(4)';
+					$fields[$column] = array(
+							'type'		=> $this->column($type),
+							'null'		=> false,
+							'default'	=> $this->index['PRI'],
+							'length'	=> $this->length($type),
 					);
 				}else {
 					$fields[$column] = array(
