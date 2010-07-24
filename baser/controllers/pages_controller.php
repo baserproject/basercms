@@ -127,7 +127,7 @@ class PagesController extends AppController {
 		$pageCategoryIds = array($this->data['Page']['page_category_id']);
 		if(!empty($this->data['Page']['page_category_id'])) {
 			if($this->data['Page']['page_category_id'] == 'pconly') {
-				$conditions['or'] = array(array('Page.page_category_id <>'=>1),
+				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
 											array('Page.page_category_id'=>null));
 			}elseif($this->data['Page']['page_category_id'] != 'noncat') {
 				$children = $this->PageCategory->children($this->data['Page']['page_category_id']);

@@ -61,15 +61,14 @@ function pageCategoryIdChangeHandler() {
 	var pageCategoryId = $("#PagePageCategoryId").val();
 	var mobile = false;
 	if(pageCategoryId){
-		for (id in mobileCategoryIds){
-			if(id == pageCategoryId){
+		for (key in mobileCategoryIds){
+			if(mobileCategoryIds[key] == pageCategoryId){
 				mobile = true;
 				break;
 			}
 		}
 	}
-	// mobileが1である前提
-	if(!mobile){
+	if(!mobile && mobileCategoryIds.length){
 		$("#RowReflectMobile").show();
 	}else{
 		$("#PageReflectMobile").attr('checked', false);

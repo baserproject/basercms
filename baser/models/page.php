@@ -169,13 +169,18 @@ class Page extends AppModel {
 
 		// モバイルデータの生成
 		if(!empty($data['reflect_mobile'])){
+			$mobileId = $this->PageCategory->getMobileId();
+			if(!$mobileId){
+				// モバイルカテゴリがない場合は trueを返して終了
+				return true;
+			}
 			$id = $this->PageCategory->getIdByPath('/mobile'.$data['url']);
 			unset($data['id']);
 			unset($data['status']);
 			unset($data['url']);
 			unset($data['modified']);
 			unset($data['reflect_mobile']);
-			$data['page_category_id'] = 1;
+			$data['page_category_id'] = $mobileId;
 			$data['url'] = $this->getPageUrl($data);
 			if($id){
 				$data['id'] = $id;

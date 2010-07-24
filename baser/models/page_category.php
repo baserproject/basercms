@@ -69,6 +69,12 @@ class PageCategory extends AppModel {
  */
 	var $_pageCategoryPathes = -1;
 /**
+ * モバイルカテゴリのID
+ * @var		mixed		-1 / false / int
+ * @access	protected
+ */
+	var $_mobileId = -1;
+/**
  * beforeValidate
  *
  * @return	boolean
@@ -379,13 +385,29 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function getMobileCategoryIds(){
-		$ids = array('1');
-		$children = $this->children(1,false,array('PageCategory.id'),array('PageCategory.id'));
+
+		$mobileId = $this->getMobileId();
+		if(!$mobileId){
+			return array();
+		}
+		$ids = array($mobileId);
+		$children = $this->children($mobileId,false,array('PageCategory.id'),array('PageCategory.id'));
 		if($children){
 			$children = Set::extract('/PageCategory/id',$children);
 			$ids = am($ids,$children);
 		}
 		return $ids;
+		
+	}
+/**
+ * モバイルカテゴリのIDを取得する
+ * @return string
+ */
+	function getMobileId() {
+		if($this->_mobileId == -1){
+			$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+		}
+		return $this->_mobileId;
 	}
 }
 ?>
