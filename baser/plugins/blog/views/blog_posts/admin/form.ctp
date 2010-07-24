@@ -82,7 +82,7 @@ $(function(){
 		<th class="col-head"><?php echo $formEx->label('BlogPost.detail', '詳細') ?></th>
 		<td class="col-input"><?php echo $ckeditor->textarea('BlogPost.detail', array('cols'=>60,'rows'=>20)) ?><?php echo $formEx->error('BlogPost.detail') ?>&nbsp;</td>
 	</tr>
-	<?php $categories = $formEx->getControlSource('BlogCategory.parent_id',array('blogContentId'=>$blogContent['BlogContent']['id'])) ?>
+	<?php $categories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id'])) ?>
 	<?php if($categories): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.blog_category_id', 'カテゴリ') ?></th>
