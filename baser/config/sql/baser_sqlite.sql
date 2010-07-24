@@ -318,11 +318,11 @@ INSERT into bc_pages (sort, name, title, description, contents, page_category_id
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">NEWS RELEASE</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<?php echo mb_convert_encoding(file_get_contents(''http://''.$_SERVER[''HTTP_HOST''].$baser->getUrl(''/''.Configure::read(''Mobile.prefix'').''/feed/index/1'')),''UTF-8'',''SJIS''); ?> <br />
+<?php $baser->feed(1) ?> <br />
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">BaserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<?php echo mb_convert_encoding(file_get_contents(''http://''.$_SERVER[''HTTP_HOST''].$baser->getUrl(''/''.Configure::read(''Mobile.prefix'').''/feed/index/2'')),''UTF-8'',''SJIS''); ?>
+<?php $baser->feed(2) ?>
 ','1','0', '/mobile/index',  datetime('now', 'localtime'),  datetime('now', 'localtime'));
 
 -- --------------------------------------------------------
