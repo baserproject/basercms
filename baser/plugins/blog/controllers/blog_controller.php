@@ -107,11 +107,6 @@ class BlogController extends BlogAppController {
 			$this->passedArgs['action'] = $this->action;
 		}
 
-		// テーマの設定
-		if($this->blogContent['BlogContent']['theme']) {
-			$this->theme = $this->blogContent['BlogContent']['theme'];
-		}
-
 	}
 /**
  * beforeRender

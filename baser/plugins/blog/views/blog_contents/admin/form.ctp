@@ -168,10 +168,6 @@ $(function(){
 			</div>
 			<?php echo $formEx->error('BlogContent.template') ?></td>
 	</tr>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.admin_viewcnt', 'テーマ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('BlogContent.theme', $themes,null,null,'基本設定に従う') ?> &nbsp; </td>
-	</tr>
 </table>
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>
