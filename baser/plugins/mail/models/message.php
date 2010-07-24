@@ -376,7 +376,11 @@ class Message extends MailAppModel {
 		foreach($this->mailFields as $mailField) {
 			if($mailField['MailField']['type']=='multi_check' && $mailField['MailField']['use_field']) {
 				if(!empty($dbData['Message'][$mailField['MailField']['field_name']])) {
-					$dbData['Message'][$mailField['MailField']['field_name']]= implode("|",$dbData['Message'][$mailField['MailField']['field_name']]);
+					if(is_array($dbData['Message'][$mailField['MailField']['field_name']])){
+						$dbData['Message'][$mailField['MailField']['field_name']]= implode("|",$dbData['Message'][$mailField['MailField']['field_name']]);
+					}else{
+						$dbData['Message'][$mailField['MailField']['field_name']]= $dbData['Message'][$mailField['MailField']['field_name']];
+					}
 				}
 			}
 		}
