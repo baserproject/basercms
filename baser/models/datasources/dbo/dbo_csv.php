@@ -730,9 +730,6 @@ class DboCsv extends DboSource {
 				// フィールド指定がある場合は指定されたフィールドのみ取得
 				if($queryData['fields']) {
 					foreach($queryData['fields'] as $field) {
-						if(!isset($record[$field])){
-							break;
-						}
 						if(!empty($record[$field])) {
 							$result[$field] = $record[$field];
 						}else {
