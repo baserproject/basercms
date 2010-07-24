@@ -93,7 +93,7 @@ class MailHelper extends TextExHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'mail'.DS;
 		}
-		$templatesPathes = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
+		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
 		
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){
