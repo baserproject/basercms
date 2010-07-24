@@ -65,6 +65,10 @@ $(document).ready(function(){
 	<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
 	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
 </div>
+
+<!-- list-num -->
+<?php $baser->element('list_num') ?>
+
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePages">

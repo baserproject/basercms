@@ -101,6 +101,17 @@ class PagesController extends AppController {
 			}
 		}
 
+		// 表示件数設定
+		if(!empty($this->params['named']['num'])){
+			$this->Session->write('Filter.Page.num', $this->params['named']['num']);
+		}else{
+			if(!$this->Session->check('Filter.Page.num')){
+				$this->passedArgs['num'] = 10;
+			}else{
+				$this->passedArgs['num'] = $this->Session->read('Filter.Page.num');
+			}
+		}
+		
 		// 並び替え処理
 		if(!empty($this->params['named']['sortup'])) {
 			$this->Page->sortup($this->params['named']['sortup'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
@@ -135,11 +146,13 @@ class PagesController extends AppController {
 			$conditions['Page.status'] = $this->data['Page']['status'];
 		}
 
-		$this->paginate = array('conditions'=>$conditions,
-				'fields'=>array(),
-				'order'=>'Page.sort',
-				'limit'=>10
+		$this->paginate = array(
+				'conditions' => $conditions,
+				'fields' => array(),
+				'order' =>'Page.sort',
+				'limit' => $this->passedArgs['num']
 		);
+		
 		$this->set('dbDatas',$this->paginate('Page'));
 
 		/* 表示設定 */

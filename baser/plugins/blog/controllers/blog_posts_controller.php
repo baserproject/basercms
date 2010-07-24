@@ -140,6 +140,17 @@ class BlogPostsController extends BlogAppController {
 			}
 		}
 
+		// 表示件数設定
+		if(!empty($this->params['named']['num'])){
+			$this->Session->write('Filter.BlogPost.num', $this->params['named']['num']);
+		}else{
+			if(!$this->Session->check('Filter.BlogPost.num')){
+				$this->passedArgs['num'] = 10;
+			}else{
+				$this->passedArgs['num'] = $this->Session->read('Filter.BlogPost.num');
+			}
+		}
+		
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 		// ページカテゴリ
 		// 子カテゴリも検索条件に入れる
@@ -162,7 +173,7 @@ class BlogPostsController extends BlogAppController {
 		$this->paginate = array('conditions'=>$conditions,
 				'fields'=>array(),
 				'order'=>'BlogPost.no DESC',
-				'limit'=>10
+				'limit'=>$this->passedArgs['num']
 		);
 
 		$posts = $this->paginate('BlogPost');

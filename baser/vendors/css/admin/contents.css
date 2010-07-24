@@ -441,3 +441,13 @@ select.multiple option {
 	margin-left:30px;
 	margin-bottom:25px;
 }
+/* list-num
+----------------------------------------------- */
+.list-num p{
+	font-size:10px;
+	text-align: right;
+}
+.list-num .current{
+	background-color:#E2E2E2;
+	padding:1px 3px;
+}
