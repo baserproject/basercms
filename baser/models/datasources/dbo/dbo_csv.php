@@ -114,7 +114,7 @@ class DboCsv extends DboSource {
  * @var		string
  * @access	protected
  */
-	var $_resultTable = 'csvs';
+	var $__resultModelName = 0;
 /**
  * CSVドライバの基本設定
  *
@@ -629,6 +629,7 @@ class DboCsv extends DboSource {
 	function csvQuery($sql) {
 
 		// SQL文を解析して、CSV操作用のクエリデータを生成する
+		$this->__resultModelName = 0;
 		$queryData = $this->parseSql($sql);
 		if(isset($queryData['crud'])) {
 			switch ($queryData['crud']) {
@@ -654,6 +655,14 @@ class DboCsv extends DboSource {
 		}
 		return $ret;
 
+	}
+/**
+ * インデックス取得
+ * @param array $queryData
+ * @return array
+ */
+	function indexCsv($queryData){
+		return array(0=>array('column'=>'id'));
 	}
 /**
  * CSVデータを読み込む
@@ -740,8 +749,7 @@ class DboCsv extends DboSource {
 			}
 
 		}
-
-		$this->_resultTable = $queryData["className"];
+		
 		$this->_count = $count;
 
 		// カウントオプションの場合は件数を返す
@@ -752,6 +760,10 @@ class DboCsv extends DboSource {
 		// MAXオプションの場合は指定フィールドの最大値を返す
 		if(!empty($queryData['option']) && $queryData['option'] == 'max') {
 			return array(0=>array($maxAsField=>$maxValue));
+		}
+
+		if(!empty($queryData["className"])){
+			$this->__resultModelName = $queryData["className"];
 		}
 
 		if(isset($results)) {
@@ -1228,7 +1240,7 @@ class DboCsv extends DboSource {
 				'recursive'=>null);
 
 		$createPattern = "/INSERT INTO[\s]*([^\s]+)[\s]*\(([^\)]+)\)[\s]*VALUES[\s]*\((.+)\)[\s]*$/si";
-		$readPattern = "/SELECT(.+)FROM(.+)WHERE(.+?)(ORDER\sBY.+|LIMIT.+|)$/si";
+		$readPattern = "/SELECT(.+)FROM(.+?)(WHERE.+|ORDER\sBY.+|LIMIT.+|)$/si";
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
@@ -1237,49 +1249,49 @@ class DboCsv extends DboSource {
 		if(preg_match($createPattern,$sql,$matches)) {
 			$parseData['crud'] = 'create';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
-			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData = array_merge($parseData,$this->_parseSqlValuesFromCreate($matches[2],$matches[3]));
 
-			// READ
+		// READ
 		}elseif(preg_match($readPattern,$sql,$matches)) {
 			$parseData['crud'] = 'read';
 			$parseData['fields'] = $this->_parseSqlFields($matches[1]);
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[2]);
-			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
-			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
-
-			if(isset($matches[4])) {
-				$etc = $matches[4];
-				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$etc,$matches2)) {
-					$parseData['order'] = $this->_parseSqlOrder($matches2[1]);
+			$parseData['className'] = $this->_parseSqlClassName($matches[1]);
+			//$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
+			if(isset($matches[3])){
+				$options = $matches[3];
+				if(preg_match("/WHERE(.+?)(ORDER\sBY.+|LIMIT.+|)$/s",$options,$matches)) {
+					$parseData['conditions'] = $this->_parseSqlCondition($matches[1],$parseData['fields']);
 				}
-				if(preg_match("/LIMIT(.+)$/s",$etc,$matches3)) {
-					$parseData = array_merge($parseData,$this->_parseSqlLimit($matches3[1]));
+				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$options,$matches)) {
+					$parseData['order'] = $this->_parseSqlOrder($matches[1]);
+				}
+				if(preg_match("/LIMIT(.+)$/s",$options,$matches)) {
+					$parseData = array_merge($parseData,$this->_parseSqlLimit($matches[1]));
 				}
 			}
 
-			// UPDATE
+		// UPDATE
 		}elseif(preg_match($updatePattern,$sql,$matches)) {
 
 			$parseData['crud'] = 'update';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
-			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData = array_merge($parseData,$this->_parseSqlValuesFromUpdate($matches[2]));
 			$parseData['conditions'] = $this->_parseSqlCondition($matches[3],$parseData['fields']);
 
-			// DELETE
+		// DELETE
 		}elseif(preg_match($deletePattern,$sql,$matches)) {
 
 			$parseData['crud'] = 'delete';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
-			$parseData['className'] = $this->_parseSqlModelName($parseData['tableName']);
 			$parseData['conditions'] = $this->_parseSqlCondition($matches[2],$parseData['fields']);
 
-			// BUILD (CREATE TABLE)
+		// BUILD (CREATE TABLE)
 		}elseif(preg_match($buildPattern,$sql,$matches)) {
 			$parseData['crud'] = 'build';
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['fields'] = $this->_parseSqlFieldsFromBuild($matches[2]);
+
 		}
 
 		return $parseData;
@@ -1295,19 +1307,58 @@ class DboCsv extends DboSource {
 	function _parseSqlFields($fields) {
 		$aryFields = split(",",$fields);
 		foreach($aryFields as $key => $field) {
-			if(strpos($field,".")!==false) {
-				if(preg_match('/MAX\((.*?)\)\sAS\s`(.*?)`/s',$field,$matches)) {
-					list($modelName,$fieldName) = explode(".",$matches[1]);
-					$fieldName = 'MAX('.$fieldName.') AS '.$matches[2];
-				}else {
-					list($modelName,$fieldName) = explode(".",$field);
+			if(preg_match('/(max|MAX)\((.*?)\)\sAS\s(.*)/s',$field,$matches)) {
+				$field = $matches[2];
+				if(strpos($field,".")!==false) {
+					list($model,$field) = explode(".",$field);
 				}
+				$field = 'MAX('.$field.') AS '.str_replace('`','',$matches[3]);
+			}elseif(preg_match('/(count|COUNT)\((.*?)\)\sAS\s(.*)/s',$field,$matches)) {
+				$field = $matches[2];
+				if(strpos($field,".")!==false) {
+					list($model,$field) = explode(".",$field);
+				}
+				$field = 'COUNT('.$field.') AS '.str_replace('`','',$matches[3]);
 			}else {
-				$fieldName = $field;
+				if(strpos($field,".")!==false) {
+					list($model,$field) = explode(".",$field);
+				}
 			}
-			$aryFields[$key] = trim(str_replace("`","",$fieldName));
+			$aryFields[$key] = trim(str_replace("`","",$field));
 		}
+
 		return $aryFields;
+		
+	}
+/**
+ * resultSet メソッドで利用する為のクラス名を取得する
+ *
+ * 本来なら、フィールドごとに保持するべきだが、処理速度向上の為、
+ * 一つのフィールドにクラス名があれば全てのフィールドに適用するものとする
+ * 結果、複数のフィールドでその中にcountやmaxが入っている場合、
+ * 他のDBの取得結果とは違うものとなる可能性がある
+ * （countやmaxはクラス名を含まないため）
+ * @param	array		$fields
+ * @return	string
+ * @access	protected
+ */
+	function _parseSqlClassName($fields) {
+		$model = '';
+		$aryFields = split(",",$fields);
+		foreach($aryFields as $field) {
+			if(preg_match('/AS\s(.*)/is', $field, $matches)){
+				if(strpos($matches[1],".")!==false){
+					list($model,$field) = explode(".",$field);
+					break;
+				}
+			}else{
+				if(strpos($field,".")!==false){
+					list($model,$field) = explode(".",$field);
+					break;
+				}
+			}
+		}
+		return trim(str_replace('`','',$model));
 	}
 /**
  * CREATE TABLE 文のフィールド名を配列に変換する
@@ -1411,19 +1462,6 @@ class DboCsv extends DboSource {
 
 	}
 /**
- * モデル名を解析する
- * TODO 現時点では単一のみ実装
- *
- * @param 	string	SQL
- * @return	string 	モデル名
- * @access 	protected
- */
-	function _parseSqlModelName($tableName) {
-
-		return Inflector::classify(str_replace($this->config['prefix'],'',$tableName));
-
-	}
-/**
  * 検索条件文字列を解析
  *
  * @param	string	SQL Conditions
@@ -1442,6 +1480,8 @@ class DboCsv extends DboSource {
 				}
 			}
 			$conditions = $tmpConditions;
+		}else{
+			$conditions = trim(str_replace('WHERE','',$conditions));
 		}
 
 		$conditions = preg_replace("/`[^`]+?`\./s","",$conditions);
@@ -2057,7 +2097,7 @@ class DboCsv extends DboSource {
 		reset($row);
 
 		while ($_row = each($row)) {
-			$this->map[$index++] = array($this->_resultTable, ($_row['key']));
+			$this->map[$index++] = array($this->__resultModelName, ($_row['key']));
 		}
 
 	}
@@ -2125,31 +2165,13 @@ class DboCsv extends DboSource {
 	}
 /**
  * Returns an array of the indexes in given table name.
- * TODO 未検証
- *
+ * CSVの場合主キーは id 固定
  * @param	string	$model Name of model to inspect
  * @return	array	Fields in table. Keys are column and unique
  * @access 	public
  */
 	function index($model) {
-		$index = array();
-		$table = $this->fullTableName($model, false);
-		if($table) {
-			$indexes = $this->query('SHOW INDEX FROM ' . $table);
-			$keys = Set::extract($indexes, '{n}.STATISTICS');
-			foreach ($keys as $i => $key) {
-				if(!isset($index[$key['Key_name']])) {
-					$index[$key['Key_name']]['column'] = $key['Column_name'];
-					$index[$key['Key_name']]['unique'] = ife($key['Non_unique'] == 0, 1, 0);
-				} else {
-					if(!is_array($index[$key['Key_name']]['column'])) {
-						$col[] = $index[$key['Key_name']]['column'];
-					}
-					$col[] = $key['Column_name'];
-					$index[$key['Key_name']]['column'] = $col;
-				}
-			}
-		}
+		$index = array('PRIMARY'=>array('unique'=>1,'column'=>'id'));
 		return $index;
 	}
 /**
