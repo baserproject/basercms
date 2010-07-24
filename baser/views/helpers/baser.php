@@ -38,6 +38,7 @@ class BaserHelper extends AppHelper {
 	var $_categoryTitle = true;
 	var $Page = null;
 	var $Permission = null;
+	var $pluginBasers = array();
 /**
  * コンストラクタ
  *
@@ -45,6 +46,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function __construct() {
+		
 		$this->_view =& ClassRegistry::getObject('view');
 		// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 		$cn = ConnectionManager::getInstance();
@@ -83,6 +85,10 @@ class BaserHelper extends AppHelper {
 
 			}
 		}
+
+		// プラグインのBaserヘルパを初期化
+		$this->_initPluginBasers();
+		
 	}
 /**
  * afterRender
@@ -746,6 +752,81 @@ class BaserHelper extends AppHelper {
 				$protocol = 'https';
 			}
 			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url);
+		}
+	}
+/**
+ * プラグインのBaserヘルパを初期化する
+ *
+ * BaserHelperに定義されていないメソッドをプラグイン内のヘルパに定義する事で
+ * BaserHelperから呼び出せるようになる仕組みを提供する。
+ * コアからプラグインのヘルパメソッドをBaserHelper経由で直接呼び出せる為、
+ * コア側のコントローラーでいちいちヘルパの定義をしなくてよくなり、
+ * プラグインを導入しただけでテンプレート上でプラグインのメソッドが呼び出せるようになる。
+ * 例えばページ機能のWISIWIG内でプラグインのメソッドを書き込む事ができる。
+ * 
+ * プラグインのBaserヘルパの命名規則：{プラグイン名}BaserHelper
+ * （呼びだし方）$baser->feed(1);
+ * 
+ * @return	void
+ * @access	public
+ */
+	function _initPluginBasers(){
+		
+		$view = $this->_view;
+		if(!empty($view->enablePlugins)) {
+			$plugins = $view->enablePlugins;
+		}else {
+			$plugins = array();
+			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+			$db =& ConnectionManager::getDataSource('baser');
+			if ($db->isInterfaceSupported('listSources')) {
+				$sources = $db->listSources();
+				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
+					$Plugin =& ClassRegistry::init('Plugin','Model');
+					$plugins = $Plugin->find('all');
+					$plugins = Set::extract('/Plugin/name',$plugins);
+				}
+			}
+
+		}
+		
+		$pluginBasers = array();
+		foreach($plugins as $plugin) {
+			$pluginName = Inflector::camelize($plugin);
+			App::import('Helper','Feed.FeedBaser');
+			if(App::import('Helper',$pluginName.'.'.$pluginName.'Baser')) {
+				$pluginBasers[] = $pluginName.'BaserHelper';
+			}
+		}
+		$vars = array(
+				'base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin'
+		);
+		$c = count($vars);
+		foreach($pluginBasers as $key => $pluginBaser) {
+			$this->pluginBasers[$key] =& new $pluginBaser();
+			for ($j = 0; $j < $c; $j++) {
+				if(isset($view->{$vars[$j]})) {
+					$this->pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
+				}
+			}
+		}
+		
+	}
+/**
+ * プラグインBaserヘルパ用マジックメソッド
+ * 
+ * Baserヘルパに存在しないメソッドが呼ばれた際プラグインのBaserヘルパを呼び出す
+ * 
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+		foreach($this->pluginBasers as $pluginBaser){
+			if(method_exists($pluginBaser,$method)){
+				return call_user_func_array(array(&$pluginBaser, $method), $params);
+			}
 		}
 	}
 }
