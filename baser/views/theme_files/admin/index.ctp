@@ -68,7 +68,7 @@ $(function(){
 	</strong> </p>
 <p>
 	<?php if($path): ?>
-	<?php $baser->link($baser->getImg('up.png',array('alt'=>'上へ')),array('action'=>'index', $theme,$plugin, $type, dirname($path))) ?>
+	<?php $baser->link($baser->getImg('up.gif',array('alt'=>'上へ')),array('action'=>'index', $theme,$plugin, $type, dirname($path))) ?>
 	<?php endif ?>
 </p>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableUsers">
@@ -109,10 +109,10 @@ $(function(){
 			<?php $baser->link($baser->getImg(array('action'=>'img_thumb',100, 100, $theme, $plugin, $type, $path, $themeFile['name']),array('alt'=>$themeFile['name'])),array('action'=>'img',$theme,$plugin,$type, $path,$themeFile['name']),array('rel'=>'colorbox','title'=>$themeFile['name'],'style'=>'display:block;padding:10px;float:left;background-color:#FFFFFF'),null,false) ?>
 			<?php echo $themeFile['name'] ?>
 			<?php elseif($themeFile['type'] == 'folder'): ?>
-			<?php $baser->img('folder.png',array('alt'=>$themeFile['name'])) ?>
+			<?php $baser->img('folder.gif',array('alt'=>$themeFile['name'])) ?>
 			<?php echo $themeFile['name'] ?>/
 			<?php else: ?>
-			<?php $baser->img('file.png',array('alt'=>$themeFile['name'])) ?>
+			<?php $baser->img('file.gif',array('alt'=>$themeFile['name'])) ?>
 			<?php echo $themeFile['name'] ?>
 			<?php endif ?></td>
 	</tr>
