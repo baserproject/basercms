@@ -20,10 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php echo @$declareXml ?><?php echo $html->docType('xhtml-trans') ?>
+<?php $baser->xmlHeader() ?>
+<?php $baser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
-<?php echo $html->charset() ?>
+<?php $baser->charset() ?>
 <title><?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - BaserCMS -</title>
 <?php echo $html->meta('description','BaserCMSのインストーラー') ?>
 <?php $baser->icon() ?>
