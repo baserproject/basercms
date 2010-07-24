@@ -19,7 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$blogCategories = $formEx->getControlSource('blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
+$blogCategories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
