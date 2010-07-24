@@ -22,6 +22,10 @@
 ?>
 <script type="text/javascript">
 $(function(){
+	pageCategoryIdChangeHandler();
+/**
+ * プレビューボタンクリック時イベント
+ */
 	$("#BtnPreview").click(function(){
 		var action = $("#PageForm").attr('action');
 		$("#PageForm").attr('action','<?php echo $this->base ?>/admin/pages/preview');
@@ -31,7 +35,47 @@ $(function(){
 		$("#PageForm").attr('target','_self');
 		return false;
 	});
+/**
+ * フォーム送信時イベント
+ */
+	$("#PageForm").submit(function(){
+		if($("#PageReflectMobile").attr('checked')){
+			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
+						' ※ 「mobile」フォルダの同階層に保存します。\n'+
+						' ※ 既に存在する場合は上書きします。')){
+				return false;
+			}
+		}
+	});
+/**
+ * カテゴリ変更時イベント
+ */
+	$("#PagePageCategoryId").change(pageCategoryIdChangeHandler);
 });
+/**
+ * モバイル反映欄の表示設定
+ */
+
+function pageCategoryIdChangeHandler() {
+	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
+	var pageCategoryId = $("#PagePageCategoryId").val();
+	var mobile = false;
+	if(pageCategoryId){
+		for (id in mobileCategoryIds){
+			if(id == pageCategoryId){
+				mobile = true;
+				break;
+			}
+		}
+	}
+	// mobileが1である前提
+	if(!mobile){
+		$("#RowReflectMobile").show();
+	}else{
+		$("#PageReflectMobile").attr('checked', false);
+		$("#RowReflectMobile").hide();
+	}
+}
 </script>
 
 <h2>
@@ -123,6 +167,22 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?></th>
 		<td class="col-input"><?php echo $formEx->radio('Page.status', $textEx->booleanDoList("公開"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?> <?php echo $formEx->error('Page.status') ?> &nbsp; </td>
+	</tr>
+	<tr id="RowReflectMobile" style="display: none">
+		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->checkbox('Page.reflect_mobile', array('label'=>'モバイルページとしてコピー')) ?> <?php echo $html->image('img_icon_help_admin.png',array('id'=>'helpReflectMobile','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextReflectMobile" class="helptext">
+				<ul>
+					<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
+					<li>モバイルページは「mobile」フォルダ内の同階層に保存します。</li>
+					<li>モバイルページが既に存在するする場合は上書きします。</li>
+				</ul>
+			</div>
+			<?php if(!empty($mobileExists)): ?>
+			<br />&nbsp;<?php $baser->link('≫ モバイルページの編集画面に移動',array($mobileExists)) ?>
+			<?php endif ?>
+		</td>
 	</tr>
 </table>
 <div class="submit">

@@ -166,6 +166,7 @@ class PagesController extends AppController {
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
 					$id = $this->Page->getLastInsertId();
+					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					// 編集画面にリダイレクト
@@ -181,6 +182,7 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('pages','page_categories');
+		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->pageTitle = '新規ページ登録';
 		$this->render('form');
 
@@ -211,6 +213,7 @@ class PagesController extends AppController {
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
 					clearViewCache($this->data['Page']['url']);
+					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
@@ -226,6 +229,8 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', $this->data['Page']['url']));
+		$this->set('mobileExists',$this->Page->mobileExists($this->data));
+		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ情報編集';
 		$this->render('form');

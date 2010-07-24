@@ -373,5 +373,19 @@ class PageCategory extends AppModel {
 			return false;
 		}
 	}
+/**
+ * モバイル用のカテゴリIDをリストで取得する
+ * @return	array	$ids
+ * @access	public
+ */
+	function getMobileCategoryIds(){
+		$ids = array('1');
+		$children = $this->children(1,false,array('PageCategory.id'),array('PageCategory.id'));
+		if($children){
+			$children = Set::extract('/PageCategory/id',$children);
+			$ids = am($ids,$children);
+		}
+		return $ids;
+	}
 }
 ?>

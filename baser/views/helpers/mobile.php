@@ -70,6 +70,10 @@ class MobileHelper extends Helper {
 				$view->output = str_replace('<cake:nocache>','',$view->output);
 				$view->output = str_replace('</cake:nocache>','',$view->output);
 			}
+			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
+			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
+			Configure::write('debug',0);
+			
 		}
 		
 	}

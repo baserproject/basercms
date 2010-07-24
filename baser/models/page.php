@@ -112,16 +112,36 @@ class Page extends AppModel {
 		}
 
 		// 新しいページファイルのパスが開けるかチェックする
-		$newPath = $this->_getPageFilePath($this->data);
-		$newFile = new File($newPath);
-		if($newFile->open('w')) {
-			$newFile->close();
-			$newFile = null;
+		$result = true;
+		if(!$this->checkOpenPageFile($this->data)){
+			$result = false;
+		}
+		if(!empty($this->data['Page']['reflect_mobile'])){
+			$data = $this->data;
+			$data['Page']['url'] = '/mobile'.$data['Page']['url'];
+			if(!$this->checkOpenPageFile($data)){
+				$result = false;
+			}
+		}
+		return $result;
+
+	}
+/**
+ * ページテンプレートファイルが開けるかチェックする
+ * @param	array	$data	ページデータ
+ * @return	boolean
+ * @access	public
+ */
+	function checkOpenPageFile($data){
+		$path = $this->_getPageFilePath($data);
+		$File = new File($path);
+		if($File->open('w')) {
+			$File->close();
+			$File = null;
 			return true;
 		}else {
 			return false;
 		}
-
 	}
 /**
  * afterSave
@@ -132,14 +152,43 @@ class Page extends AppModel {
 		if(!$this->fileSave) {
 			return true;
 		}
+
+		if(isset($this->data['Page'])){
+			$data = $this->data['Page'];
+		}
 		
-		$data = $this->data['Page'];
 		// タイトルタグと説明文を追加
 		if(empty($data['id'])) {
 			$data['id'] = $this->getInsertID();
 		}
 
-		return $this->createPageTemplate($data);
+		$result = true;
+		if(!$this->createPageTemplate($data)){
+			$result = false;
+		}
+
+		// モバイルデータの生成
+		if(!empty($data['reflect_mobile'])){
+			$id = $this->PageCategory->getIdByPath('/mobile'.$data['url']);
+			unset($data['id']);
+			unset($data['status']);
+			unset($data['url']);
+			unset($data['modified']);
+			unset($data['reflect_mobile']);
+			$data['page_category_id'] = 1;
+			$data['url'] = $this->getPageUrl($data);
+			if($id){
+				$data['id'] = $id;
+				$this->set($data);
+			}else{
+				$data['status'] = false;	// 新規ページの場合は非公開とする
+				$this->create($data);
+			}
+			if(!$this->save()){
+				$result = false;
+			}
+		}
+		return $result;
 
 	}
 /**
@@ -367,7 +416,7 @@ class Page extends AppModel {
  */
 	function entryPageFiles($targetPath,$parentCategoryId = '') {
 
-		$this->Page->saveFile = false;
+		$this->fileSave = false;
 		$folder = new Folder($targetPath);
 		$files = $folder->read(true,true,true);
 		$insert = 0;
@@ -400,7 +449,7 @@ class Page extends AppModel {
 		if(!$files[1]) $files[1] = array();
 		foreach($files[1] as $file) {
 
-			if(preg_match('/\.ctp$/is',$file) === false) {
+			if(preg_match('/\.ctp$/is',$file) == false) {
 				continue;
 			}
 
@@ -436,7 +485,7 @@ class Page extends AppModel {
 			if($pageCategoryId) {
 				$conditions['Page.page_category_id'] = $pageCategoryId;
 			}else{
-				$conditions['Page.page_category_id'] = '';
+				$conditions['Page.page_category_id'] = null;
 			}
 			$page = $this->find($conditions);
 			if($page) {
@@ -477,6 +526,23 @@ class Page extends AppModel {
 
 		return array('all'=>$all,'insert'=>$insert,'update'=>$update);
 
+	}
+/**
+ * モバイルページの存在チェック
+ * 存在する場合は、ページIDを返す
+ * @param	array	$data	ページデータ
+ * @return	mixed	ページID / false
+ * @access	public
+ */
+	function mobileExists ($data) {
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+		if(preg_match('/^\/mobile\//is',$data['url'])){
+			// 対象ページがモバイルページの場合はfalseを返す
+			return false;
+		}
+		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
 	}
 }
 ?>
