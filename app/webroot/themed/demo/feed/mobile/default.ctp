@@ -3,9 +3,6 @@
  * [モバイル] フィード
  */
 ?>
-<cake:nocache>
-	<?php $baser->cacheHeader() ?>
-</cake:nocache>
 <?php if(!empty($items)): ?>
 	<?php foreach($items as $key => $item): ?>
 <span style="color:#8ABE08">◆</span> <?php echo date("y.m.d",strtotime($item['pubDate']['value'])); ?><br />
