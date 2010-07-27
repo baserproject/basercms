@@ -175,8 +175,11 @@ class CkeditorHelper extends AppHelper {
  * @param array $options
  * @return string
  */
-	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
-		return $this->Form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(),&$form = null) {
+		if(!$form){
+			$form = $this->Form;
+		}
+		return $form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
@@ -185,9 +188,12 @@ class CkeditorHelper extends AppHelper {
  * @param array $tinyoptions
  * @return string
  */
-	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), &$form = null) {
+		if(!$form){
+			$form = $this->Form;
+		}
 		$options['type'] = 'textarea';
-		return $this->Form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+		return $form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles, $form);
 	}
 }
 ?>
