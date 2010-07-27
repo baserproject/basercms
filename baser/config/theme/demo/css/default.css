@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/**
+ * タグの基本設定
+ */
+
+/* 全体
+----------------------------------------------- */
+* {
+	margin:0px;
+	padding:0px;
+}
+body {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+	text-align: center;
+	font-size:small;
+	color:#333333;
+}
+pre {
+	background-color:#FFFFFF;
+	text-align:left;
+	border-top:1px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+	padding:10px 20px;
+}
+/* 見出し
+----------------------------------------------- */
+h1 {
+	margin:0px 0px;
+	color:#FFFFFF;
+	font-size:90%;
+	font-weight:normal;
+	line-height:100%;
+	padding-top:10px;
+	padding-bottom:10px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+h2 {
+	margin:10px 0px;
+}
+h3 {
+	margin:10px 0px;
+}
+h4 {
+	margin:10px 0px;
+}
+h5 {
+	margin:10px 0px;
+}
+h6 {
+	margin:10px 0px;
+}
+h7 {
+	margin:10px 0px;
+}
+/* 段落
+----------------------------------------------- */
+p {
+	margin:0px;
+	line-height: 150%;
+}
+/* 画像
+----------------------------------------------- */
+img {
+	border: none;
+}
+/* リンク
+----------------------------------------------- */
+:link {
+	color:#669900;
+}
+:visited {
+	color: #669900;
+}
+a:hover {
+	text-decoration:none;
+}
+a:active {
+	color: #FF9900;
+}
+/* リスト
+----------------------------------------------- */
+ul,
+dl {
+	margin:0;
+	padding:0;
+	line-height:normal;
+	list-style-type:none;
+}
+dl {
+}
+dt {
+}
+dd {
+}
+/* 強調
+----------------------------------------------- */
+strong {
+}
+em {
+}
+/* テーブル
+----------------------------------------------- */
+table {
+	border-collapse: collapse;
+}
+/* フォームパーツ
+----------------------------------------------- */
+input,
+textarea,
+select {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+	margin: 3px 2pt !important;
+	padding: 3px 1pt;
+	font-size:1.0em;
+}
+input[type=submit],
+input[type=reset],
+input[type=button] {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+}
+select {
+	padding: 3px 1pt 3px 0px;
+}
+/* その他
+----------------------------------------------- */
+small {
+	color:#AA8800;
+}

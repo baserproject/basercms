@@ -1,0 +1,97 @@
+@charset "UTF-8";
+/**
+ * レイアウト
+ */
+
+/* page
+----------------------------------------------- */
+#page {
+	width:900px;
+	margin:0 auto;
+	text-align: left;
+}
+/* contents
+----------------------------------------------- */
+#contents {
+}
+#contentsBody {
+	margin:0 auto;
+}
+/* alfa, beta
+----------------------------------------------- */
+#alfa,
+#beta {
+	position: relative;
+	float:left;
+	display: inline;
+}
+#alfa {
+	width:646px;
+	left:0px;
+	padding-bottom:50px;
+}
+#beta {
+	width:234px;
+	left:0px;
+	padding-left:20px;
+	padding-bottom:50px;
+}
+/* header
+----------------------------------------------- */
+#header {
+	width:900px;
+	margin:0 auto;
+	text-align: left;
+	background: url(images/bg_header.jpg) no-repeat;
+}
+/* footer
+----------------------------------------------- */
+html,
+body,
+#page {
+	height: 100%;
+}
+body > #page {
+	height: auto;
+	min-height: 100%;
+}
+#contents {
+	padding-bottom: 135px;
+}  /* must be same height as the footer */
+#footer {
+	position: relative;
+	margin-top: -125px; /* negative value of footer height */
+	height: 135px;
+	clear:both;
+}
+/* CLEAR FIX*/
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+/* End hide from IE-mac */
+#footer {
+	border-top:5px solid #cccccc;
+	clear:both;
+	font-size:80%;
+	text-align:right;
+	color:#666666;
+	background-color:#e2e2e2;
+}
+#footerInner {
+	width:900px;
+	margin:0 auto;
+}

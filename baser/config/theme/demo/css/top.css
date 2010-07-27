@@ -1,0 +1,39 @@
+@charset "UTF-8";
+/**
+ * トップページ
+ */
+
+/* 標準設定を上書き
+----------------------------------------------- */
+#contentsBody {
+	width:900px;
+}
+#alfa {
+	width:auto;
+}
+/* NEWS
+----------------------------------------------- */
+#newsHead01 {
+	height:25px;
+	background:url(images/bg_top_head_01.gif) no-repeat left top;
+	text-indent:-3000px;
+}
+#newsHead02 {
+	height:25px;
+	background:url(images/bg_top_head_02.gif) no-repeat left top;
+	text-indent:-3000px;
+}
+.news {
+	width:400px;
+	margin:5px 20px 20px 20px;
+	display: inline;/* IEバグ対応 */
+	float:left;
+}
+.news .body {
+	padding:10px 20px;
+}
+.news li {
+	background:url(images/bg_list_circle.gif) no-repeat left 7px;
+	padding-left:15px;
+	margin-bottom:10px;
+}

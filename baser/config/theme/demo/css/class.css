@@ -1,0 +1,198 @@
+@charset "UTF-8";
+/**
+ * 共通クラス（idセレクタに依存しないもの）
+ */
+
+/* display
+----------------------------------------------- */
+.display-none {
+	display:none;
+}
+/* text
+----------------------------------------------- */
+.weight-bold {
+	font-weight:bold;
+}
+.size-small {
+	font-size:small;
+}
+.size-medium {
+	font-size:medium;
+}
+.size-large {
+	font-size:large;
+}
+.align-left {
+	text-align:left;
+}
+.align-right {
+	text-align:right;
+}
+.align-center {
+	text-align:center !important;
+}
+/* float
+----------------------------------------------- */
+.float-left {
+	float:left;
+}
+.float-right {
+	float:right;
+}
+/* img
+----------------------------------------------- */
+.img-right {
+	float:right;
+	margin-left:10px;
+	margin-bottom:10px;
+}
+.img-left {
+	float:left;
+	margin-right:10px;
+	margin-bottom:10px;
+}
+/* clear
+----------------------------------------------- */
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+/* row-table-01
+----------------------------------------------- */
+table.row-table-01 {
+	width:100%;
+	color:#333;
+	background-color: #fff;
+	clear:both;
+	padding: 0;
+	margin: 0 0 1em 0;
+	white-space: normal;
+	border-collapse:separate;
+}
+table.row-table-01 th {
+	text-align: right;
+	padding:8px 8px;
+	font-weight:normal;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #9C3;
+	font-size:0.85em;
+	color:#669900;
+}
+table.row-table-01 tr td {
+	background-color: #ffffff;
+	padding:10px 8px;
+	vertical-align:top;
+	text-align: left;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #ccc;
+}
+/* table.cake-sql-log
+----------------------------------------------- */
+table.cake-sql-log {
+	width:90%;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	color:#333;
+	background-color: #fff;
+	clear:both;
+	padding: 0;
+	margin: 0 0 1em 0;
+	white-space: normal;
+	border-collapse:separate;
+	margin:20px auto;
+}
+table.cake-sql-log caption {
+	font-weight:bold;
+	text-align:center;
+}
+table.cake-sql-log th {
+	background-color: #e2e2e2;
+	padding:4px 8px;
+	font-weight:bold;
+	text-align:center;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #FFFFFF;
+	border-right-color: #666;
+	border-bottom-color: #666;
+	border-left-color: #FFFFFF;
+	font-size:0.8em;
+}
+table.cake-sql-log tr td {
+	background-color: #F7F7F7;
+	padding:6px 8px;
+	vertical-align:top;
+	text-align: left;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ccc;
+	border-bottom-color: #ccc;
+	font-size:0.8em;
+}
+/* cakePHP parts
+----------------------------------------------- */
+.error-message {
+	color:#C30;
+}
+.required {
+	color:#C00!important;
+	font-size:16px;
+}
+.form-error {
+	background:#F8E2DE;
+}
+.message {
+	color:#F30;
+	font-weight:bold;
+	margin:20px;
+}
+.error {
+	color:#C00;
+}
+.error em {
+	color:#06C;
+	font-style:normal;
+	font-weight:bold;
+}
+.submit {
+	text-align:center;
+}
+/* help text
+----------------------------------------------- */
+.bt-content a:visited,
+.bt-content a:link {
+	color:#688A00;
+}
+.bt-content ul li {
+	list-style:disc;
+	list-style-position:outside;
+	margin-left:10px;
+	margin-bottom:8px;
+}
+img.help {
+	padding: 5px;
+	cursor:pointer;
+}

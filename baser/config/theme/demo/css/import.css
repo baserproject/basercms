@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/**
+ * CSSインポート
+ * 全てのページで読み込むCSSを記述
+ */
+
+@import "default.css";
+@import "class.css";
+@import "layout.css";
+@import "header.css";
+@import "footer.css";
+@import "contents.css";
