@@ -22,7 +22,7 @@
 /**
  * Include files
  */
-App::import("Helper",array("Form","TimeEx","TextEx"));
+App::import('Helper',array('Form','TimeEx','TextEx','Ckeditor'));
 /**
  * FormHelper 拡張クラス
  *
@@ -35,7 +35,7 @@ class FormExHelper extends FormHelper {
  * @var		array
  * @access	public
  */
-	var $helpers = array('Html','TimeEx',"TextEx","Javascript");
+	var $helpers = array('Html','TimeEx','TextEx','Javascript','Ckeditor');
 /**
  * 都道府県用のSELECTタグを表示する
  *
@@ -937,6 +937,12 @@ DOC_END;
 			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
 		));
 		// <<<
+	}
+	function ckeditor($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+		$_options = array('type'=>'textarea');
+		$options = am($_options,$options);
+		$method = $options['type'];
+		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
 	}
 /**
  * 日付タグ
