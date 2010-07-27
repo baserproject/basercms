@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * フィードBaserヘルパー
+ * フィードPluginBaserヘルパー
  * 
  * PHP versions 4 and 5
  *
@@ -23,12 +23,12 @@
  * Include files
  */
 /**
- * フィードBaserヘルパー
+ * フィードPluginBaserヘルパー
  *
  * @package			baser.plugins.feed.views.helpers
  *
  */
-class FeedBaserHelper extends AppHelper {
+class FeedPluginBaserHelper extends AppHelper {
 /**
  * フィード出力
  * @param	int		$id

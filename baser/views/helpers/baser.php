@@ -753,7 +753,7 @@ class BaserHelper extends AppHelper {
  * プラグインを導入しただけでテンプレート上でプラグインのメソッドが呼び出せるようになる。
  * 例えばページ機能のWISIWIG内でプラグインのメソッドを書き込む事ができる。
  * 
- * プラグインのBaserヘルパの命名規則：{プラグイン名}BaserHelper
+ * プラグインのBaserヘルパの命名規則：{プラグイン名}PluginBaserHelper
  * （呼びだし方）$baser->feed(1);
  * 
  * @return	void
@@ -778,9 +778,8 @@ class BaserHelper extends AppHelper {
 		$pluginBasers = array();
 		foreach($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
-			App::import('Helper','Feed.FeedBaser');
-			if(App::import('Helper',$pluginName.'.'.$pluginName.'Baser')) {
-				$pluginBasers[] = $pluginName.'BaserHelper';
+			if(App::import('Helper',$pluginName.'.'.$pluginName.'PluginBaser')) {
+				$pluginBasers[] = $pluginName.'PluginBaserHelper';
 			}
 		}
 		$vars = array(
