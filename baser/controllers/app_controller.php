@@ -222,7 +222,7 @@ class AppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->Auth)) {
+		if(isset($this->Auth) && isset($this->params['url']['url'])) {
 			$params = Router::parse($this->params['url']['url']);
 			if(!empty($params['prefix'])) {
 				$user = $this->Auth->user();
