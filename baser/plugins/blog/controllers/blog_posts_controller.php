@@ -245,7 +245,9 @@ class BlogPostsController extends BlogAppController {
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->read(null, $id);
 		}else {
-			$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
+			if(!empty($this->data['BlogPost']['posts_date'])){
+				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
+			}
 			// データを保存
 			if($this->BlogPost->save($this->data)) {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';

@@ -76,11 +76,11 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.content', '本文') ?></th>
-		<td class="col-input"><?php echo $ckeditor->textarea('BlogPost.content',array('cols'=>60, 'rows'=>20)) ?> <?php echo $formEx->error('BlogPost.content') ?>&nbsp; </td>
+		<td class="col-input"><?php echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20)) ?> <?php echo $formEx->error('BlogPost.content') ?>&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.detail', '詳細') ?></th>
-		<td class="col-input"><?php echo $ckeditor->textarea('BlogPost.detail', array('cols'=>60,'rows'=>20)) ?><?php echo $formEx->error('BlogPost.detail') ?>&nbsp;</td>
+		<td class="col-input"><?php echo $formEx->ckeditor('BlogPost.detail', array('cols'=>60,'rows'=>20)) ?><?php echo $formEx->error('BlogPost.detail') ?>&nbsp;</td>
 	</tr>
 	<?php $categories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id'])) ?>
 	<?php if($categories): ?>

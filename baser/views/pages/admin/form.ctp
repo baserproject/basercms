@@ -161,7 +161,7 @@ function pageCategoryIdChangeHandler() {
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.contents', '本文') ?></th>
-		<td class="col-input"><?php echo $ckeditor->textarea('Page.contents',array('cols'=>60, 'rows'=>20)) ?> <?php echo $formEx->error('Page.contents') ?>&nbsp; </td>
+		<td class="col-input"><?php echo $formEx->ckeditor('Page.contents',array('cols'=>60, 'rows'=>20)) ?> <?php echo $formEx->error('Page.contents') ?>&nbsp; </td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?></th>
