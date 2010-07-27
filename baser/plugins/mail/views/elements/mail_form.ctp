@@ -31,6 +31,16 @@
 <table cellpadding="0" cellspacing="0" class="row-table-01">
 	<?php $baser->element('mail_input',array('blockStart'=>1)) ?>
 </table>
+
+<?php if(!$freezed && $mailContent['MailContent']['auth_captcha']): ?>
+<div class="auth-captcha clearfix">
+	<?php $baser->img('/'.$mailContent['MailContent']['name'].'/captcha',array('alt'=>'認証画像','class'=>'auth-captcha-image')) ?>
+	<?php echo $mailform->text('Message.auth_captcha') ?><br />
+	&nbsp;画像の文字を入力してください<br />
+	<?php echo $mailform->error('Message.auth_captcha','>> 入力された文字が間違っています。入力をやり直してください。') ?>
+</div>
+<?php endif ?>
+
 <?php /* 送信ボタン */ ?>
 <div class="submit">
 	<?php if($this->action=='index'): ?>

@@ -55,7 +55,7 @@ class MailController extends MailAppController {
  * @var 	array
  * @access 	public
  */
-	var $components = array('Email','EmailEx','Security');
+	var $components = array('Email','EmailEx','Security','Captcha');
 /**
  * CSS
  *
@@ -100,7 +100,7 @@ class MailController extends MailAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit');
+		$this->Auth->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
 
 		parent::beforeFilter();
 
@@ -180,19 +180,24 @@ class MailController extends MailAppController {
 			// 入力データを整形し、モデルに引き渡す
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
 
+			// 画像認証を行う
+			if($this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+				$captchaResult = $this->Captcha->check($this->data['Message']['auth_captcha']);
+				if(!$captchaResult){
+					$this->Message->invalidate('auth_captcha');
+				} else {
+					unset($this->data['Message']['auth_captcha']);
+				}
+			}
+			
 			// データの入力チェックを行う
 			if($this->Message->validates()) {
-
 				$this->set('freezed',true);
 				$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
-
 			}else {
-
 				$this->set('freezed',false);
-				$this->validateErrors($this->Message);	// TODO Controller::validationErrorsで参照できるようにする
 				$this->set('error',true);
 				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信して下さい。');
-
 			}
 
 		}
@@ -410,5 +415,14 @@ class MailController extends MailAppController {
 		$this->EmailEx->send();
 
 	}
+/**
+ * 認証用のキャプチャ画像を表示する
+ * @return	void
+ * @access	public
+ */
+    function captcha()
+    {
+        $this->Captcha->render();
+    } 
 }
 ?>

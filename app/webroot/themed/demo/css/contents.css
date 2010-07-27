@@ -312,3 +312,23 @@ h4.contents-head {
 	color:#FFFFFF;
 	font-weight: bold;
 }
+
+/* AuthCaptcha
+----------------------------------------------- */
+.auth-captcha{
+	width:430px;
+	margin:10px auto;
+}
+.auth-captcha-image{
+	border: 1px solid #669900;
+	display: block;
+	float:left;
+	margin-right:10px;
+	vertical-align: top;
+}
+#AuthCaptchaImage{
+	border: 1px solid #669900;
+}
+#CaptchaLoader{
+	border: 1px solid #CCCCCC;
+}

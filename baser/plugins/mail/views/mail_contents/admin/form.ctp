@@ -144,6 +144,20 @@ function mailContentSender1ClickHandler(){
 			</div>
 			&nbsp; </td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.auth_capthca', 'イメージ認証') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->radio('MailContent.auth_captcha',$textEx->booleanDoList('利用'),array('legend'=>false)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAuthCaptcha','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('MailContent.auth_captcha') ?>
+			<div id="helptextAuthCaptcha" class="helptext">
+				<ul>
+					<li>メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。</li>
+					<li>スパムなどいたずら送信が多いが多い場合に設定すると便利です。</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
 </table>
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">

@@ -22,6 +22,7 @@
 ?>
 <script type="text/javascript">
 $(function(){
+	loadAuthCaptcha();
 	$("#BlogCommentAddButton").click(function(){
 		var msg = '';
 		if(!$("#BlogCommentName").val()){
@@ -30,6 +31,11 @@ $(function(){
 		if(!$("#BlogCommentMessage").val()){
 			msg += 'コメントを入力して下さい\n';
 		}
+		<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+		if(!$("#BlogCommentAuthCaptcha").val()){
+			msg += '画象の文字を入力して下さい\n';
+		}
+		<?php endif ?>
 		if(!msg){
 			$.ajax({
 				url: $("#BlogCommentAddForm").attr('action'),
@@ -41,25 +47,37 @@ $(function(){
 					$("#ResultMessage").hide('slide',{direction:"up"},500);
 				},
 				success: function(result){
-					$("#BlogCommentName").val('');
-					$("#BlogCommentEmail").val('');
-					$("#BlogCommentUrl").val('');
-					$("#BlogCommentMessage").val('');
-					var resultMessage = '';
-					<?php if($blogContent['BlogContent']['comment_approve']): ?>
-					resultMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
-					<?php else: ?>
-					var comment = $(result);
-					comment.hide();
-					$("#BlogCommentList").append(comment);
-					comment.show(500);
-					resultMessage = 'コメントの送信が完了しました。';
-					<?php endif ?>
-					$("#ResultMessage").html(resultMessage);
-					$("#ResultMessage").show('slide',{direction:"up"},500);	
+					if(result){
+						<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+						loadAuthCaptcha();
+						<?php endif ?>
+						$("#BlogCommentName").val('');
+						$("#BlogCommentEmail").val('');
+						$("#BlogCommentUrl").val('');
+						$("#BlogCommentMessage").val('');
+						$("#BlogCommentAuthCaptcha").val('');
+						var resultMessage = '';
+						<?php if($blogContent['BlogContent']['comment_approve']): ?>
+						resultMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
+						<?php else: ?>
+						var comment = $(result);
+						comment.hide();
+						$("#BlogCommentList").append(comment);
+						comment.show(500);
+						resultMessage = 'コメントの送信が完了しました。';
+						<?php endif ?>
+						$("#ResultMessage").html(resultMessage);
+						$("#ResultMessage").show('slide',{direction:"up"},500);
+					}else{
+						<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+						loadAuthCaptcha();
+						<?php endif ?>
+						$("#ResultMessage").html('コメントの送信に失敗しました。入力内容を見なおしてください。');
+						$("#ResultMessage").show('slide',{direction:"up"},500);
+					}
 				},
 				error: function(){
-					alert('コメントの送信に失敗しました。');
+					alert('コメントの送信に失敗しました。入力内容を見なおしてください。');
 				},
 				complete: function(xhr, textStatus) {
 					$("#BlogCommentAddButton").removeAttr('disabled');
@@ -71,6 +89,19 @@ $(function(){
 		return false;
 	});
 });
+/**
+ * キャプチャ画像を読み込む
+ */
+function loadAuthCaptcha(){
+	var src = '<?php echo $baser->getUrl(array('controller'=>'blog_comments', 'action'=>'captcha')) ?>'+'?'+Math.floor( Math.random() * 100 );
+	$("#AuthCaptchaImage").hide();
+	$("#CaptchaLoader").show();
+	$("#AuthCaptchaImage").load(function(){
+		$("#CaptchaLoader").hide();
+		$("#AuthCaptchaImage").fadeIn(1000);
+	});
+	$("#AuthCaptchaImage").attr('src',src);
+}
 </script>
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 
@@ -103,6 +134,16 @@ $(function(){
 			<td><?php echo $formEx->textarea('BlogComment.message',array('rows'=>10,'cols'=>60)) ?></td>
 		</tr>
 	</table>
+
+	<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+	<div class="auth-captcha clearfix">
+		<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
+		<?php $baser->img('/img/captcha_loader.gif',array('alt'=>'Loading...','class'=>'auth-captcha-image','id'=>'CaptchaLoader')) ?>
+		<?php echo $formEx->text('BlogComment.auth_captcha') ?><br />
+		&nbsp;画像の文字を入力してください<br />
+	</div>
+	<?php endif ?>
+
 	<?php echo $formEx->end(array('label'=>'　　送信する　　','id'=>'BlogCommentAddButton')) ?>
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 </div>

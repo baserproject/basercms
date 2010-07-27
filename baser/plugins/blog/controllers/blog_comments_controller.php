@@ -55,7 +55,7 @@ class BlogCommentsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx','Security');
+	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx','Security','Captcha');
 /**
  * ぱんくずナビ
  *
@@ -82,7 +82,7 @@ class BlogCommentsController extends BlogAppController {
 
 		parent::beforeFilter();
 
-		$this->Auth->allow('add');
+		$this->Auth->allow('add','captcha');
 
 		$navis = array();
 		if(!empty($this->params['pass'][1])) {
@@ -102,8 +102,6 @@ class BlogCommentsController extends BlogAppController {
 			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
 			$navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
 
-		}else {
-			$this->notFound();
 		}
 
 		$this->navis = am($this->navis,$navis);
@@ -267,8 +265,21 @@ class BlogCommentsController extends BlogAppController {
 		if(!$this->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
 			$this->notFound();
 		}else {
+
+			// 画像認証を行う
+			$captchaResult = true;
+			if($this->blogContent['BlogContent']['auth_captcha']){
+				$captchaResult = $this->Captcha->check($this->data['BlogComment']['auth_captcha']);
+				if(!$captchaResult){
+					$this->set('dbData',false);
+					return false;
+				} else {
+					unset($this->data['BlogComment']['auth_captcha']);
+				}
+			}
+			
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
-			if($result) {
+			if($result && $captchaResult) {
 				$this->_sendComment();
 				$this->set('dbData',$result['BlogComment']);
 			}else{
@@ -276,5 +287,14 @@ class BlogCommentsController extends BlogAppController {
 			}
 		}
 	}
+/**
+ * 認証用のキャプチャ画像を表示する
+ * @return	void
+ * @access	public
+ */
+    function captcha()
+    {
+        $this->Captcha->render();
+    } 
 }
 ?>

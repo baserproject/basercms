@@ -276,6 +276,7 @@ class BlogContentsController extends BlogAppController {
 		$data['BlogContent']['template'] = 'default';
 		$data['BlogContent']['list_count'] = 10;
 		$data['BlogContent']['feed_count'] = 10;
+		$data['BlogContent']['auth_captcha'] = 1;
 		return $data;
 
 	}

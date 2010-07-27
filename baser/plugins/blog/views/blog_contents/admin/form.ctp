@@ -135,6 +135,20 @@ $(function(){
 			<?php echo $formEx->error('BlogContent.comment_approve') ?></td>
 	</tr>
 	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.auth_capthca', 'コメントイメージ認証') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->radio('BlogContent.auth_captcha',$textEx->booleanDoList('利用'),array('legend'=>false)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAuthCaptcha','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('BlogContent.auth_captcha') ?>
+			<div id="helptextAuthCaptcha" class="helptext">
+				<ul>
+					<li>ブログコメント送信の際、表示された画像の文字入力させる事で認証を行ないます。</li>
+					<li>スパムなどいたずら送信が多いが多い場合に設定すると便利です。</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.layout', 'レイアウトテンプレート名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->select('BlogContent.layout',$blog->getLayoutTemplates(),null,array(),false) ?>
