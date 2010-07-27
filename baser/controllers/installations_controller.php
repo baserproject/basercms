@@ -179,9 +179,9 @@ class InstallationsController extends AppController {
 		// core.phpの書き込み権限
 		$corefilewritable=is_writable(CONFIGS.'core.php');
 		// DEMO用のページディレクトリの書き込み権限
-		$demopagesdirwritable = is_writable(WWW_ROOT.'themed'.DS.'demo'.DS.'pages');
+		$demopagesdirwritable = is_writable(WWW_ROOT.'themed');
 		// 一時フォルダの書き込み権限
-		$tmpdirwritable = is_writable(TMP) && is_writable(TMP.'logs') && is_writable(TMP.'sessions') && is_writable(CACHE) && is_writable(CACHE.'models') && is_writable(CACHE.'persistent') && is_writable(CACHE.'views');
+		$tmpdirwritable = is_writable(TMP);
 		// SQLiteディレクトリ書き込み権限
 		$dbDirWritable = is_writable(APP.'db');
 
@@ -652,22 +652,21 @@ class InstallationsController extends AppController {
 
 		}
 
-
+		// tmp フォルダを作成する
+		$folder = new Folder();
+		$folder->create(TMP.'logs',0777);
+		$folder->create(TMP.'sessions',0777);
+		$folder->create(CACHE);
+		$folder->create(CACHE.'models',0777);
+		$folder->create(CACHE.'persistent',0777);
+		$folder->create(CACHE.'views',0777);
 
 		// demo用テーマを配置する
-		/*$targetPath = WWW_ROOT.'themed'.DS.'demo'.DS;
-        $sourcePath = BASER_CONFIGS.'themed'.DS.'demo'.DS;
+		$targetPath = WWW_ROOT.'themed'.DS.'demo';
+        $sourcePath = BASER_CONFIGS.'theme'.DS.'demo';
         $folder = new Folder();
-        $folder->create($targetPath,0777);
-        $folder = new Folder($sourcePath);
-        $files = $folder->read(true, true);
-        foreach($files[0] as $file){
-            $folder->copy(array('to'=>$targetPath.$file,'from'=>$sourcePath.$file,'mode'=>0777));
-        }
-        foreach($files[1] as $file){
-            copy($sourcePath.$file,$targetPath.$file);
-            chmod($targetPath,0666);
-        }*/
+		$folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')));
+		$folder->create($targetPath.DS.'pages',0777);
 
 		// demoテーマ用のpagesファイルを生成する
 		App::import('Model','Page');
