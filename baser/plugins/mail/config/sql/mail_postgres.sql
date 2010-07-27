@@ -64,6 +64,7 @@ CREATE TABLE "public"."bc__mail_contents" (
   "mail_template" varchar(20) default NULL,
   "redirect_url" varchar(255) default NULL,
   "status" int2 default NULL,
+  "auth_captcha" boolean default NULL,
   "created" timestamp default NULL,
   "modified" timestamp default NULL,
   PRIMARY KEY  ("id")

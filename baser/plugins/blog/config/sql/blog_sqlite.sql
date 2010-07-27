@@ -73,6 +73,7 @@ CREATE TABLE bc__blog_contents (
   feed_count integer default NULL,
   comment_use boolean default NULL,
   comment_approve boolean default NULL,
+  auth_captcha bloolan default NULL,
   created text default NULL,
   modified text default NULL
 );

@@ -60,6 +60,7 @@ CREATE TABLE bc__mail_contents (
   mail_template text default NULL,
   redirect_url text default NULL,
   status integer default NULL,
+  auth_captcha bloolan default NULL,
   created text default NULL,
   modified text default NULL
 );

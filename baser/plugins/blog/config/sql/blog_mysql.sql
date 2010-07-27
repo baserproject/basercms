@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `bc__blog_contents` (
   `feed_count` int(4) default NULL,
   `comment_use` tinyint(2) default NULL,
   `comment_approve` tinyint(2) default NULL,
+  `auth_captcha` tinyint(1) default NULL,
   `created` datetime default NULL,
   `modified` datetime default NULL,
   PRIMARY KEY  (`id`)

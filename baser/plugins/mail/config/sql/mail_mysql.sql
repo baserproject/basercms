@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `bc__mail_contents` (
   `mail_template` varchar(20) default NULL,
   `redirect_url` varchar(255) default NULL,
   `status` tinyint(2) default NULL,
+  `auth_captcha` tinyint(1) default NULL,
   `created` datetime default NULL,
   `modified` datetime default NULL,
   PRIMARY KEY  (`id`)

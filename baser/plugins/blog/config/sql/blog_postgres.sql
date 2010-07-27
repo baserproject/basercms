@@ -82,6 +82,7 @@ CREATE TABLE "public"."bc__blog_contents" (
   "feed_count" int4 default NULL,
   "comment_use" boolean default NULL,
   "comment_approve" boolean default NULL,
+  "auth_captcha" boolean default NULL,
   "created" timestamp default NULL,
   "modified" timestamp default NULL,
   PRIMARY KEY  ("id")
