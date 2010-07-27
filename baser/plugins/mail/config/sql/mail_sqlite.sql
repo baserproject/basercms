@@ -68,8 +68,8 @@ CREATE TABLE bc__mail_contents (
 -- テーブルのデータをダンプしています bc__mail_contents
 --
 
-INSERT INTO bc__mail_contents (name, title, sender_1, sender_2, sender_name, subject_user, subject_admin, layout_template, form_template, mail_template, redirect_url, status, created, modified) VALUES
-('contact', 'お問い合わせ',  NULL, NULL, 'BaserCMS - Based Website Development Project -', '【BaserCMS】お問い合わせ頂きありがとうございます。', '【BaserCMS】お問い合わせを受け付けました', 'default', 'default', 'mail_default', 'http://basercms.net/', 1, datetime('now', 'localtime'), datetime('now', 'localtime'));
+INSERT INTO bc__mail_contents (name, title, sender_1, sender_2, sender_name, subject_user, subject_admin, layout_template, form_template, mail_template, redirect_url, status, auth_captcha, created, modified) VALUES
+('contact', 'お問い合わせ',  NULL, NULL, 'BaserCMS - Based Website Development Project -', '【BaserCMS】お問い合わせ頂きありがとうございます。', '【BaserCMS】お問い合わせを受け付けました', 'default', 'default', 'mail_default', 'http://basercms.net/', 1, 1, datetime('now', 'localtime'), datetime('now', 'localtime'));
 -- --------------------------------------------------------
 
 --

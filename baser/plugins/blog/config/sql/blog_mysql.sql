@@ -92,8 +92,8 @@ CREATE TABLE IF NOT EXISTS `bc__blog_contents` (
 -- テーブルのデータをダンプしています `bc__blog_contents`
 --
 
-INSERT INTO `bc__blog_contents` (`name`, `title`, `description`, `layout`, `template`, `status`, `list_count`, `list_direction`, `feed_count`, `comment_use`, `comment_approve`, `created`, `modified`) VALUES
-('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', 1, 10, 'DESC', 10, 1, 0, NOW(), NOW());
+INSERT INTO `bc__blog_contents` (`name`, `title`, `description`, `layout`, `template`, `status`, `list_count`, `list_direction`, `feed_count`, `comment_use`, `comment_approve`, `auth_captcha`, `created`, `modified`) VALUES
+('news', 'ニュースリリース', 'Baser CMS inc. [デモ]の最新のニュースリリースをお届けします。', 'default', 'default', 1, 10, 'DESC', 10, 1, 0, 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 

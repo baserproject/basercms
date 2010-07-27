@@ -164,7 +164,7 @@ INSERT INTO bc_site_configs (name, value, created, modified) VALUES
 INSERT INTO bc_site_configs (name, value, created, modified) VALUES
 ('email', '',datetime('now', 'localtime'),datetime('now', 'localtime'));
 INSERT INTO bc_site_configs (name, value, created, modified) VALUES
-('twitter_username', 'basercms',datetime('now', 'localtime'),datetime('now', 'localtime'));
+('twitter_username', '',datetime('now', 'localtime'),datetime('now', 'localtime'));
 INSERT INTO bc_site_configs (name, value, created, modified) VALUES
 ('twitter_count', '3',datetime('now', 'localtime'),datetime('now', 'localtime'));
 
@@ -318,7 +318,7 @@ INSERT into bc_pages (sort, name, title, description, contents, page_category_id
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">NEWS RELEASE</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<?php $baser->feed(1) ?> <br />
+<?php $baser->feed(1) ?> <div>&nbsp;</div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">BaserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
