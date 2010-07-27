@@ -48,47 +48,36 @@ class BaserHelper extends AppHelper {
 	function __construct() {
 		
 		$this->_view =& ClassRegistry::getObject('view');
-		// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-		$cn = ConnectionManager::getInstance();
-		if(file_exists(CONFIGS.'database.php') && !empty($cn->config->baser['driver'])) {
-			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
-				$sources = $db->listSources();
 
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'permissions'), array_map('strtolower', $sources))) {
-					if (ClassRegistry::isKeySet('Permission')) {
-						$this->Permission = ClassRegistry::getObject('Permission');
-					}else {
-						$this->Permission = ClassRegistry::init('Permission');
-					}
-				}
-
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'pages'), array_map('strtolower', $sources))) {
-					if (ClassRegistry::isKeySet('Page')) {
-						$this->Page = ClassRegistry::getObject('Page');
-					}else {
-						$this->Page = ClassRegistry::init('Page');
-					}
-				}
-
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'page_categories'), array_map('strtolower', $sources))) {
-					if (ClassRegistry::isKeySet('PageCategory')) {
-						$this->PageCategory = ClassRegistry::getObject('PageCategory');
-					}else {
-						$this->PageCategory = ClassRegistry::init('PageCategory');
-					}
-				}
-
-				if(isset($this->_view->viewVars['siteConfig'])) {
-					$this->siteConfig = $this->_view->viewVars['siteConfig'];
-				}
-
+		if(isInstalled()){
+			
+			if (ClassRegistry::isKeySet('Permission')) {
+				$this->Permission = ClassRegistry::getObject('Permission');
+			}else {
+				$this->Permission = ClassRegistry::init('Permission');
 			}
+
+			if (ClassRegistry::isKeySet('Page')) {
+				$this->Page = ClassRegistry::getObject('Page');
+			}else {
+				$this->Page = ClassRegistry::init('Page');
+			}
+
+			if (ClassRegistry::isKeySet('PageCategory')) {
+				$this->PageCategory = ClassRegistry::getObject('PageCategory');
+			}else {
+				$this->PageCategory = ClassRegistry::init('PageCategory');
+			}
+
+			if(isset($this->_view->viewVars['siteConfig'])) {
+				$this->siteConfig = $this->_view->viewVars['siteConfig'];
+			}
+
+			// プラグインのBaserヘルパを初期化
+			$this->_initPluginBasers();
+
 		}
 
-		// プラグインのBaserヘルパを初期化
-		$this->_initPluginBasers();
-		
 	}
 /**
  * afterRender
@@ -777,17 +766,13 @@ class BaserHelper extends AppHelper {
 			$plugins = $view->enablePlugins;
 		}else {
 			$plugins = array();
-			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
-				$sources = $db->listSources();
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
-					$Plugin =& ClassRegistry::init('Plugin','Model');
-					$plugins = $Plugin->find('all');
-					$plugins = Set::extract('/Plugin/name',$plugins);
-				}
+			if (ClassRegistry::isKeySet('Permission')) {
+				$Plugin = ClassRegistry::getObject('Plugin');
+			}else {
+				$Plugin = ClassRegistry::init('Plugin');
 			}
-
+			$plugins = $Plugin->find('all');
+			$plugins = Set::extract('/Plugin/name',$plugins);
 		}
 		
 		$pluginBasers = array();
