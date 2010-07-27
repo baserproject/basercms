@@ -83,7 +83,7 @@ class BlogController extends BlogAppController {
  * @access 	public
  */
 	function beforeFilter() {
-
+		
 		parent::beforeFilter();
 
 		/* 認証設定 */
@@ -107,6 +107,10 @@ class BlogController extends BlogAppController {
 			$this->passedArgs['action'] = $this->action;
 		}
 
+		// コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
+		// 表示用のコントローラーなのでポストデータのチェックは必要ない
+		$this->Security->validatePost = false;
+		
 	}
 /**
  * beforeRender
