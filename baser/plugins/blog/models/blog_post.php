@@ -81,21 +81,6 @@ class BlogPost extends BlogAppModel {
 		return true;
 	}
 /**
- * beforeSave
- *
- * @return	boolean
- * @access	public
- */
-	function beforeSave() {
-
-		// niceditorで何も入力しない場合、自動的に<br>を入れられてしまうので、空にする
-		if($this->data['BlogPost']['detail']=='<br>') {
-			$this->data['BlogPost']['detail'] = '';
-		}
-		return true;
-
-	}
-/**
  * 初期値を取得する
  *
  * @return	array	初期値データ
