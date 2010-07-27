@@ -248,4 +248,18 @@
 		}
 
 	}
+/**
+ * BaserCMSのインストールが完了しているかチェックする
+ * @return	boolean
+ */
+	function isInstalled () {
+		if(file_exists(CONFIGS.'database.php') && file_exists(CONFIGS.'install.php')){
+			require_once CONFIGS.'database.php';
+			$dbConfig = new DATABASE_CONFIG();
+			if(!empty($dbConfig->baser['driver'])){
+				return true;
+			}
+		}
+		return false;
+	}
 ?>
