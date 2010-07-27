@@ -63,22 +63,22 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($tmpdirwritable) echo 'check'; else echo'failed'; ?>'></div>
-			/app/tmp フォルダとその配下のフォルダの書き込み権限
+			/app/tmp フォルダの書き込み権限
 			<p style='color:#888888;'>
 				<?php if ($tmpdirwritable): ?>
 				書き込み可
 				<?php else: ?>
 				書き込み不可<br />
-				<small>/app/tmp フォルダとその中にあるフォルダ全てに書き込み権限が必要です。</small>
+				<small>/app/tmp フォルダに書き込み権限が必要です。</small>
 				<?php endif ?>
 			</p>
 		</li>
 		<li>
 			<div class='<?php if ($demopagesdirwritable) echo 'check'; else echo'failed'; ?>'></div>
 			<?php if(ROOT.DS != WWW_ROOT):?>
-			/app/webroot/themed/demo/pages フォルダの書き込み権限（Demoテーマのページ機能用）
+			/app/webroot/themed フォルダの書き込み権限
 			<?php else: ?>
-			/themed/demo/pages フォルダの書き込み権限（Demoテーマのページ機能用）
+			/themed フォルダの書き込み権限
 			<?php endif ?>
 			<p style='color:#888888;'>
 				<?php if ($demopagesdirwritable): ?>
@@ -86,9 +86,9 @@ echo $html->css('import');
 				<?php else: ?>
 				書き込み不可<br />
 				<?php if(ROOT.DS != WWW_ROOT):?>
-				<small>/app/webroot/themed/demo/pages フォルダに書き込み権限が必要です</small>
+				<small>/app/webroot/themed フォルダに書き込み権限が必要です</small>
 				<?php else: ?>
-				<small>/themed/demo/pages フォルダに書き込み権限が必要です</small>
+				<small>/themed フォルダに書き込み権限が必要です</small>
 				<?php endif ?>
 				<?php endif ?>
 			</p>
