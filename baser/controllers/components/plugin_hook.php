@@ -22,32 +22,35 @@
 class PluginHookComponent extends Object {
 /**
  * プラグインフックオブジェクト
- * @var array
+ * @var		array
+ * @access	public
  */
 	var $pluginHooks = array();
+/**
+ * 登録済プラグインフック
+ * @var		array
+ * @access	public
+ */
+	var $registerHooks = array();
 /**
  * initialize
  * @param Controller $controller
  */
 	function initialize(&$controller) {
 
-		if(!file_exists(CONFIGS.'database.php')) {
+		/* 未インストール・インストール中の場合はすぐリターン */
+		if (!file_exists(CONFIGS.'database.php')) {
 			return;
-		}else {
+		} else {
 			require_once(CONFIGS.'database.php');
 			$dbConfig = new DATABASE_CONFIG();
 			if(!$dbConfig->baser['driver']) return;
 		}
-
+		
 		if(!empty($controller->enablePlugins)) {
 			$plugins = $controller->enablePlugins;
 		}else {
 			$plugins = array();
-			/* プラグインディレクトリをチェックしてプラグイン名のリストを取得 */
-			/*$folder = new Folder(APP.'plugins');
-            $files = $folder->read(true,true);
-            $plugins = $files[0];*/
-
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db =& ConnectionManager::getDataSource('baser');
 			if ($db->isInterfaceSupported('listSources')) {
@@ -59,7 +62,6 @@ class PluginHookComponent extends Object {
 					$controller->enablePlugins = $plugins = Set::extract('/Plugin/name',$plugins);
 				}
 			}
-
 		}
 
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
@@ -67,66 +69,95 @@ class PluginHookComponent extends Object {
 		foreach($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
 			if(App::import('Component',$pluginName.'.'.$pluginName.'Hook')) {
-				$pluginHooks[] = $pluginName.'HookComponent';
+				$pluginHooks[] = $pluginName;
 			}
 		}
 
 		/* プラグインフックを初期化 */
-		foreach($pluginHooks as $pluginHook) {
-			$this->pluginHooks[] =& new $pluginHook();
+		foreach($pluginHooks as $pluginName) {
+			
+			$className = $pluginName.'HookComponent';
+			$this->pluginHooks[$pluginName] =& new $className();
+
+			// 各プラグインの関数をフックに登録する
+			if(isset($this->pluginHooks[$pluginName]->registerHooks)){
+				foreach ($this->pluginHooks[$pluginName]->registerHooks as $hookName){
+					$this->registerHook($hookName, $pluginName);
+				}
+			}
+			
 		}
 
 		/* initialize のフックを実行 */
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"initialize")) {
-				$this->pluginHooks[$key]->initialize($controller);
+		$this->executeHook('initialize', $controller);
+
+	}
+/**
+ * プラグインフックを登録する
+ * @param	string	$hookName
+ * @param	string	$pluginName
+ * @return	void
+ * @access	pubic
+ */
+	function registerHook($hookName, $pluginName){
+
+		if(!isset($this->registerHooks[$hookName])){
+			$this->registerHooks[$hookName] = array();
+		}
+		$this->registerHooks[$hookName][] = $pluginName;
+
+	}
+/**
+ * プラグインフックを実行する
+ * @param	string	$hookName
+ * @param	mixed
+ * @return
+ */
+	function executeHook($hookName){
+		
+		$args = func_get_args();
+		unset($args[0]);
+		if($this->registerHooks && isset($this->registerHooks[$hookName])){
+			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
+				call_user_func_array(array(&$this->pluginHooks[$pluginName],$hookName), $args);
 			}
 		}
-
+		
 	}
 /**
  * startup
  * @param Controller $controller
  */
 	function startup(&$controller) {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"startup")) {
-				$this->pluginHooks[$key]->startup($controller);
-			}
-		}
+		$this->executeHook('startup',$controller);
 	}
 /**
  * beforeFilter
  * @param Controller $controller
  */
 	function beforeFilter(&$controller) {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"beforeFilter")) {
-				$this->pluginHooks[$key]->beforeFilter($controller);
-			}
-		}
+		$this->executeHook('beforeFilter',$controller);
+	}
+/**
+ * beforeRender
+ * @param Controller $controller
+ */
+	function beforeRender(&$controller) {
+		$this->executeHook('beforeRender',$controller);
 	}
 /**
  * beforeRedirect
  * @param Controller $controller
  */
 	function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"beforeRedirect")) {
-				$this->pluginHooks[$key]->beforeRedirect($controller, $url, $status, $exit);
-			}
-		}
+		$this->executeHook('beforeRedirect', $controller, $url, $status, $exit);
 	}
 /**
  * shutdown
  * @param Controller $controller
  */
 	function shutdown(&$controller) {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"shutdown")) {
-				$this->pluginHooks[$key]->shutdown($controller);
-			}
-		}
+		$this->executeHook('shutdown', $controller);
 	}
 }
 ?>

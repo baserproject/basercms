@@ -945,6 +945,37 @@ DOC_END;
 		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
 	}
 /**
+ * create
+ * フック用にラッピング
+ * @param	array $model
+ * @param	array $options
+ * @return	string
+ * @access	public
+ */
+	function create($model = null, $options = array(), $callback = true) {
+		$out = parent::create($model, $options);
+		if($callback) {
+			return $this->pluginHook($out, 'formExCreate');
+		}else{
+			return $out;
+		}
+	}
+/**
+ * end
+ * フック用にラッピング
+ * @param	array	$options
+ * @return	string
+ * @access	public
+ */
+	function end($options = null, $callback = true) {
+		$out = parent::end($options);
+		if($callback) {
+			return $this->pluginHook($out, 'formExEnd');
+		} else {
+			return $out;
+		}
+	}
+/**
  * 日付タグ
  * 和暦実装
  * TODO 未実装

@@ -29,6 +29,12 @@
  */
 class AppHelper extends Helper {
 /**
+ * view
+ * キャッシュ用
+ * @var View
+ */
+	var $_view = null;
+/**
  * html tags used by this helper.
  *
  * @var 	array
@@ -170,6 +176,17 @@ class AppHelper extends Helper {
 		}
 		// <<<
 		return $webPath;
+	}
+/**
+ * プラグインフックを実行する
+ * @param	string	$out
+ * @return	mixed
+ */
+	function pluginHook($out,$hook) {
+		if(!$this->_view){
+			$this->_view =& ClassRegistry::getObject('View');
+		}
+		return $this->_view->loaded['pluginHook']->{$hook}($out);
 	}
 }
 ?>

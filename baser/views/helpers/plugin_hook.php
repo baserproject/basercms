@@ -26,10 +26,17 @@ class PluginHookHelper extends AppHelper {
  */
 	var $pluginHooks = array();
 /**
+ * 登録済フックメソッド
+ * @var	array
+ */
+	var $registerHooks = array();
+/**
  * beforeRender
+ * @access	public
  */
 	function beforeRender() {
 
+		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!file_exists(CONFIGS.'database.php')) {
 			return;
 		}else {
@@ -38,14 +45,14 @@ class PluginHookHelper extends AppHelper {
 			if(!$dbConfig->baser['driver']) return;
 		}
 
-		$view = ClassRegistry::getObject('view');
+		$view = ClassRegistry::getObject('View');
 		if(!empty($view->enablePlugins)) {
 			$plugins = $view->enablePlugins;
-		}else {
+		}else {			
 			$plugins = array();
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
+			if ($db->isInterfaceSupported('listSources')) {				
 				$sources = $db->listSources();
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
 					$Plugin =& ClassRegistry::init('Plugin','Model');
@@ -53,71 +60,110 @@ class PluginHookHelper extends AppHelper {
 					$plugins = Set::extract('/Plugin/name',$plugins);
 				}
 			}
-
 		}
 
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
-		foreach($plugins as $plugin) {
+		foreach($plugins as $plugin) {			
 			$pluginName = Inflector::camelize($plugin);
 			if(App::import('Helper',$pluginName.'.'.$pluginName.'Hook')) {
-				$pluginHooks[] = $pluginName.'HookHelper';
+				$pluginHooks[] = $pluginName;
 			}
 		}
 
 		/* プラグインフックを初期化 */
-		$vars = array(
-				'base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin'
-		);
+		$vars = array('base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin');
 		$c = count($vars);
-		foreach($pluginHooks as $key => $pluginHook) {
-			$this->pluginHooks[$key] =& new $pluginHook();
+		foreach($pluginHooks as $key => $pluginName) {
+			
+			// 各プラグインのプラグインフックを初期化
+			$className=$pluginName.'HookHelper';
+			$this->pluginHooks[$pluginName] =& new $className();
 			for ($j = 0; $j < $c; $j++) {
 				if(isset($view->{$vars[$j]})) {
-					$this->pluginHooks[$key]->{$vars[$j]} = $view->{$vars[$j]};
+					$this->pluginHooks[$pluginName]->{$vars[$j]} = $view->{$vars[$j]};
 				}
 			}
+
+			// 各プラグインの関数をフックに登録する
+			if(isset($this->pluginHooks[$pluginName]->registerHooks)){				
+				foreach ($this->pluginHooks[$pluginName]->registerHooks as $hookName){
+					$this->registerHook($hookName, $pluginName);
+				}
+			}
+			
 		}
 
 		/* beforeRenderをフック */
-		if($this->pluginHooks) {
-			foreach($this->pluginHooks as $key => $pluginHook) {
-				if(method_exists($this->pluginHooks[$key],"beforeRender")) {
-					$this->pluginHooks[$key]->beforeRender();
-				}
-			}
+		$this->executeHook('beforeRender');
+
+	}
+/**
+ * プラグインフックを登録する
+ * @param	string	$hookName
+ * @param	string	$pluginName
+ * @return	void
+ * @access	pubic
+ */
+	function registerHook($hookName, $pluginName){
+		
+		if(!isset($this->registerHooks[$hookName])){
+			$this->registerHooks[$hookName] = array();
 		}
 
+		$this->registerHooks[$hookName][] = $pluginName;
+		
+	}
+
+	function executeHook($hookName, $out = null){
+		if($this->registerHooks && isset($this->registerHooks[$hookName])){
+			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
+				$out = $this->pluginHooks[$pluginName]->{$hookName}($out);
+			}
+		}
+		return $out;
 	}
 /**
  * afterRender
  */
 	function afterRender() {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"afterRender")) {
-				$this->pluginHooks[$key]->afterRender();
-			}
-		}
+		$this->executeHook('afterRender');
 	}
 /**
  * beforeLayout
  */
 	function beforeLayout() {
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"beforeLayout")) {
-				$this->pluginHooks[$key]->beforeLayout();
-			}
-		}
+		$this->executeHook('beforeLayout');
 	}
 /**
  * afterLayout
  */
 	function afterLayout() {
+		// TODO ファイルアップローダーが新しいPluginHookの仕様にバージョンアップしたら
+		// afterLayoutも新しい仕様に変更する
 		foreach($this->pluginHooks as $key => $pluginHook) {
 			if(method_exists($this->pluginHooks[$key],"afterLayout")) {
 				$this->pluginHooks[$key]->afterLayout();
 			}
 		}
+	}
+/**
+ * FormEx::end
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function formExEnd($out) {
+		return $this->executeHook('formExEnd',$out);
+	}
+/**
+ * FormEx::create
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function formExCreate($out) {
+		return $this->executeHook('formExCreate',$out);
 	}
 }
 ?>
