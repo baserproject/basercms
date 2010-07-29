@@ -766,7 +766,7 @@ class BaserHelper extends AppHelper {
 			$plugins = $view->enablePlugins;
 		}else {
 			$plugins = array();
-			if (ClassRegistry::isKeySet('Permission')) {
+			if (ClassRegistry::isKeySet('Plugin')) {
 				$Plugin = ClassRegistry::getObject('Plugin');
 			}else {
 				$Plugin = ClassRegistry::init('Plugin');
