@@ -441,6 +441,10 @@ select.multiple option {
 	margin-left:30px;
 	margin-bottom:25px;
 }
+#helpAdminBody h5 {
+	font-size: small;
+	padding-left:15px;
+}
 /* list-num
 ----------------------------------------------- */
 .list-num p{
