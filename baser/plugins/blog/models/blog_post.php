@@ -209,5 +209,6 @@ class BlogPost extends BlogAppModel {
 		}
 
 	}
+
 }
 ?>
