@@ -332,3 +332,9 @@ h4.contents-head {
 #CaptchaLoader{
 	border: 1px solid #CCCCCC;
 }
+
+#Maintenance .box{
+	text-align: center;
+	margin:50px auto;
+	text-align: center;
+}
