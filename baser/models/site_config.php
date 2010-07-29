@@ -94,48 +94,6 @@ class SiteConfig extends AppModel {
 			return false;
 		}
 	}
-/**
- * Key Value 形式のテーブルよりデータを取得して
- * １レコードとしてデータを展開する
- * @return array
- */
-	function findExpanded() {
-		$dbDatas = $this->find('all');
-		if($dbDatas) {
-			foreach($dbDatas as $dbData) {
-				$_siteConfig = $dbData['SiteConfig'];
-				$siteConfig[$_siteConfig['name']] = $_siteConfig['value'];
-			}
-		}
-		return $siteConfig;
-	}
-/**
- * Key Value 形式のテーブルにデータを保存する
- * @param array $data
- */
-	function saveKeyValue($data) {
-		if(isset($data['SiteConfig'])) {
-			$data = $data['SiteConfig'];
-		}
-		$siteConfigs = array();
-		foreach($data as $key => $value) {
-			$siteConfig = $this->find(array('name'=>$key));
-			if(!$siteConfig) {
-				$siteConfig = array();
-				$siteConfig['SiteConfig']['name'] = $key;
-				$siteConfig['SiteConfig']['value'] = $value;
-				$this->create($siteConfig);
-			}else {
-				$siteConfig['SiteConfig']['value'] = $value;
-				$this->set($siteConfig);
-			}
-			$this->save($siteConfig,false);
-			// SQliteの場合、トランザクション用の関数をサポートしていない場合があるので、
-			// 個別に保存するようにした。
-
-		}
-		return true;
-	}
 
 }
 ?>
