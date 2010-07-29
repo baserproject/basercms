@@ -328,10 +328,12 @@ class MailController extends MailAppController {
 		}
 
 		// 管理者に送信
-		$data['other']['mode'] = 'admin';
-		$this->_mailSetting($mailConfig,$mailContent['mail_template']);
-		$this->_sendmail($adminMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_admin'],$userMail,$mailContent['sender_2'],$data);
-
+		if(!empty($adminMail)) {
+			$data['other']['mode'] = 'admin';
+			$this->_mailSetting($mailConfig,$mailContent['mail_template']);
+			$this->_sendmail($adminMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_admin'],$userMail,$mailContent['sender_2'],$data);
+		}
+		
 	}
 /**
  * メールコンポーネントの初期設定
