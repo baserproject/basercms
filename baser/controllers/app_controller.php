@@ -41,7 +41,7 @@ class AppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('Html', 'HtmlEx', 'Form', 'Javascript', 'Baser', 'XmlEx', 'PluginHook');
+	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'Javascript', 'Baser', 'XmlEx');
 /**
  * レイアウト
  *
