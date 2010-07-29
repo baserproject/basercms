@@ -88,7 +88,8 @@ class BlogController extends BlogAppController {
 
 		/* 認証設定 */
 		$this->Auth->allow('index','mobile_index','archives','mobile_archives');
-
+		
+		$this->BlogContent->recursive = -1;
 		if($this->contentId) {
 			$this->blogContent = $this->BlogContent->read(null,$this->contentId);
 		}else {

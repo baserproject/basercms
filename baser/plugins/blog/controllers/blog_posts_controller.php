@@ -89,6 +89,7 @@ class BlogPostsController extends BlogAppController {
 
 		parent::beforeFilter();
 		if(isset($this->params['pass'][0])) {
+			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
 			$this->navis = am($this->navis,array($this->blogContent['BlogContent']['title'].'管理'=>'/admin/blog/blog_posts/index/'.$this->params['pass'][0]));
 			if($this->params['prefix']=='admin') {
@@ -217,7 +218,7 @@ class BlogPostsController extends BlogAppController {
 				// 編集画面にリダイレクト
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
 			}
 
 		}
@@ -256,7 +257,7 @@ class BlogPostsController extends BlogAppController {
 				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
 			}
 
 		}
@@ -401,5 +402,6 @@ class BlogPostsController extends BlogAppController {
 		$this->redirect(array('controller'=>'blog_configs','action'=>'form'));
 
 	}
+
 }
 ?>
