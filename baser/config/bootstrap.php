@@ -29,6 +29,10 @@
 	// DataSource も baser フォルダ内を参照
 	App::import('Core', 'ConnectionManager', array('file'=>'..'.DS.'baser'.DS.'models'.DS.'connection_manager.php'));
 /**
+ * tmpフォルダ確認
+ */
+	checkTmpFolders();
+/**
  * Baserパス追加
  */
 	$modelPaths[] = BASER_MODELS;

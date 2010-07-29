@@ -262,4 +262,18 @@
 		}
 		return false;
 	}
+/**
+ * 必要な一時フォルダが存在するかチェックし、
+ * なければ生成する
+ */
+	function checkTmpFolders(){
+		App::import('Core','Folder');
+		$folder = new Folder();
+		$folder->create(TMP.'logs',0777);
+		$folder->create(TMP.'sessions',0777);
+		$folder->create(CACHE);
+		$folder->create(CACHE.'models',0777);
+		$folder->create(CACHE.'persistent',0777);
+		$folder->create(CACHE.'views',0777);
+	}
 ?>

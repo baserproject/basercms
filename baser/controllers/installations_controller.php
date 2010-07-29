@@ -653,13 +653,7 @@ class InstallationsController extends AppController {
 		}
 
 		// tmp フォルダを作成する
-		$folder = new Folder();
-		$folder->create(TMP.'logs',0777);
-		$folder->create(TMP.'sessions',0777);
-		$folder->create(CACHE);
-		$folder->create(CACHE.'models',0777);
-		$folder->create(CACHE.'persistent',0777);
-		$folder->create(CACHE.'views',0777);
+		checkTmpFolders();
 
 		// demo用テーマを配置する
 		$targetPath = WWW_ROOT.'themed'.DS.'demo';
