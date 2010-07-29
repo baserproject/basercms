@@ -175,7 +175,7 @@ class CkeditorHelper extends AppHelper {
  * @param array $options
  * @return string
  */
-	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(),&$form = null) {
+	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(),$form = null) {
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -188,7 +188,7 @@ class CkeditorHelper extends AppHelper {
  * @param array $tinyoptions
  * @return string
  */
-	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), &$form = null) {
+	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
 		if(!$form){
 			$form = $this->Form;
 		}
