@@ -114,6 +114,16 @@
 			&nbsp; </td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $form->label('SiteConfig.maintenance', '公開状態') ?></th>
+		<td class="col-input"><?php echo $form->select('SiteConfig.maintenance', array(0=>'公開中',1=>'メンテナンス中'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpMaintenance','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextMaintenance" class="helptext">
+				公開状態を指定します。<br />
+				メンテナンス中の場合は、管理画面にログインする事で公開ページを確認する事ができますが、
+				制作・開発モードがデバッグモードの場合は、メンテナンス中にしていても公開ページが表示されてしまいます。
+				</div>
+			</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('SiteConfig.mode', '制作・開発モード') ?></th>
 		<td class="col-input"><?php echo $form->select('SiteConfig.mode', $formEx->getControlSource('mode'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextDebug" class="helptext"> 制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />

@@ -112,8 +112,10 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['id']);
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
-				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
+				if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
 					clearViewCache();
+				}
+				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
 					if(!$this->Page->createAllPageTemplate()){
 						$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
 						$this->redirect(array('action'=>'form'));
