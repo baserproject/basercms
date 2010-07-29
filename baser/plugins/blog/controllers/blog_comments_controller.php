@@ -257,7 +257,7 @@ class BlogCommentsController extends BlogAppController {
 
 	}
 /**
- * ブログコメントを登録する
+ * [AJAX] ブログコメントを登録する
  * @param string $blogContentId
  * @param string $blogPostId
  */
