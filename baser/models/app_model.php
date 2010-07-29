@@ -744,5 +744,60 @@ class AppModel extends Model {
 			}
 		}
 	}
+/**
+ * Key Value 形式のテーブルよりデータを取得して
+ * １レコードとしてデータを展開する
+ * @return array
+ */
+	function findExpanded() {
+
+		$dbDatas = $this->find('all');
+		if($dbDatas) {
+			foreach($dbDatas as $dbData) {
+				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];
+			}
+		}
+		return $expandedData;
+		
+	}
+/**
+ * Key Value 形式のテーブルにデータを保存する
+ * @param	array	$data
+ * @return	boolean
+ */
+	function saveKeyValue($data) {
+		
+		if(isset($data[$this->alias])) {
+			$data = $data[$this->alias];
+		}
+
+		$result = true;
+		
+		foreach($data as $key => $value) {
+			
+			$dbData = $this->find('first', array('conditions'=>array('name'=>$key)));
+			
+			if(!$dbData) {
+				$dbData = array();
+				$dbData[$this->alias]['name'] = $key;
+				$dbData[$this->alias]['value'] = $value;
+				$this->create($dbData);
+			}else {
+				$dbData[$this->alias]['value'] = $value;
+				$this->set($dbData);
+			}
+
+			// SQliteの場合、トランザクション用の関数をサポートしていない場合があるので、
+			// 個別に保存するようにした。
+			if(!$this->save(null,false)) {
+				$result = false;
+			}
+			
+		}
+		
+		return true;
+		
+	}
+	
 }
 ?>
