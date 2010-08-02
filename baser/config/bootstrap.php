@@ -148,8 +148,10 @@
 			// TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
 			// セキュリティ上の問題もあるので実装は検討が必要。
 			// bootstrapで実装した場合、他ページへの負荷の問題もある
-			session_start();
-			if(isset($_SESSION['Auth']['User']) && (!$parameter || preg_match('/\.html$/is', $parameter))) {
+			App::import('Core','Session');
+			$Session = new CakeSession();
+			$Session->start();
+			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
 			}
 		}
