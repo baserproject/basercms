@@ -39,7 +39,7 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($configdirwritable) echo 'check'; else echo'failed'; ?>'></div>
-			/app/config フォルダの書き込み権限
+			/app/config フォルダの書き込み権限（707 OR 777）
 			<p style='color:#888888;'>
 				<?php if ($configdirwritable): ?>
 				書き込み可
@@ -51,7 +51,7 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($corefilewritable) echo 'check'; else echo'failed'; ?>'></div>
-			/app/config/core.php ファイルの書き込み権限<br />
+			/app/config/core.php ファイルの書き込み権限（606 OR 666）<br />
 			<p style='color:#888888;'>
 				<?php if ($corefilewritable): ?>
 				書き込み可
@@ -63,7 +63,7 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($tmpdirwritable) echo 'check'; else echo'failed'; ?>'></div>
-			/app/tmp フォルダの書き込み権限
+			/app/tmp フォルダの書き込み権限（707 OR 777）
 			<p style='color:#888888;'>
 				<?php if ($tmpdirwritable): ?>
 				書き込み可
@@ -78,7 +78,7 @@ echo $html->css('import');
 			<?php if(ROOT.DS != WWW_ROOT):?>
 			/app/webroot/themed フォルダの書き込み権限
 			<?php else: ?>
-			/themed フォルダの書き込み権限
+			/themed フォルダの書き込み権限（707 OR 777）
 			<?php endif ?>
 			<p style='color:#888888;'>
 				<?php if ($demopagesdirwritable): ?>
@@ -126,7 +126,7 @@ echo $html->css('import');
 		</li>
 		<li>
 			<div class='<?php if ($htaccesswritable) echo 'check'; else echo 'failed'; ?>'></div>
-			.htaccess ファイル書き込み権限<br />
+			.htaccess ファイル書き込み権限（707 OR 777）<br />
 			<p style='color:#888888;'>
 				<?php if ($htaccesswritable) : ?>
 				書き込み可
@@ -171,7 +171,7 @@ echo $html->css('import');
 	<ul class="section">
 		<li>
 			<div class='<?php if ($dbDirWritable) echo 'check'; else echo 'failed'; ?>'></div>
-			/app/db/ の書き込み権限<br />
+			/app/db/ の書き込み権限（707 OR 777）<br />
 			<p style='color:#888888;'>
 				<?php if ($dbDirWritable): ?>
 				書き込み可
