@@ -13,13 +13,14 @@ th {
 a:link {
 	background:none!important;
 	text-decoration: underline!important;
+	color:#688A00!important;
 }
 body,
 td,
 th,
 h1,
 h2 {
-	font-family: "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important;
+	/*font-family: "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important*/;
 }
 #headMain h1 {
 	text-align: right;
