@@ -89,21 +89,6 @@
 			&nbsp; </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $form->label('SiteConfig.twitter_account', 'Twitterユーザー名') ?></th>
-		<td class="col-input"><?php echo $form->text('SiteConfig.twitter_username', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTwitterUsername','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $form->error('SiteConfig.twitter_username') ?>
-			<div id="helptextTwitterUsername" class="helptext"> Twitterログ読み込み機能を使う場合のTwitterユーザー名を指定します。<br />
-				<a href="https://twitter.com/signup">≫ Twitterにサインアップ</a><br />
-				テンプレートで利用する場合は、 &lt;?php $baser->element('tweet') ?&gt; で出力します。 </div>
-			&nbsp; </td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $form->label('SiteConfig.twitter_account', 'Twitterログ出力件数') ?></th>
-		<td class="col-input"><?php echo $form->text('SiteConfig.twitter_count', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTwitterCount','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $form->error('SiteConfig.twitter_count') ?>
-			<div id="helptextTwitterCount" class="helptext"> Twitterログ読み込み機能を使う場合のログの出力件数を指定します。<br />
-			</div>
-			&nbsp; </td>
-	</tr>
-	<tr>
 		<th class="col-head"><?php echo $form->label('SiteConfig.theme', 'テーマ') ?></th>
 		<td class="col-input"><?php echo $form->select('SiteConfig.theme', $themes,null,null,'なし') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTheme','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextTheme" class="helptext"> 公開ページのデザインテーマを指定します。<br />
