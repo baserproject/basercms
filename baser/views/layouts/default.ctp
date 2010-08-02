@@ -35,7 +35,7 @@
 <?php $baser->css('import') ?>
 <!--[if IE]><?php $baser->js('excanvas') ?><![endif]-->
 <?php $baser->js(array(
-	'jquery-1.3.2.min',
+	'jquery-1.4.2.min',
 	'jquery-ui-1.7.2.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.bt.min',

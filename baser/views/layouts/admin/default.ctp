@@ -36,7 +36,8 @@
 <?php $baser->css(array('jquery-ui-1.7.2/ui.all','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
 <?php $baser->js(array(
-	'jquery-1.3.2.min',
+	'jquery-1.4.2.min',
+	'jquery.dimensions.min',
 	'jquery-ui-1.7.2.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.bt.min',
