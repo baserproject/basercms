@@ -72,13 +72,9 @@ $(document).ready(function(){
 	$(".slide-trigger").click(function(){
 		target = this.id+'Body';
 		if($("#"+target).css('display') == 'none') {
-			$("#"+target).show('slide',{
-				direction:"up"
-			},500);
+			$("#"+target).slideDown();
 		} else {
-			$("#"+target).hide('slide',{
-				direction:"up"
-			},500);
+			$("#"+target).slideUp();
 		}
 	});
 	$(".slide-body").hide();
