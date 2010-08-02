@@ -296,14 +296,20 @@ class FormExHelper extends FormHelper {
  * @access	public
  */
 	function getControlSource($field,$options = array()) {
-
-		if(strpos($field,'.') !== false) {
+		$count = preg_match_all('/\./is',$field,$matches);
+		if($count == 1) {
 			list($modelName,$field) = explode('.',$field);
+		} elseif ($count == 2){
+			list($plugin,$modelName,$field) = explode('.',$field);
+			$modelName = $plugin.'.'.$modelName;
 		}
-		if(!empty($modelName)) {
+		if(empty($modelName)) {
+			$modelName = $this->model();
+		}
+		if(ClassRegistry::isKeySet($modelName)){
 			$model =& ClassRegistry::getObject($modelName);
-		}else {
-			$model =& ClassRegistry::getObject($this->model());
+		}else{
+			$model =& ClassRegistry::init($modelName);
 		}
 		if($model) {
 			return $model->getControlSource($field,$options);
@@ -915,6 +921,8 @@ DOC_END;
 		
 		// 2010/07/24 ryuring
 		// 配列用のhiddenタグを出力できるオプションを追加
+		// 2010/08/01 ryuring
+		// class属性を指定できるようにした
 		// >>> ADD
 		if(!empty($options['multiple'])){
 			$tagType = 'hiddenmultiple';
@@ -934,7 +942,7 @@ DOC_END;
 		return $this->output(sprintf(
 			$this->Html->tags[$tagType],
 			$options['name'],
-			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
+			$this->_parseAttributes($options, array('name'), '', ' ')
 		));
 		// <<<
 	}
