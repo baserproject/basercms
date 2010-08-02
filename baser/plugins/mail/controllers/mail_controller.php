@@ -133,6 +133,20 @@ class MailController extends MailAppController {
 		
 	}
 /**
+ * beforeRender
+ *
+ * @return	void
+ * @access 	public
+ */
+	function beforeRender() {
+
+		parent::beforeRender();
+		if($this->dbDatas['mailContent']['MailContent']['widget_area']){
+			$this->set('widgetArea',$this->dbDatas['mailContent']['MailContent']['widget_area']);
+		}
+
+	}
+/**
  * [PUBIC] フォームを表示する
  *
  * @param	mixed	mail_content_id

@@ -159,8 +159,8 @@ INSERT INTO "bc_site_configs" ("name", "value", "created", "modified") VALUES
 ('googlemaps_key', NULL, NOW(), NOW()),
 ('theme','demo', NOW(), NOW()),
 ('email','', NOW(), NOW()),
-('twitter_username','', NOW(), NOW()),
-('twitter_count','3', NOW(), NOW());
+('maintenance','', NOW(), NOW()),
+('widget_area','1', NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -309,3 +309,28 @@ INSERT INTO "bc_permissions" ("no","sort", "name", "user_group_id" ,"url", "auth
 ('12','12','メールフォーム編集','2','/admin/mail/mail_contents/edit*',true,true,NOW(),NOW()),
 ('13','13','フィード管理','2','/admin/feed/feed_configs*',false,true,NOW(),NOW()),
 ('14','14','ページテンプレート読込','2','/admin/pages/entry_page_files',false,true,NOW(),NOW());
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 "bc_widget_areas"
+--
+
+CREATE SEQUENCE bc_widget_areas_id_seq;
+CREATE TABLE "public"."bc_widget_areas" (
+  "id" int4 NOT NULL default nextval('bc_widget_areas_id_seq'),
+  "name" varchar(255) default NULL,
+  "widgets" text default NULL,
+  "modified" timestamp default NULL,
+  "created" timestamp default NULL,
+  PRIMARY KEY  ("id")
+) WITHOUT OIDS;
+ALTER table "public"."bc_widget_areas" SET WITHOUT CLUSTER;
+
+--
+-- テーブルのデータをダンプしています "bc_widget_areas"
+--
+
+INSERT INTO "bc_widget_areas" ("name", "widgets", "created", "modified") VALUES
+('標準サイドバー','a:1:{i:0;a:1:{s:7:\"Widget1\";a:9:{s:2:\"id\";s:1:\"1\";s:4:\"type\";s:12:\"テキスト\";s:7:\"element\";s:4:\"text\";s:6:\"plugin\";s:0:\"\";s:4:\"sort\";i:1;s:4:\"name\";s:9:\"リンク\";s:4:\"text\";s:358:\"<p style=\"margin-bottom:20px;text-align: center\"> <a href=\"http://basercms.net\" target=\"_blank\"><img src=\"http://basercms.net/img/bnr_basercms.jpg\" alt=\"コーポレートサイトにちょうどいいCMS、BaserCMS\"/></a></p><p class=\"customize-navi corner10\"><small>この部分は、ウィジェットエリア管理より編集できます。</small></p>\";s:9:\"use_title\";s:1:\"1\";s:6:\"status\";s:1:\"1\";}}}',NOW(),NOW()),
+('ブログサイドバー','a:4:{i:0;a:1:{s:7:\"Widget1\";a:9:{s:2:\"id\";s:1:\"1\";s:4:\"type\";s:24:\"ブログカレンダー\";s:7:\"element\";s:13:\"blog_calendar\";s:6:\"plugin\";s:4:\"blog\";s:4:\"sort\";i:1;s:4:\"name\";s:24:\"ブログカレンダー\";s:15:\"blog_content_id\";s:1:\"1\";s:9:\"use_title\";s:1:\"0\";s:6:\"status\";s:1:\"1\";}}i:1;a:1:{s:7:\"Widget2\";a:9:{s:2:\"id\";s:1:\"2\";s:4:\"type\";s:30:\"ブログカテゴリー一覧\";s:7:\"element\";s:22:\"blog_category_archives\";s:6:\"plugin\";s:4:\"blog\";s:4:\"sort\";i:2;s:4:\"name\";s:21:\"カテゴリー一覧\";s:15:\"blog_content_id\";s:1:\"1\";s:9:\"use_title\";s:1:\"1\";s:6:\"status\";s:1:\"1\";}}i:2;a:1:{s:7:\"Widget3\";a:9:{s:2:\"id\";s:1:\"3\";s:4:\"type\";s:27:\"月別アーカイブ一覧\";s:7:\"element\";s:21:\"blog_monthly_archives\";s:6:\"plugin\";s:4:\"blog\";s:4:\"sort\";i:3;s:4:\"name\";s:27:\"月別アーカイブ一覧\";s:15:\"blog_content_id\";s:1:\"1\";s:9:\"use_title\";s:1:\"1\";s:6:\"status\";s:1:\"1\";}}i:3;a:1:{s:7:\"Widget4\";a:9:{s:2:\"id\";s:1:\"4\";s:4:\"type\";s:15:\"最近の投稿\";s:7:\"element\";s:19:\"blog_recent_entries\";s:6:\"plugin\";s:4:\"blog\";s:4:\"sort\";i:4;s:4:\"name\";s:15:\"最近の投稿\";s:15:\"blog_content_id\";s:1:\"1\";s:9:\"use_title\";s:1:\"1\";s:6:\"status\";s:1:\"1\";}}}',NOW(),NOW());

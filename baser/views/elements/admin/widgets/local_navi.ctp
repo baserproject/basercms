@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ページカテゴリリスト
+ * ローカルナビゲーションウィジェット設定
  *
  * PHP versions 4 and 5
  *
@@ -12,18 +12,15 @@
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.views
+ * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageCategory = $page->getCategory();
+$title = 'ローカルナビゲーション';
+$description = 'ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。';
 ?>
-<?php if($pageCategory): ?>
-<div id="local-navi">
-	<h2><?php echo $pageCategory['title'] ?></h2>
-	<?php $baser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
-</div>
-<?php endif ?>
+<br />
+<small>タイトルを表示する場合、カテゴリ名を表示します。</small>

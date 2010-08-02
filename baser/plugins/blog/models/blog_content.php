@@ -76,6 +76,7 @@ class BlogContent extends BlogAppModel {
 						'message' => '>> ブログアカウント名は半角のみ入力して下さい',
 						'allowEmpty'=>false),
 				array(	'rule' => array('isUnique'),
+						'on' => 'create',
 						'message' => '入力されたブログアカウント名は既に使用されています。'));
 		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
 						'message' => ">> ブログタイトルを入力して下さい"));
@@ -103,6 +104,24 @@ class BlogContent extends BlogAppModel {
 
 		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
 			return true;
+		}else {
+			return false;
+		}
+
+	}
+/**
+ * コントロールソースを取得する
+ *
+ * @param	string	フィールド名
+ * @return	array	コントロールソース
+ * @access	public
+ */
+	function getControlSource($field = null,$options = array()) {
+
+		$controlSources['id'] = $this->find('list');
+
+		if(isset($controlSources[$field])) {
+			return $controlSources[$field];
 		}else {
 			return false;
 		}

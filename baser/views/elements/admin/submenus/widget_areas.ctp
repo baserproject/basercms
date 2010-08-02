@@ -1,13 +1,13 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ページカテゴリリスト
+ * [管理画面] ウィジェットエリア管理メニュー
  *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
+ *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -19,11 +19,16 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageCategory = $page->getCategory();
 ?>
-<?php if($pageCategory): ?>
-<div id="local-navi">
-	<h2><?php echo $pageCategory['title'] ?></h2>
-	<?php $baser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
+
+<div class="side-navi">
+	<h2>ウィジェットエリア管理メニュー</h2>
+	<ul>
+		<li>
+			<?php $baser->link('一覧を表示する',array('controller'=>'widget_areas', 'action'=>'admin_index')) ?>
+		</li>
+		<li>
+			<?php $baser->link('新規に登録する',array('controller'=>'widget_areas', 'action'=>'admin_add')) ?>
+		</li>
+	</ul>
 </div>
-<?php endif ?>

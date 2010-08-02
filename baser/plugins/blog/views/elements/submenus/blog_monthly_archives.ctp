@@ -2,6 +2,8 @@
 /* SVN FILE: $Id$ */
 /**
  * ブログ月別アーカイブ
+ *
+ * TODO 前バージョンとの互換用に残しているので不要になったら削除する
  * 
  * PHP versions 4 and 5
  *
@@ -19,6 +21,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(isset($blogContent)){
+	$id = $blogContent['BlogContent']['id'];
+}else{
+	$id = $blog_content_id;
+}
+$data = $this->requestAction('/blog/get_blog_dates/'.$id);
+$blogDates = $data['blogDates'];
+$blogContent = $data['blogContent'];
 ?>
 
 <div class="side-navi blog-monthly-archives">

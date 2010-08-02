@@ -32,6 +32,9 @@
 			<?php $baser->link('グローバルメニュー設定',array('controller'=>'global_menus','action'=>'index')) ?>
 		</li>
 		<li>
+			<?php $baser->link('ウィジェットエリア設定',array('controller'=>'widget_areas','action'=>'index')) ?>
+		</li>
+		<li>
 			<?php $baser->link('テーマ設定', array('controller'=>'themes','action'=>'index')) ?>
 		</li>
 		<li>

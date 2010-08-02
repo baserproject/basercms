@@ -3,8 +3,6 @@
 /**
  * ブログカレンダー
  * 
- * TODO 前バージョンとの互換用に残しているので不要になったら削除する
- * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -26,14 +24,23 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/get_calendar/'.$id);
+$url = '/blog/get_calendar/'.$id;
+if(!empty($year)){
+	$url.='/'.$year;
+}
+if(!empty($month)){
+	$url.='/'.$month;
+}
+$data = $this->requestAction($url);
 $blogContent = $data['blogContent'];
 $entryDates = $data['entryDates'];
 ?>
 <?php // TODO コード整理する事 ?>
 
-<div class="side-navi blog-calendar">
-	<h2>カレンダー</h2>
+<div class="widget widget-blog-calendar widget-blog-calendar-<?php echo $id ?>">
+<?php if($name && $use_title): ?>
+<h2><?php echo $name ?></h2>
+<?php endif ?>
 <?php
 //本日の日付を取得する
 $time = time();

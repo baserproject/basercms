@@ -149,6 +149,18 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.widget_area', 'ウィジェットエリア') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->select('BlogContent.widget_area',$formEx->getControlsource('WidgetArea.id'),null,array(),'サイト基本設定に従う') ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpWidgetArea','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextWidgetArea" class="helptext">
+				ブログコンテンツで利用するウィジェットエリアを指定します。<br />
+				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理',array('plugin'=>null,'controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
+			</div>
+			<?php echo $formEx->error('BlogContent.widget_area') ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.layout', 'レイアウトテンプレート名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->select('BlogContent.layout',$blog->getLayoutTemplates(),null,array(),false) ?>

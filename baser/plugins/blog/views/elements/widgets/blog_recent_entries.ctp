@@ -2,8 +2,6 @@
 /* SVN FILE: $Id$ */
 /**
  * ブログ最近の投稿
- *
- * TODO 前バージョンとの互換用に残しているので不要になったら削除する
  * 
  * PHP versions 4 and 5
  *
@@ -31,8 +29,10 @@ $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 ?>
 
-<div class="side-navi blog-recent-entries">
-	<h2>最近の投稿</h2>
+<div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?>">
+<?php if($name && $use_title): ?>
+<h2><?php echo $name ?></h2>
+<?php endif ?>
 	<?php if($recentEntries): ?>
 	<ul>
 		<?php foreach($recentEntries as $recentEntry): ?>

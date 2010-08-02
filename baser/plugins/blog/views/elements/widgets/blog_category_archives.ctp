@@ -2,8 +2,6 @@
 /* SVN FILE: $Id$ */
 /**
  * ブログカテゴリー一覧
- *
- * TODO 前バージョンとの互換用に残しているので不要になったら削除する
  * 
  * PHP versions 4 and 5
  *
@@ -33,6 +31,9 @@ App::import('Helper','Blog.Blog');
 $blog = new BlogHelper();
 ?>
 
-<div class="side-navi blog-categories-archives">
-	<h2><?php echo $blogContent['BlogContent']['title'] ?>カテゴリー</h2>
-	<?php echo $blog->getCategoryList($categories) ?> </div>
+<div class="widget widget-blog-categories-archives widget-blog-categories-archives-<?php echo $id ?>">
+<?php if($name && $use_title): ?>
+<h2><?php echo $name ?></h2>
+<?php endif ?>
+<?php echo $blog->getCategoryList($categories) ?>
+</div>

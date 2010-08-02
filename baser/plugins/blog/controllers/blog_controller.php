@@ -87,7 +87,7 @@ class BlogController extends BlogAppController {
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','archives','mobile_archives');
+		$this->Auth->allow('index','mobile_index','archives','mobile_archives','get_calendar','get_categories','get_blog_dates','get_recent_entries');
 		
 		$this->BlogContent->recursive = -1;
 		if($this->contentId) {
@@ -122,7 +122,12 @@ class BlogController extends BlogAppController {
 	function beforeRender() {
 
 		parent::beforeRender();
+		
 		$this->set('blogContent',$this->blogContent);
+
+		if($this->blogContent['BlogContent']['widget_area']){
+			$this->set('widgetArea',$this->blogContent['BlogContent']['widget_area']);
+		}
 
 	}
 /**
@@ -164,15 +169,6 @@ class BlogController extends BlogAppController {
 				'limit'=>$limit
 		);
 		$this->set('posts', $this->paginate('BlogPost'));
-
-		// カテゴリ一覧を取得
-		$this->set('categories',$this->BlogCategory->findAll(array('BlogCategory.blog_content_id'=>$contentId)));
-		// 月別アーカイブ一覧を取得
-		$this->set('blogDates',$this->BlogPost->getBlogDates($contentId));
-		// 最近の投稿一覧を取得
-		$this->set('recentEntries',$this->BlogPost->find('all',array('fields'=>array('no','name'),'conditions'=>array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$contentId),'limit'=>5, 'order'=>'posts_date DESC','recursive'=>-1)));
-		// カレンダー用データを取得
-		$this->set('entryDates',$this->BlogPost->getEntryDates($contentId,"",""));
 
 		/* 表示設定 */
 		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
@@ -384,20 +380,9 @@ class BlogController extends BlogAppController {
 
 		$this->set('single',$single);
 
-		/* カテゴリ一覧を取得 */
-		$this->BlogCategory->recursive = -1;
-		$this->set('categories',$this->BlogCategory->find('all',array('conditions'=>array('BlogCategory.blog_content_id'=>$contentId))));
-
-		/* 月別アーカイブ一覧を取得 */
-		$this->set('blogDates',$this->BlogPost->getBlogDates($contentId));
-
-		/* 最近の投稿一覧を取得 */
-		$this->set('recentEntries',$this->BlogPost->find('all',array('fields'=>array('no','name'),'conditions'=>array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$contentId),'limit'=>5, 'order'=>'posts_date DESC','recursive'=>-1)));
-
-		/* カレンダー用データを取得 */
-		$this->set('entryDates',$this->BlogPost->getEntryDates($contentId,$year,$month));
-
 		// 表示設定
+		$this->set('year',$year);
+		$this->set('month',$month);
 		$this->contentsTitle = $this->pageTitle;
 		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->layout = $this->blogContent['BlogContent']['layout'];
@@ -434,6 +419,68 @@ class BlogController extends BlogAppController {
 		$this->theme = $this->siteConfigs['theme'];
 		$this->setAction('archives');
 
+	}
+/**
+ * ブログカレンダー用のデータを取得する
+ * @param	int		$id
+ * @param	int		$year
+ * @param	int		$month
+ * @return	array
+ * @access	public
+ */
+	function get_calendar($id,$year='',$month=''){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['entryDates'] = $this->BlogPost->getEntryDates($id,$year,$month);
+		return $data;
+		
+	}
+/**
+ * カテゴリー一覧用のデータを取得する
+ * @param	int		$id
+ * @return	array
+ * @access	public
+ */
+	function get_categories($id){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogCategory->recursive = -1;
+		$data['categories'] = $this->BlogCategory->find('all',array('conditions'=>array('BlogCategory.blog_content_id'=>$id)));
+		return $data;
+		
+	}
+/**
+ * 月別アーカイブ一覧用のデータを取得する
+ * @param	int		$id
+ * @return	array
+ * @access	public
+ */
+	function get_blog_dates($id){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['blogDates'] = $this->BlogPost->getBlogDates($id);
+		return $data;
+		
+	}
+/**
+ * 最近の投稿用のデータを取得する
+ * @param	int		$id
+ * @return	array
+ * @access	public
+ */
+	function get_recent_entries($id){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['recentEntries'] = $this->BlogPost->find('all',array('fields'=>array('no','name'),'conditions'=>array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$id),'limit'=>5, 'order'=>'posts_date DESC','recursive'=>-1));
+		return $data;
+		
 	}
 }
 ?>

@@ -167,6 +167,18 @@ function mailContentSender1ClickHandler(){
 			<div id="helptextSender2" class="helptext">CC（カーボンコピー）用のメールアドレスを指定します。</div></td>
 	</tr>
 	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.widget_area', 'ウィジェットエリア') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->select('MailContent.widget_area', $formEx->getControlsource('WidgetArea.id') ,null,array(),'サイト基本設定に従う') ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpWidgetArea','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('MailContent.widget_area') ?>
+			<div id="helptextWidgetArea" class="helptext">
+				メールコンテンツで利用するウィジェットエリアを指定します。<br />
+				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理',array('plugin'=>null,'controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
+			</div>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.layout_template', 'レイアウトテンプレート名') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->select('MailContent.layout_template',$mail->getLayoutTemplates(),null,array(),false) ?>

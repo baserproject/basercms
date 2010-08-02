@@ -455,3 +455,86 @@ select.multiple option {
 	background-color:#E2E2E2;
 	padding:1px 3px;
 }
+
+/* WidgetSetting
+----------------------------------------------- */
+#WidgetSetting{
+	margin-top:20px;
+}
+#WidgetSetting .ui-widget-content{
+	width: 320px;
+	cursor:move;
+	margin:10px auto 5px;
+	border:1px solid #cccccc;
+	background-color: #ffffff;
+	background: url(images/bg_widget_head.png) repeat-x left top;
+}
+#WidgetSetting .ui-widget-content .head{
+	height:24px;
+	padding:3px 10px;
+	font-weight: bold;
+}
+#WidgetSetting .setting .head{
+	color:#999;
+}
+#WidgetSetting .setting .del{
+	float:right;
+	height:24px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+	border-left:1px solid #cccccc;
+	padding:3px 0;
+	width:40px;
+}
+#WidgetSetting .ui-widget-content .action{
+	padding:3px 0;
+	float:right;
+	height:24px;
+	font-weight: bold;
+	width:40px;
+	cursor: pointer;
+	text-align: center;
+	border-left:1px solid #cccccc;
+}
+#WidgetSetting .ui-widget-content .content{
+	padding:3px 10px 10px 10px;
+	clear:both;
+	display: none;
+}
+#WidgetSetting .ui-widget-content .content p{
+	margin:0!important;
+}
+#WidgetSetting #Source .description{
+	margin:0 12px 20px;
+}
+#WidgetSetting #Source {
+	float:left;
+	width:340px;
+	border: 1px solid #CCCCCC;
+}
+#WidgetSetting #Target {
+	float:right;
+	width: 340px;
+	min-height:210px;
+	border: 1px solid #CCCCCC;
+	padding-bottom: 10px;
+}
+#WidgetSetting #Target .enabled .head{
+	color:#000000;
+}
+#WidgetSetting .topDrop {
+	background-color: #efefef;
+}
+#WidgetSetting .template {
+	display: none;
+}
+#WidgetSetting .placeholder {
+	height:26px;
+	background: none;
+	border: 1px solid #FFFF00;
+	background-color: #FFFFFF;
+}
+#WidgetSetting #WidgetAreaUpdateTitleForm{
+	display: inline;
+}

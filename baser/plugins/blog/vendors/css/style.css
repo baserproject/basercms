@@ -69,26 +69,28 @@
 }
 /* calendar
 ----------------------------------------------- */
-.blog-calendar table {
+.widget-blog-calendar table {
 	margin-left:15px;
 }
-.blog-calendar th {
+.widget-blog-calendar th {
 	border-bottom:1px solid #e2e2e2;
 }
-.blog-calendar th,
-.blog-calendar td {
+.widget-blog-calendar th,
+.widget-blog-calendar td {
 	padding:2px 3px;
 	font-size:12px;
+	text-align: center;
 }
-.blog-calendar .sunday {
+.widget-blog-calendar .sunday {
 	color:#ff6633;
 }
-.blog-calendar .saturday {
+.widget-blog-calendar .saturday {
 	color:#3366FF;
 }
-.blog-calendar .today {
+.widget-blog-calendar .today {
 	background-color:#e2e2e2;
 }
+
 /* BlogComment
 ----------------------------------------------- */
 #BlogComment {

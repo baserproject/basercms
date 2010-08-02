@@ -1,9 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ最近の投稿
- *
- * TODO 前バージョンとの互換用に残しているので不要になったら削除する
+ * ブログ月別アーカイブ
  * 
  * PHP versions 4 and 5
  *
@@ -26,18 +24,20 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/get_recent_entries/'.$id);
-$recentEntries = $data['recentEntries'];
+$data = $this->requestAction('/blog/get_blog_dates/'.$id);
+$blogDates = $data['blogDates'];
 $blogContent = $data['blogContent'];
 ?>
 
-<div class="side-navi blog-recent-entries">
-	<h2>最近の投稿</h2>
-	<?php if($recentEntries): ?>
+<div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?>">
+<?php if($name && $use_title): ?>
+<h2><?php echo $name ?></h2>
+<?php endif ?>
+	<?php if(!empty($blogDates)): ?>
 	<ul>
-		<?php foreach($recentEntries as $recentEntry): ?>
+		<?php foreach($blogDates as $blogDate): ?>
 		<li>
-			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no']),array('prefix'=>true)) ?>
+			<?php $baser->link($blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')',array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

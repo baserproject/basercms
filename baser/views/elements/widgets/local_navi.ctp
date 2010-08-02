@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ページカテゴリリスト
+ * ローカルナビゲーションウィジェット
  *
  * PHP versions 4 and 5
  *
@@ -22,8 +22,10 @@
 $pageCategory = $page->getCategory();
 ?>
 <?php if($pageCategory): ?>
-<div id="local-navi">
+<div class="widget widget-local-navi widget-local-navi-<?php echo $id ?>">
+	<?php if($use_title): ?>
 	<h2><?php echo $pageCategory['title'] ?></h2>
+	<?php endif ?>
 	<?php $baser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
 </div>
 <?php endif ?>
