@@ -210,9 +210,20 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_phpinfo() {
-		$this->pageTitle = 'PHP設定情報';
+	function admin_info() {
+
+		$this->pageTitle = 'BaserCMS設定情報';
+		$drivers = array('csv'=>'CSV','sqlite3_ex'=>'SQLite3','mysql_ex'=>'MySQL','postgres'=>'PostgreSQL');
+		$smartUrl = 'ON';
+		$db =& ConnectionManager::getDataSource('baser');
+		if(Configure::read('App.baseUrl')){
+			$smartUrl = 'OFF';
+		}
+		$this->set('driver',$drivers[$db->config['driver']]);
+		$this->set('smartUrl',$smartUrl);
+		$this->set('baserVersion',$this->siteConfigs['version']);
 		$this->subMenuElements = array('site_configs');
+		
 	}
 
 /**

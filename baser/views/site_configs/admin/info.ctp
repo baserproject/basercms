@@ -12,15 +12,33 @@ th {
 }
 a:link {
 	background:none!important;
+}
+#headMain a:link {
+	text-decoration: underline!important;
+}
+#navigation a:link{
+	color:#688A00!important;
+}
+#glbMenus a:hover{
+	text-decoration: none!important;
+}
+.side-navi a:link,
+.to-top a:link{
 	text-decoration: underline!important;
 	color:#688A00!important;
+}
+.side-navi a:hover,
+.to-top a:hover,
+#navigation a:hover,
+#loginUser a:hover{
+	color:#CC0000!important;
 }
 body,
 td,
 th,
 h1,
 h2 {
-	/*font-family: "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important*/;
+	font-family: "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important;
 }
 #headMain h1 {
 	text-align: right;
@@ -49,4 +67,12 @@ h2 {
 <h2 class="pageTitle">
 	<?php $baser->contentsTitle() ?>
 </h2>
+<h3>インストール情報</h3>
+<ul style="margin:20px 40px">
+	<li>スマートURL： <?php echo $smartUrl ?></li>
+	<li>設置フォルダ： <?php echo ROOT.DS ?></li>
+	<li>データベース： <?php echo $driver ?></li>
+	<li>BaserCMSバージョン： <?php echo $baserVersion ?></li>
+</ul>
+<h3 style="margin-bottom:20px">PHP環境</h3>
 <?php phpinfo() ?>
