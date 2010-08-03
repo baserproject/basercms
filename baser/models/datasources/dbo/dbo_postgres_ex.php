@@ -38,7 +38,7 @@ class DboPostgresEx extends DboPostgres {
 		if(isset($schema[$addFieldName])) {
 			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
 		}
-		return $this->execute('"ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
+		return $this->execute('ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
 	}
 /**
  * カラムを変更する

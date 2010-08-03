@@ -675,13 +675,12 @@ class DboCsv extends DboSource {
 
 		$queryData = am($queryData,array('option'=>''));
 
-		/* COUNTフィールドの確認 */
 		if(preg_match("/^COUNT\(\*\)\sAS\scount$/s",trim($queryData['fields'][0]))) {
+			/* COUNTフィールドの確認 */
 			$queryData['fields'] = null;
 			$queryData['option'] = 'count';
-		}
-		/* MAXフィールドの確認（１フィールドのみ対応） */
-		if(preg_match("/^MAX\((.+?)\)\sAS\s(.*?)$/s",trim($queryData['fields'][0]),$matches)) {
+		}elseif(preg_match("/^MAX\((.+?)\)\sAS\s(.*?)$/s",trim($queryData['fields'][0]),$matches)) {
+			/* MAXフィールドの確認（１フィールドのみ対応） */
 			$queryData['fields'] = null;
 			$maxField = $matches[1];
 			$maxAsField = $matches[2];
@@ -749,7 +748,7 @@ class DboCsv extends DboSource {
 			}
 
 		}
-		
+
 		$this->_count = $count;
 
 		// カウントオプションの場合は件数を返す
@@ -1063,7 +1062,9 @@ class DboCsv extends DboSource {
 
 		// 全てのフィールドを取得
 		$this->cacheSources = false;
-		$schema = $model->schema();
+		$db =& ConnectionManager::getDataSource($model->useDbConfig);
+		$schema = $db->describe($model, $fieldName);
+
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
 			if(in_array($fieldName,$this->_csvFields)) {
@@ -1114,7 +1115,8 @@ class DboCsv extends DboSource {
 
 		// 全てのフィールドを取得
 		$this->cacheSources = false;
-		$schema = $model->schema();
+		$db =& ConnectionManager::getDataSource($model->useDbConfig);
+		$schema = $db->describe($model, $oldFieldName);
 
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
@@ -1173,7 +1175,8 @@ class DboCsv extends DboSource {
 		}
 
 		// 全てのフィールドを取得
-		$schema = $model->schema();
+		$db =& ConnectionManager::getDataSource($model->useDbConfig);
+		$schema = $db->describe($model, $fieldName);
 
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
@@ -1335,7 +1338,7 @@ class DboCsv extends DboSource {
 			}
 		}
 		return $aryFields;
-		
+
 	}
 /**
  * resultSet メソッドで利用する為のクラス名を取得する
@@ -1353,9 +1356,9 @@ class DboCsv extends DboSource {
 		$model = '';
 		$aryFields = split(",",$fields);
 		foreach($aryFields as $field) {
-			if(preg_match('/AS\s(.*)/is', $field, $matches)){
+			if(preg_match('/\((.*?)\)\sAS/is', $field, $matches)){
 				if(strpos($matches[1],".")!==false){
-					list($model,$field) = explode(".",$field);
+					list($model,$field) = explode(".",$matches[1]);
 					break;
 				}
 			}else{
@@ -1646,15 +1649,17 @@ class DboCsv extends DboSource {
 			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
 			$this->disconnect($model->tablePrefix.$model->table);
 		}else {
-			// TODO 処理を見直す
-			// ファイルリソースがあるにも関わらずデータの取得ができない場合がある。（インストール時に再現）
-			// 取り急ぎの対応として一旦接続を切って再接続している。
-			// ファイルのロック処理？かもしれない。接続を一旦解除しているので他の部分に影響している可能性もある。
 			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
 			if(!$cols) {
+				// TODO 処理を見直す
+				// ファイルリソースがあるにも関わらずデータの取得ができない場合がある。（インストール時に再現）
+				// 取り急ぎの対応として一旦接続を切って再接続している。
+				// ファイルのロック処理？かもしれない。接続を一旦解除しているので他の部分に影響している可能性もある。
+				// 追記：接続したままだとロックがかかりっぱなしになるので再度接続を解除する事にした。
 				$this->disconnect($model->tablePrefix.$model->table);
 				$this->connect($model,false);
 				$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
+				$this->disconnect($model->tablePrefix.$model->table);
 			}
 		}
 

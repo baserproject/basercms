@@ -46,7 +46,10 @@ class DboSqlite3Ex extends DboSqlite3 {
 		if(isset($schema[$addFieldName])) {
 			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
 		}
-		$this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
+		if($column['type'] == 'integer' && !empty($column['length'])){
+			unset($column['length']);
+		}
+		return $this->execute("ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column));
 	}
 /**
  * カラムを変更する
@@ -59,7 +62,8 @@ class DboSqlite3Ex extends DboSqlite3 {
  */
 	function editColumn(&$model,$oldFieldName,$newfieldName,$column=null) {
 
-		$schema = $model->schema();
+		$db =& ConnectionManager::getDataSource($model->useDbConfig);
+		$schema = $db->describe($model, $oldFieldName);
 		$tableName = $model->tablePrefix.$model->table;
 
 		$this->execute('BEGIN TRANSACTION;');
@@ -114,7 +118,8 @@ class DboSqlite3Ex extends DboSqlite3 {
 	function deleteColumn(&$model,$delFieldName) {
 
 		$tableName = $model->tablePrefix.$model->table;
-		$schema = $model->schema();
+		$db =& ConnectionManager::getDataSource($model->useDbConfig);
+		$schema = $db->describe($model, $delFieldName);
 
 		$this->execute('BEGIN TRANSACTION;');
 
