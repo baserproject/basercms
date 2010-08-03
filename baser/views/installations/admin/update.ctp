@@ -10,16 +10,14 @@
 	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。<br />
 		<strong>実行する前には必ずデータベースをバックアップしておいてください。</strong></p>
 	<p>
-		<?php $baser->link('≫ バックアップはこちらから','/admin/site_configs/form') ?>
+		<?php $baser->link('≫ バックアップはこちらから','/admin/site_configs/backup_data') ?>
 	</p>
 		<?php endif ?>
 	<?php echo $form->create(array('action'=>'update')) ?> <?php echo $form->hidden('Installation.update',array('value',true)) ?> <?php echo $form->end(array('label'=>'アップデート実行','class'=>'button btn-red')) ?>
 	<?php else: ?>
 	<p>WEBサイトのバージョンは最新です。</p>
-		<?php if($_SESSION['Auth']['User']): ?>
 	<p>
-		<?php $baser->link('≫ ダッシュボードに移動する','/admin/dashboard/index') ?>
+		<?php $baser->link('≫ 管理画面に移動する','/admin/users/login') ?>
 	</p>
-		<?php endif ?>
 	<?php endif ?>
 </div>
