@@ -169,10 +169,10 @@ $(function(){
 <textarea cols="80" rows="1" onclick="this.select(0,this.value.length)" readonly="readonly">
 <?php echo $javascript->link('/feed/ajax/'.$this->data['FeedConfig']['id']) ?>
 </textarea>
-<p>また、フィードの読み込みにはjQueryが必要です。以下のスクリプトの前に読み込んでおく必要があります。</p>
+<p>また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。</p>
 <p>jQuery（例）</p>
 <textarea cols="80" rows="1" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php echo $javascript->link('jquery-1.3.2.min') ?>
+<?php echo $javascript->link('jquery-1.4.2.min') ?>
 </textarea>
 	<?php endif ?>
 <?php endif ?>

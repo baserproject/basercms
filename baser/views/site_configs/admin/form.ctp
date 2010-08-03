@@ -106,7 +106,7 @@
 				テーマを追加する場合には、<br />
 				/app/webroot/themed/[テーマ名]/ としてテーマフォルダを作成し、
 				そのフォルダの中にCakePHPのテンプレートファイルやcss、javascriptファイル等を配置します。<br />
-				※ テーマ名にはアルファベットを利用します。 </div>
+				※ テーマ名には半角小文字のアルファベットを利用します。 </div>
 		</td>
 	</tr>
 	<tr>
@@ -115,7 +115,7 @@
 			<div id="helptextMaintenance" class="helptext">
 				公開状態を指定します。<br />
 				メンテナンス中の場合は、管理画面にログインする事で公開ページを確認する事ができますが、
-				制作・開発モードがデバッグモードの場合は、メンテナンス中にしていても公開ページが表示されてしまいます。
+				制作・開発モードがデバッグモードの場合は、メンテナンス中にしていても公開ページが表示されてしまいますので注意が必要です。
 				</div>
 			</td>
 	</tr>
@@ -124,7 +124,7 @@
 		<td class="col-input"><?php echo $formEx->select('SiteConfig.mode', $formEx->getControlSource('mode'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextDebug" class="helptext"> 制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 				※ CakePHPのデバッグモードを指します。<br />
-				※ インストールモードはBaserCMSを初期化する場合にしか利用しません。 </div></td>
+				※ インストールモードはBaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div></td>
 	</tr>
 </table>
 <div class="align-center"> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?> </div>

@@ -26,14 +26,20 @@
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
-	<p>ダッシュボードはログインした際に一番初めに来るページです。初期状態では、管理画面の利用履歴（最近の動き）とBaserCMS公式の更新情報が表示されます。<br />
-		画面上部のグローバルメニューは、初期状態では、BaserCMSの利用方法がイメージしやすいようにコーポレートサイト向けに最適化されていますが、
-		グローバルメニュー管理よりカスタマイズする事ができます。<br />
-		また、画面左のサイドメニューも、テンプレートを編集する事でカスタマイズする事ができます。</p>
+	<p>ダッシュボードはログインした際に一番初めに来るページです。初期状態では、管理画面の利用履歴（最近の動き）とBaserCMS公式の更新情報が表示されます。</p>
+		<p>画面上部のグローバルメニューは、初期状態では、BaserCMSの利用方法がイメージしやすいようにコーポレートサイト向けに最適化されていますが、
+		<?php $baser->link('グローバルメニュー管理',array('controller'=>'global_menus','action'=>'index')) ?>よりカスタマイズする事ができます。（検索欄で「管理画面」を選択して検索してください）</p>
+		<p>また、画面左のサイドメニューも、テンプレートを編集する事でカスタマイズする事ができます。</p>
 	<div class="example-box">
-		<div class="head">（例）テーマ：Demo を利用している場合のダッシュボードサイドメニューのテンプレートの場所</div>
-		<p>app/webroot/themed/demo/elements/admin/submenus/dashboard.ctp</p>
-		<p><small>※ 各テンプレートはそのうち管理画面で編集できるように改善される予定です。</small></p>
+		<div class="head">（例）ダッシュボードサイドメニューのテンプレートの場所</div>
+		<p><?php $baser->link('上部メニューの「システム設定」',array('controller'=>'site_configs','action'=>'form')) ?> ≫
+			<?php $baser->link('左メニューの「テーマ設定」',array('controller'=>'themes','action'=>'index')) ?> ≫
+			<?php $baser->link('現在のテーマの「管理」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'])) ?> ≫
+			<?php $baser->link('左メニュー「エレメントテンプレート一覧」',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements')) ?> ≫
+			<?php $baser->link('admin/ の「開く」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements/admin')) ?> ≫
+			<?php $baser->link('submenus/ の「開く」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements/admin/submenus')) ?> ≫
+			<?php $baser->link('dashboard.ctp の「編集」ボタン',array('controller'=>'theme_files','action'=>'edit',$siteConfig['theme'],'elements/admin/submenus/dashboard.ctp')) ?>
+		</p>
 	</div>
 </div>
 <div class="float-left">
