@@ -35,7 +35,7 @@
 		<p><?php $baser->link('上部メニューの「システム設定」',array('controller'=>'site_configs','action'=>'form')) ?> ≫
 			<?php $baser->link('左メニューの「テーマ設定」',array('controller'=>'themes','action'=>'index')) ?> ≫
 			<?php $baser->link('現在のテーマの「管理」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'])) ?> ≫
-			<?php $baser->link('左メニュー「エレメントテンプレート一覧」',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements')) ?> ≫
+			<?php $baser->link('左メニュー「エレメント一覧」',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements')) ?> ≫
 			<?php $baser->link('admin/ の「開く」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements/admin')) ?> ≫
 			<?php $baser->link('submenus/ の「開く」ボタン',array('controller'=>'theme_files','action'=>'index',$siteConfig['theme'],'elements/admin/submenus')) ?> ≫
 			<?php $baser->link('dashboard.ctp の「編集」ボタン',array('controller'=>'theme_files','action'=>'edit',$siteConfig['theme'],'elements/admin/submenus/dashboard.ctp')) ?>
