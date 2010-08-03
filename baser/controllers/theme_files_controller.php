@@ -435,7 +435,12 @@ class ThemeFilesController extends AppController {
 		if(!isset($this->_tempalteTypes[$type])) {
 			$this->notFound();
 		}
-		if(@move_uploaded_file($this->data['ThemeFile']['file']['tmp_name'], $fullpath .DS. $this->data['ThemeFile']['file']['name'])) {
+
+		$filePath = $fullpath .DS. $this->data['ThemeFile']['file']['name'];
+		$Folder = new Folder();
+		$Folder->create(dirname($filePath), 0777);
+
+		if(@move_uploaded_file($this->data['ThemeFile']['file']['tmp_name'], $filePath)) {
 			$this->Session->setFlash('アップロードに成功しました。');
 		}else {
 			$this->Session->setFlash('アップロードに失敗しました。');
