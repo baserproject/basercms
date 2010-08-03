@@ -67,7 +67,7 @@ class ThemesController extends AppController {
 				$themes[] = $theme;
 			}
 		}
-		$themes[] = array('name'=>'core','title'=>'BaserCMSコア','description'=>'BaserCMSコアテーマ','author'=>'basercms','url'=>'http://basercms.net');
+		$themes[] = array('name'=>'core','title'=>'BaserCMSコア','description'=>'BaserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。','author'=>'basercms','url'=>'http://basercms.net');
 		$this->set('themes',$themes);
 		$this->subMenuElements = array('site_configs');
 	}
@@ -135,7 +135,7 @@ class ThemesController extends AppController {
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
-		$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。<br />ページデータがない場合は、ページ管理よりテンプレート読み込みを実行してみてください。');
+		$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		$this->redirect(array('action'=>'index'));
 	}
 	

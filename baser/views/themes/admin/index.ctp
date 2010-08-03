@@ -54,8 +54,11 @@
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button" style="width:240px"><?php if($theme['name'] != 'core'): ?>
+		<td class="operation-button" style="width:170px;">
+			<?php if($theme['name'] != 'core'): ?>
+			<?php if($theme['name']!=$baser->siteConfig['theme']): ?>
 			<?php $baser->link('適用',array('action'=>'apply', $theme['name']), array('class'=>'btn-green-s button-s')) ?>
+			<?php endif ?>
 			<?php $baser->link('コピー',array('action'=>'copy', $theme['name']), array('class'=>'btn-red-s button-s')) ?>
 			<?php endif ?>
 			<?php $baser->link('管理',array('controller'=>'theme_files','action'=>'index', $theme['name']), array('class'=>'btn-orange-s button-s')) ?>
@@ -63,8 +66,13 @@
 			<?php $baser->link('削除', array('action'=>'del', $theme['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $theme['name']),false); ?>
 			<?php endif ?></td>
 		<td><?php echo $theme['name'] ?></td>
-		<td><?php echo $theme['title'] ?></td>
-		<td><?php echo $theme['description'] ?></td>
+		<td>
+			<?php if($theme['name']!='core'): ?>
+				<?php $baser->link($baser->getImg('/themed/'.$theme['name'].'/screenshot.png',array('alt'=>$theme['title'],'width'=>'80px','align'=>'left','style'=>'margin-right:10px;border:1px solid #e2e2e2')),'/themed/'.$theme['name'].'/screenshot.png',array('rel'=>'colorbox')) ?>
+			<?php endif ?>
+			<?php echo $theme['title'] ?>
+		</td>
+		<td style="width:150px"><?php echo $theme['description'] ?></td>
 		<td><?php if(!empty($theme['url']) && !empty($theme['author'])): ?>
 			<?php $baser->link($theme['author'],$theme['url'],array('target'=>'_blank')) ?>
 			<?php else: ?>
