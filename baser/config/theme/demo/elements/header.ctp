@@ -6,7 +6,7 @@
 
 <div id="header">
 	<div id="headMain">
-		<h1><a href="/"><?php echo $baser->siteConfig['name'] ?></a></h1>
+		<h1><?php $baser->link($baser->siteConfig['name'],'/') ?></h1>
 	</div>
 	<?php if($baser->isTop()): ?>
 	<?php $baser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s BaserCMS','border'=>'0')) ?>
