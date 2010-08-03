@@ -193,10 +193,14 @@ class AppController extends Controller {
 		parent::beforeFilter();
 
 		// メンテナンス
-		if(!empty($this->siteConfigs['maintenance']) && $this->params['controller'] != 'maintenance' && 
+		if(!empty($this->siteConfigs['maintenance']) && $this->params['controller'] != 'maintenance' &&
 					(!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
-			$this->redirect(array('admin'=>false,'controller'=>'maintenance'));
+			if(!empty($this->params['return']) && !empty($this->params['requested'])){
+				return;
+			}else{
+				$this->redirect('/maintenance');
+			}
 		}
 
 		/* 認証設定 */
