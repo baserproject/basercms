@@ -43,7 +43,7 @@ class ThemesController extends AppController {
  * パンくずナビ
  * @var array
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
 /**
  * テーマ一覧
  *
@@ -51,7 +51,8 @@ class ThemesController extends AppController {
  * @access	public
  */
 	function admin_index(){
-		$this->pageTitle = 'テーマ管理';
+		
+		$this->pageTitle = 'テーマ一覧';
 		$path = WWW_ROOT.'themed';
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
@@ -69,7 +70,8 @@ class ThemesController extends AppController {
 		}
 		$themes[] = array('name'=>'core','title'=>'BaserCMSコア','description'=>'BaserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。','author'=>'basercms','url'=>'http://basercms.net');
 		$this->set('themes',$themes);
-		$this->subMenuElements = array('site_configs');
+		$this->subMenuElements = array('themes');
+		
 	}
 /**
  * テーマをコピーする

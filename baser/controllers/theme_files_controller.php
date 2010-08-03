@@ -65,7 +65,7 @@ class ThemeFilesController extends AppController {
  * @var		array
  * @access 	public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ設定'=>'/admin/themes/index');
+	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
 /**
  * テーマファイル一覧
  *

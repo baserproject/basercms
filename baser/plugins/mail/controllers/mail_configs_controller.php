@@ -63,9 +63,7 @@ class MailConfigsController extends MailAppController {
  * @var		string
  * @access 	public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン設定'=>'/admin/plugins/index',
-			'メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
 /**
  * [ADMIN] メールフォーム設定
  *

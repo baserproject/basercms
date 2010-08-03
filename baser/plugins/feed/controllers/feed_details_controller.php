@@ -62,9 +62,7 @@ class FeedDetailsController extends FeedAppController {
  * @var		string
  * @access 	public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン管理'=>'/admin/plugins/index',
-			'フィード管理'=>'/admin/feed/feed_configs/index');
+	var $navis = array('フィード管理'=>'/admin/feed/feed_configs/index');
 /**
  * サブメニューエレメント
  *

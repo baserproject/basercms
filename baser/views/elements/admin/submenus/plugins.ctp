@@ -22,7 +22,7 @@
 ?>
 
 <div class="side-navi">
-	<h2>プラグイン設定メニュー</h2>
+	<h2>プラグイン管理メニュー</h2>
 	<ul>
 		<li>
 			<?php $baser->link('プラグイン一覧',array('plugin'=>null,'controller'=>'plugins','action'=>'index')) ?>

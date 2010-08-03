@@ -67,7 +67,7 @@ class GlobalMenusController extends AppController {
  * @access 	public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'グローバルメニュー設定'=>'/admin/global_menus/index');
+			'グローバルメニュー管理'=>'/admin/global_menus/index');
 /**
  * グローバルメニューの一覧を表示する
  *
@@ -117,7 +117,7 @@ class GlobalMenusController extends AppController {
 		$this->set('listDatas',$listDatas);
 
 		// 表示設定
-		$this->subMenuElements = array('global_menus','site_configs');
+		$this->subMenuElements = array('global_menus');
 		$this->pageTitle = 'グローバルメニュー一覧';
 
 	}
@@ -156,7 +156,7 @@ class GlobalMenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('global_menus','site_configs');
+		$this->subMenuElements = array('global_menus');
 		$this->pageTitle = '新規グローバルメニュー登録';
 		$this->render('form');
 
@@ -198,7 +198,7 @@ class GlobalMenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('global_menus','site_configs');
+		$this->subMenuElements = array('global_menus');
 		$this->pageTitle = 'グローバルメニュー編集：'.$this->data['GlobalMenu']['name'];
 		$this->render('form');
 

@@ -19,7 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$types = array('layouts'=>'レイアウトテンプレート','elements'=>'エレメントテンプレート','etc'=>'コンテンツテンプレート','css'=>'スタイルシート','img'=>'イメージ','js'=>'Javascript');
+$types = array('layouts'=>'レイアウト','elements'=>'エレメント','etc'=>'コンテンツ','css'=>'スタイルシート','img'=>'イメージ','js'=>'Javascript');
 if($theme == 'core'){
 	$themeFiles = array(0=>array('name'=>'','title'=>'コア'));
 	

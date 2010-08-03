@@ -29,17 +29,20 @@
 			<?php $baser->link('サイト基本設定',array('controller'=>'site_configs','action'=>'form')) ?>
 		</li>
 		<li>
-			<?php $baser->link('グローバルメニュー設定',array('controller'=>'global_menus','action'=>'index')) ?>
+			<?php $baser->link('グローバルメニュー管理',array('controller'=>'global_menus','action'=>'index')) ?>
 		</li>
 		<li>
-			<?php $baser->link('ウィジェットエリア設定',array('controller'=>'widget_areas','action'=>'index')) ?>
+			<?php $baser->link('ウィジェットエリア管理',array('controller'=>'widget_areas','action'=>'index')) ?>
 		</li>
 		<li>
-			<?php $baser->link('テーマ設定', array('controller'=>'themes','action'=>'index')) ?>
+			<?php $baser->link('テーマ管理', array('controller'=>'themes','action'=>'index')) ?>
 		</li>
 		<li>
-			<?php $baser->link('プラグイン設定',array('controller'=>'plugins','action'=>'index')) ?>
+			<?php $baser->link('プラグイン管理',array('controller'=>'plugins','action'=>'index')) ?>
 		</li>
+	</ul>
+	<h2>ユーティリティ</h2>
+	<ul>
 		<li>
 			<?php $baser->link('データバックアップ',array('controller'=>'site_configs','action'=>'backup_data',1),array(),'データベースのデータをダウンロードします。いいですか？') ?>
 		</li>

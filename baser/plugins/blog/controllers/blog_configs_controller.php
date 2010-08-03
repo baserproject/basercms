@@ -63,9 +63,7 @@ class BlogConfigsController extends BlogAppController {
  * @var		string
  * @access 	public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン設定'=>'/admin/plugins/index',
-			'ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * before_filter
  *

@@ -69,7 +69,7 @@ class PluginsController extends AppController {
  * @access 	public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン設定'=>'/admin/plugins/index');
+			'プラグイン管理'=>'/admin/plugins/index');
 /**
  * コンテンツID
  *
@@ -182,7 +182,7 @@ class PluginsController extends AppController {
 
 		// 表示設定
 		$this->set('listDatas',$listDatas);
-		$this->subMenuElements = array('plugins','site_configs');
+		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 
 	}
@@ -259,7 +259,7 @@ class PluginsController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('plugins','site_configs');
+		$this->subMenuElements = array('plugins');
 		$this->pageTitle = '新規プラグイン登録';
 		$this->render('form');
 

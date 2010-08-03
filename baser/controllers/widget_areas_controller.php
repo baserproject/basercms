@@ -49,14 +49,14 @@ class WidgetAreasController extends AppController {
  * @var		string
  * @access 	public
  */
-	var $navis = array('ウィジェットエリア管理'=>'/admin/widget_areas/index');
+	var $navis = array('システム設定'=>'/admin/site_configs/form','ウィジェットエリア管理'=>'/admin/widget_areas/index');
 /**
  * サブメニューエレメント
  *
  * @var 	array
  * @access 	public
  */
-	var $subMenuElements = array('widget_areas','site_configs');
+	var $subMenuElements = array('widget_areas');
 /**
  * 一覧
  * @return	void
