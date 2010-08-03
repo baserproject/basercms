@@ -67,7 +67,7 @@ h2 {
 <h2 class="pageTitle">
 	<?php $baser->contentsTitle() ?>
 </h2>
-<h3>インストール情報</h3>
+<h3>BaserCMS環境</h3>
 <ul style="margin:20px 40px">
 	<li>スマートURL： <?php echo $smartUrl ?></li>
 	<li>設置フォルダ： <?php echo ROOT.DS ?></li>

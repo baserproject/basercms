@@ -212,7 +212,7 @@ class SiteConfigsController extends AppController {
  */
 	function admin_info() {
 
-		$this->pageTitle = 'BaserCMS設定情報';
+		$this->pageTitle = '環境情報';
 		$drivers = array('csv'=>'CSV','sqlite3_ex'=>'SQLite3','mysql_ex'=>'MySQL','postgres'=>'PostgreSQL');
 		$smartUrl = 'ON';
 		$db =& ConnectionManager::getDataSource('baser');
