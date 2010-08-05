@@ -41,16 +41,20 @@
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Permission') ?> <?php echo $formEx->hidden('Permission.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('Permission.user_group_id', 'ユーザーグループ') ?></th>
+		<td class="col-input">
+			<?php $userGroups = $formEx->getControlSource('user_group_id') ?>
+			<?php echo $userGroups[$formEx->value('Permission.user_group_id')] ?>
+			<?php echo $formEx->hidden('Permission.user_group_id') ?>
+		</td>
+	</tr>
 	<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Permission.id', 'NO') ?></th>
 		<td class="col-input"><?php echo $formEx->text('Permission.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
 	</tr>
 	<?php endif; ?>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.user_group_id', 'ユーザーグループ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Permission.user_group_id', $formEx->getControlSource('user_group_id'),null,array(),false) ?> <?php echo $formEx->error('Permission.user_group_id') ?></td>
-	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.name', 'ルール名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('Permission.name', array('size'=>20,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $form->error('Permission.name') ?>

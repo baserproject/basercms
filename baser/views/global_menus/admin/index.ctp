@@ -22,9 +22,7 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
-	<?php if($form->value('GlobalMenu.open')): ?>
 	$("#GlobalMenuSearchBody").show();
-	<?php endif ?>
 });
 </script>
 
@@ -46,9 +44,8 @@ $(document).ready(function(){
 </div>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="GlobalMenuSearch">検索</a></h3>
 <div class="function-box corner10" id="GlobalMenuSearchBody" style="display:none"> <?php echo $formEx->create('GlobalMenu',array('url'=>array('action'=>'index'))) ?>
-	<p> <small>タイプ</small> <?php echo $formEx->select('GlobalMenu.menu_type',  $formEx->getControlSource('menu_type'),null,array(),false) ?>　 <small>利用状態</small> <?php echo $formEx->select('GlobalMenu.status', $textEx->booleanMarkList()) ?>　 </p>
-	<?php echo $formEx->hidden('GlobalMenu.open',array('value'=>true)) ?>
-	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
+	<p> <small>タイプ</small> <?php echo $formEx->select('GlobalMenu.menu_type',  $formEx->getControlSource('menu_type'),null,array(),false) ?>　 <small>利用状態</small> <?php echo $formEx->select('GlobalMenu.status', $textEx->booleanMarkList()) ?>　 
+	<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?></p>
 </div>
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableGlobalMenus">
 	<tr>

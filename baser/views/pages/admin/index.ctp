@@ -26,9 +26,7 @@ if($pageCategories){
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
-	<?php if($form->value('Page.open')): ?>
 	$("#PageFilterBody").show();
-	<?php endif ?>
 });
 </script>
 
@@ -61,9 +59,8 @@ $(document).ready(function(){
 		<?php if($pageCategories): ?>
 		<small>カテゴリ</small> <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
 		<?php endif ?>
-		<small>公開状態</small> <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　 </p>
-	<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
-	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
+		<small>公開状態</small> <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　 
+	<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </p>
 </div>
 
 <!-- list-num -->

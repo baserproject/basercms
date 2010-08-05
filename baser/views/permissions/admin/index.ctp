@@ -22,9 +22,7 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
-	<?php if($form->value('Permission.open')): ?>
 	$("#PermissionsSearchBody").show();
-	<?php endif ?>
 });
 </script>
 
@@ -51,9 +49,8 @@ $(document).ready(function(){
 </div>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PermissionsSearch">検索</a></h3>
 <div class="function-box corner10" id="PermissionsSearchBody"> <?php echo $formEx->create('Permission',array('url'=>array('action'=>'index'),'type'=>'get')) ?>
-	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('Permission.user_group_id',  $formEx->getControlSource('user_group_id'),null,array(),false) ?>　 </p>
-	<?php echo $formEx->hidden('Permission.open',array('value'=>true)) ?>
-	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
+	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('Permission.user_group_id',  $formEx->getControlSource('user_group_id'),null,array(),false) ?>
+		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?></p>
 </div>
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="PermissionsTable">

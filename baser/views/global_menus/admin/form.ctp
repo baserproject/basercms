@@ -34,6 +34,14 @@
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('GlobalMenu') ?> <?php echo $formEx->hidden('GlobalMenu.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('GlobalMenu.menu_type', 'タイプ') ?></th>
+		<td class="col-input">
+			<?php $menuTypes = $formEx->getControlSource('GlobalMenu.menu_type') ?>
+			<?php echo $menuTypes[$formEx->value('GlobalMenu.menu_type')] ?>
+			<?php echo $formEx->hidden('GlobalMenu.menu_type') ?>
+		</td>
+	</tr>
 	<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('GlobalMenu.id', 'NO') ?></th>
@@ -50,10 +58,6 @@
 				</ul>
 			</div>
 			<?php echo $formEx->error('GlobalMenu.name') ?></td>
-	</tr>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.menu_type', 'タイプ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('GlobalMenu.menu_type', $formEx->getControlSource('GlobalMenu.menu_type'),null,array(),false) ?><?php echo $formEx->error('GlobalMenu.menu_type') ?>&nbsp;</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('GlobalMenu.link', 'リンクURL') ?></th>

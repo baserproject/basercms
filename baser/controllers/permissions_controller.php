@@ -138,6 +138,7 @@ class PermissionsController extends AppController {
 
 		if(!$this->data) {
 			$this->data = $this->Permission->getDefaultValue();
+			$this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
 		}else {
 			/* 登録処理 */
 			if(isset($this->data['Permission']['user_group_id'])){
