@@ -24,8 +24,8 @@
 	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
 	<center>
-		<?php $baser->img('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")); ?>
-		<?php $baser->img('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")); ?>
+		<?php $baser->link($baser->getImg('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")),'http://basercms.net') ?>
+		<?php $baser->link($baser->getImg('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")),'http://cakephp.jp') ?>
 		<font size="1">(C)BaserCMS</font>
 	</center>
 </div>
