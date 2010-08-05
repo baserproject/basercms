@@ -64,6 +64,14 @@ class MaintenanceController extends AppController {
 		$this->pageTitle = 'メンテナンス中';
 
 	}
-
+/**
+ * [モバイル] メンテナンス中ページを表示する
+ *
+ * @return 	void
+ * @access	public
+ */
+	function mobile_index() {
+		$this->pageTitle = 'メンテナンス中';
+	}
 }
 ?>

@@ -47,7 +47,7 @@ class CaptchaComponent extends Object {
  * @access	public
  */
 	function startup(&$controller) {
-        $this->controller = $controller;
+        $this->controller =& $controller;
 	}
 /**
  * キャプチャ画象を表示する
@@ -83,15 +83,12 @@ class CaptchaComponent extends Object {
  * @access	public
  */
 	function convert($key){
-		$alphabets = str_split($this->alphabet);
-		
-		$converts = array();
-		for($i=0;$i<mb_strlen( $this->convert ,'UTF-8' );$i++){
-			$converts[] = mb_substr( $this->convert , $i, 1,"UTF-8" );
-		}
+
+		$alphabets = $this->strSplit($this->alphabet);
+		$converts = $this->strSplit($this->convert);
 
 		$value = '';
-		$keys = str_split($key);
+		$keys = $this->strSplit($key);
 		foreach ($keys as $key){
 			$idx = array_search($key, $alphabets);
 			if($idx === false){
@@ -100,7 +97,27 @@ class CaptchaComponent extends Object {
 				$value .= $converts[$idx];
 			}
 		}
+		
 		return $value;
 	}
+/**
+ * 文字列を１文字づつ分割して配列にする
+ * PHP5であれば、str_splitが使える
+ * @param	string	$str
+ * @return	array
+ * @access	public
+ */
+	function strSplit($str) {
+		
+		$arr = array();
+		if (is_string($str)) {
+			for ($i = 0; $i < mb_strlen($str,'UTF-8'); $i++) {
+				array_push($arr, mb_substr($str, $i, 1, 'UTF-8'));
+			}
+		}
+		return $arr;
+		
+	}
+	
 }
 ?>

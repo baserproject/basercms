@@ -86,6 +86,18 @@ class DashboardController extends AppController {
 		$this->set('viewDblogs',$this->Dblog->findAll("","","created desc",12));
 
 	}
+/**
+ * [ADMIN] 最近の動きを削除
+ */
+	function admin_del(){
 
+		if($this->Dblog->deleteAll('1 = 1')){
+			$this->Session->setFlash('最近の動きのログを削除しました。');
+		} else {
+			$this->Session->setFlash('最近の動きのログ削除に失敗しました。');
+		}
+		$this->redirect(array('action'=>'index'));
+
+	}
 }
 ?>

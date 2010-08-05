@@ -55,6 +55,9 @@
 					<?php echo $record['Dblog']['name'] ?></li>
 				<?php endforeach; ?>
 			</ul>
+			<div class="align-center">
+				<?php $baser->link('削　除',array('action'=>'del'), array('class'=>'btn-gray button'), '最近の動きのログを削除します。いいですか？') ?>
+			</div>
 			<?php endif; ?>
 		</div>
 		<div class="box-foot"> &nbsp; </div>

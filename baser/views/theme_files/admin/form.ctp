@@ -68,9 +68,9 @@ $imgExts = array('png','gif','jpg');
 			</div>
 			<?php else: ?>
 				<?php if($this->action != 'admin_view'): ?>
-			<?php echo $formEx->textarea('ThemeFile.contents',array('cols'=>80, 'rows'=>20)) ?> <?php echo $formEx->error('ThemeFile.contents') ?>&nbsp;
+			<?php echo $formEx->textarea('ThemeFile.contents',array('cols'=>80, 'rows'=>30)) ?> <?php echo $formEx->error('ThemeFile.contents') ?>&nbsp;
 				<?php else: ?>
-			<?php echo $formEx->textarea('ThemeFile.contents',array('cols'=>80, 'rows'=>20, 'readonly'=>'readonly')) ?>
+			<?php echo $formEx->textarea('ThemeFile.contents',array('cols'=>80, 'rows'=>30, 'readonly'=>'readonly')) ?>
 				<?php endif ?>
 			<?php endif ?></td>
 	</tr>
@@ -89,7 +89,7 @@ $imgExts = array('png','gif','jpg');
 	<?php else: ?>
 	<?php // プラグインのアセットの場合はコピーできない ?>
 		<?php if($theme == 'core' && !(($type=='css' || $type=='js' || $type=='img') && $plugin)): ?>
-	<?php $baser->link('現在のテーマにコピー',array('action'=>'copy_to_theme',$theme, $plugin, $type , $path) , array('class'=>'btn-red button'), '本当に現在のテーマ「'.Inflector::camelize($theme).'」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'); ?>
+	<?php $baser->link('現在のテーマにコピー',array('action'=>'copy_to_theme',$theme, $plugin, $type , $path) , array('class'=>'btn-red button'), '本当に現在のテーマ「'.Inflector::camelize($siteConfig['theme']).'」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'); ?>
 		<?php endif ?>
 	<?php endif ?>
 </div>

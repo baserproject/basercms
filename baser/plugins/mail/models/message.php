@@ -572,7 +572,7 @@ class Message extends MailAppModel {
  */
 	function _createCsv($contentName) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 		$fileName = $db->config['database'].DS.$this->getTablePrefixByContentName($contentName).'messages.csv';
 		$fields = '"id","created","modified"';
 		$file = new File($fileName);
@@ -639,7 +639,7 @@ class Message extends MailAppModel {
  */
 	function _renameCsv($source,$target) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 		$sourceFile = $db->config['database'].DS.$this->getTablePrefixByContentName($source).'messages.csv';
 		$targetFile = $db->config['database'].DS.$this->getTablePrefixByContentName($target).'messages.csv';
 		$ret = rename($sourceFile,$targetFile);
@@ -662,7 +662,7 @@ class Message extends MailAppModel {
  */
 	function _renameTable($source,$target) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 
 		$sourceName = $this->getTablePrefixByContentName($source).'messages';
 		$targetName = $this->getTablePrefixByContentName($target).'messages';
@@ -704,7 +704,7 @@ class Message extends MailAppModel {
  */
 	function _deleteCsv($contentName) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 		$fileName = $db->config['database'].DS.$this->getTablePrefixByContentName($contentName).'messages.csv';
 		$file = new File($fileName);
 		$ret = $file->delete();
@@ -725,7 +725,7 @@ class Message extends MailAppModel {
  */
 	function _deleteTable($contentName) {
 
-		$db =& $this->getDataSource();
+		$db = $this->getDataSource();
 		$tableName = $this->getTablePrefixByContentName($contentName).'messages';
 		$ret = $db->execute('DROP TABLE '.$tableName);
 		if($ret && $contentName == 'messages') {

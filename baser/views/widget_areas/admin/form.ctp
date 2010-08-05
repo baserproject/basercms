@@ -20,10 +20,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
+<!--[if !IE]><![IGNORE[--><![IGNORE[]]>
 <script type="text/javascript">
 $(function() {
 	$(".ui-widget-content").corner('10px');
+	$("#Target").corner('10px');
+	$("#Source").corner('10px');
+});
+</script>
+<!--<![endif]-->
+<script type="text/javascript">
+$(function() {
+	
 
 	var sortableOptions = {
 		scroll: true,
@@ -357,7 +365,7 @@ function updateWidget(id) {
 <?php echo $formEx->end() ?>
 <div id="WidgetSetting" class="clearfix" >
 
-	<div id="Source" class="corner10">
+	<div id="Source">
 
 		<h3>利用できるウィジェット</h3>
 		<?php foreach($widgetInfos as $widgetInfo) : ?>
@@ -419,7 +427,7 @@ foreach($widgetInfo['paths'] as $path){
 		<?php endforeach ?>
 	</div>
 
-	<div id="Target" class="corner10">
+	<div id="Target">
 		<h3>利用中のウィジェット <?php $baser->img('ajax-loader-s.gif',array('style'=>'vertical-align:middle;display:none','id'=>'WidgetAreaUpdateSortLoader','class'=>'loader')) ?></h3>
 		<?php if($formEx->value('WidgetArea.widgets')): ?>
 			<?php foreach($formEx->value('WidgetArea.widgets') as $widget): ?>

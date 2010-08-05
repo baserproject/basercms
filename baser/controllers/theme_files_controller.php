@@ -292,7 +292,7 @@ class ThemeFilesController extends AppController {
 		$this->pageTitle = '['.Inflector::camelize($theme).'] '.$this->_tempalteTypes[$type].' 編集：　'.$filename;
 		$this->navis[$this->_tempalteTypes[$type]] = '/admin/theme_files/index/'.$theme.'/'.$type;
 		$this->subMenuElements = array('theme_files');
-		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)).'/');
+		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)).DS);
 		$this->set('theme',$theme);
 		$this->set('plugin',$plugin);
 		$this->set('type', $type);
@@ -395,7 +395,7 @@ class ThemeFilesController extends AppController {
 			$target = 'フォルダ';
 		} else {
 			$pathinfo = pathinfo($fullpath);
-			$newPath = $pathinfo['dirname'].DS.$pathinfo['filename'].'_copy';
+			$newPath = $pathinfo['dirname'].DS.basename($fullpath,'.'.$pathinfo['extension']).'_copy';
 			while(true) {
 				if(!file_exists($newPath.'.'.$pathinfo['extension'])) {
 					$newPath .= '.'.$pathinfo['extension'];

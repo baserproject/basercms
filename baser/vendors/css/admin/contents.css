@@ -541,3 +541,15 @@ select.multiple option {
 #WidgetSetting #WidgetAreaUpdateTitleForm{
 	display: inline;
 }
+#ThemeFileContents{
+	width:580px;
+}
+
+#TwitterStatus {
+	width:560px;
+}
+
+#Target .setting textarea {
+	width:298px;
+	height:310px;
+}

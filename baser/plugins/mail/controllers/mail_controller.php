@@ -55,7 +55,11 @@ class MailController extends MailAppController {
  * @var 	array
  * @access 	public
  */
-	var $components = array('Email','EmailEx','Security','Captcha');
+	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
+	// そのためSecurityコンポーネントが利用できない
+	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
+	//var $components = array('Email','EmailEx','Security','Captcha');
+	var $components = array('Email','EmailEx','Captcha');
 /**
  * CSS
  *
@@ -129,7 +133,9 @@ class MailController extends MailAppController {
 
 		$this->subMenuElements = array('default');
 
-		$this->Security->requireAuth('submit');
+		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
+		// 詳細はコンポーネント設定のコメントを参照
+		//$this->Security->requireAuth('submit');
 		
 	}
 /**

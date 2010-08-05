@@ -32,6 +32,12 @@ class WidgetAreasController extends AppController {
  */
 	var $name = 'WidgetAreas';
 /**
+ * コンポーネント
+ * @var		array
+ * @access	public
+ */
+	var $components = array('RequestHandler');
+/**
  * ヘルパー
  * @var		array
  * @access	public
@@ -112,7 +118,7 @@ class WidgetAreasController extends AppController {
 		$widgetArea = $this->WidgetArea->read(null,$id);
 		if($widgetArea['WidgetArea']['widgets']){
 			$widgetArea['WidgetArea']['widgets'] = $widgets = unserialize($widgetArea['WidgetArea']['widgets']);
-			usort($widgetArea['WidgetArea']['widgets'], 'widgetSourt');
+			usort($widgetArea['WidgetArea']['widgets'], 'widgetSort');
 			foreach($widgets as $widget){
 				$key = key($widget);
 				$widgetArea[$key] = $widget[$key];
@@ -257,6 +263,7 @@ class WidgetAreasController extends AppController {
  * @access	public
  */
 	function admin_update_sort($widgetAreaId) {
+
 		if(!$widgetAreaId || !$this->data){
 			exit();
 		}
@@ -327,7 +334,7 @@ class WidgetAreasController extends AppController {
 		$widgetArea = $this->WidgetArea->read(null,$id);
 		if($widgetArea['WidgetArea']['widgets']){
 			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
-			usort($widgets, 'widgetSourt');
+			usort($widgets, 'widgetSort');
 			return $widgets;
 		}
 	}
@@ -340,7 +347,7 @@ class WidgetAreasController extends AppController {
  * @param array $b
  * @return int
  */
-function widgetSourt($a, $b){
+function widgetSort($a, $b){
 	
 	$aKey = key($a);
 	$bKey = key($b);
