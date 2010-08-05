@@ -83,7 +83,7 @@ class OAuth_Consumer {
 		$this->url = $requestTokenURL;
 		$parameters['oauth_callback'] = $callback;
 		$request = $this->createRequest($httpMethod, $requestTokenURL, null, $parameters);
-		
+
 		return $this->doRequest($request);
 	}
 	
@@ -118,7 +118,7 @@ class OAuth_Consumer {
 	/**
 	 * @access	private
 	 */
-	function &createRequest($httpMethod, $url, &$token, $parameters) {
+	function &createRequest($httpMethod, $url, $token, $parameters) {
 		$consumer =& $this->createConsumer();
 		$request =& OAuthRequest::from_consumer_and_token($consumer, $token, $httpMethod, $url, $parameters);
 		$sha1 =& new OAuthSignatureMethod_HMAC_SHA1();
