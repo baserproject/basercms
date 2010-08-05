@@ -34,10 +34,11 @@ if(!empty($no)){
 			if($widget[$key]['status']){
 				$params = array();
 				$params['widget']=true;
-				if(empty($_SESSION['Auth']['User'])){
+				if(empty($_SESSION['Auth']['User']) && empty($cache)){
 					$params['cache']='+1 month';
 				}
 				$params = am($params,$widget[$key]);
+				$params[$id] = $id;
 				$baser->element('widgets/'.$widget[$key]['element'],$params);
 			}
 		}
