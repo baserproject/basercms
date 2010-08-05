@@ -151,14 +151,21 @@
 				$parameter = str_replace($base.'/','',$_SERVER['REQUEST_URI']);
 			}
 		}else {
+			$parameter = '';
 			$query = $_SERVER['QUERY_STRING'];
-			if(!empty($query) && strpos($query, '=')) {
-				$aryPath = explode('=',$query);
-				if($aryPath[0]=='url') {
-					$parameter = $aryPath[1];
+			if(!empty($query)){
+				if(strpos($query, '&')){
+					$queries = split('&',$query);
+					foreach($queries as $_query) {
+						if(strpos($_query, '=')){
+							list($key,$value) = split('=',$_query);
+							if($key=='url'){
+								$parameter = $value;
+								break;
+							}
+						}
+					}
 				}
-			}else {
-				$parameter = '';
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
