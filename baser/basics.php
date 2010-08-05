@@ -165,7 +165,15 @@
 							}
 						}
 					}
+				}else{
+					if(strpos($query, '=')){
+						list($key,$value) = split('=',$query);
+						if($key=='url'){
+							$parameter = $value;
+						}
+					}
 				}
+
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
