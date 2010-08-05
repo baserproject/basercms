@@ -100,7 +100,7 @@ class BlogHelper extends AppHelper {
  */
 	function postTitle($post) {
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
-		$this->Baser->link($post['BlogPost']['name'], $url,array('prefix'=>true));
+		$this->Baser->link($post['BlogPost']['name'], $url);
 	}
 /**
  * コンテンツを表示する
@@ -183,11 +183,7 @@ class BlogHelper extends AppHelper {
 				$path[] = $category['BlogCategory']['name'];
 			}
 		}
-		$_url = array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives',implode(DS,$path));
-		if(!empty($this->params['prefix']) && $this->params['prefix'] != 'admin') {
-			$_url[$this->params['prefix']] = true;
-		}
-		$url = Router::url($_url);
+		$url = Router::url(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives',implode(DS,$path)));
 		return str_replace($this->base,'',$url);
 
 	}
