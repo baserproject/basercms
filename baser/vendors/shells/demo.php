@@ -55,8 +55,7 @@ class DemoShell extends Shell {
 				$siteConfig = $this->SiteConfig->findExpanded();
 				$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
 				$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
-				$siteConfig['twitter_username'] = 'basercms';
-                $siteConfig['demo_on'] = true;
+        $siteConfig['demo_on'] = true;
 				$ret = $this->SiteConfig->saveKeyValue($siteConfig);
 				if($ret){
 					$pages = $this->Page->find('all');
