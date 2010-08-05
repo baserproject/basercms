@@ -55,7 +55,14 @@ $(function() {
 				return;
 			}
 
-			var baseId = $("#Target .setting").length + 1;
+			var baseId = 0;
+			$("#Target .setting").each(function () {
+				var _baseId = $(this).attr('id').replace('Setting','');
+				if(_baseId > baseId){
+					baseId = _baseId;
+				}
+			});
+			baseId++;
 			var id = ui.item.attr("id").replace('Widget','');
 			var sourceId = id.replace('Widget','');
 			var settingId = 'Setting' + (baseId);
@@ -110,7 +117,7 @@ $(function() {
 	$("#Target .sortable").each(function(k,v){
 		registWidgetEvent($(this).attr('id').replace('Setting',''));
 	});
-	
+
 	<?php if($this->action == 'admin_edit'): ?>
 	$("#WidgetAreaUpdateTitleSubmit").click(function(){
 		widgetAreaUpdateTitle();
@@ -123,7 +130,7 @@ $(function() {
  * ウィジェットごとにid/nameをリネームする
  */
 function renameWidget(baseId){
-	
+
 	var settingId = 'Setting'+baseId;
 	$("#"+settingId+' .form').attr('id','WidgetUpdateWidgetForm'+baseId);
 	$("#WidgetUpdateWidgetForm"+baseId).children().each(function(){
@@ -137,13 +144,13 @@ function renameWidget(baseId){
 		}
 	});
 	$("#"+settingId+" label[for=WidgetStatus]").attr('for','WidgetStatus'+baseId);
-	
+
 }
 /**
  * ウィジェットイベントを登録
  */
 function registWidgetEvent(baseId){
-	
+
 	var settingId = 'Setting'+baseId;
 	$("#WidgetUpdateWidgetSubmit"+baseId).click(function (){
 		updateWidget(baseId);
@@ -169,13 +176,13 @@ function registWidgetEvent(baseId){
 		}
 		delWidget(baseId);
 	});
-	
+
 }
 /**
  * ウィジェットを削除
  */
 function delWidget(id){
-	
+
 	$.ajax({
 		url: '<?php $baser->root() ?>admin/widget_areas/del_widget/<?php echo $formEx->value('WidgetArea.id') ?>/'+id,
 		type: 'GET',
@@ -204,7 +211,7 @@ function delWidget(id){
 		}
 
 	});
-	
+
 }
 /**
  * 並び順を更新する
@@ -239,7 +246,7 @@ function widgetAreaUpdateSortedIds(){
 			$("#WidgetAreaUpdateSortLoader").hide();
 		}
 	});
-	
+
 }
 /**
  * タイトルを更新する
@@ -273,7 +280,7 @@ function widgetAreaUpdateTitle(){
 			$("#WidgetAreaUpdateTitleLoader").hide();
 		}
 	});
-	
+
 }
 /**
  * ウィジェットを更新する
@@ -309,7 +316,7 @@ function updateWidget(id) {
 		}
 
 	});
-	
+
 }
 </script>
 
