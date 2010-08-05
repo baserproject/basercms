@@ -67,7 +67,7 @@
 			<?php endif ?></td>
 		<td><?php echo $theme['name'] ?></td>
 		<td>
-			<?php if($theme['name']!='core'): ?>
+			<?php if($theme['name']!='core' && $theme['screenshot']): ?>
 				<?php $baser->link($baser->getImg('/themed/'.$theme['name'].'/screenshot.png',array('alt'=>$theme['title'],'width'=>'80px','align'=>'left','style'=>'margin-right:10px;border:1px solid #e2e2e2')),'/themed/'.$theme['name'].'/screenshot.png',array('rel'=>'colorbox')) ?>
 			<?php endif ?>
 			<?php echo $theme['title'] ?>
