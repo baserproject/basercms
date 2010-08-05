@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * コンテンツ用の設定。全ての下層ページから読み込まれる。
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -264,7 +264,8 @@
 }
 /* side-navi
 ----------------------------------------------- */
-.side-navi h2 {
+.side-navi h2,
+.widget h2 {
 	background:url(images/bg_blt_01.gif) no-repeat 10px 4px;
 	font-family:Arial, Helvetica, sans-serif;
 	padding:5px 30px 5px 35px;
@@ -273,10 +274,12 @@
 	vertical-align:bottom;
 	width:115px;
 }
-.side-navi ul {
+.side-navi ul,
+.widget ul {
 	margin-left:25px;
 }
-.side-navi ul li {
+.side-navi ul li ,
+.widget ul li {
 	background:url(images/bg_blt_02.gif) no-repeat left 5px;
 	padding-left:20px;
 	line-height:20px!important;
@@ -518,7 +521,7 @@ select.multiple option {
 	width: 340px;
 	min-height:210px;
 	border: 1px solid #CCCCCC;
-	padding-bottom: 10px;
+	padding-bottom: 40px;
 }
 #WidgetSetting #Target .enabled .head{
 	color:#000000;
