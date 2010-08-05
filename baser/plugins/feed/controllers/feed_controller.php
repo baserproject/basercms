@@ -36,6 +36,12 @@ class FeedController extends FeedAppController {
  */
 	var $name = 'Feed';
 /**
+ * コンポーネント
+ * @var		array
+ * @access	public
+ */
+	var $components = array('RequestHandler');
+/**
  * モデル
  *
  * @var 	array
@@ -49,13 +55,6 @@ class FeedController extends FeedAppController {
  * @access 	public
  */
 	var $helpers = array('Cache','TextEx');
-/**
- * レイアウト
- *
- * @var		string
- * @access 	public
- */
-	var $layout = 'feed';
 /**
  * beforeFilter
  *
@@ -219,7 +218,7 @@ class FeedController extends FeedAppController {
 
 		Configure::write('debug', 0);
 		$this->cacheAction = true;
-		$this->layout = "js";
+		$this->layout = "ajax";
 
 		// idを設定
 		$this->set('id',$id);
