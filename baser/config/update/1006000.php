@@ -110,6 +110,7 @@ App::import('Model','Blog.BlogCategory');
 	}else{
 		$this->setUpdateMessage('widget_area フィールドの追加に失敗しました。手動で追加してください。');
 	}
+	$theme = $SiteConfig->field('value',array('SiteConfig.name'=>'theme'));
 /**
  * PageCategory データ更新
  * ・mobile カテゴリを追加
@@ -133,12 +134,11 @@ App::import('Model','Blog.BlogCategory');
  * ・
  */
 	$this->setUpdateMessage('bc_pages のデータを更新します。',true, true);
-	$theme = $this->siteConfigs['theme'];
 	$Page = new Page();
 	$Page->recursive = -1;
 	$pages = $Page->find('all');
 	foreach($pages as $page){
-		if($page['Page']['theme'] == $theme){
+		if(!$theme && $page['Page']['theme'] == $theme){
 			if($page['Page']['name']=='index' && !$page['Page']['page_category_id']){
 				$page['Page']['url'] = '/index';
 				$Page->set($page);
