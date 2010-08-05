@@ -20,4 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php include BASER_VIEWS.'elements'.DS .'sidebar.ctp' ?>
+<div id="beta">
+	<?php $baser->element('submenu',array(),false,false) ?>
+</div>
