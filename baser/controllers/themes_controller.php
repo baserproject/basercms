@@ -31,7 +31,7 @@ class ThemesController extends AppController {
  * @var		array
  * @access	public
  */
-	var $uses = array();
+	var $uses = array('Page');
 /**
  * コンポーネント
  *
@@ -51,15 +51,22 @@ class ThemesController extends AppController {
  * @access	public
  */
 	function admin_index(){
-		
+
 		$this->pageTitle = 'テーマ一覧';
 		$path = WWW_ROOT.'themed';
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
 		foreach($files[0] as $themename){
 			if($themename != 'core'){
-				$themeName = $description = $author = $url = '';
-				include $path.DS.$themename.DS.'config.php';
+				$themeName = $title = $description = $author = $url = $screenshot = '';
+				if(file_exists($path.DS.$themename.DS.'config.php')){
+					include $path.DS.$themename.DS.'config.php';
+				}
+				if(file_exists($path.DS.$themename.DS.'screenshot.png')){
+					$theme['screenshot'] = true;
+				}else{
+					$theme['screenshot'] = false;
+				}
 				$theme['name'] = $themename;
 				$theme['title'] = $title;
 				$theme['description'] = $description;
@@ -71,7 +78,7 @@ class ThemesController extends AppController {
 		$themes[] = array('name'=>'core','title'=>'BaserCMSコア','description'=>'BaserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。','author'=>'basercms','url'=>'http://basercms.net');
 		$this->set('themes',$themes);
 		$this->subMenuElements = array('themes');
-		
+
 	}
 /**
  * テーマをコピーする
@@ -81,7 +88,7 @@ class ThemesController extends AppController {
  * @access	public
  */
 	function admin_copy($theme){
-		
+
 		if(!$theme){
 			$this->notFound();
 		}
@@ -97,7 +104,7 @@ class ThemesController extends AppController {
 		$folder->copy(array('from'=>$path,'to'=>$newPath,'chmod'=>0777,'skip'=>array('_notes')));
 		$this->Session->setFlash('テーマ「'.$theme.'」をコピーしました。');
 		$this->redirect(array('action'=>'index'));
-		
+
 	}
 /**
  * テーマを削除する
@@ -107,7 +114,7 @@ class ThemesController extends AppController {
  * @access	public
  */
 	function admin_del($theme){
-		
+
 		if(!$theme){
 			$this->notFound();
 		}
@@ -120,7 +127,7 @@ class ThemesController extends AppController {
 		clearViewCache();
 		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
 		$this->redirect(array('action'=>'index'));
-		
+
 	}
 /**
  * テーマを適用する
@@ -137,9 +144,13 @@ class ThemesController extends AppController {
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
-		$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
+		if(!$this->Page->createAllPageTemplate()){
+				$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+		} else {
+			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
+		}
 		$this->redirect(array('action'=>'index'));
 	}
-	
+
 }
 ?>
