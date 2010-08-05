@@ -72,7 +72,10 @@ class PagesController extends AppController {
 			$this->helpers[] = 'Cache';
 			$this->cacheAction = '1 month'; // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
 		}
-
+		
+		if(!empty($this->params['admin'])){
+			$this->navis = array('ページ管理'=>'/admin/pages/index');
+		}
 	}
 /**
  * [ADMIN] ページリスト

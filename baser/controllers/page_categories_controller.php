@@ -55,6 +55,12 @@ class PageCategoriesController extends AppController {
  */
 	var $components = array('Auth','Cookie','AuthConfigure');
 /**
+ * パンくず
+ * @var			array
+ * @access	public
+ */
+	var $navis = array('ページ管理'=>'/admin/pages/index');
+/**
  * [ADMIN] ページカテゴリーリスト
  *
  * @return	void
