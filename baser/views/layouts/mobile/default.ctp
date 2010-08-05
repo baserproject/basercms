@@ -19,8 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-?>
-<cake:nocache><?php $mobile->header() ?></cake:nocache><?php $baser->xmlHeader() ?><?php $baser->docType() ?>
+?><cake:nocache><?php $mobile->header() ?></cake:nocache><?php $baser->xmlHeader() ?><?php $baser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
 <?php $baser->charset() ?>
