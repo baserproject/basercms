@@ -131,7 +131,12 @@ class GlobalMenusController extends AppController {
 
 		if(!$this->data) {
 			$this->data['GlobalMenu']['status'] = 0;
-			$this->data['GlobalMenu']['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
+			$menuType = $this->Session->read('Filter.GlobalMenu.menu_type');
+			if($menuType){
+				$this->data['GlobalMenu']['menu_type'] = $menuType;
+			}else{
+				$this->data['GlobalMenu']['menu_type'] = 'default';
+			}
 		}else {
 
 			/* 登録処理 */
