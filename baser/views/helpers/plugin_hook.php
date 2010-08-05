@@ -48,15 +48,15 @@ class PluginHookHelper extends AppHelper {
 		$view = ClassRegistry::getObject('View');
 		if(!empty($view->enablePlugins)) {
 			$plugins = $view->enablePlugins;
-		}else {			
+		}else {
 			$plugins = array();
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {				
+			if ($db->isInterfaceSupported('listSources')) {
 				$sources = $db->listSources();
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
 					$Plugin =& ClassRegistry::init('Plugin','Model');
-					$plugins = $Plugin->find('all');
+					$plugins = $Plugin->find('all',array('fields'=>array('name')));
 					$plugins = Set::extract('/Plugin/name',$plugins);
 				}
 			}
@@ -64,7 +64,7 @@ class PluginHookHelper extends AppHelper {
 
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
-		foreach($plugins as $plugin) {			
+		foreach($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
 			if(App::import('Helper',$pluginName.'.'.$pluginName.'Hook')) {
 				$pluginHooks[] = $pluginName;
@@ -75,7 +75,7 @@ class PluginHookHelper extends AppHelper {
 		$vars = array('base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin');
 		$c = count($vars);
 		foreach($pluginHooks as $key => $pluginName) {
-			
+
 			// 各プラグインのプラグインフックを初期化
 			$className=$pluginName.'HookHelper';
 			$this->pluginHooks[$pluginName] =& new $className();
@@ -86,12 +86,12 @@ class PluginHookHelper extends AppHelper {
 			}
 
 			// 各プラグインの関数をフックに登録する
-			if(isset($this->pluginHooks[$pluginName]->registerHooks)){				
+			if(isset($this->pluginHooks[$pluginName]->registerHooks)){
 				foreach ($this->pluginHooks[$pluginName]->registerHooks as $hookName){
 					$this->registerHook($hookName, $pluginName);
 				}
 			}
-			
+
 		}
 
 		/* beforeRenderをフック */
@@ -106,13 +106,13 @@ class PluginHookHelper extends AppHelper {
  * @access	pubic
  */
 	function registerHook($hookName, $pluginName){
-		
+
 		if(!isset($this->registerHooks[$hookName])){
 			$this->registerHooks[$hookName] = array();
 		}
 
 		$this->registerHooks[$hookName][] = $pluginName;
-		
+
 	}
 
 	function executeHook($hookName, $out = null){

@@ -38,7 +38,7 @@ if(!empty($no)){
 					$params['cache']='+1 month';
 				}
 				$params = am($params,$widget[$key]);
-				$params[$id] = $id;
+				$params[$widget[$key]['id']] = $widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
 				$baser->element('widgets/'.$widget[$key]['element'],$params);
 			}
 		}

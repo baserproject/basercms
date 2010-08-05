@@ -46,11 +46,11 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function __construct() {
-		
+
 		$this->_view =& ClassRegistry::getObject('view');
 
 		if(isInstalled()){
-			
+
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
 			}else {
@@ -752,15 +752,15 @@ class BaserHelper extends AppHelper {
  * コア側のコントローラーでいちいちヘルパの定義をしなくてよくなり、
  * プラグインを導入しただけでテンプレート上でプラグインのメソッドが呼び出せるようになる。
  * 例えばページ機能のWISIWIG内でプラグインのメソッドを書き込む事ができる。
- * 
+ *
  * プラグインのBaserヘルパの命名規則：{プラグイン名}BaserHelper
  * （呼びだし方）$baser->feed(1);
- * 
+ *
  * @return	void
  * @access	public
  */
 	function _initPluginBasers(){
-		
+
 		$view = $this->_view;
 		if(!empty($view->enablePlugins)) {
 			$plugins = $view->enablePlugins;
@@ -771,10 +771,10 @@ class BaserHelper extends AppHelper {
 			}else {
 				$Plugin = ClassRegistry::init('Plugin');
 			}
-			$plugins = $Plugin->find('all');
+			$plugins = $Plugin->find('all',array('fields'=>array('name')));
 			$plugins = Set::extract('/Plugin/name',$plugins);
 		}
-		
+
 		$pluginBasers = array();
 		foreach($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
@@ -794,13 +794,13 @@ class BaserHelper extends AppHelper {
 				}
 			}
 		}
-		
+
 	}
 /**
  * プラグインBaserヘルパ用マジックメソッド
- * 
+ *
  * Baserヘルパに存在しないメソッドが呼ばれた際プラグインのBaserヘルパを呼び出す
- * 
+ *
  * @param string $method
  * @param array $params
  * @return mixed

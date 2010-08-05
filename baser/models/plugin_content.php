@@ -83,7 +83,7 @@ class PluginContent extends AppModel {
 
 		$mobilePrefix = Configure::read('Mobile.prefix');
 		$mobileOn = Configure::read('Mobile.on');
-		$pluginContents = $this->findAll();
+		$pluginContents = $this->find('all',array('fields'=>array('name','plugin')));
 		if(!$pluginContents) {
 			return false;
 		}

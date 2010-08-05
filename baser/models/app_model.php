@@ -751,14 +751,14 @@ class AppModel extends Model {
  */
 	function findExpanded() {
 
-		$dbDatas = $this->find('all');
+		$dbDatas = $this->find('all',array('fields'=>array('name','value')));
 		if($dbDatas) {
 			foreach($dbDatas as $dbData) {
 				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];
 			}
 		}
 		return $expandedData;
-		
+
 	}
 /**
  * Key Value 形式のテーブルにデータを保存する
@@ -766,17 +766,17 @@ class AppModel extends Model {
  * @return	boolean
  */
 	function saveKeyValue($data) {
-		
+
 		if(isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
 
 		$result = true;
-		
+
 		foreach($data as $key => $value) {
-			
+
 			$dbData = $this->find('first', array('conditions'=>array('name'=>$key)));
-			
+
 			if(!$dbData) {
 				$dbData = array();
 				$dbData[$this->alias]['name'] = $key;
@@ -792,12 +792,12 @@ class AppModel extends Model {
 			if(!$this->save(null,false)) {
 				$result = false;
 			}
-			
+
 		}
-		
+
 		return true;
-		
+
 	}
-	
+
 }
 ?>
