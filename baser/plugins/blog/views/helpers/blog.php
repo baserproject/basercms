@@ -183,7 +183,7 @@ class BlogHelper extends AppHelper {
 				$path[] = $category['BlogCategory']['name'];
 			}
 		}
-		$url = Router::url(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives',implode(DS,$path)));
+		$url = Router::url(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives',implode('/',$path)));
 		return str_replace($this->base,'',$url);
 
 	}
