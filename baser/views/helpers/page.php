@@ -70,7 +70,7 @@ class PageHelper extends Helper {
  * @return array
  */
 	function getCategory() {
-		if(isset($this->data['PageCategory'])) {
+		if(!empty($this->data['PageCategory']['id'])) {
 			return $this->data['PageCategory'];
 		}else {
 			return false;
