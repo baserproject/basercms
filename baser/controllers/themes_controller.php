@@ -121,9 +121,11 @@ class ThemesController extends AppController {
 		$path = WWW_ROOT.'themed'.DS.$theme;
 		$folder = new Folder();
 		$folder->delete($path);
-		$siteConfig['SiteConfig']['theme'] = '';
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		$SiteConfig->saveKeyValue($siteConfig);
+		if($theme == $siteConfig['SiteConfig']['theme']){
+			$siteConfig['SiteConfig']['theme'] = '';
+			$SiteConfig = ClassRegistry::getObject('SiteConfig');
+			$SiteConfig->saveKeyValue($siteConfig);
+		}
 		clearViewCache();
 		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
 		$this->redirect(array('action'=>'index'));
