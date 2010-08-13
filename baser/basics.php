@@ -174,6 +174,9 @@
 					}
 				}
 
+			}elseif ($_SERVER['REQUEST_URI'] == '/index'){
+				// さくらインターネットで、/index とした場合、QUERY_STRINGが空になってしまう
+				$parameter = 'index';
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
