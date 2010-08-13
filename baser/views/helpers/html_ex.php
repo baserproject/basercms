@@ -37,20 +37,6 @@ class HtmlExHelper extends HtmlHelper {
  */
 	var $helpers = array('Javascript');
 /**
- * Constructor.
- *
- * @return	void
- * @access	private
- */
-	function __construct() {
-
-		parent::__construct();
-
-		$this->tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />&nbsp;';
-		$this->tags['hiddenmultiple'] = '<input type="hidden" name="data[%s][%s][%s]" value="%s" />';
-
-	}
-/**
  * 画像の即時反映用のパラメータとして乱数を出力
  *
  * @return	int		乱数

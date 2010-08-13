@@ -105,7 +105,7 @@ class AppHelper extends Helper {
 		parent::__construct();
 
 		$this->tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />&nbsp;';
-		$this->tags['hiddenmultiple'] = '<input type="hidden" name="%s" %s />';
+		$this->tags['hiddenmultiple'] = '<input type="hidden" name="%s[]" %s />';
 
 	}
 /**
