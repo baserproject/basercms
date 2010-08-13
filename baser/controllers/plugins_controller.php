@@ -108,6 +108,11 @@ class PluginsController extends AppController {
  */
 	function getContentId() {
 
+		// 管理画面の場合には取得しない
+		if(!empty($this->params['admin'])){
+			return null;
+		}
+
 		if(!isset($this->PluginContent)) {
 			return null;
 		}
