@@ -114,14 +114,6 @@ class PagesController extends AppController {
 				$this->passedArgs['num'] = $this->Session->read('Filter.Page.num');
 			}
 		}
-		
-		// 並び替え処理
-		if(!empty($this->params['named']['sortup'])) {
-			$this->Page->sortup($this->params['named']['sortup'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
-		}
-		if(!empty($this->params['named']['sortdown'])) {
-			$this->Page->sortdown($this->params['named']['sortdown'],array('Page.page_category_id'=>$this->data['Page']['page_category_id']));
-		}
 
 		/* 条件を生成 */
 		$conditions = array();
@@ -141,7 +133,7 @@ class PagesController extends AppController {
 				}
 				$conditions['Page.page_category_id'] = $pageCategoryIds;
 			}else {
-				$conditions['Page.page_category_id'] = '';
+				$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
 			}
 		}
 		// ステータス
@@ -149,6 +141,17 @@ class PagesController extends AppController {
 			$conditions['Page.status'] = $this->data['Page']['status'];
 		}
 
+
+		// 並び替え処理
+		$this->Page->fileSave = false;
+		if(!empty($this->params['named']['sortup'])) {
+			$this->Page->sortup($this->params['named']['sortup'],$conditions);
+		}
+		if(!empty($this->params['named']['sortdown'])) {
+			$this->Page->sortdown($this->params['named']['sortdown'],$conditions);
+		}
+
+		
 		$this->paginate = array(
 				'conditions' => $conditions,
 				'fields' => array(),
