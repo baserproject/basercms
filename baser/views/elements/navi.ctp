@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -29,6 +29,8 @@ if ($this->viewPath == 'home'){
 	}
 	if ($this->viewPath != 'home' && $title_for_element){
 		$html->addCrumb('<strong>'.$title_for_element.'</strong>');
+	}else{
+		$html->addCrumb('<strong>404 NOT FOUND</strong>');
 	}
 	echo $html->getCrumbs(' &gt; ','ホーム');
 }
