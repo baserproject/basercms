@@ -268,7 +268,9 @@ class AppController extends Controller {
 		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
 		$this->set('siteConfig',$this->siteConfigs);
-		$this->set('widgetArea',$this->siteConfigs['widget_area']);
+		if(isset($this->siteConfigs['widget_area'])){
+			$this->set('widgetArea',$this->siteConfigs['widget_area']);
+		}
 
 	}
 /**
