@@ -134,7 +134,7 @@ INSERT INTO `bc__mail_fields` ( `mail_content_id`, `no`, `name`, `field_name`, `
 (1, 8,'電話番号１', 'tel_1', 'text', '電話番号', '', '', '-', '', 5, 0, 5, '', '', '', '', '', 'tel', 'tel', '', 'VALID_GROUP_COMPLATE', 'CONVERT_HANKAKU', 0, 1, 0, 8, NOW(), NOW()),
 (1, 9,'電話番号２', 'tel_2', 'text', '電話番号', '', '', '-', '', 5, 0, 5, '', '', '', '', '', 'tel', 'tel', '', 'VALID_GROUP_COMPLATE', 'CONVERT_HANKAKU', 0, 1, 0, 9, NOW(), NOW()),
 (1, 10,'電話番号３', 'tel_3', 'text', '電話番号', '', '', '', '', 5, 0, 5, '', '', '', '', '', 'tel', 'tel', '', 'VALID_GROUP_COMPLATE', 'CONVERT_HANKAKU', 0, 1, 0, 10, NOW(), NOW()),
-(1, 11,'郵便番号', 'zip', 'autozip', '住所', '[半角数字]', '〒', '<br />', 'address_1|address_2', 10, 0, 8, '', '', '', '', '', 'address', '', '', '', 'CONVERT_HANKAKU', 0, 1, 0, 11, NOW(), NOW()),
+(1, 11,'郵便番号', 'zip', 'autozip', '住所', '[半角数字]<br />', '〒', '', 'address_1|address_2', 10, 0, 8, '', '', '', '', '', 'address', '', '', '', 'CONVERT_HANKAKU', 0, 1, 0, 11, NOW(), NOW()),
 (1, 12,'都道府県', 'address_1', 'pref', '住所', '', '', '<br />', '', 0, 0, 0, '', '', '', '', '', 'address', '', '', '', '', 0, 1, 0, 12, NOW(), NOW()),
 (1, 13,'市区町村・番地', 'address_2', 'text', '住所', '', '', '<br />', '', 30, 0, 200, '', '', '', '', '', 'address', '', '', '', '', 0, 1, 0, 13, NOW(), NOW()),
 (1, 14,'建物名', 'address_3', 'text', '住所', '', '', '', '', 30, 0, 200, '', '', '', '', '', 'address', '', '', '', '', 0, 1, 0, 14, NOW(), NOW()),

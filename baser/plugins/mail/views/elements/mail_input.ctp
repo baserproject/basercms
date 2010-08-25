@@ -56,11 +56,11 @@ if (!empty($mailFields)) {
 			if (!$field['no_send'] || !$freezed) {
 				echo $mailform->control($field['type'], "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record));
 			}
-			if (!$freezed) {
-				echo $field['attention'];
-			}
 			if (!$freezed || $mailform->value("Message." . $field['field_name'])) {
 				echo $field['after_attachment'];
+			}
+			if (!$freezed) {
+				echo $field['attention'];
 			}
 			if (!$field['group_valid']) {
 				if($mailform->error("Message." . $field['field_name'] . "_format", "check")) {
