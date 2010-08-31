@@ -222,7 +222,10 @@ class BaserHelper extends AppHelper {
 		
 		// サイトタイトルを追加
 		if ($title && !empty($this->siteConfig['name'])) {
-			$title .= $separator.$this->siteConfig['name'];
+			$title .= $separator;
+		}
+		if (!empty($this->siteConfig['name'])) {
+			$title .= $this->siteConfig['name'];
 		}
 
 		return $title;
