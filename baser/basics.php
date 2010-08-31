@@ -285,6 +285,9 @@
  * なければ生成する
  */
 	function checkTmpFolders(){
+		if(!is_writable(TMP)){
+			return;
+		}
 		App::import('Core','Folder');
 		$folder = new Folder();
 		$folder->create(TMP.'logs',0777);

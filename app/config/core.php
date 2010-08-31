@@ -69,7 +69,7 @@
  * Turn off all caching application-wide.
  *
  */
-	Configure::write('Cache.disable', false);
+	Configure::write('Cache.disable', true);
 /**
  * Enable cache checking.
  *
@@ -98,7 +98,7 @@
  * To use database sessions, execute the SQL file found at /app/config/sql/sessions.sql.
  *
  */
-	Configure::write('Session.save', 'cake');
+	Configure::write('Session.save', 'php');
 /**
  * The name of the table used to store CakePHP database sessions.
  *

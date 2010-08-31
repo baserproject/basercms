@@ -578,7 +578,9 @@ class InstallationsController extends AppController {
 		/* セキュリティsaltの設定 */
 		$salt = $this->createKey(40);
 		Configure::write('Security.salt',$salt);
-		$installCoreData = array("<?php","Configure::write('Security.salt', '".$salt ."');");
+		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$salt ."');",
+											"Configure::write('Cache.disable', false);");
+
 
 		// データベース設定ファイルに設定内容を書き込む
 		$this->_writeDatabaseConfig($this->Session->read('Installation.dbType'),
