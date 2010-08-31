@@ -35,7 +35,7 @@
 		<li>テーマを削除するには、対象テーマの「削除」ボタンをクリックします。</li>
 	</ul>
 </div>
-<table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableUsers">
+<table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableThemes">
 	<tr>
 		<th>操作</th>
 		<th>テーマ名</th>
@@ -54,17 +54,20 @@
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button" style="width:170px;">
+		<td class="operation-button" style="width:170px">
 			<?php if($theme['name'] != 'core'): ?>
+			<p>
 			<?php if($theme['name']!=$baser->siteConfig['theme']): ?>
 			<?php $baser->link('適用',array('action'=>'apply', $theme['name']), array('class'=>'btn-green-s button-s')) ?>
 			<?php endif ?>
 			<?php $baser->link('コピー',array('action'=>'copy', $theme['name']), array('class'=>'btn-red-s button-s')) ?>
+			<?php $baser->link('編集',array('action'=>'edit', $theme['name']), array('class'=>'btn-orange-s button-s')) ?>
+			</p>
 			<?php endif ?>
-			<?php $baser->link('管理',array('controller'=>'theme_files','action'=>'index', $theme['name']), array('class'=>'btn-orange-s button-s')) ?>
+			<p><?php $baser->link('管理',array('controller'=>'theme_files','action'=>'index', $theme['name']), array('class'=>'btn-red-s button-s')) ?>
 			<?php if($theme['name'] != 'core'): ?>
 			<?php $baser->link('削除', array('action'=>'del', $theme['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $theme['name']),false); ?>
-			<?php endif ?></td>
+			<?php endif ?></p></td>
 		<td><?php echo $theme['name'] ?></td>
 		<td>
 			<?php if($theme['name']!='core' && $theme['screenshot']): ?>

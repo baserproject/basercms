@@ -31,7 +31,7 @@ class ThemesController extends AppController {
  * @var		array
  * @access	public
  */
-	var $uses = array('Page');
+	var $uses = array('Theme','Page');
 /**
  * コンポーネント
  *
@@ -81,6 +81,64 @@ class ThemesController extends AppController {
 
 	}
 /**
+ * テーマ名編集
+ * 
+ * @param	string	$theme
+ * @return	void
+ * @access	public
+ */
+	function admin_edit($theme){
+		
+		if(!$theme){
+			$this->notFound();
+		}
+		$themePath = WWW_ROOT.'themed'.DS.$theme.DS;
+		$title = $description = $author = $url = '';
+		include $themePath.'config.php';
+		
+		if(!$this->data){
+			$this->data['Theme']['name'] = $theme;
+			$this->data['Theme']['title'] = $title;
+			$this->data['Theme']['description'] = $description;
+			$this->data['Theme']['author'] = $author;
+			$this->data['Theme']['url'] = $url;
+		}else{
+			$this->data['Theme']['old_name'] = $theme;
+			$this->Theme->set($this->data);
+			if($this->Theme->save()){
+				$this->Session->setFlash('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
+				$this->redirect(array('action'=>'index'));
+			}else{
+				$this->Session->setFlash('テーマ情報の変更に失敗しました。入力内容を確認してください。');
+			}
+		}
+
+		if(is_writable($themePath)){
+			$folderDisabled = '';
+		}else{
+			$folderDisabled = 'disabled';
+			$this->data['Theme']['name'] = $theme;
+		}
+
+		if(is_writable($themePath.'config.php')){
+			$configDisabled = '';
+		}else{
+			$configDisabled = 'disabled';
+			$this->data['Theme']['title'] = $title;
+			$this->data['Theme']['description'] = $description;
+			$this->data['Theme']['author'] = $author;
+			$this->data['Theme']['url'] = $url;
+		}
+
+		$this->pageTitle = 'テーマ情報編集';
+		$this->subMenuElements = array('themes');
+		$this->set('theme',$theme);
+		$this->set('configDisabled',$configDisabled);
+		$this->set('folderDisabled',$folderDisabled);
+		$this->render('form');
+		
+	}
+/**
  * テーマをコピーする
  *
  * @param	string	$theme
@@ -118,6 +176,7 @@ class ThemesController extends AppController {
 		if(!$theme){
 			$this->notFound();
 		}
+		$siteConfig = array('SiteConfig'=>$this->siteConfigs);
 		$path = WWW_ROOT.'themed'.DS.$theme;
 		$folder = new Folder();
 		$folder->delete($path);

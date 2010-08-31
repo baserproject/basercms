@@ -103,11 +103,14 @@ td ul {
 	line-height:1.2em!important;
 }
 .operation-button {
-	text-align:center!important;
+	text-align:right!important;
 	padding:0;
 	margin:0;
 	white-space:nowrap;
 	vertical-align:middle;
+}
+.operation-button .button-s{
+	text-align: center!important;
 }
 /* row-table-01
 ----------------------------------------------- */
