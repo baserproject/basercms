@@ -22,16 +22,17 @@
 if ($this->viewPath == 'home'){
 	echo '<strong>ホーム</strong>';
 }else{
+	$navis = $baser->getNavis();
 	if (!empty($navis)){
-		foreach($navis as $key => $navi){
-			$html->addCrumb($key,$navi);
+		foreach($navis as $key => $value){
+			$baser->addCrumb($key,$value);
 		}
 	}
 	if ($this->viewPath != 'home' && $title_for_element){
-		$html->addCrumb('<strong>'.$title_for_element.'</strong>');
-	}else{
-		$html->addCrumb('<strong>404 NOT FOUND</strong>');
+		$baser->addCrumb('<strong>'.$title_for_element.'</strong>');
+	}elseif($this->name == 'CakeError'){
+		$baser->addCrumb('<strong>404 NOT FOUND</strong>');
 	}
-	echo $html->getCrumbs(' &gt; ','ホーム');
+	$baser->crumbs(' &gt; ','ホーム');
 }
 ?>

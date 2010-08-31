@@ -208,40 +208,56 @@ class BaserHelper extends AppHelper {
 		}else {
 			$title = $this->_view->pageTitle;
 		}
+		
+		$navis = $this->getNavis($categoryTitleOn);
+		if($navis){
+			$navis = array_reverse($navis,true);
+			foreach ($navis as $key => $value) {
+				if($title){
+					$title .= $separator;
+				}
+				$title .= $key;
+			}
+		}
+		
+		// サイトタイトルを追加
+		if ($title && !empty($this->siteConfig['name'])) {
+			$title .= $separator.$this->siteConfig['name'];
+		}
+
+		return $title;
+
+	}
+/**
+ * ナビゲーション配列を取得する
+ * 
+ * @param mixid $categoryTitleOn
+ * @return array
+ */
+	function getNavis($categoryTitleOn = null){
 
 		// ページカテゴリを追加
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
+
+		$navis = array();
 		if($this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
-				// MODIFIED 2010/07/06 ryuring
-				// $this->_views->viewVars['navis'] より取得するようにした
-				// >>>
-				/*$PageCategory =& ClassRegistry::getObject('PageCategory','Model');
-				$categoryName = $PageCategory->field('title',array('name'=>$this->_view->viewVars['page']));
-				$title .= $separator.$categoryName;*/
-				// ---
-				$navis = array_reverse($this->_view->viewVars['navis'],true);
-				foreach($navis as $navi => $url) {
-					$title.= $separator.$navi;
+				if($this->_view->viewVars['navis']){
+					$navis = $this->_view->viewVars['navis'];
 				}
-				// <<<
 			}else {
-				$title .= $separator.$this->_categoryTitle;
+				if(is_array($this->_categoryTitle)){
+					$navis = $this->_categoryTitle;
+				}else{
+					$navis = array($this->_categoryTitle=>'');
+				}
 			}
 		}
 
-		// サイトタイトルを追加
-		if ($title && !empty($this->siteConfig['name'])) {
-			$title .= $separator;
-		}
-		if(!empty($this->siteConfig['name'])) {
-			$title .= $this->siteConfig['name'];
-		}
-
-		return $title;
-
+		return $navis;
+		
 	}
 /**
  * コンテンツタイトルを取得する
