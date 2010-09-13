@@ -47,8 +47,8 @@
 	<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
 	<?php endif; ?>
 	<?php if($freezed): ?>
-	　 <?php echo $mailform->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button"))  ?>
+	　 <?php echo $mailform->end(array('label'=>'　送信する　','div'=>false, "class"=>"btn-red button", 'id'=>'MessageSubmit'))  ?>
 	<?php elseif($this->action != 'submit'): ?>
-	<?php echo $mailform->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button"))  ?>
+	<?php echo $mailform->end(array('label'=>'　入力内容を確認する　','div'=>false, "class"=>"btn-orange button", 'id'=>'MessageConfirm'))  ?>
 	<?php endif; ?>
 </div>
