@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -22,21 +22,24 @@
 $group_field = null;
 foreach($mailFields as $field) {
 	$field = $field['MailField'];
-	if( $field['use_field'] && ($group_field != $field['group_field']  || (!$group_field && !$field['group_field']))):
+	if( $field['use_field'] && isset($message[$field['field_name']]) &&  ($group_field != $field['group_field']  || (!$group_field && !$field['group_field']))):
 ?>
 
 
-◇◆ <?php echo $field['head'] ?> 
+◇◆ <?php echo $field['head'] ?>
 ----------------------------------------
 <?php
-	endif;echo"　";
-	if(!empty($field['before_attachment']) && !empty($message[$field['field_name']])){
+	endif;
+	if(isset($message[$field['field_name']])){
+		echo"　";
+	}
+	if(!empty($field['before_attachment']) && isset($message[$field['field_name']])){
 		echo " ".$field['before_attachment'];
 	}
-	if(!empty($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']){
+	if(isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']){
 		echo $maildata->control($field['type'],$message[$field['field_name']],$mailfield->getOptions($field));
 	}
-	if(!empty($field['after_attachment']) && !empty($message[$field['field_name']])){
+	if(!empty($field['after_attachment']) && isset($message[$field['field_name']])){
 		echo " ".$field['after_attachment'];
 	}
 	$group_field = $field['group_field'];
