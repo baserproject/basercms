@@ -184,7 +184,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 				if($this->Page->save($this->data,false)) {
-					$id = $this->Page->getLastInsertId();
+					$id = $this->Page->getInsertID();
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
@@ -294,16 +294,7 @@ class PagesController extends AppController {
 	function admin_entry_page_files() {
 
 		// 現在のテーマのページファイルのパスを取得
-		if($this->siteConfigs['theme']) {
-			$pagesPath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'pages';
-		}else {
-			if(is_dir(VIEWS.'pages')) {
-				$pagesPath = VIEWS.'pages';
-			}else {
-				$pagesPath = BASER_VIEWS.'pages';
-			}
-		}
-
+		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 
 		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
