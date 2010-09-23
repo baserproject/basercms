@@ -322,8 +322,6 @@ class InstallationsController extends AppController {
 		/* DBポート */
 		if (isset($postdata['installation']['dbPort'])) {
 			$this->set('dbPort', $postdata['installation']['dbPort']);
-		} else {
-			$this->set('dbPort', '3306');
 		}
 
 		if (isset($postdata['installation']['dbHost'])) {
