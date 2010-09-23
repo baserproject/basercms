@@ -58,6 +58,10 @@
  */
 	Configure::write('Baser.title','コーポレートサイトにちょうどいいCMS - BaserCMS - ');
 /**
+ * 標準キャッシュ時間設定
+ */
+	Configure::write('Baser.cachetime','1 month');
+/**
  * ベース URL を編集
  * エックスサーバーではSCRIPT_NAMEが正常に取得できなかったのでここで書き換える
  * install.phpを優先する事

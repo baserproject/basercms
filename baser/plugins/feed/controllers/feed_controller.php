@@ -54,7 +54,7 @@ class FeedController extends FeedAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Cache','TextEx');
+	var $helpers = array('Cache','TextEx','Feed.Feed');
 /**
  * beforeFilter
  *
@@ -77,6 +77,8 @@ class FeedController extends FeedAppController {
  */
 	function index($id) {
 
+		$this->navis = array();
+		
 		// IDの指定がなかった場合はエラーとする
 		if(!$id) {
 			$this->render('error');
@@ -92,7 +94,7 @@ class FeedController extends FeedAppController {
 			$this->render('error');
 			return;
 		}
-		$cacheTime = 0;
+		$cachetime = 0;
 		foreach($feedDetails as $feedDetail) {
 
 			// フィードを取得する
@@ -119,8 +121,8 @@ class FeedController extends FeedAppController {
 			$feed = $this->RssEx->findAll($url ,null, $feedDetail['FeedDetail']['cache_time'] ,$categoryFilter);
 			$feeds[] = $feed;
 
-			if($cacheTime < (strtotime($feedDetail['FeedDetail']['cache_time'])-time())) {
-				$cacheTime = (strtotime($feedDetail['FeedDetail']['cache_time'])-time());
+			if($cachetime < (strtotime($feedDetail['FeedDetail']['cache_time'])-time())) {
+				$cachetime = (strtotime($feedDetail['FeedDetail']['cache_time'])-time());
 			}
 
 
@@ -175,18 +177,17 @@ class FeedController extends FeedAppController {
 		}
 
 		// 日付で並び替え
-		$this->_bsort($items,'timestamp','DESC');
+		usort($items, array($this, "_sortDescByTimestamp"));
 
 		// 件数で絞り込み
 		$items = array_slice($items, 0, $feedConfig['FeedConfig']['display_number']);
 
 		/* キャッシュを設定 */
-		if(isset($_SESSION['Auth']['User'])) {
-			$this->cacheAction = 0;
-		}else {
-			$this->cacheAction = $cacheTime;
+		if(!isset($_SESSION['Auth']['User'])) {
+			$this->cacheAction =$cachetime;
 		}
 
+		$this->set('cachetime', $cachetime);
 		$this->set('items',$items);
 		$this->render($feedConfig['FeedConfig']['template']);
 
@@ -217,12 +218,25 @@ class FeedController extends FeedAppController {
 		}
 
 		Configure::write('debug', 0);
-		$this->cacheAction = true;
+		$this->cacheAction = Configure::read('Baser.cachetime');
 		$this->layout = "ajax";
 
 		// idを設定
 		$this->set('id',$id);
 
+	}
+/**
+ * タイムスタンプを元に降順に並び替える
+ * 
+ * @param array $a
+ * @param array $b
+ * @return 
+ */
+	function _sortDescByTimestamp($a, $b) {
+		if ($a['timestamp'] == $b['timestamp']) {
+			return 0;
+		}
+		return ($a['timestamp'] > $b['timestamp']) ? -1 : 1;
 	}
 /*
  * バブルソート

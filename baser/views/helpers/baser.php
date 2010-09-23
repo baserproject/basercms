@@ -737,13 +737,26 @@ class BaserHelper extends AppHelper {
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  */
-	function cacheHeader() {
-		header('Cache-Control: max-age=' . 86400);
-		header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", filemtime(WWW_ROOT.'index.php') ) . " GMT" );
-		if (session_id()) { //session_startしている場合
-			header('Expires: ' . gmdate( "D, d M Y H:i:s", filemtime(WWW_ROOT.'index.php')+86400 ) . " GMT");
-			header('Pragma: ');
+	function cacheHeader($expire = DAY, $type='html') {
+
+		$contentType = array(
+			'html' => 'text/html',
+			'js' => 'text/javascript', 'css' => 'text/css',
+			'gif' => 'image/gif', 'jpg' => 'image/jpeg', 'png' => 'image/png'
+		);
+		$fileModified = filemtime(WWW_ROOT.'index.php');
+		if(!is_numeric($expire)){
+			$expire = strtotime($expire);
 		}
+		header("Date: " . date("D, j M Y G:i:s ", $fileModified) . 'GMT');
+		header("Last-Modified: " . gmdate( "D, d M Y H:i:s", $fileModified) . " GMT");
+		header('Content-type: ' . $contentType[$type]);
+		header("Expires: " . gmdate("D, j M Y H:i:s", time() + $expire) . " GMT");
+		header('Cache-Control: max-age=' . $expire);
+		// Firefoxの場合は不要↓
+		//header("Cache-Control: cache");
+		header("Pragma: cache");
+
 	}
 /**
  * httpから始まるURLを取得する

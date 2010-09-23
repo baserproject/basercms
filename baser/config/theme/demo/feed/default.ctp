@@ -2,12 +2,13 @@
 /**
  * フィード
  */
+$feed->saveCachetime();
 ?>
 <cake:nocache>
-	<?php $baser->cacheHeader() ?>
+	<?php $feed->cacheHeader() ?>
 </cake:nocache>
-<?php if(!empty($items)): ?>
 
+<?php if(!empty($items)): ?>
 <ul>
 	<?php foreach($items as $key => $item): ?>
 		<?php $no = sprintf('%02d',$key+1) ?>

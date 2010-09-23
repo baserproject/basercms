@@ -68,9 +68,9 @@ class PagesController extends AppController {
 		$this->Auth->allow('display','mobile_display');
 
 		$noCache = array();
-		if((empty($this->params['prefix']) || !in_array($this->params['prefix'],$noCache)) && !isset($_SESSION['Auth']['User'])) {
+		if($this->params['prefix'] != 'admin' && !isset($_SESSION['Auth']['User'])) {
 			$this->helpers[] = 'Cache';
-			$this->cacheAction = '1 month'; // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
+			$this->cacheAction = Configure::read('Baser.cachetime'); // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
 		}
 		
 		if(!empty($this->params['admin'])){
