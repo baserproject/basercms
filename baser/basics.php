@@ -297,4 +297,25 @@
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
 	}
+/**
+ * 現在のビューディレクトリのパスを取得する
+ * 
+ * @return string
+ */
+	function getViewPath() {
+		
+		if (ClassRegistry::isKeySet('SiteConfig')) {
+			$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		}else {
+			$SiteConfig = ClassRegistry::init('SiteConfig');
+		}
+		$siteConfig = $SiteConfig->findExpanded();
+		$theme = $siteConfig['theme'];
+		if($theme) {
+			return WWW_ROOT.'themed'.DS.$theme.DS;
+		}else {
+			return VIEWS;
+		}
+
+	}
 ?>

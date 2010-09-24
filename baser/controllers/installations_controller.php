@@ -322,8 +322,6 @@ class InstallationsController extends AppController {
 		/* DBポート */
 		if (isset($postdata['installation']['dbPort'])) {
 			$this->set('dbPort', $postdata['installation']['dbPort']);
-		} else {
-			$this->set('dbPort', '3306');
 		}
 
 		if (isset($postdata['installation']['dbHost'])) {
@@ -396,17 +394,22 @@ class InstallationsController extends AppController {
 
 				if (!isset($db->error)) {
 					$result = $db->execute("drop TABLE $randomtablename");
-				}
-
-				if (!isset($db->error)) {
 					$blDBSettingsOK = true;
 					$this->Session->setFlash('データベースへの接続に成功しました。');
 					$this->set('blDBSettingsOK',$blDBSettingsOK);
+				} else {
+					$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
 				}
 
+			} else {
+				if (!$this->Session->read('Message.flash.message')) {
+					if($db->connection){
+						$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
+					} else {
+						$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。");
+					}
+				}
 			}
-
-
 
 			/* 「次のステップへ」クリック時 */
 		} elseif (isset($params['data']['buttonclicked']) &&

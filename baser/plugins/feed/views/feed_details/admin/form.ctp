@@ -62,7 +62,7 @@
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('FeedDetail.cache_time', 'キャッシュ時間') ?></th>
-		<td class="col-input"><?php echo $formEx->select('FeedDetail.cache_time', $formEx->getControlSource('cache_time')) ?> <?php echo $formEx->error('FeedDetail.cache_time') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCacheTime','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input"><?php echo $formEx->select('FeedDetail.cache_time', $formEx->getControlSource('cache_time'),null,null,'なし') ?> <?php echo $formEx->error('FeedDetail.cache_time') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpCacheTime','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextCacheTime" class="helptext"> 負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択して下さい。<br />
 			</div>
 			&nbsp; </td>

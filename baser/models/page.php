@@ -65,6 +65,15 @@ class Page extends AppModel {
  */
 	var $_unpublishes = -1;
 /**
+ * 最終登録ID
+ * 
+ * モバイルページへのコピー処理でスーパークラスの最終登録IDが上書きされ、
+ * コントローラーからは正常なIDが取得できないのでモバイルページへのコピー以外の場合だけ保存する
+ * 
+ * @var int
+ */
+	var $__pageInsertID = null;
+/**
  * beforeValidate
  * @return	boolean
  * @access	public
@@ -127,6 +136,15 @@ class Page extends AppModel {
 
 	}
 /**
+ * 最終登録IDを取得する
+ * 
+ * @return	int
+ * @access	public
+ */
+	function getInsertID(){
+		return $this->__pageInsertID;
+	}
+/**
  * ページテンプレートファイルが開けるかチェックする
  * @param	array	$data	ページデータ
  * @return	boolean
@@ -169,23 +187,56 @@ class Page extends AppModel {
 
 		// モバイルデータの生成
 		if(!empty($data['reflect_mobile'])){
+
+			// モバイルページへのコピーでスーパークラスのIDを上書きしてしまうので退避させておく
+			$this->__pageInsertID = parent::getInsertID();
+			
 			$mobileId = $this->PageCategory->getMobileId();
 			if(!$mobileId){
 				// モバイルカテゴリがない場合は trueを返して終了
 				return true;
 			}
-			$id = $this->PageCategory->getIdByPath('/mobile'.$data['url']);
+
+			$mobilePage = $this->find('first',array('conditions'=>array('Page.url'=>'/mobile'.$data['url']),'recursive'=>-1));
+			
 			unset($data['id']);
+			unset($data['sort']);
 			unset($data['status']);
-			unset($data['url']);
 			unset($data['modified']);
-			unset($data['reflect_mobile']);
-			$data['page_category_id'] = $mobileId;
-			$data['url'] = $this->getPageUrl($data);
-			if($id){
-				$data['id'] = $id;
+			$data['reflect_mobile'] = false;
+
+			if($mobilePage){
+				$data['id'] = $mobilePage['Page']['id'];
+				$data['page_category_id'] = $mobilePage['Page']['page_category_id'];
+				$data['url'] = $mobilePage['Page']['url'];
+				$data['sort'] = $mobilePage['Page']['sort'];
+				$data['status'] = $mobilePage['Page']['status'];
+				$data['created'] = $mobilePage['Page']['created'];
 				$this->set($data);
 			}else{
+				if($data['page_category_id']){
+					$fields = array('parent_id','name','title');
+					$pageCategoryTree = $this->PageCategory->getTreeList($fields,$data['page_category_id']);
+					$path = getViewPath().'pages'.DS.'mobile';
+					$parentId = $mobileId;
+					foreach($pageCategoryTree as $pageCategory) {
+						$path .= '/'.$pageCategory['PageCategory']['name'];
+						$categoryId = $this->PageCategory->getIdByPath($path);
+						if(!$categoryId){
+							$pageCategory['PageCategory']['parent_id'] = $parentId;
+							$this->PageCategory->create($pageCategory);
+							$ret = $this->PageCategory->save();
+							$parentId = $categoryId = $this->PageCategory->getInsertID();
+						}else{
+							$parentId = $categoryId;
+						}
+					}
+					$data['page_category_id'] = $categoryId;
+				}else{
+					$data['page_category_id'] = $mobileId;
+				}
+				$data['sort'] = $this->getMax('sort')+1;
+				$data['url'] = '/mobile'.$data['url'];
 				$data['status'] = false;	// 新規ページの場合は非公開とする
 				$this->create($data);
 			}

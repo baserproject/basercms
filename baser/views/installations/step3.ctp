@@ -155,8 +155,10 @@ $(document).ready( function() {
 		if(!$('#installationDbDBName').val()){
 			$('#installationDbDBName').val(dbName);
 		}
-		// ポートは上書きする
-		$('#installationDbPort').val(port);
+		if(!$('#installationDbPort').val()){
+			$('#installationDbPort').val(port);
+		}
+		
 	}
 </script>
 

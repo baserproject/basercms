@@ -200,17 +200,9 @@ class PageCategory extends AppModel {
 			$data = $data['PageCategory'];
 		}
 		
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		$siteConfig = $SiteConfig->findExpanded();
-		$theme = $siteConfig['theme'];
+		$path = $pagesPath = getViewPath().'pages'.DS;
 		$categoryName = $data['name'];
 		$parentId = $data['parent_id'];
-
-		if($theme) {
-			$path = WWW_ROOT.'themed'.DS.$theme.DS.'pages'.DS;
-		}else {
-			$path = VIEWS.'pages'.DS;
-		}
 
 		if($parentId) {
 			$categoryPath = $this->getPath($parentId);
@@ -408,6 +400,17 @@ class PageCategory extends AppModel {
 			$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
 		}
 		return $this->_mobileId;
+	}
+
+	function getTreeList($fields,$id){
+		$this->recursive = -1;
+		$pageCategories = array();
+		$pageCategories[] = $pageCategory = $this->read($fields,$id);
+		if($pageCategory['PageCategory']['parent_id']){
+			$parents = $this->getTreeList($fields,$pageCategory['PageCategory']['parent_id']);
+			$pageCategories = am($parents,$pageCategories);
+		}
+		return $pageCategories;
 	}
 }
 ?>

@@ -58,6 +58,10 @@
  */
 	Configure::write('Baser.title','コーポレートサイトにちょうどいいCMS - BaserCMS - ');
 /**
+ * 標準キャッシュ時間設定
+ */
+	Configure::write('Baser.cachetime','1 month');
+/**
  * ベース URL を編集
  * エックスサーバーではSCRIPT_NAMEが正常に取得できなかったのでここで書き換える
  * install.phpを優先する事
@@ -95,6 +99,20 @@
  * 文字コードの検出順を指定
  */
 	mb_detect_order("ASCII,JIS,UTF-8,SJIS-win,EUC-JP");
+/**
+ * セッションタイムアウト設定
+ * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
+ */
+	if (function_exists('ini_set')) {
+		$sessionTimeouts = array('high'=>10,'medium'=>100,'low'=>300);
+		$securityLevel = Configure::read('Security.level');
+		if (isset($sessionTimeouts[$securityLevel])) {
+			$sessionTimeout = $sessionTimeouts[$securityLevel] * Configure::read('Session.timeout');
+			ini_set('session.gc_maxlifetime', $sessionTimeout);
+		} else {
+			trigger_error('Security.level の設定が間違っています。', E_USER_WARNING);
+		}		
+	}
 /**
  * モバイルルーティング設定
  */

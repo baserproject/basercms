@@ -126,6 +126,8 @@ class RssEx extends Rss {
 			// キャッシュをクリア
 			clearCache($this->__createCacheHash('', $url),'views','.rss');
 		}
+
+		// キャッシュを取得
 		$cachePath = $this->cacheFolder.$this->__createCacheHash('.rss', $url);
 		$rssData = cache($cachePath, null, $cacheExpires);
 
@@ -148,8 +150,12 @@ class RssEx extends Rss {
 			}
 
 			$rssData = $this->__convertSimplePie($feed->get_items());
-			cache($cachePath, serialize($rssData));
-			chmod(CACHE.$cachePath,0666);
+
+			// ログインしてなければキャッシュを作成
+			if(!isset($_SESSION['Auth']['User'])) {
+				cache($cachePath, serialize($rssData));
+				chmod(CACHE.$cachePath,0666);
+			}
 
 			if ($rssData) {
 				return $rssData;
