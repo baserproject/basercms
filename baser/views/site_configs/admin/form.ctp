@@ -89,12 +89,12 @@
 			&nbsp; </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.widget_area', 'ウィジェットエリア') ?></th>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.widget_area', '標準ウィジェットエリア') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->select('SiteConfig.widget_area', $formEx->getControlSource('WidgetArea.id'), null,null,false) ?>
 			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpWidgetArea','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextWidgetArea" class="helptext">
-				公開ページで利用するウィジェットエリアを指定します。<br />
+				公開ページ全般で利用するウィジェットエリアを指定します。<br />
 				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理',array('controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
 			</div>
 		</td>
