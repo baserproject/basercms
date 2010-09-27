@@ -26,7 +26,7 @@ foreach($mailFields as $field) {
 ?>
 
 
-◇◆ <?php echo $field['head'] ?>
+◇◆ <?php echo $field['head'] ?> 
 ----------------------------------------
 <?php
 	endif;
