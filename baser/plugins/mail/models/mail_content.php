@@ -65,6 +65,8 @@ class MailContent extends MailAppModel {
 		$this->validate['name'] = array(array(	'rule' => 'halfText',
 						'message' => '>> メールフォームアカウント名は半角のみで入力して下さい。',
 						'allowEmpty'=>false),
+				array(	'rule' => array('notInList', array('mail')),
+						'message' => '>> メールアカウント名に「mail」は利用できません。'),
 				array(	'rule' => array('isUnique'),
 						'on' => 'create',
 						'message' => '入力されたメールフォームアカウント名は既に使用されています。'));
