@@ -347,7 +347,7 @@ class AppController extends Controller {
 
 	}
 /**
- * Baserのバージョンを取得する
+ * BaserCMSのバージョンを取得する
  *
  * @return string Baserバージョン
  */
@@ -358,6 +358,22 @@ class AppController extends Controller {
 		$aryVersionData = split("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
 			return $aryVersionData[0];
+		}else {
+			return false;
+		}
+	}
+/**
+ * CakePHPのバージョンを取得する
+ *
+ * @return string Baserバージョン
+ */
+	function getCakeVersion() {
+		App::import('File');
+		$versionFile = new File(CAKE_CORE_INCLUDE_PATH.DS.CAKE.'VERSION.txt');
+		$versionData = $versionFile->read();
+		$aryVersionData = split("\n",$versionData);
+		if(!empty($aryVersionData[0])) {
+			return 'CakePHP '.$aryVersionData[0];
 		}else {
 			return false;
 		}
