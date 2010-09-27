@@ -798,6 +798,17 @@ class AppModel extends Model {
 		return true;
 
 	}
-
+/**
+ * リストチェック
+ * リストに含む場合はエラー
+ *
+ * @param string $check Value to check
+ * @param array $list List to check against
+ * @return boolean Succcess
+ * @access public
+ */
+	function notInList($check, $list) {
+		return !in_array($check[key($check)], $list);
+	}
 }
 ?>
