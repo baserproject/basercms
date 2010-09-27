@@ -42,6 +42,7 @@
 		</p>
 	</div>
 </div>
+
 <div class="float-left">
 	<div id="ranking" class="box-01">
 		<div class="box-head">
@@ -68,7 +69,11 @@
 		<div class="box-head">
 			<h3>BaserCMSニュース</h3>
 		</div>
-		<div class="box-body"> <?php echo $javascript->link('/feed/ajax/2') ?> </div>
+		<div class="box-body">
+			<?php echo $javascript->link('/feed/ajax/2') ?>
+			<br />
+			<small>BaserCMSについて、不具合の発見・改善要望がありましたら<a href="http://forum.basercms.net" target="_blank">ユーザーズフォーラム</a> よりお知らせください。</small>
+		</div>
 		<div class="box-foot"> &nbsp; </div>
 	</div>
 </div>
