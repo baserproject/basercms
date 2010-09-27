@@ -675,7 +675,7 @@ class DboSource extends DataSource {
 						$db =& $this;
 					}
 
-					if (isset($db)) {
+					if (isset($db) && method_exists($db, 'queryAssociation')) {
 						$stack = array($assoc);
 						$db->queryAssociation($model, $linkModel, $type, $assoc, $assocData, $array, true, $resultSet, $model->recursive - 1, $stack);
 						unset($db);
@@ -1487,8 +1487,10 @@ class DboSource extends DataSource {
 					$noJoin = false;
 					break;
 				}
-				$conditions[$field] = $value;
-				unset($conditions[$originalField]);
+				if ($field !== $originalField) {
+					$conditions[$field] = $value;
+					unset($conditions[$originalField]);
+				}
 			}
 			if ($noJoin === true) {
 				return $this->conditions($conditions);

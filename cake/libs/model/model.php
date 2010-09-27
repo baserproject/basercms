@@ -342,14 +342,14 @@ class Model extends Overloadable {
  *   eg. `ParentThread`
  *
  * ### Overriding Model's __construct method.
- * 
- * When overriding Model::__construct() be careful to include and pass in all 3 of the 
+ *
+ * When overriding Model::__construct() be careful to include and pass in all 3 of the
  * arguments to `parent::__construct($id, $table, $ds);`
  *
  * ### Dynamically creating models
  *
  * You can dynamically create model instances using the the $id array syntax.
- * 
+ *
  * {{{
  * $Post = new Model(array('table' => 'posts', 'name' => 'Post', 'ds' => 'connection2'));
  * }}}
@@ -538,10 +538,9 @@ class Model extends Overloadable {
  */
 	function bindModel($params, $reset = true) {
 		foreach ($params as $assoc => $model) {
-			if ($reset === true) {
+			if ($reset === true && !isset($this->__backAssociation[$assoc])) {
 				$this->__backAssociation[$assoc] = $this->{$assoc};
 			}
-
 			foreach ($model as $key => $value) {
 				$assocName = $key;
 
@@ -551,6 +550,10 @@ class Model extends Overloadable {
 				}
 				$modelName = $assocName;
 				$this->{$assoc}[$assocName] = $value;
+
+				if ($reset === false && isset($this->__backAssociation[$assoc])) {
+					$this->__backAssociation[$assoc][$assocName] = $value;
+				}
 			}
 		}
 		$this->__createLinks();
@@ -576,14 +579,14 @@ class Model extends Overloadable {
  */
 	function unbindModel($params, $reset = true) {
 		foreach ($params as $assoc => $models) {
-			if ($reset === true) {
+			if ($reset === true && !isset($this->__backAssociation[$assoc])) {
 				$this->__backAssociation[$assoc] = $this->{$assoc};
 			}
-
 			foreach ($models as $model) {
-				$this->__backAssociation = array_merge($this->__backAssociation, $this->{$assoc});
-				unset ($this->__backAssociation[$model]);
-				unset ($this->{$assoc}[$model]);
+				if ($reset === false && isset($this->__backAssociation[$assoc][$model])) {
+					unset($this->__backAssociation[$assoc][$model]);
+				}
+				unset($this->{$assoc}[$model]);
 			}
 		}
 		return true;
@@ -784,7 +787,7 @@ class Model extends Overloadable {
 		$this->schema();
 	}
 /**
- * This function does two things: 
+ * This function does two things:
  *
  * 1. it scans the array $one for the primary key,
  * and if that's found, it sets the current id to the value of $one[id].
@@ -1012,7 +1015,7 @@ class Model extends Overloadable {
 	}
 /**
  * Initializes the model for writing a new record, loading the default values
- * for those fields that are not defined in $data, and clearing previous validation errors. 
+ * for those fields that are not defined in $data, and clearing previous validation errors.
  * Especially helpful for saving data in loops.
  *
  * @param mixed $data Optional data array to assign to the model after it is created.  If null or false,
@@ -1121,7 +1124,7 @@ class Model extends Overloadable {
  * @param string $name Name of the table field
  * @param mixed $value Value of the field
  * @param array $validate See $options param in Model::save(). Does not respect 'fieldList' key if passed
- * @return boolean See Model::save()
+ * @return mixed See Model::save()
  * @access public
  * @see Model::save()
  * @link http://book.cakephp.org/view/75/Saving-Your-Data
@@ -1951,7 +1954,7 @@ class Model extends Overloadable {
  * second parameter options for finding ( indexed array, including: 'conditions', 'limit',
  * 'recursive', 'page', 'fields', 'offset', 'order')
  *
- * Eg: 
+ * Eg:
  * {{{
  *	find('all', array(
  *		'conditions' => array('name' => 'Thomas Anderson'),
@@ -2283,9 +2286,9 @@ class Model extends Overloadable {
 		return $this->afterFind($results, $primary);
 	}
 /**
- * Called only when bindTo<ModelName>() is used.
  * This resets the association arrays for the model back
- * to those originally defined in the model.
+ * to those originally defined in the model. Normally called at the end
+ * of each call to Model::find()
  *
  * @return boolean Success
  * @access public
@@ -2428,7 +2431,7 @@ class Model extends Overloadable {
 		$_validate = $this->validate;
 		$whitelist = $this->whitelist;
 
-		if (array_key_exists('fieldList', $options)) {
+		if (!empty($options['fieldList'])) {
 			$whitelist = $options['fieldList'];
 		}
 
