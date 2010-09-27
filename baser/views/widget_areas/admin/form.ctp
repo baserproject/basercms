@@ -344,7 +344,13 @@ function updateWidget(id) {
 	<ul>
 		<li>「利用中のウィジェット」はドラッグアンドドロップで並び替える事ができます。</li>
 		<li>一時的に利用しない場合は、削除せずにウィジェット設定の「利用する」チェックを外しておくと同じ設定のまま後で利用する事ができます。</li>
+		<?php if($this->action == 'admin_edit'): ?>
+		<li>システム設定より設定できる標準ウィジェットエリアの他、個別にウィジェットを配置する場合は、テンプレートや、ページ記事中（ソース）に次のコードを貼り付けます。</li>
+		<?php endif ?>
 	</ul>
+	<?php if($this->action == 'admin_edit'): ?>
+	<pre>&lt;?php $baser->element('widget_area', array('no'=> <?php echo $formEx->value('WidgetArea.id') ?> )) ?&gt;</pre>
+	<?php endif ?>
 </div>
 
 <?php if($this->action == 'admin_add'): ?>

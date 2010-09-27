@@ -73,6 +73,7 @@ h2 {
 	<li>設置フォルダ： <?php echo ROOT.DS ?></li>
 	<li>データベース： <?php echo $driver ?></li>
 	<li>BaserCMSバージョン： <?php echo $baserVersion ?></li>
+	<li>CakePHPバージョン： <?php echo $cakeVersion ?></li>
 </ul>
 <h3 style="margin-bottom:20px">PHP環境</h3>
 <?php phpinfo() ?>

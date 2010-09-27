@@ -222,6 +222,7 @@ class SiteConfigsController extends AppController {
 		$this->set('driver',$drivers[$db->config['driver']]);
 		$this->set('smartUrl',$smartUrl);
 		$this->set('baserVersion',$this->siteConfigs['version']);
+		$this->set('cakeVersion',$this->getCakeVersion());
 		$this->subMenuElements = array('site_configs');
 		
 	}

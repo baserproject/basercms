@@ -73,7 +73,7 @@
 	clear:both;
 }
 .clearfix:after {
-	content: ".";
+	content: " ";
 	display: block;
 	clear: both;
 	height: 0;

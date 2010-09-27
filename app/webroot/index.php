@@ -27,21 +27,13 @@
  * エラーメッセージを抑制する
  * インストール時等キャッシュディレクトリの書き込み権限がない事でエラーとなり正常に表示されない場合がある為
  */
- 	ini_set( "display_errors", "Off");
+	ini_set( "display_errors", "Off");
 /**
  * Use the DS to separate the directories in other defines
  */
 	if (!defined('DS')) {
 		define('DS', DIRECTORY_SEPARATOR);
 	}
-/**
- * TODO 未整理
- * baserディレクトリに全て配置する場合
- * APP_DIR は、ルートディレクトリからの相対パス
- */
-    //define('ROOT', dirname(dirname(__FILE__)));
-	//define('APP_DIR', 'baser'.DS. 'app');
-	//define('CAKE_CORE_INCLUDE_PATH', ROOT .DS. 'baser');
 /**
  * These defines should only be edited if you have cake installed in
  * a directory layout other than the way it is distributed.
@@ -54,13 +46,18 @@
  * 基本的には、cake が配置されているディレクトリをROOTとみなす。
  */
 	if (!defined('ROOT')) {
-		if(is_dir(dirname(dirname(dirname(__FILE__))).DS.'cake')){	// 通常パターン
+		/* 通常パターン */
+		if(is_dir(dirname(dirname(dirname(__FILE__))).DS.'cake')){
 			define('ROOT', dirname(dirname(dirname(__FILE__))));
-		// app内にcakeを配置（ほとんどない）チカッパでは DocumentoRoot のひとつ上の階層に cake を配置していた為、
+
+		// app内にcakeを配置
+		// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
 		// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
 		/*}elseif(is_dir(dirname(dirname(__FILE__)).DS.'cake')){		
 			define('ROOT', dirname(dirname(__FILE__)));*/
-		}elseif(is_dir(dirname(__FILE__).DS.'cake')){				// WEBROOT配置
+		
+		// WEBROOT配置
+		}elseif(is_dir(dirname(__FILE__).DS.'cake')){
 			define('ROOT', dirname(__FILE__));
 		}
 	}
