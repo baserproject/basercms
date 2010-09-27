@@ -26,7 +26,7 @@
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
-	<p>ウィジェットとはWEBページの指定した場所に容易に部品の追加・削除ができる仕組みです。<br />
+	<p>ウィジェットとは簡単にWEBページの指定した場所に部品の追加・削除ができる仕組みです。<br />
 		その部品の一つ一つをウィジェットと呼び、ウィジェットが集まった一つのグループをウィジェットエリアと呼びます。</p>
 	<p>全体で利用するウィジェットエリアは、「<?php $baser->link("サイト基本設定",array('controller'=>'site_configs','action'=>'form')) ?>」で設定できます。また、標準プラグインである、ブログ、メールではそれぞれ別のウィジェットエリアを個別に指定する事もできます。</p>
 	<ul>
