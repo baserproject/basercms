@@ -20,17 +20,28 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<?php $baser->js('sorttable',false) ?>
+
+<?php echo $formEx->create('Sort',array('action'=>'update_sort','url'=>am(array('controller'=>'mail_fields'),$this->passedArgs))) ?>
+	<?php echo $formEx->hidden('Sort.id') ?>
+	<?php echo $formEx->hidden('Sort.offset') ?>
+<?php echo $formEx->end() ?>
+
+<div id="pageMessage" class="message" style="display:none"></div>
 
 <h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+	<?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
+	<?php $baser->img('ajax-loader-s.gif',array('id'=>'ListAjaxLoader')) ?>
+</h2>
+
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>メールフォームの各フィールド（項目）の管理が行えます。</p>
 	<ul>
 		<li>新しいフィールドを登録するには、画面下の「新規登録」ボタンをクリックします。</li>
 		<li>メールフォームの表示を確認するには、サイドメニューの「公開ページ確認」をクリックします。</li>
-		<li>各フィールド左の▲▼をクリックする事で並び順を変更する事ができます。</li>
+		<li>画面一番下の「並び替えモード」をクリックすると、表示される<?php $baser->img('sort.png',array('alt'=>'並び替え')) ?>マークをドラッグアンドドロップして行の並び替えができます。</li>
 		<li>フィールドの設定をそのままコピーするにはコピーしたいフィールド左の「コピー」ボタンをクリックします。</li>
 		<li>メールフォームより受信した内容は、画面下の「受信メールCSV」よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事ができます。</li>
 	</ul>
@@ -38,7 +49,7 @@
 
 <p><strong>このメールフォームのURL：<?php $baser->link($baser->getUri('/'.$mailContent['MailContent']['name'].'/index'),'/'.$mailContent['MailContent']['name'].'/index',array('target'=>'_blank')) ?></strong></p>
 
-<table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableMailFields">
+<table cellpadding="0" cellspacing="0" class="admin-col-table-01 sort-table" id="TableMailFields">
 	<tr>
 		<th>操作</th>
 		<th>NO</th>
@@ -54,26 +65,30 @@
 		<?php $count=0; ?>
 		<?php foreach($listDatas as $listData): ?>
 			<?php if (!$listData['MailField']['use_field']): ?>
-				<?php $class=' class="disablerow"'; ?>
+				<?php $class=' class="disablerow sortable"'; ?>
 			<?php elseif ($count%2 === 0): ?>
-				<?php $class=' class="altrow"'; ?>
+				<?php $class=' class="altrow sortable"'; ?>
 			<?php else: ?>
-				<?php $class=''; ?>
+				<?php $class=' class="sortable"'; ?>
 			<?php endif; ?>
-	<tr<?php echo $class; ?>>
-		<td class="operation-button"><?php $baser->link('コピー',array('action'=>'copy', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
+	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
+		<td style="width:20%" class="operation-button">
+			<?php if($sortmode): ?>
+			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
+			<?php echo $formEx->hidden('Sort.id'.$listData['MailField']['id'],array('class'=>'id','value'=>$listData['MailField']['id'])) ?>
+			<?php endif ?>
+			<?php $baser->link('コピー',array('action'=>'copy', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-red-s button-s'),null,false) ?>
 			<?php $baser->link('編集',array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $mailContent['MailContent']['id'],$listData['MailField']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailField']['name']),false); ?>
-			<?php $baser->link('▲',array('action'=>'index',$mailContent['MailContent']['id'],'sortup'=>$listData['MailField']['id'])) ?>
-			<?php $baser->link('▼',array('action'=>'index',$mailContent['MailContent']['id'],'sortdown'=>$listData['MailField']['id'])) ?></td>
-		<td><?php echo $listData['MailField']['no'] ?></td>
-		<td><?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?></td>
-		<td><?php echo $listData['MailField']['name']; ?></td>
-		<td><?php echo $listData['MailField']['group_field'] ?></td>
-		<td><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
-		<td><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$listData['MailField']['created']); ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$listData['MailField']['modified']); ?></td>
+		</td>
+		<td style="width:10%"><?php echo $listData['MailField']['no'] ?></td>
+		<td style="width:10%"><?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?></td>
+		<td style="width:10%"><?php echo $listData['MailField']['name']; ?></td>
+		<td style="width:10%"><?php echo $listData['MailField']['group_field'] ?></td>
+		<td style="width:10%"><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
+		<td style="width:10%"><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
+		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['MailField']['created']); ?></td>
+		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['MailField']['modified']); ?></td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>
@@ -85,5 +100,10 @@
 </table>
 <p class="align-center">
 	<?php $baser->link('新規登録',array('action'=>'add',$mailContent['MailContent']['id']),array('class'=>'btn-red button')) ?>
-	<?php $baser->link('受信メールCSV',array('action'=>'download_csv', $mailContent['MailContent']['id']),array('class'=>'btn-orange button'),null,false) ?>
+	<?php if(!$sortmode): ?>
+	<?php $baser->link('並び替えモード',array($mailContent['MailContent']['id'], 'sortmode'=>1),array('class'=>'btn-orange button')) ?>
+	<?php else: ?>
+	<?php $baser->link('ノーマルモード',array($mailContent['MailContent']['id'], 'sortmode'=>0),array('class'=>'btn-orange button')) ?>
+	<?php endif ?>
+	<?php $baser->link('受信メールCSV',array('action'=>'download_csv', $mailContent['MailContent']['id']),array('class'=>'btn-gray button'),null,false) ?>
 </p>

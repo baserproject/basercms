@@ -59,6 +59,7 @@
 ----------------------------------------------- */
 #flashMessage,
 #authMessage,
+#pageMessage,
 .no-data {
 	padding:10px;
 	margin:15px auto!important;
@@ -552,4 +553,10 @@ select.multiple option {
 #Target .setting textarea {
 	width:298px;
 	height:310px;
+}
+
+#ListAjaxLoader{
+	display:none;
+	vertical-align:bottom;
+	padding:6px;
 }

@@ -711,20 +711,42 @@ class AppModel extends Model {
 				'limit'=>$limit,
 				'recursive'=>-1));
 
-		if(!isset($target[0])) {
+		if(!isset($target[count($target)-1])) {
 			return false;
-		}else {
-			$target = $target[0];
 		}
 
 		$currentSort = $current[$this->alias]['sort'];
-		$targetSort = $target[$this->alias]['sort'];
+		$targetSort = $target[count($target)-1][$this->alias]['sort'];
 
-		$current[$this->alias]['sort'] = $targetSort;
-		$target[$this->alias]['sort'] = $currentSort;
+		// current から target までのデータをsortで範囲指定して取得
+		$conditions = array();
+		if($offset > 0) {	// DOWN
+			$conditions[$this->alias.'.sort >='] = $currentSort;
+			$conditions[$this->alias.'.sort <='] = $targetSort;
+		}elseif($offset < 0) {	// UP
+			$conditions[$this->alias.'.sort <='] = $currentSort;
+			$conditions[$this->alias.'.sort >='] = $targetSort;
+		}
+		$datas = $this->find('all',array('conditions'=>$conditions,
+				'fields'=>array($this->alias.'.id',$this->alias.'.sort'),
+				'order'=>$order,
+				'recursive'=>-1));
 
-		$this->save($current,false);
-		$this->save($target,false);
+		// 全てのデータを更新
+		foreach ($datas as $data) {
+			if($data[$this->alias]['sort'] == $currentSort) {
+				$data[$this->alias]['sort'] = $targetSort;
+			} else {
+				if($offset > 0) {
+					$data[$this->alias]['sort']--;
+				}elseif($offset < 0) {
+					$data[$this->alias]['sort']++;
+				}
+			}
+			if(!$this->save($data,false)){
+				return false;
+			}
+		}
 
 		return true;
 

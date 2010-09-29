@@ -386,6 +386,17 @@ img.slide-trigger {
 .function-box small {
 	font-weight:bold;
 }
+/* sort-table
+----------------------------------------------- */
+.sort-table .placeholder td {
+	background-color: #FFFF99;
+}
+.sort-table .sort-handle{
+	cursor: move;
+}
+.sort-table .sort-handle img{
+	margin-right:5px;
+}
 /* cakePHP parts
 ----------------------------------------------- */
 .error-message {

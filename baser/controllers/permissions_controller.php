@@ -95,30 +95,20 @@ class PermissionsController extends AppController {
 		}elseif(!empty($this->params['url']['user_group_id'])) {
 			$this->Session->write('Filter.Permission.user_group_id',$this->params['url']['user_group_id']);
 			$this->data['Permission']['user_group_id'] = $this->params['url']['user_group_id'];
-		}else {
-			if($this->Session->check('Filter.Permission.user_group_id')) {
-				$this->data['Permission']['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
-			}else {
-				$this->Session->del('Filter.Permission.user_group_id');
-				$this->Permission->getMax('user_group_id',array('id <>'=>1));
-				$this->data['Permission']['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));
-				;
-			}
+		}
+		if(isset($this->params['named']['sortmode'])){
+			$this->Session->write('SortMode.Permission', $this->params['named']['sortmode']);
 		}
 
-		/* 並び替え処理 */
-		if(!empty($this->params['named']['sortup'])) {
-			$this->Permission->sortup($this->params['named']['sortup'],array('Permission.user_group_id'=>$this->data['Permission']['user_group_id']));
-		}
-		if(!empty($this->params['named']['sortdown'])) {
-			$this->Permission->sortdown($this->params['named']['sortdown'],array('Permission.user_group_id'=>$this->data['Permission']['user_group_id']));
+		/* 並び替えモード */
+		if(!$this->Session->check('SortMode.Permission')){
+			$this->set('sortmode', 0);
+		}else{
+			$this->set('sortmode', $this->Session->read('SortMode.Permission'));
 		}
 
-		/* 条件を生成 */
-		$conditions = array();
-		if(!empty($this->data['Permission']['user_group_id'])) {
-			$conditions['Permission.user_group_id'] = $this->data['Permission']['user_group_id'];
-		}
+		$conditions = $this->_createAdminIndexConditions($this->data);
+
 
 		/* データ取得 */
 		$listDatas = $this->Permission->find('all',array('conditions'=>$conditions, 'order'=>'Permission.sort'));
@@ -241,6 +231,56 @@ class PermissionsController extends AppController {
 		$this->redirect(array('action'=>'index'));
 
 	}
+/**
+ * 並び替えを更新する [AJAX]
+ *
+ * @access	public
+ * @return	boolean
+ */
+	function admin_update_sort () {
 
+		if($this->data){
+			$conditions = $this->_createAdminIndexConditions($this->data);
+			if($this->Permission->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+				echo true;
+			}else{
+				echo false;
+			}
+		}else{
+			echo false;
+		}
+		exit();
+
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+
+		if(isset($data['Permission'])){
+			$data = $data['Permission'];
+		}
+
+		if($this->Session->check('Filter.Permission.user_group_id')) {
+			$data['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
+		}else {
+			$this->Session->del('Filter.Permission.user_group_id');
+			$data['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));
+		}
+
+		/* 条件を生成 */
+		$conditions = array();
+		if(!empty($data['user_group_id'])) {
+			$conditions['Permission.user_group_id'] = $data['user_group_id'];
+		}
+		
+		return $conditions;
+
+	}
+	
 }
 ?>
