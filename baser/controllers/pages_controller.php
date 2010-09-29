@@ -97,6 +97,8 @@ class PagesController extends AppController {
 			$this->Session->write('SortMode.Page', $this->params['named']['sortmode']);
 		}
 
+		$this->data = am($this->data,$this->_checkSession());
+		
 		/* 並び替えモード */
 		if(!$this->Session->check('SortMode.Page')){
 			$this->set('sortmode', 0);
@@ -430,6 +432,7 @@ class PagesController extends AppController {
 	function admin_update_sort () {
 
 		if($this->data){
+			$this->data = am($this->data,$this->_checkSession());
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
@@ -443,6 +446,27 @@ class PagesController extends AppController {
 		
 	}
 /**
+ * セッションをチェックする
+ * 
+ * @return	array()
+ * @access	protected
+ */
+	function _checkSession(){
+		$data = array();
+		if($this->Session->check('Filter.Page.page_category_id')) {
+			$data['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
+		}else {
+			$this->Session->write('Filter.Page.page_category_id','pconly');
+			$data['page_category_id'] = 'pconly';
+		}
+		if($this->Session->check('Filter.Page.status')) {
+			$data['status'] = $this->Session->read('Filter.Page.status');
+		}else {
+			$this->Session->del('Filter.Page.status');
+		}
+		return array('Page'=>$data);
+	}
+/**
  * 管理画面ページ一覧の検索条件を取得する
  * 
  * @param	array		$data
@@ -453,19 +477,6 @@ class PagesController extends AppController {
 
 		if(isset($data['Page'])){
 			$data = $data['Page'];
-		}
-
-		if($this->Session->check('Filter.Page.page_category_id')) {
-			$data['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
-		}else {
-			//$this->Session->del('Filter.Page.page_category_id');
-			$this->Session->write('Filter.Page.page_category_id','pconly');
-			$data['page_category_id'] = 'pconly';
-		}
-		if($this->Session->check('Filter.Page.status')) {
-			$data['status'] = $this->Session->read('Filter.Page.status');
-		}else {
-			$this->Session->del('Filter.Page.status');
 		}
 
 		/* 条件を生成 */

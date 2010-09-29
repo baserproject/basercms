@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * メールフィールドコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -120,7 +120,7 @@ class MailFieldsController extends MailAppController {
 		}else{
 			$this->set('sortmode', $this->Session->read('SortMode.MailField'));
 		}
-		
+
 		$conditions = $this->_createAdminIndexConditions($mailContentId);
 		$listDatas = $this->MailField->findAll($conditions, null, 'MailField.sort');
 		$this->set('listDatas',$listDatas);
@@ -140,7 +140,7 @@ class MailFieldsController extends MailAppController {
 			$this->Session->setFlash('無効な処理です。');
 			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
 		}
-		
+
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValue();
 		}else {
@@ -396,6 +396,6 @@ class MailFieldsController extends MailAppController {
 		return $conditions;
 
 	}
-	
+
 }
 ?>

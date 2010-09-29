@@ -85,6 +85,8 @@ class GlobalMenusController extends AppController {
 			$this->Session->write('SortMode.GlobalMenu', $this->params['named']['sortmode']);
 		}
 
+		$this->data = am($this->data,$this->_checkSession());
+		
 		/* 並び替えモード */
 		if(!$this->Session->check('SortMode.GlobalMenu')){
 			$this->set('sortmode', 0);
@@ -231,6 +233,7 @@ class GlobalMenusController extends AppController {
 	function admin_update_sort () {
 
 		if($this->data){
+			$this->data = am($this->data,$this->_checkSession());
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			if($this->GlobalMenu->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
@@ -244,18 +247,13 @@ class GlobalMenusController extends AppController {
 
 	}
 /**
- * 管理画面ページ一覧の検索条件を取得する
+ * セッションをチェックする
  *
- * @param	array		$data
- * @return	string
+ * @return	array()
  * @access	protected
  */
-	function _createAdminIndexConditions($data){
-
-		if(isset($data['GlobalMenu'])){
-			$data = $data['GlobalMenu'];
-		}
-
+	function _checkSession(){
+		$data = array();
 		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
 			$data['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
 		}else {
@@ -267,7 +265,20 @@ class GlobalMenusController extends AppController {
 		}else {
 			$this->Session->del('Filter.GlobalMenu.status');
 		}
+		return array('GlobalMenu'=>$data);
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
 
+		if(isset($data['GlobalMenu'])){
+			$data = $data['GlobalMenu'];
+		}
 
 		/* 条件を生成 */
 		$conditions = array();

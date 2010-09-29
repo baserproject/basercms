@@ -100,6 +100,8 @@ class PermissionsController extends AppController {
 			$this->Session->write('SortMode.Permission', $this->params['named']['sortmode']);
 		}
 
+		$this->data = am($this->data,$this->_checkSession());
+		
 		/* 並び替えモード */
 		if(!$this->Session->check('SortMode.Permission')){
 			$this->set('sortmode', 0);
@@ -240,6 +242,7 @@ class PermissionsController extends AppController {
 	function admin_update_sort () {
 
 		if($this->data){
+			$this->data = am($this->data,$this->_checkSession());
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			if($this->Permission->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
@@ -253,6 +256,22 @@ class PermissionsController extends AppController {
 
 	}
 /**
+ * セッションをチェックする
+ *
+ * @return	array()
+ * @access	protected
+ */
+	function _checkSession(){
+		$data = array();
+		if($this->Session->check('Filter.Permission.user_group_id')) {
+			$data['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
+		}else {
+			$this->Session->del('Filter.Permission.user_group_id');
+			$data['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));
+		}
+		return array('Permission'=>$data);
+	}
+/**
  * 管理画面ページ一覧の検索条件を取得する
  *
  * @param	array		$data
@@ -263,13 +282,6 @@ class PermissionsController extends AppController {
 
 		if(isset($data['Permission'])){
 			$data = $data['Permission'];
-		}
-
-		if($this->Session->check('Filter.Permission.user_group_id')) {
-			$data['user_group_id'] = $this->Session->read('Filter.Permission.user_group_id');
-		}else {
-			$this->Session->del('Filter.Permission.user_group_id');
-			$data['user_group_id'] = $this->Permission->getMax('user_group_id',array('id <>'=>1));
 		}
 
 		/* 条件を生成 */
