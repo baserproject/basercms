@@ -61,11 +61,12 @@
 #authMessage,
 #pageMessage,
 .no-data {
-	padding:10px;
+	padding:10px 10px 10px 36px;
 	margin:15px auto!important;
-	background-color:#FCF5EB;
-	color:#C00;
-	font-weight:normal;
+	color:#333;
+	font-weight:bold;
+	background: url(images/info.png) no-repeat 10px 11px;
+	border:5px solid #CCC;
 }
 /* button
 ----------------------------------------------- */
@@ -150,11 +151,13 @@
 #contentsBody h2 {
 	background:url(images/bg_main_head.jpg) no-repeat left top;
 	padding-left:25px;
-	padding-top:10px;
-	padding-bottom:10px;
+	padding-top:8px;
 	font-size:16px;
-	height:20px;
 	color:#688A00;
+	line-height: 20px;
+}
+#contentsBody h2 img{
+	vertical-align:middle;
 }
 #contentsBody h3 {
 	background:url(images/bg_box_blt_01.gif) left 10px no-repeat;

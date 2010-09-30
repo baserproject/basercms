@@ -51,11 +51,11 @@ class Theme extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => ">> テーマ名を入力して下さい"),
+						'message' => "テーマ名を入力して下さい"),
 				array(	'rule' => 'halfText',
-						'message' => '>> テーマ名は半角のみで入力して下さい'),
+						'message' => 'テーマ名は半角のみで入力して下さい'),
 				array(	'rule' => 'duplicate',
-						'message' => '>> 既に存在するテーマ名です'));
+						'message' => '既に存在するテーマ名です'));
 
 		return true;
 

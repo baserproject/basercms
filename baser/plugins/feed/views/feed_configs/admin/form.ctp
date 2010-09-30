@@ -32,7 +32,7 @@ $(function(){
 </script>
 
 <?php if($this->action == 'admin_edit'): ?>
-<p style="text-align:right"><a href="#headHowTo">フィードの読み込み方法 &gt;&gt;</a></p>
+<p style="text-align:right"><a href="#headHowTo">フィードの読み込み方法 ≫</a></p>
 <?php endif ?>
 <h2>
 	<?php $baser->contentsTitle() ?>

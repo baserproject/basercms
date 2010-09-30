@@ -42,7 +42,7 @@ class MailConfig extends MailAppModel {
 	function beforeValidate() {
 
 		$this->validate['encode'] = array(array('rule' => array('minLength',1),
-						'message' => ">> 文字コードを入力して下さい。",
+						'message' => "文字コードを入力して下さい。",
 						'required' => true));
 		return true;
 

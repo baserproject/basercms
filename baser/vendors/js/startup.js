@@ -82,8 +82,5 @@ $(document).ready(function(){
 	// 角丸クラスの登録
 	if($('.corner5').corner) $('.corner5').corner("5px");
 	if($('.corner10').corner) $('.corner10').corner("10px");
-	if($('#pageMessage').corner) $('#pageMessage').corner("10px");
-	if($('#flashMessage').corner) $('#flashMessage').corner("10px");
-	if($('#authMessage').corner) $('#authMessage').corner("10px");
 	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
 });

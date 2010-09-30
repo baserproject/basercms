@@ -401,13 +401,17 @@ img.slide-trigger {
 ----------------------------------------------- */
 .error-message {
 	color:#C30;
+	background: url(images/warning.png) no-repeat left center;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
 }
 .required {
-	color:#C00!important;
+	color:#C30!important;
 	font-size:16px;
 }
 .form-error {
-	background:#F8E2DE;
+	background-color:#FCF5EB;
 }
 .message {
 	color:#F30;
@@ -415,7 +419,7 @@ img.slide-trigger {
 	margin:20px;
 }
 .error {
-	color:#C00;
+	color:#C30;
 }
 .error em {
 	color:#06C;

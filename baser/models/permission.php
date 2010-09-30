@@ -65,15 +65,15 @@ class Permission extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => ">> 設定名を入力して下さい"));
+						'message' => "設定名を入力して下さい"));
 		$this->validate['user_group_id'] =	array(array('rule' => array('minLength',1),
-						'message' => ">> ユーザーグループを選択して下さい",
+						'message' => "ユーザーグループを選択して下さい",
 						'required'=>true
 						));
 		$this->validate['url'] = array(	array(	'rule' => array('minLength',1),
-						'message' => ">> 設定を入力して下さい"),
+						'message' => "設定を入力して下さい"),
 				array(	'rule' => 'checkUrl',
-						'message' => '>> アクセス拒否として設定できるのは認証ページだけです。'));
+						'message' => 'アクセス拒否として設定できるのは認証ページだけです。'));
 		return true;
 
 	}

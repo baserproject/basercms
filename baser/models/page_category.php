@@ -83,12 +83,12 @@ class PageCategory extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => ">> ページカテゴリ名を入力して下さい。",
+						'message' => "ページカテゴリ名を入力して下さい。",
 						'required' => true),
 				array(  'rule' => array('duplicatePageCategory'),
-						'message' => '>> 入力されたページカテゴリー名は、同一階層に既に登録されています'));
+						'message' => '入力されたページカテゴリー名は、同一階層に既に登録されています'));
 		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
-						'message' => ">> ページカテゴリタイトルを入力して下さい。",
+						'message' => "ページカテゴリタイトルを入力して下さい。",
 						'required' => true));
 		return true;
 

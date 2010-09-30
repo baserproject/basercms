@@ -51,9 +51,9 @@ class GlobalMenu extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => ">> メニュー名を入力して下さい"));
+						'message' => "メニュー名を入力して下さい"));
 		$this->validate['link'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => '>> リンクURLを入力して下さい'));
+						'message' => 'リンクURLを入力して下さい'));
 		return true;
 
 	}

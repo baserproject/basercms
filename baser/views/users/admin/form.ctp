@@ -49,7 +49,7 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.real_name_1', '名前') ?></th>
 		<td class="col-input"><small>[姓]</small> <?php echo $form->text('User.real_name_1', array('size'=>12,'maxlength'=>255)) ?> <small>[名]</small> <?php echo $form->text('User.real_name_2', array('size'=>12,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
-			<?php echo $form->error('User.real_name_1', '>> 姓を入力して下さい') ?> <?php echo $form->error('User.real_name_2', '>> 名を入力して下さい') ?>&nbsp;
+			<?php echo $form->error('User.real_name_1', '姓を入力して下さい') ?> <?php echo $form->error('User.real_name_2', '名を入力して下さい') ?>&nbsp;
 			&nbsp; </td>
 	</tr>
 	<tr>
@@ -58,7 +58,7 @@
 			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 				より新しいグループを追加しアクセス制限の設定をおこないます。 </div>
-			<?php echo $form->error('User.user_group_id', '>> グループを選択して下さい') ?></td>
+			<?php echo $form->error('User.user_group_id', 'グループを選択して下さい') ?></td>
 	</tr>
 	<tr>
 		<th class="col-head"> <?php if($this->action == 'admin_add'): ?>
@@ -86,7 +86,7 @@
 	<table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 		<tr style="display:none">
 			<th class="col-head"><?php echo $form->label('User.email', 'Eメール') ?></th>
-			<td class="col-input"><?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?> <?php echo $form->error('User.email', '>> Eメールの形式が不正です') ?>&nbsp;</td>
+			<td class="col-input"><?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?> <?php echo $form->error('User.email', 'Eメールの形式が不正です') ?>&nbsp;</td>
 		</tr>
 	</table>
 </div>

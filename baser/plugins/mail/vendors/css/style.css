@@ -31,19 +31,45 @@
 #mail .col-description {
 	font-size:10px;
 }
-.error-message,
-.message {
-	color:#C00;
-}
-.message {
-	color:#C00;
-	margin:10px;
-}
-input.form-error {
-	background-color:#FFF0F0;
-}
 .submit {
 	text-align:center;
 	margin-top:20px;
 	margin-bottom:20px;
+}
+#flashMessage {
+	padding:10px 20px;
+	margin:15px auto!important;
+	color:#C30;
+	font-weight:bold;
+	border:5px solid #C30;
+}
+.error-message {
+	color:#C30;
+	background: url(images/warning.png) no-repeat left center;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
+}
+.required {
+	color:#C30!important;
+	font-size:16px;
+}
+.form-error {
+	background-color:#FCF5EB;
+}
+.message {
+	color:#C30;
+	font-weight:bold;
+	margin:20px;
+}
+.error {
+	color:#C30;
+}
+.error em {
+	color:#06C;
+	font-style:normal;
+	font-weight:bold;
+}
+.submit {
+	text-align:center;
 }

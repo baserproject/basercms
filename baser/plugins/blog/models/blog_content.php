@@ -74,26 +74,26 @@ class BlogContent extends BlogAppModel {
 
 		$this->validate['name'] = array(
 				array(	'rule' => 'halfText',
-						'message' => '>> ブログアカウント名は半角のみ入力して下さい。',
+						'message' => 'ブログアカウント名は半角のみ入力して下さい。',
 						'allowEmpty'=>false),
 				array(	'rule' => array('notInList', array('blog')),
-						'message' => '>> ブログアカウント名に「blog」は利用できません。'),
+						'message' => 'ブログアカウント名に「blog」は利用できません。'),
 				array(	'rule' => array('isUnique'),
 						'on' => 'create',
 						'message' => '入力されたブログアカウント名は既に使用されています。'));
 		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => ">> ブログタイトルを入力して下さい。"));
+						'message' => "ブログタイトルを入力して下さい。"));
 		$this->validate['layout'] = array(array('rule' => 'halfText',
-						'message' => '>> レイアウトテンプレート名は半角で入力して下さい。',
+						'message' => 'レイアウトテンプレート名は半角で入力して下さい。',
 						'allowEmpty'=>false));
 		$this->validate['template'] = array(array(	'rule' => 'halfText',
-						'message' => ">> コンテンツテンプレート名は半角で入力して下さい。",
+						'message' => "コンテンツテンプレート名は半角で入力して下さい。",
 						'allowEmpty'=>false));
 		$this->validate['list_count'] = array(array(	'rule' => 'halfText',
-						'message' => ">> 一覧表示件数は半角で入力して下さい。",
+						'message' => "一覧表示件数は半角で入力して下さい。",
 						'allowEmpty'=>false));
 		$this->validate['list_direction'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => ">> 一覧に表示する順番を指定して下さい。"));
+						'message' => "一覧に表示する順番を指定して下さい。"));
 		return true;
 	}
 /**
