@@ -53,7 +53,7 @@ function sortUpdateHandler(event, ui){
 		success: function(result){
 			if(result == '1') {
 				sortTable.find(".sortable").each(function(i,v){
-					$(this).attr('id','Row'+i);
+					$(this).attr('id','Row'+(i+1));
 				});
 			} else {
 				sortTable.sortable("cancel");
