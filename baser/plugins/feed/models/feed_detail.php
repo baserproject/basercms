@@ -54,10 +54,10 @@ class FeedDetail extends FeedAppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => ">> フィード詳細名を入力して下さい",
+						'message' => "フィード詳細名を入力して下さい",
 						'required' => true));
 		$this->validate['url'] = array(array('rule' => array('minLength',1),
-						'message' => ">> フィードURLを入力して下さい",
+						'message' => "フィードURLを入力して下さい",
 						'required' => true));
 		return true;
 	}

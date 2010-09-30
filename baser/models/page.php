@@ -81,12 +81,12 @@ class Page extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => ">> ページ名を入力して下さい。",
+						'message' => "ページ名を入力して下さい。",
 						'required' => true),
 				array('rule' => 'pageExists',
-						'message' => ">> 指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。"));
+						'message' => "指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。"));
 		$this->validate['page_category_id'] = array(array('rule' => 'pageExists',
-						'message' => ">> 指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。",
+						'message' => "指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。",
 						'required' => false));
 		return true;
 

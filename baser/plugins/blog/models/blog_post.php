@@ -71,13 +71,13 @@ class BlogPost extends BlogAppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(  'rule' => array('minLength',1),
-						'message' => ">> タイトルを入力して下さい",
+						'message' => "タイトルを入力して下さい",
 						'required' => true));
 		$this->validate['posts_date'] = array(array('rule' => array('minLength',1),
-						'message' => ">> 投稿日を入力して下さい",
+						'message' => "投稿日を入力して下さい",
 						'required' => true));
 		$this->validate['user_id'] = array(array(   'rule' => array('minLength',1),
-						'message' => ">> 投稿者を選択して下さい"));
+						'message' => "投稿者を選択して下さい"));
 		return true;
 	}
 /**

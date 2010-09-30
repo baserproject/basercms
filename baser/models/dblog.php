@@ -48,7 +48,7 @@ class Dblog extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => ">> ログ内容を入力して下さい",
+						'message' => "ログ内容を入力して下さい",
 						'required' => true));
 		return true;
 

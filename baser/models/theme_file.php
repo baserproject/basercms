@@ -43,12 +43,12 @@ class ThemeFile extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => ">> テーマファイル名を入力して下さい。",
+						'message' => "テーマファイル名を入力して下さい。",
 						'required' => true),
 				array(	'rule' => 'halfText',
-						'message' => '>> テーマファイル名は半角のみで入力して下さい'),
+						'message' => 'テーマファイル名は半角のみで入力して下さい'),
 				array(  'rule' => array('duplicateThemeFile'),
-						'message' => '>> 入力されたテーマファイル名は、同一階層に既に存在します'));
+						'message' => '入力されたテーマファイル名は、同一階層に既に存在します'));
 	}
 /**
  * フォルダの重複チェック

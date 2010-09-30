@@ -68,7 +68,7 @@ class PagesController extends AppController {
 		$this->Auth->allow('display','mobile_display');
 
 		$noCache = array();
-		if($this->params['prefix'] != 'admin' && !isset($_SESSION['Auth']['User'])) {
+		if((!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') && !isset($_SESSION['Auth']['User'])) {
 			$this->helpers[] = 'Cache';
 			$this->cacheAction = Configure::read('Baser.cachetime'); // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
 		}
@@ -89,69 +89,33 @@ class PagesController extends AppController {
 		if($this->data) {
 			$this->Session->write('Filter.Page.page_category_id',$this->data['Page']['page_category_id']);
 			$this->Session->write('Filter.Page.status',$this->data['Page']['status']);
-		}else {
-			if($this->Session->check('Filter.Page.page_category_id')) {
-				$this->data['Page']['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
-			}else {
-				//$this->Session->del('Filter.Page.page_category_id');
-				$this->Session->write('Filter.Page.page_category_id','pconly');
-				$this->data['Page']['page_category_id'] = 'pconly';
-			}
-			if($this->Session->check('Filter.Page.status')) {
-				$this->data['Page']['status'] = $this->Session->read('Filter.Page.status');
-			}else {
-				$this->Session->del('Filter.Page.status');
-			}
 		}
-
-		// 表示件数設定
 		if(!empty($this->params['named']['num'])){
 			$this->Session->write('Filter.Page.num', $this->params['named']['num']);
-		}else{
-			if(!$this->Session->check('Filter.Page.num')){
-				$this->passedArgs['num'] = 10;
-			}else{
-				$this->passedArgs['num'] = $this->Session->read('Filter.Page.num');
-			}
+		}
+		if(isset($this->params['named']['sortmode'])){
+			$this->Session->write('SortMode.Page', $this->params['named']['sortmode']);
 		}
 
-		/* 条件を生成 */
-		$conditions = array();
-		// ページカテゴリ
-		// 子カテゴリも検索条件に入れる
-		$pageCategoryIds = array($this->data['Page']['page_category_id']);
-		if(!empty($this->data['Page']['page_category_id'])) {
-			if($this->data['Page']['page_category_id'] == 'pconly') {
-				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
-											array('Page.page_category_id'=>null));
-			}elseif($this->data['Page']['page_category_id'] != 'noncat') {
-				$children = $this->PageCategory->children($this->data['Page']['page_category_id']);
-				if($children) {
-					foreach($children as $child) {
-						$pageCategoryIds[] = $child['PageCategory']['id'];
-					}
-				}
-				$conditions['Page.page_category_id'] = $pageCategoryIds;
-			}else {
-				$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
-			}
-		}
-		// ステータス
-		if(isset($this->data['Page']['status']) && $this->data['Page']['status'] !== '') {
-			$conditions['Page.status'] = $this->data['Page']['status'];
-		}
-
-
-		// 並び替え処理
-		$this->Page->fileSave = false;
-		if(!empty($this->params['named']['sortup'])) {
-			$this->Page->sortup($this->params['named']['sortup'],$conditions);
-		}
-		if(!empty($this->params['named']['sortdown'])) {
-			$this->Page->sortdown($this->params['named']['sortdown'],$conditions);
-		}
-
+		$this->data = am($this->data,$this->_checkSession());
 		
+		/* 並び替えモード */
+		if(!$this->Session->check('SortMode.Page')){
+			$this->set('sortmode', 0);
+		}else{
+			$this->set('sortmode', $this->Session->read('SortMode.Page'));
+		}
+
+		/* 表示件数 */
+		if(!$this->Session->check('Filter.Page.num')){
+			$this->passedArgs['num'] = 10;
+		}else{
+			$this->passedArgs['num'] = $this->Session->read('Filter.Page.num');
+		}
+
+		// 検索条件
+		$conditions = $this->_createAdminIndexConditions($this->data);
+
 		$this->paginate = array(
 				'conditions' => $conditions,
 				'fields' => array(),
@@ -459,6 +423,90 @@ class PagesController extends AppController {
 		$this->render('display',null,TMP.'pages_preview.ctp');
 
 	}
+/**
+ * 並び替えを更新する [AJAX]
+ *
+ * @access	public
+ * @return	boolean
+ */
+	function admin_update_sort () {
 
+		if($this->data){
+			$this->data = am($this->data,$this->_checkSession());
+			$conditions = $this->_createAdminIndexConditions($this->data);
+			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+				echo true;
+			}else{
+				echo false;
+			}
+		}else{
+			echo false;
+		}
+		exit();
+		
+	}
+/**
+ * セッションをチェックする
+ * 
+ * @return	array()
+ * @access	protected
+ */
+	function _checkSession(){
+		$data = array();
+		if($this->Session->check('Filter.Page.page_category_id')) {
+			$data['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
+		}else {
+			$this->Session->write('Filter.Page.page_category_id','pconly');
+			$data['page_category_id'] = 'pconly';
+		}
+		if($this->Session->check('Filter.Page.status')) {
+			$data['status'] = $this->Session->read('Filter.Page.status');
+		}else {
+			$this->Session->del('Filter.Page.status');
+		}
+		return array('Page'=>$data);
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ * 
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+
+		/* 条件を生成 */
+		$conditions = array();
+		// ページカテゴリ
+		// 子カテゴリも検索条件に入れる
+		$pageCategoryIds = array($data['page_category_id']);
+		if(!empty($data['page_category_id'])) {
+			if($data['page_category_id'] == 'pconly') {
+				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
+											array('Page.page_category_id'=>null));
+			}elseif($data['page_category_id'] != 'noncat') {
+				$children = $this->PageCategory->children($data['page_category_id']);
+				if($children) {
+					foreach($children as $child) {
+						$pageCategoryIds[] = $child['PageCategory']['id'];
+					}
+				}
+				$conditions['Page.page_category_id'] = $pageCategoryIds;
+			}else {
+				$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
+			}
+		}
+		// ステータス
+		if(isset($data['status']) && $data['status'] !== '') {
+			$conditions['Page.status'] = $data['status'];
+		}
+
+		return $conditions;
+
+	}
 }
 ?>

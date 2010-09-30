@@ -51,12 +51,12 @@ class SiteConfig extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => ">> WEBサイト名を入力して下さい",
+						'message' => "WEBサイト名を入力して下さい",
 						'required' => true));
 		$this->validate['email'] = array(array('rule' => array('email'),
-						'message' => ">> 管理者メールアドレスの形式が不正です"),
+						'message' => "管理者メールアドレスの形式が不正です"),
 				array('rule' => array('minLength',1),
-						'message' => ">> 管理者メールアドレスを入力してください。"));
+						'message' => "管理者メールアドレスを入力してください。"));
 		return true;
 
 	}

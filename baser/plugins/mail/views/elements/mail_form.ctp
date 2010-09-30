@@ -36,9 +36,10 @@
 <div class="auth-captcha clearfix">
 	<?php $baser->img('/'.$mailContent['MailContent']['name'].'/captcha',array('alt'=>'認証画像','class'=>'auth-captcha-image')) ?>
 	<?php echo $mailform->text('Message.auth_captcha') ?><br />
-	&nbsp;画像の文字を入力してください<br />
-	<?php echo $mailform->error('Message.auth_captcha','>> 入力された文字が間違っています。入力をやり直してください。') ?>
+	&nbsp;画像の文字を入力してください<br clear="all" />
+	<?php echo $mailform->error('Message.auth_captcha','入力された文字が間違っています。入力をやり直してください。') ?>
 </div>
+
 <?php endif ?>
 
 <?php /* 送信ボタン */ ?>

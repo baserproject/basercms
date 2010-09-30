@@ -43,7 +43,7 @@ class WidgetArea extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "≫ ウィジェットエリア名を入力して下さい"));
+						'message' => "ウィジェットエリア名を入力して下さい"));
 	}
 /**
  * コントロールソース取得

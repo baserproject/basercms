@@ -427,7 +427,12 @@ class MailController extends MailAppController {
 		}
 
 		if($cc) {
-			$this->EmailEx->cc = array('<'.$cc.'>');
+			if(strpos(',',$cc !== false)) {
+				$cc = split(',', $cc);
+			}else{
+				$cc = array($cc);
+			}
+			$this->EmailEx->cc = $cc;
 		}
 
 		if($data) {

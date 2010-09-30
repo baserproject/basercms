@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * メールフィールドコントローラー
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -108,14 +108,20 @@ class MailFieldsController extends MailAppController {
 			$this->Session->setFlash('無効な処理です。');
 			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
 		}
-		
-		if(!empty($this->params['named']['sortup'])) {
-			$this->MailField->sortup($this->params['named']['sortup'],array('MailField.mail_content_id'=>$mailContentId));
+
+		/* セッション処理 */
+		if(isset($this->params['named']['sortmode'])){
+			$this->Session->write('SortMode.MailField', $this->params['named']['sortmode']);
 		}
-		if(!empty($this->params['named']['sortdown'])) {
-			$this->MailField->sortdown($this->params['named']['sortdown'],array('MailField.mail_content_id'=>$mailContentId));
+
+		/* 並び替えモード */
+		if(!$this->Session->check('SortMode.MailField')){
+			$this->set('sortmode', 0);
+		}else{
+			$this->set('sortmode', $this->Session->read('SortMode.MailField'));
 		}
-		$conditions = array('MailField.mail_content_id'=>$mailContentId);
+
+		$conditions = $this->_createAdminIndexConditions($mailContentId);
 		$listDatas = $this->MailField->findAll($conditions, null, 'MailField.sort');
 		$this->set('listDatas',$listDatas);
 		$this->subMenuElements = array('mail_fields','mail_common');
@@ -134,7 +140,7 @@ class MailFieldsController extends MailAppController {
 			$this->Session->setFlash('無効な処理です。');
 			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
 		}
-		
+
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValue();
 		}else {
@@ -355,5 +361,41 @@ class MailFieldsController extends MailAppController {
 		$this->set('contentName',$this->mailContent['MailContent']['name']);
 
 	}
+
+/**
+ * 並び替えを更新する [AJAX]
+ *
+ * @access	public
+ * @return	boolean
+ */
+	function admin_update_sort ($mailContentId) {
+
+		if($this->data){
+			$conditions = $this->_createAdminIndexConditions($mailContentId);
+			if($this->MailField->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+				echo true;
+			}else{
+				echo false;
+			}
+		}else{
+			echo false;
+		}
+		exit();
+
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($mailContentId){
+
+		$conditions = array('MailField.mail_content_id'=>$mailContentId);
+		return $conditions;
+
+	}
+
 }
 ?>

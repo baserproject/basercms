@@ -87,9 +87,13 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-	if(preg_match('/^(img|css|js)/is', str_replace($baseUrl, '', $_SERVER['REQUEST_URI']))) {
-		Configure::write('Baser.Asset',true);
-		return;
+	$url = $_SERVER['REQUEST_URI'];
+	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
+		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
+		$ext = array_pop(explode('.', $url));
+		if(in_array($ext, $assets)){
+			Configure::write('Baser.Asset',true);
+		}
 	}
 /**
  * タイムゾーン設定

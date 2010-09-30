@@ -120,7 +120,7 @@ class BlogHelper extends AppHelper {
 	function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
 		if($moreLink === true) {
-			$moreText = '&gt;&gt; 続きを読む';
+			$moreText = '≫ 続きを読む';
 		}elseif($moreLink !== false) {
 			$moreText = $moreLink;
 		}

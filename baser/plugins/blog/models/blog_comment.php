@@ -52,9 +52,9 @@ class BlogComment extends BlogAppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => '>> お名前を入力して下さい'));
+						'message' => 'お名前を入力して下さい'));
 		$this->validate['message'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => ">> コメントを入力して下さい"));
+						'message' => "コメントを入力して下さい"));
 		return true;
 	}
 /**

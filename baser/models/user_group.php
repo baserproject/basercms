@@ -71,13 +71,13 @@ class UserGroup extends AppModel {
 	function beforeValidate() {
 
 		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => ">> ユーザーグループ名を入力して下さい"),
+						'message' => "ユーザーグループ名を入力して下さい"),
 				array(	'rule' => 'halfText',
-						'message' => '>> ユーザーグループは半角のみで入力して下さい'),
+						'message' => 'ユーザーグループは半角のみで入力して下さい'),
 				array(	'rule' => array('duplicate','name'),
-						'message' => '>> 既に登録のあるユーザーグループ名です'));
+						'message' => '既に登録のあるユーザーグループ名です'));
 		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => ">> 表示名を入力して下さい"));
+						'message' => "表示名を入力して下さい"));
 		return true;
 
 	}

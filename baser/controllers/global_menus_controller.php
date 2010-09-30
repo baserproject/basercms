@@ -80,37 +80,22 @@ class GlobalMenusController extends AppController {
 		if($this->data) {
 			$this->Session->write('Filter.GlobalMenu.menu_type',$this->data['GlobalMenu']['menu_type']);
 			$this->Session->write('Filter.GlobalMenu.status',$this->data['GlobalMenu']['status']);
-		}else {
-			if($this->Session->check('Filter.GlobalMenu.menu_type')) {
-				$this->data['GlobalMenu']['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
-			}else {
-				$this->Session->del('Filter.GlobalMenu.menu_type');
-				$this->data['GlobalMenu']['menu_type'] = 'default';
-			}
-			if($this->Session->check('Filter.GlobalMenu.status')) {
-				$this->data['GlobalMenu']['status'] = $this->Session->read('Filter.GlobalMenu.status');
-			}else {
-				$this->Session->del('Filter.GlobalMenu.status');
-			}
+		}
+		if(isset($this->params['named']['sortmode'])){
+			$this->Session->write('SortMode.GlobalMenu', $this->params['named']['sortmode']);
 		}
 
-		if(!empty($this->params['named']['sortup'])) {
-			$this->GlobalMenu->sortup($this->params['named']['sortup'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
+		$this->data = am($this->data,$this->_checkSession());
+		
+		/* 並び替えモード */
+		if(!$this->Session->check('SortMode.GlobalMenu')){
+			$this->set('sortmode', 0);
+		}else{
+			$this->set('sortmode', $this->Session->read('SortMode.GlobalMenu'));
 		}
-		if(!empty($this->params['named']['sortdown'])) {
-			$this->GlobalMenu->sortdown($this->params['named']['sortdown'],array('GlobalMenu.menu_type'=>$this->data['GlobalMenu']['menu_type']));
-		}
-
-		/* 条件を生成 */
-		$conditions = array();
-		if(!empty($this->data['GlobalMenu']['menu_type'])) {
-			$conditions['GlobalMenu.menu_type'] = $this->data['GlobalMenu']['menu_type'];
-		}
-		// ステータス
-		if(isset($this->data['GlobalMenu']['status']) && $this->data['GlobalMenu']['status'] !== '') {
-			$conditions['GlobalMenu.status'] = $this->data['GlobalMenu']['status'];
-		}
-
+		
+		$conditions = $this->_createAdminIndexConditions($this->data);
+		
 		// TODO CSVドライバーが複数の並び替えフィールドを指定できないがtypeを指定したい
 		$listDatas = $this->GlobalMenu->findAll($conditions,null,array('sort'));
 
@@ -239,6 +224,74 @@ class GlobalMenusController extends AppController {
 		$this->redirect(array('action'=>'index'));
 
 	}
+/**
+ * 並び替えを更新する [AJAX]
+ *
+ * @access	public
+ * @return	boolean
+ */
+	function admin_update_sort () {
 
+		if($this->data){
+			$this->data = am($this->data,$this->_checkSession());
+			$conditions = $this->_createAdminIndexConditions($this->data);
+			if($this->GlobalMenu->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+				echo true;
+			}else{
+				echo false;
+			}
+		}else{
+			echo false;
+		}
+		exit();
+
+	}
+/**
+ * セッションをチェックする
+ *
+ * @return	array()
+ * @access	protected
+ */
+	function _checkSession(){
+		$data = array();
+		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
+			$data['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
+		}else {
+			$this->Session->del('Filter.GlobalMenu.menu_type');
+			$data['menu_type'] = 'default';
+		}
+		if($this->Session->check('Filter.GlobalMenu.status')) {
+			$data['status'] = $this->Session->read('Filter.GlobalMenu.status');
+		}else {
+			$this->Session->del('Filter.GlobalMenu.status');
+		}
+		return array('GlobalMenu'=>$data);
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+
+		if(isset($data['GlobalMenu'])){
+			$data = $data['GlobalMenu'];
+		}
+
+		/* 条件を生成 */
+		$conditions = array();
+		if(!empty($data['menu_type'])) {
+			$conditions['GlobalMenu.menu_type'] = $data['menu_type'];
+		}
+		if(isset($data['status']) && $data['status'] !== '') {
+			$conditions['GlobalMenu.status'] = $data['status'];
+		}
+
+		return $conditions;
+		
+	}
+	
 }
 ?>
