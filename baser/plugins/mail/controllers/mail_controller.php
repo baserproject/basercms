@@ -379,8 +379,8 @@ class MailController extends MailAppController {
 			$this->EmailEx->smtpOptions = array('host'	=>$mailConfig['smtp_host'],
 					'port'	=>25,
 					'timeout'	=>30,
-					'username'=>$mailConfig['smtp_username'],
-					'password'=>$mailConfig['smtp_password']);
+					'username'=>($mailConfig['smtp_username'])?$mailConfig['smtp_username']:null,
+					'password'=>($mailConfig['smtp_password'])?$mailConfig['smtp_password']:null);
 		}else {
 			$this->EmailEx->delivery = "mail";
 		}

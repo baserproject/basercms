@@ -139,7 +139,7 @@ class AppController extends Controller {
 				}else {
 					$reg = '/^\/(installations)/i';
 				}
-				if(!preg_match($reg,$_SERVER['REQUEST_URI'])) {
+				if(!preg_match($reg,$_SERVER['REQUEST_URI']) || isInstalled()) {
 					$this->theme = $this->siteConfigs['theme'];
 				}
 

@@ -434,6 +434,7 @@ class PagesController extends AppController {
 		if($this->data){
 			$this->data = am($this->data,$this->_checkSession());
 			$conditions = $this->_createAdminIndexConditions($this->data);
+			$this->Page->fileSave = false;
 			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
 			}else{
