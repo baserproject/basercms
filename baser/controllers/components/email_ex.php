@@ -112,11 +112,11 @@ class EmailExComponent extends EmailComponent {
 
 		$message = $this->__strip($message, true);
 
-		// MODIFIED 2008/6/22 egashira
+		// MODIFIED 2008/6/22 ryuring
 		//$message = str_replace(array("\r\n","\r","\n"), "", $message);
 		//$message = str_replace("<br />", "\n", $message);
 
-		// MODIFIED 2008/6/7/1
+		// MODIFIED 2008/7/1
 		// CakePHPは、PHPの閉じタグの直後の改行を削除する仕様だという事がわかった。
 		// メールなど、明示的な改行タグがないものについては、PHP閉じタグの直後に半角スペースなど
 		// を挿入する事により、改行が有効となる。よってテンプレート側で対応する事にし、
@@ -163,7 +163,6 @@ class EmailExComponent extends EmailComponent {
 
 		if (low($this->charset) !== 'iso-8859-15') {
 
-			// 2008/6/22 MODIFIED egashira
 			$enc = mb_detect_encoding($subject);
 			$_enc = mb_internal_encoding();
 			mb_internal_encoding($enc);
@@ -183,9 +182,8 @@ class EmailExComponent extends EmailComponent {
 			$subject = $start . $subject . $end;
 			*/
 
-			$subject = mb_encode_mimeheader($subject,$this->charset,'B', "\n");
+			$subject = mb_encode_mimeheader($subject,$this->charset,'B', Configure::read('Email.lfcode'));
 
-			// 2008/6/22 MODIFIED egashira
 			mb_internal_encoding($_enc);
 
 		}

@@ -104,6 +104,10 @@
  */
 	mb_detect_order("ASCII,JIS,UTF-8,SJIS-win,EUC-JP");
 /**
+ * Eメールヘッダの改行コード設定
+ */
+	Configure::write('Email.lfcode',"\n");
+/**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
  */
