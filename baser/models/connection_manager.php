@@ -177,8 +177,9 @@ class ConnectionManager extends Object {
 
 		if (file_exists(MODELS . 'datasources' . DS . $conn['filename'] . '.php')) {
 			require (MODELS . 'datasources' . DS . $conn['filename'] . '.php');
-		// >>> 2009/10/07 ADD ryuring
+		// CUSTOM ADD 2009/10/07 ryuring
 		// BASERのデータソースも検索するようにした
+		// >>>
 		}elseif(file_exists(BASER_MODELS . 'datasources' . DS . $conn['filename'] . '.php')) {
 			require (BASER_MODELS . 'datasources' . DS . $conn['filename'] . '.php');
 		// <<<
