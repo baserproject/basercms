@@ -26,7 +26,7 @@
 	require BASER.'basics.php';
 	/* ConnectionManager ハック */
 	// baserフォルダ内のデータソースも走査するようにした
-	App::import('Core', 'ConnectionManager', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'connection_manager.php'));
+	App::import('Core', 'ConnectionManager', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'connection_manager.php'));
 /**
  * tmpフォルダ確認
  */
