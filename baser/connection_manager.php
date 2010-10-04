@@ -7,15 +7,14 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.model
  * @since         CakePHP(tm) v 0.10.x.1402
@@ -24,12 +23,7 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-// >>> 2010/03/19 MODIFY ryuring
-// baser フォルダ内の DataSource を参照
-//uses ('model' . DS . 'datasources' . DS . 'datasource');
-// ---
-App::import('Core', 'DataSource', array('file'=>'..'.DS.'baser'.DS.'models'.DS.'datasources'.DS.'datasource.php'));
-// <<<
+uses ('model' . DS . 'datasources' . DS . 'datasource');
 config('database');
 
 /**
@@ -177,8 +171,9 @@ class ConnectionManager extends Object {
 
 		if (file_exists(MODELS . 'datasources' . DS . $conn['filename'] . '.php')) {
 			require (MODELS . 'datasources' . DS . $conn['filename'] . '.php');
-		// >>> 2009/10/07 ADD ryuring
+		// CUSTOM ADD 2009/10/07 ryuring
 		// BASERのデータソースも検索するようにした
+		// >>>
 		}elseif(file_exists(BASER_MODELS . 'datasources' . DS . $conn['filename'] . '.php')) {
 			require (BASER_MODELS . 'datasources' . DS . $conn['filename'] . '.php');
 		// <<<

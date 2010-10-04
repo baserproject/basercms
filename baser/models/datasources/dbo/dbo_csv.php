@@ -657,14 +657,6 @@ class DboCsv extends DboSource {
 
 	}
 /**
- * インデックス取得
- * @param array $queryData
- * @return array
- */
-	function indexCsv($queryData){
-		return array(0=>array('column'=>'id'));
-	}
-/**
  * CSVデータを読み込む
  *
  * @param 	array 	$queryData
