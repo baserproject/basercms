@@ -2526,31 +2526,38 @@ class DboSource extends DataSource {
 
 	}
 /**
- * モデルからスキーマファイルを生成する
- * @param array $options
+ * モデル名を指定してスキーマファイルを生成する
+ * 
+ * @param	array	models	モデル名
+ *					path	スキーマファイルの生成場所
+ * @return	mixed	スキーマファイルの内容 Or false
+ * @access	public
  */
 	function writeSchema($options){
 
 		App::import('Model','Schema');
-
 		extract($options);
+		
 		if(!isset($model)){
 			return false;
 		}
-
-		$table = Inflector::tableize($model);
-		$file = $table.'.php';
-		$camelize = Inflector::camelize($table);
-		$Schema = ClassRegistry::init('CakeSchema');
-
-		if(empty($path)){
-			$path = $Schema->path;
+		
+		if(!isset($file)){
+			$table = Inflector::tableize($model);
+			$file = $table.'.php';
 		}
 
+		$name = Inflector::camelize($table);
+		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
-		$options = $Schema->read(array('models'=>array($model)));
-		$options = am($options,array('name'=>$camelize,'file'=>$file,'path'=>$path));
-		return $Schema->write(null,$options);
+		
+		if(!isset($path)){
+			$path = $Schema->path;
+		}
+		
+		$options = $Schema->read(array('models' => array($model)));
+		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
+		return $Schema->write($options);
 
 	}
 /**
