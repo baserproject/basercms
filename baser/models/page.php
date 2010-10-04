@@ -142,6 +142,9 @@ class Page extends AppModel {
  * @access	public
  */
 	function getInsertID(){
+		if(!$this->__pageInsertID){
+			$this->__pageInsertID = parent::getInsertID();
+		}
 		return $this->__pageInsertID;
 	}
 /**
