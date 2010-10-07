@@ -56,21 +56,37 @@ class MaildataHelper extends TextExHelper {
 				break;
 
 			case 'radio':
-				$out = " ".$options[$value];
+				if(isset($options[$value])) {
+					$out = " ".$options[$value];
+				} else {
+					$out = " ";
+				}
 				break;
 
 			case 'select':
-				$out = " ".$options[$value];
+				if(isset($options[$value])) {
+					$out = " ".$options[$value];
+				} else {
+					$out = " ";
+				}
 				break;
 
 			case 'pref':
 				$options = $pref = $this->prefList();
-				$out = " ".$options[$value];
+				if(isset($options[$value])) {
+					$out = " ".$options[$value];
+				} else {
+					$out = " ";
+				}
 				break;
 
 			case 'check':
 				if($options) {
-					$out = $options[$value];
+					if(isset($options[$value])) {
+						$out = $options[$value];
+					} else {
+						$out = " ";
+					}
 				}else {
 					$out = " ".$value;
 				}
@@ -79,7 +95,9 @@ class MaildataHelper extends TextExHelper {
 			case 'multi_check':
 				$out = "\n";
 				foreach($value as $data) {
-					$out .= "　・".$options[$data]."\n";
+					if(isset($options[$data])) {
+						$out .= "　・".$options[$data]."\n";
+					}
 				}
 				break;
 
