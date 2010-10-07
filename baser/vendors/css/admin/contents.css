@@ -152,9 +152,10 @@
 	background:url(images/bg_main_head.jpg) no-repeat left top;
 	padding-left:25px;
 	padding-top:8px;
+	padding-bottom: 6px;
 	font-size:16px;
 	color:#688A00;
-	line-height: 20px;
+	line-height: 26px;
 }
 #contentsBody h2 img{
 	vertical-align:middle;
