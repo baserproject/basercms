@@ -80,6 +80,8 @@
 /**
  * baserUrl取得
  */
+if (file_exists(CONFIGS . 'install.php'))
+		include_once CONFIGS . 'install.php';
 	$baseUrl = baseUrl();
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
