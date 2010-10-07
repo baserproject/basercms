@@ -850,7 +850,12 @@ class DboCsv extends DboSource {
 						if(preg_match('/^"\{'.$key.'\}\s*([\+\-\/\*]+)\s*([\-0-9]+)"$/is', trim($field), $matches)) {
 							eval('$field = '.$record[$key].' '.$matches[1].' '.$matches[2].';');
 						}
-						$record[$key] = $field;
+						if(isset($record[$key])){
+							$record[$key] = $field;
+						}else{
+							trigger_error('フィールド： '.$key.' は存在しません。', E_USER_WARNING);
+							return false;
+						}
 					}
 				}else {
 					// 既存データをCSV用にコンバートする
@@ -939,7 +944,7 @@ class DboCsv extends DboSource {
 			$record = array();
 			// 配列の添え字をフィールド名に変換
 			foreach($_record as $key => $value) {
-				$record[$this->_csvFields[$key]] = $value;
+				@$record[$this->_csvFields[$key]] = $value;
 			}
 			// 文字コードを変換
 			mb_convert_variables($this->endcoding,"SJIS",$record);
@@ -1054,13 +1059,12 @@ class DboCsv extends DboSource {
 
 		// 全てのフィールドを取得
 		$this->cacheSources = false;
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $fieldName);
+		$schema = $this->describe($model, $fieldName);
 
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
 			if(in_array($fieldName,$this->_csvFields)) {
-				return $this->editColumn($model, $fieldName, $fieldName, $column);
+				return $this->renameColumn($model, $fieldName, $fieldName, $column);
 			}
 		}else {
 			$this->_csvFields = array();
@@ -1098,7 +1102,7 @@ class DboCsv extends DboSource {
  * @param Model $model
  * @param String $fieldName
  */
-	function editColumn(&$model,$oldFieldName,$fieldName,$column=null) {
+	function renameColumn(&$model,$oldFieldName,$fieldName,$column=null) {
 
 		// DB接続
 		if(!$this->connect($model,true)) {
@@ -1107,8 +1111,7 @@ class DboCsv extends DboSource {
 
 		// 全てのフィールドを取得
 		$this->cacheSources = false;
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $oldFieldName);
+		$schema = $this->describe($model, $oldFieldName);
 
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
@@ -1158,7 +1161,7 @@ class DboCsv extends DboSource {
  * @param Model $model
  * @param String $fieldName
  */
-	function deleteColumn(&$model,$fieldName) {
+	function delColumn(&$model,$fieldName) {
 
 		// DB接続
 		$this->cacheSources = false;
@@ -1167,8 +1170,7 @@ class DboCsv extends DboSource {
 		}
 
 		// 全てのフィールドを取得
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $fieldName);
+		$schema = $this->describe($model, $fieldName);
 
 		if($schema) {
 			$this->_csvFields = array_keys($schema);
@@ -2210,6 +2212,87 @@ class DboCsv extends DboSource {
  */
 	function dropSchema($schema, $table = null) {
 		return false;
+	}
+/**
+ * テーブル名を変更する
+ * プレフィックス付である事が前提
+ * @param	string	$oldName
+ * @param	string	$newName
+ * @return	boolean
+ * @access	public
+ */
+	function renameTable($oldName, $newName) {
+		
+		if(!$this->disconnect($oldName)){
+			return false;
+		}
+		$path = $this->config['database'].DS;
+		$oldPath = $path.$oldName.'.csv';
+		$newPath = $path.$newName.'.csv';
+		if(!file_exists($oldPath)){
+			return false;
+		}
+		
+		return rename($oldPath,$newPath);
+		
+	}
+/**
+ * テーブルを作成する
+ *
+ * @param	Model	$model
+ * @param	array	$schema
+ * @param	boolean
+ * @access	public
+ */
+	function createTable($model, $schema){
+
+		if (is_object($model)) {
+			$fullTableName = $this->fullTableName($model, false);
+		} else {
+			$fullTableName = $model;
+		}
+		$filename = $this->config['database'].DS.$fullTableName.'.csv';
+		$csv = '';
+		foreach($schema as $key => $value) {
+			if($key != 'indexes'){
+				$csv .= '"'.$key.'",';
+			}
+		}
+		$csv = substr($csv, 0, strlen($csv)-1);
+		$file = new File($filename, true, 0666);
+		$ret = $file->write($csv, 'w', true);
+		$file->close();
+		return $ret;
+
+	}
+/**
+ * テーブルを削除する
+ *
+ * @param	mixed	$table
+ * @return	boolean
+ * @access	public
+ */
+	function dropTable($model) {
+		if (is_object($model)) {
+			$fullTableName = $this->fullTableName($model, false);
+		} else {
+			$fullTableName = $model;
+		}
+		$filename = $this->config['database'].DS.$fullTableName.'.csv';
+		return @unlink($filename);
+
+	}
+/**
+ * Deletes all the records in a table and resets the count of the auto-incrementing
+ * primary key, where applicable.
+ *
+ * @param mixed $table A string or model class representing the table to be truncated
+ * @return boolean	SQL TRUNCATE TABLE statement, false if not applicable.
+ * @access public
+ */
+	function truncate($table) {
+		// TODO 現状、CSVのDELETE文はWHERE句がないと実行されない
+		return $this->execute('DELETE From ' . $this->fullTableName($table) . ' WHERE 1=1');
 	}
 }
 /**

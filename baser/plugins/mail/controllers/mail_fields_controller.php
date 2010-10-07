@@ -150,18 +150,23 @@ class MailFieldsController extends MailAppController {
 			$this->data['MailField']['no'] = $this->MailField->getMax('no',array('MailField.mail_content_id'=>$mailContentId))+1;
 			$this->data['MailField']['sort'] = $this->MailField->getMax('sort')+1;
 			$this->MailField->create($this->data);
-
-			// データを保存
-			if($this->MailField->save()) {
-				$this->Message->addField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name']);
-				$message = '新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->MailField->saveDbLog($message);
-				$this->redirect(array('controller'=>'mail_fields','action'=>'index',$mailContentId));
-			}else {
+			if($this->MailField->validates()) {
+				if($this->Message->addField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name'])) {
+					// データを保存
+					if($this->MailField->save(null, false)) {
+						$message = '新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。';
+						$this->Session->setFlash($message);
+						$this->MailField->saveDbLog($message);
+						$this->redirect(array('controller'=>'mail_fields','action'=>'index',$mailContentId));
+					}else {
+						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+					}
+				} else {
+					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
+				}
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		$this->subMenuElements = array('mail_fields','mail_common');
@@ -179,29 +184,37 @@ class MailFieldsController extends MailAppController {
  */
 	function admin_edit($mailContentId,$id) {
 
-		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		if(empty($this->data)) {
+		if (empty($this->data)) {
 			$this->data = $this->MailField->read(null, $id);
 		}else {
 			$old = $this->MailField->read(null, $id);
-			/* 更新処理 */
-			if($this->MailField->save($this->data)) {
-				if($old['MailField']['field_name'] != $this->data['MailField']['field_name']) {
-					$this->Message->editField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->data['MailField']['field_name']);
+			$this->MailField->set($this->data);
+			if($this->MailField->validates()) {
+				$ret = true;
+				if ($old['MailField']['field_name'] != $this->data['MailField']['field_name']) {
+					$ret = $this->Message->renameField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->data['MailField']['field_name']);
 				}
-				$message = 'メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->MailField->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$mailContentId));
-			}else {
+				if ($ret) {
+					/* 更新処理 */
+					if($this->MailField->save(null, false)) {
+						$message = 'メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。';
+						$this->Session->setFlash($message);
+						$this->MailField->saveDbLog($message);
+						$this->redirect(array('action'=>'index',$mailContentId));
+					}else {
+						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+					}
+				} else {
+					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
+				}
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		/* 表示設定 */
@@ -230,15 +243,18 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if($this->MailField->del($id)) {
-			$this->Message->deleteField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name']);
-			$message = 'メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->MailField->saveDbLog($message);
-		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
+			if($this->MailField->del($id)) {
+				$message = 'メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。';
+				$this->Session->setFlash($message);
+				$this->MailField->saveDbLog($message);
+			}else {
+				$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			}
+		} else {
+			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
 		}
-
+		
 		$this->redirect(array('action'=>'index',$mailContentId));
 
 	}
@@ -320,7 +336,7 @@ class MailFieldsController extends MailAppController {
 	function __getNewValueOnCopy($fieldName,$oldValue) {
 
 		// プレフィックスを削除したフィールド名を取得
-		$baseValue = preg_replace("/\::[0-9]+$/s","",$oldValue);
+		$baseValue = preg_replace("/\\[[0-9]\]+$/s","",$oldValue);
 		$baseValue = trim($baseValue);
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
@@ -332,13 +348,13 @@ class MailFieldsController extends MailAppController {
 		foreach($datas as $data) {
 
 			$lastPrefix = str_replace($baseValue,'',$data['MailField'][$fieldName]);
-			if(preg_match("/^\::([0-9]+)$/s",$lastPrefix,$matches)) {
+			if(preg_match("/^\\[([0-9]+)\]$/s",$lastPrefix,$matches)) {
 				$no = (int)$matches[1];
 				if($no > $prefixNo) $prefixNo = $no;
 			}
 
 		}
-		return $baseValue.'::'.($prefixNo+1).'';
+		return $baseValue.'['.($prefixNo+1).']';
 
 	}
 /**
