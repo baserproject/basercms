@@ -22,49 +22,62 @@
 App::import('Core','DboPostgres');
 class DboPostgresEx extends DboPostgres {
 /**
- * カラムを追加する
- * @param model $model
- * @param string $addFieldName
+ * カラムを追加するSQLを生成
+ *
+ * @param string $tableName
  * @param array $column
- * @return boolean
+ * @return string
  * @access public
  */
-	function addColumn(&$model,$addFieldName,$column) {
-		$tableName = $model->tablePrefix.$model->table;
-		if(empty($column['name'])) {
-			$column['name'] = $addFieldName;
-		}
-		$schema = $model->schema();
-		if(isset($schema[$addFieldName])) {
-			return $this->editColumn($model, $addFieldName, $addFieldName, $column);
-		}
-		return $this->execute('ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column));
+	function buildAddColumn($tableName, $column) {
+		return 'ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column);
 	}
 /**
- * カラムを変更する
- * @param model $model
+ * カラムを変更するSQLを生成
+ * TODO 未実装
  * @param string $oldFieldName
  * @param string $newFieldName
  * @param array $column
- * @return boolean
+ * @return string
  * @access public
  */
-	function editColumn(&$model,$oldFieldName,$newFieldName,$column=null) {
-		$tableName = $model->tablePrefix.$model->table;
-		return $this->execute('ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"');
+	function buildEditColumn($tableName, $oldFieldName, $column) {
+		return '';
 	}
 /**
  * カラムを削除する
- * @param model $model
+ *
  * @param string $delFieldName
  * @param array $column
+ * @return string
+ * @access public
+ */
+	function buildDelColumn($tableName, $delFieldName) {
+		return 'ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"';
+	}
+/**
+ * テーブル名のリネームステートメントを生成
+ *
+ * @param	string	$sourceName
+ * @param	string	$targetName
+ * @return	string
+ * @access	public
+ */
+	function buildRenameTable($sourceName, $targetName) {
+		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
+	}
+/**
+ * カラム名を変更する
+ *
+ * @param string $oldFieldName
+ * @param string $newFieldName
  * @return boolean
  * @access public
  */
-	function deleteColumn(&$model,$delFieldName) {
+	function renameColumn(&$model,$oldFieldName,$newFieldName) {
 		$tableName = $model->tablePrefix.$model->table;
-		return $this->execute('ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"');
+		$sql = 'ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"';
+		return $this->execute($sql);
 	}
-
 }
 ?>

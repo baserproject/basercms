@@ -103,21 +103,23 @@ class MailContentsController extends MailAppController {
 				$this->data['MailContent']['sender_1'] = '';
 			}
 			$this->MailContent->create($this->data);
-
-			/* データを保存 */
-			if($this->MailContent->save()) {
-
-				// 新しいメッセージテーブルを作成
-				$this->Message->createTable($this->data['MailContent']['name']);
-
-				$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->MailContent->saveDbLog($message);
-				$this->redirect(array('controller'=>'mail_contents','action'=>'index'));
-			}else {
+			if($this->MailContent->validates()) {
+				if ($this->Message->createTable($this->data['MailContent']['name'])) {
+					/* データを保存 */
+					if ($this->MailContent->save(null,false)) {
+						$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
+						$this->Session->setFlash($message);
+						$this->MailContent->saveDbLog($message);
+						$this->redirect(array('controller'=>'mail_contents','action'=>'index'));
+					} else {
+						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+					}
+				} else {
+					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。');
+				}
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 		$this->subMenuElements = array('mail_common');
 		$this->render('form');
@@ -140,44 +142,85 @@ class MailContentsController extends MailAppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->MailContent->read(null, $id);
-			$this->set('mailContent',$this->data);
 		}else {
 			$old = $this->MailContent->read(null,$id);
 			if(!$this->data['MailContent']['sender_1_']) {
 				$this->data['MailContent']['sender_1'] = '';
 			}
-			/* 更新処理 */
-			if($this->MailContent->save($this->data)) {
-
+			$this->MailContent->set($this->data);
+			if($this->MailContent->validates()) {
+				$ret = true;
 				// メッセージテーブルの名前を変更
 				if($old['MailContent']['name'] != $this->data['MailContent']['name']) {
-					$this->Message->renameTable($old['MailContent']['name'],$this->data['MailContent']['name']);
+					$ret = $this->Message->renameTable($old['MailContent']['name'],$this->data['MailContent']['name']);
 				}
+				/* 更新処理 */
+				if($ret) {
+					if($this->MailContent->save(null, false)) {
 
-				$message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->MailContent->saveDbLog($message);
+						$message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
+						$this->Session->setFlash($message);
+						$this->MailContent->saveDbLog($message);
 
-				if($this->data['MailContent']['edit_layout']){
-					$this->redirectEditLayout($this->data['MailContent']['layout_template']);
-				}elseif ($this->data['MailContent']['edit_mail_form']) {
-					$this->redirectEditForm($this->data['MailContent']['form_template']);
-				}elseif ($this->data['MailContent']['edit_mail']) {
-					$this->redirectEditMail($this->data['MailContent']['mail_template']);
-				}else{
-					$this->redirect(array('action'=>'index'));
+						if($this->data['MailContent']['edit_layout']){
+							$this->redirectEditLayout($this->data['MailContent']['layout_template']);
+						}elseif ($this->data['MailContent']['edit_mail_form']) {
+							$this->redirectEditForm($this->data['MailContent']['form_template']);
+						}elseif ($this->data['MailContent']['edit_mail']) {
+							$this->redirectEditMail($this->data['MailContent']['mail_template']);
+						}else{
+							$this->redirect(array('action'=>'index'));
+						}
+
+					}else {
+						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+					}
+				} else {
+					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルのリネームに失敗しました。');
 				}
-
-			}else {
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		/* 表示設定 */
+		$this->set('mailContent',$this->data);
 		$this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
 		$this->render('form');
+
+	}
+/**
+ * [ADMIN] 削除処理
+ *
+ @ @param	int		ID
+ * @return	void
+ * @access 	public
+ */
+	function admin_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action'=>'admin_index'));
+		}
+
+		// メッセージ用にデータを取得
+		$mailContent = $this->MailContent->read(null, $id);
+
+		/* 削除処理 */
+		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
+			if($this->MailContent->del($id)) {
+				$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
+				$this->Session->setFlash($message);
+				$this->MailContent->saveDbLog($message);
+			}else {
+				$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			}
+		} else {
+			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。');
+		}
+		$this->redirect(array('action'=>'index'));
 
 	}
 /**
@@ -262,40 +305,6 @@ class MailContentsController extends MailAppController {
 			$this->redirect(array('action'=>'index'));
 		}
 	}
-/**
- * [ADMIN] 削除処理
- *
- @ @param	int		ID
- * @return	void
- * @access 	public
- */
-	function admin_delete($id = null) {
 
-		/* 除外処理 */
-		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
-		}
-
-		// メッセージ用にデータを取得
-		$mailContent = $this->MailContent->read(null, $id);
-
-		/* 削除処理 */
-		if($this->MailContent->del($id)) {
-
-			// メッセージテーブルを削除
-			$this->Message->deleteTable($mailContent['MailContent']['name']);
-
-			$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->MailContent->saveDbLog($message);
-
-		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
-		}
-
-		$this->redirect(array('action'=>'index'));
-
-	}
 }
 ?>

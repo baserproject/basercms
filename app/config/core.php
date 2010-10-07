@@ -69,7 +69,7 @@
  * Turn off all caching application-wide.
  *
  */
-	Configure::write('Cache.disable', false);
+	Configure::write('Cache.disable', true);
 /**
  * Enable cache checking.
  *
@@ -242,4 +242,7 @@
  *
  */
 	Cache::config('default', array('engine' => 'File'));
+	if (file_exists(CONFIGS . 'install.php'))
+		include_once CONFIGS . 'install.php';
+
 ?>

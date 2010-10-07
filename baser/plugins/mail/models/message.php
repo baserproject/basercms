@@ -515,17 +515,33 @@ class Message extends MailAppModel {
 	}
 /**
  * メッセージテーブルを作成する
- * @param string $name
+ *
+ * @param string	コンテンツ名
  * @return boolean
+ * @access private
  */
-	function createTable($name) {
+	function createTable($contentName) {
 
-		$db = $this->getDataSource();
-		if($db->config['driver'] == 'csv') {
-			return $this->_createCsv($name);
-		}else {
-			return $this->_createTable($name);
+		$db =& $this->getDataSource();
+		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
+		$schema = array(
+			'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
+			'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+			'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
+		);
+		$ret = true;
+		if($contentName == 'messages') {
+			if($this->tableExists($this->tablePrefix.'messages')){
+				$ret = $db->dropTable($this->tablePrefix.'messages');
+			}
 		}
+		if(!$ret){
+			return false;
+		}
+		$ret = $db->createTable($this, $schema);
+		$this->deleteModelCache();
+		return $ret;
 
 	}
 /**
@@ -538,180 +554,24 @@ class Message extends MailAppModel {
  */
 	function renameTable($source,$target) {
 
-		$db = $this->getDataSource();
-		if($db->config['driver'] == 'csv') {
-			return $this->_renameCsv($source,$target);
-		}else {
-			return $this->_renameTable($source,$target);
-		}
-
-	}
-/**
- * メッセージテーブルを削除する
- *
- * @param string	コンテンツ名
- * @return boolean
- * @access private
- */
-	function deleteTable($name) {
-
-		$db = $this->getDataSource();
-		if($db->config['driver'] == 'csv') {
-			return $this->_deleteCsv($name);
-		}else {
-			return $this->_deleteTable($name);
-		}
-
-	}
-/**
- * メッセージCSVファイルを作成する
- * TODO DBOに実装する
- * @param string	コンテンツ名
- * @return boolean
- * @access private
- */
-	function _createCsv($contentName) {
-
-		$db = $this->getDataSource();
-		$fileName = $db->config['database'].DS.$this->getTablePrefixByContentName($contentName).'messages.csv';
-		$fields = '"id","created","modified"';
-		$file = new File($fileName);
-		$file->write($fields, 'w', true);
-		$file->close();
-		chmod($fileName,0666);
-		//Cache::clear();
-		$this->deleteModelCache();
-
-		return true;
-
-	}
-/**
- * メッセージテーブルを作成する
- *
- * @param string	コンテンツ名
- * @return boolean
- * @access private
- */
-	function _createTable($contentName) {
-
-		$db = $this->getDataSource();
-
-		$tableName = $this->getTablePrefixByContentName($contentName).'messages';
-		// TODO ドライバーに移動させる事
-		switch (str_replace('_ex','',$db->config['driver'])) {
-			case 'mysql':
-				$sql = 'CREATE TABLE '.$tableName.' ('.
-						'id INT(11) NOT NULL AUTO_INCREMENT,'.
-						'created DATETIME,'.
-						'modified DATETIME,'.
-						'PRIMARY KEY(id));';
-				break;
-			case 'postgres':
-				$sql = 'CREATE TABLE '.$tableName.' ('.
-						'id INT8 NOT NULL DEFAULT nextval(\'bc__messages_id_seq\'),'.
-						'created TIMESTAMP,'.
-						'modified TIMESTAMP,'.
-						'PRIMARY KEY(id));';
-				break;
-			case 'sqlite':
-			case 'sqlite3':
-				$sql = 'CREATE TABLE '.$tableName.' ('.
-						'id INTEGER NOT NULL PRIMARY KEY,'.
-						'created DATETIME,'.
-						'modified DATETIME);';
-				break;
-
-		}
-
-		$ret = $db->execute($sql);
-		//Cache::clear();
-		$this->deleteModelCache();
-		return $ret;
-
-	}
-/**
- * メッセージCSVファイルの名前を変更する
- *
- * @param string	元コンテンツ名
- * @param string	変更後コンテンツ名
- * @return boolean
- * @access private
- */
-	function _renameCsv($source,$target) {
-
-		$db = $this->getDataSource();
-		$sourceFile = $db->config['database'].DS.$this->getTablePrefixByContentName($source).'messages.csv';
-		$targetFile = $db->config['database'].DS.$this->getTablePrefixByContentName($target).'messages.csv';
-		$ret = rename($sourceFile,$targetFile);
-		chmod($targetFile,0666);
-		if($ret && $source == 'messages') {
-			$ret = $this->_createCsv($source);
-		}
-		//Cache::clear();
-		$this->deleteModelCache();
-		return $ret;
-
-	}
-/**
- * メッセージテーブルの名前を変更する
- *
- * @param string	元コンテンツ名
- * @param string	変更後コンテンツ名
- * @return boolean
- * @access private
- */
-	function _renameTable($source,$target) {
-
-		$db = $this->getDataSource();
+		$db =& $this->getDataSource();
 
 		$sourceName = $this->getTablePrefixByContentName($source).'messages';
 		$targetName = $this->getTablePrefixByContentName($target).'messages';
 
+		$ret = true;
 		if($target== 'messages') {
-			$ret = $db->execute('DROP TABLE '.$targetName);
+			$ret = $db->dropTable($targetName);
 		}
-		// TODO ドライバーに移行する事
-		switch (str_replace('_ex','',$db->config['driver'])) {
-			case 'mysql':
-				$sql = "ALTER TABLE ".$sourceName." RENAME ".$targetName;
-				break;
-			case 'postgres':
-				$sql = "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
-				break;
-			case 'sqlite':  // sqliteは未実装
-			case 'sqlite3':
-				$sql = "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
-				break;
+		if(!$ret){
+			return false;
 		}
-
-		$ret = $db->execute($sql);
-
+		$ret = $db->renameTable($sourceName, $targetName);
+		
 		if($ret && $source == 'messages') {
-			$ret = $this->_createTable($source);
+			$ret = $this->createTable($source);
 		}
 
-		//Cache::clear();
-		$this->deleteModelCache();
-		return $ret;
-
-	}
-/**
- * メッセージCSVを削除する
- *
- * @param string	コンテンツ名
- * @return boolean
- * @access private
- */
-	function _deleteCsv($contentName) {
-
-		$db = $this->getDataSource();
-		$fileName = $db->config['database'].DS.$this->getTablePrefixByContentName($contentName).'messages.csv';
-		$file = new File($fileName);
-		$ret = $file->delete();
-		if($ret && $contentName == 'messages') {
-			$ret = $this->_createCsv($contentName);
-		}
-		//Cache::clear();
 		$this->deleteModelCache();
 		return $ret;
 
@@ -723,15 +583,17 @@ class Message extends MailAppModel {
  * @return boolean
  * @access private
  */
-	function _deleteTable($contentName) {
+	function dropTable($contentName) {
 
-		$db = $this->getDataSource();
-		$tableName = $this->getTablePrefixByContentName($contentName).'messages';
-		$ret = $db->execute('DROP TABLE '.$tableName);
-		if($ret && $contentName == 'messages') {
-			$ret = $this->_createTable($contentName);
+		$db =& $this->getDataSource();
+		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
+		if(!$this->tableExists($this->tablePrefix.'messages')){
+			return true;
 		}
-		//Cache::clear();
+		$ret = $db->dropTable($this);
+		if($ret && $contentName == 'messages') {
+			$ret = $this->createTable($contentName);
+		}
 		$this->deleteModelCache();
 		return $ret;
 
@@ -755,10 +617,10 @@ class Message extends MailAppModel {
  * @param string $fieldName
  * @access private
  */
-	function editField($contentName, $oldFieldName,$newfieldName) {
+	function renameField($contentName, $oldFieldName,$newfieldName) {
 
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		$ret = parent::editField($oldFieldName,$newfieldName,array('type'=>'text'));
+		$ret = parent::renameField($oldFieldName,$newfieldName);
 		return $ret;
 
 	}
@@ -768,10 +630,10 @@ class Message extends MailAppModel {
  * @param string $fieldName
  * @access private
  */
-	function deleteField($contentName, $fieldName) {
+	function delField($contentName, $fieldName) {
 
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		$ret = parent::deleteField($fieldName);
+		$ret = parent::delField($fieldName);
 		return $ret;
 
 	}
@@ -782,10 +644,11 @@ class Message extends MailAppModel {
  */
 	function getTablePrefixByContentName($contentName) {
 
-		$db = $this->getDataSource();
+		$db =& $this->getDataSource();
+		$prefix = '';
 		if($contentName != 'messages') {
 			$prefix = $db->config['prefix'].$contentName."_";
-		}else {
+		} else {
 			$prefix = $db->config['prefix'];
 		}
 		return $prefix;

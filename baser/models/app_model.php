@@ -567,10 +567,10 @@ class AppModel extends Model {
  * @return boolean
  * @access public
  */
-	function editField($oldFieldName,$newFieldName,$column=null) {
+	function renameField($oldFieldName,$newFieldName,$column=null) {
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->editColumn($this,$oldFieldName,$newFieldName,$column);
+		$ret = $db->renameColumn($this,$oldFieldName,$newFieldName);
 		$this->deleteModelCache();
 		return $ret;
 	}
@@ -580,10 +580,10 @@ class AppModel extends Model {
  * @return boolean
  * @access public
  */
-	function deleteField($delFieldName) {
+	function delField($delFieldName) {
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->deleteColumn($this,$delFieldName);
+		$ret = $db->delColumn($this,$delFieldName);
 		$this->deleteModelCache();
 		return $ret;
 	}
@@ -594,6 +594,7 @@ class AppModel extends Model {
  */
 	function tableExists ($tableName) {
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db->cacheSources = false;
 		$tables = $db->listSources();
 		return in_array($tableName, $tables);
 	}
@@ -757,6 +758,7 @@ class AppModel extends Model {
  * @access public
  */
 	function deleteModelCache() {
+		$this->_schema = null;
 		App::import('Core','Folder');
 		$folder = new Folder(CACHE.'models'.DS);
 		$caches = $folder->read(true,true);

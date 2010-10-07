@@ -81,7 +81,9 @@ class BlogComment extends BlogAppModel {
 		}
 
 		// サニタイズ
-		$data['message'] = Sanitize::html($data['message']);
+		$data = Sanitize::html($data);
+		$data['url'] = str_replace('&#45;','-',$data['url']);
+		$data['email'] = str_replace('&#45;','-',$data['email']);
 		$data['blog_post_id'] = $postId;
 		$data['blog_content_id'] = $contentId;
 		if($commentApprove) {

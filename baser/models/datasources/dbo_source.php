@@ -2497,27 +2497,34 @@ class DboSource extends DataSource {
 // >>>
 /**
  * スキーマファイルを利用してテーブルを生成する
+ * 
  * @param array $options	model と path は必須
  * @param pass $path
  */
-	function createTableSchema($options) {
+	function loadSchema($options) {
 
 		App::import('Model','Schema');
-
 		extract($options);
+
 		if(!isset($model)){
 			return false;
 		}
-
-		$table = Inflector::tableize($model);
-		$file = $table.'.php';
-		$camelize = Inflector::camelize($table);
+		if(!isset($table)) {
+			$table = Inflector::tableize($model);
+		}
+		if(!isset($file)) {
+			$file = $table.'.php';
+		}
+		
+		$name = Inflector::camelize($table);
 		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		
 		if(empty($path)){
 			$path = $Schema->path;
 		}
-		$Schema->connection = $this->configKeyName;
-		$ModelSchema = $Schema->load(array('name'=>$camelize,'path'=>$path,'file'=>$file));
+		
+		$ModelSchema = $Schema->load(array('name'=>$name,'path'=>$path,'file'=>$file));
 		if(!$ModelSchema){
 			return false;
 		}
@@ -2561,15 +2568,251 @@ class DboSource extends DataSource {
 
 	}
 /**
- * フィールド構造を変更する
- * @param array $compare
- * @param string $table
- * @return <type> boolean
+ * スキーマファイルからフィールド構造を変更する
+ * 
+ * @param	array	$compare
+ * @param	array	$compare
+ * @param	string	$table
+ * @return	boolean
  */
 
-	function alterColumn($compare, $table = null){
-		$sql = $this->alterSchema($compare, $table = null);
+	function editColumnBySchema($model, $oldPath, $newPath){
+
+		App::import('Model','Schema');
+
+		$table = Inflector::tableize($model);
+		$file = $table.'.php';
+		$name = Inflector::camelize($table);
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+
+		$oldSchema = $Schema->load(array('name'=>$name,'path'=>$oldPath,'file'=>$file));
+		$newSchema = $Schema->load(array('name'=>$name,'path'=>$newPath,'file'=>$file));
+		if(!$ModelSchema){
+			return false;
+		}
+		$compare = $Schema->compare($oldSchema, $newSchema);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
+
+	}
+/**
+ * スキーマファイルからテーブルを削除する
+ *
+ * @param	string	$oldName
+ * @param	string	$newName
+ * @return	boolean
+ * @access	public
+ */
+	function dropTableBySchema($options) {
+
+		App::import('Model','Schema');
+		extract($options);
+
+		if(!isset($model)){
+			return false;
+		}
+		if(!isset($table)) {
+			$table = Inflector::tableize($model);
+		}
+		if(!isset($file)) {
+			$file = $table.'.php';
+		}
+
+		$name = Inflector::camelize($table);
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+
+		if(empty($path)){
+			$path = $Schema->path;
+		}
+
+		$ModelSchema = $Schema->load(array('name'=>$name,'path'=>$path,'file'=>$file));
+		if(!$ModelSchema){
+			return false;
+		}
+		$sql = $this->dropSchema($ModelSchema,$table);
+		return $this->execute($sql);
+
+	}
+/**
+ * テーブルを作成する
+ * 
+ * @param	Model	$mode	文字列の場合はフルテーブル名が前提
+ * @param	array	$schema
+ * @param	boolean
+ * @access	public
+ */
+	function createTable($model, $schema){
+		
+		App::import('Model','Schema');
+		if (is_object($model)) {
+			$fullTableName = $this->fullTableName($model, false);
+		} else {
+			$fullTableName = $model;
+		}
+		// 可変モデル（プレフィックスを利用してテーブルを切り替えるモデル）に対応するための処理
+		$table = str_replace($this->config['prefix'], '', $fullTableName);
+		$name = Inflector::pluralize(Inflector::classify($table));
+		$options = array('name'=>$table,
+						'connection' => $this->configKeyName,
+						$table => $schema);
+		$CakeSchema = new CakeSchema($options);
+		$sql = $this->createSchema($CakeSchema);
+		return $this->execute($sql);
+		
+	}
+/**
+ * テーブルを削除する
+ *
+ * @param	mixid	$model	文字列の場合はフルテーブル名が前提
+ * @return	boolean
+ * @access	public
+ */
+	function dropTable($model) {
+
+		if (is_object($model)) {
+			$fullTableName = $this->fullTableName($model, false);
+		} else {
+			$fullTableName = $model;
+		}
+		$sql = $this->buildDropTable($fullTableName);
+		return $this->execute($sql);
+
+	}
+/**
+ * テーブル名をリネームする
+ * プレフィックス付である事が前提
+ * @param	string	$oldName
+ * @param	string	$newName
+ * @return	boolean
+ * @access	public
+ */
+	function renameTable($oldName, $newName) {
+		
+		$sql = $this->buildRenameTable($oldName, $newName);
+		return $this->execute($sql);
+
+	}
+/**
+ * カラムを追加する
+ * @param model $model
+ * @param string $addFieldName
+ * @param array $column
+ * @return boolean
+ * @access public
+ */
+	function addColumn(&$model,$addFieldName,$column) {
+
+		$table = $model->tablePrefix . $model->table;
+		if(empty($column['name'])) {
+			$column['name'] = $addFieldName;
+		}
+		$schema = $model->schema();
+		if(isset($schema[$addFieldName])) {
+			return $this->renameColumn($model, $addFieldName, $addFieldName, $column);
+		}
+		$sql = $this->buildAddColumn($table,$column);
+		return $this->execute($sql);
+
+	}
+/**
+ * カラムを変更する
+ *
+ * @param model $model
+ * @param string $oldFieldName
+ * @param string $newFieldName
+ * @param array $column
+ * @return boolean
+ * @access public
+ */
+	function editColumn(&$model,$oldFieldName, $column) {
+		$table = $model->tablePrefix . $model->table;
+		$sql = $this->buildEditColumn($table, $oldFieldName, $column);
+		return $this->execute($sql);
+	}
+/**
+ * カラムを削除する
+ *
+ * @param model $model
+ * @param string $delFieldName
+ * @return boolean
+ * @access public
+ */
+	function delColumn(&$model, $delFieldName) {
+		$table = $model->tablePrefix . $model->table;
+		$sql = $this->buildDelColumn($table, $delFieldName);
+		return $this->execute($sql);
+	}
+/**
+ * カラム名を変更する
+ *
+ * @param model $model
+ * @param string $oldFieldName
+ * @param string $newFieldName
+ * @return boolean
+ * @access public
+ */
+	function renameColumn(&$model,$oldFieldName,$newFieldName) {
+		$schema = $model->schema();
+		$column = $schema[$oldFieldName];
+		$column['name'] = $newFieldName;
+		return $this->editColumn($model, $oldFieldName, $column);
+	}
+/**
+ * テーブルのドロップステートメントを生成
+ *
+ * @param	string	$tableName
+ * @return	string
+ * @access	public
+ */
+	function buildDropTable($tableName) {
+		return "DROP TABLE ".$tableName;
+	}
+/**
+ * テーブル名のリネームステートメントを生成
+ *
+ * @param	string	$sourceName
+ * @param	string	$targetName
+ * @return	string
+ * @access	public
+ */
+	function buildRenameTable($sourceName, $targetName) {
+		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
+	}
+/**
+ * カラムを追加するSQLを生成
+ *
+ * @param string $tableName
+ * @param array $column
+ * @return string
+ * @access public
+ */
+	function buildAddColumn($tableName, $column) {
+		return "ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column);
+	}
+/**
+ * カラムを変更するSQLを生成
+ *
+ * @param string $oldFieldName
+ * @param string $newFieldName
+ * @param array $column
+ * @return string
+ * @access public
+ */
+	function buildEditColumn($tableName, $oldFieldName, $column) {
+		return "ALTER TABLE `".$tableName."` CHANGE `".$oldFieldName."` ".$this->buildColumn($column);
+	}
+/**
+ * カラムを削除する
+ *
+ * @param string $delFieldName
+ * @param array $column
+ * @return string
+ * @access public
+ */
+	function buildDelColumn($tableName, $delFieldName) {
+		return "ALTER TABLE `".$tableName."` DROP `".$delFieldName."`";
 	}
 // <<<
 }
