@@ -242,4 +242,10 @@
  *
  */
 	Cache::config('default', array('engine' => 'File'));
+/**
+ * include install settings
+ */
+	if (file_exists(CONFIGS . 'install.php')) {
+		include_once CONFIGS . 'install.php';
+	}
 ?>

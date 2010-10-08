@@ -61,27 +61,8 @@
  */
 	Configure::write('Baser.cachetime','1 month');
 /**
- * ベース URL を編集
- * エックスサーバーではSCRIPT_NAMEが正常に取得できなかったのでここで書き換える
- * install.phpを優先する事
- */
-	$scriptName = env('SCRIPT_NAME');
-	if(!preg_match('/(.*?)\/index.php$/s',$scriptName) && strpos($scriptName,'app/webroot/index.php') === false) {
-		$pos = strpos($scriptName,'index.php');
-		$baseUrl = '';
-		if($pos !== false) {
-			$baseUrl = substr($scriptName,0,$pos);
-			$scriptName = $baseUrl.'app/webroot/index.php';
-		}else {
-			$scriptName = '';
-		}
-	}
-	Configure::write('App.baseUrl', $scriptName);
-/**
  * baserUrl取得
  */
-if (file_exists(CONFIGS . 'install.php'))
-		include_once CONFIGS . 'install.php';
 	$baseUrl = baseUrl();
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
