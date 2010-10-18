@@ -216,14 +216,14 @@ INSERT into bc_pages (sort, name, title, description, contents, page_category_id
 <div class="news" style="margin-right:28px;">
 <h2 id="newsHead01">NEWS RELEASE</h2>
 <div class="body">
-<script type="text/javascript" src="<?php $baser->root() ?>feed/ajax/1"></script>
+<?php $baser->feed(1) ?>
 </div>
 </div>
 
 <div class="news">
 <h2 id="newsHead02">BaserCMS NEWS</h2>
 <div class="body">
-<script type="text/javascript" src="<?php $baser->root() ?>feed/ajax/2"></script>
+<?php $baser->feed(2) ?>
 </div>
 </div>
 </div>
