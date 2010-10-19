@@ -553,7 +553,8 @@ class DboCsv extends DboSource {
 			mkdir(TMP."csv",0777);
 		}
 		if(file_exists($file)) {
-			copy($file,TMP."csv".DS.basename($file).".bak");
+			copy($file, TMP."csv".DS.basename($file).".bak");
+			chmod(TMP."csv".DS.basename($file).".bak", 0666);
 		}
 
 		// ファイルを開く
