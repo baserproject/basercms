@@ -123,30 +123,30 @@ class BlogPostsController extends BlogAppController {
 		/* セッション処理 */
 		if($this->data) {
 			if(isset($this->data['BlogPost']['blog_category_id'])){
-				$this->Session->write('Filter.BlogPost.'.$blogContentId.'blog_category_id',$this->data['BlogPost']['blog_category_id']);
+				$this->Session->write('Filter.BlogPost.'.$blogContentId.'.blog_category_id',$this->data['BlogPost']['blog_category_id']);
 			}
-			$this->Session->write('Filter.BlogPost.'.$blogContentId.'status',$this->data['BlogPost']['status']);
+			$this->Session->write('Filter.BlogPost.'.$blogContentId.'.status',$this->data['BlogPost']['status']);
 		}else {
-			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'blog_category_id')) {
-				$this->data['BlogPost']['blog_category_id'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'blog_category_id');
+			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'.blog_category_id')) {
+				$this->data['BlogPost']['blog_category_id'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.blog_category_id');
 			}else {
-				$this->Session->del('Filter.BlogPost.'.$blogContentId.'blog_category_id');
+				$this->Session->del('Filter.BlogPost.'.$blogContentId.'.blog_category_id');
 			}
-			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'status')) {
-				$this->data['BlogPost']['status'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'status');
+			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'.status')) {
+				$this->data['BlogPost']['status'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.status');
 			}else {
-				$this->Session->del('Filter.BlogPost.'.$blogContentId.'status');
+				$this->Session->del('Filter.BlogPost.'.$blogContentId.'.status');
 			}
 		}
 
 		// 表示件数設定
 		if(!empty($this->params['named']['num'])){
-			$this->Session->write('Filter.BlogPost.'.$blogContentId.'num', $this->params['named']['num']);
+			$this->Session->write('Filter.BlogPost.'.$blogContentId.'.num', $this->params['named']['num']);
 		}else{
-			if(!$this->Session->check('Filter.BlogPost.'.$blogContentId.'num')){
+			if(!$this->Session->check('Filter.BlogPost.'.$blogContentId.'.num')){
 				$this->passedArgs['num'] = 10;
 			}else{
-				$this->passedArgs['num'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'num');
+				$this->passedArgs['num'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.num');
 			}
 		}
 		
