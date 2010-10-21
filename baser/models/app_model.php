@@ -686,7 +686,13 @@ class AppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	function changeSort($id,$offset,$conditions) {
+	function changeSort($id,$offset,$conditions=array()) {
+		
+		if($conditions) {
+			$_conditions = $conditions;
+		} else {
+			$_conditions = array();
+		}
 
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
@@ -706,6 +712,7 @@ class AppModel extends Model {
 			return true;
 		}
 
+		$conditions = am($conditions,$_conditions);
 		$target = $this->find('all',array('conditions'=>$conditions,
 				'fields'=>array($this->alias.'.id',$this->alias.'.sort'),
 				'order'=>$order,
@@ -728,6 +735,7 @@ class AppModel extends Model {
 			$conditions[$this->alias.'.sort <='] = $currentSort;
 			$conditions[$this->alias.'.sort >='] = $targetSort;
 		}
+		$conditions = am($conditions,$_conditions);
 		$datas = $this->find('all',array('conditions'=>$conditions,
 				'fields'=>array($this->alias.'.id',$this->alias.'.sort'),
 				'order'=>$order,
