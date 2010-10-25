@@ -2548,13 +2548,28 @@ class DboSource extends DataSource {
 		if(!isset($model)){
 			return false;
 		}
+
+		// 登録済のクラスをクリアする
+		// 何故かプラグインのモデルがコアのDB設定で登録されてしまっているため
+		// コアとプラグインを連続して書き出すとプラグインのテーブルが見つからない
+		ClassRegistry::flush();
 		
 		if(!isset($file)){
-			$table = Inflector::tableize($model);
-			$file = $table.'.php';
+			if(is_array($model)) {
+				$basename = $this->configKeyName;
+			} else {
+				$basename = Inflector::tableize($model);
+				$model = array($model);
+			}
+			$file = $basename.'.php';
+		} else {
+			$basename = basename($file, '.php');
 		}
 
-		$name = Inflector::camelize($table);
+		if(!isset($name)) {
+			$name = Inflector::camelize($basename);
+		}
+		
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		
@@ -2562,7 +2577,7 @@ class DboSource extends DataSource {
 			$path = $Schema->path;
 		}
 		
-		$options = $Schema->read(array('models' => array($model)));
+		$options = $Schema->read(array('models' => $model));
 		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
 		return $Schema->write($options);
 
