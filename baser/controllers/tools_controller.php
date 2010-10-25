@@ -89,7 +89,7 @@ class ToolsController extends AppController {
  * @return  void
  * @access  public
  */
-	function admin_load() {
+	function admin_load_schema() {
 		if($this->data) {
 			if(!$this->data['Schema']['model']) {
 				$this->Session->setFlash('モデル名を入力してください。');
