@@ -73,9 +73,8 @@ class Tool extends AppModel {
 		}
 		$sources = array();
 		foreach($listSources as $source) {
-			if(preg_match('/^'.$prefix.'([a-z][a-z_]*?)$/is', $source,$maches)) {
-				$model = Inflector::camelize(Inflector::singularize(str_replace('.php', '', $maches[1])));
-				$sources[] = $model;
+			if(preg_match('/^'.$prefix.'([a-z][a-z_]*?)$/is', $source)) {
+				$sources[] = $source;
 			}
 		}
 		sort($sources);
@@ -122,9 +121,18 @@ class Tool extends AppModel {
  */
 	function _writeSchema($field, $values, $path) {
 
-		$modelList = $this->getControlSource($field);
 		$ds = str_replace('_models', '', $field);
 		$db =& ConnectionManager::getDataSource($ds);
+		$prefix = $db->config['prefix'];
+		$tableList = $this->getControlSource($field);
+		$modelList = array();
+		foreach ($tableList as $key => $table) {
+			if(preg_match('/^'.$prefix.'([a-z][a-z_]*?)$/is', $table,$maches)) {
+				$model = Inflector::camelize(Inflector::singularize($maches[1]));
+				$modelList[$key] = $model;
+			}
+		}
+
 		$result = true;
 		foreach ($values as $value){
 			if(!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))){

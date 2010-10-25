@@ -45,11 +45,11 @@
 <?php echo $formEx->create('Tool',array('action'=>'write_schema')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser_models', 'Baserコアモデル名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser_models', 'Baserコア テーブル名') ?></th>
 		<td class="col-input"><?php echo $formEx->select('Tool.baser_models',$formEx->getControlSource('Tool.baser_models'),null,array('multiple'=>true, 'style'=>'width:100%')) ?> <?php echo $formEx->error('Tool.baser_models') ?></td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin_models', 'プラグインモデル名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin_models', 'Baserプラグイン テーブル名') ?></th>
 		<td class="col-input"><?php echo $formEx->select('Tool.plugin_models',$formEx->getControlSource('Tool.plugin_models'),null,array('multiple'=>true, 'style'=>'width:100%')) ?> <?php echo $formEx->error('Tool.plugin_models') ?></td>
 	</tr>
 </table>
