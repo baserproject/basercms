@@ -111,6 +111,32 @@ class Tool extends AppModel {
 
 	}
 /**
+ * スキーマファイルを読み込む
+ * 
+ * @param array $data
+ * @param string $tmpPath
+ * @return boolean
+ */
+	function loadSchema($data, $tmpPath) {
+		
+		$path = $tmpPath . $data['Tool']['schema_file']['name'];
+		if(move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
+			App::import('Model','Schema');
+			include $path;
+			$schemaName = basename(Inflector::classify(basename($path)),'.php').'Schema';
+			$Schema = new $schemaName();
+			$db =& ConnectionManager::getDataSource($Schema->connection);
+			if($db->loadSchema(array('type'=>$data['Tool']['schema_type'],'path' => $tmpPath, 'file'=> $data['Tool']['schema_file']['name']))) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
+	}
+/**
  * スキーマを書き出す
  *
  * @param	string	$field
@@ -137,14 +163,14 @@ class Tool extends AppModel {
 		foreach ($values as $value){
 			if(!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))){
 				$result = false;
-			}else{
+			}/*else{
 				$filename = $path.Inflector::tableize($modelList[$value]).'.php';
 				$File = new File($filename);
 				$content = file_get_contents($filename);
 				$content = str_replace($path, BASER_CONFIGS.'sql'.DS, $content);
 				$File->write($content, 'w+');
 				$File->close();
-			}
+			}*/
 		}
 		return $result;
 		

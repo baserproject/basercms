@@ -650,9 +650,14 @@ class DboCsv extends DboSource {
 				case "build":
 					$ret = $this->buildCsv($queryData);
 					break;
+				case "drop":
+					$ret = $this->dropCsv($queryData);
+					break;
+				default:
+					$ret = false;
 			}
 		}else {
-			$ret = true;
+			$ret = false;
 		}
 		return $ret;
 
@@ -818,10 +823,30 @@ class DboCsv extends DboSource {
  * @param array $queryData
  */
 	function buildCsv($queryData) {
-
+		
+		if(file_exists($this->config['database'].DS.$queryData['tableName'].'.csv')){
+			return false;
+		}
 		$this->_connect($queryData['tableName'],true,null,true);
 		$head = $this->_getCsvHead($queryData['fields']);
 		return fwrite($this->connection[$queryData['tableName']], $head);
+
+	}
+/**
+ * CSVテーブルを削除する
+ * 
+ * @param	array	$queryData
+ * @return	boolean
+ * @access	public
+ */
+	function dropCsv($queryData) {
+
+		$path = $this->config['database'].DS.$queryData['tableName'].'.csv';
+		if(!file_exists($path)){
+			return false;
+		}
+		$this->disconnect($queryData['tableName']);
+		return @unlink($path);
 
 	}
 /**
@@ -1048,95 +1073,138 @@ class DboCsv extends DboSource {
 /**
  * フィールドを追加する
  *
- * @param Model $model
- * @param String $fieldName
+ * @param	array	$options [ table / column / prefix ]
+ * @return	boolean
+ * @access	protected
  */
-	function addColumn(&$model,$fieldName,$column=null) {
+	function addColumn($options) {
 
-		// DB接続
-		if(!$this->connect($model,true)) {
+		extract($options);
+
+		if(!isset($table) || !isset($column)) {
 			return false;
 		}
 
-		// 全てのフィールドを取得
-		$this->cacheSources = false;
-		$schema = $this->describe($model, $fieldName);
+		if(!isset($field)) {
+			if(isset($column['name'])) {
+				$field = $column['name'];
+			} else {
+				return false;
+			}
+		}
 
-		if($schema) {
-			$this->_csvFields = array_keys($schema);
-			if(in_array($fieldName,$this->_csvFields)) {
-				return $this->renameColumn($model, $fieldName, $fieldName, $column);
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+
+		$table = $prefix . $table;
+		
+		// DB接続		
+		if(!$this->_connect($table,true,null,true)) {
+			return false;
+		}
+
+		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		if($this->_csvFields) {
+			if(in_array($field,$this->_csvFields)) {
+				// 既に存在するフィールドの場合は falseを返す
+				return false;
 			}
 		}else {
 			$this->_csvFields = array();
 		}
 
-		$this->_csvFields[] = $fieldName;
+		$this->_csvFields[] = $field;
 		$head = $this->_getCsvHead();
 
 		// 全てのレコードを取得
-		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$records = $this->_readCsvFile($table);
 		$body="";
 		if($records) {
 			foreach($records as $key => $record) {
 				$_record = $this->_convertRecord($record);
-				$_record[] = "";
+				$_record[] = '""';
 				$body .= implode(",",$_record)."\r\n";
 			}
 		}
 
 		// ファイルサイズを0に
-		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
+		ftruncate($this->connection[$table],0);
 
 		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
 
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
+		$ret = fwrite($this->connection[$table], $csvData);
 
-		$this->disconnect($model->tablePrefix.$model->useTable);
+		$this->disconnect($table);
 		return $ret;
 
 	}
 /**
  * フィールドを編集する
  *
- * @param Model $model
- * @param String $fieldName
+ * @param	array	$options [ table / column / field / prefix ]
+ * @return	boolean
+ * @access	protected
  */
-	function renameColumn(&$model,$oldFieldName,$fieldName,$column=null) {
+	function editColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($column)) {
+			return false;
+		}
+
+		if(!isset($field)) {
+			if(isset($column['name'])){
+				$field = $column['name'];
+			} else{
+				return false;
+			}
+		}
+
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+
+		$table = $prefix . $table;
+		$old = $field;
+		if(isset($column['name'])){
+			$new = $column['name'];
+		}else{
+			// CSVは型やサイズがない為、リネーム以外はtrueを返して終了する
+			return true;
+		}
 
 		// DB接続
-		if(!$this->connect($model,true)) {
+		if(!$this->_connect($table,true,null,true)) {
 			return false;
 		}
 
 		// 全てのフィールドを取得
-		$this->cacheSources = false;
-		$schema = $this->describe($model, $oldFieldName);
-
-		if($schema) {
-			$this->_csvFields = array_keys($schema);
-			if(!in_array($oldFieldName,$this->_csvFields)) {
+		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		if($this->_csvFields) {
+			if(!in_array($old,$this->_csvFields)) {
 				return false;
 			}
 		}else {
-			$this->_csvFields = array();
+			return false;
 		}
 
 		// キーを取得
 		while ($field = current($this->_csvFields)) {
-			if ($field == $oldFieldName) {
+			if ($field == $oldField) {
 				$key = key($this->_csvFields);
 			}
 			next($this->_csvFields);
 		}
 
 		// ヘッダーの生成
-		$this->_csvFields[$key] = $fieldName;
+		$this->_csvFields[$key] = $newField;
 		$head = $this->_getCsvHead();
 
 		// 全てのレコードを取得
-		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$records = $this->_readCsvFile($table);
 		$body="";
 		if($records) {
 			foreach($records as $key => $record) {
@@ -1146,45 +1214,55 @@ class DboCsv extends DboSource {
 		}
 
 		// ファイルサイズを0に
-		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
+		ftruncate($this->connection[$table],0);
 
 		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
 
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
-		$this->disconnect($model->tablePrefix.$model->useTable);
+		$ret = fwrite($this->connection[$table], $csvData);
+		$this->disconnect($table);
 		return $ret;
 
 	}
 /**
  * フィールドを削除する
  *
- * @param Model $model
- * @param String $fieldName
+ * @param	array	$options [ table / field / prefix ]
+ * @return	boolean
+ * @access	protected
  */
-	function delColumn(&$model,$fieldName) {
+	function delColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($field)) {
+			return false;
+		}
+
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+
+		$table = $prefix . $table;
 
 		// DB接続
-		$this->cacheSources = false;
-		if(!$this->connect($model,true)) {
+		if(!$this->_connect($table,true,null,true)) {
 			return false;
 		}
 
 		// 全てのフィールドを取得
-		$schema = $this->describe($model, $fieldName);
-
-		if($schema) {
-			$this->_csvFields = array_keys($schema);
-			if(!in_array($fieldName,$this->_csvFields)) {
+		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		if($this->_csvFields) {
+			if(!in_array($field,$this->_csvFields)) {
 				return false;
 			}
 		}else {
-			$this->_csvFields = array();
+			return false;
 		}
 
 		// キーを取得
-		while ($field = current($this->_csvFields)) {
-			if ($field == $fieldName) {
+		while ($_field = current($this->_csvFields)) {
+			if ($_field == $field) {
 				$key = key($this->_csvFields);
 			}
 			next($this->_csvFields);
@@ -1199,22 +1277,22 @@ class DboCsv extends DboSource {
 		$head = $this->_getCsvHead();
 
 		// 全てのレコードを取得
-		$records = $this->_readCsvFile($model->tablePrefix.$model->useTable);
+		$records = $this->_readCsvFile($table);
 		$body="";
 		if($records) {
 			foreach($records as $key => $record) {
 				$_record = $this->_convertRecord($record);
-				unset($_record[$fieldName]);
+				unset($_record[$field]);
 				$body .= implode(",",$_record)."\r\n";
 			}
 		}
 
 		// ファイルサイズを0に
-		ftruncate($this->connection[$model->tablePrefix.$model->useTable],0);
+		ftruncate($this->connection[$table],0);
 		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
 		//ファイルに書きこみ
-		$ret = fwrite($this->connection[$model->tablePrefix.$model->useTable], $csvData);
-		$this->disconnect($model->tablePrefix.$model->useTable);
+		$ret = fwrite($this->connection[$table], $csvData);
+		$this->disconnect($table);
 		return $ret;
 
 	}
@@ -1242,7 +1320,8 @@ class DboCsv extends DboSource {
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
-
+		$dropPattern = "/DROP\sTABLE\s+([^\s]+);/si";
+		
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)) {
 			$parseData['crud'] = 'create';
@@ -1290,6 +1369,10 @@ class DboCsv extends DboSource {
 			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 			$parseData['fields'] = $this->_parseSqlFieldsFromBuild($matches[2]);
 
+		// DROP
+		}elseif(preg_match($dropPattern,$sql,$matches)) {
+			$parseData['crud'] = 'drop';
+			$parseData['tableName'] = $this->_parseSqlTableName($matches[1]);
 		}
 
 		return $parseData;
@@ -1610,7 +1693,9 @@ class DboCsv extends DboSource {
 		} else {
 			$tables = array();
 			foreach($result[1] as $csv) {
-				$tables[] = str_replace('.csv','',$csv);
+				if(preg_match('/^'.$this->config['prefix'].'[a-z0-9]/', $csv)){
+					$tables[] = str_replace('.csv','',$csv);
+				}
 			}
 			parent::listSources($tables);
 			return $tables;
@@ -1641,10 +1726,10 @@ class DboCsv extends DboSource {
 				die (__("DboCsv::describe : Can't find Connection"));
 			}
 
-			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
+			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],10240);
 			$this->disconnect($model->tablePrefix.$model->table);
 		}else {
-			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
+			$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],10240);
 			if(!$cols) {
 				// TODO 処理を見直す
 				// ファイルリソースがあるにも関わらずデータの取得ができない場合がある。（インストール時に再現）
@@ -1653,7 +1738,7 @@ class DboCsv extends DboSource {
 				// 追記：接続したままだとロックがかかりっぱなしになるので再度接続を解除する事にした。
 				$this->disconnect($model->tablePrefix.$model->table);
 				$this->connect($model,false);
-				$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],1024);
+				$cols = fgetcsv($this->connection[$model->tablePrefix.$model->table],10240);
 				$this->disconnect($model->tablePrefix.$model->table);
 			}
 		}
@@ -2190,29 +2275,23 @@ class DboCsv extends DboSource {
 		return $index;
 	}
 /**
- * Generate a MySQL Alter Table syntax for the given Schema comparison
- * TODO 未サポート
- *
- * @param	mixed	$compare
- * @param	string	$table
- * @return	string
- * @access 	public
+ * Alter Table syntax for the given Schema comparison
+ * 未サポート
+ * @param array $compare Result of a CakeSchema::compare()
+ * @return array Array of alter statements to make.
  */
 	function alterSchema($compare, $table = null) {
 		return false;
 	}
 /**
- * Generate a MySQL "drop table" statement for the given Schema object
- * TODO 未サポート
- *
- * @param	object	$schema An instance of a subclass of CakeSchema
- * @param 	string	$table Optional.  If specified only the table name given will be generated.
- *                      Otherwise, all tables defined in the schema are generated.
- * @return 	string
- * @access 	public
+ * Generate index alteration statements for a table.
+ * 未サポート
+ * @param string $table Table to alter indexes for
+ * @param array $new Indexes to add and drop
+ * @return array Index alteration statements
  */
-	function dropSchema($schema, $table = null) {
-		return false;
+	function _alterIndexes($table, $indexes) {
+		return array();
 	}
 /**
  * テーブル名を変更する
@@ -2238,49 +2317,59 @@ class DboCsv extends DboSource {
 		
 	}
 /**
- * テーブルを作成する
+ * テーブル構造を変更する
  *
- * @param	Model	$model
- * @param	array	$schema
- * @param	boolean
- * @access	public
- */
-	function createTable($model, $schema){
-
-		if (is_object($model)) {
-			$fullTableName = $this->fullTableName($model, false);
-		} else {
-			$fullTableName = $model;
-		}
-		$filename = $this->config['database'].DS.$fullTableName.'.csv';
-		$csv = '';
-		foreach($schema as $key => $value) {
-			if($key != 'indexes'){
-				$csv .= '"'.$key.'",';
-			}
-		}
-		$csv = substr($csv, 0, strlen($csv)-1);
-		$file = new File($filename, true, 0666);
-		$ret = $file->write($csv, 'w', true);
-		$file->close();
-		return $ret;
-
-	}
-/**
- * テーブルを削除する
- *
- * @param	mixed	$table
+ * @param	array	$options [ new / old ]
  * @return	boolean
  * @access	public
  */
-	function dropTable($model) {
-		if (is_object($model)) {
-			$fullTableName = $this->fullTableName($model, false);
-		} else {
-			$fullTableName = $model;
+	function alterTable($options) {
+
+		extract($options);
+
+		if(!isset($old) || !isset($new)){
+			return false;
 		}
-		$filename = $this->config['database'].DS.$fullTableName.'.csv';
-		return @unlink($filename);
+
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$compare = $Schema->compare($old, $new);
+
+		if(!$compare) {
+			return false;
+		}
+
+		foreach($compare as $table => $types) {
+			if(!$types){
+				return false;
+			}
+			foreach($types as $type => $fields) {
+				if(!$fields){
+					return false;
+				}
+				foreach($fields as $fieldName => $column) {
+					switch ($type) {
+						case 'add':
+							if(!$this->addColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+								return false;
+							}
+							break;
+						case 'change':
+							if(!$this->editColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+								return false;
+							}
+							break;
+						case 'drop':
+							if(!$this->delColumn(array('field'=>$fieldName,'table'=>$table))){
+								return false;
+							}
+							break;
+					}
+				}
+			}
+		}
+
+		return true;
 
 	}
 /**

@@ -547,43 +547,65 @@ class AppModel extends Model {
 	}
 /**
  * テーブルにフィールドを追加する
- * @param string $addField
+ * 
+ * @param string $fieldName
  * @param array $column
  * @return boolean
  * @access public
  */
-	function addField($addFieldName,$column) {
+	function addField($fieldName,$column) {
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->addColumn($this,$addFieldName,$column);
+		$options = array('field'=>$fieldName,'table'=>$this->useTable, 'prefix'=> $this->tablePrefix, 'column'=>$column);
+		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
 		return $ret;
 	}
 /**
- * フィールドを変更する
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return boolean
- * @access public
+ * フィールド構造を変更する
+ * 
+ * @param	string	$fieldName
+ * @param	array	$column
+ * @return	boolean
+ * @access	public 
  */
-	function renameField($oldFieldName,$newFieldName,$column=null) {
-		$this->_schema=null;
+	function editField($fieldName, $column) {
+		$this->_schema = null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->renameColumn($this,$oldFieldName,$newFieldName);
+		$options = array('field'=>$fieldName,'table'=>$this->useTable, 'prefix'=> $this->tablePrefix, 'column'=>$column);
+		$ret = $db->editColumn($options);
 		$this->deleteModelCache();
 		return $ret;
 	}
 /**
  * フィールドを削除する
+ *
  * @param string $delFieldName
  * @return boolean
  * @access public
  */
-	function delField($delFieldName) {
+	function delField($fieldName) {
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->delColumn($this,$delFieldName);
+		$options = array('field'=>$fieldName,'table'=>$this->useTable, 'prefix'=> $this->tablePrefix);
+		$ret = $db->delColumn($options);
+		$this->deleteModelCache();
+		return $ret;
+	}
+/**
+ * フィールド名を変更する
+ *
+ * @param string $old
+ * @param string $new
+ * @param array $column
+ * @return boolean
+ * @access public
+ */
+	function renameField($old, $new) {
+		$this->_schema=null;
+		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$options = array('new'=>$new, 'old'=>$old, 'table'=>$this->useTable, 'prefix'=> $this->tablePrefix);
+		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
 		return $ret;
 	}

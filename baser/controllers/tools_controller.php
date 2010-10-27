@@ -59,18 +59,15 @@ class ToolsController extends AppController {
 	function admin_write_schema() {
 
 		$path = TMP.'schemas'.DS;
-
+		
 		if($this->data) {
 			if(empty($this->data['Tool']['baser_models']) && empty($this->data['Tool']['plugin_models'])) {
 				$this->Session->setFlash('テーブルを選択してください。');
 			}else {
-				if(is_dir($path) && !is_writable($path)){
+				if(!$this->_resetTmpSchemaFolder()){
 					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
 					$this->redirect(array('action'=>'admin_write_schema'));
 				}
-				$Folder = new Folder();
-				$Folder->delete($path);
-				$Folder->create($path, 0777);
 				if($this->Tool->writeSchema($this->data, $path)) {
 					App::import('Vendor','Createzip');
 					$Createzip = new Createzip();
@@ -94,21 +91,47 @@ class ToolsController extends AppController {
  * @access  public
  */
 	function admin_load_schema() {
-		if($this->data) {
-			if(!$this->data['Schema']['model']) {
-				$this->Session->setFlash('モデル名を入力してください。');
-			}else {
-				$db =& ConnectionManager::getDataSource('baser');
-				if($db->createTableSchema(array('model'=>$this->data['Schema']['model'],'path'=>BASER_CONFIGS.'sql'))) {
-					$this->data = null;
-					$this->Session->setFlash('スキーマファイルを読み込みしました。');
-				}else {
+		
+		if(!$this->data) {
+			$this->data['Tool']['schema_type'] = 'create';
+		} else {
+			if(is_uploaded_file($this->data['Tool']['schema_file']['tmp_name'])) {
+				$path = TMP.'schemas'.DS;
+				if(!$this->_resetTmpSchemaFolder()){
+					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+					$this->redirect(array('action'=>'admin_load_schema'));
+				}
+				if($this->Tool->loadSchema($this->data, $path)) {
+					$this->Session->setFlash('スキーマファイルの読み込みに成功しました。');
+					$this->redirect(array('action'=>'admin_load_schema'));
+				} else {
 					$this->Session->setFlash('スキーマファイルの読み込みに失敗しました。');
 				}
+			}else {
+				$this->Session->setFlash('ファイルアップロードに失敗しました。');
 			}
 		}
 		/* 表示設定 */
 		$this->pageTitle = 'スキーマファイル読込';
+		
 	}
+/**
+ * スキーマ用の一時フォルダをリセットする
+ *
+ * @return boolean
+ */
+	function _resetTmpSchemaFolder() {
+		
+		$path = TMP.'schemas'.DS;
+		if(is_dir($path) && !is_writable($path)){
+			return false;
+		}
+		$Folder = new Folder();
+		$Folder->delete($path);
+		$Folder->create($path, 0777);
+		return true;
+		
+	}
+	
 }
 ?>

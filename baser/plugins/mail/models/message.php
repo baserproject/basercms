@@ -524,6 +524,8 @@ class Message extends MailAppModel {
 
 		$db =& $this->getDataSource();
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
+		$fullTable = $this->tablePrefix.'messages';
+		$table = str_replace($db->config['prefix'], '', $fullTable);
 		$schema = array(
 			'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 			'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
@@ -532,14 +534,14 @@ class Message extends MailAppModel {
 		);
 		$ret = true;
 		if($contentName == 'messages') {
-			if($this->tableExists($this->tablePrefix.'messages')){
-				$ret = $db->dropTable($this->tablePrefix.'messages');
+			if($this->tableExists($fullTable)){
+				$ret = $db->dropTable(array('table'=>$table));
 			}
 		}
 		if(!$ret){
 			return false;
 		}
-		$ret = $db->createTable($this, $schema);
+		$ret = $db->createTable(array('schema'=>$schema, 'table'=>$table));
 		$this->deleteModelCache();
 		return $ret;
 
@@ -558,10 +560,11 @@ class Message extends MailAppModel {
 
 		$sourceName = $this->getTablePrefixByContentName($source).'messages';
 		$targetName = $this->getTablePrefixByContentName($target).'messages';
+		$targetTable = str_replace($db->config['prefix'], '', $targetName);
 
 		$ret = true;
 		if($target== 'messages') {
-			$ret = $db->dropTable($targetName);
+			$ret = $db->dropTable(array('table'=>$targetTable));
 		}
 		if(!$ret){
 			return false;
@@ -587,13 +590,19 @@ class Message extends MailAppModel {
 
 		$db =& $this->getDataSource();
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		if(!$this->tableExists($this->tablePrefix.'messages')){
+		$fullTable = $this->tablePrefix.'messages';
+		$table = str_replace($db->config['prefix'], '', $fullTable);
+
+		if(!$this->tableExists($fullTable)){
 			return true;
 		}
-		$ret = $db->dropTable($this);
+		
+		$ret = $db->dropTable(array('table'=>$table));
+		
 		if($ret && $contentName == 'messages') {
 			$ret = $this->createTable($contentName);
 		}
+		
 		$this->deleteModelCache();
 		return $ret;
 

@@ -26,31 +26,25 @@
 </h2>
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
-	<p>スキーマファイルは、データベースの構造を読み取りCakePHPのスキーマファイルとして出力できます。</p>
-	<p>コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用すると便利です。</p>
-	<p>新規インストール時に利用するファイルは、次のフォルダ内に配置します。
-		<ul>
-			<li>Baserコア・・・/baser/config/sql/</li>
-			<li>プラグイン・・・/{プラグインフォルダ}/config/sql/</li>
-		</ul>
-	</p>
-	<p>アップデート時に利用するファイルは、次のフォルダ内に配置します。
-		<ul>
-			<li>Baserコア・・・/baser/config/update/{バージョン番号}/sql/</li>
-			<li>プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/sql/</li>
-		</ul>
-	</p>
+	<p>スキーマファイルの読み込みテストを行えます。</p>
+	<p>※ 単一ファイルのみ対応</p>
 </div>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $formEx->create('Tool',array('action'=>'write_schema')) ?>
+<?php echo $formEx->create('Tool',array('action'=>'load_schema','type'=>'file')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser_models', 'Baserコアモデル名') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Tool.baser_models',$formEx->getControlSource('Tool.baser_models'),null,array('multiple'=>true, 'style'=>'width:100%')) ?> <?php echo $formEx->error('Tool.baser_models') ?></td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.schema_type', 'スキーマタイプ') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->radio('Tool.schema_type', array('create'=>'テーブル作成', 'alter'=>'テーブル構造変更', 'drop' => 'テーブル削除'),array('legend'=>false,'separator'=>'　')) ?>
+			<?php echo $formEx->error('Tool.schema_type') ?>
+		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin_models', 'プラグインモデル名') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Tool.plugin_models',$formEx->getControlSource('Tool.plugin_models'),null,array('multiple'=>true, 'style'=>'width:100%')) ?> <?php echo $formEx->error('Tool.plugin_models') ?></td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.schema_file', 'スキーマファイル') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->file('Tool.schema_file') ?>
+			<?php echo $formEx->error('Tool.schema_file') ?>
+		</td>
 	</tr>
 </table>
-<div class="align-center"> <?php echo $formEx->end(array('label'=>'生　成','div'=>false,'class'=>'btn-red button')) ?> </div>
+<div class="align-center"> <?php echo $formEx->end(array('label'=>'読み込み','div'=>false,'class'=>'btn-red button')) ?> </div>

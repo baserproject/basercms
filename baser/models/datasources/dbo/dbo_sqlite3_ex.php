@@ -79,23 +79,37 @@ class DboSqlite3Ex extends DboSqlite3 {
 	}
 /**
  * カラムを変更する
- * @param model $model
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
+ * 
+ * @param	array	$options [ table / new / old / prefix ]
  * @return boolean
  * @access public
  */
-	function renameColumn(&$model, $oldFieldName, $newfieldName) {
+	function renameColumn($options) {
 
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $oldFieldName);
-		$tableName = $this->fullTableName($model, false);
+		extract($options);
+
+		if(!isset($table) || !isset($new) || !isset($old)) {
+			return false;
+		}
+
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+
+		$_table = $table;
+		$model = Inflector::classify(Inflector::singularize($table));
+		$table = $prefix . $table;
+
+		App::import('Model','Schema');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable($tableName, $tableName.'_temp')) {
+		if(!$this->renameTable($table, $table.'_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -103,28 +117,28 @@ class DboSqlite3Ex extends DboSqlite3 {
 		// スキーマのキーを変更（並び順を変えないように）
 		$newSchema = array();
 		foreach($schema as $key => $field) {
-			if($key == $oldFieldName) {
-				$key = $newfieldName;
+			if($key == $old) {
+				$key = $new;
 			}
 			$newSchema[$key] = $field;
 		}
 
 		// フィールドを変更した新しいテーブルを作成
-		if(!$this->createTable($tableName, $newSchema)) {
+		if(!$this->createTable(array('schema'=>$newSchema, 'table'=>$_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
-		$sql = 'INSERT INTO '.$tableName.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$tableName.'_temp';
-		$sql = str_replace($oldFieldName,$oldFieldName.' AS '.$newfieldName,$sql);
+		$sql = 'INSERT INTO '.$table.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$table.'_temp';
+		$sql = str_replace($old,$old.' AS '.$new, $sql);
 		if(!$this->execute($sql)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
-		if(!$this->dropTable($tableName.'_temp')) {
+		if(!$this->dropTable(array('table'=>$_table.'_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -136,41 +150,54 @@ class DboSqlite3Ex extends DboSqlite3 {
 /**
  * カラムを削除する
  * 
- * @param model $model
- * @param string $delFieldName
- * @param array $column
+ * @param	array	$options [ table / field / prefix ]
  * @return boolean
  * @access public
  */
-	function delColumn(&$model,$delFieldName) {
+	function delColumn($options) {
 
-		$tableName = $this->fullTableName($model, false);
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $delFieldName);
+		extract($options);
+
+		if(!isset($table) || !isset($field)) {
+			return false;
+		}
+
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+		$_table = $table;
+		$model = Inflector::classify(Inflector::singularize($table));
+		$table = $prefix . $table;
+
+		App::import('Model','Schema');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable($tableName,$tableName.'_temp')) {
+		if(!$this->renameTable($table,$table.'_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// フィールドを削除した新しいテーブルを作成
 		unset($schema[$delFieldName]);
-		if(!$this->createTable($tableName,$schema)) {
+		if(!$this->createTable(array('schema'=>$schema, 'table'=>$_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
-		if(!$this->_moveData($tableName.'_temp',$tableName,$schema)) {
+		if(!$this->_moveData($table.'_temp',$table,$schema)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
-		if(!$this->dropTable($tableName.'_temp')) {
+		if(!$this->dropTable(array('table'=>$_table.'_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
