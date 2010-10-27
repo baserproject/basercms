@@ -59,20 +59,24 @@ class ToolsController extends AppController {
 	function admin_write_schema() {
 
 		$path = TMP.'schemas'.DS;
-		if(!is_dir($path)){
-			$Folder = new Folder($path, true, 0777);
-			if(!is_writable($path)){
-				$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、書込権限を与えてください。');
-			}
-		}
-		
+
 		if($this->data) {
-			if(!$this->data['Tool']) {
-				$this->Session->setFlash('モデル名を入力してください。');
+			if(empty($this->data['Tool']['baser_models']) && empty($this->data['Tool']['plugin_models'])) {
+				$this->Session->setFlash('テーブルを選択してください。');
 			}else {
+				if(is_dir($path) && !is_writable($path)){
+					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+					$this->redirect(array('action'=>'admin_write_schema'));
+				}
+				$Folder = new Folder();
+				$Folder->delete($path);
+				$Folder->create($path, 0777);
 				if($this->Tool->writeSchema($this->data, $path)) {
-					$this->data = null;
-					$this->Session->setFlash('スキーマファイルを生成しました。');
+					App::import('Vendor','Createzip');
+					$Createzip = new Createzip();
+					$Createzip->addFolder($path);
+					$Createzip->download('schemas');
+					exit();
 				}else {
 					$this->Session->setFlash('スキーマファイルの生成に失敗しました。');
 				}
