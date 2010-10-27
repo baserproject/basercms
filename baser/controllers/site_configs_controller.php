@@ -187,7 +187,7 @@ class SiteConfigsController extends AppController {
 		}
 		
 		// ZIP圧縮して出力
-		$fileName = date('Ymd_His') . '_backup.zip';		
+		$fileName = date('Ymd_His') . '_backup';		
 		App::import('Vendor','Createzip');
 		$Createzip = new Createzip;
 		$Createzip->addFolder($backupPath, '');
