@@ -184,6 +184,9 @@ class Createzip {
 			exit;
 		}
 
+		if(!preg_match('/\.zip$/', $archiveName)){
+			$archiveName.='.zip';
+		}
 		$zippedData = $this->getZippedData();
 		$size = strlen(bin2hex($zippedData)) / 2;
 
