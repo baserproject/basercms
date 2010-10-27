@@ -22,40 +22,6 @@
 App::import('Core','DboPostgres');
 class DboPostgresEx extends DboPostgres {
 /**
- * カラムを追加するSQLを生成
- *
- * @param string $tableName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildAddColumn($tableName, $column) {
-		return 'ALTER TABLE "'.$tableName.'" ADD '.$this->buildColumn($column);
-	}
-/**
- * カラムを変更するSQLを生成
- * TODO 未実装
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildEditColumn($tableName, $oldFieldName, $column) {
-		return '';
-	}
-/**
- * カラムを削除する
- *
- * @param string $delFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildDelColumn($tableName, $delFieldName) {
-		return 'ALTER TABLE "'.$tableName.'" DROP "'.$delFieldName.'"';
-	}
-/**
  * テーブル名のリネームステートメントを生成
  *
  * @param	string	$sourceName
@@ -69,15 +35,22 @@ class DboPostgresEx extends DboPostgres {
 /**
  * カラム名を変更する
  *
- * @param string $oldFieldName
- * @param string $newFieldName
+ * @param	array	$options [ table / new / old  ]
  * @return boolean
  * @access public
  */
-	function renameColumn(&$model,$oldFieldName,$newFieldName) {
-		$tableName = $model->tablePrefix.$model->table;
-		$sql = 'ALTER TABLE "'.$tableName.'" RENAME "'.$oldFieldName.'" TO "'.$newFieldName.'"';
+	function renameColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$table = $this->config['prefix'] . $table;
+		$sql = 'ALTER TABLE "'.$table.'" RENAME "'.$old.'" TO "'.$new.'"';
 		return $this->execute($sql);
+		
 	}
 }
 ?>

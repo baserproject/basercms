@@ -781,7 +781,7 @@ class DboCsv extends DboSource {
 
 		// 主キーがない場合のauto処理
 		if(empty($queryData['values']['id'])) {
-			$queryData['values']['id'] = $this->_getMaxId($queryData['tableName'])+1;
+			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
 			$this->_lastInsertId = $queryData['values']['id'];
 		}
 
@@ -1147,7 +1147,7 @@ class DboCsv extends DboSource {
  * @return	boolean
  * @access	protected
  */
-	function editColumn($options) {
+	function changeColumn($options) {
 
 		extract($options);
 
@@ -1193,14 +1193,14 @@ class DboCsv extends DboSource {
 
 		// キーを取得
 		while ($field = current($this->_csvFields)) {
-			if ($field == $oldField) {
+			if ($field == $old) {
 				$key = key($this->_csvFields);
 			}
 			next($this->_csvFields);
 		}
 
 		// ヘッダーの生成
-		$this->_csvFields[$key] = $newField;
+		$this->_csvFields[$key] = $new;
 		$head = $this->_getCsvHead();
 
 		// 全てのレコードを取得
@@ -1231,7 +1231,7 @@ class DboCsv extends DboSource {
  * @return	boolean
  * @access	protected
  */
-	function delColumn($options) {
+	function dropColumn($options) {
 
 		extract($options);
 
@@ -1588,6 +1588,7 @@ class DboCsv extends DboSource {
 		$conditions = preg_replace('/([^<>])=+/s','$1==',$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+NOT\s+LIKE\s+\'(.*?)\'/s","!preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+LIKE\s+\'(.*?)\'/s","preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
+		
 		// BETWEEN（数字のみ対応）
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+BETWEEN\s+([0-9]+?)\s+&&\s+([0-9]+?)/s","$1 >= $2 && $1 <= $3",$conditions);
 
@@ -2295,20 +2296,28 @@ class DboCsv extends DboSource {
 	}
 /**
  * テーブル名を変更する
- * プレフィックス付である事が前提
- * @param	string	$oldName
- * @param	string	$newName
+ * 
+ * @param	array	$options [ old / new ]
  * @return	boolean
  * @access	public
  */
-	function renameTable($oldName, $newName) {
-		
-		if(!$this->disconnect($oldName)){
+	function renameTable($options) {
+
+		extract($options);
+
+		if(!isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$new = $this->config['prefix'].$new;
+		$old = $this->config['prefix'].$old;
+
+		if(!$this->disconnect($old)){
 			return false;
 		}
 		$path = $this->config['database'].DS;
-		$oldPath = $path.$oldName.'.csv';
-		$newPath = $path.$newName.'.csv';
+		$oldPath = $path.$old.'.csv';
+		$newPath = $path.$new.'.csv';
 		if(!file_exists($oldPath)){
 			return false;
 		}
@@ -2355,12 +2364,12 @@ class DboCsv extends DboSource {
 							}
 							break;
 						case 'change':
-							if(!$this->editColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+							if(!$this->changeColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
 								return false;
 							}
 							break;
 						case 'drop':
-							if(!$this->delColumn(array('field'=>$fieldName,'table'=>$table))){
+							if(!$this->dropColumn(array('field'=>$fieldName,'table'=>$table))){
 								return false;
 							}
 							break;

@@ -2579,7 +2579,9 @@ class DboSource extends DataSource {
 		$tables = $this->listSources();
 		$models = array();
 		foreach($tables as $table) {
-			$models[] = Inflector::classify(Inflector::singularize(preg_replace('/^'.$this->config['prefix'].'/', '', $table)));
+			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches)) {
+				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
+			}
 		}
 		return $this->writeSchema(array('name'=>$name, 'model'=>$models, 'path' => $path, 'file' => $file));
 		
@@ -2633,7 +2635,8 @@ class DboSource extends DataSource {
 		if(!isset($path)){
 			$path = $Schema->path;
 		}
-		
+
+		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => $model));
 		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
 		return $Schema->write($options);
@@ -2756,7 +2759,7 @@ class DboSource extends DataSource {
 		}
 
 		if (is_array($schema)) {
-			if(!empty($table)){
+			if(empty($table)){
 				return false;
 			}
 			$name = Inflector::pluralize(Inflector::classify($table));
@@ -2810,11 +2813,20 @@ class DboSource extends DataSource {
 		}
 
 		if(!isset($schema)){
-			$name = Inflector::pluralize(Inflector::classify($table));
+			$schema = $this->readSchema($table);
+			if(isset($schema['tables'][$table])) {
+				$schema = $schema['tables'][$table];
+			} else {
+				return false;
+			}
+		}
+
+		if(is_array($schema)) {
 			App::import('Model','Schema');
+			$name = Inflector::pluralize(Inflector::classify($table));
 			$options = array('name'=>$name,
 						'connection' => $this->configKeyName,
-						$table => array());
+						$table => $schema);
 			$schema = new CakeSchema($options);
 		}
 
@@ -2824,22 +2836,30 @@ class DboSource extends DataSource {
 	}
 /**
  * テーブル名をリネームする
- * プレフィックス付である事が前提
+ * 
  * @param	string	$oldName
- * @param	string	$newName
+ * @param	array	$options [ old / new ]
  * @return	boolean
  * @access	public
  */
-	function renameTable($oldName, $newName) {
-		
-		$sql = $this->buildRenameTable($oldName, $newName);
+	function renameTable($options) {
+
+		extract($options);
+
+		if(!isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$new = $this->config['prefix'].$new;
+		$old = $this->config['prefix'].$old;
+		$sql = $this->buildRenameTable($old, $new);
 		return $this->execute($sql);
 
 	}
 /**
  * カラムを追加する
  * 
- * @param	array	$options [ table / column / prefix ]
+ * @param	array	$options [ table / column ]
  * @return	boolean
  * @access	public
  */
@@ -2847,27 +2867,41 @@ class DboSource extends DataSource {
 
 		extract($options);
 
-		if(!isset($table) || !isset($column) || !isset($column['name'])) {
+		if(!isset($table) || !isset($column)) {
 			return false;
 		}
 
-		if(!isset($prefix)){
-			$prefix = $this->config['prefix'];
+		if(!isset($column['name'])) {
+			if(isset($field)) {
+				$column['name'] = $field;
+			} else {
+				return false;
+			}
 		}
 
-		$table = $prefix . $table;
-		$sql = $this->buildAddColumn($table,$column);
+		$old = $this->readSchema($table);
+		if(isset($old['tables'][$table][$field])) {
+			return false;
+		}
+		$new = $old;
+		$new['tables'][$table][$field] = $column;
+
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
 
 	}
 /**
  * カラムを変更する
  *
- * @param	array	$options [ table / column / field / prefix ]
+ * @param	array	$options [ table / column / field ]
  * @return	boolean
  * @access	public
  */
-	function editColumn($options) {
+	function changeColumn($options) {
 
 		extract($options);
 
@@ -2883,43 +2917,55 @@ class DboSource extends DataSource {
 			}
 		}
 
-		if(!isset($prefix)){
-			$prefix = $this->config['prefix'];
+		$old = $this->readSchema($table);
+		if(!isset($old['tables'][$table][$field])) {
+			return false;
 		}
+		$new = $old;
+		$new['tables'][$table][$field] = $column;
 
-		$table = $prefix . $table;
-		$sql = $this->buildEditColumn($table, $field, $column);
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
 		
 	}
 /**
  * カラムを削除する
  *
- * @param	array	$options [ table / field / prefix ]
+ * @param	array	$options [ table / field ]
  * @return boolean
  * @access public
  */
-	function delColumn($options) {
+	function dropColumn($options) {
 
 		extract($options);
 
 		if(!isset($table) || !isset($field)) {
 			return false;
 		}
-
-		if(!isset($prefix)){
-			$prefix = $this->config['prefix'];
+		
+		$old = $this->readSchema($table);
+		if(!isset($old['tables'][$table][$field])) {
+			return false;
 		}
-
-		$table = $prefix . $table;
-		$sql = $this->buildDelColumn($table, $field);
+		$new = $old;
+		unset($new['tables'][$table][$field]);
+		
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
 		
 	}
 /**
  * カラム名を変更する
  *
- * @param	array	$options [ table / new / old / prefix ]
+ * @param	array	$options [ table / new / old ]
  * @param string $oldFieldName
  * @param string $newFieldName
  * @return boolean
@@ -2932,25 +2978,11 @@ class DboSource extends DataSource {
 		if(!isset($table) || !isset($new) || !isset($old)) {
 			return false;
 		}
-
-		if(!isset($prefix)){
-			$prefix = $this->config['prefix'];
-		}
 		
 		$column['name'] = $new;
-		$options = array('field'=>$old,'table'=>$table, 'prefix'=> $prefix, 'column'=>$column);
-		return $this->editColumn($model, $oldFieldName, $column);
+		$options = array('field'=>$old,'table'=>$table, 'column'=>$column);
+		return $this->changeColumn($options);
 
-	}
-/**
- * テーブルのドロップステートメントを生成
- *
- * @param	string	$tableName
- * @return	string
- * @access	public
- */
-	function buildDropTable($tableName) {
-		return "DROP TABLE ".$tableName;
 	}
 /**
  * テーブル名のリネームステートメントを生成
@@ -2964,38 +2996,23 @@ class DboSource extends DataSource {
 		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
 	}
 /**
- * カラムを追加するSQLを生成
+ * データベースよりスキーマ情報を読み込む
  *
- * @param string $tableName
- * @param array $column
- * @return string
- * @access public
+ * @param	string	$table
+ * @return	array	$schema
+ * @access	public
  */
-	function buildAddColumn($tableName, $column) {
-		return "ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column);
-	}
-/**
- * カラムを変更するSQLを生成
- *
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildEditColumn($tableName, $oldFieldName, $column) {
-		return "ALTER TABLE `".$tableName."` CHANGE `".$oldFieldName."` ".$this->buildColumn($column);
-	}
-/**
- * カラムを削除する
- *
- * @param string $delFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildDelColumn($tableName, $delFieldName) {
-		return "ALTER TABLE `".$tableName."` DROP `".$delFieldName."`";
+	function readSchema($table) {
+		$this->cacheSources = false;
+		$tables = $this->listSources();
+		if(!in_array($this->config['prefix'].$table, $tables)){
+			return false;
+		}
+		$model = Inflector::classify(Inflector::singularize($table));
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		return $CakeSchema->read(array('models'=>array($model)));
 	}
 // <<<
 }

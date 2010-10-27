@@ -212,6 +212,12 @@ class DboSqlite3 extends DboSource {
 				'default'	=> $column[0]['dflt_value'],
 				'length'	=> $this->length($column[0]['type'])
 			);
+			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
+			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
+			if($fields[$column[0]['name']]['default']=='NULL'){
+				$fields[$column[0]['name']]['default'] = NULL;
+			}
+			// <<<
 			if($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
 					'type'		=> $fields[$column[0]['name']]['type'],

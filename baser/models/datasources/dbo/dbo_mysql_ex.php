@@ -22,40 +22,6 @@
 App::import('Core','DboMysql');
 class DboMysqlEx extends DboMysql {
 /**
- * カラムを追加するSQLを生成
- * 
- * @param string $tableName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildAddColumn($tableName, $column) {
-		return "ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column);
-	}
-/**
- * カラムを変更するSQLを生成
- *
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildEditColumn($tableName, $oldFieldName, $column) {
-		return "ALTER TABLE `".$tableName."` CHANGE `".$oldFieldName."` ".$this->buildColumn($column);
-	}
-/**
- * カラムを削除する
- * 
- * @param string $delFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildDelColumn($tableName, $delFieldName) {
-		return "ALTER TABLE `".$tableName."` DROP `".$delFieldName."`";
-	}
-/**
  * テーブル名のリネームステートメントを生成
  *
  * @param	string	$sourceName
@@ -66,7 +32,6 @@ class DboMysqlEx extends DboMysql {
 	function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
 	}
-
 
 }
 ?>
