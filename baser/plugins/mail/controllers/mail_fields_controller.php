@@ -336,7 +336,7 @@ class MailFieldsController extends MailAppController {
 	function __getNewValueOnCopy($fieldName,$oldValue) {
 
 		// プレフィックスを削除したフィールド名を取得
-		$baseValue = preg_replace("/\\[[0-9]\]+$/s","",$oldValue);
+		$baseValue = preg_replace("/\\[[0-9]+\]+$/s","",$oldValue);
 		$baseValue = trim($baseValue);
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
