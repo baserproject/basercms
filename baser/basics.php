@@ -47,7 +47,13 @@
  * @return string   ドキュメントルートの絶対パス
  */
 	function docRoot() {
-		$docRoot = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
+		if(strpos($_SERVER['SCRIPT_NAME'],'.php') === false){
+			// さくらの場合、/index を呼びだすと、拡張子が付加されない
+			$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
+		}else{
+			$scriptName = $_SERVER['SCRIPT_NAME'];
+		}
+		$docRoot = str_replace($scriptName,'',$_SERVER['SCRIPT_FILENAME']);
 		return str_replace('/', DS, $docRoot);
 	}
 /**
@@ -138,6 +144,7 @@
 /**
  * baseUrlを除外したURLのパラメーターを取得する
  * 先頭のスラッシュは除外する
+ * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
 	function getParamsFromEnv() {
 		$appBaseUrl = Configure::read('App.baseUrl');
@@ -152,7 +159,9 @@
 			}
 		}else {
 			$parameter = '';
-			$query = $_SERVER['QUERY_STRING'];
+			if(isset($_SERVER['QUERY_STRING'])) {
+				$query = $_SERVER['QUERY_STRING'];
+			}
 			if(!empty($query)){
 				if(strpos($query, '&')){
 					$queries = split('&',$query);
@@ -174,13 +183,15 @@
 					}
 				}
 
-			}elseif ($_SERVER['REQUEST_URI'] == '/index'){
-				// さくらインターネットで、/index とした場合、QUERY_STRINGが空になってしまう
-				$parameter = 'index';
+			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $_SERVER['REQUEST_URI'])){
+				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', $_SERVER['REQUEST_URI']);
+			} else {
+				$parameter = $_SERVER['REQUEST_URI'];
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
 		return $parameter;
+		
 	}
 /**
  * Viewキャッシュを削除する
@@ -299,11 +310,11 @@
 	}
 /**
  * 現在のビューディレクトリのパスを取得する
- * 
+ *
  * @return string
  */
 	function getViewPath() {
-		
+
 		if (ClassRegistry::isKeySet('SiteConfig')) {
 			$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		}else {

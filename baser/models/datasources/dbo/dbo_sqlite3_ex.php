@@ -30,41 +30,170 @@ App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo
  */
 class DboSqlite3Ex extends DboSqlite3 {
 /**
- * カラムを追加するSQLを生成
+ * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
- * @param string $tableName
- * @param array $column
- * @return string
- * @access public
+ * @param array $compare Result of a CakeSchema::compare()
+ * @return array Array of alter statements to make.
  */
-	function buildAddColumn($tableName, $column) {
-		if($column['type'] == 'integer' && !empty($column['length'])){
-			unset($column['length']);
+	function alterSchema($compare, $table = null) {
+		if (!is_array($compare)) {
+			return false;
 		}
-		return "ALTER TABLE ".$tableName." ADD ".$this->buildColumn($column);
+		$out = '';
+		$colList = array();
+		foreach ($compare as $curTable => $types) {
+			$indexes = array();
+			if (!$table || $table == $curTable) {
+				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
+				foreach ($types as $type => $column) {
+					if (isset($column['indexes'])) {
+						$indexes[$type] = $column['indexes'];
+						unset($column['indexes']);
+					}
+					switch ($type) {
+						case 'add':
+							foreach ($column as $field => $col) {
+								$col['name'] = $field;
+								$alter = 'ADD '.$this->buildColumn($col);
+								if (isset($col['after'])) {
+									$alter .= ' AFTER '. $this->name($col['after']);
+								}
+								$colList[] = $alter;
+							}
+						break;
+						case 'drop':
+							foreach ($column as $field => $col) {
+								$col['name'] = $field;
+								$colList[] = 'DROP '.$this->name($field);
+							}
+						break;
+						case 'change':
+							foreach ($column as $field => $col) {
+								if (!isset($col['name'])) {
+									$col['name'] = $field;
+								}
+								$colList[] = 'CHANGE '. $this->name($field).' '.$this->buildColumn($col);
+							}
+						break;
+					}
+				}
+				$colList = array_merge($colList, $this->_alterIndexes($curTable, $indexes));
+				$out .= "\t" . implode(",\n\t", $colList) . ";\n\n";
+			}
+		}
+		return $out;
 	}
 /**
- * カラムを変更するSQLを生成
- * 未サポート
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return string
- * @access public
+ * Overrides DboSource::index to handle SQLite indexe introspection
+ * Returns an array of the indexes in given table name.
+ *
+ * @param string $model Name of model to inspect
+ * @return array Fields in table. Keys are column and unique
  */
-	function buildEditColumn($tableName, $oldFieldName, $column) {
-		return '';
+	function index(&$model) {
+		$index = array();
+		$table = $this->fullTableName($model, false);
+		if ($table) {
+
+			$tableInfo = $this->query('PRAGMA table_info(' . $table . ')');
+			$primary = array();
+			foreach($tableInfo as $info) {
+				if(!empty($info[0]['pk'])){
+					$primary = array('PRIMARY' => array('unique' => true, 'column' => $info[0]['name']));
+				}
+			}
+
+			$indexes = $this->query('PRAGMA index_list(' . $table . ')');
+			foreach ($indexes as $i => $info) {
+				$key = array_pop($info);
+				$keyInfo = $this->query('PRAGMA index_info("' . $key['name'] . '")');
+				foreach ($keyInfo as $keyCol) {
+					if (!isset($index[$key['name']])) {
+						$col = array();
+						$index[$key['name']]['column'] = $keyCol[0]['name'];
+						$index[$key['name']]['unique'] = intval($key['unique'] == 1);
+					} else {
+						if (!is_array($index[$key['name']]['column'])) {
+							$col[] = $index[$key['name']]['column'];
+						}
+						$col[] = $keyCol[0]['name'];
+						$index[$key['name']]['column'] = $col;
+					}
+				}
+			}
+			$index = am($primary, $index);
+		}
+		return $index;
 	}
 /**
- * カラムを削除する
- * 未サポート
- * @param string $delFieldName
- * @param array $column
- * @return string
- * @access public
+ * Generate index alteration statements for a table.
+ * TODO 未サポート
+ * @param string $table Table to alter indexes for
+ * @param array $new Indexes to add and drop
+ * @return array Index alteration statements
  */
-	function buildDelColumn($tableName, $delFieldName) {
-		return '';
+	function _alterIndexes($table, $indexes) {
+		return array();
+	}
+/**
+ * テーブル構造を変更する
+ *
+ * @param	array	$options [ new / old ]
+ * @return	boolean
+ * @access	public
+ */
+	function alterTable($options) {
+
+		extract($options);
+
+		if(!isset($old) || !isset($new)){
+			return false;
+		}
+
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$compare = $Schema->compare($old, $new);
+
+		if(!$compare) {
+			return false;
+		}
+
+		foreach($compare as $table => $types) {
+			if(!$types){
+				return false;
+			}
+			foreach($types as $type => $fields) {
+				if(!$fields){
+					return false;
+				}
+				foreach($fields as $fieldName => $column) {
+					switch ($type) {
+						case 'add':
+							if(!$this->addColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+								return false;
+							}
+							break;
+						case 'change':
+							// TODO 未実装
+							// SQLiteでは、SQLで実装できない？ので、フィールドの作り直しとなる可能性が高い
+							// その場合、changeColumnメソッドをオーバライドして実装する
+							return false;
+							/*if(!$this->changeColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+								return false;
+							}*/
+							break;
+						case 'drop':
+							if(!$this->dropColumn(array('field'=>$fieldName,'table'=>$table))){
+								return false;
+							}
+							break;
+					}
+				}
+			}
+		}
+
+		return true;
+
 	}
 /**
  * テーブル名のリネームステートメントを生成
@@ -79,23 +208,34 @@ class DboSqlite3Ex extends DboSqlite3 {
 	}
 /**
  * カラムを変更する
- * @param model $model
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
+ * 
+ * @param	array	$options [ table / new / old ]
  * @return boolean
  * @access public
  */
-	function renameColumn(&$model, $oldFieldName, $newfieldName) {
+	function renameColumn($options) {
 
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $oldFieldName);
-		$tableName = $this->fullTableName($model, false);
+		extract($options);
+
+		if(!isset($table) || !isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$prefix = $this->config['prefix'];
+		$_table = $table;
+		$model = Inflector::classify(Inflector::singularize($table));
+		$table = $prefix . $table;
+
+		App::import('Model','Schema');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable($tableName, $tableName.'_temp')) {
+		if(!$this->renameTable(array('old'=>$_table, 'new'=>$_table.'_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -103,28 +243,30 @@ class DboSqlite3Ex extends DboSqlite3 {
 		// スキーマのキーを変更（並び順を変えないように）
 		$newSchema = array();
 		foreach($schema as $key => $field) {
-			if($key == $oldFieldName) {
-				$key = $newfieldName;
+			if($key == $old) {
+				$key = $new;
 			}
 			$newSchema[$key] = $field;
 		}
 
 		// フィールドを変更した新しいテーブルを作成
-		if(!$this->createTable($tableName, $newSchema)) {
+		if(!$this->createTable(array('schema'=>$newSchema, 'table'=>$_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
-		$sql = 'INSERT INTO '.$tableName.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$tableName.'_temp';
-		$sql = str_replace($oldFieldName,$oldFieldName.' AS '.$newfieldName,$sql);
+		unset($schema['indexes']);
+		$sql = 'INSERT INTO '.$table.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$table.'_temp';
+		$sql = str_replace($old,$old.' AS '.$new, $sql);
 		if(!$this->execute($sql)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
-		if(!$this->dropTable($tableName.'_temp')) {
+		// dropTableメソッドはモデルありきなので利用できない
+		if(!$this->execute('DROP TABLE '.$table.'_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -136,41 +278,56 @@ class DboSqlite3Ex extends DboSqlite3 {
 /**
  * カラムを削除する
  * 
- * @param model $model
- * @param string $delFieldName
- * @param array $column
+ * @param	array	$options [ table / field / prefix ]
  * @return boolean
  * @access public
  */
-	function delColumn(&$model,$delFieldName) {
+	function dropColumn($options) {
 
-		$tableName = $this->fullTableName($model, false);
-		$db =& ConnectionManager::getDataSource($model->useDbConfig);
-		$schema = $db->describe($model, $delFieldName);
+		extract($options);
+
+		if(!isset($table) || !isset($field)) {
+			return false;
+		}
+
+		if(!isset($prefix)){
+			$prefix = $this->config['prefix'];
+		}
+		$_table = $table;
+		$model = Inflector::classify(Inflector::singularize($table));
+		$table = $prefix . $table;
+
+		App::import('Model','Schema');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable($tableName,$tableName.'_temp')) {
+		if(!$this->renameTable(array('old'=>$_table, 'new'=>$_table.'_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// フィールドを削除した新しいテーブルを作成
-		unset($schema[$delFieldName]);
-		if(!$this->createTable($tableName,$schema)) {
+		unset($schema[$field]);
+		if(!$this->createTable(array('schema'=>$schema, 'table'=>$_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
-		if(!$this->_moveData($tableName.'_temp',$tableName,$schema)) {
+		unset($schema['indexes']);
+		if(!$this->_moveData($table.'_temp',$table,$schema)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
-		if(!$this->dropTable($tableName.'_temp')) {
+		// dropTableメソッドはモデルありきなので利用できない
+		if(!$this->execute('DROP TABLE '.$table.'_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}

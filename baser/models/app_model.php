@@ -547,45 +547,112 @@ class AppModel extends Model {
 	}
 /**
  * テーブルにフィールドを追加する
- * @param string $addField
- * @param array $column
- * @return boolean
- * @access public
+ * 
+ * @param	array	$options [ field / column / table ]
+ * @return	boolean
+ * @access	public
  */
-	function addField($addFieldName,$column) {
+	function addField($options) {
+
+		extract($options);
+
+		if(!isset($field) || !isset($column)) {
+			return false;
+		}
+
+		if(!isset($table)) {
+			$table = $this->useTable;
+		}
+
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->addColumn($this,$addFieldName,$column);
+		$options = array('field'=>$field, 'table'=>$table, 'column'=>$column);
+		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
 		return $ret;
+		
 	}
 /**
- * フィールドを変更する
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return boolean
- * @access public
+ * フィールド構造を変更する
+ * 
+ * @param	array	$options [ field / column / table ]
+ * @return	boolean
+ * @access	public
  */
-	function renameField($oldFieldName,$newFieldName,$column=null) {
-		$this->_schema=null;
+	function editField($options) {
+
+		extract($options);
+
+		if(!isset($field) || !isset($column)) {
+			return false;
+		}
+
+		if(!isset($table)) {
+			$table = $this->useTable;
+		}
+		
+		$this->_schema = null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->renameColumn($this,$oldFieldName,$newFieldName);
+		$options = array('field'=>$field,'table'=>$table, 'column'=>$column);
+		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
 		return $ret;
+		
 	}
 /**
  * フィールドを削除する
- * @param string $delFieldName
+ *
+ * @param	array	$options [ field / table ]
+ * @return	boolean
+ * @access	public
+ */
+	function delField($options) {
+
+		extract($options);
+
+		if(!isset($field)) {
+			return false;
+		}
+		
+		if(!isset($table)) {
+			$table = $this->useTable;
+		}
+
+		$this->_schema=null;
+		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$options = array('field'=>$field,'table'=>$table);
+		$ret = $db->dropColumn($options);
+		$this->deleteModelCache();
+		return $ret;
+		
+	}
+/**
+ * フィールド名を変更する
+ *
+* @param	array	$options [ new / old / table ]
+ * @param array $column
  * @return boolean
  * @access public
  */
-	function delField($delFieldName) {
+	function renameField($options) {
+
+		extract($options);
+
+		if(!isset($new) || !isset($old)) {
+			return false;
+		}
+
+		if(!isset($table)) {
+			$table = $this->useTable;
+		}
+		
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
-		$ret = $db->delColumn($this,$delFieldName);
+		$options = array('new'=>$new, 'old'=>$old, 'table'=>$table);
+		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
 		return $ret;
+		
 	}
 /**
  * テーブルの存在チェックを行う
@@ -686,7 +753,13 @@ class AppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	function changeSort($id,$offset,$conditions) {
+	function changeSort($id,$offset,$conditions=array()) {
+		
+		if($conditions) {
+			$_conditions = $conditions;
+		} else {
+			$_conditions = array();
+		}
 
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
@@ -706,6 +779,7 @@ class AppModel extends Model {
 			return true;
 		}
 
+		$conditions = am($conditions,$_conditions);
 		$target = $this->find('all',array('conditions'=>$conditions,
 				'fields'=>array($this->alias.'.id',$this->alias.'.sort'),
 				'order'=>$order,
@@ -728,6 +802,7 @@ class AppModel extends Model {
 			$conditions[$this->alias.'.sort <='] = $currentSort;
 			$conditions[$this->alias.'.sort >='] = $targetSort;
 		}
+		$conditions = am($conditions,$_conditions);
 		$datas = $this->find('all',array('conditions'=>$conditions,
 				'fields'=>array($this->alias.'.id',$this->alias.'.sort'),
 				'order'=>$order,

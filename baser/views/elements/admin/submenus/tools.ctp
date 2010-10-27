@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * MySQL DBO拡張
+ * [管理画面] ツールメニュー
  *
  * PHP versions 4 and 5
  *
@@ -12,26 +12,19 @@
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.models.datasources.dbo
+ * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-App::import('Core','DboMysql');
-class DboMysqlEx extends DboMysql {
-/**
- * テーブル名のリネームステートメントを生成
- *
- * @param	string	$sourceName
- * @param	string	$targetName
- * @return	string
- * @access	public
- */
-	function buildRenameTable($sourceName, $targetName) {
-		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
-	}
-
-}
 ?>
+
+<div class="side-navi">
+	<h2>ツールメニュー</h2>
+	<ul>
+		<li><?php $baser->link('スキーマファイル生成',array('controller'=>'tools','action'=>'write_schema')) ?></li>
+		<li><?php $baser->link('スキーマファイル読込',array('controller'=>'tools','action'=>'load_schema')) ?></li>
+	</ul>
+</div>

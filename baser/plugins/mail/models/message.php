@@ -524,6 +524,8 @@ class Message extends MailAppModel {
 
 		$db =& $this->getDataSource();
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
+		$fullTable = $this->tablePrefix.'messages';
+		$table = str_replace($db->config['prefix'], '', $fullTable);
 		$schema = array(
 			'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 			'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
@@ -532,14 +534,14 @@ class Message extends MailAppModel {
 		);
 		$ret = true;
 		if($contentName == 'messages') {
-			if($this->tableExists($this->tablePrefix.'messages')){
-				$ret = $db->dropTable($this->tablePrefix.'messages');
+			if($this->tableExists($fullTable)){
+				$ret = $db->dropTable(array('table'=>$table));
 			}
 		}
 		if(!$ret){
 			return false;
 		}
-		$ret = $db->createTable($this, $schema);
+		$ret = $db->createTable(array('schema'=>$schema, 'table'=>$table));
 		$this->deleteModelCache();
 		return $ret;
 
@@ -558,15 +560,17 @@ class Message extends MailAppModel {
 
 		$sourceName = $this->getTablePrefixByContentName($source).'messages';
 		$targetName = $this->getTablePrefixByContentName($target).'messages';
+		$sourceTable = str_replace($db->config['prefix'], '', $sourceName);
+		$targetTable = str_replace($db->config['prefix'], '', $targetName);
 
 		$ret = true;
 		if($target== 'messages') {
-			$ret = $db->dropTable($targetName);
+			$ret = $db->dropTable(array('table'=>$targetTable));
 		}
 		if(!$ret){
 			return false;
 		}
-		$ret = $db->renameTable($sourceName, $targetName);
+		$ret = $db->renameTable(array('old'=>$sourceTable, 'new'=>$targetTable));
 		
 		if($ret && $source == 'messages') {
 			$ret = $this->createTable($source);
@@ -587,13 +591,19 @@ class Message extends MailAppModel {
 
 		$db =& $this->getDataSource();
 		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		if(!$this->tableExists($this->tablePrefix.'messages')){
+		$fullTable = $this->tablePrefix.'messages';
+		$table = str_replace($db->config['prefix'], '', $fullTable);
+
+		if(!$this->tableExists($fullTable)){
 			return true;
 		}
-		$ret = $db->dropTable($this);
+		
+		$ret = $db->dropTable(array('table'=>$table));
+		
 		if($ret && $contentName == 'messages') {
 			$ret = $this->createTable($contentName);
 		}
+		
 		$this->deleteModelCache();
 		return $ret;
 
@@ -601,13 +611,33 @@ class Message extends MailAppModel {
 /**
  * メッセージファイルにフィールドを追加する
  *
- * @param string $fieldName
- * @access private
+ * @param	string	$contentName
+ * @param	string	$field
+ * @access	public
  */
-	function addField($contentName, $fieldName) {
+	function addField($contentName, $field) {
 
-		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		$ret = parent::addField($fieldName,array('type'=>'text'));
+		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
+		$db =& $this->getDataSource();
+		$table = str_replace($db->config['prefix'],'',$fullTable);
+		$options = array('field' => $field, 'column' => array('type'=>'text'), 'table' => $table);
+		$ret = parent::addField($options);
+		return $ret;
+
+	}
+/**
+ * メッセージファイルのフィールドを削除する
+ *
+ * @param	string	$contentName
+ * @param	string	$field
+ * @access	public
+ */
+	function delField($contentName, $field) {
+
+		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
+		$db =& $this->getDataSource();
+		$table = str_replace($db->config['prefix'],'',$fullTable);
+		$ret = parent::delField(array('field'=>$field, 'table'=>$table));
 		return $ret;
 
 	}
@@ -619,21 +649,10 @@ class Message extends MailAppModel {
  */
 	function renameField($contentName, $oldFieldName,$newfieldName) {
 
-		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		$ret = parent::renameField($oldFieldName,$newfieldName);
-		return $ret;
-
-	}
-/**
- * メッセージファイルのフィールドを削除する
- *
- * @param string $fieldName
- * @access private
- */
-	function delField($contentName, $fieldName) {
-
-		$this->tablePrefix = $this->getTablePrefixByContentName($contentName);
-		$ret = parent::delField($fieldName);
+		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
+		$db =& $this->getDataSource();
+		$table = str_replace($db->config['prefix'],'',$fullTable);
+		$ret = parent::renameField(array('old'=>$oldFieldName, 'new'=>$newfieldName, 'table'=>$table));
 		return $ret;
 
 	}

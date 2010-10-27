@@ -2498,7 +2498,7 @@ class DboSource extends DataSource {
 /**
  * スキーマファイルを利用してテーブルを生成する
  * 
- * @param array $options	model と path は必須
+ * @param array $options	path は必須
  * @param pass $path
  */
 	function loadSchema($options) {
@@ -2506,31 +2506,85 @@ class DboSource extends DataSource {
 		App::import('Model','Schema');
 		extract($options);
 
-		if(!isset($model)){
+		if(!isset($type)){
 			return false;
 		}
-		if(!isset($table)) {
-			$table = Inflector::tableize($model);
-		}
+		
 		if(!isset($file)) {
-			$file = $table.'.php';
+			if(isset($table)) {
+				$file = $table.'.php';
+			} elseif(isset($model)) {
+				$file = Inflector::tableize($model).'.php';
+			} elseif(isset($name)) {
+				$file = Inflector::underscore($name).'.php';
+			} else {
+				return false;
+			}
 		}
 		
-		$name = Inflector::camelize($table);
-		$Schema = ClassRegistry::init('CakeSchema');
-		$Schema->connection = $this->configKeyName;
+		if(!isset($name)){
+			if(isset($table)) {
+				$name = Inflector::camelize($table);
+			} elseif (isset($model)) {
+				$name = Inflector::pluralize($model);
+			} elseif (isset($file)) {
+				$name = basename(Inflector::classify($file),'.php');
+			} else {
+				return false;
+			}
+		}
+
+		switch($type) {
+			case 'create':
+				return $this->createTableBySchema(array('path'=>$path.$file));
+				break;
+			case 'alter':
+				$current = $path.'current.php';
+				if($this->writeCurrentSchema($current)) {
+					$result = $this->alterTableBySchema(array('oldPath'=>$current, 'newPath'=>$path.$file));
+					unlink($current);
+					return $result;
+				} else {
+					return false;
+				}
+				break;
+			case 'drop':
+				return $this->dropTableBySchema(array('path'=>$path.$file));
+				break;
+		}
+
+		return false;
 		
+	}
+/**
+ * 現在の接続のスキーマを生成する
+ *
+ * @param	string	$filename	保存先のフルパス
+ * @return	boolean
+ * @access	public
+ */
+	function writeCurrentSchema($filename){
+
+		$this->cacheSources = false;
+		$file = basename($filename);
+		$path = dirname($filename);
+		$name = basename(Inflector::classify(basename($file)), '.php');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->connection;
+
 		if(empty($path)){
 			$path = $Schema->path;
 		}
-		
-		$ModelSchema = $Schema->load(array('name'=>$name,'path'=>$path,'file'=>$file));
-		if(!$ModelSchema){
-			return false;
-		}
-		$sql = $this->createSchema($ModelSchema,$table);
-		return $this->execute($sql);
 
+		$tables = $this->listSources();
+		$models = array();
+		foreach($tables as $table) {
+			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches)) {
+				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
+			}
+		}
+		return $this->writeSchema(array('name'=>$name, 'model'=>$models, 'path' => $path, 'file' => $file));
+		
 	}
 /**
  * モデル名を指定してスキーマファイルを生成する
@@ -2548,52 +2602,113 @@ class DboSource extends DataSource {
 		if(!isset($model)){
 			return false;
 		}
+
+		// 登録済のクラスをクリアする
+		// 何故かプラグインのモデルがコアのDB設定で登録されてしまっているため
+		// コアとプラグインを連続して書き出すとプラグインのテーブルが見つからない
+		ClassRegistry::flush();
 		
 		if(!isset($file)){
-			$table = Inflector::tableize($model);
-			$file = $table.'.php';
+			if(is_array($model)) {
+				$basename = $this->configKeyName;
+			} else {
+				$basename = Inflector::tableize($model);
+				$model = array($model);
+			}
+			$file = $basename.'.php';
+		} else {
+			$basename = basename($file, '.php');
 		}
 
-		$name = Inflector::camelize($table);
+		if(!isset($name)) {
+			$name = Inflector::camelize($basename);
+		}
+		
 		$Schema = ClassRegistry::init('CakeSchema');
-		$Schema->connection = $this->configKeyName;
+		
+		if(isset($connection)) {
+			$Schema->connection = $connection;
+		} else {
+			$Schema->connection = $this->configKeyName;
+		}
 		
 		if(!isset($path)){
 			$path = $Schema->path;
 		}
-		
-		$options = $Schema->read(array('models' => array($model)));
+
+		$this->cacheSources = false;
+		$options = $Schema->read(array('models' => $model));
 		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
 		return $Schema->write($options);
 
 	}
 /**
- * スキーマファイルからフィールド構造を変更する
- * 
- * @param	array	$compare
- * @param	array	$compare
- * @param	string	$table
+ * スキーマファイルからテーブルを生成する
+ *
+ * @param	array	$options [ path ]
  * @return	boolean
+ * @access	public
  */
+	function createTableBySchema($options) {
+		
+		extract($options);
 
-	function editColumnBySchema($model, $oldPath, $newPath){
-
-		App::import('Model','Schema');
-
-		$table = Inflector::tableize($model);
-		$file = $table.'.php';
-		$name = Inflector::camelize($table);
-		$Schema = ClassRegistry::init('CakeSchema');
-		$Schema->connection = $this->configKeyName;
-
-		$oldSchema = $Schema->load(array('name'=>$name,'path'=>$oldPath,'file'=>$file));
-		$newSchema = $Schema->load(array('name'=>$name,'path'=>$newPath,'file'=>$file));
-		if(!$ModelSchema){
+		if(!isset($path)){
 			return false;
 		}
-		$compare = $Schema->compare($oldSchema, $newSchema);
-		$sql = $this->alterSchema($compare);
-		return $this->execute($sql);
+
+		$dir = dirname($path);
+		$file = basename($path);
+
+		if(!isset($name)){
+			$name = basename(Inflector::classify($file),'.php');
+		}
+
+		App::import('Model','Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+
+		$schema = $CakeSchema->load(array('name'=>$name,'path'=>$dir,'file'=>$file));
+
+		return $this->createTable(array('schema'=>$schema));
+		
+	}
+/**
+ * スキーマファイルからテーブル構造を変更する
+ * 
+ * @param	array	$options [ oldPath / newPath ]
+ * @return	boolean
+ * @access	public
+ */
+
+	function alterTableBySchema($options){
+
+		extract($options);
+
+		if(!isset($oldPath) || !isset($newPath)){
+			return false;
+		}
+
+		$oldDir = dirname($oldPath);
+		$newDir = dirname($newPath);
+		$oldFile = basename($oldPath);
+		$newFile = basename($newPath);
+
+		if(!isset($oldName)){
+			$oldName = basename(Inflector::classify($oldFile),'.php');
+		}
+		if(!isset($newName)){
+			$newName = basename(Inflector::classify($newFile),'.php');
+		}
+
+		App::import('Model','Schema');
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		
+		$old = $Schema->load(array('name'=>$oldName,'path'=>$oldDir,'file'=>$oldFile));
+		$new = $Schema->load(array('name'=>$newName,'path'=>$newDir,'file'=>$newFile));
+		
+		return $this->alterTable(array('old'=>$old, 'new'=>$new));
 
 	}
 /**
@@ -2606,168 +2721,268 @@ class DboSource extends DataSource {
  */
 	function dropTableBySchema($options) {
 
-		App::import('Model','Schema');
 		extract($options);
 
-		if(!isset($model)){
+		if(!isset($path)){
 			return false;
 		}
-		if(!isset($table)) {
-			$table = Inflector::tableize($model);
-		}
-		if(!isset($file)) {
-			$file = $table.'.php';
+
+		$dir = dirname($path);
+		$file = basename($path);
+
+		if(!isset($name)){
+			$name = basename(Inflector::classify($file),'.php');
 		}
 
-		$name = Inflector::camelize($table);
-		$Schema = ClassRegistry::init('CakeSchema');
-		$Schema->connection = $this->configKeyName;
+		App::import('Model','Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
 
-		if(empty($path)){
-			$path = $Schema->path;
-		}
+		$schema = $CakeSchema->load(array('name'=>$name,'path'=>$dir,'file'=>$file));
 
-		$ModelSchema = $Schema->load(array('name'=>$name,'path'=>$path,'file'=>$file));
-		if(!$ModelSchema){
-			return false;
-		}
-		$sql = $this->dropSchema($ModelSchema,$table);
-		return $this->execute($sql);
+		return $this->dropTable(array('schema'=>$schema));
 
 	}
 /**
  * テーブルを作成する
  * 
- * @param	Model	$mode	文字列の場合はフルテーブル名が前提
- * @param	array	$schema
- * @param	boolean
+ * @param	array	$options [ schema / table ]
+ * @return	boolean
  * @access	public
  */
-	function createTable($model, $schema){
+	function createTable($options){
+
+		extract($options);
 		
-		App::import('Model','Schema');
-		if (is_object($model)) {
-			$fullTableName = $this->fullTableName($model, false);
-		} else {
-			$fullTableName = $model;
+		if(!isset($schema)) {
+			return false;
 		}
-		// 可変モデル（プレフィックスを利用してテーブルを切り替えるモデル）に対応するための処理
-		$table = str_replace($this->config['prefix'], '', $fullTableName);
-		$name = Inflector::pluralize(Inflector::classify($table));
-		$options = array('name'=>$table,
-						'connection' => $this->configKeyName,
-						$table => $schema);
-		$CakeSchema = new CakeSchema($options);
-		$sql = $this->createSchema($CakeSchema);
+
+		if (is_array($schema)) {
+			if(empty($table)){
+				return false;
+			}
+			$name = Inflector::pluralize(Inflector::classify($table));
+			App::import('Model','Schema');
+			$options = array('name'=>$name,
+							'connection' => $this->configKeyName,
+							$table => $schema);
+			$schema = new CakeSchema($options);
+		}
+
+		// SQLを生成して実行
+		$sql = $this->createSchema($schema);
 		return $this->execute($sql);
 		
 	}
 /**
- * テーブルを削除する
+ * テーブル構造を変更する
  *
- * @param	mixid	$model	文字列の場合はフルテーブル名が前提
+ * @param	array	$options [ new / old ]
  * @return	boolean
  * @access	public
  */
-	function dropTable($model) {
+	function alterTable($options) {
 
-		if (is_object($model)) {
-			$fullTableName = $this->fullTableName($model, false);
-		} else {
-			$fullTableName = $model;
+		extract($options);
+
+		if(!isset($old) || !isset($new)){
+			return false;
 		}
-		$sql = $this->buildDropTable($fullTableName);
+
+		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema->connection = $this->configKeyName;
+		$compare = $Schema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
+		return $this->execute($sql);
+
+	}
+/**
+ * テーブルを削除する
+ *
+ * @param	array	$options [ schema / table ]
+ * @return	boolean
+ * @access	public
+ */
+	function dropTable($options) {
+
+		extract($options);
+
+		if(!isset($schema) && !isset($table)) {
+			return false;
+		}
+
+		if(!isset($schema)){
+			$schema = $this->readSchema($table);
+			if(isset($schema['tables'][$table])) {
+				$schema = $schema['tables'][$table];
+			} else {
+				return false;
+			}
+		}
+
+		if(is_array($schema)) {
+			App::import('Model','Schema');
+			$name = Inflector::pluralize(Inflector::classify($table));
+			$options = array('name'=>$name,
+						'connection' => $this->configKeyName,
+						$table => $schema);
+			$schema = new CakeSchema($options);
+		}
+
+		$sql = $this->dropSchema($schema);
 		return $this->execute($sql);
 
 	}
 /**
  * テーブル名をリネームする
- * プレフィックス付である事が前提
+ * 
  * @param	string	$oldName
- * @param	string	$newName
+ * @param	array	$options [ old / new ]
  * @return	boolean
  * @access	public
  */
-	function renameTable($oldName, $newName) {
-		
-		$sql = $this->buildRenameTable($oldName, $newName);
+	function renameTable($options) {
+
+		extract($options);
+
+		if(!isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$new = $this->config['prefix'].$new;
+		$old = $this->config['prefix'].$old;
+		$sql = $this->buildRenameTable($old, $new);
 		return $this->execute($sql);
 
 	}
 /**
  * カラムを追加する
- * @param model $model
- * @param string $addFieldName
- * @param array $column
- * @return boolean
- * @access public
+ * 
+ * @param	array	$options [ table / column ]
+ * @return	boolean
+ * @access	public
  */
-	function addColumn(&$model,$addFieldName,$column) {
+	function addColumn($options) {
 
-		$table = $model->tablePrefix . $model->table;
-		if(empty($column['name'])) {
-			$column['name'] = $addFieldName;
+		extract($options);
+
+		if(!isset($table) || !isset($column)) {
+			return false;
 		}
-		$schema = $model->schema();
-		if(isset($schema[$addFieldName])) {
-			return $this->renameColumn($model, $addFieldName, $addFieldName, $column);
+
+		if(!isset($column['name'])) {
+			if(isset($field)) {
+				$column['name'] = $field;
+			} else {
+				return false;
+			}
 		}
-		$sql = $this->buildAddColumn($table,$column);
+
+		$old = $this->readSchema($table);
+		if(isset($old['tables'][$table][$field])) {
+			return false;
+		}
+		$new = $old;
+		$new['tables'][$table][$field] = $column;
+
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
 
 	}
 /**
  * カラムを変更する
  *
- * @param model $model
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return boolean
- * @access public
+ * @param	array	$options [ table / column / field ]
+ * @return	boolean
+ * @access	public
  */
-	function editColumn(&$model,$oldFieldName, $column) {
-		$table = $model->tablePrefix . $model->table;
-		$sql = $this->buildEditColumn($table, $oldFieldName, $column);
+	function changeColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($column)) {
+			return false;
+		}
+
+		if(!isset($field)) {
+			if(isset($column['name'])){
+				$field = $column['name'];
+			} else{
+				return false;
+			}
+		}
+
+		$old = $this->readSchema($table);
+		if(!isset($old['tables'][$table][$field])) {
+			return false;
+		}
+		$new = $old;
+		$new['tables'][$table][$field] = $column;
+
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
+		
 	}
 /**
  * カラムを削除する
  *
- * @param model $model
- * @param string $delFieldName
+ * @param	array	$options [ table / field ]
  * @return boolean
  * @access public
  */
-	function delColumn(&$model, $delFieldName) {
-		$table = $model->tablePrefix . $model->table;
-		$sql = $this->buildDelColumn($table, $delFieldName);
+	function dropColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($field)) {
+			return false;
+		}
+		
+		$old = $this->readSchema($table);
+		if(!isset($old['tables'][$table][$field])) {
+			return false;
+		}
+		$new = $old;
+		unset($new['tables'][$table][$field]);
+		
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		$compare = $CakeSchema->compare($old, $new);
+		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
+		
 	}
 /**
  * カラム名を変更する
  *
- * @param model $model
+ * @param	array	$options [ table / new / old ]
  * @param string $oldFieldName
  * @param string $newFieldName
  * @return boolean
  * @access public
  */
-	function renameColumn(&$model,$oldFieldName,$newFieldName) {
-		$schema = $model->schema();
-		$column = $schema[$oldFieldName];
-		$column['name'] = $newFieldName;
-		return $this->editColumn($model, $oldFieldName, $column);
-	}
-/**
- * テーブルのドロップステートメントを生成
- *
- * @param	string	$tableName
- * @return	string
- * @access	public
- */
-	function buildDropTable($tableName) {
-		return "DROP TABLE ".$tableName;
+	function renameColumn($options) {
+
+		extract($options);
+
+		if(!isset($table) || !isset($new) || !isset($old)) {
+			return false;
+		}
+		
+		$column['name'] = $new;
+		$options = array('field'=>$old,'table'=>$table, 'column'=>$column);
+		return $this->changeColumn($options);
+
 	}
 /**
  * テーブル名のリネームステートメントを生成
@@ -2781,38 +2996,23 @@ class DboSource extends DataSource {
 		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
 	}
 /**
- * カラムを追加するSQLを生成
+ * データベースよりスキーマ情報を読み込む
  *
- * @param string $tableName
- * @param array $column
- * @return string
- * @access public
+ * @param	string	$table
+ * @return	array	$schema
+ * @access	public
  */
-	function buildAddColumn($tableName, $column) {
-		return "ALTER TABLE `".$tableName."` ADD ".$this->buildColumn($column);
-	}
-/**
- * カラムを変更するSQLを生成
- *
- * @param string $oldFieldName
- * @param string $newFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildEditColumn($tableName, $oldFieldName, $column) {
-		return "ALTER TABLE `".$tableName."` CHANGE `".$oldFieldName."` ".$this->buildColumn($column);
-	}
-/**
- * カラムを削除する
- *
- * @param string $delFieldName
- * @param array $column
- * @return string
- * @access public
- */
-	function buildDelColumn($tableName, $delFieldName) {
-		return "ALTER TABLE `".$tableName."` DROP `".$delFieldName."`";
+	function readSchema($table) {
+		$this->cacheSources = false;
+		$tables = $this->listSources();
+		if(!in_array($this->config['prefix'].$table, $tables)){
+			return false;
+		}
+		$model = Inflector::classify(Inflector::singularize($table));
+		App::import('Model', 'Schema');
+		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema->connection = $this->configKeyName;
+		return $CakeSchema->read(array('models'=>array($model)));
 	}
 // <<<
 }

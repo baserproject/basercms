@@ -81,8 +81,10 @@ class FeedHelper extends TextExHelper {
  */
 	function saveCachetime(){
 		$feedId = $this->params['pass'][0];
-		$cachetime = $this->Baser->_view->viewVars['cachetime'];
-		cache('views'.DS.'feed_cachetime_'.$feedId.'.php',$cachetime);
+		if(isset($this->Baser->_view->viewVars['cachetime'])) {
+			$cachetime = $this->Baser->_view->viewVars['cachetime'];
+			cache('views'.DS.'feed_cachetime_'.$feedId.'.php',$cachetime);
+		}
 	}
 /**
  * フィードリストのキャッシュヘッダーを出力する

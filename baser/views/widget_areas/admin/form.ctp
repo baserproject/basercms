@@ -65,7 +65,7 @@ $(function() {
 
 			var baseId = 0;
 			$("#Target .setting").each(function () {
-				var _baseId = $(this).attr('id').replace('Setting','');
+				var _baseId = parseInt($(this).attr('id').replace('Setting',''));
 				if(_baseId > baseId){
 					baseId = _baseId;
 				}

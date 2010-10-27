@@ -25,7 +25,6 @@ $feed->saveCachetime();
 	<?php $feed->cacheHeader() ?>
 </cake:nocache>
 <?php if(!empty($items)): ?>
-<?php echo MONTH ?>
 <ul>
 	<?php foreach($items as $key => $item): ?>
 		<?php $no = sprintf('%02d',$key+1) ?>
