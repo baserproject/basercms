@@ -187,19 +187,10 @@ class SiteConfigsController extends AppController {
 		}
 		
 		// ZIP圧縮して出力
-		//$archiveDir = $backupDir . 'archives' . DS;
-		/*if($blnClearOldArchives) {
-			$this->Folder->delete($archiveDir);
-		}
-		$this->Folder->create($archiveDir);*/
-		$fileName = date('Ymd_His') . '_backup.zip';
-		
+		$fileName = date('Ymd_His') . '_backup.zip';		
 		App::import('Vendor','Createzip');
 		$Createzip = new Createzip;
 		$Createzip->addFolder($backupPath, '');
-		/*$fd = fopen ($fileName, "wb");
-		$out = fwrite ($fd, $createZip->getZippedfile());
-		fclose ($fd); */
 		$Createzip->download($fileName);
 		exit();
 
