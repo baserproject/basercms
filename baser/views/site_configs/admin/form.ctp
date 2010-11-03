@@ -126,5 +126,19 @@
 				※ CakePHPのデバッグモードを指します。<br />
 				※ インストールモードはBaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div></td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.smart_url', 'スマートURL') ?></th>
+		<td class="col-input">
+			<span>利用可否：<strong>
+			<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
+			<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
+			<?php echo $formEx->select('SiteConfig.smart_url', array('0'=>'オフ', '1' => 'オン'), null ,$disabled, false) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmartUrl','class'=>'help','alt'=>'ヘルプ')) ?><br />
+			<div id="helptextSmartUrl" class="helptext"></div>
+			<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
+		</td>
+	</tr>
 </table>
 <div class="align-center"> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?> </div>

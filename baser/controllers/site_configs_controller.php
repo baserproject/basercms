@@ -100,6 +100,7 @@ class SiteConfigsController extends AppController {
 			$this->data = $this->SiteConfig->read(null, 1);
 			$this->data['SiteConfig'] = $this->siteConfigs;
 			$this->data['SiteConfig']['mode'] = $this->readDebug();
+			$this->data['SiteConfig']['smart_url'] = $this->readSmartUrl();
 		}else {
 			// テーブル構造が特殊なので強引にバリデーションを行う
 			$this->SiteConfig->data = $this->data;
@@ -108,10 +109,15 @@ class SiteConfigsController extends AppController {
 			}else {
 				// KeyValueへ変換処理
 				$mode = $this->data['SiteConfig']['mode'];
+				$smartUrl = $this->data['SiteConfig']['smart_url'];
 				unset($this->data['SiteConfig']['mode']);
 				unset($this->data['SiteConfig']['id']);
+				unset($this->data['SiteConfig']['smart_url']);
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
+				if($this->readSmartUrl() != $smartUrl) {
+					$this->writeSmartUrl($smartUrl);
+				}
 				if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
 					clearViewCache();
 				}
@@ -122,10 +128,36 @@ class SiteConfigsController extends AppController {
 					}
 				}
 				$this->Session->setFlash('システム設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+
+				if($this->readSmartUrl() != $smartUrl) {
+					if($smartUrl){
+						header('Location: '.$this->getRewriteBase('/admin/site_configs/form'));
+					}else{
+						header('Location: '.$this->getRewriteBase('/index.php/admin/site_configs/form'));
+					}
+				}else{
+					$this->redirect(array('action'=>'form'));
+				}
+				
 			}
 		}
 
+		/* スマートURL関連 */
+		// mod_rewrite モジュールインストール
+		$apachegetmodules = function_exists('apache_get_modules');
+		if($apachegetmodules) {
+			$rewriteInstalled = in_array('mod_rewrite',apache_get_modules());
+		}else {
+			$rewriteInstalled = -1;
+		}
+		$writableInstall = is_writable(CONFIGS.'install.php');
+		$writableHtaccess = is_writable(ROOT.DS.'.htaccess');
+		$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+		if($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false){
+			$smartUrlChangeable = true;
+		} else {
+			$smartUrlChangeable = false;
+		}
 		// バックアップ機能を実装しているデータベースの場合のみバックアップへのリンクを表示
 		$enableBackupDb = array('sqlite','sqlite3','mysql','csv','postgres');
 		$dbConfigs = new DATABASE_CONFIG();
@@ -135,12 +167,119 @@ class SiteConfigsController extends AppController {
 			$this->set('backupEnabled',true);
 		}
 
-		// テーマの一覧を取得
 		$this->set('themes',$this->SiteConfig->getThemes());
-
-		// 表示設定
+		$this->set('rewriteInstalled', $rewriteInstalled);
+		$this->set('writableInstall', $writableInstall);
+		$this->set('writableHtaccess', $writableHtaccess);
+		$this->set('writableHtaccess2', $writableHtaccess2);
+		$this->set('smartUrlChangeable', $smartUrlChangeable);
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
+
+	}
+/**
+ * スマートURLの設定を取得
+ * 
+ * @return	boolean
+ * @access	public
+ */
+	function readSmartUrl(){
+		if (Configure::read('App.baseUrl')) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+/**
+ * スマートURLの設定を行う
+ * 
+ * @param	boolean	$smartUrl
+ * @return	boolean
+ * @access	public
+ */
+	function writeSmartUrl($smartUrl) {
+
+		/* install.php の編集 */
+		$baseUrlPattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'([^\']*)\'[\s]*\);\n/is';
+		$file = new File(CONFIGS.'install.php');
+		$data = $file->read();
+		if($smartUrl) {
+			if(preg_match($baseUrlPattern, $data, $matches)) {
+				$data = preg_replace($baseUrlPattern, "Configure::write('App.baseUrl', '');\n", $data);
+			} else {
+				$data = str_replace("<?php\n", "<?php\nConfigure::write('App.baseUrl', '');\n", $data);
+			}
+		} else {
+			$data = preg_replace($baseUrlPattern, '', $data);
+		}
+		$file->write($data);
+		$file->close();
+		
+		/* /.htaccess の編集 */
+		$rewritePatterns = array(	"(/\n|)[^\n]*RewriteEngine\s+on/is",
+									"/\n[^\n]*RewriteBase.+$/is",
+									"/\n[^\n]*RewriteRule\s+\^\$\s+app\/webroot\/\s+\[L\]/is",
+									"/\n[^\n]*RewriteRule\s+\(\.\*\)\s+app\/webroot\/\$1\s+\[L\]/is");
+		$rewriteSettings = array(	'RewriteEngine on',
+									'RewriteBase '.$this->getRewriteBase('/'),
+									'RewriteRule ^$ app/webroot/ [L]',
+									'RewriteRule (.*) app/webroot/$1 [L]');
+		$path = ROOT.DS.'.htaccess';
+		$file = new File($path);
+		$data = $file->read();
+		foreach ($rewritePatterns as $rewritePattern) {
+			$data = preg_replace($rewritePattern, '', $data);
+		}
+		if($smartUrl) {
+			$data .= implode("\n", $rewriteSettings);
+		}
+		$file->write($data);
+		$file->close();
+
+		/* /app/webroot/.htaccess の編集 */
+		$rewritePatterns = array(	"(/\n|)[^\n]*RewriteEngine\s+on/is",
+									"/\n[^\n]*RewriteBase.+$/is",
+									"/\n[^\n]*RewriteCond\s+\%\{REQUEST_FILENAME\}\s+\!\-d/is",
+									"/\n[^\n]*RewriteCond\s+\%\{REQUEST_FILENAME\}\s+\!\-s/is",
+									"/\n[^\n]*RewriteRule\s+\^\(\.\*\)\$\s+index\.php\?url\=\$1\s\[QSA,L\]/is");
+		$rewriteSettings = array(	'RewriteEngine on',
+									'RewriteBase '.$this->getRewriteBase('/app/webroot'),
+									'RewriteCond %{REQUEST_FILENAME} !-d',
+									'RewriteCond %{REQUEST_FILENAME} !-f',
+									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
+		$path = WWW_ROOT.'.htaccess';
+		$file = new File($path);
+		$data = $file->read();
+		foreach ($rewritePatterns as $rewritePattern) {
+			$data = preg_replace($rewritePattern, '', $data);
+		}
+		if($smartUrl) {
+			$data .= implode("\n", $rewriteSettings);
+		}
+		$file->write($data);
+		$file->close();
+		
+	}
+/**
+ * RewriteBase の設定を取得する
+ *
+ * @param	string	$base
+ * @return	string
+ */
+	function getRewriteBase($url){
+
+		$baseUrl = baseUrl();
+		if(preg_match("/index\.php/", $baseUrl)){
+			$baseUrl = str_replace('index.php/', '', baseUrl());
+		}
+		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
+		if($url != '/' || !$baseUrl) {
+			$url = $baseUrl.$url;
+		}else{
+			$url = $baseUrl;
+		}
+		
+		return $url;
 
 	}
 /**
