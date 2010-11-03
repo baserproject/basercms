@@ -2285,6 +2285,17 @@ class DboCsv extends DboSource {
 		return false;
 	}
 /**
+ * Generate a "drop table" statement for the given Schema object
+ * 未サポート
+ * @param object $schema An instance of a subclass of CakeSchema
+ * @param string $table Optional.  If specified only the table name given will be generated.
+ *   Otherwise, all tables defined in the schema are generated.
+ * @return string
+ */
+	function dropSchema($schema, $table = null) {
+		return false;
+	}
+/**
  * Generate index alteration statements for a table.
  * 未サポート
  * @param string $table Table to alter indexes for
@@ -2392,6 +2403,39 @@ class DboCsv extends DboSource {
 	function truncate($table) {
 		// TODO 現状、CSVのDELETE文はWHERE句がないと実行されない
 		return $this->execute('DELETE From ' . $this->fullTableName($table) . ' WHERE 1=1');
+	}
+/**
+ * Begin a transaction
+ * TODO 未実装
+ * @param model $model
+ * @return boolean True on success, false on fail
+ * (i.e. if the database/model does not support transactions,
+ * or a transaction has not started).
+ */
+	function begin(&$model) {
+		return false;
+	}
+/**
+ * Commit a transaction
+ * TODO 未実装
+ * @param model $model
+ * @return boolean True on success, false on fail
+ * (i.e. if the database/model does not support transactions,
+ * or a transaction has not started).
+ */
+	function commit(&$model) {
+		return false;
+	}
+/**
+ * Rollback a transaction
+ * TODO 未実装
+ * @param model $model
+ * @return boolean True on success, false on fail
+ * (i.e. if the database/model does not support transactions,
+ * or a transaction has not started).
+ */
+	function rollback(&$model) {
+		return false;
 	}
 }
 /**
