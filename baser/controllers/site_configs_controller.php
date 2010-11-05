@@ -178,103 +178,6 @@ class SiteConfigsController extends AppController {
 
 	}
 /**
- * スマートURLの設定を取得
- * 
- * @return	boolean
- * @access	public
- */
-	function readSmartUrl(){
-		if (Configure::read('App.baseUrl')) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-/**
- * スマートURLの設定を行う
- * 
- * @param	boolean	$smartUrl
- * @return	boolean
- * @access	public
- */
-	function writeSmartUrl($smartUrl) {
-
-		/* install.php の編集 */
-		
-		if($smartUrl) {
-			$this->writeInstallSetting('App.baseUrl', '');
-		} else {
-			$file = new File(CONFIGS.'install.php');
-			$data = $file->read();
-			$baseUrlPattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'([^\']*)\'[\s]*\);\n/is';
-			$data = preg_replace($baseUrlPattern, '', $data);
-			$file->write($data);
-			$file->close();
-		}
-		
-		/* /.htaccess の編集 */
-		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
-									"/\n[^\n#]*RewriteBase.+/i",
-									"/\n[^\n#]*RewriteCond.+/i",
-									"/\n[^\n#]*RewriteRule.+/i");
-		$rewriteSettings = array(	'RewriteEngine on',
-									'RewriteBase '.$this->getRewriteBase('/'),
-									'RewriteRule ^$ app/webroot/ [L]',
-									'RewriteRule (.*) app/webroot/$1 [L]');
-		$path = ROOT.DS.'.htaccess';
-		$file = new File($path);
-		$data = $file->read();
-		foreach ($rewritePatterns as $rewritePattern) {
-			$data = preg_replace($rewritePattern, '', $data);
-		}
-		if($smartUrl) {
-			$data .= "\n".implode("\n", $rewriteSettings);
-		}
-		$file->write($data);
-		$file->close();
-
-		/* /app/webroot/.htaccess の編集 */
-		$rewriteSettings = array(	'RewriteEngine on',
-									'RewriteBase '.$this->getRewriteBase('/app/webroot'),
-									'RewriteCond %{REQUEST_FILENAME} !-d',
-									'RewriteCond %{REQUEST_FILENAME} !-f',
-									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
-		$path = WWW_ROOT.'.htaccess';
-		$file = new File($path);
-		$data = $file->read();
-		foreach ($rewritePatterns as $rewritePattern) {
-			$data = preg_replace($rewritePattern, '', $data);
-		}
-		if($smartUrl) {
-			$data .= "\n".implode("\n", $rewriteSettings);
-		}
-		$file->write($data);
-		$file->close();
-		
-	}
-/**
- * RewriteBase の設定を取得する
- *
- * @param	string	$base
- * @return	string
- */
-	function getRewriteBase($url){
-
-		$baseUrl = baseUrl();
-		if(preg_match("/index\.php/", $baseUrl)){
-			$baseUrl = str_replace('index.php/', '', baseUrl());
-		}
-		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
-		if($url != '/' || !$baseUrl) {
-			$url = $baseUrl.$url;
-		}else{
-			$url = $baseUrl;
-		}
-		
-		return $url;
-
-	}
-/**
  * キャッシュファイルを全て削除する
  * @return	void
  * @access	public
@@ -334,13 +237,14 @@ class SiteConfigsController extends AppController {
 	function admin_info() {
 
 		$this->pageTitle = '環境情報';
-		$drivers = array('csv'=>'CSV','sqlite3_ex'=>'SQLite3','mysql_ex'=>'MySQL','postgres'=>'PostgreSQL');
+		$drivers = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
 		$smartUrl = 'ON';
 		$db =& ConnectionManager::getDataSource('baser');
 		if(Configure::read('App.baseUrl')){
 			$smartUrl = 'OFF';
 		}
-		$this->set('driver',$drivers[$db->config['driver']]);
+		$driver = str_replace('_ex','',$db->config['driver']);
+		$this->set('driver',$drivers[$driver]);
 		$this->set('smartUrl',$smartUrl);
 		$this->set('baserVersion',$this->siteConfigs['version']);
 		$this->set('cakeVersion',$this->getCakeVersion());

@@ -152,7 +152,13 @@ class DboCsv extends DboSource {
  * @access	private
  */
 	function __construct($config = null, $autoConnect = true) {
-
+		// TODO 現在の仕様として、$connected は、配列にしてしまっているので、
+		// 次の処理を行うと処理がうまくいかなくなってしまう。
+		// 配列の接続データは別のプロパティに持たせるようにした方が？
+		/*if($autoConnect){
+			$folder = new Folder();
+			$this->connected = $folder->create($config['database']);
+		}*/
 		parent::__construct($config,false);
 
 	}
@@ -444,6 +450,10 @@ class DboCsv extends DboSource {
  */
 	function _connect($tableName,$lock=true,$plugin=null,$force = false) {
 
+		if(!empty($this->connection[$tableName])){
+			return $this->connection[$tableName];
+		}
+
 		$config = $this->config;
 		// CSVファイルのパスを取得
 		$this->csvName[$tableName] = $config['database'].DS.$tableName.'.csv';
@@ -471,9 +481,6 @@ class DboCsv extends DboSource {
  * @access	public
  */
 	function disconnect($tableName = null) {
-
-		// TODO 必要か確認
-		//@mysql_free_result($this->results);
 
 		if($tableName) {
 			if(empty($this->connection[$tableName])) {
@@ -779,10 +786,16 @@ class DboCsv extends DboSource {
  */
 	function createCsv($queryData) {
 
+		if(!$this->_connect($queryData['tableName'])){
+			return false;
+		}
+		
 		// 主キーがない場合のauto処理
 		if(empty($queryData['values']['id'])) {
 			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
 			$this->_lastInsertId = $queryData['values']['id'];
+		}else{
+			$this->_csvFields = fgetcsv($this->connection[$queryData['tableName']],10240);
 		}
 
 		// カラムをテーブル情報どおりに並べる
@@ -814,6 +827,8 @@ class DboCsv extends DboSource {
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$queryData['tableName']], $csv);
 
+		$this->disconnect($queryData['tableName']);
+		
 		return $ret;
 
 	}
@@ -966,7 +981,7 @@ class DboCsv extends DboSource {
 		rewind($this->connection[$index]);
 		$this->_csvFields = fgetcsv($this->connection[$index],10240);
 
-		while(($_record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
+		while(($_record = fgetcsvReg($this->connection[$index], 10240)) !== false) {
 			$record = array();
 			// 配列の添え字をフィールド名に変換
 			foreach($_record as $key => $value) {
@@ -1016,7 +1031,7 @@ class DboCsv extends DboSource {
 			}
 		}
 
-		while(($record = fgetcsv_reg($this->connection[$index], 10240)) !== false) {
+		while(($record = fgetcsvReg($this->connection[$index], 10240)) !== false) {
 			if($record[$idNum]>=$maxId) {
 				$maxId = $record[$idNum];
 			}
@@ -1486,6 +1501,7 @@ class DboCsv extends DboSource {
 		$arrValues = explode(",",$values);
 
 		for($i=0;$i<count($arrFields);$i++) {
+			$arrFields[$i] = trim($arrFields[$i]);
 			$datas[$arrFields[$i]] = $this->_convertField($arrValues[$i],false);
 		}
 
@@ -1716,6 +1732,11 @@ class DboCsv extends DboSource {
 		if ($cache != null) {
 			return $cache;
 		}
+
+		if(!file_exists($this->config['database'].DS.$this->config['prefix'].$model->useTable.'.csv')){
+			return null;
+		}
+
 		$fields = false;
 
 		// 接続されていない場合は、一時的に接続してヘッダーを取得
@@ -2285,17 +2306,6 @@ class DboCsv extends DboSource {
 		return false;
 	}
 /**
- * Generate a "drop table" statement for the given Schema object
- * 未サポート
- * @param object $schema An instance of a subclass of CakeSchema
- * @param string $table Optional.  If specified only the table name given will be generated.
- *   Otherwise, all tables defined in the schema are generated.
- * @return string
- */
-	function dropSchema($schema, $table = null) {
-		return false;
-	}
-/**
  * Generate index alteration statements for a table.
  * 未サポート
  * @param string $table Table to alter indexes for
@@ -2498,36 +2508,5 @@ class DboCsv extends DboSource {
 		$temp = $v[$i];
 		$v[$i] = $v[$j];
 		$v[$j] = $temp;
-	}
-/**
- * ファイルポインタから行を取得し、CSVフィールドを処理する
- *
- * TODO GLOBAL グローバルな関数として再配置する必要あり
- *
- * @param	stream	handle
- * @param	int		length
- * @param	string	delimiter
- * @param 	string	enclosure
- * @return	mixed	ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
- */
-	function fgetcsv_reg (&$handle, $length = null, $d = ',', $e = '"') {
-		$d = preg_quote($d);
-		$e = preg_quote($e);
-		$_line = "";
-		$eof = false;
-		while (($eof != true)and(!feof($handle))) {
-			$_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
-			$itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
-			if ($itemcnt % 2 == 0) $eof = true;
-		}
-		$_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
-		$_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
-		preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-		$_csv_data = $_csv_matches[1];
-		for($_csv_i=0;$_csv_i<count($_csv_data);$_csv_i++) {
-			$_csv_data[$_csv_i]=preg_replace('/^'.$e.'(.*)'.$e.'$/s','$1',$_csv_data[$_csv_i]);
-			$_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
-		}
-		return empty($_line) ? false : $_csv_data;
 	}
 ?>

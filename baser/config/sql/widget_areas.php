@@ -1,10 +1,10 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* WidgetAreas schema generated on: 2010-08-03 10:08:20 : 1280800520*/
+/* WidgetAreas schema generated on: 2010-11-04 18:11:11 : 1288863011*/
 class WidgetAreasSchema extends CakeSchema {
 	var $name = 'WidgetAreas';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/baser/config/sql';
+	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
 
 	var $file = 'widget_areas.php';
 

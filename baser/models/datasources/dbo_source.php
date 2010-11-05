@@ -2966,8 +2966,6 @@ class DboSource extends DataSource {
  * カラム名を変更する
  *
  * @param	array	$options [ table / new / old ]
- * @param string $oldFieldName
- * @param string $newFieldName
  * @return boolean
  * @access public
  */
@@ -3013,6 +3011,60 @@ class DboSource extends DataSource {
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		return $CakeSchema->read(array('models'=>array($model)));
+	}
+/**
+ * CSVファイルをDBに読み込む
+ *
+ * @param	array	$options [ path / encoding ]
+ * @return	boolean
+ * @access	public
+ */
+	function loadCsv($options) {
+		
+		extract($options);
+		if(!isset($path)) {
+			return false;
+		}
+		if(!isset($encoding)) {
+			$encoding = 'UTF-8';
+		}
+
+		$appEncoding = Configure::read('App.encoding');
+		$table = basename($path, '.csv');
+		$fullTableName = $this->config['prefix'].$table;
+		$schema = $this->readSchema(basename($path, '.csv'));
+		
+		// ヘッダ取得
+		$fp = fopen($path, 'r');
+		$_head = fgetcsv($fp,10240);
+		foreach($_head as $value) {
+			$head[] = $this->name($value);
+		}
+
+		while(($_record = fgetcsvReg($fp, 10240)) !== false) {
+			$values = array();
+			// 配列の添え字をフィールド名に変換
+			foreach($_record as $key => $value) {
+				if($_head[$key]=='created'){
+					$value = date('Y-m-d H:i:s');
+				}
+				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
+			}
+			$query = array(
+				'table' => $fullTableName,
+				'fields' => implode(', ', $head) ,
+				'values' => mb_convert_encoding(implode(', ', $values), $appEncoding, $encoding)
+			);
+			$sql = $this->renderStatement('create', $query);
+			if (!$this->execute($sql)) {
+				return false;
+			}
+
+		}
+		fclose($fp);
+		
+		return true;
+
 	}
 // <<<
 }
