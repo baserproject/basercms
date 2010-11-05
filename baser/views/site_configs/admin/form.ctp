@@ -153,6 +153,7 @@ $(function(){
 		<td class="col-input">
 			<span>Rewriteモジュール利用可否：<strong>
 			<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
+			<?php $disabled = array() ?>
 			<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
 			<?php echo $formEx->select('SiteConfig.smart_url', array('0'=>'オフ', '1' => 'オン'), null ,$disabled, false) ?>
 			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmartUrl','class'=>'help','alt'=>'ヘルプ')) ?><br />
@@ -162,18 +163,10 @@ $(function(){
 				・スマートURL有効例：<br />　　http://localhost/contact/form<br />
 				</p><br />
 				<p>スマートURLの設定はサーバー環境に深く依存します。<br />
-					「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますので、注意が必要です。<br />
+					「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますので注意が必要です。<br />
 					スマートURLをオンに切り替えた場合、/app/ フォルダ、/app/webroot/ フォルダ内の「.htaccess」ファイルに、
-					RewriteBase設定が自動的に書き込まれますが、うまく動作しない場合、この設定値を環境に合わせて調整してください。<br />
-					マルチドメインの場合は、RewriteBaseの設定値を、マルチドメインのフォルダから始めたものに変更するとうまくいく場合が多いようです。</p>
-				<br />
-				<p>（例）マルチドメインのフォルダが「test」の場合の、/app/webroot/.htaccess の設定</p>
-				<pre>RewriteBase /test/app/webroot</pre>
-				<br />
-				<p>また、スマートURLオンの設定がどうしてもうまくいかず、元に戻したい場合は、上記.htaccessファイル内の、
-					RewriteEngine / RewriteBase / RewriteCond / RewriteRule から始まる行を全て削除し、
-					/app/config/install.php 内の次の行を削除してください。</p>
-				<pre>Configure::write('App.baseUrl', '');</pre>
+					RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
+					詳細については、各.htaccessファイルのコメントを確認してください。</p>
 			</div>
 			<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
 			<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
