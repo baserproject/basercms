@@ -422,7 +422,8 @@ select.multiple option {
 }
 /* UpdateMessage
 ----------------------------------------------- */
-#UpdateMessage {
+#UpdateMessage,
+#FirstMessage{
 	margin-top: 3px;
 	background-color: #dd3300;
 	padding:6px 15px;
@@ -430,7 +431,8 @@ select.multiple option {
 	font-weight: bold;
 	text-align: center;
 }
-#UpdateMessage a {
+#UpdateMessage a ,
+#FirstMessage a {
 	color: #FFFFFF;
 }
 /* map

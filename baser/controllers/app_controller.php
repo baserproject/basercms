@@ -192,6 +192,11 @@ class AppController extends Controller {
 
 		parent::beforeFilter();
 
+		// 初回アクセスメッセージ表示設定
+		if(Configure::read('Baser.firstAccess')) {
+			$this->writeInstallSetting('Baser.firstAccess', false);
+		}
+
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) && 
 					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
@@ -488,6 +493,42 @@ class AppController extends Controller {
 
 		$this->EmailEx->send();
 
+	}
+/**
+ * インストール設定を書き換える
+ *
+ * @param	string	$key
+ * @param	string	$value
+ * @return	boolean
+ * @access	public
+ */
+	function writeInstallSetting($key, $value) {
+
+		/* install.php の編集 */
+		if(is_string($value)) {
+			$value = "'".$value."'";
+		}
+		if(is_bool($value)){
+			if($value){
+				$value = 'true';
+			}else{
+				$value = 'false';
+			}
+		}
+		$setting = "Configure::write('".$key."', ".$value.");\n";
+		$key = str_replace('.', '\.', $key);
+		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
+		$file = new File(CONFIGS.'install.php');
+		$data = $file->read();
+		if(preg_match($pattern, $data)) {
+			$data = preg_replace($pattern, $setting, $data);
+		} else {
+			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
+		}
+		$return = $file->write($data);
+		$file->close();
+		return $return;
+		
 	}
 }
 ?>
