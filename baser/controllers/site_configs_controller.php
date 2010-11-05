@@ -200,26 +200,23 @@ class SiteConfigsController extends AppController {
 	function writeSmartUrl($smartUrl) {
 
 		/* install.php の編集 */
-		$baseUrlPattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'([^\']*)\'[\s]*\);\n/is';
-		$file = new File(CONFIGS.'install.php');
-		$data = $file->read();
+		
 		if($smartUrl) {
-			if(preg_match($baseUrlPattern, $data, $matches)) {
-				$data = preg_replace($baseUrlPattern, "Configure::write('App.baseUrl', '');\n", $data);
-			} else {
-				$data = str_replace("<?php\n", "<?php\nConfigure::write('App.baseUrl', '');\n", $data);
-			}
+			$this->writeInstallSetting('App.baseUrl', '');
 		} else {
+			$file = new File(CONFIGS.'install.php');
+			$data = $file->read();
+			$baseUrlPattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'([^\']*)\'[\s]*\);\n/is';
 			$data = preg_replace($baseUrlPattern, '', $data);
+			$file->write($data);
+			$file->close();
 		}
-		$file->write($data);
-		$file->close();
 		
 		/* /.htaccess の編集 */
-		$rewritePatterns = array(	"(/\n|)[^\n]*RewriteEngine\s+on/is",
-									"/\n[^\n]*RewriteBase.+$/is",
-									"/\n[^\n]*RewriteRule\s+\^\$\s+app\/webroot\/\s+\[L\]/is",
-									"/\n[^\n]*RewriteRule\s+\(\.\*\)\s+app\/webroot\/\$1\s+\[L\]/is");
+		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
+									"/\n[^\n#]*RewriteBase.+/i",
+									"/\n[^\n#]*RewriteCond.+/i",
+									"/\n[^\n#]*RewriteRule.+/i");
 		$rewriteSettings = array(	'RewriteEngine on',
 									'RewriteBase '.$this->getRewriteBase('/'),
 									'RewriteRule ^$ app/webroot/ [L]',
@@ -231,17 +228,12 @@ class SiteConfigsController extends AppController {
 			$data = preg_replace($rewritePattern, '', $data);
 		}
 		if($smartUrl) {
-			$data .= implode("\n", $rewriteSettings);
+			$data .= "\n".implode("\n", $rewriteSettings);
 		}
 		$file->write($data);
 		$file->close();
 
 		/* /app/webroot/.htaccess の編集 */
-		$rewritePatterns = array(	"(/\n|)[^\n]*RewriteEngine\s+on/is",
-									"/\n[^\n]*RewriteBase.+$/is",
-									"/\n[^\n]*RewriteCond\s+\%\{REQUEST_FILENAME\}\s+\!\-d/is",
-									"/\n[^\n]*RewriteCond\s+\%\{REQUEST_FILENAME\}\s+\!\-s/is",
-									"/\n[^\n]*RewriteRule\s+\^\(\.\*\)\$\s+index\.php\?url\=\$1\s\[QSA,L\]/is");
 		$rewriteSettings = array(	'RewriteEngine on',
 									'RewriteBase '.$this->getRewriteBase('/app/webroot'),
 									'RewriteCond %{REQUEST_FILENAME} !-d',
@@ -254,7 +246,7 @@ class SiteConfigsController extends AppController {
 			$data = preg_replace($rewritePattern, '', $data);
 		}
 		if($smartUrl) {
-			$data .= implode("\n", $rewriteSettings);
+			$data .= "\n".implode("\n", $rewriteSettings);
 		}
 		$file->write($data);
 		$file->close();
