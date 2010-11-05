@@ -20,7 +20,26 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
+<script type="text/javascript">
+$(function(){
+	<?php if($formEx->value('SiteConfig.smart_url')): ?>
+	var smartUrl = 1;
+	<?php else: ?>
+	var smartUrl = 0;
+	<?php endif ?>
+	var smartUrlAlert = 'スマートURLの設定を変更されていますが、ヘルプメッセージは読まれましたか？\nサーバー環境によっては、設定変更後、.htaccessファイルを手動で調整しないとアクセスできない場合もありますのでご注意ください。';
+	$("#btnSubmit").click(function(){
+		if(smartUrl != $("#SiteConfigSmartUrl").val()) {
+			if(confirm(smartUrlAlert)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return true;
+	});
+});
+</script>
 <h2>
 	<?php $baser->contentsTitle() ?>
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
@@ -120,11 +139,39 @@
 			</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.mode', '制作・開発モード') ?></th>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.mode', '制作・開発モード') ?></th>
 		<td class="col-input"><?php echo $formEx->select('SiteConfig.mode', $formEx->getControlSource('mode'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpDebug','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextDebug" class="helptext"> 制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 				※ CakePHPのデバッグモードを指します。<br />
 				※ インストールモードはBaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div></td>
 	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.smart_url', 'スマートURL') ?><br />
+		<small class="error">設定を変更する場合は<br />
+			「？」マークのヘルプを<br />必ずお読みください</small>
+		</th>
+		<td class="col-input">
+			<span>Rewriteモジュール利用可否：<strong>
+			<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
+			<?php $disabled = array() ?>
+			<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
+			<?php echo $formEx->select('SiteConfig.smart_url', array('0'=>'オフ', '1' => 'オン'), null ,$disabled, false) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmartUrl','class'=>'help','alt'=>'ヘルプ')) ?><br />
+			<div id="helptextSmartUrl" class="helptext">
+				<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />
+				・スマートURL無効例：<br />　　http://localhost/index.php/contact/form<br />
+				・スマートURL有効例：<br />　　http://localhost/contact/form<br />
+				</p><br />
+				<p>スマートURLの設定はサーバー環境に深く依存します。<br />
+					「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますので注意が必要です。<br />
+					スマートURLをオンに切り替えた場合、/app/ フォルダ、/app/webroot/ フォルダ内の「.htaccess」ファイルに、
+					RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
+					詳細については、各.htaccessファイルのコメントを確認してください。</p>
+			</div>
+			<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
+		</td>
+	</tr>
 </table>
-<div class="align-center"> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?> </div>
+<div class="align-center"> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button','id'=>'btnSubmit')) ?> </div>

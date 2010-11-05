@@ -100,6 +100,7 @@ class SiteConfigsController extends AppController {
 			$this->data = $this->SiteConfig->read(null, 1);
 			$this->data['SiteConfig'] = $this->siteConfigs;
 			$this->data['SiteConfig']['mode'] = $this->readDebug();
+			$this->data['SiteConfig']['smart_url'] = $this->readSmartUrl();
 		}else {
 			// テーブル構造が特殊なので強引にバリデーションを行う
 			$this->SiteConfig->data = $this->data;
@@ -108,10 +109,15 @@ class SiteConfigsController extends AppController {
 			}else {
 				// KeyValueへ変換処理
 				$mode = $this->data['SiteConfig']['mode'];
+				$smartUrl = $this->data['SiteConfig']['smart_url'];
 				unset($this->data['SiteConfig']['mode']);
 				unset($this->data['SiteConfig']['id']);
+				unset($this->data['SiteConfig']['smart_url']);
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
+				if($this->readSmartUrl() != $smartUrl) {
+					$this->writeSmartUrl($smartUrl);
+				}
 				if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
 					clearViewCache();
 				}
@@ -122,10 +128,36 @@ class SiteConfigsController extends AppController {
 					}
 				}
 				$this->Session->setFlash('システム設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+
+				if($this->readSmartUrl() != $smartUrl) {
+					if($smartUrl){
+						header('Location: '.$this->getRewriteBase('/admin/site_configs/form'));
+					}else{
+						header('Location: '.$this->getRewriteBase('/index.php/admin/site_configs/form'));
+					}
+				}else{
+					$this->redirect(array('action'=>'form'));
+				}
+				
 			}
 		}
 
+		/* スマートURL関連 */
+		// mod_rewrite モジュールインストール
+		$apachegetmodules = function_exists('apache_get_modules');
+		if($apachegetmodules) {
+			$rewriteInstalled = in_array('mod_rewrite',apache_get_modules());
+		}else {
+			$rewriteInstalled = -1;
+		}
+		$writableInstall = is_writable(CONFIGS.'install.php');
+		$writableHtaccess = is_writable(ROOT.DS.'.htaccess');
+		$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+		if($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false){
+			$smartUrlChangeable = true;
+		} else {
+			$smartUrlChangeable = false;
+		}
 		// バックアップ機能を実装しているデータベースの場合のみバックアップへのリンクを表示
 		$enableBackupDb = array('sqlite','sqlite3','mysql','csv','postgres');
 		$dbConfigs = new DATABASE_CONFIG();
@@ -135,10 +167,12 @@ class SiteConfigsController extends AppController {
 			$this->set('backupEnabled',true);
 		}
 
-		// テーマの一覧を取得
 		$this->set('themes',$this->SiteConfig->getThemes());
-
-		// 表示設定
+		$this->set('rewriteInstalled', $rewriteInstalled);
+		$this->set('writableInstall', $writableInstall);
+		$this->set('writableHtaccess', $writableHtaccess);
+		$this->set('writableHtaccess2', $writableHtaccess2);
+		$this->set('smartUrlChangeable', $smartUrlChangeable);
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 
@@ -203,13 +237,14 @@ class SiteConfigsController extends AppController {
 	function admin_info() {
 
 		$this->pageTitle = '環境情報';
-		$drivers = array('csv'=>'CSV','sqlite3_ex'=>'SQLite3','mysql_ex'=>'MySQL','postgres'=>'PostgreSQL');
+		$drivers = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
 		$smartUrl = 'ON';
 		$db =& ConnectionManager::getDataSource('baser');
 		if(Configure::read('App.baseUrl')){
 			$smartUrl = 'OFF';
 		}
-		$this->set('driver',$drivers[$db->config['driver']]);
+		$driver = str_replace('_ex','',$db->config['driver']);
+		$this->set('driver',$drivers[$driver]);
 		$this->set('smartUrl',$smartUrl);
 		$this->set('baserVersion',$this->siteConfigs['version']);
 		$this->set('cakeVersion',$this->getCakeVersion());

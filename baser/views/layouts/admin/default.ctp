@@ -97,6 +97,13 @@
 			<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
 			<?php $baser->updateMessage() ?>
 			<?php endif ?>
+
+			<?php if($this->params['controller']!='installations' && Configure::read('Baser.firstAccess')): ?>
+			<div id="FirstMessage">
+				BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
+				<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
+			</div>
+			<?php endif ?>
 			
 			<!-- begin alfa -->
 			<div id="alfa" >

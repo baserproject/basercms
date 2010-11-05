@@ -192,6 +192,11 @@ class AppController extends Controller {
 
 		parent::beforeFilter();
 
+		// 初回アクセスメッセージ表示設定
+		if($this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
+			$this->writeInstallSetting('Baser.firstAccess', 'false');
+		}
+
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) && 
 					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
@@ -487,6 +492,134 @@ class AppController extends Controller {
 		}
 
 		$this->EmailEx->send();
+
+	}
+/**
+ * インストール設定を書き換える
+ *
+ * @param	string	$key
+ * @param	string	$value
+ * @return	boolean
+ * @access	public
+ */
+	function writeInstallSetting($key, $value) {
+
+		/* install.php の編集 */
+		$setting = "Configure::write('".$key."', ".$value.");\n";
+		$key = str_replace('.', '\.', $key);
+		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
+		$file = new File(CONFIGS.'install.php');
+		$data = $file->read();
+		if(preg_match($pattern, $data)) {
+			$data = preg_replace($pattern, $setting, $data);
+		} else {
+			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
+		}
+		$return = $file->write($data);
+		$file->close();
+		return $return;
+		
+	}
+/**
+ * スマートURLの設定を取得
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function readSmartUrl(){
+		if (Configure::read('App.baseUrl')) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+/**
+ * スマートURLの設定を行う
+ *
+ * @param	boolean	$smartUrl
+ * @return	boolean
+ * @access	public
+ */
+	function writeSmartUrl($smartUrl) {
+
+		/* install.php の編集 */
+		if($smartUrl) {
+			if(!$this->writeInstallSetting('App.baseUrl', "''")){
+				return false;
+			}
+		} else {
+			if(!$this->writeInstallSetting('App.baseUrl', "env('SCRIPT_NAME')")){
+				return false;
+			}
+		}
+
+		/* /.htaccess の編集 */
+		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
+									"/\n[^\n#]*RewriteBase.+/i",
+									"/\n[^\n#]*RewriteCond.+/i",
+									"/\n[^\n#]*RewriteRule.+/i");
+		$rewriteSettings = array(	'RewriteEngine on',
+									'RewriteBase '.$this->getRewriteBase('/'),
+									'RewriteRule ^$ app/webroot/ [L]',
+									'RewriteRule (.*) app/webroot/$1 [L]');
+		$path = ROOT.DS.'.htaccess';
+		$file = new File($path);
+		$data = $file->read();
+		foreach ($rewritePatterns as $rewritePattern) {
+			$data = preg_replace($rewritePattern, '', $data);
+		}
+		if($smartUrl) {
+			$data .= "\n".implode("\n", $rewriteSettings);
+		}
+		if(!$file->write($data)){
+			$file->close();
+			return false;
+		}
+		$file->close();
+
+		/* /app/webroot/.htaccess の編集 */
+		$rewriteSettings = array(	'RewriteEngine on',
+									'RewriteBase '.$this->getRewriteBase('/app/webroot'),
+									'RewriteCond %{REQUEST_FILENAME} !-d',
+									'RewriteCond %{REQUEST_FILENAME} !-f',
+									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
+		$path = WWW_ROOT.'.htaccess';
+		$file = new File($path);
+		$data = $file->read();
+		foreach ($rewritePatterns as $rewritePattern) {
+			$data = preg_replace($rewritePattern, '', $data);
+		}
+		if($smartUrl) {
+			$data .= "\n".implode("\n", $rewriteSettings);
+		}
+		if(!$file->write($data)){
+			$file->close();
+			return false;
+		}
+		$file->close();
+		return true;
+
+	}
+/**
+ * RewriteBase の設定を取得する
+ *
+ * @param	string	$base
+ * @return	string
+ */
+	function getRewriteBase($url){
+
+		$baseUrl = baseUrl();
+		if(preg_match("/index\.php/", $baseUrl)){
+			$baseUrl = str_replace('index.php/', '', baseUrl());
+		}
+		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
+		if($url != '/' || !$baseUrl) {
+			$url = $baseUrl.$url;
+		}else{
+			$url = $baseUrl;
+		}
+
+		return $url;
 
 	}
 }

@@ -315,6 +315,9 @@ class Page extends AppModel {
 		$file = $data['name'];
 		$categoryId = $data['page_category_id'];
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		if(!$SiteConfig){
+			$SiteConfig = ClassRegistry::init('SiteConfig');
+		}
 		$SiteConfig->cacheQueries = false;
 		$siteConfig = $SiteConfig->findExpanded();
 		$theme = $siteConfig['theme'];

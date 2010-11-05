@@ -34,12 +34,11 @@ define("PHP_MINIMUM_MEMORY_LIMIT", 16);
  * インストーラーコントローラー
  */
 class InstallationsController extends AppController {
-	var $name = 'installations';								// クラス名
+	var $name = 'Installations';								// クラス名
 	var $components = array('Session');							// コンポーネント
 	var $layout = "installations";								// レイアウト
 	var $helpers = array('Html', 'Form', 'Javascript', 'Time'); // ヘルパー
 	var $uses = null;											// モデル
-	var $webrootExists = false;
 	var $_updateMessage = array();								// アップデートメッセージ
 /**
  * データベースエラーハンドラ
@@ -61,13 +60,6 @@ class InstallationsController extends AppController {
 
 	}
 /**
- * インストール不能警告メッセージを表示
- * @return void
- */
-	function alert() {
-		$this->pageTitle = 'BaserCMSのインストールを開始できません';
-	}
-/**
  * beforeFilter
  *
  * @return void
@@ -75,6 +67,7 @@ class InstallationsController extends AppController {
  */
 	function beforeFilter() {
 
+		/* インストール状態判別 */
 		if(file_exists(CONFIGS.'database.php')) {
 			$db = ConnectionManager::getInstance();
 			if($db->config->baser['driver'] != '') {
@@ -107,37 +100,12 @@ class InstallationsController extends AppController {
 				break;
 		}
 
-
-		$postdata= $this->data;
-
 		if (strpos($this->webroot, 'webroot') === false) {
 			$this->webroot = DS;
 		}
 
-		if(is_dir(APP.'webroot')) {
-			$this->webrootExists = true;
-		}
-
-		if(file_exists(dirname(APP).DS.'.htaccess') && (!$this->webrootExists || file_exists(APP.'webroot'.DS.'.htaccess'))) {
-			if(strpos($this->base, '/app/webroot/index.php') !== false) {
-				$this->base = str_replace('/app/webroot/index.php','',$this->base);
-			}elseif(strpos($this->base, '/index.php') !== false) {
-				$this->base = str_replace('/index.php','',$this->base);
-			}
-
-			$corefilename=CONFIGS.'install.php';
-			if(!file_exists($corefilename)) {
-				$installCoreData = array("<?php");
-				$installCoreData[] = "Configure::write('App.baseUrl', '');";
-				$installCoreData[] = "?>";
-				file_put_contents($corefilename, implode("\n", $installCoreData));
-				// rewrite設定が書いた.htaccess が既に存在している前提では、
-				// install.phpが生成される前の段階では、$this->redirectがうまく動作しない。
-				// rewriteされた同じ処理のURLにリダイレクトさせる事により、install.phpを読み込ませる。
-				header('Location: '.$this->base.'/installations/'.$this->action);
-			}
-		}
 		$this->theme = null;
+		
 	}
 /**
  * Step 1: ウェルカムページ
@@ -163,271 +131,86 @@ class InstallationsController extends AppController {
  */
 	function step2() {
 
-		$this->pageTitle = 'BaserCMSのインストール [ステップ２]';
-		$this->set('phpminimumversion', PHP_MINIMUM_VERSION);
-		$phpversionok= version_compare ( preg_replace('/[a-z-]/','', phpversion()),PHP_MINIMUM_VERSION,'>=');
-		$this->set('phpversionok', $phpversionok);
-		$this->set('phpactualversion', preg_replace('/[a-z-]/','', phpversion()));
+		if($this->data && $this->data['clicked']=='next'){
+			$this->redirect('step3');
+		}
 
+		// PHPバージョンチェック
+		$phpVersionOk= version_compare ( preg_replace('/[a-z-]/','', phpversion()),PHP_MINIMUM_VERSION,'>=');
 		// PHP memory limit チェック
 		$phpCurrentMemoryLimit = intval(ini_get('memory_limit'));
 		$phpMemoryOk = ((($phpCurrentMemoryLimit >= PHP_MINIMUM_MEMORY_LIMIT) || $phpCurrentMemoryLimit == -1) === TRUE);
 		// セーフモード
-		$safemodeoff = !ini_get('safe_mode');
+		$safeModeOff = !ini_get('safe_mode');
 		// configs 書き込み権限
-		$configdirwritable=is_writable(CONFIGS);
+		$configDirWritable = is_writable(CONFIGS);
 		// core.phpの書き込み権限
-		$corefilewritable=is_writable(CONFIGS.'core.php');
+		$coreFileWritable = is_writable(CONFIGS.'core.php');
 		// DEMO用のページディレクトリの書き込み権限
-		$demopagesdirwritable = is_writable(WWW_ROOT.'themed');
+		$themeDirWritable = is_writable(WWW_ROOT.'themed');
 		// 一時フォルダの書き込み権限
-		$tmpdirwritable = is_writable(TMP);
+		$tmpDirWritable = is_writable(TMP);
 		// SQLiteディレクトリ書き込み権限
 		$dbDirWritable = is_writable(APP.'db');
 
-		// mod_rewrite モジュールインストール
-		$apachegetmodules = function_exists('apache_get_modules');
-		if($apachegetmodules) {
-			$modrewriteinstalled = in_array('mod_rewrite',apache_get_modules());
-		}else {
-			$modrewriteinstalled = false;
-		}
-
-		// メインディレクトリの書き込み権限
-		$htaccesswritable=is_writable(dirname(APP)) && is_writable(WWW_ROOT);
-		// .htaccessの存在チェック
-		$htaccessExists=file_exists(dirname(APP).DS.'.htaccess') && (!$this->webrootExists || file_exists(APP.'webroot'.DS.'.htaccess'));
+		/* ダミーのデータベース設定ファイルを保存 */
+		$this->_writeDatabaseConfig();
 
 		/* viewに変数をセット */
-		$this->set('phpminimummemorylimit', PHP_MINIMUM_MEMORY_LIMIT);
-		$this->set('phpcurrentmemorylimit', $phpCurrentMemoryLimit);
-		$this->set('phpmemoryok', $phpMemoryOk);
-		$this->set('apachegetmodules',$apachegetmodules);
-		$this->set('modrewriteinstalled', $modrewriteinstalled);
-		$this->set('configdirwritable', $configdirwritable);
-		$this->set('corefilewritable',$corefilewritable);
-		$this->set('htaccesswritable', $htaccesswritable);
-		$this->set('htaccessExists', $htaccessExists);
-		$this->set('safemodeoff', $safemodeoff);
+		$this->set('phpVersionOk', $phpVersionOk);
+		$this->set('phpActualVersion', preg_replace('/[a-z-]/','', phpversion()));
+		$this->set('phpMinimumVersion', PHP_MINIMUM_VERSION);
+		$this->set('phpMinimumMemoryLimit', PHP_MINIMUM_MEMORY_LIMIT);
+		$this->set('phpCurrentMemoryLimit', $phpCurrentMemoryLimit);
+		$this->set('phpMemoryOk', $phpMemoryOk);
+		$this->set('configDirWritable', $configDirWritable);
+		$this->set('coreFileWritable',$coreFileWritable);
+		$this->set('safeModeOff', $safeModeOff);
 		$this->set('dbDirWritable',$dbDirWritable);
-		$this->set('tmpdirwritable',$tmpdirwritable);
-		$this->set('demopagesdirwritable',$demopagesdirwritable);
-		$this->set('blRequirementsMet', ($tmpdirwritable && $configdirwritable && $corefilewritable && $phpversionok && $demopagesdirwritable));
-
-		/* ダミーのデータベース設定ファイルを保存 */
-		$this->_writeDatabaseConfig('', 'localhost', '', 'dummy', 'dummy', 'dummy', '', '');
-		$this->Session->write('Installation.modrewritesupport', ($modrewriteinstalled && $htaccesswritable));
-
+		$this->set('tmpDirWritable',$tmpDirWritable);
+		$this->set('themeDirWritable',$themeDirWritable);
+		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
+		$this->pageTitle = 'BaserCMSのインストール [ステップ２]';
+		
 	}
 /**
  * Step 3: データベースの接続設定
  * @return void
  * @access public
  */
-	function step3() {
+	function step3() {	
 
-		$this->pageTitle = 'BaserCMSのインストール [ステップ３]';
-		$postdata= $this->data;
-		$params = $this->params;
-		$blDBSettingsOK = false;
-
-		/* 戻るボタンクリック時 */
-		if (isset($params['form']['step2'])) {
-			$this->redirect('step4');
-		}
-
-		/* DBソース */
-		$dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
-		$sqlite = false;
-		if(function_exists('sqlite_libversion') && is_writable(APP.'db')  &&
-				class_exists('PDO') &&
-				version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
-			$pdoDrivers = PDO::getAvailableDrivers();
-			if(in_array('sqlite',$pdoDrivers)) {
-
-				/* /app/db/sqliteフォルダ確認＆生成 */
-				if(is_dir(APP.'db'.DS.'sqlite')) {
-					if(is_writable(APP.'db'.DS.'sqlite')) {
-						$sqlite = true;
-					}else {
-						if(chmod(APP.'db'.DS.'sqlite',0777)) {
-							$sqlite = true;
-						}
-					}
-				}else {
-					if(mkdir(APP.'db'.DS.'sqlite') && chmod(APP.'db'.DS.'sqlite',0777)) {
-						$sqlite = true;
-					}
-				}
-				if($sqlite) {
-					$dbsource['sqlite3'] = 'SQLite3';
-				}
-
-			}else {
-				// TODO SQLite2 は AlTER TABLE できないので、実装には、テーブル構造の解析が必要になる。
-				// 一度一時テーブルを作成し、データを移動させた上で、DROP。
-				// 新しい状態のテーブルを作成し、一時テーブルよりデータを移行。
-				// その後、一時テーブルを削除する必要がある。
-				// 【参考】http://seclan.dll.jp/dtdiary/2007/dt20070228.htm
-				// プラグインコンテンツのアカウント変更時、メールフォームのフィールド変更時の処理を実装する。
-				//$dbsource['sqlite'] = 'SQLite';
-			}
-		}
-
-		$csv = false;
-		if(is_writable(APP.'db')) {
-			/* /app/db/csvフォルダ確認＆生成 */
-			if(is_dir(APP.'db'.DS.'csv')) {
-				if(is_writable(APP.'db'.DS.'csv')) {
-					$csvWritable = true;
-				}else {
-					if(chmod(APP.'db'.DS.'csv',0777)) {
-						$csvWritable = true;
-					}
-				}
-			}else {
-				if(mkdir(APP.'db'.DS.'csv') && chmod(APP.'db'.DS.'csv',0777)) {
-					$csvWritable = true;
-				}
-			}
-			/* /app/db/csv/baserフォルダ確認＆生成 */
-			if(is_dir(APP.'db'.DS.'csv'.DS.'baser')) {
-				if(is_writable(APP.'db'.DS.'csv'.DS.'baser')) {
-					$csv = true;
-				}else {
-					if(chmod(APP.'db'.DS.'csv'.DS.'baser',0777)) {
-						$csv = true;
-					}
-				}
-			}else {
-				if(mkdir(APP.'db'.DS.'csv'.DS.'baser') && chmod(APP.'db'.DS.'csv'.DS.'baser',0777)) {
-					$csv = true;
-				}
-			}
-
-			if($csv) {
-				$dbsource['csv'] = 'CSV';
-			}
-		}
-
-		$this->set('dbsource', $dbsource);
-
-		/* DBタイプ */
-		if (isset($postdata['installation']['dbType'])) {
-			$this->set('defaultdb', $postdata['installation']['dbType']);
+		if(!$this->data) {
+			$this->data = $this->_getDefaultValuesStep3();
 		} else {
-			$this->set('defaultdb', 'mysql');
-		}
 
-		/* DBポート */
-		if (isset($postdata['installation']['dbPort'])) {
-			$this->set('dbPort', $postdata['installation']['dbPort']);
-		}
+			$this->_writeDbSettingToSession($this->data['Installation']);
 
-		if (isset($postdata['installation']['dbHost'])) {
-			$this->set('dbHost', $postdata['installation']['dbHost']);
-		} else {
-			$this->set('dbHost', 'localhost');
-		}
+			/* 戻るボタンクリック時 */
+			if ($this->data['buttonclicked']=='back') {
+				$this->redirect('step2');
 
-		if (isset($postdata['installation']['dbDBName'])) {
-			$this->set('dbDBName', $postdata['installation']['dbDBName']);
-		} else {
-			$this->set('dbDBName', 'baser');
-		}
+			/* 接続テスト */
+			} elseif ($this->data['buttonclicked']=='checkdb') {
 
-		/* DBプレフィックス */
-		$dbPrefix = '';
-		if (isset($postdata['installation']['dbPrefix'])) {
-			$this->set('dbPrefix', $postdata['installation']['dbPrefix']);
-		} else {
-			$this->set('dbPrefix','bc_');
-		}
-
-		if($postdata['installation']['dbType'] == 'postgres') {
-			$postdata['installation']['dbSchema'] = 'public'; // TODO とりあえずpublic固定
-		}else {
-			$postdata['installation']['dbSchema'] = '';
-		}
-
-		if(!empty($postdata['installation']['dbType']) && !empty($postdata['installation']['dbDBName'])) {
-			$dbType = str_replace('_ex','',$postdata['installation']['dbType']);
-			if($dbType == 'sqlite' || $dbType == 'sqlite3') {
-				$database = APP.'db'.DS.'sqlite'.DS.'baser.db';
-			}elseif($dbType == 'csv') {
-				$database = APP.'db'.DS.'csv'.DS.'baser';
-			}else {
-				$database = $postdata['installation']['dbDBName'];
-			}
-		}
-
-		/* 接続テスト */
-		// CSV , SQLite は 接続テストが不要な為スキップする
-		if (isset($params['data']['buttonclicked']) &&
-				$params['data']['buttonclicked']=='checkdb') {
-
-			set_error_handler(array($this, "dbErrorHandler"));
-
-			/* ポート指定がない場合は空欄にする */
-			if ($postdata['installation']['dbPort']=='default') {
-				$postdata['installation']['dbPort']='';
-			}
-
-			/* データベース接続生成 */
-			App::import('ConnectionManager');
-			$db = &ConnectionManager::create('test',array(  'driver' => $postdata['installation']['dbType'],
-					'persistent' => false,
-					'host' => $postdata['installation']['dbHost'],
-					'port' => $postdata['installation']['dbPort'],
-					'login' => $postdata['installation']['dbUsername'],
-					'password' => $postdata['installation']['dbPassword'],
-					'database' => $database,
-					'schema' => $postdata['installation']['dbSchema'],
-					'prefix' =>  $dbPrefix,
-					'encoding' => 'utf8'));
-
-			if ($db->connected) {
-
-				/* 一時的にテーブルを作成できるかテスト */
-				$randomtablename='deleteme'.rand(100,100000);
-				$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
-
-				if (!isset($db->error)) {
-					$result = $db->execute("drop TABLE $randomtablename");
-					$blDBSettingsOK = true;
-					$this->Session->setFlash('データベースへの接続に成功しました。');
-					$this->set('blDBSettingsOK',$blDBSettingsOK);
-				} else {
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
-				}
-
-			} else {
-				if (!$this->Session->read('Message.flash.message')) {
-					if($db->connection){
-						$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
-					} else {
-						$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。");
-					}
-				}
-			}
+				$this->set('blDBSettingsOK',$this->_testConnectDb($this->_readDbSettingFromSession()));
 
 			/* 「次のステップへ」クリック時 */
-		} elseif (isset($params['data']['buttonclicked']) &&
-				$params['data']['buttonclicked']=='createdb') {
+			} elseif ($this->data['buttonclicked']=='createdb') {
+				if($this->_constructionDb()) {
+					$this->Session->setFlash("データベースの構築に成功しました。");
+					$this->redirect('step4');
+				}else {
+					$db =& ConnectionManager::getDataSource('baser');
+					$this->Session->setFlash("データベースの構築中にエラーが発生しました。<br />".$db->error);
+				}
 
-			/* データベース設定をセッションに保存する */
-			$this->Session->write('Installation.dbType', $postdata['installation']['dbType']);
-			$this->Session->write('Installation.dbHost', $postdata['installation']['dbHost']);
-			$this->Session->write('Installation.dbPort', $postdata['installation']['dbPort']);
-			$this->Session->write('Installation.dbUsername', $postdata['installation']['dbUsername']);
-			$this->Session->write('Installation.dbPassword', $postdata['installation']['dbPassword']);
-			$this->Session->write('Installation.dbPrefix', $postdata['installation']['dbPrefix']);
-			$this->Session->write('Installation.dbDBName', $database);
-			$this->Session->write('Installation.dbSchema',$postdata['installation']['dbSchema']);
-			$this->autoRender = false;
-			$this->redirect('step4');
-
+			}
+			
 		}
+		
+		$this->pageTitle = 'BaserCMSのインストール [ステップ３]';
+		$this->set('dbsource', $this->_getDbSource());
 
 	}
 /**
@@ -438,132 +221,56 @@ class InstallationsController extends AppController {
  */
 	function step4() {
 
+		if(!$this->data) {
+			$this->data = $this->_getDefaultValuesStep4();
+		} else {
+			
+			// ユーザー情報をセッションに保存
+			$this->Session->write('Installation.admin_email', $this->data['Installation']['admin_email']);
+			$this->Session->write('Installation.admin_username', $this->data['Installation']['admin_username']);
+			$this->Session->write('Installation.admin_password', $this->data['Installation']['admin_password']);
+
+			if($this->data['clicked'] == 'back') {
+				
+				$this->_resetDatabase();
+				$this->redirect('step3');
+
+			} elseif($this->data['clicked'] == 'finish') {
+				
+				// データベース設定ファイルに設定内容を書き込む
+				//$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
+
+				// DB接続
+				$db =& $this->_connectDb($this->_readDbSettingFromSession());
+
+				// サイト基本設定登録
+				App::import('Model','SiteConfig');
+				$siteConfig['SiteConfig']['email'] = $this->data['Installation']['admin_email'];
+				$SiteConfigClass = new SiteConfig();
+				$SiteConfigClass->saveKeyValue($siteConfig);
+
+				// 管理ユーザー登録
+				$salt = $this->_createKey(40);
+				Configure::write('Security.salt',$salt);
+				$this->Session->write('Installation.salt',$salt);
+				App::import('Model','User');
+				$User = new User();
+				$user['User']['name'] = $this->data['Installation']['admin_username'];
+				$user['User']['real_name_1'] = $this->data['Installation']['admin_username'];
+				$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
+				$user['User']['user_group_id'] = 1;
+				$User->save($user);
+				if ($db->error) {
+					if($message) $message .= '<br />';
+					$message .= '管理ユーザーを作成できませんでした。<br />'.$db->error;
+				} else {
+					$this->redirect('step5');
+				}
+			}
+		}
+
 		$this->pageTitle = 'BaserCMSのインストール [ステップ４]';
-		$dbType = $this->Session->read('Installation.dbType');
-		App::import('ConnectionManager');
-		App::import('Vendor','dbrestore');
-
-		if (isset($postdata['installation']['admin_username'])) {
-			$this->set('adminUsername', $postdata['installation']['admin_username']);
-		} else {
-			$this->set('adminUsername', 'admin');
-		}
-		if (isset($postdata['installation']['admin_email'])) {
-			$this->set('adminEmail', $postdata['installation']['admin_email']);
-		} else {
-			$this->set('adminEmail', '');
-		}
-
-		$db = &ConnectionManager::create('baser',array( 'driver' => $dbType,
-				'persistent' => false,
-				'host' => $this->Session->read('Installation.dbHost'),
-				'port' => $this->Session->read('Installation.dbPort'),
-				'login' => $this->Session->read('Installation.dbUsername'),
-				'password' => $this->Session->read('Installation.dbPassword'),
-				'database' => $this->Session->read('Installation.dbDBName'),
-				'schema' => $this->Session->read('Installation.dbSchema'),
-				'prefix' =>  $this->Session->read('Installation.dbPrefix'),
-				'encoding' => 'utf8'));
-
-		/* データベースを構築する */
-		if ($db->connected || $dbType=='csv') {
-			switch ($dbType) {
-				case 'mysql':
-				case 'mysqli':
-				// 文字コードの設定を行う
-					$db->execute('ALTER DATABASE '.$db->startQuote.$this->Session->read('Installation.dbDBName').$db->endQuote.' CHARACTER SET utf8 COLLATE utf8_unicode_ci');
-					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('Installation.dbDBName'), $this->Session->read('Installation.dbHost'), $this->Session->read('Installation.dbUsername'), $this->Session->read('Installation.dbPassword'),$this->Session->read('Installation.dbPort'));
-					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql'.DS.'blog_'.$dbType.'.sql');
-					break;
-
-				case 'postgres':
-				// 文字コードの設定を行う
-					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('Installation.dbDBName'), $this->Session->read('Installation.dbHost'), $this->Session->read('Installation.dbUsername'), $this->Session->read('Installation.dbPassword'),$this->Session->read('Installation.dbPort'));
-					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_'.$dbType.'.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql'.DS.'blog_'.$dbType.'.sql');
-					break;
-
-				case 'sqlite':
-				case 'sqlite3':
-
-					$dbRestore = new DbRestore($dbType);
-					$dbRestore->connect($this->Session->read('Installation.dbDBName'));
-					$ret = $dbRestore->doRestore(BASER_CONFIGS.'sql'.DS.'baser_sqlite.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql'.DS.'mail_sqlite.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql'.DS.'feed_sqlite.sql');
-					if($ret) $ret = $dbRestore->doRestore(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql'.DS.'blog_sqlite.sql');
-					chmod($this->Session->read('Installation.dbDBName'),0666);
-					break;
-
-				case 'csv':
-					$dbPrefix = $this->Session->read('Installation.dbPrefix');
-					$targetDir = $this->Session->read('Installation.dbDBName').DS;
-					if(!is_dir(APP.'db'.DS.'csv')) {
-						mkdir(APP.'db'.DS.'csv',0777);
-						chmod(APP.'db'.DS.'csv',0777);
-					}
-					if(!is_dir($targetDir)) {
-						mkdir($targetDir,0777);
-						chmod($targetDir,0777);
-					}
-
-					/* BaesrコアのCSVファイルをコピー */
-					$sourceDir = BASER_CONFIGS.'csv'.DS.'baser'.DS;
-					$folder = new Folder($sourceDir);
-					$files = $folder->read(true,true);
-					$ret = true;
-					foreach($files[1] as $file) {
-						if($file != 'empty' && $ret) {
-							if (!file_exists($targetDir.$dbPrefix.$file)) {
-								$_ret = copy($sourceDir.$file,$targetDir.$dbPrefix.$file);
-								if ($_ret) {
-									chmod($targetDir.$dbPrefix.$file,0666);
-								}else {
-									$ret = $_ret;
-								}
-							}
-						}
-					}
-					/* BaserプラグインのCSVファイルをコピー */
-					$plugins = array('blog','feed','mail');
-					foreach($plugins as $plugin) {
-						$sourceDir = BASER_PLUGINS.$plugin.DS.'config'.DS.'csv'.DS.$plugin.DS;
-						$folder = new Folder($sourceDir);
-						$files = $folder->read(true,true);
-						foreach($files[1] as $file) {
-							if($file != 'empty' && $ret) {
-								if (!file_exists($targetDir.$dbPrefix.'_'.$file)) {
-									$_ret = copy($sourceDir.$file,$targetDir.$dbPrefix.'_'.$file);
-									if ($_ret) {
-										chmod($targetDir.$dbPrefix.'_'.$file,0666);
-									}else {
-										$ret = $_ret;
-									}
-								}
-							}
-						}
-					}
-					break;
-
-			}
-
-			if($ret) {
-				$this->Session->setFlash("データベースの構築に成功しました。");
-			}else {
-				$this->Session->setFlash("データベースの構築中にエラーが発生しました。");
-			}
-
-		}else {
-			$this->Session->setFlash("データベースに接続できませんでした。");
-		}
-
+		
 	}
 /**
  * Step 5: 設定ファイルの生成
@@ -575,210 +282,422 @@ class InstallationsController extends AppController {
  */
 	function step5() {
 
-		$this->pageTitle = 'BaserCMSのインストール完了！';
-		$postdata= $this->data;
+		$message = '';
 
-		/* セキュリティsaltの設定 */
-		$salt = $this->createKey(40);
-		Configure::write('Security.salt',$salt);
-		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$salt ."');",
-											"Configure::write('Cache.disable', false);");
-
-
-		// データベース設定ファイルに設定内容を書き込む
-		$this->_writeDatabaseConfig($this->Session->read('Installation.dbType'),
-				$this->Session->read('Installation.dbHost'),
-				$this->Session->read('Installation.dbPort'),
-				$this->Session->read('Installation.dbUsername'),
-				$this->Session->read('Installation.dbPassword'),
-				$this->Session->read('Installation.dbDBName'),
-				$this->Session->read('Installation.dbPrefix'),
-				$this->Session->read('Installation.dbSchema'));
-
-		/* ユーザーを生成 */
-		App::import('ConnectionManager');
-		$db = &ConnectionManager::create('baser',array('driver' => $this -> Session->read('Installation.dbType'),
-				'persistent' => false,
-				'host' => $this->Session->read('Installation.dbHost'),
-				'port' => $this->Session->read('Installation.dbPort'),
-				'login' => $this->Session->read('Installation.dbUsername'),
-				'password' => $this->Session->read('Installation.dbPassword'),
-				'database' => $this->Session->read('Installation.dbDBName'),
-				'schema' => $this->Session->read('Installation.dbSchema'),
-				'prefix' =>  $this->Session->read('Installation.dbPrefix'),
-				'encoding' => 'utf8'));
-
-		if ($db->connected ||  $this->Session->read('Installation.dbType') == 'csv') {
-
-			App::import('Model','SiteConfig');
-			$siteConfig['SiteConfig']['email'] = $postdata['installation']['admin_email'];
-			$SiteConfigClass = new SiteConfig();
-			$SiteConfigClass->saveKeyValue($siteConfig);
-
-			// 管理ユーザー登録
-			// TODO モデルでの処理に書き換える
-			$admin = $postdata['installation']['admin_username'];
-			$password = $postdata['installation']['admin_password'];
-			$hashedPassword = Security::hash($password,null,true);
-			if ($this->Session->read('Installation.dbType')=='sqlite' || $this->Session->read('Installation.dbType') =='sqlite3') {
-				$date = date('Y/m/d H:i:s');
-			} else {
-				$date = date('Y-m-d H:i:s');
-			}
-			$db->execute("insert into ".$this->Session->read('Installation.dbPrefix')."users (name,real_name_1,real_name_2,password,email,user_group_id,created,modified) values ('{$admin}','{$admin}','','".$hashedPassword."','',1,'".$date."','".$date."')");
-
-			// CSVの際には、作成日の更新を行う
-			if($this->Session->read('Installation.dbType') == 'csv') {
-				$folder = new Folder($this->Session->read('Installation.dbDBName'));
-				$files = $folder->read(true,true);
-				foreach($files[1] as $file) {
-					// TODO 上記で一度インサートしてハンドリングしているせいか、usersに更新をかけるとヘッダーの定義がsite_configsになってしまう。
-					// 日付の更新は上でできているのでとりあえず除外する。
-					if($file != 'empty' && $file != $this->Session->read('Installation.dbPrefix').'users.csv') {
-						if($file == $this->Session->read('Installation.dbPrefix').'_blog_posts.csv') {
-							$sql = "UPDATE ".str_replace(".csv",'',$file)." SET posts_date='".date('Y-m-d H:i:s')."',created='".date('Y-m-d H:i:s')."', modified='".date('Y-m-d H:i:s')."' WHERE 1=1";
-						}else {
-							$sql = "UPDATE ".str_replace(".csv",'',$file)." SET created='".date('Y-m-d H:i:s')."', modified='".date('Y-m-d H:i:s')."' WHERE 1=1";
-						}
-						$db->execute($sql);
-					}
-				}
-			}
-			// ログインするとセッションが初期化されてしまうので一旦取得しておく
-			$installationSetting = $this->Session->read('Installation');
-			// ログイン
-			$extra['data']['User']['name'] = $admin;
-			$extra['data']['User']['password'] = $password;
-			$this->requestAction('/admin/users/login_exec', $extra);
-			$this->Session->write('Installation', $installationSetting);
-			if ($db->error) {
-				$this->set('usercreateerror','管理ユーザーを作成できませんでした。: '.$db->error);
-			}
-
+		// インストールファイルを生成する
+		if(!$this->_createInstallFile()){
+			if($message) $message .= '<br />';
+			$message .= '/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をして下さい。';
 		}
 
 		// tmp フォルダを作成する
 		checkTmpFolders();
+		
+		// ブログの投稿日を更新
+		$this->_updateEntryDate();
+
+		// ログイン
+		$this->_login();
 
 		// demo用テーマを配置する
-		$targetPath = WWW_ROOT.'themed'.DS.'demo';
-        $sourcePath = BASER_CONFIGS.'theme'.DS.'demo';
-        $folder = new Folder();
-		$folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')));
-		$folder->create($targetPath.DS.'pages',0777);
+		$this->_deployTheme();
 
 		// demoテーマ用のpagesファイルを生成する
-		App::import('Model','Page');
-		$Page = new Page(null, null, 'baser');
-		$pages = $Page->findAll();
-		foreach($pages as $page) {
-			$Page->data = $page;
-			$Page->afterSave();
-		}
+		$this->_createPages();
 
-		/* mod_rewrite 設定 */
-		$htaccessEnabled = $htaccess1 = $htaccess3 = false;
+		// データベース設定を書き込む
+		$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
 
-		if (!file_exists(dirname(APP).DS.'.htaccess')) {
-
-			if ($this->Session->read('Installation.modrewritesupport')) {
-
-				/* /.htaccess */
-				if (copy(dirname(APP).DS.'htaccess.txt',dirname(APP).DS.'.htaccess')===false) {
-					$this->set('modrewriteenableerror','/htaccess.txt ファイル名の変更ができませんでした。パーミッションを確認して下さい。');
-				} else {
-					chmod(dirname(APP).DS.'.htaccess',0666);
-					$htaccess1 = true;
-				}
-
-				/* /app/webroot/.htaccess */
-				if (ROOT.DS != WWW_ROOT) {
-					if (!copy(APP.'webroot'.DS.'htaccess.txt',WWW_ROOT.'.htaccess')) {
-						$this->set('modrewriteenableerror','/app/webroot/htaccess.txt ファイル名の変更ができませんでした。パーミッションを確認して下さい。');
-					} else {
-						chmod(WWW_ROOT.'.htaccess',0666);
-						$htaccess3 = true;
-					}
-				} else {
-					$htaccess3 = true;
-				}
-
-				if ($htaccess1 && $htaccess3) {
-					$htaccessEnabled = true;
-				}
-
-			}
-
-		} else {
-			/* 既に有効な場合 */
-			$this->set('modrewritealreadyenabled',true);
-			$htaccessEnabled = true;
-		}
-
-		if($htaccessEnabled) {
-			$this->set('fancyurl', true);
-			$installCoreData[] = "Configure::write('App.baseUrl', '');";
-		}
-
-		/* インストールファイル生成 */
-		$installCoreData[] = "?>";
-		$corefilename=CONFIGS.'install.php';
-		$status = file_put_contents($corefilename, implode("\n", $installCoreData));
-		chmod($corefilename,0666);
-
-		/* デバッグモードを0に変更 */
+		// デバッグモードを0に変更
 		$this->writeDebug(0);
 
-		if ($status === FALSE) {
-			$this->set('modrewriteenableerror',"/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をして下さい。");
+		if($message) {
+			$this->setFlash($message);
 		}
 
-		$this->set('fancybase', str_replace("/index.php", "", $this->base));
+		$this->pageTitle = 'BaserCMSのインストール完了！';
 
-		if (strncasecmp(PHP_OS, 'win', 3) != 0) {
+	}
+/**
+ * インストールファイルを生成する
+ *
+ * @return	boolean
+ * @access	protected
+ */
+	function _createInstallFile() {
 
-			$file1 = CONFIGS. 'database.php';
-			$file2 = CONFIGS. 'core.php';
-			$file3 = CONFIGS. 'install.php';
-
-			$stat = stat($file1);
-			$fileMode1 = substr(sprintf('%o', $stat['mode']), -3);
-			$stat = stat($file2);
-			$fileMode2 = substr(sprintf('%o', $stat['mode']), -3);
-			$stat = stat(CONFIGS);
-			$dirMode = substr(sprintf('%o', $stat['mode']), -3);
-
-			if (file_exists($file3)) {
-				$stat = stat($file2);
-				$fileMode3 = substr(sprintf('%o', $stat['mode']), -3);
-				$fileModesecure3 = !((int)$fileMode3{1} & 2 || (int)$fileMode3{2} & 2);
-			} else {
-				$fileModesecure3 = true;
-			}
-
-			$fileModesecure1 = !((int)$fileMode1{1} & 2 || (int)$fileMode1{2} & 2);
-			$fileModesecure2 = !((int)$fileMode2{1} & 2 || (int)$fileMode2{2} & 2);
-			$dirModesecure = !((int)$dirMode{1} & 2 || (int)$dirMode{2} & 2);
-			$this->set('secure', $fileModesecure1 && $fileModesecure2 && $fileModesecure3 && $dirModesecure);
-
-		} else {
-			$this->set('secure',true);
+		$corefilename=CONFIGS.'install.php';
+		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
+											"Configure::write('Baser.firstAccess', true);",
+											"Configure::write('Cache.disable', false);", "?>");
+		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
+			return chmod($corefilename,0666);
+		}else {
+			return false;
 		}
 
 	}
 /**
+ * 登録日を更新する
+ * 
+ * @return	boolean
+ * @access	protected
+ */
+	function _updateEntryDate() {
+
+		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+		$db =& $this->_connectDb($this->_readDbSettingFromSession(),'plugin');
+		App::import('Model', 'Blog.BlogPost');
+		$BlogPost = new BlogPost();
+		$blogPosts = $BlogPost->find('all');
+		if($blogPosts) {
+			$ret = true;
+			foreach($blogPosts as $blogPost) {
+				$blogPost['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
+				if(!$BlogPost->save($blogPost)) {
+					$ret = false;
+				}
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+		
+	}
+/**
+ * 管理画面にログインする
+ *
+ * @return	void
+ * @access	protected
+ */
+	function _login() {
+
+		// ログインするとセッションが初期化されてしまうので一旦取得しておく
+		$installationSetting = $this->Session->read('Installation');
+		$extra['data']['User']['name'] = $installationSetting['admin_username'];
+		$extra['data']['User']['password'] = $installationSetting['admin_password'];
+		$this->requestAction('/admin/users/login_exec', $extra);
+		$this->Session->write('Installation', $installationSetting);
+
+	}
+/**
+ * テーマを配置する
+ *
+ * @param	string	$theme
+ * @return	boolean
+ * @access	protected
+ */
+	function _deployTheme($theme = 'demo') {
+		
+		$targetPath = WWW_ROOT.'themed'.DS.$theme;
+        $sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
+        $folder = new Folder();
+		if($folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
+			if($folder->create($targetPath.DS.'pages',0777)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
+	}
+/**
+ * テーマ用のページファイルを生成する
+ *
+ * @return	boolean
+ * @access	protected
+ */
+	function _createPages() {
+		
+		App::import('Model','Page');
+		$Page = new Page(null, null, 'baser');
+		$pages = $Page->findAll();
+		if($pages) {
+			$ret = true;
+			foreach($pages as $page) {
+				$Page->data = $page;
+				if(!$Page->afterSave()){
+					$ret = false;
+				}
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * データベースに接続する
+ *
+ * @param	array		$config
+ * @return	DboSource	$db
+ * @access	public
+ */
+	function &_connectDb($config, $name='baser') {
+
+		return ConnectionManager::create($name ,array( 'driver' => $config['dbType'],
+				'persistent' => false,
+				'host' => $config['dbHost'],
+				'port' => $config['dbPort'],
+				'login' => $config['dbUsername'],
+				'password' => $config['dbPassword'],
+				'database' => $this->_getRealDbName($config['dbType'], $config['dbName']),
+				'schema' => $config['dbSchema'],
+				'prefix' =>  $config['dbPrefix'],
+				'encoding' => $config['dbEncoding']));
+
+	}
+/**
+ * データベースを構築する
+ */
+	function _constructionDb() {
+
+		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+
+		/* データベースを構築する */
+		if ($db->connected || $db->config['driver']=='csv') {
+
+			$paths = array(BASER_CONFIGS.'sql',
+							BASER_PLUGINS.'blog'.DS.'config'.DS.'sql',
+							BASER_PLUGINS.'feed'.DS.'config'.DS.'sql',
+							BASER_PLUGINS.'mail'.DS.'config'.DS.'sql');
+			$initFiles = array();
+			foreach($paths as $path) {
+				$folder = new Folder($path);
+				$files = $folder->read(true, true, true);
+				if(isset($files[1])) {
+					$initFiles = am($initFiles, $files[1]);
+				}
+			}
+
+			// DB構築
+			foreach($initFiles as $file) {
+				if(!preg_match('/\.php$/',$file)) {
+					continue;
+				}
+				if(!$db->createTableBySchema(array('path'=>$file))){
+					return false;
+				}
+			}
+
+			// 初期データ投入
+			foreach($initFiles as $file) {
+				if(!preg_match('/\.csv$/',$file)) {
+					continue;
+				}
+				if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+					return false;
+				}
+			}
+
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * ステップ３用のフォーム初期値を取得する
+ *
+ * @return	array
+ * @access	public
+ */
+	function _getDefaultValuesStep3() {
+
+		if( $this->Session->read('Installation.dbType') ){
+			$data = array('Installation'=>$this->_readDbSettingFromSession());
+		} else {
+			$data['Installation']['dbType'] = 'mysql';
+			$data['Installation']['dbHost'] = 'localhost';
+			$data['Installation']['dbPort'] = '3306';
+			$data['Installation']['dbPrefix'] = 'bc_';
+			$data['Installation']['dbName'] = 'baser';
+		}
+		return $data;
+
+	}
+/**
+ * ステップ４用のフォーム初期値を取得する
+ *
+ * @return	array
+ * @access	public
+ */
+	function _getDefaultValuesStep4() {
+		
+		if ( $this->Session->read('Installation.admin_username') ) {
+			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
+		} else {
+			$data['Installation']['admin_username'] = 'admin';
+		}
+		if ( $this->Session->read('Installation.admin_password') ) {
+			$data['Installation']['admin_password'] = $this->Session->read('Installation.admin_password');
+			$data['Installation']['admin_confirmpassword'] = $data['Installation']['admin_password'];
+		} else {
+			$data['Installation']['admin_password'] = '';
+		}
+		if ( $this->Session->read('Installation.admin_email') ) {
+			$data['Installation']['admin_email'] = $this->Session->read('Installation.admin_email');
+		} else {
+			$data['Installation']['admin_email'] = '';
+		}
+		return $data;
+
+	}
+/**
+ * DB設定をセッションから取得
+ *
+ * @return	array
+ * @access	protected
+ */
+	function _readDbSettingFromSession() {
+
+		$data['dbType'] = $this->Session->read('Installation.dbType');
+		$data['dbHost'] = $this->Session->read('Installation.dbHost');
+		$data['dbPort'] = $this->Session->read('Installation.dbPort');
+		$data['dbUsername'] = $this->Session->read('Installation.dbUsername');
+		$data['dbPassword'] = $this->Session->read('Installation.dbPassword');
+		$data['dbPrefix'] = $this->Session->read('Installation.dbPrefix');
+		$data['dbName'] = $this->Session->read('Installation.dbName');
+		$data['dbSchema'] = $this->Session->read('Installation.dbSchema');
+		$data['dbEncoding'] = $this->Session->read('Installation.dbEncoding');
+		return $data;
+
+	}
+/**
+ * 実際の設定用のDB名を取得する
+ *
+ * @param	string	$type
+ * @param	string	$name
+ * @return	string
+ * @access	protected
+ */
+	function _getRealDbName($type, $name) {
+
+		/* dbName */
+		if(!empty($type) && !empty($name)) {
+			$type = str_replace('_ex','',$type);
+			if($type == 'sqlite3') {
+				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
+			}elseif($type == 'csv') {
+				return APP.'db'.DS.'csv'.DS.$name;
+			}
+		}
+		return $name;
+
+	}
+/**
+ * DB設定をセッションに保存
+ *
+ * @param	array	$data
+ * @return	void
+ * @access	public
+ */
+	function _writeDbSettingToSession($data) {
+
+		/* dbEncoding */
+		$data['dbEncoding'] = 'utf8';
+
+		/* dbSchema */
+		if($data['dbType'] == 'postgres') {
+			$data['dbSchema'] = 'public'; // TODO とりあえずpublic固定
+		}else {
+			$data['dbSchema'] = '';
+		}
+
+		$this->Session->write('Installation.dbType', $data['dbType']);
+		$this->Session->write('Installation.dbHost', $data['dbHost']);
+		$this->Session->write('Installation.dbPort', $data['dbPort']);
+		$this->Session->write('Installation.dbUsername', $data['dbUsername']);
+		$this->Session->write('Installation.dbPassword', $data['dbPassword']);
+		$this->Session->write('Installation.dbPrefix', $data['dbPrefix']);
+		$this->Session->write('Installation.dbName', $data['dbName']);
+		$this->Session->write('Installation.dbSchema',$data['dbSchema']);
+		$this->Session->write('Installation.dbEncoding',$data['dbEncoding']);
+
+	}
+/**
+ * データベース接続テスト
+ *
+ * @param	array	$config
+ * @return	boolean
+ * @access	protected
+ */
+	function _testConnectDb($config){
+		
+		set_error_handler(array($this, "dbErrorHandler"));
+
+		/* データベース接続生成 */
+		
+		$db =& $this->_connectDb($config);
+		
+		if ($db->connected) {
+
+			/* 一時的にテーブルを作成できるかテスト */
+			$randomtablename='deleteme'.rand(100,100000);
+			$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
+
+			if (!isset($db->error)) {
+				$db->execute("drop TABLE $randomtablename");
+				$this->Session->setFlash('データベースへの接続に成功しました。');
+				return true;
+			} else {
+				$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
+			}
+
+		} else {
+			if (!$this->Session->read('Message.flash.message')) {
+				if($db->connection){
+					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
+				} else {
+					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。");
+				}
+			}
+		}
+
+		return false;
+		
+	}
+/**
  * データベース設定ファイル[database.php]を保存する
  *
- * @param string データベースタイプ
- * @param string ホスト
- * @param string ユーザー名
- * @param string パスワード
- * @param string データベース名
- * @param string Table Prefix
+ * @param	array	$options
  * @return boolean
  * @access private
  */
-	function _writeDatabaseConfig($dbType, $dbHost, $dbPort, $dbUsername, $dbPassword, $dbDBName, $dbPrefix, $dbSchema, $dbEncoding='utf8') {
+	function _writeDatabaseConfig($options = array()) {
+
+		extract($options);
+		
+		if(!isset($dbType)) {
+			$dbType = '';
+		}
+		if(!isset($dbHost)) {
+			$dbHost = 'localhost';
+		}
+		if(!isset($dbPort)) {
+			$dbPort = '';
+		}
+		if(!isset($dbUsername)) {
+			$dbUsername = 'dummy';
+		}
+		if(!isset($dbPassword)) {
+			$dbPassword = 'dummy';
+		}
+		if(!isset($dbName)) {
+			$dbName = 'dummy';
+		}
+		if(!isset($dbPrefix)) {
+			$dbPrefix = '';
+		}
+		if(!isset($dbSchema)) {
+			$dbSchema = '';
+		}
+		if(!isset($dbEncoding)) {
+			$dbEncoding = 'utf8';
+		}
 
 		App::import('File');
 
@@ -806,30 +725,25 @@ class InstallationsController extends AppController {
 			$dbfilehandler->write("\t'driver' => '".$dbType."',\n");
 			$dbfilehandler->write("\t'persistent' => false,\n");
 			$dbfilehandler->write("\t'host' => '".$dbHost."',\n");
-			if ($dbPort=='default') {
-				$dbPort='';
-			}
 			$dbfilehandler->write("\t'port' => '".$dbPort."',\n");
 			$dbfilehandler->write("\t'login' => '".$dbUsername."',\n");
 			$dbfilehandler->write("\t'password' => '".$dbPassword."',\n");
-			$dbfilehandler->write("\t'database' => '".$dbDBName."',\n");
+			$dbfilehandler->write("\t'database' => '".$this->_getRealDbName($dbType, $dbName)."',\n");
 			$dbfilehandler->write("\t'schema' => '".$dbSchema."',\n");
 			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."',\n");
 			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
 			$dbfilehandler->write(");\n");
+			
 			$dbfilehandler->write('var $plugin = array('."\n");
 			$dbfilehandler->write("\t'driver' => '".$dbType."',\n");
 			$dbfilehandler->write("\t'persistent' => false,\n");
 			$dbfilehandler->write("\t'host' => '".$dbHost."',\n");
-			if ($dbPort=='default') {
-				$dbPort='';
-			}
 			$dbfilehandler->write("\t'port' => '".$dbPort."',\n");
 			$dbfilehandler->write("\t'login' => '".$dbUsername."',\n");
 			$dbfilehandler->write("\t'password' => '".$dbPassword."',\n");
-			$dbfilehandler->write("\t'database' => '".$dbDBName."',\n");
+			$dbfilehandler->write("\t'database' => '".$this->_getRealDbName($dbType, $dbName)."',\n");
 			$dbfilehandler->write("\t'schema' => '".$dbSchema."',\n");
-			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."_',\n");
+			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."',\n");
 			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
 			$dbfilehandler->write(");\n");
 			$dbfilehandler->write("}\n");
@@ -844,12 +758,58 @@ class InstallationsController extends AppController {
 
 	}
 /**
+ * 利用可能なデータソースを取得する
+ *
+ * @return	array
+ * @access	protected
+ */
+	function _getDbSource() {
+		
+		/* DBソース取得 */
+		$dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
+		$folder = new Folder();
+		
+		/* SQLite利用可否チェック */
+		if(function_exists('sqlite_libversion') &&
+				class_exists('PDO') &&
+				version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
+			
+			$pdoDrivers = PDO::getAvailableDrivers();
+			if(in_array('sqlite',$pdoDrivers)) {
+				$dbFolderPath = APP.'db'.DS.'sqlite';
+				if($folder->create($dbFolderPath, 0777) && is_writable($dbFolderPath)){
+					$dbsource['sqlite3'] = 'SQLite3';
+				}
+			}else {
+				// TODO SQLite2 実装
+				// AlTER TABLE できないので、実装には、テーブル構造の解析が必要になる。
+				// 一度一時テーブルを作成し、データを移動させた上で、DROP。
+				// 新しい状態のテーブルを作成し、一時テーブルよりデータを移行。
+				// その後、一時テーブルを削除する必要がある。
+				// 【参考】http://seclan.dll.jp/dtdiary/2007/dt20070228.htm
+				// プラグインコンテンツのアカウント変更時、メールフォームのフィールド変更時の処理を実装する必要あり
+				//$dbsource['sqlite'] = 'SQLite';
+			}
+			
+		}
+
+		/* CSV利用可否 */
+		$dbFolderPath = APP.'db'.DS.'csv';
+		if($folder->create($dbFolderPath, 0777) && is_writable($dbFolderPath)){
+			$dbsource['csv'] = 'CSV';
+		}
+		
+		return $dbsource;
+
+	}
+/**
  * セキュリティ用のキーを生成する
  *
- * @param int $length
- * @return string   キー
+ * @param	int		$length
+ * @return	string	キー
+ * @access	protected
  */
-	function createKey($length) {
+	function _createKey($length) {
 
 		$keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$randkey = "";
@@ -859,8 +819,21 @@ class InstallationsController extends AppController {
 
 	}
 /**
+ * インストール不能警告メッセージを表示
+ * 
+ * @return	void
+ * @access	public
+ */
+	function alert() {
+		$this->pageTitle = 'BaserCMSのインストールを開始できません';
+	}
+/**
  * BaserCMSを初期化する
- * @return void
+ *
+ * debug フラグが -1 の場合のみ実行可能
+ * 
+ * @return	void
+ * @access	public
  */
 	function reset() {
 
@@ -881,15 +854,18 @@ class InstallationsController extends AppController {
 			}
 
 			$messages = array();
-			if(file_exists(dirname(APP).DS.'.htaccess')) {
-				if(@!unlink(dirname(APP).DS.'.htaccess')) {
-					$messages[] = str_replace($_SERVER['DOCUMENT_ROOT'],'',dirname(APP)).DS.'.htaccess は削除できませんでした。';
+			$file = new File(CONFIGS.'core.php');
+			$data = $file->read();
+			$pattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'\'[\s]*\);\n/is';
+			if(preg_match($pattern, $data)) {
+				$data = preg_replace($pattern, "Configure::write('App.baseUrl', env('SCRIPT_NAME'));\n", $data);
+				if(!$file->write($data)){
+					$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 				}
+				$file->close();
 			}
-			if(file_exists(WWW_ROOT.'.htaccess')) {
-				if(@!unlink(WWW_ROOT.'.htaccess')) {
-					$messages[] = str_replace($_SERVER['DOCUMENT_ROOT'],'',WWW_ROOT).'.htaccess は削除できませんでした。';
-				}
+			if(!$this->writeSmartUrl(false)){
+				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 			}
 
 			$themeFolder = new Folder(WWW_ROOT.'themed');
@@ -946,7 +922,7 @@ class InstallationsController extends AppController {
 					'port' => $this->Session->read('Installation.dbPort'),
 					'login' => $this->Session->read('Installation.dbUsername'),
 					'password' => $this->Session->read('Installation.dbPassword'),
-					'database' => $this->Session->read('Installation.dbDBName'),
+					'database' => $this->Session->read('Installation.dbName'),
 					'schema' => $this->Session->read('Installation.dbSchema'),
 					'prefix' =>  $this->Session->read('Installation.dbPrefix'),
 					'encoding' => 'utf8'));
@@ -990,11 +966,11 @@ class InstallationsController extends AppController {
 
 			case 'sqlite':
 			case 'sqlite3':
-				@unlink($dbConfig['database']);
+				@unlink($this->_getRealDbName(str_replace('_ex','',$dbConfig['driver']), $dbConfig['database']));
 				break;
 
 			case 'csv':
-				$folder = new Folder($dbConfig['database']);
+				$folder = new Folder($this->_getRealDbName(str_replace('_ex','',$dbConfig['driver']), $dbConfig['database']));
 				$files = $folder->read(true,true,true);
 				foreach($files[1] as $file) {
 					if(basename($file) != 'empty') {
