@@ -24,6 +24,7 @@
 <?php $baser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
+<meta name="robots" content="noindex,nofollow" />
 <?php $baser->charset() ?>
 <title><?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - BaserCMS -</title>
 <?php echo $html->meta('description','BaserCMSのインストーラー') ?>
