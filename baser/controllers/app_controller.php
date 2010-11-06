@@ -193,7 +193,7 @@ class AppController extends Controller {
 		parent::beforeFilter();
 
 		// 初回アクセスメッセージ表示設定
-		if($this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
+		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
 			$this->writeInstallSetting('Baser.firstAccess', 'false');
 		}
 
