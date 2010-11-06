@@ -299,10 +299,11 @@ class InstallationsController extends AppController {
 		// ログイン
 		$this->_login();
 
-		// demo用テーマを配置する
+		// テーマを配置する
 		$this->_deployTheme();
+		$this->_deployTheme('skelton');
 
-		// demoテーマ用のpagesファイルを生成する
+		// pagesファイルを生成する
 		$this->_createPages();
 
 		// データベース設定を書き込む
