@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ設定ファイル
+ * フィードインストーラー
  *
  * PHP versions 4 and 5
  *
@@ -12,17 +12,12 @@
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.plugins.blog.config
+ * @package			baser.plugins.feed.config
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$title = 'ブログ';
-$description = '複数設置可能なシンプルブログ';
-$author = 'ryuring';
-$url = 'http://www.e-catchup.jp';
-$adminLink = '/admin/blog/blog_contents/index';
-$installMessage = '';
+$this->Plugin->initDatabase('plugin','feed');
 ?>

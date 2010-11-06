@@ -19,6 +19,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$adminLink = '/admin/mail/mail_contents/index';
 $title = 'メールフォーム';
+$description = '複数設置可能の高機能メールフォーム';
+$author = 'ryuring';
+$url = 'http://www.e-catchup.jp';
+$adminLink = '/admin/mail/mail_contents/index';
+$installMessage = '';
 ?>

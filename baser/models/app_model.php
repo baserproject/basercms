@@ -331,70 +331,67 @@ class AppModel extends Model {
  * 既に存在するテーブルは上書きしない
  *
  * @param	array	データベース設定名
- * @param	string	保存先パス
+ * @param	string	プラグイン名
  * @return 	boolean
  * @access	protected
  */
-	function initDatabase($dbConfigName,$fileName) {
+	function initDatabase($dbConfigName,$pluginName = '') {
 
-		$dbConfigs = new DATABASE_CONFIG();
-		$dbConfig = $dbConfigs->{$dbConfigName};
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
 
-		if ($dbConfig['driver'] == 'sqlite3' || $dbConfig['driver'] == 'sqlite3_ex') {
-			$dbType = 'sqlite';
-		} elseif ($dbConfig['driver'] == 'postgres_ex') {
-			$dbType = 'postgres';
-		} elseif ($dbConfig['driver'] == 'mysql_ex') {
-			$dbType = 'mysql';
+		// 初期データフォルダを走査
+		if(!$pluginName) {
+			$path = BASER_CONFIGS.'sql';
 		} else {
-			$dbType = $dbConfig['driver'];
-		}
-
-		if($dbType != 'csv') {
-
-			if($dbConfigName == 'plugin') {  // プラグイン
-				if(file_exists(APP.'plugins'.DS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = APP.'plugins'.DS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}elseif(file_exists(BASER_PLUGINS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = BASER_PLUGINS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}
-			}else {  // etc
-				if(file_exists(CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}elseif(file_exists(BASER_CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = BASER_CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}
-			}
-
-			if(!empty($filePath)) {
-				return $this->restoreDb($dbConfig,$filePath);
-			}else {
+			$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql';
+			$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql';
+			if(file_exists($appPath)) {
+				$path = $appPath;
+			} elseif (file_exists($baserPath)) {
+				$path = $baserPath;
+			} else {
 				return true;
 			}
-
-		} elseif ($dbType == 'csv') {  // CSV
-
-			if($dbConfigName == 'plugin') {  // プラグイン
-				if(file_exists(APP.'plugins'.DS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS)) {
-					$filePath = APP.'plugins'.DS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS;
-				}elseif(file_exists(BASER_PLUGINS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS)) {
-					$filePath = BASER_PLUGINS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS;
-				}
-			}else {  // etc
-				if(file_exists(CONFIGS.'csv'.DS.$fileName.DS)) {
-					$filePath = CONFIGS.'csv'.DS.$fileName.DS;
-				}elseif(file_exists(BASER_CONFIGS.'csv'.DS.$fileName.DS)) {
-					$filePath = BASER_CONFIGS.'csv'.DS.$fileName.DS;
-				}
-			}
-
-			if(!empty($filePath)) {
-				return $this->restoreDb($dbConfig,$filePath);
-			}else {
-				return true;
-			}
-
 		}
+		
+		$schemaPaths = array();
+		$dataPaths = array();
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true, true);
+		foreach($files[1] as $file) {
+			if(preg_match('/\.php$/', $file)) {
+				if(!in_array($prefix . basename($file, '.php'), $listSources)) {
+					$schemaPaths[] = $file;
+				}
+			} elseif (preg_match('/\.csv$/', $file)) {
+				if(!in_array($prefix . basename($file, '.csv'), $listSources)) {
+					$dataPaths[] = $file;
+				}
+			}
+		}
+		
+		// スキーマ読み込み
+		if($schemaPaths) {
+			foreach($schemaPaths as $file) {
+				if(!$db->createTableBySchema(array('path'=>$file))){
+					return false;
+				}
+			}
+		}
+
+		// データ読み込み
+		if($dataPaths) {
+			foreach($dataPaths as $file) {
+				if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+					return false;
+				}
+			}
+		}
+		
+		return true;
 
 	}
 /**

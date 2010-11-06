@@ -43,17 +43,6 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.name', 'プラグイン名') ?></th>
 		<td class="col-input"><?php echo $formEx->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?> <?php echo $formEx->error('Plugin.name') ?>&nbsp;</td>
 	</tr>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.title', '表示名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.title', array('size'=>40,'maxlength'=>255)) ?> <?php echo $formEx->error('Plugin.title') ?>&nbsp;</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('Plugin.admin_link', '管理URL') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.admin_link', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdminLink','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextAdminLink" class="helptext"> 先頭にスラッシュをつけたルートパスで入力して下さい。<br />
-				(例) /admin/plugins/index </div>
-			<?php echo $formEx->error('Plugin.admin_link') ?></td>
-	</tr>
 </table>
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>

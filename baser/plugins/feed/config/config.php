@@ -19,6 +19,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$adminLink = '/admin/feed/feed_configs/index';
 $title = 'フィードリーダー';
+$description = 'RSSフィードをWebページに貼り付ける事ができるフィードリーダー';
+$author = 'ryuring';
+$url = 'http://www.e-catchup.jp';
+$adminLink = '/admin/feed/feed_configs/index';
+$installMessage = '';
 ?>

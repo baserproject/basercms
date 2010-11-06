@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ設定ファイル
+ * ブログインストーラー
  *
  * PHP versions 4 and 5
  *
@@ -19,10 +19,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$title = 'ブログ';
-$description = '複数設置可能なシンプルブログ';
-$author = 'ryuring';
-$url = 'http://www.e-catchup.jp';
-$adminLink = '/admin/blog/blog_contents/index';
-$installMessage = '';
+$this->Plugin->initDatabase('plugin','blog');
 ?>

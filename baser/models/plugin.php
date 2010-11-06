@@ -53,9 +53,6 @@ class Plugin extends AppModel {
 		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
 						'message' => "プラグイン名を入力して下さい。",
 						'required' => true));
-		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
-						'message' => "表示名を入力して下さい。",
-						'required' => true));
 		return true;
 
 	}

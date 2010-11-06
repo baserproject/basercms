@@ -167,23 +167,52 @@ class PluginsController extends AppController {
 		// データベースに登録されていないプラグインをリストアップ
 		$pluginFolder = new Folder(APP.'plugins'.DS);
 		$plugins = $pluginFolder->read(true,true);
-		$unRegistryPlugins = array();
+		$unRegistereds = array();
+		$registereds = array();
 		foreach($plugins[0] as $plugin) {
 			$exists = false;
+			$pluginData = array();
 			foreach($listDatas as $data) {
 				if($plugin == $data['Plugin']['name']) {
+					$pluginData = $data;
 					$exists = true;
 					break;
 				}
 			}
-			if(!$exists) {
-				$unRegistryPlugin = array('Plugin'=>array('id'=>null,'name'=>null,'title'=>null,'admin_link'=>null,'created'=>null,'modified'=>null));
-				$unRegistryPlugin['Plugin']['name'] = $plugin;
-				$unRegistryPlugin['Plugin']['title'] = '未登録';
-				$unRegistryPlugins[] = $unRegistryPlugin;
+
+			// 設定ファイル読み込み
+			$title = $description = $author = $url = $adminLink = '';
+			$appConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config'.DS.'config.php';
+			$baserConfigPath = BASER_PLUGINS.$plugin.DS.'config'.DS.'config.php';
+			if(file_exists($appConfigPath)) {
+				include $appConfigPath;
+			}elseif(file_exists($baserConfigPath)) {
+				include $baserConfigPath;
+			}
+
+			if(isset($title))
+				$pluginData['Plugin']['title'] = $title;
+			if(isset($description))
+				$pluginData['Plugin']['description'] = $description;
+			if(isset($author))
+				$pluginData['Plugin']['author'] = $author;
+			if(isset($url))
+				$pluginData['Plugin']['url'] = $url;
+
+			if($exists) {
+				if(isset($adminLink))
+					$pluginData['Plugin']['admin_link'] = $adminLink;
+				$registereds[] = $pluginData;
+			} else {
+				$pluginData['Plugin']['id'] = '';
+				$pluginData['Plugin']['name'] = $plugin;
+				$pluginData['Plugin']['created'] = '';
+				$pluginData['Plugin']['modified'] = '';
+				$pluginData['Plugin']['adminLink'] = '';
+				$unRegistereds[] = $pluginData;
 			}
 		}
-		$listDatas = array_merge($listDatas,$unRegistryPlugins);
+		$listDatas = array_merge($registereds,$unRegistereds);
 
 		// 表示設定
 		$this->set('listDatas',$listDatas);
@@ -231,20 +260,15 @@ class PluginsController extends AppController {
 			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'config.php')) {
 				include BASER_PLUGINS.$name.DS.'config'.DS.'config.php';
 			}
-			if(isset($adminLink)) $this->data['Plugin']['admin_link'] = $adminLink;
-			if(isset($title)) $this->data['Plugin']['title'] = $title;
 			if(!empty($installMessage)) {
 				$this->Session->setFlash($installMessage);
 			}
 
 		}else {
-			if(!preg_match('/^http/is', $this->data['Plugin']['admin_link']) && !preg_match('/^\//is', $this->data['Plugin']['admin_link'])){
-				$this->data['Plugin']['admin_link'] = '/'.$this->data['Plugin']['admin_link'];
-			}
-			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'install.php')) {
-				include APP.'plugins'.DS.$name.DS.'config'.DS.'install.php';
-			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'install.php')) {
-				include BASER_PLUGINS.$name.DS.'config'.DS.'install.php';
+			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
+				include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
+			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
+				include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
 			}
 			/* 登録処理 */
 			$this->Plugin->create($this->data);
@@ -253,7 +277,7 @@ class PluginsController extends AppController {
 			if($this->Plugin->save()) {
 				Cache::clear(false,'_cake_model_');
 				Cache::clear(false,'_cake_core_');
-				$message = '新規プラグイン「'.$this->data['Plugin']['title'].'」を BaserCMS に登録しました。';
+				$message = '新規プラグイン「'.$this->data['Plugin']['name'].'」を BaserCMS に登録しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
@@ -266,46 +290,6 @@ class PluginsController extends AppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = '新規プラグイン登録';
-		$this->render('form');
-
-	}
-/**
- * [ADMIN] 編集処理
- *
- @ @param	int		ID
- * @return	void
- * @access 	public
- */
-	function admin_edit($id) {
-
-		/* 除外処理 */
-		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
-		}
-
-		if(empty($this->data)) {
-			$this->data = $this->Plugin->read(null, $id);
-		}else {
-			if(!preg_match('/^http/is', $this->data['Plugin']['admin_link']) && !preg_match('/^\//is', $this->data['Plugin']['admin_link'])){
-				$this->data['Plugin']['admin_link'] = '/'.$this->data['Plugin']['admin_link'];
-			}
-			$this->Plugin->set($this->data);
-			/* 更新処理 */
-			if($this->Plugin->save()) {
-				$message = 'プラグイン「'.$this->data['Plugin']['title'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->Plugin->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$id));
-			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
-			}
-
-		}
-
-		/* 表示設定 */
-		$this->subMenuElements = array('plugins','site_configs');
-		$this->pageTitle = 'プラグイン編集：'.$this->data['Plugin']['title'];
 		$this->render('form');
 
 	}
