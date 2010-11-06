@@ -25,6 +25,7 @@
 	'styleswitcher',
 	'startup')) ?>
 <?php $baser->scripts() ?>
+<?php $baser->element('google_analytics') ?>
 </head>
 <body id="<?php $baser->contentsName() ?>">
 

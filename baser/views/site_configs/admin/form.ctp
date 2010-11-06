@@ -108,6 +108,18 @@ $(function(){
 			&nbsp; </td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->text('SiteConfig.google_analytics_id', array('size'=>35,'maxlength'=>255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpGoogleAnalyticsId','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('SiteConfig.google_analytics_id') ?>
+			<div id="helptextGoogleAnalyticsId" class="helptext"><a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
+				<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
+				テンプレートで利用する場合は、 <pre>&lt;?php $baser->element('google_analytics') ?&gt;</pre> で出力します。
+			</div>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.widget_area', '標準ウィジェットエリア') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->select('SiteConfig.widget_area', $formEx->getControlSource('WidgetArea.id'), null,null,false) ?>
