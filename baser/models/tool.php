@@ -48,9 +48,7 @@ class Tool extends AppModel {
 	function getControlSource ($field) {
 
 		// スキーマ用モデルリスト
-		$controlSources['baser_models'] = $this->getListModels('baser');
-		$controlSources['plugin_models'] = $this->getListModels('plugin');
-
+		$controlSources['tables'] = $this->getListModels();
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -63,21 +61,17 @@ class Tool extends AppModel {
  * @param string $ds
  * @return array
  */
-	function getListModels($ds){
-		
-		$db =& ConnectionManager::getDataSource($ds);
-		$prefix = $db->config['prefix'];
+	function getListModels(){
+
+		$db =& ConnectionManager::getDataSource('baser');
 		$listSources = $db->listSources();
 		if(!$listSources){
 			return array();
 		}
 		$sources = array();
 		foreach($listSources as $source) {
-			if(preg_match('/^'.$prefix.'([a-z][a-z_]*?)$/is', $source)) {
-				$sources[] = $source;
-			}
+			$sources[] = $source;
 		}
-		sort($sources);
 		return $sources;
 		
 	}
@@ -94,18 +88,13 @@ class Tool extends AppModel {
 		if(isset($data['Tool'])){
 			$data = $data['Tool'];
 		}
-		if(!$data['baser_models'] && !$data['plugin_models']){
+		if(!$data['tables']){
 			return false;
 		}
 		$result = true;
-		$types = array('baser_models','plugin_models');
-		foreach($types as $type) {
-			if($data[$type]){
-				if(!$this->_writeSchema($type, $data[$type], $path)){
-					$result = false;
-					break;
-				}
-			}
+		if(!$this->_writeSchema('tables', $data['tables'], $path)){
+			$result = false;
+			break;
 		}
 		return $result;
 
@@ -147,8 +136,7 @@ class Tool extends AppModel {
  */
 	function _writeSchema($field, $values, $path) {
 
-		$ds = str_replace('_models', '', $field);
-		$db =& ConnectionManager::getDataSource($ds);
+		$db =& ConnectionManager::getDataSource('baser');
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();
