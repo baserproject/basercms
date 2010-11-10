@@ -8,10 +8,14 @@
  * ----------------------------------------
  * アップデートスクリプトや、スキーマファイルの仕様については
  * 次のファイルに記載されいているコメントを参考にしてください。
- * 
+ *
  * /baser/controllers/updaters_controller.php
  *
- * 
+ * スキーマ変更後、データの更新を行う場合は、ClassRegistry を利用せず、
+ * モデルクラスを直接イニシャライズしないと、
+ * スキーマのキャッシュが古いままとなるので注意が必要です。
+ *
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -45,6 +49,7 @@
  *		※ 無効の場合でもプラグイン用のテーブルを残す仕様の為
  */
 	$db =& ConnectionManager::getDataSource('plugin');
+	$db->cacheQueries = false;
 	$listSources = $db->listSources();
 	$prefix = $db->config['prefix'];
 	$pluginTables = array('blog'=>$prefix.'blog_contents',
@@ -58,7 +63,8 @@
 			$tableExistsPlugins[] = $key;
 		}
 	}
-	$Plugin = ClassRegistry::init('Plugin');
+	App::import('Model', 'Plugin');
+	$Plugin = new Plugin();
 	$result = true;
 	foreach($tableExistsPlugins as $plugin) {
 		$data = $Plugin->find('first', array('conditions'=>array('name'=>$plugin)));
@@ -77,7 +83,10 @@
 			if(isset($title))
 				$data['Plugin']['title'] = $title;
 		}
-		$data['Plugin']['version'] = $this->getBaserVersion($plugin);
+		$version = $this->getBaserVersion($plugin);
+		if($version && !preg_match('/^Baser/', $version)) {
+			$data['Plugin']['version'] = $version;
+		}
 		if(!$Plugin->save($data)) {
 			$result = false;
 		}
@@ -91,4 +100,4 @@
  * プラグインの有効化を促すメッセージを追加
  */
 	$this->setMessage('全てのプラグインは一時的に無効状態になっています。', true);
-	$this->setMessage('プラグイン一覧より、プラグインの有効化を行ってください。', true);
+	$this->setMessage('プラグイン一覧より、必要なプラグインの有効化を行ってください。', true);
