@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログインストーラー
+ * アップデーターモデル
  *
  * PHP versions 4 and 5
  *
@@ -12,12 +12,35 @@
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.plugins.blog.config
+ * @package			baser.models
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->Plugin->initDb('blog');
+/**
+ * Include files
+ */
+/**
+ * アップデーターモデル
+ *
+ * @package			baser.models
+ */
+class Updater extends AppModel {
+/**
+ * クラス名
+ *
+ * @var		string
+ * @access 	public
+ */
+	var $name = 'Updater';
+/**
+ * テーブル
+ *
+ * @var     string
+ * @access  public
+ */
+	var $useTable = false;
+}
 ?>

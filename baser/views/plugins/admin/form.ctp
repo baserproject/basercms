@@ -32,16 +32,20 @@
 </div>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Plugin',array('url'=>array($this->data['Plugin']['name']))) ?>
+<?php echo $formEx->hidden('Plugin.name') ?>
+<?php echo $formEx->hidden('Plugin.title') ?>
+<?php echo $formEx->hidden('Plugin.status') ?>
+<?php echo $formEx->hidden('Plugin.version') ?>
+
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-	<?php if($this->action == 'admin_edit'): ?>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('Plugin.id', 'NO') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
-	</tr>
-	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Plugin.name', 'プラグイン名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Plugin.name', array('size'=>40,'maxlength'=>255,'readonly'=>'readonly')) ?> <?php echo $formEx->error('Plugin.name') ?>&nbsp;</td>
+		<td class="col-input">
+			<?php echo $formEx->value('Plugin.name').' '.$formEx->value('Plugin.version') ?>
+			<?php if($formEx->value('Plugin.title')): ?>
+				（<?php echo $formEx->value('Plugin.title') ?>）
+			<?php endif ?>
+		</td>
 	</tr>
 </table>
 <div class="submit">

@@ -56,5 +56,17 @@ class Plugin extends AppModel {
 		return true;
 
 	}
+/**
+ * データベースを初期化する
+ *
+ * 既存のテーブルは上書きしない
+ *
+ * @param	string	$plugin
+ * @return	boolean
+ * @access	public
+ */
+	function initDb($plugin) {
+		return parent::initDb('plugin', $plugin);
+	}
 }
 ?>

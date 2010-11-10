@@ -2794,7 +2794,11 @@ class DboSource extends DataSource {
 		$Schema->connection = $this->configKeyName;
 		$compare = $Schema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
-		return $this->execute($sql);
+		if($sql) {
+			return $this->execute($sql);
+		} else {
+			return false;
+		}
 
 	}
 /**
@@ -3033,7 +3037,12 @@ class DboSource extends DataSource {
 		$table = basename($path, '.csv');
 		$fullTableName = $this->config['prefix'].$table;
 		$schema = $this->readSchema(basename($path, '.csv'));
-		
+		if(isset($schema['tables'][$table]['indexes']['PRIMARY']['column'])) {
+			$indexField = $schema['tables'][$table]['indexes']['PRIMARY']['column'];
+		} else {
+			$indexField = '';
+		}
+
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
 		$_head = fgetcsv($fp,10240);
@@ -3045,6 +3054,11 @@ class DboSource extends DataSource {
 			$values = array();
 			// 配列の添え字をフィールド名に変換
 			foreach($_record as $key => $value) {
+				// 主キーでデータが空の場合はスキップ
+				if($_head[$key]==$indexField && !$value) {
+					unset($head[$key]);
+					continue;
+				}
 				if($_head[$key]=='created'){
 					$value = date('Y-m-d H:i:s');
 				}

@@ -356,15 +356,50 @@ class AppController extends Controller {
  *
  * @return string Baserバージョン
  */
-	function getBaserVersion() {
+	function getBaserVersion($plugin = '') {
+
+		$corePlugins = array('blog', 'feed', 'mail');
+		if(!$plugin || in_array($plugin, $corePlugins)) {
+			$path = BASER.'VERSION.txt';
+		} else {
+			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
+			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
+			if(file_exists($appPath)) {
+				$path = $appPath;
+			}elseif(file_exists($baserPath)) {
+				$path = $baserPath;
+			} else {
+				return false;
+			}
+		}
+		
 		App::import('File');
-		$versionFile = new File(BASER.'VERSION.txt');
+		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
 			return $aryVersionData[0];
 		}else {
 			return false;
+		}
+		
+	}
+/**
+ * DBのバージョンを取得する
+ *
+ * @return	string
+ */
+	function getSiteVersion($plugin = '') {
+
+		if(!$plugin) {
+			if(isset($this->siteConfigs['version'])) {
+				return preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
+			} else {
+				return '';
+			}
+		} else {
+			$Plugin = ClassRegistry::init('Plugin');
+			return $Plugin->field('version', array('name'=>$plugin));
 		}
 	}
 /**

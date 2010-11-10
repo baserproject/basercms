@@ -326,16 +326,16 @@ class AppModel extends Model {
 
 	}
 /**
- * MysqlDumpファイルでデータベースを初期化
+ * データベースを初期化
  *
  * 既に存在するテーブルは上書きしない
  *
  * @param	array	データベース設定名
  * @param	string	プラグイン名
  * @return 	boolean
- * @access	protected
+ * @access	public
  */
-	function initDatabase($dbConfigName,$pluginName = '') {
+	function initDb($dbConfigName,$pluginName = '') {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
@@ -356,41 +356,113 @@ class AppModel extends Model {
 				return true;
 			}
 		}
-		
-		$schemaPaths = array();
-		$dataPaths = array();
-		$Folder = new Folder($path);
-		$files = $Folder->read(true, true, true);
-		foreach($files[1] as $file) {
-			if(preg_match('/\.php$/', $file)) {
-				if(!in_array($prefix . basename($file, '.php'), $listSources)) {
-					$schemaPaths[] = $file;
-				}
-			} elseif (preg_match('/\.csv$/', $file)) {
-				if(!in_array($prefix . basename($file, '.csv'), $listSources)) {
-					$dataPaths[] = $file;
-				}
-			}
+
+		if($this->loadSchema($dbConfigName, $path)){
+			return $this->loadCsv($dbConfigName, $path);
+		} else {
+			return false;
 		}
 		
-		// スキーマ読み込み
-		if($schemaPaths) {
-			foreach($schemaPaths as $file) {
-				if(!$db->createTableBySchema(array('path'=>$file))){
-					return false;
+	}
+/**
+ * スキーマファイルを利用してデータベース構造を変更する
+ *
+ * @param	array	データベース設定名
+ * @param	string	スキーマファイルのパス
+ * @param	string	テーブル指定
+ * @param	string	更新タイプ指定
+ * @return 	boolean
+ * @access	public
+ */
+	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array()) {
+
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		
+		foreach($files[1] as $file) {
+			if(in_array($file, $excludePath)) {
+				continue;
+			}
+			if(preg_match('/^(.*?)\.php$/', $file, $matches)) {
+				$type = 'create';
+				$table = $matches[1];
+				if(preg_match('/^create_(.*?)\.php$/', $file, $matches)) {
+					$type = 'create';
+					$table = $matches[1];
+					if(in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} elseif (preg_match('/^alter_(.*?)\.php$/', $file, $matches)) {
+					$type = 'alter';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
+					$type = 'drop';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} else {
+					if(in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				}
+				if($filterTable && $filterTable != $table) {
+					continue;
+				}
+				if($filterType && $filterType != $type) {
+					continue;
+				}
+				$tmpdir = TMP.'schemas'.DS;
+				copy($path.DS.$file,$tmpdir.$table.'.php');
+				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php'));
+				@unlink($tmpdir.$file);
+				return $result;
+				
+			}
+		}
+		return false;
+
+	}
+/**
+ * CSVを読み込む
+ *
+ * @param	array	データベース設定名
+ * @param	string	CSVパス
+ * @param	string	テーブル指定
+ * @return 	boolean
+ * @access	public
+ */
+	function loadCsv($dbConfigName, $path, $filterTable='') {
+
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db->cacheSources = false;
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+
+		foreach($files[1] as $file) {
+			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
+				$table = $matches[1];
+				if(in_array($prefix . $table, $listSources)) {
+					if($filterTable && $filterTable != $table) {
+						continue;
+					}
+					if(!$db->loadCsv(array('path'=>$path.DS.$file, 'encoding'=>'SJIS'))){
+						return false;
+					}
 				}
 			}
 		}
 
-		// データ読み込み
-		if($dataPaths) {
-			foreach($dataPaths as $file) {
-				if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
-					return false;
-				}
-			}
-		}
-		
 		return true;
 
 	}
@@ -848,6 +920,7 @@ class AppModel extends Model {
 	function findExpanded() {
 
 		$dbDatas = $this->find('all',array('fields'=>array('name','value')));
+		$expandedData = array();
 		if($dbDatas) {
 			foreach($dbDatas as $dbData) {
 				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];

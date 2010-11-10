@@ -72,7 +72,8 @@
  * @param string $version
  */
 	function verpoint($version) {
-		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
+		$version = str_replace('BaserCMS ', '', $version);
+		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
 			return $maches[1]*1000000 + $maches[2]*1000 + $maches[3];
 		}else {
 			return 0;
