@@ -97,7 +97,7 @@ class PluginsController extends AppController {
 		}
 
 		$this->contentId = $this->getContentId();
-
+		
 	}
 /**
  * コンテンツIDを取得する
