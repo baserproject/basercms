@@ -181,7 +181,7 @@ class PluginsController extends AppController {
 			}
 			// プラグインのバージョンを取得
 			$version = $this->getBaserVersion($plugin);
-			
+
 			// 設定ファイル読み込み
 			$title = $description = $author = $url = $adminLink = '';
 			$appConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config'.DS.'config.php';
@@ -207,7 +207,8 @@ class PluginsController extends AppController {
 				if(isset($adminLink))
 					$pluginData['Plugin']['admin_link'] = $adminLink;
 				// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser/', $version)) {
+				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
+					$pluginData['Plugin']['version'] = $matches[1];
 					$pluginData['Plugin']['old_version'] = true;
 				}elseif($pluginData['Plugin']['version'] < $version && !in_array($pluginData['Plugin']['name'],array('blog', 'feed', 'mail'))) {
 					$pluginData['Plugin']['update'] = true;
@@ -289,13 +290,13 @@ class PluginsController extends AppController {
 			}
 
 		}else {
-			
+
 			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
 				include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
 			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
 				include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
 			}
-			
+
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
 
 			if($data) {
@@ -312,14 +313,14 @@ class PluginsController extends AppController {
 
 			// データを保存
 			if($this->Plugin->save()) {
-				
+
 				Cache::clear(false,'_cake_model_');
 				Cache::clear(false,'_cake_core_');
 				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を BaserCMS に登録しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
-				
+
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -347,7 +348,7 @@ class PluginsController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		
+
 		$data = $this->Plugin->read(null, $id);
 		$data['Plugin']['status'] = false;
 
