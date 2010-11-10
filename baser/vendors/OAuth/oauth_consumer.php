@@ -1,9 +1,9 @@
 <?php
 /**
  * A simple OAuth consumer for CakePHP.
- * 
+ *
  * Requires the OAuth library from http://oauth.googlecode.com/svn/code/php/
- * 
+ *
  * Copyright (c) by Daniel Hofstetter (http://cakebaker.42dh.com)
  *
  * Licensed under The MIT License
@@ -33,7 +33,7 @@ class OAuth_Consumer {
 	 * @access	private
 	 */
 	var $fullResponse = null;
-	
+
 	function OAuth_Consumer($consumerKey, $consumerSecret = '') {
 		$this->consumerKey = $consumerKey;
 		$this->consumerSecret = $consumerSecret;
@@ -46,7 +46,7 @@ class OAuth_Consumer {
 	function get($accessTokenKey, $accessTokenSecret, $url, $getData = array()) {
 		$accessToken = new OAuthToken($accessTokenKey, $accessTokenSecret);
 		$request = $this->createRequest('GET', $url, $accessToken, $getData);
-		
+
 		return $this->doGet($request->to_url());
 	}
 	/**
@@ -57,10 +57,10 @@ class OAuth_Consumer {
 		$queryStringParams = OAuthUtil::parse_parameters($_SERVER['QUERY_STRING']);
 		$parameters['oauth_verifier'] = $queryStringParams['oauth_verifier'];
 		$request = $this->createRequest($httpMethod, $accessTokenURL, $requestToken, $parameters);
-		
+
 		return $this->doRequest($request);
 	}
-	
+
 	/**
 	 * Useful for debugging purposes to see what is returned when requesting a request/access token.
 	 * @access	public
@@ -68,12 +68,12 @@ class OAuth_Consumer {
 	function getFullResponse() {
 		return $this->fullResponse;
 	}
-	
+
 	/**
 	 * @param $requestTokenURL
-	 * @param $callback An absolute URL to which the Service Provider will redirect the User back when the Obtaining User 
-	 * 					Authorization step is completed. If the Consumer is unable to receive callbacks or a callback URL 
-	 * 					has been established via other means, the parameter value MUST be set to oob (case sensitive), to 
+	 * @param $callback An absolute URL to which the Service Provider will redirect the User back when the Obtaining User
+	 * 					Authorization step is completed. If the Consumer is unable to receive callbacks or a callback URL
+	 * 					has been established via other means, the parameter value MUST be set to oob (case sensitive), to
 	 * 					indicate an out-of-band configuration. Section 6.1.1 from http://oauth.net/core/1.0a
 	 * @param $httpMethod 'POST' or 'GET'
 	 * @param $parameters
@@ -86,7 +86,7 @@ class OAuth_Consumer {
 
 		return $this->doRequest($request);
 	}
-	
+
 	/**
 	 * Call API with a POST request
 	 * @access	public
@@ -94,18 +94,19 @@ class OAuth_Consumer {
 	function post($accessTokenKey, $accessTokenSecret, $url, $postData = array()) {
 		$accessToken = new OAuthToken($accessTokenKey, $accessTokenSecret);
 		$request = $this->createRequest('POST', $url, $accessToken, $postData);
-		
+
 		return $this->doPost($url, $request->to_postdata());
 	}
 	/**
 	 * @access	protected
 	 */
-	function &createOAuthToken($response) {
+	function createOAuthToken($response) {
+		
 		if (isset($response['oauth_token']) && isset($response['oauth_token_secret'])) {
 			$OAuthToken = new OAuthToken($response['oauth_token'], $response['oauth_token_secret']);
 			return $OAuthToken;
 		}
-		
+
 		return null;
 	}
 	/**
