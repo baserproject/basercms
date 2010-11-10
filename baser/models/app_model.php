@@ -378,6 +378,7 @@ class AppModel extends Model {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db->cacheSources = false;
 		$listSources = $db->listSources();
 		$prefix = $db->config['prefix'];
 		$Folder = new Folder($path);
@@ -423,11 +424,13 @@ class AppModel extends Model {
 				copy($path.DS.$file,$tmpdir.$table.'.php');
 				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php'));
 				@unlink($tmpdir.$file);
-				return $result;
+				if(!$result) {
+					return false;
+				}
 				
 			}
 		}
-		return false;
+		return true;
 
 	}
 /**
