@@ -803,7 +803,7 @@ class BaserHelper extends AppHelper {
 			}else {
 				$Plugin = ClassRegistry::init('Plugin');
 			}
-			$plugins = $Plugin->find('all',array('fields'=>array('name')));
+			$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
 			$plugins = Set::extract('/Plugin/name',$plugins);
 		}
 
