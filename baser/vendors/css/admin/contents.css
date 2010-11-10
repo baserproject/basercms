@@ -68,6 +68,9 @@
 	background: url(images/info.png) no-repeat 10px 11px;
 	border:5px solid #CCC;
 }
+#flashMessage strong {
+	color:#CC0000;
+}
 /* button
 ----------------------------------------------- */
 .button {

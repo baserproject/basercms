@@ -131,7 +131,7 @@ class WidgetAreasController extends AppController {
 			$widgetInfos[0]['paths'][] = VIEWS.'elements'.DS.'admin'.DS.'widgets';
 		}
 
-		$plugins = $this->Plugin->find('all');
+		$plugins = $this->Plugin->find('all', array('conditions'=>array('status'=>true)));
 
 		if($plugins){
 			$pluginWidgets = array();

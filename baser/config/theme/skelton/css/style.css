@@ -1,0 +1,102 @@
+@charset "UTF-8";
+/**
+ * スケルトンスタイルシート
+ */
+/* tags
+----------------------------------------------- */
+body {
+	font-size:small;
+}
+td{
+	padding:5px;
+}
+input {
+	margin:3px;
+}
+img {
+	border:none;
+}
+/* Page
+----------------------------------------------- */
+#Page {
+	width:900px;
+	margin:0 auto;
+	text-align: left;
+}
+/* Alfa, Beta
+----------------------------------------------- */
+#Alfa,
+#Beta {
+	position: relative;
+	float:left;
+	display: inline;
+	background-color: #fefefe;
+}
+#Alfa {
+	width:646px;
+	left:0px;
+	padding-bottom:50px;
+}
+#Beta {
+	width:234px;
+	left:0px;
+	padding-left:20px;
+	padding-bottom:50px;
+}
+/* Header
+----------------------------------------------- */
+#Header {
+	text-align: left;
+}
+/* Footer
+----------------------------------------------- */
+#Footer {
+	text-align: center;
+	font-size: x-small;
+}
+/* GlobalMenus
+----------------------------------------------- */
+#GlobalMenus {
+	margin:40px auto 40px 0;
+}
+#GlobalMenus ul{
+	padding:0;
+	margin:0;
+}
+#GlobalMenus li{
+	float: left;
+	margin-right:20px;
+	list-style: none;
+	font-size: medium;
+	font-weight: bold;
+	margin-left:0;
+	padding-left:0;
+}
+/* Navigation
+----------------------------------------------- */
+#Navigation {
+	margin-bottom: 20px;
+}
+/* widget
+----------------------------------------------- */
+.widget h2 {
+	font-size:small;
+}
+/* clearfix
+----------------------------------------------- */
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}

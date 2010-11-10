@@ -579,8 +579,8 @@ class BaserHelper extends AppHelper {
  * @return void
  */
 	function updateMessage() {
-		if($this->checkUpdate()) {
-			$updateLink = $this->Html->link('ここ','/installations/update');
+		if($this->checkUpdate() && $this->params['controller'] != 'updaters') {
+			$updateLink = $this->Html->link('ここ','/admin/updaters');
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
 	}
@@ -803,7 +803,7 @@ class BaserHelper extends AppHelper {
 			}else {
 				$Plugin = ClassRegistry::init('Plugin');
 			}
-			$plugins = $Plugin->find('all',array('fields'=>array('name')));
+			$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
 			$plugins = Set::extract('/Plugin/name',$plugins);
 		}
 

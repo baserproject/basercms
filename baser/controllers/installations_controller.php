@@ -34,12 +34,41 @@ define("PHP_MINIMUM_MEMORY_LIMIT", 16);
  * インストーラーコントローラー
  */
 class InstallationsController extends AppController {
-	var $name = 'Installations';								// クラス名
-	var $components = array('Session');							// コンポーネント
-	var $layout = "installations";								// レイアウト
-	var $helpers = array('Html', 'Form', 'Javascript', 'Time'); // ヘルパー
-	var $uses = null;											// モデル
-	var $_updateMessage = array();								// アップデートメッセージ
+/**
+ * クラス名
+ *
+ * @var		string
+ * @access	public
+ */
+	var $name = 'Installations';
+/**
+ * コンポーネント
+ *
+ * @var		array
+ * @access	public
+ */
+	var $components = array('Session');
+/**
+ * レイアウト
+ *
+ * @var		string
+ * @access	public
+ */
+	var $layout = "installations";
+/**
+ * ヘルパー
+ *
+ * @var		array
+ * @access	public
+ */
+	var $helpers = array('Html', 'Form', 'Javascript', 'Time');
+/**
+ * モデル
+ *
+ * @var		array
+ * @access	public
+ */
+	var $uses = null;
 /**
  * データベースエラーハンドラ
  *
@@ -86,8 +115,6 @@ class InstallationsController extends AppController {
 				if(Configure::read('debug') != -1) {
 					$this->notFound();
 				}
-				break;
-			case 'update':
 				break;
 			default:
 				if($installed == 'complete') {
@@ -237,9 +264,6 @@ class InstallationsController extends AppController {
 
 			} elseif($this->data['clicked'] == 'finish') {
 				
-				// データベース設定ファイルに設定内容を書き込む
-				//$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
-
 				// DB接続
 				$db =& $this->_connectDb($this->_readDbSettingFromSession());
 
@@ -296,13 +320,17 @@ class InstallationsController extends AppController {
 		// ブログの投稿日を更新
 		$this->_updateEntryDate();
 
+		// プラグインのステータスを更新
+		$this->_updatePluginStatus();
+
 		// ログイン
 		$this->_login();
 
-		// demo用テーマを配置する
+		// テーマを配置する
 		$this->_deployTheme();
+		$this->_deployTheme('skelton');
 
-		// demoテーマ用のpagesファイルを生成する
+		// pagesファイルを生成する
 		$this->_createPages();
 
 		// データベース設定を書き込む
@@ -336,6 +364,34 @@ class InstallationsController extends AppController {
 			return false;
 		}
 
+	}
+/**
+ * プラグインのステータスを更新する
+ *
+ * @return	boolean
+ * @access	protected
+ */
+	function _updatePluginStatus() {
+		
+		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+		$version = $this->getBaserVersion();
+		App::import('Model', 'Plugin');
+		$Plugin = new Plugin();
+		$datas = $Plugin->find('all');
+		if($datas){
+			$result = true;
+			foreach($datas as $data) {
+				$data['Plugin']['version'] = $version;
+				$data['Plugin']['status'] = true;
+				if(!$Plugin->save($data)) {
+					$result = false;
+				}
+			}
+			return $result;
+		} else {
+			return false;
+		}
+		
 	}
 /**
  * 登録日を更新する
@@ -981,109 +1037,6 @@ class InstallationsController extends AppController {
 
 		}
 
-	}
-/**
- * アップデート実行
- * アップデートプログラムは、/baser/config/update/ に次の形式で格納する
- * {メジャー番号}{3桁のマイナー番号}{3桁のパッチ番号}.php
- * （例）1.5.10 → 1005010.php
- * @return void
- * @access public
- */
-	function update() {
-
-		$this->pageTitle = 'WEBサイトアップデート';
-		$this->layoutPath = 'admin';
-		$this->layout = 'default';
-		$this->subDir = 'admin';
-		clearAllCache();
-
-		/* バージョンを解析 */
-		$baserVersion = $this->getBaserVersion();
-		$baserVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$baserVersion);
-		$baserVerpoint = verpoint($baserVersion);
-		if(isset($this->siteConfigs['version'])) {
-			$siteVer = preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
-			$siteVerpoint = verpoint($this->siteConfigs['version']);
-		}else {
-			$siteVer = 'バージョンなし';
-			$siteVerpoint = 0;
-		}
-
-		/* スクリプトを走査 */
-		$folder = new Folder(BASER_CONFIGS.'update');
-		$files = $folder->read(true,true);
-		$scriptNum = 0;
-		$scripts = array();
-		if(!empty($files[1])) {
-			foreach ($files[1] as $file) {
-				if(preg_match("/(.*?)\.php$/is", $file , $matches)) {
-					$scriptVerpoint = $matches[1];
-					if(($scriptVerpoint > $siteVerpoint && $scriptVerpoint <= $baserVerpoint)||$matches[1]=='latest') {
-						$scriptNum++;
-						$scripts[] = $file;
-					}
-				}
-			}
-		}
-
-		/* スクリプト実行 */
-		if($this->data) {
-			
-			$this->setUpdateMessage($baserVersion.' へのアップデートを開始します。', true);
-
-			if($scripts){
-				asort($scripts);
-				foreach($scripts as $script) {
-					$this->setUpdateMessage('アップデートプログラム '.$script.' を実行します。', true, true);
-					include BASER_CONFIGS.'update'.DS.$script;
-				}
-			}
-
-			/* サイト基本設定にバージョンを保存 */
-			$SiteConfigClass = ClassRegistry::getObject('SiteConfig');
-			$data['SiteConfig']['version'] = $baserVersion;
-			$SiteConfigClass->saveKeyValue($data);
-
-			$this->setUpdateMessage($baserVersion.' へのアップデートが完了しました。', true, true);
-			$this->Session->setFlash($this->getUpadteMessage());
-			$this->log($this->_updateMessage,'install');
-			$this->redirect(array('action'=>'update'));
-			
-		}
-
-		$this->set('siteVer',$siteVer);
-		$this->set('baserVer',$baserVer);
-		$this->set('scriptNum',$scriptNum);
-
-	}
-/**
- * アップデートメッセージをセットする
- * 
- * @param	string		$message
- * @param	boolean		$head			見出しとして設定する
- * @param	boolean		$beforeBreak	前の行で改行する
- * @return	void
- * @access	public
- */
-	function setUpdateMessage($message, $head = false, $beforeBreak = false) {
-		if($beforeBreak) {
-			$this->_updateMessage[] = '';
-		}
-		if($head){
-			$message = '----- '.$message.' -----';
-		}else{
-			$message = '* '.$message;
-		}
-		$this->_updateMessage[] = $message;
-	}
-/**
- * アップデートメッセージを取得する
- * 改行区切り
- * @return string
- */
-	function getUpadteMessage() {
-		return implode('<br />',$this->_updateMessage);
 	}
 
 }

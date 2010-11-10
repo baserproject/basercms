@@ -58,7 +58,7 @@ class PluginHookComponent extends Object {
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
 					/* DBに登録されているものだけに変更した */
 					$Plugin =& ClassRegistry::init('Plugin','Model');
-					$plugins = $Plugin->find('all');
+					$plugins = $Plugin->find('all',array('conditions'=>array('status'=>true)));
 					$controller->enablePlugins = $plugins = Set::extract('/Plugin/name',$plugins);
 				}
 			}

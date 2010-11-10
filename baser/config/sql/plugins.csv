@@ -1,4 +1,4 @@
-"id","name","title","admin_link","created","modified"
-"1","mail","メールフォーム","/admin/mail/mail_contents/index","",""
-"2","feed","フィードリーダー","/admin/feed/feed_configs/index","",""
-"3","blog","ブログ","/admin/blog/blog_contents/index","",""
+"id","name","title","version","status","created","modified"
+"1","mail","メールフォーム","","","",""
+"2","feed","フィードリーダー","","","",""
+"3","blog","ブログ","","","",""

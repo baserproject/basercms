@@ -326,75 +326,147 @@ class AppModel extends Model {
 
 	}
 /**
- * MysqlDumpファイルでデータベースを初期化
+ * データベースを初期化
  *
  * 既に存在するテーブルは上書きしない
  *
  * @param	array	データベース設定名
- * @param	string	保存先パス
+ * @param	string	プラグイン名
  * @return 	boolean
- * @access	protected
+ * @access	public
  */
-	function initDatabase($dbConfigName,$fileName) {
+	function initDb($dbConfigName,$pluginName = '') {
 
-		$dbConfigs = new DATABASE_CONFIG();
-		$dbConfig = $dbConfigs->{$dbConfigName};
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
 
-		if ($dbConfig['driver'] == 'sqlite3' || $dbConfig['driver'] == 'sqlite3_ex') {
-			$dbType = 'sqlite';
-		} elseif ($dbConfig['driver'] == 'postgres_ex') {
-			$dbType = 'postgres';
-		} elseif ($dbConfig['driver'] == 'mysql_ex') {
-			$dbType = 'mysql';
+		// 初期データフォルダを走査
+		if(!$pluginName) {
+			$path = BASER_CONFIGS.'sql';
 		} else {
-			$dbType = $dbConfig['driver'];
-		}
-
-		if($dbType != 'csv') {
-
-			if($dbConfigName == 'plugin') {  // プラグイン
-				if(file_exists(APP.'plugins'.DS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = APP.'plugins'.DS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}elseif(file_exists(BASER_PLUGINS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = BASER_PLUGINS.$fileName.DS.'config'.DS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}
-			}else {  // etc
-				if(file_exists(CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}elseif(file_exists(BASER_CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql')) {
-					$filePath = BASER_CONFIGS.'sql'.DS.$fileName.'_'.$dbType.'.sql';
-				}
-			}
-
-			if(!empty($filePath)) {
-				return $this->restoreDb($dbConfig,$filePath);
-			}else {
+			$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql';
+			$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql';
+			if(file_exists($appPath)) {
+				$path = $appPath;
+			} elseif (file_exists($baserPath)) {
+				$path = $baserPath;
+			} else {
 				return true;
 			}
-
-		} elseif ($dbType == 'csv') {  // CSV
-
-			if($dbConfigName == 'plugin') {  // プラグイン
-				if(file_exists(APP.'plugins'.DS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS)) {
-					$filePath = APP.'plugins'.DS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS;
-				}elseif(file_exists(BASER_PLUGINS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS)) {
-					$filePath = BASER_PLUGINS.$fileName.DS.'config'.DS.'csv'.DS.$fileName.DS;
-				}
-			}else {  // etc
-				if(file_exists(CONFIGS.'csv'.DS.$fileName.DS)) {
-					$filePath = CONFIGS.'csv'.DS.$fileName.DS;
-				}elseif(file_exists(BASER_CONFIGS.'csv'.DS.$fileName.DS)) {
-					$filePath = BASER_CONFIGS.'csv'.DS.$fileName.DS;
-				}
-			}
-
-			if(!empty($filePath)) {
-				return $this->restoreDb($dbConfig,$filePath);
-			}else {
-				return true;
-			}
-
 		}
+
+		if($this->loadSchema($dbConfigName, $path)){
+			return $this->loadCsv($dbConfigName, $path);
+		} else {
+			return false;
+		}
+		
+	}
+/**
+ * スキーマファイルを利用してデータベース構造を変更する
+ *
+ * @param	array	データベース設定名
+ * @param	string	スキーマファイルのパス
+ * @param	string	テーブル指定
+ * @param	string	更新タイプ指定
+ * @return 	boolean
+ * @access	public
+ */
+	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array()) {
+
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db->cacheSources = false;
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		
+		foreach($files[1] as $file) {
+			if(in_array($file, $excludePath)) {
+				continue;
+			}
+			if(preg_match('/^(.*?)\.php$/', $file, $matches)) {
+				$type = 'create';
+				$table = $matches[1];
+				if(preg_match('/^create_(.*?)\.php$/', $file, $matches)) {
+					$type = 'create';
+					$table = $matches[1];
+					if(in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} elseif (preg_match('/^alter_(.*?)\.php$/', $file, $matches)) {
+					$type = 'alter';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
+					$type = 'drop';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				} else {
+					if(in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+				}
+				if($filterTable && $filterTable != $table) {
+					continue;
+				}
+				if($filterType && $filterType != $type) {
+					continue;
+				}
+				$tmpdir = TMP.'schemas'.DS;
+				copy($path.DS.$file,$tmpdir.$table.'.php');
+				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php'));
+				@unlink($tmpdir.$file);
+				if(!$result) {
+					return false;
+				}
+				
+			}
+		}
+		return true;
+
+	}
+/**
+ * CSVを読み込む
+ *
+ * @param	array	データベース設定名
+ * @param	string	CSVパス
+ * @param	string	テーブル指定
+ * @return 	boolean
+ * @access	public
+ */
+	function loadCsv($dbConfigName, $path, $filterTable='') {
+
+		// テーブルリストを取得
+		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db->cacheSources = false;
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+
+		foreach($files[1] as $file) {
+			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
+				$table = $matches[1];
+				if(in_array($prefix . $table, $listSources)) {
+					if($filterTable && $filterTable != $table) {
+						continue;
+					}
+					if(!$db->loadCsv(array('path'=>$path.DS.$file, 'encoding'=>'SJIS'))){
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
 
 	}
 /**
@@ -851,6 +923,7 @@ class AppModel extends Model {
 	function findExpanded() {
 
 		$dbDatas = $this->find('all',array('fields'=>array('name','value')));
+		$expandedData = array();
 		if($dbDatas) {
 			foreach($dbDatas as $dbData) {
 				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];

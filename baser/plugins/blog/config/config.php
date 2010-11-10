@@ -19,6 +19,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$adminLink = '/admin/blog/blog_contents/index';
 $title = 'ブログ';
+$description = '複数設置可能なシンプルブログ';
+$author = 'ryuring';
+$url = 'http://www.e-catchup.jp';
+$adminLink = '/admin/blog/blog_contents/index';
+$installMessage = '';
 ?>

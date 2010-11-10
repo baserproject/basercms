@@ -30,7 +30,7 @@ function transformRSS($data) {
 		'link' => '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'],
 		'guid' => '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'],
 		'category' => $data['BlogCategory']['title'],
-		'description' => $data['BlogPost']['content'],
+		'description' => $data['BlogPost']['content'].$data['BlogPost']['detail'],
 		'pubDate' => $data['BlogPost']['posts_date']
 	);
 }

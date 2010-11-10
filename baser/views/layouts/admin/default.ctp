@@ -24,6 +24,7 @@
 <?php $baser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
+<meta name="robots" content="noindex,nofollow" />
 <?php $baser->charset() ?>
 <?php $baser->title() ?>
 <?php $baser->metaDescription() ?>

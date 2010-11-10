@@ -72,7 +72,8 @@
  * @param string $version
  */
 	function verpoint($version) {
-		if(preg_match("/BaserCMS ([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
+		$version = str_replace('BaserCMS ', '', $version);
+		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
 			return $maches[1]*1000000 + $maches[2]*1000 + $maches[3];
 		}else {
 			return 0;
@@ -296,6 +297,7 @@
  * なければ生成する
  */
 	function checkTmpFolders(){
+		
 		if(!is_writable(TMP)){
 			return;
 		}
@@ -307,6 +309,8 @@
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
+		$folder->create(CACHE.'schemas',0777);
+		
 	}
 /**
  * 現在のビューディレクトリのパスを取得する

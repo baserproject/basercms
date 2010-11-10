@@ -56,7 +56,7 @@ class PluginHookHelper extends AppHelper {
 				$sources = $db->listSources();
 				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
 					$Plugin =& ClassRegistry::init('Plugin','Model');
-					$plugins = $Plugin->find('all',array('fields'=>array('name')));
+					$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
 					$plugins = Set::extract('/Plugin/name',$plugins);
 				}
 			}

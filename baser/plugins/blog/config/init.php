@@ -19,5 +19,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->Plugin->initDatabase('plugin','blog');
+$this->Plugin->initDb('blog');
 ?>
