@@ -97,6 +97,10 @@
 		$this->setMessage('plugins テーブルの更新に失敗しました。', true);
 	}
 /**
+ * スキーマ用の一時フォルダを作成する
+ */
+	checkTmpFolders();
+/**
  * プラグインの有効化を促すメッセージを追加
  */
 	$this->setMessage('全てのプラグインは一時的に無効状態になっています。', true);
