@@ -297,6 +297,7 @@
  * なければ生成する
  */
 	function checkTmpFolders(){
+		
 		if(!is_writable(TMP)){
 			return;
 		}
@@ -308,6 +309,8 @@
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
+		$folder->create(CACHE.'schemas',0777);
+		
 	}
 /**
  * 現在のビューディレクトリのパスを取得する
