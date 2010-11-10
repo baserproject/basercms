@@ -264,9 +264,6 @@ class InstallationsController extends AppController {
 
 			} elseif($this->data['clicked'] == 'finish') {
 				
-				// データベース設定ファイルに設定内容を書き込む
-				//$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
-
 				// DB接続
 				$db =& $this->_connectDb($this->_readDbSettingFromSession());
 
