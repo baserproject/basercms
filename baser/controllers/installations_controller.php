@@ -323,6 +323,9 @@ class InstallationsController extends AppController {
 		// ブログの投稿日を更新
 		$this->_updateEntryDate();
 
+		// プラグインのステータスを更新
+		$this->_updatePluginStatus();
+
 		// ログイン
 		$this->_login();
 
@@ -364,6 +367,34 @@ class InstallationsController extends AppController {
 			return false;
 		}
 
+	}
+/**
+ * プラグインのステータスを更新する
+ *
+ * @return	boolean
+ * @access	protected
+ */
+	function _updatePluginStatus() {
+		
+		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+		$version = $this->getBaserVersion();
+		App::import('Model', 'Plugin');
+		$Plugin = new Plugin();
+		$datas = $Plugin->find('all');
+		if($datas){
+			$result = true;
+			foreach($datas as $data) {
+				$data['Plugin']['version'] = $version;
+				$data['Plugin']['status'] = true;
+				if(!$Plugin->save($data)) {
+					$result = false;
+				}
+			}
+			return $result;
+		} else {
+			return false;
+		}
+		
 	}
 /**
  * 登録日を更新する
