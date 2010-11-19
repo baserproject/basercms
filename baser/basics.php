@@ -305,11 +305,11 @@
 		$folder = new Folder();
 		$folder->create(TMP.'logs',0777);
 		$folder->create(TMP.'sessions',0777);
-		$folder->create(CACHE);
+		$folder->create(TMP.'schemas',0777);
+		$folder->create(CACHE, 0777);
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
-		$folder->create(CACHE.'schemas',0777);
 		
 	}
 /**

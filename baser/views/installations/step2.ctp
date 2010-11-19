@@ -144,9 +144,9 @@ $(function(){
 		</li>
 	</ul>
 	<h4>PHPセーフモード</h4>
-	<div class="section">BaserCMSはセーフモードがOnの場合でも動作実績がありますが、完全にサポートしているわけではありません。
-		正常に動作しない可能性がありますのでご注意ください。<br />
-		<small>セーフモードがOnの場合、BaserCMSが内部的に利用するフォルダの生成や権限の付与に失敗する事があるので、その場合は、手動による個別対応が必要です。</small> </div>
+	
+	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとBaserCMSは正常に動作しません。
+		<small>ページ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は正常に動作しません。</small></div>
 	<ul class="section">
 		<li>
 			<div class='<?php if ($safeModeOff) echo 'check'; else echo 'failed'; ?>'></div>
@@ -160,7 +160,17 @@ $(function(){
 			</p>
 		</li>
 	</ul>
+	<?php if (!$safeModeOff) : ?>
+	<div class="section">
+		<strong style="color:#F00">次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
+		レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
+		サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。<br />
+		<small>次の２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので、残念ながらBaserCMSを正常に動作させる事はできません。</small>
+	</div>
+<pre>AddHandler application/x-httpd-phpcgi .php
+mod_gzip_on Off</pre>
 </div>
+	<?php endif ?>
 <form action='step2' method="post" id="checkenv">
 	<div style="float:left">
 		<button class='btn-orange button' id='btncheckagain'  type='submit' ><span>再チェック</span></button>

@@ -357,7 +357,8 @@ class InstallationsController extends AppController {
 		$corefilename=CONFIGS.'install.php';
 		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
 											"Configure::write('Baser.firstAccess', true);",
-											"Configure::write('Cache.disable', false);", "?>");
+											"Configure::write('Cache.disable', false);",
+											"Cache::config('default', array('engine' => 'File'));","?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
 			return chmod($corefilename,0666);
 		}else {
@@ -430,6 +431,7 @@ class InstallationsController extends AppController {
 
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
 		$installationSetting = $this->Session->read('Installation');
+		Configure::write('Security.salt', $installationSetting['salt']);
 		$extra['data']['User']['name'] = $installationSetting['admin_username'];
 		$extra['data']['User']['password'] = $installationSetting['admin_password'];
 		$this->requestAction('/admin/users/login_exec', $extra);
