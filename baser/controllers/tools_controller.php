@@ -60,7 +60,9 @@ class ToolsController extends AppController {
 
 		$path = TMP.'schemas'.DS;
 		
-		if($this->data) {
+		if(!$this->data) {
+			$this->data['Tool']['connection'] = 'baser';
+		} else {
 			if(empty($this->data['Tool']['tables'])) {
 				$this->Session->setFlash('テーブルを選択してください。');
 			}else {

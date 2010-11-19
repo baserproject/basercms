@@ -48,6 +48,7 @@ class Tool extends AppModel {
 	function getControlSource ($field) {
 
 		// スキーマ用モデルリスト
+		$controlSources['connection'] = array('baser'=>'baser（コア）','plugin'=>'plugin（プラグイン）');
 		$controlSources['tables'] = $this->getListModels();
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -83,7 +84,7 @@ class Tool extends AppModel {
  * @return	boolean
  * @access	public
  */
-	function writeSchema($data, $path){
+	function writeSchema($data, $path, $dbConfigName){
 		
 		if(isset($data['Tool'])){
 			$data = $data['Tool'];
@@ -92,7 +93,7 @@ class Tool extends AppModel {
 			return false;
 		}
 		$result = true;
-		if(!$this->_writeSchema('tables', $data['tables'], $path)){
+		if(!$this->_writeSchema('tables', $data['tables'], $path, $data['connection'])){
 			$result = false;
 			break;
 		}
@@ -134,9 +135,9 @@ class Tool extends AppModel {
  * @return	boolean
  * @access	protected
  */
-	function _writeSchema($field, $values, $path) {
+	function _writeSchema($field, $values, $path, $dbConfigName='baser') {
 
-		$db =& ConnectionManager::getDataSource('baser');
+		$db =& ConnectionManager::getDataSource($dbConfigName);
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();
