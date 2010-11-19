@@ -252,15 +252,48 @@ class PluginsController extends AppController {
 	}
 /**
  * プラグインファイルを削除する
- * データベースのデータは削除せずそのまま残す
+ *
  * @param string $pluginName
  * @access private
  */
 	function __deletePluginFile($pluginName) {
-		$folder = new Folder();
+
+		$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql'.DS;
+		$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'.DS;
+		$tmpPath = TMP.'schemas'.DS.'uninstall'.DS;
+		$folder = new Folder($tmpPath);
+		$folder->delete();
+		$folder->create($tmpPath);
+
+		if(is_dir($appPath)) {
+			$path = $appPath;
+		}else {
+			$path = $baserPath;
+		}
+
+		// インストール用スキーマをdropスキーマとして一時フォルダに移動
+		$folder = new Folder($path);
+		$files = $folder->read(true, true);
+		if(is_array($files[1])) {
+			foreach($files[1] as $file) {
+				if(preg_match('/\.php$/', $file)) {
+					$from = $path.DS.$file;
+					$to = $tmpPath.'drop_'.$file;
+					copy($from, $to);
+					chmod($to, 0666);
+				}
+			}
+		}
+
+		// テーブルを削除
+		$this->Plugin->loadSchema('plugin', $tmpPath);
+
+		// プラグインフォルダを削除
 		$folder->delete(APP.'plugins'.DS.$pluginName);
-		//$folder->delete(APP.'db'.DS.'csv'.DS.$pluginName);
-		//$folder->delete(BASER_PLUGINS.$pluginName);
+
+		// 一時フォルダを削除
+		$folder->delete($tmpPath);
+		
 	}
 /**
  * [ADMIN] 登録処理
