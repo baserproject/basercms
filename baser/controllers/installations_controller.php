@@ -492,8 +492,13 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	function &_connectDb($config, $name='baser') {
-
-		return ConnectionManager::create($name ,array( 'driver' => $config['dbType'],
+		
+		if($name == 'plugin') {
+			$config['dbPrefix'].=Configure::read('Baser.pluginDbPrefix');
+		}
+		
+		$result =  ConnectionManager::create($name ,array(
+				'driver' => $config['dbType'],
 				'persistent' => false,
 				'host' => $config['dbHost'],
 				'port' => $config['dbPort'],
@@ -503,6 +508,12 @@ class InstallationsController extends AppController {
 				'schema' => $config['dbSchema'],
 				'prefix' =>  $config['dbPrefix'],
 				'encoding' => $config['dbEncoding']));
+		
+		if($result) {
+			return $result;
+		} else {
+			return ConnectionManager::getDataSource($name);
+		}
 
 	}
 /**
@@ -510,26 +521,43 @@ class InstallationsController extends AppController {
  */
 	function _constructionDb() {
 
-		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+		if(!$this->_constructionTable(BASER_CONFIGS.'sql')) {
+			return false;
+		}
+		if(!$this->_constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin')) {
+			return false;
+		}
+		if(!$this->_constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin')) {
+			return false;
+		}
+		if(!$this->_constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin')) {
+			return false;
+		}
+		return true;
 
-		/* データベースを構築する */
-		if ($db->connected || $db->config['driver']=='csv') {
+	}
+/**
+ * テーブルを構築する
+ *
+ * @param	string	$configKeyName
+ * @param	string	$path
+ * @return	boolean
+ */
+	function _constructionTable($path, $configKeyName = 'baser') {
 
-			$paths = array(BASER_CONFIGS.'sql',
-							BASER_PLUGINS.'blog'.DS.'config'.DS.'sql',
-							BASER_PLUGINS.'feed'.DS.'config'.DS.'sql',
-							BASER_PLUGINS.'mail'.DS.'config'.DS.'sql');
-			$initFiles = array();
-			foreach($paths as $path) {
-				$folder = new Folder($path);
-				$files = $folder->read(true, true, true);
-				if(isset($files[1])) {
-					$initFiles = am($initFiles, $files[1]);
-				}
-			}
+		$db =& $this->_connectDb($this->_readDbSettingFromSession(), $configKeyName);
+
+		if (!$db->connected && $db->config['driver']!='csv') {
+			return false;
+		}
+		
+		$folder = new Folder($path);
+		$files = $folder->read(true, true, true);
+		
+		if(isset($files[1])) {
 
 			// DB構築
-			foreach($initFiles as $file) {
+			foreach($files[1] as $file) {
 				if(!preg_match('/\.php$/',$file)) {
 					continue;
 				}
@@ -539,7 +567,7 @@ class InstallationsController extends AppController {
 			}
 
 			// 初期データ投入
-			foreach($initFiles as $file) {
+			foreach($files[1] as $file) {
 				if(!preg_match('/\.csv$/',$file)) {
 					continue;
 				}
@@ -547,13 +575,9 @@ class InstallationsController extends AppController {
 					return false;
 				}
 			}
-
-			return true;
-
-		} else {
-			return false;
 		}
-
+		return true;
+		
 	}
 /**
  * ステップ３用のフォーム初期値を取得する
@@ -799,7 +823,7 @@ class InstallationsController extends AppController {
 			$dbfilehandler->write("\t'password' => '".$dbPassword."',\n");
 			$dbfilehandler->write("\t'database' => '".$this->_getRealDbName($dbType, $dbName)."',\n");
 			$dbfilehandler->write("\t'schema' => '".$dbSchema."',\n");
-			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."',\n");
+			$dbfilehandler->write("\t'prefix' => '".$dbPrefix.Configure::read('Baser.pluginDbPrefix')."',\n");
 			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
 			$dbfilehandler->write(");\n");
 			$dbfilehandler->write("}\n");

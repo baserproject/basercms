@@ -49,9 +49,9 @@ class Tool extends AppModel {
 
 		// スキーマ用モデルリスト
 		$controlSources['connection'] = array('baser'=>'baser（コア）','plugin'=>'plugin（プラグイン）');
-		$controlSources['tables'] = $this->getListModels();
-		if(isset($controlSources[$field])) {
-			return $controlSources[$field];
+		$controlSources = $this->getListModels($field);
+		if(isset($controlSources)) {
+			return $controlSources;
 		}else {
 			return false;
 		}
@@ -62,16 +62,19 @@ class Tool extends AppModel {
  * @param string $ds
  * @return array
  */
-	function getListModels(){
+	function getListModels($configKeyName = 'baser'){
 
-		$db =& ConnectionManager::getDataSource('baser');
+		$db =& ConnectionManager::getDataSource($configKeyName);
 		$listSources = $db->listSources();
 		if(!$listSources){
 			return array();
 		}
 		$sources = array();
 		foreach($listSources as $source) {
-			$sources[] = $source;
+			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $source, $matches) &&
+					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+				$sources[] = $source;
+			}
 		}
 		return $sources;
 		
@@ -84,18 +87,26 @@ class Tool extends AppModel {
  * @return	boolean
  * @access	public
  */
-	function writeSchema($data, $path, $dbConfigName){
+	function writeSchema($data, $path){
 		
 		if(isset($data['Tool'])){
 			$data = $data['Tool'];
 		}
-		if(!$data['tables']){
+		if(!$data['baser'] && !$data['plugin']){
 			return false;
 		}
+
 		$result = true;
-		if(!$this->_writeSchema('tables', $data['tables'], $path, $data['connection'])){
-			$result = false;
-			break;
+
+		if($data['baser']) {
+			if(!$this->_writeSchema('baser', $data['baser'], $path)){
+				$result = false;
+			}
+		}
+		if($data['plugin']) {
+			if(!$this->_writeSchema('plugin', $data['plugin'], $path)){
+				$result = false;
+			}
 		}
 		return $result;
 
@@ -135,9 +146,9 @@ class Tool extends AppModel {
  * @return	boolean
  * @access	protected
  */
-	function _writeSchema($field, $values, $path, $dbConfigName='baser') {
+	function _writeSchema($field, $values, $path) {
 
-		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db =& ConnectionManager::getDataSource($field);
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();

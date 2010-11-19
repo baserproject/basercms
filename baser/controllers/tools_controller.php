@@ -32,7 +32,7 @@ class ToolsController extends AppController {
  * @access  public
  */
 	var $name = 'Tools';
-	var $uses = array('Tool');
+	var $uses = array('Tool', 'Page');
 /**
  * コンポーネント
  *
@@ -51,6 +51,184 @@ class ToolsController extends AppController {
  */
 	var $subMenuElements = array('tools');
 /**
+ * データメンテナンス
+ *
+ * @param	string	$mode
+ */
+	function admin_maintenance($mode='') {
+
+		switch($mode) {
+			case 'backup':
+				$this->_backupDb();
+				break;
+			case 'restore':
+				if(!$this->data) {
+					$this->notFound();
+				}
+				$messages = array();
+				if($this->_restoreDb($this->data)) {
+					$messages[] = 'データの復元が完了しました。';
+				} else {
+					$messages[] = 'データの復元に失敗しました。';
+				}
+				if(!$this->Page->createAllPageTemplate()){
+					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
+				}
+				if($messages) {
+					$this->Session->setFlash(implode('<br />', $messages));
+				}
+				$this->redirect(array('action'=>'maintenance'));
+				break;
+		}
+		$this->pageTitle = 'データメンテナンス';
+		$this->subMenuElements = array('site_configs');
+
+	}
+/**
+ * バックアップファイルを復元する
+ *
+ * @param	array	$data
+ * @return	boolean
+ * @access	protected
+ */
+	function _restoreDb($data){
+		
+		if(empty($data['Tool']['backup']['tmp_name'])){
+			return false;
+		}
+		
+		$tmpPath = TMP.'schemas'.DS;
+		$targetPath = $tmpPath.$data['Tool']['backup']['name'];
+
+		if(!move_uploaded_file($data['Tool']['backup']['tmp_name'], $targetPath)) {
+			return false;
+		}
+
+		/* ZIPファイルを解凍する */
+		App::import('Vendor', 'Simplezip');
+		$Simplezip = new Simplezip();
+		if(!$Simplezip->unzip($targetPath, $tmpPath)){
+			return false;
+		}
+		@unlink($targetPath);
+
+		if(!$this->_loadBackup($tmpPath.'baser'.DS, 'baser')) {
+			return false;
+		}
+		if(!$this->_loadBackup($tmpPath.'plugin'.DS, 'plugin')) {
+			return false;
+		}
+
+		$this->_resetTmpSchemaFolder();
+		clearAllCache();
+		
+		return true;
+		
+	}
+/**
+ * データベースをレストア
+ *
+ * @param	string	$path			スキーマファイルのパス
+ * @param	string	$configKeyName	DB接続名
+ * @return	boolean
+ * @access	protected
+ */
+	function _loadBackup($path, $configKeyName) {
+
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if(!is_array($files[1])){
+			return false;
+		}
+		
+		$db =& ConnectionManager::getDataSource($configKeyName);
+		
+		/* テーブルを削除する */
+		foreach($files[1] as $file) {
+			if(preg_match("/\.php$/", $file)) {
+				if(!$db->loadSchema(array('type'=>'drop','path' => $path, 'file'=> $file))){
+					return false;
+				}
+			}
+		}
+
+		/* テーブルを読み込む */
+		foreach($files[1] as $file) {
+			if(preg_match("/\.php$/", $file)) {
+				if(!$db->loadSchema(array('type'=>'create','path' => $path, 'file'=> $file))){
+					return false;
+				}
+			}
+		}
+
+		/* CSVファイルを読み込む */
+		foreach($files[1] as $file) {
+			if(preg_match("/\.csv$/", $file)) {
+				if(!$db->loadCsv(array('path' => $path.$file, 'encoding' => 'SJIS'))){
+					return false;
+				}
+			}
+		}
+
+		return true;
+		
+	}
+/**
+ * バックアップデータを作成する
+ *
+ * @return 	void
+ * @access	public
+ */
+	function _backupDb() {
+
+		$tmpDir = TMP . 'schemas' . DS;
+		$version = $this->getBaserVersion();
+		$Folder = new Folder();
+		$Folder->delete($tmpDir);
+		$Folder->create($tmpDir.'baser'.DS, 0777);
+		$Folder->create($tmpDir.'plugin'.DS, 0777);
+		$this->_writeBackup('baser', $tmpDir.'baser'.DS);
+		$this->_writeBackup('plugin', $tmpDir.'plugin'.DS);
+
+		// ZIP圧縮して出力
+		$fileName = 'baserbackup_'.$version.'_'.date('Ymd_His');
+		App::import('Vendor','Simplezip');
+		$Simplezip = new Simplezip;
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($fileName);
+		$this->_resetTmpSchemaFolder();
+		exit();
+
+	}
+/**
+ * バックアップファイルを書きだす
+ *
+ * @param	string	$configKeyName
+ * @param	string	$path
+ * @return	boolean;
+ */
+	function _writeBackup($configKeyName, $path) {
+
+		$db =& ConnectionManager::getDataSource($configKeyName);
+		$db->cacheSources = false;
+		$tables = $db->listSources();
+		foreach($tables as $table) {
+			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $table, $matches) &&
+					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+				$table = $matches[1];
+				$model = Inflector::classify(Inflector::singularize($table));
+				if(!$db->writeSchema(array('path'=>$path, 'model'=>$model))){
+					return false;
+				}
+				if(!$db->writeCsv(array('path'=>$path.$table.'.csv'))) {
+					return false;
+				}
+			}
+		}
+		return true;
+
+	}
+/**
  * モデル名からスキーマファイルを生成する
  *
  * @return  void
@@ -63,7 +241,7 @@ class ToolsController extends AppController {
 		if(!$this->data) {
 			$this->data['Tool']['connection'] = 'baser';
 		} else {
-			if(empty($this->data['Tool']['tables'])) {
+			if(empty($this->data['Tool'])) {
 				$this->Session->setFlash('テーブルを選択してください。');
 			}else {
 				if(!$this->_resetTmpSchemaFolder()){
@@ -71,10 +249,10 @@ class ToolsController extends AppController {
 					$this->redirect(array('action'=>'admin_write_schema'));
 				}
 				if($this->Tool->writeSchema($this->data, $path)) {
-					App::import('Vendor','Createzip');
-					$Createzip = new Createzip();
-					$Createzip->addFolder($path);
-					$Createzip->download('schemas');
+					App::import('Vendor','Simplezip');
+					$Simplezip = new Simplezip();
+					$Simplezip->addFolder($path);
+					$Simplezip->download('schemas');
 					exit();
 				}else {
 					$this->Session->setFlash('スキーマファイルの生成に失敗しました。');

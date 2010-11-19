@@ -61,6 +61,10 @@
  */
 	Configure::write('Baser.cachetime','1 month');
 /**
+ * プラグインDBプレフィックス
+ */
+	Configure::write('Baser.pluginDbPrefix', 'pg_');
+/**
  * baserUrl取得
  */
 	$baseUrl = baseUrl();

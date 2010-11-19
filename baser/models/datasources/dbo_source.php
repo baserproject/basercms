@@ -2569,7 +2569,7 @@ class DboSource extends DataSource {
 		$file = basename($filename);
 		$path = dirname($filename);
 		$name = basename(Inflector::classify(basename($file)), '.php');
-		$Schema = ClassRegistry::init('CakeSchema');
+		$Schema = ClassRegistry::init('Core', 'CakeSchema');
 		$Schema->connection = $this->connection;
 
 		if(empty($path)){
@@ -2579,7 +2579,8 @@ class DboSource extends DataSource {
 		$tables = $this->listSources();
 		$models = array();
 		foreach($tables as $table) {
-			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches)) {
+			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches) &&
+					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
 			}
 		}
@@ -2589,7 +2590,7 @@ class DboSource extends DataSource {
 /**
  * モデル名を指定してスキーマファイルを生成する
  * 
- * @param	array	models	モデル名
+ * @param	array	model	モデル名
  *					path	スキーマファイルの生成場所
  * @return	mixed	スキーマファイルの内容 Or false
  * @access	public
@@ -3005,7 +3006,9 @@ class DboSource extends DataSource {
  * @access	public
  */
 	function readSchema($table) {
+		
 		$this->cacheSources = false;
+		ClassRegistry::flush();
 		$tables = $this->listSources();
 		if(!in_array($this->config['prefix'].$table, $tables)){
 			return false;
@@ -3015,6 +3018,7 @@ class DboSource extends DataSource {
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		return $CakeSchema->read(array('models'=>array($model)));
+		
 	}
 /**
  * CSVファイルをDBに読み込む
@@ -3059,7 +3063,7 @@ class DboSource extends DataSource {
 					unset($head[$key]);
 					continue;
 				}
-				if($_head[$key]=='created'){
+				if($_head[$key]=='created' && !$value){
 					$value = date('Y-m-d H:i:s');
 				}
 				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
@@ -3079,6 +3083,96 @@ class DboSource extends DataSource {
 		
 		return true;
 
+	}
+/**
+ * CSV用のフィールドデータに変換する
+ *
+ * @param string $value
+ * @param boolean $dc （ " を "" に変換するか）
+ * @return string
+ */
+	function _convertFieldToCsv($value,$dc = true) {
+		if($dc) {
+			$value = str_replace('"','""',$value);
+		}
+		$value = trim(trim($value),"\'");
+		$value = str_replace("\\'","'",$value);
+		$value = str_replace('{CM}',',',$value);
+		$value = '"'.$value.'"';
+		return $value;
+	}
+/**
+ * CSV用のレコードデータに変換する
+ *
+ * @param array $record
+ * @return array
+ */
+	function _convertRecordToCsv($record) {
+		foreach($record as $field => $value) {
+			$record[$field] = $this->_convertFieldToCsv($value);
+		}
+		return $record;
+	}
+/**
+ * DBのデータをCSVファイルとして書きだす
+ *
+ * @param	array	$options [ path / table / encoding ]
+ * @return	boolean
+ * @access	public
+ */
+	function writeCsv($options) {
+
+		extract($options);
+		if(!isset($path)) {
+			return false;
+		}
+		if(!isset($encoding)) {
+			$encoding = 'SJIS';
+		}
+		if(!isset($table)) {
+			$table = basename($path, '.csv');
+		}
+
+		$appEncoding = Configure::read('App.encoding');
+		$fullTableName = $this->config['prefix'].$table;
+		$sql = $this->renderStatement('select', array('table'=>$fullTableName,
+														'fields'=>'*',
+														'conditions'=>'WHERE 1=1',
+														'alias'=>'',
+														'joins'=>'',
+														'group'=>'',
+														'order'=>'',
+														'limit'=>''));
+		$datas = $this->query($sql);
+
+		if(!$datas) {
+			// データがない場合はtrueを返して終了
+			return true;
+		}
+
+		$fp = fopen($path, 'a');
+		ftruncate($fp,0);
+
+		// ヘッダを書込
+		$heads = array();
+		foreach($datas[0][$fullTableName] as $key => $value) {
+			$heads[] = '"'.$key.'"';
+		}
+		fwrite($fp, implode(",",$heads)."\r\n");
+
+		// データを書込
+		foreach($datas as $data) {
+			$record = $data[$fullTableName];
+			$record = $this->_convertRecordToCsv($record);
+			mb_convert_variables($encoding,$appEncoding,$record);
+			$csv = implode(',',$record)."\r\n";
+			fwrite($fp, $csv);
+		}
+
+		fclose($fp);
+
+		return true;
+		
 	}
 // <<<
 }

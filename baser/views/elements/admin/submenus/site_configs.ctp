@@ -44,10 +44,10 @@
 	<h2>ユーティリティ</h2>
 	<ul>
 		<li>
-			<?php $baser->link('データバックアップ',array('controller'=>'site_configs','action'=>'backup_data',1),array(),'データベースのデータをダウンロードします。いいですか？') ?>
+			<?php $baser->link('サーバーキャッシュ削除',array('controller'=>'site_configs','action'=>'del_cache'),array(),'サーバーキャッシュを削除します。いいですか？') ?>
 		</li>
 		<li>
-			<?php $baser->link('サーバーキャッシュ削除',array('controller'=>'site_configs','action'=>'del_cache'),array(),'サーバーキャッシュを削除します。いいですか？') ?>
+			<?php $baser->link('データメンテナンス',array('controller'=>'tools','action'=>'maintenance')) ?>
 		</li>
 		<li>
 			<?php $baser->link('環境情報',array('controller'=>'site_configs','action'=>'info')) ?>
