@@ -44,8 +44,12 @@
 <?php echo $formEx->create('Tool',array('action'=>'write_schema')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.tables', 'テーブル名') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Tool.tables',$formEx->getControlSource('Tool.tables'),null,array('multiple'=>true, 'style'=>'width:100%;height:450px')) ?> <?php echo $formEx->error('Tool.tables') ?></td>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser', 'コアテーブル名') ?></th>
+		<td class="col-input"><?php echo $formEx->select('Tool.baser',$formEx->getControlSource('Tool.baser'),null,array('multiple'=>true, 'style'=>'width:400px;height:250px')) ?> <?php echo $formEx->error('Tool.baser') ?></td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin', 'プラグインテーブル名') ?></th>
+		<td class="col-input"><?php echo $formEx->select('Tool.plugin',$formEx->getControlSource('Tool.plugin'),null,array('multiple'=>true, 'style'=>'width:400px;height:250px')) ?> <?php echo $formEx->error('Tool.plugin') ?></td>
 	</tr>
 </table>
 <div class="align-center"> <?php echo $formEx->end(array('label'=>'生　成','div'=>false,'class'=>'btn-red button')) ?> </div>

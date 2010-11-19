@@ -11,7 +11,7 @@
 	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。<br />
 		<strong>実行する前には必ずバックアップを実行しておいてください。</strong></p>
 	<p>
-		<?php $baser->link('≫ バックアップはこちらから','/admin/site_configs/backup_data') ?>
+		<?php $baser->link('≫ バックアップはこちらから','/admin/tools/maintenance/backup') ?>
 	</p>
 		<?php endif ?>
 	<?php echo $form->create(array('action'=>$this->action, 'url'=>array($plugin))) ?>

@@ -71,7 +71,7 @@
 			<?php $baser->link('登録',array('action'=>'add', $listData['Plugin']['name']),array('class'=>'btn-green-s button-s'),null,false) ?>
 			<?php endif ?>
 			<?php if(!$listData['Plugin']['status']): ?>
-			<?php $baser->link('削除', array('action'=>'delete_file', $listData['Plugin']['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\nプラグインフォルダ内のファイルも全て削除されますが、データベースに保存した情報は削除されずそのまま残ります。', $listData['Plugin']['name']),false); ?>
+			<?php $baser->link('削除', array('action'=>'delete_file', $listData['Plugin']['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。', $listData['Plugin']['name']),false); ?>
 			<?php endif; ?>
 			<?php if($listData['Plugin']['old_version']): ?>
 			<br /><small style="color:#CC0000">新しいバージョンに<br />アップデートして下さい</small>

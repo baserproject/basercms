@@ -36,13 +36,13 @@ $(function(){
 	<?php $baser->contentsTitle() ?>
 </h2>
 <?php if(!$complete): ?>
-<p>BaserCMSを初期化します。データベースのデータも全て削除されます。<br />
-	データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行して下さい。</p>
-<p>ファイルベースのデータベースの保存場所は下記のとおりです。</p>
-<ul>
-	<li>SQLite：　/app/db/sqlite/</li>
-	<li>CSV：　/app/db/csv/</li>
-</ul>
+<p>BaserCMSを初期化します。データベースのデータも全て削除されます。</p>
+	<?php if(isInstalled()): ?>
+<p>データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行して下さい。</p>
+<p>
+	<?php $baser->link('≫ バックアップはこちらから','/admin/tools/maintenance/backup') ?>
+</p>
+	<?php endif ?>
 <?php echo $form->create(array('action'=>'reset')) ?> <?php echo $form->hidden('Installation.reset',array('value'=>true)) ?> <?php echo $form->end(array('label'=>'初期化する','class'=>'button btn-gray')) ?>
 <?php else: ?>
 <p>引き続きBaserCMSのインストールを行うには、「インストール実行」ボタンをクリックしてください。</p>
