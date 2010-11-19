@@ -850,9 +850,7 @@ class InstallationsController extends AppController {
 		$folder = new Folder();
 		
 		/* SQLite利用可否チェック */
-		if(function_exists('sqlite_libversion') &&
-				class_exists('PDO') &&
-				version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
+		if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
 			
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
