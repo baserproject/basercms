@@ -793,7 +793,7 @@ class DboCsv extends DboSource {
 		// 主キーがない場合のauto処理
 		if(empty($queryData['values']['id'])) {
 			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
-			$this->_lastInsertId = $queryData['values']['id'];
+			$this->_lastInsertId = str_replace('"','',$queryData['values']['id']);
 		}else{
 			$this->_csvFields = fgetcsv($this->connection[$queryData['tableName']],10240);
 		}
