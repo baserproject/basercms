@@ -146,7 +146,8 @@ $(function(){
 	<h4>PHPセーフモード</h4>
 	
 	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとBaserCMSの全ての機能を利用する事はできません。
-		<small>ページカテゴリ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は、事前にFTPでの作業を併用する必要があります。</small></div>
+		<small>ページカテゴリ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は、事前にFTPでの作業を併用する必要があります。</small><br />
+	</div>
 	<ul class="section">
 		<li>
 			<div class='<?php if ($safeModeOff) echo 'check'; else echo 'failed'; ?>'></div>
@@ -160,7 +161,7 @@ $(function(){
 			</p>
 		</li>
 	</ul>
-	<?php if ($safeModeOff) : ?>
+	<?php if (!$safeModeOff) : ?>
 	<div class="section">
 		<strong style="color:#F00">次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
 		レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
@@ -178,8 +179,9 @@ mod_gzip_on Off</pre>
 		<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite / CSVを利用する場合）</li>
 		<li>/baser/config/theme/ 内の全て　→　/app/webroot/themed/</li>
 	</ul>
-</div>
 	<?php endif ?>
+</div>
+	
 <form action='step2' method="post" id="checkenv">
 	<div style="float:left">
 		<button class='btn-orange button' id='btncheckagain'  type='submit' ><span>再チェック</span></button>

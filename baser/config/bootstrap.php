@@ -30,7 +30,9 @@
 /**
  * tmpフォルダ確認
  */
-	checkTmpFolders();
+	if(isInstalled()) {
+		checkTmpFolders();
+	}
 /**
  * Baserパス追加
  */

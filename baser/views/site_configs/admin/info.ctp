@@ -71,6 +71,7 @@ h2 {
 <ul style="margin:20px 40px">
 	<li>スマートURL： <?php echo $smartUrl ?></li>
 	<li>設置フォルダ： <?php echo ROOT.DS ?></li>
+	<li>セーフモード：<?php if($safeModeOn): ?>On<?php else: ?>Off<?php endif ?>
 	<li>データベース： <?php echo $driver ?></li>
 	<li>BaserCMSバージョン： <?php echo $baserVersion ?></li>
 	<li>CakePHPバージョン： <?php echo $cakeVersion ?></li>
