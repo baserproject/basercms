@@ -145,8 +145,8 @@ $(function(){
 	</ul>
 	<h4>PHPセーフモード</h4>
 	
-	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとBaserCMSは正常に動作しません。
-		<small>ページ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は正常に動作しません。</small></div>
+	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとBaserCMSの全ての機能を利用する事はできません。
+		<small>ページカテゴリ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は、事前にFTPでの作業を併用する必要があります。</small></div>
 	<ul class="section">
 		<li>
 			<div class='<?php if ($safeModeOff) echo 'check'; else echo 'failed'; ?>'></div>
@@ -160,15 +160,24 @@ $(function(){
 			</p>
 		</li>
 	</ul>
-	<?php if (!$safeModeOff) : ?>
+	<?php if ($safeModeOff) : ?>
 	<div class="section">
 		<strong style="color:#F00">次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
 		レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
 		サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。<br />
-		<small>次の２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので、残念ながらBaserCMSを正常に動作させる事はできません。</small>
 	</div>
-<pre>AddHandler application/x-httpd-phpcgi .php
+	<pre class="section">AddHandler application/x-httpd-phpcgi .php
 mod_gzip_on Off</pre>
+	<div class="section">
+		上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。
+		BaserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />
+		FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、コピーしたもの全てに書き込み権限を与えます。<br />
+		コピーと権限の変更が完了したら次のステップに進みインストールを続けます。
+	</div>
+	<ul class="section"><li>/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/</li>
+		<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite / CSVを利用する場合）</li>
+		<li>/baser/config/theme/ 内の全て　→　/app/webroot/themed/</li>
+	</ul>
 </div>
 	<?php endif ?>
 <form action='step2' method="post" id="checkenv">
