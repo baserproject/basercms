@@ -551,8 +551,11 @@ class InstallationsController extends AppController {
 
 		if (!$db->connected && $db->config['driver']!='csv') {
 			return false;
+		} elseif($db->config['driver'] == 'csv') {
+			// CSVの場合はフォルダを作成する
+			$folder = new Folder($db->config['database'], true, 0777);
 		}
-		
+
 		$folder = new Folder($path);
 		$files = $folder->read(true, true, true);
 		
