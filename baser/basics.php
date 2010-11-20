@@ -306,10 +306,42 @@
 		$folder->create(TMP.'logs',0777);
 		$folder->create(TMP.'sessions',0777);
 		$folder->create(TMP.'schemas',0777);
+		$folder->create(TMP.'schemas'.DS.'baser', 0777);
+		$folder->create(TMP.'schemas'.DS.'plugin', 0777);
 		$folder->create(CACHE, 0777);
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
+		
+	}
+/**
+ * フォルダの中をフォルダを残して空にする
+ *
+ * @param	string	$path
+ * @return	boolean
+ */
+	function emptyFolder($path) {
+
+		$result = true;
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true, true);
+		if(is_array($files[1])) {
+			foreach($files[1] as $file) {
+				if($file != 'empty') {
+					if(!@unlink($file)) {
+						$result = false;
+					}
+				}
+			}
+		}
+		if(is_array($files[0])) {
+			foreach($files[0] as $file) {
+				if(!emptyFolder($file)) {
+					$result = false;
+				}
+			}
+		}
+		return $result;
 		
 	}
 /**
