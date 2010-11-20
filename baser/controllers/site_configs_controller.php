@@ -131,14 +131,26 @@ class SiteConfigsController extends AppController {
 
 				if($this->readSmartUrl() != $smartUrl) {
 					if($smartUrl){
-						header('Location: '.$this->getRewriteBase('/admin/site_configs/form'));
+						$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
 					}else{
-						header('Location: '.$this->getRewriteBase('/index.php/admin/site_configs/form'));
+						$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
 					}
+					if($_SERVER['SERVER_PORT']=='443') {
+						$protocol = 'https';
+					} else {
+						$protocol = 'http';
+					}
+					if($_SERVER['SERVER_PORT'] !='80' && $_SERVER['SERVER_PORT'] != '443') {
+						$port = ':'.$_SERVER['SERVER_PORT'];
+					} else {
+						$port = '';
+					}
+					header('Location: '.$protocol.'://'.$_SERVER['SERVER_NAME'].$port.$redirectUrl);
+					exit();
 				}else{
 					$this->redirect(array('action'=>'form'));
 				}
-				
+
 			}
 		}
 
@@ -207,7 +219,7 @@ class SiteConfigsController extends AppController {
 		$this->set('baserVersion',$this->siteConfigs['version']);
 		$this->set('cakeVersion',$this->getCakeVersion());
 		$this->subMenuElements = array('site_configs');
-		
+
 	}
 
 }
