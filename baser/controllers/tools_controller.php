@@ -183,17 +183,14 @@ class ToolsController extends AppController {
 
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = $this->getBaserVersion();
-		$Folder = new Folder();
-		$Folder->delete($tmpDir);
-		$Folder->create($tmpDir.'baser'.DS, 0777);
-		$Folder->create($tmpDir.'plugin'.DS, 0777);
+		$this->_resetTmpSchemaFolder();
 		$this->_writeBackup('baser', $tmpDir.'baser'.DS);
 		$this->_writeBackup('plugin', $tmpDir.'plugin'.DS);
 
 		// ZIP圧縮して出力
 		$fileName = 'baserbackup_'.$version.'_'.date('Ymd_His');
 		App::import('Vendor','Simplezip');
-		$Simplezip = new Simplezip;
+		$Simplezip = new Simplezip();
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);
 		$this->_resetTmpSchemaFolder();
@@ -303,13 +300,7 @@ class ToolsController extends AppController {
 	function _resetTmpSchemaFolder() {
 		
 		$path = TMP.'schemas'.DS;
-		if(is_dir($path) && !is_writable($path)){
-			return false;
-		}
-		$Folder = new Folder();
-		$Folder->delete($path);
-		$Folder->create($path, 0777);
-		return true;
+		return emptyFolder($path);
 		
 	}
 	

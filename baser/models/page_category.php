@@ -141,6 +141,11 @@ class PageCategory extends AppModel {
  */
 	function beforeSave() {
 
+		// セーフモードの場合はフォルダの自動生成は行わない
+		if(ini_get('safe_mode')) {
+			return true;
+		}
+		
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->createPageCategoryFolder($this->data);
 		if($this->exists()) {

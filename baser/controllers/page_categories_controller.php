@@ -99,7 +99,12 @@ class PageCategoriesController extends AppController {
 
 			if($this->PageCategory->validates()) {
 				if($this->PageCategory->save($this->data,false)) {
-					$this->Session->setFlash('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
+					$message = 'ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。';
+					if(ini_get('safe_mode')) {
+						$message .= '<br />機能制限のセーフモードで動作しているので、手動で次のフォルダ内に追加したカテゴリと同階層のフォルダを作成し、書込権限を与える必要があります。<br />'.
+									WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'pages'.DS;
+					}
+					$this->Session->setFlash($message);
 					$this->PageCategory->saveDbLog('ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
 					$this->redirect('/admin/page_categories/index');
 				}else {
