@@ -145,9 +145,9 @@ class TimeExHelper extends TimeHelper {
  * @return	string 	Formatted date string
  * @access	public
  */
-	function format($format = 'Y-m-d', $date, $invalid = false, $userOffset = null) {
+	function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
 
-		if($date != "00:00:00" && (!$date||$date === 0)) {
+		if($date != "00:00:00" && (!$date||$date === 0||$date=='0000-00-00 00:00:00')) {
 			return "";
 		}
 
