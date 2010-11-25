@@ -271,7 +271,7 @@ class DboSqlite3 extends DboSource {
 					$data = trim(str_replace('/', '-', $data));
 				}
 				if ($data === '' || $data == '0000-00-00 00:00:00') {
-					return 'NULL';
+					return "''";
 				}
 				break;
 			default:
