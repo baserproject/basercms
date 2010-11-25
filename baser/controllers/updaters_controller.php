@@ -436,7 +436,9 @@ class UpdatersController extends AppController {
 		if(!$path) {
 			return false;
 		}
-		return $this->Updater->loadSchema('baser', $path, $filterTable, $filterType, array('updater.php'));
+		$result = $this->Updater->loadSchema('baser', $path, $filterTable, $filterType, array('updater.php'));
+		clearAllCache();
+		return $result;
 
 	}
 /**
