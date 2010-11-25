@@ -437,7 +437,7 @@ class FormExHelper extends FormHelper {
 			$value = $attributes['value'];
 			unset($attributes['value']);
 		}
-		if($value) {
+		if($value && $value != '0000-00-00 00:00:00') {
 			$dateValue = date('Y/m/d',strtotime($value));
 			$timeValue = date('H:i:s',strtotime($value));
 			$attributes['value']=$dateValue;
