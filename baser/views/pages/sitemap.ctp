@@ -35,6 +35,5 @@
 <h3 class="contents-head">非公開ページ</h3>
 <ul class="section">
 	<li><a href="<?php $baser->root() ?>admin/users/login">管理者ログイン</a></li>
-	<li><a href="<?php $baser->root() ?>about.html">メンバーログイン</a></li>
 </ul>
 <p class="section"><small>※ このテンプレートを利用される場合、非公開ページの一覧は削除をおすすめします。</small></p>

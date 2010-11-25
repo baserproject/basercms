@@ -48,7 +48,7 @@
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>重複しない識別名称を半角のみで入力して下さい。</li>
-					<li>識別名 admin は変更できません。</li>
+					<li>識別名 admins は変更できません。</li>
 				</ul>
 			</div>
 			<?php echo $form->error('UserGroup.name') ?></td>
