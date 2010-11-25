@@ -59,9 +59,11 @@ class ToolsController extends AppController {
 
 		switch($mode) {
 			case 'backup':
+				set_time_limit (0);
 				$this->_backupDb();
 				break;
 			case 'restore':
+				set_time_limit (0);
 				if(!$this->data) {
 					$this->notFound();
 				}
