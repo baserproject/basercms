@@ -199,8 +199,7 @@ class PagesController extends AppController {
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
-					// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
-					//$this->redirect(array('action'=>'admin_index'));
+					$this->redirect('/admin/pages/edit/'.$id);
 				}else {
 					$this->Session->setFlash('保存中にエラーが発生しました。');
 				}
