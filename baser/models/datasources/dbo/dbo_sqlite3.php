@@ -210,7 +210,12 @@ class DboSqlite3 extends DboSource {
 				'type'		=> $this->column($column[0]['type']),
 				'null'		=> !$column[0]['notnull'],
 				'default'	=> $column[0]['dflt_value'],
-				'length'	=> $this->length($column[0]['type'])
+			// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
+			// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
+			//	'length'	=> $this->length($column[0]['type'])
+			// ---
+				'length'	=> ($column[0]['type'])? $this->length($column[0]['type']) : ''
+			// <<<
 			);
 			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
