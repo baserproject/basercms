@@ -161,7 +161,7 @@ $(function(){
 			</p>
 		</li>
 	</ul>
-	<?php if ($safeModeOff) : ?>
+	<?php if (!$safeModeOff) : ?>
 	<div class="section">
 		<strong style="color:#F00">次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
 		レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
