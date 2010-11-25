@@ -64,7 +64,8 @@
 		<th class="col-head"> <?php if($this->action == 'admin_add'): ?>
 			<span class="required">*</span>&nbsp;
 			<?php endif; ?>
-			<?php echo $form->label('User.password_1', 'パスワード') ?> </th>
+			<?php echo $form->label('User.password_1', 'パスワード') ?>
+		</th>
 		<td class="col-input"><small>[パスワードは変更する場合のみ入力してください]</small><br />
 			<?php echo $form->password('User.password_1', array('size'=>20,'maxlength'=>255)) ?> <?php echo $form->password('User.password_2', array('size'=>20,'maxlength'=>255)) ?>&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
 			<div id="helptextPassword" class="helptext">

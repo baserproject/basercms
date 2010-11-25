@@ -210,7 +210,12 @@ class DboSqlite3 extends DboSource {
 				'type'		=> $this->column($column[0]['type']),
 				'null'		=> !$column[0]['notnull'],
 				'default'	=> $column[0]['dflt_value'],
-				'length'	=> $this->length($column[0]['type'])
+			// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
+			// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
+			//	'length'	=> $this->length($column[0]['type'])
+			// ---
+				'length'	=> ($column[0]['type'])? $this->length($column[0]['type']) : ''
+			// <<<
 			);
 			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
@@ -244,20 +249,38 @@ class DboSqlite3 extends DboSource {
 		if ($parent != null) {
 			return $parent;
 		}
+
 		if ($data === null) {
 			return 'NULL';
 		}
-		if ($data === '') {
-			return "''";
-		}
+
 		switch ($column) {
 			case 'boolean':
+				if ($data === '') {
+					return false;
+				}
 				$data = $this->boolean((bool)$data);
-			break;
+				break;
+			case 'integer';
+				if ($data === '') {
+					return 'NULL';
+				}
+				break;
+			case 'datetime':
+				if($data) {
+					$data = trim(str_replace('/', '-', $data));
+				}
+				if ($data === '' || $data == '0000-00-00 00:00:00') {
+					return "''";
+				}
+				break;
 			default:
+				if ($data === '') {
+					return "''";
+				}
 				$data = $this->connection->quote($data);
 				return $data;
-			break;
+				break;
 		}
 		return "'" . $data . "'";
 	}

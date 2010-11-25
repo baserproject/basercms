@@ -3005,10 +3005,12 @@ class DboSource extends DataSource {
  * @return	array	$schema
  * @access	public
  */
-	function readSchema($table) {
-		
-		$this->cacheSources = false;
-		ClassRegistry::flush();
+	function readSchema($table, $cache = true) {
+
+		if($cache) {
+			$this->cacheSources = false;
+			ClassRegistry::flush();
+		}
 		$tables = $this->listSources();
 		if(!in_array($this->config['prefix'].$table, $tables)){
 			return false;
@@ -3132,11 +3134,24 @@ class DboSource extends DataSource {
 		if(!isset($table)) {
 			$table = basename($path, '.csv');
 		}
+		
+		$schemas = $this->readSchema($table, false);
+		if(!isset($schemas['tables'][$table])) {
+			return false;
+		}
 
+		$_fields = array();
+		foreach($schemas['tables'][$table] as $key => $schema) {
+			if($key != 'indexes') {
+				$_fields[] = $key;
+			}
+		}
+		$fields = implode(',', $_fields);
+		
 		$appEncoding = Configure::read('App.encoding');
 		$fullTableName = $this->config['prefix'].$table;
 		$sql = $this->renderStatement('select', array('table'=>$fullTableName,
-														'fields'=>'*',
+														'fields'=>$fields,
 														'conditions'=>'WHERE 1=1',
 														'alias'=>'',
 														'joins'=>'',
@@ -3154,15 +3169,20 @@ class DboSource extends DataSource {
 		ftruncate($fp,0);
 
 		// ヘッダを書込
+		if(isset($datas[0][$fullTableName])) {
+			$tablekey = $fullTableName;
+		} else {
+			$tablekey = 0;
+		}
 		$heads = array();
-		foreach($datas[0][$fullTableName] as $key => $value) {
+		foreach($datas[0][$tablekey] as $key => $value) {
 			$heads[] = '"'.$key.'"';
 		}
 		fwrite($fp, implode(",",$heads)."\r\n");
 
 		// データを書込
 		foreach($datas as $data) {
-			$record = $data[$fullTableName];
+			$record = $data[$tablekey];
 			$record = $this->_convertRecordToCsv($record);
 			mb_convert_variables($encoding,$appEncoding,$record);
 			$csv = implode(',',$record)."\r\n";

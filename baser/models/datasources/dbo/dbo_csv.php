@@ -557,7 +557,8 @@ class DboCsv extends DboSource {
 		// TODO すぐに上書きされてしまうので意味がないかも
 		// 上書きしないように一意の名称でバックアップをとるとゴミが溜まりすぎる
 		if(!is_dir(TMP."csv")) {
-			mkdir(TMP."csv",0777);
+			mkdir(TMP.'csv');
+			chmod(TMP.'csv', 0777);
 		}
 		if(file_exists($file)) {
 			copy($file, TMP."csv".DS.basename($file).".bak");

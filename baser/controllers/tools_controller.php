@@ -59,9 +59,11 @@ class ToolsController extends AppController {
 
 		switch($mode) {
 			case 'backup':
+				set_time_limit (0);
 				$this->_backupDb();
 				break;
 			case 'restore':
+				set_time_limit (0);
 				if(!$this->data) {
 					$this->notFound();
 				}
@@ -209,10 +211,16 @@ class ToolsController extends AppController {
 		$db =& ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
+
 		foreach($tables as $table) {
 			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $table, $matches) &&
 					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$table = $matches[1];
+				if(isset($db->systemTables)) {
+					if(in_array($table, $db->systemTables)) {
+						continue;
+					}
+				}
 				$model = Inflector::classify(Inflector::singularize($table));
 				if(!$db->writeSchema(array('path'=>$path, 'model'=>$model))){
 					return false;

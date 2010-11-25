@@ -437,7 +437,7 @@ class FormExHelper extends FormHelper {
 			$value = $attributes['value'];
 			unset($attributes['value']);
 		}
-		if($value) {
+		if($value && $value != '0000-00-00 00:00:00') {
 			$dateValue = date('Y/m/d',strtotime($value));
 			$timeValue = date('H:i:s',strtotime($value));
 			$attributes['value']=$dateValue;
@@ -452,7 +452,16 @@ $(function(){
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
-        $("#{$domId}").val($("#{$domId}Date").val().replace(/\//g, '-')+' '+$("#{$domId}Time").val());
+		var value = $("#{$domId}Date").val().replace(/\//g, '-');
+		if($("#{$domId}Time").val()) {
+			value += ' '+$("#{$domId}Time").val();
+		}
+        $("#{$domId}").val(value);
+		if(this.id.replace('{$domId}','') == 'Date') {
+			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
+				$("#{$domId}Time").val('00:00:00');
+			}
+		}
    }
 });
 DOC_END;
