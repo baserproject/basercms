@@ -453,6 +453,9 @@ $(function(){
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
         $("#{$domId}").val($("#{$domId}Date").val().replace(/\//g, '-')+' '+$("#{$domId}Time").val());
+		if(!$("#{$domId}Time").val()) {
+			$("#{$domId}Time").val('00:00:00');
+		}
    }
 });
 DOC_END;
