@@ -211,7 +211,7 @@ class UpdatersController extends AppController {
 
 	}
 /**
- * コアのアップデート実行
+ * プラグインのアップデート実行
  *
  * @return void
  * @access public
@@ -381,12 +381,19 @@ class UpdatersController extends AppController {
 			if(!$__plugin) {
 				/* サイト基本設定にバージョンを保存 */
 				$SiteConfigClass = ClassRegistry::getObject('SiteConfig');
+				$SiteConfigClass->cacheQueries = false;
 				$__data['SiteConfig']['version'] = $targetVersion;
 				$__result = $SiteConfigClass->saveKeyValue($__data);
 			} else {
-				$__data = $this->Plugin->find('first', array('conditions'=>array('name'=>$__plugin)));
-				$__data['Plugin']['version'] = $targetVersion;
-				$__result = $this->Plugin->save($__data);
+				// 1.6.7 では plugins テーブルの構造が変わったので、find でデータが取得できないのでスキップする
+				// DB の再接続を行えば取得できるかも
+				if( $targetVersion == '1.6.7') {
+					$__result = true;
+				} else {
+					$__data = $this->Plugin->find('first', array('conditions'=>array('name'=>$__plugin)));
+					$__data['Plugin']['version'] = $targetVersion;
+					$__result = $this->Plugin->save($__data);
+				}
 			}
 		} else {
 			$__result = true;

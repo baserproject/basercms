@@ -234,7 +234,7 @@ class PluginsController extends AppController {
 
 		// 表示設定
 		$this->set('listDatas',$listDatas);
-		$this->subMenuElements = array('plugins');
+		$this->subMenuElements = array('site_configs', 'plugins');
 		$this->pageTitle = 'プラグイン一覧';
 
 	}
@@ -361,7 +361,7 @@ class PluginsController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('plugins');
+		$this->subMenuElements = array('site_configs', 'plugins');
 		$this->pageTitle = '新規プラグイン登録';
 		$this->render('form');
 

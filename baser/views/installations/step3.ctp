@@ -26,7 +26,7 @@ $(document).ready( function() {
 		$('#btnnext').hide();
 	}
 	initForm();
-	<?php if (isset($blDBSettingsOK)): ?>$('#btnnext').show();<?php endif; ?>
+	<?php if (!empty($blDBSettingsOK)): ?>$('#btnnext').show();<?php endif; ?>
 
 	/* イベント登録 */
 	$('#checkdb,#btnnext,#btnback').click( function a() {
