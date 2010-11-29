@@ -433,7 +433,7 @@ class DboCsv extends DboSource {
  * @param array $config An array defining the new configuration settings
  * @return boolean True on success, false on failure
  */
-	function reconnect($config = null) {
+	function reconnect($config = array()) {
 		$this->disconnect();
 		$this->setConfig($config);
 		$this->_sources = null;
@@ -515,7 +515,7 @@ class DboCsv extends DboSource {
  */
 	function isConnected($tableName = null) {
 
-		if($this->connected) {
+		if(!empty($this->connected)) {
 			if($tableName && !empty($this->connected[$tableName])) {
 				return $this->connected[$tableName];
 			}else if(!empty($this->connected[0])) {
@@ -790,7 +790,7 @@ class DboCsv extends DboSource {
 		if(!$this->_connect($queryData['tableName'])){
 			return false;
 		}
-		
+
 		// 主キーがない場合のauto処理
 		if(empty($queryData['values']['id'])) {
 			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
@@ -829,7 +829,7 @@ class DboCsv extends DboSource {
 		$ret = fwrite($this->connection[$queryData['tableName']], $csv);
 
 		$this->disconnect($queryData['tableName']);
-		
+
 		return $ret;
 
 	}
@@ -839,7 +839,7 @@ class DboCsv extends DboSource {
  * @param array $queryData
  */
 	function buildCsv($queryData) {
-		
+
 		if(file_exists($this->config['database'].DS.$queryData['tableName'].'.csv')){
 			return false;
 		}
@@ -850,7 +850,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * CSVテーブルを削除する
- * 
+ *
  * @param	array	$queryData
  * @return	boolean
  * @access	public
@@ -1114,8 +1114,8 @@ class DboCsv extends DboSource {
 		}
 
 		$table = $prefix . $table;
-		
-		// DB接続		
+
+		// DB接続
 		if(!$this->_connect($table,true,null,true)) {
 			return false;
 		}
@@ -1337,7 +1337,7 @@ class DboCsv extends DboSource {
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
 		$dropPattern = "/DROP\sTABLE\s+([^\s]+);/si";
-		
+
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)) {
 			$parseData['crud'] = 'create';
@@ -1605,7 +1605,7 @@ class DboCsv extends DboSource {
 		$conditions = preg_replace('/([^<>])=+/s','$1==',$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+NOT\s+LIKE\s+\'(.*?)\'/s","!preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+LIKE\s+\'(.*?)\'/s","preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
-		
+
 		// BETWEEN（数字のみ対応）
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+BETWEEN\s+([0-9]+?)\s+&&\s+([0-9]+?)/s","$1 >= $2 && $1 <= $3",$conditions);
 
@@ -2318,7 +2318,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * テーブル名を変更する
- * 
+ *
  * @param	array	$options [ old / new ]
  * @return	boolean
  * @access	public
@@ -2343,9 +2343,9 @@ class DboCsv extends DboSource {
 		if(!file_exists($oldPath)){
 			return false;
 		}
-		
+
 		return rename($oldPath,$newPath);
-		
+
 	}
 /**
  * テーブル構造を変更する
