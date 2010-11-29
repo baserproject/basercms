@@ -29,7 +29,7 @@ class DemoShell extends Shell {
 	function initcsv() {
 	
 		if($this->_initCsv()){
-			
+
 			App::import('Core','Security');
 			$this->deleteCache();
 
@@ -55,7 +55,7 @@ class DemoShell extends Shell {
 				$siteConfig = $this->SiteConfig->findExpanded();
 				$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
 				$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
-        $siteConfig['demo_on'] = true;
+				$siteConfig['demo_on'] = true;
 				$ret = $this->SiteConfig->saveKeyValue($siteConfig);
 				if($ret){
 					$pages = $this->Page->find('all');
@@ -116,12 +116,13 @@ class DemoShell extends Shell {
 			mkdir(APP.'db'.DS.'csv',0777);
 			chmod(APP.'db'.DS.'csv',0777);
 		}
-		
+
 		$folder = new Folder();
 		
 		$dbConfig = new DATABASE_CONFIG();
 		$folder->delete($dbConfig->baser['database']);
 		$folder->delete($dbConfig->plugin['database']);
+
 		if($this->_initCsvBaser($dbConfig->baser['prefix'],$dbConfig->baser['database'])){
 			if($this->_initCsvPlugin($dbConfig->plugin['prefix'],$dbConfig->plugin['database'])){
 				// TODO baserとpluginのデータソースを別々に取得して処理を行った場合、ファイルロックの問題か固まってしまうので
@@ -143,6 +144,13 @@ class DemoShell extends Shell {
 						if(!$_ret) $ret = $_ret;
 					}
 				}
+				$targets = array('1', '2', '3');
+				foreach($targets as $target) {
+					$sql = "UPDATE `".'plugins'."` SET `status`='1 WHERE `id`='".$target."'";
+					if(!$db->execute($sql)){
+						$_ret = false;
+					}
+				}
 				return $ret;
 			}
 		}else{
@@ -162,13 +170,13 @@ class DemoShell extends Shell {
 		}
 
 		/* BaesrコアのCSVファイルをコピー */
-		$sourceDir = BASER_CONFIGS.'csv'.DS.'baser'.DS;
+		$sourceDir = BASER_CONFIGS.'sql'.DS;
 		$folder = new Folder($sourceDir);
 		$files = $folder->read(true,true);
 		$ret = true;
 		foreach($files[1] as $file){
 			if($file != 'empty' && $ret){
-				if (!file_exists($targetDir.$dbPrefix.$file)) {
+				if (!file_exists($targetDir.$dbPrefix.$file) && preg_match('/\.csv$/', $file)) {
 					$_ret = copy($sourceDir.$file,$targetDir.$dbPrefix.$file);
 					if ($_ret) {
 						chmod($targetDir.$dbPrefix.$file,0666);
@@ -195,14 +203,14 @@ class DemoShell extends Shell {
 		}
 		$ret = true;
 		/* BaserプラグインのCSVファイルをコピー */
-		$plugins = array('blog','feed','mail');
-		foreach($plugins as $plugin){
-			$sourceDir = BASER_PLUGINS.$plugin.DS.'config'.DS.'csv'.DS.$plugin.DS;
+		$plugins = array('blog'=>BASER_PLUGINS,'feed'=>BASER_PLUGINS,'mail'=>BASER_PLUGINS, 'twitter'=>APP.'plugins'.DS, 'uploader'=>APP.'plugins'.DS);
+		foreach($plugins as $plugin => $path){
+			$sourceDir = $path.$plugin.DS.'config'.DS.'sql'.DS;
 			$folder = new Folder($sourceDir);
 			$files = $folder->read(true,true);
 			foreach($files[1] as $file){
 				if($file != 'empty' && $ret){
-					if (!file_exists($targetDir.$dbPrefix.$file)) {
+					if (!file_exists($targetDir.$dbPrefix.$file) && preg_match('/\.csv$/', $file)) {
 						$_ret = copy($sourceDir.$file,$targetDir.$dbPrefix.$file);
 						if ($_ret) {
 							chmod($targetDir.$dbPrefix.$file,0666);
