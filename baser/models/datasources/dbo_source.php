@@ -2569,7 +2569,7 @@ class DboSource extends DataSource {
 		$file = basename($filename);
 		$path = dirname($filename);
 		$name = basename(Inflector::classify(basename($file)), '.php');
-		$Schema = ClassRegistry::init('Core', 'CakeSchema');
+		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->connection;
 
 		if(empty($path)){

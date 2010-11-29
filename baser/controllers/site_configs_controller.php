@@ -221,6 +221,9 @@ class SiteConfigsController extends AppController {
  */
 	function admin_info() {
 
+		if(!empty($this->siteConfigs['demo_on'])) {
+			$this->notFound();
+		}
 		$this->pageTitle = '環境情報';
 		$drivers = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
 		$smartUrl = 'ON';

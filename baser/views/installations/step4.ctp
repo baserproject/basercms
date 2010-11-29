@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -51,7 +51,7 @@ $(document).ready(function(){
 		<div>
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
-				<li> <?php echo $form->text('Installation.admin_email', array('value'=>$adminEmail,'size'=>44)); ?> </li>
+				<li> <?php echo $form->text('Installation.admin_email', array('size'=>44)); ?> </li>
 			</ul>
 			<h3>管理ユーザー登録</h3>
 			<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
@@ -59,7 +59,7 @@ $(document).ready(function(){
 				<li>
 					<label>管理者名</label>
 					<br />
-					<?php echo $form->text('Installation.admin_username', array ('value'=>$adminUsername)); ?> </li>
+					<?php echo $form->text('Installation.admin_username'); ?> </li>
 				<li class="clearfix">
 					<label>パスワード</label>
 					<br />
