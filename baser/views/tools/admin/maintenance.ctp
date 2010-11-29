@@ -17,7 +17,9 @@
 <div class="align-center"> <?php $baser->link('ダウンロード', array('backup'), array('class'=>'btn-red button')) ?> </div>
 
 <h3>データの復元</h3>
-<p>バックアップファイルをアップロードし、データベースのデータを復元します。</p>
+<p>バックアップファイルをアップロードし、データベースのデータを復元します。<br />
+<small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。<br />
+v1.6.6以前のバックアップデータの復元はできません。v1.6.6以前のデータを復元するには、phpMyAdminなどのDB管理ツールをご利用ください。</small></p>
 <?php echo $formEx->create('Tool',array('action'=>'maintenance', 'url'=>array('restore'),'type'=>'file')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>

@@ -257,7 +257,7 @@ class DboSqlite3 extends DboSource {
 		switch ($column) {
 			case 'boolean':
 				if ($data === '') {
-					return false;
+					return 0;
 				}
 				$data = $this->boolean((bool)$data);
 				break;

@@ -571,6 +571,9 @@ class InstallationsController extends AppController {
 				}
 			}
 
+			// CSVの場合ロックを解除しないとデータの投入に失敗する
+			$db->reconnect();
+
 			// 初期データ投入
 			foreach($files[1] as $file) {
 				if(!preg_match('/\.csv$/',$file)) {

@@ -83,7 +83,7 @@
 		<td style="white-space: nowrap"><?php echo $listData['Plugin']['title'] ?></td>
 		<td><?php echo $listData['Plugin']['version'] ?></td>
 		<td><?php echo $listData['Plugin']['description'] ?></td>
-		<td><?php $baser->link($listData['Plugin']['author'],$listData['Plugin']['author']) ?></td>
+		<td><?php $baser->link($listData['Plugin']['author'],$listData['Plugin']['url'], array('target'=>'_blank')) ?></td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>

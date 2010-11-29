@@ -192,9 +192,9 @@ $(function(){
 					RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
 					詳細については、各.htaccessファイルのコメントを確認してください。</p>
 			</div>
-			<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
-			<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
-			<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo baseUrl() ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
+			<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
+			<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
 		</td>
 	</tr>
 </table>

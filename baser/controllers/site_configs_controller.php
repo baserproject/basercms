@@ -104,15 +104,28 @@ class SiteConfigsController extends AppController {
 		}else {
 			// テーブル構造が特殊なので強引にバリデーションを行う
 			$this->SiteConfig->data = $this->data;
+			
 			if(!$this->SiteConfig->validates()) {
+				
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				
 			}else {
+				
 				// KeyValueへ変換処理
-				$mode = $this->data['SiteConfig']['mode'];
-				$smartUrl = $this->data['SiteConfig']['smart_url'];
-				unset($this->data['SiteConfig']['mode']);
 				unset($this->data['SiteConfig']['id']);
-				unset($this->data['SiteConfig']['smart_url']);
+				if(isset($this->data['SiteConfig']['mode'])) {
+					$mode = $this->data['SiteConfig']['mode'];
+					unset($this->data['SiteConfig']['mode']);
+				} else {
+					$mode = 0;
+				}
+				if(isset($this->data['SiteConfig']['smart_url'])) {
+					$smartUrl = $this->data['SiteConfig']['smart_url'];
+					unset($this->data['SiteConfig']['smart_url']);
+				} else {
+					$smartUrl = false;
+				}
+
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
 				if($this->readSmartUrl() != $smartUrl) {
@@ -140,12 +153,7 @@ class SiteConfigsController extends AppController {
 					} else {
 						$protocol = 'http';
 					}
-					if($_SERVER['SERVER_PORT'] !='80' && $_SERVER['SERVER_PORT'] != '443') {
-						$port = ':'.$_SERVER['SERVER_PORT'];
-					} else {
-						$port = '';
-					}
-					header('Location: '.$protocol.'://'.$_SERVER['SERVER_NAME'].$port.$redirectUrl);
+					header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].$redirectUrl);
 					exit();
 				}else{
 					$this->redirect(array('action'=>'form'));
@@ -164,7 +172,13 @@ class SiteConfigsController extends AppController {
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
 		$writableHtaccess = is_writable(ROOT.DS.'.htaccess');
-		$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+		if(ROOT.DS.'.htaccess' != WWW_ROOT.'.htaccess') {
+			$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+		} else{
+			$writableHtaccess2 = true;
+		}
+		$baseUrl = str_replace('/index.php', '', baseUrl());
+		
 		if($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false){
 			$smartUrlChangeable = true;
 		} else {
@@ -184,6 +198,7 @@ class SiteConfigsController extends AppController {
 		$this->set('writableInstall', $writableInstall);
 		$this->set('writableHtaccess', $writableHtaccess);
 		$this->set('writableHtaccess2', $writableHtaccess2);
+		$this->set('baseUrl', $baseUrl);
 		$this->set('smartUrlChangeable', $smartUrlChangeable);
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
