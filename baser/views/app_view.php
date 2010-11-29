@@ -22,7 +22,7 @@
 /**
  * Include files
  */
-App::import('View','Theme');
+App::import('Core','Theme');
 /**
  * view 拡張クラス
  *
