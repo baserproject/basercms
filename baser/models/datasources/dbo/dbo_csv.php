@@ -796,7 +796,19 @@ class DboCsv extends DboSource {
 			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
 			$this->_lastInsertId = str_replace('"','',$queryData['values']['id']);
 		}else{
+
+			$_queryData['crud'] = 'read';
+			$_queryData['className'] = Inflector::classify(str_replace($this->config['prefix'], '', $queryData['tableName']));
+			$_queryData['fields'] = array('id');
+			$_queryData['tableName'] = $queryData['tableName'];
+			$_queryData['limit'] = 1;
+			$_queryData['page'] = 1;
+			$_queryData['conditions'] = 'if ($record[\'id\']=='.$queryData['values']['id'].') return true;';
+			if($this->readCsv($_queryData)) {
+				return false;
+			}
 			$this->_csvFields = fgetcsv($this->connection[$queryData['tableName']],10240);
+			
 		}
 
 		// カラムをテーブル情報どおりに並べる
