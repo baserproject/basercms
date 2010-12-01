@@ -1009,6 +1009,8 @@ class DboCsv extends DboSource {
 			$records[] = $record;
 		}
 
+		rewind($this->connection[$index]);
+		
 		return $records;
 
 	}
