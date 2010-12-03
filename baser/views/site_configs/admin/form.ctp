@@ -26,7 +26,7 @@ $(function(){
 	<?php if($safeModeOn): ?>
 	var safeModeOn = 1;
 	<?php else: ?>
-	var safeModeOn = 1;
+	var safeModeOn = 0;
 	<?php endif ?>
 	<?php if($formEx->value('SiteConfig.smart_url')): ?>
 	var smartUrl = 1;
