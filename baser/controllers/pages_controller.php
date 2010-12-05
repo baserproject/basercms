@@ -210,7 +210,7 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', $this->data['Page']['url']));
+		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->subMenuElements = array('pages','page_categories');

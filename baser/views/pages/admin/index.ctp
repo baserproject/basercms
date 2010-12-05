@@ -116,10 +116,11 @@ $(function(){
 			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
 			<?php echo $formEx->hidden('Sort.id'.$dbData['Page']['id'],array('class'=>'id','value'=>$dbData['Page']['id'])) ?>
 			<?php endif ?>
-			<?php if(!preg_match('/^\/mobile\//is', $dbData['Page']['url'])): ?>
-			<?php $baser->link('確認',$dbData['Page']['url'],array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
+			<?php $url = preg_replace('/index$/', '', $dbData['Page']['url']) ?>
+			<?php if(!preg_match('/^\/mobile\//is', $url)): ?>
+			<?php $baser->link('確認',$url,array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
 			<?php else: ?>
-			<?php $baser->link('確認',preg_replace('/^\/mobile\//is', '/m/', $dbData['Page']['url']), array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
+			<?php $baser->link('確認',preg_replace('/^\/mobile\//is', '/m/', $url), array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
 			<?php endif ?>
 			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
