@@ -84,6 +84,9 @@
 /**
  * タイムゾーン設定
  */
+ 	if(!ini_get('date.timezone')) {
+ 		ini_set('date.timezone', 'Asia/Tokyo');
+ 	}
 	@putenv("TZ=JST-9");
 /**
  * 文字コードの検出順を指定
