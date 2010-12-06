@@ -6,7 +6,7 @@
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
 <div class=""body"">
-<?php $baser->feed(1) ?>
+<?php $baser->js('/feed/ajax/1') ?>
 </div>
 </div>
 
@@ -14,7 +14,7 @@
 <div class=""news"">
 <h2 id=""newsHead02"">BaserCMS NEWS</h2>
 <div class=""body"">
-<?php $baser->feed(2) ?>
+<?php $baser->js('/feed/ajax/2') ?>
 </div>
 </div>
 </div>","","1","/index","",""
