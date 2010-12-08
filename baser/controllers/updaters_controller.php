@@ -443,7 +443,12 @@ class UpdatersController extends AppController {
 		if(!$path) {
 			return false;
 		}
-		$result = $this->Updater->loadSchema('baser', $path, $filterTable, $filterType, array('updater.php'));
+		if($plugin) {
+			$dbConfigName = 'plugin';
+		} else {
+			$dbConfigName = 'baser';
+		}
+		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'));
 		clearAllCache();
 		return $result;
 
