@@ -48,7 +48,7 @@ class BlogPostsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('TextEx','TimeEx','FormEx','Ckeditor');
+	var $helpers = array('TextEx','TimeEx','FormEx','Ckeditor', 'Blog.Blog');
 /**
  * コンポーネント
  *
@@ -120,57 +120,16 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
 		}
 
-		/* セッション処理 */
-		if($this->data) {
-			if(isset($this->data['BlogPost']['blog_category_id'])){
-				$this->Session->write('Filter.BlogPost.'.$blogContentId.'.blog_category_id',$this->data['BlogPost']['blog_category_id']);
-			}
-			$this->Session->write('Filter.BlogPost.'.$blogContentId.'.status',$this->data['BlogPost']['status']);
-		}else {
-			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'.blog_category_id')) {
-				$this->data['BlogPost']['blog_category_id'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.blog_category_id');
-			}else {
-				$this->Session->del('Filter.BlogPost.'.$blogContentId.'.blog_category_id');
-			}
-			if($this->Session->check('Filter.BlogPost.'.$blogContentId.'.status')) {
-				$this->data['BlogPost']['status'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.status');
-			}else {
-				$this->Session->del('Filter.BlogPost.'.$blogContentId.'.status');
-			}
-		}
-
-		// 表示件数設定
-		if(!empty($this->params['named']['num'])){
-			$this->Session->write('Filter.BlogPost.'.$blogContentId.'.num', $this->params['named']['num']);
-		}else{
-			if(!$this->Session->check('Filter.BlogPost.'.$blogContentId.'.num')){
-				$this->passedArgs['num'] = 10;
-			}else{
-				$this->passedArgs['num'] = $this->Session->read('Filter.BlogPost.'.$blogContentId.'.num');
-			}
-		}
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => 10));
+		$this->setViewConditions('BlogPost', $blogContentId, $default);
+		$this->passedArgs[] = $blogContentId;
 		
-		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
-		// ページカテゴリ
-		// 子カテゴリも検索条件に入れる
-		if(!empty($this->data['BlogPost']['blog_category_id'])) {
-			$blogCategoryIds = array($this->data['BlogPost']['blog_category_id']);
-			$children = $this->BlogCategory->children($this->data['BlogPost']['blog_category_id']);
-			if($children) {
-				foreach($children as $child) {
-					$blogCategoryIds[] = $child['BlogCategory']['id'];
-				}
-			}
-			$conditions['BlogPost.blog_category_id'] = $blogCategoryIds;
-		}
-		// ステータス
-		if(isset($this->data['BlogPost']['status']) && $this->data['BlogPost']['status'] !== '') {
-			$conditions['BlogPost.status'] = $this->data['BlogPost']['status'];
-		}
+		/* 検索条件生成 */
+		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
 
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-				'fields'=>array(),
 				'order'=>'BlogPost.no DESC',
 				'limit'=>$this->passedArgs['num']
 		);
@@ -184,6 +143,47 @@ class BlogPostsController extends BlogAppController {
 		// 表示設定
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事一覧';
 
+	}
+/**
+ * ページ一覧用の検索条件を生成する
+ *
+ * @param	array	$blogContentId
+ * @param	array	$data
+ * @return	array	$conditions
+ * @access	protected
+ */
+	function _createAdminIndexConditions($blogContentId, $data) {
+
+		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
+			unset($data['BlogPost']['status']);
+		}
+		if(isset($data['BlogPost']['user_id']) && $data['BlogPost']['user_id'] === '') {
+			unset($data['BlogPost']['user_id']);
+		}
+
+		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
+
+		// ページカテゴリ（子カテゴリも検索条件に入れる）
+		if(!empty($data['BlogPost']['blog_category_id'])) {
+			$blogCategoryIds = array($data['BlogPost']['blog_category_id']);
+			$children = $this->BlogCategory->children($data['BlogPost']['blog_category_id']);
+			if($children) {
+				foreach($children as $child) {
+					$blogCategoryIds[] = $child['BlogCategory']['id'];
+				}
+			}
+			$conditions['BlogPost.blog_category_id'] = $blogCategoryIds;
+		} else {
+			unset($data['BlogPost']['blog_category_id']);
+		}
+
+		$_conditions = $this->postConditions($data);
+		if($_conditions) {
+			$conditions = am($conditions, $_conditions);
+		}
+
+		return $conditions;
+		
 	}
 /**
  * [ADMIN] 登録処理
@@ -222,7 +222,8 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
-		$this->set('users',$this->BlogPost->User->getUserList($this->Auth->user()));
+		$authUser = $this->Auth->user();
+		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
 
@@ -243,6 +244,8 @@ class BlogPostsController extends BlogAppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->read(null, $id);
+			$this->data['BlogPost']['content_tmp'] = $this->data['BlogPost']['content'];
+			$this->data['BlogPost']['detail_tmp'] = $this->data['BlogPost']['detail'];
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);

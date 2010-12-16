@@ -20,7 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
 <div id="header">
 	<div id="headMain">
 		<?php if(isset($baser->siteConfig['name'])): ?>

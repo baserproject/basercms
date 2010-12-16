@@ -149,7 +149,7 @@ class ToolsController extends AppController {
 		foreach($files[1] as $file) {
 			if(preg_match("/\.php$/", $file)) {
 				if(!$db->loadSchema(array('type'=>'drop','path' => $path, 'file'=> $file))){
-					return false;
+					continue;
 				}
 			}
 		}

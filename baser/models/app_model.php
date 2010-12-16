@@ -757,6 +757,27 @@ class AppModel extends Model {
 
 	}
 /**
+ * 英数チェックプラス
+ *
+ * ハイフンアンダースコアを許容
+ *
+ * @param	string	チェック対象文字列
+ * @return	boolean
+ * @access	public
+ */
+	function alphaNumericPlus($check) {
+
+		if(!$check[key($check)]) {
+			return true;
+		}
+		if(preg_match("/^[a-zA-Z0-9\-_]+$/",$check[key($check)])) {
+			return true;
+		}else {
+			return false;
+		}
+
+	}
+/**
  * データの重複チェックを行う
  * @param array $check
  * @return boolean

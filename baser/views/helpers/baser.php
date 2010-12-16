@@ -514,7 +514,7 @@ class BaserHelper extends AppHelper {
 
 		// ページ公開チェック
 		if(isset($this->Page)) {
-			if(!$this->Page->checkPublish($_url)) {
+			if($this->Page->checkUnPublish($_url)) {
 				$enabled = false;
 			}
 		}
@@ -738,14 +738,17 @@ class BaserHelper extends AppHelper {
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  */
 	function cacheHeader($expire = DAY, $type='html') {
-
+		
 		$contentType = array(
 			'html' => 'text/html',
 			'js' => 'text/javascript', 'css' => 'text/css',
 			'gif' => 'image/gif', 'jpg' => 'image/jpeg', 'png' => 'image/png'
 		);
 		$fileModified = filemtime(WWW_ROOT.'index.php');
-		if(!is_numeric($expire)){
+
+		if(!$expire) {
+			$expire = strtotime(DAY);
+		} elseif(!is_numeric($expire)){
 			$expire = strtotime($expire);
 		}
 		header("Date: " . date("D, j M Y G:i:s ", $fileModified) . 'GMT');

@@ -50,14 +50,15 @@ class PluginContent extends AppModel {
  */
 	function beforeValidate() {
 
-		$this->validate['name'] = array(array('rule' => 'alphaNumeric',
-						'message' => 'コンテンツ名は半角英数字のみ入力して下さい'),
+		$this->validate['name'] = array(array('rule' => 'alphaNumericPlus',
+						'message' => 'コンテンツ名は半角英数字、ハイフン、アンダースコアのみで入力して下さい'),
 				array('rule' => array('isUnique'),
 						'message' => '入力されたコンテンツ名は既に使用されています。'));
 		$this->validate['content_id'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => "コンテンツIDを入力して下さい"));
-		$this->validate['plugin'] = array(array('rule' => 'alphaNumeric',
-						'message' => 'プラグイン名は半角英数字のみ入力して下さい'),
+						'message' => "コンテンツIDを入力して下さい",
+						'on'=>'update'));
+		$this->validate['plugin'] = array(array('rule' => 'alphaNumericPlus',
+						'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力して下さい'),
 				array('rule' => VALID_NOT_EMPTY,
 						'message' => 'プラグイン名を入力して下さい'));
 		return true;

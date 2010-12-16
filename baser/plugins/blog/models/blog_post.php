@@ -200,8 +200,12 @@ class BlogPost extends BlogAppModel {
  */
 	function getControlSource($field = null,$options = array()) {
 
-		$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
-
+		if($field == 'blog_category_id') {
+			$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
+		}
+		if($field == 'user_id') {
+			$controlSources['user_id'] = $this->User->getUserList($options);
+		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -209,6 +213,54 @@ class BlogPost extends BlogAppModel {
 		}
 
 	}
+/**
+ * 公開状態を取得する
+ *
+ * @param	array	データリスト
+ * @return	boolean	公開状態
+ * @access	public
+ */
+	function allowPublish($data){
 
+		if(isset($data['BlogPost'])){
+			$data = $data['BlogPost'];
+		}
+
+		$allowPublish = (int)$data['status'];
+
+		if($data['publish_begin'] == '0000-00-00 00:00:00') {
+			$data['publish_begin'] = NULL;
+		}
+		if($data['publish_end'] == '0000-00-00 00:00:00') {
+			$data['publish_end'] = NULL;
+		}
+
+		// 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
+		if(($data['publish_begin'] && $data['publish_begin'] >= date('Y-m-d H:i:s')) ||
+				($data['publish_end'] && $data['publish_end'] <= date('Y-m-d H:i:s'))){
+			$allowPublish = false;
+		}
+
+		return $allowPublish;
+
+	}
+/**
+ * 公開済の conditions を取得
+ * 
+ * @return	array
+ */
+	function getConditionAllowPublish() {
+		
+		$conditions[$this->alias.'.status'] = true;
+		$conditions[] = array('or'=> array(array($this->alias.'.publish_begin <=' => date('Y-m-d H:i:s')),
+										array($this->alias.'.publish_begin' => NULL),
+										array($this->alias.'.publish_begin' => '0000-00-00 00:00:00')));
+		$conditions[] = array('or'=> array(array($this->alias.'.publish_end >=' => date('Y-m-d H:i:s')),
+										array($this->alias.'.publish_end' => NULL),
+										array($this->alias.'.publish_end' => '0000-00-00 00:00:00')));
+		return $conditions;
+		
+	}
+	
 }
 ?>

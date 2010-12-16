@@ -96,7 +96,7 @@ class User extends AppModel {
  * TODO beforeValidateに移行する事
  */
 	function invalidFields($options = array()) {
-	
+
 		$data = $this->data;
 
 		/*** パスワードチェック ***/
@@ -162,21 +162,13 @@ class User extends AppModel {
 	}
 /**
  * ユーザーリストを取得する
- * 認証ユーザーのみのリストを取得する場合は引数を指定する
+ *
+ * 条件を指定する場合は引数を指定する
  * @param array $authUser
  */
-	function getUserList($authUser=null) {
+	function getUserList($conditions = array()) {
 
-		if($authUser && $authUser['User']['user_group_id']!=1) {
-			if($authUser['User']['real_name_2']) {
-				$name = $authUser['User']['real_name_1']." ".$authUser['User']['real_name_2'];
-			}else {
-				$name = $authUser['User']['real_name_1'];
-			}
-			return array($authUser['User']['id']=>$name);
-		}
-
-		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2')));
+		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2'), 'conditions'=>$conditions));
 		$list = array();
 		if ($users) {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成

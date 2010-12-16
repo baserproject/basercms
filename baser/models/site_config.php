@@ -50,13 +50,19 @@ class SiteConfig extends AppModel {
  */
 	function beforeValidate() {
 
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
+		$this->validate['formal_name'] = array(array('rule' => array('minLength',1),
 						'message' => "WEBサイト名を入力して下さい",
+						'required' => true));
+		$this->validate['name'] = array(array('rule' => array('minLength',1),
+						'message' => "WEBサイトタイトルを入力して下さい",
 						'required' => true));
 		$this->validate['email'] = array(array('rule' => array('email'),
 						'message' => "管理者メールアドレスの形式が不正です"),
 				array('rule' => array('minLength',1),
 						'message' => "管理者メールアドレスを入力してください。"));
+		$this->validate['mail_encode'] = array(array('rule' => array('minLength',1),
+						'message' => "メール送信文字コードを入力してください。デフォルトは「ISO-2022-JP」です。",
+						'required' => true));
 		return true;
 
 	}

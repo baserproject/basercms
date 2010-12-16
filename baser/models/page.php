@@ -43,7 +43,9 @@ class Page extends AppModel {
  */
 	var $belongsTo = array(
 			'PageCategory' =>   array(  'className'=>'PageCategory',
-							'foreignKey'=>'page_category_id'));
+							'foreignKey'=>'page_category_id'),
+			'User' => array('className'=> 'User',
+							'foreignKey'=>'author_id'));
 /**
  * 更新前のページファイルのパス
  * @var	string
@@ -59,17 +61,23 @@ class Page extends AppModel {
  */
 	var $fileSave = true;
 /**
- * 非公開URLリスト
+ * 非公開WebページURLリスト
  * キャッシュ用
  * @var mixed;
  */
 	var $_unpublishes = -1;
 /**
+ * 公開WebページURLリスト
+ * キャッシュ用
+ * @var mixed;
+ */
+	var $_publishes = -1;
+/**
  * 最終登録ID
- * 
+ *
  * モバイルページへのコピー処理でスーパークラスの最終登録IDが上書きされ、
  * コントローラーからは正常なIDが取得できないのでモバイルページへのコピー以外の場合だけ保存する
- * 
+ *
  * @var int
  */
 	var $__pageInsertID = null;
@@ -96,8 +104,9 @@ class Page extends AppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue() {
-		
+	function getDefaultValue($authUser) {
+
+		$data[$this->name]['author_id'] = $authUser['User']['id'];
 		$data[$this->name]['sort'] = $this->getMax('sort')+1;
 		$data[$this->name]['status'] = false;
 		return $data;
@@ -137,7 +146,7 @@ class Page extends AppModel {
 	}
 /**
  * 最終登録IDを取得する
- * 
+ *
  * @return	int
  * @access	public
  */
@@ -177,7 +186,7 @@ class Page extends AppModel {
 		if(isset($this->data['Page'])){
 			$data = $this->data['Page'];
 		}
-		
+
 		// タイトルタグと説明文を追加
 		if(empty($data['id'])) {
 			$data['id'] = $this->getInsertID();
@@ -193,7 +202,7 @@ class Page extends AppModel {
 
 			// モバイルページへのコピーでスーパークラスのIDを上書きしてしまうので退避させておく
 			$this->__pageInsertID = parent::getInsertID();
-			
+
 			$mobileId = $this->PageCategory->getMobileId();
 			if(!$mobileId){
 				// モバイルカテゴリがない場合は trueを返して終了
@@ -201,21 +210,20 @@ class Page extends AppModel {
 			}
 
 			$mobilePage = $this->find('first',array('conditions'=>array('Page.url'=>'/mobile'.$data['url']),'recursive'=>-1));
-			
+
 			unset($data['id']);
 			unset($data['sort']);
 			unset($data['status']);
-			unset($data['modified']);
-			$data['reflect_mobile'] = false;
 
 			if($mobilePage){
-				$data['id'] = $mobilePage['Page']['id'];
-				$data['page_category_id'] = $mobilePage['Page']['page_category_id'];
-				$data['url'] = $mobilePage['Page']['url'];
-				$data['sort'] = $mobilePage['Page']['sort'];
-				$data['status'] = $mobilePage['Page']['status'];
-				$data['created'] = $mobilePage['Page']['created'];
-				$this->set($data);
+				$mobilePage['Page']['name'] = $data['name'];
+				$mobilePage['Page']['title'] = $data['title'];
+				$mobilePage['Page']['description'] = $data['description'];
+				$mobilePage['Page']['draft'] = $data['draft'];
+				$mobilePage['Page']['modified'] = $data['modified'];
+				$mobilePage['Page']['contents'] = $data['contents'];
+				$mobilePage['Page']['reflect_mobile'] = false;
+				$this->set($mobilePage);
 			}else{
 				if($data['page_category_id']){
 					$fields = array('parent_id','name','title');
@@ -241,7 +249,13 @@ class Page extends AppModel {
 				$data['sort'] = $this->getMax('sort')+1;
 				$data['url'] = '/mobile'.$data['url'];
 				$data['status'] = false;	// 新規ページの場合は非公開とする
+				unset($data['publish_begin']);
+				unset($data['publish_end']);
+				unset($data['created']);
+				unset($data['modified']);
+				$data['reflect_mobile'] = false;
 				$this->create($data);
+
 			}
 			if(!$this->save()){
 				$result = false;
@@ -299,7 +313,7 @@ class Page extends AppModel {
 		}else {
 			return false;
 		}
-		
+
 	}
 /**
  * ページファイルのディレクトリを取得する
@@ -378,8 +392,12 @@ class Page extends AppModel {
 			$this->PageCategory->cacheQueries = false;
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
-				foreach($categoryPath as $category) {
-					$url .= $category['PageCategory']['name'].'/';
+				foreach($categoryPath as $key => $category) {
+					if($key == 0 && $category['PageCategory']['name'] == 'mobile') {
+						$url .= Configure::read('Mobile.prefix').'/';
+					} else {
+						$url .= $category['PageCategory']['name'].'/';
+					}
 				}
 			}
 		}
@@ -428,22 +446,50 @@ class Page extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
+ * @param	string	$field			フィールド名
+ * @param	array	$options
+ * @return	mixed	$controlSource	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null) {
+	function getControlSource($field = null, $options = array()) {
 
 		if(ClassRegistry::isKeySet('SiteConfig')) {
 			$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		}
 		$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id');
-
+		$controlSources['user_id'] = $this->User->getUserList($options);
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
 			return false;
 		}
+
+	}
+/**
+ * 非公開チェックを行う
+ * @param	string	$url
+ * @return	boolean
+ * @access	public
+ */
+	function checkUnPublish($url) {
+
+		if($this->_unpublishes == -1) {
+			$conditions['or']['Page.status'] = false;
+			$conditions['or'][] = array(array('Page.publish_begin >' => date('Y-m-d H:i:s')),
+												array('Page.publish_begin <>' => '0000-00-00 00:00:00'),
+												array('Page.publish_begin <>' => NULL));
+			$conditions['or'][] = array(array('Page.publish_end <' => date('Y-m-d H:i:s')),
+												array('Page.publish_end <>' => '0000-00-00 00:00:00'),
+												array('Page.publish_end <>' => NULL));
+			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
+			if(!$pages) {
+				$this->_unpublishes = array();
+				return false;
+			}
+			$this->_unpublishes = Set::extract('/Page/url', $pages);
+		}
+
+		return in_array($url,$this->_unpublishes);
 
 	}
 /**
@@ -454,17 +500,22 @@ class Page extends AppModel {
  */
 	function checkPublish($url) {
 
-		if($this->_unpublishes == -1) {
-			$conditions = array('Page.status' => false);
+		if($this->_publishes == -1) {
+			$conditions['Page.status'] = true;
+			$conditions[] = array('or'=> array(array('Page.publish_begin <=' => date('Y-m-d H:i:s')),
+											array('Page.publish_begin' => NULL),
+											array('Page.publish_begin' => '0000-00-00 00:00:00')));
+			$conditions[] = array('or'=> array(array('Page.publish_end >=' => date('Y-m-d H:i:s')),
+											array('Page.publish_end' => NULL),
+											array('Page.publish_end' => '0000-00-00 00:00:00')));
 			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
 			if(!$pages) {
-				$this->_unpublishes = array();
-				return true;
+				$this->_publishes = array();
+				return false;
 			}
-			$this->_unpublishes = Set::extract('/Page/url', $pages);
+			$this->_publishes = Set::extract('/Page/url', $pages);
 		}
-
-		return !in_array($url,$this->_unpublishes);
+		return in_array($url,$this->_publishes);
 
 	}
 /**

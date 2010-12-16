@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $html->css('/mail/css/style',null,null,false);
-if(Configure::read('debug')==0){
+if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 	/* プラグインの為か、inlineが動作しない */
 	//$html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
 	$this->addScript($html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url'])));
@@ -34,7 +34,7 @@ if(Configure::read('debug')==0){
 <div class="section">
 	<p>お問い合わせ頂きありがとうございました。<br />
 		確認次第、ご連絡させて頂きます。</p>
-	<?php if($mailContent['MailContent']['redirect_url']): ?>
+	<?php if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']): ?>
 	<p>※５秒後にトップページへ自動的に移動します。</p>
 	<p> <a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックして下さい。≫</a> </p>
 	<?php endif; ?>

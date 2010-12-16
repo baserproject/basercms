@@ -32,75 +32,127 @@ class CkeditorHelper extends AppHelper {
  */
 	var $_script = false;
 /**
- * Adds the tiny_mce.js file and constructs the options
- * 'Source' //ソース
- * 'Save' //保存
- * 'NewPage' //新しいページ
- * 'Preview' //プレビュー
- * 'Templates' //テンプレート
- * 'Cut' //切り取り
- * 'Copy' //コピー
- * 'Paste' //貼り付け
- * 'PasteText' //プレーンテキスト貼り付け
- * 'PasteFromWord' //ワードから貼り付け
- * 'Print' //印刷
- * 'SpellChecker' //スペルチェック
- * 'Scayt' //スペルチェック設定
- * 'Undo' //元に戻す
- * 'Redo' //やり直し
- * 'Find' //検索
- * 'Replace' //置き換え
- * 'SelectAll' //すべて選択
- * 'RemoveFormat' //フォーマット削除
- * 'Form' //フォーム
- * 'Checkbox' //チェックボックス
- * 'Radio' //ラジオボタン
- * 'TextField' //1行テキスト
- * 'Textarea' //テキストエリア
- * 'Select' //選択フィールド
- * 'Button' //ボタン
- * 'ImageButton' //画像ボタン
- * 'HiddenField' //不可視フィールド
- * 'Bold' //太字
- * 'Italic' //斜体
- * 'Underline' //下線
- * 'Strike' //打ち消し線
- * 'Subscript' //添え字
- * 'Superscript' //上付き文字
- * 'NumberedList' //段落番号
- * 'BulletedList' //箇条書き
- * 'Outdent' //インデント解除
- * 'Indent' //インデント
- * 'Blockquote' //ブロック引用
- * 'JustifyLeft' //左揃え
- * 'JustifyCenter' //中央揃え
- * 'JustifyRight' //右揃え
- * 'JustifyBlock' //両端揃え
- * 'Link' //リンク挿入／編集
- * 'Unlink' //リンク解除
- * 'Anchor' //アンカー挿入／編集
- * 'Image' //イメージ
- * 'Flash' //FLASH
- * 'Table' //テーブル
- * 'HorizontalRule' //横罫線
- * 'Smiley' //絵文字
- * 'SpecialChar' //特殊文字
- * 'PageBreak' //改ページ挿入
- * 'Styles' //スタイル
- * 'Format' //フォーマット
- * 'Font' //フォント
- * 'FontSize' //フォントサイズ
- * 'TextColor' //テキスト色
- * 'BGColor' //背景色
- * 'Maximize' //最大化
- * 'ShowBlocks' //ブロック表示
- * 'About' //CKEditorバージョン情報
- * @param string $fieldName Name of a field, like this "Modelname.fieldname", "Modelname/fieldname" is deprecated
- * @param array $tinyoptions Array of TinyMCE attributes for this textarea
- * @return string JavaScript code to initialise the TinyMCE area
+ * CKEditor のスクリプトを構築する
+ *
+ * 【ボタン一覧】
+ * Source			- ソース
+ * Save				- 保存
+ * NewPage			- 新しいページ
+ * Preview			- プレビュー
+ * Templates		- テンプレート
+ * Cut				- 切り取り
+ * Copy				- コピー
+ * Paste			- 貼り付け
+ * PasteText		- プレーンテキスト貼り付け
+ * PasteFromWord	- ワードから貼り付け
+ * Print			- 印刷
+ * SpellChecker		- スペルチェック
+ * Scayt			- スペルチェック設定
+ * Undo				- 元に戻す
+ * Redo				- やり直し
+ * Find				- 検索
+ * Replace			- 置き換え
+ * SelectAll		- すべて選択
+ * RemoveFormat		- フォーマット削除
+ * Form				- フォーム
+ * Checkbox			- チェックボックス
+ * Radio			- ラジオボタン
+ * TextField		- 1行テキスト
+ * Textarea			- テキストエリア
+ * Select			- 選択フィールド
+ * Button			- ボタン
+ * ImageButton		- 画像ボタン
+ * HiddenField		- 不可視フィールド
+ * Bold				- 太字
+ * Italic			- 斜体
+ * Underline		- 下線
+ * Strike			- 打ち消し線
+ * Subscript		- 添え字
+ * Superscript		- 上付き文字
+ * NumberedList		- 段落番号
+ * BulletedList		- 箇条書き
+ * Outdent			- インデント解除
+ * Indent			- インデント
+ * Blockquote		- ブロック引用
+ * JustifyLeft		- 左揃え
+ * JustifyCenter	- 中央揃え
+ * JustifyRight		- 右揃え
+ * JustifyBlock		- 両端揃え
+ * Link				- リンク挿入／編集
+ * Unlink			- リンク解除
+ * Anchor			- アンカー挿入／編集
+ * Image			- イメージ
+ * Flash			- FLASH
+ * Table			- テーブル
+ * HorizontalRule	- 横罫線
+ * Smiley			- 絵文字
+ * SpecialChar		- 特殊文字
+ * PageBreak		- 改ページ挿入
+ * Styles			- スタイル
+ * Format			- フォーマット
+ * Font				- フォント
+ * FontSize			- フォントサイズ
+ * TextColor		- テキスト色
+ * BGColor			- 背景色
+ * Maximize			- 最大化
+ * ShowBlocks		- ブロック表示
+ * About			- CKEditorバージョン情報
+ * Publish			- 本稿に切り替え
+ * Draft			- 草稿に切り替え
+ * CopyPublish		- 本稿を草稿にコピー
+ * CopyDraft		- 草稿を本稿にコピー
+ * 
+ * @param	string	$fieldName
+ * @param	array	$ckoptions
+ * @return	string
+ * @access	protected
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
+		if(isset($ckoptions['publishAreaId'])) {
+			$publishAreaId = $ckoptions['publishAreaId'];
+			unset($ckoptions['publishAreaId']);
+		} else {
+			$publishAreaId = '';
+		}
+
+		if(isset($ckoptions['draftAreaId'])) {
+			$draftAreaId = $ckoptions['draftAreaId'];
+			unset($ckoptions['draftAreaId']);
+		} else {
+			$draftAreaId = '';
+		}
+		if(isset($ckoptions['disablePublish'])) {
+			$disablePublish = $ckoptions['disablePublish'];
+			unset($ckoptions['disablePublish']);
+		} else {
+			$disablePublish = false;
+		}
+		if(isset($ckoptions['disableDraft'])) {
+			$disableDraft = $ckoptions['disableDraft'];
+			unset($ckoptions['disableDraft']);
+		} else {
+			$disableDraft = true;
+		}
+		if(isset($ckoptions['disableCopyDraft'])) {
+			$disableCopyDraft = $ckoptions['disableCopyDraft'];
+			unset($ckoptions['disableCopyDraft']);
+		} else {
+			$disableCopyDraft = false;
+		}
+		if(isset($ckoptions['disableCopyPublish'])) {
+			$disableCopyPublish = $ckoptions['disableCopyPublish'];
+			unset($ckoptions['disableCopyPublish']);
+		} else {
+			$disableCopyPublish = false;
+		}
+		if(isset($ckoptions['readOnlyPublish'])) {
+			$readOnlyPublish = $ckoptions['readOnlyPublish'];
+			unset($ckoptions['readOnlyPublish']);
+		} else {
+			$readOnlyPublish = false;
+		}
+		
 		$jscode = '';
 		if(strpos($fieldName,'.')) {
 			list($model,$field) = explode('.',$fieldName);
@@ -112,24 +164,31 @@ class CkeditorHelper extends AppHelper {
 			$this->_script = true;
 			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
 		}
+		$toolbar1 = array('Cut', 'Copy', 'Paste', '-',
+							'Undo', 'Redo', '-',
+							'Bold', 'Italic', 'Underline', 'Strike', '-',
+							'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
+							'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+							'Smiley', 'Table', 'HorizontalRule', '-');
+		$toolbar2 = array( 'Styles', 'Format', 'Font', 'FontSize',
+							'TextColor', 'BGColor', '-',
+							'Link', 'Unlink', '-',
+							'Image');
+		$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
+		if(!$disableCopyDraft) {
+			$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
+		}
+		if(!$disableCopyPublish) {
+			$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
+		}
 		$_ckoptions = array('language' => 'ja',
 				'skin' => 'kama',
 				'width' => '600px',
 				'height' => '300px',
 				'collapser' => false,
 				'baseFloatZIndex' => 900,
-				'toolbar'=>array(array('Cut', 'Copy', 'Paste', '-',
-								'Undo', 'Redo', '-',
-								'Bold', 'Italic', 'Underline', 'Strike', '-',
-								'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
-								'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-								'Smiley', 'Table', 'HorizontalRule', '-'),
-						array( 'Styles', 'Format', 'Font', 'FontSize',
-								'TextColor', 'BGColor', '-',
-								'Link', 'Unlink', '-',
-								'Image'),
-						array( 'Maximize', 'ShowBlocks','Source')
-		));
+				'toolbar'=> array($toolbar1, $toolbar2, $toolbar3)
+		);
 		$ckoptions = array_merge($_ckoptions,$ckoptions);
 
 		if(!$styles) {
@@ -163,19 +222,40 @@ class CkeditorHelper extends AppHelper {
 			);
 		}
 		$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
+		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
 		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
+		if($draftAreaId) {
+			$jscode .= "editor_{$field}.draftDraftAreaId = '{$draftAreaId}';";
+		}
+		if($publishAreaId) {
+			$jscode .= "editor_{$field}.draftPublishAreaId = '{$publishAreaId}';";
+		}
+		if($readOnlyPublish) {
+			$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
+		}
+		$jscode .= " });";
+		$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
+		if($disableDraft) {
+			$jscode .= "editor_{$field}.execCommand('disableDraft');";
+		}
+		if($disablePublish) {
+			$jscode .= "editor_{$field}.execCommand('disablePublish');";
+		}
+		$jscode .= " });";
 		return $this->Javascript->codeBlock($jscode);
 	}
 /**
  * CKEditorのテキストエリアを出力する（textarea）
+ * 
  * @param string $fieldName
  * @param array $options
  * @param array $options
  * @return string
  */
-	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(),$form = null) {
+	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -183,6 +263,7 @@ class CkeditorHelper extends AppHelper {
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
+ * 
  * @param string $fieldName
  * @param array $options
  * @param array $tinyoptions

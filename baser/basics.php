@@ -23,38 +23,56 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
+ * 
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
+ * 
  * @return string   ベースURL
  */
 	function baseUrl() {
+
 		$appBaseUrl = Configure::read('App.baseUrl');
 		if($appBaseUrl) {
-			$_url = $_SERVER['REQUEST_URI'];
 			$baseUrl = $appBaseUrl.'/';
 		}else {
-			$_baseUrl = str_replace(DS,'/',preg_replace("/^\\".DS."/i",'',str_replace(docRoot(),'',ROOT)));
-			if($_baseUrl) {
-				$baseUrl = '/'.$_baseUrl.'/';
-			}else {
-				$baseUrl = '/';
+			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
+			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
+			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
+			$url = str_replace('url=', '', $_SERVER['QUERY_STRING']);
+			if($url) {
+				$baseUrl = str_replace($url, '', $_SERVER['REQUEST_URI']);
+			} else {
+				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
+				$baseUrl = preg_replace("/index$/", '', $_SERVER['REQUEST_URI']);
 			}
 		}
 		return $baseUrl;
+
 	}
 /**
  * ドキュメントルートを取得する
+ *
  * サブドメインの場合など、$_SERVER['DOCUMENT_ROOT'] が正常に取得できない場合に利用する
+ * UserDir に対応
+ *
  * @return string   ドキュメントルートの絶対パス
  */
 	function docRoot() {
+
 		if(strpos($_SERVER['SCRIPT_NAME'],'.php') === false){
 			// さくらの場合、/index を呼びだすと、拡張子が付加されない
 			$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
 		}else{
 			$scriptName = $_SERVER['SCRIPT_NAME'];
 		}
-		$docRoot = str_replace($scriptName,'',$_SERVER['SCRIPT_FILENAME']);
-		return str_replace('/', DS, $docRoot);
+		$path = explode('/', $scriptName);
+		krsort($path);
+		$docRoot = $_SERVER['SCRIPT_FILENAME'];
+		foreach($path as $value) {
+			$reg = "/\\".DS.$value."$/";
+			$docRoot = preg_replace($reg, '', $docRoot);
+		}
+		return $docRoot;
+
 	}
 /**
  * リビジョンを取得する
@@ -395,5 +413,26 @@
 			$_csv_data[$_csv_i]=str_replace($e.$e, $e, $_csv_data[$_csv_i]);
 		}
 		return empty($_line) ? false : $_csv_data;
+	}
+/**
+ * httpからのフルURLを取得する
+ *
+ * @param	mixed	$url
+ * @return	string
+ * @access	public
+ */
+	function fullUrl($url) {
+		$url = Router::url($url);
+		$protocol = 'http://';
+		$port = '';
+		if(!empty($_SERVER['HTTPS'])) {
+			$protocol = 'https://';
+		}
+		if(isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' && $_SERVER['PORT'] != '443') {
+			$port = ':'.$_SERVER['SERVER_PORT'];
+		}
+		$host = $_SERVER['SERVER_NAME'];
+		$full = $protocol.$host.$port.$url;
+		return $full;
 	}
 ?>

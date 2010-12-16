@@ -19,6 +19,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!isset($page)) {
+	return;
+}
 $pageCategory = $page->getCategory();
 ?>
 <?php if($pageCategory): ?>

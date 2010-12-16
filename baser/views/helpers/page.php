@@ -80,5 +80,29 @@ class PageHelper extends Helper {
 			return false;
 		}
 	}
+/**
+ * 公開状態を取得する
+ *
+ * @param	array	データリスト
+ * @return	boolean	公開状態
+ * @access	public
+ */
+	function allowPublish($data){
+
+		if(isset($data['Page'])){
+			$data = $data['Page'];
+		}
+
+		$allowPublish = (int)$data['status'];
+
+		// 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
+		if(($data['publish_begin'] != 0 && $data['publish_begin'] >= date('Y-m-d H:i:s')) ||
+				($data['publish_end'] != 0 && $data['publish_end'] <= date('Y-m-d H:i:s'))){
+			$allowPublish = false;
+		}
+
+		return $allowPublish;
+
+	}
 }
 ?>

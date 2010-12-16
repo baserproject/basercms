@@ -277,6 +277,29 @@ class EmailExComponent extends EmailComponent {
 
 		return $lines;
 	}
-
+/**
+ * Format a string as an email address
+ *
+ * @param string $string String representing an email address
+ * @return string Email address suitable for email headers or smtp pipe
+ * @access private
+ */
+	function __formatAddress($string, $smtp = false) {
+		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
+		if ($smtp && $hasAlias) {
+			return $this->__strip('<' .  $matches[3] . '>');
+		} elseif ($smtp) {
+			return $this->__strip('<' . $string . '>');
+		}
+		if ($hasAlias && !empty($matches[2])) {
+			// >>> CUSTOMIZE MODIFY 2010/12/06 ryuring
+			// 送信者名をエンコード
+			//return $this->__strip($matches[2] . ' <' . $matches[3] . '>');
+			// ---
+			return $this->__strip($this->__encode($matches[2]) . ' <' . $matches[3] . '>');
+			// <<<
+		}
+		return $this->__strip($string);
+	}
 }
 ?>

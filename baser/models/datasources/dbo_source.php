@@ -3030,7 +3030,7 @@ class DboSource extends DataSource {
  * @access	public
  */
 	function loadCsv($options) {
-		
+
 		extract($options);
 		if(!isset($path)) {
 			return false;
@@ -3057,6 +3057,9 @@ class DboSource extends DataSource {
 		}
 
 		while(($_record = fgetcsvReg($fp, 10240)) !== false) {
+
+			mb_convert_variables($appEncoding, $encoding, $_record);
+
 			$values = array();
 			// 配列の添え字をフィールド名に変換
 			foreach($_record as $key => $value) {
@@ -3073,7 +3076,7 @@ class DboSource extends DataSource {
 			$query = array(
 				'table' => $fullTableName,
 				'fields' => implode(', ', $head) ,
-				'values' => mb_convert_encoding(implode(', ', $values), $appEncoding, $encoding)
+				'values' => implode(', ', $values)
 			);
 			$sql = $this->renderStatement('create', $query);
 			if (!$this->execute($sql)) {
@@ -3082,7 +3085,7 @@ class DboSource extends DataSource {
 
 		}
 		fclose($fp);
-		
+
 		return true;
 
 	}

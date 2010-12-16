@@ -33,19 +33,5 @@ class MailConfig extends MailAppModel {
  * @access 	public
  */
 	var $name = 'MailConfig';
-/**
- * beforeValidate
- *
- * @return	boolean
- * @access	public
- */
-	function beforeValidate() {
-
-		$this->validate['encode'] = array(array('rule' => array('minLength',1),
-						'message' => "文字コードを入力して下さい。",
-						'required' => true));
-		return true;
-
-	}
 }
 ?>
