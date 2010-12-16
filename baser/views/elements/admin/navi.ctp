@@ -19,7 +19,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
 if ($this->viewPath != 'dashboard'){
 	$baser->addCrumb('ダッシュボード',array('plugin'=>null,'controller'=>'dashboard'));
 }

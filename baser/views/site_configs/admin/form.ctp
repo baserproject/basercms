@@ -73,11 +73,22 @@ $(function(){
 <?php echo $formEx->create('SiteConfig',array('action'=>'form')) ?> <?php echo $formEx->hidden('SiteConfig.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.name', 'WEBサイト名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.name', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.name') ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.formal_name', 'WEBサイト名') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.formal_name', array('size'=>55,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.formal_name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
-					<li>サイトの基本タイトルとして利用されます。</li>
+					<li>正式なWEBサイト名を指定します。</li>
+					<li>メールの送信元等で利用します。</li>
+				</ul>
+			</div>
+			&nbsp; </td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.name', 'WEBサイトタイトル') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.name', array('size'=>55,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.name') ?>
+			<div id="helptextName" class="helptext">
+				<ul>
+					<li>サイトの基本タイトルとして利用されます。（タイトルタグに影響します）</li>
 					<li>テンプレートで利用する場合は、<br />
 						&lt;?php $baser->title() ?&gt; で出力します。</li>
 				</ul>
@@ -86,7 +97,7 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.keyword', 'サイト基本キーワード') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.keyword', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpKeyword','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.keyword') ?>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.keyword', array('size'=>55,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpKeyword','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.keyword') ?>
 			<div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />
 				&lt;?php $baser->keywords() ?&gt; で出力します。</div>
 			&nbsp; </td>
@@ -104,7 +115,8 @@ $(function(){
 	</tr>
 </table>
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
+<div id ="formOptionBody" class="slide-body">
+<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
 		<td class="col-input"><?php echo $formEx->text('SiteConfig.address', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAddress','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.address') ?>
@@ -198,4 +210,32 @@ $(function(){
 		</td>
 	</tr>
 </table>
+<h3>メール設定関連</h3>
+<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+	<tr>
+		<th><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.mail_encode', 'メール送信文字コード') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.mail_encode', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpEncode','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextEncode" class="helptext">送信メールの文字コード</div>
+			<?php echo $formEx->error('SiteConfig.mail_encode') ?></td>
+	</tr>
+	<tr>
+		<th><?php echo $formEx->label('SiteConfig.smtp_host', 'SMTPホスト') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.smtp_host', array('size'=>35,'maxlength'=>255)) ?> <?php echo $formEx->error('SiteConfig.smtp_host') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpHost','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
+			&nbsp; </td>
+	</tr>
+	<tr>
+		<th><?php echo $formEx->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.smtp_user', array('size'=>35,'maxlength'=>255)) ?> <?php echo $formEx->error('SiteConfig.smtp_user') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpUsername','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
+			&nbsp; </td>
+	</tr>
+	<tr>
+		<th><?php echo $formEx->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.smtp_password', array('size'=>35,'maxlength'=>255)) ?> <?php echo $formEx->error('SiteConfig.smtp_password') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
+			&nbsp; </td>
+	</tr>
+</table>
+</div>
 <div class="align-center"> <?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button','id'=>'btnSubmit')) ?> </div>

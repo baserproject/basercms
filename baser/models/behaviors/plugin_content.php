@@ -73,7 +73,15 @@ class PluginContentBehavior extends ModelBehavior {
 				return false;
 			}
 		}
-		return true;
+		
+		// バリデーション
+		$pluginContent = $this->_generatePluginContentData($model);
+		if(isset($pluginContent['PluginContent']['id'])) {
+			$this->PluginContent->set($pluginContent);
+		}else {
+			$this->PluginContent->create($pluginContent);
+		}
+		return $this->PluginContent->validates();
 
 	}
 /**
@@ -86,21 +94,46 @@ class PluginContentBehavior extends ModelBehavior {
  */
 	function afterSave(&$model, $created) {
 
-		// プラグイン名を取得
-		$pluginName = $this->getPluginName($model->alias);
 		// コンテンツIDを取得
 		if($created) {
 			$contentId = $model->getLastInsertId();
 		}else {
 			$contentId = $model->data[$model->alias]['id'];
 		}
+		$pluginContent = $this->_generatePluginContentData($model, $contentId);
+		
+		/*** データを保存 ***/
+		if(isset($pluginContent['PluginContent']['id'])) {
+			$this->PluginContent->set($pluginContent);
+		}else {
+			$this->PluginContent->create($pluginContent);
+		}
+		$this->PluginContent->save();
 
+	}
+/**
+ * プラグインコンテンツデータを生成する
+ *
+ * 既に登録されているデータの場合は取得した上で生成
+ *
+ * @param	Model	$model
+ * @return	array
+ * @access	protected
+ */
+	function _generatePluginContentData(&$model, $contentId = '') {
+		
+		// プラグイン名を取得
+		$pluginName = $this->getPluginName($model->alias);
+		
 		/*** プラグインコンテンツを取得 ***/
-		$conditions = array('PluginContent.content_id'=>$contentId,
-				'PluginContent.plugin'=>$pluginName);
-		$pluginContent = $this->PluginContent->find($conditions);
-		if(!$pluginContent) {
-			$pluginContent = array();
+		$pluginContent = array();
+		if($contentId) {
+			$conditions = array('PluginContent.content_id'=>$contentId,
+					'PluginContent.plugin'=>$pluginName);
+			$pluginContent = $this->PluginContent->find($conditions);
+			if(!$pluginContent) {
+				$pluginContent = array();
+			}
 		}
 
 		/*** データを更新 ***/
@@ -108,14 +141,8 @@ class PluginContentBehavior extends ModelBehavior {
 		$pluginContent['PluginContent']['content_id'] = $contentId;
 		$pluginContent['PluginContent']['name'] = $model->data[$model->alias]['name'];
 
-		/*** データを保存 ***/
-		if(isset($pluginContent['PluginContent']['id'])) {
-			$this->PluginContent->set($pluginContent);
-		}else {
-			$this->PluginContent->create($pluginContent);
-		}
-		$ret = $this->PluginContent->save();
-
+		return $pluginContent;
+		
 	}
 /**
  * beforeDelete

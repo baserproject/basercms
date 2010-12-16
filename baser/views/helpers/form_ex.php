@@ -955,11 +955,23 @@ DOC_END;
 		));
 		// <<<
 	}
+/**
+ * CKEditorを出力する
+ * 
+ * @param	string	$fieldName
+ * @param	array	$options
+ * @param	array	$editorOptions
+ * @param	array	$styles
+ * @return	string
+ * @access	public
+ */
 	function ckeditor($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+
 		$_options = array('type'=>'textarea');
 		$options = am($_options,$options);
 		$method = $options['type'];
 		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
+		
 	}
 /**
  * create

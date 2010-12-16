@@ -72,7 +72,7 @@ class PagesController extends AppController {
 			$this->helpers[] = 'Cache';
 			$this->cacheAction = Configure::read('Baser.cachetime'); // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
 		}
-		
+
 		if(!empty($this->params['admin'])){
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
 		}
@@ -85,32 +85,14 @@ class PagesController extends AppController {
  */
 	function admin_index() {
 
-		/* セッション処理 */
-		if($this->data) {
-			$this->Session->write('Filter.Page.page_category_id',$this->data['Page']['page_category_id']);
-			$this->Session->write('Filter.Page.status',$this->data['Page']['status']);
-		}
-		if(!empty($this->params['named']['num'])){
-			$this->Session->write('Filter.Page.num', $this->params['named']['num']);
-		}
-		if(isset($this->params['named']['sortmode'])){
-			$this->Session->write('SortMode.Page', $this->params['named']['sortmode']);
-		}
-
-		$this->data = am($this->data,$this->_checkSession());
-		
-		/* 並び替えモード */
-		if(!$this->Session->check('SortMode.Page')){
-			$this->set('sortmode', 0);
-		}else{
-			$this->set('sortmode', $this->Session->read('SortMode.Page'));
-		}
-
-		/* 表示件数 */
-		if(!$this->Session->check('Filter.Page.num')){
-			$this->passedArgs['num'] = 10;
-		}else{
-			$this->passedArgs['num'] = $this->Session->read('Filter.Page.num');
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => 10, 'sortmode' => 0),
+							'Page' => array('page_category_id'=>'pconly'));
+		$this->setViewConditions('Page', null, $default);
+		if($this->Session->check('Page.sortmode')) {
+			$sortmode = $this->Session->read('Page.sortmode');
+		}else {
+			$sortmode = 0;
 		}
 
 		// 検索条件
@@ -122,10 +104,10 @@ class PagesController extends AppController {
 				'order' =>'Page.sort',
 				'limit' => $this->passedArgs['num']
 		);
-		
-		$this->set('dbDatas',$this->paginate('Page'));
 
 		/* 表示設定 */
+		$this->set('sortmode', $sortmode);
+		$this->set('dbDatas',$this->paginate('Page'));
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ一覧';
 
@@ -139,7 +121,7 @@ class PagesController extends AppController {
 	function admin_add() {
 
 		if(empty($this->data)) {
-			$this->data = $this->Page->getDefaultValue();
+			$this->data = $this->Page->getDefaultValue($this->Auth->user());
 		}else {
 
 			/* 登録処理 */
@@ -164,6 +146,7 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->pageTitle = '新規ページ登録';
@@ -187,6 +170,7 @@ class PagesController extends AppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
+			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
 		}else {
 
 			/* 更新処理 */
@@ -194,6 +178,7 @@ class PagesController extends AppController {
 			$this->Page->set($this->data);
 
 			if($this->Page->validates()) {
+
 				if($this->Page->save($this->data,false)) {
 					clearViewCache($this->data['Page']['url']);
 					$this->data['Page']['reflect_mobile'] = false;
@@ -203,6 +188,7 @@ class PagesController extends AppController {
 				}else {
 					$this->Session->setFlash('保存中にエラーが発生しました。');
 				}
+
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -210,6 +196,7 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
@@ -314,8 +301,7 @@ class PagesController extends AppController {
 		// 拡張子なしの場合は、route.phpで認証がかかる為、ここでは処理を行わない
 		// 1.5.9 以前との互換性の為残しておく
 		if(($ext)) {
-			$conditions = array('Page.status'=>true,'Page.url'=>$url);
-			if(!$this->Page->find($conditions, array('Page.id'), null, -1)) {
+			if(!$this->Page->checkPublish($url)) {
 				$this->notFound();
 			}
 		}
@@ -349,7 +335,7 @@ class PagesController extends AppController {
 			foreach ($categories as $category) {
 				if(!empty($category['url'])) {
 					$this->navis[$category['title']] = $category['url'];
-				}else {
+				}elseif(isset($categories['title'])) {
 					$this->navis[$category['title']] = '';
 				}
 			}
@@ -379,19 +365,22 @@ class PagesController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_preview($id = null) {
+	function admin_create_preview($id) {
 
-		if($id) {
-			$conditions = array('Page.id' => $id);
-			$page = $this->Page->find($conditions);
-		}elseif(isset($this->data['Page'])) {
+		if(isset($this->data['Page'])) {
 			$page = $this->data;
 			$page['Page']['url'] = $this->Page->getPageUrl($page);
+		} else {
+			$conditions = array('Page.id' => $id);
+			$page = $this->Page->find($conditions);
 		}
 
 		if(!$page) {
-			$this->notFound();
+			echo false;
+			exit();
 		}
+
+		Cache::write('page_preview_'.$id, $page);
 
 		if(preg_match('/^\/mobile\//is', $page['Page']['url'])){
 			Configure::write('Mobile.on',true);
@@ -400,26 +389,42 @@ class PagesController extends AppController {
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
-		$path = TMP.'pages_preview.ctp';
+		$path = TMP.'pages_preview_'.$id.'.ctp';
 		$file = new File($path);
 		$file->open('w');
 		$file->append($contents);
 		$file->close();
 		unset($file);
 		@chmod($path, 0666);
+		echo true;
+		exit();
 
-		if(!Configure::read('Mobile.on')){
-			$this->layoutPath = '';
-		}else{
+	}
+/**
+ * プレビューを表示する
+ *
+ * @return	void
+ * @access	public
+ */
+	function admin_preview($id){
+
+		$page = Cache::read('page_preview_'.$id);
+
+		if(preg_match('/^\/mobile\//is', $page['Page']['url'])){
+			Configure::write('Mobile.on',true);
 			$this->layoutPath = 'mobile';
 			$this->helpers[] = 'mobile';
+		} else {
+			$this->layoutPath = '';
 		}
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
 		$this->theme = $this->siteConfigs['theme'];
-		$this->render('display',null,TMP.'pages_preview.ctp');
+		$this->render('display',null,TMP.'pages_preview_'.$id.'.ctp');
+		@unlink(TMP.'pages_preview_'.$id.'.ctp');
+		Cache::delete('page_preview_'.$id);
 
 	}
 /**
@@ -443,66 +448,68 @@ class PagesController extends AppController {
 			echo false;
 		}
 		exit();
-		
-	}
-/**
- * セッションをチェックする
- * 
- * @return	array()
- * @access	protected
- */
-	function _checkSession(){
-		$data = array();
-		if($this->Session->check('Filter.Page.page_category_id')) {
-			$data['page_category_id'] = $this->Session->read('Filter.Page.page_category_id');
-		}else {
-			$this->Session->write('Filter.Page.page_category_id','pconly');
-			$data['page_category_id'] = 'pconly';
-		}
-		if($this->Session->check('Filter.Page.status')) {
-			$data['status'] = $this->Session->read('Filter.Page.status');
-		}else {
-			$this->Session->del('Filter.Page.status');
-		}
-		return array('Page'=>$data);
+
 	}
 /**
  * 管理画面ページ一覧の検索条件を取得する
- * 
+ *
  * @param	array		$data
  * @return	string
  * @access	protected
  */
 	function _createAdminIndexConditions($data){
 
+		/* 条件を生成 */
+		$conditions = array();
+		// ページカテゴリ
+
+		$pageCategoryId = $data['Page']['page_category_id'];
+		unset($data['Page']['page_category_id']);
+
+		// 条件指定のないフィールドを解除
+		foreach($data['Page'] as $key => $value) {
+			if($value === '') {
+				unset($data['Page'][$key]);
+			}
+		}
+
+		if($data['Page']) {
+			$conditions = $this->postConditions($data);
+		}
+
 		if(isset($data['Page'])){
 			$data = $data['Page'];
 		}
 
-		/* 条件を生成 */
-		$conditions = array();
 		// ページカテゴリ
-		// 子カテゴリも検索条件に入れる
-		$pageCategoryIds = array($data['page_category_id']);
-		if(!empty($data['page_category_id'])) {
-			if($data['page_category_id'] == 'pconly') {
+		if(!empty($pageCategoryId)) {
+
+			if($pageCategoryId == 'pconly') {
+
+				// PCのみ
 				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
 											array('Page.page_category_id'=>null));
-			}elseif($data['page_category_id'] != 'noncat') {
-				$children = $this->PageCategory->children($data['page_category_id']);
+
+			}elseif($pageCategoryId != 'noncat') {
+
+				// カテゴリ指定
+				// 子カテゴリも検索条件に入れる
+				$pageCategoryIds = array($pageCategoryId);
+				$children = $this->PageCategory->children($pageCategoryId);
 				if($children) {
 					foreach($children as $child) {
 						$pageCategoryIds[] = $child['PageCategory']['id'];
 					}
 				}
 				$conditions['Page.page_category_id'] = $pageCategoryIds;
-			}else {
+
+			}elseif($pageCategoryId == 'noncat') {
+
+				//カテゴリなし
 				$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
+
 			}
-		}
-		// ステータス
-		if(isset($data['status']) && $data['status'] !== '') {
-			$conditions['Page.status'] = $data['status'];
+
 		}
 
 		return $conditions;

@@ -283,10 +283,10 @@ class InstallationsController extends AppController {
 				$user['User']['real_name_1'] = $this->data['Installation']['admin_username'];
 				$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
 				$user['User']['user_group_id'] = 1;
-				$User->save($user);
-				if ($db->error) {
+				if (!$User->save($user)) {
 					if($message) $message .= '<br />';
 					$message .= '管理ユーザーを作成できませんでした。<br />'.$db->error;
+					$this->Session->setFlash($message);
 				} else {
 					$this->redirect('step5');
 				}

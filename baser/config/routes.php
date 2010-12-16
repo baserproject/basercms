@@ -64,11 +64,11 @@ if(!empty($cn->config->baser['driver'])) {
 			}
 			foreach ($_parameters as $_parameter){
 				if(!$mobileOn){
-					$conditions = array('Page.status'=>true,'Page.url'=>'/'.$_parameter);
+					$url = '/'.$_parameter;
 				}else{
-					$conditions = array('Page.status'=>true,'Page.url'=>'/mobile/'.$_parameter);
+					$url = '/mobile/'.$_parameter;
 				}
-				if($Page->field('id',$conditions)){
+				if($Page->checkPublish($url)){
 					if(!$mobileOn){
 						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{

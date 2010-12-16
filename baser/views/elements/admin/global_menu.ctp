@@ -19,5 +19,30 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'elements'.DS.'global_menu.ctp';
 ?>
+
+<ul class="global-menu clearfix">
+	<?php if(empty($menuType)) $menuType = '' ?>
+		<?php $globalMenus = $baser->getGlobalMenus($menuType) ?>
+		<?php if(!empty($globalMenus)): ?>
+			<?php foreach($globalMenus as $key => $globalMenu): ?>
+				<?php $no = sprintf('%02d',$key+1) ?>
+				<?php if($globalMenu['GlobalMenu']['status']): ?>
+					<?php if($key == 0): ?>
+						<?php $class = ' class="first menu'.$no.'"' ?>
+					<?php elseif($key == count($globalMenus) - 1): ?>
+						<?php $class = ' class="last menu'.$no.'"' ?>
+					<?php else: ?>
+						<?php $class = ' class="menu'.$no.'"' ?>
+					<?php endif ?>
+					<?php if($this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
+	<li<?php echo $class ?>><?php echo str_replace('/index.php','',$html->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>
+					<?php else: ?>
+	<li<?php echo $class ?>>
+	<?php $baser->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link']) ?>
+	</li>
+					<?php endif ?>
+				<?php endif ?>
+		<?php endforeach ?>
+	<?php endif ?>
+</ul>

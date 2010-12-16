@@ -101,7 +101,7 @@ function mailContentSender1ClickHandler(){
 				<ul>
 					<li>メールフォームのURLに利用します。<br />
 						(例)メールフォームIDが test の場合・・・http://[BaserCMS設置URL]/test/index</li>
-					<li>半角英数字で入力して下さい。</li>
+					<li>半角英数字、ハイフン、アンダースコアで入力して下さい。</li>
 				</ul>
 			</div>
 			&nbsp; </td>

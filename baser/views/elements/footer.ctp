@@ -19,12 +19,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+include BASER_VIEWS.'elements'.DS.'admin'.DS.'footer.ctp';
 ?>
-
-<div id="footer">
-	<p id="copyright"> BaserCMS <?php echo $baserVersion ?>&nbsp;&nbsp; <a href="http://basercms.net/" target="_new">
-		<?php $baser->img('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")); ?>
-		</a>&nbsp; <a href="http://cakephp.org/" target="_new">
-		<?php $baser->img('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")); ?>
-		</a> </p>
-</div>

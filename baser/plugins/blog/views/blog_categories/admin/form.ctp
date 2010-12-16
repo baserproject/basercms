@@ -36,7 +36,7 @@
 </div>
 
 <?php if($this->action == 'admin_edit'): ?>
-<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.no')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.no'),array('target'=>'_blank')) ?></strong></p>
+<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$formEx->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>
 <?php endif ?>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>

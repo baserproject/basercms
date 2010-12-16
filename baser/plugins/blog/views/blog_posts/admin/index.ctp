@@ -20,6 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $blogCategories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
+$users = $formEx->getControlSource("BlogPost.user_id");
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -28,6 +29,12 @@ $(document).ready(function(){
 	<?php endif ?>
 });
 </script>
+
+<style type="text/css">
+th{
+	white-space: nowrap;
+}
+</style>
 
 <h2>
 	<?php $baser->contentsTitle() ?>
@@ -50,6 +57,7 @@ $(document).ready(function(){
 		<small>カテゴリ</small> <?php echo $formEx->select('BlogPost.blog_category_id', $blogCategories, null, array('escape'=>false)) ?>　
 		<?php endif ?>
 		<small>公開設定</small> <?php echo $formEx->select('BlogPost.status', $textEx->booleanMarkList()) ?>　
+		<small>作成者</small> <?php echo $formEx->select('BlogPost.user_id', $users) ?>　
 	</p>
 	<?php echo $formEx->hidden('BlogPost.open',array('value'=>true)) ?>
 	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
@@ -70,20 +78,21 @@ $paginator->options = array('url' => $this->passedArgs);
 	<tr>
 		<th>操作</th>
 		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'no'); ?></th>
-		<th style="width:122px"><?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'name'); ?></th>
-		<th><?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'BlogCategory.name'); ?></th>
-		<th><?php echo $paginator->sort(array('asc'=>'投稿者 ▼','desc'=>'投稿者 ▲'),'User.real_name_1'); ?></th>
+		<th>
+			<?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'BlogCategory.name'); ?><br />
+			<?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'name'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'作成者 ▼','desc'=>'作成者 ▲'),'User.real_name_1'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'公開状態 ▼','desc'=>'公開状態 ▲'),'status'); ?></th>
 		<?php if($blogContent['BlogContent']['comment_use']): ?>
 		<th>コメント</th>
 		<?php endif ?>
-		<th><?php echo $paginator->sort(array('asc'=>'投稿日 ▼','desc'=>'投稿日 ▲'),'posts_date'); ?></th>
-		<th><?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
+		<th><?php echo $paginator->sort(array('asc'=>'投稿日 ▼','desc'=>'投稿日 ▲'),'posts_date'); ?><br />
+		<?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?></th>
 	</tr>
 	<?php if(!empty($posts)): ?>
 		<?php $count=0; ?>
 		<?php foreach($posts as $post): ?>
-			<?php if (!$post['BlogPost']['status']): ?>
+			<?php if (!$blog->allowPublish($post)): ?>
 				<?php $class=' class="disablerow"'; ?>
 			<?php elseif ($count%2 === 0): ?>
 				<?php $class=' class="altrow"'; ?>
@@ -95,10 +104,12 @@ $paginator->options = array('url' => $this->passedArgs);
 			<?php $baser->link('編集',array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $blogContent['BlogContent']['id'], $post['BlogPost']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $post['BlogPost']['name']),false); ?></td>
 		<td><?php echo $post['BlogPost']['no']; ?></td>
-		<td><?php $baser->link($post['BlogPost']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id'])) ?></td>
-		<td><?php if(!empty($post['BlogCategory']['title'])): ?>
-			<?php echo $post['BlogCategory']['title']; ?>
-			<?php endif; ?></td>
+		<td>
+			<?php if(!empty($post['BlogCategory']['title'])): ?>
+			<?php echo $post['BlogCategory']['title']; ?><br />
+			<?php endif; ?>
+			<?php $baser->link($post['BlogPost']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id'])) ?>
+		</td>
 		<td>
 			<?php if(!empty($post['User'])): ?>
 			<?php echo $post['User']['real_name_1']." ".$post['User']['real_name_2']; ?>
@@ -113,8 +124,8 @@ $paginator->options = array('url' => $this->passedArgs);
 			<?php echo $comment ?>
 			<?php endif ?></td>
 		<?php endif ?>
-		<td><?php echo $timeEx->format('y-m-d',$post['BlogPost']['posts_date']); ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$post['BlogPost']['modified']); ?></td>
+		<td><?php echo $timeEx->format('y-m-d',$post['BlogPost']['posts_date']); ?><br />
+		<?php echo $timeEx->format('y-m-d',$post['BlogPost']['modified']); ?></td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>

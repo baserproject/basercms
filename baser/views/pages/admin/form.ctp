@@ -19,6 +19,25 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$baser->css('ckeditor/editor', null, null, false);
+$users = $formEx->getControlSource("Page.user_id");
+$statuses = array(0=>'非公開', 1=>'公開');
+if($formEx->value('Page.id')) {
+	$previewId = $formEx->value('Page.id');
+}else{
+	$previewId = 'add_'.mt_rand(0, 99999999);
+}
+if($formEx->value('Page.page_category_id') == $mobileId) {
+	$previewWidth = '320px';
+}else {
+	$previewWidth = '90%';
+}
+$baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
+if($this->action == 'admin_add') {
+	$disableDraft = true;
+} else {
+	$disableDraft = false;
+}
 ?>
 <script type="text/javascript">
 $(function(){
@@ -27,18 +46,26 @@ $(function(){
  * プレビューボタンクリック時イベント
  */
 	$("#BtnPreview").click(function(){
-		var action = $("#PageForm").attr('action');
-		$("#PageForm").attr('action','<?php echo $this->base ?>/admin/pages/preview');
-		$("#PageForm").attr('target','_blank');
-		$("#PageForm").submit();
-		$("#PageForm").attr('action',action);
-		$("#PageForm").attr('target','_self');
+		$("#PageContents").val(editor_contents_tmp.getData());
+		$.ajax({
+			type: "POST",
+			url: '<?php echo $this->base ?>/admin/pages/create_preview/<?php echo $previewId ?>',
+			data: $("#PageForm").serialize(),
+			success: function(result){
+				if(result) {
+					$("#LinkPreview").trigger("click");
+				} else {
+					alert('プレビューの読み込みに失敗しました。');
+				}
+			}
+		});
 		return false;
 	});
+	$("#LinkPreview").colorbox({width:"<?php echo $previewWidth ?>", height:"90%", iframe:true});
 /**
  * フォーム送信時イベント
  */
-	$("#PageForm").submit(function(){
+	$("#btnSave").click(function(){
 		if($("#PageReflectMobile").attr('checked')){
 			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
 						' ※ 「mobile」フォルダの同階層に保存します。\n'+
@@ -46,6 +73,8 @@ $(function(){
 				return false;
 			}
 		}
+		editor_contents_tmp.execCommand('synchronize');
+		$("#PageMode").val('save');
 	});
 /**
  * カテゴリ変更時イベント
@@ -55,7 +84,6 @@ $(function(){
 /**
  * モバイル反映欄の表示設定
  */
-
 function pageCategoryIdChangeHandler() {
 	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
 	var pageCategoryId = $("#PagePageCategoryId").val();
@@ -103,6 +131,7 @@ function pageCategoryIdChangeHandler() {
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php echo $formEx->create('Page',array('id'=>'PageForm')) ?>
+<?php echo $formEx->hidden('Page.mode') ?>
 <?php echo $formEx->hidden('Page.sort') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<?php if($this->action == 'admin_edit'): ?>
@@ -162,11 +191,35 @@ function pageCategoryIdChangeHandler() {
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.contents', '本文') ?></th>
-		<td class="col-input"><?php echo $formEx->ckeditor('Page.contents',array('cols'=>60, 'rows'=>20)) ?> <?php echo $formEx->error('Page.contents') ?>&nbsp; </td>
+		<td class="col-input">
+			<?php echo $formEx->ckeditor('Page.contents_tmp',array('cols'=>60, 'rows'=>20), array('disableDraft' => $disableDraft, 'publishAreaId' => 'PageContents', 'draftAreaId' => 'PageDraft')) ?>
+			<?php echo $formEx->hidden('Page.contents') ?>
+			<?php echo $formEx->hidden('Page.draft') ?>
+			<?php echo $formEx->error('Page.contents') ?>&nbsp;
+		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?></th>
-		<td class="col-input"><?php echo $formEx->radio('Page.status', $textEx->booleanDoList("公開"),array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?> <?php echo $formEx->error('Page.status') ?> &nbsp; </td>
+		<th class="col-head">
+			<span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?>
+		</th>
+		<td class="col-input">
+			<?php echo $formEx->radio('Page.status', $statuses , array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+			<?php echo $formEx->error('Page.status') ?>
+			&nbsp;&nbsp;
+			<?php echo $formEx->dateTimePicker('Page.publish_begin',array('size'=>12,'maxlength'=>10),true) ?>&nbsp;〜&nbsp;
+			<?php echo $formEx->dateTimePicker('Page.publish_end',array('size'=>12,'maxlength'=>10),true) ?>
+			<?php echo $formEx->error('Page.publish_begin') ?>
+			<?php echo $formEx->error('Page.publish_end') ?>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
+		<td class="col-input">
+			<?php if(isset($users[$formEx->value('Page.author_id')])) : ?>
+			<?php echo $users[$formEx->value('Page.author_id')] ?>
+			<?php endif ?>
+			<?php echo $formEx->hidden('Page.author_id') ?>
+		</td>
 	</tr>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
@@ -187,11 +240,11 @@ function pageCategoryIdChangeHandler() {
 </table>
 <div class="submit">
 	<?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button')) ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
+		<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button', 'id'=>'btnSave')) ?>
+		<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
 	<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
-	<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
+		<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button', 'id'=>'btnSave')) ?>
+		<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
+		<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
 	<?php endif ?>
 </div>

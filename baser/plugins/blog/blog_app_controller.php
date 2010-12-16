@@ -42,11 +42,8 @@ class BlogAppController extends PluginsController {
 			$data['SiteConfig'] = $this->siteConfigs;
 		}
 		$to = $this->siteConfigs['email'];
-		$from = $this->siteConfigs['email'];
-		$fromName = $this->siteConfigs['name'];
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
-		$template = 'blog_comment';
-		$this->sendmail($to, $from, $fromName, $title, $template, $data);
+		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
 
 	}
 }

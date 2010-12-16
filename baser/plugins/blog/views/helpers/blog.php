@@ -261,6 +261,11 @@ class BlogHelper extends AppHelper {
  */
 	function prevLink($post,$title='',$htmlAttributes = array()) {
 
+		if(ClassRegistry::isKeySet('BlogPost')) {
+			$BlogPost = ClassRegistry::getObject('BlogPost');
+		} else {
+			$BlogPost = ClassRegistry::init('BlogPost');
+		}
 		$_htmlAttributes = array('class'=>'prev-link','arrow'=>'≪ ');
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
@@ -270,7 +275,7 @@ class BlogHelper extends AppHelper {
 		$conditions = array();
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
-		$conditions['BlogPost.status'] = true;
+		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$prevPost = $BlogPost->find($conditions,array('no','name'),'posts_date DESC',-1);
 		if($prevPost) {
 			$no = $prevPost['BlogPost']['no'];
@@ -287,6 +292,11 @@ class BlogHelper extends AppHelper {
  */
 	function nextLink($post,$title='',$htmlAttributes = array()) {
 
+		if(ClassRegistry::isKeySet('BlogPost')) {
+			$BlogPost = ClassRegistry::getObject('BlogPost');
+		} else {
+			$BlogPost = ClassRegistry::init('BlogPost');
+		}
 		$_htmlAttributes = array('class'=>'next-link','arrow'=>' ≫');
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
@@ -296,7 +306,7 @@ class BlogHelper extends AppHelper {
 		$conditions = array();
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
-		$conditions['BlogPost.status'] = true;
+		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$nextPost = $BlogPost->find($conditions,array('no','name'),'posts_date',-1);
 		if($nextPost) {
 			$no = $nextPost['BlogPost']['no'];
@@ -379,6 +389,22 @@ class BlogHelper extends AppHelper {
 		}
 		return $templates;
 	}
+/**
+ * 公開状態を取得する
+ *
+ * @param	array	データリスト
+ * @return	boolean	公開状態
+ * @access	public
+ */
+	function allowPublish($data){
 
+		if(ClassRegistry::isKeySet('BlogPost')) {
+			$BlogPost = ClassRegistry::getObject('BlogPost');
+		} else {
+			$BlogPost = ClassRegistry::init('BlogPost');
+		}
+		return $BlogPost->allowPublish($data);
+
+	}
 }
 ?>

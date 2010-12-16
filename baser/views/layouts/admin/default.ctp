@@ -63,23 +63,16 @@
 		
 		<!-- begin contents -->
 		<div id="contents">
-		
+
+			<?php if($this->params['url']['url'] != 'admin/users/login' &&
+					$this->params['url']['url'] != 'installations/update' &&
+					$this->params['url']['url'] != 'installations/reset' &&
+					($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
 			<!-- begin navigation -->
 			<div id="navigation" class="clearfix">
 				<div id="pankuzu">
-					<?php if($this->params['url']['url'] != 'admin/users/login' &&
-							$this->params['url']['url'] != 'installations/update' &&
-							$this->params['url']['url'] != 'installations/reset' &&
-							($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
 					<?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
-					<?php else: ?>
-					<?php $baser->element('navi',array('title_for_element'=>$title_for_layout),false,false); ?>
-					<?php endif; ?>
 				</div>
-				<?php if($this->params['url']['url'] != 'admin/users/login' && 
-							$this->params['url']['url'] != 'installations/update' &&
-							$this->params['url']['url'] != 'installations/reset' &&
-							($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
 				<div id="loginUser">
 					<?php if(Configure::read('debug')>0): ?>
 					<span>只今デバッグ中</span>
@@ -91,10 +84,10 @@
 					</span>
 					<?php endif; ?>
 				</div>
-				<?php endif; ?>
 			</div>
 			<!-- end navigation -->
-			
+			<?php endif; ?>
+
 			<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
 			<?php $baser->updateMessage() ?>
 			<?php endif ?>

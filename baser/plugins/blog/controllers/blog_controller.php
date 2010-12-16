@@ -160,8 +160,8 @@ class BlogController extends BlogAppController {
 		}
 
 		/* ブログ記事一覧を取得 */
-		$conditions["BlogPost.status"] = 1;
 		$conditions["BlogPost.blog_content_id"] = $contentId;
+		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 		$this->BlogPost->unbindModel(array('belongsTo'=>array('BlogContent')));
 		$this->paginate = array('conditions'=>$conditions,
 				'fields'=>array(),
@@ -243,11 +243,11 @@ class BlogController extends BlogAppController {
 		/*** カテゴリ一覧 ***/
 		if($type=='category') {
 			$conditions = array();
-			$conditions["BlogPost.blog_category_id"] = $categoryId;
-			if(!$this->preview) {
-				$conditions["BlogPost.status"] = true;
-			}
+			$conditions["BlogPost.blog_category_id"] = $categoryId;		
 			$conditions['BlogPost.blog_content_id'] = $contentId;
+			if(!$this->preview) {
+				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+			}
 			$this->paginate = array('conditions'=>$conditions,
 					'fields'=>array(),
 					'order'=>'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
@@ -275,7 +275,7 @@ class BlogController extends BlogAppController {
 
 			$conditions = array();
 			if(!$this->preview) {
-				$conditions["BlogPost.status"] = true;
+				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 			}
 			$conditions['BlogPost.blog_content_id'] = $contentId;
 
@@ -321,8 +321,8 @@ class BlogController extends BlogAppController {
 
 				// blog_post_idを取得
 				$conditions["BlogPost.no"] = $id;
-				$conditions['BlogPost.status'] = true;
 				$conditions["BlogPost.blog_content_id"] = $contentId;
+				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 				$postId = $this->BlogPost->field('id',$conditions);
 				if(!$postId) {
 					$this->notFound();
@@ -346,11 +346,11 @@ class BlogController extends BlogAppController {
 			if($this->preview && isset($this->data['BlogPost'])) {
 				$post['BlogPost'] = $this->data['BlogPost'];
 			}else {
-				if(!$this->preview) {
-					$conditions['BlogPost.status'] = true;
-				}
 				$conditions["BlogPost.no"] = $id;
 				$conditions["BlogPost.blog_content_id"] = $contentId;
+				if(!$this->preview) {
+					$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+				}
 				$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
 				$post = $this->BlogPost->find($conditions);
 				if(!$post) {
@@ -359,7 +359,7 @@ class BlogController extends BlogAppController {
 			}
 
 			// ナビゲーションを設定
-			if($post['BlogPost']['blog_category_id']) {
+			if(!empty($post['BlogPost']['blog_category_id'])) {
 				$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
 				if($blogCategories) {
 					foreach($blogCategories as $blogCategory) {
@@ -410,8 +410,24 @@ class BlogController extends BlogAppController {
  * @return	void
  * @access 	public
  */
-	function admin_preview() {
+	function admin_create_preview($blogContentsId, $id) {
 
+		Cache::write('blog_posts_preview_'.$id, $this->data);
+		echo true;
+		exit();
+		
+	}
+/**
+ * プレビューを表示する
+ *
+ * @return	void
+ * @access	public
+ */
+	function admin_preview($blogContentsId, $id){
+
+		$data = Cache::read('blog_posts_preview_'.$id);
+		Cache::delete('blog_posts_preview_'.$id);
+		$this->data = $this->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';
 		$this->subDir = '';
@@ -478,7 +494,15 @@ class BlogController extends BlogAppController {
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
-		$data['recentEntries'] = $this->BlogPost->find('all',array('fields'=>array('no','name'),'conditions'=>array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$id),'limit'=>5, 'order'=>'posts_date DESC','recursive'=>-1));
+		$conditions = array('BlogPost.blog_content_id'=>$id);
+		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		$data['recentEntries'] = $this->BlogPost->find('all', array(
+				'fields'=>array('no','name'),
+				'conditions'=>$conditions,
+				'limit'=>5,
+				'order'=>'posts_date DESC',
+				'recursive'=>-1)
+		);
 		return $data;
 		
 	}

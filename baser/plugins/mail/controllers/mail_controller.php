@@ -343,104 +343,24 @@ class MailController extends MailAppController {
 		// ユーザーに送信
 		if(!empty($userMail)) {
 			$data['other']['mode'] = 'user';
-			$this->_mailSetting($mailConfig,$mailContent['mail_template']);
-			$this->_sendmail($userMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_user'],null,null,$data);
+			$options = array('fromName' => $mailContent['sender_name'],
+								'template' => $mailContent['mail_template'],
+								'from' => $adminMail);
+			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
 
 		// 管理者に送信
 		if(!empty($adminMail)) {
 			$data['other']['mode'] = 'admin';
-			$this->_mailSetting($mailConfig,$mailContent['mail_template']);
-			$this->_sendmail($adminMail,$adminMail,$mailContent['sender_name'],$mailContent['subject_admin'],$userMail,$mailContent['sender_2'],$data);
+			$options = array('fromName' => $mailContent['sender_name'],
+								'reply' => $userMail,
+								'from' => $adminMail,
+								'template' => $mailContent['mail_template'],
+								'cc' => $mailContent['sender_2']
+			);
+			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}
 		
-	}
-/**
- * メールコンポーネントの初期設定
- *
- * @param	array   メール設定
- * @param   string  テンプレート
- * @return	boolean 設定結果
- * @access	protected
- */
-	function _mailSetting($mailConfig,$template) {
-
-		$this->EmailEx->reset();
-		$this->EmailEx->charset=$mailConfig['encode'];
-		$this->EmailEx->sendAs = 'text';		// text or html or both
-		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-		if(Configure::read('Mobile.on')) {
-			$this->EmailEx->template = 'mobile'.DS.$template;
-		}else {
-			$this->EmailEx->template = $template;
-		}
-		if($mailConfig['smtp_host']) {
-			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
-			$this->EmailEx->smtpOptions = array('host'	=>$mailConfig['smtp_host'],
-					'port'	=>25,
-					'timeout'	=>30,
-					'username'=>($mailConfig['smtp_username'])?$mailConfig['smtp_username']:null,
-					'password'=>($mailConfig['smtp_password'])?$mailConfig['smtp_password']:null);
-		}else {
-			$this->EmailEx->delivery = "mail";
-		}
-
-		return true;
-
-	}
-/**
- * メールを送信する
- * @param string $to        送信先アドレス
- * @param string $from      送信元アドレス
- * @param string $fromName  送信元名
- * @param string $title     表題
- * @param string $cc        CCアドレス
- * @param array $data       送信データ
- * @return boolean          送信結果
- * @access protected
- */
-	function _sendmail($to,$from,$fromName,$title,$reply = null, $cc = null,$data = null) {
-
-		$this->EmailEx->to = $to;
-		$this->EmailEx->subject = $title;
-
-		if($from && $fromName) {
-			$this->EmailEx->return = $from;
-			if($reply) {
-				$this->EmailEx->replyTo = $reply;
-			}else {
-				$this->EmailEx->replyTo = $from;
-			}
-			$this->EmailEx->from = $fromName . '<'.$from.'>';
-		}elseif($from) {
-			$this->EmailEx->return = $from;
-			if($reply) {
-				$this->EmailEx->replyTo = $reply;
-			}else {
-				$this->EmailEx->replyTo = $from;
-			}
-			$this->EmailEx->from = $from;
-		}else {
-			$this->EmailEx->return = $to;
-			$this->EmailEx->replyTo = $to;
-			$this->EmailEx->from = $to;
-		}
-
-		if($cc) {
-			if(strpos(',',$cc !== false)) {
-				$cc = split(',', $cc);
-			}else{
-				$cc = array($cc);
-			}
-			$this->EmailEx->cc = $cc;
-		}
-
-		if($data) {
-			$this->set($data);
-		}
-
-		$this->EmailEx->send();
-
 	}
 /**
  * 認証用のキャプチャ画像を表示する

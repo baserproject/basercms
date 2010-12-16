@@ -28,10 +28,10 @@ class BlogPostsSchema extends CakeSchema {
 		'user_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'status' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 2),
 		'posts_date' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'content_draft' => array('type' => 'text', 'null' => true, 'default' => NULL),
-		'detail_draft' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'content_draft' => array('type' => 'text', 'null' => true, 'default' => NULL),
+		'detail_draft' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

@@ -73,31 +73,4 @@
 			<?php echo $form->error('MailConfig.site_fax') ?></td>
 	</tr>
 </table>
-<h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
-	<tr>
-		<th><span class="required">*</span>&nbsp;<?php echo $form->label('MailConfig.encode', '文字コード') ?></th>
-		<td class="col-input"><?php echo $form->text('MailConfig.encode', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpEncode','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextEncode" class="helptext">送信メールの文字コード</div>
-			<?php echo $form->error('MailConfig.encode') ?></td>
-	</tr>
-	<tr>
-		<th><?php echo $form->label('MailConfig.smtp_host', 'SMTPホスト') ?></th>
-		<td class="col-input"><?php echo $form->text('MailConfig.smtp_host', array('size'=>35,'maxlength'=>255)) ?> <?php echo $form->error('MailConfig.smtp_host') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpHost','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			&nbsp; </td>
-	</tr>
-	<tr>
-		<th><?php echo $form->label('MailConfig.smtp_username', 'SMTPユーザー') ?></th>
-		<td class="col-input"><?php echo $form->text('MailConfig.smtp_username', array('size'=>35,'maxlength'=>255)) ?> <?php echo $form->error('MailConfig.smtp_username') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpUsername','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			&nbsp; </td>
-	</tr>
-	<tr>
-		<th><?php echo $form->label('MailConfig.smtp_password', 'SMTPパスワード') ?></th>
-		<td class="col-input"><?php echo $form->text('MailConfig.smtp_password', array('size'=>35,'maxlength'=>255)) ?> <?php echo $form->error('MailConfig.smtp_password') ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSmtpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			&nbsp; </td>
-	</tr>
-</table>
 <div class="align-center"> <?php echo $form->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button')) ?> </div>

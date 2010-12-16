@@ -8,3 +8,8 @@
 "7","email","","",""
 "8","widget_area","1","",""
 "9","maintenance","0","",""
+"10","mail_encode","ISO-2022-JP","",""
+"11","smtp_host","","",""
+"12","smtp_user","","",""
+"13","smtp_password","","",""
+"14","formal_name","BaserCMS inc. [ƒfƒ‚]","",""

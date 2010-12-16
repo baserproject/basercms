@@ -88,13 +88,13 @@ class Theme extends AppModel {
  * @return	boolean
  */
 	function save($data = null, $validate = true, $fieldList = array()) {
-		
+
 		if(!$data){
 			$data = $this->data;
 		}else{
 			$this->set($data);
 		}
-		
+
 		if($validate){
 			if(!$this->validates()){
 				return false;
@@ -104,10 +104,12 @@ class Theme extends AppModel {
 		if(isset($data['Theme'])){
 			$data = $data['Theme'];
 		}
-		
+
 		$path = WWW_ROOT.'themed'.DS;
-		if(!rename($path.$data['old_name'], $path.$data['name'])){
-			return false;
+		if($path.$data['old_name'] != $path.$data['name']) {
+			if(!rename($path.$data['old_name'], $path.$data['name'])){
+				return false;
+			}
 		}
 
 		$keys = array('title','description','author','url');
@@ -116,13 +118,13 @@ class Theme extends AppModel {
 				$this->setConfig($data['name'], $key, $data[$key]);
 			}
 		}
-		
+
 		return true;
 
 	}
 /**
  * テーマ設定ファイルに値を設定する
- * 
+ *
  * @param string $key
  * @param string $value
  * @param string $contents

@@ -470,64 +470,111 @@ class AppController extends Controller {
 	}
 /**
  * メールを送信する
+ * 
+ * @param	string	$to		送信先アドレス
+ * @param	string	$from	送信元アドレス
+ * @param	string	$title	タイトル
+ * @param	mixed	$body	本文
+ * @return	boolean			送信結果
+ * @access	public
+ */
+	function sendMail($to, $title = '', $body = '', $options = array()) {
+
+		$_options = array('fromName' => $this->siteConfigs['formal_name'],
+							'reply' => $this->siteConfigs['email'],
+							'cc' => '',
+							'template' => 'default',
+							'from' => $this->siteConfigs['email']
+		);
+
+		$options = am($_options, $options);
+
+		extract($options);
+
+		if(!isset($this->EmailEx)) {
+			return false;
+		}
+		
+		// メール基本設定
+		$this->_setMail();
+
+		// テンプレート
+		if(Configure::read('Mobile.on')) {
+			$this->EmailEx->template = 'mobile'.DS.$template;
+		}else {
+			$this->EmailEx->template = $template;
+		}
+
+		// データ
+		if(is_array($body)) {
+			$this->set($body);
+		}else {
+			$this->set('body', $body);
+		}
+		
+		// 送信先アドレス
+		$this->EmailEx->to = $to;
+
+		// 件名
+		$this->EmailEx->subject = $title;
+
+		// 送信元・返信先
+		if($from) {
+			$this->EmailEx->from = $from;
+			$this->EmailEx->return = $from;
+			$this->EmailEx->replyTo = $reply;
+		} else {
+			$this->EmailEx->from = $to;
+			$this->EmailEx->return = $to;
+			$this->EmailEx->replyTo = $to;
+		}
+
+		// 送信元名
+		if($from && $fromName) {
+			$this->EmailEx->from = $fromName . ' <'.$from.'>';
+		}
+
+		// CC
+		if($cc) {
+			if(strpos(',',$cc !== false)) {
+				$cc = split(',', $cc);
+			}else{
+				$cc = array($cc);
+			}
+			$this->EmailEx->cc = $cc;
+		}
+
+		$this->EmailEx->send();
+
+	}
+/**
+ * メールコンポーネントの初期設定
  *
- * @param	mixed	mailform
- * @return	void
+ * @return	boolean 設定結果
  * @access	protected
  */
-	function sendmail($to,$from,$fromName,$title,$template,$data = null) {
+	function _setMail() {
 
 		if(!isset($this->EmailEx)) {
 			return false;
 		}
 
 		$this->EmailEx->reset();
-		$this->EmailEx->to = $to;
-		$this->EmailEx->subject = $title;
-		if($from && $fromName) {
-			$this->EmailEx->return = $from;
-			$this->EmailEx->replyTo = $from;
-			$this->EmailEx->from = $fromName . '<'.$from.'>';
-		}elseif($from) {
-			$this->EmailEx->return = $from;
-			$this->EmailEx->replyTo = $from;
-			$this->EmailEx->from = $from;
-		}else {
-			$this->EmailEx->return = $to;
-			$this->EmailEx->replyTo = $to;
-			$this->EmailEx->from = $to;
-		}
-
-		if(Configure::read('Mobile.on')) {
-			$this->EmailEx->template = 'mobile'.DS.$template;
-		}else {
-			$this->EmailEx->template = $template;
-		}
-
+		$this->EmailEx->charset = $this->siteConfigs['mail_encode'];
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-		// TODO SMTPの設定は、サイト基本設定でできるようにする
-		$this->EmailEx->charset='ISO-2022-JP';
-		/*if($mailConfig['smtp_host']){
+		if($this->siteConfigs['smtp_host']) {
 			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
-			$this->EmailEx->smtpOptions = array('host'	=>$mailConfig['smtp_host'],
-													  'port'	=>25,
-													  'timeout'	=>30,
-													  'username'=>$mailConfig['smtp_username'],
-													  'password'=>$mailConfig['smtp_password']);
-		}else{*/
-		$this->EmailEx->delivery = "mail";
-		//}
-		if(Configure::read('Mobile.on')) {
-			$this->EmailEx->template = 'mobile'.DS.$template;
-		}else {
-			$this->EmailEx->template = $template;
-		}
-		if($data) {
-			$this->set($data);
+			$this->EmailEx->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
+					'port'	=>25,
+					'timeout'	=>30,
+					'username'=>($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user']:null,
+					'password'=>($this->siteConfigs['smtp_password'])?$this->siteConfigs['smtp_password']:null);
+		} else {
+			$this->EmailEx->delivery = "mail";
 		}
 
-		$this->EmailEx->send();
+		return true;
 
 	}
 /**
@@ -656,6 +703,83 @@ class AppController extends Controller {
 		}
 
 		return $url;
+
+	}
+/**
+ * 画面の情報をセットする
+ *
+ * @param	array	$filterModels
+ * @param	string	$subGroup
+ * @param	array	$default
+ * @return	void
+ * @access	public
+ */
+	function setViewConditions($filterModels = array(), $subGroup = '', $default = array()) {
+		$this->_saveViewConditions($filterModels, $subGroup);
+		$this->_loadViewConditions($filterModels, $subGroup, $default);
+	}
+/**
+ * 画面の情報をセッションに保存する
+ *
+ * @param	string		$subGroup
+ * @return	void
+ * @access	protected
+ */
+	function _saveViewConditions($filterModels = array(), $subGroup = '') {
+
+		if(!is_array($filterModels)){
+			$filterModels = array($filterModels);
+		}
+		$group = $this->name.Inflector::classify($this->action);
+		if($subGroup) {
+			$group .= ".".$subGroup;
+		}
+		foreach($filterModels as $model) {
+			if(isset($this->data[$model])) {
+				$this->Session->write("{$group}.filter.{$model}",$this->data[$model]);
+			}
+		}
+		if(!empty($this->params['named'])) {
+			$this->Session->write("{$group}.named",$this->params['named']);
+		}
+
+	}
+/**
+ * 画面の情報をセッションから読み込む
+ *
+ * @param	string		$subGroup
+ * @param	array		$defaultValues
+ * @access	protected
+ */
+	function _loadViewConditions($filterModels = array(), $subGroup = '', $default = array()) {
+
+		if(!is_array($filterModels)){
+			$filterModels = array($filterModels);
+		}
+		$group = $this->name.Inflector::classify($this->action);
+		if($subGroup) {
+			$group .= ".".$subGroup;
+		}
+
+		foreach($filterModels as $model) {
+			if($this->Session->check("{$group}.filter.{$model}")) {
+				$filter = $this->Session->read("{$group}.filter.{$model}");
+			} elseif(!empty($default[$model])) {
+				$filter = $default[$model];
+			} else {
+				$filter = array();
+			}
+			$this->data[$model] = $filter;
+		}
+
+		if($this->Session->check("{$group}.named")) {
+			$named = $this->Session->read("{$group}.named");
+		} elseif(!empty($default['named'])) {
+			$named = $default['named'];
+		} else {
+			$named = array();
+		}
+		$this->passedArgs = $named;
 
 	}
 }
