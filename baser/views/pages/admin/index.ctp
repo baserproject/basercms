@@ -110,11 +110,10 @@ $(function(){
 		<?php else: ?>
 		<th>NO</th>
 		<th>カテゴリ</th>
-		<th>ページ名</th>
-		<th>タイトル</th>
+		<th>ページ名<br />タイトル</th>
 		<th>公開状態</th>
-		<th>登録日</th>
-		<th>更新日</th>
+		<th>作成者</th>
+		<th>登録日<br />更新日</th>
 		<?php endif ?>
 	</tr>
 	<?php if(!empty($dbDatas)): ?>
@@ -128,7 +127,7 @@ $(function(){
 				<?php $class=' class="sortable"'; ?>
 			<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
-		<td class="operation-button">
+		<td class="operation-button" style="width:15%">
 			<?php if($sortmode): ?>
 			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
 			<?php echo $formEx->hidden('Sort.id'.$dbData['Page']['id'],array('class'=>'id','value'=>$dbData['Page']['id'])) ?>
@@ -142,23 +141,23 @@ $(function(){
 			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
 		</td>
-		<td class="col-id" style="width:10%"><?php echo $dbData['Page']['id']; ?></td>
-		<td>
+		<td style="width:5%"><?php echo $dbData['Page']['id']; ?></td>
+		<td style="width:15%">
 			<?php if(!empty($dbData['PageCategory']['title'])): ?>
 			<?php echo $dbData['PageCategory']['title']; ?>
 			<?php endif; ?></td>
-		<td>
+		<td style="width:30%">
 			<?php $baser->link($dbData['Page']['name'],array('action'=>'edit', $dbData['Page']['id'])); ?><br />
 			<?php echo $dbData['Page']['title']; ?></td>
 		<td style="width:10%;text-align:center">
 			<?php echo $textEx->booleanMark($dbData['Page']['status']); ?><br />
 		</td>
-		<td style="text-align:center">
+		<td style="width:15%;text-align:center">
 			<?php if(isset($users[$dbData['Page']['author_id']])) : ?>
 			<?php echo $users[$dbData['Page']['author_id']] ?>
 			<?php endif ?>
 		</td>
-		<td style="white-space: nowrap">
+		<td style="width:10%;white-space: nowrap">
 			<?php echo $timeEx->format('y-m-d',$dbData['Page']['created']) ?><br />
 			<?php echo $timeEx->format('y-m-d',$dbData['Page']['modified']) ?>
 		</td>
