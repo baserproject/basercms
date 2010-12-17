@@ -709,61 +709,80 @@ class AppController extends Controller {
  * 画面の情報をセットする
  *
  * @param	array	$filterModels
- * @param	string	$subGroup
- * @param	array	$default
+ * @param	string	$options
  * @return	void
  * @access	public
  */
-	function setViewConditions($filterModels = array(), $subGroup = '', $default = array()) {
-		$this->_saveViewConditions($filterModels, $subGroup);
-		$this->_loadViewConditions($filterModels, $subGroup, $default);
+	function setViewConditions($filterModels = array(), $options = array()) {
+		$this->_saveViewConditions($filterModels, $options);
+		$this->_loadViewConditions($filterModels, $options);
 	}
 /**
  * 画面の情報をセッションに保存する
  *
- * @param	string		$subGroup
+ * @param	string		$options
  * @return	void
  * @access	protected
  */
-	function _saveViewConditions($filterModels = array(), $subGroup = '') {
+	function _saveViewConditions($filterModels = array(), $options = array()) {
+
+		$_options = array('action' => '', 'group' => '');
+		$options = am($_options, $options);
+		extract($options);
 
 		if(!is_array($filterModels)){
 			$filterModels = array($filterModels);
 		}
-		$group = $this->name.Inflector::classify($this->action);
-		if($subGroup) {
-			$group .= ".".$subGroup;
+
+		if(!$action) {
+			$action = $this->action;
 		}
+
+		$contentsName = $this->name.Inflector::classify($action);
+		if($group) {
+			$contentsName .= ".".$group;
+		}
+
 		foreach($filterModels as $model) {
 			if(isset($this->data[$model])) {
-				$this->Session->write("{$group}.filter.{$model}",$this->data[$model]);
+				$this->Session->write("{$contentsName}.filter.{$model}",$this->data[$model]);
 			}
 		}
+		
 		if(!empty($this->params['named'])) {
-			$this->Session->write("{$group}.named",$this->params['named']);
+			$named = am($this->Session->read("{$contentsName}.named"), $this->params['named']);
+			$this->Session->write("{$contentsName}.named", $named);
 		}
 
 	}
 /**
  * 画面の情報をセッションから読み込む
  *
- * @param	string		$subGroup
- * @param	array		$defaultValues
+ * @param	string		$options
  * @access	protected
  */
-	function _loadViewConditions($filterModels = array(), $subGroup = '', $default = array()) {
+	function _loadViewConditions($filterModels = array(), $options = array()) {
+
+		$_options = array('default'=>array(), 'action' => '', 'group' => '');
+		$options = am($_options, $options);
+		extract($options);
 
 		if(!is_array($filterModels)){
 			$filterModels = array($filterModels);
 		}
-		$group = $this->name.Inflector::classify($this->action);
-		if($subGroup) {
-			$group .= ".".$subGroup;
+		
+		if(!$action) {
+			$action = $this->action;
+		}
+
+		$contentsName = $this->name.Inflector::classify($action);
+		if($group) {
+			$contentsName .= ".".$group;
 		}
 
 		foreach($filterModels as $model) {
-			if($this->Session->check("{$group}.filter.{$model}")) {
-				$filter = $this->Session->read("{$group}.filter.{$model}");
+			if($this->Session->check("{$contentsName}.filter.{$model}")) {
+				$filter = $this->Session->read("{$contentsName}.filter.{$model}");
 			} elseif(!empty($default[$model])) {
 				$filter = $default[$model];
 			} else {
@@ -772,8 +791,8 @@ class AppController extends Controller {
 			$this->data[$model] = $filter;
 		}
 
-		if($this->Session->check("{$group}.named")) {
-			$named = $this->Session->read("{$group}.named");
+		if($this->Session->check("{$contentsName}.named")) {
+			$named = $this->Session->read("{$contentsName}.named");
 		} elseif(!empty($default['named'])) {
 			$named = $default['named'];
 		} else {

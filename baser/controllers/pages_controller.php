@@ -88,11 +88,17 @@ class PagesController extends AppController {
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => 10, 'sortmode' => 0),
 							'Page' => array('page_category_id'=>'pconly'));
-		$this->setViewConditions('Page', null, $default);
-		if($this->Session->check('Page.sortmode')) {
-			$sortmode = $this->Session->read('Page.sortmode');
+		$this->setViewConditions('Page', array('default' => $default));
+		if($this->Session->check('PagesAdminIndex.named.sortmode')) {
+			$sortmode = $this->Session->read('PagesAdminIndex.named.sortmode');
 		}else {
 			$sortmode = 0;
+		}
+
+		// 並び替えモードの場合は、強制的にsortフィールドで並び替える
+		if($sortmode) {
+			$this->passedArgs['sort'] = 'sort';
+			$this->passedArgs['direction'] = 'asc';
 		}
 
 		// 検索条件
@@ -436,7 +442,7 @@ class PagesController extends AppController {
 	function admin_update_sort () {
 
 		if($this->data){
-			$this->data = am($this->data,$this->_checkSession());
+			$this->setViewConditions('Page', array('action' => 'admin_index'));
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			$this->Page->fileSave = false;
 			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
