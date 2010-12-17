@@ -471,7 +471,8 @@ class PagesController extends AppController {
 
 		$pageCategoryId = $data['Page']['page_category_id'];
 		unset($data['Page']['page_category_id']);
-
+		unset($data['Sort']);
+		
 		// 条件指定のないフィールドを解除
 		foreach($data['Page'] as $key => $value) {
 			if($value === '') {
