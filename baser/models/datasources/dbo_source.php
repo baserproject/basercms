@@ -3045,7 +3045,7 @@ class DboSource extends DataSource {
 			return false;
 		}
 		if(!isset($encoding)) {
-			$_encoding = $this->_dbEncToPhp($this->getEncoding());
+			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 
 		$appEncoding = Configure::read('App.encoding');
