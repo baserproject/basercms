@@ -81,6 +81,15 @@ class DboSource extends DataSource {
 		'commit' => 'COMMIT',
 		'rollback' => 'ROLLBACK'
 	);
+// >>> CUSTOMIZE ADD 2010/12/17 ryuring
+/**
+ * PHP←→DBエンコーディングマップ
+ *
+ * @var		array
+ * @access	public
+ */
+	var $_encodingMaps = array('utf8'=>'UTF-8', 'sjis'=>'SJIS', 'ujis'=>'EUC-JP');
+// <<<
 /**
  * Constructor
  */
@@ -3036,7 +3045,7 @@ class DboSource extends DataSource {
 			return false;
 		}
 		if(!isset($encoding)) {
-			$encoding = 'UTF-8';
+			$_encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 
 		$appEncoding = Configure::read('App.encoding');
@@ -3058,7 +3067,9 @@ class DboSource extends DataSource {
 
 		while(($_record = fgetcsvReg($fp, 10240)) !== false) {
 
-			mb_convert_variables($appEncoding, $encoding, $_record);
+			if($appEncoding != $encoding) {
+				mb_convert_variables($appEncoding, $encoding, $_record);
+			}
 
 			$values = array();
 			// 配列の添え字をフィールド名に変換
@@ -3132,7 +3143,7 @@ class DboSource extends DataSource {
 			return false;
 		}
 		if(!isset($encoding)) {
-			$encoding = 'SJIS';
+			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 		if(!isset($table)) {
 			$table = basename($path, '.csv');
@@ -3181,21 +3192,55 @@ class DboSource extends DataSource {
 		foreach($datas[0][$tablekey] as $key => $value) {
 			$heads[] = '"'.$key.'"';
 		}
-		fwrite($fp, implode(",",$heads)."\r\n");
+
+		$head = implode(",",$heads)."\n";
+		if($encoding != $this->dbEncoding) {
+			$head = mb_convert_encoding($head, $encoding, $appEncoding);
+		}
+		fwrite($fp, $head);
 
 		// データを書込
 		foreach($datas as $data) {
 			$record = $data[$tablekey];
 			$record = $this->_convertRecordToCsv($record);
-			mb_convert_variables($encoding,$appEncoding,$record);
-			$csv = implode(',',$record)."\r\n";
-			fwrite($fp, $csv);
+			$csvRecord = implode(',',$record)."\n";
+			if($encoding != $appEncoding) {
+				$csvRecord = mb_convert_encoding($csvRecord, $encoding, $appEncoding);
+			}
+			fwrite($fp, $csvRecord);
 		}
 
 		fclose($fp);
 
 		return true;
 		
+	}
+/**
+ * DB用エンコーディング名称をPHP用エンコーディング名称に変換する
+ *
+ * @param	string	$enc
+ * @return	string
+ */
+	function _dbEncToPhp($enc) {
+		if(!empty($this->_encodingMaps[$enc])) {
+			return $this->_encodingMaps[$enc];
+		} else {
+			return $enc;
+		}
+	}
+/**
+ * PHP用エンコーディング名称をDB用のエンコーディング名称に変換する
+ *
+ * @param	string	$enc
+ * @return	string
+ */
+	function _phpEncToDb ($enc) {
+		$encs = array_keys($this->_encodingMaps, $enc);
+		if($encs && is_array($encs)) {
+			return $encs[0];
+		} else {
+			return $enc;
+		}
 	}
 // <<<
 }
