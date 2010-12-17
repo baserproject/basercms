@@ -160,7 +160,8 @@ class BlogPostsController extends BlogAppController {
 		if(isset($data['BlogPost']['user_id']) && $data['BlogPost']['user_id'] === '') {
 			unset($data['BlogPost']['user_id']);
 		}
-
+		unset($data['BlogPost']['open']);
+		
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
 		// ページカテゴリ（子カテゴリも検索条件に入れる）
