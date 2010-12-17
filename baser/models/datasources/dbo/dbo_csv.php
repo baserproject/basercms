@@ -1666,6 +1666,7 @@ class DboCsv extends DboSource {
 		$conditions = preg_replace("/(\s+)OR(\s+)/s","$1||$2",$conditions);
 		$conditions = str_replace('<>','!=',$conditions);
 		$conditions = str_replace('IS NULL',"== ''",$conditions);
+		$conditions = str_replace('IS NOT NULL',"!= ''",$conditions);
 		$conditions = preg_replace("/YEAR\((.*?)\)/si","date('Y',strtotime($1))",$conditions);
 		$conditions = preg_replace("/MONTH\((.*?)\)/si","date('m',strtotime($1))",$conditions);
 		$conditions = preg_replace("/DAY\((.*?)\)/si","date('d',strtotime($1))",$conditions);
