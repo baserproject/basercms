@@ -51,6 +51,9 @@ $(document).ready( function() {
 			} else if ($("#InstallationDbName").val() == "") {
 				alert("データベース名を入力して下さい。");
 				return false;
+			} else if ($("#InstallationDbPrefix").val() == "") {
+				alert("他のアプリケーションと重複しないプレフィックスを入力して下さい。（例）bc_");
+				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert("データベースのポートナンバーを入力して下さい。");
 				return false;

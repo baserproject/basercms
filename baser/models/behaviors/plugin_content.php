@@ -72,15 +72,14 @@ class PluginContentBehavior extends ModelBehavior {
 				$model->invalidate('name','既に登録されています。');
 				return false;
 			}
+			$pluginContent = $this->_generatePluginContentData($model);
+			$this->PluginContent->create($pluginContent);
+		} else {
+			$pluginContent = $this->_generatePluginContentData($model, $model->data[$model->alias]['id']);
+			$this->PluginContent->set($pluginContent);
 		}
 		
 		// バリデーション
-		$pluginContent = $this->_generatePluginContentData($model);
-		if(isset($pluginContent['PluginContent']['id'])) {
-			$this->PluginContent->set($pluginContent);
-		}else {
-			$this->PluginContent->create($pluginContent);
-		}
 		return $this->PluginContent->validates();
 
 	}

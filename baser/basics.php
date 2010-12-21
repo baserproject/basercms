@@ -386,8 +386,6 @@
 /**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
  *
- * TODO GLOBAL グローバルな関数として再配置する必要あり
- *
  * @param	stream	handle
  * @param	int		length
  * @param	string	delimiter

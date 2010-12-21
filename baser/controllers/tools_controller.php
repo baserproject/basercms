@@ -225,7 +225,7 @@ class ToolsController extends AppController {
 				if(!$db->writeSchema(array('path'=>$path, 'model'=>$model))){
 					return false;
 				}
-				if(!$db->writeCsv(array('path'=>$path.$table.'.csv'))) {
+				if(!$db->writeCsv(array('path'=>$path.$table.'.csv', 'encoding'=>'SJIS'))) {
 					return false;
 				}
 			}

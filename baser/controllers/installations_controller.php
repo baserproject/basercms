@@ -694,6 +694,9 @@ class InstallationsController extends AppController {
 		}else {
 			$data['dbSchema'] = '';
 		}
+		if($data['dbType'] == 'csv') {
+			$data['dbEncoding'] = 'sjis';
+		}
 
 		$this->Session->write('Installation.dbType', $data['dbType']);
 		$this->Session->write('Installation.dbHost', $data['dbHost']);
@@ -1029,24 +1032,30 @@ class InstallationsController extends AppController {
 			case 'mysql':
 				$sources = $db->listSources();
 				foreach($sources as $source) {
-					$sql = 'DROP TABLE '.$source;
-					$db->execute($sql);
+					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
+						$sql = 'DROP TABLE '.$source;
+						$db->execute($sql);
+					}
 				}
 				break;
 
 			case 'postgres':
 				$sources = $db->listSources();
 				foreach($sources as $source) {
-					$sql = 'DROP TABLE '.$source;
-					$db->execute($sql);
+					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
+						$sql = 'DROP TABLE '.$source;
+						$db->execute($sql);
+					}
 				}
 				// シーケンスも削除
 				$sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
 				$sequences = $db->query($sql);
 				$sequences = Set::extract('/0/sequence_name',$sequences);
 				foreach($sequences as $sequence) {
-					$sql = 'DROP SEQUENCE '.$sequence;
-					$db->execute($sql);
+					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
+						$sql = 'DROP SEQUENCE '.$sequence;
+						$db->execute($sql);
+					}
 				}
 				break;
 

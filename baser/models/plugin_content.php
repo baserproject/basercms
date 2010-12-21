@@ -53,6 +53,7 @@ class PluginContent extends AppModel {
 		$this->validate['name'] = array(array('rule' => 'alphaNumericPlus',
 						'message' => 'コンテンツ名は半角英数字、ハイフン、アンダースコアのみで入力して下さい'),
 				array('rule' => array('isUnique'),
+						'on'=>'create',
 						'message' => '入力されたコンテンツ名は既に使用されています。'));
 		$this->validate['content_id'] = array(array('rule' => VALID_NOT_EMPTY,
 						'message' => "コンテンツIDを入力して下さい",

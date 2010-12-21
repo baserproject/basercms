@@ -81,6 +81,15 @@ class DboSource extends DataSource {
 		'commit' => 'COMMIT',
 		'rollback' => 'ROLLBACK'
 	);
+// >>> CUSTOMIZE ADD 2010/12/17 ryuring
+/**
+ * PHP←→DBエンコーディングマップ
+ *
+ * @var		array
+ * @access	public
+ */
+	var $_encodingMaps = array('utf8'=>'UTF-8', 'sjis'=>'SJIS', 'ujis'=>'EUC-JP');
+// <<<
 /**
  * Constructor
  */
@@ -2497,7 +2506,7 @@ class DboSource extends DataSource {
 // >>>
 /**
  * スキーマファイルを利用してテーブルを生成する
- * 
+ *
  * @param array $options	path は必須
  * @param pass $path
  */
@@ -2509,7 +2518,7 @@ class DboSource extends DataSource {
 		if(!isset($type)){
 			return false;
 		}
-		
+
 		if(!isset($file)) {
 			if(isset($table)) {
 				$file = $table.'.php';
@@ -2521,7 +2530,7 @@ class DboSource extends DataSource {
 				return false;
 			}
 		}
-		
+
 		if(!isset($name)){
 			if(isset($table)) {
 				$name = Inflector::camelize($table);
@@ -2554,7 +2563,7 @@ class DboSource extends DataSource {
 		}
 
 		return false;
-		
+
 	}
 /**
  * 現在の接続のスキーマを生成する
@@ -2585,11 +2594,11 @@ class DboSource extends DataSource {
 			}
 		}
 		return $this->writeSchema(array('name'=>$name, 'model'=>$models, 'path' => $path, 'file' => $file));
-		
+
 	}
 /**
  * モデル名を指定してスキーマファイルを生成する
- * 
+ *
  * @param	array	model	モデル名
  *					path	スキーマファイルの生成場所
  * @return	mixed	スキーマファイルの内容 Or false
@@ -2599,7 +2608,7 @@ class DboSource extends DataSource {
 
 		App::import('Model','Schema');
 		extract($options);
-		
+
 		if(!isset($model)){
 			return false;
 		}
@@ -2608,7 +2617,7 @@ class DboSource extends DataSource {
 		// 何故かプラグインのモデルがコアのDB設定で登録されてしまっているため
 		// コアとプラグインを連続して書き出すとプラグインのテーブルが見つからない
 		ClassRegistry::flush();
-		
+
 		if(!isset($file)){
 			if(is_array($model)) {
 				$basename = $this->configKeyName;
@@ -2624,15 +2633,15 @@ class DboSource extends DataSource {
 		if(!isset($name)) {
 			$name = Inflector::camelize($basename);
 		}
-		
+
 		$Schema = ClassRegistry::init('CakeSchema');
-		
+
 		if(isset($connection)) {
 			$Schema->connection = $connection;
 		} else {
 			$Schema->connection = $this->configKeyName;
 		}
-		
+
 		if(!isset($path)){
 			$path = $Schema->path;
 		}
@@ -2651,7 +2660,7 @@ class DboSource extends DataSource {
  * @access	public
  */
 	function createTableBySchema($options) {
-		
+
 		extract($options);
 
 		if(!isset($path)){
@@ -2672,11 +2681,11 @@ class DboSource extends DataSource {
 		$schema = $CakeSchema->load(array('name'=>$name,'path'=>$dir,'file'=>$file));
 
 		return $this->createTable(array('schema'=>$schema));
-		
+
 	}
 /**
  * スキーマファイルからテーブル構造を変更する
- * 
+ *
  * @param	array	$options [ oldPath / newPath ]
  * @return	boolean
  * @access	public
@@ -2705,10 +2714,10 @@ class DboSource extends DataSource {
 		App::import('Model','Schema');
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
-		
+
 		$old = $Schema->load(array('name'=>$oldName,'path'=>$oldDir,'file'=>$oldFile));
 		$new = $Schema->load(array('name'=>$newName,'path'=>$newDir,'file'=>$newFile));
-		
+
 		return $this->alterTable(array('old'=>$old, 'new'=>$new));
 
 	}
@@ -2746,7 +2755,7 @@ class DboSource extends DataSource {
 	}
 /**
  * テーブルを作成する
- * 
+ *
  * @param	array	$options [ schema / table ]
  * @return	boolean
  * @access	public
@@ -2754,7 +2763,7 @@ class DboSource extends DataSource {
 	function createTable($options){
 
 		extract($options);
-		
+
 		if(!isset($schema)) {
 			return false;
 		}
@@ -2774,7 +2783,7 @@ class DboSource extends DataSource {
 		// SQLを生成して実行
 		$sql = $this->createSchema($schema);
 		return $this->execute($sql);
-		
+
 	}
 /**
  * テーブル構造を変更する
@@ -2841,7 +2850,7 @@ class DboSource extends DataSource {
 	}
 /**
  * テーブル名をリネームする
- * 
+ *
  * @param	string	$oldName
  * @param	array	$options [ old / new ]
  * @return	boolean
@@ -2863,7 +2872,7 @@ class DboSource extends DataSource {
 	}
 /**
  * カラムを追加する
- * 
+ *
  * @param	array	$options [ table / column ]
  * @return	boolean
  * @access	public
@@ -2935,7 +2944,7 @@ class DboSource extends DataSource {
 		$compare = $CakeSchema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
-		
+
 	}
 /**
  * カラムを削除する
@@ -2951,21 +2960,21 @@ class DboSource extends DataSource {
 		if(!isset($table) || !isset($field)) {
 			return false;
 		}
-		
+
 		$old = $this->readSchema($table);
 		if(!isset($old['tables'][$table][$field])) {
 			return false;
 		}
 		$new = $old;
 		unset($new['tables'][$table][$field]);
-		
+
 		App::import('Model', 'Schema');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		$compare = $CakeSchema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
-		
+
 	}
 /**
  * カラム名を変更する
@@ -2981,7 +2990,7 @@ class DboSource extends DataSource {
 		if(!isset($table) || !isset($new) || !isset($old)) {
 			return false;
 		}
-		
+
 		$column['name'] = $new;
 		$options = array('field'=>$old,'table'=>$table, 'column'=>$column);
 		return $this->changeColumn($options);
@@ -3020,7 +3029,7 @@ class DboSource extends DataSource {
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		return $CakeSchema->read(array('models'=>array($model)));
-		
+
 	}
 /**
  * CSVファイルをDBに読み込む
@@ -3036,7 +3045,7 @@ class DboSource extends DataSource {
 			return false;
 		}
 		if(!isset($encoding)) {
-			$encoding = 'UTF-8';
+			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 
 		$appEncoding = Configure::read('App.encoding');
@@ -3058,7 +3067,9 @@ class DboSource extends DataSource {
 
 		while(($_record = fgetcsvReg($fp, 10240)) !== false) {
 
-			mb_convert_variables($appEncoding, $encoding, $_record);
+			if($appEncoding != $encoding) {
+				mb_convert_variables($appEncoding, $encoding, $_record);
+			}
 
 			$values = array();
 			// 配列の添え字をフィールド名に変換
@@ -3074,7 +3085,7 @@ class DboSource extends DataSource {
 				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
 			}
 			$query = array(
-				'table' => $fullTableName,
+				'table' => $this->name($fullTableName),
 				'fields' => implode(', ', $head) ,
 				'values' => implode(', ', $values)
 			);
@@ -3132,12 +3143,12 @@ class DboSource extends DataSource {
 			return false;
 		}
 		if(!isset($encoding)) {
-			$encoding = 'SJIS';
+			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 		if(!isset($table)) {
 			$table = basename($path, '.csv');
 		}
-		
+
 		$schemas = $this->readSchema($table, false);
 		if(!isset($schemas['tables'][$table])) {
 			return false;
@@ -3146,14 +3157,14 @@ class DboSource extends DataSource {
 		$_fields = array();
 		foreach($schemas['tables'][$table] as $key => $schema) {
 			if($key != 'indexes') {
-				$_fields[] = $key;
+				$_fields[] = $this->name($key);
 			}
 		}
 		$fields = implode(',', $_fields);
-		
+
 		$appEncoding = Configure::read('App.encoding');
 		$fullTableName = $this->config['prefix'].$table;
-		$sql = $this->renderStatement('select', array('table'=>$fullTableName,
+		$sql = $this->renderStatement('select', array('table'=>$this->name($fullTableName),
 														'fields'=>$fields,
 														'conditions'=>'WHERE 1=1',
 														'alias'=>'',
@@ -3181,21 +3192,55 @@ class DboSource extends DataSource {
 		foreach($datas[0][$tablekey] as $key => $value) {
 			$heads[] = '"'.$key.'"';
 		}
-		fwrite($fp, implode(",",$heads)."\r\n");
+
+		$head = implode(",",$heads)."\n";
+		if($encoding != $this->dbEncoding) {
+			$head = mb_convert_encoding($head, $encoding, $appEncoding);
+		}
+		fwrite($fp, $head);
 
 		// データを書込
 		foreach($datas as $data) {
 			$record = $data[$tablekey];
 			$record = $this->_convertRecordToCsv($record);
-			mb_convert_variables($encoding,$appEncoding,$record);
-			$csv = implode(',',$record)."\r\n";
-			fwrite($fp, $csv);
+			$csvRecord = implode(',',$record)."\n";
+			if($encoding != $appEncoding) {
+				$csvRecord = mb_convert_encoding($csvRecord, $encoding, $appEncoding);
+			}
+			fwrite($fp, $csvRecord);
 		}
 
 		fclose($fp);
 
 		return true;
-		
+
+	}
+/**
+ * DB用エンコーディング名称をPHP用エンコーディング名称に変換する
+ *
+ * @param	string	$enc
+ * @return	string
+ */
+	function _dbEncToPhp($enc) {
+		if(!empty($this->_encodingMaps[$enc])) {
+			return $this->_encodingMaps[$enc];
+		} else {
+			return $enc;
+		}
+	}
+/**
+ * PHP用エンコーディング名称をDB用のエンコーディング名称に変換する
+ *
+ * @param	string	$enc
+ * @return	string
+ */
+	function _phpEncToDb ($enc) {
+		$encs = array_keys($this->_encodingMaps, $enc);
+		if($encs && is_array($encs)) {
+			return $encs[0];
+		} else {
+			return $enc;
+		}
 	}
 // <<<
 }

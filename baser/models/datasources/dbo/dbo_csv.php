@@ -61,12 +61,19 @@ class DboCsv extends DboSource {
  */
 	var $endQuote = "`";
 /**
- * エンコーディング
+ * DBエンコーディング
  *
  * @var		string
  * @access	public
  */
-	var $endcoding = "UTF-8";
+	var $dbEncoding = "SJIS";
+/**
+ * アプリエンコーディング
+ *
+ * @var		string
+ * @access	public
+ */
+	var $appEncoding = "UTF-8";
 /**
  * コネクション
  *
@@ -152,6 +159,7 @@ class DboCsv extends DboSource {
  * @access	private
  */
 	function __construct($config = null, $autoConnect = true) {
+		
 		// TODO 現在の仕様として、$connected は、配列にしてしまっているので、
 		// 次の処理を行うと処理がうまくいかなくなってしまう。
 		// 配列の接続データは別のプロパティに持たせるようにした方が？
@@ -160,7 +168,8 @@ class DboCsv extends DboSource {
 			$this->connected = $folder->create($config['database']);
 		}*/
 		parent::__construct($config,false);
-
+		$this->appEncoding = Configure::read('App.encoding');
+		
 	}
 /**
  * The "R" in CRUD
@@ -416,7 +425,7 @@ class DboCsv extends DboSource {
 		}
 
 		$this->connected[$tableName] = false;
-
+		
 		if(!$this->_connect($tableName,$lock,$model->plugin)) {
 
 			// 接続が見つからない場合はエラー
@@ -426,6 +435,23 @@ class DboCsv extends DboSource {
 			return true;
 		}
 
+	}
+/**
+ * Sets the database encoding
+ *
+ * @param string $enc Database encoding
+ */
+	function setEncoding($enc) {
+		$this->dbEncoding = $this->_dbEncToPhp($enc);
+		return true;
+	}
+/**
+ * Sets the database encoding
+ *
+ * @param string $enc Database encoding
+ */
+	function getEncoding() {
+		return $this->_phpEncToDb($this->dbEncoding);
 	}
 /**
  * Reconnects to database server with optional new settings
@@ -468,7 +494,7 @@ class DboCsv extends DboSource {
 		if($this->connection[$tableName] !== false) {
 			$this->connected[$tableName] = true;
 		}
-		if (isset($config['encoding']) && !empty($config['encoding'])) {
+		if (!empty($config['encoding'])) {
 			$this->setEncoding($config['encoding']);
 		}
 		return $this->connected[$tableName];
@@ -827,12 +853,16 @@ class DboCsv extends DboSource {
 		// 最後の行に改行がなかったら改行を追加する
 		// もっといい方法があれば・・・
 		if(!preg_match("/\n$/s",$csv)) {
-			$csv .= "\r\n";
+			$csv .= "\n";
 		}
 
+		$newRecord = implode(",",$tmpData)."\n";
 		// 新しいレコードを追加
-		mb_convert_variables("SJIS",$this->endcoding,$tmpData);
-		$csv .= implode(",",$tmpData)."\r\n";
+		if($this->dbEncoding != $this->appEncoding) {
+			$newRecord = mb_convert_encoding($newRecord, $this->dbEncoding, $this->appEncoding);
+		}
+		
+		$csv .= $newRecord;
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
@@ -857,6 +887,9 @@ class DboCsv extends DboSource {
 		}
 		$this->_connect($queryData['tableName'],true,null,true);
 		$head = $this->_getCsvHead($queryData['fields']);
+		if($this->appEncoding != $this->dbEncoding) {
+			$head = mb_convert_encoding($head, $this->dbEncoding, $this->appEncoding);
+		}
 		return fwrite($this->connection[$queryData['tableName']], $head);
 
 	}
@@ -915,14 +948,17 @@ class DboCsv extends DboSource {
 					// 既存データをCSV用にコンバートする
 					$record = $this->_convertRecord($record);
 				}
-				$body .= implode(",",$record)."\r\n";
+				$body .= implode(",",$record)."\n";
 			}
 		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
-		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+		$csvData = $head.$body;
+		if($this->dbEncoding != $this->appEncoding) {
+			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
+		}
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$queryData['tableName']], $csvData);
@@ -949,14 +985,17 @@ class DboCsv extends DboSource {
 		foreach($records as $key => $record) {
 			if(!eval($queryData['conditions'])) {
 				$record = $this->_convertRecord($record);
-				$body .= implode(",",$record)."\r\n";
+				$body .= implode(",",$record)."\n";
 			}
 		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
-		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+		$csvData = $head.$body;
+		if($this->dbEncoding != $this->appEncoding) {
+			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
+		}
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$queryData['tableName']], $csvData);
@@ -1001,7 +1040,10 @@ class DboCsv extends DboSource {
 				@$record[$this->_csvFields[$key]] = $value;
 			}
 			// 文字コードを変換
-			mb_convert_variables($this->endcoding,"SJIS",$record);
+			if($this->dbEncoding != $this->appEncoding) {
+				mb_convert_variables($this->appEncoding,$this->dbEncoding,$record);
+			}
+			
 			// 条件に合致しない場合は取得せず次へ
 			if($conditions && !eval($conditions)) {
 				continue;
@@ -1069,7 +1111,7 @@ class DboCsv extends DboSource {
 		foreach($fields as $field) {
 			$head .= "\"".$field . "\",";
 		}
-		return substr($head,0,strlen($head)-1) . "\r\n";
+		return substr($head,0,strlen($head)-1) . "\n";
 	}
 /**
  * CSV用のフィールドデータに変換する
@@ -1154,14 +1196,17 @@ class DboCsv extends DboSource {
 			foreach($records as $key => $record) {
 				$_record = $this->_convertRecord($record);
 				$_record[] = '""';
-				$body .= implode(",",$_record)."\r\n";
+				$body .= implode(",",$_record)."\n";
 			}
 		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$table],0);
 
-		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+		$csvData = $head.$body;
+		if($this->dbEncoding != $this->appEncoding) {
+			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
+		}
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$table], $csvData);
@@ -1239,14 +1284,17 @@ class DboCsv extends DboSource {
 		if($records) {
 			foreach($records as $key => $record) {
 				$_record = $this->_convertRecord($record);
-				$body .= implode(",",$_record)."\r\n";
+				$body .= implode(",",$_record)."\n";
 			}
 		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$table],0);
 
-		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+		$csvData = $head.$body;
+		if($this->dbEncoding != $this->appEncoding) {
+			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
+		}
 
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$table], $csvData);
@@ -1313,13 +1361,18 @@ class DboCsv extends DboSource {
 			foreach($records as $key => $record) {
 				$_record = $this->_convertRecord($record);
 				unset($_record[$field]);
-				$body .= implode(",",$_record)."\r\n";
+				$body .= implode(",",$_record)."\n";
 			}
 		}
 
 		// ファイルサイズを0に
 		ftruncate($this->connection[$table],0);
-		$csvData = mb_convert_encoding($head.$body, 'SJIS', $this->endcoding);
+
+		$csvData = $head.$body;
+		if($this->dbEncoding != $this->appEncoding) {
+			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
+		}
+		
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$table], $csvData);
 		$this->disconnect($table);
@@ -1613,6 +1666,7 @@ class DboCsv extends DboSource {
 		$conditions = preg_replace("/(\s+)OR(\s+)/s","$1||$2",$conditions);
 		$conditions = str_replace('<>','!=',$conditions);
 		$conditions = str_replace('IS NULL',"== ''",$conditions);
+		$conditions = str_replace('IS NOT NULL',"!= ''",$conditions);
 		$conditions = preg_replace("/YEAR\((.*?)\)/si","date('Y',strtotime($1))",$conditions);
 		$conditions = preg_replace("/MONTH\((.*?)\)/si","date('m',strtotime($1))",$conditions);
 		$conditions = preg_replace("/DAY\((.*?)\)/si","date('d',strtotime($1))",$conditions);
@@ -2260,27 +2314,6 @@ class DboCsv extends DboSource {
 		} else {
 			return false;
 		}
-	}
-/**
- * エンコーディングを設定する
- *
- * @param	string	$enc Database encoding
- * @return	boolean
- * @access 	public
- */
-	function setEncoding($enc) {
-		$this->encoding = $enc;
-		return true;
-	}
-/**
- * エンコーディングを返す
- * TODO 現在SJIS固定
- *
- * @return	string	csv encoding
- * @access 	public
- */
-	function getEncoding() {
-		return "SJIS";
 	}
 /**
  * Inserts multiple values into a table

@@ -394,7 +394,7 @@ class Page extends AppModel {
 			if($categoryPath) {
 				foreach($categoryPath as $key => $category) {
 					if($key == 0 && $category['PageCategory']['name'] == 'mobile') {
-						$url .= Configure::read('Mobile.prefix').'/';
+						$url .= 'mobile/';
 					} else {
 						$url .= $category['PageCategory']['name'].'/';
 					}
