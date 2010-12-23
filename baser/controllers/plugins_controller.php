@@ -261,8 +261,8 @@ class PluginsController extends AppController {
 		$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql'.DS;
 		$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'.DS;
 		$tmpPath = TMP.'schemas'.DS.'uninstall'.DS;
-		$folder = new Folder($tmpPath);
-		$folder->delete();
+		$folder = new Folder();
+		$folder->delete($tmpPath);
 		$folder->create($tmpPath);
 
 		if(is_dir($appPath)) {
