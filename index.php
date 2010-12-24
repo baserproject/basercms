@@ -25,7 +25,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- *  Get Cake's root directory
+ *  Get Cake's root directory test
  */
 	define('APP_DIR', 'app');
 	define('DS', DIRECTORY_SEPARATOR);
