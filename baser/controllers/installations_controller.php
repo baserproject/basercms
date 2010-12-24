@@ -963,8 +963,8 @@ class InstallationsController extends AppController {
 				$pagesFolder = new Folder($theme.DS.'pages');
 				$pathes = $pagesFolder->read(true,true,true);
 				foreach($pathes[0] as $path){
-					$folder = new Folder($path);
-					$folder->delete();
+					$folder = new Folder();
+					$folder->delete($path);
 					$folder = null;
 				}
 				foreach($pathes[1] as $path){
