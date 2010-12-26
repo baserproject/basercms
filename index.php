@@ -1,6 +1,6 @@
 <?php
 /* SVN FILE: $Id$ */
-/**
+/** test
  * Requests collector.
  *
  *  This file collects requests if:
