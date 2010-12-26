@@ -118,10 +118,24 @@ $(function(){
 <div id ="formOptionBody" class="slide-body">
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.address', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAddress','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.address') ?>
-			<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所を入力して下さい。</div>
-			&nbsp; </td>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.site_url', 'WebサイトURL') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->text('SiteConfig.site_url', array('size'=>35,'maxlength'=>255)) ?><br />
+			<?php echo $formEx->text('SiteConfig.ssl_url', array('size'=>35,'maxlength'=>255)) ?><small>[SSL]</small>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSiteUrl','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('SiteConfig.site_url') ?><?php echo $formEx->error('SiteConfig.ssl_url') ?>
+			<div id="helptextSiteUrl" class="helptext">BaserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.admin_ssl_on', '管理画面SSL設定') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->radio('SiteConfig.admin_ssl_on', $textEx->booleanDoList('SSL通信を利用'), array('separator'=>'　', 'legend'=>false)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdminSslOn','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('SiteConfig.admin_ssl_on') ?>
+			<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
+			また、SSL用のWebサイトURLの指定が必要です。</div>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.googlemaps_key', 'GoogleMapsキー') ?></th>

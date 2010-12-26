@@ -62,7 +62,7 @@ class AppController extends Controller {
  * @var		array
  * @access	public
  */
-	var $components = array('PluginHook');
+	var $components = array('PluginHook', 'RequestHandler', 'Security');
 /**
  * サブディレクトリ
  *
@@ -250,6 +250,30 @@ class AppController extends Controller {
 			}
 		}
 
+		// SSLリダイレクト設定
+		if(Configure::read('Baser.adminSslOn') && !empty($this->params['admin'])) {
+			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
+			if($adminSslMethods) {
+				$this->Security->blackHoleCallback = '_sslFail';
+				$this->Security->requireSecure = $adminSslMethods;
+			}
+		}
+		
+		// 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		if(!empty($this->params['admin'])) {
+			$this->Security->validatePost = false;
+		}
+
+	}
+/**
+ * 管理画面用のメソッドを取得（コールバックメソッド）
+ *
+ * @param	string	$var
+ * @return	boolean
+ * @access	public
+ */
+	function _adminSslMethods($var) {
+		return preg_match('/^admin_/', $var);
 	}
 /**
  * beforeRender
@@ -270,6 +294,7 @@ class AppController extends Controller {
 		}
 
 		$this->__loadDataToView();
+		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
@@ -278,6 +303,31 @@ class AppController extends Controller {
 			$this->set('widgetArea',$this->siteConfigs['widget_area']);
 		}
 
+	}
+/**
+ * SSLエラー処理
+ *
+ * SSL通信が必要なURLの際にSSLでない場合、
+ * SSLのURLにリダイレクトさせる
+ *
+ * @param	string	$err
+ * @return	void
+ * @access	protected
+ */
+	function _sslFail($err) {
+
+		if ($err === 'secure') {
+			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->here は利用せずURLを生成する
+			$url = $this->params['url']['url'];
+			if(Configure::read('App.baseUrl')) {
+				$url = 'index.php/'.$url;
+			}
+			
+			$url = Configure::read('Baser.sslUrl').$url;
+			$this->redirect($url);
+			exit();
+		}
+		
 	}
 /**
  * NOT FOUNDページを出力する

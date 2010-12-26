@@ -33,5 +33,8 @@
 		<li>
 			<?php $baser->link('ページテンプレート読込',array('controller'=>'pages','action'=>'admin_entry_page_files'),array('confirm'=>'テーマ '.Inflector::camelize($baser->siteConfig['theme']).' フォルダ内のページテンプレートを全て読み込みます。\n本当によろしいですか？')) ?>
 		</li>
+		<li>
+			<?php $baser->link('ページテンプレート書出',array('controller'=>'pages','action'=>'admin_write_page_files'),array('confirm'=>'データベース内のページデータを、'.'テーマ '.Inflector::camelize($baser->siteConfig['theme']).' のページテンプレートとして全て書出します。\n本当によろしいですか？')) ?>
+		</li>
 	</ul>
 </div>

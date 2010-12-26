@@ -91,18 +91,8 @@
 		$this->setMessage('site_configs テーブルの更新に失敗しました。', true);
 	}
 /**
- * mail_configs スキーマの読み込み
+ * install.php にSSL対応用の項目追加
  */
-	if(!$this->loadSchema('test', 'mail', 'mail_configs')){
-		$this->setMessage('mail_configs のテーブル構造の更新に失敗しました。', true);
-	} else {
-		$this->setMessage('mail_configs のテーブル構造の更新に成功しました。');
-	}
-/**
- * blog_posts スキーマの読み込み
- */
-	if(!$this->loadSchema('test', 'blog', 'blog_posts')){
-		$this->setMessage('blog_posts のテーブル構造の更新に失敗しました。', true);
-	} else {
-		$this->setMessage('blog_posts のテーブル構造の更新に成功しました。');
-	}
+	$this->writeInstallSetting('Baser.siteUrl', "'".siteUrl()."'");
+	$this->writeInstallSetting('Baser.sslUrl', "''");
+	$this->writeInstallSetting('Baser.adminSslOn', "false");

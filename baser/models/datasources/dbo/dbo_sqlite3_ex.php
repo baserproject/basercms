@@ -30,13 +30,6 @@ App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo
  */
 class DboSqlite3Ex extends DboSqlite3 {
 /**
- * システムテーブル
- * 
- * @var		array
- * @access	public
- */
-var $systemTables = array('sqlite_sequence');
-/**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
  * @param array $compare Result of a CakeSchema::compare()
@@ -364,7 +357,7 @@ var $systemTables = array('sqlite_sequence');
 	function _convertCsvFieldsFromSchema($schema) {
 		$fields = '';
 		foreach($schema as $key => $field) {
-			$fields .= "'".$key."',";
+			$fields .= '"'.$key.'",';
 		}
 		return substr($fields,0,strlen($fields)-1);
 	}

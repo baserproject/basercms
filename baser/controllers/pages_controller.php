@@ -259,6 +259,23 @@ class PagesController extends AppController {
 
 	}
 /**
+ * [ADMIN] ページファイルを登録する
+ *
+ * @return	void
+ * @access	public
+ */
+	function admin_write_page_files() {
+
+		if($this->Page->createAllPageTemplate()){
+			$this->Session->setFlash('ページテンプレートの書き出しに成功しました。');
+		} else {
+			$this->Session->setFlash('ページテンプレートの書き出しに失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+		}
+		clearViewCache();
+		$this->redirect(array('action'=>'admin_index'));
+
+	}
+/**
  * ビューを表示する
  *
  * @param	mixed

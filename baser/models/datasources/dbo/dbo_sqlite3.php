@@ -168,7 +168,11 @@ class DboSqlite3 extends DboSource {
 		}
 
 		//echo "listsources:beforeresult ";
-		$result = $this->fetchAll("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", false);
+		// >>> CUSTOMIZE MODIFY 2010/12/26 ryuring
+		//$result = $this->fetchAll("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", false);
+		// ---
+		$result = $this->fetchAll("SELECT name FROM sqlite_master WHERE type='table' AND name<>'sqlite_sequence' ORDER BY name;", false);
+		// <<<
 		//echo "listsources:result ";
 		//pr($result);
 
