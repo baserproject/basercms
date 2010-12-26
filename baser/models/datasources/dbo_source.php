@@ -2548,7 +2548,7 @@ class DboSource extends DataSource {
 				return $this->createTableBySchema(array('path'=>$path.$file));
 				break;
 			case 'alter':
-				$current = $path.'current.php';
+				$current = $path.basename($file,'.php').'_current.php';
 				if($this->writeCurrentSchema($current)) {
 					$result = $this->alterTableBySchema(array('oldPath'=>$current, 'newPath'=>$path.$file));
 					unlink($current);
@@ -2710,7 +2710,7 @@ class DboSource extends DataSource {
 		if(!isset($newName)){
 			$newName = basename(Inflector::classify($newFile),'.php');
 		}
-
+		
 		App::import('Model','Schema');
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
