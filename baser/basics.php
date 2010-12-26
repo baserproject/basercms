@@ -417,20 +417,38 @@
  *
  * @param	mixed	$url
  * @return	string
- * @access	public
  */
 	function fullUrl($url) {
 		$url = Router::url($url);
+		return topLevelUrl(false).$url;
+	}
+/**
+ * サイトのトップレベルのURLを取得する
+ *
+ * @param	boolean	$lastSlash
+ * @return	string
+  */
+	function topLevelUrl($lastSlash = true) {
 		$protocol = 'http://';
-		$port = '';
 		if(!empty($_SERVER['HTTPS'])) {
 			$protocol = 'https://';
 		}
-		if(isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' && $_SERVER['PORT'] != '443') {
-			$port = ':'.$_SERVER['SERVER_PORT'];
+		$host = $_SERVER['HTTP_HOST'];
+		$url = $protocol.$host;
+		if($lastSlash) {
+			$url .= '/';
 		}
-		$host = $_SERVER['SERVER_NAME'];
-		$full = $protocol.$host.$port.$url;
-		return $full;
+		return $url;
+	}
+/**
+ * サイトの設置URLを取得する
+ *
+ * index.phpは含まない
+ * 
+ * @return	string
+ */
+	function siteUrl() {
+		$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
+		return topLevelUrl(false).$baseUrl;
 	}
 ?>

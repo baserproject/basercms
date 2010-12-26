@@ -88,7 +88,7 @@ class UsersController extends AppController {
 		if($this->params['prefix']=='admin'){
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
-		
+
 	}
 /**
  * ログイン処理を行う

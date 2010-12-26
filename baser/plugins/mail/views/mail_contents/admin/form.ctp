@@ -158,6 +158,17 @@ function mailContentSender1ClickHandler(){
 			</div>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.ssl_on', 'SSL通信') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->radio('MailContent.ssl_on',$textEx->booleanDoList('利用'),array('legend'=>false)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpSslOn','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('MailContent.ssl_on', 'SSL通信を利用するには、'.$baser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、事前にSSL通信用のWebサイトURLを指定してください。', array('escape'=>false)) ?>
+			<div id="helptextSslOn" class="helptext">
+				管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。
+			</div>
+		</td>
+	</tr>
 </table>
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">

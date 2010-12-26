@@ -101,10 +101,17 @@ class SiteConfigsController extends AppController {
 			$this->data['SiteConfig'] = $this->siteConfigs;
 			$this->data['SiteConfig']['mode'] = $this->readDebug();
 			$this->data['SiteConfig']['smart_url'] = $this->readSmartUrl();
+			$this->data['SiteConfig']['site_url'] = Configure::read('Baser.siteUrl');
+			$this->data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
+			$this->data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
 		}else {
 			// テーブル構造が特殊なので強引にバリデーションを行う
 			$this->SiteConfig->data = $this->data;
-			
+
+			if($this->data['SiteConfig']['admin_ssl_on'] && !$this->data['SiteConfig']['ssl_url']) {
+				$this->SiteConfig->invalidate('ssl_url', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。');
+			}
+
 			if(!$this->SiteConfig->validates()) {
 				
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
@@ -119,6 +126,7 @@ class SiteConfigsController extends AppController {
 				} else {
 					$mode = 0;
 				}
+
 				if(isset($this->data['SiteConfig']['smart_url'])) {
 					$smartUrl = $this->data['SiteConfig']['smart_url'];
 					unset($this->data['SiteConfig']['smart_url']);
@@ -126,8 +134,34 @@ class SiteConfigsController extends AppController {
 					$smartUrl = false;
 				}
 
+				$siteUrl = $this->data['SiteConfig']['site_url'];
+				if(!preg_match('/\/$/', $siteUrl)) {
+					$siteUrl .= '/';
+				}
+				unset($this->data['SiteConfig']['site_url']);
+
+				if(isset($this->data['SiteConfig']['ssl_url'])) {
+					$sslUrl = $this->data['SiteConfig']['ssl_url'];
+					if(!preg_match('/\/$/', $sslUrl)) {
+						$sslUrl .= '/';
+					}
+					unset($this->data['SiteConfig']['ssl_url']);
+				} else {
+					$sslUrl = '';
+				}
+
+				if(isset($this->data['SiteConfig']['admin_ssl_on'])) {
+					$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
+					unset($this->data['SiteConfig']['admin_ssl_on']);
+				} else {
+					$adminSslOn = '';
+				}
+
 				$this->SiteConfig->saveKeyValue($this->data);
 				$this->writeDebug($mode);
+				$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
+				$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
+				$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
 				if($this->readSmartUrl() != $smartUrl) {
 					$this->writeSmartUrl($smartUrl);
 				}

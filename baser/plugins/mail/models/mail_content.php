@@ -90,13 +90,33 @@ class MailContent extends MailAppModel {
 		$this->validate['sender_1'] = array(array(	'rule' => 'email',
 						'allowEmpty' => true,
 						'message' => '送信先メールアドレスの形式が不正です。'));
-
+		$this->validate['ssl_on'] = array('rule' => 'checkSslUrl',
+						"message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。');
 		if($this->data['MailContent']['sender_1_']) {
 			$this->validate['sender_1'] = array(array('rule' => 'email',
 							'message' => '送信先メールアドレスの形式が不正です。'));
 		}
 
 		return true;
+	}
+/**
+ * SSL用のURLが設定されているかチェックする
+ * 
+ * @param	string	チェック対象文字列
+ * @return	boolean
+ * @access	public
+ */
+	function checkSslUrl($check) {		
+		if($check[key($check)]) {
+			$sslUrl = Configure::read('Baser.sslUrl');
+			if(empty($sslUrl)) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return true;
+		}
 	}
 /**
  * 英数チェック

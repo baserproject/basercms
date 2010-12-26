@@ -500,8 +500,15 @@ class BaserHelper extends AppHelper {
 		}else {
 			$forceTitle = false;
 		}
-
-		$_url = str_replace($this->base, '', $this->getUrl($url));
+		
+		if(isset($htmlAttributes['ssl'])) {
+			$ssl = true;
+			unset($htmlAttributes['ssl']);
+		}else {
+			$ssl = false;
+		}
+		$url = $this->getUrl($url);
+		$_url = str_replace($this->base, '', $url);
 		$enabled = true;
 
 		// 認証チェック
@@ -526,9 +533,42 @@ class BaserHelper extends AppHelper {
 				return '';
 			}
 		}
-
+		
+		// 現在SSLのURLの場合、フルパスで取得
+		if($this->isSSL()) {
+			$_url = preg_replace("/^\//", "", $_url);
+			if(preg_match('/^admin\//', $_url)) {
+				$admin = true;
+			} else {
+				$admin = false;
+			}
+			if($this->base) {
+				$_url = 'index.php/'.$_url;
+			}
+			if(!$ssl && !$admin) {
+				$url = Configure::read('Baser.siteUrl').$_url;
+			} else {
+				$url = Configure::read('Baser.sslUrl').$_url;
+			}
+		} else {
+			$url = $_url;
+		}
+		
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
+	}
+/**
+ * 現在がSSL通信か確認する
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function isSSL() {
+		if(!empty($this->_view->viewVars['isSSL'])){
+			return true;
+		} else {
+			return false;
+		}
 	}
 /**
  * charsetを出力するだけのラッパー

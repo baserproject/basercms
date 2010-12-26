@@ -132,6 +132,8 @@ class InstallationsController extends AppController {
 		}
 
 		$this->theme = null;
+
+		$this->Security->validatePost = false;
 		
 	}
 /**
@@ -144,9 +146,22 @@ class InstallationsController extends AppController {
 
 		$this->pageTitle = 'BaserCMSのインストール';
 
-		// キャッシュファイルを削除する（デバッグ用）
-		if(is_writable(CACHE)) {
-			clearAllCache();
+		// 一時ファイルを削除する（再インストール用）
+		if(is_writable(TMP)) {
+			$folder = new Folder(TMP);
+			$files = $folder->read(true, true, true);
+			if(isset($files[0])) {
+				foreach($files[0] as $file) {
+					$folder->delete($file);
+				}
+			}
+			if(isset($files[1])) {
+				foreach($files[1] as $file) {
+					if(basename($file) != 'empty') {
+						$folder->delete($file);
+					}
+				}
+			}
 		}
 
 	}
@@ -355,8 +370,12 @@ class InstallationsController extends AppController {
 	function _createInstallFile() {
 
 		$corefilename=CONFIGS.'install.php';
+		$siteUrl = siteUrl();
 		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
 											"Configure::write('Baser.firstAccess', true);",
+											"Configure::write('Baser.siteUrl', '{$siteUrl}');",
+											"Configure::write('Baser.sslUrl', '');",
+											"Configure::write('Baser.adminSslOn', false);",
 											"Configure::write('Cache.disable', false);",
 											"Cache::config('default', array('engine' => 'File'));","?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
