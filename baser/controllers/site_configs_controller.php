@@ -113,11 +113,11 @@ class SiteConfigsController extends AppController {
 			}
 
 			if(!$this->SiteConfig->validates()) {
-				
+
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
-				
+
 			}else {
-				
+
 				// KeyValueへ変換処理
 				unset($this->data['SiteConfig']['id']);
 				if(isset($this->data['SiteConfig']['mode'])) {
@@ -142,7 +142,7 @@ class SiteConfigsController extends AppController {
 
 				if(isset($this->data['SiteConfig']['ssl_url'])) {
 					$sslUrl = $this->data['SiteConfig']['ssl_url'];
-					if(!preg_match('/\/$/', $sslUrl)) {
+					if($sslUrl && !preg_match('/\/$/', $sslUrl)) {
 						$sslUrl .= '/';
 					}
 					unset($this->data['SiteConfig']['ssl_url']);
@@ -212,7 +212,7 @@ class SiteConfigsController extends AppController {
 			$writableHtaccess2 = true;
 		}
 		$baseUrl = str_replace('/index.php', '', baseUrl());
-		
+
 		if($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false){
 			$smartUrlChangeable = true;
 		} else {

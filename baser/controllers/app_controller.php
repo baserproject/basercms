@@ -319,7 +319,7 @@ class AppController extends Controller {
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->here は利用せずURLを生成する
 			$url = $this->params['url']['url'];
-			if(baseUrl()) {
+			if(Configure::read('App.baseUrl')) {
 				$url = 'index.php/'.$url;
 			}
 			
