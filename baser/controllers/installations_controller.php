@@ -573,6 +573,8 @@ class InstallationsController extends AppController {
 		} elseif($db->config['driver'] == 'csv') {
 			// CSVの場合はフォルダを作成する
 			$folder = new Folder($db->config['database'], true, 0777);
+		} elseif($db->config['driver'] == 'sqlite3') {
+			chmod($db->config['database'], 0666);
 		}
 
 		$folder = new Folder($path);

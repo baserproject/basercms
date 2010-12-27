@@ -163,14 +163,16 @@ class Tool extends AppModel {
 		foreach ($values as $value){
 			if(!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))){
 				$result = false;
-			}/*else{
+			}else{
+				// pathプロパティを削除
 				$filename = $path.Inflector::tableize($modelList[$value]).'.php';
 				$File = new File($filename);
 				$content = file_get_contents($filename);
-				$content = str_replace($path, BASER_CONFIGS.'sql'.DS, $content);
+				$reg = '/\n\n[^\n]+?\$path[^\n]+?;/is';
+				$content = preg_replace($reg, '', $content);
 				$File->write($content, 'w+');
 				$File->close();
-			}*/
+			}
 		}
 		return $result;
 		
