@@ -35,7 +35,7 @@
 /**
  * スキーマの読み込み
  */
-	if($this->loadSchema('test', 'blog')){
+	if($this->loadSchema('1.6.8', 'blog')){
 		$this->setMessage('ブログプラグインのテーブル構造の更新に成功しました。');
 	} else {
 		$this->setMessage('ブログプラグインのテーブル構造の更新に失敗しました。', true);

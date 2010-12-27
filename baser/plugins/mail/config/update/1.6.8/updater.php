@@ -35,7 +35,7 @@
 /**
  * スキーマの読み込み
  */
-	if($this->loadSchema('test', 'mail')){
+	if($this->loadSchema('1.6.8', 'mail')){
 		$this->setMessage('メールプラグインのテーブル構造の更新に成功しました。');
 	} else {
 		$this->setMessage('メールプラグインのテーブル構造の更新に失敗しました。', true);

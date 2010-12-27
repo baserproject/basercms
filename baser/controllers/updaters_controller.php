@@ -201,7 +201,7 @@ class UpdatersController extends AppController {
 
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
-		$this->pageTitle = 'BaserCMSコア アップデート';
+		$this->pageTitle = 'アプリケーションアップデート（BaserCMSコア）';
 		$this->set('updateTarget', 'BaserCMSコア');
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
@@ -244,7 +244,7 @@ class UpdatersController extends AppController {
 		$targetVersion = $this->getBaserVersion($name);
 		$sourceVersion = $this->getSiteVersion($name);
 		$title = $this->Plugin->field('title',array('name'=>$name)).'プラグイン';
-		$this->pageTitle = $title.' アップデート';
+		$this->pageTitle = 'アプリケーションアップデート（'.$title.'）';
 		$this->set('updateTarget', $title);
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
