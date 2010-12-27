@@ -3,10 +3,10 @@
 </h2>
 <div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;">
 	<p> <strong><?php echo $updateTarget ?> のバージョン</strong>：<?php echo $baserVer ?><br />
-		<strong>現在のバージョン</strong>：<?php echo $siteVer ?>
+		<strong>対応するアプリケーションのバージョン</strong>：<?php echo $siteVer ?>
 	</p>
 	<?php if($baserVer != $siteVer || $scriptNum): ?>
-	<p>「アップデート実行」をクリックして <?php echo $updateTarget ?> のアップデートを完了させてください。</p>
+	<p>「アップデート実行」をクリックしてアプリケーションのアップデートを完了させてください。</p>
 		<?php if($scriptNum): ?>
 	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。<br />
 		<strong>実行する前には必ずバックアップを実行しておいてください。</strong></p>
