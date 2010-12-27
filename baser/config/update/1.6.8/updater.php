@@ -35,7 +35,7 @@
 /**
  * pages スキーマの読み込み
  */
-	if(!$this->loadSchema('test', '', 'pages')){
+	if(!$this->loadSchema('1.6.8', '', 'pages')){
 		$this->setMessage('pages のテーブル構造の更新に失敗しました。', true);
 	} else {
 		$this->setMessage('pages のテーブル構造の更新に成功しました。');
