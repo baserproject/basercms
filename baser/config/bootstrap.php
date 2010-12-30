@@ -79,6 +79,7 @@
 		$ext = array_pop(explode('.', $url));
 		if(in_array($ext, $assets)){
 			Configure::write('Baser.Asset',true);
+			return;
 		}
 	}
 /**
