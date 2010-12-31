@@ -51,6 +51,13 @@ class ToolsController extends AppController {
  */
 	var $subMenuElements = array('tools');
 /**
+ * ぱんくずナビ
+ *
+ * @var		string
+ * @access 	public
+ */
+	var $navis = array('システム設定'=>'/admin/site_configs/form');
+/**
  * データメンテナンス
  *
  * @param	string	$mode
