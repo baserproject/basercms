@@ -542,7 +542,7 @@ class BaserHelper extends AppHelper {
 			} else {
 				$admin = false;
 			}
-			if($this->base) {
+			if(Configure::read('App.baseUrl')) {
 				$_url = 'index.php/'.$_url;
 			}
 			if(!$ssl && !$admin) {
