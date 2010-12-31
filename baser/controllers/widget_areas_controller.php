@@ -63,6 +63,10 @@ class WidgetAreasController extends AppController {
  * @access 	public
  */
 	var $subMenuElements = array('widget_areas');
+	function beforeFilter() {
+		parent::beforeFilter();
+		$this->Security->validatePost = false;
+	}
 /**
  * 一覧
  * @return	void
@@ -224,6 +228,9 @@ class WidgetAreasController extends AppController {
 		}
 
 		$data = $this->data;
+		if(isset($data['_Token'])) {
+			unset($data['_Token']);
+		}
 		$dataKey = key($data);
 		$widgetArea = $this->WidgetArea->read(null,$widgetAreaId);
 		$update = false;
