@@ -53,13 +53,11 @@
 	<tr>
 		<th>操作</th>
 		<th>NO</th>
-		<th>フィールド名</th>
-		<th>項目名</th>
-		<th>グループ名</th>
+		<th>フィールド名<br />項目名</th>
 		<th>タイプ</th>
+		<th>グループ名</th>
 		<th>必須</th>
-		<th>登録日</th>
-		<th>更新日</th>
+		<th>登録日<br />更新日</th>
 	</tr>
 	<?php if(!empty($listDatas)): ?>
 		<?php $count=0; ?>
@@ -72,7 +70,7 @@
 				<?php $class=' class="sortable"'; ?>
 			<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
-		<td style="width:20%" class="operation-button">
+		<td style="width:25%" class="operation-button">
 			<?php if($sortmode): ?>
 			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
 			<?php echo $formEx->hidden('Sort.id'.$listData['MailField']['id'],array('class'=>'id','value'=>$listData['MailField']['id'])) ?>
@@ -81,14 +79,18 @@
 			<?php $baser->link('編集',array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
 			<?php $baser->link('削除', array('action'=>'delete', $mailContent['MailContent']['id'],$listData['MailField']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailField']['name']),false); ?>
 		</td>
-		<td style="width:10%"><?php echo $listData['MailField']['no'] ?></td>
-		<td style="width:10%"><?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?></td>
-		<td style="width:10%"><?php echo $listData['MailField']['name']; ?></td>
+		<td style="width:5%"><?php echo $listData['MailField']['no'] ?></td>
+		<td style="width:30%">
+			<?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?><br />
+			<?php echo $listData['MailField']['name']; ?>
+		</td>
+		<td style="width:19%"><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
 		<td style="width:10%"><?php echo $listData['MailField']['group_field'] ?></td>
-		<td style="width:10%"><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
-		<td style="width:10%"><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['MailField']['created']); ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['MailField']['modified']); ?></td>
+		<td style="width:8%"><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
+		<td style="width:8%">
+				<?php echo $timeEx->format('y-m-d',$listData['MailField']['created']); ?><br />
+				<?php echo $timeEx->format('y-m-d',$listData['MailField']['modified']); ?>
+		</td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>
