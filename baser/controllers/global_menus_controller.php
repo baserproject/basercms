@@ -102,7 +102,7 @@ class GlobalMenusController extends AppController {
 		$this->set('listDatas',$listDatas);
 
 		// 表示設定
-		$this->subMenuElements = array('global_menus');
+		$this->subMenuElements = array('site_configs','global_menus');
 		$this->pageTitle = 'グローバルメニュー一覧';
 
 	}
@@ -146,7 +146,7 @@ class GlobalMenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('global_menus');
+		$this->subMenuElements = array('site_configs','global_menus');
 		$this->pageTitle = '新規グローバルメニュー登録';
 		$this->render('form');
 
@@ -188,7 +188,7 @@ class GlobalMenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('global_menus');
+		$this->subMenuElements = array('site_configs','global_menus');
 		$this->pageTitle = 'グローバルメニュー編集：'.$this->data['GlobalMenu']['name'];
 		$this->render('form');
 

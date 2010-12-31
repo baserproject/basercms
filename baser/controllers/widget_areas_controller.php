@@ -62,7 +62,7 @@ class WidgetAreasController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $subMenuElements = array('widget_areas');
+	var $subMenuElements = array('site_configs','widget_areas');
 	function beforeFilter() {
 		parent::beforeFilter();
 		$this->Security->validatePost = false;
