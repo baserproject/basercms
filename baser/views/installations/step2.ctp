@@ -166,11 +166,12 @@ $(function(){
 		<strong style="color:#F00">次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
 		レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
 		サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。<br />
-		<small>インストール中にCGIモードに切り替えた場合は、ブラウザを一旦終了して、インストールを始めからやり直してください。</small>
 	</div>
 	<pre class="section">AddHandler application/x-httpd-phpcgi .php
 mod_gzip_on Off</pre>
-	
+	<div class="section">
+		<strong style="color:#F00">インストール中にCGIモードに切り替えた場合は、クッキーを削除した上で、「再チェック」をクリックしてください。</strong>
+	</div>
 	<div class="section">
 		上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。
 		BaserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />

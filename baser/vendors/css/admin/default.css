@@ -29,8 +29,10 @@ body {
 	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
 	text-align: center;
 	font-size:small;
-	background:url(images/bg_body.jpg) repeat-x left top;
 	color:#333333;
+}
+body.normal {
+	background:url(images/bg_body.jpg) repeat-x left top;
 	background-color:#EDF8C9;/*background-color:#E19284;*/
 }
 pre {

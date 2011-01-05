@@ -47,7 +47,7 @@ class InstallationsController extends AppController {
  * @var		array
  * @access	public
  */
-	var $components = array('Session');
+	var $components = array('Session', 'EmailEx');
 /**
  * レイアウト
  *
@@ -134,7 +134,7 @@ class InstallationsController extends AppController {
 		$this->theme = null;
 
 		$this->Security->validatePost = false;
-		
+
 	}
 /**
  * Step 1: ウェルカムページ
@@ -213,14 +213,14 @@ class InstallationsController extends AppController {
 		$this->set('themeDirWritable',$themeDirWritable);
 		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'BaserCMSのインストール [ステップ２]';
-		
+
 	}
 /**
  * Step 3: データベースの接続設定
  * @return void
  * @access public
  */
-	function step3() {	
+	function step3() {
 
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValuesStep3();
@@ -248,9 +248,9 @@ class InstallationsController extends AppController {
 				}
 
 			}
-			
+
 		}
-		
+
 		$this->pageTitle = 'BaserCMSのインストール [ステップ３]';
 		$this->set('dbsource', $this->_getDbSource());
 
@@ -266,19 +266,19 @@ class InstallationsController extends AppController {
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValuesStep4();
 		} else {
-			
+
 			// ユーザー情報をセッションに保存
 			$this->Session->write('Installation.admin_email', $this->data['Installation']['admin_email']);
 			$this->Session->write('Installation.admin_username', $this->data['Installation']['admin_username']);
 			$this->Session->write('Installation.admin_password', $this->data['Installation']['admin_password']);
 
 			if($this->data['clicked'] == 'back') {
-				
+
 				$this->_resetDatabase();
 				$this->redirect('step3');
 
 			} elseif($this->data['clicked'] == 'finish') {
-				
+
 				// DB接続
 				$db =& $this->_connectDb($this->_readDbSettingFromSession());
 
@@ -297,18 +297,33 @@ class InstallationsController extends AppController {
 				$user['User']['name'] = $this->data['Installation']['admin_username'];
 				$user['User']['real_name_1'] = $this->data['Installation']['admin_username'];
 				$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
+				$user['User']['email'] = $this->data['Installation']['admin_email'];
 				$user['User']['user_group_id'] = 1;
 				if (!$User->save($user)) {
 					if($message) $message .= '<br />';
 					$message .= '管理ユーザーを作成できませんでした。<br />'.$db->error;
 					$this->Session->setFlash($message);
 				} else {
+					$this->_sendCompleteMail($user['User']['email'], $user['User']['name'], $this->data['Installation']['admin_password']);
 					$this->redirect('step5');
 				}
 			}
 		}
 
 		$this->pageTitle = 'BaserCMSのインストール [ステップ４]';
+
+	}
+/**
+ * インストール完了メールを送信する
+ * 
+ * @param	string	$email
+ * @param	string	$name
+ * @param	string	$password
+ */
+	function _sendCompleteMail($email, $name, $password) {
+
+		$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
+		$this->sendMail($email, 'BaserCMSインストール完了', $body, array('template'=>'installed'));
 		
 	}
 /**
@@ -331,7 +346,7 @@ class InstallationsController extends AppController {
 
 		// tmp フォルダを作成する
 		checkTmpFolders();
-		
+
 		// ブログの投稿日を更新
 		$this->_updateEntryDate();
 
@@ -392,7 +407,7 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	function _updatePluginStatus() {
-		
+
 		$db =& $this->_connectDb($this->_readDbSettingFromSession());
 		$version = $this->getBaserVersion();
 		App::import('Model', 'Plugin');
@@ -411,11 +426,11 @@ class InstallationsController extends AppController {
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
  * 登録日を更新する
- * 
+ *
  * @return	boolean
  * @access	protected
  */
@@ -438,7 +453,7 @@ class InstallationsController extends AppController {
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
  * 管理画面にログインする
@@ -465,7 +480,7 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	function _deployTheme($theme = 'demo') {
-		
+
 		$targetPath = WWW_ROOT.'themed'.DS.$theme;
         $sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
         $folder = new Folder();
@@ -478,7 +493,7 @@ class InstallationsController extends AppController {
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
  * テーマ用のページファイルを生成する
@@ -487,7 +502,7 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	function _createPages() {
-		
+
 		App::import('Model','Page');
 		$Page = new Page(null, null, 'baser');
 		$pages = $Page->findAll();
@@ -513,11 +528,11 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	function &_connectDb($config, $name='baser') {
-		
+
 		if($name == 'plugin') {
 			$config['dbPrefix'].=Configure::read('Baser.pluginDbPrefix');
 		}
-		
+
 		$result =  ConnectionManager::create($name ,array(
 				'driver' => $config['dbType'],
 				'persistent' => false,
@@ -529,7 +544,7 @@ class InstallationsController extends AppController {
 				'schema' => $config['dbSchema'],
 				'prefix' =>  $config['dbPrefix'],
 				'encoding' => $config['dbEncoding']));
-		
+
 		if($result) {
 			return $result;
 		} else {
@@ -579,7 +594,7 @@ class InstallationsController extends AppController {
 
 		$folder = new Folder($path);
 		$files = $folder->read(true, true, true);
-		
+
 		if(isset($files[1])) {
 
 			// DB構築
@@ -606,7 +621,7 @@ class InstallationsController extends AppController {
 			}
 		}
 		return true;
-		
+
 	}
 /**
  * ステップ３用のフォーム初期値を取得する
@@ -635,7 +650,7 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	function _getDefaultValuesStep4() {
-		
+
 		if ( $this->Session->read('Installation.admin_username') ) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
 		} else {
@@ -738,13 +753,13 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	function _testConnectDb($config){
-		
+
 		set_error_handler(array($this, "dbErrorHandler"));
 
 		/* データベース接続生成 */
-		
+
 		$db =& $this->_connectDb($config);
-		
+
 		if ($db->connected) {
 
 			/* 一時的にテーブルを作成できるかテスト */
@@ -770,7 +785,7 @@ class InstallationsController extends AppController {
 		}
 
 		return false;
-		
+
 	}
 /**
  * データベース設定ファイル[database.php]を保存する
@@ -781,8 +796,12 @@ class InstallationsController extends AppController {
  */
 	function _writeDatabaseConfig($options = array()) {
 
+		if(!is_writable(CONFIGS)) {
+			return false;
+		}
+
 		extract($options);
-		
+
 		if(!isset($dbType)) {
 			$dbType = '';
 		}
@@ -845,7 +864,7 @@ class InstallationsController extends AppController {
 			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."',\n");
 			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
 			$dbfilehandler->write(");\n");
-			
+
 			$dbfilehandler->write('var $plugin = array('."\n");
 			$dbfilehandler->write("\t'driver' => '".$dbType."',\n");
 			$dbfilehandler->write("\t'persistent' => false,\n");
@@ -876,14 +895,14 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	function _getDbSource() {
-		
+
 		/* DBソース取得 */
 		$dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
 		$folder = new Folder();
-		
+
 		/* SQLite利用可否チェック */
 		if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
-			
+
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
 				$dbFolderPath = APP.'db'.DS.'sqlite';
@@ -900,7 +919,7 @@ class InstallationsController extends AppController {
 				// プラグインコンテンツのアカウント変更時、メールフォームのフィールド変更時の処理を実装する必要あり
 				//$dbsource['sqlite'] = 'SQLite';
 			}
-			
+
 		}
 
 		/* CSV利用可否 */
@@ -908,7 +927,7 @@ class InstallationsController extends AppController {
 		if($folder->create($dbFolderPath, 0777) && is_writable($dbFolderPath)){
 			$dbsource['csv'] = 'CSV';
 		}
-		
+
 		return $dbsource;
 
 	}
@@ -930,7 +949,7 @@ class InstallationsController extends AppController {
 	}
 /**
  * インストール不能警告メッセージを表示
- * 
+ *
  * @return	void
  * @access	public
  */
@@ -941,7 +960,7 @@ class InstallationsController extends AppController {
  * BaserCMSを初期化する
  *
  * debug フラグが -1 の場合のみ実行可能
- * 
+ *
  * @return	void
  * @access	public
  */
@@ -951,7 +970,7 @@ class InstallationsController extends AppController {
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
 		$this->subDir = 'admin';
-		
+
 		if($this->data['Installation']['reset']) {
 
 			if(file_exists(CONFIGS.'database.php')) {

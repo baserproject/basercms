@@ -165,7 +165,8 @@ class FeedConfigsController extends FeedAppController {
 
 			// データを保存
 			if($this->FeedConfig->save($this->data)) {
-
+				
+				$this->_clearCache($this->data['FeedConfig']['id']);
 				$this->Session->setFlash('フィード「'.$this->data['FeedConfig']['name'].'」を更新しました。');
 				$this->FeedConfig->saveDbLog('フィード「'.$this->data['FeedConfig']['name'].'」を更新しました。');
 
@@ -264,16 +265,67 @@ class FeedConfigsController extends FeedAppController {
 		$this->set('id',$id);
 	}
 /**
- * フィードのキャッシュを削除する
+ * フィードのキャッシュを全て削除する
+ * 
  * @return	void
  * @access	public
  */
 	function admin_delete_cache() {
-		$baseUrl = Configure::read('App.baseUrl');
-		clearViewCache(null,'rss');
-		clearViewCache($baseUrl.'/feed/index');
+		
+		$this->_clearCache();
 		$this->Session->setFlash('フィードのキャッシュを削除しました。');
 		$this->redirect('/admin/feed/feed_configs/index');
+		
 	}
+/**
+ * フィードのキャッシュを削除する（requestAction用）
+ *
+ * @param	string	$feedConfigId
+ * @param	string	$url
+ * @return	void
+ * @access	protected
+ */
+	function admin_clear_cache($feedConfigId = '', $url = '') {
+
+		$this->_clearCache($feedConfigId, $url);
+		
+	}
+/**
+ * フィードのキャッシュを削除する
+ *
+ * TODO 第2引き数がない場合、全てのRSSのキャッシュを削除してしまう仕様となっているので
+ * RSSキャッシュ保存名をURLのハッシュ文字列ではなく、feed_detail_idを元にした文字列に変更し、
+ * feed_detail_idで指定して削除できるようにする
+ *
+ * @param	string	$feedConfigId
+ * @param	string	$url
+ * @return	void
+ * @access	protected
+ */
+	function _clearCache($feedConfigId = '', $url = '') {
+		
+		if($feedConfigId) {
+			clearViewCache('/feed/index/'.$feedConfigId);
+			clearViewCache('/feed/ajax/'.$feedConfigId);
+			clearViewCache('/feed/cachetime/'.$feedConfigId);
+		} else {
+			clearViewCache('/feed/index');
+			clearViewCache('/feed/ajax');
+			clearViewCache('/feed/cachetime');
+		}
+		if($url) {
+			if(strpos($url,'http')===false) {
+				// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
+				clearCache($this->RssEx->__createCacheHash('', 'http://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
+				clearCache($this->RssEx->__createCacheHash('', 'https://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
+			}else {
+				clearCache($this->RssEx->__createCacheHash('', $url),'views','.rss');
+			}
+		} else {
+			clearViewCache(null,'rss');
+		}
+		
+	}
+	
 }
 ?>

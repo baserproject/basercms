@@ -594,7 +594,7 @@ class AppController extends Controller {
 			$this->EmailEx->cc = $cc;
 		}
 
-		$this->EmailEx->send();
+		return $this->EmailEx->send();
 
 	}
 /**
@@ -609,8 +609,13 @@ class AppController extends Controller {
 			return false;
 		}
 
+		if(!empty($this->siteConfigs['mail_encode'])) {
+			$encode = $this->siteConfigs['mail_encode'];
+		} else {
+			$encode = 'ISO-2022-JP';
+		}
 		$this->EmailEx->reset();
-		$this->EmailEx->charset = $this->siteConfigs['mail_encode'];
+		$this->EmailEx->charset = $encode;
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if($this->siteConfigs['smtp_host']) {
@@ -851,5 +856,25 @@ class AppController extends Controller {
 		$this->passedArgs = $named;
 
 	}
+/**
+ * ランダムなパスワード文字列を生成する
+ *
+ * @param	int		$len
+ * @return	string	$password
+ * @access	public
+ */
+	function generatePassword ($len = 8) {
+
+		srand ( (double) microtime () * 1000000);
+		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		$password = "";
+		while ($len--) {
+			$pos = rand(0,61);
+			$password .= $seed[$pos];
+		}
+		return $password;
+
+	}
+
 }
 ?>

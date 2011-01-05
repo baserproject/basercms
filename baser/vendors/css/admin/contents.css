@@ -144,6 +144,7 @@
 ----------------------------------------------- */
 #contentsBody {
 	padding:0 20px;
+	text-align: left;
 }
 #contentsBody p,
 #contentsBody ul {

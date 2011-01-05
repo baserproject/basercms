@@ -28,12 +28,6 @@
 	// baserフォルダ内のデータソースも走査するようにした
 	App::import('Core', 'ConnectionManager', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'connection_manager.php'));
 /**
- * tmpフォルダ確認
- */
-	if(isInstalled()) {
-		checkTmpFolders();
-	}
-/**
  * Baserパス追加
  */
 	$modelPaths[] = BASER_MODELS;
@@ -54,6 +48,24 @@
 	$localePaths[] = BASER_LOCALES;
 	//$shellPaths[];
 /**
+ * vendors内の静的ファイルの読み込みの場合はスキップ
+ */
+	$url = $_SERVER['REQUEST_URI'];
+	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
+		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
+		$ext = array_pop(explode('.', $url));
+		if(in_array($ext, $assets)){
+			Configure::write('Baser.Asset',true);
+			return;
+		}
+	}
+/**
+ * tmpフォルダ確認
+ */
+	if(isInstalled()) {
+		checkTmpFolders();
+	}
+/**
  * デフォルトタイトル設定
  * インストールの際のエラー時等DB接続まえのエラーで利用
  */
@@ -70,25 +82,6 @@
  * baserUrl取得
  */
 	$baseUrl = baseUrl();
-/**
- * vendors内の静的ファイルの読み込みの場合はスキップ
- */
-	$url = $_SERVER['REQUEST_URI'];
-	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
-		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
-		$ext = array_pop(explode('.', $url));
-		if(in_array($ext, $assets)){
-			Configure::write('Baser.Asset',true);
-			return;
-		}
-	}
-/**
- * タイムゾーン設定
- */
- 	if(!ini_get('date.timezone')) {
- 		ini_set('date.timezone', 'Asia/Tokyo');
- 	}
-	@putenv("TZ=JST-9");
 /**
  * 文字コードの検出順を指定
  */
@@ -109,7 +102,7 @@
 			ini_set('session.gc_maxlifetime', $sessionTimeout);
 		} else {
 			trigger_error('Security.level の設定が間違っています。', E_USER_WARNING);
-		}		
+		}
 	}
 /**
  * モバイルルーティング設定

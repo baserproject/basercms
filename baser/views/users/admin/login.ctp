@@ -45,7 +45,9 @@
 			</table>
 			<br />
 			<br />
-			<p> <?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　 <?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?> </p>
+			<p> <?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　
+				<?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?> </p>
+			<p><small><?php $baser->link('パスワードを忘れた？', array('action'=>'reset_password'), array('rel'=>'popup')) ?></small></p>
 		</div>
 		<div class="box-foot"> &nbsp; </div>
 	</div>

@@ -70,7 +70,7 @@
 			<h3>BaserCMSニュース</h3>
 		</div>
 		<div class="box-body">
-			<?php $baser->feed(2) ?>
+			<?php $baser->js('/feed/ajax/2') ?>
 			<br />
 			<small>BaserCMSについて、不具合の発見・改善要望がありましたら<a href="http://forum.basercms.net" target="_blank">ユーザーズフォーラム</a> よりお知らせください。</small>
 		</div>

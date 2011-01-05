@@ -2,12 +2,12 @@
 /* SVN FILE: $Id$ */
 /**
  * [管理画面] メールフィールド 一覧
- * 
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -80,14 +80,14 @@
 			<?php $baser->link('削除', array('action'=>'delete', $mailContent['MailContent']['id'],$listData['MailField']['id']), array('class'=>'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？', $listData['MailField']['name']),false); ?>
 		</td>
 		<td style="width:5%"><?php echo $listData['MailField']['no'] ?></td>
-		<td style="width:30%">
+		<td style="width:25%">
 			<?php $baser->link($listData['MailField']['field_name'],array('action'=>'edit', $mailContent['MailContent']['id'],$listData['MailField']['id'])); ?><br />
 			<?php echo $listData['MailField']['name']; ?>
 		</td>
-		<td style="width:19%"><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
+		<td style="width:15%"><?php echo $textEx->listValue('MailField.type',$listData['MailField']['type']); ?></td>
 		<td style="width:10%"><?php echo $listData['MailField']['group_field'] ?></td>
-		<td style="width:8%"><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
-		<td style="width:8%">
+		<td style="width:8%;text-align:center"><?php echo $textEx->booleanMark($listData['MailField']['not_empty']) ?></td>
+		<td style="width:12%">
 				<?php echo $timeEx->format('y-m-d',$listData['MailField']['created']); ?><br />
 				<?php echo $timeEx->format('y-m-d',$listData['MailField']['modified']); ?>
 		</td>

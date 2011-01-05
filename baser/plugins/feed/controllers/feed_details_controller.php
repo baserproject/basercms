@@ -41,7 +41,7 @@ class FeedDetailsController extends FeedAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('Feed.FeedDetail','Feed.FeedConfig');
+	var $uses = array('Feed.FeedDetail','Feed.FeedConfig', 'Feed.RssEx');
 /**
  * ヘルパー
  *
@@ -155,6 +155,7 @@ class FeedDetailsController extends FeedAppController {
 			$this->FeedDetail->set($this->data);
 			// データを保存
 			if($this->FeedDetail->save()) {
+				$this->requestAction('/admin/feed/feed_configs/clear_cache', array('pass'=>array($this->data['FeedDetail']['feed_config_id'], $this->data['FeedDetail']['url'])));
 				$this->Session->setFlash('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
 				$this->FeedDetail->saveDbLog('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
 				$this->redirect(array('controller'=>'feed_configs','action'=>'admin_edit', $feedConfigId, $id.'#headFeedDetail'));
@@ -168,6 +169,28 @@ class FeedDetailsController extends FeedAppController {
 		$this->pageTitle = 'フィード詳細情報編集';
 		$this->render('form');
 
+	}
+/**
+ * フィードのキャッシュを削除する
+ *
+ * @param	string	$feedConfigId
+ * @param	string	$url
+ * @return	void
+ * @access	protected
+ */
+	function _clearViewCatch($feedConfigId, $url) {
+		
+		clearViewCache('/feed/index/'.$feedConfigId);
+		clearViewCache('/feed/ajax/'.$feedConfigId);
+		clearViewCache('/feed/cachetime/'.$feedConfigId);
+		if(strpos($url,'http')===false) {
+			// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
+			clearCache($this->RssEx->__createCacheHash('', 'http://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
+			clearCache($this->RssEx->__createCacheHash('', 'https://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
+		}else {
+			clearCache($this->RssEx->__createCacheHash('', $url),'views','.rss');
+		}
+		
 	}
 /**
  * [ADMIN] 削除
