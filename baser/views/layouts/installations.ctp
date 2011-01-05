@@ -47,7 +47,7 @@
 	'startup')) ?>
 <?php $baser->scripts() ?>
 </head>
-<body id="<?php $baser->contentsName() ?>">
+<body id="<?php $baser->contentsName() ?>" class="normal">
 
 <!-- begin page -->
 <div id="page">

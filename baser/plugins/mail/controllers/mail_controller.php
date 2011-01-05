@@ -219,12 +219,14 @@ class MailController extends MailAppController {
 			// データの入力チェックを行う
 			if($this->Message->validates()) {
 				$this->set('freezed',true);
-				$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
 			}else {
 				$this->set('freezed',false);
 				$this->set('error',true);
+				
 				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信して下さい。');
 			}
+
+			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
 
 		}
 

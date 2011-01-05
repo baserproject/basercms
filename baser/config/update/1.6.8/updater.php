@@ -91,6 +91,21 @@
 		$this->setMessage('site_configs テーブルの更新に失敗しました。', true);
 	}
 /**
+ * users 更新
+ */
+	App::import('Model', 'User');
+	$UserClass = new User();
+	$user = $UserClass->findByUserGroupId(1);
+	if($user) {
+		$user['User']['email'] = $siteConfig['email'];
+		$UserClass->set($user);
+		if($UserClass->save()) {
+			$this->setMessage('users テーブルの更新に成功しました。');
+		} else {
+			$this->setMessage('users テーブルの更新に成功しました。');
+		}
+	}
+/**
  * install.php にSSL対応用の項目追加
  */
 	$this->writeInstallSetting('Baser.siteUrl', "'".siteUrl()."'");

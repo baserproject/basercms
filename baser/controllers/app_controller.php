@@ -198,7 +198,7 @@ class AppController extends Controller {
 		}
 
 		// メンテナンス
-		if(!empty($this->siteConfigs['maintenance']) && 
+		if(!empty($this->siteConfigs['maintenance']) &&
 					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
 					(!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
@@ -258,7 +258,7 @@ class AppController extends Controller {
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
-		
+
 		// 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
 		if(!empty($this->params['admin'])) {
 			$this->Security->validatePost = false;
@@ -322,12 +322,12 @@ class AppController extends Controller {
 			if(Configure::read('App.baseUrl')) {
 				$url = 'index.php/'.$url;
 			}
-			
+
 			$url = Configure::read('Baser.sslUrl').$url;
 			$this->redirect($url);
 			exit();
 		}
-		
+
 	}
 /**
  * NOT FOUNDページを出力する
@@ -423,7 +423,7 @@ class AppController extends Controller {
 				return false;
 			}
 		}
-		
+
 		App::import('File');
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
@@ -433,7 +433,7 @@ class AppController extends Controller {
 		}else {
 			return false;
 		}
-		
+
 	}
 /**
  * DBのバージョンを取得する
@@ -520,7 +520,7 @@ class AppController extends Controller {
 	}
 /**
  * メールを送信する
- * 
+ *
  * @param	string	$to		送信先アドレス
  * @param	string	$from	送信元アドレス
  * @param	string	$title	タイトル
@@ -544,7 +544,7 @@ class AppController extends Controller {
 		if(!isset($this->EmailEx)) {
 			return false;
 		}
-		
+
 		// メール基本設定
 		$this->_setMail();
 
@@ -561,7 +561,7 @@ class AppController extends Controller {
 		}else {
 			$this->set('body', $body);
 		}
-		
+
 		// 送信先アドレス
 		$this->EmailEx->to = $to;
 
@@ -571,17 +571,19 @@ class AppController extends Controller {
 		// 送信元・返信先
 		if($from) {
 			$this->EmailEx->from = $from;
+			$this->EmailEx->additionalParams = '-f'.$from;
 			$this->EmailEx->return = $from;
 			$this->EmailEx->replyTo = $reply;
 		} else {
 			$this->EmailEx->from = $to;
+			$this->EmailEx->additionalParams = '-f'.$to;
 			$this->EmailEx->return = $to;
 			$this->EmailEx->replyTo = $to;
 		}
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = $fromName . ' <'.$from.'>';
+			$this->EmailEx->from = '"'.$fromName . '" <'.$from.'>';
 		}
 
 		// CC
@@ -594,7 +596,7 @@ class AppController extends Controller {
 			$this->EmailEx->cc = $cc;
 		}
 
-		$this->EmailEx->send();
+		return $this->EmailEx->send();
 
 	}
 /**
@@ -609,8 +611,13 @@ class AppController extends Controller {
 			return false;
 		}
 
+		if(!empty($this->siteConfigs['mail_encode'])) {
+			$encode = $this->siteConfigs['mail_encode'];
+		} else {
+			$encode = 'ISO-2022-JP';
+		}
 		$this->EmailEx->reset();
-		$this->EmailEx->charset = $this->siteConfigs['mail_encode'];
+		$this->EmailEx->charset = $encode;
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if($this->siteConfigs['smtp_host']) {
@@ -651,7 +658,7 @@ class AppController extends Controller {
 		$return = $file->write($data);
 		$file->close();
 		return $return;
-		
+
 	}
 /**
  * スマートURLの設定を取得
@@ -798,7 +805,7 @@ class AppController extends Controller {
 				$this->Session->write("{$contentsName}.filter.{$model}",$this->data[$model]);
 			}
 		}
-		
+
 		if(!empty($this->params['named'])) {
 			$named = am($this->Session->read("{$contentsName}.named"), $this->params['named']);
 			$this->Session->write("{$contentsName}.named", $named);
@@ -820,7 +827,7 @@ class AppController extends Controller {
 		if(!is_array($filterModels)){
 			$filterModels = array($filterModels);
 		}
-		
+
 		if(!$action) {
 			$action = $this->action;
 		}
@@ -851,5 +858,25 @@ class AppController extends Controller {
 		$this->passedArgs = $named;
 
 	}
+/**
+ * ランダムなパスワード文字列を生成する
+ *
+ * @param	int		$len
+ * @return	string	$password
+ * @access	public
+ */
+	function generatePassword ($len = 8) {
+
+		srand ( (double) microtime () * 1000000);
+		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		$password = "";
+		while ($len--) {
+			$pos = rand(0,61);
+			$password .= $seed[$pos];
+		}
+		return $password;
+
+	}
+
 }
 ?>

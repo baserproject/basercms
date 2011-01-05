@@ -59,7 +59,7 @@ class UsersController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * サブメニューエレメント
  *
@@ -83,7 +83,7 @@ class UsersController extends AppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('admin_login','admin_login_exec');
+		$this->Auth->allow('admin_login','admin_login_exec', 'admin_reset_password');
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin'){
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
@@ -308,6 +308,48 @@ class UsersController extends AppController {
 		$this->redirect(array('action'=>'admin_index'));
 
 	}
-
+/**
+ * ログインパスワードをリセットする
+ *
+ * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
+ * 
+ * @return	void
+ * @access	public
+ */
+	function admin_reset_password () {
+		
+		$this->layout = 'popup';
+		$this->pageTitle = 'パスワードのリセット';
+		
+		if($this->data) {
+			
+			if(empty($this->data['User']['email'])) {
+				$this->Session->setFlash('メールアドレスを入力してください。');
+				return;
+			}
+			$email = $this->data['User']['email'];
+			$user = $this->User->findByEmail($email);
+			if(!$user) {
+				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
+				return;
+			}
+			$password = $this->generatePassword();
+			$user['User']['password'] = $this->Auth->password($password);
+			$this->User->set($user);
+			if(!$this->User->save()) {
+				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
+				return;
+			}
+			$body = $email.' の新しいパスワードは、 '.$password.' です。';
+			if(!$this->sendMail($email, 'パスワードを変更しました', $body)) {
+				$this->Session->setFlash('メール送信時にエラーが発生しました。');
+				return;
+			}
+			$this->Session->setFlash($email.' 宛に新しいパスワードを送信しました。');
+			$this->data = array();
+			
+		}
+		
+	}
 }
 ?>

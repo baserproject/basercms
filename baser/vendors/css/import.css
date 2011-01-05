@@ -26,7 +26,7 @@
 @import "admin/contents.css";
 @import "admin/header.css";
 @import "admin/footer.css";
-body {
+body.normal{
 	background:url(images/bg_body_red.jpg) repeat-x left top;
 	background-color:#FFDBD9;
 }

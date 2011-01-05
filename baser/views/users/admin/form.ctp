@@ -61,6 +61,17 @@
 			<?php echo $form->error('User.user_group_id', 'グループを選択して下さい') ?></td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $form->label('User.email', 'Eメール') ?></th>
+		<td class="col-input">
+			<?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpEmail','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextEmail" class="helptext">
+				連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等</small>
+			</div>
+			<?php echo $form->error('User.email') ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"> <?php if($this->action == 'admin_add'): ?>
 			<span class="required">*</span>&nbsp;
 			<?php endif; ?>
@@ -82,15 +93,7 @@
 			<?php echo $form->error('User.password') ?>&nbsp; </td>
 	</tr>
 </table>
-<div style="display:none">
-	<h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
-	<table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
-		<tr style="display:none">
-			<th class="col-head"><?php echo $form->label('User.email', 'Eメール') ?></th>
-			<td class="col-input"><?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?> <?php echo $form->error('User.email', 'Eメールの形式が不正です') ?>&nbsp;</td>
-		</tr>
-	</table>
-</div>
+
 <div class="align-center">
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php if(isset($baser->siteConfig['demo_on']) && $baser->siteConfig['demo_on']): ?>

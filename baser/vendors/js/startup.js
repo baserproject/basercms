@@ -83,4 +83,5 @@ $(document).ready(function(){
 	if($('.corner5').corner) $('.corner5').corner("5px");
 	if($('.corner10').corner) $('.corner10').corner("10px");
 	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+	if($("a[rel='popup']").colorbox) $("a[rel='popup']").colorbox({width:"60%", height:"70%", iframe:true});
 });

@@ -24,10 +24,12 @@
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * エラーメッセージを抑制する
- * インストール時等キャッシュディレクトリの書き込み権限がない事でエラーとなり正常に表示されない場合がある為
+ * タイムゾーンを設定する
  */
-	ini_set( "display_errors", "Off");
+	if(!ini_get('date.timezone')) {
+ 		ini_set('date.timezone', 'Asia/Tokyo');
+ 	}
+	@putenv("TZ=JST-9");
 /**
  * Use the DS to separate the directories in other defines
  */
