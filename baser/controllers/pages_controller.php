@@ -285,18 +285,22 @@ class PagesController extends AppController {
 	function display() {
 
 		$path = func_get_args();
-		$url = str_replace('pages','',$path[0]);
-		if($url == 'index.html') {
-			$url = '/index.html';
-		}
 
 		$ext = '';
 		if(strpos($path[0], '.html') !== false) {
+
 			// .htmlの拡張子がついている場合、$pathが正常に取得できないので取得しなおす
+			// 1.5.9 以前との互換性の為残しておく
+			$url = str_replace('pages','',$path[0]);
+			if($url == 'index.html') {
+				$url = '/index.html';
+			}
 			$params = Router::parse(str_replace('.html','',$path[0]));
 			$path = $params['pass'];
 			$this->params['pass'] = $path;
 			$ext = '.html';
+		} else {
+			$url = '/'.implode('/', $path);
 		}
 
 		// モバイルディレクトリへのアクセスは Not Found
@@ -330,8 +334,28 @@ class PagesController extends AppController {
 		}
 
 		// ナビゲーションを取得
+		$this->navis = $this->_getNavi($url);
+
+		$path[count($path)-1] .= $ext;
+		$this->subMenuElements = array('default');
+		$this->set(compact('page', 'subpage', 'title'));
+		$this->render(join('/', $path));
+
+	}
+/**
+ * パンくずナビ用の配列を取得する
+ *
+ * @param	string	$url
+ * @return	array
+ * @access	protected
+ */
+	function _getNavi($url) {
+
+		$url = preg_replace('/^\//', '', $url);
+		$path = explode('/', $url);
 		$categories = array();
 		$conditions = array();
+		$navis = array();
 		for($i=0;$i<count($path)-1;$i++) {
 			$categories[$path[$i]] = '';
 			$conditions['or'][] = array('PageCategory.name'=>$path[$i]);
@@ -357,18 +381,15 @@ class PagesController extends AppController {
 			}
 			foreach ($categories as $category) {
 				if(!empty($category['url'])) {
-					$this->navis[$category['title']] = $category['url'];
-				}elseif(isset($categories['title'])) {
-					$this->navis[$category['title']] = '';
+					$navis[$category['title']] = $category['url'];
+				}elseif(isset($category['title'])) {
+					$navis[$category['title']] = '';
 				}
 			}
 		}
 
-		$path[count($path)-1] .= $ext;
-		$this->subMenuElements = array('default');
-		$this->set(compact('page', 'subpage', 'title'));
-		$this->render(join('/', $path));
-
+		return $navis;
+		
 	}
 /**
  * [MOBILE] ビューを表示する
@@ -444,6 +465,7 @@ class PagesController extends AppController {
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
+		$this->navis = $this->_getNavi($this->params['url']['url']);
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.'.ctp');
 		@unlink(TMP.'pages_preview_'.$id.'.ctp');
