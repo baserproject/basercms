@@ -530,11 +530,19 @@ class AppController extends Controller {
  */
 	function sendMail($to, $title = '', $body = '', $options = array()) {
 
-		$_options = array('fromName' => $this->siteConfigs['formal_name'],
-							'reply' => $this->siteConfigs['email'],
+		$formalName = $email = '';
+		if(!empty($this->siteConfigs)) {
+			$formalName = $this->siteConfigs['formal_name'];
+			$email = $this->siteConfigs['email'];
+		}
+		if(!$formalName) {
+			$formalName = Configure::read('Baser.title');
+		}
+		$_options = array('fromName' => $formalName,
+							'reply' => $email,
 							'cc' => '',
 							'template' => 'default',
-							'from' => $this->siteConfigs['email']
+							'from' => $email
 		);
 
 		$options = am($_options, $options);
@@ -620,7 +628,7 @@ class AppController extends Controller {
 		$this->EmailEx->charset = $encode;
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-		if($this->siteConfigs['smtp_host']) {
+		if(!empty($this->siteConfigs['smtp_host'])) {
 			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
 			$this->EmailEx->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
 					'port'	=>25,
