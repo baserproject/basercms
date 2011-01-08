@@ -702,6 +702,12 @@ class AppController extends Controller {
 		}
 
 		/* /.htaccess の編集 */
+
+		//======================================================================
+		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったので、追記モード「a」で開くことにした。
+		// そのため、実際の書き込み時は、 ftruncate で、内容をリセットし、ファイルポインタを先頭に戻している。
+		//======================================================================
+		
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
@@ -711,7 +717,8 @@ class AppController extends Controller {
 									'RewriteRule ^$ app/webroot/ [L]',
 									'RewriteRule (.*) app/webroot/$1 [L]');
 		$path = ROOT.DS.'.htaccess';
-		$file = new File($path);
+		$file = new File($path);		
+		$file->open('a+');
 		$data = $file->read();
 		foreach ($rewritePatterns as $rewritePattern) {
 			$data = preg_replace($rewritePattern, '', $data);
@@ -719,6 +726,7 @@ class AppController extends Controller {
 		if($smartUrl) {
 			$data .= "\n".implode("\n", $rewriteSettings);
 		}
+		ftruncate($file->handle,0);
 		if(!$file->write($data)){
 			$file->close();
 			return false;
@@ -733,6 +741,7 @@ class AppController extends Controller {
 									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
 		$path = WWW_ROOT.'.htaccess';
 		$file = new File($path);
+		$file->open('a+');
 		$data = $file->read();
 		foreach ($rewritePatterns as $rewritePattern) {
 			$data = preg_replace($rewritePattern, '', $data);
@@ -740,6 +749,7 @@ class AppController extends Controller {
 		if($smartUrl) {
 			$data .= "\n".implode("\n", $rewriteSettings);
 		}
+		ftruncate($file->handle,0);
 		if(!$file->write($data)){
 			$file->close();
 			return false;
