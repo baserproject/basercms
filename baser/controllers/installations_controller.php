@@ -315,7 +315,7 @@ class InstallationsController extends AppController {
 	}
 /**
  * インストール完了メールを送信する
- * 
+ *
  * @param	string	$email
  * @param	string	$name
  * @param	string	$password
@@ -323,8 +323,8 @@ class InstallationsController extends AppController {
 	function _sendCompleteMail($email, $name, $password) {
 
 		$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
-		$this->sendMail($email, 'BaserCMSインストール完了', $body, array('template'=>'installed'));
-		
+		$this->sendMail($email, 'BaserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
+
 	}
 /**
  * Step 5: 設定ファイルの生成
@@ -608,7 +608,9 @@ class InstallationsController extends AppController {
 			}
 
 			// CSVの場合ロックを解除しないとデータの投入に失敗する
-			$db->reconnect();
+			if($db->config['driver'] == 'csv') {
+				$db->reconnect();
+			}
 
 			// 初期データ投入
 			foreach($files[1] as $file) {

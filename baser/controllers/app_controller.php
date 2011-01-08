@@ -530,11 +530,19 @@ class AppController extends Controller {
  */
 	function sendMail($to, $title = '', $body = '', $options = array()) {
 
-		$_options = array('fromName' => $this->siteConfigs['formal_name'],
-							'reply' => $this->siteConfigs['email'],
+		$formalName = $email = '';
+		if(!empty($this->siteConfigs)) {
+			$formalName = $this->siteConfigs['formal_name'];
+			$email = $this->siteConfigs['email'];
+		}
+		if(!$formalName) {
+			$formalName = Configure::read('Baser.title');
+		}
+		$_options = array('fromName' => $formalName,
+							'reply' => $email,
 							'cc' => '',
 							'template' => 'default',
-							'from' => $this->siteConfigs['email']
+							'from' => $email
 		);
 
 		$options = am($_options, $options);
@@ -620,7 +628,7 @@ class AppController extends Controller {
 		$this->EmailEx->charset = $encode;
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-		if($this->siteConfigs['smtp_host']) {
+		if(!empty($this->siteConfigs['smtp_host'])) {
 			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
 			$this->EmailEx->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
 					'port'	=>25,
@@ -694,6 +702,12 @@ class AppController extends Controller {
 		}
 
 		/* /.htaccess の編集 */
+
+		//======================================================================
+		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったので、追記モード「a」で開くことにした。
+		// そのため、実際の書き込み時は、 ftruncate で、内容をリセットし、ファイルポインタを先頭に戻している。
+		//======================================================================
+		
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
@@ -703,7 +717,8 @@ class AppController extends Controller {
 									'RewriteRule ^$ app/webroot/ [L]',
 									'RewriteRule (.*) app/webroot/$1 [L]');
 		$path = ROOT.DS.'.htaccess';
-		$file = new File($path);
+		$file = new File($path);		
+		$file->open('a+');
 		$data = $file->read();
 		foreach ($rewritePatterns as $rewritePattern) {
 			$data = preg_replace($rewritePattern, '', $data);
@@ -711,6 +726,7 @@ class AppController extends Controller {
 		if($smartUrl) {
 			$data .= "\n".implode("\n", $rewriteSettings);
 		}
+		ftruncate($file->handle,0);
 		if(!$file->write($data)){
 			$file->close();
 			return false;
@@ -725,6 +741,7 @@ class AppController extends Controller {
 									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
 		$path = WWW_ROOT.'.htaccess';
 		$file = new File($path);
+		$file->open('a+');
 		$data = $file->read();
 		foreach ($rewritePatterns as $rewritePattern) {
 			$data = preg_replace($rewritePattern, '', $data);
@@ -732,6 +749,7 @@ class AppController extends Controller {
 		if($smartUrl) {
 			$data .= "\n".implode("\n", $rewriteSettings);
 		}
+		ftruncate($file->handle,0);
 		if(!$file->write($data)){
 			$file->close();
 			return false;
