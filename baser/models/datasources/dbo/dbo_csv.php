@@ -348,9 +348,6 @@ class DboCsv extends DboSource {
 		$alias = $this->name($model->alias);
 		$joins = implode(' ', $this->_getJoins($model));
 
-		if (empty($conditions)) {
-			$alias = $joins = false;
-		}
 		$conditions = $this->conditions($this->defaultConditions($model, $conditions, $alias), true, true, $model);
 
 		if ($conditions === false) {
