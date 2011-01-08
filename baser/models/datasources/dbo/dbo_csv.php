@@ -159,7 +159,7 @@ class DboCsv extends DboSource {
  * @access	private
  */
 	function __construct($config = null, $autoConnect = true) {
-		
+
 		// TODO 現在の仕様として、$connected は、配列にしてしまっているので、
 		// 次の処理を行うと処理がうまくいかなくなってしまう。
 		// 配列の接続データは別のプロパティに持たせるようにした方が？
@@ -169,7 +169,7 @@ class DboCsv extends DboSource {
 		}*/
 		parent::__construct($config,false);
 		$this->appEncoding = Configure::read('App.encoding');
-		
+
 	}
 /**
  * The "R" in CRUD
@@ -425,7 +425,7 @@ class DboCsv extends DboSource {
 		}
 
 		$this->connected[$tableName] = false;
-		
+
 		if(!$this->_connect($tableName,$lock,$model->plugin)) {
 
 			// 接続が見つからない場合はエラー
@@ -834,7 +834,7 @@ class DboCsv extends DboSource {
 				return false;
 			}
 			$this->_csvFields = fgetcsv($this->connection[$queryData['tableName']],10240);
-			
+
 		}
 
 		// カラムをテーブル情報どおりに並べる
@@ -861,7 +861,7 @@ class DboCsv extends DboSource {
 		if($this->dbEncoding != $this->appEncoding) {
 			$newRecord = mb_convert_encoding($newRecord, $this->dbEncoding, $this->appEncoding);
 		}
-		
+
 		$csv .= $newRecord;
 
 		// ファイルサイズを0に
@@ -1043,7 +1043,7 @@ class DboCsv extends DboSource {
 			if($this->dbEncoding != $this->appEncoding) {
 				mb_convert_variables($this->appEncoding,$this->dbEncoding,$record);
 			}
-			
+
 			// 条件に合致しない場合は取得せず次へ
 			if($conditions && !eval($conditions)) {
 				continue;
@@ -1052,7 +1052,7 @@ class DboCsv extends DboSource {
 		}
 
 		rewind($this->connection[$index]);
-		
+
 		return $records;
 
 	}
@@ -1372,7 +1372,7 @@ class DboCsv extends DboSource {
 		if($this->dbEncoding != $this->appEncoding) {
 			$csvData = mb_convert_encoding($csvData, $this->dbEncoding, $this->appEncoding);
 		}
-		
+
 		//ファイルに書きこみ
 		$ret = fwrite($this->connection[$table], $csvData);
 		$this->disconnect($table);
@@ -1670,7 +1670,7 @@ class DboCsv extends DboSource {
 		$conditions = preg_replace("/YEAR\((.*?)\)/si","date('Y',strtotime($1))",$conditions);
 		$conditions = preg_replace("/MONTH\((.*?)\)/si","date('m',strtotime($1))",$conditions);
 		$conditions = preg_replace("/DAY\((.*?)\)/si","date('d',strtotime($1))",$conditions);
-		$conditions = preg_replace('/([^<>])=+/s','$1==',$conditions);
+		$conditions = preg_replace('/([^<>!])=+/s','$1==',$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+NOT\s+LIKE\s+\'(.*?)\'/s","!preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
 		$conditions = preg_replace("/([`a-z0-9_]+)\s+LIKE\s+\'(.*?)\'/s","preg_match('/^'.str_replace(\"*\",\".*\",\"$2\").'$/s',$1)>=1",$conditions);
 
