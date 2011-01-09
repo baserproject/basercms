@@ -100,11 +100,13 @@ class BlogPost extends BlogAppModel {
  */
 	function getBlogDates($blogContentId) {
 
+		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
+		$conditions = am($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
 		/*$dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
-                                          'conditions'=>array('BlogPost.status'=>1),
+                                          $conditions,
                                           'group'=>array('YEAR(posts_date)','MONTH(posts_date)'))));*/
-		$posts = $this->find('all',array('conditions'=>array('BlogPost.status'=>1,'BlogPost.blog_content_id'=>$blogContentId),'order'=>'BlogPost.posts_date DESC'));
+		$posts = $this->find('all',array('conditions'=>$conditions, 'order'=>'BlogPost.posts_date DESC', 'recursive'=>-1));
 		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
 
 		$dates = array();
@@ -133,7 +135,40 @@ class BlogPost extends BlogAppModel {
  */
 	function getEntryDates($contentId,$year,$month) {
 
-		$conditions = array('BlogPost.status'=>true,'BlogPost.blog_content_id'=>$contentId);
+		$entryDates = $this->find('all',array('fields'=>array('BlogPost.posts_date'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1));
+		$entryDates = Set::extract('/BlogPost/posts_date',$entryDates);
+		foreach($entryDates as $key => $entryDate) {
+			$entryDates[$key] = date('Y-m-d',strtotime($entryDate));
+		}
+		return $entryDates;
+
+	}
+/**
+ * 指定した月の記事が存在するかチェックする
+ *
+ * @param	int	$contentId
+ * @param	int	$year
+ * @param	int	$month
+ * @return	boolean
+ */
+	function existsEntry($contentId,$year,$month) {
+		if($this->find('first',array('fields'=>array('BlogPost.id'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+/**
+ * 年月を指定した検索条件を生成
+ *
+ * データベースごとに構文が違う
+ * 
+ * @param	int	$contentId
+ * @param	int	$year
+ * @param	int	$month
+ * @return	string
+ */
+	function _getEntryDatesConditions($contentId,$year,$month) {
 
 		$dbConfig = new DATABASE_CONFIG();
 		$driver = str_replace('_ex','',$dbConfig->plugin['driver']);
@@ -182,14 +217,9 @@ class BlogPost extends BlogAppModel {
 
 		}
 
-		$entryDates = $this->find('all',array('fields'=>array('BlogPost.posts_date'),'conditions'=>$conditions));
-		$entryDates = Set::extract('/BlogPost/posts_date',$entryDates);
-
-		foreach($entryDates as $key => $entryDate) {
-			$entryDates[$key] = date('Y-m-d',strtotime($entryDate));
-		}
-		return $entryDates;
-
+		$conditions = am($conditions,  array('BlogPost.blog_content_id'=>$contentId), $this->getConditionAllowPublish());
+		return $conditions;
+		
 	}
 /**
  * コントロールソースを取得する

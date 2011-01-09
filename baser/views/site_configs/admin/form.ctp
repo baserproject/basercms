@@ -74,8 +74,11 @@ $(function(){
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.formal_name', 'WEBサイト名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.formal_name', array('size'=>55,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.formal_name') ?>
-			<div id="helptextName" class="helptext">
+		<td class="col-input">
+			<?php echo $formEx->text('SiteConfig.formal_name', array('size'=>55,'maxlength'=>255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpFormalName','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('SiteConfig.formal_name') ?>
+			<div id="helptextFormalName" class="helptext">
 				<ul>
 					<li>正式なWEBサイト名を指定します。</li>
 					<li>メールの送信元等で利用します。</li>
@@ -85,10 +88,13 @@ $(function(){
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.name', 'WEBサイトタイトル') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.name', array('size'=>55,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.name') ?>
+		<td class="col-input">
+			<?php echo $formEx->text('SiteConfig.name', array('size'=>55,'maxlength'=>255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->error('SiteConfig.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
-					<li>サイトの基本タイトルとして利用されます。（タイトルタグに影響します）</li>
+					<li>Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）</li>
 					<li>テンプレートで利用する場合は、<br />
 						&lt;?php $baser->title() ?&gt; で出力します。</li>
 				</ul>

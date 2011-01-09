@@ -111,9 +111,17 @@ else{
 //カレンダーを表示するHTML
 print '<table class="blog-calendar"><tr><td colspan=7>';
 print "<center>";
-print $baser->getLink($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),array('prefix'=>true),null,false);
+if($data['prev']) {
+	print $baser->getLink($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),array('prefix'=>true),null,false);
+} else {
+	print $month3."月";
+}
 print "　".$year."年".$month."月　";
-print $baser->getLink($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),array('prefix'=>true),null,false);
+if($data['next']) {
+	print $baser->getLink($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),array('prefix'=>true),null,false);
+} else {
+	print $month4."月";
+}
 print "</td></tr>";
 
 print '

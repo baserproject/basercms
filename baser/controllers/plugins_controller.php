@@ -324,25 +324,23 @@ class PluginsController extends AppController {
 
 		}else {
 
-			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
-				include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
-			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
-				include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
-			}
-
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
 
 			if($data) {
+				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
 				$data['Plugin']['name']=$this->data['Plugin']['name'];
 				$data['Plugin']['title']=$this->data['Plugin']['title'];
 				$data['Plugin']['status']=$this->data['Plugin']['status'];
-				$data['Plugin']['version']=$this->data['Plugin']['version'];
+				$this->Plugin->set($data);
 			} else {
+				if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
+					include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
+				}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
+					include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
+				}
 				$data = $this->data;
+				$this->Plugin->create($data);
 			}
-
-			/* 登録処理 */
-			$this->Plugin->create($data);
 
 			// データを保存
 			if($this->Plugin->save()) {
