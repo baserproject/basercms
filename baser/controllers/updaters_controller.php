@@ -177,7 +177,9 @@ class UpdatersController extends AppController {
 
 		clearAllCache();
 
-		$targets = array('', 'blog', 'feed', 'mail');
+		$targetPlugins = array('blog', 'feed', 'mail');
+		$targets = $this->Plugin->find('list', array('fields'=>array('name'), 'conditions'=>array('status'=>true, 'name'=> $targetPlugins)));
+		$targets = am(array(''), $targets);
 
 		$scriptNum = 0;
 		foreach($targets as $target) {
