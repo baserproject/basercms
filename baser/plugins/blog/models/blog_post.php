@@ -100,11 +100,13 @@ class BlogPost extends BlogAppModel {
  */
 	function getBlogDates($blogContentId) {
 
+		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
+		$conditions = am($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
 		/*$dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
-                                          'conditions'=>array('BlogPost.status'=>1),
+                                          $conditions,
                                           'group'=>array('YEAR(posts_date)','MONTH(posts_date)'))));*/
-		$posts = $this->find('all',array('conditions'=>array('BlogPost.status'=>1,'BlogPost.blog_content_id'=>$blogContentId),'order'=>'BlogPost.posts_date DESC'));
+		$posts = $this->find('all',array('conditions'=>$conditions, 'order'=>'BlogPost.posts_date DESC', 'recursive'=>-1));
 		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
 
 		$dates = array();
