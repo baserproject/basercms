@@ -23,18 +23,18 @@
 
                                            <?php echo date('Y-m-d H:i:s') ?> 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　◆◇　BaserCMSのインストールが完了しました　◇◆
+　　　　　　◆◇　BaserCMSのインストールが完了しました　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　おめでとうございます！
-　次のURLへBaserCMSのインストールが完了しました。
+　おめでとうございます！
+　次のURLへBaserCMSのインストールが完了しました。
 　<?php echo $siteUrl ?> 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　◆ ログイン情報
+　◆ ログイン情報
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-管理ページ： <?php echo $siteUrl.preg_replace('/^\//','',$baser->getUrl('/admin/users/login')) ?> 
+管理ページ： <?php echo topLevelUrl(false).Configure::read('App.baseUrl').'/admin/users/login' ?> 
 アカウント： <?php echo $name ?>　
-パスワード： <?php echo $password ?>　
+パスワード： <?php echo $password ?>　
 
-※ パスワードはユーザー管理より変更する事ができます。
+※ パスワードはユーザー管理より変更する事ができます。
