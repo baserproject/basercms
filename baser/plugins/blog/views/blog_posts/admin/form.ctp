@@ -21,7 +21,7 @@
  */
 $baser->css('ckeditor/editor', null, null, false);
 $statuses = array(0=>'非公開', 1=>'公開');
-$categories = $formEx->getControlSource('BlogPost.blog_category_id',array('blog_content_id'=>$blogContent['BlogContent']['id']));
+$categories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
 if($formEx->value('BlogPost.id')) {
 	$previewId = $formEx->value('BlogPost.id');
 }else{
