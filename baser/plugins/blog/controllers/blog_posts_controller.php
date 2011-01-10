@@ -154,7 +154,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
-		unset($this->data['_Token']);
+		unset($data['_Token']);
 		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
 			unset($data['BlogPost']['status']);
 		}
