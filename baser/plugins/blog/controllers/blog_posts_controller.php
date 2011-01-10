@@ -124,7 +124,7 @@ class BlogPostsController extends BlogAppController {
 		$default = array('named' => array('num' => 10));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
 		$this->passedArgs[] = $blogContentId;
-		unset($this->data['_Token']);
+		
 		/* 検索条件生成 */
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
 
@@ -154,6 +154,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
+		unset($this->data['_Token']);
 		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
 			unset($data['BlogPost']['status']);
 		}
