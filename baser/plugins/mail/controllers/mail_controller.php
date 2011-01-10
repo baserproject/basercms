@@ -136,6 +136,7 @@ class MailController extends MailAppController {
 		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 		// 詳細はコンポーネント設定のコメントを参照
 		//$this->Security->requireAuth('submit');
+		$this->Security->validatePost = false;
 
 		// SSL設定
 		if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
