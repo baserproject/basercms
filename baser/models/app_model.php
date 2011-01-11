@@ -362,7 +362,7 @@ class AppModel extends Model {
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
  * スキーマファイルを利用してデータベース構造を変更する
@@ -383,7 +383,7 @@ class AppModel extends Model {
 		$prefix = $db->config['prefix'];
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
-		
+
 		foreach($files[1] as $file) {
 			if(in_array($file, $excludePath)) {
 				continue;
@@ -427,7 +427,7 @@ class AppModel extends Model {
 				if(!$result) {
 					return false;
 				}
-				
+
 			}
 		}
 		return true;
@@ -619,7 +619,7 @@ class AppModel extends Model {
 	}
 /**
  * テーブルにフィールドを追加する
- * 
+ *
  * @param	array	$options [ field / column / table ]
  * @return	boolean
  * @access	public
@@ -642,11 +642,11 @@ class AppModel extends Model {
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
 		return $ret;
-		
+
 	}
 /**
  * フィールド構造を変更する
- * 
+ *
  * @param	array	$options [ field / column / table ]
  * @return	boolean
  * @access	public
@@ -662,14 +662,14 @@ class AppModel extends Model {
 		if(!isset($table)) {
 			$table = $this->useTable;
 		}
-		
+
 		$this->_schema = null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field'=>$field,'table'=>$table, 'column'=>$column);
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
 		return $ret;
-		
+
 	}
 /**
  * フィールドを削除する
@@ -685,7 +685,7 @@ class AppModel extends Model {
 		if(!isset($field)) {
 			return false;
 		}
-		
+
 		if(!isset($table)) {
 			$table = $this->useTable;
 		}
@@ -696,7 +696,7 @@ class AppModel extends Model {
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
 		return $ret;
-		
+
 	}
 /**
  * フィールド名を変更する
@@ -717,14 +717,14 @@ class AppModel extends Model {
 		if(!isset($table)) {
 			$table = $this->useTable;
 		}
-		
+
 		$this->_schema=null;
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('new'=>$new, 'old'=>$old, 'table'=>$table);
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
 		return $ret;
-		
+
 	}
 /**
  * テーブルの存在チェックを行う
@@ -847,7 +847,7 @@ class AppModel extends Model {
  * @return boolean
  */
 	function changeSort($id,$offset,$conditions=array()) {
-		
+
 		if($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -1027,13 +1027,13 @@ class AppModel extends Model {
 		// <<<
 			$useNewDate = (isset($data['year']) || isset($data['month']) ||
 				isset($data['day']) || isset($data['hour']) || isset($data['minute']));
-			
+
 			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
 			//$dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
 			// ---
 			$dateFields = array('W'=>'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
 			// <<<
-			
+
 			$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
 
 			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
@@ -1090,8 +1090,10 @@ class AppModel extends Model {
 					// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 					if($val == 'wareki' && !empty($data['wareki'])) {
 						$warekis = array('m'=>1867, 't'=>1911, 's'=>1925, 'h'=>1988);
-						list($wareki, $year) = split('-', $data['year']);
-						$data['year'] = $year + $warekis[$wareki];
+						if(!empty($data['year'])) {
+							list($wareki, $year) = split('-', $data['year']);
+							$data['year'] = $year + $warekis[$wareki];
+						}
 					}
 					// <<<
 					if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
