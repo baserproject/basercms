@@ -70,14 +70,13 @@ class FormExHelper extends FormHelper {
  */
 	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 
-		// $nengoを追加
-		$year = $month = $day = $hour = $min = $meridian = $nengo = null;
+		$year = $month = $day = $hour = $min = $meridian = null;
 
 		if (empty($selected)) {
 			$selected = $this->value($fieldName);
 		}
 
-		if ($selected === null && $showEmpty !== true) {
+		if ($selected === null && $showEmpty != true) {
 			$selected = time();
 		}
 
@@ -85,7 +84,7 @@ class FormExHelper extends FormHelper {
 			if (is_array($selected)) {
 				extract($selected);
 			} else {
-				if (is_int($selected)) {
+				if (is_numeric($selected)) {
 					$selected = strftime('%Y-%m-%d %H:%M:%S', $selected);
 				}
 				$meridian = 'am';
@@ -122,7 +121,17 @@ class FormExHelper extends FormHelper {
 		}
 
 		$elements = array('Day','Month','Year','Hour','Minute','Meridian');
-		$defaults = array('minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true);
+		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+		/*$defaults = array(
+			'minYear' => null, 'maxYear' => null, 'separator' => '-',
+			'interval' => 1, 'monthNames' => true
+		);*/
+		// ---
+		$defaults = array(
+			'minYear' => null, 'maxYear' => null, 'separator' => ' ',
+			'interval' => 1, 'monthNames' => ''
+		);
+		// <<<
 		$attributes = array_merge($defaults, (array) $attributes);
 		if (isset($attributes['minuteInterval'])) {
 			$attributes['interval'] = $attributes['minuteInterval'];
@@ -140,6 +149,7 @@ class FormExHelper extends FormHelper {
 				// build out an array version
 				foreach ($elements as $element) {
 					$selectAttrName = 'select' . $element . 'Attr';
+					${$selectAttrName} = $attributes;
 					${$selectAttrName}['id'] = $attributes['id'] . $element;
 				}
 			} elseif (is_array($attributes['id'])) {
@@ -161,77 +171,91 @@ class FormExHelper extends FormHelper {
 		$opt = '';
 
 		if ($dateFormat != 'NONE') {
-
-			if(substr($dateFormat,0,1)=="W") {
-				//$this->options['year'] = $this->getWarekiYears($attributes['minYear'],$attributes['maxYear']);
-			}
-
 			$selects = array();
 			foreach (preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
 				switch ($char) {
+					// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 					case 'W':
-						$selects[] = $this->nengo($fieldName, $nengo, $selectYearAttr, $showEmpty);
+						$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
 						break;
+					// <<<
 					case 'Y':
-						if(substr($dateFormat,0,1)=="W") {
-							$selects[] = $this->wyear($fieldName,$year)."年";
-						}else {
-							$selects[] = $this->year($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
-						}
-						break;
+						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+						/*$selects[] = $this->year(
+							$fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty
+						);*/
+						// ---
+						$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
+						$selects[] = $this->year(
+							$fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty
+						).$suffix;
+						// <<<
+					break;
 					case 'M':
 						$selectMonthAttr['monthNames'] = $monthNames;
-						$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty)."月";
-						break;
+						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+						//$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty);
+						// ---
+						$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
+						$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty).$suffix;
+						// <<<
+					break;
 					case 'D':
-						$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty)."日";
-						break;
+						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+						//$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty);
+						// ---
+						$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
+						$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty).$suffix;
+						// <<<
+					break;
 				}
 			}
 			$opt = implode($separator, $selects);
 		}
-
-		switch($timeFormat) {
+		if (!empty($interval) && $interval > 1 && !empty($min)) {
+			$min = round($min * (1 / $interval)) * $interval;
+		}
+		$selectMinuteAttr['interval'] = $interval;
+		switch ($timeFormat) {
 			case '24':
 				$opt .= $this->hour($fieldName, true, $hour, $selectHourAttr, $showEmpty) . ':' .
-						$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty);
-				break;
+				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty);
+			break;
 			case '12':
-				$selectMinuteAttr['interval'] = $interval;
 				$opt .= $this->hour($fieldName, false, $hour, $selectHourAttr, $showEmpty) . ':' .
-						$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty) . ' ' .
-						$this->meridian($fieldName, $meridian, $selectMeridianAttr, $showEmpty);
-				break;
+				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty) . ' ' .
+				$this->meridian($fieldName, $meridian, $selectMeridianAttr, $showEmpty);
+			break;
 			case 'NONE':
 			default:
 				$opt .= '';
-				break;
+			break;
 		}
 		return $opt;
 	}
 /**
- * 年号選択タグ
+ * 和暦年
  *
- * @param	string	$fieldName Prefix name for the SELECT element
- * @param	string	$selected Option which is selected.
- * @param	array	$attributes Attribute array for the select elements.
- * @param	boolean	$showEmpty Show/hide the empty select option
- * @return	string
- * @access	public
+ * @param string $fieldName Prefix name for the SELECT element
+ * @param integer $minYear First year in sequence
+ * @param integer $maxYear Last year in sequence
+ * @param string $selected Option which is selected.
+ * @param array $attributes Attribute array for the select elements.
+ * @param boolean $showEmpty Show/hide the empty select option
+ * @return string
  */
-	function nengo($fieldName, $selected = null, $attributes = array(), $showEmpty = true) {
-
+	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
 				extract($value);
-				$selected = $nengo;
+				$selected = $year;
 			} else {
 				if (empty($value)) {
-					if (!$showEmpty) {
+					if (!$showEmpty && !$maxYear) {
 						$selected = 'now';
 
-					} elseif (!$showEmpty && !$selected) {
-						$selected = "h";
+					} elseif (!$showEmpty && $maxYear && !$selected) {
+						$selected = $maxYear;
 					}
 				} else {
 					$selected = $value;
@@ -239,52 +263,31 @@ class FormExHelper extends FormHelper {
 			}
 		}
 
-		if (strlen($selected) > 1 || $selected === 'now') {
-			$wareki = $this->TimeEx->convertWareki($selected);
-			$selected = $wareki['n'];
+		if (strlen($selected) > 4 || $selected === 'now') {
+			$wareki = $this->TimeEx->convertToWareki(date('Y-m-d', strtotime($selected)));
+			$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
+			$w = $this->TimeEx->wareki($wareki);
+			$wyear = $this->TimeEx->wyear($wareki);
+			$selected = $w.'-'.$wyear;
 		} elseif ($selected === false) {
 			$selected = null;
-		}
-		return $this->select($fieldName . ".nengo", $this->__generateOptions("nengo"), $selected, $attributes, $showEmpty);
-
-	}
-/**
- * 和暦の年（初期値を設定した際に、和暦に変換される）
- *
- * @param	string	$fieldName Prefix name for the SELECT element
- * @param	string	$selected Option which is selected.
- * @return	string
- * @access	public
- */
-	function wyear($fieldName,$selected) {
-
-		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
-			if (is_array($value)) {
-				extract($value);
-				$selected = $year;
+		} elseif(strpos($selected, '-')===false) {
+			$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
+			if($wareki) {
+				$w = $this->TimeEx->wareki($wareki);
+				$wyear = $this->TimeEx->wyear($wareki);
+				$selected = $w.'-'.$wyear;
 			} else {
-				if (empty($value)) {
-					$selected = 'now';
-				} else {
-					$selected = $value;
-				}
+				$selected = null;
 			}
 		}
-
-		if (strlen($selected) > 4 || $selected === 'now') {
-			$selectedYear = date('Y', strtotime($selected));
-			$wareki = $this->TimeEx->convertWareki($selected);
-			$selectedWyear = $wareki['Y'];
-		} elseif ($selected === false) {
-			$selectedYear = null;
-			$selectedWyear = null;
-		} else {
-			$selectedYear = "";
-			$selectedWyear = "";
-		}
-
-		return $this->text($fieldName.".wyear",array("size"=>4,"value"=>$selectedWyear)).$this->hidden($fieldName.".year",array("size"=>4,"value"=>$selectedYear));
-
+		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
+		
+		return $this->hidden($fieldName.".wareki", array('value'=>true)).
+		$this->select(
+			$fieldName . ".year", $this->__generateOptions('wyear', $yearOptions),
+			$selected, $attributes, $showEmpty
+		);
 	}
 /**
  * コントロールソースを取得する
@@ -494,37 +497,35 @@ DOC_END;
 					$data[$i] = sprintf('%02d', $i);
 					$i += $interval;
 				}
-				break;
+			break;
 			case 'hour':
 				for ($i = 1; $i <= 12; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-				break;
+			break;
 			case 'hour24':
 				for ($i = 0; $i <= 23; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-				break;
+			break;
 			case 'meridian':
 				$data = array('am' => 'am', 'pm' => 'pm');
-				break;
+			break;
 			case 'day':
-				if (!isset($options['min'])) {
-					$min = 1;
-				} else {
+				$min = 1;
+				$max = 31;
+
+				if (isset($options['min'])) {
 					$min = $options['min'];
 				}
-
-				if (!isset($options['max'])) {
-					$max = 31;
-				} else {
+				if (isset($options['max'])) {
 					$max = $options['max'];
 				}
 
 				for ($i = $min; $i <= $max; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
-				break;
+			break;
 			case 'month':
 				if ($options['monthNames']) {
 					$data['01'] = __('January', true);
@@ -544,7 +545,7 @@ DOC_END;
 						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
 					}
 				}
-				break;
+			break;
 			case 'year':
 				$current = intval(date('Y'));
 
@@ -566,10 +567,37 @@ DOC_END;
 					$data[$i] = $i;
 				}
 				$data = array_reverse($data, true);
+			break;
+			// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
+			case 'wyear':
+				$current = intval(date('Y'));
+
+				if (!isset($options['min'])) {
+					$min = $current - 20;
+				} else {
+					$min = $options['min'];
+				}
+
+				if (!isset($options['max'])) {
+					$max = $current + 20;
+				} else {
+					$max = $options['max'];
+				}
+				if ($min > $max) {
+					list($min, $max) = array($max, $min);
+				}
+				for ($i = $min; $i <= $max; $i++) {
+					$wyears = $this->TimeEx->convertToWarekiYear($i);
+					if($wyears) {
+						foreach($wyears as $value) {
+							list($w,$year) = split('-', $value);
+							$data[$value] = $this->TimeEx->nengo($w).' '.$year;
+						}
+					}
+				}
+				$data = array_reverse($data, true);
 				break;
-			case 'nengo':
-				$data = $this->TimeEx->getNengos();
-				break;
+			// <<<
 		}
 		$this->__options[$name] = $data;
 		return $this->__options[$name];

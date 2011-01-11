@@ -1003,5 +1003,111 @@ class AppModel extends Model {
 	function notInList($check, $list) {
 		return !in_array($check[key($check)], $list);
 	}
+/**
+ * Deconstructs a complex data type (array or object) into a single field value.
+ *
+ * @param string $field The name of the field to be deconstructed
+ * @param mixed $data An array or object to be deconstructed into a field
+ * @return mixed The resulting data that should be assigned to a field
+ * @access public
+ */
+	function deconstruct($field, $data) {
+		if (!is_array($data)) {
+			return $data;
+		}
+
+		$copy = $data;
+		$type = $this->getColumnType($field);
+
+		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
+		// メールフォームで生成するフィールドは全てテキストの為（暫定）
+		//if (in_array($type, array('datetime', 'timestamp', 'date', 'time'))) {
+		// ---
+		if (in_array($type, array('text', 'datetime', 'timestamp', 'date', 'time'))) {
+		// <<<
+			$useNewDate = (isset($data['year']) || isset($data['month']) ||
+				isset($data['day']) || isset($data['hour']) || isset($data['minute']));
+			
+			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
+			//$dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
+			// ---
+			$dateFields = array('W'=>'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
+			// <<<
+			
+			$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
+
+			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
+			// メールフォームで生成するフィールドは全てテキストの為（暫定）
+			//$db =& ConnectionManager::getDataSource($this->useDbConfig);
+			//$format = $db->columns[$type]['format'];
+			// ---
+			if($type != 'text') {
+				$db =& ConnectionManager::getDataSource($this->useDbConfig);
+				$format = $db->columns[$type]['format'];
+			} else {
+				$format = 'Y-m-d H:i:s';
+			}
+			// <<<
+			$date = array();
+
+			if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] != 12 && 'pm' == $data['meridian']) {
+				$data['hour'] = $data['hour'] + 12;
+			}
+			if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] == 12 && 'am' == $data['meridian']) {
+				$data['hour'] = '00';
+			}
+			if ($type == 'time') {
+				foreach ($timeFields as $key => $val) {
+					if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
+						$data[$val] = '00';
+					} elseif ($data[$val] === '') {
+						$data[$val] = '';
+					} else {
+						$data[$val] = sprintf('%02d', $data[$val]);
+					}
+					if (!empty($data[$val])) {
+						$date[$key] = $data[$val];
+					} else {
+						return null;
+					}
+				}
+			}
+
+			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
+			// メールフォームで生成するフィールドは全てテキストの為（暫定）
+			//if ($type == 'datetime' || $type == 'timestamp' || $type == 'date') {
+			// ---
+			if ($type == 'text' || $type == 'datetime' || $type == 'timestamp' || $type == 'date') {
+			// <<<
+				foreach ($dateFields as $key => $val) {
+					if ($val == 'hour' || $val == 'min' || $val == 'sec') {
+						if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
+							$data[$val] = '00';
+						} else {
+							$data[$val] = sprintf('%02d', $data[$val]);
+						}
+					}
+					// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
+					if($val == 'wareki' && !empty($data['wareki'])) {
+						$warekis = array('m'=>1867, 't'=>1911, 's'=>1925, 'h'=>1988);
+						list($wareki, $year) = split('-', $data['year']);
+						$data['year'] = $year + $warekis[$wareki];
+					}
+					// <<<
+					if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+						return null;
+					}
+					if (isset($data[$val]) && !empty($data[$val])) {
+						$date[$key] = $data[$val];
+					}
+				}
+			}
+			$date = str_replace(array_keys($date), array_values($date), $format);
+			if ($useNewDate && !empty($date)) {
+				return $date;
+			}
+		}
+		return $data;
+	}
 }
 ?>

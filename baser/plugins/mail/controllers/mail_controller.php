@@ -143,6 +143,14 @@ class MailController extends MailAppController {
 			$this->Security->blackHoleCallback = '_sslFail';
 			$this->Security->requireSecure = am($this->Security->requireSecure, array('index', 'confirm', 'submit'));
 		}
+
+		// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
+		// ※ nameフィールドの名称を[message]以外にする
+		if($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
+			$prefix = $this->dbDatas['mailContent']['MailContent']['name']."_";
+			$this->Message = new Message(false,null,null,$prefix);
+			$this->Message->mailFields = $this->dbDatas['mailFields'];
+		}
 		
 	}
 /**
@@ -271,11 +279,9 @@ class MailController extends MailAppController {
 				$prefix = "";
 			}
 
-			$Message = new Message(false,null,null,$prefix);
-			$Message->mailFields = $this->dbDatas['mailFields'];
-			$Message->create($this->data);
+			$this->Message->create($this->data);
 
-			if($Message->save(null,false)) {
+			if($this->Message->save(null,false)) {
 
 				// メール送信
 				$this->_sendEmail();

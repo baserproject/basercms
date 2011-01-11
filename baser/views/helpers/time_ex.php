@@ -37,13 +37,95 @@ class TimeExHelper extends TimeHelper {
  */
 	var $nengos = array("m"=>"明治","t"=>"大正","s"=>"昭和","h"=>"平成");
 /**
- * 年号リストを取得
+ * 年号を取得
  *
- * @return	array	年号リスト
+ * @return	string	年号をあらわすアルファベット
  * @access	public
  */
-	function getNengos() {
-		return $this->nengos;
+	function nengo($w) {
+		if(isset($this->nengos[$w])) {
+			return $this->nengos[$w];
+		} else {
+			return false;
+		}
+	}
+/**
+ * 和暦を取得（アルファベット）
+ * 
+ * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
+ * @return	mixid	string / false
+ */
+	function wareki($date) {
+		
+		$_date = split('/', $date);
+		if(!$_date) {
+			$_date = split('-', $date);
+		}
+		if(count($_date)==3) {
+			$wyear = split('-',$_date[0]);
+			if(isset($wyear[0])) {
+				return $wyear[0];
+			} else {
+				return false;
+			}
+		} elseif(count($_date)==4) {
+			return $_date[0];
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * 和暦の年を取得
+ * 
+ * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
+ * @return	mixid	int / false
+ */
+	function wyear($date) {
+		$_date = split('/', $date);
+		if(!$_date) {
+			$_date = split('-', $date);
+		}
+		if(count($_date)==3) {
+			$wyear = split('-',$_date[0]);
+			if(isset($wyear[1])) {
+				return $wyear[1];
+			} else {
+				return false;
+			}
+		} elseif(count($_date)==4) {
+			return $_date[1];
+		} else {
+			return false;
+		}
+	}
+/**
+ * 西暦を和暦の年に変換する
+ *
+ * 西暦をまたがる場合があるので配列で返す
+ * @param	int		$year
+ * @return	array
+ */
+	function convertToWarekiYear($year) {
+		
+		if($year >= 1868 && $year <= 1911) {
+			return array('m-'.($year-1867));
+		} elseif ($year == 1912) {
+			return array('m-'.($year-1867),'t-'.($year-1911));
+		} elseif ($year >= 1913 && $year <= 1925) {
+			return array('t-'.($year-1911));
+		} elseif ($year == 1926) {
+			return array('t-'.($year-1911), 's-'.($year-1925));
+		} elseif ($year >= 1927 && $year <= 1988) {
+			return array('s-'.($year-1925));
+		} elseif ($year == 1989) {
+			return array('s-'.($year-1925), 'h-'.($year-1988));
+		} elseif ($year >= 1990) {
+			return array('h-'.($year-1988));
+		} else {
+			return false;
+		}
+		
 	}
 /**
  * 和暦変換
@@ -52,7 +134,10 @@ class TimeExHelper extends TimeHelper {
  * @return	array	和暦データ
  * @access	public
  */
-	function convertWareki($date) {
+	function convertToWareki($date) {
+		if(!$date) {
+			return '';
+		}
 		if(strtotime($date)==-1) {
 			list($y,$m,$d) = explode("-",$date);
 			$ymd = $y.$m.$d;
@@ -62,61 +147,20 @@ class TimeExHelper extends TimeHelper {
 		}
 
 		if ($ymd <= "19120729") {
-			$g = $this->nengos['m'];
-			$n = "m";
+			$w = "m";
 			$y = $y - 1867;
 		} elseif ($ymd >= "19120730" && $ymd <= "19261224") {
-			$g = $this->nengos['t'];
-			$n = "t";
+			$w = "t";
 			$y = $y - 1911;
 		} elseif ($ymd >= "19261225" && $ymd <= "19890107") {
-			$g = $this->nengos['s'];
-			$n = "s";
+			$w = "s";
 			$y = $y - 1925;
 		} elseif ($ymd >= "19890108") {
-			$g = $this->nengos['h'];
-			$n = "h";
+			$w = "h";
 			$y = $y - 1988;
 		}
-		$wareki = array('G'=>$g,"n"=>$n,'Y'=>$y,'m'=> date('m',strtotime($date)),'d'=> date('d',strtotime($date)));
-		return $wareki;
-	}
-/**
- * 西暦変換
- *
- * @param	array	$aryDate
- * @return	string	西暦
- * @access	public
- */
-	function convertSeireki($aryDate) {
-
-		if(!$aryDate['month'] || !$aryDate['day'] || !$aryDate['wyear']) {
-			return null;
-		}
-
-		switch ($aryDate['nengo']) {
-
-			case "m":
-				$aryDate["year"] = $aryDate["wyear"] + 1867;
-				break;
-
-			case "t":
-				$aryDate["year"] = $aryDate["wyear"] + 1911;
-				break;
-
-			case "s":
-				$aryDate["year"] = $aryDate["wyear"] + 1925;
-				break;
-
-			case "h":
-				$aryDate["year"] = $aryDate["wyear"] + 1988;
-				break;
-
-		}
-		if(checkdate($aryDate['month'],$aryDate['day'],$aryDate['year'])) {
-			return $aryDate["year"]."/".$aryDate['month']."/".$aryDate['day'];
-		}
-
+		return $w.'-'.$y.'/'.date('m',strtotime($date)).'/'.date('d',strtotime($date));
+		
 	}
 /**
  * 文字列から時間（分）を取得

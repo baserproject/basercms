@@ -312,11 +312,11 @@ class TextExHelper extends TextHelper {
  */
 	function dateTimeWareki($arrDate) {
 
-		if(!$arrDate['nengo'] || !$arrDate['wyear'] || !$arrDate['month'] || !$arrDate['day'])
+		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
 			return;
-
-		$wareki = $this->TimeEx->getNengos();
-		return $wareki[$arrDate['nengo']]." ".$arrDate['wyear']."年 ".$arrDate['month']."月 ".$arrDate['day'].'日';
+		list($w,$year) = split('-', $arrDate['year']);
+		$wareki = $this->TimeEx->nengo($w);
+		return $wareki." ".$year."年 ".$arrDate['month']."月 ".$arrDate['day'].'日';
 
 	}
 /**
