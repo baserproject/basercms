@@ -483,7 +483,7 @@ class FreezeHelper extends FormExHelper {
 	function freezeControll($fieldName,$options,$attributes=array()) {
 
 		$attributes = array_merge(array('class' => ''), $attributes);
-
+		unset($attributes["separator"]);
 		if(preg_match_all("/\./",$fieldName,$regs)==2) {
 			list($model,$field,$detail) = explode('.',$fieldName);
 		}else {
@@ -557,7 +557,7 @@ class FreezeHelper extends FormExHelper {
 
 			// 値なし
 		}else {
-			
+
 			if($options) {
 				if(!$value && !empty($options[0])) {
 					$value = $options[0];
@@ -573,9 +573,9 @@ class FreezeHelper extends FormExHelper {
 			}elseif(is_array ($value) && isset($value[$detail])) {
 				$value = $value[$detail];
 			}
-			
+
 			$out = parent::hidden($fieldName, $attributes) . $value;
-			
+
 		}
 
 		return $out;
