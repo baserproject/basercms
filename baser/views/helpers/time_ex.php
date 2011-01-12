@@ -128,6 +128,37 @@ class TimeExHelper extends TimeHelper {
 		
 	}
 /**
+ * 和暦の年を西暦に変換する
+ *
+ * 和暦のフォーマット例：s-48
+ * @param	string	$year
+ * @return	int
+ */
+	function convertToSeirekiYear($year) {
+
+		if(strpos($year, '-')===false) {
+			return false;
+		}
+		list($w,$year) = split('-', $year);
+		switch ($w) {
+			case 'm':
+				return $year + 1867;
+				break;
+			case 't':
+				return $year + 1911;
+				break;
+			case 's':
+				return $year + 1925;
+				break;
+			case 'h':
+				return $year + 1988;
+				break;
+			default:
+				return false;
+		}
+
+	}
+/**
  * 和暦変換
  *
  * @param	string	日付
