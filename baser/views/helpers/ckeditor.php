@@ -109,18 +109,17 @@ class CkeditorHelper extends AppHelper {
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
-		if(isset($ckoptions['publishAreaId'])) {
-			$publishAreaId = $ckoptions['publishAreaId'];
-			unset($ckoptions['publishAreaId']);
+		if(isset($ckoptions['useDraft'])) {
+			$useDraft = $ckoptions['useDraft'];
+			unset($ckoptions['useDraft']);
 		} else {
-			$publishAreaId = '';
+			$useDraft = false;
 		}
-
-		if(isset($ckoptions['draftAreaId'])) {
-			$draftAreaId = $ckoptions['draftAreaId'];
-			unset($ckoptions['draftAreaId']);
+		if(isset($ckoptions['draftField'])) {
+			$draftField = $ckoptions['draftField'];
+			unset($ckoptions['draftField']);
 		} else {
-			$draftAreaId = '';
+			$draftField = false;
 		}
 		if(isset($ckoptions['disablePublish'])) {
 			$disablePublish = $ckoptions['disablePublish'];
@@ -152,12 +151,23 @@ class CkeditorHelper extends AppHelper {
 		} else {
 			$readOnlyPublish = false;
 		}
-		
+
 		$jscode = '';
 		if(strpos($fieldName,'.')) {
 			list($model,$field) = explode('.',$fieldName);
 		}else {
 			$field = $fieldName;
+		}
+		if($useDraft) {
+			$srcField = $field;
+			$field .= '_tmp';
+			$srcFieldName = $fieldName;
+			$fieldName .= '_tmp';
+		}
+
+		if($useDraft) {
+			$publishAreaId = Inflector::camelize($model.'_'.$srcField);
+			$draftAreaId = Inflector::camelize($model.'_'.$draftField);
 		}
 
 		if (!$this->_script) {
@@ -174,12 +184,16 @@ class CkeditorHelper extends AppHelper {
 							'TextColor', 'BGColor', '-',
 							'Link', 'Unlink', '-',
 							'Image');
-		$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
-		if(!$disableCopyDraft) {
-			$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
-		}
-		if(!$disableCopyPublish) {
-			$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
+		if($useDraft) {
+			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
+			if(!$disableCopyDraft) {
+				$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
+			}
+			if(!$disableCopyPublish) {
+				$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
+			}
+		} else {
+			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source');
 		}
 		$_ckoptions = array('language' => 'ja',
 				'skin' => 'kama',
@@ -227,24 +241,28 @@ class CkeditorHelper extends AppHelper {
 		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
-		if($draftAreaId) {
-			$jscode .= "editor_{$field}.draftDraftAreaId = '{$draftAreaId}';";
-		}
-		if($publishAreaId) {
-			$jscode .= "editor_{$field}.draftPublishAreaId = '{$publishAreaId}';";
-		}
-		if($readOnlyPublish) {
-			$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
-		}
-		$jscode .= " });";
-		$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
-		if($disableDraft) {
-			$jscode .= "editor_{$field}.execCommand('disableDraft');";
-		}
-		if($disablePublish) {
-			$jscode .= "editor_{$field}.execCommand('disablePublish');";
+		if($useDraft) {
+			if($draftAreaId) {
+				$jscode .= "editor_{$field}.draftDraftAreaId = '{$draftAreaId}';";
+			}
+			if($publishAreaId) {
+				$jscode .= "editor_{$field}.draftPublishAreaId = '{$publishAreaId}';";
+			}
+			if($readOnlyPublish) {
+				$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
+			}
 		}
 		$jscode .= " });";
+		if($useDraft) {
+			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
+			if($disableDraft) {
+				$jscode .= "editor_{$field}.execCommand('disableDraft');";
+			}
+			if($disablePublish) {
+				$jscode .= "editor_{$field}.execCommand('disablePublish');";
+			}
+			$jscode .= " });";
+		}
 		return $this->Javascript->codeBlock($jscode);
 	}
 /**
@@ -259,7 +277,15 @@ class CkeditorHelper extends AppHelper {
 		if(!$form){
 			$form = $this->Form;
 		}
-		return $form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
+			list($model,$field) = explode('.',$fieldName);
+			$inputFieldName = $fieldName.'_tmp';
+			$hidden = $form->hidden($fieldName).$form->hidden($model.'.'.$editorOptions['draftField']);
+		} else {
+			$inputFieldName = $fieldName;
+			$hidden = '';
+		}
+		return $form->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
@@ -273,8 +299,16 @@ class CkeditorHelper extends AppHelper {
 		if(!$form){
 			$form = $this->Form;
 		}
+		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
+			list($model,$field) = explode('.',$fieldName);
+			$inputFieldName = $fieldName.'_tmp';
+			$hidden = $form->hidden($fieldName).$form->hidden($model.'.'.$editorOptions['draftField']);
+		} else {
+			$inputFieldName = $fieldName;
+			$hidden = '';
+		}
 		$options['type'] = 'textarea';
-		return $form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles, $form);
+		return $form->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles, $form);
 	}
 }
 ?>
