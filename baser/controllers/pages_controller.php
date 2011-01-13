@@ -509,6 +509,7 @@ class PagesController extends AppController {
 		// ページカテゴリ
 
 		$pageCategoryId = $data['Page']['page_category_id'];
+		unset($data['_Token']);
 		unset($data['Page']['page_category_id']);
 		unset($data['Sort']);
 		
