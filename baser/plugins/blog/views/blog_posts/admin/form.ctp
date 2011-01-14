@@ -117,8 +117,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.content', '本文') ?></th>
 		<td class="col-input">
-			<?php //echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
-			<?php echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20)) ?>
+			<?php echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('BlogPost.content') ?>
 		</td>
 	</tr>
