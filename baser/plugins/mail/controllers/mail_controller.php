@@ -177,7 +177,7 @@ class MailController extends MailAppController {
 	function index($id = null) {
 
 		// 初期値を取得
-		if($this->data) {
+		if(!$this->data) {
 			$this->data = $this->Message->getDefaultValue();
 		}
 
