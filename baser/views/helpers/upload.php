@@ -143,10 +143,17 @@ class UploadHelper extends FormHelper {
 					if($tmp) {
 						$options['tmp'] = true;
 					}
+<<<<<<< HEAD
 					$fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<br /><span class="file-name">'.$value.'</span>';
 				}else {
 					$filePath = $basePath.$value;
 					$fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<br /><span class="file-name">'.$value.'</span>';
+=======
+					$fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<p>'.$value.'</p>';
+				}else {
+					$filePath = $basePath.$value;
+					$fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<p>'.$value.'</p>';
+>>>>>>> UploadHelper見直し
 				}
 			}else {
 				$fileLinkTag = $value;
@@ -214,7 +221,10 @@ class UploadHelper extends FormHelper {
 			$linkOptions['escape'] = $options['escape'];
 			unset($options['escape']);
 		}
+<<<<<<< HEAD
 		$mobile = $options['mobile'];
+=======
+>>>>>>> UploadHelper見直し
 
 		$_field = split('\.',$fieldName);
 		$modelName = $_field[0];
@@ -247,6 +257,7 @@ class UploadHelper extends FormHelper {
 				if($key == $imgsize) {
 					$check = true;
 				}
+<<<<<<< HEAD
 				if(isset($copySetting['mobile'])) {
 					if($copySetting['mobile'] != $mobile) {
 						continue;
@@ -256,6 +267,9 @@ class UploadHelper extends FormHelper {
 						continue;
 					}
 				}
+=======
+
+>>>>>>> UploadHelper見直し
 				$imgPrefix = '';
 				$imgSuffix = '';
 				if(isset($copySetting['suffix']))
@@ -268,10 +282,18 @@ class UploadHelper extends FormHelper {
 
 				if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
 					if($check && !$mostSizeExists) {
+<<<<<<< HEAD
 						$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
 						$mostSizeExists = true;
 					} elseif(!$maxSizeExists) {
 						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+=======
+						$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
+						$mostSizeExists = true;
+					}
+					if(!$maxSizeExists) {
+						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
+>>>>>>> UploadHelper見直し
 						$maxSizeExists = true;
 					}
 				}elseif($tmp && $check) {
