@@ -539,7 +539,6 @@ class UploadBehavior extends ModelBehavior {
 			return false;
 		}
 		$data = $model->data[$model->alias];
-<<<<<<< HEAD
 		if(!isset($data[$setting['namefield']])){
 			if($setting['namefield'] == 'id' && $model->id) {
 			$basename = $model->id;
@@ -550,14 +549,6 @@ class UploadBehavior extends ModelBehavior {
 			$basename = $data[$setting['namefield']];
 		}
 
-=======
-		if(!isset($data[$setting['namefield']]) && $setting['namefield'] = 'id' && $model->id) {
-			$data[$setting['namefield']] = $model->id;
-		} else {
-			return false;
-		}
-		$basename = $data[$setting['namefield']];
->>>>>>> UploadBehaviorを調整
 		if(!empty($setting['nameformat'])) {
 			$basename = sprintf($setting['nameformat'],$basename);
 		}
