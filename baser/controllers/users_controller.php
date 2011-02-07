@@ -191,7 +191,7 @@ class UsersController extends AppController {
  * @access 	public
  */
 	function admin_logout() {
-
+		
 		$this->Auth->logout();
 		$this->Cookie->del('Auth.User');
 		$this->Session->setFlash('ログアウトしました');
