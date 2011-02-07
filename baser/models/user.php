@@ -262,31 +262,12 @@ class User extends AppModel {
  * @return	string
  */
 	function getAuthPrefix($userName) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> プレフィックス認証追加の仕組みを実装
-=======
-
->>>>>>> パスワード変更処理を調整
 		$user = $this->find('first', array(
 			'fields'		=> array('UserGroup.auth_prefix'),
 			'conditions'	=> array('User.name'=>$userName),
 			'recursive'		=> 0
 		));
-<<<<<<< HEAD
-
-		if(isset($user['UserGroup']['auth_prefix'])) {
-			return $user['UserGroup']['auth_prefix'];
-		} else {
-			return '';
-		}
-
-	}
-=======
->>>>>>> プレフィックス認証追加の仕組みを実装
 
 		if(isset($user['UserGroup']['auth_prefix'])) {
 			return $user['UserGroup']['auth_prefix'];
