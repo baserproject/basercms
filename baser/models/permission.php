@@ -111,7 +111,11 @@ class Permission extends AppModel {
  * @access	public
  */
 	function getAuthPrefix($id) {
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> パーミッション管理を認証プレフィックスに対応
 		$data = $this->find('first', array(
 			'conditions'=>array('Permission.id'=>$id),
 			'fields'=>array('UserGroup.auth_prefix'),
@@ -122,7 +126,11 @@ class Permission extends AppModel {
 		} else {
 			return '';
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> パーミッション管理を認証プレフィックスに対応
 	}
 /**
  * 初期値を取得する
