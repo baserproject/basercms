@@ -20,7 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 $userGroups = $formEx->getControlSource('User.user_group_id');
+<<<<<<< HEAD
 $userGroups = array(''=>'指定なし') + $userGroups;
+=======
+$userGroups = am(array(''=>'指定なし'), $userGroups);
+>>>>>>> ユーザー一覧の検索条件にユーザーグループ指定なしを追加
 ?>
 
 <h2>
@@ -34,6 +38,7 @@ $userGroups = array(''=>'指定なし') + $userGroups;
 <h3><a href="javascript:void(0);" class="slide-trigger" id="UsersSearch">検索</a></h3>
 <div class="function-box corner10" id="UsersSearchBody"> <?php echo $formEx->create('User',array('url'=>array('action'=>'index'))) ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $userGroups,null,array(),false) ?>
 		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
 </div>
@@ -43,6 +48,9 @@ $userGroups = array(''=>'指定なし') + $userGroups;
 
 =======
 	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $formEx->getControlSource('User.user_group_id'),null,array(),false) ?>
+=======
+	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $userGroups,null,array(),false) ?>
+>>>>>>> ユーザー一覧の検索条件にユーザーグループ指定なしを追加
 		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
 </div>
 >>>>>>> ユーザー一覧にユーザーグループの検索条件を追加
