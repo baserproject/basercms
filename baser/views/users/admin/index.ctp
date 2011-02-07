@@ -33,6 +33,7 @@ $userGroups = array(''=>'指定なし') + $userGroups;
 </div>
 <h3><a href="javascript:void(0);" class="slide-trigger" id="UsersSearch">検索</a></h3>
 <div class="function-box corner10" id="UsersSearchBody"> <?php echo $formEx->create('User',array('url'=>array('action'=>'index'))) ?>
+<<<<<<< HEAD
 	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $userGroups,null,array(),false) ?>
 		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
 </div>
@@ -40,6 +41,11 @@ $userGroups = array(''=>'指定なし') + $userGroups;
 <!-- list-num -->
 <?php $baser->element('list_num') ?>
 
+=======
+	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $formEx->getControlSource('User.user_group_id'),null,array(),false) ?>
+		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
+</div>
+>>>>>>> ユーザー一覧にユーザーグループの検索条件を追加
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
