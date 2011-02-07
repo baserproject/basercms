@@ -39,6 +39,19 @@ if(!empty($cn->config->baser['driver'])) {
  */
 	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard', 'action'=> 'index'));
 /**
+ * 追加プレフィックス
+ */
+	$authPrefixes = Configure::read('AuthPrefix');
+	$adminPrefix = Configure::read('Routing.admin');
+	if($authPrefixes) {
+		foreach($authPrefixes as $key => $authPrefix) {
+			if($key != $adminPrefix) {
+				Router::connect('/mypage', array('prefix'=>$key, 'controller' => 'users', 'action' => 'auth_prefix_error'));
+				Router::connect('/'.$key.'/:controller/:action/*', array('prefix' => $key, $key => true));
+			}
+		}
+	}
+/**
  * ページ機能拡張
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング

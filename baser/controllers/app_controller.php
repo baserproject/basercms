@@ -210,8 +210,14 @@ class AppController extends Controller {
 		}
 
 		/* 認証設定 */
-		if(isset($this->AuthConfigure) && !empty($this->params['prefix'])) {
-			$this->AuthConfigure->setting($this->params['prefix']);
+		if(isset($this->AuthConfigure) && isset($this->params['prefix'])) {
+			$configs = Configure::read('AuthPrefix');
+			if(isset($configs[$this->params['prefix']])) {
+				$config = $configs[$this->params['prefix']];
+			} else {
+				$config = array();
+			}
+			$this->AuthConfigure->setting($config);
 		}
 
 		// 送信データの文字コードを内部エンコーディングに変換
@@ -239,13 +245,13 @@ class AppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->Auth) && isset($this->params['url']['url'])) {
-			$params = Router::parse($this->params['url']['url']);
-			if(!empty($params['prefix'])) {
+		if(isset($this->Auth) && isset($this->params['action'])) {
+			if(!$this->Auth->allowedActions || !in_array($this->params['action'], $this->Auth->allowedActions)) {
 				$user = $this->Auth->user();
 				$Permission = ClassRegistry::init('Permission');
 				if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])) {
-					$this->redirect('/'.$params['prefix']);
+					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+					$this->redirect($this->Auth->loginAction);
 				}
 			}
 		}
@@ -391,7 +397,7 @@ class AppController extends Controller {
 		$this->set('navis',$this->navis);                       // パンくずなび
 
 		/* ログインユーザー */
-		if (isset ($_SESSION['Auth']['User'])) {
+		if (isset($_SESSION['Auth']['User'])) {
 			$this->set('user',$_SESSION['Auth']['User']);
 		}
 
@@ -522,9 +528,9 @@ class AppController extends Controller {
  * メールを送信する
  *
  * @param	string	$to		送信先アドレス
- * @param	string	$from	送信元アドレス
  * @param	string	$title	タイトル
  * @param	mixed	$body	本文
+ * @options	array
  * @return	boolean			送信結果
  * @access	public
  */
@@ -707,7 +713,7 @@ class AppController extends Controller {
 		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったので、追記モード「a」で開くことにした。
 		// そのため、実際の書き込み時は、 ftruncate で、内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
-		
+
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
@@ -717,7 +723,7 @@ class AppController extends Controller {
 									'RewriteRule ^$ app/webroot/ [L]',
 									'RewriteRule (.*) app/webroot/$1 [L]');
 		$path = ROOT.DS.'.htaccess';
-		$file = new File($path);		
+		$file = new File($path);
 		$file->open('a+');
 		$data = $file->read();
 		foreach ($rewritePatterns as $rewritePattern) {
@@ -789,8 +795,17 @@ class AppController extends Controller {
  * @access	public
  */
 	function setViewConditions($filterModels = array(), $options = array()) {
-		$this->_saveViewConditions($filterModels, $options);
+
+		$_options = array('type' => 'post', 'session' => true);
+		$options = am($_options, $options);
+		extract($options);
+		if($type == 'post' && $session == true) {
+			$this->_saveViewConditions($filterModels, $options);
+		} elseif ($type == 'get') {
+			$options['session'] = false;
+		}
 		$this->_loadViewConditions($filterModels, $options);
+
 	}
 /**
  * 画面の情報をセッションに保存する
@@ -838,12 +853,17 @@ class AppController extends Controller {
  */
 	function _loadViewConditions($filterModels = array(), $options = array()) {
 
-		$_options = array('default'=>array(), 'action' => '', 'group' => '');
+		$_options = array('default'=>array(), 'action' => '', 'group' => '', 'type' => 'post' , 'session' => true);
 		$options = am($_options, $options);
+		$named = array();
+		$filter = array();
 		extract($options);
 
 		if(!is_array($filterModels)){
+			$model = $filterModels;
 			$filterModels = array($filterModels);
+		} else {
+			$model = $filterModels[0];
 		}
 
 		if(!$action) {
@@ -855,25 +875,92 @@ class AppController extends Controller {
 			$contentsName .= ".".$group;
 		}
 
-		foreach($filterModels as $model) {
-			if($this->Session->check("{$contentsName}.filter.{$model}")) {
-				$filter = $this->Session->read("{$contentsName}.filter.{$model}");
+		if($type == 'post' && $session) {
+			foreach($filterModels as $model) {
+				if($this->Session->check("{$contentsName}.filter.{$model}")) {
+					$filter = $this->Session->read("{$contentsName}.filter.{$model}");
+				} elseif(!empty($default[$model])) {
+					$filter = $default[$model];
+				} else {
+					$filter = array();
+				}
+				$this->data[$model] = $filter;
+			}
+			if($this->Session->check("{$contentsName}.named")) {
+				$named = $this->Session->read("{$contentsName}.named");
+			} elseif(!empty($default['named'])) {
+				$named = $default['named'];
+			}
+		} elseif($type == 'get') {
+			if(!empty($this->params['url'])) {
+				$url = $this->params['url'];
+				unset($url['url']);
+				unset($url['ext']);
+				unset($url['x']);
+				unset($url['y']);
+			}
+			if(!empty($url)) {
+				$filter = $url;
 			} elseif(!empty($default[$model])) {
 				$filter = $default[$model];
-			} else {
-				$filter = array();
 			}
 			$this->data[$model] = $filter;
+			$named['?'] = $filter;
+
 		}
 
-		if($this->Session->check("{$contentsName}.named")) {
-			$named = $this->Session->read("{$contentsName}.named");
-		} elseif(!empty($default['named'])) {
-			$named = $default['named'];
-		} else {
-			$named = array();
+		$this->passedArgs += $named;
+
+	}
+/**
+ * Select Text 用の条件を生成する
+ *
+ * @param	string	$fieldName
+ * @param	mixed	$values
+ * @param	array	$options
+ * @return	string
+ * @access	public
+ */
+	function convertSelectTextCondition($fieldName, $values, $options = array()) {
+
+		$_options = array('type'=>'string', 'conditionType'=>'or');
+		$options = am($_options, $options);
+		$conditions = array();
+		extract($options);
+
+		if($type=='string' && !is_array($value)) {
+			$values = split(',',str_replace('\'', '', $values));
 		}
-		$this->passedArgs = $named;
+        if(!empty($values) && is_array($values)){
+            foreach($values as $value){
+                $conditions[$conditionType][] = array($fieldName.' LIKE' => "%'".$value."'%");
+            }
+        }
+		return $conditions;
+
+	}
+/**
+ * BETWEEN 条件を生成
+ *
+ * @param	string	$fieldName
+ * @param	mixed	$value
+ * @return	array
+ * @access	public
+ */
+	function convertBetweenCondition($fieldName, $value) {
+
+		if(strpos($value, '-')===false) {
+			return false;
+		}
+		list($start, $end) = split('-', $value);
+		if(!$start) {
+			$conditions[$fieldName.' <='] = $end;
+		}elseif(!$end) {
+			$conditions[$fieldName.' >='] = $start;
+		}else {
+			$conditions[$fieldName.' BETWEEN ? AND ?'] = array($start, $end);
+		}
+		return $conditions;
 
 	}
 /**
@@ -895,6 +982,93 @@ class AppController extends Controller {
 		return $password;
 
 	}
+/**
+ * 認証完了後処理
+ *
+ * @return	boolean
+ */
+	function isAuthorized() {
 
+		$requestedPrefix = '';
+		$authPrefix = $this->getAuthPreifx($this->Auth->user('name'));
+
+		if(!empty($this->params['prefix'])) {
+			$requestedPrefix = $this->params['prefix'];
+		}
+
+		if($requestedPrefix && ($this->params['prefix'] != $authPrefix)) {
+			if($authPrefix != Configure::read('Routing.admin')) {
+				// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
+				$ref = $this->referer();
+				$loginAction = Router::normalize($this->Auth->loginAction);
+				if($ref == $loginAction) {
+					$this->Session->delete('Auth.User');
+					$this->Session->delete('Message.flash');
+					$this->Auth->authError = $this->Auth->loginError;
+					return false;
+				} else {
+					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+					$this->redirect($ref);
+					return;
+				}
+			}
+		}
+
+		return true;
+
+	}
+/**
+ * 対象ユーザーの認証コンテンツのプレフィックスを取得
+ *
+ * TODO 認証完了後は、セッションに保存しておいてもよいのでは？
+ *
+ * @param	string	$userName
+ * @return	string
+ */
+	function getAuthPreifx($userName) {
+
+		if(isset($this->User)) {
+			$UserClass = $this->User;
+		} else {
+			$UserClass = ClassRegistry::init('User');
+		}
+
+		return $UserClass->getAuthPrefix($userName);
+
+	}
+/**
+ * Returns the referring URL for this request.
+ *
+ * @param string $default Default URL to use if HTTP_REFERER cannot be read from headers
+ * @param boolean $local If true, restrict referring URLs to local server
+ * @return string Referring URL
+ * @access public
+ * @link http://book.cakephp.org/view/430/referer
+ */
+	function referer($default = null, $local = false) {
+		$ref = env('HTTP_REFERER');
+		if (!empty($ref) && defined('FULL_BASE_URL')) {
+			// >>> CUSTOMIZE MODIFY 2011/01/18 ryuring
+			// スマートURLオフの際、$this->webrootがうまく動作しないので調整
+			//$base = FULL_BASE_URL . $this->webroot;
+			// ---
+			$base = FULL_BASE_URL . $this->base;
+			// <<<
+			if (strpos($ref, $base) === 0) {
+				$return =  substr($ref, strlen($base));
+				if ($return[0] != '/') {
+					$return = '/'.$return;
+				}
+				return $return;
+			} elseif (!$local) {
+				return $ref;
+			}
+		}
+
+		if ($default != null) {
+			return $default;
+		}
+		return '/';
+	}
 }
 ?>

@@ -52,8 +52,8 @@
 	background:url("images/bg_user_icon.gif") no-repeat left center;
 	padding-left:20px;
 }
-#loginUser span a {
-	text-decoration:underline;
+#loginUser a {
+	text-decoration:underline!important;
 }
 /* flashMessage
 ----------------------------------------------- */

@@ -51,12 +51,12 @@ class TimeExHelper extends TimeHelper {
 	}
 /**
  * 和暦を取得（アルファベット）
- * 
+ *
  * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
  * @return	mixid	string / false
  */
 	function wareki($date) {
-		
+
 		$_date = split('/', $date);
 		if(!$_date) {
 			$_date = split('-', $date);
@@ -77,7 +77,7 @@ class TimeExHelper extends TimeHelper {
 	}
 /**
  * 和暦の年を取得
- * 
+ *
  * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
  * @return	mixid	int / false
  */
@@ -107,7 +107,7 @@ class TimeExHelper extends TimeHelper {
  * @return	array
  */
 	function convertToWarekiYear($year) {
-		
+
 		if($year >= 1868 && $year <= 1911) {
 			return array('m-'.($year-1867));
 		} elseif ($year == 1912) {
@@ -125,7 +125,7 @@ class TimeExHelper extends TimeHelper {
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
  * 和暦の年を西暦に変換する
@@ -166,12 +166,19 @@ class TimeExHelper extends TimeHelper {
  * @access	public
  */
 	function convertToWareki($date) {
+
 		if(!$date) {
 			return '';
+		} elseif(is_array($date)) {
+			if(!empty($date['year']) && !empty($date['month']) && !empty($date['day'])) {
+				$date = $date['year'].'-'.$date['month'].'-'.$date['day'];
+			} else {
+				return '';
+			}
 		}
+
 		if(strtotime($date)==-1) {
-			list($y,$m,$d) = explode("-",$date);
-			$ymd = $y.$m.$d;
+			return '';
 		}else {
 			$ymd = date('Ymd',strtotime($date));
 			$y = date('Y',strtotime($date));
@@ -191,7 +198,7 @@ class TimeExHelper extends TimeHelper {
 			$y = $y - 1988;
 		}
 		return $w.'-'.$y.'/'.date('m',strtotime($date)).'/'.date('d',strtotime($date));
-		
+
 	}
 /**
  * 文字列から時間（分）を取得
@@ -255,5 +262,4 @@ class TimeExHelper extends TimeHelper {
 
 	}
 }
-
 ?>

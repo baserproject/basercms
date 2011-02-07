@@ -32,6 +32,53 @@ class CkeditorHelper extends AppHelper {
  */
 	var $_script = false;
 /**
+ * 初期化状態
+ *
+ * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
+ *
+ * @var	boolean
+ */
+	var $inited = false;
+/**
+ * 初期設定スタイル
+ *
+ * StyleSet 名 basercms
+ *
+ * @var	array
+ */
+	var $style = array(
+					array(	'name' => '青見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color'=>'Blue')),
+					array(	'name' => '赤見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color' => 'Red')),
+					array(	'name' => '黄マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Yellow')),
+					array(	'name' => '緑マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Lime')),
+					array(	'name' => '大文字(big)',
+							'element' => 'big'),
+					array(	'name' => '小文字(small)',
+							'element' => 'small'),
+					array( 	'name' => 'コード(code)',
+							'element' => 'code'),
+					array( 	'name' => '削除文(del)',
+							'element' => 'del'),
+					array( 	'name' => '挿入文(ins)',
+							'element' => 'ins'),
+					array(	'name' => '引用(cite)',
+							'element' => 'cite'),
+					array( 	'name' => 'インライン(q)',
+							'element' => 'q')
+			);
+	function __construct() {
+		parent::__construct();
+
+	}
+/**
  * CKEditor のスクリプトを構築する
  *
  * 【ボタン一覧】
@@ -101,7 +148,7 @@ class CkeditorHelper extends AppHelper {
  * Draft			- 草稿に切り替え
  * CopyPublish		- 本稿を草稿にコピー
  * CopyDraft		- 草稿を本稿にコピー
- * 
+ *
  * @param	string	$fieldName
  * @param	array	$ckoptions
  * @return	string
@@ -109,6 +156,12 @@ class CkeditorHelper extends AppHelper {
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
+		if(isset($ckoptions['stylesSet'])) {
+			$stylesSet = $ckoptions['stylesSet'];
+			unset($ckoptions['stylesSet']);
+		} else {
+			$stylesSet = 'basercms';
+		}
 		if(isset($ckoptions['useDraft'])) {
 			$useDraft = $ckoptions['useDraft'];
 			unset($ckoptions['useDraft']);
@@ -205,39 +258,19 @@ class CkeditorHelper extends AppHelper {
 		);
 		$ckoptions = array_merge($_ckoptions,$ckoptions);
 
-		if(!$styles) {
-			$styles = array(
-					array(	'name' => '青見出し(h3)',
-							'element' => 'h3',
-							'styles' => array('color'=>'Blue')),
-					array(	'name' => '赤見出し(h3)',
-							'element' => 'h3',
-							'styles' => array('color' => 'Red')),
-					array(	'name' => '黄マーカー(span)',
-							'element' => 'span',
-							'styles' => array('background-color' => 'Yellow')),
-					array(	'name' => '緑マーカー(span)',
-							'element' => 'span',
-							'styles' => array('background-color' => 'Lime')),
-					array(	'name' => '大文字(big)',
-							'element' => 'big'),
-					array(	'name' => '小文字(small)',
-							'element' => 'small'),
-					array( 	'name' => 'コード(code)',
-							'element' => 'code'),
-					array( 	'name' => '削除文(del)',
-							'element' => 'del'),
-					array( 	'name' => '挿入文(ins)',
-							'element' => 'ins'),
-					array(	'name' => '引用(cite)',
-							'element' => 'cite'),
-					array( 	'name' => 'インライン(q)',
-							'element' => 'q')
-			);
+		if(!$this->inited) {
+			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
+			$this->inited = true;
+		} else {
+			$jscode = '';
 		}
-		$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
+		if($styles) {
+			foreach($styles as $key => $style) {
+				$jscode .= "CKEDITOR.addStylesSet('".$key."',".$this->Javascript->object($style).");";
+			}
+		}
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
-		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
+		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
@@ -267,7 +300,7 @@ class CkeditorHelper extends AppHelper {
 	}
 /**
  * CKEditorのテキストエリアを出力する（textarea）
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param array $options
@@ -289,7 +322,7 @@ class CkeditorHelper extends AppHelper {
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param array $tinyoptions

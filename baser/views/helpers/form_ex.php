@@ -282,7 +282,7 @@ class FormExHelper extends FormHelper {
 			}
 		}
 		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
-		
+
 		return $this->hidden($fieldName.".wareki", array('value'=>true)).
 		$this->select(
 			$fieldName . ".year", $this->__generateOptions('wyear', $yearOptions),
@@ -750,18 +750,21 @@ DOC_END;
 /**
  * Returns a formatted SELECT element.
  *
+ * Attributes:
+ *
+ * - 'showParents' - If included in the array and set to true, an additional option element
+ *   will be added for the parent of each option group.
+ * - 'multiple' - show a multiple select box.  If set to 'checkbox' multiple checkboxes will be
+ *   created instead.
+ *
  * @param string $fieldName Name attribute of the SELECT
  * @param array $options Array of the OPTION elements (as 'value'=>'Text' pairs) to be used in the
- * 						 SELECT element
+ *    SELECT element
  * @param mixed $selected The option selected by default.  If null, the default value
- *						  from POST data will be used when available.
- * @param array $attributes	 The HTML attributes of the select element.
- *		'showParents' - If included in the array and set to true, an additional option element
- *						will be added for the parent of each option group.
- *		'multiple' - show a multiple select box.  If set to 'checkbox' multiple checkboxes will be
- * 					 created instead.
+ *   from POST data will be used when available.
+ * @param array $attributes The HTML attributes of the select element.
  * @param mixed $showEmpty If true, the empty select option is shown.  If a string,
- *						   that string is displayed as the empty element.
+ *   that string is displayed as the empty element.
  * @return string Formatted SELECT element
  */
 	function select($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
@@ -800,10 +803,14 @@ DOC_END;
 			$style = ($attributes['multiple'] === 'checkbox') ? 'checkbox' : null;
 			$template = ($style) ? 'checkboxmultiplestart' : 'selectmultiplestart';
 			$tag = $this->Html->tags[$template];
+			// >>> CUSTOMIZE MODIFY 2011/01/21 ryuring
 			// multiplecheckboxの場合にhiddenをつけないオプションを追加
+			//$select[] = $this->hidden(null, array('value' => '', 'id' => null, 'secure' => false));
+			// ---
 			if(!isset($attributes['hidden']) || $attributes['hidden']!==false) {
 				$select[] = $this->hidden(null, array('value' => '', 'id' => null, 'secure' => false));
 			}
+			// <<<
 		} else {
 			$tag = $this->Html->tags['selectstart'];
 		}
@@ -837,13 +844,19 @@ DOC_END;
 		}else {
 			$div = null;
 		}
-		$select = array_merge($select, $this->__selectOptions(
+		$_select = $this->__selectOptions(
 			array_reverse($options, true),
 			$selected,
 			array(),
 			$showParents,
 			array('escape' => $escapeOptions, 'style' => $style, 'div' => $div)
-		));
+		);
+		if(!empty($attributes['separator'])) {
+			$separator = $attributes['separator']."\n";
+		}else {
+			$separator = "\n";
+		}
+		$select[] = implode($separator, $_select);
 
 		$template = ($style == 'checkbox') ? 'checkboxmultipleend' : 'selectend';
 		$select[] = $this->Html->tags[$template];
@@ -862,12 +875,7 @@ DOC_END;
 			$out .= '<input type="button" name="'.$tagName.'Clear" id="'.$tagName.'Clear" value="　解　除　" />';
 			return $this->output(implode("\n", $select))."<br />".$out;
 		}else {
-			if(!empty($attributes['separator'])) {
-				$separator = $attributes['separator'];
-			}else {
-				$separator = "\n";
-			}
-			return $this->output(implode($separator, $select));
+			return $this->output(implode("\n", $select));
 		}
 	}
 /**
@@ -892,7 +900,7 @@ DOC_END;
 		$id = $_options['id'];
 		$_id = $_options['id'].'_';
 		$name = $_options['name'];
-		$out = '<span id="'.$_id.'">'.$this->select($fieldName.'_', $options, $selected, $attributes, $showEmpty).'</span>';
+		$out = '<div id="'.$_id.'">'.$this->select($fieldName.'_', $options, $selected, $attributes, $showEmpty).'</div>';
 		$out .= $this->hidden($fieldName);
 		$script = <<< DOC_END
 $(document).ready(function() {
@@ -946,7 +954,7 @@ DOC_END;
 			$this->__secure();
 		}
 		// <<<
-		
+
 		$options = $this->_initInputField($fieldName, array_merge(
 			$options, array('secure' => false)
 		));
@@ -955,15 +963,26 @@ DOC_END;
 		if ($fieldName !== '_method' && $model !== '_Token' && $secure) {
 			$this->__secure(null, '' . $options['value']);
 		}
-		
+
 		// 2010/07/24 ryuring
 		// 配列用のhiddenタグを出力できるオプションを追加
 		// 2010/08/01 ryuring
 		// class属性を指定できるようにした
 		// >>> ADD
+		$multiple = false;
+		$value = '';
 		if(!empty($options['multiple'])){
+			$multiple = true;
 			$tagType = 'hiddenmultiple';
 			$options['id'] = null;
+			if (!isset($attributes['value'])) {
+				$value = $this->value($fieldName);
+			}else {
+				$value = $attributes['value'];
+			}
+			if(is_array($value) && !$value) {
+				unset($attributes['value']);
+			}
 			unset($options['multiple']);
 		} else {
 			$tagType = 'hidden';
@@ -976,16 +995,29 @@ DOC_END;
 			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
 		));*/
 		// ---
-		return $this->output(sprintf(
-			$this->Html->tags[$tagType],
-			$options['name'],
-			$this->_parseAttributes($options, array('name'), '', ' ')
-		));
+		if($multiple && is_array($value)) {
+			$out = array();
+			foreach($value as $key => $_value) {
+				$options['value'] = $key;
+				$out[] = $this->output(sprintf(
+					$this->Html->tags[$tagType],
+					$options['name'],
+					$this->_parseAttributes($options, array('name'), '', ' ')
+				));
+			}
+			return implode("\n", $out);
+		} else {
+			return $this->output(sprintf(
+				$this->Html->tags[$tagType],
+				$options['name'],
+				$this->_parseAttributes($options, array('name'), '', ' ')
+			));
+		}
 		// <<<
 	}
 /**
  * CKEditorを出力する
- * 
+ *
  * @param	string	$fieldName
  * @param	array	$options
  * @param	array	$editorOptions
@@ -999,7 +1031,7 @@ DOC_END;
 		$options = am($_options,$options);
 		$method = $options['type'];
 		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
-		
+
 	}
 /**
  * create
@@ -1033,21 +1065,68 @@ DOC_END;
 		}
 	}
 /**
+ * Generates a form input element complete with label and wrapper div
+ *
+ * Options - See each field type method for more information. Any options that are part of
+ * $attributes or $options for the different type methods can be included in $options for input().
+ *
+ * - 'type' - Force the type of widget you want. e.g. ```type => 'select'```
+ * - 'label' - control the label
+ * - 'div' - control the wrapping div element
+ * - 'options' - for widgets that take options e.g. radio, select
+ * - 'error' - control the error message that is produced
+ *
+ * @param string $fieldName This should be "Modelname.fieldname"
+ * @param array $options Each type of input takes different options.
+ * @return string Completed form widget
+ */
+	function input($fieldName, $options = array()) {
+
+		$type = '';
+		if(isset($options['type'])) {
+			$type = $options['type'];
+		}
+
+		if(!isset($options['div'])) {
+			$options['div'] = false;
+		}
+
+		switch($type) {
+			case 'text':
+			default :
+				if(!isset($options['label'])) {
+					$options['label'] = false;
+				}
+				break;
+			case 'radio':
+				if(!isset($options['legend'])) {
+					$options['legend'] = false;
+				}
+				if(!isset($options['separator'])) {
+					$options['separator'] = '　';
+				}
+				break;
+		}
+
+		return parent::input($fieldName, $options);
+
+	}
+/**
  * 日付タグ
  * 和暦実装
  * TODO 未実装
  */
 	/*function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
-	
+
 		if($dateFormat == "WYMD"){
 			$this->options['month'] = $this->getWarekiMonthes();
 			$this->options['day'] = $this->getWarekiDays();
 			$this->options['year'] = $this->getWarekiYears($attributes['minYear'],$attributes['maxYear']);
 			$dateFormat = "YMD";
-			
+
 		}
 		return parent::dateTime($fieldName, $dateFormat, $timeFormat, $selected, $attributes, $showEmpty);
-		
+
 	}*/
 }
 ?>

@@ -33,9 +33,7 @@
 	</div>
 	<div id="glbMenus">
 		<h2 class="display-none">グローバルメニュー</h2>
-		<?php if($this->params['url']['url'] != 'admin/users/login' &&
-					$this->params['url']['url'] != 'installations/update' &&
-					($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
+		<?php if($useNavi): ?>
 		<?php $baser->element('global_menu',array('menuType'=>'admin')) ?>
 		<?php endif; ?>
 	</div>

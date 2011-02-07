@@ -229,15 +229,22 @@ class TextExHelper extends TextHelper {
  * @return	array	都道府県リスト
  * @access	public
  */
-	function prefList() {
+	function prefList($empty = '都道府県') {
 
-		$pref = array(""=>"都道府県",1=>"北海道",2=>"青森県",3=>"岩手県",4=>"宮城県",5=>"秋田県",6=>"山形県",
+		$pref = array();
+		if($empty) {
+			$pref = array(""=>$empty);
+		} elseif($pref !== false) {
+			$pref = array(""=>"");
+		}
+
+		$pref = am($pref, array(1=>"北海道",2=>"青森県",3=>"岩手県",4=>"宮城県",5=>"秋田県",6=>"山形県",
 				7=>"福島県",8=>"茨城県",9=>"栃木県",10=>"群馬県",11=>"埼玉県",12=>"千葉県",13=>"東京都",14=>"神奈川県",
 				15=>"新潟県",16=>"富山県",17=>"石川県",18=>"福井県",19=>"山梨県",20=>"長野県",21=>"岐阜県",22=>"静岡県",
 				23=>"愛知県",24=>"三重県",25=>"滋賀県",26=>"京都府",27=>"大阪府",28=>"兵庫県",29=>"奈良県",30=>"和歌山県",
 				31=>"鳥取県",32=>"島根県",33=>"岡山県",34=>"広島県",35=>"山口県",36=>"徳島県",37=>"香川県",38=>"愛媛県",
 				39=>"高知県",40=>"福岡県",41=>"佐賀県",42=>"長崎県",43=>"熊本県",44=>"大分県",45=>"宮崎県",46=>"鹿児島県",
-				47=>"沖縄県");
+				47=>"沖縄県"));
 		return $pref;
 
 	}
@@ -269,12 +276,29 @@ class TextExHelper extends TextHelper {
  * @return	string	都道府県名
  * @access	public
  */
-	function pref($value) {
+	function pref($value, $noValue='') {
+
 		if(!$value) {
-			return '';
+			return $noValue;
 		}
 		$list = $this->prefList();
 		return $list[(int)$value];
+
+	}
+/**
+ * データをチェックして空の場合に指定した値を返す
+ *
+ * @param	mixed	$value
+ * @param	mixed	$noValue
+ * @return	mixed
+ */
+	function noValue($value, $noValue) {
+
+		if(!$value) {
+			return $noValue;
+		}else {
+			return $value;
+		}
 
 	}
 /**
@@ -320,6 +344,22 @@ class TextExHelper extends TextHelper {
 
 	}
 /**
+ * 通貨表示
+ *
+ * @param	int		$value
+ * @param	string	$prefix
+ * @return	string
+ */
+	function moneyFormat($value, $prefix='¥') {
+		
+		if($value) {
+			return $prefix.number_format($value);
+		} else {
+			return '';
+		}
+		
+	}
+/**
  * form::dateTimeで取得したデータを文字列データに変換する
  *
  * @param	array	$arrDate
@@ -338,11 +378,18 @@ class TextExHelper extends TextHelper {
  *
  * @param	string	フォーマット
  * @param	mixed	値
+ * @param	mixed	データがなかった場合の初期値
  * @return	string	変換後の文字列
  * @access	public
  */
-	function format($format,$value) {
-		return sprintf($format,$value);
+	function format($format,$value, $noValue = '') {
+		
+		if($value === '' || is_null($value)) {
+			return $noValue;
+		} else {
+			return sprintf($format,$value);
+		}
+		
 	}
 /**
  * モデルのコントロールソースより表示用データを取得する
@@ -391,11 +438,61 @@ class TextExHelper extends TextHelper {
  * @param array $array
  * @return mixied
  */
-	function arrayValue($key,$array) {
+	function arrayValue($key, $array, $noValue = '') {
+		
 		if(isset($array[(int)$key])) {
 			return $array[(int)$key];
 		}
-		return '';
+		return $noValue;
+	}
+/**
+ * 連想配列とキーのリストより値のリストを取得し文字列で返す
+ *
+ * 文字列に結合する際、指定した区切り文字を指定できる
+ *
+ * @param	string	$glue
+ * @param	array	$keys
+ * @param	array	$array
+ * @return	string
+ */
+	function arrayValues($glue, $keys, $array) {
+
+		$values = array();
+		foreach($keys as $key) {
+			if(isset($array[$key])) {
+				$values[] = $array[$key];
+			}
+		}
+		if($values) {
+			return implode($glue, $values);
+		} else {
+			return '';
+		}
+
+	}
+/**
+ * 日付より年齢を取得する
+ *
+ * @param	string	$birthday
+ * @param	string	$suffix
+ * @param	mixed	$noValue
+ * @return	mixed
+ */
+	function age($birthday, $suffix='歳', $noValue = '不明') {
+
+		if(!$birthday) {
+			return $noValue;
+		}
+		$byear = date('Y', strtotime($birthday));
+		$bmonth = date('m', strtotime($birthday));
+		$bday = date('d', strtotime($birthday));
+		$tyear = date('Y');
+		$tmonth = date('m');
+		$tday = date('d');
+		$age = $tyear - $byear;
+		if($tmonth * 100 + $tday < $bmonth * 100 + $bday) $age--;
+		return $age.$suffix;
+
 	}
 /**
  * boolean型用のリストを有効、無効で出力
@@ -421,5 +518,6 @@ class TextExHelper extends TextHelper {
 		return $list[(int)$value];
 
 	}
+	
 }
 ?>

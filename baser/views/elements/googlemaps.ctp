@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php 
+<?php
 $_width = 600;
 $_height = 400;
 $_zoom = 16;
@@ -33,7 +33,12 @@ if(isset($zoom)) $_zoom = $zoom;
 if(isset($mapId)) $_mapId = $mapId;
 if(isset($address)) $_address = $address;
 if(isset($markerText)) $_markerText = $markerText;
-
+if($longitude) {
+	$googlemaps->longitude = $longitude;
+}
+if($latitude) {
+	$googlemaps->latitude = $latitude;
+}
 $googlemaps->googlemapsKey = $baser->siteConfig['googlemaps_key'];
 $googlemaps->mapId = $_mapId;
 $googlemaps->zoom = $_zoom;

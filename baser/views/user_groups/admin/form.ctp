@@ -19,8 +19,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$authPrefixes = array();
+foreach(Configure::read('AuthPrefix') as $key => $authPrefix) {
+	$authPrefixes[$key] = $key;
+}
 ?>
-
 <h2>
 	<?php $baser->contentsTitle() ?>
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
@@ -39,8 +42,9 @@
 	<?php endif; ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.name', 'ユーザーグループ名') ?></th>
-		<td class="col-input"><?php if($form->value('UserGroup.name')=='admins' && $this->action == 'admin_edit'): ?>
-			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>
+		<td class="col-input">
+			<?php if($form->value('UserGroup.name')=='admins' && $this->action == 'admin_edit'): ?>
+			<?php echo $form->value('UserGroup.name') ?><?php echo $form->hidden('UserGroup.name') ?>
 			<?php else: ?>
 			<?php echo $form->text('UserGroup.name', array('size'=>20,'maxlength'=>255)) ?>
 			<?php endif ?>
@@ -48,7 +52,7 @@
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>重複しない識別名称を半角のみで入力して下さい。</li>
-					<li>識別名 admins は変更できません。</li>
+					<li>admins の場合は変更できません。</li>
 				</ul>
 			</div>
 			<?php echo $form->error('UserGroup.name') ?></td>
@@ -59,6 +63,22 @@
 			<div id="helptextTitle" class="helptext"> 日本語が入力できますのでわかりやすい名称を入力します。 </div>
 			<?php echo $form->error('UserGroup.title') ?></td>
 	</tr>
+<?php if(count($authPrefixes) > 1): ?>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('UserGroup.auth_prefix', '認証プレフィックス') ?></th>
+		<td class="col-input">
+			<?php if($form->value('UserGroup.name') == 'admins'): ?>
+				<?php echo $form->value('UserGroup.auth_prefix') ?>
+				<?php echo $form->hidden('UserGroup.auth_prefix') ?>
+			<?php else: ?>
+				<?php echo $form->select('UserGroup.auth_prefix', $authPrefixes, null, null, false) ?>
+			<?php endif ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAuthPrefix','class'=>'help','alt'=>'ヘルプ')) ?>
+			<div id="helptextAuthPrefix" class="helptext">所属するプレフィックスコンテンツを指定します。<br />ユーザーグループ名が admins の場合は編集できません。</div>
+			<?php echo $form->error('UserGroup.auth_prefix') ?>
+		</td>
+	</tr>
+<?php endif ?>
 </table>
 <div class="align-center">
 	<?php if ($this->action == 'admin_edit'): ?>
@@ -66,8 +86,8 @@
 	<?php if ($form->value('UserGroup.name')!='admins'): ?>
 		<?php $baser->link('削　除', array('action'=>'delete', $form->value('UserGroup.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。', $form->value('UserGroup.name')),false); ?>
 	<?php endif ?>
-	</form>
 	<?php else: ?>
-	<?php echo $form->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>
+	<?php echo $form->submit('登　録', array('div'=>false,'class'=>'btn-red button')) ?>
 	<?php endif ?>
+	<?php echo $form->end() ?>
 </div>

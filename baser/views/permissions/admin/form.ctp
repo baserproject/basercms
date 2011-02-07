@@ -62,7 +62,7 @@
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Permission.url', 'URL設定') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Permission.url', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpUrl','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $form->error('Permission.url') ?>
+		<td class="col-input"><strong>/<?php echo $authPrefix ?>/</strong><?php echo $formEx->text('Permission.url', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpUrl','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $form->error('Permission.url') ?>
 			<div id="helptextUrl" class="helptext">
 				<ul>
 					<li>BaserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />

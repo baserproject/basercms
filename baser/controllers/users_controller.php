@@ -59,7 +59,7 @@ class UsersController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('ReplacePrefix', 'Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * サブメニューエレメント
  *
@@ -83,12 +83,34 @@ class UsersController extends AppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('admin_login','admin_login_exec', 'admin_reset_password');
-		parent::beforeFilter();
-		if($this->params['prefix']=='admin'){
+		// beforeFilterの前に記述する必要あり
+		$this->Auth->allow('mypage_login', 'admin_login', 'admin_logout','admin_login_exec', 'admin_reset_password');
+		if(isset($this->params['prefix'])) {
+			$this->Auth->allow($this->params['prefix'].'_login', $this->params['prefix'].'_logout', $this->params['prefix'].'_reset_password');
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
 
+		parent::beforeFilter();
+
+		$this->ReplacePrefix->allow('login', 'logout', 'reset_password', 'auth_prefix_error');
+
+	}
+/**
+ * 許可されていない認証プレフィックスにアクセスした場合に呼び出される
+ * セッションメッセージを設定してトップページにリダイレクトする
+ * router.phpで定義
+ *
+ * @return	void
+ * @access	public
+ */
+	function admin_auth_prefix_error() {
+		
+		$this->Session->setFlash(
+				'ログインしているユーザーでは指定された領域にはアクセスできません。<br />'.
+				'一度ログアウトを行い、許可されているユーザーでログインしなおしてください。'
+		);
+		$this->redirect('/');
+		
 	}
 /**
  * ログイン処理を行う
@@ -115,42 +137,51 @@ class UsersController extends AppController {
  */
 	function admin_login() {
 
-		/* 他の画面からの遷移の処理 */
-		if (empty($this->data)) {
-			// セッションが残っている場合は自動ログイン
-			if (isset($_SESSION['Auth']['User']['name'])) {
-				$this->redirect($this->Auth->loginRedirect);
-			}
-			// クッキーがある場合には自動ログイン
-			$cookie = $this->Cookie->read('Auth.User');
-			if (!is_null($cookie)) {
-				if ($this->Auth->login($cookie)) {
-					$this->Session->del('Message.auth');
-					$this->redirect($this->Auth->redirect());
+		$user = $this->Auth->user();
+
+		if($this->data) {
+			if ($user) {
+				if (!empty($this->data['User']['saved'])) {
+					$this->setAuthCookie($this->data);
+					unset($this->data['User']['save']);
+				}else {
+					$this->Cookie->destroy();
 				}
+				$this->Session->setFlash("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
 			}
 		}
 
-		/* ログインフォームからの処理 */
-		$user = $this->Auth->user();
 		if ($user) {
-			if (!empty($this->data['User']['saved'])) {
-				$cookie = array();
-				$cookie['name'] = $this->data['User']['name'];
-				$cookie['password'] = $this->data['User']['password'];				// ハッシュ化されている
-				$this->Cookie->write('Auth.User', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
-				unset($this->data['User']['save']);
-			}else {
-				$this->Cookie->destroy();
-			}
-			$this->Session->setFlash("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
 			$this->redirect($this->Auth->redirect());
+		}
+
+		$pageTitle = 'ログイン';
+		if(isset($this->params['prefix'])) {
+			$prefixAuth = Configure::read('AuthPrefix.'.$this->params['prefix']);
+			if($prefixAuth && isset($prefixAuth['loginTitle'])) {
+				$pageTitle = $prefixAuth['loginTitle'];
+			}
 		}
 
 		/* 表示設定 */
 		$this->navis = array();
 		$this->subMenuElements = '';
-		$this->pageTitle = '管理者ログイン';
+		$this->pageTitle = $pageTitle;
+
+	}
+/**
+ * 認証クッキーをセットする
+ *
+ * @param	array	$data
+ * @return	void
+ * @access	public
+ */
+	function setAuthCookie($data) {
+
+		$cookie = array();
+		$cookie['name'] = $data['User']['name'];
+		$cookie['password'] = $data['User']['password'];				// ハッシュ化されている
+		$this->Cookie->write('Auth.User', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 
 	}
 /**
@@ -164,7 +195,7 @@ class UsersController extends AppController {
 		$this->Auth->logout();
 		$this->Cookie->del('Auth.User');
 		$this->Session->setFlash('ログアウトしました');
-		$this->redirect(array('action'=>'login'));
+		$this->redirect(array($this->params['prefix']=>true, 'action'=>'login'));
 
 	}
 /**
@@ -176,10 +207,14 @@ class UsersController extends AppController {
 	function admin_index() {
 
 		/* データ取得 */
-		$this->paginate = array('conditions'=>array(),
+		$default = array('named' => array('num' => 10));
+		$this->setViewConditions('User', array('default' => $default));
+		$conditions = $this->_createAdminIndexConditions($this->data);
+		$this->paginate = array(
+			'conditions'=>$conditions,
 				'fields'=>array(),
 				'order'=>'User.user_group_id,User.id',
-				'limit'=>10
+				'limit'=>$this->passedArgs['num']
 		);
 		$dbDatas = $this->paginate('User');
 
@@ -187,8 +222,29 @@ class UsersController extends AppController {
 		if($dbDatas) {
 			$this->set('users',$dbDatas);
 		}
-		$this->subMenuElements = array('users', 'user_groups', 'permissions');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー一覧';
+
+	}
+/**
+ * ページ一覧用の検索条件を生成する
+ *
+ * @param	array	$data
+ * @return	array	$conditions
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data) {
+
+		unset($data['_Token']);
+		if(isset($data['User']['user_group_id']) && $data['User']['user_group_id'] === '') {
+			unset($data['User']['user_group_id']);
+		}
+		$conditions = $this->postConditions($data);
+		if($conditions) {
+			return $conditions;
+		} else {
+			return array();
+		}
 
 	}
 /**
@@ -212,7 +268,7 @@ class UsersController extends AppController {
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
-				$this->redirect('/admin/users/index');
+				$this->redirect(array('action'=>'edit', $this->User->getInsertID()));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -220,7 +276,7 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('users', 'user_groups', 'permissions');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->render('form');
 
@@ -259,7 +315,7 @@ class UsersController extends AppController {
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'admin_index'));
+				$this->redirect(array('action'=>'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -267,7 +323,7 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('users', 'user_groups', 'permissions');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->render('form');
 
@@ -312,17 +368,17 @@ class UsersController extends AppController {
  * ログインパスワードをリセットする
  *
  * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
- * 
+ *
  * @return	void
  * @access	public
  */
 	function admin_reset_password () {
-		
+
 		$this->layout = 'popup';
 		$this->pageTitle = 'パスワードのリセット';
-		
+
 		if($this->data) {
-			
+
 			if(empty($this->data['User']['email'])) {
 				$this->Session->setFlash('メールアドレスを入力してください。');
 				return;
@@ -347,9 +403,9 @@ class UsersController extends AppController {
 			}
 			$this->Session->setFlash($email.' 宛に新しいパスワードを送信しました。');
 			$this->data = array();
-			
+
 		}
-		
+
 	}
 }
 ?>

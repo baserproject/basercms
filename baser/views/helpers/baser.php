@@ -208,7 +208,7 @@ class BaserHelper extends AppHelper {
 		}else {
 			$title = $this->_view->pageTitle;
 		}
-		
+
 		$navis = $this->getNavis($categoryTitleOn);
 		if($navis){
 			$navis = array_reverse($navis,true);
@@ -219,7 +219,7 @@ class BaserHelper extends AppHelper {
 				$title .= $key;
 			}
 		}
-		
+
 		// サイトタイトルを追加
 		if ($title && !empty($this->siteConfig['name'])) {
 			$title .= $separator;
@@ -233,7 +233,7 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * ナビゲーション配列を取得する
- * 
+ *
  * @param mixid $categoryTitleOn
  * @return array
  */
@@ -260,7 +260,7 @@ class BaserHelper extends AppHelper {
 		}
 
 		return $navis;
-		
+
 	}
 /**
  * コンテンツタイトルを取得する
@@ -366,8 +366,12 @@ class BaserHelper extends AppHelper {
 
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
+			$params['subDir'] = false;
+		} else {
+			$params['subDir'] = true;
 		}
 		return $this->_view->element($name, $params, $loadHelpers);
+
 	}
 /**
  * エレメントを出力する
@@ -500,7 +504,7 @@ class BaserHelper extends AppHelper {
 		}else {
 			$forceTitle = false;
 		}
-		
+
 		if(isset($htmlAttributes['ssl'])) {
 			$ssl = true;
 			unset($htmlAttributes['ssl']);
@@ -533,7 +537,7 @@ class BaserHelper extends AppHelper {
 				return '';
 			}
 		}
-		
+
 		// 現在SSLのURLの場合、フルパスで取得
 		if($this->isSSL()) {
 			$_url = preg_replace("/^\//", "", $_url);
@@ -553,7 +557,7 @@ class BaserHelper extends AppHelper {
 		} else {
 			$url = $_url;
 		}
-		
+
 		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 	}
@@ -778,7 +782,7 @@ class BaserHelper extends AppHelper {
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  */
 	function cacheHeader($expire = DAY, $type='html') {
-		
+
 		$contentType = array(
 			'html' => 'text/html',
 			'js' => 'text/javascript', 'css' => 'text/css',
