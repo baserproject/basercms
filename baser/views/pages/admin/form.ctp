@@ -192,9 +192,7 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.contents', '本文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('Page.contents_tmp',array('cols'=>60, 'rows'=>20), array('disableDraft' => $disableDraft, 'publishAreaId' => 'PageContents', 'draftAreaId' => 'PageDraft')) ?>
-			<?php echo $formEx->hidden('Page.contents') ?>
-			<?php echo $formEx->hidden('Page.draft') ?>
+			<?php echo $formEx->ckeditor('Page.contents',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('Page.contents') ?>&nbsp;
 		</td>
 	</tr>

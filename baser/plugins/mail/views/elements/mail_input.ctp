@@ -73,10 +73,10 @@ if (!empty($mailFields)) {
 			}
 
 			/* 説明欄 */
-			if (($array->last($mailFields,$record)) ||
+			if (($array->last($mailFields, $key)) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$record))) {
+					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$key))) {
 				if (!$freezed && $description) {
 					echo $html->image('img_icon_help.gif',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
 				}

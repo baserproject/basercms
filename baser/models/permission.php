@@ -50,12 +50,12 @@ class Permission extends AppModel {
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
- * permissions
+ * permissionsTmp
  * ログインしているユーザーの拒否URLリスト
  * キャッシュ用
  * @var mixed
  */
-	var $permissions = -1;
+	var $permissionsTmp = -1;
 /**
  * beforeValidate
  *
@@ -97,11 +97,31 @@ class Permission extends AppModel {
 		}
 		$params = Router::parse($url);
 		if(empty($params['prefix'])) {
-			$this->invalidate('setting','>> アクセス拒否として設定できるのは認証ページだけです。');
 			return false;
 		}
 
 		return true;
+
+	}
+/**
+ * 認証プレフィックスを取得する
+ *
+ * @param	int	$id
+ * @return	string
+ * @access	public
+ */
+	function getAuthPrefix($id) {
+
+		$data = $this->find('first', array(
+			'conditions'=>array('Permission.id'=>$id),
+			'fields'=>array('UserGroup.auth_prefix'),
+			'recursive'=>0
+		));
+		if(isset($data['UserGroup']['auth_prefix'])) {
+			return $data['UserGroup']['auth_prefix'];
+		} else {
+			return '';
+		}
 
 	}
 /**
@@ -156,18 +176,18 @@ class Permission extends AppModel {
  */
 	function check($url, $userGroupId) {
 
-		if($this->permissions === -1) {
+		if($this->permissionsTmp === -1) {
 			$conditions = array('Permission.user_group_id' => $userGroupId);
 			$permissions = $this->find('all',array('conditions'=>$conditions,'order'=>'sort','recursive'=>-1));
 			if($permissions) {
-				$this->permissions = $permissions;
+				$this->permissionsTmp = $permissions;
 			}else {
-				$this->permissions = array();
+				$this->permissionsTmp = array();
 				return true;
 			}
 		}
 
-		$permissions = $this->permissions;
+		$permissions = $this->permissionsTmp;
 
 		if($url!='/') {
 			$url = preg_replace('/^\//is', '', $url);

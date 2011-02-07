@@ -397,7 +397,7 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * 画像のサイズを取得
- * 
+ *
  * @param	string	$path
  * @return	mixed	array / false
  * @access	public
@@ -501,7 +501,9 @@ class UploadBehavior extends ModelBehavior {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($model,$setting,$pathinfo['extension']);
-
+					if(!$newName) {
+						return true;
+					}
 					if($oldName != $newName) {
 
 						rename($this->savePath.$oldName,$this->savePath.$newName);
@@ -526,6 +528,7 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * フィールドベースのファイル名を取得する
+ *
  * @param Model $model
  * @param array $setting
  * @param string $ext
@@ -535,11 +538,22 @@ class UploadBehavior extends ModelBehavior {
 		if(empty($setting['namefield'])) {
 			return false;
 		}
-		$basename = $model->data[$model->alias][$setting['namefield']];
+		$data = $model->data[$model->alias];
+		if(!isset($data[$setting['namefield']])){
+			if($setting['namefield'] == 'id' && $model->id) {
+			$basename = $model->id;
+			} else {
+				return false;
+			}
+		} else {
+			$basename = $data[$setting['namefield']];
+		}
+
 		if(!empty($setting['nameformat'])) {
 			$basename = sprintf($setting['nameformat'],$basename);
 		}
 		return $basename . '_' . $setting['name'] . '.' . $ext;
+
 	}
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する

@@ -19,6 +19,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$userGroups = $formEx->getControlSource('User.user_group_id');
+$userGroups = array(''=>'指定なし') + $userGroups;
 ?>
 
 <h2>
@@ -29,8 +31,18 @@
 	<p>ユーザー管理ではログインする事ができるユーザーの管理を行う事ができます。<br />
 		新しいユーザーを登録するには「新規登録」ボタンをクリックします。</p>
 </div>
+<h3><a href="javascript:void(0);" class="slide-trigger" id="UsersSearch">検索</a></h3>
+<div class="function-box corner10" id="UsersSearchBody"> <?php echo $formEx->create('User',array('url'=>array('action'=>'index'))) ?>
+	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $userGroups,null,array(),false) ?>
+		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
+</div>
+
+<!-- list-num -->
+<?php $baser->element('list_num') ?>
+
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
+
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableUsers">
 	<tr>
 		<th>操作</th>

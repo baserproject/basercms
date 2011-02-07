@@ -68,6 +68,7 @@ class MailField extends MailAppModel {
 				'multi_check'=>'マルチチェックボックス',
 				'autozip'=>'自動補完郵便番号',
 				'pref'=>'都道府県リスト',
+				'date_time_birthday_wareki'=>'和暦生年月日',
 				'hidden'=>'隠しフィールド');
 
 		$source['valid'] = array('VALID_NOT_EMPTY'=>'入力必須',

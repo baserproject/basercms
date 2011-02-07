@@ -8,16 +8,12 @@
 	<?php if($baserVer != $siteVer || $scriptNum): ?>
 	<p>「アップデート実行」をクリックしてアプリケーションのアップデートを完了させてください。</p>
 		<?php if($scriptNum): ?>
-	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。<br />
-		<strong>実行する前には必ずバックアップを実行しておいてください。</strong></p>
-	<p>
-		<?php $baser->link('≫ バックアップはこちらから','/admin/tools/maintenance/backup') ?>
-	</p>
+	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。</p>
 		<?php endif ?>
-	<?php echo $form->create(array('action'=>$this->action, 'url'=>array($plugin))) ?>
-	<?php echo $form->hidden('Installation.update',array('value'=>true)) ?>
-	<?php echo $form->end(array('label'=>'アップデート実行','class'=>'button btn-red')) ?>
-		<?php else: ?>
+		<?php echo $form->create(array('action'=>$this->action, 'url'=>array($plugin))) ?>
+		<?php echo $form->hidden('Installation.update',array('value'=>true)) ?>
+		<?php echo $form->end(array('label'=>'アップデート実行','class'=>'button btn-red')) ?>
+	<?php else: ?>
 	<p>WEBサイトのバージョンは最新です。</p>
 	<p>
 		<?php if(!$plugin): ?>
@@ -28,3 +24,20 @@
 	</p>
 	<?php endif ?>
 </div>
+<?php if($scriptNum): ?>
+<div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;margin-top:20px">
+	<p>	<strong>データベースのバックアップは行いましたか？</strong><br />
+		<?php if(!$plugin): ?>
+		バックアップを行われていない場合は、アップデートを実行する前に、プログラムファイルを前のバージョンに戻しシステム設定よりデータベースのバックアップを行いましょう。<br />
+		<?php else: ?>
+		バックアップを行われていない場合は、アップデートを実行する前にデータベースのバックアップを行いましょう。<br />
+		<?php endif ?>
+		<small>※ アップデート処理は自己責任で行ってください。</small><br />
+		<?php if($plugin): ?>
+		<?php $baser->link('≫ バックアップはこちらから','/admin/tools/maintenance/backup') ?>
+		<?php endif ?>
+	</p>
+	<p><strong>リリースノートのアップデート時の注意事項は読まれましたか？</strong><br />
+		リリースバージョンによっては、追加作業が必要となる場合があるので注意が必要です。<br />公式サイトのリリースノート必ず確認してください。</p>
+</div>
+<?php endif ?>

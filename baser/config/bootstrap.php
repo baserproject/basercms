@@ -79,6 +79,14 @@
  */
 	Configure::write('Baser.pluginDbPrefix', 'pg_');
 /**
+ * 管理画面認証設定
+ */
+	$adminPrefix = Configure::read('Routing.admin');
+	Configure::write('AuthPrefix.'.$adminPrefix, array(
+		'loginRedirect'	=> '/'.$adminPrefix,
+		'loginTitle'	=> '管理システムログイン'
+	));
+/**
  * baserUrl取得
  */
 	$baseUrl = baseUrl();

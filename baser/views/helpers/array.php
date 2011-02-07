@@ -33,31 +33,39 @@ class ArrayHelper extends AppHelper {
  * 配列の最初の要素かどうか調べる
  *
  * @param 	array	配列
- * @param 	mixed	要素
+ * @param 	mixed	現在のキー
  * @return 	boolean
  * @access	public
  */
-	function first($array,$value) {
-		if($array[0]===$value) {
+	function first($array, $key) {
+
+		reset($array);
+		$first = key($array);
+		if($key===$first) {
 			return true;
 		}else {
 			return false;
 		}
+
 	}
 /**
  * 配列の最後の要素かどうか調べる
  *
  * @param 	array	配列
- * @param 	mixed	要素
+ * @param 	mixed	現在のキー
  * @return 	boolean
  * @access	public
  */
-	function last($array,$value) {
-		if($array[count($array)-1]===$value) {
+	function last($array, $key) {
+
+		end($array);
+		$end = key($array);
+		if($key===$end) {
 			return true;
 		}else {
 			return false;
 		}
+
 	}
 
 }

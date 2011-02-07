@@ -32,7 +32,7 @@
 		<div class="box-head">
 			<h3>アカウント／パスワードを入力して下さい</h3>
 		</div>
-		<div class="box-body"> <?php echo $form->create('User',array('action'=>'login')) ?>
+		<div class="box-body"> <?php echo $form->create('User',array('action'=>'login', 'url'=>array($this->params['prefix']=>true))) ?>
 			<table border="0">
 				<tr>
 					<td style="text-align:right">アカウント&nbsp;</td>
@@ -47,7 +47,7 @@
 			<br />
 			<p> <?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　
 				<?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?> </p>
-			<p><small><?php $baser->link('パスワードを忘れた？', array('action'=>'reset_password'), array('rel'=>'popup')) ?></small></p>
+			<p><small><?php $baser->link('パスワードを忘れた？', array('action'=>'reset_password', $this->params['prefix'] => true), array('rel'=>'popup')) ?></small></p>
 		</div>
 		<div class="box-foot"> &nbsp; </div>
 	</div>

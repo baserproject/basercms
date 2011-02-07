@@ -74,7 +74,7 @@ jQuery(function($) {
 				$("#rowSeparator").hide();$("#MailFieldSeparator").val('');
 				break;
 			case 'pref':
-			case 'date_time_birthday':
+			case 'date_time_birthday_wareki':
 			case 'date_time_reserve':
 				$("#rowSize").hide();$("#MailFieldSize").val('');
 				$("#rowRows").hide();$("#MailFieldRows").val('');

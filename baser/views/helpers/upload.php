@@ -75,10 +75,10 @@ class UploadHelper extends FormHelper {
 		}
 		$out = $fileTag;
 		if($fileLinkTag) {
-			$out .= '<br />'.$delCheckTag.$hiddenTag.'<br />'.$fileLinkTag;
+			$out .= '&nbsp;'.$delCheckTag.$hiddenTag.'<br />'.$fileLinkTag;
 		}
 
-		return $out;
+		return '<div class="upload-file">'.$out.'</div>';
 
 	}
 /**
@@ -143,10 +143,10 @@ class UploadHelper extends FormHelper {
 					if($tmp) {
 						$options['tmp'] = true;
 					}
-					$fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<br />'.$value;
+					$fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<br /><span class="file-name">'.$value.'</span>';
 				}else {
 					$filePath = $basePath.$value;
-					$fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<br />'.$value;
+					$fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<br /><span class="file-name">'.$value.'</span>';
 				}
 			}else {
 				$fileLinkTag = $value;
@@ -168,13 +168,16 @@ class UploadHelper extends FormHelper {
  * @param array $options
  * @return string
  */
-	function uploadImage($fieldName, $fileName, $options) {
+	function uploadImage($fieldName, $fileName, $options = array()) {
+
 		if(is_array($fileName)) {
 			return '';
 		}
-		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true);
+		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true, 'mobile'=>false);
 		$options = Set::merge($_options,$options);
 		$imgOptions = array();
+		$linkOptions = array();
+		$noimage = false;
 		$link = true;
 		$tmp = false;
 
@@ -193,13 +196,25 @@ class UploadHelper extends FormHelper {
 		}
 		unset($options['imgsize']);
 		if(isset($options['noimage'])) {
-			if(!$fileName) $fileName = $options['noimage'];
+			if(!$fileName) {
+				$fileName = $options['noimage'];
+				$noimage = true;
+			}
 			unset($options['noimage']);
+		} else {
+			if(!$fileName) {
+				return '';
+			}
 		}
 		if(isset($options['link'])) {
 			$link = $options['link'];
 			unset($options['link']);
 		}
+		if(isset($options['escape'])) {
+			$linkOptions['escape'] = $options['escape'];
+			unset($options['escape']);
+		}
+		$mobile = $options['mobile'];
 
 		$_field = split('\.',$fieldName);
 		$modelName = $_field[0];
@@ -222,55 +237,66 @@ class UploadHelper extends FormHelper {
 			unset($options['tmp']);
 		}
 
-		$check = false;
-		$maxSizeExists = false;
-		$mostSizeExists = false;
+		if(!$noimage) {
+			$check = false;
+			$maxSizeExists = false;
+			$mostSizeExists = false;
 
-		foreach($copySettings as $key => $copySetting) {
+			foreach($copySettings as $key => $copySetting) {
 
-			if($key == $imgsize) {
-				$check = true;
+				if($key == $imgsize) {
+					$check = true;
+				}
+				if(isset($copySetting['mobile'])) {
+					if($copySetting['mobile'] != $mobile) {
+						continue;
+					}
+				}else{
+					if($mobile != preg_match('/^mobile_/', $key)) {
+						continue;
+					}
+				}
+				$imgPrefix = '';
+				$imgSuffix = '';
+				if(isset($copySetting['suffix']))
+					$imgSuffix = $copySetting['suffix'];
+				if(isset($copySetting['prefix']))
+					$imgPrefix = $copySetting['prefix'];
+				$pathinfo = pathinfo($fileName);
+				$ext = $pathinfo['extension'];
+				$basename = basename($fileName,'.'.$ext);
+
+				if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
+					if($check && !$mostSizeExists) {
+						$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+						$mostSizeExists = true;
+					} elseif(!$maxSizeExists) {
+						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+						$maxSizeExists = true;
+					}
+				}elseif($tmp && $check) {
+					// 指定した横幅でIMGタグベースでリサイズ
+					$imgOptions['width']=$copySetting['width'];
+					break;
+				}
 			}
 
-			$imgPrefix = '';
-			$imgSuffix = '';
-			if(isset($copySetting['suffix']))
-				$imgSuffix = $copySetting['suffix'];
-			if(isset($copySetting['prefix']))
-				$imgPrefix = $copySetting['prefix'];
-			$pathinfo = pathinfo($fileName);
-			$ext = $pathinfo['extension'];
-			$basename = basename($fileName,'.'.$ext);
-
-			if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
-				if($check && !$mostSizeExists) {
-					$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
-					$mostSizeExists = true;
-				}
-				if(!$maxSizeExists) {
-					$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext;
-					$maxSizeExists = true;
-				}
-			}elseif($tmp && $check) {
-				// 指定した横幅でIMGタグベースでリサイズ
-				$imgOptions['width']=$copySetting['width'];
-				break;
+			if(!isset($mostSizeUrl)) {
+				$mostSizeUrl = $fileUrl.$fileName.'?'.rand();
 			}
+			if(!isset($maxSizeUrl)) {
+				$maxSizeUrl = $fileUrl.$fileName;
+			}
+
+		} else {
+			$mostSizeUrl = $fileName;
 		}
 
-		if(!isset($mostSizeUrl)) {
-			$mostSizeUrl = $fileUrl.$fileName;
-		}
-		if(!isset($maxSizeUrl)) {
-			$maxSizeUrl = $fileUrl.$fileName;
-		}
-
-		if($link) {
-			return $this->Html->link($this->Html->image($mostSizeUrl,$imgOptions),$maxSizeUrl,$options);
+		if($link && !$noimage) {
+			return $this->Html->link($this->Html->image($mostSizeUrl,$imgOptions),$maxSizeUrl,am($options, $linkOptions));
 		}else {
-			return $this->Html->image($mostSizeUrl.'?'.rand(),$imgOptions);
+			return $this->Html->image($mostSizeUrl,am($options, $imgOptions));
 		}
-
 
 	}
 }

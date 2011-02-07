@@ -32,6 +32,53 @@ class CkeditorHelper extends AppHelper {
  */
 	var $_script = false;
 /**
+ * 初期化状態
+ *
+ * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
+ *
+ * @var	boolean
+ */
+	var $inited = false;
+/**
+ * 初期設定スタイル
+ *
+ * StyleSet 名 basercms
+ *
+ * @var	array
+ */
+	var $style = array(
+					array(	'name' => '青見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color'=>'Blue')),
+					array(	'name' => '赤見出し(h3)',
+							'element' => 'h3',
+							'styles' => array('color' => 'Red')),
+					array(	'name' => '黄マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Yellow')),
+					array(	'name' => '緑マーカー(span)',
+							'element' => 'span',
+							'styles' => array('background-color' => 'Lime')),
+					array(	'name' => '大文字(big)',
+							'element' => 'big'),
+					array(	'name' => '小文字(small)',
+							'element' => 'small'),
+					array( 	'name' => 'コード(code)',
+							'element' => 'code'),
+					array( 	'name' => '削除文(del)',
+							'element' => 'del'),
+					array( 	'name' => '挿入文(ins)',
+							'element' => 'ins'),
+					array(	'name' => '引用(cite)',
+							'element' => 'cite'),
+					array( 	'name' => 'インライン(q)',
+							'element' => 'q')
+			);
+	function __construct() {
+		parent::__construct();
+
+	}
+/**
  * CKEditor のスクリプトを構築する
  *
  * 【ボタン一覧】
@@ -101,7 +148,7 @@ class CkeditorHelper extends AppHelper {
  * Draft			- 草稿に切り替え
  * CopyPublish		- 本稿を草稿にコピー
  * CopyDraft		- 草稿を本稿にコピー
- * 
+ *
  * @param	string	$fieldName
  * @param	array	$ckoptions
  * @return	string
@@ -109,18 +156,23 @@ class CkeditorHelper extends AppHelper {
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
-		if(isset($ckoptions['publishAreaId'])) {
-			$publishAreaId = $ckoptions['publishAreaId'];
-			unset($ckoptions['publishAreaId']);
+		if(isset($ckoptions['stylesSet'])) {
+			$stylesSet = $ckoptions['stylesSet'];
+			unset($ckoptions['stylesSet']);
 		} else {
-			$publishAreaId = '';
+			$stylesSet = 'basercms';
 		}
-
-		if(isset($ckoptions['draftAreaId'])) {
-			$draftAreaId = $ckoptions['draftAreaId'];
-			unset($ckoptions['draftAreaId']);
+		if(isset($ckoptions['useDraft'])) {
+			$useDraft = $ckoptions['useDraft'];
+			unset($ckoptions['useDraft']);
 		} else {
-			$draftAreaId = '';
+			$useDraft = false;
+		}
+		if(isset($ckoptions['draftField'])) {
+			$draftField = $ckoptions['draftField'];
+			unset($ckoptions['draftField']);
+		} else {
+			$draftField = false;
 		}
 		if(isset($ckoptions['disablePublish'])) {
 			$disablePublish = $ckoptions['disablePublish'];
@@ -152,12 +204,23 @@ class CkeditorHelper extends AppHelper {
 		} else {
 			$readOnlyPublish = false;
 		}
-		
+
 		$jscode = '';
 		if(strpos($fieldName,'.')) {
 			list($model,$field) = explode('.',$fieldName);
 		}else {
 			$field = $fieldName;
+		}
+		if($useDraft) {
+			$srcField = $field;
+			$field .= '_tmp';
+			$srcFieldName = $fieldName;
+			$fieldName .= '_tmp';
+		}
+
+		if($useDraft) {
+			$publishAreaId = Inflector::camelize($model.'_'.$srcField);
+			$draftAreaId = Inflector::camelize($model.'_'.$draftField);
 		}
 
 		if (!$this->_script) {
@@ -174,12 +237,16 @@ class CkeditorHelper extends AppHelper {
 							'TextColor', 'BGColor', '-',
 							'Link', 'Unlink', '-',
 							'Image');
-		$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
-		if(!$disableCopyDraft) {
-			$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
-		}
-		if(!$disableCopyPublish) {
-			$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
+		if($useDraft) {
+			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
+			if(!$disableCopyDraft) {
+				$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
+			}
+			if(!$disableCopyPublish) {
+				$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
+			}
+		} else {
+			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source');
 		}
 		$_ckoptions = array('language' => 'ja',
 				'skin' => 'kama',
@@ -191,65 +258,49 @@ class CkeditorHelper extends AppHelper {
 		);
 		$ckoptions = array_merge($_ckoptions,$ckoptions);
 
-		if(!$styles) {
-			$styles = array(
-					array(	'name' => '青見出し(h3)',
-							'element' => 'h3',
-							'styles' => array('color'=>'Blue')),
-					array(	'name' => '赤見出し(h3)',
-							'element' => 'h3',
-							'styles' => array('color' => 'Red')),
-					array(	'name' => '黄マーカー(span)',
-							'element' => 'span',
-							'styles' => array('background-color' => 'Yellow')),
-					array(	'name' => '緑マーカー(span)',
-							'element' => 'span',
-							'styles' => array('background-color' => 'Lime')),
-					array(	'name' => '大文字(big)',
-							'element' => 'big'),
-					array(	'name' => '小文字(small)',
-							'element' => 'small'),
-					array( 	'name' => 'コード(code)',
-							'element' => 'code'),
-					array( 	'name' => '削除文(del)',
-							'element' => 'del'),
-					array( 	'name' => '挿入文(ins)',
-							'element' => 'ins'),
-					array(	'name' => '引用(cite)',
-							'element' => 'cite'),
-					array( 	'name' => 'インライン(q)',
-							'element' => 'q')
-			);
+		if(!$this->inited) {
+			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
+			$this->inited = true;
+		} else {
+			$jscode = '';
 		}
-		$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($styles).");";
+		if($styles) {
+			foreach($styles as $key => $style) {
+				$jscode .= "CKEDITOR.addStylesSet('".$key."',".$this->Javascript->object($style).");";
+			}
+		}
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
-		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = 'basercms';";
+		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
-		if($draftAreaId) {
-			$jscode .= "editor_{$field}.draftDraftAreaId = '{$draftAreaId}';";
-		}
-		if($publishAreaId) {
-			$jscode .= "editor_{$field}.draftPublishAreaId = '{$publishAreaId}';";
-		}
-		if($readOnlyPublish) {
-			$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
-		}
-		$jscode .= " });";
-		$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
-		if($disableDraft) {
-			$jscode .= "editor_{$field}.execCommand('disableDraft');";
-		}
-		if($disablePublish) {
-			$jscode .= "editor_{$field}.execCommand('disablePublish');";
+		if($useDraft) {
+			if($draftAreaId) {
+				$jscode .= "editor_{$field}.draftDraftAreaId = '{$draftAreaId}';";
+			}
+			if($publishAreaId) {
+				$jscode .= "editor_{$field}.draftPublishAreaId = '{$publishAreaId}';";
+			}
+			if($readOnlyPublish) {
+				$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
+			}
 		}
 		$jscode .= " });";
+		if($useDraft) {
+			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
+			if($disableDraft) {
+				$jscode .= "editor_{$field}.execCommand('disableDraft');";
+			}
+			if($disablePublish) {
+				$jscode .= "editor_{$field}.execCommand('disablePublish');";
+			}
+			$jscode .= " });";
+		}
 		return $this->Javascript->codeBlock($jscode);
 	}
 /**
  * CKEditorのテキストエリアを出力する（textarea）
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param array $options
@@ -259,11 +310,19 @@ class CkeditorHelper extends AppHelper {
 		if(!$form){
 			$form = $this->Form;
 		}
-		return $form->textarea($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles);
+		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
+			list($model,$field) = explode('.',$fieldName);
+			$inputFieldName = $fieldName.'_tmp';
+			$hidden = $form->hidden($fieldName).$form->hidden($model.'.'.$editorOptions['draftField']);
+		} else {
+			$inputFieldName = $fieldName;
+			$hidden = '';
+		}
+		return $form->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param array $tinyoptions
@@ -273,8 +332,16 @@ class CkeditorHelper extends AppHelper {
 		if(!$form){
 			$form = $this->Form;
 		}
+		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
+			list($model,$field) = explode('.',$fieldName);
+			$inputFieldName = $fieldName.'_tmp';
+			$hidden = $form->hidden($fieldName).$form->hidden($model.'.'.$editorOptions['draftField']);
+		} else {
+			$inputFieldName = $fieldName;
+			$hidden = '';
+		}
 		$options['type'] = 'textarea';
-		return $form->input($fieldName, $options) . $this->_build($fieldName, $editorOptions, $styles, $form);
+		return $form->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles, $form);
 	}
 }
 ?>

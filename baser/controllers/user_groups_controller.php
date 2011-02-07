@@ -59,7 +59,7 @@ class UserGroupsController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $subMenuElements = array('users', 'user_groups', 'permissions');
+	var $subMenuElements = array('users', 'user_groups');
 /**
  * ぱんくずナビ
  *

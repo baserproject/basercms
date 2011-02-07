@@ -70,14 +70,22 @@ class UserGroup extends AppModel {
  */
 	function beforeValidate() {
 
-		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "ユーザーグループ名を入力して下さい"),
-				array(	'rule' => 'halfText',
-						'message' => 'ユーザーグループは半角のみで入力して下さい'),
-				array(	'rule' => array('duplicate','name'),
-						'message' => '既に登録のあるユーザーグループ名です'));
-		$this->validate['title'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "表示名を入力して下さい"));
+		$this->validate['name'] = array(
+			array(	'rule' => 'notEmpty',
+					'message' => "ユーザーグループ名を入力して下さい。"),
+			array(	'rule' => 'halfText',
+					'message' => 'ユーザーグループは半角のみで入力して下さい。'),
+			array(	'rule' => array('duplicate','name'),
+					'message' => '既に登録のあるユーザーグループ名です。')
+		);
+		$this->validate['title'] = array(
+			array(	'rule' => 'notEmpty',
+					'message' => "表示名を入力して下さい。")
+		);
+		$this->validate['auth_prefix'] = array(
+			array(	'rule' => 'notEmpty',
+					'message' => "認証プレフィックスを入力して下さい。")
+		);
 		return true;
 
 	}
@@ -116,6 +124,27 @@ class UserGroup extends AppModel {
 		}else {
 			return false;
 		}
+	}
+/**
+ * 認証プレフィックスを取得する
+ *
+ * @param	int	$id
+ * @return	string
+ * @access	public
+ */
+	function getAuthPrefix($id) {
+		
+		$data = $this->find('first', array(
+			'conditions'=>array('UserGroup.id'=>$id),
+			'fields'=>array('UserGroup.auth_prefix'),
+			'recursive'=>-1
+		));
+		if(isset($data['UserGroup']['auth_prefix'])) {
+			return $data['UserGroup']['auth_prefix'];
+		} else {
+			return '';
+		}
+		
 	}
 }
 ?>

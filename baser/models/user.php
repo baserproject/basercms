@@ -74,7 +74,7 @@ class User extends AppModel {
 					array(	'rule' => array('minLength',6),
 							'allowEmpty' => false,
 							'message' => 'パスワードは６文字以上で入力して下さい。'),
-				'alphaNumeric' => 
+				'alphaNumeric' =>
 					array(	'rule' => 'alphaNumeric',
 							'message' => 'パスワードは半角英数字のみで入力して下さい'));
 
@@ -86,7 +86,7 @@ class User extends AppModel {
 		$this->validate['user_group_id'] =	array(
 				array(	'rule' => VALID_NOT_EMPTY,
 						'message' => "グループを選択して下さい"));
-		
+
 		return true;
 
 	}
@@ -109,10 +109,7 @@ class User extends AppModel {
 			// 入力ミスチェック
 			if($data['User']['password_1'] != $data['User']['password_2']) {
 				$this->invalidate('password','パスワードが同じものではありません');
-			}else {
-				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
-			$this->data['User']['password'] = $this->data['User']['password_1'];
 
 		}
 
@@ -256,6 +253,27 @@ class User extends AppModel {
 	function convertToView($data) {
 
 		return $data;
+
+	}
+/**
+ * ユーザーが許可されている認証プレフィックスを取得する
+ *
+ * @param	string	$userName
+ * @return	string
+ */
+	function getAuthPrefix($userName) {
+
+		$user = $this->find('first', array(
+			'fields'		=> array('UserGroup.auth_prefix'),
+			'conditions'	=> array('User.name'=>$userName),
+			'recursive'		=> 0
+		));
+
+		if(isset($user['UserGroup']['auth_prefix'])) {
+			return $user['UserGroup']['auth_prefix'];
+		} else {
+			return '';
+		}
 
 	}
 

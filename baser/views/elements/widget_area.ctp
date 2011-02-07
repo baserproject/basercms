@@ -39,7 +39,7 @@ if(!empty($no)){
 				}
 				$params = am($params,$widget[$key]);
 				$params[$widget[$key]['id']] = $widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
-				$baser->element('widgets/'.$widget[$key]['element'],$params);
+				$baser->element('widgets/'.$widget[$key]['element'],$params, false, $subdir);
 			}
 		}
 ?>

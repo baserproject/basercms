@@ -117,18 +117,14 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.content', '本文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('BlogPost.content_tmp',array('cols'=>60, 'rows'=>20), array('disableDraft' => $disableDraft, 'publishAreaId' => 'BlogPostContent', 'draftAreaId' => 'BlogPostContentDraft')) ?>
-			<?php echo $formEx->hidden('BlogPost.content') ?>
-			<?php echo $formEx->hidden('BlogPost.content_draft') ?>
+			<?php echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('BlogPost.content') ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.detail', '詳細') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('BlogPost.detail_tmp', array('cols'=>60,'rows'=>20), array('disableDraft' => $disableDraft, 'publishAreaId' => 'BlogPostDetail', 'draftAreaId' => 'BlogPostDetailDraft')) ?>
-			<?php echo $formEx->hidden('BlogPost.detail') ?>
-			<?php echo $formEx->hidden('BlogPost.detail_draft') ?>
+			<?php echo $formEx->ckeditor('BlogPost.detail',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('BlogPost.detail') ?>
 		</td>
 	</tr>

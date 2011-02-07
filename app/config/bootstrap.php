@@ -40,5 +40,13 @@
  *
  */
 require ROOT.DS.'baser'.DS.'config'.DS.'bootstrap.php';
+/**
+ * 追加プレフィックス認証（例）
+ *
+ * Configure::write('AuthPrefix.mypage', array(
+ *		'loginRedirect'=>'/mypage/dashboard/index',
+ *		'loginTitle'=>'マイページログイン')
+ * );
+ */
 //EOF
 ?>

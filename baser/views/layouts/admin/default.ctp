@@ -19,6 +19,24 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$paramPrefix = '';
+$paramUrl = $this->params['url']['url'];
+if(isset($this->params['prefix'])) {
+	$paramPrefix = $this->params['prefix'];
+}
+if($this->params['controller'] == 'updaters' ||
+		$this->params['controller'] == 'installations' ||
+		$paramUrl == ($paramPrefix.'/users/login')) {
+	$useNavi = false;
+} else {
+	$useNavi = true;
+}
+if($this->name == 'CakeError'){
+	$useNavi = false;
+}
+if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
+	$useNavi = false;
+}
 ?>
 <?php $baser->xmlHeader() ?>
 <?php $baser->docType() ?>
@@ -58,16 +76,13 @@
 	<div id="gradationShadow">
 	
 		<!-- begin header -->
-		<?php $baser->element('header'); ?>
+		<?php $baser->element('header', array('useNavi'=>$useNavi)); ?>
 		<!-- end header -->
 		
 		<!-- begin contents -->
 		<div id="contents">
 
-			<?php if($this->params['url']['url'] != 'admin/users/login' &&
-					$this->params['url']['url'] != 'installations/update' &&
-					$this->params['url']['url'] != 'installations/reset' &&
-					($this->name != 'CakeError' || isset($_SESSION['Auth']['User']))): ?>
+			<?php if($useNavi): ?>
 			<!-- begin navigation -->
 			<div id="navigation" class="clearfix">
 				<div id="pankuzu">
@@ -79,10 +94,10 @@
 					<?php else: ?>
 					<span>
 					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
-					&nbsp;| &nbsp;
-					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
 					</span>
 					<?php endif; ?>
+					&nbsp;| &nbsp;
+					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
 				</div>
 			</div>
 			<!-- end navigation -->

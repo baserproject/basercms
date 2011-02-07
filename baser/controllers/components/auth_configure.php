@@ -49,49 +49,74 @@ class  AuthConfigureComponent extends Object {
  * @return 	boolean
  * @access	public
  */
-	function setting($prefix) {
+	function setting($config) {
 
-		if(!$prefix) {
+		if(empty($this->controller->Auth)) {
 			return false;
 		}
 
-		/* 認証設定 */
+		$controller =& $this->controller;
+		$auth =& $controller->Auth;
+		$requestedPrefix = '';
+		
+		if(isset($controller->params['prefix'])) {
+			$requestedPrefix = $controller->params['prefix'];
+		}
+		
+		if(!$requestedPrefix) {
+			return true;
+		}
+		
+		$_config = array(
+			'loginRedirect' => '/'.$requestedPrefix
+		);
+		$config = array_merge($_config, $config);
+		extract($config);
 
-		$redirect = $this->controller->Auth->Session->read('Auth.redirect');
-		// 記録された過去のリダイレクト先が管理者ページ以外の場合はリセット
-		if(strpos($redirect, $prefix)===false) {
-			$this->controller->Auth->Session->write('Auth.redirect',null);
+		// オートリダイレクトをOFF
+		$auth->autoRedirect = false;
+		// エラーメッセージ
+		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力して下さい。';
+		// 権限が無いactionを実行した際のエラーメッセージ
+		$auth->authError = '指定されたページを開くにはログインする必要があります。';
+		//ユーザIDとパスワードのフィールドを指定
+		$auth->fields = array('username' => 'name', 'password' => 'password');
+		$auth->authorize = 'controller';
+		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
+		$auth->userModel = 'User';
+		// AppController::isAuthorizeでチェックするのでコメントアウト
+		/*if($requestedPrefix) {
+			//$auth->userScope = array('UserGroup.auth_prefix'=>$requestedPrefix);
+		}*/
+
+		// セッション識別
+		$auth->sessionKey = 'Auth.User';
+		// ログインアクション
+		$auth->loginAction = '/'.$requestedPrefix.'/users/login';
+
+		$redirect = $auth->Session->read('Auth.redirect');
+		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
+		if($redirect && strpos($redirect, $requestedPrefix)===false) {
+			$auth->Session->write('Auth.redirect',null);
 		}
 
 		// ログイン後にリダイレクトするURL
-		$this->controller->Auth->loginRedirect = '/'.$prefix;
-		// ログインアクション
-		$this->controller->Auth->loginAction = '/'.$prefix.'/users/login';
-		// セッション識別
-		$this->controller->Auth->sessionKey = 'Auth.User';
+		$auth->loginRedirect = $loginRedirect;
 
-		$cookie = $this->controller->Cookie->read($this->controller->Auth->sessionKey);
-
-		if(isset($cookie['Auth']['User']))
-			$authCookie = $cookie['Auth']['User'];
-
-		// オートリダイレクトをOFF
-		$this->controller->Auth->autoRedirect = false;
-		// エラーメッセージ
-		$this->controller->Auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力して下さい。';
-		// 権限が無いactionを実行した際のエラーメッセージ
-		$this->controller->Auth->authError = '該当のページを開くにはログインする必要があります。';
-		//ユーザIDとパスワードのフィールドを指定
-		$this->controller->Auth->fields = array('username' => 'name', 'password' => 'password');
-		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
-		//$this->controller->Auth->userModel = 'User';
-
-		// クッキーがある場合には認証なし
-		if ((!empty($authCookie) && $this->controller->Auth->login($authCookie))||Configure::read('debug')>0) {
-			$this->controller->Session->del('Message.auth');
-			$this->controller->Auth->allow();
+		if(!$auth->user()) {
+			// クッキーがある場合にはクッキーで認証
+			$cookie = $controller->Cookie->read($auth->sessionKey);
+			if(!empty($cookie)) {
+				$auth->login($cookie);
+				return true;
+			}
+			// デバッグモードの場合は無条件に認証なし
+			if(Configure::read('debug')>0) {
+				$controller->Session->del('Message.auth');
+				$auth->allow();
+			}
 		}
-
+		
 		return true;
 
 	}

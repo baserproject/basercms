@@ -119,47 +119,102 @@ class FreezeHelper extends FormExHelper {
 
 		if($this->freezed) {
 
-			$nengo = $wyear = $year = $month = $day = null;
-			$nengoOptions = $yearOptions = $monthOptions = $dayOptions = array();
-			$sepaletor = " ";
+			$year = $month = $day = $hour = $min = $meridian = null;
 
-			// TODO 和暦がうまく動作しない
-			/*if($dateFormat == 'WYMD'){
-				
-				list($model,$field) = explode('.',$fieldName);
-				
-				// 西暦年がない場合は取得
-				if(empty($this->data[$model][$field]['year'])){
-					$seireki = $this->TimeEx->convertSeireki($this->data[$model][$field]);
-					if($seireki)
-						$this->data[$model][$field]['year'] = date('Y',strtotime($seireki));
-				}
+			if (empty($selected)) {
+				$selected = $this->value($fieldName);
+			}
 
-				if(!$this->data[$model][$field]['nengo']||
-						!$this->data[$model][$field]['wyear']||
-						!$this->data[$model][$field]['year']||
-						!$this->data[$model][$field]['month']||
-						!$this->data[$model][$field]['day']){
-					$this->data[$model][$field]['nengo']="";
-					$this->data[$model][$field]['wyear']="";
-					$this->data[$model][$field]['year']="";
-					$this->data[$model][$field]['month']="";
-					$this->data[$model][$field]['day']="";
+			if ($selected === null && $showEmpty != true) {
+				$selected = time();
+			}
+
+			if (!empty($selected)) {
+				if (is_array($selected)) {
+					extract($selected);
+				} else {
+					if (is_numeric($selected)) {
+						$selected = strftime('%Y-%m-%d %H:%M:%S', $selected);
+					}
+					$meridian = 'am';
+					$pos = strpos($selected, '-');
+					if ($pos !== false) {
+						$date = explode('-', $selected);
+						$days = explode(' ', $date[2]);
+						$day = $days[0];
+						$month = $date[1];
+						$year = $date[0];
+					} else {
+						$days[1] = $selected;
+					}
+
+					if ($timeFormat != 'NONE' && !empty($timeFormat)) {
+						$time = explode(':', $days[1]);
+						$check = str_replace(':', '', $days[1]);
+
+						if (($check > 115959) && $timeFormat == '12') {
+							$time[0] = $time[0] - 12;
+							$meridian = 'pm';
+						} elseif ($time[0] == '00' && $timeFormat == '12') {
+							$time[0] = 12;
+						} elseif ($time[0] > 12) {
+							$meridian = 'pm';
+						}
+						if ($time[0] == 0 && $timeFormat == '12') {
+							$time[0] = 12;
+						}
+						$hour = $time[0];
+						$min = $time[1];
+					}
 				}
-				$sepaletor = " ";
-				$nengoOptions = $this->__generateOptions("nengo");
-				$nengo = $this->freezeControll($fieldName.".nengo", $nengoOptions,$attributes).$sepaletor;
-				$wyear = $this->freezeControll($fieldName.".wyear", $yearOptions,$attributes)."年".$sepaletor;
-				$year = $this->hidden($fieldName.".year", $yearOptions,$attributes);
-			}else{*/
-			$year = $this->freezeControll($fieldName.".year", $yearOptions,$attributes)."年".$sepaletor;
-			//}
+			}
+
+			$elements = array('Day','Month','Year','Hour','Minute','Meridian');
+			$defaults = array(
+				'minYear' => null, 'maxYear' => null, 'separator' => '&nbsp;'
+			);
+			$attributes = array_merge($defaults, (array) $attributes);
+			$minYear = $attributes['minYear'];
+			$maxYear = $attributes['maxYear'];
+			$separator = $attributes['separator'];
+			if (isset($attributes['id'])) {
+				if (is_string($attributes['id'])) {
+					// build out an array version
+					foreach ($elements as $element) {
+						$selectAttrName = 'select' . $element . 'Attr';
+						${$selectAttrName} = $attributes;
+						${$selectAttrName}['id'] = $attributes['id'] . $element;
+					}
+				} elseif (is_array($attributes['id'])) {
+					// check for missing ones and build selectAttr for each element
+					foreach ($elements as $element) {
+						$selectAttrName = 'select' . $element . 'Attr';
+						${$selectAttrName} = $attributes;
+						${$selectAttrName}['id'] = $attributes['id'][strtolower($element)];
+					}
+				}
+			} else {
+				// build the selectAttrName with empty id's to pass
+				foreach ($elements as $element) {
+					$selectAttrName = 'select' . $element . 'Attr';
+					${$selectAttrName} = $attributes;
+				}
+			}
+			$selects = array();
+			if(preg_match('/^W/',$dateFormat)){
+				$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
+			}else{
+				$selectYearAttr['value'] = $year;
+				$selects[] = $this->freezeControll($fieldName.".year", array(),$selectYearAttr)."年";
+			}
 
 			// TODO 値の出力はTextExにまとめた方がよいかも
 			// メール本文への出力も同じ処理を利用する。（改行の処理などはどうするか。。）
-			$month = $this->freezeControll($fieldName.".month", $monthOptions ,$attributes)."月".$sepaletor;
-			$day = $this->freezeControll($fieldName.".day", $dayOptions ,$attributes)."日";
-			return $nengo.$wyear.$year.$month.$day;
+			$selectMonthAttr['value'] = $month;
+			$selectDayAttr['value'] = $day;
+			$selects[] = $this->freezeControll($fieldName.".month", array() ,$selectMonthAttr)."月";
+			$selects[] = $this->freezeControll($fieldName.".day", array() ,$selectDayAttr)."日";
+			return implode($separator, $selects);;
 
 		}else {
 
@@ -167,6 +222,63 @@ class FreezeHelper extends FormExHelper {
 
 		}
 
+	}
+/**
+ * 和暦年
+ *
+ * @param string $fieldName Prefix name for the SELECT element
+ * @param integer $minYear First year in sequence
+ * @param integer $maxYear Last year in sequence
+ * @param string $selected Option which is selected.
+ * @param array $attributes Attribute array for the select elements.
+ * @param boolean $showEmpty Show/hide the empty select option
+ * @return string
+ */
+	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+
+		if($this->freezed) {
+			if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
+				if (is_array($value)) {
+					extract($value);
+					$selected = $year;
+				} else {
+					if (empty($value)) {
+						if (!$showEmpty && !$maxYear) {
+							$selected = 'now';
+
+						} elseif (!$showEmpty && $maxYear && !$selected) {
+							$selected = $maxYear;
+						}
+					} else {
+						$selected = $value;
+					}
+				}
+			}
+			if (strlen($selected) > 4 || $selected === 'now') {
+				$wareki = $this->TimeEx->convertToWareki(date('Y-m-d', strtotime($selected)));
+				$w = $this->TimeEx->wareki($wareki);
+				$wyear = $this->TimeEx->wyear($wareki);
+				$selected = $w.'-'.$wyear;
+				$freezeText = $this->TimeEx->nengo($w) . ' ' . $wyear;
+			} elseif ($selected === false) {
+				$selected = null;
+				$freezeText = '';
+			} elseif(strpos($selected, '-')===false) {
+				$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
+				if($wareki) {
+					$w = $this->TimeEx->wareki($wareki);
+					$wyear = $this->TimeEx->wyear($wareki);
+					$selected = $w.'-'.$wyear;
+					$freezeText = $this->TimeEx->nengo($w) . ' ' . $wyear;
+				} else {
+					$selected = null;
+					$freezeText = '';
+				}
+			}
+			return $freezeText.$this->hidden($fieldName.".wareki", array('value'=>true)).$this->hidden($fieldName.".year", array('value'=>$selected));
+		} else {
+			return parent::wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
+		}
 	}
 /**
  * チェックボックスを表示する
@@ -371,7 +483,7 @@ class FreezeHelper extends FormExHelper {
 	function freezeControll($fieldName,$options,$attributes=array()) {
 
 		$attributes = array_merge(array('class' => ''), $attributes);
-
+		unset($attributes["separator"]);
 		if(preg_match_all("/\./",$fieldName,$regs)==2) {
 			list($model,$field,$detail) = explode('.',$fieldName);
 		}else {
@@ -445,6 +557,7 @@ class FreezeHelper extends FormExHelper {
 
 			// 値なし
 		}else {
+
 			if($options) {
 				if(!$value && !empty($options[0])) {
 					$value = $options[0];
@@ -457,10 +570,12 @@ class FreezeHelper extends FormExHelper {
 				}else {
 					$value = null;
 				}
-			}else {
+			}elseif(is_array ($value) && isset($value[$detail])) {
 				$value = $value[$detail];
 			}
+
 			$out = parent::hidden($fieldName, $attributes) . $value;
+
 		}
 
 		return $out;

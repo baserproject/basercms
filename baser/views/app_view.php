@@ -51,7 +51,12 @@ class AppView extends ThemeView {
 
 		if(!$name && isset($this->params['prefix'])) {
 			$prefix = $this->params['prefix'];
-			$name = str_replace($prefix.'_','',$this->action);
+			if(preg_match('/^'.$prefix.'_/', $this->action)) {
+				$name = str_replace($prefix.'_','',$this->action);
+			} elseif(preg_match('/^admin_/', $this->action)) {
+				// プレフィックスをadminとしてすり替え
+				$name = str_replace('admin_','',$this->action);
+			}
 		}
 		if($this->name == 'CakeError' && $this->viewPath == 'errors') {
 			// CakeErrorの場合はサブフォルダを除外

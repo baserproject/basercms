@@ -144,6 +144,12 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $formEx->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
+		<td class="col-input"><?php echo $formEx->text('SiteConfig.address', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAddress','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.address') ?>
+			<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所を入力して下さい。</div>
+			&nbsp; </td>
+	</tr>
+	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.googlemaps_key', 'GoogleMapsキー') ?></th>
 		<td class="col-input"><?php echo $formEx->text('SiteConfig.googlemaps_key', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpGooglemapsKey','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.googlemaps_key') ?>
 			<div id="helptextGooglemapsKey" class="helptext"> GoogleMaps利用時のAPIキーを指定します。<br />
@@ -220,7 +226,7 @@ $(function(){
 				</p><br />
 				<p>スマートURLの設定はサーバー環境に深く依存します。<br />
 					「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますので注意が必要です。<br />
-					スマートURLをオンに切り替えた場合、/app/ フォルダ、/app/webroot/ フォルダ内の「.htaccess」ファイルに、
+					スマートURLをオンに切り替えた場合、/ フォルダ、/app/webroot/ フォルダ内の「.htaccess」ファイルに、
 					RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
 					詳細については、各.htaccessファイルのコメントを確認してください。</p>
 			</div>

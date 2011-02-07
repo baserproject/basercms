@@ -129,7 +129,7 @@ class MailformHelper extends FreezeHelper {
 				$attributes['minYear'] = intval(date('Y'));
 				$attributes['maxYear'] = $attributes['minYear']+1;
 				$attributes['monthNames'] = false;
-				$attributes['separator'] = ' ';
+				$attributes['separator'] = '&nbsp;';
 				$out = $this->dateTime($fieldName,'YMD',null,null,$attributes);
 				break;
 
@@ -139,8 +139,8 @@ class MailformHelper extends FreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
 				$attributes['monthNames'] = false;
-				$attributes['separator'] = ' ';
-				$out = $this->dateTime($fieldName,'WYMD',null,null,$attributes);
+				$attributes['separator'] = '&nbsp;';
+				$out = $this->dateTime($fieldName,'WMD',null,null,$attributes);
 				break;
 
 			case 'textarea':
