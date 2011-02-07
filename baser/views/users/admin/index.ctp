@@ -21,10 +21,14 @@
  */
 $userGroups = $formEx->getControlSource('User.user_group_id');
 <<<<<<< HEAD
+<<<<<<< HEAD
 $userGroups = array(''=>'指定なし') + $userGroups;
 =======
 $userGroups = am(array(''=>'指定なし'), $userGroups);
 >>>>>>> ユーザー一覧の検索条件にユーザーグループ指定なしを追加
+=======
+$userGroups = array(''=>'指定なし') + $userGroups;
+>>>>>>> ユーザー一覧に表示件数指定機能を追加、検索条件のドロップダウンを見直し。
 ?>
 
 <h2>
@@ -46,6 +50,7 @@ $userGroups = am(array(''=>'指定なし'), $userGroups);
 <!-- list-num -->
 <?php $baser->element('list_num') ?>
 
+<<<<<<< HEAD
 =======
 	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('User.user_group_id',  $formEx->getControlSource('User.user_group_id'),null,array(),false) ?>
 =======
@@ -54,6 +59,8 @@ $userGroups = am(array(''=>'指定なし'), $userGroups);
 		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
 </div>
 >>>>>>> ユーザー一覧にユーザーグループの検索条件を追加
+=======
+>>>>>>> ユーザー一覧に表示件数指定機能を追加、検索条件のドロップダウンを見直し。
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
