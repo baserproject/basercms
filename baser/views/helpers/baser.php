@@ -410,9 +410,9 @@ class BaserHelper extends AppHelper {
  * セッションメッセージをフラッシュするだけのラッパー
  * @return void
  */
-	function flash() {
-		if ($this->Session->check('Message.flash')) {
-			$this->Session->flash();
+	function flash($key='flash') {
+		if ($this->Session->check('Message.'.$key)) {
+			$this->Session->flash($key);
 		}
 	}
 /**

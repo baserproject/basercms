@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id: page_category.php 309 2010-06-13 11:57:06Z ryuring $ */
+/* SVN FILE: $Id$ */
 /**
  * ページカテゴリーモデル
  *
@@ -14,9 +14,9 @@
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
- * @version			$Revision: 309 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2010-06-13 20:57:06 +0900 (日, 13 6 2010) $
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -145,7 +145,7 @@ class PageCategory extends AppModel {
 		if(ini_get('safe_mode')) {
 			return true;
 		}
-		
+
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->createPageCategoryFolder($this->data);
 		if($this->exists()) {
@@ -204,7 +204,7 @@ class PageCategory extends AppModel {
 		if(isset($data['PageCategory'])) {
 			$data = $data['PageCategory'];
 		}
-		
+
 		$path = $pagesPath = getViewPath().'pages'.DS;
 		$categoryName = $data['name'];
 		$parentId = $data['parent_id'];
@@ -218,7 +218,7 @@ class PageCategory extends AppModel {
 			}
 		}
 		return $path.$categoryName;
-		
+
 	}
 /**
  * 同一階層に同じニックネームのカテゴリがないかチェックする
@@ -394,7 +394,7 @@ class PageCategory extends AppModel {
 			$ids = am($ids,$children);
 		}
 		return $ids;
-		
+
 	}
 /**
  * モバイルカテゴリのIDを取得する
