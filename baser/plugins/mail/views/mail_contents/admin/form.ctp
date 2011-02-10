@@ -34,25 +34,25 @@ $(function(){
 	}
 	$("#EditLayout").click(function(){
 		if(confirm('メールフォーム設定を保存して、レイアウトテンプレート '+$("#MailContentLayoutTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val(true);
-			$("#MailContentEditMailForm").val(false);
-			$("#MailContentEditMail").val(false);
+			$("#MailContentEditLayout").val(1);
+			$("#MailContentEditMailForm").val('');
+			$("#MailContentEditMail").val('');
 			$("#MailContentEditForm").submit();
 		}
 	});
 	$("#EditForm").click(function(){
 		if(confirm('メールフォーム設定を保存して、メールフォームテンプレート '+$("#MailContentFormTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val(false);
-			$("#MailContentEditMailForm").val(true);
-			$("#MailContentEditMail").val(false);
+			$("#MailContentEditLayout").val('');
+			$("#MailContentEditMailForm").val(1);
+			$("#MailContentEditMail").val('');
 			$("#MailContentEditForm").submit();
 		}
 	});
 	$("#EditMail").click(function(){
 		if(confirm('メールフォーム設定を保存して、送信メールテンプレート '+$("#MailContentMailTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val(false);
-			$("#MailContentEditMailForm").val(false);
-			$("#MailContentEditMail").val(true);
+			$("#MailContentEditLayout").val('');
+			$("#MailContentEditMailForm").val('');
+			$("#MailContentEditMail").val(1);
 			$("#MailContentEditForm").submit();
 		}
 	});
