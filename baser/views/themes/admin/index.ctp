@@ -71,7 +71,15 @@
 		<td><?php echo $theme['name'] ?></td>
 		<td>
 			<?php if($theme['name']!='core' && $theme['screenshot']): ?>
-				<?php $baser->link($baser->getImg('/themed/'.$theme['name'].'/screenshot.png',array('alt'=>$theme['title'],'width'=>'80px','align'=>'left','style'=>'margin-right:10px;border:1px solid #e2e2e2')),'/themed/'.$theme['name'].'/screenshot.png',array('rel'=>'colorbox')) ?>
+			<?php /* ↓↓↓ スマートURLオフの場合、HtmlHelper::link では、正しいリンク先が取得できないので直接記述 ↓↓↓ */ ?>
+			<a href="<?php echo $html->webroot('/themed/'.$theme['name'].'/screenshot.png') ?>" rel="colorbox">
+				<?php $baser->img('/themed/'.$theme['name'].'/screenshot.png',array(
+							'alt'=>$theme['title'],
+							'width'=>'80px',
+							'align'=>'left',
+							'style'=>'margin-right:10px;border:1px solid #e2e2e2'
+				)) ?>
+			</a>
 			<?php endif ?>
 			<?php echo $theme['title'] ?>
 		</td>

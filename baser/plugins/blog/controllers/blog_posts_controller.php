@@ -124,7 +124,7 @@ class BlogPostsController extends BlogAppController {
 		$default = array('named' => array('num' => 10));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
 		$this->passedArgs[] = $blogContentId;
-		
+		unset($this->data['_Token']);
 		/* 検索条件生成 */
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
 
@@ -162,7 +162,7 @@ class BlogPostsController extends BlogAppController {
 			unset($data['BlogPost']['user_id']);
 		}
 		unset($data['BlogPost']['open']);
-		
+
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
 		// ページカテゴリ（子カテゴリも検索条件に入れる）
@@ -185,7 +185,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		return $conditions;
-		
+
 	}
 /**
  * [ADMIN] 登録処理

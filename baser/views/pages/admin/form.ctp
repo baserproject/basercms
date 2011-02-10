@@ -213,10 +213,8 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
 		<td class="col-input">
-			<?php if(isset($users[$formEx->value('Page.author_id')])) : ?>
-			<?php echo $users[$formEx->value('Page.author_id')] ?>
-			<?php endif ?>
-			<?php echo $formEx->hidden('Page.author_id') ?>
+			<?php echo $formEx->select('Page.author_id', $users) ?>
+			<?php echo $formEx->error('Page.publish_end') ?>
 		</td>
 	</tr>
 	<tr id="RowReflectMobile" style="display: none">

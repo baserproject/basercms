@@ -52,7 +52,8 @@
 			<?php if($viewDblogs): ?>
 			<ul>
 				<?php foreach ($viewDblogs as $record): ?>
-				<li><?php echo $time->format('Y.m.d',$record['Dblog']['created']) ?><br />
+				<li><?php echo $time->format('Y.m.d',$record['Dblog']['created']) ?>
+					<small><?php echo $time->format('H:i:s',$record['Dblog']['created']) ?></small><br />
 					<?php echo $record['Dblog']['name'] ?></li>
 				<?php endforeach; ?>
 			</ul>
