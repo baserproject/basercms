@@ -451,6 +451,13 @@ class BlogController extends BlogAppController {
 		$this->BlogPost->recursive = -1;
 		$data['entryDates'] = $this->BlogPost->getEntryDates($id,$year,$month);
 
+		if(!$year) {
+			$year = date('Y');
+		}
+		if(!$month) {
+			$month = date('m');
+		}
+
 		if($month==12) {
 			$data['next'] = $this->BlogPost->existsEntry($id, $year+1, 1);
 		} else {
