@@ -60,8 +60,8 @@ class User extends AppModel {
 		$this->validate['name'] = array(
 				array(	'rule' => VALID_NOT_EMPTY,
 						'message' => "アカウント名を入力して下さい"),
-				array(	'rule' => 'halfText',
-						'message' => 'アカウント名は半角のみで入力して下さい'),
+				array(	'rule' => 'alphaNumericPlus',
+						'message' => 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力して下さい'),
 				array(	'rule' => array('duplicate','name'),
 						'message' => '既に登録のあるアカウント名です'));
 
@@ -75,8 +75,8 @@ class User extends AppModel {
 							'allowEmpty' => false,
 							'message' => 'パスワードは６文字以上で入力して下さい。'),
 				'alphaNumeric' =>
-					array(	'rule' => 'alphaNumeric',
-							'message' => 'パスワードは半角英数字のみで入力して下さい'));
+					array(	'rule' => 'alphaNumericPlus',
+							'message' => 'パスワードは半角英数字とハイフン、アンダースコアのみで入力して下さい'));
 
 		$this->validate['email'] = array(
 				array(	'rule' => array('email'),
