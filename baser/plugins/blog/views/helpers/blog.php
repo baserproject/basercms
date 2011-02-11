@@ -217,8 +217,8 @@ class BlogHelper extends AppHelper {
  * @param $depth
  * @return string
  */
-	function getCategoryList($categories,$depth=3) {
-		return $this->_getCategoryList($categories,$depth);
+	function getCategoryList($categories,$depth=3, $count = false) {
+		return $this->_getCategoryList($categories,$depth, 1, $count);
 	}
 /**
  * カテゴリーリストを取得する
@@ -226,7 +226,7 @@ class BlogHelper extends AppHelper {
  * @param $depth
  * @return string
  */
-	function _getCategoryList($categories,$depth=3,$current=1) {
+	function _getCategoryList($categories, $depth=3, $current=1, $count = false) {
 		if($depth < $current) {
 			return '';
 		}
@@ -234,9 +234,12 @@ class BlogHelper extends AppHelper {
 			$out = '<ul class="depth-'.$current.'">';
 			$current++;
 			foreach($categories as $category) {
+				if($count && isset($category['BlogCategory']['count'])) {
+					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
+				}
 				$out .= '<li>'.$this->getCategory($category);
 				if(!empty($category['children'])) {
-					$out.= $this->_getCategoryList($category['children'],$depth,$current);
+					$out.= $this->_getCategoryList($category['children'],$depth,$current, $count);
 				}
 				$out.='</li>';
 			}

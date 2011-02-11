@@ -19,12 +19,20 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!isset($count)) {
+	$count = true;
+}
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/get_blog_dates/'.$id);
+if($count) {
+	$actionUrl = '/blog/get_blog_dates/'.$id.'/1';
+} else {
+	$actionUrl = '/blog/get_blog_dates/'.$id;
+}
+$data = $this->requestAction($actionUrl);
 $blogDates = $data['blogDates'];
 $blogContent = $data['blogContent'];
 ?>
@@ -36,8 +44,13 @@ $blogContent = $data['blogContent'];
 	<?php if(!empty($blogDates)): ?>
 	<ul>
 		<?php foreach($blogDates as $blogDate): ?>
+			<?php if($count): ?>
+				<?php $title = $blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')' ?>
+			<?php else: ?>
+				<?php $title = $blogDate['year'].'年'.$blogDate['month'].'月' ?>
+			<?php endif ?>
 		<li>
-			<?php $baser->link($blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')',array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?>
+			<?php $baser->link($title, array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

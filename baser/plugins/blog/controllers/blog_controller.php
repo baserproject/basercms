@@ -478,12 +478,11 @@ class BlogController extends BlogAppController {
  * @return	array
  * @access	public
  */
-	function get_categories($id){
+	function get_categories($id, $count = false){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
-		$this->BlogCategory->recursive = -1;
-		$data['categories'] = $this->BlogCategory->find('all',array('conditions'=>array('BlogCategory.blog_content_id'=>$id)));
+		$data['categories'] = $this->BlogCategory->getCategories($id, $count);
 		return $data;
 		
 	}
@@ -493,12 +492,12 @@ class BlogController extends BlogAppController {
  * @return	array
  * @access	public
  */
-	function get_blog_dates($id){
+	function get_blog_dates($id, $count = false){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
-		$data['blogDates'] = $this->BlogPost->getBlogDates($id);
+		$data['blogDates'] = $this->BlogPost->getBlogDates($id, $count);
 		return $data;
 		
 	}
@@ -508,7 +507,7 @@ class BlogController extends BlogAppController {
  * @return	array
  * @access	public
  */
-	function get_recent_entries($id){
+	function get_recent_entries($id, $count = 5){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
@@ -518,7 +517,7 @@ class BlogController extends BlogAppController {
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
 				'fields'=>array('no','name'),
 				'conditions'=>$conditions,
-				'limit'=>5,
+				'limit'=>$count,
 				'order'=>'posts_date DESC',
 				'recursive'=>-1)
 		);
