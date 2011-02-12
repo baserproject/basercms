@@ -235,6 +235,7 @@ class BlogHelper extends AppHelper {
 			$current++;
 			foreach($categories as $category) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				if($count && isset($category['BlogCategory']['count'])) {
 					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
 				}
@@ -246,6 +247,14 @@ class BlogHelper extends AppHelper {
 				if(!empty($category['children'])) {
 					$out.= $this->_getCategoryList($category['children'],$depth,$current);
 >>>>>>> Trunkでの変更をマージ 929-933
+=======
+				if($count && isset($category['BlogCategory']['count'])) {
+					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
+				}
+				$out .= '<li>'.$this->getCategory($category);
+				if(!empty($category['children'])) {
+					$out.= $this->_getCategoryList($category['children'],$depth,$current, $count);
+>>>>>>> Trunkでの変更をマージ 935-942
 				}
 				$out.='</li>';
 			}
