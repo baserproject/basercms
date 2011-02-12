@@ -31,11 +31,17 @@ $(document).ready(function(){
 			}else if($("#InstallationAdminUsername").val() == ""){
 				alert("ユーザー名を入力して下さい。");
 				return false;
+			}else if(!$("#InstallationAdminUsername").val().match(/^[a-zA-Z0-9\-_]+$/)) {
+				alert("ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。");
+				return false;
 			}else if($("#InstallationAdminPassword").val().length < 6){
 				alert("あなたのパスワードを６文字以上で入力して下さい。");
 				return false;
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
 				alert("パスワードが確認欄のパスワードと同じではありません。");
+				return false;
+			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_]+$/)) {
+				alert("パスワードには半角英数字とハイフン、アンダースコアのみ利用可能です。");
 				return false;
 			}
 		}else if(this.id == 'btnback') {
@@ -51,21 +57,24 @@ $(document).ready(function(){
 		<div>
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
-				<li> <?php echo $form->text('Installation.admin_email', array('size'=>44)); ?> </li>
+				<li><?php echo $form->text('Installation.admin_email', array('size'=>44)); ?></li>
 			</ul>
 			<h3>管理ユーザー登録</h3>
 			<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
 			<ul>
 				<li>
-					<label>管理者名</label>
-					<br />
-					<?php echo $form->text('Installation.admin_username'); ?> </li>
+					<label>管理者名</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+					<?php echo $form->text('Installation.admin_username'); ?>
+				</li>
 				<li class="clearfix">
-					<label>パスワード</label>
-					<br />
-					<div class="float-left"> <?php echo $form->password('Installation.admin_password', array ()); ?> </div>
-					<div class="float-left"> <?php echo $form->password('Installation.admin_confirmpassword', array()); ?><br />
-						<small>確認の為もう一度入力して下さい</small> </div>
+					<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+					<div class="float-left">
+						<?php echo $form->password('Installation.admin_password', array ()); ?>
+					</div>
+					<div class="float-left">
+						<?php echo $form->password('Installation.admin_confirmpassword', array()); ?><br />
+						<small>確認の為もう一度入力して下さい</small>
+					</div>
 				</li>
 			</ul>
 		</div>

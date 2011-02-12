@@ -94,6 +94,7 @@ CKEDITOR.plugins.add('draft',
 				event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 			}
 
+			CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			if(event.editor.draftMode == 'draft') {
 				event.editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_ON);
 			} else if(event.editor.draftMode == 'publish') {
@@ -125,8 +126,9 @@ CKEDITOR.plugins.draft =
 					$('#'+editor.draftPublishAreaId).val(editor.getData());
 					editor.setData($('#'+editor.draftDraftAreaId).val());
 					editor.draftMode = 'draft';
-					editor.readOnly(false);
+					editor.readOnly(false);			
 				}
+				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false
 		},
@@ -145,8 +147,8 @@ CKEDITOR.plugins.draft =
 					if (editor.draftReadOnlyPublish) {
 						editor.readOnly(true); 
 					}
-					
 				}
+				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			state: CKEDITOR.TRISTATE_ON,
 			canUndo : false
@@ -166,6 +168,7 @@ CKEDITOR.plugins.draft =
 				} else {
 					editor.setData($("#"+editor.draftPublishAreaId).val());
 				}
+				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false
 		},
@@ -184,6 +187,7 @@ CKEDITOR.plugins.draft =
 				} else {
 					editor.setData($("#"+editor.draftDraftAreaId).val());
 				}
+				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false
 		},
@@ -228,6 +232,28 @@ CKEDITOR.plugins.draft =
 					$("#"+editor.draftDraftAreaId).val(editor.getData());
 				}else if(editor.getCommand('changePublish').state == CKEDITOR.TRISTATE_ON) {
 					$("#"+editor.draftPublishAreaId).val(editor.getData());
+				}
+			},
+			canUndo : false
+		},
+	/**
+	 * 草稿モードに合わせて背景色を変更する
+	 */
+		setBackGroundColor :
+		{
+			exec : function (editor) {
+				var color;
+				if(editor.draftMode == 'draft') {
+					color = '#EEF';
+				} else {
+					color = '#FFF';
+				}
+				if(editor.mode == 'wysiwyg') {
+					setTimeout(function(){
+						$('#cke_contents_'+editor.name+' iframe').contents().find('body').css('background-color',color);
+					}, 200);
+				} else if(editor.mode == 'source') {
+					$('#cke_contents_'+editor.name+' textarea').css('background-color', color);
 				}
 			},
 			canUndo : false

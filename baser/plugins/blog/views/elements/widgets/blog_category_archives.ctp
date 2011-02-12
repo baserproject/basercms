@@ -19,12 +19,20 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!isset($count)) {
+	$count = true;
+}
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/get_categories/'.$id);
+if($count) {
+	$actionUrl = '/blog/get_categories/'.$id.'/1';
+} else {
+	$actionUrl = '/blog/get_categories/'.$id;
+}
+$data = $this->requestAction($actionUrl);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
 App::import('Helper','Blog.Blog');
@@ -35,5 +43,5 @@ $blog = new BlogHelper();
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
-<?php echo $blog->getCategoryList($categories) ?>
+<?php echo $blog->getCategoryList($categories, 1, $count) ?>
 </div>

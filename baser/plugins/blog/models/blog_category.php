@@ -165,5 +165,40 @@ class BlogCategory extends BlogAppModel {
 		}
 		return $ret;
 	}
+/**
+ * カテゴリリストを取得する
+ *
+ * @param	int		$id
+ * @param	boolean	$count
+ * @return	array
+ * @access	public
+ */
+	function getCategories($id, $count = false) {
+		
+		if($count) {
+			$recursive = 1;
+		} else {
+			$recursive = -1;
+		}
+		$datas = $this->find('all',array(
+			'conditions'=>array('BlogCategory.blog_content_id'=>$id),
+			'fields' => array('id', 'name', 'title'),
+			'recursive' => $recursive));
+		if($datas) {
+			foreach($datas as $key => $data) {
+				if(isset($data['BlogPost'])) {
+					$datas[$key]['BlogCategory']['count'] = count($data['BlogPost']);
+					unset($datas[$key]['BlogPost']);
+				} else {
+					$datas[$key]['BlogCategory']['count'] = 0;
+				}
+			}
+			return $datas;
+		} else {
+			return array();
+		}
+		
+	}
+	
 }
 ?>

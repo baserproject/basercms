@@ -69,26 +69,6 @@ class SiteConfigsController extends AppController {
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
 /**
- * Folder Object
- *
- * @var Folder
- */
-	var $Folder;
-/**
- * beforeFilter
- * @return	void
- * @access	public
- */
-	function beforeFilter() {
-
-		parent::beforeFilter();
-
-		// init Folder
-		$this->Folder =& new Folder();
-		$this->Folder->mode = 0777;
-
-	}
-/**
  * [ADMIN] サイト基本設定
  *
  * @return	void
@@ -97,20 +77,12 @@ class SiteConfigsController extends AppController {
 	function admin_form() {
 
 		if(empty($this->data)) {
-			$this->data = $this->SiteConfig->read(null, 1);
-			$this->data['SiteConfig'] = $this->siteConfigs;
-			$this->data['SiteConfig']['mode'] = $this->readDebug();
-			$this->data['SiteConfig']['smart_url'] = $this->readSmartUrl();
-			$this->data['SiteConfig']['site_url'] = Configure::read('Baser.siteUrl');
-			$this->data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
-			$this->data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
-		}else {
-			// テーブル構造が特殊なので強引にバリデーションを行う
-			$this->SiteConfig->data = $this->data;
 
-			if($this->data['SiteConfig']['admin_ssl_on'] && !$this->data['SiteConfig']['ssl_url']) {
-				$this->SiteConfig->invalidate('ssl_url', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。');
-			}
+			$this->data = $this->_getSiteConfigData();
+			
+		}else {
+			
+			$this->SiteConfig->set($this->data);
 
 			if(!$this->SiteConfig->validates()) {
 
@@ -118,86 +90,86 @@ class SiteConfigsController extends AppController {
 
 			}else {
 
-				// KeyValueへ変換処理
-				unset($this->data['SiteConfig']['id']);
+				$mode = 0;
+				$smartUrl = false;
+				$siteUrl = $sslUrl = $adminSslOn = '';
 				if(isset($this->data['SiteConfig']['mode'])) {
 					$mode = $this->data['SiteConfig']['mode'];
-					unset($this->data['SiteConfig']['mode']);
-				} else {
-					$mode = 0;
 				}
-
 				if(isset($this->data['SiteConfig']['smart_url'])) {
 					$smartUrl = $this->data['SiteConfig']['smart_url'];
-					unset($this->data['SiteConfig']['smart_url']);
-				} else {
-					$smartUrl = false;
 				}
-
-				$siteUrl = $this->data['SiteConfig']['site_url'];
-				if(!preg_match('/\/$/', $siteUrl)) {
-					$siteUrl .= '/';
+				if(isset($this->data['SiteConfig']['ssl_url'])) {
+					$siteUrl = $this->data['SiteConfig']['site_url'];
+					if(!preg_match('/\/$/', $siteUrl)) {
+						$siteUrl .= '/';
+					}
 				}
-				unset($this->data['SiteConfig']['site_url']);
-
 				if(isset($this->data['SiteConfig']['ssl_url'])) {
 					$sslUrl = $this->data['SiteConfig']['ssl_url'];
 					if($sslUrl && !preg_match('/\/$/', $sslUrl)) {
 						$sslUrl .= '/';
 					}
-					unset($this->data['SiteConfig']['ssl_url']);
-				} else {
-					$sslUrl = '';
 				}
-
 				if(isset($this->data['SiteConfig']['admin_ssl_on'])) {
 					$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
-					unset($this->data['SiteConfig']['admin_ssl_on']);
-				} else {
-					$adminSslOn = '';
 				}
+				unset($this->data['SiteConfig']['id']);
+				unset($this->data['SiteConfig']['mode']);
+				unset($this->data['SiteConfig']['smart_url']);
+				unset($this->data['SiteConfig']['site_url']);
+				unset($this->data['SiteConfig']['ssl_url']);
+				unset($this->data['SiteConfig']['admin_ssl_on']);
 
-				$this->SiteConfig->saveKeyValue($this->data);
-				$this->writeDebug($mode);
-				$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
-				$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
-				$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
-				if($this->readSmartUrl() != $smartUrl) {
-					$this->writeSmartUrl($smartUrl);
-				}
-				if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
-					clearViewCache();
-				}
-				if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
-					if(!$this->Page->createAllPageTemplate()){
-						$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+				// DBに保存
+				if($this->SiteConfig->saveKeyValue($this->data)) {
+
+					$this->Session->setFlash('システム設定を保存しました。');
+					
+					// 環境設定を保存
+					$this->writeDebug($mode);
+					$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
+					$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
+					$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
+					if($this->readSmartUrl() != $smartUrl) {
+						$this->writeSmartUrl($smartUrl);
+					}
+
+					// キャッシュをクリア
+					if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
+						clearViewCache();
+					}
+
+					// ページテンプレートの生成
+					if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
+						if(!$this->Page->createAllPageTemplate()){
+							$this->Session->setFlash(
+									'テーマ変更中にページテンプレートの生成に失敗しました。<br />'.
+									'表示できないページはページ管理より更新処理を行ってください。'
+							);
+						}
+					}
+
+					// リダイレクト
+					if($this->readSmartUrl() != $smartUrl) {
+						if($smartUrl){
+							$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
+						}else{
+							$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
+						}
+						header('Location: '.FULL_BASE_URL.$redirectUrl);
+						exit();
+					}else{
 						$this->redirect(array('action'=>'form'));
 					}
-				}
-				$this->Session->setFlash('システム設定を保存しました。');
 
-				if($this->readSmartUrl() != $smartUrl) {
-					if($smartUrl){
-						$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
-					}else{
-						$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
-					}
-					if($_SERVER['SERVER_PORT']=='443') {
-						$protocol = 'https';
-					} else {
-						$protocol = 'http';
-					}
-					header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].$redirectUrl);
-					exit();
-				}else{
-					$this->redirect(array('action'=>'form'));
 				}
-
+				
 			}
+			
 		}
 
 		/* スマートURL関連 */
-		// mod_rewrite モジュールインストール
 		$apachegetmodules = function_exists('apache_get_modules');
 		if($apachegetmodules) {
 			$rewriteInstalled = in_array('mod_rewrite',apache_get_modules());
@@ -217,14 +189,6 @@ class SiteConfigsController extends AppController {
 			$smartUrlChangeable = true;
 		} else {
 			$smartUrlChangeable = false;
-		}
-		// バックアップ機能を実装しているデータベースの場合のみバックアップへのリンクを表示
-		$enableBackupDb = array('sqlite','sqlite3','mysql','csv','postgres');
-		$dbConfigs = new DATABASE_CONFIG();
-		$dbConfig = $dbConfigs->{'baser'};
-		$driver = str_replace('_ex','',$dbConfig['driver']);
-		if(in_array($driver,$enableBackupDb)) {
-			$this->set('backupEnabled',true);
 		}
 
 		$this->set('themes',$this->SiteConfig->getThemes());
@@ -273,6 +237,23 @@ class SiteConfigsController extends AppController {
 		$this->subMenuElements = array('site_configs');
 
 	}
+/**
+ * サイト基本設定データを取得する
+ *
+ * @return	void
+ * @access	protected
+ */
+	function _getSiteConfigData() {
 
+		$data['SiteConfig'] = $this->siteConfigs;
+		$data['SiteConfig']['mode'] = $this->readDebug();
+		$data['SiteConfig']['smart_url'] = $this->readSmartUrl();
+		$data['SiteConfig']['site_url'] = Configure::read('Baser.siteUrl');
+		$data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
+		$data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
+		return $data;
+
+	}
+	
 }
 ?>

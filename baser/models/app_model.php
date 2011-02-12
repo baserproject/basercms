@@ -1111,5 +1111,32 @@ class AppModel extends Model {
 		}
 		return $data;
 	}
+/**
+ * ２つのフィールド値を確認する
+ *
+ * @param	array	$check
+ * @param	mixed	$fields
+ * @return	boolean
+ * @access	public
+ */
+	function confirm($check, $fields) {
+
+		if(is_array($fields) && count($fields) > 1) {
+			$value1 = $this->data[$this->alias][$fields[0]];
+			$value2 = $this->data[$this->alias][$fields[1]];
+		} elseif($fields) {
+			$value1 = $check[key($check)];
+			$value2 = $this->data[$this->alias][$fields];
+		} else {
+			return false;
+		}
+
+		if($value1 != $value2) {
+			return false;
+		}
+		return true;
+
+	}
+	
 }
 ?>

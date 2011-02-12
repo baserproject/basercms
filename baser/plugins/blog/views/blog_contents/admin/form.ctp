@@ -24,15 +24,15 @@
 $(function(){
 	$("#EditLayoutTemplate").click(function(){
 		if(confirm('ブログ設定を保存して、レイアウトテンプレート '+$("#BlogContentLayout").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#BlogContentEditLayoutTemplate").val(true);
-			$("#BlogContentEditBlogTemplate").val(false);
+			$("#BlogContentEditLayoutTemplate").val(1);
+			$("#BlogContentEditBlogTemplate").val('');
 			$("#BlogContentEditForm").submit();
 		}
 	});
 	$("#EditBlogTemplate").click(function(){
 		if(confirm('ブログ設定を保存して、コンテンツテンプレート '+$("#BlogContentTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#BlogContentEditLayoutTemplate").val(false);
-			$("#BlogContentEditBlogTemplate").val(true);
+			$("#BlogContentEditLayoutTemplate").val('');
+			$("#BlogContentEditBlogTemplate").val(1);
 			$("#BlogContentEditForm").submit();
 		}
 	});

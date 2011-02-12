@@ -98,7 +98,7 @@ class BlogPost extends BlogAppModel {
  * @return array    月別リストデータ
  * @access public
  */
-	function getBlogDates($blogContentId) {
+	function getBlogDates($blogContentId, $count = false) {
 
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 		$conditions = am($conditions, $this->getConditionAllowPublish());
@@ -117,13 +117,17 @@ class BlogPost extends BlogAppModel {
 				if($date['year'] == date('Y',strtotime($postsDate)) &&
 						$date['month'] == date('m',strtotime($postsDate))) {
 					$exists = true;
-					$dates[$key]['count']++;
+					if($count) {
+						$dates[$key]['count']++;
+					}
 				}
 			}
 			if(!$exists) {
 				$_date['year'] = date('Y',strtotime($postsDate));
 				$_date['month'] = date('m',strtotime($postsDate));
-				$_date['count'] = 1;
+				if($count) {
+					$_date['count'] = 1;
+				}
 				$dates[] = $_date;
 			}
 		}

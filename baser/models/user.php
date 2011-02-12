@@ -50,97 +50,71 @@ class User extends AppModel {
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
- * beforeValidate
+ * validate
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "アカウント名を入力して下さい"),
-				array(	'rule' => 'halfText',
-						'message' => 'アカウント名は半角のみで入力して下さい'),
-				array(	'rule' => array('duplicate','name'),
-						'message' => '既に登録のあるアカウント名です'));
-
-		$this->validate['real_name_1'] = array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "名前[姓]を入力して下さい"));
-
-		$this->validate['password'] = array(
-				'minLength' =>
-					array(	'rule' => array('minLength',6),
-							'allowEmpty' => false,
-							'message' => 'パスワードは６文字以上で入力して下さい。'),
-				'alphaNumeric' =>
-					array(	'rule' => 'alphaNumeric',
-							'message' => 'パスワードは半角英数字のみで入力して下さい'));
-
-		$this->validate['email'] = array(
-				array(	'rule' => array('email'),
-						'message' => "Eメールの形式が不正です",
-						'allowEmpty' => true));
-
-		$this->validate['user_group_id'] =	array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "グループを選択して下さい"));
-
-		return true;
-
-	}
+	var $validate = array(
+		'name'=>array(
+			'notEmpty' => array(
+				'rule'		=> VALID_NOT_EMPTY,
+				'message'	=> "アカウント名を入力して下さい"
+			),
+			'alphaNumericPlus' => array(
+				'rule'		=>	'alphaNumericPlus',
+				'message'	=> 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力して下さい'
+			),
+			'duplicate' => array(
+				'rule'		=>	array('duplicate','name'),
+				'message'	=> '既に登録のあるアカウント名です'
+			)
+		),
+		'real_name_1' => array(
+			'rule'		=> VALID_NOT_EMPTY,
+			'message'	=> "名前[姓]を入力して下さい"
+		),
+		'password' => array(
+			'minLength' => array(
+				'rule'		=> array('minLength',6),
+				'allowEmpty'=> false,
+				'message'	=> 'パスワードは６文字以上で入力して下さい。'
+			),
+			'alphaNumeric' => array(
+				'rule'		=> 'alphaNumericPlus',
+				'message'	=> 'パスワードは半角英数字とハイフン、アンダースコアのみで入力して下さい'
+			),
+			'confirm' => array(
+				'rule'		=> array('confirm', array('password_1', 'password_2')),
+				'message'	=> 'パスワードが同じものではありません'
+			)
+		),
+		'email' => array(
+			'rule'		=> array('email'),
+			'message'	=> "Eメールの形式が不正です",
+			'allowEmpty'=> true
+		),
+		'user_group_id'=>array(
+			'rule'		=> VALID_NOT_EMPTY,
+			'message'	=> "グループを選択して下さい"
+		)
+	);
 /**
- * バリデート処理
+ * パリでーション
  *
- * @param	array	$options
- * @return	boolean True if there are no errors
- * @access 	public
- * TODO beforeValidateに移行する事
+ * @param string $options An optional array of custom options to be made available in the beforeValidate callback
+ * @return boolean True if there are no errors
+ * @access public
  */
-	function invalidFields($options = array()) {
-
-		$data = $this->data;
-
-		/*** パスワードチェック ***/
-
-		if(isset($data['User']['password_1']) && isset($data['User']['password_2'])) {
-
-			// 入力ミスチェック
-			if($data['User']['password_1'] != $data['User']['password_2']) {
-				$this->invalidate('password','パスワードが同じものではありません');
-			}
-
-		}
-
-		$ret = parent::invalidFields($options);
-
-		// テキストボックスにエラークラスを表示させる
-		// TODO invalidFields は、エラーのあるフィールドリストを返す関数の為、処理見直しが必要かも
+	function validates($options = array()) {
+		
+		$result = parent::validates($options);
 		if(isset($this->validationErrors['password'])) {
 			$this->invalidate('password_1');
 			$this->invalidate('password_2');
 		}
-
-		return $ret;
-
-	}
-/**
- * アカウント重複チェック
- *
- * @param	string	user_name
- * @return	boolean
- * @access	public
- */
-	function checkRepeatedId($id) {
-
-		$ret = $this->find(array('name'=>$id));
-		if($ret) {
-			return true;
-		}else {
-			return false;
-		}
-
+		return $result;
+		
 	}
 /**
  * コントロールソースを取得する

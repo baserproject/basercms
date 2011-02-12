@@ -43,32 +43,47 @@ class SiteConfig extends AppModel {
  */
 	var $useDbConfig = 'baser';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['formal_name'] = array(array('rule' => array('minLength',1),
-						'message' => "Webサイト名を入力して下さい",
-						'required' => true));
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => "Webサイトタイトルを入力して下さい",
-						'required' => true));
-		$this->validate['email'] = array(array('rule' => array('email'),
-						'message' => "管理者メールアドレスの形式が不正です"),
-				array('rule' => array('minLength',1),
-						'message' => "管理者メールアドレスを入力してください。"));
-		$this->validate['mail_encode'] = array(array('rule' => array('minLength',1),
-						'message' => "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
-						'required' => true));
-		$this->validate['site_url'] = array(array('rule' => array('minLength', 1),
-						'message' => "WebサイトURLを入力してください",
-						'required' => true));
-		return true;
-
-	}
+	var $validate = array(
+		'formal_name' => array(
+			'rule'		=> array('minLength',1),
+			'message'	=> "Webサイト名を入力して下さい。",
+			'required'	=> true
+		),
+		'name' => array(
+			'rule'		=> array('minLength',1),
+			'message'	=> "Webサイトタイトルを入力して下さい。",
+			'required'	=> true
+		),
+		'email' => array(
+			array(
+				'rule'		=> array('email'),
+				'message'	=> "管理者メールアドレスの形式が不正です。"
+			),
+			array(
+				'rule'		=> array('minLength',1),
+				'message'	=> "管理者メールアドレスを入力してください。"
+			)
+		),
+		'mail_encode' => array(
+			'rule'		=> array('minLength',1),
+			'message'	=> "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
+			'required'	=> true
+		),
+		'site_url' => array(
+			'rule'		=> array('minLength', 1),
+			'message'	=> "WebサイトURLを入力してください。",
+			'required'	=> true
+		),
+		'admin_ssl_on' => array(
+			'rule'		=> array('sslUrlExists'),
+			'message'	=> "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
+		)
+	);
 /**
  * テーマの一覧を取得する
  *
@@ -103,6 +118,20 @@ class SiteConfig extends AppModel {
 			return false;
 		}
 	}
-
+/**
+ * SSL用のURLが設定されているかチェックする
+ *
+ * @param mixed	$check
+ * @return boolean
+ * @access public
+ */
+	function sslUrlExists($check) {
+		$sslOn = $check[key($check)];
+		if($sslOn && empty($this->data['SiteConfig']['ssl_url'])) {
+			return false;
+		}
+		return true;
+	}
+	
 }
 ?>
