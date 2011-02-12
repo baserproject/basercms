@@ -83,12 +83,12 @@ class BlogController extends BlogAppController {
  * @access 	public
  */
 	function beforeFilter() {
-		
+
 		parent::beforeFilter();
 
 		/* 認証設定 */
 		$this->Auth->allow('index','mobile_index','archives','mobile_archives','get_calendar','get_categories','get_blog_dates','get_recent_entries');
-		
+
 		$this->BlogContent->recursive = -1;
 		if($this->contentId) {
 			$this->blogContent = $this->BlogContent->read(null,$this->contentId);
@@ -111,7 +111,7 @@ class BlogController extends BlogAppController {
 		// コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
 		// 表示用のコントローラーなのでポストデータのチェックは必要ない
 		$this->Security->validatePost = false;
-		
+
 	}
 /**
  * beforeRender
@@ -122,7 +122,7 @@ class BlogController extends BlogAppController {
 	function beforeRender() {
 
 		parent::beforeRender();
-		
+
 		$this->set('blogContent',$this->blogContent);
 
 		if($this->blogContent['BlogContent']['widget_area']){
@@ -243,7 +243,7 @@ class BlogController extends BlogAppController {
 		/*** カテゴリ一覧 ***/
 		if($type=='category') {
 			$conditions = array();
-			$conditions["BlogPost.blog_category_id"] = $categoryId;		
+			$conditions["BlogPost.blog_category_id"] = $categoryId;
 			$conditions['BlogPost.blog_content_id'] = $contentId;
 			if(!$this->preview) {
 				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
@@ -415,7 +415,7 @@ class BlogController extends BlogAppController {
 		Cache::write('blog_posts_preview_'.$id, $this->data);
 		echo true;
 		exit();
-		
+
 	}
 /**
  * プレビューを表示する
@@ -468,9 +468,9 @@ class BlogController extends BlogAppController {
 		} else {
 			$data['prev'] = $this->BlogPost->existsEntry($id, $year, $month-1);
 		}
-		
+
 		return $data;
-		
+
 	}
 /**
  * カテゴリー一覧用のデータを取得する
@@ -484,7 +484,7 @@ class BlogController extends BlogAppController {
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$data['categories'] = $this->BlogCategory->getCategories($id, $count);
 		return $data;
-		
+
 	}
 /**
  * 月別アーカイブ一覧用のデータを取得する
@@ -499,7 +499,7 @@ class BlogController extends BlogAppController {
 		$this->BlogPost->recursive = -1;
 		$data['blogDates'] = $this->BlogPost->getBlogDates($id, $count);
 		return $data;
-		
+
 	}
 /**
  * 最近の投稿用のデータを取得する
@@ -522,7 +522,7 @@ class BlogController extends BlogAppController {
 				'recursive'=>-1)
 		);
 		return $data;
-		
+
 	}
 }
 ?>

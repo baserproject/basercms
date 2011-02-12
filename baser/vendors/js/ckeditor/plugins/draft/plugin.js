@@ -6,7 +6,7 @@
  * ※ jQueryが必須
  * ※ 現時点では、保存前にフィールドへの同期が必要
  * （例）editor.execCommand('synchronize');
- * 
+ *
  * TODO キー押下時のイベントを拾って反映させるか検討が必要
  *
  * PHP versions 4 and 5
@@ -67,7 +67,7 @@ CKEDITOR.plugins.add('draft',
 		editor.on('instanceReady', function(event) {
 			if(editor.draftReadOnlyPublish) {
 				if(event.editor.draftMode == 'publish') {
-					editor.readOnly(true); 
+					editor.readOnly(true);
 				}
 				event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 			}
@@ -126,7 +126,7 @@ CKEDITOR.plugins.draft =
 					$('#'+editor.draftPublishAreaId).val(editor.getData());
 					editor.setData($('#'+editor.draftDraftAreaId).val());
 					editor.draftMode = 'draft';
-					editor.readOnly(false);			
+					editor.readOnly(false);
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
@@ -145,7 +145,7 @@ CKEDITOR.plugins.draft =
 					editor.setData($('#'+editor.draftPublishAreaId).val());
 					editor.draftMode = 'publish';
 					if (editor.draftReadOnlyPublish) {
-						editor.readOnly(true); 
+						editor.readOnly(true);
 					}
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);

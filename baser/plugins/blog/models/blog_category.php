@@ -174,7 +174,7 @@ class BlogCategory extends BlogAppModel {
  * @access	public
  */
 	function getCategories($id, $count = false) {
-		
+
 		if($count) {
 			$recursive = 1;
 		} else {
@@ -197,8 +197,8 @@ class BlogCategory extends BlogAppModel {
 		} else {
 			return array();
 		}
-		
+
 	}
-	
+
 }
 ?>

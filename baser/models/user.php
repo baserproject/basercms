@@ -107,14 +107,14 @@ class User extends AppModel {
  * @access public
  */
 	function validates($options = array()) {
-		
+
 		$result = parent::validates($options);
 		if(isset($this->validationErrors['password'])) {
 			$this->invalidate('password_1');
 			$this->invalidate('password_2');
 		}
 		return $result;
-		
+
 	}
 /**
  * コントロールソースを取得する
