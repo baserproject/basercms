@@ -42,11 +42,7 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.name', 'アカウント名') ?></th>
 		<td class="col-input"><?php echo $form->text('User.name', array('size'=>20,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-<<<<<<< HEAD
 			<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。 </div>
-=======
-			<div id="helptextName" class="helptext"> 半角のみで入力してください。 </div>
->>>>>>> スマートURLオフの場合、テーマ管理で、スクリーンショット画像のポップアップ表示が正常に動作しない不具合を改善
 			<?php echo $form->error('User.name') ?>&nbsp; </td>
 	</tr>
 	<tr>
@@ -90,11 +86,7 @@
 						パスワードの変更をする場合は、
 						<?php endif; ?>
 						確認の為２回入力して下さい。</li>
-<<<<<<< HEAD
 					<li>半角英数字とハイフン、アンダースコアのみで入力して下さい</li>
-=======
-					<li>半角英数字で入力して下さい</li>
->>>>>>> スマートURLオフの場合、テーマ管理で、スクリーンショット画像のポップアップ表示が正常に動作しない不具合を改善
 					<li>最低６文字以上で入力して下さい</li>
 				</ul>
 			</div>
