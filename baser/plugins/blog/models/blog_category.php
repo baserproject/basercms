@@ -174,7 +174,11 @@ class BlogCategory extends BlogAppModel {
  * @access	public
  */
 	function getCategories($id, $count = false) {
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> Merge branch '1.6'
 		if($count) {
 			$recursive = 1;
 		} else {
@@ -197,8 +201,14 @@ class BlogCategory extends BlogAppModel {
 		} else {
 			return array();
 		}
+<<<<<<< HEAD
 
 	}
 
+=======
+		
+	}
+	
+>>>>>>> Merge branch '1.6'
 }
 ?>
