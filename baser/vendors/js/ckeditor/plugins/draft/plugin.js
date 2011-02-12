@@ -126,7 +126,7 @@ CKEDITOR.plugins.draft =
 					$('#'+editor.draftPublishAreaId).val(editor.getData());
 					editor.setData($('#'+editor.draftDraftAreaId).val());
 					editor.draftMode = 'draft';
-					editor.readOnly(false);
+					editor.readOnly(false);			
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
