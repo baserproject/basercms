@@ -334,7 +334,7 @@ class BlogHelper extends AppHelper {
 		}
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
 														BASER_VIEWS.'layouts'.DS));
-
+		
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
 			$folder = new Folder($templatesPath);
@@ -370,7 +370,7 @@ class BlogHelper extends AppHelper {
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'blog'.DS;
 		}
 		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;
-
+		
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){
 			$folder = new Folder($templatePath);

@@ -79,9 +79,9 @@ class SiteConfigsController extends AppController {
 		if(empty($this->data)) {
 
 			$this->data = $this->_getSiteConfigData();
-
+			
 		}else {
-
+			
 			$this->SiteConfig->set($this->data);
 
 			if(!$this->SiteConfig->validates()) {
@@ -125,7 +125,7 @@ class SiteConfigsController extends AppController {
 				if($this->SiteConfig->saveKeyValue($this->data)) {
 
 					$this->Session->setFlash('システム設定を保存しました。');
-
+					
 					// 環境設定を保存
 					$this->writeDebug($mode);
 					$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
@@ -164,9 +164,9 @@ class SiteConfigsController extends AppController {
 					}
 
 				}
-
+				
 			}
-
+			
 		}
 
 		/* スマートURL関連 */
@@ -254,6 +254,6 @@ class SiteConfigsController extends AppController {
 		return $data;
 
 	}
-
+	
 }
 ?>

@@ -166,7 +166,7 @@ class BlogPost extends BlogAppModel {
  * 年月を指定した検索条件を生成
  *
  * データベースごとに構文が違う
- *
+ * 
  * @param	int	$contentId
  * @param	int	$year
  * @param	int	$month
@@ -223,7 +223,7 @@ class BlogPost extends BlogAppModel {
 
 		$conditions = am($conditions,  array('BlogPost.blog_content_id'=>$contentId), $this->getConditionAllowPublish());
 		return $conditions;
-
+		
 	}
 /**
  * コントロールソースを取得する
@@ -280,11 +280,11 @@ class BlogPost extends BlogAppModel {
 	}
 /**
  * 公開済の conditions を取得
- *
+ * 
  * @return	array
  */
 	function getConditionAllowPublish() {
-
+		
 		$conditions[$this->alias.'.status'] = true;
 		$conditions[] = array('or'=> array(array($this->alias.'.publish_begin <=' => date('Y-m-d H:i:s')),
 										array($this->alias.'.publish_begin' => NULL),
@@ -293,8 +293,8 @@ class BlogPost extends BlogAppModel {
 										array($this->alias.'.publish_end' => NULL),
 										array($this->alias.'.publish_end' => '0000-00-00 00:00:00')));
 		return $conditions;
-
+		
 	}
-
+	
 }
 ?>

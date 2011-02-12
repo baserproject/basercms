@@ -132,6 +132,6 @@ class SiteConfig extends AppModel {
 		}
 		return true;
 	}
-
+	
 }
 ?>

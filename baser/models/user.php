@@ -55,10 +55,6 @@ class User extends AppModel {
  * @var		array
  * @access	public
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ユーザーモデルのバリデーションを整理
 	var $validate = array(
 		'name'=>array(
 			'notEmpty' => array(
@@ -111,87 +107,14 @@ class User extends AppModel {
  * @access public
  */
 	function validates($options = array()) {
-<<<<<<< HEAD
-
-		$result = parent::validates($options);
-=======
-	function beforeValidate() {
-
-		$this->validate['name'] = array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "アカウント名を入力して下さい"),
-				array(	'rule' => 'alphaNumericPlus',
-						'message' => 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力して下さい'),
-				array(	'rule' => array('duplicate','name'),
-						'message' => '既に登録のあるアカウント名です'));
-
-		$this->validate['real_name_1'] = array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "名前[姓]を入力して下さい"));
-
-		$this->validate['password'] = array(
-				'minLength' =>
-					array(	'rule' => array('minLength',6),
-							'allowEmpty' => false,
-							'message' => 'パスワードは６文字以上で入力して下さい。'),
-				'alphaNumeric' =>
-					array(	'rule' => 'alphaNumericPlus',
-							'message' => 'パスワードは半角英数字とハイフン、アンダースコアのみで入力して下さい'));
-
-		$this->validate['email'] = array(
-				array(	'rule' => array('email'),
-						'message' => "Eメールの形式が不正です",
-						'allowEmpty' => true));
-
-		$this->validate['user_group_id'] =	array(
-				array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "グループを選択して下さい"));
-
-		return true;
-
-	}
-/**
- * バリデート処理
- *
- * @param	array	$options
- * @return	boolean True if there are no errors
- * @access 	public
- * TODO beforeValidateに移行する事
- */
-	function invalidFields($options = array()) {
-
-		$data = $this->data;
-
-		/*** パスワードチェック ***/
-
-		if(isset($data['User']['password_1']) && isset($data['User']['password_2'])) {
-
-			// 入力ミスチェック
-			if($data['User']['password_1'] != $data['User']['password_2']) {
-				$this->invalidate('password','パスワードが同じものではありません');
-			}
-
-		}
-
-		$ret = parent::invalidFields($options);
-
-		// テキストボックスにエラークラスを表示させる
-		// TODO invalidFields は、エラーのあるフィールドリストを返す関数の為、処理見直しが必要かも
->>>>>>> パスワードとして利用可能な文字列が統一できてない問題を解消 fixes #1195
-=======
 		
 		$result = parent::validates($options);
->>>>>>> ユーザーモデルのバリデーションを整理
 		if(isset($this->validationErrors['password'])) {
 			$this->invalidate('password_1');
 			$this->invalidate('password_2');
 		}
 		return $result;
-<<<<<<< HEAD
-
-=======
 		
->>>>>>> ユーザーモデルのバリデーションを整理
 	}
 /**
  * コントロールソースを取得する

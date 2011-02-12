@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * [管理画面] ページ フォーム
- *
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
