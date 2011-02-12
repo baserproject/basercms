@@ -1137,6 +1137,10 @@ class AppModel extends Model {
 		return true;
 
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> ユーザーモデルのバリデーションを整理
 }
 ?>

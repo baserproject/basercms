@@ -56,6 +56,9 @@ class User extends AppModel {
  * @access	public
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ユーザーモデルのバリデーションを整理
 	var $validate = array(
 		'name'=>array(
 			'notEmpty' => array(
@@ -108,6 +111,7 @@ class User extends AppModel {
  * @access public
  */
 	function validates($options = array()) {
+<<<<<<< HEAD
 
 		$result = parent::validates($options);
 =======
@@ -174,12 +178,20 @@ class User extends AppModel {
 		// テキストボックスにエラークラスを表示させる
 		// TODO invalidFields は、エラーのあるフィールドリストを返す関数の為、処理見直しが必要かも
 >>>>>>> パスワードとして利用可能な文字列が統一できてない問題を解消 fixes #1195
+=======
+		
+		$result = parent::validates($options);
+>>>>>>> ユーザーモデルのバリデーションを整理
 		if(isset($this->validationErrors['password'])) {
 			$this->invalidate('password_1');
 			$this->invalidate('password_2');
 		}
 		return $result;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> ユーザーモデルのバリデーションを整理
 	}
 /**
  * コントロールソースを取得する
