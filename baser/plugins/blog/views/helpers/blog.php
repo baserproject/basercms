@@ -234,12 +234,18 @@ class BlogHelper extends AppHelper {
 			$out = '<ul class="depth-'.$current.'">';
 			$current++;
 			foreach($categories as $category) {
+<<<<<<< HEAD
 				if($count && isset($category['BlogCategory']['count'])) {
 					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
 				}
 				$out .= '<li>'.$this->getCategory($category);
 				if(!empty($category['children'])) {
 					$out.= $this->_getCategoryList($category['children'],$depth,$current, $count);
+=======
+				$out .= '<li>'.$this->getCategory($category);
+				if(!empty($category['children'])) {
+					$out.= $this->_getCategoryList($category['children'],$depth,$current);
+>>>>>>> Trunkでの変更をマージ 929-933
 				}
 				$out.='</li>';
 			}
