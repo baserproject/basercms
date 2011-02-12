@@ -50,15 +50,9 @@ $(function(){
 	});
 	$("#EditMail").click(function(){
 		if(confirm('メールフォーム設定を保存して、送信メールテンプレート '+$("#MailContentMailTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-<<<<<<< HEAD
 			$("#MailContentEditLayout").val('');
 			$("#MailContentEditMailForm").val('');
 			$("#MailContentEditMail").val(1);
-=======
-			$("#MailContentEditLayout").val(false);
-			$("#MailContentEditMailForm").val(false);
-			$("#MailContentEditMail").val(true);
->>>>>>> Trunkでの変更をマージ 929-933
 			$("#MailContentEditForm").submit();
 		}
 	});
