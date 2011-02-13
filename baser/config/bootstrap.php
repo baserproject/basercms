@@ -55,9 +55,16 @@
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $url));
 		if(in_array($ext, $assets)){
-			Configure::write('Baser.Asset',true);
+			Configure::write('Baser.Asset', true);
 			return;
 		}
+	}
+/**
+ * 設定ファイル読み込み
+ */
+	if(Configure::load('baser')===false) {
+		include BASER_CONFIGS.'baser.php';
+		Configure::write($config);
 	}
 /**
  * tmpフォルダ確認
@@ -66,38 +73,13 @@
 		checkTmpFolders();
 	}
 /**
- * デフォルトタイトル設定
- * インストールの際のエラー時等DB接続まえのエラーで利用
- */
-	Configure::write('Baser.title','コーポレートサイトにちょうどいいCMS - BaserCMS - ');
-/**
- * 標準キャッシュ時間設定
- */
-	Configure::write('Baser.cachetime','1 month');
-/**
- * プラグインDBプレフィックス
- */
-	Configure::write('Baser.pluginDbPrefix', 'pg_');
-/**
- * 管理画面認証設定
- */
-	$adminPrefix = Configure::read('Routing.admin');
-	Configure::write('AuthPrefix.'.$adminPrefix, array(
-		'loginRedirect'	=> '/'.$adminPrefix,
-		'loginTitle'	=> '管理システムログイン'
-	));
-/**
  * baserUrl取得
  */
 	$baseUrl = baseUrl();
 /**
  * 文字コードの検出順を指定
  */
-	mb_detect_order("ASCII,JIS,UTF-8,SJIS-win,EUC-JP");
-/**
- * Eメールヘッダの改行コード設定
- */
-	Configure::write('Email.lfcode',"\n");
+	mb_detect_order(Configure::read('Baser.detectOrder'));var_dump(Configure::read('Baser.detectOrder'));
 /**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
@@ -113,16 +95,10 @@
 		}
 	}
 /**
- * モバイルルーティング設定
- */
-	$mobilePrefix = 'm';
-	if(!Configure::read('Mobile.prefix')) {
-		Configure::write('Mobile.prefix', $mobilePrefix);
-	}
-/**
  * パラメーター取得
  * モバイル判定
  */
+	$mobilePrefix = Configure::read('Mobile.prefix');
 	$parameter = getParamsFromEnv();	// 環境変数からパラメータを取得
 	$mobileOn = false;
 	$mobilePlugin = false;
@@ -153,6 +129,20 @@
 	Configure::write('Mobile.on',$mobileOn);
 	Configure::write('Mobile.plugin',$mobilePlugin);
 /**
+ * 簡易携帯リダイレクト
+ */
+	if(!$mobileOn) {
+		$mobileAgents = Configure::read('Mobile.agents');
+		foreach($mobileAgents as $mobileAgent) {
+			if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $mobileAgent) !== false) {
+				$redirectUrl = FULL_BASE_URL.$baseUrl.$mobilePrefix.'/'.$parameter;
+				header("HTTP/1.1 301 Moved Permanently");
+				header("Location: ".$redirectUrl);
+				exit();
+			}
+		}
+	}
+/**
  * Viewのキャッシュ設定
  */
 	if(Configure::read('debug') > 0) {
@@ -170,26 +160,6 @@
 			$Session->start();
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
-			}
-		}
-	}
-/**
- * 簡易携帯リダイレクト
- */
-	if(!$mobileOn) {
-		// TODO 管理画面で設定できるようにする
-		$mobileAgents = array('Googlebot-Mobile','Y!J-SRD','Y!J-MBS','DoCoMo','SoftBank','Vodafone','J-PHONE','UP.Browser');
-		foreach($mobileAgents as $mobileAgent) {
-			if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $mobileAgent) !== false) {
-				if(empty($_SERVER['HTTPS'])) {
-					$protocol = 'http';
-				}else {
-					$protocol = 'https';
-				}
-				$redirectUrl = $protocol . '://'.$_SERVER['HTTP_HOST'].$baseUrl.$mobilePrefix.'/'.$parameter;
-				header("HTTP/1.1 301 Moved Permanently");
-				header("Location: ".$redirectUrl);
-				exit();
 			}
 		}
 	}
