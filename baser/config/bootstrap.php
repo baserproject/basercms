@@ -79,7 +79,7 @@
 /**
  * 文字コードの検出順を指定
  */
-	mb_detect_order(Configure::read('Baser.detectOrder'));var_dump(Configure::read('Baser.detectOrder'));
+	mb_detect_order(Configure::read('Baser.detectOrder'));
 /**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
