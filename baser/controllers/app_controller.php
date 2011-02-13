@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: app_controller.php 154 2011-02-13 17:56:46Z ryuring $ */
 /**
  * AppController 拡張クラス
  *
@@ -707,45 +707,60 @@ class AppController extends Controller {
 			}
 		}
 
-		/* /.htaccess の編集 */
+		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
+		if($baseUrl == WWW_ROOT) {
+			$webrootRewriteBase = '/';
+		} else {
+			$webrootRewriteBase = '/app/webroot';
+		}
+
+		/* /app/webroot/.htaccess の編集 */
+		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
+
+		if($baseUrl != WWW_ROOT) {
+			/* /.htaccess の編集 */
+			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
+		}
+
+		return true;
+
+	}
+/**
+ * .htaccess にスマートURLの設定を書きこむ
+ *
+ * @param	string	$path
+ * @param	array	$rewriteSettings
+ * @return	boolean
+ * @access	protected
+ */
+	function _writeSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
 
 		//======================================================================
-		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったので、追記モード「a」で開くことにした。
-		// そのため、実際の書き込み時は、 ftruncate で、内容をリセットし、ファイルポインタを先頭に戻している。
+		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
+		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
+		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
-
+		
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
 									"/\n[^\n#]*RewriteRule.+/i");
-		$rewriteSettings = array(	'RewriteEngine on',
-									'RewriteBase '.$this->getRewriteBase('/'),
-									'RewriteRule ^$ app/webroot/ [L]',
-									'RewriteRule (.*) app/webroot/$1 [L]');
-		$path = ROOT.DS.'.htaccess';
-		$file = new File($path);
-		$file->open('a+');
-		$data = $file->read();
-		foreach ($rewritePatterns as $rewritePattern) {
-			$data = preg_replace($rewritePattern, '', $data);
+		switch($type) {
+			case 'root':
+				$rewriteSettings = array(	'RewriteEngine on',
+											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteRule ^$ app/webroot/ [L]',
+											'RewriteRule (.*) app/webroot/$1 [L]');
+				break;
+			case 'webroot':
+				$rewriteSettings = array(	'RewriteEngine on',
+											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteCond %{REQUEST_FILENAME} !-d',
+											'RewriteCond %{REQUEST_FILENAME} !-f',
+											'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
+				break;
 		}
-		if($smartUrl) {
-			$data .= "\n".implode("\n", $rewriteSettings);
-		}
-		ftruncate($file->handle,0);
-		if(!$file->write($data)){
-			$file->close();
-			return false;
-		}
-		$file->close();
 
-		/* /app/webroot/.htaccess の編集 */
-		$rewriteSettings = array(	'RewriteEngine on',
-									'RewriteBase '.$this->getRewriteBase('/app/webroot'),
-									'RewriteCond %{REQUEST_FILENAME} !-d',
-									'RewriteCond %{REQUEST_FILENAME} !-f',
-									'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
-		$path = WWW_ROOT.'.htaccess';
 		$file = new File($path);
 		$file->open('a+');
 		$data = $file->read();
@@ -761,7 +776,6 @@ class AppController extends Controller {
 			return false;
 		}
 		$file->close();
-		return true;
 
 	}
 /**
