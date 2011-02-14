@@ -43,7 +43,11 @@
 			'loginRedirect'	=> '/'.$adminPrefix,
 			// ログイン画面タイトル
 			'loginTitle'	=> '管理システムログイン'
-		)
+		)/*,
+		'mypage' => array(
+			'loginRedirect'=>'/mypage/dashboard/index',
+			'loginTitle'=>'マイページログイン'
+		)*/
 	);
 /**
  * Eメール設定
