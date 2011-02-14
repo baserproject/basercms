@@ -2,8 +2,16 @@
 /**
  * ブログアーカイブ一覧
  */
+$baser->css('colorbox/colorbox', null, null, false);
+$baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
+
+<script type="text/javascript">
+$(function(){
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+});
+</script>
 
 <h2 class="contents-head">
 	<?php $blog->title() ?>

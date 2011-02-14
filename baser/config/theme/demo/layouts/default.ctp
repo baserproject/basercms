@@ -12,18 +12,12 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css(array('import','colorbox/colorbox')) ?>
-<!--[if IE]><?php $baser->js('excanvas') ?><![endif]-->
+<?php $baser->css(array('import')) ?>
 <?php $baser->js(array(
 	'jquery-1.4.2.min',
-	'jquery-ui-1.7.2.custom.min',
-	'i18n/ui.datepicker-ja',
-	'jquery.bt.min',
 	'jquery.corner',
-	'jquery.colorbox-min',
-	'functions',
-	'styleswitcher',
-	'startup')) ?>
+	'startup'
+)) ?>
 <?php $baser->scripts() ?>
 <?php $baser->element('google_analytics') ?>
 </head>
