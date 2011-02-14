@@ -25,6 +25,12 @@ $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false
 $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>
 
+<script type="text/javascript">
+$(function(){
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+});
+</script>
+
 <h2 class="contents-head">
 	<?php $blog->title() ?>
 </h2>
