@@ -64,7 +64,7 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 	'jquery.corner',
 	'functions',
 	'styleswitcher',
-	'startup')) ?>
+	'admin/startup')) ?>
 <?php $baser->scripts() ?>
 </head>
 <body id="<?php $baser->contentsName() ?>" class="normal">

@@ -19,11 +19,18 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('/blog/css/style',null,null,false);
+$baser->css(array('/blog/css/style','colorbox/colorbox'), null, null, false);
+$baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getDescription());
 ?>
-<!-- blog title -->
 
+<script type="text/javascript">
+$(function(){
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+});
+</script>
+
+<!-- blog title -->
 <h2 class="contents-head">
 	<?php $blog->title() ?>
 </h2>
