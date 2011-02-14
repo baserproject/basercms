@@ -61,10 +61,17 @@
 	}
 /**
  * 設定ファイル読み込み
+ * install.php で設定している為、一旦読み込んで再設定
  */
+	$baserSettings = Configure::read('Baser');
 	if(Configure::load('baser')===false) {
 		include BASER_CONFIGS.'baser.php';
 		Configure::write($config);
+	}
+	if($baserSettings) {
+		foreach ($baserSettings as $key => $value) {
+			Configure::write('Baser.'.$key, $value);
+		}
 	}
 /**
  * tmpフォルダ確認
