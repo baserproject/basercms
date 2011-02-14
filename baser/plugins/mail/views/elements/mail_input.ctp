@@ -34,10 +34,10 @@ if (!empty($mailFields)) {
 		if ($field['use_field'] && ($blockStart && $iteration >= $blockStart) && (!$blockEnd || $iteration <= $blockEnd)) {
 
 			$next_key = $key + 1;
-
+			$description = $field['description'];
+			
 			/* 項目名 */
 			if ($group_field != $field['group_field']  || (!$group_field && !$field['group_field'])) {
-				$description = $field['description'];
 				echo '<tr id="RowMessage'.Inflector::camelize($record['MailField']['field_name']).'"';
 				if ($field['type'] == 'hidden') {
 					echo ' style="display:none"';
@@ -50,19 +50,21 @@ if (!empty($mailFields)) {
 			}
 
 			echo '<span id="FieldMessage'.Inflector::camelize($record['MailField']['field_name']).'">';
-
+			if (!$freezed && $description) {
+				echo '<span class="mail-description">'. $description .'</span>';
+			}
 			/* 入力欄 */
 			if (!$freezed || $mailform->value("Message." . $field['field_name']) !== '') {
-				echo $field['before_attachment'];
+				echo '<span class="mail-before-attachment">'.$field['before_attachment'].'</span>';
 			}
 			if (!$field['no_send'] || !$freezed) {
 				echo $mailform->control($field['type'], "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record));
 			}
 			if (!$freezed || $mailform->value("Message." . $field['field_name']) !== '') {
-				echo $field['after_attachment'];
+				echo '<span class="mail-after-attachment">'.$field['after_attachment'].'</span>';
 			}
 			if (!$freezed) {
-				echo $field['attention'];
+				echo '<span class="mail-attention">'.$field['attention'].'</span>';
 			}
 			if (!$field['group_valid']) {
 				if($mailform->error("Message." . $field['field_name'] . "_format", "check")) {
@@ -77,9 +79,6 @@ if (!empty($mailFields)) {
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$key))) {
-				if (!$freezed && $description) {
-					echo $html->image('img_icon_help.gif',array('id'=>Inflector::variable('help_'.$field['field_name']),'class'=>'help','alt'=>'ヘルプ'));
-				}
 
 				if ($field['group_valid']) {
 					if ($mailform->error("Message." . $field['group_field'] . "_format", "check")) {
@@ -92,10 +91,6 @@ if (!empty($mailFields)) {
 				}
 
 				echo '</span>';
-
-				if (!$freezed && $description) {
-					echo '<div id="'.Inflector::variable('helptext_'.$field['field_name']) . '" class="helptext">'. $description .'</div>';
-				}
 				echo '</td></tr>';
 			}else{
 				echo '</span>';
