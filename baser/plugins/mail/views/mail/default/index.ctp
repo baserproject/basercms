@@ -19,7 +19,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$html->css('/mail/css/style',null,null,false);
+$html->css(array('/mail/css/style', 'jquery-ui-1.7.2/ui.all'),null,null,false);
+$baser->js(array('jquery-ui-1.7.2.custom.min','i18n/ui.datepicker-ja'), false);
 $mail->indexFields($mailContent['MailContent']['id']);
 ?>
 

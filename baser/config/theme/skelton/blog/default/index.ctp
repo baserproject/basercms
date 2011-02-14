@@ -2,9 +2,17 @@
 /**
  * ブログトップ
  */
+$baser->css('colorbox/colorbox', null, null, false);
+$baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getDescription());
 ?>
 <!-- blog title -->
+
+<script type="text/javascript">
+$(function(){
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+});
+</script>
 
 <h2 class="contents-head">
 	<?php $blog->title() ?>

@@ -238,9 +238,8 @@ class User extends AppModel {
 	function getAuthPrefix($userName) {
 
 		$user = $this->find('first', array(
-			'fields'		=> array('UserGroup.auth_prefix'),
 			'conditions'	=> array('User.name'=>$userName),
-			'recursive'		=> 0
+			'recursive'		=> 1
 		));
 
 		if(isset($user['UserGroup']['auth_prefix'])) {

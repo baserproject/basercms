@@ -177,8 +177,10 @@ class SiteConfigsController extends AppController {
 			$rewriteInstalled = -1;
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
-		$writableHtaccess = is_writable(ROOT.DS.'.htaccess');
-		if(ROOT.DS.'.htaccess' != WWW_ROOT.'.htaccess') {
+		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
+		$writableHtaccess = is_writable($baseUrl.'.htaccess');
+
+		if($baseUrl != WWW_ROOT) {
 			$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
 		} else{
 			$writableHtaccess2 = true;

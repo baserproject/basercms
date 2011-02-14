@@ -2,6 +2,8 @@
 /**
  * メールフォーム確認ページ
  */
+$html->css('jquery-ui-1.7.2/ui.all', null, null, false);
+$baser->js(array('jquery-ui-1.7.2.custom.min', 'i18n/ui.datepicker-ja'), false);
 if($freezed){
 	$mailform->freeze();
 }

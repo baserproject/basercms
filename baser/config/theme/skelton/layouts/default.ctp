@@ -12,11 +12,9 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css(array('style','colorbox/colorbox')) ?>
+<?php $baser->css('style') ?>
 <?php $baser->js(array(
 	'jquery-1.4.2.min',
-	'jquery.bt.min',
-	'jquery.colorbox-min',
 	'functions',
 	'startup')) ?>
 <?php $baser->scripts() ?>
