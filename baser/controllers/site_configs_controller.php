@@ -177,11 +177,19 @@ class SiteConfigsController extends AppController {
 			$rewriteInstalled = -1;
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
-		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
-		$writableHtaccess = is_writable($baseUrl.'.htaccess');
 
-		if($baseUrl != WWW_ROOT) {
-			$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+		if(preg_match('/'.str_replace('/', '\/', $_SERVER['DOCUMENT_ROOT']).'/', ROOT)) {
+			// webroot ≠ DOCUMENT_ROOT
+			$htaccess1 = ROOT.DS.'.htaccess';
+		} else {
+			// webtoot = DOCUMENT_ROOT
+			$htaccess1 = $_SERVER['DOCUMENT_ROOT'].'.htaccess';
+		}
+		$htaccess2 = WWW_ROOT.'.htaccess';
+
+		$writableHtaccess = is_writable($htaccess1);
+		if($htaccess1 != $htaccess2) {
+			$writableHtaccess2 = is_writable($htaccess2);
 		} else{
 			$writableHtaccess2 = true;
 		}
