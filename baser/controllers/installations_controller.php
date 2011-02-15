@@ -899,8 +899,18 @@ class InstallationsController extends AppController {
 	function _getDbSource() {
 
 		/* DBソース取得 */
-		$dbsource = array( 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
+		$dbsource = array();
 		$folder = new Folder();
+
+		/* MySQL利用可否 */
+		if(function_exists('mysql_connect')) {
+			$dbsource['mysql'] = 'MySQL';
+		}
+
+		/* PostgreSQL利用可否 */
+		if(function_exists('pg_connect')) {
+			$dbsource['postgres'] = 'PostgreSQL';
+		}
 
 		/* SQLite利用可否チェック */
 		if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
