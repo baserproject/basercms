@@ -442,6 +442,30 @@ class AppController extends Controller {
 
 	}
 /**
+ * テーマのバージョン番号を取得する
+ *
+ * @param	string	$theme
+ * @return	string
+ * @access	public
+ */
+	function getThemeVersion($theme) {
+		
+		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
+		if(!file_exists($path)) {
+			return false;
+		}
+		App::import('File');
+		$versionFile = new File($path);
+		$versionData = $versionFile->read();
+		$aryVersionData = split("\n",$versionData);
+		if(!empty($aryVersionData[0])) {
+			return $aryVersionData[0];
+		}else {
+			return false;
+		}
+		
+	}
+/**
  * DBのバージョンを取得する
  *
  * @return	string
@@ -707,8 +731,15 @@ class AppController extends Controller {
 			}
 		}
 
-		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
-		if($baseUrl == WWW_ROOT) {
+		if(preg_match('/'.str_replace('/', '\/', docRoot()).'/', ROOT)) {
+			// webroot ≠ DOCUMENT_ROOT
+			$basicWebroot = false;
+		} else {
+			// webtoot = DOCUMENT_ROOT
+			$basicWebroot = true;
+		}
+
+		if(ROOT == WWW_ROOT || $basicWebroot) {
 			$webrootRewriteBase = '/';
 		} else {
 			$webrootRewriteBase = '/app/webroot';
@@ -717,7 +748,7 @@ class AppController extends Controller {
 		/* /app/webroot/.htaccess の編集 */
 		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
 
-		if($baseUrl != WWW_ROOT) {
+		if(ROOT != WWW_ROOT && !$basicWebroot) {
 			/* /.htaccess の編集 */
 			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
 		}
@@ -1005,6 +1036,11 @@ class AppController extends Controller {
 
 		$requestedPrefix = '';
 		$authPrefix = $this->getAuthPreifx($this->Auth->user('name'));
+
+		if(!$authPrefix) {
+			// 1.6.8 以下の場合は authPrefix が取得できないので true を返して終了
+			return true;
+		}
 
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];

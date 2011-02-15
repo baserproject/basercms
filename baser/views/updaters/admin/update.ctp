@@ -17,7 +17,7 @@
 	<p>WEBサイトのバージョンは最新です。</p>
 	<p>
 		<?php if(!$plugin): ?>
-			<?php $baser->link('≫ 管理画面に移動する','/admin/users/login') ?>
+			<?php $baser->link('≫ 管理画面に移動する','/admin') ?>
 		<?php else: ?>
 			<?php $baser->link('≫ プラグイン一覧に移動する','/admin/plugins/index') ?>
 		<?php endif ?>

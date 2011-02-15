@@ -40,6 +40,7 @@
 		<th>操作</th>
 		<th>テーマ名</th>
 		<th>タイトル</th>
+		<th>バージョン</th>
 		<th>説明</th>
 		<th>制作者</th>
 	</tr>
@@ -54,7 +55,7 @@
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button" style="width:170px">
+		<td class="operation-button" style="width:110px">
 			<?php if($theme['name'] != 'core'): ?>
 			<p>
 			<?php if($theme['name']!=$baser->siteConfig['theme']): ?>
@@ -69,21 +70,21 @@
 			<?php $baser->link('削除', array('action'=>'del', $theme['name']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $theme['name']),false); ?>
 			<?php endif ?></p></td>
 		<td><?php echo $theme['name'] ?></td>
-		<td>
+		<td style="width:220px">
 			<?php if($theme['name']!='core' && $theme['screenshot']): ?>
 			<?php /* ↓↓↓ スマートURLオフの場合、HtmlHelper::link では、正しいリンク先が取得できないので直接記述 ↓↓↓ */ ?>
 			<a href="<?php echo $html->webroot('/themed/'.$theme['name'].'/screenshot.png') ?>" rel="colorbox">
 				<?php $baser->img('/themed/'.$theme['name'].'/screenshot.png',array(
 							'alt'=>$theme['title'],
 							'width'=>'80px',
-							'align'=>'left',
-							'style'=>'margin-right:10px;border:1px solid #e2e2e2'
+							'style'=>'float:left;margin-right:10px;border:1px solid #e2e2e2'
 				)) ?>
 			</a>
 			<?php endif ?>
 			<?php echo $theme['title'] ?>
 		</td>
-		<td style="width:150px"><?php echo $theme['description'] ?></td>
+		<td style="width:70px"><?php echo $theme['version'] ?></td>
+		<td style="width:170px"><?php echo $theme['description'] ?></td>
 		<td><?php if(!empty($theme['url']) && !empty($theme['author'])): ?>
 			<?php $baser->link($theme['author'],$theme['url'],array('target'=>'_blank')) ?>
 			<?php else: ?>

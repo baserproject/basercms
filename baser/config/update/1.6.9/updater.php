@@ -35,7 +35,7 @@
 /**
  * user_groups スキーマの読み込み
  */
-	if(!$this->loadSchema('test', '', 'user_groups')){
+	if(!$this->loadSchema('1.6.9', '', 'user_groups')){
 		$this->setMessage('user_groups のテーブル構造の更新に失敗しました。', true);
 	} else {
 		$this->setMessage('user_groups のテーブル構造の更新に成功しました。');

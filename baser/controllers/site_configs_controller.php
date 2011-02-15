@@ -79,9 +79,9 @@ class SiteConfigsController extends AppController {
 		if(empty($this->data)) {
 
 			$this->data = $this->_getSiteConfigData();
-			
+
 		}else {
-			
+
 			$this->SiteConfig->set($this->data);
 
 			if(!$this->SiteConfig->validates()) {
@@ -125,7 +125,7 @@ class SiteConfigsController extends AppController {
 				if($this->SiteConfig->saveKeyValue($this->data)) {
 
 					$this->Session->setFlash('システム設定を保存しました。');
-					
+
 					// 環境設定を保存
 					$this->writeDebug($mode);
 					$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
@@ -164,9 +164,9 @@ class SiteConfigsController extends AppController {
 					}
 
 				}
-				
+
 			}
-			
+
 		}
 
 		/* スマートURL関連 */
@@ -177,11 +177,29 @@ class SiteConfigsController extends AppController {
 			$rewriteInstalled = -1;
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
+<<<<<<< HEAD
 		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
 		$writableHtaccess = is_writable($baseUrl.'.htaccess');
 
 		if($baseUrl != WWW_ROOT) {
 			$writableHtaccess2 = is_writable(WWW_ROOT.'.htaccess');
+=======
+
+		$docRoot = docRoot();
+
+		if(preg_match('/'.str_replace('/', '\/', $docRoot).'/', ROOT)) {
+			// webroot ≠ DOCUMENT_ROOT
+			$htaccess1 = ROOT.DS.'.htaccess';
+		} else {
+			// webtoot = DOCUMENT_ROOT
+			$htaccess1 = $docRoot.DS.'.htaccess';
+		}
+		$htaccess2 = WWW_ROOT.'.htaccess';
+
+		$writableHtaccess = is_writable($htaccess1);
+		if($htaccess1 != $htaccess2) {
+			$writableHtaccess2 = is_writable($htaccess2);
+>>>>>>> dev-1.6
 		} else{
 			$writableHtaccess2 = true;
 		}
@@ -256,6 +274,6 @@ class SiteConfigsController extends AppController {
 		return $data;
 
 	}
-	
+
 }
 ?>
