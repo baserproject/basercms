@@ -315,6 +315,14 @@ class BaserHelper extends AppHelper {
 		echo $this->Html->meta('description',$this->getDescription());
 	}
 /**
+ * RSSリンクタグを出力する
+ * @param	string	$title
+ * @param	string	$link
+ */
+	function rss($title, $link) {
+		echo $this->Html->meta($title, $link, array('type' => 'rss'));
+	}
+/**
  * トップページかどうか判断する
  * @return boolean
  */
