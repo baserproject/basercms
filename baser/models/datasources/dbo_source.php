@@ -3194,7 +3194,7 @@ class DboSource extends DataSource {
 		}
 
 		$head = implode(",",$heads)."\n";
-		if($encoding != $this->dbEncoding) {
+		if($encoding != $this->config['encoding']) {
 			$head = mb_convert_encoding($head, $encoding, $appEncoding);
 		}
 		fwrite($fp, $head);
