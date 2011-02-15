@@ -1038,6 +1038,11 @@ class AppController extends Controller {
 		$requestedPrefix = '';
 		$authPrefix = $this->getAuthPreifx($this->Auth->user('name'));
 
+		if(!$authPrefix) {
+			// 1.6.8 以下の場合は authPrefix が取得できないので true を返して終了
+			return true;
+		}
+
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];
 		}
