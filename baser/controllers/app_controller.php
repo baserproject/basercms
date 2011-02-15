@@ -442,6 +442,30 @@ class AppController extends Controller {
 
 	}
 /**
+ * テーマのバージョン番号を取得する
+ *
+ * @param	string	$theme
+ * @return	string
+ * @access	public
+ */
+	function getThemeVersion($theme) {
+		
+		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
+		if(!file_exists($path)) {
+			return false;
+		}
+		App::import('File');
+		$versionFile = new File($path);
+		$versionData = $versionFile->read();
+		$aryVersionData = split("\n",$versionData);
+		if(!empty($aryVersionData[0])) {
+			return $aryVersionData[0];
+		}else {
+			return false;
+		}
+		
+	}
+/**
  * DBのバージョンを取得する
  *
  * @return	string
