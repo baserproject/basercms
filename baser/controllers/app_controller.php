@@ -731,7 +731,7 @@ class AppController extends Controller {
 			}
 		}
 
-		if(preg_match('/'.str_replace('/', '\/', $_SERVER['DOCUMENT_ROOT']).'/', ROOT)) {
+		if(preg_match('/'.str_replace('/', '\/', docRoot()).'/', ROOT)) {
 			// webroot ≠ DOCUMENT_ROOT
 			$basicWebroot = false;
 		} else {
@@ -739,7 +739,6 @@ class AppController extends Controller {
 			$basicWebroot = true;
 		}
 
-		$baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']);
 		if(ROOT == WWW_ROOT || $basicWebroot) {
 			$webrootRewriteBase = '/';
 		} else {
