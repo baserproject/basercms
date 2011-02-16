@@ -124,7 +124,7 @@ class AppHelper extends Helper {
 		// >>>
 		$dir = Configure::read('App.dir');
 		$webroot = Configure::read('App.webroot');
-		if(Configure::read('App.baseUrl')) {
+		if(Configure::read('App.baseUrl') && DEPLOY_PATTERN == 1) {
 			if (strpos($this->webroot, $dir) === false) {
 				$this->webroot .= $dir . '/' ;
 			}
