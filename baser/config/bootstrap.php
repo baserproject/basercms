@@ -62,7 +62,7 @@
 /**
  * 配置パターン
  */
-	if(!preg_match('/'.str_replace('/', '\/', docRoot()).'/', ROOT)) {
+	if(!preg_match('/'.preg_quote(docRoot()).'/', ROOT)) {
 		// CakePHP標準の配置
 		define('DEPLOY_PATTERN', 3);
 	} elseif(ROOT.DS == WWW_ROOT) {
