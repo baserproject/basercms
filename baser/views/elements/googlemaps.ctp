@@ -33,10 +33,10 @@ if(isset($zoom)) $_zoom = $zoom;
 if(isset($mapId)) $_mapId = $mapId;
 if(isset($address)) $_address = $address;
 if(isset($markerText)) $_markerText = $markerText;
-if($longitude) {
+if(isset($longitude)) {
 	$googlemaps->longitude = $longitude;
 }
-if($latitude) {
+if(isset($latitude)) {
 	$googlemaps->latitude = $latitude;
 }
 $googlemaps->googlemapsKey = $baser->siteConfig['googlemaps_key'];
