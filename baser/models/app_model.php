@@ -1023,7 +1023,7 @@ class AppModel extends Model {
 		// メールフォームで生成するフィールドは全てテキストの為（暫定）
 		//if (in_array($type, array('datetime', 'timestamp', 'date', 'time'))) {
 		// ---
-		if (in_array($type, array('text', 'datetime', 'timestamp', 'date', 'time'))) {
+		if (in_array($type, array('string', 'text', 'datetime', 'timestamp', 'date', 'time'))) {
 		// <<<
 			$useNewDate = (isset($data['year']) || isset($data['month']) ||
 				isset($data['day']) || isset($data['hour']) || isset($data['minute']));
@@ -1041,7 +1041,7 @@ class AppModel extends Model {
 			//$db =& ConnectionManager::getDataSource($this->useDbConfig);
 			//$format = $db->columns[$type]['format'];
 			// ---
-			if($type != 'text') {
+			if($type != 'text' && $type != 'string') {
 				$db =& ConnectionManager::getDataSource($this->useDbConfig);
 				$format = $db->columns[$type]['format'];
 			} else {
@@ -1077,7 +1077,7 @@ class AppModel extends Model {
 			// メールフォームで生成するフィールドは全てテキストの為（暫定）
 			//if ($type == 'datetime' || $type == 'timestamp' || $type == 'date') {
 			// ---
-			if ($type == 'text' || $type == 'datetime' || $type == 'timestamp' || $type == 'date') {
+			if ($type == 'text' || $type == 'string' || $type == 'datetime' || $type == 'timestamp' || $type == 'date') {
 			// <<<
 				foreach ($dateFields as $key => $val) {
 					if ($val == 'hour' || $val == 'min' || $val == 'sec') {
@@ -1097,7 +1097,15 @@ class AppModel extends Model {
 					}
 					// <<<
 					if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
-						return null;
+						// >>> CUSTOMIZE MODIFY 2011/02/17 ryuring 和暦対応
+						//return null;
+						// ---
+						if($type != 'text' && $type != 'string') {
+							return null;
+						} else {
+							return $data;
+						}
+						// <<<
 					}
 					if (isset($data[$val]) && !empty($data[$val])) {
 						$date[$key] = $data[$val];
