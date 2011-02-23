@@ -4,10 +4,10 @@ app/config/database.php
 app/config/install.php
 app/db/*
 !app/db/empty
-app/plugins/uploader/
-app/plugins/twitter/
-app/plugins/debug_kit/
-app/plugins/page_reader/
+app/plugins/*
+!app/plugins/blog
+!app/plugins/mail
+!app/plugins/feed
 app/webroot/files/*
 !app/webroot/files/empty
 app/tmp/*
