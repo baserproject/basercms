@@ -111,6 +111,9 @@ class UserGroupsController extends AppController {
 		if($this->data) {
 
 			/* 登録処理 */
+			if(empty($this->data['UserGroup']['auth_prefix'])) {
+				$this->data['UserGroup']['auth_prefix'] = 'admin';
+			}
 			$this->UserGroup->create($this->data);
 			if($this->UserGroup->save()) {
 				$message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
