@@ -243,8 +243,15 @@ class BlogController extends BlogAppController {
 		/*** カテゴリ一覧 ***/
 		if($type=='category') {
 			$conditions = array();
-			$conditions["BlogPost.blog_category_id"] = $categoryId;		
+			$categoryIds = array(0=>$categoryId);
+			$catChildren = $this->BlogCategory->children($categoryId);
+			if($catChildren) {
+				$catChildren = Set::extract('/BlogCategory/id',$catChildren);
+				$categoryIds = am($categoryIds, $catChildren);
+			}
+			$conditions["BlogPost.blog_category_id"] = $categoryIds;
 			$conditions['BlogPost.blog_content_id'] = $contentId;
+
 			if(!$this->preview) {
 				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 			}
