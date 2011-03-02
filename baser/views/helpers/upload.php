@@ -170,9 +170,6 @@ class UploadHelper extends FormHelper {
  */
 	function uploadImage($fieldName, $fileName, $options = array()) {
 
-		if(is_array($fileName)) {
-			return '';
-		}
 		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true, 'mobile'=>false);
 		$options = Set::merge($_options,$options);
 		$imgOptions = array();
@@ -180,6 +177,15 @@ class UploadHelper extends FormHelper {
 		$noimage = false;
 		$link = true;
 		$tmp = false;
+
+		if(is_array($fileName)) {
+			if(isset($fileName['session_key'])) {
+				$fileName = $fileName['session_key'];
+				$tmp = true;
+			} else {
+				return '';
+			}
+		}
 
 		$imgsize = $options['imgsize'];
 		if(isset($options['alt'])) {
@@ -214,6 +220,10 @@ class UploadHelper extends FormHelper {
 			$linkOptions['escape'] = $options['escape'];
 			unset($options['escape']);
 		}
+		if(isset($options['tmp'])) {
+			$tmp = true;
+			unset($options['tmp']);
+		}
 		$mobile = $options['mobile'];
 
 		$_field = split('\.',$fieldName);
@@ -226,18 +236,23 @@ class UploadHelper extends FormHelper {
 			return;
 		}
 
-		$fileUrl = $this->base.DS.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
+		$fileUrl = $this->base.'/files/'.$model->actsAs['Upload']['saveDir'].'/';
 		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
 		$copySettings = $model->actsAs['Upload']['fields'][$field]['imagecopy'];
 
-		if(isset($options['tmp'])) {
-			$tmp = true;
+		if($tmp) {
 			$link = false;
-			$fileUrl = $this->base.DS.'uploads'.DS.'tmp'.DS;
-			unset($options['tmp']);
+			$fileUrl = $this->base.'/uploads/tmp/';
+			if($imgsize) {
+				$fileUrl .= $imgsize.'/';
+			}
 		}
 
-		if(!$noimage) {
+		if($noimage) {
+			$mostSizeUrl = $fileName;
+		} elseif($tmp) {
+			$mostSizeUrl = $fileUrl.$fileName;
+		} else {
 			$check = false;
 			$maxSizeExists = false;
 			$mostSizeExists = false;
@@ -274,11 +289,8 @@ class UploadHelper extends FormHelper {
 						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
 						$maxSizeExists = true;
 					}
-				}elseif($tmp && $check) {
-					// 指定した横幅でIMGタグベースでリサイズ
-					$imgOptions['width']=$copySetting['width'];
-					break;
 				}
+
 			}
 
 			if(!isset($mostSizeUrl)) {
@@ -288,8 +300,6 @@ class UploadHelper extends FormHelper {
 				$maxSizeUrl = $fileUrl.$fileName;
 			}
 
-		} else {
-			$mostSizeUrl = $fileName;
 		}
 
 		if($link && !$noimage) {
