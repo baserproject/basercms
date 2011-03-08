@@ -174,23 +174,21 @@ class BlogCategory extends BlogAppModel {
  * @access	public
  */
 	function getCategories($id, $count = false) {
-		
-		if($count) {
-			$recursive = 1;
-		} else {
-			$recursive = -1;
-		}
+
 		$datas = $this->find('all',array(
 			'conditions'=>array('BlogCategory.blog_content_id'=>$id),
 			'fields' => array('id', 'name', 'title'),
-			'recursive' => $recursive));
+			'recursive' => -1));
 		if($datas) {
-			foreach($datas as $key => $data) {
-				if(isset($data['BlogPost'])) {
-					$datas[$key]['BlogCategory']['count'] = count($data['BlogPost']);
-					unset($datas[$key]['BlogPost']);
-				} else {
-					$datas[$key]['BlogCategory']['count'] = 0;
+			if($count) {
+				foreach($datas as $key => $data) {
+					$datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', array(
+						'conditions' => 
+							am(
+								array('BlogPost.blog_category_id' => $data['BlogCategory']['id']),
+								$this->BlogPost->getConditionAllowPublish()
+							)
+					));
 				}
 			}
 			return $datas;
