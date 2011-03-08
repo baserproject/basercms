@@ -151,7 +151,7 @@ class MailController extends MailAppController {
 			$this->Message = new Message(false,null,null,$prefix);
 			$this->Message->mailFields = $this->dbDatas['mailFields'];
 		}
-		
+
 	}
 /**
  * beforeRender
@@ -226,14 +226,14 @@ class MailController extends MailAppController {
 					unset($this->data['Message']['auth_captcha']);
 				}
 			}
-			
+
 			// データの入力チェックを行う
 			if($this->Message->validates()) {
 				$this->set('freezed',true);
 			}else {
 				$this->set('freezed',false);
 				$this->set('error',true);
-				
+
 				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信して下さい。');
 			}
 
@@ -361,6 +361,7 @@ class MailController extends MailAppController {
 		if(!empty($userMail)) {
 			$data['other']['mode'] = 'user';
 			$options = array('fromName' => $mailContent['sender_name'],
+								'reply' => $adminMail,
 								'template' => $mailContent['mail_template'],
 								'from' => $adminMail);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
@@ -377,7 +378,7 @@ class MailController extends MailAppController {
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}
-		
+
 	}
 /**
  * 認証用のキャプチャ画像を表示する
@@ -387,6 +388,6 @@ class MailController extends MailAppController {
     function captcha()
     {
         $this->Captcha->render();
-    } 
+    }
 }
 ?>
