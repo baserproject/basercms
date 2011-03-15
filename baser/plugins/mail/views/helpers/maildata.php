@@ -93,10 +93,15 @@ class MaildataHelper extends TextExHelper {
 				break;
 
 			case 'multi_check':
-				$out = "\n";
-				foreach($value as $data) {
-					if(isset($options[$data])) {
-						$out .= "　・".$options[$data]."\n";
+				$out = "";
+				if($value) {
+					if(!is_array($value)) {
+						$value = explode("|", $value);
+					}
+					foreach($value as $data) {
+						if(isset($options[$data])) {
+							$out .= "・".$options[$data]."\n";
+						}
 					}
 				}
 				break;

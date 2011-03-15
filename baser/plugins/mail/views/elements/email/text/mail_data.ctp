@@ -30,9 +30,6 @@ foreach($mailFields as $field) {
 ----------------------------------------
 <?php
 	endif;
-	if(isset($message[$field['field_name']])){
-		echo"　";
-	}
 	if(!empty($field['before_attachment']) && isset($message[$field['field_name']])){
 		echo " ".$field['before_attachment'];
 	}
