@@ -150,14 +150,6 @@ $(function(){
 			&nbsp; </td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.googlemaps_key', 'GoogleMapsキー') ?></th>
-		<td class="col-input"><?php echo $formEx->text('SiteConfig.googlemaps_key', array('size'=>35,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpGooglemapsKey','class'=>'help','alt'=>'ヘルプ')) ?> <?php echo $formEx->error('SiteConfig.googlemaps_key') ?>
-			<div id="helptextGooglemapsKey" class="helptext"> GoogleMaps利用時のAPIキーを指定します。<br />
-				GoogleMapを利用する場合には、Googleアカウントを取得した上で、<a href="http://code.google.com/intl/ja/apis/maps/signup.html" target="_blank">Google MAPS API に登録</a>しキーを取得します。<br />
-				テンプレートで利用する場合は、 &lt;?php $baser->element('googlemaps') ?&gt; で出力します。 </div>
-			&nbsp; </td>
-	</tr>
-	<tr>
 		<th class="col-head"><?php echo $formEx->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->text('SiteConfig.google_analytics_id', array('size'=>35,'maxlength'=>255)) ?>
