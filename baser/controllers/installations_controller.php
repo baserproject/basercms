@@ -296,16 +296,19 @@ class InstallationsController extends AppController {
 				$User = new User();
 				$user['User']['name'] = $this->data['Installation']['admin_username'];
 				$user['User']['real_name_1'] = $this->data['Installation']['admin_username'];
-				$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
 				$user['User']['email'] = $this->data['Installation']['admin_email'];
 				$user['User']['user_group_id'] = 1;
-				if (!$User->save($user)) {
-					if($message) $message .= '<br />';
-					$message .= '管理ユーザーを作成できませんでした。<br />'.$db->error;
-					$this->Session->setFlash($message);
-				} else {
+				$user['User']['password_1'] = $this->data['Installation']['admin_password'];
+				$user['User']['password_2'] = $this->data['Installation']['admin_confirmpassword'];
+				$User->create($user);
+				if ($User->validates()) {
+					$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
+					$User->save($user,false);
 					$this->_sendCompleteMail($user['User']['email'], $user['User']['name'], $this->data['Installation']['admin_password']);
 					$this->redirect('step5');
+				} else {
+					$message = '管理ユーザーを作成できませんでした。<br />'.$db->error;
+					$this->Session->setFlash($message);
 				}
 			}
 		}
