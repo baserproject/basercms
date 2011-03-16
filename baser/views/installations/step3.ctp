@@ -158,7 +158,7 @@ $(document).ready( function() {
 		<p> データベースサーバーの場合は、データベース情報を入力し次に進む前に接続テストを実行して下さい。<br />
 			<strong>CSV以外の場合は、データベースが存在し中身が空である必要があります。</strong> </p>
 	</div>
-	<div>
+	<div style="margin-bottom:30px">
 		<form action="step3" method="post" name='dbsettings' id="dbsettings">
 			<ul>
 				<li id="dbType"> <?php echo $form->label('Installation.dbType', 'データベースタイプ');?><br />
@@ -186,6 +186,12 @@ $(document).ready( function() {
 					<br style="clear:both" />
 					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。</small></li>
 			</ul>
+			<?php if (!empty($blDBSettingsOK)): ?>
+			<h3>オプション</h3>
+			<ul>
+				<li><?php echo $form->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
+			</ul>
+			<?php endif ?>
 		</form>
 	</div>
 	<div class="clearfix">
