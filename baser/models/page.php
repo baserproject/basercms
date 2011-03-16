@@ -501,13 +501,7 @@ class Page extends AppModel {
 	function checkPublish($url) {
 
 		if($this->_publishes == -1) {
-			$conditions['Page.status'] = true;
-			$conditions[] = array('or'=> array(array('Page.publish_begin <=' => date('Y-m-d H:i:s')),
-											array('Page.publish_begin' => NULL),
-											array('Page.publish_begin' => '0000-00-00 00:00:00')));
-			$conditions[] = array('or'=> array(array('Page.publish_end >=' => date('Y-m-d H:i:s')),
-											array('Page.publish_end' => NULL),
-											array('Page.publish_end' => '0000-00-00 00:00:00')));
+			$conditions = $this->getConditionAllowPublish();
 			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
 			if(!$pages) {
 				$this->_publishes = array();
@@ -516,6 +510,23 @@ class Page extends AppModel {
 			$this->_publishes = Set::extract('/Page/url', $pages);
 		}
 		return in_array($url,$this->_publishes);
+
+	}
+/**
+ * 公開済の conditions を取得
+ *
+ * @return	array
+ */
+	function getConditionAllowPublish() {
+
+		$conditions[$this->alias.'.status'] = true;
+		$conditions[] = array('or'=> array(array($this->alias.'.publish_begin <=' => date('Y-m-d H:i:s')),
+										array($this->alias.'.publish_begin' => NULL),
+										array($this->alias.'.publish_begin' => '0000-00-00 00:00:00')));
+		$conditions[] = array('or'=> array(array($this->alias.'.publish_end >=' => date('Y-m-d H:i:s')),
+										array($this->alias.'.publish_end' => NULL),
+										array($this->alias.'.publish_end' => '0000-00-00 00:00:00')));
+		return $conditions;
 
 	}
 /**

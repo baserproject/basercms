@@ -41,6 +41,7 @@
 			<div id="contentsBody" class="clearfix">
 				<?php $baser->flash() ?>
 				<?php $baser->content() ?>
+				<?php $baser->element('contents_navi') ?>
 			</div>
 			<!-- end contentsBody -->
 			
