@@ -621,7 +621,7 @@ class AppController extends Controller {
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = '"'.$fromName . '" <'.$from.'>';
+			$this->EmailEx->from = ''.$fromName . ' <'.$from.'>';
 		}
 
 		// CC
