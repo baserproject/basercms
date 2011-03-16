@@ -148,8 +148,8 @@ class BlogController extends BlogAppController {
 
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
-			$this->set('channel', array('title' => $this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name'],
-					'description' => $this->blogContent['BlogContent']['description']));
+			$this->set('channel', array('title' => h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
+					'description' => h($this->blogContent['BlogContent']['description'])));
 			$this->layout = 'default';
 			$limit = $this->blogContent['BlogContent']['feed_count'];
 			$template = 'index';
