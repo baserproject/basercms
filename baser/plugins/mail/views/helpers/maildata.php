@@ -30,6 +30,8 @@ App::import('Helper', 'TextEx');
  *
  */
 class MaildataHelper extends TextExHelper {
+
+	var $helpers = array('TimeEx');
 /**
  * メール用のデータを出力する
  *
@@ -52,6 +54,7 @@ class MaildataHelper extends TextExHelper {
 		switch($type) {
 
 			case 'text':
+			case 'email':
 				$out = " ".$value;
 				break;
 
@@ -106,14 +109,17 @@ class MaildataHelper extends TextExHelper {
 				}
 				break;
 
-			case 'date_time_reserve':
+			case 'date_time_calender':
 				$value = $this->dateTime($value);
 				if($value) {
 					$out = " ".date('Y年 m月 d日',strtotime($value));
 				}
 				break;
 
-			case 'date_time_birthday_wareki':
+			case 'date_time_wareki':
+				if(!is_array($value)) {
+					$value = $this->TimeEx->convertToWarekiArray($value);
+				}
 				$out = " ".$this->dateTimeWareki($value);
 				break;
 

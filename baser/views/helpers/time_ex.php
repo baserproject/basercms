@@ -201,8 +201,8 @@ class TimeExHelper extends TimeHelper {
 		}
 
 		$dataWareki = array(
-			'wareki'	=>	$w,
-			'year'		=>	$y,
+			'wareki'	=>	true,
+			'year'		=>	$w.'-'.$y,
 			'month'		=>	$m,
 			'day'		=>	$d
 		);
@@ -221,7 +221,7 @@ class TimeExHelper extends TimeHelper {
 
 		$dateArray = $this->convertToWarekiArray($date);
 		if(is_array($dateArray) && !empty($dateArray)) {
-			return $dateArray['wareki'] . '-' . $dateArray['year'] . '/' . $dateArray['month'] . '/' . $dateArray['day'];
+			return $dateArray['year'] . '/' . $dateArray['month'] . '/' . $dateArray['day'];
 		} else {
 			return '';
 		}

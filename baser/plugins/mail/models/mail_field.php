@@ -61,25 +61,34 @@ class MailField extends MailAppModel {
  */
 	function getControlSource($field = null) {
 
-		$source['type'] = array('text'=>'テキスト',
-				'textarea'=>'テキストエリア',
-				'radio'=>'ラジオボタン',
-				'select'=>'セレクトボックス',
-				'multi_check'=>'マルチチェックボックス',
-				'autozip'=>'自動補完郵便番号',
-				'pref'=>'都道府県リスト',
-				'date_time_birthday_wareki'=>'和暦生年月日',
-				'hidden'=>'隠しフィールド');
+		$source['type'] = array(
+			'text'				=> 'テキスト',
+			'textarea'			=> 'テキストエリア',
+			'radio'				=> 'ラジオボタン',
+			'select'			=> 'セレクトボックス',
+			'email'				=> 'Eメール',
+			'multi_check'		=> 'マルチチェックボックス',
+			'autozip'			=> '自動補完郵便番号',
+			'pref'				=> '都道府県リスト',
+			'date_time_wareki'	=> '和暦日付',
+			'date_time_calender'=> 'カレンダー',
+			'hidden'			=> '隠しフィールド'
+		);
 
-		$source['valid'] = array('VALID_NOT_EMPTY'=>'入力必須',
-				'VALID_EMAIL'=>'Eメールチェック',
-				'/^(|[0-9]+)$/'=>'数値チェック',
-				'/^([0-9]+)$/'=>'数値チェック（入力必須）');
+		$source['valid'] = array(
+			'VALID_NOT_EMPTY'	=> '入力必須',
+			'VALID_EMAIL'		=> 'Eメールチェック',
+			'/^(|[0-9]+)$/'		=> '数値チェック',
+			'/^([0-9]+)$/'		=> '数値チェック（入力必須）'
+		);
 
-		$source['valid_ex'] = array('VALID_EMAIL_CONFIRM'=>'Eメール比較チェック',
-				'VALID_GROUP_COMPLATE'=>'グループチェック',
-				'VALID_NOT_UNCHECKED'=>'チェックなしチェック',
-				'VALID_DATETIME'=>'日付チェック');
+		$source['valid_ex'] = array(
+			'VALID_EMAIL_CONFIRM'	=> 'Eメール比較チェック',
+			'VALID_GROUP_COMPLATE'	=> 'グループチェック',
+			'VALID_NOT_UNCHECKED'	=> 'チェックなしチェック',
+			'VALID_DATETIME'		=> '日付チェック'
+		);
+		
 		$source['auto_convert'] = array('CONVERT_HANKAKU'=>'半角変換');
 
 		if($field) {

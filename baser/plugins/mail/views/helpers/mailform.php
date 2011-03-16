@@ -47,6 +47,7 @@ class MailformHelper extends FreezeHelper {
 		switch($type) {
 
 			case 'text':
+			case 'email':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
@@ -121,25 +122,27 @@ class MailformHelper extends FreezeHelper {
 				$out = $this->select($fieldName,$options,null,$attributes,false);
 				break;
 
-			case 'date_time_reserve':
+			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
-				unset($attributes['empty']);
-				$attributes['minYear'] = intval(date('Y'));
-				$attributes['maxYear'] = $attributes['minYear']+1;
-				$attributes['monthNames'] = false;
-				$attributes['separator'] = '&nbsp;';
-				$out = $this->dateTime($fieldName,'YMD',null,null,$attributes);
+				unset($attributes['empty']);;
+				$out = $this->datepicker($fieldName, $attributes);
 				break;
 
-			case 'date_time_birthday_wareki':
+			case 'date_time_wareki':
 				unset($attributes['size']);
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
 				$attributes['monthNames'] = false;
 				$attributes['separator'] = '&nbsp;';
+				if(isset($attributes['minYear']) && $attributes['minYear'] == 'today') {
+					$attributes['minYear'] = intval(date('Y'));
+				}
+				if(isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
+					$attributes['maxYear'] = intval(date('Y'));
+				}
 				$out = $this->dateTime($fieldName,'WMD',null,null,$attributes);
 				break;
 

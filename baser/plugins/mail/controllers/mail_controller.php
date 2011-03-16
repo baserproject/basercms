@@ -344,12 +344,21 @@ class MailController extends MailAppController {
 		}
 
 		// ユーザーメールを取得
-		if(!empty($data['Message']['email'])) {
-			$userMail = $data['Message']['email'];
-		}elseif(!empty($data['Message']['email_1'])) {
-			$userMail = $data['Message']['email_1'];
+		foreach($this->dbDatas['mailFields'] as $mailField) {
+			if($mailField['MailField']['type'] == 'email') {
+				$userMail = $data['Message'][$mailField['MailField']['field_name']];
+				break;
+			}
 		}
-
+		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
+		if(!$userMail) {
+			if(!empty($data['Message']['email'])) {
+				$userMail = $data['Message']['email'];
+			}elseif(!empty($data['Message']['email_1'])) {
+				$userMail = $data['Message']['email_1'];
+			}
+		}
+		
 		// ユーザー名を取得
 		/*if(!empty($data['Message']['name'])){
 			$userName = $data['Message']['name'] . '　様';
