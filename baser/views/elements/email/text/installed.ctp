@@ -31,7 +31,7 @@
 　<?php echo $siteUrl ?> 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　◆ ログイン情報
+　◆ ログイン情報
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 管理ページ： <?php echo topLevelUrl(false).Configure::read('App.baseUrl').'/admin/users/login' ?> 
 アカウント： <?php echo $name ?>　
