@@ -395,7 +395,7 @@ class ThemeFilesController extends AppController {
 			$target = 'フォルダ';
 		} else {
 			$pathinfo = pathinfo($fullpath);
-			$newPath = $pathinfo['dirname'].DS.basename($fullpath,'.'.$pathinfo['extension']).'_copy';
+			$newPath = $pathinfo['dirname'].DS.urldecode(basename($fullpath,'.'.$pathinfo['extension'])).'_copy';
 			while(true) {
 				if(!file_exists($newPath.'.'.$pathinfo['extension'])) {
 					$newPath .= '.'.$pathinfo['extension'];
@@ -403,7 +403,7 @@ class ThemeFilesController extends AppController {
 				}
 				$newPath .= '_copy';
 			}
-			$result = @copy($fullpath,$newPath);
+			$result = @copy(urldecode($fullpath),$newPath);
 			if($result) {
 				chmod($newPath, 0666);
 			}
@@ -411,9 +411,9 @@ class ThemeFilesController extends AppController {
 		}
 
 		if($result) {
-			$this->Session->setFlash($target.' '.$path .' をコピーしました。');
+			$this->Session->setFlash($target.' '.urldecode($path) .' をコピーしました。');
 		}else {
-			$this->Session->setFlash($target.' '.$path .' のコピーに失敗しました。');
+			$this->Session->setFlash($target.' '.urldecode($path) .' のコピーに失敗しました。');
 		}
 
 		$this->redirect(array('action'=>'index',$theme,$type,dirname($path)));
