@@ -107,9 +107,6 @@ class PageCategory extends AppModel {
  */
 	function getControlSource($field = null,$options = array()) {
 
-		if(ClassRegistry::isKeySet('SiteConfig')) {
-			$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		}
 		$conditions = array();
 		if(!empty($options['excludeParentId'])) {
 			$children = $this->children($options['excludeParentId']);
@@ -122,8 +119,13 @@ class PageCategory extends AppModel {
 
 		$parents = $this->generatetreelist($conditions);
 		$controlSources['parent_id'] = array();
+		if(!Configure::read('Baser.mobile')) {
+			$excludeId = $this->getMobileId();
+		} else {
+			$excludeId = '';
+		}
 		foreach($parents as $key => $parent) {
-			if($parent) {
+			if($parent && $key != $excludeId) {
 				if(preg_match("/^([_]+)/i",$parent,$matches)) {
 					$parent = preg_replace("/^[_]+/i",'',$parent);
 					$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);

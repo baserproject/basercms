@@ -557,6 +557,14 @@ class PagesController extends AppController {
 
 			}
 
+		} else {
+			if(!Configure::read('Baser.mobile')) {
+				$conditions['or'] = array(
+					array('Page.page_category_id' => ''),
+					array('Page.page_category_id' => NULL),
+					array('Page.page_category_id <>') => $this->PageCategory->getMobileId()
+				);
+			}
 		}
 
 		return $conditions;

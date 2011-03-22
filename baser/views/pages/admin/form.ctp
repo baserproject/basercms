@@ -245,6 +245,7 @@ function pageCategoryIdChangeHandler() {
 			<?php echo $formEx->error('Page.author_id') ?>
 		</td>
 	</tr>
+<?php if(Configure::read('Baser.mobile')): ?>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
@@ -262,6 +263,7 @@ function pageCategoryIdChangeHandler() {
 			<?php endif ?>
 		</td>
 	</tr>
+<?php endif ?>
 </table>
 
 <div class="submit">

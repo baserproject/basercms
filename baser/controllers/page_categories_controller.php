@@ -68,7 +68,12 @@ class PageCategoriesController extends AppController {
  */
 	function admin_index() {
 
-		$_dbDatas = $this->PageCategory->generatetreelist();
+		if(!Configure::read('Baser.mobile')) {
+			$conditions = array('PageCategory.id <>' => $this->PageCategory->getMobileId());
+		} else {
+			$conditions = array();
+		}
+		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
 			$category = $this->PageCategory->find(array('PageCategory.id'=>$key));

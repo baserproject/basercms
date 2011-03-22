@@ -146,8 +146,13 @@
 		}
 	}
 	Configure::write('Baser.urlParam',$parameter);
-	Configure::write('Mobile.on',$mobileOn);
-	Configure::write('Mobile.plugin',$mobilePlugin);
+	if(Configure::read('Baser.mobile')) {
+		Configure::write('Mobile.on',$mobileOn);
+		Configure::write('Mobile.plugin',$mobilePlugin);
+	} else {
+		Configure::write('Mobile.on',false);
+		Configure::write('Mobile.plugin',false);
+	}
 /**
  * 簡易携帯リダイレクト
  */
