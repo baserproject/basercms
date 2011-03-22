@@ -45,7 +45,7 @@ class MobileHelper extends Helper {
 		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
 
 			$view->output = mb_convert_kana($view->output, "rak", "UTF-8");
-			$view->output = mb_convert_encoding($view->output, "SJIS", "UTF-8");
+			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
 			
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
