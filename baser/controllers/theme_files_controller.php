@@ -435,15 +435,20 @@ class ThemeFilesController extends AppController {
 		if(!isset($this->_tempalteTypes[$type])) {
 			$this->notFound();
 		}
+		$pathinfo = pathinfo($this->data['ThemeFile']['file']['name']);
+		$ext = $pathinfo['extension'];
+		if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
+			$filePath = $fullpath .DS. $this->data['ThemeFile']['file']['name'];
+			$Folder = new Folder();
+			$Folder->create(dirname($filePath), 0777);
 
-		$filePath = $fullpath .DS. $this->data['ThemeFile']['file']['name'];
-		$Folder = new Folder();
-		$Folder->create(dirname($filePath), 0777);
-
-		if(@move_uploaded_file($this->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-			$this->Session->setFlash('アップロードに成功しました。');
-		}else {
-			$this->Session->setFlash('アップロードに失敗しました。');
+			if(@move_uploaded_file($this->data['ThemeFile']['file']['tmp_name'], $filePath)) {
+				$this->Session->setFlash('アップロードに成功しました。');
+			}else {
+				$this->Session->setFlash('アップロードに失敗しました。');
+			}
+		} else {
+			$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
 		}
 		$this->redirect(array('action'=>'index',$theme,$type,$path));
 
