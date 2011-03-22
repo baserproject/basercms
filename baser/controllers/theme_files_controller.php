@@ -239,13 +239,13 @@ class ThemeFilesController extends AppController {
 			$this->notFound();
 		}
 
-		$filename = basename($path);
+		$filename = urldecode(basename($path));
 
 		if (!$this->data) {
 
 			$file = new File($fullpath);
 			$pathinfo = pathinfo($fullpath);
-			$this->data['ThemeFile']['name'] = basename($file->name,'.'.$pathinfo['extension']);
+			$this->data['ThemeFile']['name'] = urldecode(basename($file->name,'.'.$pathinfo['extension']));
 			$this->data['ThemeFile']['ext'] = $pathinfo['extension'];
 			if(!in_array($pathinfo['extension'], array('png','gif','jpg'))) {
 				$this->data['ThemeFile']['contents'] = $file->read();
@@ -256,8 +256,8 @@ class ThemeFilesController extends AppController {
 			$this->ThemeFile->set($this->data);
 			if($this->ThemeFile->validates()) {
 
-				$oldPath = $fullpath;
-				$newPath = dirname($fullpath).DS.$this->data['ThemeFile']['name'].'.'.$this->data['ThemeFile']['ext'];
+				$oldPath = urldecode($fullpath);
+				$newPath = dirname($fullpath).DS.urldecode($this->data['ThemeFile']['name']).'.'.$this->data['ThemeFile']['ext'];
 
 				if(!in_array($this->data['ThemeFile']['ext'], array('png','gif','jpg'))) {
 					$file = new File($oldPath);

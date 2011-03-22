@@ -45,8 +45,6 @@ class ThemeFile extends AppModel {
 				array(	'rule'		=> array('notEmpty'),
 						'message'	=> "テーマファイル名を入力してください。",
 						'required'	=> true),
-				array(	'rule'		=> 'halfText',
-						'message'	=> 'テーマファイル名は半角のみで入力してください。'),
 				array(  'rule'		=> array('duplicateThemeFile'),
 						'message'	=> '入力されたテーマファイル名は、同一階層に既に存在します。')
 			)
