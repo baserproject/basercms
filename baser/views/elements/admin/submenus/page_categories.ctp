@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ページカテゴリー管理メニュー
+ * [ADMIN] ページカテゴリー管理メニュー
  *
  * PHP versions 4 and 5
  *

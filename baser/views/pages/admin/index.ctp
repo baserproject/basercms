@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ページ一覧
+ * [ADMIN] ページ一覧
  *
  * PHP versions 4 and 5
  *
@@ -24,30 +24,34 @@ if($pageCategories){
 	$pageCategories = array('noncat'=>'カテゴリなし','pconly'=>'PCページのみ')+$pageCategories;
 }
 $users = $formEx->getControlSource("Page.user_id");
+$baser->js('sorttable', false);
 ?>
-<?php $baser->js('sorttable',false) ?>
+
 <script type="text/javascript">
 $(function(){
 	$("#PageFilterBody").show();
 });
 </script>
+
 <style type="text/css">
-	th{
+th{
 		white-space: nowrap;
 }
 </style>
-<?php echo $formEx->create('Sort',array('action'=>'update_sort','url'=>am(array('controller'=>'pages'),$this->passedArgs))) ?>
-	<?php echo $formEx->hidden('Sort.id') ?>
-	<?php echo $formEx->hidden('Sort.offset') ?>
+
+<?php echo $formEx->create('Sort', array('action' => 'update_sort', 'url' => am(array('controller'=>'pages'), $this->passedArgs))) ?>
+<?php echo $formEx->input('Sort.id', array('type' => 'hidden')) ?>
+<?php echo $formEx->input('Sort.offset', array('type' => 'hidden')) ?>
 <?php echo $formEx->end() ?>
 
 <div id="pageMessage" class="message" style="display:none"></div>
 
 <h2>
 	<?php $baser->contentsTitle() ?>&nbsp;
-	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
-	<?php $baser->img('ajax-loader-s.gif',array('id'=>'ListAjaxLoader')) ?>
+	<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
+	<?php $baser->img('ajax-loader-s.gif', array('id' => 'ListAjaxLoader')) ?>
 </h2>
+
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ページ管理では、ブログやメールフォーム以外のWEBページを管理する事ができます。</p>
@@ -70,112 +74,142 @@ $(function(){
 		<p>http://[BaserCMS設置URL]/company/about</p>
 	</div>
 </div>
+
+<!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
-<div class="function-box corner10" id="PageFilterBody" style="display:none"> <?php echo $formEx->create('Page',array('url'=>array('action'=>'index'))) ?>
+<div class="function-box corner10" id="PageFilterBody" style="display:none">
+	<?php echo $formEx->create('Page', array('url' => array('action' => 'index'))) ?>
 	<p>
-		<?php if($pageCategories): ?>
-		<small>カテゴリ</small> <?php echo $formEx->select('Page.page_category_id', $pageCategories, null,array('escape'=>false)) ?>　
-		<?php endif ?>
-		<small>公開状態</small> <?php echo $formEx->select('Page.status', $textEx->booleanMarkList()) ?>　
-		<small>作成者</small> <?php echo $formEx->select('Page.author_id', $users) ?>　
-	<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </p>
+<?php if($pageCategories): ?>
+		<small>カテゴリ</small>
+		<?php echo $formEx->input('Page.page_category_id', array(
+				'type'		=> 'select',
+				'options'	=> $pageCategories,
+				'escape'	=> false,
+				'empty' => '指定なし')) ?>　
+<?php endif ?>
+		<small>公開状態</small>
+		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?>　
+		<small>作成者</small>
+		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?>　
+		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?> </p>
+	<?php $formEx->end() ?>
 </div>
 
 <!-- list-num -->
 <?php $baser->element('list_num') ?>
 
 <!-- pagination -->
-<?php $baser->pagination('default',array(),null,false) ?>
+<?php $baser->pagination('default', array(), null, false) ?>
+
+<!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01 sort-table" id="TablePages">
 	<tr>
 		<th>操作</th>
-		<?php if(!$sortmode): ?>
-		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'id'); ?></th>
-		<th><?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'page_category_id'); ?></th>
+<?php if(!$sortmode): ?>
+		<th><?php echo $paginator->sort(array('asc' => 'NO ▼', 'desc' => 'NO ▲'), 'id') ?></th>
+		<th><?php echo $paginator->sort(array('asc' => 'カテゴリ ▼', 'desc' => 'カテゴリ ▲'), 'page_category_id') ?></th>
 		<th>
-			<?php echo $paginator->sort(array('asc'=>'ページ名 ▼','desc'=>'ページ名 ▲'),'name'); ?><br />
-			<?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'title'); ?>
+			<?php echo $paginator->sort(array('asc' => 'ページ名 ▼', 'desc' => 'ページ名 ▲'), 'name') ?><br />
+			<?php echo $paginator->sort(array('asc' => 'タイトル ▼', 'desc' => 'タイトル ▲'), 'title') ?>
 		</th>
 		<th>
-			<?php echo $paginator->sort(array('asc'=>'公開状態 ▼','desc'=>'公開状態 ▲'),'status'); ?><br />
+			<?php echo $paginator->sort(array('asc' => '公開状態 ▼', 'desc' => '公開状態 ▲'), 'status') ?><br />
 		</th>
 		<th>
-			<?php echo $paginator->sort(array('asc'=>'作成者 ▼','desc'=>'作成者 ▲'),'author_id'); ?><br />
+			<?php echo $paginator->sort(array('asc' => '作成者 ▼', 'desc' => '作成者 ▲'), 'author_id') ?><br />
 		</th>
 		<th>
-			<?php echo $paginator->sort(array('asc'=>'登録日 ▼','desc'=>'登録日 ▲'),'created'); ?><br />
-			<?php echo $paginator->sort(array('asc'=>'更新日 ▼','desc'=>'更新日 ▲'),'modified'); ?>
+			<?php echo $paginator->sort(array('asc' => '登録日 ▼', 'desc' => '登録日 ▲'), 'created') ?><br />
+			<?php echo $paginator->sort(array('asc' => '更新日 ▼', 'desc' => '更新日 ▲'), 'modified') ?>
 		</th>
-
-		<?php else: ?>
+<?php else: ?>
 		<th>NO</th>
 		<th>カテゴリ</th>
 		<th>ページ名<br />タイトル</th>
 		<th>公開状態</th>
 		<th>作成者</th>
 		<th>登録日<br />更新日</th>
-		<?php endif ?>
+<?php endif ?>
 	</tr>
-	<?php if(!empty($dbDatas)): ?>
-		<?php $count=0; ?>
-		<?php foreach($dbDatas as $dbData): ?>
-			<?php if (!$page->allowPublish($dbData)): ?>
-				<?php $class=' class="disablerow sortable"'; ?>
-			<?php elseif ($count%2 === 0): ?>
-				<?php $class=' class="altrow sortable"'; ?>
-			<?php else: ?>
-				<?php $class=' class="sortable"'; ?>
-			<?php endif; ?>
+<?php if(!empty($dbDatas)): ?>
+	<?php $count=0; ?>
+	<?php foreach($dbDatas as $dbData): ?>
+		<?php if (!$page->allowPublish($dbData)): ?>
+			<?php $class=' class="disablerow sortable"'; ?>
+		<?php elseif ($count%2 === 0): ?>
+			<?php $class=' class="altrow sortable"'; ?>
+		<?php else: ?>
+			<?php $class=' class="sortable"'; ?>
+		<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 		<td class="operation-button" style="width:15%">
-			<?php if($sortmode): ?>
-			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
-			<?php echo $formEx->hidden('Sort.id'.$dbData['Page']['id'],array('class'=>'id','value'=>$dbData['Page']['id'])) ?>
-			<?php endif ?>
-			<?php $url = preg_replace('/index$/', '', $dbData['Page']['url']) ?>
-			<?php if(!preg_match('/^\/mobile\//is', $url)): ?>
-			<?php $baser->link('確認',$url,array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
-			<?php else: ?>
-			<?php $baser->link('確認',preg_replace('/^\/mobile\//is', '/m/', $url), array('class'=>'btn-green-s button-s','target'=>'_blank'),null,false) ?>
-			<?php endif ?>
-			<?php $baser->link('編集',array('action'=>'edit', $dbData['Page']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $dbData['Page']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),false); ?>
+		<?php if($sortmode): ?>
+			<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え')) ?></span>
+			<?php echo $formEx->input('Sort.id'.$dbData['Page']['id'], array(
+				'type'	=> 'hidden',
+				'class'	=> 'id',
+				'value' => $dbData['Page']['id'])) ?>
+		<?php endif ?>
+		<?php $url = preg_replace('/index$/', '', $dbData['Page']['url']) ?>
+		<?php if(!preg_match('/^\/mobile\//is', $url)): ?>
+			<?php $baser->link('確認', $url, array('class' => 'btn-green-s button-s', 'target' => '_blank'), null, false) ?>
+		<?php else: ?>
+			<?php $baser->link('確認',
+					preg_replace('/^\/mobile\//is', '/m/', $url),
+					array('class' => 'btn-green-s button-s', 'target' => '_blank'),
+					null, false) ?>
+		<?php endif ?>
+			<?php $baser->link('編集', 
+					array('action' => 'edit', $dbData['Page']['id']),
+					array('class' => 'btn-orange-s button-s'),
+					null, false) ?>
+			<?php $baser->link('削除', 
+					array('action' => 'delete', $dbData['Page']['id']),
+					array('class' => 'btn-gray-s button-s'),
+					sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),
+					false); ?>
 		</td>
 		<td style="width:5%"><?php echo $dbData['Page']['id']; ?></td>
 		<td style="width:15%">
-			<?php if(!empty($dbData['PageCategory']['title'])): ?>
+		<?php if(!empty($dbData['PageCategory']['title'])): ?>
 			<?php echo $dbData['PageCategory']['title']; ?>
-			<?php endif; ?></td>
+		<?php endif; ?>
+		</td>
 		<td style="width:30%">
-			<?php $baser->link($dbData['Page']['name'],array('action'=>'edit', $dbData['Page']['id'])); ?><br />
-			<?php echo $dbData['Page']['title']; ?></td>
+			<?php $baser->link($dbData['Page']['name'], array('action' => 'edit', $dbData['Page']['id'])); ?><br />
+			<?php echo $dbData['Page']['title']; ?>
+		</td>
 		<td style="width:10%;text-align:center">
 			<?php echo $textEx->booleanMark($dbData['Page']['status']); ?><br />
 		</td>
 		<td style="width:15%;text-align:center">
-			<?php if(isset($users[$dbData['Page']['author_id']])) : ?>
+		<?php if(isset($users[$dbData['Page']['author_id']])) : ?>
 			<?php echo $users[$dbData['Page']['author_id']] ?>
-			<?php endif ?>
+		<?php endif ?>
 		</td>
 		<td style="width:10%;white-space: nowrap">
 			<?php echo $timeEx->format('y-m-d',$dbData['Page']['created']) ?><br />
 			<?php echo $timeEx->format('y-m-d',$dbData['Page']['modified']) ?>
 		</td>
 	</tr>
-			<?php $count++; ?>
-		<?php endforeach; ?>
-	<?php else: ?>
+		<?php $count++; ?>
+	<?php endforeach; ?>
+<?php else: ?>
 	<tr>
 		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
 	<?php endif; ?>
 </table>
-<?php $baser->pagination('default',array(),null,false) ?>
+
+<!-- pagination -->
+<?php $baser->pagination('default', array(), null, false) ?>
+
 <div class="align-center">
-	<?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?>
-	<?php if(!$sortmode): ?>
-	<?php $baser->link('並び替えモード',array('sortmode'=>1),array('class'=>'btn-orange button')) ?>
-	<?php else: ?>
-	<?php $baser->link('ノーマルモード',array('sortmode'=>0),array('class'=>'btn-orange button')) ?>
-	<?php endif ?>
+	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
+<?php if(!$sortmode): ?>
+	<?php $baser->link('並び替えモード', array('sortmode' => 1), array('class' => 'btn-orange button')) ?>
+<?php else: ?>
+	<?php $baser->link('ノーマルモード', array('sortmode' => 0), array('class' => 'btn-orange button')) ?>
+<?php endif ?>
 </div>

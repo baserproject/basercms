@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * サイドメニュー
+ * [PUBLISH] サイドメニュー
  *
  * PHP versions 4 and 5
  *

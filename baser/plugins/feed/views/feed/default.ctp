@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * フィード
+ * [PUBLISH] フィード
  * 
  * PHP versions 4 and 5
  *
@@ -24,6 +24,7 @@ $feed->saveCachetime();
 <cake:nocache>
 	<?php $feed->cacheHeader() ?>
 </cake:nocache>
+
 <?php if(!empty($items)): ?>
 <ul>
 	<?php foreach($items as $key => $item): ?>
@@ -36,7 +37,7 @@ $feed->saveCachetime();
 			<?php $class = ' class="clearfix feed'.$no.'"' ?>
 		<?php endif ?>
 	<li<?php echo $class ?>> <span class="date"><?php echo date("Y.m.d",strtotime($item['pubDate']['value'])); ?></span><br />
-		<span class="title"><a href="<?php echo $item['link']['value']; ?>"><?php echo $item['title']['value']; ?></a></span> </li>
+		<span class="title"><a href="<?php echo $item['link']['value']; ?>"><?php echo $item['title']['value']; ?></a></span></li>
 	<?php endforeach; ?>
 </ul>
 <?php else: ?>

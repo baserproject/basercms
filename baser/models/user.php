@@ -58,49 +58,72 @@ class User extends AppModel {
 	var $validate = array(
 		'name'=>array(
 			'notEmpty' => array(
-				'rule'		=> VALID_NOT_EMPTY,
-				'message'	=> "アカウント名を入力して下さい"
+				'rule'		=> array('notEmpty'),
+				'message'	=> 'アカウント名を入力してください。'
 			),
 			'alphaNumericPlus' => array(
 				'rule'		=>	'alphaNumericPlus',
-				'message'	=> 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力して下さい'
+				'message'	=> 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'
 			),
 			'duplicate' => array(
 				'rule'		=>	array('duplicate','name'),
-				'message'	=> '既に登録のあるアカウント名です'
+				'message'	=> '既に登録のあるアカウント名です。'
+			),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'アカウント名は255文字以内で入力してください。'
 			)
 		),
 		'real_name_1' => array(
-			'rule'		=> VALID_NOT_EMPTY,
-			'message'	=> "名前[姓]を入力して下さい"
+			'notEmpty' => array(
+				'rule'		=> array('notEmpty'),
+				'message'	=> '名前[姓]を入力してください。'),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 50),
+				'message'	=> 'アカウント名は50文字以内で入力してください。'
+			)
+		),
+		'real_name_2' => array(
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 50),
+				'message'	=> '名前[名]は50文字以内で入力してください。'
+			)
 		),
 		'password' => array(
 			'minLength' => array(
 				'rule'		=> array('minLength',6),
 				'allowEmpty'=> false,
-				'message'	=> 'パスワードは６文字以上で入力して下さい。'
+				'message'	=> 'パスワードは６文字以上で入力してください。'
+			),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'パスワードは255文字以内で入力してください。'
 			),
 			'alphaNumeric' => array(
 				'rule'		=> 'alphaNumericPlus',
-				'message'	=> 'パスワードは半角英数字とハイフン、アンダースコアのみで入力して下さい'
+				'message'	=> 'パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。'
 			),
 			'confirm' => array(
 				'rule'		=> array('confirm', array('password_1', 'password_2')),
-				'message'	=> 'パスワードが同じものではありません'
+				'message'	=> 'パスワードが同じものではありません。'
 			)
 		),
 		'email' => array(
-			'rule'		=> array('email'),
-			'message'	=> "Eメールの形式が不正です",
-			'allowEmpty'=> true
+			'email' => array(
+				'rule'		=> array('email'),
+				'message'	=> 'Eメールの形式が不正です。',
+				'allowEmpty'=> true),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'Eメールは255文字以内で入力してください。')
 		),
 		'user_group_id'=>array(
-			'rule'		=> VALID_NOT_EMPTY,
-			'message'	=> "グループを選択して下さい"
+			'rule'		=> array('notEmpty'),
+			'message'	=> 'グループを選択してください。'
 		)
 	);
 /**
- * パリでーション
+ * validates
  *
  * @param string $options An optional array of custom options to be made available in the beforeValidate callback
  * @return boolean True if there are no errors

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ページネーション標準
+ * [PUBLISH] ページネーション標準
  *
  * PHP versions 4 and 5
  *

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコメント一覧
+ * [MOBILE] ブログコメント一覧
  * 
  * PHP versions 4 and 5
  *

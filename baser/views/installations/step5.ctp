@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー Step5
+ * [PUBLISH] インストーラー Step5
  *
  * PHP versions 4 and 5
  *

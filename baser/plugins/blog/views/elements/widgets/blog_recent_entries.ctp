@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ最近の投稿
+ * [PUBLISH] ブログ最近の投稿
  * 
  * PHP versions 4 and 5
  *

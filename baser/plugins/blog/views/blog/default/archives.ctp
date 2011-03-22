@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログアーカイブ一覧
+ * [PUBLISH] ブログアーカイブ一覧
  * 
  * PHP versions 4 and 5
  *
@@ -31,32 +31,39 @@ $(function(){
 });
 </script>
 
+<!-- title -->
 <h2 class="contents-head">
 	<?php $blog->title() ?>
 </h2>
+
+<!-- archives title -->
 <h3 class="contents-head">
 	<?php $baser->contentsTitle() ?>
 </h3>
+
 <!-- pagination -->
 <?php $baser->pagination('simple'); ?>
+
+<!-- list -->
 <?php if(!empty($posts)): ?>
-<?php foreach($posts as $post): ?>
+	<?php foreach($posts as $post): ?>
 <div class="post">
 	<h4 class="contents-head">
 		<?php $blog->postTitle($post) ?>
 	</h4>
 	<?php $blog->postContent($post,true,true) ?>
-	<div class="meta"> <span>
+	<div class="meta"><span>
 		<?php $blog->category($post) ?>
 		&nbsp;
 		<?php $blog->postDate($post) ?>
 		&nbsp;
 		<?php $blog->author($post) ?>
-		</span> </div>
+	</span></div>
 </div>
-<?php endforeach; ?>
+	<?php endforeach; ?>
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
+
 <!-- pagination -->
 <?php $baser->pagination('simple'); ?>

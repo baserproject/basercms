@@ -35,21 +35,22 @@ class ThemeFile extends AppModel {
  */
 	var $useTable = false;
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => "テーマファイル名を入力して下さい。",
-						'required' => true),
-				array(	'rule' => 'halfText',
-						'message' => 'テーマファイル名は半角のみで入力して下さい'),
-				array(  'rule' => array('duplicateThemeFile'),
-						'message' => '入力されたテーマファイル名は、同一階層に既に存在します'));
-	}
+	var $validate = array(
+			'name' => array(
+				array(	'rule'		=> array('notEmpty'),
+						'message'	=> "テーマファイル名を入力してください。",
+						'required'	=> true),
+				array(	'rule'		=> 'halfText',
+						'message'	=> 'テーマファイル名は半角のみで入力してください。'),
+				array(  'rule'		=> array('duplicateThemeFile'),
+						'message'	=> '入力されたテーマファイル名は、同一階層に既に存在します。')
+			)
+	);
 /**
  * フォルダの重複チェック
  * @param	array	$check

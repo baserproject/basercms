@@ -63,23 +63,29 @@ class BlogPost extends BlogAppModel {
 							'exclusive'=>false,
 							'finderQuery'=>''));
 /**
- * beforeValidate
+ * validate
  *
- * @return	void
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(  'rule' => array('minLength',1),
-						'message' => "タイトルを入力して下さい",
-						'required' => true));
-		$this->validate['posts_date'] = array(array('rule' => array('minLength',1),
-						'message' => "投稿日を入力して下さい",
-						'required' => true));
-		$this->validate['user_id'] = array(array(   'rule' => array('minLength',1),
-						'message' => "投稿者を選択して下さい"));
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(  'rule'		=> array('notEmpty'),
+					'message'	=> 'タイトルを入力してください。',
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'タイトルは50文字以内で入力してください。')
+		),
+		'posts_date' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '投稿日を入力してください。',
+					'required'	=> true)
+		),
+		'user_id' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '投稿者を選択してください。')
+		)
+	);
 /**
  * 初期値を取得する
  *

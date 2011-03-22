@@ -43,19 +43,27 @@ class Plugin extends AppModel {
  */
 	var $useDbConfig = 'baser';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => "プラグイン名を入力して下さい。",
-						'required' => true));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('alphaNumericPlus'),
+					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力してください。',
+					'reqquired'	=> true),
+			array(	'rule'		=> array('isUnique'),
+					'on'		=> 'create',
+					'message'	=>	'指定のプラグインは既に使用されています。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'プラグイン名は50文字以内としてください。')
+		),
+		'title' => array(
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'プラグインタイトルは50文字以内としてください。')
+		)
+	);
 /**
  * データベースを初期化する
  *

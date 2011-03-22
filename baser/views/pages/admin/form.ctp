@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ページ フォーム
+ * [ADMIN] ページ フォーム
  * 
  * PHP versions 4 and 5
  *
@@ -39,6 +39,7 @@ if($this->action == 'admin_add') {
 	$disableDraft = false;
 }
 ?>
+
 <script type="text/javascript">
 $(function(){
 	pageCategoryIdChangeHandler();
@@ -105,9 +106,9 @@ function pageCategoryIdChangeHandler() {
 }
 </script>
 
-<h2>
-	<?php $baser->contentsTitle() ?>
+<h2><?php $baser->contentsTitle() ?>
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>WEBページとして表示させる「ページ」の登録を行います。</p>
@@ -123,35 +124,51 @@ function pageCategoryIdChangeHandler() {
 
 <?php if($this->action == 'admin_edit'): ?>
 	<?php if($formEx->value('Page.status')): ?>
-<p><strong>このページのURL：<?php $baser->link($baser->getUri('/'.$url),'/'.$url,array('target'=>'_blank')) ?></strong></p>
+<p><strong>このページのURL：<?php $baser->link($baser->getUri('/' . $url), '/' . $url, array('target' => '_blank')) ?></strong></p>
 	<?php else: ?>
-<p><strong>このページのURL：<?php echo $baser->getUri('/'.$url) ?></strong></p>
+<p><strong>このページのURL：<?php echo $baser->getUri('/' . $url) ?></strong></p>
 	<?php endif ?>
 <?php endif ?>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $formEx->create('Page',array('id'=>'PageForm')) ?>
-<?php echo $formEx->hidden('Page.mode') ?>
-<?php echo $formEx->hidden('Page.sort') ?>
+
+<?php echo $formEx->create('Page', array('id' => 'PageForm')) ?>
+<?php echo $formEx->input('Page.mode', array('type' => 'hidden')) ?>
+<?php echo $formEx->input('Page.sort', array('type' => 'hidden')) ?>
+
+<!-- form -->
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-	<?php if($this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.id', 'NO') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Page.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
+		<td class="col-input">
+			<?php echo $formEx->value('Page.id') ?>
+			<?php echo $formEx->input('Page.id', array('type' => 'hidden')) ?>
+		</td>
 	</tr>
-	<?php endif; ?>
-	<?php $categories = $formEx->getControlSource('page_category_id') ?>
-	<?php if($categories): ?>
+<?php endif; ?>
+<?php $categories = $formEx->getControlSource('page_category_id') ?>
+<?php if($categories): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Page.page_category_id',$categories,null,array('escape'=>false)) ?> <?php echo $formEx->error('Page.page_category_id') ?>&nbsp;</td>
+		<td class="col-input">
+			<?php echo $formEx->input('Page.page_category_id', array(
+					'type'		=> 'select',
+					'options'	=> $categories,
+					'escape'	=> false,
+					'empty'		=> '指定なし')) ?>
+			<?php echo $formEx->error('Page.page_category_id') ?>
+		</td>
 	</tr>
-	<?php else: ?>
+<?php else: ?>
 	<?php echo $formEx->hidden('Page.page_category_id') ?>
-	<?php endif ?>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.name', 'ページ名') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Page.name', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->input('Page.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpName', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('Page.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>ページ名はURLに利用します。</li>
@@ -159,11 +176,14 @@ function pageCategoryIdChangeHandler() {
 					<li>日本語の入力が可能です。</li>
 				</ul>
 			</div>
-			<?php echo $formEx->error('Page.name') ?></td>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.title', 'タイトル') ?></th>
-		<td class="col-input"><?php echo $formEx->text('Page.title', array('size'=>40,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpTitle','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->input('Page.title', array('type' => 'text', 'size'=> 40, 'maxlength' => 255, 'counter' => true)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpTitle', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('Page.title') ?>
 			<div id="helptextTitle" class="helptext">
 				<ul>
 					<li>タイトルはTitleタグに利用し、ブラウザのタイトルバーに表示されます。</li>
@@ -173,11 +193,14 @@ function pageCategoryIdChangeHandler() {
 						トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
 				</ul>
 			</div>
-			<?php echo $formEx->error('Page.title') ?></td>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.description', '説明文') ?></th>
-		<td class="col-input"><?php echo $formEx->textarea('Page.description', array('cols'=>60,'rows'=>2)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpDescription','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<?php echo $formEx->input('Page.description', array('type' => 'textarea', 'cols' => 60,'rows' => 2, 'maxlength' => 255, 'counter' => true)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpDescription', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('Page.description') ?>
 			<div id="helptextDescription" class="helptext">
 				<ul>
 					<li>説明文はMetaタグのdescription属性に利用されます。</li>
@@ -187,25 +210,30 @@ function pageCategoryIdChangeHandler() {
 						<small>※ 省略した場合、上記タグではサイト基本設定で設定された説明文が出力されます。</small></li>
 				</ul>
 			</div>
-			<?php echo $formEx->error('Page.description') ?></td>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.contents', '本文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('Page.contents',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => $disableDraft)) ?>
-			<?php echo $formEx->error('Page.contents') ?>&nbsp;
+			<?php echo $formEx->ckeditor('Page.contents', 
+					array('cols' => 60, 'rows' => 20),
+					array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => $disableDraft)) ?>
+			<?php echo $formEx->error('Page.contents') ?>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head">
-			<span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?>
-		</th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Page.status', '公開状態') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->radio('Page.status', $statuses , array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+			<?php echo $formEx->input('Page.status', array(
+					'type'		=> 'radio',
+					'options'	=> $statuses ,
+					'legend'	=> false,
+					'separator'	=> '&nbsp;&nbsp;')) ?>
 			<?php echo $formEx->error('Page.status') ?>
 			&nbsp;&nbsp;
-			<?php echo $formEx->dateTimePicker('Page.publish_begin',array('size'=>12,'maxlength'=>10),true) ?>&nbsp;〜&nbsp;
-			<?php echo $formEx->dateTimePicker('Page.publish_end',array('size'=>12,'maxlength'=>10),true) ?>
+			<?php echo $formEx->dateTimePicker('Page.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+			&nbsp;〜&nbsp;
+			<?php echo $formEx->dateTimePicker('Page.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
 			<?php echo $formEx->error('Page.publish_begin') ?>
 			<?php echo $formEx->error('Page.publish_end') ?>
 		</td>
@@ -213,14 +241,15 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->select('Page.author_id', $users) ?>
-			<?php echo $formEx->error('Page.publish_end') ?>
+			<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
+			<?php echo $formEx->error('Page.author_id') ?>
 		</td>
 	</tr>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->checkbox('Page.reflect_mobile', array('label'=>'モバイルページとしてコピー')) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpReflectMobile','class'=>'help','alt'=>'ヘルプ')) ?>
+			<?php echo $formEx->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpReflectMobile', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<div id="helptextReflectMobile" class="helptext">
 				<ul>
 					<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
@@ -229,18 +258,25 @@ function pageCategoryIdChangeHandler() {
 				</ul>
 			</div>
 			<?php if(!empty($mobileExists)): ?>
-			<br />&nbsp;<?php $baser->link('≫ モバイルページの編集画面に移動',array($mobileExists)) ?>
+			<br />&nbsp;<?php $baser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
 			<?php endif ?>
 		</td>
 	</tr>
 </table>
+
 <div class="submit">
-	<?php if($this->action == 'admin_add'): ?>
-		<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button', 'id'=>'btnSave')) ?>
-		<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
-		<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button', 'id'=>'btnSave')) ?>
-		<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
-		<?php $baser->link('削　除',array('action'=>'delete', $formEx->value('Page.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),false); ?>
-	<?php endif ?>
+<?php if($this->action == 'admin_add'): ?>
+	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php echo $formEx->submit('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php $baser->link('削　除',
+			array('action'=>'delete', $formEx->value('Page.id')),
+			array('class'=>'btn-gray button'),
+			sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),
+			false); ?>
+<?php endif ?>
 </div>
+
+<?php echo $formEx->end() ?>

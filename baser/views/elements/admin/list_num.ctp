@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * リスト設定リンク
+ * [ADMIN] リスト設定リンク
  *
  * PHP versions 4 and 5
  *

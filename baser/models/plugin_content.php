@@ -43,28 +43,35 @@ class PluginContent extends AppModel {
  */
 	var $useDbConfig = 'baser';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	void
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => 'alphaNumericPlus',
-						'message' => 'コンテンツ名は半角英数字、ハイフン、アンダースコアのみで入力して下さい'),
-				array('rule' => array('isUnique'),
-						'on'=>'create',
-						'message' => '入力されたコンテンツ名は既に使用されています。'));
-		$this->validate['content_id'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => "コンテンツIDを入力して下さい",
-						'on'=>'update'));
-		$this->validate['plugin'] = array(array('rule' => 'alphaNumericPlus',
-						'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力して下さい'),
-				array('rule' => VALID_NOT_EMPTY,
-						'message' => 'プラグイン名を入力して下さい'));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('alphaNumericPlus'),
+					'message'	=> 'コンテンツ名は半角英数字、ハイフン、アンダースコアのみで入力してください。'),
+			array(	'rule'		=> array('isUnique'),
+					'on'		=> 'create',
+					'message'	=>	'入力されたコンテンツ名は既に使用されています。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'コンテンツ名は50文字以内で入力してください。')
+		),
+		'content_id' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'コンテンツIDを入力してください。',
+					'on'		=> 'update')
+		),
+		'plugin' => array(
+			array(	'rule'		=> array('alphaNumericPlus'),
+					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力してください。'),
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'プラグイン名を入力してください。'),
+			array(	'rule'		=> array('maxLength', 20),
+					'message'	=> 'プラグイン名は20文字以内で入力してください。')
+		)
+	);
 /**
  * プラグイン名の書き換え
  *

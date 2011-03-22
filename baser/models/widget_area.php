@@ -35,16 +35,22 @@ class WidgetArea extends AppModel {
  */
 	var $name = 'WidgetArea';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "ウィジェットエリア名を入力して下さい"));
-	}
+	var $validate = array(
+		'name' => array(
+			'notEmpty' => array(
+				'rule'		=> array('notEmpty'),
+				'message'	=> 'ウィジェットエリア名を入力してください。'),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'ウィジェットエリア名は255文字以内で入力してください。'
+			)
+		)
+	);
 /**
  * コントロールソース取得
  * @param	string	$field

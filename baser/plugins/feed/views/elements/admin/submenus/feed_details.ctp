@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] フィード詳細メニュー
+ * [ADMIN] フィード詳細メニュー
  *
  * PHP versions 4 and 5
  *
@@ -24,17 +24,11 @@
 <div class="side-navi">
 	<h2>フィードメニュー</h2>
 	<ul>
-		<?php if($this->params['controller']=='feed_details'): ?>
-		<li>
-			<?php $baser->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedDetail.feed_config_id'))) ?>
-		</li>
-		<li>
-			<?php $baser->link('フィード設定に戻る',array('controller'=>'feed_configs','action'=>'edit',$form->value('FeedDetail.feed_config_id'))) ?>
-		</li>
-		<?php else: ?>
-		<li>
-			<?php $baser->link('読込フィードを追加',array('controller'=>'feed_details','action'=>'add',$form->value('FeedConfig.id'))) ?>
-		</li>
-		<?php endif; ?>
+<?php if($this->params['controller']=='feed_details'): ?>
+		<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedDetail.feed_config_id'))) ?></li>
+		<li><?php $baser->link('フィード設定に戻る', array('controller' => 'feed_configs', 'action' => 'edit', $form->value('FeedDetail.feed_config_id'))) ?></li>
+<?php else: ?>
+		<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedConfig.id'))) ?></li>
+<?php endif; ?>
 	</ul>
 </div>

@@ -1,8 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコメント単記事
- * Ajax でも利用される
+ * [MOBILE] ブログコメント単記事
  * 
  * PHP versions 4 and 5
  *

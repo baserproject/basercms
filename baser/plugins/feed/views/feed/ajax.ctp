@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * フィード読み込みAJAX
+ * [PUBLISH] フィード読み込みAJAX
  *
  * PHP versions 4 and 5
  *
@@ -21,7 +21,7 @@
  */
 $baser->cacheHeader(MONTH,'js');
 ?>
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('/feed/img/ajax-loader.gif',array('alt'=>'loading now...','style'=>'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('/feed/img/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)

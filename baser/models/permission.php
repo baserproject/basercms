@@ -57,26 +57,32 @@ class Permission extends AppModel {
  */
 	var $permissionsTmp = -1;
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => "設定名を入力して下さい"));
-		$this->validate['user_group_id'] =	array(array('rule' => array('minLength',1),
-						'message' => "ユーザーグループを選択して下さい",
-						'required'=>true
-						));
-		$this->validate['url'] = array(	array(	'rule' => array('minLength',1),
-						'message' => "設定を入力して下さい"),
-				array(	'rule' => 'checkUrl',
-						'message' => 'アクセス拒否として設定できるのは認証ページだけです。'));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '設定名を入力してください。'),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '設定名は255文字以内で入力してください。')
+		),
+		'user_group_id' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'ユーザーグループを選択してください。',
+					'required'	=> true)
+		),
+		'url' => array(	
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '設定URLを入力してください。'),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '設定URLは255文字以内で入力してください。'),
+			array(	'rule'		=> array('checkUrl'),
+					'message'	=> 'アクセス拒否として設定できるのは認証ページだけです。')
+		)
+	);
 /**
  * 設定をチェックする
  *

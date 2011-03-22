@@ -76,7 +76,7 @@ class  AuthConfigureComponent extends Object {
 		// オートリダイレクトをOFF
 		$auth->autoRedirect = false;
 		// エラーメッセージ
-		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力して下さい。';
+		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
 		// 権限が無いactionを実行した際のエラーメッセージ
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
 		//ユーザIDとパスワードのフィールドを指定

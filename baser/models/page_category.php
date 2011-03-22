@@ -75,24 +75,29 @@ class PageCategory extends AppModel {
  */
 	var $_mobileId = -1;
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => array('minLength',1),
-						'message' => "ページカテゴリ名を入力して下さい。",
-						'required' => true),
-				array(  'rule' => array('duplicatePageCategory'),
-						'message' => '入力されたページカテゴリー名は、同一階層に既に登録されています'));
-		$this->validate['title'] = array(array(	'rule' => array('minLength',1),
-						'message' => "ページカテゴリタイトルを入力して下さい。",
-						'required' => true));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('minLength', 1),
+					'message'	=> 'ページカテゴリ名を入力してください。',
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'ページカテゴリ名は50文字以内で入力してください。'),
+			array(  'rule'		=> array('duplicatePageCategory'),
+					'message'	=> '入力されたページカテゴリー名は、同一階層に既に登録されています。')
+		),
+		'title' => array(
+			array(	'rule'		=> array('minLength', 1),
+					'message'	=> 'ページカテゴリタイトルを入力してください。',
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'ページカテゴリタイトルは255文字以内で入力してください。')
+		)
+	);
 /**
  * コントロールソースを取得する
  *

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログカテゴリー一覧ウィジェット設定
+ * [ADMIN] ブログカテゴリー一覧ウィジェット設定
  *
  * PHP versions 4 and 5
  *

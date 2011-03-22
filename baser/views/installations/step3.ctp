@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー Step3
+ * [PUBLISH] インストーラー Step3
  *
  * PHP versions 4 and 5
  *
@@ -20,6 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <script type="text/javascript">
 $(document).ready( function() {
 	if ($('#btnnext').attr('disabled')) {
@@ -46,22 +47,22 @@ $(document).ready( function() {
 				alert("データベースのホスト名を入力してください。");
 				return false;
 			} else if ($("#InstallationDbUsername").val() == "") {
-				alert("データベースユーザー名を入力して下さい。");
+				alert("データベースユーザー名を入力してください。");
 				return false;
 			} else if ($("#InstallationDbName").val() == "") {
-				alert("データベース名を入力して下さい。");
+				alert("データベース名を入力してください。");
 				return false;
 			} else if ($("#InstallationDbPrefix").val() == "") {
-				alert("他のアプリケーションと重複しないプレフィックスを入力して下さい。（例）bc_");
+				alert("他のアプリケーションと重複しないプレフィックスを入力してください。（例）bc_");
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
-				alert("プレフィックスの末尾はアンダースコアにして下さい。（例）bc_");
+				alert("プレフィックスの末尾はアンダースコアにしてください。（例）bc_");
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
-				alert("プレフィックスは英数字とアンダースコアの組み合わせにして下さい。（例）bc_");
+				alert("プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）bc_");
 				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
-				alert("データベースのポートナンバーを入力して下さい。");
+				alert("データベースのポートナンバーを入力してください。");
 				return false;
 			}			
 		}
@@ -152,55 +153,62 @@ $(document).ready( function() {
 	}
 </script>
 
+<?php echo $formEx->create(null, array('action' => 'step3', 'id' => 'dbsettings', 'name' => 'dbsettings')) ?>
+
 <div id="Installations">
 	<h3>データベース設定</h3>
 	<div>
-		<p> データベースサーバーの場合は、データベース情報を入力し次に進む前に接続テストを実行して下さい。<br />
+		<p> データベースサーバーの場合は、データベース情報を入力し次に進む前に接続テストを実行してください。<br />
 			<strong>CSV以外の場合は、データベースが存在し中身が空である必要があります。</strong> </p>
 	</div>
 	<div style="margin-bottom:30px">
-		<form action="step3" method="post" name='dbsettings' id="dbsettings">
-			<ul>
-				<li id="dbType"> <?php echo $form->label('Installation.dbType', 'データベースタイプ');?><br />
-					<?php echo $form->select('Installation.dbType',$dbsource , null, null,false); ?> </li>
-				<li id="dbHost"> <?php echo $form->label('Installation.dbHost', 'データベースホスト名');?><br />
-					<?php echo $form->text('Installation.dbHost',array('maxlength'=>'300','size'=>45)); ?> </li>
-				<li id="dbUser" class="clearfix">
-					<label>ログイン情報</label>
-					<br />
-					<div class="float-left"> <?php echo $form->text('Installation.dbUsername',array('maxlength'=>'100')); ?><br />
-						<small>ユーザー名</small> </div>
-					<div class="float-left"> <?php echo $form->text('Installation.dbPassword',array('maxlength'=>'100','type'=>'password')); ?><br />
-						<small>パスワード</small> </div>
-				</li>
-				<li id="dbInfo" class="clearfix">
-					<label>データベース情報</label>
-					<br />
-					<div class="float-left"> <?php echo $form->text('Installation.dbPrefix',array('size'=>'10')); ?><br />
-						<small>プレフィックス</small> </div>
-					<div class="float-left"> <?php echo $form->text('Installation.dbName',array('maxlength'=>'100')); ?><br />
-						<small>データベース名</small> </div>
-					<div class="float-left"> <?php echo $form->text('Installation.dbPort',array('maxlength'=>'5','size'=>5)); ?><br />
-						<small>ポート</small> </div>
-					<?php echo $form->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
-					<br style="clear:both" />
-					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。</small></li>
-			</ul>
-			<?php if (!empty($blDBSettingsOK)): ?>
-			<h3>オプション</h3>
-			<ul>
-				<li><?php echo $form->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
-			</ul>
-			<?php endif ?>
-		</form>
+		<ul>
+			<li id="dbType"> <?php echo $formEx->label('Installation.dbType', 'データベースタイプ');?><br />
+				<?php echo $formEx->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
+			<li id="dbHost"> <?php echo $formEx->label('Installation.dbHost', 'データベースホスト名');?><br />
+				<?php echo $formEx->input('Installation.dbHost', array('type' => 'text', 'maxlength' => '300','size' => 45)); ?> </li>
+			<li id="dbUser" class="clearfix">
+				<label>ログイン情報</label>
+				<br />
+				<div class="float-left"> <?php echo $formEx->input('Installation.dbUsername',array('type' => 'text', 'maxlength'=>'100')); ?><br />
+					<small>ユーザー名</small> </div>
+				<div class="float-left"> <?php echo $formEx->input('Installation.dbPassword',array('type' => 'text', 'maxlength'=>'100','type'=>'password')); ?><br />
+					<small>パスワード</small> </div>
+			</li>
+			<li id="dbInfo" class="clearfix">
+				<label>データベース情報</label>
+				<br />
+				<div class="float-left"> <?php echo $formEx->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
+					<small>プレフィックス</small> </div>
+				<div class="float-left"> <?php echo $formEx->input('Installation.dbName',array('type' => 'text', 'maxlength'=>'100')); ?><br />
+					<small>データベース名</small> </div>
+				<div class="float-left"> <?php echo $formEx->input('Installation.dbPort',array('type' => 'text', 'maxlength'=>'5','size'=>5)); ?><br />
+					<small>ポート</small> </div>
+				<?php echo $formEx->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
+				<br style="clear:both" />
+				<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。</small></li>
+		</ul>
+<?php if (!empty($blDBSettingsOK)): ?>
+		<h3>オプション</h3>
+		<ul>
+			<li><?php echo $formEx->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
+		</ul>
+<?php endif ?>
+
 	</div>
 	<div class="clearfix">
 		<div class="float-left">
-			<button type="submit" class='btn-gray button' id='btnback' ><span>戻る</span></button>
+			<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
 		</div>
 		<div class="float-left">
-			<button class='btn-orange button' name="checkdb" type='submit' id='checkdb'><span>接続テスト</span></button>
+			<?php echo $formEx->button('接続テスト', array('class' => 'btn-orange button', 'id' => 'checkdb')) ?>
 		</div>
-		<button class='btn-red button' name="btnnext" id='btnnext' type='button' <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?> disabled='disabled' <?php endif ?>> <span>次のステップへ</span> </button>
+<?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
+		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled')) ?>
+<?php else: ?>
+		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext')) ?>
+<?php endif ?>
 	</div>
 </div>
+
+<?php echo $formEx->end() ?>

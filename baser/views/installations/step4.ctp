@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー Step4
+ * [PUBLISH] インストーラー Step4
  *
  * PHP versions 4 and 5
  *
@@ -20,22 +20,23 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#btnfinish,#btnback').click( function() {
 		if(this.id == 'btnfinish') {
 			$("#clicked").val('finish');
 			if($("#InstallationAdminEmail").val() == ""){
-				alert("管理用メールアドレスを入力して下さい。");
+				alert("管理用メールアドレスを入力してください。");
 				return false;
 			}else if($("#InstallationAdminUsername").val() == ""){
-				alert("ユーザー名を入力して下さい。");
+				alert("ユーザー名を入力してください。");
 				return false;
 			}else if(!$("#InstallationAdminUsername").val().match(/^[a-zA-Z0-9\-_]+$/)) {
 				alert("ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。");
 				return false;
 			}else if($("#InstallationAdminPassword").val().length < 6){
-				alert("あなたのパスワードを６文字以上で入力して下さい。");
+				alert("あなたのパスワードを６文字以上で入力してください。");
 				return false;
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
 				alert("パスワードが確認欄のパスワードと同じではありません。");
@@ -52,40 +53,42 @@ $(document).ready(function(){
 });
 </script>
 
+<?php echo $formEx->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
+
 <div id="Installations">
-	<form action="step4" method="post" name='adminSettings' id='adminSettings'>
+	<div>
+		<h3>管理用メールアドレス登録</h3>
+		<ul>
+			<li><?php echo $formEx->input('Installation.admin_email', array('type' => 'text', 'size'=>44)); ?></li>
+		</ul>
+		<h3>管理ユーザー登録</h3>
+		<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
+		<ul>
+			<li>
+				<label>管理者名</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+				<?php echo $formEx->input('Installation.admin_username', array('type' => 'text')); ?>
+			</li>
+			<li class="clearfix">
+				<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+				<div class="float-left">
+					<?php echo $formEx->input('Installation.admin_password', array('type' => 'password')); ?>
+				</div>
+				<div class="float-left">
+					<?php echo $formEx->input('Installation.admin_confirmpassword', array('type' => 'password')); ?><br />
+					<small>確認の為もう一度入力してください</small>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<?php echo $formEx->input('clicked', array('type' => 'hidden')) ?>
+	<div class="clearfix">
+		<div class="float-left">
+			<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
+		</div>
 		<div>
-			<h3>管理用メールアドレス登録</h3>
-			<ul>
-				<li><?php echo $form->text('Installation.admin_email', array('size'=>44)); ?></li>
-			</ul>
-			<h3>管理ユーザー登録</h3>
-			<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
-			<ul>
-				<li>
-					<label>管理者名</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
-					<?php echo $form->text('Installation.admin_username'); ?>
-				</li>
-				<li class="clearfix">
-					<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
-					<div class="float-left">
-						<?php echo $form->password('Installation.admin_password', array ()); ?>
-					</div>
-					<div class="float-left">
-						<?php echo $form->password('Installation.admin_confirmpassword', array()); ?><br />
-						<small>確認の為もう一度入力して下さい</small>
-					</div>
-				</li>
-			</ul>
+			<?php echo $formEx->button('完了', array('class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
 		</div>
-		<?php echo $form->hidden('clicked') ?>
-		<div class="clearfix">
-			<div class="float-left">
-				<button type="submit" class='btn-gray button' id='btnback' ><span>戻る</span></button>
-			</div>
-			<div>
-				<button class='btn-red button' name="step5" id='btnfinish' type='button'><span>完了</span></button>
-			</div>
-		</div>
-	</form>
+	</div>
 </div>
+
+<?php echo $formEx->end() ?>

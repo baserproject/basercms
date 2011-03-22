@@ -40,6 +40,13 @@ class ThemesController extends AppController {
  */
 	var $components = array('Auth','Cookie','AuthConfigure');
 /**
+ * ヘルパー
+ *
+ * @var		array
+ * @access	public
+ */
+	var $helpers = array('FormEx');
+/**
  * パンくずナビ
  * @var array
  */

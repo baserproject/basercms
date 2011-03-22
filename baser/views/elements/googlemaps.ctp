@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * グールグルマップ
+ * [PUBLISH] グールグルマップ
  *
  * PHP versions 4 and 5
  *

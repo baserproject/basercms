@@ -34,25 +34,80 @@ class MailField extends MailAppModel {
  */
 	var $name = 'MailField';
 /**
- * beforeValidate
+ * validate
  *
- * @return	void
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['field_name'] = array(array('rule' => 'halfText',
-						'message' => 'フィールド名は半角のみで入力して下さい。',
-						'allowEmpty'=>false),
-				array(	'rule'=>'duplicateMailField',
-						'message' => '入力されたフィールド名は既に登録されています'));
-		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "項目名を入力して下さい。"));
-		$this->validate['type'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "タイプを入力して下さい"));
-
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> "項目名を入力してください。"),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '項目名は255文字以内で入力してください。')
+		),
+		'field_name' => array(
+			array(	'rule'		=> array('halfText'),
+					'message'	=> 'フィールド名は半角のみで入力してください。',
+					'allowEmpty'=> false),
+			array(	'rule'		=> 'duplicateMailField',
+					'message'	=> '入力されたフィールド名は既に登録されています。'),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'フィールド名は255文字以内で入力してください。')
+		),
+		'type' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> "タイプを入力してください。")
+		),
+		'head' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '項目見出しは255文字以内で入力してください。')
+		),
+		'attention' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '注意書きは255文字以内で入力してください。')
+		),
+		'before_attachment' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '前見出しは255文字以内で入力してください。')
+		),
+		'after_attachment' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '後見出しは255文字以内で入力してください。')
+		),
+		'source' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '選択リストは255文字以内で入力してください。')
+		),
+		'options' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'オプションは255文字以内で入力してください。')
+		),
+		'class' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'クラス名は255文字以内で入力してください。')
+		),
+		'separator' => array(
+			array(	'rule'		=> array('maxLength', 20),
+					'message'	=> '区切り文字は20文字以内で入力してください。')
+		),
+		'default_value' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '初期値は255文字以内で入力してください。')
+		),
+		'description' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '説明文は255文字以内で入力してください。')
+		),
+		'group_field' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'グループフィールドは255文字以内で入力してください。')
+		),
+		'group_valid' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'グループ入力チェックは255文字以内で入力してください。')
+		)
+	);
 /**
  * コントロールソースを取得する
  *

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * 送信メール
+ * [EMAIL] 送信メール
  *
  * PHP versions 4 and 5
  *

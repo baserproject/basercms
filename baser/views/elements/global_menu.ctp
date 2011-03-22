@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * グロバールメニュー
+ * [PUBLISH] グロバールメニュー
  * 
  * PHP versions 4 and 5
  *

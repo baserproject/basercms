@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * PHPテンプレート読み込みウィジェット
+ * [PUBLISH] PHPテンプレート読み込みウィジェット
  *
  * PHP versions 4 and 5
  *

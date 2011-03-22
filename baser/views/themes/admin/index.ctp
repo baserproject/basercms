@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] テーマ一覧
+ * [ADMIN] テーマ一覧
  *
  * PHP versions 4 and 5
  *
@@ -21,9 +21,10 @@
  */
 ?>
 
-<h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>
+	&nbsp;<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?></h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ここではテーマを切り替えたり、テーマファイルを閲覧、編集したりとテーマの管理を行う事ができます。<br />
@@ -35,6 +36,8 @@
 		<li>テーマを削除するには、対象テーマの「削除」ボタンをクリックします。</li>
 	</ul>
 </div>
+
+<!-- form -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableThemes">
 	<tr>
 		<th>操作</th>

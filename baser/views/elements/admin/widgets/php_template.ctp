@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * テンプレートウィジェット設定
+ * [ADMIN] テンプレートウィジェット設定
  *
  * PHP versions 4 and 5
  *

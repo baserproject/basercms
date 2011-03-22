@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] アクセス拒否設定一覧
+ * [ADMIN] アクセス制限設定一覧
  *
  * PHP versions 4 and 5
  *
@@ -19,26 +19,31 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$baser->js('sorttable',false);
 ?>
-<?php $baser->js('sorttable',false) ?>
+
 <script type="text/javascript">
 $(function(){
 	$("#PermissionsSearchBody").show();
 });
 </script>
 
-<?php echo $formEx->create('Sort',array('action'=>'update_sort','url'=>am(array('controller'=>'permissions'),$this->passedArgs))) ?>
-	<?php echo $formEx->hidden('Sort.id') ?>
-	<?php echo $formEx->hidden('Sort.offset') ?>
+<?php echo $formEx->create('Sort', array(
+	'action' => 'update_sort',
+	'url' => am(array('controller'=>'permissions'), $this->passedArgs))) ?>
+<?php echo $formEx->input('Sort.id', array('type' => 'hidden')) ?>
+<?php echo $formEx->input('Sort.offset', array('type' => 'hidden')) ?>
 <?php echo $formEx->end() ?>
 
 <div id="pageMessage" class="message" style="display:none"></div>
 
 <h2>
 	<?php $baser->contentsTitle() ?>&nbsp;
-	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
-	<?php $baser->img('ajax-loader-s.gif',array('id'=>'ListAjaxLoader')) ?>
+	<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
+	<?php $baser->img('ajax-loader-s.gif', array('id' => 'ListAjaxLoader')) ?>
 </h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>サイト運営者には必要最低限のメニューしか表示しないなど、ユーザーグループごとのアクセス制限をかける事でシンプルなインターフェイスを実現する事ができます。<br />
@@ -58,11 +63,19 @@ $(function(){
 		</ol>
 	</div>
 </div>
+
+<!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PermissionsSearch">検索</a></h3>
-<div class="function-box corner10" id="PermissionsSearchBody"> <?php echo $formEx->create('Permission',array('url'=>array('action'=>'index'),'type'=>'get')) ?>
-	<p> <small>ユーザーグループ</small> <?php echo $formEx->select('Permission.user_group_id',  $formEx->getControlSource('user_group_id'),null,array(),false) ?>
-		<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?><?php echo $form->end() ?></p>
+<div class="function-box corner10" id="PermissionsSearchBody">
+	<?php echo $formEx->create('Permission', array('url' => array('action' => 'index'), 'type' => 'get')) ?>
+	<p><small>ユーザーグループ</small>
+		<?php echo $formEx->input('Permission.user_group_id', array(
+			'type'		=> 'select', 
+			'options'	=> $formEx->getControlSource('user_group_id'))) ?>
+		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?>
+		<?php echo $formEx->end() ?></p>
 </div>
+
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01 sort-table" id="PermissionsTable">
 	<tr>
@@ -72,51 +85,59 @@ $(function(){
 		<th>アクセス</th>
 		<th>登録日<br />更新日</th>
 	</tr>
-	<?php if(!empty($listDatas)): ?>
-		<?php $count=0; ?>
-		<?php foreach($listDatas as $listData): ?>
-			<?php if (!$listData['Permission']['status']): ?>
-				<?php $class=' class="disablerow sortable"'; ?>
-			<?php elseif ($count%2 === 0): ?>
-				<?php $class=' class="altrow sortable"'; ?>
-			<?php else: ?>
-				<?php $class=' class="sortable"'; ?>
-			<?php endif; ?>
+<?php if(!empty($listDatas)): ?>
+	<?php $count=0; ?>
+	<?php foreach($listDatas as $listData): ?>
+		<?php if (!$listData['Permission']['status']): ?>
+			<?php $class=' class="disablerow sortable"'; ?>
+		<?php elseif ($count%2 === 0): ?>
+			<?php $class=' class="altrow sortable"'; ?>
+		<?php else: ?>
+			<?php $class=' class="sortable"'; ?>
+		<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 		<td style="width:15%" class="operation-button">
-			<?php if($sortmode): ?>
-			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
-			<?php echo $formEx->hidden('Sort.id'.$listData['Permission']['id'],array('class'=>'id','value'=>$listData['Permission']['id'])) ?>
-			<?php endif ?>
-			<?php $baser->link('編集',array('action'=>'edit', $listData['Permission']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php if($listData['Permission']['name']!='admins'): ?>
-			<?php $baser->link('削除', array('action'=>'delete', $listData['Permission']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['Permission']['name']),false); ?>
-			<?php endif ?>
+		<?php if($sortmode): ?>
+			<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え')) ?></span>
+			<?php echo $formEx->input('Sort.id' . $listData['Permission']['id'], array(
+					'type'	=> 'hidden',
+					'class'	=> 'id',
+					'value'=>$listData['Permission']['id'])) ?>
+		<?php endif ?>
+			<?php $baser->link('編集', array('action' => 'edit', $listData['Permission']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
+		<?php if($listData['Permission']['name']!='admins'): ?>
+			<?php $baser->link('削除', 
+					array('action' => 'delete', $listData['Permission']['id']),
+					array('class' => 'btn-gray-s button-s'),
+					sprintf('%s を本当に削除してもいいですか？', $listData['Permission']['name']),
+					false); ?>
+		<?php endif ?>
 		</td>
 		<td style="width:10%"><?php echo $listData['Permission']['no']; ?></td>
 		<td style="width:55%">
-			<?php $baser->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?><br />
+			<?php $baser->link($listData['Permission']['name'], array('action' => 'edit', $listData['Permission']['id'])); ?><br />
 			<?php echo $listData['Permission']['url']; ?>
 		</td>
-		<td style="width:10%" class="align-center"><?php echo $textEx->arrayValue($listData['Permission']['auth'],array(0=>'×',1=>'〇')) ?></td>
+		<td style="width:10%" class="align-center"><?php echo $textEx->arrayValue($listData['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>
 		<td style="width:10%">
-			<?php echo $timeEx->format('y-m-d',$listData['Permission']['created']); ?><br />
-			<?php echo $timeEx->format('y-m-d',$listData['Permission']['modified']); ?>
+			<?php echo $timeEx->format('y-m-d', $listData['Permission']['created']); ?><br />
+			<?php echo $timeEx->format('y-m-d', $listData['Permission']['modified']); ?>
 		</td>
 	</tr>
-			<?php $count++; ?>
-		<?php endforeach; ?>
-	<?php else: ?>
+		<?php $count++; ?>
+	<?php endforeach; ?>
+<?php else: ?>
 	<tr>
 		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
-	<?php endif; ?>
+<?php endif; ?>
 </table>
+
 <div class="align-center">
-	<?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?>
-	<?php if(!$sortmode): ?>
-	<?php $baser->link('並び替えモード',array('sortmode'=>1),array('class'=>'btn-orange button')) ?>
-	<?php else: ?>
-	<?php $baser->link('ノーマルモード',array('sortmode'=>0),array('class'=>'btn-orange button')) ?>
-	<?php endif ?>
+	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
+<?php if(!$sortmode): ?>
+	<?php $baser->link('並び替えモード', array('sortmode' => 1), array('class' => 'btn-orange button')) ?>
+<?php else: ?>
+	<?php $baser->link('ノーマルモード', array('sortmode' => 0), array('class' => 'btn-orange button')) ?>
+<?php endif ?>
 </div>

@@ -50,32 +50,28 @@ class SiteConfig extends AppModel {
  */
 	var $validate = array(
 		'formal_name' => array(
-			'rule'		=> array('minLength',1),
-			'message'	=> "Webサイト名を入力して下さい。",
+			'rule'		=> array('notEmpty'),
+			'message'	=> 'Webサイト名を入力してください。',
 			'required'	=> true
 		),
 		'name' => array(
-			'rule'		=> array('minLength',1),
-			'message'	=> "Webサイトタイトルを入力して下さい。",
+			'rule'		=> array('notEmpty'),
+			'message'	=> 'Webサイトタイトルを入力してください。',
 			'required'	=> true
 		),
 		'email' => array(
-			array(
-				'rule'		=> array('email'),
-				'message'	=> "管理者メールアドレスの形式が不正です。"
-			),
-			array(
-				'rule'		=> array('minLength',1),
-				'message'	=> "管理者メールアドレスを入力してください。"
-			)
+			array(	'rule'		=> array('email'),
+					'message'	=> '管理者メールアドレスの形式が不正です。'),
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '管理者メールアドレスを入力してください。')
 		),
 		'mail_encode' => array(
-			'rule'		=> array('minLength',1),
+			'rule'		=> array('notEmpty'),
 			'message'	=> "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
 			'required'	=> true
 		),
 		'site_url' => array(
-			'rule'		=> array('minLength', 1),
+			'rule'		=> array('notEmpty'),
 			'message'	=> "WebサイトURLを入力してください。",
 			'required'	=> true
 		),

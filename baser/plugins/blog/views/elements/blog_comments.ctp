@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコメント一覧
+ * [PUBLISH] ブログコメント一覧
  * 
  * PHP versions 4 and 5
  *
@@ -34,14 +34,14 @@ $(function(){
 function sendComment() {
 	var msg = '';
 	if(!$("#BlogCommentName").val()){
-		msg += 'お名前を入力して下さい\n';
+		msg += 'お名前を入力してください\n';
 	}
 	if(!$("#BlogCommentMessage").val()){
-		msg += 'コメントを入力して下さい\n';
+		msg += 'コメントを入力してください\n';
 	}
 	<?php if($blogContent['BlogContent']['auth_captcha']): ?>
 	if(!$("#BlogCommentAuthCaptcha").val()){
-		msg += '画象の文字を入力して下さい\n';
+		msg += '画象の文字を入力してください\n';
 	}
 	<?php endif ?>
 	if(!msg){
@@ -109,48 +109,58 @@ function loadAuthCaptcha(){
 	$("#AuthCaptchaImage").attr('src',src);
 }
 </script>
-<?php if($blogContent['BlogContent']['comment_use']): ?>
 
+<?php if($blogContent['BlogContent']['comment_use']): ?>
 <div id="BlogComment">
+
 	<h4 class="contents-head">この記事へのコメント</h4>
+	
 	<div id="BlogCommentList">
-		<?php if(!empty($post['BlogComment'])): ?>
-			<?php foreach($post['BlogComment'] as $comment): ?>
+	<?php if(!empty($post['BlogComment'])): ?>
+		<?php foreach($post['BlogComment'] as $comment): ?>
 		<?php $baser->element('blog_comment',array('dbData'=>$comment)) ?>
-			<?php endforeach ?>
-		<?php endif ?>
+		<?php endforeach ?>
+	<?php endif ?>
 	</div>
+	
 	<h4 class="contents-head">コメントを送る</h4>
-	<?php echo $formEx->create('BlogComment',array('url'=>array($blogContent['BlogContent']['id'],$post['BlogPost']['id']))) ?>
+
+	<?php echo $formEx->create('BlogComment', array('url' => array($blogContent['BlogContent']['id'], $post['BlogPost']['id']))) ?>
+	
 	<table cellpadding="0" cellspacing="0" class="row-table-01">
 		<tr>
 			<th><?php echo $formEx->label('BlogComment.name','お名前') ?></th>
-			<td><?php echo $formEx->text('BlogComment.name') ?></td>
+			<td><?php echo $formEx->input('BlogComment.name', array('type' => 'text')) ?></td>
 		</tr>
 		<tr>
 			<th><?php echo $formEx->label('BlogComment.email','Eメール') ?></th>
-			<td><?php echo $formEx->text('BlogComment.email',array('size'=>30)) ?>&nbsp;<small>※ メールは公開されません</small></td>
+			<td>
+				<?php echo $formEx->input('BlogComment.email', array('type' => 'text', 'size'=>30)) ?>&nbsp;
+				<small>※ メールは公開されません</small>
+			</td>
 		</tr>
 		<tr>
 			<th><?php echo $formEx->label('BlogComment.url','URL') ?></th>
-			<td><?php echo $formEx->text('BlogComment.url',array('size'=>30)) ?></td>
+			<td><?php echo $formEx->input('BlogComment.url',array('type' => 'text', 'size'=>30)) ?></td>
 		</tr>
 		<tr>
 			<th><?php echo $formEx->label('BlogComment.message','コメント') ?></th>
-			<td><?php echo $formEx->textarea('BlogComment.message',array('rows'=>10,'cols'=>60)) ?></td>
+			<td><?php echo $formEx->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 60)) ?></td>
 		</tr>
 	</table>
 
 	<?php if($blogContent['BlogContent']['auth_captcha']): ?>
 	<div class="auth-captcha clearfix">
 		<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
-		<?php $baser->img('/img/captcha_loader.gif',array('alt'=>'Loading...','class'=>'auth-captcha-image','id'=>'CaptchaLoader')) ?>
+		<?php $baser->img('/img/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id'=>'CaptchaLoader')) ?>
 		<?php echo $formEx->text('BlogComment.auth_captcha') ?><br />
 		&nbsp;画像の文字を入力してください<br />
 	</div>
 	<?php endif ?>
 
 	<?php echo $formEx->end(array('label'=>'　　送信する　　','id'=>'BlogCommentAddButton')) ?>
+	
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
+	
 </div>
 <?php endif ?>

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * 管理者レイアウト
+ * [ADMIN] デフォルトレイアウト
  *
  * PHP versions 4 and 5
  *

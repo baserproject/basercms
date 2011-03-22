@@ -1,7 +1,8 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコメント単記事
+ * [PUBLISH] ブログコメント単記事
+ * 
  * Ajax でも利用される
  * 
  * PHP versions 4 and 5
@@ -21,16 +22,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 <?php if(!empty($dbData)): ?>
 	<?php if($dbData['status']): ?>
-
-<div class="comment" id="Comment<?php echo $dbData['no'] ?>"> <span class="comment-name">≫
+<div class="comment" id="Comment<?php echo $dbData['no'] ?>">
+	<span class="comment-name">≫
 		<?php if($dbData['url']): ?>
-	<?php echo $baser->link($dbData['name'],$dbData['url'],array('target'=>'_blank')) ?>
+		<?php echo $baser->link($dbData['name'], $dbData['url'], array('target' => '_blank')) ?>
 		<?php else: ?>
-	<?php echo $dbData['name'] ?>
+		<?php echo $dbData['name'] ?>
 		<?php endif ?>
-	</span> <br />
-	<span class="comment-message"> <?php echo nl2br($dbData['message']) ?> </span> </div>
+	</span><br />
+	<span class="comment-message"><?php echo nl2br($dbData['message']) ?></span>
+</div>
 	<?php endif ?>
 <?php endif ?>

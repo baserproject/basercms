@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * Ajax用レイアウト
+ * [ADMIN] Ajax用レイアウト
  *
  * PHP versions 4 and 5
  *

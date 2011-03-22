@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * テキストウィジェット
+ * [PUBLISH] テキストウィジェット
  *
  * PHP versions 4 and 5
  *

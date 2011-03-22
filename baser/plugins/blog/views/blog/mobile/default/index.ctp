@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [モバイル] ブログ
+ * [MOBILE] ブログ
  * 
  * PHP versions 4 and 5
  *
@@ -22,18 +22,22 @@
 $baser->setDescription($blog->getDescription());
 ?>
 
+<!-- title -->
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $baser->getContentsTitle(); ?></span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
-<div>
-	<?php $blog->description() ?>
-</div>
+
+<!-- description -->
+<div><?php $blog->description() ?></div>
 <br />
+
 <!-- pagination -->
 <?php $baser->pagination() ?>
 <br />
 <br />
+
+<!-- list -->
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $post): ?>
 <span style="color:#8ABE08">◆</span>
@@ -55,5 +59,6 @@ $baser->setDescription($blog->getDescription());
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
+
 <!-- pagination -->
 <?php echo $baser->pagination() ?>

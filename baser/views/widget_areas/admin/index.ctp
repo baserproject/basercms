@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ウィジェットエリア一覧
+ * [ADMIN] ウィジェットエリア一覧
  *
  * PHP versions 4 and 5
  *
@@ -24,6 +24,8 @@
 <h2>
 	<?php $baser->contentsTitle() ?>
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ウィジェットとは簡単にWEBページの指定した場所に部品の追加・削除ができる仕組みです。<br />
@@ -36,14 +38,14 @@
 	<p><small>※ なお、ウィジェットエリアを作成、編集する際には、サーバーキャッシュが削除されますので、一時的に公開ページの表示速度が遅くなってしまいますのでご注意ください。</small></p>
 </div>
 
+<!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableWidgetAreas">
 	<tr>
-		<th>操作</th>
+		<th style="width:100px">操作</th>
 		<th>NO</th>
 		<th>ウィジェットエリア名</th>
 		<th>登録ウィジェット数</th>
-		<th>登録日</th>
-		<th>更新日</th>
+		<th>登録日<br />更新日</th>
 	</tr>
 	<?php if(!empty($widgetAreas)): ?>
 		<?php $count=0; ?>
@@ -59,8 +61,8 @@
 		<td><?php echo $widgetArea['WidgetArea']['id']; ?></td>
 		<td><?php $baser->link($widgetArea['WidgetArea']['name'],array('action'=>'edit', $widgetArea['WidgetArea']['id'])); ?></td>
 		<td><?php echo $widgetArea['WidgetArea']['count']; ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$widgetArea['WidgetArea']['created']); ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$widgetArea['WidgetArea']['modified']); ?></td>
+		<td><?php echo $timeEx->format('y-m-d',$widgetArea['WidgetArea']['created']); ?><br />
+			<?php echo $timeEx->format('y-m-d',$widgetArea['WidgetArea']['modified']); ?></td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ログイン
+ * [ADMIN] ログイン
  *
  * PHP versions 4 and 5
  *
@@ -19,36 +19,40 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-?>
-<?php if ( $session->check('Message.auth') ) {
+if ( $session->check('Message.auth') ) {
     $session->flash('auth');
-} ?>
+}
+?>
 
 <h2>
 	<?php $baser->contentsTitle() ?>
 </h2>
+
 <div id="login">
 	<div class="box-01">
 		<div class="box-head">
-			<h3>アカウント／パスワードを入力して下さい</h3>
+			<h3>アカウント／パスワードを入力してください</h3>
 		</div>
-		<div class="box-body"> <?php echo $form->create('User',array('action'=>'login', 'url'=>array($this->params['prefix']=>true))) ?>
+		<div class="box-body">
+			<?php echo $formEx->create('User', array('action' => 'login', 'url' => array($this->params['prefix'] => true))) ?>
 			<table border="0">
 				<tr>
 					<td style="text-align:right">アカウント&nbsp;</td>
-					<td style="text-align:left"><?php echo $form->text('User.name',array('size'=>20)) ?></td>
+					<td style="text-align:left"><?php echo $formEx->input('User.name', array('type' => 'text', 'size'=>20)) ?></td>
 				</tr>
 				<tr>
 					<td style="text-align:right">パスワード&nbsp;</td>
-					<td style="text-align:left"><?php echo $form->password('User.password',array('size'=>20)) ?></td>
+					<td style="text-align:left"><?php echo $formEx->input('User.password',array('type' => 'password', 'size'=>20)) ?></td>
 				</tr>
 			</table>
 			<br />
 			<br />
-			<p> <?php echo $form->checkbox('User.saved') ?> <?php echo $form->label('User.saved','<small>次回から自動的にログイン</small>') ?>　
-				<?php echo $form->end(array('label'=>'　ログインする　', 'div'=>false, 'class'=>'btn-red button')) ?> </p>
-			<p><small><?php $baser->link('パスワードを忘れた？', array('action'=>'reset_password', $this->params['prefix'] => true), array('rel'=>'popup')) ?></small></p>
+			<p><?php echo $formEx->input('User.saved', array('type' => 'checkbox')) ?>&nbsp;
+				<?php echo $formEx->label('User.saved', '<small>次回から自動的にログイン</small>') ?>　
+				<?php echo $formEx->submit('　ログインする　', array('div' => false, 'class' => 'btn-red button')) ?> </p>
+			<p><small><?php $baser->link('パスワードを忘れた？', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?></small></p>
+			<?php echo $formEx->end() ?>
 		</div>
-		<div class="box-foot"> &nbsp; </div>
+		<div class="box-foot">&nbsp;</div>
 	</div>
 </div>

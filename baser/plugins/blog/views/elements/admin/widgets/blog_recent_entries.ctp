@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ最近の投稿ウィジェット設定
+ * [ADMIN] ブログ最近の投稿ウィジェット設定
  *
  * PHP versions 4 and 5
  *

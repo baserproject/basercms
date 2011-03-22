@@ -60,25 +60,31 @@ class BlogCategory extends BlogAppModel {
 							'exclusive'=>false,
 							'finderQuery'=>''));
 /**
- * beforeValidate
+ * validate
  *
- * @return	void
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(  'rule' => array('minLength',1),
-						'message' => "ブログカテゴリー名を入力して下さい",
-						'required' => true),
-				array(  'rule' => 'halfText',
-						'message' => 'ブログカテゴリー名は半角のみで入力して下さい'),
-				array(  'rule' => array('duplicateBlogCategory'),
-						'message' => '入力されたブログカテゴリは既に登録されています'));
-		$this->validate['title'] = array(array(  'rule' => array('minLength',1),
-						'message' => "ブログカテゴリータイトルを入力して下さい",
-						'required' => true));
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(  'rule'		=> array('notEmpty'),
+					'message'	=> "ブログカテゴリ名を入力してください。",
+					'required'	=> true),
+			array(  'rule'		=> 'halfText',
+					'message'	=> 'ブログカテゴリ名は半角のみで入力してください。'),
+			array(  'rule'		=> array('duplicateBlogCategory'),
+					'message'	=> '入力されたブログカテゴリは既に登録されています。'),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'ブログカテゴリ名は255文字以内で入力してください。')
+		),
+		'title' => array(
+			array(  'rule'		=> array('notEmpty'),
+					'message'	=> "ブログカテゴリタイトルを入力してください。",
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'ブログカテゴリ名は255文字以内で入力してください。')
+		)
+	);
 /**
  * コントロールソースを取得する
  *

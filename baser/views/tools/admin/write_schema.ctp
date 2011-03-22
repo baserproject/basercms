@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] スキーマ生成 フォーム
+ * [ADMIN] スキーマ生成 フォーム
  *
  * PHP versions 4 and 5
  *
@@ -21,9 +21,11 @@
  */
 ?>
 <h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
+	<?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
 </h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>スキーマファイルは、データベースの構造を読み取り、CakePHPのスキーマファイルとして出力できます。</p>
@@ -40,16 +42,36 @@
 		<li>プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/sql/</li>
 	</ul>
 </div>
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $formEx->create('Tool',array('action'=>'write_schema')) ?>
+
+<!-- list -->
+<?php echo $formEx->create('Tool', array('action' => 'write_schema')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser', 'コアテーブル名') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Tool.baser',$formEx->getControlSource('Tool.baser'),null,array('multiple'=>true, 'style'=>'width:400px;height:250px')) ?> <?php echo $formEx->error('Tool.baser') ?></td>
+		<td class="col-input">
+			<?php echo $formEx->input('Tool.baser', array(
+				'type'		=> 'select',
+				'options'	=> $formEx->getControlSource('Tool.baser'),
+				'multiple'	=> true,
+				'style'		=> 'width:400px;height:250px')) ?>
+			<?php echo $formEx->error('Tool.baser') ?>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin', 'プラグインテーブル名') ?></th>
-		<td class="col-input"><?php echo $formEx->select('Tool.plugin',$formEx->getControlSource('Tool.plugin'),null,array('multiple'=>true, 'style'=>'width:400px;height:250px')) ?> <?php echo $formEx->error('Tool.plugin') ?></td>
+		<td class="col-input">
+			<?php echo $formEx->input('Tool.plugin', array(
+				'type'		=> 'select',
+				'options'	=> $formEx->getControlSource('Tool.plugin'),
+				'multiple'	=> true,
+				'style'		=> 'width:400px;height:250px')) ?>
+			<?php echo $formEx->error('Tool.plugin') ?>
+		</td>
 	</tr>
 </table>
-<div class="align-center"> <?php echo $formEx->end(array('label'=>'生　成','div'=>false,'class'=>'btn-red button')) ?> </div>
+
+<div class="align-center"><?php echo $formEx->submit('生　成', array('div' => false, 'class' => 'btn-red button')) ?></div>
+
+<?php echo $formEx->end() ?>

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ブログ記事管理メニュー
+ * [ADMIN] ブログ記事管理メニュー
  *
  * PHP versions 4 and 5
  *
@@ -22,19 +22,12 @@
 ?>
 
 <div class="side-navi">
-	<h2>記事管理メニュー</h2>
+	<h2>ブログ管理メニュー</h2>
 	<ul>
-		<?php if($this->params['controller'] == 'blog_posts' && $this->action == 'admin_edit'): ?>
-		<!--<li><?php // TODO 未実装 $baser->link('記事プレビュー',array('controller'=>'blog','action'=>'preview',$blogContent['BlogContent']['id'],$form->value('BlogPost.id')),array('target'=>'_blank')) ?></li>-->
-		<?php endif; ?>
-		<li>
-			<?php $baser->link('コメント一覧',array('plugin'=>false,'controller'=>'blog_comments','action'=>'index',$blogContent['BlogContent']['id'])) ?>
-		</li>
-		<li>
-			<?php $baser->link('記事一覧',array('controller'=>'blog_posts','action'=>'index',$blogContent['BlogContent']['id'])) ?>
-		</li>
-		<li>
-			<?php $baser->link('新規記事を登録',array('controller'=>'blog_posts','action'=>'add',$blogContent['BlogContent']['id'])) ?>
-		</li>
+		<li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
+		<li><?php $baser->link('コメント一覧',array('plugin'=>false,'controller'=>'blog_comments','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
+		<li><?php $baser->link('記事一覧',array('controller'=>'blog_posts','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
+		<li><?php $baser->link('新規記事を登録',array('controller'=>'blog_posts','action'=>'add',$blogContent['BlogContent']['id'])) ?></li>
+		<li><?php $baser->link('ブログ基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?></li>
 	</ul>
 </div>

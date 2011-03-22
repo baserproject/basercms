@@ -43,23 +43,21 @@ class Theme extends AppModel {
  */
 	var $useTable = false;
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array(	'rule' => VALID_NOT_EMPTY,
-						'message' => "テーマ名を入力して下さい"),
-				array(	'rule' => 'halfText',
-						'message' => 'テーマ名は半角のみで入力して下さい'),
-				array(	'rule' => 'duplicate',
-						'message' => '既に存在するテーマ名です'));
-
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'テーマ名を入力してください。'),
+			array(	'rule'		=> 'halfText',
+					'message'	=> 'テーマ名は半角のみで入力してください。'),
+			array(	'rule'		=> 'duplicate',
+					'message'	=> '既に存在するテーマ名です。')
+		)
+	);
 /**
  * 重複チェック
  *

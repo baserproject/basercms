@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] システム設定メニュー
+ * [ADMIN] システム設定メニュー
  * 
  * PHP versions 4 and 5
  *

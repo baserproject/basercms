@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー用レイアウト
+ * [PUBLISH] インストーラー用レイアウト
  *
  * PHP versions 4 and 5
  *

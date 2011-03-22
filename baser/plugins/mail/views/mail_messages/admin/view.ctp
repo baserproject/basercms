@@ -20,8 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+<!-- title -->
 <h2><?php $baser->contentsTitle() ?></h2>
 
+<!-- view -->
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr><th>NO</th><td><?php echo $message['Message']['id'] ?></td></tr>
 	<tr><th>受信日時</th><td><?php echo $timeEx->format('Y/m/d H:i:s', $message['Message']['created']) ?></td></tr>

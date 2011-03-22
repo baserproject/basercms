@@ -35,15 +35,6 @@ class BlogConfig extends BlogAppModel {
  * @access 	public
  */
 	var $name = 'BlogConfig';
-/**
- * beforeValidate
- *
- * @return	void
- * @access	public
- */
-	function beforeValidate() {
-		return true;
-	}
 
 }
 ?>
