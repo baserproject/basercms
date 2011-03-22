@@ -124,7 +124,11 @@ class ThemeFilesController extends AppController {
 			$files = $folder->read(true,true);
 			$themeFiles = array();
 			$folders = array();
-			$excludeList = array('css','elements','img','layouts','pages','_notes','helpers','js');
+			if(!$path) {
+				$excludeList = array('css','elements','img','layouts','pages','_notes','helpers','js');
+			} else {
+				$excludeList = array();
+			}
 			foreach($files[0] as $file) {
 				if(!in_array($file, $excludeList)) {
 					$folder = array();
@@ -583,7 +587,7 @@ class ThemeFilesController extends AppController {
  */
 	function _parseArgs($args) {
 
-		$data = array('plugin'=>'','theme'=>'','type'=>'','path'=>'','fullpath'=>'');
+		$data = array('plugin'=>'','theme'=>'','type'=>'','path'=>'','fullpath'=>'', 'assets'=>false);
 		$assets = array('css','js','img');
 
 		if(!empty($args[1]) && !isset($this->_tempalteTypes[$args[1]])) {
@@ -632,12 +636,14 @@ class ThemeFilesController extends AppController {
 
 		if($data['plugin']) {
 			if(in_array($data['type'],$assets)) {
+				$data['assets'] = true;
 				$viewPath = BASER_PLUGINS.$data['plugin'].DS.'vendors'.DS;
 			}else {
 				$viewPath = BASER_PLUGINS.$data['plugin'].DS.'views'.DS;
 			}
 		}elseif($data['theme'] == 'core') {
 			if(in_array($data['type'],$assets)) {
+				$data['assets'] = true;
 				$viewPath = BASER_VENDORS;
 			}else {
 				$viewPath = BASER_VIEWS;
@@ -676,7 +682,11 @@ class ThemeFilesController extends AppController {
 		}
 
 		if($type!='etc') {
-			$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
+			if($plugin && $assets) {
+				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS.$path;
+			} else {
+				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
+			}
 		}else {
 			$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		}
@@ -709,7 +719,11 @@ class ThemeFilesController extends AppController {
 		}
 
 		if($type!='etc') {
-			$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS;
+			if($plugin && $assets) {
+				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS;
+			} else {
+				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS;
+			}
 			if($path) {
 				$themePath .= $path.DS;
 			}
