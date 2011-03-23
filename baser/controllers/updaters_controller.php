@@ -220,6 +220,30 @@ class UpdatersController extends AppController {
 
 	}
 /**
+ * [ADMIN] アップデートスクリプトを実行する
+ *
+ * @return	void
+ * @access	public
+ */
+	function admin_exec_script() {
+
+		if($this->data) {
+			$this->setMessage('アップデートスクリプトの実行します。', false, true, true);
+			if(!$this->execScript($this->data['Updater']['plugin'], $this->data['Updater']['version'])) {
+				$this->Session->setFlash('アップデートスクリプトが見つかりません。');
+			} else {
+				$this->setMessage('アップデートスクリプトの実行が完了しました。', false, true, true);
+				$this->Session->setFlash($this->_getUpadteMessage());
+				$this->redirect(array('action'=>'exec_script'));
+			}
+		}
+
+		$this->pageTitle = 'アップデートスクリプト実行';
+		$plugins = $this->Plugin->find('list');
+		$this->set('plugins', $plugins);
+		
+	}
+/**
  * プラグインのアップデート実行
  *
  * @return void
@@ -363,55 +387,74 @@ class UpdatersController extends AppController {
  * @return	boolean
  * @access	public
  */
-	function _update($__plugin = '') {
+	function _update($plugin = '') {
 
-		$targetVersion = $this->getBaserVersion($__plugin);
-		$sourceVersion = $this->getSiteVersion($__plugin);
-		$__path = $this->_getUpdateFolder($__plugin);
-		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $__plugin);
+		$targetVersion = $this->getBaserVersion($plugin);
+		$sourceVersion = $this->getSiteVersion($plugin);
+		$path = $this->_getUpdateFolder($plugin);
+		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $plugin);
 
-		if(!$__plugin) {
-			$__name = 'BaserCMSコア';
+		if(!$plugin) {
+			$name = 'BaserCMSコア';
 		}else{
-			$__name = $this->Plugin->field('title',array('name'=>$__plugin)).'プラグイン';
+			$name = $this->Plugin->field('title',array('name'=>$plugin)).'プラグイン';
 		}
 
-		$this->setMessage($__name.' '.$targetVersion.' へのアップデートを開始します。', false, true, true);
+		$this->setMessage($name.' '.$targetVersion.' へのアップデートを開始します。', false, true, true);
 
 		if($updaters){
 			asort($updaters);
-			foreach($updaters as $__version => $updateVerPoint) {
-				$this->setMessage('アップデートプログラム '.$__version.' を実行します。', false, true, true);
-				include $__path.$__version.DS.'updater.php';
+			foreach($updaters as $version => $updateVerPoint) {
+				$this->setMessage('アップデートプログラム '.$version.' を実行します。', false, true, true);
+				$this->execScript($plugin, $version);
 			}
 		}
 
 		if(!isset($updaters['test'])) {
-			if(!$__plugin) {
+			if(!$plugin) {
 				/* サイト基本設定にバージョンを保存 */
 				$SiteConfigClass = ClassRegistry::getObject('SiteConfig');
 				$SiteConfigClass->cacheQueries = false;
-				$__data['SiteConfig']['version'] = $targetVersion;
-				$__result = $SiteConfigClass->saveKeyValue($__data);
+				$data['SiteConfig']['version'] = $targetVersion;
+				$result = $SiteConfigClass->saveKeyValue($data);
 			} else {
 				// 1.6.7 では plugins テーブルの構造が変わったので、find でデータが取得できないのでスキップする
 				// DB の再接続を行えば取得できるかも
 				if( $targetVersion == '1.6.7') {
-					$__result = true;
+					$result = true;
 				} else {
-					$__data = $this->Plugin->find('first', array('conditions'=>array('name'=>$__plugin)));
-					$__data['Plugin']['version'] = $targetVersion;
-					$__result = $this->Plugin->save($__data);
+					$data = $this->Plugin->find('first', array('conditions'=>array('name'=>$plugin)));
+					$data['Plugin']['version'] = $targetVersion;
+					$result = $this->Plugin->save($data);
 				}
 			}
 		} else {
-			$__result = true;
+			$result = true;
 		}
 
-		$this->setMessage($__name.' '.$targetVersion.' へのアップデートが完了しました。', false, true, true);
+		$this->setMessage($name.' '.$targetVersion.' へのアップデートが完了しました。', false, true, true);
 
-		return $__result;
+		return $result;
 
+	}
+/**
+ * アップデートスクリプトを実行する
+ *
+ * @param	string	$__plugin
+ * @param	string	$__version
+ */
+	function execScript($__plugin, $__version) {
+		
+		$__path = $this->_getUpdateFolder($__plugin).$__version.DS.'updater.php';
+		
+		if(!file_exists($__path)) {
+			return false;
+		}
+		
+		include $__path;
+
+		return true;
+		
 	}
 /**
  * アップデートメッセージをセットする

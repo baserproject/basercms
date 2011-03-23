@@ -93,8 +93,13 @@
  */
 	function verpoint($version) {
 		$version = str_replace('BaserCMS ', '', $version);
-		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)[\sa-z]*/is", $version, $maches)) {
-			return $maches[1]*1000000 + $maches[2]*1000 + $maches[3];
+		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
+			if(isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
+				$maches[4] = str_replace('.', '', $maches[4]);
+			} else {
+				$maches[4] = 0;
+			}
+			return $maches[1]*1000000000 + $maches[2]*1000000 + $maches[3]*1000 + $maches[4];
 		}else {
 			return 0;
 		}
