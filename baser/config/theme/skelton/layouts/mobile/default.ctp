@@ -25,6 +25,7 @@
 		<?php $baser->img('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")); ?>
 		<font size="1">(C)BaserCMS</font>
 	</center>
-	
+
+<?php $baser->element('google_analytics') ?>
 </body>
 </html>

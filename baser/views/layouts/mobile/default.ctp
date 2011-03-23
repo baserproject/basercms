@@ -45,5 +45,6 @@
 		<font size="1">(C)BaserCMS</font>
 	</center>
 </div>
+<?php $baser->element('google_analytics') ?>
 </body>
 </html>
