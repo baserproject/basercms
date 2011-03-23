@@ -394,6 +394,7 @@ class InstallationsController extends AppController {
 											"Configure::write('Baser.siteUrl', '{$siteUrl}');",
 											"Configure::write('Baser.sslUrl', '');",
 											"Configure::write('Baser.adminSslOn', false);",
+											"Configure::write('Baser.mobile', true);",
 											"Configure::write('Cache.disable', false);",
 											"Cache::config('default', array('engine' => 'File'));","?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
