@@ -260,11 +260,16 @@ class UsersController extends AppController {
 		}else {
 
 			/* 登録処理 */
-			$this->User->create();
-			$this->User->set($this->data);
-
+			$this->data['User']['password'] = $this->data['User']['password_1'];
+			
+			$this->User->create($this->data);
+			
 			if($this->User->validates()) {
-				$this->data['User']['password'] = $this->Auth->password($this->data['User']['password_1']);
+				unset($this->data['User']['password_1']);
+				unset($this->data['User']['password_2']);
+				if(isset($this->data['User']['password'])) {
+					$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
+				}
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
@@ -302,16 +307,18 @@ class UsersController extends AppController {
 
 			/* 更新処理 */
 			// パスワードがない場合は更新しない
-			if(!$this->data['User']['password_1'] && !$this->data['User']['password_2']) {
-				unset($this->data['User']['password_1']);
-				unset($this->data['User']['password_2']);
-			}else {
-				$this->data['User']['password'] = $this->Auth->password($this->data['User']['password_1']);
+			if($this->data['User']['password_1'] || $this->data['User']['password_2']) {
+				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
 
 			$this->User->set($this->data);
 
 			if($this->User->validates()) {
+				unset($this->data['User']['password_1']);
+				unset($this->data['User']['password_2']);
+				if(isset($this->data['User']['password'])) {
+					$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
+				}
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
