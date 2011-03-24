@@ -528,12 +528,13 @@ class FreezeHelper extends FormExHelper {
 				$_value = "";
 				foreach($value as $key => $data) {
 					if(isset($options[$data])) {
-						$_options = array('value'=>$data,'multiple'=>true);
-						$_value .= $this->hidden($fieldName, $_options).sprintf($this->Html->tags['li'], null, $options[$data]);
+						$_value .= sprintf($this->Html->tags['li'], null, $options[$data]);
 					}
 				}
-				$out = sprintf($this->Html->tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
 
+				$out = sprintf($this->Html->tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
+				$out .= $this->hidden($fieldName, array('value'=>$value,'multiple'=>true));
+				
 				// 一般
 			}elseif(empty($detail)) {
 

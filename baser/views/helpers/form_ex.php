@@ -964,10 +964,12 @@ DOC_END;
 			$this->__secure(null, '' . $options['value']);
 		}
 
-		// 2010/07/24 ryuring
+		// CUSTOMIZE 2010/07/24 ryuring
 		// 配列用のhiddenタグを出力できるオプションを追加
-		// 2010/08/01 ryuring
+		// CUSTOMIZE 2010/08/01 ryuring
 		// class属性を指定できるようにした
+		// CUSTOMIZE 2011/03/11 ryuring
+		// multiple で送信する値が配列の添字となっていたので配列の値に変更した
 		// >>> ADD
 		$multiple = false;
 		$value = '';
@@ -975,13 +977,13 @@ DOC_END;
 			$multiple = true;
 			$tagType = 'hiddenmultiple';
 			$options['id'] = null;
-			if (!isset($attributes['value'])) {
+			if (!isset($options['value'])) {
 				$value = $this->value($fieldName);
 			}else {
-				$value = $attributes['value'];
+				$value = $options['value'];
 			}
 			if(is_array($value) && !$value) {
-				unset($attributes['value']);
+				unset($options['value']);
 			}
 			unset($options['multiple']);
 		} else {
@@ -997,8 +999,8 @@ DOC_END;
 		// ---
 		if($multiple && is_array($value)) {
 			$out = array();
-			foreach($value as $key => $_value) {
-				$options['value'] = $key;
+			foreach($value as $_value) {
+				$options['value'] = $_value;
 				$out[] = $this->output(sprintf(
 					$this->Html->tags[$tagType],
 					$options['name'],
