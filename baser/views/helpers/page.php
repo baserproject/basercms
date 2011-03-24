@@ -38,6 +38,13 @@ class PageHelper extends Helper {
  */
 	var $data = array();
 /**
+ * ヘルパー
+ * 
+ * @var		array
+ * @access	public
+ */
+	var $helpers = array('Baser');
+/**
  * construct
  */
 	function  __construct() {
@@ -104,5 +111,92 @@ class PageHelper extends Helper {
 		return $allowPublish;
 
 	}
+/**
+ * ページカテゴリ間の次の記事へのリンクを取得する
+ *
+ * @param	array	$post
+ * @param	string	$title
+ * @param	array	$attributes
+ */
+	function nextLink($title='', $attributes = array()) {
+
+		if(empty($this->data['Page']['page_category_id'])) {
+			return '';
+		}
+
+		if(ClassRegistry::isKeySet('Page')) {
+			$PageClass =& ClassRegistry::getObject('Page');
+		} else {
+			$PageClass =& ClassRegistry::init('Page');
+		}
+
+		$_attributes = array('class'=>'next-link','arrow'=>' ≫');
+		$attributes = am($_attributes,$attributes);
+		
+		$arrow = $attributes['arrow'];
+		unset($attributes['arrow']);
+
+		$conditions = am(array(
+			'Page.sort >' => $this->data['Page']['sort'],
+			'Page.page_category_id' => $this->data['Page']['page_category_id']
+		), $PageClass->getConditionAllowPublish());
+		$nextPost = $PageClass->find('first', array(
+			'conditions'=> $conditions,
+			'fields'	=> array('title', 'url'),
+			'order'		=> 'sort',
+			'recursive'	=> -1
+		));
+		if($nextPost) {
+			if(!$title) {
+				$title = $nextPost['Page']['title'].$arrow;
+			}
+			$this->Baser->link($title, $nextPost['Page']['url'], $attributes);
+		}
+
+	}
+/**
+ * ページカテゴリ間の前の記事へのリンクを取得する
+ *
+ * @param	array	$post
+ * @param	string	$title
+ * @param	array	$attributes
+ */
+	function prevLink($title='', $attributes = array()) {
+
+		if(empty($this->data['Page']['page_category_id'])) {
+			return '';
+		}
+
+		if(ClassRegistry::isKeySet('Page')) {
+			$PageClass =& ClassRegistry::getObject('Page');
+		} else {
+			$PageClass =& ClassRegistry::init('Page');
+		}
+
+		$_attributes = array('class'=>'prev-link','arrow'=>'≪ ');
+		$attributes = am($_attributes,$attributes);
+
+		$arrow = $attributes['arrow'];
+		unset($attributes['arrow']);
+
+		$conditions = am(array(
+			'Page.sort <' => $this->data['Page']['sort'],
+			'Page.page_category_id' => $this->data['Page']['page_category_id']
+		), $PageClass->getConditionAllowPublish());
+		$nextPost = $PageClass->find('first', array(
+			'conditions'=> $conditions,
+			'fields'	=> array('title', 'url'),
+			'order'		=> 'sort DESC',
+			'recursive'	=> -1
+		));
+		if($nextPost) {
+			if(!$title) {
+				$title = $arrow.$nextPost['Page']['title'];
+			}
+			$this->Baser->link($title, $nextPost['Page']['url'], $attributes);
+		}
+
+	}
+	
 }
 ?>

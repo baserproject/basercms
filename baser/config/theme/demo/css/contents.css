@@ -103,6 +103,12 @@ h4.contents-head {
 .post ul {
 	margin:0 35px 20px 35px;
 }
+#ContentsNavi {
+	margin-top:50px;
+	margin-bottom:20px;
+	text-align: center;
+}
+
 /* loginUser
 ----------------------------------------------- */
 #login {
