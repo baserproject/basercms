@@ -167,7 +167,7 @@ class ThemesController extends AppController {
 			$newPath .= '_copy';
 		}
 		$folder = new Folder();
-		$folder->copy(array('from'=>$path,'to'=>$newPath,'chmod'=>0777,'skip'=>array('_notes')));
+		$folder->copy(array('from'=>$path,'to'=>$newPath,'mode'=>0777,'skip'=>array('_notes')));
 		$this->Session->setFlash('テーマ「'.$theme.'」をコピーしました。');
 		$this->redirect(array('action'=>'index'));
 
