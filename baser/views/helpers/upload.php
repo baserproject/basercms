@@ -285,7 +285,7 @@ class UploadHelper extends FormHelper {
 					if($check && !$mostSizeExists) {
 						$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
 						$mostSizeExists = true;
-					} elseif(!$maxSizeExists) {
+					} elseif(!$mostSizeExists && !$maxSizeExists) {
 						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
 						$maxSizeExists = true;
 					}
@@ -297,7 +297,7 @@ class UploadHelper extends FormHelper {
 				$mostSizeUrl = $fileUrl.$fileName.'?'.rand();
 			}
 			if(!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl.$fileName;
+				$maxSizeUrl = $fileUrl.$fileName.'?'.rand();
 			}
 
 		}
