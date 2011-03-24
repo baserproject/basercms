@@ -54,6 +54,12 @@ $(document).ready( function() {
 			} else if ($("#InstallationDbPrefix").val() == "") {
 				alert("他のアプリケーションと重複しないプレフィックスを入力して下さい。（例）bc_");
 				return false;
+			} else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
+				alert("プレフィックスの末尾はアンダースコアにして下さい。（例）bc_");
+				return false;
+			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
+				alert("プレフィックスは英数字とアンダースコアの組み合わせにして下さい。（例）bc_");
+				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert("データベースのポートナンバーを入力して下さい。");
 				return false;
@@ -176,7 +182,9 @@ $(document).ready( function() {
 						<small>データベース名</small> </div>
 					<div class="float-left"> <?php echo $form->text('Installation.dbPort',array('maxlength'=>'5','size'=>5)); ?><br />
 						<small>ポート</small> </div>
-					<?php echo $form->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?> </li>
+					<?php echo $form->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
+					<br style="clear:both" />
+					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。</small></li>
 			</ul>
 		</form>
 	</div>
