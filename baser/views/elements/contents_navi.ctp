@@ -19,10 +19,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($page)) {
+if(!isset($page) || !$page->contensNaviAvailable()) {
 	return;
 }
 ?>
+
 <div id="ContentsNavi">
 	<?php $page->prevLink() ?>
 	&nbsp;｜&nbsp;

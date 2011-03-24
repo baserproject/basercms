@@ -97,7 +97,9 @@ class PageCategoriesController extends AppController {
  */
 	function admin_add() {
 
-		if(!empty($this->data)) {
+		if(empty($this->data)) {
+			$this->data = array('PageCategory' => array('contents_navi' => false));
+		} else {
 
 			/* 登録処理 */
 			$this->PageCategory->create($this->data);

@@ -1,10 +1,8 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* PageCategories schema generated on: 2010-11-04 18:11:09 : 1288863009*/
+/* PageCategories schema generated on: 2011-03-23 00:03:31 : 1300807471*/
 class PageCategoriesSchema extends CakeSchema {
 	var $name = 'PageCategories';
-
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
 
 	var $file = 'page_categories.php';
 
@@ -25,6 +23,7 @@ class PageCategoriesSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'sort' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
+		'contents_navi' => array('type' => 'boolean', 'null' => false, 'default' => true),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

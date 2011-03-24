@@ -103,6 +103,23 @@
 			</div>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('PageCategory.contents_navi', array(
+					'type'		=> 'radio',
+					'options'	=> $textEx->booleanDolist('利用'),
+					'legend'	=> false,
+					'separator'		=> '&nbsp;&nbsp;')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpContentsNavi', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('PageCategory.parent_id') ?>
+			<div id="helptextContentsNavi" class="helptext">
+				<ul>
+					<li>同カテゴリ内のページ間ナビゲーション（コンテンツナビ）を利用するには「利用する」を選択します。</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
 </table>
 
 <div class="submit">

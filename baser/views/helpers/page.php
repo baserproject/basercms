@@ -120,7 +120,7 @@ class PageHelper extends Helper {
  */
 	function nextLink($title='', $attributes = array()) {
 
-		if(empty($this->data['Page']['page_category_id'])) {
+		if(!$this->contensNaviAvailable()) {
 			return '';
 		}
 
@@ -163,7 +163,7 @@ class PageHelper extends Helper {
  */
 	function prevLink($title='', $attributes = array()) {
 
-		if(empty($this->data['Page']['page_category_id'])) {
+		if(!$this->contensNaviAvailable()) {
 			return '';
 		}
 
@@ -196,6 +196,19 @@ class PageHelper extends Helper {
 			$this->Baser->link($title, $nextPost['Page']['url'], $attributes);
 		}
 
+	}
+/**
+ * コンテンツナビ有効チェック
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function contensNaviAvailable() {
+		if(empty($this->data['Page']['page_category_id']) || empty($this->data['PageCategory']['contents_navi'])) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 }
