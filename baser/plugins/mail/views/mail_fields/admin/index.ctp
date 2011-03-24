@@ -107,5 +107,4 @@
 	<?php else: ?>
 	<?php $baser->link('ノーマルモード',array($mailContent['MailContent']['id'], 'sortmode'=>0),array('class'=>'btn-orange button')) ?>
 	<?php endif ?>
-	<?php $baser->link('受信メールCSV',array('action'=>'download_csv', $mailContent['MailContent']['id']),array('class'=>'btn-gray button'),null,false) ?>
 </p>

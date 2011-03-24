@@ -22,14 +22,23 @@
 ?>
 
 <div class="side-navi">
-	<h2>メールフィールド<br />
+	<h2>メールフォーム<br />
 		管理メニュー</h2>
 	<ul>
+		<li>
+			<?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>'','controller'=>$mailContent['MailContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?>
+		</li>
+		<li>
+			<?php $baser->link('受信メール一覧',array('controller'=>'mail_messages','action'=>'index',$mailContent['MailContent']['id'])) ?>
+		</li>
 		<li>
 			<?php $baser->link('フィールド一覧',array('controller'=>'mail_fields','action'=>'index',$mailContent['MailContent']['id'])) ?>
 		</li>
 		<li>
 			<?php $baser->link('新規フィールドを登録',array('controller'=>'mail_fields','action'=>'add',$mailContent['MailContent']['id'])) ?>
+		</li>
+		<li>
+			<?php $baser->link('メールフォーム基本設定',array('controller'=>'mail_contents','action'=>'edit',$mailContent['MailContent']['id'])) ?>
 		</li>
 	</ul>
 </div>
