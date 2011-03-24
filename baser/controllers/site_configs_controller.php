@@ -139,7 +139,9 @@ class SiteConfigsController extends AppController {
 					}
 
 					// キャッシュをクリア
-					if($this->siteConfigs['maintenance'] || ($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme'])){
+					if($this->siteConfigs['maintenance'] || 
+							($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) ||
+							($this->siteConfigs['google_analytics_id'] != $this->data['SiteConfig']['google_analytics_id'])){
 						clearViewCache();
 					}
 
