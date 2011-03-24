@@ -336,6 +336,7 @@ class TextExHelper extends TextHelper {
  */
 	function dateTimeWareki($arrDate) {
 
+		if(!is_array($arrDate)) return;
 		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
 			return;
 		list($w,$year) = split('-', $arrDate['year']);

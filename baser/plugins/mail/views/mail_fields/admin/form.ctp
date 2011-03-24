@@ -41,6 +41,7 @@ jQuery(function($) {
 
 		switch ($("#MailFieldType").val()){
 			case 'text':
+			case 'email':
 				$("#rowSize").show();
 				$("#rowRows").hide();$("#MailFieldRows").val('');
 				$("#rowMaxlength").show();
@@ -74,8 +75,8 @@ jQuery(function($) {
 				$("#rowSeparator").hide();$("#MailFieldSeparator").val('');
 				break;
 			case 'pref':
-			case 'date_time_birthday_wareki':
-			case 'date_time_reserve':
+			case 'date_time_wareki':
+			case 'date_time_calender':
 				$("#rowSize").hide();$("#MailFieldSize").val('');
 				$("#rowRows").hide();$("#MailFieldRows").val('');
 				$("#rowMaxlength").hide();$("#MailFieldMaxlength").val('');
@@ -139,7 +140,13 @@ jQuery(function($) {
 	<tr id="rowType">
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailField.type', 'タイプ') ?></th>
 		<td class="col-input"><?php echo $formEx->select('MailField.type', $controlSource['type']) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpType','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextType" class="helptext"> 自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。 </div>
+			<div id="helptextType" class="helptext">
+				<ul>
+					<li>Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信メールを送信します。<br />
+						<small>※ 前バージョンとの互換性の為、フィールド名を「email_1」とした場合、Eメールを選択しなくても自動返信メールを送信します。</small></li>
+					<li>自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。</li>
+				</ul>
+			</div>
 			<?php echo $formEx->error('MailField.type') ?></td>
 	</tr>
 	<tr id="rowHead">
