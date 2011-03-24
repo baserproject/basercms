@@ -83,5 +83,6 @@ class MobileHelper extends Helper {
 	function header(){
 		header("Content-type: application/xhtml+xml");
 	}
+	
 }
 ?>
