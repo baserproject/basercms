@@ -272,6 +272,7 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
+			$path = str_replace(DS, '/', $path);
 			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],$type,$path));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
@@ -299,7 +300,8 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.DS.'index.ctp'));
+			$path = str_replace(DS, '/', $path);
+			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.'/index.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
