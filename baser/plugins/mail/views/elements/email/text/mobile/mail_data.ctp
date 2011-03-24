@@ -27,7 +27,7 @@
 
 ◇◆ <?php echo $fields['MailField']['head'] ?> 
 ----------------------------
-<?php endif;echo"　"; ?>
+<?php endif ?>
 <?php if(!empty($fields['MailField']['before_attachment']) && !empty($message[$fields['MailField']['field_name']])): ?>
 <?php echo " ".$fields['MailField']['before_attachment'] ?>
 <?php endif; ?>
