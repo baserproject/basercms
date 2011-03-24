@@ -135,8 +135,7 @@
       $documentPath = urldecode($documentPath);
     }
 
-    //$account = $_GET["utmac"];
-		$account = MOBILE_GOOGLE_ANALYTICS_ID;
+    $account = $_GET["utmac"];
     $userAgent = $_SERVER["HTTP_USER_AGENT"];
     if (empty($userAgent)) {
       $userAgent = "";

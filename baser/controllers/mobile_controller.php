@@ -52,7 +52,7 @@ class MobileController extends AppController {
 			));
 			exit();
 		}
-		define('MOBILE_GOOGLE_ANALYTICS_ID', str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']));
+		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
 		App::import('Vendor', 'ga');
 		exit();
 	}
