@@ -111,7 +111,8 @@ $imgExts = array('png','gif','jpg');
 <?php else: ?>
 <?php // プラグインのアセットの場合はコピーできない ?>
 	<?php if(!$safeModeOn): ?>
-		<?php if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
+		<?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
+		<?php if($theme == 'core'): ?>
 	<?php $baser->link('現在のテーマにコピー',
 			array('action' => 'copy_to_theme', $theme, $plugin, $type , $path),
 			array('class'=>'btn-red button'),
