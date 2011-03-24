@@ -65,6 +65,9 @@ class PageHelper extends Helper {
 			if($param && preg_match('/\/$/is',$param)){
 				$param .= 'index';
 			}
+			if(Configure::read('Mobile.on')) {
+				$param = 'mobile/'.$param;
+			}
 			$this->data = $this->Page->findByUrl('/'.$param);
 		}
 	}
@@ -150,7 +153,7 @@ class PageHelper extends Helper {
 			if(!$title) {
 				$title = $nextPost['Page']['title'].$arrow;
 			}
-			$this->Baser->link($title, $nextPost['Page']['url'], $attributes);
+			$this->Baser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
 		}
 
 	}
@@ -193,7 +196,7 @@ class PageHelper extends Helper {
 			if(!$title) {
 				$title = $arrow.$nextPost['Page']['title'];
 			}
-			$this->Baser->link($title, $nextPost['Page']['url'], $attributes);
+			$this->Baser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
 		}
 
 	}
