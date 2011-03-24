@@ -21,5 +21,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('blog_comment',array('dbData'=>$dbData));
+if($dbData) {
+	$baser->element('blog_comment',array('dbData'=>$dbData));
+}
 ?>
