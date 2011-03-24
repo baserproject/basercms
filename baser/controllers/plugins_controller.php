@@ -210,7 +210,7 @@ class PluginsController extends AppController {
 				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
 					$pluginData['Plugin']['version'] = $matches[1];
 					$pluginData['Plugin']['old_version'] = true;
-				}elseif($pluginData['Plugin']['version'] < $version && !in_array($pluginData['Plugin']['name'],array('blog', 'feed', 'mail'))) {
+				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'],array('blog', 'feed', 'mail'))) {
 					$pluginData['Plugin']['update'] = true;
 				}
 				$registereds[] = $pluginData;
