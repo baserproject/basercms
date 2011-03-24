@@ -273,7 +273,6 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$htmlAttributes['prefix'] = true;
 		$BlogPost =& ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
@@ -285,7 +284,7 @@ class BlogHelper extends AppHelper {
 			if(!$title) {
 				$title = $arrow.$prevPost['BlogPost']['name'];
 			}
-			$this->Baser->link($title, array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
+			$this->Baser->link($title, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
 		}
 
 	}
@@ -304,7 +303,6 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$htmlAttributes['prefix'] = true;
 		$BlogPost =& ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
@@ -316,7 +314,7 @@ class BlogHelper extends AppHelper {
 			if(!$title) {
 				$title = $nextPost['BlogPost']['name'].$arrow;
 			}
-			$this->Baser->link($title, array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
+			$this->Baser->link($title, array('admin'=>false,'plugin'=>'','mobile'=>false,'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
 		}
 
 	}
