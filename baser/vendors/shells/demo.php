@@ -35,16 +35,18 @@ class DemoShell extends Shell {
 
 			$ret = true;
 			$user['User']['name'] = 'admin';
-			$user['User']['password_1'] = Security::hash('demodemo', null, true);
-			$user['User']['password_2'] = $user['User']['password_1'];
+			$user['User']['password'] = Security::hash('demodemo', null, true);
+			$user['User']['password_1'] = 'demodemo';
+			$user['User']['password_2'] = 'demodemo';
 			$user['User']['real_name_1'] = 'admin';
 			$user['User']['user_group_id'] = 1;
 			$this->User->create($user);
 			if(!$this->User->save()) $ret = false;
 			
 			$user['User']['name'] = 'operator';
-			$user['User']['password_1'] = Security::hash('demodemo', null, true);
-			$user['User']['password_2'] = $user['User']['password_1'];
+			$user['User']['password'] = Security::hash('demodemo', null, true);
+			$user['User']['password_1'] = 'demodemo';
+			$user['User']['password_2'] = 'demodemo';
 			$user['User']['real_name_1'] = 'member';
 			$user['User']['user_group_id'] = 2;
 			$this->User->create($user);
@@ -135,7 +137,7 @@ class DemoShell extends Shell {
 					$files = $folder->read(true,true);
 					
 					foreach($files[1] as $file){
-						if($file == $dbConfig->{$dataSource}['prefix'].'_blog_posts.csv'){
+						if($file == 'blog_posts.csv'){
 							$sql = "UPDATE `".str_replace(".csv",'',$file)."` SET `posts_date`='".date('Y-m-d H:i:s')."',`created`='".date('Y-m-d H:i:s')."', `modified`='".date('Y-m-d H:i:s')."' WHERE 1=1";
 						}else{
 							$sql = "UPDATE `".str_replace(".csv",'',$file)."` SET `created`='".date('Y-m-d H:i:s')."', `modified`='".date('Y-m-d H:i:s')."' WHERE 1=1";
