@@ -23,7 +23,7 @@ class PageCategoriesSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'sort' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
-		'contents_navi' => array('type' => 'boolean', 'null' => false, 'default' => true),
+		'contents_navi' => array('type' => 'boolean', 'null' => false, 'default' => false),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

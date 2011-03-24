@@ -361,5 +361,81 @@ class DboSqlite3Ex extends DboSqlite3 {
 		}
 		return substr($fields,0,strlen($fields)-1);
 	}
+/**
+ * Returns an array of the fields in given table name.
+ *
+ * @param string $tableName Name of database table to inspect
+ * @return array Fields in table. Keys are name and type
+ */
+	function describe(&$model) {
+		$cache = $this->__describe($model);
+		if ($cache != null) {
+			return $cache;
+		}
+		$fields = array();
+		$result = $this->fetchAll('PRAGMA table_info(' . $model->tablePrefix . $model->table . ')');
+
+		foreach ($result as $column) {
+			$fields[$column[0]['name']] = array(
+				'type'		=> $this->column($column[0]['type']),
+				'null'		=> !$column[0]['notnull'],
+				'default'	=> $column[0]['dflt_value'],
+			// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
+			// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
+			//	'length'	=> $this->length($column[0]['type'])
+			// ---
+				'length'	=> ($column[0]['type'])? $this->length($column[0]['type']) : ''
+			// <<<
+			);
+			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
+			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
+			if($fields[$column[0]['name']]['default']=='NULL'){
+				$fields[$column[0]['name']]['default'] = NULL;
+			}
+			// <<<
+			if($column[0]['pk'] == 1) {
+				$fields[$column[0]['name']] = array(
+					'type'		=> $fields[$column[0]['name']]['type'],
+					'null'		=> false,
+					'default'	=> $column[0]['dflt_value'],
+					'key'		=> $this->index['PRI'],
+					// >>> CUSTOMIZE MODIFY 2010/03/23 ryuring
+					// baserCMSのプライマリーキーの初期値は8バイトで統一
+					//'length'	=> 11
+					// ---
+					'length' => 8
+					// <<<
+				);
+			}
+		}
+
+		$this->__cacheDescription($model->tablePrefix . $model->table, $fields);
+		return $fields;
+	}
+/**
+ * Returns a Model description (metadata) or null if none found.
+ *
+ * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
+ * Datasource::describe と同じ
+ * 
+ * @param Model $model
+ * @return mixed
+ */
+	function __describe($model) {
+		if ($this->cacheSources === false) {
+			return null;
+		}
+		$table = $this->fullTableName($model, false);
+		if (isset($this->__descriptions[$table])) {
+			return $this->__descriptions[$table];
+		}
+		$cache = $this->__cacheDescription($table);
+
+		if ($cache !== null) {
+			$this->__descriptions[$table] =& $cache;
+			return $cache;
+		}
+		return null;
+	}
 }
 ?>
