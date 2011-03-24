@@ -1137,7 +1137,7 @@ DOC_END;
 function countSize() {
 	var len = $(this).val().length;
 	var maxlen = $(this).attr('maxlength');
-	if(!maxlen){
+	if(!maxlen || maxlen == -1){
 		maxlen = '-';
 	}
 	$("#"+$(this).attr('id')+'Counter').html(len+'/<small>'+maxlen+'</small>');
