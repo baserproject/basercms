@@ -23,9 +23,9 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
- * 
+ *
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
- * 
+ *
  * @return string   ベースURL
  */
 	function baseUrl() {
@@ -66,12 +66,14 @@
 		}
 		$path = explode('/', $scriptName);
 		krsort($path);
-		$docRoot = $_SERVER['SCRIPT_FILENAME'];
+		// WINDOWS環境の場合、SCRIPT_NAMEのDIRECTORY_SEPARATORがスラッシュの場合があるので
+		// スラッシュに一旦置換してスラッシュベースで解析
+		$docRoot = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
 		foreach($path as $value) {
-			$reg = "/\\".DS.$value."$/";
+			$reg = "/\/".$value."$/";
 			$docRoot = preg_replace($reg, '', $docRoot);
 		}
-		return $docRoot;
+		return str_replace('/', DS, $docRoot);
 
 	}
 /**
@@ -210,7 +212,7 @@
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
 		return $parameter;
-		
+
 	}
 /**
  * Viewキャッシュを削除する
@@ -315,7 +317,7 @@
  * なければ生成する
  */
 	function checkTmpFolders(){
-		
+
 		if(!is_writable(TMP)){
 			return;
 		}
@@ -330,7 +332,7 @@
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
-		
+
 	}
 /**
  * フォルダの中をフォルダを残して空にする
@@ -360,7 +362,7 @@
 			}
 		}
 		return $result;
-		
+
 	}
 /**
  * 現在のビューディレクトリのパスを取得する
@@ -444,7 +446,7 @@
  * サイトの設置URLを取得する
  *
  * index.phpは含まない
- * 
+ *
  * @return	string
  */
 	function siteUrl() {
