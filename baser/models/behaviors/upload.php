@@ -302,7 +302,12 @@ class UploadBehavior extends ModelBehavior {
 		if(!$this->tmpId) {
 			$fileName = $prefix . $basename . $suffix . '.'.$field['ext'];
 		}else {
-			$fileName = $this->tmpId.'_'.$field['name'].'.'.$field['ext'];
+			if(!empty($field['namefield'])) {
+				$model->data[$model->alias][$field['namefield']] = $this->tmpId;
+				$fileName = $this->getFieldBasename($model, $field, $field['ext']);
+			} else {
+				$fileName = $this->tmpId.'_'.$field['name'].'.'.$field['ext'];
+			}
 		}
 		$filePath = $this->savePath . $fileName;
 
@@ -327,8 +332,10 @@ class UploadBehavior extends ModelBehavior {
 			}
 
 		}else {
-			$this->Session->write('Upload.'.$fileName,file_get_contents($file['tmp_name']));
-			$this->Session->write('Upload.'.$fileName.'_type',$file['type']);
+			$_fileName = str_replace('.','_',$fileName);
+			$this->Session->write('Upload.'.$_fileName, $field);
+			$this->Session->write('Upload.'.$_fileName.'.type', $file['type']);
+			$this->Session->write('Upload.'.$_fileName.'.data', file_get_contents($file['tmp_name']));
 			return $fileName;
 		}
 
