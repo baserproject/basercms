@@ -7,7 +7,7 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2010, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2010, Catchup, Inc.
@@ -68,11 +68,9 @@ $(function(){
 	<tr>
 		<th>操作</th>
 		<th>NO</th>
-		<th>ルール名</th>
-		<th>URL設定</th>
+		<th>ルール名<br />URL設定</th>
 		<th>アクセス</th>
-		<th>登録日</th>
-		<th>更新日</th>
+		<th>登録日<br />更新日</th>
 	</tr>
 	<?php if(!empty($listDatas)): ?>
 		<?php $count=0; ?>
@@ -85,7 +83,7 @@ $(function(){
 				<?php $class=' class="sortable"'; ?>
 			<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
-		<td style="width:20%" class="operation-button">
+		<td style="width:15%" class="operation-button">
 			<?php if($sortmode): ?>
 			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
 			<?php echo $formEx->hidden('Sort.id'.$listData['Permission']['id'],array('class'=>'id','value'=>$listData['Permission']['id'])) ?>
@@ -96,11 +94,15 @@ $(function(){
 			<?php endif ?>
 		</td>
 		<td style="width:10%"><?php echo $listData['Permission']['no']; ?></td>
-		<td style="width:10%"><?php $baser->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?></td>
-		<td style="width:20%"><?php echo $listData['Permission']['url']; ?></td>
+		<td style="width:55%">
+			<?php $baser->link($listData['Permission']['name'],array('action'=>'edit', $listData['Permission']['id'])); ?><br />
+			<?php echo $listData['Permission']['url']; ?>
+		</td>
 		<td style="width:10%" class="align-center"><?php echo $textEx->arrayValue($listData['Permission']['auth'],array(0=>'×',1=>'〇')) ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['Permission']['created']); ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['Permission']['modified']); ?></td>
+		<td style="width:10%">
+			<?php echo $timeEx->format('y-m-d',$listData['Permission']['created']); ?><br />
+			<?php echo $timeEx->format('y-m-d',$listData['Permission']['modified']); ?>
+		</td>
 	</tr>
 			<?php $count++; ?>
 		<?php endforeach; ?>
