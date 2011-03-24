@@ -91,9 +91,9 @@ $(document).ready( function() {
 		var port,host,dbName,prefix;
 
 		if (dbType.val()=='mysql') {
-			$('#dbHost').show();
-			$('#dbUser').show();
-			$('#dbInfo').show();
+			$('#dbHost').show(500);
+			$('#dbUser').show(500);
+			$('#dbInfo').show(500);
 			$('#checkdb').show();
 			$('#btnnext').hide();
 			host = 'localhost';
@@ -101,9 +101,9 @@ $(document).ready( function() {
 			port = '3306';
 			prefix = 'bc_'
 		} else if (dbType.val()=='postgres') {
-			$('#dbHost').show();
-			$('#dbUser').show();
-			$('#dbInfo').show();
+			$('#dbHost').show(500);
+			$('#dbUser').show(500);
+			$('#dbInfo').show(500);
 			$('#checkdb').show();
 			$('#btnnext').hide();
 			host = 'localhost';
@@ -111,9 +111,9 @@ $(document).ready( function() {
 			port = '5432';
 			prefix = 'bc_'
 		} else if(dbType.val()=='sqlite3') {
-			$('#dbHost').hide();
-			$('#dbUser').hide();
-			$('#dbInfo').hide();
+			$('#dbHost').hide(500);
+			$('#dbUser').hide(500);
+			$('#dbInfo').hide(500);
 			$('#checkdb').hide();
 			$('#btnnext').attr('disabled','');
 			$('#btnnext').show();
@@ -121,9 +121,9 @@ $(document).ready( function() {
 			port = '';
 			$('#InstallationDbPrefix').val('');
 		} else if(dbType.val()=='csv') {
-			$('#dbHost').hide();
-			$('#dbUser').hide();
-			$('#dbInfo').hide();
+			$('#dbHost').hide(500);
+			$('#dbUser').hide(500);
+			$('#dbInfo').hide(500);
 			$('#checkdb').hide();
 			$('#btnnext').attr('disabled','');
 			$('#btnnext').show();
@@ -131,9 +131,9 @@ $(document).ready( function() {
 			port = '';
 			$('#InstallationDbPrefix').val('');
 		} else {
-			$('#dbHost').show();
-			$('#dbUser').show();
-			$('#dbInfo').show();
+			$('#dbHost').show(500);
+			$('#dbUser').show(500);
+			$('#dbInfo').show(500);
 			$('#checkdb').show();
 			$('#btnnext').hide();
 		}
@@ -186,7 +186,8 @@ $(document).ready( function() {
 					<small>ポート</small> </div>
 				<?php echo $formEx->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
 				<br style="clear:both" />
-				<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。</small></li>
+				<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />
+				※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。</small></li>
 		</ul>
 <?php if (!empty($blDBSettingsOK)): ?>
 		<h3>オプション</h3>
