@@ -34,7 +34,8 @@
 		<span style="color:#FF6600;">Let's BaserCMS!</span>
 	</center>
 	<hr size="2" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:2px solid #FF6600;" />
-	<?php echo $content_for_layout; ?> <br />
+	<?php echo $content_for_layout; ?><br />
+	<?php $baser->element('contents_navi') ?><br />
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:1px solid #FF6600;" />
 	<span style="color:#FF6600">◆ </span>
 	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>

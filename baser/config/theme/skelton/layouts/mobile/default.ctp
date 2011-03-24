@@ -15,6 +15,7 @@
 	
 	<?php echo $baser->siteConfig['name'] ?>
 	<?php echo $content_for_layout; ?><br />
+	<?php $baser->element('contents_navi') ?><br />
 
 	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
 
