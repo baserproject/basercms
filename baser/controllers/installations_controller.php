@@ -300,6 +300,7 @@ class InstallationsController extends AppController {
 				$user['User']['user_group_id'] = 1;
 				$user['User']['password_1'] = $this->data['Installation']['admin_password'];
 				$user['User']['password_2'] = $this->data['Installation']['admin_confirmpassword'];
+				$user['User']['password'] = $user['User']['password_1'];
 				$User->create($user);
 				if ($User->validates()) {
 					$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
@@ -748,6 +749,9 @@ class InstallationsController extends AppController {
 		}
 		if($data['dbType'] == 'csv') {
 			$data['dbEncoding'] = 'sjis';
+		}
+		if($data['dbType'] == 'mysql' || $data['dbType'] == 'sqlite3' || $data['dbType'] == 'postgres') {
+			$data['dbType'] .= '_ex';
 		}
 
 		$this->Session->write('Installation.dbType', $data['dbType']);
