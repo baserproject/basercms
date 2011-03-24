@@ -239,7 +239,7 @@ class InstallationsController extends AppController {
 
 			/* 「次のステップへ」クリック時 */
 			} elseif ($this->data['buttonclicked']=='createdb') {
-				if($this->_constructionDb()) {
+				if($this->_constructionDb($this->data['Installation']['non_demo_data'])) {
 					$this->Session->setFlash("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
@@ -558,18 +558,18 @@ class InstallationsController extends AppController {
 /**
  * データベースを構築する
  */
-	function _constructionDb() {
+	function _constructionDb($nonDemoData = false) {
 
-		if(!$this->_constructionTable(BASER_CONFIGS.'sql')) {
+		if(!$this->_constructionTable(BASER_CONFIGS.'sql', 'baser', $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin')) {
+		if(!$this->_constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin')) {
+		if(!$this->_constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin')) {
+		if(!$this->_constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
 			return false;
 		}
 		return true;
@@ -582,7 +582,7 @@ class InstallationsController extends AppController {
  * @param	string	$path
  * @return	boolean
  */
-	function _constructionTable($path, $configKeyName = 'baser') {
+	function _constructionTable($path, $configKeyName = 'baser', $nonDemoData = false) {
 
 		$db =& $this->_connectDb($this->_readDbSettingFromSession(), $configKeyName);
 
@@ -610,21 +610,31 @@ class InstallationsController extends AppController {
 				}
 			}
 
-			// CSVの場合ロックを解除しないとデータの投入に失敗する
-			if($db->config['driver'] == 'csv') {
-				$db->reconnect();
+			if($nonDemoData && $configKeyName == 'baser') {
+				$nonDemoData = false;
+				$folder = new Folder($path.DS.'non_demo');
+				$files = $folder->read(true, true, true);
 			}
 
-			// 初期データ投入
-			foreach($files[1] as $file) {
-				if(!preg_match('/\.csv$/',$file)) {
-					continue;
+			if(!$nonDemoData) {
+
+				// CSVの場合ロックを解除しないとデータの投入に失敗する
+				if($db->config['driver'] == 'csv') {
+					$db->reconnect();
 				}
-				if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
-					return false;
+
+				// 初期データ投入
+				foreach($files[1] as $file) {
+					if(!preg_match('/\.csv$/',$file)) {
+						continue;
+					}
+					if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+						return false;
+					}
 				}
 			}
 		}
+		
 		return true;
 
 	}
