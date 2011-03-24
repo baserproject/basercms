@@ -31,12 +31,6 @@
  */
 class GooglemapsHelper extends AppHelper {
 /**
- * GoogleMapsKey
- * @var		string
- * @access	public
- */
-	var $googlemapsKey = '';
-/**
  * タイトル
  * @var		string
  * @access	public
@@ -108,31 +102,43 @@ class GooglemapsHelper extends AppHelper {
  */
 	function _getScript() {
 
-		if(!$this->longitude || !$this->latitude || !$this->mapId || !$this->googlemapsKey) {
+		if(!$this->longitude || !$this->latitude || !$this->mapId) {
 			return false;
 		}
-		$script = 'var map;';
-		$script .= 'var markers = new Array(1);';
-		$script .= 'var marker = null;';
-		$script .= 'var n_markers = 0;';
-		$script .= 'var markeropts = new Object();';
-		$script .= 'map = new GMap2(document.getElementById("'.$this->mapId.'"));';
-		$script .= 'map.setCenter(new GLatLng('.$this->latitude.','.$this->longitude.'),'.$this->zoom.');';
-		$script .= 'map.addControl(new GLargeMapControl());';
-		$script .= 'map.addControl(new GMapTypeControl());';
-		$script .= 'map.addControl(new GOverviewMapControl());';
-		$script .= 'map.setMapType(G_NORMAL_MAP);';
-		if($this->title) {
-			$script .= 'markeropts.title = "'.$this->title.'";';
-		}
+		
+		$script =
+<<< DOC_END
+			var latlng = new google.maps.LatLng({$this->latitude},{$this->longitude});
+			var options = {
+				zoom: {$this->zoom},
+				center: latlng,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				navigationControl: true,
+				mapTypeControl: true,
+				scaleControl: true
+			};
+			var map = new google.maps.Map(document.getElementById("{$this->mapId}"), options);
+			var marker = new google.maps.Marker({
+				position: latlng,
+				map: map,
+				title:"{$this->title}"
+			});
+DOC_END;
+	
 		if($this->markerText) {
-			$script .= 'marker = new GMarker(new GPoint('.$this->longitude.','.$this->latitude.'), markeropts);';
-			$script .= 'markers[n_markers] = marker;';
-			$script .= "markers[0].openInfoWindowHtml('".$this->markerText."');";
-			$script .= 'n_markers++;';
-			$script .= 'map.addOverlay(marker);';
+			$script .=
+<<< INFO_END
+			var infowindow = new google.maps.InfoWindow({
+				content: '{$this->markerText}'
+			});
+			infowindow.open(map,marker);
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+			});
+INFO_END;
 		}
-		$googleScript = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key='.$this->googlemapsKey.'" type="text/javascript"></script>';
+
+		$googleScript = '<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
 
 		return $googleScript.'<script type="text/javascript">'.$script.'</script>';
 
@@ -141,10 +147,10 @@ class GooglemapsHelper extends AppHelper {
  * 位置情報を読み込む
  */
 	function loadLocation() {
-		if(!$this->googlemapsKey || !$this->address) {
+		if(!$this->address) {
 			return false;
 		}
-		$location = $this->getLocation($this->googlemapsKey,$this->address);
+		$location = $this->getLocation($this->address);
 		if($location) {
 			$this->latitude = $location['latitude'];
 			$this->longitude = $location['longitude'];
@@ -156,9 +162,9 @@ class GooglemapsHelper extends AppHelper {
 /**
  * 位置情報を取得する
  */
-	function getLocation($key,$address) {
+	function getLocation($address) {
 		App::import("Component","Gmaps");
-		$gmap = new GmapsComponent($key);
+		$gmap = new GmapsComponent();
 		if ($gmap->getInfoLocation($address)) {
 			return array('latitude'=>$gmap->getLatitude(),'longitude'=>$gmap->getLongitude());
 		}else {

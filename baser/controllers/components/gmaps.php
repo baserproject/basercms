@@ -74,32 +74,16 @@ class GmapsComponent  extends Object {
  */
 	var $_postalCode;
 /**
- * Google Maps Key
- *
- * @var string
- */
-	var $_key;
-/**
  * Base Url
  *
  * @var string
  */
 	var $_baseUrl;
 /**
- * GoogleMapsキーのセッター
- * @param string $value
- */
-	function setKey($value) {
-		$this->_key = $value;
-	}
-/**
  * Construct
- *
- * @param string $key
  */
-	function __construct ($key='') {
-		$this->_key= $key;
-		$this->_baseUrl= "http://" . MAPS_HOST . "/maps/geo?output=xml&key=" . $this->_key;
+	function __construct () {
+		$this->_baseUrl= "http://" . MAPS_HOST . "/maps/geo?output=xml";
 	}
 /**
  * getInfoLocation

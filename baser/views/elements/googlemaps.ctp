@@ -39,12 +39,11 @@ if(isset($longitude)) {
 if(isset($latitude)) {
 	$googlemaps->latitude = $latitude;
 }
-$googlemaps->googlemapsKey = $baser->siteConfig['googlemaps_key'];
 $googlemaps->mapId = $_mapId;
 $googlemaps->zoom = $_zoom;
 $googlemaps->title = $baser->siteConfig['name'];
 $googlemaps->markerText = $_markerText;
 if(!$googlemaps->load($_address,$_width,$_height)){
-	echo 'Google Maps を読み込めません。管理画面で正しいgooglemapsキー、住所が設定されているか確認してください。';
+	echo 'Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。';
 }
 ?>
