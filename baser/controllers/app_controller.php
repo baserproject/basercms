@@ -923,10 +923,12 @@ class AppController extends Controller {
 				}
 				$this->data[$model] = $filter;
 			}
-			if($this->Session->check("{$contentsName}.named")) {
-				$named = $this->Session->read("{$contentsName}.named");
-			} elseif(!empty($default['named'])) {
+			$named = array();
+			if(!empty($default['named'])) {
 				$named = $default['named'];
+			}
+			if($this->Session->check("{$contentsName}.named")) {
+				$named = am($named, $this->Session->read("{$contentsName}.named"));
 			}
 		} elseif($type == 'get') {
 			if(!empty($this->params['url'])) {
