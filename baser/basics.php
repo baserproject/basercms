@@ -453,4 +453,28 @@
 		$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
 		return topLevelUrl(false).$baseUrl;
 	}
+/**
+ * 配列を再帰的に上書きする
+ * 二つまで
+ * @param	array	$a
+ * @param	array	$b
+ * @return	array
+ */
+	function amr($a, $b) {
+
+		foreach ($b as $k => $v) {
+			if(is_array($v)) {
+				if(isset($a[$k])) {
+					$a[$k] = amr($a[$k], $v);
+					continue;
+				}
+			}
+			if(!is_array($a)) {
+				$a = array($a);
+			}
+			$a[$k] = $v;
+		}
+		return $a;
+
+	}
 ?>
