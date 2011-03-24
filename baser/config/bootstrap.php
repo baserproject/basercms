@@ -60,6 +60,19 @@
 		}
 	}
 /**
+ * 配置パターン
+ */
+	if(!preg_match('/'.str_replace('/', '\/', docRoot()).'/', ROOT)) {
+		// CakePHP標準の配置
+		define('DEPLOY_PATTERN', 3);
+	} elseif(ROOT.DS == WWW_ROOT) {
+		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
+		define('DEPLOY_PATTERN', 2);
+	} else {
+		// baserCMS配布時の配置
+		define('DEPLOY_PATTERN', 1);
+	}
+/**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */

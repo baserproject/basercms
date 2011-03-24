@@ -731,15 +731,7 @@ class AppController extends Controller {
 			}
 		}
 
-		if(preg_match('/'.str_replace('/', '\/', docRoot()).'/', ROOT)) {
-			// webroot ≠ DOCUMENT_ROOT
-			$basicWebroot = false;
-		} else {
-			// webtoot = DOCUMENT_ROOT
-			$basicWebroot = true;
-		}
-
-		if(ROOT == WWW_ROOT || $basicWebroot) {
+		if(DEPLOY_PATTERN == 2 || DEPLOY_PATTERN == 3) {
 			$webrootRewriteBase = '/';
 		} else {
 			$webrootRewriteBase = '/app/webroot';
@@ -748,7 +740,7 @@ class AppController extends Controller {
 		/* /app/webroot/.htaccess の編集 */
 		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
 
-		if(ROOT != WWW_ROOT && !$basicWebroot) {
+		if(DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
 			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
 		}

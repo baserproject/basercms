@@ -178,14 +178,10 @@ class SiteConfigsController extends AppController {
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
 
-		$docRoot = docRoot();
-
-		if(preg_match('/'.str_replace('/', '\/', $docRoot).'/', ROOT)) {
-			// webroot ≠ DOCUMENT_ROOT
+		if(DEPLOY_PATTERN != 3) {
 			$htaccess1 = ROOT.DS.'.htaccess';
 		} else {
-			// webtoot = DOCUMENT_ROOT
-			$htaccess1 = $docRoot.DS.'.htaccess';
+			$htaccess1 = docRoot().DS.'.htaccess';
 		}
 		$htaccess2 = WWW_ROOT.'.htaccess';
 
