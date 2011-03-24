@@ -141,6 +141,23 @@ class AppController extends Controller {
 				}
 				if(!preg_match($reg,$_SERVER['REQUEST_URI']) || isInstalled()) {
 					$this->theme = $this->siteConfigs['theme'];
+					// ===============================================================================
+					// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
+					// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
+					// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
+					// 表示されてしまうので明示的に指定している。
+					// （例）
+					// [変更後] app/webroot/themed/demo/blog/news/index.ctp
+					// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
+					// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
+					// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
+					// ※ AppView::_pathsも関連している
+					// ===============================================================================
+					$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
+					$pluginPaths = Configure::read('pluginPaths');
+					if(!in_array($pluginThemePath, $pluginPaths)) {
+						Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
+					}
 				}
 
 			}
