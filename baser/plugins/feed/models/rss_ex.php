@@ -203,7 +203,12 @@ class RssEx extends Rss {
 			$tmp['link']['value'] = $data->get_link();
 			$tmp['pubDate']['value'] = date("r",strtotime($data->get_date()));
 			$tmp['dc:creator']['value'] = $data->get_author();
-			$tmp['category']['value'] = $data->get_category();
+			$cat = $data->get_category();
+			if($cat) {
+				$tmp['category']['value'] = $cat->get_term();
+			} else {
+				$tmp['category']['value'] = '';
+			}
 			$tmp['guid']['value'] = $data->get_id();
 			$tmp['guid']['attributes']['isPermaLink'] = $data->get_permalink();
 			$tmp['description']['value'] = $data->get_description();
