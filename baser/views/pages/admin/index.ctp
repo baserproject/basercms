@@ -19,9 +19,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageCategories = $formEx->getControlSource('Page.page_category_id');
+$_pageCategories = $formEx->getControlSource('Page.page_category_id');
+$pageCategories = array('noncat'=>'カテゴリなし');
+if(Configure::read('Baser.mobile')) {
+	$pageCategories += array('pconly'=>'PCページのみ');
+}
 if($pageCategories){
-	$pageCategories = array('noncat'=>'カテゴリなし','pconly'=>'PCページのみ')+$pageCategories;
+	$pageCategories = $pageCategories + $_pageCategories;
 }
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);

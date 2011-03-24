@@ -254,6 +254,12 @@ $(function(){
 				<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $formEx->label('SiteConfig.mobile', 'モバイル') ?></th>
+			<td class="col-input">
+				<?php echo $formEx->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+			</td>
+		</tr>
 	</table>
 	
 	<h3>メール設定関連</h3>
