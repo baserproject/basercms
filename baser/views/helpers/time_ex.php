@@ -159,13 +159,13 @@ class TimeExHelper extends TimeHelper {
 
 	}
 /**
- * 和暦変換
+ * 和暦変換(配列で返す)
  *
  * @param	string	日付
  * @return	array	和暦データ
  * @access	public
  */
-	function convertToWareki($date) {
+	function convertToWarekiArray($date) {
 
 		if(!$date) {
 			return '';
@@ -179,10 +179,12 @@ class TimeExHelper extends TimeHelper {
 
 		if(strtotime($date)==-1) {
 			return '';
-		}else {
-			$ymd = date('Ymd',strtotime($date));
-			$y = date('Y',strtotime($date));
 		}
+
+		$ymd = date('Ymd',strtotime($date));
+		$y = date('Y',strtotime($date));
+		$m = date('m',strtotime($date));
+		$d = date('d',strtotime($date));
 
 		if ($ymd <= "19120729") {
 			$w = "m";
@@ -197,9 +199,35 @@ class TimeExHelper extends TimeHelper {
 			$w = "h";
 			$y = $y - 1988;
 		}
-		return $w.'-'.$y.'/'.date('m',strtotime($date)).'/'.date('d',strtotime($date));
+
+		$dataWareki = array(
+			'wareki'	=>	$w,
+			'year'		=>	$y,
+			'month'		=>	$m,
+			'day'		=>	$d
+		);
+
+		return $dataWareki;
 
 	}
+/**
+ * 和暦変換
+ *
+ * @param	string	日付
+ * @return	string	和暦データ
+ * @access	public
+ */
+	function convertToWareki($date) {
+
+		$dateArray = $this->convertToWarekiArray($date);
+		if(is_array($dateArray) && !empty($dateArray)) {
+			return $dateArray['wareki'] . '-' . $dateArray['year'] . '/' . $dateArray['month'] . '/' . $dateArray['day'];
+		} else {
+			return '';
+		}
+
+	}
+
 /**
  * 文字列から時間（分）を取得
  *
