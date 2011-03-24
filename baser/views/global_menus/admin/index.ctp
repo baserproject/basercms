@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] グローバルメニュー一覧
+ * [ADMIN] グローバルメニュー一覧
  *
  * PHP versions 4 and 5
  *
@@ -27,9 +27,9 @@ $(function(){
 });
 </script>
 
-<?php echo $formEx->create('Sort',array('action'=>'update_sort','url'=>am(array('controller'=>'global_menus'),$this->passedArgs))) ?>
-	<?php echo $formEx->hidden('Sort.id') ?>
-	<?php echo $formEx->hidden('Sort.offset') ?>
+<?php echo $formEx->create('Sort', array('action' => 'update_sort', 'url' => am(array('controller' => 'global_menus'), $this->passedArgs))) ?>
+<?php echo $formEx->input('Sort.id', array('type' => 'hidden')) ?>
+<?php echo $formEx->input('Sort.offset', array('type' => 'hidden')) ?>
 <?php echo $formEx->end() ?>
 
 <div id="pageMessage" class="message" style="display:none"></div>
@@ -39,6 +39,8 @@ $(function(){
 	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
 	<?php $baser->img('ajax-loader-s.gif',array('id'=>'ListAjaxLoader')) ?>
 </h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>公開ページ、管理画面のグローバルメニューの管理ができます。<br />
@@ -52,60 +54,79 @@ $(function(){
 		<li>画面一番下の「並び替えモード」をクリックすると、表示される<?php $baser->img('sort.png',array('alt'=>'並び替え')) ?>マークをドラッグアンドドロップして行の並び替えができます。</li>
 	</ul>
 </div>
+
+<!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="GlobalMenuSearch">検索</a></h3>
-<div class="function-box corner10" id="GlobalMenuSearchBody" style="display:none"> <?php echo $formEx->create('GlobalMenu',array('url'=>array('action'=>'index'))) ?>
-	<p> <small>タイプ</small> <?php echo $formEx->select('GlobalMenu.menu_type',  $formEx->getControlSource('menu_type'),null,array(),false) ?>　 <small>利用状態</small> <?php echo $formEx->select('GlobalMenu.status', $textEx->booleanMarkList()) ?>　 
-	<?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?></p>
+<div class="function-box corner10" id="GlobalMenuSearchBody" style="display:none">
+	<?php echo $formEx->create('GlobalMenu',array('url' => array('action' => 'index'))) ?>
+	<p><small>タイプ</small>
+		<?php echo $formEx->input('GlobalMenu.menu_type', array(
+				'type'		=> 'select', 
+				'options'	=> $formEx->getControlSource('menu_type'))) ?>
+		<small>利用状態</small>
+		<?php echo $formEx->input('GlobalMenu.status', array(
+				'type'		=> 'select',
+				'options'	=> $textEx->booleanMarkList(),'empty' => '指定なし')) ?>　
+	<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?></p>
+	<?php echo $formEx->end() ?>
 </div>
+
+<!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01 sort-table" id="TableGlobalMenus">
 	<tr>
-		<th>操作</th>
+		<th style="width:100px">操作</th>
 		<th>NO</th>
 		<th>タイプ</th>
-		<th>メニュー名</th>
-		<th>リンクURL</th>
-		<th>登録日</th>
-		<th>更新日</th>
+		<th>メニュー名<br />リンクURL</th>
+		<th>登録日<br />更新日</th>
 	</tr>
-	<?php if(!empty($listDatas)): ?>
-		<?php $count=0; ?>
-		<?php foreach($listDatas as $listData): ?>
-			<?php if (!$listData['GlobalMenu']['status']): ?>
-				<?php $class=' class="disablerow sortable"'; ?>
-			<?php elseif ($count%2 === 0): ?>
-				<?php $class=' class="altrow sortable"'; ?>
-			<?php else: ?>
-				<?php $class=' class="sortable"'; ?>
-			<?php endif; ?>
+<?php if(!empty($listDatas)): ?>
+	<?php $count=0; ?>
+	<?php foreach($listDatas as $listData): ?>
+		<?php if (!$listData['GlobalMenu']['status']): ?>
+			<?php $class=' class="disablerow sortable"'; ?>
+		<?php elseif ($count%2 === 0): ?>
+			<?php $class=' class="altrow sortable"'; ?>
+		<?php else: ?>
+			<?php $class=' class="sortable"'; ?>
+		<?php endif; ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
-		<td style="width:20%" class="operation-button">
-			<?php if($sortmode): ?>
+		<td class="operation-button">
+		<?php if($sortmode): ?>
 			<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
-			<?php echo $formEx->hidden('Sort.id'.$listData['GlobalMenu']['id'],array('class'=>'id','value'=>$listData['GlobalMenu']['id'])) ?>
-			<?php endif ?>
-			<?php $baser->link('編集',array('action'=>'edit', $listData['GlobalMenu']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $listData['GlobalMenu']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $listData['GlobalMenu']['name']),false); ?>
+			<?php echo $formEx->input('Sort.id'.$listData['GlobalMenu']['id'], array(
+							'type'	=> 'hidden',
+							'class'	=> 'id',
+							'value'	=> $listData['GlobalMenu']['id'])) ?>
+		<?php endif ?>
+			<?php $baser->link('編集', array('action' => 'edit', $listData['GlobalMenu']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
+			<?php $baser->link('削除', 
+					array('action' => 'delete', $listData['GlobalMenu']['id']),
+					array('class'=>'btn-gray-s button-s'),
+					sprintf('%s を本当に削除してもいいですか？', $listData['GlobalMenu']['name']),
+					false); ?>
 		</td>
-		<td style="width:10%"><?php echo $listData['GlobalMenu']['no']; ?></td>
-		<td style="width:10%"><?php echo $textEx->listValue('GlobalMenu.menu_type',$listData['GlobalMenu']['menu_type']); ?></td>
-		<td style="width:20%"><?php $baser->link($listData['GlobalMenu']['name'],array('action'=>'edit',$listData['GlobalMenu']['id'])); ?></td>
-		<td style="width:20%"><?php $baser->link($listData['GlobalMenu']['link'],$listData['GlobalMenu']['link'],array('target'=>'_blank')); ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['created']); ?></td>
-		<td style="width:10%"><?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['modified']); ?></td>
+		<td><?php echo $listData['GlobalMenu']['no']; ?></td>
+		<td><?php echo $textEx->listValue('GlobalMenu.menu_type', $listData['GlobalMenu']['menu_type']); ?></td>
+		<td><?php $baser->link($listData['GlobalMenu']['name'], array('action' => 'edit', $listData['GlobalMenu']['id'])); ?><br />
+			<?php $baser->link($listData['GlobalMenu']['link'], $listData['GlobalMenu']['link'], array('target'=>'_blank')); ?></td>
+		<td><?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['created']); ?><br />
+			<?php echo $timeEx->format('y-m-d',$listData['GlobalMenu']['modified']); ?></td>
 	</tr>
-			<?php $count++; ?>
-		<?php endforeach; ?>
-	<?php else: ?>
+		<?php $count++; ?>
+	<?php endforeach; ?>
+<?php else: ?>
 	<tr>
 		<td colspan="7"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
-	<?php endif; ?>
+<?php endif; ?>
 </table>
+
 <div class="align-center">
-	<?php $baser->link('新規登録',array('action'=>'add'),array('class'=>'btn-red button')) ?>
-	<?php if(!$sortmode): ?>
-	<?php $baser->link('並び替えモード',array('sortmode'=>1),array('class'=>'btn-orange button')) ?>
-	<?php else: ?>
-	<?php $baser->link('ノーマルモード',array('sortmode'=>0),array('class'=>'btn-orange button')) ?>
-	<?php endif ?>
+	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
+<?php if(!$sortmode): ?>
+	<?php $baser->link('並び替えモード', array('sortmode' => 1), array('class' => 'btn-orange button')) ?>
+<?php else: ?>
+	<?php $baser->link('ノーマルモード', array('sortmode' => 0), array('class' => 'btn-orange button')) ?>
+<?php endif ?>
 </div>

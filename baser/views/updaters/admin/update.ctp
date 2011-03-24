@@ -1,6 +1,29 @@
+<?php
+/* SVN FILE: $Id$ */
+/**
+ * [ADMIN] アップデート
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2010, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.views
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+?>
 <h2>
 	<?php $baser->contentsTitle() ?>
 </h2>
+
 <div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;">
 	<p> <strong><?php echo $updateTarget ?> のバージョン</strong>：<?php echo $baserVer ?><br />
 		<strong>対応するアプリケーションのバージョン</strong>：<?php echo $siteVer ?>
@@ -10,9 +33,9 @@
 		<?php if($scriptNum): ?>
 	<p>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。</p>
 		<?php endif ?>
-		<?php echo $form->create(array('action'=>$this->action, 'url'=>array($plugin))) ?>
-		<?php echo $form->hidden('Installation.update',array('value'=>true)) ?>
-		<?php echo $form->end(array('label'=>'アップデート実行','class'=>'button btn-red')) ?>
+		<?php echo $formEx->create(array('action' => $this->action, 'url' => array($plugin))) ?>
+		<?php echo $formEx->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
+		<?php echo $formEx->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
 	<?php else: ?>
 	<p>WEBサイトのバージョンは最新です。</p>
 	<p>
@@ -24,6 +47,7 @@
 	</p>
 	<?php endif ?>
 </div>
+
 <?php if($scriptNum): ?>
 <div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;margin-top:20px">
 	<p>	<strong>データベースのバックアップは行いましたか？</strong><br />

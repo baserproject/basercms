@@ -61,7 +61,7 @@ class InstallationsController extends AppController {
  * @var		array
  * @access	public
  */
-	var $helpers = array('Html', 'Form', 'Javascript', 'Time');
+	var $helpers = array('Html', 'FormEx', 'Javascript', 'Time');
 /**
  * モデル
  *
@@ -83,7 +83,7 @@ class InstallationsController extends AppController {
 	function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
 
 		if ($errno==2) {
-			$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。<br />".$errstr);
+			$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr);
 			restore_error_handler();
 		}
 
@@ -344,7 +344,7 @@ class InstallationsController extends AppController {
 		// インストールファイルを生成する
 		if(!$this->_createInstallFile()){
 			if($message) $message .= '<br />';
-			$message .= '/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をして下さい。';
+			$message .= '/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をしてください。';
 		}
 
 		// tmp フォルダを作成する
@@ -792,9 +792,9 @@ class InstallationsController extends AppController {
 		} else {
 			if (!$this->Session->read('Message.flash.message')) {
 				if($db->connection){
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
+					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
 				} else {
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直して下さい。");
+					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。");
 				}
 			}
 		}

@@ -82,23 +82,34 @@ class Page extends AppModel {
  */
 	var $__pageInsertID = null;
 /**
- * beforeValidate
- * @return	boolean
+ * バリデーション
+ *
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => "ページ名を入力して下さい。",
-						'required' => true),
-				array('rule' => 'pageExists',
-						'message' => "指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。"));
-		$this->validate['page_category_id'] = array(array('rule' => 'pageExists',
-						'message' => "指定したページは既に存在します。ファイル名、またはカテゴリを変更して下さい。",
-						'required' => false));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'ページ名を入力してください。',
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'ページ名は50文字以内で入力してください。'),
+			array(	'rule'		=> array('pageExists'),
+					'message'	=> '指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。')
+		),
+		'page_category_id' => array(
+			array(	'rule'		=> array('pageExists'),
+					'message'	=> '指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。')
+		),
+		'title' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'ページタイトルは255文字以内で入力してください。')
+		),
+		'description' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> '説明文は255文字以内で入力してください。')
+		)
+	);
 /**
  * フォームの初期値を設定する
  * @return	array	初期値データ

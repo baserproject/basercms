@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ローカルナビゲーションウィジェット
+ * [PUBLISH] ローカルナビゲーションウィジェット
  *
  * PHP versions 4 and 5
  *

@@ -63,32 +63,34 @@ class UserGroup extends AppModel {
 							'exclusive'=>false,
 							'finderQuery'=>''));
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'ユーザーグループ名を入力してください。'),
+			array(	'rule'		=> array('halfText'),
+					'message'	=> 'ユーザーグループ名は半角のみで入力してください。'),
+			array(	'rule'		=> array('duplicate','name'),
+					'message'	=> '既に登録のあるユーザーグループ名です。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'ユーザーグループ名は50文字以内で入力してください。')
+		),
+		'title' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '表示名を入力してください。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> '表示名は50文字以内で入力してください。')
 
-		$this->validate['name'] = array(
-			array(	'rule' => 'notEmpty',
-					'message' => "ユーザーグループ名を入力して下さい。"),
-			array(	'rule' => 'halfText',
-					'message' => 'ユーザーグループは半角のみで入力して下さい。'),
-			array(	'rule' => array('duplicate','name'),
-					'message' => '既に登録のあるユーザーグループ名です。')
-		);
-		$this->validate['title'] = array(
-			array(	'rule' => 'notEmpty',
-					'message' => "表示名を入力して下さい。")
-		);
-		$this->validate['auth_prefix'] = array(
-			array(	'rule' => 'notEmpty',
-					'message' => "認証プレフィックスを入力して下さい。")
-		);
-		return true;
-
-	}
+		),
+		'auth_prefix' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> '認証プレフィックスを入力してください。')
+		)
+	);
 /**
  * 関連するユーザーを管理者グループに変更し保存する
  * @param <type> $cascade

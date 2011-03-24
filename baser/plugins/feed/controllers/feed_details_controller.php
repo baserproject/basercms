@@ -127,7 +127,7 @@ class FeedDetailsController extends FeedAppController {
 		}
 
 		// 表示設定
-		$this->pageTitle = '新規フィード詳細情報登録';
+		$this->pageTitle = '新規フィード情報登録';
 		$this->render('form');
 
 	}
@@ -166,7 +166,7 @@ class FeedDetailsController extends FeedAppController {
 		}
 
 		// 表示設定
-		$this->pageTitle = 'フィード詳細情報編集';
+		$this->pageTitle = 'フィード情報編集';
 		$this->render('form');
 
 	}

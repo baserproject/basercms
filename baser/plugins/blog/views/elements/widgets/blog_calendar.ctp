@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログカレンダー
+ * [PUBLISH] ブログカレンダー
  * 
  * PHP versions 4 and 5
  *

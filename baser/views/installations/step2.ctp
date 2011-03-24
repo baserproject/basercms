@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー Step2
+ * [PUBLISH] インストーラー Step2
  *
  * PHP versions 4 and 5
  *
@@ -21,6 +21,7 @@
  */
 echo $html->css('import');
 ?>
+
 <script type="text/javascript">
 $(function(){
 	$("#btnnext,#btncheckagain").click(function(){
@@ -39,7 +40,10 @@ $(function(){
 
 <p>インストール環境の条件をチェックしました。<br />
 	次に進む為には、「基本必須条件」の赤いマークを全て解決する必要があります。</p>
+
 <div style="margin-bottom:30px">
+
+	<!-- basic -->
 	<h3>基本必須条件</h3>
 	<ul class="section">
 		<li>
@@ -109,6 +113,8 @@ $(function(){
 			</p>
 		</li>
 	</ul>
+
+	<!-- option -->
 	<h3>オプション</h3>
 
 	<h4>ファイルデータベース</h4>
@@ -184,13 +190,19 @@ mod_gzip_on Off</pre>
 	</ul>
 	<?php endif ?>
 </div>
-	
-<form action='step2' method="post" id="checkenv">
-	<div style="float:left">
-		<button class='btn-orange button' id='btncheckagain'  type='submit' ><span>再チェック</span></button>
-	</div>
-	<div>
-		<button class='btn-red button' <?php if (!$blRequirementsMet): ?>style="display:none" disabled='disabled' <?php endif ?> id='btnnext' type='submit' ><span>次のステップへ</span></button>
-	</div>
-	<?php echo $form->hidden('clicked') ?>
-</form>
+
+<?php echo $formEx->create(null, array('action' => 'step2', 'id' => 'checkenv')) ?>
+<?php echo $formEx->hidden('clicked') ?>
+
+<div style="float:left">
+	<?php echo $formEx->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
+</div>
+<div>
+	<?php if (!$blRequirementsMet): ?>
+		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
+	<?php else: ?>
+		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
+	<?php endif ?>
+</div>
+
+<?php echo $formEx->end() ?>

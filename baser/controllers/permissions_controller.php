@@ -159,6 +159,7 @@ class PermissionsController extends AppController {
 				$this->Permission->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
 			}else {
+				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 

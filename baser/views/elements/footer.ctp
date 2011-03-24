@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * フッター
+ * [PUBLISH] フッター
  *
  * PHP versions 4 and 5
  *

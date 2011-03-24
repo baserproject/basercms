@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * メール用テンプレート
+ * [EMAIL] メール用テンプレート
  *
  * PHP versions 4 and 5
  *

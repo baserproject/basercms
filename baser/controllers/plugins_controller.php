@@ -88,7 +88,7 @@ class PluginsController extends AppController {
 
 		if(!isset($this->Plugin)) {
 			$this->cakeError('missingClass', array(array('className' => 'Plugin',
-							'notice'=>'プラグインでは、コントローラーで、Pluginモデルを読み込んでおく必要があります。usesプロパティを確認して下さい。')));
+							'notice'=>'プラグインでは、コントローラーで、Pluginモデルを読み込んでおく必要があります。usesプロパティを確認してください。')));
 		}
 
 		// 有効でないプラグインを実行させない

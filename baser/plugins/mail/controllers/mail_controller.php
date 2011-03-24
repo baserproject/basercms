@@ -234,7 +234,7 @@ class MailController extends MailAppController {
 				$this->set('freezed',false);
 				$this->set('error',true);
 
-				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信して下さい。');
+				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信してください。');
 			}
 
 			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);

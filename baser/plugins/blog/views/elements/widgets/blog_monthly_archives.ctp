@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ月別アーカイブ
+ * [PUBLISH] ブログ月別アーカイブ
  * 
  * PHP versions 4 and 5
  *

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [モバイル] レイアウト
+ * [MOBILE] レイアウト
  * 
  * PHP versions 4 and 5
  *

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * フィード読み込みエラー
+ * [PUBLISH] フィード読み込みエラー
  *
  * PHP versions 4 and 5
  *

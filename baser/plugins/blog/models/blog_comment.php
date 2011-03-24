@@ -44,19 +44,41 @@ class BlogComment extends BlogAppModel {
 	var $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
 							'foreignKey'=>'blog_post_id'));
 /**
- * beforeValidate
+ * validate
  *
- * @return	void
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => 'お名前を入力して下さい'));
-		$this->validate['message'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => "コメントを入力して下さい"));
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'お名前を入力してください。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'お名前は50文字以内で入力してください。')
+		),
+		'email' => array(
+			'email' => array(
+				'rule'		=> array('email'),
+				'message'	=> 'Eメールの形式が不正です。',
+				'allowEmpty'=> true),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'Eメールは255文字以内で入力してください。')
+		),
+		'url' => array(
+			'url' => array(
+				'rule'		=> array('url'),
+				'message'	=> 'URLの形式が不正です。',
+				'allowEmpty'=> true),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 255),
+				'message'	=> 'URLは255文字以内で入力してください。')
+		),
+		'message' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> "コメントを入力してください。")
+		)
+	);
 /**
  * 初期値を取得する
  *

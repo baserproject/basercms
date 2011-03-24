@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ウィジェットエリア
+ * [PUBLISH] ウィジェットエリア
  *
  * no を引き数で渡して利用する
  * <?php $baser->element('widget_areas',array('no'=>1)) ?>

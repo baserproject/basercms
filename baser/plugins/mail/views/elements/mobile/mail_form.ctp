@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [モバイル] メールフォーム本体
+ * [MOBILE] メールフォーム本体
  *
  * PHP versions 4 and 5
  *
@@ -41,4 +41,5 @@
 	<?php echo $mailform->submit('　入力内容を確認する　', array("class"=>"btn-orange button"))  ?>
 </center>
 <?php endif; ?>
+
 <?php echo $mailform->end() ?>

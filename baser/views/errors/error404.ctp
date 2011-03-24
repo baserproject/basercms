@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * 404エラー
+ * [PUBLISH] 404エラー
  *
  * PHP versions 4 and 5
  *

@@ -40,19 +40,18 @@ class Dblog extends AppModel {
  */
 	var $useDbConfig = 'baser';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => "ログ内容を入力して下さい",
-						'required' => true));
-		return true;
-
-	}
+	var $validate = array(
+		'name'	=> array(
+			array(	'rule' => array('notEmpty'),
+					'message' => "ログ内容を入力してください。",
+					'required' => true)
+		)
+	);
 
 }
 ?>

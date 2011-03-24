@@ -64,10 +64,13 @@ h2 {
 	color:#688A00;
 }
 </style>
+
 <h2 class="pageTitle">
 	<?php $baser->contentsTitle() ?>
 </h2>
+
 <h3>BaserCMS環境</h3>
+
 <ul style="margin:20px 40px">
 	<li>スマートURL： <?php echo $smartUrl ?></li>
 	<li>設置フォルダ： <?php echo ROOT.DS ?></li>
@@ -76,5 +79,6 @@ h2 {
 	<li>BaserCMSバージョン： <?php echo $baserVersion ?></li>
 	<li>CakePHPバージョン： <?php echo $cakeVersion ?></li>
 </ul>
+
 <h3 style="margin-bottom:20px">PHP環境</h3>
 <?php phpinfo() ?>

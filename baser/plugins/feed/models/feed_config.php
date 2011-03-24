@@ -57,25 +57,41 @@ class FeedConfig extends FeedAppModel {
 							"exclusive" => false,
 							"finderQuery" => ""));
 /**
- * beforeValidate
+ * validate
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => "フィード設定名を入力して下さい",
-						'required' => true));
-		$this->validate['display_number'] = array(array('rule' => 'numeric',
-						'message' => "数値を入力して下さい",
-						'required' => true));
-		$this->validate['template'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => "テンプレート名を入力して下さい"),
-				array('rule' => 'halfText',
-						'message' => 'テンプレート名は半角のみで入力して下さい'));
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'フィード設定名を入力してください。',
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'フィード設定名は50文字以内で入力してください。')
+		),
+		'feed_title_index' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'フィードタイトルリストは255文字以内で入力してください。')
+		),
+		'category_index' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'カテゴリリストは255文字以内で入力してください。')
+		),
+		'display_number' => array(
+			array(	'rule'		=> 'numeric',
+					'message'	=> '数値を入力してください。',
+					'required'	=> true)
+		),
+		'template' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'テンプレート名を入力してください。'),
+			array(	'rule'		=> 'halfText',
+					'message'	=> 'テンプレート名は半角のみで入力してください。'),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'テンプレート名は50文字以内で入力してください。')
+		)
+	);
 /**
  * 初期値を取得
  */

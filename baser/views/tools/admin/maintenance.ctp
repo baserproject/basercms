@@ -1,7 +1,30 @@
+<?php
+/* SVN FILE: $Id$ */
+/**
+ * [ADMIN] データメンテナンス
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2010, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.views
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+?>
 <h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
+	<?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
 </h2>
+
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>データベースのバックアップと復元が行えますので、定期的にバックアップを保存しておく事をおすすめします。</p>
@@ -13,21 +36,29 @@
 </div>
 
 <h3>データのバックアップ</h3>
+
 <p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
-<div class="align-center"> <?php $baser->link('ダウンロード', array('backup'), array('class'=>'btn-red button')) ?> </div>
+
+<div class="align-center"><?php $baser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
 
 <h3>データの復元</h3>
+
 <p>バックアップファイルをアップロードし、データベースのデータを復元します。<br />
 <small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。<br />
 v1.6.6以前のバックアップデータの復元はできません。v1.6.6以前のデータを復元するには、phpMyAdminなどのDB管理ツールをご利用ください。</small></p>
-<?php echo $formEx->create('Tool',array('action'=>'maintenance', 'url'=>array('restore'),'type'=>'file')) ?>
+
+<?php echo $formEx->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
+
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.backup', 'バックアップファイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->file('Tool.backup') ?>
+			<?php echo $formEx->input('Tool.backup', array('type' => 'file')) ?>
 			<?php echo $formEx->error('Tool.backup') ?>
 		</td>
 	</tr>
 </table>
-<div class="align-center"> <?php echo $formEx->end(array('label'=>'アップロード','div'=>false,'class'=>'btn-red button')) ?> </div>
+
+<div class="align-center"><?php echo $formEx->submit('アップロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
+
+<?php echo $formEx->end() ?>

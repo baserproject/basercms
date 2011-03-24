@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [モバイル] メール送信データ
+ * [EMAIL] MOBILE メール送信データ
  *
  * PHP versions 4 and 5
  *

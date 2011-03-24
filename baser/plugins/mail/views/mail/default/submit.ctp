@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * メールフォーム送信完了ページ
+ * [PUBLISH] メールフォーム送信完了ページ
  * 
  * PHP versions 4 and 5
  *
@@ -30,12 +30,14 @@ if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 <h2 class="contents-head">
 	<?php $baser->contentsTitle() ?>
 </h2>
+
 <h3 class="contents-head">メール送信完了</h3>
+
 <div class="section">
 	<p>お問い合わせ頂きありがとうございました。<br />
 		確認次第、ご連絡させて頂きます。</p>
-	<?php if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']): ?>
+<?php if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']): ?>
 	<p>※５秒後にトップページへ自動的に移動します。</p>
-	<p> <a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックして下さい。≫</a> </p>
-	<?php endif; ?>
+	<p><a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックしてください。≫</a></p>
+<?php endif; ?>
 </div>

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストーラー初期ページ
+ * [PUBLISH] インストーラー初期ページ
  *
  * PHP versions 4 and 5
  *
@@ -22,11 +22,13 @@
 ?>
 
 <p>コーポレートサイトにちょうどいいCMS「BaserCMS」のインストールを開始します。<br />
-	よろしければ「次のステップ」ボタンをクリックして下さい。</p>
+	よろしければ「次のステップ」ボタンをクリックしてください。</p>
+
 <p>SQLite3（PHP5のみ）やBaserCMS標準のCSVデータベースを利用すれば、<br />
 	インストールにデータベースサーバーは必要ありません。</p>
-<p<small>※ 膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。</small>
-</p>
+
+<p<small>※ 膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。</small></p>
+
 <div>
 	<form action="<?php echo $this->base ?>/installations/step2" method="post">
 		<button class='btn-red button' id='startbtn' type='submit' ><span>次のステップ</span></button>

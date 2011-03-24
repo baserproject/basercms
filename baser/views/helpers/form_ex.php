@@ -37,6 +37,13 @@ class FormExHelper extends FormHelper {
  */
 	var $helpers = array('Html','TimeEx','TextEx','Javascript','Ckeditor');
 /**
+ * sizeCounter用の関数読み込み可否
+ * 
+ * @var		boolean
+ * @access	public
+ */
+	var $sizeCounterFunctionLoaded = false;
+/**
  * 都道府県用のSELECTタグを表示する
  *
  * @param 	string	$fieldName Name attribute of the SELECT
@@ -1093,6 +1100,10 @@ DOC_END;
 			$options['div'] = false;
 		}
 
+		if(!isset($options['error'])) {
+			$options['error'] = false;
+		}
+
 		switch($type) {
 			case 'text':
 			default :
@@ -1110,8 +1121,31 @@ DOC_END;
 				break;
 		}
 
-		return parent::input($fieldName, $options);
+		$out = parent::input($fieldName, $options);
 
+		/* カウンター */
+		if(!empty($options['counter'])) {
+			$domId = $this->domId($fieldName, $options);
+			$counter = '<span id="'.$domId.'Counter'.'" class="size-counter"></span>';
+			$script = '$("#'.$domId.'").keyup(countSize);$("#'.$domId.'").keyup();';
+			if(!$this->sizeCounterFunctionLoaded) {
+				$script .= <<< DOC_END
+function countSize() {
+	var len = $(this).val().length;
+	var maxlen = $(this).attr('maxlength');
+	if(!maxlen){
+		maxlen = '-';
+	}
+	$("#"+$(this).attr('id')+'Counter').html(len+'/<small>'+maxlen+'</small>');
+}
+DOC_END;
+				$this->sizeCounterFunctionLoaded = true;
+			}
+			$out = $out.$counter.$this->Javascript->codeBlock($script);
+		}
+		
+		return $out;
+		
 	}
 /**
  * 日付タグ

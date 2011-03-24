@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * RSS
+ * [MOBILE] RSS
  *
  * PHP versions 4 and 5
  *

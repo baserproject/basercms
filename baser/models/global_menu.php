@@ -43,20 +43,25 @@ class GlobalMenu extends AppModel {
  */
 	var $name = 'GlobalMenu';
 /**
- * beforeValidate
+ * バリデーション
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => "メニュー名を入力して下さい"));
-		$this->validate['link'] = array(array('rule' => VALID_NOT_EMPTY,
-						'message' => 'リンクURLを入力して下さい'));
-		return true;
-
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'メニュー名を入力してください。'),
+			array(	'rule'		=> array('maxLength', 20),
+					'message'	=> 'メニュー名は20文字以内で入力してください。')
+		),
+		'link' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> 'リンクURLを入力してください。'),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'リンクURLは255文字以内で入力してください。')
+		)
+	);
 /**
  * コントロールソースを取得する
  *

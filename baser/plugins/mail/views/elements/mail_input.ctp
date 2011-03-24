@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * メールフォーム本体
+ * [PUBLISH] メールフォーム本体
  *
  * PHP versions 4 and 5
  *

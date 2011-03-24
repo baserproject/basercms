@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ユーザー フォーム
+ * [ADMIN] ユーザー フォーム
  *
  * PHP versions 4 and 5
  *
@@ -21,76 +21,96 @@
  */
 ?>
 
-<h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ログイン用のユーザーアカウントを登録する事ができます。<br />
 		パスワード欄は変更する場合のみ入力します。</p>
 </div>
-<!--<h3>基本項目</h3>-->
+
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
-<?php echo $form->create('User') ?> <?php echo $form->hidden('User.id') ?>
+
+<?php echo $formEx->create('User') ?>
+<?php echo $formEx->hidden('User.id') ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-	<?php if($this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $form->label('User.id', 'NO') ?></th>
-		<td class="col-input"><?php echo $form->text('User.id', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
-	</tr>
-	<?php endif; ?>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.name', 'アカウント名') ?></th>
-		<td class="col-input"><?php echo $form->text('User.name', array('size'=>20,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpName','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。 </div>
-			<?php echo $form->error('User.name') ?>&nbsp; </td>
-	</tr>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.real_name_1', '名前') ?></th>
-		<td class="col-input"><small>[姓]</small> <?php echo $form->text('User.real_name_1', array('size'=>12,'maxlength'=>255)) ?> <small>[名]</small> <?php echo $form->text('User.real_name_2', array('size'=>12,'maxlength'=>255)) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpRealName1','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
-			<?php echo $form->error('User.real_name_1', '姓を入力して下さい') ?> <?php echo $form->error('User.real_name_2', '名を入力して下さい') ?>&nbsp;
-			&nbsp; </td>
-	</tr>
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $form->label('User.user_group_id', 'グループ') ?></th>
-		<td class="col-input"><?php echo $form->select('User.user_group_id', $formEx->getControlSource('user_group_id'),null,null,false) ?> <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpUserGroupId','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
-				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
-				より新しいグループを追加しアクセス制限の設定をおこないます。 </div>
-			<?php echo $form->error('User.user_group_id', 'グループを選択して下さい') ?></td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $form->label('User.email', 'Eメール') ?></th>
+		<th class="col-head"><?php echo $formEx->label('User.id', 'NO') ?></th>
 		<td class="col-input">
-			<?php echo $form->text('User.email', array('size'=>40,'maxlength'=>255)) ?>
-			<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpEmail','class'=>'help','alt'=>'ヘルプ')) ?>
-			<div id="helptextEmail" class="helptext">
-				連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等</small>
-			</div>
-			<?php echo $form->error('User.email') ?>
+			<?php echo $formEx->value('User.id') ?>
+			<?php echo $formEx->input('User.id', array('type' => 'hidden')) ?>
+		</td>
+	</tr>
+<?php endif; ?>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('User.name', 'アカウント名') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('User.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpName', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('User.name') ?>
+			<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。</div>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"> <?php if($this->action == 'admin_add'): ?>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('User.real_name_1', '名前') ?></th>
+		<td class="col-input">
+			<small>[姓]</small> <?php echo $formEx->input('User.real_name_1', array('type' => 'text', 'size' => 12, 'maxlength' => 255)) ?>
+			<small>[名]</small> <?php echo $formEx->input('User.real_name_2', array('type' => 'text', 'size' => 12, 'maxlength' => 255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpRealName1', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('User.real_name_1', '姓を入力してください') ?>
+			<?php echo $formEx->error('User.real_name_2', '名を入力してください') ?>
+			<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('User.user_group_id', 'グループ') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('User.user_group_id', array('type' => 'select', 'options' => $formEx->getControlSource('user_group_id'))) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpUserGroupId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('User.user_group_id', 'グループを選択してください') ?>
+			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
+				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
+				より新しいグループを追加しアクセス制限の設定をおこないます。</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('User.email', 'Eメール') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('User.email', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpEmail', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('User.email') ?>
+			<div id="helptextEmail" class="helptext">
+				連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等</small>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head">
+			<?php if($this->action == 'admin_add'): ?>
 			<span class="required">*</span>&nbsp;
 			<?php endif; ?>
-			<?php echo $form->label('User.password_1', 'パスワード') ?>
+			<?php echo $formEx->label('User.password_1', 'パスワード') ?>
 		</th>
-		<td class="col-input"><small>[パスワードは変更する場合のみ入力してください]</small><br />
-			<?php echo $form->password('User.password_1', array('size'=>20,'maxlength'=>255)) ?> <?php echo $form->password('User.password_2', array('size'=>20,'maxlength'=>255)) ?>&nbsp; <?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpPassword','class'=>'help','alt'=>'ヘルプ')) ?>
+		<td class="col-input">
+			<small>[パスワードは変更する場合のみ入力してください]</small><br />
+			<?php echo $formEx->input('User.password_1', array('type' => 'password', 'size' => 20, 'maxlength' => 255)) ?>
+			<?php echo $formEx->input('User.password_2', array('type' => 'password', 'size' => 20, 'maxlength' => 255)) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpPassword', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('User.password') ?>
 			<div id="helptextPassword" class="helptext">
 				<ul>
 					<li>
 						<?php if($this->action == "admin_edit"): ?>
 						パスワードの変更をする場合は、
 						<?php endif; ?>
-						確認の為２回入力して下さい。</li>
-					<li>半角英数字とハイフン、アンダースコアのみで入力して下さい</li>
-					<li>最低６文字以上で入力して下さい</li>
+						確認の為２回入力してください。</li>
+					<li>半角英数字とハイフン、アンダースコアのみで入力してください</li>
+					<li>最低６文字以上で入力してください</li>
 				</ul>
 			</div>
-			<?php echo $form->error('User.password') ?>&nbsp; </td>
+		</td>
 	</tr>
 </table>
 
@@ -99,11 +119,15 @@
 		<?php if(isset($baser->siteConfig['demo_on']) && $baser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
-	<?php echo $form->submit('更　新',array('div'=>false,'class'=>'btn-orange button')) ?>
-	<?php $baser->link('削　除', array('action'=>'delete', $form->value('User.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $form->value('User.name')),false); ?>
+	<?php echo $formEx->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php $baser->link('削　除', 
+			array('action' => 'delete', $formEx->value('User.id')),
+			array('class' => 'btn-gray button'),
+			sprintf('%s を本当に削除してもいいですか？', $formEx->value('User.name')), false); ?>
 		<?php endif ?>
-	</form>
 	<?php else: ?>
-	<?php echo $form->end(array('label'=>'登　録', 'div'=>false,'class'=>'btn-red button')) ?>
+	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
 	<?php endif ?>
 </div>
+
+<?php echo $formEx->end() ?>

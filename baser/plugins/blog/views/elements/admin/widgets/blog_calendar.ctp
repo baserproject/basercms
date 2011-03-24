@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログカレンダーウィジェット設定
+ * [ADMIN] ブログカレンダーウィジェット設定
  * 
  * PHP versions 4 and 5
  *

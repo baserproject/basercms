@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログ詳細ページ
+ * [PUBLISH] ブログ詳細ページ
  * 
  * PHP versions 4 and 5
  *
@@ -31,25 +31,34 @@ $(function(){
 });
 </script>
 
+<!-- blog title -->
 <h2 class="contents-head">
 	<?php $blog->title() ?>
 </h2>
+
+<!-- post title -->
 <h3 class="contents-head">
 	<?php $baser->contentsTitle() ?>
 </h3>
+
+<!-- post detail -->
 <div class="post">
 	<?php $blog->postContent($post) ?>
-	<div class="meta"> <span>
+	<div class="meta"><span>
 		<?php $blog->category($post) ?>
 		&nbsp;
 		<?php $blog->postDate($post) ?>
 		&nbsp;
 		<?php $blog->author($post) ?>
-		</span> </div>
+	</span></div>
 </div>
+
+<!-- contents navi -->
 <div id="contentsNavi">
 	<?php $blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 	<?php $blog->nextLink($post) ?>
 </div>
+
+<!-- comments -->
 <?php $baser->element('blog_comments') ?>

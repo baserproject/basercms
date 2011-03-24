@@ -1,7 +1,8 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコメント登録完了
+ * [PUBLISH] ブログコメント登録完了
+ * 
  * Ajaxで呼び出される
  *
  * PHP versions 4 and 5

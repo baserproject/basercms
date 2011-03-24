@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] ブログ記事 フォーム
+ * [ADMIN] ブログ記事 フォーム
  *
  * PHP versions 4 and 5
  *
@@ -21,19 +21,20 @@
  */
 $baser->css('ckeditor/editor', null, null, false);
 $statuses = array(0=>'非公開', 1=>'公開');
-$categories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
+$categories = $formEx->getControlSource('BlogPost.blog_category_id', array('blogContentId' => $blogContent['BlogContent']['id']));
 if($formEx->value('BlogPost.id')) {
 	$previewId = $formEx->value('BlogPost.id');
 }else{
 	$previewId = 'add_'.mt_rand(0, 99999999);
 }
-$baser->link('&nbsp;', array('controller'=>'blog', 'action'=>'preview',$blogContent['BlogContent']['id'], $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
+$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
 if($this->action == 'admin_add') {
 	$disableDraft = true;
 } else {
 	$disableDraft = false;
 }
 ?>
+
 <script type="text/javascript">
 $(function(){
 /**
@@ -68,9 +69,11 @@ $(function(){
 });
 </script>
 
-<h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<!-- title -->
+<h2><?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
+<!-- help -->
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ブログ記事の登録を行います。</p>
@@ -83,59 +86,83 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 	<?php if($formEx->value('BlogPost.status')): ?>
-	<p><strong>この記事のURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no')),'/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no'),array('target'=>'_blank')) ?></strong></p>
+	<p><strong>この記事のURL：<?php $baser->link(
+			$baser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $formEx->value('BlogPost.no')),
+			'/' . $blogContent['BlogContent']['name'] . '/archives/' . $formEx->value('BlogPost.no'),
+			array('target' => '_blank')) ?></strong></p>
 	<?php else: ?>
-	<p><strong>この記事のURL：<?php echo $baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/'.$formEx->value('BlogPost.no')) ?></strong></p>
+	<p><strong>この記事のURL：<?php echo $baser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $formEx->value('BlogPost.no')) ?></strong></p>
 	<?php endif ?>
 <?php endif ?>
 
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-<?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/add/'.$blogContent['BlogContent']['id'],'id'=>'BlogPostForm')) ?>
-<?php elseif($this->action=='admin_edit'): ?>
-<?php echo $formEx->create('BlogPost',array('url'=>'/admin/blog/blog_posts/edit/'.$blogContent['BlogContent']['id'].'/'.$formEx->value('BlogPost.id'),'id'=>'BlogPostForm')) ?>
+<?php echo $formEx->create('BlogPost', array('url' => '/admin/blog/blog_posts/add/' . $blogContent['BlogContent']['id'], 'id' => 'BlogPostForm')) ?>
+<?php elseif($this->action == 'admin_edit'): ?>
+<?php echo $formEx->create('BlogPost', array('url' => '/admin/blog/blog_posts/edit/' . $blogContent['BlogContent']['id'] . '/' . $formEx->value('BlogPost.id'), 'id' => 'BlogPostForm')) ?>
 <?php endif; ?>
-<?php echo $formEx->hidden('BlogPost.id') ?> <?php echo $formEx->hidden('BlogPost.blog_content_id',array('value'=>$blogContent['BlogContent']['id'])) ?>
+<?php echo $formEx->input('BlogPost.id', array('type' => 'hidden')) ?>
+<?php echo $formEx->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
+
+<!-- form -->
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-	<?php if($this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.no', 'NO') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogPost.no', array('size'=>20,'maxlength'=>255,'readonly'=>'readonly')) ?>&nbsp; </td>
+		<td class="col-input">
+			<?php echo $formEx->value('BlogPost.no') ?>
+			<?php echo $formEx->input('BlogPost.no', array('type' => 'hidden')) ?>
+		</td>
 	</tr>
-	<?php endif; ?>
-	<?php if($categories): ?>
+<?php endif; ?>
+<?php if($categories): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.blog_category_id', 'カテゴリ') ?></th>
-		<td class="col-input"><?php echo $formEx->select('BlogPost.blog_category_id',$categories,null,array('escape'=>false),'なし') ?><?php echo $formEx->error('BlogPost.blog_category_id') ?>&nbsp;</td>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false, 'empty' => 'なし')) ?>
+			<?php echo $formEx->error('BlogPost.blog_category_id') ?>
+		</td>
 	</tr>
-	<?php endif ?>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.name', 'タイトル') ?></th>
-		<td class="col-input"><?php echo $formEx->text('BlogPost.name', array('size'=>40,'maxlength'=>255)) ?><?php echo $formEx->error('BlogPost.name') ?>&nbsp;</td>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogPost.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'counter' => true)) ?>
+			<?php echo $formEx->error('BlogPost.name') ?>
+		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.content', '本文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('BlogPost.content',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
+			<?php echo $formEx->ckeditor('BlogPost.content', 
+					array('cols' => 60, 'rows' => 20),
+					array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('BlogPost.content') ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.detail', '詳細') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->ckeditor('BlogPost.detail',array('cols'=>60, 'rows'=>20), array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => $disableDraft)) ?>
+			<?php echo $formEx->ckeditor('BlogPost.detail',
+					array('cols' => 60, 'rows' => 20),
+					array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => $disableDraft)) ?>
 			<?php echo $formEx->error('BlogPost.detail') ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->radio('BlogPost.status', $statuses, array("legend"=>false,"separator"=>"&nbsp;&nbsp;")) ?>
+			<?php echo $formEx->input('BlogPost.status', array(
+					'type'		=> 'radio',
+					'options'	=> $statuses,
+					'legend'	=> false,
+					'separator'	=> '&nbsp;&nbsp;')) ?>
 			<?php echo $formEx->error('BlogPost.status') ?>
 			&nbsp;&nbsp;
-			<?php echo $formEx->dateTimePicker('BlogPost.publish_begin',array('size'=>12,'maxlength'=>10),true) ?>&nbsp;〜&nbsp;
-			<?php echo $formEx->dateTimePicker('BlogPost.publish_end',array('size'=>12,'maxlength'=>10),true) ?>
+			<?php echo $formEx->dateTimePicker('BlogPost.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+			&nbsp;〜&nbsp;
+			<?php echo $formEx->dateTimePicker('BlogPost.publish_end', array('size' => 12, 'maxlength' => 10),true) ?>
 			<?php echo $formEx->error('BlogPost.publish_begin') ?>
 			<?php echo $formEx->error('BlogPost.publish_end') ?>
 		</td>
@@ -143,25 +170,39 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.user_id', '作成者') ?></th>
 		<td class="col-input">
-			<?php if($this->action=='admin_edit' && count($users) && isset($user) && $user['user_group_id']!=1): ?>
+<?php if($this->action=='admin_edit' && count($users) && isset($user) && $user['user_group_id']!=1): ?>
 			<?php echo $users[$formEx->value('User.id')] ?>
-			<?php else: ?>
-			<?php echo $formEx->select('BlogPost.user_id',$users,null,null,false) ?><?php echo $formEx->error('BlogPost.user_id') ?>
-			<?php endif ?>
+<?php else: ?>
+			<?php echo $formEx->input('BlogPost.user_id', array(
+					'type'		=> 'select',
+					'options'	=> $users)) ?>
+			<?php echo $formEx->error('BlogPost.user_id') ?>
+<?php endif ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.posts_date', '作成日') ?></th>
-		<td class="col-input"><?php echo $formEx->dateTimePicker('BlogPost.posts_date',array('size'=>12,'maxlength'=>10),true) ?><?php echo $formEx->error('BlogPost.posts_date') ?> &nbsp; </td>
+		<td class="col-input">
+			<?php echo $formEx->dateTimePicker('BlogPost.posts_date', array('size' => 12, 'maxlength' => 10), true) ?>
+			<?php echo $formEx->error('BlogPost.posts_date') ?>
+		</td>
 	</tr>
 </table>
+
+<!-- button -->
 <div class="submit">
-	<?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->end(array('label'=>'登　録','div'=>false,'class'=>'btn-red button', 'id'=>'btnSave')) ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->end(array('label'=>'更　新','div'=>false,'class'=>'btn-orange button', 'id'=>'btnSave')) ?>
-	<?php echo $formEx->end(array('label'=>'保存前確認','div'=>false,'class'=>'btn-green button','id'=>'BtnPreview')) ?>
-	<?php $baser->link('削　除',array('action'=>'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')), array('class'=>'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),false); ?>
-	<?php endif ?>
+<?php if($this->action == 'admin_add'): ?>
+	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php echo $formEx->submit('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php $baser->link('削　除',
+			array('action' => 'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')),
+			array('class'=>'btn-gray button'),
+			sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),
+			false); ?>
+<?php endif ?>
 </div>
+
+<?php echo $formEx->end() ?>

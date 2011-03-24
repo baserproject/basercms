@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * インストール警告ページ
+ * [PUBLISH] インストール警告ページ
  * 
  * PHP versions 4 and 5
  *
@@ -23,6 +23,7 @@
 
 <p>インストールを開始するにはデバッグモードが 0 以外である必要があります。</p>
 <p>デバッグモードを変更するには次の手順のとおり操作してください。</p>
+
 <ul>
 	<li>次のファイルを開きます。<br />
 		<pre>/app/config/core.php</pre>
@@ -33,6 +34,5 @@
 	<li>0 の部分を、 -1 / 1 / 2 / 3 のどれかに書き換えます。</li>
 	<li>編集したファイルをサーバーにアップロードします。</li>
 </ul>
-<p><small>
-	<?php $baser->link('≫ BaserCMSを初期化するにはコチラから','/installations/reset') ?>
-	</small></p>
+
+<p><small><?php $baser->link('≫ BaserCMSを初期化するにはコチラから','/installations/reset') ?></small></p>

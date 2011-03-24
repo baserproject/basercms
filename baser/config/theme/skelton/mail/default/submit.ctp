@@ -18,6 +18,6 @@ if(Configure::read('debug')==0){
 		確認次第、ご連絡させて頂きます。</p>
 	<?php if($mailContent['MailContent']['redirect_url']): ?>
 	<p>※５秒後にトップページへ自動的に移動します。</p>
-	<p> <a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックして下さい。≫</a> </p>
+	<p> <a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックしてください。≫</a> </p>
 	<?php endif; ?>
 </div>

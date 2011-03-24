@@ -46,21 +46,31 @@ class FeedDetail extends FeedAppModel {
 							'foreignKey' => 'feed_config_id'
 	));
 /**
- * beforeValidate
+ * validate
  *
- * @return	boolean
+ * @var		array
  * @access	public
  */
-	function beforeValidate() {
-
-		$this->validate['name'] = array(array('rule' => array('minLength',1),
-						'message' => "フィード詳細名を入力して下さい",
-						'required' => true));
-		$this->validate['url'] = array(array('rule' => array('minLength',1),
-						'message' => "フィードURLを入力して下さい",
-						'required' => true));
-		return true;
-	}
+	var $validate = array(
+		'name' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> "フィード詳細名を入力してください。",
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 50),
+					'message'	=> 'フィード詳細名は50文字以内で入力してください。')
+		),
+		'url' => array(
+			array(	'rule'		=> array('notEmpty'),
+					'message'	=> "フィードURLを入力してください。",
+					'required'	=> true),
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'フィードURLは255文字以内で入力してください。')
+		),
+		'category_filter' => array(
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'カテゴリフィルタは255文字以内で入力してください。')
+		)
+	);
 /**
  * コントロールソースを取得する
  *

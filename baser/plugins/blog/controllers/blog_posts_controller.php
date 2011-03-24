@@ -314,19 +314,19 @@ class BlogPostsController extends BlogAppController {
 		$check = true;
 		$message = '';
 		if(!isset($this->data['Import']['blog_content_id']) || !$this->data['Import']['blog_content_id']) {
-			$message .= '取り込み対象のブログを選択して下さい<br />';
+			$message .= '取り込み対象のブログを選択してください<br />';
 			$check = false;
 		}
 		if(!isset($this->data['Import']['user_id']) || !$this->data['Import']['user_id']) {
-			$message .= '記事の投稿者を選択して下さい<br />';
+			$message .= '記事の投稿者を選択してください<br />';
 			$check = false;
 		}
 		if(!isset($this->data['Import']['file']['tmp_name'])) {
-			$message .= 'XMLデータを選択して下さい<br />';
+			$message .= 'XMLデータを選択してください<br />';
 			$check = false;
 		}
 		if($this->data['Import']['file']['type'] != 'text/xml') {
-			$message .= 'XMLデータを選択して下さい<br />';
+			$message .= 'XMLデータを選択してください<br />';
 			$check = false;
 		}else {
 

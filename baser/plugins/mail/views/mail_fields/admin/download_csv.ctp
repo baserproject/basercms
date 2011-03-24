@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [管理画面] CSVダウンロード
+ * [ADMIN] CSVダウンロード
  *
  * PHP versions 4 and 5
  *
