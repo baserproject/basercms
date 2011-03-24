@@ -47,7 +47,12 @@ class MobileHelper extends Helper {
 			$view->output = str_replace('＆', '&amp;', $view->output);
 			$view->output = mb_convert_kana($view->output, "rak", "UTF-8");
 			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
-			
+
+			// 内部リンクの自動変換
+			$baseUrl = baseUrl();
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'([^\"]+?)\"/', "href=\"".$baseUrl."m/$1\"", $view->output);
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'m\/m\//', "href=\"".$baseUrl."m/", $view->output);
+
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
 					isset($view->loaded['cache']) &&
