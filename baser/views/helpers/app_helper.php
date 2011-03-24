@@ -118,29 +118,42 @@ class AppHelper extends Helper {
  */
 	function webroot($file) {
 
-		// 2010/05/19 ADD ryuring
+		// CUSTOMIZE ADD 2010/05/19 ryuring
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
 		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
+		// CUSTOMIZE MODIFY 2011/03/17 ryuring
+		// DEPLOY_PATTERN 2 について対応
 		// >>>
 		$dir = Configure::read('App.dir');
 		$webroot = Configure::read('App.webroot');
-		if(Configure::read('App.baseUrl') && DEPLOY_PATTERN == 1) {
-			if (strpos($this->webroot, $dir) === false) {
-				$this->webroot .= $dir . '/' ;
-			}
-			if (strpos($this->webroot, $webroot) === false) {
-				$this->webroot .= $webroot . '/';
+		$baseUrl = Configure::read('App.baseUrl');
+		if($baseUrl) {
+			switch (DEPLOY_PATTERN) {
+				case 1:
+					if (strpos($this->webroot, $dir) === false) {
+						$this->webroot .= $dir . '/' ;
+					}
+					if (strpos($this->webroot, $webroot) === false) {
+						$this->webroot .= $webroot . '/';
+					}
+					break;
+				case 2:
+					$baseDir = str_replace('index.php', '', $baseUrl);
+					if (preg_match('/\/'.$webroot.'\/$/', $baseDir)) {
+						$this->webroot = $baseDir;
+					}
+					break;
 			}
 		}
 		//<<<
 
-		// 2009/10/6 MODIFY ryuring
+		// CUSTOMIZE MODIFY 2009/10/6 ryuring
 		// Rewriteモジュールが利用できない場合、$html->css / $javascript->link では、
 		// app/webroot/を付加してURLを生成してしまう為、vendors 内のパス解決ができない。
 		// URLの取得方法をRouterに変更
 		// Dispatcherクラスのハックが必須
 		//
-		// 2010/02/12 MODIFY egashira
+		// CUSTOMIZE MODIFY 2010/02/12 ryuring
 		// ファイルの存在チェックを行い存在しない場合のみRouterを利用するように変更した。
 
 		// >>>
@@ -170,7 +183,7 @@ class AppHelper extends Helper {
 		if (strpos($webPath, '//') !== false) {
 			return str_replace('//', '/', $webPath);
 		}
-		// >>> ADD
+		// >>> CUSTOMIZE ADD 2010/02/12 ryuring
 		if (strpos($webPath, '\\') !== false) {
 			$webPath = str_replace("\\",'/',$webPath);
 		}
