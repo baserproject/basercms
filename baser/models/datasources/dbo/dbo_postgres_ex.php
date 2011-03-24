@@ -103,8 +103,8 @@ class DboPostgresEx extends DboPostgres {
 			case 'time':
 				// >>> CUSTOMIZE ADD 2010/03/23 ryuring
 				// postgresql の場合、0000-00-00 00:00:00 を指定すると範囲外エラーとなる為
-				if ($data == '0000-00-00 00:00:00') {
-					return 'NULL';
+				if ($data === '0000-00-00 00:00:00') {
+					return "'".date('Y-m-d H:i:s', 0)."'";
 				}
 				// <<<
 				if ($data === '') {
