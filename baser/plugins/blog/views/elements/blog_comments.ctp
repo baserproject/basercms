@@ -24,71 +24,77 @@
 $(function(){
 	loadAuthCaptcha();
 	$("#BlogCommentAddButton").click(function(){
-		var msg = '';
-		if(!$("#BlogCommentName").val()){
-			msg += 'お名前を入力して下さい\n';
-		}
-		if(!$("#BlogCommentMessage").val()){
-			msg += 'コメントを入力して下さい\n';
-		}
-		<?php if($blogContent['BlogContent']['auth_captcha']): ?>
-		if(!$("#BlogCommentAuthCaptcha").val()){
-			msg += '画象の文字を入力して下さい\n';
-		}
-		<?php endif ?>
-		if(!msg){
-			$.ajax({
-				url: $("#BlogCommentAddForm").attr('action'),
-				type: 'POST',
-				data: $("#BlogCommentAddForm").serialize(),
-				dataType: 'html',
-				beforeSend: function() {
-					$("#BlogCommentAddButton").attr('disabled', 'disabled');
-					$("#ResultMessage").hide('slide',{direction:"up"},500);
-				},
-				success: function(result){
-					if(result){
-						<?php if($blogContent['BlogContent']['auth_captcha']): ?>
-						loadAuthCaptcha();
-						<?php endif ?>
-						$("#BlogCommentName").val('');
-						$("#BlogCommentEmail").val('');
-						$("#BlogCommentUrl").val('');
-						$("#BlogCommentMessage").val('');
-						$("#BlogCommentAuthCaptcha").val('');
-						var resultMessage = '';
-						<?php if($blogContent['BlogContent']['comment_approve']): ?>
-						resultMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
-						<?php else: ?>
-						var comment = $(result);
-						comment.hide();
-						$("#BlogCommentList").append(comment);
-						comment.show(500);
-						resultMessage = 'コメントの送信が完了しました。';
-						<?php endif ?>
-						$("#ResultMessage").html(resultMessage);
-						$("#ResultMessage").show('slide',{direction:"up"},500);
-					}else{
-						<?php if($blogContent['BlogContent']['auth_captcha']): ?>
-						loadAuthCaptcha();
-						<?php endif ?>
-						$("#ResultMessage").html('コメントの送信に失敗しました。入力内容を見なおしてください。');
-						$("#ResultMessage").show('slide',{direction:"up"},500);
-					}
-				},
-				error: function(){
-					alert('コメントの送信に失敗しました。入力内容を見なおしてください。');
-				},
-				complete: function(xhr, textStatus) {
-					$("#BlogCommentAddButton").removeAttr('disabled');
-				}
-			});
-		}else{
-			alert(msg);
-		}
+		sendComment();
 		return false;
 	});
 });
+/**
+ * コメントを送信する
+ */
+function sendComment() {
+	var msg = '';
+	if(!$("#BlogCommentName").val()){
+		msg += 'お名前を入力して下さい\n';
+	}
+	if(!$("#BlogCommentMessage").val()){
+		msg += 'コメントを入力して下さい\n';
+	}
+	<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+	if(!$("#BlogCommentAuthCaptcha").val()){
+		msg += '画象の文字を入力して下さい\n';
+	}
+	<?php endif ?>
+	if(!msg){
+		$.ajax({
+			url: $("#BlogCommentAddForm").attr('action'),
+			type: 'POST',
+			data: $("#BlogCommentAddForm").serialize(),
+			dataType: 'html',
+			beforeSend: function() {
+				$("#BlogCommentAddButton").attr('disabled', 'disabled');
+				$("#ResultMessage").slideUp();
+			},
+			success: function(result){
+				if(result){
+					<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+					loadAuthCaptcha();
+					<?php endif ?>
+					$("#BlogCommentName").val('');
+					$("#BlogCommentEmail").val('');
+					$("#BlogCommentUrl").val('');
+					$("#BlogCommentMessage").val('');
+					$("#BlogCommentAuthCaptcha").val('');
+					var resultMessage = '';
+					<?php if($blogContent['BlogContent']['comment_approve']): ?>
+					resultMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
+					<?php else: ?>
+					var comment = $(result);
+					comment.hide();
+					$("#BlogCommentList").append(comment);
+					comment.show(500);
+					resultMessage = 'コメントの送信が完了しました。';
+					<?php endif ?>
+					$("#ResultMessage").html(resultMessage);
+					$("#ResultMessage").slideDown();
+				}else{
+					<?php if($blogContent['BlogContent']['auth_captcha']): ?>
+					loadAuthCaptcha();
+					<?php endif ?>
+					$("#ResultMessage").html('コメントの送信に失敗しました。入力内容を見なおしてください。');
+					$("#ResultMessage").slideDown();
+				}
+			},
+			error: function(){
+				alert('コメントの送信に失敗しました。入力内容を見なおしてください。');
+			},
+			complete: function(xhr, textStatus) {
+				$("#BlogCommentAddButton").removeAttr('disabled');
+			}
+		});
+	}else{
+		alert(msg);
+	}
+}
 /**
  * キャプチャ画像を読み込む
  */
