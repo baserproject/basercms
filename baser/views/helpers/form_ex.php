@@ -422,11 +422,15 @@ class FormExHelper extends FormHelper {
 		$input = $this->text($fieldName,$attributes);
 
 		// javascript
-		$script = "<script type=\"text/javascript\"><!--";
-		$script .= 'jQuery(function($){';
-		$script .= '$("#'.$id.'").datepicker()';
-		$script .= '});';
-		$script .= "//--></script>";
+		$script = <<< DOC_END
+<script type="text/javascript">
+<!--
+jQuery(function($){
+	$("#{$id}").datepicker();
+});
+//-->
+</script>
+DOC_END;
 		
 		$out = $input."\n".$script;
 		return $out;
