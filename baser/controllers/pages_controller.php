@@ -534,8 +534,13 @@ class PagesController extends AppController {
 			if($pageCategoryId == 'pconly') {
 
 				// PCのみ
-				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
-											array('Page.page_category_id'=>null));
+				$mobileCategoryIds = $this->PageCategory->getMobileCategoryIds();
+				if($mobileCategoryIds) {
+					$conditions['or'] = array('not'=>array('Page.page_category_id' => $mobileCategoryIds),
+												array('Page.page_category_id'=>null));
+				} else {
+					$conditions['or'] = array(array('Page.page_category_id'=>null));
+				}
 
 			}elseif($pageCategoryId != 'noncat') {
 
