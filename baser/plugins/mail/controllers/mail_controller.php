@@ -343,12 +343,18 @@ class MailController extends MailAppController {
 			$adminMail = $this->siteConfigs['email'];
 		}
 
-		// ユーザーメールを取得
 		foreach($this->dbDatas['mailFields'] as $mailField) {
+			// ユーザーメールを取得
 			if($mailField['MailField']['type'] == 'email') {
 				$userMail = $data['Message'][$mailField['MailField']['field_name']];
-				break;
 			}
+			// 件名にフィールドの値を埋め込む
+			$mailContent['subject_user'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
+														$data['Message'][$mailField['MailField']['field_name']],
+														$mailContent['subject_user']);
+			$mailContent['subject_admin'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
+														$data['Message'][$mailField['MailField']['field_name']],
+														$mailContent['subject_admin']);
 		}
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
 		if(!$userMail) {
@@ -358,7 +364,7 @@ class MailController extends MailAppController {
 				$userMail = $data['Message']['email_1'];
 			}
 		}
-		
+
 		// ユーザー名を取得
 		/*if(!empty($data['Message']['name'])){
 			$userName = $data['Message']['name'] . '　様';
