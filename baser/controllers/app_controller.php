@@ -466,7 +466,7 @@ class AppController extends Controller {
  * @access	public
  */
 	function getThemeVersion($theme) {
-		
+
 		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
 		if(!file_exists($path)) {
 			return false;
@@ -480,7 +480,7 @@ class AppController extends Controller {
 		}else {
 			return false;
 		}
-		
+
 	}
 /**
  * DBのバージョンを取得する
@@ -638,7 +638,7 @@ class AppController extends Controller {
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = ''.$fromName . ' <'.$from.'>';
+			$this->EmailEx->from = '"'.$fromName . '" <'.$from.'>';
 		}
 
 		// CC
@@ -780,7 +780,7 @@ class AppController extends Controller {
 		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
 		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
-		
+
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
