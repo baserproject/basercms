@@ -27,7 +27,7 @@ $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'の�
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
 });
 </script>
 

@@ -10,7 +10,7 @@ $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
 });
 </script>
 
