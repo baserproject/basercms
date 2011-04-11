@@ -142,16 +142,19 @@ class BlogCommentsController extends BlogAppController {
 			$this->pageTitle = 'ブログ ['.$this->blogContent['BlogContent']['title'].'] のコメント一覧';
 		}
 
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
+
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-				'fields'=>array(),
-				'order'=>'BlogComment.id',
-				'limit'=>10
+				'fields'=> array(),
+				'order'	=> 'BlogComment.id',
+				'limit'	=> $this->passedArgs['num']
 		);
 
 		$dbDatas = $this->paginate('BlogComment');
 		$this->set('dbDatas',$dbDatas);
-
 
 	}
 /**

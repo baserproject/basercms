@@ -36,6 +36,9 @@
 	</ul>
 </div>
 
+<!-- list-num -->
+<?php $baser->element('list_num') ?>
+
 <!-- pagination -->
 <?php $baser->pagination('default',array(),null,false) ?>
 
