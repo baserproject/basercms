@@ -207,7 +207,7 @@ class UsersController extends AppController {
 	function admin_index() {
 
 		/* データ取得 */
-		$default = array('named' => array('num' => 10));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('User', array('default' => $default));
 		$conditions = $this->_createAdminIndexConditions($this->data);
 		$this->paginate = array(

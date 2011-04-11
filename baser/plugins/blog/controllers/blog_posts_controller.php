@@ -121,7 +121,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => 10));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
 		$this->passedArgs[] = $blogContentId;
 		unset($this->data['_Token']);

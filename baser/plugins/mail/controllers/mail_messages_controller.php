@@ -102,7 +102,7 @@ class MailMessagesController extends MailAppController {
  */
 	function admin_index($mailContentId) {
 
-		$default = array('named' => array('num' => 10));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('MailMessage', array('default' => $default));
 		$this->paginate = array(
 			'fields'=>array(),

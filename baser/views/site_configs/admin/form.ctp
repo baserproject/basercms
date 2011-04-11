@@ -132,6 +132,18 @@ $(function(){
 			<?php echo $formEx->error('SiteConfig.email') ?>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.admin_list_num', '管理システムの<br />初期一覧件数') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('SiteConfig.admin_list_num', array('type' => 'select', 'options' => array(
+				10	=> '10件',
+				20	=> '20件',
+				50	=> '50件',
+				100 => '100件'
+			))) ?>
+			<?php echo $formEx->error('SiteConfig.admin_list_num') ?>
+		</td>
+	</tr>
 </table>
 
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>

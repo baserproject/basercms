@@ -86,7 +86,7 @@ class PagesController extends AppController {
 	function admin_index() {
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => 10, 'sortmode' => 0),
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0),
 							'Page' => array('page_category_id'=>'pconly'));
 		$this->setViewConditions('Page', array('default' => $default));
 		if($this->Session->check('PagesAdminIndex.named.sortmode')) {
