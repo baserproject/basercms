@@ -48,7 +48,7 @@ class BlogController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html','TextEx','TimeEx','Freeze','Paginator','Blog.Blog','cache');
+	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'cache');
 /**
  * コンポーネント
  */
@@ -87,7 +87,11 @@ class BlogController extends BlogAppController {
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','archives','mobile_archives','get_calendar','get_categories','get_blog_dates','get_recent_entries');
+		$this->Auth->allow(
+			'index', 'mobile_index', 'archives', 'mobile_archives',
+			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
+			'posts_list'
+		);
 		
 		$this->BlogContent->recursive = -1;
 		if($this->contentId) {
@@ -530,6 +534,50 @@ class BlogController extends BlogAppController {
 		);
 		return $data;
 		
+	}
+/**
+ * 記事リストを出力
+ *
+ * requestAction用
+ * 
+ * @param	int	$blogContentId
+ * @param	int	$num
+ */
+	function posts($blogContentId, $num = 5) {
+		
+		$this->layout = null;
+		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
+		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		$this->BlogPost->unbindModel(array('belongsTo' => array('BlogContent', 'User')));
+		$posts = $this->BlogPost->find('all', array(
+				'conditions'=> $conditions,
+				'limit'		=> $num,
+				'order'		=> 'posts_date DESC',
+				'recursive'	=> 0)
+		);
+		$this->set('posts', $posts);
+
+		//----------------------------------------------------------------------
+		// requestAction で呼ばれる為、ClassRegistry で管理する view が
+		// 呼びだし元のインスタンスとなる為、Helper より、現在の view の値を参照できない。
+		// ClassRegistryより一時的に登録済 viewを削除する事で対応。
+		//----------------------------------------------------------------------
+		$view =& ClassRegistry::getObject('view');
+		ClassRegistry::removeObject('view');
+		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
+		ClassRegistry::addObject('view', $view);
+		
+	}
+/**
+ * [MOBILE] 記事リストを出力
+ *
+ * requestAction用
+ *
+ * @param	int	$blogContentId
+ * @param	int	$num
+ */
+	function mobile_posts($blogContentId, $num = 5) {
+		$this->setAction('post_list');
 	}
 }
 ?>

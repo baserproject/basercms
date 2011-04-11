@@ -262,7 +262,7 @@ class AppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->Auth) && isset($this->params['action'])) {
+		if(isset($this->Auth) && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->Auth->allowedActions || !in_array($this->params['action'], $this->Auth->allowedActions)) {
 				$user = $this->Auth->user();
 				$Permission = ClassRegistry::init('Permission');
