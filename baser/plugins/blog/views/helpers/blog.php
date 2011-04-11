@@ -407,5 +407,41 @@ class BlogHelper extends AppHelper {
 		return $BlogPost->allowPublish($data);
 
 	}
+/**
+ * 記事中の画像を出力する
+ *
+ * @param	array	$post
+ * @param	array	$options
+ * @return	void
+ * @access	public
+ */
+	function postImg($post, $options) {
+
+		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
+		$options = am($_options, $options);
+		extract($options);
+		unset($options['num']);
+		unset($options['link']);
+		
+		$contents = $post['BlogPost']['content'].$post['BlogPost']['detail'];
+		$pattern = '/<img.*?src="([^"]+)"[^>]*>/is';
+		if(!preg_match_all($pattern, $contents, $matches)){
+			return '';
+		}
+
+		if(isset($matches[1][$num-1])) {
+			$url = $matches[1][$num-1];
+			$img = $this->Baser->getImg($url, $options);
+			if($link) {
+				$this->Baser->link($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
+			} else {
+				echo $img;
+			}
+		} else {
+			return '';
+		}
+		
+	}
+	
 }
 ?>

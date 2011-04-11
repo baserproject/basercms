@@ -155,13 +155,19 @@ class AppHelper extends Helper {
 		//
 		// CUSTOMIZE MODIFY 2010/02/12 ryuring
 		// ファイルの存在チェックを行い存在しない場合のみRouterを利用するように変更した。
-
+		//
+		// CUSTOMIZE MODIFY 2011/04/11 ryuring
+		// Rewriteモジュールが利用できない場合、画像等で出力されるURL形式（/app/webroot/img/...）が
+		// $file に設定された場合でもパス解決ができるようにした。
+		//
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
 		if(file_exists(WWW_ROOT . $file)) {
 			$webPath = $this->webroot.$file;
-		}else {
+		} elseif(file_exists(docRoot().$file)) {
+			$webPath = $file;
+		} else {
 			$webPath = Router::url('/'.$file);
 		}
 		// <<<
