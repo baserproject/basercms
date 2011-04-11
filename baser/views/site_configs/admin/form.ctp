@@ -171,7 +171,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $formEx->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 12)) ?>
+				<?php echo $formEx->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
 				<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpGoogleAnalyticsId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $formEx->error('SiteConfig.google_analytics_id') ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">
