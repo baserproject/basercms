@@ -323,8 +323,8 @@ class Message extends MailAppModel {
 				if(!is_array($value)) {
 					$data['Message'][$mailField['MailField']['field_name']] = str_replace('<!--','&lt;!--', $data['Message'][$mailField['MailField']['field_name']]);
 				}
-				// 前後の半角、全角の空白文字を削除
-				$data['Message'][$mailField['MailField']['field_name']] = trim($data['Message'][$mailField['MailField']['field_name']], "　 ");
+				// TRIM
+				$data['Message'][$mailField['MailField']['field_name']] = trim($data['Message'][$mailField['MailField']['field_name']]);
 			}
 			
 		}
