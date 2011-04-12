@@ -299,6 +299,7 @@
 .pagination {
 	margin:10px 5px;
 	font-size:10px;
+	text-align: left;
 }
 .pagination a {
 }
