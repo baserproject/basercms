@@ -698,13 +698,17 @@ class AppController extends Controller {
  * @access	public
  */
 	function writeInstallSetting($key, $value) {
-
+		
 		/* install.php の編集 */
 		$setting = "Configure::write('".$key."', ".$value.");\n";
 		$key = str_replace('.', '\.', $key);
 		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
 		$file = new File(CONFIGS.'install.php');
-		$data = $file->read();
+		if(file_exists(CONFIGS.'install.php')) {
+			$data = $file->read();
+		}else {
+			$data = "<?php\n?>";
+		}
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {

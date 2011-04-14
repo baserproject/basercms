@@ -1001,16 +1001,7 @@ class InstallationsController extends AppController {
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
-		if($this->data['Installation']['reset']) {
-
-			if(file_exists(CONFIGS.'database.php')) {
-				// データベースのデータを削除
-				$this->_resetDatabase();
-				unlink(CONFIGS.'database.php');
-			}
-			if(file_exists(CONFIGS.'install.php')) {
-				unlink(CONFIGS.'install.php');
-			}
+		if(!empty($this->data['Installation']['reset'])) {
 
 			$messages = array();
 			$file = new File(CONFIGS.'core.php');
@@ -1027,6 +1018,15 @@ class InstallationsController extends AppController {
 				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 			}
 
+			if(file_exists(CONFIGS.'database.php')) {
+				// データベースのデータを削除
+				$this->_resetDatabase();
+				unlink(CONFIGS.'database.php');
+			}
+			if(file_exists(CONFIGS.'install.php')) {
+				unlink(CONFIGS.'install.php');
+			}
+			
 			$themeFolder = new Folder(WWW_ROOT.'themed');
 			$themeFiles = $themeFolder->read(true,true,true);
 			foreach($themeFiles[0] as $theme){
