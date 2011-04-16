@@ -315,7 +315,7 @@
 	display:none;
 }
 select.multiple {
-	font-family:"ＭＳ ゴシック", "Osaka－等幅";
+	font-family:"ＭＳ ゴシック", Osaka;
 	font-size:12px;
 	padding:5px;
 	height:220px;
@@ -407,7 +407,8 @@ select.multiple option {
 }
 .contextMenu li {
 	background:none!important;
-	padding:0!important;
+	padding:0;
+	text-align: left;
 }
 /* installations
 ----------------------------------------------- */
