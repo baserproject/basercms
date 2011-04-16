@@ -330,6 +330,7 @@ class BlogHelper extends AppHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'layouts'.DS;
 		}
+		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
 														BASER_VIEWS.'layouts'.DS));
 		
@@ -367,6 +368,7 @@ class BlogHelper extends AppHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'blog'.DS;
 		}
+		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'blog'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;
 		
 		$_templates = array();
