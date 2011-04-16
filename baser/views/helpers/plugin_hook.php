@@ -114,7 +114,14 @@ class PluginHookHelper extends AppHelper {
 		$this->registerHooks[$hookName][] = $pluginName;
 
 	}
-
+/**
+ * フックを実行する
+ *
+ * @param	string	$hookName
+ * @param	string	$out
+ * @return	string	$out
+ * @access	public
+ */
 	function executeHook($hookName, $out = null){
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
@@ -139,13 +146,7 @@ class PluginHookHelper extends AppHelper {
  * afterLayout
  */
 	function afterLayout() {
-		// TODO ファイルアップローダーが新しいPluginHookの仕様にバージョンアップしたら
-		// afterLayoutも新しい仕様に変更する
-		foreach($this->pluginHooks as $key => $pluginHook) {
-			if(method_exists($this->pluginHooks[$key],"afterLayout")) {
-				$this->pluginHooks[$key]->afterLayout();
-			}
-		}
+		$this->executeHook('afterLayout');
 	}
 /**
  * FormEx::end
