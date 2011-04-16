@@ -520,7 +520,12 @@ class UpdatersController extends AppController {
 		if(!$path) {
 			return false;
 		}
-		return $this->Updater->loadCsv('baser', $path, $filterTable);
+		if($plugin) {
+			$dbConfigName = 'plugin';
+		} else {
+			$dbConfigName = 'baser';
+		}
+		return $this->Updater->loadCsv($dbConfigName, $path, $filterTable);
 
 	}
 /**
