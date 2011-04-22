@@ -900,5 +900,27 @@ class BaserHelper extends AppHelper {
 			}
 		}
 	}
+/**
+ * 文字列を検索しマークとしてタグをつける
+ *
+ * @param string $search	検索文字列
+ * @param string $text		検索対象文字列
+ * @param string $name		マーク用タグ
+ * @param array $attributes	タグの属性
+ * @param boolean $escape	エスケープ有無
+ * @return string $text		変換後文字列
+ * @access public
+ */
+	function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
+
+		if(!is_array($search)) {
+			$search = array($search);
+		}
+		foreach($search as $value) {
+			$text = str_replace($value, $this->Html->tag($name, $value, $attributes, $escape), $text);
+		}
+		return $text;
+		
+	}
 }
 ?>
