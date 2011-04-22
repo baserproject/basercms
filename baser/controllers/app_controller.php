@@ -239,6 +239,17 @@ class AppController extends Controller {
 
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
+		
+		// $this->params['url'] の調整
+		// 環境によって？キーにamp;が付加されてしまうため
+		if(isset($this->params['url']) && is_array($this->params['url'])) {
+			foreach ($this->params['url']  as $key => $val ) {
+				if ( strpos( $key, 'amp;' ) === 0 ) {
+					$this->params['url'][substr( $key, 4 )] = $val;
+					unset( $this->params['url'][$key] );
+				}
+			}
+		}
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
@@ -965,6 +976,9 @@ class AppController extends Controller {
 				$filter = $default[$model];
 			}
 			$this->data[$model] = $filter;
+			if(!empty($default['named'])) {
+				$named = $default['named'];
+			}
 			$named['?'] = $filter;
 
 		}
