@@ -19,6 +19,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(empty($paginator)) {
+	return;
+}
 ?>
 <?php $paginator->options = array('url' => $this->passedArgs) ?>
 <?php if((int)$paginator->counter(array('format'=>'%pages%')) > 1): ?>
