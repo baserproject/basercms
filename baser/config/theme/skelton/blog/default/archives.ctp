@@ -19,8 +19,7 @@ $(function(){
 <h3 class="contents-head">
 	<?php $baser->contentsTitle() ?>
 </h3>
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+
 <?php if(!empty($posts)): ?>
 <?php foreach($posts as $post): ?>
 <div class="post">

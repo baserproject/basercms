@@ -23,8 +23,7 @@ $(function(){
 	<?php $blog->description() ?>
 </p>
 <?php endif ?>
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+
 <?php if(!empty($posts)): ?>
 <?php foreach($posts as $post): ?>
 <div class="post">

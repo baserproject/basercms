@@ -41,9 +41,6 @@ $(function(){
 	<?php $baser->contentsTitle() ?>
 </h3>
 
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
-
 <!-- list -->
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $post): ?>

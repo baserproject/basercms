@@ -48,6 +48,9 @@ img {
 #Header {
 	text-align: left;
 }
+#Header .search-box {
+	float: right;
+}
 /* Footer
 ----------------------------------------------- */
 #Footer {
@@ -99,4 +102,30 @@ img {
 }
 .clearfix {
 	display: block;
+}
+/* .pagination
+---------------------------------------------------*/
+.pagination .disabled {
+	display:none;
+}
+.pagination .number,
+.pagination .prev,
+.pagination .next,
+.pagination .current{
+	padding:5px 8px;
+	border:1px solid #e2e2e2;
+	margin:0 2px;
+}
+/* list-num
+---------------------------------------------------*/
+.list-num {
+	text-align: right;
+}
+/* 検索
+---------------------------------------------------*/
+.search-box {
+	text-align: center;
+}
+.search-result {
+	text-align: right;
 }

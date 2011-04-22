@@ -41,7 +41,7 @@ class AppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'Javascript', 'Baser', 'XmlEx');
+	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'FormEx', 'Javascript', 'Baser', 'XmlEx');
 /**
  * レイアウト
  *
@@ -291,10 +291,12 @@ class AppController extends Controller {
 				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
+		} else {
+			$this->Security->enabled = false;
 		}
 
 		// 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if(!empty($this->params['admin'])) {
+		if($this->Security->enabled && !empty($this->params['admin'])) {
 			$this->Security->validatePost = false;
 		}
 

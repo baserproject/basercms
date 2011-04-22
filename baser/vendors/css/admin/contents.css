@@ -571,3 +571,61 @@ select.multiple option {
 	vertical-align:bottom;
 	padding:6px;
 }
+/* page-numbers
+---------------------------------------------------*/
+.page-numbers .disabled {
+	display:none;
+}
+.page-numbers {
+	text-align:right;
+}
+/* no-data
+----------------------------------------------- */
+.no-data {
+	text-align:center;
+}
+/* .pagination
+---------------------------------------------------*/
+.pagination {
+	text-align: center;
+}
+.pagination .disabled {
+	display:none;
+}
+.page-numbers {
+	text-align:right;
+}
+.pagination .number,
+.pagination .prev,
+.pagination .next,
+.pagination .current{
+	padding:5px 8px;
+	border:1px solid #e2e2e2;
+	margin:0 2px;
+}
+.pagination .current {
+	background-color: #efefef;
+}
+.pagination a:hover{
+	background-color: #669900;
+	color:#fff;
+}
+/* list-num
+---------------------------------------------------*/
+.list-num {
+	text-align: right;
+}
+/* 検索
+---------------------------------------------------*/
+.search-box {
+	text-align: center;
+}
+.search-result {
+	text-align: right;
+	background-color: #efefef;
+	padding:5px 8px;
+	margin-bottom: 5px;
+}
+.result-link a{
+	color:#999;
+}

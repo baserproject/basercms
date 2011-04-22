@@ -5,8 +5,9 @@
 ?>
 
 <div id="header">
-	<div id="headMain">
+	<div id="headMain" class="clearfix">
 		<h1><?php $baser->link($baser->siteConfig['name'],'/') ?></h1>
+		<?php $baser->element('search') ?>
 	</div>
 	<?php if($baser->isTop()): ?>
 	<?php $baser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s BaserCMS','border'=>'0')) ?>

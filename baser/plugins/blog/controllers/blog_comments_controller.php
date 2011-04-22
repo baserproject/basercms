@@ -107,6 +107,7 @@ class BlogCommentsController extends BlogAppController {
 			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 		}
 
+		$this->Security->enabled = true;
 		$this->Security->requireAuth('add');
 
 	}

@@ -36,6 +36,13 @@ class BlogPost extends BlogAppModel {
  */
 	var $name = 'BlogPost';
 /**
+ * ビヘイビア
+ *
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('ContentsManager');
+/**
  * belongsTo
  *
  * @var 	array
@@ -301,6 +308,60 @@ class BlogPost extends BlogAppModel {
 		return $conditions;
 		
 	}
-	
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルに登録
+		$this->saveContent($this->createContent($this->data));
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['BlogPost'])) {
+			$data = $data['BlogPost'];
+		}
+
+		$_data = array();
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		if(!empty($data['blog_category_id'])) {
+			$BlogCategory = ClassRegistry::init('BlogCategory');
+			$categoryPath = $BlogCategory->getPath($data['blog_category_id'], array('title'));
+			if($categoryPath) {
+				$_data['Content']['category'] = $categoryPath[0]['BlogCategory']['title'];
+			}
+		}
+		$_data['Content']['title'] = $data['name'];
+		$_data['Content']['detail'] = $data['content'].' '.$data['detail'];
+		$PluginContent = ClassRegistry::init('PluginContent');
+		$_data['Content']['url'] = '/'.$PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')).'/archives/'.$data['no'];
+		$_data['Content']['status'] = $this->allowPublish($data);
+
+		return $_data;
+
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
 }
 ?>

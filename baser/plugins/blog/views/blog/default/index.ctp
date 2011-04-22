@@ -42,9 +42,6 @@ $(function(){
 </p>
 <?php endif ?>
 
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
-
 <!-- list -->
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $post): ?>

@@ -33,6 +33,47 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
+ * contents スキーマの読み込み
+ *
+ * contents テーブルの作成
+ */
+	if(!$this->loadSchema('1.6.11', '', 'contents')){
+		$this->setMessage('contents テーブル構造の作成に失敗しました。', true);
+	} else {
+		$this->setMessage('contents テーブル構造の作成に成功しました。');
+	}
+/**
+ * contents 更新
+ */
+	$Page = ClassRegistry::init('Page');
+	$pages = $Page->find('all');
+	$result = true;
+	foreach($pages as $page) {
+		if($Page->save($page)) {
+			continue;
+		} else {
+			$result = false;
+			break;
+		}
+	}
+	if($result) {
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		$blogPosts = $BlogPost->find('all');
+		foreach($blogPosts as $blogPost) {
+			if($BlogPost->save($blogPost)) {
+				continue;
+			} else {
+				$result = false;
+				break;
+			}
+		}
+	}
+	if($result){
+		$this->setMessage('contents テーブルのデータ更新に成功しました。');
+	} else {
+		$this->setMessage('contents テーブルのデータ更新に失敗しました。', true);
+	}
+/**
  * site_configs 更新
  */
 	App::import('Model', 'SiteConfig');

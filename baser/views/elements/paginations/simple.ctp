@@ -26,10 +26,8 @@ if(empty($paginator)) {
 <?php $paginator->options = array('url' => $this->passedArgs) ?>
 <?php if((int)$paginator->counter(array('format'=>'%pages%')) > 1): ?>
 <div class="pagination">
-	<?php echo $paginator->prev('<', null, null,  array('class'=>'disabled','tag'=>'span')) ?>
-	<span class="page-numbers">
-		<?php echo $paginator->numbers(array('separator'=>'')) ?>
-	</span>
-	<?php echo $paginator->next('>', null, null, array('class'=>'disabled','tag'=>'span')) ?>
+<?php echo $paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
+<?php echo $html->tag('span', $paginator->numbers(array('separator' => '', 'class' => 'number'), array('class' => 'page-numbers'))) ?>
+<?php echo $paginator->next('次へ >', array('class'=>'next'), null, array('class'=>'disabled')) ?>
 </div>
 <?php endif; ?>

@@ -54,19 +54,6 @@
 	padding-top:5px;
 	text-align:right;
 }
-/* page-numbers
----------------------------------------------------*/
-.page-numbers .disabled {
-	display:none;
-}
-.page-numbers {
-	text-align:right;
-}
-/* no-data
------------------------------------------------ */
-.no-data {
-	text-align:center;
-}
 /* calendar
 ----------------------------------------------- */
 .widget-blog-calendar table {
