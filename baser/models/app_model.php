@@ -80,23 +80,6 @@ class AppModel extends Model {
 
 	}
 /**
- * afterFind
- *
- * @param	mixed	$results
- * @return	mixed	$results
- * @access	public
- */
-	function afterFind($results) {
-
-		/* データベース文字コードを内部文字コードに変換 */
-		// MySQL4.0 以下で動作
-		if($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
-			$results = $this->convertEncodingByArray($results, mb_internal_encoding(), Configure::read('Config.dbCharset'));
-		}
-		return $results;
-
-	}
-/**
  * beforeSave
  *
  * @return	boolean
@@ -1145,6 +1128,153 @@ class AppModel extends Model {
 		return true;
 
 	}
+/**
+ * afterFind
+ *
+ * @param	mixed	$results
+ * @return	mixed	$results
+ * @access	public
+ */
+	function afterFind($results) {
+
+		/* データベース文字コードを内部文字コードに変換 */
+		// MySQL4.0 以下で動作
+		if($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
+			$results = $this->convertEncodingByArray($results, mb_internal_encoding(), Configure::read('Config.dbCharset'));
+		}
+
+		return parent::afterFind($results);
+
+	}
+/**
+ * Unbinds all relations from a model
+ *
+ * @param string unbinds all related models.
+ * @return void
+ * @access public
+ */
+    function expects($arguments, $reset = true) {
+		
+        $models = array();
+
+        foreach($arguments as $index => $argument)
+        {
+            if (is_array($argument))
+            {
+                if (count($argument) > 0)
+                {
+                    $arguments = am($arguments, $argument);
+                }
+
+                unset($arguments[$index]);
+            }
+        }
+
+        foreach($arguments as $index => $argument)
+        {
+            if (!is_string($argument))
+            {
+                unset($arguments[$index]);
+            }
+        }
+
+        if (count($arguments) == 0)
+        {
+            $models[$this->name] = array();
+        }
+        else
+        {
+            foreach($arguments as $argument)
+            {
+                if (strpos($argument, '.') !== false)
+                {
+                    $model = substr($argument, 0, strpos($argument, '.'));
+                    $child = substr($argument, strpos($argument, '.') + 1);
+
+                    if ($child == $model)
+                    {
+                        $models[$model] = array();
+                    }
+                    else
+                    {
+                        $models[$model][] = $child;
+                    }
+                }
+                else
+                {
+                    $models[$this->name][] = $argument;
+                }
+            }
+        }
+
+        $relationTypes = array ('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
+
+        foreach($models as $bindingName => $children)
+        {
+            $model = null;
+
+            foreach($relationTypes as $relationType)
+            {
+                $currentRelation = (isset($this->$relationType) ? $this->$relationType : null);
+
+                if (isset($currentRelation) && isset($currentRelation[$bindingName]) && is_array($currentRelation[$bindingName]) && isset($currentRelation[$bindingName]['className']))
+                {
+                    $model = $currentRelation[$bindingName]['className'];
+                    break;
+                }
+            }
+
+            if (!isset($model))
+            {
+                $model = $bindingName;
+            }
+
+            if (isset($model) && $model != $this->name && isset($this->$model))
+            {
+                if (!isset($this->__backInnerAssociation))
+                {
+                    $this->__backInnerAssociation = array();
+                }
+
+                $this->__backInnerAssociation[] = $model;
+
+                $this->$model->expects(true, $children);
+            }
+        }
+
+        if (isset($models[$this->name]))
+        {
+            foreach($models as $model => $children)
+            {
+                if ($model != $this->name)
+                {
+                    $models[$this->name][] = $model;
+                }
+            }
+
+            $models = array_unique($models[$this->name]);
+            $unbind = array();
+
+            foreach($relationTypes as $relation)
+            {
+                if (isset($this->$relation))
+                {
+                    foreach($this->$relation as $bindingName => $bindingData)
+                    {
+                        if (!in_array($bindingName, $models))
+                        {
+                            $unbind[$relation][] = $bindingName;
+                        }
+                    }
+                }
+            }
+            if (count($unbind) > 0)
+            {
+                $this->unbindModel($unbind, $reset);
+            }
+        }
+		
+    }
 	
 }
 ?>

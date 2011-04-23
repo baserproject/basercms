@@ -70,6 +70,25 @@ class BlogPost extends BlogAppModel {
 							'exclusive'=>false,
 							'finderQuery'=>''));
 /**
+ * HABTM
+ * 
+ * @var array
+ * @access public
+ */
+	var $hasAndBelongsToMany = array(
+			'BlogTag' => array(
+				'className'				=> 'Blog.BlogTag',
+				'joinTable'				=> 'blog_posts_blog_tags',
+				'foreignKey'			=> 'blog_post_id',
+				'associationForeignKey'	=> 'blog_tag_id',
+				'conditions'			=> '',
+				'order'					=> '',
+				'limit'					=> '',
+				'unique'				=> true,
+				'finderQuery'			=> '',
+				'deleteQuery'			=> ''
+		));
+/**
  * validate
  *
  * @var		array
@@ -253,6 +272,9 @@ class BlogPost extends BlogAppModel {
 		if($field == 'user_id') {
 			$controlSources['user_id'] = $this->User->getUserList($options);
 		}
+		if($field == 'blog_tag_id') {
+			$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -337,7 +359,7 @@ class BlogPost extends BlogAppModel {
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		if(!empty($data['blog_category_id'])) {
-			$BlogCategory = ClassRegistry::init('BlogCategory');
+			$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 			$categoryPath = $BlogCategory->getPath($data['blog_category_id'], array('title'));
 			if($categoryPath) {
 				$_data['Content']['category'] = $categoryPath[0]['BlogCategory']['title'];

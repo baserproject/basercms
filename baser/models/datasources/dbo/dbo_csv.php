@@ -210,8 +210,9 @@ class DboCsv extends DboSource {
 		} else {
 			$queryData['fields'] = $this->fields($model);	// フィールド取得
 		}
+		
 		// 全てのフィールドを取得
-		$this->_csvFields = array_keys($model->schema());
+		$this->_loadCsvFields($model);
 
 		foreach ($model->__associations as $type) {
 			foreach ($model->{$type} as $assoc => $assocData) {
@@ -282,7 +283,7 @@ class DboCsv extends DboSource {
 		}
 
 		// 全てのフィールドを取得
-		$this->_csvFields = array_keys($model->schema());
+		$this->_loadCsvFields($model);
 
 		$id = null;
 
@@ -334,7 +335,7 @@ class DboCsv extends DboSource {
 			return false;
 		}
 
-		$this->_csvFields = array_keys($model->schema());
+		$this->_loadCsvFields($model);
 
 		if ($values == null) {
 			$combined = $fields;
@@ -378,8 +379,7 @@ class DboCsv extends DboSource {
 			return false;
 		}
 
-		$this->_csvFields = array_keys($model->schema());
-
+		$this->_loadCsvFields($model);
 
 		$alias = $this->name($model->alias);
 		$table = $this->fullTableName($model);
@@ -423,7 +423,7 @@ class DboCsv extends DboSource {
 
 		$this->connected[$tableName] = false;
 
-		if(!$this->_connect($tableName,$lock,$model->plugin)) {
+		if(!$this->_connect($tableName,$lock)) {
 
 			// 接続が見つからない場合はエラー
 			//die (__("DboCsv::connect : Can't find Connection : ".$model->tablePrefix.$model->table));
@@ -466,12 +466,11 @@ class DboCsv extends DboSource {
  *
  * @param	string	$tableName
  * @param	boolean	$lock
- * @param	string	$plugin
  * @param	boolean	$force
  * @return	mixed	ファイルポインタ / false
  * @access	protected
  */
-	function _connect($tableName,$lock=true,$plugin=null,$force = false) {
+	function _connect($tableName, $lock = true, $force = false) {
 
 		if(!empty($this->connection[$tableName])){
 			return $this->connection[$tableName];
@@ -814,33 +813,39 @@ class DboCsv extends DboSource {
 			return false;
 		}
 
-		// 主キーがない場合のauto処理
-		if(empty($queryData['values']['id'])) {
-			$queryData['values']['id'] = '"'.($this->_getMaxId($queryData['tableName'])+1).'"';
-			$this->_lastInsertId = str_replace('"','',$queryData['values']['id']);
-		}else{
-
-			$_queryData['crud'] = 'read';
-			$_queryData['className'] = Inflector::classify(str_replace($this->config['prefix'], '', $queryData['tableName']));
-			$_queryData['fields'] = array('id');
-			$_queryData['tableName'] = $queryData['tableName'];
-			$_queryData['limit'] = 1;
-			$_queryData['page'] = 1;
-			$_queryData['conditions'] = 'if ($record[\'id\']=='.$queryData['values']['id'].') return true;';
-			if($this->readCsv($_queryData)) {
-				return false;
+		// 追加対象のデータを絞り込む
+		$_records = $queryData['records'];
+		$records = array();
+		$id = $this->_getMaxId($queryData['tableName']);
+		foreach($_records as $record) {
+			if(empty($record['id'])) {
+				// 主キーがない場合のauto処理
+				$id++;
+				$record['id'] = '"'.$id.'"';
+				$records[] = $record;
+				$this->_lastInsertId = $id;
+				continue;
+			}else{
+				// ID重複チェック
+				if(!$this->__checkDuplicateId($queryData['tableName'], $record['id'])) {
+					$records[] = $record;
+					continue;
+				}
 			}
-			$this->_csvFields = fgetcsv($this->connection[$queryData['tableName']],10240);
-
 		}
 
 		// カラムをテーブル情報どおりに並べる
-		foreach($this->_csvFields  as $field) {
-			if(isset($queryData['values'][$field])) {
-				$tmpData[$field]=$queryData['values'][$field];
-			}else {
-				$tmpData[$field]=null;
+		$_records = $records;
+		$records = array();
+		foreach($_records as $record) {
+			foreach($this->_csvFields  as $field) {
+				if(isset($record[$field])) {
+					$_record[$field]=$record[$field];
+				}else {
+					$_record[$field]=null;
+				}
 			}
+			$records[] = $_record;
 		}
 
 		// CSVファイルを全て読み込む
@@ -853,14 +858,15 @@ class DboCsv extends DboSource {
 			$csv .= "\n";
 		}
 
-		$newRecord = implode(",",$tmpData)."\n";
-		// 新しいレコードを追加
-		if($this->dbEncoding != $this->appEncoding) {
-			$newRecord = mb_convert_encoding($newRecord, $this->dbEncoding, $this->appEncoding);
+		foreach ($records as $record) {
+			$newRecord = implode(",", $record)."\n";
+			// 新しいレコードを追加
+			if($this->dbEncoding != $this->appEncoding) {
+				$newRecord = mb_convert_encoding($newRecord, $this->dbEncoding, $this->appEncoding);
+			}
+			$csv .= $newRecord;
 		}
-
-		$csv .= $newRecord;
-
+		
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
@@ -873,6 +879,34 @@ class DboCsv extends DboSource {
 
 	}
 /**
+ * IDの重複チェックを行う
+ * @param string $table
+ * @param int $id
+ * @return boolean
+ * @access public
+ */
+	function __checkDuplicateId($table, $id) {
+		
+		$queryData['crud'] = 'read';
+		$queryData['className'] = Inflector::classify(str_replace($this->config['prefix'], '', $table));
+		$queryData['fields'] = array('id');
+		$queryData['tableName'] = $table;
+		$queryData['limit'] = 1;
+		$queryData['page'] = 1;
+		$queryData['conditions'] = 'if ($record[\'id\']=='.$id.') return true;';
+		if($this->readCsv($queryData)) {
+			$result = true;
+		} else {
+			$result = false;
+		}
+
+		// フィールド情報を読み込み直す
+		$this->_loadCsvFields($queryData['tableName']);
+		
+		return $result;
+		
+	}
+/**
  * CSVテーブルを生成する
  *
  * @param array $queryData
@@ -882,7 +916,7 @@ class DboCsv extends DboSource {
 		if(file_exists($this->config['database'].DS.$queryData['tableName'].'.csv')){
 			return false;
 		}
-		$this->_connect($queryData['tableName'],true,null,true);
+		$this->_connect($queryData['tableName'], true, true);
 		$head = $this->_getCsvHead($queryData['fields']);
 		if($this->appEncoding != $this->dbEncoding) {
 			$head = mb_convert_encoding($head, $this->dbEncoding, $this->appEncoding);
@@ -1027,8 +1061,7 @@ class DboCsv extends DboSource {
 
 		// ヘッダ取得
 		//setlocale(LC_ALL, 'ja_JP.SJIS'); //日本語文字化け対策
-		rewind($this->connection[$index]);
-		$this->_csvFields = fgetcsv($this->connection[$index],10240);
+		$this->_loadCsvFields($index);
 
 		while(($_record = fgetcsvReg($this->connection[$index], 10240)) !== false) {
 			$record = array();
@@ -1075,8 +1108,8 @@ class DboCsv extends DboSource {
 		$maxId=0;
 
 		// ヘッダ取得
-		rewind($this->connection[$index]);
-		$this->_csvFields = fgetcsv($this->connection[$index],10240);
+		$this->_loadCsvFields($index);
+
 		$idNum = '';
 		foreach($this->_csvFields as $key => $value) {
 			if($value == 'id') {
@@ -1169,11 +1202,12 @@ class DboCsv extends DboSource {
 		$table = $prefix . $table;
 
 		// DB接続
-		if(!$this->_connect($table,true,null,true)) {
+		if(!$this->_connect($table, true, true)) {
 			return false;
 		}
 
-		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		$this->_loadCsvFields($table);
+		
 		if($this->_csvFields) {
 			if(in_array($field,$this->_csvFields)) {
 				// 既に存在するフィールドの場合は falseを返す
@@ -1249,12 +1283,13 @@ class DboCsv extends DboSource {
 		}
 
 		// DB接続
-		if(!$this->_connect($table,true,null,true)) {
+		if(!$this->_connect($table, true, true)) {
 			return false;
 		}
 
 		// 全てのフィールドを取得
-		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		$this->_loadCsvFields($table);
+		
 		if($this->_csvFields) {
 			if(!in_array($old,$this->_csvFields)) {
 				return false;
@@ -1321,12 +1356,13 @@ class DboCsv extends DboSource {
 		$table = $prefix . $table;
 
 		// DB接続
-		if(!$this->_connect($table,true,null,true)) {
+		if(!$this->_connect($table, true, true)) {
 			return false;
 		}
 
 		// 全てのフィールドを取得
-		$this->_csvFields = fgetcsv($this->connection[$table],10240);
+		$this->_loadCsvFields($table);
+		
 		if($this->_csvFields) {
 			if(!in_array($field,$this->_csvFields)) {
 				return false;
@@ -1558,19 +1594,30 @@ class DboCsv extends DboSource {
  */
 	function _parseSqlValuesFromCreate($fields,$values) {
 
+		$values = str_replace('), (', '),(', $values);
+		if(strpos($values, '),(') !== false) {
+			$values = explode('),(', $values);
+		} else {
+			$values = array($values);
+		}
+		
 		$fields = str_replace("`","",$fields);
-		$values = str_replace('\,','{CM}',$values);
-		$values = str_replace("\"",'""',$values);
-
 		$arrFields = explode(",",$fields);
-		$arrValues = explode(",",$values);
 
-		for($i=0;$i<count($arrFields);$i++) {
-			$arrFields[$i] = trim($arrFields[$i]);
-			$datas[$arrFields[$i]] = $this->_convertField($arrValues[$i],false);
+		$records = array();
+		foreach($values as $value) {
+			$value = str_replace('\,','{CM}',$value);
+			$value = str_replace("\"",'""',$value);
+			$arrValues = explode(",",$value);
+			$record = array();
+			for($i=0;$i<count($arrFields);$i++) {
+				$arrFields[$i] = trim($arrFields[$i]);
+				$record[$arrFields[$i]] = $this->_convertField($arrValues[$i], false);
+			}
+			$records[] = $record;
 		}
 
-		$parseData['values'] = $datas;
+		$parseData['records'] = $records;
 		$parseData['fields'] = $arrFields;
 		return $parseData;
 
@@ -2061,7 +2108,7 @@ class DboCsv extends DboSource {
 			return false;
 		}
 		// 全てのフィールドを取得
-		$this->_csvFields = array_keys($linkModel->schema());
+		$this->_loadCsvFields($linkModel);
 
 		if ($query = $this->generateAssociationQuery($model, $linkModel, $type, $association, $assocData, $queryData, $external, $resultSet)) {
 			if (!isset($resultSet) || !is_array($resultSet)) {
@@ -2115,10 +2162,9 @@ class DboCsv extends DboSource {
 					}
 				}
 				if (!empty($ins)) {
-					$query = str_replace('{$__cakeID__$}', '(' .join(', ', $ins) .')', $query);
+					$query = str_replace('{$__cakeID__$}', join(', ', $ins), $query);
 					$query = str_replace('= (', 'IN (', $query);
 					$query = str_replace('=  (', 'IN (', $query);
-					$query = str_replace('  WHERE 1 = 1', '', $query);
 				}
 
 				$foreignKey = $model->hasAndBelongsToMany[$association]['foreignKey'];
@@ -2127,8 +2173,52 @@ class DboCsv extends DboSource {
 				$habtmFieldsCount = count($habtmFields);
 				$q = $this->insertQueryData($query, null, $association, $assocData, $model, $linkModel, $stack);
 
+				$tableName = $this->config['prefix'].$assocData['joinTable'];
+				$this->_loadCsvFields($tableName);
+
 				if ($q != false) {
 					$fetch = $this->fetchAll($q, $model->cacheQueries, $model->alias);
+					if($fetch) {
+						$query = $this->generateAssociationQuery($model, $linkModel, 'belongsTo', $association, $assocData, $queryData, $external, $resultSet);
+						$ins = Set::extract('/'.$assocData['with'].'/'.$assocData['associationForeignKey'], $fetch);
+						if (!empty($ins)) {
+							$query = str_replace('{$__cakeForeignKey__$}', '('.join(', ', $ins).')', $query);
+							$query = str_replace('= (', 'IN (', $query);
+							$query = str_replace('=  (', 'IN (', $query);
+						}
+						$q = $this->insertQueryData($query, null, $association, $assocData, $model, $linkModel, $stack);
+
+						$this->_loadCsvFields($linkModel);
+						$fetch2 = $this->fetchAll($q, $model->cacheQueries, $model->alias);
+						
+						$uniqueIds = $merge = array();
+						/*foreach($fetch2 as $row) {
+							foreach($fetch as $j => $data) {
+								if (
+								(isset($data[$with]) && $data[$with][$joinKeys[1]] === $row[$assocData['className']][$linkModel->primaryKey]) &&
+										(!in_array($data[$with][$joinKeys[1]], $uniqueIds))
+								) {
+									$uniqueIds[] = $data[$with][$joinKeys[1]];
+
+									if ($habtmFieldsCount <= 2) {
+										unset($data[$with]);
+									}
+									$data[$assocData['className']] = $row;
+									$merge[] = am($data, $row);
+								}
+							}
+						}*/
+
+						$merge = array();
+						foreach($fetch as $row) {
+							foreach($fetch2 as $data) {
+								if(isset($row[$with]) && $row[$with][$joinKeys[1]] === $data[$assocData['className']][$linkModel->primaryKey]) {
+									$merge[] = am($row, $data);
+								}
+							}
+						}
+						$fetch = $merge;
+					}
 				} else {
 					$fetch = null;
 				}
@@ -2208,6 +2298,25 @@ class DboCsv extends DboSource {
 
 	}
 /**
+ * CSVフィールドを読み込む
+ *
+ * @param mixed $model or $table
+ * @access protected
+ */
+	function _loadCsvFields($model) {
+		
+		if(is_object($model)) {
+			$this->_csvFields = array_keys($model->schema());
+		} else {
+			if(empty($this->connection[$model])) {
+				$this->_connect($model, false);
+			}
+			rewind($this->connection[$model]);
+			$this->_csvFields = fgetcsv($this->connection[$model],10240);
+		}
+		
+	}
+/**
  * 全ての結果セットを返す
  *
  * @param	string	$sql SQL statement
@@ -2225,7 +2334,10 @@ class DboCsv extends DboSource {
 		if ($this->execute($sql)) {
 			$out = array();
 
-			reset($this->_result);
+			if(is_array($this->_result)) {
+				reset($this->_result);
+			}
+
 			while ($item = $this->fetchRow()) {
 				$out[] = $item;
 			}
@@ -2314,7 +2426,6 @@ class DboCsv extends DboSource {
 	}
 /**
  * Inserts multiple values into a table
- * TODO 未検証
  *
  * @param	string	$table
  * @param	string	$fields
@@ -2492,6 +2603,190 @@ class DboCsv extends DboSource {
 	function rollback(&$model) {
 		return false;
 	}
+/**
+ * Generates an array representing a query or part of a query from a single model or two associated models
+ *
+ * @param Model $model
+ * @param Model $linkModel
+ * @param string $type
+ * @param string $association
+ * @param array $assocData
+ * @param array $queryData
+ * @param boolean $external
+ * @param array $resultSet
+ * @return mixed
+ */
+	function generateAssociationQuery(&$model, &$linkModel, $type, $association = null, $assocData = array(), &$queryData, $external = false, &$resultSet) {
+		$queryData = $this->__scrubQueryData($queryData);
+		$assocData = $this->__scrubQueryData($assocData);
+
+		if (empty($queryData['fields'])) {
+			$queryData['fields'] = $this->fields($model, $model->alias);
+		} elseif (!empty($model->hasMany) && $model->recursive > -1) {
+			$assocFields = $this->fields($model, $model->alias, array("{$model->alias}.{$model->primaryKey}"));
+			$passedFields = $this->fields($model, $model->alias, $queryData['fields']);
+
+			if (count($passedFields) === 1) {
+				$match = strpos($passedFields[0], $assocFields[0]);
+				$match1 = strpos($passedFields[0], 'COUNT(');
+				if ($match === false && $match1 === false) {
+					$queryData['fields'] = array_merge($passedFields, $assocFields);
+				} else {
+					$queryData['fields'] = $passedFields;
+				}
+			} else {
+				$queryData['fields'] = array_merge($passedFields, $assocFields);
+			}
+			unset($assocFields, $passedFields);
+		}
+
+		if ($linkModel == null) {
+			return $this->buildStatement(
+				array(
+					'fields' => array_unique($queryData['fields']),
+					'table' => $this->fullTableName($model),
+					'alias' => $model->alias,
+					'limit' => $queryData['limit'],
+					'offset' => $queryData['offset'],
+					'joins' => $queryData['joins'],
+					'conditions' => $queryData['conditions'],
+					'order' => $queryData['order'],
+					'group' => $queryData['group']
+				),
+				$model
+			);
+		}
+		if ($external && !empty($assocData['finderQuery'])) {
+			return $assocData['finderQuery'];
+		}
+
+		$alias = $association;
+		$self = ($model->name == $linkModel->name);
+		$fields = array();
+
+		if ((!$external && in_array($type, array('hasOne', 'belongsTo')) && $this->__bypass === false) || $external) {
+			$fields = $this->fields($linkModel, $alias, $assocData['fields']);
+		}
+		if (empty($assocData['offset']) && !empty($assocData['page'])) {
+			$assocData['offset'] = ($assocData['page'] - 1) * $assocData['limit'];
+		}
+		$assocData['limit'] = $this->limit($assocData['limit'], $assocData['offset']);
+
+		switch ($type) {
+			case 'hasOne':
+			case 'belongsTo':
+				$conditions = $this->__mergeConditions(
+					$assocData['conditions'],
+					$this->getConstraint($type, $model, $linkModel, $alias, array_merge($assocData, compact('external', 'self')))
+				);
+
+				if (!$self && $external) {
+					foreach ($conditions as $key => $condition) {
+						if (is_numeric($key) && strpos($condition, $model->alias . '.') !== false) {
+							unset($conditions[$key]);
+						}
+					}
+				}
+
+				if ($external) {
+					$query = array_merge($assocData, array(
+						'conditions' => $conditions,
+						'table' => $this->fullTableName($linkModel),
+						'fields' => $fields,
+						'alias' => $alias,
+						'group' => null
+					));
+					$query = array_merge(array('order' => $assocData['order'], 'limit' => $assocData['limit']), $query);
+				} else {
+					$join = array(
+						'table' => $this->fullTableName($linkModel),
+						'alias' => $alias,
+						'type' => isset($assocData['type']) ? $assocData['type'] : 'LEFT',
+						'conditions' => trim($this->conditions($conditions, true, false, $model))
+					);
+					$queryData['fields'] = array_merge($queryData['fields'], $fields);
+
+					if (!empty($assocData['order'])) {
+						$queryData['order'][] = $assocData['order'];
+					}
+					if (!in_array($join, $queryData['joins'])) {
+						$queryData['joins'][] = $join;
+					}
+					return true;
+				}
+			break;
+			case 'hasMany':
+				$assocData['fields'] = $this->fields($linkModel, $alias, $assocData['fields']);
+				if (!empty($assocData['foreignKey'])) {
+					$assocData['fields'] = array_merge($assocData['fields'], $this->fields($linkModel, $alias, array("{$alias}.{$assocData['foreignKey']}")));
+				}
+				$query = array(
+					'conditions' => $this->__mergeConditions($this->getConstraint('hasMany', $model, $linkModel, $alias, $assocData), $assocData['conditions']),
+					'fields' => array_unique($assocData['fields']),
+					'table' => $this->fullTableName($linkModel),
+					'alias' => $alias,
+					'order' => $assocData['order'],
+					'limit' => $assocData['limit'],
+					'group' => null
+				);
+			break;
+			case 'hasAndBelongsToMany':
+				$joinFields = array();
+				$joinAssoc = null;
+
+				if (isset($assocData['with']) && !empty($assocData['with'])) {
+					$joinKeys = array($assocData['foreignKey'], $assocData['associationForeignKey']);
+					list($with, $joinFields) = $model->joinModel($assocData['with'], $joinKeys);
+
+					$joinTbl = $this->fullTableName($model->{$with});
+					$joinAlias = $joinTbl;
+
+					if (is_array($joinFields) && !empty($joinFields)) {
+						$joinFields = $this->fields($model->{$with}, $model->{$with}->alias, $joinFields);
+						$joinAssoc = $joinAlias = $model->{$with}->alias;
+					} else {
+						$joinFields = array();
+					}
+				} else {
+					$joinTbl = $this->fullTableName($assocData['joinTable']);
+					$joinAlias = $joinTbl;
+				}
+				// CUSTOMIZE modify 2011/04/23 ryuring
+				// CSVでHABTMに対応する為、ここでは、リンクテーブルのテーブルのみ取得するように変更
+				// >>>
+				/*$query = array(
+					'conditions' => $assocData['conditions'],
+					'limit' => $assocData['limit'],
+					'table' => $this->fullTableName($linkModel),
+					'alias' => $alias,
+					'fields' => array_merge($this->fields($linkModel, $alias, $assocData['fields']), $joinFields),
+					'order' => $assocData['order'],
+					'group' => null,
+					'joins' => array(array(
+						'table' => $joinTbl,
+						'alias' => $joinAssoc,
+						'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $alias)
+					))
+				);*/
+				// ---
+				$query = array(
+					'conditions' => $this->getConstraint('hasMany', $model, $linkModel, $joinAlias, $assocData),
+					'limit' => $assocData['limit'],
+					'table' => $joinTbl,
+					'alias' => $joinAssoc,
+					'fields' => $joinFields,
+					'order' => $assocData['order'],
+					'group' => null
+				);
+				// <<<
+			break;
+		}
+		if (isset($query)) {
+			return $this->buildStatement($query, $model);
+		}
+		return null;
+	}
+	
 }
 /**
  * クイックソート

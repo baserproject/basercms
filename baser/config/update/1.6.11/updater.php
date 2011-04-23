@@ -43,7 +43,9 @@
 		$this->setMessage('contents テーブル構造の作成に成功しました。');
 	}
 /**
- * contents 更新
+ * pages 更新
+ *
+ * 保存処理を行う事で contents テーブルに検索データを追加
  */
 	$Page = ClassRegistry::init('Page');
 	$pages = $Page->find('all');
@@ -56,22 +58,10 @@
 			break;
 		}
 	}
-	if($result) {
-		$BlogPost = ClassRegistry::init('Blog.BlogPost');
-		$blogPosts = $BlogPost->find('all');
-		foreach($blogPosts as $blogPost) {
-			if($BlogPost->save($blogPost)) {
-				continue;
-			} else {
-				$result = false;
-				break;
-			}
-		}
-	}
 	if($result){
-		$this->setMessage('contents テーブルのデータ更新に成功しました。');
+		$this->setMessage('pages > contents テーブルのデータ更新に成功しました。');
 	} else {
-		$this->setMessage('contents テーブルのデータ更新に失敗しました。', true);
+		$this->setMessage('pages > contents テーブルのデータ更新に失敗しました。', true);
 	}
 /**
  * site_configs 更新

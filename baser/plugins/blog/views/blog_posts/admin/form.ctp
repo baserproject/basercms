@@ -66,6 +66,48 @@ $(function(){
 		editor_detail_tmp.execCommand('synchronize');
 		$("#BlogPostMode").val('save');
 	});
+/**
+ * ブログタグ追加
+ */
+	$("#BlogTagName").keypress(function(ev) {
+		if ((ev.which && ev.which === 13) || (ev.keyCode && ev.keyCode === 13)) {
+			$("#BtnAddBlogTag").click();
+			return false;
+		} else {
+			return true;
+		}
+	});
+	$("#BtnAddBlogTag").click(function(){
+		if(!$("#BlogTagName").val()) {
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: '<?php echo $this->base ?>/admin/blog/blog_tags/ajax_add',
+			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
+			dataType: 'html',
+			beforeSend: function() {
+				$("#BtnAddBlogTag").attr('disabled', 'disabled');
+				$("#TagLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogTags").append(result);
+					$("#BlogTagName").val('');
+				} else {
+					alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(){
+				alert('ブログタグの追加に失敗しました。');
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogTag").removeAttr('disabled');
+				$("#TagLoader").hide();
+				$("#BlogTags").effect("highlight",{},1500);
+			}
+		});
+	});
 });
 </script>
 
@@ -109,7 +151,7 @@ $(function(){
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogPost.no', 'NO') ?></th>
+		<th class="col-head" style="width:53px"><?php echo $formEx->label('BlogPost.no', 'NO') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->value('BlogPost.no') ?>
 			<?php echo $formEx->input('BlogPost.no', array('type' => 'hidden')) ?>
@@ -150,6 +192,21 @@ $(function(){
 			<?php echo $formEx->error('BlogPost.detail') ?>
 		</td>
 	</tr>
+<?php if(!empty($blogContent['BlogContent']['tag_use'])): ?>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('BlogTag.BlogTag', 'タグ') ?></th>
+		<td class="col-input">
+			<div class="clearfix" id="BlogTags" style="padding:5px">
+			<?php echo $formEx->input('BlogTag.BlogTag',
+					array('type' => 'select', 'multiple' => 'checkbox', 'options' => $formEx->getControlSource('BlogPost.blog_tag_id'))) ?>
+			</div>
+			<?php echo $formEx->error('BlogTag.BlogTag') ?>
+			<?php echo $formEx->input('BlogTag.name', array('type' => 'text')) ?>
+			<?php echo $formEx->button('新しいタグを追加', array('id' => 'BtnAddBlogTag')) ?>
+			<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
+		</td>
+	</tr>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
 		<td class="col-input">

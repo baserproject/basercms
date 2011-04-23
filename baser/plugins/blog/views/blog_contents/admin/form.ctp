@@ -195,6 +195,17 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.tag_use', 'タグ機能') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogContent.tag_use', array(
+				'type'		=> 'radio',
+				'options'	=> $textEx->booleanDoList('利用'),
+				'legend'	=> false,
+				'separator'	=> '&nbsp;&nbsp;')) ?>
+			<?php echo $formEx->error('BlogContent.tag_use') ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.widget_area', 'ウィジェットエリア') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->input('BlogContent.widget_area', array(

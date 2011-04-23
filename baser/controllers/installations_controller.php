@@ -239,7 +239,11 @@ class InstallationsController extends AppController {
 
 			/* 「次のステップへ」クリック時 */
 			} elseif ($this->data['buttonclicked']=='createdb') {
-				if($this->_constructionDb($this->data['Installation']['non_demo_data'])) {
+				$nonDemoData = false;
+				if(isset($this->data['Installation']['non_demo_data'])) {
+					$nonDemoData = $this->data['Installation']['non_demo_data'];
+				}
+				if($this->_constructionDb($nonDemoData)) {
 					$this->Session->setFlash("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {

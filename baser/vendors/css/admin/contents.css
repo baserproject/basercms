@@ -629,3 +629,10 @@ select.multiple option {
 .result-link a{
 	color:#999;
 }
+/* その他
+---------------------------------------------------*/
+div.checkbox {
+	float:left;
+	padding-right:10px;
+	line-height: 2.0em;
+}

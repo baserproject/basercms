@@ -57,6 +57,7 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 	</span></div>
+	<?php $baser->element('blog_tag', array('post' => $post)) ?>
 </div>
 	<?php endforeach; ?>
 <?php else: ?>

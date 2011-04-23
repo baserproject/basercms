@@ -161,6 +161,37 @@ class BlogHelper extends AppHelper {
 		}
 	}
 /**
+ * タグを出力する
+ *
+ * @param array $post
+ * @param string $separator
+ */
+	function tag($post, $separator = ' , ') {
+		echo $this->getTag($post, $separator);
+	}
+/**
+ * タグを取得する
+ *
+ * @param array $post
+ * @param string $separator
+ */
+	function getTag($post, $separator = ' , ') {
+
+		$tagLinks = array();
+		if(!empty($post['BlogTag'])) {
+			foreach($post['BlogTag'] as $tag) {
+				$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', 'tag', $tag['name']);
+				$tagLinks[] = $this->Baser->getLink($tag['name'], $url);
+			}
+		}
+		if($tagLinks) {
+			return implode($separator, $tagLinks);
+		} else {
+			return '';
+		}
+		
+	}
+/**
  * カテゴリのURLを取得する
  * @param string $blogCategoyId
  * @return void
