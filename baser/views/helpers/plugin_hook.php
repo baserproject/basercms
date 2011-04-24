@@ -133,6 +133,15 @@ class PluginHookHelper extends AppHelper {
 		$this->executeHook('afterLayout');
 	}
 /**
+ * FormEx::create
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function formExCreate($out) {
+		return $this->executeHook('formExCreate', $out);
+	}
+/**
  * FormEx::end
  * @param	string	$out
  * @return	string
@@ -142,13 +151,23 @@ class PluginHookHelper extends AppHelper {
 		return $this->executeHook('formExEnd',$out);
 	}
 /**
- * FormEx::create
- * @param	string	$out
- * @return	string
- * @access	public
+ * Baser::header
+ *
+ * @param string $out
+ * @return string
  */
-	function formExCreate($out) {
-		return $this->executeHook('formExCreate',$out);
+	function baserHeader($out) {
+		return $this->executeHook('baserHeader', $out);
 	}
+/**
+ * Baser::footer
+ *
+ * @param string $out
+ * @return string
+ */
+	function baserFooter($out) {
+		return $this->executeHook('baserFooter', $out);
+	}
+	
 }
 ?>

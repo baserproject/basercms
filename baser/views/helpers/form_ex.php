@@ -1048,34 +1048,54 @@ DOC_END;
 	}
 /**
  * create
+ *
  * フック用にラッピング
+ * 
  * @param	array $model
  * @param	array $options
  * @return	string
  * @access	public
  */
-	function create($model = null, $options = array(), $callback = true) {
+	function create($model = null, $options = array()) {
+
+		$_options = array('callback' => true);
+		$options = am($_options, $options);
+		$callback = $options['callback'];
+		unset($options['callback']);
 		$out = parent::create($model, $options);
 		if($callback) {
-			return $this->pluginHook($out, 'formExCreate');
+			return $this->executeHook('formExCreate', $out);
 		}else{
 			return $out;
 		}
+		
 	}
 /**
  * end
+ * 
  * フック用にラッピング
+ *
  * @param	array	$options
  * @return	string
  * @access	public
  */
 	function end($options = null, $callback = true) {
+
+		if(is_array($options)) {
+			$options = array_merge(array('callback' => true), $options);
+			extract($options);
+			unset($options['callback']);
+		} else {
+			$callback = true;
+		}
+		
 		$out = parent::end($options);
 		if($callback) {
-			return $this->pluginHook($out, 'formExEnd');
+			return $this->executeHook('formExEnd', $out);
 		} else {
 			return $out;
 		}
+		
 	}
 /**
  * Generates a form input element complete with label and wrapper div

@@ -197,15 +197,19 @@ class AppHelper extends Helper {
 		return $webPath;
 	}
 /**
- * プラグインフックを実行する
+ * フック処理を実行する
+ * 
  * @param	string	$out
  * @return	mixed
  */
-	function pluginHook($out,$hook) {
+	function executeHook($hook, $out) {
+		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
 		}
 		return $this->_view->loaded['pluginHook']->{$hook}($out);
+		
 	}
+
 }
 ?>

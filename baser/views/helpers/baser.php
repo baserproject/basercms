@@ -393,6 +393,28 @@ class BaserHelper extends AppHelper {
 		echo $this->getElement($name, $params, $loadHelpers, $subDir);
 	}
 /**
+ * ヘッダーを出力する
+ * 
+ * @param array $params
+ * @param mixed $loadHelpers
+ * @param boolean $subDir
+ */
+	function header($params = array(), $loadHelpers = false, $subDir = true) {
+		$out = $this->getElement('header', $params, $loadHelpers, $subDir);
+		echo $this->executeHook('baserHeader', $out);
+	}
+/**
+ * フッターを出力する
+ *
+ * @param array $params
+ * @param mixed $loadHelpers
+ * @param boolean $subDir
+ */
+	function footer($params = array(), $loadHelpers = false, $subDir = true) {
+		$out = $this->getElement('footer', $params, $loadHelpers, $subDir);
+		echo $this->executeHook('baserFooter', $out);
+	}
+/**
  * ページネーションを出力する
  * @param string $name
  * @param array $params
