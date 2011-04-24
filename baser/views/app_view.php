@@ -38,7 +38,7 @@ class AppView extends ThemeView {
 	var $__passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir','enablePlugins'
+			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'
 	);
 /**
  * テンプレートのファイル名を取得する

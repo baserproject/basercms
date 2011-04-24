@@ -99,12 +99,6 @@ class AppController extends Controller {
  */
 	var $contentsTitle = '';
 /**
- * 有効プラグイン
- * @var     array
- * @access  public
- */
-	var $enablePlugins = array();
-/**
  * サイトコンフィグデータ
  * @var array
  */

@@ -37,40 +37,24 @@ class PluginHookHelper extends AppHelper {
 	function beforeRender() {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
-		if(!file_exists(CONFIGS.'database.php')) {
+		if(!isInstalled ()) {
 			return;
-		}else {
-			require_once(CONFIGS.'database.php');
-			$dbConfig = new DATABASE_CONFIG();
-			if(!$dbConfig->baser['driver']) return;
 		}
 
 		$view = ClassRegistry::getObject('View');
-		if(!empty($view->enablePlugins)) {
-			$plugins = $view->enablePlugins;
-		}else {
-			$plugins = array();
-			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
-				$sources = $db->listSources();
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'plugins'), array_map('strtolower', $sources))) {
-					$Plugin =& ClassRegistry::init('Plugin','Model');
-					$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
-					$plugins = Set::extract('/Plugin/name',$plugins);
-				}
-			}
-		}
+		$plugins = Configure::read('Baser.enablePlugins');
 
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
-		foreach($plugins as $plugin) {
-			$pluginName = Inflector::camelize($plugin);
-			if(App::import('Helper',$pluginName.'.'.$pluginName.'Hook')) {
-				$pluginHooks[] = $pluginName;
+		if($plugins) {
+			foreach($plugins as $plugin) {
+				$pluginName = Inflector::camelize($plugin);
+				if(App::import('Helper',$pluginName.'.'.$pluginName.'Hook')) {
+					$pluginHooks[] = $pluginName;
+				}
 			}
 		}
-
+		
 		/* プラグインフックを初期化 */
 		$vars = array('base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin');
 		$c = count($vars);

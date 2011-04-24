@@ -45,7 +45,20 @@ class AppModel extends Model {
  * @access	public
  */
 	var $plugin = '';
+/**
+ * DB接続設定名
+ *
+ * @var string
+ * @access public
+ */
 	var $useDbConfig = 'baser';
+/**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('PluginHook');
 /**
  * コンストラクタ
  *

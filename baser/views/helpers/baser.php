@@ -849,17 +849,10 @@ class BaserHelper extends AppHelper {
 	function _initPluginBasers(){
 
 		$view = $this->_view;
-		if(!empty($view->enablePlugins)) {
-			$plugins = $view->enablePlugins;
-		}else {
-			$plugins = array();
-			if (ClassRegistry::isKeySet('Plugin')) {
-				$Plugin = ClassRegistry::getObject('Plugin');
-			}else {
-				$Plugin = ClassRegistry::init('Plugin');
-			}
-			$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
-			$plugins = Set::extract('/Plugin/name',$plugins);
+		$plugins = Configure::read('Baser.enablePlugins');
+
+		if(!$plugins) {
+			return;
 		}
 
 		$pluginBasers = array();

@@ -188,4 +188,21 @@
 			}
 		}
 	}
+/**
+ * 利用可能プラグインの設定
+ *
+ * これより前にモデルをインスタンス化した場合、PluginHookBehavior::setup() で、
+ * enablePlugins を参照できなくなってしまうので注意
+ * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+ */
+	$db =& ConnectionManager::getDataSource('baser');
+	$sources = $db->listSources();
+	$pluginTable = $db->config['prefix'] . 'plugins';
+	if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
+		$sql = 'SELECT Plugin.name FROM '.$pluginTable.' AS Plugin WHERE Plugin.status = '.$db->value(true).';';
+		$plugins = $db->query($sql);
+		if($plugins) {
+			Configure::write('Baser.enablePlugins', Set::extract('/Plugin/name',$plugins));
+		}
+	}
 ?>
