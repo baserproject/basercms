@@ -301,5 +301,97 @@ class EmailExComponent extends EmailComponent {
 		}
 		return $this->__strip($string);
 	}
+/**
+ * Render the contents using the current layout and template.
+ *
+ * @param string $content Content to render
+ * @return array Email ready to be sent
+ * @access private
+ */
+	function __renderTemplate($content) {
+		$viewClass = $this->Controller->view;
+
+		if ($viewClass != 'View') {
+			if (strpos($viewClass, '.') !== false) {
+				list($plugin, $viewClass) = explode('.', $viewClass);
+			}
+			$viewClass = $viewClass . 'View';
+			App::import('View', $this->Controller->view);
+		}
+		$View = new $viewClass($this->Controller, false);
+		$View->layout = $this->layout;
+		$msg = array();
+
+		$content = implode("\n", $content);
+
+		if ($this->sendAs === 'both') {
+			$htmlContent = $content;
+			if (!empty($this->attachments)) {
+				$msg[] = '--' . $this->__boundary;
+				$msg[] = 'Content-Type: multipart/alternative; boundary="alt-' . $this->__boundary . '"';
+				$msg[] = '';
+			}
+			$msg[] = '--alt-' . $this->__boundary;
+			$msg[] = 'Content-Type: text/plain; charset=' . $this->charset;
+			$msg[] = 'Content-Transfer-Encoding: 7bit';
+			$msg[] = '';
+
+			$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
+			$View->layoutPath = 'email' . DS . 'text';
+			$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
+			$msg = array_merge($msg, $content);
+
+			$msg[] = '';
+			$msg[] = '--alt-' . $this->__boundary;
+			$msg[] = 'Content-Type: text/html; charset=' . $this->charset;
+			$msg[] = 'Content-Transfer-Encoding: 7bit';
+			$msg[] = '';
+
+			$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
+			$View->layoutPath = 'email' . DS . 'html';
+			$htmlContent = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($htmlContent)));
+			$msg = array_merge($msg, $htmlContent);
+			$msg[] = '';
+			$msg[] = '--alt-' . $this->__boundary . '--';
+			$msg[] = '';
+
+			return $msg;
+		}
+
+		if (!empty($this->attachments)) {
+			if ($this->sendAs === 'html') {
+				$msg[] = '';
+				$msg[] = '--' . $this->__boundary;
+				$msg[] = 'Content-Type: text/html; charset=' . $this->charset;
+				$msg[] = 'Content-Transfer-Encoding: 7bit';
+				$msg[] = '';
+			} else {
+				$msg[] = '--' . $this->__boundary;
+				$msg[] = 'Content-Type: text/plain; charset=' . $this->charset;
+				$msg[] = 'Content-Transfer-Encoding: 7bit';
+				$msg[] = '';
+			}
+		}
+
+		// CUSTOMIZE MODIFY 2011/04/25 ryuring
+		// プラグインのテンプレートを指定できるようにした
+		// >>>
+		// $content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content), true);
+		// ---
+		if($this->plugin) {
+			$options = array('content' => $content, 'plugin' => $this->plugin);
+		} else {
+			$options = array('content' => $content);
+		}
+		$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, $options, true);
+		// <<<
+		
+		$View->layoutPath = 'email' . DS . $this->sendAs;
+		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
+		$msg = array_merge($msg, $content);
+
+		return $msg;
+	}
+	
 }
 ?>
