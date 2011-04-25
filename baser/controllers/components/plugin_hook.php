@@ -102,7 +102,7 @@ class PluginHookComponent extends Object {
 		unset($args[0]);
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				call_user_func_array(array(&$this->pluginHooks[$pluginName],$hookName), $args);
+				call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
 			}
 		}
 		
@@ -113,13 +113,6 @@ class PluginHookComponent extends Object {
  */
 	function startup(&$controller) {
 		$this->executeHook('startup',$controller);
-	}
-/**
- * beforeFilter
- * @param Controller $controller
- */
-	function beforeFilter(&$controller) {
-		$this->executeHook('beforeFilter',$controller);
 	}
 /**
  * beforeRender
@@ -141,6 +134,20 @@ class PluginHookComponent extends Object {
  */
 	function shutdown(&$controller) {
 		$this->executeHook('shutdown', $controller);
+	}
+/**
+ * afterPageAdd
+ * @param Controller $controller
+ */
+	function afterPageAdd(&$controller) {
+		$this->executeHook('afterPageAdd', $controller);
+	}
+/**
+ * afterPageEdit
+ * @param Controller $controller
+ */
+	function afterPageEdit(&$controller) {
+		$this->executeHook('afterPageEdit', $controller);
 	}
 }
 ?>

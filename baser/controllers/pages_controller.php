@@ -140,6 +140,7 @@ class PagesController extends AppController {
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
+					$this->executeHook('afterPageAdd');
 					// 編集画面にリダイレクト
 					$this->redirect('/admin/pages/edit/'.$id);
 				}else {
@@ -190,6 +191,7 @@ class PagesController extends AppController {
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
+					$this->executeHook('afterPageEdit');
 					$this->redirect('/admin/pages/edit/'.$id);
 				}else {
 					$this->Session->setFlash('保存中にエラーが発生しました。');
