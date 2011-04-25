@@ -46,7 +46,7 @@ class PagesController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * モデル
  *
@@ -153,6 +153,8 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('users', $this->Page->getControlSource('user_id'));
+		$this->set('ckEditorOptions', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
@@ -204,6 +206,8 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('users', $this->Page->getControlSource('user_id'));
+		$this->set('ckEditorOptions', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
 		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));

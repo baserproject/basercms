@@ -20,8 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('ckeditor/editor', null, null, false);
-$users = $formEx->getControlSource("Page.user_id");
-$statuses = array(0=>'非公開', 1=>'公開');
 if($formEx->value('Page.id')) {
 	$previewId = $formEx->value('Page.id');
 }else{
@@ -33,11 +31,6 @@ if($formEx->value('Page.page_category_id') == $mobileId) {
 	$previewWidth = '90%';
 }
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
-if($this->action == 'admin_add') {
-	$disableDraft = true;
-} else {
-	$disableDraft = false;
-}
 ?>
 
 <script type="text/javascript">
@@ -217,7 +210,7 @@ function pageCategoryIdChangeHandler() {
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('Page.contents', 
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions) ?>
 			<?php echo $formEx->error('Page.contents') ?>
 		</td>
 	</tr>
@@ -226,7 +219,7 @@ function pageCategoryIdChangeHandler() {
 		<td class="col-input">
 			<?php echo $formEx->input('Page.status', array(
 					'type'		=> 'radio',
-					'options'	=> $statuses ,
+					'options'	=> array(0 => '非公開', 1 => '公開') ,
 					'legend'	=> false,
 					'separator'	=> '&nbsp;&nbsp;')) ?>
 			<?php echo $formEx->error('Page.status') ?>
