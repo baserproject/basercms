@@ -55,7 +55,7 @@ class BlogPostsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -215,6 +215,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
+				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
@@ -225,6 +226,8 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$authUser = $this->Auth->user();
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
+		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
 		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
@@ -257,7 +260,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
@@ -267,6 +270,8 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$this->set('users',$this->BlogPost->User->getUserList());
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
+		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->data['BlogPost']['name'];
 		$this->render('form');
 

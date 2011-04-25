@@ -179,7 +179,7 @@ $(function(){
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('BlogPost.content', 
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions1) ?>
 			<?php echo $formEx->error('BlogPost.content') ?>
 		</td>
 	</tr>
@@ -188,7 +188,7 @@ $(function(){
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('BlogPost.detail',
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions2) ?>
 			<?php echo $formEx->error('BlogPost.detail') ?>
 		</td>
 	</tr>
