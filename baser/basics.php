@@ -482,4 +482,31 @@
 		return $a;
 
 	}
+/**
+ * プラグインのコンフィグファイルを読み込む
+ *
+ * @param string $name
+ * @return boolean
+ */
+	function loadPluginConfig($name) {
+		
+		if(strpos($name, '.') === false) {
+			return false;
+		}
+		list($plugin, $file) = explode('.', $name);
+
+		$pluginPaths = array(
+			APP.'plugins'.DS,
+			BASER_PLUGINS
+		);
+		foreach($pluginPaths as $pluginPath) {
+		$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
+			if(file_exists($configPath)) {
+				include $configPath;
+			}
+		}
+
+		return Configure::write($config);
+
+	}
 ?>
