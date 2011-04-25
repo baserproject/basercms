@@ -522,6 +522,9 @@ class BaserHelper extends AppHelper {
  * aタグを取得するだけのラッパー
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+		
+		$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+
 		if(!empty($htmlAttributes['prefix'])) {
 			if(!empty($this->params['prefix'])) {
 				$url[$this->params['prefix']] = true;
@@ -588,8 +591,10 @@ class BaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		$out = $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
+		return $this->executeHook('afterBaserGetLink', $url, $out);
+		
 	}
 /**
  * 現在がSSL通信か確認する

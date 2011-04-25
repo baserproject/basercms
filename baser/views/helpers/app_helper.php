@@ -199,15 +199,19 @@ class AppHelper extends Helper {
 /**
  * フック処理を実行する
  * 
- * @param	string	$out
+ * @param	string	$hook
  * @return	mixed
  */
-	function executeHook($hook, $out) {
+	function executeHook($hook) {
 		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
 		}
-		return $this->_view->loaded['pluginHook']->{$hook}($out);
+
+		$args = func_get_args();
+		$args[0] =& $this;
+
+		return call_user_func_array(array(&$this->_view->loaded['pluginHook'], $hook), $args);
 		
 	}
 

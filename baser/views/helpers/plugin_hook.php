@@ -106,13 +106,19 @@ class PluginHookHelper extends AppHelper {
  * @return	string	$out
  * @access	public
  */
-	function executeHook($hookName, $out = null){
+	function executeHook($hookName, $return = null){
+
+		$args = func_get_args();
+		unset($args[0]);unset($args[1]);
+
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				$out = $this->pluginHooks[$pluginName]->{$hookName}($out);
+				return call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
 			}
 		}
-		return $out;
+
+		return $return;
+		
 	}
 /**
  * afterRender
@@ -134,21 +140,93 @@ class PluginHookHelper extends AppHelper {
 	}
 /**
  * FormEx::create
+ *
+ * 過去バージョンとの互換性の為残す
  * @param	string	$out
  * @return	string
  * @access	public
+ * @deprecated
  */
 	function formExCreate($out) {
-		return $this->executeHook('formExCreate', $out);
+		return $this->executeHook('formExCreate', $out, $out);
 	}
 /**
  * FormEx::end
+ *
+ * 過去バージョンとの互換性の為残す
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ * @deprecated
+ */
+	function formExEnd($out) {
+		return $this->executeHook('formExEnd',$out, $out);
+	}
+/**
+ * before Form::create
+ * @param Form $form
+ * @param string $model
+ * @param array $options
+ * @return	array
+ * @access	public
+ */
+	function beforeFormCreate(&$form, $model = null, $options = array()) {
+		return $this->executeHook('beforeFormCreate', $options, $form, $model, $options);
+	}
+/**
+ * after Form::create
  * @param	string	$out
  * @return	string
  * @access	public
  */
-	function formExEnd($out) {
-		return $this->executeHook('formExEnd',$out);
+	function afterFormCreate(&$form, $out) {
+		$out = $this->executeHook('afterFormCreate', $out, $form, $out);
+		return $this->formExCreate($out);
+	}
+/**
+ * before Form::end
+ * @param Form $form
+ * @param string $model
+ * @param array $options
+ * @return	array
+ * @access	public
+ */
+	function beforeFormEnd(&$form, $options = array()) {
+		return $this->executeHook('beforeFormEnd', $options, $form, $options);
+	}
+/**
+ * after Form::end
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function afterFormEnd(&$form, $out) {
+		$out = $this->executeHook('afterFormEnd', $out, $form, $out);
+		return $this->formExEnd($out);
+	}
+/**
+ * before Form::input
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function beforeFormInput(&$form, $fieldName, $options = array()) {
+		return $this->executeHook('beforeFormInput', $options, $form, $fieldName, $options);
+	}
+/**
+ * after Form::input
+ * @param	string	$out
+ * @return	string
+ * @access	public
+ */
+	function afterFormInput(&$form, $fieldName, $out) {
+		return $this->executeHook('afterFormInput', $out, $form, $fieldName, $out);
+	}
+	function beforeBaserGetLink(&$html, $title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+		return $this->executeHook('beforeBaserGetLink', $htmlAttributes, $html, $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+	}
+	function afterBaserGetLink(&$html, $url, $out) {
+		return $this->executeHook('afterBaserGetLink', $out, $html, $url, $out);
 	}
 /**
  * Baser::header

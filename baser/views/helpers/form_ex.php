@@ -1058,16 +1058,11 @@ DOC_END;
  */
 	function create($model = null, $options = array()) {
 
-		$_options = array('callback' => true);
-		$options = am($_options, $options);
-		$callback = $options['callback'];
-		unset($options['callback']);
+		$options = $this->executeHook('beforeFormCreate', $model, $options);
+		
 		$out = parent::create($model, $options);
-		if($callback) {
-			return $this->executeHook('formExCreate', $out);
-		}else{
-			return $out;
-		}
+
+		return $this->executeHook('afterFormCreate', $out);
 		
 	}
 /**
@@ -1079,22 +1074,13 @@ DOC_END;
  * @return	string
  * @access	public
  */
-	function end($options = null, $callback = true) {
+	function end($options = null) {
 
-		if(is_array($options)) {
-			$options = array_merge(array('callback' => true), $options);
-			extract($options);
-			unset($options['callback']);
-		} else {
-			$callback = true;
-		}
-		
+		$options = $this->executeHook('beforeFormEnd', $options);
+
 		$out = parent::end($options);
-		if($callback) {
-			return $this->executeHook('formExEnd', $out);
-		} else {
-			return $out;
-		}
+		
+		return $this->executeHook('afterFormEnd', $out);
 		
 	}
 /**
@@ -1115,6 +1101,8 @@ DOC_END;
  */
 	function input($fieldName, $options = array()) {
 
+		$options = $this->executeHook('beforeFormInput', $fieldName, $options);
+		
 		$type = '';
 		if(isset($options['type'])) {
 			$type = $options['type'];
@@ -1168,7 +1156,7 @@ DOC_END;
 			$out = $out.$counter.$this->Javascript->codeBlock($script);
 		}
 		
-		return $out;
+		return $this->executeHook('afterFormInput', $fieldName, $out);
 		
 	}
 /**
