@@ -72,8 +72,9 @@ class PluginHookBehavior extends ModelBehavior {
  *
  * @param Model $model
  * @param string $hookName
- * @param mixed
- * @return
+ * @param mixed $return
+ * @return mixed
+ * @access public
  */
 	function executeHook(&$model, $hookName, $return = null){
 
