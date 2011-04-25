@@ -440,9 +440,11 @@ class TextExHelper extends TextHelper {
  * @return mixied
  */
 	function arrayValue($key, $array, $noValue = '') {
-		
-		if(isset($array[(int)$key])) {
-			return $array[(int)$key];
+		if(is_numeric($key)) {
+			$key = (int)$key;
+		}
+		if(isset($array[$key])) {
+			return $array[$key];
 		}
 		return $noValue;
 	}
