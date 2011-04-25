@@ -266,6 +266,7 @@ class Page extends AppModel {
 				}else{
 					$data['page_category_id'] = $mobileId;
 				}
+				$data['author_id'] = $_SESSION['Auth']['User']['id'];
 				$data['sort'] = $this->getMax('sort')+1;
 				$data['url'] = '/mobile'.$data['url'];
 				$data['status'] = false;	// 新規ページの場合は非公開とする
