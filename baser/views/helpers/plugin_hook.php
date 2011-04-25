@@ -234,8 +234,8 @@ class PluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	function baserHeader($out) {
-		return $this->executeHook('baserHeader', $out);
+	function baserHeader(&$baser, $out) {
+		return $this->executeHook('baserHeader', $out, $out);
 	}
 /**
  * Baser::footer
@@ -243,8 +243,8 @@ class PluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	function baserFooter($out) {
-		return $this->executeHook('baserFooter', $out);
+	function baserFooter(&$baser, $out) {
+		return $this->executeHook('baserFooter', $out, $out);
 	}
 	
 }
