@@ -140,6 +140,17 @@ class AppView extends ThemeView {
 		}
 		return $paths;
 	}
+/**
+ * フック処理を実行する
+ *
+ * @param	string	$out
+ * @return	mixed
+ */
+	function executeHook($hook, $out) {
+
+		return $this->loaded['pluginHook']->{$hook}($out);
+
+	}
 	
 }
 ?>

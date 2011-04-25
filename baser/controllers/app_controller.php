@@ -1145,5 +1145,18 @@ class AppController extends Controller {
 		}
 		return '/';
 	}
+/**
+ * フックメソッドを実行する
+ * 
+ * @param string $hook
+ * @return mixed
+ */
+	function executeHook($hook) {
+
+		$args = func_get_args();
+		$args[0] = $this;
+		return call_user_func_array( array( &$this->PluginHook, $hook ), $args );
+
+	}
 }
 ?>
