@@ -370,7 +370,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array()) {
+	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
@@ -418,7 +418,7 @@ class AppModel extends Model {
 				}
 				$tmpdir = TMP.'schemas'.DS;
 				copy($path.DS.$file,$tmpdir.$table.'.php');
-				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php'));
+				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField));
 				@unlink($tmpdir.$file);
 				if(!$result) {
 					return false;

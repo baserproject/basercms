@@ -500,7 +500,8 @@ class UpdatersController extends AppController {
 		} else {
 			$dbConfigName = 'baser';
 		}
-		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'));
+		// アップデートの場合 drop field は実行しない
+		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'), true);
 		clearAllCache();
 		return $result;
 
