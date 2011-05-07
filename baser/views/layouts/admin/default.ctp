@@ -89,13 +89,14 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 					<?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
 				</div>
 				<div id="loginUser">
-					<?php if(Configure::read('debug')>0): ?>
-					<span>只今デバッグ中</span>
-					<?php else: ?>
 					<span>
+					<?php if($user): ?>
 					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
-					</span>
+					<?php endif ?>
+					<?php if(Configure::read('debug')>0): ?>
+					&nbsp;[<?php echo Configure::read('debug') ?>]
 					<?php endif; ?>
+					</span>
 					&nbsp;| &nbsp;
 					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
 				</div>
