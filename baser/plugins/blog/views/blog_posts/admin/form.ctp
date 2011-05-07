@@ -41,6 +41,8 @@ $(function(){
  * プレビューボタンクリック時イベント
  */
 	$("#BtnPreview").click(function(){
+		var content = $("#BlogPostContent").val();
+		var detail = $("#BlogPostDetail").val();
 		$("#BlogPostContent").val(editor_content_tmp.getData());
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		$.ajax({
@@ -55,6 +57,8 @@ $(function(){
 				}
 			}
 		});
+		$("#BlogPostContent").val(content);
+		$("#BlogPostDetail").val(detail);
 		return false;
 	});
 	$("#LinkPreview").colorbox({width:"90%", height:"90%", iframe:true});
@@ -65,6 +69,7 @@ $(function(){
 		editor_content_tmp.execCommand('synchronize');
 		editor_detail_tmp.execCommand('synchronize');
 		$("#BlogPostMode").val('save');
+		$("#BlogPostForm").submit();
 	});
 /**
  * ブログタグ追加
@@ -146,6 +151,7 @@ $(function(){
 <?php endif; ?>
 <?php echo $formEx->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $formEx->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
+<?php echo $formEx->hidden('BlogPost.mode') ?>
 
 <!-- form -->
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
@@ -227,14 +233,15 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.user_id', '作成者') ?></th>
 		<td class="col-input">
-<?php if($this->action=='admin_edit' && count($users) && isset($user) && $user['user_group_id']!=1): ?>
-			<?php echo $users[$formEx->value('User.id')] ?>
-<?php else: ?>
+<?php if(isset($user) && $user['user_group_id'] == 1): ?>
 			<?php echo $formEx->input('BlogPost.user_id', array(
 					'type'		=> 'select',
 					'options'	=> $users)) ?>
 			<?php echo $formEx->error('BlogPost.user_id') ?>
+<?php else: ?>
+			<?php echo $users[$formEx->value('BlogPost.user_id')] ?>
 <?php endif ?>
+			<?php echo $formEx->hidden('BlogPost.user_id') ?>
 		</td>
 	</tr>
 	<tr>
@@ -249,11 +256,11 @@ $(function(){
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->submit('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php $baser->link('削　除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')),
 			array('class'=>'btn-gray button'),
