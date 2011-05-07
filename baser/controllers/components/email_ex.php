@@ -318,7 +318,7 @@ class EmailExComponent extends EmailComponent {
 			$viewClass = $viewClass . 'View';
 			App::import('View', $this->Controller->view);
 		}
-		$View = new $viewClass($this->Controller, false);
+		$View = new $viewClass($this->Controller);
 		$View->layout = $this->layout;
 		$msg = array();
 
@@ -355,6 +355,7 @@ class EmailExComponent extends EmailComponent {
 			$msg[] = '--alt-' . $this->__boundary . '--';
 			$msg[] = '';
 
+			ClassRegistry::removeObject('view');
 			return $msg;
 		}
 
@@ -389,6 +390,7 @@ class EmailExComponent extends EmailComponent {
 		$View->layoutPath = 'email' . DS . $this->sendAs;
 		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
 		$msg = array_merge($msg, $content);
+		ClassRegistry::removeObject('view');
 
 		return $msg;
 	}

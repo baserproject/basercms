@@ -628,41 +628,69 @@ DOC_END;
  * @return string An HTML text input element
  */
 	function checkbox($fieldName, $options = array()) {
-
-		/* hiddenをデフォルトオプションに追加 */
+		// CUSTOMIZE ADD 2011/05/07 ryuring
+		// >>> hiddenをデフォルトオプションに追加
 		$options = array_merge(array('hidden' => true), $options);
 		$hidden = $options['hidden'];
 		unset($options['hidden']);
-
+		// <<<
+		
 		$options = $this->_initInputField($fieldName, $options);
 		$value = current($this->value());
 
 		if (!isset($options['value']) || empty($options['value'])) {
 			$options['value'] = 1;
-		} elseif (!empty($value) && $value === $options['value']) {
+		} elseif (
+			(!isset($options['checked']) && !empty($value) && $value === $options['value']) ||
+			!empty($options['checked'])
+		) {
 			$options['checked'] = 'checked';
 		}
 
-		// hiddenオプションがある場合のみ、hiddenタグを出力
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
+		/*$hiddenOptions = array(
+			'id' => $options['id'] . '_', 'name' => $options['name'],
+			'value' => '0', 'secure' => false
+		);
+		if (isset($options['disabled']) && $options['disabled'] == true) {
+			$hiddenOptions['disabled'] = 'disabled';
+		}
+		$output = $this->hidden($fieldName, $hiddenOptions);*/
+		// ---
 		if($hidden) {
-			$output = $this->hidden($fieldName, array(
-					'id' => $options['id'] . '_', 'name' => $options['name'],
-					'value' => '0', 'secure' => false
-			));
+			$hiddenOptions = array(
+				'id' => $options['id'] . '_', 'name' => $options['name'],
+				'value' => '0', 'secure' => false
+			);
+			if (isset($options['disabled']) && $options['disabled'] == true) {
+				$hiddenOptions['disabled'] = 'disabled';
+			}
+			$output = $this->hidden($fieldName, $hiddenOptions);
 		}else {
 			$output='';
 		}
-		/* label を追加 */
+		// <<<
+		
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// >>> label を追加
+		/*return $this->output($output . sprintf(
+			$this->Html->tags['checkbox'],
+			$options['name'],
+			$this->_parseAttributes($options, array('name'), null, ' ')
+		));*/
+		// ---
 		if(!empty($options['label'])) {
 			$label = '&nbsp;'.parent::label($fieldName, $options['label']);
 		}else {
 			$label = '';
 		}
 		return $this->output($output . sprintf(
-				$this->Html->tags['checkbox'],
-				$options['name'],
-				$this->_parseAttributes($options, array('name'), null, ' ')
-				)).$label;
+			$this->Html->tags['checkbox'],
+			$options['name'],
+			$this->_parseAttributes($options, array('name'), null, ' ')
+		)).$label;
+		// <<<
 	}
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
