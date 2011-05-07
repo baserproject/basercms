@@ -195,30 +195,32 @@
  * enablePlugins を参照できなくなってしまうので注意
  * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
  */
-	$db =& ConnectionManager::getDataSource('baser');
-	$sources = $db->listSources();
-	$pluginTable = $db->config['prefix'] . 'plugins';
-	$enablePlugins = array();
-	if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-		$sql = 'SELECT Plugin.name FROM '.$pluginTable.' AS Plugin WHERE Plugin.status = '.$db->value(true).';';
-		$plugins = $db->query($sql);
-		if($plugins) {
-			$enablePlugins = Set::extract('/Plugin/name',$plugins);
-			Configure::write('Baser.enablePlugins', $enablePlugins);
+ 	if(isInstalled()) {
+		$db =& ConnectionManager::getDataSource('baser');
+		$sources = $db->listSources();
+		$pluginTable = $db->config['prefix'] . 'plugins';
+		$enablePlugins = array();
+		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
+			$sql = 'SELECT Plugin.name FROM '.$pluginTable.' AS Plugin WHERE Plugin.status = '.$db->value(true).';';
+			$plugins = $db->query($sql);
+			if($plugins) {
+				$enablePlugins = Set::extract('/Plugin/name',$plugins);
+				Configure::write('Baser.enablePlugins', $enablePlugins);
+			}
 		}
-	}
 /**
  * プラグインの bootstrap を実行する
  */
-	$_pluginPaths = array(
-		APP.'plugins'.DS,
-		BASER_PLUGINS
-	);
-	foreach($enablePlugins as $enablePlugin) {
-		foreach($_pluginPaths as $_pluginPath) {
-			$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
-			if(file_exists($pluginBootstrap)) {
-				include $pluginBootstrap;
+		$_pluginPaths = array(
+			APP.'plugins'.DS,
+			BASER_PLUGINS
+		);
+		foreach($enablePlugins as $enablePlugin) {
+			foreach($_pluginPaths as $_pluginPath) {
+				$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
+				if(file_exists($pluginBootstrap)) {
+					include $pluginBootstrap;
+				}
 			}
 		}
 	}
