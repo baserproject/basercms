@@ -75,7 +75,7 @@ class BlogTagsController extends BlogAppController {
 		$this->setViewConditions('BlogTag', array('default' => $default));
 
 		$this->paginate = array(
-				'order'	=> 'BlogPost.id',
+				'order'	=> 'BlogTag.id',
 				'limit'	=> $this->passedArgs['num']
 		);
 		$this->set('datas', $this->paginate('BlogTag'));

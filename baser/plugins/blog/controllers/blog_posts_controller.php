@@ -124,14 +124,35 @@ class BlogPostsController extends BlogAppController {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
 		$this->passedArgs[] = $blogContentId;
-		unset($this->data['_Token']);
+		
 		/* 検索条件生成 */
+		$joins = array();
+
+		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
+			$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			if($db->config['driver'] != 'csv') {
+				$joins = array(
+					array(
+						'table' => $db->config['prefix'].'blog_posts_blog_tags',
+						'alias' => 'BlogPostsBlogTag',
+						'type' => 'inner',
+						'conditions'=> array('BlogPostsBlogTag.blog_post_id = BlogPost.id')
+					),
+					array(
+						'table' => $db->config['prefix'].'blog_tags',
+						'alias' => 'BlogTag',
+						'type' => 'inner',
+						'conditions'=> array('BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->data['BlogPost']['blog_tag_id'])
+				));
+			}
+		}
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
 
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-				'order'=>'BlogPost.no DESC',
-				'limit'=>$this->passedArgs['num']
+				'joins'	=> $joins,
+				'order'	=>'BlogPost.no DESC',
+				'limit'	=>$this->passedArgs['num']
 		);
 
 		$posts = $this->paginate('BlogPost');
@@ -165,6 +186,19 @@ class BlogPostsController extends BlogAppController {
 
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
+		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
+		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+		if($db->config['driver'] == 'csv') {
+			if(!empty($data['BlogPost']['blog_tag_id'])) {
+				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
+				if($blogTags) {
+					$conditions['BlogPost.id'] = Set::extract('/BlogPost/id', $blogTags);
+				}
+			}
+		}
+
+		unset($data['BlogPost']['blog_tag_id']);
+		
 		// ページカテゴリ（子カテゴリも検索条件に入れる）
 		if(!empty($data['BlogPost']['blog_category_id'])) {
 			$blogCategoryIds = array($data['BlogPost']['blog_category_id']);
@@ -260,7 +294,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
+				$this->PluginHook->executeHook('afterBlogPostEdit', $this);
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');

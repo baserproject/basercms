@@ -595,6 +595,9 @@ select.multiple option {
 .page-numbers {
 	text-align:right;
 }
+body.normal .page-numbers {
+	text-align:left;
+}
 .pagination .number,
 .pagination .prev,
 .pagination .next,
@@ -635,4 +638,11 @@ div.checkbox {
 	float:left;
 	padding-right:10px;
 	line-height: 2.0em;
+}
+table#TableBlogPosts span.tag {
+	border:1px solid #e2e2e2;
+	background-color: #efefef;
+	font-size: 10px;
+	padding:1px 2px;
+	margin-left:5px;
 }

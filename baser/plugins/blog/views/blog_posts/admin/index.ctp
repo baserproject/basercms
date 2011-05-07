@@ -20,6 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $blogCategories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
+$blogTags = $formEx->getControlSource('BlogPost.blog_tag_id');
 $users = $formEx->getControlSource("BlogPost.user_id");
 ?>
 <script type="text/javascript">
@@ -56,6 +57,9 @@ th{
 		<?php if($blogCategories): ?>
 		<small>カテゴリ</small> <?php echo $formEx->select('BlogPost.blog_category_id', $blogCategories, null, array('escape'=>false)) ?>　
 		<?php endif ?>
+		<?php if($blogContent['BlogContent']['tag_use'] && $blogTags): ?>
+		<small>タグ</small> <?php echo $formEx->select('BlogPost.blog_tag_id', $blogTags, null, array('escape'=>false)) ?>　
+		<?php endif ?>
 		<small>公開設定</small> <?php echo $formEx->select('BlogPost.status', $textEx->booleanMarkList()) ?>　
 		<small>作成者</small> <?php echo $formEx->select('BlogPost.user_id', $users) ?>　
 	</p>
@@ -79,7 +83,7 @@ $paginator->options = array('url' => $this->passedArgs);
 		<th>操作</th>
 		<th><?php echo $paginator->sort(array('asc'=>'NO ▼','desc'=>'NO ▲'),'no'); ?></th>
 		<th>
-			<?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'BlogCategory.name'); ?><br />
+			<?php echo $paginator->sort(array('asc'=>'カテゴリ ▼','desc'=>'カテゴリ ▲'),'BlogCategory.name'); ?><?php if($blogContent['BlogContent']['tag_use']): ?>／タグ<?php endif ?><br />
 			<?php echo $paginator->sort(array('asc'=>'タイトル ▼','desc'=>'タイトル ▲'),'name'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'作成者 ▼','desc'=>'作成者 ▲'),'User.real_name_1'); ?></th>
 		<th><?php echo $paginator->sort(array('asc'=>'公開状態 ▼','desc'=>'公開状態 ▲'),'status'); ?></th>
@@ -106,8 +110,13 @@ $paginator->options = array('url' => $this->passedArgs);
 		<td><?php echo $post['BlogPost']['no']; ?></td>
 		<td>
 			<?php if(!empty($post['BlogCategory']['title'])): ?>
-			<?php echo $post['BlogCategory']['title']; ?><br />
+			<?php echo $post['BlogCategory']['title']; ?>
 			<?php endif; ?>
+			<?php if($blogContent['BlogContent']['tag_use'] && !empty($post['BlogTag'])): ?>
+				<?php $tags = Set::extract('/name', $post['BlogTag']) ?>
+				<span class="tag"><?php echo implode('</span><span class="tag">',$tags) ?></span>
+			<?php endif ?>
+			<br />
 			<?php $baser->link($post['BlogPost']['name'],array('action'=>'edit', $blogContent['BlogContent']['id'], $post['BlogPost']['id'])) ?>
 		</td>
 		<td>
