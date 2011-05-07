@@ -98,7 +98,7 @@ class ContentsManagerBehavior extends ModelBehavior {
 
 		$this->Content = ClassRegistry::init('Content');
 		if($this->Content->deleteAll(array('Content.model' => $model->alias, 'Content.model_id' => $id))) {
-			$this->updateContentCategory($model);
+			return $this->updateContentCategory($model);
 		}
 
 	}
