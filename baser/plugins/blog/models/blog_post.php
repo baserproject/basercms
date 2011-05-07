@@ -331,6 +331,20 @@ class BlogPost extends BlogAppModel {
 		
 	}
 /**
+ * 公開状態の記事を取得する
+ *
+ * @param array $options
+ * @return array
+ */
+	function getPublishes ($options) {
+
+		if(!empty($options['conditions'])) {
+			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
+		}
+		return $this->find('all', $options);
+
+	}
+/**
  * afterSave
  *
  * @return boolean
