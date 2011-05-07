@@ -49,10 +49,29 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	function __construct() {
+		
 		$this->_view =& ClassRegistry::getObject('view');
-		if(isset($this->_view->viewVars['blogContent'])) {
+		$this->setBlogContent();
+		
+	}
+/**
+ * ブログコンテンツデータをセットする
+ * 
+ * @param int $blogContentId 
+ */
+	function setBlogContent($blogContentId = null) {
+
+		if(isset($this->blogContent)) {
+			return;
+		}
+		if($blogContentId) {
+			$BlogContent = ClassRegistry::getObject('BlogContent');
+			$BlogContent->expects(array());
+			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
+		} elseif(isset($this->_view->viewVars['blogContent'])) {
 			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
 		}
+
 	}
 /**
  * タイトルを表示する
@@ -98,9 +117,52 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return void
  */
-	function postTitle($post) {
+	function postTitle($post, $link = true) {
+
+		echo $this->getPostTitle($post, $link);
+
+	}
+/**
+ * 記事タイトルを取得する
+ *
+ * @param array $post
+ * @param boolean $link
+ * @return string
+ */
+	function getPostTitle($post, $link) {
+
+		if($link) {
+			return $this->getPostLink($post, $post['BlogPost']['name']);
+		} else {
+			return $post['BlogPost']['name'];
+		}
+		
+	}
+/**
+ * 記事へのリンクを取得する
+ *
+ * @param array $post
+ * @param string $title
+ * @param array $options
+ * @return string
+ */
+	function getPostLink($post, $title, $options = array()) {
+
+		$this->setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
-		$this->Baser->link($post['BlogPost']['name'], $url);
+		return $this->Baser->getLink($title, $url, $options);
+		
+	}
+/**
+ * 記事へのリンクを出力する
+ *
+ * @param array $post
+ * @param string $title
+ */
+	function postLink($post, $title, $options = array()) {
+
+		echo $this->getPostLink($post, $title, $options);
+
 	}
 /**
  * コンテンツを表示する
@@ -448,8 +510,9 @@ class BlogHelper extends AppHelper {
  * @return	void
  * @access	public
  */
-	function postImg($post, $options) {
+	function postImg($post, $options = array()) {
 
+		$this->setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
 		$options = am($_options, $options);
 		extract($options);
