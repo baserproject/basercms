@@ -40,6 +40,7 @@ $(function(){
  * プレビューボタンクリック時イベント
  */
 	$("#BtnPreview").click(function(){
+		var contents = $("#PageContents").val();
 		$("#PageContents").val(editor_contents_tmp.getData());
 		$.ajax({
 			type: "POST",
@@ -53,6 +54,7 @@ $(function(){
 				}
 			}
 		});
+		$("#PageContents").val(contents);
 		return false;
 	});
 	$("#LinkPreview").colorbox({width:"<?php echo $previewWidth ?>", height:"90%", iframe:true});
@@ -69,6 +71,7 @@ $(function(){
 		}
 		editor_contents_tmp.execCommand('synchronize');
 		$("#PageMode").val('save');
+		$("#PageForm").submit();
 	});
 /**
  * カテゴリ変更時イベント
@@ -261,11 +264,11 @@ function pageCategoryIdChangeHandler() {
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->submit('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php $baser->link('削　除',
 			array('action'=>'delete', $formEx->value('Page.id')),
 			array('class'=>'btn-gray button'),
