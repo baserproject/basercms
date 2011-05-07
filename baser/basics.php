@@ -499,6 +499,7 @@
 			APP.'plugins'.DS,
 			BASER_PLUGINS
 		);
+		$config = null;
 		foreach($pluginPaths as $pluginPath) {
 		$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
 			if(file_exists($configPath)) {
@@ -506,7 +507,11 @@
 			}
 		}
 
-		return Configure::write($config);
+		if($config) {
+			return Configure::write($config);
+		} else {
+			return false;
+		}
 
 	}
 ?>
