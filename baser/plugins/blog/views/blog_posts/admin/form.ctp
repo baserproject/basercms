@@ -240,8 +240,8 @@ $(function(){
 			<?php echo $formEx->error('BlogPost.user_id') ?>
 <?php else: ?>
 			<?php echo $users[$formEx->value('BlogPost.user_id')] ?>
-<?php endif ?>
 			<?php echo $formEx->hidden('BlogPost.user_id') ?>
+<?php endif ?>
 		</td>
 	</tr>
 	<tr>

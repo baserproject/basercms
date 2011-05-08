@@ -213,7 +213,7 @@ function pageCategoryIdChangeHandler() {
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('Page.contents', 
 					array('cols' => 60, 'rows' => 20),
-					$ckEditorOptions) ?>
+					$ckEditorOptions1) ?>
 			<?php echo $formEx->error('Page.contents') ?>
 		</td>
 	</tr>
@@ -237,8 +237,13 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
 		<td class="col-input">
+<?php if(isset($user) && $user['user_group_id'] == 1): ?>
 			<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 			<?php echo $formEx->error('Page.author_id') ?>
+<?php else: ?>
+			<?php echo $users[$formEx->value('Page.author_id')] ?>
+			<?php echo $formEx->hidden('Page.author_id') ?>
+<?php endif ?>
 		</td>
 	</tr>
 <?php if(Configure::read('Baser.mobile')): ?>
