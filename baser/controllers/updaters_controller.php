@@ -239,7 +239,7 @@ class UpdatersController extends AppController {
 		}
 
 		$this->pageTitle = 'アップデートスクリプト実行';
-		$plugins = $this->Plugin->find('list');
+		$plugins = $this->Plugin->find('list', array('fields' => array('name', 'title')));
 		$this->set('plugins', $plugins);
 		
 	}
@@ -501,7 +501,7 @@ class UpdatersController extends AppController {
 			$dbConfigName = 'baser';
 		}
 		// アップデートの場合 drop field は実行しない
-		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'), true);
+		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'), false);
 		clearAllCache();
 		return $result;
 

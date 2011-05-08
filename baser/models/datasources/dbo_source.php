@@ -2513,7 +2513,7 @@ class DboSource extends DataSource {
 	function loadSchema($options) {
 
 		App::import('Model','Schema');
-		$options = array_merge(array('drop' => true), $options);
+		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
 		if(!isset($type)){
