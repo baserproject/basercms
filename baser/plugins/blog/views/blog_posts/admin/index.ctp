@@ -19,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$baser->css('/blog/css/admin/style', null, null, false);
 $blogCategories = $formEx->getControlSource('BlogPost.blog_category_id',array('blogContentId'=>$blogContent['BlogContent']['id']));
 $blogTags = $formEx->getControlSource('BlogPost.blog_tag_id');
 $users = $formEx->getControlSource("BlogPost.user_id");
