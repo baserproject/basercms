@@ -301,7 +301,7 @@ class Page extends AppModel {
 
 		// モバイル未対応
 		$PageCategory = ClassRegistry::init('PageCategory');
-		if($data['Page']['page_category_id'] == $PageCategory->getMobileId()) {
+		if(in_array($data['Page']['page_category_id'], $PageCategory->getMobileCategoryIds())) {
 			return array();
 		}
 		
