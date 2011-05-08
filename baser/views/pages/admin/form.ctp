@@ -248,7 +248,7 @@ function pageCategoryIdChangeHandler() {
 <?php endif ?>
 		</td>
 	</tr>
-<?php if($mobile): ?>
+<?php if($reflectMobile): ?>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
