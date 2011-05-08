@@ -154,10 +154,9 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$this->set('categories', $this->Page->getControlSource('page_category_id'));
-		$this->set('mobile', Configure::read('Baser.mobile'));
+		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
-		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->pageTitle = '新規ページ登録';
@@ -208,9 +207,10 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
-		$this->set('mobileId', $this->PageCategory->getMobileId());
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());

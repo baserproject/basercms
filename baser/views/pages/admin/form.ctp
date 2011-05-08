@@ -25,11 +25,6 @@ if($formEx->value('Page.id')) {
 }else{
 	$previewId = 'add_'.mt_rand(0, 99999999);
 }
-if($formEx->value('Page.page_category_id') == $mobileId) {
-	$previewWidth = '320px';
-}else {
-	$previewWidth = '90%';
-}
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 ?>
 
@@ -57,7 +52,6 @@ $(function(){
 		$("#PageContents").val(contents);
 		return false;
 	});
-	$("#LinkPreview").colorbox({width:"<?php echo $previewWidth ?>", height:"90%", iframe:true});
 /**
  * フォーム送信時イベント
  */
@@ -82,9 +76,12 @@ $(function(){
  * モバイル反映欄の表示設定
  */
 function pageCategoryIdChangeHandler() {
+	
 	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
 	var pageCategoryId = $("#PagePageCategoryId").val();
 	var mobile = false;
+	var previewWidth;
+	
 	if(pageCategoryId){
 		for (key in mobileCategoryIds){
 			if(mobileCategoryIds[key] == pageCategoryId){
@@ -99,6 +96,12 @@ function pageCategoryIdChangeHandler() {
 		$("#PageReflectMobile").attr('checked', false);
 		$("#RowReflectMobile").hide();
 	}
+	if(mobile) {
+		previewWidth = '320px';
+	} else {
+		previewWidth = '90%';
+	}
+	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true});
 }
 </script>
 
@@ -249,7 +252,7 @@ function pageCategoryIdChangeHandler() {
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+			<?php echo $formEx->input('Page.reflectMobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpReflectMobile', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<div id="helptextReflectMobile" class="helptext">
 				<ul>
