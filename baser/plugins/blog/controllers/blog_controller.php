@@ -402,6 +402,13 @@ class BlogController extends BlogAppController {
 
 			if($this->preview && isset($this->data['BlogPost'])) {
 				$post['BlogPost'] = $this->data['BlogPost'];
+				if(isset($this->data['BlogTag'])) {
+					$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $this->data['BlogTag']['BlogTag']));
+					if($tags) {
+						$tags = Set::extract('/BlogTag/.', $tags);
+						$post['BlogTag'] = $tags;
+					}
+				}
 			}else {
 				$conditions["BlogPost.no"] = $id;
 				$conditions["BlogPost.blog_content_id"] = $contentId;
