@@ -1430,7 +1430,7 @@ class DboCsv extends DboSource {
 				'page'=>null,
 				'group'=>array(),
 				'recursive'=>null);
-
+		$sql = preg_replace('/;$/', '', $sql);
 		$createPattern = "/INSERT INTO[\s]*([^\s]+)[\s]*\(([^\)]+)\)[\s]*VALUES[\s]*\((.+)\)[\s]*$/si";
 		$readPattern = "/SELECT(.+)FROM(.+?)(WHERE.+|ORDER\sBY.+|LIMIT.+|)$/si";
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
@@ -1454,7 +1454,7 @@ class DboCsv extends DboSource {
 			if(isset($matches[3])){
 				$options = $matches[3];
 				if(preg_match("/WHERE(.+?)(ORDER\sBY.+|LIMIT.+|)$/s",$options,$matches)) {
-					$parseData['conditions'] = $this->_parseSqlCondition($matches[1],$parseData['fields']);
+					$parseData['conditions'] = $this->_parseSqlCondition($matches[1],$parseData['fields'], $parseData['tableName']);
 				}
 				if(preg_match("/ORDER\sBY(.+?)(LIMIT.+|)$/s",$options,$matches)) {
 					$parseData['order'] = $this->_parseSqlOrder($matches[1]);
@@ -1685,7 +1685,7 @@ class DboCsv extends DboSource {
  * @return 	string	eval用の検索条件
  * @access 	protected
  */
-	function _parseSqlCondition($conditions,$fields) {
+	function _parseSqlCondition($conditions, $fields, $tableName = '') {
 
 		if(is_array($conditions)) {
 			foreach($conditions as $key => $condition) {
@@ -1750,11 +1750,16 @@ class DboCsv extends DboSource {
 			$conditions = preg_replace("/NOT\s*?\(.*?\)/s",$_conditions,$conditions);
 		}
 
+		if(empty($this->_csvFields) && $tableName) {
+			$this->_loadCsvFields($tableName);
+		}
+		
 		if(isset($this->_csvFields)) {
 			foreach($this->_csvFields as $fieldName) {
 				$conditions = preg_replace("/(^|[^a-z0-9_])`".$fieldName."`([^a-z0-9_]*)/s","$1\$record['".$fieldName."']$2",$conditions);
 			}
 		}
+		
 		//$conditions = str_replace("`","",$conditions);
 		$conditions = 'if (' . $conditions . ') return true;';
 
