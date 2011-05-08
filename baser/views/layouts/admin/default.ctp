@@ -90,7 +90,7 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 				</div>
 				<div id="loginUser">
 					<span>
-					<?php if($user): ?>
+					<?php if(!empty($user)): ?>
 					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
 					<?php endif ?>
 					<?php if(Configure::read('debug')>0): ?>
