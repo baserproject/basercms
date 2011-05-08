@@ -519,7 +519,7 @@ class InstallationsController extends AppController {
 			$ret = true;
 			foreach($pages as $page) {
 				$Page->data = $page;
-				if(!$Page->afterSave()){
+				if(!$Page->afterSave(true)){
 					$ret = false;
 				}
 			}
