@@ -30,6 +30,17 @@ App::import('Component','Email');
  *
  */
 class EmailExComponent extends EmailComponent {
+// CUSTOMIZE ADD 2011/05/07 ryuring
+// プラグインのテンプレートを指定できるようにした
+// >>>
+/**
+ * プラグイン名
+ * 
+ * @var string
+ * @access public
+ */
+	var $plugin = null;
+// <<<
 /**
  * Send an email using the specified content, template and layout
  *
