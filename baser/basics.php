@@ -489,19 +489,19 @@
  * @return boolean
  */
 	function loadPluginConfig($name) {
-		
+
 		if(strpos($name, '.') === false) {
 			return false;
 		}
 		list($plugin, $file) = explode('.', $name);
-
+		$plugin = strtolower($plugin);
 		$pluginPaths = array(
 			APP.'plugins'.DS,
 			BASER_PLUGINS
 		);
 		$config = null;
 		foreach($pluginPaths as $pluginPath) {
-		$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
+			$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
 			if(file_exists($configPath)) {
 				include $configPath;
 			}
