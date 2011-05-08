@@ -182,7 +182,7 @@ class PageCategory extends AppModel {
  */
 	function afterSave($created) {
 		if(!$created) {
-			$this->updateRelatedPageUrl($this->data['PageCategory']['id']);
+			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
 	}
 /**
@@ -324,7 +324,7 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function updateRelatedPageUrlRecursive($categoryId) {
-		if(!$this->releaseRelatedPages($categoryId)){
+		if(!$this->updateRelatedPageUrl($categoryId)){
 			return false;
 		}
 		$children = $this->children($categoryId);
