@@ -331,7 +331,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName,$pluginName = '', $loadCsv = true) {
+	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '') {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -348,7 +348,7 @@ class AppModel extends Model {
 			}
 		}
 
-		if($this->loadSchema($dbConfigName, $path, '', '', array(), $dropField = false)){
+		if($this->loadSchema($dbConfigName, $path, $filterTable, '', array(), $dropField = false)){
 			if($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
 			} else {

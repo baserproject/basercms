@@ -77,14 +77,14 @@ class Plugin extends AppModel {
 		return parent::initDb('plugin', $plugin);
 	}
 /**
- * データベースの構造を変更する（コア）
+ * データベースの構造を変更する
  * 
  * @param string $plugin
  * @return boolean
  * @access public
  */
-	function alterCoreDb($plugin) {
-		return parent::initDb('baser', $plugin, false);
+	function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
+		return parent::initDb($dbConfigName, $plugin, false);
 	}
 }
 ?>
