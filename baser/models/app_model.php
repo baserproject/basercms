@@ -331,12 +331,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName,$pluginName = '') {
-
-		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
-		$listSources = $db->listSources();
-		$prefix = $db->config['prefix'];
+	function initDb($dbConfigName,$pluginName = '', $loadCsv = true) {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -353,8 +348,12 @@ class AppModel extends Model {
 			}
 		}
 
-		if($this->loadSchema($dbConfigName, $path)){
-			return $this->loadCsv($dbConfigName, $path);
+		if($this->loadSchema($dbConfigName, $path, '', '', array(), $dropField = false)){
+			if($loadCsv) {
+				return $this->loadCsv($dbConfigName, $path);
+			} else {
+				return true;
+			}
 		} else {
 			return false;
 		}
