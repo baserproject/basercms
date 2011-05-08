@@ -359,39 +359,33 @@ class PagesController extends AppController {
  */
 	function _getNavi($url) {
 
-		$url = preg_replace('/^\//', '', $url);
-		$path = explode('/', $url);
-		$categories = array();
-		$conditions = array();
-		$navis = array();
-		for($i=0;$i<count($path)-1;$i++) {
-			$categories[$path[$i]] = '';
-			$conditions['or'][] = array('PageCategory.name'=>$path[$i]);
+		if(Configure::read('Mobile.on')) {
+			$url = '/mobile'.$url;
 		}
-		if($conditions) {
-			$this->PageCategory->hasMany['Page']['conditions'] = array('Page.status'=>true);
-			$pageCategories = $this->PageCategory->find('all',array('fields'=>array('name','title'),'conditions'=>$conditions));
-			foreach($pageCategories as $pageCategory) {
+		
+		// 直属のカテゴリIDを取得
+		$pageCategoryId = $this->Page->field('page_category_id', array('Page.url' => $url));
+		
+		// 関連カテゴリを取得（関連ページも同時に取得）
+		$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
+		
+		$navis = array();
+		if($pageCategorires) {
+			// index ページの有無によりリンクを判別
+			foreach($pageCategorires as $pageCategory) {
 				if(!empty($pageCategory['Page'])) {
-					$categoryPageUrl = '';
+					$categoryUrl = '';
 					foreach($pageCategory['Page'] as $page) {
 						if($page['name'] == 'index') {
-							$categoryPageUrl = $page['url'];
+							$categoryUrl = $page['url'];
+							break;
 						}
 					}
-				}
-				if(!$categoryPageUrl) {
-					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title']);
-				}else {
-					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title'],
-							'url'=>$categoryPageUrl);
-				}
-			}
-			foreach ($categories as $category) {
-				if(!empty($category['url'])) {
-					$navis[$category['title']] = $category['url'];
-				}elseif(isset($category['title'])) {
-					$navis[$category['title']] = '';
+					if($categoryUrl) {
+						$navis[$pageCategory['PageCategory']['title']] = $categoryUrl;
+					} else {
+						$navis[$pageCategory['PageCategory']['title']] = '';
+					}
 				}
 			}
 		}
