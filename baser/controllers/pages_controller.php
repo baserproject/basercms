@@ -153,6 +153,8 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$this->set('mobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->set('mobileId', $this->PageCategory->getMobileId());

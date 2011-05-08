@@ -143,7 +143,6 @@ function pageCategoryIdChangeHandler() {
 		</td>
 	</tr>
 <?php endif; ?>
-<?php $categories = $formEx->getControlSource('page_category_id') ?>
 <?php if($categories): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
@@ -246,7 +245,7 @@ function pageCategoryIdChangeHandler() {
 <?php endif ?>
 		</td>
 	</tr>
-<?php if(Configure::read('Baser.mobile')): ?>
+<?php if($mobile): ?>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
