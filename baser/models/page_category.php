@@ -54,7 +54,7 @@ class PageCategory extends AppModel {
  */
 	var $hasMany = array('Page' => array('className'=>'Page',
 							'conditions'=>'',
-							'order'=>'Page.id',
+							'order'=>'Page.sort',
 							'limit'=>'',
 							'foreignKey'=>'page_category_id',
 							'dependent'=>false,
