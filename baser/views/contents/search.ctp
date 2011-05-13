@@ -1,7 +1,5 @@
 <h2 class="contents-head"><?php $baser->contentsTitle() ?></h2>
 
-<?php $baser->element('search') ?>
-
 <div class="section">
 <?php if(!empty($paginator)): ?>
 	<div class="search-result corner5">		
