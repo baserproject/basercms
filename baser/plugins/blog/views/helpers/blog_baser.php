@@ -50,7 +50,7 @@ class BlogBaserHelper extends AppHelper {
 		if($mobile){
 			$url['prefix'] = 'mobile';
 		}
-		echo $this->requestAction($url, array('pass' => array($id, $num)));
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num)));
 
 	}
 

@@ -611,16 +611,7 @@ class BlogController extends BlogAppController {
 				'recursive'	=> 0)
 		);
 		$this->set('posts', $posts);
-
-		//----------------------------------------------------------------------
-		// requestAction で呼ばれる為、ClassRegistry で管理する view が
-		// 呼びだし元のインスタンスとなる為、Helper より、現在の view の値を参照できない。
-		// ClassRegistryより一時的に登録済 viewを削除する事で対応。
-		//----------------------------------------------------------------------
-		$view =& ClassRegistry::getObject('view');
-		ClassRegistry::removeObject('view');
 		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
-		ClassRegistry::addObject('view', $view);
 		
 	}
 /**
@@ -632,7 +623,9 @@ class BlogController extends BlogAppController {
  * @param	int	$num
  */
 	function mobile_posts($blogContentId, $num = 5) {
-		$this->setAction('post_list');
+		
+		$this->setAction('posts', $blogContentId, $num);
+		
 	}
 }
 ?>
