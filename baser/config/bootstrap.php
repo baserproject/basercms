@@ -201,7 +201,11 @@
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$sql = 'SELECT '.$db->name('Plugin.name').' FROM '.$pluginTable.' AS Plugin WHERE '.$db->name('Plugin.status').' = '.$db->value(true).';';
+			$field = 'Plugin.name';
+			if(str_replace('_ex','',$db->config['driver'])=='postgres') {
+				$field .= ' AS Plugin__name';
+			}
+			$sql = 'SELECT '.$db->name($field).' FROM '.$db->name($pluginTable).' AS '.$db->name('Plugin').' WHERE '.$db->name('Plugin.status').' = '.$db->value(true).';';
 			$plugins = $db->query($sql);
 			if($plugins) {
 				$enablePlugins = Set::extract('/Plugin/name',$plugins);
