@@ -323,7 +323,7 @@ class FormHelper extends AppHelper {
 		$fields += $locked;
 
 		$fields = Security::hash(serialize($fields) . Configure::read('Security.salt'));
-		$locked = str_rot13(serialize(array_keys($locked)));
+		$locked = implode(array_keys($locked), '|');
 
 		$out .= $this->hidden('_Token.fields', array(
 			'value' => urlencode($fields . ':' . $locked),
@@ -859,7 +859,10 @@ class FormHelper extends AppHelper {
 
 		if (!isset($options['value']) || empty($options['value'])) {
 			$options['value'] = 1;
-		} elseif (!empty($value) && $value === $options['value']) {
+		} elseif (
+			(!isset($options['checked']) && !empty($value) && $value === $options['value']) ||
+			!empty($options['checked'])
+		) {
 			$options['checked'] = 'checked';
 		}
 		$hiddenOptions = array(

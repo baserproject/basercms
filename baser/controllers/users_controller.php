@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
@@ -207,7 +207,7 @@ class UsersController extends AppController {
 	function admin_index() {
 
 		/* データ取得 */
-		$default = array('named' => array('num' => 10));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('User', array('default' => $default));
 		$conditions = $this->_createAdminIndexConditions($this->data);
 		$this->paginate = array(

@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.mail.views.helpers
  * @since			Baser v 0.1.0
@@ -56,6 +56,7 @@ class MailHelper extends TextExHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'layouts'.DS;
 		}
+		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS,
 													BASER_VIEWS.'layouts'.DS));
 		
@@ -93,6 +94,7 @@ class MailHelper extends TextExHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'mail'.DS;
 		}
+		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'mail'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
 		
 		$_templates = array();
@@ -128,6 +130,7 @@ class MailHelper extends TextExHelper {
 		if($this->Baser->siteConfig['theme']){
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
 		}
+		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
 
 		$_templates = array();

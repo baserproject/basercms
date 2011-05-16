@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			cake
  * @subpackage		baser.app.view.helpers
@@ -393,6 +393,28 @@ class BaserHelper extends AppHelper {
 		echo $this->getElement($name, $params, $loadHelpers, $subDir);
 	}
 /**
+ * ヘッダーを出力する
+ * 
+ * @param array $params
+ * @param mixed $loadHelpers
+ * @param boolean $subDir
+ */
+	function header($params = array(), $loadHelpers = false, $subDir = true) {
+		$out = $this->getElement('header', $params, $loadHelpers, $subDir);
+		echo $this->executeHook('baserHeader', $out);
+	}
+/**
+ * フッターを出力する
+ *
+ * @param array $params
+ * @param mixed $loadHelpers
+ * @param boolean $subDir
+ */
+	function footer($params = array(), $loadHelpers = false, $subDir = true) {
+		$out = $this->getElement('footer', $params, $loadHelpers, $subDir);
+		echo $this->executeHook('baserFooter', $out);
+	}
+/**
  * ページネーションを出力する
  * @param string $name
  * @param array $params
@@ -500,6 +522,9 @@ class BaserHelper extends AppHelper {
  * aタグを取得するだけのラッパー
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+		
+		$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+
 		if(!empty($htmlAttributes['prefix'])) {
 			if(!empty($this->params['prefix'])) {
 				$url[$this->params['prefix']] = true;
@@ -566,8 +591,10 @@ class BaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		return $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		$out = $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
+		return $this->executeHook('afterBaserGetLink', $url, $out);
+		
 	}
 /**
  * 現在がSSL通信か確認する
@@ -849,17 +876,10 @@ class BaserHelper extends AppHelper {
 	function _initPluginBasers(){
 
 		$view = $this->_view;
-		if(!empty($view->enablePlugins)) {
-			$plugins = $view->enablePlugins;
-		}else {
-			$plugins = array();
-			if (ClassRegistry::isKeySet('Plugin')) {
-				$Plugin = ClassRegistry::getObject('Plugin');
-			}else {
-				$Plugin = ClassRegistry::init('Plugin');
-			}
-			$plugins = $Plugin->find('all',array('fields'=>array('name'), 'conditions'=>array('status'=>true)));
-			$plugins = Set::extract('/Plugin/name',$plugins);
+		$plugins = Configure::read('Baser.enablePlugins');
+
+		if(!$plugins) {
+			return;
 		}
 
 		$pluginBasers = array();
@@ -899,6 +919,28 @@ class BaserHelper extends AppHelper {
 				return call_user_func_array(array(&$pluginBaser, $method), $params);
 			}
 		}
+	}
+/**
+ * 文字列を検索しマークとしてタグをつける
+ *
+ * @param string $search	検索文字列
+ * @param string $text		検索対象文字列
+ * @param string $name		マーク用タグ
+ * @param array $attributes	タグの属性
+ * @param boolean $escape	エスケープ有無
+ * @return string $text		変換後文字列
+ * @access public
+ */
+	function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
+
+		if(!is_array($search)) {
+			$search = array($search);
+		}
+		foreach($search as $value) {
+			$text = str_replace($value, $this->Html->tag($name, $value, $attributes, $escape), $text);
+		}
+		return $text;
+		
 	}
 }
 ?>

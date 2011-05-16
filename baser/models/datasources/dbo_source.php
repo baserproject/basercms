@@ -2513,6 +2513,7 @@ class DboSource extends DataSource {
 	function loadSchema($options) {
 
 		App::import('Model','Schema');
+		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
 		if(!isset($type)){
@@ -2550,7 +2551,7 @@ class DboSource extends DataSource {
 			case 'alter':
 				$current = $path.basename($file,'.php').'_current.php';
 				if($this->writeCurrentSchema($current)) {
-					$result = $this->alterTableBySchema(array('oldPath'=>$current, 'newPath'=>$path.$file));
+					$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
 					unlink($current);
 					return $result;
 				} else {
@@ -2693,6 +2694,7 @@ class DboSource extends DataSource {
 
 	function alterTableBySchema($options){
 
+		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
 		if(!isset($oldPath) || !isset($newPath)){
@@ -2718,7 +2720,7 @@ class DboSource extends DataSource {
 		$old = $Schema->load(array('name'=>$oldName,'path'=>$oldDir,'file'=>$oldFile));
 		$new = $Schema->load(array('name'=>$newName,'path'=>$newDir,'file'=>$newFile));
 
-		return $this->alterTable(array('old'=>$old, 'new'=>$new));
+		return $this->alterTable(array('old' => $old, 'new' => $new, 'dropField' => $dropField));
 
 	}
 /**
@@ -2794,6 +2796,7 @@ class DboSource extends DataSource {
  */
 	function alterTable($options) {
 
+		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
 		if(!isset($old) || !isset($new)){
@@ -2803,7 +2806,20 @@ class DboSource extends DataSource {
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$compare = $Schema->compare($old, $new);
+
+		if(!$dropField) {
+			foreach($compare as $table => $alter) {
+				foreach($alter as $method => $field) {
+					if($method == 'drop') {
+						unset($compare[$table]['drop']);
+						break;
+					}
+				}
+			}
+		}
+
 		$sql = $this->alterSchema($compare);
+
 		if($sql) {
 			return $this->execute($sql);
 		} else {

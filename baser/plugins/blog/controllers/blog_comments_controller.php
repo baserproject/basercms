@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
@@ -107,6 +107,7 @@ class BlogCommentsController extends BlogAppController {
 			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 		}
 
+		$this->Security->enabled = true;
 		$this->Security->requireAuth('add');
 
 	}
@@ -142,16 +143,19 @@ class BlogCommentsController extends BlogAppController {
 			$this->pageTitle = 'ブログ ['.$this->blogContent['BlogContent']['title'].'] のコメント一覧';
 		}
 
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
+
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-				'fields'=>array(),
-				'order'=>'BlogComment.id',
-				'limit'=>10
+				'fields'=> array(),
+				'order'	=> 'BlogComment.id',
+				'limit'	=> $this->passedArgs['num']
 		);
 
 		$dbDatas = $this->paginate('BlogComment');
 		$this->set('dbDatas',$dbDatas);
-
 
 	}
 /**

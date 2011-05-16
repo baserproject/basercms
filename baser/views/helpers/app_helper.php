@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.view.helpers
  * @since			Baser v 0.1.0
@@ -155,13 +155,19 @@ class AppHelper extends Helper {
 		//
 		// CUSTOMIZE MODIFY 2010/02/12 ryuring
 		// ファイルの存在チェックを行い存在しない場合のみRouterを利用するように変更した。
-
+		//
+		// CUSTOMIZE MODIFY 2011/04/11 ryuring
+		// Rewriteモジュールが利用できない場合、画像等で出力されるURL形式（/app/webroot/img/...）が
+		// $file に設定された場合でもパス解決ができるようにした。
+		//
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
 		if(file_exists(WWW_ROOT . $file)) {
 			$webPath = $this->webroot.$file;
-		}else {
+		} elseif(file_exists(docRoot().$file)) {
+			$webPath = $file;
+		} else {
 			$webPath = Router::url('/'.$file);
 		}
 		// <<<
@@ -191,15 +197,23 @@ class AppHelper extends Helper {
 		return $webPath;
 	}
 /**
- * プラグインフックを実行する
- * @param	string	$out
+ * フック処理を実行する
+ * 
+ * @param	string	$hook
  * @return	mixed
  */
-	function pluginHook($out,$hook) {
+	function executeHook($hook) {
+		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
 		}
-		return $this->_view->loaded['pluginHook']->{$hook}($out);
+
+		$args = func_get_args();
+		$args[0] =& $this;
+
+		return call_user_func_array(array(&$this->_view->loaded['pluginHook'], $hook), $args);
+		
 	}
+
 }
 ?>

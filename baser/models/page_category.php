@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
@@ -54,7 +54,7 @@ class PageCategory extends AppModel {
  */
 	var $hasMany = array('Page' => array('className'=>'Page',
 							'conditions'=>'',
-							'order'=>'Page.id',
+							'order'=>'Page.sort',
 							'limit'=>'',
 							'foreignKey'=>'page_category_id',
 							'dependent'=>false,
@@ -182,7 +182,7 @@ class PageCategory extends AppModel {
  */
 	function afterSave($created) {
 		if(!$created) {
-			$this->updateRelatedPageUrl($this->data['PageCategory']['id']);
+			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
 	}
 /**
@@ -324,7 +324,7 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function updateRelatedPageUrlRecursive($categoryId) {
-		if(!$this->releaseRelatedPages($categoryId)){
+		if(!$this->updateRelatedPageUrl($categoryId)){
 			return false;
 		}
 		$children = $this->children($categoryId);

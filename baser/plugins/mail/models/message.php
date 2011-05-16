@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.mail.models
  * @since			Baser v 0.1.0
@@ -308,28 +308,25 @@ class Message extends MailAppModel {
  */
 	function autoConvert($data) {
 
-		// 対象フィールドを取得
 		foreach($this->mailFields as $mailField) {
 
-			// 半角処理
-			if($mailField['MailField']['auto_convert']=='CONVERT_HANKAKU') {
-				$data['Message'][$mailField['MailField']['field_name']] = mb_convert_kana($data['Message'][$mailField['MailField']['field_name']],'a');
+			if(!empty($data['Message'][$mailField['MailField']['field_name']])) {
+				// 半角処理
+				if($mailField['MailField']['auto_convert']=='CONVERT_HANKAKU') {
+					$data['Message'][$mailField['MailField']['field_name']] = mb_convert_kana($data['Message'][$mailField['MailField']['field_name']],'a');
+				}
+				// 全角処理
+				if($mailField['MailField']['auto_convert']=='CONVERT_ZENKAKU') {
+					$data['Message'][$mailField['MailField']['field_name']] = mb_convert_kana($data['Message'][$mailField['MailField']['field_name']],'AK');
+				}
+				// サニタイズ
+				if(!is_array($value)) {
+					$data['Message'][$mailField['MailField']['field_name']] = str_replace('<!--','&lt;!--', $data['Message'][$mailField['MailField']['field_name']]);
+				}
+				// TRIM
+				$data['Message'][$mailField['MailField']['field_name']] = trim($data['Message'][$mailField['MailField']['field_name']]);
 			}
-			// 全角処理
-			if($mailField['MailField']['auto_convert']=='CONVERT_ZENKAKU') {
-				$data['Message'][$mailField['MailField']['field_name']] = mb_convert_kana($data['Message'][$mailField['MailField']['field_name']],'AK');
-			}
-
-		}
-
-		// TODO エラー時用のサニタイズ処理をかける。→バリデートの前の処理で場所をもっと適した場所に変更する事
-		foreach($data['Message'] as $key => $value) {
-
-			if(!is_array($value)) {
-				$value = str_replace('<!--','&lt;!--',$value);
-				$data['Message'][$key] = $value;
-			}
-
+			
 		}
 
 		return $data;

@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
@@ -276,6 +276,7 @@ class BlogContentsController extends BlogAppController {
 		$data['BlogContent']['list_count'] = 10;
 		$data['BlogContent']['feed_count'] = 10;
 		$data['BlogContent']['auth_captcha'] = 1;
+		$data['BlogContent']['tag_use'] = false;
 		return $data;
 
 	}

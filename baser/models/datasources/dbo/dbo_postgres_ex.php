@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models.datasources.dbo
  * @since			Baser v 0.1.0
@@ -142,5 +142,84 @@ class DboPostgresEx extends DboPostgres {
 			return null;
 		}
 	}
+/**
+ * Alter the Schema of a table.
+ *
+ * @param array $compare Results of CakeSchema::compare()
+ * @param string $table name of the table
+ * @access public
+ * @return array
+ */
+	function alterSchema($compare, $table = null) {
+		if (!is_array($compare)) {
+			return false;
+		}
+		$out = '';
+		$colList = array();
+		foreach ($compare as $curTable => $types) {
+			$indexes = array();
+			if (!$table || $table == $curTable) {
+				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
+				foreach ($types as $type => $column) {
+					if (isset($column['indexes'])) {
+						$indexes[$type] = $column['indexes'];
+						unset($column['indexes']);
+					}
+					switch ($type) {
+						case 'add':
+							foreach ($column as $field => $col) {
+								$col['name'] = $field;
+								$alter = 'ADD COLUMN '.$this->buildColumn($col);
+								if (isset($col['after'])) {
+									$alter .= ' AFTER '. $this->name($col['after']);
+								}
+								$colList[] = $alter;
+							}
+						break;
+						case 'drop':
+							foreach ($column as $field => $col) {
+								$col['name'] = $field;
+								$colList[] = 'DROP COLUMN '.$this->name($field);
+							}
+						break;
+						case 'change':
+							// CUSTOMIZE DEL 2010/05/16 ryuring
+							//==================================================
+							// PostgreSQLの場合、schemaでDB側の数値型の長さが取得できない為、
+							// 変更されてない場合でも変更されてしまうので、chageは無視する
+							// 仕様に変更（暫定措置）
+							//==================================================
+							/*foreach ($column as $field => $col) {
+								if (!isset($col['name'])) {
+									$col['name'] = $field;
+								}
+								$fieldName = $this->name($field);
+								$colList[] = 'ALTER COLUMN '. $fieldName .' TYPE ' . str_replace($fieldName, '', $this->buildColumn($col));
+							}*/
+						break;
+					}
+				}
+				if (isset($indexes['drop']['PRIMARY'])) {
+					$colList[] = 'DROP CONSTRAINT ' . $curTable . '_pkey';
+				}
+				if (isset($indexes['add']['PRIMARY'])) {
+					$cols = $indexes['add']['PRIMARY']['column'];
+					if (is_array($cols)) {
+						$cols = implode(', ', $cols);
+					}
+					$colList[] = 'ADD PRIMARY KEY (' . $cols . ')';
+				}
+				
+				if (!empty($colList)) {
+					$out .= "\t" . implode(",\n\t", $colList) . ";\n\n";
+				} else {
+					$out = '';
+				}
+				$out .= implode(";\n\t", $this->_alterIndexes($curTable, $indexes)) . ";";
+			}
+		}
+		return $out;
+	}
+	
 }
 ?>

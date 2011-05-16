@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
@@ -75,7 +75,7 @@
 			<h3>BaserCMSニュース</h3>
 		</div>
 		<div class="box-body">
-			<?php $baser->js('/feed/ajax/2') ?>
+			<?php $baser->js('/feed/ajax/1') ?>
 			<br />
 			<small>BaserCMSについて、不具合の発見・改善要望がありましたら<a href="http://forum.basercms.net" target="_blank">ユーザーズフォーラム</a> よりお知らせください。</small>
 		</div>

@@ -6,7 +6,7 @@
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
 <div class=""body"">
-<?php $baser->js('/feed/ajax/1') ?>
+<?php $baser->blogPosts('news', 5) ?>
 </div>
 </div>
 
@@ -14,7 +14,7 @@
 <div class=""news"">
 <h2 id=""newsHead02"">BaserCMS NEWS</h2>
 <div class=""body"">
-<?php $baser->js('/feed/ajax/2') ?>
+<?php $baser->js('/feed/ajax/1') ?>
 </div>
 </div>
 </div>","","1","/index","","1","","","",""
@@ -105,9 +105,9 @@ WEBシステム開発事業（ダミー）</td></tr>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">NEWS RELEASE</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $baser->feed(1) ?> <div>&nbsp;</div>
+<?php $baser->blogPosts('news', 5) ?> <div>&nbsp;</div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">BaserCMS NEWS</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $baser->feed(2) ?>
+<?php $baser->feed(1) ?>
 ","1","1","/mobile/index","","1","","","",""

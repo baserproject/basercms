@@ -107,11 +107,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
@@ -239,7 +239,7 @@ class UpdatersController extends AppController {
 		}
 
 		$this->pageTitle = 'アップデートスクリプト実行';
-		$plugins = $this->Plugin->find('list');
+		$plugins = $this->Plugin->find('list', array('fields' => array('name', 'title')));
 		$this->set('plugins', $plugins);
 		
 	}
@@ -500,7 +500,8 @@ class UpdatersController extends AppController {
 		} else {
 			$dbConfigName = 'baser';
 		}
-		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'));
+		// アップデートの場合 drop field は実行しない
+		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'), false);
 		clearAllCache();
 		return $result;
 
@@ -520,7 +521,12 @@ class UpdatersController extends AppController {
 		if(!$path) {
 			return false;
 		}
-		return $this->Updater->loadCsv('baser', $path, $filterTable);
+		if($plugin) {
+			$dbConfigName = 'plugin';
+		} else {
+			$dbConfigName = 'baser';
+		}
+		return $this->Updater->loadCsv($dbConfigName, $path, $filterTable);
 
 	}
 /**

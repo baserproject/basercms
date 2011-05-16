@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
@@ -41,6 +41,8 @@ $(function(){
  * プレビューボタンクリック時イベント
  */
 	$("#BtnPreview").click(function(){
+		var content = $("#BlogPostContent").val();
+		var detail = $("#BlogPostDetail").val();
 		$("#BlogPostContent").val(editor_content_tmp.getData());
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		$.ajax({
@@ -55,6 +57,8 @@ $(function(){
 				}
 			}
 		});
+		$("#BlogPostContent").val(content);
+		$("#BlogPostDetail").val(detail);
 		return false;
 	});
 	$("#LinkPreview").colorbox({width:"90%", height:"90%", iframe:true});
@@ -65,6 +69,49 @@ $(function(){
 		editor_content_tmp.execCommand('synchronize');
 		editor_detail_tmp.execCommand('synchronize');
 		$("#BlogPostMode").val('save');
+		$("#BlogPostForm").submit();
+	});
+/**
+ * ブログタグ追加
+ */
+	$("#BlogTagName").keypress(function(ev) {
+		if ((ev.which && ev.which === 13) || (ev.keyCode && ev.keyCode === 13)) {
+			$("#BtnAddBlogTag").click();
+			return false;
+		} else {
+			return true;
+		}
+	});
+	$("#BtnAddBlogTag").click(function(){
+		if(!$("#BlogTagName").val()) {
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: '<?php echo $this->base ?>/admin/blog/blog_tags/ajax_add',
+			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
+			dataType: 'html',
+			beforeSend: function() {
+				$("#BtnAddBlogTag").attr('disabled', 'disabled');
+				$("#TagLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogTags").append(result);
+					$("#BlogTagName").val('');
+				} else {
+					alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(){
+				alert('ブログタグの追加に失敗しました。');
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogTag").removeAttr('disabled');
+				$("#TagLoader").hide();
+				$("#BlogTags").effect("highlight",{},1500);
+			}
+		});
 	});
 });
 </script>
@@ -104,12 +151,13 @@ $(function(){
 <?php endif; ?>
 <?php echo $formEx->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $formEx->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
+<?php echo $formEx->hidden('BlogPost.mode') ?>
 
 <!-- form -->
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 <?php if($this->action == 'admin_edit'): ?>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogPost.no', 'NO') ?></th>
+		<th class="col-head" style="width:53px"><?php echo $formEx->label('BlogPost.no', 'NO') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->value('BlogPost.no') ?>
 			<?php echo $formEx->input('BlogPost.no', array('type' => 'hidden')) ?>
@@ -137,7 +185,7 @@ $(function(){
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('BlogPost.content', 
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions1) ?>
 			<?php echo $formEx->error('BlogPost.content') ?>
 		</td>
 	</tr>
@@ -146,10 +194,25 @@ $(function(){
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('BlogPost.detail',
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions2) ?>
 			<?php echo $formEx->error('BlogPost.detail') ?>
 		</td>
 	</tr>
+<?php if(!empty($blogContent['BlogContent']['tag_use'])): ?>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('BlogTag.BlogTag', 'タグ') ?></th>
+		<td class="col-input">
+			<div class="clearfix" id="BlogTags" style="padding:5px">
+			<?php echo $formEx->input('BlogTag.BlogTag',
+					array('type' => 'select', 'multiple' => 'checkbox', 'options' => $formEx->getControlSource('BlogPost.blog_tag_id'))) ?>
+			</div>
+			<?php echo $formEx->error('BlogTag.BlogTag') ?>
+			<?php echo $formEx->input('BlogTag.name', array('type' => 'text')) ?>
+			<?php echo $formEx->button('新しいタグを追加', array('id' => 'BtnAddBlogTag')) ?>
+			<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
+		</td>
+	</tr>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.status', '公開状態') ?></th>
 		<td class="col-input">
@@ -170,13 +233,14 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogPost.user_id', '作成者') ?></th>
 		<td class="col-input">
-<?php if($this->action=='admin_edit' && count($users) && isset($user) && $user['user_group_id']!=1): ?>
-			<?php echo $users[$formEx->value('User.id')] ?>
-<?php else: ?>
+<?php if(isset($user) && $user['user_group_id'] == 1): ?>
 			<?php echo $formEx->input('BlogPost.user_id', array(
 					'type'		=> 'select',
 					'options'	=> $users)) ?>
 			<?php echo $formEx->error('BlogPost.user_id') ?>
+<?php else: ?>
+			<?php echo $users[$formEx->value('BlogPost.user_id')] ?>
+			<?php echo $formEx->hidden('BlogPost.user_id') ?>
 <?php endif ?>
 		</td>
 	</tr>
@@ -192,11 +256,11 @@ $(function(){
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->submit('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php $baser->link('削　除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')),
 			array('class'=>'btn-gray button'),

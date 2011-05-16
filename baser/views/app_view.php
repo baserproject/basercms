@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser
  * @since			Baser v 0.1.0
@@ -38,7 +38,7 @@ class AppView extends ThemeView {
 	var $__passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir','enablePlugins'
+			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'
 	);
 /**
  * テンプレートのファイル名を取得する
@@ -139,6 +139,17 @@ class AppView extends ThemeView {
 			$this->__paths = $paths;
 		}
 		return $paths;
+	}
+/**
+ * フック処理を実行する
+ *
+ * @param	string	$out
+ * @return	mixed
+ */
+	function executeHook($hook, $out) {
+
+		return $this->loaded['pluginHook']->{$hook}($out);
+
 	}
 	
 }

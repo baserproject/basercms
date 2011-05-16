@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
@@ -26,5 +26,7 @@
 	<ul>
 		<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
 		<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
+		<li><?php $baser->link('タグ一覧',array('controller'=>'blog_tags','action'=>'index')) ?></li>
+		<li><?php $baser->link('新規タグを登録',array('controller'=>'blog_tags','action'=>'add')) ?></li>
 	</ul>
 </div>

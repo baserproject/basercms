@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
@@ -46,6 +46,13 @@ class Page extends AppModel {
 							'foreignKey'=>'page_category_id'),
 			'User' => array('className'=> 'User',
 							'foreignKey'=>'author_id'));
+/**
+ * ビヘイビア
+ *
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('ContentsManager');
 /**
  * 更新前のページファイルのパス
  * @var	string
@@ -186,9 +193,11 @@ class Page extends AppModel {
 	}
 /**
  * afterSave
+ * 
  * @return boolean
+ * @access public
  */
-	function afterSave() {
+	function afterSave($created) {
 
 		if(!$this->fileSave) {
 			return true;
@@ -257,6 +266,7 @@ class Page extends AppModel {
 				}else{
 					$data['page_category_id'] = $mobileId;
 				}
+				$data['author_id'] = $_SESSION['Auth']['User']['id'];
 				$data['sort'] = $this->getMax('sort')+1;
 				$data['url'] = '/mobile'.$data['url'];
 				$data['status'] = false;	// 新規ページの場合は非公開とする
@@ -268,11 +278,101 @@ class Page extends AppModel {
 				$this->create($data);
 
 			}
-			if(!$this->save()){
-				$result = false;
+			$this->save();
+		}
+
+		// トップページの場合は検索データとして登録しない
+		if($this->data['Page']['url'] == '/index') {
+			return;
+		}
+		// 検索用テーブルに登録
+		// $this->fileSave が false の時も実行されないので注意
+		$this->saveContent($this->createContent($this->data));
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		// モバイル未対応
+		$PageCategory = ClassRegistry::init('PageCategory');
+		if(in_array($data['Page']['page_category_id'], $PageCategory->getMobileCategoryIds())) {
+			return array();
+		}
+		
+		if(isset($data['Page'])) {
+			$data = $data['Page'];
+		}
+
+		$_data = array();
+		// $this->idに値が入ってない場合もあるので
+		if(!empty($data['id'])) {
+			$_data['Content']['model_id'] = $data['id'];
+		} else {
+			$_data['Content']['model_id'] = $this->id;
+		}
+		$_data['Content']['category'] = '';
+		if(!empty($data['page_category_id'])) {
+			$categoryPath = $PageCategory->getPath($data['page_category_id'], array('title'));
+			if($categoryPath) {
+				$_data['Content']['category'] = $categoryPath[0]['PageCategory']['title'];
 			}
 		}
-		return $result;
+		$_data['Content']['title'] = $data['title'];
+		$parameters = split('/', preg_replace("/^\//", '', $data['url']));
+		$detail = $this->requestAction(array('controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
+		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
+		$_data['Content']['detail'] = $data['description'].' '.$detail;
+		$_data['Content']['url'] = $data['url'];
+		$_data['Content']['status'] = $this->allowedPublish($data['status'], $data['publish_begin'], $data['publish_end']);
+
+		return $_data;
+
+	}
+/**
+ * beforeDelete
+ * 
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+		
+		return $this->deleteContent($this->id);
+		
+	}
+/**
+ * データが公開済みかどうかチェックする
+ *
+ * 同様のメソッド checkPublish があり DB接続前提でURLでチェックする仕組みだが
+ * こちらは、実データで直接チェックする
+ * TODO メソッド名のリファクタリング要
+ *
+ * @return	array
+ */
+	function allowedPublish($status, $publishBegin, $publishEnd) {
+
+		if(!$status) {
+			return false;
+		}
+
+		if($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if($publishBegin < date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+
+		if($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if($publishEnd > date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+
+		return true;
 
 	}
 /**
@@ -679,5 +779,6 @@ class Page extends AppModel {
 		}
 		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
 	}
+	
 }
 ?>

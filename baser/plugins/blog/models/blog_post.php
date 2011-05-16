@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.models
  * @since			Baser v 0.1.0
@@ -35,6 +35,13 @@ class BlogPost extends BlogAppModel {
  * @access 	public
  */
 	var $name = 'BlogPost';
+/**
+ * ビヘイビア
+ *
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('ContentsManager');
 /**
  * belongsTo
  *
@@ -62,6 +69,25 @@ class BlogPost extends BlogAppModel {
 							'dependent'=>true,
 							'exclusive'=>false,
 							'finderQuery'=>''));
+/**
+ * HABTM
+ * 
+ * @var array
+ * @access public
+ */
+	var $hasAndBelongsToMany = array(
+			'BlogTag' => array(
+				'className'				=> 'Blog.BlogTag',
+				'joinTable'				=> 'blog_posts_blog_tags',
+				'foreignKey'			=> 'blog_post_id',
+				'associationForeignKey'	=> 'blog_tag_id',
+				'conditions'			=> '',
+				'order'					=> '',
+				'limit'					=> '',
+				'unique'				=> true,
+				'finderQuery'			=> '',
+				'deleteQuery'			=> ''
+		));
 /**
  * validate
  *
@@ -246,6 +272,9 @@ class BlogPost extends BlogAppModel {
 		if($field == 'user_id') {
 			$controlSources['user_id'] = $this->User->getUserList($options);
 		}
+		if($field == 'blog_tag_id') {
+			$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -301,6 +330,74 @@ class BlogPost extends BlogAppModel {
 		return $conditions;
 		
 	}
-	
+/**
+ * 公開状態の記事を取得する
+ *
+ * @param array $options
+ * @return array
+ */
+	function getPublishes ($options) {
+
+		if(!empty($options['conditions'])) {
+			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
+		}
+		return $this->find('all', $options);
+
+	}
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルに登録
+		$this->saveContent($this->createContent($this->data));
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['BlogPost'])) {
+			$data = $data['BlogPost'];
+		}
+
+		$_data = array();
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		if(!empty($data['blog_category_id'])) {
+			$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+			$categoryPath = $BlogCategory->getPath($data['blog_category_id'], array('title'));
+			if($categoryPath) {
+				$_data['Content']['category'] = $categoryPath[0]['BlogCategory']['title'];
+			}
+		}
+		$_data['Content']['title'] = $data['name'];
+		$_data['Content']['detail'] = $data['content'].' '.$data['detail'];
+		$PluginContent = ClassRegistry::init('PluginContent');
+		$_data['Content']['url'] = '/'.$PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')).'/archives/'.$data['no'];
+		$_data['Content']['status'] = $this->allowPublish($data);
+
+		return $_data;
+
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
 }
 ?>
