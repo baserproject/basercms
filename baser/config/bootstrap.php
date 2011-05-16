@@ -201,7 +201,7 @@
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$sql = 'SELECT `Plugin`.`name` FROM '.$pluginTable.' AS Plugin WHERE `Plugin`.`status` = '.$db->value(true).';';
+			$sql = 'SELECT '.$db->name('Plugin.name').' FROM '.$pluginTable.' AS Plugin WHERE '.$db->name('Plugin.status').' = '.$db->value(true).';';
 			$plugins = $db->query($sql);
 			if($plugins) {
 				$enablePlugins = Set::extract('/Plugin/name',$plugins);
