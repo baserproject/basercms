@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -299,6 +299,7 @@
 .pagination {
 	margin:10px 5px;
 	font-size:10px;
+	text-align: left;
 }
 .pagination a {
 }
@@ -314,7 +315,7 @@
 	display:none;
 }
 select.multiple {
-	font-family:"ＭＳ ゴシック", "Osaka－等幅";
+	font-family:"ＭＳ ゴシック", Osaka;
 	font-size:12px;
 	padding:5px;
 	height:220px;
@@ -406,7 +407,8 @@ select.multiple option {
 }
 .contextMenu li {
 	background:none!important;
-	padding:0!important;
+	padding:0;
+	text-align: left;
 }
 /* installations
 ----------------------------------------------- */
@@ -568,4 +570,72 @@ select.multiple option {
 	display:none;
 	vertical-align:bottom;
 	padding:6px;
+}
+/* page-numbers
+---------------------------------------------------*/
+.page-numbers .disabled {
+	display:none;
+}
+.page-numbers {
+	text-align:right;
+}
+/* no-data
+----------------------------------------------- */
+.no-data {
+	text-align:center;
+}
+/* .pagination
+---------------------------------------------------*/
+.pagination {
+	text-align: center;
+}
+.pagination .disabled {
+	display:none;
+}
+.page-numbers {
+	text-align:right;
+}
+body.normal .page-numbers {
+	text-align:left;
+}
+.pagination .number,
+.pagination .prev,
+.pagination .next,
+.pagination .current{
+	padding:5px 8px;
+	border:1px solid #e2e2e2;
+	margin:0 2px;
+}
+.pagination .current {
+	background-color: #efefef;
+}
+.pagination a:hover{
+	background-color: #669900;
+	color:#fff;
+}
+/* list-num
+---------------------------------------------------*/
+.list-num {
+	text-align: right;
+}
+/* 検索
+---------------------------------------------------*/
+.search-box {
+	text-align: center;
+}
+.search-result {
+	text-align: right;
+	background-color: #efefef;
+	padding:5px 8px;
+	margin-bottom: 5px;
+}
+.result-link a{
+	color:#999;
+}
+/* その他
+---------------------------------------------------*/
+div.checkbox {
+	float:left;
+	padding-right:10px;
+	line-height: 2.0em;
 }

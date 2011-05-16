@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
@@ -27,7 +27,7 @@ $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'の�
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
 });
 </script>
 
@@ -40,9 +40,6 @@ $(function(){
 <h3 class="contents-head">
 	<?php $baser->contentsTitle() ?>
 </h3>
-
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
 
 <!-- list -->
 <?php if(!empty($posts)): ?>
@@ -59,6 +56,7 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 	</span></div>
+	<?php $baser->element('blog_tag', array('post' => $post)) ?>
 </div>
 	<?php endforeach; ?>
 <?php else: ?>

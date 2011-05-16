@@ -94,6 +94,15 @@ class EmailComponent extends Object{
  */
 	var $bcc = array();
 /**
+ * The date to put in the Date: header.  This should be a date
+ * conformant with the RFC2822 standard.  Leave null, to have
+ * today's date generated.
+ *
+ * @var string
+ */
+	var $date = null;
+
+/**
  * The subject of the email
  *
  * @var string
@@ -138,6 +147,19 @@ class EmailComponent extends Object{
  * @access public
  */
 	var $lineLength = 70;
+
+/**
+ * Line feed character(s) to be used when sending using mail() function
+ * If null PHP_EOL is used.
+ * RFC2822 requires it to be CRLF but some Unix
+ * mail transfer agents replace LF by CRLF automatically
+ * (which leads to doubling CR if CRLF is used).
+ *
+ * @var string
+ * @access public
+ */
+	var $lineFeed = null;
+
 /**
  * @deprecated see lineLength
  */
@@ -345,6 +367,7 @@ class EmailComponent extends Object{
 		$this->bcc = array();
 		$this->subject = null;
 		$this->additionalParams = null;
+		$this->date = null;
 		$this->smtpError = null;
 		$this->attachments = array();
 		$this->__header = array();
@@ -368,7 +391,7 @@ class EmailComponent extends Object{
 			$viewClass = $viewClass . 'View';
 			App::import('View', $this->Controller->view);
 		}
-		$View = new $viewClass($this->Controller, false);
+		$View = new $viewClass($this->Controller);
 		$View->layout = $this->layout;
 		$msg = array();
 
@@ -405,6 +428,7 @@ class EmailComponent extends Object{
 			$msg[] = '--alt-' . $this->__boundary . '--';
 			$msg[] = '';
 
+			ClassRegistry::removeObject('view');
 			return $msg;
 		}
 
@@ -427,6 +451,7 @@ class EmailComponent extends Object{
 		$View->layoutPath = 'email' . DS . $this->sendAs;
 		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
 		$msg = array_merge($msg, $content);
+		ClassRegistry::removeObject('view');
 
 		return $msg;
 	}
@@ -470,6 +495,13 @@ class EmailComponent extends Object{
 		if ($this->delivery == 'smtp') {
 			$this->__header[] = 'Subject: ' . $this->__encode($this->subject);
 		}
+
+		$date = $this->date;
+		if ($date == false) {
+			$date = date(DATE_RFC2822);
+		}
+		$this->__header[] = 'Date: ' . $date;
+
 		$this->__header[] = 'X-Mailer: ' . $this->xMailer;
 
 		if (!empty($this->headers)) {
@@ -657,12 +689,27 @@ class EmailComponent extends Object{
  * @access private
  */
 	function __mail() {
-		$header = implode("\n", $this->__header);
-		$message = implode("\n", $this->__message);
+		if ($this->lineFeed === null) {
+			$lineFeed = PHP_EOL;
+		} else {
+			$lineFeed = $this->lineFeed;
+		}
+		$header = implode($lineFeed, $this->__header);
+		$message = implode($lineFeed, $this->__message);
 		if (ini_get('safe_mode')) {
 			return @mail($this->to, $this->__encode($this->subject), $message, $header);
 		}
 		return @mail($this->to, $this->__encode($this->subject), $message, $header, $this->additionalParams);
+	}
+/**
+ * Helper method to get socket, overridden in tests
+ *
+ * @param array $config Config data for the socket.
+ * @return void
+ * @access protected
+ */
+	function _getSocket($config) {
+		$this->__smtpConnection =& new CakeSocket($config);
 	}
 /**
  * Sends out email via SMTP
@@ -673,7 +720,14 @@ class EmailComponent extends Object{
 	function __smtp() {
 		App::import('Core', array('Socket'));
 
-		$this->__smtpConnection =& new CakeSocket(array_merge(array('protocol'=>'smtp'), $this->smtpOptions));
+		$defaults = array(
+			'host' => 'localhost',
+			'port' => 25,
+			'protocol' => 'smtp',
+			'timeout' => 30
+		);
+		$this->smtpOptions = array_merge($defaults, $this->smtpOptions);
+		$this->_getSocket($this->smtpOptions);
 
 		if (!$this->__smtpConnection->connect()) {
 			$this->smtpError = $this->__smtpConnection->lastError();
@@ -687,7 +741,7 @@ class EmailComponent extends Object{
 		if (isset($this->smtpOptions['client'])) {
 			$host = $this->smtpOptions['client'];
 		} elseif (!empty($httpHost)) {
-			$host = $httpHost;
+			list($host) = explode(':', $httpHost);
 		} else {
 			$host = 'localhost';
 		}

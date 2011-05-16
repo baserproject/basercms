@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
@@ -55,7 +55,7 @@ class BlogPostsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * ぱんくずナビ
  *
@@ -121,17 +121,38 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => 10));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
 		$this->passedArgs[] = $blogContentId;
-		unset($this->data['_Token']);
+		
 		/* 検索条件生成 */
+		$joins = array();
+
+		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
+			$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			if($db->config['driver'] != 'csv') {
+				$joins = array(
+					array(
+						'table' => $db->config['prefix'].'blog_posts_blog_tags',
+						'alias' => 'BlogPostsBlogTag',
+						'type' => 'inner',
+						'conditions'=> array('BlogPostsBlogTag.blog_post_id = BlogPost.id')
+					),
+					array(
+						'table' => $db->config['prefix'].'blog_tags',
+						'alias' => 'BlogTag',
+						'type' => 'inner',
+						'conditions'=> array('BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->data['BlogPost']['blog_tag_id'])
+				));
+			}
+		}
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
 
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
-				'order'=>'BlogPost.no DESC',
-				'limit'=>$this->passedArgs['num']
+				'joins'	=> $joins,
+				'order'	=>'BlogPost.no DESC',
+				'limit'	=>$this->passedArgs['num']
 		);
 
 		$posts = $this->paginate('BlogPost');
@@ -165,6 +186,19 @@ class BlogPostsController extends BlogAppController {
 
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
+		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
+		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+		if($db->config['driver'] == 'csv') {
+			if(!empty($data['BlogPost']['blog_tag_id'])) {
+				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
+				if($blogTags) {
+					$conditions['BlogPost.id'] = Set::extract('/BlogPost/id', $blogTags);
+				}
+			}
+		}
+
+		unset($data['BlogPost']['blog_tag_id']);
+		
 		// ページカテゴリ（子カテゴリも検索条件に入れる）
 		if(!empty($data['BlogPost']['blog_category_id'])) {
 			$blogCategoryIds = array($data['BlogPost']['blog_category_id']);
@@ -215,6 +249,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
+				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
@@ -225,6 +260,8 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$authUser = $this->Auth->user();
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
+		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
 		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
@@ -257,7 +294,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				// 一覧にリダイレクトすると記事の再編集時に検索する必要があるので一旦コメントアウト
+				$this->PluginHook->executeHook('afterBlogPostEdit', $this);
 				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
@@ -267,6 +304,8 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$this->set('users',$this->BlogPost->User->getUserList());
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
+		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->data['BlogPost']['name'];
 		$this->render('form');
 

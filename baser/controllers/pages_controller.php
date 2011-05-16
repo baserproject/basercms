@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
@@ -46,7 +46,7 @@ class PagesController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
 /**
  * モデル
  *
@@ -86,7 +86,7 @@ class PagesController extends AppController {
 	function admin_index() {
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => 10, 'sortmode' => 0),
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0),
 							'Page' => array('page_category_id'=>'pconly'));
 		$this->setViewConditions('Page', array('default' => $default));
 		if($this->Session->check('PagesAdminIndex.named.sortmode')) {
@@ -140,6 +140,7 @@ class PagesController extends AppController {
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
+					$this->executeHook('afterPageAdd');
 					// 編集画面にリダイレクト
 					$this->redirect('/admin/pages/edit/'.$id);
 				}else {
@@ -152,7 +153,10 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('mobileId', $this->PageCategory->getMobileId());
+		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$this->set('reflectMobile', Configure::read('Baser.mobile'));
+		$this->set('users', $this->Page->getControlSource('user_id'));
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->pageTitle = '新規ページ登録';
@@ -190,6 +194,7 @@ class PagesController extends AppController {
 					$this->data['Page']['reflect_mobile'] = false;
 					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
 					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
+					$this->executeHook('afterPageEdit');
 					$this->redirect('/admin/pages/edit/'.$id);
 				}else {
 					$this->Session->setFlash('保存中にエラーが発生しました。');
@@ -202,7 +207,10 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('mobileId', $this->PageCategory->getMobileId());
+		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$this->set('reflectMobile', Configure::read('Baser.mobile'));
+		$this->set('users', $this->Page->getControlSource('user_id'));
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
 		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
@@ -351,39 +359,33 @@ class PagesController extends AppController {
  */
 	function _getNavi($url) {
 
-		$url = preg_replace('/^\//', '', $url);
-		$path = explode('/', $url);
-		$categories = array();
-		$conditions = array();
-		$navis = array();
-		for($i=0;$i<count($path)-1;$i++) {
-			$categories[$path[$i]] = '';
-			$conditions['or'][] = array('PageCategory.name'=>$path[$i]);
+		if(Configure::read('Mobile.on')) {
+			$url = '/mobile'.$url;
 		}
-		if($conditions) {
-			$this->PageCategory->hasMany['Page']['conditions'] = array('Page.status'=>true);
-			$pageCategories = $this->PageCategory->find('all',array('fields'=>array('name','title'),'conditions'=>$conditions));
-			foreach($pageCategories as $pageCategory) {
+		
+		// 直属のカテゴリIDを取得
+		$pageCategoryId = $this->Page->field('page_category_id', array('Page.url' => $url));
+		
+		// 関連カテゴリを取得（関連ページも同時に取得）
+		$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
+		
+		$navis = array();
+		if($pageCategorires) {
+			// index ページの有無によりリンクを判別
+			foreach($pageCategorires as $pageCategory) {
 				if(!empty($pageCategory['Page'])) {
-					$categoryPageUrl = '';
+					$categoryUrl = '';
 					foreach($pageCategory['Page'] as $page) {
 						if($page['name'] == 'index') {
-							$categoryPageUrl = $page['url'];
+							$categoryUrl = $page['url'];
+							break;
 						}
 					}
-				}
-				if(!$categoryPageUrl) {
-					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title']);
-				}else {
-					$categories[$pageCategory['PageCategory']['name']] = array('title'=>$pageCategory['PageCategory']['title'],
-							'url'=>$categoryPageUrl);
-				}
-			}
-			foreach ($categories as $category) {
-				if(!empty($category['url'])) {
-					$navis[$category['title']] = $category['url'];
-				}elseif(isset($category['title'])) {
-					$navis[$category['title']] = '';
+					if($categoryUrl) {
+						$navis[$pageCategory['PageCategory']['title']] = $categoryUrl;
+					} else {
+						$navis[$pageCategory['PageCategory']['title']] = '';
+					}
 				}
 			}
 		}
@@ -534,8 +536,13 @@ class PagesController extends AppController {
 			if($pageCategoryId == 'pconly') {
 
 				// PCのみ
-				$conditions['or'] = array('not'=>array('Page.page_category_id'=>$this->PageCategory->getMobileCategoryIds()),
-											array('Page.page_category_id'=>null));
+				$mobileCategoryIds = $this->PageCategory->getMobileCategoryIds();
+				if($mobileCategoryIds) {
+					$conditions['or'] = array('not'=>array('Page.page_category_id' => $mobileCategoryIds),
+												array('Page.page_category_id'=>null));
+				} else {
+					$conditions['or'] = array(array('Page.page_category_id'=>null));
+				}
 
 			}elseif($pageCategoryId != 'noncat') {
 

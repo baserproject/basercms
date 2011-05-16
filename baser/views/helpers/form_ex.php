@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.view.helpers
  * @since			Baser v 0.1.0
@@ -628,41 +628,69 @@ DOC_END;
  * @return string An HTML text input element
  */
 	function checkbox($fieldName, $options = array()) {
-
-		/* hiddenをデフォルトオプションに追加 */
+		// CUSTOMIZE ADD 2011/05/07 ryuring
+		// >>> hiddenをデフォルトオプションに追加
 		$options = array_merge(array('hidden' => true), $options);
 		$hidden = $options['hidden'];
 		unset($options['hidden']);
-
+		// <<<
+		
 		$options = $this->_initInputField($fieldName, $options);
 		$value = current($this->value());
 
 		if (!isset($options['value']) || empty($options['value'])) {
 			$options['value'] = 1;
-		} elseif (!empty($value) && $value === $options['value']) {
+		} elseif (
+			(!isset($options['checked']) && !empty($value) && $value === $options['value']) ||
+			!empty($options['checked'])
+		) {
 			$options['checked'] = 'checked';
 		}
 
-		// hiddenオプションがある場合のみ、hiddenタグを出力
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
+		/*$hiddenOptions = array(
+			'id' => $options['id'] . '_', 'name' => $options['name'],
+			'value' => '0', 'secure' => false
+		);
+		if (isset($options['disabled']) && $options['disabled'] == true) {
+			$hiddenOptions['disabled'] = 'disabled';
+		}
+		$output = $this->hidden($fieldName, $hiddenOptions);*/
+		// ---
 		if($hidden) {
-			$output = $this->hidden($fieldName, array(
-					'id' => $options['id'] . '_', 'name' => $options['name'],
-					'value' => '0', 'secure' => false
-			));
+			$hiddenOptions = array(
+				'id' => $options['id'] . '_', 'name' => $options['name'],
+				'value' => '0', 'secure' => false
+			);
+			if (isset($options['disabled']) && $options['disabled'] == true) {
+				$hiddenOptions['disabled'] = 'disabled';
+			}
+			$output = $this->hidden($fieldName, $hiddenOptions);
 		}else {
 			$output='';
 		}
-		/* label を追加 */
+		// <<<
+		
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// >>> label を追加
+		/*return $this->output($output . sprintf(
+			$this->Html->tags['checkbox'],
+			$options['name'],
+			$this->_parseAttributes($options, array('name'), null, ' ')
+		));*/
+		// ---
 		if(!empty($options['label'])) {
 			$label = '&nbsp;'.parent::label($fieldName, $options['label']);
 		}else {
 			$label = '';
 		}
 		return $this->output($output . sprintf(
-				$this->Html->tags['checkbox'],
-				$options['name'],
-				$this->_parseAttributes($options, array('name'), null, ' ')
-				)).$label;
+			$this->Html->tags['checkbox'],
+			$options['name'],
+			$this->_parseAttributes($options, array('name'), null, ' ')
+		)).$label;
+		// <<<
 	}
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
@@ -1048,34 +1076,40 @@ DOC_END;
 	}
 /**
  * create
+ *
  * フック用にラッピング
+ * 
  * @param	array $model
  * @param	array $options
  * @return	string
  * @access	public
  */
-	function create($model = null, $options = array(), $callback = true) {
+	function create($model = null, $options = array()) {
+
+		$options = $this->executeHook('beforeFormCreate', $model, $options);
+		
 		$out = parent::create($model, $options);
-		if($callback) {
-			return $this->pluginHook($out, 'formExCreate');
-		}else{
-			return $out;
-		}
+
+		return $this->executeHook('afterFormCreate', $out);
+		
 	}
 /**
  * end
+ * 
  * フック用にラッピング
+ *
  * @param	array	$options
  * @return	string
  * @access	public
  */
-	function end($options = null, $callback = true) {
+	function end($options = null) {
+
+		$options = $this->executeHook('beforeFormEnd', $options);
+
 		$out = parent::end($options);
-		if($callback) {
-			return $this->pluginHook($out, 'formExEnd');
-		} else {
-			return $out;
-		}
+		
+		return $this->executeHook('afterFormEnd', $out);
+		
 	}
 /**
  * Generates a form input element complete with label and wrapper div
@@ -1095,6 +1129,8 @@ DOC_END;
  */
 	function input($fieldName, $options = array()) {
 
+		$options = $this->executeHook('beforeFormInput', $fieldName, $options);
+		
 		$type = '';
 		if(isset($options['type'])) {
 			$type = $options['type'];
@@ -1148,7 +1184,7 @@ DOC_END;
 			$out = $out.$counter.$this->Javascript->codeBlock($script);
 		}
 		
-		return $out;
+		return $this->executeHook('afterFormInput', $fieldName, $out);
 		
 	}
 /**

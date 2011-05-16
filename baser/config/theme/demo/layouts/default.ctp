@@ -28,7 +28,7 @@
 <div id="page">
 
 	<!-- begin header -->
-	<?php $baser->element('header') ?>
+	<?php $baser->header() ?>
 	<!-- end header -->
 	
 	<!-- begin contents -->
@@ -48,7 +48,7 @@
 		</div>
 		<!-- end alfa -->
 		
-		<?php if(!$baser->isTop() || !empty($this->params['member'])): ?>
+		<?php if(!$baser->isTop()): ?>
 		<!-- begin beta -->
 		<?php $baser->element('sidebar') ?>
 		<!-- end beta -->
@@ -65,7 +65,7 @@
 <!-- end page -->
 
 <!-- begin footer -->
-<?php $baser->element('footer') ?>
+<?php $baser->footer() ?>
 <!-- end footer -->
 
 <?php echo $cakeDebug; ?>

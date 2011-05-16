@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
@@ -239,7 +239,11 @@ class InstallationsController extends AppController {
 
 			/* 「次のステップへ」クリック時 */
 			} elseif ($this->data['buttonclicked']=='createdb') {
-				if($this->_constructionDb($this->data['Installation']['non_demo_data'])) {
+				$nonDemoData = false;
+				if(isset($this->data['Installation']['non_demo_data'])) {
+					$nonDemoData = $this->data['Installation']['non_demo_data'];
+				}
+				if($this->_constructionDb($nonDemoData)) {
 					$this->Session->setFlash("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
@@ -515,7 +519,7 @@ class InstallationsController extends AppController {
 			$ret = true;
 			foreach($pages as $page) {
 				$Page->data = $page;
-				if(!$Page->afterSave()){
+				if(!$Page->afterSave(true)){
 					$ret = false;
 				}
 			}
@@ -1001,16 +1005,7 @@ class InstallationsController extends AppController {
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
-		if($this->data['Installation']['reset']) {
-
-			if(file_exists(CONFIGS.'database.php')) {
-				// データベースのデータを削除
-				$this->_resetDatabase();
-				unlink(CONFIGS.'database.php');
-			}
-			if(file_exists(CONFIGS.'install.php')) {
-				unlink(CONFIGS.'install.php');
-			}
+		if(!empty($this->data['Installation']['reset'])) {
 
 			$messages = array();
 			$file = new File(CONFIGS.'core.php');
@@ -1027,6 +1022,15 @@ class InstallationsController extends AppController {
 				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 			}
 
+			if(file_exists(CONFIGS.'database.php')) {
+				// データベースのデータを削除
+				$this->_resetDatabase();
+				unlink(CONFIGS.'database.php');
+			}
+			if(file_exists(CONFIGS.'install.php')) {
+				unlink(CONFIGS.'install.php');
+			}
+			
 			$themeFolder = new Folder(WWW_ROOT.'themed');
 			$themeFiles = $themeFolder->read(true,true,true);
 			foreach($themeFiles[0] as $theme){

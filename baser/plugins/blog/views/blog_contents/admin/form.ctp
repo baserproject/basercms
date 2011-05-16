@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
@@ -110,7 +110,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', '一覧表示件数') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('BlogContent.list_count', array('type', 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
+			<?php echo $formEx->input('BlogContent.list_count', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpListCount', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $formEx->error('BlogContent.list_count') ?>
 			<div id="helptextListCount" class="helptext">
@@ -192,6 +192,17 @@ $(function(){
 					<li>スパムなどいたずら送信が多いが多い場合に設定すると便利です。</li>
 				</ul>
 			</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.tag_use', 'タグ機能') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogContent.tag_use', array(
+				'type'		=> 'radio',
+				'options'	=> $textEx->booleanDoList('利用'),
+				'legend'	=> false,
+				'separator'	=> '&nbsp;&nbsp;')) ?>
+			<?php echo $formEx->error('BlogContent.tag_use') ?>
 		</td>
 	</tr>
 	<tr>

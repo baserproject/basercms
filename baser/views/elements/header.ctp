@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
@@ -23,16 +23,17 @@
 
 <div id="header">
 	<div id="headMain">
-		<?php if(isset($baser->siteConfig['name'])): ?>
 		<h1>
+<?php if(isset($baser->siteConfig['name'])): ?>
 			<?php $baser->link($baser->siteConfig['name'],'/') ?>
+<?php else: ?>
+			<?php echo Configure::read('Baser.title') ?>
+<?php endif ?>
+<?php if(isset($javascript)): ?>
+			　<span id="fontChanger">文字サイズ： <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜ <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜ <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a> </span>
+<?php endif; ?>
 		</h1>
-		<?php else: ?>
-		<h1><?php echo Configure::read('Baser.title') ?></h1>
-		<?php endif ?>
-		<?php if(isset($javascript)): ?>
-		<p id="fontChanger">フォントサイズ： <a href="#" onclick="setActiveStyleSheet('large'); return false;">大</a>｜ <a href="#" onclick="setActiveStyleSheet('medium'); return false;">中</a>｜ <a href="#" onclick="setActiveStyleSheet('small'); return false;">小</a> </p>
-		<?php endif; ?>
+		<?php $baser->element('search') ?>
 	</div>
 	<div id="glbMenus">
 		<h2 class="display-none">グローバルメニュー</h2>

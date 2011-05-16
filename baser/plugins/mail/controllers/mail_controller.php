@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.mail.controller
  * @since			Baser v 0.1.0
@@ -133,6 +133,7 @@ class MailController extends MailAppController {
 
 		$this->subMenuElements = array('default');
 
+		$this->Security->enabled = true;
 		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 		// 詳細はコンポーネント設定のコメントを参照
 		//$this->Security->requireAuth('submit');
@@ -343,12 +344,18 @@ class MailController extends MailAppController {
 			$adminMail = $this->siteConfigs['email'];
 		}
 
-		// ユーザーメールを取得
 		foreach($this->dbDatas['mailFields'] as $mailField) {
+			// ユーザーメールを取得
 			if($mailField['MailField']['type'] == 'email') {
 				$userMail = $data['Message'][$mailField['MailField']['field_name']];
-				break;
 			}
+			// 件名にフィールドの値を埋め込む
+			$mailContent['subject_user'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
+														$data['Message'][$mailField['MailField']['field_name']],
+														$mailContent['subject_user']);
+			$mailContent['subject_admin'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
+														$data['Message'][$mailField['MailField']['field_name']],
+														$mailContent['subject_admin']);
 		}
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
 		if(!$userMail) {
@@ -358,7 +365,7 @@ class MailController extends MailAppController {
 				$userMail = $data['Message']['email_1'];
 			}
 		}
-		
+
 		// ユーザー名を取得
 		/*if(!empty($data['Message']['name'])){
 			$userName = $data['Message']['name'] . '　様';

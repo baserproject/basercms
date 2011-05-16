@@ -25,7 +25,7 @@
 
 <div id="Page">
 
-	<?php $baser->element('header') ?>
+	<?php $baser->header() ?>
 	
 	<div id="Wrap" class="clearfix">
 	
@@ -45,7 +45,7 @@
 
 	<div class="to-top"> <a href="#Page">このページの先頭へ戻る</a> </div>
 	
-	<?php $baser->element('footer') ?>
+	<?php $baser->footer() ?>
 	
 </div>
 

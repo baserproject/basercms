@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
@@ -41,7 +41,7 @@ class AppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'Javascript', 'Baser', 'XmlEx');
+	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'FormEx', 'Javascript', 'Baser', 'XmlEx');
 /**
  * レイアウト
  *
@@ -98,12 +98,6 @@ class AppController extends Controller {
  * @access  public
  */
 	var $contentsTitle = '';
-/**
- * 有効プラグイン
- * @var     array
- * @access  public
- */
-	var $enablePlugins = array();
 /**
  * サイトコンフィグデータ
  * @var array
@@ -239,6 +233,17 @@ class AppController extends Controller {
 
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
+		
+		// $this->params['url'] の調整
+		// 環境によって？キーにamp;が付加されてしまうため
+		if(isset($this->params['url']) && is_array($this->params['url'])) {
+			foreach ($this->params['url']  as $key => $val ) {
+				if ( strpos( $key, 'amp;' ) === 0 ) {
+					$this->params['url'][substr( $key, 4 )] = $val;
+					unset( $this->params['url'][$key] );
+				}
+			}
+		}
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
@@ -262,7 +267,7 @@ class AppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->Auth) && isset($this->params['action'])) {
+		if(isset($this->Auth) && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->Auth->allowedActions || !in_array($this->params['action'], $this->Auth->allowedActions)) {
 				$user = $this->Auth->user();
 				$Permission = ClassRegistry::init('Permission');
@@ -280,10 +285,12 @@ class AppController extends Controller {
 				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
+		} else {
+			$this->Security->enabled = false;
 		}
 
 		// 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if(!empty($this->params['admin'])) {
+		if($this->Security->enabled && !empty($this->params['admin'])) {
 			$this->Security->validatePost = false;
 		}
 
@@ -466,7 +473,7 @@ class AppController extends Controller {
  * @access	public
  */
 	function getThemeVersion($theme) {
-		
+
 		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
 		if(!file_exists($path)) {
 			return false;
@@ -480,7 +487,7 @@ class AppController extends Controller {
 		}else {
 			return false;
 		}
-		
+
 	}
 /**
  * DBのバージョンを取得する
@@ -638,7 +645,7 @@ class AppController extends Controller {
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = ''.$fromName . ' <'.$from.'>';
+			$this->EmailEx->from = "'{$fromName}' <{$from}>";
 		}
 
 		// CC
@@ -698,13 +705,17 @@ class AppController extends Controller {
  * @access	public
  */
 	function writeInstallSetting($key, $value) {
-
+		
 		/* install.php の編集 */
 		$setting = "Configure::write('".$key."', ".$value.");\n";
 		$key = str_replace('.', '\.', $key);
 		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
 		$file = new File(CONFIGS.'install.php');
-		$data = $file->read();
+		if(file_exists(CONFIGS.'install.php')) {
+			$data = $file->read();
+		}else {
+			$data = "<?php\n?>";
+		}
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
@@ -780,7 +791,7 @@ class AppController extends Controller {
 		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
 		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
-		
+
 		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
 									"/\n[^\n#]*RewriteBase.+/i",
 									"/\n[^\n#]*RewriteCond.+/i",
@@ -961,6 +972,9 @@ class AppController extends Controller {
 				$filter = $default[$model];
 			}
 			$this->data[$model] = $filter;
+			if(!empty($default['named'])) {
+				$named = $default['named'];
+			}
 			$named['?'] = $filter;
 
 		}
@@ -1130,6 +1144,19 @@ class AppController extends Controller {
 			return $default;
 		}
 		return '/';
+	}
+/**
+ * フックメソッドを実行する
+ * 
+ * @param string $hook
+ * @return mixed
+ */
+	function executeHook($hook) {
+
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( &$this->PluginHook, $hook ), $args );
+
 	}
 }
 ?>

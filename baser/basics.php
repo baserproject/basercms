@@ -8,11 +8,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser
  * @since			Baser v 0.1.0
@@ -480,6 +480,38 @@
 			$a[$k] = $v;
 		}
 		return $a;
+
+	}
+/**
+ * プラグインのコンフィグファイルを読み込む
+ *
+ * @param string $name
+ * @return boolean
+ */
+	function loadPluginConfig($name) {
+
+		if(strpos($name, '.') === false) {
+			return false;
+		}
+		list($plugin, $file) = explode('.', $name);
+		$plugin = strtolower($plugin);
+		$pluginPaths = array(
+			APP.'plugins'.DS,
+			BASER_PLUGINS
+		);
+		$config = null;
+		foreach($pluginPaths as $pluginPath) {
+			$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
+			if(file_exists($configPath)) {
+				include $configPath;
+			}
+		}
+
+		if($config) {
+			return Configure::write($config);
+		} else {
+			return false;
+		}
 
 	}
 ?>

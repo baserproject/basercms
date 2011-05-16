@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views.layout
  * @since			Baser v 0.1.0
@@ -89,13 +89,14 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 					<?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
 				</div>
 				<div id="loginUser">
-					<?php if(Configure::read('debug')>0): ?>
-					<span>只今デバッグ中</span>
-					<?php else: ?>
 					<span>
+					<?php if(!empty($user)): ?>
 					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
-					</span>
+					<?php endif ?>
+					<?php if(Configure::read('debug')>0): ?>
+					&nbsp;[<?php echo Configure::read('debug') ?>]
 					<?php endif; ?>
+					</span>
 					&nbsp;| &nbsp;
 					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
 				</div>

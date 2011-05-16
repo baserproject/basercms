@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
@@ -20,24 +20,12 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('ckeditor/editor', null, null, false);
-$users = $formEx->getControlSource("Page.user_id");
-$statuses = array(0=>'非公開', 1=>'公開');
 if($formEx->value('Page.id')) {
 	$previewId = $formEx->value('Page.id');
 }else{
 	$previewId = 'add_'.mt_rand(0, 99999999);
 }
-if($formEx->value('Page.page_category_id') == $mobileId) {
-	$previewWidth = '320px';
-}else {
-	$previewWidth = '90%';
-}
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
-if($this->action == 'admin_add') {
-	$disableDraft = true;
-} else {
-	$disableDraft = false;
-}
 ?>
 
 <script type="text/javascript">
@@ -47,6 +35,7 @@ $(function(){
  * プレビューボタンクリック時イベント
  */
 	$("#BtnPreview").click(function(){
+		var contents = $("#PageContents").val();
 		$("#PageContents").val(editor_contents_tmp.getData());
 		$.ajax({
 			type: "POST",
@@ -60,9 +49,9 @@ $(function(){
 				}
 			}
 		});
+		$("#PageContents").val(contents);
 		return false;
 	});
-	$("#LinkPreview").colorbox({width:"<?php echo $previewWidth ?>", height:"90%", iframe:true});
 /**
  * フォーム送信時イベント
  */
@@ -76,6 +65,7 @@ $(function(){
 		}
 		editor_contents_tmp.execCommand('synchronize');
 		$("#PageMode").val('save');
+		$("#PageForm").submit();
 	});
 /**
  * カテゴリ変更時イベント
@@ -86,9 +76,12 @@ $(function(){
  * モバイル反映欄の表示設定
  */
 function pageCategoryIdChangeHandler() {
+	
 	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
 	var pageCategoryId = $("#PagePageCategoryId").val();
 	var mobile = false;
+	var previewWidth;
+	
 	if(pageCategoryId){
 		for (key in mobileCategoryIds){
 			if(mobileCategoryIds[key] == pageCategoryId){
@@ -103,6 +96,12 @@ function pageCategoryIdChangeHandler() {
 		$("#PageReflectMobile").attr('checked', false);
 		$("#RowReflectMobile").hide();
 	}
+	if(mobile) {
+		previewWidth = '320px';
+	} else {
+		previewWidth = '90%';
+	}
+	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true});
 }
 </script>
 
@@ -147,7 +146,6 @@ function pageCategoryIdChangeHandler() {
 		</td>
 	</tr>
 <?php endif; ?>
-<?php $categories = $formEx->getControlSource('page_category_id') ?>
 <?php if($categories): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
@@ -217,7 +215,7 @@ function pageCategoryIdChangeHandler() {
 		<td class="col-input">
 			<?php echo $formEx->ckeditor('Page.contents', 
 					array('cols' => 60, 'rows' => 20),
-					array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => $disableDraft)) ?>
+					$ckEditorOptions1) ?>
 			<?php echo $formEx->error('Page.contents') ?>
 		</td>
 	</tr>
@@ -226,7 +224,7 @@ function pageCategoryIdChangeHandler() {
 		<td class="col-input">
 			<?php echo $formEx->input('Page.status', array(
 					'type'		=> 'radio',
-					'options'	=> $statuses ,
+					'options'	=> array(0 => '非公開', 1 => '公開') ,
 					'legend'	=> false,
 					'separator'	=> '&nbsp;&nbsp;')) ?>
 			<?php echo $formEx->error('Page.status') ?>
@@ -241,15 +239,20 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
 		<td class="col-input">
+<?php if(isset($user) && $user['user_group_id'] == 1): ?>
 			<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 			<?php echo $formEx->error('Page.author_id') ?>
+<?php else: ?>
+			<?php echo $users[$formEx->value('Page.author_id')] ?>
+			<?php echo $formEx->hidden('Page.author_id') ?>
+<?php endif ?>
 		</td>
 	</tr>
-<?php if(Configure::read('Baser.mobile')): ?>
+<?php if($reflectMobile): ?>
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+			<?php echo $formEx->input('Page.reflectMobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpReflectMobile', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<div id="helptextReflectMobile" class="helptext">
 				<ul>
@@ -268,11 +271,11 @@ function pageCategoryIdChangeHandler() {
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->submit('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->submit('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $formEx->button('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php $baser->link('削　除',
 			array('action'=>'delete', $formEx->value('Page.id')),
 			array('class'=>'btn-gray button'),

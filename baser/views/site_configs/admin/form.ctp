@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi 
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
@@ -132,6 +132,18 @@ $(function(){
 			<?php echo $formEx->error('SiteConfig.email') ?>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('SiteConfig.admin_list_num', '管理システムの<br />初期一覧件数') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('SiteConfig.admin_list_num', array('type' => 'select', 'options' => array(
+				10	=> '10件',
+				20	=> '20件',
+				50	=> '50件',
+				100 => '100件'
+			))) ?>
+			<?php echo $formEx->error('SiteConfig.admin_list_num') ?>
+		</td>
+	</tr>
 </table>
 
 <h3><a href="javascript:void(0)" id="formOption" class="slide-trigger">オプション</a></h3>
@@ -171,7 +183,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $formEx->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 12)) ?>
+				<?php echo $formEx->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
 				<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpGoogleAnalyticsId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $formEx->error('SiteConfig.google_analytics_id') ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">

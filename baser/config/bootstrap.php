@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.config
  * @since			Baser v 0.1.0
@@ -185,6 +185,46 @@
 			$Session->start();
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
+			}
+		}
+	}
+/**
+ * 利用可能プラグインの設定
+ *
+ * これより前にモデルをインスタンス化した場合、PluginHookBehavior::setup() で、
+ * enablePlugins を参照できなくなってしまうので注意
+ * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+ */
+ 	if(isInstalled()) {
+		$db =& ConnectionManager::getDataSource('baser');
+		$sources = $db->listSources();
+		$pluginTable = $db->config['prefix'] . 'plugins';
+		$enablePlugins = array();
+		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
+			$field = 'Plugin.name';
+			if(str_replace('_ex','',$db->config['driver'])=='postgres') {
+				$field .= ' AS Plugin__name';
+			}
+			$sql = 'SELECT '.$db->name($field).' FROM '.$db->name($pluginTable).' AS '.$db->name('Plugin').' WHERE '.$db->name('Plugin.status').' = '.$db->value(true).';';
+			$plugins = $db->query($sql);
+			if($plugins) {
+				$enablePlugins = Set::extract('/Plugin/name',$plugins);
+				Configure::write('Baser.enablePlugins', $enablePlugins);
+			}
+		}
+/**
+ * プラグインの bootstrap を実行する
+ */
+		$_pluginPaths = array(
+			APP.'plugins'.DS,
+			BASER_PLUGINS
+		);
+		foreach($enablePlugins as $enablePlugin) {
+			foreach($_pluginPaths as $_pluginPath) {
+				$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
+				if(file_exists($pluginBootstrap)) {
+					include $pluginBootstrap;
+				}
 			}
 		}
 	}

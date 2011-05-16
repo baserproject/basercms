@@ -10,7 +10,7 @@ $baser->setDescription($blog->getDescription());
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox();
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
 });
 </script>
 
@@ -23,8 +23,7 @@ $(function(){
 	<?php $blog->description() ?>
 </p>
 <?php endif ?>
-<!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+
 <?php if(!empty($posts)): ?>
 <?php foreach($posts as $post): ?>
 <div class="post">
@@ -39,6 +38,7 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 		</span> </div>
+	<?php $baser->element('blog_tag', array('post' => $post)) ?>
 </div>
 <?php endforeach; ?>
 <?php else: ?>

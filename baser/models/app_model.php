@@ -6,11 +6,11 @@
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2010, Catchup, Inc.
+ * Copyright 2008 - 2011, Catchup, Inc.
  *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
- * @copyright		Copyright 2008 - 2010, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
@@ -45,7 +45,20 @@ class AppModel extends Model {
  * @access	public
  */
 	var $plugin = '';
+/**
+ * DB接続設定名
+ *
+ * @var string
+ * @access public
+ */
 	var $useDbConfig = 'baser';
+/**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('PluginHook');
 /**
  * コンストラクタ
  *
@@ -77,23 +90,6 @@ class AppModel extends Model {
 			}
 
 		}
-
-	}
-/**
- * afterFind
- *
- * @param	mixed	$results
- * @return	mixed	$results
- * @access	public
- */
-	function afterFind($results) {
-
-		/* データベース文字コードを内部文字コードに変換 */
-		// MySQL4.0 以下で動作
-		if($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
-			$results = $this->convertEncodingByArray($results, mb_internal_encoding(), Configure::read('Config.dbCharset'));
-		}
-		return $results;
 
 	}
 /**
@@ -335,12 +331,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName,$pluginName = '') {
-
-		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
-		$listSources = $db->listSources();
-		$prefix = $db->config['prefix'];
+	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '') {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -357,8 +348,12 @@ class AppModel extends Model {
 			}
 		}
 
-		if($this->loadSchema($dbConfigName, $path)){
-			return $this->loadCsv($dbConfigName, $path);
+		if($this->loadSchema($dbConfigName, $path, $filterTable, '', array(), $dropField = false)){
+			if($loadCsv) {
+				return $this->loadCsv($dbConfigName, $path);
+			} else {
+				return true;
+			}
 		} else {
 			return false;
 		}
@@ -374,7 +369,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array()) {
+	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
@@ -422,7 +417,7 @@ class AppModel extends Model {
 				}
 				$tmpdir = TMP.'schemas'.DS;
 				copy($path.DS.$file,$tmpdir.$table.'.php');
-				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php'));
+				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField));
 				@unlink($tmpdir.$file);
 				if(!$result) {
 					return false;
@@ -1145,6 +1140,153 @@ class AppModel extends Model {
 		return true;
 
 	}
+/**
+ * afterFind
+ *
+ * @param	mixed	$results
+ * @return	mixed	$results
+ * @access	public
+ */
+	function afterFind($results) {
+
+		/* データベース文字コードを内部文字コードに変換 */
+		// MySQL4.0 以下で動作
+		if($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
+			$results = $this->convertEncodingByArray($results, mb_internal_encoding(), Configure::read('Config.dbCharset'));
+		}
+
+		return parent::afterFind($results);
+
+	}
+/**
+ * Unbinds all relations from a model
+ *
+ * @param string unbinds all related models.
+ * @return void
+ * @access public
+ */
+    function expects($arguments, $reset = true) {
+		
+        $models = array();
+
+        foreach($arguments as $index => $argument)
+        {
+            if (is_array($argument))
+            {
+                if (count($argument) > 0)
+                {
+                    $arguments = am($arguments, $argument);
+                }
+
+                unset($arguments[$index]);
+            }
+        }
+
+        foreach($arguments as $index => $argument)
+        {
+            if (!is_string($argument))
+            {
+                unset($arguments[$index]);
+            }
+        }
+
+        if (count($arguments) == 0)
+        {
+            $models[$this->name] = array();
+        }
+        else
+        {
+            foreach($arguments as $argument)
+            {
+                if (strpos($argument, '.') !== false)
+                {
+                    $model = substr($argument, 0, strpos($argument, '.'));
+                    $child = substr($argument, strpos($argument, '.') + 1);
+
+                    if ($child == $model)
+                    {
+                        $models[$model] = array();
+                    }
+                    else
+                    {
+                        $models[$model][] = $child;
+                    }
+                }
+                else
+                {
+                    $models[$this->name][] = $argument;
+                }
+            }
+        }
+
+        $relationTypes = array ('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
+
+        foreach($models as $bindingName => $children)
+        {
+            $model = null;
+
+            foreach($relationTypes as $relationType)
+            {
+                $currentRelation = (isset($this->$relationType) ? $this->$relationType : null);
+
+                if (isset($currentRelation) && isset($currentRelation[$bindingName]) && is_array($currentRelation[$bindingName]) && isset($currentRelation[$bindingName]['className']))
+                {
+                    $model = $currentRelation[$bindingName]['className'];
+                    break;
+                }
+            }
+
+            if (!isset($model))
+            {
+                $model = $bindingName;
+            }
+
+            if (isset($model) && $model != $this->name && isset($this->$model))
+            {
+                if (!isset($this->__backInnerAssociation))
+                {
+                    $this->__backInnerAssociation = array();
+                }
+
+                $this->__backInnerAssociation[] = $model;
+
+                $this->$model->expects(true, $children);
+            }
+        }
+
+        if (isset($models[$this->name]))
+        {
+            foreach($models as $model => $children)
+            {
+                if ($model != $this->name)
+                {
+                    $models[$this->name][] = $model;
+                }
+            }
+
+            $models = array_unique($models[$this->name]);
+            $unbind = array();
+
+            foreach($relationTypes as $relation)
+            {
+                if (isset($this->$relation))
+                {
+                    foreach($this->$relation as $bindingName => $bindingData)
+                    {
+                        if (!in_array($bindingName, $models))
+                        {
+                            $unbind[$relation][] = $bindingName;
+                        }
+                    }
+                }
+            }
+            if (count($unbind) > 0)
+            {
+                $this->unbindModel($unbind, $reset);
+            }
+        }
+		
+    }
 	
 }
 ?>
