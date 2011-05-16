@@ -110,7 +110,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.list_count', '一覧表示件数') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('BlogContent.list_count', array('type', 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
+			<?php echo $formEx->input('BlogContent.list_count', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpListCount', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $formEx->error('BlogContent.list_count') ?>
 			<div id="helptextListCount" class="helptext">
