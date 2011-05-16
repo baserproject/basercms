@@ -5,9 +5,9 @@
 // BaserCMS Release Notes
 //
 // BaserCMS :  Based Website Development Project (http://basercms.net)
-// Copyright 2008 - 2010, Catchup, Inc. (http://www.e-catchup.jp)
+// Copyright 2008 - 2011, Catchup, Inc. (http://www.e-catchup.jp)
 //
-// @copyright		Copyright 2008 - 2010, Catchup, Inc.
+// @copyright		Copyright 2008 - 2011, Catchup, Inc.
 // @link			http://basercms.net
 // @package			baser
 // @since			BaserCMS v 0.1.0
@@ -15,6 +15,47 @@
 // +---------------------------------------------------------------------------------------------------+ //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
+
+
+[2010-05-16] basercms-1.6.11
+-NEW: [BC]	サイト内検索実装 fixes 1016
+-NEW: [BG]	ブログヘルパーに記事内の画像を抜き出すメソッドを追加しました。 fixes #1331
+			（例）<?php $blog->postImg($post) ?>
+-NEW: [BC]	管理システムの各画面の一覧件数の初期値を設定できるようにしました。 fixes #1326
+-NEW: [BG]	ブログにタグ機能を実装 fixes #1330
+-NEW: [BG]	BaserHelper に、ブログの記事一覧を出力する関数を追加しました。
+			（例）<?php $baser->blogPosts('news') ?>
+-NEW: [BG]	ブログコメント一覧の表示件数設定機能を追加しました。 fixes #1339
+-CHG: [BC]	トップページの新着部分の出力方法をフィード読み込みから DB読み込みに変更しました。
+			（例）<?php $baser->blogPost('news', 5) ?>
+-CHG: [BC]	ヘッダー・フッターの出力方法を変更しました。
+			（例）<?php $baser->header() ?><?php $baser->footer() ?>
+-CHG: [BC]	プラグインからコアのDB構造を変更するalterDbメソッドを追加しました。（プラグインのinit.php で利用します）
+			（例）$this->Plugin->alter('blog', 'plugin');
+-CHG: [BC]	CakePHPを1.2.10 にアップデートしました。
+-CHG: [BC]	ヘルパーの新しいプラグインフックを追加しました。
+			beforeFormCreate / afterFormCreate / beforeFormEnd / afterFormEnd / beforeFormInput / afterFormInput / baserHeader / baserFooter
+-CHG: [BC]	ビヘイビアのプラグインフックを追加しました。
+			setup / beforeFind / afterFind / beforeValidate / beforeSave / beforeDelete / afterDelete / onError
+-CHG: [BC]	bootstrap でプラグインのbootstrapも読み込めるようにしました。
+			/app/plugins/{プラグイン名}/config/bootstrap.php として配置します。
+-CHG: [BC]	プラグインのコンフィグファイルを読み込む関数を追加しました。（Configure::load() では読み込めない為）
+			loadPluginConfig()
+-CHG: [BC]	jquery.corner を 2.11 にアップデート（Firefox4系で動作しなかった為）
+-CHG: [ML]	メール送信の際、コア側の処理でプラグインのテンプレートを指定できるようにしました。
+-CHG: [ML]	お問合せ管理の受信メール詳細画面に「削除」ボタンを設置しました。 fixes #1278
+-CHG: [ML]	メールフォームで入力値の前後の空白を削除する処理を実装しました。 fixes #1329
+-CHG: [ML]	メールの件名に、メールフォームで送信された値を表示する仕組みを追加しました。
+			件名欄に{$フィールド名} で入力します。
+-BUG: [BC]	Google Analytics 文字数制限を変更しました。 fixes #1285
+			12文字 →16文字
+-BUG: [BC]	IEの場合に、ColorBoxの角丸画像読み込みが表示速度の障害となっている問題を解消 fixes #1336
+-BUG: [BC]	同じ名称のページカテゴリを作成した場合、パンくずが正常に出力できない不具合を改善しました。 fixes #1344
+-BUG: [BC]	ページカテゴリ名を変更した際に、関連するページのURLが更新されない不具合を改善しました。 fixes #1376
+-BUG: [BC]	管理システムの Webページ一覧で一覧が正常に取得できない場合がある問題を改善しました。
+-BUG: [BC]	インストール時初期データなしオプションの場合、初期状態でモバイルが表示できない問題を改善しました。
+【アップデート時の注意事項】
+cake フォルダも上書きしてください。
 
 
 [2010-03-24] basercms-1.6.10
