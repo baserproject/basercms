@@ -90,7 +90,7 @@ class BlogController extends BlogAppController {
 		$this->Auth->allow(
 			'index', 'mobile_index', 'archives', 'mobile_archives',
 			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
-			'posts_list'
+			'posts', 'mobile_posts'
 		);
 		
 		$this->BlogContent->recursive = -1;
