@@ -168,7 +168,7 @@ class BlogController extends BlogAppController {
 		$conditions["BlogPost.blog_content_id"] = $contentId;
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 
-		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
+		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogContent'), false);
 		$this->paginate = array(
 				'conditions'=> $conditions,
 				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
