@@ -130,6 +130,8 @@ class DemoShell extends Shell {
 				// TODO baserとpluginのデータソースを別々に取得して処理を行った場合、ファイルロックの問題か固まってしまうので
 				// baserのデータソースを使い回している。デモの場合、ファイルの場所が同じなのでとりあえずの処理。
 				$db =& ConnectionManager::getDataSource('baser');
+				// 一旦接続を切る。bootstrap で plugins を読み込んでおり、update に失敗する為。
+				$db->disconnect();
 				$dataSources = array('baser','plugin');
 				$ret = true;
 				foreach ($dataSources as $dataSource){
