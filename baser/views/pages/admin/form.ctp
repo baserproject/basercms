@@ -252,7 +252,7 @@ function pageCategoryIdChangeHandler() {
 	<tr id="RowReflectMobile" style="display: none">
 		<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Page.reflectMobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+			<?php echo $formEx->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpReflectMobile', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<div id="helptextReflectMobile" class="helptext">
 				<ul>
