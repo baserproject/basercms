@@ -942,5 +942,26 @@ class BaserHelper extends AppHelper {
 		return $text;
 		
 	}
+/**
+ * サイトマップを出力する
+ * 
+ * @param mixid $pageCategoryId / '' / 0
+ */
+	function sitemap($pageCategoryId = null) {
+
+		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId)));
+		$params = array('pageList' => $pageList);
+		if(empty($_SESSION['Auth']['User'])) {
+			$params = am($params, array(
+				'cache' => array(
+					'time' => Configure::read('Baser.cachetime'),
+					'key' => $pageCategoryId))
+			);
+		}
+		
+		$this->element('sitemap', $params);
+		
+	}
+	
 }
 ?>
