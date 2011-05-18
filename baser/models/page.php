@@ -217,6 +217,13 @@ class Page extends AppModel {
 			$result = false;
 		}
 
+		// トップページの場合は検索データとして登録しない
+		if($this->data['Page']['url'] != '/index') {
+			// 検索用テーブルに登録
+			// $this->fileSave が false の時も実行されないので注意
+			$this->saveContent($this->createContent($this->data));
+		}
+		
 		// モバイルデータの生成
 		if(!empty($data['reflect_mobile'])){
 
@@ -280,14 +287,6 @@ class Page extends AppModel {
 			}
 			$this->save();
 		}
-
-		// トップページの場合は検索データとして登録しない
-		if($this->data['Page']['url'] == '/index') {
-			return;
-		}
-		// 検索用テーブルに登録
-		// $this->fileSave が false の時も実行されないので注意
-		$this->saveContent($this->createContent($this->data));
 
 	}
 /**
