@@ -295,8 +295,7 @@ class PagesController extends AppController {
 		$path = func_get_args();
 
 		$ext = '';
-		if(strpos($path[0], '.html') !== false) {
-
+		if(preg_match('/^pages/', $path[0])) {
 			// .htmlの拡張子がついている場合、$pathが正常に取得できないので取得しなおす
 			// 1.5.9 以前との互換性の為残しておく
 			$url = str_replace('pages','',$path[0]);
@@ -312,7 +311,7 @@ class PagesController extends AppController {
 		}
 
 		// モバイルディレクトリへのアクセスは Not Found
-		if($path[0]=='mobile'){
+		if(isset($path[0]) && $path[0]=='mobile'){
 			$this->notFound();
 		}
 
