@@ -43,9 +43,9 @@
 	line-height:40px;
 	margin-top:30px;
 }
-#contentsBody ul.section li,
+#contentsBody ul li,
 .post ul li {
-	background:url(images/bg_list_circle.gif) no-repeat left center;
+	background:url(images/bg_list_circle.gif) no-repeat left 8px;
 	padding-left:20px;
 	margin-bottom:10px;
 }
@@ -99,9 +99,9 @@ h4.contents-head {
 #contentsBody .section {
 	margin:0 35px 20px 35px;
 }
-#contentsBody ul.section,
+#contentsBody ul,
 .post ul {
-	margin:0 35px 20px 35px;
+	margin:3px 35px 20px 35px;
 }
 #ContentsNavi {
 	margin-top:50px;

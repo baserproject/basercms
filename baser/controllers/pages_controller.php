@@ -135,19 +135,36 @@ class PagesController extends AppController {
 			$this->Page->create($this->data);
 
 			if($this->Page->validates()) {
+				
 				if($this->Page->save($this->data,false)) {
-					$id = $this->Page->getInsertID();
-					$this->data['Page']['reflect_mobile'] = false;
-					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を追加しました。');
-					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を追加しました。');
+					
+					// 公開状態の場合サイトマップのキャッシュを削除する
+					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
+						$this->deleteSitemapCache();
+					}
+					
+					// 完了メッセージ
+					$message = 'ページ「'.$this->data['Page']['name'].'」を追加しました。';
+					$this->Session->setFlash($message);
+					$this->Page->saveDbLog($message);
+					
+					// afterPageAdd
 					$this->executeHook('afterPageAdd');
+					
 					// 編集画面にリダイレクト
+					$id = $this->Page->getInsertID();
 					$this->redirect('/admin/pages/edit/'.$id);
+					
 				}else {
+					
 					$this->Session->setFlash('保存中にエラーが発生しました。');
+					
 				}
+				
 			}else {
+				
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				
 			}
 
 		}
@@ -183,6 +200,7 @@ class PagesController extends AppController {
 			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
 		}else {
 
+			$before = $this->Page->read(null, $id);
 			/* 更新処理 */
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->set($this->data);
@@ -190,14 +208,32 @@ class PagesController extends AppController {
 			if($this->Page->validates()) {
 
 				if($this->Page->save($this->data,false)) {
+					
+					// タイトル、URL、公開状態が更新された場合、サイトマップのキャッシュを削除する
+					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
+					$afterStatus = $this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end']);
+					if($beforeStatus != $afterStatus || $before['Page']['title'] != $this->data['Page']['title'] || $before['Page']['url'] != $this->data['Page']['url']) {
+						$this->deleteSitemapCache();
+					}
+					
+					// ビューのキャッシュを削除する
 					clearViewCache($this->data['Page']['url']);
-					$this->data['Page']['reflect_mobile'] = false;
-					$this->Session->setFlash('ページ「'.$this->data['Page']['name'].'」を更新しました。');
-					$this->Page->saveDbLog('ページ「'.$this->data['Page']['name'].'」を更新しました。');
+					
+					// 完了メッセージ
+					$message = 'ページ「'.$this->data['Page']['name'].'」を更新しました。';
+					$this->Session->setFlash($message);
+					$this->Page->saveDbLog($message);
+					
+					// afterPageEdit
 					$this->executeHook('afterPageEdit');
+					
+					// 同ページへリダイレクト
 					$this->redirect('/admin/pages/edit/'.$id);
+					
 				}else {
+					
 					$this->Session->setFlash('保存中にエラーが発生しました。');
+					
 				}
 
 			}else {
@@ -239,11 +275,25 @@ class PagesController extends AppController {
 
 		/* 削除処理 */
 		if($this->Page->del($id)) {
+			
+			// ページテンプレートを削除
 			$this->Page->delFile($page);
-			$this->Session->setFlash('ページ: '.$page['Page']['name'].' を削除しました。');
-			$this->Page->saveDbLog('ページ「'.$page['Page']['name'].'」を削除しました。');
+			
+			// 公開状態だった場合、サイトマップのキャッシュを削除
+			// 公開期間のチェックは行わず確実に削除
+			if($page['Page']['status']) {
+				$this->deleteSitemapCache();
+			}
+			
+			// 完了メッセージ
+			$message = 'ページ: '.$page['Page']['name'].' を削除しました。';
+			$this->Session->setFlash($message);
+			$this->Page->saveDbLog($message);
+			
 		}else {
+			
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			
 		}
 
 		$this->redirect(array('action'=>'admin_index'));
@@ -576,5 +626,17 @@ class PagesController extends AppController {
 		return $conditions;
 
 	}
+/**
+ * サイトマップのキャッシュを削除する
+ * 
+ * @return boolean
+ * @access public
+ */
+	function deleteSitemapCache() {
+		
+		return clearCache('element_*_sitemap', 'views', '');
+		
+	}
+	
 }
 ?>
