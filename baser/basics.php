@@ -494,7 +494,7 @@
 			return false;
 		}
 		list($plugin, $file) = explode('.', $name);
-		$plugin = strtolower($plugin);
+		$plugin = Inflector::underscore($plugin);
 		$pluginPaths = array(
 			APP.'plugins'.DS,
 			BASER_PLUGINS
