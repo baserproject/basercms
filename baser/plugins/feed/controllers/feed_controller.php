@@ -95,6 +95,7 @@ class FeedController extends FeedAppController {
 			return;
 		}
 		$cachetime = 0;
+		$itemExists = false;
 		foreach($feedDetails as $feedDetail) {
 
 			// フィードを取得する
@@ -125,10 +126,13 @@ class FeedController extends FeedAppController {
 				$cachetime = (strtotime($feedDetail['FeedDetail']['cache_time'])-time());
 			}
 
+			if($feed['Items']) {
+				$itemExists = true;
+			}
 
 		}
 		// データが取得できなかった場合はレンダリングして終了
-		if(empty($feeds[0]['Items'])) {
+		if(!$itemExists) {
 			$this->render($feedConfig['FeedConfig']['template']);
 			return;
 		}
