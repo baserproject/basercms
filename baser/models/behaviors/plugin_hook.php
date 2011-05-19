@@ -82,8 +82,17 @@ class PluginHookBehavior extends ModelBehavior {
 		unset($args[1]);unset($args[2]);
 
 		if($this->registerHooks && isset($this->registerHooks[$model->alias][$hookName])){
+			foreach($args as $key => $arg) {
+				if($arg === $return) {
+					$j = $key;
+					break;
+				}
+			}
 			foreach($this->registerHooks[$model->alias][$hookName] as $pluginName) {
-				return call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				if(isset($j)) {
+					$args[$j] = $return;
+				}
 			}
 		}
 		return $return;
