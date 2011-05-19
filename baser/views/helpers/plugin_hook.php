@@ -112,8 +112,17 @@ class PluginHookHelper extends AppHelper {
 		unset($args[0]);unset($args[1]);
 
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
+			foreach($args as $key => $arg) {
+				if($arg === $return) {
+					$j = $key;
+					break;
+				}
+			}
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				return call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				if(isset($j)) {
+					$args[$j] = $return;
+				}
 			}
 		}
 
