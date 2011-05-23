@@ -53,7 +53,6 @@ class DemoShell extends Shell {
 			if(!$this->User->save()) $ret = false;
 			
 			if($ret){
-				
 				$siteConfig = $this->SiteConfig->findExpanded();
 				$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
 				$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
@@ -61,8 +60,11 @@ class DemoShell extends Shell {
 				$ret = $this->SiteConfig->saveKeyValue($siteConfig);
 				if($ret){
 					$pages = $this->Page->find('all');
+					// シェルでリクエストアクションを呼び出すとエラーになるので、検索テーブルへの保存は行わない
+					$this->Page->contentSaving = false;
 					foreach($pages as $page){
-						if(!$this->Page->save($page)){
+						$this->Page->set($page);
+						if(!$this->Page->save()){
 							$ret = false;
 						}
 					}
