@@ -745,7 +745,7 @@ class Page extends AppModel {
 			}else{
 				$conditions['Page.page_category_id'] = null;
 			}
-			$page = $this->find($conditions);
+			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
 			if($page) {
 				$page['Page']['title'] = $title;
 				$page['Page']['description'] = $description;
