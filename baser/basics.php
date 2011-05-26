@@ -37,12 +37,12 @@
 			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
 			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
 			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			$url = str_replace('url=', '', $_SERVER['QUERY_STRING']);
+			$url = str_replace('url=', '', @$_SERVER['QUERY_STRING']);
 			if($url) {
-				$baseUrl = str_replace($url, '', $_SERVER['REQUEST_URI']);
+				$baseUrl = str_replace($url, '', @$_SERVER['REQUEST_URI']);
 			} else {
 				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
-				$baseUrl = preg_replace("/index$/", '', $_SERVER['REQUEST_URI']);
+				$baseUrl = preg_replace("/index$/", '', @$_SERVER['REQUEST_URI']);
 			}
 		}
 		return $baseUrl;
@@ -209,10 +209,10 @@
 					}
 				}
 
-			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $_SERVER['REQUEST_URI'])){
-				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', $_SERVER['REQUEST_URI']);
+			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', @$_SERVER['REQUEST_URI'])){
+				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', @$_SERVER['REQUEST_URI']);
 			} else {
-				$parameter = $_SERVER['REQUEST_URI'];
+				$parameter = @$_SERVER['REQUEST_URI'];
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);

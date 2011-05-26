@@ -50,7 +50,7 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-	$url = $_SERVER['REQUEST_URI'];
+	$url = @$_SERVER['REQUEST_URI'];
 	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $url));

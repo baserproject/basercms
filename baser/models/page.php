@@ -68,6 +68,13 @@ class Page extends AppModel {
  */
 	var $fileSave = true;
 /**
+ * 検索テーブルへの保存可否
+ *
+ * @var boolean
+ * @access public
+ */
+	var $contentSaving = true;
+/**
  * 非公開WebページURLリスト
  * キャッシュ用
  * @var mixed;
@@ -122,9 +129,9 @@ class Page extends AppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue($authUser) {
+	function getDefaultValue() {
 
-		$data[$this->name]['author_id'] = $authUser['User']['id'];
+		$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
 		$data[$this->name]['sort'] = $this->getMax('sort')+1;
 		$data[$this->name]['status'] = false;
 		return $data;
@@ -199,29 +206,26 @@ class Page extends AppModel {
  */
 	function afterSave($created) {
 
-		if(!$this->fileSave) {
-			return true;
-		}
-
 		if(isset($this->data['Page'])){
 			$data = $this->data['Page'];
 		}
-
 		// タイトルタグと説明文を追加
 		if(empty($data['id'])) {
-			$data['id'] = $this->getInsertID();
+			$data['id'] = $this->id;
+		}
+
+		// 検索用テーブルに登録
+		if($this->contentSaving) {
+			$this->saveContent($this->createContent($data));
+		}
+		
+		if(!$this->fileSave) {
+			return true;
 		}
 
 		$result = true;
 		if(!$this->createPageTemplate($data)){
 			$result = false;
-		}
-
-		// トップページの場合は検索データとして登録しない
-		if($this->data['Page']['url'] != '/index') {
-			// 検索用テーブルに登録
-			// $this->fileSave が false の時も実行されないので注意
-			$this->saveContent($this->createContent($this->data));
 		}
 		
 		// モバイルデータの生成
@@ -298,14 +302,25 @@ class Page extends AppModel {
  */
 	function createContent($data) {
 
-		// モバイル未対応
-		$PageCategory = ClassRegistry::init('PageCategory');
-		if(in_array($data['Page']['page_category_id'], $PageCategory->getMobileCategoryIds())) {
-			return array();
-		}
-		
 		if(isset($data['Page'])) {
 			$data = $data['Page'];
+		}
+		if(!isset($data['publish_begin'])) {
+			$data['publish_begin'] = '';
+		}
+		if(!isset($data['publish_end'])) {
+			$data['publish_end'] = '';
+		}
+
+		// トップページの場合は検索データとして登録しない
+		if($data['url'] == '/index') {
+			return;
+		}
+		
+		// モバイル未対応
+		$PageCategory = ClassRegistry::init('PageCategory');
+		if(in_array($data['page_category_id'], $PageCategory->getMobileCategoryIds())) {
+			return array();
 		}
 
 		$_data = array();
@@ -584,6 +599,7 @@ class Page extends AppModel {
 	function checkUnPublish($url) {
 
 		if($this->_unpublishes == -1) {
+			
 			$conditions['or']['Page.status'] = false;
 			$conditions['or'][] = array(array('Page.publish_begin >' => date('Y-m-d H:i:s')),
 												array('Page.publish_begin <>' => '0000-00-00 00:00:00'),
@@ -592,13 +608,21 @@ class Page extends AppModel {
 												array('Page.publish_end <>' => '0000-00-00 00:00:00'),
 												array('Page.publish_end <>' => NULL));
 			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
+			
 			if(!$pages) {
 				$this->_unpublishes = array();
 				return false;
 			}
+			
 			$this->_unpublishes = Set::extract('/Page/url', $pages);
+			
 		}
 
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		
 		return in_array($url,$this->_unpublishes);
 
 	}
@@ -721,7 +745,7 @@ class Page extends AppModel {
 			}else{
 				$conditions['Page.page_category_id'] = null;
 			}
-			$page = $this->find($conditions);
+			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
 			if($page) {
 				$page['Page']['title'] = $title;
 				$page['Page']['description'] = $description;
