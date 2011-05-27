@@ -683,15 +683,44 @@ class Page extends AppModel {
 
 		// カテゴリの取得・登録
 		$categoryName = basename($targetPath);
+		
 		$pageCategoryId = '';
 		if($categoryName != 'pages') {
+			
+			// カテゴリ名の取得
+			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく
+			$categoryTitles = Configure::read('Baser.pageCategoryTitles');
+			$categoryTitle = -1;
+			if($categoryTitles) {
+				$categoryNames = explode('/', str_replace(getViewPath().'pages'.DS, '', $targetPath));
+				foreach($categoryNames as $key => $value) {
+					if(isset($categoryTitles[$value])) {
+						if(count($categoryNames) == ($key + 1)) {
+							$categoryTitle = $categoryTitles[$value]['title'];
+						}elseif(isset($categoryTitles[$value]['children'])) {
+							$categoryTitles = $categoryTitles[$value]['children'];
+						}
+					}
+				}
+			}
+			
 			$categoryId = $this->PageCategory->getIdByPath($targetPath);
 			if($categoryId) {
 				$pageCategoryId = $categoryId;
+				if($categoryTitle != -1) { 
+					$pageCategory = $this->PageCategory->find('first', array('conditions' => array('PageCategory.id' => $pageCategoryId), 'recursive' => -1));
+					$pageCategory['PageCategory']['title'] = $categoryTitle;
+					$this->PageCategory->set($pageCategory);
+					$this->PageCategory->save();
+				}
 			}else {
 				$pageCategory['PageCategory']['parent_id'] = $parentCategoryId;
 				$pageCategory['PageCategory']['name'] = $categoryName;
-				$pageCategory['PageCategory']['title'] = $categoryName;
+				if($categoryTitle == -1) { 
+					$pageCategory['PageCategory']['title'] = $categoryName;
+				} else {
+					$pageCategory['PageCategory']['title'] = $categoryTitle;
+				}
 				$pageCategory['PageCategory']['sort'] = $this->PageCategory->getMax('sort')+1;
 				$this->PageCategory->cacheQueries = false;
 				$this->PageCategory->create($pageCategory);
