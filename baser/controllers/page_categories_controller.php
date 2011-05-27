@@ -69,10 +69,26 @@ class PageCategoriesController extends AppController {
 	function admin_index() {
 
 		if(!Configure::read('Baser.mobile')) {
-			$conditions = array('PageCategory.id <>' => $this->PageCategory->getMobileId());
-		} else {
-			$conditions = array();
+			$this->data['PageCategory']['type'] = 'pc';
 		}
+			
+		$default = array('PageCategory' => array('type'=>'pc'));
+		$this->setViewConditions('PageCategory', array('default' => $default));
+
+		$mobileId = $this->PageCategory->getMobileId();
+		$children = $this->PageCategory->children($mobileId, false, array('PageCategory.id'));
+		$ids = array();
+		if($children) {
+			$ids = am($ids, Set::extract('/PageCategory/id', $children));
+		}
+
+		if($this->data['PageCategory']['type'] == 'pc' || empty($this->data['PageCategory']['type'])) {
+			$ids = am(array($mobileId), $ids);
+			$conditions = array('NOT' => array('PageCategory.id' => $ids));
+		} elseif($this->data['PageCategory']['type'] == 'mobile') {
+			$conditions = array(array('PageCategory.id' => $ids));
+		}
+		
 		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
@@ -212,6 +228,14 @@ class PageCategoriesController extends AppController {
 		$this->redirect(array('action'=>'admin_index'));
 
 	}
-
+	function admin_up($id) {
+		$this->PageCategory->moveup($id);
+		$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
+	}
+	function admin_down($id) {
+		$this->PageCategory->movedown($id);
+		$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
+	}
+	
 }
 ?>
