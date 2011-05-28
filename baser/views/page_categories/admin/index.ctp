@@ -68,7 +68,7 @@
 		<?php else: ?>
 			<?php $class=''; ?>
 		<?php endif; ?>
-	<tr<?php echo $class; ?>>
+	<tr<?php echo $class; ?> id="Row<?php echo $dbData['PageCategory']['id'] ?>">
 		<td class="operation-button">
 		<?php if($dbData['PageCategory']['name']!='mobile'): ?>
 			<?php if($key != 0): ?>

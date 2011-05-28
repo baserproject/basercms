@@ -230,11 +230,11 @@ class PageCategoriesController extends AppController {
 	}
 	function admin_up($id) {
 		$this->PageCategory->moveup($id);
-		$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
+		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
 	}
 	function admin_down($id) {
 		$this->PageCategory->movedown($id);
-		$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
+		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
 	}
 	
 }
