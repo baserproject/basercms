@@ -228,13 +228,31 @@ class PageCategoriesController extends AppController {
 		$this->redirect(array('action'=>'admin_index'));
 
 	}
+/**
+ * カテゴリの並び替え順を上げる
+ * 
+ * @param type $id
+ * @return void 
+ * @access public
+ */
 	function admin_up($id) {
+		
 		$this->PageCategory->moveup($id);
 		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
+		
 	}
+/**
+ * カテゴリの並び替え順を下げる
+ * 
+ * @param type $id 
+ * @return void
+ * @access public
+ */
 	function admin_down($id) {
+		
 		$this->PageCategory->movedown($id);
 		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
+		
 	}
 	
 }
