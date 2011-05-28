@@ -127,7 +127,7 @@ class PagesController extends AppController {
 	function admin_add() {
 
 		if(empty($this->data)) {
-			$this->data = $this->Page->getDefaultValue($this->Auth->user());
+			$this->data = $this->Page->getDefaultValue();
 		}else {
 
 			/* 登録処理 */
