@@ -535,6 +535,7 @@ class PagesController extends AppController {
 			$this->setViewConditions('Page', array('action' => 'admin_index'));
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			$this->Page->fileSave = false;
+			$this->Page->contentSaving = false;
 			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
 			}else{
