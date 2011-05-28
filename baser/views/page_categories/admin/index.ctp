@@ -35,6 +35,22 @@
 	</div>
 </div>
 
+<?php if(Configure::read('Baser.mobile')): ?>
+<!-- search -->
+<h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
+<div class="function-box corner10" id="PageFilterBody">
+	<?php echo $formEx->create('PageCategory', array('url' => array('action' => 'index'))) ?>
+	<p>
+		<small>タイプ</small>
+		<?php echo $formEx->input('PageCategory.type', array(
+				'type'		=> 'select',
+				'options'	=> array('pc' => 'PC', 'mobile' => 'モバイル'),
+				'escape'	=> false)) ?>　
+		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?> </p>
+	<?php $formEx->end() ?>
+</div>
+<?php endif ?>
+
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TablePageCategoryCategories">
 	<tr>
@@ -46,7 +62,7 @@
 	</tr>
 <?php if(!empty($dbDatas)): ?>
 	<?php $count=0; ?>
-	<?php foreach($dbDatas as $dbData): ?>
+	<?php foreach($dbDatas as $key => $dbData): ?>
 		<?php if ($count%2 === 0): ?>
 			<?php $class=' class="altrow"'; ?>
 		<?php else: ?>
@@ -55,6 +71,12 @@
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
 		<?php if($dbData['PageCategory']['name']!='mobile'): ?>
+			<?php if($key != 0): ?>
+			<?php $baser->link('▲', array('controller' => 'page_categories', 'action' => 'up', $dbData['PageCategory']['id'])) ?>
+			<?php endif ?>
+			<?php if(count($dbDatas) != ($key + 1)): ?>
+			<?php $baser->link('▼', array('controller' => 'page_categories', 'action' => 'down', $dbData['PageCategory']['id'])) ?>
+			<?php endif ?>
 			<?php $baser->link('編集', array('action' => 'edit', $dbData['PageCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['PageCategory']['id']),
