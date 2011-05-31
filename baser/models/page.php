@@ -149,7 +149,12 @@ class Page extends AppModel {
 
 		// 保存前のページファイルのパスを取得
 		if($this->exists()) {
-			$this->oldPath = $this->_getPageFilePath($this->find(array('Page.id'=>$this->data['Page']['id'])));
+			$this->oldPath = $this->_getPageFilePath(
+					$this->find('find', array(
+						'conditions' => array('Page.id' => $this->data['Page']['id']),
+						'recursive' => -1)
+					)
+			);
 		}else {
 			$this->oldPath = '';
 		}
@@ -395,7 +400,7 @@ class Page extends AppModel {
  * @access	public
  */
 	function createAllPageTemplate(){
-		$pages = $this->find('all');
+		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
 		foreach($pages as $page){
 			if(!$this->createPageTemplate($page)){
@@ -476,7 +481,7 @@ class Page extends AppModel {
 
 		if($categoryId) {
 			$this->PageCategory->cacheQueries = false;
-			$categoryPath = $this->PageCategory->getPath($categoryId);
+			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
 					$path .= $category['PageCategory']['name'].DS;
@@ -561,7 +566,7 @@ class Page extends AppModel {
 			}else {
 				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
 			}
-			if(!$this->find($conditions)) {
+			if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 				return true;
 			}else {
 				return !file_exists($this->_getPageFilePath($this->data));
@@ -636,7 +641,11 @@ class Page extends AppModel {
 
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
-			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
+			$pages = $this->find('all', array(
+				'fields' => 'url',
+				'conditions' => $conditions,
+				'recursive'=>-1
+			));
 			if(!$pages) {
 				$this->_publishes = array();
 				return false;
@@ -776,12 +785,24 @@ class Page extends AppModel {
 			}
 			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
 			if($page) {
-				$page['Page']['title'] = $title;
-				$page['Page']['description'] = $description;
-				$page['Page']['contents'] = $contents;
-				$this->set($page);
-				if($this->save()) {
-					$update++;
+				$chage = false;
+				if($title != $page['Page']['title']) {
+					$chage = true;
+				}
+				if($description != $page['Page']['description']) {
+					$chage = true;
+				}
+				if(trim($contents) != trim($page['Page']['contents'])) {
+					$chage = true;
+				}
+				if($chage) {
+					$page['Page']['title'] = $title;
+					$page['Page']['description'] = $description;
+					$page['Page']['contents'] = $contents;
+					$this->set($page);
+					if($this->save()) {
+						$update++;
+					}
 				}
 			}else {
 				$page = $this->getDefaultValue();
