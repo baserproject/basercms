@@ -28,11 +28,6 @@ if($formEx->value('BlogPost.id')) {
 	$previewId = 'add_'.mt_rand(0, 99999999);
 }
 $baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
-if($this->action == 'admin_add') {
-	$disableDraft = true;
-} else {
-	$disableDraft = false;
-}
 ?>
 
 <script type="text/javascript">
