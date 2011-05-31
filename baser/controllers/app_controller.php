@@ -588,6 +588,10 @@ class AppController extends Controller {
 		if(!empty($this->siteConfigs)) {
 			$formalName = $this->siteConfigs['formal_name'];
 			$email = $this->siteConfigs['email'];
+			if(strpos($email, ',') !== false) {
+				$email = split(',', $email);
+				$email = $email[0];
+			}
 		}
 		if(!$formalName) {
 			$formalName = Configure::read('Baser.title');
@@ -595,6 +599,7 @@ class AppController extends Controller {
 		$_options = array('fromName' => $formalName,
 							'reply' => $email,
 							'cc' => '',
+							'bcc' => '',
 							'template' => 'default',
 							'from' => $email
 		);
@@ -607,9 +612,36 @@ class AppController extends Controller {
 			return false;
 		}
 
+		if(strpos($to, ',') !== false) {
+			$_to = split(',', $to);
+			$to = $_to[0];
+			if(count($_to) > 1) {
+				unset($_to[0]);
+				if($bcc) {
+					$bcc .= ',';
+				}
+				$bcc .= implode(',', $_to);
+			}
+		}
+		
 		// メール基本設定
 		$this->_setMail();
 
+		if(!empty($options['filePaths'])) {
+			if(!is_array($options['filePaths'])) {
+				$this->EmailEx->filePaths = array($options['filePaths']);
+			} else {
+				$this->EmailEx->filePaths = $options['filePaths'];
+			}
+		}
+		if(!empty($options['attachments'])) {
+			if(!is_array($options['attachments'])) {
+				$this->EmailEx->attachments = array($options['attachments']);
+			} else {
+				$this->EmailEx->attachments = $options['attachments'];
+			}
+		}
+		
 		// テンプレート
 		if(Configure::read('Mobile.on')) {
 			$this->EmailEx->template = 'mobile'.DS.$template;
@@ -650,14 +682,24 @@ class AppController extends Controller {
 
 		// CC
 		if($cc) {
-			if(strpos(',',$cc !== false)) {
+			if(strpos($cc, ',') !== false) {
 				$cc = split(',', $cc);
 			}else{
 				$cc = array($cc);
 			}
 			$this->EmailEx->cc = $cc;
 		}
-
+		
+		// BCC
+		if($bcc) {
+			if(strpos($bcc, ',') !== false) {
+				$bcc = split(',', $bcc);
+			}else{
+				$bcc = array($bcc);
+			}
+			$this->EmailEx->bcc = $bcc;
+		}
+		
 		return $this->EmailEx->send();
 
 	}

@@ -1287,6 +1287,30 @@ class AppModel extends Model {
         }
 		
     }
+/**
+ * 複数のEメールチェック（カンマ区切り）
+ * 
+ * @param array $check
+ * @return boolean 
+ */
+	function emails($check) {
+		
+		$Validation =& Validation::getInstance();
+		
+		if(strpos($check[key($check)], ',') !== false) {
+			$emails = explode(',', $check[key($check)]);
+		}
+		
+		$result = true;
+		foreach($emails as $email) {
+			if(!$Validation->email($email)) {
+				$result = false;
+			}
+		}
+		
+		return $result;
+		
+	}
 	
 }
 ?>
