@@ -150,7 +150,7 @@ class Page extends AppModel {
 		// 保存前のページファイルのパスを取得
 		if($this->exists()) {
 			$this->oldPath = $this->_getPageFilePath(
-					$this->find('find', array(
+					$this->find('first', array(
 						'conditions' => array('Page.id' => $this->data['Page']['id']),
 						'recursive' => -1)
 					)
