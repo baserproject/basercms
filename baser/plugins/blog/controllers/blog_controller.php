@@ -608,7 +608,7 @@ class BlogController extends BlogAppController {
 				'conditions'=> $conditions,
 				'limit'		=> $num,
 				'order'		=> 'posts_date DESC',
-				'recursive'	=> 0)
+				'recursive'	=> 1)
 		);
 		$this->set('posts', $posts);
 		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');

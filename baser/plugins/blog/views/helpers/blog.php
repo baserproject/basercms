@@ -260,16 +260,14 @@ class BlogHelper extends AppHelper {
  */
 	function getCategoryUrl($blogCategoryId) {
 
-		$view =& ClassRegistry::getObject('view');
-		$blogContentName = $view->viewVars['blogContent']['BlogContent']['name'];
 		if (!isset($this->BlogCategory)) {
-			if(ClassRegistry::isKeySet('BlogCategory')) {
-				$this->BlogCategory = ClassRegistry::getObject('BlogCategory');
-			}else {
-				$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
-			}
+			$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
+		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
+		$this->setBlogContent($blogContentId);
+		$blogContentName = $this->blogContent['name'];
+		
 		$path = array('category');
 		if($categoryPath) {
 			foreach($categoryPath as $category) {
