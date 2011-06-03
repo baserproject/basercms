@@ -510,6 +510,19 @@ class BlogHelper extends AppHelper {
  */
 	function postImg($post, $options = array()) {
 
+		echo $this->getPostImg($post, $options);
+		
+	}
+/**
+ * 記事中の画像を取得する
+ *
+ * @param	array	$post
+ * @param	array	$options
+ * @return	void
+ * @access	public
+ */
+	function getPostImg($post, $options = array()) {
+		
 		$this->setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
 		$options = am($_options, $options);
@@ -527,14 +540,35 @@ class BlogHelper extends AppHelper {
 			$url = $matches[1][$num-1];
 			$img = $this->Baser->getImg($url, $options);
 			if($link) {
-				$this->Baser->link($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
+				return $this->Baser->geLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
 			} else {
-				echo $img;
+				return $img;
 			}
 		} else {
 			return '';
 		}
 		
+	}
+/**
+ * 記事の本文、詳細の中で指定したIDの中のHTMLを取得する
+ *
+ * @param array $post
+ * @param string $id
+ * @return string
+ * @access public
+ */
+	function getHtmlById($post, $id) {
+		
+		$content = $post['BlogPost']['content'].$post['BlogPost']['detail'];
+		
+		$values = array();
+		$pattern = '/<([^\s]+)\s[^>]*?id="'.$id.'"[^>]*>(.*?)<\/\1>/is';
+		if(preg_match($pattern, $content, $matches)){
+			return $matches[2];
+		}else{
+			return '';
+		}
+	
 	}
 	
 }
