@@ -298,7 +298,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function title($separator='｜',$categoryTitleOn = null) {
-		echo '<title>'.$this->getTitle($separator,$categoryTitleOn).'</title>';
+		echo '<title>'.strip_tags($this->getTitle($separator,$categoryTitleOn)).'</title>';
 	}
 /**
  * メタキーワードタグを出力する
@@ -312,7 +312,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function metaDescription() {
-		echo $this->Html->meta('description',$this->getDescription());
+		echo $this->Html->meta('description', strip_tags($this->getDescription()));
 	}
 /**
  * RSSリンクタグを出力する
