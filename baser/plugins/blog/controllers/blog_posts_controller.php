@@ -245,6 +245,7 @@ class BlogPostsController extends BlogAppController {
 
 			// データを保存
 			if($this->BlogPost->save()) {
+				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
@@ -291,6 +292,7 @@ class BlogPostsController extends BlogAppController {
 			}
 			// データを保存
 			if($this->BlogPost->save($this->data)) {
+				clearViewCache();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
