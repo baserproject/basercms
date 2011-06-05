@@ -1301,11 +1301,13 @@ class AppModel extends Model {
 	function emails($check) {
 		
 		$Validation =& Validation::getInstance();
-		
+		$emails = array();
 		if(strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
 		}
-		
+		if(!$emails) {
+			$emails = array($check[key($check)]);
+		}
 		$result = true;
 		foreach($emails as $email) {
 			if(!$Validation->email($email)) {
