@@ -540,7 +540,7 @@ class BlogHelper extends AppHelper {
 			$url = $matches[1][$num-1];
 			$img = $this->Baser->getImg($url, $options);
 			if($link) {
-				return $this->Baser->geLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
+				return $this->Baser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
 			} else {
 				return $img;
 			}
