@@ -92,7 +92,7 @@ class AppModel extends Model {
 		}
 		
 		// モデルデータキャッシュ設定
-		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.modelDataCache')) {
+		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime')) {
 			$this->Behaviors->attach('Cache');
 		}
 
@@ -1335,9 +1335,9 @@ class AppModel extends Model {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if ($cache && $this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+		if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
 			if($this->cacheEnabled()) {
-				return $this->cacheMethod(Configure::read('Baser.cachetime'), __FUNCTION__, $args);
+				return $this->cacheMethod($cache, __FUNCTION__, $args);
 			}
 		}
 		return call_user_func_array(array('parent', __FUNCTION__), $args);

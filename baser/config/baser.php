@@ -32,7 +32,7 @@
 		// 文字コードの検出順
 		'detectOrder'		=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
 		// モデルデータキャッシュの利用可否
-		'modelDataCache'	=> true
+		'dataCachetime'		=> '1 month'
 	);
 /**
  * 認証プレフィックス設定

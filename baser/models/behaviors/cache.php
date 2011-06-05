@@ -25,14 +25,22 @@ class CacheBehavior extends ModelBehavior {
 			return $ret;
 		}
 		// サーバーキャッシュの場合
-		$ret = Cache::read($cachekey);
+		$ret = Cache::read($cachekey, '_cake_data_');
 		if($ret !== false){
 			$this->enabled = true;
+			if($ret == "{false}") {
+				$ret = false;
+			}
 			return $ret;
 		}
 		$ret = call_user_func_array(array($model, $method), $args);
 		$this->enabled = true;
-		Cache::write($cachekey, $ret, $expire);
+		if($ret === false) {
+			$_ret = "{false}";
+		} else {
+			$_ret = $ret;
+		}	
+		Cache::write($cachekey, $_ret, '_cake_data_');
 		// クリア用にモデル毎のキャッシュキーリストを作成
 		$cacheListKey = get_class($model) . '_cacheMethodList';
 		$list = Cache::read($cacheListKey);

@@ -113,7 +113,11 @@ class PluginHookBehavior extends ModelBehavior {
 		}
 
 		$plugins = Configure::read('Baser.enablePlugins');
-
+		
+		if(!$plugins) {
+			return;
+		}
+		
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
 		if($plugins) {
