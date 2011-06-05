@@ -30,7 +30,9 @@
 		// プラグインDBプレフィックス
 		'pluginDbPrefix'	=> 'pg_',
 		// 文字コードの検出順
-		'detectOrder'		=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP'
+		'detectOrder'		=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
+		// モデルデータキャッシュの利用可否
+		'modelDataCache'	=> true
 	);
 /**
  * 認証プレフィックス設定

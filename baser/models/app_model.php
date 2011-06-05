@@ -90,6 +90,11 @@ class AppModel extends Model {
 			}
 
 		}
+		
+		// モデルデータキャッシュ設定
+		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.modelDataCache')) {
+			$this->Behaviors->attach('Cache');
+		}
 
 	}
 /**
@@ -1311,6 +1316,23 @@ class AppModel extends Model {
 		return $result;
 		
 	}
-	
+/**
+ * find
+ * 
+ * キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
+ * 
+ * @param mixed...
+ * @return type 
+ * @access public
+ */
+	function find() {
+		
+		$args = func_get_args();
+		if ($this->Behaviors->attached('Cache')) {
+			if($this->cacheEnabled()) return $this->cacheMethod(Configure::read('Baser.cachetime'), __FUNCTION__, $args);
+		}
+		return call_user_func_array(array('parent', __FUNCTION__), $args);
+		
+	}
 }
 ?>

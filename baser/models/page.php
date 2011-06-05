@@ -77,13 +77,16 @@ class Page extends AppModel {
 /**
  * 非公開WebページURLリスト
  * キャッシュ用
- * @var mixed;
+ * @var mixed
+ * @deprecated
  */
 	var $_unpublishes = -1;
 /**
  * 公開WebページURLリスト
+ * 
  * キャッシュ用
- * @var mixed;
+ * 
+ * @var mixed
  */
 	var $_publishes = -1;
 /**
@@ -597,9 +600,11 @@ class Page extends AppModel {
 	}
 /**
  * 非公開チェックを行う
+ * 
  * @param	string	$url
  * @return	boolean
  * @access	public
+ * @deprecated isPageUrl と組み合わせて checkPublish を利用してください。
  */
 	function checkUnPublish($url) {
 
@@ -639,6 +644,11 @@ class Page extends AppModel {
  */
 	function checkPublish($url) {
 
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
 			$pages = $this->find('all', array(
@@ -851,6 +861,29 @@ class Page extends AppModel {
 			return false;
 		}
 		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
+	}
+/**
+ * ページで管理されているURLかチェックする
+ * 
+ * @param string $url
+ * @return boolean
+ * @access public
+ */
+	function isPageUrl($url) {
+		
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		$conditions = array('Page.url' => $url);
+		$data = $this->find('first', array(
+			'conditions' => $conditions, 
+			'fields' => array('Page.id'), 
+			'recursive' => -1
+		));
+		if($data) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 }

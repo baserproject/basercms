@@ -557,9 +557,11 @@ class BaserHelper extends AppHelper {
 		}
 
 		// ページ公開チェック
-		if(isset($this->Page) && !preg_match('/^\/admin/', $_url)) {
-			if($this->Page->checkUnPublish($_url)) {
-				$enabled = false;
+		if(empty($this->params['admin'])) {
+			if(isset($this->Page) && !preg_match('/^\/admin/', $_url)) {
+				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
+					$enabled = false;
+				}
 			}
 		}
 
