@@ -181,10 +181,11 @@ class ContentsController extends AppController {
 		$conditions = array('Page.page_category_id' => $parentCategoryId);
 		$conditions = am($conditions, $this->Page->getConditionAllowPublish());
 		$pages = $this->Page->find('all', array(
-			'conditions' => $conditions,
-			'fields' => array('name', 'title', 'url'), 
-			'order' => 'Page.sort',
-			'recursive' => -1
+			'conditions'=> $conditions,
+			'fields'	=> array('name', 'title', 'url'), 
+			'order'		=> 'Page.sort',
+			'recursive' => -1,
+			'cache'		=> false
 		));
 
 		foreach($pages as $key => $page) {

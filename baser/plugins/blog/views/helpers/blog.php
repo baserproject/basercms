@@ -369,7 +369,14 @@ class BlogHelper extends AppHelper {
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-		$prevPost = $BlogPost->find($conditions,array('no','name'),'posts_date DESC',-1);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$prevPost = $BlogPost->find('first', array(
+			'conditions'	=> $conditions,
+			'fields'		=> array('no','name'),
+			'order'			=> 'posts_date DESC',
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
 		if($prevPost) {
 			$no = $prevPost['BlogPost']['no'];
 			if(!$title) {
@@ -399,7 +406,14 @@ class BlogHelper extends AppHelper {
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-		$nextPost = $BlogPost->find($conditions,array('no','name'),'posts_date',-1);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$nextPost = $BlogPost->find('first', array(
+			'conditions'	=> $conditions,
+			'fields'		=> array('no','name'),
+			'order'			=> 'posts_date',
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
 		if($nextPost) {
 			$no = $nextPost['BlogPost']['no'];
 			if(!$title) {

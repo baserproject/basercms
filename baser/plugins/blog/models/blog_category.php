@@ -193,7 +193,8 @@ class BlogCategory extends BlogAppModel {
 							am(
 								array('BlogPost.blog_category_id' => $data['BlogCategory']['id']),
 								$this->BlogPost->getConditionAllowPublish()
-							)
+							),
+						'cache'		=> false
 					));
 				}
 			}

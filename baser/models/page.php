@@ -90,6 +90,14 @@ class Page extends AppModel {
  */
 	var $_publishes = -1;
 /**
+ * WebページURLリスト
+ * 
+ * キャッシュ用
+ * 
+ * @var mixed
+ */
+	var $_pages = -1;
+/**
  * 最終登録ID
  *
  * モバイルページへのコピー処理でスーパークラスの最終登録IDが上書きされ、
@@ -651,10 +659,12 @@ class Page extends AppModel {
 		
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
+			// 毎秒抽出条件が違うのでキャッシュしない
 			$pages = $this->find('all', array(
-				'fields' => 'url',
-				'conditions' => $conditions,
-				'recursive'=>-1
+				'fields'	=> 'url',
+				'conditions'=> $conditions,
+				'recursive'	=> -1,
+				'cache'		=> false
 			));
 			if(!$pages) {
 				$this->_publishes = array();
@@ -871,18 +881,23 @@ class Page extends AppModel {
  */
 	function isPageUrl($url) {
 		
-		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
-		$conditions = array('Page.url' => $url);
-		$data = $this->find('first', array(
-			'conditions' => $conditions, 
-			'fields' => array('Page.id'), 
-			'recursive' => -1
-		));
-		if($data) {
-			return true;
-		} else {
-			return false;
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
 		}
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		
+		if($this->_pages == -1) {
+			$pages = $this->find('all', array(
+				'fields'	=> 'url',
+				'recursive'	=> -1
+			));
+			if(!$pages) {
+				$this->_pages = array();
+				return false;
+			}
+			$this->_pages = Set::extract('/Page/url', $pages);
+		}
+		return in_array($url,$this->_pages);
 		
 	}
 	

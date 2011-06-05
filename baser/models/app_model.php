@@ -1330,8 +1330,15 @@ class AppModel extends Model {
 	function find() {
 		
 		$args = func_get_args();
-		if ($this->Behaviors->attached('Cache')) {
-			if($this->cacheEnabled()) return $this->cacheMethod(Configure::read('Baser.cachetime'), __FUNCTION__, $args);
+		$cache = true;
+		if(isset($args[1]['cache']) && is_bool($args[1]['cache'])) {
+			$cache = $args[1]['cache'];
+			unset($args[1]['cache']);
+		}
+		if ($cache && $this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+			if($this->cacheEnabled()) {
+				return $this->cacheMethod(Configure::read('Baser.cachetime'), __FUNCTION__, $args);
+			}
 		}
 		return call_user_func_array(array('parent', __FUNCTION__), $args);
 		

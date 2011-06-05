@@ -147,7 +147,8 @@ class PageHelper extends Helper {
 			'conditions'=> $conditions,
 			'fields'	=> array('title', 'url'),
 			'order'		=> 'sort',
-			'recursive'	=> -1
+			'recursive'	=> -1,
+			'cache'		=> false
 		));
 		if($nextPost) {
 			if(!$title) {
@@ -190,7 +191,8 @@ class PageHelper extends Helper {
 			'conditions'=> $conditions,
 			'fields'	=> array('title', 'url'),
 			'order'		=> 'sort DESC',
-			'recursive'	=> -1
+			'recursive'	=> -1,
+			'cache'		=> false
 		));
 		if($nextPost) {
 			if(!$title) {
