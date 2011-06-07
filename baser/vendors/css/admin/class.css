@@ -190,6 +190,7 @@ table.admin-col-table-01 th {
 	text-align: center;
 	border-bottom:2px solid #690;
 	border-right:1px solid #690;
+	white-space: nowrap;
 }
 table.admin-col-table-01 th a {
 	text-decoration:none;
@@ -447,4 +448,7 @@ img.slide-trigger {
 .size-counter small{
 	font-size: 10px;
 	color:#CCC;
+}
+.function-box span {
+	white-space: nowrap;
 }
