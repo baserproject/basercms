@@ -164,7 +164,7 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeFind(&$model, $query) {
-		return $this->executeHook($model, 'beforeFind', true, $query);
+		return $this->executeHook($model, 'beforeFind', $query, $query);
 	}
 /**
  * afterFind
