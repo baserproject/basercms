@@ -158,6 +158,7 @@ table.admin-row-table-01 th {
 	border-bottom-color: #669900;
 	font-size:0.85em;
 	color:#669900;
+	white-space: nowrap;
 }
 table.admin-row-table-01 tr td {
 	/*background-color: #ffffff;*/
