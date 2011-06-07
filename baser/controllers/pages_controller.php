@@ -170,7 +170,9 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$user = $this->Auth->user();
+		$this->set('editable', true);
+		$this->set('categories', $this->Page->getControlSource('page_category_id', array('owner_id' => $user['User']['user_group_id'])));
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
@@ -243,7 +245,17 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$user = $this->Auth->user();
+		if($this->data['PageCategory']['owner_id'] == $user['User']['user_group_id'] || $user['User']['user_group_id'] == 1) {
+			$editable = true;
+			$catOption = array('owner_id' => $user['User']['user_group_id']);
+		} else {
+			$editable = false;
+			$catOption = array();
+		}
+		
+		$this->set('editable', $editable);
+		$this->set('categories', $this->Page->getControlSource('page_category_id', $catOption));
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
@@ -561,9 +573,12 @@ class PagesController extends AppController {
 		// ページカテゴリ
 
 		$pageCategoryId = $data['Page']['page_category_id'];
+		$name = $data['Page']['name'];
 		unset($data['_Token']);
+		unset($data['Page']['name']);
 		unset($data['Page']['page_category_id']);
 		unset($data['Sort']);
+		unset($data['Page']['open']);
 		
 		// 条件指定のないフィールドを解除
 		foreach($data['Page'] as $key => $value) {
@@ -624,6 +639,13 @@ class PagesController extends AppController {
 			}
 		}
 
+		if($name) {
+			$conditions['and']['or'] = array(
+				'Page.name LIKE' => '%'.$name.'%',
+				'Page.title LIKE' => '%'.$name.'%'
+			);
+		}
+		
 		return $conditions;
 
 	}

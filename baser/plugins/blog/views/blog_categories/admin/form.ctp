@@ -97,6 +97,22 @@
 			<?php echo $formEx->error('BlogCategory.parent_id') ?>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('BlogCategory.owner_id', '管理グループ') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogCategory.owner_id', array(
+					'type'		=> 'select',
+					'options'	=> $formEx->getControlSource('BlogCategory.owner_id'),
+					'empty'		=> '指定しない')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpOwnerId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('BlogCategory.owner_id') ?>
+			<div id="helptextOwnerId" class="helptext">
+				<ul>
+					<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
 </table>
 
 <!-- button -->

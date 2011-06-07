@@ -120,6 +120,22 @@
 			</div>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><?php echo $formEx->label('PageCategory.owner_id', '管理グループ') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('PageCategory.owner_id', array(
+					'type'		=> 'select',
+					'options'	=> $formEx->getControlSource('PageCategory.owner_id'),
+					'empty'		=> '指定しない')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpOwnerId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $formEx->error('PageCategory.owner_id') ?>
+			<div id="helptextOwnerId" class="helptext">
+				<ul>
+					<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
+				</ul>
+			</div>
+		</td>
+	</tr>
 </table>
 
 <div class="submit">

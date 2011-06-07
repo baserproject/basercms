@@ -283,16 +283,18 @@ class BlogPost extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		if($field == 'blog_category_id') {
-			$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
-		}
-		if($field == 'user_id') {
-			$controlSources['user_id'] = $this->User->getUserList($options);
-		}
-		if($field == 'blog_tag_id') {
-			$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+		switch ($field) {
+			case 'blog_category_id':
+				$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
+				break;
+			case 'user_id':
+				$controlSources['user_id'] = $this->User->getUserList($options);
+				break;
+			case 'blog_tag_id':
+				$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+				break;
 		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];

@@ -25,6 +25,9 @@ if($formEx->value('Page.id')) {
 }else{
 	$previewId = 'add_'.mt_rand(0, 99999999);
 }
+if($user['user_group_id'] == 1 || $user['user_group_id'] == @$baser->siteConfig['root_owner_id'] || !$editable) {
+	$categories = am(array('' => '指定なし', $categories));
+}
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 ?>
 
@@ -153,8 +156,7 @@ function pageCategoryIdChangeHandler() {
 			<?php echo $formEx->input('Page.page_category_id', array(
 					'type'		=> 'select',
 					'options'	=> $categories,
-					'escape'	=> false,
-					'empty'		=> '指定なし')) ?>
+					'escape'	=> false)) ?>
 			<?php echo $formEx->error('Page.page_category_id') ?>
 		</td>
 	</tr>
@@ -274,13 +276,17 @@ function pageCategoryIdChangeHandler() {
 	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
+	<?php if($editable): ?>
 	<?php echo $formEx->button('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php endif ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php if($editable): ?>
 	<?php $baser->link('削　除',
 			array('action'=>'delete', $formEx->value('Page.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),
 			false); ?>
+	<?php endif ?>
 <?php endif ?>
 </div>
 

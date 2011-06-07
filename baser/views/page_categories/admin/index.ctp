@@ -94,7 +94,7 @@
 		<?php endif ?>
 		</td>
 		<td><?php echo $dbData['PageCategory']['title']; ?></td>
-		<td><?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['created']); ?><br />
+		<td style="white-space:nowrap"><?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['created']); ?><br />
 			<?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['modified']); ?></td>
 	</tr>
 		<?php $count++; ?>

@@ -92,32 +92,46 @@ class BlogCategory extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field,$options = array()) {
 
-		if($field == 'parent_id' && !isset($options['blogContentId'])) {
-			return false;
-		}
+		switch($field) {
+			case 'parent_id':
+				if(!isset($options['blogContentId'])) {
+					return false;
+				}				
+				$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
+				if(!empty($options['excludeParentId'])) {
+					$children = $this->children($options['excludeParentId']);
+					$excludeIds = array($options['excludeParentId']);
+					foreach($children as $child) {
+						$excludeIds[] = $child['BlogCategory']['id'];
+					}
+					$conditions['NOT']['BlogCategory.id'] = $excludeIds;
+				}
 
-		$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
-		if(!empty($options['excludeParentId'])) {
-			$children = $this->children($options['excludeParentId']);
-			$excludeIds = array($options['excludeParentId']);
-			foreach($children as $child) {
-				$excludeIds[] = $child['BlogCategory']['id'];
-			}
-			$conditions['NOT']['BlogCategory.id'] = $excludeIds;
+				if(isset($options['owner_id'])) {
+					$conditions['OR'] = array(
+						array('BlogCategory.owner_id' => null),
+						array('BlogCategory.owner_id' => $options['owner_id'])
+					);
+				}
+				$parents = $this->generatetreelist($conditions);
+				$controlSources['parent_id'] = array();
+				foreach($parents as $key => $parent) {
+					if(preg_match("/^([_]+)/i",$parent,$matches)) {
+						$parent = preg_replace("/^[_]+/i",'',$parent);
+						$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+						$parent = $prefix.'└'.$parent;
+					}
+					$controlSources['parent_id'][$key] = $parent;
+				}
+				break;
+			case 'owner_id':
+				$UserGroup = ClassRegistry::init('UserGroup');
+				$controlSources['owner_id'] = $UserGroup->find('list', array('fields' => array('id', 'title'), 'recursive' => -1));
+				break;
 		}
-
-		$parents = $this->generatetreelist($conditions);
-		$controlSources['parent_id'] = array();
-		foreach($parents as $key => $parent) {
-			if(preg_match("/^([_]+)/i",$parent,$matches)) {
-				$parent = preg_replace("/^[_]+/i",'',$parent);
-				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-				$parent = $prefix.'└'.$parent;
-			}
-			$controlSources['parent_id'][$key] = $parent;
-		}
+		
 
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];

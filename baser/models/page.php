@@ -592,13 +592,16 @@ class Page extends AppModel {
  * @return	mixed	$controlSource	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null, $options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		if(ClassRegistry::isKeySet('SiteConfig')) {
-			$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		switch ($field) {
+			case 'page_category_id':
+				$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id', $options);
+				break;
+			case 'user_id':
+				$controlSources['user_id'] = $this->User->getUserList($options);
+				break;
 		}
-		$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id');
-		$controlSources['user_id'] = $this->User->getUserList($options);
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {

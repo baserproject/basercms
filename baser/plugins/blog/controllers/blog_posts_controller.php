@@ -123,7 +123,6 @@ class BlogPostsController extends BlogAppController {
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
-		$this->passedArgs[] = $blogContentId;
 		
 		/* 検索条件生成 */
 		$joins = array();
@@ -175,6 +174,8 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
+		$name = $data['BlogPost']['name'];
+		unset($data['BlogPost']['name']);
 		unset($data['_Token']);
 		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
 			unset($data['BlogPost']['status']);
@@ -218,6 +219,10 @@ class BlogPostsController extends BlogAppController {
 			$conditions = am($conditions, $_conditions);
 		}
 
+		if($name) {
+			$conditions['BlogPost.name LIKE'] = '%'.$name.'%';
+		}
+		
 		return $conditions;
 
 	}
@@ -261,6 +266,11 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$authUser = $this->Auth->user();
+		$this->set('editable', true);
+		$this->set('categories', $this->BlogPost->getControlSource('blog_category_id', array(
+			'blogContentId' => $this->blogContent['BlogContent']['id'],
+			'owner_id' => $authUser['User']['user_group_id']
+		)));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
 		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
@@ -305,6 +315,18 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
+		$user = $this->Auth->user();
+		if($this->data['BlogCategory']['owner_id'] == $user['User']['user_group_id'] || $user['User']['user_group_id'] == 1) {
+			$editable = true;
+			$catOption = array('blogContentId' => $this->blogContent['BlogContent']['id'], 'owner_id' => $user['User']['user_group_id']);
+		} else {
+			$editable = false;
+			$catOption = array('blogContentId' => $this->blogContent['BlogContent']['id']);
+		}
+
+		$this->set('editable', $editable);
+		$this->set('categories', $this->BlogPost->getControlSource('blog_category_id', $catOption));
+		
 		$this->set('users',$this->BlogPost->User->getUserList());
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));
