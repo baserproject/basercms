@@ -174,7 +174,11 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
-		$name = $data['BlogPost']['name'];
+		$name = '';
+		if(isset($data['BlogPost']['name'])) {
+			$name = $data['BlogPost']['name'];
+		}
+		
 		unset($data['BlogPost']['name']);
 		unset($data['_Token']);
 		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
