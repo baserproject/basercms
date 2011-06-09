@@ -19,16 +19,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', null, null, false);
 $statuses = array(0=>'非公開', 1=>'公開');
-if($formEx->value('BlogPost.id')) {
-	$previewId = $formEx->value('BlogPost.id');
-}else{
-	$previewId = 'add_'.mt_rand(0, 99999999);
-}
-if($user['user_group_id'] == 1 || $user['user_group_id'] == @$baser->siteConfig['root_owner_id'] || !$editable) {
-	$categories = am(array('' => '指定なし', $categories));
-}
+$baser->css('ckeditor/editor', null, null, false);
 $baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 

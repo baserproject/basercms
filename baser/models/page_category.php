@@ -107,10 +107,15 @@ class PageCategory extends AppModel {
  */
 	function getControlSource($field, $options = array()) {
 
-		
 		switch ($field) {
+			
 			case 'parent_id':
+				
 				$conditions = array();
+				if(isset($options['conditions'])) {
+					$conditions = $options['conditions'];
+				}
+				
 				if(!empty($options['excludeParentId'])) {
 					$children = $this->children($options['excludeParentId']);
 					$excludeIds = array($options['excludeParentId']);
@@ -120,13 +125,18 @@ class PageCategory extends AppModel {
 					$conditions['NOT']['PageCategory.id'] = $excludeIds;
 				}
 				
-				if(isset($options['owner_id'])) {
-					$conditions['OR'] = array(
-						'PageCategory.owner_id' => null,
-						'PageCategory.owner_id' => $options['owner_id'],
+				if(isset($options['ownerId'])) {
+					$ownerIdConditions = array(
+						array('PageCategory.owner_id' => null),
+						array('PageCategory.owner_id' => $options['ownerId']),
 					);
+					if(isset($conditions['OR'])) {
+						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
+					} else {
+						$conditions['OR'] = $ownerIdConditions;
+					}
 				}
-				
+
 				$parents = $this->generatetreelist($conditions);
 				$controlSources['parent_id'] = array();
 				if(!Configure::read('Baser.mobile')) {

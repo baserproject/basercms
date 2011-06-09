@@ -272,6 +272,12 @@ $(function(){
 				<?php echo $formEx->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $formEx->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
+			<td class="col-input">
+				<?php echo $formEx->input('SiteConfig.root_owner_id', array('type' => 'select', 'options' => $userGroups, 'empty' => '指定しない')) ?>
+			</td>
+		</tr>
 	</table>
 	
 	<h3>メール設定関連</h3>

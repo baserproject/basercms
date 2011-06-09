@@ -25,7 +25,7 @@ if(Configure::read('Baser.mobile')) {
 	$pageCategories += array('pconly'=>'PCページのみ');
 }
 if($pageCategories){
-	$pageCategories = $pageCategories + $_pageCategories;
+	//$pageCategories = $pageCategories + $_pageCategories;
 }
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);

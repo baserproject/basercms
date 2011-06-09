@@ -171,8 +171,17 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$user = $this->Auth->user();
+		
+		$categories = $this->Page->getControlSource('page_category_id', array(
+			'rootOwnerId' => $this->siteConfigs['root_owner_id'],
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'pageEditable'	=> true,
+			'empty'			=> '指定しない'
+		));
+		
 		$this->set('editable', true);
-		$this->set('categories', $this->Page->getControlSource('page_category_id', array('owner_id' => $user['User']['user_group_id'])));
+		$this->set('categories', $categories);
+		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
@@ -246,16 +255,32 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$user = $this->Auth->user();
-		if($this->data['PageCategory']['owner_id'] == $user['User']['user_group_id'] || $user['User']['user_group_id'] == 1) {
-			$editable = true;
-			$catOption = array('owner_id' => $user['User']['user_group_id']);
+		$editable = false;
+		$pageCategoryId = '';
+		
+		if(isset($this->data['Page']['page_category_id'])) {
+			$pageCategoryId = $this->data['Page']['page_category_id'];
+		}
+		if(!$pageCategoryId) {
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
-			$editable = false;
-			$catOption = array();
+			$currentCatOwner = $this->data['PageCategory']['owner_id'];
 		}
 		
+		$editable = ($currentCatOwner == $user['User']['user_group_id'] ||
+					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
+		
+		$categories = $this->Page->getControlSource('page_category_id', array(
+			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'pageCategoryId'=> $pageCategoryId,
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'pageEditable'	=> $editable,
+			'empty'			=> '指定しない'
+		));
+				
 		$this->set('editable', $editable);
-		$this->set('categories', $this->Page->getControlSource('page_category_id', $catOption));
+		$this->set('categories', $categories);
+		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));

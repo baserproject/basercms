@@ -98,7 +98,11 @@ class BlogCategory extends BlogAppModel {
 			case 'parent_id':
 				if(!isset($options['blogContentId'])) {
 					return false;
-				}				
+				}
+				$conditions = array();
+				if(isset($options['conditions'])) {
+					$conditions = $options['conditions'];
+				}
 				$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
 				if(!empty($options['excludeParentId'])) {
 					$children = $this->children($options['excludeParentId']);
@@ -109,12 +113,18 @@ class BlogCategory extends BlogAppModel {
 					$conditions['NOT']['BlogCategory.id'] = $excludeIds;
 				}
 
-				if(isset($options['owner_id'])) {
-					$conditions['OR'] = array(
+				if(isset($options['ownerId'])) {
+					$ownerIdConditions = array(
 						array('BlogCategory.owner_id' => null),
-						array('BlogCategory.owner_id' => $options['owner_id'])
+						array('BlogCategory.owner_id' => $options['ownerId']),
 					);
+					if(isset($conditions['OR'])) {
+						$conditions['OR'] = am($conditions['OR'],$ownerIdConditions);
+					} else {
+						$conditions['OR'] = $ownerIdConditions;
+					}
 				}
+
 				$parents = $this->generatetreelist($conditions);
 				$controlSources['parent_id'] = array();
 				foreach($parents as $key => $parent) {

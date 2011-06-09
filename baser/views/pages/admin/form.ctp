@@ -20,14 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('ckeditor/editor', null, null, false);
-if($formEx->value('Page.id')) {
-	$previewId = $formEx->value('Page.id');
-}else{
-	$previewId = 'add_'.mt_rand(0, 99999999);
-}
-if($user['user_group_id'] == 1 || $user['user_group_id'] == @$baser->siteConfig['root_owner_id'] || !$editable) {
-	$categories = am(array('' => '指定なし', $categories));
-}
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 ?>
 

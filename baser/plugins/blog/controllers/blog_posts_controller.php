@@ -269,15 +269,20 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
-		$authUser = $this->Auth->user();
+		$user = $this->Auth->user();
+		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
+			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
+			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'postEditable'	=> true,
+			'empty'			=> '指定しない'
+		));
 		$this->set('editable', true);
-		$this->set('categories', $this->BlogPost->getControlSource('blog_category_id', array(
-			'blogContentId' => $this->blogContent['BlogContent']['id'],
-			'owner_id' => $authUser['User']['user_group_id']
-		)));
+		$this->set('categories', $categories);
+		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
-		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
+		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user['User']['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
 
@@ -320,17 +325,33 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$user = $this->Auth->user();
-		if($this->data['BlogCategory']['owner_id'] == $user['User']['user_group_id'] || $user['User']['user_group_id'] == 1) {
-			$editable = true;
-			$catOption = array('blogContentId' => $this->blogContent['BlogContent']['id'], 'owner_id' => $user['User']['user_group_id']);
-		} else {
-			$editable = false;
-			$catOption = array('blogContentId' => $this->blogContent['BlogContent']['id']);
-		}
-
-		$this->set('editable', $editable);
-		$this->set('categories', $this->BlogPost->getControlSource('blog_category_id', $catOption));
+		$editable = false;
+		$blogCategoryId = '';
 		
+		if(isset($this->data['BlogPost']['blog_category_id'])) {
+			$blogCategoryId = $this->data['BlogPost']['blog_category_id'];
+		}
+		if(!$blogCategoryId) {
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+		} else {
+			$currentCatOwner = $this->data['BlogCategory']['owner_id'];
+		}
+		
+		$editable = ($currentCatOwner == $user['User']['user_group_id'] ||
+					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
+		
+		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
+			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
+			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'blogCategoryId'=> $blogCategoryId,
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'postEditable'	=> $editable,
+			'empty'			=> '指定しない'
+		));
+		
+		$this->set('editable', $editable);
+		$this->set('categories', $categories);
+		$this->set('previewId', $this->data['BlogPost']['id']);
 		$this->set('users',$this->BlogPost->User->getUserList());
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));

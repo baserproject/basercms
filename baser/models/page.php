@@ -595,13 +595,68 @@ class Page extends AppModel {
 	function getControlSource($field, $options = array()) {
 
 		switch ($field) {
+			
 			case 'page_category_id':
-				$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id', $options);
+								
+				$catOption = array();
+				$isSuperAdmin = false;
+				$rootEditable = false;
+				
+				extract($options);
+
+				if(!empty($userGroupId)) {
+					
+					if(!isset($pageCategoryId)) {
+						$pageCategoryId = '';
+					}
+
+					if($userGroupId == 1) {
+						$isSuperAdmin = true;
+					}
+
+					// ドキュメントルート配下の編集許可チェック
+					if(!$rootOwnerId || $rootOwnerId == $userGroupId) {
+						$rootEditable = true;
+					}
+
+					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
+					if(!$pageEditable && $pageCategoryId) {
+						$catOption = array('conditions' => array('OR' => array('PageCategory.id' => $pageCategoryId)));
+					}
+
+					// super admin でない場合は、管理許可のあるカテゴリのみ取得
+					if(!$isSuperAdmin) {
+						$catOption['ownerId'] = $userGroupId;
+					}
+				
+					if($pageEditable && !$rootEditable && !$isSuperAdmin) {
+						unset($empty);
+					}
+				
+				}
+				
+				$categories = $this->PageCategory->getControlSource('parent_id', $catOption);
+				
+				// 「指定しない」追加
+				if(isset($empty)) {
+					if($categories) {
+						$categories = array('' => $empty) + $categories;
+					} else {
+						$categories = array('' => $empty);
+					}
+				}
+				
+				$controlSources['page_category_id'] = $categories;
+				
 				break;
+				
 			case 'user_id':
+				
 				$controlSources['user_id'] = $this->User->getUserList($options);
 				break;
+			
 		}
+		
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
