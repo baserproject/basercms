@@ -38,8 +38,12 @@ $allowOwners = array('', $user['user_group_id']);
 	<tr>
 		<th style="width:122px">操作</th>
 		<th>NO</th>
-		<th>ブログカテゴリ名<br />ブログカテゴリタイトル</th>
-		<th>管理グループ</th>
+		<th>ブログカテゴリ名
+			<?php if($baser->siteConfig['category_permission']): ?>
+			<br />管理グループ
+			<?php endif ?>
+		</th>
+		<th>ブログカテゴリタイトル</th>
 		<th>登録日<br />更新日</th>
 	</tr>
 <?php if(!empty($dbDatas)): ?>
@@ -63,10 +67,13 @@ $allowOwners = array('', $user['user_group_id']);
 		<?php endif ?>
 		</td>
 		<td><?php echo $dbData['BlogCategory']['no'] ?></td>
-		<td><?php $baser->link($dbData['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?><br />
-			<?php echo $dbData['BlogCategory']['title'] ?>
+		<td><?php $baser->link($dbData['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?>
+	<?php if($baser->siteConfig['category_permission']): ?>
+			<br />
+			<?php echo $textEx->arrayValue($dbData['BlogCategory']['owner_id'], $owners) ?>
+	<?php endif ?>
 		</td>
-		<td><?php echo $textEx->arrayValue($dbData['BlogCategory']['owner_id'], $owners) ?></td>
+		<td><?php echo $dbData['BlogCategory']['title'] ?></td>
 		<td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['created']); ?><br />
 			<?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['modified']); ?></td>
 	</tr>

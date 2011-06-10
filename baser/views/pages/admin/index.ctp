@@ -19,14 +19,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$_pageCategories = $formEx->getControlSource('Page.page_category_id');
-$pageCategories = array('noncat'=>'カテゴリなし');
-if(Configure::read('Baser.mobile')) {
-	$pageCategories += array('pconly'=>'PCページのみ');
-}
-if($pageCategories){
-	//$pageCategories = $pageCategories + $_pageCategories;
-}
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);
 $allowOwners = array('', $user['user_group_id']);
@@ -37,8 +29,34 @@ $(document).ready(function(){
 	<?php if($form->value('Page.open')): ?>
 	$("#PageFilterBody").show();
 	<?php endif ?>
+	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
 });
+function pageTypeChengeHandler() {
+	var pageType = $('input[name="data[Page][page_type]"]:checked').val();
+	$.ajax({
+		type: "POST",
+		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
+		beforeSend: function() {
+			$("#CategoryAjaxLoader").show();
+		},
+		success: function(result){
+			if(result) {
+				var categoryId = $("#PagePageCategoryId").val();
+				$("#PagePageCategoryId option").remove();
+				$("#PagePageCategoryId").append('<option value="">指定しない</option>');
+				$("#PagePageCategoryId").append('<option value="noncat">カテゴリなし</option>');
+				$("#PagePageCategoryId").append($(result).find('option'));
+				$("#PagePageCategoryId").val(categoryId);
+			}
+		},
+		complete: function() {
+			$("#CategoryAjaxLoader").hide();
+		}
+	});
+}
 </script>
+
+<div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
 
 <?php echo $formEx->create('Sort', array('action' => 'update_sort', 'url' => am(array('controller'=>'pages'), $this->passedArgs))) ?>
 <?php echo $formEx->input('Sort.id', array('type' => 'hidden')) ?>
@@ -82,18 +100,25 @@ $(document).ready(function(){
 	<?php echo $formEx->create('Page', array('url' => array('action' => 'index'))) ?>
 	<p>
 		<span><small>ページ名</small> <?php echo $formEx->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>
+		<span><small>公開状態</small>
+		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+		<span><small>作成者</small>
+		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
+<?php if($pageCategories && Configure::read('Baser.mobile')): ?>
+		<span><small>タイプ</small>
+		<?php echo $formEx->input('Page.page_type', array(
+				'type'		=> 'radio',
+				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
+<?php endif ?>
 <?php if($pageCategories): ?>
 		<span><small>カテゴリ</small>
 		<?php echo $formEx->input('Page.page_category_id', array(
 				'type'		=> 'select',
 				'options'	=> $pageCategories,
-				'escape'	=> false,
-				'empty' => '指定なし')) ?></span>　
+				'escape'	=> false)) ?></span>
+		<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>　<br />
 <?php endif ?>
-		<span><small>公開状態</small>
-		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
-		<span><small>作成者</small>
-		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span></p>
+</p>
 		<div class="align-center"><?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?></div> 
 		<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
 	<?php $formEx->end() ?>

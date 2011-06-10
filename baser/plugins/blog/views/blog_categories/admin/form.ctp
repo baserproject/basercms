@@ -98,6 +98,7 @@
 <?php else: ?>
 	<?php echo $formEx->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 <?php endif ?>
+<?php if($baser->siteConfig['category_permission']): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogCategory.owner_id', '管理グループ') ?></th>
 		<td class="col-input">
@@ -114,6 +115,7 @@
 			</div>
 		</td>
 	</tr>
+<?php endif ?>
 </table>
 
 <!-- button -->

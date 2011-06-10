@@ -600,6 +600,7 @@ class Page extends AppModel {
 								
 				$catOption = array();
 				$isSuperAdmin = false;
+				$mobileRoot = true;
 				
 				extract($options);
 
@@ -625,11 +626,13 @@ class Page extends AppModel {
 				
 					if($pageEditable && !$rootEditable && !$isSuperAdmin) {
 						unset($empty);
+						$mobileRoot = false;
 					}
 				
 				}
 				
-				$categories = $this->PageCategory->getControlSource('parent_id', $catOption);
+				$options = am($options, $catOption);
+				$categories = $this->PageCategory->getControlSource('parent_id', $options);
 				
 				// 「指定しない」追加
 				if(isset($empty)) {
@@ -638,7 +641,8 @@ class Page extends AppModel {
 					} else {
 						$categories = array('' => $empty);
 					}
-				} else {
+				}
+				if(!$mobileRoot) {
 					$mobileId = $this->PageCategory->getMobileId();
 					if(isset($categories[$mobileId])) {
 						unset($categories[$mobileId]);

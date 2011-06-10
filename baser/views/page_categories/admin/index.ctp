@@ -57,8 +57,12 @@ $allowOwners = array('', $user['user_group_id']);
 	<tr>
 		<th style="width:100px">操作</th>
 		<th>NO</th>
-		<th>ページカテゴリ名<br />ページカテゴリタイトル</th>
-		<th>管理グループ</th>
+		<th>ページカテゴリ名
+<?php if($baser->siteConfig['category_permission']): ?>
+			<br />管理グループ
+<?php endif ?>
+		</th>
+		<th>ページカテゴリタイトル</th>
 		<th>登録日<br />更新日</th>
 	</tr>
 <?php if(!empty($dbDatas)): ?>
@@ -94,10 +98,13 @@ $allowOwners = array('', $user['user_group_id']);
 			<?php $baser->link($dbData['PageCategory']['name'], array('action' => 'edit', $dbData['PageCategory']['id'])); ?>
 		<?php else: ?>
 			<?php echo $dbData['PageCategory']['name'] ?>
-		<?php endif ?><br />
-		<?php echo $dbData['PageCategory']['title']; ?>
+		<?php endif ?>
+		<?php if($baser->siteConfig['category_permission']): ?>
+		<br />
+		<?php echo $textEx->arrayValue($dbData['PageCategory']['owner_id'], $owners) ?>
+		<?php endif ?>
 		</td>
-		<td><?php echo $textEx->arrayValue($dbData['PageCategory']['owner_id'], $owners) ?></td>
+		<td><?php echo $dbData['PageCategory']['title']; ?></td>
 		<td style="white-space:nowrap"><?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['created']); ?><br />
 			<?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['modified']); ?></td>
 	</tr>

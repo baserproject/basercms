@@ -116,13 +116,17 @@ class PageCategory extends AppModel {
 					$conditions = $options['conditions'];
 				}
 				
-				if(!empty($options['excludeParentId'])) {
-					$children = $this->children($options['excludeParentId']);
-					$excludeIds = array($options['excludeParentId']);
-					foreach($children as $child) {
-						$excludeIds[] = $child['PageCategory']['id'];
+				if(isset($options['excludeParentId'])) {
+					if($options['excludeParentId']) {
+						$children = $this->children($options['excludeParentId']);
+						$excludeIds = array($options['excludeParentId']);
+						foreach($children as $child) {
+							$excludeIds[] = $child['PageCategory']['id'];
+						}
+						$conditions['NOT']['PageCategory.id'] = $excludeIds;
+					} else {
+						$conditions['PageCategory.id'] = $this->getMobileCategoryIds(false);
 					}
-					$conditions['NOT']['PageCategory.id'] = $excludeIds;
 				}
 				
 				if(isset($options['ownerId'])) {
@@ -140,12 +144,12 @@ class PageCategory extends AppModel {
 				$parents = $this->generatetreelist($conditions);
 				$controlSources['parent_id'] = array();
 				if(!Configure::read('Baser.mobile')) {
-					$excludeId = $this->getMobileId();
+					$excludeIds = $this->getMobileCategoryIds();
 				} else {
-					$excludeId = '';
+					$excludeIds = array();
 				}
 				foreach($parents as $key => $parent) {
-					if($parent && $key != $excludeId) {
+					if($parent && !in_array($key, $excludeIds)) {
 						if(preg_match("/^([_]+)/i",$parent,$matches)) {
 							$parent = preg_replace("/^[_]+/i",'',$parent);
 							$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
@@ -414,13 +418,16 @@ class PageCategory extends AppModel {
  * @return	array	$ids
  * @access	public
  */
-	function getMobileCategoryIds(){
+	function getMobileCategoryIds($top = true){
 
 		$mobileId = $this->getMobileId();
 		if(!$mobileId){
 			return array();
 		}
-		$ids = array($mobileId);
+		$ids = array();
+		if($top) {
+			$ids[] = $mobileId;
+		}
 		$children = $this->children($mobileId,false,array('PageCategory.id'),array('PageCategory.id'));
 		if($children){
 			$children = Set::extract('/PageCategory/id',$children);
@@ -433,11 +440,22 @@ class PageCategory extends AppModel {
  * モバイルカテゴリのIDを取得する
  * @return string
  */
-	function getMobileId() {
-		if($this->_mobileId == -1){
-			$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+	function getMobileId($pcId = null) {
+		
+		if($pcId){
+			$path = $this->getPath($pcId, array('name'), -1);
+			$path = Set::extract('/PageCategory/name', $path);
+			$path = implode(DS, $path);
+			$path = getViewPath().'pages'.DS.'mobile'.DS.$path;
+			$mobileId = $this->getIdByPath($path);			
+		}else{
+			if($this->_mobileId == -1){
+				$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+			}
+			$mobileId = $this->_mobileId;
 		}
-		return $this->_mobileId;
+		return $mobileId;
+		
 	}
 /**
  * ツリーリストを取得する

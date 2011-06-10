@@ -123,6 +123,7 @@
 			</div>
 		</td>
 	</tr>
+<?php if($baser->siteConfig['category_permission']): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('PageCategory.owner_id', '管理グループ') ?></th>
 		<td class="col-input">
@@ -139,6 +140,7 @@
 			</div>
 		</td>
 	</tr>
+<?php endif ?>
 </table>
 
 <div class="submit">
