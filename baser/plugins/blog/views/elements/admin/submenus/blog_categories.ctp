@@ -25,6 +25,8 @@
 	<h2>カテゴリ管理メニュー</h2>
 	<ul>
 		<li><?php $baser->link('ブログカテゴリ一覧',array('controller'=>'blog_categories','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
+<?php if($newCatAddable): ?>
 		<li><?php $baser->link('新規ブログカテゴリを登録',array('controller'=>'blog_categories','action'=>'add',$blogContent['BlogContent']['id'])) ?></li>
+<?php endif ?>
 	</ul>
 </div>

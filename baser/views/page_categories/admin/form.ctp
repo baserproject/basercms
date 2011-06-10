@@ -86,14 +86,14 @@
 			</div>
 		</td>
 	</tr>
+<?php if($parents): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('PageCategory.parent_id', '親カテゴリ') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->input('PageCategory.parent_id', array(
 					'type'		=> 'select', 
-					'options'	=> $formEx->getControlSource('parent_id', array('excludeParentId' => $formEx->value('PageCategory.id'))),
-					'escape'	=> false,
-					'empty'		=> 'なし')) ?>
+					'options'	=> $parents,
+					'escape'	=> false)) ?>
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpParentId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $formEx->error('PageCategory.parent_id') ?>
 			<div id="helptextParentId" class="helptext">
@@ -103,6 +103,9 @@
 			</div>
 		</td>
 	</tr>
+<?php else: ?>
+	<?php echo $formEx->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
 		<td class="col-input">

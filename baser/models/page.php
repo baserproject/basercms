@@ -600,7 +600,6 @@ class Page extends AppModel {
 								
 				$catOption = array();
 				$isSuperAdmin = false;
-				$rootEditable = false;
 				
 				extract($options);
 
@@ -612,11 +611,6 @@ class Page extends AppModel {
 
 					if($userGroupId == 1) {
 						$isSuperAdmin = true;
-					}
-
-					// ドキュメントルート配下の編集許可チェック
-					if(!$rootOwnerId || $rootOwnerId == $userGroupId) {
-						$rootEditable = true;
 					}
 
 					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
@@ -643,6 +637,11 @@ class Page extends AppModel {
 						$categories = array('' => $empty) + $categories;
 					} else {
 						$categories = array('' => $empty);
+					}
+				} else {
+					$mobileId = $this->PageCategory->getMobileId();
+					if(isset($categories[$mobileId])) {
+						unset($categories[$mobileId]);
 					}
 				}
 				

@@ -1200,5 +1200,26 @@ class AppController extends Controller {
 		return call_user_func_array( array( &$this->PluginHook, $hook ), $args );
 
 	}
+/**
+ * 現在のユーザーのドキュメントルートの書き込み権限確認
+ * 
+ * @return boolean
+ * @access public
+ */
+	function checkRootEditable() {
+		
+		if(!isset($this->Auth)) {
+			return false;
+		}
+		$user = $this->Auth->user();
+		if($this->siteConfigs['root_owner_id'] == $user['User']['user_group_id'] ||
+				!$this->siteConfigs['root_owner_id'] || $user['User']['user_group_id'] == 1) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
 ?>

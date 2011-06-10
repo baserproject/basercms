@@ -28,8 +28,10 @@
 		<li>
 			<?php $baser->link('一覧を表示する',array('controller'=>'page_categories','action'=>'admin_index')) ?>
 		</li>
+<?php if($newCatAddable): ?>
 		<li>
 			<?php $baser->link('新規に登録する',array('controller'=>'page_categories','action'=>'admin_add')) ?>
 		</li>
+<?php endif ?>
 	</ul>
 </div>

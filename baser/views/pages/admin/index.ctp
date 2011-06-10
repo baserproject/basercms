@@ -216,7 +216,9 @@ $(document).ready(function(){
 <?php $baser->pagination('default', array(), null, false) ?>
 
 <div class="align-center">
+<?php if($newCatAddable): ?>
 	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
+<?php endif ?>
 <?php if(!$sortmode): ?>
 	<?php $baser->link('並び替えモード', array('sortmode' => 1), array('class' => 'btn-orange button')) ?>
 <?php else: ?>

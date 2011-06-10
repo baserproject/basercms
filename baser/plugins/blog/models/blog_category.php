@@ -228,6 +228,31 @@ class BlogCategory extends BlogAppModel {
 		}
 		
 	}
+/**
+ * 新しいカテゴリが追加できる状態かチェックする
+ * 
+ * @param int $userGroupId
+ * @param boolean $rootEditable
+ * @return boolean
+ * @access public
+ */
+	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
+		$newCatAddable = false;
+		$ownerCats = $this->find('count', array(
+			'conditions' => array(
+				'OR' => array(
+					array('BlogCategory.owner_id' => null),
+					array('BlogCategory.owner_id' => $userGroupId)
+				)
+		)));
+
+		if($ownerCats || $rootEditable) {
+			$newCatAddable = true;
+		}
+		return $newCatAddable;
+		
+	}
 	
 }
 ?>

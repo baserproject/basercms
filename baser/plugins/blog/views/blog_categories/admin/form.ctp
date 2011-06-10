@@ -84,19 +84,20 @@
 			<?php echo $formEx->error('BlogCategory.title') ?>
 		</td>
 	</tr>
+<?php if($parents): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->input('BlogCategory.parent_id', array(
 					'type'		=> 'select',
-					'options'	=> $formEx->getControlSource('BlogCategory.parent_id', array(
-						'blogContentId'		=> $blogContent['BlogContent']['id'],
-						'excludeParentId'	=> $formEx->value('BlogCategory.id'))),
-					'escape'	=> false,
-					'empty'		=> 'なし')) ?>
+					'options'	=> $parents,
+					'escape'	=> false)) ?>
 			<?php echo $formEx->error('BlogCategory.parent_id') ?>
 		</td>
 	</tr>
+<?php else: ?>
+	<?php echo $formEx->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogCategory.owner_id', '管理グループ') ?></th>
 		<td class="col-input">

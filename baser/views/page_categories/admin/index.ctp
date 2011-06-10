@@ -19,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$allowOwners = array('', $user['user_group_id']);
 ?>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
@@ -56,8 +57,8 @@
 	<tr>
 		<th style="width:100px">操作</th>
 		<th>NO</th>
-		<th>ページカテゴリ名</th>
-		<th>ページカテゴリタイトル</th>
+		<th>ページカテゴリ名<br />ページカテゴリタイトル</th>
+		<th>管理グループ</th>
 		<th>登録日<br />更新日</th>
 	</tr>
 <?php if(!empty($dbDatas)): ?>
@@ -77,12 +78,14 @@
 			<?php if(count($dbDatas) != ($key + 1)): ?>
 			<?php $baser->link('▼', array('controller' => 'page_categories', 'action' => 'down', $dbData['PageCategory']['id'])) ?>
 			<?php endif ?>
+			<?php if(in_array($dbData['PageCategory']['owner_id'], $allowOwners)||$user['user_group_id']==1): ?>
 			<?php $baser->link('編集', array('action' => 'edit', $dbData['PageCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['PageCategory']['id']),
 					array('class'=>'btn-gray-s button-s'),
 					sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $dbData['PageCategory']['name']),
 					false); ?>
+			<?php endif ?>
 		<?php endif ?>
 		</td>
 		<td><?php echo $dbData['PageCategory']['id']; ?></td>
@@ -91,9 +94,10 @@
 			<?php $baser->link($dbData['PageCategory']['name'], array('action' => 'edit', $dbData['PageCategory']['id'])); ?>
 		<?php else: ?>
 			<?php echo $dbData['PageCategory']['name'] ?>
-		<?php endif ?>
+		<?php endif ?><br />
+		<?php echo $dbData['PageCategory']['title']; ?>
 		</td>
-		<td><?php echo $dbData['PageCategory']['title']; ?></td>
+		<td><?php echo $textEx->arrayValue($dbData['PageCategory']['owner_id'], $owners) ?></td>
 		<td style="white-space:nowrap"><?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['created']); ?><br />
 			<?php echo $timeEx->format('y-m-d', $dbData['PageCategory']['modified']); ?></td>
 	</tr>
@@ -106,6 +110,8 @@
 <?php endif; ?>
 </table>
 
+<?php if($newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
 </div>
+<?php endif ?>

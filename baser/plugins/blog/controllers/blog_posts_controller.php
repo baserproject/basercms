@@ -94,6 +94,7 @@ class BlogPostsController extends BlogAppController {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}
 		}
+		
 	}
 /**
  * beforeRender
@@ -153,14 +154,9 @@ class BlogPostsController extends BlogAppController {
 				'order'	=>'BlogPost.no DESC',
 				'limit'	=>$this->passedArgs['num']
 		);
-
-		$posts = $this->paginate('BlogPost');
-
-		if($posts) {
-			$this->set('posts',$posts);
-		}
-
+		
 		// 表示設定
+		$this->set('posts', $this->paginate('BlogPost'));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事一覧';
 
 	}
@@ -272,7 +268,7 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->Auth->user();
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
-			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'rootEditable'	=> $this->checkRootEditable(),
 			'userGroupId'	=> $user['User']['user_group_id'],
 			'postEditable'	=> true,
 			'empty'			=> '指定しない'
@@ -342,7 +338,7 @@ class BlogPostsController extends BlogAppController {
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
-			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'rootEditable'	=> $this->checkRootEditable(),
 			'blogCategoryId'=> $blogCategoryId,
 			'userGroupId'	=> $user['User']['user_group_id'],
 			'postEditable'	=> $editable,

@@ -291,7 +291,6 @@ class BlogPost extends BlogAppModel {
 				extract($options);
 				$catOption = array('blogContentId' => $blogContentId);
 				$isSuperAdmin = false;
-				$rootEditable = false;
 
 				if(!empty($userGroupId)) {
 					
@@ -301,11 +300,6 @@ class BlogPost extends BlogAppModel {
 
 					if($userGroupId == 1) {
 						$isSuperAdmin = true;
-					}
-
-					// ドキュメントルート配下の編集許可チェック
-					if(!$rootOwnerId || $rootOwnerId == $userGroupId) {
-						$rootEditable = true;
 					}
 
 					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する

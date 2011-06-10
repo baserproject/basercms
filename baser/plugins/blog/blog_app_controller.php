@@ -30,6 +30,13 @@ App::import('Controller', 'Plugins');
  */
 class BlogAppController extends PluginsController {
 /**
+ * モデル
+ * 
+ * @var array
+ * @access public
+ */
+	var $uses = array('Plugin', 'Blog.BlogCategory');
+/**
  * コメントを管理者メールへメール送信する
  * @param array $data
  */
@@ -46,5 +53,23 @@ class BlogAppController extends PluginsController {
 		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
 
 	}
+/**
+ * beforeFilter
+ *
+ * @return	void
+ * @access 	public
+ */
+	function beforeFilter() {
+		
+		parent::beforeFilter();
+		$user = $this->Auth->user();
+		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
+				$user['User']['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
+	}
+	
 }
 ?>

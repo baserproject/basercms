@@ -439,7 +439,14 @@ class PageCategory extends AppModel {
 		}
 		return $this->_mobileId;
 	}
-
+/**
+ * ツリーリストを取得する
+ * 
+ * @param array $fields
+ * @param int $id
+ * @return array
+ * @access public 
+ */
 	function getTreeList($fields,$id){
 		$this->recursive = -1;
 		$pageCategories = array();
@@ -450,5 +457,32 @@ class PageCategory extends AppModel {
 		}
 		return $pageCategories;
 	}
+/**
+ * 新しいカテゴリが追加できる状態かチェックする
+ * 
+ * @param int $userGroupId
+ * @param boolean $rootEditable
+ * @return boolean
+ * @access public
+ */
+	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
+		$newCatAddable = false;
+		$ownerCats = $this->find('count', array(
+			'conditions' => array(
+				'OR' => array(
+					array('PageCategory.owner_id' => null),
+					array('PageCategory.owner_id' => $userGroupId)
+				),
+				'PageCategory.id <>' => $this->getMobileId()
+		)));
+
+		if($ownerCats || $rootEditable) {
+			$newCatAddable = true;
+		}
+		return $newCatAddable;
+		
+	}
+	
 }
 ?>

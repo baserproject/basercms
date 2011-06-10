@@ -76,6 +76,14 @@ class PagesController extends AppController {
 		if(!empty($this->params['admin'])){
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
 		}
+		
+		$user = $this->Auth->user();
+		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
+				$user['User']['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
 	}
 /**
  * [ADMIN] ページリスト
@@ -173,7 +181,7 @@ class PagesController extends AppController {
 		$user = $this->Auth->user();
 		
 		$categories = $this->Page->getControlSource('page_category_id', array(
-			'rootOwnerId' => $this->siteConfigs['root_owner_id'],
+			'rootEditable' => $this->checkRootEditable(),
 			'userGroupId'	=> $user['User']['user_group_id'],
 			'pageEditable'	=> true,
 			'empty'			=> '指定しない'
@@ -271,7 +279,7 @@ class PagesController extends AppController {
 					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
 		
 		$categories = $this->Page->getControlSource('page_category_id', array(
-			'rootOwnerId'	=> $this->siteConfigs['root_owner_id'],
+			'rootEditable'	=> $this->checkRootEditable(),
 			'pageCategoryId'=> $pageCategoryId,
 			'userGroupId'	=> $user['User']['user_group_id'],
 			'pageEditable'	=> $editable,
