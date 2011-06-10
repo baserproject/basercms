@@ -20,6 +20,22 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function(){
+	$("#btnEdit").click(function(){
+		if($("#SelfUpdate").html()) {
+			if(confirm('更新内容をログイン情報に反映する為、一旦ログアウトします。よろしいですか？')) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	});
+});
+</script>
+
+<div id="SelfUpdate" class="display-none"><?php echo $selfUpdate ?></div>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
 	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
@@ -119,7 +135,7 @@
 		<?php if(isset($baser->siteConfig['demo_on']) && $baser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
-	<?php echo $formEx->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $formEx->submit('更　新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnEdit')) ?>
 	<?php $baser->link('削　除', 
 			array('action' => 'delete', $formEx->value('User.id')),
 			array('class' => 'btn-gray button'),
