@@ -73,50 +73,51 @@ $(function(){
  */
 function pageCategoryIdChangeHandler() {
 	
-	if(!$("#MobileOn").html()) {
-		return;
-	}
-	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
-	var pageCategoryId = $("#PagePageCategoryId").val();
 	var mobile = false;
 	var previewWidth;
 	
-	if($('input[name="data[Page][page_type]"]:checked').val() == 2 && !pageCategoryId) {
-		pageCategoryId = $("#RootMobileId").html();
-	}
-	
-	// モバイルカテゴリ判定
-	if(pageCategoryId){
-		for (var key in mobileCategoryIds){
-			if(mobileCategoryIds[key] == pageCategoryId){
-				mobile = true;
-				break;
+	if(!$("#MobileOn").html()) {
+		var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
+		var pageCategoryId = $("#PagePageCategoryId").val();
+
+		if($('input[name="data[Page][page_type]"]:checked').val() == 2 && !pageCategoryId) {
+			pageCategoryId = $("#RootMobileId").html();
+		}
+
+		// モバイルカテゴリ判定
+		if(pageCategoryId){
+			for (var key in mobileCategoryIds){
+				if(mobileCategoryIds[key] == pageCategoryId){
+					mobile = true;
+					break;
+				}
 			}
 		}
-	}
-	
-	// モバイルカテゴリを選択した場合は表示しない
-	if(!mobile && mobileCategoryIds.length){
-		
-		$.ajax({
-			type: "POST",
-			url: $("#CheckMobilePageAddableUrl").html()+'/'+pageCategoryId,
-			beforeSend: function() {
-				$("#AjaxLoader").show();
-			},
-			success: function(result){
-				if(result) {
-					changeStateReflectMobile(true);
-				} else {
-					changeStateReflectMobile(false);
+
+		// モバイルカテゴリを選択した場合は表示しない
+		if(!mobile && mobileCategoryIds.length){
+
+			$.ajax({
+				type: "POST",
+				url: $("#CheckMobilePageAddableUrl").html()+'/'+pageCategoryId,
+				beforeSend: function() {
+					$("#AjaxLoader").show();
+				},
+				success: function(result){
+					if(result) {
+						changeStateReflectMobile(true);
+					} else {
+						changeStateReflectMobile(false);
+					}
+				},
+				complete: function() {
+					$("#AjaxLoader").hide();
 				}
-			},
-			complete: function() {
-				$("#AjaxLoader").hide();
-			}
-		});
-	}else{
-		changeStateReflectMobile(false);
+			});
+		}else{
+			changeStateReflectMobile(false);
+		}
+		
 	}
 	
 	// プレビューをモバイル用にリサイズする
