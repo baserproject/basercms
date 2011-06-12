@@ -22,12 +22,15 @@
 if(empty($paginator)) {
 	return;
 }
+if(!isset($modules)) {
+	$modules = 8;
+}
 ?>
 <?php $paginator->options = array('url' => $this->passedArgs) ?>
 <?php if((int)$paginator->counter(array('format'=>'%pages%')) > 1): ?>
 <div class="pagination">
 <?php echo $paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
-<?php echo $html->tag('span', $paginator->numbers(array('separator' => '', 'class' => 'number'), array('class' => 'page-numbers'))) ?>
+<?php echo $html->tag('span', $paginator->numbers(array('separator' => '', 'class' => 'number', 'modulus' => $modules), array('class' => 'page-numbers'))) ?>
 <?php echo $paginator->next('次へ >', array('class'=>'next'), null, array('class'=>'disabled')) ?>
 </div>
 <?php endif; ?>

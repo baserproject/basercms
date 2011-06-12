@@ -194,6 +194,7 @@ class AppModel extends Model {
 		App::import('Model', 'Dblog');
 		$Dblog = new Dblog();
 		$logdata['Dblog']['name'] = $message;
+		$logdata['Dblog']['user_id'] = $_SESSION['Auth']['User']['id'];
 		return $Dblog->save($logdata);
 
 	}
@@ -1343,5 +1344,25 @@ class AppModel extends Model {
 		return call_user_func_array(array('parent', __FUNCTION__), $args);
 		
 	}
+/**
+ * Deletes multiple model records based on a set of conditions.
+ *
+ * @param mixed $conditions Conditions to match
+ * @param boolean $cascade Set to true to delete records that depend on this record
+ * @param boolean $callbacks Run callbacks (not being used)
+ * @return boolean True on success, false on failure
+ * @access public
+ * @link http://book.cakephp.org/view/692/deleteAll
+ */
+	function deleteAll($conditions, $cascade = true, $callbacks = false) {
+		
+		$result = parent::deleteAll($conditions, $cascade, $callbacks);
+		if($result) {
+			$this->cacheDelete($this);
+		}
+		return $result;
+		
+	}
+	
 }
 ?>
