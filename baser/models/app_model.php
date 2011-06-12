@@ -1369,7 +1369,11 @@ class AppModel extends Model {
 		
 		$result = parent::deleteAll($conditions, $cascade, $callbacks);
 		if($result) {
-			$this->cacheDelete($this);
+			if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+				if($this->cacheEnabled()) {
+					$this->cacheDelete($this);
+				}
+			}
 		}
 		return $result;
 		
