@@ -2559,7 +2559,7 @@ class DboCsv extends DboSource {
 				}
 			}
 		}
-
+		clearCache(null, 'models');
 		return true;
 
 	}

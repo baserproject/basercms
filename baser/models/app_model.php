@@ -337,7 +337,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '') {
+	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -354,7 +354,7 @@ class AppModel extends Model {
 			}
 		}
 
-		if($this->loadSchema($dbConfigName, $path, $filterTable, '', array(), $dropField = false)){
+		if($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)){
 			if($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
 			} else {
@@ -430,6 +430,11 @@ class AppModel extends Model {
 				}
 
 			}
+		}
+		$folder = new Folder(CACHE.'datas');
+		$files = $folder->read(true, true, true);
+		foreach($files[1] as $file) {
+			@unlink($file);
 		}
 		return true;
 
@@ -1130,12 +1135,18 @@ class AppModel extends Model {
  */
 	function confirm($check, $fields) {
 
+		$value1 = $value2 = '';
 		if(is_array($fields) && count($fields) > 1) {
-			$value1 = $this->data[$this->alias][$fields[0]];
-			$value2 = $this->data[$this->alias][$fields[1]];
+			if(isset($this->data[$this->alias][$fields[0]]) && 
+					isset($this->data[$this->alias][$fields[1]])) {
+				$value1 = $this->data[$this->alias][$fields[0]];
+				$value2 = $this->data[$this->alias][$fields[1]];
+			}
 		} elseif($fields) {
-			$value1 = $check[key($check)];
-			$value2 = $this->data[$this->alias][$fields];
+			if(isset($check[key($check)]) && isset($this->data[$this->alias][$fields])) {
+				$value1 = $check[key($check)];
+				$value2 = $this->data[$this->alias][$fields];
+			}
 		} else {
 			return false;
 		}
