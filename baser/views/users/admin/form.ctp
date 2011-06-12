@@ -83,12 +83,13 @@ $(function(){
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('User.user_group_id', 'グループ') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('User.user_group_id', array('type' => 'select', 'options' => $formEx->getControlSource('user_group_id'))) ?>
+			<?php echo $formEx->input('User.user_group_id', array('type' => 'select', 'options' => $userGroups)) ?>
 			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpUserGroupId', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $formEx->error('User.user_group_id', 'グループを選択してください') ?>
 			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 				より新しいグループを追加しアクセス制限の設定をおこないます。</div>
+			<?php echo $userGroups[$formEx->value('User.user_group_id')] ?>
 		</td>
 	</tr>
 	<tr>
@@ -135,11 +136,13 @@ $(function(){
 		<?php if(isset($baser->siteConfig['demo_on']) && $baser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
+			<?php if($editable): ?>
 	<?php echo $formEx->submit('更　新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnEdit')) ?>
 	<?php $baser->link('削　除', 
 			array('action' => 'delete', $formEx->value('User.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $formEx->value('User.name')), false); ?>
+			<?php endif ?>
 		<?php endif ?>
 	<?php else: ?>
 	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>

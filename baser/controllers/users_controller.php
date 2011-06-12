@@ -281,6 +281,7 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->set('editable', true);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->render('form');
@@ -343,6 +344,18 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
+		$userGroups = $this->User->getControlSource('user_group_id');
+		$editable = true;
+		$user = $this->Auth->user();
+		if($user['User']['user_group_id'] != 1 && 
+				$this->data['User']['user_group_id'] == 1) {
+			$editable = false;
+		} else {
+			unset($userGroups[1]);
+		}
+		
+		$this->set('userGroups', $userGroups);
+		$this->set('editable', $editable);
 		$this->set('selfUpdate', $selfUpdate);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';

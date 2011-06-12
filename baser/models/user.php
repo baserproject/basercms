@@ -146,10 +146,16 @@ class User extends AppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null) {
+	function getControlSource($field) {
 
-		$controlSources['user_group_id'] = $this->UserGroup->find('list');
-
+		switch($field) {
+			
+			case 'user_group_id':
+				$controlSources['user_group_id'] = $this->UserGroup->find('list');
+				break;
+		
+		}
+		
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
