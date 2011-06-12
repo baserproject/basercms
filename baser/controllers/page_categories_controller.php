@@ -98,14 +98,17 @@ class PageCategoriesController extends AppController {
 		if($children) {
 			$ids = am($ids, Set::extract('/PageCategory/id', $children));
 		}
-
 		if($this->data['PageCategory']['type'] == 'pc' || empty($this->data['PageCategory']['type'])) {
 			$ids = am(array($mobileId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif($this->data['PageCategory']['type'] == 'mobile') {
-			$conditions = array(array('PageCategory.id' => $ids));
+			if($ids) {
+				$conditions = array(array('PageCategory.id' => $ids));
+			} else {
+				$conditions = array(array('PageCategory.id <>' => $mobileId));
+			}
 		}
-		
+
 		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
