@@ -775,6 +775,7 @@ class Page extends AppModel {
 		$categoryName = basename($targetPath);
 		
 		$pageCategoryId = '';
+		$this->PageCategory->updateRelatedPage = false;
 		if($categoryName != 'pages') {
 			
 			// カテゴリ名の取得

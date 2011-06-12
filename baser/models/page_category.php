@@ -75,6 +75,13 @@ class PageCategory extends AppModel {
  */
 	var $_mobileId = -1;
 /**
+ * 保存時に関連ページを更新するかどうか
+ * 
+ * @var boolean
+ * @access public
+ */
+	var $updateRelatedPage = true;
+/**
  * バリデーション
  *
  * @var		array
@@ -211,7 +218,7 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function afterSave($created) {
-		if(!$created) {
+		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
 	}
