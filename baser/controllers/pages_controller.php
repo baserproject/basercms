@@ -271,14 +271,22 @@ class PagesController extends AppController {
 			$pageType = 2;
 		}
 		$this->data['Page']['page_type'] = $pageType;
+		$currentOwnerId = '';
+		$currentPageCategoryId = '';
+		if(!empty($this->data['PageCategory']['owner_id'])) {
+			$currentPageCategoryId = $this->data['PageCategory']['currentPageCategoryId'];
+		}
+		if(!empty($this->data['PageCategory']['owner_id'])) {
+			$currentPageCategoryId = $this->data['PageCategory']['currentPageCategoryId'];
+		}
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
-			'currentOwnerId'		=> $this->data['PageCategory']['owner_id'],
-			'currentPageCategoryId'	=> $this->data['PageCategory']['id'],
+			'currentOwnerId'		=> $currentOwnerId,
+			'currentPageCategoryId'	=> $currentPageCategoryId,
 			'own'			=> true,
 			'empty'			=> '指定しない'
 		));
 		$this->set('categories', $categories);
-		$this->set('editable', $this->checkCurrentEditable($this->data['Page']['page_category_id'], $this->data['PageCategory']['owner_id']));
+		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
