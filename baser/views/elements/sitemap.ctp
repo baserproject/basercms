@@ -33,7 +33,9 @@ if(!isset($recursive)) {
 		<?php if(!empty($pageCategories['PageCategory']['url'])): ?>
 			<?php $baser->link($pageCategories['PageCategory']['title'], $pageCategories['PageCategory']['url']) ?>
 		<?php else: ?>
-			<?php echo $pageCategories['PageCategory']['title'] ?>
+			<?php if(isset($pageCategories['children'])): ?>
+				<?php echo $pageCategories['PageCategory']['title'] ?>
+			<?php endif ?>
 		<?php endif ?>
 		<?php if(isset($pageCategories['children'])): ?>
 			<?php $baser->element('sitemap', array('pageList' => $pageCategories['children'], 'recursive' => $recursive+1)) ?>
