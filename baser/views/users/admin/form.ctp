@@ -89,7 +89,6 @@ $(function(){
 			<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 				<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 				より新しいグループを追加しアクセス制限の設定をおこないます。</div>
-			<?php echo $userGroups[$formEx->value('User.user_group_id')] ?>
 		</td>
 	</tr>
 	<tr>
