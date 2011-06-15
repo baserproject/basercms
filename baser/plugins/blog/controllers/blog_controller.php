@@ -490,6 +490,22 @@ class BlogController extends BlogAppController {
 
 	}
 /**
+ * プレビューを表示する
+ * 
+ * @param string $mode
+ * @param int $blogContentsId
+ * @param int $id 
+ */
+	function admin_preview($blogContentsId, $id, $mode) {
+		
+		if($mode == 'create') {
+			$this->_createPreview($blogContentsId, $id);
+		} elseif($mode == 'view') {
+			$this->_viewPreview($blogContentsId, $id);
+		}
+		
+	}
+/**
  * [PUBLIC] ブログ記事をプレビュー
  *
  * @param	mixed	blog_post_id / type
@@ -497,7 +513,7 @@ class BlogController extends BlogAppController {
  * @return	void
  * @access 	public
  */
-	function admin_create_preview($blogContentsId, $id) {
+	function _createPreview($blogContentsId, $id) {
 
 		Cache::write('blog_posts_preview_'.$id, $this->data);
 		echo true;
@@ -510,7 +526,7 @@ class BlogController extends BlogAppController {
  * @return	void
  * @access	public
  */
-	function admin_preview($blogContentsId, $id){
+	function _viewPreview($blogContentsId, $id){
 
 		$data = Cache::read('blog_posts_preview_'.$id);
 		Cache::delete('blog_posts_preview_'.$id);

@@ -21,7 +21,7 @@
  */
 $statuses = array(0=>'非公開', 1=>'公開');
 $baser->css('ckeditor/editor', null, null, false);
-$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
+$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 
 <script type="text/javascript">
@@ -36,7 +36,7 @@ $(function(){
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		$.ajax({
 			type: "POST",
-			url: '<?php echo $this->base ?>/admin/blog/create_preview/<?php echo $blogContent['BlogContent']['id'] ?>/<?php echo $previewId ?>',
+			url: '<?php echo $this->base ?>/admin/blog/preview/<?php echo $blogContent['BlogContent']['id'] ?>/<?php echo $previewId ?>/create',
 			data: $("#BlogPostForm").serialize(),
 			success: function(result){
 				if(result) {
