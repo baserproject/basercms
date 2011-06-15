@@ -150,7 +150,9 @@ class PagesController extends AppController {
 			/* 登録処理 */
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->create($this->data);
-
+			if($this->data['Page']['page_type'] == 2 && !$this->data['Page']['page_category_id']) {
+				$this->data['Page']['page_category_id'] = 1;
+			}
 			if($this->Page->validates()) {
 				
 				if($this->Page->save($this->data,false)) {
@@ -188,7 +190,12 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$this->data['Page']['page_type'] = 1;
+		$pageTypeSelectable = true;
 		$categories = $this->getCategorySource(1, array('empty' => '指定しない', 'own' => true));
+		if(!$this->getCategorySource(2, array('empty' => '指定しない', 'own' => true))) {
+			$pageTypeSelectable = false;
+		}
+		$this->set('pageTypeSelectable', $pageTypeSelectable);
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
@@ -196,7 +203,6 @@ class PagesController extends AppController {
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->subMenuElements = array('pages','page_categories');
-		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->set('rootMobileId', $this->PageCategory->getMobileId());
 		$this->pageTitle = '新規ページ登録';
 		$this->render('form');
@@ -266,6 +272,7 @@ class PagesController extends AppController {
 
 		/* 表示設定 */
 		$pageType = 1;
+		$pageTypeSelectable = true;
 		$mobileIds = $this->PageCategory->getMobileCategoryIds();
 		if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
 			$pageType = 2;
@@ -273,18 +280,31 @@ class PagesController extends AppController {
 		$this->data['Page']['page_type'] = $pageType;
 		$currentOwnerId = '';
 		$currentPageCategoryId = '';
-		if(!empty($this->data['PageCategory']['owner_id'])) {
-			$currentPageCategoryId = $this->data['PageCategory']['currentPageCategoryId'];
+		if(!empty($this->data['PageCategory']['id'])) {
+			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
-		if(!empty($this->data['PageCategory']['owner_id'])) {
-			$currentPageCategoryId = $this->data['PageCategory']['currentPageCategoryId'];
-		}
-		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
+		$pcCategories = $this->getCategorySource(1, array(
 			'currentOwnerId'		=> $currentOwnerId,
 			'currentPageCategoryId'	=> $currentPageCategoryId,
 			'own'			=> true,
 			'empty'			=> '指定しない'
 		));
+		$mobileCategories = $this->getCategorySource(2, array(
+			'currentOwnerId'		=> $currentOwnerId,
+			'currentPageCategoryId'	=> $currentPageCategoryId,
+			'own'			=> true,
+			'empty'			=> '指定しない'
+		));
+		if(!$pcCategories || !$mobileCategories) {
+			$pageTypeSelectable = false;
+		}
+		$categories = array();
+		if($this->data['Page']['page_type'] == 1) {
+			$categories = $pcCategories;
+		} elseif($this->data['Page']['page_type'] == 2) {
+			$categories = $mobileCategories;
+		}
+		$this->set('pageTypeSelectable', $pageTypeSelectable);
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
@@ -293,7 +313,6 @@ class PagesController extends AppController {
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
-		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
 		$this->set('rootMobileId', $this->PageCategory->getMobileId());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ情報編集';
@@ -740,9 +759,9 @@ class PagesController extends AppController {
 				}
 				if($ownerId) {
 					if($userGroupId == $ownerId) {
-						$return = true;
+						$result = true;
 					} else {
-						$return = false;
+						$result = false;
 					}
 				} else {
 					$result = true;

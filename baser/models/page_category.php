@@ -132,7 +132,13 @@ class PageCategory extends AppModel {
 						}
 						$conditions['NOT']['PageCategory.id'] = $excludeIds;
 					} else {
-						$conditions['PageCategory.id'] = $this->getMobileCategoryIds(false);
+						// excludeParentId が空文字の場合はPCページ以外を指す
+						$mobileCategoryIds = $this->getMobileCategoryIds(false);
+						if($mobileCategoryIds) {
+							$conditions['PageCategory.id'] = $mobileCategoryIds;
+						} else {
+							return array();
+						}
 					}
 				}
 				

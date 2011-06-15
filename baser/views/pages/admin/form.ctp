@@ -76,8 +76,8 @@ function pageCategoryIdChangeHandler() {
 	var mobile = false;
 	var previewWidth;
 	
-	if(!$("#MobileOn").html()) {
-		var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
+	if($("#MobileOn").html()) {
+
 		var pageCategoryId = $("#PagePageCategoryId").val();
 
 		if($('input[name="data[Page][page_type]"]:checked').val() == 2 && !pageCategoryId) {
@@ -85,17 +85,12 @@ function pageCategoryIdChangeHandler() {
 		}
 
 		// モバイルカテゴリ判定
-		if(pageCategoryId){
-			for (var key in mobileCategoryIds){
-				if(mobileCategoryIds[key] == pageCategoryId){
-					mobile = true;
-					break;
-				}
-			}
+		if($('input[name="data[Page][page_type]"]:checked').val() == 2) {
+			mobile = true;
 		}
 
 		// モバイルカテゴリを選択した場合は表示しない
-		if(!mobile && mobileCategoryIds.length){
+		if(!mobile){
 
 			$.ajax({
 				type: "POST",
@@ -238,6 +233,7 @@ function pageTypeChengeHandler() {
 		<td class="col-input">
 	<?php if(Configure::read('Baser.mobile')): ?>
 		<?php echo $formEx->input('Page.page_type', array(
+				'disabled'	=> !$pageTypeSelectable,
 				'type'		=> 'radio',
 				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
 	<?php endif ?>
