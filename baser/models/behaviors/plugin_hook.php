@@ -113,7 +113,11 @@ class PluginHookBehavior extends ModelBehavior {
 		}
 
 		$plugins = Configure::read('Baser.enablePlugins');
-
+		
+		if(!$plugins) {
+			return;
+		}
+		
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
 		if($plugins) {
@@ -160,7 +164,7 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeFind(&$model, $query) {
-		return $this->executeHook($model, 'beforeFind', true, $query);
+		return $this->executeHook($model, 'beforeFind', $query, $query);
 	}
 /**
  * afterFind

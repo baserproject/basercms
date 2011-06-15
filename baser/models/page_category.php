@@ -75,6 +75,13 @@ class PageCategory extends AppModel {
  */
 	var $_mobileId = -1;
 /**
+ * 保存時に関連ページを更新するかどうか
+ * 
+ * @var boolean
+ * @access public
+ */
+	var $updateRelatedPage = true;
+/**
  * バリデーション
  *
  * @var		array
@@ -105,36 +112,72 @@ class PageCategory extends AppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		$conditions = array();
-		if(!empty($options['excludeParentId'])) {
-			$children = $this->children($options['excludeParentId']);
-			$excludeIds = array($options['excludeParentId']);
-			foreach($children as $child) {
-				$excludeIds[] = $child['PageCategory']['id'];
-			}
-			$conditions['NOT']['PageCategory.id'] = $excludeIds;
-		}
-
-		$parents = $this->generatetreelist($conditions);
-		$controlSources['parent_id'] = array();
-		if(!Configure::read('Baser.mobile')) {
-			$excludeId = $this->getMobileId();
-		} else {
-			$excludeId = '';
-		}
-		foreach($parents as $key => $parent) {
-			if($parent && $key != $excludeId) {
-				if(preg_match("/^([_]+)/i",$parent,$matches)) {
-					$parent = preg_replace("/^[_]+/i",'',$parent);
-					$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-					$parent = $prefix.'└'.$parent;
+		switch ($field) {
+			
+			case 'parent_id':
+				
+				$conditions = array();
+				if(isset($options['conditions'])) {
+					$conditions = $options['conditions'];
 				}
-				$controlSources['parent_id'][$key] = $parent;
-			}
-		}
+				
+				if(isset($options['excludeParentId'])) {
+					if($options['excludeParentId']) {
+						$children = $this->children($options['excludeParentId']);
+						$excludeIds = array($options['excludeParentId']);
+						foreach($children as $child) {
+							$excludeIds[] = $child['PageCategory']['id'];
+						}
+						$conditions['NOT']['PageCategory.id'] = $excludeIds;
+					} else {
+						// excludeParentId が空文字の場合はPCページ以外を指す
+						$mobileCategoryIds = $this->getMobileCategoryIds(false);
+						if($mobileCategoryIds) {
+							$conditions['PageCategory.id'] = $mobileCategoryIds;
+						} else {
+							return array();
+						}
+					}
+				}
+				
+				if(isset($options['ownerId'])) {
+					$ownerIdConditions = array(
+						array('PageCategory.owner_id' => null),
+						array('PageCategory.owner_id' => $options['ownerId']),
+					);
+					if(isset($conditions['OR'])) {
+						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
+					} else {
+						$conditions['OR'] = $ownerIdConditions;
+					}
+				}
 
+				$parents = $this->generatetreelist($conditions);
+				$controlSources['parent_id'] = array();
+				if(!Configure::read('Baser.mobile')) {
+					$excludeIds = $this->getMobileCategoryIds();
+				} else {
+					$excludeIds = array();
+				}
+				foreach($parents as $key => $parent) {
+					if($parent && !in_array($key, $excludeIds)) {
+						if(preg_match("/^([_]+)/i",$parent,$matches)) {
+							$parent = preg_replace("/^[_]+/i",'',$parent);
+							$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+							$parent = $prefix.'└'.$parent;
+						}
+						$controlSources['parent_id'][$key] = $parent;
+					}
+				}
+				break;
+			case 'owner_id':
+				$UserGroup = ClassRegistry::init('UserGroup');
+				$controlSources['owner_id'] = $UserGroup->find('list', array('fields' => array('id', 'title'), 'recursive' => -1));
+				break;
+		}
+		
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -181,7 +224,7 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function afterSave($created) {
-		if(!$created) {
+		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
 	}
@@ -388,13 +431,16 @@ class PageCategory extends AppModel {
  * @return	array	$ids
  * @access	public
  */
-	function getMobileCategoryIds(){
+	function getMobileCategoryIds($top = true){
 
 		$mobileId = $this->getMobileId();
 		if(!$mobileId){
 			return array();
 		}
-		$ids = array($mobileId);
+		$ids = array();
+		if($top) {
+			$ids[] = $mobileId;
+		}
 		$children = $this->children($mobileId,false,array('PageCategory.id'),array('PageCategory.id'));
 		if($children){
 			$children = Set::extract('/PageCategory/id',$children);
@@ -407,13 +453,31 @@ class PageCategory extends AppModel {
  * モバイルカテゴリのIDを取得する
  * @return string
  */
-	function getMobileId() {
-		if($this->_mobileId == -1){
-			$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+	function getMobileId($pcId = null) {
+		
+		if($pcId){
+			$path = $this->getPath($pcId, array('name'), -1);
+			$path = Set::extract('/PageCategory/name', $path);
+			$path = implode(DS, $path);
+			$path = getViewPath().'pages'.DS.'mobile'.DS.$path;
+			$mobileId = $this->getIdByPath($path);			
+		}else{
+			if($this->_mobileId == -1){
+				$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+			}
+			$mobileId = $this->_mobileId;
 		}
-		return $this->_mobileId;
+		return $mobileId;
+		
 	}
-
+/**
+ * ツリーリストを取得する
+ * 
+ * @param array $fields
+ * @param int $id
+ * @return array
+ * @access public 
+ */
 	function getTreeList($fields,$id){
 		$this->recursive = -1;
 		$pageCategories = array();
@@ -424,5 +488,32 @@ class PageCategory extends AppModel {
 		}
 		return $pageCategories;
 	}
+/**
+ * 新しいカテゴリが追加できる状態かチェックする
+ * 
+ * @param int $userGroupId
+ * @param boolean $rootEditable
+ * @return boolean
+ * @access public
+ */
+	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
+		$newCatAddable = false;
+		$ownerCats = $this->find('count', array(
+			'conditions' => array(
+				'OR' => array(
+					array('PageCategory.owner_id' => null),
+					array('PageCategory.owner_id' => $userGroupId)
+				),
+				'PageCategory.id <>' => $this->getMobileId()
+		)));
+
+		if($ownerCats || $rootEditable) {
+			$newCatAddable = true;
+		}
+		return $newCatAddable;
+		
+	}
+	
 }
 ?>

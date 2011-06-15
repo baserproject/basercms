@@ -83,7 +83,14 @@ class DashboardController extends AppController {
 		/* 表示設定 */
 		$this->subMenuElements = array("dashboard");
 		$this->pageTitle = '管理者ダッシュボード';
-		$this->set('viewDblogs',$this->Dblog->findAll("","","created desc",12));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('Dblog', array('default' => $default));
+		
+		$this->paginate = array(
+				'order' =>'Dblog.created DESC',
+				'limit' => $this->passedArgs['num']
+		);
+		$this->set('viewDblogs',$this->paginate('Dblog'));
 
 	}
 /**

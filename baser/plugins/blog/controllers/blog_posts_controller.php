@@ -41,7 +41,7 @@ class BlogPostsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('Blog.BlogPost','Blog.BlogContent','Blog.BlogCategory');
+	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
@@ -94,6 +94,7 @@ class BlogPostsController extends BlogAppController {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}
 		}
+		
 	}
 /**
  * beforeRender
@@ -123,7 +124,6 @@ class BlogPostsController extends BlogAppController {
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
-		$this->passedArgs[] = $blogContentId;
 		
 		/* 検索条件生成 */
 		$joins = array();
@@ -154,14 +154,9 @@ class BlogPostsController extends BlogAppController {
 				'order'	=>'BlogPost.no DESC',
 				'limit'	=>$this->passedArgs['num']
 		);
-
-		$posts = $this->paginate('BlogPost');
-
-		if($posts) {
-			$this->set('posts',$posts);
-		}
-
+		
 		// 表示設定
+		$this->set('posts', $this->paginate('BlogPost'));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事一覧';
 
 	}
@@ -175,6 +170,12 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
+		$name = '';
+		if(isset($data['BlogPost']['name'])) {
+			$name = $data['BlogPost']['name'];
+		}
+		
+		unset($data['BlogPost']['name']);
 		unset($data['_Token']);
 		if(isset($data['BlogPost']['status']) && $data['BlogPost']['status'] === '') {
 			unset($data['BlogPost']['status']);
@@ -218,6 +219,10 @@ class BlogPostsController extends BlogAppController {
 			$conditions = am($conditions, $_conditions);
 		}
 
+		if($name) {
+			$conditions['BlogPost.name LIKE'] = '%'.$name.'%';
+		}
+		
 		return $conditions;
 
 	}
@@ -245,6 +250,7 @@ class BlogPostsController extends BlogAppController {
 
 			// データを保存
 			if($this->BlogPost->save()) {
+				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
@@ -259,10 +265,20 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
-		$authUser = $this->Auth->user();
+		$user = $this->Auth->user();
+		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
+			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
+			'rootEditable'	=> $this->checkRootEditable(),
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'postEditable'	=> true,
+			'empty'			=> '指定しない'
+		));
+		$this->set('editable', true);
+		$this->set('categories', $categories);
+		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
-		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $authUser['User']['id'])));
+		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user['User']['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->render('form');
 
@@ -291,6 +307,7 @@ class BlogPostsController extends BlogAppController {
 			}
 			// データを保存
 			if($this->BlogPost->save($this->data)) {
+				clearViewCache();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
@@ -303,6 +320,34 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
+		$user = $this->Auth->user();
+		$editable = false;
+		$blogCategoryId = '';
+		
+		if(isset($this->data['BlogPost']['blog_category_id'])) {
+			$blogCategoryId = $this->data['BlogPost']['blog_category_id'];
+		}
+		if(!$blogCategoryId) {
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+		} else {
+			$currentCatOwner = $this->data['BlogCategory']['owner_id'];
+		}
+		
+		$editable = ($currentCatOwner == $user['User']['user_group_id'] ||
+					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
+		
+		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
+			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
+			'rootEditable'	=> $this->checkRootEditable(),
+			'blogCategoryId'=> $blogCategoryId,
+			'userGroupId'	=> $user['User']['user_group_id'],
+			'postEditable'	=> $editable,
+			'empty'			=> '指定しない'
+		));
+		
+		$this->set('editable', $editable);
+		$this->set('categories', $categories);
+		$this->set('previewId', $this->data['BlogPost']['id']);
 		$this->set('users',$this->BlogPost->User->getUserList());
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
 		$this->set('ckEditorOptions2', array('useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));

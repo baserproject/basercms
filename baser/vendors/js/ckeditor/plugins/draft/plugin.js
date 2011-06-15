@@ -130,7 +130,8 @@ CKEDITOR.plugins.draft =
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 本稿に切り替える
@@ -151,7 +152,8 @@ CKEDITOR.plugins.draft =
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			state: CKEDITOR.TRISTATE_ON,
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 草稿を本稿にコピーする
@@ -170,7 +172,8 @@ CKEDITOR.plugins.draft =
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 本稿を草稿にコピーする
@@ -189,7 +192,8 @@ CKEDITOR.plugins.draft =
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 草稿機能を無効にする
@@ -204,7 +208,8 @@ CKEDITOR.plugins.draft =
 				editor.draftMode = 'publish';
 				editor.draftDraftAvailable = false;
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 本稿機能を無効にする
@@ -219,7 +224,8 @@ CKEDITOR.plugins.draft =
 				editor.draftMode = 'draft';
 				editor.draftPublishAvailable = false;
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * CKEditorの編集内容をフィールドに反映する
@@ -234,7 +240,8 @@ CKEDITOR.plugins.draft =
 					$("#"+editor.draftPublishAreaId).val(editor.getData());
 				}
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		},
 	/**
 	 * 草稿モードに合わせて背景色を変更する
@@ -256,7 +263,8 @@ CKEDITOR.plugins.draft =
 					$('#cke_contents_'+editor.name+' textarea').css('background-color', color);
 				}
 			},
-			canUndo : false
+			canUndo : false,
+			editorFocus : false
 		}
 	}
 };

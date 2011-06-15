@@ -77,6 +77,7 @@ class BlogCategoriesController extends BlogAppController {
  * @access 	public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
 		$this->BlogContent->recursive = -1;
 		$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
@@ -86,6 +87,7 @@ class BlogCategoriesController extends BlogAppController {
 		}
 		// バリデーション設定
 		$this->BlogCategory->validationParams['blogContentId'] = $this->blogContent['BlogContent']['id'];
+		
 	}
 /**
  * beforeRender
@@ -118,9 +120,8 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		if($dbDatas) {
-			$this->set('dbDatas',$dbDatas);
-		}
+		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
+		$this->set('dbDatas',$dbDatas);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] ブログカテゴリ一覧';
 
 	}
@@ -158,6 +159,20 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
+		$user = $this->Auth->user();
+		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
+		if($user['User']['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user['User']['user_group_id'];
+		}
+		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		}
+		$this->set('parents', $parents);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規ブログカテゴリ登録';
 		$this->render('form');
 
@@ -193,6 +208,23 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
+		$user = $this->Auth->user();
+		$catOptions = array(
+			'blogContentId' => $this->blogContent['BlogContent']['id'],
+			'excludeParentId' => $this->data['BlogCategory']['id']
+		);
+		if($user['User']['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user['User']['user_group_id'];
+		}
+		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		}
+		$this->set('parents', $parents);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] ブログカテゴリ編集';
 		$this->render('form');
 

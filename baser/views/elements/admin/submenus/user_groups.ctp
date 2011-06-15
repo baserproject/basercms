@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
+<?php if($user['user_group_id'] == 1): ?>
 <div class="side-navi">
 	<h2>ユーザーグループ<br />
 		管理メニュー</h2>
@@ -33,3 +33,4 @@
 		</li>
 	</ul>
 </div>
+<?php endif ?>

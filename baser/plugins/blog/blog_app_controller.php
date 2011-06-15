@@ -46,5 +46,23 @@ class BlogAppController extends PluginsController {
 		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
 
 	}
+/**
+ * beforeFilter
+ *
+ * @return	void
+ * @access 	public
+ */
+	function beforeFilter() {
+		
+		parent::beforeFilter();
+		$user = $this->Auth->user();
+		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
+				$user['User']['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
+	}
+	
 }
 ?>

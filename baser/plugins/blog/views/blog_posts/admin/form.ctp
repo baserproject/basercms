@@ -19,20 +19,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', null, null, false);
 $statuses = array(0=>'非公開', 1=>'公開');
-$categories = $formEx->getControlSource('BlogPost.blog_category_id', array('blogContentId' => $blogContent['BlogContent']['id']));
-if($formEx->value('BlogPost.id')) {
-	$previewId = $formEx->value('BlogPost.id');
-}else{
-	$previewId = 'add_'.mt_rand(0, 99999999);
-}
-$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
-if($this->action == 'admin_add') {
-	$disableDraft = true;
-} else {
-	$disableDraft = false;
-}
+$baser->css('ckeditor/editor', null, null, false);
+$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 
 <script type="text/javascript">
@@ -47,7 +36,7 @@ $(function(){
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		$.ajax({
 			type: "POST",
-			url: '<?php echo $this->base ?>/admin/blog/create_preview/<?php echo $blogContent['BlogContent']['id'] ?>/<?php echo $previewId ?>',
+			url: '<?php echo $this->base ?>/admin/blog/preview/<?php echo $blogContent['BlogContent']['id'] ?>/<?php echo $previewId ?>/create',
 			data: $("#BlogPostForm").serialize(),
 			success: function(result){
 				if(result) {
@@ -168,7 +157,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogPost.blog_category_id', 'カテゴリ') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false, 'empty' => 'なし')) ?>
+			<?php echo $formEx->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>
 			<?php echo $formEx->error('BlogPost.blog_category_id') ?>
 		</td>
 	</tr>
@@ -259,13 +248,17 @@ $(function(){
 	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
+	<?php if($editable): ?>
 	<?php echo $formEx->button('更　新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php endif ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php if($editable): ?>
 	<?php $baser->link('削　除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $formEx->value('BlogPost.name')),
 			false); ?>
+	<?php endif ?>
 <?php endif ?>
 </div>
 

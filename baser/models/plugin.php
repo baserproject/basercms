@@ -73,8 +73,8 @@ class Plugin extends AppModel {
  * @return	boolean
  * @access	public
  */
-	function initDb($plugin) {
-		return parent::initDb('plugin', $plugin);
+	function initDb($plugin, $filterTable = '') {
+		return parent::initDb('plugin', $plugin, true, $filterTable, 'create');
 	}
 /**
  * データベースの構造を変更する
@@ -84,7 +84,7 @@ class Plugin extends AppModel {
  * @access public
  */
 	function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
-		return parent::initDb($dbConfigName, $plugin, false);
+		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
 	}
 }
 ?>

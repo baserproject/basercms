@@ -92,32 +92,56 @@ class BlogCategory extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field,$options = array()) {
 
-		if($field == 'parent_id' && !isset($options['blogContentId'])) {
-			return false;
-		}
+		switch($field) {
+			case 'parent_id':
+				if(!isset($options['blogContentId'])) {
+					return false;
+				}
+				$conditions = array();
+				if(isset($options['conditions'])) {
+					$conditions = $options['conditions'];
+				}
+				$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
+				if(!empty($options['excludeParentId'])) {
+					$children = $this->children($options['excludeParentId']);
+					$excludeIds = array($options['excludeParentId']);
+					foreach($children as $child) {
+						$excludeIds[] = $child['BlogCategory']['id'];
+					}
+					$conditions['NOT']['BlogCategory.id'] = $excludeIds;
+				}
 
-		$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
-		if(!empty($options['excludeParentId'])) {
-			$children = $this->children($options['excludeParentId']);
-			$excludeIds = array($options['excludeParentId']);
-			foreach($children as $child) {
-				$excludeIds[] = $child['BlogCategory']['id'];
-			}
-			$conditions['NOT']['BlogCategory.id'] = $excludeIds;
-		}
+				if(isset($options['ownerId'])) {
+					$ownerIdConditions = array(
+						array('BlogCategory.owner_id' => null),
+						array('BlogCategory.owner_id' => $options['ownerId']),
+					);
+					if(isset($conditions['OR'])) {
+						$conditions['OR'] = am($conditions['OR'],$ownerIdConditions);
+					} else {
+						$conditions['OR'] = $ownerIdConditions;
+					}
+				}
 
-		$parents = $this->generatetreelist($conditions);
-		$controlSources['parent_id'] = array();
-		foreach($parents as $key => $parent) {
-			if(preg_match("/^([_]+)/i",$parent,$matches)) {
-				$parent = preg_replace("/^[_]+/i",'',$parent);
-				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-				$parent = $prefix.'└'.$parent;
-			}
-			$controlSources['parent_id'][$key] = $parent;
+				$parents = $this->generatetreelist($conditions);
+				$controlSources['parent_id'] = array();
+				foreach($parents as $key => $parent) {
+					if(preg_match("/^([_]+)/i",$parent,$matches)) {
+						$parent = preg_replace("/^[_]+/i",'',$parent);
+						$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+						$parent = $prefix.'└'.$parent;
+					}
+					$controlSources['parent_id'][$key] = $parent;
+				}
+				break;
+			case 'owner_id':
+				$UserGroup = ClassRegistry::init('UserGroup');
+				$controlSources['owner_id'] = $UserGroup->find('list', array('fields' => array('id', 'title'), 'recursive' => -1));
+				break;
 		}
+		
 
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -193,7 +217,8 @@ class BlogCategory extends BlogAppModel {
 							am(
 								array('BlogPost.blog_category_id' => $data['BlogCategory']['id']),
 								$this->BlogPost->getConditionAllowPublish()
-							)
+							),
+						'cache'		=> false
 					));
 				}
 			}
@@ -201,6 +226,31 @@ class BlogCategory extends BlogAppModel {
 		} else {
 			return array();
 		}
+		
+	}
+/**
+ * 新しいカテゴリが追加できる状態かチェックする
+ * 
+ * @param int $userGroupId
+ * @param boolean $rootEditable
+ * @return boolean
+ * @access public
+ */
+	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
+		$newCatAddable = false;
+		$ownerCats = $this->find('count', array(
+			'conditions' => array(
+				'OR' => array(
+					array('BlogCategory.owner_id' => null),
+					array('BlogCategory.owner_id' => $userGroupId)
+				)
+		)));
+
+		if($ownerCats || $rootEditable) {
+			$newCatAddable = true;
+		}
+		return $newCatAddable;
 		
 	}
 	

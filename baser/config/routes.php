@@ -64,7 +64,7 @@ if(!empty($cn->config->baser['driver'])) {
 		}else {
 			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}
-	}else{
+	}elseif(!preg_match('/^admin/', $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
@@ -81,7 +81,7 @@ if(!empty($cn->config->baser['driver'])) {
 				}else{
 					$url = '/mobile/'.$_parameter;
 				}
-				if($Page->checkPublish($url)){
+				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$mobileOn){
 						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{

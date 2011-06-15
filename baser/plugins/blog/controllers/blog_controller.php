@@ -41,7 +41,7 @@ class BlogController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array("Blog.BlogPost","Blog.BlogContent","Blog.BlogCategory");
+	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
@@ -169,11 +169,13 @@ class BlogController extends BlogAppController {
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 
 		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogContent'), false);
+		// 毎秒抽出条件が違うのでキャッシュしない
 		$this->paginate = array(
 				'conditions'=> $conditions,
 				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
 				'limit'		=> $limit,
-				'recursive'	=> 1
+				'recursive'	=> 1,
+				'cache'		=> false
 		);
 		$this->set('posts', $this->paginate('BlogPost'));
 
@@ -271,11 +273,13 @@ class BlogController extends BlogAppController {
 				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 			}
 			$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
+			// 毎秒抽出条件が違うのでキャッシュしない
 			$this->paginate = array('conditions'=>$conditions,
 					'fields'	=> array(),
 					'order'		=> 'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
 					'limit'		=> $this->blogContent['BlogContent']['list_count'],
-					'recursive'	=> 1
+					'recursive'	=> 1,
+					'cache'		=> false
 			);
 			$posts = $this->paginate('BlogPost');
 			$this->set('posts',$posts);
@@ -307,12 +311,14 @@ class BlogController extends BlogAppController {
 					$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 				}
 				$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
+				// 毎秒抽出条件が違うのでキャッシュしない
 				$this->paginate = array(
 						'conditions'	=> $conditions,
 						'fields'		=> array(),
 						'order'			=> 'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
 						'limit'			=> $this->blogContent['BlogContent']['list_count'],
-						'recursive'		=> 1
+						'recursive'		=> 1,
+						'cache'			=> false
 				);
 				$posts = $this->paginate('BlogPost');
 
@@ -357,10 +363,13 @@ class BlogController extends BlogAppController {
 					break;
 			}
 			$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
-			$this->paginate = array('conditions'=>$conditions,
-					'fields'=>array(),
-					'order'=>'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'].',BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
-					'limit'=>$this->blogContent['BlogContent']['list_count']
+			// 毎秒抽出条件が違うのでキャッシュしない
+			$this->paginate = array(
+				'conditions'=> $conditions,
+				'fields'	=> array(),
+				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'].',BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
+				'limit'		=> $this->blogContent['BlogContent']['list_count'],
+				'cache'		=> false
 			);
 			$this->BlogPost->recursive = 1;
 			$posts = $this->paginate('BlogPost');
@@ -380,11 +389,19 @@ class BlogController extends BlogAppController {
 				$conditions["BlogPost.no"] = $id;
 				$conditions["BlogPost.blog_content_id"] = $contentId;
 				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-				$postId = $this->BlogPost->field('id',$conditions);
-				if(!$postId) {
+				// 毎秒抽出条件が違うのでキャッシュしない
+				$data = $this->BlogPost->find('first', array(
+					'conditions'=> $conditions,
+					'fields'	=> array('BlogPost.id'),
+					'cache'		=> false,
+					'recursive'	=> -1
+				));
+				if(empty($data['BlogPost']['id'])) {
 					$this->notFound();
+				} else {
+					$postId = $data['BlogPost']['id'];
 				}
-
+				
 				if($this->BlogPost->BlogComment->add($this->data,$contentId,$postId,$this->blogContent['BlogContent']['comment_approve'])) {
 					$this->_sendComment();
 					if($this->blogContent['BlogContent']['comment_approve']) {
@@ -418,7 +435,11 @@ class BlogController extends BlogAppController {
 
 				$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogComment'), false);
 				$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
-				$post = $this->BlogPost->find($conditions);
+				// 毎秒抽出条件が違うのでキャッシュしない
+				$post = $this->BlogPost->find('first', array(
+					'conditions'	=> $conditions,
+					'cache'			=> false
+				));
 				if(!$post) {
 					$this->notFound();
 				}
@@ -469,6 +490,22 @@ class BlogController extends BlogAppController {
 
 	}
 /**
+ * プレビューを表示する
+ * 
+ * @param string $mode
+ * @param int $blogContentsId
+ * @param int $id 
+ */
+	function admin_preview($blogContentsId, $id, $mode) {
+		
+		if($mode == 'create') {
+			$this->_createPreview($blogContentsId, $id);
+		} elseif($mode == 'view') {
+			$this->_viewPreview($blogContentsId, $id);
+		}
+		
+	}
+/**
  * [PUBLIC] ブログ記事をプレビュー
  *
  * @param	mixed	blog_post_id / type
@@ -476,7 +513,7 @@ class BlogController extends BlogAppController {
  * @return	void
  * @access 	public
  */
-	function admin_create_preview($blogContentsId, $id) {
+	function _createPreview($blogContentsId, $id) {
 
 		Cache::write('blog_posts_preview_'.$id, $this->data);
 		echo true;
@@ -489,7 +526,7 @@ class BlogController extends BlogAppController {
  * @return	void
  * @access	public
  */
-	function admin_preview($blogContentsId, $id){
+	function _viewPreview($blogContentsId, $id){
 
 		$data = Cache::read('blog_posts_preview_'.$id);
 		Cache::delete('blog_posts_preview_'.$id);
@@ -580,13 +617,15 @@ class BlogController extends BlogAppController {
 		$this->BlogPost->recursive = -1;
 		$conditions = array('BlogPost.blog_content_id'=>$id);
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
-				'fields'=>array('no','name'),
-				'conditions'=>$conditions,
-				'limit'=>$count,
-				'order'=>'posts_date DESC',
-				'recursive'=>-1)
-		);
+				'fields'	=> array('no','name'),
+				'conditions'=> $conditions,
+				'limit'		=> $count,
+				'order'		=> 'posts_date DESC',
+				'recursive'	=> -1,
+				'cache'		=> false
+		));
 		return $data;
 		
 	}
@@ -604,12 +643,14 @@ class BlogController extends BlogAppController {
 		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 		$this->BlogPost->unbindModel(array('belongsTo' => array('BlogContent', 'User')));
+		// 毎秒抽出条件が違うのでキャッシュしない
 		$posts = $this->BlogPost->find('all', array(
 				'conditions'=> $conditions,
 				'limit'		=> $num,
 				'order'		=> 'posts_date DESC',
-				'recursive'	=> 0)
-		);
+				'recursive'	=> 1,
+				'cache'		=> false
+		));
 		$this->set('posts', $posts);
 		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
 		

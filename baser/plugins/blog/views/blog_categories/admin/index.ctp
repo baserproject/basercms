@@ -19,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$allowOwners = array('', $user['user_group_id']);
 ?>
 
 <!-- title -->
@@ -37,7 +38,11 @@
 	<tr>
 		<th style="width:122px">操作</th>
 		<th>NO</th>
-		<th>ブログカテゴリ名</th>
+		<th>ブログカテゴリ名
+			<?php if($baser->siteConfig['category_permission']): ?>
+			<br />管理グループ
+			<?php endif ?>
+		</th>
 		<th>ブログカテゴリタイトル</th>
 		<th>登録日<br />更新日</th>
 	</tr>
@@ -52,15 +57,22 @@
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
 			<?php $baser->link('確認', $blog->getCategoryUrl($dbData['BlogCategory']['id']), array('target' => '_blank', 'class' => 'btn-green-s button-s')) ?>
+		<?php if(in_array($dbData['BlogCategory']['owner_id'], $allowOwners)||$user['user_group_id']==1): ?>
 			<?php $baser->link('編集', array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除',
 					array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']),
 					array('class'=>'btn-gray-s button-s'),
 					sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。', $dbData['BlogCategory']['name']),
 					false); ?>
+		<?php endif ?>
 		</td>
 		<td><?php echo $dbData['BlogCategory']['no'] ?></td>
-		<td><?php $baser->link($dbData['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?></td>
+		<td><?php $baser->link($dbData['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id'])) ?>
+	<?php if($baser->siteConfig['category_permission']): ?>
+			<br />
+			<?php echo $textEx->arrayValue($dbData['BlogCategory']['owner_id'], $owners) ?>
+	<?php endif ?>
+		</td>
 		<td><?php echo $dbData['BlogCategory']['title'] ?></td>
 		<td><?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['created']); ?><br />
 			<?php echo $timeEx->format('Y-m-d',$dbData['BlogCategory']['modified']); ?></td>
@@ -75,6 +87,8 @@
 </table>
 
 <!-- button -->
+<?php if($newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録', array('action' => 'add', $blogContent['BlogContent']['id']), array('class' => 'btn-red button')) ?>
 </div>
+<?php endif ?>

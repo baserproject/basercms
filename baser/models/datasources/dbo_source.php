@@ -2784,7 +2784,10 @@ class DboSource extends DataSource {
 
 		// SQLを生成して実行
 		$sql = $this->createSchema($schema);
-		return $this->execute($sql);
+		$return = $this->execute($sql);
+		// とりあえずキャッシュを全て削除
+		clearCache(null, 'models');
+		return $return;
 
 	}
 /**
@@ -2821,7 +2824,10 @@ class DboSource extends DataSource {
 		$sql = $this->alterSchema($compare);
 
 		if($sql) {
-			return $this->execute($sql);
+			$return = $this->execute($sql);
+			// とりあえずキャッシュを全て削除
+			clearCache(null, 'models');
+			return $return;
 		} else {
 			return false;
 		}
@@ -2861,7 +2867,10 @@ class DboSource extends DataSource {
 		}
 
 		$sql = $this->dropSchema($schema);
-		return $this->execute($sql);
+		$return = $this->execute($sql);
+		// とりあえずキャッシュを全て削除
+		clearCache(null, 'models');
+		return $return;
 
 	}
 /**

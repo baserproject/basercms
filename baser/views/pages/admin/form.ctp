@@ -20,11 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 $baser->css('ckeditor/editor', null, null, false);
-if($formEx->value('Page.id')) {
-	$previewId = $formEx->value('Page.id');
-}else{
-	$previewId = 'add_'.mt_rand(0, 99999999);
-}
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 ?>
 
@@ -39,7 +34,7 @@ $(function(){
 		$("#PageContents").val(editor_contents_tmp.getData());
 		$.ajax({
 			type: "POST",
-			url: '<?php echo $this->base ?>/admin/pages/create_preview/<?php echo $previewId ?>',
+			url: $("#PreviewUrl").html(),
 			data: $("#PageForm").serialize(),
 			success: function(result){
 				if(result) {
@@ -58,7 +53,7 @@ $(function(){
 	$("#btnSave").click(function(){
 		if($("#PageReflectMobile").attr('checked')){
 			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
-						' ※ 「mobile」フォルダの同階層に保存します。\n'+
+						' ※ 「mobile」フォルダからの同階層に保存します。\n'+
 						' ※ 既に存在する場合は上書きします。')){
 				return false;
 			}
@@ -71,42 +66,128 @@ $(function(){
  * カテゴリ変更時イベント
  */
 	$("#PagePageCategoryId").change(pageCategoryIdChangeHandler);
+	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
 });
 /**
  * モバイル反映欄の表示設定
  */
 function pageCategoryIdChangeHandler() {
 	
-	var mobileCategoryIds = [<?php echo implode(',', $mobileCategoryIds) ?>];
-	var pageCategoryId = $("#PagePageCategoryId").val();
 	var mobile = false;
 	var previewWidth;
 	
-	if(pageCategoryId){
-		for (key in mobileCategoryIds){
-			if(mobileCategoryIds[key] == pageCategoryId){
-				mobile = true;
-				break;
-			}
+	if($("#MobileOn").html()) {
+
+		var pageCategoryId = $("#PagePageCategoryId").val();
+
+		if($('input[name="data[Page][page_type]"]:checked').val() == 2 && !pageCategoryId) {
+			pageCategoryId = $("#RootMobileId").html();
 		}
+
+		// モバイルカテゴリ判定
+		if($('input[name="data[Page][page_type]"]:checked').val() == 2) {
+			mobile = true;
+		}
+
+		// モバイルカテゴリを選択した場合は表示しない
+		if(!mobile){
+
+			$.ajax({
+				type: "POST",
+				url: $("#CheckMobilePageAddableUrl").html()+'/'+pageCategoryId,
+				beforeSend: function() {
+					$("#AjaxLoader").show();
+				},
+				success: function(result){
+					if(result) {
+						changeStateReflectMobile(true);
+					} else {
+						changeStateReflectMobile(false);
+					}
+				},
+				complete: function() {
+					$("#AjaxLoader").hide();
+				}
+			});
+		}else{
+			changeStateReflectMobile(false);
+		}
+		
 	}
-	if(!mobile && mobileCategoryIds.length){
-		$("#RowReflectMobile").show();
-	}else{
-		$("#PageReflectMobile").attr('checked', false);
-		$("#RowReflectMobile").hide();
-	}
+	
+	// プレビューをモバイル用にリサイズする
 	if(mobile) {
 		previewWidth = '320px';
 	} else {
 		previewWidth = '90%';
 	}
 	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true});
+	
+}
+function changeStateReflectMobile(use) {
+
+	if(use) {
+		$("#RowReflectMobile").show();
+	}else{
+		$("#PageReflectMobile").attr('checked', false);
+		$("#RowReflectMobile").hide();
+	}
+	
+}
+function pageTypeChengeHandler() {
+	
+	var pageType = $('input[name="data[Page][page_type]"]:checked').val();
+	var options = {};
+	if($("#PageId").val()) {
+		options = {
+			"data[Page][own]":true,
+			"data[Page][empty]": '指定しない',
+			"data[Page][currentPageCategoryId]": $("#PageCategoryId").html(),
+			"data[Page][currentOwnerId]": $("#PageCategoryOwnerId").html()
+		};
+	} else {
+		options = {
+			"data[Page][own]":true,
+			"data[Page][empty]": '指定しない'
+		};
+	}
+	$.ajax({
+		type: "POST",
+		data: options,
+		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
+		beforeSend: function() {
+			$("#CategoryAjaxLoader").show();
+		},
+		success: function(result){
+			if(result) {
+				$("#PagePageCategoryId option").remove();
+				$("#PagePageCategoryId").append($(result).find('option'));
+				$("#PagePageCategoryId").val('');
+				pageCategoryIdChangeHandler();
+			}
+		},
+		complete: function() {
+			$("#CategoryAjaxLoader").hide();
+		}
+	});
+	
 }
 </script>
 
-<h2><?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+<div class="display-none">
+	<div id="PreviewUrl"><?php $baser->url(array('action' => 'create_preview', $previewId)) ?></div>
+	<div id="CheckMobilePageAddableUrl"><?php $baser->url(array('action' => 'check_mobile_page_addable')) ?></div>
+	<div id="AjaxCategorySourceUrl"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
+	<div id="PageCategoryId"><?php echo $formEx->value('PageCategory.id') ?></div>
+	<div id="PageCategoryOwnerId"><?php echo $formEx->value('PageCategory.owner_id') ?></div>
+	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
+	<div id="MobileOn"><?php echo Configure::read('Baser.mobile') ?></div>
+</div>
+
+<h2><?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
+	<?php $baser->img('ajax-loader-s.gif', array('id' => 'AjaxLoader', 'class' => 'display-none')) ?>
+</h2>
 
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
@@ -150,12 +231,18 @@ function pageCategoryIdChangeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
 		<td class="col-input">
+	<?php if(Configure::read('Baser.mobile')): ?>
+		<?php echo $formEx->input('Page.page_type', array(
+				'disabled'	=> !$pageTypeSelectable,
+				'type'		=> 'radio',
+				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
+	<?php endif ?>
 			<?php echo $formEx->input('Page.page_category_id', array(
 					'type'		=> 'select',
 					'options'	=> $categories,
-					'escape'	=> false,
-					'empty'		=> '指定なし')) ?>
+					'escape'	=> false)) ?>
 			<?php echo $formEx->error('Page.page_category_id') ?>
+			<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
 		</td>
 	</tr>
 <?php else: ?>
@@ -274,13 +361,17 @@ function pageCategoryIdChangeHandler() {
 	<?php echo $formEx->button('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
+	<?php if($editable): ?>
 	<?php echo $formEx->button('更　新', array('label' => '更　新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php endif ?>
 	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php if($editable): ?>
 	<?php $baser->link('削　除',
 			array('action'=>'delete', $formEx->value('Page.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),
 			false); ?>
+	<?php endif ?>
 <?php endif ?>
 </div>
 

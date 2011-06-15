@@ -138,7 +138,14 @@ class BlogPost extends BlogAppModel {
 		/*$dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
                                           $conditions,
                                           'group'=>array('YEAR(posts_date)','MONTH(posts_date)'))));*/
-		$posts = $this->find('all',array('conditions'=>$conditions, 'order'=>'BlogPost.posts_date DESC', 'recursive'=>-1));
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$posts = $this->find('all',array(
+			'conditions'=> $conditions, 
+			'order'		=> 'BlogPost.posts_date DESC', 
+			'recursive' => -1,
+			'cache'		=> false
+		));
+
 		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
 
 		$dates = array();
@@ -171,7 +178,12 @@ class BlogPost extends BlogAppModel {
  */
 	function getEntryDates($contentId,$year,$month) {
 
-		$entryDates = $this->find('all',array('fields'=>array('BlogPost.posts_date'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1));
+		$entryDates = $this->find('all', array(
+			'fields'	=> array('BlogPost.posts_date'),
+			'conditions'=> $this->_getEntryDatesConditions($contentId,$year,$month), 
+			'recursive'	=> -1,
+			'cache'		=> false
+		));
 		$entryDates = Set::extract('/BlogPost/posts_date',$entryDates);
 		foreach($entryDates as $key => $entryDate) {
 			$entryDates[$key] = date('Y-m-d',strtotime($entryDate));
@@ -188,11 +200,18 @@ class BlogPost extends BlogAppModel {
  * @return	boolean
  */
 	function existsEntry($contentId,$year,$month) {
-		if($this->find('first',array('fields'=>array('BlogPost.id'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1))) {
+		
+		if($this->find('first', array(
+			'fields'	=> array('BlogPost.id'),
+			'conditions'=> $this->_getEntryDatesConditions($contentId,$year,$month), 
+			'recursive'	=> -1,
+			'cache'		=> false
+		))) {
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * 年月を指定した検索条件を生成
@@ -264,16 +283,61 @@ class BlogPost extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		if($field == 'blog_category_id') {
-			$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
-		}
-		if($field == 'user_id') {
-			$controlSources['user_id'] = $this->User->getUserList($options);
-		}
-		if($field == 'blog_tag_id') {
-			$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+		switch ($field) {
+			case 'blog_category_id':
+				
+				extract($options);
+				$catOption = array('blogContentId' => $blogContentId);
+				$isSuperAdmin = false;
+
+				if(!empty($userGroupId)) {
+					
+					if(!isset($blogCategoryId)) {
+						$blogCategoryId = '';
+					}
+
+					if($userGroupId == 1) {
+						$isSuperAdmin = true;
+					}
+
+					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
+					if(!$postEditable && $blogCategoryId) {
+						$catOption['conditions'] = array('OR' => array('BlogCategory.id' => $blogCategoryId));
+					}
+
+					// super admin でない場合は、管理許可のあるカテゴリのみ取得
+					if(!$isSuperAdmin) {
+						$catOption['ownerId'] = $userGroupId;
+					}
+				
+					if($postEditable && !$rootEditable && !$isSuperAdmin) {
+						unset($empty);
+					}
+				
+				}
+				
+				$categories = $this->BlogCategory->getControlSource('parent_id', $catOption);
+				
+				// 「指定しない」追加
+				if(isset($empty)) {
+					if($categories) {
+						$categories = array('' => $empty) + $categories;
+					} else {
+						$categories = array('' => $empty);
+					}
+				}
+				
+				$controlSources['blog_category_id'] = $categories;
+				
+				break;
+			case 'user_id':
+				$controlSources['user_id'] = $this->User->getUserList($options);
+				break;
+			case 'blog_tag_id':
+				$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+				break;
 		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -340,8 +404,13 @@ class BlogPost extends BlogAppModel {
 
 		if(!empty($options['conditions'])) {
 			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
+		} else {
+			$options['conditions'] = $this->getConditionAllowPublish();
 		}
-		return $this->find('all', $options);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$options['cache'] = false;
+		$datas = $this->find('all', $options);
+		return $datas;
 
 	}
 /**

@@ -19,29 +19,44 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$_pageCategories = $formEx->getControlSource('Page.page_category_id');
-$pageCategories = array('noncat'=>'カテゴリなし');
-if(Configure::read('Baser.mobile')) {
-	$pageCategories += array('pconly'=>'PCページのみ');
-}
-if($pageCategories){
-	$pageCategories = $pageCategories + $_pageCategories;
-}
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);
+$allowOwners = array('', $user['user_group_id']);
 ?>
 
 <script type="text/javascript">
-$(function(){
+$(document).ready(function(){
+	<?php if($form->value('Page.open')): ?>
 	$("#PageFilterBody").show();
+	<?php endif ?>
+	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
 });
+function pageTypeChengeHandler() {
+	var pageType = $('input[name="data[Page][page_type]"]:checked').val();
+	$.ajax({
+		type: "POST",
+		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
+		beforeSend: function() {
+			$("#CategoryAjaxLoader").show();
+		},
+		success: function(result){
+			if(result) {
+				var categoryId = $("#PagePageCategoryId").val();
+				$("#PagePageCategoryId option").remove();
+				$("#PagePageCategoryId").append('<option value="">指定しない</option>');
+				$("#PagePageCategoryId").append('<option value="noncat">カテゴリなし</option>');
+				$("#PagePageCategoryId").append($(result).find('option'));
+				$("#PagePageCategoryId").val(categoryId);
+			}
+		},
+		complete: function() {
+			$("#CategoryAjaxLoader").hide();
+		}
+	});
+}
 </script>
 
-<style type="text/css">
-th{
-		white-space: nowrap;
-}
-</style>
+<div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
 
 <?php echo $formEx->create('Sort', array('action' => 'update_sort', 'url' => am(array('controller'=>'pages'), $this->passedArgs))) ?>
 <?php echo $formEx->input('Sort.id', array('type' => 'hidden')) ?>
@@ -84,19 +99,28 @@ th{
 <div class="function-box corner10" id="PageFilterBody" style="display:none">
 	<?php echo $formEx->create('Page', array('url' => array('action' => 'index'))) ?>
 	<p>
+		<span><small>ページ名</small> <?php echo $formEx->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>
+		<span><small>公開状態</small>
+		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+		<span><small>作成者</small>
+		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
+<?php if($pageCategories && Configure::read('Baser.mobile')): ?>
+		<span><small>タイプ</small>
+		<?php echo $formEx->input('Page.page_type', array(
+				'type'		=> 'radio',
+				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
+<?php endif ?>
 <?php if($pageCategories): ?>
-		<small>カテゴリ</small>
+		<span><small>カテゴリ</small>
 		<?php echo $formEx->input('Page.page_category_id', array(
 				'type'		=> 'select',
 				'options'	=> $pageCategories,
-				'escape'	=> false,
-				'empty' => '指定なし')) ?>　
+				'escape'	=> false)) ?></span>
+		<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>　<br />
 <?php endif ?>
-		<small>公開状態</small>
-		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?>　
-		<small>作成者</small>
-		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?>　
-		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?> </p>
+</p>
+		<div class="align-center"><?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?></div> 
+		<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
 	<?php $formEx->end() ?>
 </div>
 
@@ -146,6 +170,11 @@ th{
 		<?php else: ?>
 			<?php $class=' class="sortable"'; ?>
 		<?php endif; ?>
+		<?php if(empty($dbData['PageCategory']['id']) || $dbData['PageCategory']['name'] == 'mobile'): ?>
+			<?php $ownerId = $baser->siteConfig['root_owner_id'] ?>
+		<?php else: ?>
+			<?php $ownerId = $dbData['PageCategory']['owner_id'] ?>
+		<?php endif ?>
 	<tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 		<td class="operation-button" style="width:15%">
 		<?php if($sortmode): ?>
@@ -164,15 +193,17 @@ th{
 					array('class' => 'btn-green-s button-s', 'target' => '_blank'),
 					null, false) ?>
 		<?php endif ?>
-			<?php $baser->link('編集', 
+			<?php $baser->link('詳細', 
 					array('action' => 'edit', $dbData['Page']['id']),
 					array('class' => 'btn-orange-s button-s'),
 					null, false) ?>
+		<?php if(in_array($ownerId, $allowOwners)||$user['user_group_id']==1): ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['Page']['id']),
 					array('class' => 'btn-gray-s button-s'),
 					sprintf('%s を本当に削除してもいいですか？', $dbData['Page']['name']),
 					false); ?>
+		<?php endif ?>
 		</td>
 		<td style="width:5%"><?php echo $dbData['Page']['id']; ?></td>
 		<td style="width:15%">
@@ -210,7 +241,9 @@ th{
 <?php $baser->pagination('default', array(), null, false) ?>
 
 <div class="align-center">
+<?php if($newCatAddable): ?>
 	<?php $baser->link('新規登録', array('action' => 'add'), array('class' => 'btn-red button')) ?>
+<?php endif ?>
 <?php if(!$sortmode): ?>
 	<?php $baser->link('並び替えモード', array('sortmode' => 1), array('class' => 'btn-orange button')) ?>
 <?php else: ?>

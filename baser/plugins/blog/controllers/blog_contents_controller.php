@@ -41,7 +41,7 @@ class BlogContentsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('SiteConfig',"Blog.BlogContent");
+	var $uses = array('SiteConfig', 'Blog.BlogCategory', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
@@ -118,7 +118,7 @@ class BlogContentsController extends BlogAppController {
 				$message = '新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogContent->saveDbLog($message);
-				$this->redirect(array('controller'=>'blog_posts','action'=>'index',$id));
+				$this->redirect(array('action'=>'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -161,7 +161,7 @@ class BlogContentsController extends BlogAppController {
 				}elseif ($this->data['BlogContent']['edit_blog_template']) {
 					$this->redirectEditBlog($this->data['BlogContent']['template']);
 				}else{
-					$this->redirect(array('action'=>'index',$id));
+					$this->redirect(array('action'=>'edit',$id));
 				}
 				
 			}else {

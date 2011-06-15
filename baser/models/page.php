@@ -77,15 +77,26 @@ class Page extends AppModel {
 /**
  * 非公開WebページURLリスト
  * キャッシュ用
- * @var mixed;
+ * @var mixed
+ * @deprecated
  */
 	var $_unpublishes = -1;
 /**
  * 公開WebページURLリスト
+ * 
  * キャッシュ用
- * @var mixed;
+ * 
+ * @var mixed
  */
 	var $_publishes = -1;
+/**
+ * WebページURLリスト
+ * 
+ * キャッシュ用
+ * 
+ * @var mixed
+ */
+	var $_pages = -1;
 /**
  * 最終登録ID
  *
@@ -149,7 +160,12 @@ class Page extends AppModel {
 
 		// 保存前のページファイルのパスを取得
 		if($this->exists()) {
-			$this->oldPath = $this->_getPageFilePath($this->find(array('Page.id'=>$this->data['Page']['id'])));
+			$this->oldPath = $this->_getPageFilePath(
+					$this->find('first', array(
+						'conditions' => array('Page.id' => $this->data['Page']['id']),
+						'recursive' => -1)
+					)
+			);
 		}else {
 			$this->oldPath = '';
 		}
@@ -395,7 +411,7 @@ class Page extends AppModel {
  * @access	public
  */
 	function createAllPageTemplate(){
-		$pages = $this->find('all');
+		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
 		foreach($pages as $page){
 			if(!$this->createPageTemplate($page)){
@@ -476,7 +492,7 @@ class Page extends AppModel {
 
 		if($categoryId) {
 			$this->PageCategory->cacheQueries = false;
-			$categoryPath = $this->PageCategory->getPath($categoryId);
+			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
 					$path .= $category['PageCategory']['name'].DS;
@@ -561,7 +577,7 @@ class Page extends AppModel {
 			}else {
 				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
 			}
-			if(!$this->find($conditions)) {
+			if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 				return true;
 			}else {
 				return !file_exists($this->_getPageFilePath($this->data));
@@ -576,13 +592,74 @@ class Page extends AppModel {
  * @return	mixed	$controlSource	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null, $options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		if(ClassRegistry::isKeySet('SiteConfig')) {
-			$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		switch ($field) {
+			
+			case 'page_category_id':
+								
+				$catOption = array();
+				$isSuperAdmin = false;
+				$mobileRoot = true;
+				
+				extract($options);
+
+				if(!empty($userGroupId)) {
+					
+					if(!isset($pageCategoryId)) {
+						$pageCategoryId = '';
+					}
+
+					if($userGroupId == 1) {
+						$isSuperAdmin = true;
+					}
+
+					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
+					if(!$pageEditable && $pageCategoryId) {
+						$catOption = array('conditions' => array('OR' => array('PageCategory.id' => $pageCategoryId)));
+					}
+
+					// super admin でない場合は、管理許可のあるカテゴリのみ取得
+					if(!$isSuperAdmin) {
+						$catOption['ownerId'] = $userGroupId;
+					}
+				
+					if($pageEditable && !$rootEditable && !$isSuperAdmin) {
+						unset($empty);
+						$mobileRoot = false;
+					}
+				
+				}
+				
+				$options = am($options, $catOption);
+				$categories = $this->PageCategory->getControlSource('parent_id', $options);
+				
+				// 「指定しない」追加
+				if(isset($empty)) {
+					if($categories) {
+						$categories = array('' => $empty) + $categories;
+					} else {
+						$categories = array('' => $empty);
+					}
+				}
+				if(!$mobileRoot) {
+					$mobileId = $this->PageCategory->getMobileId();
+					if(isset($categories[$mobileId])) {
+						unset($categories[$mobileId]);
+					}
+				}
+				
+				$controlSources['page_category_id'] = $categories;
+				
+				break;
+				
+			case 'user_id':
+				
+				$controlSources['user_id'] = $this->User->getUserList($options);
+				break;
+			
 		}
-		$controlSources['page_category_id'] = $this->PageCategory->getControlSource('parent_id');
-		$controlSources['user_id'] = $this->User->getUserList($options);
+		
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -592,9 +669,11 @@ class Page extends AppModel {
 	}
 /**
  * 非公開チェックを行う
+ * 
  * @param	string	$url
  * @return	boolean
  * @access	public
+ * @deprecated isPageUrl と組み合わせて checkPublish を利用してください。
  */
 	function checkUnPublish($url) {
 
@@ -634,9 +713,20 @@ class Page extends AppModel {
  */
 	function checkPublish($url) {
 
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
-			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
+			// 毎秒抽出条件が違うのでキャッシュしない
+			$pages = $this->find('all', array(
+				'fields'	=> 'url',
+				'conditions'=> $conditions,
+				'recursive'	=> -1,
+				'cache'		=> false
+			));
 			if(!$pages) {
 				$this->_publishes = array();
 				return false;
@@ -685,6 +775,7 @@ class Page extends AppModel {
 		$categoryName = basename($targetPath);
 		
 		$pageCategoryId = '';
+		$this->PageCategory->updateRelatedPage = false;
 		if($categoryName != 'pages') {
 			
 			// カテゴリ名の取得
@@ -776,12 +867,24 @@ class Page extends AppModel {
 			}
 			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
 			if($page) {
-				$page['Page']['title'] = $title;
-				$page['Page']['description'] = $description;
-				$page['Page']['contents'] = $contents;
-				$this->set($page);
-				if($this->save()) {
-					$update++;
+				$chage = false;
+				if($title != $page['Page']['title']) {
+					$chage = true;
+				}
+				if($description != $page['Page']['description']) {
+					$chage = true;
+				}
+				if(trim($contents) != trim($page['Page']['contents'])) {
+					$chage = true;
+				}
+				if($chage) {
+					$page['Page']['title'] = $title;
+					$page['Page']['description'] = $description;
+					$page['Page']['contents'] = $contents;
+					$this->set($page);
+					if($this->save()) {
+						$update++;
+					}
 				}
 			}else {
 				$page = $this->getDefaultValue();
@@ -830,6 +933,34 @@ class Page extends AppModel {
 			return false;
 		}
 		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
+	}
+/**
+ * ページで管理されているURLかチェックする
+ * 
+ * @param string $url
+ * @return boolean
+ * @access public
+ */
+	function isPageUrl($url) {
+		
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		
+		if($this->_pages == -1) {
+			$pages = $this->find('all', array(
+				'fields'	=> 'url',
+				'recursive'	=> -1
+			));
+			if(!$pages) {
+				$this->_pages = array();
+				return false;
+			}
+			$this->_pages = Set::extract('/Page/url', $pages);
+		}
+		return in_array($url,$this->_pages);
+		
 	}
 	
 }

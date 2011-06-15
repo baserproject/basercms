@@ -260,16 +260,14 @@ class BlogHelper extends AppHelper {
  */
 	function getCategoryUrl($blogCategoryId) {
 
-		$view =& ClassRegistry::getObject('view');
-		$blogContentName = $view->viewVars['blogContent']['BlogContent']['name'];
 		if (!isset($this->BlogCategory)) {
-			if(ClassRegistry::isKeySet('BlogCategory')) {
-				$this->BlogCategory = ClassRegistry::getObject('BlogCategory');
-			}else {
-				$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
-			}
+			$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
+		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
+		$this->setBlogContent($blogContentId);
+		$blogContentName = $this->blogContent['name'];
+		
 		$path = array('category');
 		if($categoryPath) {
 			foreach($categoryPath as $category) {
@@ -371,7 +369,14 @@ class BlogHelper extends AppHelper {
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-		$prevPost = $BlogPost->find($conditions,array('no','name'),'posts_date DESC',-1);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$prevPost = $BlogPost->find('first', array(
+			'conditions'	=> $conditions,
+			'fields'		=> array('no','name'),
+			'order'			=> 'posts_date DESC',
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
 		if($prevPost) {
 			$no = $prevPost['BlogPost']['no'];
 			if(!$title) {
@@ -401,7 +406,14 @@ class BlogHelper extends AppHelper {
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-		$nextPost = $BlogPost->find($conditions,array('no','name'),'posts_date',-1);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$nextPost = $BlogPost->find('first', array(
+			'conditions'	=> $conditions,
+			'fields'		=> array('no','name'),
+			'order'			=> 'posts_date',
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
 		if($nextPost) {
 			$no = $nextPost['BlogPost']['no'];
 			if(!$title) {
@@ -512,6 +524,19 @@ class BlogHelper extends AppHelper {
  */
 	function postImg($post, $options = array()) {
 
+		echo $this->getPostImg($post, $options);
+		
+	}
+/**
+ * 記事中の画像を取得する
+ *
+ * @param	array	$post
+ * @param	array	$options
+ * @return	void
+ * @access	public
+ */
+	function getPostImg($post, $options = array()) {
+		
 		$this->setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
 		$options = am($_options, $options);
@@ -529,14 +554,35 @@ class BlogHelper extends AppHelper {
 			$url = $matches[1][$num-1];
 			$img = $this->Baser->getImg($url, $options);
 			if($link) {
-				$this->Baser->link($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
+				return $this->Baser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
 			} else {
-				echo $img;
+				return $img;
 			}
 		} else {
 			return '';
 		}
 		
+	}
+/**
+ * 記事の本文、詳細の中で指定したIDの中のHTMLを取得する
+ *
+ * @param array $post
+ * @param string $id
+ * @return string
+ * @access public
+ */
+	function getHtmlById($post, $id) {
+		
+		$content = $post['BlogPost']['content'].$post['BlogPost']['detail'];
+		
+		$values = array();
+		$pattern = '/<([^\s]+)\s[^>]*?id="'.$id.'"[^>]*>(.*?)<\/\1>/is';
+		if(preg_match($pattern, $content, $matches)){
+			return $matches[2];
+		}else{
+			return '';
+		}
+	
 	}
 	
 }

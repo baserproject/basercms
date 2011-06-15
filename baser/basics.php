@@ -337,6 +337,7 @@
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
+		$folder->create(CACHE.'datas',0777);
 
 	}
 /**

@@ -90,6 +90,11 @@ class AppModel extends Model {
 			}
 
 		}
+		
+		// モデルデータキャッシュ設定
+		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime')) {
+			$this->Behaviors->attach('Cache');
+		}
 
 	}
 /**
@@ -189,6 +194,7 @@ class AppModel extends Model {
 		App::import('Model', 'Dblog');
 		$Dblog = new Dblog();
 		$logdata['Dblog']['name'] = $message;
+		$logdata['Dblog']['user_id'] = $_SESSION['Auth']['User']['id'];
 		return $Dblog->save($logdata);
 
 	}
@@ -331,7 +337,7 @@ class AppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '') {
+	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -348,7 +354,7 @@ class AppModel extends Model {
 			}
 		}
 
-		if($this->loadSchema($dbConfigName, $path, $filterTable, '', array(), $dropField = false)){
+		if($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)){
 			if($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
 			} else {
@@ -424,6 +430,11 @@ class AppModel extends Model {
 				}
 
 			}
+		}
+		$folder = new Folder(CACHE.'datas');
+		$files = $folder->read(true, true, true);
+		foreach($files[1] as $file) {
+			@unlink($file);
 		}
 		return true;
 
@@ -1124,12 +1135,18 @@ class AppModel extends Model {
  */
 	function confirm($check, $fields) {
 
+		$value1 = $value2 = '';
 		if(is_array($fields) && count($fields) > 1) {
-			$value1 = $this->data[$this->alias][$fields[0]];
-			$value2 = $this->data[$this->alias][$fields[1]];
+			if(isset($this->data[$this->alias][$fields[0]]) && 
+					isset($this->data[$this->alias][$fields[1]])) {
+				$value1 = $this->data[$this->alias][$fields[0]];
+				$value2 = $this->data[$this->alias][$fields[1]];
+			}
 		} elseif($fields) {
-			$value1 = $check[key($check)];
-			$value2 = $this->data[$this->alias][$fields];
+			if(isset($check[key($check)]) && isset($this->data[$this->alias][$fields])) {
+				$value1 = $check[key($check)];
+				$value2 = $this->data[$this->alias][$fields];
+			}
 		} else {
 			return false;
 		}
@@ -1287,6 +1304,80 @@ class AppModel extends Model {
         }
 		
     }
+/**
+ * 複数のEメールチェック（カンマ区切り）
+ * 
+ * @param array $check
+ * @return boolean 
+ */
+	function emails($check) {
+		
+		$Validation =& Validation::getInstance();
+		$emails = array();
+		if(strpos($check[key($check)], ',') !== false) {
+			$emails = explode(',', $check[key($check)]);
+		}
+		if(!$emails) {
+			$emails = array($check[key($check)]);
+		}
+		$result = true;
+		foreach($emails as $email) {
+			if(!$Validation->email($email)) {
+				$result = false;
+			}
+		}
+		
+		return $result;
+		
+	}
+/**
+ * find
+ * 
+ * キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
+ * 
+ * @param mixed...
+ * @return type 
+ * @access public
+ */
+	function find() {
+		
+		$args = func_get_args();
+		$cache = true;
+		if(isset($args[1]['cache']) && is_bool($args[1]['cache'])) {
+			$cache = $args[1]['cache'];
+			unset($args[1]['cache']);
+		}
+		if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+			if($this->cacheEnabled()) {
+				return $this->cacheMethod($cache, __FUNCTION__, $args);
+			}
+		}
+		return call_user_func_array(array('parent', __FUNCTION__), $args);
+		
+	}
+/**
+ * Deletes multiple model records based on a set of conditions.
+ *
+ * @param mixed $conditions Conditions to match
+ * @param boolean $cascade Set to true to delete records that depend on this record
+ * @param boolean $callbacks Run callbacks (not being used)
+ * @return boolean True on success, false on failure
+ * @access public
+ * @link http://book.cakephp.org/view/692/deleteAll
+ */
+	function deleteAll($conditions, $cascade = true, $callbacks = false) {
+		
+		$result = parent::deleteAll($conditions, $cascade, $callbacks);
+		if($result) {
+			if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+				if($this->cacheEnabled()) {
+					$this->cacheDelete($this);
+				}
+			}
+		}
+		return $result;
+		
+	}
 	
 }
 ?>

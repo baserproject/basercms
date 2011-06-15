@@ -32,12 +32,6 @@ $(document).ready(function(){
 });
 </script>
 
-<style type="text/css">
-th{
-	white-space: nowrap;
-}
-</style>
-
 <h2>
 	<?php $baser->contentsTitle() ?>
 	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
@@ -55,14 +49,15 @@ th{
 <h3><a href="javascript:void(0);" class="slide-trigger" id="BlogPostFilter">検索</a></h3>
 <div class="function-box corner10" id="BlogPostFilterBody" style="display:none"> <?php echo $formEx->create('BlogPost',array('url'=>array('action'=>'index',$blogContent['BlogContent']['id']))) ?>
 	<p>
+		<span><small>ページ名</small> <?php echo $formEx->input('BlogPost.name', array('type' => 'text', 'size' => '30')) ?></span>
 		<?php if($blogCategories): ?>
-		<small>カテゴリ</small> <?php echo $formEx->select('BlogPost.blog_category_id', $blogCategories, null, array('escape'=>false)) ?>　
+		<span><small>カテゴリ</small> <?php echo $formEx->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $blogCategories, 'escape'=>false, 'empty' => '指定なし')) ?></span>　
 		<?php endif ?>
 		<?php if($blogContent['BlogContent']['tag_use'] && $blogTags): ?>
-		<small>タグ</small> <?php echo $formEx->select('BlogPost.blog_tag_id', $blogTags, null, array('escape'=>false)) ?>　
+		<span><small>タグ</small> <?php echo $formEx->input('BlogPost.blog_tag_id', array('type' => 'select', 'options' => $blogTags, 'escape' => false, 'empty' => '指定なし')) ?></span>　
 		<?php endif ?>
-		<small>公開設定</small> <?php echo $formEx->select('BlogPost.status', $textEx->booleanMarkList()) ?>　
-		<small>作成者</small> <?php echo $formEx->select('BlogPost.user_id', $users) ?>　
+		<span><small>公開設定</small> <?php echo $formEx->input('BlogPost.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+		<span><small>作成者</small> <?php echo $formEx->input('BlogPost.user_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 	</p>
 	<?php echo $formEx->hidden('BlogPost.open',array('value'=>true)) ?>
 	<div class="align-center"> <?php echo $formEx->submit('検　索',array('div'=>false,'class'=>'btn-orange button')) ?> </div>
@@ -146,6 +141,9 @@ $paginator->options = array('url' => $this->passedArgs);
 	<?php endif; ?>
 </table>
 <?php $baser->pagination('default',array(),null,false) ?>
+
+<?php if($newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?>
 </div>
+<?php endif ?>

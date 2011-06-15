@@ -33,12 +33,15 @@ class Dblog extends AppModel {
  */
 	var $name = 'Dblog';
 /**
- * データベース接続
- *
- * @var     string
- * @access  public
+ * belongsTo
+ * @var 	array
+ * @access	public
  */
-	var $useDbConfig = 'baser';
+	var $belongsTo = array(
+			'User' => array(
+				'className'=> 'User',
+				'foreignKey'=>'user_id'
+	));
 /**
  * バリデーション
  *

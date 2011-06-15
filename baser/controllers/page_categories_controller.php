@@ -39,7 +39,7 @@ class PageCategoriesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('TextEx', 'FormEx');
+	var $helpers = array('TextEx', 'FormEx', 'Array');
 /**
  * This controller does not use a model
  *
@@ -61,6 +61,23 @@ class PageCategoriesController extends AppController {
  */
 	var $navis = array('ページ管理'=>'/admin/pages/index');
 /**
+ * beforeFilter
+ *
+ * @return	void
+ * @access 	public
+ */
+	function beforeFilter() {
+		
+		parent::beforeFilter();
+		$user = $this->Auth->user();
+		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
+				$user['User']['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
+	}
+/**
  * [ADMIN] ページカテゴリーリスト
  *
  * @return	void
@@ -81,14 +98,17 @@ class PageCategoriesController extends AppController {
 		if($children) {
 			$ids = am($ids, Set::extract('/PageCategory/id', $children));
 		}
-
 		if($this->data['PageCategory']['type'] == 'pc' || empty($this->data['PageCategory']['type'])) {
 			$ids = am(array($mobileId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif($this->data['PageCategory']['type'] == 'mobile') {
-			$conditions = array(array('PageCategory.id' => $ids));
+			if($ids) {
+				$conditions = array(array('PageCategory.id' => $ids));
+			} else {
+				$conditions = array(array('PageCategory.id <>' => $mobileId));
+			}
 		}
-		
+
 		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
@@ -99,6 +119,7 @@ class PageCategoriesController extends AppController {
 			}
 			$dbDatas[] = $category;
 		}
+		$this->set('owners', $this->PageCategory->getControlSource('owner_id'));
 		$this->set('dbDatas',$dbDatas);
 		/* 表示設定 */
 		$this->subMenuElements = array('pages','page_categories');
@@ -140,6 +161,21 @@ class PageCategoriesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$user = $this->Auth->user();
+		$mobileId = $this->PageCategory->getMobileId();
+		$parents = $this->PageCategory->getControlSource('parent_id', array(
+			'ownerId' => $user['User']['user_group_id']
+		));
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		} elseif(isset($parents[$mobileId])) {
+			unset($parents[$mobileId]);
+		}
+		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '新規ページカテゴリー登録';
 		$this->render('form');
@@ -194,6 +230,22 @@ class PageCategoriesController extends AppController {
 		$this->set('indexPage',$indexPage);
 
 		/* 表示設定 */
+		$user = $this->Auth->user();
+		$mobileId = $this->PageCategory->getMobileId();
+		$parents = $this->PageCategory->getControlSource('parent_id', array(
+			'excludeParentId' => $this->data['PageCategory']['id'],
+			'ownerId' => $user['User']['user_group_id']
+		));
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		} elseif(isset($parents[$mobileId])) {
+			unset($parents[$mobileId]);
+		}
+		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページカテゴリー情報編集';
 		$this->render('form');

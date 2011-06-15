@@ -281,6 +281,15 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
+		$userGroups = $this->User->getControlSource('user_group_id');
+		$editable = true;
+		$user = $this->Auth->user();
+		if($user['User']['user_group_id'] != 1) {
+			unset($userGroups[1]);
+		}
+		
+		$this->set('userGroups', $userGroups);
+		$this->set('editable', true);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->render('form');
@@ -301,10 +310,18 @@ class UsersController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
+		$selfUpdate = false;
+		$user = $this->Auth->user();
+				
 		if(empty($this->data)) {
 			$this->data = $this->User->read(null, $id);
+			if($user['User']['id'] == $this->data['User']['id']) {
+				$selfUpdate = true;
+			}
 		}else {
-
+			if($user['User']['id'] == $this->data['User']['id']) {
+				$selfUpdate = true;
+			}
 			/* 更新処理 */
 			// パスワードがない場合は更新しない
 			if($this->data['User']['password_1'] || $this->data['User']['password_2']) {
@@ -320,6 +337,11 @@ class UsersController extends AppController {
 					$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
+				
+				if($selfUpdate) {
+					$this->admin_logout();
+				}
+
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->redirect(array('action'=>'edit', $id));
@@ -330,6 +352,20 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
+		$userGroups = $this->User->getControlSource('user_group_id');
+		$editable = true;
+		$user = $this->Auth->user();
+		if($user['User']['user_group_id'] != 1) {
+			if($this->data['User']['user_group_id'] == 1) {
+				$editable = false;
+			} else {
+				unset($userGroups[1]);
+			}
+		}
+		
+		$this->set('userGroups', $userGroups);
+		$this->set('editable', $editable);
+		$this->set('selfUpdate', $selfUpdate);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->render('form');

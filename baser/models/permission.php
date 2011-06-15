@@ -118,10 +118,11 @@ class Permission extends AppModel {
  */
 	function getAuthPrefix($id) {
 
+		// CSV の場合、他テーブルの fields を指定するとデータが取得できない
 		$data = $this->find('first', array(
 			'conditions'=>array('Permission.id'=>$id),
-			'fields'=>array('UserGroup.auth_prefix'),
-			'recursive'=>0
+			/*'fields'=>array('UserGroup.auth_prefix'),*/
+			'recursive'=>1
 		));
 		if(isset($data['UserGroup']['auth_prefix'])) {
 			return $data['UserGroup']['auth_prefix'];
@@ -198,6 +199,19 @@ class Permission extends AppModel {
 		if($url!='/') {
 			$url = preg_replace('/^\//is', '', $url);
 		}
+		
+		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
+		$allows = array(
+			'admin',
+			'admin/',
+			'admin/dashboard/index',
+			'admin/users/edit/'.$_SESSION['Auth']['User']['id'],
+			'admin/users/logout'
+		);
+		if(in_array($url,$allows)) {
+			return true;
+		}
+		
 		$ret = true;
 		foreach($permissions as $permission) {
 			if(!$permission['Permission']['status']) {
@@ -210,7 +224,9 @@ class Permission extends AppModel {
 			}
 			$pattern = addslashes($pattern);
 			$pattern = str_replace('/', '\/', $pattern);
-			$pattern = '/^'.str_replace('*', '.*?', $pattern).'$/is';
+			$pattern = str_replace('*', '.*?', $pattern);
+			$pattern = '/^'.str_replace('\/.*?', '(|\/.*?)', $pattern).'$/is';
+			//var_dump($pattern);
 			if(preg_match($pattern, $url)) {
 				$ret = $permission['Permission']['auth'];
 			}

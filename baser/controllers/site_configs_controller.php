@@ -204,6 +204,10 @@ class SiteConfigsController extends AppController {
 			$smartUrlChangeable = false;
 		}
 
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
+		
+		$this->set('userGroups', $userGroups);
 		$this->set('themes',$this->SiteConfig->getThemes());
 		$this->set('rewriteInstalled', $rewriteInstalled);
 		$this->set('writableInstall', $writableInstall);

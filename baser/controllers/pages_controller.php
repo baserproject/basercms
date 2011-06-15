@@ -76,6 +76,14 @@ class PagesController extends AppController {
 		if(!empty($this->params['admin'])){
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
 		}
+		
+		$user = $this->Auth->user();
+		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
+				$user['User']['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
 	}
 /**
  * [ADMIN] ページリスト
@@ -87,7 +95,7 @@ class PagesController extends AppController {
 
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0),
-							'Page' => array('page_category_id'=>'pconly'));
+							'Page' => array('page_category_id' => '', 'page_type' => 1));
 		$this->setViewConditions('Page', array('default' => $default));
 		if($this->Session->check('PagesAdminIndex.named.sortmode')) {
 			$sortmode = $this->Session->read('PagesAdminIndex.named.sortmode');
@@ -112,6 +120,15 @@ class PagesController extends AppController {
 		);
 
 		/* 表示設定 */
+		if(!isset($this->data['Page']['page_type'])) {
+			$this->data['Page']['page_type'] = 1;
+		}
+		$pageCategories = array('' => '指定しない', 'noncat' => 'カテゴリなし');
+		$_pageCategories = $this->getCategorySource($this->data['Page']['page_type']);
+		if($_pageCategories) {
+			$pageCategories += $_pageCategories;
+		}
+		$this->set('pageCategories', $pageCategories);
 		$this->set('sortmode', $sortmode);
 		$this->set('dbDatas',$this->paginate('Page'));
 		$this->subMenuElements = array('pages','page_categories');
@@ -133,7 +150,9 @@ class PagesController extends AppController {
 			/* 登録処理 */
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->create($this->data);
-
+			if($this->data['Page']['page_type'] == 2 && !$this->data['Page']['page_category_id']) {
+				$this->data['Page']['page_category_id'] = 1;
+			}
 			if($this->Page->validates()) {
 				
 				if($this->Page->save($this->data,false)) {
@@ -170,12 +189,21 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$this->data['Page']['page_type'] = 1;
+		$pageTypeSelectable = true;
+		$categories = $this->getCategorySource(1, array('empty' => '指定しない', 'own' => true));
+		if(!$this->getCategorySource(2, array('empty' => '指定しない', 'own' => true))) {
+			$pageTypeSelectable = false;
+		}
+		$this->set('pageTypeSelectable', $pageTypeSelectable);
+		$this->set('categories', $categories);
+		$this->set('editable', true);
+		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->subMenuElements = array('pages','page_categories');
-		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
+		$this->set('rootMobileId', $this->PageCategory->getMobileId());
 		$this->pageTitle = '新規ページ登録';
 		$this->render('form');
 
@@ -243,13 +271,49 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->set('categories', $this->Page->getControlSource('page_category_id'));
+		$pageType = 1;
+		$pageTypeSelectable = true;
+		$mobileIds = $this->PageCategory->getMobileCategoryIds();
+		if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
+			$pageType = 2;
+		}
+		$this->data['Page']['page_type'] = $pageType;
+		$currentOwnerId = '';
+		$currentPageCategoryId = '';
+		if(!empty($this->data['PageCategory']['id'])) {
+			$currentPageCategoryId = $this->data['PageCategory']['id'];
+		}
+		$pcCategories = $this->getCategorySource(1, array(
+			'currentOwnerId'		=> $currentOwnerId,
+			'currentPageCategoryId'	=> $currentPageCategoryId,
+			'own'			=> true,
+			'empty'			=> '指定しない'
+		));
+		$mobileCategories = $this->getCategorySource(2, array(
+			'currentOwnerId'		=> $currentOwnerId,
+			'currentPageCategoryId'	=> $currentPageCategoryId,
+			'own'			=> true,
+			'empty'			=> '指定しない'
+		));
+		if(!$pcCategories || !$mobileCategories) {
+			$pageTypeSelectable = false;
+		}
+		$categories = array();
+		if($this->data['Page']['page_type'] == 1) {
+			$categories = $pcCategories;
+		} elseif($this->data['Page']['page_type'] == 2) {
+			$categories = $mobileCategories;
+		}
+		$this->set('pageTypeSelectable', $pageTypeSelectable);
+		$this->set('categories', $categories);
+		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
+		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
 		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
 		$this->set('mobileExists',$this->Page->mobileExists($this->data));
-		$this->set('mobileCategoryIds',$this->PageCategory->getMobileCategoryIds());
+		$this->set('rootMobileId', $this->PageCategory->getMobileId());
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ情報編集';
 		$this->render('form');
@@ -561,10 +625,30 @@ class PagesController extends AppController {
 		// ページカテゴリ
 
 		$pageCategoryId = $data['Page']['page_category_id'];
+		
+		$name = '';
+		$pageType = 1;
+		if(isset($data['Page']['name'])) {
+			$name = $data['Page']['name'];
+		}
+		if(isset($data['Page']['page_type'])) {
+			$pageType = $data['Page']['page_type'];
+		}
+		
 		unset($data['_Token']);
+		unset($data['Page']['name']);
 		unset($data['Page']['page_category_id']);
 		unset($data['Sort']);
+		unset($data['Page']['open']);
+		unset($data['Page']['page_type']);
 		
+		if($pageType == 1 && !$pageCategoryId) {
+			$pageCategoryId = 'pconly';
+		}
+		if($pageType == 2 && !$pageCategoryId) {
+			$pageCategoryId = $this->PageCategory->getMobileId();
+		}
+
 		// 条件指定のないフィールドを解除
 		foreach($data['Page'] as $key => $value) {
 			if($value === '') {
@@ -610,7 +694,11 @@ class PagesController extends AppController {
 			}elseif($pageCategoryId == 'noncat') {
 
 				//カテゴリなし
-				$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
+				if($pageType == 1) {
+					$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
+				} elseif($pageType == 2) {
+					$conditions['Page.page_category_id'] = $this->PageCategory->getMobileId();
+				}
 
 			}
 
@@ -624,6 +712,13 @@ class PagesController extends AppController {
 			}
 		}
 
+		if($name) {
+			$conditions['and']['or'] = array(
+				'Page.name LIKE' => '%'.$name.'%',
+				'Page.title LIKE' => '%'.$name.'%'
+			);
+		}
+		
 		return $conditions;
 
 	}
@@ -637,6 +732,139 @@ class PagesController extends AppController {
 		
 		return clearCache('element_*_sitemap', 'views', '');
 		
+	}
+/**
+ * PC用のカテゴリIDを元にモバイルページが作成する権限があるかチェックする
+ * 
+ * @param int $id
+ * @return boolean
+ * @access public
+ */
+	function admin_check_mobile_page_addable($type, $id) {
+		
+		$user = $this->Auth->user();
+		$userGroupId = $user['User']['user_group_id'];
+		$result = false;
+		while(true) {
+			$mobileId = $this->PageCategory->getMobileId($id);
+			if($mobileId) {
+				if($mobileId == 1) {
+					$ownerId = $this->siteConfigs['root_owner_id'];
+				} else {
+					$pageCategory = $this->PageCategory->find('first', array(
+						'conditions'=> array('PageCategory.id' => $mobileId),
+						'field'		=> array('owner_id')
+					));
+					$ownerId = $pageCategory['PageCategory']['owner_id'];
+				}
+				if($ownerId) {
+					if($userGroupId == $ownerId) {
+						$result = true;
+					} else {
+						$result = false;
+					}
+				} else {
+					$result = true;
+				}
+				break;
+			}
+			$pageCategory = $this->PageCategory->find('first', array(
+				'conditions'=> array('PageCategory.id' => $id),
+				'field'		=> array('parent_id')
+			));
+			
+			$id = $pageCategory['PageCategory']['parent_id'];
+			
+		}
+		
+		if($result) {
+			echo 1;
+		}
+		exit();
+		
+	}
+/**
+ * [AJAX] カテゴリリスト用のデータを取得する
+ * 
+ * @param int $type
+ * @param boolean $empty
+ * @return array
+ * @access public
+ */
+	function admin_ajax_category_source($type) {
+		
+		$categorySource = $this->getCategorySource($type, $this->data['Page']);
+		$this->set('categorySource', $categorySource);
+
+	}
+/**
+ * カテゴリリスト用のデータを取得する
+ * 
+ * @param int $type
+ * @param boolean $empty
+ * @return array
+ * @access public
+ */
+	function getCategorySource($type, $options = array()) {
+		
+		$editable = true;
+		
+		if(isset($options['currentPageCategoryId']) && isset($options['currentOwnerId'])) {
+			$editable = $this->checkCurrentEditable($options['currentPageCategoryId'], $options['currentOwnerId']);
+		}
+
+		switch($type) {
+			case '1':
+				$excludeParentId = '1';
+				break;
+			case '2':
+				$excludeParentId = '';
+				break;
+		}
+
+		$_options = array(
+			'rootEditable'		=> $this->checkRootEditable(),
+			'pageEditable'		=> $editable,
+			'mobileRoot'		=> false,
+			'excludeParentId'	=> $excludeParentId
+		);
+		
+		if(isset($options['currentPageCategoryId'])) {
+			$_options['pageCategoryId'] = $options['currentPageCategoryId'];
+		}
+		if(isset($options['empty'])) {
+			$_options['empty'] = $options['empty'];
+		}
+		if(!empty($options['own'])) {
+			$user = $this->Auth->user();
+			$_options['userGroupId'] = $user['User']['user_group_id'];
+		}
+		
+		return $this->Page->getControlSource('page_category_id', $_options);
+
+	}
+/**
+ * 現在のページが書込可能かチェックする
+ * 
+ * @param int $pageCategoryId
+ * @param int $ownerId
+ * @return boolean
+ * @access public
+ */
+	function checkCurrentEditable($pageCategoryId, $ownerId) {
+		
+		$user = $this->Auth->user();
+		$editable = false;
+
+		if(!$pageCategoryId) {
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+		} else {
+			$currentCatOwner = $ownerId;
+		}
+		
+		return ($currentCatOwner == $user['User']['user_group_id'] ||
+					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
+
 	}
 	
 }

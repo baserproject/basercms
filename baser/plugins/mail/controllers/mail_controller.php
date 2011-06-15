@@ -326,7 +326,6 @@ class MailController extends MailAppController {
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];
 		$userMail = '';
-		//$userName = '';
 
 		// データを整形
 		$data = $this->Message->restoreData($this->Message->convertToDb($this->data));
@@ -345,18 +344,17 @@ class MailController extends MailAppController {
 		}
 
 		foreach($this->dbDatas['mailFields'] as $mailField) {
+			$field = $mailField['MailField']['field_name'];
+			$value = $data['Message'][$field];
 			// ユーザーメールを取得
-			if($mailField['MailField']['type'] == 'email') {
-				$userMail = $data['Message'][$mailField['MailField']['field_name']];
+			if($mailField['MailField']['type'] == 'email' && $value) {
+				$userMail = $value;
 			}
 			// 件名にフィールドの値を埋め込む
-			$mailContent['subject_user'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
-														$data['Message'][$mailField['MailField']['field_name']],
-														$mailContent['subject_user']);
-			$mailContent['subject_admin'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
-														$data['Message'][$mailField['MailField']['field_name']],
-														$mailContent['subject_admin']);
+			$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
+			$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
 		}
+		
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
 		if(!$userMail) {
 			if(!empty($data['Message']['email'])) {
@@ -366,31 +364,27 @@ class MailController extends MailAppController {
 			}
 		}
 
-		// ユーザー名を取得
-		/*if(!empty($data['Message']['name'])){
-			$userName = $data['Message']['name'] . '　様';
-		}elseif(!empty($data['Message']['name_1']) && !empty($data['Message']['name_2'])){
-			$userName = $data['Message']['name_1'] . '　' . $data['Message']['name_2'] . '　様';
-		}*/
-
 		// ユーザーに送信
 		if(!empty($userMail)) {
 			$data['other']['mode'] = 'user';
-			$options = array('fromName' => $mailContent['sender_name'],
-								'reply' => $adminMail,
-								'template' => $mailContent['mail_template'],
-								'from' => $adminMail);
+			$options = array(
+				'fromName'	=> $mailContent['sender_name'],
+				'reply'		=> $adminMail,
+				'template'	=> $mailContent['mail_template'],
+				'from'		=> $adminMail
+			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
 
 		// 管理者に送信
 		if(!empty($adminMail)) {
 			$data['other']['mode'] = 'admin';
-			$options = array('fromName' => $mailContent['sender_name'],
-								'reply' => $userMail,
-								'from' => $adminMail,
-								'template' => $mailContent['mail_template'],
-								'cc' => $mailContent['sender_2']
+			$options = array(
+				'fromName'	=> $mailContent['sender_name'],
+				'reply'		=> $userMail,
+				'from'		=> $adminMail,
+				'template'	=> $mailContent['mail_template'],
+				'cc'		=> $mailContent['sender_2']
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}

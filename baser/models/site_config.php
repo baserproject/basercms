@@ -60,7 +60,7 @@ class SiteConfig extends AppModel {
 			'required'	=> true
 		),
 		'email' => array(
-			array(	'rule'		=> array('email'),
+			array(	'rule'		=> array('emails'),
 					'message'	=> '管理者メールアドレスの形式が不正です。'),
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> '管理者メールアドレスを入力してください。')

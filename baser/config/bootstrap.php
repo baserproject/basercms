@@ -202,10 +202,24 @@
 		}
 	}
 /**
+ * データキャッシュ
+ */
+if(isInstalled()) {
+	Cache::config('_cake_data_', array(
+			'engine'		=> 'File',
+			'duration'		=> Configure::read('Baser.dataCachetime'),
+			'probability'	=> 100,
+			'path'			=> CACHE.'datas',
+			'prefix'		=> 'cake_',
+			'lock'			=> false,
+			'serialize'		=> true
+	 ));
+}
+/**
  * 利用可能プラグインの設定
  *
- * これより前にモデルをインスタンス化した場合、PluginHookBehavior::setup() で、
- * enablePlugins を参照できなくなってしまうので注意
+ * PluginHookBehavior::setup() で、Baser.enablePlugins を参照できるように、
+ * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
  * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
  */
  	if(isInstalled()) {
@@ -214,12 +228,13 @@
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$field = 'Plugin.name';
-			if(str_replace('_ex','',$db->config['driver'])=='postgres') {
-				$field .= ' AS Plugin__name';
-			}
-			$sql = 'SELECT '.$db->name($field).' FROM '.$db->name($pluginTable).' AS '.$db->name('Plugin').' WHERE '.$db->name('Plugin.status').' = '.$db->value(true).';';
-			$plugins = $db->query($sql);
+			App::import('Core', 'ClassRegistry');
+			// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
+			App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
+			App::import('Behavior', 'Cache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'cache.php'));
+			$Plugin = ClassRegistry::init('Plugin');
+			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
+			ClassRegistry::removeObject('Plugin');
 			if($plugins) {
 				$enablePlugins = Set::extract('/Plugin/name',$plugins);
 				Configure::write('Baser.enablePlugins', $enablePlugins);

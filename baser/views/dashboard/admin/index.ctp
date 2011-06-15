@@ -54,10 +54,16 @@
 			<ul>
 				<?php foreach ($viewDblogs as $record): ?>
 				<li><?php echo $time->format('Y.m.d',$record['Dblog']['created']) ?>
-					<small><?php echo $time->format('H:i:s',$record['Dblog']['created']) ?></small><br />
+					<small><?php echo $time->format('H:i:s',$record['Dblog']['created']) ?>&nbsp;
+						<?php if(!empty($record['User']['real_name_1'])): ?>
+						[<?php echo $record['User']['real_name_1'] . $record['User']['real_name_2'] ?>]
+						<?php endif ?>
+					</small><br />
 					<?php echo $record['Dblog']['name'] ?></li>
 				<?php endforeach; ?>
 			</ul>
+			<?php $baser->pagination('simple', array('modules' => 4), null, false) ?>
+			<?php $baser->element('list_num') ?>
 			<div class="align-center">
 				<?php $baser->link('削　除',
 						array('action' => 'del'),
