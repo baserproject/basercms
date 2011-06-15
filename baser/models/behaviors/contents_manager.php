@@ -79,7 +79,7 @@ class ContentsManagerBehavior extends ModelBehavior {
 		$result = $this->Content->save();
 
 		// カテゴリを site_configsに保存
-		if($result && $data['Content']['category'] != $before['Content']['category']) {
+		if($result) {
 			return $this->updateContentCategory($model, $data['Content']['category']);
 		}
 
@@ -109,7 +109,7 @@ class ContentsManagerBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function updateContentCategory(&$model, $contentCategory = null) {
+	function updateContentCategory(&$model) {
 		
 		$db = ConnectionManager::getDataSource('baser');
 		$contentCategories = array();
@@ -122,16 +122,12 @@ class ContentsManagerBehavior extends ModelBehavior {
 				}
 			}
 		} else {
-			$contents = $this->Content->find('all', array('fields' => array('Content.category'), 'group' => array('Content.category')));
+			$contents = $this->Content->find('all', array('fields' => array('Content.category'), 'group' => array('Content.category'), 'conditions' => array('Content.status' => true)));
 			foreach($contents as $content) {
 				if($content['Content']['category']) {
 					$contentCategories[$content['Content']['category']] = $content['Content']['category'];
 				}
 			}
-		}
-
-		if($contentCategory && !in_array($contentCategory, $contentCategories)) {
-			$contentCategories[$contentCategory] = $contentCategory;
 		}
 
 		$siteConfigs['SiteConfig']['content_categories'] = serialize($contentCategories);
