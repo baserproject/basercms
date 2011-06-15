@@ -161,7 +161,7 @@ function pageTypeChengeHandler() {
 		data: options,
 		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
 		beforeSend: function() {
-			$("#AjaxLoader").show();
+			$("#CategoryAjaxLoader").show();
 		},
 		success: function(result){
 			if(result) {
@@ -172,7 +172,7 @@ function pageTypeChengeHandler() {
 			}
 		},
 		complete: function() {
-			$("#AjaxLoader").hide();
+			$("#CategoryAjaxLoader").hide();
 		}
 	});
 	
@@ -246,6 +246,7 @@ function pageTypeChengeHandler() {
 					'options'	=> $categories,
 					'escape'	=> false)) ?>
 			<?php echo $formEx->error('Page.page_category_id') ?>
+			<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
 		</td>
 	</tr>
 <?php else: ?>
