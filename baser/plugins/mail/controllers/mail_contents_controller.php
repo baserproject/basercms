@@ -110,7 +110,7 @@ class MailContentsController extends MailAppController {
 						$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
 						$this->Session->setFlash($message);
 						$this->MailContent->saveDbLog($message);
-						$this->redirect(array('controller'=>'mail_contents','action'=>'index'));
+						$this->redirect(array('action'=>'edit', $this->MailContent->id));
 					} else {
 						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 					}
@@ -169,7 +169,7 @@ class MailContentsController extends MailAppController {
 						}elseif ($this->data['MailContent']['edit_mail']) {
 							$this->redirectEditMail($this->data['MailContent']['mail_template']);
 						}else{
-							$this->redirect(array('action'=>'index'));
+							$this->redirect(array('action'=>'edit', $this->data['MailContent']['id']));
 						}
 
 					}else {
