@@ -41,7 +41,7 @@ class BlogContentsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('SiteConfig',"Blog.BlogContent");
+	var $uses = array('SiteConfig', 'Blog.BlogCategory', 'Blog.BlogContent');
 /**
  * ヘルパー
  *

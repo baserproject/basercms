@@ -41,7 +41,7 @@ class BlogCommentsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('Blog.BlogComment','Blog.BlogPost');
+	var $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
 /**
  * ヘルパー
  *

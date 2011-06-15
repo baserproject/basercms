@@ -42,7 +42,7 @@ class BlogConfigsController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $uses = array('Blog.BlogConfig','Blog.BlogContent','User');
+	var $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
 /**
  * コンポーネント
  *

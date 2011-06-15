@@ -30,13 +30,6 @@ App::import('Controller', 'Plugins');
  */
 class BlogAppController extends PluginsController {
 /**
- * モデル
- * 
- * @var array
- * @access public
- */
-	var $uses = array('Plugin', 'Blog.BlogCategory');
-/**
  * コメントを管理者メールへメール送信する
  * @param array $data
  */
