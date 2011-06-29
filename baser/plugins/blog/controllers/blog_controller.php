@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコントローラー
+ * ブログ記事コントローラー
  *
  * PHP versions 4 and 5
  *
@@ -12,7 +12,7 @@
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -23,7 +23,7 @@
  * Include files
  */
 /**
- * 記事コントローラー
+ * ブログ記事コントローラー
  *
  * @package			baser.plugins.blog.controllers
  */
@@ -48,11 +48,14 @@ class BlogController extends BlogAppController {
  * @var 	array
  * @access 	public
  */
-	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'cache');
+	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'Cache');
 /**
  * コンポーネント
+ * 
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx', 'Security');
+	var $components = array('Auth', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
 /**
  * ぱんくずナビ
  *
@@ -69,11 +72,16 @@ class BlogController extends BlogAppController {
 	var $subMenuElements = array();
 /**
  * ブログデータ
+ * 
+ * @var array
+ * @access public
  */
 	var $blogContent = array();
 /**
  * プレビューフラグ
+ * 
  * @var boolean
+ * @access public
  */
 	var $preview = false;
 /**
@@ -138,8 +146,8 @@ class BlogController extends BlogAppController {
 /**
  * [PUBLIC] ブログを一覧表示する
  *
- * @return	void
- * @access 	public
+ * @retur void
+ * @access public
  */
 	function index() {
 
@@ -190,8 +198,8 @@ class BlogController extends BlogAppController {
 /**
  * [MOBILE] ブログ記事を一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function mobile_index() {
 
@@ -201,10 +209,10 @@ class BlogController extends BlogAppController {
 /**
  * [PUBLIC] ブログアーカイブを表示する
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
  */
 	function archives() {
 
@@ -479,10 +487,10 @@ class BlogController extends BlogAppController {
 /**
  * [MOBILE] ブログアーカイブを表示する
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
  */
 	function mobile_archives() {
 
@@ -490,11 +498,13 @@ class BlogController extends BlogAppController {
 
 	}
 /**
- * プレビューを表示する
+ * [ADMIN] プレビューを表示する
  * 
- * @param string $mode
  * @param int $blogContentsId
- * @param int $id 
+ * @param int $id
+ * @param string $mode
+ * @return void
+ * @access public
  */
 	function admin_preview($blogContentsId, $id, $mode) {
 		
@@ -506,12 +516,12 @@ class BlogController extends BlogAppController {
 		
 	}
 /**
- * [PUBLIC] ブログ記事をプレビュー
+ * ブログ記事をプレビュー
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed blog_post_id / type
+ * @param mixed blog_post_id / ""
+ * @return void
+ * @access protected
  */
 	function _createPreview($blogContentsId, $id) {
 
@@ -523,8 +533,10 @@ class BlogController extends BlogAppController {
 /**
  * プレビューを表示する
  *
- * @return	void
- * @access	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access protected
  */
 	function _viewPreview($blogContentsId, $id){
 
@@ -541,11 +553,12 @@ class BlogController extends BlogAppController {
 	}
 /**
  * ブログカレンダー用のデータを取得する
- * @param	int		$id
- * @param	int		$year
- * @param	int		$month
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param int $year
+ * @param int $month
+ * @return array
+ * @access public
  */
 	function get_calendar($id,$year='',$month=''){
 
@@ -577,9 +590,11 @@ class BlogController extends BlogAppController {
 	}
 /**
  * カテゴリー一覧用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param mixed $count
+ * @return array
+ * @access public
  */
 	function get_categories($id, $count = false){
 
@@ -591,9 +606,10 @@ class BlogController extends BlogAppController {
 	}
 /**
  * 月別アーカイブ一覧用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @return mixed $count
+ * @access public
  */
 	function get_blog_dates($id, $count = false){
 
@@ -606,9 +622,11 @@ class BlogController extends BlogAppController {
 	}
 /**
  * 最近の投稿用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param mixed $count
+ * @return array
+ * @access public
  */
 	function get_recent_entries($id, $count = 5){
 
@@ -634,8 +652,9 @@ class BlogController extends BlogAppController {
  *
  * requestAction用
  * 
- * @param	int	$blogContentId
- * @param	int	$num
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
  */
 	function posts($blogContentId, $num = 5) {
 		
@@ -660,13 +679,15 @@ class BlogController extends BlogAppController {
  *
  * requestAction用
  *
- * @param	int	$blogContentId
- * @param	int	$num
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
  */
 	function mobile_posts($blogContentId, $num = 5) {
 		
 		$this->setAction('posts', $blogContentId, $num);
 		
 	}
+	
 }
 ?>
