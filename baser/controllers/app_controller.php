@@ -804,7 +804,7 @@ class AppController extends Controller {
 		if(DEPLOY_PATTERN == 2 || DEPLOY_PATTERN == 3) {
 			$webrootRewriteBase = '/';
 		} else {
-			$webrootRewriteBase = '/app/webroot';
+			$webrootRewriteBase = '/'.APP_DIR.'/webroot';
 		}
 
 		/* /app/webroot/.htaccess の編集 */
@@ -842,8 +842,8 @@ class AppController extends Controller {
 			case 'root':
 				$rewriteSettings = array(	'RewriteEngine on',
 											'RewriteBase '.$this->getRewriteBase($rewriteBase),
-											'RewriteRule ^$ app/webroot/ [L]',
-											'RewriteRule (.*) app/webroot/$1 [L]');
+											'RewriteRule ^$ '.APP_DIR.'/webroot/ [L]',
+											'RewriteRule (.*) '.APP_DIR.'/webroot/$1 [L]');
 				break;
 			case 'webroot':
 				$rewriteSettings = array(	'RewriteEngine on',
