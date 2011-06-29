@@ -229,7 +229,11 @@ class PagesController extends AppController {
 		}else {
 
 			$before = $this->Page->read(null, $id);
+			
 			/* 更新処理 */
+			if($this->data['Page']['page_type'] == 2 && !$this->data['Page']['page_category_id']) {
+				$this->data['Page']['page_category_id'] = $this->PageCategory->getMobileId();
+			}
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->set($this->data);
 
