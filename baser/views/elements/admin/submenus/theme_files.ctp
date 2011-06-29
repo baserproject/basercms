@@ -23,7 +23,7 @@ $types = array('layouts'=>'レイアウト','elements'=>'エレメント','etc'=
 if($theme == 'core'){
 	$themeFiles = array(0=>array('name'=>'','title'=>'コア'));
 	
-	$Plugin = ClassRegistry::getObject('Plugin');
+	$Plugin = ClassRegistry::init('Plugin');
 	$plugins = $Plugin->find('all',array('fields'=>array('name','title')));
 	$themeFiles = am($themeFiles,Set::extract('/Plugin/.',$plugins));
 }else{
