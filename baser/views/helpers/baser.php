@@ -718,7 +718,12 @@ class BaserHelper extends AppHelper {
 
 		// ページ機能の場合
 		if($controller=='pages' && $action=='display') {
-			$pageUrl = str_replace('pages/','',$this->params['pass'][0]);
+			
+			if(strpos($this->params['pass'][0], 'pages/') !== false) {
+				$pageUrl = str_replace('pages/','',$this->params['pass'][0]);
+			} else {
+				$pageUrl = $this->params['url']['url'];
+			}
 			$pos = strpos($pageUrl,'.html');
 			if($pos !== false) {
 				$pageUrl = substr($pageUrl, 0, $pos);
