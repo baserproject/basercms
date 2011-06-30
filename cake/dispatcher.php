@@ -355,7 +355,12 @@ class Dispatcher extends Object {
 			if ($webroot === 'webroot' && $webroot === basename($base)) {
 				$base = dirname($base);
 			}
+			// CUSTOMIZE modify 2011/06/30 ryuring バグフィックス
+			// >>>
+			//if ($dir === 'app' && $dir === basename($base)) {
+			// ---
 			if ($dir === 'app' || $dir === basename($base)) {
+			// <<<
 				$base = dirname($base);
 			}
 
