@@ -229,7 +229,7 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='.php') {
+	function clearViewCache($url=null,$ext='') {
 
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
