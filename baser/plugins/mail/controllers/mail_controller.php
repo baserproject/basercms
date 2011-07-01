@@ -180,6 +180,8 @@ class MailController extends MailAppController {
 		// 初期値を取得
 		if(!$this->data) {
 			$this->data = $this->Message->getDefaultValue();
+		}else {
+			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
 		}
 
 		$this->set('freezed',false);
