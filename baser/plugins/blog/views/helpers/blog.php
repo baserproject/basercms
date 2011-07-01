@@ -204,20 +204,20 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return void
  */
-	function category($post) {
-		echo $this->getCategory($post);
+	function category($post, $options = array()) {
+		echo $this->getCategory($post, $options);
 	}
 /**
  * カテゴリを取得する
  * @param array $post
  * @return string
  */
-	function getCategory($post) {
+	function getCategory($post, $options = array()) {
 		if(!empty($post['BlogCategory']['name'])) {
 			if(!isset($this->Html)){
 				$this->Html = new HtmlHelper();
 			}
-			return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),null,null,false);
+			return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),$options,null,false);
 		}else {
 			return '';
 		}
