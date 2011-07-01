@@ -92,7 +92,10 @@ class AppModel extends Model {
 		}
 		
 		// モデルデータキャッシュ設定
-		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime')) {
+		// AppModelではキャッシュを利用しない
+		// 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
+		// （HABTMの更新がうまくいかなかったので）
+		if(Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime') && get_class() != 'AppModel') {
 			$this->Behaviors->attach('Cache');
 		}
 
@@ -1339,7 +1342,7 @@ class AppModel extends Model {
  * @return type 
  * @access public
  */
-	function find() {
+	function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
 		
 		$args = func_get_args();
 		$cache = true;
@@ -1352,7 +1355,7 @@ class AppModel extends Model {
 				return $this->cacheMethod($cache, __FUNCTION__, $args);
 			}
 		}
-		return call_user_func_array(array('parent', __FUNCTION__), $args);
+		return parent::find($conditions, $fields, $order, $recursive);
 		
 	}
 /**
