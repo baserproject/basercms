@@ -1212,8 +1212,8 @@ class AppController extends Controller {
 			return false;
 		}
 		$user = $this->Auth->user();
-		if($this->siteConfigs['root_owner_id'] == $user['User']['user_group_id'] ||
-				!$this->siteConfigs['root_owner_id'] || $user['User']['user_group_id'] == 1) {
+		if(@$this->siteConfigs['root_owner_id'] == $user['User']['user_group_id'] ||
+				!@$this->siteConfigs['root_owner_id'] || $user['User']['user_group_id'] == 1) {
 			return true;
 		} else {
 			return false;

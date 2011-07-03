@@ -1350,7 +1350,7 @@ class AppModel extends Model {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+		if (isset($this->Behaviors) && $this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
 			if($this->cacheEnabled()) {
 				return $this->cacheMethod($cache, __FUNCTION__, $args);
 			}

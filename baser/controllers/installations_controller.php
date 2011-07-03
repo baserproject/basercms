@@ -47,7 +47,7 @@ class InstallationsController extends AppController {
  * @var		array
  * @access	public
  */
-	var $components = array('Session', 'EmailEx');
+	var $components = array('Session', 'EmailEx', 'BaserManager');
 /**
  * レイアウト
  *
@@ -243,6 +243,7 @@ class InstallationsController extends AppController {
 				if(isset($this->data['Installation']['non_demo_data'])) {
 					$nonDemoData = $this->data['Installation']['non_demo_data'];
 				}
+				$this->deleteAllTables();
 				if($this->_constructionDb($nonDemoData)) {
 					$this->Session->setFlash("データベースの構築に成功しました。");
 					$this->redirect('step4');
@@ -277,8 +278,6 @@ class InstallationsController extends AppController {
 			$this->Session->write('Installation.admin_password', $this->data['Installation']['admin_password']);
 
 			if($this->data['clicked'] == 'back') {
-
-				$this->_resetDatabase();
 				$this->redirect('step3');
 
 			} elseif($this->data['clicked'] == 'finish') {
@@ -365,8 +364,8 @@ class InstallationsController extends AppController {
 		$this->_login();
 
 		// テーマを配置する
-		$this->_deployTheme();
-		$this->_deployTheme('skelton');
+		$this->BaserManager->deployTheme();
+		$this->BaserManager->deployTheme('skelton');
 
 		// pagesファイルを生成する
 		$this->_createPages();
@@ -482,29 +481,6 @@ class InstallationsController extends AppController {
 
 	}
 /**
- * テーマを配置する
- *
- * @param	string	$theme
- * @return	boolean
- * @access	protected
- */
-	function _deployTheme($theme = 'demo') {
-
-		$targetPath = WWW_ROOT.'themed'.DS.$theme;
-        $sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
-        $folder = new Folder();
-		if($folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
-			if($folder->create($targetPath.DS.'pages',0777)) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-
-	}
-/**
  * テーマ用のページファイルを生成する
  *
  * @return	boolean
@@ -539,20 +515,20 @@ class InstallationsController extends AppController {
 	function &_connectDb($config, $name='baser') {
 
 		if($name == 'plugin') {
-			$config['dbPrefix'].=Configure::read('Baser.pluginDbPrefix');
+			$config['prefix'].=Configure::read('Baser.pluginDbPrefix');
 		}
-
+		
 		$result =  ConnectionManager::create($name ,array(
-				'driver' => $config['dbType'],
+				'driver' => $config['driver'],
 				'persistent' => false,
-				'host' => $config['dbHost'],
-				'port' => $config['dbPort'],
-				'login' => $config['dbUsername'],
-				'password' => $config['dbPassword'],
-				'database' => $this->_getRealDbName($config['dbType'], $config['dbName']),
-				'schema' => $config['dbSchema'],
-				'prefix' =>  $config['dbPrefix'],
-				'encoding' => $config['dbEncoding']));
+				'host' => $config['host'],
+				'port' => $config['port'],
+				'login' => $config['login'],
+				'password' => $config['password'],
+				'database' => $config['database'],
+				'schema' => $config['schema'],
+				'prefix' =>  $config['prefix'],
+				'encoding' => $config['encoding']));
 
 		if($result) {
 			return $result;
@@ -566,81 +542,21 @@ class InstallationsController extends AppController {
  */
 	function _constructionDb($nonDemoData = false) {
 
-		if(!$this->_constructionTable(BASER_CONFIGS.'sql', 'baser', $nonDemoData)) {
+		$dbConfig = $this->_readDbSettingFromSession();
+		if(!$this->BaserManager->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
+		$dbConfig['prefix'].=Configure::read('Baser.pluginDbPrefix');
+		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
+		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->_constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $nonDemoData)) {
+		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		return true;
 
-	}
-/**
- * テーブルを構築する
- *
- * @param	string	$configKeyName
- * @param	string	$path
- * @return	boolean
- */
-	function _constructionTable($path, $configKeyName = 'baser', $nonDemoData = false) {
-
-		$db =& $this->_connectDb($this->_readDbSettingFromSession(), $configKeyName);
-
-		if (!$db->connected && $db->config['driver']!='csv') {
-			return false;
-		} elseif($db->config['driver'] == 'csv') {
-			// CSVの場合はフォルダを作成する
-			$folder = new Folder($db->config['database'], true, 0777);
-		} elseif($db->config['driver'] == 'sqlite3') {
-			chmod($db->config['database'], 0666);
-		}
-
-		$folder = new Folder($path);
-		$files = $folder->read(true, true, true);
-
-		if(isset($files[1])) {
-
-			// DB構築
-			foreach($files[1] as $file) {
-				if(!preg_match('/\.php$/',$file)) {
-					continue;
-				}
-				if(!$db->createTableBySchema(array('path'=>$file))){
-					return false;
-				}
-			}
-
-			if($nonDemoData && $configKeyName == 'baser') {
-				$nonDemoData = false;
-				$folder = new Folder($path.DS.'non_demo');
-				$files = $folder->read(true, true, true);
-			}
-
-			if(!$nonDemoData) {
-
-				// CSVの場合ロックを解除しないとデータの投入に失敗する
-				if($db->config['driver'] == 'csv') {
-					$db->reconnect();
-				}
-
-				// 初期データ投入
-				foreach($files[1] as $file) {
-					if(!preg_match('/\.csv$/',$file)) {
-						continue;
-					}
-					if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
-						return false;
-					}
-				}
-			}
-		}
-		
 		return true;
 
 	}
@@ -653,7 +569,17 @@ class InstallationsController extends AppController {
 	function _getDefaultValuesStep3() {
 
 		if( $this->Session->read('Installation.dbType') ){
-			$data = array('Installation'=>$this->_readDbSettingFromSession());
+			$_data = $this->_readDbSettingFromSession();
+			$data['Installation']['dbType'] = $_data['driver'];
+			$data['Installation']['dbHost'] = $_data['host'];
+			$data['Installation']['dbPort'] = $_data['port'];
+			$data['Installation']['dbPrefix'] = $_data['prefix'];
+			$_data['database'] = basename($_data['database']);
+			$_data['database'] = str_replace(array('.csv', '.db'), '', $_data['database']);
+			$_data['database'] = basename($_data['database']);
+			$data['Installation']['dbName'] = $_data['database'];
+			$data['Installation']['dbUsername'] = $_data['login'];
+			$data['Installation']['dbPassword'] = $_data['password'];
 		} else {
 			$data['Installation']['dbType'] = 'mysql';
 			$data['Installation']['dbHost'] = 'localhost';
@@ -699,15 +625,16 @@ class InstallationsController extends AppController {
  */
 	function _readDbSettingFromSession() {
 
-		$data['dbType'] = $this->Session->read('Installation.dbType');
-		$data['dbHost'] = $this->Session->read('Installation.dbHost');
-		$data['dbPort'] = $this->Session->read('Installation.dbPort');
-		$data['dbUsername'] = $this->Session->read('Installation.dbUsername');
-		$data['dbPassword'] = $this->Session->read('Installation.dbPassword');
-		$data['dbPrefix'] = $this->Session->read('Installation.dbPrefix');
-		$data['dbName'] = $this->Session->read('Installation.dbName');
-		$data['dbSchema'] = $this->Session->read('Installation.dbSchema');
-		$data['dbEncoding'] = $this->Session->read('Installation.dbEncoding');
+		$data['driver'] = $this->Session->read('Installation.dbType');
+		$data['host'] = $this->Session->read('Installation.dbHost');
+		$data['port'] = $this->Session->read('Installation.dbPort');
+		$data['login'] = $this->Session->read('Installation.dbUsername');
+		$data['password'] = $this->Session->read('Installation.dbPassword');
+		$data['prefix'] = $this->Session->read('Installation.dbPrefix');
+		$data['database'] = $this->_getRealDbName($data['driver'], $this->Session->read('Installation.dbName'));
+		$data['schema'] = $this->Session->read('Installation.dbSchema');
+		$data['encoding'] = $this->Session->read('Installation.dbEncoding');
+		$data['persistent'] = false;
 		return $data;
 
 	}
@@ -826,32 +753,32 @@ class InstallationsController extends AppController {
 
 		extract($options);
 
-		if(!isset($dbType)) {
-			$dbType = '';
+		if(!isset($driver)) {
+			$driver = '';
 		}
-		if(!isset($dbHost)) {
-			$dbHost = 'localhost';
+		if(!isset($host)) {
+			$host = 'localhost';
 		}
-		if(!isset($dbPort)) {
-			$dbPort = '';
+		if(!isset($port)) {
+			$port = '';
 		}
-		if(!isset($dbUsername)) {
-			$dbUsername = 'dummy';
+		if(!isset($login)) {
+			$login = 'dummy';
 		}
-		if(!isset($dbPassword)) {
-			$dbPassword = 'dummy';
+		if(!isset($password)) {
+			$password = 'dummy';
 		}
-		if(!isset($dbName)) {
-			$dbName = 'dummy';
+		if(!isset($database)) {
+			$database = 'dummy';
 		}
-		if(!isset($dbPrefix)) {
-			$dbPrefix = '';
+		if(!isset($prefix)) {
+			$prefix = '';
 		}
-		if(!isset($dbSchema)) {
-			$dbSchema = '';
+		if(!isset($schema)) {
+			$schema = '';
 		}
-		if(!isset($dbEncoding)) {
-			$dbEncoding = 'utf8';
+		if(!isset($encoding)) {
+			$encoding = 'utf8';
 		}
 
 		App::import('File');
@@ -865,8 +792,8 @@ class InstallationsController extends AppController {
 				$dbfilehandler->delete();
 			}
 
-			if($dbType == 'mysql' || $dbType == 'sqlite3' || $dbType == 'postgres') {
-				$dbType .= '_ex';
+			if($driver == 'mysql' || $driver == 'sqlite3' || $driver == 'postgres') {
+				$driver .= '_ex';
 			}
 
 			$dbfilehandler->create();
@@ -877,29 +804,29 @@ class InstallationsController extends AppController {
 			$dbfilehandler->write("//\n");
 			$dbfilehandler->write("class DATABASE_CONFIG {\n");
 			$dbfilehandler->write('var $baser = array('."\n");
-			$dbfilehandler->write("\t'driver' => '".$dbType."',\n");
+			$dbfilehandler->write("\t'driver' => '".$driver."',\n");
 			$dbfilehandler->write("\t'persistent' => false,\n");
-			$dbfilehandler->write("\t'host' => '".$dbHost."',\n");
-			$dbfilehandler->write("\t'port' => '".$dbPort."',\n");
-			$dbfilehandler->write("\t'login' => '".$dbUsername."',\n");
-			$dbfilehandler->write("\t'password' => '".$dbPassword."',\n");
-			$dbfilehandler->write("\t'database' => '".$this->_getRealDbName($dbType, $dbName)."',\n");
-			$dbfilehandler->write("\t'schema' => '".$dbSchema."',\n");
-			$dbfilehandler->write("\t'prefix' => '".$dbPrefix."',\n");
-			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
+			$dbfilehandler->write("\t'host' => '".$host."',\n");
+			$dbfilehandler->write("\t'port' => '".$port."',\n");
+			$dbfilehandler->write("\t'login' => '".$login."',\n");
+			$dbfilehandler->write("\t'password' => '".$password."',\n");
+			$dbfilehandler->write("\t'database' => '".$database."',\n");
+			$dbfilehandler->write("\t'schema' => '".$schema."',\n");
+			$dbfilehandler->write("\t'prefix' => '".$prefix."',\n");
+			$dbfilehandler->write("\t'encoding' => '".$encoding."'\n");
 			$dbfilehandler->write(");\n");
 
 			$dbfilehandler->write('var $plugin = array('."\n");
-			$dbfilehandler->write("\t'driver' => '".$dbType."',\n");
+			$dbfilehandler->write("\t'driver' => '".$driver."',\n");
 			$dbfilehandler->write("\t'persistent' => false,\n");
-			$dbfilehandler->write("\t'host' => '".$dbHost."',\n");
-			$dbfilehandler->write("\t'port' => '".$dbPort."',\n");
-			$dbfilehandler->write("\t'login' => '".$dbUsername."',\n");
-			$dbfilehandler->write("\t'password' => '".$dbPassword."',\n");
-			$dbfilehandler->write("\t'database' => '".$this->_getRealDbName($dbType, $dbName)."',\n");
-			$dbfilehandler->write("\t'schema' => '".$dbSchema."',\n");
-			$dbfilehandler->write("\t'prefix' => '".$dbPrefix.Configure::read('Baser.pluginDbPrefix')."',\n");
-			$dbfilehandler->write("\t'encoding' => '".$dbEncoding."'\n");
+			$dbfilehandler->write("\t'host' => '".$host."',\n");
+			$dbfilehandler->write("\t'port' => '".$port."',\n");
+			$dbfilehandler->write("\t'login' => '".$login."',\n");
+			$dbfilehandler->write("\t'password' => '".$password."',\n");
+			$dbfilehandler->write("\t'database' => '".$database."',\n");
+			$dbfilehandler->write("\t'schema' => '".$schema."',\n");
+			$dbfilehandler->write("\t'prefix' => '".$prefix.Configure::read('Baser.pluginDbPrefix')."',\n");
+			$dbfilehandler->write("\t'encoding' => '".$encoding."'\n");
 			$dbfilehandler->write(");\n");
 			$dbfilehandler->write("}\n");
 			$dbfilehandler->write("?>\n");
@@ -1024,7 +951,7 @@ class InstallationsController extends AppController {
 
 			if(file_exists(CONFIGS.'database.php')) {
 				// データベースのデータを削除
-				$this->_resetDatabase();
+				$this->BaserManager->deleteAllTables();
 				unlink(CONFIGS.'database.php');
 			}
 			if(file_exists(CONFIGS.'install.php')) {
@@ -1070,87 +997,15 @@ class InstallationsController extends AppController {
 
 	}
 /**
- * データベースを初期化する
- * @param array $dbConfig
+ * 全てのテーブルを削除する
  */
-	function _resetDatabase() {
-
-		/* データベース設定を取得 */
-		$dbType = $this->Session->read('Installation.dbType');
-		if($dbType) {
-			// インストール途中の場合はセッションから取得
-			$db = &ConnectionManager::create('test',array(  'driver' => $this->Session->read('Installation.dbType'),
-					'persistent' => false,
-					'host' => $this->Session->read('Installation.dbHost'),
-					'port' => $this->Session->read('Installation.dbPort'),
-					'login' => $this->Session->read('Installation.dbUsername'),
-					'password' => $this->Session->read('Installation.dbPassword'),
-					'database' => $this->Session->read('Installation.dbName'),
-					'schema' => $this->Session->read('Installation.dbSchema'),
-					'prefix' =>  $this->Session->read('Installation.dbPrefix'),
-					'encoding' => 'utf8'));
-			$dbConfig = $db->config;
-		}elseif(class_exists('DATABASE_CONFIG')) {
-			$dbConfig = new DATABASE_CONFIG();
-			$dbConfig = $dbConfig->baser;
-			if(empty($dbConfig['driver'])) {
-				return;
-			}
-			$db =& ConnectionManager::getDataSource('baser');
-		}
-
-		/* 削除実行 */
-		// TODO schemaを有効活用すればここはスッキリしそうだが見送り
-		$dbType = str_replace('_ex','',$dbConfig['driver']);
-		switch ($dbType) {
-			case 'mysql':
-				$sources = $db->listSources();
-				foreach($sources as $source) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
-						$sql = 'DROP TABLE '.$source;
-						$db->execute($sql);
-					}
-				}
-				break;
-
-			case 'postgres':
-				$sources = $db->listSources();
-				foreach($sources as $source) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
-						$sql = 'DROP TABLE '.$source;
-						$db->execute($sql);
-					}
-				}
-				// シーケンスも削除
-				$sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
-				$sequences = $db->query($sql);
-				$sequences = Set::extract('/0/sequence_name',$sequences);
-				foreach($sequences as $sequence) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
-						$sql = 'DROP SEQUENCE '.$sequence;
-						$db->execute($sql);
-					}
-				}
-				break;
-
-			case 'sqlite':
-			case 'sqlite3':
-				@unlink($this->_getRealDbName(str_replace('_ex','',$dbConfig['driver']), $dbConfig['database']));
-				break;
-
-			case 'csv':
-				$folder = new Folder($this->_getRealDbName(str_replace('_ex','',$dbConfig['driver']), $dbConfig['database']));
-				$files = $folder->read(true,true,true);
-				foreach($files[1] as $file) {
-					if(basename($file) != 'empty') {
-						@unlink($file);
-					}
-				}
-				break;
-
-		}
-
+	function deleteAllTables() {
+		
+		$config = $this->_readDbSettingFromSession();
+		$this->BaserManager->deleteTables('baser', $config);
+		$config['prefix'].=Configure::read('Baser.pluginDbPrefix');
+		$this->BaserManager->deleteTables('plugin', $config);
+		
 	}
-
 }
 ?>
