@@ -139,9 +139,7 @@ class AppHelper extends Helper {
 					break;
 				case 2:
 					$baseDir = str_replace('index.php', '', $baseUrl);
-					if (preg_match('/\/'.$webroot.'\/$/', $baseDir)) {
-						$this->webroot = $baseDir;
-					}
+					$this->webroot = $baseDir;
 					break;
 			}
 		}
