@@ -34,12 +34,12 @@ if(!empty($no)){
 			if($widget[$key]['status']){
 				$params = array();
 				$params['widget']=true;
-				if(empty($_SESSION['Auth']['User']) && empty($cache)){
+				if(empty($_SESSION['Auth']['User']) && !isset($cache)){
 					$params['cache']='+1 month';
 				}
 				$params = am($params,$widget[$key]);
 				$params[$widget[$key]['id']] = $widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
-				$baser->element('widgets/'.$widget[$key]['element'],$params);
+				$baser->element('widgets/'.$widget[$key]['element'],$params, false, $subDir);
 			}
 		}
 ?>
