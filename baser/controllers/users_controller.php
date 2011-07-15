@@ -85,13 +85,20 @@ class UsersController extends AppController {
 		/* 認証設定 */
 		// beforeFilterの前に記述する必要あり
 		if(isset($this->params['prefix'])) {
-			$this->AuthEx->allow($this->params['prefix'].'_login', $this->params['prefix'].'_logout', $this->params['prefix'].'_login_exec', $this->params['prefix'].'_reset_password');
+			$this->AuthEx->allow(
+					$this->params['prefix'].'_login', 
+					$this->params['prefix'].'_logout', 
+					$this->params['prefix'].'_login_exec', 
+					$this->params['prefix'].'_reset_password',
+					'admin_login_exec',
+					'admin_reset_password'
+			);
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
 
 		parent::beforeFilter();
 
-		$this->ReplacePrefix->allow('login', 'logout', 'reset_password', 'auth_prefix_error');
+		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'auth_prefix_error');
 
 	}
 /**
@@ -141,7 +148,8 @@ class UsersController extends AppController {
 		}
 		
 		$user = $this->AuthEx->user();
-		$userModel = $this->getUserModel();
+		$userModel = $this->AuthEx->userModel;
+		
 		if($this->data) {
 			if ($user) {
 				if (!empty($this->data[$userModel]['saved'])) {
@@ -156,6 +164,10 @@ class UsersController extends AppController {
 
 		if ($user) {
 			$this->redirect($this->AuthEx->redirect());
+		} else {
+			if($this->data) {
+				$this->redirect($this->referer());
+			}
 		}
 
 		$pageTitle = 'ログイン';
@@ -180,11 +192,12 @@ class UsersController extends AppController {
  * @access	public
  */
 	function setAuthCookie($data) {
-
+		
+		$userModel = $this->AuthEx->userModel;
 		$cookie = array();
-		$cookie['name'] = $data['User']['name'];
-		$cookie['password'] = $data['User']['password'];				// ハッシュ化されている
-		$this->Cookie->write('Auth.User', $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$cookie['name'] = $data[$userModel]['name'];
+		$cookie['password'] = $data[$userModel]['password'];				// ハッシュ化されている
+		$this->Cookie->write('Auth.'.$userModel, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 
 	}
 /**
@@ -195,8 +208,9 @@ class UsersController extends AppController {
  */
 	function admin_logout() {
 
+		$userModel = $this->AuthEx->userModel;
 		$this->AuthEx->logout();
-		$this->Cookie->del('Auth.User');
+		$this->Cookie->del('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
 		$this->redirect(array($this->params['prefix']=>true, 'action'=>'login'));
 
@@ -425,23 +439,23 @@ class UsersController extends AppController {
 
 		$this->layout = 'popup';
 		$this->pageTitle = 'パスワードのリセット';
-
+		$userModel = $this->AuthEx->userModel;
 		if($this->data) {
 
-			if(empty($this->data['User']['email'])) {
+			if(empty($this->data[$userModel]['email'])) {
 				$this->Session->setFlash('メールアドレスを入力してください。');
 				return;
 			}
-			$email = $this->data['User']['email'];
-			$user = $this->User->findByEmail($email);
+			$email = $this->data[$userModel]['email'];
+			$user = $this->{$userModel}->findByEmail($email);
 			if(!$user) {
 				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
 				return;
 			}
 			$password = $this->generatePassword();
 			$user['User']['password'] = $this->AuthEx->password($password);
-			$this->User->set($user);
-			if(!$this->User->save()) {
+			$this->{$userModel}->set($user);
+			if(!$this->{$userModel}->save()) {
 				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
 				return;
 			}

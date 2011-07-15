@@ -793,9 +793,9 @@ class AppModel extends Model {
  */
 	function duplicate($check,$field) {
 
-		$conditions = array($this->name.'.'.key($check)=>$check[key($check)]);
+		$conditions = array($this->alias.'.'.key($check)=>$check[key($check)]);
 		if($this->exists()) {
-			$conditions['NOT'] = array($this->name.'.id'=>$this->id);
+			$conditions['NOT'] = array($this->alias.'.id'=>$this->id);
 		}
 		$ret = $this->find($conditions);
 		if($ret) {
