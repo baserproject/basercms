@@ -255,6 +255,9 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * カテゴリのURLを取得する
+ * 
+ * [注意] リンク関数でラップする前提の為、ベースURLは考慮されない
+ * 
  * @param string $blogCategoyId
  * @return void
  */
