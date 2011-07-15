@@ -55,7 +55,7 @@ class BlogController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('Auth', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
+	var $components = array('AuthEx', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
 /**
  * ぱんくずナビ
  *
@@ -95,7 +95,7 @@ class BlogController extends BlogAppController {
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->Auth->allow(
+		$this->AuthEx->allow(
 			'index', 'mobile_index', 'archives', 'mobile_archives',
 			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
 			'posts', 'mobile_posts'

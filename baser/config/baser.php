@@ -44,11 +44,13 @@
 			// 認証後リダイレクト先
 			'loginRedirect'	=> '/'.$adminPrefix,
 			// ログイン画面タイトル
-			'loginTitle'	=> '管理システムログイン'
+			'loginTitle'	=> '管理システムログイン',
 		)/*,
 		'mypage' => array(
 			'loginRedirect'=>'/mypage/dashboard/index',
-			'loginTitle'=>'マイページログイン'
+			'loginTitle'=>'マイページログイン',
+			'userModel'		=> 'User',
+			'loginAction'	=> '/mypage/users/login'
 		)*/
 	);
 /**

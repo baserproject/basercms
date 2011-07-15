@@ -57,7 +57,7 @@ class DashboardController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth', 'Cookie', 'AuthConfigure');
+	var $components = array('AuthEx', 'Cookie', 'AuthConfigure');
 /**
  * ぱんくずナビ
  *

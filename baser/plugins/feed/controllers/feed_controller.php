@@ -64,7 +64,7 @@ class FeedController extends FeedAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','ajax');
+		$this->AuthEx->allow('index','mobile_index','ajax');
 		parent::beforeFilter();
 
 	}

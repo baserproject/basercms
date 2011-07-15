@@ -51,12 +51,12 @@ class  AuthConfigureComponent extends Object {
  */
 	function setting($config) {
 
-		if(empty($this->controller->Auth)) {
+		if(empty($this->controller->AuthEx)) {
 			return false;
 		}
 
 		$controller =& $this->controller;
-		$auth =& $controller->Auth;
+		$auth =& $controller->AuthEx;
 		$requestedPrefix = '';
 		
 		if(isset($controller->params['prefix'])) {
@@ -73,6 +73,13 @@ class  AuthConfigureComponent extends Object {
 		$config = array_merge($_config, $config);
 		extract($config);
 
+		if(empty($userModel)) {
+			$userModel = 'User';
+		}
+		if(empty($loginAction)) {
+			$loginAction = '/'.$requestedPrefix.'/users/login';
+		}
+		
 		// オートリダイレクトをOFF
 		$auth->autoRedirect = false;
 		// エラーメッセージ
@@ -83,16 +90,16 @@ class  AuthConfigureComponent extends Object {
 		$auth->fields = array('username' => 'name', 'password' => 'password');
 		$auth->authorize = 'controller';
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
-		$auth->userModel = 'User';
+		$auth->userModel = $userModel;
 		// AppController::isAuthorizeでチェックするのでコメントアウト
 		/*if($requestedPrefix) {
 			//$auth->userScope = array('UserGroup.auth_prefix'=>$requestedPrefix);
 		}*/
 
 		// セッション識別
-		$auth->sessionKey = 'Auth.User';
+		$auth->sessionKey = 'Auth.'.$userModel;
 		// ログインアクション
-		$auth->loginAction = '/'.$requestedPrefix.'/users/login';
+		$auth->loginAction = $loginAction;
 
 		$redirect = $auth->Session->read('Auth.redirect');
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット

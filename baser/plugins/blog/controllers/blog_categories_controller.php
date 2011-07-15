@@ -55,7 +55,7 @@ class BlogCategoriesController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
@@ -159,10 +159,11 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
-		if($user['User']['user_group_id'] != 1) {
-			$catOptions['ownerId'] = $user['User']['user_group_id'];
+		if($user[$userModel]['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
 		if($this->checkRootEditable()) {
@@ -208,13 +209,14 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$catOptions = array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
 			'excludeParentId' => $this->data['BlogCategory']['id']
 		);
-		if($user['User']['user_group_id'] != 1) {
-			$catOptions['ownerId'] = $user['User']['user_group_id'];
+		if($user[$userModel]['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
 		if($this->checkRootEditable()) {

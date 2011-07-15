@@ -53,7 +53,7 @@ class PageCategoriesController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * パンくず
  * @var			array
@@ -69,9 +69,10 @@ class PageCategoriesController extends AppController {
 	function beforeFilter() {
 		
 		parent::beforeFilter();
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
-				$user['User']['user_group_id'], 
+				$user[$userModel]['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);
@@ -161,10 +162,11 @@ class PageCategoriesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$mobileId = $this->PageCategory->getMobileId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
-			'ownerId' => $user['User']['user_group_id']
+			'ownerId' => $user[$userModel]['user_group_id']
 		));
 		if($this->checkRootEditable()) {
 			if($parents) {
@@ -230,11 +232,12 @@ class PageCategoriesController extends AppController {
 		$this->set('indexPage',$indexPage);
 
 		/* 表示設定 */
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$mobileId = $this->PageCategory->getMobileId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
 			'excludeParentId' => $this->data['PageCategory']['id'],
-			'ownerId' => $user['User']['user_group_id']
+			'ownerId' => $user[$userModel]['user_group_id']
 		));
 		if($this->checkRootEditable()) {
 			if($parents) {

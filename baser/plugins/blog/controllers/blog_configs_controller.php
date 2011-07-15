@@ -22,7 +22,6 @@
 /**
  * Include files
  */
-App::import('Controller', 'Auth');
 /**
  * ブログ設定コントローラー
  *
@@ -49,7 +48,7 @@ class BlogConfigsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *

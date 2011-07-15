@@ -55,9 +55,13 @@ class BlogAppController extends PluginsController {
 	function beforeFilter() {
 		
 		parent::beforeFilter();
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		if(!$user || !$userModel) {
+			return;
+		}
 		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
-				$user['User']['user_group_id'], 
+				$user[$userModel]['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);

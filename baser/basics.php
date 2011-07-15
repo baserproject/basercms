@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: basics.php 3 2011-07-06 17:10:54Z ryuring $ */
 /**
  * BaserCMS共通関数
  *
@@ -16,9 +16,9 @@
  * @link			http://basercms.net BaserCMS Project
  * @package			baser
  * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @version			$Revision: 3 $
+ * @modifiedby		$LastChangedBy: ryuring $
+ * @lastmodified	$Date: 2011-07-07 02:10:54 +0900 (木, 07 7 2011) $
  * @license			http://basercms.net/license/index.html
  */
 /**

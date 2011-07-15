@@ -59,7 +59,7 @@ class UsersController extends AppController {
  * @var 	array
  * @access 	public
  */
-	var $components = array('ReplacePrefix', 'Auth','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('ReplacePrefix', 'AuthEx','Cookie','AuthConfigure', 'EmailEx');
 /**
  * サブメニューエレメント
  *
@@ -84,9 +84,8 @@ class UsersController extends AppController {
 
 		/* 認証設定 */
 		// beforeFilterの前に記述する必要あり
-		$this->Auth->allow('mypage_login', 'admin_login', 'admin_logout','admin_login_exec', 'admin_reset_password');
 		if(isset($this->params['prefix'])) {
-			$this->Auth->allow($this->params['prefix'].'_login', $this->params['prefix'].'_logout', $this->params['prefix'].'_reset_password');
+			$this->AuthEx->allow($this->params['prefix'].'_login', $this->params['prefix'].'_logout', $this->params['prefix'].'_login_exec', $this->params['prefix'].'_reset_password');
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
 
@@ -123,7 +122,7 @@ class UsersController extends AppController {
 		if(!$this->data) {
 			return false;
 		}
-		if($this->Auth->login($this->data)) {
+		if($this->AuthEx->login($this->data)) {
 			return true;
 		}
 		return false;
@@ -136,23 +135,27 @@ class UsersController extends AppController {
  * @access 	public
  */
 	function admin_login() {
-
-		$user = $this->Auth->user();
-
+		
+		if($this->AuthEx->loginAction != ('/'.$this->params['url']['url'])) {
+			$this->notFound();
+		}
+		
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		if($this->data) {
 			if ($user) {
-				if (!empty($this->data['User']['saved'])) {
+				if (!empty($this->data[$userModel]['saved'])) {
 					$this->setAuthCookie($this->data);
-					unset($this->data['User']['save']);
+					unset($this->data[$userModel]['save']);
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->Session->setFlash("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
+				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
 			}
 		}
 
 		if ($user) {
-			$this->redirect($this->Auth->redirect());
+			$this->redirect($this->AuthEx->redirect());
 		}
 
 		$pageTitle = 'ログイン';
@@ -192,7 +195,7 @@ class UsersController extends AppController {
  */
 	function admin_logout() {
 
-		$this->Auth->logout();
+		$this->AuthEx->logout();
 		$this->Cookie->del('Auth.User');
 		$this->Session->setFlash('ログアウトしました');
 		$this->redirect(array($this->params['prefix']=>true, 'action'=>'login'));
@@ -216,7 +219,7 @@ class UsersController extends AppController {
 				'order'=>'User.user_group_id,User.id',
 				'limit'=>$this->passedArgs['num']
 		);
-		$dbDatas = $this->paginate('User');
+		$dbDatas = $this->paginate();
 
 		/* 表示設定 */
 		if($dbDatas) {
@@ -268,7 +271,7 @@ class UsersController extends AppController {
 				unset($this->data['User']['password_1']);
 				unset($this->data['User']['password_2']);
 				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
+					$this->data['User']['password'] = $this->AuthEx->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
@@ -283,8 +286,9 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->Auth->user();
-		if($user['User']['user_group_id'] != 1) {
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		if($user[$userModel]['user_group_id'] != 1) {
 			unset($userGroups[1]);
 		}
 		
@@ -311,15 +315,16 @@ class UsersController extends AppController {
 		}
 
 		$selfUpdate = false;
-		$user = $this->Auth->user();
-				
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		
 		if(empty($this->data)) {
 			$this->data = $this->User->read(null, $id);
-			if($user['User']['id'] == $this->data['User']['id']) {
+			if($user[$userModel]['id'] == $this->data['User']['id']) {
 				$selfUpdate = true;
 			}
 		}else {
-			if($user['User']['id'] == $this->data['User']['id']) {
+			if($user[$userModel]['id'] == $this->data['User']['id']) {
 				$selfUpdate = true;
 			}
 			/* 更新処理 */
@@ -334,7 +339,7 @@ class UsersController extends AppController {
 				unset($this->data['User']['password_1']);
 				unset($this->data['User']['password_2']);
 				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
+					$this->data['User']['password'] = $this->AuthEx->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
 				
@@ -354,8 +359,9 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->Auth->user();
-		if($user['User']['user_group_id'] != 1) {
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		if($user[$userModel]['user_group_id'] != 1) {
 			if($this->data['User']['user_group_id'] == 1) {
 				$editable = false;
 			} else {
@@ -433,7 +439,7 @@ class UsersController extends AppController {
 				return;
 			}
 			$password = $this->generatePassword();
-			$user['User']['password'] = $this->Auth->password($password);
+			$user['User']['password'] = $this->AuthEx->password($password);
 			$this->User->set($user);
 			if(!$this->User->save()) {
 				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');

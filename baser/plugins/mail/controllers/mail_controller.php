@@ -104,7 +104,7 @@ class MailController extends MailAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
+		$this->AuthEx->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
 
 		parent::beforeFilter();
 
@@ -347,6 +347,9 @@ class MailController extends MailAppController {
 
 		foreach($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
+			if(!isset($data['Message'][$field])) {
+				continue;
+			}
 			$value = $data['Message'][$field];
 			// ユーザーメールを取得
 			if($mailField['MailField']['type'] == 'email' && $value) {
