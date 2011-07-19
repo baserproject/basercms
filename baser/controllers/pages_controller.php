@@ -46,7 +46,7 @@ class PagesController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('AuthEx','Cookie','AuthConfigure', 'EmailEx');
 /**
  * モデル
  *
@@ -65,7 +65,7 @@ class PagesController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->Auth->allow('display','mobile_display');
+		$this->AuthEx->allow('display','mobile_display');
 
 		$noCache = array();
 		if((!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') && !isset($_SESSION['Auth']['User'])) {
@@ -77,9 +77,10 @@ class PagesController extends AppController {
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
 		}
 		
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
-				$user['User']['user_group_id'], 
+				$user[$userModel]['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);
@@ -746,8 +747,9 @@ class PagesController extends AppController {
  */
 	function admin_check_mobile_page_addable($type, $id) {
 		
-		$user = $this->Auth->user();
-		$userGroupId = $user['User']['user_group_id'];
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		$userGroupId = $user[$userModel]['user_group_id'];
 		$result = false;
 		while(true) {
 			$mobileId = $this->PageCategory->getMobileId($id);
@@ -840,8 +842,9 @@ class PagesController extends AppController {
 			$_options['empty'] = $options['empty'];
 		}
 		if(!empty($options['own'])) {
-			$user = $this->Auth->user();
-			$_options['userGroupId'] = $user['User']['user_group_id'];
+			$user = $this->AuthEx->user();
+			$userModel = $this->getUserModel();
+			$_options['userGroupId'] = $user[$userModel]['user_group_id'];
 		}
 		
 		return $this->Page->getControlSource('page_category_id', $_options);
@@ -857,7 +860,8 @@ class PagesController extends AppController {
  */
 	function checkCurrentEditable($pageCategoryId, $ownerId) {
 		
-		$user = $this->Auth->user();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
 		$editable = false;
 
 		if(!$pageCategoryId) {
@@ -866,8 +870,8 @@ class PagesController extends AppController {
 			$currentCatOwner = $ownerId;
 		}
 		
-		return ($currentCatOwner == $user['User']['user_group_id'] ||
-					$user['User']['user_group_id'] == 1 || !$currentCatOwner);
+		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
+					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
 
 	}
 	

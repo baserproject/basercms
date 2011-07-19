@@ -155,9 +155,9 @@ class ContentsController extends AppController {
  * @param mixid $parentCategoryId / '' / 0
  * @return type 
  */
-	function get_page_list_recursive($parentCategoryId = null) {
+	function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		
-		return $this->__getPageListRecursive($parentCategoryId);
+		return $this->__getPageListRecursive($parentCategoryId, $recursive);
 		
 	}
 /**
@@ -166,7 +166,7 @@ class ContentsController extends AppController {
  * @param mixid $parentCategoryId / '' / 0
  * @return string 
  */
-	function __getPageListRecursive($parentCategoryId = null) {
+	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
 		$direct = false;
 		$mobileId = $this->Page->PageCategory->getMobileId();
@@ -211,9 +211,10 @@ class ContentsController extends AppController {
 		// カテゴリごとの子カテゴリ取得
 		$children = array();
 		if($pageCategories) {
+			$level++;
 			foreach ($pageCategories as $key => $pageCategory) {
-				$children = $this->__getPageListRecursive($pageCategory['PageCategory']['id']);
-				if($children) {
+				$children = $this->__getPageListRecursive($pageCategory['PageCategory']['id'], $recursive, $level);
+				if($children && (is_null($recursive) || $recursive > $level)) {
 					$pageCategories[$key]['children'] = $children;
 				}
 				if(isset($children['pages'])) {

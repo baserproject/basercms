@@ -27,6 +27,13 @@ if(!isset($recursive)) {
 }
 ?>
 <ul class="sitemap ul-level-<?php echo $recursive ?>">
+<?php if(isset($pageList['pages'])): ?>
+	<?php foreach($pageList['pages'] as $page): ?>
+		<?php if($page['Page']['title']): ?>
+	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $baser->link($page['Page']['title'], $page['Page']['url']) ?></li>
+		<?php endif ?>
+	<?php endforeach; ?>
+<?php endif ?>
 <?php if(isset($pageList['pageCategories'])): ?>
 	<?php foreach($pageList['pageCategories'] as $pageCategories): ?>
 	<li class="sitemap-page li-level-<?php echo $recursive ?>">
@@ -42,12 +49,5 @@ if(!isset($recursive)) {
 		<?php endif ?>
 	</li>
 	<?php endforeach ?>
-<?php endif ?>
-<?php if(isset($pageList['pages'])): ?>
-	<?php foreach($pageList['pages'] as $page): ?>
-		<?php if($page['Page']['title']): ?>
-	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $baser->link($page['Page']['title'], $page['Page']['url']) ?></li>
-		<?php endif ?>
-	<?php endforeach; ?>
 <?php endif ?>
 </ul>

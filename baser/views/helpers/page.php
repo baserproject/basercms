@@ -91,6 +91,51 @@ class PageHelper extends Helper {
 		}
 	}
 /**
+ * 現在のページが所属する親のカテゴリを取得する
+ *
+ * @param boolean $top
+ * @return array
+ */
+	function getParentCategory($top = false) {
+		$category = $this->getCategory();
+		if(empty($category['id'])) {
+			return false;
+		}
+		if($top) {
+			$path = $this->Page->PageCategory->getpath($category['id']);
+			if($path) {
+				$parent = $path[0];
+			} else {
+				return false;
+			}
+		} else {
+			$parent = $this->Page->PageCategory->getparentnode($category['id']);
+		}
+		return $parent;
+	}
+/**
+ * ページリストを取得する
+ * 
+ * @param int $pageCategoryId
+ * @param int $recursive
+ * @return array
+ */
+	function getPageList($pageCategoryId, $recursive = null) {
+		return $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
+	}
+/**
+ * カテゴリ名を取得する
+ * @return mixed string / false
+ */
+	function getCategoryName(){
+		$category = $this->getCategory();
+		if($category['name']) {
+			return $category['name'];
+		} else {
+			return false;
+		}
+	}
+/**
  * 公開状態を取得する
  *
  * @param	array	データリスト

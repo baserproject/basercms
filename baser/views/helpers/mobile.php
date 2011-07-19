@@ -45,6 +45,8 @@ class MobileHelper extends Helper {
 		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
 
 			$view->output = str_replace('＆', '&amp;', $view->output);
+			$view->output = str_replace('＜', '&lt;', $view->output);
+			$view->output = str_replace('＞', '&gt;', $view->output);
 			$view->output = mb_convert_kana($view->output, "rak", "UTF-8");
 			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
 

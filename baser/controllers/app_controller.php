@@ -267,13 +267,14 @@ class AppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->Auth) && isset($this->params['action']) && empty($this->params['requested'])) {
-			if(!$this->Auth->allowedActions || !in_array($this->params['action'], $this->Auth->allowedActions)) {
-				$user = $this->Auth->user();
+		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('Mobile.on') && isset($this->params['action']) && empty($this->params['requested'])) {
+			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
+				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
-				if(!$Permission->check($this->params['url']['url'],$user['User']['user_group_id'])) {
+				$userModel = Configure::read('AuthPrefix.'.$this->params['prefix'].'.userModel');
+				if(!$Permission->check($this->params['url']['url'],$user[$this->AuthEx->userModel]['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
-					$this->redirect($this->Auth->loginAction);
+					$this->redirect($this->AuthEx->loginAction);
 				}
 			}
 		}
@@ -1102,7 +1103,7 @@ class AppController extends Controller {
 	function isAuthorized() {
 
 		$requestedPrefix = '';
-		$authPrefix = $this->getAuthPreifx($this->Auth->user('name'));
+		$authPrefix = $this->getAuthPreifx($this->AuthEx->user('name'));
 
 		if(!$authPrefix) {
 			// 1.6.8 以下の場合は authPrefix が取得できないので true を返して終了
@@ -1117,11 +1118,11 @@ class AppController extends Controller {
 			if($authPrefix != Configure::read('Routing.admin')) {
 				// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
 				$ref = $this->referer();
-				$loginAction = Router::normalize($this->Auth->loginAction);
+				$loginAction = Router::normalize($this->AuthEx->loginAction);
 				if($ref == $loginAction) {
 					$this->Session->delete('Auth.User');
 					$this->Session->delete('Message.flash');
-					$this->Auth->authError = $this->Auth->loginError;
+					$this->AuthEx->authError = $this->AuthEx->loginError;
 					return false;
 				} else {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
@@ -1208,16 +1209,33 @@ class AppController extends Controller {
  */
 	function checkRootEditable() {
 		
-		if(!isset($this->Auth)) {
+		if(!isset($this->AuthEx)) {
 			return false;
 		}
-		$user = $this->Auth->user();
-		if($this->siteConfigs['root_owner_id'] == $user['User']['user_group_id'] ||
-				!$this->siteConfigs['root_owner_id'] || $user['User']['user_group_id'] == 1) {
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		if(!$user || !$userModel) {
+			return false;
+		}
+		if(@$this->siteConfigs['root_owner_id'] == $user[$userModel]['user_group_id'] ||
+				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == 1) {
 			return true;
 		} else {
 			return false;
 		}
+		
+	}
+/**
+ * ユーザーモデルを取得する
+ * 
+ * @return mixed string Or false
+ */
+	function getUserModel() {
+		
+		if(!isset($this->AuthEx)) {
+			return false;
+		}
+		return $this->AuthEx->userModel;
 		
 	}
 	

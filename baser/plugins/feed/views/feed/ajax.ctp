@@ -44,6 +44,7 @@ var errorCallback = function (xml, status, e)
 $.ajax({
 	type: 'GET',
 	url:      '<?php echo Router::url('/feed/index/'.$id); ?>',
+	cache: false,
 	success:  successCallback,
 	error:    errorCallback
 });

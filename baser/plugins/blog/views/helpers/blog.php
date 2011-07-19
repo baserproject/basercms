@@ -204,20 +204,20 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return void
  */
-	function category($post) {
-		echo $this->getCategory($post);
+	function category($post, $options = array()) {
+		echo $this->getCategory($post, $options);
 	}
 /**
  * カテゴリを取得する
  * @param array $post
  * @return string
  */
-	function getCategory($post) {
+	function getCategory($post, $options = array()) {
 		if(!empty($post['BlogCategory']['name'])) {
 			if(!isset($this->Html)){
 				$this->Html = new HtmlHelper();
 			}
-			return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),null,null,false);
+			return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),$options,null,false);
 		}else {
 			return '';
 		}
@@ -255,6 +255,9 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * カテゴリのURLを取得する
+ * 
+ * [注意] リンク関数でラップする前提の為、ベースURLは考慮されない
+ * 
  * @param string $blogCategoyId
  * @return void
  */
@@ -321,6 +324,7 @@ class BlogHelper extends AppHelper {
 		if($depth < $current) {
 			return '';
 		}
+		$baseCurrentUrl = $this->blogContent['name'].'/archives/category/';
 		if($categories) {
 			$out = '<ul class="depth-'.$current.'">';
 			$current++;
@@ -328,7 +332,14 @@ class BlogHelper extends AppHelper {
 				if($count && isset($category['BlogCategory']['count'])) {
 					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
 				}
-				$out .= '<li>'.$this->getCategory($category);
+				if($this->_view->params['url']['url'] == $baseCurrentUrl.$category['BlogCategory']['name']) {
+					$class = ' class="current"';
+				} elseif($this->_view->params['named']['category'] == $category['BlogCategory']['name']) {
+					$class = ' class="selected"';
+				} else {
+					$class = '';
+				}
+				$out .= '<li'.$class.'>'.$this->getCategory($category);
 				if(!empty($category['children'])) {
 					$out.= $this->_getCategoryList($category['children'],$depth,$current, $count);
 				}

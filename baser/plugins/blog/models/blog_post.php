@@ -130,8 +130,15 @@ class BlogPost extends BlogAppModel {
  * @return array    月別リストデータ
  * @access public
  */
-	function getBlogDates($blogContentId, $count = false) {
+	function getPostedDates($blogContentId, $options) {
 
+		$options = array_merge(array(
+			'count'		=> false, 
+			'viewCount'	=> false, 
+			'type'		=> 'month'
+		), $options);
+		
+		extract($options);
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 		$conditions = am($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
@@ -147,29 +154,54 @@ class BlogPost extends BlogAppModel {
 		));
 
 		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
-
 		$dates = array();
+		$counter = 0;
+		
 		foreach($postsDates as $postsDate) {
+			
 			$exists = false;
 			$_date = array();
+			
 			foreach($dates as $key => $date) {
-				if($date['year'] == date('Y',strtotime($postsDate)) &&
-						$date['month'] == date('m',strtotime($postsDate))) {
+				
+				if($type == 'year' && $date['year'] == date('Y',strtotime($postsDate))) {
 					$exists = true;
-					if($count) {
+				}
+				if($type == 'month' && 
+						$date['year'] == date('Y',strtotime($postsDate)) &&
+						$date['month'] == date('m',strtotime($postsDate))) {				
+					$exists = true;
+				}
+				
+				if($exists) {				
+					if($viewCount) {
 						$dates[$key]['count']++;
 					}
+					break;
 				}
+				
 			}
+			
 			if(!$exists) {
-				$_date['year'] = date('Y',strtotime($postsDate));
-				$_date['month'] = date('m',strtotime($postsDate));
-				if($count) {
+				if($type == 'year') {
+					$_date['year'] = date('Y',strtotime($postsDate));
+				} else {
+					$_date['year'] = date('Y',strtotime($postsDate));
+					$_date['month'] = date('m',strtotime($postsDate));
+				}
+				if($viewCount) {
 					$_date['count'] = 1;
 				}
 				$dates[] = $_date;
+				$counter++;
 			}
+			
+			if($count !== false && $count <= $counter) {
+				break;
+			}
+			
 		}
+		
 		return $dates;
 
 	}

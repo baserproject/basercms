@@ -173,17 +173,29 @@
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
 	function getParamsFromEnv() {
+		
+		
+		if(!isset($_SERVER['REQUEST_URI'])) {
+			return;
+		} else {
+			$requestUri = $_SERVER['REQUEST_URI'];
+		}
+
 		$appBaseUrl = Configure::read('App.baseUrl');
 		$parameter = '';
+		
 		if($appBaseUrl) {
+			
 			$base = dirname($appBaseUrl);
-			if(strpos($_SERVER['REQUEST_URI'], $appBaseUrl) !== false) {
-				$parameter = str_replace($appBaseUrl,'',$_SERVER['REQUEST_URI']);
+			if(strpos($requestUri, $appBaseUrl) !== false) {
+				$parameter = str_replace($appBaseUrl, '', $requestUri);
 			}else {
 				// トップページ
-				$parameter = str_replace($base.'/','',$_SERVER['REQUEST_URI']);
+				$parameter = str_replace($base.'/', '', $requestUri);
 			}
+			
 		}else {
+			
 			$parameter = '';
 			if(isset($_SERVER['QUERY_STRING'])) {
 				$query = $_SERVER['QUERY_STRING'];
@@ -209,13 +221,14 @@
 					}
 				}
 
-			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', @$_SERVER['REQUEST_URI'])){
-				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', @$_SERVER['REQUEST_URI']);
+			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $requestUri)){
+				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', $requestUri);
 			} else {
-				$parameter = @$_SERVER['REQUEST_URI'];
+				$parameter = $requestUri;
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
+		
 		return $parameter;
 
 	}
@@ -229,7 +242,7 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='.php') {
+	function clearViewCache($url=null,$ext='') {
 
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {

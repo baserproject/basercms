@@ -30,8 +30,8 @@ if(isset($blogContent)){
 $data = $this->requestAction('/blog/get_recent_entries/'.$id.'/'.$count);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
+$baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
 ?>
-
 <div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?>">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
@@ -39,7 +39,12 @@ $blogContent = $data['blogContent'];
 	<?php if($recentEntries): ?>
 	<ul>
 		<?php foreach($recentEntries as $recentEntry): ?>
-		<li>
+			<?php if($this->params['url']['url'] == $baseCurrentUrl.$recentEntry['BlogPost']['no']): ?>
+				<?php $class = ' class="current"' ?>
+			<?php else: ?>
+				<?php $class = '' ?>
+			<?php endif ?>
+		<li<?php echo $class ?>>
 			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no']),array('prefix'=>true)) ?>
 		</li>
 		<?php endforeach; ?>

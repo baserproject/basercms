@@ -3,25 +3,25 @@
  * http://www.exgear.jp/blog/2008/11/method_cache_behavior/
  */
 class CacheBehavior extends ModelBehavior {
-	static $cacheData = array();
 	var $enabled = true;
 	function setup(&$model, $config = array()) {}
 	/**
 	 * メソッドキャッシュ
 	 */
 	function cacheMethod(&$model, $expire, $method, $args = array()){
+		static $cacheData = array();
 		$this->enabled = false;
 		// キャッシュキー
 		$cachekey = get_class($model) . '_' . $method . '_'  . $expire . '_' . md5(serialize($args));
 		// 変数キャッシュの場合
 		if(!$expire){
-			if (isset($this->cacheData[$cachekey])) {
+			if (isset($cacheData[$cachekey])) {
 				$this->enabled = true;
-				return $this->cacheData[$cachekey];
+				return $cacheData[$cachekey];
 			}
 			$ret = call_user_func_array(array($model, $method), $args);
 			$this->enabled = true;
-			$this->cacheData[$cachekey] = $ret;
+			$cacheData[$cachekey] = $ret;
 			return $ret;
 		}
 		// サーバーキャッシュの場合
@@ -33,7 +33,7 @@ class CacheBehavior extends ModelBehavior {
 			}
 			return $ret;
 		}
-		$ret = call_user_func_array(array($model, $method), $args);
+		$ret = call_user_func_array(array(&$model, $method), $args);
 		$this->enabled = true;
 		if($ret === false) {
 			$_ret = "{false}";

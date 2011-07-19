@@ -177,12 +177,12 @@ class User extends AppModel {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成
 			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
 			foreach($users as $key => $user) {
-				if($user['User']['real_name_2']) {
-					$name = $user['User']['real_name_1']." ".$user['User']['real_name_2'];
+				if($user[$this->alias]['real_name_2']) {
+					$name = $user[$this->alias]['real_name_1']." ".$user[$this->alias]['real_name_2'];
 				}else {
-					$name = $user['User']['real_name_1'];
+					$name = $user[$this->alias]['real_name_1'];
 				}
-				$list[$user['User']['id']] = $name;
+				$list[$user[$this->alias]['id']] = $name;
 			}
 		}
 		return $list;

@@ -22,6 +22,6 @@
 $title = 'ブログカレンダー';
 $description = 'ブログのカレンダーを表示します。';
 ?>
-<?php echo $formEx->label($key.'.blog_content_id','ブログ') ?>&nbsp;
-<?php echo $formEx->select($key.'.blog_content_id',$formEx->getControlSource('Blog.BlogContent.id'),null,null,false) ?><br />
+<?php echo $formEx->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
+<?php echo $formEx->select($key.'.blog_content_id', $formEx->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
 <small>ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカレンダーを表示します。</small>

@@ -55,7 +55,7 @@ class BlogCommentsController extends BlogAppController {
  * @var     array
  * @access  public
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx','Security','Captcha');
+	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler','EmailEx','Security','Captcha');
 /**
  * ぱんくずナビ
  *
@@ -80,7 +80,7 @@ class BlogCommentsController extends BlogAppController {
 
 		parent::beforeFilter();
 
-		$this->Auth->allow('add','captcha');
+		$this->AuthEx->allow('add','captcha');
 
 		$navis = array();
 		if(!empty($this->params['pass'][1])) {

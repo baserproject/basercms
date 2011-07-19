@@ -12,7 +12,7 @@
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			blog.controllers
+ * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -55,7 +55,7 @@ class BlogController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('Auth', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
+	var $components = array('AuthEx', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
 /**
  * ぱんくずナビ
  *
@@ -95,9 +95,9 @@ class BlogController extends BlogAppController {
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->Auth->allow(
+		$this->AuthEx->allow(
 			'index', 'mobile_index', 'archives', 'mobile_archives',
-			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
+			'get_calendar', 'get_categories', 'get_posted_dates', 'get_recent_entries',
 			'posts', 'mobile_posts'
 		);
 		
@@ -151,45 +151,26 @@ class BlogController extends BlogAppController {
  */
 	function index() {
 
-		if($this->contentId) {
-			$contentId = $this->contentId;
-		}else {
-			// TODO ブログの数を確認し、一つであればそのIDを格納し、記事が複数の場合はnotFoundとする？
-			// もしくは、デフォルト設定させるか、idが一番小さいものをデフォルトとするか。
-			$contentId = 1;
-		}
-
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
-			$this->set('channel', array('title' => h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
-					'description' => h($this->blogContent['BlogContent']['description'])));
+			$this->set('channel', array(
+				'title'			=> h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
+				'description'	=> h($this->blogContent['BlogContent']['description'])
+			));
 			$this->layout = 'default';
-			$limit = $this->blogContent['BlogContent']['feed_count'];
 			$template = 'index';
+			$limit = $this->blogContent['BlogContent']['feed_count'];
 		}else {
 			$this->layout = $this->blogContent['BlogContent']['layout'];
-			$limit = $this->blogContent['BlogContent']['list_count'];
 			$template = $this->blogContent['BlogContent']['template'].DS.'index';
+			$limit = $this->blogContent['BlogContent']['list_count'];
 		}
 
-		/* ブログ記事一覧を取得 */
-		$conditions["BlogPost.blog_content_id"] = $contentId;
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-
-		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogContent'), false);
-		// 毎秒抽出条件が違うのでキャッシュしない
-		$this->paginate = array(
-				'conditions'=> $conditions,
-				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
-				'limit'		=> $limit,
-				'recursive'	=> 1,
-				'cache'		=> false
-		);
-		$this->set('posts', $this->paginate('BlogPost'));
-
-		/* 表示設定 */
-		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
-		$this->set('single',false);
+		$datas = $this->_getBlogPosts(array('limit' => $limit));
+		
+		$this->set('posts', $datas);
+		$this->set('single', false);
+		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
 		$this->navis = array();
 		$this->render($template);
@@ -263,12 +244,12 @@ class BlogController extends BlogAppController {
 			/* タグ別記事一覧 */
 			case 'tag':
 
-				$tag = urldecode($pass[count($pass)-1]);
+				$tag = $pass[count($pass)-1];
 				if(empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(array('tag' => $tag));
-				$this->pageTitle = $tag;
+				$this->pageTitle = urldecode($tag);
 				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 				break;
 				
@@ -430,7 +411,7 @@ class BlogController extends BlogAppController {
 			'day'			=> null,
 			'id'			=> null
 		);
-			
+
 		$options = am($_options, $options);
 		if(!empty($this->params['named'])) {
 			$options = am($options, $this->params['named']);
@@ -460,7 +441,7 @@ class BlogController extends BlogAppController {
 		
 		// タグ条件
 		if($tag) {
-			
+			$tag = urldecode($tag);
 			$tags = $this->BlogPost->BlogTag->find('all', array(
 				'conditions'=> array('BlogTag.name' => $tag), 
 				'recursive'	=> 1
@@ -665,12 +646,35 @@ class BlogController extends BlogAppController {
  * @return mixed $count
  * @access public
  */
-	function get_blog_dates($id, $count = false){
+	function get_posted_months($id, $count = 12, $viewCount = false){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
-		$data['blogDates'] = $this->BlogPost->getBlogDates($id, $count);
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'month', 
+			'count'		=> $count, 
+			'viewCount'	=> $viewCount
+		));
+		return $data;
+		
+	}
+/**
+ * 年別アーカイブ一覧用のデータを取得する
+ * 
+ * @param int $id
+ * @return mixed $count
+ * @access public
+ */
+	function get_posted_years($id, $viewCount = false){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'year', 
+			'viewCount'	=> $viewCount
+		));
 		return $data;
 		
 	}
@@ -713,18 +717,9 @@ class BlogController extends BlogAppController {
 	function posts($blogContentId, $num = 5) {
 		
 		$this->layout = null;
-		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-		$this->BlogPost->unbindModel(array('belongsTo' => array('BlogContent', 'User')));
-		// 毎秒抽出条件が違うのでキャッシュしない
-		$posts = $this->BlogPost->find('all', array(
-				'conditions'=> $conditions,
-				'limit'		=> $num,
-				'order'		=> 'posts_date DESC',
-				'recursive'	=> 1,
-				'cache'		=> false
-		));
-		$this->set('posts', $posts);
+		$this->contentId = $blogContentId;
+		$datas = $this->_getBlogPosts(array('listCount' => $num));
+		$this->set('posts', $datas);
 		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
 		
 	}

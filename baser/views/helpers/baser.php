@@ -374,9 +374,9 @@ class BaserHelper extends AppHelper {
 
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
-			$params['subDir'] = false;
-		} else {
 			$params['subDir'] = true;
+		} else {
+			$params['subDir'] = false;
 		}
 		return $this->_view->element($name, $params, $loadHelpers);
 
@@ -954,9 +954,9 @@ class BaserHelper extends AppHelper {
  * 
  * @param mixid $pageCategoryId / '' / 0
  */
-	function sitemap($pageCategoryId = null) {
+	function sitemap($pageCategoryId = null, $recursive = null) {
 
-		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId)));
+		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		$params = array('pageList' => $pageList);
 		if(empty($_SESSION['Auth']['User'])) {
 			$params = am($params, array(

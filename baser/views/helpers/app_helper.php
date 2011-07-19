@@ -139,9 +139,7 @@ class AppHelper extends Helper {
 					break;
 				case 2:
 					$baseDir = str_replace('index.php', '', $baseUrl);
-					if (preg_match('/\/'.$webroot.'\/$/', $baseDir)) {
-						$this->webroot = $baseDir;
-					}
+					$this->webroot = $baseDir;
 					break;
 			}
 		}
@@ -165,7 +163,7 @@ class AppHelper extends Helper {
 		// ---
 		if(file_exists(WWW_ROOT . $file)) {
 			$webPath = $this->webroot.$file;
-		} elseif(file_exists(docRoot().$file)) {
+		} elseif(file_exists(docRoot().DS.$file)) {
 			$webPath = $file;
 		} else {
 			$webPath = Router::url('/'.$file);

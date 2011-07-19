@@ -46,7 +46,7 @@ if(!empty($cn->config->baser['driver'])) {
 	if($authPrefixes) {
 		foreach($authPrefixes as $key => $authPrefix) {
 			if($key != $adminPrefix) {
-				Router::connect('/mypage', array('prefix'=>$key, 'controller' => 'users', 'action' => 'auth_prefix_error'));
+				Router::connect('/'.$key, array('prefix'=>$key, 'controller' => 'users', 'action' => 'auth_prefix_error'));
 				Router::connect('/'.$key.'/:controller/:action/*', array('prefix' => $key, $key => true));
 			}
 		}

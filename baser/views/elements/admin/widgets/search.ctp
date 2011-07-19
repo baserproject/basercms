@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] PHPテンプレート読み込みウィジェット
+ * [ADMIN] サイト内検索フォーム設定
  *
  * PHP versions 4 and 5
  *
@@ -12,17 +12,13 @@
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			baser.plugins.blog.views
+ * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$title = 'サイト内検索';
+$description = 'サイト内検索フォームを表示します。';
 ?>
-<div class="widget widget-php-template widget-php-template-<?php echo $id ?>">
-<?php if($name && $use_title): ?>
-<h2><?php echo $name ?></h2>
-<?php endif ?>
-<?php $baser->element('widgets'.DS.$template, array(), false, $subDir) ?>
-</div>
