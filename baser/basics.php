@@ -242,7 +242,7 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='') {
+	function clearViewCache($url=null,$ext='.php') {
 
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
@@ -274,13 +274,7 @@
 			$files = $folder->read(true,true);
 			foreach($files[1] as $file) {
 				if($file != 'empty') {
-					if($ext) {
-						if(preg_match('/'.str_replace('.', '\.', $ext).'$/is', $file)) {
-							@unlink(CACHE.'views'.DS.$file);
-						}
-					}else {
-						@unlink(CACHE.'views'.DS.$file);
-					}
+					@unlink(CACHE.'views'.DS.$file);
 				}
 			}
 		}
