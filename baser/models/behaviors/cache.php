@@ -33,7 +33,7 @@ class CacheBehavior extends ModelBehavior {
 			}
 			return $ret;
 		}
-		$ret = call_user_func_array(array($model, $method), $args);
+		$ret = call_user_func_array(array(&$model, $method), $args);
 		$this->enabled = true;
 		if($ret === false) {
 			$_ret = "{false}";

@@ -272,7 +272,7 @@ class AppController extends Controller {
 				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
 				$userModel = Configure::read('AuthPrefix.'.$this->params['prefix'].'.userModel');
-				if(!$Permission->check($this->params['url']['url'],$user[$userModel]['user_group_id'])) {
+				if(!$Permission->check($this->params['url']['url'],$user[$this->AuthEx->userModel]['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
 					$this->redirect($this->AuthEx->loginAction);
 				}
