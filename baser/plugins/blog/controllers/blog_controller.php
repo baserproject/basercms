@@ -151,14 +151,6 @@ class BlogController extends BlogAppController {
  */
 	function index() {
 
-		if($this->contentId) {
-			$contentId = $this->contentId;
-		}else {
-			// TODO ブログの数を確認し、一つであればそのIDを格納し、記事が複数の場合はnotFoundとする？
-			// もしくは、デフォルト設定させるか、idが一番小さいものをデフォルトとするか。
-			$contentId = 1;
-		}
-
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
 			$this->set('channel', array(
@@ -166,30 +158,17 @@ class BlogController extends BlogAppController {
 				'description'	=> h($this->blogContent['BlogContent']['description'])
 			));
 			$this->layout = 'default';
-			$limit = $this->blogContent['BlogContent']['feed_count'];
 			$template = 'index';
+			$limit = $this->blogContent['BlogContent']['feed_count'];
 		}else {
 			$this->layout = $this->blogContent['BlogContent']['layout'];
-			$limit = $this->blogContent['BlogContent']['list_count'];
 			$template = $this->blogContent['BlogContent']['template'].DS.'index';
+			$limit = $this->blogContent['BlogContent']['list_count'];
 		}
 
-		/* ブログ記事一覧を取得 */
-		$conditions["BlogPost.blog_content_id"] = $contentId;
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-
-		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogContent'), false);
-		// 毎秒抽出条件が違うのでキャッシュしない
-		$this->paginate = array(
-				'conditions'=> $conditions,
-				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
-				'limit'		=> $limit,
-				'recursive'	=> 1,
-				'cache'		=> false
-		);
-		$this->set('posts', $this->paginate('BlogPost'));
-
-		/* 表示設定 */
+		$datas = $this->_getBlogPosts(array('limit' => $limit));
+		
+		$this->set('posts', $datas);
 		$this->set('single', false);
 		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
@@ -265,12 +244,12 @@ class BlogController extends BlogAppController {
 			/* タグ別記事一覧 */
 			case 'tag':
 
-				$tag = urldecode($pass[count($pass)-1]);
+				$tag = $pass[count($pass)-1];
 				if(empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(array('tag' => $tag));
-				$this->pageTitle = $tag;
+				$this->pageTitle = urldecode($tag);
 				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 				break;
 				
@@ -462,7 +441,7 @@ class BlogController extends BlogAppController {
 		
 		// タグ条件
 		if($tag) {
-			
+			$tag = urldecode($tag);
 			$tags = $this->BlogPost->BlogTag->find('all', array(
 				'conditions'=> array('BlogTag.name' => $tag), 
 				'recursive'	=> 1
