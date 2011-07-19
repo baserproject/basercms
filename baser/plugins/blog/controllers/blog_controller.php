@@ -694,18 +694,9 @@ class BlogController extends BlogAppController {
 	function posts($blogContentId, $num = 5) {
 		
 		$this->layout = null;
-		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-		$this->BlogPost->unbindModel(array('belongsTo' => array('BlogContent', 'User')));
-		// 毎秒抽出条件が違うのでキャッシュしない
-		$posts = $this->BlogPost->find('all', array(
-				'conditions'=> $conditions,
-				'limit'		=> $num,
-				'order'		=> 'posts_date DESC',
-				'recursive'	=> 1,
-				'cache'		=> false
-		));
-		$this->set('posts', $posts);
+		$this->contentId = $blogContentId;
+		$datas = $this->_getBlogPosts(array('listCount' => $num));
+		$this->set('posts', $datas);
 		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
 		
 	}
