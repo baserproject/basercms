@@ -12,7 +12,7 @@
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			blog.controllers
+ * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -161,8 +161,10 @@ class BlogController extends BlogAppController {
 
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
-			$this->set('channel', array('title' => h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
-					'description' => h($this->blogContent['BlogContent']['description'])));
+			$this->set('channel', array(
+				'title'			=> h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
+				'description'	=> h($this->blogContent['BlogContent']['description'])
+			));
 			$this->layout = 'default';
 			$limit = $this->blogContent['BlogContent']['feed_count'];
 			$template = 'index';
@@ -188,8 +190,8 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		/* 表示設定 */
-		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
-		$this->set('single',false);
+		$this->set('single', false);
+		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
 		$this->navis = array();
 		$this->render($template);
@@ -430,7 +432,7 @@ class BlogController extends BlogAppController {
 			'day'			=> null,
 			'id'			=> null
 		);
-			
+
 		$options = am($_options, $options);
 		if(!empty($this->params['named'])) {
 			$options = am($options, $this->params['named']);
