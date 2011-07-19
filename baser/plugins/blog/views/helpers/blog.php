@@ -324,6 +324,7 @@ class BlogHelper extends AppHelper {
 		if($depth < $current) {
 			return '';
 		}
+		$baseCurrentUrl = $this->blogContent['name'].'/archives/category/';
 		if($categories) {
 			$out = '<ul class="depth-'.$current.'">';
 			$current++;
@@ -331,7 +332,14 @@ class BlogHelper extends AppHelper {
 				if($count && isset($category['BlogCategory']['count'])) {
 					$category['BlogCategory']['title'] .= '('.$category['BlogCategory']['count'].')';
 				}
-				$out .= '<li>'.$this->getCategory($category);
+				if($this->_view->params['url']['url'] == $baseCurrentUrl.$category['BlogCategory']['name']) {
+					$class = ' class="current"';
+				} elseif($this->_view->params['named']['category'] == $category['BlogCategory']['name']) {
+					$class = ' class="selected"';
+				} else {
+					$class = '';
+				}
+				$out .= '<li'.$class.'>'.$this->getCategory($category);
 				if(!empty($category['children'])) {
 					$out.= $this->_getCategoryList($category['children'],$depth,$current, $count);
 				}

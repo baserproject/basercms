@@ -97,7 +97,7 @@ class BlogController extends BlogAppController {
 		/* 認証設定 */
 		$this->AuthEx->allow(
 			'index', 'mobile_index', 'archives', 'mobile_archives',
-			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
+			'get_calendar', 'get_categories', 'get_posted_dates', 'get_recent_entries',
 			'posts', 'mobile_posts'
 		);
 		
@@ -646,12 +646,35 @@ class BlogController extends BlogAppController {
  * @return mixed $count
  * @access public
  */
-	function get_blog_dates($id, $count = false){
+	function get_posted_months($id, $count = 12, $viewCount = false){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
-		$data['blogDates'] = $this->BlogPost->getBlogDates($id, $count);
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'month', 
+			'count'		=> $count, 
+			'viewCount'	=> $viewCount
+		));
+		return $data;
+		
+	}
+/**
+ * 年別アーカイブ一覧用のデータを取得する
+ * 
+ * @param int $id
+ * @return mixed $count
+ * @access public
+ */
+	function get_posted_years($id, $viewCount = false){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'year', 
+			'viewCount'	=> $viewCount
+		));
 		return $data;
 		
 	}
