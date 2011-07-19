@@ -1,13 +1,13 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] サイト内検索フォーム
- * 
+ * [PUBLISH] サイト内検索フォームウィジェット
+ *
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
+ *								9-5 nagao 3-chome, fukuoka-shi
  *								fukuoka, Japan 814-0123
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
@@ -25,7 +25,10 @@ if(!empty($this->passedArgs['num'])) {
 	$url = array('plugin' => null, 'controller' => 'contents');
 }
 ?>
-<div class="section search-box">
+<div class="widget widget-site-search widgetsite-search-<?php echo $id ?>">
+<?php if($name && $use_title): ?>
+<h2><?php echo $name ?></h2>
+<?php endif ?>
 <?php echo $formEx->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
 <?php if(unserialize($baser->siteConfig['content_categories'])) : ?>
 <?php echo $formEx->input('Content.c', array('type' => 'select', 'options' => unserialize($baser->siteConfig['content_categories']), 'empty' => 'カテゴリ： 指定しない　')) ?>
