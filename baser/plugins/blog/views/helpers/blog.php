@@ -334,7 +334,7 @@ class BlogHelper extends AppHelper {
 				}
 				if($this->_view->params['url']['url'] == $baseCurrentUrl.$category['BlogCategory']['name']) {
 					$class = ' class="current"';
-				} elseif($this->_view->params['named']['category'] == $category['BlogCategory']['name']) {
+				} elseif(!empty($this->_view->params['named']['category']) && $this->_view->params['named']['category'] == $category['BlogCategory']['name']) {
 					$class = ' class="selected"';
 				} else {
 					$class = '';
