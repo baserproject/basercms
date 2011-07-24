@@ -97,7 +97,7 @@ class BlogController extends BlogAppController {
 		/* 認証設定 */
 		$this->AuthEx->allow(
 			'index', 'mobile_index', 'archives', 'mobile_archives',
-			'get_calendar', 'get_categories', 'get_posted_dates', 'get_recent_entries',
+			'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries',
 			'posts', 'mobile_posts'
 		);
 		
