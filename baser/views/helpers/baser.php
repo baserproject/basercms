@@ -691,21 +691,23 @@ class BaserHelper extends AppHelper {
 		$url2 = '';
 
 		if(!empty($this->params['prefix'])) {
-			$prefix = $this->params['prefix'];
+			$prefix = h($this->params['prefix']);
 		}
 		if(!empty($this->params['plugin'])) {
-			$plugin = $this->params['plugin'];
+			$plugin = h($this->params['plugin']);
 		}
-		$controller = $this->params['controller'];
+		$controller = h($this->params['controller']);
 		if($prefix) {
-			$action = str_replace($prefix.'_','',$this->params['action']);
+			$action = str_replace($prefix.'_', '', h($this->params['action']));
 		}else {
-			$action = $this->params['action'];
+			$action = h($this->params['action']);
 		}
 		if(!empty($this->params['pass'][0])) {
-			$pass = $this->params['pass'];
+			foreach($this->params['pass'][0] as $key => $value) {
+				$pass[$key] = h($value);
+			}
 		}
-		$url = split('/',$this->params['url']['url']);
+		$url = split('/', h($this->params['url']['url']));
 		if(isset($url[0])) {
 			$url0 = $url[0];
 		}
@@ -719,10 +721,10 @@ class BaserHelper extends AppHelper {
 		// ページ機能の場合
 		if($controller=='pages' && $action=='display') {
 			
-			if(strpos($this->params['pass'][0], 'pages/') !== false) {
-				$pageUrl = str_replace('pages/','',$this->params['pass'][0]);
+			if(strpos($pass[0], 'pages/') !== false) {
+				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
-				$pageUrl = $this->params['url']['url'];
+				$pageUrl = $url;
 			}
 			$pos = strpos($pageUrl,'.html');
 			if($pos !== false) {
