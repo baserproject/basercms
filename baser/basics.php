@@ -267,6 +267,7 @@
 				clearCache($home);
 			}
 		}elseif($url) {
+			$url = preg_replace('/\/index$/', '', $url);
 			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
 		}else {
 			App::import('Core','Folder');
@@ -279,6 +280,20 @@
 			}
 		}
 
+	}
+/**
+ * データキャッシュを削除する
+ */
+	function clearDataCache() {
+		
+		App::import('Core','Folder');
+		$folder = new Folder(CACHE.'datas'.DS);
+
+		$files = $folder->read(true,true,true);
+		foreach($files[1] as $file) {
+			@unlink($file);
+		}
+		
 	}
 /**
  * キャッシュファイルを全て削除する
