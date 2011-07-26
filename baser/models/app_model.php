@@ -1384,6 +1384,29 @@ class AppModel extends Model {
 		return $result;
 		
 	}
+/**
+ * Updates multiple model records based on a set of conditions.
+ *
+ * @param array $fields Set of fields and values, indexed by fields.
+ *    Fields are treated as SQL snippets, to insert literal values manually escape your data.
+ * @param mixed $conditions Conditions to match, true for all records
+ * @return boolean True on success, false on failure
+ * @access public
+ * @link http://book.cakephp.org/view/75/Saving-Your-Data
+ */
+	function updateAll($fields, $conditions = true) {
+		
+		$result = parent::updateAll($fields, $conditions);
+		if($result) {
+			if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+				if($this->cacheEnabled()) {
+					$this->cacheDelete($this);
+				}
+			}
+		}
+		return $result;
+		
+	}
 	
 }
 ?>
