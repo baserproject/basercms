@@ -724,7 +724,7 @@ class BaserHelper extends AppHelper {
 			if(strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
-				$pageUrl = $url;
+				$pageUrl = h($this->params['url']['url']);
 			}
 			$pos = strpos($pageUrl,'.html');
 			if($pos !== false) {
