@@ -229,21 +229,16 @@ class Page extends AppModel {
 		if(empty($data['id'])) {
 			$data['id'] = $this->id;
 		}
+		
+		if($this->fileSave) {
+			$this->createPageTemplate($data);
+		}
 
 		// 検索用テーブルに登録
 		if($this->contentSaving) {
 			$this->saveContent($this->createContent($data));
 		}
-		
-		if(!$this->fileSave) {
-			return true;
-		}
 
-		$result = true;
-		if(!$this->createPageTemplate($data)){
-			$result = false;
-		}
-		
 		// モバイルデータの生成
 		if(!empty($data['reflect_mobile'])){
 

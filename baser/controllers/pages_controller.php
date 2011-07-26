@@ -606,6 +606,8 @@ class PagesController extends AppController {
 			$this->Page->fileSave = false;
 			$this->Page->contentSaving = false;
 			if($this->Page->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+				clearViewCache();
+				clearDataCache();
 				echo true;
 			}else{
 				echo false;

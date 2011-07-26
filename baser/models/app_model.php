@@ -92,13 +92,13 @@ class AppModel extends Model {
 		}
 		
 		// モデルデータキャッシュ設定
-		// AppModelではキャッシュを利用しない
+		// AppModelではキャッシュを利用しない（$this->nameが定義されている事）
 		// 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
 		// （HABTMの更新がうまくいかなかったので）
 		// PHP4では次のような処理ができない為【PHP5限定】
 		// Model ⇒ Behavior ⇒ call_user_func_array ⇒ Model ⇒ Behavior
 		// ※ ビヘイビア内で自モデルのメソッドを呼び出しそのメソッド内でさらにビヘイビアを使う
-		if(PHP5 && Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime') && get_class() != 'AppModel') {
+		if(PHP5 && Configure::read('debug') == 0 && $this->Behaviors && Configure::read('Baser.dataCachetime') && $this->name) {
 			$this->Behaviors->attach('Cache');
 		}
 
