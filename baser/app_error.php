@@ -27,7 +27,7 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppError', array('file' => BASER));
+App::import('Core', 'BaserAppError', array('search' => BASER));
 /**
  * ErrorHandler 拡張クラス
  * @package			baser
