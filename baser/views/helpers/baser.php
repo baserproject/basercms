@@ -702,8 +702,8 @@ class BaserHelper extends AppHelper {
 		}else {
 			$action = h($this->params['action']);
 		}
-		if(!empty($this->params['pass'][0])) {
-			foreach($this->params['pass'][0] as $key => $value) {
+		if(!empty($this->params['pass'])) {
+			foreach($this->params['pass'] as $key => $value) {
 				$pass[$key] = h($value);
 			}
 		}
