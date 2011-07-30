@@ -67,6 +67,36 @@ class ArrayHelper extends AppHelper {
 		}
 
 	}
-
+/**
+ * 配列にテキストを追加する
+ *
+ * @param	array	$array
+ * @param	string	$prefix
+ * @param	string	$suffix
+ * @return	array
+ * @access	public
+ */
+	function addText($array, $prefix = '', $suffix = '') {
+		if($prefix || $suffix) {
+			array_walk($array, array($this, '__addText'), $prefix.','.$suffix);
+		}
+		return $array;
+	}
+/**
+ * addTextToArrayのコールバックメソッド
+ *
+ * @param	string	$value
+ * @param	string	$key
+ * @param	string	$add
+ * @return	string
+ * @access	private
+ */
+	function __addText(&$value, $key, $add) {
+		if($add) {
+			list($prefix, $suffix) = split(',',$add);
+		}
+		$value = $prefix.$value.$suffix;
+	}
+	
 }
 ?>
