@@ -223,13 +223,13 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
+				$posts = $this->_getBlogPosts(array('category' => $category));
+
+				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
 					'BlogCategory.blog_content_id'	=> $this->contentId,
 					'BlogCategory.name'				=> $category
 				));
-				$posts = $this->_getBlogPosts(array('categoryId' => $categoryId));
-
-				// ナビゲーションを設定
 				$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
 				if(count($blogCategories) > 1){
 					foreach($blogCategories as $key => $blogCategory) {
