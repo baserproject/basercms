@@ -1,8 +1,13 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * エラーハンドラークラス
+ * ErrorHandler 拡張クラス
  *
+ * =============================================================================
+ * 独自の AppError を利用する場合は、このファイルをアプリケーションフォルダに
+ * コピーして利用すると BaserCMS のアップデート時に上書きされません。
+ * =============================================================================
+ * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -22,24 +27,11 @@
 /**
  * Include files
  */
-App::import('Core', 'Error');
+App::import('Core', 'BaserAppError', array('file' => BASER));
 /**
- * エラーハンドラークラス
+ * ErrorHandler 拡張クラス
  * @package			baser
  */
-class AppError extends ErrorHandler {
-/**
- * クラスが見つからない
- * @param array $params
- */
-	function missingClass($params) {
-		if($params['className']) {
-			$this->controller->set('className',$params['className']);
-		}
-		if($params['notice']) {
-			$this->controller->set('notice', $params['notice']);
-		}
-		$this->_outputMessage('missing_class');
-	}
+class AppError extends BaserAppError {
 }
 ?>

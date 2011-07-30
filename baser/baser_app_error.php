@@ -1,13 +1,8 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * View 拡張クラス
+ * ErrorHandler 拡張クラス
  *
- * =============================================================================
- * 独自の AppView を利用する場合は、このファイルをアプリケーションフォルダに
- * コピーして利用すると BaserCMS のアップデート時に上書きされません。
- * =============================================================================
- * 
  * PHP versions 4 and 5
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
@@ -27,12 +22,25 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppView', array('search' => BASER_VIEWS));
+App::import('Core', 'Error');
 /**
- * View 拡張クラス
- *
- * @package			baser.views
+ * ErrorHandler 拡張クラス
+ * @package baser
  */
-class AppView extends BaserAppView {
+class BaserAppError extends ErrorHandler {
+/**
+ * クラスが見つからない
+ * @param array $params
+ */
+	function missingClass($params) {
+		if($params['className']) {
+			$this->controller->set('className',$params['className']);
+		}
+		if($params['notice']) {
+			$this->controller->set('notice', $params['notice']);
+		}
+		$this->_outputMessage('missing_class');
+	}
+	
 }
 ?>
