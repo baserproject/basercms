@@ -435,7 +435,7 @@ class BlogController extends BlogAppController {
 			$options = am($options, $this->params['named']);
 		}
 		extract($options);
-		$expects = array('BlogCategory', 'User', 'BlogTag');
+		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
 		$conditions = array('BlogPost.blog_content_id'	=> $this->contentId);
 		
 		// カテゴリ条件
