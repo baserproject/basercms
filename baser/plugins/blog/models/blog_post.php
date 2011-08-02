@@ -99,8 +99,8 @@ class BlogPost extends BlogAppModel {
 			array(  'rule'		=> array('notEmpty'),
 					'message'	=> 'タイトルを入力してください。',
 					'required'	=> true),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'タイトルは50文字以内で入力してください。')
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'タイトルは255文字以内で入力してください。')
 		),
 		'posts_date' => array(
 			array(	'rule'		=> array('notEmpty'),
