@@ -160,7 +160,7 @@ class PagesController extends AppController {
 					
 					// 公開状態の場合サイトマップのキャッシュを削除する
 					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
-						$this->deleteSitemapCache();
+						clearViewCache();
 					}
 					
 					// 完了メッセージ
@@ -242,11 +242,11 @@ class PagesController extends AppController {
 
 				if($this->Page->save($this->data,false)) {
 					
-					// タイトル、URL、公開状態が更新された場合、サイトマップのキャッシュを削除する
+					// タイトル、URL、公開状態が更新された場合、ビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
 					$afterStatus = $this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end']);
 					if($beforeStatus != $afterStatus || $before['Page']['title'] != $this->data['Page']['title'] || $before['Page']['url'] != $this->data['Page']['url']) {
-						$this->deleteSitemapCache();
+						clearViewCache();
 					}
 					
 					// ビューのキャッシュを削除する
@@ -351,7 +351,7 @@ class PagesController extends AppController {
 			// 公開状態だった場合、サイトマップのキャッシュを削除
 			// 公開期間のチェックは行わず確実に削除
 			if($page['Page']['status']) {
-				$this->deleteSitemapCache();
+				clearViewCache();
 			}
 			
 			// 完了メッセージ
@@ -728,17 +728,6 @@ class PagesController extends AppController {
 		
 		return $conditions;
 
-	}
-/**
- * サイトマップのキャッシュを削除する
- * 
- * @return boolean
- * @access public
- */
-	function deleteSitemapCache() {
-		
-		return clearCache('element_*_sitemap', 'views', '');
-		
 	}
 /**
  * PC用のカテゴリIDを元にモバイルページが作成する権限があるかチェックする
