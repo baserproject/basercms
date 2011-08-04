@@ -389,7 +389,7 @@ class MailController extends MailAppController {
 				'reply'		=> $userMail,
 				'from'		=> $adminMail,
 				'template'	=> $mailContent['mail_template'],
-				'cc'		=> $mailContent['sender_2']
+				'bcc'		=> $mailContent['sender_2']
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}
