@@ -31,7 +31,7 @@ $(function(){
 		$('.help').bt({
 			trigger: 'click',
 			//trigger: ['focus', 'blur'],
-			positions: 'right',
+			positions: 'top',
 			shadow: true,
 			shadowOffsetX: 3,
 			shadowOffsetY: 3,
@@ -39,19 +39,19 @@ $(function(){
 			shadowColor: 'rgba(0,0,0,.2)',
 			shadowOverlap: false,
 			noShadowOpts: {
-				strokeStyle: '#fff',
-				strokeWidth: 2
+				strokeStyle: '#CCC',
+				strokeWidth: 3
 			},
-			width: '250px',
+			width: '360px',
 			/*shrinkToFit: true,*/
 			fill: '#FFF',
 			spikeLength: 12,
 			spikeGirth: 18,
-			padding: 10,
+			padding: 15,
 			cornerRadius: 10,
-			strokeWidth: 3, /*no stroke*/
-			strokeStyle: '#FFFFFF',
-			fill: 'rgba(255, 255, 221, .8)',
+			strokeWidth: 6, /*no stroke*/
+			strokeStyle: '#CCC',
+			fill: 'rgba(255, 255, 255, 1.00)',
 			cssStyles: {
 				fontSize: '12px',
 				color: '#333300'
@@ -59,11 +59,13 @@ $(function(){
 			showTip: function(box){
 				$(box).fadeIn(200);
 			},
-			hideTip: function(box, callback){
+			// jQuery.uiのバージョンを1.8.14にしたところ、
+			// hideイベントのフックで何故か再表示できなくなったのでコメントアウト
+			/*hideTip: function(box, callback){
 				$(box).animate({
 					opacity: 0
 				}, 200, callback);
-			},
+			},*/
 			contentSelector: "$('#helptext'+this.id.substring(4,this.id.length)).html()"
 		});
 	}

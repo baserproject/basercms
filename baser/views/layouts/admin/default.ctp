@@ -52,12 +52,12 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 <?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
 <?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
 <?php $baser->css('admin/import') ?>
-<?php $baser->css(array('jquery-ui-1.7.2/ui.all','colorbox/colorbox')) ?>
+<?php $baser->css(array('jquery-ui/ui.all','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
 <?php $baser->js(array(
-	'jquery-1.4.2.min',
+	'jquery-1.6.2.min',
 	'jquery.dimensions.min',
-	'jquery-ui-1.7.2.custom.min',
+	'jquery-ui-1.8.14.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.bt.min',
 	'jquery.colorbox-min',
