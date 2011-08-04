@@ -29,7 +29,7 @@ if(!empty($no)){
 ?>
 <div class="widget-area widget-area-<?php echo $no ?>">
 <?php
-		foreach($widgets as $widget){
+		foreach($widgets as $key => $widget){
 			$key = key($widget);
 			if($widget[$key]['status']){
 				$params = array();
@@ -38,7 +38,7 @@ if(!empty($no)){
 					$params['cache']='+1 month';
 				}
 				$params = am($params,$widget[$key]);
-				$params[$widget[$key]['id']] = $widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
+				$params[$no.'_'.$widget[$key]['id']] = $no.'_'.$widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
 				$baser->element('widgets/'.$widget[$key]['element'],$params, false, $subDir);
 			}
 		}
