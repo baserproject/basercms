@@ -202,7 +202,8 @@ class BlogController extends BlogAppController {
 		$type = $year = $month = $day = $id = '';
 		$navis = $posts = array();
 		$single = false;
-
+		$posts = array();
+		
 		if($pass[0] == 'category') {
 			$type = 'category';
 		}elseif($pass[0] == 'tag') {
@@ -222,13 +223,13 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
+				$posts = $this->_getBlogPosts(array('category' => $category));
+
+				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
 					'BlogCategory.blog_content_id'	=> $this->contentId,
 					'BlogCategory.name'				=> $category
 				));
-				$posts = $this->_getBlogPosts(array('categoryId' => $categoryId));
-
-				// ナビゲーションを設定
 				$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
 				if(count($blogCategories) > 1){
 					foreach($blogCategories as $key => $blogCategory) {
@@ -283,6 +284,23 @@ class BlogController extends BlogAppController {
 					}
 					
 					$post['BlogPost'] = $this->data['BlogPost'];
+					
+					if($this->data['BlogPost']['blog_category_id']) {
+						$blogCategory = $this->BlogPost->BlogCategory->find('first', array(
+							'conditions'=> array('BlogCategory.id' => $this->data['BlogPost']['blog_category_id']),
+							'recursive'	=> -1
+						));
+						$post['BlogCategory'] = $blogCategory['BlogCategory'];
+					}
+					
+					if($this->data['BlogPost']['user_id']) {
+						$author = $this->BlogPost->User->find('first', array(
+							'conditions'	=> array('User.id'	=> $this->data['BlogPost']['user_id']),
+							'recursive'		=> -1
+						));
+						$post['User'] = $author['User'];
+					}
+					
 					if(isset($this->data['BlogTag'])) {
 						$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $this->data['BlogTag']['BlogTag']));
 						if($tags) {
@@ -303,10 +321,9 @@ class BlogController extends BlogAppController {
 						$this->add_comment($id);
 					}
 					
-					$posts = $this->_getBlogPosts(array('id' => $id));
-					if(!empty($posts[0])) {
-						$post = $posts[0];
-						$this->set('post', $post);
+					$_posts = $this->_getBlogPosts(array('id' => $id));
+					if(!empty($_posts[0])) {
+						$post = $_posts[0];
 					} else {
 						$this->notFound();
 					}
@@ -328,6 +345,7 @@ class BlogController extends BlogAppController {
 				if($this->preview) {
 					$this->blogContent['BlogContent']['comment_use'] = false;
 				}
+				$this->set('post', $post);
 
 		}
 
@@ -417,7 +435,7 @@ class BlogController extends BlogAppController {
 			$options = am($options, $this->params['named']);
 		}
 		extract($options);
-		$expects = array('BlogCategory', 'User', 'BlogTag');
+		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
 		$conditions = array('BlogPost.blog_content_id'	=> $this->contentId);
 		
 		// カテゴリ条件

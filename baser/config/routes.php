@@ -127,6 +127,21 @@ if(!empty($cn->config->baser['driver'])) {
 else {
 	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
 }
-
+/**
+ * インストーラー用
+ */
 Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));
+/**
+ * エラーハンドラ読み込み
+ * baserフォルダ内のAppErrorを読みこませる為に定義
+ * bootstrapに記述するとAppControllerの未定義エラーとなる為仕方なくここに配置
+ * また、controllerに記述するとAppControllerの重複定義となってしまう
+ */
+if (file_exists(APP . 'error.php')) {
+	include_once (APP . 'error.php');
+} elseif (file_exists(APP . 'app_error.php')) {
+	include_once (APP . 'app_error.php');
+} elseif (file_exists(BASER . 'app_error.php')) {
+	include_once (BASER . 'app_error.php');
+}
 ?>

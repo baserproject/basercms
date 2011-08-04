@@ -21,7 +21,7 @@ class BlogPostsSchema extends CakeSchema {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
 		'no' => array('type' => 'integer', 'null' => false),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
+		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 255),
 		'content' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'detail' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'blog_category_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),

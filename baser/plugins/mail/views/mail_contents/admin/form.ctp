@@ -214,13 +214,13 @@ function mailContentSender1ClickHandler(){
 
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01 slide-body" id="formOptionBody">
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.sender_2', 'CC用送信先メールアドレス') ?></th>
+		<th class="col-head"><?php echo $formEx->label('MailContent.sender_2', 'BCC用送信先メールアドレス') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->input('MailContent.sender_2', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 			<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpSender2', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $formEx->error('MailContent.sender_2') ?>
 			<div id="helptextSender2" class="helptext">
-				<ul><li>CC（カーボンコピー）用のメールアドレスを指定します。</li>
+				<ul><li>BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。</li>
 					<li>複数の送信先を指定するには、カンマで区切って入力します。</li></ul>
 			</div>
 		</td>

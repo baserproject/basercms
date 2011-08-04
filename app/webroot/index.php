@@ -49,7 +49,7 @@
  */
 	if (!defined('ROOT')) {
 		/* 通常パターン */
-		if(is_dir(dirname(dirname(dirname(__FILE__))).DS.'cake')){
+		if(@is_dir(dirname(dirname(dirname(__FILE__))).DS.'cake')){
 			define('ROOT', dirname(dirname(dirname(__FILE__))));
 
 		// app内にcakeを配置

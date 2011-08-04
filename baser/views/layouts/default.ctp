@@ -34,7 +34,7 @@
 <?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
 <?php $baser->css('import') ?>
 <?php $baser->js(array(
-	'jquery-1.4.2.min',
+	'jquery-1.6.2.min',
 	'jquery.corner',
 	'styleswitcher',
 	'startup')) ?>

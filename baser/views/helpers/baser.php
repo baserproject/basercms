@@ -702,8 +702,8 @@ class BaserHelper extends AppHelper {
 		}else {
 			$action = h($this->params['action']);
 		}
-		if(!empty($this->params['pass'][0])) {
-			foreach($this->params['pass'][0] as $key => $value) {
+		if(!empty($this->params['pass'])) {
+			foreach($this->params['pass'] as $key => $value) {
 				$pass[$key] = h($value);
 			}
 		}
@@ -724,7 +724,7 @@ class BaserHelper extends AppHelper {
 			if(strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
-				$pageUrl = $url;
+				$pageUrl = h($this->params['url']['url']);
 			}
 			$pos = strpos($pageUrl,'.html');
 			if($pos !== false) {
