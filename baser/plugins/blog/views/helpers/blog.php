@@ -61,15 +61,15 @@ class BlogHelper extends AppHelper {
  */
 	function setBlogContent($blogContentId = null) {
 
-		if(isset($this->blogContent)) {
+		if(isset($this->blogContent) && !$blogContentId) {
 			return;
 		}
-		if(isset($this->_view->viewVars['blogContent'])) {
-			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
-		}elseif($blogContentId) {
+		if($blogContentId) {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
 			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
+		} elseif(isset($this->_view->viewVars['blogContent'])) {
+			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
 		}
 
 	}

@@ -56,8 +56,8 @@ $(function() {
 			});
 		},
 		update: function(event, ui){
-
-			if(ui.item.attr("id").match(/^Setting/i)){
+			// jQueryUI 1.8.14 より、 ui.item.attr("id")で id が取得できない
+			if($(ui.item.context).attr("id").match(/^Setting/i)){
 				widgetAreaUpdateSortedIds();
 				return;
 			}
@@ -69,8 +69,9 @@ $(function() {
 					baseId = _baseId;
 				}
 			});
+
 			baseId++;
-			var id = ui.item.attr("id").replace('Widget','');
+			var id = $(ui.item.context).attr("id").replace('Widget','');
 			var sourceId = id.replace('Widget','');
 			var settingId = 'Setting' + (baseId);
 			var tmpId = 'Tmp'+(baseId);
