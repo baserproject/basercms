@@ -224,6 +224,7 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function afterSave($created) {
+		$this->Page->cacheDelete($this->Page);
 		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
