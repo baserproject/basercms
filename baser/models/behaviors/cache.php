@@ -1,14 +1,58 @@
 <?php
+/* SVN FILE: $Id$ */
 /**
- * http://www.exgear.jp/blog/2008/11/method_cache_behavior/
+ * キャッシュビヘイビア
+ *
+ * PHP versions 4 and 5
+ *
+ * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, Catchup, Inc.
+ *								9-5 nagao 3-chome, fukuoka-shi
+ *								fukuoka, Japan 814-0123
+ *
+ * @copyright		Copyright 2008 - 2011, Catchup, Inc.
+ * @link			http://basercms.net BaserCMS Project
+ * @package			baser.models.behaviors
+ * @since			Baser v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+/**
+ * キャッシュビヘイビア
+ *
+ * @subpackage		baser.models.behaviors
  */
 class CacheBehavior extends ModelBehavior {
+/**
+ * 利用状態
+ * 
+ * @var boolean
+ * @access public
+ */
 	var $enabled = true;
+/**
+ * setup
+ * 
+ * @param Model $model
+ * @param array $config 
+ * @return void
+ * @access public
+ */
 	function setup(&$model, $config = array()) {}
-	/**
-	 * メソッドキャッシュ
-	 */
+/**
+ * キャッシュ処理
+ * 
+ * @param Model $model
+ * @param int $expire
+ * @param string $method
+ * @args mixed
+ * @return mixed
+ * @access public
+ */
 	function cacheMethod(&$model, $expire, $method, $args = array()){
+		
 		static $cacheData = array();
 		$this->enabled = false;
 		// キャッシュキー
@@ -47,17 +91,27 @@ class CacheBehavior extends ModelBehavior {
 		$list[$cachekey] = 1;
 		Cache::write($cacheListKey, $list);
 		return $ret;
+		
 	}
-	/**
-	 * 再帰防止判定用
-	 */
+/**
+ * 再帰防止判定用
+ * 
+ * @param Model $model
+ * @return boolean
+ * @access public
+ */
 	function cacheEnabled(&$model){
 		return $this->enabled;
 	}
-	/**
-	 * キャッシュクリア
-	 */
+/**
+ * キャッシュを削除する
+ * 
+ * @param Model $model
+ * @return void
+ * @access public
+ */
 	function cacheDelete(&$model){
+		
 		$cacheListKey = get_class($model) . '_cacheMethodList';
 		$list = Cache::read($cacheListKey);
 		if(empty($list)) return;
@@ -65,14 +119,60 @@ class CacheBehavior extends ModelBehavior {
 			Cache::delete($key);
 		}
 		Cache::delete($cacheListKey);
+		
 	}
-	/**
-	 * 追加・変更・削除時にはキャッシュをクリア
-	 */
+/**
+ * afterSave
+ * 
+ * @param Model $model
+ * @param boolean $created 
+ * @return void
+ * @access public
+ */
 	function afterSave(&$model, $created) {
-		$this->cacheDelete($model);
+		
+		$this->deleteAssocCache($model);
+		
 	}
+/**
+ * afterDelete
+ * 
+ * @param Model $model 
+ * @return void
+ * @access public
+ */
 	function afterDelete(&$model) {
-		$this->cacheDelete($model);
+		
+		$this->deleteAssocCache($model);
+		
 	}
+/**
+ * 関連モデルを含めてキャッシュを削除する
+ * 
+ * @param Model $model
+ * @return void
+ * @access public
+ * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい
+ */
+	function deleteAssocCache(&$model, $recursive = 0) {
+		
+		$this->cacheDelete($model);
+		if($recursive <= 3) {
+			$recursive++;
+			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
+			foreach($assocTypes as $assocType) {
+				if($model->{$assocType}) {
+					foreach($model->{$assocType} as $assoc) {
+						$className = $assoc['className'];
+						if(isset($model->{$className})) {
+							$this->deleteAssocCache($model->{$className}, $recursive);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	
 }
+?>

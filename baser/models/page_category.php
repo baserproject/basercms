@@ -224,7 +224,6 @@ class PageCategory extends AppModel {
  * @access	public
  */
 	function afterSave($created) {
-		$this->Page->cacheDelete($this->Page);
 		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
@@ -390,13 +389,13 @@ class PageCategory extends AppModel {
 		if(!$id) {
 			return;
 		}
-		$pages = $this->Page->find('first',array('conditions'=>array('Page.page_category_id'=>$id),'recursive'=>-1));
+		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$id),'recursive'=>-1));
 		$result = true;
 		// ページデータのURLを更新
 		if($pages) {
 			$this->Page->saveFile = false;
 			foreach($pages as $page) {
-				$page['url'] = $this->Page->getPageUrl($page);
+				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
 				if(!$this->Page->save()){
 					$result = false;

@@ -161,7 +161,6 @@ class PagesController extends AppController {
 					// キャッシュを削除する
 					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
 						clearViewCache();
-						$this->Page->PageCategory->cacheDelete($this->Page->PageCategory);
 					}
 					
 					// 完了メッセージ
@@ -248,7 +247,6 @@ class PagesController extends AppController {
 					$afterStatus = $this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end']);
 					if($beforeStatus != $afterStatus || $before['Page']['title'] != $this->data['Page']['title'] || $before['Page']['url'] != $this->data['Page']['url']) {
 						clearViewCache();
-						$this->Page->PageCategory->cacheDelete($this->Page->PageCategory);
 					} else {
 						clearViewCache($this->data['Page']['url']);
 					}
