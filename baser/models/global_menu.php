@@ -43,6 +43,13 @@ class GlobalMenu extends AppModel {
  */
 	var $name = 'GlobalMenu';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * バリデーション
  *
  * @var		array

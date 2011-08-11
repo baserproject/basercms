@@ -36,6 +36,13 @@ class FeedDetail extends FeedAppModel {
  */
 	var $name = 'FeedDetail';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * belongsTo
  * @var		array
  * @access	public

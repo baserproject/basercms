@@ -25,6 +25,19 @@
  * @package			baser.models
  */
 class Content extends AppModel {
+/**
+ * クラス名
+ * 
+ * @var string
+ * @access public
+ */
 	var $name = 'Content';
+/**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
 }
 ?>

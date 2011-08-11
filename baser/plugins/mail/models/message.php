@@ -38,6 +38,13 @@ class Message extends MailAppModel {
  */
 	var $name = 'Message';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * メールフォーム情報
  *
  * @var 	array

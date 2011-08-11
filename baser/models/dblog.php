@@ -33,6 +33,13 @@ class Dblog extends AppModel {
  */
 	var $name = 'Dblog';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * belongsTo
  * @var 	array
  * @access	public

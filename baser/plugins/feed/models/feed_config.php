@@ -36,6 +36,13 @@ class FeedConfig extends FeedAppModel {
  */
 	var $name = 'FeedConfig';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * DB設定
  * @var		string
  * @access	public

@@ -47,7 +47,7 @@ class PageCategory extends AppModel {
  * actsAs
  * @var array
  */
-	var $actsAs = array('Tree');
+	var $actsAs = array('Tree', 'Cache');
 /**
  * hasMany
  * @var array

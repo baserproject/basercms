@@ -36,6 +36,13 @@ class UserGroup extends AppModel {
  */
 	var $name = 'UserGroup';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
  * @var     string

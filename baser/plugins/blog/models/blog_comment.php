@@ -36,6 +36,13 @@ class BlogComment extends BlogAppModel {
  */
 	var $name = 'BlogComment';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * belongsTo
  *
  * @var 	array

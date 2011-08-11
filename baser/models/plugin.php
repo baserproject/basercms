@@ -36,6 +36,13 @@ class Plugin extends AppModel {
  */
 	var $name = 'Plugin';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
  * @var     string

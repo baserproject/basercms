@@ -35,6 +35,13 @@ class WidgetArea extends AppModel {
  */
 	var $name = 'WidgetArea';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * バリデーション
  *
  * @var		array

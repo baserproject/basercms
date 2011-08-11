@@ -35,6 +35,12 @@ class BlogConfig extends BlogAppModel {
  * @access 	public
  */
 	var $name = 'BlogConfig';
-
+/**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
 }
 ?>
