@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 if(!isset($count)) {
-	$count = true;
+	$count = false;
 }
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];

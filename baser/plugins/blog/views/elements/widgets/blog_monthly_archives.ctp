@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 if(!isset($view_count)) {
-	$view_count = true;
+	$view_count = false;
 }
 if(!isset($count)) {
 	$count = 12;
