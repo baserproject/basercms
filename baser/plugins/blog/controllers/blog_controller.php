@@ -427,7 +427,8 @@ class BlogController extends BlogAppController {
 			'year'			=> null,
 			'month'			=> null,
 			'day'			=> null,
-			'id'			=> null
+			'id'			=> null,
+			'keyword'		=> null
 		);
 
 		$options = am($_options, $options);
@@ -459,7 +460,15 @@ class BlogController extends BlogAppController {
 		
 		// タグ条件
 		if($tag) {
-			$tag = urldecode($tag);
+			
+			if(!is_array($tag)) {
+				$tag = array($tag);
+			}
+			
+			foreach($tag as $key => $value) {
+				$tag[$key] = urldecode($value);
+			}
+			
 			$tags = $this->BlogPost->BlogTag->find('all', array(
 				'conditions'=> array('BlogTag.name' => $tag), 
 				'recursive'	=> 1
@@ -469,8 +478,23 @@ class BlogController extends BlogAppController {
 				$conditions['BlogPost.id'] = $ids;
 			} else {
 				return array();
-			}			
-			
+			}
+
+		}
+		
+		// キーワード条件
+		if($keyword) {
+			if(preg_match('/\s/', $keyword)) {
+				$keywords = explode("\s", $keyword);
+			} else {
+				$keywords = array($keyword);
+			}
+			foreach($keywords as $key => $value) {
+				$keywords[$key] = urldecode($value);
+				$conditions['or'][]['BlogPost.name LIKE'] = '%'.$value.'%';
+				$conditions['or'][]['BlogPost.content LIKE'] = '%'.$value.'%';
+				$conditions['or'][]['BlogPost.detail LIKE'] = '%'.$value.'%';
+			}
 		}
 		
 		// 年月日条件
