@@ -36,6 +36,13 @@ class Permission extends AppModel {
  */
 	var $name = 'Permission';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
  * @var     string

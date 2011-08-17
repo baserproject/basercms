@@ -676,7 +676,7 @@ class BaserHelper extends AppHelper {
  * コンテンツ名を取得する
  * ・キャメルケースで取得
  * ・URLのコントローラー名までを取得
- * ・ページの場合は、カテゴリ名（カテゴリがない場合はdefault）
+ * ・ページの場合は、カテゴリ名（カテゴリがない場合はDefault）
  * @return string
  */
 	function getContentsName($detail = false) {
@@ -726,16 +726,23 @@ class BaserHelper extends AppHelper {
 			} else {
 				$pageUrl = h($this->params['url']['url']);
 			}
-			$pos = strpos($pageUrl,'.html');
-			if($pos !== false) {
-				$pageUrl = substr($pageUrl, 0, $pos);
+			
+			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
+			
+			if(preg_match('/^[^\/]/', $pageUrl)) {
+				$pageUrl = '/'.$pageUrl;
 			}
+			if(preg_match('/\/$/', $pageUrl)) {
+				$pageUrl .= 'index';
+			}
+			
 			if(!$detail) {
 				$aryPageUrl = split('/',$pageUrl);
 				$controller = $aryPageUrl[0];
 			} else {
 				return Inflector::camelize(str_replace('/', '_', $pageUrl));
 			}
+			
 		}
 
 		// プラグインルーティングの場合
@@ -760,6 +767,10 @@ class BaserHelper extends AppHelper {
 
 		$contentsName = Inflector::camelize($contentsName);
 
+		if(!$contentsName) {
+			$contentsName = 'Default';
+		}
+		
 		return $contentsName;
 
 	}

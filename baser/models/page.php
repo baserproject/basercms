@@ -52,7 +52,7 @@ class Page extends AppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('ContentsManager');
+	var $actsAs = array('ContentsManager', 'Cache');
 /**
  * 更新前のページファイルのパス
  * @var	string

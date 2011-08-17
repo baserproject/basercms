@@ -33,5 +33,12 @@ class MailConfig extends MailAppModel {
  * @access 	public
  */
 	var $name = 'MailConfig';
+/**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
 }
 ?>

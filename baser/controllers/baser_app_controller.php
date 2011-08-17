@@ -663,6 +663,10 @@ class BaserAppController extends Controller {
 
 		// 送信元・返信先
 		if($from) {
+			if(strpos($from, ',') !== false) {
+				$_from = split(',', $from);
+				$from = $_from[0];
+			}
 			$this->EmailEx->from = $from;
 			$this->EmailEx->additionalParams = '-f'.$from;
 			$this->EmailEx->return = $from;

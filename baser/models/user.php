@@ -36,6 +36,13 @@ class User extends AppModel {
  */
 	var $name = 'User';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
  * @var     string

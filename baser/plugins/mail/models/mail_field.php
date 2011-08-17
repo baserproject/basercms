@@ -34,6 +34,13 @@ class MailField extends MailAppModel {
  */
 	var $name = 'MailField';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * validate
  *
  * @var		array

@@ -595,6 +595,22 @@ class BlogHelper extends AppHelper {
 		}
 	
 	}
-	
+/**
+ * 親カテゴリを取得する
+ *
+ * @param array $post
+ * @return array $parentCategory
+ * @access public
+ */
+	function getParentCategory($post) {
+
+		if(empty($post['BlogCategory']['id'])) {
+			return null;
+		}
+
+		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+		return $BlogCategory->getparentnode($post['BlogCategory']['id']);
+		
+	}
 }
 ?>

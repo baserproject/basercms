@@ -36,6 +36,13 @@ class BlogTag extends BlogAppModel {
  */
 	var $name = 'BlogTag';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * HABTM
  *
  * @var array

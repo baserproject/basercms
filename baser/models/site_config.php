@@ -36,6 +36,13 @@ class SiteConfig extends AppModel {
  */
 	var $name = 'SiteConfig';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
  * @var     string
