@@ -91,17 +91,6 @@ class BaserAppModel extends Model {
 
 		}
 		
-		// モデルデータキャッシュ設定
-		// AppModelではキャッシュを定義しない事
-		// 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
-		// （HABTMの更新がうまくいかなかったので）
-		// PHP4では次のような処理ができない為【PHP5限定】
-		// Model ⇒ Behavior ⇒ call_user_func_array ⇒ Model ⇒ Behavior
-		// ※ ビヘイビア内で自モデルのメソッドを呼び出しそのメソッド内でさらにビヘイビアを使う
-		if(!PHP5 || Configure::read('debug') != 0) {
-			unset($this->actsAs['Cache']);
-		}
-		
 	}
 /**
  * beforeSave
@@ -1341,6 +1330,15 @@ class BaserAppModel extends Model {
  * 
  * キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
  * 
+ * 【AppModelではキャッシュを定義しない事】
+ * 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
+ * （HABTMの更新がうまくいかなかったので）
+ * 
+ * 【PHP5限定】
+ * PHP4では次のような処理ができない為
+ * Model ⇒ Behavior ⇒ call_user_func_array ⇒ Model ⇒ Behavior
+ * ※ ビヘイビア内で自モデルのメソッドを呼び出しそのメソッド内でさらにビヘイビアを使う
+ *
  * @param mixed...
  * @return type 
  * @access public
@@ -1353,7 +1351,8 @@ class BaserAppModel extends Model {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if (isInstalled() && isset($this->Behaviors) && $this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+		if (PHP5 && isInstalled() && isset($this->Behaviors) && $this->Behaviors->attached('Cache') && 
+				$this->Behaviors->enabled('Cache') && Configure::read('debug') == 0 ) {
 			if($this->cacheEnabled()) {
 				return $this->cacheMethod($cache, __FUNCTION__, $args);
 			}
