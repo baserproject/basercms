@@ -366,7 +366,7 @@ class BaserAppController extends Controller {
  */
 	function notFound() {
 
-		$this->cakeError('error404', array(array($this->here)));
+		return $this->cakeError('error404', array(array($this->here)));
 
 	}
 /**

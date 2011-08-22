@@ -454,7 +454,7 @@ class PagesController extends AppController {
 		// 1.5.9 以前との互換性の為残しておく
 		if(($ext)) {
 			if(!$this->Page->checkPublish($url)) {
-				$this->notFound();
+				return $this->notFound();
 			}
 		}
 
