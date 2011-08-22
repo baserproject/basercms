@@ -51,8 +51,8 @@
 	$mailContents = $MailContent->find('all', array('cache' => false));
 	if($mailContents) {
 		foreach($mailContents as $mailContent) {
-			$MailContent->set($MailContent);
-			if($MailContent->save()) {
+			$MailContent->set($mailContent);
+			if(!$MailContent->save()) {
 				$result = false;
 			}
 		}

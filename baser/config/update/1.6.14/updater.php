@@ -67,14 +67,16 @@
 			switch ($content['Content']['model']) {
 				case 'Page':
 					$type = 'ページ';
+					break;
 				case 'BlogPost':
 					$type = 'ブログ';
+					break;
 				default:
 					$type = '';
 			}
 			$content['Content']['type'] = $type;
 			$Content->set($content);
-			if($Content->save()) {
+			if(!$Content->save()) {
 				$result = false;
 			}
 		}

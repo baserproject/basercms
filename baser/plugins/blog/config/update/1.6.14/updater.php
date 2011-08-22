@@ -51,8 +51,8 @@
 	$blogContents = $BlogContent->find('all', array('cache' => false));
 	if($blogContents) {
 		foreach($blogContents as $blogContent) {
-			$BlogContent->set($BlogContent);
-			if($BlogContent->save()) {
+			$BlogContent->set($blogContent);
+			if(!$BlogContent->save()) {
 				$result = false;
 			}
 		}
