@@ -104,9 +104,9 @@ class DboPostgresEx extends DboPostgres {
 					}
 					// >>> CUSTOMIZE ADD 2011/08/22 ryuring
 					if($fields[$c['name']]['default'] === 'true' && $fields[$c['name']]['type'] == 'boolean') {
-						$fields[$c['name']]['default'] = true;
+						$fields[$c['name']]['default'] = 1;
 					} elseif($fields[$c['name']]['default'] === 'false' && $fields[$c['name']]['type'] == 'boolean') {
-						$fields[$c['name']]['default'] = false;
+						$fields[$c['name']]['default'] = 0;
 					}
 					// <<<
 				}

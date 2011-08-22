@@ -392,7 +392,13 @@ class DboSqlite3Ex extends DboSqlite3 {
 			if($fields[$column[0]['name']]['default']=='NULL'){
 				$fields[$column[0]['name']]['default'] = NULL;
 			}
-			// <<<
+			// >>> CUSTOMIZE ADD 2011/08/22 ryuring
+			if($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
+				$fields[$column[0]['name']]['default'] = 1;
+			} elseif($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
+				$fields[$column[0]['name']]['default'] = 0;
+			}
+			// >>>
 			if($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
 					'type'		=> $fields[$column[0]['name']]['type'],
