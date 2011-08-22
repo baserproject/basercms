@@ -264,7 +264,7 @@ class ContentsController extends AppController {
  */
 	function admin_index() {
 		
-		$this->pageTitle = 'コンテンツ一覧';
+		$this->pageTitle = '検索インデックス コンテンツ一覧';
 
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -287,7 +287,7 @@ class ContentsController extends AppController {
  */
 	function admin_add() {
 		
-		$this->pageTitle = 'コンテンツ登録';
+		$this->pageTitle = '検索インデックス コンテンツ登録';
 		
 		if($this->data) {
 			$url = $this->data['Content']['url'];

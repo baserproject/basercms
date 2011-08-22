@@ -65,7 +65,21 @@ $(function(){
 <div id="AjaxChangePriorityUrl" class="display-none"><?php echo $baser->url(array('action' => 'ajax_change_priority')) ?></div>
 <div id="ContentOpen" class="display-none"><?php echo $formEx->value('Content.open') ?></div>
 
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $baser->contentsTitle() ?>&nbsp;
+	<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
+
+<div class="help-box corner10 display-none" id="helpAdminBody">
+	<h4>ユーザーヘルプ</h4>
+	<p>baserCMSでは、サイト内検索の対象とするデータを「検索インデックス」として管理しており、
+	Webページやプラグインコンテンツの追加、更新時に自動的に更新されるようになっています。<br />
+	また、サイト内検索での検索結果の表示順は、優先度、更新日によって確定する事となっており、ここでは次の処理を行う事ができます。
+	</p>
+	<ul>
+		<li>優先度の変更（0.1〜1.0）</li>
+		<li>検索結果に表示されるコンテンツの削除</li>
+		<li>baserCMSで管理できないコンテンツの検索インデックスへの登録</li>
+	</ul>
+</div>
 
 <!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="ContentFilter">検索</a></h3>
