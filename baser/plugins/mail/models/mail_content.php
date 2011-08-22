@@ -149,7 +149,7 @@ class MailContent extends MailAppModel {
  */
 	function beforeValidate() {
 
-		if($this->data['MailContent']['sender_1_']) {
+		if($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
 				array(	'rule'		=> 'email',
 						'message'	=> '送信先メールアドレスの形式が不正です。'));
