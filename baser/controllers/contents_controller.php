@@ -93,7 +93,7 @@ class ContentsController extends AppController {
 		
 			$this->paginate = array(
 				'conditions'=> $this->_createSearchConditions($this->data),
-				'order'		=> 'Content.modified DESC',
+				'order'		=> 'Content.priority DESC, Content.modified DESC, Content.id',
 				'limit'		=> $this->passedArgs['num']
 			);
 
@@ -145,6 +145,12 @@ class ContentsController extends AppController {
 				$data['Content']['category'] = $data['Content']['c'];
 			}
 			unset($data['Content']['c']);
+		}
+		if(isset($data['Content']['m'])) {
+			if($data['Content']['m']) {
+				$data['Content']['model'] = $data['Content']['m'];
+			}
+			unset($data['Content']['m']);
 		}
 		
 		$conditions = am($conditions, $this->postConditions($data));
@@ -375,12 +381,9 @@ class ContentsController extends AppController {
 			$this->redirect(array('action'=>'admin_index'));
 		}
 
-		// メッセージ用にタイトルを取得
-		$title = $this->Content->field('title', array('Content.id' => $id));
-
 		/* 削除処理 */
-		if($this->Content->del($id)) {			
-			$message = '検索インデックス: '.$title.' を削除しました。';
+		if($this->Content->del($id)) {
+			$message = '検索インデックスより NO.'.$id.' を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Content->saveDbLog($message);
 		}else {

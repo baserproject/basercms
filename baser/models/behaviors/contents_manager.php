@@ -74,13 +74,16 @@ class ContentsManagerBehavior extends ModelBehavior {
 			$data['Content']['id'] = $before['Content']['id'];
 			$this->Content->set($data);
 		} else {
+			if(empty($data['Content']['priority'])) {
+				$data['Content']['priority'] = '0.5';
+			}
 			$this->Content->create($data);
 		}
 		$result = $this->Content->save();
 
 		// カテゴリを site_configsに保存
 		if($result) {
-			return $this->updateContentCategory($model, $data['Content']['category']);
+			return $this->updateContentMeta($model, $data['Content']['category']);
 		}
 
 		return $result;
@@ -96,27 +99,31 @@ class ContentsManagerBehavior extends ModelBehavior {
 
 		$this->Content = ClassRegistry::init('Content');
 		if($this->Content->deleteAll(array('Content.model' => $model->alias, 'Content.model_id' => $id))) {
-			return $this->updateContentCategory($model);
+			return $this->updateContentMeta($model);
 		}
 
 	}
 /**
- * コンテンツカテゴリを更新する
+ * コンテンツメタ情報を更新する
  *
  * @param string $contentCategory
  * @return boolean
  * @access public
  */
-	function updateContentCategory(&$model) {
+	function updateContentMeta(&$model) {
 		
 		$db = ConnectionManager::getDataSource('baser');
 		$contentCategories = array();
+		$contentTypes = array();
 		if($db->config['driver']=='csv') {
 			// CSVの場合GROUP BYが利用できない（BaserCMS 1.6.11）
 			$contents = $this->Content->find('all', array('conditions' => array('Content.status' => true)));
 			foreach($contents as $content) {
 				if($content['Content']['category'] && !in_array($content['Content']['category'], $contentCategories)) {
 					$contentCategories[$content['Content']['category']] = $content['Content']['category'];
+				}
+				if($content['Content']['type'] && !in_array($content['Content']['type'], $contentTypes)) {
+					$contentTypes[$content['Content']['type']] = $content['Content']['type'];
 				}
 			}
 		} else {
@@ -126,9 +133,16 @@ class ContentsManagerBehavior extends ModelBehavior {
 					$contentCategories[$content['Content']['category']] = $content['Content']['category'];
 				}
 			}
+			$contents = $this->Content->find('all', array('fields' => array('Content.type'), 'group' => array('Content.type'), 'conditions' => array('Content.status' => true)));
+			foreach($contents as $content) {
+				if($content['Content']['type']) {
+					$contentTypes[$content['Content']['type']] = $content['Content']['type'];
+				}
+			}
 		}
 
 		$siteConfigs['SiteConfig']['content_categories'] = serialize($contentCategories);
+		$siteConfigs['SiteConfig']['content_types'] = serialize($contentTypes);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		return $SiteConfig->saveKeyValue($siteConfigs);
 

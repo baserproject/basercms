@@ -338,6 +338,7 @@ class Page extends AppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'ページ';
 		// $this->idに値が入ってない場合もあるので
 		if(!empty($data['id'])) {
 			$_data['Content']['model_id'] = $data['id'];

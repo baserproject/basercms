@@ -30,8 +30,11 @@ $mail->indexFields($mailContent['MailContent']['id']);
 
 <h3 class="contents-head">入力フォーム</h3>
 
+<div class="section mail-description">
+	<?php $mail->description() ?>
+</div>
+
 <div class="section">
-	<p><span class="required">*</span> 印の項目は必須となりますので、必ず入力してください。</p>
 	<?php $baser->flash() ?>
 	<?php $baser->element('mail_form') ?>
 </div>

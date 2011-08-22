@@ -252,6 +252,7 @@ class MailContent extends MailAppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'メール';
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];

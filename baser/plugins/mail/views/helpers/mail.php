@@ -28,13 +28,50 @@
  * @package			baser.plugins.mail.views.helpers
  *
  */
-class MailHelper extends TextExHelper {
+class MailHelper extends AppHelper {
+/**
+ * view
+ * @var		View
+ * @access	protected
+ */
+	var $_view = null;
 /**
  * ヘルパー
  * @var		array
  * @access	public
  */
 	var $helpers = array('Baser');
+/**
+ * コンストラクタ
+ *
+ * @return void
+ * @access public
+ */
+	function __construct() {
+		
+		$this->_view =& ClassRegistry::getObject('view');
+		$this->setMailContent();
+		
+	}
+/**
+ * メールコンテンツデータをセットする
+ * 
+ * @param int $mailContentId 
+ */
+	function setMailContent($mailContentId = null) {
+
+		if(isset($this->mailContent) && !$mailContentId) {
+			return;
+		}
+		if($mailContentId) {
+			$MailContent = ClassRegistry::getObject('MailContent');
+			$MailContent->expects(array());
+			$this->mailContent = Set::extract('MailContent', $MailContent->read(null, $mailContentId));
+		} elseif(isset($this->_view->viewVars['mailContent'])) {
+			$this->mailContent = $this->_view->viewVars['mailContent']['MailContent'];
+		}
+
+	}
 /**
  * メールフィールド一覧ページへのリンクを張る
  * @param string $mailContentId
@@ -155,6 +192,20 @@ class MailHelper extends TextExHelper {
 		}
 		return $templates;
 	}
+/**
+ * メールの説明文を取得する
+ * @return string
+ */
+	function getDescription() {
+		return $this->mailContent['description'];
+	}
+/**
+ * メールの説明文を表示する
+ * @return void
+ */
+	function description() {
+		echo $this->getDescription();
+	}
+	
 }
-
 ?>

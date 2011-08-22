@@ -190,6 +190,7 @@ class BlogContent extends BlogAppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];

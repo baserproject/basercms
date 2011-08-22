@@ -475,6 +475,7 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		if(!empty($data['blog_category_id'])) {
