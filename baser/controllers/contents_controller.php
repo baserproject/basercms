@@ -22,43 +22,43 @@
 /**
  * コンテンツコントローラー
  *
- * @package       cake
- * @subpackage    cake.baser.controllers
+ * @package cake
+ * @subpackage cake.baser.controllers
  */
 class ContentsController extends AppController {
 /**
  * クラス名
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $name = 'Contents';
 /**
  * モデル
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Content', 'Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx', 'FormEx');
 /**
  * beforeFilter
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 		
@@ -78,8 +78,8 @@ class ContentsController extends AppController {
 /**
  * コンテンツ検索
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function search() {
 		
@@ -170,7 +170,8 @@ class ContentsController extends AppController {
  * ページリストを取得する
  * 
  * @param mixid $parentCategoryId / '' / 0
- * @return type 
+ * @return type
+ * @access public 
  */
 	function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		
@@ -181,7 +182,8 @@ class ContentsController extends AppController {
  * ページリストを取得する（再帰）
  * 
  * @param mixid $parentCategoryId / '' / 0
- * @return string 
+ * @return string
+ * @access private 
  */
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 

@@ -25,63 +25,63 @@
 /**
  * 記事コントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogPostsController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogPosts';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx','TimeEx','FormEx','Ckeditor', 'Blog.Blog');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure', 'EmailEx');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ブログコンテンツデータ
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $blogContent;
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -99,8 +99,8 @@ class BlogPostsController extends BlogAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -111,8 +111,8 @@ class BlogPostsController extends BlogAppController {
 /**
  * [ADMIN] 一覧表示
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index($blogContentId) {
 
@@ -163,10 +163,10 @@ class BlogPostsController extends BlogAppController {
 /**
  * ページ一覧用の検索条件を生成する
  *
- * @param	array	$blogContentId
- * @param	array	$data
- * @return	array	$conditions
- * @access	protected
+ * @param array $blogContentId
+ * @param array $data
+ * @return array $conditions
+ * @access protected
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
@@ -229,8 +229,9 @@ class BlogPostsController extends BlogAppController {
 /**
  * [ADMIN] 登録処理
  *
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @return void
+ * @access public
  */
 	function admin_add($blogContentId) {
 
@@ -287,9 +288,10 @@ class BlogPostsController extends BlogAppController {
 /**
  * [ADMIN] 編集処理
  *
- * @param	int		blog_post_id
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($blogContentId,$id) {
 
@@ -360,9 +362,10 @@ class BlogPostsController extends BlogAppController {
 /**
  * [ADMIN] 削除処理
  *
- * @param	int		blog_post_id
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($blogContentId,$id = null) {
 
@@ -389,11 +392,10 @@ class BlogPostsController extends BlogAppController {
 	}
 /**
  * 外部データインポート
- *
  * WordPressのみ対応（2.2.3のみ検証済）
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_import() {
 

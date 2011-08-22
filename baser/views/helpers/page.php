@@ -22,42 +22,52 @@
 /**
  * ページヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class PageHelper extends Helper {
 /**
  * ページモデル
- * @var		Page
- * @access	public
+ * 
+ * @var Page
+ * @access public
  */
 	var $Page = null;
 /**
  * data
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $data = array();
 /**
  * ヘルパー
  * 
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Baser');
 /**
  * construct
+ * 
+ * @return void
+ * @access public
  */
 	function  __construct() {
+		
 		if(ClassRegistry::isKeySet('Page')) {
 			$this->Page = ClassRegistry::getObject('Page');
 		}else {
 			$this->Page =& ClassRegistry::init('Page','Model');
 		}
+		
 	}
 /**
  * beforeRender
+ * 
+ * @return void
+ * @access public
  */
 	function beforeRender() {
+		
 		if(isset($this->params['pass'][0])) {
 			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->data = $this->Page->findByUrl('/'.impload('/',$this->params['pass'][0]));
@@ -70,33 +80,43 @@ class PageHelper extends Helper {
 			}
 			$this->data = $this->Page->findByUrl('/'.$param);
 		}
+		
 	}
 /**
  * ページ機能用URLを取得する
+ * 
  * @param array $page
  * @return string
  */
 	function url($page) {
+		
 		return $this->Page->getPageUrl($page);
+		
 	}
 /**
  * 現在のページが所属するカテゴリデータを取得する
+ * 
  * @return array
+ * @access public
  */
 	function getCategory() {
+		
 		if(!empty($this->data['PageCategory']['id'])) {
 			return $this->data['PageCategory'];
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 現在のページが所属する親のカテゴリを取得する
  *
  * @param boolean $top
  * @return array
+ * @access public
  */
 	function getParentCategory($top = false) {
+		
 		$category = $this->getCategory();
 		if(empty($category['id'])) {
 			return false;
@@ -112,6 +132,7 @@ class PageHelper extends Helper {
 			$parent = $this->Page->PageCategory->getparentnode($category['id']);
 		}
 		return $parent;
+		
 	}
 /**
  * ページリストを取得する
@@ -119,28 +140,35 @@ class PageHelper extends Helper {
  * @param int $pageCategoryId
  * @param int $recursive
  * @return array
+ * @access public
  */
 	function getPageList($pageCategoryId, $recursive = null) {
+		
 		return $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
+		
 	}
 /**
  * カテゴリ名を取得する
+ * 
  * @return mixed string / false
+ * @access public
  */
 	function getCategoryName(){
+		
 		$category = $this->getCategory();
 		if($category['name']) {
 			return $category['name'];
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * 公開状態を取得する
  *
- * @param	array	データリスト
- * @return	boolean	公開状態
- * @access	public
+ * @param array データリスト
+ * @return boolean 公開状態
+ * @access public
  */
 	function allowPublish($data){
 
@@ -162,9 +190,9 @@ class PageHelper extends Helper {
 /**
  * ページカテゴリ間の次の記事へのリンクを取得する
  *
- * @param	array	$post
- * @param	string	$title
- * @param	array	$attributes
+ * @param array $post
+ * @param string $title
+ * @param array $attributes
  */
 	function nextLink($title='', $attributes = array()) {
 
@@ -206,9 +234,11 @@ class PageHelper extends Helper {
 /**
  * ページカテゴリ間の前の記事へのリンクを取得する
  *
- * @param	array	$post
- * @param	string	$title
- * @param	array	$attributes
+ * @param array $post
+ * @param string $title
+ * @param array $attributes
+ * @return void
+ * @access public
  */
 	function prevLink($title='', $attributes = array()) {
 
@@ -254,11 +284,13 @@ class PageHelper extends Helper {
  * @access	public
  */
 	function contensNaviAvailable() {
+		
 		if(empty($this->data['Page']['page_category_id']) || empty($this->data['PageCategory']['contents_navi'])) {
 			return false;
 		} else {
 			return true;
 		}
+		
 	}
 	
 }

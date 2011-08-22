@@ -25,14 +25,14 @@
 /**
  * メニューモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class PluginContent extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'PluginContent';
 /**
@@ -45,15 +45,15 @@ class PluginContent extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -81,7 +81,6 @@ class PluginContent extends AppModel {
 	);
 /**
  * プラグイン名の書き換え
- *
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
  * 一つのプラグインで二つのコンテンツを設置した場合に利用する。
  * あらかじめ、plugin_contentsテーブルに、URLに使う名前とコンテンツを特定する。
@@ -90,6 +89,10 @@ class PluginContent extends AppModel {
  * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
  * Router::connectの引数として値を与えると、$html->linkなどで、
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
+ * 
+ * @param$url
+ * @return boolean
+ * @access public
  */
 	function addRoute($url) {
 

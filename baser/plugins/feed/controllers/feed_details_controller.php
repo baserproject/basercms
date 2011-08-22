@@ -25,56 +25,56 @@
 /**
  * フィード詳細コントローラー
  *
- * @package			baser.plugins.feed.controllers
+ * @package baser.plugins.feed.controllers
  */
 class FeedDetailsController extends FeedAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedDetails';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Feed.FeedDetail','Feed.FeedConfig', 'Feed.RssEx');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('フィード管理'=>'/admin/feed/feed_configs/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -84,13 +84,14 @@ class FeedDetailsController extends FeedAppController {
 		if($this->params['prefix']=='admin') {
 			$this->subMenuElements = array('feed_details');
 		}
+		
 	}
 /**
  * [ADMIN] 登録
  *
- * @param	int		feed_config_id
- * @return	void
- * @access	public
+ * @param int feed_config_id
+ * @return void
+ * @access public
  */
 	function admin_add($feedConfigId) {
 
@@ -134,8 +135,8 @@ class FeedDetailsController extends FeedAppController {
 /**
  * [ADMIN] 編集
  *
- * @param	int		feed_config_id
- * @param	int		feed_detail_id
+ * @param int $feedConfigId
+ * @param int $id
  * @return	void
  * @access	public
  */
@@ -173,8 +174,8 @@ class FeedDetailsController extends FeedAppController {
 /**
  * フィードのキャッシュを削除する
  *
- * @param	string	$feedConfigId
- * @param	string	$url
+ * @param string $feedConfigId
+ * @param string $url
  * @return	void
  * @access	protected
  */
@@ -195,9 +196,9 @@ class FeedDetailsController extends FeedAppController {
 /**
  * [ADMIN] 削除
  *
- * @param	int		feed_config_id
- * @param	int		feed_detail_id
- * @return	void
+ * @param int $feedConfigId
+ * @param	int $id
+ * @return void
  * @access	public
  */
 	function admin_delete($feedConfigId, $id = null) {
@@ -222,6 +223,7 @@ class FeedDetailsController extends FeedAppController {
 		$this->redirect(array('controller'=>'feed_configs','action'=>'admin_edit', $feedConfigId, $id.'#headFeedDetail'));
 
 	}
+	
 }
 
 ?>

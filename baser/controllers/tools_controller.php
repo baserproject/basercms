@@ -22,45 +22,51 @@
 /**
  * ツールコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class ToolsController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'Tools';
 	var $uses = array('Tool', 'Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパ
  * 
  * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * サブメニュー
+ * 
+ * @var type
+ * @access public 
  */
 	var $subMenuElements = array('tools');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
 /**
  * データメンテナンス
  *
- * @param	string	$mode
+ * @param string $mode
+ * @return void
+ * @access public
  */
 	function admin_maintenance($mode='') {
 
@@ -96,9 +102,9 @@ class ToolsController extends AppController {
 /**
  * バックアップファイルを復元する
  *
- * @param	array	$data
- * @return	boolean
- * @access	protected
+ * @param array $data
+ * @return boolean
+ * @access protected
  */
 	function _restoreDb($data){
 		
@@ -137,10 +143,10 @@ class ToolsController extends AppController {
 /**
  * データベースをレストア
  *
- * @param	string	$path			スキーマファイルのパス
- * @param	string	$configKeyName	DB接続名
- * @return	boolean
- * @access	protected
+ * @param string $path スキーマファイルのパス
+ * @param string $configKeyName DB接続名
+ * @return boolean
+ * @access protected
  */
 	function _loadBackup($path, $configKeyName) {
 
@@ -185,8 +191,8 @@ class ToolsController extends AppController {
 /**
  * バックアップデータを作成する
  *
- * @return 	void
- * @access	public
+ * @return void
+ * @access protected
  */
 	function _backupDb() {
 
@@ -209,9 +215,10 @@ class ToolsController extends AppController {
 /**
  * バックアップファイルを書きだす
  *
- * @param	string	$configKeyName
- * @param	string	$path
- * @return	boolean;
+ * @param string $configKeyName
+ * @param string $path
+ * @return boolean
+ * @access protected
  */
 	function _writeBackup($configKeyName, $path) {
 
@@ -238,8 +245,8 @@ class ToolsController extends AppController {
 /**
  * モデル名からスキーマファイルを生成する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_write_schema() {
 
@@ -274,8 +281,8 @@ class ToolsController extends AppController {
 /**
  * スキーマファイルを読み込みテーブルを生成する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_load_schema() {
 		
@@ -306,6 +313,7 @@ class ToolsController extends AppController {
  * スキーマ用の一時フォルダをリセットする
  *
  * @return boolean
+ * @access protected
  */
 	function _resetTmpSchemaFolder() {
 		

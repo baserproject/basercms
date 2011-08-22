@@ -25,14 +25,14 @@
 /**
  * フィード設定モデル
  *
- * @package			baser.plugins.feed.models
+ * @package baser.plugins.feed.models
  */
 class FeedConfig extends FeedAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedConfig';
 /**
@@ -44,15 +44,15 @@ class FeedConfig extends FeedAppModel {
 	var $actsAs = array('Cache');
 /**
  * DB設定
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'plugin';
 /**
  * hasMany
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array("FeedDetail" =>
 			array("className" => "Feed.FeedDetail",
@@ -66,8 +66,8 @@ class FeedConfig extends FeedAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -101,6 +101,9 @@ class FeedConfig extends FeedAppModel {
 	);
 /**
  * 初期値を取得
+ * 
+ * @return array
+ * @access public
  */
 	function getDefaultValue() {
 
@@ -109,5 +112,6 @@ class FeedConfig extends FeedAppModel {
 		return $data;
 
 	}
+	
 }
 ?>

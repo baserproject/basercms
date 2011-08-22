@@ -24,59 +24,58 @@
  */
 /**
  * ダッシュボードコントローラー
- *
  * 管理者ログインやメンバーログインのダッシュボードページを表示する
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class DashboardController extends AppController {
 /**
  * クラス名
  *
- * @var 	string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Dashboard';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Dblog','User','GlobalMenu');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('time','javascript');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx', 'Cookie', 'AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $navis = array();
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * [ADMIN] 管理者ダッシュボードページを表示する
  *
- * @return 	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -95,6 +94,9 @@ class DashboardController extends AppController {
 	}
 /**
  * [ADMIN] 最近の動きを削除
+ * 
+ * @return void
+ * @access public
  */
 	function admin_del(){
 
@@ -106,5 +108,6 @@ class DashboardController extends AppController {
 		$this->redirect(array('action'=>'index'));
 
 	}
+	
 }
 ?>

@@ -25,56 +25,56 @@
 /**
  * カテゴリコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogCategoriesController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogCategories';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Blog.BlogCategory','Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx','TimeEx','FormEx','Blog.Blog');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 		
@@ -92,18 +92,20 @@ class BlogCategoriesController extends BlogAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
+		
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
+		
 	}
 /**
  * [ADMIN] ブログを一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index($blogContentId) {
 
@@ -128,8 +130,9 @@ class BlogCategoriesController extends BlogAppController {
 /**
  * [ADMIN] 登録処理
  *
- * @return	void
- * @access 	public
+ * @param string $blogContentId
+ * @return void
+ * @access public
  */
 	function admin_add($blogContentId) {
 
@@ -181,9 +184,10 @@ class BlogCategoriesController extends BlogAppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		blog_category_no
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($blogContentId,$id) {
 
@@ -234,9 +238,10 @@ class BlogCategoriesController extends BlogAppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		blog_category_no
+ * @param int $blogContentId
+ * @param int $id
  * @return	void
- * @access 	public
+ * @access public
  */
 	function admin_delete($blogContentId,$id = null) {
 
@@ -260,5 +265,6 @@ class BlogCategoriesController extends BlogAppController {
 		$this->redirect(array('action'=>'index',$blogContentId));
 
 	}
+	
 }
 ?>

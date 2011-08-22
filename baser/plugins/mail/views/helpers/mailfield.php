@@ -25,16 +25,16 @@
 /**
  * メールフィールドヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MailfieldHelper extends AppHelper {
 /**
  * htmlの属性を取得する
  *
- * @param	array	メールフィールド
- * @return	array	html属性
- * @access	public
+ * @param array メールフィールド
+ * @return array html属性
+ * @access public
  */
 	function getAttributes($data) {
 
@@ -61,9 +61,9 @@ class MailfieldHelper extends AppHelper {
 /**
  * コントロールのソースを取得する
  *
- * @param	array	メールフィールド
- * @return	array	コントロールソース
- * @access	public
+ * @param array メールフィールド
+ * @return array コントロールソース
+ * @access public
  */
 	function getOptions($data) {
 
@@ -91,6 +91,7 @@ class MailfieldHelper extends AppHelper {
 		}
 
 	}
+	
 }
 
 ?>

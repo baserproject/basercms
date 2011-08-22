@@ -25,21 +25,21 @@
 /**
  * グローバルメニューモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class GlobalMenu extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'GlobalMenu';
 /**
@@ -52,8 +52,8 @@ class GlobalMenu extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -72,9 +72,9 @@ class GlobalMenu extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field = null) {
 

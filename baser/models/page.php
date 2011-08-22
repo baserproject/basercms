@@ -21,25 +21,28 @@
  */
 /**
  * ページモデル
- * @package			baser.models
+ * 
+ * @package baser.models
  */
 class Page extends AppModel {
 /**
  * クラス名
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Page';
 /**
  * データベース接続
- * @var     string
- * @access  public
+ * 
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array(
 			'PageCategory' =>   array(  'className'=>'PageCategory',
@@ -55,7 +58,8 @@ class Page extends AppModel {
 	var $actsAs = array('ContentsManager', 'Cache');
 /**
  * 更新前のページファイルのパス
- * @var	string
+ * 
+ * @var string
  * @access public
  */
 	var $oldPath = '';
@@ -63,8 +67,9 @@ class Page extends AppModel {
  * ファイル保存可否
  * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
  * テンプレート読み込み時などはfalseにして保存しないようにする
- * @var		boolean
- * @access	public
+ * 
+ * @var boolean
+ * @access public
  */
 	var $fileSave = true;
 /**
@@ -77,39 +82,41 @@ class Page extends AppModel {
 /**
  * 非公開WebページURLリスト
  * キャッシュ用
+ * 
  * @var mixed
  * @deprecated
+ * @access protected
  */
 	var $_unpublishes = -1;
 /**
  * 公開WebページURLリスト
- * 
  * キャッシュ用
  * 
  * @var mixed
+ * @access protected
  */
 	var $_publishes = -1;
 /**
  * WebページURLリスト
- * 
  * キャッシュ用
  * 
  * @var mixed
+ * @access protected
  */
 	var $_pages = -1;
 /**
  * 最終登録ID
- *
  * モバイルページへのコピー処理でスーパークラスの最終登録IDが上書きされ、
  * コントローラーからは正常なIDが取得できないのでモバイルページへのコピー以外の場合だけ保存する
  *
  * @var int
+ * @access private
  */
 	var $__pageInsertID = null;
 /**
  * バリデーション
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $validate = array(
@@ -137,6 +144,7 @@ class Page extends AppModel {
 	);
 /**
  * フォームの初期値を設定する
+ * 
  * @return	array	初期値データ
  * @access	public
  */
@@ -150,7 +158,9 @@ class Page extends AppModel {
 	}
 /**
  * beforeSave
+ * 
  * @return boolean
+ * @access public
  */
 	function beforeSave() {
 
@@ -192,18 +202,22 @@ class Page extends AppModel {
  * @access	public
  */
 	function getInsertID(){
+		
 		if(!$this->__pageInsertID){
 			$this->__pageInsertID = parent::getInsertID();
 		}
 		return $this->__pageInsertID;
+		
 	}
 /**
  * ページテンプレートファイルが開けるかチェックする
+ * 
  * @param	array	$data	ページデータ
  * @return	boolean
  * @access	public
  */
 	function checkOpenPageFile($data){
+		
 		$path = $this->_getPageFilePath($data);
 		$File = new File($path);
 		if($File->open('w')) {
@@ -213,10 +227,12 @@ class Page extends AppModel {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * afterSave
  * 
+ * @param array $created
  * @return boolean
  * @access public
  */
@@ -366,8 +382,8 @@ class Page extends AppModel {
 /**
  * beforeDelete
  * 
- * @return	boolean
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeDelete() {
 		
@@ -376,12 +392,15 @@ class Page extends AppModel {
 	}
 /**
  * データが公開済みかどうかチェックする
- *
  * 同様のメソッド checkPublish があり DB接続前提でURLでチェックする仕組みだが
  * こちらは、実データで直接チェックする
  * TODO メソッド名のリファクタリング要
  *
+ * @param boolean $status
+ * @param boolean $publishBegin
+ * @param boolean $publishEnd
  * @return	array
+ * @access public
  */
 	function allowedPublish($status, $publishBegin, $publishEnd) {
 
@@ -406,10 +425,12 @@ class Page extends AppModel {
 	}
 /**
  * DBデータを元にページテンプレートを全て生成する
- * @return	boolean
- * @access	public
+ * 
+ * @return boolean
+ * @access public
  */
 	function createAllPageTemplate(){
+		
 		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
 		foreach($pages as $page){
@@ -418,12 +439,14 @@ class Page extends AppModel {
 			}
 		}
 		return $result;
+		
 	}
 /**
  * ページテンプレートを生成する
- * @param	array	$data ページデータ
- * @return	boolean
- * @access	public
+ * 
+ * @param array $data ページデータ
+ * @return boolean
+ * @access public
  */
 	function createPageTemplate($data){
 
@@ -457,8 +480,10 @@ class Page extends AppModel {
 	}
 /**
  * ページファイルのディレクトリを取得する
+ * 
  * @param array $data
  * @return string
+ * @access protected
  */
 	function _getPageFilePath($data) {
 
@@ -507,19 +532,24 @@ class Page extends AppModel {
 	}
 /**
  * ページファイルを削除する
+ * 
  * @param array $data
  */
 	function delFile($data) {
+		
 		$path = $this->_getPageFilePath($data);
 		if($path) {
 			return unlink($path);
 		}
 		return true;
+		
 	}
 /**
  * ページのURLを取得する
+ * 
  * @param array $data
  * @return string
+ * @access public
  */
 	function getPageUrl($data) {
 
@@ -542,14 +572,20 @@ class Page extends AppModel {
 			}
 		}
 		return $url.$data['name'];
+		
 	}
 /**
  * Baserが管理するタグを追加する
+ * 
+ * @param string $id
  * @param string $contents
  * @param string $title
+ * @param string $description
  * @return string
+ * @access public
  */
 	function addBaserPageTag($id,$contents,$title,$description) {
+		
 		$tag = '<!-- BaserPageTagBegin -->'."\n";
 		$tag .= '<?php $baser->setTitle(\''.$title.'\') ?>'."\n";
 		$tag .= '<?php $baser->setDescription(\''.$description.'\') ?>'."\n";
@@ -558,15 +594,17 @@ class Page extends AppModel {
 		}
 		$tag .= '<!-- BaserPageTagEnd -->'."\n";
 		return $tag . $contents;
+		
 	}
 /**
  * ページ存在チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function pageExists($check) {
+		
 		if($this->exists()) {
 			return true;
 		}else {
@@ -582,14 +620,15 @@ class Page extends AppModel {
 				return !file_exists($this->_getPageFilePath($this->data));
 			}
 		}
+		
 	}
 /**
  * コントロールソースを取得する
  *
- * @param	string	$field			フィールド名
- * @param	array	$options
- * @return	mixed	$controlSource	コントロールソース
- * @access	public
+ * @param string $field フィールド名
+ * @param array $options
+ * @return mixed $controlSource コントロールソース
+ * @access public
  */
 	function getControlSource($field, $options = array()) {
 
@@ -706,9 +745,10 @@ class Page extends AppModel {
 	}
 /**
  * 公開チェックを行う
- * @param	string	$url
- * @return	boolean
- * @access	public
+ * 
+ * @param string $url
+ * @return boolean
+ * @access public
  */
 	function checkPublish($url) {
 
@@ -738,7 +778,8 @@ class Page extends AppModel {
 /**
  * 公開済の conditions を取得
  *
- * @return	array
+ * @return array
+ * @access public
  */
 	function getConditionAllowPublish() {
 
@@ -756,10 +797,10 @@ class Page extends AppModel {
  * ページファイルを登録する
  * ※ 再帰処理
  *
- * @param	string	$pagePath
- * @param	string	$parentCategoryId
- * @return	array	処理結果 all / success
- * @access	protected
+ * @param string $pagePath
+ * @param string $parentCategoryId
+ * @return array 処理結果 all / success
+ * @access protected
  */
 	function entryPageFiles($targetPath,$parentCategoryId = '') {
 
@@ -919,11 +960,13 @@ class Page extends AppModel {
 /**
  * モバイルページの存在チェック
  * 存在する場合は、ページIDを返す
- * @param	array	$data	ページデータ
- * @return	mixed	ページID / false
- * @access	public
+ * 
+ * @param array $data ページデータ
+ * @return mixed ページID / false
+ * @access public
  */
 	function mobileExists ($data) {
+		
 		if(isset($data['Page'])){
 			$data = $data['Page'];
 		}
@@ -932,6 +975,7 @@ class Page extends AppModel {
 			return false;
 		}
 		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
+		
 	}
 /**
  * ページで管理されているURLかチェックする

@@ -22,8 +22,8 @@
 /**
  * ページカテゴリーコントローラー
  *
- * @package       cake
- * @subpackage    cake.baser.controllers
+ * @package cake
+ * @subpackage cake.baser.controllers
  */
 class PageCategoriesController extends AppController {
 /**
@@ -50,21 +50,21 @@ class PageCategoriesController extends AppController {
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * パンくず
- * @var			array
+ * @var array
  * @access	public
  */
 	var $navis = array('ページ管理'=>'/admin/pages/index');
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 		
@@ -81,8 +81,8 @@ class PageCategoriesController extends AppController {
 /**
  * [ADMIN] ページカテゴリーリスト
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -130,8 +130,8 @@ class PageCategoriesController extends AppController {
 /**
  * [ADMIN] ページカテゴリー情報登録
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -186,9 +186,9 @@ class PageCategoriesController extends AppController {
 /**
  * [ADMIN] ページカテゴリー情報編集
  *
- * @param	int		page_id
- * @return	void
- * @access 	public
+ * @param int page_id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -257,9 +257,9 @@ class PageCategoriesController extends AppController {
 /**
  * [ADMIN] ページカテゴリー情報削除
  *
- * @param	int		page_id
- * @return	void
- * @access 	public
+ * @param int page_id
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 

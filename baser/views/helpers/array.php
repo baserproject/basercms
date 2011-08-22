@@ -26,16 +26,16 @@ App::import('Helper', 'Form');
 /**
  * ArrayHelper
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class ArrayHelper extends AppHelper {
 /**
  * 配列の最初の要素かどうか調べる
  *
- * @param 	array	配列
- * @param 	mixed	現在のキー
- * @return 	boolean
- * @access	public
+ * @param array $array 配列
+ * @param mixed $key 現在のキー
+ * @return boolean
+ * @access public
  */
 	function first($array, $key) {
 
@@ -51,10 +51,10 @@ class ArrayHelper extends AppHelper {
 /**
  * 配列の最後の要素かどうか調べる
  *
- * @param 	array	配列
- * @param 	mixed	現在のキー
- * @return 	boolean
- * @access	public
+ * @param array $array 配列
+ * @param mixed $key 現在のキー
+ * @return boolean
+ * @access public
  */
 	function last($array, $key) {
 

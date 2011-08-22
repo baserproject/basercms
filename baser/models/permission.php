@@ -25,14 +25,14 @@
 /**
  * パーミッションモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Permission extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Permission';
 /**
@@ -45,14 +45,14 @@ class Permission extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
@@ -60,14 +60,16 @@ class Permission extends AppModel {
  * permissionsTmp
  * ログインしているユーザーの拒否URLリスト
  * キャッシュ用
+ * 
  * @var mixed
+ * @access public
  */
 	var $permissionsTmp = -1;
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -93,6 +95,7 @@ class Permission extends AppModel {
 /**
  * 設定をチェックする
  *
+ * @param array $check
  * @return boolean True if the operation should continue, false if it should abort
  * @access public
  */
@@ -119,9 +122,9 @@ class Permission extends AppModel {
 /**
  * 認証プレフィックスを取得する
  *
- * @param	int	$id
- * @return	string
- * @access	public
+ * @param int $id
+ * @return string
+ * @access public
  */
 	function getAuthPrefix($id) {
 
@@ -141,17 +144,20 @@ class Permission extends AppModel {
 /**
  * 初期値を取得する
  * @return array
+ * @access public
  */
 	function getDefaultValue() {
+		
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
 		return $data;
+		
 	}
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
+ * @param string フィールド名
+ * @return array コントロールソース
  * @access	public
  */
 	function getControlSource($field = null) {
@@ -167,9 +173,13 @@ class Permission extends AppModel {
 	}
 /**
  * beforeSave
+ * 
  * @param array $options
+ * @return boolean
+ * @access public
  */
 	function beforeSave($options) {
+		
 		if(isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
 		}else {
@@ -182,11 +192,16 @@ class Permission extends AppModel {
 		}
 		$this->data['Permission'] = $data;
 		return true;
+		
 	}
 /**
  * 権限チェックを行う
+ * 
+ * @param array $url
  * @param string $userGroupId
  * @param array $params
+ * @return boolean
+ * @access public
  */
 	function check($url, $userGroupId) {
 

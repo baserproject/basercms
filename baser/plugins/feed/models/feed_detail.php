@@ -23,16 +23,16 @@
  * Include files
  */
 /**
- * フィード詳細モデル
+ * feed_detail
  *
- * @package			baser.plugins.feed.models
+ * @package baser.plugins.feed.models
  */
 class FeedDetail extends FeedAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedDetail';
 /**
@@ -44,8 +44,9 @@ class FeedDetail extends FeedAppModel {
 	var $actsAs = array('Cache');
 /**
  * belongsTo
- * @var		array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
 							'conditions' => '',
@@ -55,8 +56,8 @@ class FeedDetail extends FeedAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -81,8 +82,8 @@ class FeedDetail extends FeedAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
+ * @param string $field フィールド名
+ * @return array コントロールソース
  * @access	public
  */
 	function getControlSource($field = null) {
@@ -97,6 +98,7 @@ class FeedDetail extends FeedAppModel {
 	}
 /**
  * 初期値を取得する
+ * 
  * @param string $feedDetailId
  * @retun array $data
  * @access public
@@ -110,5 +112,6 @@ class FeedDetail extends FeedAppModel {
 		return $data;
 
 	}
+	
 }
 ?>

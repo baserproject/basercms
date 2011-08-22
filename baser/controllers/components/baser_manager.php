@@ -20,9 +20,14 @@
  * @license			http://basercms.net/license/index.html
  */
 class BaserManagerComponent extends Object {
-	
 /**
  * データベースを初期化する
+ * 
+ * @param type $reset
+ * @param type $dbConfig
+ * @param type $nonDemoData
+ * @return type
+ * @access public 
  */
 	function initDb($reset = true, $dbConfig = null, $nonDemoData = false) {
 		
@@ -36,6 +41,11 @@ class BaserManagerComponent extends Object {
 	}
 /**
  * データベースを構築する
+ * 
+ * @param type $dbConfig
+ * @param type $nonDemoData
+ * @return type
+ * @access public
  */
 	function constructionDb($dbConfig = null, $nonDemoData = false) {
 
@@ -57,9 +67,12 @@ class BaserManagerComponent extends Object {
 /**
  * テーブルを構築する
  *
- * @param	string	$configKeyName
- * @param	string	$path
- * @return	boolean
+ * @param string	$path
+ * @param string	$dbConfigKeyName
+ * @param string	$dbConfig
+ * @param string	$nonDemoData
+ * @return boolean
+ * @access public
  */
 	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $nonDemoData = false) {
 
@@ -124,6 +137,8 @@ class BaserManagerComponent extends Object {
  * 全てのテーブルを削除する
  * 
  * @param type $dbConfig 
+ * @return void
+ * @access public
  */
 	function deleteAllTables($dbConfig = null) {
 		
@@ -134,8 +149,10 @@ class BaserManagerComponent extends Object {
 /**
  * テーブルを削除する
  * 
+ * @param string $dbConfigKeyName
  * @param array $dbConfig
- * 
+ * @return boolean
+ * @access public
  * TODO 処理を DboSource に移動する
  */
 	function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
@@ -200,7 +217,9 @@ class BaserManagerComponent extends Object {
  * データソースを取得する
  * 
  * @param string $configKeyName
- * @param array $dbConfig 
+ * @param array $dbConfig
+ * @return DataSource
+ * @access public
  */
 	function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 
@@ -220,15 +239,15 @@ class BaserManagerComponent extends Object {
 /**
  * テーマを配置する
  *
- * @param	string	$theme
- * @return	boolean
- * @access	protected
+ * @param string $theme
+ * @return boolean
+ * @access public
  */
 	function deployTheme($theme = 'demo') {
 
 		$targetPath = WWW_ROOT.'themed'.DS.$theme;
-        $sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
-        $folder = new Folder();
+		$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
+		$folder = new Folder();
 		$folder->delete($targetPath);
 		if($folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
 			if($folder->create($targetPath.DS.'pages',0777)) {

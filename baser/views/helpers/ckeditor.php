@@ -23,28 +23,31 @@ class CkeditorHelper extends AppHelper {
 /**
  * ヘルパー
  * @var array
+ * @access public
  */
 	var $helpers = array('Javascript', 'Form');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
+ * 
  * @var boolean
+ * @access public
  */
 	var $_script = false;
 /**
  * 初期化状態
- *
  * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
  *
- * @var	boolean
+ * @var boolean
+ * @access public
  */
 	var $inited = false;
 /**
  * 初期設定スタイル
- *
  * StyleSet 名 basercms
  *
- * @var	array
+ * @var array
+ * @access public
  */
 	var $style = array(
 					array(	'name' => '青見出し(h3)',
@@ -80,7 +83,6 @@ class CkeditorHelper extends AppHelper {
 	}
 /**
  * CKEditor のスクリプトを構築する
- *
  * 【ボタン一覧】
  * Source			- ソース
  * Save				- 保存
@@ -149,10 +151,10 @@ class CkeditorHelper extends AppHelper {
  * CopyPublish		- 本稿を草稿にコピー
  * CopyDraft		- 草稿を本稿にコピー
  *
- * @param	string	$fieldName
- * @param	array	$ckoptions
- * @return	string
- * @access	protected
+ * @param string $fieldName
+ * @param array $ckoptions
+ * @return string
+ * @access protected
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
@@ -297,6 +299,7 @@ class CkeditorHelper extends AppHelper {
 			$jscode .= " });";
 		}
 		return $this->Javascript->codeBlock($jscode);
+		
 	}
 /**
  * CKEditorのテキストエリアを出力する（textarea）
@@ -307,6 +310,7 @@ class CkeditorHelper extends AppHelper {
  * @return string
  */
 	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+		
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -319,6 +323,7 @@ class CkeditorHelper extends AppHelper {
 			$hidden = '';
 		}
 		return $form->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
+		
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
@@ -329,6 +334,7 @@ class CkeditorHelper extends AppHelper {
  * @return string
  */
 	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+		
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -342,6 +348,8 @@ class CkeditorHelper extends AppHelper {
 		}
 		$options['type'] = 'textarea';
 		return $form->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles, $form);
+		
 	}
+	
 }
 ?>

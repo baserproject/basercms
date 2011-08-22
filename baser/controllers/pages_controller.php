@@ -22,8 +22,8 @@
 /**
  * ページコントローラー
  *
- * @package       cake
- * @subpackage    cake.baser.controllers
+ * @package cake
+ * @subpackage cake.baser.controllers
  */
 class PagesController extends AppController {
 /**
@@ -43,22 +43,22 @@ class PagesController extends AppController {
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure', 'EmailEx');
 /**
  * モデル
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $uses = array('Page', 'PageCategory');
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -89,8 +89,8 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページリスト
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -139,8 +139,8 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページ情報登録
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -212,9 +212,9 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページ情報編集
  *
- * @param	int		$id (page_id)
- * @return	void
- * @access 	public
+ * @param int $id (page_id)
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -326,9 +326,9 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページ情報削除
  *
- * @param	int		$id (page_id)
- * @return	void
- * @access 	public
+ * @param int $id (page_id)
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -370,8 +370,8 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページファイルを登録する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_entry_page_files() {
 
@@ -387,8 +387,8 @@ class PagesController extends AppController {
 /**
  * [ADMIN] ページファイルを登録する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_write_page_files() {
 
@@ -404,9 +404,9 @@ class PagesController extends AppController {
 /**
  * ビューを表示する
  *
- * @param	mixed
- * @return	void
- * @access	public
+ * @param mixed
+ * @return void
+ * @access public
  */
 	function display() {
 
@@ -470,9 +470,9 @@ class PagesController extends AppController {
 /**
  * パンくずナビ用の配列を取得する
  *
- * @param	string	$url
- * @return	array
- * @access	protected
+ * @param string	$url
+ * @return array
+ * @access protected
  */
 	function _getNavi($url) {
 
@@ -513,20 +513,22 @@ class PagesController extends AppController {
 /**
  * [MOBILE] ビューを表示する
  *
- * @param	mixed
- * @return	void
- * @access	public
+ * @param mixed
+ * @return void
+ * @access public
  */
 	function mobile_display() {
+		
 		$path = func_get_args();
 		call_user_func_array( array( &$this, 'display' ), $path );
+		
 	}
 /**
  * [ADMIN] WEBページをプレビュー
  *
- * @param	mixed	$id (blog_post_id)
- * @return	void
- * @access 	public
+ * @param mixed	$id (blog_post_id)
+ * @return void
+ * @access public
  */
 	function admin_create_preview($id) {
 
@@ -566,8 +568,8 @@ class PagesController extends AppController {
 /**
  * プレビューを表示する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_preview($id){
 
@@ -594,8 +596,8 @@ class PagesController extends AppController {
 /**
  * 並び替えを更新する [AJAX]
  *
- * @access	public
- * @return	boolean
+ * @access public
+ * @return boolean
  */
 	function admin_update_sort () {
 
@@ -620,9 +622,9 @@ class PagesController extends AppController {
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $data
+ * @return string
+ * @access protected
  */
 	function _createAdminIndexConditions($data){
 
@@ -731,6 +733,7 @@ class PagesController extends AppController {
 /**
  * PC用のカテゴリIDを元にモバイルページが作成する権限があるかチェックする
  * 
+ * @param int $type
  * @param int $id
  * @return boolean
  * @access public
@@ -797,6 +800,7 @@ class PagesController extends AppController {
  * カテゴリリスト用のデータを取得する
  * 
  * @param int $type
+ * @param int $options
  * @param boolean $empty
  * @return array
  * @access public

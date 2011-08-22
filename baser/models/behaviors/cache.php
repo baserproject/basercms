@@ -101,7 +101,9 @@ class CacheBehavior extends ModelBehavior {
  * @access public
  */
 	function cacheEnabled(&$model){
+		
 		return $this->enabled;
+		
 	}
 /**
  * キャッシュを削除する

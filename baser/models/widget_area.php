@@ -25,13 +25,13 @@
 /**
  * ウィジェットエリアモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class WidgetArea extends AppModel {
 /**
  * クラス名
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'WidgetArea';
 /**
@@ -44,8 +44,8 @@ class WidgetArea extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -60,8 +60,9 @@ class WidgetArea extends AppModel {
 	);
 /**
  * コントロールソース取得
- * @param	string	$field
- * @return	array
+ * @param string $field
+ * @return array
+ * @access public
  */
 	function getControlSource($field) {
 
@@ -73,5 +74,6 @@ class WidgetArea extends AppModel {
 		}
 		
 	}
+	
 }
 ?>

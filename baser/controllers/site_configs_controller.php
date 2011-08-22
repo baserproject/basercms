@@ -25,54 +25,55 @@
 /**
  * サイト設定コントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class SiteConfigsController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'SiteConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('SiteConfig','GlobalMenu','Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ヘルパー
  * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * ぱんくずナビ
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
 /**
  * [ADMIN] サイト基本設定
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -221,16 +222,20 @@ class SiteConfigsController extends AppController {
 	}
 /**
  * キャッシュファイルを全て削除する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function admin_del_cache() {
+		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
 		$this->redirect(array('action'=>'form'));
+		
 	}
 /**
  * [ADMIN] PHPINFOを表示する
+ * 
  * @return void
  * @access public
  */
@@ -257,8 +262,8 @@ class SiteConfigsController extends AppController {
 /**
  * サイト基本設定データを取得する
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _getSiteConfigData() {
 

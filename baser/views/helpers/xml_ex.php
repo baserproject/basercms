@@ -26,13 +26,14 @@ App::import("Helper","Xml");
 /**
  * XMLヘルパー拡張
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class XmlExHelper extends XmlHelper {
 /**
  * XML宣言を生成
  * IE6以外の場合のみ生成する
- * @param  array $attrib
+ * 
+ * @param array $attrib
  * @return string XML宣言
  */
 	function header($attrib = array()) {
@@ -43,5 +44,6 @@ class XmlExHelper extends XmlHelper {
 		}
 
 	}
+	
 }
 ?>

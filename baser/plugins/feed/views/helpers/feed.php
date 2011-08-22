@@ -25,21 +25,23 @@
 /**
  * フィードヘルパー
  *
- * @package			baser.plugins.feed.views.helpers
+ * @package baser.plugins.feed.views.helpers
  *
  */
 class FeedHelper extends TextExHelper {
 /**
  * ヘルパー
- * @var		array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $helpers = array('Baser');
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * 
+ * @return array
+ * @access public
  */
 	function getTemplates() {
 		
@@ -70,36 +72,40 @@ class FeedHelper extends TextExHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * フィードのキャッシュタイムをキャッシュファイルに保存
- * 
  * <cake:nocache>でキャッシュタイムを参照できるようにする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function saveCachetime(){
+		
 		$feedId = $this->params['pass'][0];
 		if(isset($this->Baser->_view->viewVars['cachetime'])) {
 			$cachetime = $this->Baser->_view->viewVars['cachetime'];
 			cache('views'.DS.'feed_cachetime_'.$feedId.'.php',$cachetime);
 		}
+		
 	}
 /**
  * フィードリストのキャッシュヘッダーを出力する
- *
  * キャッシュ時間は管理画面で設定した値
  * ヘッダーを出力するには<cake:nocache>を利用する
  * <cake:nocache>内では動的変数を利用できないのでキャッシュファイルを利用する
  * 事前に $feed->saveCachetime() でキャッシュタイムを保存しておく
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function cacheHeader(){
+		
 		$feedId = $this->params['pass'][0];
 		$this->Baser->cacheHeader(cache('views'.DS.'feed_cachetime_'.$feedId.'.php'));
+		
 	}
+	
 }
 ?>

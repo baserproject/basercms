@@ -22,20 +22,24 @@
 /**
  * モバイルコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class MobileController extends AppController {
 /**
  * モデル
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $uses = null;
 /**
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
+ * 
+ * return void
+ * access public
  */
 	function ga() {
+		
 		if(empty($this->siteConfigs['google_analytics_id']) || !version_compare ( preg_replace('/[a-z-]/','', phpversion()), '5','>=')) {
 			header("Content-Type: image/gif");
 			header("Cache-Control: " .
@@ -55,6 +59,8 @@ class MobileController extends AppController {
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
 		App::import('Vendor', 'ga');
 		exit();
+		
 	}
+	
 }
 ?>

@@ -25,41 +25,41 @@
 /**
  * フィードコントローラー
  *
- * @package			baser.plugins.feed.controllers
+ * @package baser.plugins.feed.controllers
  */
 class FeedController extends FeedAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Feed';
 /**
  * コンポーネント
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $components = array('RequestHandler');
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Cache','TextEx','Feed.Feed');
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -71,9 +71,9 @@ class FeedController extends FeedAppController {
 /**
  * [PUBLIC] フィードを一覧表示する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function index($id) {
 
@@ -199,9 +199,9 @@ class FeedController extends FeedAppController {
 /**
  * [MOBILE] フィードを一覧表示する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function mobile_index($id) {
 
@@ -211,9 +211,9 @@ class FeedController extends FeedAppController {
 /**
  * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function ajax($id) {
 
@@ -234,7 +234,8 @@ class FeedController extends FeedAppController {
  * 
  * @param array $a
  * @param array $b
- * @return 
+ * @return array
+ * @access protected
  */
 	function _sortDescByTimestamp($a, $b) {
 		if ($a['timestamp'] == $b['timestamp']) {
@@ -245,11 +246,11 @@ class FeedController extends FeedAppController {
 /*
  * バブルソート
  *
- * @param	array	$val = ソートする配列
- * @param	string	$flag = ソート対象の配列要素
- * @param	string	$order = ソートの昇順・降順　デフォルトは昇順
- * @return	array	並び替え後の配列
- * @access	protected
+ * @param array $val = ソートする配列
+ * @param string $flag = ソート対象の配列要素
+ * @param string $order = ソートの昇順・降順 デフォルトは昇順
+ * @return array 並び替え後の配列
+ * @access protected
  */
 	function _bsort(&$val, $flag = "", $order = "ASC") {
 
@@ -286,6 +287,8 @@ class FeedController extends FeedAppController {
 				}
 			}
 		}
+		
 	}
+	
 }
 ?>

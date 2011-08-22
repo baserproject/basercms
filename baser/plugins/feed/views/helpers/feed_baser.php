@@ -22,14 +22,17 @@
 /**
  * フィードBaserヘルパー
  *
- * @package			baser.plugins.feed.views.helpers
+ * @package baser.plugins.feed.views.helpers
  *
  */
 class FeedBaserHelper extends AppHelper {
 /**
  * フィード出力
- * @param	int		$id
- * @param	mixid	$mobile '' / boolean
+ * 
+ * @param int $id
+ * @param mixid $mobile '' / boolean
+ * @return void
+ * @access public
  */
 	function feed ($id, $mobile='') {
 		

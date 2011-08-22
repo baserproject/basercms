@@ -25,14 +25,14 @@
 /**
  * ユーザーグループモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class UserGroup extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'UserGroup';
 /**
@@ -45,15 +45,15 @@ class UserGroup extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('Permission'=>
 			array('className'=>'Permission',
@@ -72,8 +72,8 @@ class UserGroup extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -100,8 +100,10 @@ class UserGroup extends AppModel {
 	);
 /**
  * 関連するユーザーを管理者グループに変更し保存する
- * @param <type> $cascade
- * @return <type>
+ * 
+ * @param boolean $cascade
+ * @return boolean
+ * @access public
  */
 	function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);

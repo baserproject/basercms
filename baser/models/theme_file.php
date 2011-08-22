@@ -24,20 +24,21 @@ class ThemeFile extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'ThemeFile';
 /**
  * use table
- * @var		boolean
+ * 
+ * @var boolean
  * @access	public
  */
 	var $useTable = false;
 /**
  * バリデーション
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $validate = array(
@@ -51,8 +52,10 @@ class ThemeFile extends AppModel {
 	);
 /**
  * フォルダの重複チェック
+ * 
  * @param	array	$check
  * @return	boolean
+ * @access public
  */
 	function duplicateThemeFile ($check) {
 
@@ -67,5 +70,6 @@ class ThemeFile extends AppModel {
 		}
 
 	}
+	
 }
 ?>

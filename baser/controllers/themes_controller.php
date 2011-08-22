@@ -22,40 +22,41 @@
 class ThemesController extends AppController {
 /**
  * コントローラー名
- * @var		string
+ * @var string
  * @access	public
  */
 	var $name = 'Themes';
 /**
  * モデル
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Theme','Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * パンくずナビ
  * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
 /**
  * テーマ一覧
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_index(){
 
@@ -98,9 +99,9 @@ class ThemesController extends AppController {
 /**
  * テーマ名編集
  * 
- * @param	string	$theme
- * @return	void
- * @access	public
+ * @param string $theme
+ * @return void
+ * @access public
  */
 	function admin_edit($theme){
 		
@@ -156,9 +157,9 @@ class ThemesController extends AppController {
 /**
  * テーマをコピーする
  *
- * @param	string	$theme
- * @return	void
- * @access	public
+ * @param string $theme
+ * @return void
+ * @access public
  */
 	function admin_copy($theme){
 
@@ -182,9 +183,9 @@ class ThemesController extends AppController {
 /**
  * テーマを削除する
  *
- * @param	string	$theme
- * @return	void
- * @access	public
+ * @param string $theme
+ * @return void
+ * @access public
  */
 	function admin_del($theme){
 
@@ -208,11 +209,12 @@ class ThemesController extends AppController {
 /**
  * テーマを適用する
  *
- * @param	string	$theme
- * @return	void
- * @access	public
+ * @param string $theme
+ * @return void
+ * @access public
  */
 	function admin_apply($theme){
+		
 		if(!$theme){
 			$this->notFound();
 		}
@@ -226,6 +228,7 @@ class ThemesController extends AppController {
 			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		}
 		$this->redirect(array('action'=>'index'));
+		
 	}
 
 }

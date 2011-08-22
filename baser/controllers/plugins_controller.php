@@ -21,52 +21,51 @@
  */
 /**
  * Plugin 拡張クラス
- *
  * プラグインのコントローラーより継承して利用する
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class PluginsController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'Plugins';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('GlobalMenu','Plugin','PluginContent');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
 			'プラグイン管理'=>'/admin/plugins/index');
@@ -79,8 +78,8 @@ class PluginsController extends AppController {
 /**
  * beforeFilter
  *
- * @return	void
- * @access	private
+ * @return void
+ * @access private
  */
 	function beforeFilter() {
 
@@ -101,10 +100,10 @@ class PluginsController extends AppController {
 	}
 /**
  * コンテンツIDを取得する
- *
  * 一つのプラグインで複数のコンテンツを実装する際に利用する。
  *
- * @return int  $pluginNo
+ * @return int $pluginNo
+ * @access public
  */
 	function getContentId() {
 
@@ -155,8 +154,8 @@ class PluginsController extends AppController {
 /**
  * プラグインの一覧を表示する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -242,19 +241,23 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] ファイル削除
  *
- * @param   string  プライグイン名
- * @access  public
+ * @param string プライグイン名
+ * @return void
+ * @access public
  */
 	function admin_delete_file($pluginName) {
+		
 		$this->__deletePluginFile($pluginName);
 		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
 		$this->Session->setFlash($message);
 		$this->redirect(array('action'=>'index'));
+		
 	}
 /**
  * プラグインファイルを削除する
  *
  * @param string $pluginName
+ * @return void
  * @access private
  */
 	function __deletePluginFile($pluginName) {
@@ -299,6 +302,7 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] 登録処理
  *
+ * @param string 	$name
  * @return  void
  * @access  public
  */
@@ -368,9 +372,9 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 

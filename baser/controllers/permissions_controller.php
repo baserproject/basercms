@@ -22,69 +22,72 @@
 /**
  * アクセス制限設定コントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class PermissionsController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'Permissions';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Permission');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Time','Freeze');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('users','user_groups','permissions');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
 			'ユーザーグループ管理'=>'/admin/user_group/index',
 			'アクセス制限設定管理'=>'/admin/permissions/index');
 /**
  * beforeFilter
- * @return	void
- * @access	public
+ * 
+ * @return oid
+ * @access public
  */
 	function beforeFilter () {
+		
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin'){
 			$this->set('usePermission',true);
 		}
+		
 	}
 /**
  * アクセス制限設定の一覧を表示する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index($userGroupId=null) {
 
@@ -123,8 +126,8 @@ class PermissionsController extends AppController {
 /**
  * [ADMIN] 登録処理
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -174,9 +177,9 @@ class PermissionsController extends AppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -214,9 +217,9 @@ class PermissionsController extends AppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -244,8 +247,8 @@ class PermissionsController extends AppController {
 /**
  * 並び替えを更新する [AJAX]
  *
+ * @return boolean
  * @access	public
- * @return	boolean
  */
 	function admin_update_sort () {
 
@@ -266,7 +269,7 @@ class PermissionsController extends AppController {
 /**
  * セッションをチェックする
  *
- * @return	array()
+ * @return array()
  * @access	protected
  */
 	function _checkSession(){
@@ -282,9 +285,9 @@ class PermissionsController extends AppController {
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $data
+ * @return string
+ * @access protected
  */
 	function _createAdminIndexConditions($data){
 

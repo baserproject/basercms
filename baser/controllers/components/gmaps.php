@@ -27,63 +27,76 @@ define('MAPS_HOST', 'maps.google.com');
 /**
  * GoogleMap コンポーネント
  *
- * @package			cake
- * @subpackage		cake.app.controllers.components
+ * @package cake
+ * @subpackage cake.app.controllers.components
  */
 class GmapsComponent  extends Object {
 /**
  * Latitude
  *
  * @var double
+ * @access protected
  */
 	var $_latitude;
 /**
  * Longitude
  *
  * @var double
+ * @access protected
  */
 	var $_longitude;
 /**
  * Address
  *
  * @var string
+ * @access protected
  */
 	var $_address;
 /**
  * Country name
  *
  * @var string
+ * @access protected
  */
 	var $_countryName;
 /**
  * Country name code
  *
  * @var string
+ * @access protected
  */
 	var $_countryNameCode;
 /**
  * Administrative area name
  *
  * @var string
+ * @access protected
  */
 	var $_administrativeAreaName;
 /**
  * Postal Code
  *
  * @var string
+ * @access protected
  */
 	var $_postalCode;
 /**
  * Base Url
  *
  * @var string
+ * @access protected
  */
 	var $_baseUrl;
 /**
  * Construct
+ * 
+ * @return void
+ * @access private
  */
 	function __construct () {
+		
 		$this->_baseUrl= "http://" . MAPS_HOST . "/maps/geo?output=xml";
+		
 	}
 /**
  * getInfoLocation
@@ -92,10 +105,13 @@ class GmapsComponent  extends Object {
  * @param string $city
  * @param string $state
  * @return boolean
+ * @access public
  */
 	function getInfoLocation ($address) {
+		
 		if (!empty($address)) {
 			return $this->_connect($address);
+			
 		}
 		return false;
 	}
@@ -104,6 +120,7 @@ class GmapsComponent  extends Object {
  *
  * @param string $param
  * @return boolean
+ * @access protected
  */
 	function _connect($param) {
 
@@ -147,62 +164,85 @@ class GmapsComponent  extends Object {
 		} else {
 			return false;
 		}
+	
 	}
 /**
  * get the Postal Code
  *
  * @return string
+ * @access public
  */
 	function getPostalCode () {
+		
 		return $this->_postalCode;
+		
 	}
 /**
  * get the Address
  *
  * @return string
+ * @access public
  */
 	function getAddress () {
+		
 		return $this->_address;
+		
 	}
 /**
  * get the Country name
  *
  * @return string
+ * @access public
  */
 	function getCountryName () {
+		
 		return $this->_countryName;
+		
 	}
 /**
  * get the Country name code
  *
  * @return string
+ * @access public
  */
 	function getCountryNameCode () {
+
 		return $this->_countryNameCode;
+		
 	}
 /**
  * get the Administrative area name
  *
  * @return string
+ * @access public
  */
 	function getAdministrativeAreaName () {
+
 		return $this->_administrativeAreaName;
+
 	}
 /**
  * get the Latitude coordinate
  *
  * @return double
+ * @access public
  */
 	function getLatitude () {
+
 		return $this->_latitude;
+
 	}
 /**
  * get the Longitude coordinate
  *
  * @return double
+ * @access public
  */
 	function getLongitude () {
+		
 		return $this->_longitude;
+		
 	}
+	
 }
 ?>

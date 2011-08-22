@@ -22,18 +22,18 @@
 /**
  * コンテンツ管理ビヘイビア
  *
- * @subpackage		baser.models.behaviors
+ * @subpackage baser.models.behaviors
  */
 class ContentsManagerBehavior extends ModelBehavior {
 /**
  * Content Model
+ * 
  * @var Content
  * @access public
  */
 	var $Content = null;
 /**
  * コンテンツデータを登録する
- *
  * コンテンツデータを次のように作成して引き渡す
  * array('Content' =>
  *			array(	'model_id'	=> 'モデルでのID'
@@ -149,3 +149,4 @@ class ContentsManagerBehavior extends ModelBehavior {
 	}
 
 }
+?>

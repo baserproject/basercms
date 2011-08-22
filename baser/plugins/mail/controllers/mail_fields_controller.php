@@ -25,56 +25,56 @@
 /**
  * メールフィールドコントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailFieldsController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailFields';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.MailField','Mail.MailContent','Mail.Message');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','FormEx','TextEx','Csv');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -87,8 +87,8 @@ class MailFieldsController extends MailAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -99,8 +99,9 @@ class MailFieldsController extends MailAppController {
 /**
  * [ADMIN] メールフィールド一覧
  *
- * @return  void
- * @access  public
+ * @param int $mailContentId
+ * @return void
+ * @access public
  */
 	function admin_index($mailContentId) {
 
@@ -131,8 +132,9 @@ class MailFieldsController extends MailAppController {
 /**
  * [ADMIN] メールフィールド追加
  *
- * @return  void
- * @access  public
+ * @param int $mailContentId
+ * @return void
+ * @access public
  */
 	function admin_add($mailContentId) {
 
@@ -178,9 +180,10 @@ class MailFieldsController extends MailAppController {
 /**
  * [ADMIN] 編集処理
  *
- * @param	int		ID
- * @return	void
- * @access 	public
+ * @param int $mailContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($mailContentId,$id) {
 
@@ -227,9 +230,10 @@ class MailFieldsController extends MailAppController {
 /**
  * [ADMIN] 削除処理
  *
- * @param	int		ID
- * @return	void
- * @access 	public
+ * @param int $mailContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($mailContentId,$id = null) {
 
@@ -261,8 +265,8 @@ class MailFieldsController extends MailAppController {
 /**
  * フォームの初期値を取得する
  *
- * @return  void
- * @access  protected
+ * @return string
+ * @access protected
  */
 	function _getDefaultValue() {
 
@@ -275,8 +279,10 @@ class MailFieldsController extends MailAppController {
 /**
  * フィールドデータをコピーする
  *
- * @return  void
- * @access  protected
+ * @param int $mailContentId
+ * @param int $Id
+ * @return void
+ * @access protected
  */
 	function admin_copy($mailContentId,$id) {
 
@@ -359,7 +365,10 @@ class MailFieldsController extends MailAppController {
 	}
 /**
  * メッセージCSVファイルをダウンロードする
- * @param <type> $mailContentId
+ * 
+ * @param int $mailContentId
+ * @return void
+ * @access public
  */
 	function admin_download_csv($mailContentId) {
 
@@ -381,8 +390,9 @@ class MailFieldsController extends MailAppController {
 /**
  * 並び替えを更新する [AJAX]
  *
+ * @param int $mailContentId
+ * @return boolean
  * @access	public
- * @return	boolean
  */
 	function admin_update_sort ($mailContentId) {
 
@@ -402,9 +412,9 @@ class MailFieldsController extends MailAppController {
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $mailContentId
+ * @return string
+ * @access protected
  */
 	function _createAdminIndexConditions($mailContentId){
 

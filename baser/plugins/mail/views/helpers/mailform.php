@@ -26,19 +26,19 @@ App::import('Helper', 'Freeze');
 /**
  * メールフォームヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MailformHelper extends FreezeHelper {
 /**
  * メールフィールドのデータよりコントロールを生成する
  *
- * @param	string	コントロールタイプ
- * @param	string	フィールド文字列
- * @param	array	コントロールソース
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * @param string $type コントロールタイプ
+ * @param string $fieldName フィールド文字列
+ * @param array $options コントロールソース
+ * @param array $attributes html属性
+ * @return string htmlタグ
+ * @access public
  */
 	function control($type,$fieldName,$options, $attributes = array()) {
 
@@ -162,5 +162,6 @@ class MailformHelper extends FreezeHelper {
 		return $out;
 
 	}
+	
 }
 ?>

@@ -22,41 +22,41 @@
 /**
  * メンテナンスコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class MaintenanceController extends AppController {
 /**
  * クラス名
  *
- * @var 	string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Maintenance';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = null;
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array();
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * メンテナンス中ページを表示する
  *
- * @return 	void
+ * @return void
  * @access	public
  */
 	function index() {
@@ -67,11 +67,14 @@ class MaintenanceController extends AppController {
 /**
  * [モバイル] メンテナンス中ページを表示する
  *
- * @return 	void
+ * @return void
  * @access	public
  */
 	function mobile_index() {
+		
 		$this->pageTitle = 'メンテナンス中';
+		
 	}
+	
 }
 ?>

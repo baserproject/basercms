@@ -22,29 +22,29 @@
 /**
  * メールコンテンツモデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class MailContent extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailContent';
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('MailField'=>
 			array('className'=>'Mail.MailField',
@@ -57,8 +57,8 @@ class MailContent extends MailAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -144,8 +144,8 @@ class MailContent extends MailAppModel {
 /**
  * beforeValidate
  *
- * @return	void
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeValidate() {
 
@@ -156,15 +156,17 @@ class MailContent extends MailAppModel {
 		}
 
 		return true;
+		
 	}
 /**
  * SSL用のURLが設定されているかチェックする
  * 
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
-	function checkSslUrl($check) {		
+	function checkSslUrl($check) {
+		
 		if($check[key($check)]) {
 			$sslUrl = Configure::read('Baser.sslUrl');
 			if(empty($sslUrl)) {
@@ -175,13 +177,14 @@ class MailContent extends MailAppModel {
 		} else {
 			return true;
 		}
+		
 	}
 /**
  * 英数チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function alphaNumeric($check) {
 
@@ -195,8 +198,8 @@ class MailContent extends MailAppModel {
 /**
  * フォームの初期値を取得する
  *
- * @return  void
- * @access  protected
+ * @return string
+ * @access protected
  */
 	function getDefaultValue() {
 

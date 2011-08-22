@@ -22,14 +22,14 @@
 /**
  * モバイルヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class MobileHelper extends Helper {
 /**
  * afterLayout
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function afterLayout() {
 
@@ -87,9 +87,14 @@ class MobileHelper extends Helper {
 	}
 /**
  * コンテンツタイプを出力
+ * 
+ * @return void
+ * @access public
  */
 	function header(){
+		
 		header("Content-type: application/xhtml+xml");
+		
 	}
 	
 }

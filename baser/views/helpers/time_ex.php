@@ -26,34 +26,38 @@ App::import("Helper","time");
 /**
  * Timeヘルパー拡張
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class TimeExHelper extends TimeHelper {
 /**
  * 年号リスト
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $nengos = array("m"=>"明治","t"=>"大正","s"=>"昭和","h"=>"平成");
 /**
  * 年号を取得
  *
- * @return	string	年号をあらわすアルファベット
- * @access	public
+ * @param string $w
+ * @return string 年号をあらわすアルファベット
+ * @access public
  */
 	function nengo($w) {
+		
 		if(isset($this->nengos[$w])) {
 			return $this->nengos[$w];
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * 和暦を取得（アルファベット）
  *
- * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
- * @return	mixid	string / false
+ * @param string $date 和暦を表す日付文字列（s-48/5/10）
+ * @return mixid string / false
+ * @access public
  */
 	function wareki($date) {
 
@@ -78,10 +82,12 @@ class TimeExHelper extends TimeHelper {
 /**
  * 和暦の年を取得
  *
- * @param	string	$date	和暦を表す日付文字列（s-48/5/10）
- * @return	mixid	int / false
+ * @param string $date 和暦を表す日付文字列（s-48/5/10）
+ * @return mixid int / false
+ * @access public
  */
 	function wyear($date) {
+		
 		$_date = split('/', $date);
 		if(!$_date) {
 			$_date = split('-', $date);
@@ -98,13 +104,15 @@ class TimeExHelper extends TimeHelper {
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * 西暦を和暦の年に変換する
- *
  * 西暦をまたがる場合があるので配列で返す
- * @param	int		$year
- * @return	array
+ * 
+ * @param int $year
+ * @return array
+ * @access public
  */
 	function convertToWarekiYear($year) {
 
@@ -129,10 +137,11 @@ class TimeExHelper extends TimeHelper {
 	}
 /**
  * 和暦の年を西暦に変換する
- *
  * 和暦のフォーマット例：s-48
- * @param	string	$year
- * @return	int
+ * 
+ * @param string $year
+ * @return int
+ * @access public
  */
 	function convertToSeirekiYear($year) {
 
@@ -161,9 +170,9 @@ class TimeExHelper extends TimeHelper {
 /**
  * 和暦変換(配列で返す)
  *
- * @param	string	日付
- * @return	array	和暦データ
- * @access	public
+ * @param string 日付
+ * @return array 和暦データ
+ * @access public
  */
 	function convertToWarekiArray($date) {
 
@@ -213,9 +222,9 @@ class TimeExHelper extends TimeHelper {
 /**
  * 和暦変換
  *
- * @param	string	日付
- * @return	string	和暦データ
- * @access	public
+ * @param string $date 日付
+ * @return string 和暦データ
+ * @access public
  */
 	function convertToWareki($date) {
 
@@ -231,8 +240,8 @@ class TimeExHelper extends TimeHelper {
 /**
  * 文字列から時間（分）を取得
  *
- * @param	string	日時
- * @return	mixed	分/null
+ * @param string $strDate 日時
+ * @return mixed 分/null
  * @access	public
  */
 	function minutes($strDate) {
@@ -249,11 +258,12 @@ class TimeExHelper extends TimeHelper {
 /**
  * format 拡張
  *
- * @param	string 	$dateString Datetime string
- * @param	boolean $invalid flag to ignore results of fromString == false
- * @param	int 	$userOffset User's offset from GMT (in hours)
- * @return	string 	Formatted date string
- * @access	public
+ * @param array $format
+ * @param string $date String Datetime string
+ * @param boolean $invalid flag to ignore results of fromString == false
+ * @param int $userOffset User's offset from GMT (in hours)
+ * @return string Formatted date string
+ * @access public
  */
 	function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
 
@@ -266,14 +276,13 @@ class TimeExHelper extends TimeHelper {
 	}
 /**
  * 指定した日数が経過しているか確認する
- *
  * 経過していない場合はtrueを返す
  * 日付が確認できなかった場合もtrueを返す
  *
- * @param	string	日付
- * @param	int		経過日数
- * @return	boolean	経過有無
- * @access	public
+ * @param string $date 日付
+ * @param int $days 経過日数
+ * @return boolean 経過有無
+ * @access public
  */
 	function pastDays($date,$days) {
 
@@ -289,5 +298,6 @@ class TimeExHelper extends TimeHelper {
 		}
 
 	}
+	
 }
 ?>

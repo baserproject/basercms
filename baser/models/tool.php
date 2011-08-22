@@ -21,29 +21,29 @@
  */
 /**
  * ツールモデル
- * @package			baser.models
+ * @package baser.models
  */
 class Tool extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Tool';
 /**
  * テーブル
  * 
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $useTable = false;
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource ($field) {
 
@@ -59,8 +59,11 @@ class Tool extends AppModel {
 	}
 /**
  * データソースを指定してモデルリストを取得する
+ * 
+ * @param string $configKeyName
  * @param string $ds
  * @return array
+ * @access public
  */
 	function getListModels($configKeyName = 'baser'){
 
@@ -82,10 +85,10 @@ class Tool extends AppModel {
 /**
  * スキーマを書き出す
  * 
- * @param	string	$path
- * @param	array	$data
- * @return	boolean
- * @access	public
+ * @param string $path
+ * @param array $data
+ * @return boolean
+ * @access public
  */
 	function writeSchema($data, $path){
 		
@@ -117,6 +120,7 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $tmpPath
  * @return boolean
+ * @access public
  */
 	function loadSchema($data, $tmpPath) {
 		
@@ -140,11 +144,11 @@ class Tool extends AppModel {
 /**
  * スキーマを書き出す
  *
- * @param	string	$field
- * @param	array	$values
- * @param	string	$path
- * @return	boolean
- * @access	protected
+ * @param string $field
+ * @param array $values
+ * @param string $path
+ * @return boolean
+ * @access protected
  */
 	function _writeSchema($field, $values, $path) {
 

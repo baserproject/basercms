@@ -31,22 +31,22 @@ class BlogController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Blog';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'Cache');
 /**
@@ -59,15 +59,15 @@ class BlogController extends BlogAppController {
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array();
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
@@ -87,8 +87,8 @@ class BlogController extends BlogAppController {
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 		
@@ -129,8 +129,8 @@ class BlogController extends BlogAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -146,7 +146,7 @@ class BlogController extends BlogAppController {
 /**
  * [PUBLIC] ブログを一覧表示する
  *
- * @retur void
+ * @return void
  * @access public
  */
 	function index() {
@@ -595,8 +595,8 @@ class BlogController extends BlogAppController {
 /**
  * ブログ記事をプレビュー
  *
- * @param mixed blog_post_id / type
- * @param mixed blog_post_id / ""
+ * @param int $blogContentsId / type
+ * @param int $id / ""
  * @return void
  * @access protected
  */
@@ -705,6 +705,7 @@ class BlogController extends BlogAppController {
  * 年別アーカイブ一覧用のデータを取得する
  * 
  * @param int $id
+ * @param boolean $viewCount
  * @return mixed $count
  * @access public
  */
@@ -749,7 +750,6 @@ class BlogController extends BlogAppController {
 	}
 /**
  * 記事リストを出力
- *
  * requestAction用
  * 
  * @param int $blogContentId

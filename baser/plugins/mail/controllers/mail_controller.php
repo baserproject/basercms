@@ -25,35 +25,35 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * @package			baser.plugins.mail.controller
+ * @package baser.plugins.mail.controller
  */
 class MailController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Mail';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.Message','Mail.MailContent','Mail.MailField','Mail.MailConfig');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Freeze','Mailform','Javascript','Array','TimeEx','Maildata','Mailfield','Mail');
 /**
  * Array of components a controller will use
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
@@ -63,43 +63,43 @@ class MailController extends MailAppController {
 /**
  * CSS
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $css = array('mail/form');
 /**
  * ページタイトル
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $pageTitle = 'お問い合わせ';
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * データベースデータ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $dbDatas = null;
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array();
 /**
  * beforeFilter.
  *
  * @return void
- * @access 	public
+ * @access public
  */
 	function beforeFilter() {
 
@@ -157,8 +157,8 @@ class MailController extends MailAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -171,9 +171,9 @@ class MailController extends MailAppController {
 /**
  * [PUBIC] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function index($id = null) {
 
@@ -196,9 +196,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_index($id=null) {
 
@@ -208,9 +208,9 @@ class MailController extends MailAppController {
 /**
  * [PUBIC] データの確認画面を表示
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed	mail_content_id
+ * @return void
+ * @access public
  */
 	function confirm($id = null) {
 
@@ -254,9 +254,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_confirm($id=null) {
 
@@ -266,9 +266,9 @@ class MailController extends MailAppController {
 /**
  * [PUBIC] データ送信
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function submit($id = null) {
 
@@ -309,9 +309,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] 送信完了ページ
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_submit($id=null) {
 
@@ -320,8 +320,9 @@ class MailController extends MailAppController {
 	}
 /**
  * メール送信する
- * @return	void
- * @access	protected
+ * 
+ * @return void
+ * @access protected
  */
 	function _sendEmail() {
 
@@ -397,12 +398,16 @@ class MailController extends MailAppController {
 	}
 /**
  * 認証用のキャプチャ画像を表示する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
     function captcha()
     {
+		
         $this->Captcha->render();
+		
     }
+	
 }
 ?>

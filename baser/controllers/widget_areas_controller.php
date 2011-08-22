@@ -22,45 +22,45 @@
 /**
  * ウィジェットエリアコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class WidgetAreasController extends AppController {
 /**
  * クラス名
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'WidgetAreas';
 /**
  * コンポーネント
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $components = array('RequestHandler');
 /**
  * ヘルパー
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * モデル
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('WidgetArea','Plugin');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form','ウィジェットエリア管理'=>'/admin/widget_areas/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('site_configs','widget_areas');
 	function beforeFilter() {
@@ -69,8 +69,8 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * 一覧
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_index () {
 
@@ -91,8 +91,9 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * 新規登録
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function admin_add () {
 
@@ -112,8 +113,9 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * 編集
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -170,9 +172,9 @@ class WidgetAreasController extends AppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -199,8 +201,9 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * [AJAX] タイトル更新
- * @return	boolean
- * @access	public
+ * 
+ * @return boolean
+ * @access public
  */
 	function admin_update_title() {
 
@@ -217,9 +220,10 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * [AJAX] ウィジェット更新
- * @param	int	$widgetAreaId
- * @return	boolean
- * @access	public
+ * 
+ * @param int $widgetAreaId
+ * @return boolean
+ * @access public
  */
 	function admin_update_widget($widgetAreaId) {
 		
@@ -265,9 +269,9 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * 並び順を更新する
- * @param	int	$widgetAreaId
- * @return	boolean
- * @access	public
+ * @param int $widgetAreaId
+ * @return boolean
+ * @access public
  */
 	function admin_update_sort($widgetAreaId) {
 
@@ -294,13 +298,15 @@ class WidgetAreasController extends AppController {
 		//clearViewCache('element_widget','');
 		clearViewCache();
 		exit();
+		
 	}
 /**
  * [AJAX] ウィジェットを削除
+ * 
  * @param int $widgetAreaId
  * @param int $id
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_del_widget($widgetAreaId, $id) {
 
@@ -333,8 +339,10 @@ class WidgetAreasController extends AppController {
 	}
 /**
  * ウィジェットを並び替えた上で取得する
- * @param	int		$id
- * @return	array	$widgets
+ * 
+ * @param int $id
+ * @return array $widgets
+ * @access public
  */
 	function get_widgets($id){
 		
@@ -350,6 +358,7 @@ class WidgetAreasController extends AppController {
 /**
  * ウィジェットの並べ替えを行う
  * usortのコールバックメソッド
+ * 
  * @param array $a
  * @param array $b
  * @return int

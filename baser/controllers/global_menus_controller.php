@@ -22,57 +22,57 @@
 /**
  * グローバルメニューコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class GlobalMenusController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'GlobalMenus';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('GlobalMenu');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @accesspublic
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler');
 /**
  * ヘルパ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form',
 			'グローバルメニュー管理'=>'/admin/global_menus/index');
 /**
  * グローバルメニューの一覧を表示する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -109,8 +109,8 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 登録処理
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -154,9 +154,9 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param	int ID
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -196,9 +196,9 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -228,7 +228,7 @@ class GlobalMenusController extends AppController {
  * 並び替えを更新する [AJAX]
  *
  * @access	public
- * @return	boolean
+ * @return boolean
  */
 	function admin_update_sort () {
 
@@ -249,10 +249,11 @@ class GlobalMenusController extends AppController {
 /**
  * セッションをチェックする
  *
- * @return	array()
+ * @return array()
  * @access	protected
  */
 	function _checkSession(){
+		
 		$data = array();
 		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
 			$data['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
@@ -266,13 +267,14 @@ class GlobalMenusController extends AppController {
 			$this->Session->del('Filter.GlobalMenu.status');
 		}
 		return array('GlobalMenu'=>$data);
+		
 	}
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $data
+ * @return string
+ * @access protected
  */
 	function _createAdminIndexConditions($data){
 

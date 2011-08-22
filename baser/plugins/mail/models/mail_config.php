@@ -22,15 +22,15 @@
 /**
  * メール設定モデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class MailConfig extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailConfig';
 /**

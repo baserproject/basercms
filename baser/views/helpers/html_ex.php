@@ -26,23 +26,22 @@ App::import('Helper', 'Html');
 /**
  * Htmlヘルパーの拡張クラス
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class HtmlExHelper extends HtmlHelper {
 /**
  * Included helpers.
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Javascript');
 /**
  * Document type definitions
- *
  * CUSTOMIZE MODIFY 2011/06/02 ryuring
  * html5 を追加
  * 
- * @var	array
+ * @var array
  * @access private
  */
 	var $__docTypes = array(
@@ -58,11 +57,13 @@ class HtmlExHelper extends HtmlHelper {
 /**
  * 画像の即時反映用のパラメータとして乱数を出力
  *
- * @return	int		乱数
- * @access	public
+ * @return int 乱数
+ * @access public
  */
 	function rand() {
+		
 		return rand();
+		
 	}
 
 }

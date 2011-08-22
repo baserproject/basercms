@@ -30,8 +30,8 @@ App::import('Component', 'Auth');
  *
  * Binds access control with user authentication and session management.
  *
- * @package       cake
- * @subpackage    cake.cake.libs.controller.components
+ * @package cake
+ * @subpackage cake.cake.libs.controller.components
  */
 class AuthExComponent extends AuthComponent {
 /**
@@ -44,6 +44,7 @@ class AuthExComponent extends AuthComponent {
  * @access public
  */
 	function identify($user = null, $conditions = null) {
+		
 		if ($conditions === false) {
 			$conditions = null;
 		} elseif (is_array($conditions)) {
@@ -153,6 +154,8 @@ class AuthExComponent extends AuthComponent {
 			// <<<
 		}
 		return null;
+		
 	}
+	
 }
 ?>

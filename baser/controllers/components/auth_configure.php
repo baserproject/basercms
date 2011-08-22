@@ -19,35 +19,38 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */
+ * /
 /**
  * 認証設定コンポーネント
  *
- * @package			baser.controllers.components
+ * @package baser.controllers.components
  */
 class  AuthConfigureComponent extends Object {
 /**
  * コントローラー
- * @var		Controller
+ * 
+ * @var Controller
  * @access	public
  */
 	var $controller = null;
 /**
  * initialize
  *
- * @param   object  $controller
- * @return 	void
- * @access	public
+ * @param object $controller
+ * @return void
+ * @access public
  */
 	function initialize(&$controller) {
+		
 		$this->controller = $controller;
+		
 	}
 /**
  * 認証設定
  *
- * @param   string  prefix
- * @return 	boolean
- * @access	public
+ * @param string $config
+ * @return boolean
+ * @access public
  */
 	function setting($config) {
 

@@ -25,21 +25,21 @@
 /**
  * アップデーターモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Updater extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Updater';
 /**
  * テーブル
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useTable = false;
 }

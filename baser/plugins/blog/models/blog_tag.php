@@ -25,7 +25,7 @@
 /**
  * ブログタグモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogTag extends BlogAppModel {
 /**
@@ -64,8 +64,8 @@ class BlogTag extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name'=>array(

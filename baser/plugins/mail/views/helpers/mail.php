@@ -25,7 +25,7 @@
 /**
  * メールヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MailHelper extends AppHelper {
@@ -37,8 +37,8 @@ class MailHelper extends AppHelper {
 	var $_view = null;
 /**
  * ヘルパー
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Baser');
 /**
@@ -74,18 +74,24 @@ class MailHelper extends AppHelper {
 	}
 /**
  * メールフィールド一覧ページへのリンクを張る
+ * 
  * @param string $mailContentId
+ * @return void
+ * @access public
  */
 	function indexFields($mailContentId) {
+		
 		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
 			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
 		}
+		
 	}
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * 
+ * @return array
+ * @access public
  */
 	function getLayoutTemplates() {
 
@@ -118,12 +124,14 @@ class MailHelper extends AppHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * フォームテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * 
+ * @return array
+ * @access public
  */
 	function getFormTemplates() {
 
@@ -154,12 +162,14 @@ class MailHelper extends AppHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * 
+ * @return array
+ * @access public
  */
 	function getMailTemplates() {
 
@@ -191,6 +201,7 @@ class MailHelper extends AppHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * メールの説明文を取得する

@@ -22,15 +22,15 @@
 /**
  * メールフィールドモデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class MailField extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailField';
 /**
@@ -43,8 +43,8 @@ class MailField extends MailAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -118,8 +118,9 @@ class MailField extends MailAppModel {
 /**
  * コントロールソースを取得する
  *
- * @return	array	source
- * @access 	public
+ * @param string $field
+ * @return array source
+ * @access public
  */
 	function getControlSource($field = null) {
 
@@ -158,12 +159,15 @@ class MailField extends MailAppModel {
 		}else {
 			return $source;
 		}
+		
 	}
 /**
  * 同じ名称のフィールド名がないかチェックする
  * 同じメールコンテンツが条件
+ * 
  * @param array $check
  * @return boolean
+ * @access public
  */
 	function duplicateMailField($check) {
 
@@ -180,5 +184,6 @@ class MailField extends MailAppModel {
 		}
 
 	}
+	
 }
 ?>

@@ -21,25 +21,27 @@
  */
 /**
  * アップロードコントローラー
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class UploadsController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'Uploads';
 /**
  * モデル
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array();
 /**
  * セッションに保存した一時ファイルを出力する
  * @param string $name
+ * @return void
+ * @access public
  */
 	function tmp() {
 
@@ -106,5 +108,6 @@ class UploadsController extends AppController {
 		exit();
 
 	}
+	
 }
 ?>

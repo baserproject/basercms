@@ -22,7 +22,7 @@
 /**
  * コンテンツモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Content extends AppModel {
 /**

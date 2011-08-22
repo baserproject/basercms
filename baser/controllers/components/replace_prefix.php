@@ -39,21 +39,21 @@ class ReplacePrefixComponent extends Object {
  * プレフィックス置き換えを許可するアクション
  * プレフィックスなしの純粋なアクション名を指定する
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $allowedPureActions = array();
 /**
  * 置き換え後のプレフィックス
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $replacedPrefix = 'admin';
 /**
  * 対象コントローラーのメソッド
  *
- * @var		array
+ * @var array
  * @access	protected
  */
 	var $_methods;
@@ -65,7 +65,9 @@ class ReplacePrefixComponent extends Object {
  * @access public
  */
 	function initialize(&$controller) {
+		
 		$this->_methods = $controller->methods;
+		
 	}
 /**
  * プレフィックスの置き換えを許可するアクションを設定する

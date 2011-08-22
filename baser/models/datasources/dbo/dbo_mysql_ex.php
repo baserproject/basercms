@@ -24,13 +24,15 @@ class DboMysqlEx extends DboMysql {
 /**
  * テーブル名のリネームステートメントを生成
  *
- * @param	string	$sourceName
- * @param	string	$targetName
- * @return	string
- * @access	public
+ * @param string $sourceName
+ * @param string $targetName
+ * @return string
+ * @access public
  */
 	function buildRenameTable($sourceName, $targetName) {
+		
 		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
+	
 	}
 
 }

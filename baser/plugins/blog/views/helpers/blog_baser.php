@@ -22,21 +22,22 @@
 /**
  * BlogBaserヘルパー
  *
- * @package			baser.plugins.blog.views.helpers
+ * @package baser.plugins.blog.views.helpers
  *
  */
 class BlogBaserHelper extends AppHelper {
 /**
  * ブログ記事一覧出力
- *
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $baser->blogPosts('news', 3) ?>
  * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.ctp
  * 
- * @param	int		$contentsName
- * @param	mixid	$mobile			'' / boolean
- * @return	void
- * @access	public
+ * @param int $contentsName
+ * @param int $num
+ * @param array $options
+ * @param mixid $mobile '' / boolean
+ * @return void
+ * @access public
  */
 	function blogPosts ($contentsName, $num = 5, $options = array()) {
 

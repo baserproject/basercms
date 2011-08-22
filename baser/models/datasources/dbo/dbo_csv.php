@@ -34,80 +34,80 @@
 /**
  * CSV DBO Driver
  *
- * @package			baser.models.datasources.dbo
+ * @package baser.models.datasources.dbo
  */
 class DboCsv extends DboSource {
 /**
  * ドライバーの説明文
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $description = "CSV DBO Driver";
 /**
  * 開始クォート
  * TODO 空文字でいいかも
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $startQuote = "`";
 /**
  * 終了クォート
  * TODO 空文字でいいかも
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $endQuote = "`";
 /**
  * DBエンコーディング
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $dbEncoding = "SJIS";
 /**
  * アプリエンコーディング
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $appEncoding = "UTF-8";
 /**
  * コネクション
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $connection = array();
 /**
  * 接続状態
  *
- * @var		boolean
- * @access 	public
+ * @var boolean
+ * @access public
  */
 	var $connected = false;
 /**
  * CSVファイル名（フルパス）
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $csvName = '';
 /**
  * 最後に追加されたID
  *
- * @var		string
- * @access	protected
+ * @var string
+ * @access protected
  */
 	var $_lastInsertId = '';
 /**
  * 基本SQLコマンドの一覧
  * 未実装
  *
- * @var 	array
- * @access	protected
+ * @var array
+ * @access protected
  */
 	var $_command = array();
 	/*var $_commands = array(
@@ -118,14 +118,14 @@ class DboCsv extends DboSource {
 /**
  * resultTable
  *
- * @var		string
- * @access	protected
+ * @var string
+ * @access	private
  */
 	var $__resultModelName = 0;
 /**
  * CSVドライバの基本設定
  *
- * @var 	array
+ * @var array
  * @access	protected
  */
 	var $_baseConfig = array(
@@ -134,8 +134,8 @@ class DboCsv extends DboSource {
 /**
  * column definition
  *
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $columns = array(
 			'primary_key' => array('name' => 'NOT NULL AUTO_INCREMENT'),
@@ -153,10 +153,10 @@ class DboCsv extends DboSource {
 /**
  * コンストラクタ
  *
- * @param 	array	接続設定
- * @param 	boolean	自動接続の有無
- * @return 	void
- * @access	private
+ * @param 	array 接続設定
+ * @param boolean 自動接続の有無
+ * @return void
+ * @access private
  */
 	function __construct($config = null, $autoConnect = true) {
 
@@ -173,14 +173,13 @@ class DboCsv extends DboSource {
 	}
 /**
  * The "R" in CRUD
- *
  * TODO 改修要
  *
- * @param 	Model 	$model
- * @param 	array 	$queryData
+ * @param 	Model $model
+ * @param 	array $queryData
  * @param 	integer アソシエーションの深さ
- * @return 	array	結果セット
- * @access	public
+ * @return array 結果セット
+ * @access public
  */
 	function read(&$model, $queryData = array(), $recursive = null) {
 
@@ -265,15 +264,16 @@ class DboCsv extends DboSource {
 
 		$this->disconnect($model->tablePrefix.$model->table);
 		return $resultSet;
+		
 	}
 /**
  * The "C" in CRUD
  *
- * @param	Model	$model
- * @param	array	フィールドリスト
- * @param	array	値リスト
- * @return	boolean	Success
- * @access	public
+ * @param Model $model
+ * @param array フィールドリスト
+ * @param array 値リスト
+ * @return boolean Success
+ * @access public
  */
 	function create(&$model, $fields = null, $values = null) {
 
@@ -317,16 +317,17 @@ class DboCsv extends DboSource {
 			$this->disconnect($model->tablePrefix.$model->table);
 			return false;
 		}
+		
 	}
 /**
  * The "U" in CRUD
  *
- * @param	Model	$model
- * @param	array	フィールドリスト
- * @param	array	値リスト
- * @param	mixed	条件
- * @return	boolean
- * @access	public
+ * @param Model $model
+ * @param array フィールドリスト
+ * @param array 値リスト
+ * @param mixed 条件
+ * @return boolean
+ * @access public
  */
 	function update(&$model, $fields = array(), $values = null, $conditions = null) {
 
@@ -363,14 +364,15 @@ class DboCsv extends DboSource {
 		}
 		$this->disconnect($model->tablePrefix.$model->table);
 		return true;
+		
 	}
 /**
  * The "D" in CRUD
  *
- * @param	Model	$model
- * @param	mixed	条件
- * @return	boolean	Success
- * @access	public
+ * @param Model $model
+ * @param mixed 条件
+ * @return boolean Success
+ * @access public
  */
 	function delete(&$model, $conditions = null) {
 
@@ -407,10 +409,10 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルに接続する
  *
- * @param	model	モデル
- * @param	boolean	CSVファイルロック有無
- * @return	boolean 接続できた場合は True 、できなかった場合は False
- * @access	public
+ * @param model モデル
+ * @param boolean CSVファイルロック有無
+ * @return boolean 接続できた場合は True 、できなかった場合は False
+ * @access public
  */
 	function connect(&$model,$lock=true) {
 
@@ -437,38 +439,50 @@ class DboCsv extends DboSource {
  * Sets the database encoding
  *
  * @param string $enc Database encoding
+ * @return boolean
+ * @access public
  */
 	function setEncoding($enc) {
+		
 		$this->dbEncoding = $this->_dbEncToPhp($enc);
 		return true;
+		
 	}
 /**
  * Sets the database encoding
  *
  * @param string $enc Database encoding
+ * @return mixed
+ * @access public
  */
 	function getEncoding() {
+		
 		return $this->_phpEncToDb($this->dbEncoding);
+		
 	}
 /**
  * Reconnects to database server with optional new settings
  * CSVの場合は切断するだけ
+ * 
  * @param array $config An array defining the new configuration settings
  * @return boolean True on success, false on failure
+ * @access public
  */
 	function reconnect($config = array()) {
+		
 		$this->disconnect();
 		$this->setConfig($config);
 		$this->_sources = null;
+		
 	}
 /**
  * 接続処理
  *
- * @param	string	$tableName
- * @param	boolean	$lock
- * @param	boolean	$force
- * @return	mixed	ファイルポインタ / false
- * @access	protected
+ * @param string $tableName
+ * @param boolean $lock
+ * @param boolean $force
+ * @return mixed ファイルポインタ / false
+ * @access protected
  */
 	function _connect($tableName, $lock = true, $force = false) {
 
@@ -494,13 +508,15 @@ class DboCsv extends DboSource {
 			$this->setEncoding($config['encoding']);
 		}
 		return $this->connected[$tableName];
+		
 	}
 /**
  * CSVファイルのファイルリソースを開放する
  * テーブル名の指定がない場合は全て開放する
- * @param	string	テーブル名
- * @return	boolean	開放できたら True を返す
- * @access	public
+ * 
+ * @param string テーブル名
+ * @return boolean 開放できたら True を返す
+ * @access public
  */
 	function disconnect($tableName = null) {
 
@@ -531,9 +547,9 @@ class DboCsv extends DboSource {
 /**
  * データベースに接続できているかチェックする
  *
- * @param	string	テーブル名
- * @return 	boolean	True if the database is connected, else false
- * @access	public
+ * @param string テーブル名
+ * @return boolean True if the database is connected, else false
+ * @access public
  */
 	function isConnected($tableName = null) {
 
@@ -553,9 +569,9 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルを開く
  *
- * @param	string	CSVファイルのパス
- * @return 	stream	CSVファイルへのポインタ
- * @access	public
+ * @param string CSVファイルのパス
+ * @return stream CSVファイルへのポインタ
+ * @access public
  */
 	function csvConnect($file) {
 
@@ -566,12 +582,11 @@ class DboCsv extends DboSource {
 	}
 /**
  * ロック状態でCSVファイルを開く
- *
  * 開く前にバックアップを生成する
  *
- * @param	string	CSVファイルのパス
- * @return 	stream	CSVファイルへのポインタ
- * @access	public
+ * @param string CSVファイルのパス
+ * @return stream CSVファイルへのポインタ
+ * @access public
  */
 	function csvConnectByLocked($file) {
 
@@ -604,11 +619,12 @@ class DboCsv extends DboSource {
 	}
 /**
  * ロック状態のCSVファイルを解除した上で開放する（配列対応）
- * @param	mixid	stream OR array
- * @return 	void	開放に成功した場合には true を返す
- * @access	public
+ * @param mixid stream OR array
+ * @return void 開放に成功した場合には true を返す
+ * @access public
  */
 	function csvCloseByLocked(&$fp) {
+		
 		if(is_array($fp)) {
 			$ret = true;
 			foreach($fp as $key => $value) {
@@ -620,14 +636,16 @@ class DboCsv extends DboSource {
 		}else {
 			return $this->__csvCloseByLocked($fp);
 		}
+		
 	}
 /**
  * ロック状態のCSVファイルを解除した上で開放する
- * @param	stream	ファイルストリーム
- * @return 	void	開放に成功した場合には true を返す
- * @access	private
+ * @param stream ファイルストリーム
+ * @return void 開放に成功した場合には true を返す
+ * @access private
  */
 	function __csvCloseByLocked(&$fp) {
+		
 		$ret = false;
 		if($fp) {
 			//ロックの開放
@@ -637,13 +655,14 @@ class DboCsv extends DboSource {
 			$fp = null;
 		}
 		return $ret;
+		
 	}
 /**
  * 与えられたSQLステートメントを実行する
  *
- * @param 	string 	SQL statement
- * @return 	mixed 	配列の結果セットまたは、true/false
- * @access 	protected
+ * @param 	string SQL statement
+ * @return mixed 配列の結果セットまたは、true/false
+ * @access protected
  */
 	function _execute($sql) {
 
@@ -653,9 +672,9 @@ class DboCsv extends DboSource {
 /**
  * CSVデータの操作を行う
  *
- * @param 	string	$sql SQL statement
- * @return 	mixed 	配列の結果セットまたは、true/false
- * @access	public
+ * @param string $sql SQL statement
+ * @return mixed 配列の結果セットまたは、true/false
+ * @access public
  */
 	function csvQuery($sql) {
 
@@ -695,9 +714,9 @@ class DboCsv extends DboSource {
 /**
  * CSVデータを読み込む
  *
- * @param 	array 	$queryData
- * @return 	mixed	array / false result
- * @access 	public
+ * @param array $queryData
+ * @return mixed array / false result
+ * @access public
  */
 	function readCsv($queryData) {
 
@@ -803,9 +822,9 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルにレコードを追加する
  *
- * @param 	array 	クエリデータ
- * @return 	boolen 	true/false
- * @access 	public
+ * @param array クエリデータ
+ * @return mixed
+ * @access public
  */
 	function createCsv($queryData) {
 
@@ -880,10 +899,11 @@ class DboCsv extends DboSource {
 	}
 /**
  * IDの重複チェックを行う
+ * 
  * @param string $table
  * @param int $id
  * @return boolean
- * @access public
+ * @access private
  */
 	function __checkDuplicateId($table, $id) {
 		
@@ -910,6 +930,8 @@ class DboCsv extends DboSource {
  * CSVテーブルを生成する
  *
  * @param array $queryData
+ * @return mixed boolean / int
+ * @access public
  */
 	function buildCsv($queryData) {
 
@@ -927,9 +949,9 @@ class DboCsv extends DboSource {
 /**
  * CSVテーブルを削除する
  *
- * @param	array	$queryData
- * @return	boolean
- * @access	public
+ * @param array $queryData
+ * @return mixed fals / string
+ * @access public
  */
 	function dropCsv($queryData) {
 
@@ -944,9 +966,9 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルを更新する
  *
- * @param 	array 	クエリデータ
- * @return 	boolen 	true/false
- * @access 	public
+ * @param array クエリデータ
+ * @return mixed
+ * @access public
  */
 	function updateCsv($queryData) {
 
@@ -1000,9 +1022,9 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルよりレコードを削除する
  *
- * @param 	array 	クエリデータ
- * @return 	boolean	true/false
- * @access 	public
+ * @param array クエリデータ
+ * @return boolean true/false
+ * @access public
  */
 	function deleteCsv($queryData) {
 
@@ -1037,10 +1059,10 @@ class DboCsv extends DboSource {
 /**
  * CSVファイルを配列として読み込む
  *
- * @param	string	テーブル名
- * @param	string	検索条件
- * @return 	array	配列の結果セット
- * @access 	protected
+ * @param string テーブル名
+ * @param string 検索条件
+ * @return array 配列の結果セット
+ * @access protected
  */
 	function _readCsvFile($tableName = null, $conditions = null) {
 
@@ -1088,8 +1110,10 @@ class DboCsv extends DboSource {
 	}
 /**
  * IDの最大値を取得する
- * @param	string	$tableName
- * @return	int		$id
+ * 
+ * @param string $tableName
+ * @return int $id
+ * @access protecteds
  */
 	function _getMaxId($tableName) {
 
@@ -1129,11 +1153,12 @@ class DboCsv extends DboSource {
 /**
  * CSV用のヘッダを取得する
  *
- * @param	array
- * @return	string
- * @access	protected
+ * @param array
+ * @return string
+ * @access protected
  */
 	function _getCsvHead($fields = null) {
+		
 		if(!$fields) {
 			$fields = $this->_csvFields;
 		}
@@ -1142,6 +1167,7 @@ class DboCsv extends DboSource {
 			$head .= "\"".$field . "\",";
 		}
 		return substr($head,0,strlen($head)-1) . "\n";
+		
 	}
 /**
  * CSV用のフィールドデータに変換する
@@ -1149,8 +1175,10 @@ class DboCsv extends DboSource {
  * @param string $value
  * @param boolean $dc （ " を "" に変換するか）
  * @return string
+ * @access protected
  */
 	function _convertField($value,$dc = true) {
+		
 		if($dc) {
 			$value = str_replace('"','""',$value);
 		}
@@ -1159,6 +1187,7 @@ class DboCsv extends DboSource {
 		$value = str_replace('{CM}',',',$value);
 		$value = '"'.$value.'"';
 		return $value;
+		
 	}
 /**
  * CSV用のレコードデータに変換する
@@ -1167,17 +1196,19 @@ class DboCsv extends DboSource {
  * @return array
  */
 	function _convertRecord($record) {
+		
 		foreach($record as $field => $value) {
 			$record[$field] = $this->_convertField($value);
 		}
 		return $record;
+		
 	}
 /**
  * フィールドを追加する
  *
- * @param	array	$options [ table / column / prefix ]
- * @return	boolean
- * @access	protected
+ * @param array $options [ table / column / prefix ]
+ * @return boolean
+ * @access protected
  */
 	function addColumn($options) {
 
@@ -1249,9 +1280,9 @@ class DboCsv extends DboSource {
 /**
  * フィールドを編集する
  *
- * @param	array	$options [ table / column / field / prefix ]
- * @return	boolean
- * @access	protected
+ * @param array $options [ table / column / field / prefix ]
+ * @return boolean
+ * @access protected
  */
 	function changeColumn($options) {
 
@@ -1337,9 +1368,9 @@ class DboCsv extends DboSource {
 /**
  * フィールドを削除する
  *
- * @param	array	$options [ table / field / prefix ]
- * @return	boolean
- * @access	protected
+ * @param array $options [ table / field / prefix ]
+ * @return boolean
+ * @access protected
  */
 	function dropColumn($options) {
 
@@ -1415,8 +1446,8 @@ class DboCsv extends DboSource {
 /**
  * SQLデータのCSV処理用の解析を行う
  *
- * @param 	string	SQL statement
- * @return 	array	configs
+ * @param string SQL statement
+ * @return array configs
  * @access	public
  */
 	function parseSql($sql) {
@@ -1497,9 +1528,9 @@ class DboCsv extends DboSource {
 /**
  * SQL文のフィールド名を配列に変換する
  *
- * @param 	string 	SQL statement
- * @return 	array 	フィールド名リスト
- * @access 	protected
+ * @param string SQL statement
+ * @return array フィールド名リスト
+ * @access protected
  */
 	function _parseSqlFields($fields,$modelName) {
 		$aryFields = split(",",$fields);
@@ -1542,11 +1573,13 @@ class DboCsv extends DboSource {
  * 結果、複数のフィールドでその中にcountやmaxが入っている場合、
  * 他のDBの取得結果とは違うものとなる可能性がある
  * （countやmaxはクラス名を含まないため）
- * @param	array		$fields
- * @return	string
- * @access	protected
+ * 
+ * @param array $fields
+ * @return string
+ * @access protected
  */
 	function _parseSqlClassName($fields) {
+		
 		$model = '';
 		$aryFields = split(",",$fields);
 		foreach($aryFields as $field) {
@@ -1563,13 +1596,14 @@ class DboCsv extends DboSource {
 			}
 		}
 		return trim(str_replace('`','',$model));
+		
 	}
 /**
  * CREATE TABLE 文のフィールド名を配列に変換する
  *
- * @param 	string 	SQL statement
- * @return 	array 	フィールド名リスト
- * @access 	protected
+ * @param 	string SQL statement
+ * @return array フィールド名リスト
+ * @access protected
  */
 	function _parseSqlFieldsFromBuild($sql) {
 
@@ -1588,9 +1622,10 @@ class DboCsv extends DboSource {
 /**
  * SQL文のフィールド名と値を配列に変換する（INSERT文用）
  *
- * @param 	string 	SQL statement
- * @return 	array 	フィールドリスト
- * @access 	protected
+ * @param 	string SQL statement
+ * @param strig $values
+ * @return array フィールドリスト
+ * @access protected
  */
 	function _parseSqlValuesFromCreate($fields,$values) {
 
@@ -1625,9 +1660,9 @@ class DboCsv extends DboSource {
 /**
  * SQL文のフィールド名と値を配列に変換する（UPDATE文用）
  *
- * @param 	string 	SQL statement
- * @return 	array 	フィールドリスト
- * @access 	protected
+ * @param string SQL statement
+ * @return array フィールドリスト
+ * @access protected
  */
 	function _parseSqlValuesFromUpdate($sql) {
 
@@ -1661,9 +1696,9 @@ class DboCsv extends DboSource {
  * テーブル名を解析する
  * TODO 現時点では単一のみ実装
  *
- * @param 	string	SQL
- * @return	string 	モデル名
- * @access 	protected
+ * @param string SQL
+ * @return string モデル名
+ * @access protected
  */
 	function _parseSqlTableName($tables) {
 
@@ -1680,10 +1715,10 @@ class DboCsv extends DboSource {
 /**
  * 検索条件文字列を解析
  *
- * @param	string	SQL Conditions
- * @param	array	フィールドリスト
- * @return 	string	eval用の検索条件
- * @access 	protected
+ * @param string SQL Conditions
+ * @param	array フィールドリスト
+ * @return string eval用の検索条件
+ * @access protected
  */
 	function _parseSqlCondition($conditions, $fields, $tableName = '') {
 
@@ -1769,9 +1804,9 @@ class DboCsv extends DboSource {
 /**
  * LIMIT を解析
  *
- * @param	string	SQL
- * @return 	array	offset/limit/page 格納した配列
- * @access 	protected
+ * @param string SQL
+ * @returnarray offset/limit/page 格納した配列
+ * @access protected
  */
 	function _parseSqlLimit($limit) {
 
@@ -1795,9 +1830,9 @@ class DboCsv extends DboSource {
  * ORDER を解析
  * TOOD 現在、Orderを指定できるフィールドは１フィールドのみ
  *
- * @param	string	SQL Order
- * @return 	array	並び替え条件リスト
- * @access 	protected
+ * @param string SQL Order
+ * @return array 並び替え条件リスト
+ * @access protected
  */
 	function _parseSqlOrder($strOrder) {
 
@@ -1812,6 +1847,7 @@ class DboCsv extends DboSource {
 	}
 /**
  * テーブルの全てのリストを取得する
+ * 
  * @return array Array of tablenames in the database
  */
 	function listSources() {
@@ -1840,9 +1876,9 @@ class DboCsv extends DboSource {
 /**
  * フィールド情報を取得する
  *
- * @param	Model	モデル
- * @return 	array 	フィールド情報のリスト
- * @access 	public
+ * @param Model モデル
+ * @return array フィールド情報のリスト
+ * @access public
  */
 	function describe(&$model) {
 
@@ -1927,13 +1963,14 @@ class DboCsv extends DboSource {
 /**
  * SQL用にエスケープ処理を行う
  *
- * @param	string 	$data String to be prepared for use in an SQL statement
- * @param	string 	$column The column into which this data will be inserted
- * @param	boolean $safe Whether or not numeric data should be handled automagically if no column data is provided
- * @return	string 	Quoted and escaped data
- * @access 	public
+ * @param string $data String to be prepared for use in an SQL statement
+ * @param string $column The column into which this data will be inserted
+ * @param boolean $safe Whether or not numeric data should be handled automagically if no column data is provided
+ * @return string Quoted and escaped data
+ * @access public
  */
 	function value($data, $column = null, $safe = false) {
+		
 		$parent = parent::value($data, $column, $safe);
 
 		if ($parent != null) {
@@ -1964,13 +2001,14 @@ class DboCsv extends DboSource {
 				break;
 		}
 		return $data;
+		
 	}
 /**
  * 文字列のエスケープ処理を行う
  *
- * @param 	string 	エスケープ対象データ
- * @return 	string 	エスケープ処理を行ったデータ
- * @access 	public
+ * @param string エスケープ対象データ
+ * @return string エスケープ処理を行ったデータ
+ * @access public
  */
 	function escapeString($value) {
 
@@ -1984,13 +2022,15 @@ class DboCsv extends DboSource {
  * TODO 未サポート
  *
  * @return string Error message with error number
- * @access 	public
+ * @access public
  */
 	function lastError() {
+		
 		/*if (mysql_errno($this->connection)) {
 		 return mysql_errno($this->connection).': '.mysql_error($this->connection);
 		 }*/
 		return null;
+		
 	}
 /**
  * Returns number of affected rows in previous database operation. If no previous operation exists,
@@ -1998,15 +2038,17 @@ class DboCsv extends DboSource {
  * TODO 未サポート
  *
  * @return integer Number of affected rows
- * @access 	public
+ * @access public
  */
 	function lastAffected() {
+		
 		/*
 		 if ($this->_result) {
 		 return mysql_affected_rows($this->connection);
 		 }
 		*/
 		return null;
+		
 	}
 /**
  * Returns number of rows in previous resultset. If no previous resultset exists,
@@ -2014,20 +2056,22 @@ class DboCsv extends DboSource {
  * TODO 未検証
  *
  * @return integer Number of rows in resultset
- * @access 	public
+ * @access public
  */
 	function lastNumRows() {
+		
 		if ($this->_result and is_resource($this->_result)) {
 			return @mysql_num_rows($this->_result);
 		}
 		return null;
+		
 	}
 /**
  * 最後に追加されたデータのIDを返す
  *
- * @param	mixed	$source
- * @return 	mixed	最後に追加されたデータのID
- * @access 	public
+ * @param mixed	$source
+ * @return mixed	最後に追加されたデータのID
+ * @access public
  */
 	function lastInsertId($source = null) {
 
@@ -2044,9 +2088,10 @@ class DboCsv extends DboSource {
  *
  * @param string $real Real database-layer column type (i.e. "varchar(255)")
  * @return string Abstract column type (i.e. "string")
- * @access 	public
+ * @access public
  */
 	function column($real) {
+		
 		if (is_array($real)) {
 			$col = $real['name'];
 			if (isset($real['limit'])) {
@@ -2089,22 +2134,23 @@ class DboCsv extends DboSource {
 			return $col;
 		}
 		return 'text';
+		
 	}
 /**
  * queryAssociation
  *
- * @param 	Model	$model
- * @param 	Model	$linkModel
- * @param 	string	$type Association type
- * @param 	array	$association
- * @param 	mixed	$assocData
- * @param 	array	$queryData
- * @param 	boolean	$external
- * @param 	array	$resultSet
- * @param 	integer $recursive Number of levels of association
- * @param 	array 	$stack
- * @return	void
- * @access 	public
+ * @param Model $model
+ * @param Model $linkModel
+ * @param string $type Association type
+ * @param array $association
+ * @param mixed $assocData
+ * @param array $queryData
+ * @param boolean $external
+ * @param array $resultSet
+ * @param integer $recursive Number of levels of association
+ * @param array $stack
+ * @return void
+ * @access public
  */
 	function queryAssociation(&$model, &$linkModel, $type, $association, $assocData, &$queryData, $external = false, &$resultSet, $recursive, $stack) {
 
@@ -2306,6 +2352,7 @@ class DboCsv extends DboSource {
  * CSVフィールドを読み込む
  *
  * @param mixed $model or $table
+ * @return void
  * @access protected
  */
 	function _loadCsvFields($model) {
@@ -2324,12 +2371,13 @@ class DboCsv extends DboSource {
 /**
  * 全ての結果セットを返す
  *
- * @param	string	$sql SQL statement
- * @param	boolean $cache Enables returning/storing cached query results
- * @return	array	Array of resultset rows, or false if no rows matched
- * @access 	public
+ * @param string $sql SQL statement
+ * @param boolean $cache Enables returning/storing cached query results
+ * @return array Array of resultset rows, or false if no rows matched
+ * @access public
  */
 	function fetchAll($sql, $cache = true, $modelName = null) {
+		
 		if ($cache && isset($this->_queryCache[$sql])) {
 			if (preg_match('/^\s*select/i', $sql)) {
 				return $this->_queryCache[$sql];
@@ -2357,15 +2405,17 @@ class DboCsv extends DboSource {
 		} else {
 			return array();
 		}
+		
 	}
 /**
  * カレントの結果セットを取得する
  *
- * @param	string	$sql
- * @return	array	The fetched row as an array
- * @access 	public
+ * @param string $sql
+ * @return array The fetched row as an array
+ * @access public
  */
 	function fetchRow($sql = null) {
+		
 		if (!empty($sql) && is_string($sql) && strlen($sql) > 5) {
 			if (!$this->execute($sql)) {
 				return null;
@@ -2378,6 +2428,7 @@ class DboCsv extends DboSource {
 		} else {
 			return null;
 		}
+		
 	}
 /**
  * 結果をfetchResult用にセットする。
@@ -2386,11 +2437,12 @@ class DboCsv extends DboSource {
  * fetchRowよりレコード分呼び出される
  * 配列ポインタを利用してループを制御
  *
- * @param	array	$results
- * @return	void
- * @access 	public
+ * @param array $results
+ * @return void
+ * @access public
  */
 	function resultSet(&$results) {
+		
 		$this->results =& $results;
 		$this->map = array();
 		$index = 0;
@@ -2408,13 +2460,13 @@ class DboCsv extends DboSource {
 	}
 /**
  * CakePHP固有のモデル配列を生成する
- *
  * 処理ごとに配列ポインタを進める
  *
- * @return	array	$resultRow
- * @access 	public
+ * @return array $resultRow
+ * @access public
  */
 	function fetchResult() {
+		
 		if ($row = each($this->results)) {
 			$resultRow = array();
 			$i = 0;
@@ -2428,15 +2480,16 @@ class DboCsv extends DboSource {
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * Inserts multiple values into a table
  *
- * @param	string	$table
- * @param	string	$fields
- * @param 	array	$values
- * @return	void
- * @access 	public
+ * @param string $table
+ * @param string $fields
+ * @param array $values
+ * @return void
+ * @access public
  */
 	function insertMulti($table, $fields, $values) {
 		$table = $this->fullTableName($table);
@@ -2449,38 +2502,49 @@ class DboCsv extends DboSource {
 /**
  * Returns an array of the indexes in given table name.
  * CSVの場合主キーは id 固定
- * @param	string	$model Name of model to inspect
- * @return	array	Fields in table. Keys are column and unique
- * @access 	public
+ * 
+ * @param string $model Name of model to inspect
+ * @return array Fields in table. Keys are column and unique
+ * @access public
  */
 	function index($model) {
+		
 		$index = array('PRIMARY'=>array('unique'=>1,'column'=>'id'));
 		return $index;
+	
 	}
 /**
  * Alter Table syntax for the given Schema comparison
  * 未サポート
+ * 
  * @param array $compare Result of a CakeSchema::compare()
  * @return array Array of alter statements to make.
+ * @access public
  */
 	function alterSchema($compare, $table = null) {
-		return false;
+		
+		return false
+		;
 	}
 /**
  * Generate index alteration statements for a table.
  * 未サポート
+ * 
  * @param string $table Table to alter indexes for
  * @param array $new Indexes to add and drop
  * @return array Index alteration statements
+ * @access protected
  */
 	function _alterIndexes($table, $indexes) {
+		
 		return array();
+		
 	}
 /**
  * テーブル名を変更する
  *
  * @param	array	$options [ old / new ]
- * @return	boolean
+ * @return	mixed
  * @access	public
  */
 	function renameTable($options) {
@@ -2510,9 +2574,9 @@ class DboCsv extends DboSource {
 /**
  * テーブル構造を変更する
  *
- * @param	array	$options [ new / old ]
- * @return	boolean
- * @access	public
+ * @param array $options [ new / old ]
+ * @return boolean
+ * @access public
  */
 	function alterTable($options) {
 
@@ -2568,45 +2632,57 @@ class DboCsv extends DboSource {
  * primary key, where applicable.
  *
  * @param mixed $table A string or model class representing the table to be truncated
- * @return boolean	SQL TRUNCATE TABLE statement, false if not applicable.
+ * @return boolean SQL TRUNCATE TABLE statement, false if not applicable.
  * @access public
  */
 	function truncate($table) {
+		
 		// TODO 現状、CSVのDELETE文はWHERE句がないと実行されない
 		return $this->execute('DELETE From ' . $this->fullTableName($table) . ' WHERE 1=1');
+		
 	}
 /**
  * Begin a transaction
  * TODO 未実装
- * @param model $model
+ * 
+ * @param Model $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
  */
 	function begin(&$model) {
+		
 		return false;
+		
 	}
 /**
  * Commit a transaction
  * TODO 未実装
- * @param model $model
+ * @param Model $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
+ * @access pablic
  */
 	function commit(&$model) {
+		
 		return false;
+		
 	}
 /**
  * Rollback a transaction
  * TODO 未実装
- * @param model $model
+ * 
+ * @param Model $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
+ *@access public
  */
 	function rollback(&$model) {
+		
 		return false;
+		
 	}
 /**
  * Generates an array representing a query or part of a query from a single model or two associated models
@@ -2620,8 +2696,10 @@ class DboCsv extends DboSource {
  * @param boolean $external
  * @param array $resultSet
  * @return mixed
+ * @access public
  */
 	function generateAssociationQuery(&$model, &$linkModel, $type, $association = null, $assocData = array(), &$queryData, $external = false, &$resultSet) {
+		
 		$queryData = $this->__scrubQueryData($queryData);
 		$assocData = $this->__scrubQueryData($assocData);
 
@@ -2790,6 +2868,7 @@ class DboCsv extends DboSource {
 			return $this->buildStatement($query, $model);
 		}
 		return null;
+		
 	}
 	
 }
@@ -2798,14 +2877,15 @@ class DboCsv extends DboSource {
  *
  * TODO GLOBAL グローバルな関数として再配置する必要あり
  *
- * @param	array	$int_array = ソートする配列
- * @param	int		$left = 開始位置（0で決め打ち）
- * @param	int		$right = 終了位置（$int_arrayの要素数：決め打ち）
- * @param	string	$flag = ソート対象の配列要素
- * @param	string	$order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
- * @return	array	ソート後の配列
+ * @param array $int_array = ソートする配列
+ * @param int $left = 開始位置（0で決め打ち）
+ * @param int $right = 終了位置（$int_arrayの要素数：決め打ち）
+ * @param string $flag = ソート対象の配列要素
+ * @param string $order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
+ * @return array ソート後の配列
  */
 	function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
+		
 		if ($left >= $right) {
 			return;
 		}
@@ -2837,21 +2917,24 @@ class DboCsv extends DboSource {
 		swap($int_array, $left, $last);
 		qsort($int_array, $left, $last-1, $flag = $flag, $order = $order);
 		qsort($int_array, $last+1, $right, $flag = $flag, $order = $order);
+		
 	}
 /**
  * swap
- *
  * qsort で利用される
  * TODO GLOBAL グローバルな関数として再配置する必要あり
  *
- * @param	array
- * @param	string
- * @param	string
- * @return	void
+ * @param array
+ * @param string
+ * @param string
+ * @return void
+ * @access public
  */
 	function swap(&$v, $i, $j) {
+		
 		$temp = $v[$i];
 		$v[$i] = $v[$j];
 		$v[$j] = $temp;
+		
 	}
 ?>

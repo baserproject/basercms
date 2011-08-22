@@ -22,29 +22,29 @@
 class ThemeFilesController extends AppController {
 /**
  * クラス名
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'ThemeFiles';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('ThemeFile', 'ThemeFolder');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx','Ckeditor');
 /**
  * テーマファイルタイプ
  *
- * @var		array
- * @public	protected
+ * @var array
+ * @public protected
  */
 	var $_tempalteTypes = array('layouts'=>'レイアウトテンプレート',
 			'elements'=>'エレメントテンプレート',
@@ -55,22 +55,22 @@ class ThemeFilesController extends AppController {
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
 /**
  * テーマファイル一覧
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -166,8 +166,8 @@ class ThemeFilesController extends AppController {
 /**
  * テーマファイル作成
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -232,8 +232,8 @@ class ThemeFilesController extends AppController {
 /**
  * テーマファイル編集
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_edit() {
 
@@ -307,8 +307,8 @@ class ThemeFilesController extends AppController {
 /**
  * ファイルを削除する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_del () {
 
@@ -374,8 +374,8 @@ class ThemeFilesController extends AppController {
 /**
  * テーマファイルをコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy() {
 
@@ -426,8 +426,8 @@ class ThemeFilesController extends AppController {
 /**
  * ファイルをアップロードする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_upload() {
 
@@ -460,8 +460,8 @@ class ThemeFilesController extends AppController {
 /**
  * フォルダ追加
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_add_folder() {
 
@@ -498,8 +498,8 @@ class ThemeFilesController extends AppController {
 /**
  * フォルダ編集
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_edit_folder() {
 
@@ -549,8 +549,8 @@ class ThemeFilesController extends AppController {
 /**
  * フォルダ表示
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_view_folder() {
 
@@ -582,8 +582,9 @@ class ThemeFilesController extends AppController {
 /**
  * 引き数を解析する
  *
- * @param	array $args
- * @return	array
+ * @param array $args
+ * @return array
+ * @access protected
  */
 	function _parseArgs($args) {
 
@@ -670,8 +671,8 @@ class ThemeFilesController extends AppController {
 /**
  * コアファイルを現在のテーマにコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy_to_theme() {
 
@@ -707,8 +708,8 @@ class ThemeFilesController extends AppController {
 /**
  * コアファイルのフォルダを現在のテーマにコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy_folder_to_theme() {
 
@@ -747,9 +748,9 @@ class ThemeFilesController extends AppController {
  * 画像を表示する
  * コアの画像等も表示可
  * 
- * @param	array	パス情報
- * @return	void
- * @access	public
+ * @param array パス情報
+ * @return void
+ * @access public
  */
 	function admin_img() {
 
@@ -777,11 +778,11 @@ class ThemeFilesController extends AppController {
  * 画像を表示する
  * コアの画像等も表示可
  * 
- * @param	int		$width
- * @param	int		$height
- * @param	array	パス情報
- * @return	void
- * @access	public
+ * @param int $width
+ * @param int $height
+ * @param array パス情報
+ * @return void
+ * @access public
  */
 	function admin_img_thumb() {
 
@@ -815,5 +816,6 @@ class ThemeFilesController extends AppController {
 		exit();
 
 	}
+	
 }
 ?>

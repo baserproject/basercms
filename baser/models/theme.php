@@ -25,28 +25,28 @@
 /**
  * テーマモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Theme extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Theme';
 /**
  * テーブル
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useTable = false;
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -61,11 +61,12 @@ class Theme extends AppModel {
 /**
  * 重複チェック
  *
- * @param	string
- * @return	boolean
- * @access	public
+ * @param string
+ * @return boolean
+ * @access public
  */
 	function duplicate($check) {
+		
 		$value = $check[key($check)];
 		if(!$value){
 			return true;
@@ -78,12 +79,14 @@ class Theme extends AppModel {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 保存
  *
- * @param	string
- * @return	boolean
+ * @param string
+ * @return boolean
+ * @access public
  */
 	function save($data = null, $validate = true, $fieldList = array()) {
 
@@ -127,6 +130,7 @@ class Theme extends AppModel {
  * @param string $value
  * @param string $contents
  * @return string
+ * @access public
  */
 	function setConfig($theme,$key,$value){
 

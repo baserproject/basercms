@@ -25,28 +25,28 @@
 /**
  * ブログコンテンツモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogContent extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogContent';
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
@@ -67,8 +67,8 @@ class BlogContent extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -118,9 +118,9 @@ class BlogContent extends BlogAppModel {
 /**
  * 英数チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function alphaNumeric($check) {
 
@@ -134,9 +134,9 @@ class BlogContent extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field = null,$options = array()) {
 

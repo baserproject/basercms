@@ -121,18 +121,20 @@ class DboPostgresEx extends DboPostgres {
 /**
  * テーブル名のリネームステートメントを生成
  *
- * @param	string	$sourceName
- * @param	string	$targetName
- * @return	string
- * @access	public
+ * @param string $sourceName
+ * @param string $targetName
+ * @return string
+ * @access public
  */
 	function buildRenameTable($sourceName, $targetName) {
+		
 		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
+		
 	}
 /**
  * カラム名を変更する
  *
- * @param	array	$options [ table / new / old  ]
+ * @param array $options [ table / new / old  ]
  * @return boolean
  * @access public
  */
@@ -157,6 +159,7 @@ class DboPostgresEx extends DboPostgres {
  * @param boolean $read Value to be used in READ or WRITE context
  * @return string Quoted and escaped
  * @todo Add logic that formats/escapes data based on column type
+ * @access public
  */
 	function value($data, $column = null, $read = true) {
 
@@ -212,6 +215,7 @@ class DboPostgresEx extends DboPostgres {
 			break;
 		}
 		return "'" . $data . "'";
+		
 	}
 /**
  * Prepares a value, or an array of values for database queries by quoting and escaping them.
@@ -220,8 +224,10 @@ class DboPostgresEx extends DboPostgres {
  * @param string $column The column into which this data will be inserted
  * @param boolean $read Value to be used in READ or WRITE context
  * @return mixed Prepared value or array of values.
+ * @access private
  */
 	function __value($data, $column = null, $read = true) {
+		
 		if (is_array($data) && !empty($data)) {
 			return array_map(
 				array(&$this, 'value'),
@@ -238,6 +244,7 @@ class DboPostgresEx extends DboPostgres {
 		} else {
 			return null;
 		}
+		
 	}
 /**
  * Alter the Schema of a table.
@@ -248,6 +255,7 @@ class DboPostgresEx extends DboPostgres {
  * @return array
  */
 	function alterSchema($compare, $table = null) {
+		
 		if (!is_array($compare)) {
 			return false;
 		}
@@ -316,6 +324,7 @@ class DboPostgresEx extends DboPostgres {
 			}
 		}
 		return $out;
+		
 	}
 	
 }

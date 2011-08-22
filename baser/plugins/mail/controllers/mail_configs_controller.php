@@ -25,49 +25,49 @@
 /**
  * メールフォーム設定コントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailConfigsController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.MailConfig');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
 /**
  * [ADMIN] メールフォーム設定
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -90,5 +90,6 @@ class MailConfigsController extends MailAppController {
 		$this->pageTitle = 'メールプラグイン基本設定';
 
 	}
+	
 }
 ?>

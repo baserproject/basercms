@@ -25,56 +25,56 @@
 /**
  * メールコンテンツコントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailContentsController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailContents';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array("Mail.MailContent",'Mail.Message');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','FormEx','TextEx', 'Mail.Mail');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * [ADMIN] メールフォーム一覧
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -87,8 +87,8 @@ class MailContentsController extends MailAppController {
 /**
  * [ADMIN] メールフォーム追加
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -128,9 +128,9 @@ class MailContentsController extends MailAppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -193,9 +193,9 @@ class MailContentsController extends MailAppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -225,11 +225,13 @@ class MailContentsController extends MailAppController {
 	}
 /**
  * レイアウト編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditLayout($template){
+		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
 						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
@@ -248,14 +250,17 @@ class MailContentsController extends MailAppController {
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
 		}
+		
 	}
 /**
  * メール編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditMail($template){
+		
 		$type = 'elements';
 		$path = 'email'.DS.'text'.DS.$template.'.ctp';
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
@@ -278,14 +283,17 @@ class MailContentsController extends MailAppController {
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
 		}
+		
 	}
 /**
  * メールフォーム編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditForm($template){
+		
 		$path = 'mail'.DS.$template;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
@@ -306,6 +314,7 @@ class MailContentsController extends MailAppController {
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
 		}
+		
 	}
 
 }

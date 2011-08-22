@@ -26,7 +26,7 @@ App::import('Helper', 'TextEx');
 /**
  * メールデータヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MaildataHelper extends TextExHelper {
@@ -35,11 +35,11 @@ class MaildataHelper extends TextExHelper {
 /**
  * メール用のデータを出力する
  *
- * @param	string	コントロールタイプ
- * @param	mixed	変換前の値
- * @param	array	コントロールソース
- * @return 	string	メール用データ
- * @access	public
+ * @param string コントロールタイプ
+ * @param mixed 変換前の値
+ * @param array コントロールソース
+ * @return string メール用データ
+ * @access public
  */
 	function control($type,$value,$options = "") {
 
@@ -148,5 +148,6 @@ class MaildataHelper extends TextExHelper {
 		return $out;
 
 	}
+	
 }
 ?>
