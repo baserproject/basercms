@@ -168,12 +168,31 @@
 
 	}
 /**
- * baseUrlを除外したURLのパラメーターを取得する
+ * 環境変数よりURLパラメータを取得する
+ * 
+ * モバイルプレフィックスは除外する
+ * bootstrap実行後でのみ利用可
+ */
+	function getUrlParamFromEnv() {
+		
+		$mobilePrefix = Configure::read('Mobile.prefix');
+		$url = getUrlFromEnv();
+		return preg_replace('/^'.$mobilePrefix.'\//','',$url);
+		
+	}
+/**
+ * 環境変数よりURLを取得する
+ * 
+ * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
  * 先頭のスラッシュは除外する
+ * baseUrlは除外する
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
-	function getParamsFromEnv() {
+	function getUrlFromEnv() {
 		
+		if(!empty($_GET['url'])) {
+			return preg_replace('/^\//', '', $_GET['url']);
+		}
 		
 		if(!isset($_SERVER['REQUEST_URI'])) {
 			return;

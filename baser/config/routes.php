@@ -30,6 +30,8 @@ if (file_exists(CONFIGS.'database.php')) {
 	$cn = ConnectionManager::getInstance();
 }
 if(!empty($cn->config->baser['driver'])) {
+	$parameter = getUrlParamFromEnv();
+	Configure::write('Baser.urlParam', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$parameter = Configure::read('Baser.urlParam');
 	$mobileOn = Configure::read('Mobile.on');
 	$mobilePrefix = Configure::read('Mobile.prefix');

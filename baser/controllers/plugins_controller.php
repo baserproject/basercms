@@ -121,7 +121,8 @@ class PluginsController extends AppController {
 			return null;
 		}
 		$contentName = '';
-		$url = split('/',$this->params['url']['url']);
+		$url = preg_replace('/^\//', '', $this->params['url']['url']);
+		$url = split('/', $url);
 		if($url[0]!=Configure::read('Mobile.prefix')) {
 			if(!empty($this->params['prefix']) && $url[0] == $this->params['prefix']) {
 				if(isset($url[1])) {

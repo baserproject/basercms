@@ -50,10 +50,10 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-	$url = @$_SERVER['REQUEST_URI'];
-	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
+	$uri = @$_SERVER['REQUEST_URI'];
+	if (strpos($uri, 'css/') !== false || strpos($uri, 'js/') !== false || strpos($uri, 'img/') !== false) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
-		$ext = array_pop(explode('.', $url));
+		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
 			Configure::write('Baser.Asset', true);
 			return;
@@ -119,18 +119,14 @@
  * モバイル判定
  */
 	$mobilePrefix = Configure::read('Mobile.prefix');
-	$parameter = getParamsFromEnv();	// 環境変数からパラメータを取得
+	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
 	$mobileOn = false;
 	$mobilePlugin = false;
-
-	if(!empty($parameter)) {
-
-		$parameters = explode('/',$parameter);
+	$parameter = getUrlParamFromEnv();
+	if(!empty($url)) {
+		$parameters = explode('/',$url);
 		if($parameters[0] == $mobilePrefix) {
-
-			$parameter = str_replace($mobilePrefix.'/','',$parameter);
 			$mobileOn = true;
-
 			if(!empty($parameters[1])) {
 				App::import('Core','Folder');
 				$pluginFolder = new Folder(APP.'plugins');
@@ -145,7 +141,7 @@
 			}
 		}
 	}
-	Configure::write('Baser.urlParam',$parameter);
+	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる
 	if(Configure::read('Baser.mobile')) {
 		Configure::write('Mobile.on',$mobileOn);
 		Configure::write('Mobile.plugin',$mobilePlugin);
