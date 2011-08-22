@@ -260,6 +260,12 @@ $(function(){
 			</div>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.exclude_search', '公開設定') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
+		</td>
+	</tr>
 </table>
 
 <!-- button -->

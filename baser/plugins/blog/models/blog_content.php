@@ -41,7 +41,7 @@ class BlogContent extends BlogAppModel {
  * @var 	array
  * @access 	public
  */
-	var $actsAs = array('PluginContent', 'Cache');
+	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
@@ -149,5 +149,57 @@ class BlogContent extends BlogAppModel {
 		}
 
 	}
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogContent']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogContent']['id']);
+		}
+		
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['BlogContent'])) {
+			$data = $data['BlogContent'];
+		}
+
+		$_data = array();
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		$_data['Content']['title'] = $data['title'];
+		$_data['Content']['detail'] = $data['description'];
+		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['status'] = true;
+
+		return $_data;
+
+	}
+	
 }
 ?>

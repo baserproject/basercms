@@ -236,7 +236,11 @@ class Page extends AppModel {
 
 		// 検索用テーブルに登録
 		if($this->contentSaving) {
-			$this->saveContent($this->createContent($data));
+			if(!$data['exclude_search']) {
+				$this->saveContent($this->createContent($data));
+			} else {
+				$this->deleteContent($data['id']);
+			}
 		}
 
 		// モバイルデータの生成
@@ -323,9 +327,8 @@ class Page extends AppModel {
 			$data['publish_end'] = '';
 		}
 
-		// トップページの場合は検索データとして登録しない
-		if($data['url'] == '/index') {
-			return;
+		if(!$data['title']) {
+			$data['title'] = Inflector::camelize($data['name']);
 		}
 		
 		// モバイル未対応

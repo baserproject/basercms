@@ -453,9 +453,13 @@ class BlogPost extends BlogAppModel {
  */
 	function afterSave($created) {
 
-		// 検索用テーブルに登録
-		$this->saveContent($this->createContent($this->data));
-
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogPost']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogPost']['id']);
+		}
+		
 	}
 /**
  * 検索用データを生成する
@@ -500,5 +504,6 @@ class BlogPost extends BlogAppModel {
 		return $this->deleteContent($this->id);
 
 	}
+	
 }
 ?>

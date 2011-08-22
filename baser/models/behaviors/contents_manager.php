@@ -89,8 +89,6 @@ class ContentsManagerBehavior extends ModelBehavior {
 /**
  * コンテンツデータを削除する
  * 
- * URLをキーとして削除する
- * 
  * @param Model $model
  * @param string $url 
  */

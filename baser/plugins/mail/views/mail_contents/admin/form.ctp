@@ -129,6 +129,13 @@ function mailContentSender1ClickHandler(){
 		</td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $formEx->label('MailContent.description', 'メールフォーム説明文') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('MailContent.description', array('type' => 'textarea', 'cols' => 35,'rows' => 4, 'counter' => true)) ?>
+			<?php echo $formEx->error('MailContent.description') ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('MailContent.sender_1', '送信先メールアドレス') ?></th>
 		<td class="col-input">
 			<?php echo $formEx->input('MailContent.sender_1_', array(
@@ -289,6 +296,12 @@ function mailContentSender1ClickHandler(){
 					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.exclude_search', '公開設定') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'このメールフォームをサイト内検索の検索結果より除外する')) ?>
 		</td>
 	</tr>
 </table>

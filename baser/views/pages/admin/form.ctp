@@ -318,7 +318,8 @@ function pageTypeChengeHandler() {
 			&nbsp;&nbsp;
 			<?php echo $formEx->dateTimePicker('Page.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 			&nbsp;〜&nbsp;
-			<?php echo $formEx->dateTimePicker('Page.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
+			<?php echo $formEx->dateTimePicker('Page.publish_end', array('size' => 12, 'maxlength' => 10), true) ?><br />
+			<?php echo $formEx->input('Page.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
 			<?php echo $formEx->error('Page.publish_begin') ?>
 			<?php echo $formEx->error('Page.publish_end') ?>
 		</td>
