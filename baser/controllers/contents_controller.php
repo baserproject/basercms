@@ -371,6 +371,84 @@ class ContentsController extends AppController {
 		$this->redirect(array('action'=>'admin_index'));
 
 	}
-	
+/**
+ * [ADMIN] 検索インデックス登録
+ */
+	function admin_add() {
+		
+		$this->pageTitle = '検索インデックス登録';
+		if($this->data) {
+			$url = $this->data['Content']['url'];
+			$url = str_replace(FULL_BASE_URL.$this->base, '', $url);
+
+			if(!$this->Content->find('count', array('conditions' => array('Content.url' => $url)))) {
+
+				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
+				Router::reload();
+				// URLのデータを取得
+				$content = $this->requestAction($url, array('return' => 1));
+				$View =& ClassRegistry::getObject('View');
+				// requestActionでインスタンス化されたViewを削除
+				// （管理システムではなく公開ページのView情報になっている可能性がある為）
+				ClassRegistry::removeObject('View');
+				// ルーティングのデフォルト設定を再読み込み（元の設定に復元する為）
+				Router::reload();
+				// 元の設定を復元
+				Router::setRequestInfo(array($this->params, array('base' => $this->base, 'webroot' => $this->webroot)));
+				$title = '';
+				
+				if(!is_a($content, 'ErrorHandler')) {
+					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
+					$title = $View->pageTitle;
+				} elseif (preg_match('/\.html/', $url)) {
+					App::import('Core', 'HttpSocket');
+					$socket = new HttpSocket();
+					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
+					$content = $socket->get(siteUrl().$url);
+					$code = $socket->response['status']['code'];
+					if($code != 200) {
+						unset($content);
+					} else {
+						if(preg_match('/<title>([^<]+)<\/title>/', $content, $matches)) {
+							$title = $matches[1];
+							$content = preg_replace('/<title>[^<]+<\/title>/', '', $content);
+						}
+					}
+				} else {
+					unset($content);
+				}
+				
+				if(isset($content)) {
+					$content = Sanitize::stripAll($content);
+					$content = strip_tags($content);
+					$data = array('Content' => array(
+						'title'		=> $title,
+						'detail'	=> $content,
+						'url'		=> $url,
+						'type'		=> 'その他',
+						'status'	=> true,
+						'priority'	=> 0.5
+					));
+					$this->Content->create($data);
+					if($this->Content->save()) {
+						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
+						$this->redirect('index');
+					} else {
+						$this->Session->setFlash('保存中にエラーが発生しました。');
+					}
+				} else {
+					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
+					$this->Session->setFlash('保存中にエラーが発生しました。');
+				}
+				
+			} else {
+				$this->Content->invalidate('url', '既に登録済のURLです。');
+				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+			}
+			
+		}
+		
+	}
+
 }
 ?>

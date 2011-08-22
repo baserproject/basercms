@@ -129,7 +129,8 @@ $(function(){
 		</td>
 		<td><?php echo $data['Content']['id'] ?></td>
 		<td style="width:15%"><?php echo $data['Content']['type'] ?><br /><?php echo $data['Content']['category'] ?></td>
-		<td style="width:15%"><?php echo $baser->link($data['Content']['title'], $data['Content']['url'], array('target' => '_blank')) ?></td>
+		<td style="width:15%">
+			<?php echo $baser->link($textEx->noValue($data['Content']['title'], '設定なし'), $data['Content']['url'], array('target' => '_blank')) ?></td>
 		<td><?php echo $textEx->mbTruncate($data['Content']['detail'], 50) ?></td>
 		<td style="width:10%;text-align:center">
 			<?php echo $textEx->booleanMark($data['Content']['status']); ?><br />
