@@ -46,7 +46,7 @@ class ContentsController extends AppController {
  * @var     array
  * @access  public
  */
-	var $components = array();
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパー
  *
@@ -61,8 +61,19 @@ class ContentsController extends AppController {
  * @access	public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
+		
 		$this->Security->enabled = false;
+		
+		// 認証設定
+		$this->AuthEx->allow('search','get_page_list_recursive');
+		
+		if(!empty($this->params['admin'])) {
+			$this->subMenuElements = array('site_configs', 'contents');
+			$this->navis = array('システム設定'=>'/admin/site_configs/form', '検索インデックス管理' => '/admin/contents/index');
+		}
+		
 	}
 /**
  * コンテンツ検索
@@ -253,7 +264,8 @@ class ContentsController extends AppController {
  */
 	function admin_index() {
 		
-		$this->pageTitle = '検索インデックス';
+		$this->pageTitle = 'コンテンツ一覧';
+
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Content', array('default' => $default));
@@ -268,115 +280,15 @@ class ContentsController extends AppController {
 
 	}
 /**
- * 管理画面ページ一覧の検索条件を取得する
- *
- * @param	array		$data
- * @return	string
- * @access	protected
- */
-	function _createAdminIndexConditions($data){
-		
-		/* 条件を生成 */
-		$conditions = array();
-		
-		$type = $data['Content']['type'];
-		$category = $data['Content']['category'];
-		$status = $data['Content']['status'];
-		$keyword = $data['Content']['keyword'];
-
-		unset($data['Content']['type']);
-		unset($data['Content']['category']);
-		unset($data['Content']['status']);
-		unset($data['Content']['keyword']);
-		unset($data['Content']['open']);
-		if(!$data['Content']['priority']) {
-			unset($data['Content']['priority']);
-		}
-		foreach($data['Content'] as $key => $value) {
-			if(preg_match('/priority_[0-9]+$/', $key)) {
-				unset($data['Content'][$key]);
-			}
-		}
-
-		if($data['Content']) {
-			$conditions = $this->postConditions($data);
-		}
-		
-		if($type) {
-			$conditions['Content.type'] = $type;
-		}
-		if($category) {
-			if($category == 'none') {
-				$conditions['Content.category'] = '';
-			} else {
-				$conditions['Content.category'] = $category;
-			}
-		}
-		if($status != '') {
-			$conditions['Content.status'] = $status;
-		}
-		if($keyword) {
-			$conditions['and']['or'] = array(
-				'Content.title LIKE' => '%'.$keyword.'%',
-				'Content.detail LIKE' => '%'.$keyword.'%'
-			);
-		}
-		
-		return $conditions;
-
-	}
-/**
- * [AJAX] 優先順位を変更する
+ * [ADMIN] 検索インデックス登録
  * 
- * @return boolean
- * @access public
- */
-	function admin_ajax_change_priority() {
-		
-		if($this->data) {
-			$this->Content->set($this->data);
-			if($this->Content->save()) {
-				echo true;
-			}
-		}
-		exit();
-		
-	}
-/**
- * [ADMIN] 検索インデックス削除
- *
- * @param	int		$id
  * @return	void
  * @access 	public
  */
-	function admin_delete($id = null) {
-
-		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
-		}
-
-		// メッセージ用にタイトルを取得
-		$title = $this->Content->field('title', array('Content.id' => $id));
-
-		/* 削除処理 */
-		if($this->Content->del($id)) {			
-			$message = '検索インデックス: '.$title.' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Content->saveDbLog($message);
-		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
-		}
-
-		$this->redirect(array('action'=>'admin_index'));
-
-	}
-/**
- * [ADMIN] 検索インデックス登録
- */
 	function admin_add() {
 		
-		$this->pageTitle = '検索インデックス登録';
+		$this->pageTitle = 'コンテンツ登録';
+		
 		if($this->data) {
 			$url = $this->data['Content']['url'];
 			$url = str_replace(FULL_BASE_URL.$this->base, '', $url);
@@ -448,6 +360,110 @@ class ContentsController extends AppController {
 			
 		}
 		
+	}
+/**
+ * [ADMIN] 検索インデックス削除
+ *
+ * @param	int		$id
+ * @return	void
+ * @access 	public
+ */
+	function admin_delete($id = null) {
+
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action'=>'admin_index'));
+		}
+
+		// メッセージ用にタイトルを取得
+		$title = $this->Content->field('title', array('Content.id' => $id));
+
+		/* 削除処理 */
+		if($this->Content->del($id)) {			
+			$message = '検索インデックス: '.$title.' を削除しました。';
+			$this->Session->setFlash($message);
+			$this->Content->saveDbLog($message);
+		}else {
+			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		}
+
+		$this->redirect(array('action'=>'admin_index'));
+
+	}
+/**
+ * [AJAX] 優先順位を変更する
+ * 
+ * @return boolean
+ * @access public
+ */
+	function admin_ajax_change_priority() {
+		
+		if($this->data) {
+			$this->Content->set($this->data);
+			if($this->Content->save()) {
+				echo true;
+			}
+		}
+		exit();
+		
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+		
+		/* 条件を生成 */
+		$conditions = array();
+		
+		$type = $data['Content']['type'];
+		$category = $data['Content']['category'];
+		$status = $data['Content']['status'];
+		$keyword = $data['Content']['keyword'];
+
+		unset($data['Content']['type']);
+		unset($data['Content']['category']);
+		unset($data['Content']['status']);
+		unset($data['Content']['keyword']);
+		unset($data['Content']['open']);
+		if(!$data['Content']['priority']) {
+			unset($data['Content']['priority']);
+		}
+		foreach($data['Content'] as $key => $value) {
+			if(preg_match('/priority_[0-9]+$/', $key)) {
+				unset($data['Content'][$key]);
+			}
+		}
+
+		if($data['Content']) {
+			$conditions = $this->postConditions($data);
+		}
+		
+		if($type) {
+			$conditions['Content.type'] = $type;
+		}
+		if($category) {
+			if($category == 'none') {
+				$conditions['Content.category'] = '';
+			} else {
+				$conditions['Content.category'] = $category;
+			}
+		}
+		if($status != '') {
+			$conditions['Content.status'] = $status;
+		}
+		if($keyword) {
+			$conditions['and']['or'] = array(
+				'Content.title LIKE' => '%'.$keyword.'%',
+				'Content.detail LIKE' => '%'.$keyword.'%'
+			);
+		}
+		
+		return $conditions;
+
 	}
 
 }
