@@ -245,5 +245,103 @@ class ContentsController extends AppController {
 		return $result;
 		
 	}
+/**
+ * [ADMIN] 検索インデックス
+ * 
+ * @return void
+ * @access public
+ */
+	function admin_index() {
+		
+		$this->pageTitle = '検索インデックス';
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('Content', array('default' => $default));
+		$conditions = $this->_createAdminIndexConditions($this->data);
+		$this->paginate = array(
+				'conditions' => $conditions,
+				'fields' => array(),
+				'order' =>'Content.priority DESC, Content.modified DESC, Content.id',
+				'limit' => $this->passedArgs['num']
+		);
+		$this->set('datas', $this->paginate('Content'));
+
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+		
+		/* 条件を生成 */
+		$conditions = array();
+		
+		$type = $data['Content']['type'];
+		$category = $data['Content']['category'];
+		$status = $data['Content']['status'];
+		$keyword = $data['Content']['keyword'];
+
+		unset($data['Content']['type']);
+		unset($data['Content']['category']);
+		unset($data['Content']['status']);
+		unset($data['Content']['keyword']);
+		unset($data['Content']['open']);
+		if(!$data['Content']['priority']) {
+			unset($data['Content']['priority']);
+		}
+		foreach($data['Content'] as $key => $value) {
+			if(preg_match('/priority_[0-9]+$/', $key)) {
+				unset($data['Content'][$key]);
+			}
+		}
+
+		if($data['Content']) {
+			$conditions = $this->postConditions($data);
+		}
+		
+		if($type) {
+			$conditions['Content.type'] = $type;
+		}
+		if($category) {
+			if($category == 'none') {
+				$conditions['Content.category'] = '';
+			} else {
+				$conditions['Content.category'] = $category;
+			}
+		}
+		if($status != '') {
+			$conditions['Content.status'] = $status;
+		}
+		if($keyword) {
+			$conditions['and']['or'] = array(
+				'Content.title LIKE' => '%'.$keyword.'%',
+				'Content.detail LIKE' => '%'.$keyword.'%'
+			);
+		}
+		
+		return $conditions;
+
+	}
+/**
+ * [AJAX] 優先順位を変更する
+ * 
+ * @return boolean
+ * @access public
+ */
+	function admin_ajax_change_priority() {
+		
+		if($this->data) {
+			$this->Content->set($this->data);
+			if($this->Content->save()) {
+				echo true;
+			}
+		}
+		exit();
+		
+	}
 	
 }
+?>
