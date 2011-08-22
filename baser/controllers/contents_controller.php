@@ -342,6 +342,35 @@ class ContentsController extends AppController {
 		exit();
 		
 	}
+/**
+ * [ADMIN] 検索インデックス削除
+ *
+ * @param	int		$id
+ * @return	void
+ * @access 	public
+ */
+	function admin_delete($id = null) {
+
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action'=>'admin_index'));
+		}
+
+		// メッセージ用にタイトルを取得
+		$title = $this->Content->field('title', array('Content.id' => $id));
+
+		/* 削除処理 */
+		if($this->Content->del($id)) {			
+			$message = '検索インデックス: '.$title.' を削除しました。';
+			$this->Session->setFlash($message);
+			$this->Content->saveDbLog($message);
+		}else {
+			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		}
+
+		$this->redirect(array('action'=>'admin_index'));
+
+	}
 	
 }
 ?>
