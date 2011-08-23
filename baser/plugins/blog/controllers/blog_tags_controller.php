@@ -95,7 +95,7 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->create($this->data);
 			if($this->BlogTag->save()) {
-				$message = '記事「'.$this->data['BlogTag']['name'].'」を追加しました。';
+				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogTag->saveDbLog($message);
 				$this->redirect(array('action' => 'index'));
@@ -129,7 +129,7 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->set($this->data);
 			if($this->BlogTag->save()) {
-				$message = '記事「'.$this->data['BlogTag']['name'].'」を更新しました。';
+				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogTag->saveDbLog($message);
 				$this->redirect(array('action' => 'index'));
@@ -160,7 +160,7 @@ class BlogTagsController extends BlogAppController {
 		$data = $this->BlogTag->read(null, $id);
 
 		if($this->BlogTag->del($id)) {
-			$message = $this->BlogTag->data['BlogTag']['name'].' を削除しました。';
+			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 			$this->Session->setFlash($message);
 			$this->BlogTag->saveDbLog($message);
 		}else {
