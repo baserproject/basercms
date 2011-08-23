@@ -947,17 +947,18 @@ class BaserHelper extends AppHelper {
 			
 			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
 			
-			if(preg_match('/^[^\/]/', $pageUrl)) {
-				$pageUrl = '/'.$pageUrl;
-			}
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
 			
 			if(!$detail) {
+				$pageUrl = preg_replace('/^\//', '', $pageUrl);
 				$aryPageUrl = split('/',$pageUrl);
 				$controller = $aryPageUrl[0];
 			} else {
+				if(preg_match('/^[^\/]/', $pageUrl)) {
+					$pageUrl = '/'.$pageUrl;
+				}
 				return Inflector::camelize(str_replace('/', '_', $pageUrl));
 			}
 			
