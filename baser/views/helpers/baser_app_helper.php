@@ -159,9 +159,11 @@ class BaserAppHelper extends Helper {
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
 		$filePath = str_replace('/', DS, $file);
+		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->webroot.$file;
-		} elseif(file_exists(docRoot().DS.$filePath)) {
+		} elseif(file_exists($docRoot.DS.$filePath) && strpos($docRoot.DS.$filePath, ROOT.DS) !== false) {
+			// ※ ファイルのパスが ROOT 配下にある事が前提
 			$webPath = $file;
 		} else {
 			$webPath = Router::url('/'.$file);
