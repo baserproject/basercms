@@ -158,9 +158,10 @@ class BaserAppHelper extends Helper {
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
-		if(file_exists(WWW_ROOT . $file)) {
+		$filePath = str_replace('/', DS, $file);
+		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->webroot.$file;
-		} elseif(file_exists(docRoot().DS.$file)) {
+		} elseif(file_exists(docRoot().DS.$filePath)) {
 			$webPath = $file;
 		} else {
 			$webPath = Router::url('/'.$file);
@@ -170,11 +171,11 @@ class BaserAppHelper extends Helper {
 		if (!empty($this->themeWeb)) {
 			$os = env('OS');
 			if (!empty($os) && strpos($os, 'Windows') !== false) {
-				if (strpos(WWW_ROOT . $this->themeWeb  . $file, '\\') !== false) {
-					$path = str_replace('/', '\\', WWW_ROOT . $this->themeWeb  . $file);
+				if (strpos(WWW_ROOT . $this->themeWeb  . $filePath, '\\') !== false) {
+					$path = str_replace('/', '\\', WWW_ROOT . $this->themeWeb  . $filePath);
 				}
 			} else {
-				$path = WWW_ROOT . $this->themeWeb  . $file;
+				$path = WWW_ROOT . $this->themeWeb  . $filePath;
 			}
 			if (file_exists($path)) {
 				$webPath = "{$this->webroot}" . $this->themeWeb . $file;
