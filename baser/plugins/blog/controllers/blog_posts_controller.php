@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: blog_posts_controller.php 42 2011-08-23 19:20:59Z ryuring $ */
 /**
  * 記事コントローラー
  *
@@ -14,9 +14,9 @@
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @version			$Revision: 42 $
+ * @modifiedby		$LastChangedBy: ryuring $
+ * @lastmodified	$Date: 2011-08-24 04:20:59 +0900 (水, 24 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -250,7 +250,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->create($this->data);
 
 			// データを保存
-			if($this->BlogPost->save()) {
+			if($this->BlogPost->saveAll()) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
@@ -308,8 +308,9 @@ class BlogPostsController extends BlogAppController {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
 			}
+			$this->BlogPost->set($this->data);
 			// データを保存
-			if($this->BlogPost->save($this->data)) {
+			if($this->BlogPost->saveAll()) {
 				clearViewCache();
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
