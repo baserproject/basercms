@@ -2652,7 +2652,7 @@ class DboCsv extends DboSource {
  */
 	function begin(&$model) {
 		
-		return false;
+		return null;
 		
 	}
 /**
@@ -2666,7 +2666,7 @@ class DboCsv extends DboSource {
  */
 	function commit(&$model) {
 		
-		return false;
+		return null;
 		
 	}
 /**
@@ -2681,7 +2681,7 @@ class DboCsv extends DboSource {
  */
 	function rollback(&$model) {
 		
-		return false;
+		return null;
 		
 	}
 /**
