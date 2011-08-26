@@ -421,6 +421,10 @@ class ContentsController extends AppController {
  */
 	function _createAdminIndexConditions($data){
 		
+		if($data) {
+			return array();
+		}
+		
 		/* 条件を生成 */
 		$conditions = array();
 		
