@@ -791,13 +791,21 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	function posts($blogContentId, $num = 5) {
-		
+
+		if(!empty($this->params['named']['template'])) {
+			$template = $this->params['named']['template'];
+		} else {
+			$template = 'posts';
+		}
+		unset($this->params['named']['template']);
+
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 		$datas = $this->_getBlogPosts(array('listCount' => $num));
 		$this->set('posts', $datas);
-		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
-		
+
+		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
+
 	}
 /**
  * [MOBILE] 記事リストを出力

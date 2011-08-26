@@ -41,6 +41,18 @@ class BlogBaserHelper extends AppHelper {
  */
 	function blogPosts ($contentsName, $num = 5, $options = array()) {
 
+		$_options = array(
+			'category'	=> null,
+			'tag'		=> null,
+			'year'		=> null,
+			'month'		=> null,
+			'day'		=> null,
+			'id'		=> null,
+			'keyword'	=> null,
+			'template'	=> null
+		);
+		$options = am($_options, $options);
+
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
@@ -53,7 +65,15 @@ class BlogBaserHelper extends AppHelper {
 		if($mobile){
 			$url['prefix'] = 'mobile';
 		}
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
+
+		if(isset($options['templates'])) {
+			$templates = $options['templates'];
+		} else {
+			$templates = 'posts';
+		}
+		unset ($options['templates']);
+
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
 
 	}
 
