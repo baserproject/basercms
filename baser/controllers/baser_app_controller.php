@@ -245,9 +245,9 @@ class BaserAppController extends Controller {
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
-			$this->layoutPath = $this->params['prefix'];
-			$this->subDir = $this->params['prefix'];
-			if($this->params['prefix'] == 'mobile') {
+			$this->layoutPath = str_replace('_', '/', $this->params['prefix']);
+			$this->subDir = str_replace('_', '/', $this->params['prefix']);
+			if(preg_match('/^mobile(|_)/', $this->params['prefix'])) {
 				$this->helpers[] = 'Mobile';
 			}
 		}
