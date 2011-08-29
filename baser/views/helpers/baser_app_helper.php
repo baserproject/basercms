@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: baser_app_helper.php 143 2011-08-26 06:11:39Z ryuring $ */
 /**
  * Helper 拡張クラス
  *
@@ -14,9 +14,9 @@
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.view.helpers
  * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @version			$Revision: 143 $
+ * @modifiedby		$LastChangedBy: ryuring $
+ * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -212,6 +212,25 @@ class BaserAppHelper extends Helper {
 		return call_user_func_array(array(&$this->_view->loaded['pluginHook'], $hook), $args);
 		
 	}
-
+/**
+ * Finds URL for specified action.
+ *
+ * Returns an URL pointing to a combination of controller and action. Param
+ * $url can be:
+ *	+ Empty - the method will find adress to actuall controller/action.
+ *	+ '/' - the method will find base URL of application.
+ *	+ A combination of controller/action - the method will find url for it.
+ *
+ * @param  mixed  $url    Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
+ *                        or an array specifying any of the following: 'controller', 'action',
+ *                        and/or 'plugin', in addition to named arguments (keyed array elements),
+ *                        and standard URL arguments (indexed array elements)
+ * @param boolean $full   If true, the full base URL will be prepended to the result
+ * @return string  Full translated URL with base path.
+ */
+	function url($url = null, $full = false) {
+		$url = addSessionId($url);
+		return parent::url($url, $full);
+	}
 }
 ?>

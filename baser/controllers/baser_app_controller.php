@@ -1240,6 +1240,20 @@ class BaserAppController extends Controller {
 		return $this->AuthEx->userModel;
 		
 	}
+/**
+ * Redirects to given $url, after turning off $this->autoRender.
+ * Script execution is halted after the redirect.
+ *
+ * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
+ * @param integer $status Optional HTTP status code (eg: 404)
+ * @param boolean $exit If true, exit() will be called after the redirect
+ * @return mixed void if $exit = false. Terminates script if $exit = true
+ * @access public
+ */
+	function redirect($url, $status = null, $exit = true) {
+		$url = addSessionId($url);
+		parent::redirect($url, $status, $exit);
+	}
 	
 }
 ?>

@@ -556,4 +556,53 @@
 		}
 
 	}
+/**
+ * URLにセッションIDを付加する
+ * 既に付加されている場合は重複しない
+ * 
+ * @param mixed $url
+ * @return mixed
+ */
+	function addSessionId($url) {
+		
+		if(Configure::read('Mobile.on')) {
+			if(is_array($url)) {
+				$url["?"][session_name()] = session_id();
+			} else {
+				if(strpos($url, '?') !== false) {
+					$args = array();
+					$_url = explode('?', $url);
+					if(!empty($_url[1])) {
+						if(strpos($_url[1], '&') !== false) {
+							$aryUrl = explode('&', $_url[1]);
+							foreach($aryUrl as $pass) {
+								if(strpos($pass, '=') !== false) {
+									list($key, $value) = explode('=', $pass);
+									$args[$key] = $value;
+								}
+							}
+						} else {
+							if(strpos($_url[1], '=') !== false) {
+								list($key, $value) = explode('=', $_url[1]);
+								$args[$key] = $value;
+							}
+						}
+					}
+					$args[session_name()] = session_id();
+					$pass = '';
+					foreach($args as $key => $value) {
+						if($pass) {
+							$pass .= '&';
+						}
+						$pass .= $key.'='.$value;
+					}
+					$url = $_url[0] . '?' . $pass;
+				} else {
+					$url .= '?'.session_name().'='.session_id();
+				}
+			}
+		}
+		return $url;
+		
+	}
 ?>
