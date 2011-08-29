@@ -532,6 +532,9 @@ class PagesController extends AppController {
 
 		if(isset($this->data['Page'])) {
 			$page = $this->data;
+			if(empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 2) {
+				$page['Page']['page_category_id'] = $this->Page->PageCategory->getMobileId();
+			}
 			$page['Page']['url'] = $this->Page->getPageUrl($page);
 		} else {
 			$conditions = array('Page.id' => $id);
