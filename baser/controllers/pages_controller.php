@@ -146,6 +146,7 @@ class PagesController extends AppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->Page->getDefaultValue();
+			$this->data['Page']['page_type'] = 1;
 		}else {
 
 			/* 登録処理 */
@@ -190,13 +191,14 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->data['Page']['page_type'] = 1;
-		$pageTypeSelectable = true;
-		$categories = $this->getCategorySource(1, array('empty' => '指定しない', 'own' => true));
-		if(!$this->getCategorySource(2, array('empty' => '指定しない', 'own' => true))) {
-			$pageTypeSelectable = false;
+		switch ($this->data['Page']['page_type']) {
+			case 1:
+				$categories = $this->getCategorySource(1, array('empty' => '指定しない', 'own' => true));
+				break;
+			case 2:
+				$categories = $this->getCategorySource(2, array('empty' => '指定しない', 'own' => true));
+				break;
 		}
-		$this->set('pageTypeSelectable', $pageTypeSelectable);
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
@@ -227,6 +229,12 @@ class PagesController extends AppController {
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
 			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
+			$mobileIds = $this->PageCategory->getMobileCategoryIds();
+			if(!in_array($this->data['Page']['page_category_id'], $mobileIds)) {
+				$this->data['Page']['page_type'] = 1;
+			} else {
+				$this->data['Page']['page_type'] = 2;
+			}
 		}else {
 
 			$before = $this->Page->read(null, $id);
@@ -275,40 +283,30 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$pageType = 1;
-		$pageTypeSelectable = true;
-		$mobileIds = $this->PageCategory->getMobileCategoryIds();
-		if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
-			$pageType = 2;
-		}
-		$this->data['Page']['page_type'] = $pageType;
 		$currentOwnerId = '';
 		$currentPageCategoryId = '';
 		if(!empty($this->data['PageCategory']['id'])) {
 			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
-		$pcCategories = $this->getCategorySource(1, array(
-			'currentOwnerId'		=> $currentOwnerId,
-			'currentPageCategoryId'	=> $currentPageCategoryId,
-			'own'			=> true,
-			'empty'			=> '指定しない'
-		));
-		$mobileCategories = $this->getCategorySource(2, array(
-			'currentOwnerId'		=> $currentOwnerId,
-			'currentPageCategoryId'	=> $currentPageCategoryId,
-			'own'			=> true,
-			'empty'			=> '指定しない'
-		));
-		if(!$pcCategories || !$mobileCategories) {
-			$pageTypeSelectable = false;
+		switch ($this->data['Page']['page_type']) {
+			case 1:
+				$categories = $this->getCategorySource(1, array(
+					'currentOwnerId'		=> $currentOwnerId,
+					'currentPageCategoryId'	=> $currentPageCategoryId,
+					'own'			=> true,
+					'empty'			=> '指定しない'
+				));
+				break;
+			case 2:
+				$categories = $this->getCategorySource(2, array(
+					'currentOwnerId'		=> $currentOwnerId,
+					'currentPageCategoryId'	=> $currentPageCategoryId,
+					'own'			=> true,
+					'empty'			=> '指定しない'
+				));
+				break;
 		}
-		$categories = array();
-		if($this->data['Page']['page_type'] == 1) {
-			$categories = $pcCategories;
-		} elseif($this->data['Page']['page_type'] == 2) {
-			$categories = $mobileCategories;
-		}
-		$this->set('pageTypeSelectable', $pageTypeSelectable);
+
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);

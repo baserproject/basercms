@@ -90,7 +90,7 @@ function pageCategoryIdChangeHandler() {
 		}
 
 		// モバイルカテゴリを選択した場合は表示しない
-		if(!mobile){
+		if(!mobile && $("#Action").html() == 'admin_edit'){
 
 			$.ajax({
 				type: "POST",
@@ -182,6 +182,7 @@ function pageTypeChengeHandler() {
 	<div id="PageCategoryOwnerId"><?php echo $formEx->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
 	<div id="MobileOn"><?php echo Configure::read('Baser.mobile') ?></div>
+	<div id="Action"><?php echo $this->action ?></div>
 </div>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
@@ -233,7 +234,6 @@ function pageTypeChengeHandler() {
 		<td class="col-input">
 	<?php if(Configure::read('Baser.mobile')): ?>
 		<?php echo $formEx->input('Page.page_type', array(
-				'disabled'	=> !$pageTypeSelectable,
 				'type'		=> 'radio',
 				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
 	<?php endif ?>
@@ -241,8 +241,8 @@ function pageTypeChengeHandler() {
 					'type'		=> 'select',
 					'options'	=> $categories,
 					'escape'	=> false)) ?>
-			<?php echo $formEx->error('Page.page_category_id') ?>
 			<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
+			<?php echo $formEx->error('Page.page_category_id') ?>
 		</td>
 	</tr>
 <?php else: ?>
