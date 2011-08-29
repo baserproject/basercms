@@ -610,7 +610,11 @@ class Page extends AppModel {
 		}else {
 			$conditions['Page.name'] = $this->data['Page']['name'];
 			if(empty($this->data['Page']['page_category_id'])) {
-				$conditions['Page.page_category_id'] = NULL;
+				if($this->data['Page']['page_type'] == 2) {
+					$conditions['Page.page_category_id'] = $this->PageCategory->getMobileId();
+				} else {
+					$conditions['Page.page_category_id'] = NULL;
+				}
 			}else {
 				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
 			}
