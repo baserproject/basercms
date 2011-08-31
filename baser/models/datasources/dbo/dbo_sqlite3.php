@@ -328,7 +328,9 @@ class DboSqlite3 extends DboSource {
 	}
 /**
  * Begin a transaction
- *
+ * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+ * ロックに関する原因については未解析
+ * 
  * @param string $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions).
@@ -336,18 +338,21 @@ class DboSqlite3 extends DboSource {
  */
 	function begin (&$model) {
 		
-		if (parent::begin($model)) {
-			if ($this->pdo_statement->beginTransaction()) {
+		return null;
+		/*if (parent::begin($model)) {
+			if ($this->connection->beginTransaction()) {
 				$this->_transactionStarted = true;
 				return true;
 			}
 		}
-		return false;
+		return false;*/
 		
 	}
 /**
  * Commit a transaction
- *
+ * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+ * ロックに関する原因については未解析
+ * 
  * @param unknown_type $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
@@ -356,16 +361,19 @@ class DboSqlite3 extends DboSource {
  */
 	function commit (&$model) {
 		
-		if (parent::commit($model)) {
+		return null;
+		/*if (parent::commit($model)) {
 			$this->_transactionStarted = false;
-			return $this->pdo_statement->commit();
+			return $this->connection->commit();
 		}
-		return false;
+		return false;*/
 		
 	}
 /**
  * Rollback a transaction
- *
+ * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+ * ロックに関する原因については未解析
+ * 
  * @param unknown_type $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
@@ -374,10 +382,11 @@ class DboSqlite3 extends DboSource {
  */
 	function rollback (&$model) {
 		
-		if (parent::rollback($model)) {
-			return $this->pdo_statement->rollBack();
+		return null;
+		/*if (parent::rollback($model)) {
+			return $this->connection->rollBack();
 		}
-		return false;
+		return false;*/
 		
 	}
 /**
