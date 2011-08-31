@@ -378,7 +378,8 @@ ini_set('mbstring.func_overload', '0');
 			}
 
 			$aI['N'] = substr($vZ, 26, $nF);
-			if (substr($aI['N'], -1) == '/') {
+			$aI['N'] = str_replace('/',DS,$aI['N']);
+			if (substr($aI['N'], -1) == DS) {
 				continue;
 			}
 

@@ -172,7 +172,7 @@ class Tool extends AppModel {
 				$filename = $path.Inflector::tableize($modelList[$value]).'.php';
 				$File = new File($filename);
 				$content = file_get_contents($filename);
-				$reg = '/\n\n[^\n]+?\$path[^\n]+?;/is';
+				$reg = '/(\r\n\r\n|\n\n)[^\n]+?\$path[^\n]+?;/is';
 				$content = preg_replace($reg, '', $content);
 				$File->write($content, 'w+');
 				$File->close();
