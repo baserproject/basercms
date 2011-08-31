@@ -4,8 +4,6 @@
 class PermissionsSchema extends CakeSchema {
 	var $name = 'Permissions';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'permissions.php';
 
 	var $connection = 'baser';

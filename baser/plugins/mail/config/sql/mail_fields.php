@@ -4,8 +4,6 @@
 class MailFieldsSchema extends CakeSchema {
 	var $name = 'MailFields';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'mail_fields.php';
 
 	var $connection = 'plugin';

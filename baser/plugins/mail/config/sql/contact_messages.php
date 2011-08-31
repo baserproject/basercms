@@ -4,8 +4,6 @@
 class ContactMessagesSchema extends CakeSchema {
 	var $name = 'ContactMessages';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'contact_messages.php';
 
 	var $connection = 'plugin';

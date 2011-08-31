@@ -4,8 +4,6 @@
 class MailConfigsSchema extends CakeSchema {
 	var $name = 'MailConfigs';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'mail_configs.php';
 
 	var $connection = 'plugin';
