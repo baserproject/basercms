@@ -223,7 +223,7 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
-				$posts = $this->_getBlogPosts(array('conditons' => array('category' => $category)));
+				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
 
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
