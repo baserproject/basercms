@@ -324,7 +324,8 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'),$path));
-		return str_replace(preg_replace('/^\//','',baseUrl()),'',$url);
+		$baseUrl = preg_replace('/\/$/', '', baseUrl());
+		return preg_replace('/^'.preg_quote($baseUrl, '/').'/', '', $url);
 
 	}
 /**
@@ -642,6 +643,7 @@ class BlogHelper extends AppHelper {
 
 		if(isset($matches[1][$num-1])) {
 			$url = $matches[1][$num-1];
+			$url = preg_replace('/^'.preg_quote($this->base, '/').'/', '', $url);
 			$img = $this->Baser->getImg($url, $options);
 			if($link) {
 				return $this->Baser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));

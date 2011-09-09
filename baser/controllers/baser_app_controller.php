@@ -799,7 +799,7 @@ class BaserAppController extends Controller {
 				return false;
 			}
 		} else {
-			if(!$this->writeInstallSetting('App.baseUrl', "env('SCRIPT_NAME')")){
+			if(!$this->writeInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
 				return false;
 			}
 		}

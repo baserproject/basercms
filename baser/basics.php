@@ -32,7 +32,10 @@
 
 		$appBaseUrl = Configure::read('App.baseUrl');
 		if($appBaseUrl) {
-			$baseUrl = $appBaseUrl.'/';
+			$baseUrl = $appBaseUrl;
+			if(!preg_match('/\/$/', $appBaseUrl)) {
+				$baseUrl .= '/';
+			}
 		}else {
 			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
 			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
