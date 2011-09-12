@@ -110,7 +110,9 @@ class MaildataHelper extends TextExHelper {
 				break;
 
 			case 'date_time_calender':
-				$value = $this->dateTime($value);
+				if(is_array($value)) {
+					$value = $this->dateTime($value);
+				}
 				if($value) {
 					$out = " ".date('Y年 m月 d日',strtotime($value));
 				}
