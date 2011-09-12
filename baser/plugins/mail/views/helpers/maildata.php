@@ -33,8 +33,8 @@ class MaildataHelper extends TextExHelper {
 
 	var $helpers = array('TimeEx');
 /**
- * メール用のデータを出力する
- *
+ * メール表示用のデータを出力する
+ * 
  * @param string コントロールタイプ
  * @param mixed 変換前の値
  * @param array コントロールソース

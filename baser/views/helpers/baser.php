@@ -845,7 +845,7 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * アップデート処理が必要かチェックする
- * 
+ * TODO 別のヘルパに移動する
  * @return boolean
  * @access public
  */
@@ -862,7 +862,7 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * アップデート用のメッセージを出力する
- * 
+ * TODO 別のヘルパーに移動する
  * @return void
  * @access public
  */

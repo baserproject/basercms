@@ -54,7 +54,7 @@ class BlogHelper extends AppHelper {
 	function __construct() {
 		
 		$this->_view =& ClassRegistry::getObject('view');
-		$this->setBlogContent();
+		$this->_setBlogContent();
 		
 	}
 /**
@@ -62,9 +62,9 @@ class BlogHelper extends AppHelper {
  * 
  * @param int $blogContentId 
  * @return void
- * @access public
+ * @access protected
  */
-	function setBlogContent($blogContentId = null) {
+	function _setBlogContent($blogContentId = null) {
 
 		if(isset($this->blogContent) && !$blogContentId) {
 			return;
@@ -174,7 +174,7 @@ class BlogHelper extends AppHelper {
  */
 	function getPostLink($post, $title, $options = array()) {
 
-		$this->setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
 		return $this->Baser->getLink($title, $url, $options);
 		
@@ -314,7 +314,7 @@ class BlogHelper extends AppHelper {
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
-		$this->setBlogContent($blogContentId);
+		$this->_setBlogContent($blogContentId);
 		$blogContentName = $this->blogContent['name'];
 		
 		$path = array('category');
@@ -513,7 +513,7 @@ class BlogHelper extends AppHelper {
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * 
+ * TODO 別のヘルパに移動
  * @return array
  * @access public
  */
@@ -553,7 +553,7 @@ class BlogHelper extends AppHelper {
 /**
  * ブログテンプレートを取得
  * コンボボックスのソースとして利用
- * 
+ * TODO 別のヘルパに移動
  * @return array
  * @access public
  */
@@ -628,7 +628,7 @@ class BlogHelper extends AppHelper {
  */
 	function getPostImg($post, $options = array()) {
 		
-		$this->setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
 		$options = am($_options, $options);
 		extract($options);

@@ -89,7 +89,7 @@ class MailHelper extends AppHelper {
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * 
+ * TODO 他のヘルパーに移動する
  * @return array
  * @access public
  */
@@ -129,7 +129,7 @@ class MailHelper extends AppHelper {
 /**
  * フォームテンプレートを取得
  * コンボボックスのソースとして利用
- * 
+ * TODO 他のヘルパーに移動する
  * @return array
  * @access public
  */
@@ -167,7 +167,7 @@ class MailHelper extends AppHelper {
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * 
+ * TODO 他のヘルパに移動する
  * @return array
  * @access public
  */
