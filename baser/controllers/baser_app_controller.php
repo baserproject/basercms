@@ -725,7 +725,6 @@ class BaserAppController extends Controller {
 		}
 		$this->EmailEx->reset();
 		$this->EmailEx->charset = $encode;
-		$this->EmailEx->date = date('Y-m-d H:i:s');
 		$this->EmailEx->sendAs = 'text';		// text or html or both
 		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if(!empty($this->siteConfigs['smtp_host'])) {
