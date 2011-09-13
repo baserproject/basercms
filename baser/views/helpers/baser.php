@@ -758,7 +758,7 @@ class BaserHelper extends AppHelper {
 		}
 
 		// 現在SSLのURLの場合、フルパスで取得
-		if($this->isSSL()) {
+		if($this->isSSL() && ssl) {
 			$_url = preg_replace("/^\//", "", $_url);
 			if(preg_match('/^admin\//', $_url)) {
 				$admin = true;
