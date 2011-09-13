@@ -229,37 +229,52 @@ class CkeditorHelper extends AppHelper {
 			$this->_script = true;
 			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
 		}
-		$toolbar1 = array('Cut', 'Copy', 'Paste', '-',
-							'Undo', 'Redo', '-',
-							'Bold', 'Italic', 'Underline', 'Strike', '-',
-							'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
-							'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-							'Smiley', 'Table', 'HorizontalRule', '-');
-		$toolbar2 = array( 'Styles', 'Format', 'Font', 'FontSize',
-							'TextColor', 'BGColor', '-',
-							'Link', 'Unlink', '-',
-							'Image');
-		if($useDraft) {
-			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
-			if(!$disableCopyDraft) {
-				$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
-			}
-			if(!$disableCopyPublish) {
-				$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
-			}
-		} else {
-			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source');
-		}
-		$_ckoptions = array('language' => 'ja',
-				'skin' => 'kama',
-				'width' => '600px',
-				'height' => '300px',
-				'collapser' => false,
-				'baseFloatZIndex' => 900,
-				'toolbar'=> array($toolbar1, $toolbar2, $toolbar3)
+		
+		$toolbar = array(
+			'simple' => array(
+				array(	'Bold', 'Underline', '-',
+						'NumberedList', 'BulletedList', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
+						'Format', 'FontSize', 'TextColor', 'BGColor', 'Link', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			),
+			'normal' => array(
+				array(	'Cut', 'Copy', 'Paste', '-','Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
+						'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+						'Smiley', 'Table', 'HorizontalRule', '-'),
+				array(	'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			)
 		);
+
+		$_ckoptions = array('language' => 'ja',
+			'type'	=> 'normal',
+			'skin' => 'kama',
+			'width' => '600px',
+			'height' => '300px',
+			'collapser' => false,
+			'baseFloatZIndex' => 900,
+		);
+		
 		$ckoptions = array_merge($_ckoptions,$ckoptions);
 
+		if(empty($ckoptions['toolbar'])) {
+			$ckoptions['toolbar'] = $toolbar[$ckoptions['type']];
+		}
+
+		if($useDraft) {			
+			$lastBar = $ckoptions['toolbar'][count($ckoptions['toolbar'])-1];
+			$lastBar = am($lastBar , array( '-', 'Publish', '-', 'Draft'));
+			if(!$disableCopyDraft) {
+				$lastBar = am($lastBar , array('-', 'CopyDraft'));
+			}
+			if(!$disableCopyPublish) {
+				$lastBar = am($lastBar , array('-', 'CopyPublish'));
+			}
+			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
+		}
+		
 		if(!$this->inited) {
 			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;

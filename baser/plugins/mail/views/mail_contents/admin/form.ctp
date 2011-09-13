@@ -131,7 +131,7 @@ function mailContentSender1ClickHandler(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('MailContent.description', 'メールフォーム説明文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('MailContent.description', array('type' => 'textarea', 'cols' => 35,'rows' => 4, 'counter' => true)) ?>
+			<?php echo $formEx->ckeditor('MailContent.description', null, array('width' => '500px', 'height' => '120px', 'type' => 'simple')) ?>
 			<?php echo $formEx->error('MailContent.description') ?>
 		</td>
 	</tr>

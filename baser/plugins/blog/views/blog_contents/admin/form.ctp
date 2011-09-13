@@ -100,7 +100,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogContent.description', 'ブログ説明文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('BlogContent.description', array('type' => 'textarea', 'cols' => 35,'rows' => 4, 'counter' => true)) ?>
+			<?php echo $formEx->ckeditor('BlogContent.description', null, array('width' => '500px', 'height' => '120px', 'type' => 'simple')) ?>
 			<?php echo $formEx->error('BlogContent.description') ?>
 		</td>
 	</tr>

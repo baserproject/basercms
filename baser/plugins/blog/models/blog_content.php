@@ -89,10 +89,6 @@ class BlogContent extends BlogAppModel {
 			array(	'rule'		=> array('maxLength', 255),
 					'message'	=> 'ブログタイトルは255文字以内で入力してください。')
 		),
-		'description' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'ブログ説明文は255文字以内で入力してください。')
-		),
 		'layout' => array(
 			array(	'rule'		=> 'halfText',
 					'message'	=> 'レイアウトテンプレート名は半角で入力してください。',
