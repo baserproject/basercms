@@ -54,6 +54,9 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 <?php $baser->css('admin/import') ?>
 <?php $baser->css(array('jquery-ui/ui.all','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
+<!--[if IE 6]>
+<?php $baser->js(array('fixed-1.8', 'DD_belatedPNG_0.0.8a', 'DD_belatedPNG_config')) ?>
+<![endif]-->
 <?php $baser->js(array(
 	'jquery-1.6.2.min',
 	'jquery.dimensions.min',
@@ -61,13 +64,21 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 	'i18n/ui.datepicker-ja',
 	'jquery.bt.min',
 	'jquery.colorbox-min',
-	'jquery.corner',
+	'jquery.corner-2.12',
 	'functions',
 	'styleswitcher',
 	'admin/startup')) ?>
 <?php $baser->scripts() ?>
 </head>
 <body id="<?php $baser->contentsName() ?>" class="normal">
+
+<!-- loader -->
+<div id="Waiting" class="waiting-box">
+	<div class="corner5">
+	<?php echo $html->image('ajax-loader.gif') ?><br />
+    Waiting...
+	</div>
+</div>
 
 <!-- begin page -->
 <div id="page">

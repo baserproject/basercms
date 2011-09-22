@@ -452,3 +452,23 @@ img.slide-trigger {
 .function-box span {
 	white-space: nowrap;
 }
+.waiting-box {
+    position: fixed;
+    text-align: center;
+    z-index: 10000;
+	width:100%;
+	height: 100%;
+	padding-top:100px;
+	display: none;
+}
+.waiting-box div{
+    background-color: #CCCCCC;
+    border: 1px solid #999999;
+    font-size: x-small;
+    margin: 0 auto;
+    opacity: 0.4;
+    padding: 10px 20px 5px;
+    text-align: center;
+    top: 60px;
+    width: 100px;
+}
