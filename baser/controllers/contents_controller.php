@@ -421,7 +421,7 @@ class ContentsController extends AppController {
  */
 	function _createAdminIndexConditions($data){
 		
-		if($data) {
+		if(!$data) {
 			return array();
 		}
 		
