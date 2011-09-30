@@ -166,21 +166,17 @@
 			}
 			if($agentOn) {
 				Configure::write('AgentPrefix.currentAgent', $key);
+				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
+				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
 			}
 			Configure::write('AgentPrefix.on', $agentOn);
 			Configure::write('AgentPrefix.plugin', $agentPlugin);
-			Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
-			Configure::write('AgentPrefix.currentAlias', $setting['alias']);
 			if($agentOn) {
 				break;
 			}
 		}
 	}
 	if($agentOn) {
-		if(Configure::write('Agent.currentAgent') == 'mobile') {
-			ini_set('session.use_cookies', 0);
-			ini_set('session.use_trans_sid', '1');
-		}
 		//======================================================================
 		// /m/files/... へのアクセスの場合、/files/... へ自動リダイレクト
 		// CMSで作成するページ内のリンクは、モバイルでアクセスすると、

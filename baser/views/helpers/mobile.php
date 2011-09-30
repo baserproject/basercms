@@ -93,7 +93,9 @@ class MobileHelper extends Helper {
  */
 	function header(){
 		
-		header("Content-type: application/xhtml+xml");
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+			header("Content-type: application/xhtml+xml");
+		}
 		
 	}
 	

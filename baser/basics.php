@@ -76,6 +76,10 @@
  */
 	function docRoot() {
 
+		if(empty($_SERVER['SCRIPT_NAME'])) {
+			return '';
+		}		
+		
 		if(strpos($_SERVER['SCRIPT_NAME'],'.php') === false){
 			// さくらの場合、/index を呼びだすと、拡張子が付加されない
 			$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
@@ -581,9 +585,9 @@
  * @param mixed $url
  * @return mixed
  */
-	function addSessionId($url) {
+	function addSessionId($url, $force = false) {
 		
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
 			if(is_array($url)) {
 				$url["?"][session_name()] = session_id();
 			} else {

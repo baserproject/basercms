@@ -71,7 +71,10 @@ class  AuthConfigureComponent extends Object {
 		}
 		
 		$_config = array(
-			'loginRedirect' => '/'.$requestedPrefix
+			'loginRedirect' => '/'.$requestedPrefix,
+			'username'		=> 'name',
+			'password'		=> 'password',
+			'serial'		=> ''
 		);
 		$config = array_merge($_config, $config);
 		extract($config);
@@ -82,7 +85,6 @@ class  AuthConfigureComponent extends Object {
 		if(empty($loginAction)) {
 			$loginAction = '/'.$requestedPrefix.'/users/login';
 		}
-		
 		// オートリダイレクトをOFF
 		$auth->autoRedirect = false;
 		// エラーメッセージ
@@ -90,7 +92,7 @@ class  AuthConfigureComponent extends Object {
 		// 権限が無いactionを実行した際のエラーメッセージ
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
 		//ユーザIDとパスワードのフィールドを指定
-		$auth->fields = array('username' => 'name', 'password' => 'password');
+		$auth->fields = array('username' => $username, 'password' => $password, 'serial' => $serial);
 		$auth->authorize = 'controller';
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
 		$auth->userModel = $userModel;

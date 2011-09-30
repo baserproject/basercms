@@ -155,7 +155,11 @@ class UsersController extends AppController {
 		if($this->data) {
 			if ($user) {
 				if (!empty($this->data[$userModel]['saved'])) {
-					$this->setAuthCookie($this->data);
+					if(Configure::read('AgentPrefix.currentAlias') != 'mobile') {
+						$this->setAuthCookie($this->data);
+					} else {
+						$this->AuthEx->saveSerial();
+					}
 					unset($this->data[$userModel]['save']);
 				}else {
 					$this->Cookie->destroy();

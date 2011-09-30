@@ -131,7 +131,7 @@ class BaserAppController extends Controller {
 				}else {
 					$reg = '/^\/(installations)/i';
 				}
-				if(!preg_match($reg,$_SERVER['REQUEST_URI']) || isInstalled()) {
+				if(!preg_match($reg, @$_SERVER['REQUEST_URI']) || isInstalled()) {
 					$this->theme = $this->siteConfigs['theme'];
 					// ===============================================================================
 					// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -1253,7 +1253,7 @@ class BaserAppController extends Controller {
  * @access public
  */
 	function redirect($url, $status = null, $exit = true) {
-		$url = addSessionId($url);
+		$url = addSessionId($url, true);
 		parent::redirect($url, $status, $exit);
 	}
 	
