@@ -29,9 +29,9 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
+<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
+<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
+<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
 <?php $baser->css('import') ?>
 <?php $baser->js(array(
 	'jquery-1.6.2.min',
