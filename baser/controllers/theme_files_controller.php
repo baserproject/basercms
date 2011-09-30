@@ -108,12 +108,10 @@ class ThemeFilesController extends AppController {
 				}
 			}
 			foreach($files[1] as $file) {
-				if(preg_match('/^(.+?)(\.ctp|\.css|\.js|\.png|\.gif|\.jpg)$/is',$file,$matches)) {
-					$themeFile = array();
-					$themeFile['name'] = $file;
-					$themeFile['type'] = 'file';
-					$themeFiles[] = $themeFile;
-				}
+				$themeFile = array();
+				$themeFile['name'] = $file;
+				$themeFile['type'] = $this->_getFileType($file);
+				$themeFiles[] = $themeFile;
 			}
 			$themeFiles = am($folders,$themeFiles);
 
@@ -141,12 +139,10 @@ class ThemeFilesController extends AppController {
 				if($file=='screenshot.png') {
 					continue;
 				}
-				if(preg_match('/^(.+?)(\.ctp|\.css|\.js|\.png|\.gif|\.jpg)$/is',$file,$matches)) {
-					$themeFile = array();
-					$themeFile['name'] = $file;
-					$themeFile['type'] = 'file';
-					$themeFiles[] = $themeFile;
-				}
+				$themeFile = array();
+				$themeFile['name'] = $file;
+				$themeFile['type'] = $this->_getFileType($file);
+				$themeFiles[] = $themeFile;
 			}
 			$themeFiles = am($folders,$themeFiles);
 
@@ -162,6 +158,24 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin',$plugin);
 		$this->set('type',$type);
 
+	}
+/**
+ * ファイルタイプを取得する
+ * 
+ * @param string $file
+ * @return mixed false / type 
+ */
+	function _getFileType($file) {
+		
+		if(preg_match('/^(.+?)(\.ctp|\.css|\.js)$/is',$file)) {
+			return 'text';
+		} elseif(preg_match('/^(.+?)(\.png|\.gif|\.jpg)$/is',$file)) {
+			return 'image';
+		} else {
+			return 'file';
+		}
+		return false;
+		
 	}
 /**
  * テーマファイル作成
@@ -250,8 +264,9 @@ class ThemeFilesController extends AppController {
 			$file = new File($fullpath);
 			$pathinfo = pathinfo($fullpath);
 			$this->data['ThemeFile']['name'] = urldecode(basename($file->name,'.'.$pathinfo['extension']));
+			$this->data['ThemeFile']['type'] = $this->_getFileType(urldecode(basename($file->name)));
 			$this->data['ThemeFile']['ext'] = $pathinfo['extension'];
-			if(!in_array($pathinfo['extension'], array('png','gif','jpg'))) {
+			if($this->data['ThemeFile']['type'] == 'text') {
 				$this->data['ThemeFile']['contents'] = $file->read();
 			}
 
@@ -262,8 +277,8 @@ class ThemeFilesController extends AppController {
 
 				$oldPath = urldecode($fullpath);
 				$newPath = dirname($fullpath).DS.urldecode($this->data['ThemeFile']['name']).'.'.$this->data['ThemeFile']['ext'];
-
-				if(!in_array($this->data['ThemeFile']['ext'], array('png','gif','jpg'))) {
+				$this->data['ThemeFile']['type'] = $this->_getFileType(basename($newPath));
+				if($this->data['ThemeFile']['type'] == 'text') {
 					$file = new File($oldPath);
 					if($file->open('w')) {
 						$file->append($this->data['ThemeFile']['contents']);
@@ -441,7 +456,7 @@ class ThemeFilesController extends AppController {
 		}
 		$pathinfo = pathinfo($this->data['ThemeFile']['file']['name']);
 		$ext = $pathinfo['extension'];
-		if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
+		//if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
 			$filePath = $fullpath .DS. $this->data['ThemeFile']['file']['name'];
 			$Folder = new Folder();
 			$Folder->create(dirname($filePath), 0777);
@@ -451,9 +466,9 @@ class ThemeFilesController extends AppController {
 			}else {
 				$this->Session->setFlash('アップロードに失敗しました。');
 			}
-		} else {
-			$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
-		}
+		//} else {
+			//$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
+		//}
 		$this->redirect(array('action'=>'index',$theme,$type,$path));
 
 	}

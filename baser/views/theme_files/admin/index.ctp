@@ -118,7 +118,7 @@ $(function(){
 		<?php endif ?>
 		</td>
 		<td>
-		<?php if(preg_match('/.+?(\.png|\.gif|\.jpg)$/is', $themeFile['name'])): ?>
+		<?php if($themeFile['type'] == 'image'): ?>
 			<?php $baser->link(
 					$baser->getImg(array('action' => 'img_thumb', 100, 100, $theme, $plugin, $type, $path, $themeFile['name']), array('alt'=>$themeFile['name'])),
 					array('action' => 'img', $theme, $plugin, $type, $path, $themeFile['name']),
