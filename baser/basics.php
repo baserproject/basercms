@@ -23,41 +23,44 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
- *
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
- *
- * @return string   ベースURL
+ * / | /index.php/ | /subdir/ | /subdir/index.php/
+ * @return string ベースURL
  */
 	function baseUrl() {
 
-		$appBaseUrl = Configure::read('App.baseUrl');
-		if($appBaseUrl) {
-			$baseUrl = $appBaseUrl;
-			if(!preg_match('/\/$/', $appBaseUrl)) {
+		$baseUrl = Configure::read('App.baseUrl');
+		if($baseUrl) {
+			if(!preg_match('/\/$/', $baseUrl)) {
 				$baseUrl .= '/';
 			}
 		}else {
-			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
-			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
-			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			$url = '';
 			if(!empty($_SERVER['QUERY_STRING'])) {
+				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
+				// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまい
+				// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
+				$url = '';
 				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
 					$url = $maches[1];
 				}
-			}
-			if($url) {
-				$requested = '/';
-				if(!empty($_SERVER['REQUEST_URI'])) {
-					$requested = $_SERVER['REQUEST_URI'];
+				if($url) {
+					$requestUri = '/';
+					if(!empty($_SERVER['REQUEST_URI'])) {
+						$requestUri = $_SERVER['REQUEST_URI'];
+					}
+					if(strpos($requestUri, '?') !== false) {
+						list($requestUri) = explode('?', $requestUri);
+					}
+					$baseUrl = str_replace($url, '', $requestUri);
 				}
-				if(strpos($requested, '?') !== false) {
-					list($requested) = explode('?', $requested);
-				}
-				$baseUrl = str_replace($url, '', $requested);
+				
 			} else {
 				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
-				$baseUrl = preg_replace("/index$/", '', @$_SERVER['REQUEST_URI']);
+				$requestUri = '/';
+				if(!empty($_SERVER['REQUEST_URI'])) {
+					$requestUri = $_SERVER['REQUEST_URI'];
+				}
+				$baseUrl = preg_replace("/index$/", '', $requestUri);
 			}
 		}
 		return $baseUrl;
