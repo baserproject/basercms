@@ -474,8 +474,8 @@ class PagesController extends AppController {
  */
 	function _getNavi($url) {
 
-		if(Configure::read('Mobile.on')) {
-			$url = '/mobile'.$url;
+		if(Configure::read('AgentPrefix.on')) {
+			$url = '/'.Configure::read('AgentPrefix.currentPrefix').$url;
 		}
 		
 		// 直属のカテゴリIDを取得
@@ -548,8 +548,11 @@ class PagesController extends AppController {
 
 		Cache::write('page_preview_'.$id, $page);
 
-		if(preg_match('/^\/mobile\//is', $page['Page']['url'])){
-			Configure::write('Mobile.on',true);
+		if(preg_match('/^\/'.Configure::read('AgentPrefix.mobile.prefix').'\//is', $page['Page']['url'])){
+			Configure::write('AgentPrefix.on',true);
+			Configure::write('Agent.currentAgent', 'mobile');
+			Configure::write('AgentPrefix.currentPrefix', Configure::read('AgentPrefix.mobile.prefix'));
+			Configure::write('AgentPrefix.currentAlias', Configure::read('AgentPrefix.mobile.alias'));
 		}
 
 		// 一時ファイルとしてビューを保存
@@ -576,10 +579,15 @@ class PagesController extends AppController {
 
 		$page = Cache::read('page_preview_'.$id);
 
-		if(preg_match('/^\/mobile\//is', $page['Page']['url'])){
-			Configure::write('Mobile.on',true);
-			$this->layoutPath = 'mobile';
-			$this->helpers[] = 'mobile';
+		if(preg_match('/^\/'.Configure::read('AgentPrefix.mobile.prefix').'\//is', $page['Page']['url'])){
+			Configure::write('AgentPrefix.on',true);
+			Configure::write('AgentPrefix.currentAgent', 'mobile');
+			Configure::write('AgentPrefix.currentPrefix', Configure::read('AgentPrefix.mobile.prefix'));
+			Configure::write('AgentPrefix.currentAlias', Configure::read('AgentPrefix.mobile.alias'));
+			$this->layoutPath = Configure::read('AgentPrefix.mobile.prefix');
+			if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+				$this->helpers[] = 'Mobile';
+			}
 		} else {
 			$this->layoutPath = '';
 		}

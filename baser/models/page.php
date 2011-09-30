@@ -187,7 +187,7 @@ class Page extends AppModel {
 		}
 		if(!empty($this->data['Page']['reflect_mobile'])){
 			$data = $this->data;
-			$data['Page']['url'] = '/mobile'.$data['Page']['url'];
+			$data['Page']['url'] = '/'.Configure::read('AgentPrefix.mobile.prefix').$data['Page']['url'];
 			if(!$this->checkOpenPageFile($data)){
 				$result = false;
 			}
@@ -271,7 +271,7 @@ class Page extends AppModel {
 				return true;
 			}
 
-			$mobilePage = $this->find('first',array('conditions'=>array('Page.url'=>'/mobile'.$data['url']),'recursive'=>-1));
+			$mobilePage = $this->find('first',array('conditions'=>array('Page.url'=>'/'.Configure::read('AgentPrefix.mobile.prefix').$data['url']),'recursive'=>-1));
 
 			unset($data['id']);
 			unset($data['sort']);
@@ -290,7 +290,7 @@ class Page extends AppModel {
 				if($data['page_category_id']){
 					$fields = array('parent_id','name','title');
 					$pageCategoryTree = $this->PageCategory->getTreeList($fields,$data['page_category_id']);
-					$path = getViewPath().'pages'.DS.'mobile';
+					$path = getViewPath().'pages'.DS.Configure::read('AgentPrefix.mobile.prefix');
 					$parentId = $mobileId;
 					foreach($pageCategoryTree as $pageCategory) {
 						$path .= '/'.$pageCategory['PageCategory']['name'];
@@ -310,7 +310,7 @@ class Page extends AppModel {
 				}
 				$data['author_id'] = $_SESSION['Auth']['User']['id'];
 				$data['sort'] = $this->getMax('sort')+1;
-				$data['url'] = '/mobile'.$data['url'];
+				$data['url'] = '/'.Configure::read('AgentPrefix.mobile.prefix').$data['url'];
 				$data['status'] = false;	// 新規ページの場合は非公開とする
 				unset($data['publish_begin']);
 				unset($data['publish_end']);
@@ -563,8 +563,8 @@ class Page extends AppModel {
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
 				foreach($categoryPath as $key => $category) {
-					if($key == 0 && $category['PageCategory']['name'] == 'mobile') {
-						$url .= 'mobile/';
+					if($key == 0 && $category['PageCategory']['name'] == Configure::read('AgentPrefix.mobile.prefix')) {
+						$url .= Configure::read('AgentPrefix.mobile.prefix').'/';
 					} else {
 						$url .= $category['PageCategory']['name'].'/';
 					}
@@ -742,7 +742,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
 		
 		return in_array($url,$this->_unpublishes);
 
@@ -759,7 +759,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
 		
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
@@ -974,11 +974,11 @@ class Page extends AppModel {
 		if(isset($data['Page'])){
 			$data = $data['Page'];
 		}
-		if(preg_match('/^\/mobile\//is',$data['url'])){
+		if(preg_match('/^\/'.Configure::read('AgentPrefix.mobile.prefix').'\//is',$data['url'])){
 			// 対象ページがモバイルページの場合はfalseを返す
 			return false;
 		}
-		return $this->field('id',array('Page.url'=>'/mobile'.$data['url']));
+		return $this->field('id',array('Page.url'=>'/'.Configure::read('AgentSettings.Mobile.prefix').$data['url']));
 		
 	}
 /**
@@ -993,7 +993,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('Mobile.prefix').'\//', '/mobile/', $url);
+		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
 		
 		if($this->_pages == -1) {
 			$pages = $this->find('all', array(

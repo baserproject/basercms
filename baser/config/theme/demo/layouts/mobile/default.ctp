@@ -21,7 +21,7 @@
 	<?php $baser->element('contents_navi') ?><br />
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
 	<span style="color:#8ABE08">◆ </span>
-	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
+	<?php $baser->link('トップへ','/'.Configure::read('AgentPrefix.mobile.alias').'/') ?>
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
 	<center>
 		<?php $baser->link($baser->getImg('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")),'http://basercms.net') ?>

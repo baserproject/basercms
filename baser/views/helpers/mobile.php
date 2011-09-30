@@ -42,7 +42,7 @@ class MobileHelper extends Helper {
 			$rss = false;
 		}
 
-		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
+		if($view && !$rss && Configure::read('AgentPrefix.currentAgent') == 'mobile' && $view->layoutPath != 'email'.DS.'text') {
 
 			$view->output = str_replace('＆', '&amp;', $view->output);
 			$view->output = str_replace('＜', '&lt;', $view->output);

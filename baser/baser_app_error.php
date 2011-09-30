@@ -96,6 +96,27 @@ class BaserAppError extends ErrorHandler {
 		}
 		$this->_outputMessage('missing_class');
 	}
-	
+/**
+ * Renders the Missing Layout web page.
+ *
+ * @param array $params Parameters for controller
+ * @access public
+ */
+	function missingLayout($params) {
+		extract($params, EXTR_OVERWRITE);
+		
+		$this->controller->layout = 'default';
+		
+		// >>> CUSTOMIZE ADD 2011/09/23 ryuring
+		$this->controller->layoutPath = '';
+		$this->controller->subDir = '';
+		// <<<
+		
+		$this->controller->set(array(
+			'file' => $file,
+			'title' => __('Missing Layout', true)
+		));
+		$this->_outputMessage('missingLayout');
+	}
 }
 ?>

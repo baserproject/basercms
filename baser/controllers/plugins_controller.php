@@ -122,7 +122,7 @@ class PluginsController extends AppController {
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->params['url']['url']);
 		$url = split('/', $url);
-		if($url[0]!=Configure::read('Mobile.prefix')) {
+		if($url[0]!=Configure::read('AgentPrefix.currentAlias')) {
 			if(!empty($this->params['prefix']) && $url[0] == $this->params['prefix']) {
 				if(isset($url[1])) {
 					$contentName = $url[1];

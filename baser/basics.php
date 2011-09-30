@@ -40,9 +40,21 @@
 			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
 			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
 			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			$url = str_replace('url=', '', @$_SERVER['QUERY_STRING']);
+			$url = '';
+			if(!empty($_SERVER['QUERY_STRING'])) {
+				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
+					$url = $maches[1];
+				}
+			}
 			if($url) {
-				$baseUrl = str_replace($url, '', @$_SERVER['REQUEST_URI']);
+				$requested = '/';
+				if(!empty($_SERVER['REQUEST_URI'])) {
+					$requested = $_SERVER['REQUEST_URI'];
+				}
+				if(strpos($requested, '?') !== false) {
+					list($requested) = explode('?', $requested);
+				}
+				$baseUrl = str_replace($url, '', $requested);
 			} else {
 				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
 				$baseUrl = preg_replace("/index$/", '', @$_SERVER['REQUEST_URI']);
@@ -178,9 +190,9 @@
  */
 	function getUrlParamFromEnv() {
 		
-		$mobilePrefix = Configure::read('Mobile.prefix');
+		$agentAlias = Configure::read('AgentPrefix.currentAlias');
 		$url = getUrlFromEnv();
-		return preg_replace('/^'.$mobilePrefix.'\//','',$url);
+		return preg_replace('/^'.$agentAlias.'\//','',$url);
 		
 	}
 /**
@@ -568,7 +580,7 @@
  */
 	function addSessionId($url) {
 		
-		if(Configure::read('Mobile.on')) {
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
 			if(is_array($url)) {
 				$url["?"][session_name()] = session_id();
 			} else {

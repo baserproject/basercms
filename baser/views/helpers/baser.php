@@ -393,8 +393,8 @@ class BaserHelper extends AppHelper {
 		
 		return ($this->params['url']['url'] == '/' ||
 						$this->params['url']['url'] == 'index' ||
-						$this->params['url']['url'] == Configure::read('Mobile.prefix').'/' ||
-						$this->params['url']['url'] == Configure::read('Mobile.prefix').'/index');
+						$this->params['url']['url'] == Configure::read('AgentPrefix.currentAlias').'/' ||
+						$this->params['url']['url'] == Configure::read('AgentPrefix.currentAlias').'/index');
 		
 	}
 /**
@@ -585,7 +585,7 @@ class BaserHelper extends AppHelper {
  */
 	function xmlHeader($attrib = array()) {
 		
-		if(empty($attrib['encoding']) && Configure::read('Mobile.on')){
+		if(empty($attrib['encoding']) && Configure::read('AgentPrefix.currentAgent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->XmlEx->header($attrib)."\n";
@@ -806,7 +806,7 @@ class BaserHelper extends AppHelper {
  */
 	function charset($charset = null) {
 		
-		if(!$charset && Configure::read('Mobile.on')){
+		if(!$charset && Configure::read('AgentPrefix.currentAgent') == 'mobile'){
 			$charset = 'Shift-JIS';
 		}
 		echo $this->Html->charset($charset);
@@ -838,7 +838,7 @@ class BaserHelper extends AppHelper {
  */
 	function editPage($id) {
 		
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
 			echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank')).'</div>';
 		}
 		

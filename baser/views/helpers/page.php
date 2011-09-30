@@ -75,8 +75,8 @@ class PageHelper extends Helper {
 			if($param && preg_match('/\/$/is',$param)){
 				$param .= 'index';
 			}
-			if(Configure::read('Mobile.on')) {
-				$param = 'mobile/'.$param;
+			if(Configure::read('AgentPrefix.on')) {
+				$param = Configure::read('AgentPrefix.currentPrefix').'/'.$param;
 			}
 			$this->data = $this->Page->findByUrl('/'.$param);
 		}

@@ -192,7 +192,7 @@ class ContentsController extends AppController {
 		if($parentCategoryId === 0) {
 			$direct = true;
 			$parentCategoryId = null;
-		}elseif(!$parentCategoryId && Configure::read('Mobile.on')) {
+		}elseif(!$parentCategoryId && Configure::read('AgentPrefix.currentAgent') == 'mobile') {
 			$parentCategoryId = $mobileId;
 		}
 		

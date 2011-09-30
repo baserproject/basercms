@@ -61,15 +61,41 @@
 		'lfcode' => "\n"
 	);
 /**
- * 携帯設定
+ * エージェント設定
  */
-	$config['Mobile'] = array(
-		// プレフィックス
-		'prefix'	=> 'm',
-		// ユーザーエージェント
-		'agents'	=> array(
-			'Googlebot-Mobile','Y!J-SRD','Y!J-MBS','DoCoMo','SoftBank',
-			'Vodafone','J-PHONE','UP.Browser'
+	$config['AgentPrefix'] = array(
+		'mobile'	=> array(
+			'alias'	=> 'm',
+			'prefix'=> 'mobile',
+			'agents'	=> array(
+				'Googlebot-Mobile',
+				'Y!J-SRD',
+				'Y!J-MBS',
+				'DoCoMo',
+				'SoftBank',
+				'Vodafone',
+				'J-PHONE',
+				'UP.Browser'
+			)
+		),
+		'smartphone'	=> array(
+			'alias'		=> 's',
+			'prefix'	=> 'smartphone',
+			'agents'	=> array(
+				'iPhone',         // Apple iPhone
+				'iPod',           // Apple iPod touch
+				'Android',        // 1.5+ Android
+				'dream',          // Pre 1.5 Android
+				'CUPCAKE',        // 1.5+ Android
+				'blackberry9500', // Storm
+				'blackberry9530', // Storm
+				'blackberry9520', // Storm v2
+				'blackberry9550', // Storm v2
+				'blackberry9800', // Torch
+				'webOS',          // Palm Pre Experimental
+				'incognito',      // Other iPhone browser
+				'webmate'         // Other iPhone browser
+			)
 		)
 	);
 ?>

@@ -221,7 +221,7 @@ class MailController extends MailAppController {
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
 
 			// 画像認証を行う
-			if(!Configure::read('Mobile.on') && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+			if(Configure::read('AgentPrefix.currentAgent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
 				$captchaResult = $this->Captcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');

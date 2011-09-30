@@ -159,9 +159,11 @@ class BaserAppController extends Controller {
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
 			// モバイルのエラー用
-			if(Configure::read('Mobile.on')) {
-				$this->layoutPath = 'mobile';
-				$this->helpers[] = 'Mobile';
+			if(Configure::read('AgentPrefix.on')) {
+				$this->layoutPath = Configure::read('AgentPrefix.currentPrefix');
+				if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+					$this->helpers[] = 'Mobile';
+				}
 			}
 
 			if($base) {
@@ -176,7 +178,7 @@ class BaserAppController extends Controller {
 
 		}
 
-		if(Configure::read('Mobile.on')) {
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
 			if(isset($this->siteConfigs['mobile_on']) && !$this->siteConfigs['mobile_on']) {
 				$this->notFound();
 			}
@@ -265,7 +267,7 @@ class BaserAppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('Mobile.on') && isset($this->params['action']) && empty($this->params['requested'])) {
+		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('AgentPrefix.on') && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
 				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
@@ -642,8 +644,8 @@ class BaserAppController extends Controller {
 		}
 		
 		// テンプレート
-		if(Configure::read('Mobile.on')) {
-			$this->EmailEx->template = 'mobile'.DS.$template;
+		if(Configure::read('AgentPrefix.on')) {
+			$this->EmailEx->template = Configure::read('AgentPrefix.currentPrefix').DS.$template;
 		}else {
 			$this->EmailEx->template = $template;
 		}

@@ -60,10 +60,10 @@ class BlogBaserHelper extends AppHelper {
 			$mobile = $options['mobile'];
 			unset($options['mobile']);
 		} else {
-			$mobile = Configure::read('Mobile.on');
+			$mobile = (Configure::read('AgentPrefix.currentAgent') == 'mobile');
 		}
 		if($mobile){
-			$url['prefix'] = 'mobile';
+			$url['prefix'] = Configure::read('AgentPrefix.mobile.prefix');
 		}
 
 		if(isset($options['templates'])) {

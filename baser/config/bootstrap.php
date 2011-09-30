@@ -116,55 +116,71 @@
 	}
 /**
  * パラメーター取得
- * モバイル判定
  */
-	$mobilePrefix = Configure::read('Mobile.prefix');
 	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
-	$mobileOn = false;
-	$mobilePlugin = false;
 	$parameter = getUrlParamFromEnv();
-	if(!empty($url)) {
-		$parameters = explode('/',$url);
-		if($parameters[0] == $mobilePrefix) {
-			$mobileOn = true;
-			if(!empty($parameters[1])) {
-				App::import('Core','Folder');
-				$pluginFolder = new Folder(APP.'plugins');
-				$_plugins = $pluginFolder->read(true,true);
-				$plugins = $_plugins[0];
-				foreach($plugins as $plugin) {
-					if($parameters[1] == $plugin) {
-						$mobilePlugin = true;
-						break;
+	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
+/**
+ * パラメーター取得
+ * モバイル判定・簡易リダイレクト
+ */
+	$agentSettings = Configure::read('AgentPrefix');
+	if(Configure::read('Baser.mobile')) {
+		foreach($agentSettings as $key => $setting) {
+			$agentOn = false;
+			$agentPlugin = false;
+			$agentPrefix = $setting['prefix'];
+			if(!empty($url)) {
+				$parameters = explode('/',$url);
+				if($parameters[0] == $setting['alias']) {
+					$agentOn = true;
+					if(!empty($parameters[1])) {
+						App::import('Core','Folder');
+						$pluginFolder = new Folder(APP.'plugins');
+						$_plugins = $pluginFolder->read(true,true);
+						$plugins = $_plugins[0];
+						foreach($plugins as $plugin) {
+							if($parameters[1] == $plugin) {
+								$agentPlugin = true;
+								break;
+							}
+						}
 					}
 				}
 			}
-		}
-	}
-	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる
-	if(Configure::read('Baser.mobile')) {
-		Configure::write('Mobile.on',$mobileOn);
-		Configure::write('Mobile.plugin',$mobilePlugin);
-	} else {
-		Configure::write('Mobile.on',false);
-		Configure::write('Mobile.plugin',false);
-	}
-/**
- * 簡易携帯リダイレクト
- */
-	if(!$mobileOn) {
-		$mobileAgents = Configure::read('Mobile.agents');
-		foreach($mobileAgents as $mobileAgent) {
-			if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $mobileAgent) !== false) {
-				$redirectUrl = FULL_BASE_URL.$baseUrl.$mobilePrefix.'/'.$parameter;
-				header("HTTP/1.1 301 Moved Permanently");
-				header("Location: ".$redirectUrl);
-				exit();
+			if(!$agentOn) {
+				$agentAgents = $setting['agents'];
+				$agentAgents = implode('||', $agentAgents);
+				$agentAgents = preg_quote($agentAgents, '/');
+				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
+				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
+					$getParams = str_replace($baseUrl.$parameter, '', $_SERVER['REQUEST_URI']);
+					if($getParams == '/' || '/index.php') {
+						$getParams = '';
+					}
+					$redirectUrl = FULL_BASE_URL.$baseUrl.$setting['alias'].'/'.$parameter.$getParams;
+					header("HTTP/1.1 301 Moved Permanently");
+					header("Location: ".$redirectUrl);
+					exit();
+				}
+			}
+			if($agentOn) {
+				Configure::write('AgentPrefix.currentAgent', $key);
+			}
+			Configure::write('AgentPrefix.on', $agentOn);
+			Configure::write('AgentPrefix.plugin', $agentPlugin);
+			Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
+			Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+			if($agentOn) {
+				break;
 			}
 		}
-	} else {
-		ini_set('session.use_cookies', 0);
-		ini_set('session.use_trans_sid', '1');
+	}
+	if($agentOn) {
+		if(Configure::write('Agent.currentAgent') == 'mobile') {
+			ini_set('session.use_cookies', 0);
+			ini_set('session.use_trans_sid', '1');
+		}
 		//======================================================================
 		// /m/files/... へのアクセスの場合、/files/... へ自動リダイレクト
 		// CMSで作成するページ内のリンクは、モバイルでアクセスすると、

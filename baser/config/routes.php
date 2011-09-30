@@ -33,9 +33,10 @@ if(!empty($cn->config->baser['driver'])) {
 	$parameter = getUrlParamFromEnv();
 	Configure::write('Baser.urlParam', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$parameter = Configure::read('Baser.urlParam');
-	$mobileOn = Configure::read('Mobile.on');
-	$mobilePrefix = Configure::read('Mobile.prefix');
-	$mobilePlugin = Configure::read('Mobile.plugin');
+	$agentOn = Configure::read('AgentPrefix.on');
+	$agentPlugin = Configure::read('AgentPrefix.plugin');
+	$agentAlias = Configure::read('AgentPrefix.currentAlias');
+	$agentPrefix = Configure::read('AgentPrefix.currentPrefix');
 /**
  * 管理画面トップページ
  */
@@ -61,8 +62,8 @@ if(!empty($cn->config->baser['driver'])) {
 	/* 1.5.9以前との互換性の為残しておく */
 	// .html付きのアクセスの場合、pagesコントローラーを呼び出す
 	if(strpos($parameter, '.html') !== false) {
-		if($mobileOn) {
-			Router::connect('/'.$mobilePrefix.'/.*?\.html', array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display','pages/'.$parameter));
+		if($agentOn) {
+			Router::connect('/'.$agentAlias.'/.*?\.html', array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}else {
 			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}
@@ -78,16 +79,16 @@ if(!empty($cn->config->baser['driver'])) {
 				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
 			}
 			foreach ($_parameters as $_parameter){
-				if(!$mobileOn){
+				if(!$agentOn){
 					$url = '/'.$_parameter;
 				}else{
-					$url = '/mobile/'.$_parameter;
+					$url = '/'.$agentPrefix.'/'.$_parameter;
 				}
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
-					if(!$mobileOn){
+					if(!$agentOn){
 						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{
-						Router::connect('/'.$mobilePrefix.'/'.$parameter, am(array('prefix' => 'mobile','controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect('/'.$agentAlias.'/'.$parameter, am(array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}
 					break;
 				}
@@ -105,16 +106,16 @@ if(!empty($cn->config->baser['driver'])) {
 /**
  * 携帯ルーティング
  */
-	if($mobileOn) {
+	if($agentOn) {
 		// プラグイン
-		if($mobilePlugin) {
+		if($agentPlugin) {
 			// ノーマル
-			Router::connect('/'.$mobilePrefix.'/:plugin/:controller/:action/*', array('prefix' => 'mobile'));
+			Router::connect('/'.$agentAlias.'/:plugin/:controller/:action/*', array('prefix' => $agentPrefix));
 			// プラグイン名省略
-			Router::connect('/'.$mobilePrefix.'/:plugin/:action/*', array('prefix' => 'mobile'));
+			Router::connect('/'.$agentAlias.'/:plugin/:action/*', array('prefix' => $agentPrefix));
 		}
 		// 携帯ノーマル
-		Router::connect('/'.$mobilePrefix.'/:controller/:action/*', array('prefix' => 'mobile'));
+		Router::connect('/'.$agentAlias.'/:controller/:action/*', array('prefix' => $agentPrefix));
 	}
 /**
  * ユニットテスト
