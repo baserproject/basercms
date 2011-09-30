@@ -594,6 +594,8 @@ class PagesController extends AppController {
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
+		$this->params['controller'] = 'pages';
+		$this->params['action'] = 'display';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
 		$this->navis = $this->_getNavi($this->params['url']['url']);
 		$this->theme = $this->siteConfigs['theme'];
