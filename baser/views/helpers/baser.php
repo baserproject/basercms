@@ -1223,6 +1223,43 @@ class BaserHelper extends AppHelper {
 		$this->element('sitemap', $params);
 		
 	}
-	
+/**
+ * Flashを表示する
+ * 
+ * @param string $path
+ * @param string $id
+ * @param int $width
+ * @param int $height
+ * @param array $options
+ * @return string 
+ */
+	function swf($path, $id, $width, $height, $options = array()) {
+		
+		$options = array_merge(array(
+			'version'	=> 7,
+			'script'	=> 'swfobject-2.2',
+			'noflash'	=> '&nbsp;'
+		), $options);
+		extract($options);
+		
+		if(!preg_match('/^\//', $path)) {
+			$path = '/img/'.$path;
+		}
+		if(strpos($path, "\.") === false) {
+			$path .= '.swf';
+		}
+		$path = $this->webroot($path);
+		$path = 'http://projects.localhost:8888'.$path;
+		$out .= $this->js($script, true)."\n";
+		$out = <<< END_FLASH
+<div id="{$id}">{$noflash}</div>
+<script type="text/javascript">
+	swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
+</script>
+END_FLASH;
+		
+		echo $out;
+		
+	}
 }
 ?>
