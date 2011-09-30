@@ -104,7 +104,7 @@ class BaserHelper extends AppHelper {
 		if(!$menuType) {
 			$menuType = 'default';
 		}
-		if (ClassRegistry::isKeySet('GlobalMenu')) {
+		if (ClassRegistry::init('GlobalMenu')) {
 			if(!file_exists(CONFIGS.'database.php')) {
 				return '';
 			}
