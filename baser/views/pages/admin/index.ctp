@@ -21,7 +21,10 @@
  */
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);
-$allowOwners = array('', $user['user_group_id']);
+$allowOwners = array();
+if(!empty($user)) {
+	$allowOwners = array('', $user['user_group_id']);
+}
 ?>
 
 <script type="text/javascript">
@@ -197,7 +200,7 @@ function pageTypeChengeHandler() {
 					array('action' => 'edit', $dbData['Page']['id']),
 					array('class' => 'btn-orange-s button-s'),
 					null, false) ?>
-		<?php if(in_array($ownerId, $allowOwners)||$user['user_group_id']==1): ?>
+		<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['Page']['id']),
 					array('class' => 'btn-gray-s button-s'),
