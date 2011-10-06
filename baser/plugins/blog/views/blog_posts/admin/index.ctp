@@ -142,7 +142,7 @@ $paginator->options = array('url' => $this->passedArgs);
 </table>
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<?php if($newCatAddable): ?>
+<?php if(isset($newCatAddable) && $newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?>
 </div>
