@@ -331,7 +331,9 @@ function pageTypeChengeHandler() {
 			<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 			<?php echo $formEx->error('Page.author_id') ?>
 <?php else: ?>
+	<?php if(isset($users[$formEx->value('Page.author_id')])): ?>
 			<?php echo $users[$formEx->value('Page.author_id')] ?>
+	<?php endif ?>
 			<?php echo $formEx->hidden('Page.author_id') ?>
 <?php endif ?>
 		</td>
