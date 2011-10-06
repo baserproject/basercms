@@ -229,7 +229,9 @@ $(function(){
 					'options'	=> $users)) ?>
 			<?php echo $formEx->error('BlogPost.user_id') ?>
 <?php else: ?>
+	<?php if(isset($users[$formEx->value('BlogPost.user_id')])): ?>
 			<?php echo $users[$formEx->value('BlogPost.user_id')] ?>
+	<?php endif ?>
 			<?php echo $formEx->hidden('BlogPost.user_id') ?>
 <?php endif ?>
 		</td>
