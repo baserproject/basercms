@@ -89,6 +89,11 @@ class ContentsController extends AppController {
 		$default = array('named' => array('num' => 10));
 		$this->setViewConditions('Content', array('default' => $default, 'type' => 'get'));
 
+		if(!empty($this->data['Content'])) {
+			foreach($this->data['Content'] as $key => $value) {
+				$this->data['Content'][$key] = h($value);
+			}
+		}
 		if(!empty($this->params['url']['q'])) {
 		
 			$this->paginate = array(
@@ -421,7 +426,7 @@ class ContentsController extends AppController {
  */
 	function _createAdminIndexConditions($data){
 		
-		if(!$data) {
+		if(empty($data['Content'])) {
 			return array();
 		}
 		
