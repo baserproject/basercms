@@ -67,12 +67,6 @@ class PagesController extends AppController {
 		// 認証設定
 		$this->AuthEx->allow('display','mobile_display');
 
-		$noCache = array();
-		if((!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') && !isset($_SESSION['Auth']['User'])) {
-			$this->helpers[] = 'Cache';
-			$this->cacheAction = Configure::read('Baser.cachetime'); // ページ更新時にキャッシュは削除するのでとりあえず1ヶ月で固定
-		}
-
 		if(!empty($this->params['admin'])){
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
 		}
@@ -456,6 +450,16 @@ class PagesController extends AppController {
 			}
 		}
 
+		// キャッシュ設定
+		if(!isset($_SESSION['Auth']['User'])){
+			$this->helpers[] = 'Cache';
+			$this->cacheAction = $this->Page->getCacheTime($url);
+		}
+		
+		if($this->Page->getByUrl($url)) {
+			
+		}
+		
 		// ナビゲーションを取得
 		$this->navis = $this->_getNavi($url);
 

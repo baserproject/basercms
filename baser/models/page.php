@@ -748,6 +748,26 @@ class Page extends AppModel {
 
 	}
 /**
+ * キャッシュ時間を取得する
+ * 
+ * @param string $url
+ * @return mixed int or false
+ */
+	function getCacheTime($url) {
+		
+		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
+		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
+		if(!$page) {
+			return false;
+		}
+		if($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
+			return strtotime($page['Page']['publish_end']) - time();
+		} else {
+			return Configure::read('Baser.cachetime');
+		}
+		
+	}
+/**
  * 公開チェックを行う
  * 
  * @param string $url
