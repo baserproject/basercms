@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,31 +26,31 @@ App::import('Helper',array('Form','TimeEx','TextEx','Ckeditor'));
 /**
  * FormHelper 拡張クラス
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class FormExHelper extends FormHelper {
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','TextEx','Javascript','Ckeditor');
 /**
  * sizeCounter用の関数読み込み可否
  * 
- * @var		boolean
- * @access	public
+ * @var boolean
+ * @access public
  */
 	var $sizeCounterFunctionLoaded = false;
 /**
  * 都道府県用のSELECTタグを表示する
  *
- * @param 	string	$fieldName Name attribute of the SELECT
- * @param 	mixed 	$selected Selected option
- * @param 	array 	$attributes Array of HTML options for the opening SELECT element
- * @return 	string 	都道府県用のSELECTタグ
- * @access 	public
+ * @param string $fieldName Name attribute of the SELECT
+ * @param mixed $selected Selected option
+ * @param array $attributes Array of HTML options for the opening SELECT element
+ * @return string 都道府県用のSELECTタグ
+ * @access public
  */
 	function prefTag($fieldName, $selected = null, $attributes = array()) {
 
@@ -61,19 +61,19 @@ class FormExHelper extends FormHelper {
 /**
  * dateTime 拡張
  *
- * @param 	string 	$fieldName Prefix name for the SELECT element
- * @param 	string 	$dateFormat DMY, MDY, YMD or NONE.
- * @param 	string 	$timeFormat 12, 24, NONE
- * @param 	string 	$selected Option which is selected.
- * @param 	string 	$attributes array of Attributes
+ * @param string $fieldName Prefix name for the SELECT element
+ * @param string $dateFormat DMY, MDY, YMD or NONE.
+ * @param string $timeFormat 12, 24, NONE
+ * @param string $selected Option which is selected.
+ * @param string $attributes array of Attributes
  *						'monthNames' If set and false numbers will be used for month select instead of text.
  *						'minYear' The lowest year to use in the year select
  *						'maxYear' The maximum year to use in the year select
  *						'interval' The interval for the minutes select. Defaults to 1
  *						'separator' The contents of the string between select elements. Defaults to '-'
- * @param 	bool 	$showEmpty Whether or not to show an empty default value.
- * @return 	string 	The HTML formatted OPTION element
- * @access 	public
+ * @param boolean $showEmpty Whether or not to show an empty default value.
+ * @return string The HTML formatted OPTION element
+ * @access public
  */
 	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 
@@ -239,6 +239,7 @@ class FormExHelper extends FormHelper {
 			break;
 		}
 		return $opt;
+		
 	}
 /**
  * 和暦年
@@ -252,6 +253,7 @@ class FormExHelper extends FormHelper {
  * @return string
  */
 	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+		
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
 				extract($value);
@@ -295,17 +297,19 @@ class FormExHelper extends FormHelper {
 			$fieldName . ".year", $this->__generateOptions('wyear', $yearOptions),
 			$selected, $attributes, $showEmpty
 		);
+		
 	}
 /**
  * コントロールソースを取得する
- *
  * Model側でメソッドを用意しておく必要がある
  *
- * @param	string	フィールド名
- * @return 	array	コントロールソース
- * @access	public
+ * @param string $field フィールド名
+ * @param array $options
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field,$options = array()) {
+		
 		$count = preg_match_all('/\./is',$field,$matches);
 		if($count == 1) {
 			list($modelName,$field) = explode('.',$field);
@@ -335,7 +339,8 @@ class FormExHelper extends FormHelper {
  * @param mixed $conditions
  * @param mixed $fields
  * @param mixed $order
- * @return mixed    リストまたは、false
+ * @return mixed リストまたは、false
+ * @access public
  */
 	function generateList($modelName,$conditions = array(),$fields = array(),$order = array()) {
 
@@ -361,9 +366,10 @@ class FormExHelper extends FormHelper {
 /**
  * JsonList
  *
- * @param	string	フィールド文字列
- * @return 	array	属性
- * @access	public
+ * @param string $field フィールド文字列
+ * @param string $attributes
+ * @return array 属性
+ * @access public
  */
 	function jsonList($field,$attributes) {
 
@@ -393,13 +399,12 @@ class FormExHelper extends FormHelper {
 	}
 /**
  * カレンダーコントロール付きのテキストフィールド
- *
  * jquery-ui-1.7.2 必須
  *
- * @param 	string	フィールド文字列
- * @param	array	HTML属性
- * @return	string	html
- * @access 	public
+ * @param string フィールド文字列
+ * @param array HTML属性
+ * @return string html
+ * @access public
  */
 	function datepicker($fieldName, $attributes = array()) {
 
@@ -438,9 +443,11 @@ DOC_END;
 	}
 /**
  * 日付カレンダーと時間フィールド
+ * 
  * @param string $fieldName
  * @param array $attributes
  * @return string
+ * @access public
  */
 	function dateTimePicker($fieldName, $attributes = array()) {
 
@@ -481,16 +488,18 @@ $(function(){
 DOC_END;
 		$script = $this->Javascript->codeBlock($_script,array('inline'=>false));
 		return $dateTag.$timeTag.$hiddenTag;
+		
 	}
 /**
  * Generates option lists for common <select /> menus
  *
- * @param	string	$name
- * @param	array	$options
- * @return	array	option lists
- * @access 	private
+ * @param string $name
+ * @param array $options
+ * @return array option lists
+ * @access private
  */
 	function __generateOptions($name, $options = array()) {
+		
 		if (!empty($this->options[$name])) {
 			return $this->options[$name];
 		}
@@ -612,10 +621,10 @@ DOC_END;
 		}
 		$this->__options[$name] = $data;
 		return $this->__options[$name];
+		
 	}
 /**
  * Creates a checkbox input widget.
- *
  * MODIFIED 2008/10/24 egashira
  *          hiddenタグを出力しないオプションを追加
  *
@@ -626,8 +635,10 @@ DOC_END;
  * @todo Right now, automatically setting the 'checked' value is dependent on whether or not the
  * 		 checkbox is bound to a model.  This should probably be re-evaluated in future versions.
  * @return string An HTML text input element
+ * @access public
  */
 	function checkbox($fieldName, $options = array()) {
+		
 		// CUSTOMIZE ADD 2011/05/07 ryuring
 		// >>> hiddenをデフォルトオプションに追加
 		$options = array_merge(array('hidden' => true), $options);
@@ -691,13 +702,16 @@ DOC_END;
 			$this->_parseAttributes($options, array('name'), null, ' ')
 		)).$label;
 		// <<<
+		
 	}
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
- * @access private
+ * 
  * @return array
+ * @access private
  */
 	function __selectOptions($elements = array(), $selected = null, $parents = array(), $showParents = null, $attributes = array()) {
+		 
 		$select = array();
 		$attributes = array_merge(array('escape' => true, 'style' => null), $attributes);
 		$selectedIsEmpty = ($selected === '' || $selected === null);
@@ -785,10 +799,10 @@ DOC_END;
 		}
 
 		return array_reverse($select, true);
+		
 	}
 /**
  * Returns a formatted SELECT element.
- *
  * Attributes:
  *
  * - 'showParents' - If included in the array and set to true, an additional option element
@@ -805,8 +819,10 @@ DOC_END;
  * @param mixed $showEmpty If true, the empty select option is shown.  If a string,
  *   that string is displayed as the empty element.
  * @return string Formatted SELECT element
+ * @access public
  */
 	function select($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
+		
 		$select = array();
 		$showParents = false;
 		$escapeOptions = true;
@@ -916,15 +932,18 @@ DOC_END;
 		}else {
 			return $this->output(implode("\n", $select));
 		}
+		
 	}
 /**
  * 文字列保存用複数選択コントロール
+ * 
  * @param string $fieldName
  * @param array $options
  * @param mixed $selected
  * @param array $attributes
  * @param mixed $showEmpty
  * @return string
+ * @access public
  */
 	function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 
@@ -961,6 +980,7 @@ $(document).ready(function() {
 DOC_END;
 		$out .= $this->Javascript->codeBlock($script);
 		return $out;
+		
 	}
 /**
  * Creates a hidden input field.
@@ -971,6 +991,7 @@ DOC_END;
  * @access public
  */
 	function hidden($fieldName, $options = array()) {
+		
 		$secure = true;
 
 		if (isset($options['secure'])) {
@@ -1055,6 +1076,7 @@ DOC_END;
 			));
 		}
 		// <<<
+		
 	}
 /**
  * CKEditorを出力する
@@ -1076,13 +1098,12 @@ DOC_END;
 	}
 /**
  * create
- *
  * フック用にラッピング
  * 
- * @param	array $model
- * @param	array $options
- * @return	string
- * @access	public
+ * @param array $model
+ * @param array $options
+ * @return string
+ * @access public
  */
 	function create($model = null, $options = array()) {
 
@@ -1095,7 +1116,6 @@ DOC_END;
 	}
 /**
  * end
- * 
  * フック用にラッピング
  *
  * @param	array	$options

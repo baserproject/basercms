@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -19,7 +19,20 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$allowOwners = array('', $user['user_group_id']);
+$allowOwners = array();
+if(isset($user['user_group_id'])) {
+	$allowOwners = array('', $user['user_group_id']);
+}
+$pageType = array();
+if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+	$pageType = array('pc' => 'PC');	
+}
+if(Configure::read('Baser.mobile')) {
+	$pageType['mobile'] = 'モバイル';
+}
+if(Configure::read('Baser.smartphone')) {
+	$pageType['smartphone'] = 'スマートフォン';
+}
 ?>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
@@ -36,7 +49,7 @@ $allowOwners = array('', $user['user_group_id']);
 	</div>
 </div>
 
-<?php if(Configure::read('Baser.mobile')): ?>
+<?php if($pageType): ?>
 <!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
 <div class="function-box corner10" id="PageFilterBody">
@@ -45,7 +58,7 @@ $allowOwners = array('', $user['user_group_id']);
 		<small>タイプ</small>
 		<?php echo $formEx->input('PageCategory.type', array(
 				'type'		=> 'select',
-				'options'	=> array('pc' => 'PC', 'mobile' => 'モバイル'),
+				'options'	=> $pageType,
 				'escape'	=> false)) ?>　
 		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?> </p>
 	<?php $formEx->end() ?>
@@ -82,7 +95,7 @@ $allowOwners = array('', $user['user_group_id']);
 			<?php if(count($dbDatas) != ($key + 1)): ?>
 			<?php $baser->link('▼', array('controller' => 'page_categories', 'action' => 'down', $dbData['PageCategory']['id'])) ?>
 			<?php endif ?>
-			<?php if(in_array($dbData['PageCategory']['owner_id'], $allowOwners)||$user['user_group_id']==1): ?>
+			<?php if(in_array($dbData['PageCategory']['owner_id'], $allowOwners)|| (!empty($user) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('編集', array('action' => 'edit', $dbData['PageCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['PageCategory']['id']),

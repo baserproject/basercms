@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,14 +22,14 @@
 /**
  * DBログモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Dblog extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Dblog';
 /**
@@ -41,8 +41,9 @@ class Dblog extends AppModel {
 	var $actsAs = array('Cache');
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array(
 			'User' => array(
@@ -52,8 +53,8 @@ class Dblog extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name'	=> array(

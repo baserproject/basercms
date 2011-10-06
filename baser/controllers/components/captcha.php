@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -23,49 +23,62 @@ class CaptchaComponent extends Object {
 /**
  * Vendorsフォルダのパス
  * kcaptchaの設定ファイルを読み込む為に利用
- * @var		string
- * @access	public
+ *
+ * @var string
+ * @access public
  */
 	var $vendorsPath = BASER_VENDORS;
 /**
  * アルファベットの組み合わせ（半角記号も可）
  * kcaptcha_config.php で設定されたものを読み込む為に利用
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $alphabet = '';
 /**
  * 代替文字の組み合わせ
  * kcaptcha_config.php で設定されたものを読み込む為に利用
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $convert = '';
 /**
  * startup
- * @param	Controller $controller
- * @access	public
+ * 
+ * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function startup(&$controller) {
-        $this->controller =& $controller;
+		
+		$this->controller =& $controller;
+	
 	}
 /**
  * キャプチャ画象を表示する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function render()
 	{
+		
 		App::import('Vendor','kcaptcha/kcaptcha');
 		$kcaptcha = new KCAPTCHA();
 		$this->controller->Session->write('captcha', $kcaptcha->getKeyString());
+		
 	}
 /**
  * 認証を行う
- * @param	string	$value	フォームから送信されたもじれる
+ * 
+ * @param	string	$value	フォームから送信された文字列
  * @return	boolean
+ * @access public
  */
 	function check($value){
+		
 		include $this->vendorsPath.'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;
 		$this->convert = $convert;
@@ -75,9 +88,11 @@ class CaptchaComponent extends Object {
 		}else{
 			return ($value == $_value);
 		}
+			
 	}
 /**
  * kcaptchaで定義されたアルファベットを $convert に定義された任意の文字列に変換する
+ * 
  * @param	string	$key
  * @return	string
  * @access	public
@@ -99,10 +114,12 @@ class CaptchaComponent extends Object {
 		}
 		
 		return $value;
+	
 	}
 /**
  * 文字列を１文字づつ分割して配列にする
  * PHP5であれば、str_splitが使える
+ * 
  * @param	string	$str
  * @return	array
  * @access	public

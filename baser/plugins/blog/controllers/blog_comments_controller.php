@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,62 +25,62 @@
 /**
  * ブログコメントコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogCommentsController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogComments';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array();
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler','EmailEx','Security','Captcha');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
 		parent::beforeFilter();
 
-		$this->AuthEx->allow('add','captcha');
+		$this->AuthEx->allow('add','captcha', 'smartphone_add', 'smartphone_captcha');
 
 		$navis = array();
 		if(!empty($this->params['pass'][1])) {
@@ -114,18 +114,20 @@ class BlogCommentsController extends BlogAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
+		
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
+		
 	}
 /**
  * [ADMIN] ブログを一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index($blogContentId,$blogPostId=null) {
 
@@ -161,9 +163,11 @@ class BlogCommentsController extends BlogAppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		blog_category_no
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @param int $blogPostId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($blogContentId,$blogPostId,$id = null) {
 
@@ -194,9 +198,12 @@ class BlogCommentsController extends BlogAppController {
 	}
 /**
  * [ADMIN] コメントを公開状態に設定する
+ * 
  * @param string $blogContentId
  * @param string $blogPostId
  * @param string $blogCommentId
+ * @return void
+ * @access public
  */
 	function admin_publish($blogContentId,$blogPostId,$blogCommentId) {
 
@@ -227,9 +234,12 @@ class BlogCommentsController extends BlogAppController {
 	}
 /**
  * [ADMIN] コメントを非公開状態に設定する
+ * 
  * @param string $blogContentId
  * @param string $blogPostId
  * @param string $blogCommentId
+ * @return void
+ * @access public
  */
 	function admin_unpublish($blogContentId,$blogPostId,$blogCommentId) {
 		if(!$blogContentId || !$blogCommentId) {
@@ -260,8 +270,11 @@ class BlogCommentsController extends BlogAppController {
 	}
 /**
  * [AJAX] ブログコメントを登録する
+ * 
  * @param string $blogContentId
  * @param string $blogPostId
+ * @return boolean
+ * @access public
  */
 	function add($blogContentId,$blogPostId) {
 		if(!$this->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
@@ -288,15 +301,44 @@ class BlogCommentsController extends BlogAppController {
 				$this->set('dbData',false);
 			}
 		}
+
+	}
+/**
+ * [AJAX] ブログコメントを登録する
+ * 
+ * @param string $blogContentId
+ * @param string $blogPostId
+ * @return boolean
+ * @access public
+ */
+	function smartphone_add($blogContentId,$blogPostId) {
+		
+		$this->setAction('add', $blogContentId, $blogPostId);
+		
 	}
 /**
  * 認証用のキャプチャ画像を表示する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
     function captcha()
     {
+		
         $this->Captcha->render();
+		
+    } 
+/**
+ * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+ * 
+ * @return void
+ * @access public
+ */
+    function smartphone_captcha()
+    {
+		
+        $this->Captcha->render();
+		
     } 
 }
 ?>

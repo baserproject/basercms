@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,15 +26,15 @@ App::import('Model', 'MailField');
 /**
  * メッセージモデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class Message extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Message';
 /**
@@ -47,15 +47,15 @@ class Message extends MailAppModel {
 /**
  * メールフォーム情報
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $mailFields = null;
 /**
  * Constructor.
  *
- * @return	void
- * @access	private
+ * @return void
+ * @access private
  */
 	function __construct($id = false, $table = null, $ds = null, $tablePrefix = null) {
 
@@ -74,8 +74,8 @@ class Message extends MailAppModel {
 /**
  * beforeSave
  *
- * @return	boolean
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeSave() {
 
@@ -114,12 +114,11 @@ class Message extends MailAppModel {
 	}
 /**
  * validate（入力チェック）を個別に設定する
- *
  * VALID_NOT_EMPTY	空不可
  * VALID_EMAIL		メール形式チェック
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  * TODO Cake1.2に対応させる
  */
 	function _setValidate() {
@@ -140,9 +139,9 @@ class Message extends MailAppModel {
 /**
  * 拡張バリデートチェック
  *
- * @param 	array	$data
- * @return	void
- * @access	protected
+ * @param array $data
+ * @return void
+ * @access protected
  */
 	function _validExtends($data) {
 
@@ -174,8 +173,8 @@ class Message extends MailAppModel {
 /**
  * エラー内容変換
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _validSingeErrorCheck() {
 
@@ -190,13 +189,12 @@ class Message extends MailAppModel {
 
 		}
 
-
 	}
 /**
  * バリデートグループエラーチェック
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _validGroupErrorCheck() {
 
@@ -235,9 +233,9 @@ class Message extends MailAppModel {
 /**
  * 不完全データチェック
  *
- * @param	array	$data
- * @return	void
- * @access	protected
+ * @param array $data
+ * @return void
+ * @access protected
  */
 	function _validGroupComplate($data) {
 
@@ -274,9 +272,9 @@ class Message extends MailAppModel {
 /**
  * Eメール確認チェック
  *
- * @param 	array	$data
- * @return	void
- * @access	protected
+ * @param array $data
+ * @return void
+ * @access protected
  */
 	function _validEmailCofirm($data) {
 
@@ -305,13 +303,12 @@ class Message extends MailAppModel {
 	}
 /**
  * 自動変換
- *
  * 確認画面で利用される事も踏まえてバリデートを通す為の
  * 可能な変換処理を行う。
  *
- * @param 	array	$data
- * @return	array	$data
- * @access	public
+ * @param array $data
+ * @return array $data
+ * @access public
  */
 	function autoConvert($data) {
 
@@ -350,10 +347,11 @@ class Message extends MailAppModel {
 /**
  * 初期値の設定をする
  *
- * @return	array	$data
- * @access	public
+ * @return array $data
+ * @access public
  */
 	function getDefaultValue() {
+		
 		$data = array();
 
 		// 対象フィールドを取得
@@ -379,11 +377,12 @@ class Message extends MailAppModel {
 /**
  * データベース用のデータに変換する
  *
- * @param 	array	$dbDatas
- * @return 	array	$dbDatas
- * @access	public
+ * @param array $dbDatas
+ * @return array $dbDatas
+ * @access public
  */
 	function convertToDb($dbData) {
+		
 		// マルチチェックのデータを｜区切りに変換
 		foreach($this->mailFields as $mailField) {
 			if($mailField['MailField']['type']=='multi_check' && $mailField['MailField']['use_field']) {
@@ -405,13 +404,12 @@ class Message extends MailAppModel {
 	}
 /**
  * 機種依存文字の変換処理
- *
  * 内部文字コードがUTF-8である必要がある。
  * 多次元配列には対応していない。
  *
- * @param	string	変換対象文字列
- * @return	string	変換後文字列
- * @access	public
+ * @param string $str 変換対象文字列
+ * @return string $str 変換後文字列
+ * @access public
  * TODO AppExModeに移行すべきかも
  */
 	function replaceText($str) {
@@ -493,9 +491,9 @@ class Message extends MailAppModel {
 /**
  * メール用に変換する
  *
- * @param	array	$dbDatas
- * @return	array	$dbDatas
- * @access	public
+ * @param array $dbDatas
+ * @return array $dbDatas
+ * @access public
  * TODO ヘルパー化すべきかも
  */
 	function convertDatasToMail($dbData) {
@@ -528,9 +526,9 @@ class Message extends MailAppModel {
 /**
  * メッセージテーブルを作成する
  *
- * @param string	コンテンツ名
+ * @param string $contentName コンテンツ名
  * @return boolean
- * @access private
+ * @access public
  */
 	function createTable($contentName) {
 
@@ -561,10 +559,10 @@ class Message extends MailAppModel {
 /**
  * メッセージテーブルの名前を変更する
  *
- * @param string	元コンテンツ名
- * @param string	変更後コンテンツ名
+ * @param string $source 元コンテンツ名
+ * @param string $target 変更後コンテンツ名
  * @return boolean
- * @access private
+ * @access public
  */
 	function renameTable($source,$target) {
 
@@ -595,7 +593,7 @@ class Message extends MailAppModel {
 /**
  * メッセージテーブルを削除する
  *
- * @param string	コンテンツ名
+ * @param string $contentName コンテンツ名
  * @return boolean
  * @access private
  */
@@ -623,9 +621,10 @@ class Message extends MailAppModel {
 /**
  * メッセージファイルにフィールドを追加する
  *
- * @param	string	$contentName
- * @param	string	$field
- * @access	public
+ * @param string $contentName
+ * @param string $field
+ * @return array
+ * @access public
  */
 	function addField($contentName, $field) {
 
@@ -640,9 +639,10 @@ class Message extends MailAppModel {
 /**
  * メッセージファイルのフィールドを削除する
  *
- * @param	string	$contentName
- * @param	string	$field
- * @access	public
+ * @param string $contentName
+ * @param string $field
+ * @return array
+ * @access public
  */
 	function delField($contentName, $field) {
 
@@ -657,6 +657,9 @@ class Message extends MailAppModel {
  * メッセージファイルのフィールドを編集する
  *
  * @param string $fieldName
+ * @param string $oldFieldName
+ * @param string $newfieldName
+ * @return array
  * @access private
  */
 	function renameField($contentName, $oldFieldName,$newfieldName) {
@@ -670,8 +673,10 @@ class Message extends MailAppModel {
 	}
 /**
  * コンテンツ名つきのテーブルプレフィックスを取得する
+ * 
  * @param string $contentName
  * @return string
+ * @access public
  */
 	function getTablePrefixByContentName($contentName) {
 
@@ -687,11 +692,13 @@ class Message extends MailAppModel {
 	}
 /**
  * メッセージ保存用テーブルのフィールドを最適化する
- *
  * 初回の場合、id/created/modifiedを追加する
  * 2回目以降の場合は、最後のカラムに追加する
+ * 
  * @param array $dbConfig
  * @param int $mailContentId
+ * @return boolean
+ * @access public
  */
 	function construction($mailContentId) {
 
@@ -730,5 +737,6 @@ class Message extends MailAppModel {
 		return true;
 
 	}
+	
 }
 ?>

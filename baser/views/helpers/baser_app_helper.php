@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: baser_app_helper.php 143 2011-08-26 06:11:39Z ryuring $ */
 /**
  * Helper 拡張クラス
  *
@@ -7,16 +7,16 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
  * @package			baser.view.helpers
  * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @version			$Revision: 143 $
+ * @modifiedby		$LastChangedBy: ryuring $
+ * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -158,9 +158,12 @@ class BaserAppHelper extends Helper {
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
-		if(file_exists(WWW_ROOT . $file)) {
+		$filePath = str_replace('/', DS, $file);
+		$docRoot = docRoot();
+		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->webroot.$file;
-		} elseif(file_exists(docRoot().DS.$file)) {
+		} elseif(file_exists($docRoot.DS.$filePath) && strpos($docRoot.DS.$filePath, ROOT.DS) !== false) {
+			// ※ ファイルのパスが ROOT 配下にある事が前提
 			$webPath = $file;
 		} else {
 			$webPath = Router::url('/'.$file);
@@ -170,11 +173,11 @@ class BaserAppHelper extends Helper {
 		if (!empty($this->themeWeb)) {
 			$os = env('OS');
 			if (!empty($os) && strpos($os, 'Windows') !== false) {
-				if (strpos(WWW_ROOT . $this->themeWeb  . $file, '\\') !== false) {
-					$path = str_replace('/', '\\', WWW_ROOT . $this->themeWeb  . $file);
+				if (strpos(WWW_ROOT . $this->themeWeb  . $filePath, '\\') !== false) {
+					$path = str_replace('/', '\\', WWW_ROOT . $this->themeWeb  . $filePath);
 				}
 			} else {
-				$path = WWW_ROOT . $this->themeWeb  . $file;
+				$path = WWW_ROOT . $this->themeWeb  . $filePath;
 			}
 			if (file_exists($path)) {
 				$webPath = "{$this->webroot}" . $this->themeWeb . $file;
@@ -209,6 +212,25 @@ class BaserAppHelper extends Helper {
 		return call_user_func_array(array(&$this->_view->loaded['pluginHook'], $hook), $args);
 		
 	}
-
+/**
+ * Finds URL for specified action.
+ *
+ * Returns an URL pointing to a combination of controller and action. Param
+ * $url can be:
+ *	+ Empty - the method will find adress to actuall controller/action.
+ *	+ '/' - the method will find base URL of application.
+ *	+ A combination of controller/action - the method will find url for it.
+ *
+ * @param  mixed  $url    Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
+ *                        or an array specifying any of the following: 'controller', 'action',
+ *                        and/or 'plugin', in addition to named arguments (keyed array elements),
+ *                        and standard URL arguments (indexed array elements)
+ * @param boolean $full   If true, the full base URL will be prepended to the result
+ * @return string  Full translated URL with base path.
+ */
+	function url($url = null, $full = false) {
+		$url = addSessionId($url);
+		return parent::url($url, $full);
+	}
 }
 ?>

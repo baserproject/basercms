@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -142,7 +142,7 @@ $paginator->options = array('url' => $this->passedArgs);
 </table>
 <?php $baser->pagination('default',array(),null,false) ?>
 
-<?php if($newCatAddable): ?>
+<?php if(isset($newCatAddable) && $newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録',array('action'=>'add', $blogContent['BlogContent']['id']),array('class'=>'btn-red button')) ?>
 </div>

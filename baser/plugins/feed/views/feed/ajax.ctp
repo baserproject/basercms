@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -21,7 +21,7 @@
  */
 $baser->cacheHeader(MONTH,'js');
 ?>
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('/feed/img/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)
@@ -43,7 +43,7 @@ var errorCallback = function (xml, status, e)
 //  リクエスト処理
 $.ajax({
 	type: 'GET',
-	url:      '<?php echo Router::url('/feed/index/'.$id); ?>',
+	url:      '<?php echo Router::url(array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
 	cache: false,
 	success:  successCallback,
 	error:    errorCallback

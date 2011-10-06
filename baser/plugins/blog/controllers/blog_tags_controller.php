@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,7 +25,7 @@
 /**
  * ブログタグコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogTagsController extends BlogAppController {
 /**
@@ -45,22 +45,22 @@ class BlogTagsController extends BlogAppController {
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @vararray
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('blog_common');
 /**
@@ -95,7 +95,7 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->create($this->data);
 			if($this->BlogTag->save()) {
-				$message = '記事「'.$this->data['BlogTag']['name'].'」を追加しました。';
+				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogTag->saveDbLog($message);
 				$this->redirect(array('action' => 'index'));
@@ -129,7 +129,7 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->set($this->data);
 			if($this->BlogTag->save()) {
-				$message = '記事「'.$this->data['BlogTag']['name'].'」を更新しました。';
+				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogTag->saveDbLog($message);
 				$this->redirect(array('action' => 'index'));
@@ -160,7 +160,7 @@ class BlogTagsController extends BlogAppController {
 		$data = $this->BlogTag->read(null, $id);
 
 		if($this->BlogTag->del($id)) {
-			$message = $this->BlogTag->data['BlogTag']['name'].' を削除しました。';
+			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 			$this->Session->setFlash($message);
 			$this->BlogTag->saveDbLog($message);
 		}else {

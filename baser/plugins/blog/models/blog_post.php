@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,14 +25,14 @@
 /**
  * 記事モデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogPost extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogPost';
 /**
@@ -45,8 +45,8 @@ class BlogPost extends BlogAppModel {
 /**
  * belongsTo
  *
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $belongsTo = array(
 			'BlogCategory' =>   array(  'className'=>'Blog.BlogCategory',
@@ -59,8 +59,8 @@ class BlogPost extends BlogAppModel {
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogComment'=>
 			array('className'=>'Blog.BlogComment',
@@ -91,8 +91,8 @@ class BlogPost extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -115,19 +115,23 @@ class BlogPost extends BlogAppModel {
 /**
  * 初期値を取得する
  *
- * @return	array	初期値データ
- * @access	public
+ * @return array $authUser 初期値データ
+ * @access public
  */
 	function getDefaultValue($authUser) {
+		
 		$data[$this->name]['user_id'] = $authUser['User']['id'];
 		$data[$this->name]['posts_date'] = date('Y/m/d H:i:s');
 		$data[$this->name]['status'] = 0;
 		return $data;
+		
 	}
 /**
  * ブログの月別一覧を取得する
  *
- * @return array    月別リストデータ
+ * @param array $blogContentId
+ * @param array $options
+ * @return array 月別リストデータ
  * @access public
  */
 	function getPostedDates($blogContentId, $options) {
@@ -207,6 +211,12 @@ class BlogPost extends BlogAppModel {
 	}
 /**
  * カレンダー用に指定した月で記事の投稿がある日付のリストを取得する
+ * 
+ * @param int $contentId
+ * @param int $year
+ * @param int $month
+ * @return array
+ * @access public
  */
 	function getEntryDates($contentId,$year,$month) {
 
@@ -226,9 +236,9 @@ class BlogPost extends BlogAppModel {
 /**
  * 指定した月の記事が存在するかチェックする
  *
- * @param	int	$contentId
- * @param	int	$year
- * @param	int	$month
+ * @param	int $contentId
+ * @param	int $year
+ * @param	int $month
  * @return	boolean
  */
 	function existsEntry($contentId,$year,$month) {
@@ -247,13 +257,13 @@ class BlogPost extends BlogAppModel {
 	}
 /**
  * 年月を指定した検索条件を生成
- *
  * データベースごとに構文が違う
  * 
- * @param	int	$contentId
- * @param	int	$year
- * @param	int	$month
- * @return	string
+ * @param int $contentId
+ * @param int $year
+ * @param int $month
+ * @return string
+ * @access private
  */
 	function _getEntryDatesConditions($contentId,$year,$month) {
 
@@ -311,7 +321,8 @@ class BlogPost extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
+ * @param string $field フィールド名
+ * @param	array	$options
  * @return	array	コントロールソース
  * @access	public
  */
@@ -381,9 +392,9 @@ class BlogPost extends BlogAppModel {
 /**
  * 公開状態を取得する
  *
- * @param	array	データリスト
- * @return	boolean	公開状態
- * @access	public
+ * @param array データリスト
+ * @return boolean 公開状態
+ * @access public
  */
 	function allowPublish($data){
 
@@ -412,7 +423,8 @@ class BlogPost extends BlogAppModel {
 /**
  * 公開済の conditions を取得
  * 
- * @return	array
+ * @return array
+ * @access public 
  */
 	function getConditionAllowPublish() {
 		
@@ -431,6 +443,7 @@ class BlogPost extends BlogAppModel {
  *
  * @param array $options
  * @return array
+ * @access public
  */
 	function getPublishes ($options) {
 
@@ -448,14 +461,19 @@ class BlogPost extends BlogAppModel {
 /**
  * afterSave
  *
+ * @param boolean $created
  * @return boolean
  * @access public
  */
 	function afterSave($created) {
 
-		// 検索用テーブルに登録
-		$this->saveContent($this->createContent($this->data));
-
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogPost']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogPost']['id']);
+		}
+		
 	}
 /**
  * 検索用データを生成する
@@ -471,6 +489,7 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		if(!empty($data['blog_category_id'])) {
@@ -492,13 +511,14 @@ class BlogPost extends BlogAppModel {
 /**
  * beforeDelete
  *
- * @return	boolean
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeDelete() {
 
 		return $this->deleteContent($this->id);
 
 	}
+	
 }
 ?>

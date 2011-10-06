@@ -17,7 +17,7 @@
 	<?php echo $content_for_layout; ?><br />
 	<?php $baser->element('contents_navi') ?><br />
 
-	<?php $baser->link('トップへ','/'.Configure::read('Mobile.prefix').'/') ?>
+	<?php $baser->link('トップへ','/'.Configure::read('AgentSettings.mobile.alias').'/') ?>
 
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#8ABE08;background:#8ABE08;border:1px solid #8ABE08;" />
 	

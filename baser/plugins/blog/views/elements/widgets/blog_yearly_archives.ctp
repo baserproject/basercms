@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -36,7 +36,7 @@ $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 ?>
-<div class="widget widget-blog-yearly-archives widget-blog-yearly-archives-<?php echo $id ?>">
+<div class="widget widget-blog-yearly-archives widget-blog-yearly-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
@@ -62,7 +62,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 				'controller'	=> $blogContent['BlogContent']['name'], 
 				'action'		=> 'archives', 
 				'date', $postedDate['year']
-			), array('prefix' => true)) ?>
+			)) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

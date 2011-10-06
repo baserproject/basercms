@@ -9,8 +9,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -23,26 +23,44 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
- *
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
- *
- * @return string   ベースURL
+ * / | /index.php/ | /subdir/ | /subdir/index.php/
+ * @return string ベースURL
  */
 	function baseUrl() {
 
-		$appBaseUrl = Configure::read('App.baseUrl');
-		if($appBaseUrl) {
-			$baseUrl = $appBaseUrl.'/';
+		$baseUrl = Configure::read('App.baseUrl');
+		if($baseUrl) {
+			if(!preg_match('/\/$/', $baseUrl)) {
+				$baseUrl .= '/';
+			}
 		}else {
-			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
-			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
-			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			$url = str_replace('url=', '', @$_SERVER['QUERY_STRING']);
-			if($url) {
-				$baseUrl = str_replace($url, '', @$_SERVER['REQUEST_URI']);
+			if(!empty($_SERVER['QUERY_STRING'])) {
+				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
+				// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまい
+				// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
+				$url = '';
+				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
+					$url = $maches[1];
+				}
+				if($url) {
+					$requestUri = '/';
+					if(!empty($_SERVER['REQUEST_URI'])) {
+						$requestUri = $_SERVER['REQUEST_URI'];
+					}
+					if(strpos($requestUri, '?') !== false) {
+						list($requestUri) = explode('?', $requestUri);
+					}
+					$baseUrl = str_replace($url, '', $requestUri);
+				}
+				
 			} else {
 				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
-				$baseUrl = preg_replace("/index$/", '', @$_SERVER['REQUEST_URI']);
+				$requestUri = '/';
+				if(!empty($_SERVER['REQUEST_URI'])) {
+					$requestUri = $_SERVER['REQUEST_URI'];
+				}
+				$baseUrl = preg_replace("/index$/", '', $requestUri);
 			}
 		}
 		return $baseUrl;
@@ -58,6 +76,10 @@
  */
 	function docRoot() {
 
+		if(empty($_SERVER['SCRIPT_NAME'])) {
+			return '';
+		}		
+		
 		if(strpos($_SERVER['SCRIPT_NAME'],'.php') === false){
 			// さくらの場合、/index を呼びだすと、拡張子が付加されない
 			$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
@@ -168,12 +190,31 @@
 
 	}
 /**
- * baseUrlを除外したURLのパラメーターを取得する
+ * 環境変数よりURLパラメータを取得する
+ * 
+ * モバイルプレフィックスは除外する
+ * bootstrap実行後でのみ利用可
+ */
+	function getUrlParamFromEnv() {
+		
+		$agentAlias = Configure::read('AgentPrefix.currentAlias');
+		$url = getUrlFromEnv();
+		return preg_replace('/^'.$agentAlias.'\//','',$url);
+		
+	}
+/**
+ * 環境変数よりURLを取得する
+ * 
+ * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
  * 先頭のスラッシュは除外する
+ * baseUrlは除外する
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
-	function getParamsFromEnv() {
+	function getUrlFromEnv() {
 		
+		if(!empty($_GET['url'])) {
+			return preg_replace('/^\//', '', $_GET['url']);
+		}
 		
 		if(!isset($_SERVER['REQUEST_URI'])) {
 			return;
@@ -536,5 +577,54 @@
 			return false;
 		}
 
+	}
+/**
+ * URLにセッションIDを付加する
+ * 既に付加されている場合は重複しない
+ * 
+ * @param mixed $url
+ * @return mixed
+ */
+	function addSessionId($url, $force = false) {
+		
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
+			if(is_array($url)) {
+				$url["?"][session_name()] = session_id();
+			} else {
+				if(strpos($url, '?') !== false) {
+					$args = array();
+					$_url = explode('?', $url);
+					if(!empty($_url[1])) {
+						if(strpos($_url[1], '&') !== false) {
+							$aryUrl = explode('&', $_url[1]);
+							foreach($aryUrl as $pass) {
+								if(strpos($pass, '=') !== false) {
+									list($key, $value) = explode('=', $pass);
+									$args[$key] = $value;
+								}
+							}
+						} else {
+							if(strpos($_url[1], '=') !== false) {
+								list($key, $value) = explode('=', $_url[1]);
+								$args[$key] = $value;
+							}
+						}
+					}
+					$args[session_name()] = session_id();
+					$pass = '';
+					foreach($args as $key => $value) {
+						if($pass) {
+							$pass .= '&';
+						}
+						$pass .= $key.'='.$value;
+					}
+					$url = $_url[0] . '?' . $pass;
+				} else {
+					$url .= '?'.session_name().'='.session_id();
+				}
+			}
+		}
+		return $url;
+		
 	}
 ?>

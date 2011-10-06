@@ -8,8 +8,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -24,21 +24,22 @@ class ThemeFolder extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'ThemeFolder';
 /**
  * use table
- * @var		boolean
- * @access	public
+ * 
+ * @var boolean
+ * @access public
  */
 	var $useTable = false;
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -53,8 +54,9 @@ class ThemeFolder extends AppModel {
 	);
 /**
  * フォルダの重複チェック
- * @param	array	$check
- * @return	boolean
+ * 
+ * @param array $check
+ * @return boolean
  */
 	function duplicateThemeFolder ($check) {
 
@@ -72,5 +74,6 @@ class ThemeFolder extends AppModel {
 		}
 
 	}
+	
 }
 ?>

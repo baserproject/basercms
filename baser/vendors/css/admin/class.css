@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -451,4 +451,24 @@ img.slide-trigger {
 }
 .function-box span {
 	white-space: nowrap;
+}
+.waiting-box {
+    position: fixed;
+    text-align: center;
+    z-index: 10000;
+	width:100%;
+	height: 100%;
+	padding-top:100px;
+	display: none;
+}
+.waiting-box div{
+    background-color: #CCCCCC;
+    border: 1px solid #999999;
+    font-size: x-small;
+    margin: 0 auto;
+    opacity: 0.4;
+    padding: 10px 20px 5px;
+    text-align: center;
+    top: 60px;
+    width: 100px;
 }

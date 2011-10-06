@@ -20,8 +20,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -35,19 +35,21 @@
 /**
  * プラグインコンテンツビヘイビア
  *
- * @package			baser.models.behaviors
+ * @package baser.models.behaviors
  */
 class PluginContentBehavior extends ModelBehavior {
 /**
  * プラグインコンテンツモデル
  *
  * @var Model
+ * @access public
  */
 	var $PluginContent = null;
 /**
  * setup
  *
  * @param array $config
+ * @return void
  * @access public
  */
 	function setup(&$model, $config = array()) {
@@ -58,10 +60,10 @@ class PluginContentBehavior extends ModelBehavior {
 /**
  * beforeSave
  *
- * @param	Model	$model
- * @param
- * @return	void
- * @access	public
+ * @param Model $model
+ * @param Model $options
+ * @return void
+ * @access public
  */
 	function beforeSave(&$model,$options) {
 
@@ -87,7 +89,7 @@ class PluginContentBehavior extends ModelBehavior {
  * afterSave
  *
  * @param	Model	$model
- * @param
+ * @param Model $created
  * @return	void
  * @access	public
  */
@@ -112,10 +114,10 @@ class PluginContentBehavior extends ModelBehavior {
 	}
 /**
  * プラグインコンテンツデータを生成する
- *
  * 既に登録されているデータの場合は取得した上で生成
  *
- * @param	Model	$model
+ * @param Model $model
+ * @param Model $contentId
  * @return	array
  * @access	protected
  */
@@ -147,7 +149,6 @@ class PluginContentBehavior extends ModelBehavior {
  * beforeDelete
  *
  * @param	Model	$model
- * @param
  * @return	void
  * @access	public
  */
@@ -159,10 +160,9 @@ class PluginContentBehavior extends ModelBehavior {
 	}
 /**
  * プラグイン名を取得する
- *
  * モデル名から文字列「Content」を除外した「プラグイン名」を取得
  *
- * @param   string モデル名
+ * @param string モデル名
  * @return string プラグイン名
  */
 	function getPluginName($modelName) {

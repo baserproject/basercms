@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -27,7 +27,7 @@
 		<li><?php $baser->link('公開ページ確認',array('admin'=>false,'plugin'=>$blogContent['BlogContent']['name'],'controller'=>$blogContent['BlogContent']['name'],'action'=>'index'),array('target'=>'_blank')) ?></li>
 		<li><?php $baser->link('コメント一覧',array('plugin'=>false,'controller'=>'blog_comments','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
 		<li><?php $baser->link('記事一覧',array('controller'=>'blog_posts','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
-<?php if($newCatAddable): ?>
+<?php if(isset($newCatAddable) && $newCatAddable): ?>
 		<li><?php $baser->link('新規記事を登録',array('controller'=>'blog_posts','action'=>'add',$blogContent['BlogContent']['id'])) ?></li>
 <?php endif ?>
 		<li><?php $baser->link('ブログ基本設定',array('plugin'=>false,'controller'=>'blog_contents','action'=>'edit',$blogContent['BlogContent']['id'])) ?></li>

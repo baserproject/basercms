@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -21,7 +21,20 @@
  */
 $users = $formEx->getControlSource("Page.user_id");
 $baser->js('sorttable', false);
-$allowOwners = array('', $user['user_group_id']);
+$allowOwners = array();
+if(!empty($user)) {
+	$allowOwners = array('', $user['user_group_id']);
+}
+$pageType = array();
+if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+	$pageType = array('1' => 'PC');	
+}
+if(Configure::read('Baser.mobile')) {
+	$pageType['2'] = 'モバイル';
+}
+if(Configure::read('Baser.smartphone')) {
+	$pageType['3'] = 'スマートフォン';
+}
 ?>
 
 <script type="text/javascript">
@@ -104,11 +117,11 @@ function pageTypeChengeHandler() {
 		<?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
 		<span><small>作成者</small>
 		<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
-<?php if($pageCategories && Configure::read('Baser.mobile')): ?>
+<?php if($pageType): ?>
 		<span><small>タイプ</small>
 		<?php echo $formEx->input('Page.page_type', array(
 				'type'		=> 'radio',
-				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
+				'options'	=> $pageType)) ?></span>　
 <?php endif ?>
 <?php if($pageCategories): ?>
 		<span><small>カテゴリ</small>
@@ -185,19 +198,34 @@ function pageTypeChengeHandler() {
 				'value' => $dbData['Page']['id'])) ?>
 		<?php endif ?>
 		<?php $url = preg_replace('/index$/', '', $dbData['Page']['url']) ?>
-		<?php if(!preg_match('/^\/mobile\//is', $url)): ?>
+			
+			
+		<?php if(!preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url) && !preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
 			<?php $baser->link('確認', $url, array('class' => 'btn-green-s button-s', 'target' => '_blank'), null, false) ?>
-		<?php else: ?>
+			
+			
+			
+		<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)): ?>
 			<?php $baser->link('確認',
-					preg_replace('/^\/mobile\//is', '/m/', $url),
+					preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', '/'.Configure::read('AgentSettings.mobile.alias').'/', $url),
 					array('class' => 'btn-green-s button-s', 'target' => '_blank'),
-					null, false) ?>
+					null, false) ?>			
+			
+			
+		<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
+			<?php $baser->link('確認',
+					preg_replace('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', '/'.Configure::read('AgentSettings.smartphone.alias').'/', $url),
+					array('class' => 'btn-green-s button-s', 'target' => '_blank'),
+					null, false) ?>			
 		<?php endif ?>
+			
+			
+			
 			<?php $baser->link('詳細', 
 					array('action' => 'edit', $dbData['Page']['id']),
 					array('class' => 'btn-orange-s button-s'),
 					null, false) ?>
-		<?php if(in_array($ownerId, $allowOwners)||$user['user_group_id']==1): ?>
+		<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['Page']['id']),
 					array('class' => 'btn-gray-s button-s'),

@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -21,25 +21,28 @@
  */
 /**
  * ブログヘルパー
- * @package			baser.plugins.blog.views.helpers
+ * @package baser.plugins.blog.views.helpers
  */
 class BlogHelper extends AppHelper {
 /**
  * view
- * @var		View
- * @access	protected
+ * 
+ * @var View
+ * @access protected
  */
 	var $_view = null;
 /**
  * ヘルパー
- * @var		array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','Baser');
 /**
  * ブログカテゴリモデル
- * @var		BlogCategory
- * @access	public
+ * 
+ * @var BlogCategory
+ * @access public
  */
 	var $BlogCategory = null;
 /**
@@ -51,15 +54,17 @@ class BlogHelper extends AppHelper {
 	function __construct() {
 		
 		$this->_view =& ClassRegistry::getObject('view');
-		$this->setBlogContent();
+		$this->_setBlogContent();
 		
 	}
 /**
  * ブログコンテンツデータをセットする
  * 
  * @param int $blogContentId 
+ * @return void
+ * @access protected
  */
-	function setBlogContent($blogContentId = null) {
+	function _setBlogContent($blogContentId = null) {
 
 		if(isset($this->blogContent) && !$blogContentId) {
 			return;
@@ -75,45 +80,64 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * タイトルを表示する
+ * 
  * @return void
+ * @access public
  */
 	function title() {
+		
 		echo $this->getTitle();
+		
 	}
 /**
  * タイトルを取得する
+ * 
  * @return string
+ * @access public
  */
 	function getTitle() {
+		
 		return $this->blogContent['title'];
+		
 	}
 /**
  * ブログの説明文を取得する
+ * 
  * @return string
+ * @access public
  */
 	function getDescription() {
+		
 		return $this->blogContent['description'];
+		
 	}
 /**
  * ブログの説明文を表示する
+ * 
  * @return void
+ * @access public
  */
 	function description() {
 		echo $this->getDescription();
 	}
 /**
  * ブログの説明文が指定されているかどうか
+ * 
  * @return boolean
+ * @access public
  */
 	function descriptionExists() {
+		
 		if(!empty($this->blogContent['description'])) {
 			return true;
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 記事のタイトルを表示する
+ * 
  * @param array $post
  * @return void
  */
@@ -128,6 +152,7 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @param boolean $link
  * @return string
+ * @access public
  */
 	function getPostTitle($post, $link) {
 
@@ -145,10 +170,11 @@ class BlogHelper extends AppHelper {
  * @param string $title
  * @param array $options
  * @return string
+ * @access public
  */
 	function getPostLink($post, $title, $options = array()) {
 
-		$this->setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
 		return $this->Baser->getLink($title, $url, $options);
 		
@@ -158,6 +184,8 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post
  * @param string $title
+ * @return void
+ * @access public
  */
 	function postLink($post, $title, $options = array()) {
 
@@ -166,18 +194,24 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * コンテンツを表示する
+ * 
  * @param array $post
  * @param mixied boolean / string $moreLink
  * @return void
+ * @access public
  */
 	function postContent($post,$moreText = true, $moreLink = false, $cut = false) {
+		
 		echo $this->getPostContent($post, $moreText, $moreLink, $cut);
+		
 	}
 /**
  * コンテンツデータを取得する
+ * 
  * @param array $post
  * @param mixied boolean / string $moreLink
  * @return string
+ * @access public
  */
 	function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
@@ -201,18 +235,24 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * カテゴリを出力する
+
  * @param array $post
  * @return void
+ * @access puublic
  */
 	function category($post, $options = array()) {
+		
 		echo $this->getCategory($post, $options);
+		
 	}
 /**
  * カテゴリを取得する
+ * 
  * @param array $post
  * @return string
  */
 	function getCategory($post, $options = array()) {
+		
 		if(!empty($post['BlogCategory']['name'])) {
 			if(!isset($this->Html)){
 				$this->Html = new HtmlHelper();
@@ -221,21 +261,28 @@ class BlogHelper extends AppHelper {
 		}else {
 			return '';
 		}
+		
 	}
 /**
  * タグを出力する
  *
  * @param array $post
  * @param string $separator
+ * @return void
+ * @access public
  */
 	function tag($post, $separator = ' , ') {
+		
 		echo $this->getTag($post, $separator);
+		
 	}
 /**
  * タグを取得する
  *
  * @param array $post
  * @param string $separator
+ * @return void
+ * @access public
  */
 	function getTag($post, $separator = ' , ') {
 
@@ -255,7 +302,6 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * カテゴリのURLを取得する
- * 
  * [注意] リンク関数でラップする前提の為、ベースURLは考慮されない
  * 
  * @param string $blogCategoyId
@@ -268,7 +314,7 @@ class BlogHelper extends AppHelper {
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
-		$this->setBlogContent($blogContentId);
+		$this->_setBlogContent($blogContentId);
 		$blogContentName = $this->blogContent['name'];
 		
 		$path = array('category');
@@ -278,24 +324,45 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'),$path));
-		return str_replace(preg_replace('/^\//','',baseUrl()),'',$url);
+		$baseUrl = preg_replace('/\/$/', '', baseUrl());
+		return preg_replace('/^'.preg_quote($baseUrl, '/').'/', '', $url);
 
 	}
 /**
  * 登録日
+ * 
  * @param array $post
  * @param string $format
  * @return void
+ * @access public
  */
 	function postDate($post,$format = 'Y/m/d') {
-		echo $this->TimeEx->format($format,$post['BlogPost']['posts_date']);
+		
+		echo $this->getPostDate($post, $format);
+		
+	}
+/**
+ * 登録日
+ * 
+ * @param array $post
+ * @param string $format
+ * @return void
+ * @access public
+ */
+	function getPostDate($post,$format = 'Y/m/d') {
+		
+		return $this->TimeEx->format($format,$post['BlogPost']['posts_date']);
+		
 	}
 /**
  * 投稿者を出力
+ * 
  * @param array $post
  * @return void
+ * @access public
  */
 	function author($post) {
+		
 		$author = '';
 		if(!empty($post['User']['real_name_1'])) {
 			$author .= $post['User']['real_name_1'];
@@ -304,23 +371,31 @@ class BlogHelper extends AppHelper {
 			$author .= " ".$post['User']['real_name_2'];
 		}
 		echo $author;
+		
 	}
 /**
  * カテゴリーリストを取得する
+ * 
  * @param $categories
  * @param $depth
  * @return string
+ * @access public
  */
 	function getCategoryList($categories,$depth=3, $count = false) {
+		
 		return $this->_getCategoryList($categories,$depth, 1, $count);
+		
 	}
 /**
  * カテゴリーリストを取得する
+ * 
  * @param $categories
  * @param $depth
  * @return string
+ * @access public
  */
 	function _getCategoryList($categories, $depth=3, $current=1, $count = false) {
+		
 		if($depth < $current) {
 			return '';
 		}
@@ -350,19 +425,30 @@ class BlogHelper extends AppHelper {
 		}else {
 			return '';
 		}
+		
 	}
 /**
  * ブログ編集ページへのリンクを出力
+ * 
  * @param string $id
+ * @return void
+ * @access public
  */
 	function editPost($blogContentId,$blogPostId) {
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
+		
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
 			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'blog','controller'=>'blog_posts','action'=>'edit',$blogContentId,$blogPostId),array('target'=>'_blank')).'</div>';
 		}
+		
 	}
 /**
  * 前の記事へのリンクを取得する
+ * 
  * @param array $post
+ * @param string $title
+ * @param array $htmlAttributes
+ * @return void
+ * @access pulic
  */
 	function prevLink($post,$title='',$htmlAttributes = array()) {
 
@@ -399,7 +485,10 @@ class BlogHelper extends AppHelper {
 	}
 /**
  * 次の記事へのリンクを取得する
+ * 
  * @param array $post
+ * @return void
+ * @access public
  */
 	function nextLink($post,$title='',$htmlAttributes = array()) {
 
@@ -437,8 +526,9 @@ class BlogHelper extends AppHelper {
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * TODO 別のヘルパに移動
+ * @return array
+ * @access public
  */
 	function getLayoutTemplates() {
 
@@ -471,12 +561,14 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * ブログテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * TODO 別のヘルパに移動
+ * @return array
+ * @access public
  */
 	function getBlogTemplates() {
 
@@ -507,12 +599,13 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * 公開状態を取得する
  *
- * @param	array	データリスト
- * @return	boolean	公開状態
+ * @param array $data データリスト
+ * @return boolean 公開状態
  * @access	public
  */
 	function allowPublish($data){
@@ -528,10 +621,10 @@ class BlogHelper extends AppHelper {
 /**
  * 記事中の画像を出力する
  *
- * @param	array	$post
- * @param	array	$options
- * @return	void
- * @access	public
+ * @param array $post
+ * @param array $options
+ * @return void
+ * @access public
  */
 	function postImg($post, $options = array()) {
 
@@ -541,14 +634,14 @@ class BlogHelper extends AppHelper {
 /**
  * 記事中の画像を取得する
  *
- * @param	array	$post
- * @param	array	$options
- * @return	void
- * @access	public
+ * @param array $post
+ * @param array $options
+ * @return void
+ * @access public
  */
 	function getPostImg($post, $options = array()) {
 		
-		$this->setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
 		$options = am($_options, $options);
 		extract($options);
@@ -563,6 +656,7 @@ class BlogHelper extends AppHelper {
 
 		if(isset($matches[1][$num-1])) {
 			$url = $matches[1][$num-1];
+			$url = preg_replace('/^'.preg_quote($this->base, '/').'/', '', $url);
 			$img = $this->Baser->getImg($url, $options);
 			if($link) {
 				return $this->Baser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));

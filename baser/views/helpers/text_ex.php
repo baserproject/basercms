@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,32 +26,32 @@ App::import("Helper",array("Text","TimeEx"));
 /**
  * Textヘルパー拡張
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class TextExHelper extends TextHelper {
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TimeEx','FormEx');
 /**
  * 文字数カット（日本語対応）
- *
  * Cuts a string to the length of $length and replaces the last characters
  * with the ending if the text is longer than length.
  *
- * @param	string  $text String to truncate.
- * @param 	integer $length Length of returned string, including ellipsis.
- * @param 	mixed 	$ending If string, will be used as Ending and appended to the trimmed string.
+ * @param string $text String to truncate.
+ * @param integer $length Length of returned string, including ellipsis.
+ * @param mixed $ending If string, will be used as Ending and appended to the trimmed string.
  *						Can also be an associative array that can contain the last three params of this method.
- * @param 	boolean $exact If false, $text will not be cut mid-word
- * @param 	boolean $considerHtml If true, HTML tags would be handled correctly
- * @return 	string	Trimmed string.
- * @access	public
+ * @param boolean $exact If false, $text will not be cut mid-word
+ * @param boolean $considerHtml If true, HTML tags would be handled correctly
+ * @return string Trimmed string.
+ * @access public
  */
 	function mbTruncate($text, $length = 100, $ending = '...', $exact = true, $considerHtml = false) {
+		
 		if (is_array($ending)) {
 			extract($ending);
 		}
@@ -128,13 +128,14 @@ class TextExHelper extends TextHelper {
 		}
 
 		return $truncate;
+		
 	}
 /**
  * boolean型を○―マークで出力
  *
- * @param	boolean
- * @return	string	○―マーク
- * @access	public
+ * @param boolean
+ * @return string ○―マーク
+ * @access public
  */
 	function booleanMark($value) {
 
@@ -148,8 +149,8 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用のリストを○―マークで出力
  *
- * @return	array	○―マークリスト
- * @access	public
+ * @return array ○―マークリスト
+ * @access public
  */
 	function booleanMarkList() {
 
@@ -159,8 +160,8 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用のリストを有無で出力
  *
- * @return	array	有無リスト
- * @access	public
+ * @return array 有無リスト
+ * @access public
  */
 	function booleanExistsList() {
 
@@ -170,8 +171,8 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用のリストを可、不可で出力
  *
- * @return	array	可/不可リスト
- * @access	public
+ * @return array 可/不可リスト
+ * @access public
  */
 	function booleanAllowList() {
 
@@ -181,9 +182,9 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用のリストを[〜する/〜しない]形式で出力する
  *
- * @param	string	Do文字列
- * @return	array	[〜する/〜しない]形式のリスト
- * @access	public
+ * @param string $doText Do文字列
+ * @return array [〜する/〜しない]形式のリスト
+ * @access public
  */
 	function booleanDoList($doText = null) {
 
@@ -192,30 +193,36 @@ class TextExHelper extends TextHelper {
 	}
 /**
  * boolean型用のリストを[〜る/〜ない]形式で出力する
- * @param	string	Do文字列
- * @return	array
- * @access	public
+ * 
+ * @param string $requireText Do文字列
+ * @return array
+ * @access public
  */
 	function booleanRequireList($requireText = null) {
+		
 		return array(0=>$requireText.'ない',1=>$requireText.'る');
+		
 	}
 /**
  * boolean型用のリストを[〜る/〜ない]形式で出力する
+ * 
  * @param mixed $value
  * @param string $text
  * @return mixed
  */
 	function booleanRequire($value,$text) {
+		
 		$booleanList = $this->booleanRequireList($text);
 		return $booleanList[$value];
+		
 	}
 /**
  * boolean型のデータを [〜する / 〜しない] 形式で出力する
  *
- * @param   boolean 値
- * @param   string  Do文字列
- * @return  string
- * @access  public
+ * @param boolean $value 値
+ * @param string $doText Do文字列
+ * @return string
+ * @access public
  */
 	function booleanDo($value,$doText = null) {
 
@@ -226,8 +233,8 @@ class TextExHelper extends TextHelper {
 /**
  * 都道府県のリストを出力
  *
- * @return	array	都道府県リスト
- * @access	public
+ * @return array 都道府県リスト
+ * @access public
  */
 	function prefList($empty = '都道府県') {
 
@@ -250,6 +257,10 @@ class TextExHelper extends TextHelper {
 	}
 /**
  * 性別を出力
+ * 
+ * @param array $value
+ * @return string
+ * @access public
  */
 	function sex($value) {
 		$sexes = array(1=>'男',2=>'女');
@@ -257,23 +268,25 @@ class TextExHelper extends TextHelper {
 	}
 /**
  * 郵便番号にハイフンをつけて出力
- *
  * TODO とりあえずの仕様
  *
- * @param	string	ハイフンなしの郵便番号
- * @return	string	〒マーク、ハイフン付きの郵便番号
+ * @param string	$value ハイフンなしの郵便番号
+ * @return string	〒マーク、ハイフン付きの郵便番号
  * @access	public
  */
 	function zipFormat($value) {
+		
 		$right = substr($value,0,3);
 		$left = substr($value,3,4);
 		return "〒 ".$right."-".$left;
+		
 	}
 /**
  * 番号を都道府県に変換して出力
  *
- * @param	int		都道府県番号
- * @return	string	都道府県名
+ * @param int $value 都道府県番号
+ * @param string $noValue 都道府県名
+ * @return string 都道府県名
  * @access	public
  */
 	function pref($value, $noValue='') {
@@ -288,9 +301,10 @@ class TextExHelper extends TextHelper {
 /**
  * データをチェックして空の場合に指定した値を返す
  *
- * @param	mixed	$value
- * @param	mixed	$noValue
- * @return	mixed
+ * @param mixed $value
+ * @param	mixed $noValue
+ * @return mixed
+ * @access public
  */
 	function noValue($value, $noValue) {
 
@@ -304,7 +318,7 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用を可、不可で出力
  *
- * @param	boolean
+ * @param boolean $value
  * @return	string	可/不可
  * @access	public
  */
@@ -317,9 +331,9 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用を有無で出力
  *
- * @param	boolean
- * @return	string	有/無
- * @access	public
+ * @param boolean $value
+ * @return string 有/無
+ * @access public
  */
 	function booleanExists($value) {
 
@@ -330,9 +344,9 @@ class TextExHelper extends TextHelper {
 /**
  * form::dateTimeで取得した和暦データを文字列データに変換する
  *
- * @param	array	$arrDate
- * @return	string	和暦
- * @access	public
+ * @param array $arrDate
+ * @return string 和暦
+ * @access public
  */
 	function dateTimeWareki($arrDate) {
 
@@ -347,9 +361,9 @@ class TextExHelper extends TextHelper {
 /**
  * 通貨表示
  *
- * @param	int		$value
- * @param	string	$prefix
- * @return	string
+ * @param int $value
+ * @param string $prefix
+ * @return string
  */
 	function moneyFormat($value, $prefix='¥') {
 		
@@ -363,9 +377,9 @@ class TextExHelper extends TextHelper {
 /**
  * form::dateTimeで取得したデータを文字列データに変換する
  *
- * @param	array	$arrDate
- * @return	string	日付
- * @access	public
+ * @param array $arrDate
+ * @return string 日付
+ * @access public
  */
 	function dateTime($arrDate) {
 
@@ -377,9 +391,9 @@ class TextExHelper extends TextHelper {
 /**
  * 文字をフォーマット形式で出力する
  *
- * @param	string	フォーマット
- * @param	mixed	値
- * @param	mixed	データがなかった場合の初期値
+ * @param string $format フォーマット
+ * @param mixed $value 値
+ * @param	mixed $noValue データがなかった場合の初期値
  * @return	string	変換後の文字列
  * @access	public
  */
@@ -395,10 +409,10 @@ class TextExHelper extends TextHelper {
 /**
  * モデルのコントロールソースより表示用データを取得する
  *
- * @param	string	フィールド名
- * @param	mixed	値
- * @return	string	表示用データ
- * @access	public
+ * @param string $field フィールド名
+ * @param mixed $value 値
+ * @return string 表示用データ
+ * @access public
  */
 	function listValue($field,$value) {
 
@@ -412,11 +426,14 @@ class TextExHelper extends TextHelper {
 	}
 /**
  * 区切り文字で区切られたテキストを配列に変換する
+ * 
  * @param string $separator
- * @prama string $value
+ * @param string $value
  * @return array
+ * @access public
  */
 	function toArray($separator,$value) {
+		
 		if($separator != '"') {
 			$value = str_replace('"','',$value);
 		}
@@ -432,14 +449,19 @@ class TextExHelper extends TextHelper {
 		}
 		$values = split($separator,$value);
 		return $values;
+		
 	}
 /**
  * 配列とキーを指定して値を取得する
+ * 
+ * @param int $key
  * @param mixed $value
  * @param array $array
+ * @param mixed type $noValue
  * @return mixied
  */
 	function arrayValue($key, $array, $noValue = '') {
+		
 		if(is_numeric($key)) {
 			$key = (int)$key;
 		}
@@ -447,16 +469,17 @@ class TextExHelper extends TextHelper {
 			return $array[$key];
 		}
 		return $noValue;
+		
 	}
 /**
  * 連想配列とキーのリストより値のリストを取得し文字列で返す
- *
  * 文字列に結合する際、指定した区切り文字を指定できる
  *
- * @param	string	$glue
- * @param	array	$keys
- * @param	array	$array
- * @return	string
+ * @param string $glue
+ * @param array $keys
+ * @param array $array
+ * @return string
+ * @access public
  */
 	function arrayValues($glue, $keys, $array) {
 
@@ -476,10 +499,11 @@ class TextExHelper extends TextHelper {
 /**
  * 日付より年齢を取得する
  *
- * @param	string	$birthday
- * @param	string	$suffix
- * @param	mixed	$noValue
- * @return	mixed
+ * @param string $birthday
+ * @param string $suffix
+ * @param mixed $noValue
+ * @return mixed
+ * @access public
  */
 	function age($birthday, $suffix='歳', $noValue = '不明') {
 
@@ -500,8 +524,8 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用のリストを有効、無効で出力
  *
- * @return	array	可/不可リスト
- * @access	public
+ * @return array 可/不可リスト
+ * @access public
  */
 	function booleanStatusList() {
 
@@ -511,9 +535,9 @@ class TextExHelper extends TextHelper {
 /**
  * boolean型用を無効・有効で出力
  *
- * @param	boolean
- * @return	string	無効/有効
- * @access	public
+ * @param boolean
+ * @return string 無効/有効
+ * @access public
  */
 	function booleanStatus($value) {
 

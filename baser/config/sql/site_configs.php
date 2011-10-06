@@ -4,8 +4,6 @@
 class SiteConfigsSchema extends CakeSchema {
 	var $name = 'SiteConfigs';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'site_configs.php';
 
 	var $connection = 'baser';

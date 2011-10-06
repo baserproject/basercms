@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -131,7 +131,7 @@ class BaserAppController extends Controller {
 				}else {
 					$reg = '/^\/(installations)/i';
 				}
-				if(!preg_match($reg,$_SERVER['REQUEST_URI']) || isInstalled()) {
+				if(!preg_match($reg, @$_SERVER['REQUEST_URI']) || isInstalled()) {
 					$this->theme = $this->siteConfigs['theme'];
 					// ===============================================================================
 					// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -159,9 +159,11 @@ class BaserAppController extends Controller {
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
 			// モバイルのエラー用
-			if(Configure::read('Mobile.on')) {
-				$this->layoutPath = 'mobile';
-				$this->helpers[] = 'Mobile';
+			if(Configure::read('AgentPrefix.on')) {
+				$this->layoutPath = Configure::read('AgentPrefix.currentPrefix');
+				if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+					$this->helpers[] = 'Mobile';
+				}
 			}
 
 			if($base) {
@@ -176,7 +178,7 @@ class BaserAppController extends Controller {
 
 		}
 
-		if(Configure::read('Mobile.on')) {
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
 			if(isset($this->siteConfigs['mobile_on']) && !$this->siteConfigs['mobile_on']) {
 				$this->notFound();
 			}
@@ -245,9 +247,9 @@ class BaserAppController extends Controller {
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
-			$this->layoutPath = $this->params['prefix'];
-			$this->subDir = $this->params['prefix'];
-			if($this->params['prefix'] == 'mobile') {
+			$this->layoutPath = str_replace('_', '/', $this->params['prefix']);
+			$this->subDir = str_replace('_', '/', $this->params['prefix']);
+			if(preg_match('/^mobile(|_)/', $this->params['prefix'])) {
 				$this->helpers[] = 'Mobile';
 			}
 		}
@@ -258,14 +260,12 @@ class BaserAppController extends Controller {
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Cache-Control: post-check=0, pre-check=0", false);
 			header("Pragma: no-cache");
-
 			// デバックを出力しない。
 			Configure::write('debug', 0);
-			$this->layout = "ajax";
 		}
 
 		// 権限チェック
-		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('Mobile.on') && isset($this->params['action']) && empty($this->params['requested'])) {
+		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('AgentPrefix.on') && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
 				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
@@ -366,7 +366,7 @@ class BaserAppController extends Controller {
  */
 	function notFound() {
 
-		$this->cakeError('error404', array(array($this->here)));
+		return $this->cakeError('error404', array(array($this->here)));
 
 	}
 /**
@@ -642,8 +642,8 @@ class BaserAppController extends Controller {
 		}
 		
 		// テンプレート
-		if(Configure::read('Mobile.on')) {
-			$this->EmailEx->template = 'mobile'.DS.$template;
+		if(Configure::read('AgentPrefix.on')) {
+			$this->EmailEx->template = Configure::read('AgentPrefix.currentPrefix').DS.$template;
 		}else {
 			$this->EmailEx->template = $template;
 		}
@@ -799,7 +799,7 @@ class BaserAppController extends Controller {
 				return false;
 			}
 		} else {
-			if(!$this->writeInstallSetting('App.baseUrl', "env('SCRIPT_NAME')")){
+			if(!$this->writeInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
 				return false;
 			}
 		}
@@ -1239,6 +1239,20 @@ class BaserAppController extends Controller {
 		}
 		return $this->AuthEx->userModel;
 		
+	}
+/**
+ * Redirects to given $url, after turning off $this->autoRender.
+ * Script execution is halted after the redirect.
+ *
+ * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
+ * @param integer $status Optional HTTP status code (eg: 404)
+ * @param boolean $exit If true, exit() will be called after the redirect
+ * @return mixed void if $exit = false. Terminates script if $exit = true
+ * @access public
+ */
+	function redirect($url, $status = null, $exit = true) {
+		$url = addSessionId($url, true);
+		parent::redirect($url, $status, $exit);
 	}
 	
 }

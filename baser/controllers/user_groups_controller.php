@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,68 +22,70 @@
 /**
  * ユーザーグループコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class UserGroupsController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'UserGroups';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('UserGroup');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('users', 'user_groups');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index',
 			'ユーザーグループ管理'=>'/admin/user_groups/index');
 /**
  * beforeFilter
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeFilter () {
+		
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin'){
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
+		
 	}
 /**
  * ユーザーグループの一覧を表示する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -103,8 +105,8 @@ class UserGroupsController extends AppController {
 /**
  * [ADMIN] 登録処理
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -134,9 +136,9 @@ class UserGroupsController extends AppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -170,9 +172,9 @@ class UserGroupsController extends AppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 

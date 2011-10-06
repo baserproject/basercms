@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,61 +25,63 @@
 /**
  * ブログ設定コントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogConfigsController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * before_filter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin') {
 			$this->subMenuElements = array('blog_common');
 		}
+		
 	}
 /**
  * [ADMIN] サイト基本設定
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -105,5 +107,6 @@ class BlogConfigsController extends BlogAppController {
 		$this->pageTitle = 'ブログ設定';
 
 	}
+	
 }
 ?>

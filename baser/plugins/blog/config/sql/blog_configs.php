@@ -4,8 +4,6 @@
 class BlogConfigsSchema extends CakeSchema {
 	var $name = 'BlogConfigs';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'blog_configs.php';
 
 	var $connection = 'plugin';

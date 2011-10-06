@@ -4,8 +4,6 @@
 class BlogCommentsSchema extends CakeSchema {
 	var $name = 'BlogComments';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'blog_comments.php';
 
 	var $connection = 'plugin';

@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -118,7 +118,7 @@ $(function(){
 		<?php endif ?>
 		</td>
 		<td>
-		<?php if(preg_match('/.+?(\.png|\.gif|\.jpg)$/is', $themeFile['name'])): ?>
+		<?php if($themeFile['type'] == 'image'): ?>
 			<?php $baser->link(
 					$baser->getImg(array('action' => 'img_thumb', 100, 100, $theme, $plugin, $type, $path, $themeFile['name']), array('alt'=>$themeFile['name'])),
 					array('action' => 'img', $theme, $plugin, $type, $path, $themeFile['name']),

@@ -4,8 +4,6 @@
 class WidgetAreasSchema extends CakeSchema {
 	var $name = 'WidgetAreas';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'widget_areas.php';
 
 	var $connection = 'baser';

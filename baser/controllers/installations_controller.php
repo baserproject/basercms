@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,6 +25,7 @@
  */
 /**
  * インストール条件
+ * 
  *  @global string PHP_MINIMUM_VERSION
  *  @global integer PHP_MINIMUM_MEMORY_LIMIT in MB
  */
@@ -37,45 +38,45 @@ class InstallationsController extends AppController {
 /**
  * クラス名
  *
- * @var		string
+ * @var string
  * @access	public
  */
 	var $name = 'Installations';
 /**
  * コンポーネント
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $components = array('Session', 'EmailEx', 'BaserManager');
 /**
  * レイアウト
  *
- * @var		string
+ * @var string
  * @access	public
  */
 	var $layout = "installations";
 /**
  * ヘルパー
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $helpers = array('Html', 'FormEx', 'Javascript', 'Time');
 /**
  * モデル
  *
- * @var		array
+ * @var array
  * @access	public
  */
 	var $uses = null;
 /**
  * データベースエラーハンドラ
  *
- * @param int		$errno
+ * @param int $errno
  * @param string	$errstr
  * @param string	$errfile
- * @param int		$errline
+ * @param int $errline
  * @param string	$errcontext
  * @return void
  * @access public
@@ -217,6 +218,7 @@ class InstallationsController extends AppController {
 	}
 /**
  * Step 3: データベースの接続設定
+ * 
  * @return void
  * @access public
  */
@@ -326,6 +328,8 @@ class InstallationsController extends AppController {
  * @param	string	$email
  * @param	string	$name
  * @param	string	$password
+ * @return void
+ * @access protected
  */
 	function _sendCompleteMail($email, $name, $password) {
 
@@ -335,9 +339,9 @@ class InstallationsController extends AppController {
 	}
 /**
  * Step 5: 設定ファイルの生成
- *
  * データベース設定ファイル[database.php]
  * インストールファイル[install.php]
+ * 
  * @return void
  * @access public
  */
@@ -386,7 +390,7 @@ class InstallationsController extends AppController {
 /**
  * インストールファイルを生成する
  *
- * @return	boolean
+ * @return boolean
  * @access	protected
  */
 	function _createInstallFile() {
@@ -399,6 +403,7 @@ class InstallationsController extends AppController {
 											"Configure::write('Baser.sslUrl', '');",
 											"Configure::write('Baser.adminSslOn', false);",
 											"Configure::write('Baser.mobile', true);",
+											"Configure::write('Baser.smartphone', true);",
 											"Configure::write('Cache.disable', false);",
 											"Cache::config('default', array('engine' => 'File'));","?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
@@ -411,7 +416,7 @@ class InstallationsController extends AppController {
 /**
  * プラグインのステータスを更新する
  *
- * @return	boolean
+ * @return boolean
  * @access	protected
  */
 	function _updatePluginStatus() {
@@ -439,7 +444,7 @@ class InstallationsController extends AppController {
 /**
  * 登録日を更新する
  *
- * @return	boolean
+ * @return boolean
  * @access	protected
  */
 	function _updateEntryDate() {
@@ -466,7 +471,7 @@ class InstallationsController extends AppController {
 /**
  * 管理画面にログインする
  *
- * @return	void
+ * @return void
  * @access	protected
  */
 	function _login() {
@@ -483,34 +488,27 @@ class InstallationsController extends AppController {
 /**
  * テーマ用のページファイルを生成する
  *
- * @return	boolean
  * @access	protected
  */
 	function _createPages() {
 
 		App::import('Model','Page');
 		$Page = new Page(null, null, 'baser');
-		$pages = $Page->findAll();
+		$pages = $Page->find('all', array('recursive' => -1));
 		if($pages) {
-			$ret = true;
 			foreach($pages as $page) {
 				$Page->data = $page;
-				if(!$Page->afterSave(true)){
-					$ret = false;
-				}
+				$Page->afterSave(true);
 			}
-			return $ret;
-		} else {
-			return false;
 		}
 
 	}
 /**
  * データベースに接続する
  *
- * @param	array		$config
- * @return	DboSource	$db
- * @access	public
+ * @param array $config
+ * @return DboSource $db
+ * @access public
  */
 	function &_connectDb($config, $name='baser') {
 
@@ -539,6 +537,10 @@ class InstallationsController extends AppController {
 	}
 /**
  * データベースを構築する
+ * 
+ * @param type $nonDemoData
+ * @return boolean
+ * @access protected
  */
 	function _constructionDb($nonDemoData = false) {
 
@@ -563,8 +565,8 @@ class InstallationsController extends AppController {
 /**
  * ステップ３用のフォーム初期値を取得する
  *
- * @return	array
- * @access	public
+ * @return array
+ * @access	protected
  */
 	function _getDefaultValuesStep3() {
 
@@ -593,8 +595,8 @@ class InstallationsController extends AppController {
 /**
  * ステップ４用のフォーム初期値を取得する
  *
- * @return	array
- * @access	public
+ * @return array
+ * @access	protected
  */
 	function _getDefaultValuesStep4() {
 
@@ -620,7 +622,7 @@ class InstallationsController extends AppController {
 /**
  * DB設定をセッションから取得
  *
- * @return	array
+ * @return array
  * @access	protected
  */
 	function _readDbSettingFromSession() {
@@ -641,9 +643,9 @@ class InstallationsController extends AppController {
 /**
  * 実際の設定用のDB名を取得する
  *
- * @param	string	$type
- * @param	string	$name
- * @return	string
+ * @param string	$type
+ * @param string	$name
+ * @return string
  * @access	protected
  */
 	function _getRealDbName($type, $name) {
@@ -663,9 +665,9 @@ class InstallationsController extends AppController {
 /**
  * DB設定をセッションに保存
  *
- * @param	array	$data
- * @return	void
- * @access	public
+ * @param array $data
+ * @return void
+ * @access	protected
  */
 	function _writeDbSettingToSession($data) {
 
@@ -699,9 +701,9 @@ class InstallationsController extends AppController {
 /**
  * データベース接続テスト
  *
- * @param	array	$config
- * @return	boolean
- * @access	protected
+ * @param array $config
+ * @return boolean
+ * @access protected
  */
 	function _testConnectDb($config){
 
@@ -842,7 +844,7 @@ class InstallationsController extends AppController {
 /**
  * 利用可能なデータソースを取得する
  *
- * @return	array
+ * @return array
  * @access	protected
  */
 	function _getDbSource() {
@@ -895,8 +897,8 @@ class InstallationsController extends AppController {
 /**
  * セキュリティ用のキーを生成する
  *
- * @param	int		$length
- * @return	string	キー
+ * @param	int $length
+ * @return string キー
  * @access	protected
  */
 	function _createKey($length) {
@@ -911,15 +913,14 @@ class InstallationsController extends AppController {
 /**
  * インストール不能警告メッセージを表示
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function alert() {
 		$this->pageTitle = 'BaserCMSのインストールを開始できません';
 	}
 /**
  * BaserCMSを初期化する
- *
  * debug フラグが -1 の場合のみ実行可能
  *
  * @return	void
@@ -998,6 +999,9 @@ class InstallationsController extends AppController {
 	}
 /**
  * 全てのテーブルを削除する
+ *
+ * @return void
+ * @access public 
  */
 	function deleteAllTables() {
 		
@@ -1007,5 +1011,6 @@ class InstallationsController extends AppController {
 		$this->BaserManager->deleteTables('plugin', $config);
 		
 	}
+	
 }
 ?>

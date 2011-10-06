@@ -4,8 +4,6 @@
 class UsersSchema extends CakeSchema {
 	var $name = 'Users';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'users.php';
 
 	var $connection = 'baser';

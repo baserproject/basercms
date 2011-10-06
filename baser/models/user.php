@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,14 +25,14 @@
 /**
  * ユーザーモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class User extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'User';
 /**
@@ -45,22 +45,23 @@ class User extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name'=>array(
@@ -149,9 +150,9 @@ class User extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field) {
 
@@ -172,9 +173,11 @@ class User extends AppModel {
 	}
 /**
  * ユーザーリストを取得する
- *
  * 条件を指定する場合は引数を指定する
+ * 
  * @param array $authUser
+ * @return array
+ * @access public
  */
 	function getUserList($conditions = array()) {
 
@@ -193,12 +196,13 @@ class User extends AppModel {
 			}
 		}
 		return $list;
+		
 	}
 /**
  * フォームの初期値を設定する
  *
- * @return	array	初期値データ
- * @access	public
+ * @return array 初期値データ
+ * @access public
  */
 	function getDefaultValue() {
 
@@ -209,9 +213,9 @@ class User extends AppModel {
 /**
  * afterFind
  *
- * @param	array	結果セット
- * @param	array	$primary
- * @return	array	結果セット
+ * @param array 結果セット
+ * @param array $primary
+ * @return array 結果セット
  * @access	public
  */
 	function afterFind($results, $primary = false) {
@@ -226,12 +230,11 @@ class User extends AppModel {
 	}
 /**
  * 取得結果を変換する
- *
  * HABTM対応
  *
- * @param	array	結果セット
- * @return	array	結果セット
- * @access	public
+ * @param array 結果セット
+ * @return array 結果セット
+ * @access public
  */
 	function convertResults($results) {
 
@@ -256,9 +259,9 @@ class User extends AppModel {
 /**
  * View用のデータを取得する
  *
- * @param	array	結果セット
- * @return	array	結果セット
- * @access	public
+ * @param array 結果セット
+ * @return array 結果セット
+ * @access public
  */
 	function convertToView($data) {
 
@@ -268,8 +271,8 @@ class User extends AppModel {
 /**
  * ユーザーが許可されている認証プレフィックスを取得する
  *
- * @param	string	$userName
- * @return	string
+ * @param string $userName
+ * @return string
  */
 	function getAuthPrefix($userName) {
 

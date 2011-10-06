@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,20 +22,119 @@
 App::import('Core','DboPostgres');
 class DboPostgresEx extends DboPostgres {
 /**
+ * Returns an array of the fields in given table name.
+ *
+ * @param string $tableName Name of database table to inspect
+ * @return array Fields in table. Keys are name and type
+ */
+	function &describe(&$model) {
+		$fields = parent::describe($model);
+		$table = $this->fullTableName($model, false);
+		$this->_sequenceMap[$table] = array();
+
+		if ($fields === null) {
+			$cols = $this->fetchAll(
+				"SELECT DISTINCT column_name AS name, data_type AS type, is_nullable AS null,
+					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+					character_octet_length AS oct_length FROM information_schema.columns
+				WHERE table_name = " . $this->value($table) . " AND table_schema = " .
+				$this->value($this->config['schema'])."  ORDER BY position",
+				false
+			);
+
+			foreach ($cols as $column) {
+				$colKey = array_keys($column);
+
+				if (isset($column[$colKey[0]]) && !isset($column[0])) {
+					$column[0] = $column[$colKey[0]];
+				}
+
+				if (isset($column[0])) {
+					$c = $column[0];
+
+					if (!empty($c['char_length'])) {
+						$length = intval($c['char_length']);
+					} elseif (!empty($c['oct_length'])) {
+						if ($c['type'] == 'character varying') {
+							$length = null;
+							$c['type'] = 'text';
+						// >>> CUSTOMIZE ADD 2011/08/22 ryuring
+						} elseif($c['type'] == 'text') {
+							$length = null;
+						// <<<
+						} else {
+							$length = intval($c['oct_length']);
+						}
+					} else {
+						$length = $this->length($c['type']);
+					}
+					$fields[$c['name']] = array(
+						'type'    => $this->column($c['type']),
+						'null'    => ($c['null'] == 'NO' ? false : true),
+						'default' => preg_replace(
+							"/^'(.*)'$/",
+							"$1",
+							preg_replace('/::.*/', '', $c['default'])
+						),
+						'length'  => $length
+					);
+					// >>> CUSTOMIZE ADD 2011/08/22 ryuring
+					if (!$fields[$c['name']]['length'] && $fields[$c['name']]['type'] == 'integer') {
+						$fields[$c['name']]['length'] = 8;
+					}
+					// <<<
+					if ($c['name'] == $model->primaryKey) {
+						$fields[$c['name']]['key'] = 'primary';
+						if ($fields[$c['name']]['type'] !== 'string') {
+							// >>> CUSTOMIZE MODIFY 2011/08/22 ryuring
+							//$fields[$c['name']]['length'] = 11;
+							// ---
+							$fields[$c['name']]['length'] = 8;
+							// <<<
+						}
+					}
+					if (
+						$fields[$c['name']]['default'] == 'NULL' ||
+						preg_match('/nextval\([\'"]?([\w.]+)/', $c['default'], $seq)
+					) {
+						$fields[$c['name']]['default'] = null;
+						if (!empty($seq) && isset($seq[1])) {
+							$this->_sequenceMap[$table][$c['name']] = $seq[1];
+						}
+					}
+					// >>> CUSTOMIZE ADD 2011/08/22 ryuring
+					if($fields[$c['name']]['default'] === 'true' && $fields[$c['name']]['type'] == 'boolean') {
+						$fields[$c['name']]['default'] = 1;
+					} elseif($fields[$c['name']]['default'] === 'false' && $fields[$c['name']]['type'] == 'boolean') {
+						$fields[$c['name']]['default'] = 0;
+					}
+					// <<<
+				}
+			}
+			$this->__cacheDescription($table, $fields);
+		}
+		if (isset($model->sequence)) {
+			$this->_sequenceMap[$table][$model->primaryKey] = $model->sequence;
+		}
+		return $fields;
+	}
+/**
  * テーブル名のリネームステートメントを生成
  *
- * @param	string	$sourceName
- * @param	string	$targetName
- * @return	string
- * @access	public
+ * @param string $sourceName
+ * @param string $targetName
+ * @return string
+ * @access public
  */
 	function buildRenameTable($sourceName, $targetName) {
+		
 		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
+		
 	}
 /**
  * カラム名を変更する
  *
- * @param	array	$options [ table / new / old  ]
+ * @param array $options [ table / new / old  ]
  * @return boolean
  * @access public
  */
@@ -60,6 +159,7 @@ class DboPostgresEx extends DboPostgres {
  * @param boolean $read Value to be used in READ or WRITE context
  * @return string Quoted and escaped
  * @todo Add logic that formats/escapes data based on column type
+ * @access public
  */
 	function value($data, $column = null, $read = true) {
 
@@ -115,6 +215,7 @@ class DboPostgresEx extends DboPostgres {
 			break;
 		}
 		return "'" . $data . "'";
+		
 	}
 /**
  * Prepares a value, or an array of values for database queries by quoting and escaping them.
@@ -123,8 +224,10 @@ class DboPostgresEx extends DboPostgres {
  * @param string $column The column into which this data will be inserted
  * @param boolean $read Value to be used in READ or WRITE context
  * @return mixed Prepared value or array of values.
+ * @access private
  */
 	function __value($data, $column = null, $read = true) {
+		
 		if (is_array($data) && !empty($data)) {
 			return array_map(
 				array(&$this, 'value'),
@@ -141,6 +244,7 @@ class DboPostgresEx extends DboPostgres {
 		} else {
 			return null;
 		}
+		
 	}
 /**
  * Alter the Schema of a table.
@@ -151,6 +255,7 @@ class DboPostgresEx extends DboPostgres {
  * @return array
  */
 	function alterSchema($compare, $table = null) {
+		
 		if (!is_array($compare)) {
 			return false;
 		}
@@ -219,6 +324,7 @@ class DboPostgresEx extends DboPostgres {
 			}
 		}
 		return $out;
+		
 	}
 	
 }

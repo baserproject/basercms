@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -19,20 +19,31 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+/**
+ * プラグインフックヘルパー
+ * 
+ * @package baser.views.helpers
+ */
 class PluginHookHelper extends AppHelper {
 /**
  * プラグインフックオブジェクト
+ * 
  * @var array
+ * @access public
  */
 	var $pluginHooks = array();
 /**
  * 登録済フックメソッド
- * @var	array
+
+ * @var array
+ * @access public
  */
 	var $registerHooks = array();
 /**
  * beforeRender
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -84,10 +95,11 @@ class PluginHookHelper extends AppHelper {
 	}
 /**
  * プラグインフックを登録する
- * @param	string	$hookName
- * @param	string	$pluginName
- * @return	void
- * @access	pubic
+ * 
+ * @param string $hookName
+ * @param string $pluginName
+ * @return void
+ * @access pubic
  */
 	function registerHook($hookName, $pluginName){
 
@@ -101,10 +113,10 @@ class PluginHookHelper extends AppHelper {
 /**
  * フックを実行する
  *
- * @param	string	$hookName
- * @param	string	$out
- * @return	string	$out
- * @access	public
+ * @param string $hookName
+ * @param string $out
+ * @return string $out
+ * @access public
  */
 	function executeHook($hookName, $return = null){
 
@@ -131,120 +143,183 @@ class PluginHookHelper extends AppHelper {
 	}
 /**
  * afterRender
+ * 
+ * @return void
+ * @access public
  */
 	function afterRender() {
+		
 		$this->executeHook('afterRender');
+		
 	}
 /**
  * beforeLayout
+ * 
+ * @return void
+ * @access public
  */
 	function beforeLayout() {
+		
 		$this->executeHook('beforeLayout');
+		
 	}
 /**
  * afterLayout
+ * 
+ * @return void
+ * @access public
  */
 	function afterLayout() {
+		
 		$this->executeHook('afterLayout');
+		
 	}
 /**
  * FormEx::create
- *
  * 過去バージョンとの互換性の為残す
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  * @deprecated
  */
 	function formExCreate($out) {
+		
 		return $this->executeHook('formExCreate', $out, $out);
+		
 	}
 /**
  * FormEx::end
- *
  * 過去バージョンとの互換性の為残す
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  * @deprecated
  */
 	function formExEnd($out) {
+		
 		return $this->executeHook('formExEnd',$out, $out);
+		
 	}
 /**
  * before Form::create
+ * 
  * @param Form $form
  * @param string $model
  * @param array $options
- * @return	array
- * @access	public
+ * @return array
+ * @access public
  */
 	function beforeFormCreate(&$form, $model = null, $options = array()) {
+		
 		return $this->executeHook('beforeFormCreate', $options, $form, $model, $options);
+		
 	}
 /**
  * after Form::create
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  */
 	function afterFormCreate(&$form, $out) {
+		
 		$out = $this->executeHook('afterFormCreate', $out, $form, $out);
 		return $this->formExCreate($out);
+		
 	}
 /**
  * before Form::end
+ * 
  * @param Form $form
  * @param string $model
  * @param array $options
- * @return	array
- * @access	public
+ * @return array
+ * @access public
  */
 	function beforeFormEnd(&$form, $options = array()) {
+		
 		return $this->executeHook('beforeFormEnd', $options, $form, $options);
+		
 	}
 /**
  * after Form::end
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  */
 	function afterFormEnd(&$form, $out) {
+		
 		$out = $this->executeHook('afterFormEnd', $out, $form, $out);
 		return $this->formExEnd($out);
+		
 	}
 /**
  * before Form::input
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  */
 	function beforeFormInput(&$form, $fieldName, $options = array()) {
+		
 		return $this->executeHook('beforeFormInput', $options, $form, $fieldName, $options);
+		
 	}
 /**
  * after Form::input
- * @param	string	$out
- * @return	string
- * @access	public
+ * 
+ * @param string $out
+ * @return string
+ * @access public
  */
 	function afterFormInput(&$form, $fieldName, $out) {
+		
 		return $this->executeHook('afterFormInput', $out, $form, $fieldName, $out);
+		
 	}
+/**
+ * beforeBaserGetLink
+ * 
+ * @param string $html
+ * @param striing $title
+ * @param string $url
+ * @param array $htmlAttributes
+ * @param boolean $confirmMessage
+ * @param boolean $escapeTitle
+ * @return string 
+ */
 	function beforeBaserGetLink(&$html, $title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+		
 		return $this->executeHook('beforeBaserGetLink', $htmlAttributes, $html, $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		
 	}
+/**
+ *
+ * @param string $html
+ * @param string $url
+ * @param string $out
+ * @return string 
+ * @access public
+ */
 	function afterBaserGetLink(&$html, $url, $out) {
+		
 		return $this->executeHook('afterBaserGetLink', $out, $html, $url, $out);
+		
 	}
 /**
  * Baser::header
  *
  * @param string $out
  * @return string
+ * @access public
  */
 	function baserHeader(&$baser, $out) {
+		
 		return $this->executeHook('baserHeader', $out, $out);
+		
 	}
 /**
  * Baser::footer
@@ -253,7 +328,9 @@ class PluginHookHelper extends AppHelper {
  * @return string
  */
 	function baserFooter(&$baser, $out) {
+		
 		return $this->executeHook('baserFooter', $out, $out);
+		
 	}
 	
 }

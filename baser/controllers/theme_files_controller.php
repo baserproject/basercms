@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,29 +22,29 @@
 class ThemeFilesController extends AppController {
 /**
  * クラス名
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'ThemeFiles';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('ThemeFile', 'ThemeFolder');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx','Ckeditor');
 /**
  * テーマファイルタイプ
  *
- * @var		array
- * @public	protected
+ * @var array
+ * @public protected
  */
 	var $_tempalteTypes = array('layouts'=>'レイアウトテンプレート',
 			'elements'=>'エレメントテンプレート',
@@ -55,22 +55,22 @@ class ThemeFilesController extends AppController {
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
 /**
  * テーマファイル一覧
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -108,12 +108,10 @@ class ThemeFilesController extends AppController {
 				}
 			}
 			foreach($files[1] as $file) {
-				if(preg_match('/^(.+?)(\.ctp|\.css|\.js|\.png|\.gif|\.jpg)$/is',$file,$matches)) {
-					$themeFile = array();
-					$themeFile['name'] = $file;
-					$themeFile['type'] = 'file';
-					$themeFiles[] = $themeFile;
-				}
+				$themeFile = array();
+				$themeFile['name'] = $file;
+				$themeFile['type'] = $this->_getFileType($file);
+				$themeFiles[] = $themeFile;
 			}
 			$themeFiles = am($folders,$themeFiles);
 
@@ -141,12 +139,10 @@ class ThemeFilesController extends AppController {
 				if($file=='screenshot.png') {
 					continue;
 				}
-				if(preg_match('/^(.+?)(\.ctp|\.css|\.js|\.png|\.gif|\.jpg)$/is',$file,$matches)) {
-					$themeFile = array();
-					$themeFile['name'] = $file;
-					$themeFile['type'] = 'file';
-					$themeFiles[] = $themeFile;
-				}
+				$themeFile = array();
+				$themeFile['name'] = $file;
+				$themeFile['type'] = $this->_getFileType($file);
+				$themeFiles[] = $themeFile;
 			}
 			$themeFiles = am($folders,$themeFiles);
 
@@ -164,10 +160,28 @@ class ThemeFilesController extends AppController {
 
 	}
 /**
+ * ファイルタイプを取得する
+ * 
+ * @param string $file
+ * @return mixed false / type 
+ */
+	function _getFileType($file) {
+		
+		if(preg_match('/^(.+?)(\.ctp|\.css|\.js)$/is',$file)) {
+			return 'text';
+		} elseif(preg_match('/^(.+?)(\.png|\.gif|\.jpg)$/is',$file)) {
+			return 'image';
+		} else {
+			return 'file';
+		}
+		return false;
+		
+	}
+/**
  * テーマファイル作成
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -232,8 +246,8 @@ class ThemeFilesController extends AppController {
 /**
  * テーマファイル編集
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_edit() {
 
@@ -250,8 +264,9 @@ class ThemeFilesController extends AppController {
 			$file = new File($fullpath);
 			$pathinfo = pathinfo($fullpath);
 			$this->data['ThemeFile']['name'] = urldecode(basename($file->name,'.'.$pathinfo['extension']));
+			$this->data['ThemeFile']['type'] = $this->_getFileType(urldecode(basename($file->name)));
 			$this->data['ThemeFile']['ext'] = $pathinfo['extension'];
-			if(!in_array($pathinfo['extension'], array('png','gif','jpg'))) {
+			if($this->data['ThemeFile']['type'] == 'text') {
 				$this->data['ThemeFile']['contents'] = $file->read();
 			}
 
@@ -262,8 +277,8 @@ class ThemeFilesController extends AppController {
 
 				$oldPath = urldecode($fullpath);
 				$newPath = dirname($fullpath).DS.urldecode($this->data['ThemeFile']['name']).'.'.$this->data['ThemeFile']['ext'];
-
-				if(!in_array($this->data['ThemeFile']['ext'], array('png','gif','jpg'))) {
+				$this->data['ThemeFile']['type'] = $this->_getFileType(basename($newPath));
+				if($this->data['ThemeFile']['type'] == 'text') {
 					$file = new File($oldPath);
 					if($file->open('w')) {
 						$file->append($this->data['ThemeFile']['contents']);
@@ -307,8 +322,8 @@ class ThemeFilesController extends AppController {
 /**
  * ファイルを削除する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_del () {
 
@@ -374,8 +389,8 @@ class ThemeFilesController extends AppController {
 /**
  * テーマファイルをコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy() {
 
@@ -426,8 +441,8 @@ class ThemeFilesController extends AppController {
 /**
  * ファイルをアップロードする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_upload() {
 
@@ -441,7 +456,7 @@ class ThemeFilesController extends AppController {
 		}
 		$pathinfo = pathinfo($this->data['ThemeFile']['file']['name']);
 		$ext = $pathinfo['extension'];
-		if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
+		//if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
 			$filePath = $fullpath .DS. $this->data['ThemeFile']['file']['name'];
 			$Folder = new Folder();
 			$Folder->create(dirname($filePath), 0777);
@@ -451,17 +466,17 @@ class ThemeFilesController extends AppController {
 			}else {
 				$this->Session->setFlash('アップロードに失敗しました。');
 			}
-		} else {
-			$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
-		}
+		//} else {
+			//$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
+		//}
 		$this->redirect(array('action'=>'index',$theme,$type,$path));
 
 	}
 /**
  * フォルダ追加
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_add_folder() {
 
@@ -498,8 +513,8 @@ class ThemeFilesController extends AppController {
 /**
  * フォルダ編集
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_edit_folder() {
 
@@ -549,8 +564,8 @@ class ThemeFilesController extends AppController {
 /**
  * フォルダ表示
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_view_folder() {
 
@@ -582,8 +597,9 @@ class ThemeFilesController extends AppController {
 /**
  * 引き数を解析する
  *
- * @param	array $args
- * @return	array
+ * @param array $args
+ * @return array
+ * @access protected
  */
 	function _parseArgs($args) {
 
@@ -670,8 +686,8 @@ class ThemeFilesController extends AppController {
 /**
  * コアファイルを現在のテーマにコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy_to_theme() {
 
@@ -707,8 +723,8 @@ class ThemeFilesController extends AppController {
 /**
  * コアファイルのフォルダを現在のテーマにコピーする
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_copy_folder_to_theme() {
 
@@ -747,9 +763,9 @@ class ThemeFilesController extends AppController {
  * 画像を表示する
  * コアの画像等も表示可
  * 
- * @param	array	パス情報
- * @return	void
- * @access	public
+ * @param array パス情報
+ * @return void
+ * @access public
  */
 	function admin_img() {
 
@@ -777,11 +793,11 @@ class ThemeFilesController extends AppController {
  * 画像を表示する
  * コアの画像等も表示可
  * 
- * @param	int		$width
- * @param	int		$height
- * @param	array	パス情報
- * @return	void
- * @access	public
+ * @param int $width
+ * @param int $height
+ * @param array パス情報
+ * @return void
+ * @access public
  */
 	function admin_img_thumb() {
 
@@ -815,5 +831,6 @@ class ThemeFilesController extends AppController {
 		exit();
 
 	}
+	
 }
 ?>

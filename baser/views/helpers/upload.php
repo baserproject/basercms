@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,7 +26,7 @@ App::import('Helper', 'Form');
 /**
  * アップロードヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class UploadHelper extends FormHelper {
 /**
@@ -35,6 +35,7 @@ class UploadHelper extends FormHelper {
  * そして削除用のチェックボックスを表示する
  * [カスタムオプション]
  * imgsize・・・画像のサイズを指定する
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -83,6 +84,7 @@ class UploadHelper extends FormHelper {
 	}
 /**
  * ファイルへのリンクを取得する
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -163,6 +165,7 @@ class UploadHelper extends FormHelper {
  * 上から順に大きい画像を並べている事が前提で
  * 指定したサイズ内で最大の画像を出力
  * リンク先は存在する最大の画像へのリンクとなる
+ * 
  * @param string $fieldName
  * @param string $fileName
  * @param array $options
@@ -309,5 +312,6 @@ class UploadHelper extends FormHelper {
 		}
 
 	}
+	
 }
 ?>

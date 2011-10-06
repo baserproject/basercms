@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -41,7 +41,7 @@
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 	<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">コメントを送る</span> </div>
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-	<?php echo $formEx->create('BlogComment',array('url'=>'/'.Configure::read('Mobile.prefix').'/'.$blogContent['BlogContent']['name'].'/archives/'.$post['BlogPost']['no'].'#BlogComment')) ?> 
+	<?php echo $formEx->create('BlogComment',array('url'=>'/'.Configure::read('AgentSettings.mobile.alias').'/'.$blogContent['BlogContent']['name'].'/archives/'.$post['BlogPost']['no'].'#BlogComment')) ?> 
 	<?php echo $formEx->label('BlogComment.name','お名前') ?><br />
 	<?php echo $formEx->text('BlogComment.name') ?><br />
 	<span style="color:red;"><?php echo $formEx->error('BlogComment.name') ?></span> 

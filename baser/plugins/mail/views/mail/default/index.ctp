@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -30,8 +30,11 @@ $mail->indexFields($mailContent['MailContent']['id']);
 
 <h3 class="contents-head">入力フォーム</h3>
 
+<div class="section mail-description">
+	<?php $mail->description() ?>
+</div>
+
 <div class="section">
-	<p><span class="required">*</span> 印の項目は必須となりますので、必ず入力してください。</p>
 	<?php $baser->flash() ?>
 	<?php $baser->element('mail_form') ?>
 </div>

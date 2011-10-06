@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -19,7 +19,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$imgExts = array('png','gif','jpg');
 ?>
 
 <h2><?php $baser->contentsTitle() ?>
@@ -71,10 +70,11 @@ $imgExts = array('png','gif','jpg');
 <?php endif ?>
 		</td>
 	</tr>
+<?php if($this->action == 'admin_add' || ($this->action == 'admin_edit' && in_array($this->data['ThemeFile']['type'], array('text', 'image')))): ?>
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('ThemeFile.contents', '内容') ?></th>
 		<td class="col-input">
-<?php if(in_array($formEx->value('ThemeFile.ext'), $imgExts) && ($this->action != 'admin_edit' || $this->action != 'admin_view')): ?>
+<?php if(($this->action == 'admin_edit' || $this->action == 'admin_view') && $this->data['ThemeFile']['type'] == 'image'): ?>
 			<div class="align-center" style="margin:20px auto">
 				<?php $baser->link(
 						$baser->getImg(array('action' => 'img_thumb', 550, 550, $theme, $plugin, $type, $path), array('alt' => basename($path))),
@@ -82,7 +82,7 @@ $imgExts = array('png','gif','jpg');
 						array('rel' => 'colorbox', 'title' => basename($path))
 				) ?>
 			</div>
-<?php else: ?>
+<?php elseif($this->action == 'admin_add' || $this->data['ThemeFile']['type'] == 'text'): ?>
 	<?php if($this->action != 'admin_view'): ?>
 			<?php echo $formEx->input('ThemeFile.contents', array('type' => 'textarea', 'cols' => 80, 'rows' => 30)) ?>
 			<?php echo $formEx->error('ThemeFile.contents') ?>
@@ -92,6 +92,7 @@ $imgExts = array('png','gif','jpg');
 <?php endif ?>
 		</td>
 	</tr>
+<?php endif ?>
 </table>
 
 <div class="submit">

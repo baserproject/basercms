@@ -30,10 +30,16 @@ App::import('Component', 'Auth');
  *
  * Binds access control with user authentication and session management.
  *
- * @package       cake
- * @subpackage    cake.cake.libs.controller.components
+ * @package cake
+ * @subpackage cake.cake.libs.controller.components
  */
 class AuthExComponent extends AuthComponent {
+/**
+ * 個体識別ID
+ * @var string 
+ * CUSTOMIZE ADD 2011/09/25 ryuring
+ */
+	var $serial = '';
 /**
  * Identifies a user based on specific criteria.
  *
@@ -44,6 +50,7 @@ class AuthExComponent extends AuthComponent {
  * @access public
  */
 	function identify($user = null, $conditions = null) {
+		
 		if ($conditions === false) {
 			$conditions = null;
 		} elseif (is_array($conditions)) {
@@ -153,6 +160,96 @@ class AuthExComponent extends AuthComponent {
 			// <<<
 		}
 		return null;
+		
 	}
+/**
+ * Manually log-in a user with the given parameter data.  The $data provided can be any data
+ * structure used to identify a user in AuthComponent::identify().  If $data is empty or not
+ * specified, POST data from Controller::$data will be used automatically.
+ *
+ * After (if) login is successful, the user record is written to the session key specified in
+ * AuthComponent::$sessionKey.
+ *
+ * @param mixed $data User object
+ * @return boolean True on login success, false on failure
+ * @access public
+ */
+	function login($data = null) {
+		// CUSTOMIZE ADD 2011/09/25 ryuring
+		// 簡単ログイン
+		// >>>
+		if(!empty($this->fields['serial']) && !$data) {
+			$serial = $this->getSerial();
+			$Model = $model =& $this->getModel();
+			if($serial) {
+				$data = $Model->find('first', array('conditions' => array($Model->alias.'.'.$this->fields['serial'] => $serial), 'recursive' => -1));
+			}
+		}
+		// <<<
+		return parent::login($data);
+		
+	}
+/**
+ * Logs a user out, and returns the login action to redirect to.
+ *
+ * @param mixed $url Optional URL to redirect the user to after logout
+ * @return string AuthComponent::$loginAction
+ * @see AuthComponent::$loginAction
+ * @access public
+ */
+	function logout() {
+		if(!empty($this->fields['serial'])) {
+			$this->deleteSerial();
+		}
+		return parent::logout();
+	}
+/**
+ * 個体識別IDを保存する
+ * @return boolean 
+ */
+	function saveSerial() {
+		$user = $this->user();
+		if(!empty($this->fields['serial']) && $user) {
+			$serial = $this->getSerial();
+			$Model = $model =& $this->getModel();
+			if($serial) {
+				$user[$this->userModel][$this->fields['serial']] = $serial;
+				$Model->set($user);
+				return $Model->save();
+			}
+		}
+	}
+/**
+ * 個体識別IDを削除する
+ * 
+ * @return boolean
+ */
+	function deleteSerial() {
+		$user = $this->user();
+		if(!empty($this->fields['serial']) && $user) {
+			$Model = $model =& $this->getModel();
+			$user[$this->userModel][$this->fields['serial']] = '';
+			$Model->set($user);
+			return $Model->save();
+		}
+	}
+/**
+ * 個体識別IDを取得
+ * 
+ * @return string
+ */
+	function getSerial() {
+		
+		if(!empty($_SERVER['HTTP_X_DCMGUID'])) {
+			return $_SERVER['HTTP_X_DCMGUID'];
+		} elseif(!empty($_SERVER['HTTP_X_UP_SUBNO'])) {
+			return $_SERVER['HTTP_X_UP_SUBNO'];
+		} elseif(!empty($_SERVER['HTTP_X_JPHONE_UID'])) {
+			return $_SERVER['HTTP_X_JPHONE_UID'];
+		}
+		return '';
+		
+	}
+	
 }
 ?>

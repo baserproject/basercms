@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,35 +25,35 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * @package			baser.plugins.mail.controller
+ * @package baser.plugins.mail.controller
  */
 class MailController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Mail';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.Message','Mail.MailContent','Mail.MailField','Mail.MailConfig');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Freeze','Mailform','Javascript','Array','TimeEx','Maildata','Mailfield','Mail');
 /**
  * Array of components a controller will use
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
@@ -63,48 +63,53 @@ class MailController extends MailAppController {
 /**
  * CSS
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $css = array('mail/form');
 /**
  * ページタイトル
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $pageTitle = 'お問い合わせ';
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * データベースデータ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $dbDatas = null;
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array();
 /**
  * beforeFilter.
  *
  * @return void
- * @access 	public
+ * @access public
  */
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->AuthEx->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
+		$this->AuthEx->allow(
+				'index', 'mobile_index', 'smartphone_index',
+				'confirm', 'mobile_confirm', 'smartphone_confirm',
+				'submit', 'mobile_submit', 'smartphone_submit', 
+				'captcha', 'smartphone_captcha'
+		);
 
 		parent::beforeFilter();
 
@@ -157,8 +162,8 @@ class MailController extends MailAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -171,9 +176,9 @@ class MailController extends MailAppController {
 /**
  * [PUBIC] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function index($id = null) {
 
@@ -196,9 +201,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_index($id=null) {
 
@@ -206,11 +211,23 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_index($id=null) {
+
+		$this->setAction('index',$id);
+
+	}
+/**
  * [PUBIC] データの確認画面を表示
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed	mail_content_id
+ * @return void
+ * @access public
  */
 	function confirm($id = null) {
 
@@ -221,7 +238,7 @@ class MailController extends MailAppController {
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
 
 			// 画像認証を行う
-			if(!Configure::read('Mobile.on') && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+			if(Configure::read('AgentPrefix.currentAgent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
 				$captchaResult = $this->Captcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
@@ -254,9 +271,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_confirm($id=null) {
 
@@ -264,11 +281,23 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_confirm($id=null) {
+
+		$this->setAction('confirm',$id);
+
+	}
+/**
  * [PUBIC] データ送信
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function submit($id = null) {
 
@@ -309,9 +338,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] 送信完了ページ
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_submit($id=null) {
 
@@ -319,9 +348,22 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] 送信完了ページ
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_submit($id=null) {
+
+		$this->setAction('submit',$id);
+
+	}
+/**
  * メール送信する
- * @return	void
- * @access	protected
+ * 
+ * @return void
+ * @access protected
  */
 	function _sendEmail() {
 
@@ -397,12 +439,27 @@ class MailController extends MailAppController {
 	}
 /**
  * 認証用のキャプチャ画像を表示する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
     function captcha()
     {
+		
         $this->Captcha->render();
+		
+    }
+/**
+ * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+ * 
+ * @return void
+ * @access public
+ */
+    function smartphone_captcha()
+    {
+		
+        $this->Captcha->render();
+		
     }
 }
 ?>

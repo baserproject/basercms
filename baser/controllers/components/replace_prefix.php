@@ -22,8 +22,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -39,21 +39,21 @@ class ReplacePrefixComponent extends Object {
  * プレフィックス置き換えを許可するアクション
  * プレフィックスなしの純粋なアクション名を指定する
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $allowedPureActions = array();
 /**
  * 置き換え後のプレフィックス
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $replacedPrefix = 'admin';
 /**
  * 対象コントローラーのメソッド
  *
- * @var		array
+ * @var array
  * @access	protected
  */
 	var $_methods;
@@ -65,7 +65,9 @@ class ReplacePrefixComponent extends Object {
  * @access public
  */
 	function initialize(&$controller) {
+		
 		$this->_methods = $controller->methods;
+		
 	}
 /**
  * プレフィックスの置き換えを許可するアクションを設定する
@@ -123,9 +125,9 @@ class ReplacePrefixComponent extends Object {
 			// viewファイルが存在すればリクエストされたプレフィックスを優先する
 			$existsLoginView = false;
 			$viewPaths = $this->getViewPaths($controller);
-
+			$prefixPath = str_replace('_', DS, $requestedPrefix);
 			foreach($viewPaths as $path) {
-				$file = $path.Inflector::underscore($controller->name).DS.$requestedPrefix.DS.$pureAction.$controller->ext;
+				$file = $path.Inflector::underscore($controller->name).DS.$prefixPath.DS.$pureAction.$controller->ext;
 				if(file_exists($file)) {
 					$existsLoginView = true;
 					break;
@@ -133,8 +135,8 @@ class ReplacePrefixComponent extends Object {
 			}
 
 			if($existsLoginView) {
-				$controller->subDir = $requestedPrefix;
-				$controller->layoutPath = $requestedPrefix;
+				$controller->subDir = $prefixPath;
+				$controller->layoutPath = $prefixPath;
 			}
 
 		}

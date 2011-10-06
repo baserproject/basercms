@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,28 +25,28 @@
 /**
  * ブログコンテンツモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogContent extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogContent';
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $actsAs = array('PluginContent', 'Cache');
+	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
@@ -67,8 +67,8 @@ class BlogContent extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -88,10 +88,6 @@ class BlogContent extends BlogAppModel {
 					'message'	=> 'ブログタイトルを入力してください。'),
 			array(	'rule'		=> array('maxLength', 255),
 					'message'	=> 'ブログタイトルは255文字以内で入力してください。')
-		),
-		'description' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'ブログ説明文は255文字以内で入力してください。')
 		),
 		'layout' => array(
 			array(	'rule'		=> 'halfText',
@@ -118,9 +114,9 @@ class BlogContent extends BlogAppModel {
 /**
  * 英数チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function alphaNumeric($check) {
 
@@ -134,9 +130,9 @@ class BlogContent extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field = null,$options = array()) {
 
@@ -149,5 +145,58 @@ class BlogContent extends BlogAppModel {
 		}
 
 	}
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogContent']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogContent']['id']);
+		}
+		
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['BlogContent'])) {
+			$data = $data['BlogContent'];
+		}
+
+		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		$_data['Content']['title'] = $data['title'];
+		$_data['Content']['detail'] = $data['description'];
+		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['status'] = true;
+
+		return $_data;
+
+	}
+	
 }
 ?>

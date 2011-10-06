@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,13 +26,14 @@ App::import("Helper","Xml");
 /**
  * XMLヘルパー拡張
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class XmlExHelper extends XmlHelper {
 /**
  * XML宣言を生成
  * IE6以外の場合のみ生成する
- * @param  array $attrib
+ * 
+ * @param array $attrib
  * @return string XML宣言
  */
 	function header($attrib = array()) {
@@ -43,5 +44,6 @@ class XmlExHelper extends XmlHelper {
 		}
 
 	}
+	
 }
 ?>

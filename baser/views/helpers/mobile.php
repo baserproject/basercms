@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,14 +22,14 @@
 /**
  * モバイルヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class MobileHelper extends Helper {
 /**
  * afterLayout
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function afterLayout() {
 
@@ -42,7 +42,7 @@ class MobileHelper extends Helper {
 			$rss = false;
 		}
 
-		if($view && !$rss && Configure::read('Mobile.on') && $view->layoutPath != 'email'.DS.'text') {
+		if($view && !$rss && Configure::read('AgentPrefix.currentAgent') == 'mobile' && $view->layoutPath != 'email'.DS.'text') {
 
 			$view->output = str_replace('＆', '&amp;', $view->output);
 			$view->output = str_replace('＜', '&lt;', $view->output);
@@ -87,9 +87,16 @@ class MobileHelper extends Helper {
 	}
 /**
  * コンテンツタイプを出力
+ * 
+ * @return void
+ * @access public
  */
 	function header(){
-		header("Content-type: application/xhtml+xml");
+		
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+			header("Content-type: application/xhtml+xml");
+		}
+		
 	}
 	
 }

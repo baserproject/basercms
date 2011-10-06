@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,31 +25,35 @@
 /**
  * ブログカテゴリモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogCategory extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogCategory';
 /**
  * バリデーション設定
+ * 
  * @var array
+ * @access public
  */
 	var $validationParams = array();
 /**
  * actsAs
+ * 
  * @var array
+ * @access public
  */
 	var $actsAs = array('Tree', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
@@ -62,8 +66,8 @@ class BlogCategory extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -88,9 +92,9 @@ class BlogCategory extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field,$options = array()) {
 
@@ -153,8 +157,10 @@ class BlogCategory extends BlogAppModel {
 /**
  * 同じニックネームのカテゴリがないかチェックする
  * 同じブログコンテンツが条件
+ * 
  * @param array $check
  * @return boolean
+ * @access public
  */
 	function duplicateBlogCategory($check) {
 
@@ -173,8 +179,10 @@ class BlogCategory extends BlogAppModel {
 	}
 /**
  * 関連する記事データをカテゴリ無所属に変更し保存する
- * @param <type> $cascade
- * @return <type>
+ * 
+ * @param boolean $cascade
+ * @return boolean
+ * @access public
  */
 	function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
@@ -198,10 +206,10 @@ class BlogCategory extends BlogAppModel {
 /**
  * カテゴリリストを取得する
  *
- * @param	int		$id
- * @param	boolean	$count
- * @return	array
- * @access	public
+ * @param int $id
+ * @param boolean $count
+ * @return array
+ * @access public
  */
 	function getCategories($id, $count = false) {
 

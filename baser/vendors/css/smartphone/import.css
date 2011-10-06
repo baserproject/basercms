@@ -1,0 +1,10 @@
+@charset "UTF-8";
+/**
+ * CSSインポート
+ * 全てのページで読み込むCSSを記述
+ */
+
+@import "../html5reset-1.6.1.css";
+@import "base.css";
+@import "layout.css";
+@import "contents.css";

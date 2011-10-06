@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -100,7 +100,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('BlogContent.description', 'ブログ説明文') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('BlogContent.description', array('type' => 'textarea', 'cols' => 35,'rows' => 4, 'counter' => true)) ?>
+			<?php echo $formEx->ckeditor('BlogContent.description', null, array('width' => '500px', 'height' => '120px', 'type' => 'simple')) ?>
 			<?php echo $formEx->error('BlogContent.description') ?>
 		</td>
 	</tr>
@@ -258,6 +258,12 @@ $(function(){
 					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 				</ul>
 			</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('BlogContent.exclude_search', '公開設定') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 		</td>
 	</tr>
 </table>

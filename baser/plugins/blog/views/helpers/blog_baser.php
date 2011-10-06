@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,37 +22,62 @@
 /**
  * BlogBaserヘルパー
  *
- * @package			baser.plugins.blog.views.helpers
+ * @package baser.plugins.blog.views.helpers
  *
  */
 class BlogBaserHelper extends AppHelper {
 /**
  * ブログ記事一覧出力
- *
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $baser->blogPosts('news', 3) ?>
  * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.ctp
  * 
- * @param	int		$contentsName
- * @param	mixid	$mobile			'' / boolean
- * @return	void
- * @access	public
+ * @param int $contentsName
+ * @param int $num
+ * @param array $options
+ * @param mixid $mobile '' / boolean
+ * @return void
+ * @access public
  */
 	function blogPosts ($contentsName, $num = 5, $options = array()) {
+
+		$_options = array(
+			'category'	=> null,
+			'tag'		=> null,
+			'year'		=> null,
+			'month'		=> null,
+			'day'		=> null,
+			'id'		=> null,
+			'keyword'	=> null,
+			'template'	=> null
+		);
+		$options = am($_options, $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
-		if(isset($options['mobile'])) {
-			$mobile = $options['mobile'];
-			unset($options['mobile']);
+		
+		$settings = Configure::read('AgentSettings');
+		foreach($settings as $key => $setting) {
+			if(isset($options[$key])) {
+				$agentOn = $options[$key];
+				unset($options[$key]);
+			} else {
+				$agentOn = (Configure::read('AgentPrefix.currentAgent') == $key);
+			}
+			if($agentOn){
+				$url['prefix'] = $setting['prefix'];
+				break;
+			}
+		}
+		if(isset($options['templates'])) {
+			$templates = $options['templates'];
 		} else {
-			$mobile = Configure::read('Mobile.on');
+			$templates = 'posts';
 		}
-		if($mobile){
-			$url['prefix'] = 'mobile';
-		}
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
+		unset ($options['templates']);
+
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
 
 	}
 

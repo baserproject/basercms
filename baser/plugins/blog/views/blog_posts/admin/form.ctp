@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -214,7 +214,8 @@ $(function(){
 			&nbsp;&nbsp;
 			<?php echo $formEx->dateTimePicker('BlogPost.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 			&nbsp;〜&nbsp;
-			<?php echo $formEx->dateTimePicker('BlogPost.publish_end', array('size' => 12, 'maxlength' => 10),true) ?>
+			<?php echo $formEx->dateTimePicker('BlogPost.publish_end', array('size' => 12, 'maxlength' => 10),true) ?><br />
+			<?php echo $formEx->input('BlogPost.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
 			<?php echo $formEx->error('BlogPost.publish_begin') ?>
 			<?php echo $formEx->error('BlogPost.publish_end') ?>
 		</td>
@@ -228,7 +229,9 @@ $(function(){
 					'options'	=> $users)) ?>
 			<?php echo $formEx->error('BlogPost.user_id') ?>
 <?php else: ?>
+	<?php if(isset($users[$formEx->value('BlogPost.user_id')])): ?>
 			<?php echo $users[$formEx->value('BlogPost.user_id')] ?>
+	<?php endif ?>
 			<?php echo $formEx->hidden('BlogPost.user_id') ?>
 <?php endif ?>
 		</td>

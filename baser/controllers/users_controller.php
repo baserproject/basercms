@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -29,56 +29,56 @@ App::import('Helper','FormEx',true,BASER_HELPERS);
  *
  * ユーザーを管理するコントローラー。ログイン処理を担当する。
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class UsersController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Users';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('User','GlobalMenu','UserGroup');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('HtmlEx','time','FormEx');
 /**
  * コンポーネント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $components = array('ReplacePrefix', 'AuthEx','Cookie','AuthConfigure', 'EmailEx');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('ユーザー管理'=>'/admin/users/index');
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
@@ -106,8 +106,8 @@ class UsersController extends AppController {
  * セッションメッセージを設定してトップページにリダイレクトする
  * router.phpで定義
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_auth_prefix_error() {
 		
@@ -122,7 +122,9 @@ class UsersController extends AppController {
  * ログイン処理を行う
  * ・リダイレクトは行わない
  * ・requestActionから呼び出す
+ * 
  * @return boolean
+ * @access public
  */
 	function admin_login_exec() {
 
@@ -138,8 +140,8 @@ class UsersController extends AppController {
 /**
  * [ADMIN] 管理者ログイン画面
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_login() {
 		
@@ -153,7 +155,11 @@ class UsersController extends AppController {
 		if($this->data) {
 			if ($user) {
 				if (!empty($this->data[$userModel]['saved'])) {
-					$this->setAuthCookie($this->data);
+					if(Configure::read('AgentPrefix.currentAlias') != 'mobile') {
+						$this->setAuthCookie($this->data);
+					} else {
+						$this->AuthEx->saveSerial();
+					}
 					unset($this->data[$userModel]['save']);
 				}else {
 					$this->Cookie->destroy();
@@ -187,9 +193,9 @@ class UsersController extends AppController {
 /**
  * 認証クッキーをセットする
  *
- * @param	array	$data
- * @return	void
- * @access	public
+ * @param array $data
+ * @return void
+ * @access public
  */
 	function setAuthCookie($data) {
 		
@@ -203,8 +209,8 @@ class UsersController extends AppController {
 /**
  * [ADMIN] 管理者ログアウト
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_logout() {
 
@@ -218,8 +224,8 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザーリスト
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -246,9 +252,9 @@ class UsersController extends AppController {
 /**
  * ページ一覧用の検索条件を生成する
  *
- * @param	array	$data
- * @return	array	$conditions
- * @access	protected
+ * @param array $data
+ * @return array $conditions
+ * @access protected
  */
 	function _createAdminIndexConditions($data) {
 
@@ -267,8 +273,8 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザー情報登録
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -316,9 +322,9 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザー情報編集
  *
- * @param	int		user_id
- * @return	void
- * @access 	public
+ * @param int user_id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -394,9 +400,9 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザー情報削除
  *
- * @param	int		user_id
- * @return	void
- * @access 	public
+ * @param int user_id
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -429,11 +435,10 @@ class UsersController extends AppController {
 	}
 /**
  * ログインパスワードをリセットする
- *
  * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_reset_password () {
 
@@ -470,5 +475,6 @@ class UsersController extends AppController {
 		}
 
 	}
+	
 }
 ?>

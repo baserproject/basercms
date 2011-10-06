@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,53 +22,64 @@
 /**
  * コンテンツコントローラー
  *
- * @package       cake
- * @subpackage    cake.baser.controllers
+ * @package cake
+ * @subpackage cake.baser.controllers
  */
 class ContentsController extends AppController {
 /**
  * クラス名
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $name = 'Contents';
 /**
  * モデル
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Content', 'Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array();
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx', 'FormEx');
 /**
  * beforeFilter
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
+		
 		$this->Security->enabled = false;
+		
+		// 認証設定
+		$this->AuthEx->allow('search','get_page_list_recursive');
+		
+		if(!empty($this->params['admin'])) {
+			$this->subMenuElements = array('site_configs', 'contents');
+			$this->navis = array('システム設定'=>'/admin/site_configs/form', '検索インデックス管理' => '/admin/contents/index');
+		}
+		
 	}
 /**
  * コンテンツ検索
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function search() {
 		
@@ -78,11 +89,16 @@ class ContentsController extends AppController {
 		$default = array('named' => array('num' => 10));
 		$this->setViewConditions('Content', array('default' => $default, 'type' => 'get'));
 
+		if(!empty($this->data['Content'])) {
+			foreach($this->data['Content'] as $key => $value) {
+				$this->data['Content'][$key] = h($value);
+			}
+		}
 		if(!empty($this->params['url']['q'])) {
 		
 			$this->paginate = array(
 				'conditions'=> $this->_createSearchConditions($this->data),
-				'order'		=> 'Content.modified DESC',
+				'order'		=> 'Content.priority DESC, Content.modified DESC, Content.id',
 				'limit'		=> $this->passedArgs['num']
 			);
 
@@ -111,7 +127,7 @@ class ContentsController extends AppController {
 		} else {
 			$query = array($query);
 		}
-		return $query;
+		return h($query);
 		
 	}
 /**
@@ -135,6 +151,12 @@ class ContentsController extends AppController {
 			}
 			unset($data['Content']['c']);
 		}
+		if(isset($data['Content']['m'])) {
+			if($data['Content']['m']) {
+				$data['Content']['model'] = $data['Content']['m'];
+			}
+			unset($data['Content']['m']);
+		}
 		
 		$conditions = am($conditions, $this->postConditions($data));
 
@@ -153,7 +175,8 @@ class ContentsController extends AppController {
  * ページリストを取得する
  * 
  * @param mixid $parentCategoryId / '' / 0
- * @return type 
+ * @return type
+ * @access public 
  */
 	function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		
@@ -162,19 +185,22 @@ class ContentsController extends AppController {
 	}
 /**
  * ページリストを取得する（再帰）
- * 
+ * TODO スマートフォン未対応
  * @param mixid $parentCategoryId / '' / 0
- * @return string 
+ * @return string
+ * @access private 
  */
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
 		$direct = false;
-		$mobileId = $this->Page->PageCategory->getMobileId();
+		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('AgentPrefix.currentAgent'));
+		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
 		if($parentCategoryId === 0) {
 			$direct = true;
 			$parentCategoryId = null;
-		}elseif(!$parentCategoryId && Configure::read('Mobile.on')) {
-			$parentCategoryId = $mobileId;
+		}elseif(!$parentCategoryId && Configure::read('AgentPrefix.currentAgent') == Configure::read('AgentSettings.mobile.prefix')) {
+			$parentCategoryId = $currentAgentId;
 		}
 		
 		// ページリスト取得
@@ -190,14 +216,20 @@ class ContentsController extends AppController {
 
 		foreach($pages as $key => $page) {
 			$pages[$key]['Page']['url'] = preg_replace('/^\/mobile/', '/m', $page['Page']['url']);
+			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/s', $page['Page']['url']);
 		}
 		
 		if(!$direct) {
 			// カテゴリリスト取得
 			$conditions = array('PageCategory.parent_id' => $parentCategoryId);
 			if(!$parentCategoryId) {
-				$conditions['PageCategory.id <>'] = $mobileId;
+				$conditions = am($conditions, array(array('PageCategory.id <>' => $mobileId), array('PageCategory.id <>' => $smartphoneId)));
+			} elseif($parentCategoryId == $mobileId) {
+				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $smartphoneId)));
+			} elseif($parentCategoryId == $smartphoneId) {
+				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $mobileId)));
 			}
+			
 			$pageCategories = $this->Page->PageCategory->find('all', array(
 				'conditions' => $conditions, 
 				'fields' => array('id', 'title'),
@@ -245,5 +277,216 @@ class ContentsController extends AppController {
 		return $result;
 		
 	}
-	
+/**
+ * [ADMIN] 検索インデックス
+ * 
+ * @return void
+ * @access public
+ */
+	function admin_index() {
+		
+		$this->pageTitle = '検索インデックス コンテンツ一覧';
+
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('Content', array('default' => $default));
+		$conditions = $this->_createAdminIndexConditions($this->data);
+		$this->paginate = array(
+				'conditions' => $conditions,
+				'fields' => array(),
+				'order' =>'Content.priority DESC, Content.modified DESC, Content.id',
+				'limit' => $this->passedArgs['num']
+		);
+		$this->set('datas', $this->paginate('Content'));
+
+	}
+/**
+ * [ADMIN] 検索インデックス登録
+ * 
+ * @return	void
+ * @access 	public
+ */
+	function admin_add() {
+		
+		$this->pageTitle = '検索インデックス コンテンツ登録';
+		
+		if($this->data) {
+			$url = $this->data['Content']['url'];
+			$url = str_replace(FULL_BASE_URL.$this->base, '', $url);
+
+			if(!$this->Content->find('count', array('conditions' => array('Content.url' => $url)))) {
+
+				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
+				Router::reload();
+				// URLのデータを取得
+				$content = $this->requestAction($url, array('return' => 1));
+				$View =& ClassRegistry::getObject('View');
+				// requestActionでインスタンス化されたViewを削除
+				// （管理システムではなく公開ページのView情報になっている可能性がある為）
+				ClassRegistry::removeObject('View');
+				// ルーティングのデフォルト設定を再読み込み（元の設定に復元する為）
+				Router::reload();
+				// 元の設定を復元
+				Router::setRequestInfo(array($this->params, array('base' => $this->base, 'webroot' => $this->webroot)));
+				$title = '';
+				
+				if(!is_a($content, 'ErrorHandler')) {
+					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
+					$title = $View->pageTitle;
+				} elseif (preg_match('/\.html/', $url)) {
+					App::import('Core', 'HttpSocket');
+					$socket = new HttpSocket();
+					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
+					$content = $socket->get(siteUrl().$url);
+					$code = $socket->response['status']['code'];
+					if($code != 200) {
+						unset($content);
+					} else {
+						if(preg_match('/<title>([^<]+)<\/title>/', $content, $matches)) {
+							$title = $matches[1];
+							$content = preg_replace('/<title>[^<]+<\/title>/', '', $content);
+						}
+					}
+				} else {
+					unset($content);
+				}
+				
+				if(isset($content)) {
+					$content = Sanitize::stripAll($content);
+					$content = strip_tags($content);
+					$data = array('Content' => array(
+						'title'		=> $title,
+						'detail'	=> $content,
+						'url'		=> $url,
+						'type'		=> 'その他',
+						'status'	=> true,
+						'priority'	=> 0.5
+					));
+					$this->Content->create($data);
+					if($this->Content->save()) {
+						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
+						$this->redirect('index');
+					} else {
+						$this->Session->setFlash('保存中にエラーが発生しました。');
+					}
+				} else {
+					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
+					$this->Session->setFlash('保存中にエラーが発生しました。');
+				}
+				
+			} else {
+				$this->Content->invalidate('url', '既に登録済のURLです。');
+				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+			}
+			
+		}
+		
+	}
+/**
+ * [ADMIN] 検索インデックス削除
+ *
+ * @param	int		$id
+ * @return	void
+ * @access 	public
+ */
+	function admin_delete($id = null) {
+
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action'=>'admin_index'));
+		}
+
+		/* 削除処理 */
+		if($this->Content->del($id)) {
+			$message = '検索インデックスより NO.'.$id.' を削除しました。';
+			$this->Session->setFlash($message);
+			$this->Content->saveDbLog($message);
+		}else {
+			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+		}
+
+		$this->redirect(array('action'=>'admin_index'));
+
+	}
+/**
+ * [AJAX] 優先順位を変更する
+ * 
+ * @return boolean
+ * @access public
+ */
+	function admin_ajax_change_priority() {
+		
+		if($this->data) {
+			$this->Content->set($this->data);
+			if($this->Content->save()) {
+				echo true;
+			}
+		}
+		exit();
+		
+	}
+/**
+ * 管理画面ページ一覧の検索条件を取得する
+ *
+ * @param	array		$data
+ * @return	string
+ * @access	protected
+ */
+	function _createAdminIndexConditions($data){
+		
+		if(empty($data['Content'])) {
+			return array();
+		}
+		
+		/* 条件を生成 */
+		$conditions = array();
+		
+		$type = $data['Content']['type'];
+		$category = $data['Content']['category'];
+		$status = $data['Content']['status'];
+		$keyword = $data['Content']['keyword'];
+
+		unset($data['Content']['type']);
+		unset($data['Content']['category']);
+		unset($data['Content']['status']);
+		unset($data['Content']['keyword']);
+		unset($data['Content']['open']);
+		if(!$data['Content']['priority']) {
+			unset($data['Content']['priority']);
+		}
+		foreach($data['Content'] as $key => $value) {
+			if(preg_match('/priority_[0-9]+$/', $key)) {
+				unset($data['Content'][$key]);
+			}
+		}
+
+		if($data['Content']) {
+			$conditions = $this->postConditions($data);
+		}
+		
+		if($type) {
+			$conditions['Content.type'] = $type;
+		}
+		if($category) {
+			if($category == 'none') {
+				$conditions['Content.category'] = '';
+			} else {
+				$conditions['Content.category'] = $category;
+			}
+		}
+		if($status != '') {
+			$conditions['Content.status'] = $status;
+		}
+		if($keyword) {
+			$conditions['and']['or'] = array(
+				'Content.title LIKE' => '%'.$keyword.'%',
+				'Content.detail LIKE' => '%'.$keyword.'%'
+			);
+		}
+		
+		return $conditions;
+
+	}
+
 }
+?>

@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi 
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -19,8 +19,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$prefix = '';
+if(Configure::read('AgentPrefix.on')) {
+	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+}
 ?>
-
 <ul class="global-menu clearfix">
 	<?php if(empty($menuType)) $menuType = '' ?>
 		<?php $globalMenus = $baser->getGlobalMenus($menuType) ?>
@@ -35,11 +38,12 @@
 					<?php else: ?>
 						<?php $class = ' class="menu'.$no.'"' ?>
 					<?php endif ?>
-					<?php if($this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
+					<?php if(!Configure::read('AgentPrefix.on') && $this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
+	<?php /* PC版トップページ */ ?>
 	<li<?php echo $class ?>><?php echo str_replace('/index.php','',$html->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>
 					<?php else: ?>
 	<li<?php echo $class ?>>
-	<?php $baser->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link']) ?>
+	<?php $baser->link($globalMenu['GlobalMenu']['name'], $prefix.$globalMenu['GlobalMenu']['link']) ?>
 	</li>
 					<?php endif ?>
 				<?php endif ?>

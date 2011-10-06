@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -26,20 +26,20 @@ App::import('Helper', 'TextEx');
 /**
  * メールデータヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MaildataHelper extends TextExHelper {
 
 	var $helpers = array('TimeEx');
 /**
- * メール用のデータを出力する
- *
- * @param	string	コントロールタイプ
- * @param	mixed	変換前の値
- * @param	array	コントロールソース
- * @return 	string	メール用データ
- * @access	public
+ * メール表示用のデータを出力する
+ * 
+ * @param string コントロールタイプ
+ * @param mixed 変換前の値
+ * @param array コントロールソース
+ * @return string メール用データ
+ * @access public
  */
 	function control($type,$value,$options = "") {
 
@@ -110,7 +110,9 @@ class MaildataHelper extends TextExHelper {
 				break;
 
 			case 'date_time_calender':
-				$value = $this->dateTime($value);
+				if(is_array($value)) {
+					$value = $this->dateTime($value);
+				}
 				if($value) {
 					$out = " ".date('Y年 m月 d日',strtotime($value));
 				}
@@ -148,5 +150,6 @@ class MaildataHelper extends TextExHelper {
 		return $out;
 
 	}
+	
 }
 ?>

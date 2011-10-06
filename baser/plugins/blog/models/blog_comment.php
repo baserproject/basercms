@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,14 +25,14 @@
 /**
  * ブログコメントモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogComment extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogComment';
 /**
@@ -45,16 +45,16 @@ class BlogComment extends BlogAppModel {
 /**
  * belongsTo
  *
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
 							'foreignKey'=>'blog_post_id'));
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -89,8 +89,8 @@ class BlogComment extends BlogAppModel {
 /**
  * 初期値を取得する
  *
- * @return	array	初期値データ
- * @access	public
+ * @return array 初期値データ
+ * @access public
  */
 	function getDefaultValue() {
 		$data[$this->name]['name'] = 'NO NAME';
@@ -100,7 +100,8 @@ class BlogComment extends BlogAppModel {
  * コメントを追加する
  * @param array $data
  * @param string $contentId
- * @param string $postNo
+ * @param string $postId
+ * @param string $commentApprove
  * @return boolean
  */
 	function add($data,$contentId,$postId,$commentApprove) {
@@ -126,5 +127,6 @@ class BlogComment extends BlogAppModel {
 		return $this->save();
 
 	}
+	
 }
 ?>

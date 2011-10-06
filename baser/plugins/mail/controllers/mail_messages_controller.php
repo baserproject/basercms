@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,49 +22,49 @@
 /**
  * 受信メールコントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailMessagesController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailMessages';
 /**
  * モデル
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Mail.maildata', 'Mail.mailfield', 'TextEx', 'Array');
 /**
  * メールコンテンツデータ
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $mailContent;
 /**
  * サブメニュー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('mail_fields','mail_common');
 /**
  * beforeFilter
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function  beforeFilter() {
 		
@@ -84,8 +84,8 @@ class MailMessagesController extends MailAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -96,9 +96,9 @@ class MailMessagesController extends MailAppController {
 /**
  * [ADMIN] 受信メール一覧
  *
- * @param	string	$mailContentId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @return void
+ * @access public
  */
 	function admin_index($mailContentId) {
 
@@ -122,10 +122,10 @@ class MailMessagesController extends MailAppController {
 /**
  * [ADMIN] 受信メール詳細
  *
- * @param	string	$mailContentId
- * @param	string	$messageId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
  */
 	function admin_view($mailContentId, $messageId){
 
@@ -152,10 +152,10 @@ class MailMessagesController extends MailAppController {
 /**
  * [ADMIN] 受信メール削除
  *
- * @param	string	$mailContentId
- * @param	string	$messageId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
  */
 	function admin_delete($mailContentId, $messageId) {
 

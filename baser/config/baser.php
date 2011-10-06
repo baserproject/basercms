@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -61,15 +61,43 @@
 		'lfcode' => "\n"
 	);
 /**
- * 携帯設定
+ * エージェント設定
  */
-	$config['Mobile'] = array(
-		// プレフィックス
-		'prefix'	=> 'm',
-		// ユーザーエージェント
-		'agents'	=> array(
-			'Googlebot-Mobile','Y!J-SRD','Y!J-MBS','DoCoMo','SoftBank',
-			'Vodafone','J-PHONE','UP.Browser'
+	$config['AgentSettings'] = array(
+		'mobile'	=> array(
+			'alias'	=> 'm',
+			'prefix'=> 'mobile',
+			'autoRedirect'	=> true,
+			'agents'	=> array(
+				'Googlebot-Mobile',
+				'Y!J-SRD',
+				'Y!J-MBS',
+				'DoCoMo',
+				'SoftBank',
+				'Vodafone',
+				'J-PHONE',
+				'UP.Browser'
+			)
+		),
+		'smartphone'	=> array(
+			'alias'		=> 's',
+			'prefix'	=> 'smartphone',
+			'autoRedirect'	=> true,
+			'agents'	=> array(
+				'iPhone',         // Apple iPhone
+				'iPod',           // Apple iPod touch
+				'Android',        // 1.5+ Android
+				'dream',          // Pre 1.5 Android
+				'CUPCAKE',        // 1.5+ Android
+				'blackberry9500', // Storm
+				'blackberry9530', // Storm
+				'blackberry9520', // Storm v2
+				'blackberry9550', // Storm v2
+				'blackberry9800', // Torch
+				'webOS',          // Palm Pre Experimental
+				'incognito',      // Other iPhone browser
+				'webmate'         // Other iPhone browser
+			)
 		)
 	);
 ?>

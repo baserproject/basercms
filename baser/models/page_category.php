@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,35 +22,35 @@
 /**
  * ページカテゴリーモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class PageCategory extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'PageCategory';
 /**
- * バリデーション設定
- * @var array
- */
-/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * actsAs
+ * 
  * @var array
+ * @access public
  */
 	var $actsAs = array('Tree', 'Cache');
 /**
  * hasMany
+ * 
  * @var array
+ * @access @public
  */
 	var $hasMany = array('Page' => array('className'=>'Page',
 							'conditions'=>'',
@@ -64,16 +64,18 @@ class PageCategory extends AppModel {
  * ページカテゴリフォルダのパスリスト
  * キーはカテゴリID
  * キャッシュ用
- * @var		mixed
- * @access	protected
+ * 
+ * @var mixed
+ * @access protected
  */
 	var $_pageCategoryPathes = -1;
 /**
- * モバイルカテゴリのID
- * @var		mixed		-1 / false / int
+ * エージェントカテゴリのID
+ * 
+ * @var array
  * @access	protected
  */
-	var $_mobileId = -1;
+	var $_agentId = array();
 /**
  * 保存時に関連ページを更新するかどうか
  * 
@@ -84,8 +86,8 @@ class PageCategory extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -108,9 +110,9 @@ class PageCategory extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field, $options = array()) {
 
@@ -123,19 +125,29 @@ class PageCategory extends AppModel {
 					$conditions = $options['conditions'];
 				}
 				
-				if(isset($options['excludeParentId'])) {
-					if($options['excludeParentId']) {
-						$children = $this->children($options['excludeParentId']);
-						$excludeIds = array($options['excludeParentId']);
-						foreach($children as $child) {
-							$excludeIds[] = $child['PageCategory']['id'];
+				if(!empty($options['excludeParentId'])) {
+					if(!is_array($options['excludeParentId'])) {
+						$options['excludeParentId'] = array($options['excludeParentId']);
+					}
+					$excludeIds = array();
+					foreach($options['excludeParentId'] as $excludeParentId) {
+						$children = $this->children($excludeParentId);
+						if($children) {
+							$excludeIds = am($excludeIds, Set::extract('/PageCategory/id', $children));
 						}
-						$conditions['NOT']['PageCategory.id'] = $excludeIds;
-					} else {
-						// excludeParentId が空文字の場合はPCページ以外を指す
-						$mobileCategoryIds = $this->getMobileCategoryIds(false);
-						if($mobileCategoryIds) {
-							$conditions['PageCategory.id'] = $mobileCategoryIds;
+						$excludeIds[] = $excludeParentId;
+					}
+					$conditions['NOT']['PageCategory.id'] = $excludeIds;
+				}
+				if(!empty($options['parentId'])) {
+					if(!is_array($options['parentId'])) {
+						$options['parentId'] = array($options['parentId']);
+					}
+					$parentIds = array();
+					foreach($options['parentId'] as $parentId) {
+						$children = $this->children($parentId);
+						if($children) {
+							$parentIds = am($parentIds, Set::extract('/PageCategory.id', $children));
 						} else {
 							return array();
 						}
@@ -156,10 +168,13 @@ class PageCategory extends AppModel {
 
 				$parents = $this->generatetreelist($conditions);
 				$controlSources['parent_id'] = array();
+				
+				$excludeIds = array();
 				if(!Configure::read('Baser.mobile')) {
-					$excludeIds = $this->getMobileCategoryIds();
-				} else {
-					$excludeIds = array();
+					$excludeIds = $this->getAgentCategoryIds('mobile');
+				}
+				if(!Configure::read('Baser.smartphone')) {
+					$excludeIds = $this->getAgentCategoryIds('smartphone');
 				}
 				foreach($parents as $key => $parent) {
 					if($parent && !in_array($key, $excludeIds)) {
@@ -187,7 +202,9 @@ class PageCategory extends AppModel {
 	}
 /**
  * beforeSave
+ * 
  * @return boolean
+ * @access public
  */
 	function beforeSave() {
 
@@ -220,21 +237,27 @@ class PageCategory extends AppModel {
 	}
 /**
  * afterSave
- * @param	boolean	$created
- * @access	public
+ * 
+ * @param boolean $created
+ * @return void
+ * @access public
  */
 	function afterSave($created) {
+		
 		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
+		
 	}
 /**
  * ページカテゴリのフォルダを生成してパスを返す
- * @param	array	$data	ページカテゴリデータ
- * @return	mixid	カテゴリのパス / false
- * @access	public
+ * 
+ * @param array $data ページカテゴリデータ
+ * @return mixid カテゴリのパス / false
+ * @access public
  */
 	function createPageCategoryFolder($data) {
+		
 		$path = $this->getPageCategoryFolderPath($data);
 		$folder = new Folder();
 		if($folder->create($path, 0777)){
@@ -242,12 +265,14 @@ class PageCategory extends AppModel {
 		}else{
 			return false;
 		}
+		
 	}
 /**
  * カテゴリフォルダのパスを取得する
- * @param	array	$data	ページカテゴリデータ
- * @return	string	$path
- * @access	public
+ * 
+ * @param array $data ページカテゴリデータ
+ * @return string $path
+ * @access public
  */
 	function getPageCategoryFolderPath($data) {
 
@@ -273,8 +298,10 @@ class PageCategory extends AppModel {
 /**
  * 同一階層に同じニックネームのカテゴリがないかチェックする
  * 同じテーマが条件
+ * 
  * @param array $check
  * @return boolean
+ * @access public
  */
 	function duplicatePageCategory($check) {
 
@@ -305,10 +332,13 @@ class PageCategory extends AppModel {
 	}
 /**
  * 関連するページデータをカテゴリ無所属に変更し保存する
- * @param <type> $cascade
- * @return <type>
+ * 
+ * @param boolean $cascade
+ * @return boolean
+ * @access public
  */
 	function beforeDelete($cascade = true) {
+		
 		parent::beforeDelete($cascade);
 		$id = $this->data['PageCategory']['id'];
 		if($this->releaseRelatedPagesRecursive($id)){
@@ -319,14 +349,17 @@ class PageCategory extends AppModel {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 関連するページのカテゴリを解除する（再帰的）
- * @param	int		$categoryId
- * @return	boolean
- * @access	public
+ * 
+ * @param int $categoryId
+ * @return boolean
+ * @access public
  */
 	function releaseRelatedPagesRecursive($categoryId) {
+		
 		if(!$this->releaseRelatedPages($categoryId)){
 			return false;
 		}
@@ -338,14 +371,17 @@ class PageCategory extends AppModel {
 			}
 		}
 		return $ret;
+		
 	}
 /**
  * 関連するページのカテゴリを解除する
- * @param	int		$categoryId
- * @return	boolean
- * @access	public
+ * 
+ * @param int $categoryId
+ * @return boolean
+ * @access public
  */
 	function releaseRelatedPages($categoryId) {
+		
 		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId),'recursive'=>-1));
 		$ret = true;
 		if($pages) {
@@ -359,14 +395,17 @@ class PageCategory extends AppModel {
 			}
 		}
 		return $ret;
+		
 	}
 /**
  * 関連するページデータのURLを更新する
- * @param	string	$id
- * @return	void
- * @access	public
+ * 
+ * @param string $id
+ * @return void
+ * @access public
  */
 	function updateRelatedPageUrlRecursive($categoryId) {
+		
 		if(!$this->updateRelatedPageUrl($categoryId)){
 			return false;
 		}
@@ -378,14 +417,17 @@ class PageCategory extends AppModel {
 			}
 		}
 		return $ret;
+		
 	}
 /**
  * 関連するページデータのURLを更新する
- * @param	string	$id
- * @return	void
- * @access	public
+ * 
+ * @param string $id
+ * @return void
+ * @access public
  */
 	function updateRelatedPageUrl($id) {
+		
 		if(!$id) {
 			return;
 		}
@@ -403,14 +445,18 @@ class PageCategory extends AppModel {
 			}
 		}
 		return $result;
+		
 	}
 /**
  * カテゴリフォルダのパスから対象となるデータが存在するかチェックする
  * 存在する場合は id を返す
- * @param	string	$path
- * @return	mixed
+ * 
+ * @param string $path
+ * @return mixed
+ * @access public
  */
 	function getIdByPath($path) {
+		
 		if($this->_pageCategoryPathes == -1) {
 			$this->_pageCategoryPathes = array();
 			$pageCategories = $this->find('all');
@@ -425,23 +471,26 @@ class PageCategory extends AppModel {
 		}else{
 			return false;
 		}
+		
 	}
 /**
  * モバイル用のカテゴリIDをリストで取得する
- * @return	array	$ids
- * @access	public
+ * 
+ * @param boolean $top
+ * @return array $ids
+ * @access public
  */
-	function getMobileCategoryIds($top = true){
+	function getAgentCategoryIds($type = 'mobile', $top = true){
 
-		$mobileId = $this->getMobileId();
-		if(!$mobileId){
+		$agentId = $this->getAgentId($type);
+		if(!$agentId){
 			return array();
 		}
 		$ids = array();
 		if($top) {
-			$ids[] = $mobileId;
+			$ids[] = $agentId;
 		}
-		$children = $this->children($mobileId,false,array('PageCategory.id'),array('PageCategory.id'));
+		$children = $this->children($agentId, false, array('PageCategory.id'),array('PageCategory.id'));
 		if($children){
 			$children = Set::extract('/PageCategory/id',$children);
 			$ids = am($ids,$children);
@@ -450,25 +499,32 @@ class PageCategory extends AppModel {
 
 	}
 /**
- * モバイルカテゴリのIDを取得する
- * @return string
+ * エージェントカテゴリのIDを取得する
+ * 
+ * @param int $targetId
+ * @return int
+ * @access public
  */
-	function getMobileId($pcId = null) {
-		
-		if($pcId){
-			$path = $this->getPath($pcId, array('name'), -1);
-			$path = Set::extract('/PageCategory/name', $path);
-			$path = implode(DS, $path);
-			$path = getViewPath().'pages'.DS.'mobile'.DS.$path;
-			$mobileId = $this->getIdByPath($path);			
-		}else{
-			if($this->_mobileId == -1){
-				$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+	function getAgentId($type = 'mobile', $targetId = null) {
+
+		if($targetId){
+			if(in_array($targetId, array($this->getAgentId('mobile'), $this->getAgentId('smartphone')))) {
+				$path = getViewPath().'pages'.DS.$type;
+			} else {
+				$path = $this->getPath($targetId, array('name'), -1);
+				$path = Set::extract('/PageCategory/name', $path);
+				$path = implode(DS, $path);
+				$path = getViewPath().'pages'.DS.$type.DS.$path;
 			}
-			$mobileId = $this->_mobileId;
+			$agentId = $this->getIdByPath($path);
+		}else{
+			if(!isset($this->_agentId[$type])){
+				$this->_agentId[$type] = $this->field('id',array('PageCategory.name'=>$type));
+			}
+			$agentId = $this->_agentId[$type];
 		}
-		return $mobileId;
-		
+		return $agentId;
+
 	}
 /**
  * ツリーリストを取得する
@@ -479,6 +535,7 @@ class PageCategory extends AppModel {
  * @access public 
  */
 	function getTreeList($fields,$id){
+		
 		$this->recursive = -1;
 		$pageCategories = array();
 		$pageCategories[] = $pageCategory = $this->read($fields,$id);
@@ -487,6 +544,7 @@ class PageCategory extends AppModel {
 			$pageCategories = am($parents,$pageCategories);
 		}
 		return $pageCategories;
+		
 	}
 /**
  * 新しいカテゴリが追加できる状態かチェックする
@@ -505,7 +563,8 @@ class PageCategory extends AppModel {
 					array('PageCategory.owner_id' => null),
 					array('PageCategory.owner_id' => $userGroupId)
 				),
-				'PageCategory.id <>' => $this->getMobileId()
+				array('PageCategory.id <>' => $this->getAgentId('mobile')),
+				array('PageCategory.id <>' => $this->getAgentId('smartphone'))
 		)));
 
 		if($ownerCats || $rootEditable) {

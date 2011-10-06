@@ -108,8 +108,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -131,48 +131,50 @@ class UpdatersController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'Updaters';
 /**
  * アップデートメッセージ
  *
- * @var		string
- * @access	protected
+ * @var array
+ * @access protected
  */
 	var $_updateMessage = array();
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx', 'Cookie', 'AuthConfigure');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * モデル
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Updater', 'Plugin');
 /**
  * beforeFilter
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
 		$this->subDir = 'admin';
+		
 	}
 /**
  * コアのアップデート実行
@@ -222,8 +224,8 @@ class UpdatersController extends AppController {
 /**
  * [ADMIN] アップデートスクリプトを実行する
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_exec_script() {
 
@@ -245,7 +247,8 @@ class UpdatersController extends AppController {
 	}
 /**
  * プラグインのアップデート実行
- *
+ * 
+ * @param string $name
  * @return void
  * @access public
  */
@@ -289,9 +292,9 @@ class UpdatersController extends AppController {
 /**
  * 処理対象のスクリプト数を取得する
  *
- * @param	string	$plugin
- * @return	int
- * @access	protected
+ * @param string $plugin
+ * @return int
+ * @access protected
  */
 	function _getScriptNum($plugin= '') {
 
@@ -307,11 +310,11 @@ class UpdatersController extends AppController {
 /**
  * アップデータのパスを取得する
  *
- * @param	string	$sourceVersion
- * @param	string	$targetVersion
- * @param	string	$plugin
- * @return	array	$updates
- * @access	protected
+ * @param string $sourceVersion
+ * @param string $targetVersion
+ * @param string $plugin
+ * @return array $updates
+ * @access protected
  */
 	function _getUpdaters($sourceVersion, $targetVersion, $plugin = ''){
 
@@ -355,11 +358,12 @@ class UpdatersController extends AppController {
 /**
  * アップデートフォルダのパスを取得する
  *
- * @param	string	$plugin
- * @return	mixed	$path or false
- * @access	protected
+ * @param string $plugin
+ * @return mixed $path or false
+ * @access protected
  */
 	function _getUpdateFolder($plugin='') {
+		
 		if(!$plugin) {
 			return BASER_CONFIGS.'update'.DS;
 		} else {
@@ -373,6 +377,7 @@ class UpdatersController extends AppController {
 				return false;
 			}
 		}
+		
 	}
 /**
  * アップデートを実行する
@@ -381,11 +386,11 @@ class UpdatersController extends AppController {
  * よく使われるような変数名はダブらないように
  * アンダースコアを二つつける
  *
- * @param	string	$targetVersion
- * @param	string	$sourceVersion
- * @param	string	$plugin
- * @return	boolean
- * @access	public
+ * @param string $targetVersion
+ * @param string $sourceVersion
+ * @param string $plugin
+ * @return boolean
+ * @access public
  */
 	function _update($plugin = '') {
 
@@ -440,8 +445,10 @@ class UpdatersController extends AppController {
 /**
  * アップデートスクリプトを実行する
  *
- * @param	string	$__plugin
- * @param	string	$__version
+ * @param string $__plugin
+ * @param string $__version
+ * @return void
+ * @access public
  */
 	function execScript($__plugin, $__version) {
 		
@@ -459,13 +466,14 @@ class UpdatersController extends AppController {
 /**
  * アップデートメッセージをセットする
  *
- * @param	string		$message
- * @param	boolean		$head			見出しとして設定する
- * @param	boolean		$beforeBreak	前の行で改行する
- * @return	void
- * @access	public
+ * @param string $message
+ * @param boolean $head 見出しとして設定する
+ * @param boolean $beforeBreak 前の行で改行する
+ * @return void
+ * @access public
  */
 	function setMessage($message, $strong = false, $head = false, $beforeBreak = false) {
+		
 		if($beforeBreak) {
 			$this->_updateMessage[] = '';
 		}
@@ -478,15 +486,16 @@ class UpdatersController extends AppController {
 			$message = '<strong>'.$message.'</strong>';
 		}
 		$this->_updateMessage[] = $message;
+		
 	}
 /**
  * DB構造を変更する
  *
- * @param	string	$version
- * @param	string	$plugin
- * @param	string	$filterTable
- * @param	string	$filterType
- * @return	boolean
+ * @param string $version
+ * @param tring $plugin
+ * @param string $filterTable
+ * @param string $filterType
+ * @return boolean
  * @access	public
  */
 	function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
@@ -509,11 +518,11 @@ class UpdatersController extends AppController {
 /**
  * データを追加する
  *
- * @param	string	$version
- * @param	string	$plugin
- * @param	string	$filterTable
- * @return	boolean
- * @access	public
+ * @param string $version
+ * @param string $plugin
+ * @param string $filterTable
+ * @return boolean
+ * @access public
  */
 	function loadCsv($version, $plugin = '', $filterTable = '') {
 
@@ -532,9 +541,9 @@ class UpdatersController extends AppController {
 /**
  * アップデートスクリプトのパスを取得する
  *
- * @param	string	$version
- * @param	string	$plugin
- * @return	string	$path or ''
+ * @param string $version
+ * @param string $plugin
+ * @return string $path or ''
  */
 	function _getUpdatePath($version, $plugin = '') {
 
@@ -563,23 +572,28 @@ class UpdatersController extends AppController {
 /**
  * アップデートメッセージを取得する
  * 改行区切り
+ * 
  * @return string
  */
 	function _getUpadteMessage() {
+		
 		return implode('<br />',$this->_updateMessage);
+		
 	}
 /**
  * アップデートメッセージを保存する
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _writeUpdateLog() {
+		
 		if($this->_updateMessage) {
 			foreach($this->_updateMessage as $message) {
 				$this->log(strip_tags($message), 'update');
 			}
 		}
+		
 	}
 
 }

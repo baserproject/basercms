@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,54 +25,55 @@
 /**
  * サイト設定コントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class SiteConfigsController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'SiteConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('SiteConfig','GlobalMenu','Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ヘルパー
  * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * ぱんくずナビ
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('システム設定'=>'/admin/site_configs/form');
 /**
  * [ADMIN] サイト基本設定
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -114,6 +115,7 @@ class SiteConfigsController extends AppController {
 				
 				$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
 				$mobile = $this->data['SiteConfig']['mobile'];
+				$smartphone = $this->data['SiteConfig']['smartphone'];
 
 				unset($this->data['SiteConfig']['id']);
 				unset($this->data['SiteConfig']['mode']);
@@ -122,6 +124,8 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['ssl_url']);
 				unset($this->data['SiteConfig']['admin_ssl_on']);
 				unset($this->data['SiteConfig']['mobile']);
+				unset($this->data['SiteConfig']['smartphone']);
+				
 
 				// DBに保存
 				if($this->SiteConfig->saveKeyValue($this->data)) {
@@ -134,6 +138,8 @@ class SiteConfigsController extends AppController {
 					$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
 					$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
 					$this->writeInstallSetting('Baser.mobile', ($mobile)? 'true' : 'false');
+					$this->writeInstallSetting('Baser.smartphone', ($smartphone)? 'true' : 'false');
+					
 					if($this->readSmartUrl() != $smartUrl) {
 						$this->writeSmartUrl($smartUrl);
 					}
@@ -221,16 +227,20 @@ class SiteConfigsController extends AppController {
 	}
 /**
  * キャッシュファイルを全て削除する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function admin_del_cache() {
+		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
 		$this->redirect(array('action'=>'form'));
+		
 	}
 /**
  * [ADMIN] PHPINFOを表示する
+ * 
  * @return void
  * @access public
  */
@@ -257,8 +267,8 @@ class SiteConfigsController extends AppController {
 /**
  * サイト基本設定データを取得する
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _getSiteConfigData() {
 
@@ -269,6 +279,7 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
 		$data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
 		$data['SiteConfig']['mobile'] = Configure::read('Baser.mobile');
+		$data['SiteConfig']['smartphone'] = Configure::read('Baser.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {
 			$data['SiteConfig']['mobile'] = false;
 		}

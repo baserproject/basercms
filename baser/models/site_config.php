@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,14 +25,14 @@
 /**
  * システム設定モデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class SiteConfig extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'SiteConfig';
 /**
@@ -45,15 +45,15 @@ class SiteConfig extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'formal_name' => array(
@@ -91,6 +91,7 @@ class SiteConfig extends AppModel {
  * テーマの一覧を取得する
  *
  * @return array
+ * @access public
  */
 	function getThemes() {
 
@@ -110,16 +111,20 @@ class SiteConfig extends AppModel {
 	}
 /**
  * コントロールソースを取得する
+ * 
  * @param string $field
  * @return mixed array | false
+ * @access public
  */
 	function getControlSource($field=null) {
+		
 		$controlSources['mode'] = array(-1=>'インストールモード',0=>'ノーマルモード',1=>'デバッグモード１',2=>'デバッグモード２',3=>'デバッグモード３');
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * SSL用のURLが設定されているかチェックする
@@ -129,11 +134,13 @@ class SiteConfig extends AppModel {
  * @access public
  */
 	function sslUrlExists($check) {
+		
 		$sslOn = $check[key($check)];
 		if($sslOn && empty($this->data['SiteConfig']['ssl_url'])) {
 			return false;
 		}
 		return true;
+		
 	}
 	
 }

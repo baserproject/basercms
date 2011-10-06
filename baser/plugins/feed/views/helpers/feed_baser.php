@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -22,23 +22,26 @@
 /**
  * フィードBaserヘルパー
  *
- * @package			baser.plugins.feed.views.helpers
+ * @package baser.plugins.feed.views.helpers
  *
  */
 class FeedBaserHelper extends AppHelper {
 /**
  * フィード出力
- * @param	int		$id
- * @param	mixid	$mobile '' / boolean
+ * 
+ * @param int $id
+ * @param mixid $mobile '' / boolean
+ * @return void
+ * @access public
  */
 	function feed ($id, $mobile='') {
 		
 		$url = array('plugin'=>'feed','controller'=>'feed','action'=>'index');
 		if($mobile===''){
-			$mobile = Configure::read('Mobile.on');
+			$mobile = (Configure::read('AgentPrefix.currentAgent') == 'mobile');
 		}
 		if($mobile){
-			$url['prefix'] = 'mobile';
+			$url['prefix'] = Configure::read('AgentSettings.mobile.prefix');
 		}
 		echo $this->requestAction($url,array('pass'=>array($id)));
 

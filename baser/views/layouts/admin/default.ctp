@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -48,12 +48,15 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
+<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
+<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
+<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
 <?php $baser->css('admin/import') ?>
 <?php $baser->css(array('jquery-ui/ui.all','colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
+<!--[if IE 6]>
+<?php $baser->js(array('fixed-1.8', 'DD_belatedPNG_0.0.8a', 'DD_belatedPNG_config')) ?>
+<![endif]-->
 <?php $baser->js(array(
 	'jquery-1.6.2.min',
 	'jquery.dimensions.min',
@@ -61,13 +64,21 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 	'i18n/ui.datepicker-ja',
 	'jquery.bt.min',
 	'jquery.colorbox-min',
-	'jquery.corner',
+	'jquery.corner-2.12',
 	'functions',
 	'styleswitcher',
 	'admin/startup')) ?>
 <?php $baser->scripts() ?>
 </head>
 <body id="<?php $baser->contentsName() ?>" class="normal">
+
+<!-- loader -->
+<div id="Waiting" class="waiting-box">
+	<div class="corner5">
+	<?php echo $html->image('ajax-loader.gif') ?><br />
+    Waiting...
+	</div>
+</div>
 
 <!-- begin page -->
 <div id="page">

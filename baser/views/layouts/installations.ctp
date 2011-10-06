@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -29,9 +29,9 @@
 <title><?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - BaserCMS -</title>
 <?php echo $html->meta('description','BaserCMSのインストーラー') ?>
 <?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
+<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
+<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
+<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
 <?php $baser->css('import') ?>
 <?php $baser->js(array(
 	'jquery-1.4.2.min',

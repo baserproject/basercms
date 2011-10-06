@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -50,10 +50,11 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-	$url = @$_SERVER['REQUEST_URI'];
-	if (strpos($url, 'css/') !== false || strpos($url, 'js/') !== false || strpos($url, 'img/') !== false) {
+	$uri = @$_SERVER['REQUEST_URI'];
+	$baseUrl = baseUrl();
+	if (strpos($uri, $baseUrl.'css/') !== false || strpos($uri, $baseUrl.'js/') !== false || strpos($uri, $baseUrl.'img/') !== false) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
-		$ext = array_pop(explode('.', $url));
+		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
 			Configure::write('Baser.Asset', true);
 			return;
@@ -116,57 +117,58 @@
 	}
 /**
  * パラメーター取得
- * モバイル判定
  */
-	$mobilePrefix = Configure::read('Mobile.prefix');
-	$parameter = getParamsFromEnv();	// 環境変数からパラメータを取得
-	$mobileOn = false;
-	$mobilePlugin = false;
-
-	if(!empty($parameter)) {
-
-		$parameters = explode('/',$parameter);
-		if($parameters[0] == $mobilePrefix) {
-
-			$parameter = str_replace($mobilePrefix.'/','',$parameter);
-			$mobileOn = true;
-
-			if(!empty($parameters[1])) {
-				App::import('Core','Folder');
-				$pluginFolder = new Folder(APP.'plugins');
-				$_plugins = $pluginFolder->read(true,true);
-				$plugins = $_plugins[0];
-				foreach($plugins as $plugin) {
-					if($parameters[1] == $plugin) {
-						$mobilePlugin = true;
-						break;
-					}
+	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
+	$parameter = getUrlParamFromEnv();
+	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
+/**
+ * パラメーター取得
+ * モバイル判定・簡易リダイレクト
+ */
+	$agentSettings = Configure::read('AgentSettings');
+	if(!Configure::read('Baser.mobile')) {
+		unset($agentSettings['mobile']);
+	}
+	if(!Configure::read('Baser.smartphone')) {
+		unset($agentSettings['smartphone']);
+	}
+	$agentOn = false;
+	if($agentSettings) {
+		foreach($agentSettings as $key => $setting) {
+			$agentOn = false;
+			if(!empty($url)) {
+				$parameters = explode('/',$url);
+				if($parameters[0] == $setting['alias']) {
+					$agentOn = true;
 				}
 			}
-		}
-	}
-	Configure::write('Baser.urlParam',$parameter);
-	if(Configure::read('Baser.mobile')) {
-		Configure::write('Mobile.on',$mobileOn);
-		Configure::write('Mobile.plugin',$mobilePlugin);
-	} else {
-		Configure::write('Mobile.on',false);
-		Configure::write('Mobile.plugin',false);
-	}
-/**
- * 簡易携帯リダイレクト
- */
-	if(!$mobileOn) {
-		$mobileAgents = Configure::read('Mobile.agents');
-		foreach($mobileAgents as $mobileAgent) {
-			if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], $mobileAgent) !== false) {
-				$redirectUrl = FULL_BASE_URL.$baseUrl.$mobilePrefix.'/'.$parameter;
-				header("HTTP/1.1 301 Moved Permanently");
-				header("Location: ".$redirectUrl);
-				exit();
+			if(!$agentOn && $setting['autoRedirect']) {
+				$agentAgents = $setting['agents'];
+				$agentAgents = implode('||', $agentAgents);
+				$agentAgents = preg_quote($agentAgents, '/');
+				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
+				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
+					$getParams = str_replace($baseUrl.$parameter, '', $_SERVER['REQUEST_URI']);
+					if($getParams == '/' || '/index.php') {
+						$getParams = '';
+					}
+					$redirectUrl = FULL_BASE_URL.$baseUrl.$setting['alias'].'/'.$parameter.$getParams;
+					header("HTTP/1.1 301 Moved Permanently");
+					header("Location: ".$redirectUrl);
+					exit();
+				}
+			}
+			if($agentOn) {
+				Configure::write('AgentPrefix.currentAgent', $key);
+				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
+				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+			}
+			if($agentOn) {
+				break;
 			}
 		}
-	} else {
+	}
+	if($agentOn) {
 		//======================================================================
 		// /m/files/... へのアクセスの場合、/files/... へ自動リダイレクト
 		// CMSで作成するページ内のリンクは、モバイルでアクセスすると、
@@ -180,6 +182,7 @@
 			exit();
 		}
 	}
+	Configure::write('AgentPrefix.on', $agentOn);
 /**
  * Viewのキャッシュ設定
  */

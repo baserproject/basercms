@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,68 +25,70 @@
 /**
  * フィード設定コントローラー
  *
- * @package			baser.plugins.feed.controllers
+ * @package baser.plugins.feed.controllers
  */
 class FeedConfigsController extends FeedAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx','TimeEx','FormEx','Feed.Feed');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('フィード管理'=>'/admin/feed/feed_configs/index');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * before_filter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin') {
 			$this->subMenuElements = array('feed_common');
 		}
+		
 	}
 /**
  * [ADMIN] 一覧表示
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -109,8 +111,8 @@ class FeedConfigsController extends FeedAppController {
 /**
  * [ADMIN] 登録
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -145,9 +147,9 @@ class FeedConfigsController extends FeedAppController {
 /**
  * [ADMIN] 編集
  *
- * @param	int		feed_confg_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -192,11 +194,13 @@ class FeedConfigsController extends FeedAppController {
 	}
 /**
  * テンプレート編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditTemplate($template){
+		
 		$path = 'feed'.DS.$template.'.ctp';
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
@@ -217,13 +221,14 @@ class FeedConfigsController extends FeedAppController {
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
 		}
+		
 	}
 /**
  * [ADMIN] 削除
  *
- * @param	int		feed_confg_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -258,17 +263,21 @@ class FeedConfigsController extends FeedAppController {
  * 読み込んだフィードをプレビュー表示する
  *
  * @param string $id
+ * @return void
+ * @access public
  */
 	function admin_preview($id) {
+		
 		if(!$id) $this->notFound();
 		$this->pageTitle = 'プレビュー：'.$this->FeedConfig->field('name',array('FeedConfig.id'=>$id));
 		$this->set('id',$id);
+		
 	}
 /**
  * フィードのキャッシュを全て削除する
  * 
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_delete_cache() {
 		
@@ -280,10 +289,10 @@ class FeedConfigsController extends FeedAppController {
 /**
  * フィードのキャッシュを削除する（requestAction用）
  *
- * @param	string	$feedConfigId
- * @param	string	$url
- * @return	void
- * @access	protected
+ * @param string $feedConfigId
+ * @param string $url
+ * @return void
+ * @access protected
  */
 	function admin_clear_cache($feedConfigId = '', $url = '') {
 
@@ -292,7 +301,6 @@ class FeedConfigsController extends FeedAppController {
 	}
 /**
  * フィードのキャッシュを削除する
- *
  * TODO 第2引き数がない場合、全てのRSSのキャッシュを削除してしまう仕様となっているので
  * RSSキャッシュ保存名をURLのハッシュ文字列ではなく、feed_detail_idを元にした文字列に変更し、
  * feed_detail_idで指定して削除できるようにする

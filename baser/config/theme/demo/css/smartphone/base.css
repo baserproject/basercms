@@ -1,0 +1,97 @@
+@charset "UTF-8";
+/**
+ * Smart Phone Base
+ */
+
+/* body
+----------------------------------------------- */
+body {
+	margin:0;
+	padding:0;
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	font-size:16px;
+}
+.body p {
+	text-align: left;
+	line-height: 1.5em;
+}
+.body img {
+	margin-bottom: 10px;
+	margin-left:auto;
+	margin-right: auto;
+}
+/* form parts
+----------------------------------------------- */
+input {
+	border:1px solid #ccc;
+	margin:3px;
+	font-size: 18px;
+}
+select {
+	border-radius: 5px;
+	font-size: 18px;
+}
+input[type="text"] {
+	width:190px;
+	padding:5px;
+}
+input[type="submit"] {
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	width:280px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e2e2e2));
+	height:35px;
+	font-size: 18px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 rgba(200, 200, 200, 30);
+}
+textarea {
+	width:190px;
+	padding:5px;
+}
+/* clear
+----------------------------------------------- */
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+.display-none {
+	display: none;
+}
+/* basercms parts
+----------------------------------------------- */
+.message {
+	border:3px solid #C00;
+	color:#C00;
+	padding:10px 15px;
+	font-weight: bold;
+	margin-bottom: 40px;
+	margin-left:10px;
+	margin-right:10px;
+}
+#authMessage,
+#flashMessage {
+	padding: 10px;
+	font-size: 16px;
+}
+.error-message {
+	color:#C30;
+	background: url(../../img/warning.png) no-repeat left 1px;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
+	line-height: 20px;
+	margin-top:5px;
+	margin-bottom: 5px;
+}

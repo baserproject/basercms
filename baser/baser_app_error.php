@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -29,6 +29,61 @@ App::import('Core', 'Error');
  */
 class BaserAppError extends ErrorHandler {
 /**
+ * Class constructor.
+ *
+ * @param string $method Method producing the error
+ * @param array $messages Error messages
+ */
+	function __construct($method, $messages) {
+		App::import('Core', 'Sanitize');
+		static $__previousError = null;
+
+		if ($__previousError != array($method, $messages)) {
+			$__previousError = array($method, $messages);
+			$this->controller =& new CakeErrorController();
+		} else {
+			$this->controller =& new Controller();
+			$this->controller->viewPath = 'errors';
+		}
+
+		$options = array('escape' => false);
+		$messages = Sanitize::clean($messages, $options);
+
+		if (!isset($messages[0])) {
+			$messages = array($messages);
+		}
+
+		if (method_exists($this->controller, 'apperror')) {
+			return $this->controller->appError($method, $messages);
+		}
+
+		if (!in_array(strtolower($method), array_map('strtolower', get_class_methods($this)))) {
+			$method = 'error';
+		}
+
+		if ($method !== 'error') {
+			if (Configure::read() == 0) {
+				$method = 'error404';
+				if (isset($code) && $code == 500) {
+					$method = 'error500';
+				}
+			}
+		}
+		
+		// >>> CUSTOMIZE MODIFY 2011/08/19 ryuring
+		//$this->dispatchMethod($method, $messages);
+		//$this->_stop();
+		// ---
+		if(!isset($this->controller->params['return'])) {
+			$this->dispatchMethod($method, $messages);
+			$this->_stop();
+		} else {
+			return;
+		}
+		// <<<
+		
+	}
+/**
  * クラスが見つからない
  * @param array $params
  */
@@ -41,6 +96,27 @@ class BaserAppError extends ErrorHandler {
 		}
 		$this->_outputMessage('missing_class');
 	}
-	
+/**
+ * Renders the Missing Layout web page.
+ *
+ * @param array $params Parameters for controller
+ * @access public
+ */
+	function missingLayout($params) {
+		extract($params, EXTR_OVERWRITE);
+		
+		$this->controller->layout = 'default';
+		
+		// >>> CUSTOMIZE ADD 2011/09/23 ryuring
+		$this->controller->layoutPath = '';
+		$this->controller->subDir = '';
+		// <<<
+		
+		$this->controller->set(array(
+			'file' => $file,
+			'title' => __('Missing Layout', true)
+		));
+		$this->_outputMessage('missingLayout');
+	}
 }
 ?>

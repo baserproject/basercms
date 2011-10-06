@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,14 +25,14 @@
 /**
  * プラグインモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Plugin extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Plugin';
 /**
@@ -45,15 +45,15 @@ class Plugin extends AppModel {
 /**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -73,15 +73,16 @@ class Plugin extends AppModel {
 	);
 /**
  * データベースを初期化する
- *
  * 既存のテーブルは上書きしない
  *
- * @param	string	$plugin
- * @return	boolean
- * @access	public
+ * @param string $plugin
+ * @return boolean
+ * @access public
  */
 	function initDb($plugin, $filterTable = '') {
+		
 		return parent::initDb('plugin', $plugin, true, $filterTable, 'create');
+		
 	}
 /**
  * データベースの構造を変更する
@@ -91,7 +92,10 @@ class Plugin extends AppModel {
  * @access public
  */
 	function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
+		
 		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
+		
 	}
+	
 }
 ?>

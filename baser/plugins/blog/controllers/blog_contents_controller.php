@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,68 +25,70 @@
 /**
  * ブログコンテンツコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogContentsController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogContents';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('SiteConfig', 'Blog.BlogCategory', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','FormEx','Blog.Blog');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
 	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * before_filter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
 		if(isset($this->params['prefix']) && $this->params['prefix']=='admin') {
 			$this->subMenuElements = array('blog_common');
 		}
+		
 	}
 /**
  * [ADMIN] ブログコンテンツ一覧
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -98,8 +100,8 @@ class BlogContentsController extends BlogAppController {
 /**
  * [ADMIN] ブログコンテンツ追加
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -133,9 +135,9 @@ class BlogContentsController extends BlogAppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		blog_category_no
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
@@ -179,11 +181,13 @@ class BlogContentsController extends BlogAppController {
 	}
 /**
  * レイアウト編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditLayout($template){
+		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
 						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
@@ -202,12 +206,14 @@ class BlogContentsController extends BlogAppController {
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action'=>'index'));
 		}
+		
 	}
 /**
  * ブログテンプレート編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditBlog($template){
 		$path = 'blog'.DS.$template;
@@ -234,9 +240,9 @@ class BlogContentsController extends BlogAppController {
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		blog_content_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
@@ -264,8 +270,8 @@ class BlogContentsController extends BlogAppController {
 /**
  * フォームの初期値を取得する
  *
- * @return  void
- * @access  protected
+ * @return void
+ * @access protected
  */
 	function _getDefaultValue() {
 
@@ -280,5 +286,6 @@ class BlogContentsController extends BlogAppController {
 		return $data;
 
 	}
+	
 }
 ?>

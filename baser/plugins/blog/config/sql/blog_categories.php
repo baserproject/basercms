@@ -4,8 +4,6 @@
 class BlogCategoriesSchema extends CakeSchema {
 	var $name = 'BlogCategories';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'blog_categories.php';
 
 	var $connection = 'plugin';

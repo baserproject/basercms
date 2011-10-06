@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -25,20 +25,20 @@
 /**
  * プラグインフックビヘイビア
  *
- * @package			baser.models.behavior
+ * @package baser.models.behavior
  */
 class PluginHookBehavior extends ModelBehavior {
 /**
  * プラグインフックオブジェクト
  * 
- * @var		array
+ * @var array
  * @access	public
  */
 	var $pluginHooks = array();
 /**
  * 登録済プラグインフック
  * 
- * @var		array
+ * @var array
  * @access	public
  */
 	var $registerHooks = array();
@@ -176,7 +176,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterFind(&$model, $results, $primary) {
+		
 		return $this->executeHook($model, 'afterFind', $results, $results, $primary);
+		
 	}
 /**
  * beforeValidate
@@ -186,7 +188,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeValidate(&$model) {
+		
 		return $this->executeHook($model, 'beforeValidate', true);
+		
 	}
 /**
  * beforeSave
@@ -196,7 +200,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeSave(&$model) {
+		
 		return $this->executeHook($model, 'beforeSave', true);
+		
 	}
 /**
  * afterSave
@@ -206,7 +212,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterSave(&$model, $created) {
+		
 		$this->executeHook($model, 'afterSave', null, $created);
+		
 	}
 /**
  * beforeDelete
@@ -217,7 +225,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeDelete(&$model, $cascade = true) {
+		
 		return $this->executeHook($model, 'beforeDelete', true, $cascade);
+		
 	}
 /**
  * afterDelete
@@ -226,7 +236,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterDelete(&$model) {
+		
 		$this->executeHook($model, 'afterDelete');
+		
 	}
 /**
  * onError
@@ -236,7 +248,10 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function onError(&$model, $error) {
+		
 		$this->executeHook($model, 'onError', null, $error);
+		
 	}
 	
 }
+?>
