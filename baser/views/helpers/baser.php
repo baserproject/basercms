@@ -32,7 +32,7 @@
 class BaserHelper extends AppHelper {
 	var $_view = null;
 	var $siteConfig = array();
-	var $helpers = array('Html','Javascript','Session','XmlEx');
+	var $helpers = array('HtmlEx','Javascript','Session','XmlEx');
 	var $_content = null;			// コンテンツ
 	var $_categoryTitleOn = true;
 	var $_categoryTitle = true;
@@ -356,7 +356,7 @@ class BaserHelper extends AppHelper {
  */
 	function metaKeywords() {
 		
-		echo $this->Html->meta('keywords',$this->getkeywords());
+		echo $this->HtmlEx->meta('keywords',$this->getkeywords());
 		
 	}
 /**
@@ -367,7 +367,7 @@ class BaserHelper extends AppHelper {
  */
 	function metaDescription() {
 		
-		echo $this->Html->meta('description', strip_tags($this->getDescription()));
+		echo $this->HtmlEx->meta('description', strip_tags($this->getDescription()));
 		
 	}
 /**
@@ -380,7 +380,7 @@ class BaserHelper extends AppHelper {
  */
 	function rss($title, $link) {
 		
-		echo $this->Html->meta($title, $link, array('type' => 'rss'));
+		echo $this->HtmlEx->meta($title, $link, array('type' => 'rss'));
 		
 	}
 /**
@@ -599,7 +599,7 @@ class BaserHelper extends AppHelper {
  */
 	function icon() {
 		
-		echo  $this->Html->meta('icon');
+		echo  $this->HtmlEx->meta('icon');
 		
 	}
 /**
@@ -611,7 +611,7 @@ class BaserHelper extends AppHelper {
  */
 	function docType($type = 'xhtml-trans') {
 		
-		echo $this->Html->docType($type)."\n";
+		echo $this->HtmlEx->docType($type)."\n";
 		
 	}
 /**
@@ -627,7 +627,7 @@ class BaserHelper extends AppHelper {
  */
 	function css($path, $rel = null, $htmlAttributes = array(), $inline = true) {
 		
-		$ret = $this->Html->css($path, $rel, $htmlAttributes, $inline);
+		$ret = $this->HtmlEx->css($path, $rel, $htmlAttributes, $inline);
 		if($inline) {
 			echo $ret;
 		}
@@ -672,7 +672,7 @@ class BaserHelper extends AppHelper {
  */
 	function getImg($path, $options = array()) {
 		
-		return $this->Html->image($path, $options);
+		return $this->HtmlEx->image($path, $options);
 		
 	}
 /**
@@ -777,7 +777,7 @@ class BaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		$out = $this->Html->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		$out = $this->HtmlEx->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 		return $this->executeHook('afterBaserGetLink', $url, $out);
 		
@@ -809,7 +809,7 @@ class BaserHelper extends AppHelper {
 		if(!$charset && Configure::read('AgentPrefix.currentAgent') == 'mobile'){
 			$charset = 'Shift-JIS';
 		}
-		echo $this->Html->charset($charset);
+		echo $this->HtmlEx->charset($charset);
 		
 	}
 /**
@@ -869,7 +869,7 @@ class BaserHelper extends AppHelper {
 	function updateMessage() {
 		
 		if($this->checkUpdate() && $this->params['controller'] != 'updaters') {
-			$updateLink = $this->Html->link('ここ','/admin/updaters');
+			$updateLink = $this->HtmlEx->link('ここ','/admin/updaters');
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
 		
@@ -907,7 +907,7 @@ class BaserHelper extends AppHelper {
 		$url1 = '';
 		$url2 = '';
 
-		if(!empty($this->params['prefix'])) {
+		if(!empty($this->params['prefix']) && Configure::read('AgentPrefix.currentPrefix') != $this->params['prefix']) {
 			$prefix = h($this->params['prefix']);
 		}
 		if(!empty($this->params['plugin'])) {
@@ -924,7 +924,13 @@ class BaserHelper extends AppHelper {
 				$pass[$key] = h($value);
 			}
 		}
+
 		$url = split('/', h($this->params['url']['url']));
+		
+		if(Configure::read('AgentPrefix.on')) {
+			array_shift($url);
+		}
+
 		if(isset($url[0])) {
 			$url0 = $url[0];
 		}
@@ -967,7 +973,7 @@ class BaserHelper extends AppHelper {
 			$plugin = '';
 			$controller = $url0;
 		}
-
+// NewsArchives2
 		if($prefix)	$prefix .= '_';
 		if($plugin) $plugin .= '_';
 		if($controller) $controller .= '_';
@@ -1002,13 +1008,13 @@ class BaserHelper extends AppHelper {
  */
 	function crumbs($separator = '&raquo;', $startText = false) {
 		
-		if (!empty($this->Html->_crumbs)) {
+		if (!empty($this->HtmlEx->_crumbs)) {
 			$out = array();
 			if ($startText) {
 				$out[] = $this->getLink($startText, '/');
 			}
 
-			foreach ($this->Html->_crumbs as $crumb) {
+			foreach ($this->HtmlEx->_crumbs as $crumb) {
 				if (!empty($crumb[1])) {
 					$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
 				} else {
@@ -1034,7 +1040,7 @@ class BaserHelper extends AppHelper {
 		
 		$_options = array('forceTitle'=>true);
 		$options = am($_options,$options);
-		$this->Html->_crumbs[] = array($name, $link, $options);
+		$this->HtmlEx->_crumbs[] = array($name, $link, $options);
 		
 	}
 /**
@@ -1195,7 +1201,7 @@ class BaserHelper extends AppHelper {
 			$search = array($search);
 		}
 		foreach($search as $value) {
-			$text = str_replace($value, $this->Html->tag($name, $value, $attributes, $escape), $text);
+			$text = str_replace($value, $this->HtmlEx->tag($name, $value, $attributes, $escape), $text);
 		}
 		return $text;
 		
