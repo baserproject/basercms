@@ -25,12 +25,16 @@
 if(!isset($recursive)) {
 	$recursive = 1;
 }
+$prefix = '';
+if(Configure::read('AgentPrefix.on')) {
+	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+}
 ?>
-<ul class="sitemap ul-level-<?php echo $recursive ?>">
+<ul class="sitemap section ul-level-<?php echo $recursive ?>">
 <?php if(isset($pageList['pages'])): ?>
 	<?php foreach($pageList['pages'] as $page): ?>
 		<?php if($page['Page']['title']): ?>
-	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $baser->link($page['Page']['title'], $page['Page']['url']) ?></li>
+	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $baser->link($page['Page']['title'],$prefix.$page['Page']['url']) ?></li>
 		<?php endif ?>
 	<?php endforeach; ?>
 <?php endif ?>
@@ -38,7 +42,7 @@ if(!isset($recursive)) {
 	<?php foreach($pageList['pageCategories'] as $pageCategories): ?>
 	<li class="sitemap-page li-level-<?php echo $recursive ?>">
 		<?php if(!empty($pageCategories['PageCategory']['url'])): ?>
-			<?php $baser->link($pageCategories['PageCategory']['title'], $pageCategories['PageCategory']['url']) ?>
+			<?php $baser->link($pageCategories['PageCategory']['title'], $prefix.$pageCategories['PageCategory']['url']) ?>
 		<?php else: ?>
 			<?php if(isset($pageCategories['children'])): ?>
 				<?php echo $pageCategories['PageCategory']['title'] ?>

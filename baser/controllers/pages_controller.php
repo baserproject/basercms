@@ -65,7 +65,7 @@ class PagesController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->AuthEx->allow('display','mobile_display');
+		$this->AuthEx->allow('display','mobile_display', 'smartphone_display');
 
 		if(!empty($this->params['admin'])){
 			$this->navis = array('ページ管理'=>'/admin/pages/index');
@@ -147,7 +147,9 @@ class PagesController extends AppController {
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->create($this->data);
 			if($this->data['Page']['page_type'] == 2 && !$this->data['Page']['page_category_id']) {
-				$this->data['Page']['page_category_id'] = 1;
+				$this->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif($this->data['Page']['page_type'] == 3 && !$this->data['Page']['page_category_id']) {
+				$this->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
 			if($this->Page->validates()) {
 				
@@ -185,22 +187,17 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		switch ($this->data['Page']['page_type']) {
-			case 1:
-				$categories = $this->getCategorySource(1, array('empty' => '指定しない', 'own' => true));
-				break;
-			case 2:
-				$categories = $this->getCategorySource(2, array('empty' => '指定しない', 'own' => true));
-				break;
-		}
+		$categories = $this->getCategorySource($this->data['Page']['page_type'], array('empty' => '指定しない', 'own' => true));
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
+		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
 		$this->subMenuElements = array('pages','page_categories');
-		$this->set('rootMobileId', $this->PageCategory->getMobileId());
+		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
+		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
 		$this->pageTitle = '新規ページ登録';
 		$this->render('form');
 
@@ -223,19 +220,26 @@ class PagesController extends AppController {
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
 			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
-			$mobileIds = $this->PageCategory->getMobileCategoryIds();
-			if(!in_array($this->data['Page']['page_category_id'], $mobileIds)) {
-				$this->data['Page']['page_type'] = 1;
-			} else {
+			$mobileIds = $this->PageCategory->getAgentCategoryIds('mobile');
+			$smartphoneIds = $this->PageCategory->getAgentCategoryIds('smartphone');
+			if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
 				$this->data['Page']['page_type'] = 2;
+			} elseif(in_array($this->data['Page']['page_category_id'], $smartphoneIds)) {
+				$this->data['Page']['page_type'] = 3;
+			} else {
+				$this->data['Page']['page_type'] = 1;
 			}
 		}else {
 
 			$before = $this->Page->read(null, $id);
-			
+			if(empty($this->data['Page']['page_type'])) {
+				$this->data['Page']['page_type'] = 1;
+			}
 			/* 更新処理 */
 			if($this->data['Page']['page_type'] == 2 && !$this->data['Page']['page_category_id']) {
-				$this->data['Page']['page_category_id'] = $this->PageCategory->getMobileId();
+				$this->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif($this->data['Page']['page_type'] == 3 && !$this->data['Page']['page_category_id']) {
+				$this->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
 			$this->data['Page']['url'] = $this->Page->getPageUrl($this->data);
 			$this->Page->set($this->data);
@@ -282,38 +286,46 @@ class PagesController extends AppController {
 		if(!empty($this->data['PageCategory']['id'])) {
 			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
-		switch ($this->data['Page']['page_type']) {
-			case 1:
-				$categories = $this->getCategorySource(1, array(
-					'currentOwnerId'		=> $currentOwnerId,
-					'currentPageCategoryId'	=> $currentPageCategoryId,
-					'own'			=> true,
-					'empty'			=> '指定しない'
-				));
-				break;
-			case 2:
-				$categories = $this->getCategorySource(2, array(
-					'currentOwnerId'		=> $currentOwnerId,
-					'currentPageCategoryId'	=> $currentPageCategoryId,
-					'own'			=> true,
-					'empty'			=> '指定しない'
-				));
-				break;
-		}
-
+		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
+			'currentOwnerId'		=> $currentOwnerId,
+			'currentPageCategoryId'	=> $currentPageCategoryId,
+			'own'			=> true,
+			'empty'			=> '指定しない'
+		));
+		
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
+		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
-		$this->set('url',preg_replace('/^\/mobile\//is', '/m/', preg_replace('/index$/', '', $this->data['Page']['url'])));
-		$this->set('mobileExists',$this->Page->mobileExists($this->data));
-		$this->set('rootMobileId', $this->PageCategory->getMobileId());
+		$this->set('url', $this->convertViewUrl($this->data['Page']['url']));
+		$this->set('mobileExists',$this->Page->agentExists('mobile', $this->data));
+		$this->set('smartphoneExists',$this->Page->agentExists('smartphone', $this->data));
+		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
+		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = 'ページ情報編集';
 		$this->render('form');
 
+	}
+/**
+ * DBに保存されているURLをビュー用のURLに変換する
+ * 
+ * @param string $url
+ * @return string
+ */
+	function convertViewUrl($url) {
+		
+		$url = preg_replace('/index$/', '/', $url);
+		if(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', '/'.Configure::read('AgentSettings.mobile.alias').'/', $url);
+		} elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', '/'.Configure::read('AgentSettings.smartphone.alias').'/', $url);
+		}
+		return $url;
+		
 	}
 /**
  * [ADMIN] ページ情報削除
@@ -421,7 +433,7 @@ class PagesController extends AppController {
 		}
 
 		// モバイルディレクトリへのアクセスは Not Found
-		if(isset($path[0]) && $path[0]=='mobile'){
+		if(isset($path[0]) && ($path[0]==Configure::read('AgentSettings.mobile.prefix') || $path[0]==Configure::read('AgentSettings.smartphone.prefix'))){
 			$this->notFound();
 		}
 
@@ -456,10 +468,6 @@ class PagesController extends AppController {
 			$this->cacheAction = $this->Page->getCacheTime($url);
 		}
 		
-		if($this->Page->getByUrl($url)) {
-			
-		}
-		
 		// ナビゲーションを取得
 		$this->navis = $this->_getNavi($url);
 
@@ -479,7 +487,7 @@ class PagesController extends AppController {
 	function _getNavi($url) {
 
 		if(Configure::read('AgentPrefix.on')) {
-			$url = '/'.Configure::read('AgentPrefix.currentPrefix').$url;
+			$url = '/'.Configure::read('AgentPrefix.currentAlias').$url;
 		}
 		
 		// 直属のカテゴリIDを取得
@@ -526,6 +534,19 @@ class PagesController extends AppController {
 		
 	}
 /**
+ * [SMARTPHONE] ビューを表示する
+ *
+ * @param mixed
+ * @return void
+ * @access public
+ */
+	function smartphone_display() {
+		
+		$path = func_get_args();
+		call_user_func_array( array( &$this, 'display' ), $path );
+		
+	}
+/**
  * [ADMIN] WEBページをプレビュー
  *
  * @param mixed	$id (blog_post_id)
@@ -537,8 +558,11 @@ class PagesController extends AppController {
 		if(isset($this->data['Page'])) {
 			$page = $this->data;
 			if(empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 2) {
-				$page['Page']['page_category_id'] = $this->Page->PageCategory->getMobileId();
+				$page['Page']['page_category_id'] = $this->Page->PageCategory->getAgentId('mobile');
+			}elseif(empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 3) {
+				$page['Page']['page_category_id'] = $this->Page->PageCategory->getAgentId('smartphone');
 			}
+			
 			$page['Page']['url'] = $this->Page->getPageUrl($page);
 		} else {
 			$conditions = array('Page.id' => $id);
@@ -552,13 +576,17 @@ class PagesController extends AppController {
 
 		Cache::write('page_preview_'.$id, $page);
 
-		if(preg_match('/^\/'.Configure::read('AgentPrefix.mobile.prefix').'\//is', $page['Page']['url'])){
-			Configure::write('AgentPrefix.on',true);
-			Configure::write('Agent.currentAgent', 'mobile');
-			Configure::write('AgentPrefix.currentPrefix', Configure::read('AgentPrefix.mobile.prefix'));
-			Configure::write('AgentPrefix.currentAlias', Configure::read('AgentPrefix.mobile.alias'));
+		$settings = Configure::read('AgentSettings');
+		foreach($settings as $key => $setting) {
+			if(preg_match('/^\/'.$setting['prefix'].'\//is', $page['Page']['url'])){
+				Configure::write('AgentPrefix.on',true);
+				Configure::write('AgentPrefix.currentAgent', $key);
+				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
+				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+				break;
+			}
 		}
-
+		
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
@@ -583,12 +611,18 @@ class PagesController extends AppController {
 
 		$page = Cache::read('page_preview_'.$id);
 
-		if(preg_match('/^\/'.Configure::read('AgentPrefix.mobile.prefix').'\//is', $page['Page']['url'])){
-			Configure::write('AgentPrefix.on',true);
-			Configure::write('AgentPrefix.currentAgent', 'mobile');
-			Configure::write('AgentPrefix.currentPrefix', Configure::read('AgentPrefix.mobile.prefix'));
-			Configure::write('AgentPrefix.currentAlias', Configure::read('AgentPrefix.mobile.alias'));
-			$this->layoutPath = Configure::read('AgentPrefix.mobile.prefix');
+		$settings = Configure::read('AgentSettings');
+		foreach($settings as $key => $setting) {
+			if(preg_match('/^\/'.$setting['prefix'].'\//is', $page['Page']['url'])){
+				Configure::write('AgentPrefix.on',true);
+				Configure::write('AgentPrefix.currentAgent', $key);
+				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
+				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+				break;
+			}
+		}
+		if(Configure::read('AgentPrefix.on')){
+			$this->layoutPath = Configure::read('AgentSettings.'.Configure::read('AgentPrefix.currentAgent').'.prefix');
 			if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
 				$this->helpers[] = 'Mobile';
 			}
@@ -669,7 +703,10 @@ class PagesController extends AppController {
 			$pageCategoryId = 'pconly';
 		}
 		if($pageType == 2 && !$pageCategoryId) {
-			$pageCategoryId = $this->PageCategory->getMobileId();
+			$pageCategoryId = $this->PageCategory->getAgentId('mobile');
+		}
+		if($pageType == 3 && !$pageCategoryId) {
+			$pageCategoryId = $this->PageCategory->getAgentId('smartphone');
 		}
 
 		// 条件指定のないフィールドを解除
@@ -693,15 +730,15 @@ class PagesController extends AppController {
 			if($pageCategoryId == 'pconly') {
 
 				// PCのみ
-				$mobileCategoryIds = $this->PageCategory->getMobileCategoryIds();
-				if($mobileCategoryIds) {
-					$conditions['or'] = array('not'=>array('Page.page_category_id' => $mobileCategoryIds),
+				$agentCategoryIds = am($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
+				if($agentCategoryIds) {
+					$conditions['or'] = array('not'=>array('Page.page_category_id' => $agentCategoryIds),
 												array('Page.page_category_id'=>null));
 				} else {
 					$conditions['or'] = array(array('Page.page_category_id'=>null));
 				}
 
-			}elseif($pageCategoryId != 'noncat') {
+			} elseif($pageCategoryId != 'noncat') {
 
 				// カテゴリ指定
 				// 子カテゴリも検索条件に入れる
@@ -714,24 +751,30 @@ class PagesController extends AppController {
 				}
 				$conditions['Page.page_category_id'] = $pageCategoryIds;
 
-			}elseif($pageCategoryId == 'noncat') {
+			} elseif($pageCategoryId == 'noncat') {
 
 				//カテゴリなし
 				if($pageType == 1) {
 					$conditions['or'] = array(array('Page.page_category_id' => ''),array('Page.page_category_id'=>NULL));
 				} elseif($pageType == 2) {
-					$conditions['Page.page_category_id'] = $this->PageCategory->getMobileId();
+					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
+				} elseif($pageType == 3) {
+					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 				}
 
 			}
 
 		} else {
-			if(!Configure::read('Baser.mobile')) {
+			if(!Configure::read('Baser.mobile') || !Configure::read('Baser.smartphone')) {
 				$conditions['or'] = array(
 					array('Page.page_category_id' => ''),
-					array('Page.page_category_id' => NULL),
-					array('Page.page_category_id <>' => $this->PageCategory->getMobileId())
-				);
+					array('Page.page_category_id' => NULL));
+			}
+			if(!Configure::read('Baser.mobile')) {
+				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('mobile'));
+			}
+			if(!Configure::read('Baser.smartphone')) {
+				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('smartphone'));
 			}
 		}
 
@@ -753,20 +796,20 @@ class PagesController extends AppController {
  * @return boolean
  * @access public
  */
-	function admin_check_mobile_page_addable($type, $id) {
+	function admin_check_agent_page_addable($type, $id) {
 		
 		$user = $this->AuthEx->user();
 		$userModel = $this->getUserModel();
 		$userGroupId = $user[$userModel]['user_group_id'];
 		$result = false;
 		while(true) {
-			$mobileId = $this->PageCategory->getMobileId($id);
-			if($mobileId) {
-				if($mobileId == 1) {
+			$agentId = $this->PageCategory->getAgentId($type, $id);
+			if($agentId) {
+				if($agentId == 1 || $agentId == 2) {
 					$ownerId = $this->siteConfigs['root_owner_id'];
 				} else {
 					$pageCategory = $this->PageCategory->find('first', array(
-						'conditions'=> array('PageCategory.id' => $mobileId),
+						'conditions'=> array('PageCategory.id' => $agentId),
 						'field'		=> array('owner_id')
 					));
 					$ownerId = $pageCategory['PageCategory']['owner_id'];
@@ -780,6 +823,9 @@ class PagesController extends AppController {
 				} else {
 					$result = true;
 				}
+				break;
+			} elseif($agentId === false) {
+				$result = false;
 				break;
 			}
 			$pageCategory = $this->PageCategory->find('first', array(
@@ -828,19 +874,28 @@ class PagesController extends AppController {
 			$editable = $this->checkCurrentEditable($options['currentPageCategoryId'], $options['currentOwnerId']);
 		}
 
+		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
+		
 		switch($type) {
-			case '1':
-				$excludeParentId = '1';
+			case '1':	// PC
+				$parentId = '';
+				$excludeParentId = array($mobileId, $smartphoneId);
 				break;
-			case '2':
+			case '2':	// モバイル
+				$parentId = $mobileId;
 				$excludeParentId = '';
 				break;
+			case '3':	// スマホ
+				$parentId = $smartphoneId;
+				$excludeParentId = '';
 		}
 
 		$_options = array(
 			'rootEditable'		=> $this->checkRootEditable(),
 			'pageEditable'		=> $editable,
-			'mobileRoot'		=> false,
+			'agentRoot'			=> false,
+			'parentId'			=> $parentId,
 			'excludeParentId'	=> $excludeParentId
 		);
 		

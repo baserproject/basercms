@@ -63,10 +63,11 @@
 /**
  * エージェント設定
  */
-	$config['AgentPrefix'] = array(
+	$config['AgentSettings'] = array(
 		'mobile'	=> array(
 			'alias'	=> 'm',
 			'prefix'=> 'mobile',
+			'autoRedirect'	=> true,
 			'agents'	=> array(
 				'Googlebot-Mobile',
 				'Y!J-SRD',
@@ -81,6 +82,7 @@
 		'smartphone'	=> array(
 			'alias'		=> 's',
 			'prefix'	=> 'smartphone',
+			'autoRedirect'	=> true,
 			'agents'	=> array(
 				'iPhone',         // Apple iPhone
 				'iPod',           // Apple iPod touch

@@ -122,8 +122,8 @@ class  AuthConfigureComponent extends Object {
 				$auth->login($cookie);
 				return true;
 			}
-			// デバッグモードの場合は無条件に認証なし
-			if(Configure::read('debug')>0) {
+			// インストールモードの場合は無条件に認証なし
+			if(Configure::read('debug')==-1) {
 				$controller->Session->del('Message.auth');
 				$auth->allow();
 			}

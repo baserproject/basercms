@@ -115,6 +115,7 @@ class SiteConfigsController extends AppController {
 				
 				$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
 				$mobile = $this->data['SiteConfig']['mobile'];
+				$smartphone = $this->data['SiteConfig']['smartphone'];
 
 				unset($this->data['SiteConfig']['id']);
 				unset($this->data['SiteConfig']['mode']);
@@ -123,6 +124,8 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['ssl_url']);
 				unset($this->data['SiteConfig']['admin_ssl_on']);
 				unset($this->data['SiteConfig']['mobile']);
+				unset($this->data['SiteConfig']['smartphone']);
+				
 
 				// DBに保存
 				if($this->SiteConfig->saveKeyValue($this->data)) {
@@ -135,6 +138,8 @@ class SiteConfigsController extends AppController {
 					$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
 					$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
 					$this->writeInstallSetting('Baser.mobile', ($mobile)? 'true' : 'false');
+					$this->writeInstallSetting('Baser.smartphone', ($smartphone)? 'true' : 'false');
+					
 					if($this->readSmartUrl() != $smartUrl) {
 						$this->writeSmartUrl($smartUrl);
 					}
@@ -274,6 +279,7 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
 		$data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
 		$data['SiteConfig']['mobile'] = Configure::read('Baser.mobile');
+		$data['SiteConfig']['smartphone'] = Configure::read('Baser.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {
 			$data['SiteConfig']['mobile'] = false;
 		}

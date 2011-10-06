@@ -127,7 +127,7 @@ class ContentsController extends AppController {
 		} else {
 			$query = array($query);
 		}
-		return $query;
+		return h($query);
 		
 	}
 /**
@@ -185,7 +185,7 @@ class ContentsController extends AppController {
 	}
 /**
  * ページリストを取得する（再帰）
- * 
+ * TODO スマートフォン未対応
  * @param mixid $parentCategoryId / '' / 0
  * @return string
  * @access private 
@@ -193,12 +193,14 @@ class ContentsController extends AppController {
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
 		$direct = false;
-		$mobileId = $this->Page->PageCategory->getMobileId();
+		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('AgentPrefix.currentAgent'));
+		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
 		if($parentCategoryId === 0) {
 			$direct = true;
 			$parentCategoryId = null;
-		}elseif(!$parentCategoryId && Configure::read('AgentPrefix.currentAgent') == 'mobile') {
-			$parentCategoryId = $mobileId;
+		}elseif(!$parentCategoryId && Configure::read('AgentPrefix.currentAgent') == Configure::read('AgentSettings.mobile.prefix')) {
+			$parentCategoryId = $currentAgentId;
 		}
 		
 		// ページリスト取得
@@ -214,14 +216,20 @@ class ContentsController extends AppController {
 
 		foreach($pages as $key => $page) {
 			$pages[$key]['Page']['url'] = preg_replace('/^\/mobile/', '/m', $page['Page']['url']);
+			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/s', $page['Page']['url']);
 		}
 		
 		if(!$direct) {
 			// カテゴリリスト取得
 			$conditions = array('PageCategory.parent_id' => $parentCategoryId);
 			if(!$parentCategoryId) {
-				$conditions['PageCategory.id <>'] = $mobileId;
+				$conditions = am($conditions, array(array('PageCategory.id <>' => $mobileId), array('PageCategory.id <>' => $smartphoneId)));
+			} elseif($parentCategoryId == $mobileId) {
+				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $smartphoneId)));
+			} elseif($parentCategoryId == $smartphoneId) {
+				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $mobileId)));
 			}
+			
 			$pageCategories = $this->Page->PageCategory->find('all', array(
 				'conditions' => $conditions, 
 				'fields' => array('id', 'title'),

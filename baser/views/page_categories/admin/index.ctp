@@ -23,6 +23,16 @@ $allowOwners = array();
 if(isset($user['user_group_id'])) {
 	$allowOwners = array('', $user['user_group_id']);
 }
+$pageType = array();
+if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+	$pageType = array('pc' => 'PC');	
+}
+if(Configure::read('Baser.mobile')) {
+	$pageType['mobile'] = 'モバイル';
+}
+if(Configure::read('Baser.smartphone')) {
+	$pageType['smartphone'] = 'スマートフォン';
+}
 ?>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
@@ -39,7 +49,7 @@ if(isset($user['user_group_id'])) {
 	</div>
 </div>
 
-<?php if(Configure::read('Baser.mobile')): ?>
+<?php if($pageType): ?>
 <!-- search -->
 <h3><a href="javascript:void(0);" class="slide-trigger" id="PageFilter">検索</a></h3>
 <div class="function-box corner10" id="PageFilterBody">
@@ -48,7 +58,7 @@ if(isset($user['user_group_id'])) {
 		<small>タイプ</small>
 		<?php echo $formEx->input('PageCategory.type', array(
 				'type'		=> 'select',
-				'options'	=> array('pc' => 'PC', 'mobile' => 'モバイル'),
+				'options'	=> $pageType,
 				'escape'	=> false)) ?>　
 		<?php echo $formEx->submit('検　索', array('div' => false, 'class' => 'btn-orange button')) ?> </p>
 	<?php $formEx->end() ?>

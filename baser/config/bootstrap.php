@@ -125,31 +125,24 @@
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
  */
-	$agentSettings = Configure::read('AgentPrefix');
-	if(Configure::read('Baser.mobile')) {
+	$agentSettings = Configure::read('AgentSettings');
+	if(!Configure::read('Baser.mobile')) {
+		unset($agentSettings['mobile']);
+	}
+	if(!Configure::read('Baser.smartphone')) {
+		unset($agentSettings['smartphone']);
+	}
+	$agentOn = false;
+	if($agentSettings) {
 		foreach($agentSettings as $key => $setting) {
 			$agentOn = false;
-			$agentPlugin = false;
-			$agentPrefix = $setting['prefix'];
 			if(!empty($url)) {
 				$parameters = explode('/',$url);
 				if($parameters[0] == $setting['alias']) {
 					$agentOn = true;
-					if(!empty($parameters[1])) {
-						App::import('Core','Folder');
-						$pluginFolder = new Folder(APP.'plugins');
-						$_plugins = $pluginFolder->read(true,true);
-						$plugins = $_plugins[0];
-						foreach($plugins as $plugin) {
-							if($parameters[1] == $plugin) {
-								$agentPlugin = true;
-								break;
-							}
-						}
-					}
 				}
 			}
-			if(!$agentOn) {
+			if(!$agentOn && $setting['autoRedirect']) {
 				$agentAgents = $setting['agents'];
 				$agentAgents = implode('||', $agentAgents);
 				$agentAgents = preg_quote($agentAgents, '/');
@@ -170,8 +163,6 @@
 				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
 				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
 			}
-			Configure::write('AgentPrefix.on', $agentOn);
-			Configure::write('AgentPrefix.plugin', $agentPlugin);
 			if($agentOn) {
 				break;
 			}
@@ -191,6 +182,7 @@
 			exit();
 		}
 	}
+	Configure::write('AgentPrefix.on', $agentOn);
 /**
  * Viewのキャッシュ設定
  */

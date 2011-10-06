@@ -260,10 +260,8 @@ class BaserAppController extends Controller {
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Cache-Control: post-check=0, pre-check=0", false);
 			header("Pragma: no-cache");
-
 			// デバックを出力しない。
 			Configure::write('debug', 0);
-			$this->layout = "ajax";
 		}
 
 		// 権限チェック

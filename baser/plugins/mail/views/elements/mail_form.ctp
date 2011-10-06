@@ -19,12 +19,16 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$prefix = '';
+if(Configure::read('AgentPrefix.on')) {
+	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+}
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-<?php echo $mailform->create('Message', array('url' => '/' . $mailContent['MailContent']['name'] . '/confirm')) ?>
+<?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/confirm')) ?>
 <?php else: ?>
-<?php echo $mailform->create('Message', array('url' => '/' . $mailContent['MailContent']['name'] . '/submit')) ?>
+<?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 
@@ -34,7 +38,7 @@
 
 <?php if(!$freezed && $mailContent['MailContent']['auth_captcha']): ?>
 <div class="auth-captcha clearfix">
-	<?php $baser->img('/' . $mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
+	<?php $baser->img($prefix.'/'.$mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
 	<?php echo $mailform->text('Message.auth_captcha') ?><br />
 	&nbsp;画像の文字を入力してください<br clear="all" />
 	<?php echo $mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>

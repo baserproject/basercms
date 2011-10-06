@@ -104,7 +104,12 @@ class MailController extends MailAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->AuthEx->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
+		$this->AuthEx->allow(
+				'index', 'mobile_index', 'smartphone_index',
+				'confirm', 'mobile_confirm', 'smartphone_confirm',
+				'submit', 'mobile_submit', 'smartphone_submit', 
+				'captcha', 'smartphone_captcha'
+		);
 
 		parent::beforeFilter();
 
@@ -206,6 +211,18 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_index($id=null) {
+
+		$this->setAction('index',$id);
+
+	}
+/**
  * [PUBIC] データの確認画面を表示
  *
  * @param mixed	mail_content_id
@@ -264,6 +281,18 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_confirm($id=null) {
+
+		$this->setAction('confirm',$id);
+
+	}
+/**
  * [PUBIC] データ送信
  *
  * @param mixed mail_content_id
@@ -314,6 +343,18 @@ class MailController extends MailAppController {
  * @access public
  */
 	function mobile_submit($id=null) {
+
+		$this->setAction('submit',$id);
+
+	}
+/**
+ * [SMARTPHONE] 送信完了ページ
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_submit($id=null) {
 
 		$this->setAction('submit',$id);
 
@@ -408,6 +449,17 @@ class MailController extends MailAppController {
         $this->Captcha->render();
 		
     }
-	
+/**
+ * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+ * 
+ * @return void
+ * @access public
+ */
+    function smartphone_captcha()
+    {
+		
+        $this->Captcha->render();
+		
+    }
 }
 ?>

@@ -272,6 +272,12 @@ $(function(){
 				<?php echo $formEx->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $formEx->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
+			<td class="col-input">
+				<?php echo $formEx->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+			</td>
+		</tr>
 <?php if($baser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $formEx->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>

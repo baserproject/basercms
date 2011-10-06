@@ -96,9 +96,10 @@ class BlogController extends BlogAppController {
 
 		/* 認証設定 */
 		$this->AuthEx->allow(
-			'index', 'mobile_index', 'archives', 'mobile_archives',
-			'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries',
-			'posts', 'mobile_posts'
+			'index', 'mobile_index', 'smartphone_index',
+			'archives', 'mobile_archives', 'smartphone_archives',
+			'posts', 'mobile_posts', 'smartphone_posts',
+			'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries'
 		);
 		
 		$this->BlogContent->recursive = -1;
@@ -183,6 +184,17 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	function mobile_index() {
+
+		$this->setAction('index');
+
+	}
+/**
+ * [SMARTPHONE] ブログ記事を一覧表示する
+ *
+ * @return void
+ * @access public
+ */
+	function smartphone_index() {
 
 		$this->setAction('index');
 
@@ -609,6 +621,19 @@ class BlogController extends BlogAppController {
 
 	}
 /**
+ * [SMARTPHONE] ブログアーカイブを表示する
+ *
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
+ */
+	function smartphone_archives() {
+
+		$this->setAction('archives');
+
+	}
+/**
  * [ADMIN] プレビューを表示する
  * 
  * @param int $blogContentsId
@@ -824,6 +849,20 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	function mobile_posts($blogContentId, $num = 5) {
+		
+		$this->setAction('posts', $blogContentId, $num);
+		
+	}
+/**
+ * [SMARTPHONE] 記事リストを出力
+ *
+ * requestAction用
+ *
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
+ */
+	function smartphone_posts($blogContentId, $num = 5) {
 		
 		$this->setAction('posts', $blogContentId, $num);
 		

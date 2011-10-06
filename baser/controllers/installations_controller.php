@@ -403,6 +403,7 @@ class InstallationsController extends AppController {
 											"Configure::write('Baser.sslUrl', '');",
 											"Configure::write('Baser.adminSslOn', false);",
 											"Configure::write('Baser.mobile', true);",
+											"Configure::write('Baser.smartphone', true);",
 											"Configure::write('Cache.disable', false);",
 											"Cache::config('default', array('engine' => 'File'));","?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
@@ -487,25 +488,18 @@ class InstallationsController extends AppController {
 /**
  * テーマ用のページファイルを生成する
  *
- * @return boolean
  * @access	protected
  */
 	function _createPages() {
 
 		App::import('Model','Page');
 		$Page = new Page(null, null, 'baser');
-		$pages = $Page->findAll();
+		$pages = $Page->find('all', array('recursive' => -1));
 		if($pages) {
-			$ret = true;
 			foreach($pages as $page) {
 				$Page->data = $page;
-				if(!$Page->afterSave(true)){
-					$ret = false;
-				}
+				$Page->afterSave(true);
 			}
-			return $ret;
-		} else {
-			return false;
 		}
 
 	}

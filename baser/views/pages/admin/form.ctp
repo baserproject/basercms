@@ -21,6 +21,16 @@
  */
 $baser->css('ckeditor/editor', null, null, false);
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
+$pageTypes = array();
+if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+	$pageTypes = array('1' => 'PC');	
+}
+if(Configure::read('Baser.mobile')) {
+	$pageTypes['2'] = 'モバイル';
+}
+if(Configure::read('Baser.smartphone')) {
+	$pageTypes['3'] = 'スマートフォン';
+}
 ?>
 
 <script type="text/javascript">
@@ -58,6 +68,13 @@ $(function(){
 				return false;
 			}
 		}
+		if($("#PageReflectSmartphone").attr('checked')){
+			if(!confirm('このページを元にスマートフォンページを作成します。いいですか？\n\n'+
+						' ※ 「smartphone」フォルダからの同階層に保存します。\n'+
+						' ※ 既に存在する場合は上書きします。')){
+				return false;
+			}
+		}
 		editor_contents_tmp.execCommand('synchronize');
 		$("#PageMode").val('save');
 		$("#PageForm").submit();
@@ -72,29 +89,32 @@ $(function(){
  * モバイル反映欄の表示設定
  */
 function pageCategoryIdChangeHandler() {
-	
-	var mobile = false;
+
+	var pageType = 1;
 	var previewWidth;
 	
-	if($("#MobileOn").html()) {
+	if($("#MobileOn").html() || $("#SmartphoneOn").html()) {
 
 		var pageCategoryId = $("#PagePageCategoryId").val();
 
 		if($('input[name="data[Page][page_type]"]:checked').val() == 2 && !pageCategoryId) {
 			pageCategoryId = $("#RootMobileId").html();
+		} else if($('input[name="data[Page][page_type]"]:checked').val() == 3 && !pageCategoryId) {
+			pageCategoryId = $("#RootSmartphoneId").html();
 		}
 
 		// モバイルカテゴリ判定
 		if($('input[name="data[Page][page_type]"]:checked').val() == 2) {
-			mobile = true;
+			pageType = 2;
+		} else if($('input[name="data[Page][page_type]"]:checked').val() == 3) {
+			pageType = 3;
 		}
 
 		// モバイルカテゴリを選択した場合は表示しない
-		if(!mobile && $("#Action").html() == 'admin_edit'){
-
+		if(pageType != 2 && $("#Action").html() == 'admin_edit'){
 			$.ajax({
 				type: "POST",
-				url: $("#CheckMobilePageAddableUrl").html()+'/'+pageCategoryId,
+				url: $("#CheckAgentPageAddableUrl").html()+'/mobile/'+pageCategoryId,
 				beforeSend: function() {
 					$("#AjaxLoader").show();
 				},
@@ -112,12 +132,36 @@ function pageCategoryIdChangeHandler() {
 		}else{
 			changeStateReflectMobile(false);
 		}
-		
+		// スマートフォンカテゴリを選択した場合は表示しない
+		if(pageType != 3 && $("#Action").html() == 'admin_edit'){
+			$.ajax({
+				type: "POST",
+				url: $("#CheckAgentPageAddableUrl").html()+'/smartphone/'+pageCategoryId,
+				beforeSend: function() {
+					$("#AjaxLoader").show();
+				},
+				success: function(result){
+					if(result) {
+						changeStateReflectSmartphone(true);
+					} else {
+						changeStateReflectSmartphone(false);
+					}
+				},
+				complete: function() {
+					$("#AjaxLoader").hide();
+				}
+			});
+		}else{
+			changeStateReflectSmartphone(false);
+		}
+
 	}
 	
 	// プレビューをモバイル用にリサイズする
-	if(mobile) {
-		previewWidth = '320px';
+	if(pageType == 2) {
+		previewWidth = '270px';
+	}else if(pageType == 3) {
+		previewWidth = '350px';
 	} else {
 		previewWidth = '90%';
 	}
@@ -131,6 +175,16 @@ function changeStateReflectMobile(use) {
 	}else{
 		$("#PageReflectMobile").attr('checked', false);
 		$("#RowReflectMobile").hide();
+	}
+	
+}
+function changeStateReflectSmartphone(use) {
+
+	if(use) {
+		$("#RowReflectSmartphone").show();
+	}else{
+		$("#PageReflectSmartphone").attr('checked', false);
+		$("#RowReflectSmartphone").hide();
 	}
 	
 }
@@ -176,12 +230,14 @@ function pageTypeChengeHandler() {
 
 <div class="display-none">
 	<div id="PreviewUrl"><?php $baser->url(array('action' => 'create_preview', $previewId)) ?></div>
-	<div id="CheckMobilePageAddableUrl"><?php $baser->url(array('action' => 'check_mobile_page_addable')) ?></div>
+	<div id="CheckAgentPageAddableUrl"><?php $baser->url(array('action' => 'check_agent_page_addable')) ?></div>
 	<div id="AjaxCategorySourceUrl"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
 	<div id="PageCategoryId"><?php echo $formEx->value('PageCategory.id') ?></div>
 	<div id="PageCategoryOwnerId"><?php echo $formEx->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
+	<div id="RootSmartphoneId"><?php echo $rootSmartphoneId ?></div>
 	<div id="MobileOn"><?php echo Configure::read('Baser.mobile') ?></div>
+	<div id="SmartphoneOn"><?php echo Configure::read('Baser.smartphone') ?></div>
 	<div id="Action"><?php echo $this->action ?></div>
 </div>
 
@@ -205,9 +261,9 @@ function pageTypeChengeHandler() {
 
 <?php if($this->action == 'admin_edit'): ?>
 	<?php if($formEx->value('Page.status')): ?>
-<p><strong>このページのURL：<?php $baser->link($baser->getUri('/' . $url), '/' . $url, array('target' => '_blank')) ?></strong></p>
+<p><strong>このページのURL：<?php $baser->link($baser->getUri($url), $url, array('target' => '_blank')) ?></strong></p>
 	<?php else: ?>
-<p><strong>このページのURL：<?php echo $baser->getUri('/' . $url) ?></strong></p>
+<p><strong>このページのURL：<?php echo $baser->getUri($url) ?></strong></p>
 	<?php endif ?>
 <?php endif ?>
 
@@ -232,10 +288,10 @@ function pageTypeChengeHandler() {
 	<tr>
 		<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
 		<td class="col-input">
-	<?php if(Configure::read('Baser.mobile')): ?>
+	<?php if($pageTypes): ?>
 		<?php echo $formEx->input('Page.page_type', array(
 				'type'		=> 'radio',
-				'options'	=> array('1' => 'PC', '2' => 'モバイル'))) ?></span>　
+				'options'	=> $pageTypes)) ?></span>　
 	<?php endif ?>
 			<?php echo $formEx->input('Page.page_category_id', array(
 					'type'		=> 'select',
@@ -353,6 +409,25 @@ function pageTypeChengeHandler() {
 			</div>
 			<?php if(!empty($mobileExists)): ?>
 			<br />&nbsp;<?php $baser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
+			<?php endif ?>
+		</td>
+	</tr>
+<?php endif ?>
+<?php if($reflectSmartphone): ?>
+	<tr id="RowReflectSmartphone" style="display: none">
+		<th class="col-head"><?php echo $formEx->label('Page.status', 'スマートフォン') ?></th>
+		<td class="col-input">
+			<?php echo $formEx->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
+			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpReflectSmartphone', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
+			<div id="helptextReflectSmartphone" class="helptext">
+				<ul>
+					<li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
+					<li>スマートフォンページは「smartphone」フォルダ内の同階層に保存します。</li>
+					<li>スマートフォンページが既に存在するする場合は上書きします。</li>
+				</ul>
+			</div>
+			<?php if(!empty($smartphoneExists)): ?>
+			<br />&nbsp;<?php $baser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
 			<?php endif ?>
 		</td>
 	</tr>

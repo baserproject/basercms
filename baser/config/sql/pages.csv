@@ -92,3 +92,68 @@ WEBシステム開発事業（ダミー）</td></tr>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <?php $baser->feed(1) ?>
 ","1","1","/mobile/index","","1","","","","",""
+"","6","index","","","
+<div id=""news"" class=""clearfix"">
+<div class=""news"" style=""margin-right:28px;"">
+<h2 id=""newsHead01"">NEWS RELEASE</h2>
+<div class=""body"">
+<?php $baser->blogPosts('news', 5) ?>
+</div>
+</div>
+<div class=""news"">
+<h2 id=""newsHead02"">BaserCMS NEWS</h2>
+<div class=""body"">
+<?php $baser->js('/s/feed/ajax/1') ?>
+</div>
+</div>
+</div>","2","1","/smartphone/index","","1","","","","",""
+"","7","about","会社案内","BaserCMS inc.の会社案内ページ","<h2 class=""contents-head"">会社案内</h2>
+<h3 class=""contents-head"">会社データ</h3>
+<div class=""section"">
+<table class=""row-table-01"" cellspacing=""0"" cellpadding=""0"">
+<tr><th width=""150"">会社名</th><td>BaserCMS inc.  [デモ]</td></tr>
+<tr><th>設立</th><td>2009年11月</td></tr>
+<tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>
+<tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />
+WEBサイト制作事業（ダミー）<br />
+WEBシステム開発事業（ダミー）</td></tr>
+</table>
+</div>
+<h3 class=""contents-head"">アクセスマップ</h3>
+<div class=""section"">
+<?php $baser->element(""googlemaps"", array(""width"" => 585)) ?>
+</div>
+","2","1","/smartphone/about","","1","","","","",""
+"","8","service","サービス","BaserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
+<div class=""section"">
+<p>
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+</p>
+</div>
+<div class=""section"">
+<p>
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+</p>
+</div>
+<div class=""section"">
+<p>
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
+</p>
+</div>
+","2","1","/smartphone/service","","1","","","","",""
+"","9","sitemap","サイトマップ","BaserCMS inc.のサイトマップページ","<h2 class=""contents-head"">サイトマップ</h2>
+<?php $baser->sitemap() ?>
+<ul class=""section"">
+	<li><?php $baser->link(""新着情報"",""/s/news/index"") ?></li>
+	<li><?php $baser->link(""お問い合わせ"",""/s/contact/index"") ?>	</li>
+</ul>
+","2","1","/smartphone/sitemap","","1","","","","",""

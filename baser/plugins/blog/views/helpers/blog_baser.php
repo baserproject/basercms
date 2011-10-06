@@ -56,16 +56,20 @@ class BlogBaserHelper extends AppHelper {
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
-		if(isset($options['mobile'])) {
-			$mobile = $options['mobile'];
-			unset($options['mobile']);
-		} else {
-			$mobile = (Configure::read('AgentPrefix.currentAgent') == 'mobile');
+		
+		$settings = Configure::read('AgentSettings');
+		foreach($settings as $key => $setting) {
+			if(isset($options[$key])) {
+				$agentOn = $options[$key];
+				unset($options[$key]);
+			} else {
+				$agentOn = (Configure::read('AgentPrefix.currentAgent') == $key);
+			}
+			if($agentOn){
+				$url['prefix'] = $setting['prefix'];
+				break;
+			}
 		}
-		if($mobile){
-			$url['prefix'] = Configure::read('AgentPrefix.mobile.prefix');
-		}
-
 		if(isset($options['templates'])) {
 			$templates = $options['templates'];
 		} else {

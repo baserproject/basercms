@@ -40,7 +40,7 @@ $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 ?>
 
-<div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?>">
+<div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
@@ -66,7 +66,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 				'controller'	=> $blogContent['BlogContent']['name'],
 				'action'		=> 'archives',
 				'date', $postedDate['year'], $postedDate['month']
-			), array('prefix' => true)) ?>
+			)) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

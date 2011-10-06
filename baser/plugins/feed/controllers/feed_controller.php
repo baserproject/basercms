@@ -54,7 +54,7 @@ class FeedController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Cache','TextEx','Feed.Feed');
+	var $helpers = array('Cache','TextEx','Feed.Feed', 'Array');
 /**
  * beforeFilter
  *
@@ -64,7 +64,7 @@ class FeedController extends FeedAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->AuthEx->allow('index','mobile_index','ajax');
+		$this->AuthEx->allow('index', 'mobile_index', 'smartphone_index', 'ajax', 'smartphone_ajax');
 		parent::beforeFilter();
 
 	}
@@ -209,6 +209,18 @@ class FeedController extends FeedAppController {
 
 	}
 /**
+ * [SMARTPHONE] フィードを一覧表示する
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function smartphone_index($id) {
+
+		$this->setAction('index',$id);
+
+	}
+/**
  * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
  *
  * @param int $id
@@ -227,6 +239,18 @@ class FeedController extends FeedAppController {
 
 		// idを設定
 		$this->set('id',$id);
+
+	}
+/**
+ * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function smartphone_ajax($id) {
+
+		$this->setAction('ajax',$id);
 
 	}
 /**

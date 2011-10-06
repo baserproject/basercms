@@ -41,7 +41,7 @@ class FeedBaserHelper extends AppHelper {
 			$mobile = (Configure::read('AgentPrefix.currentAgent') == 'mobile');
 		}
 		if($mobile){
-			$url['prefix'] = Configure::read('AgentPrefix.mobile.prefix');
+			$url['prefix'] = Configure::read('AgentSettings.mobile.prefix');
 		}
 		echo $this->requestAction($url,array('pass'=>array($id)));
 

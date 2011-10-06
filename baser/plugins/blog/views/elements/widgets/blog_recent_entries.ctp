@@ -32,7 +32,7 @@ $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
 ?>
-<div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?>">
+<div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
@@ -45,7 +45,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
 				<?php $class = '' ?>
 			<?php endif ?>
 		<li<?php echo $class ?>>
-			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no']),array('prefix'=>true)) ?>
+			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no'])) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

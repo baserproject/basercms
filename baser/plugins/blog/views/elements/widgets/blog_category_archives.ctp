@@ -39,7 +39,7 @@ App::import('Helper','Blog.Blog');
 $blog = new BlogHelper();
 ?>
 
-<div class="widget widget-blog-categories-archives widget-blog-categories-archives-<?php echo $id ?>">
+<div class="widget widget-blog-categories-archives widget-blog-categories-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>

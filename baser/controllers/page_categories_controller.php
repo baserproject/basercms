@@ -93,33 +93,50 @@ class PageCategoriesController extends AppController {
 		$default = array('PageCategory' => array('type'=>'pc'));
 		$this->setViewConditions('PageCategory', array('default' => $default));
 
-		$mobileId = $this->PageCategory->getMobileId();
-		$children = $this->PageCategory->children($mobileId, false, array('PageCategory.id'));
+		$mobileId = $this->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->PageCategory->getAgentId('smartphone');
+		
 		$ids = array();
-		if($children) {
-			$ids = am($ids, Set::extract('/PageCategory/id', $children));
-		}
+		$conditions = array();
 		if($this->data['PageCategory']['type'] == 'pc' || empty($this->data['PageCategory']['type'])) {
-			$ids = am(array($mobileId), $ids);
+			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
+			if($children) {
+				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+			}
+			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif($this->data['PageCategory']['type'] == 'mobile') {
+			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
+			if($children) {
+				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+			}
 			if($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
-			} else {
-				$conditions = array(array('PageCategory.id <>' => $mobileId));
+			}
+		} elseif($this->data['PageCategory']['type'] == 'smartphone') {
+			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
+			if($children) {
+				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+			}
+			if($ids) {
+				$conditions = array(array('PageCategory.id' => $ids));
 			}
 		}
-
-		$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+		
 		$dbDatas = array();
-		foreach($_dbDatas as $key => $dbData) {
-			$category = $this->PageCategory->find(array('PageCategory.id'=>$key));
-			if(preg_match("/^([_]+)/i",$dbData,$matches)) {
-				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-				$category['PageCategory']['title'] = $prefix.'└'.$category['PageCategory']['title'];
+		if($conditions) {
+			$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+			$dbDatas = array();
+			foreach($_dbDatas as $key => $dbData) {
+				$category = $this->PageCategory->find(array('PageCategory.id'=>$key));
+				if(preg_match("/^([_]+)/i",$dbData,$matches)) {
+					$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
+					$category['PageCategory']['title'] = $prefix.'└'.$category['PageCategory']['title'];
+				}
+				$dbDatas[] = $category;
 			}
-			$dbDatas[] = $category;
 		}
+		
 		$this->set('owners', $this->PageCategory->getControlSource('owner_id'));
 		$this->set('dbDatas',$dbDatas);
 		/* 表示設定 */
@@ -164,7 +181,6 @@ class PageCategoriesController extends AppController {
 		/* 表示設定 */
 		$user = $this->AuthEx->user();
 		$userModel = $this->getUserModel();
-		$mobileId = $this->PageCategory->getMobileId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
 			'ownerId' => $user[$userModel]['user_group_id']
 		));
@@ -174,8 +190,15 @@ class PageCategoriesController extends AppController {
 			} else {
 				$parents = array('' => '指定しない');
 			}
-		} elseif(isset($parents[$mobileId])) {
-			unset($parents[$mobileId]);
+		} else {
+			$mobileId = $this->PageCategory->getAgentId('mobile');
+			if(isset($parents[$mobileId])) {
+				unset($parents[$mobileId]);
+			}
+			$smartphoneId = $this->PageCategory->getAgentId('smartphone');
+			if(isset($parents[$smartphoneId])) {
+				unset($parents[$smartphoneId]);
+			}
 		}
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
@@ -234,7 +257,7 @@ class PageCategoriesController extends AppController {
 		/* 表示設定 */
 		$user = $this->AuthEx->user();
 		$userModel = $this->getUserModel();
-		$mobileId = $this->PageCategory->getMobileId();
+		$mobileId = $this->PageCategory->getAgentId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
 			'excludeParentId' => $this->data['PageCategory']['id'],
 			'ownerId' => $user[$userModel]['user_group_id']

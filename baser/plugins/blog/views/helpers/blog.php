@@ -338,7 +338,20 @@ class BlogHelper extends AppHelper {
  */
 	function postDate($post,$format = 'Y/m/d') {
 		
-		echo $this->TimeEx->format($format,$post['BlogPost']['posts_date']);
+		echo $this->getPostDate($post, $format);
+		
+	}
+/**
+ * 登録日
+ * 
+ * @param array $post
+ * @param string $format
+ * @return void
+ * @access public
+ */
+	function getPostDate($post,$format = 'Y/m/d') {
+		
+		return $this->TimeEx->format($format,$post['BlogPost']['posts_date']);
 		
 	}
 /**

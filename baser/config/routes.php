@@ -34,7 +34,6 @@ if(!empty($cn->config->baser['driver'])) {
 	Configure::write('Baser.urlParam', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$parameter = Configure::read('Baser.urlParam');
 	$agentOn = Configure::read('AgentPrefix.on');
-	$agentPlugin = Configure::read('AgentPrefix.plugin');
 	$agentAlias = Configure::read('AgentPrefix.currentAlias');
 	$agentPrefix = Configure::read('AgentPrefix.currentPrefix');
 /**
@@ -96,19 +95,33 @@ if(!empty($cn->config->baser['driver'])) {
 		}
 	}
 /**
- * プラグイン名の書き換え
+ * プラグイン判定 ＆ プラグイン名の書き換え
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
  */
+	$isPlugin = false;
 	$PluginContent = ClassRegistry::init('PluginContent');
 	if($PluginContent) {
-		$PluginContent->addRoute($parameter);
+		$isPlugin = $PluginContent->addRoute($parameter);
+	}
+	$url = getUrlFromEnv();
+	if(!empty($url)) {
+		$path = explode('/',$url);
+		App::import('Core','Folder');
+		$pluginFolder = new Folder(APP.'plugins');
+		$plugins = $pluginFolder->read(true,true);
+		if($plugins[0]) {
+			if(in_array($path[0], $plugins[0]) || 
+				(isset($path[1]) && $path[0] == $agentAlias && in_array($path[1], $plugins[0]))) {
+				$isPlugin = true;
+			}
+		}
 	}
 /**
  * 携帯ルーティング
  */
 	if($agentOn) {
 		// プラグイン
-		if($agentPlugin) {
+		if($isPlugin) {
 			// ノーマル
 			Router::connect('/'.$agentAlias.'/:plugin/:controller/:action/*', array('prefix' => $agentPrefix));
 			// プラグイン名省略

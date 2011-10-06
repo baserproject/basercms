@@ -101,29 +101,40 @@ class PluginContent extends AppModel {
 		}
 
 		$agentAlias = Configure::read('AgentPrefix.currentAlias');
+		$agentPrefix = Configure::read('AgentPrefix.currentAgent');
 		$agentOn = Configure::read('AgentPrefix.on');
-		$pluginContents = $this->find('all',array('fields'=>array('name','plugin')));
-		if(!$pluginContents) {
+		
+		$url = preg_replace('/^\//','',$url);
+		if(strpos($url, '/') !== false) {
+			list($name) = split('/',$url);
+		}else {
+			$name = $url;
+		}
+		
+		$pluginContent = $this->find('first', array(
+			'fields' => array('name', 'plugin'),
+			'conditions'=> array('PluginContent.name' => $name)
+		));
+		if(!$pluginContent) {
 			return false;
 		}
 
-		$url = preg_replace('/^\//','',$url);
-		if(strpos($url, '/') !== false) {
-			$_path = split('/',$url);
+		if(!$agentOn) {
+			Router::connect(
+					'/'.$pluginContent['PluginContent']['name'].'/:action/*',
+					array(
+						'plugin'	=> $pluginContent['PluginContent']['plugin'],
+						'controller'=> $pluginContent['PluginContent']['plugin']
+			));
 		}else {
-			$_path[0] = $url;
-			$_path[1] = '';
+			Router::connect('/'.$agentAlias.'/'.$pluginContent['PluginContent']['name'].'/:action/*',
+					array(
+						'prefix'	=> $agentPrefix,
+						'plugin'	=> $pluginContent['PluginContent']['plugin'],
+						'controller'=> $pluginContent['PluginContent']['plugin']
+			));
 		}
-
-		foreach($pluginContents as $pluginContent ) {
-			if($pluginContent['PluginContent']['name']) {
-				if(!$agentOn && $_path[0] == $pluginContent['PluginContent']['name']) {
-					Router::connect('/'.$pluginContent['PluginContent']['name'].'/:action/*',array('plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
-				}elseif($agentOn && $_path[0]==$pluginContent['PluginContent']['name']) {
-					Router::connect('/'.$agentAlias.'/'.$pluginContent['PluginContent']['name'].'/:action/*',array('prefix' => 'mobile','plugin'=>$pluginContent['PluginContent']['plugin'],'controller'=>$pluginContent['PluginContent']['plugin']));
-				}
-			}
-		}
+		return true;
 
 	}
 }

@@ -86,3 +86,19 @@
 			$this->setMessage('contents テーブルのデータ更新に失敗しました。', true);
 		}
 	}
+/**
+ * page_categories データ更新
+ */
+	App::import('Model', 'PageCategory');
+	$PageCategory = new PageCategory();
+	$data = array('PageCategory' => array(
+		'name'		=> 'smartphone',
+		'title'		=> 'スマートフォン',
+		'created'	=> date('Y-m-d H:i:s')
+	));
+	$PageCategory->create($data);
+	if($PageCategory->save()) {
+		$this->setMessage('page_categories テーブルのデータ更新に成功しました。');
+	} else {
+		$this->setMessage('page_categories テーブルのデータ更新に失敗しました。', true);
+	}

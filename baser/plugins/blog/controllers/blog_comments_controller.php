@@ -80,7 +80,7 @@ class BlogCommentsController extends BlogAppController {
 
 		parent::beforeFilter();
 
-		$this->AuthEx->allow('add','captcha');
+		$this->AuthEx->allow('add','captcha', 'smartphone_add', 'smartphone_captcha');
 
 		$navis = array();
 		if(!empty($this->params['pass'][1])) {
@@ -301,6 +301,20 @@ class BlogCommentsController extends BlogAppController {
 				$this->set('dbData',false);
 			}
 		}
+
+	}
+/**
+ * [AJAX] ブログコメントを登録する
+ * 
+ * @param string $blogContentId
+ * @param string $blogPostId
+ * @return boolean
+ * @access public
+ */
+	function smartphone_add($blogContentId,$blogPostId) {
+		
+		$this->setAction('add', $blogContentId, $blogPostId);
+		
 	}
 /**
  * 認証用のキャプチャ画像を表示する
@@ -314,6 +328,17 @@ class BlogCommentsController extends BlogAppController {
         $this->Captcha->render();
 		
     } 
-	
+/**
+ * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+ * 
+ * @return void
+ * @access public
+ */
+    function smartphone_captcha()
+    {
+		
+        $this->Captcha->render();
+		
+    } 
 }
 ?>

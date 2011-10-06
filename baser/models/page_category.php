@@ -70,12 +70,12 @@ class PageCategory extends AppModel {
  */
 	var $_pageCategoryPathes = -1;
 /**
- * モバイルカテゴリのID
+ * エージェントカテゴリのID
  * 
- * @var mixed -1 / false / int
+ * @var array
  * @access	protected
  */
-	var $_mobileId = -1;
+	var $_agentId = array();
 /**
  * 保存時に関連ページを更新するかどうか
  * 
@@ -125,19 +125,29 @@ class PageCategory extends AppModel {
 					$conditions = $options['conditions'];
 				}
 				
-				if(isset($options['excludeParentId'])) {
-					if($options['excludeParentId']) {
-						$children = $this->children($options['excludeParentId']);
-						$excludeIds = array($options['excludeParentId']);
-						foreach($children as $child) {
-							$excludeIds[] = $child['PageCategory']['id'];
+				if(!empty($options['excludeParentId'])) {
+					if(!is_array($options['excludeParentId'])) {
+						$options['excludeParentId'] = array($options['excludeParentId']);
+					}
+					$excludeIds = array();
+					foreach($options['excludeParentId'] as $excludeParentId) {
+						$children = $this->children($excludeParentId);
+						if($children) {
+							$excludeIds = am($excludeIds, Set::extract('/PageCategory/id', $children));
 						}
-						$conditions['NOT']['PageCategory.id'] = $excludeIds;
-					} else {
-						// excludeParentId が空文字の場合はPCページ以外を指す
-						$mobileCategoryIds = $this->getMobileCategoryIds(false);
-						if($mobileCategoryIds) {
-							$conditions['PageCategory.id'] = $mobileCategoryIds;
+						$excludeIds[] = $excludeParentId;
+					}
+					$conditions['NOT']['PageCategory.id'] = $excludeIds;
+				}
+				if(!empty($options['parentId'])) {
+					if(!is_array($options['parentId'])) {
+						$options['parentId'] = array($options['parentId']);
+					}
+					$parentIds = array();
+					foreach($options['parentId'] as $parentId) {
+						$children = $this->children($parentId);
+						if($children) {
+							$parentIds = am($parentIds, Set::extract('/PageCategory.id', $children));
 						} else {
 							return array();
 						}
@@ -158,10 +168,13 @@ class PageCategory extends AppModel {
 
 				$parents = $this->generatetreelist($conditions);
 				$controlSources['parent_id'] = array();
+				
+				$excludeIds = array();
 				if(!Configure::read('Baser.mobile')) {
-					$excludeIds = $this->getMobileCategoryIds();
-				} else {
-					$excludeIds = array();
+					$excludeIds = $this->getAgentCategoryIds('mobile');
+				}
+				if(!Configure::read('Baser.smartphone')) {
+					$excludeIds = $this->getAgentCategoryIds('smartphone');
 				}
 				foreach($parents as $key => $parent) {
 					if($parent && !in_array($key, $excludeIds)) {
@@ -467,17 +480,17 @@ class PageCategory extends AppModel {
  * @return array $ids
  * @access public
  */
-	function getMobileCategoryIds($top = true){
+	function getAgentCategoryIds($type = 'mobile', $top = true){
 
-		$mobileId = $this->getMobileId();
-		if(!$mobileId){
+		$agentId = $this->getAgentId($type);
+		if(!$agentId){
 			return array();
 		}
 		$ids = array();
 		if($top) {
-			$ids[] = $mobileId;
+			$ids[] = $agentId;
 		}
-		$children = $this->children($mobileId,false,array('PageCategory.id'),array('PageCategory.id'));
+		$children = $this->children($agentId, false, array('PageCategory.id'),array('PageCategory.id'));
 		if($children){
 			$children = Set::extract('/PageCategory/id',$children);
 			$ids = am($ids,$children);
@@ -486,28 +499,32 @@ class PageCategory extends AppModel {
 
 	}
 /**
- * モバイルカテゴリのIDを取得する
+ * エージェントカテゴリのIDを取得する
  * 
- * @param int $pcId
+ * @param int $targetId
  * @return int
  * @access public
  */
-	function getMobileId($pcId = null) {
-		
-		if($pcId){
-			$path = $this->getPath($pcId, array('name'), -1);
-			$path = Set::extract('/PageCategory/name', $path);
-			$path = implode(DS, $path);
-			$path = getViewPath().'pages'.DS.'mobile'.DS.$path;
-			$mobileId = $this->getIdByPath($path);			
-		}else{
-			if($this->_mobileId == -1){
-				$this->_mobileId = $this->field('id',array('PageCategory.name'=>'mobile'));
+	function getAgentId($type = 'mobile', $targetId = null) {
+
+		if($targetId){
+			if(in_array($targetId, array($this->getAgentId('mobile'), $this->getAgentId('smartphone')))) {
+				$path = getViewPath().'pages'.DS.$type;
+			} else {
+				$path = $this->getPath($targetId, array('name'), -1);
+				$path = Set::extract('/PageCategory/name', $path);
+				$path = implode(DS, $path);
+				$path = getViewPath().'pages'.DS.$type.DS.$path;
 			}
-			$mobileId = $this->_mobileId;
+			$agentId = $this->getIdByPath($path);
+		}else{
+			if(!isset($this->_agentId[$type])){
+				$this->_agentId[$type] = $this->field('id',array('PageCategory.name'=>$type));
+			}
+			$agentId = $this->_agentId[$type];
 		}
-		return $mobileId;
-		
+		return $agentId;
+
 	}
 /**
  * ツリーリストを取得する
@@ -546,7 +563,8 @@ class PageCategory extends AppModel {
 					array('PageCategory.owner_id' => null),
 					array('PageCategory.owner_id' => $userGroupId)
 				),
-				'PageCategory.id <>' => $this->getMobileId()
+				array('PageCategory.id <>' => $this->getAgentId('mobile')),
+				array('PageCategory.id <>' => $this->getAgentId('smartphone'))
 		)));
 
 		if($ownerCats || $rootEditable) {

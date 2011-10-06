@@ -21,7 +21,7 @@
  */
 $baser->cacheHeader(MONTH,'js');
 ?>
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('/feed/img/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)
@@ -43,7 +43,7 @@ var errorCallback = function (xml, status, e)
 //  リクエスト処理
 $.ajax({
 	type: 'GET',
-	url:      '<?php echo Router::url('/feed/index/'.$id); ?>',
+	url:      '<?php echo Router::url(array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
 	cache: false,
 	success:  successCallback,
 	error:    errorCallback
