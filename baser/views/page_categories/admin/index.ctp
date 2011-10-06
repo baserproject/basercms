@@ -19,7 +19,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$allowOwners = array('', $user['user_group_id']);
+$allowOwners = array();
+if(isset($user['user_group_id'])) {
+	$allowOwners = array('', $user['user_group_id']);
+}
 ?>
 
 <h2><?php $baser->contentsTitle() ?>&nbsp;
@@ -82,7 +85,7 @@ $allowOwners = array('', $user['user_group_id']);
 			<?php if(count($dbDatas) != ($key + 1)): ?>
 			<?php $baser->link('▼', array('controller' => 'page_categories', 'action' => 'down', $dbData['PageCategory']['id'])) ?>
 			<?php endif ?>
-			<?php if(in_array($dbData['PageCategory']['owner_id'], $allowOwners)||$user['user_group_id']==1): ?>
+			<?php if(in_array($dbData['PageCategory']['owner_id'], $allowOwners)|| (!empty($user) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('編集', array('action' => 'edit', $dbData['PageCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['PageCategory']['id']),
