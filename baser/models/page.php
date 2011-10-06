@@ -150,7 +150,9 @@ class Page extends AppModel {
  */
 	function getDefaultValue() {
 
-		$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
+		if(!empty($_SESSION['Auth'])) {
+			$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
+		}
 		$data[$this->name]['sort'] = $this->getMax('sort')+1;
 		$data[$this->name]['status'] = false;
 		return $data;
