@@ -19,7 +19,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$allowOwners = array('', $user['user_group_id']);
+$allowOwners = array();
+if(isset($user['user_group_id'])) {
+	$allowOwners = array('', $user['user_group_id']);
+}
 ?>
 
 <!-- title -->
@@ -57,7 +60,7 @@ $allowOwners = array('', $user['user_group_id']);
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
 			<?php $baser->link('確認', $blog->getCategoryUrl($dbData['BlogCategory']['id']), array('target' => '_blank', 'class' => 'btn-green-s button-s')) ?>
-		<?php if(in_array($dbData['BlogCategory']['owner_id'], $allowOwners)||$user['user_group_id']==1): ?>
+		<?php if(in_array($dbData['BlogCategory']['owner_id'], $allowOwners)||(isset($user['user_group_id']) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('編集', array('action' => 'edit', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
 			<?php $baser->link('削除',
 					array('action'=>'delete', $blogContent['BlogContent']['id'], $dbData['BlogCategory']['id']),
@@ -87,7 +90,7 @@ $allowOwners = array('', $user['user_group_id']);
 </table>
 
 <!-- button -->
-<?php if($newCatAddable): ?>
+<?php if(isset($newCatAddable) && $newCatAddable): ?>
 <div class="align-center">
 	<?php $baser->link('新規登録', array('action' => 'add', $blogContent['BlogContent']['id']), array('class' => 'btn-red button')) ?>
 </div>
