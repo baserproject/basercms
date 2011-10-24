@@ -1039,7 +1039,11 @@ class BaserHelper extends AppHelper {
 	function addCrumb($name, $link = null, $options = null) {
 		
 		$_options = array('forceTitle'=>true);
-		$options = am($_options,$options);
+		if($options) {
+			$options = am($_options,$options);
+		} else {
+			$options = $_options;
+		}
 		$this->HtmlEx->_crumbs[] = array($name, $link, $options);
 		
 	}
