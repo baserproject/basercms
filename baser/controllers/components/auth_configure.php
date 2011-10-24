@@ -74,7 +74,8 @@ class  AuthConfigureComponent extends Object {
 			'loginRedirect' => '/'.$requestedPrefix,
 			'username'		=> 'name',
 			'password'		=> 'password',
-			'serial'		=> ''
+			'serial'		=> '',
+			'userScope'		=> ''
 		);
 		$config = array_merge($_config, $config);
 		extract($config);
@@ -100,6 +101,9 @@ class  AuthConfigureComponent extends Object {
 		/*if($requestedPrefix) {
 			//$auth->userScope = array('UserGroup.auth_prefix'=>$requestedPrefix);
 		}*/
+		if($userScope) {
+			$auth->userScope = $userScope;
+		}
 
 		// セッション識別
 		$auth->sessionKey = 'Auth.'.$userModel;
