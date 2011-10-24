@@ -257,7 +257,7 @@ class BlogController extends BlogAppController {
 			/* タグ別記事一覧 */
 			case 'tag':
 
-				$tag = $pass[count($pass)-1];
+				$tag = h($pass[count($pass)-1]);
 				if(empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
 					$this->notFound();
 				}
@@ -269,9 +269,9 @@ class BlogController extends BlogAppController {
 			/* 月別アーカイブ一覧 */
 			case 'date':
 
-				$year = $pass[1];
-				$month = @$pass[2];
-				$day = @$pass[3];
+				$year = h($pass[1]);
+				$month = h(@$pass[2]);
+				$day = h(@$pass[3]);
 				if(!$year && !$month && !$day) {
 					$this->notFound();
 				}
@@ -705,6 +705,8 @@ class BlogController extends BlogAppController {
  */
 	function get_calendar($id,$year='',$month=''){
 
+		$year = h($year);
+		$month = h($month);
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
