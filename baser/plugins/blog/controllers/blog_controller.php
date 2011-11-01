@@ -156,18 +156,18 @@ class BlogController extends BlogAppController {
 			Configure::write('debug', 0);
 			$this->set('channel', array(
 				'title'			=> h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
-				'description'	=> h($this->blogContent['BlogContent']['description'])
+				'description'	=> h(strip_tags($this->blogContent['BlogContent']['description']))
 			));
 			$this->layout = 'default';
 			$template = 'index';
-			$limit = $this->blogContent['BlogContent']['feed_count'];
+			$listCount = $this->blogContent['BlogContent']['feed_count'];
 		}else {
 			$this->layout = $this->blogContent['BlogContent']['layout'];
 			$template = $this->blogContent['BlogContent']['template'].DS.'index';
-			$limit = $this->blogContent['BlogContent']['list_count'];
+			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
 
-		$datas = $this->_getBlogPosts(array('limit' => $limit));
+		$datas = $this->_getBlogPosts(array('listCount' => $listCount));
 		
 		$this->set('posts', $datas);
 		$this->set('single', false);
@@ -808,7 +808,7 @@ class BlogController extends BlogAppController {
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
 				'fields'	=> array('no','name'),
 				'conditions'=> $conditions,
-				'limit'		=> $count,
+				'listCount'		=> $count,
 				'order'		=> 'posts_date DESC',
 				'recursive'	=> -1,
 				'cache'		=> false
