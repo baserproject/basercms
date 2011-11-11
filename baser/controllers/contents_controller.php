@@ -141,6 +141,8 @@ class ContentsController extends AppController {
 		
 		$conditions = array('Content.status' => true);
 		$query = '';
+		unset($data['Content']['key']);
+		unset($data['Content']['fields']);
 		if(isset($data['Content']['q'])) {
 			$query = $data['Content']['q'];
 			unset($data['Content']['q']);
