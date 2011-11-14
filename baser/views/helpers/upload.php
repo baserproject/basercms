@@ -239,7 +239,7 @@ class UploadHelper extends FormHelper {
 			return;
 		}
 
-		$fileUrl = $this->base.'/files/'.$model->actsAs['Upload']['saveDir'].'/';
+		$fileUrl = '/files/'.$model->actsAs['Upload']['saveDir'].'/';
 		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
 		$copySettings = $model->actsAs['Upload']['fields'][$field]['imagecopy'];
 

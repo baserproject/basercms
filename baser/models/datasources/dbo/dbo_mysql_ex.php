@@ -31,7 +31,7 @@ class DboMysqlEx extends DboMysql {
  */
 	function buildRenameTable($sourceName, $targetName) {
 		
-		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
+		return "ALTER TABLE `".$sourceName."` RENAME `".$targetName."`";
 	
 	}
 

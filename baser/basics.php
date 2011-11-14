@@ -46,7 +46,7 @@
 				if($url) {
 					$requestUri = '/';
 					if(!empty($_SERVER['REQUEST_URI'])) {
-						$requestUri = $_SERVER['REQUEST_URI'];
+						$requestUri = urldecode($_SERVER['REQUEST_URI']);
 					}
 					if(strpos($requestUri, '?') !== false) {
 						list($requestUri) = explode('?', $requestUri);

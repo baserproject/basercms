@@ -175,8 +175,9 @@
 		// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
 		// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
 		//======================================================================
-		if(preg_match('/^files/', $parameter)) {
-			$redirectUrl = FULL_BASE_URL.$baseUrl.$parameter;
+		$_parameter = preg_replace('/^'.Configure::read('AgentPrefix.currentAlias').'\//', '', $parameter);
+		if(preg_match('/^files/', $_parameter)) {
+			$redirectUrl = FULL_BASE_URL.'/'.$_parameter;
 			header("HTTP/1.1 301 Moved Permanently");
 			header("Location: ".$redirectUrl);
 			exit();

@@ -45,6 +45,7 @@ header .global-menu li a{
 	width:106px;
 	height:49px;
 	line-height:49px;
+	text-decoration:none;
 }
 /* footer
 ----------------------------------------------- */

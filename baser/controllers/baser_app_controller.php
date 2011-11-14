@@ -179,7 +179,12 @@ class BaserAppController extends Controller {
 		}
 
 		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
-			if(isset($this->siteConfigs['mobile_on']) && !$this->siteConfigs['mobile_on']) {
+			if(!Configure::read('Baser.mobile')) {
+				$this->notFound();
+			}
+		}
+		if(Configure::read('AgentPrefix.currentAgent') == 'smartphone') {
+			if(!Configure::read('Baser.smartphone')) {
 				$this->notFound();
 			}
 		}
@@ -680,7 +685,7 @@ class BaserAppController extends Controller {
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = "'{$fromName}' <{$from}>";
+			$this->EmailEx->from = $fromName.' <'.$from.'>';
 		}
 
 		// CC

@@ -52,9 +52,9 @@ $day = date("j", $time);
 
 //GETにきた年月をチェックする
 if(isset($this->params['pass']['0']) && $this->params['pass']['0'] == 'date'){
-	$year2=@$this->params['pass']['1'];
-	$month2=@$this->params['pass']['2'];
-	$day2=@$this->params['pass']['3'];
+	$year2=h(@$this->params['pass']['1']);
+	$month2=h(@$this->params['pass']['2']);
+	$day2=h(@$this->params['pass']['3']);
 }else{
 	$year2='';
 	$month2='';

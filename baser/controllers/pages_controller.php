@@ -494,7 +494,10 @@ class PagesController extends AppController {
 		$pageCategoryId = $this->Page->field('page_category_id', array('Page.url' => $url));
 		
 		// 関連カテゴリを取得（関連ページも同時に取得）
-		$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
+		$pageCategorires = array();
+		if($pageCategoryId) {
+			$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
+		}
 		
 		$navis = array();
 		if($pageCategorires) {

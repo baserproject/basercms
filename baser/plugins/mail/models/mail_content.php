@@ -210,6 +210,7 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['mail_template'] = 'mail_default';
 		$data['MailContent']['use_description'] = 1;
 		$data['MailContent']['auth_captcha'] = 0;
+		$data['MailContent']['ssl_on'] = 0;
 		
 		return $data;
 

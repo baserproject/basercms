@@ -251,18 +251,33 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return string
  */
-	function getCategory($post, $options = array()) {
-		
-		if(!empty($post['BlogCategory']['name'])) {
-			if(!isset($this->Html)){
-				$this->Html = new HtmlHelper();
-			}
-			return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),$options,null,false);
-		}else {
-			return '';
-		}
-		
-	}
+   function getCategory($post, $options = array()) {
+       
+       if(!empty($post['BlogCategory']['name'])) {
+           
+           $options = am(array('link' => true), $options);
+           $link = false;
+           
+           if($options['link']) {
+               $link = true;
+           }
+           
+           unset($options['link']);
+           
+           if($link) {
+               if(!isset($this->Html)){
+                   $this->Html = new HtmlHelper();
+               }
+               return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),$options,null,false);
+           } else {
+               return $post['BlogCategory']['title'];
+           }
+           
+       }else {
+           return '';
+       }
+       
+   }
 /**
  * タグを出力する
  *

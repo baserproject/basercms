@@ -189,7 +189,7 @@ class BaserAppModel extends Model {
 		App::import('Model', 'Dblog');
 		$Dblog = new Dblog();
 		$logdata['Dblog']['name'] = $message;
-		$logdata['Dblog']['user_id'] = $_SESSION['Auth']['User']['id'];
+		$logdata['Dblog']['user_id'] = @$_SESSION['Auth']['User']['id'];
 		return $Dblog->save($logdata);
 
 	}

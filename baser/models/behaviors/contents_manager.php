@@ -57,8 +57,8 @@ class ContentsManagerBehavior extends ModelBehavior {
 
 		$data['Content']['model'] = $model->alias;
 		// タグ、空白を除外
-		$data['Content']['detail'] = preg_replace("/[\n\t\s]+/is", ' ', trim(strip_tags($data['Content']['detail'])));
-
+		$data['Content']['detail'] = str_replace(array("\r\n","\r","\n", "\t", "\s"), '', trim(strip_tags($data['Content']['detail'])));
+		
 		// 検索用データとして保存
 		$id = '';
 		$this->Content = ClassRegistry::init('Content');
