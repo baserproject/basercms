@@ -808,7 +808,7 @@ class BlogController extends BlogAppController {
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
 				'fields'	=> array('no','name'),
 				'conditions'=> $conditions,
-				'listCount'		=> $count,
+				'limit'		=> $count,
 				'order'		=> 'posts_date DESC',
 				'recursive'	=> -1,
 				'cache'		=> false
