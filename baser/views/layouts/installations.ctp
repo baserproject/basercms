@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views.layout
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -26,8 +26,8 @@
 <head>
 <meta name="robots" content="noindex,nofollow" />
 <?php $baser->charset() ?>
-<title><?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - BaserCMS -</title>
-<?php echo $html->meta('description','BaserCMSのインストーラー') ?>
+<title><?php echo $title_for_layout ?>　コーポレートサイトにちょうどいいCMS - baserCMS -</title>
+<?php echo $html->meta('description','baserCMSのインストーラー') ?>
 <?php $baser->icon() ?>
 <?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
 <?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -51,7 +51,10 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
+	var $navis = array(
+		'システム設定'	=> array('controller' => 'site_configs', 'action' => 'form'), 
+		'テーマ管理'	=> array('controller' => 'themes', 'action' => 'index')
+	);
 /**
  * テーマ一覧
  *
@@ -86,9 +89,9 @@ class ThemesController extends AppController {
 		}
 		$themes[] = array(
 			'name'=>'core',
-			'title'=>'BaserCMSコア',
+			'title'=>'baserCMSコア',
 			'version'=>$this->getBaserVersion(),
-			'description'=>'BaserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
+			'description'=>'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
 			'author'=>'basercms',
 			'url'=>'http://basercms.net'
 		);
@@ -123,7 +126,7 @@ class ThemesController extends AppController {
 			$this->Theme->set($this->data);
 			if($this->Theme->save()){
 				$this->Session->setFlash('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else{
 				$this->Session->setFlash('テーマ情報の変更に失敗しました。入力内容を確認してください。');
 			}
@@ -177,7 +180,7 @@ class ThemesController extends AppController {
 		$folder = new Folder();
 		$folder->copy(array('from'=>$path,'to'=>$newPath,'mode'=>0777,'skip'=>array('_notes')));
 		$this->Session->setFlash('テーマ「'.$theme.'」をコピーしました。');
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -203,7 +206,7 @@ class ThemesController extends AppController {
 		}
 		clearViewCache();
 		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -227,7 +230,7 @@ class ThemesController extends AppController {
 		} else {
 			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		}
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 		
 	}
 

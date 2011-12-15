@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -60,12 +60,10 @@
 		<?php endif; ?>
 	<tr<?php echo $class; ?>>
 		<td class="operation-button">
-			<?php $baser->link('確認', '/admin/feed/feed_configs/preview/' . $feedConfig['FeedConfig']['id'], array('target' => '_blank', 'class' => 'btn-green-s button-s')) ?>
+			<?php $baser->link('確認', array('controller' => 'feed_configs', 'action' => 'preview', $feedConfig['FeedConfig']['id']), array('target' => '_blank', 'class' => 'btn-green-s button-s')) ?>
 			<?php $baser->link('編集', array('action' => 'edit', $feedConfig['FeedConfig']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
-			<?php $baser->link('削除', 
-					array('action' => 'delete', $feedConfig['FeedConfig']['id']),
-					array('class' => 'btn-gray-s button-s'),
-					sprintf('%s を本当に削除してもいいですか？', $feedConfig['FeedConfig']['name']), false); ?></td>
+			<?php $baser->link('削除', array('action' => 'delete', $feedConfig['FeedConfig']['id']), array('class' => 'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $feedConfig['FeedConfig']['name']), false); ?>
+		</td>
 		<td><?php echo $feedConfig['FeedConfig']['id']; ?></td>
 		<td><?php $baser->link($feedConfig['FeedConfig']['name'], array('action' => 'edit', $feedConfig['FeedConfig']['id'])) ?></td>
 		<td><?php echo $feedConfig['FeedConfig']['display_number'] ?></td>

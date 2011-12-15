@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class BlogContentsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理' => array('controller' => 'blog_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -120,7 +120,7 @@ class BlogContentsController extends BlogAppController {
 				$message = '新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogContent->saveDbLog($message);
-				$this->redirect(array('action'=>'edit', $id));
+				$this->redirect(array('action' => 'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -144,7 +144,7 @@ class BlogContentsController extends BlogAppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -163,7 +163,7 @@ class BlogContentsController extends BlogAppController {
 				}elseif ($this->data['BlogContent']['edit_blog_template']) {
 					$this->redirectEditBlog($this->data['BlogContent']['template']);
 				}else{
-					$this->redirect(array('action'=>'edit',$id));
+					$this->redirect(array('action' => 'edit', $id));
 				}
 				
 			}else {
@@ -201,10 +201,10 @@ class BlogContentsController extends BlogAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.'.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 		
 	}
@@ -231,10 +231,10 @@ class BlogContentsController extends BlogAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.'/index.ctp'));
+			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 	}
 /**
@@ -249,7 +249,7 @@ class BlogContentsController extends BlogAppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -264,7 +264,7 @@ class BlogContentsController extends BlogAppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -145,9 +145,11 @@ $(function(){
 				<ul>
 					<li>RSSフィードに出力する件数を指定します。</li>
 					<li>半角数字で入力してください。</li>
+					<?php if($this->action == 'admin_edit'): ?>
 					<li>RSSフィードのURLは
-						<?php $baser->link($baser->getUrl('http://'.env('HTTP_HOST').'/'.$formEx->value('BlogContent.name').'/index.rss'),'/'.$formEx->value('BlogContent.name').'/index.rss',array('target'=>'_blank')) ?>
+						<?php $baser->link(Router::url('/'.$formEx->value('BlogContent.name').'/index.rss', true),'/'.$formEx->value('BlogContent.name').'/index.rss',array('target'=>'_blank')) ?>
 						となります。</li>
+					<?php endif ?>
 				</ul>
 			</div>
 		</td>
@@ -216,7 +218,7 @@ $(function(){
 			<?php echo $formEx->error('BlogContent.widget_area') ?>
 			<div id="helptextWidgetArea" class="helptext">
 				ブログコンテンツで利用するウィジェットエリアを指定します。<br />
-				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理',array('plugin'=>null,'controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
+				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
 			</div>
 		</td>
 	</tr>

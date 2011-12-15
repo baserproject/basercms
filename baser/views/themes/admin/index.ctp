@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -28,7 +28,7 @@
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>ここではテーマを切り替えたり、テーマファイルを閲覧、編集したりとテーマの管理を行う事ができます。<br />
-		なお、テーマ「core」は、BaserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
+		なお、テーマ「core」は、baserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
 	<ul>
 		<li>テーマを切り替えるには、対象テーマの「適用」ボタンをクリックします。</li>
 		<li>テーマを丸ごとコピーするには、対象テーマの「コピー」ボタンをクリックします。</li>

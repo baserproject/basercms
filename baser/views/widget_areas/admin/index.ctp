@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -56,8 +56,10 @@
 				<?php $class=''; ?>
 			<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button"><?php $baser->link('編集',array('action'=>'edit', $widgetArea['WidgetArea']['id']),array('class'=>'btn-orange-s button-s'),null,false) ?>
-			<?php $baser->link('削除', array('action'=>'delete', $widgetArea['WidgetArea']['id']), array('class'=>'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $widgetArea['WidgetArea']['name']),false); ?></td>
+		<td class="operation-button">
+			<?php $baser->link('編集', array('action'=>'edit', $widgetArea['WidgetArea']['id']), array('class' => 'btn-orange-s button-s'),null,false) ?>
+			<?php $baser->link('削除', array('action'=>'delete', $widgetArea['WidgetArea']['id']), array('class' => 'btn-gray-s button-s'), sprintf('%s を本当に削除してもいいですか？', $widgetArea['WidgetArea']['name']), false); ?>
+		</td>
 		<td><?php echo $widgetArea['WidgetArea']['id']; ?></td>
 		<td><?php $baser->link($widgetArea['WidgetArea']['name'],array('action'=>'edit', $widgetArea['WidgetArea']['id'])); ?></td>
 		<td><?php echo $widgetArea['WidgetArea']['count']; ?></td>

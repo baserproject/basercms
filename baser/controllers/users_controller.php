@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -19,11 +19,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::import('Helper','HtmlEx',true,BASER_HELPERS);
-App::import('Helper','FormEx',true,BASER_HELPERS);
 /**
  * ユーザーコントローラー
  *
@@ -52,7 +47,7 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('HtmlEx','time','FormEx');
+	var $helpers = array('HtmlEx','TimeEx','FormEx');
 /**
  * コンポーネント
  *
@@ -73,7 +68,9 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('ユーザー管理'=>'/admin/users/index');
+	var $navis = array(
+		'ユーザー管理'			=> array('controller' => 'users', 'action' => 'index'),
+	);
 /**
  * beforeFilter
  *
@@ -98,25 +95,8 @@ class UsersController extends AppController {
 
 		parent::beforeFilter();
 
-		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'auth_prefix_error');
+		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
 
-	}
-/**
- * 許可されていない認証プレフィックスにアクセスした場合に呼び出される
- * セッションメッセージを設定してトップページにリダイレクトする
- * router.phpで定義
- *
- * @return void
- * @access public
- */
-	function admin_auth_prefix_error() {
-		
-		$this->Session->setFlash(
-				'ログインしているユーザーでは指定された領域にはアクセスできません。<br />'.
-				'一度ログアウトを行い、許可されているユーザーでログインしなおしてください。'
-		);
-		$this->redirect('/');
-		
 	}
 /**
  * ログイン処理を行う
@@ -218,7 +198,7 @@ class UsersController extends AppController {
 		$this->AuthEx->logout();
 		$this->Cookie->del('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
-		$this->redirect(array($this->params['prefix']=>true, 'action'=>'login'));
+		$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
 
 	}
 /**
@@ -296,7 +276,7 @@ class UsersController extends AppController {
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
-				$this->redirect(array('action'=>'edit', $this->User->getInsertID()));
+				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -331,7 +311,7 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		$selfUpdate = false;
@@ -369,7 +349,7 @@ class UsersController extends AppController {
 
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'edit', $id));
+				$this->redirect(array('action' => 'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -409,14 +389,14 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
 				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
 			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -430,7 +410,7 @@ class UsersController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

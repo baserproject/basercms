@@ -5,13 +5,13 @@
  * 
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -91,14 +91,14 @@ h2 {
 	<?php $baser->contentsTitle() ?>
 </h2>
 
-<h3>BaserCMS環境</h3>
+<h3>baserCMS環境</h3>
 
 <ul style="margin:20px 40px">
 	<li>スマートURL： <?php echo $smartUrl ?></li>
 	<li>設置フォルダ： <?php echo ROOT.DS ?></li>
 	<li>セーフモード：<?php if($safeModeOn): ?>On<?php else: ?>Off<?php endif ?>
 	<li>データベース： <?php echo $driver ?></li>
-	<li>BaserCMSバージョン： <?php echo $baserVersion ?></li>
+	<li>baserCMSバージョン： <?php echo $baserVersion ?></li>
 	<li>CakePHPバージョン： <?php echo $cakeVersion ?></li>
 </ul>
 

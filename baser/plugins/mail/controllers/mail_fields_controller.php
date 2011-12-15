@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class MailFieldsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $navis = array('メールフォーム管理' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -81,7 +81,7 @@ class MailFieldsController extends MailAppController {
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null,$this->params['pass'][0]);
-		$this->navis = am($this->navis,array($this->mailContent['MailContent']['title'].'管理'=>'/admin/mail/mail_fields/index/'.$this->params['pass'][0]));
+		$this->navis = am($this->navis, array($this->mailContent['MailContent']['title'].'管理' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0])));
 
 	}
 /**
@@ -107,7 +107,7 @@ class MailFieldsController extends MailAppController {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
 		/* セッション処理 */
@@ -140,7 +140,7 @@ class MailFieldsController extends MailAppController {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
 		if(!$this->data) {
@@ -159,7 +159,7 @@ class MailFieldsController extends MailAppController {
 						$message = '新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。';
 						$this->Session->setFlash($message);
 						$this->MailField->saveDbLog($message);
-						$this->redirect(array('controller'=>'mail_fields','action'=>'index',$mailContentId));
+						$this->redirect(array('controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 					}else {
 						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 					}
@@ -189,7 +189,7 @@ class MailFieldsController extends MailAppController {
 
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if (empty($this->data)) {
@@ -208,7 +208,7 @@ class MailFieldsController extends MailAppController {
 						$message = 'メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。';
 						$this->Session->setFlash($message);
 						$this->MailField->saveDbLog($message);
-						$this->redirect(array('action'=>'index',$mailContentId));
+						$this->redirect(array('action' => 'index', $mailContentId));
 					}else {
 						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 					}
@@ -240,7 +240,7 @@ class MailFieldsController extends MailAppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'admin_index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -259,7 +259,7 @@ class MailFieldsController extends MailAppController {
 			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
 		}
 		
-		$this->redirect(array('action'=>'index',$mailContentId));
+		$this->redirect(array('action' => 'index', $mailContentId));
 
 	}
 /**
@@ -289,14 +289,14 @@ class MailFieldsController extends MailAppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		/* コピー対象フィールドデータを読み込む */
 		$mailField = $this->MailField->read(null,$id);
 		if(!$mailField) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// 不要な値をリセットする
@@ -325,7 +325,7 @@ class MailFieldsController extends MailAppController {
 			$this->Session->setFlash($message);
 		}
 
-		$this->redirect(array('action'=>'index',$mailContentId));
+		$this->redirect(array('action' => 'index', $mailContentId));
 
 	}
 /**
@@ -374,7 +374,7 @@ class MailFieldsController extends MailAppController {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'mail_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
 		$this->Message->alias = Inflector::camelize($this->mailContent['MailContent']['name'].'_message');

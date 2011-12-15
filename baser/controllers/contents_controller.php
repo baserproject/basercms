@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -71,7 +71,10 @@ class ContentsController extends AppController {
 		
 		if(!empty($this->params['admin'])) {
 			$this->subMenuElements = array('site_configs', 'contents');
-			$this->navis = array('システム設定'=>'/admin/site_configs/form', '検索インデックス管理' => '/admin/contents/index');
+			$this->navis = array(
+				'システム設定'			=> array('controller' => 'site_configs', 'action' => 'form'), 
+				'検索インデックス管理'	=> array('controller' => 'contents', 'action' => 'index')
+			);
 		}
 		
 	}
@@ -367,7 +370,7 @@ class ContentsController extends AppController {
 					$this->Content->create($data);
 					if($this->Content->save()) {
 						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
-						$this->redirect('index');
+						$this->redirect(array('action' => 'index'));
 					} else {
 						$this->Session->setFlash('保存中にエラーが発生しました。');
 					}
@@ -395,7 +398,7 @@ class ContentsController extends AppController {
 
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		/* 削除処理 */
@@ -407,7 +410,7 @@ class ContentsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -82,28 +82,17 @@ class PluginContent extends AppModel {
 /**
  * プラグイン名の書き換え
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
- * 一つのプラグインで二つのコンテンツを設置した場合に利用する。
- * あらかじめ、plugin_contentsテーブルに、URLに使う名前とコンテンツを特定する。
- * プラグインごとの一意のキー[content_id]を保存しておく。
- *
- * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
- * Router::connectの引数として値を与えると、$html->linkなどで、
- * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
  * 
- * @param$url
- * @return boolean
+ * @param $url
+ * @return array Or false
  * @access public
  */
-	function addRoute($url) {
+	function currentPluginContent($url) {
 
 		if(!$url) {
 			return false;
 		}
 
-		$agentAlias = Configure::read('AgentPrefix.currentAlias');
-		$agentPrefix = Configure::read('AgentPrefix.currentAgent');
-		$agentOn = Configure::read('AgentPrefix.on');
-		
 		$url = preg_replace('/^\//','',$url);
 		if(strpos($url, '/') !== false) {
 			list($name) = split('/',$url);
@@ -111,31 +100,12 @@ class PluginContent extends AppModel {
 			$name = $url;
 		}
 		
-		$pluginContent = $this->find('first', array(
+		return $pluginContent = $this->find('first', array(
 			'fields' => array('name', 'plugin'),
 			'conditions'=> array('PluginContent.name' => $name)
 		));
-		if(!$pluginContent) {
-			return false;
-		}
-
-		if(!$agentOn) {
-			Router::connect(
-					'/'.$pluginContent['PluginContent']['name'].'/:action/*',
-					array(
-						'plugin'	=> $pluginContent['PluginContent']['plugin'],
-						'controller'=> $pluginContent['PluginContent']['plugin']
-			));
-		}else {
-			Router::connect('/'.$agentAlias.'/'.$pluginContent['PluginContent']['name'].'/:action/*',
-					array(
-						'prefix'	=> $agentPrefix,
-						'plugin'	=> $pluginContent['PluginContent']['plugin'],
-						'controller'=> $pluginContent['PluginContent']['plugin']
-			));
-		}
-		return true;
 
 	}
+
 }
 ?>

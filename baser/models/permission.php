@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -104,14 +104,22 @@ class Permission extends AppModel {
 		if(!$check[key($check)]) {
 			return true;
 		}
+		
 		$url = $check[key($check)];
+		
 		if(preg_match('/^[^\/]/is',$url)) {
 			$url = '/'.$url;
 		}
+		
+		// ルーティング設定に合わせて変換
+		$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		
 		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)) {
 			$url = $matches[1].'/'.'*';
 		}
+		
 		$params = Router::parse($url);
+		
 		if(empty($params['prefix'])) {
 			return false;
 		}
@@ -222,6 +230,10 @@ class Permission extends AppModel {
 			$url = preg_replace('/^\//is', '', $url);
 		}
 		
+		$adminPrefix = Configure::read('Routing.admin');
+		
+		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
+		
 		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
 		$allows = array(
 			'admin',
@@ -256,5 +268,6 @@ class Permission extends AppModel {
 		return $ret;
 
 	}
+	
 }
 ?>

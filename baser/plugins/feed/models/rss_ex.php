@@ -6,13 +6,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.models
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -193,7 +193,7 @@ class RssEx extends Rss {
 		$feed['Channel']['description']['value'] = $simplePie->get_description();
 		$feed['Channel']['pubDate']['value'] = '';
 		$feed['Channel']['language']['value'] = $simplePie->get_language();
-		$feed['Channel']['generator']['value'] = 'BaserCMS';
+		$feed['Channel']['generator']['value'] = 'baserCMS';
 		$feed['Items'] = array();
 
 		foreach($datas as $data) {
@@ -233,7 +233,7 @@ class RssEx extends Rss {
 		if(!empty($datas['last-modified'])){
 			$feed['Channel']['pubDate']['value'] = $datas['last-modified'];
 		}*/
-		//$feed['Channel']['generator']['value'] = 'BaserCMS';
+		//$feed['Channel']['generator']['value'] = 'baserCMS';
 		/*if(!empty($datas['info']['language']))
 			$feed['Channel']['language']['value'] = $datas['info']['language'];*/
 

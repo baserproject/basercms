@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -45,9 +45,9 @@
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action == 'admin_add'): ?>
-<?php echo $formEx->create('BlogCategory', array('url' => '/admin/blog/blog_categories/add/' . $blogContent['BlogContent']['id'])) ?>
+<?php echo $formEx->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $formEx->create('BlogCategory', array('url' => '/admin/blog/blog_categories/edit/' . $blogContent['BlogContent']['id'] . '/' . $formEx->value('BlogCategory.id'))) ?>
+<?php echo $formEx->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $formEx->value('BlogCategory.id'), 'id' => false))) ?>
 <?php endif; ?>
 
 <?php echo $formEx->input('BlogCategory.id', array('type' => 'hidden')) ?>

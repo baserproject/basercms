@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -115,7 +115,7 @@ function mailContentSender1ClickHandler(){
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>メールフォームのURLに利用します。<br />
-						(例)メールフォームIDが test の場合・・・http://[BaserCMS設置URL]/test/index</li>
+						(例)メールフォームIDが test の場合・・・http://[baserCMS設置URL]/test/index</li>
 					<li>半角英数字、ハイフン、アンダースコアで入力してください。</li>
 				</ul>
 			</div>

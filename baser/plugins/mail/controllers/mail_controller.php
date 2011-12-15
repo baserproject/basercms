@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controller
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -232,7 +232,7 @@ class MailController extends MailAppController {
 	function confirm($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
@@ -302,7 +302,7 @@ class MailController extends MailAppController {
 	function submit($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。

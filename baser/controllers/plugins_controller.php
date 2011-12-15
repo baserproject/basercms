@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -67,8 +67,10 @@ class PluginsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン管理'=>'/admin/plugins/index');
+	var $navis = array(
+		'システム設定'		=> array('controller' => 'site_configs', 'action' => 'form'),
+		'プラグイン管理'	=> array('controller' => 'plugins', 'action' => 'index')
+	);
 /**
  * コンテンツID
  *
@@ -250,7 +252,7 @@ class PluginsController extends AppController {
 		$this->__deletePluginFile($pluginName);
 		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
 		$this->Session->setFlash($message);
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 		
 	}
 /**
@@ -349,13 +351,12 @@ class PluginsController extends AppController {
 
 			// データを保存
 			if($this->Plugin->save()) {
-
-				Cache::clear(false,'_cake_model_');
-				Cache::clear(false,'_cake_core_');
-				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を BaserCMS に登録しました。';
+				
+				clearAllCache();
+				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
@@ -381,7 +382,7 @@ class PluginsController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 
@@ -390,6 +391,7 @@ class PluginsController extends AppController {
 
 		/* 削除処理 */
 		if($this->Plugin->save($data)) {
+			clearAllCache();
 			$message = 'プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。';
 			$this->Session->setFlash($message);
 			$this->Plugin->saveDbLog($message);
@@ -397,7 +399,7 @@ class PluginsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 

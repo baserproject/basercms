@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		baser.app.view.helpers
  * @since			Baser v 0.1.0
@@ -728,6 +728,14 @@ class BaserHelper extends AppHelper {
 		}else {
 			$ssl = false;
 		}
+		
+		// 管理システムグローバルメニュー対策
+		// プレフィックスが変更された場合も正常動作させる為
+		// TODO グローバルメニューが廃止になったら削除
+		if(!is_array($url)) {
+			$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		}
+		
 		$url = $this->getUrl($url);
 		$_url = str_replace($this->base, '', $url);
 		$enabled = true;
@@ -742,7 +750,8 @@ class BaserHelper extends AppHelper {
 
 		// ページ公開チェック
 		if(empty($this->params['admin'])) {
-			if(isset($this->Page) && !preg_match('/^\/admin/', $_url)) {
+			$adminPrefix = Configure::read('Routing.admin');
+			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
 				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
 					$enabled = false;
 				}
@@ -756,8 +765,6 @@ class BaserHelper extends AppHelper {
 				return '';
 			}
 		}
-		
-
 
 		// 現在SSLのURLの場合、フルパスで取得
 		if($this->isSSL() || $ssl) {
@@ -841,7 +848,7 @@ class BaserHelper extends AppHelper {
 	function editPage($id) {
 		
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
-			echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank')).'</div>';
+			echo '<div class="edit-link">'.$this->getLink('≫ 編集する', array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id), array('target' => '_blank')).'</div>';
 		}
 		
 	}
@@ -869,9 +876,9 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function updateMessage() {
-		
+		$adminPrefix = Configure::read('Routing.admin');
 		if($this->checkUpdate() && $this->params['controller'] != 'updaters') {
-			$updateLink = $this->HtmlEx->link('ここ','/admin/updaters');
+			$updateLink = $this->HtmlEx->link('ここ',"/{$adminPrefix}/updaters");
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
 		

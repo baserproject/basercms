@@ -5,13 +5,13 @@
  * 
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -158,7 +158,7 @@ $(function(){
 				<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpSiteUrl', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $formEx->error('SiteConfig.site_url') ?>
 				<?php echo $formEx->error('SiteConfig.ssl_url') ?>
-				<div id="helptextSiteUrl" class="helptext">BaserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
+				<div id="helptextSiteUrl" class="helptext">baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
 			</td>
 		</tr>
 		<tr>
@@ -235,7 +235,7 @@ $(function(){
 				<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpDebug', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
-					※ インストールモードはBaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
+					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
 			</td>
 		</tr>
 		<tr>

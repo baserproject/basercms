@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.config
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -26,31 +26,67 @@ if(Configure::read('Baser.Asset')) {
 	return;
 }
 
-if (file_exists(CONFIGS.'database.php')) {
-	$cn = ConnectionManager::getInstance();
-}
-if(!empty($cn->config->baser['driver'])) {
+if(isInstalled()) {
+	
 	$parameter = getUrlParamFromEnv();
 	Configure::write('Baser.urlParam', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
-	$parameter = Configure::read('Baser.urlParam');
 	$agentOn = Configure::read('AgentPrefix.on');
 	$agentAlias = Configure::read('AgentPrefix.currentAlias');
 	$agentPrefix = Configure::read('AgentPrefix.currentPrefix');
-/**
- * 管理画面トップページ
- */
-	Router::connect('admin', array('admin'=>true, 'controller' => 'dashboard', 'action'=> 'index'));
-/**
- * 追加プレフィックス
- */
 	$authPrefixes = Configure::read('AuthPrefix');
-	$adminPrefix = Configure::read('Routing.admin');
-	if($authPrefixes) {
-		foreach($authPrefixes as $key => $authPrefix) {
-			if($key != $adminPrefix) {
-				Router::connect('/'.$key, array('prefix'=>$key, 'controller' => 'users', 'action' => 'auth_prefix_error'));
-				Router::connect('/'.$key.'/:controller/:action/*', array('prefix' => $key, $key => true));
+	
+	$pluginMatch = array();
+	$plugins = Configure::listObjects('plugin');
+	if($plugins) {
+		foreach ($plugins as $key => $value) {
+			$plugins[$key] = Inflector::underscore($value);
+		}
+		$pluginMatch = array('plugin' => implode('|', $plugins));
+	}
+/**
+ * プラグイン判定 ＆ プラグイン名の書き換え
+ * 
+ * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
+ * 一つのプラグインで二つのコンテンツを設置した場合に利用する。
+ * あらかじめ、plugin_contentsテーブルに、URLに使う名前とコンテンツを特定する。
+ * プラグインごとの一意のキー[content_id]を保存しておく。
+ *
+ * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
+ * Router::connectの引数として値を与えると、$html->linkなどで、
+ * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
+ */
+	$PluginContent = ClassRegistry::init('PluginContent');
+	if($PluginContent) {
+		$pluginContent = $PluginContent->currentPluginContent($parameter);
+		if($pluginContent) {
+			$pluginContentName = $pluginContent['PluginContent']['name'];
+			$pluginName = $pluginContent['PluginContent']['plugin'];
+			if(!$agentOn) {
+				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller'=> $pluginName));
+			}else {
+				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName));
 			}
+		}
+	}
+/**
+ * 認証プレフィックス
+ */
+	if($authPrefixes && is_array($authPrefixes)) {
+		foreach($authPrefixes as $key => $authPrefix) {
+			if(empty($authPrefix['prefix'])) {
+				continue;
+			}
+			$prefix = $authPrefix['prefix'];
+			if(!empty($authPrefix['alias'])) {
+				$alias = $authPrefix['alias'];
+			} else {
+				$alias = $prefix;
+			}
+			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
+			Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+			Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+			Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
 		}
 	}
 /**
@@ -58,15 +94,16 @@ if(!empty($cn->config->baser['driver'])) {
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング
  */
+	$adminPrefix = Configure::read('Routing.admin');
 	/* 1.5.9以前との互換性の為残しておく */
 	// .html付きのアクセスの場合、pagesコントローラーを呼び出す
 	if(strpos($parameter, '.html') !== false) {
 		if($agentOn) {
-			Router::connect('/'.$agentAlias.'/.*?\.html', array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display','pages/'.$parameter));
+			Router::connect("/{$agentAlias}/.*?\.html", array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}else {
 			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}
-	}elseif(!preg_match('/^admin/', $parameter)){
+	}elseif(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
@@ -79,56 +116,31 @@ if(!empty($cn->config->baser['driver'])) {
 			}
 			foreach ($_parameters as $_parameter){
 				if(!$agentOn){
-					$url = '/'.$_parameter;
+					$url = "/{$_parameter}";
 				}else{
-					$url = '/'.$agentPrefix.'/'.$_parameter;
+					$url = "/{$agentPrefix}/{$_parameter}";
 				}
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$agentOn){
-						Router::connect('/'.$parameter, am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{
-						Router::connect('/'.$agentAlias.'/'.$parameter, am(array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}
 					break;
 				}
 			}
 		}
 	}
+
 /**
- * プラグイン判定 ＆ プラグイン名の書き換え
- * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
- */
-	$isPlugin = false;
-	$PluginContent = ClassRegistry::init('PluginContent');
-	if($PluginContent) {
-		$isPlugin = $PluginContent->addRoute($parameter);
-	}
-	$url = getUrlFromEnv();
-	if(!empty($url)) {
-		$path = explode('/',$url);
-		App::import('Core','Folder');
-		$pluginFolder = new Folder(APP.'plugins');
-		$plugins = $pluginFolder->read(true,true);
-		if($plugins[0]) {
-			if(in_array($path[0], $plugins[0]) || 
-				(isset($path[1]) && $path[0] == $agentAlias && in_array($path[1], $plugins[0]))) {
-				$isPlugin = true;
-			}
-		}
-	}
-/**
- * 携帯ルーティング
+ * 携帯標準ルーティング
  */
 	if($agentOn) {
 		// プラグイン
-		if($isPlugin) {
-			// ノーマル
-			Router::connect('/'.$agentAlias.'/:plugin/:controller/:action/*', array('prefix' => $agentPrefix));
-			// プラグイン名省略
-			Router::connect('/'.$agentAlias.'/:plugin/:action/*', array('prefix' => $agentPrefix));
-		}
+		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
+		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		// 携帯ノーマル
-		Router::connect('/'.$agentAlias.'/:controller/:action/*', array('prefix' => $agentPrefix));
+		Router::connect("/{$agentAlias}/:controller/:action/*", array('prefix' => $agentPrefix));
 	}
 /**
  * ユニットテスト

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class MailConfigsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $navis = array('メールフォーム管理' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'));
 /**
  * [ADMIN] メールフォーム設定
  *
@@ -78,7 +78,7 @@ class MailConfigsController extends MailAppController {
 			/* 更新処理 */
 			if($this->MailConfig->save($this->data)) {
 				$this->Session->setFlash('メールフォーム設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+				$this->redirect(array('action' => 'form'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}

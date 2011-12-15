@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class BlogCommentsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理' => array('controller' => 'blog_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -86,19 +86,21 @@ class BlogCommentsController extends BlogAppController {
 		if(!empty($this->params['pass'][1])) {
 
 			$dbDatas = $this->BlogPost->read(null,$this->params['pass'][1]);
+			
 			if(!$dbDatas) {
 				$this->notFound();
 			}
+			
 			$this->blogPost['BlogPost'] = $dbDatas['BlogPost'];
 			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
-			$navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
-			$navis[$this->blogPost['BlogPost']['name']] = '/admin/blog/blog_posts/edit/'.$this->blogContent['BlogContent']['id'].'/'.$this->blogPost['BlogPost']['id'];
+			$navis[$this->blogContent['BlogContent']['title'].'管理'] = array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']);
+			$navis[$this->blogPost['BlogPost']['name']] = array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']);
 
 		}elseif(!empty($this->params['pass'][0])) {
 
 			$dbDatas = $this->BlogPost->BlogContent->read(null,$this->params['pass'][0]);
 			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
-			$navis[$this->blogContent['BlogContent']['title'].'管理'] = '/admin/blog/blog_posts/index/'.$this->blogContent['BlogContent']['id'];
+			$navis[$this->blogContent['BlogContent']['title'].'管理'] = array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']);
 
 		}
 
@@ -133,7 +135,7 @@ class BlogCommentsController extends BlogAppController {
 
 		if(!$blogContentId || empty($this->blogContent['BlogContent'])) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 		
 		/* 検索条件 */
@@ -190,9 +192,9 @@ class BlogCommentsController extends BlogAppController {
 		}
 
 		if($blogPostId) {
-			$this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
+			$this->redirect(array('action' => 'index', $blogContentId, $blogPostId));
 		}else {
-			$this->redirect(array('action'=>'index',$blogContentId));
+			$this->redirect(array('action' => 'index', $blogContentId));
 		}
 
 	}
@@ -226,9 +228,9 @@ class BlogCommentsController extends BlogAppController {
 		}
 
 		if($blogPostId) {
-			$this->redirect(array('action'=>'index',$blogContentId,$blogPostId));
+			$this->redirect(array('action' => 'index', $blogContentId, $blogPostId));
 		}else {
-			$this->redirect(array('action'=>'index',$blogContentId));
+			$this->redirect(array('action' => 'index', $blogContentId));
 		}
 
 	}
@@ -262,9 +264,9 @@ class BlogCommentsController extends BlogAppController {
 		}
 
 		if($blogPostId) {
-			$this->redirect(array('action'=>'admin_index',$blogContentId,$blogPostId));
+			$this->redirect(array('action' => 'index', $blogContentId, $blogPostId));
 		}else {
-			$this->redirect(array('action'=>'admin_index',$blogContentId));
+			$this->redirect(array('action' => 'index', $blogContentId));
 		}
 
 	}

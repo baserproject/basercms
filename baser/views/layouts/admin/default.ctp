@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views.layout
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -19,14 +19,15 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$paramPrefix = '';
 $paramUrl = $this->params['url']['url'];
-if(isset($this->params['prefix'])) {
-	$paramPrefix = $this->params['prefix'];
+$authPrefixes = Configure::read('AuthPrefix');
+$loginUrls = array();
+foreach($authPrefixes as $authPrefix) {
+	$loginUrls[] = $authPrefix['alias'].'/users/login';
 }
 if($this->params['controller'] == 'updaters' ||
 		$this->params['controller'] == 'installations' ||
-		$paramUrl == ($paramPrefix.'/users/login')) {
+		in_array($paramUrl, $loginUrls)) {
 	$useNavi = false;
 } else {
 	$useNavi = true;
@@ -102,14 +103,14 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 				<div id="loginUser">
 					<span>
 					<?php if(!empty($user)): ?>
-					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
+					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様", array('plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?>
 					<?php endif ?>
 					<?php if(Configure::read('debug')>0): ?>
 					&nbsp;[<?php echo Configure::read('debug') ?>]
 					<?php endif; ?>
 					</span>
 					&nbsp;| &nbsp;
-					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
+					<?php $baser->link('ログアウト', array('plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?>
 				</div>
 			</div>
 			<!-- end navigation -->
@@ -121,8 +122,8 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 
 			<?php if($this->params['controller']!='installations' && Configure::read('Baser.firstAccess')): ?>
 			<div id="FirstMessage">
-				BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
-				<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
+				baserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
+				<?php $baser->link('システム設定', array('controller' => 'site_configs', 'action' => 'form')) ?>より行えます。
 			</div>
 			<?php endif ?>
 			

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class BlogConfigsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理' => array('controller' => 'blog_contents', 'action' => 'index'));
 /**
  * before_filter
  *
@@ -96,7 +96,7 @@ class BlogConfigsController extends BlogAppController {
 			/* 更新処理 */
 			if($this->BlogConfig->save($this->data)) {
 				$this->Session->setFlash('ブログ設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+				$this->redirect(array('action' => 'form'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}

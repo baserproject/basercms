@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -101,9 +101,9 @@ function pageTypeChengeHandler() {
 	</ul>
 	<div class="example-box">
 		<div class="head">（例）ページ名「about」として作成したページを表示させる為のURL</div>
-		<p>http://[BaserCMS設置URL]/about</p>
+		<p>http://[baserCMS設置URL]/about</p>
 		<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
-		<p>http://[BaserCMS設置URL]/company/about</p>
+		<p>http://[baserCMS設置URL]/company/about</p>
 	</div>
 </div>
 
@@ -199,18 +199,14 @@ function pageTypeChengeHandler() {
 		<?php endif ?>
 		<?php $url = preg_replace('/index$/', '', $dbData['Page']['url']) ?>
 			
-			
 		<?php if(!preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url) && !preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
 			<?php $baser->link('確認', $url, array('class' => 'btn-green-s button-s', 'target' => '_blank'), null, false) ?>
-			
-			
 			
 		<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)): ?>
 			<?php $baser->link('確認',
 					preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', '/'.Configure::read('AgentSettings.mobile.alias').'/', $url),
 					array('class' => 'btn-green-s button-s', 'target' => '_blank'),
 					null, false) ?>			
-			
 			
 		<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
 			<?php $baser->link('確認',
@@ -219,12 +215,11 @@ function pageTypeChengeHandler() {
 					null, false) ?>			
 		<?php endif ?>
 			
-			
-			
-			<?php $baser->link('詳細', 
-					array('action' => 'edit', $dbData['Page']['id']),
-					array('class' => 'btn-orange-s button-s'),
-					null, false) ?>
+		<?php $baser->link('詳細', 
+				array('action' => 'edit', $dbData['Page']['id']),
+				array('class' => 'btn-orange-s button-s'),
+				null, false) ?>
+		
 		<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id']==1)): ?>
 			<?php $baser->link('削除', 
 					array('action' => 'delete', $dbData['Page']['id']),

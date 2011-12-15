@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -41,9 +41,9 @@
 <h3>基本項目</h3>
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php if($this->action == 'admin_add'): ?>
-<?php echo $formEx->create('FeedDetail', array('url' => '/admin/feed/feed_details/add/' . $formEx->value('FeedDetail.feed_config_id'))) ?>
+<?php echo $formEx->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'add', $formEx->value('FeedDetail.feed_config_id')))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $formEx->create('FeedDetail', array('url' => '/admin/feed/feed_details/edit/' . $formEx->value('FeedDetail.feed_config_id') . '/' . $formEx->value('FeedDetail.id'))) ?>
+<?php echo $formEx->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'edit', $formEx->value('FeedDetail.feed_config_id'), $formEx->value('FeedDetail.id'), 'id' => false))) ?>
 <?php endif; ?>
 <?php echo $formEx->input('FeedDetail.feed_config_id', array('type' => 'hidden')) ?>
 

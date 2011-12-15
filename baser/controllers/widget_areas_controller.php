@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -55,7 +55,10 @@ class WidgetAreasController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form','ウィジェットエリア管理'=>'/admin/widget_areas/index');
+	var $navis = array(
+		'システム設定'			=> array('controller' => 'site_configs', 'action' => 'form'),
+		'ウィジェットエリア管理'	=> array('controller' => 'widget_areas', 'action' => 'index')
+	);
 /**
  * サブメニューエレメント
  *
@@ -103,7 +106,7 @@ class WidgetAreasController extends AppController {
 			$this->WidgetArea->set($this->data);
 			if($this->WidgetArea->save()){
 				$this->Session->setFlash('新しいウィジェットエリアを保存しました。');
-				$this->redirect(array('action'=>'edit',$this->WidgetArea->getInsertID()));
+				$this->redirect(array('action' => 'edit', $this->WidgetArea->getInsertID()));
 			}else{
 				$this->Session->setFlash('新しいウィジェットエリアの保存に失敗しました。');
 			}
@@ -181,7 +184,7 @@ class WidgetAreasController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -196,7 +199,7 @@ class WidgetAreasController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 		clearViewCache('element_widget','');
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

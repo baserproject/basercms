@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -52,7 +52,7 @@ $(function(){
 			<p style='color:#888888;'>現在のPHPバージョン： <?php echo $phpActualVersion; ?>
 				<?php if (!$phpVersionOk): ?>
 				<br />
-				<small>ご利用のサーバーでは残念ながらBaserCMSを動作させる事はできません</small>
+				<small>ご利用のサーバーでは残念ながらbaserCMSを動作させる事はできません</small>
 				<?php endif ?>
 			</p>
 		</li>
@@ -135,7 +135,7 @@ $(function(){
 		</li>
 	</ul>
 	<h4>PHPのメモリ</h4>
-	<div class="section">PHPのメモリが <?php echo $phpMinimumMemoryLimit . " MB"; ?> より低い場合、BaserCMSの全ての機能が正常に動作しない可能性があります。<br />
+	<div class="section">PHPのメモリが <?php echo $phpMinimumMemoryLimit . " MB"; ?> より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。<br />
 		<small>サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあります。その場合、サーバー業者等へサーバースペックを直接確認してください。</small> </div>
 	<ul class="section">
 		<li>
@@ -151,7 +151,7 @@ $(function(){
 	</ul>
 	<h4>PHPセーフモード</h4>
 	
-	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとBaserCMSの全ての機能を利用する事はできません。
+	<div class="section">セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとbaserCMSの全ての機能を利用する事はできません。
 		<small>ページカテゴリ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生成する機能は、事前にFTPでの作業を併用する必要があります。</small><br />
 	</div>
 	<ul class="section">
@@ -180,7 +180,7 @@ mod_gzip_on Off</pre>
 	</div>
 	<div class="section">
 		上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。
-		BaserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />
+		baserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />
 		FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、フォルダ全てに書き込み権限（707 Or 777）を与えます。<br />
 		コピーと権限の変更が完了したら次のステップに進みインストールを続けます。
 	</div>

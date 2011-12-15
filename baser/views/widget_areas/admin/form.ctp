@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -20,6 +20,9 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<div id="DelWidgetUrl" style="display:none"><?php $baser->url(array('controller' => 'widget_areas', 'action' => 'del_widget', $formEx->value('WidgetArea.id'))) ?></div>
+<div id="CurrentAction" style="display:none"><?php echo $this->action ?></div>
+
 <!--[if !IE]><![IGNORE[--><![IGNORE[]]>
 <script type="text/javascript">
 $(function() {
@@ -126,12 +129,12 @@ $(function() {
 		registWidgetEvent($(this).attr('id').replace('Setting',''));
 	});
 
-	<?php if($this->action == 'admin_edit'): ?>
-	$("#WidgetAreaUpdateTitleSubmit").click(function(){
-		widgetAreaUpdateTitle();
-		return false;
-	});
-	<?php endif ?>
+	if($("#CurrentAction").html() == 'admin_edit') {
+		$("#WidgetAreaUpdateTitleSubmit").click(function(){
+			widgetAreaUpdateTitle();
+			return false;
+		});
+	}
 
 });
 /**
@@ -192,7 +195,7 @@ function registWidgetEvent(baseId){
 function delWidget(id){
 
 	$.ajax({
-		url: '<?php $baser->root() ?>admin/widget_areas/del_widget/<?php echo $formEx->value('WidgetArea.id') ?>/'+id,
+		url: $("#DelWidgetUrl").html()+'/'+id,
 		type: 'GET',
 		dataType: 'text',
 		beforeSend: function() {
@@ -356,9 +359,9 @@ function updateWidget(id) {
 </div>
 
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->create('WidgetArea', array('action' => 'add')) ?>
+	<?php echo $formEx->create('WidgetArea', array('url' => array('action' => 'add'))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->create('WidgetArea', array('action' => 'update_title')) ?>
+	<?php echo $formEx->create('WidgetArea', array('action' => 'update_title', 'url' => array('action' => 'update_title', 'id' => false))) ?>
 <?php endif ?>
 
 <?php echo $formEx->hidden('WidgetArea.id') ?>
@@ -371,7 +374,7 @@ function updateWidget(id) {
 
 <?php if(!empty($widgetInfos)): ?>
 
-	<?php echo $formEx->create('WidgetArea', array('url' => array($formEx->value('WidgetArea.id')), 'action' => 'update_sort')) ?>
+	<?php echo $formEx->create('WidgetArea', array('action' => 'update_sort', 'url' => array('action' => 'update_sort', $formEx->value('WidgetArea.id'), 'id' => false))) ?>
 	<?php echo $formEx->input('WidgetArea.sorted_ids', array('type' => 'hidden')) ?>
 	<?php echo $formEx->end() ?>
 
@@ -423,10 +426,7 @@ function updateWidget(id) {
 			</div>
 			<div class="content" style="text-align:right">
 				<p class="widget-name"><small><?php echo $widget['title'] ?></small></p>
-				<?php echo $formEx->create('Widget', array(
-					'url'	=> array('controller' => 'widget_areas', $formEx->value('WidgetArea.id')),
-					'action'=> 'update_widget',
-					'class'	=> 'form')) ?>
+				<?php echo $formEx->create('Widget', array('url' => array('controller' => 'widget_areas', 'action'=> 'update_widget', $formEx->value('WidgetArea.id')), 'class' => 'form')) ?>
 				<?php echo $formEx->input('Widget.id', array('type' => 'hidden', 'class'=>'id')) ?>
 				<?php echo $formEx->input('Widget.type', array('type' => 'hidden', 'value' => $widget['title'])) ?>
 				<?php echo $formEx->input('Widget.element', array('type' => 'hidden', 'value' => $widget['name'])) ?>
@@ -471,11 +471,7 @@ function updateWidget(id) {
 				</div>
 				<div class="content" style="text-align:right">
 					<p><small><?php echo $widget[$key]['type'] ?></small></p>
-					<?php echo $formEx->create('Widget', array(
-						'url'	=> '/admin/widget_areas/update_widget/'.$formEx->value('WidgetArea.id'),
-						'action'=> 'update_widget',
-						'class'	=> 'form',
-						'id'	=> 'WidgetUpdateWidgetForm'.$widget[$key]['id'])) ?>
+					<?php echo $formEx->create('Widget', array('url' => array('controller' => 'widget_areas', 'action' => 'update_widget', $formEx->value('WidgetArea.id'), 'id' => false), 'class' => 'form', 'id' => 'WidgetUpdateWidgetForm'.$widget[$key]['id'])) ?>
 					<?php echo $formEx->input($key.'.id', array('type' => 'hidden', 'class' => 'id')) ?>
 					<?php echo $formEx->input($key.'.type', array('type' => 'hidden')) ?>
 					<?php echo $formEx->input($key.'.element', array('type' => 'hidden')) ?>
@@ -484,10 +480,7 @@ function updateWidget(id) {
 					<?php echo $formEx->label($key.'name','タイトル') ?>&nbsp;
 					<?php echo $formEx->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
 					<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'])) ?><br />
-					<?php $baser->img('ajax-loader-s.gif', array(
-						'style' => 'vertical-align:middle;display:none',
-						'id'	=> 'WidgetUpdateWidgetLoader'.$widget[$key]['id'],
-						'class' => 'loader')) ?>
+					<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
 					<?php echo $formEx->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
 					<?php echo $formEx->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
 					<?php echo $formEx->end(array('label' => '保　存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit'.$widget[$key]['id'], 'class' => 'submit')) ?>

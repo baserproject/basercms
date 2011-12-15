@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -29,7 +29,7 @@
 	<h4>ユーザーヘルプ</h4>
 	<p>データベースのバックアップと復元が行えますので、定期的にバックアップを保存しておく事をおすすめします。</p>
 	<ul><li>データベースのデータと構造をバックアップします。</li>
-		<li>BaserCMSのバージョンが違う場合は復元する事ができない場合があります。</li>
+		<li>baserCMSのバージョンが違う場合は復元する事ができない場合があります。</li>
 		<li>環境によっては復元に失敗する可能性もあります。バックアップと復元は必ず自己責任で行ってください。<br />
 			<small>※ 運用を開始する前に、バックアップと復元が正常に動作するかの確認をおすすめします。</small></li>
 	</ul>

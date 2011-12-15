@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -118,6 +118,12 @@ class PermissionsController extends AppController {
 		/* データ取得 */
 		$listDatas = $this->Permission->find('all',array('conditions'=>$conditions, 'order'=>'Permission.sort'));
 
+		if($listDatas) {
+			foreach($listDatas as $key => $data) {
+				$listDatas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $data['Permission']['url']);
+			}
+		}
+		
 		/* 表示設定 */
 		$this->set('listDatas',$listDatas);
 		$this->pageTitle = 'アクセス制限設定一覧';
@@ -160,7 +166,7 @@ class PermissionsController extends AppController {
 				$message = '新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
@@ -169,6 +175,9 @@ class PermissionsController extends AppController {
 		}
 
 		/* 表示設定 */
+		if($authPrefix == 'admin') {
+			$authPrefix = Configure::read('Routing.admin');
+		}
 		$this->pageTitle = '新規アクセス制限設定登録';
 		$this->set('authPrefix', $authPrefix);
 		$this->render('form');
@@ -186,7 +195,7 @@ class PermissionsController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		$authPrefix = $this->Permission->getAuthPrefix($id);
@@ -201,14 +210,18 @@ class PermissionsController extends AppController {
 				$message = 'アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->Permission->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else {
+				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
 		}
 
 		/* 表示設定 */
+		if($authPrefix == 'admin') {
+			$authPrefix = Configure::read('Routing.admin');
+		}
 		$this->pageTitle = 'アクセス制限設定編集：'.$this->data['Permission']['name'];
 		$this->set('authPrefix', $authPrefix);
 		$this->render('form');
@@ -226,7 +239,7 @@ class PermissionsController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -241,7 +254,7 @@ class PermissionsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -66,8 +66,10 @@ class UserGroupsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('ユーザー管理'=>'/admin/users/index',
-			'ユーザーグループ管理'=>'/admin/user_groups/index');
+	var $navis = array(
+		'ユーザー管理'			=> array('controller' => 'users', 'action' => 'index'),
+		'ユーザーグループ管理'	=> array('controller' => 'user_groups', 'action' => 'index')
+	);
 /**
  * beforeFilter
  * @return void
@@ -121,7 +123,7 @@ class UserGroupsController extends AppController {
 				$message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -145,7 +147,7 @@ class UserGroupsController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -157,7 +159,7 @@ class UserGroupsController extends AppController {
 				$message = 'ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$id));
+				$this->redirect(array('action' => 'index', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -181,7 +183,7 @@ class UserGroupsController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -196,7 +198,7 @@ class UserGroupsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 

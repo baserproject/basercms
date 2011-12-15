@@ -3,7 +3,7 @@
 /**
  * アップデーターコントローラー
  *
- * BaserCMSのコアや、プラグインのアップデートを行えます。
+ * baserCMSのコアや、プラグインのアップデートを行えます。
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * 　アップデートファイルの配置場所
@@ -29,7 +29,7 @@
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * データベースの構造変更にCakeSchemaを利用できます。
  * ブラウザより、次のURLにアクセスするとスキーマファイルの書き出しが行えますのでそれを利用します。
- * http://{BaserCMSの設置URL}/admin/tools/write_schema
+ * http://{baserCMSの設置URL}/admin/tools/write_schema
  * 更新タイプによって、ファイル名を変更し、アップデートフォルダに設置します。
  *
  * ■ テーブル追加： create_{テーブル名}.php
@@ -101,18 +101,18 @@
  * 作成したスキーマファイルが正常に読み込めるかをテストする場合には、
  * ブラウザより次のURLにアクセスし、スキーマファイルをアップロードしてテストを行なえます。
  *
- * http://{BaserCMSの設置フォルダ}/admin/tools/load_schema
+ * http://{baserCMSの設置フォルダ}/admin/tools/load_schema
  *
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
  * @since			Baser v 0.1.0
@@ -206,14 +206,14 @@ class UpdatersController extends AppController {
 			$this->setMessage('全てのアップデート処理が完了しました。', false, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 
 		}
 
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
-		$this->pageTitle = 'アプリケーションアップデート（BaserCMSコア）';
-		$this->set('updateTarget', 'BaserCMSコア');
+		$this->pageTitle = 'アプリケーションアップデート（baserCMSコア）';
+		$this->set('updateTarget', 'baserCMSコア');
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
 		$this->set('scriptNum',$scriptNum);
@@ -236,7 +236,7 @@ class UpdatersController extends AppController {
 			} else {
 				$this->setMessage('アップデートスクリプトの実行が完了しました。', false, true, true);
 				$this->Session->setFlash($this->_getUpadteMessage());
-				$this->redirect(array('action'=>'exec_script'));
+				$this->redirect(array('action' => 'exec_script'));
 			}
 		}
 
@@ -273,7 +273,7 @@ class UpdatersController extends AppController {
 			$this->_update($name);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action'=>'plugin', $name));
+			$this->redirect(array('action' => 'plugin', $name));
 
 		}
 
@@ -400,7 +400,7 @@ class UpdatersController extends AppController {
 		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $plugin);
 
 		if(!$plugin) {
-			$name = 'BaserCMSコア';
+			$name = 'baserCMSコア';
 		}else{
 			$name = $this->Plugin->field('title',array('name'=>$plugin)).'プラグイン';
 		}

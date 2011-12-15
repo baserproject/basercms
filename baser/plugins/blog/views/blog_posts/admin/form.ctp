@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -24,8 +24,12 @@ $baser->css('ckeditor/editor', null, null, false);
 $baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 
+<div id="CreatePreviewUrl" style="display:none"><?php echo $baser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
+<div id="AddTagUrl" style="display:none"><?php echo $baser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
+
 <script type="text/javascript">
 $(function(){
+	
 /**
  * プレビューボタンクリック時イベント
  */
@@ -36,7 +40,7 @@ $(function(){
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		$.ajax({
 			type: "POST",
-			url: '<?php echo $this->base ?>/admin/blog/preview/<?php echo $blogContent['BlogContent']['id'] ?>/<?php echo $previewId ?>/create',
+			url: $("#CreatePreviewUrl").html(),
 			data: $("#BlogPostForm").serialize(),
 			success: function(result){
 				if(result) {
@@ -77,7 +81,7 @@ $(function(){
 		}
 		$.ajax({
 			type: "POST",
-			url: '<?php echo $this->base ?>/admin/blog/blog_tags/ajax_add',
+			url: $("#AddTagUrl").html(),
 			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
 			dataType: 'html',
 			beforeSend: function() {
@@ -134,9 +138,9 @@ $(function(){
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-<?php echo $formEx->create('BlogPost', array('url' => '/admin/blog/blog_posts/add/' . $blogContent['BlogContent']['id'], 'id' => 'BlogPostForm')) ?>
+<?php echo $formEx->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $formEx->create('BlogPost', array('url' => '/admin/blog/blog_posts/edit/' . $blogContent['BlogContent']['id'] . '/' . $formEx->value('BlogPost.id'), 'id' => 'BlogPostForm')) ?>
+<?php echo $formEx->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $formEx->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
 <?php endif; ?>
 <?php echo $formEx->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $formEx->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>

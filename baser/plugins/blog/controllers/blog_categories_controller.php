@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class BlogCategoriesController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理' => array('controller' => 'blog_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -79,12 +79,15 @@ class BlogCategoriesController extends BlogAppController {
 	function beforeFilter() {
 		
 		parent::beforeFilter();
+		
 		$this->BlogContent->recursive = -1;
 		$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
-		$this->navis = am($this->navis,array($this->blogContent['BlogContent']['title'].'管理'=>'/admin/blog/blog_posts/index/'.$this->params['pass'][0]));
-		if($this->params['prefix']=='admin') {
-			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
+		$this->navis = am($this->navis, array($this->blogContent['BlogContent']['title'].'管理' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0])));
+		
+		if($this->params['prefix'] == 'admin') {
+			$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
 		}
+		
 		// バリデーション設定
 		$this->BlogCategory->validationParams['blogContentId'] = $this->blogContent['BlogContent']['id'];
 		
@@ -138,7 +141,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		if(!$blogContentId) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -154,7 +157,7 @@ class BlogCategoriesController extends BlogAppController {
 			if($this->BlogCategory->save()) {
 				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
 				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
-				$this->redirect(array('action'=>'index',$blogContentId));
+				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -194,7 +197,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -205,7 +208,7 @@ class BlogCategoriesController extends BlogAppController {
 			if($this->BlogCategory->save($this->data)) {
 				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
 				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'index',$blogContentId));
+				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -248,7 +251,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得

@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,7 +20,7 @@
  */
 ?>
 <?php $baser->setTitle('会社案内') ?>
-<?php $baser->setDescription('BaserCMS inc.の会社案内ページ') ?>
+<?php $baser->setDescription('baserCMS inc.の会社案内ページ') ?>
 
 <h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>

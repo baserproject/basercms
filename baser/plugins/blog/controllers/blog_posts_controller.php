@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision: 42 $
@@ -62,7 +62,7 @@ class BlogPostsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $navis = array('ブログ管理' => array('controller' => 'blog_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -86,13 +86,17 @@ class BlogPostsController extends BlogAppController {
 	function beforeFilter() {
 
 		parent::beforeFilter();
+		
 		if(isset($this->params['pass'][0])) {
+			
 			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
-			$this->navis = am($this->navis,array($this->blogContent['BlogContent']['title'].'管理'=>'/admin/blog/blog_posts/index/'.$this->params['pass'][0]));
-			if($this->params['prefix']=='admin') {
+			$this->navis = am($this->navis, array($this->blogContent['BlogContent']['title'].'管理' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0])));
+			
+			if($this->params['prefix'] == 'admin') {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}
+			
 		}
 		
 	}
@@ -118,7 +122,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!$blogContentId || !$this->blogContent) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		/* 画面情報設定 */
@@ -237,7 +241,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!$blogContentId || !$this->blogContent) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -258,7 +262,7 @@ class BlogPostsController extends BlogAppController {
 				$this->BlogPost->saveDbLog($message);
 				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
-				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
+				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
 			}
@@ -297,7 +301,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!$blogContentId || !$id) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -316,7 +320,7 @@ class BlogPostsController extends BlogAppController {
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
 				$this->PluginHook->executeHook('afterBlogPostEdit', $this);
-				$this->redirect('/admin/blog/blog_posts/edit/'.$blogContentId.'/'.$id);
+				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
 			}
@@ -372,7 +376,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!$blogContentId || !$id) {
 			$this->Session->setFlash('無効な処理です。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -388,7 +392,7 @@ class BlogPostsController extends BlogAppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'admin_index',$blogContentId));
+		$this->redirect(array('action' => 'index',$blogContentId));
 
 	}
 /**
@@ -438,7 +442,7 @@ class BlogPostsController extends BlogAppController {
 		// 送信内容に問題がある場合には元のページにリダイレクト
 		if(!$check) {
 			$this->Session->setFlash($message);
-			$this->redirect(array('controller'=>'blog_configs','action'=>'form'));
+			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 		}
 
 		// カテゴリ一覧の取得
@@ -492,7 +496,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$this->Session->setFlash( $count . ' 件の記事を取り込みました');
-		$this->redirect(array('controller'=>'blog_configs','action'=>'form'));
+		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 
 	}
 

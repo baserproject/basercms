@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -40,9 +40,9 @@
 	<p>WEBサイトのバージョンは最新です。</p>
 	<p>
 		<?php if(!$plugin): ?>
-			<?php $baser->link('≫ 管理画面に移動する','/admin') ?>
+			<?php $baser->link('≫ 管理画面に移動する', array('controller' => 'dashboard', 'action' => 'index')) ?>
 		<?php else: ?>
-			<?php $baser->link('≫ プラグイン一覧に移動する','/admin/plugins/index') ?>
+			<?php $baser->link('≫ プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index')) ?>
 		<?php endif ?>
 	</p>
 	<?php endif ?>
@@ -58,7 +58,7 @@
 		<?php endif ?>
 		<small>※ アップデート処理は自己責任で行ってください。</small><br />
 		<?php if($plugin): ?>
-		<?php $baser->link('≫ バックアップはこちらから','/admin/tools/maintenance/backup') ?>
+		<?php $baser->link('≫ バックアップはこちらから', array('controller' => 'tools', 'action' => 'maintenance', 'backup')) ?>
 		<?php endif ?>
 	</p>
 	<p><strong>リリースノートのアップデート時の注意事項は読まれましたか？</strong><br />

@@ -1,17 +1,17 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * BaserCMS設定ファイル
+ * baserCMS設定ファイル
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.config
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -20,11 +20,11 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * BaserCMS基本設定
+ * baserCMS基本設定
  */
 	$config['Baser'] = array(
 		// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
-		'title'				=> 'コーポレートサイトにちょうどいいCMS - BaserCMS - ',
+		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 		// 標準キャッシュ時間
 		'cachetime'			=> '1 month',
 		// プラグインDBプレフィックス
@@ -40,18 +40,23 @@
 	$adminPrefix = Configure::read('Routing.admin');
 	$config['AuthPrefix'] = array(
 		// 管理画面
-		$adminPrefix => array(
+		'admin' => array(
+			'prefix'		=> 'admin',
+			'alias'			=> $adminPrefix,
 			// 認証後リダイレクト先
 			'loginRedirect'	=> '/'.$adminPrefix,
 			// ログイン画面タイトル
 			'loginTitle'	=> '管理システムログイン',
-		)/*,
+			'loginAction'	=> '/'.$adminPrefix.'/users/login'
+		),
 		'mypage' => array(
+			'alias'			=> 'mypage',
+			'prefix'		=> 'mypage',
 			'loginRedirect'=>'/mypage/dashboard/index',
 			'loginTitle'=>'マイページログイン',
 			'userModel'		=> 'User',
 			'loginAction'	=> '/mypage/users/login'
-		)*/
+		)
 	);
 /**
  * Eメール設定

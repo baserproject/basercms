@@ -5,13 +5,13 @@
  * 
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -117,9 +117,9 @@ jQuery(function($) {
 
 <?php /* MailContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action == 'admin_add'): ?>
-<?php echo $formEx->create('MailField', array('url' => '/admin/mail/mail_fields/add/' . $mailContent['MailContent']['id'])) ?>
+<?php echo $formEx->create('MailField', array('url' => array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id']))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $formEx->create('MailField', array('url' => '/admin/mail/mail_fields/edit/' . $mailContent['MailContent']['id'] . '/' . $formEx->value('MailField.id'))) ?>
+<?php echo $formEx->create('MailField', array('url' => array('controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $formEx->value('MailField.id'), 'id' => false))) ?>
 <?php endif; ?>
 <?php echo $formEx->hidden('MailField.id') ?>
 

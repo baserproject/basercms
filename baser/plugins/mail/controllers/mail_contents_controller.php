@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -62,7 +62,7 @@ class MailContentsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $navis = array('メールフォーム管理' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'));
 /**
  * サブメニューエレメント
  *
@@ -110,7 +110,7 @@ class MailContentsController extends MailAppController {
 						$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
 						$this->Session->setFlash($message);
 						$this->MailContent->saveDbLog($message);
-						$this->redirect(array('action'=>'edit', $this->MailContent->id));
+						$this->redirect(array('action' => 'edit', $this->MailContent->id));
 					} else {
 						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 					}
@@ -137,7 +137,7 @@ class MailContentsController extends MailAppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -169,7 +169,7 @@ class MailContentsController extends MailAppController {
 						}elseif ($this->data['MailContent']['edit_mail']) {
 							$this->redirectEditMail($this->data['MailContent']['mail_template']);
 						}else{
-							$this->redirect(array('action'=>'edit', $this->data['MailContent']['id']));
+							$this->redirect(array('action' => 'edit', $this->data['MailContent']['id']));
 						}
 
 					}else {
@@ -202,7 +202,7 @@ class MailContentsController extends MailAppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -220,7 +220,7 @@ class MailContentsController extends MailAppController {
 		} else {
 			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。');
 		}
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -245,10 +245,10 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.'.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 		
 	}
@@ -278,10 +278,10 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],$type,$path));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 		
 	}
@@ -309,10 +309,10 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.'/index.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 		
 	}

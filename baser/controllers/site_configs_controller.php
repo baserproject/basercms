@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -68,7 +68,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $navis = array('システム設定' => array('controller' => 'site_configs', 'action' => 'form'));
 /**
  * [ADMIN] サイト基本設定
  *
@@ -163,15 +163,16 @@ class SiteConfigsController extends AppController {
 
 					// リダイレクト
 					if($this->readSmartUrl() != $smartUrl) {
+						$adminPrefix = Configure::read('Routing.admin');
 						if($smartUrl){
-							$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
 						}else{
-							$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/index.php/'.$adminPrefix.'/site_configs/form');
 						}
 						header('Location: '.FULL_BASE_URL.$redirectUrl);
 						exit();
 					}else{
-						$this->redirect(array('action'=>'form'));
+						$this->redirect(array('action' => 'form'));
 					}
 
 				}
@@ -235,7 +236,7 @@ class SiteConfigsController extends AppController {
 		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
-		$this->redirect(array('action'=>'form'));
+		$this->redirect(array('action' => 'form'));
 		
 	}
 /**

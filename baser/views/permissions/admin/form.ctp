@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi 
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -81,7 +81,7 @@
 			<?php echo $form->error('Permission.url') ?>
 			<div id="helptextUrl" class="helptext">
 				<ul>
-					<li>BaserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />
+					<li>baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />
 						（例）/admin/users/index</li>
 					<li>管理画面など認証がかかっているURLしか登録できません。</li>
 					<li>特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br />

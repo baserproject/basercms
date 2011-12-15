@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -66,8 +66,10 @@ class GlobalMenusController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'グローバルメニュー管理'=>'/admin/global_menus/index');
+	var $navis = array(
+		'システム設定'			=> array('controller' => 'site_configs', 'action' => 'form'),
+		'グローバルメニュー管理'	=> array('controller' => 'global_menus', 'action' => 'index')
+	);
 /**
  * グローバルメニューの一覧を表示する
  *
@@ -138,7 +140,7 @@ class GlobalMenusController extends AppController {
 				$message = '新規グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -163,7 +165,7 @@ class GlobalMenusController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -180,7 +182,7 @@ class GlobalMenusController extends AppController {
 				$message = 'グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$id));
+				$this->redirect(array('action' => 'index', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -205,7 +207,7 @@ class GlobalMenusController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -221,7 +223,7 @@ class GlobalMenusController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

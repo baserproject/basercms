@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -76,8 +76,8 @@ class MailMessagesController extends MailAppController {
 			$this->Message = new Message(false,null,null,$prefix);
 		}
 		$this->navis = array(
-			'メールフォーム管理'=>'/admin/mail/mail_contents/index',
-			$this->mailContent['MailContent']['title'].'管理'=>'/admin/mail/mail_fields/index/'.$this->params['pass'][0]
+			'メールフォーム管理'									=> array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'),
+			$this->mailContent['MailContent']['title'].'管理'	=> array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0])
 		);
 		
 	}
@@ -142,7 +142,7 @@ class MailMessagesController extends MailAppController {
 			'order'		=> 'MailField.sort'
 		));
 		$this->navis = am(
-			$this->navis, array('受信メール一覧'=>'/admin/mail/mail_messages/index/'.$this->params['pass'][0])
+			$this->navis, array('受信メール一覧' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]))
 		);
 		$this->set(compact('mailFields'));
 		$this->set(compact('message'));
@@ -170,7 +170,7 @@ class MailMessagesController extends MailAppController {
 		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
-		$this->redirect(array('action'=>'index',$mailContentId));
+		$this->redirect(array('action' => 'index', $mailContentId));
 
 	}
 

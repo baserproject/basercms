@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -82,7 +82,7 @@ class MailHelper extends AppHelper {
 	function indexFields($mailContentId) {
 		
 		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
+			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
 		
 	}

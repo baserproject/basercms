@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -68,7 +68,7 @@ class PagesController extends AppController {
 		$this->AuthEx->allow('display','mobile_display', 'smartphone_display');
 
 		if(!empty($this->params['admin'])){
-			$this->navis = array('ページ管理'=>'/admin/pages/index');
+			$this->navis = array('ページ管理' => array('controller' => 'pages', 'action' => 'index'));
 		}
 		
 		$user = $this->AuthEx->user();
@@ -170,7 +170,7 @@ class PagesController extends AppController {
 					
 					// 編集画面にリダイレクト
 					$id = $this->Page->getInsertID();
-					$this->redirect('/admin/pages/edit/'.$id);
+					$this->redirect(array('controller' => 'pages', 'action' => 'edit', $id));
 					
 				}else {
 					
@@ -214,7 +214,7 @@ class PagesController extends AppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -266,7 +266,7 @@ class PagesController extends AppController {
 					$this->executeHook('afterPageEdit');
 					
 					// 同ページへリダイレクト
-					$this->redirect('/admin/pages/edit/'.$id);
+					$this->redirect(array('action' => 'edit', $id));
 					
 				}else {
 					
@@ -339,7 +339,7 @@ class PagesController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -368,7 +368,7 @@ class PagesController extends AppController {
 			
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -385,7 +385,7 @@ class PagesController extends AppController {
 
 		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
 		$this->Session->setFlash($message);
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -402,7 +402,7 @@ class PagesController extends AppController {
 			$this->Session->setFlash('ページテンプレートの書き出しに失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
 		}
 		clearViewCache();
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

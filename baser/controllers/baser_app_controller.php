@@ -5,13 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
  *								1-19-4 ikinomatsubara, fukuoka-shi
  *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			Baser v 0.1.0
  * @version			$Revision$
@@ -112,48 +112,68 @@ class BaserAppController extends Controller {
 		parent::__construct();
 
 		$base = baseUrl();
+		$isAdmin = false;
+		$isInstallations = false;
+		$adminPrefix = Configure::read('Routing.admin');
+		
+		if($base) {
+			$adminReg = '/^'.str_replace('/','\/',$base).$adminPrefix.'/i';
+			$installationsReg = '/^'.str_replace('/','\/',$base).'installations/i';
+		}else {
+			$adminReg = '/^\/'.$adminPrefix.'/i';
+			$installationsReg = '/^\/installations/i';
+		}
+		
+		if(preg_match($adminReg, @$_SERVER['REQUEST_URI'])) {
+			$isAdmin = true;
+		} elseif (preg_match($installationsReg, @$_SERVER['REQUEST_URI'])) {
+			$isInstallations = true;
+		}
+		
+		if(isInstalled()) {
+			
+			// サイト基本設定の読み込み
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$this->siteConfigs = $SiteConfig->findExpanded();
 
-		// サイト基本設定の読み込み
-		if(file_exists(CONFIGS.'database.php')) {
-			$dbConfig = new DATABASE_CONFIG();
-			if($dbConfig->baser['driver']) {
-				$SiteConfig = ClassRegistry::init('SiteConfig','Model');
-				$this->siteConfigs = $SiteConfig->findExpanded();
-
-				if(empty($this->siteConfigs['version'])) {
-					$this->siteConfigs['version'] = $this->getBaserVersion();
-					$SiteConfig->saveKeyValue($this->siteConfigs);
-				}
-
-				// テーマの設定
-				if($base) {
-					$reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
-				}else {
-					$reg = '/^\/(installations)/i';
-				}
-				if(!preg_match($reg, @$_SERVER['REQUEST_URI']) || isInstalled()) {
-					$this->theme = $this->siteConfigs['theme'];
-					// ===============================================================================
-					// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
-					// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
-					// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
-					// 表示されてしまうので明示的に指定している。
-					// （例）
-					// [変更後] app/webroot/themed/demo/blog/news/index.ctp
-					// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
-					// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
-					// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
-					// ※ AppView::_pathsも関連している
-					// ===============================================================================
-					$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
-					$pluginPaths = Configure::read('pluginPaths');
-					if(!in_array($pluginThemePath, $pluginPaths)) {
-						Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
-					}
-				}
-
+			if(empty($this->siteConfigs['version'])) {
+				$this->siteConfigs['version'] = $this->getBaserVersion();
+				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
 
+			if(!$isInstallations) {
+				
+				// テーマの設定
+				if(empty($this->siteConfigs['admin_theme'])) {
+					$this->theme = $this->siteConfigs['theme'];
+				} elseif($isAdmin) {
+					if($isAdmin) {
+						$this->theme = $this->siteConfigs['theme'];
+					} else {
+						$this->theme = $this->siteConfigs['admin_theme'];
+					}
+				}
+				
+				// ===============================================================================
+				// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
+				// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
+				// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
+				// 表示されてしまうので明示的に指定している。
+				// （例）
+				// [変更後] app/webroot/themed/demo/blog/news/index.ctp
+				// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
+				// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
+				// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
+				// ※ AppView::_pathsも関連している
+				// ===============================================================================
+				$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
+				$pluginPaths = Configure::read('pluginPaths');
+				if(!in_array($pluginThemePath, $pluginPaths)) {
+					Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
+				}
+				
+			}
+			
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
@@ -166,12 +186,7 @@ class BaserAppController extends Controller {
 				}
 			}
 
-			if($base) {
-				$reg = '/^'.str_replace('/','\/',$base).'admin/i';
-			}else {
-				$reg = '/^\/admin/i';
-			}
-			if(preg_match($reg,$_SERVER['REQUEST_URI'])) {
+			if($isAdmin) {
 				$this->layoutPath = 'admin';
 				$this->subDir = 'admin';
 			}
@@ -437,7 +452,7 @@ class BaserAppController extends Controller {
 
 	}
 /**
- * BaserCMSのバージョンを取得する
+ * baserCMSのバージョンを取得する
  *
  * @return string Baserバージョン
  */
@@ -502,7 +517,7 @@ class BaserAppController extends Controller {
 
 		if(!$plugin) {
 			if(isset($this->siteConfigs['version'])) {
-				return preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
+				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
 			} else {
 				return '';
 			}
@@ -1120,22 +1135,20 @@ class BaserAppController extends Controller {
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];
 		}
-
-		if($requestedPrefix && ($this->params['prefix'] != $authPrefix)) {
-			if($authPrefix != Configure::read('Routing.admin')) {
-				// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
-				$ref = $this->referer();
-				$loginAction = Router::normalize($this->AuthEx->loginAction);
-				if($ref == $loginAction) {
-					$this->Session->delete('Auth.User');
-					$this->Session->delete('Message.flash');
-					$this->AuthEx->authError = $this->AuthEx->loginError;
-					return false;
-				} else {
-					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
-					$this->redirect($ref);
-					return;
-				}
+		
+		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
+			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
+			$ref = $this->referer();
+			$loginAction = Router::normalize($this->AuthEx->loginAction);
+			if($ref == $loginAction) {
+				$this->Session->delete('Auth.User');
+				$this->Session->delete('Message.flash');
+				$this->AuthEx->authError = $this->AuthEx->loginError;
+				return false;
+			} else {
+				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+				$this->redirect($ref);
+				return;
 			}
 		}
 
@@ -1256,8 +1269,40 @@ class BaserAppController extends Controller {
  * @access public
  */
 	function redirect($url, $status = null, $exit = true) {
+		
 		$url = addSessionId($url, true);
+		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
+		// ※ Routing.admin を変更した場合
+		if (!isset($url['admin']) && !empty($this->params['admin'])) {
+			$url['admin'] = true;
+		} elseif (isset($url['admin']) && !$url['admin']) {
+			unset($url['admin']);
+		}
 		parent::redirect($url, $status, $exit);
+		
+	}
+/**
+ * Calls a controller's method from any location.
+ *
+ * @param mixed $url String or array-based url.
+ * @param array $extra if array includes the key "return" it sets the AutoRender to true.
+ * @return mixed Boolean true or false on success/failure, or contents
+ *               of rendered action if 'return' is set in $extra.
+ * @access public
+ */
+	function requestAction($url, $extra = array()) {
+		
+		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
+		// 管理システムやプラグインでのURLの生成が CakePHP の標準仕様と違っていたので調整
+		if ((!isset($url['admin']) && !empty($this->params['admin'])) || !empty($url['admin'])) {
+			$url['prefix'] = 'admin';
+		}
+		if (!isset($url['plugin']) && !empty($this->params['plugin'])) {
+			$url['plugin'] = $this->params['plugin'];
+		}
+		// <<<
+		return parent::requestAction($url, $extra);
+		
 	}
 	
 }
