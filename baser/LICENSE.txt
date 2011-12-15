@@ -1,7 +1,5 @@
-The GNU General Public License, version 2
-
-BaserCMS :  Based Website Development Project (http://basercms.net)
-Copyright 2009 - 2011, Catchup, Inc. (http://www.e-catchup.jp)
+baserCMS :  Based Website Development Project <http://basercms.net>
+Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
 
 About License
 http://basercms.net/license/index.html
