@@ -273,7 +273,8 @@ class CkeditorHelper extends AppHelper {
 			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
 		}
 		
-		$jscode = "$(document).ready(function(){";
+		$this->Javascript->codeBlock("var editor_" . $field . ";", array("inline" => false));
+		$jscode = "$(function(){";
 		if(!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
@@ -287,7 +288,7 @@ class CkeditorHelper extends AppHelper {
 		}
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
-		$jscode .= "var editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
+		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
@@ -312,7 +313,7 @@ class CkeditorHelper extends AppHelper {
 			}
 			$jscode .= " });";
 		}
-		$jscode .= " });";
+		$jscode .= "});";
 		return $this->Javascript->codeBlock($jscode);
 		
 	}
