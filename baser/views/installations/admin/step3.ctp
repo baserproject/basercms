@@ -113,7 +113,8 @@ $(document).ready( function() {
 			$('#dbUser').hide(500);
 			$('#dbInfo').hide(500);
 			$('#checkdb').hide();
-			$('#btnnext').attr('disabled','');
+			
+			$('#btnnext').removeAttr("disabled");
 			$('#btnnext').show();
 			dbName = 'baser';
 			port = '';
@@ -123,7 +124,7 @@ $(document).ready( function() {
 			$('#dbUser').hide(500);
 			$('#dbInfo').hide(500);
 			$('#checkdb').hide();
-			$('#btnnext').attr('disabled','');
+			$('#btnnext').removeAttr("disabled");
 			$('#btnnext').show();
 			dbName = 'baser';
 			port = '';
@@ -199,10 +200,6 @@ $(document).ready( function() {
 
 		</div>
 	</div>
-	
-	<ul><li>
-		<?php $baser->link('インストールを完全に最初からやり直す場合はコチラをクリックしてください','/installations/reset') ?>
-	</li></ul>
 	
 	<div class="submit">
 		<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>

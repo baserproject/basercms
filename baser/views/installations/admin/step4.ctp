@@ -92,10 +92,6 @@ $(document).ready(function(){
 
 	</div>
 
-	<ul><li>
-		<?php $baser->link('インストールを完全に最初からやり直す場合はコチラをクリックしてください','/installations/reset') ?>
-	</li></ul>
-
 	<div class="submit">
 		<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
 		<?php echo $formEx->button('完了', array('class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
