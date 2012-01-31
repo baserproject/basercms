@@ -3,17 +3,15 @@
 /**
  * メールフォーム設定コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,53 +20,55 @@
 /**
  * Include files
  */
-App::import('Controller', 'Auth');
 /**
  * メールフォーム設定コントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailConfigsController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.MailConfig');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
+	);
 /**
  * [ADMIN] メールフォーム設定
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -79,7 +79,7 @@ class MailConfigsController extends MailAppController {
 			/* 更新処理 */
 			if($this->MailConfig->save($this->data)) {
 				$this->Session->setFlash('メールフォーム設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+				$this->redirect(array('action' => 'form'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -89,7 +89,9 @@ class MailConfigsController extends MailAppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールプラグイン基本設定';
+		$this->help = 'mail_configs_form';
 
 	}
+	
 }
 ?>

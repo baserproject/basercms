@@ -9,25 +9,58 @@
  * Author: Felix Geisendorfer (thinkingphp.org / fg-webdesign.de)
  * 
  */
+/**
+ * Include files
+ */
+/**
+ * web_model
+ * 
+ * @package baser.plugins.feed.models
+ */
 class WebModel extends AppModel
 {
+/**
+ *
+ * @var boolean
+ * @access public
+ */
     var $useTable = false;
+/**
+ *
+ * @var int 
+ * @access public
+ */
     var $connection_timeout = '30';
     
-    /**
-     * Set this to active if security is very important for your ssl connection, however I had
-     * (valid) certification that would not pass the curl libraries ssl checks.
-     */
+/**
+ * Set this to active if security is very important for your ssl connection, however I had
+ * (valid) certification that would not pass the curl libraries ssl checks.
+ * 
+ * @var boolean
+ * @access public 
+ */
     var $ssl_strict = false;
     
-    /**
-     * This Model actually doesn't do any caching itself, this is left to the Models
-     * that extend this Model.
-     */    
+/**
+ * This Model actually doesn't do any caching itself, this is left to the Models
+ * that extend this Model.
+ * 
+ * @var string
+ * @access public
+ */    
     var $cacheFolder = 'web';
-    
+/**
+ * construct
+ * 
+ * @param boolean $id
+ * @param string $table
+ * @param string $ds 
+ * @return void
+ * @access private
+ */
     function __construct($id = false, $table = null, $ds = null)
     {
+		
         parent::__construct($id, $table, $ds);
         
         $this->cacheFolder = str_replace('/', DS, $this->cacheFolder);
@@ -36,11 +69,23 @@ class WebModel extends AppModel
             $this->cacheFolder = 'web'.DS;
         
         if (substr($this->cacheFolder, -1, 1)!=DS)
-            $this->cacheFolder = $this->cacheFolder.DS;            
+            $this->cacheFolder = $this->cacheFolder.DS;       
+
     }    
-    
+/**
+ * httpPost
+ * 
+ * @param string $url
+ * @param string $vars
+ * @param string $headers
+ * @param string $cookie_file
+ * @param string $timeout
+ * @return mixed 
+ * @access public
+ */
     function httpPost($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null)
     {
+		
         $vars = $this->__toUrlData($vars);
 
     	$ch = curl_init();
@@ -79,11 +124,23 @@ class WebModel extends AppModel
     	$response = curl_exec($ch);
     	curl_close($ch);           	
 			    
-        return $response;        
-    }
+        return $response;
     
+    }
+/**
+ * httpGet
+ * 
+ * @param string $url
+ * @param string $vars
+ * @param string $headers
+ * @param string $cookie_file
+ * @param string $timeout
+ * @return string
+ * @access string 
+ */
     function httpGet($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null)
-    {            
+    {
+	
         if (!empty($vars))
             $url = $url.'?'.$this->__toUrlData($vars);
 
@@ -124,11 +181,20 @@ class WebModel extends AppModel
         curl_close($ch);
         
         
-        return $ret;   
+        return $ret;
+		
     }  
-    
+/**
+ * cleanUpCacheFolder
+ * 
+ * @param int $expires
+ * @param string $pattern
+ * @return array
+ * @access public
+ */
     function cleanUpCacheFolder($expires = '+2 hours', $pattern = '.*')
     {
+		
         uses('Folder');
         $path = TMP.'cache'.DS.$this->cacheFolder;
         
@@ -163,10 +229,18 @@ class WebModel extends AppModel
             return true;
         else 
             return $errors;
+		
     }       
-    
+/**
+ * toUrlData
+ * 
+ * @param string $arrayData
+ * @return array
+ * @access private 
+ */
     function __toUrlData($arrayData)
     {
+		
         $postData = array();
         
         foreach ($arrayData as $key => $val)
@@ -175,16 +249,19 @@ class WebModel extends AppModel
         }
         
         return join('&', $postData);
+		
     }            
     
     /**
      * Creates a unique cache file path by combining all parameters given to a unique MD5 hash
      *
-     * @param string $ext   The extension for the cache file
-     * @return string       Returns a unique file path
+     * @param string $ext The extension for the cache file
+     * @return string Returns a unique file path
+     * @access private 
      */
     function __createCacheHash($ext = '.txt')
     {
+		
         $args = func_get_args();        
         array_shift($args);
         
@@ -196,6 +273,8 @@ class WebModel extends AppModel
         }
         
         return md5($hashSource).$ext;
+		
     }    
+	
 }
 ?>

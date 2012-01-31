@@ -3,17 +3,15 @@
 /**
  * フィードコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,55 +23,55 @@
 /**
  * フィードコントローラー
  *
- * @package			baser.plugins.feed.controllers
+ * @package baser.plugins.feed.controllers
  */
 class FeedController extends FeedAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Feed';
 /**
  * コンポーネント
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $components = array('RequestHandler');
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $helpers = array('Cache','TextEx','Feed.Feed');
+	var $helpers = array('Cache','TextEx','Feed.Feed', 'Array');
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','ajax');
+		$this->AuthEx->allow('index', 'mobile_index', 'smartphone_index', 'ajax', 'smartphone_ajax');
 		parent::beforeFilter();
 
 	}
 /**
  * [PUBLIC] フィードを一覧表示する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function index($id) {
 
@@ -199,9 +197,9 @@ class FeedController extends FeedAppController {
 /**
  * [MOBILE] フィードを一覧表示する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function mobile_index($id) {
 
@@ -209,11 +207,23 @@ class FeedController extends FeedAppController {
 
 	}
 /**
+ * [SMARTPHONE] フィードを一覧表示する
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function smartphone_index($id) {
+
+		$this->setAction('index',$id);
+
+	}
+/**
  * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
  *
- * @param	int		feed_config_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function ajax($id) {
 
@@ -230,11 +240,24 @@ class FeedController extends FeedAppController {
 
 	}
 /**
+ * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function smartphone_ajax($id) {
+
+		$this->setAction('ajax',$id);
+
+	}
+/**
  * タイムスタンプを元に降順に並び替える
  * 
  * @param array $a
  * @param array $b
- * @return 
+ * @return array
+ * @access protected
  */
 	function _sortDescByTimestamp($a, $b) {
 		if ($a['timestamp'] == $b['timestamp']) {
@@ -245,11 +268,11 @@ class FeedController extends FeedAppController {
 /*
  * バブルソート
  *
- * @param	array	$val = ソートする配列
- * @param	string	$flag = ソート対象の配列要素
- * @param	string	$order = ソートの昇順・降順　デフォルトは昇順
- * @return	array	並び替え後の配列
- * @access	protected
+ * @param array $val = ソートする配列
+ * @param string $flag = ソート対象の配列要素
+ * @param string $order = ソートの昇順・降順 デフォルトは昇順
+ * @return array 並び替え後の配列
+ * @access protected
  */
 	function _bsort(&$val, $flag = "", $order = "ASC") {
 
@@ -286,6 +309,8 @@ class FeedController extends FeedAppController {
 				}
 			}
 		}
+		
 	}
+	
 }
 ?>

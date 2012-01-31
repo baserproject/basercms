@@ -3,17 +3,15 @@
 /**
  * CKEditorヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -23,28 +21,31 @@ class CkeditorHelper extends AppHelper {
 /**
  * ヘルパー
  * @var array
+ * @access public
  */
 	var $helpers = array('Javascript', 'Form');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
+ * 
  * @var boolean
+ * @access public
  */
 	var $_script = false;
 /**
  * 初期化状態
- *
  * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
  *
- * @var	boolean
+ * @var boolean
+ * @access public
  */
 	var $inited = false;
 /**
  * 初期設定スタイル
- *
  * StyleSet 名 basercms
  *
- * @var	array
+ * @var array
+ * @access public
  */
 	var $style = array(
 					array(	'name' => '青見出し(h3)',
@@ -80,7 +81,6 @@ class CkeditorHelper extends AppHelper {
 	}
 /**
  * CKEditor のスクリプトを構築する
- *
  * 【ボタン一覧】
  * Source			- ソース
  * Save				- 保存
@@ -149,10 +149,10 @@ class CkeditorHelper extends AppHelper {
  * CopyPublish		- 本稿を草稿にコピー
  * CopyDraft		- 草稿を本稿にコピー
  *
- * @param	string	$fieldName
- * @param	array	$ckoptions
- * @return	string
- * @access	protected
+ * @param string $fieldName
+ * @param array $ckoptions
+ * @return string
+ * @access protected
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
@@ -227,37 +227,52 @@ class CkeditorHelper extends AppHelper {
 			$this->_script = true;
 			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
 		}
-		$toolbar1 = array('Cut', 'Copy', 'Paste', '-',
-							'Undo', 'Redo', '-',
-							'Bold', 'Italic', 'Underline', 'Strike', '-',
-							'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
-							'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-							'Smiley', 'Table', 'HorizontalRule', '-');
-		$toolbar2 = array( 'Styles', 'Format', 'Font', 'FontSize',
-							'TextColor', 'BGColor', '-',
-							'Link', 'Unlink', '-',
-							'Image');
-		if($useDraft) {
-			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source', '-', 'Publish', '-', 'Draft');
-			if(!$disableCopyDraft) {
-				$toolbar3 = am($toolbar3 , array('-', 'CopyDraft'));
-			}
-			if(!$disableCopyPublish) {
-				$toolbar3 = am($toolbar3 , array('-', 'CopyPublish'));
-			}
-		} else {
-			$toolbar3 = array( 'Maximize', 'ShowBlocks','Source');
-		}
-		$_ckoptions = array('language' => 'ja',
-				'skin' => 'kama',
-				'width' => '600px',
-				'height' => '300px',
-				'collapser' => false,
-				'baseFloatZIndex' => 900,
-				'toolbar'=> array($toolbar1, $toolbar2, $toolbar3)
+		
+		$toolbar = array(
+			'simple' => array(
+				array(	'Bold', 'Underline', '-',
+						'NumberedList', 'BulletedList', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
+						'Format', 'FontSize', 'TextColor', 'BGColor', 'Link', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			),
+			'normal' => array(
+				array(	'Cut', 'Copy', 'Paste', '-','Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
+						'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+						'Smiley', 'Table', 'HorizontalRule', '-'),
+				array(	'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			)
 		);
+
+		$_ckoptions = array('language' => 'ja',
+			'type'	=> 'normal',
+			'skin' => 'kama',
+			'width' => '600px',
+			'height' => '300px',
+			'collapser' => false,
+			'baseFloatZIndex' => 900,
+		);
+		
 		$ckoptions = array_merge($_ckoptions,$ckoptions);
 
+		if(empty($ckoptions['toolbar'])) {
+			$ckoptions['toolbar'] = $toolbar[$ckoptions['type']];
+		}
+
+		if($useDraft) {			
+			$lastBar = $ckoptions['toolbar'][count($ckoptions['toolbar'])-1];
+			$lastBar = am($lastBar , array( '-', 'Publish', '-', 'Draft'));
+			if(!$disableCopyDraft) {
+				$lastBar = am($lastBar , array('-', 'CopyDraft'));
+			}
+			if(!$disableCopyPublish) {
+				$lastBar = am($lastBar , array('-', 'CopyPublish'));
+			}
+			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
+		}
+		
 		if(!$this->inited) {
 			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
@@ -297,6 +312,7 @@ class CkeditorHelper extends AppHelper {
 			$jscode .= " });";
 		}
 		return $this->Javascript->codeBlock($jscode);
+		
 	}
 /**
  * CKEditorのテキストエリアを出力する（textarea）
@@ -307,6 +323,7 @@ class CkeditorHelper extends AppHelper {
  * @return string
  */
 	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+		
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -319,6 +336,7 @@ class CkeditorHelper extends AppHelper {
 			$hidden = '';
 		}
 		return $form->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
+		
 	}
 /**
  * CKEditorのテキストエリアを出力する（input）
@@ -329,6 +347,7 @@ class CkeditorHelper extends AppHelper {
  * @return string
  */
 	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+		
 		if(!$form){
 			$form = $this->Form;
 		}
@@ -342,6 +361,8 @@ class CkeditorHelper extends AppHelper {
 		}
 		$options['type'] = 'textarea';
 		return $form->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles, $form);
+		
 	}
+	
 }
 ?>

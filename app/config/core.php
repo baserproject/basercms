@@ -53,7 +53,7 @@
  *
  * And uncomment the App.baseUrl below:
  */
-	Configure::write('App.baseUrl', env('SCRIPT_NAME'));
+	Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
 /**
  * Uncomment the define below to use CakePHP admin routes.
  *
@@ -98,7 +98,7 @@
  * To use database sessions, execute the SQL file found at /app/config/sql/sessions.sql.
  *
  */
-	Configure::write('Session.save', 'php');
+	Configure::write('Session.save', 'session');
 /**
  * The name of the table used to store CakePHP database sessions.
  *

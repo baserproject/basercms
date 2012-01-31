@@ -1,0 +1,119 @@
+@charset "UTF-8";
+/**
+ * Smart Phone Layout
+ */
+ 
+ /* header
+----------------------------------------------- */
+header {
+	text-align:center;
+	background-image: url(../img/smartphone/bg_line.png);
+	background-repeat: repeat-x;
+	background-position: left top;
+	background-color: #000;
+}
+#BoxLogo {
+	background:url(../../img/smartphone/bg_head.png) repeat-x left top;
+	height:45px;
+	padding:0 2px;
+	border-left:1px solid #c4c2c2;
+	border-right:1px solid #c4c2c2;
+	padding-left:10px;
+}
+#Logo {
+	float:left;
+	height:45px;
+	line-height:45px;
+	font-size:16px;
+	font-weight:bold;
+	color:#666;
+	text-shadow: 2px 2px 0 rgba(255, 255, 255, 30);
+}
+header .global-menu {
+	background-color:#333;
+	padding:0 1px;
+}
+header .global-menu li {
+	list-style:none;
+	background:url(../../img/smartphone/btn_menu.png) no-repeat left top;
+	float:left;
+}
+header .global-menu li a{
+	color:#fff;
+	font-size:12px;
+	display:block;
+	width:106px;
+	height:49px;
+	line-height:49px;
+	text-decoration:none;
+}
+/* footer
+----------------------------------------------- */
+footer {
+	border-top:1px solid #CCC;
+	background-color:#e4e4e4;
+	padding-bottom:15px;
+	padding-top:30px;
+}
+footer .global-menu {
+	font-size:12px;
+	font-weight:bold;
+	margin-bottom:30px;
+	padding-left:10px;
+	padding-right:10px;
+}
+footer .global-menu a {
+	color:#333;
+}
+footer .global-menu li {
+	display:block;
+	float:left;
+	padding:6px;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 30);
+}
+address {
+	text-align:center;
+	height:30px;
+	line-height:16px;
+	color:#333;
+	font-style:normal;
+	font-size:12px;
+}
+footer .banner{
+	padding:10px;
+	text-align: center;
+}
+/* widget-area
+----------------------------------------------- */
+.widget-area {
+	margin-bottom: 40px;
+	background-color: #efefef;
+	border-top:5px solid #e2e2e2;
+	border-bottom: 5px solid #e2e2e2;
+}
+.widget-area h2{
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	padding:10px 13% 10px 15px;
+	background-color:#fff;
+	font-size: 16px;
+	margin-bottom:10px;
+}
+.blog-widget h2{
+	background: url(../../img/smartphone/icon_arrow.png) #fff no-repeat 93% center;
+}
+.widget-area ul {
+	padding-left:40px;
+	list-style:disc;
+	padding-bottom: 20px;
+}
+.widget-area ul li {
+	margin-bottom: 10px;
+}
+.widget-text {
+	padding-bottom: 20px;	
+}
+.widget-text p{
+	margin-left:10px;
+	margin-right:10px;
+}

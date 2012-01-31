@@ -3,17 +3,15 @@
 /**
  * FreezeHelper
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -24,33 +22,39 @@
  */
 App::import('Helper', 'FormEx', 'Upload');
 /**
- * @package			baser.view.helpers
+ * @package baser.view.helpers
  */
 class FreezeHelper extends FormExHelper {
 /**
  * 凍結状態
- * @var 	boolean
- * @access	public
+ * 
+ * @var boolean
+ * @access public
  */
 	var $freezed = false;
 /**
  * ヘルパー
- * @var     array
- * @access  public
+ * 
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','FormEx','Upload','TextEx','TimeEx','Javascript');
 /**
  * フォームを凍結させる
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function freeze() {
+		
 		$this->freezed = true;
+	
 	}
 /**
  * テキストボックスを表示する
- * @param	string	フィールド文字列
- * @param	array	html属性
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param array $attributes html属性
  * @return	string	htmlタグ
  * @access	public
  */
@@ -76,12 +80,13 @@ class FreezeHelper extends FormExHelper {
 	}
 /**
  * select プルダウンメニューを表示
- * @param	string	フィールド文字列
- * @param	array	コントロールソース
- * @param	mixed	$selected
- * @param	array	html属性
+ * 
+ * @param	string $fieldName フィールド文字列
+ * @param	array $options コントロールソース
+ * @param	mixed $selected
+ * @param	array $attributes html属性
  * @param	array	空データの表示有無
- * @return	string	htmlタグ
+ * @return	string $showEmpty htmlタグ
  * @access	public
  */
 	function select($fieldName, $options, $selected = null, $attributes = array(), $showEmpty = true) {
@@ -106,14 +111,15 @@ class FreezeHelper extends FormExHelper {
 	}
 /**
  * 日付タグを表示
- * @param	string	フィールド文字列
- * @param	string	日付フォーマット
- * @param	string	時間フォーマット
+ * 
+ * @param	string $fieldName フィールド文字列
+ * @param	string $dateFormat 日付フォーマット
+ * @param	string $timeFormat 時間フォーマット
  * @param	mixed	$selected
- * @param	array	html属性
- * @param	array	空データの表示有無
- * @return	string	htmlタグ
- * @access	public
+ * @param	array	$attributes html属性
+ * @param	array $showEmpty 空データの表示有無
+ * @return string htmlタグ
+ * @access public
  */
 	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 
@@ -233,6 +239,7 @@ class FreezeHelper extends FormExHelper {
  * @param array $attributes Attribute array for the select elements.
  * @param boolean $showEmpty Show/hide the empty select option
  * @return string
+ * @access public
  */
 	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
 
@@ -282,11 +289,12 @@ class FreezeHelper extends FormExHelper {
 	}
 /**
  * チェックボックスを表示する
- * @param	string	フィールド文字列
- * @param	title	タイトル
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param title $title タイトル
+ * @param array $attributes html属性
+ * @return string htmlタグ
+ * @access public
  */
 	function checkbox($fieldName,$title,$attributes = array()) {
 
@@ -296,13 +304,15 @@ class FreezeHelper extends FormExHelper {
 		}else {
 			return parent::checkbox($fieldName,$attributes);
 		}
+		
 	}
 /**
  * テキストエリアを表示する
- * @param	string	フィールド文字列
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * 
+ * @param string フィールド文字列
+ * @param array html属性
+ * @return string htmlタグ
+ * @access public
  */
 	function textarea($fieldName,$attributes = array()) {
 
@@ -326,11 +336,12 @@ class FreezeHelper extends FormExHelper {
 	}
 /**
  * ラジオボタンを表示する
- * @param	string	フィールド文字列
- * @param	array	コントロールソース
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param array $options コントロールソース
+ * @param array $attributes html属性
+ * @return string htmlタグ
+ * @access public
  */
 	function radio($fieldName,$options, $attributes = array()) {
 
@@ -343,11 +354,14 @@ class FreezeHelper extends FormExHelper {
 	}
 /**
  * ファイルタグを出力
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
+ * @access public
  */
 	function file($fieldName, $options = array()) {
+		
 		if($this->freezed) {
 			$value = $this->value($fieldName);
 			if(is_array($value) && isset($value['session_key'])) {
@@ -367,17 +381,20 @@ class FreezeHelper extends FormExHelper {
 		}else {
 			return $this->Upload->file($fieldName,$options);
 		}
+		
 	}
 /**
  * ファイルコントロール（画像）を表示する
  * TODO 確認画面には未チェック
- * @param	string	フィールド文字列
- * @param	array	html属性
- * @param	array	画像属性
- * @return	string	htmlタグ
- * @access	public
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param	array $attributes html属性
+ * @param array $attributes 画像属性
+ * @return string htmlタグ
+ * @access public
  */
 	function image($fieldName, $attributes = array(), $imageAttributes = array()) {
+		
 		if(!$attributes)$attributes = array();
 		$output = "";
 		$imageAttributes = array_merge(array('ext' => 'jpg','alt' => '','dir' => '', 'id' => ''), $imageAttributes);
@@ -420,10 +437,11 @@ class FreezeHelper extends FormExHelper {
 /**
  * JsonList
  * TODO 確認画面用の実装は全くしてない
- * @param	string	フィールド文字列
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param array $attributes html属性
+ * @return string	htmlタグ
+ * @access public
  */
 	function jsonList($fieldName,$attributes) {
 
@@ -447,10 +465,11 @@ class FreezeHelper extends FormExHelper {
 /**
  * カレンダーコントロール付きのテキストフィールド
  * jquery-ui-1.7.2 必須
- * @param 	string	フィールド文字列
- * @param	array	HTML属性
- * @return	string	html
- * @access 	public
+ * 
+ * @param 	string $fieldName フィールド文字列
+ * @param array $attributes HTML属性
+ * @return string html
+ * @access public
  */
 	function datepicker($fieldName, $attributes = array()) {
 
@@ -582,5 +601,6 @@ class FreezeHelper extends FormExHelper {
 		return $out;
 
 	}
+	
 }
 ?>

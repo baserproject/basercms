@@ -3,29 +3,32 @@
 /**
  * [ADMIN] ダッシュボードメニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ * @deprecated よく使う項目に代替
  */
 ?>
 
-<div class="side-navi">
-	<h2>ダッシュボードメニュー</h2>
-	<ul>
-		<li>
-			<?php $baser->link('ユーザーを追加する',array('controller'=>'users','action'=>'add')) ?>
-		</li>
-	</ul>
-</div>
+
+<tr>
+	<th>ダッシュボードメニュー</th>
+	<td>
+		<ul>
+			<li>
+				<?php $baser->link('ユーザーを追加する', array('controller' => 'users', 'action' => 'add')) ?>
+			</li>
+		</ul>
+	</td>
+</tr>
+

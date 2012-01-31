@@ -3,17 +3,15 @@
 /**
  * XMLヘルパー拡張
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,13 +24,14 @@ App::import("Helper","Xml");
 /**
  * XMLヘルパー拡張
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class XmlExHelper extends XmlHelper {
 /**
  * XML宣言を生成
  * IE6以外の場合のみ生成する
- * @param  array $attrib
+ * 
+ * @param array $attrib
  * @return string XML宣言
  */
 	function header($attrib = array()) {
@@ -43,5 +42,6 @@ class XmlExHelper extends XmlHelper {
 		}
 
 	}
+	
 }
 ?>

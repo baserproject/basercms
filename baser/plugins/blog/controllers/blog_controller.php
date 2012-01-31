@@ -1,19 +1,17 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ブログコントローラー
+ * ブログ記事コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -23,7 +21,7 @@
  * Include files
  */
 /**
- * 記事コントローラー
+ * ブログ記事コントローラー
  *
  * @package			baser.plugins.blog.controllers
  */
@@ -31,66 +29,75 @@ class BlogController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Blog';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $uses = array("Blog.BlogPost","Blog.BlogContent","Blog.BlogCategory");
+	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'cache');
+	var $helpers = array('Html', 'TextEx', 'TimeEx', 'Freeze', 'Array', 'Paginator', 'Blog.Blog', 'Cache');
 /**
  * コンポーネント
+ * 
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler','EmailEx', 'Security');
+	var $components = array('AuthEx', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array();
+	var $crumbs = array();
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ブログデータ
+ * 
+ * @var array
+ * @access public
  */
 	var $blogContent = array();
 /**
  * プレビューフラグ
+ * 
  * @var boolean
+ * @access public
  */
 	var $preview = false;
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
 		
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->Auth->allow(
-			'index', 'mobile_index', 'archives', 'mobile_archives',
-			'get_calendar', 'get_categories', 'get_blog_dates', 'get_recent_entries',
-			'posts', 'mobile_posts'
+		$this->AuthEx->allow(
+			'index', 'mobile_index', 'smartphone_index',
+			'archives', 'mobile_archives', 'smartphone_archives',
+			'posts', 'mobile_posts', 'smartphone_posts',
+			'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries'
 		);
 		
 		$this->BlogContent->recursive = -1;
@@ -101,7 +108,7 @@ class BlogController extends BlogAppController {
 		}
 
 		$this->subMenuElements = array('default');
-		$this->navis = array($this->blogContent['BlogContent']['title']=>'/'.$this->blogContent['BlogContent']['name'].'/index');
+		$this->crumbs = array(array('name' => $this->blogContent['BlogContent']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/index'));
 
 		// ページネーションのリンク対策
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
@@ -121,8 +128,8 @@ class BlogController extends BlogAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -138,58 +145,41 @@ class BlogController extends BlogAppController {
 /**
  * [PUBLIC] ブログを一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function index() {
 
-		if($this->contentId) {
-			$contentId = $this->contentId;
-		}else {
-			// TODO ブログの数を確認し、一つであればそのIDを格納し、記事が複数の場合はnotFoundとする？
-			// もしくは、デフォルト設定させるか、idが一番小さいものをデフォルトとするか。
-			$contentId = 1;
-		}
-
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
-			$this->set('channel', array('title' => h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
-					'description' => h($this->blogContent['BlogContent']['description'])));
+			$this->set('channel', array(
+				'title'			=> h($this->blogContent['BlogContent']['title'].'｜'.$this->siteConfigs['name']),
+				'description'	=> h(strip_tags($this->blogContent['BlogContent']['description']))
+			));
 			$this->layout = 'default';
-			$limit = $this->blogContent['BlogContent']['feed_count'];
 			$template = 'index';
+			$listCount = $this->blogContent['BlogContent']['feed_count'];
 		}else {
 			$this->layout = $this->blogContent['BlogContent']['layout'];
-			$limit = $this->blogContent['BlogContent']['list_count'];
 			$template = $this->blogContent['BlogContent']['template'].DS.'index';
+			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
 
-		/* ブログ記事一覧を取得 */
-		$conditions["BlogPost.blog_content_id"] = $contentId;
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-
-		$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogContent'), false);
-		$this->paginate = array(
-				'conditions'=> $conditions,
-				'order'		=> 'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'],
-				'limit'		=> $limit,
-				'recursive'	=> 1
-		);
-		$this->set('posts', $this->paginate('BlogPost'));
-
-		/* 表示設定 */
-		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
-		$this->set('single',false);
+		$datas = $this->_getBlogPosts(array('listCount' => $listCount));
+		$this->set('editLink', array('admin' => true, 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
+		$this->set('posts', $datas);
+		$this->set('single', false);
+		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
-		$this->navis = array();
+		$this->crumbs = array();
 		$this->render($template);
 
 	}
 /**
  * [MOBILE] ブログ記事を一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function mobile_index() {
 
@@ -197,145 +187,351 @@ class BlogController extends BlogAppController {
 
 	}
 /**
+ * [SMARTPHONE] ブログ記事を一覧表示する
+ *
+ * @return void
+ * @access public
+ */
+	function smartphone_index() {
+
+		$this->setAction('index');
+
+	}
+/**
  * [PUBLIC] ブログアーカイブを表示する
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
  */
 	function archives() {
 
 		// パラメーター処理
 		$pass = $this->params['pass'];
-		$year="";
-		$month="";
-		$day="";
-		$id = "";
-
-		// コンテンツID取得
-		if($this->contentId) {
-			$contentId = $this->contentId;
-		}
+		$type = $year = $month = $day = $id = '';
+		$crumbs = $posts = array();
+		$single = false;
+		$posts = array();
+		
 		if($pass[0] == 'category') {
-			$type='category';
-			$conditions = array('BlogCategory.blog_content_id'=>$this->contentId,'BlogCategory.name'=>$pass[count($pass)-1]);
-			$categoryId = $this->BlogCategory->field('id',$conditions);
-			if(!$categoryId) $this->notFound();
+			$type = 'category';
 		}elseif($pass[0] == 'tag') {
 			$type = 'tag';
-			$name = urldecode($pass[count($pass)-1]);
-			if(empty($this->blogContent['BlogContent']['tag_use'])) {
-				$this->notFound();
-			}
 		}elseif($pass[0] == 'date') {
 			$type='date';
-			$year = $pass[1];
-			$month = @$pass[2];
-			$day = @$pass[3];
-			if(!$year && !$month && !$day) $this->notFound();
-		}elseif($this->preview) {
-			$contentId = $pass[0];
-			$type = "";
-			if(!empty($pass[1])) {
-				$id = $pass[1];
-			}
-			if(!$id && empty($this->data['BlogPost'])) {
-				$this->notFound();
-			}
-		}else {
-			$type = "";
-			if(!empty($pass[0])) {
-				$id = $pass[0];
-			}
-			if(!$id) {
-				$this->notFound();
-			}
 		}
 
-		/*** カテゴリ一覧 ***/
-		if($type=='category') {
+		switch($type) {
 			
-			$conditions = array();
-			$categoryIds = array(0=>$categoryId);
-			//$this->BlogCategory->expects();
+			/* カテゴリ一覧 */
+			case 'category':
+			
+				$category = $pass[count($pass)-1];
+				if(empty($category)) {
+					$this->notFound();
+				}
+
+				// 記事を取得
+				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
+
+				// ナビゲーションを設定
+				$categoryId = $this->BlogCategory->field('id', array(
+					'BlogCategory.blog_content_id'	=> $this->contentId,
+					'BlogCategory.name'				=> $category
+				));
+				$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
+				if(count($blogCategories) > 1){
+					foreach($blogCategories as $key => $blogCategory) {
+						if($key < count($blogCategories) -1 ) {
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name']);
+						}
+					}
+				}
+				$this->pageTitle = $blogCategories[count($blogCategories)-1]['BlogCategory']['title'];
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
+				break;
+			
+			/* タグ別記事一覧 */
+			case 'tag':
+
+				$tag = h($pass[count($pass)-1]);
+				if(empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
+					$this->notFound();
+				}
+				$posts = $this->_getBlogPosts(array('conditions' => array('tag' => $tag)));
+				$this->pageTitle = urldecode($tag);
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
+				break;
+				
+			/* 月別アーカイブ一覧 */
+			case 'date':
+
+				$year = h($pass[1]);
+				$month = h(@$pass[2]);
+				$day = h(@$pass[3]);
+				if(!$year && !$month && !$day) {
+					$this->notFound();
+				}
+				$posts = $this->_getBlogPosts(array('conditions' => array('year' => $year, 'month' => $month, 'day' => $day)));
+				$this->pageTitle = $year.'年';
+				if($month) $this->pageTitle .= $month.'月';
+				if($day) $this->pageTitle .= $day.'日';
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
+				break;
+			
+			/* 単ページ */
+			default:
+
+				// プレビュー
+				if($this->preview) {
+					
+					$this->contentId = $pass[0];
+					if(!empty($pass[1])) {
+						$id = $pass[1];
+					} elseif(empty($this->data['BlogPost'])) {
+						$this->notFound();
+					}
+					
+					$post['BlogPost'] = $this->data['BlogPost'];
+					
+					if($this->data['BlogPost']['blog_category_id']) {
+						$blogCategory = $this->BlogPost->BlogCategory->find('first', array(
+							'conditions'=> array('BlogCategory.id' => $this->data['BlogPost']['blog_category_id']),
+							'recursive'	=> -1
+						));
+						$post['BlogCategory'] = $blogCategory['BlogCategory'];
+					}
+					
+					if($this->data['BlogPost']['user_id']) {
+						$author = $this->BlogPost->User->find('first', array(
+							'conditions'	=> array('User.id'	=> $this->data['BlogPost']['user_id']),
+							'recursive'		=> -1
+						));
+						$post['User'] = $author['User'];
+					}
+					
+					if(isset($this->data['BlogTag'])) {
+						$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $this->data['BlogTag']['BlogTag']));
+						if($tags) {
+							$tags = Set::extract('/BlogTag/.', $tags);
+							$post['BlogTag'] = $tags;
+						}
+					}
+					
+				} else {
+					
+					if(!empty($pass[0])) {
+						$id = $pass[0];
+					} else {
+						$this->notFound();
+					}
+					// コメント送信
+					if(isset($this->data['BlogComment'])) {
+						$this->add_comment($id);
+					}
+					
+					$_posts = $this->_getBlogPosts(array('conditions' => array('id' => $id)));
+					if(!empty($_posts[0])) {
+						$post = $_posts[0];
+					} else {
+						$this->notFound();
+					}
+					
+					$user = $this->AuthEx->user();
+					if(empty($this->params['admin']) && !empty($user) && !Configure::read('AgentPrefix.on')) {
+						$this->set('editLink', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
+					}
+
+				}
+
+				// ナビゲーションを設定
+				if(!empty($post['BlogPost']['blog_category_id'])) {
+					$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
+					if($blogCategories) {
+						foreach($blogCategories as $blogCategory) {
+							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name']);
+						}
+					}
+				}
+				$this->pageTitle = $post['BlogPost']['name'];
+				$single = true;
+				$template = $this->blogContent['BlogContent']['template'].DS.'single';
+				if($this->preview) {
+					$this->blogContent['BlogContent']['comment_use'] = false;
+				}
+				$this->set('post', $post);
+
+		}
+
+		// 表示設定
+		$this->crumbs += $crumbs;
+		$this->set('single',$single);
+		$this->set('posts', $posts);
+		$this->set('year', $year);
+		$this->set('month', $month);
+		$this->contentsTitle = $this->pageTitle;
+		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
+		$this->layout = $this->blogContent['BlogContent']['layout'];
+		$this->render($template);
+
+	}
+/**
+ * コメントを送信する
+ * 
+ * @param int $id
+ * @return void
+ * @access public 
+ */
+	function add_comment($id) {
+		
+		// blog_post_idを取得
+		$conditions = array(
+			'BlogPost.no'				=> $id,
+			'BlogPost.blog_content_id'	=> $this->contentId
+		);
+		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$data = $this->BlogPost->find('first', array(
+			'conditions'=> $conditions,
+			'fields'	=> array('BlogPost.id'),
+			'cache'		=> false,
+			'recursive'	=> -1
+		));
+		
+		if(empty($data['BlogPost']['id'])) {
+			$this->notFound();
+		} else {
+			$postId = $data['BlogPost']['id'];
+		}
+
+		if($this->BlogPost->BlogComment->add($this->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
+			
+			$this->_sendComment();
+			if($this->blogContent['BlogContent']['comment_approve']) {
+				$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
+			}else {
+				$commentMessage = 'コメントの送信が完了しました。';
+			}
+			$this->data = null;
+			
+		}else {
+			
+			$commentMessage = 'コメントの送信に失敗しました。';
+			
+		}
+		
+		$this->set('commentMessage',$commentMessage);
+		
+	}
+/**
+ * ブログ記事を取得する
+ * 
+ * @param array $options
+ * @return array
+ * @access protected
+ */
+	function _getBlogPosts($options = array()) {
+		
+		$_options = array(
+			'listDirection'	=> $this->blogContent['BlogContent']['list_direction'],
+			'listCount'		=> $this->blogContent['BlogContent']['list_count'],
+			'conditions'	=> array()
+		);
+		$_conditions = array(
+			'category'	=> null,
+			'tag'			=> null,
+			'year'			=> null,
+			'month'			=> null,
+			'day'			=> null,
+			'id'			=> null,
+			'keyword'		=> null
+		);
+
+		$options = am($_options, $options);
+		
+		$__conditions = array();
+		
+		if(!empty($this->params['named'])) {
+			$__conditions = am($options['conditions'], $this->params['named']);
+		} else {
+			$__conditions = $options['conditions'];
+		}
+		unset($options['conditions']);
+		$_conditions = am($_conditions, $__conditions);
+		
+		extract($options);
+		
+		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
+		$conditions = array('BlogPost.blog_content_id'	=> $this->contentId);
+		
+		// カテゴリ条件
+		if($_conditions['category']) {
+			$category = $_conditions['category'];
+			$categoryId = $this->BlogCategory->field('id', array(
+				'BlogCategory.blog_content_id'	=> $this->contentId,
+				'BlogCategory.name'				=> $category
+			));
+			$categoryIds = array(0 => $categoryId);
+
+			// 指定したカテゴリ名にぶら下がる子カテゴリを取得
 			$catChildren = $this->BlogCategory->children($categoryId);
 			if($catChildren) {
 				$catChildren = Set::extract('/BlogCategory/id',$catChildren);
 				$categoryIds = am($categoryIds, $catChildren);
 			}
-			$conditions["BlogPost.blog_category_id"] = $categoryIds;
-			$conditions['BlogPost.blog_content_id'] = $contentId;
-
-			if(!$this->preview) {
-				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+			$conditions['BlogPost.blog_category_id'] = $categoryIds;
+			
+		}
+		
+		// タグ条件
+		if($_conditions['tag']) {
+			
+			$tag = $_conditions['tag'];
+			if(!is_array($tag)) {
+				$tag = array($tag);
 			}
-			$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
-			$this->paginate = array('conditions'=>$conditions,
-					'fields'	=> array(),
-					'order'		=> 'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
-					'limit'		=> $this->blogContent['BlogContent']['list_count'],
-					'recursive'	=> 1
-			);
-			$posts = $this->paginate('BlogPost');
-			$this->set('posts',$posts);
-
-			// ナビゲーションを設定
-			$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
-			if(count($blogCategories) > 1){
-				foreach($blogCategories as $key => $blogCategory) {
-					if($key < count($blogCategories) -1 ) {
-						$this->navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
-					}
-				}
+			
+			foreach($tag as $key => $value) {
+				$tag[$key] = urldecode($value);
 			}
-			$this->pageTitle = $blogCategories[count($blogCategories)-1]['BlogCategory']['title'];
-			$single = false;
-			$template = $this->blogContent['BlogContent']['template'].DS.'archives';
-
-		/*** タグ別記事一覧 ***/
-		} elseif($type=='tag') {
-
-			$conditions["BlogTag.name"] = $name;
-			$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $conditions, 'recursive' => 1));
-			if($tags) {
+			
+			$tags = $this->BlogPost->BlogTag->find('all', array(
+				'conditions'=> array('BlogTag.name' => $tag), 
+				'recursive'	=> 1
+			));
+			if(isset($tags[0]['BlogPost'][0]['id'])) {
 				$ids = Set::extract('/BlogPost/id',$tags);
-				$conditions = array();
 				$conditions['BlogPost.id'] = $ids;
-				$conditions['BlogPost.blog_content_id'] = $contentId;
-				if(!$this->preview) {
-					$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-				}
-				$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
-				$this->paginate = array(
-						'conditions'	=> $conditions,
-						'fields'		=> array(),
-						'order'			=> 'BlogPost.posts_date DESC,BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
-						'limit'			=> $this->blogContent['BlogContent']['list_count'],
-						'recursive'		=> 1
-				);
-				$posts = $this->paginate('BlogPost');
-
 			} else {
-				$posts = array();
+				return array();
 			}
 
-			$this->set('posts',$posts);
-
-			// ナビゲーションを設定
-			$this->pageTitle = $name;
-			$single = false;
-			$template = $this->blogContent['BlogContent']['template'].DS.'archives';
-
-		/*** 月別アーカイブ一覧 ***/
-		}elseif($type=='date') {
-
-			$conditions = array();
-			if(!$this->preview) {
-				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		}
+		
+		// キーワード条件
+		if($_conditions['keyword']) {
+			$keyword = $_conditions['keyword'];
+			if(preg_match('/\s/', $keyword)) {
+				$keywords = explode("\s", $keyword);
+			} else {
+				$keywords = array($keyword);
 			}
-			$conditions['BlogPost.blog_content_id'] = $contentId;
-
+			foreach($keywords as $key => $value) {
+				$keywords[$key] = urldecode($value);
+				$conditions['or'][]['BlogPost.name LIKE'] = '%'.$value.'%';
+				$conditions['or'][]['BlogPost.content LIKE'] = '%'.$value.'%';
+				$conditions['or'][]['BlogPost.detail LIKE'] = '%'.$value.'%';
+			}
+		}
+		
+		// 年月日条件
+		if($_conditions['year'] || $_conditions['month'] || $_conditions['day']) {
+			$year = $_conditions['year'];
+			$month = $_conditions['month'];
+			$day = $_conditions['day'];
+			
 			$db=& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
 			switch (str_replace('_ex','',$db->config['driver'])) {
 				case 'mysql':
@@ -356,112 +552,71 @@ class BlogController extends BlogAppController {
 					if($day) $conditions["strftime('%d',BlogPost.posts_date)"] = sprintf('%02d',$day);
 					break;
 			}
-			$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag'), false);
-			$this->paginate = array('conditions'=>$conditions,
-					'fields'=>array(),
-					'order'=>'BlogPost.posts_date '.$this->blogContent['BlogContent']['list_direction'].',BlogPost.id '.$this->blogContent['BlogContent']['list_direction'],
-					'limit'=>$this->blogContent['BlogContent']['list_count']
-			);
-			$this->BlogPost->recursive = 1;
-			$posts = $this->paginate('BlogPost');
-			$this->set('posts',$posts);
-			$this->pageTitle = $year.'年';
-			if($month) $this->pageTitle .= $month.'月';
-			if($day) $this->pageTitle .= $day.'日';
-			$single = false;
-			$template = $this->blogContent['BlogContent']['template'].DS.'archives';
-
-		/*** 単ページ ***/
-		}else {
-
-			if(isset($this->data['BlogComment'])) {
-
-				// blog_post_idを取得
-				$conditions["BlogPost.no"] = $id;
-				$conditions["BlogPost.blog_content_id"] = $contentId;
-				$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-				$postId = $this->BlogPost->field('id',$conditions);
-				if(!$postId) {
-					$this->notFound();
-				}
-
-				if($this->BlogPost->BlogComment->add($this->data,$contentId,$postId,$this->blogContent['BlogContent']['comment_approve'])) {
-					$this->_sendComment();
-					if($this->blogContent['BlogContent']['comment_approve']) {
-						$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
-					}else {
-						$commentMessage = 'コメントの送信が完了しました。';
-					}
-					$this->data = null;
-				}else {
-					$commentMessage = 'コメントの送信に失敗しました。';
-				}
-				$this->set('commentMessage',$commentMessage);
-
-			}
-
-			if($this->preview && isset($this->data['BlogPost'])) {
-				$post['BlogPost'] = $this->data['BlogPost'];
-				if(isset($this->data['BlogTag'])) {
-					$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $this->data['BlogTag']['BlogTag']));
-					if($tags) {
-						$tags = Set::extract('/BlogTag/.', $tags);
-						$post['BlogTag'] = $tags;
-					}
-				}
-			}else {
-				$conditions["BlogPost.no"] = $id;
-				$conditions["BlogPost.blog_content_id"] = $contentId;
-				if(!$this->preview) {
-					$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-				}
-
-				$this->BlogPost->expects(array('BlogCategory', 'User', 'BlogTag', 'BlogComment'), false);
-				$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
-				$post = $this->BlogPost->find($conditions);
-				if(!$post) {
-					$this->notFound();
-				}
-			}
-
-			// ナビゲーションを設定
-			if(!empty($post['BlogPost']['blog_category_id'])) {
-				$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
-				if($blogCategories) {
-					foreach($blogCategories as $blogCategory) {
-						$this->navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
-					}
-				}
-			}
-
-			$this->set('post',$post);
-			$this->pageTitle = $post['BlogPost']['name'];
-			$single = true;
-			if($this->preview) {
-				$this->blogContent['BlogContent']['comment_use'] = false;
-			}
-			$template = $this->blogContent['BlogContent']['template'].DS.'single';
 
 		}
+		
+		if($_conditions['id']) {
+			$conditions["BlogPost.no"] = $_conditions['id'];
+			$expects[] = 'BlogComment';
+			$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
+			$listCount = 1;
+		}
+		
+		unset($_conditions['category']);
+		unset($_conditions['tag']);
+		unset($_conditions['keyword']);
+		unset($_conditions['year']);
+		unset($_conditions['month']);
+		unset($_conditions['day']);
+		unset($_conditions['id']);
+		unset($_conditions['page']);
+		unset($_conditions['num']);
+		unset($_conditions['sort']);
+		unset($_conditions['direction']);
+		
+		if($_conditions) {
+			// とりあえず BlogPost のフィールド固定
+			$conditions = am($conditions, $this->postConditions(array('BlogPost' => $_conditions)));
+		}
+		
+		// プレビューの場合は公開ステータスを条件にしない
+		if(!$this->preview) {
+			$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		}
 
-		$this->set('single',$single);
+		$this->BlogPost->expects($expects, false);
 
-		// 表示設定
-		$this->set('year',$year);
-		$this->set('month',$month);
-		$this->contentsTitle = $this->pageTitle;
-		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
-		$this->layout = $this->blogContent['BlogContent']['layout'];
-		$this->render($template);
+		if(!empty($direction)) {
+			$listDirection = $direction;
+		}
+		$order = "BlogPost.posts_date {$listDirection}";
+		if(!empty($sort)) {
+			$order = "BlogPost.{$sort} {$listDirection}";
+			if($sort != 'id') {
+				$order .= ", BlogPost.id ASC";
+			}
+		}
+		
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$this->paginate = array(
+				'conditions'=> $conditions,
+				'fields'	=> array(),
+				'order'		=> $order,
+				'limit'		=> $listCount,
+				'recursive'	=> 1,
+				'cache'		=> false
+		);
+		
+		return $this->paginate('BlogPost');
 
 	}
 /**
  * [MOBILE] ブログアーカイブを表示する
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
  */
 	function mobile_archives() {
 
@@ -469,14 +624,45 @@ class BlogController extends BlogAppController {
 
 	}
 /**
- * [PUBLIC] ブログ記事をプレビュー
+ * [SMARTPHONE] ブログアーカイブを表示する
  *
- * @param	mixed	blog_post_id / type
- * @param	mixed	blog_post_id / ""
- * @return	void
- * @access 	public
+ * @param mixed	blog_post_id / type
+ * @param mixed	blog_post_id / ""
+ * @return void
+ * @access public
  */
-	function admin_create_preview($blogContentsId, $id) {
+	function smartphone_archives() {
+
+		$this->setAction('archives');
+
+	}
+/**
+ * [ADMIN] プレビューを表示する
+ * 
+ * @param int $blogContentsId
+ * @param int $id
+ * @param string $mode
+ * @return void
+ * @access public
+ */
+	function admin_preview($blogContentsId, $id, $mode) {
+		
+		if($mode == 'create') {
+			$this->_createPreview($blogContentsId, $id);
+		} elseif($mode == 'view') {
+			$this->_viewPreview($blogContentsId, $id);
+		}
+		
+	}
+/**
+ * ブログ記事をプレビュー
+ *
+ * @param int $blogContentsId / type
+ * @param int $id / ""
+ * @return void
+ * @access protected
+ */
+	function _createPreview($blogContentsId, $id) {
 
 		Cache::write('blog_posts_preview_'.$id, $this->data);
 		echo true;
@@ -486,10 +672,12 @@ class BlogController extends BlogAppController {
 /**
  * プレビューを表示する
  *
- * @return	void
- * @access	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access protected
  */
-	function admin_preview($blogContentsId, $id){
+	function _viewPreview($blogContentsId, $id){
 
 		$data = Cache::read('blog_posts_preview_'.$id);
 		Cache::delete('blog_posts_preview_'.$id);
@@ -497,21 +685,31 @@ class BlogController extends BlogAppController {
 		$this->preview = true;
 		$this->layoutPath = '';
 		$this->subDir = '';
-		$this->params['prefix'] = '';
+		unset($this->params['pass']);
+		unset($this->params['prefix']);
+		unset($this->params['plugin']);
+		unset($this->params['admin']);
+		$this->params['controller'] = $this->blogContent['BlogContent']['name'];
+		$this->params['action'] = 'archives';
+		$this->params['url']['url'] = $this->params['controller'].'/'.'archives'.'/'.$this->data['BlogPost']['no'];
+		$this->params['pass'][0] = $this->data['BlogPost']['no'];
 		$this->theme = $this->siteConfigs['theme'];
 		$this->setAction('archives');
 
 	}
 /**
  * ブログカレンダー用のデータを取得する
- * @param	int		$id
- * @param	int		$year
- * @param	int		$month
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param int $year
+ * @param int $month
+ * @return array
+ * @access public
  */
 	function get_calendar($id,$year='',$month=''){
 
+		$year = h($year);
+		$month = h($month);
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
@@ -540,9 +738,11 @@ class BlogController extends BlogAppController {
 	}
 /**
  * カテゴリー一覧用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param mixed $count
+ * @return array
+ * @access public
  */
 	function get_categories($id, $count = false){
 
@@ -554,24 +754,51 @@ class BlogController extends BlogAppController {
 	}
 /**
  * 月別アーカイブ一覧用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @return mixed $count
+ * @access public
  */
-	function get_blog_dates($id, $count = false){
+	function get_posted_months($id, $count = 12, $viewCount = false){
 
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
-		$data['blogDates'] = $this->BlogPost->getBlogDates($id, $count);
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'month', 
+			'count'		=> $count, 
+			'viewCount'	=> $viewCount
+		));
+		return $data;
+		
+	}
+/**
+ * 年別アーカイブ一覧用のデータを取得する
+ * 
+ * @param int $id
+ * @param boolean $viewCount
+ * @return mixed $count
+ * @access public
+ */
+	function get_posted_years($id, $viewCount = false){
+
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null,$id);
+		$this->BlogPost->recursive = -1;
+		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
+			'type'		=> 'year', 
+			'viewCount'	=> $viewCount
+		));
 		return $data;
 		
 	}
 /**
  * 最近の投稿用のデータを取得する
- * @param	int		$id
- * @return	array
- * @access	public
+ * 
+ * @param int $id
+ * @param mixed $count
+ * @return array
+ * @access public
  */
 	function get_recent_entries($id, $count = 5){
 
@@ -580,52 +807,71 @@ class BlogController extends BlogAppController {
 		$this->BlogPost->recursive = -1;
 		$conditions = array('BlogPost.blog_content_id'=>$id);
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
-				'fields'=>array('no','name'),
-				'conditions'=>$conditions,
-				'limit'=>$count,
-				'order'=>'posts_date DESC',
-				'recursive'=>-1)
-		);
+				'fields'	=> array('no','name'),
+				'conditions'=> $conditions,
+				'limit'		=> $count,
+				'order'		=> 'posts_date DESC',
+				'recursive'	=> -1,
+				'cache'		=> false
+		));
 		return $data;
 		
 	}
 /**
  * 記事リストを出力
- *
  * requestAction用
  * 
- * @param	int	$blogContentId
- * @param	int	$num
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
  */
 	function posts($blogContentId, $num = 5) {
-		
+
+		if(!empty($this->params['named']['template'])) {
+			$template = $this->params['named']['template'];
+		} else {
+			$template = 'posts';
+		}
+		unset($this->params['named']['template']);
+
 		$this->layout = null;
-		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-		$this->BlogPost->unbindModel(array('belongsTo' => array('BlogContent', 'User')));
-		$posts = $this->BlogPost->find('all', array(
-				'conditions'=> $conditions,
-				'limit'		=> $num,
-				'order'		=> 'posts_date DESC',
-				'recursive'	=> 0)
-		);
-		$this->set('posts', $posts);
-		$this->render($this->blogContent['BlogContent']['template'].DS.'posts');
-		
+		$this->contentId = $blogContentId;
+		$datas = $this->_getBlogPosts(array('listCount' => $num));
+		$this->set('posts', $datas);
+
+		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
+
 	}
 /**
  * [MOBILE] 記事リストを出力
  *
  * requestAction用
  *
- * @param	int	$blogContentId
- * @param	int	$num
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
  */
 	function mobile_posts($blogContentId, $num = 5) {
 		
 		$this->setAction('posts', $blogContentId, $num);
 		
 	}
+/**
+ * [SMARTPHONE] 記事リストを出力
+ *
+ * requestAction用
+ *
+ * @param int $blogContentId
+ * @param mixed $num
+ * @access public
+ */
+	function smartphone_posts($blogContentId, $num = 5) {
+		
+		$this->setAction('posts', $blogContentId, $num);
+		
+	}
+	
 }
 ?>

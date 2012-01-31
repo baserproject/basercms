@@ -1,21 +1,19 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * BaserCMS共通関数
+ * baserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -23,26 +21,44 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
- *
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
- *
- * @return string   ベースURL
+ * / | /index.php/ | /subdir/ | /subdir/index.php/
+ * @return string ベースURL
  */
 	function baseUrl() {
 
-		$appBaseUrl = Configure::read('App.baseUrl');
-		if($appBaseUrl) {
-			$baseUrl = $appBaseUrl.'/';
+		$baseUrl = Configure::read('App.baseUrl');
+		if($baseUrl) {
+			if(!preg_match('/\/$/', $baseUrl)) {
+				$baseUrl .= '/';
+			}
 		}else {
-			// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
-			// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまう為、
-			// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			$url = str_replace('url=', '', @$_SERVER['QUERY_STRING']);
-			if($url) {
-				$baseUrl = str_replace($url, '', @$_SERVER['REQUEST_URI']);
+			if(!empty($_SERVER['QUERY_STRING'])) {
+				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
+				// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまい
+				// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
+				$url = '';
+				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
+					$url = $maches[1];
+				}
+				if($url) {
+					$requestUri = '/';
+					if(!empty($_SERVER['REQUEST_URI'])) {
+						$requestUri = urldecode($_SERVER['REQUEST_URI']);
+					}
+					if(strpos($requestUri, '?') !== false) {
+						list($requestUri) = explode('?', $requestUri);
+					}
+					$baseUrl = str_replace($url, '', $requestUri);
+				}
+				
 			} else {
 				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
-				$baseUrl = preg_replace("/index$/", '', @$_SERVER['REQUEST_URI']);
+				$requestUri = '/';
+				if(!empty($_SERVER['REQUEST_URI'])) {
+					$requestUri = $_SERVER['REQUEST_URI'];
+				}
+				$baseUrl = preg_replace("/index$/", '', $requestUri);
 			}
 		}
 		return $baseUrl;
@@ -58,6 +74,10 @@
  */
 	function docRoot() {
 
+		if(empty($_SERVER['SCRIPT_NAME'])) {
+			return '';
+		}		
+		
 		if(strpos($_SERVER['SCRIPT_NAME'],'.php') === false){
 			// さくらの場合、/index を呼びだすと、拡張子が付加されない
 			$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
@@ -78,24 +98,31 @@
 	}
 /**
  * リビジョンを取得する
- * @param string    BaserCMS形式のバージョン表記　（例）BaserCMS 1.5.3.1600 beta
+ * @param string    baserCMS形式のバージョン表記　（例）baserCMS 1.5.3.1600 beta
  * @return string   リビジョン番号
  */
 	function revision($version) {
-		return preg_replace("/BaserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
+		return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
 	}
 /**
  * バージョンを特定する一意の数値を取得する
  * ２つ目以降のバージョン番号は３桁として結合
  * 1.5.9 => 1005009
  * ※ ２つ目以降のバージョン番号は999までとする
- * @param string $version
+ * β版の場合はfalseを返す
+ * 
+ * @param mixed $version Or false
  */
 	function verpoint($version) {
-		$version = str_replace('BaserCMS ', '', $version);
-		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
+		$version = str_replace('baserCMS ', '', $version);
+		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
 			if(isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
+				if(isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
+					return false;
+				}
 				$maches[4] = str_replace('.', '', $maches[4]);
+			} elseif(isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
+				return false;
 			} else {
 				$maches[4] = 0;
 			}
@@ -168,22 +195,53 @@
 
 	}
 /**
- * baseUrlを除外したURLのパラメーターを取得する
+ * 環境変数よりURLパラメータを取得する
+ * 
+ * モバイルプレフィックスは除外する
+ * bootstrap実行後でのみ利用可
+ */
+	function getUrlParamFromEnv() {
+		
+		$agentAlias = Configure::read('AgentPrefix.currentAlias');
+		$url = getUrlFromEnv();
+		return preg_replace('/^'.$agentAlias.'\//','',$url);
+		
+	}
+/**
+ * 環境変数よりURLを取得する
+ * 
+ * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
  * 先頭のスラッシュは除外する
+ * baseUrlは除外する
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
-	function getParamsFromEnv() {
+	function getUrlFromEnv() {
+		
+		if(!empty($_GET['url'])) {
+			return preg_replace('/^\//', '', $_GET['url']);
+		}
+		
+		if(!isset($_SERVER['REQUEST_URI'])) {
+			return;
+		} else {
+			$requestUri = $_SERVER['REQUEST_URI'];
+		}
+
 		$appBaseUrl = Configure::read('App.baseUrl');
 		$parameter = '';
+		
 		if($appBaseUrl) {
+			
 			$base = dirname($appBaseUrl);
-			if(strpos($_SERVER['REQUEST_URI'], $appBaseUrl) !== false) {
-				$parameter = str_replace($appBaseUrl,'',$_SERVER['REQUEST_URI']);
+			if(strpos($requestUri, $appBaseUrl) !== false) {
+				$parameter = str_replace($appBaseUrl, '', $requestUri);
 			}else {
 				// トップページ
-				$parameter = str_replace($base.'/','',$_SERVER['REQUEST_URI']);
+				$parameter = str_replace($base.'/', '', $requestUri);
 			}
+			
 		}else {
+			
 			$parameter = '';
 			if(isset($_SERVER['QUERY_STRING'])) {
 				$query = $_SERVER['QUERY_STRING'];
@@ -209,13 +267,14 @@
 					}
 				}
 
-			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', @$_SERVER['REQUEST_URI'])){
-				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', @$_SERVER['REQUEST_URI']);
+			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $requestUri)){
+				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', $requestUri);
 			} else {
-				$parameter = @$_SERVER['REQUEST_URI'];
+				$parameter = $requestUri;
 			}
 		}
 		$parameter = preg_replace('/^\//','',$parameter);
+		
 		return $parameter;
 
 	}
@@ -241,12 +300,22 @@
 					}else{
 						$home = 'm';
 					}
-				}
-				if(Configure::read('App.baseUrl')) {
+				} elseif (preg_match('/^\/s/is', $url)) {
 					if($home){
-						$home = 'index_php_'.$home;
+						$home = 's_'.$home;
 					}else{
-						$home = 'index_php';
+						$home = 's';
+					}
+				}
+				$baseUrl = baseUrl();
+				if($baseUrl) {
+					$baseUrl = str_replace(array('/', '.'), '_', $baseUrl);
+					$baseUrl = preg_replace('/^_/', '', $baseUrl);
+					$baseUrl = preg_replace('/_$/', '', $baseUrl);
+					if($home){
+						$home = $baseUrl.$home;
+					}else{
+						$home = $baseUrl;
 					}
 				}elseif(!$home){
 					$home = 'home';
@@ -254,6 +323,7 @@
 				clearCache($home);
 			}
 		}elseif($url) {
+			$url = preg_replace('/\/index$/', '', $url);
 			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
 		}else {
 			App::import('Core','Folder');
@@ -261,17 +331,25 @@
 			$files = $folder->read(true,true);
 			foreach($files[1] as $file) {
 				if($file != 'empty') {
-					if($ext) {
-						if(preg_match('/'.str_replace('.', '\.', $ext).'$/is', $file)) {
-							@unlink(CACHE.'views'.DS.$file);
-						}
-					}else {
-						@unlink(CACHE.'views'.DS.$file);
-					}
+					@unlink(CACHE.'views'.DS.$file);
 				}
 			}
 		}
 
+	}
+/**
+ * データキャッシュを削除する
+ */
+	function clearDataCache() {
+		
+		App::import('Core','Folder');
+		$folder = new Folder(CACHE.'datas'.DS);
+
+		$files = $folder->read(true,true,true);
+		foreach($files[1] as $file) {
+			@unlink($file);
+		}
+		
 	}
 /**
  * キャッシュファイルを全て削除する
@@ -304,7 +382,7 @@
 
 	}
 /**
- * BaserCMSのインストールが完了しているかチェックする
+ * baserCMSのインストールが完了しているかチェックする
  * @return	boolean
  */
 	function isInstalled () {
@@ -337,6 +415,7 @@
 		$folder->create(CACHE.'models',0777);
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
+		$folder->create(CACHE.'datas',0777);
 
 	}
 /**
@@ -513,5 +592,54 @@
 			return false;
 		}
 
+	}
+/**
+ * URLにセッションIDを付加する
+ * 既に付加されている場合は重複しない
+ * 
+ * @param mixed $url
+ * @return mixed
+ */
+	function addSessionId($url, $force = false) {
+		
+		if(Configure::read('AgentPrefix.currentAgent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
+			if(is_array($url)) {
+				$url["?"][session_name()] = session_id();
+			} else {
+				if(strpos($url, '?') !== false) {
+					$args = array();
+					$_url = explode('?', $url);
+					if(!empty($_url[1])) {
+						if(strpos($_url[1], '&') !== false) {
+							$aryUrl = explode('&', $_url[1]);
+							foreach($aryUrl as $pass) {
+								if(strpos($pass, '=') !== false) {
+									list($key, $value) = explode('=', $pass);
+									$args[$key] = $value;
+								}
+							}
+						} else {
+							if(strpos($_url[1], '=') !== false) {
+								list($key, $value) = explode('=', $_url[1]);
+								$args[$key] = $value;
+							}
+						}
+					}
+					$args[session_name()] = session_id();
+					$pass = '';
+					foreach($args as $key => $value) {
+						if($pass) {
+							$pass .= '&';
+						}
+						$pass .= $key.'='.$value;
+					}
+					$url = $_url[0] . '?' . $pass;
+				} else {
+					$url .= '?'.session_name().'='.session_id();
+				}
+			}
+		}
+		return $url;
+		
 	}
 ?>

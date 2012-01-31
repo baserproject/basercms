@@ -4,8 +4,6 @@
 class BlogCategoriesSchema extends CakeSchema {
 	var $name = 'BlogCategories';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'blog_categories.php';
 
 	var $connection = 'plugin';
@@ -27,6 +25,7 @@ class BlogCategoriesSchema extends CakeSchema {
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
+		'owner_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

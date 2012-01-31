@@ -3,17 +3,15 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controller
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,35 +23,35 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * @package			baser.plugins.mail.controller
+ * @package baser.plugins.mail.controller
  */
 class MailController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Mail';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.Message','Mail.MailContent','Mail.MailField','Mail.MailConfig');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Freeze','Mailform','Javascript','Array','TimeEx','Maildata','Mailfield','Mail');
 /**
  * Array of components a controller will use
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
@@ -63,48 +61,53 @@ class MailController extends MailAppController {
 /**
  * CSS
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $css = array('mail/form');
 /**
  * ページタイトル
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $pageTitle = 'お問い合わせ';
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * データベースデータ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $dbDatas = null;
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array();
+	var $crumbs = array();
 /**
  * beforeFilter.
  *
  * @return void
- * @access 	public
+ * @access public
  */
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->Auth->allow('index','mobile_index','confirm','mobile_confirm','submit','mobile_submit','captcha');
+		$this->AuthEx->allow(
+				'index', 'mobile_index', 'smartphone_index',
+				'confirm', 'mobile_confirm', 'smartphone_confirm',
+				'submit', 'mobile_submit', 'smartphone_submit', 
+				'captcha', 'smartphone_captcha'
+		);
 
 		parent::beforeFilter();
 
@@ -157,8 +160,8 @@ class MailController extends MailAppController {
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -171,15 +174,17 @@ class MailController extends MailAppController {
 /**
  * [PUBIC] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function index($id = null) {
 
 		// 初期値を取得
-		if(!$this->data) {
+		if(!isset($this->data['Message'])) {
 			$this->data = $this->Message->getDefaultValue();
+		}else {
+			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
 		}
 
 		$this->set('freezed',false);
@@ -187,6 +192,11 @@ class MailController extends MailAppController {
 		if($this->dbDatas['mailFields'])
 			$this->set('mailFields',$this->dbDatas['mailFields']);
 
+		$user = $this->AuthEx->user();
+		if(!empty($user) && !Configure::read('AgentPrefix.on')) {
+			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
+		}
+		
 		$this->set('mailContent',$this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
 
@@ -194,9 +204,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_index($id=null) {
 
@@ -204,22 +214,34 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_index($id=null) {
+
+		$this->setAction('index',$id);
+
+	}
+/**
  * [PUBIC] データの確認画面を表示
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed	mail_content_id
+ * @return void
+ * @access public
  */
 	function confirm($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
 
 			// 画像認証を行う
-			if(!Configure::read('Mobile.on') && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+			if(Configure::read('AgentPrefix.currentAgent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
 				$captchaResult = $this->Captcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
@@ -252,9 +274,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] フォームを表示する
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_confirm($id=null) {
 
@@ -262,16 +284,28 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] フォームを表示する
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_confirm($id=null) {
+
+		$this->setAction('confirm',$id);
+
+	}
+/**
  * [PUBIC] データ送信
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function submit($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
@@ -307,9 +341,9 @@ class MailController extends MailAppController {
 /**
  * [MOBILE] 送信完了ページ
  *
- * @param	mixed	mail_content_id
- * @return	void
- * @access	public
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
  */
 	function mobile_submit($id=null) {
 
@@ -317,16 +351,28 @@ class MailController extends MailAppController {
 
 	}
 /**
+ * [SMARTPHONE] 送信完了ページ
+ *
+ * @param mixed mail_content_id
+ * @return void
+ * @access public
+ */
+	function smartphone_submit($id=null) {
+
+		$this->setAction('submit',$id);
+
+	}
+/**
  * メール送信する
- * @return	void
- * @access	protected
+ * 
+ * @return void
+ * @access protected
  */
 	function _sendEmail() {
 
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];
 		$userMail = '';
-		//$userName = '';
 
 		// データを整形
 		$data = $this->Message->restoreData($this->Message->convertToDb($this->data));
@@ -345,18 +391,20 @@ class MailController extends MailAppController {
 		}
 
 		foreach($this->dbDatas['mailFields'] as $mailField) {
+			$field = $mailField['MailField']['field_name'];
+			if(!isset($data['Message'][$field])) {
+				continue;
+			}
+			$value = $data['Message'][$field];
 			// ユーザーメールを取得
-			if($mailField['MailField']['type'] == 'email') {
-				$userMail = $data['Message'][$mailField['MailField']['field_name']];
+			if($mailField['MailField']['type'] == 'email' && $value) {
+				$userMail = $value;
 			}
 			// 件名にフィールドの値を埋め込む
-			$mailContent['subject_user'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
-														$data['Message'][$mailField['MailField']['field_name']],
-														$mailContent['subject_user']);
-			$mailContent['subject_admin'] = str_replace('{$'.$mailField['MailField']['field_name'].'}',
-														$data['Message'][$mailField['MailField']['field_name']],
-														$mailContent['subject_admin']);
+			$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
+			$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
 		}
+		
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
 		if(!$userMail) {
 			if(!empty($data['Message']['email'])) {
@@ -366,31 +414,27 @@ class MailController extends MailAppController {
 			}
 		}
 
-		// ユーザー名を取得
-		/*if(!empty($data['Message']['name'])){
-			$userName = $data['Message']['name'] . '　様';
-		}elseif(!empty($data['Message']['name_1']) && !empty($data['Message']['name_2'])){
-			$userName = $data['Message']['name_1'] . '　' . $data['Message']['name_2'] . '　様';
-		}*/
-
 		// ユーザーに送信
 		if(!empty($userMail)) {
 			$data['other']['mode'] = 'user';
-			$options = array('fromName' => $mailContent['sender_name'],
-								'reply' => $adminMail,
-								'template' => $mailContent['mail_template'],
-								'from' => $adminMail);
+			$options = array(
+				'fromName'	=> $mailContent['sender_name'],
+				'reply'		=> $adminMail,
+				'template'	=> $mailContent['mail_template'],
+				'from'		=> $adminMail
+			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
 
 		// 管理者に送信
 		if(!empty($adminMail)) {
 			$data['other']['mode'] = 'admin';
-			$options = array('fromName' => $mailContent['sender_name'],
-								'reply' => $userMail,
-								'from' => $adminMail,
-								'template' => $mailContent['mail_template'],
-								'cc' => $mailContent['sender_2']
+			$options = array(
+				'fromName'	=> $mailContent['sender_name'],
+				'reply'		=> $userMail,
+				'from'		=> $adminMail,
+				'template'	=> $mailContent['mail_template'],
+				'bcc'		=> $mailContent['sender_2']
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}
@@ -398,12 +442,27 @@ class MailController extends MailAppController {
 	}
 /**
  * 認証用のキャプチャ画像を表示する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
     function captcha()
     {
+		
         $this->Captcha->render();
+		
+    }
+/**
+ * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+ * 
+ * @return void
+ * @access public
+ */
+    function smartphone_captcha()
+    {
+		
+        $this->Captcha->render();
+		
     }
 }
 ?>

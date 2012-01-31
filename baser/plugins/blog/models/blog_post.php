@@ -3,17 +3,15 @@
 /**
  * 記事モデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,14 +23,14 @@
 /**
  * 記事モデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogPost extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogPost';
 /**
@@ -41,12 +39,12 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('ContentsManager');
+	var $actsAs = array('ContentsManager', 'Cache');
 /**
  * belongsTo
  *
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $belongsTo = array(
 			'BlogCategory' =>   array(  'className'=>'Blog.BlogCategory',
@@ -59,8 +57,8 @@ class BlogPost extends BlogAppModel {
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogComment'=>
 			array('className'=>'Blog.BlogComment',
@@ -91,16 +89,16 @@ class BlogPost extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
 			array(  'rule'		=> array('notEmpty'),
 					'message'	=> 'タイトルを入力してください。',
 					'required'	=> true),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'タイトルは50文字以内で入力してください。')
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'タイトルは255文字以内で入力してください。')
 		),
 		'posts_date' => array(
 			array(	'rule'		=> array('notEmpty'),
@@ -115,63 +113,117 @@ class BlogPost extends BlogAppModel {
 /**
  * 初期値を取得する
  *
- * @return	array	初期値データ
- * @access	public
+ * @return array $authUser 初期値データ
+ * @access public
  */
 	function getDefaultValue($authUser) {
+		
 		$data[$this->name]['user_id'] = $authUser['User']['id'];
 		$data[$this->name]['posts_date'] = date('Y/m/d H:i:s');
 		$data[$this->name]['status'] = 0;
 		return $data;
+		
 	}
 /**
  * ブログの月別一覧を取得する
  *
- * @return array    月別リストデータ
+ * @param array $blogContentId
+ * @param array $options
+ * @return array 月別リストデータ
  * @access public
  */
-	function getBlogDates($blogContentId, $count = false) {
+	function getPostedDates($blogContentId, $options) {
 
+		$options = array_merge(array(
+			'count'		=> false, 
+			'viewCount'	=> false, 
+			'type'		=> 'month'
+		), $options);
+		
+		extract($options);
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 		$conditions = am($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
 		/*$dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
                                           $conditions,
                                           'group'=>array('YEAR(posts_date)','MONTH(posts_date)'))));*/
-		$posts = $this->find('all',array('conditions'=>$conditions, 'order'=>'BlogPost.posts_date DESC', 'recursive'=>-1));
-		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$posts = $this->find('all',array(
+			'conditions'=> $conditions, 
+			'order'		=> 'BlogPost.posts_date DESC', 
+			'recursive' => -1,
+			'cache'		=> false
+		));
 
+		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
 		$dates = array();
+		$counter = 0;
+		
 		foreach($postsDates as $postsDate) {
+			
 			$exists = false;
 			$_date = array();
+			
 			foreach($dates as $key => $date) {
-				if($date['year'] == date('Y',strtotime($postsDate)) &&
-						$date['month'] == date('m',strtotime($postsDate))) {
+				
+				if($type == 'year' && $date['year'] == date('Y',strtotime($postsDate))) {
 					$exists = true;
-					if($count) {
+				}
+				if($type == 'month' && 
+						$date['year'] == date('Y',strtotime($postsDate)) &&
+						$date['month'] == date('m',strtotime($postsDate))) {				
+					$exists = true;
+				}
+				
+				if($exists) {				
+					if($viewCount) {
 						$dates[$key]['count']++;
 					}
+					break;
 				}
+				
 			}
+			
 			if(!$exists) {
-				$_date['year'] = date('Y',strtotime($postsDate));
-				$_date['month'] = date('m',strtotime($postsDate));
-				if($count) {
+				if($type == 'year') {
+					$_date['year'] = date('Y',strtotime($postsDate));
+				} else {
+					$_date['year'] = date('Y',strtotime($postsDate));
+					$_date['month'] = date('m',strtotime($postsDate));
+				}
+				if($viewCount) {
 					$_date['count'] = 1;
 				}
 				$dates[] = $_date;
+				$counter++;
 			}
+			
+			if($count !== false && $count <= $counter) {
+				break;
+			}
+			
 		}
+		
 		return $dates;
 
 	}
 /**
  * カレンダー用に指定した月で記事の投稿がある日付のリストを取得する
+ * 
+ * @param int $contentId
+ * @param int $year
+ * @param int $month
+ * @return array
+ * @access public
  */
 	function getEntryDates($contentId,$year,$month) {
 
-		$entryDates = $this->find('all',array('fields'=>array('BlogPost.posts_date'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1));
+		$entryDates = $this->find('all', array(
+			'fields'	=> array('BlogPost.posts_date'),
+			'conditions'=> $this->_getEntryDatesConditions($contentId,$year,$month), 
+			'recursive'	=> -1,
+			'cache'		=> false
+		));
 		$entryDates = Set::extract('/BlogPost/posts_date',$entryDates);
 		foreach($entryDates as $key => $entryDate) {
 			$entryDates[$key] = date('Y-m-d',strtotime($entryDate));
@@ -182,27 +234,34 @@ class BlogPost extends BlogAppModel {
 /**
  * 指定した月の記事が存在するかチェックする
  *
- * @param	int	$contentId
- * @param	int	$year
- * @param	int	$month
+ * @param	int $contentId
+ * @param	int $year
+ * @param	int $month
  * @return	boolean
  */
 	function existsEntry($contentId,$year,$month) {
-		if($this->find('first',array('fields'=>array('BlogPost.id'),'conditions'=>$this->_getEntryDatesConditions($contentId,$year,$month), 'recursive'=>-1))) {
+		
+		if($this->find('first', array(
+			'fields'	=> array('BlogPost.id'),
+			'conditions'=> $this->_getEntryDatesConditions($contentId,$year,$month), 
+			'recursive'	=> -1,
+			'cache'		=> false
+		))) {
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 /**
  * 年月を指定した検索条件を生成
- *
  * データベースごとに構文が違う
  * 
- * @param	int	$contentId
- * @param	int	$year
- * @param	int	$month
- * @return	string
+ * @param int $contentId
+ * @param int $year
+ * @param int $month
+ * @return string
+ * @access private
  */
 	function _getEntryDatesConditions($contentId,$year,$month) {
 
@@ -260,20 +319,66 @@ class BlogPost extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
+ * @param string $field フィールド名
+ * @param	array	$options
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field = null,$options = array()) {
+	function getControlSource($field, $options = array()) {
 
-		if($field == 'blog_category_id') {
-			$controlSources['blog_category_id'] = $this->BlogCategory->getControlSource('parent_id',$options);
-		}
-		if($field == 'user_id') {
-			$controlSources['user_id'] = $this->User->getUserList($options);
-		}
-		if($field == 'blog_tag_id') {
-			$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+		switch ($field) {
+			case 'blog_category_id':
+				
+				extract($options);
+				$catOption = array('blogContentId' => $blogContentId);
+				$isSuperAdmin = false;
+
+				if(!empty($userGroupId)) {
+					
+					if(!isset($blogCategoryId)) {
+						$blogCategoryId = '';
+					}
+
+					if($userGroupId == 1) {
+						$isSuperAdmin = true;
+					}
+
+					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
+					if(!$postEditable && $blogCategoryId) {
+						$catOption['conditions'] = array('OR' => array('BlogCategory.id' => $blogCategoryId));
+					}
+
+					// super admin でない場合は、管理許可のあるカテゴリのみ取得
+					if(!$isSuperAdmin) {
+						$catOption['ownerId'] = $userGroupId;
+					}
+				
+					if($postEditable && !$rootEditable && !$isSuperAdmin) {
+						unset($empty);
+					}
+				
+				}
+				
+				$categories = $this->BlogCategory->getControlSource('parent_id', $catOption);
+				
+				// 「指定しない」追加
+				if(isset($empty)) {
+					if($categories) {
+						$categories = array('' => $empty) + $categories;
+					} else {
+						$categories = array('' => $empty);
+					}
+				}
+				
+				$controlSources['blog_category_id'] = $categories;
+				
+				break;
+			case 'user_id':
+				$controlSources['user_id'] = $this->User->getUserList($options);
+				break;
+			case 'blog_tag_id':
+				$controlSources['blog_tag_id'] = $this->BlogTag->find('list');
+				break;
 		}
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -285,9 +390,9 @@ class BlogPost extends BlogAppModel {
 /**
  * 公開状態を取得する
  *
- * @param	array	データリスト
- * @return	boolean	公開状態
- * @access	public
+ * @param array データリスト
+ * @return boolean 公開状態
+ * @access public
  */
 	function allowPublish($data){
 
@@ -316,7 +421,8 @@ class BlogPost extends BlogAppModel {
 /**
  * 公開済の conditions を取得
  * 
- * @return	array
+ * @return array
+ * @access public 
  */
 	function getConditionAllowPublish() {
 		
@@ -335,26 +441,37 @@ class BlogPost extends BlogAppModel {
  *
  * @param array $options
  * @return array
+ * @access public
  */
 	function getPublishes ($options) {
 
 		if(!empty($options['conditions'])) {
 			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
+		} else {
+			$options['conditions'] = $this->getConditionAllowPublish();
 		}
-		return $this->find('all', $options);
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$options['cache'] = false;
+		$datas = $this->find('all', $options);
+		return $datas;
 
 	}
 /**
  * afterSave
  *
+ * @param boolean $created
  * @return boolean
  * @access public
  */
 	function afterSave($created) {
 
-		// 検索用テーブルに登録
-		$this->saveContent($this->createContent($this->data));
-
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogPost']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogPost']['id']);
+		}
+		
 	}
 /**
  * 検索用データを生成する
@@ -370,6 +487,7 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
 		$_data['Content']['model_id'] = $this->id;
 		$_data['Content']['category'] = '';
 		if(!empty($data['blog_category_id'])) {
@@ -391,13 +509,14 @@ class BlogPost extends BlogAppModel {
 /**
  * beforeDelete
  *
- * @return	boolean
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeDelete() {
 
 		return $this->deleteContent($this->id);
 
 	}
+	
 }
 ?>

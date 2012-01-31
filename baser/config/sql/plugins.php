@@ -4,8 +4,6 @@
 class PluginsSchema extends CakeSchema {
 	var $name = 'Plugins';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'plugins.php';
 
 	var $connection = 'baser';

@@ -3,17 +3,15 @@
 /**
  * カテゴリコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,83 +23,93 @@
 /**
  * カテゴリコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogCategoriesController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogCategories';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Blog.BlogCategory','Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('TextEx','TimeEx','FormEx','Blog.Blog');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
+	);
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * beforeFilter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
+		
 		$this->BlogContent->recursive = -1;
 		$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
-		$this->navis = am($this->navis,array($this->blogContent['BlogContent']['title'].'管理'=>'/admin/blog/blog_posts/index/'.$this->params['pass'][0]));
-		if($this->params['prefix']=='admin') {
-			$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
+		$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
+		
+		if($this->params['prefix'] == 'admin') {
+			$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
 		}
+		
 		// バリデーション設定
 		$this->BlogCategory->validationParams['blogContentId'] = $this->blogContent['BlogContent']['id'];
+		
 	}
 /**
  * beforeRender
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
+		
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
+		
 	}
 /**
  * [ADMIN] ブログを一覧表示する
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_index($blogContentId) {
 
@@ -118,23 +126,24 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		if($dbDatas) {
-			$this->set('dbDatas',$dbDatas);
-		}
+		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
+		$this->set('dbDatas',$dbDatas);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] ブログカテゴリ一覧';
+		$this->help = 'blog_categories_index';
 
 	}
 /**
  * [ADMIN] 登録処理
  *
- * @return	void
- * @access 	public
+ * @param string $blogContentId
+ * @return void
+ * @access public
  */
 	function admin_add($blogContentId) {
 
 		if(!$blogContentId) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('controller'=>'blog_contents','action'=>'admin_index'));
+			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -150,7 +159,7 @@ class BlogCategoriesController extends BlogAppController {
 			if($this->BlogCategory->save()) {
 				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
 				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
-				$this->redirect(array('action'=>'index',$blogContentId));
+				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -158,23 +167,40 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
+		if($user[$userModel]['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
+		}
+		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		}
+		$this->set('parents', $parents);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規ブログカテゴリ登録';
+		$this->help = 'blog_categories_form';
 		$this->render('form');
 
 	}
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		blog_category_no
- * @return	void
- * @access 	public
+ * @param int $blogContentId
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($blogContentId,$id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -185,7 +211,7 @@ class BlogCategoriesController extends BlogAppController {
 			if($this->BlogCategory->save($this->data)) {
 				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
 				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'index',$blogContentId));
+				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -193,23 +219,105 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		$catOptions = array(
+			'blogContentId' => $this->blogContent['BlogContent']['id'],
+			'excludeParentId' => $this->data['BlogCategory']['id']
+		);
+		if($user[$userModel]['user_group_id'] != 1) {
+			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
+		}
+		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
+		if($this->checkRootEditable()) {
+			if($parents) {
+				$parents = array('' => '指定しない') + $parents;
+			} else {
+				$parents = array('' => '指定しない');
+			}
+		}
+		$this->set('parents', $parents);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] ブログカテゴリ編集';
+		$this->help = 'blog_categories_form';
 		$this->render('form');
 
 	}
 /**
+ * [ADMIN] 一括削除
+ *
+ * @param int $blogContentId
+ * @param int $id
+ * @return	void
+ * @access public
+ */
+	function _batch_del($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$this->_del($id);
+			}
+		}
+		return true;
+	}
+/**
+ * [ADMIN] 削除処理　(ajax)
+ *
+ * @param int $blogContentId
+ * @param int $id
+ * @return	void
+ * @access public
+ */
+	function admin_ajax_delete($blogContentId, $id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+		
+		if($this->_del($id)){
+			exit(true);
+		}else{
+			exit();
+		}
+		
+	}
+/**
+ * 削除処理
+ *
+ * @param int $blogContentId
+ * @param int $id
+ * @return	void
+ * @access public
+ */
+	function _del($id = null) {
+	
+		// メッセージ用にデータを取得
+		$data = $this->BlogCategory->read(null, $id);
+		/* 削除処理 */
+		if($this->BlogCategory->del($id)) {
+	
+			$this->BlogCategory->saveDbLog('カテゴリ「'.$data['BlogCategory']['name'].'」を削除しました。');
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	
+/**
  * [ADMIN] 削除処理
  *
- @ @param	int		blog_category_no
+ * @param int $blogContentId
+ * @param int $id
  * @return	void
- * @access 	public
+ * @access public
  */
-	function admin_delete($blogContentId,$id = null) {
+	function admin_delete($blogContentId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -226,5 +334,6 @@ class BlogCategoriesController extends BlogAppController {
 		$this->redirect(array('action'=>'index',$blogContentId));
 
 	}
+	
 }
 ?>

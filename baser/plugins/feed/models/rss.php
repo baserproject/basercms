@@ -5,7 +5,7 @@
  * This Model allows you to parse a given RSS 2.0 feed and have it returned in a big 
  * array.
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
  * Copyright (c) Felix Geisendrfer <info@fg-webdesign.de>
  *
@@ -17,18 +17,56 @@
  * @link			http://www.thinkingphp.org/ 
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-
-
+/**
+ * Include files
+ */
 App::import("Model","Feed.WebModel",true,array(BASER_PLUGINS));
-
-class Rss extends WebModel 
-{
+/**
+ * rss
+ * 
+ * @package baser.plugins.feed.models
+ */
+class Rss extends WebModel {
+/**
+ * name
+ * 
+ * @var string 
+ * @access public
+ */
     var $name = 'Rss';
+/**
+ * cacheExpires
+ * 
+ * @var string 
+ * @access public
+ */
     var $cacheExpires = '+2 hours';
+/**
+ * cacheFolder
+ * 
+ * @var string 
+ * @access public
+ */
     var $cacheFolder = 'web/rss';
+/**
+ * useDbConfig
+ * 
+ * @var string
+ * @access public
+ */
     var $useDbConfig = null;
-    function findAll($feedUrl, $limit = 10, $cacheExpires = null)
+/**
+ * findAll
+ * 
+ * @param string $feedUrl
+ * @param int $limit
+ * @param string $cacheExpires
+ * @return array
+ * @access public
+ */  
+	function findAll($feedUrl, $limit = 10, $cacheExpires = null)
     {
+		
         if (empty($feedUrl))
             return array();
 
@@ -44,9 +82,18 @@ class Rss extends WebModel
 
         return $feed;
     }
-
-    function __getRawRSS($feedUrl, $vars = array(), $cacheExpires = null)
+/**
+ * getRawRSS
+ * 
+ * @param string $feedUrl
+ * @param array $vars
+ * @param string $cacheExpires
+ * @return string
+ * @access private
+ */    
+	function __getRawRSS($feedUrl, $vars = array(), $cacheExpires = null)
     {
+		
         $url = $feedUrl;
         
         $cachePath = $this->cacheFolder.$this->__createCacheHash('.rss', $url, $vars);
@@ -65,14 +112,19 @@ class Rss extends WebModel
         }
         
         return $rssData;
+		
     }
     
-    /**
-     * A simple function for parsing RSS data. Only returns Items for now.
-     *
-     */
+ /**
+ * A simple function for parsing RSS data. Only returns Items for now.
+ *
+ * @param string $data
+ * @return array 
+ * @access private
+ */
     function __parseRSS($data)
     {
+		
         if (empty($data))
             return array();
     
@@ -103,11 +155,18 @@ class Rss extends WebModel
         {
             return array('Error' => 'No function for parsing RSS feeds of version "'.$version.'" available.');
         }
+		
     }
-    
-    
+/**
+ * parseRSS_2_0
+ * 
+ * @param string $data
+ * @return array 
+ * @access private
+ */    
     function __parseRSS_2_0($data)
-    {       
+    {
+
         // First thing we need to do, is to identify all html/otherwise formated contents
         preg_match_all('/\<\!\[CDATA\[(.+)\]\]\>/iUs', $data, $cdata, PREG_SET_ORDER);
 
@@ -161,10 +220,21 @@ class Rss extends WebModel
         // Return everything
         return array('Channel' => $channel,
                      'Items' => @$items);
+		
     }    
-    
+/**
+ * getXMLNodeAttributes
+ * 
+ * @param string $rawFields
+ * @param string $cdata
+ * @param string $dataHash
+ * @param string $type
+ * @return string 
+ * @access private
+ */    
     function __getNodeFields($rawFields, $cdata = null, $dataHash = null, $type = null)
     {
+		
         // Don't ask - it works. No seriously, I spent a lot of time and thought on this regex
         // if you are interested in how it works feel free to contact me. In case you wonder about
         // the \x00's, that's an optimization trick to generate a character set that matches new lines
@@ -214,10 +284,18 @@ class Rss extends WebModel
             $fields = $rawFields;
         
         return $fields;
+		
     }
-    
+/**
+ * getXMLNodeAttributes
+ * 
+ * @param string $attributesData
+ * @return array
+ * @access private 
+ */    
     function __getXMLNodeAttributes($attributesData)
     {
+		
         if (empty($attributesData))
             return array();
     
@@ -235,7 +313,9 @@ class Rss extends WebModel
         }
         
         return $attributes;
+		
     }
+	
 }
 
 ?>

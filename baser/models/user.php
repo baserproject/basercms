@@ -3,17 +3,15 @@
 /**
  * ユーザーモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,35 +23,43 @@
 /**
  * ユーザーモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class User extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'User';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name'=>array(
@@ -142,14 +148,20 @@ class User extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
-	function getControlSource($field = null) {
+	function getControlSource($field) {
 
-		$controlSources['user_group_id'] = $this->UserGroup->find('list');
-
+		switch($field) {
+			
+			case 'user_group_id':
+				$controlSources['user_group_id'] = $this->UserGroup->find('list');
+				break;
+		
+		}
+		
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
@@ -159,9 +171,11 @@ class User extends AppModel {
 	}
 /**
  * ユーザーリストを取得する
- *
  * 条件を指定する場合は引数を指定する
+ * 
  * @param array $authUser
+ * @return array
+ * @access public
  */
 	function getUserList($conditions = array()) {
 
@@ -171,21 +185,22 @@ class User extends AppModel {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成
 			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
 			foreach($users as $key => $user) {
-				if($user['User']['real_name_2']) {
-					$name = $user['User']['real_name_1']." ".$user['User']['real_name_2'];
+				if($user[$this->alias]['real_name_2']) {
+					$name = $user[$this->alias]['real_name_1']." ".$user[$this->alias]['real_name_2'];
 				}else {
-					$name = $user['User']['real_name_1'];
+					$name = $user[$this->alias]['real_name_1'];
 				}
-				$list[$user['User']['id']] = $name;
+				$list[$user[$this->alias]['id']] = $name;
 			}
 		}
 		return $list;
+		
 	}
 /**
  * フォームの初期値を設定する
  *
- * @return	array	初期値データ
- * @access	public
+ * @return array 初期値データ
+ * @access public
  */
 	function getDefaultValue() {
 
@@ -196,9 +211,9 @@ class User extends AppModel {
 /**
  * afterFind
  *
- * @param	array	結果セット
- * @param	array	$primary
- * @return	array	結果セット
+ * @param array 結果セット
+ * @param array $primary
+ * @return array 結果セット
  * @access	public
  */
 	function afterFind($results, $primary = false) {
@@ -213,12 +228,11 @@ class User extends AppModel {
 	}
 /**
  * 取得結果を変換する
- *
  * HABTM対応
  *
- * @param	array	結果セット
- * @return	array	結果セット
- * @access	public
+ * @param array 結果セット
+ * @return array 結果セット
+ * @access public
  */
 	function convertResults($results) {
 
@@ -243,9 +257,9 @@ class User extends AppModel {
 /**
  * View用のデータを取得する
  *
- * @param	array	結果セット
- * @return	array	結果セット
- * @access	public
+ * @param array 結果セット
+ * @return array 結果セット
+ * @access public
  */
 	function convertToView($data) {
 
@@ -255,8 +269,8 @@ class User extends AppModel {
 /**
  * ユーザーが許可されている認証プレフィックスを取得する
  *
- * @param	string	$userName
- * @return	string
+ * @param string $userName
+ * @return string
  */
 	function getAuthPrefix($userName) {
 

@@ -3,22 +3,24 @@
 /**
  * [PUBLISH] ブログコメント一覧
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$prefix = '';
+if(Configure::read('AgentPrefix.on')) {
+	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+}
 ?>
 <script type="text/javascript">
 $(function(){
@@ -84,7 +86,7 @@ function sendComment() {
 					$("#ResultMessage").slideDown();
 				}
 			},
-			error: function(){
+			error: function(result){
 				alert('コメントの送信に失敗しました。入力内容を見なおしてください。');
 			},
 			complete: function(xhr, textStatus) {
@@ -99,7 +101,8 @@ function sendComment() {
  * キャプチャ画像を読み込む
  */
 function loadAuthCaptcha(){
-	var src = '<?php echo $baser->getUrl(array('controller'=>'blog_comments', 'action'=>'captcha')) ?>'+'?'+Math.floor( Math.random() * 100 );
+
+	var src = $("#BlogCommentCaptchaUrl").html()+'?'+Math.floor( Math.random() * 100 );	
 	$("#AuthCaptchaImage").hide();
 	$("#CaptchaLoader").show();
 	$("#AuthCaptchaImage").load(function(){
@@ -107,8 +110,11 @@ function loadAuthCaptcha(){
 		$("#AuthCaptchaImage").fadeIn(1000);
 	});
 	$("#AuthCaptchaImage").attr('src',src);
+
 }
 </script>
+
+<div id="BlogCommentCaptchaUrl" class="display-none"><?php echo $baser->getUrl($prefix.'/blog/blog_comments/captcha') ?></div>
 
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 <div id="BlogComment">
@@ -118,14 +124,14 @@ function loadAuthCaptcha(){
 	<div id="BlogCommentList">
 	<?php if(!empty($post['BlogComment'])): ?>
 		<?php foreach($post['BlogComment'] as $comment): ?>
-		<?php $baser->element('blog_comment',array('dbData'=>$comment)) ?>
+		<?php $baser->element('blog_comment', array('dbData'=>$comment)) ?>
 		<?php endforeach ?>
 	<?php endif ?>
 	</div>
 	
 	<h4 class="contents-head">コメントを送る</h4>
 
-	<?php echo $formEx->create('BlogComment', array('url' => array($blogContent['BlogContent']['id'], $post['BlogPost']['id']))) ?>
+	<?php echo $formEx->create('BlogComment', array('url' => $prefix.'/blog/blog_comments/add/'.$blogContent['BlogContent']['id'].'/'. $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 	
 	<table cellpadding="0" cellspacing="0" class="row-table-01">
 		<tr>

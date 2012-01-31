@@ -5,12 +5,12 @@
  *
  * PHP versions 4 and 5
  *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
- * @copyright		Copyright 2010, Catchup, Inc.
- * @link			http://www.e-catchup.jp
+ * @copyright		Copyright 2011 - 2011, Catchup, Inc.
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -378,7 +378,8 @@ ini_set('mbstring.func_overload', '0');
 			}
 
 			$aI['N'] = substr($vZ, 26, $nF);
-			if (substr($aI['N'], -1) == '/') {
+			$aI['N'] = str_replace('/',DS,$aI['N']);
+			if (substr($aI['N'], -1) == DS) {
 				continue;
 			}
 

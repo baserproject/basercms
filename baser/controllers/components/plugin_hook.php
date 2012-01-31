@@ -3,17 +3,15 @@
 /**
  * プラグインフックコンポーネント
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers.components
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,19 +20,24 @@
 class PluginHookComponent extends Object {
 /**
  * プラグインフックオブジェクト
- * @var		array
+ * 
+ * @var array
  * @access	public
  */
 	var $pluginHooks = array();
 /**
  * 登録済プラグインフック
- * @var		array
+ * 
+ * @var array
  * @access	public
  */
 	var $registerHooks = array();
 /**
  * initialize
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function initialize(&$controller) {
 
@@ -77,6 +80,7 @@ class PluginHookComponent extends Object {
 	}
 /**
  * プラグインフックを登録する
+ * 
  * @param	string	$hookName
  * @param	string	$pluginName
  * @return	void
@@ -92,9 +96,11 @@ class PluginHookComponent extends Object {
 	}
 /**
  * プラグインフックを実行する
+ * 
  * @param	string	$hookName
  * @param	mixed
- * @return
+ * @return void
+ * @access public
  */
 	function executeHook($hookName){
 		
@@ -109,45 +115,76 @@ class PluginHookComponent extends Object {
 	}
 /**
  * startup
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function startup(&$controller) {
+		
 		$this->executeHook('startup',$controller);
+		
 	}
 /**
  * beforeRender
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function beforeRender(&$controller) {
+		
 		$this->executeHook('beforeRender',$controller);
+		
 	}
 /**
  * beforeRedirect
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
+		
 		$this->executeHook('beforeRedirect', $controller, $url, $status, $exit);
+		
 	}
 /**
  * shutdown
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function shutdown(&$controller) {
+		
 		$this->executeHook('shutdown', $controller);
+		
 	}
 /**
  * afterPageAdd
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function afterPageAdd(&$controller) {
+		
 		$this->executeHook('afterPageAdd', $controller);
+		
 	}
 /**
  * afterPageEdit
+ * 
  * @param Controller $controller
+ * @return void
+ * @access public
  */
 	function afterPageEdit(&$controller) {
+		
 		$this->executeHook('afterPageEdit', $controller);
+		
 	}
+	
 }
 ?>

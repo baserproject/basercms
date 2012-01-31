@@ -3,17 +3,15 @@
 /**
  * メールヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,30 +23,74 @@
 /**
  * メールヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
-class MailHelper extends TextExHelper {
+class MailHelper extends AppHelper {
+/**
+ * view
+ * @var		View
+ * @access	protected
+ */
+	var $_view = null;
 /**
  * ヘルパー
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Baser');
 /**
- * メールフィールド一覧ページへのリンクを張る
+ * コンストラクタ
+ *
+ * @return void
+ * @access public
+ */
+	function __construct() {
+		
+		$this->_view =& ClassRegistry::getObject('view');
+		$this->setMailContent();
+		
+	}
+/**
+ * メールコンテンツデータをセットする
+ * 
+ * @param int $mailContentId 
+ */
+	function setMailContent($mailContentId = null) {
+
+		if(isset($this->mailContent) && !$mailContentId) {
+			return;
+		}
+		if($mailContentId) {
+			$MailContent = ClassRegistry::getObject('MailContent');
+			$MailContent->expects(array());
+			$this->mailContent = Set::extract('MailContent', $MailContent->read(null, $mailContentId));
+		} elseif(isset($this->_view->viewVars['mailContent'])) {
+			$this->mailContent = $this->_view->viewVars['mailContent']['MailContent'];
+		}
+
+	}
+/**
+ * メールフィールド一覧ページへのリンクを張る【非推奨】
+ * 
  * @param string $mailContentId
+ * @return void
+ * @access public
+ * @deprecated ツールバーに移行
  */
 	function indexFields($mailContentId) {
-		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('Mobile.on')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
+		
+		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
+			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
+		
 	}
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * TODO 他のヘルパーに移動する
+ * @return array
+ * @access public
  */
 	function getLayoutTemplates() {
 
@@ -81,12 +123,14 @@ class MailHelper extends TextExHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * フォームテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * TODO 他のヘルパーに移動する
+ * @return array
+ * @access public
  */
 	function getFormTemplates() {
 
@@ -117,12 +161,14 @@ class MailHelper extends TextExHelper {
 			}
 		}
 		return $templates;
+		
 	}
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
- * @return	array
- * @access	public
+ * TODO 他のヘルパに移動する
+ * @return array
+ * @access public
  */
 	function getMailTemplates() {
 
@@ -154,7 +200,22 @@ class MailHelper extends TextExHelper {
 			}
 		}
 		return $templates;
+		
 	}
+/**
+ * メールの説明文を取得する
+ * @return string
+ */
+	function getDescription() {
+		return $this->mailContent['description'];
+	}
+/**
+ * メールの説明文を表示する
+ * @return void
+ */
+	function description() {
+		echo $this->getDescription();
+	}
+	
 }
-
 ?>

@@ -1,84 +1,83 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * グローバルメニューコントローラー
+ * メニューコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
- * グローバルメニューコントローラー
+ * メニューコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class GlobalMenusController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'GlobalMenus';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('GlobalMenu');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @accesspublic
  */
-	var $components = array('Auth','Cookie','AuthConfigure','RequestHandler');
+	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler');
 /**
  * ヘルパ
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Time','FormEx');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'グローバルメニュー管理'=>'/admin/global_menus/index');
+	var $crumbs = array(
+		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
+		array('name' => 'メニュー管理', 'url' => array('controller' => 'global_menus', 'action' => 'index'))
+	);
 /**
- * グローバルメニューの一覧を表示する
+ * メニューの一覧を表示する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
 		/* セッション処理 */
 		if($this->data) {
-			$this->Session->write('Filter.GlobalMenu.menu_type',$this->data['GlobalMenu']['menu_type']);
 			$this->Session->write('Filter.GlobalMenu.status',$this->data['GlobalMenu']['status']);
 		}
 		if(isset($this->params['named']['sortmode'])){
@@ -101,44 +100,45 @@ class GlobalMenusController extends AppController {
 
 		$this->set('listDatas',$listDatas);
 
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+		
 		// 表示設定
 		$this->subMenuElements = array('site_configs','global_menus');
-		$this->pageTitle = 'グローバルメニュー一覧';
-
+		$this->pageTitle = 'メニュー一覧';
+		$this->search = 'global_menus_index';
+		$this->help = 'global_menus_index';
+		
 	}
 /**
  * [ADMIN] 登録処理
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
 		if(!$this->data) {
 			$this->data['GlobalMenu']['status'] = 0;
-			$menuType = $this->Session->read('Filter.GlobalMenu.menu_type');
-			if($menuType){
-				$this->data['GlobalMenu']['menu_type'] = $menuType;
-			}else{
-				$this->data['GlobalMenu']['menu_type'] = 'default';
-			}
 		}else {
 
 			/* 登録処理 */
 			if(!preg_match('/^http/is', $this->data['GlobalMenu']['link']) && !preg_match('/^\//is', $this->data['GlobalMenu']['link'])){
 				$this->data['GlobalMenu']['link'] = '/'.$this->data['GlobalMenu']['link'];
 			}
-			$this->data['GlobalMenu']['no'] = $this->GlobalMenu->getMax('no',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
-			$this->data['GlobalMenu']['sort'] = $this->GlobalMenu->getMax('sort',array('menu_type'=>$this->data['GlobalMenu']['menu_type']))+1;
+			$this->data['GlobalMenu']['no'] = $this->GlobalMenu->getMax('no')+1;
+			$this->data['GlobalMenu']['sort'] = $this->GlobalMenu->getMax('sort')+1;
 			$this->GlobalMenu->create($this->data);
 
 			// データを保存
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$message = '新規グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。';
+				$message = '新規メニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -147,23 +147,24 @@ class GlobalMenusController extends AppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('site_configs','global_menus');
-		$this->pageTitle = '新規グローバルメニュー登録';
+		$this->pageTitle = '新規メニュー登録';
+		$this->help = 'global_menus_form';
 		$this->render('form');
 
 	}
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param	int ID
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -177,10 +178,10 @@ class GlobalMenusController extends AppController {
 			$this->GlobalMenu->set($this->data);
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$message = 'グローバルメニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
+				$message = 'メニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->GlobalMenu->saveDbLog($message);
-				$this->redirect(array('action'=>'index',$id));
+				$this->redirect(array('action' => 'index', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -189,23 +190,46 @@ class GlobalMenusController extends AppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('site_configs','global_menus');
-		$this->pageTitle = 'グローバルメニュー編集：'.$this->data['GlobalMenu']['name'];
+		$this->pageTitle = 'メニュー編集：'.$this->data['GlobalMenu']['name'];
+		$this->help = 'global_menus_form';
 		$this->render('form');
 
 	}
 /**
- * [ADMIN] 削除処理
+ * [ADMIN] 一括削除
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
-	function admin_delete($id = null) {
+	function _batch_del($ids) {
+		if($ids) {
+			foreach($ids as $id) {
+				// メッセージ用にデータを取得
+				$post = $this->GlobalMenu->read(null, $id);
+
+				/* 削除処理 */
+				if($this->GlobalMenu->del($id)) {
+					clearViewCache();
+					$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
+					$this->GlobalMenu->saveDbLog($message);
+				}
+			}
+		}
+		return true;
+	}
+/**
+ * [ADMIN] 削除処理 (ajax)
+ *
+ * @param int ID
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			exit();
 		}
 
 		// メッセージ用にデータを取得
@@ -214,23 +238,51 @@ class GlobalMenusController extends AppController {
 		/* 削除処理 */
 		if($this->GlobalMenu->del($id)) {
 			clearViewCache();
-			$message = 'グローバルメニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
+			$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
+			$this->GlobalMenu->saveDbLog($message);
+			exit(true);
+		}
+		exit();
+
+	}
+	/**
+ * [ADMIN] 削除処理
+ *
+ * @param int ID
+ * @return void
+ * @access public
+ */
+	function admin_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action' => 'index'));
+		}
+
+		// メッセージ用にデータを取得
+		$post = $this->GlobalMenu->read(null, $id);
+
+		/* 削除処理 */
+		if($this->GlobalMenu->del($id)) {
+			clearViewCache();
+			$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->GlobalMenu->saveDbLog($message);
 		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
  * 並び替えを更新する [AJAX]
  *
  * @access	public
- * @return	boolean
+ * @return boolean
  */
-	function admin_update_sort () {
+	function admin_ajax_update_sort () {
 
 		if($this->data){
 			$this->data = am($this->data,$this->_checkSession());
@@ -249,10 +301,11 @@ class GlobalMenusController extends AppController {
 /**
  * セッションをチェックする
  *
- * @return	array()
+ * @return array()
  * @access	protected
  */
 	function _checkSession(){
+		
 		$data = array();
 		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
 			$data['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
@@ -266,13 +319,14 @@ class GlobalMenusController extends AppController {
 			$this->Session->del('Filter.GlobalMenu.status');
 		}
 		return array('GlobalMenu'=>$data);
+		
 	}
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $data
+ * @return string
+ * @access protected
  */
 	function _createAdminIndexConditions($data){
 
@@ -282,9 +336,6 @@ class GlobalMenusController extends AppController {
 
 		/* 条件を生成 */
 		$conditions = array();
-		if(!empty($data['menu_type'])) {
-			$conditions['GlobalMenu.menu_type'] = $data['menu_type'];
-		}
 		if(isset($data['status']) && $data['status'] !== '') {
 			$conditions['GlobalMenu.status'] = $data['status'];
 		}

@@ -3,17 +3,15 @@
 /**
  * パーミッションモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,27 +23,34 @@
 /**
  * パーミッションモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Permission extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Permission';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * belongsTo
- * @var 	array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
@@ -53,14 +58,16 @@ class Permission extends AppModel {
  * permissionsTmp
  * ログインしているユーザーの拒否URLリスト
  * キャッシュ用
+ * 
  * @var mixed
+ * @access public
  */
 	var $permissionsTmp = -1;
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -86,6 +93,7 @@ class Permission extends AppModel {
 /**
  * 設定をチェックする
  *
+ * @param array $check
  * @return boolean True if the operation should continue, false if it should abort
  * @access public
  */
@@ -94,14 +102,22 @@ class Permission extends AppModel {
 		if(!$check[key($check)]) {
 			return true;
 		}
+		
 		$url = $check[key($check)];
+		
 		if(preg_match('/^[^\/]/is',$url)) {
 			$url = '/'.$url;
 		}
+		
+		// ルーティング設定に合わせて変換
+		$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		
 		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)) {
 			$url = $matches[1].'/'.'*';
 		}
+		
 		$params = Router::parse($url);
+		
 		if(empty($params['prefix'])) {
 			return false;
 		}
@@ -112,16 +128,17 @@ class Permission extends AppModel {
 /**
  * 認証プレフィックスを取得する
  *
- * @param	int	$id
- * @return	string
- * @access	public
+ * @param int $id
+ * @return string
+ * @access public
  */
 	function getAuthPrefix($id) {
 
+		// CSV の場合、他テーブルの fields を指定するとデータが取得できない
 		$data = $this->find('first', array(
 			'conditions'=>array('Permission.id'=>$id),
-			'fields'=>array('UserGroup.auth_prefix'),
-			'recursive'=>0
+			/*'fields'=>array('UserGroup.auth_prefix'),*/
+			'recursive'=>1
 		));
 		if(isset($data['UserGroup']['auth_prefix'])) {
 			return $data['UserGroup']['auth_prefix'];
@@ -133,17 +150,20 @@ class Permission extends AppModel {
 /**
  * 初期値を取得する
  * @return array
+ * @access public
  */
 	function getDefaultValue() {
+		
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
 		return $data;
+		
 	}
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
+ * @param string フィールド名
+ * @return array コントロールソース
  * @access	public
  */
 	function getControlSource($field = null) {
@@ -159,9 +179,13 @@ class Permission extends AppModel {
 	}
 /**
  * beforeSave
+ * 
  * @param array $options
+ * @return boolean
+ * @access public
  */
 	function beforeSave($options) {
+		
 		if(isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
 		}else {
@@ -174,11 +198,16 @@ class Permission extends AppModel {
 		}
 		$this->data['Permission'] = $data;
 		return true;
+		
 	}
 /**
  * 権限チェックを行う
+ * 
+ * @param array $url
  * @param string $userGroupId
  * @param array $params
+ * @return boolean
+ * @access public
  */
 	function check($url, $userGroupId) {
 
@@ -198,6 +227,25 @@ class Permission extends AppModel {
 		if($url!='/') {
 			$url = preg_replace('/^\//is', '', $url);
 		}
+		
+		$adminPrefix = Configure::read('Routing.admin');
+		
+		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
+		
+		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
+		$allows = array(
+			'/^admin$/',
+			'/^admin\/$/',
+			'/^admin\/dashboard\/.*?/',
+			'/^admin\/users\/edit\/'.$_SESSION['Auth']['User']['id'].'$/',
+			'/^admin\/users\/logout$/'
+		);
+		foreach($allows as $allow) {
+			if(preg_match($allow, $url)) {
+				return true;
+			}
+		}
+		
 		$ret = true;
 		foreach($permissions as $permission) {
 			if(!$permission['Permission']['status']) {
@@ -210,7 +258,9 @@ class Permission extends AppModel {
 			}
 			$pattern = addslashes($pattern);
 			$pattern = str_replace('/', '\/', $pattern);
-			$pattern = '/^'.str_replace('*', '.*?', $pattern).'$/is';
+			$pattern = str_replace('*', '.*?', $pattern);
+			$pattern = '/^'.str_replace('\/.*?', '(|\/.*?)', $pattern).'$/is';
+			//var_dump($pattern);
 			if(preg_match($pattern, $url)) {
 				$ret = $permission['Permission']['auth'];
 			}
@@ -218,5 +268,40 @@ class Permission extends AppModel {
 		return $ret;
 
 	}
+/**
+ * アクセス制限データをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
+		}
+		
+		if($this->find('count', array('conditions' => array('Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name'])))) {
+			$data['Permission']['name'] .= '_copy';
+			return $this->copy(null, $data);	// 再帰処理
+		}
+
+		unset($data['Permission']['id']);
+		unset($data['Permission']['modified']);
+		unset($data['Permission']['created']);
+
+		$data['Permission']['no'] = $this->getMax('no',array('user_group_id' => $data['Permission']['user_group_id']))+1;
+		$data['Permission']['sort'] = $this->getMax('sort',array('user_group_id' => $data['Permission']['user_group_id']))+1;
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['Permission']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
 ?>

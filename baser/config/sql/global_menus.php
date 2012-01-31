@@ -4,8 +4,6 @@
 class GlobalMenusSchema extends CakeSchema {
 	var $name = 'GlobalMenus';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'global_menus.php';
 
 	var $connection = 'baser';

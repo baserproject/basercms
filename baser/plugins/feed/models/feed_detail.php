@@ -3,17 +3,15 @@
 /**
  * フィード詳細モデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -23,22 +21,30 @@
  * Include files
  */
 /**
- * フィード詳細モデル
+ * feed_detail
  *
- * @package			baser.plugins.feed.models
+ * @package baser.plugins.feed.models
  */
 class FeedDetail extends FeedAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedDetail';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * belongsTo
- * @var		array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
 							'conditions' => '',
@@ -48,8 +54,8 @@ class FeedDetail extends FeedAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -74,8 +80,8 @@ class FeedDetail extends FeedAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
+ * @param string $field フィールド名
+ * @return array コントロールソース
  * @access	public
  */
 	function getControlSource($field = null) {
@@ -90,6 +96,7 @@ class FeedDetail extends FeedAppModel {
 	}
 /**
  * 初期値を取得する
+ * 
  * @param string $feedDetailId
  * @retun array $data
  * @access public
@@ -103,5 +110,6 @@ class FeedDetail extends FeedAppModel {
 		return $data;
 
 	}
+	
 }
 ?>

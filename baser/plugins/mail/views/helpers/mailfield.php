@@ -3,17 +3,15 @@
 /**
  * メールフィールドヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,16 +23,16 @@
 /**
  * メールフィールドヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MailfieldHelper extends AppHelper {
 /**
  * htmlの属性を取得する
  *
- * @param	array	メールフィールド
- * @return	array	html属性
- * @access	public
+ * @param array メールフィールド
+ * @return array html属性
+ * @access public
  */
 	function getAttributes($data) {
 
@@ -61,9 +59,9 @@ class MailfieldHelper extends AppHelper {
 /**
  * コントロールのソースを取得する
  *
- * @param	array	メールフィールド
- * @return	array	コントロールソース
- * @access	public
+ * @param array メールフィールド
+ * @return array コントロールソース
+ * @access public
  */
 	function getOptions($data) {
 
@@ -91,6 +89,7 @@ class MailfieldHelper extends AppHelper {
 		}
 
 	}
+	
 }
 
 ?>

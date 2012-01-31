@@ -3,17 +3,15 @@
 /**
  * プラグインモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,33 +23,40 @@
 /**
  * プラグインモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Plugin extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Plugin';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('alphaNumericPlus'),
-					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力してください。',
+					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',
 					'reqquired'	=> true),
 			array(	'rule'		=> array('isUnique'),
 					'on'		=> 'create',
@@ -61,20 +66,21 @@ class Plugin extends AppModel {
 		),
 		'title' => array(
 			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'プラグインタイトルは50文字以内としてください。')
+					'message'	=> 'プラグインタイトルは50文字以内とします。')
 		)
 	);
 /**
  * データベースを初期化する
- *
  * 既存のテーブルは上書きしない
  *
- * @param	string	$plugin
- * @return	boolean
- * @access	public
+ * @param string $plugin
+ * @return boolean
+ * @access public
  */
-	function initDb($plugin) {
-		return parent::initDb('plugin', $plugin);
+	function initDb($plugin, $filterTable = '') {
+		
+		return parent::initDb('plugin', $plugin, true, $filterTable, 'create');
+		
 	}
 /**
  * データベースの構造を変更する
@@ -84,7 +90,10 @@ class Plugin extends AppModel {
  * @access public
  */
 	function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
-		return parent::initDb($dbConfigName, $plugin, false);
+		
+		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
+		
 	}
+	
 }
 ?>

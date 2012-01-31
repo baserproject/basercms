@@ -3,17 +3,15 @@
 /**
  * アップロードヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,7 +24,7 @@ App::import('Helper', 'Form');
 /**
  * アップロードヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class UploadHelper extends FormHelper {
 /**
@@ -35,6 +33,7 @@ class UploadHelper extends FormHelper {
  * そして削除用のチェックボックスを表示する
  * [カスタムオプション]
  * imgsize・・・画像のサイズを指定する
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -83,6 +82,7 @@ class UploadHelper extends FormHelper {
 	}
 /**
  * ファイルへのリンクを取得する
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -163,6 +163,7 @@ class UploadHelper extends FormHelper {
  * 上から順に大きい画像を並べている事が前提で
  * 指定したサイズ内で最大の画像を出力
  * リンク先は存在する最大の画像へのリンクとなる
+ * 
  * @param string $fieldName
  * @param string $fileName
  * @param array $options
@@ -236,7 +237,7 @@ class UploadHelper extends FormHelper {
 			return;
 		}
 
-		$fileUrl = $this->base.'/files/'.$model->actsAs['Upload']['saveDir'].'/';
+		$fileUrl = '/files/'.$model->actsAs['Upload']['saveDir'].'/';
 		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
 		$copySettings = $model->actsAs['Upload']['fields'][$field]['imagecopy'];
 
@@ -309,5 +310,6 @@ class UploadHelper extends FormHelper {
 		}
 
 	}
+	
 }
 ?>

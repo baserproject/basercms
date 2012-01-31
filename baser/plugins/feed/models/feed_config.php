@@ -3,17 +3,15 @@
 /**
  * フィード設定モデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,27 +23,34 @@
 /**
  * フィード設定モデル
  *
- * @package			baser.plugins.feed.models
+ * @package baser.plugins.feed.models
  */
 class FeedConfig extends FeedAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'FeedConfig';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * DB設定
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'plugin';
 /**
  * hasMany
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array("FeedDetail" =>
 			array("className" => "Feed.FeedDetail",
@@ -59,8 +64,8 @@ class FeedConfig extends FeedAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -94,6 +99,9 @@ class FeedConfig extends FeedAppModel {
 	);
 /**
  * 初期値を取得
+ * 
+ * @return array
+ * @access public
  */
 	function getDefaultValue() {
 
@@ -102,5 +110,6 @@ class FeedConfig extends FeedAppModel {
 		return $data;
 
 	}
+	
 }
 ?>

@@ -3,17 +3,15 @@
 /**
  * [ADMIN] プラグインメニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,11 +19,12 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>プラグイン管理メニュー</h2>
-	<ul>
-		<li>
-			<?php $baser->link('プラグイン一覧',array('plugin'=>null,'controller'=>'plugins','action'=>'index')) ?>
-		</li>
-	</ul>
-</div>
+
+<tr>
+	<th>プラグイン管理メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('プラグイン一覧', array('plugin' => null, 'controller' => 'plugins', 'action' => 'index')) ?></li>
+		</ul>
+	</td>
+</tr>

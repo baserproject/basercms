@@ -4,17 +4,15 @@
 /**
  * RSS取得モデルであるRssクラスを継承したクラス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -28,24 +26,24 @@ App::import('Vendor','Feed.simplepie', true, array(BASER_PLUGINS)); // オブジ
 /**
  * RSS取得モデルであるRssクラスを継承したクラス
  *
- * @package			baser.plugins.feed.models
+ * @package baser.plugins.feed.models
  */
 class RssEx extends Rss {
 /**
  * キャッシュフォルダー
- * @var		string
+ * @var string
  * @access	public
  */
 	var $cacheFolder = 'views';
 /**
  * データを削除する（ログ記録オプション付）
  *
- * @param 	string 	RSSのURL
- * @param 	int		取得する件数
- * @param 	string	キャッシュ保持期間
- * @param	string	抽出するカテゴリ
- * @return 	array	RSSデータ
- * @access	public
+ * @param 	string RSSのURL
+ * @param 	int 取得する件数
+ * @param 	string キャッシュ保持期間
+ * @param string 抽出するカテゴリ
+ * @return array RSSデータ
+ * @access public
  */
 	function findAll($feedUrl, $limit = 10, $cacheExpires = null,$category = null) {
 
@@ -68,6 +66,7 @@ class RssEx extends Rss {
  * @param array $items
  * @param mixed $filterCategory
  * @return array $items
+ * @access public
  */
 	function filteringCategory($items,$filterCategory = null) {
 
@@ -112,10 +111,10 @@ class RssEx extends Rss {
 /**
  * SimplePieでRSSを取得する
  *
- * @param 	string 	RSSのURL
- * @param 	string	キャッシュ保持期間
- * @return 	array	RSSデータ
- * @access	public
+ * @param string RSSのURL
+ * @param string キャッシュ保持期間
+ * @return array RSSデータ
+ * @access private
  */
 	function __getSimplePie($url,$cacheExpires = null) {
 
@@ -171,15 +170,14 @@ class RssEx extends Rss {
 	}
 /**
  * SimplePieで取得したデータを表示用に整形する
- *
  * 2009/09/09	ryuring
  *				古いバージョンのSimplePieでは、WordPress2.8.4が出力するRSSを解析できない事が判明。
  * 				SimplePie1.2に載せ換えて対応した。
  * TODO			このままでは、itemがない場合、RSS自体の情報が取得できないので修正が必要
  *
- * @param 	string 	SimplePieで取得したデータ
- * @return 	array	RSSデータ
- * @access	public
+ * @param string SimplePieで取得したデータ
+ * @return array RSSデータ
+ * @access private
  */
 	function __convertSimplePie($datas) {
 
@@ -193,7 +191,7 @@ class RssEx extends Rss {
 		$feed['Channel']['description']['value'] = $simplePie->get_description();
 		$feed['Channel']['pubDate']['value'] = '';
 		$feed['Channel']['language']['value'] = $simplePie->get_language();
-		$feed['Channel']['generator']['value'] = 'BaserCMS';
+		$feed['Channel']['generator']['value'] = 'baserCMS';
 		$feed['Items'] = array();
 
 		foreach($datas as $data) {
@@ -233,7 +231,7 @@ class RssEx extends Rss {
 		if(!empty($datas['last-modified'])){
 			$feed['Channel']['pubDate']['value'] = $datas['last-modified'];
 		}*/
-		//$feed['Channel']['generator']['value'] = 'BaserCMS';
+		//$feed['Channel']['generator']['value'] = 'baserCMS';
 		/*if(!empty($datas['info']['language']))
 			$feed['Channel']['language']['value'] = $datas['info']['language'];*/
 
@@ -278,5 +276,6 @@ class RssEx extends Rss {
 		return $feed;
 
 	}
+	
 }
 ?>

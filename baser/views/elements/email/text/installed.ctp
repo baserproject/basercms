@@ -7,8 +7,8 @@
  *
  * BaserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ *								1-19-4 ikinomatsubara, fukuoka-shi
+ *								fukuoka, Japan 819-0055
  *
  * @copyright		Copyright 2008 - 2011, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
@@ -23,12 +23,13 @@
 
                                            <?php echo date('Y-m-d H:i:s') ?> 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　◆◇　BaserCMSのインストールが完了しました　◇◆
+　　　　　　◆◇　baserCMSのインストールが完了しました　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 　おめでとうございます！
-　次のURLへBaserCMSのインストールが完了しました。
+　次のURLへbaserCMSのインストールが完了しました。
 　<?php echo $siteUrl ?> 
+
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ ログイン情報
@@ -36,7 +37,73 @@
 管理ページ： <?php echo topLevelUrl(false).Configure::read('App.baseUrl').'/admin/users/login' ?> 
 アカウント： <?php echo $name ?>　
 パスワード： <?php echo $password ?>　
-
 ※ パスワードはユーザー管理より変更する事ができます。
 
- 
+
+━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+　◆ baserCMSでどんな事ができるの？
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
+baserCMS を初めてご利用される場合は次のページをご覧ください。
+
+■ baserCMSとは？
+http://basercms.net/about/index.html
+
+■ 機能一覧
+http://basercms.net/about/feature.html
+
+■ はじめてガイド
+http://basercms.net/about/guide.html
+
+
+━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+　◆ スマートURLについて
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
+スマートURL機能は、サイトのURLを短くわかりやすいURL表示に変更する機能です。
+この機能を利用する事で、短くスマートなURLを実現する事ができます。
+また、表示速度改善にも役立ちます。
+
+スマートURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。
+スマートURLの設定は、管理画面のシステム設定より行えます。
+　（例）
+　　・スマートURLオフ：http://localhost/index.php/contact/index
+　　・スマートURLオン：http://localhost/contact/index
+
+スマートURLの設定はサーバー環境に深く依存します。
+「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますのでご注意ください。
+こちらより各種レンタルサーバーの動作状況を確認できます。
+http://basercms.net/manuals/introductions/2.html
+
+----------------------------------------
+スマートURLがうまく動作しない場合は、
+下記２ヶ所の.htaccessファイルのコメントを確認してください。
+/.htaccess
+/app/webroot/.htaccess
+----------------------------------------
+
+
+━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+　◆ ユーザーズコミュニティについて
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
+■ 公式サイト
+http://basercms.net/
+最新版のダウンロード、利用方法やカスタマイズ方法はこちらから！
+
+■ baserCMSユーザー会
+http://groups.google.com/group/basercms
+baserCMSの最新情報などを発信しています！まずはこちらからご登録を！
+
+■ ユーザーズフォーラム
+http://forum.basercms.net/
+不具合や改善報告はこちらよりどうぞ！
+
+■ Facebook
+http://www.facebook.com/basercms
+いいね！をクリックして普及にご協力ください！
+
+■ Twitter
+http://twitter.com/#!/basercms
+TIPSや最新情報をつぶやいてます！ Follow Me！
+
+■ 勉強会サイト
+http://study.basercms.net/
+勉強会の資料などを配布しています。

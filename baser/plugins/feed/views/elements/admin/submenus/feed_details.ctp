@@ -3,17 +3,15 @@
 /**
  * [ADMIN] フィード詳細メニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,14 +19,17 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>フィードメニュー</h2>
-	<ul>
+
+<tr>
+	<th>フィードメニュー</th>
+	<td>
+		<ul>
 <?php if($this->params['controller']=='feed_details'): ?>
-		<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedDetail.feed_config_id'))) ?></li>
-		<li><?php $baser->link('フィード設定に戻る', array('controller' => 'feed_configs', 'action' => 'edit', $form->value('FeedDetail.feed_config_id'))) ?></li>
+			<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedDetail.feed_config_id'))) ?></li>
+			<li><?php $baser->link('フィード設定に戻る', array('controller' => 'feed_configs', 'action' => 'edit', $form->value('FeedDetail.feed_config_id'))) ?></li>
 <?php else: ?>
-		<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedConfig.id'))) ?></li>
+			<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedConfig.id'))) ?></li>
 <?php endif; ?>
-	</ul>
-</div>
+		</ul>
+	</td>
+</tr>

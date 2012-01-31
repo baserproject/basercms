@@ -3,17 +3,15 @@
 /**
  * [ADMIN] 受信メール詳細
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,11 +19,9 @@
  */
 ?>
 
-<!-- title -->
-<h2><?php $baser->contentsTitle() ?></h2>
 
 <!-- view -->
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr><th>NO</th><td><?php echo $message['Message']['id'] ?></td></tr>
 	<tr><th>受信日時</th><td><?php echo $timeEx->format('Y/m/d H:i:s', $message['Message']['created']) ?></td></tr>
 <?php 
@@ -67,7 +63,7 @@ foreach($mailFields as $key => $mailField) {
 </table>
 
 <!-- button -->
-<p class="align-center">
+<p class="submit">
 	<?php $baser->link('削除',
 					array('action'=>'delete', $mailContent['MailContent']['id'], $message['Message']['id']),
 					array('class'=>'btn-gray button'),

@@ -4,8 +4,6 @@
 class FeedDetailsSchema extends CakeSchema {
 	var $name = 'FeedDetails';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'feed_details.php';
 
 	var $connection = 'plugin';

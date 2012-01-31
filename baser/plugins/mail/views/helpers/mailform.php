@@ -3,17 +3,15 @@
 /**
  * メールフォームヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,19 +24,19 @@ App::import('Helper', 'Freeze');
 /**
  * メールフォームヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MailformHelper extends FreezeHelper {
 /**
  * メールフィールドのデータよりコントロールを生成する
  *
- * @param	string	コントロールタイプ
- * @param	string	フィールド文字列
- * @param	array	コントロールソース
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * @param string $type コントロールタイプ
+ * @param string $fieldName フィールド文字列
+ * @param array $options コントロールソース
+ * @param array $attributes html属性
+ * @return string htmlタグ
+ * @access public
  */
 	function control($type,$fieldName,$options, $attributes = array()) {
 
@@ -162,5 +160,6 @@ class MailformHelper extends FreezeHelper {
 		return $out;
 
 	}
+	
 }
 ?>

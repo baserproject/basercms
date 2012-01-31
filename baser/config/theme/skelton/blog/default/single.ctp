@@ -5,7 +5,6 @@
 $baser->css('colorbox/colorbox', null, null, false);
 $baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
-$blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>
 
 <script type="text/javascript">

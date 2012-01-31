@@ -3,14 +3,12 @@
 /* 
  *  CSVヘルパー
  * 
- *  PHP versions 4 and 5
+ *  PHP versions 5
  * 
  *  SmartCake :  Smart Introduction Project <http://basercms.net>
- *  Copyright 2008 - 2011, Catchup, Inc.
- *  								9-5 nagao 3-chome, fukuoka-shi
- *  								fukuoka, Japan 814-0123
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *  @filesource
- *  @copyright     Copyright 2008 - 2011, Catchup, Inc.
+ *  @copyright		Copyright 2008 - 2011, baserCMS Users Community
  *  @link          http://basercms.net SmartCake Project
  *  @package       cake
  *  @subpackage    cake.baser.views.helpers
@@ -26,7 +24,7 @@
 /**
  * CSVヘルパー
  *
- * @package			baser.views.helpers
+ * @package baser.views.helpers
  */
 class CsvHelper extends AppHelper {
 /**
@@ -53,10 +51,10 @@ class CsvHelper extends AppHelper {
 /**
  * データを追加する（単数）
  *
- * @param   string  $modelName
- * @param   array   $data
- * @return  void
- * @access  public
+ * @param string $modelName
+ * @param array $data
+ * @return void
+ * @access public
  */
 	function addModelData($modelName,$data) {
 
@@ -75,9 +73,9 @@ class CsvHelper extends AppHelper {
 /**
  * データをセットする（複数）
  *
- * @param   string   $modelName
- * @param   array   $datas
- * @return  $csv
+ * @param string $modelName
+ * @param array $datas
+ * @return $csv
  */
 	function addModelDatas($modelName,$datas) {
 
@@ -92,13 +90,14 @@ class CsvHelper extends AppHelper {
 
 		}
 		return true;
+		
 	}
 /**
  * モデルデータよりCSV用のheadデータを取得する
  *
- * @param   array   $data
- * @return  string|false  $head
- * @access  protected
+ * @param array $data
+ * @return string|false $head
+ * @access protected
  */
 	function _perseKey($data) {
 
@@ -118,9 +117,9 @@ class CsvHelper extends AppHelper {
 /**
  * モデルデータよりCSV用の本体データを取得する
  *
- * @param   array   $data
- * @return  string  $body
- * @access  protected
+ * @param array $data
+ * @return string $body
+ * @access protected
  */
 	function _perseValue($data) {
 
@@ -171,9 +170,10 @@ class CsvHelper extends AppHelper {
  * ファイルを保存する
  *
  * @param $fileName
- * @return unknown_type
+ * @return void
  */
 	function save($fileName) {
+		
 		if($this->exportCsvHead) {
 			$exportData = $this->csvHead.$this->csvBody;
 		}else {
@@ -182,6 +182,8 @@ class CsvHelper extends AppHelper {
 		$fp = fopen($fileName,"w");
 		fputs($fp,$exportData,1024*1000*10);
 		fclose($fp);
+		
 	}
+	
 }
 ?>

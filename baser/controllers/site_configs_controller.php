@@ -3,17 +3,15 @@
 /**
  * サイト設定コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,54 +23,55 @@
 /**
  * サイト設定コントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class SiteConfigsController extends AppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'SiteConfigs';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array('SiteConfig','GlobalMenu','Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * サブメニューエレメント
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * ヘルパー
  * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * ぱんくずナビ
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
 /**
  * [ADMIN] サイト基本設定
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function admin_form() {
 
@@ -114,6 +113,7 @@ class SiteConfigsController extends AppController {
 				
 				$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
 				$mobile = $this->data['SiteConfig']['mobile'];
+				$smartphone = $this->data['SiteConfig']['smartphone'];
 
 				unset($this->data['SiteConfig']['id']);
 				unset($this->data['SiteConfig']['mode']);
@@ -122,6 +122,8 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['ssl_url']);
 				unset($this->data['SiteConfig']['admin_ssl_on']);
 				unset($this->data['SiteConfig']['mobile']);
+				unset($this->data['SiteConfig']['smartphone']);
+				
 
 				// DBに保存
 				if($this->SiteConfig->saveKeyValue($this->data)) {
@@ -134,38 +136,30 @@ class SiteConfigsController extends AppController {
 					$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
 					$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
 					$this->writeInstallSetting('Baser.mobile', ($mobile)? 'true' : 'false');
+					$this->writeInstallSetting('Baser.smartphone', ($smartphone)? 'true' : 'false');
+					
 					if($this->readSmartUrl() != $smartUrl) {
 						$this->writeSmartUrl($smartUrl);
 					}
 
 					// キャッシュをクリア
 					if($this->siteConfigs['maintenance'] || 
-							($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) ||
 							($this->siteConfigs['google_analytics_id'] != $this->data['SiteConfig']['google_analytics_id'])){
 						clearViewCache();
 					}
 
-					// ページテンプレートの生成
-					if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
-						if(!$this->Page->createAllPageTemplate()){
-							$this->Session->setFlash(
-									'テーマ変更中にページテンプレートの生成に失敗しました。<br />'.
-									'表示できないページはページ管理より更新処理を行ってください。'
-							);
-						}
-					}
-
 					// リダイレクト
 					if($this->readSmartUrl() != $smartUrl) {
+						$adminPrefix = Configure::read('Routing.admin');
 						if($smartUrl){
-							$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
 						}else{
-							$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/index.php/'.$adminPrefix.'/site_configs/form');
 						}
 						header('Location: '.FULL_BASE_URL.$redirectUrl);
 						exit();
 					}else{
-						$this->redirect(array('action'=>'form'));
+						$this->redirect(array('action' => 'form'));
 					}
 
 				}
@@ -204,7 +198,10 @@ class SiteConfigsController extends AppController {
 			$smartUrlChangeable = false;
 		}
 
-		$this->set('themes',$this->SiteConfig->getThemes());
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
+		
+		$this->set('userGroups', $userGroups);
 		$this->set('rewriteInstalled', $rewriteInstalled);
 		$this->set('writableInstall', $writableInstall);
 		$this->set('writableHtaccess', $writableHtaccess);
@@ -213,20 +210,25 @@ class SiteConfigsController extends AppController {
 		$this->set('smartUrlChangeable', $smartUrlChangeable);
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
-
+		$this->help = 'site_configs_form';
+		
 	}
 /**
  * キャッシュファイルを全て削除する
- * @return	void
- * @access	public
+ * 
+ * @return void
+ * @access public
  */
 	function admin_del_cache() {
+		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
-		$this->redirect(array('action'=>'form'));
+		$this->redirect(array('action' => 'form'));
+		
 	}
 /**
  * [ADMIN] PHPINFOを表示する
+ * 
  * @return void
  * @access public
  */
@@ -251,10 +253,19 @@ class SiteConfigsController extends AppController {
 
 	}
 /**
+ * [ADMIN] PHP INFO
+ * 
+ * @return void
+ * @access public
+ */
+	function admin_phpinfo() {
+		$this->layout = 'empty';
+	}
+/**
  * サイト基本設定データを取得する
  *
- * @return	void
- * @access	protected
+ * @return void
+ * @access protected
  */
 	function _getSiteConfigData() {
 
@@ -265,6 +276,7 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
 		$data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
 		$data['SiteConfig']['mobile'] = Configure::read('Baser.mobile');
+		$data['SiteConfig']['smartphone'] = Configure::read('Baser.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {
 			$data['SiteConfig']['mobile'] = false;
 		}

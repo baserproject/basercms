@@ -3,17 +3,15 @@
 /**
  * ユーザーグループモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,28 +23,35 @@
 /**
  * ユーザーグループモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class UserGroup extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'UserGroup';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('Permission'=>
 			array('className'=>'Permission',
@@ -65,8 +70,8 @@ class UserGroup extends AppModel {
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -93,8 +98,10 @@ class UserGroup extends AppModel {
 	);
 /**
  * 関連するユーザーを管理者グループに変更し保存する
- * @param <type> $cascade
- * @return <type>
+ * 
+ * @param boolean $cascade
+ * @return boolean
+ * @access public
  */
 	function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
@@ -148,5 +155,46 @@ class UserGroup extends AppModel {
 		}
 		
 	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data, $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
+		}
+		$data['UserGroup']['name'] .= '_copy';
+		$data['UserGroup']['title'] .= '_copy';
+		
+		unset($data['UserGroup']['id']);
+		unset($data['UserGroup']['modified']);
+		unset($data['UserGroup']['created']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['UserGroup']['id'] = $this->getInsertID();
+			if($recursive) {
+				$permissions = $this->Permission->find('all', array('conditions' => array('Permission.user_group_id' => $id), 'recursive' => -1));
+				foreach($permissions as $permission) {
+					$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
+					$this->Permission->copy(null, $permission);
+				}
+			}
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data, $recursive);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
 }
 ?>

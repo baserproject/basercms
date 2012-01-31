@@ -3,17 +3,15 @@
 /**
  * [PUBLISH] デフォルトレイアウト
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views.layout
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -29,12 +27,12 @@
 <?php $baser->metaDescription() ?>
 <?php $baser->metaKeywords() ?>
 <?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'large')) ?>
+<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
+<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
+<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
 <?php $baser->css('import') ?>
 <?php $baser->js(array(
-	'jquery-1.4.2.min',
+	'jquery-1.6.2.min',
 	'jquery.corner',
 	'styleswitcher',
 	'startup')) ?>

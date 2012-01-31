@@ -23,6 +23,7 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+$fileName = $_SERVER['SCRIPT_FILENAME'];
 /**
  * タイムゾーンを設定する
  */
@@ -49,18 +50,17 @@
  */
 	if (!defined('ROOT')) {
 		/* 通常パターン */
-		if(is_dir(dirname(dirname(dirname(__FILE__))).DS.'cake')){
-			define('ROOT', dirname(dirname(dirname(__FILE__))));
-
+		if(@is_dir(dirname(dirname(dirname($fileName))).DS.'cake')){
+			define('ROOT', dirname(dirname(dirname($fileName))));
 		// app内にcakeを配置
 		// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
 		// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
-		/*}elseif(is_dir(dirname(dirname(__FILE__)).DS.'cake')){		
-			define('ROOT', dirname(dirname(__FILE__)));*/
+		/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){		
+			define('ROOT', dirname(dirname($fileName)));*/
 		
 		// WEBROOT配置
-		}elseif(is_dir(dirname(__FILE__).DS.'cake')){
-			define('ROOT', dirname(__FILE__));
+		}elseif(is_dir(dirname($fileName).DS.'cake')){
+			define('ROOT', dirname($fileName));
 		}
 	}
 /**
@@ -70,7 +70,7 @@
  * app ディレクトリの名称を変更する場合は、以下を変更する。
  */
 	if (!defined('APP_DIR')) {
-		//define('APP_DIR', basename(dirname(dirname(__FILE__))));
+		//define('APP_DIR', basename(dirname(dirname($fileName))));
 		define('APP_DIR', 'app');
 	}
 /**
@@ -87,10 +87,10 @@
  *
  */
 	if (!defined('WEBROOT_DIR')) {
-		define('WEBROOT_DIR', basename(dirname(__FILE__)));
+		define('WEBROOT_DIR', basename(dirname($fileName)));
 	}
 	if (!defined('WWW_ROOT')) {
-		define('WWW_ROOT', dirname(__FILE__) . DS);
+		define('WWW_ROOT', dirname($fileName) . DS);
 	}
 	if (!defined('CORE_PATH')) {
 		if (function_exists('ini_set') && ini_set('include_path', CAKE_CORE_INCLUDE_PATH . PATH_SEPARATOR . ROOT . DS . APP_DIR . DS . PATH_SEPARATOR . ini_get('include_path'))) {

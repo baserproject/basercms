@@ -3,17 +3,15 @@
 /**
  * メールコンテンツコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,56 +23,59 @@
 /**
  * メールコンテンツコントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailContentsController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailContents';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $uses = array("Mail.MailContent",'Mail.Message');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','FormEx','TextEx', 'Mail.Mail');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
+	);
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * [ADMIN] メールフォーム一覧
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
@@ -82,13 +83,14 @@ class MailContentsController extends MailAppController {
 		$this->set('listDatas',$listDatas);
 		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールフォーム一覧';
+		$this->help = 'mail_contents_index';
 
 	}
 /**
  * [ADMIN] メールフォーム追加
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -110,7 +112,7 @@ class MailContentsController extends MailAppController {
 						$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
 						$this->Session->setFlash($message);
 						$this->MailContent->saveDbLog($message);
-						$this->redirect(array('controller'=>'mail_contents','action'=>'index'));
+						$this->redirect(array('action' => 'edit', $this->MailContent->id));
 					} else {
 						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 					}
@@ -122,22 +124,23 @@ class MailContentsController extends MailAppController {
 			}
 		}
 		$this->subMenuElements = array('mail_common');
+		$this->help = 'mail_contents_form';
 		$this->render('form');
 
 	}
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -169,7 +172,7 @@ class MailContentsController extends MailAppController {
 						}elseif ($this->data['MailContent']['edit_mail']) {
 							$this->redirectEditMail($this->data['MailContent']['mail_template']);
 						}else{
-							$this->redirect(array('action'=>'index'));
+							$this->redirect(array('action' => 'edit', $this->data['MailContent']['id']));
 						}
 
 					}else {
@@ -187,22 +190,51 @@ class MailContentsController extends MailAppController {
 		$this->set('mailContent',$this->data);
 		$this->subMenuElements = array('mail_fields','mail_common');
 		$this->pageTitle = 'メールフォーム設定編集：'.$this->data['MailContent']['title'];
+		$this->help = 'mail_contents_form';
 		$this->render('form');
+
+	}
+/**
+ * [ADMIN] 削除処理　(ajax);
+ *
+ * @param int ID
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		// メッセージ用にデータを取得
+		$mailContent = $this->MailContent->read(null, $id);
+
+		/* 削除処理 */
+		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
+			if($this->MailContent->del($id)) {
+				$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
+				$this->MailContent->saveDbLog($message);
+				exit(true);
+			}
+		} 
+		exit();
 
 	}
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		ID
- * @return	void
- * @access 	public
+ * @param int ID
+ * @return void
+ * @access public
  */
 	function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -220,16 +252,19 @@ class MailContentsController extends MailAppController {
 		} else {
 			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。');
 		}
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
+
 /**
  * レイアウト編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditLayout($template){
+		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
 						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
@@ -243,19 +278,22 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.'.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
+		
 	}
 /**
  * メール編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditMail($template){
+		
 		$type = 'elements';
 		$path = 'email'.DS.'text'.DS.$template.'.ctp';
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
@@ -273,19 +311,22 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],$type,$path));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
+		
 	}
 /**
  * メールフォーム編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditForm($template){
+		
 		$path = 'mail'.DS.$template;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
@@ -301,12 +342,35 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'mail'=>false,'prefix'=>false,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.'/index.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
+		
 	}
+/**
+ * データをコピーする
+ *
+ * @param int $mailContentId
+ * @param int $Id
+ * @return void
+ * @access protected
+ */
+	function admin_ajax_copy($id) {
 
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		$result = $this->MailContent->copy($id);
+		if($result) {
+			$this->set('data', $result);
+		} else {
+			exit();
+		}
+
+	}
 }
 ?>

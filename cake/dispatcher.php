@@ -355,7 +355,13 @@ class Dispatcher extends Object {
 			if ($webroot === 'webroot' && $webroot === basename($base)) {
 				$base = dirname($base);
 			}
-			if ($dir === 'app' && $dir === basename($base)) {
+			// CUSTOMIZE modify 2011/08/23 ryuring
+			// >>>
+			// app フォルダの名称変更に対応できるようにした
+			//if ($dir === 'app' && $dir === basename($base)) {
+			// ---
+			if ($dir === APP_DIR && $dir === basename($base)) {
+			// <<<
 				$base = dirname($base);
 			}
 

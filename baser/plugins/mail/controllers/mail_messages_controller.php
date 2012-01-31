@@ -3,17 +3,15 @@
 /**
  * 受信メールコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,49 +20,59 @@
 /**
  * 受信メールコントローラー
  *
- * @package			baser.plugins.mail.controllers
+ * @package baser.plugins.mail.controllers
  */
 class MailMessagesController extends MailAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailMessages';
 /**
  * モデル
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
 /**
  * ヘルパー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Mail.maildata', 'Mail.mailfield', 'TextEx', 'Array');
 /**
  * メールコンテンツデータ
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $mailContent;
 /**
  * サブメニュー
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array('mail_fields','mail_common');
 /**
+ * ぱんくずナビ
+ *
+ * @var array
+ * @access public
+ */
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
+	);
+/**
  * beforeFilter
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function  beforeFilter() {
 		
@@ -75,17 +83,14 @@ class MailMessagesController extends MailAppController {
 			$prefix = $this->mailContent['MailContent']['name']."_";
 			$this->Message = new Message(false,null,null,$prefix);
 		}
-		$this->navis = array(
-			'メールフォーム管理'=>'/admin/mail/mail_contents/index',
-			$this->mailContent['MailContent']['title'].'管理'=>'/admin/mail/mail_fields/index/'.$this->params['pass'][0]
-		);
+		$this->crumbs[] = array('name' => $this->mailContent['MailContent']['title'].'管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
 		
 	}
 /**
  * beforeRender
  *
- * @return	void
- * @access	public
+ * @return void
+ * @access public
  */
 	function beforeRender() {
 
@@ -96,9 +101,9 @@ class MailMessagesController extends MailAppController {
 /**
  * [ADMIN] 受信メール一覧
  *
- * @param	string	$mailContentId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @return void
+ * @access public
  */
 	function admin_index($mailContentId) {
 
@@ -117,15 +122,16 @@ class MailMessagesController extends MailAppController {
 		$this->set(compact('mailFields'));
 		$this->set(compact('messages'));
 		$this->pageTitle = '受信メール一覧';
+		$this->help = 'mail_messages_index';
 
 	}
 /**
  * [ADMIN] 受信メール詳細
  *
- * @param	string	$mailContentId
- * @param	string	$messageId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
  */
 	function admin_view($mailContentId, $messageId){
 
@@ -141,21 +147,73 @@ class MailMessagesController extends MailAppController {
 			'conditions'=> array('MailField.mail_content_id' => $mailContentId),
 			'order'		=> 'MailField.sort'
 		));
-		$this->navis = am(
-			$this->navis, array('受信メール一覧'=>'/admin/mail/mail_messages/index/'.$this->params['pass'][0])
-		);
+		$this->crumbs[] = array('name' => '受信メール一覧', 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
 		$this->set(compact('mailFields'));
 		$this->set(compact('message'));
 		$this->pageTitle = '受信メール詳細';
 
 	}
 /**
+ * [ADMIN] 受信メール一括削除
+ *
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
+ */
+	function _batch_del($ids) {
+		if($ids) {
+			foreach($ids as $id) {
+				$this->_del($id);
+			}
+		}
+		return true;
+	}
+/**
+ * [ADMIN] 受信メール削除　(ajax)
+ *
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($mailContentId, $messageId) {
+
+		if(!$messageId) {
+			exit();
+		}
+		if($this->_del($messageId)){
+			exit(true);
+		}else{
+			exit();
+		}
+	}
+/**
+ * 受信メール削除　
+ *
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
+ */
+	function _del($id = null) {
+		if($this->Message->del($id)) {
+			$message = '受信データ NO「'.$id.'」 を削除しました。';
+			$this->Message->saveDbLog($message);
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	
+/**
  * [ADMIN] 受信メール削除
  *
- * @param	string	$mailContentId
- * @param	string	$messageId
- * @return	void
- * @access	public
+ * @param int $mailContentId
+ * @param int $messageId
+ * @return void
+ * @access public
  */
 	function admin_delete($mailContentId, $messageId) {
 
@@ -170,7 +228,7 @@ class MailMessagesController extends MailAppController {
 		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
-		$this->redirect(array('action'=>'index',$mailContentId));
+		$this->redirect(array('action' => 'index', $mailContentId));
 
 	}
 

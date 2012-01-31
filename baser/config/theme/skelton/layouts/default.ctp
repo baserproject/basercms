@@ -15,7 +15,7 @@
 <?php $baser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 <?php $baser->css('style') ?>
 <?php $baser->js(array(
-	'jquery-1.4.2.min',
+	'jquery-1.6.4.min',
 	'functions',
 	'startup')) ?>
 <?php $baser->scripts() ?>
@@ -49,6 +49,6 @@
 	
 </div>
 
-<?php echo $cakeDebug; ?>
+<?php $baser->func() ?>
 </body>
 </html>

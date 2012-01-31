@@ -3,17 +3,15 @@
 /**
  * [管理画面] メールフィールド管理メニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,14 +19,17 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>メールフォーム<br />
-		管理メニュー</h2>
-	<ul>
-		<li><?php $baser->link('公開ページ確認', array('admin' => false, 'plugin' => '', 'controller' => $mailContent['MailContent']['name'], 'action' => 'index'), array('target' => '_blank')) ?></li>
-		<li><?php $baser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
-		<li><?php $baser->link('フィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
-		<li><?php $baser->link('新規フィールドを登録', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
-		<li><?php $baser->link('メールフォーム基本設定', array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
-	</ul>
-</div>
+
+<tr>
+	<th>メールフォーム管理メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('メールフィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $baser->link('新規メールフィールドを登録', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $baser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $baser->link('受信メールCSVダウンロード', array('controller' => 'mail_fields', 'action' => 'download_csv', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $baser->link('メールフォーム基本設定', array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $baser->link('公開ページ確認', '/' . $mailContent['MailContent']['name'] . '/index') ?></li>
+		</ul>
+	</td>
+</tr>

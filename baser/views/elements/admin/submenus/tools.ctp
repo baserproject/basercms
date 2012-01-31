@@ -3,17 +3,15 @@
 /**
  * [ADMIN] ツールメニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -24,7 +22,7 @@
 <div class="side-navi">
 	<h2>ツールメニュー</h2>
 	<ul>
-		<li><?php $baser->link('スキーマファイル生成',array('controller'=>'tools','action'=>'write_schema')) ?></li>
-		<li><?php $baser->link('スキーマファイル読込',array('controller'=>'tools','action'=>'load_schema')) ?></li>
+		<li><?php $baser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>
+		<li><?php $baser->link('スキーマファイル読込', array('controller' => 'tools', 'action' => 'load_schema')) ?></li>
 	</ul>
 </div>

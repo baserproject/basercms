@@ -3,17 +3,15 @@
 /**
  * ブログコンテンツモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,28 +23,28 @@
 /**
  * ブログコンテンツモデル
  *
- * @package			baser.plugins.blog.models
+ * @package baser.plugins.blog.models
  */
 class BlogContent extends BlogAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogContent';
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $actsAs = array('PluginContent');
+	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
@@ -67,8 +65,8 @@ class BlogContent extends BlogAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -78,7 +76,6 @@ class BlogContent extends BlogAppModel {
 				array(	'rule'		=> array('notInList', array('blog')),
 						'message'	=> 'ブログアカウント名に「blog」は利用できません。'),
 				array(	'rule'		=> array('isUnique'),
-						'on'		=> 'create',
 						'message'	=> '入力されたブログアカウント名は既に使用されています。'),
 				array(	'rule'		=> array('maxLength', 50),
 						'message'	=> 'ブログアカウント名は50文字以内で入力してください。')
@@ -88,10 +85,6 @@ class BlogContent extends BlogAppModel {
 					'message'	=> 'ブログタイトルを入力してください。'),
 			array(	'rule'		=> array('maxLength', 255),
 					'message'	=> 'ブログタイトルは255文字以内で入力してください。')
-		),
-		'description' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'ブログ説明文は255文字以内で入力してください。')
 		),
 		'layout' => array(
 			array(	'rule'		=> 'halfText',
@@ -118,9 +111,9 @@ class BlogContent extends BlogAppModel {
 /**
  * 英数チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function alphaNumeric($check) {
 
@@ -134,9 +127,9 @@ class BlogContent extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource($field = null,$options = array()) {
 
@@ -149,5 +142,88 @@ class BlogContent extends BlogAppModel {
 		}
 
 	}
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['BlogContent']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['BlogContent']['id']);
+		}
+		
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['BlogContent'])) {
+			$data = $data['BlogContent'];
+		}
+
+		$_data = array();
+		$_data['Content']['type'] = 'ブログ';
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		$_data['Content']['title'] = $data['title'];
+		$_data['Content']['detail'] = $data['description'];
+		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['status'] = true;
+
+		return $_data;
+
+	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed BlogContent Or false
+ */
+	function copy($id, $data) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
+		}
+		$data['BlogContent']['name'] .= '_copy';
+		$data['BlogContent']['title'] .= '_copy';
+		$data['BlogContent']['status'] = false;
+		unset($data['BlogContent']['id']);
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['BlogContent']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
 }
 ?>

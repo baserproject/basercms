@@ -3,17 +3,15 @@
 /**
  * メールフィールドモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,22 +20,29 @@
 /**
  * メールフィールドモデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class MailField extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailField';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -111,8 +116,9 @@ class MailField extends MailAppModel {
 /**
  * コントロールソースを取得する
  *
- * @return	array	source
- * @access 	public
+ * @param string $field
+ * @return array source
+ * @access public
  */
 	function getControlSource($field = null) {
 
@@ -151,12 +157,15 @@ class MailField extends MailAppModel {
 		}else {
 			return $source;
 		}
+		
 	}
 /**
  * 同じ名称のフィールド名がないかチェックする
  * 同じメールコンテンツが条件
+ * 
  * @param array $check
  * @return boolean
+ * @access public
  */
 	function duplicateMailField($check) {
 
@@ -173,5 +182,43 @@ class MailField extends MailAppModel {
 		}
 
 	}
+/**
+ * フィールドデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data = array(), $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+		}
+		
+		if($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
+			$data['MailField']['name'] .= '_copy';
+			$data['MailField']['field_name'] .= '_copy';
+			return $this->copy(null, $data);	// 再帰処理
+		}
+		
+		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		$data['MailField']['sort'] = $this->getMax('sort') + 1;
+		$data['MailField']['use_field'] = false;
+		
+		unset($data['MailField']['id']);
+		unset($data['MailField']['modified']);
+		unset($data['MailField']['created']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['MailField']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
 ?>

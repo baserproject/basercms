@@ -1,19 +1,17 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [ADMIN] グローバルメニュー用のメニュー
+ * [ADMIN] メニュー用のメニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,15 +19,13 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>グローバルメニュー<br />
-		管理メニュー</h2>
-	<ul>
-		<li>
-			<?php $baser->link('グローバルメニュー一覧',array('controller'=>'global_menus','action'=>'index')) ?>
-		</li>
-		<li>
-			<?php $baser->link('新規メニューを登録',array('controller'=>'global_menus','action'=>'add')) ?>
-		</li>
-	</ul>
-</div>
+
+<tr>
+	<th>メニュー管理メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('メニュー一覧', array('controller' => 'global_menus', 'action' => 'index')) ?></li>
+			<li><?php $baser->link('新規メニューを登録', array('controller' => 'global_menus', 'action' => 'add')) ?></li>
+		</ul>
+	</td>
+</tr>

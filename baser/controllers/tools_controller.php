@@ -3,17 +3,15 @@
 /**
  * ツールコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,45 +20,53 @@
 /**
  * ツールコントローラー
  *
- * @package			baser.controllers
+ * @package baser.controllers
  */
 class ToolsController extends AppController {
 /**
  * クラス名
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $name = 'Tools';
 	var $uses = array('Tool', 'Page');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ヘルパ
  * 
  * @var array
+ * @access public
  */
 	var $helpers = array('FormEx');
 /**
  * サブメニュー
+ * 
+ * @var type
+ * @access public 
  */
 	var $subMenuElements = array('tools');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $crumbs = array(
+		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
+	);
 /**
  * データメンテナンス
  *
- * @param	string	$mode
+ * @param string $mode
+ * @return void
+ * @access public
  */
 	function admin_maintenance($mode='') {
 
@@ -86,7 +92,7 @@ class ToolsController extends AppController {
 				if($messages) {
 					$this->Session->setFlash(implode('<br />', $messages));
 				}
-				$this->redirect(array('action'=>'maintenance'));
+				$this->redirect(array('action' => 'maintenance'));
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
@@ -96,9 +102,9 @@ class ToolsController extends AppController {
 /**
  * バックアップファイルを復元する
  *
- * @param	array	$data
- * @return	boolean
- * @access	protected
+ * @param array $data
+ * @return boolean
+ * @access protected
  */
 	function _restoreDb($data){
 		
@@ -137,10 +143,10 @@ class ToolsController extends AppController {
 /**
  * データベースをレストア
  *
- * @param	string	$path			スキーマファイルのパス
- * @param	string	$configKeyName	DB接続名
- * @return	boolean
- * @access	protected
+ * @param string $path スキーマファイルのパス
+ * @param string $configKeyName DB接続名
+ * @return boolean
+ * @access protected
  */
 	function _loadBackup($path, $configKeyName) {
 
@@ -185,8 +191,8 @@ class ToolsController extends AppController {
 /**
  * バックアップデータを作成する
  *
- * @return 	void
- * @access	public
+ * @return void
+ * @access protected
  */
 	function _backupDb() {
 
@@ -209,9 +215,10 @@ class ToolsController extends AppController {
 /**
  * バックアップファイルを書きだす
  *
- * @param	string	$configKeyName
- * @param	string	$path
- * @return	boolean;
+ * @param string $configKeyName
+ * @param string $path
+ * @return boolean
+ * @access protected
  */
 	function _writeBackup($configKeyName, $path) {
 
@@ -238,8 +245,8 @@ class ToolsController extends AppController {
 /**
  * モデル名からスキーマファイルを生成する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_write_schema() {
 
@@ -253,7 +260,7 @@ class ToolsController extends AppController {
 			}else {
 				if(!$this->_resetTmpSchemaFolder()){
 					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(array('action'=>'admin_write_schema'));
+					$this->redirect(array('action' => 'write_schema'));
 				}
 				if($this->Tool->writeSchema($this->data, $path)) {
 					App::import('Vendor','Simplezip');
@@ -274,8 +281,8 @@ class ToolsController extends AppController {
 /**
  * スキーマファイルを読み込みテーブルを生成する
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_load_schema() {
 		
@@ -286,11 +293,11 @@ class ToolsController extends AppController {
 				$path = TMP.'schemas'.DS;
 				if(!$this->_resetTmpSchemaFolder()){
 					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(array('action'=>'admin_load_schema'));
+					$this->redirect(array('action' => 'load_schema'));
 				}
 				if($this->Tool->loadSchema($this->data, $path)) {
 					$this->Session->setFlash('スキーマファイルの読み込みに成功しました。');
-					$this->redirect(array('action'=>'admin_load_schema'));
+					$this->redirect(array('action' => 'load_schema'));
 				} else {
 					$this->Session->setFlash('スキーマファイルの読み込みに失敗しました。');
 				}
@@ -306,6 +313,7 @@ class ToolsController extends AppController {
  * スキーマ用の一時フォルダをリセットする
  *
  * @return boolean
+ * @access protected
  */
 	function _resetTmpSchemaFolder() {
 		

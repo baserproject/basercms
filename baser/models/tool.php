@@ -3,17 +3,15 @@
 /**
  * ツールモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,29 +19,29 @@
  */
 /**
  * ツールモデル
- * @package			baser.models
+ * @package baser.models
  */
 class Tool extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Tool';
 /**
  * テーブル
  * 
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $useTable = false;
 /**
  * コントロールソースを取得する
  *
- * @param	string	フィールド名
- * @return	array	コントロールソース
- * @access	public
+ * @param string フィールド名
+ * @return array コントロールソース
+ * @access public
  */
 	function getControlSource ($field) {
 
@@ -59,8 +57,11 @@ class Tool extends AppModel {
 	}
 /**
  * データソースを指定してモデルリストを取得する
+ * 
+ * @param string $configKeyName
  * @param string $ds
  * @return array
+ * @access public
  */
 	function getListModels($configKeyName = 'baser'){
 
@@ -82,10 +83,10 @@ class Tool extends AppModel {
 /**
  * スキーマを書き出す
  * 
- * @param	string	$path
- * @param	array	$data
- * @return	boolean
- * @access	public
+ * @param string $path
+ * @param array $data
+ * @return boolean
+ * @access public
  */
 	function writeSchema($data, $path){
 		
@@ -117,6 +118,7 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $tmpPath
  * @return boolean
+ * @access public
  */
 	function loadSchema($data, $tmpPath) {
 		
@@ -140,11 +142,11 @@ class Tool extends AppModel {
 /**
  * スキーマを書き出す
  *
- * @param	string	$field
- * @param	array	$values
- * @param	string	$path
- * @return	boolean
- * @access	protected
+ * @param string $field
+ * @param array $values
+ * @param string $path
+ * @return boolean
+ * @access protected
  */
 	function _writeSchema($field, $values, $path) {
 
@@ -168,7 +170,7 @@ class Tool extends AppModel {
 				$filename = $path.Inflector::tableize($modelList[$value]).'.php';
 				$File = new File($filename);
 				$content = file_get_contents($filename);
-				$reg = '/\n\n[^\n]+?\$path[^\n]+?;/is';
+				$reg = '/(\r\n\r\n|\n\n)[^\n]+?\$path[^\n]+?;/is';
 				$content = preg_replace($reg, '', $content);
 				$File->write($content, 'w+');
 				$File->close();

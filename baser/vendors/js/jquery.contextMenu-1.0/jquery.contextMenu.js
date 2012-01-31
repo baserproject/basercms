@@ -2,6 +2,12 @@
 //
 // Version 1.00
 //
+// =============================================================================
+// 2012/01/17 modified by ryuring
+// 内部的に、クリックイベントを解除していたので、
+// このプラグインで登録したクリックイベントのみが解除される仕様に変更
+// =============================================================================
+// 
 // Cory S.N. LaViska
 // A Beautiful Site (http://abeautifulsite.net/)
 //
@@ -68,7 +74,7 @@ if(jQuery)( function() {
 							(e.pageY) ? y = e.pageY : x = e.clientY + d.scrollTop;
 							
 							// Show the menu
-							$(document).unbind('click');
+							$(document).unbind('click.contextMenu');
 							$(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
 							// Hover events
 							$(menu).find('A').mouseover( function() {
@@ -107,9 +113,9 @@ if(jQuery)( function() {
 							});
 							
 							// When items are selected
-							$('#' + o.menu).find('A').unbind('click');
-							$('#' + o.menu).find('LI:not(.disabled) A').click( function() {
-								$(document).unbind('click').unbind('keypress');
+							$('#' + o.menu).find('A').unbind('click.contextMenu');
+							$('#' + o.menu).find('LI:not(.disabled) A').bind("click.contextMenu", function() {
+								$(document).unbind('click.contextMenu').unbind('keypress');
 								$(".contextMenu").hide();
 								// Callback
 								if( callback ) callback( $(this).attr('href').substr(1), $(srcElement), {x: x - offset.left, y: y - offset.top, docX: x, docY: y} );
@@ -118,8 +124,8 @@ if(jQuery)( function() {
 							
 							// Hide bindings
 							setTimeout( function() { // Delay for Mozilla
-								$(document).click( function() {
-									$(document).unbind('click').unbind('keypress');
+								$(document).bind("click.contextMenu", function() {
+									$(document).unbind('click.contextMenu').unbind('keypress');
 									$(menu).fadeOut(o.outSpeed);
 									return false;
 								});

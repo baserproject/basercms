@@ -3,17 +3,15 @@
 /**
  * BlogBaserヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,35 +20,62 @@
 /**
  * BlogBaserヘルパー
  *
- * @package			baser.plugins.blog.views.helpers
+ * @package baser.plugins.blog.views.helpers
  *
  */
 class BlogBaserHelper extends AppHelper {
 /**
  * ブログ記事一覧出力
- *
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $baser->blogPosts('news', 3) ?>
- * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/post_list.ctp
- * 注意事項: Webページで利用する場合、サーバーキャッシュは削除されないので手動で削除が必要
+ * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.ctp
  * 
- * @param	int		$contentsName
- * @param	mixid	$mobile			'' / boolean
- * @return	void
- * @access	public
+ * @param int $contentsName
+ * @param int $num
+ * @param array $options
+ * @param mixid $mobile '' / boolean
+ * @return void
+ * @access public
  */
-	function blogPosts ($contentsName, $num = 5, $mobile = '') {
+	function blogPosts ($contentsName, $num = 5, $options = array()) {
+
+		$_options = array(
+			'category'	=> null,
+			'tag'		=> null,
+			'year'		=> null,
+			'month'		=> null,
+			'day'		=> null,
+			'id'		=> null,
+			'keyword'	=> null,
+			'template'	=> null
+		);
+		$options = am($_options, $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
-		if($mobile === ''){
-			$mobile = Configure::read('Mobile.on');
+		
+		$settings = Configure::read('AgentSettings');
+		foreach($settings as $key => $setting) {
+			if(isset($options[$key])) {
+				$agentOn = $options[$key];
+				unset($options[$key]);
+			} else {
+				$agentOn = (Configure::read('AgentPrefix.currentAgent') == $key);
+			}
+			if($agentOn){
+				$url['prefix'] = $setting['prefix'];
+				break;
+			}
 		}
-		if($mobile){
-			$url['prefix'] = 'mobile';
+		if(isset($options['templates'])) {
+			$templates = $options['templates'];
+		} else {
+			$templates = 'posts';
 		}
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num)));
+		unset ($options['templates']);
+
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
 
 	}
 

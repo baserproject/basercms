@@ -1,19 +1,22 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * エラーハンドラークラス
+ * ErrorHandler 拡張クラス
  *
- * PHP versions 4 and 5
+ * =============================================================================
+ * 独自の AppError を利用する場合は、このファイルをアプリケーションフォルダに
+ * コピーして利用すると baserCMS のアップデート時に上書きされません。
+ * =============================================================================
+ * 
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,24 +25,11 @@
 /**
  * Include files
  */
-App::import('Core', 'Error');
+App::import('Core', 'BaserAppError', array('search' => BASER));
 /**
- * エラーハンドラークラス
+ * ErrorHandler 拡張クラス
  * @package			baser
  */
-class AppError extends ErrorHandler {
-/**
- * クラスが見つからない
- * @param array $params
- */
-	function missingClass($params) {
-		if($params['className']) {
-			$this->controller->set('className',$params['className']);
-		}
-		if($params['notice']) {
-			$this->controller->set('notice', $params['notice']);
-		}
-		$this->_outputMessage('missing_class');
-	}
+class AppError extends BaserAppError {
 }
 ?>

@@ -3,17 +3,15 @@
 /**
  * SQLite3 DBO拡張
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models.datasources.dbo
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,7 +24,7 @@ App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo
 /**
  * SQLite3 DBO拡張
  *
- * @package			baser.models.datasources.dbo
+ * @package baser.models.datasources.dbo
  */
 class DboSqlite3Ex extends DboSqlite3 {
 /**
@@ -34,8 +32,10 @@ class DboSqlite3Ex extends DboSqlite3 {
  *
  * @param array $compare Result of a CakeSchema::compare()
  * @return array Array of alter statements to make.
+ * @access public
  */
 	function alterSchema($compare, $table = null) {
+		
 		if (!is_array($compare)) {
 			return false;
 		}
@@ -82,6 +82,7 @@ class DboSqlite3Ex extends DboSqlite3 {
 			}
 		}
 		return $out;
+		
 	}
 /**
  * Overrides DboSource::index to handle SQLite indexe introspection
@@ -89,8 +90,10 @@ class DboSqlite3Ex extends DboSqlite3 {
  *
  * @param string $model Name of model to inspect
  * @return array Fields in table. Keys are column and unique
+ * @access public
  */
 	function index(&$model) {
+		
 		$index = array();
 		$table = $this->fullTableName($model, false);
 		if ($table) {
@@ -124,23 +127,28 @@ class DboSqlite3Ex extends DboSqlite3 {
 			$index = am($primary, $index);
 		}
 		return $index;
+		
 	}
 /**
  * Generate index alteration statements for a table.
  * TODO 未サポート
+ * 
  * @param string $table Table to alter indexes for
  * @param array $new Indexes to add and drop
  * @return array Index alteration statements
+ * @access protected
  */
 	function _alterIndexes($table, $indexes) {
+		
 		return array();
+		
 	}
 /**
  * テーブル構造を変更する
  *
- * @param	array	$options [ new / old ]
- * @return	boolean
- * @access	public
+ * @param array $options [ new / old ]
+ * @return boolean
+ * @access public
  */
 	function alterTable($options) {
 
@@ -198,13 +206,15 @@ class DboSqlite3Ex extends DboSqlite3 {
 /**
  * テーブル名のリネームステートメントを生成
  *
- * @param	string	$sourceName
- * @param	string	$targetName
- * @return	string
- * @access	public
+ * @param string $sourceName
+ * @param string $targetName
+ * @return string
+ * @access public
  */
 	function buildRenameTable($sourceName, $targetName) {
+		
 		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
+		 
 	}
 /**
  * カラムを変更する
@@ -338,23 +348,26 @@ class DboSqlite3Ex extends DboSqlite3 {
 	}
 /**
  * テーブルからテーブルへデータを移動する
- * @param	string	$sourceTableName
- * @param	string	$targetTableName
- * @param	array	$schema
- * @return	booelan
- * @access	protected
+ * @param string	$sourceTableName
+ * @param string	$targetTableName
+ * @param array	$schema
+ * @return booelan
+ * @access protected
  */
 	function _moveData($sourceTableName,$targetTableName,$schema) {
+		
 		$sql = 'INSERT INTO '.$targetTableName.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$sourceTableName;
 		return $this->execute($sql);
+		
 	}
 /**
  * スキーマ情報よりCSV形式のフィールドリストを取得する
- * @param	array	$schema
- * @return	string
- * @access	protected
+ * @param array $schema
+ * @return string
+ * @access protected
  */
 	function _convertCsvFieldsFromSchema($schema) {
+		
 		$fields = '';
 		foreach($schema as $key => $field) {
 			$fields .= '"'.$key.'",';
@@ -366,8 +379,10 @@ class DboSqlite3Ex extends DboSqlite3 {
  *
  * @param string $tableName Name of database table to inspect
  * @return array Fields in table. Keys are name and type
+ * @access public
  */
 	function describe(&$model) {
+		
 		$cache = $this->__describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -392,7 +407,13 @@ class DboSqlite3Ex extends DboSqlite3 {
 			if($fields[$column[0]['name']]['default']=='NULL'){
 				$fields[$column[0]['name']]['default'] = NULL;
 			}
-			// <<<
+			// >>> CUSTOMIZE ADD 2011/08/22 ryuring
+			if($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
+				$fields[$column[0]['name']]['default'] = 1;
+			} elseif($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
+				$fields[$column[0]['name']]['default'] = 0;
+			}
+			// >>>
 			if($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
 					'type'		=> $fields[$column[0]['name']]['type'],
@@ -411,17 +432,19 @@ class DboSqlite3Ex extends DboSqlite3 {
 
 		$this->__cacheDescription($model->tablePrefix . $model->table, $fields);
 		return $fields;
+		
 	}
 /**
  * Returns a Model description (metadata) or null if none found.
- *
  * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ
  * 
  * @param Model $model
  * @return mixed
+ * @access private
  */
 	function __describe($model) {
+		
 		if ($this->cacheSources === false) {
 			return null;
 		}
@@ -436,6 +459,8 @@ class DboSqlite3Ex extends DboSqlite3 {
 			return $cache;
 		}
 		return null;
+		
 	}
+	
 }
 ?>

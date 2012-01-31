@@ -3,17 +3,15 @@
 /**
  * ブログコンテンツコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,81 +23,93 @@
 /**
  * ブログコンテンツコントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package baser.plugins.blog.controllers
  */
 class BlogContentsController extends BlogAppController {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'BlogContents';
 /**
  * モデル
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $uses = array('SiteConfig',"Blog.BlogContent");
+	var $uses = array('SiteConfig', 'Blog.BlogCategory', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $helpers = array('Html','TimeEx','FormEx','Blog.Blog');
 /**
  * コンポーネント
  *
- * @var     array
- * @access  public
+ * @var array
+ * @access public
  */
-	var $components = array('Auth','Cookie','AuthConfigure');
+	var $components = array('AuthEx','Cookie','AuthConfigure');
 /**
  * ぱんくずナビ
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
+	);
 /**
  * サブメニューエレメント
  *
- * @var		string
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $subMenuElements = array();
 /**
  * before_filter
  *
- * @return	void
- * @access 	public
+ * @return void
+ * @access public
  */
 	function beforeFilter() {
+		
 		parent::beforeFilter();
 		if(isset($this->params['prefix']) && $this->params['prefix']=='admin') {
 			$this->subMenuElements = array('blog_common');
 		}
+		
 	}
 /**
  * [ADMIN] ブログコンテンツ一覧
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_index() {
 
-		$listDatas = $this->BlogContent->find('all',array('order'=>array('BlogContent.id')));
-		$this->set('listDatas',$listDatas);
+		$datas = $this->BlogContent->find('all',array('order'=>array('BlogContent.id')));
+		$this->set('datas', $datas);
+		
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+		
 		$this->pageTitle = 'ブログ一覧';
+		$this->help = 'blog_contents_index';
 
 	}
 /**
  * [ADMIN] ブログコンテンツ追加
  *
- * @return  void
- * @access  public
+ * @return void
+ * @access public
  */
 	function admin_add() {
 
@@ -118,7 +128,7 @@ class BlogContentsController extends BlogAppController {
 				$message = '新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogContent->saveDbLog($message);
-				$this->redirect(array('controller'=>'blog_posts','action'=>'index',$id));
+				$this->redirect(array('action' => 'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -133,21 +143,20 @@ class BlogContentsController extends BlogAppController {
 /**
  * [ADMIN] 編集処理
  *
- @ @param	int		blog_category_no
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
  */
 	function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogContent->read(null, $id);
-			$this->set('blogContent',$this->data);
 		}else {
 
 			/* 更新処理 */
@@ -161,7 +170,7 @@ class BlogContentsController extends BlogAppController {
 				}elseif ($this->data['BlogContent']['edit_blog_template']) {
 					$this->redirectEditBlog($this->data['BlogContent']['template']);
 				}else{
-					$this->redirect(array('action'=>'index',$id));
+					$this->redirect(array('action' => 'edit', $id));
 				}
 				
 			}else {
@@ -170,20 +179,26 @@ class BlogContentsController extends BlogAppController {
 
 		}
 
+		$this->set('publishLink', '/'.$this->data['BlogContent']['name'].'/index');
+		
 		/* 表示設定 */
+		$this->set('blogContent',$this->data);
 		$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 		$this->set('themes',$this->SiteConfig->getThemes());
 		$this->pageTitle = 'ブログ設定編集：'.$this->data['BlogContent']['title'];
+		$this->help = 'blog_contents_form';
 		$this->render('form');
 
 	}
 /**
  * レイアウト編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditLayout($template){
+		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
 						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
@@ -197,17 +212,19 @@ class BlogContentsController extends BlogAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'layouts',$template.'.ctp'));
+			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.'.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
+		
 	}
 /**
  * ブログテンプレート編集画面にリダイレクトする
- * @param	string	$template
- * @return	void
- * @access	public
+ * 
+ * @param string $template
+ * @return void
+ * @access public
  */
 	function redirectEditBlog($template){
 		$path = 'blog'.DS.$template;
@@ -225,25 +242,26 @@ class BlogContentsController extends BlogAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin'=>null,'controller'=>'theme_files','action'=>'edit',$this->siteConfigs['theme'],'etc',$path.'/index.ctp'));
+			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index.ctp'));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 		}
 	}
 /**
  * [ADMIN] 削除処理
  *
- @ @param	int		blog_content_id
- * @return	void
- * @access 	public
+ * @param int $id
+ * @return void
+ * @access public
+ * @deprecated
  */
 	function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -258,14 +276,40 @@ class BlogContentsController extends BlogAppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
+
+	}
+/**
+ * [ADMIN] Ajax 削除処理
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		// メッセージ用にデータを取得
+		$post = $this->BlogContent->read(null, $id);
+
+		/* 削除処理 */
+		if($this->BlogContent->del($id)) {
+			$this->BlogContent->saveDbLog('ブログ「'.$post['BlogContent']['title'].'」 を削除しました。');
+			echo true;
+		}
+
+		exit();
 
 	}
 /**
  * フォームの初期値を取得する
  *
- * @return  void
- * @access  protected
+ * @return void
+ * @access protected
  */
 	function _getDefaultValue() {
 
@@ -280,5 +324,26 @@ class BlogContentsController extends BlogAppController {
 		return $data;
 
 	}
+/**
+ * [ADMIN] データコピー（AJAX）
+ * 
+ * @param int $id 
+ * @return void
+ * @access public
+ */
+	function admin_ajax_copy($id) {
+		
+		if(!$id) {
+			exit();
+		}
+		$result = $this->BlogContent->copy($id);
+		if($result) {
+			$this->set('data', $result);
+		} else {
+			exit();
+		}
+		
+	}
+	
 }
 ?>

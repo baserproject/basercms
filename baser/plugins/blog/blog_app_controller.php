@@ -3,17 +3,15 @@
 /**
  * ブログコントローラー基底クラス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -46,5 +44,27 @@ class BlogAppController extends PluginsController {
 		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
 
 	}
+/**
+ * beforeFilter
+ *
+ * @return	void
+ * @access 	public
+ */
+	function beforeFilter() {
+		
+		parent::beforeFilter();
+		$user = $this->AuthEx->user();
+		$userModel = $this->getUserModel();
+		if(!$user || !$userModel) {
+			return;
+		}
+		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
+				$user[$userModel]['user_group_id'], 
+				$this->checkRootEditable()
+		);
+		$this->set('newCatAddable', $newCatAddable);
+		
+	}
+	
 }
 ?>

@@ -72,6 +72,11 @@
 	line-height:20px!important;
 	font-size:12px;
 }
+.widget li.current a,
+.widget li.selected a{
+	font-weight: bold;
+	color:#360;
+}
 h3.contents-head {
 	margin-bottom:20px!important;
 	padding:5px 10px;
@@ -220,7 +225,6 @@ h4.contents-head {
 /* map
 ----------------------------------------------- */
 #map {
-	margin-left:30px;
 	margin-bottom:30px;
 }
 /* edit-link

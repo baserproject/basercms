@@ -4,8 +4,6 @@
 class MessagesSchema extends CakeSchema {
 	var $name = 'Messages';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'messages.php';
 
 	var $connection = 'plugin';

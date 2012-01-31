@@ -3,17 +3,15 @@
 /**
  * Email 拡張モデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,8 +24,7 @@ App::import('Component','Email');
 /**
  * Email 拡張モデル
  *
- * @package			baser.plugins.feed.controller.components
- *
+ * @package baser.plugins.feed.controller.components
  */
 class EmailExComponent extends EmailComponent {
 // CUSTOMIZE ADD 2011/05/07 ryuring
@@ -47,10 +44,11 @@ class EmailExComponent extends EmailComponent {
  * @param	mixed	$content Either an array of text lines, or a string with contents
  * @param	string	$template Template to use when sending email
  * @param	string	$layout Layout to use to enclose email body
- * @return	boolean	Success
+ * @return	boolean Success
  * @access	public
  */
 	function send($content = null, $template = null, $layout = null) {
+		
 		$this->__createHeader();
 
 		if ($template) {
@@ -111,13 +109,14 @@ class EmailExComponent extends EmailComponent {
 		$this->__message = array();
 
 		return $sent;
+	
 	}
 /**
  * Wrap the message using EmailComponent::$lineLength
  *
- * @param 	string 	$message Message to wrap
- * @return 	string 	Wrapped message
- * @access 	private
+ * @param 	string $message Message to wrap
+ * @return 	string Wrapped message
+ * @access private
  */
 	function __wrap($message) {
 
@@ -141,8 +140,10 @@ class EmailExComponent extends EmailComponent {
 	}
 /**
  * テンプレートを整形後に再度ラップする必要があるのでラップ処理の部分だけを分離
+ * 
  * @param array $lines
  * @return array
+ * @access private
  */
 	function ___wrap($lines) {
 
@@ -230,6 +231,7 @@ class EmailExComponent extends EmailComponent {
  *       強制的に$widthで改行する、とか？
  */
 	function mbFold($str, $width, $encoding = null) {
+		
 		assert('$width >= 4');
 
 		if (!isset($str)) {
@@ -287,6 +289,7 @@ class EmailExComponent extends EmailComponent {
 		}
 
 		return $lines;
+	
 	}
 /**
  * Format a string as an email address
@@ -296,6 +299,7 @@ class EmailExComponent extends EmailComponent {
  * @access private
  */
 	function __formatAddress($string, $smtp = false) {
+		
 		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
 		if ($smtp && $hasAlias) {
 			return $this->__strip('<' .  $matches[3] . '>');
@@ -311,6 +315,7 @@ class EmailExComponent extends EmailComponent {
 			// <<<
 		}
 		return $this->__strip($string);
+	
 	}
 /**
  * Render the contents using the current layout and template.
@@ -320,6 +325,7 @@ class EmailExComponent extends EmailComponent {
  * @access private
  */
 	function __renderTemplate($content) {
+		
 		$viewClass = $this->Controller->view;
 
 		if ($viewClass != 'View') {
@@ -404,6 +410,7 @@ class EmailExComponent extends EmailComponent {
 		ClassRegistry::removeObject('view');
 
 		return $msg;
+
 	}
 	
 }

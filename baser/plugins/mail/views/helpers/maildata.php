@@ -3,17 +3,15 @@
 /**
  * メールデータヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,20 +24,20 @@ App::import('Helper', 'TextEx');
 /**
  * メールデータヘルパー
  *
- * @package			baser.plugins.mail.views.helpers
+ * @package baser.plugins.mail.views.helpers
  *
  */
 class MaildataHelper extends TextExHelper {
 
 	var $helpers = array('TimeEx');
 /**
- * メール用のデータを出力する
- *
- * @param	string	コントロールタイプ
- * @param	mixed	変換前の値
- * @param	array	コントロールソース
- * @return 	string	メール用データ
- * @access	public
+ * メール表示用のデータを出力する
+ * 
+ * @param string コントロールタイプ
+ * @param mixed 変換前の値
+ * @param array コントロールソース
+ * @return string メール用データ
+ * @access public
  */
 	function control($type,$value,$options = "") {
 
@@ -110,7 +108,9 @@ class MaildataHelper extends TextExHelper {
 				break;
 
 			case 'date_time_calender':
-				$value = $this->dateTime($value);
+				if(is_array($value)) {
+					$value = $this->dateTime($value);
+				}
 				if($value) {
 					$out = " ".date('Y年 m月 d日',strtotime($value));
 				}
@@ -148,5 +148,6 @@ class MaildataHelper extends TextExHelper {
 		return $out;
 
 	}
+	
 }
 ?>

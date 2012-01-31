@@ -1,5 +1,5 @@
 /* Generic context menu styles */
-.contextMenu {
+.context-menu {
 	position: absolute;
 	width: 120px;
 	z-index: 99999;
@@ -10,13 +10,13 @@
 	display: none;
 }
 
-.contextMenu LI {
+.context-menu LI {
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
 }
 
-.contextMenu A {
+.context-menu A {
 	color: #333;
 	text-decoration: none;
 	display: block;
@@ -29,21 +29,21 @@
 	padding-left: 28px;
 }
 
-.contextMenu LI.hover A {
+.context-menu LI.hover A {
 	color: #FFF;
 	background-color: #3399FF;
 }
 
-.contextMenu LI.disabled A {
+.context-menu LI.disabled A {
 	color: #AAA;
 	cursor: default;
 }
 
-.contextMenu LI.hover.disabled A {
+.context-menu LI.hover.disabled A {
 	background-color: transparent;
 }
 
-.contextMenu LI.separator {
+.context-menu LI.separator {
 	border-top: solid 1px #CCC;
 }
 
@@ -54,9 +54,9 @@
 	classes to the respective LI element(s)
 */
 
-.contextMenu LI.edit A { background-image: url(images/page_white_edit.png); }
-.contextMenu LI.cut A { background-image: url(images/cut.png); }
-.contextMenu LI.copy A { background-image: url(images/page_white_copy.png); }
-.contextMenu LI.paste A { background-image: url(images/page_white_paste.png); }
-.contextMenu LI.delete A { background-image: url(images/page_white_delete.png); }
-.contextMenu LI.quit A { background-image: url(images/door.png); }
+.context-menu LI.edit A { background-image: url(images/page_white_edit.png); }
+.context-menu LI.cut A { background-image: url(images/cut.png); }
+.context-menu LI.copy A { background-image: url(images/page_white_copy.png); }
+.context-menu LI.paste A { background-image: url(images/page_white_paste.png); }
+.context-menu LI.delete A { background-image: url(images/page_white_delete.png); }
+.context-menu LI.quit A { background-image: url(images/door.png); }

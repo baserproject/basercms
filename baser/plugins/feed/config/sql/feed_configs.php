@@ -4,8 +4,6 @@
 class FeedConfigsSchema extends CakeSchema {
 	var $name = 'FeedConfigs';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
 	var $file = 'feed_configs.php';
 
 	var $connection = 'plugin';

@@ -3,17 +3,15 @@
 /**
  * テーマモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,28 +23,28 @@
 /**
  * テーマモデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class Theme extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'Theme';
 /**
  * テーブル
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useTable = false;
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -61,11 +59,12 @@ class Theme extends AppModel {
 /**
  * 重複チェック
  *
- * @param	string
- * @return	boolean
- * @access	public
+ * @param string
+ * @return boolean
+ * @access public
  */
 	function duplicate($check) {
+		
 		$value = $check[key($check)];
 		if(!$value){
 			return true;
@@ -78,12 +77,14 @@ class Theme extends AppModel {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 保存
  *
- * @param	string
- * @return	boolean
+ * @param string
+ * @return boolean
+ * @access public
  */
 	function save($data = null, $validate = true, $fieldList = array()) {
 
@@ -127,6 +128,7 @@ class Theme extends AppModel {
  * @param string $value
  * @param string $contents
  * @return string
+ * @access public
  */
 	function setConfig($theme,$key,$value){
 

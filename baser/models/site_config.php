@@ -3,17 +3,15 @@
 /**
  * システム設定モデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,28 +23,35 @@
 /**
  * システム設定モデル
  *
- * @package			baser.models
+ * @package baser.models
  */
 class SiteConfig extends AppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'SiteConfig';
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	var $actsAs = array('Cache');
+/**
  * データベース接続
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $useDbConfig = 'baser';
 /**
  * バリデーション
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'formal_name' => array(
@@ -60,7 +65,7 @@ class SiteConfig extends AppModel {
 			'required'	=> true
 		),
 		'email' => array(
-			array(	'rule'		=> array('email'),
+			array(	'rule'		=> array('emails'),
 					'message'	=> '管理者メールアドレスの形式が不正です。'),
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> '管理者メールアドレスを入力してください。')
@@ -84,6 +89,7 @@ class SiteConfig extends AppModel {
  * テーマの一覧を取得する
  *
  * @return array
+ * @access public
  */
 	function getThemes() {
 
@@ -103,16 +109,20 @@ class SiteConfig extends AppModel {
 	}
 /**
  * コントロールソースを取得する
+ * 
  * @param string $field
  * @return mixed array | false
+ * @access public
  */
 	function getControlSource($field=null) {
+		
 		$controlSources['mode'] = array(-1=>'インストールモード',0=>'ノーマルモード',1=>'デバッグモード１',2=>'デバッグモード２',3=>'デバッグモード３');
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * SSL用のURLが設定されているかチェックする
@@ -122,11 +132,13 @@ class SiteConfig extends AppModel {
  * @access public
  */
 	function sslUrlExists($check) {
+		
 		$sslOn = $check[key($check)];
 		if($sslOn && empty($this->data['SiteConfig']['ssl_url'])) {
 			return false;
 		}
 		return true;
+		
 	}
 	
 }

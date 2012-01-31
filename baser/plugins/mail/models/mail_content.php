@@ -3,17 +3,15 @@
 /**
  * メールコンテンツモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,29 +20,29 @@
 /**
  * メールコンテンツモデル
  *
- * @package			baser.plugins.mail.models
+ * @package baser.plugins.mail.models
  *
  */
 class MailContent extends MailAppModel {
 /**
  * クラス名
  *
- * @var		string
- * @access 	public
+ * @var string
+ * @access public
  */
 	var $name = 'MailContent';
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
+ * @access public
  */
-	var $actsAs = array('PluginContent');
+	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
 /**
  * hasMany
  *
- * @var		array
- * @access 	public
+ * @var array
+ * @access public
  */
 	var $hasMany = array('MailField'=>
 			array('className'=>'Mail.MailField',
@@ -57,8 +55,8 @@ class MailContent extends MailAppModel {
 /**
  * validate
  *
- * @var		array
- * @access	public
+ * @var array
+ * @access public
  */
 	var $validate = array(
 		'name' => array(
@@ -68,7 +66,6 @@ class MailContent extends MailAppModel {
 			array(	'rule'		=> array('notInList', array('mail')),
 					'message'	=> 'メールフォームアカウント名に「mail」は利用できません。'),
 			array(	'rule'		=> array('isUnique'),
-					'on'		=> 'create',
 					'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
 			array(	'rule'		=> array('maxLength', 20),
 					'message'	=> 'メールフォームアカウント名は20文字以内で入力してください。')
@@ -144,27 +141,29 @@ class MailContent extends MailAppModel {
 /**
  * beforeValidate
  *
- * @return	void
- * @access	public
+ * @return boolean
+ * @access public
  */
 	function beforeValidate() {
 
-		if($this->data['MailContent']['sender_1_']) {
+		if($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
 				array(	'rule'		=> 'email',
 						'message'	=> '送信先メールアドレスの形式が不正です。'));
 		}
 
 		return true;
+		
 	}
 /**
  * SSL用のURLが設定されているかチェックする
  * 
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
-	function checkSslUrl($check) {		
+	function checkSslUrl($check) {
+		
 		if($check[key($check)]) {
 			$sslUrl = Configure::read('Baser.sslUrl');
 			if(empty($sslUrl)) {
@@ -175,13 +174,14 @@ class MailContent extends MailAppModel {
 		} else {
 			return true;
 		}
+		
 	}
 /**
  * 英数チェック
  *
- * @param	string	チェック対象文字列
- * @return	boolean
- * @access	public
+ * @param string $check チェック対象文字列
+ * @return boolean
+ * @access public
  */
 	function alphaNumeric($check) {
 
@@ -195,8 +195,8 @@ class MailContent extends MailAppModel {
 /**
  * フォームの初期値を取得する
  *
- * @return  void
- * @access  protected
+ * @return string
+ * @access protected
  */
 	function getDefaultValue() {
 
@@ -207,9 +207,106 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['mail_template'] = 'mail_default';
 		$data['MailContent']['use_description'] = 1;
 		$data['MailContent']['auth_captcha'] = 0;
+		$data['MailContent']['ssl_on'] = 0;
 		
 		return $data;
 
 	}
+/**
+ * afterSave
+ *
+ * @return boolean
+ * @access public
+ */
+	function afterSave($created) {
+
+		// 検索用テーブルへの登録・削除
+		if(!$this->data['MailContent']['exclude_search']) {
+			$this->saveContent($this->createContent($this->data));
+		} else {
+			$this->deleteContent($this->data['MailContent']['id']);
+		}
+
+	}
+/**
+ * beforeDelete
+ *
+ * @return	boolean
+ * @access	public
+ */
+	function beforeDelete() {
+
+		return $this->deleteContent($this->id);
+
+	}
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ * @access public
+ */
+	function createContent($data) {
+
+		if(isset($data['MailContent'])) {
+			$data = $data['MailContent'];
+		}
+
+		$_data = array();
+		$_data['Content']['type'] = 'メール';
+		$_data['Content']['model_id'] = $this->id;
+		$_data['Content']['category'] = '';
+		$_data['Content']['title'] = $data['title'];
+		$_data['Content']['detail'] = $data['description'];
+		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['status'] = true;
+
+		return $_data;
+
+	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data, $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
+		}
+		
+		$data['MailContent']['name'] .= '_copy';
+		$data['MailContent']['title'] .= '_copy';
+		unset($data['MailContent']['id']);
+		unset($data['MailContent']['created']);
+		unset($data['MailContent']['modified']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['MailContent']['id'] = $this->getInsertID();
+			if($recursive) {
+				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'recursive' => -1));
+				foreach($mailFields as $mailField) {
+					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
+					$this->MailField->copy(null, $mailField);
+				}
+				$Message = ClassRegistry::getObject('Message');
+				$Message->createTable($result['MailContent']['name']);
+				$Message->construction($result['MailContent']['id']);
+			}
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data, $recursive);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
 }
 ?>

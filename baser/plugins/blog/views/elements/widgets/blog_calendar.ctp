@@ -3,17 +3,15 @@
 /**
  * [PUBLISH] ブログカレンダー
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -37,7 +35,7 @@ $entryDates = $data['entryDates'];
 ?>
 <?php // TODO コード整理する事 ?>
 
-<div class="widget widget-blog-calendar widget-blog-calendar-<?php echo $id ?>">
+<div class="widget widget-blog-calendar widget-blog-calendar-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
@@ -52,9 +50,9 @@ $day = date("j", $time);
 
 //GETにきた年月をチェックする
 if(isset($this->params['pass']['0']) && $this->params['pass']['0'] == 'date'){
-	$year2=@$this->params['pass']['1'];
-	$month2=@$this->params['pass']['2'];
-	$day2=@$this->params['pass']['3'];
+	$year2=h(@$this->params['pass']['1']);
+	$month2=h(@$this->params['pass']['2']);
+	$day2=h(@$this->params['pass']['3']);
 }else{
 	$year2='';
 	$month2='';
@@ -112,13 +110,13 @@ else{
 print '<table class="blog-calendar"><tr><td colspan=7>';
 print "<center>";
 if($data['prev']) {
-	print $baser->getLink($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),array('prefix'=>true),null,false);
+	print $baser->getLink($month3."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year3, $month3),null,false);
 } else {
 	print $month3."月";
 }
 print "　".$year."年".$month."月　";
 if($data['next']) {
-	print $baser->getLink($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),array('prefix'=>true),null,false);
+	print $baser->getLink($month4."月",array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year4, $month4),null,false);
 } else {
 	print $month4."月";
 }
@@ -178,13 +176,13 @@ function check($i,$w,$year,$month,$day,$entryDates,$baser,$blogContent){
 	
 	if(in_array(date('Y-m-d',strtotime($year.'-'.$month.'-'.$i)),$entryDates)){
 		if(date('Y-m-d') == date('Y-m-d',strtotime($year.'-'.$month.'-'.$i))){
-			$change = '<td class="today">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
+			$change = '<td class="today">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,false).'</td>';
 		}elseif($w==0){
-			$change = '<td class="sunday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
+			$change = '<td class="sunday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,false).'</td>';
 		}elseif($w==6){
-			$change = '<td class="saturday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
+			$change = '<td class="saturday">'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,false).'</td>';
 		}else{
-			$change = '<td>'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),array('prefix'=>true),null,false).'</td>';
+			$change = '<td>'.$baser->getLink($i,array('admin'=>false,'blog'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives', 'date', $year, $month, $i),null,false).'</td>';
 		}
 	}else{
 		if(date('Y-m-d') == date('Y-m-d',strtotime($year.'-'.$month.'-'.$i))){

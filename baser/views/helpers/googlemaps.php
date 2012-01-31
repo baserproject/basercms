@@ -3,18 +3,16 @@
 /**
  * GoogleMapヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -26,54 +24,65 @@
 /**
  * GoogleMapヘルパー
  *
- * @package			cake
- * @subpackage		cake.app.views.helpers
+ * @package cake
+ * @subpackage cake.app.views.helpers
  */
 class GooglemapsHelper extends AppHelper {
 /**
  * タイトル
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $title = '';
 /**
  * マーカーテキスト
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $markerText = '';
 /**
  * 地図を表示するDOM ID
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $mapId = 'map';
 /**
  * 住所
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $address = '';
 /**
  * latitude
- * @var
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $latitude = '';
 /**
  * longitude
- * @var
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $longitude = '';
 /**
  * ズーム
- * @var		int
- * @access	public
+ * @var int
+ * @access public
  */
 	var $zoom = 16;
 /**
  * Google マップ を読み込む
+ * 
+ * @param string $address
+ * @param int $width
+ * @param int $height
+ * @return boolean
+ * @access public 
  */
 	function load($address='',$width=null,$height=null) {
 
@@ -96,9 +105,13 @@ class GooglemapsHelper extends AppHelper {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * Google マップ読み込み用のjavascriptを生成する
+ * 
+ * @return string
+ * @access public 
  */
 	function _getScript() {
 
@@ -145,8 +158,12 @@ INFO_END;
 	}
 /**
  * 位置情報を読み込む
+ * 
+ * @return boolean
+ * @access public
  */
 	function loadLocation() {
+		
 		if(!$this->address) {
 			return false;
 		}
@@ -158,11 +175,18 @@ INFO_END;
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * 位置情報を取得する
+ *
+ * @param string $address
+ * @return boolean 
+ * @access public
  */
+
 	function getLocation($address) {
+		
 		App::import("Component","Gmaps");
 		$gmap = new GmapsComponent();
 		if ($gmap->getInfoLocation($address)) {
@@ -170,6 +194,8 @@ INFO_END;
 		}else {
 			return false;
 		}
+		
 	}
+	
 }
 ?>

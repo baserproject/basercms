@@ -3,17 +3,15 @@
 /**
  * プラグインフックビヘイビア
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behavior
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -25,20 +23,20 @@
 /**
  * プラグインフックビヘイビア
  *
- * @package			baser.models.behavior
+ * @package baser.models.behavior
  */
 class PluginHookBehavior extends ModelBehavior {
 /**
  * プラグインフックオブジェクト
  * 
- * @var		array
+ * @var array
  * @access	public
  */
 	var $pluginHooks = array();
 /**
  * 登録済プラグインフック
  * 
- * @var		array
+ * @var array
  * @access	public
  */
 	var $registerHooks = array();
@@ -113,7 +111,11 @@ class PluginHookBehavior extends ModelBehavior {
 		}
 
 		$plugins = Configure::read('Baser.enablePlugins');
-
+		
+		if(!$plugins) {
+			return;
+		}
+		
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
 		if($plugins) {
@@ -160,7 +162,7 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeFind(&$model, $query) {
-		return $this->executeHook($model, 'beforeFind', true, $query);
+		return $this->executeHook($model, 'beforeFind', $query, $query);
 	}
 /**
  * afterFind
@@ -172,7 +174,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterFind(&$model, $results, $primary) {
+		
 		return $this->executeHook($model, 'afterFind', $results, $results, $primary);
+		
 	}
 /**
  * beforeValidate
@@ -182,7 +186,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeValidate(&$model) {
+		
 		return $this->executeHook($model, 'beforeValidate', true);
+		
 	}
 /**
  * beforeSave
@@ -192,7 +198,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeSave(&$model) {
+		
 		return $this->executeHook($model, 'beforeSave', true);
+		
 	}
 /**
  * afterSave
@@ -202,7 +210,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterSave(&$model, $created) {
+		
 		$this->executeHook($model, 'afterSave', null, $created);
+		
 	}
 /**
  * beforeDelete
@@ -213,7 +223,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function beforeDelete(&$model, $cascade = true) {
+		
 		return $this->executeHook($model, 'beforeDelete', true, $cascade);
+		
 	}
 /**
  * afterDelete
@@ -222,7 +234,9 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function afterDelete(&$model) {
+		
 		$this->executeHook($model, 'afterDelete');
+		
 	}
 /**
  * onError
@@ -232,7 +246,10 @@ class PluginHookBehavior extends ModelBehavior {
  * @access public
  */
 	function onError(&$model, $error) {
+		
 		$this->executeHook($model, 'onError', null, $error);
+		
 	}
 	
 }
+?>

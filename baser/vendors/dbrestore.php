@@ -5,11 +5,9 @@
  *
  * PHP versions 4 and 5
  *
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
  * @link			http://www.e-catchup.jp
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$

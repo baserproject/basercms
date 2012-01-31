@@ -3,17 +3,15 @@
 /**
  * ファイルアップロードビヘイビア
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behaviors
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,37 +19,45 @@
  */
 /**
  * ファイルアップロードビヘイビア
- * @subpackage		baser.models.behaviors
+ * 
+ * @subpackage baser.models.behaviors
  */
 class UploadBehavior extends ModelBehavior {
 /**
  * 保存ディレクトリ
- * @var		string
- * @access	public
+ * 
+ * @var string
+ * @access public
  */
 	var $savePath = '';
 /**
  * 設定
- * @var		array
- * @access	public
+ * 
+ * @var array
+ * @access public
  */
 	var $settings =  null;
 /**
  * 一時ID
+ * 
  * @var string
+ * @access public
  */
 	var $tmpId = null;
 /**
  * Session
+ * 
  * @var Session
+ * @access public
  */
 	var $Session = null;
 /**
  * セットアップ
- * @param	Model	$model
- * @param	array	actsAsの設定
- * @return	void
- * @access	public
+ * 
+ * @param Model	$model
+ * @param array	actsAsの設定
+ * @return void
+ * @access public
  */
 	function setup(&$model, $config = array()) {
 
@@ -67,33 +73,43 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * Before save
- * @param	Model	$model
- * @param
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @param Model $options
+ * @return boolean
+ * @access public
  */
 	function beforeSave(&$model, $options) {
+		
 		return $this->saveFiles($model);
+		
 	}
 /**
  * After save
- * @param	Model	$model
- * @param
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @param Model $created
+ * @param Model $options
+ * @return boolean
+ * @access public
  */
 	function afterSave(&$model, $created, $options) {
+		
 		$this->renameToFieldBasename($model);
 		$model->data = $model->save($model->data, array('callbacks'=>false,'validate'=>false));
+		
 	}
 /**
  * 一時ファイルとして保存する
+ * 
  * @param Model $model
  * @param array $data
  * @param string $tmpId
  * @return boolean
+ * @access public
  */
 	function saveTmpFiles(&$model,$data,$tmpId) {
+		
 		$this->Session->del('Upload');
 		$model->data = $data;
 		$this->tmpId = $tmpId;
@@ -102,12 +118,14 @@ class UploadBehavior extends ModelBehavior {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * ファイル群を保存する
- * @param	Model	$model
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @return boolean
+ * @access public
  */
 	function saveFiles(&$model) {
 
@@ -233,8 +251,11 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * セッションに保存されたファイルデータをファイルとして保存する
+ * 
  * @param Model $model
- * @param string $field
+ * @param string $fieldName
+ * @return void
+ * @access public
  */
 	function moveFileSessionToTmp(&$model,$fieldName) {
 
@@ -277,10 +298,11 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * ファイルを保存する
- * @param	Model	$model
- * @param	array	画像保存対象フィールドの設定
- * @return	ファイル名 Or false
- * @access	public
+ * 
+ * @param Model $model
+ * @param array 画像保存対象フィールドの設定
+ * @return ファイル名 Or false
+ * @access public
  */
 	function saveFile(&$model,$field) {
 
@@ -344,10 +366,11 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * 画像をコピーする
- * @param	Model	$model
- * @param	array	画像保存対象フィールドの設定
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @param array 画像保存対象フィールドの設定
+ * @return boolean
+ * @access public
  */
 	function copyImage(&$model,$field) {
 
@@ -377,13 +400,14 @@ class UploadBehavior extends ModelBehavior {
 /**
  * 画像ファイルをコピーする
  * リサイズ可能
- * @param	Model	$model
- * @param	string	コピー元のパス
- * @param	string	コピー先のパス
- * @param	int		横幅
- * @param	int		高さ
- * @return	boolean
- * @access	public
+ * 
+ * @param Model	$model
+ * @param string コピー元のパス
+ * @param string コピー先のパス
+ * @param int 横幅
+ * @param int 高さ
+ * @return boolean
+ * @access public
  */
 	function resizeImage($source,$distination,$width=0,$height=0,$thumb = false) {
 
@@ -405,24 +429,27 @@ class UploadBehavior extends ModelBehavior {
 /**
  * 画像のサイズを取得
  *
- * @param	string	$path
- * @return	mixed	array / false
- * @access	public
+ * @param string $path
+ * @return mixed array / false
+ * @access public
  */
 	function getImageSize($path) {
+		
 		$imginfo = getimagesize($path);
 		if($imginfo) {
 			return array('width' => $imginfo[0], 'height' => $imginfo[1]);
 		}
 		return false;
+		
 	}
 /**
  * After delete
  * 画像ファイルの削除を行う
  * 削除に失敗してもデータの削除は行う
- * @param	Model	$model
- * @return	void
- * @access	public
+ * 
+ * @param Model $model
+ * @return void
+ * @access public
  */
 	function beforeDelete(&$model) {
 
@@ -432,9 +459,10 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * 画像ファイル群を削除する
- * @param	Model	$model
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @return boolean
+ * @access public
  */
 	function delFiles(&$model,$fieldName = null) {
 
@@ -447,10 +475,11 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * ファイルを削除する
- * @param	Model	$model
- * @param	array	保存対象フィールドの設定
- * @return	boolean
- * @access	public
+ * 
+ * @param Model $model
+ * @param array 保存対象フィールドの設定
+ * @return boolean
+ * @access public
  */
 	function delFile(&$model,$file,$field,$delImagecopy=true) {
 
@@ -491,8 +520,10 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * ファイル名をフィールド値ベースのファイル名に変更する
+
  * @param Model $model
  * @return boolean
+ * @access public
  */
 	function renameToFieldBasename(&$model) {
 
@@ -532,6 +563,7 @@ class UploadBehavior extends ModelBehavior {
 			}
 		}
 		return true;
+		
 	}
 /**
  * フィールドベースのファイル名を取得する
@@ -539,6 +571,8 @@ class UploadBehavior extends ModelBehavior {
  * @param Model $model
  * @param array $setting
  * @param string $ext
+ * @return mixed false / string
+ * @access public
  */
 	function getFieldBasename(&$model,$setting,$ext) {
 
@@ -564,10 +598,12 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する
+ * 
  * @param Model $model
  * @param array $setting
  * @param string $filename
  * @return string
+ * @access public
  */
 	function getFileName(&$model,$setting,$filename) {
 
@@ -585,23 +621,30 @@ class UploadBehavior extends ModelBehavior {
 	}
 /**
  * ファイル名からベースファイル名を取得する
+ * 
  * @param Model $model
  * @param array $setting
  * @param string $filename
  * @return string
+ * @access public
  */
 	function getBasename(&$model,$setting,$filename) {
+		
 		$pattern = "/^".$prefix."(.*?)".$suffix."\.[a-zA-Z0-9]*$/is";
 		if(preg_match($pattern, $filename,$maches)) {
 			return $maches[1];
 		}else {
 			return '';
 		}
+		
 	}
 /**
  * 一意のファイル名を取得する
+ * 
  * @param string $fieldName
  * @param string $fileName
+ * @return string
+ * @access public
  */
 	function getUniqueFileName(&$model, $fieldName, $fileName, $setting = null) {
 
@@ -635,5 +678,6 @@ class UploadBehavior extends ModelBehavior {
 		}
 
 	}
+	
 }
 ?>

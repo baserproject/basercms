@@ -3,54 +3,68 @@
 /**
  * [PUBLISH] ブログ月別アーカイブ
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!isset($view_count)) {
+	$view_count = false;
+}
 if(!isset($count)) {
-	$count = true;
+	$count = 12;
 }
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
 	$id = $blog_content_id;
 }
-if($count) {
-	$actionUrl = '/blog/get_blog_dates/'.$id.'/1';
-} else {
-	$actionUrl = '/blog/get_blog_dates/'.$id;
+$actionUrl = '/blog/get_posted_months/'.$id.'/'.$count;
+if($view_count) {
+	$actionUrl .= '/1';
 }
 $data = $this->requestAction($actionUrl);
-$blogDates = $data['blogDates'];
+$postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
+$baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 ?>
 
-<div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?>">
+<div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
-	<?php if(!empty($blogDates)): ?>
+	<?php if(!empty($postedDates)): ?>
 	<ul>
-		<?php foreach($blogDates as $blogDate): ?>
-			<?php if($count): ?>
-				<?php $title = $blogDate['year'].'年'.$blogDate['month'].'月'.'('.$blogDate['count'].')' ?>
+		<?php foreach($postedDates as $postedDate): ?>
+			<?php if(isset($this->params['named']['year']) && isset($this->params['named']['month']) && $this->params['named']['year'] == $postedDate['year'] && $this->params['named']['month'] == $postedDate['month']): ?>
+				<?php $class = ' class="selected"' ?>
+			<?php elseif($this->params['url']['url'] == $baseCurrentUrl.$postedDate['year'].'/'.$postedDate['month']): ?>
+				<?php $class = ' class="current"' ?>
 			<?php else: ?>
-				<?php $title = $blogDate['year'].'年'.$blogDate['month'].'月' ?>
+				<?php $class = '' ?>
 			<?php endif ?>
-		<li>
-			<?php $baser->link($title, array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives','date',$blogDate['year'],$blogDate['month']),array('prefix'=>true)) ?>
+			<?php if($view_count): ?>
+				<?php $title = $postedDate['year'].'年'.$postedDate['month'].'月'.'('.$postedDate['count'].')' ?>
+			<?php else: ?>
+				<?php $title = $postedDate['year'].'年'.$postedDate['month'].'月' ?>
+			<?php endif ?>
+		<li<?php echo $class ?>>
+			<?php $baser->link($title, array(
+				'admin'			=> false,
+				'plugin'		=> '',
+				'controller'	=> $blogContent['BlogContent']['name'],
+				'action'		=> 'archives',
+				'date', $postedDate['year'], $postedDate['month']
+			)) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

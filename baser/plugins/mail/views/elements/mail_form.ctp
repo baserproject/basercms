@@ -3,28 +3,30 @@
 /**
  * [PUBLISH] フォーム
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								9-5 nagao 3-chome, fukuoka-shi 
- *								fukuoka, Japan 814-0123
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$prefix = '';
+if(Configure::read('AgentPrefix.on')) {
+	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+}
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-<?php echo $mailform->create('Message', array('url' => '/' . $mailContent['MailContent']['name'] . '/confirm')) ?>
+<?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/confirm')) ?>
 <?php else: ?>
-<?php echo $mailform->create('Message', array('url' => '/' . $mailContent['MailContent']['name'] . '/submit')) ?>
+<?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 
@@ -34,7 +36,7 @@
 
 <?php if(!$freezed && $mailContent['MailContent']['auth_captcha']): ?>
 <div class="auth-captcha clearfix">
-	<?php $baser->img('/' . $mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
+	<?php $baser->img($prefix.'/'.$mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
 	<?php echo $mailform->text('Message.auth_captcha') ?><br />
 	&nbsp;画像の文字を入力してください<br clear="all" />
 	<?php echo $mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
