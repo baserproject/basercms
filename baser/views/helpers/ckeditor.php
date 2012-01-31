@@ -273,11 +273,12 @@ class CkeditorHelper extends AppHelper {
 			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
 		}
 		
+		$jscode = "$(document).ready(function(){";
 		if(!$this->inited) {
-			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
+			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
 		} else {
-			$jscode = '';
+			$jscode .= '';
 		}
 		if($styles) {
 			foreach($styles as $key => $style) {
@@ -311,6 +312,7 @@ class CkeditorHelper extends AppHelper {
 			}
 			$jscode .= " });";
 		}
+		$jscode .= " });";
 		return $this->Javascript->codeBlock($jscode);
 		
 	}
