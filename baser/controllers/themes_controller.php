@@ -3,17 +3,15 @@
 /**
  * テーマコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -51,7 +49,9 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form', 'テーマ管理'=>'/admin/themes/index');
+	var $crumbs = array(
+		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
+	);
 /**
  * テーマ一覧
  *
@@ -64,37 +64,53 @@ class ThemesController extends AppController {
 		$path = WWW_ROOT.'themed';
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
+		$datas = array();
 		foreach($files[0] as $themename){
-			if($themename != 'core'){
-				$themeName = $title = $description = $author = $url = $screenshot = '';
-				if(file_exists($path.DS.$themename.DS.'config.php')){
-					include $path.DS.$themename.DS.'config.php';
-				}
-				if(file_exists($path.DS.$themename.DS.'screenshot.png')){
-					$theme['screenshot'] = true;
-				}else{
-					$theme['screenshot'] = false;
-				}
-				$theme['name'] = $themename;
-				$theme['title'] = $title;
-				$theme['description'] = $description;
-				$theme['author'] = $author;
-				$theme['url'] = $url;
-				$theme['version'] = $this->getThemeVersion($theme['name']);
-				$themes[] = $theme;
+			if($themename != 'core' && $themename != '_notes'){
+				$datas[] = $this->_loadThemeInfo($themename);
 			}
 		}
-		$themes[] = array(
+		$datas[] = array(
 			'name'=>'core',
-			'title'=>'BaserCMSコア',
+			'title'=>'baserCMSコア',
 			'version'=>$this->getBaserVersion(),
-			'description'=>'BaserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
+			'description'=>'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
 			'author'=>'basercms',
 			'url'=>'http://basercms.net'
 		);
-		$this->set('themes',$themes);
-		$this->subMenuElements = array('site_configs', 'themes');
-
+		$this->set('datas',$datas);
+		$this->subMenuElements = array('themes');
+		$this->help = 'themes_index';
+		
+	}
+/**
+ * テーマ情報を読み込む
+ * 
+ * @param string $theme 
+ * @return array
+ * @access protected
+ */
+	function _loadThemeInfo($themename) {
+		
+		$path = WWW_ROOT.'themed';
+		$title = $description = $author = $url = $screenshot = '';
+		$theme = array();
+		if(file_exists($path.DS.$themename.DS.'config.php')){
+			include $path.DS.$themename.DS.'config.php';
+		}
+		if(file_exists($path.DS.$themename.DS.'screenshot.png')){
+			$theme['screenshot'] = true;
+		}else{
+			$theme['screenshot'] = false;
+		}
+		$theme['name'] = $themename;
+		$theme['title'] = $title;
+		$theme['description'] = $description;
+		$theme['author'] = $author;
+		$theme['url'] = $url;
+		$theme['version'] = $this->getThemeVersion($theme['name']);
+		return $theme;
+		
 	}
 /**
  * テーマ名編集
@@ -123,7 +139,7 @@ class ThemesController extends AppController {
 			$this->Theme->set($this->data);
 			if($this->Theme->save()){
 				$this->Session->setFlash('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 			}else{
 				$this->Session->setFlash('テーマ情報の変更に失敗しました。入力内容を確認してください。');
 			}
@@ -151,6 +167,7 @@ class ThemesController extends AppController {
 		$this->set('theme',$theme);
 		$this->set('configDisabled',$configDisabled);
 		$this->set('folderDisabled',$folderDisabled);
+		$this->help = 'themes_form';
 		$this->render('form');
 		
 	}
@@ -161,24 +178,105 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_copy($theme){
+	function admin_ajax_copy($theme){
 
 		if(!$theme){
-			$this->notFound();
+			exit();
 		}
-		$path = WWW_ROOT.'themed'.DS.$theme;
-		$newPath = $path.'_copy';
+		$result = $this->_copy($theme);
+		if($result) {
+			$this->set('data', $result);
+		} else {
+			exit();
+		}
+
+	}
+/**
+ * テーマをコピーする
+ *
+ * @param string $theme
+ * @return boolean
+ * @access public
+ */
+	function _copy($theme) {
+		
+		$basePath = WWW_ROOT.'themed'.DS;
+		$newTheme = $theme.'_copy';
 		while(true){
-			if(!is_dir($newPath)){
+			if(!is_dir($basePath.$newTheme)){
 				break;
 			}
-			$newPath .= '_copy';
+			$newTheme .= '_copy';
 		}
 		$folder = new Folder();
-		$folder->copy(array('from'=>$path,'to'=>$newPath,'mode'=>0777,'skip'=>array('_notes')));
-		$this->Session->setFlash('テーマ「'.$theme.'」をコピーしました。');
-		$this->redirect(array('action'=>'index'));
+		if($folder->copy(array('from'=>$basePath.$theme,'to'=>$basePath.$newTheme,'mode'=>0777,'skip'=>array('_notes')))) {
+			$this->Theme->saveDblog('テーマ「'.$theme.'」をコピーしました。');
+			return $this->_loadThemeInfo($newTheme);
+		} else {
+			return false;
+		}
+		
+	}
+	/**
+ * テーマを削除する　(ajax)
+ *
+ * @param string $theme
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($theme){
 
+		if(!$theme){
+			exit();
+		}
+		if($this->_del($theme)) {
+			clearViewCache();
+			exit(true);
+		}
+		exit();
+		
+	}
+/**
+ * 一括削除
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected
+ */
+	function _batch_del($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$this->_del($id);
+			}
+		}
+		clearViewCache();
+		return true;
+		
+	}
+/**
+ * データを削除する
+ * 
+ * @param int $id
+ * @return boolean 
+ * @access protected
+ */
+	function _del($theme) {
+		
+		$path = WWW_ROOT.'themed'.DS.$theme;
+		$folder = new Folder();
+		if($folder->delete($path)) {
+			$siteConfig = array('SiteConfig'=>$this->siteConfigs);
+			if($theme == $siteConfig['SiteConfig']['theme']){
+				$siteConfig['SiteConfig']['theme'] = '';
+				$SiteConfig = ClassRegistry::getObject('SiteConfig');
+				$SiteConfig->saveKeyValue($siteConfig);
+			}
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 /**
  * テーマを削除する
@@ -203,7 +301,7 @@ class ThemesController extends AppController {
 		}
 		clearViewCache();
 		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -227,7 +325,7 @@ class ThemesController extends AppController {
 		} else {
 			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		}
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 		
 	}
 

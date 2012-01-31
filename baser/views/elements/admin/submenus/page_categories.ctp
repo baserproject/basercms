@@ -5,15 +5,13 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi 
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 1.7.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,17 +19,15 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>ページカテゴリー<br />
-		メニュー</h2>
-	<ul>
-		<li>
-			<?php $baser->link('一覧を表示する',array('controller'=>'page_categories','action'=>'admin_index')) ?>
-		</li>
+
+<tr>
+	<th>固定ページカテゴリー管理メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('一覧を表示する', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
 <?php if($newCatAddable): ?>
-		<li>
-			<?php $baser->link('新規に登録する',array('controller'=>'page_categories','action'=>'admin_add')) ?>
-		</li>
+			<li><?php $baser->link('新規に登録する', array('controller'=> 'page_categories', 'action' => 'add')) ?></li>
 <?php endif ?>
-	</ul>
-</div>
+		</ul>
+	</td>
+</tr>

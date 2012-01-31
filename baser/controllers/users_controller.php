@@ -3,27 +3,20 @@
 /**
  * ユーザーコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::import('Helper','HtmlEx',true,BASER_HELPERS);
-App::import('Helper','FormEx',true,BASER_HELPERS);
 /**
  * ユーザーコントローラー
  *
@@ -52,7 +45,7 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('HtmlEx','time','FormEx');
+	var $helpers = array('HtmlEx','TimeEx','FormEx');
 /**
  * コンポーネント
  *
@@ -73,7 +66,10 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('ユーザー管理'=>'/admin/users/index');
+	var $crumbs = array(
+		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
+		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index'))
+	);
 /**
  * beforeFilter
  *
@@ -90,33 +86,17 @@ class UsersController extends AppController {
 					$this->params['prefix'].'_logout', 
 					$this->params['prefix'].'_login_exec', 
 					$this->params['prefix'].'_reset_password',
+					$this->params['prefix'].'_ajax_login',
 					'admin_login_exec',
 					'admin_reset_password'
 			);
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
-
+		
 		parent::beforeFilter();
 
-		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'auth_prefix_error');
+		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
 
-	}
-/**
- * 許可されていない認証プレフィックスにアクセスした場合に呼び出される
- * セッションメッセージを設定してトップページにリダイレクトする
- * router.phpで定義
- *
- * @return void
- * @access public
- */
-	function admin_auth_prefix_error() {
-		
-		$this->Session->setFlash(
-				'ログインしているユーザーでは指定された領域にはアクセスできません。<br />'.
-				'一度ログアウトを行い、許可されているユーザーでログインしなおしてください。'
-		);
-		$this->redirect('/');
-		
 	}
 /**
  * ログイン処理を行う
@@ -185,10 +165,47 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->navis = array();
+		$this->crumbs = array();
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
 
+	}
+/**
+ * [ADMIN] 管理者ログイン画面（Ajax）
+ *
+ * @return void
+ * @access public
+ */
+	function admin_ajax_login() {
+		
+		if(!$this->AuthEx->login($this->data)) {
+			exit();
+		}
+		
+		$user = $this->AuthEx->user();
+		$userModel = $this->AuthEx->userModel;
+		
+		if($this->data) {
+			if ($user) {
+				if (!empty($this->data[$userModel]['saved'])) {
+					if(Configure::read('AgentPrefix.currentAlias') != 'mobile') {
+						$this->setAuthCookie($this->data);
+					} else {
+						$this->AuthEx->saveSerial();
+					}
+					unset($this->data[$userModel]['save']);
+				}else {
+					$this->Cookie->destroy();
+				}
+				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+			}
+		}
+
+		if ($user) {
+			exit(Router::url($this->AuthEx->redirect()));
+		}
+		exit();
+		
 	}
 /**
  * 認証クッキーをセットする
@@ -218,7 +235,7 @@ class UsersController extends AppController {
 		$this->AuthEx->logout();
 		$this->Cookie->del('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
-		$this->redirect(array($this->params['prefix']=>true, 'action'=>'login'));
+		$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
 
 	}
 /**
@@ -241,13 +258,20 @@ class UsersController extends AppController {
 		);
 		$dbDatas = $this->paginate();
 
-		/* 表示設定 */
 		if($dbDatas) {
 			$this->set('users',$dbDatas);
 		}
+		
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+		
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー一覧';
-
+		$this->search = 'users_index';
+		$this->help = 'users_index';
+		
 	}
 /**
  * ページ一覧用の検索条件を生成する
@@ -296,7 +320,7 @@ class UsersController extends AppController {
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
-				$this->redirect(array('action'=>'edit', $this->User->getInsertID()));
+				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -316,6 +340,7 @@ class UsersController extends AppController {
 		$this->set('editable', true);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
+		$this->help = 'users_form';
 		$this->render('form');
 
 	}
@@ -331,7 +356,7 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		$selfUpdate = false;
@@ -369,7 +394,7 @@ class UsersController extends AppController {
 
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->redirect(array('action'=>'edit', $id));
+				$this->redirect(array('action' => 'edit', $id));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -394,10 +419,43 @@ class UsersController extends AppController {
 		$this->set('selfUpdate', $selfUpdate);
 		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
+		$this->help = 'users_form';
 		$this->render('form');
 
 	}
 /**
+ * [ADMIN] ユーザー情報削除　(ajax)
+ *
+ * @param int user_id
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		// 最後のユーザーの場合は削除はできない
+		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
+				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
+			exit();
+		}
+
+		// メッセージ用にデータを取得
+		$user = $this->User->read(null, $id);
+
+		/* 削除処理 */
+		if($this->User->del($id)) {
+			$this->User->saveDbLog('ユーザー「'.$user['User']['name'].'」を削除しました。');
+			exit(true);
+		}
+
+		exit();
+
+	}
+	/**
  * [ADMIN] ユーザー情報削除
  *
  * @param int user_id
@@ -409,14 +467,14 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
 				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
 			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -430,7 +488,7 @@ class UsersController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -442,7 +500,6 @@ class UsersController extends AppController {
  */
 	function admin_reset_password () {
 
-		$this->layout = 'popup';
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->AuthEx->userModel;
 		if($this->data) {

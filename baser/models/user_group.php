@@ -3,17 +3,15 @@
 /**
  * ユーザーグループモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -157,5 +155,46 @@ class UserGroup extends AppModel {
 		}
 		
 	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data, $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
+		}
+		$data['UserGroup']['name'] .= '_copy';
+		$data['UserGroup']['title'] .= '_copy';
+		
+		unset($data['UserGroup']['id']);
+		unset($data['UserGroup']['modified']);
+		unset($data['UserGroup']['created']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['UserGroup']['id'] = $this->getInsertID();
+			if($recursive) {
+				$permissions = $this->Permission->find('all', array('conditions' => array('Permission.user_group_id' => $id), 'recursive' => -1));
+				foreach($permissions as $permission) {
+					$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
+					$this->Permission->copy(null, $permission);
+				}
+			}
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data, $recursive);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
 }
 ?>

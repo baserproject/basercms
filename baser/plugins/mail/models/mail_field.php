@@ -3,17 +3,15 @@
 /**
  * メールフィールドモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -183,6 +181,43 @@ class MailField extends MailAppModel {
 			return true;
 		}
 
+	}
+/**
+ * フィールドデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data = array(), $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+		}
+		
+		if($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
+			$data['MailField']['name'] .= '_copy';
+			$data['MailField']['field_name'] .= '_copy';
+			return $this->copy(null, $data);	// 再帰処理
+		}
+		
+		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		$data['MailField']['sort'] = $this->getMax('sort') + 1;
+		$data['MailField']['use_field'] = false;
+		
+		unset($data['MailField']['id']);
+		unset($data['MailField']['modified']);
+		unset($data['MailField']['created']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['MailField']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			return false;
+		}
+		
 	}
 	
 }

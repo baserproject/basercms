@@ -3,17 +3,15 @@
 /**
  * ページモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -643,7 +641,7 @@ class Page extends AppModel {
 		$tag .= '<?php $baser->setTitle(\''.$title.'\') ?>'."\n";
 		$tag .= '<?php $baser->setDescription(\''.$description.'\') ?>'."\n";
 		if($id) {
-			$tag .= '<?php $baser->editPage('.$id.') ?>'."\n";
+			$tag .= '<?php $baser->setPageEditLink('.$id.') ?>'."\n";
 		}
 		$tag .= '<!-- BaserPageTagEnd -->'."\n";
 		return $tag . $contents;
@@ -1088,6 +1086,76 @@ class Page extends AppModel {
 			$this->_pages = Set::extract('/Page/url', $pages);
 		}
 		return in_array($url,$this->_pages);
+		
+	}
+/**
+ * Removes record for given ID. If no ID is given, the current ID is used. Returns true on success.
+ *
+ * @param mixed $id ID of record to delete
+ * @param boolean $cascade Set to true to delete records that depend on this record
+ * @return boolean True on success
+ * @access public
+ * @link http://book.cakephp.org/view/690/del
+ */
+	function del($id = null, $cascade = true) {
+		
+		// メッセージ用にデータを取得
+		$page = $this->read(null, $id);
+		
+		/* 削除処理 */
+		if(parent::del($id, $cascade)) {
+			
+			// ページテンプレートを削除
+			$this->delFile($page);
+			
+			// 公開状態だった場合、サイトマップのキャッシュを削除
+			// 公開期間のチェックは行わず確実に削除
+			if($page['Page']['status']) {
+				clearViewCache();
+			}
+			return true;
+			
+		} else {
+			
+			return false;
+			
+		}
+		
+	}
+/**
+ * ページデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed page Or false
+ */
+	function copy($id = null, $data = array()) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
+		}
+		$data['Page']['name'] .= '_copy';
+		if(!empty($_SESSION['Auth']['User'])) {
+			$data['Page']['author_id'] = $_SESSION['Auth']['User']['id'];
+		}
+		$data['Page']['sort'] = $this->getMax('sort')+1;
+		$data['Page']['status'] = false;
+		$data['Page']['url'] = $this->getPageUrl($data);
+		unset($data['Page']['id']);
+		unset($data['Page']['created']);
+		unset($data['Page']['modified']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data);
+			} else {
+				return false;
+			}
+		}
 		
 	}
 	

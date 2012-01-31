@@ -3,17 +3,15 @@
 /**
  * [ADMIN] フィード設定共通メニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi 
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,14 +19,16 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>フィード設定<br />
-		共通メニュー</h2>
-	<ul>
-		<li><?php $baser->link('フィード設定一覧',array('action' => 'index')) ?></li>
-		<li><?php $baser->link('新規フィード設定を登録',array('action' => 'add')) ?></li>
+
+<tr>
+	<th>フィード設定共通メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('フィード設定一覧',array('action' => 'index')) ?></li>
+			<li><?php $baser->link('新規フィード設定を登録',array('action' => 'add')) ?></li>
 <?php if($this->params['controller'] == 'feed_configs' && $this->action == 'admin_index'): ?>
-		<li><?php $baser->link('キャッシュを削除', array('action' => 'delete_cache'), null, 'フィードのキャッシュを削除します。いいですか？') ?></li>
+			<li><?php $baser->link('キャッシュを削除', array('action' => 'delete_cache'), null, 'フィードのキャッシュを削除します。いいですか？') ?></li>
 <?php endif ?>
-	</ul>
-</div>
+		</ul>
+	</td>
+</tr>

@@ -3,17 +3,15 @@
 /**
  * ブログコンテンツモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -78,7 +76,6 @@ class BlogContent extends BlogAppModel {
 				array(	'rule'		=> array('notInList', array('blog')),
 						'message'	=> 'ブログアカウント名に「blog」は利用できません。'),
 				array(	'rule'		=> array('isUnique'),
-						'on'		=> 'create',
 						'message'	=> '入力されたブログアカウント名は既に使用されています。'),
 				array(	'rule'		=> array('maxLength', 50),
 						'message'	=> 'ブログアカウント名は50文字以内で入力してください。')
@@ -196,6 +193,36 @@ class BlogContent extends BlogAppModel {
 
 		return $_data;
 
+	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed BlogContent Or false
+ */
+	function copy($id, $data) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
+		}
+		$data['BlogContent']['name'] .= '_copy';
+		$data['BlogContent']['title'] .= '_copy';
+		$data['BlogContent']['status'] = false;
+		unset($data['BlogContent']['id']);
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['BlogContent']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data);
+			} else {
+				return false;
+			}
+		}
+		
 	}
 	
 }

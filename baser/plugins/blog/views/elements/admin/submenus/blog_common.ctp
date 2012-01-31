@@ -3,17 +3,15 @@
 /**
  * [ADMIN] ブログ共通メニュー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi 
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,12 +19,15 @@
  */
 ?>
 
-<div class="side-navi">
-	<h2>ブログプラグイン<br />共通メニュー</h2>
-	<ul>
-		<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
-		<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
-		<li><?php $baser->link('タグ一覧',array('controller'=>'blog_tags','action'=>'index')) ?></li>
-		<li><?php $baser->link('新規タグを登録',array('controller'=>'blog_tags','action'=>'add')) ?></li>
-	</ul>
-</div>
+
+<tr>
+	<th>ブログプラグイン共通メニュー</th>
+	<td>
+		<ul>
+			<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
+			<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
+			<li><?php $baser->link('タグ一覧',array('controller'=>'blog_tags','action'=>'index')) ?></li>
+			<li><?php $baser->link('新規タグを登録',array('controller'=>'blog_tags','action'=>'add')) ?></li>
+		</ul>
+	</td>
+</tr>

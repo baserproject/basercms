@@ -3,43 +3,25 @@
 /**
  * [ADMIN] テーマフォルダ登録・編集
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-<h2><?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('img_icon_help_admin.gif',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?></h2>
-
-<!-- help -->
-<div class="help-box corner10 display-none" id="helpAdminBody">
-	<h4>ユーザーヘルプ</h4>
-	<p>テーマファイルを分類する為のフォルダの作成・編集・削除が行えます。</p>
-	<ul>
-		<li>フォルダを作成するには、フォルダ名を半角で入力して「作成」ボタンをクリックします。</li>
-		<li>フォルダ名を編集するには、新しいフォルダ名を半角で入力して「更新」ボタンをクリックします。</li>
-		<li>フォルダを削除するには、「削除」ボタンをクリックします。フォルダ内のファイルは全て削除されるので注意が必要です。</li>
-		<li>フォルダごと現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをクリックします。（core テーマのみ）</li>
-	</ul>
-</div>
-
 <!-- current -->
-<p><strong>現在の位置：<?php echo $currentPath ?></strong></p>
-
-<p><small><span class="required">*</span> 印の項目は必須です。</small></p>
+<div class="em-box align-left">
+	現在の位置：<?php echo $currentPath ?>
+</div>
 
 <?php if($this->action == 'admin_add_folder'): ?>
 <?php echo $formEx->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'add_folder', $theme, $type, $path))) ?>
@@ -51,26 +33,27 @@
 <?php echo $formEx->input('ThemeFolder.pastname', array('type' => 'hidden')) ?>
 
 <!-- form -->
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
-	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('ThemeFolder.name', 'フォルダ名') ?></th>
-		<td class="col-input">
-<?php if($this->action != 'admin_view_folder'): ?>
-			<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-			<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpName', 'class' => 'help', 'alt' => 'ヘルプ')) ?>
-			<div id="helptextName" class="helptext">
-				<ul>
-					<li>フォルダ名は半角で入力してください。</li>
-				</ul>
-			</div>
-			<?php echo $formEx->error('ThemeFolder.name') ?>
-<?php else: ?>
-			<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'readonly' => 'readonly')) ?>
-<?php endif ?>
-		</td>
-	</tr>
-</table>
-
+<div class="section">
+	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
+		<tr>
+			<th class="col-head"><?php echo $formEx->label('ThemeFolder.name', 'フォルダ名') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+	<?php if($this->action != 'admin_view_folder'): ?>
+				<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div id="helptextName" class="helptext">
+					<ul>
+						<li>フォルダ名は半角で入力してください。</li>
+					</ul>
+				</div>
+				<?php echo $formEx->error('ThemeFolder.name') ?>
+	<?php else: ?>
+				<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'readonly' => 'readonly')) ?>
+	<?php endif ?>
+			</td>
+		</tr>
+	</table>
+</div>
 <div class="submit">
 <?php if($this->action == 'admin_add_folder'): ?>
 	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, $path), array('class' => 'btn-gray button')); ?>
@@ -78,10 +61,10 @@
 	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->action == 'admin_add_folder'): ?>
-	<?php echo $formEx->submit('作　成', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $formEx->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit_folder'): ?>
-	<?php echo $formEx->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削　除',
+	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php $baser->link('削除',
 			array('action'=>'del', $theme, $type, $path),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $formEx->value('ThemeFolder.name')),

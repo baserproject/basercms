@@ -1,114 +1,113 @@
 @charset "UTF-8";
 /* SVN FILE: $Id$ */
 /**
- * タグの基本設定
+ * タグ・クラスの基本設定
  *
- * PHP versions 4 and 5
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
- *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
- * @since			Baser v 0.1.0
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 1.7.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
-/* 全体
------------------------------------------------ */
+
+/* ==================================================================== */
+/*    T A G S
+/* ==================================================================== */
+
+
 * {
 	margin:0px;
 	padding:0px;
 }
+html {
+	color: #000;
+	background: #FFF;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+select,
+p,
+blockquote,
+th,
+td {
+	margin: 0;
+	padding: 0;
+}
 body {
 	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
-	text-align: center;
-	font-size:small;
-	color:#333333;
+	text-align:center;
 }
-body.normal {
-	background:url(images/bg_body.jpg) repeat-x left top;
-	background-color:#EDF8C9;/*background-color:#E19284;*/
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
-pre {
-	background-color:#FFFFFF;
-	text-align:left;
-	border-top:1px solid #cccccc;
-	border-bottom:1px solid #cccccc;
-	padding:10px 20px;
-}
-/* 見出し
------------------------------------------------ */
-h1 {
-	margin:0px 0px;
-	color:#FFFFFF;
-	text-align:right;
-	font-size:90%;
-	font-weight:normal;
-	line-height:100%;
-	padding-top:10px;
-	padding-bottom:10px;
-	font-family:Arial, Helvetica, sans-serif;
-}
-h2 {
-	margin:10px 0px;
-}
-h3 {
-	margin:10px 0px;
-}
-h4 {
-	margin:10px 0px;
-}
-h5 {
-	margin:10px 0px;
-}
-h6 {
-	margin:10px 0px;
-}
-h7 {
-	margin:10px 0px;
-}
-/* 段落
------------------------------------------------ */
 p {
-	margin:0px;
 	line-height: 150%;
 }
-/* 画像
------------------------------------------------ */
+fieldset,
 img {
-	border: none;
-	vertical-align:bottom;	/* IEで画像の下にできる隙間をつめる為に必要 */
+	border: 0;
+}
+img {
 	margin:auto;
 }
-/* リンク
------------------------------------------------ */
-:link {
-	color:#688A00;
+address,
+button,
+caption,
+cite,
+code,
+dfn,
+em,
+input,
+optgroup,
+option,
+select,
+strong,
+textarea,
+th,
+var {
+    font:inherit;
 }
-:visited {
-	color: #669900;
+small {
+	color:#999;
 }
-a:hover {
-	color:#CC3300;
-	text-decoration: underline;
+strong {
 }
-a:active {
-	color: #FF9900;
+em {
 }
-/* リスト
------------------------------------------------ */
+del,
+ins {
+	text-decoration: none;
+}
 ul,
 dl {
-	margin:0;
-	padding:0;
 	line-height:normal;
-	list-style-type:none;
 }
 dl {
 }
@@ -116,34 +115,82 @@ dt {
 }
 dd {
 }
-/* 強調
------------------------------------------------ */
-strong {
+li {
+	/*zoom: 1;*/
+	list-style: none;
 }
-em {
+li a {
+	zoom: 1;
 }
-/* テーブル
------------------------------------------------ */
-table {
-	border-collapse: collapse;
+caption,
+th {
+	text-align: left;
 }
-/* フォームパーツ
------------------------------------------------ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before,
+q:after {
+	content: '';
+}
+abbr,
+acronym {
+	border: 0;
+	font-variant: normal;
+}
+sup {
+	vertical-align: baseline;
+}
+sub {
+	vertical-align: baseline;
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
+}
+pre {
+	background-color:#F3F3F3;
+	text-align:left;
+	padding:10px 20px;
+	margin-bottom: 20px;
+	overflow:auto;
+	border:1px solid #E2E2E2;
+}
 form {
 	display:inline;
 }
 input, textarea, select, option {
 	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
 }
-input, textarea, select {
+input[type=text], textarea, select, input[type=password] {
 	margin:3px 2px;
 	padding: 3px 1px;
-	font-size:1.0em;
+	border:1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color:#fff;
+}
+input[type=checkbox] {
+	vertical-align: middle;
 }
 input[type=submit],
 input[type=reset],
 input[type=button] {
 	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+}
+input[type=text], textarea, input[type=password] {
+	font-size: 1.4em;
+	padding: 3px 3px;
+}
+select {
+	font-size: 1.2em;
 }
 select {
 	padding: 1px;
@@ -151,8 +198,209 @@ select {
 optgroup option{
 	padding-left:20px;
 }
-/* その他
+
+
+/* ==================================================================== */
+/*    C L A S S E S
+/* ==================================================================== */
+
+
+/* display
 ----------------------------------------------- */
-small {
-	color:#AA8800;
+
+.display-none {
+	display:none;
+}
+
+/* text
+----------------------------------------------- */
+
+.weight-normal {
+	font-weight: normal!important;
+}
+.weight-bold {
+	font-weight:bold!important;
+}
+.size-small {
+	font-size:small!important;
+}
+.size-smaller {
+	font-size: x-small!important;
+}
+.size-medium {
+	font-size:medium!important;
+}
+.size-large {
+	font-size:large!important;
+}
+.size-larger {
+	font-size: x-large!important;
+}
+.align-left {
+	text-align:left!important;
+}
+.align-right {
+	text-align:right!important;
+}
+.align-center {
+	text-align:center!important;
+}
+
+/* float
+----------------------------------------------- */
+
+.float-left {
+	float:left;
+}
+.float-right {
+	float:right;
+}
+.img-right {
+	float:right;
+	margin-left:10px;
+	margin-bottom:10px;
+}
+.img-left {
+	float:left;
+	margin-right:10px;
+	margin-bottom:10px;
+}
+
+/* clear
+----------------------------------------------- */
+
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+
+/* 縦方向中央揃え
+----------------------------------------------- */
+
+.vertical-middle{
+		position: relative!important;
+}
+.vertical-middle .inner{
+		position: absolute!important;
+		top: 50%!important;
+		margin-top: -1em!important;
+}
+		
+/* BaserCMS parts
+----------------------------------------------- */
+
+.edit-link {
+	margin-bottom:10px;
+	text-align:right;
+	font-size: 12px;
+}
+.edit-link a{
+	border:1px solid #1C98D4;
+	color:#1C98D4;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.edit-link a:hover{
+	color:#1C98D4;
+	text-decoration:underline;
+}
+
+/* CakePHP parts
+----------------------------------------------- */
+
+table.cake-sql-log {
+	width:90%;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	color:#333;
+	background-color: #fff;
+	clear:both;
+	padding: 0;
+	margin: 0 0 1em 0;
+	white-space: normal;
+	border-collapse:separate;
+	margin:20px auto;
+}
+table.cake-sql-log caption {
+	font-weight:bold;
+	text-align:center;
+}
+table.cake-sql-log th {
+	background-color: #e2e2e2;
+	padding:4px 8px;
+	font-weight:bold;
+	text-align:center;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #FFFFFF;
+	border-right-color: #666;
+	border-bottom-color: #666;
+	border-left-color: #FFFFFF;
+	font-size:0.8em;
+}
+table.cake-sql-log tr td {
+	background-color: #F7F7F7;
+	padding:6px 8px;
+	vertical-align:top;
+	text-align: left;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ccc;
+	border-bottom-color: #ccc;
+	font-size:0.8em;
+}
+.error-message {
+	color:#C30;
+	background: url(images/warning.png) no-repeat left center;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
+}
+.required {
+	color:#C30;
+	font-size:16px;
+}
+.form-error {
+	background-color:#FCF5EB;
+}
+.message {
+	color:#F30;
+	font-weight:bold;
+	margin:20px;
+}
+.error {
+	color:#C30;
+}
+.error em {
+	color:#06C;
+	font-style:normal;
+	font-weight:bold;
+}
+.submit {
+	text-align:center;
+}
+.help{
+	cursor: pointer;
+	vertical-align:middle;
 }

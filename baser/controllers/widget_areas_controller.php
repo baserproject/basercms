@@ -3,17 +3,15 @@
 /**
  * ウィジェットエリアコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -55,14 +53,22 @@ class WidgetAreasController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form','ウィジェットエリア管理'=>'/admin/widget_areas/index');
+	var $crumbs = array(
+		array('name' => 'ウィジェットエリア管理', 'url' => array('controller' => 'widget_areas', 'action' => 'index'))
+	);
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array('site_configs','widget_areas');
+	var $subMenuElements = array('widget_areas');
+/**
+ * beforeFilter
+ * 
+ * @return void
+ * @access public
+ */
 	function beforeFilter() {
 		parent::beforeFilter();
 		$this->Security->validatePost = false;
@@ -87,6 +93,7 @@ class WidgetAreasController extends AppController {
 			}
 		}
 		$this->set('widgetAreas',$widgetAreas);
+		$this->help = 'widget_areas_index';
 
 	}
 /**
@@ -103,11 +110,12 @@ class WidgetAreasController extends AppController {
 			$this->WidgetArea->set($this->data);
 			if($this->WidgetArea->save()){
 				$this->Session->setFlash('新しいウィジェットエリアを保存しました。');
-				$this->redirect(array('action'=>'edit',$this->WidgetArea->getInsertID()));
+				$this->redirect(array('action' => 'edit', $this->WidgetArea->getInsertID()));
 			}else{
 				$this->Session->setFlash('新しいウィジェットエリアの保存に失敗しました。');
 			}
 		}
+		$this->help = 'widget_areas_form';
 		$this->render('form');
 		
 	}
@@ -165,11 +173,58 @@ class WidgetAreasController extends AppController {
 		}
 
 		$this->set('widgetInfos',$widgetInfos);
-		
+		$this->help = 'widget_areas_form';
 		$this->render('form');
 		
 	}
 /**
+ * [ADMIN] 削除処理　(ajax)
+ *
+ * @param int ID
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		// メッセージ用にデータを取得
+		$post = $this->WidgetArea->read(null, $id);
+
+		/* 削除処理 */
+		if($this->WidgetArea->del($id)) {
+			$message = 'ウィジェットエリア「'.$post['WidgetArea']['name'].'」 を削除しました。';
+			exit(true);
+		}
+		clearViewCache('element_widget','');
+		exit();
+
+	}
+/**
+ * 一括削除
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected
+ */
+	function _batch_del($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$data = $this->WidgetArea->read(null, $id);
+				if($this->WidgetArea->del($id)) {
+					$this->WidgetArea->saveDbLog('ウィジェットエリア: '.$data['WidgetArea']['name'].' を削除しました。');
+				}
+			}
+			clearViewCache('element_widget','');
+		}
+		return true;
+		
+	}
+	/**
  * [ADMIN] 削除処理
  *
  * @param int ID
@@ -181,7 +236,7 @@ class WidgetAreasController extends AppController {
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -196,7 +251,7 @@ class WidgetAreasController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 		clearViewCache('element_widget','');
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**

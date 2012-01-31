@@ -3,17 +3,15 @@
 /**
  * Helper 拡張クラス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision: 143 $
  * @modifiedby		$LastChangedBy: ryuring $
  * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
@@ -229,8 +227,26 @@ class BaserAppHelper extends Helper {
  * @return string  Full translated URL with base path.
  */
 	function url($url = null, $full = false) {
+		
 		$url = addSessionId($url);
+		
+		//======================================================================
+		// FormHelper::createで id をキーとして使うので、ルーターでマッチしない場合がある。
+		// id というキー名を除外する事で対応。
+		//======================================================================
+		if(is_array($url) && isset($url['id'])) {
+			array_push($url, $url['id']);
+			unset($url['id']);
+		}
+		
+		if (!isset($url['admin']) && !empty($this->params['admin'])) {
+			$url['admin'] = true;
+		} elseif (isset($url['admin']) && !$url['admin']) {
+			unset($url['admin']);
+		}
+			
 		return parent::url($url, $full);
+		
 	}
 }
 ?>

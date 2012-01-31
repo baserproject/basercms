@@ -4,7 +4,6 @@
  */
 $html->css('jquery-ui/ui.all', null, null, false);
 $baser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
-$mail->indexFields($mailContent['MailContent']['id']);
 ?>
 
 <h2 class="contents-head">

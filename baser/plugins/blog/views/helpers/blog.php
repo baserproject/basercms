@@ -3,17 +3,15 @@
 /**
  * ブログヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -443,16 +441,17 @@ class BlogHelper extends AppHelper {
 		
 	}
 /**
- * ブログ編集ページへのリンクを出力
- * 
+ * ブログ編集ページへのリンクを出力【非推奨】
+ *
  * @param string $id
  * @return void
  * @access public
+ * @deprecated ツールバーに移行
  */
 	function editPost($blogContentId,$blogPostId) {
 		
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'blog','controller'=>'blog_posts','action'=>'edit',$blogContentId,$blogPostId),array('target'=>'_blank')).'</div>';
+			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
 		}
 		
 	}

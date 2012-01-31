@@ -49,6 +49,6 @@
 	
 </div>
 
-<?php echo $cakeDebug; ?>
+<?php $baser->func() ?>
 </body>
 </html>

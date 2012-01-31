@@ -1,26 +1,24 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * ページコントローラー
+ * 固定ページコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
- * ページコントローラー
+ * 固定ページコントローラー
  *
  * @package cake
  * @subpackage cake.baser.controllers
@@ -68,7 +66,7 @@ class PagesController extends AppController {
 		$this->AuthEx->allow('display','mobile_display', 'smartphone_display');
 
 		if(!empty($this->params['admin'])){
-			$this->navis = array('ページ管理'=>'/admin/pages/index');
+			$this->crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
 		}
 		
 		$user = $this->AuthEx->user();
@@ -92,14 +90,9 @@ class PagesController extends AppController {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0),
 							'Page' => array('page_category_id' => '', 'page_type' => 1));
 		$this->setViewConditions('Page', array('default' => $default));
-		if($this->Session->check('PagesAdminIndex.named.sortmode')) {
-			$sortmode = $this->Session->read('PagesAdminIndex.named.sortmode');
-		}else {
-			$sortmode = 0;
-		}
 
 		// 並び替えモードの場合は、強制的にsortフィールドで並び替える
-		if($sortmode) {
+		if($this->passedArgs['sortmode']) {
 			$this->passedArgs['sort'] = 'sort';
 			$this->passedArgs['direction'] = 'asc';
 		}
@@ -113,7 +106,16 @@ class PagesController extends AppController {
 				'order' =>'Page.sort',
 				'limit' => $this->passedArgs['num']
 		);
-
+		$datas = $this->paginate('Page');
+		$this->set('datas',$datas);
+		
+		$this->_setAdminIndexViewData();
+		
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+		
 		/* 表示設定 */
 		if(!isset($this->data['Page']['page_type'])) {
 			$this->data['Page']['page_type'] = 1;
@@ -123,15 +125,18 @@ class PagesController extends AppController {
 		if($_pageCategories) {
 			$pageCategories += $_pageCategories;
 		}
+
+		$this->set('search', 'pages_index');
+		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('pageCategories', $pageCategories);
-		$this->set('sortmode', $sortmode);
-		$this->set('dbDatas',$this->paginate('Page'));
 		$this->subMenuElements = array('pages','page_categories');
-		$this->pageTitle = 'ページ一覧';
+		$this->pageTitle = '固定ページ一覧';
+		$this->search = 'pages_index';
+		$this->help = 'pages_index';
 
 	}
 /**
- * [ADMIN] ページ情報登録
+ * [ADMIN] 固定ページ情報登録
  *
  * @return void
  * @access public
@@ -161,7 +166,7 @@ class PagesController extends AppController {
 					}
 					
 					// 完了メッセージ
-					$message = 'ページ「'.$this->data['Page']['name'].'」を追加しました。';
+					$message = '固定ページ「'.$this->data['Page']['name'].'」を追加しました。';
 					$this->Session->setFlash($message);
 					$this->Page->saveDbLog($message);
 					
@@ -170,7 +175,7 @@ class PagesController extends AppController {
 					
 					// 編集画面にリダイレクト
 					$id = $this->Page->getInsertID();
-					$this->redirect('/admin/pages/edit/'.$id);
+					$this->redirect(array('controller' => 'pages', 'action' => 'edit', $id));
 					
 				}else {
 					
@@ -194,16 +199,17 @@ class PagesController extends AppController {
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true));
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
-		$this->pageTitle = '新規ページ登録';
+		$this->pageTitle = '新規固定ページ登録';
+		$this->help = 'pages_form';
 		$this->render('form');
 
 	}
 /**
- * [ADMIN] ページ情報編集
+ * [ADMIN] 固定ページ情報編集
  *
  * @param int $id (page_id)
  * @return void
@@ -214,7 +220,7 @@ class PagesController extends AppController {
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
@@ -258,15 +264,15 @@ class PagesController extends AppController {
 					}
 					
 					// 完了メッセージ
-					$message = 'ページ「'.$this->data['Page']['name'].'」を更新しました。';
+					$message = '固定ページ「'.$this->data['Page']['name'].'」を更新しました。';
 					$this->Session->setFlash($message);
 					$this->Page->saveDbLog($message);
 					
 					// afterPageEdit
 					$this->executeHook('afterPageEdit');
 					
-					// 同ページへリダイレクト
-					$this->redirect('/admin/pages/edit/'.$id);
+					// 同固定ページへリダイレクト
+					$this->redirect(array('action' => 'edit', $id));
 					
 				}else {
 					
@@ -293,20 +299,31 @@ class PagesController extends AppController {
 			'empty'			=> '指定しない'
 		));
 		
+		$url = $this->convertViewUrl($this->data['Page']['url']);
+		
+		if($this->data['Page']['url']) {
+			$this->set('publishLink', $url);
+		}
+		
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('Baser.mobile'));
 		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false));
-		$this->set('url', $this->convertViewUrl($this->data['Page']['url']));
+		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
+		$this->set('url', $url);
 		$this->set('mobileExists',$this->Page->agentExists('mobile', $this->data));
 		$this->set('smartphoneExists',$this->Page->agentExists('smartphone', $this->data));
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
 		$this->subMenuElements = array('pages','page_categories');
-		$this->pageTitle = 'ページ情報編集';
+		if(!empty($this->data['Page']['title'])) {
+			$this->pageTitle = '固定ページ情報編集：'.$this->data['Page']['title'];
+		} else {
+			$this->pageTitle = '固定ページ情報編集：'.Inflector::Classify($this->data['Page']['name']);
+		}
+		$this->help = 'pages_form';
 		$this->render('form');
 
 	}
@@ -328,18 +345,19 @@ class PagesController extends AppController {
 		
 	}
 /**
- * [ADMIN] ページ情報削除
+ * [ADMIN] 固定ページ情報削除
  *
  * @param int $id (page_id)
  * @return void
  * @access public
+ * @deprecated admin_ajax_delete で Ajax化
  */
 	function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		// メッセージ用にデータを取得
@@ -348,17 +366,8 @@ class PagesController extends AppController {
 		/* 削除処理 */
 		if($this->Page->del($id)) {
 			
-			// ページテンプレートを削除
-			$this->Page->delFile($page);
-			
-			// 公開状態だった場合、サイトマップのキャッシュを削除
-			// 公開期間のチェックは行わず確実に削除
-			if($page['Page']['status']) {
-				clearViewCache();
-			}
-			
 			// 完了メッセージ
-			$message = 'ページ: '.$page['Page']['name'].' を削除しました。';
+			$message = '固定ページ: '.$page['Page']['name'].' を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Page->saveDbLog($message);
 			
@@ -368,28 +377,28 @@ class PagesController extends AppController {
 			
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
- * [ADMIN] ページファイルを登録する
+ * [ADMIN] 固定ページファイルを登録する
  *
  * @return void
  * @access public
  */
 	function admin_entry_page_files() {
 
-		// 現在のテーマのページファイルのパスを取得
+		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 
 		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
 		$this->Session->setFlash($message);
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
- * [ADMIN] ページファイルを登録する
+ * [ADMIN] 固定ページファイルを登録する
  *
  * @return void
  * @access public
@@ -397,12 +406,12 @@ class PagesController extends AppController {
 	function admin_write_page_files() {
 
 		if($this->Page->createAllPageTemplate()){
-			$this->Session->setFlash('ページテンプレートの書き出しに成功しました。');
+			$this->Session->setFlash('固定ページテンプレートの書き出しに成功しました。');
 		} else {
-			$this->Session->setFlash('ページテンプレートの書き出しに失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+			$this->Session->setFlash('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。');
 		}
 		clearViewCache();
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
 /**
@@ -469,7 +478,7 @@ class PagesController extends AppController {
 		}
 		
 		// ナビゲーションを取得
-		$this->navis = $this->_getNavi($url);
+		$this->crumbs = $this->_getCrumbs($url);
 
 		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
@@ -484,7 +493,7 @@ class PagesController extends AppController {
  * @return array
  * @access protected
  */
-	function _getNavi($url) {
+	function _getCrumbs($url) {
 
 		if(Configure::read('AgentPrefix.on')) {
 			$url = '/'.Configure::read('AgentPrefix.currentAlias').$url;
@@ -493,15 +502,15 @@ class PagesController extends AppController {
 		// 直属のカテゴリIDを取得
 		$pageCategoryId = $this->Page->field('page_category_id', array('Page.url' => $url));
 		
-		// 関連カテゴリを取得（関連ページも同時に取得）
+		// 関連カテゴリを取得（関連固定ページも同時に取得）
 		$pageCategorires = array();
 		if($pageCategoryId) {
 			$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
 		}
 		
-		$navis = array();
+		$crumbs = array();
 		if($pageCategorires) {
-			// index ページの有無によりリンクを判別
+			// index 固定ページの有無によりリンクを判別
 			foreach($pageCategorires as $pageCategory) {
 				if(!empty($pageCategory['Page'])) {
 					$categoryUrl = '';
@@ -512,15 +521,15 @@ class PagesController extends AppController {
 						}
 					}
 					if($categoryUrl) {
-						$navis[$pageCategory['PageCategory']['title']] = $categoryUrl;
+						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => $categoryUrl);
 					} else {
-						$navis[$pageCategory['PageCategory']['title']] = '';
+						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
 					}
 				}
 			}
 		}
 
-		return $navis;
+		return $crumbs;
 		
 	}
 /**
@@ -550,7 +559,7 @@ class PagesController extends AppController {
 		
 	}
 /**
- * [ADMIN] WEBページをプレビュー
+ * [ADMIN] 固定ページをプレビュー
  *
  * @param mixed	$id (blog_post_id)
  * @return void
@@ -638,7 +647,7 @@ class PagesController extends AppController {
 		$this->params['controller'] = 'pages';
 		$this->params['action'] = 'display';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
-		$this->navis = $this->_getNavi($this->params['url']['url']);
+		$this->crumbs = $this->_getCrumbs($this->params['url']['url']);
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.'.ctp');
 		@unlink(TMP.'pages_preview_'.$id.'.ctp');
@@ -651,7 +660,7 @@ class PagesController extends AppController {
  * @access public
  * @return boolean
  */
-	function admin_update_sort () {
+	function admin_ajax_update_sort () {
 
 		if($this->data){
 			$this->setViewConditions('Page', array('action' => 'admin_index'));
@@ -672,7 +681,7 @@ class PagesController extends AppController {
 
 	}
 /**
- * 管理画面ページ一覧の検索条件を取得する
+ * 管理画面固定ページ一覧の検索条件を取得する
  *
  * @param array $data
  * @return string
@@ -682,9 +691,13 @@ class PagesController extends AppController {
 
 		/* 条件を生成 */
 		$conditions = array();
-		// ページカテゴリ
+		$pageCategoryId = '';
+		
+		// 固定ページカテゴリ
 
-		$pageCategoryId = $data['Page']['page_category_id'];
+		if(isset($data['Page']['page_category_id'])) {
+			$pageCategoryId = $data['Page']['page_category_id'];
+		}
 		
 		$name = '';
 		$pageType = 1;
@@ -727,7 +740,7 @@ class PagesController extends AppController {
 			$data = $data['Page'];
 		}
 
-		// ページカテゴリ
+		// 固定ページカテゴリ
 		if(!empty($pageCategoryId)) {
 
 			if($pageCategoryId == 'pconly') {
@@ -856,7 +869,7 @@ class PagesController extends AppController {
  */
 	function admin_ajax_category_source($type) {
 		
-		$categorySource = $this->getCategorySource($type, $this->data['Page']);
+		$categorySource = $this->getCategorySource($type, $this->data['Option']);
 		$this->set('categorySource', $categorySource);
 
 	}
@@ -879,7 +892,7 @@ class PagesController extends AppController {
 
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
 		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
-		
+
 		switch($type) {
 			case '1':	// PC
 				$parentId = '';
@@ -892,6 +905,10 @@ class PagesController extends AppController {
 			case '3':	// スマホ
 				$parentId = $smartphoneId;
 				$excludeParentId = '';
+				break;
+			default:
+				$parentId = '';
+				$excludeParentId = '';
 		}
 
 		$_options = array(
@@ -901,9 +918,17 @@ class PagesController extends AppController {
 			'parentId'			=> $parentId,
 			'excludeParentId'	=> $excludeParentId
 		);
-		
+		$_options['currentPageCategoryId'] = 58;
 		if(isset($options['currentPageCategoryId'])) {
 			$_options['pageCategoryId'] = $options['currentPageCategoryId'];
+			
+		}
+		if(!empty($options['excludeParentId'])) {
+			if($_options['excludeParentId']) {
+				$_options['excludeParentId'][] = $options['excludeParentId'];
+			} else {
+				$_options['excludeParentId'] = $options['excludeParentId'];
+			}
 		}
 		if(isset($options['empty'])) {
 			$_options['empty'] = $options['empty'];
@@ -940,6 +965,188 @@ class PagesController extends AppController {
 		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
 					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
 
+	}
+/**
+ * 一括削除
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected
+ */
+	function _batch_del($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$data = $this->Page->read(null, $id);
+				if($this->Page->del($id)) {
+					$this->Page->saveDbLog('固定ページ: '.$data['Page']['name'].' を削除しました。');
+				}
+			}
+		}
+		return true;
+		
+	}
+/**
+ * [ADMIN] 無効状態にする（AJAX）
+ * 
+ * @param string $blogContentId
+ * @param string $blogPostId beforeFilterで利用
+ * @param string $blogCommentId
+ * @return void
+ * @access public
+ */
+	function admin_ajax_unpublish($id) {
+		
+		if(!$id) {
+			exit();
+		}
+		if($this->_changeStatus($id, false)) {
+			exit(true);
+		}
+		exit();
+
+	}
+/**
+ * [ADMIN] 有効状態にする（AJAX）
+ * 
+ * @param string $blogContentId
+ * @param string $blogPostId beforeFilterで利用
+ * @param string $blogCommentId
+ * @return void
+ * @access public
+ */
+	function admin_ajax_publish($id) {
+		
+		if(!$id) {
+			exit();
+		}
+		if($this->_changeStatus($id, true)) {
+			exit(true);
+		}
+		exit();
+
+	}
+/**
+ * 一括公開
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected 
+ */
+	function _batch_publish($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$this->_changeStatus($id, true);
+			}
+		}
+		return true;
+		
+	}
+/**
+ * 一括非公開
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected 
+ */
+	function _batch_unpublish($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$this->_changeStatus($id, false);
+			}
+		}
+		return true;
+		
+	}
+/**
+ * ステータスを変更する
+ * 
+ * @param int $id
+ * @param boolean $status
+ * @return boolean 
+ */
+	function _changeStatus($id, $status) {
+		
+		$statusTexts = array(0 => '非公開', 1 => '公開');
+		$data = $this->Page->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
+		$data['Page']['status'] = $status;
+		if($status) {
+			$data['Page']['publish_begin'] = '';
+			$data['Page']['publish_end'] = '';
+		}
+		$this->Page->set($data);
+		if($this->Page->save()) {
+			clearViewCache($data['Page']['url']);
+			$statusText = $statusTexts[$status];
+			$this->Page->saveDbLog('固定ページ「'.$data['Page']['name'].'」 を'.$statusText.'にしました。');
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+/**
+ * [ADMIN] 固定ページ情報削除
+ *
+ * @param int $id (page_id)
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		if(!$id) {
+			exit();
+		}
+		
+		$page = $this->Page->read(null, $id);
+
+		if($this->Page->del($id)) {		
+			clearViewCache($page['Page']['url']);
+			$this->Page->saveDbLog('固定ページ: '.$page['Page']['name'].' を削除しました。');
+			echo true;
+		}
+		exit();
+
+	}
+/**
+ * [ADMIN] 固定ページコピー
+ * 
+ * @param int $id 
+ * @return void
+ * @access public
+ */
+	function admin_ajax_copy($id = null) {
+		
+		$result = $this->Page->copy($id);
+		if($result) {
+			$result['Page']['id'] = $this->Page->getInsertID();
+			$this->setViewConditions('Page', array('action' => 'admin_index'));
+			$this->_setAdminIndexViewData();
+			ClassRegistry::removeObject('View');	// Page 保存時に requestAction で 固定ページテンプレート生成用に初期化される為
+			$this->set('data', $result);
+		} else {
+			exit();
+		}
+		
+	}
+/**
+ * 一覧の表示用データをセットする
+ * 
+ * @return void
+ * @access protected
+ */
+	function _setAdminIndexViewData() {
+		
+		$user = $this->AuthEx->user();
+		$allowOwners = array();
+		if(!empty($user)) {
+			$allowOwners = array('', $user['User']['user_group_id']);
+		}
+		$this->set('allowOwners', $allowOwners);
+		$this->set('sortmode', $this->passedArgs['sortmode']);
+		
 	}
 	
 }

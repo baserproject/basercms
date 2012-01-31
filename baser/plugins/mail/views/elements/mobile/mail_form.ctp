@@ -3,17 +3,15 @@
 /**
  * [MOBILE] メールフォーム本体
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,9 +20,9 @@
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-<?php echo $mailform->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'confirm')) ?>
+<?php echo $mailform->create(null, array('controller' => $mailContent['MailContent']['name'], 'action' => 'confirm')) ?>
 <?php else: ?>
-<?php echo $mailform->create(null,array('plugin'=>'aaa','controller'=>$mailContent['MailContent']['name'],'action'=>'submit')) ?>
+<?php echo $mailform->create(null, array('controller' => $mailContent['MailContent']['name'], 'action' => 'submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 <?php echo $baser->element('mail_input',array('blockStart'=>1)) ?>

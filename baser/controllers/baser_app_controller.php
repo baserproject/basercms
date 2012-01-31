@@ -3,17 +3,15 @@
 /**
  * Controller 拡張クラス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -52,8 +50,9 @@ class BaserAppController extends Controller {
  *
  * @var mixed
  * @access protected
+ * TODO メニュー管理を除外後、GlobalMenuを除外する
  */
-	var $uses = array('GlobalMenu');
+	var $uses = array('GlobalMenu', 'Favorite');
 /**
  * コンポーネント
  *
@@ -71,34 +70,50 @@ class BaserAppController extends Controller {
 /**
  * サブメニューエレメント
  *
- * @var		array
- * @access	public
+ * @var string
+ * @access public
  */
 	var $subMenuElements = '';
 /**
- * コントローラータイトル
+ * パンくずナビ
  *
- * @var		string
- * @access	public
+ * @var array
+ * @access public
  */
-	var $navis = array();
+	var $crumbs = array();
+/**
+ * 検索ボックス
+ * 
+ * @var string
+ * @access public
+ */
+	var $search = '';
+/**
+ * ヘルプ
+ * 
+ * @var string
+ * @access public
+ */
+	var $help = '';
 /**
  * ページ説明文
  *
- * @var		string
- * @access	public
+ * @var string
+ * @access public
  */
 	var $siteDescription = '';
 /**
  * コンテンツタイトル
  *
- * @var     string
- * @access  public
+ * @var string
+ * @access public
  */
 	var $contentsTitle = '';
 /**
  * サイトコンフィグデータ
+ * 
  * @var array
+ * @access public
  */
 	var $siteConfigs = array();
 /**
@@ -110,54 +125,27 @@ class BaserAppController extends Controller {
 	function __construct() {
 
 		parent::__construct();
+		
+		if(isInstalled()) {
+			
+			// サイト基本設定の読み込み
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$this->siteConfigs = $SiteConfig->findExpanded();
 
-		$base = baseUrl();
-
-		// サイト基本設定の読み込み
-		if(file_exists(CONFIGS.'database.php')) {
-			$dbConfig = new DATABASE_CONFIG();
-			if($dbConfig->baser['driver']) {
-				$SiteConfig = ClassRegistry::init('SiteConfig','Model');
-				$this->siteConfigs = $SiteConfig->findExpanded();
-
-				if(empty($this->siteConfigs['version'])) {
-					$this->siteConfigs['version'] = $this->getBaserVersion();
-					$SiteConfig->saveKeyValue($this->siteConfigs);
-				}
-
-				// テーマの設定
-				if($base) {
-					$reg = '/^'.str_replace('/','\/',$base).'(installations)/i';
-				}else {
-					$reg = '/^\/(installations)/i';
-				}
-				if(!preg_match($reg, @$_SERVER['REQUEST_URI']) || isInstalled()) {
-					$this->theme = $this->siteConfigs['theme'];
-					// ===============================================================================
-					// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
-					// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
-					// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
-					// 表示されてしまうので明示的に指定している。
-					// （例）
-					// [変更後] app/webroot/themed/demo/blog/news/index.ctp
-					// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
-					// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
-					// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
-					// ※ AppView::_pathsも関連している
-					// ===============================================================================
-					$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
-					$pluginPaths = Configure::read('pluginPaths');
-					if(!in_array($pluginThemePath, $pluginPaths)) {
-						Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
-					}
-				}
-
+			if(empty($this->siteConfigs['version'])) {
+				$this->siteConfigs['version'] = $this->getBaserVersion();
+				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
-
+			
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
+			
+			$params = Router::parse(@$_SERVER['REQUEST_URI']);
+			
+			$this->setTheme($params);
+			
 			// モバイルのエラー用
 			if(Configure::read('AgentPrefix.on')) {
 				$this->layoutPath = Configure::read('AgentPrefix.currentPrefix');
@@ -166,12 +154,7 @@ class BaserAppController extends Controller {
 				}
 			}
 
-			if($base) {
-				$reg = '/^'.str_replace('/','\/',$base).'admin/i';
-			}else {
-				$reg = '/^\/admin/i';
-			}
-			if(preg_match($reg,$_SERVER['REQUEST_URI'])) {
+			if(!empty($params['admin'])) {
 				$this->layoutPath = 'admin';
 				$this->subDir = 'admin';
 			}
@@ -188,6 +171,7 @@ class BaserAppController extends Controller {
 				$this->notFound();
 			}
 		}
+		
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->params['prefix']を利用できない為。
@@ -207,7 +191,30 @@ class BaserAppController extends Controller {
 	function beforeFilter() {
 
 		parent::beforeFilter();
-
+		
+		// テーマを設定
+		$this->setTheme($this->params);
+		
+		if(isInstalled() && $this->params['controller'] != 'installations') {
+			// ===============================================================================
+			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
+			// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
+			// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
+			// 表示されてしまうので明示的に指定している。
+			// （例）
+			// [変更後] app/webroot/themed/demo/blog/news/index.ctp
+			// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
+			// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
+			// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
+			// ※ AppView::_pathsも関連している
+			// ===============================================================================
+			$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
+			$pluginPaths = Configure::read('pluginPaths');
+			if(!in_array($pluginThemePath, $pluginPaths)) {
+				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
+			}
+		}
+		
 		// 初回アクセスメッセージ表示設定
 		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
 			$this->writeInstallSetting('Baser.firstAccess', 'false');
@@ -260,7 +267,7 @@ class BaserAppController extends Controller {
 		}
 
 		// Ajax
-		if(isset($this->RequestHandler) && $this->RequestHandler->isAjax()) {
+		if(isset($this->RequestHandler) && $this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
 			// キャッシュ対策
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Cache-Control: post-check=0, pre-check=0", false);
@@ -298,6 +305,34 @@ class BaserAppController extends Controller {
 			$this->Security->validatePost = false;
 		}
 
+	}
+/**
+ * テーマをセットする
+ * 
+ * @param array $params 
+ * @return void
+ * @access public
+ */
+	function setTheme($params) {
+		
+		if(isInstalled() && $params['controller'] != 'installations') {
+			
+			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
+				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
+			}
+			
+			if(empty($params['admin'])) {
+				$this->theme = $this->siteConfigs['theme'];
+			} else {
+				if(!empty($this->siteConfigs['admin_theme'])) {
+					$this->theme = $this->siteConfigs['admin_theme'];
+				} else {
+					$this->theme = $this->siteConfigs['theme'];
+				}
+			}
+
+		}
+		
 	}
 /**
  * 管理画面用のメソッドを取得（コールバックメソッド）
@@ -422,11 +457,14 @@ class BaserAppController extends Controller {
 	function __loadDataToView() {
 
 		$this->set('subMenuElements',$this->subMenuElements);	// サブメニューエレメント
-		$this->set('navis',$this->navis);                       // パンくずなび
+		$this->set('crumbs',$this->crumbs);                       // パンくずなび
+		$this->set('search', $this->search);
+		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (isset($_SESSION['Auth']['User'])) {
+		if (isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
 			$this->set('user',$_SESSION['Auth']['User']);
+			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}
 
 		/* 携帯用絵文字データの読込 */
@@ -437,7 +475,7 @@ class BaserAppController extends Controller {
 
 	}
 /**
- * BaserCMSのバージョンを取得する
+ * baserCMSのバージョンを取得する
  *
  * @return string Baserバージョン
  */
@@ -502,7 +540,7 @@ class BaserAppController extends Controller {
 
 		if(!$plugin) {
 			if(isset($this->siteConfigs['version'])) {
-				return preg_replace("/BaserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
+				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is","$1",$this->siteConfigs['version']);
 			} else {
 				return '';
 			}
@@ -1120,22 +1158,20 @@ class BaserAppController extends Controller {
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];
 		}
-
-		if($requestedPrefix && ($this->params['prefix'] != $authPrefix)) {
-			if($authPrefix != Configure::read('Routing.admin')) {
-				// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
-				$ref = $this->referer();
-				$loginAction = Router::normalize($this->AuthEx->loginAction);
-				if($ref == $loginAction) {
-					$this->Session->delete('Auth.User');
-					$this->Session->delete('Message.flash');
-					$this->AuthEx->authError = $this->AuthEx->loginError;
-					return false;
-				} else {
-					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
-					$this->redirect($ref);
-					return;
-				}
+		
+		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
+			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
+			$ref = $this->referer();
+			$loginAction = Router::normalize($this->AuthEx->loginAction);
+			if($ref == $loginAction) {
+				$this->Session->delete('Auth.User');
+				$this->Session->delete('Message.flash');
+				$this->AuthEx->authError = $this->AuthEx->loginError;
+				return false;
+			} else {
+				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+				$this->redirect($ref);
+				return;
 			}
 		}
 
@@ -1256,8 +1292,103 @@ class BaserAppController extends Controller {
  * @access public
  */
 	function redirect($url, $status = null, $exit = true) {
+		
 		$url = addSessionId($url, true);
+		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
+		// ※ Routing.admin を変更した場合
+		if (!isset($url['admin']) && !empty($this->params['admin'])) {
+			$url['admin'] = true;
+		} elseif (isset($url['admin']) && !$url['admin']) {
+			unset($url['admin']);
+		}
 		parent::redirect($url, $status, $exit);
+		
+	}
+/**
+ * Calls a controller's method from any location.
+ *
+ * @param mixed $url String or array-based url.
+ * @param array $extra if array includes the key "return" it sets the AutoRender to true.
+ * @return mixed Boolean true or false on success/failure, or contents
+ *               of rendered action if 'return' is set in $extra.
+ * @access public
+ */
+	function requestAction($url, $extra = array()) {
+		
+		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
+		// 管理システムやプラグインでのURLの生成が CakePHP の標準仕様と違っていたので調整
+		// >>> CUSTOMIZE MODIFY 2012/1/28 ryuring
+		// 配列でないURLの場合に、間違った値に書きなおされていたので配列チェックを追加
+		if(is_array($url)) {
+			if ((!isset($url['admin']) && !empty($this->params['admin'])) || !empty($url['admin'])) {
+				$url['prefix'] = 'admin';
+			}
+			if (!isset($url['plugin']) && !empty($this->params['plugin'])) {
+				$url['plugin'] = $this->params['plugin'];
+			}
+		}
+		// <<<
+		return parent::requestAction($url, $extra);
+		
+	}
+/**
+ * よく使う項目の表示状態を保存する
+ * 
+ * @param mixed $open 1 Or ''
+ */
+	function admin_ajax_save_favorite_box($open = '') {
+		
+		$this->Session->write('Baser.favorite_box_opened', $open);
+		echo true;
+		exit();
+		
+	}
+/**
+ * 一括処理
+ * 
+ * 一括処理としてコントローラーの次のメソッドを呼び出す
+ * バッチ処理名は、バッチ処理指定用のコンボボックスで定義する
+ * 
+ * _batch{バッチ処理名} 
+ * 
+ * 処理結果として成功の場合は、バッチ処理名を出力する
+ * 
+ * @return void
+ * @access public
+ */
+	function admin_ajax_batch () {
+		
+		$method = $this->data['ListTool']['batch'];
+		
+		if($this->data['ListTool']['batch_targets']) {
+			foreach($this->data['ListTool']['batch_targets'] as $key => $batchTarget) {
+				if(!$batchTarget) {
+					unset($this->data['ListTool']['batch_targets'][$key]);
+				}
+			}
+		}
+		
+		$action = '_batch_'.$method;
+		
+		if (method_exists($this, $action)) {
+			if($this->{$action}($this->data['ListTool']['batch_targets'])) {
+				echo $method;
+			}
+		}
+		exit();
+		
+	}
+/**
+ * 検索ボックスの表示状態を保存する
+ * 
+ * @param mixed $open 1 Or ''
+ */
+	function admin_ajax_save_search_box($key, $open = '') {
+		
+		$this->Session->write('Baser.searchBoxOpened.'.$key, $open);
+		echo true;
+		exit();
+		
 	}
 	
 }

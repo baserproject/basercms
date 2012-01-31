@@ -5,7 +5,7 @@
  * This Model allows you to parse a given RSS 2.0 feed and have it returned in a big 
  * array.
  * 
- * PHP versions 4 and 5
+ * PHP versions 5
  *
  * Copyright (c) Felix Geisendrfer <info@fg-webdesign.de>
  *

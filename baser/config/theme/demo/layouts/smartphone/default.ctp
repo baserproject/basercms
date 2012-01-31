@@ -50,14 +50,14 @@
 	
 	<footer>
 		<?php $baser->element('global_menu') ?>
-		<address>Copyright(C) 2008 - 2011 <br />BaserCMS All rights Reserved.</address>
+		<address>Copyright(C) 2008 - 2011 <br />baserCMS All rights Reserved.</address>
 		<div class="banner">
-		<?php $baser->link($baser->getImg('baser.power.gif', array('alt'=> 'BaserCMS : Based Website Development Project', 'border'=> "0")),'http://basercms.net') ?>
+		<?php $baser->link($baser->getImg('baser.power.gif', array('alt'=> 'baserCMS : Based Website Development Project', 'border'=> "0")),'http://basercms.net') ?>
 		<?php $baser->link($baser->getImg('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework', 'border'=> "0")),'http://cakephp.jp') ?>
 		</div>
 	</footer>
 	
 </div>
-<?php echo $cakeDebug; ?>
+<?php $baser->func() ?>
 </body>
 </html>

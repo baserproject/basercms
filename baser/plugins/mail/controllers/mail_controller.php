@@ -3,17 +3,15 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controller
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -94,7 +92,7 @@ class MailController extends MailAppController {
  * @var array
  * @access public
  */
-	var $navis = array();
+	var $crumbs = array();
 /**
  * beforeFilter.
  *
@@ -183,7 +181,7 @@ class MailController extends MailAppController {
 	function index($id = null) {
 
 		// 初期値を取得
-		if(!$this->data) {
+		if(!isset($this->data['Message'])) {
 			$this->data = $this->Message->getDefaultValue();
 		}else {
 			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
@@ -194,6 +192,11 @@ class MailController extends MailAppController {
 		if($this->dbDatas['mailFields'])
 			$this->set('mailFields',$this->dbDatas['mailFields']);
 
+		$user = $this->AuthEx->user();
+		if(!empty($user) && !Configure::read('AgentPrefix.on')) {
+			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
+		}
+		
 		$this->set('mailContent',$this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
 
@@ -232,7 +235,7 @@ class MailController extends MailAppController {
 	function confirm($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
@@ -302,7 +305,7 @@ class MailController extends MailAppController {
 	function submit($id = null) {
 
 		if(!$this->data) {
-			$this->redirect(array("action"=>"index",$id));
+			$this->redirect(array('action' => 'index', $id));
 		}else {
 
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。

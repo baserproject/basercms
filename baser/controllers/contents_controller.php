@@ -3,17 +3,15 @@
 /**
  * コンテンツコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -71,7 +69,10 @@ class ContentsController extends AppController {
 		
 		if(!empty($this->params['admin'])) {
 			$this->subMenuElements = array('site_configs', 'contents');
-			$this->navis = array('システム設定'=>'/admin/site_configs/form', '検索インデックス管理' => '/admin/contents/index');
+			$this->crumbs = array(
+				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')), 
+				array('name' => '検索インデックス管理', 'url' => array('controller' => 'contents', 'action' => 'index'))
+			);
 		}
 		
 	}
@@ -300,6 +301,14 @@ class ContentsController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$this->set('datas', $this->paginate('Content'));
+		
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+		
+		$this->search = 'contents_index';
+		$this->help = 'contents_index';
 
 	}
 /**
@@ -367,7 +376,7 @@ class ContentsController extends AppController {
 					$this->Content->create($data);
 					if($this->Content->save()) {
 						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
-						$this->redirect('index');
+						$this->redirect(array('action' => 'index'));
 					} else {
 						$this->Session->setFlash('保存中にエラーが発生しました。');
 					}
@@ -382,7 +391,28 @@ class ContentsController extends AppController {
 			}
 			
 		}
-		
+		$this->help = 'contents_add';
+	}
+/**
+ * [ADMIN] 検索インデックス削除　(ajax)
+ *
+ * @param	int		$id
+ * @return	void
+ * @access 	public
+ */
+	function admin_ajax_delete($id = null) {
+
+		if(!$id) {
+			exit();
+		}
+
+		/* 削除処理 */
+		if($this->Content->del($id)) {
+			$message = '検索インデックスより NO.'.$id.' を削除しました。';
+			$this->Content->saveDbLog($message);
+			exit(true);
+		}
+		exit();
 	}
 /**
  * [ADMIN] 検索インデックス削除
@@ -395,7 +425,7 @@ class ContentsController extends AppController {
 
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 		/* 削除処理 */
@@ -407,8 +437,32 @@ class ContentsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'admin_index'));
+		$this->redirect(array('action' => 'index'));
 
+	}
+/**
+ * [ADMIN] 検索インデックス一括削除
+ *
+ * @param	int		$id
+ * @return	void
+ * @access 	public
+ */
+	function _batch_del($ids) {
+
+		if($ids){
+			
+			foreach($ids as $id) {
+				
+			/* 削除処理 */
+				if($this->Content->del($id)) {
+					$message = '検索インデックスより NO.'.$id.' を削除しました。';
+					$this->Content->saveDbLog($message);
+				}
+				
+			}
+			
+		}
+		return true;
 	}
 /**
  * [AJAX] 優先順位を変更する

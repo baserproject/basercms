@@ -10,7 +10,7 @@
 		<?php $baser->element('search') ?>
 	</div>
 	<?php if($baser->isTop()): ?>
-	<?php $baser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s BaserCMS','border'=>'0')) ?>
+	<?php $baser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s baserCMS','border'=>'0')) ?>
 	<?php endif ?>
 	<div id="glbMenus">
 		<h2 class="display-none">グローバルメニュー</h2>

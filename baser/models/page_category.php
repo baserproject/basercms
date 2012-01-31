@@ -3,17 +3,15 @@
 /**
  * ページカテゴリーモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -139,19 +137,24 @@ class PageCategory extends AppModel {
 					}
 					$conditions['NOT']['PageCategory.id'] = $excludeIds;
 				}
+				
+				$parentIds = array();
 				if(!empty($options['parentId'])) {
 					if(!is_array($options['parentId'])) {
 						$options['parentId'] = array($options['parentId']);
 					}
-					$parentIds = array();
 					foreach($options['parentId'] as $parentId) {
 						$children = $this->children($parentId);
 						if($children) {
-							$parentIds = am($parentIds, Set::extract('/PageCategory.id', $children));
+							$parentIds = am($parentIds, Set::extract('/PageCategory/id', $children));
 						} else {
 							return array();
 						}
 					}
+				}
+				
+				if($parentIds) {
+					$conditions['PageCategory.id'] = $parentIds;
 				}
 				
 				if(isset($options['ownerId'])) {
@@ -571,6 +574,60 @@ class PageCategory extends AppModel {
 			$newCatAddable = true;
 		}
 		return $newCatAddable;
+		
+	}
+/**
+ * ページカテゴリーをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed page Or false
+ */
+	function copy($id = null, $data = array()) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('PageCategory.id' => $id), 'recursive' => -1));
+		}
+		$data['PageCategory']['name'] .= '_copy';
+		$data['PageCategory']['title'] .= '_copy';
+		unset($data['PageCategory']['id']);
+		unset($data['PageCategory']['created']);
+		unset($data['PageCategory']['modified']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+/**
+ * ページカテゴリタイプを取得する
+ * 1:PC / 2:ケータイ / 3:スマフォ
+ * 
+ * @param int $id
+ * @return string 
+ * @access public
+ */
+	function getType($id) {
+
+		$types = array('' => '1', Configure::read('AgentSettings.mobile.prefix') => '2', Configure::read('AgentSettings.smartphone.prefix') => '3');
+		$path = $this->getpath($id, array('name'));
+		unset($path[count($path)-1]);
+
+		if(!empty($path[0]['PageCategory']['name'])) {
+			if(isset($types[$path[0]['PageCategory']['name']])) {
+				return $types[$path[0]['PageCategory']['name']];
+			}
+		}
+		
+		return 1;
 		
 	}
 	

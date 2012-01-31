@@ -3,17 +3,15 @@
 /**
  * メールコンテンツモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -68,7 +66,6 @@ class MailContent extends MailAppModel {
 			array(	'rule'		=> array('notInList', array('mail')),
 					'message'	=> 'メールフォームアカウント名に「mail」は利用できません。'),
 			array(	'rule'		=> array('isUnique'),
-					'on'		=> 'create',
 					'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
 			array(	'rule'		=> array('maxLength', 20),
 					'message'	=> 'メールフォームアカウント名は20文字以内で入力してください。')
@@ -266,6 +263,49 @@ class MailContent extends MailAppModel {
 
 		return $_data;
 
+	}
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data, $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
+		}
+		
+		$data['MailContent']['name'] .= '_copy';
+		$data['MailContent']['title'] .= '_copy';
+		unset($data['MailContent']['id']);
+		unset($data['MailContent']['created']);
+		unset($data['MailContent']['modified']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['MailContent']['id'] = $this->getInsertID();
+			if($recursive) {
+				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'recursive' => -1));
+				foreach($mailFields as $mailField) {
+					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
+					$this->MailField->copy(null, $mailField);
+				}
+				$Message = ClassRegistry::getObject('Message');
+				$Message->createTable($result['MailContent']['name']);
+				$Message->construction($result['MailContent']['id']);
+			}
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data, $recursive);
+			} else {
+				return false;
+			}
+		}
+		
 	}
 	
 }

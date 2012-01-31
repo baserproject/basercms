@@ -3,17 +3,15 @@
 /**
  * パーミッションモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -104,14 +102,22 @@ class Permission extends AppModel {
 		if(!$check[key($check)]) {
 			return true;
 		}
+		
 		$url = $check[key($check)];
+		
 		if(preg_match('/^[^\/]/is',$url)) {
 			$url = '/'.$url;
 		}
+		
+		// ルーティング設定に合わせて変換
+		$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		
 		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)) {
 			$url = $matches[1].'/'.'*';
 		}
+		
 		$params = Router::parse($url);
+		
 		if(empty($params['prefix'])) {
 			return false;
 		}
@@ -222,16 +228,22 @@ class Permission extends AppModel {
 			$url = preg_replace('/^\//is', '', $url);
 		}
 		
+		$adminPrefix = Configure::read('Routing.admin');
+		
+		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
+		
 		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
 		$allows = array(
-			'admin',
-			'admin/',
-			'admin/dashboard/index',
-			'admin/users/edit/'.$_SESSION['Auth']['User']['id'],
-			'admin/users/logout'
+			'/^admin$/',
+			'/^admin\/$/',
+			'/^admin\/dashboard\/.*?/',
+			'/^admin\/users\/edit\/'.$_SESSION['Auth']['User']['id'].'$/',
+			'/^admin\/users\/logout$/'
 		);
-		if(in_array($url,$allows)) {
-			return true;
+		foreach($allows as $allow) {
+			if(preg_match($allow, $url)) {
+				return true;
+			}
 		}
 		
 		$ret = true;
@@ -256,5 +268,40 @@ class Permission extends AppModel {
 		return $ret;
 
 	}
+/**
+ * アクセス制限データをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
+		}
+		
+		if($this->find('count', array('conditions' => array('Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name'])))) {
+			$data['Permission']['name'] .= '_copy';
+			return $this->copy(null, $data);	// 再帰処理
+		}
+
+		unset($data['Permission']['id']);
+		unset($data['Permission']['modified']);
+		unset($data['Permission']['created']);
+
+		$data['Permission']['no'] = $this->getMax('no',array('user_group_id' => $data['Permission']['user_group_id']))+1;
+		$data['Permission']['sort'] = $this->getMax('sort',array('user_group_id' => $data['Permission']['user_group_id']))+1;
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['Permission']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }
 ?>

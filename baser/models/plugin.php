@@ -3,17 +3,15 @@
 /**
  * プラグインモデル
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.models
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -58,7 +56,7 @@ class Plugin extends AppModel {
 	var $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('alphaNumericPlus'),
-					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力してください。',
+					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',
 					'reqquired'	=> true),
 			array(	'rule'		=> array('isUnique'),
 					'on'		=> 'create',
@@ -68,7 +66,7 @@ class Plugin extends AppModel {
 		),
 		'title' => array(
 			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'プラグインタイトルは50文字以内としてください。')
+					'message'	=> 'プラグインタイトルは50文字以内とします。')
 		)
 	);
 /**

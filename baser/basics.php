@@ -1,21 +1,19 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * BaserCMS共通関数
+ * baserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -100,24 +98,31 @@
 	}
 /**
  * リビジョンを取得する
- * @param string    BaserCMS形式のバージョン表記　（例）BaserCMS 1.5.3.1600 beta
+ * @param string    baserCMS形式のバージョン表記　（例）baserCMS 1.5.3.1600 beta
  * @return string   リビジョン番号
  */
 	function revision($version) {
-		return preg_replace("/BaserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
+		return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
 	}
 /**
  * バージョンを特定する一意の数値を取得する
  * ２つ目以降のバージョン番号は３桁として結合
  * 1.5.9 => 1005009
  * ※ ２つ目以降のバージョン番号は999までとする
- * @param string $version
+ * β版の場合はfalseを返す
+ * 
+ * @param mixed $version Or false
  */
 	function verpoint($version) {
-		$version = str_replace('BaserCMS ', '', $version);
-		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
+		$version = str_replace('baserCMS ', '', $version);
+		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
 			if(isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
+				if(isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
+					return false;
+				}
 				$maches[4] = str_replace('.', '', $maches[4]);
+			} elseif(isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
+				return false;
 			} else {
 				$maches[4] = 0;
 			}
@@ -295,12 +300,22 @@
 					}else{
 						$home = 'm';
 					}
-				}
-				if(Configure::read('App.baseUrl')) {
+				} elseif (preg_match('/^\/s/is', $url)) {
 					if($home){
-						$home = 'index_php_'.$home;
+						$home = 's_'.$home;
 					}else{
-						$home = 'index_php';
+						$home = 's';
+					}
+				}
+				$baseUrl = baseUrl();
+				if($baseUrl) {
+					$baseUrl = str_replace(array('/', '.'), '_', $baseUrl);
+					$baseUrl = preg_replace('/^_/', '', $baseUrl);
+					$baseUrl = preg_replace('/_$/', '', $baseUrl);
+					if($home){
+						$home = $baseUrl.$home;
+					}else{
+						$home = $baseUrl;
 					}
 				}elseif(!$home){
 					$home = 'home';
@@ -367,7 +382,7 @@
 
 	}
 /**
- * BaserCMSのインストールが完了しているかチェックする
+ * baserCMSのインストールが完了しているかチェックする
  * @return	boolean
  */
 	function isInstalled () {

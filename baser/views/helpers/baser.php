@@ -3,18 +3,16 @@
 /**
  * Baserヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		baser.app.view.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -93,7 +91,7 @@ class BaserHelper extends AppHelper {
 		
 	}
 /**
- * グローバルメニューを取得する
+ * メニューを取得する
  * 
  * @param string $menuType
  * @return array $globalMenus
@@ -246,14 +244,14 @@ class BaserHelper extends AppHelper {
 			$title = $this->_view->pageTitle;
 		}
 
-		$navis = $this->getNavis($categoryTitleOn);
-		if($navis){
-			$navis = array_reverse($navis,true);
-			foreach ($navis as $key => $value) {
+		$crumbs = $this->getCrumbs($categoryTitleOn);
+		if($crumbs){
+			$crumbs = array_reverse($crumbs,true);
+			foreach ($crumbs as $crumb) {
 				if($title){
 					$title .= $separator;
 				}
-				$title .= $key;
+				$title .= $crumb['name'];
 			}
 		}
 
@@ -269,35 +267,35 @@ class BaserHelper extends AppHelper {
 
 	}
 /**
- * ナビゲーション配列を取得する
+ * パンくず用の配列を取得する
  *
  * @param mixid $categoryTitleOn
  * @return array
  * @access public
  */
-	function getNavis($categoryTitleOn = null){
+	function getCrumbs($categoryTitleOn = null){
 
 		// ページカテゴリを追加
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
 
-		$navis = array();
+		$crumbs = array();
 		if($this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
-				if($this->_view->viewVars['navis']){
-					$navis = $this->_view->viewVars['navis'];
+				if($this->_view->viewVars['crumbs']){
+					$crumbs = $this->_view->viewVars['crumbs'];
 				}
 			}else {
 				if(is_array($this->_categoryTitle)){
-					$navis = $this->_categoryTitle;
+					$crumbs = $this->_categoryTitle;
 				}else{
-					$navis = array($this->_categoryTitle=>'');
+					$crumbs = array($this->_categoryTitle=>'');
 				}
 			}
 		}
 
-		return $navis;
+		return $crumbs;
 
 	}
 /**
@@ -311,7 +309,7 @@ class BaserHelper extends AppHelper {
 		// トップページの場合は、タイトルをサイト名だけにする
 		if (!empty($this->_view->viewVars['contentsTitle'])) {
 			$contentsTitle = $this->_view->viewVars['contentsTitle'];
-		}elseif($this->params['url']['url'] == '/' || $this->params['url']['url'] == '/pages/index.html') {
+		}elseif(($this->params['url']['url'] == '/' || $this->params['url']['url'] == '/pages/index.html') && $this->params['controller']!='installations') {
 			if(!empty($this->siteConfig['name'])) {
 				$contentsTitle = $this->siteConfig['name'];
 			}
@@ -510,12 +508,13 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * ページネーションを出力する
- * 
+ * [非推奨] 
  * @param string $name
  * @param array $params
  * @param boolean $loadHelpers
  * @return void
  * @access public
+ * @deprecated
  */
 	function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
 		
@@ -554,14 +553,39 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * スクリプトを出力する
- * $scripts_for_layout を出力するだけのラッパー
+ * $scripts_for_layout を出力する
  * 
  * @return void
  * @access public
  */
 	function scripts() {
 		
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {
+			$publishTheme = $this->HtmlEx->themeWeb;
+			$this->HtmlEx->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
+			$this->css('admin/toolbar', null, null, false);
+			$this->HtmlEx->themeWeb = $publishTheme;
+		}
 		echo join("\n\t", $this->_view->__scripts);
+		
+	}
+/**
+ * ツールバーやCakeのデバッグ出力を表示
+ * 
+ * @return void
+ * @access public
+ */
+	function func() {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {
+			$publishTheme = $this->_view->theme;
+			$this->_view->theme = $this->siteConfig['admin_theme'];
+			$this->element('admin/toolbar');
+			$this->_view->theme = $publishTheme;
+		}
+		if (isset($this->_view->viewVars['cakeDebug']) && Configure::read() > 2) {
+			$params = array('controller' => $this->_view->viewVars['cakeDebug']);
+			echo View::element('dump', $params, false);
+		}
 		
 	}
 /**
@@ -728,8 +752,16 @@ class BaserHelper extends AppHelper {
 		}else {
 			$ssl = false;
 		}
+		
+		// 管理システムメニュー対策
+		// プレフィックスが変更された場合も正常動作させる為
+		// TODO メニューが廃止になったら削除
+		if(!is_array($url)) {
+			$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		}
+		
 		$url = $this->getUrl($url);
-		$_url = str_replace($this->base, '', $url);
+		$_url = preg_replace('/^'.preg_quote($this->base, '/').'\//', '/', $url);
 		$enabled = true;
 
 		// 認証チェック
@@ -742,7 +774,8 @@ class BaserHelper extends AppHelper {
 
 		// ページ公開チェック
 		if(empty($this->params['admin'])) {
-			if(isset($this->Page) && !preg_match('/^\/admin/', $_url)) {
+			$adminPrefix = Configure::read('Routing.admin');
+			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
 				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
 					$enabled = false;
 				}
@@ -758,7 +791,7 @@ class BaserHelper extends AppHelper {
 		}
 
 		// 現在SSLのURLの場合、フルパスで取得
-		if($this->isSSL() && $ssl) {
+		if($this->isSSL() || $ssl) {
 			$_url = preg_replace("/^\//", "", $_url);
 			if(preg_match('/^admin\//', $_url)) {
 				$admin = true;
@@ -836,11 +869,59 @@ class BaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function editPage($id) {
+	function setPageEditLink($id) {
 		
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
-			echo '<div class="edit-link">'.$this->getLink('≫ 編集する',array('admin'=>true,'controller'=>'pages','action'=>'edit',$id),array('target'=>'_blank')).'</div>';
+			$this->_view->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
+		
+	}
+/**
+ * 編集リンクを出力する
+ * 
+ * @return void
+ * @access public
+ */
+	function editLink() {
+		
+		if(!empty($this->_view->viewVars['editLink'])) {
+			$this->link('編集する', $this->_view->viewVars['editLink'], array('class' => 'tool-menu'));
+		}
+		
+	}
+/**
+ * 編集リンクが存在するかチェックする
+ * 
+ * @return boolean
+ * @access public
+ */
+	function existsEditLink() {
+		
+		return (!empty($this->_view->viewVars['editLink']));
+		
+	}
+/**
+ * 公開ページへのリンクを出力する
+ * 
+ * @return void
+ * @access public
+ */
+	function publishLink() {
+		
+		if(!empty($this->_view->viewVars['publishLink'])) {
+			$this->link('公開ページ', $this->_view->viewVars['publishLink'], array('class' => 'tool-menu'));
+		}
+		
+	}
+/**
+ * 公開ページへのリンクが存在するかチェックする
+ * 
+ * @return boolean
+ * @access public
+ */
+	function existsPublishLink() {
+		
+		return (!empty($this->_view->viewVars['publishLink']));
 		
 	}
 /**
@@ -857,7 +938,12 @@ class BaserHelper extends AppHelper {
 		}else {
 			$siteVerpoint = 0;
 		}
-		return ($baserVerpoint > $siteVerpoint);
+		
+		if(!$baserVerpoint === false || $siteVerpoint === false) {
+			return false;
+		} else {
+			return ($baserVerpoint > $siteVerpoint);
+		}
 		
 	}
 /**
@@ -867,9 +953,9 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function updateMessage() {
-		
+		$adminPrefix = Configure::read('Routing.admin');
 		if($this->checkUpdate() && $this->params['controller'] != 'updaters') {
-			$updateLink = $this->HtmlEx->link('ここ','/admin/updaters');
+			$updateLink = $this->HtmlEx->link('ここ',"/{$adminPrefix}/updaters");
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
 		
@@ -882,7 +968,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function contentsName($detail = false) {
-		
+		$detail = true;
 		echo $this->getContentsName($detail);
 		
 	}
@@ -906,6 +992,7 @@ class BaserHelper extends AppHelper {
 		$url0 = '';
 		$url1 = '';
 		$url2 = '';
+		$default = 'Default';
 
 		if(!empty($this->params['prefix']) && Configure::read('AgentPrefix.currentPrefix') != $this->params['prefix']) {
 			$prefix = h($this->params['prefix']);
@@ -958,13 +1045,16 @@ class BaserHelper extends AppHelper {
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
-			
+			$aryPageUrl = split('/',$pageUrl);
 			if(!$detail) {
-				$aryPageUrl = split('/',$pageUrl);
-				$controller = $aryPageUrl[0];
+				$contentsName = Inflector::camelize($aryPageUrl[0]);
 			} else {
-				return Inflector::camelize(str_replace('/', '_', $pageUrl));
+				$contentsName =  Inflector::camelize(implode('_', $aryPageUrl));
 			}
+			if(!$contentsName) {
+				$contentsName = $default;
+			}
+			return $contentsName;
 			
 		}
 
@@ -991,7 +1081,7 @@ class BaserHelper extends AppHelper {
 		$contentsName = Inflector::camelize($contentsName);
 
 		if(!$contentsName) {
-			$contentsName = 'Default';
+			$contentsName = $default;
 		}
 		
 		return $contentsName;
@@ -1270,6 +1360,33 @@ END_FLASH;
 		
 		echo $out;
 		
+	}
+/**
+ * URLをリンクとして利用可能なURLに変換する
+ * ページの確認用URL取得に利用する
+ * /smartphone/about → /s/about
+ * 
+ * @param string $url
+ * @param string $type mobile / smartphone
+ * @return string URL 
+ */
+	function changePrefixToAlias($url, $type) {
+		$alias = Configure::read("AgentSettings.{$type}.alias");
+		$prefix = Configure::read("AgentSettings.{$type}.prefix");
+		return preg_replace('/^\/'.$prefix.'\//is', '/'.$alias.'/', $url);
+	}
+/**
+ * 現在のログインユーザーが管理者グループかどうかチェックする
+ * 
+ * @return boolean 
+ * @access public
+ */
+	function isAdmin() {
+		if(!empty($this->_view->viewVars['user']['user_group_id']) && $this->_view->viewVars['user']['user_group_id'] == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

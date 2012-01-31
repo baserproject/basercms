@@ -3,17 +3,15 @@
 /**
  * [ADMIN] データメンテナンス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,14 +20,14 @@
 ?>
 <h2>
 	<?php $baser->contentsTitle() ?>&nbsp;
-	<?php echo $html->image('img_icon_help_admin.gif', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
+	<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
 </h2>
 
 <div class="help-box corner10 display-none" id="helpAdminBody">
 	<h4>ユーザーヘルプ</h4>
 	<p>データベースのバックアップと復元が行えますので、定期的にバックアップを保存しておく事をおすすめします。</p>
 	<ul><li>データベースのデータと構造をバックアップします。</li>
-		<li>BaserCMSのバージョンが違う場合は復元する事ができない場合があります。</li>
+		<li>baserCMSのバージョンが違う場合は復元する事ができない場合があります。</li>
 		<li>環境によっては復元に失敗する可能性もあります。バックアップと復元は必ず自己責任で行ってください。<br />
 			<small>※ 運用を開始する前に、バックアップと復元が正常に動作するかの確認をおすすめします。</small></li>
 	</ul>
@@ -39,7 +37,7 @@
 
 <p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
 
-<div class="align-center"><?php $baser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
+<div class="submit"><?php $baser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
 
 <h3>データの復元</h3>
 
@@ -49,7 +47,7 @@ v1.6.6以前のバックアップデータの復元はできません。v1.6.6�
 
 <?php echo $formEx->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
 
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.backup', 'バックアップファイル') ?></th>
 		<td class="col-input">
@@ -59,6 +57,6 @@ v1.6.6以前のバックアップデータの復元はできません。v1.6.6�
 	</tr>
 </table>
 
-<div class="align-center"><?php echo $formEx->submit('アップロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="submit"><?php echo $formEx->submit('アップロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
 
 <?php echo $formEx->end() ?>

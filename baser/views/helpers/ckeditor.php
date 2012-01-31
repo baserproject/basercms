@@ -3,17 +3,15 @@
 /**
  * CKEditorヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -275,11 +273,12 @@ class CkeditorHelper extends AppHelper {
 			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
 		}
 		
+		$jscode = "$(document).ready(function(){";
 		if(!$this->inited) {
-			$jscode = "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
+			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
 		} else {
-			$jscode = '';
+			$jscode .= '';
 		}
 		if($styles) {
 			foreach($styles as $key => $style) {
@@ -313,6 +312,7 @@ class CkeditorHelper extends AppHelper {
 			}
 			$jscode .= " });";
 		}
+		$jscode .= " });";
 		return $this->Javascript->codeBlock($jscode);
 		
 	}

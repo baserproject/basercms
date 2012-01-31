@@ -3,17 +3,15 @@
 /**
  * ツールコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -60,7 +58,9 @@ class ToolsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $crumbs = array(
+		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
+	);
 /**
  * データメンテナンス
  *
@@ -92,7 +92,7 @@ class ToolsController extends AppController {
 				if($messages) {
 					$this->Session->setFlash(implode('<br />', $messages));
 				}
-				$this->redirect(array('action'=>'maintenance'));
+				$this->redirect(array('action' => 'maintenance'));
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
@@ -260,7 +260,7 @@ class ToolsController extends AppController {
 			}else {
 				if(!$this->_resetTmpSchemaFolder()){
 					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(array('action'=>'admin_write_schema'));
+					$this->redirect(array('action' => 'write_schema'));
 				}
 				if($this->Tool->writeSchema($this->data, $path)) {
 					App::import('Vendor','Simplezip');
@@ -293,11 +293,11 @@ class ToolsController extends AppController {
 				$path = TMP.'schemas'.DS;
 				if(!$this->_resetTmpSchemaFolder()){
 					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(array('action'=>'admin_load_schema'));
+					$this->redirect(array('action' => 'load_schema'));
 				}
 				if($this->Tool->loadSchema($this->data, $path)) {
 					$this->Session->setFlash('スキーマファイルの読み込みに成功しました。');
-					$this->redirect(array('action'=>'admin_load_schema'));
+					$this->redirect(array('action' => 'load_schema'));
 				} else {
 					$this->Session->setFlash('スキーマファイルの読み込みに失敗しました。');
 				}

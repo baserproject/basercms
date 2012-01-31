@@ -3,17 +3,15 @@
 /**
  * ブログ記事コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -62,7 +60,7 @@ class BlogController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $navis = array();
+	var $crumbs = array();
 /**
  * サブメニューエレメント
  *
@@ -110,7 +108,7 @@ class BlogController extends BlogAppController {
 		}
 
 		$this->subMenuElements = array('default');
-		$this->navis = array($this->blogContent['BlogContent']['title']=>'/'.$this->blogContent['BlogContent']['name'].'/index');
+		$this->crumbs = array(array('name' => $this->blogContent['BlogContent']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/index'));
 
 		// ページネーションのリンク対策
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
@@ -168,12 +166,12 @@ class BlogController extends BlogAppController {
 		}
 
 		$datas = $this->_getBlogPosts(array('listCount' => $listCount));
-		
+		$this->set('editLink', array('admin' => true, 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
 		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
-		$this->navis = array();
+		$this->crumbs = array();
 		$this->render($template);
 
 	}
@@ -212,7 +210,7 @@ class BlogController extends BlogAppController {
 		// パラメーター処理
 		$pass = $this->params['pass'];
 		$type = $year = $month = $day = $id = '';
-		$navis = $posts = array();
+		$crumbs = $posts = array();
 		$single = false;
 		$posts = array();
 		
@@ -246,7 +244,7 @@ class BlogController extends BlogAppController {
 				if(count($blogCategories) > 1){
 					foreach($blogCategories as $key => $blogCategory) {
 						if($key < count($blogCategories) -1 ) {
-							$navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -340,6 +338,11 @@ class BlogController extends BlogAppController {
 						$this->notFound();
 					}
 					
+					$user = $this->AuthEx->user();
+					if(empty($this->params['admin']) && !empty($user) && !Configure::read('AgentPrefix.on')) {
+						$this->set('editLink', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
+					}
+
 				}
 
 				// ナビゲーションを設定
@@ -347,7 +350,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
 					if($blogCategories) {
 						foreach($blogCategories as $blogCategory) {
-							$this->navis[$blogCategory['BlogCategory']['title']] = '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name'];
+							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -362,7 +365,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// 表示設定
-		$this->navis += $navis;
+		$this->crumbs += $crumbs;
 		$this->set('single',$single);
 		$this->set('posts', $posts);
 		$this->set('year', $year);
@@ -808,7 +811,7 @@ class BlogController extends BlogAppController {
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
 				'fields'	=> array('no','name'),
 				'conditions'=> $conditions,
-				'listCount'		=> $count,
+				'limit'		=> $count,
 				'order'		=> 'posts_date DESC',
 				'recursive'	=> -1,
 				'cache'		=> false

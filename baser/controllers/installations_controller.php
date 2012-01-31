@@ -3,18 +3,16 @@
 /**
  * インストーラーコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -50,12 +48,19 @@ class InstallationsController extends AppController {
  */
 	var $components = array('Session', 'EmailEx', 'BaserManager');
 /**
- * レイアウト
+ * レイアウトパス
  *
  * @var string
  * @access	public
  */
-	var $layout = "installations";
+	var $layoutPath = 'admin';
+/**
+ * サブフォルダ
+ *
+ * @var string
+ * @access	public
+ */
+	var $subDir = 'admin';
 /**
  * ヘルパー
  *
@@ -119,7 +124,9 @@ class InstallationsController extends AppController {
 				break;
 			default:
 				if($installed == 'complete') {
-					$this->notFound();
+					if($this->action != 'step5') {
+						$this->notFound();
+					}
 				}else {
 					if(Configure::read('debug') == 0) {
 						$this->redirect(array('action'=>'alert'));
@@ -145,7 +152,7 @@ class InstallationsController extends AppController {
  */
 	function index() {
 
-		$this->pageTitle = 'BaserCMSのインストール';
+		$this->pageTitle = 'baserCMSのインストール';
 
 		// 一時ファイルを削除する（再インストール用）
 		if(is_writable(TMP)) {
@@ -213,7 +220,7 @@ class InstallationsController extends AppController {
 		$this->set('tmpDirWritable',$tmpDirWritable);
 		$this->set('themeDirWritable',$themeDirWritable);
 		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
-		$this->pageTitle = 'BaserCMSのインストール [ステップ２]';
+		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 
 	}
 /**
@@ -258,7 +265,7 @@ class InstallationsController extends AppController {
 
 		}
 
-		$this->pageTitle = 'BaserCMSのインストール [ステップ３]';
+		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
 		$this->set('dbsource', $this->_getDbSource());
 
 	}
@@ -319,7 +326,7 @@ class InstallationsController extends AppController {
 			}
 		}
 
-		$this->pageTitle = 'BaserCMSのインストール [ステップ４]';
+		$this->pageTitle = 'baserCMSのインストール [ステップ４]';
 
 	}
 /**
@@ -334,7 +341,7 @@ class InstallationsController extends AppController {
 	function _sendCompleteMail($email, $name, $password) {
 
 		$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
-		$this->sendMail($email, 'BaserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
+		$this->sendMail($email, 'baserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
 
 	}
 /**
@@ -347,6 +354,11 @@ class InstallationsController extends AppController {
  */
 	function step5() {
 
+		$this->pageTitle = 'baserCMSのインストール完了！';
+		if($installed == 'complete') {
+			return;
+		}
+		
 		$message = '';
 
 		// インストールファイルを生成する
@@ -373,6 +385,7 @@ class InstallationsController extends AppController {
 
 		// pagesファイルを生成する
 		$this->_createPages();
+		ClassRegistry::removeObject('View');
 
 		// データベース設定を書き込む
 		$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
@@ -383,8 +396,6 @@ class InstallationsController extends AppController {
 		if($message) {
 			$this->setFlash($message);
 		}
-
-		$this->pageTitle = 'BaserCMSのインストール完了！';
 
 	}
 /**
@@ -481,7 +492,7 @@ class InstallationsController extends AppController {
 		Configure::write('Security.salt', $installationSetting['salt']);
 		$extra['data']['User']['name'] = $installationSetting['admin_username'];
 		$extra['data']['User']['password'] = $installationSetting['admin_password'];
-		$this->requestAction('/admin/users/login_exec', $extra);
+		$this->requestAction(array('admin' => true, 'controller' => 'users', 'action' => 'login_exec'), $extra);
 		$this->Session->write('Installation', $installationSetting);
 
 	}
@@ -587,7 +598,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbHost'] = 'localhost';
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'bc_';
-			$data['Installation']['dbName'] = 'baser';
+			$data['Installation']['dbName'] = 'basercms';
 		}
 		return $data;
 
@@ -802,7 +813,7 @@ class InstallationsController extends AppController {
 			$dbfilehandler->open('w',true);
 			$dbfilehandler->write("<?php\n");
 			$dbfilehandler->write("//\n");
-			$dbfilehandler->write("// Database Configuration File created by BaserCMS Installation\n");
+			$dbfilehandler->write("// Database Configuration File created by baserCMS Installation\n");
 			$dbfilehandler->write("//\n");
 			$dbfilehandler->write("class DATABASE_CONFIG {\n");
 			$dbfilehandler->write('var $baser = array('."\n");
@@ -917,10 +928,12 @@ class InstallationsController extends AppController {
  * @access public
  */
 	function alert() {
-		$this->pageTitle = 'BaserCMSのインストールを開始できません';
+		
+		$this->pageTitle = 'baserCMSのインストールを開始できません';
+		
 	}
 /**
- * BaserCMSを初期化する
+ * baserCMSを初期化する
  * debug フラグが -1 の場合のみ実行可能
  *
  * @return	void
@@ -928,7 +941,7 @@ class InstallationsController extends AppController {
  */
 	function reset() {
 
-		$this->pageTitle = 'BaserCMSの初期化';
+		$this->pageTitle = 'baserCMSの初期化';
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
 		$this->subDir = 'admin';
@@ -965,9 +978,11 @@ class InstallationsController extends AppController {
 				$pagesFolder = new Folder($theme.DS.'pages');
 				$pathes = $pagesFolder->read(true,true,true);
 				foreach($pathes[0] as $path){
-					$folder = new Folder();
-					$folder->delete($path);
-					$folder = null;
+					if(basename($path) != 'admin') {
+						$folder = new Folder();
+						$folder->delete($path);
+						$folder = null;
+					}
 				}
 				foreach($pathes[1] as $path){
 					if(basename($path) != 'empty') {
@@ -982,7 +997,7 @@ class InstallationsController extends AppController {
 				$messages[] = '手動でサーバー上より上記ファイルを削除して初期化を完了させてください。';
 			}
 
-			$messages = am(array('BaserCMSを初期化しました。',''),$messages);
+			$messages = am(array('baserCMSを初期化しました。',''),$messages);
 
 			$message = implode('<br />', $messages);
 

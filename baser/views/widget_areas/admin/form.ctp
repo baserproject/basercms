@@ -3,32 +3,24 @@
 /**
  * [ADMIN] ウィジェットエリア編集
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.views
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<!--[if !IE]><![IGNORE[--><![IGNORE[]]>
-<script type="text/javascript">
-$(function() {
-	$(".ui-widget-content").corner('10px');
-	$("#Target").corner('10px');
-	$("#Source").corner('10px');
-});
-</script>
-<!--<![endif]-->
+<div id="DelWidgetUrl" style="display:none"><?php $baser->url(array('controller' => 'widget_areas', 'action' => 'del_widget', $formEx->value('WidgetArea.id'))) ?></div>
+<div id="CurrentAction" style="display:none"><?php echo $this->action ?></div>
+
 <script type="text/javascript">
 $(function() {
 
@@ -103,9 +95,13 @@ $(function() {
 			/* ウィジェットを保存 */
 			updateWidget(baseId);
 
-		}};
-	$("#Target").sortable(sortableOptions
-	).droppable(
+		},
+		activate: function(event, ui) {
+			// ドラッグ時の幅を元の幅に合わせる
+			$("#Source div:last").width(ui.item.width()-20);
+		}
+	};
+	$("#Target").sortable(sortableOptions).droppable(
 	{
 		hoverClass: 'topDrop',
 		accept: 'div.draggable',
@@ -126,12 +122,12 @@ $(function() {
 		registWidgetEvent($(this).attr('id').replace('Setting',''));
 	});
 
-	<?php if($this->action == 'admin_edit'): ?>
-	$("#WidgetAreaUpdateTitleSubmit").click(function(){
-		widgetAreaUpdateTitle();
-		return false;
-	});
-	<?php endif ?>
+	if($("#CurrentAction").html() == 'admin_edit') {
+		$("#WidgetAreaUpdateTitleSubmit").click(function(){
+			widgetAreaUpdateTitle();
+			return false;
+		});
+	}
 
 });
 /**
@@ -192,7 +188,7 @@ function registWidgetEvent(baseId){
 function delWidget(id){
 
 	$.ajax({
-		url: '<?php $baser->root() ?>admin/widget_areas/del_widget/<?php echo $formEx->value('WidgetArea.id') ?>/'+id,
+		url: $("#DelWidgetUrl").html()+'/'+id,
 		type: 'GET',
 		dataType: 'text',
 		beforeSend: function() {
@@ -327,38 +323,10 @@ function updateWidget(id) {
 
 }
 </script>
-
-<div id="flashMessage" class="message" style="display:none"></div>
-
-<h2><?php $baser->contentsTitle() ?>&nbsp;
-	<?php echo $html->image('img_icon_help_admin.gif',array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?></h2>
-
-<div class="help-box corner10 display-none" id="helpAdminBody">
-	<h4>ユーザーヘルプ</h4>
-	<p>一つのウィジェットエリアは、左側の「利用できるウィジェット」からお好きなウィジェットを複数選択して作成する事ができます。</p>
-	<ul>
-		<li>まず、わかりやすい「ウィジェットエリア名」を決めて入力します。（例）サイドバー等</li>
-		<li>「エリア名を保存する」ボタンをクリックすると「利用できるウィジェット」と「利用中のウィジェット」の二つの領域が表示されます</li>
-		<li>「利用できるウィジェット」の中から利用したいウィジェットをドラッグして「利用中のウィジェット」の中でドロップします。</li>
-		<li>ウィジェットの設定欄が開きますので必要に応じて入力し「保存」ボタンをクリックします。</li>
-	</ul>
-	<h5>ポイント</h5>
-	<ul>
-		<li>「利用中のウィジェット」はドラッグアンドドロップで並び替える事ができます。</li>
-		<li>一時的に利用しない場合は、削除せずにウィジェット設定の「利用する」チェックを外しておくと同じ設定のまま後で利用する事ができます。</li>
-		<?php if($this->action == 'admin_edit'): ?>
-		<li>システム設定より設定できる標準ウィジェットエリアの他、個別にウィジェットを配置する場合は、テンプレートや、ページ記事中（ソース）に次のコードを貼り付けます。</li>
-		<?php endif ?>
-	</ul>
-	<?php if($this->action == 'admin_edit'): ?>
-	<pre>&lt;?php $baser->element('widget_area', array('no'=> <?php echo $formEx->value('WidgetArea.id') ?> )) ?&gt;</pre>
-	<?php endif ?>
-</div>
-
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->create('WidgetArea', array('action' => 'add')) ?>
+	<?php echo $formEx->create('WidgetArea', array('url' => array('action' => 'add'))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->create('WidgetArea', array('action' => 'update_title')) ?>
+	<?php echo $formEx->create('WidgetArea', array('action' => 'update_title', 'url' => array('action' => 'update_title', 'id' => false))) ?>
 <?php endif ?>
 
 <?php echo $formEx->hidden('WidgetArea.id') ?>
@@ -371,18 +339,19 @@ function updateWidget(id) {
 
 <?php if(!empty($widgetInfos)): ?>
 
-	<?php echo $formEx->create('WidgetArea', array('url' => array($formEx->value('WidgetArea.id')), 'action' => 'update_sort')) ?>
+	<?php echo $formEx->create('WidgetArea', array('action' => 'update_sort', 'url' => array('action' => 'update_sort', $formEx->value('WidgetArea.id'), 'id' => false))) ?>
 	<?php echo $formEx->input('WidgetArea.sorted_ids', array('type' => 'hidden')) ?>
 	<?php echo $formEx->end() ?>
 
 <div id="WidgetSetting" class="clearfix" >
 
 	<!-- 利用できるウィジェット -->
-	<div id="Source">
+	<div id="SourceOuter">
+		<div id="Source">
 
-		<h3>利用できるウィジェット</h3>
-	<?php foreach($widgetInfos as $widgetInfo) : ?>
-		<h4><?php echo $widgetInfo['title'] ?></h4>
+			<h2>利用できるウィジェット</h2>
+		<?php foreach($widgetInfos as $widgetInfo) : ?>
+			<h3><?php echo $widgetInfo['title'] ?></h3>
 <?php
 		$widgets = array();
 		foreach($widgetInfo['paths'] as $path){
@@ -406,95 +375,88 @@ function updateWidget(id) {
 			}
 		}
 ?>
-		<?php foreach($widgets as $widget): ?>
-		
-		<div class="ui-widget-content draggable widget" id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
-			<div class="head"><?php echo $widget['title'] ?></div>
-		</div>
-		
-		<div class="description"><?php echo $widget['description'] ?></div>
+			<?php foreach($widgets as $widget): ?>
 
-		<div class="ui-widget-content sortable widget template <?php echo $widget['name'] ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
-			<div class="clearfix">
-				<div class="widget-name display-none"><?php echo $widget['name'] ?></div>
-				<div class="del">削除</div>
-				<div class="action">設定</div>
+			<div class="ui-widget-content draggable widget" id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
 				<div class="head"><?php echo $widget['title'] ?></div>
 			</div>
-			<div class="content" style="text-align:right">
-				<p class="widget-name"><small><?php echo $widget['title'] ?></small></p>
-				<?php echo $formEx->create('Widget', array(
-					'url'	=> array('controller' => 'widget_areas', $formEx->value('WidgetArea.id')),
-					'action'=> 'update_widget',
-					'class'	=> 'form')) ?>
-				<?php echo $formEx->input('Widget.id', array('type' => 'hidden', 'class'=>'id')) ?>
-				<?php echo $formEx->input('Widget.type', array('type' => 'hidden', 'value' => $widget['title'])) ?>
-				<?php echo $formEx->input('Widget.element', array('type' => 'hidden', 'value' => $widget['name'])) ?>
-				<?php echo $formEx->input('Widget.plugin',array('type' => 'hidden', 'value' => $widgetInfo['plugin'])) ?>
-				<?php echo $formEx->input('Widget.sort', array('type' => 'hidden')) ?>
-				<?php echo $formEx->label('Widget.name','タイトル') ?>&nbsp;
-				<?php echo $formEx->input('Widget.name', array('type' => 'text', 'class' => 'name')) ?><br />
-				<?php echo $widget['setting'] ?><br />
-				<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader')) ?>
-				<?php echo $formEx->input('Widget.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title', 'checked' => 'checked')) ?>
-				<?php echo $formEx->input('Widget.status', array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
-				<?php echo $formEx->end(array('label' => '保　存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'submit')) ?>
-			</div>
-		</div>
-		<?php endforeach ?>
-	<?php endforeach ?>
-	</div>
 
-	<!-- 利用中のウィジェット -->
-	<div id="Target">
-		
-		<h3>利用中のウィジェット <?php $baser->img('ajax-loader-s.gif', array(
-			'style' => 'vertical-align:middle;display:none',
-			'id'	=> 'WidgetAreaUpdateSortLoader',
-			'class' => 'loader')) ?></h3>
-		
-	<?php if($formEx->value('WidgetArea.widgets')): ?>
-		<?php foreach($formEx->value('WidgetArea.widgets') as $widget): ?>
-		
-			<?php $key = key($widget) ?>
-			<?php $enabled = '' ?>
-			<?php if($widget[$key]['status']): ?>
-				<?php $enabled = ' enabled' ?>
-			<?php endif ?>
+			<div class="description"><?php echo $widget['description'] ?></div>
 
-			<div class="ui-widget-content sortable widget setting <?php echo $widget[$key]['element'] ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
+			<div class="ui-widget-content sortable widget template <?php echo $widget['name'] ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
 				<div class="clearfix">
-					<div class="widget-name display-none"><?php echo $widget[$key]['element'] ?></div>
+					<div class="widget-name display-none"><?php echo $widget['name'] ?></div>
 					<div class="del">削除</div>
 					<div class="action">設定</div>
-					<div class="head"><?php echo $widget[$key]['name'] ?></div>
+					<div class="head"><?php echo $widget['title'] ?></div>
 				</div>
 				<div class="content" style="text-align:right">
-					<p><small><?php echo $widget[$key]['type'] ?></small></p>
-					<?php echo $formEx->create('Widget', array(
-						'url'	=> '/admin/widget_areas/update_widget/'.$formEx->value('WidgetArea.id'),
-						'action'=> 'update_widget',
-						'class'	=> 'form',
-						'id'	=> 'WidgetUpdateWidgetForm'.$widget[$key]['id'])) ?>
-					<?php echo $formEx->input($key.'.id', array('type' => 'hidden', 'class' => 'id')) ?>
-					<?php echo $formEx->input($key.'.type', array('type' => 'hidden')) ?>
-					<?php echo $formEx->input($key.'.element', array('type' => 'hidden')) ?>
-					<?php echo $formEx->input($key.'.plugin', array('type' => 'hidden')) ?>
-					<?php echo $formEx->input($key.'.sort', array('type' => 'hidden')) ?>
-					<?php echo $formEx->label($key.'name','タイトル') ?>&nbsp;
-					<?php echo $formEx->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
-					<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'])) ?><br />
-					<?php $baser->img('ajax-loader-s.gif', array(
-						'style' => 'vertical-align:middle;display:none',
-						'id'	=> 'WidgetUpdateWidgetLoader'.$widget[$key]['id'],
-						'class' => 'loader')) ?>
-					<?php echo $formEx->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
-					<?php echo $formEx->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
-					<?php echo $formEx->end(array('label' => '保　存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit'.$widget[$key]['id'], 'class' => 'submit')) ?>
+					<p class="widget-name"><small><?php echo $widget['title'] ?></small></p>
+					<?php echo $formEx->create('Widget', array('url' => array('controller' => 'widget_areas', 'action'=> 'update_widget', $formEx->value('WidgetArea.id')), 'class' => 'form')) ?>
+					<?php echo $formEx->input('Widget.id', array('type' => 'hidden', 'class'=>'id')) ?>
+					<?php echo $formEx->input('Widget.type', array('type' => 'hidden', 'value' => $widget['title'])) ?>
+					<?php echo $formEx->input('Widget.element', array('type' => 'hidden', 'value' => $widget['name'])) ?>
+					<?php echo $formEx->input('Widget.plugin',array('type' => 'hidden', 'value' => $widgetInfo['plugin'])) ?>
+					<?php echo $formEx->input('Widget.sort', array('type' => 'hidden')) ?>
+					<?php echo $formEx->label('Widget.name','タイトル') ?>&nbsp;
+					<?php echo $formEx->input('Widget.name', array('type' => 'text', 'class' => 'name')) ?><br />
+					<?php echo $widget['setting'] ?><br />
+					<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader')) ?>
+					<?php echo $formEx->input('Widget.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title', 'checked' => 'checked')) ?>
+					<?php echo $formEx->input('Widget.status', array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
+					<?php echo $formEx->end(array('label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'button')) ?>
 				</div>
 			</div>
 			<?php endforeach ?>
-		<?php endif ?>
+		<?php endforeach ?>
+		</div>
+	</div>
+	
+	<!-- 利用中のウィジェット -->
+	<div id="TargetOuter">
+		<div id="Target">
+
+			<h2>利用中のウィジェット <?php $baser->img('ajax-loader-s.gif', array(
+				'style' => 'vertical-align:middle;display:none',
+				'id'	=> 'WidgetAreaUpdateSortLoader',
+				'class' => 'loader')) ?></h2>
+
+		<?php if($formEx->value('WidgetArea.widgets')): ?>
+			<?php foreach($formEx->value('WidgetArea.widgets') as $widget): ?>
+
+				<?php $key = key($widget) ?>
+				<?php $enabled = '' ?>
+				<?php if($widget[$key]['status']): ?>
+					<?php $enabled = ' enabled' ?>
+				<?php endif ?>
+
+				<div class="ui-widget-content sortable widget setting <?php echo $widget[$key]['element'] ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
+					<div class="clearfix">
+						<div class="widget-name display-none"><?php echo $widget[$key]['element'] ?></div>
+						<div class="del">削除</div>
+						<div class="action">設定</div>
+						<div class="head"><?php echo $widget[$key]['name'] ?></div>
+					</div>
+					<div class="content" style="text-align:right">
+						<p><small><?php echo $widget[$key]['type'] ?></small></p>
+						<?php echo $formEx->create('Widget', array('url' => array('controller' => 'widget_areas', 'action' => 'update_widget', $formEx->value('WidgetArea.id'), 'id' => false), 'class' => 'form', 'id' => 'WidgetUpdateWidgetForm'.$widget[$key]['id'])) ?>
+						<?php echo $formEx->input($key.'.id', array('type' => 'hidden', 'class' => 'id')) ?>
+						<?php echo $formEx->input($key.'.type', array('type' => 'hidden')) ?>
+						<?php echo $formEx->input($key.'.element', array('type' => 'hidden')) ?>
+						<?php echo $formEx->input($key.'.plugin', array('type' => 'hidden')) ?>
+						<?php echo $formEx->input($key.'.sort', array('type' => 'hidden')) ?>
+						<?php echo $formEx->label($key.'name','タイトル') ?>&nbsp;
+						<?php echo $formEx->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
+						<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'])) ?><br />
+						<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
+						<?php echo $formEx->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
+						<?php echo $formEx->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
+						<?php echo $formEx->end(array('label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit'.$widget[$key]['id'], 'class' => 'button')) ?>
+					</div>
+				</div>
+				<?php endforeach ?>
+			<?php endif ?>
+		</div>
 	</div>
 </div>
 <?php endif ?>

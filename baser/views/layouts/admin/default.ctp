@@ -1,42 +1,23 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [ADMIN] デフォルトレイアウト
+ * [ADMIN] レイアウト
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
- * @package			baser.views.layout
- * @since			Baser v 0.1.0
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			baser.views
+ * @since			baserCMS v 1.7.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$paramPrefix = '';
-$paramUrl = $this->params['url']['url'];
-if(isset($this->params['prefix'])) {
-	$paramPrefix = $this->params['prefix'];
-}
-if($this->params['controller'] == 'updaters' ||
-		$this->params['controller'] == 'installations' ||
-		$paramUrl == ($paramPrefix.'/users/login')) {
-	$useNavi = false;
-} else {
-	$useNavi = true;
-}
-if($this->name == 'CakeError'){
-	$useNavi = false;
-}
-if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
-	$useNavi = false;
-}
+$favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 ?>
 <?php $baser->xmlHeader() ?>
 <?php $baser->docType() ?>
@@ -45,119 +26,117 @@ if(empty($_SESSION['Auth']['User']) && Configure::read('debug') == 0) {
 <meta name="robots" content="noindex,nofollow" />
 <?php $baser->charset() ?>
 <?php $baser->title() ?>
-<?php $baser->metaDescription() ?>
-<?php $baser->metaKeywords() ?>
-<?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
-<?php $baser->css('admin/import') ?>
-<?php $baser->css(array('jquery-ui/ui.all','colorbox/colorbox')) ?>
+<?php $baser->css(array(
+	'jquery-ui/ui.all',
+	'admin/import', 
+	'../js/jquery.contextMenu-1.0/jquery.contextMenu', 
+	'colorbox/colorbox')) ?>
 <!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
-<!--[if IE 6]>
-<?php $baser->js(array('fixed-1.8', 'DD_belatedPNG_0.0.8a', 'DD_belatedPNG_config')) ?>
-<![endif]-->
 <?php $baser->js(array(
 	'jquery-1.6.2.min',
-	'jquery.dimensions.min',
 	'jquery-ui-1.8.14.custom.min',
 	'i18n/ui.datepicker-ja',
-	'jquery.bt.min',
-	'jquery.colorbox-min',
 	'jquery.corner-2.12',
-	'functions',
-	'styleswitcher',
+	'jquery.bt.min',
+	'cb',
+	'jquery.contextMenu-1.0/jquery.contextMenu',
+	'jquery.form-2.94',
+	'jquery.validate.min',
+	'jquery.colorbox-min',
+	'validate_messages_ja',
+	'admin/functions',
 	'admin/startup')) ?>
 <?php $baser->scripts() ?>
 </head>
+
 <body id="<?php $baser->contentsName() ?>" class="normal">
 
-<!-- loader -->
-<div id="Waiting" class="waiting-box">
-	<div class="corner5">
-	<?php echo $html->image('ajax-loader.gif') ?><br />
-    Waiting...
-	</div>
-</div>
+<div id="Page">
+	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $baser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
+	<div id="SaveSearchBoxUrl" style="display:none"><?php $baser->url(array('action' => 'ajax_save_search_box', $baser->getContentsName(true))) ?></div>
+	<div id="FavoriteBoxOpened" style="display:none"><?php echo (!empty($user))? $session->read('Baser.favorite_box_opened') : false ?></div>
+	<div id="SearchBoxOpened" style="display:none"><?php echo $session->read('Baser.searchBoxOpened.'.$baser->getContentsName(true)) ?></div>
+	<div id="CurrentPageName" style="display: none"><?php $baser->contentsTitle() ?></div>
+	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->params['url']['url'] ?></div>
 
-<!-- begin page -->
-<div id="page">
-
-	<!-- begin gradationShadow -->
-	<div id="gradationShadow">
-	
-		<!-- begin header -->
-		<?php $baser->element('header', array('useNavi'=>$useNavi)); ?>
-		<!-- end header -->
-		
-		<!-- begin contents -->
-		<div id="contents">
-
-			<?php if($useNavi): ?>
-			<!-- begin navigation -->
-			<div id="navigation" class="clearfix">
-				<div id="pankuzu">
-					<?php $baser->element('navi',array('title_for_element'=>$title_for_layout)); ?>
-				</div>
-				<div id="loginUser">
-					<span>
-					<?php if(!empty($user)): ?>
-					<?php $baser->link($user['real_name_1']." ".$user['real_name_2']."  様",array('plugin'=>null,'controller'=>'users','action'=>'edit',$user['id'])) ?>
-					<?php endif ?>
-					<?php if(Configure::read('debug')>0): ?>
-					&nbsp;[<?php echo Configure::read('debug') ?>]
-					<?php endif; ?>
-					</span>
-					&nbsp;| &nbsp;
-					<?php $baser->link('ログアウト',array('plugin'=>null,'controller'=>'users','action'=>'logout')) ?>
-				</div>
-			</div>
-			<!-- end navigation -->
-			<?php endif; ?>
-
-			<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
-			<?php $baser->updateMessage() ?>
-			<?php endif ?>
-
-			<?php if($this->params['controller']!='installations' && Configure::read('Baser.firstAccess')): ?>
-			<div id="FirstMessage">
-				BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
-				<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
-			</div>
-			<?php endif ?>
-			
-			<!-- begin alfa -->
-			<div id="alfa" >
-			
-				<!-- begin contentsBody -->
-				<div id="contentsBody">
-					<?php $baser->flash() ?>
-					<?php $baser->content() ?>
-				</div>
-				<!-- end contentsBody -->
-				
-			</div>
-			<!-- end alfa -->
-			
-			<!-- begin beta -->
-			<?php $baser->element('sidebar'); ?>
-			<!-- end beta -->
-			
-			<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
-			
+	<!-- Waiting -->
+	<div id="Waiting" class="waiting-box" style="display:none">
+		<div class="corner10">
+		<?php echo $html->image('ajax-loader.gif') ?><br />
+		W A I T
 		</div>
-		<!-- end contents -->
-		
-		<!-- begin footer -->
-		<?php $baser->element('footer'); ?>
-		<!-- end footer -->
-		
 	</div>
-	<!-- end gradationShadow -->
-	
-</div>
-<!-- end page -->
 
-<?php echo $cakeDebug; ?>
+	<?php $baser->header() ?>
+
+	<div id="Wrap" class="clearfix">
+
+		<?php if(!empty($user)): ?>
+		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
+			<div class="cbb clearfix">
+
+				<?php $baser->element('favorite_menu') ?>
+				<?php $baser->element('permission') ?>
+
+			<!-- / .cbb .clearfix --></div>
+		<!-- / #SideBar --></div>
+		<?php endif ?>
+
+		<div id="Contents">
+
+			<div class="cbb">
+
+				<?php $baser->element('crumbs', array('currentTitle' => $title_for_layout)) ?>
+
+				<div id="ContentsBody" class="contents-body clearfix">
+
+					<div class="clearfix">
+						<?php $baser->element('contents_menu') ?>
+						<h1><?php $baser->contentsTitle() ?></h1>
+					</div>
+					
+					<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
+					<?php $baser->updateMessage() ?>
+					<?php endif ?>
+
+					<?php if($this->params['controller']!='installations' && Configure::read('Baser.firstAccess')): ?>
+					<div id="FirstMessage" class="em-box">
+						BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
+						<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
+					</div>
+					<?php endif ?>
+					
+					<?php $baser->flash() ?>
+
+					<?php $baser->element('submenu') ?>
+
+					<?php $baser->element('help') ?>
+
+					<?php $baser->element('search') ?>
+
+					<?php $baser->content() ?>
+
+
+
+				<!-- / #ContentsBody .contents-body .clarfix --></div>
+
+				<?php if(!empty($user)): ?>
+				<div id="ToTop"><?php $baser->link('▲ トップへ', '#Header') ?></div>
+				<?php endif ?>
+
+			<!-- / .cbb --></div>
+
+		<!-- / #Contents --></div>
+
+	<!-- / #Wrap .clearfix --></div>
+
+	<?php $baser->footer() ?>
+	
+<!-- / #Page --></div>
+
+<?php $baser->element('credit') ?>
+	
+<?php $baser->func() ?>
 </body>
+
 </html>

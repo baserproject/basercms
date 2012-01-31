@@ -3,7 +3,7 @@
 /**
  * アップデーターコントローラー
  *
- * BaserCMSのコアや、プラグインのアップデートを行えます。
+ * baserCMSのコアや、プラグインのアップデートを行えます。
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * 　アップデートファイルの配置場所
@@ -29,7 +29,7 @@
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * データベースの構造変更にCakeSchemaを利用できます。
  * ブラウザより、次のURLにアクセスするとスキーマファイルの書き出しが行えますのでそれを利用します。
- * http://{BaserCMSの設置URL}/admin/tools/write_schema
+ * http://{baserCMSの設置URL}/admin/tools/write_schema
  * 更新タイプによって、ファイル名を変更し、アップデートフォルダに設置します。
  *
  * ■ テーブル追加： create_{テーブル名}.php
@@ -101,21 +101,19 @@
  * 作成したスキーマファイルが正常に読み込めるかをテストする場合には、
  * ブラウザより次のURLにアクセスし、スキーマファイルをアップロードしてテストを行なえます。
  *
- * http://{BaserCMSの設置フォルダ}/admin/tools/load_schema
+ * http://{baserCMSの設置フォルダ}/admin/tools/load_schema
  *
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -206,16 +204,18 @@ class UpdatersController extends AppController {
 			$this->setMessage('全てのアップデート処理が完了しました。', false, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(array('action' => 'index'));
 
 		}
 
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
-		$this->pageTitle = 'アプリケーションアップデート（BaserCMSコア）';
-		$this->set('updateTarget', 'BaserCMSコア');
+		$this->pageTitle = 'データベースアップデート（baserCMSコア）';
+		$this->set('updateTarget', 'baserCMSコア');
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
+		$this->set('siteVerPoint',  verpoint($sourceVersion));
+		$this->set('baserVerPoint', verpoint($targetVersion));		
 		$this->set('scriptNum',$scriptNum);
 		$this->set('plugin', false);
 		$this->render('update');
@@ -236,7 +236,7 @@ class UpdatersController extends AppController {
 			} else {
 				$this->setMessage('アップデートスクリプトの実行が完了しました。', false, true, true);
 				$this->Session->setFlash($this->_getUpadteMessage());
-				$this->redirect(array('action'=>'exec_script'));
+				$this->redirect(array('action' => 'exec_script'));
 			}
 		}
 
@@ -273,14 +273,14 @@ class UpdatersController extends AppController {
 			$this->_update($name);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action'=>'plugin', $name));
+			$this->redirect(array('action' => 'plugin', $name));
 
 		}
 
 		$targetVersion = $this->getBaserVersion($name);
 		$sourceVersion = $this->getSiteVersion($name);
 		$title = $this->Plugin->field('title',array('name'=>$name)).'プラグイン';
-		$this->pageTitle = 'アプリケーションアップデート（'.$title.'）';
+		$this->pageTitle = 'データベースアップデート（'.$title.'）';
 		$this->set('updateTarget', $title);
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
@@ -321,6 +321,10 @@ class UpdatersController extends AppController {
 		$sourceVerPoint = verpoint($sourceVersion);
 		$targetVerPoint = verpoint($targetVersion);
 
+		if($sourceVerPoint === false || $targetVerPoint === false) {
+			return false;
+		}
+		
 		if(!$plugin) {
 			$path = BASER_CONFIGS.'update'.DS;
 			if(!is_dir($path)){
@@ -341,16 +345,21 @@ class UpdatersController extends AppController {
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
 		$updaters = array();
+		$updateVerPoints = array();
 		if(!empty($files[0])) {
 			foreach ($files[0] as $folder) {
 				$updateVersion = $folder;
-				$updateVerPoint = verpoint($updateVersion);
-				if(($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $updateVersion=='test') {
-					if(file_exists($path.DS.$folder.DS.'updater.php')) {
-						$updaters[$updateVersion] = $updateVerPoint;
+				$updateVerPoints[$updateVersion] = verpoint($updateVersion);
+			}
+			asort($updateVerPoints);
+			foreach ($updateVerPoints as $key => $updateVerPoint) {
+				if(($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key=='test') {
+					if(file_exists($path.DS.$key.DS.'updater.php')) {
+						$updaters[$key] = $updateVerPoint;
 					}
 				}
 			}
+			
 		}
 		return $updaters;
 
@@ -400,7 +409,7 @@ class UpdatersController extends AppController {
 		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $plugin);
 
 		if(!$plugin) {
-			$name = 'BaserCMSコア';
+			$name = 'baserCMSコア';
 		}else{
 			$name = $this->Plugin->field('title',array('name'=>$plugin)).'プラグイン';
 		}
@@ -577,7 +586,7 @@ class UpdatersController extends AppController {
  */
 	function _getUpadteMessage() {
 		
-		return implode('<br />',$this->_updateMessage);
+		return implode('<br />',$this->_updateMessage).'<br /><br />';
 		
 	}
 /**

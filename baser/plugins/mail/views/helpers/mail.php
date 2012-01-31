@@ -3,17 +3,15 @@
 /**
  * メールヘルパー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views.helpers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -73,16 +71,17 @@ class MailHelper extends AppHelper {
 
 	}
 /**
- * メールフィールド一覧ページへのリンクを張る
+ * メールフィールド一覧ページへのリンクを張る【非推奨】
  * 
  * @param string $mailContentId
  * @return void
  * @access public
+ * @deprecated ツールバーに移行
  */
 	function indexFields($mailContentId) {
 		
 		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する',array('admin'=>true,'prefix'=>'mail','controller'=>'mail_fields','action'=>'index',$mailContentId),array('target'=>'_blank')).'</div>';
+			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
 		
 	}

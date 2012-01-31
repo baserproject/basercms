@@ -3,17 +3,15 @@
 /**
  * ブログタグコントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -52,10 +50,13 @@ class BlogTagsController extends BlogAppController {
 /**
  * ぱんくずナビ
  *
- * @vararray
+ * @var string
  * @access public
  */
-	var $navis = array('ブログ管理'=>'/admin/blog/blog_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
+	);
 /**
  * サブメニューエレメント
  *
@@ -169,6 +170,47 @@ class BlogTagsController extends BlogAppController {
 
 		$this->redirect(array('action' => 'index'));
 
+	}
+/**
+ * [ADMIN] 削除処理　(ajax)
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
+
+		if(!$id) {
+			exit();
+		}
+
+		$data = $this->BlogTag->read(null, $id);
+		if($this->BlogTag->del($id)) {
+			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
+			$this->BlogTag->saveDbLog($message);
+			exit(true);
+		}
+		exit();
+
+	}
+/**
+ * [ADMIN] 一括削除
+ *
+ * @param int $id
+ * @return void
+ * @access public
+ */
+	function _batch_del($ids) {
+		if($ids) {
+			foreach($ids as $id) {
+				$data = $this->BlogTag->read(null, $id);
+				if($this->BlogTag->del($id)) {
+					$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
+					$this->BlogTag->saveDbLog($message);
+				}
+			}
+		}
+		return true;
 	}
 /**
  * [ADMIN] AJAXタグ登録

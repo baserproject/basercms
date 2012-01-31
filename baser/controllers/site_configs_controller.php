@@ -3,17 +3,15 @@
 /**
  * サイト設定コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -68,7 +66,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form');
+	var $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
 /**
  * [ADMIN] サイト基本設定
  *
@@ -146,32 +144,22 @@ class SiteConfigsController extends AppController {
 
 					// キャッシュをクリア
 					if($this->siteConfigs['maintenance'] || 
-							($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) ||
 							($this->siteConfigs['google_analytics_id'] != $this->data['SiteConfig']['google_analytics_id'])){
 						clearViewCache();
 					}
 
-					// ページテンプレートの生成
-					if($this->siteConfigs['theme'] != $this->data['SiteConfig']['theme']) {
-						if(!$this->Page->createAllPageTemplate()){
-							$this->Session->setFlash(
-									'テーマ変更中にページテンプレートの生成に失敗しました。<br />'.
-									'表示できないページはページ管理より更新処理を行ってください。'
-							);
-						}
-					}
-
 					// リダイレクト
 					if($this->readSmartUrl() != $smartUrl) {
+						$adminPrefix = Configure::read('Routing.admin');
 						if($smartUrl){
-							$redirectUrl = $this->getRewriteBase('/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
 						}else{
-							$redirectUrl = $this->getRewriteBase('/index.php/admin/site_configs/form');
+							$redirectUrl = $this->getRewriteBase('/index.php/'.$adminPrefix.'/site_configs/form');
 						}
 						header('Location: '.FULL_BASE_URL.$redirectUrl);
 						exit();
 					}else{
-						$this->redirect(array('action'=>'form'));
+						$this->redirect(array('action' => 'form'));
 					}
 
 				}
@@ -214,7 +202,6 @@ class SiteConfigsController extends AppController {
 		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
 		
 		$this->set('userGroups', $userGroups);
-		$this->set('themes',$this->SiteConfig->getThemes());
 		$this->set('rewriteInstalled', $rewriteInstalled);
 		$this->set('writableInstall', $writableInstall);
 		$this->set('writableHtaccess', $writableHtaccess);
@@ -223,7 +210,8 @@ class SiteConfigsController extends AppController {
 		$this->set('smartUrlChangeable', $smartUrlChangeable);
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
-
+		$this->help = 'site_configs_form';
+		
 	}
 /**
  * キャッシュファイルを全て削除する
@@ -235,7 +223,7 @@ class SiteConfigsController extends AppController {
 		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
-		$this->redirect(array('action'=>'form'));
+		$this->redirect(array('action' => 'form'));
 		
 	}
 /**
@@ -263,6 +251,15 @@ class SiteConfigsController extends AppController {
 		$this->set('cakeVersion',$this->getCakeVersion());
 		$this->subMenuElements = array('site_configs');
 
+	}
+/**
+ * [ADMIN] PHP INFO
+ * 
+ * @return void
+ * @access public
+ */
+	function admin_phpinfo() {
+		$this->layout = 'empty';
 	}
 /**
  * サイト基本設定データを取得する

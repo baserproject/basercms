@@ -5,7 +5,7 @@
  *
  * Long description for file
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
  * CakePHP(tm) :  Rapid Development Framework <http://www.cakephp.org/>
  * Copyright 2005-2008, Cake Software Foundation, Inc.

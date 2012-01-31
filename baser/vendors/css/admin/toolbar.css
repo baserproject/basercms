@@ -1,0 +1,103 @@
+@charset "utf-8";
+/* SVN FILE: $Id$ */
+/**
+ * ツールバー
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 1.7.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+/* html
+----------------------------------------------- */
+
+html {
+	margin-top:31px;
+}
+html, body {
+	min-height: 340px;
+}
+/* ToolBar
+----------------------------------------------- */
+
+#ToolBar{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+	display:block;	
+	background-color:#333;
+	color: #EEE;
+	width:100%;
+	font-size: 12px;
+	border-bottom: 1px solid #444;
+}
+#ToolbarInner {
+	padding: 0 30px;
+}
+#ToolBar a{
+	line-height: 30px;
+	height: 30px;
+	padding: 0 10px;
+	color: #EEE;
+	text-decoration: none;
+	display: block;
+	position: relative;
+	vertical: top;
+}
+#ToolBar a:hover{
+	background-color: #444;
+	color: #FFF;
+}
+#ToolMenu li{
+	float: left;
+	vertical-align: top;
+}
+#UserMenu{
+	margin-right:10px;
+	float: right;
+	vertical-align: top;
+	color:#3366CC;
+	height:30px;
+}
+#UserMenu ul li{
+    position: relative;
+}
+#UserMenu ul li ul{
+    display:none;
+    border: 1px solid #CCC;
+    box-shadow: 0 1px 3px #CCC;
+	background-color:#FFF;
+}
+#UserMenu .active ul{
+    display:block !important;
+	clear:both;
+}
+#UserMenu .active a {
+    background-color: #FFF;
+    box-shadow: 0 -1px 3px #CCC;
+}
+#UserMenu .active ul a {
+    position:relative;
+    z-index: 1;
+	margin-top: -1px;
+    box-shadow: 0 0 0 #CCCCCC;
+	color:#000;
+	padding:2px 30px 2px 15px;
+}
+#UserMenu .active a.title{
+    border: 1px solid #999;
+    border-bottom: 0;
+    color:#CCC;
+	float:right;
+}
+#UserMenu .active ul a:hover{
+	background-color:#EDF8C9;
+}

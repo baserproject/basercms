@@ -16,7 +16,6 @@
 <?php $baser->css(array('import')) ?>
 <?php $baser->js(array(
 	'jquery-1.6.4.min',
-	'jquery.corner',
 	'startup'
 )) ?>
 <?php $baser->scripts() ?>
@@ -68,6 +67,6 @@
 <?php $baser->footer() ?>
 <!-- end footer -->
 
-<?php echo $cakeDebug; ?>
+<?php $baser->func() ?>
 </body>
 </html>

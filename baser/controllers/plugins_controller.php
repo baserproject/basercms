@@ -3,17 +3,15 @@
 /**
  * Plugin 拡張クラス
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -67,8 +65,9 @@ class PluginsController extends AppController {
  * @var array
  * @access public
  */
-	var $navis = array('システム設定'=>'/admin/site_configs/form',
-			'プラグイン管理'=>'/admin/plugins/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('controller' => 'plugins', 'action' => 'index'))
+	);
 /**
  * コンテンツID
  *
@@ -159,9 +158,9 @@ class PluginsController extends AppController {
  */
 	function admin_index() {
 
-		$listDatas = $this->Plugin->find('all');
-		if(!$listDatas) {
-			$listDatas = array();
+		$datas = $this->Plugin->find('all');
+		if(!$datas) {
+			$datas = array();
 		}
 		// プラグインフォルダーのチェックを行う。
 		// データベースに登録されていないプラグインをリストアップ
@@ -172,7 +171,7 @@ class PluginsController extends AppController {
 		foreach($plugins[0] as $plugin) {
 			$exists = false;
 			$pluginData = array();
-			foreach($listDatas as $data) {
+			foreach($datas as $data) {
 				if($plugin == $data['Plugin']['name']) {
 					$pluginData = $data;
 					$exists = true;
@@ -230,12 +229,13 @@ class PluginsController extends AppController {
 				$unRegistereds[] = $pluginData;
 			}
 		}
-		$listDatas = array_merge($registereds,$unRegistereds);
+		$datas = array_merge($registereds,$unRegistereds);
 
 		// 表示設定
-		$this->set('listDatas',$listDatas);
-		$this->subMenuElements = array('site_configs', 'plugins');
+		$this->set('datas',$datas);
+		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
+		$this->help = 'plugins_index';
 
 	}
 /**
@@ -244,13 +244,29 @@ class PluginsController extends AppController {
  * @param string プライグイン名
  * @return void
  * @access public
+ * @deprecated admin_ajax_delete_file に移行
  */
 	function admin_delete_file($pluginName) {
 		
 		$this->__deletePluginFile($pluginName);
 		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
 		$this->Session->setFlash($message);
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
+		
+	}
+/**
+ * [ADMIN] ファイル削除
+ *
+ * @param string プライグイン名
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete_file($pluginName) {
+		
+		$pluginName = urldecode($pluginName);
+		$this->__deletePluginFile($pluginName);
+		$this->Plugin->saveDbLog('プラグイン「'.$pluginName.'」 を完全に削除しました。');
+		exit(true);
 		
 	}
 /**
@@ -307,7 +323,8 @@ class PluginsController extends AppController {
  * @access  public
  */
 	function admin_add($name) {
-
+		
+		$name = urldecode($name);
 		if(!$this->data) {
 			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'config.php')) {
 				include APP.'plugins'.DS.$name.DS.'config'.DS.'config.php';
@@ -349,23 +366,23 @@ class PluginsController extends AppController {
 
 			// データを保存
 			if($this->Plugin->save()) {
-
-				Cache::clear(false,'_cake_model_');
-				Cache::clear(false,'_cake_core_');
-				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を BaserCMS に登録しました。';
+				
+				clearAllCache();
+				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。';
 				$this->Session->setFlash($message);
 				$this->Plugin->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action' => 'index'));
 
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->Session->setFlash('プラグインに問題がある為インストールを完了できません。開発者に確認してください。');
 			}
 
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('site_configs', 'plugins');
+		$this->subMenuElements = array('plugins');
 		$this->pageTitle = '新規プラグイン登録';
+		$this->help = 'plugins_form';
 		$this->render('form');
 
 	}
@@ -375,13 +392,14 @@ class PluginsController extends AppController {
  * @param int ID
  * @return void
  * @access public
+ * @deprecated admin_ajax_delete に移行
  */
 	function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
-			$this->redirect(array('action'=>'admin_index'));
+			$this->redirect(array('action' => 'index'));
 		}
 
 
@@ -390,6 +408,7 @@ class PluginsController extends AppController {
 
 		/* 削除処理 */
 		if($this->Plugin->save($data)) {
+			clearAllCache();
 			$message = 'プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。';
 			$this->Session->setFlash($message);
 			$this->Plugin->saveDbLog($message);
@@ -397,9 +416,59 @@ class PluginsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action'=>'index'));
+		$this->redirect(array('action' => 'index'));
 
 	}
+/**
+ * [ADMIN] 削除処理　(ajax)
+ *
+ * @param int ID
+ * @return void
+ * @access public
+ */
+	function admin_ajax_delete($id = null) {
 
+		/* 除外処理 */
+		if(!$id) {
+			exit();
+		}
+
+		$data = $this->Plugin->read(null, $id);
+		$data['Plugin']['status'] = false;
+		$this->Plugin->set($data);
+		/* 削除処理 */
+		if($this->Plugin->save()) {
+			clearAllCache();
+			$this->Plugin->saveDbLog('プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。');
+			exit(true);
+		}
+		
+		exit();
+
+	}
+/**
+ * 一括無効
+ * 
+ * @param array $ids
+ * @return boolean
+ * @access protected
+ */
+	function _batch_del($ids) {
+		
+		if($ids) {
+			foreach($ids as $id) {
+				$data = $this->Plugin->read(null, $id);
+				$data['Plugin']['status'] = false;
+				$this->Plugin->set($data);
+				if($this->Plugin->save()) {
+					$this->Plugin->saveDbLog('プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。');
+				}
+			}
+			clearAllCache();
+		}
+		return true;
+		
+	}
+	
 }
 ?>

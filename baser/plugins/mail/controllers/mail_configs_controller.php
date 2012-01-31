@@ -3,17 +3,15 @@
 /**
  * メールフォーム設定コントローラー
  *
- * PHP versions 4 and 5
+ * PHP versions 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
- * @since			Baser v 0.1.0
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -62,7 +60,10 @@ class MailConfigsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $navis = array('メールフォーム管理'=>'/admin/mail/mail_contents/index');
+	var $crumbs = array(
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
+	);
 /**
  * [ADMIN] メールフォーム設定
  *
@@ -78,7 +79,7 @@ class MailConfigsController extends MailAppController {
 			/* 更新処理 */
 			if($this->MailConfig->save($this->data)) {
 				$this->Session->setFlash('メールフォーム設定を保存しました。');
-				$this->redirect(array('action'=>'form'));
+				$this->redirect(array('action' => 'form'));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
@@ -88,6 +89,7 @@ class MailConfigsController extends MailAppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールプラグイン基本設定';
+		$this->help = 'mail_configs_form';
 
 	}
 	

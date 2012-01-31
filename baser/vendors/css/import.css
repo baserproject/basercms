@@ -6,14 +6,12 @@
  *
  * PHP versions 4 and 5
  *
- * BaserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi 
- *								fukuoka, Japan 819-0055
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
- * @since			Baser v 0.1.0
+ * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -21,27 +19,7 @@
  */
 
 @import "admin/default.css";
+@import "admin/base.css";
 @import "admin/layout.css";
-@import "admin/class.css";
 @import "admin/contents.css";
-@import "admin/header.css";
-@import "admin/footer.css";
-body.normal{
-	background:url(images/bg_body_red.jpg) repeat-x left top;
-	background-color:#FFDBD9;
-}
-#page {
-	background: url(images/bg_page_red.gif) repeat-y;
-}
-#gradationShadow {
-	background: url(images/bg_gradation_shadow_red.jpg) no-repeat;
-}
-#header {
-	background: url(images/bg_header_red.jpg) no-repeat;
-}
-#footer {
-	background: url(images/bg_footer_red.jpg) no-repeat;
-}
-#glbMenus {
-	background:url(images/bg_glb_menu_red.jpg) no-repeat;
-}
+@import "admin/toolbar.css";
