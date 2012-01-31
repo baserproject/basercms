@@ -53,7 +53,7 @@ $(function(){
 				}
 			}
 		});
-		//$("#PageContents").val(contents);
+		$("#PageContents").val(contents);
 		return false;
 	});
 /**
