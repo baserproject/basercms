@@ -968,7 +968,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function contentsName($detail = false) {
-		$detail = true;
+
 		echo $this->getContentsName($detail);
 		
 	}
