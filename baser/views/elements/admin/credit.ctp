@@ -161,7 +161,7 @@ function resizeScroll() {
 					<li>Nobuhiko Yoshikawa (<a href="http://twitter.com/nobynoby" target="_blank">nobynoby</a>)</li>
 					<li><a href="http://www.alter-ego.jp/" target="_blank">Evian</a> (<a href="http://twitter.com/evian" target="_blank">evian</a>)</li>
 					<li><a href="http://apollodenki.blog97.fc2.com/" target="_blank">Apollon</a> (<a href="http://twitter.com/apollon_d" target="_blank">apollon_d</a>)</li>
-					<li>Nagachan (<a href="http://twitter.com/QuarisJP" target="_blank">QuarisJP</a>)</li>
+					<li><a href="http://quaris.jp" target="_blank">Nagachan</a> (<a href="http://twitter.com/QuarisJP" target="_blank">QuarisJP</a>)</li>
 					<li>Kou (<a href="http://twitter.com/k0567" target="_blank">k0567</a>)</li>
 				</ul>
 				<ul>
