@@ -1095,16 +1095,18 @@ class BaserAppModel extends Model {
 						}
 					}
 					// <<<
-					if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
-						// >>> CUSTOMIZE MODIFY 2011/02/17 ryuring 和暦対応
-						//return null;
-						// ---
+					
+					// >>> CUSTOMIZE MODIFY 2011/02/17 ryuring 和暦対応
+					// if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+					//	return null;
+					// ---
+					if ($val != 'wareki' && (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-'))) {
 						if($type != 'text' && $type != 'string') {
 							return null;
 						} else {
 							return $data;
 						}
-						// <<<
+					// <<<
 					}
 					if (isset($data[$val]) && !empty($data[$val])) {
 						$date[$key] = $data[$val];
