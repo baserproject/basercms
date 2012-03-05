@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.views
  * @since			baserCMS v 0.1.0
@@ -92,63 +92,4 @@ $(function(){
 					<ul>
 						<li>一つの表示フィードに対し、複数のフィードを読み込む際、フィードタイトルを表示させたい場合は、フィードタイトルを「|」で区切って入力してください。</li>
 						<li>テンプレート上で、「feed_title」として参照できるようになります。</li>
-						<li>また、先頭から順に「feed_title_no」としてインデックス番号が割り振られます。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $formEx->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
-			<td class="col-input">
-				<?php echo $formEx->input('FeedConfig.category_index', array('type' => 'textarea', 'cols'=>36,'rows'=>3)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCategoryIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('FeedConfig.category_index') ?>
-				<div id="helptextCategoryIndex" class="helptext">
-					<ul>
-						<li>カテゴリにインデックス番号を割り当てたい場合は、カテゴリ名を「|」で区切って入力してください。</li>
-						<li>先頭から順に「category_no」としてインデックス番号が割り振られます。</li>
-					</ul>
-				</div>
-
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $formEx->label('FeedConfig.template', 'テンプレート名') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $formEx->input('FeedConfig.template', array('type' => 'select', 'options' => $feed->getTemplates())) ?>
-				<?php echo $formEx->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
-	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
-	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('FeedConfig.template') ?>
-				<div id="helptextTemplate" class="helptext">
-					<ul>
-						<li>出力するフィードのテンプレートを指定します。</li>
-						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
-
-<!-- button -->
-<div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
-			array('action' => 'delete', $formEx->value('FeedConfig.id')),
-			array('class'=>'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $formEx->value('FeedConfig.name')),
-			false); ?>
-<?php endif ?>
-</div>
-
-<?php echo $formEx->end() ?>
-
-
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $baser->element('feed_details/index_list') ?></div>
+						<li>また、先頭から順に「feed_title_no」としてイ

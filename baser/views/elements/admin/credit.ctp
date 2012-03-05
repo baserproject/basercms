@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 1.7.0
@@ -185,7 +185,6 @@ function resizeScroll() {
 						<li><a href="http://www.panic-net.org/" target="_blank">Min</a> (<a href="http://twitter.com/min_meou" target="_blank">min_meou</a>)</li>
 						<li><a href="http://blog.grooweb.jp/" target="_blank">Youhei Nishi</a> (<a href="http://twitter.com/nippei" target="_blank">nippei</a>)</li>
 						<li>Ryuji Egashira (<a href="http://twitter.com/ryuring" target="_blank">ryuring</a>)</li>
-						<li>Masakazu Fuchigami (arata)</li>
 						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
 					</ul>
 				</div>

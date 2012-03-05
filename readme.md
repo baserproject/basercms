@@ -1,7 +1,7 @@
 baserCMS
 ==========
 Based Website Development Project  
-Copyright 2008 - 2011, baserCMS Users Community  
+Copyright 2008 - 2012, baserCMS Users Community  
 
 Documentation
 -------------
