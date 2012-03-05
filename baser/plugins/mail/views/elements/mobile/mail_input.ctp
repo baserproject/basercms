@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -69,15 +69,4 @@
 						<?php else: ?>
 <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "", "必須項目です",array('wrap' => false)) ?></font>
 						<?php endif; ?>
-<font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_same", "入力データが一致していません",array('wrap' => false)) ?></font> <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_complate", "入力データが不完全です",array('wrap' => false)) ?></font>
-					<?php endif; ?>
-					<?php if(!$freezed): ?>
-<br />
-<font size="1"><?php echo $description ?></font>
-					<?php endif; ?>
-				<?php endif; ?>
-<?php $group_field=$record['MailField']['group_field'] ?>
-			<?php endif; ?>
-		<?php endif; ?>
-	<?php endif; ?>
-<?php endforeach; ?>
+<font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_same", "入力データが一致していません",array('wrap' => false)) ?></font> <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_complate", "入力
