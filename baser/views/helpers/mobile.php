@@ -49,9 +49,10 @@ class MobileHelper extends Helper {
 			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
 
 			// 内部リンクの自動変換
+			$currentAlias = Configure::read('AgentPrefix.currentAlias');
 			$baseUrl = baseUrl();
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'([^\"]+?)\"/', "href=\"".$baseUrl."m/$1\"", $view->output);
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'m\/m\//', "href=\"".$baseUrl."m/", $view->output);
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'([^\"]+?)\"/', "href=\"".$baseUrl.$currentAlias."/$1\"", $view->output);
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).$currentAlias.'\/'.$currentAlias.'\//', "href=\"".$baseUrl.$currentAlias."/", $view->output);
 
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
