@@ -49,7 +49,13 @@ $(function(){
 	changeNavi('#UserName');
 	changeNavi('#UserPassword');
 		
-	$('#UserName,#UserPassword').bind('keyup', changeNavi);
+	$('#UserName,#UserPassword').bind('keyup', function(){
+		if($(this).val()) {
+			$(this).prev().hide();
+		} else {
+			$(this).prev().show();
+		}
+	});
 
 	$("#Login").click(function(){
 		changeView(false);
