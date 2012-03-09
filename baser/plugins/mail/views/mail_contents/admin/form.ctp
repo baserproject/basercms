@@ -200,94 +200,8 @@ function mailContentSender1ClickHandler(){
 		</tr>
 	</table>	
 </div>
+
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
-<div class="section">
-<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.sender_2', 'BCC用送信先メールアドレス') ?></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.sender_2', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
-			<?php echo $html->image('admin/icn_help.png',array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('MailContent.sender_2') ?>
-			<div id="helptextSender2" class="helptext">
-				<ul><li>BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。</li>
-					<li>複数の送信先を指定するには、カンマで区切って入力します。</li></ul>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.widget_area', 'ウィジェットエリア') ?>&nbsp;<span class="required">*</span></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.widget_area', array('type' => 'select', 'options' => $formEx->getControlsource('WidgetArea.id') , 'empty' => 'サイト基本設定に従う')) ?>
-			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('MailContent.widget_area') ?>
-			<div id="helptextWidgetArea" class="helptext">
-				メールコンテンツで利用するウィジェットエリアを指定します。<br />
-				ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.layout_template', 'レイアウトテンプレート名') ?>&nbsp;<span class="required">*</span></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.layout_template', array('type' => 'select', 'options' => $mail->getLayoutTemplates())) ?>
-			<?php echo $formEx->input('MailContent.edit_layout', array('type' => 'hidden')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-			<?php $baser->link('≫ 編集する','javascript:void(0)', array('id' => 'EditLayout')) ?>
-<?php endif ?>
-			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpLayoutTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('MailContent.layout_template') ?>
-			<div id="helptextLayoutTemplate" class="helptext">
-				<ul>
-					<li>メールフォームの外枠のテンプレートを指定します。</li>
-					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-				</ul>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.form_template', 'メールフォームテンプレート名') ?>&nbsp;<span class="required">*</span></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.form_template', array('type' => 'select', 'options' => $mail->getFormTemplates())) ?>
-			<?php echo $formEx->input('MailContent.edit_mail_form', array('type' => 'hidden')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-			<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
-<?php endif ?>
-			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFormTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('MailContent.form_template') ?>
-			<div id="helptextFormTemplate" class="helptext">
-				<ul>
-					<li>メールフォーム本体のテンプレートを指定します。</li>
-					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-				</ul>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('MailContent.mail_template', '送信メールテンプレート名') ?>&nbsp;<span class="required">*</span></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.mail_template', array('type' => 'select', 'options' => $mail->getMailTemplates())) ?>
-			<?php echo $formEx->input('MailContent.edit_mail', array('type' => 'hidden')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-			<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
-<?php endif ?>
-			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpMailTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('MailContent.mail_template') ?>
-			<div id="helptextMailTemplate" class="helptext">
-				<ul>
-					<li>送信するメールのテンプレートを指定します。</li>
-					<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-				</ul>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<th class="col-head"><?php echo $formEx->label('BlogContent.exclude_search', '公開設定') ?>&nbsp;<span class="required">*</span></th>
-		<td class="col-input">
-			<?php echo $formEx->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'このメールフォームをサイト内検索の検索結果より除外する')) ?>
-		</td>
-	</tr>
-</table>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
 		<tr>
@@ -376,6 +290,7 @@ function mailContentSender1ClickHandler(){
 		</tr>
 	</table>
 </div>
+	
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
