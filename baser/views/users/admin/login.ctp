@@ -46,13 +46,10 @@ $(function(){
 	
 	$("body").prepend($("#Login"));
 	$('#UserName').focus();
-	$('#UserName,#UserPassword').bind('keyup', function(){
-		if($(this).val()) {
-			$(this).prev().hide();
-		} else {
-			$(this).prev().show();
-		}
-	});
+	changeNavi('#UserName');
+	changeNavi('#UserPassword');
+		
+	$('#UserName,#UserPassword').bind('keyup', changeNavi);
 
 	$("#Login").click(function(){
 		changeView(false);
@@ -106,6 +103,13 @@ $(function(){
 	}
 	
 });
+function changeNavi(target){
+	if($(target).val()) {
+		$(target).prev().hide();
+	} else {
+		$(target).prev().show();
+	}
+}
 function changeView(creditOn) {
 
 	if(creditOn) {
