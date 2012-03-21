@@ -30,7 +30,7 @@
 class BaserHelper extends AppHelper {
 	var $_view = null;
 	var $siteConfig = array();
-	var $helpers = array('HtmlEx','Javascript','Session','XmlEx');
+	var $helpers = array('HtmlEx','Javascript','Session','XmlEx', 'Array');
 	var $_content = null;			// コンテンツ
 	var $_categoryTitleOn = true;
 	var $_categoryTitle = true;
@@ -229,6 +229,7 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * タイトルを取得する
+ * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
  * 
  * @param string $separator
  * @param string $categoryTitleOn
@@ -237,17 +238,16 @@ class BaserHelper extends AppHelper {
  */
 	function getTitle($separator='｜',$categoryTitleOn = null) {
 
-		// ページコントローラーでタイトルが指定されてない場合はページタイトルを出力しない
-		if(strpos($this->_view->pageTitle,'.html') !== false) {
-			$title = '';
-		}else {
-			$title = $this->_view->pageTitle;
-		}
-
 		$crumbs = $this->getCrumbs($categoryTitleOn);
 		if($crumbs){
-			$crumbs = array_reverse($crumbs,true);
-			foreach ($crumbs as $crumb) {
+			$crumbs = array_reverse($crumbs);
+			$title = '';
+			foreach ($crumbs as $key => $crumb) {
+				if($this->Array->first($crumbs, $key) && isset($crumbs[$key+1])) {
+					if($crumbs[$key+1]['name'] == $crumb['name']) {
+						continue;
+					}
+				}
 				if($title){
 					$title .= $separator;
 				}
@@ -268,10 +268,13 @@ class BaserHelper extends AppHelper {
 	}
 /**
  * パンくず用の配列を取得する
- *
+ * 基本的には、コントローラーの crumbs プロパティで設定した値を取得する仕様だが
+ * 事前に setCategoryTitle メソッドで出力内容をカスタマイズする事ができる
+ * 
  * @param mixid $categoryTitleOn
  * @return array
  * @access public
+ * @todo 処理内容がわかりにくいので変数名のリファクタリング要
  */
 	function getCrumbs($categoryTitleOn = null){
 
@@ -294,7 +297,9 @@ class BaserHelper extends AppHelper {
 				}
 			}
 		}
-
+		
+		$crumbs[] = array('name' => $this->getContentsTitle(), 'url' => '');
+		
 		return $crumbs;
 
 	}

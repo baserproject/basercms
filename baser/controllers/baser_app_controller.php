@@ -37,7 +37,7 @@ class BaserAppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'FormEx', 'Javascript', 'Baser', 'XmlEx');
+	var $helpers = array('PluginHook', 'Html', 'HtmlEx', 'Form', 'FormEx', 'Javascript', 'Baser', 'XmlEx', 'Array');
 /**
  * レイアウト
  *

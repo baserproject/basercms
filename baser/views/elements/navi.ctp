@@ -3,6 +3,8 @@
 /**
  * [PUBLISH] ナビゲーション
  *
+ * ページタイトルが直属のカテゴリ名と同じ場合は、直属のカテゴリ名を省略する
+ * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -22,14 +24,22 @@ if ($this->viewPath == 'home'){
 }else{
 	$crumbs = $baser->getCrumbs();
 	if (!empty($crumbs)){
-		foreach($crumbs as $crumb){
-			$baser->addCrumb($crumb['name'], $crumb['url']);
+		foreach($crumbs as $key => $crumb){
+			if($array->last($crumbs, $key+1)) {
+				if($crumbs[$key+1]['name'] == $crumb['name']) {
+					continue;
+				}
+			}
+			if($array->last($crumbs, $key)) {
+				if ($this->viewPath != 'home' && $crumb['name']){
+					$baser->addCrumb('<strong>'.$crumb['name'].'</strong>');
+				}elseif($this->name == 'CakeError'){
+					$baser->addCrumb('<strong>404 NOT FOUND</strong>');
+				}
+			} else {
+				$baser->addCrumb($crumb['name'], $crumb['url']);
+			}
 		}
-	}
-	if ($this->viewPath != 'home' && $title_for_element){
-		$baser->addCrumb('<strong>'.$title_for_element.'</strong>');
-	}elseif($this->name == 'CakeError'){
-		$baser->addCrumb('<strong>404 NOT FOUND</strong>');
 	}
 	$baser->crumbs(' &gt; ','ホーム');
 }
