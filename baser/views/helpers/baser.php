@@ -1047,16 +1047,21 @@ class BaserHelper extends AppHelper {
 			if(preg_match('/^[^\/]/', $pageUrl)) {
 				$pageUrl = '/'.$pageUrl;
 			}
+			
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
-			$aryPageUrl = split('/',$pageUrl);
-			if(!$detail) {
-				$contentsName = Inflector::camelize($aryPageUrl[0]);
+			$aryPageUrl = explode('/', $pageUrl);
+			
+			array_shift($aryPageUrl);
+			
+			if(count($aryPageUrl) >= 2) {
+				if(!$detail) {
+					$contentsName = Inflector::camelize($aryPageUrl[0]);
+				} else {
+					$contentsName =  Inflector::camelize(implode('_', $aryPageUrl));
+				}
 			} else {
-				$contentsName =  Inflector::camelize(implode('_', $aryPageUrl));
-			}
-			if(!$contentsName) {
 				$contentsName = $default;
 			}
 			return $contentsName;
@@ -1068,7 +1073,7 @@ class BaserHelper extends AppHelper {
 			$plugin = '';
 			$controller = $url0;
 		}
-// NewsArchives2
+
 		if($prefix)	$prefix .= '_';
 		if($plugin) $plugin .= '_';
 		if($controller) $controller .= '_';
