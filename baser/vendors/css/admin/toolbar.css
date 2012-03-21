@@ -56,6 +56,13 @@ html, body {
 	background-color: #444;
 	color: #FFF;
 }
+#ToolMenu ul,#ToolMenu li,#UserMenu ul, #UserMenu li{
+	margin:0;
+	padding:0;
+}
+#UserMenu li img {
+	vertical-align: middle;
+}
 #ToolMenu li{
 	float: left;
 	vertical-align: top;
