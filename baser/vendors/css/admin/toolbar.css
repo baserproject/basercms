@@ -59,6 +59,7 @@ html, body {
 #ToolMenu ul,#ToolMenu li,#UserMenu ul, #UserMenu li{
 	margin:0;
 	padding:0;
+	list-style: none;
 }
 #UserMenu li img {
 	vertical-align: middle;
