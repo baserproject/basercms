@@ -280,7 +280,7 @@ class Page extends AppModel {
 
 		// 検索用テーブルに登録
 		if($this->contentSaving) {
-			if(!$data['exclude_search']) {
+			if(empty($data['exclude_search'])) {
 				$this->saveContent($this->createContent($data));
 			} else {
 				$this->deleteContent($data['id']);
@@ -661,9 +661,9 @@ class Page extends AppModel {
 		}else {
 			$conditions['Page.name'] = $this->data['Page']['name'];
 			if(empty($this->data['Page']['page_category_id'])) {
-				if($this->data['Page']['page_type'] == 2) {
+				if(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
 					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
-				} elseif($this->data['Page']['page_type'] == 3) {
+				} elseif(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
 					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 				} else {
 					$conditions['Page.page_category_id'] = NULL;
@@ -947,14 +947,14 @@ class Page extends AppModel {
 
 		// ファイル読み込み・ページ登録
 		if(!$files[1]) $files[1] = array();
-		foreach($files[1] as $file) {
+		foreach($files[1] as $path) {
 
-			if(preg_match('/\.ctp$/is',$file) == false) {
+			if(preg_match('/\.ctp$/is',$path) == false) {
 				continue;
 			}
 
-			$pageName = basename($file, '.ctp');
-			$file = new File($file);
+			$pageName = basename($path, '.ctp');
+			$file = new File($path);
 			$contents = $file->read();
 			$file->close();
 			$file = null;
