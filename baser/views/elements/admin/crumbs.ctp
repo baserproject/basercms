@@ -23,11 +23,21 @@ if ($this->viewPath != 'dashboard'){
 $crumbs = $baser->getCrumbs();
 if (!empty($crumbs)){
 	foreach($crumbs as $crumb){
-		$baser->addCrumb($crumb['name'], $crumb['url']);
+		if($array->last($crumbs, $key+1)) {
+			if($crumbs[$key+1]['name'] == $crumb['name']) {
+				continue;
+			}
+		}
+		if($array->last($crumbs, $key)) {
+			if ($this->viewPath != 'home' && $crumb['name']){
+				$baser->addCrumb('<strong>'.$crumb['name'].'</strong>');
+			}elseif($this->name == 'CakeError'){
+				$baser->addCrumb('<strong>404 NOT FOUND</strong>');
+			}
+		} else {
+			$baser->addCrumb($crumb['name'], $crumb['url']);
+		}
 	}
-}
-if ($currentTitle){
-	$baser->addCrumb('<strong>'.$currentTitle.'</strong>');
 }
 ?>
 

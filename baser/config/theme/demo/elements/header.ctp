@@ -19,7 +19,7 @@
 	<?php if(!$baser->isTop()): ?>
 	<!-- navigation -->
 	<div id="navigation">
-		<?php $baser->element('navi',array('title_for_element'=>$baser->getContentsTitle())); ?>
+		<?php $baser->element('crumbs'); ?>
 	</div>
 	<?php endif ?>
 </div>

@@ -16,7 +16,7 @@
 
 	<?php if(!$baser->isTop()): ?>
 	<div id="Navigation">
-		<?php $baser->element('navi',array('title_for_element'=>$baser->getContentsTitle())); ?>
+		<?php $baser->element('crumbs'); ?>
 	</div>
 	<?php endif ?>
 

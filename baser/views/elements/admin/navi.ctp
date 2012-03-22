@@ -16,6 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ * @deprecated		2.0の次のバージョンで削除
  */
 if ($this->viewPath != 'dashboard'){
 	$baser->addCrumb('ダッシュボード',array('plugin' => null, 'controller' => 'dashboard'));

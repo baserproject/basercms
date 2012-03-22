@@ -86,7 +86,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 
 			<div class="cbb">
 
-				<?php $baser->element('crumbs', array('currentTitle' => $title_for_layout)) ?>
+				<?php $baser->element('crumbs') ?>
 
 				<div id="ContentsBody" class="contents-body clearfix">
 
