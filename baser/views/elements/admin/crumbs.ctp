@@ -22,7 +22,7 @@ if ($this->viewPath != 'dashboard'){
 }
 $crumbs = $baser->getCrumbs();
 if (!empty($crumbs)){
-	foreach($crumbs as $crumb){
+	foreach($crumbs as $key => $crumb){
 		if($array->last($crumbs, $key+1)) {
 			if($crumbs[$key+1]['name'] == $crumb['name']) {
 				continue;
