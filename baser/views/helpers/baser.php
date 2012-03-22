@@ -298,7 +298,10 @@ class BaserHelper extends AppHelper {
 			}
 		}
 		
-		$crumbs[] = array('name' => $this->getContentsTitle(), 'url' => '');
+		$contentsTitle = $this->getContentsTitle();
+		if($contentsTitle) {
+			$crumbs[] = array('name' => $contentsTitle, 'url' => '');
+		}
 		
 		return $crumbs;
 
@@ -314,14 +317,9 @@ class BaserHelper extends AppHelper {
 		// トップページの場合は、タイトルをサイト名だけにする
 		if (!empty($this->_view->viewVars['contentsTitle'])) {
 			$contentsTitle = $this->_view->viewVars['contentsTitle'];
-		}elseif(($this->params['url']['url'] == '/' || $this->params['url']['url'] == '/pages/index.html') && $this->params['controller']!='installations') {
-			if(!empty($this->siteConfig['name'])) {
-				$contentsTitle = $this->siteConfig['name'];
-			}
 		}elseif($this->_view->pageTitle) {
 			$contentsTitle = $this->_view->pageTitle;
 		}
-
 		if ($this->_view->name != 'CakeError' && !empty($contentsTitle)) {
 			return $contentsTitle;
 		}
@@ -987,8 +985,15 @@ class BaserHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getContentsName($detail = false) {
+	function getContentsName($detail = false, $options = array()) {
 
+		$options = am(array(
+			'home'		=> 'Home',
+			'default'	=> 'Default',
+			'error'		=> 'Error'),
+		$options);
+		extract($options);
+		
 		$prefix = '';
 		$plugin = '';
 		$controller = '';
@@ -997,8 +1002,8 @@ class BaserHelper extends AppHelper {
 		$url0 = '';
 		$url1 = '';
 		$url2 = '';
-		$default = 'Default';
-
+		$aryUrl = array();
+		
 		if(!empty($this->params['prefix']) && Configure::read('AgentPrefix.currentPrefix') != $this->params['prefix']) {
 			$prefix = h($this->params['prefix']);
 		}
@@ -1033,7 +1038,7 @@ class BaserHelper extends AppHelper {
 			$url2 = $url[2];
 		}
 
-		// ページ機能の場合
+		// 固定ページの場合
 		if($controller=='pages' && $action=='display') {
 			
 			if(strpos($pass[0], 'pages/') !== false) {
@@ -1041,59 +1046,51 @@ class BaserHelper extends AppHelper {
 			} else {
 				$pageUrl = h($this->params['url']['url']);
 			}
-			
-			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
-			
-			if(preg_match('/^[^\/]/', $pageUrl)) {
-				$pageUrl = '/'.$pageUrl;
-			}
-			
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
-			$aryPageUrl = explode('/', $pageUrl);
+			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
+			$pageUrl = preg_replace('/^\//', '', $pageUrl);
+			$aryUrl = split('/',$pageUrl);
 			
-			array_shift($aryPageUrl);
-			
-			if(count($aryPageUrl) >= 2) {
-				if(!$detail) {
-					$contentsName = Inflector::camelize($aryPageUrl[0]);
-				} else {
-					$contentsName =  Inflector::camelize(implode('_', $aryPageUrl));
-				}
-			} else {
-				$contentsName = $default;
+		} else {
+
+			// プラグインルーティングの場合
+			if((($url1==''&&$action=='index')||($url1==$action)) && $url2!=$action && $plugin) {
+				$plugin = '';
+				$controller = $url0;
 			}
-			return $contentsName;
-			
-		}
-
-		// プラグインルーティングの場合
-		if((($url1==''&&$action=='index')||($url1==$action)) && $url2!=$action && $plugin) {
-			$plugin = '';
-			$controller = $url0;
-		}
-
-		if($prefix)	$prefix .= '_';
-		if($plugin) $plugin .= '_';
-		if($controller) $controller .= '_';
-		if($action) $action .= '_';
-
-		$contentsName = $prefix.$plugin.$controller;
-
-		if($detail) {
-			$contentsName .= $action;
+			if($prefix)	{
+				$aryUrl[] = $prefix;
+			}
+			if($plugin) {
+				$aryUrl[] = $plugin;
+			}
+			if($controller) {
+				$aryUrl[] = $controller;
+			}
+			if($action) {
+				$aryUrl[] = $action;
+			}
 			if($pass) {
-				$contentsName .= '_'.implode('_', $pass);
+				$aryUrl = $aryUrl + $pass;
 			}
+
 		}
 
-		$contentsName = Inflector::camelize($contentsName);
-
-		if(!$contentsName) {
+		if ($this->_view->name == 'CakeError') {
+			$contentsName = $error;
+		} elseif(count($aryUrl) >= 2) {
+			if(!$detail) {
+				$contentsName = Inflector::camelize($aryUrl[0]);
+			} else {
+				$contentsName =  Inflector::camelize(implode('_', $aryUrl));
+			}
+		} elseif(count($aryUrl) == 1 && $aryUrl[0] == 'index') {
+			$contentsName = $home;
+		} else {
 			$contentsName = $default;
 		}
-		
 		return $contentsName;
 
 	}
