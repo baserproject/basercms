@@ -886,6 +886,12 @@ class Page extends AppModel {
  */
 	function entryPageFiles($targetPath,$parentCategoryId = '') {
 
+		if(function_exists('ini_set')) {
+			ini_set('max_execution_time', 0);
+			ini_set('max_input_time', 0);
+			ini_set('memory_limit ', '256M');
+		}
+		
 		$this->fileSave = false;
 		$folder = new Folder($targetPath);
 		$files = $folder->read(true,true,true);
