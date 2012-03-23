@@ -1,6 +1,6 @@
-<?php
+<?php 
 /* SVN FILE: $Id$ */
-/* UserGroups schema generated on: 2011-01-19 17:01:38 : 1295426558*/
+/* UserGroups schema generated on: 2012-03-23 13:03:39 : 1332478179*/
 class UserGroupsSchema extends CakeSchema {
 	var $name = 'UserGroups';
 
@@ -20,6 +20,7 @@ class UserGroupsSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
+		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

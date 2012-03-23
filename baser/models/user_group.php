@@ -195,6 +195,15 @@ class UserGroup extends AppModel {
 		}
 		
 	}
-	
+/**
+ * グローバルメニューを利用可否確認
+ * 
+ * @param string $id
+ * @return boolean
+ * @access public
+ */
+	function isAdminGlobalmenuUsed($id) {
+		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
+	}
 }
 ?>

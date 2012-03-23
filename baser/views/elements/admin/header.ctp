@@ -19,12 +19,11 @@
  */
 ?>
 <div id="Header" class="clearfix">
-
 	<?php $baser->element('toolbar') ?>
-
+<?php if($baserAdmin->isAdminGlobalmenuUsed()): ?>
 	<div class="clearfix" id="HeaderInner">
 	
-<?php if(!empty($user)): ?>
+	<?php if(!empty($user)): ?>
 		<div id="GlobalMenu">
 			<ul class="clearfix">
 				<li><?php $baser->link($baser->getImg('admin/btn_header_menu_1.png', array('width' => 118, 'height' => 26, 'alt' => '固定ページ管理', 'class' => 'btn', 'title' => '固定ページ管理')), array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>
@@ -34,16 +33,16 @@
 				<li><?php $baser->link($baser->getImg('admin/btn_header_menu_5.png', array('width' => 104, 'height' => 26, 'alt' => 'システム管理', 'class' => 'btn', 'title' => 'システム管理')), array('plugin' => '', 'controller' => 'site_configs', 'action' => 'form')) ?></li>	
 			</ul>
 		</div>
-<?php endif ?>
+	<?php endif ?>
 	
 		<div id="Logo">
-<?php if(!empty($user)): ?>
+	<?php if(!empty($user)): ?>
 			<?php $baser->link($baser->getImg('admin/logo_header.png', array('width' => 153, 'height' => 30, 'alt' => 'baserCMS')), array('plugin' => null, 'controller' => 'dashboard', 'action' => 'index')) ?>
-<?php else: ?>
+	<?php else: ?>
 			<?php $baser->img('admin/logo_header.png', array('width' => 153, 'height' => 30, 'alt' => 'baserCMS')) ?>
-<?php endif ?>
+	<?php endif ?>
 		</div>
 	
 	</div>
-	
+<?php endif ?>
 <!-- / #Header .clearfix --></div>

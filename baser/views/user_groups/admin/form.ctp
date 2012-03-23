@@ -65,6 +65,28 @@ foreach(Configure::read('AuthPrefix') as $key => $authPrefix) {
 				<?php echo $formEx->error('UserGroup.title') ?>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $formEx->label('UserGroup.use_admin_globalmenu', '管理システムの<br />グローバルメニューを利用する') ?></th>
+			<td class="col-input">
+<?php if($formEx->value('UserGroup.name') == 'admins' && $this->action == 'admin_edit'): ?>
+				<?php if($formEx->value('UserGroup.use_admin_globalmenu')): ?>
+				利用する
+				<?php else: ?>
+				利用しない
+				<?php endif ?>
+<?php else: ?>
+				<?php echo $formEx->input('UserGroup.use_admin_globalmenu', array('type' => 'checkbox', 'label' => '利用する')) ?>
+<?php endif ?>
+				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $formEx->error('UserGroup.use_admin_globalmenu') ?>
+				<div id="helptextName" class="helptext">
+					<ul>
+						<li>管理システムでグローバルメニューを利用するかどうか設定します。</li>
+						<li>admins の場合は変更できません。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
 <?php if(count($authPrefixes) > 1): ?>
 		<tr>
 			<th class="col-head"><?php echo $formEx->label('UserGroup.auth_prefix', '認証プレフィックス') ?>&nbsp;<span class="required">*</span></th>
