@@ -65,7 +65,7 @@ html, body {
 	list-style: none;
 }
 #UserMenu li img {
-	vertical-align: middle;
+	vertical-align: baseline;
 }
 #ToolMenu li{
 	float: left;
