@@ -42,7 +42,7 @@ html, body {
 #ToolbarInner {
 	padding: 0 30px;
 }
-#ToolBar a{
+#ToolBar a, #ToolBar span{
 	line-height: 30px;
 	height: 30px;
 	padding: 0 10px;
@@ -51,6 +51,9 @@ html, body {
 	display: block;
 	position: relative;
 	vertical: top;
+}
+#ToolBar span {
+	color:#666;
 }
 #ToolBar a:hover{
 	background-color: #444;
@@ -108,4 +111,11 @@ html, body {
 }
 #UserMenu .active ul a:hover{
 	background-color:#EDF8C9;
+}
+span#DebugMode{
+	background-color:#E20;
+	font-weight: bold;
+	color:#FFF;
+	display: inline!important;
+	padding:3px 5px;
 }

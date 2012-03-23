@@ -32,12 +32,18 @@ $(function(){
 	<div id="ToolbarInner" class="clearfix">
 		<div id="ToolMenu">
 			<ul>
+				
 				<?php if($this->name == 'Installations'): ?>
 				<li><?php $baser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', array('target' => '_blank')) ?></li>
 				<?php elseif(empty($this->params['admin'])): ?>
 				<li><?php $baser->link($baser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
 				<?php else: ?>
 				<li><?php $baser->link($baser->siteConfig['name'], '/') ?></li>
+					<?php if(Configure::read('debug') == -1): ?>
+				<li><span class="corner5" id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">！</span></li>
+					<?php elseif(Configure::read('debug') > 0): ?>
+				<li><span class="corner5" id="DebugMode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"><?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></li>
+					<?php endif; ?>
 				<?php endif ?>
 				<?php if($baser->existsEditLink()): ?>
 				<li><?php $baser->editLink() ?></li>
@@ -50,7 +56,7 @@ $(function(){
 
 	<?php if(!empty($user)): ?>
 		<div id="UserMenu">
-			<ul>
+			<ul class="clearfix">
 				<li>
 					<?php $baser->link($user['real_name_1']." ".$user['real_name_2'].' '.$baser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
@@ -59,7 +65,6 @@ $(function(){
 					</ul>
 				</li>
 			</ul>
-
 		</div>
 	<?php endif ?>
 	</div>
