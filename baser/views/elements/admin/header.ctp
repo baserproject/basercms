@@ -20,7 +20,7 @@
 ?>
 <div id="Header" class="clearfix">
 	<?php $baser->element('toolbar') ?>
-<?php if($baserAdmin->isAdminGlobalmenuUsed()): ?>
+<?php if($this->name == 'Installations' || $this->params['url']['url'] == 'admin/users/login' || $baserAdmin->isAdminGlobalmenuUsed()): ?>
 	<div class="clearfix" id="HeaderInner">
 	
 	<?php if(!empty($user)): ?>

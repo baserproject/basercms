@@ -355,7 +355,8 @@ class InstallationsController extends AppController {
 	function step5() {
 
 		$this->pageTitle = 'baserCMSのインストール完了！';
-		if($installed == 'complete') {
+		$db = ConnectionManager::getInstance();
+		if($db->config->baser['driver'] != '') {
 			return;
 		}
 		

@@ -18,8 +18,10 @@
  * @license			http://basercms.net/license/index.html
  */
 $publishTheme = $baser->HtmlEx->themeWeb;
-$baser->HtmlEx->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
-$baser->Javascript->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
+if($this->name != 'Installations') {
+	$baser->HtmlEx->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
+	$baser->Javascript->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
+}
 $baser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
 ?>
 <script type="text/javascript">
@@ -65,13 +67,11 @@ $(function(){
 						<li><?php $baser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 						<li><?php $baser->link('ログアウト', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
 					</ul>
-					<?php else: ?>
-						<?php if($this->params['url']['url'] != 'admin/users/login'): ?>
+					<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != 'admin/users/login'): ?>
 					<?php $baser->link('ログインしていません '.$baser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 						<li><?php $baser->link('ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>
 					</ul>
-						<?php endif ?>
 					<?php endif ?>
 				</li>
 			</ul>
