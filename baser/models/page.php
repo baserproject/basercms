@@ -1137,10 +1137,12 @@ class Page extends AppModel {
  */
 	function copy($id = null, $data = array()) {
 		
+		$data = array();
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
 		}
 		$data['Page']['name'] .= '_copy';
+		$data['Page']['title'] .= '_copy';
 		if(!empty($_SESSION['Auth']['User'])) {
 			$data['Page']['author_id'] = $_SESSION['Auth']['User']['id'];
 		}
