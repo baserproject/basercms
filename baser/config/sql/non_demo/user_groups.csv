@@ -1,2 +1,2 @@
-"id","name","title","auth_prefix","created","modified"
-"","admins","システム管理","admin","",""
+"id","name","title","auth_prefix","use_admin_globalmenu","created","modified"
+"","admins","システム管理","admin","1","",""
