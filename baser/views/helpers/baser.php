@@ -238,10 +238,10 @@ class BaserHelper extends AppHelper {
  */
 	function getTitle($separator='｜',$categoryTitleOn = null) {
 
+		$title = '';
 		$crumbs = $this->getCrumbs($categoryTitleOn);
 		if($crumbs){
 			$crumbs = array_reverse($crumbs);
-			$title = '';
 			foreach ($crumbs as $key => $crumb) {
 				if($this->Array->first($crumbs, $key) && isset($crumbs[$key+1])) {
 					if($crumbs[$key+1]['name'] == $crumb['name']) {
