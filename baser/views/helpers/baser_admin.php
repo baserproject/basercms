@@ -51,11 +51,16 @@ class BaserAdminHelper extends AppHelper {
  * @access public
  */
 	function isAdminGlobalmenuUsed() {
+		
+		if(!isInstalled()) {
+			return false;
+		}
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::getObject('UserGroup');
 		return $UserGroup->isAdminGlobalmenuUsed($this->_view->viewVars['user']['user_group_id']);
+		
 	}
 	
 }

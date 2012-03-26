@@ -386,14 +386,30 @@
  * @return	boolean
  */
 	function isInstalled () {
-		if(file_exists(CONFIGS.'database.php') && file_exists(CONFIGS.'install.php')){
+		
+		if(getDbConfig() && file_exists(CONFIGS.'install.php')){
+			return true;
+		}
+		return false;
+		
+	}
+/**
+ * DBセッティングが存在するかチェックする
+ * 
+ * @param string $name
+ * @return mixed DatabaseConfig Or false 
+ */
+	function getDbConfig($name = 'baser') {
+		
+		if(file_exists(CONFIGS.'database.php')) {
 			require_once CONFIGS.'database.php';
 			$dbConfig = new DATABASE_CONFIG();
-			if(!empty($dbConfig->baser['driver'])){
-				return true;
+			if(!empty($dbConfig->{$name}['driver'])){
+				return $dbConfig->{$name};
 			}
 		}
 		return false;
+		
 	}
 /**
  * 必要な一時フォルダが存在するかチェックし、

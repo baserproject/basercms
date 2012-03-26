@@ -137,6 +137,8 @@ class BaserAppController extends Controller {
 				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
 			
+		} elseif($this->name != 'Installations') {
+			$this->redirect('/');
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
@@ -191,6 +193,7 @@ class BaserAppController extends Controller {
 	function beforeFilter() {
 
 		parent::beforeFilter();
+		
 		
 		// テーマを設定
 		$this->setTheme($this->params);
@@ -462,16 +465,17 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (isInstalled() && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
 			$this->set('user',$_SESSION['Auth']['User']);
 			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}
 
 		/* 携帯用絵文字データの読込 */
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
-			//$emojiData = $this->EmojiData->findAll();
-			//$this->set('emoji',$this->Emoji->EmojiData($emojiData));
-		}
+		// TODO 実装するかどうか検討する
+		/*if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
+			$emojiData = $this->EmojiData->findAll();
+			$this->set('emoji',$this->Emoji->EmojiData($emojiData));
+		}*/
 
 	}
 /**

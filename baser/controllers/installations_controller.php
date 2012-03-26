@@ -357,7 +357,12 @@ class InstallationsController extends AppController {
 
 		$this->pageTitle = 'baserCMSのインストール完了！';
 		$db = ConnectionManager::getInstance();
-		if($db->config->baser['driver'] != '') {
+		if($db->config->baser['driver'] == '') {
+			// データベース設定を書き込む
+			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
+			// DB設定ファイルを再読み込みする為リダイレクトする
+			$this->redirect('step5');
+		} elseif(isInstalled()) {
 			return;
 		}
 		
@@ -368,7 +373,7 @@ class InstallationsController extends AppController {
 			if($message) $message .= '<br />';
 			$message .= '/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をしてください。';
 		}
-
+		
 		// tmp フォルダを作成する
 		checkTmpFolders();
 
@@ -388,9 +393,6 @@ class InstallationsController extends AppController {
 		// pagesファイルを生成する
 		$this->_createPages();
 		ClassRegistry::removeObject('View');
-
-		// データベース設定を書き込む
-		$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
 
 		// デバッグモードを0に変更
 		$this->writeDebug(0);
@@ -968,10 +970,10 @@ class InstallationsController extends AppController {
 			if(!$this->writeSmartUrl(false)){
 				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 			}
-
+			
+			$this->deleteAllTables();
 			if(file_exists(CONFIGS.'database.php')) {
 				// データベースのデータを削除
-				$this->BaserManager->deleteAllTables();
 				unlink(CONFIGS.'database.php');
 			}
 			if(file_exists(CONFIGS.'install.php')) {
@@ -1026,10 +1028,20 @@ class InstallationsController extends AppController {
  */
 	function deleteAllTables() {
 		
-		$config = $this->_readDbSettingFromSession();
-		$this->BaserManager->deleteTables('baser', $config);
-		$config['prefix'].=Configure::read('Baser.pluginDbPrefix');
-		$this->BaserManager->deleteTables('plugin', $config);
+		$baserConfig = $this->_readDbSettingFromSession();
+		if(!$baserConfig) {
+			$baserConfig = getDbConfig('baser');
+			$pluginConfig = getDbConfig('plugin');
+		} else {
+			$pluginConfig = $baserConfig;
+			$pluginConfig['prefix'] .= Configure::read('Baser.pluginDbPrefix');
+		}
+		if($baserConfig) {
+			$this->BaserManager->deleteTables('baser', $baserConfig);
+		}
+		if($pluginConfig) {
+			$this->BaserManager->deleteTables('plugin', $pluginConfig);
+		}
 		
 	}
 	
