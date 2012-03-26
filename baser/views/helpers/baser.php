@@ -28,14 +28,68 @@
  * @subpackage baser.app.views.helpers
  */
 class BaserHelper extends AppHelper {
+/**
+ * View
+ * 
+ * @var View
+ * @access protected
+ */
 	var $_view = null;
+/**
+ * サイト基本設定
+ * 
+ * @var array
+ * @access public
+ */
 	var $siteConfig = array();
+/**
+ * ヘルパー
+ * 
+ * @var array
+ * @access public
+ */
 	var $helpers = array('HtmlEx','Javascript','Session','XmlEx', 'Array');
-	var $_content = null;			// コンテンツ
+/**
+ * コンテンツ
+ * 
+ * @var string
+ * @access protected
+ */
+	var $_content = null;
+/**
+ * カテゴリタイトル設定
+ * 
+ * @var mixed
+ * @access protected
+ */
 	var $_categoryTitleOn = true;
+/**
+ * カテゴリタイトル
+ * 
+ * @var mixed boolean Or string
+ * @access protected
+ */
 	var $_categoryTitle = true;
+/**
+ * ページモデル
+ * 
+ * @var Page
+ * @access public
+ */
 	var $Page = null;
+/**
+ * アクセス制限設定モデル
+ * 
+ * @var Permission
+ * @access public
+ */
 	var $Permission = null;
+/**
+ * Plugin Basers
+ * 
+ * @var array
+ * @access public
+ */
 	var $pluginBasers = array();
 /**
  * コンストラクタ
