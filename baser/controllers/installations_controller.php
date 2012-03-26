@@ -305,7 +305,7 @@ class InstallationsController extends AppController {
 				Configure::write('Security.salt',$salt);
 				$this->Session->write('Installation.salt',$salt);
 				App::import('Model','User');
-				$User = new User();
+				$user = array();
 				$user['User']['name'] = $this->data['Installation']['admin_username'];
 				$user['User']['real_name_1'] = $this->data['Installation']['admin_username'];
 				$user['User']['email'] = $this->data['Installation']['admin_email'];
@@ -313,6 +313,7 @@ class InstallationsController extends AppController {
 				$user['User']['password_1'] = $this->data['Installation']['admin_password'];
 				$user['User']['password_2'] = $this->data['Installation']['admin_confirmpassword'];
 				$user['User']['password'] = $user['User']['password_1'];
+				$User = new User();
 				$User->create($user);
 				if ($User->validates()) {
 					$user['User']['password'] = Security::hash($this->data['Installation']['admin_password'],null,true);
@@ -433,7 +434,7 @@ class InstallationsController extends AppController {
  */
 	function _updatePluginStatus() {
 
-		$db =& $this->_connectDb($this->_readDbSettingFromSession());
+		$this->_connectDb($this->_readDbSettingFromSession());
 		$version = $this->getBaserVersion();
 		App::import('Model', 'Plugin');
 		$Plugin = new Plugin();
@@ -488,6 +489,7 @@ class InstallationsController extends AppController {
  */
 	function _login() {
 
+		$extra = array();
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
 		$installationSetting = $this->Session->read('Installation');
 		Configure::write('Security.salt', $installationSetting['salt']);
@@ -582,6 +584,7 @@ class InstallationsController extends AppController {
  */
 	function _getDefaultValuesStep3() {
 
+		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
 			$_data = $this->_readDbSettingFromSession();
 			$data['Installation']['dbType'] = $_data['driver'];
@@ -612,6 +615,7 @@ class InstallationsController extends AppController {
  */
 	function _getDefaultValuesStep4() {
 
+		$data = array();
 		if ( $this->Session->read('Installation.admin_username') ) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
 		} else {
@@ -639,6 +643,7 @@ class InstallationsController extends AppController {
  */
 	function _readDbSettingFromSession() {
 
+		$data = array();
 		$data['driver'] = $this->Session->read('Installation.dbType');
 		$data['host'] = $this->Session->read('Installation.dbHost');
 		$data['port'] = $this->Session->read('Installation.dbPort');
@@ -731,7 +736,7 @@ class InstallationsController extends AppController {
 			$randomtablename='deleteme'.rand(100,100000);
 			$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
 
-			if (!isset($db->error)) {
+			if ($result) {
 				$db->execute("drop TABLE $randomtablename");
 				$this->Session->setFlash('データベースへの接続に成功しました。');
 				return true;
