@@ -674,6 +674,25 @@ class BlogPostsController extends BlogAppController {
 		}
 		
 	}
+/**
+ * [ADMIN] コピー
+ * 
+ * @param int $id 
+ * @return void
+ * @access public
+ */
+	function admin_ajax_copy($blogContentId, $id = null) {
+		
+		$result = $this->BlogPost->copy($id);
+		if($result) {
+			$result['BlogPost']['id'] = $this->BlogPost->getInsertID();
+			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
+			$this->set('data', $result);
+		} else {
+			exit();
+		}
+		
+	}
 	
 }
 ?>

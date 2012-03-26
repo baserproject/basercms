@@ -517,6 +517,44 @@ class BlogPost extends BlogAppModel {
 		return $this->deleteContent($this->id);
 
 	}
+/**
+ * コピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed page Or false
+ */
+	function copy($id = null, $data = array()) {
+		
+		$data = array();
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => 1));
+		}
+		if(!empty($_SESSION['Auth']['User'])) {
+			$data['BlogPost']['user_id'] = $_SESSION['Auth']['User']['id'];
+		}
+		
+		$data['BlogPost']['name'] .= '_copy';
+		$data['BlogPost']['no'] = $this->getMax('no', array('BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']))+1;
+		$data['BlogPost']['status'] = false;
+		
+		unset($data['BlogPost']['id']);
+		unset($data['BlogPost']['created']);
+		unset($data['BlogPost']['modified']);
+		
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			return $result;
+		} else {
+			if(isset($this->validationErrors['name'])) {
+				return $this->copy(null, $data);
+			} else {
+				return false;
+			}
+		}
+		
+	}
 	
 }
 ?>
