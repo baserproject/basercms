@@ -443,8 +443,20 @@ class BaserHelper extends AppHelper {
  * 
  * @return boolean
  * @access public
+ * @deprecated isHomeに統合する
  */
 	function isTop() {
+		
+		return $this->isHome();
+		
+	}
+/**
+ * トップページかどうか判断する
+ * 
+ * @return boolean
+ * @access public
+ */
+	function isHome() {
 		
 		return ($this->params['url']['url'] == '/' ||
 						$this->params['url']['url'] == 'index' ||
