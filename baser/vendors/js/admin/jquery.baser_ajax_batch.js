@@ -9,7 +9,7 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 1.7.0
+ * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
