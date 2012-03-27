@@ -180,6 +180,11 @@ input[type=text], textarea, select, input[type=password] {
 input[type=checkbox] {
 	vertical-align: middle;
 }
+input[type=radio],
+input[type=checkbox] {
+	margin-left:5px;
+	margin-right:5px;
+}
 input[type=submit],
 input[type=reset],
 input[type=button] {
