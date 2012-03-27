@@ -740,15 +740,26 @@ class BlogController extends BlogAppController {
  * カテゴリー一覧用のデータを取得する
  * 
  * @param int $id
- * @param mixed $count
+ * @param mixed $limit Number Or false Or '0'（制限なし）
+ * @param mixed $viewCount
+ * @param mixed $contentType year Or null
  * @return array
  * @access public
  */
-	function get_categories($id, $count = false){
+	function get_categories($id, $limit = false, $viewCount = false, $depth = 1, $contentType = null){
 
+		if($limit === '0') {
+			$limit = false;
+		}
+		$data = array();
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
-		$data['categories'] = $this->BlogCategory->getCategories($id, $count);
+		$data['categories'] = $this->BlogCategory->getCategoryList($id, array(
+			'type'		=> $contentType,
+			'limit'		=> $limit,
+			'depth'		=> $depth,
+			'viewCount' => $viewCount
+		));
 		return $data;
 		
 	}
@@ -756,17 +767,20 @@ class BlogController extends BlogAppController {
  * 月別アーカイブ一覧用のデータを取得する
  * 
  * @param int $id
- * @return mixed $count
+ * @return mixed $limit Number Or false Or '0'（制限なし）
  * @access public
  */
-	function get_posted_months($id, $count = 12, $viewCount = false){
+	function get_posted_months($id, $limit = 12, $viewCount = false){
 
+		if($limit === '0') {
+			$limit = false;
+		}
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
 		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
 			'type'		=> 'month', 
-			'count'		=> $count, 
+			'limit'		=> $limit, 
 			'viewCount'	=> $viewCount
 		));
 		return $data;
@@ -780,13 +794,17 @@ class BlogController extends BlogAppController {
  * @return mixed $count
  * @access public
  */
-	function get_posted_years($id, $viewCount = false){
+	function get_posted_years($id, $limit = false, $viewCount = false){
 
+		if($limit === '0') {
+			$limit = false;
+		}
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
 		$data['postedDates'] = $this->BlogPost->getPostedDates($id, array(
 			'type'		=> 'year', 
+			'limit'		=> $limit, 
 			'viewCount'	=> $viewCount
 		));
 		return $data;
@@ -800,8 +818,11 @@ class BlogController extends BlogAppController {
  * @return array
  * @access public
  */
-	function get_recent_entries($id, $count = 5){
+	function get_recent_entries($id, $limit = 5){
 
+		if($limit === '0') {
+			$limit = false;
+		}
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null,$id);
 		$this->BlogPost->recursive = -1;
@@ -811,7 +832,7 @@ class BlogController extends BlogAppController {
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
 				'fields'	=> array('no','name'),
 				'conditions'=> $conditions,
-				'limit'		=> $count,
+				'limit'		=> $limit,
 				'order'		=> 'posts_date DESC',
 				'recursive'	=> -1,
 				'cache'		=> false
@@ -827,7 +848,7 @@ class BlogController extends BlogAppController {
  * @param mixed $num
  * @access public
  */
-	function posts($blogContentId, $num = 5) {
+	function posts($blogContentId, $limit = 5) {
 
 		if(!empty($this->params['named']['template'])) {
 			$template = $this->params['named']['template'];
@@ -838,7 +859,7 @@ class BlogController extends BlogAppController {
 
 		$this->layout = null;
 		$this->contentId = $blogContentId;
-		$datas = $this->_getBlogPosts(array('listCount' => $num));
+		$datas = $this->_getBlogPosts(array('listCount' => $limit));
 		$this->set('posts', $datas);
 
 		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
@@ -853,9 +874,9 @@ class BlogController extends BlogAppController {
  * @param mixed $num
  * @access public
  */
-	function mobile_posts($blogContentId, $num = 5) {
+	function mobile_posts($blogContentId, $limit = 5) {
 		
-		$this->setAction('posts', $blogContentId, $num);
+		$this->setAction('posts', $blogContentId, $limit);
 		
 	}
 /**
@@ -867,9 +888,9 @@ class BlogController extends BlogAppController {
  * @param mixed $num
  * @access public
  */
-	function smartphone_posts($blogContentId, $num = 5) {
+	function smartphone_posts($blogContentId, $limit = 5) {
 		
-		$this->setAction('posts', $blogContentId, $num);
+		$this->setAction('posts', $blogContentId, $limit);
 		
 	}
 	

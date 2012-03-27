@@ -20,12 +20,20 @@
 if(!isset($view_count)) {
 	$view_count = false;
 }
+if(!isset($limit)) {
+	$limit = false;
+}
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
 	$id = $blog_content_id;
 }
 $actionUrl = '/blog/get_posted_years/'.$id;
+if($limit) {
+	$actionUrl .= '/'.$limit;
+} else {
+	$actionUrl .= '/0';
+}
 if($view_count) {
 	$actionUrl .= '/1';
 }
@@ -34,6 +42,8 @@ $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 ?>
+
+
 <div class="widget widget-blog-yearly-archives widget-blog-yearly-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>

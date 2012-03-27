@@ -447,7 +447,7 @@ function updateWidget(id) {
 						<?php echo $formEx->input($key.'.sort', array('type' => 'hidden')) ?>
 						<?php echo $formEx->label($key.'name','タイトル') ?>&nbsp;
 						<?php echo $formEx->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
-						<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'])) ?><br />
+						<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit')) ?><br />
 						<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
 						<?php echo $formEx->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
 						<?php echo $formEx->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>

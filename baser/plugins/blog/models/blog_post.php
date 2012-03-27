@@ -135,9 +135,10 @@ class BlogPost extends BlogAppModel {
 	function getPostedDates($blogContentId, $options) {
 
 		$options = array_merge(array(
-			'count'		=> false, 
+			'category'	=> false,
+			'limit'		=> false, 
 			'viewCount'	=> false, 
-			'type'		=> 'month'
+			'type'		=> 'month'	// month Or year
 		), $options);
 		
 		extract($options);
@@ -147,32 +148,45 @@ class BlogPost extends BlogAppModel {
 		/*$dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
                                           $conditions,
                                           'group'=>array('YEAR(posts_date)','MONTH(posts_date)'))));*/
+		
+		if($category) {
+			$recursive = 1;
+			$this->unbindModel(array(
+				'belongsTo'				=> array('User', 'BlogContent'),
+				'hasAndBelongsToMany'	=> array('BlogTag')
+			));
+		} else {
+			$recursive = -1;
+		}
+		
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$posts = $this->find('all',array(
 			'conditions'=> $conditions, 
 			'order'		=> 'BlogPost.posts_date DESC', 
-			'recursive' => -1,
+			'recursive' => $recursive,
 			'cache'		=> false
 		));
 
-		$postsDates = Set::extract('/BlogPost/posts_date',$posts);
 		$dates = array();
 		$counter = 0;
-		
-		foreach($postsDates as $postsDate) {
+
+		foreach($posts as $post) {
 			
 			$exists = false;
 			$_date = array();
+			$year = date('Y',strtotime($post['BlogPost']['posts_date']));
+			$month = date('m',strtotime($post['BlogPost']['posts_date']));
+			$categoryId = $post['BlogPost']['blog_category_id'];
 			
 			foreach($dates as $key => $date) {
 				
-				if($type == 'year' && $date['year'] == date('Y',strtotime($postsDate))) {
-					$exists = true;
-				}
-				if($type == 'month' && 
-						$date['year'] == date('Y',strtotime($postsDate)) &&
-						$date['month'] == date('m',strtotime($postsDate))) {				
-					$exists = true;
+				if(!$category || $date['BlogCategory']['id'] == $categoryId) {
+					if($type == 'year' && $date['year'] == $year) {
+						$exists = true;
+					}
+					if($type == 'month' && $date['year'] == $year && $date['month'] == $month) {				
+						$exists = true;
+					}
 				}
 				
 				if($exists) {				
@@ -186,10 +200,15 @@ class BlogPost extends BlogAppModel {
 			
 			if(!$exists) {
 				if($type == 'year') {
-					$_date['year'] = date('Y',strtotime($postsDate));
-				} else {
-					$_date['year'] = date('Y',strtotime($postsDate));
-					$_date['month'] = date('m',strtotime($postsDate));
+					$_date['year'] = $year;
+				} elseif($type == 'month') {
+					$_date['year'] = $year;
+					$_date['month'] = $month;
+				}
+				if($category) {
+					$_date['BlogCategory']['id'] = $categoryId;
+					$_date['BlogCategory']['name'] = $post['BlogCategory']['name'];
+					$_date['BlogCategory']['title'] = $post['BlogCategory']['title'];
 				}
 				if($viewCount) {
 					$_date['count'] = 1;
@@ -198,7 +217,7 @@ class BlogPost extends BlogAppModel {
 				$counter++;
 			}
 			
-			if($count !== false && $count <= $counter) {
+			if($limit !== false && $limit <= $counter) {
 				break;
 			}
 			

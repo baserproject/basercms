@@ -209,15 +209,61 @@ class BlogCategory extends BlogAppModel {
  * @return array
  * @access public
  */
-	function getCategories($id, $count = false) {
+	function getCategoryList($blogContentId, $options) {
 
+		$options = array_merge(array(
+			'depth'		=> 1,
+			'type'		=> null,
+			'order'		=> 'BlogCategory.id',
+			'limit'		=> false, 
+			'viewCount'	=> false,
+			'fields'	=> array('id', 'name', 'title')
+		), $options);
+		$datas = array();
+		
+		extract($options);
+		if(!$type) {
+			$datas = $this->_getCategoryList($blogContentId, null, $viewCount, $depth);
+		} elseif($type == 'year') {
+			$options = array(
+				'category'	=> true,
+				'limit'		=> $limit, 
+				'viewCount'	=> $viewCount, 
+				'type'		=> 'year'
+			);
+			$_datas = $this->BlogPost->getPostedDates($blogContentId, $options);
+			$datas = array();
+			foreach($_datas as $data) {
+				if($viewCount) {
+					$data['BlogCategory']['count'] = $data['count'];
+				}
+				$datas[$data['year']][] = array('BlogCategory' => $data['BlogCategory']);
+			}
+		}
+		
+		return $datas;
+		
+	}
+/**
+ * カテゴリリストを取得する（再帰処理）
+ * 
+ * @param int $blogContentId
+ * @param int $id
+ * @param int $viewCount
+ * @param int $depth
+ * @param int $current
+ * @param array $fields
+ * @return array
+ */
+	function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = array()) {
+		
 		$datas = $this->find('all',array(
-			'conditions'=>array('BlogCategory.blog_content_id'=>$id),
-			'fields' => array('id', 'name', 'title'),
+			'conditions'=>array('BlogCategory.blog_content_id' => $blogContentId, 'BlogCategory.parent_id' => $id),
+			'fields' => $fields,
 			'recursive' => -1));
 		if($datas) {
-			if($count) {
-				foreach($datas as $key => $data) {
+			foreach($datas as $key => $data) {
+				if($viewCount) {
 					$datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', array(
 						'conditions' => 
 							am(
@@ -227,12 +273,17 @@ class BlogCategory extends BlogAppModel {
 						'cache'		=> false
 					));
 				}
+				if($current < $depth) {
+					$current++;
+					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current);
+					if($children) {
+						$datas[$key]['BlogCategory']['children'] = $children;
+					}
+				}
 			}
-			return $datas;
-		} else {
-			return array();
 		}
-		
+		return $datas;
+
 	}
 /**
  * 新しいカテゴリが追加できる状態かチェックする

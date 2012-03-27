@@ -20,8 +20,32 @@
 $title = 'ブログカテゴリー一覧';
 $description = 'ブログのカテゴリー一覧を表示します。';
 ?>
-<?php echo $formEx->label($key.'.count', '件数表示') ?>&nbsp;
-<?php echo $formEx->radio($key.'.count', $textEx->booleanDoList(''), array('legend' => false, 'value' => false)) ?><br />
+
+<script type="text/javascript">
+$(function(){
+	var key = "<?php echo $key ?>";
+	$("#"+key+"ByYear").click(function(){
+		if($("#"+key+"ByYear").attr('checked') == 'checked') {
+			$("#"+key+"Depth").val(1);
+			$("#Span"+key+"Depth").slideUp(200);
+		} else {
+			$("#Span"+key+"Depth").slideDown(200);
+		}
+	});
+	if($("#"+key+"ByYear").attr('checked') == 'checked') {
+		$("#"+key+"Depth").val(1);
+		$("#Span"+key+"Depth").hide();
+	}
+});
+</script>
+	
+<?php echo $formEx->label($key.'.limit','表示数') ?>&nbsp;
+<?php echo $formEx->text($key.'.limit', array('size' => 6)) ?>&nbsp;件<br />
+<?php echo $formEx->label($key.'.view_count', '記事数表示') ?>&nbsp;
+<?php echo $formEx->radio($key.'.view_count', $textEx->booleanDoList(''), array('legend' => false, 'default' => 0)) ?><br />
+<?php echo $formEx->checkbox($key.'.by_year', array('label' => '年別に表示する')) ?><br />
+<p id="Span<?php echo $key ?>Depth"><?php echo $formEx->label($key.'.depth', '深さ') ?>&nbsp;
+<?php echo $formEx->text($key.'.depth', array('size' => 6, 'default' => 1)) ?>&nbsp;階層</p>
 <?php echo $formEx->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
 <?php echo $formEx->select($key.'.blog_content_id', $formEx->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
-<small>ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカテゴリー一覧を表示します。</small>
+<small>ブログページを表示している場合は、上記の設定に関係なく、<br />対象ブログのブログカテゴリー一覧を表示します。</small>

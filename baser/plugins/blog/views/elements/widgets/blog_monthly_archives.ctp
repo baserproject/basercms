@@ -20,15 +20,15 @@
 if(!isset($view_count)) {
 	$view_count = false;
 }
-if(!isset($count)) {
-	$count = 12;
+if(!isset($limit)) {
+	$limit = 12;
 }
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
 	$id = $blog_content_id;
 }
-$actionUrl = '/blog/get_posted_months/'.$id.'/'.$count;
+$actionUrl = '/blog/get_posted_months/'.$id.'/'.$limit;
 if($view_count) {
 	$actionUrl .= '/1';
 }
@@ -37,6 +37,7 @@ $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 ?>
+
 
 <div class="widget widget-blog-monthly-archives widget-blog-monthly-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
