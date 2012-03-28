@@ -266,7 +266,7 @@ class BlogHelper extends AppHelper {
                if(!isset($this->Html)){
                    $this->Html = new HtmlHelper();
                }
-               return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id']),$options,null,false);
+               return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id'], $options),$options,null,false);
            } else {
                return $post['BlogCategory']['title'];
            }
@@ -320,8 +320,13 @@ class BlogHelper extends AppHelper {
  * @param string $blogCategoyId
  * @return void
  */
-	function getCategoryUrl($blogCategoryId) {
+	function getCategoryUrl($blogCategoryId, $options = array()) {
 
+		$options = array_merge(array(
+			'named'	=> array()
+		), $options);
+		extract($options);
+		
 		if (!isset($this->BlogCategory)) {
 			$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
 		}
@@ -336,7 +341,12 @@ class BlogHelper extends AppHelper {
 				$path[] = $category['BlogCategory']['name'];
 			}
 		}
-		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'),$path));
+
+		if($named) {
+			$path = array_merge($path, $named);
+		}
+		
+		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'), $path));
 		$baseUrl = preg_replace('/\/$/', '', baseUrl());
 		return preg_replace('/^'.preg_quote($baseUrl, '/').'/', '', $url);
 
@@ -394,9 +404,9 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getCategoryList($categories,$depth=3, $count = false) {
+	function getCategoryList($categories,$depth=3, $count = false, $options = array()) {
 		
-		return $this->_getCategoryList($categories,$depth, 1, $count);
+		return $this->_getCategoryList($categories,$depth, 1, $count, $options);
 		
 	}
 /**
@@ -407,7 +417,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function _getCategoryList($categories, $depth=3, $current=1, $count = false) {
+	function _getCategoryList($categories, $depth=3, $current=1, $count = false, $options = array()) {
 		
 		if($depth < $current) {
 			return '';
@@ -430,9 +440,9 @@ class BlogHelper extends AppHelper {
 				} else {
 					$class = '';
 				}
-				$out .= '<li'.$class.'>'.$this->getCategory($category);
+				$out .= '<li'.$class.'>'.$this->getCategory($category, $options);
 				if(!empty($category['BlogCategory']['children'])) {
-					$out.= $this->_getCategoryList($category['BlogCategory']['children'],$depth,$current, $count);
+					$out.= $this->_getCategoryList($category['BlogCategory']['children'],$depth,$current, $count, $options);
 				}
 				$out.='</li>';
 			}

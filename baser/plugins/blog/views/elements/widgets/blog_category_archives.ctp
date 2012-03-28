@@ -53,8 +53,8 @@ $blog = new BlogHelper();
 <?php if($by_year): ?>
 	<ul>
 	<?php foreach($categories as $key => $category): ?>
-		<li class="category-year"><span><?php echo $key ?>年</span>
-		<?php echo $blog->getCategoryList($category, $depth, $view_count) ?>
+		<li class="category-year"><span><?php $baser->link($key.'年', array('plugin' => null, 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $key)) ?></span>
+		<?php echo $blog->getCategoryList($category, $depth, $view_count, array('named' => array('year' => $key))) ?>
 		</li>
 	<?php endforeach ?>
 	</ul>
