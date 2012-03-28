@@ -288,10 +288,10 @@ class MailContent extends MailAppModel {
 		if($result) {
 			$result['MailContent']['id'] = $this->getInsertID();
 			if($recursive) {
-				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'recursive' => -1));
+				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
 				foreach($mailFields as $mailField) {
 					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
-					$this->MailField->copy(null, $mailField);
+					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
 				$Message = ClassRegistry::getObject('Message');
 				$Message->createTable($result['MailContent']['name']);

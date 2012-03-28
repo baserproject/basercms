@@ -189,7 +189,13 @@ class MailField extends MailAppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data = array(), $recursive = true) {
+	function copy($id, $data = array(), $options = array()) {
+		
+		$options = array_merge(array(
+			'sortUpdateOff'	=> false,
+		), $options);
+		
+		extract($options);
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
@@ -198,11 +204,13 @@ class MailField extends MailAppModel {
 		if($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
 			$data['MailField']['field_name'] .= '_copy';
-			return $this->copy(null, $data);	// 再帰処理
+			return $this->copy(null, $data, $options);	// 再帰処理
 		}
 		
 		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
-		$data['MailField']['sort'] = $this->getMax('sort') + 1;
+		if(!$sortUpdateOff) {
+			$data['MailField']['sort'] = $this->getMax('sort') + 1;
+		}
 		$data['MailField']['use_field'] = false;
 		
 		unset($data['MailField']['id']);
