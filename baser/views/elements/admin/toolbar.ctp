@@ -50,9 +50,9 @@ $(function(){
 				<?php endif ?>
 				<?php if(!empty($this->params['admin'])): ?>
 					<?php if(Configure::read('debug') == -1): ?>
-				<li>&nbsp;&nbsp;<span class="corner5" id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">！</span>&nbsp;&nbsp;</li>
+				<li>&nbsp;&nbsp;<span class="corner5" id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">インストールモード</span>&nbsp;&nbsp;</li>
 					<?php elseif(Configure::read('debug') > 0): ?>
-				<li>&nbsp;&nbsp;<span class="corner5" id="DebugMode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"><?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></span>&nbsp;&nbsp;</li>
+				<li>&nbsp;&nbsp;<span class="corner5" id="DebugMode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">デバッグモード<?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></span>&nbsp;&nbsp;</li>
 					<?php endif; ?>
 				<?php endif ?>
 			</ul>
