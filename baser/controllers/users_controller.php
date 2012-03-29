@@ -406,7 +406,7 @@ class UsersController extends AppController {
 		$editable = true;
 		$user = $this->AuthEx->user();
 		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
 			if($this->data['User']['user_group_id'] == 1) {
 				$editable = false;
 			} else {
