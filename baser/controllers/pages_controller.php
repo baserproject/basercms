@@ -335,7 +335,7 @@ class PagesController extends AppController {
  */
 	function convertViewUrl($url) {
 		
-		$url = preg_replace('/index$/', '/', $url);
+		$url = preg_replace('/\/index$/', '/', $url);
 		if(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)) {
 			$url = preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', '/'.Configure::read('AgentSettings.mobile.alias').'/', $url);
 		} elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)) {
