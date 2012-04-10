@@ -52,7 +52,7 @@ class BaserAdminHelper extends AppHelper {
  */
 	function isAdminGlobalmenuUsed() {
 		
-		if(!isInstalled()) {
+		if(!BC_IS_INSTALLED) {
 			return false;
 		}
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {

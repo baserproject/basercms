@@ -101,7 +101,7 @@ class BaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(isInstalled()){
+		if(BC_IS_INSTALLED){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');

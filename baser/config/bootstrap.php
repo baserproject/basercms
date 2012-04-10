@@ -46,11 +46,14 @@
 	$localePaths[] = BASER_LOCALES;
 	//$shellPaths[];
 /**
+ * baserUrl取得
+ */
+	define('BC_BASE_URL', baseUrl());
+/**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
 	$uri = @$_SERVER['REQUEST_URI'];
-	$baseUrl = baseUrl();
-	if (strpos($uri, $baseUrl.'css/') !== false || strpos($uri, $baseUrl.'js/') !== false || strpos($uri, $baseUrl.'img/') !== false) {
+	if (strpos($uri, BC_BASE_URL.'css/') !== false || strpos($uri, BC_BASE_URL.'js/') !== false || strpos($uri, BC_BASE_URL.'img/') !== false) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
@@ -63,14 +66,18 @@
  */
 	if(!preg_match('/'.preg_quote(docRoot(), '/').'/', ROOT)) {
 		// CakePHP標準の配置
-		define('DEPLOY_PATTERN', 3);
+		define('BC_DEPLOY_PATTERN', 3);
 	} elseif(ROOT.DS == WWW_ROOT) {
 		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
-		define('DEPLOY_PATTERN', 2);
+		define('BC_DEPLOY_PATTERN', 2);
 	} else {
 		// baserCMS配布時の配置
-		define('DEPLOY_PATTERN', 1);
+		define('BC_DEPLOY_PATTERN', 1);
 	}
+/**
+ * インストール状態 
+ */
+	define('BC_IS_INSTALLED', isInstalled());
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
@@ -93,13 +100,9 @@
 /**
  * tmpフォルダ確認
  */
-	if(isInstalled()) {
+	if(BC_IS_INSTALLED) {
 		checkTmpFolders();
 	}
-/**
- * baserUrl取得
- */
-	$baseUrl = baseUrl();
 /**
  * 文字コードの検出順を指定
  */
@@ -151,11 +154,11 @@
 				$agentAgents = preg_quote($agentAgents, '/');
 				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
 				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
-					$getParams = str_replace($baseUrl.$parameter, '', $_SERVER['REQUEST_URI']);
+					$getParams = str_replace(BC_BASE_URL.$parameter, '', $_SERVER['REQUEST_URI']);
 					if($getParams == '/' || '/index.php') {
 						$getParams = '';
 					}
-					$redirectUrl = FULL_BASE_URL.$baseUrl.$setting['alias'].'/'.$parameter.$getParams;
+					$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
 					header("HTTP/1.1 301 Moved Permanently");
 					header("Location: ".$redirectUrl);
 					exit();
@@ -208,7 +211,7 @@
 /**
  * データキャッシュ
  */
-if(isInstalled()) {
+if(BC_IS_INSTALLED) {
 	Cache::config('_cake_data_', array(
 			'engine'		=> 'File',
 			'duration'		=> Configure::read('BcCache.dataCachetime'),
@@ -218,11 +221,23 @@ if(isInstalled()) {
 			'lock'			=> false,
 			'serialize'		=> true
 	 ));
+/**
+ * 環境情報キャッシュ
+ */
+	Cache::config('_cake_env_', array(
+			'engine'		=> 'File',
+			'duration'		=> Configure::read('BcCache.defaultCachetime'),
+			'probability'	=> 100,
+			'path'			=> CACHE.'environment',
+			'prefix'		=> 'cake_',
+			'lock'			=> false,
+			'serialize'		=> true
+	 ));
 }
 /**
  * プラグインの bootstrap を実行する
  */
- 	if(isInstalled()) {
+ 	if(BC_IS_INSTALLED) {
 		$enablePlugins = getEnablePlugins();
 		Configure::write('BcStatus.enablePlugins', $enablePlugins);
 		$_pluginPaths = array(

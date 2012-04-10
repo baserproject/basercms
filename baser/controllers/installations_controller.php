@@ -362,7 +362,7 @@ class InstallationsController extends AppController {
 			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
 			// DB設定ファイルを再読み込みする為リダイレクトする
 			$this->redirect('step5');
-		} elseif(isInstalled()) {
+		} elseif(BC_IS_INSTALLED) {
 			return;
 		}
 		

@@ -126,7 +126,7 @@ class BaserAppController extends Controller {
 
 		parent::__construct();
 		
-		if(isInstalled()) {
+		if(BC_IS_INSTALLED) {
 			
 			// サイト基本設定の読み込み
 			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
@@ -198,7 +198,7 @@ class BaserAppController extends Controller {
 		// テーマを設定
 		$this->setTheme($this->params);
 		
-		if(isInstalled() && $this->params['controller'] != 'installations') {
+		if(BC_IS_INSTALLED && $this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
 			// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
@@ -320,7 +320,7 @@ class BaserAppController extends Controller {
  */
 	function setTheme($params) {
 		
-		if(isInstalled() && $params['controller'] != 'installations') {
+		if(BC_IS_INSTALLED && $params['controller'] != 'installations') {
 			
 			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
 				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
@@ -467,7 +467,7 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (isInstalled() && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (BC_IS_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
 			$this->set('user',$_SESSION['Auth']['User']);
 			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}
@@ -861,7 +861,7 @@ class BaserAppController extends Controller {
 			}
 		}
 
-		if(DEPLOY_PATTERN == 2 || DEPLOY_PATTERN == 3) {
+		if(BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
 			$webrootRewriteBase = '/';
 		} else {
 			$webrootRewriteBase = '/'.APP_DIR.'/webroot';
@@ -870,7 +870,7 @@ class BaserAppController extends Controller {
 		/* /app/webroot/.htaccess の編集 */
 		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
 
-		if(DEPLOY_PATTERN == 1) {
+		if(BC_DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
 			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
 		}
@@ -939,9 +939,9 @@ class BaserAppController extends Controller {
  */
 	function getRewriteBase($url){
 
-		$baseUrl = baseUrl();
+		$baseUrl = BC_BASE_URL;
 		if(preg_match("/index\.php/", $baseUrl)){
-			$baseUrl = str_replace('index.php/', '', baseUrl());
+			$baseUrl = str_replace('index.php/', '', $baseUrl);
 		}
 		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
 		if($url != '/' || !$baseUrl) {

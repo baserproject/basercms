@@ -21,8 +21,12 @@
  */
 /**
  * WEBサイトのベースとなるURLを取得する
+ * 
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
  * / | /index.php/ | /subdir/ | /subdir/index.php/
+ * 
+ * ※ プログラムフォルダ内の画像やCSSの読み込み時もbootstrap.php で呼び出されるのでサーバーキャッシュは利用しない
+ * 
  * @return string ベースURL
  */
 	function baseUrl() {
@@ -432,6 +436,7 @@
 		$folder->create(CACHE.'persistent',0777);
 		$folder->create(CACHE.'views',0777);
 		$folder->create(CACHE.'datas',0777);
+		$folder->create(CACHE.'environment',0777);
 
 	}
 /**
@@ -671,7 +676,7 @@
 		
 		$enablePlugins = array();
 		if(!Configure::read('Cache.disable')) {
-			$enablePlugins = Cache::read('enable_plugins');
+			$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 		}
 		if(!$enablePlugins) {
 			$db =& ConnectionManager::getDataSource('baser');
@@ -688,8 +693,9 @@
 				ClassRegistry::removeObject('Plugin');
 				if($plugins) {
 					$enablePlugins = Set::extract('/Plugin/name',$plugins);
+					
 					if(!Configure::read('Cache.disable')) {
-						Cache::write('enable_plugins', $enablePlugins);
+						Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
 					}
 				}
 			}

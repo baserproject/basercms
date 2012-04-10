@@ -177,7 +177,7 @@ class SiteConfigsController extends AppController {
 		}
 		$writableInstall = is_writable(CONFIGS.'install.php');
 
-		if(DEPLOY_PATTERN != 3) {
+		if(BC_DEPLOY_PATTERN != 3) {
 			$htaccess1 = ROOT.DS.'.htaccess';
 		} else {
 			$htaccess1 = docRoot().DS.'.htaccess';
@@ -190,7 +190,7 @@ class SiteConfigsController extends AppController {
 		} else{
 			$writableHtaccess2 = true;
 		}
-		$baseUrl = str_replace('/index.php', '', baseUrl());
+		$baseUrl = str_replace('/index.php', '', BC_BASE_URL);
 
 		if($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false){
 			$smartUrlChangeable = true;

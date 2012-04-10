@@ -347,7 +347,7 @@ class BlogHelper extends AppHelper {
 		}
 		
 		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'), $path));
-		$baseUrl = preg_replace('/\/$/', '', baseUrl());
+		$baseUrl = preg_replace('/\/$/', '', BC_BASE_URL);
 		return preg_replace('/^'.preg_quote($baseUrl, '/').'/', '', $url);
 
 	}
