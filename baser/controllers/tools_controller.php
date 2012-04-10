@@ -228,7 +228,7 @@ class ToolsController extends AppController {
 
 		foreach($tables as $table) {
 			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $table, $matches) &&
-					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$table = $matches[1];
 				$model = Inflector::classify(Inflector::singularize($table));
 				if(!$db->writeSchema(array('path'=>$path, 'model'=>$model))){

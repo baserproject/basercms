@@ -51,7 +51,7 @@ class PluginHookHelper extends AppHelper {
 		}
 
 		$view = ClassRegistry::getObject('View');
-		$plugins = Configure::read('Baser.enablePlugins');
+		$plugins = Configure::read('BcStatus.enablePlugins');
 
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();

@@ -40,7 +40,7 @@ class MobileHelper extends Helper {
 			$rss = false;
 		}
 
-		if($view && !$rss && Configure::read('AgentPrefix.currentAgent') == 'mobile' && $view->layoutPath != 'email'.DS.'text') {
+		if($view && !$rss && Configure::read('BcRequest.agent') == 'mobile' && $view->layoutPath != 'email'.DS.'text') {
 
 			$view->output = str_replace('＆', '&amp;', $view->output);
 			$view->output = str_replace('＜', '&lt;', $view->output);
@@ -49,10 +49,9 @@ class MobileHelper extends Helper {
 			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
 
 			// 内部リンクの自動変換
-			$currentAlias = Configure::read('AgentPrefix.currentAlias');
-			$baseUrl = baseUrl();
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).'([^\"]+?)\"/', "href=\"".$baseUrl.$currentAlias."/$1\"", $view->output);
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', $baseUrl).$currentAlias.'\/'.$currentAlias.'\//', "href=\"".$baseUrl.$currentAlias."/", $view->output);
+			$currentAlias = Configure::read('BcRequest.agentAlias');
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', BC_BASE_URL).'([^\"]+?)\"/', "href=\"".BC_BASE_URL.$currentAlias."/$1\"", $view->output);
+			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', BC_BASE_URL).$currentAlias.'\/'.$currentAlias.'\//', "href=\"".BC_BASE_URL.$currentAlias."/", $view->output);
 
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
@@ -92,7 +91,7 @@ class MobileHelper extends Helper {
  */
 	function header(){
 		
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+		if(Configure::read('BcRequest.agent') == 'mobile') {
 			header("Content-type: application/xhtml+xml");
 		}
 		

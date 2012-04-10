@@ -193,13 +193,13 @@ class Page extends AppModel {
 		}
 		
 		if(!empty($data['reflect_mobile'])){
-			$data['url'] = '/'.Configure::read('AgentSettings.mobile.prefix').$this->removeAgentPrefixFromUrl($data['url']);
+			$data['url'] = '/'.Configure::read('BcAgent.mobile.prefix').$this->removeAgentPrefixFromUrl($data['url']);
 			if(!$this->checkOpenPageFile($data)){
 				$result = false;
 			}
 		}
 		if(!empty($data['reflect_smartphone'])){
-			$data['url'] = '/'.Configure::read('AgentSettings.smartphone.prefix').$this->removeAgentPrefixFromUrl($data['url']);
+			$data['url'] = '/'.Configure::read('BcAgent.smartphone.prefix').$this->removeAgentPrefixFromUrl($data['url']);
 			if(!$this->checkOpenPageFile($data)){
 				$result = false;
 			}
@@ -214,10 +214,10 @@ class Page extends AppModel {
  * @return type 
  */
 	function removeAgentPrefixFromUrl($url) {
-		if(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//', $url)) {
-			$url = preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//', '/', $url);
-		} elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//', $url)) {
-			$url = preg_replace('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//', '/', $url);
+		if(preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//', '/', $url);
+		} elseif(preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//', '/', $url);
 		}
 		return $url;
 	}
@@ -319,7 +319,7 @@ class Page extends AppModel {
 			return true;
 		}
 
-		$data['url'] = '/'.Configure::read('AgentSettings.'.$type.'.prefix').$this->removeAgentPrefixFromUrl($data['url']);
+		$data['url'] = '/'.Configure::read('BcAgent.'.$type.'.prefix').$this->removeAgentPrefixFromUrl($data['url']);
 		
 		$agentPage = $this->find('first',array('conditions'=>array('Page.url'=>$data['url']),'recursive'=>-1));
 
@@ -341,7 +341,7 @@ class Page extends AppModel {
 			if($data['page_category_id']){
 				$fields = array('parent_id','name','title');
 				$pageCategoryTree = $this->PageCategory->getTreeList($fields,$data['page_category_id']);
-				$path = getViewPath().'pages'.DS.Configure::read('AgentSettings.'.$type.'.prefix');
+				$path = getViewPath().'pages'.DS.Configure::read('BcAgent.'.$type.'.prefix');
 				$parentId = $agentId;
 				foreach($pageCategoryTree as $pageCategory) {
 					$path .= '/'.$pageCategory['PageCategory']['name'];
@@ -614,8 +614,8 @@ class Page extends AppModel {
 			$categoryPath = $this->PageCategory->getPath($categoryId);
 			if($categoryPath) {
 				foreach($categoryPath as $key => $category) {
-					if($key == 0 && $category['PageCategory']['name'] == Configure::read('AgentSettings.mobile.prefix')) {
-						$url .= Configure::read('AgentSettings.mobile.prefix').'/';
+					if($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.mobile.prefix')) {
+						$url .= Configure::read('BcAgent.mobile.prefix').'/';
 					} else {
 						$url .= $category['PageCategory']['name'].'/';
 					}
@@ -800,7 +800,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
+		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		
 		return in_array($url,$this->_unpublishes);
 
@@ -813,7 +813,7 @@ class Page extends AppModel {
  */
 	function getCacheTime($url) {
 		
-		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
+		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
 		if(!$page) {
 			return false;
@@ -821,7 +821,7 @@ class Page extends AppModel {
 		if($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
 			return strtotime($page['Page']['publish_end']) - time();
 		} else {
-			return Configure::read('Baser.cachetime');
+			return Configure::read('BcCache.defaultCachetime');
 		}
 		
 	}
@@ -837,7 +837,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
+		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		
 		if($this->_publishes == -1) {
 			$conditions = $this->getConditionAllowPublish();
@@ -1059,11 +1059,11 @@ class Page extends AppModel {
 			$data = $data['Page'];
 		}
 		$url = $this->removeAgentPrefixFromUrl($data['url']);
-		if(preg_match('/^\/'.Configure::read('AgentSettings.'.$type.'.prefix').'\//is', $url)){
+		if(preg_match('/^\/'.Configure::read('BcAgent.'.$type.'.prefix').'\//is', $url)){
 			// 対象ページがモバイルページの場合はfalseを返す
 			return false;
 		}
-		return $this->field('id',array('Page.url'=>'/'.Configure::read('AgentSettings.'.$type.'.prefix').$url));
+		return $this->field('id',array('Page.url'=>'/'.Configure::read('BcAgent.'.$type.'.prefix').$url));
 		
 	}
 /**
@@ -1078,7 +1078,7 @@ class Page extends AppModel {
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/'.Configure::read('AgentPrefix.currentAlias').'\//', '/'.Configure::read('AgentPrefix.currentPrefix').'/', $url);
+		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		
 		if($this->_pages == -1) {
 			$pages = $this->find('all', array(

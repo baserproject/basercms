@@ -106,6 +106,6 @@
 /**
  * install.php にSSL対応用の項目追加
  */
-	$this->writeInstallSetting('Baser.siteUrl', "'".siteUrl()."'");
-	$this->writeInstallSetting('Baser.sslUrl', "''");
-	$this->writeInstallSetting('Baser.adminSslOn', "false");
+	$this->writeInstallSetting('BcEnv.siteUrl', "'".siteUrl()."'");
+	$this->writeInstallSetting('BcEnv.sslUrl', "''");
+	$this->writeInstallSetting('BcApp.adminSsl', "false");

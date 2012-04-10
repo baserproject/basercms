@@ -99,7 +99,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 					<?php $baser->updateMessage() ?>
 					<?php endif ?>
 
-					<?php if($this->params['controller']!='installations' && Configure::read('Baser.firstAccess')): ?>
+					<?php if($this->params['controller']!='installations' && !empty($baser->siteConfig['first_access'])): ?>
 					<div id="FirstMessage" class="em-box">
 						BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
 						<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。

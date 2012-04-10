@@ -126,7 +126,7 @@ class BaserAppController extends Controller {
 
 		parent::__construct();
 		
-		if(isInstalled()) {
+		if(BC_IS_INSTALLED) {
 			
 			// サイト基本設定の読み込み
 			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
@@ -149,9 +149,9 @@ class BaserAppController extends Controller {
 			$this->setTheme($params);
 			
 			// モバイルのエラー用
-			if(Configure::read('AgentPrefix.on')) {
-				$this->layoutPath = Configure::read('AgentPrefix.currentPrefix');
-				if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+			if(Configure::read('BcRequest.agent')) {
+				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
+				if(Configure::read('BcRequest.agent') == 'mobile') {
 					$this->helpers[] = 'Mobile';
 				}
 			}
@@ -163,13 +163,13 @@ class BaserAppController extends Controller {
 
 		}
 
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
-			if(!Configure::read('Baser.mobile')) {
+		if(Configure::read('BcRequest.agent') == 'mobile') {
+			if(!Configure::read('BcApp.mobile')) {
 				$this->notFound();
 			}
 		}
-		if(Configure::read('AgentPrefix.currentAgent') == 'smartphone') {
-			if(!Configure::read('Baser.smartphone')) {
+		if(Configure::read('BcRequest.agent') == 'smartphone') {
+			if(!Configure::read('BcApp.smartphone')) {
 				$this->notFound();
 			}
 		}
@@ -198,7 +198,7 @@ class BaserAppController extends Controller {
 		// テーマを設定
 		$this->setTheme($this->params);
 		
-		if(isInstalled() && $this->params['controller'] != 'installations') {
+		if(BC_IS_INSTALLED && $this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
 			// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
@@ -217,10 +217,12 @@ class BaserAppController extends Controller {
 				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
 			}
 		}
-		
+
 		// 初回アクセスメッセージ表示設定
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
-			$this->writeInstallSetting('Baser.firstAccess', 'false');
+		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && !empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
 		}
 
 		// メンテナンス
@@ -237,7 +239,7 @@ class BaserAppController extends Controller {
 
 		/* 認証設定 */
 		if(isset($this->AuthConfigure) && isset($this->params['prefix'])) {
-			$configs = Configure::read('AuthPrefix');
+			$configs = Configure::read('BcAuthPrefix');
 			if(isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
 			} else {
@@ -280,11 +282,11 @@ class BaserAppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('AgentPrefix.on') && isset($this->params['action']) && empty($this->params['requested'])) {
+		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
 				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
-				$userModel = Configure::read('AuthPrefix.'.$this->params['prefix'].'.userModel');
+				$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
 				if(!$Permission->check($this->params['url']['url'],$user[$this->AuthEx->userModel]['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
 					$this->redirect($this->AuthEx->loginAction);
@@ -293,7 +295,7 @@ class BaserAppController extends Controller {
 		}
 
 		// SSLリダイレクト設定
-		if(Configure::read('Baser.adminSslOn') && !empty($this->params['admin'])) {
+		if(Configure::read('BcApp.adminSsl') && !empty($this->params['admin'])) {
 			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
 			if($adminSslMethods) {
 				$this->Security->blackHoleCallback = '_sslFail';
@@ -318,7 +320,7 @@ class BaserAppController extends Controller {
  */
 	function setTheme($params) {
 		
-		if(isInstalled() && $params['controller'] != 'installations') {
+		if(BC_IS_INSTALLED && $params['controller'] != 'installations') {
 			
 			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
 				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
@@ -395,7 +397,7 @@ class BaserAppController extends Controller {
 				$url = 'index.php/'.$url;
 			}
 
-			$url = Configure::read('Baser.sslUrl').$url;
+			$url = Configure::read('BcEnv.sslUrl').$url;
 			$this->redirect($url);
 			exit();
 		}
@@ -465,7 +467,7 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (isInstalled() && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (BC_IS_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
 			$this->set('user',$_SESSION['Auth']['User']);
 			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}
@@ -591,8 +593,11 @@ class BaserAppController extends Controller {
 /**
  * /app/core.php のデバッグモードを書き換える
  * @param int $mode
+ * @deprecated
  */
 	function writeDebug($mode) {
+		
+		trigger_error("(Controller::writeDebug) は非推奨です。Controller::writeInstallSetting を利用してください。", E_USER_WARNING);
 		$file = new File(CONFIGS.'core.php');
 		$core = $file->read(false,'w');
 		if($core) {
@@ -604,12 +609,16 @@ class BaserAppController extends Controller {
 			$file->close();
 			return false;
 		}
+		
 	}
 /**
  * /app/core.phpのデバッグモードを取得する
  * @return string $mode
+ * @deprecated
  */
 	function readDebug() {
+		
+		trigger_error("(Controller::readDebug) は非推奨です。Configure::read('debug') を利用してください。", E_USER_WARNING);
 		$mode = '';
 		$file = new File(CONFIGS.'core.php');
 		$core = $file->read(false,'r');
@@ -617,6 +626,7 @@ class BaserAppController extends Controller {
 			$mode = trim($matches[1]);
 		}
 		return $mode;
+		
 	}
 /**
  * メールを送信する
@@ -640,7 +650,7 @@ class BaserAppController extends Controller {
 			}
 		}
 		if(!$formalName) {
-			$formalName = Configure::read('Baser.title');
+			$formalName = Configure::read('BcApp.title');
 		}
 		$_options = array('fromName' => $formalName,
 							'reply' => $email,
@@ -689,8 +699,8 @@ class BaserAppController extends Controller {
 		}
 		
 		// テンプレート
-		if(Configure::read('AgentPrefix.on')) {
-			$this->EmailEx->template = Configure::read('AgentPrefix.currentPrefix').DS.$template;
+		if(Configure::read('BcRequest.agent')) {
+			$this->EmailEx->template = Configure::read('BcRequest.agentPrefix').DS.$template;
 		}else {
 			$this->EmailEx->template = $template;
 		}
@@ -851,7 +861,7 @@ class BaserAppController extends Controller {
 			}
 		}
 
-		if(DEPLOY_PATTERN == 2 || DEPLOY_PATTERN == 3) {
+		if(BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
 			$webrootRewriteBase = '/';
 		} else {
 			$webrootRewriteBase = '/'.APP_DIR.'/webroot';
@@ -860,7 +870,7 @@ class BaserAppController extends Controller {
 		/* /app/webroot/.htaccess の編集 */
 		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
 
-		if(DEPLOY_PATTERN == 1) {
+		if(BC_DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
 			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
 		}
@@ -929,9 +939,9 @@ class BaserAppController extends Controller {
  */
 	function getRewriteBase($url){
 
-		$baseUrl = baseUrl();
+		$baseUrl = BC_BASE_URL;
 		if(preg_match("/index\.php/", $baseUrl)){
-			$baseUrl = str_replace('index.php/', '', baseUrl());
+			$baseUrl = str_replace('index.php/', '', $baseUrl);
 		}
 		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
 		if($url != '/' || !$baseUrl) {

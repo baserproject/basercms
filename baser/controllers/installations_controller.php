@@ -362,7 +362,7 @@ class InstallationsController extends AppController {
 			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
 			// DB設定ファイルを再読み込みする為リダイレクトする
 			$this->redirect('step5');
-		} elseif(isInstalled()) {
+		} elseif(BC_IS_INSTALLED) {
 			return;
 		}
 		
@@ -394,9 +394,6 @@ class InstallationsController extends AppController {
 		$this->_createPages();
 		ClassRegistry::removeObject('View');
 
-		// デバッグモードを0に変更
-		$this->writeDebug(0);
-
 		if($message) {
 			$this->setFlash($message);
 		}
@@ -412,15 +409,17 @@ class InstallationsController extends AppController {
 
 		$corefilename=CONFIGS.'install.php';
 		$siteUrl = siteUrl();
-		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
-											"Configure::write('Baser.firstAccess', true);",
-											"Configure::write('Baser.siteUrl', '{$siteUrl}');",
-											"Configure::write('Baser.sslUrl', '');",
-											"Configure::write('Baser.adminSslOn', false);",
-											"Configure::write('Baser.mobile', true);",
-											"Configure::write('Baser.smartphone', true);",
-											"Configure::write('Cache.disable', false);",
-											"Cache::config('default', array('engine' => 'File'));","?>");
+		$installCoreData = array("<?php",	
+			"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
+			"Configure::write('Cache.disable', false);",
+			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
+			"Configure::write('BcEnv.sslUrl', '');",
+			"Configure::write('BcApp.adminSsl', false);",
+			"Configure::write('BcApp.mobile', true);",
+			"Configure::write('BcApp.smartphone', true);",
+			"Cache::config('default', array('engine' => 'File'));",
+			"Configure::write('debug', 0);",
+		"?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
 			return chmod($corefilename,0666);
 		}else {
@@ -529,7 +528,7 @@ class InstallationsController extends AppController {
 	function &_connectDb($config, $name='baser') {
 
 		if($name == 'plugin') {
-			$config['prefix'].=Configure::read('Baser.pluginDbPrefix');
+			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		}
 		
 		$result =  ConnectionManager::create($name ,array(
@@ -564,7 +563,7 @@ class InstallationsController extends AppController {
 		if(!$this->BaserManager->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		$dbConfig['prefix'].=Configure::read('Baser.pluginDbPrefix');
+		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
@@ -846,7 +845,7 @@ class InstallationsController extends AppController {
 			$dbfilehandler->write("\t'password' => '".$password."',\n");
 			$dbfilehandler->write("\t'database' => '".$database."',\n");
 			$dbfilehandler->write("\t'schema' => '".$schema."',\n");
-			$dbfilehandler->write("\t'prefix' => '".$prefix.Configure::read('Baser.pluginDbPrefix')."',\n");
+			$dbfilehandler->write("\t'prefix' => '".$prefix.Configure::read('BcEnv.pluginDbPrefix')."',\n");
 			$dbfilehandler->write("\t'encoding' => '".$encoding."'\n");
 			$dbfilehandler->write(");\n");
 			$dbfilehandler->write("}\n");
@@ -1034,7 +1033,7 @@ class InstallationsController extends AppController {
 			$pluginConfig = getDbConfig('plugin');
 		} else {
 			$pluginConfig = $baserConfig;
-			$pluginConfig['prefix'] .= Configure::read('Baser.pluginDbPrefix');
+			$pluginConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		}
 		if($baserConfig) {
 			$this->BaserManager->deleteTables('baser', $baserConfig);

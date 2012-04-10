@@ -173,10 +173,10 @@ class PageCategory extends AppModel {
 				$controlSources['parent_id'] = array();
 				
 				$excludeIds = array();
-				if(!Configure::read('Baser.mobile')) {
+				if(!Configure::read('BcApp.mobile')) {
 					$excludeIds = $this->getAgentCategoryIds('mobile');
 				}
-				if(!Configure::read('Baser.smartphone')) {
+				if(!Configure::read('BcApp.smartphone')) {
 					$excludeIds = $this->getAgentCategoryIds('smartphone');
 				}
 				foreach($parents as $key => $parent) {
@@ -617,7 +617,7 @@ class PageCategory extends AppModel {
  */
 	function getType($id) {
 
-		$types = array('' => '1', Configure::read('AgentSettings.mobile.prefix') => '2', Configure::read('AgentSettings.smartphone.prefix') => '3');
+		$types = array('' => '1', Configure::read('BcAgent.mobile.prefix') => '2', Configure::read('BcAgent.smartphone.prefix') => '3');
 		$path = $this->getpath($id, array('name'));
 		unset($path[count($path)-1]);
 

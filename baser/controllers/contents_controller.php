@@ -196,13 +196,13 @@ class ContentsController extends AppController {
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
 		$direct = false;
-		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('AgentPrefix.currentAgent'));
+		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('BcRequest.agent'));
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
 		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
 		if($parentCategoryId === 0) {
 			$direct = true;
 			$parentCategoryId = null;
-		}elseif(!$parentCategoryId && Configure::read('AgentPrefix.currentAgent') == Configure::read('AgentSettings.mobile.prefix')) {
+		}elseif(!$parentCategoryId && Configure::read('BcRequest.agent') == Configure::read('BcAgent.mobile.prefix')) {
 			$parentCategoryId = $currentAgentId;
 		}
 		

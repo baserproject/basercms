@@ -46,15 +46,18 @@
 	$localePaths[] = BASER_LOCALES;
 	//$shellPaths[];
 /**
+ * baserUrl取得
+ */
+	define('BC_BASE_URL', baseUrl());
+/**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
 	$uri = @$_SERVER['REQUEST_URI'];
-	$baseUrl = baseUrl();
-	if (strpos($uri, $baseUrl.'css/') !== false || strpos($uri, $baseUrl.'js/') !== false || strpos($uri, $baseUrl.'img/') !== false) {
+	if (strpos($uri, BC_BASE_URL.'css/') !== false || strpos($uri, BC_BASE_URL.'js/') !== false || strpos($uri, BC_BASE_URL.'img/') !== false) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
-			Configure::write('Baser.Asset', true);
+			Configure::write('BcRequest.asset', true);
 			return;
 		}
 	}
@@ -63,42 +66,47 @@
  */
 	if(!preg_match('/'.preg_quote(docRoot(), '/').'/', ROOT)) {
 		// CakePHP標準の配置
-		define('DEPLOY_PATTERN', 3);
+		define('BC_DEPLOY_PATTERN', 3);
 	} elseif(ROOT.DS == WWW_ROOT) {
 		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
-		define('DEPLOY_PATTERN', 2);
+		define('BC_DEPLOY_PATTERN', 2);
 	} else {
 		// baserCMS配布時の配置
-		define('DEPLOY_PATTERN', 1);
+		define('BC_DEPLOY_PATTERN', 1);
 	}
+/**
+ * インストール状態 
+ */
+	define('BC_IS_INSTALLED', isInstalled());
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
-	$baserSettings = Configure::read('Baser');
+	$baserSettings = array();
+	$baserSettings['BcEnv'] = Configure::read('BcEnv');
+	$baserSettings['BcApp'] = Configure::read('BcApp');
 	if(Configure::load('baser')===false) {
+		$config = array();
 		include BASER_CONFIGS.'baser.php';
 		Configure::write($config);
 	}
 	if($baserSettings) {
-		foreach ($baserSettings as $key => $value) {
-			Configure::write('Baser.'.$key, $value);
+		foreach ($baserSettings as $key1 => $settings) {
+			foreach($settings as $key2 => $setting) {
+				Configure::write($key1.'.'.$key2, $setting);
+			}
 		}
 	}
 /**
  * tmpフォルダ確認
  */
-	if(isInstalled()) {
+	if(BC_IS_INSTALLED) {
 		checkTmpFolders();
 	}
 /**
- * baserUrl取得
- */
-	$baseUrl = baseUrl();
-/**
  * 文字コードの検出順を指定
  */
-	mb_detect_order(Configure::read('Baser.detectOrder'));
+	mb_detect_order(Configure::read('BcEncode.detectOrder'));
 /**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
@@ -118,16 +126,16 @@
  */
 	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
 	$parameter = getUrlParamFromEnv();
-	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
+	Configure::write('BcRequest.pureUrl',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
 /**
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
  */
-	$agentSettings = Configure::read('AgentSettings');
-	if(!Configure::read('Baser.mobile')) {
+	$agentSettings = Configure::read('BcAgent');
+	if(!Configure::read('BcApp.mobile')) {
 		unset($agentSettings['mobile']);
 	}
-	if(!Configure::read('Baser.smartphone')) {
+	if(!Configure::read('BcApp.smartphone')) {
 		unset($agentSettings['smartphone']);
 	}
 	$agentOn = false;
@@ -146,22 +154,20 @@
 				$agentAgents = preg_quote($agentAgents, '/');
 				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
 				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
-					$getParams = str_replace($baseUrl.$parameter, '', $_SERVER['REQUEST_URI']);
+					$getParams = str_replace(BC_BASE_URL.$parameter, '', $_SERVER['REQUEST_URI']);
 					if($getParams == '/' || '/index.php') {
 						$getParams = '';
 					}
-					$redirectUrl = FULL_BASE_URL.$baseUrl.$setting['alias'].'/'.$parameter.$getParams;
+					$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
 					header("HTTP/1.1 301 Moved Permanently");
 					header("Location: ".$redirectUrl);
 					exit();
 				}
 			}
 			if($agentOn) {
-				Configure::write('AgentPrefix.currentAgent', $key);
-				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
-				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
-			}
-			if($agentOn) {
+				Configure::write('BcRequest.agent', $key);
+				Configure::write('BcRequest.agentPrefix', $setting['prefix']);
+				Configure::write('BcRequest.agentAlias', $setting['alias']);
 				break;
 			}
 		}
@@ -173,7 +179,7 @@
 		// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
 		// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
 		//======================================================================
-		$_parameter = preg_replace('/^'.Configure::read('AgentPrefix.currentAlias').'\//', '', $parameter);
+		$_parameter = preg_replace('/^'.Configure::read('BcRequest.agentAlias').'\//', '', $parameter);
 		if(preg_match('/^files/', $_parameter)) {
 			$redirectUrl = FULL_BASE_URL.'/'.$_parameter;
 			header("HTTP/1.1 301 Moved Permanently");
@@ -181,7 +187,6 @@
 			exit();
 		}
 	}
-	Configure::write('AgentPrefix.on', $agentOn);
 /**
  * Viewのキャッシュ設定
  */
@@ -206,45 +211,35 @@
 /**
  * データキャッシュ
  */
-if(isInstalled()) {
+if(BC_IS_INSTALLED) {
 	Cache::config('_cake_data_', array(
 			'engine'		=> 'File',
-			'duration'		=> Configure::read('Baser.dataCachetime'),
+			'duration'		=> Configure::read('BcCache.dataCachetime'),
 			'probability'	=> 100,
 			'path'			=> CACHE.'datas',
 			'prefix'		=> 'cake_',
 			'lock'			=> false,
 			'serialize'		=> true
 	 ));
-}
 /**
- * 利用可能プラグインの設定
- *
- * PluginHookBehavior::setup() で、Baser.enablePlugins を参照できるように、
- * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
- * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+ * 環境情報キャッシュ
  */
- 	if(isInstalled()) {
-		$db =& ConnectionManager::getDataSource('baser');
-		$sources = $db->listSources();
-		$pluginTable = $db->config['prefix'] . 'plugins';
-		$enablePlugins = array();
-		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			App::import('Core', 'ClassRegistry');
-			// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
-			App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
-			App::import('Behavior', 'Cache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'cache.php'));
-			$Plugin = ClassRegistry::init('Plugin');
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
-			ClassRegistry::removeObject('Plugin');
-			if($plugins) {
-				$enablePlugins = Set::extract('/Plugin/name',$plugins);
-				Configure::write('Baser.enablePlugins', $enablePlugins);
-			}
-		}
+	Cache::config('_cake_env_', array(
+			'engine'		=> 'File',
+			'duration'		=> Configure::read('BcCache.defaultCachetime'),
+			'probability'	=> 100,
+			'path'			=> CACHE.'environment',
+			'prefix'		=> 'cake_',
+			'lock'			=> false,
+			'serialize'		=> true
+	 ));
+}
 /**
  * プラグインの bootstrap を実行する
  */
+ 	if(BC_IS_INSTALLED) {
+		$enablePlugins = getEnablePlugins();
+		Configure::write('BcStatus.enablePlugins', $enablePlugins);
 		$_pluginPaths = array(
 			APP.'plugins'.DS,
 			BASER_PLUGINS

@@ -101,7 +101,7 @@ class BaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(isInstalled()){
+		if(BC_IS_INSTALLED){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -460,8 +460,8 @@ class BaserHelper extends AppHelper {
 		
 		return ($this->params['url']['url'] == '/' ||
 						$this->params['url']['url'] == 'index' ||
-						$this->params['url']['url'] == Configure::read('AgentPrefix.currentAlias').'/' ||
-						$this->params['url']['url'] == Configure::read('AgentPrefix.currentAlias').'/index');
+						$this->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/' ||
+						$this->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/index');
 		
 	}
 /**
@@ -678,7 +678,7 @@ class BaserHelper extends AppHelper {
  */
 	function xmlHeader($attrib = array()) {
 		
-		if(empty($attrib['encoding']) && Configure::read('AgentPrefix.currentAgent') == 'mobile'){
+		if(empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->XmlEx->header($attrib)."\n";
@@ -871,9 +871,9 @@ class BaserHelper extends AppHelper {
 				$_url = 'index.php/'.$_url;
 			}
 			if(!$ssl && !$admin) {
-				$url = Configure::read('Baser.siteUrl').$_url;
+				$url = Configure::read('BcEnv.siteUrl').$_url;
 			} else {
-				$url = Configure::read('Baser.sslUrl').$_url;
+				$url = Configure::read('BcEnv.sslUrl').$_url;
 			}
 		} else {
 			$url = $_url;
@@ -908,7 +908,7 @@ class BaserHelper extends AppHelper {
  */
 	function charset($charset = null) {
 		
-		if(!$charset && Configure::read('AgentPrefix.currentAgent') == 'mobile'){
+		if(!$charset && Configure::read('BcRequest.agent') == 'mobile'){
 			$charset = 'Shift-JIS';
 		}
 		echo $this->HtmlEx->charset($charset);
@@ -940,7 +940,7 @@ class BaserHelper extends AppHelper {
  */
 	function setPageEditLink($id) {
 		
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$this->_view->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
 		
@@ -1070,7 +1070,7 @@ class BaserHelper extends AppHelper {
 		$url2 = '';
 		$aryUrl = array();
 		
-		if(!empty($this->params['prefix']) && Configure::read('AgentPrefix.currentPrefix') != $this->params['prefix']) {
+		if(!empty($this->params['prefix']) && Configure::read('BcRequest.agentPrefix') != $this->params['prefix']) {
 			$prefix = h($this->params['prefix']);
 		}
 		if(!empty($this->params['plugin'])) {
@@ -1090,7 +1090,7 @@ class BaserHelper extends AppHelper {
 
 		$url = split('/', h($this->params['url']['url']));
 		
-		if(Configure::read('AgentPrefix.on')) {
+		if(Configure::read('BcRequest.agent')) {
 			array_shift($url);
 		}
 
@@ -1306,7 +1306,7 @@ class BaserHelper extends AppHelper {
 	function _initPluginBasers(){
 
 		$view = $this->_view;
-		$plugins = Configure::read('Baser.enablePlugins');
+		$plugins = Configure::read('BcStatus.enablePlugins');
 
 		if(!$plugins) {
 			return;
@@ -1388,7 +1388,7 @@ class BaserHelper extends AppHelper {
 		if(empty($_SESSION['Auth']['User'])) {
 			$params = am($params, array(
 				'cache' => array(
-					'time' => Configure::read('Baser.cachetime'),
+					'time' => Configure::read('BcCache.defaultCachetime'),
 					'key' => $pageCategoryId))
 			);
 		}
@@ -1444,8 +1444,8 @@ END_FLASH;
  * @return string URL 
  */
 	function changePrefixToAlias($url, $type) {
-		$alias = Configure::read("AgentSettings.{$type}.alias");
-		$prefix = Configure::read("AgentSettings.{$type}.prefix");
+		$alias = Configure::read("BcAgent.{$type}.alias");
+		$prefix = Configure::read("BcAgent.{$type}.prefix");
 		return preg_replace('/^\/'.$prefix.'\//is', '/'.$alias.'/', $url);
 	}
 /**

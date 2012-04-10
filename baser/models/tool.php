@@ -73,7 +73,7 @@ class Tool extends AppModel {
 		$sources = array();
 		foreach($listSources as $source) {
 			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $source, $matches) &&
-					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$sources[] = $source;
 			}
 		}

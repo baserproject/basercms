@@ -117,13 +117,13 @@ class BaserAppHelper extends Helper {
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
 		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
 		// CUSTOMIZE MODIFY 2011/03/17 ryuring
-		// DEPLOY_PATTERN 2 について対応
+		// BC_DEPLOY_PATTERN 2 について対応
 		// >>>
 		$dir = Configure::read('App.dir');
 		$webroot = Configure::read('App.webroot');
 		$baseUrl = Configure::read('App.baseUrl');
 		if($baseUrl) {
-			switch (DEPLOY_PATTERN) {
+			switch (BC_DEPLOY_PATTERN) {
 				case 1:
 					if (strpos($this->webroot, $dir) === false) {
 						$this->webroot .= $dir . '/' ;

@@ -196,8 +196,8 @@ class PagesController extends AppController {
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('reflectMobile', Configure::read('Baser.mobile'));
-		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
+		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
+		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
 		$this->subMenuElements = array('pages','page_categories');
@@ -308,8 +308,8 @@ class PagesController extends AppController {
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
-		$this->set('reflectMobile', Configure::read('Baser.mobile'));
-		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
+		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
+		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
 		$this->set('url', $url);
@@ -336,10 +336,10 @@ class PagesController extends AppController {
 	function convertViewUrl($url) {
 		
 		$url = preg_replace('/\/index$/', '/', $url);
-		if(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)) {
-			$url = preg_replace('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', '/'.Configure::read('AgentSettings.mobile.alias').'/', $url);
-		} elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)) {
-			$url = preg_replace('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', '/'.Configure::read('AgentSettings.smartphone.alias').'/', $url);
+		if(preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', '/'.Configure::read('BcAgent.mobile.alias').'/', $url);
+		} elseif(preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', $url)) {
+			$url = preg_replace('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', '/'.Configure::read('BcAgent.smartphone.alias').'/', $url);
 		}
 		return $url;
 		
@@ -442,7 +442,7 @@ class PagesController extends AppController {
 		}
 
 		// モバイルディレクトリへのアクセスは Not Found
-		if(isset($path[0]) && ($path[0]==Configure::read('AgentSettings.mobile.prefix') || $path[0]==Configure::read('AgentSettings.smartphone.prefix'))){
+		if(isset($path[0]) && ($path[0]==Configure::read('BcAgent.mobile.prefix') || $path[0]==Configure::read('BcAgent.smartphone.prefix'))){
 			$this->notFound();
 		}
 
@@ -495,8 +495,8 @@ class PagesController extends AppController {
  */
 	function _getCrumbs($url) {
 
-		if(Configure::read('AgentPrefix.on')) {
-			$url = '/'.Configure::read('AgentPrefix.currentAlias').$url;
+		if(Configure::read('BcRequest.agent')) {
+			$url = '/'.Configure::read('BcRequest.agentAlias').$url;
 		}
 		
 		// 直属のカテゴリIDを取得
@@ -588,13 +588,12 @@ class PagesController extends AppController {
 
 		Cache::write('page_preview_'.$id, $page);
 
-		$settings = Configure::read('AgentSettings');
+		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
 			if(preg_match('/^\/'.$setting['prefix'].'\//is', $page['Page']['url'])){
-				Configure::write('AgentPrefix.on',true);
-				Configure::write('AgentPrefix.currentAgent', $key);
-				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
-				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+				Configure::write('BcRequest.agent', $key);
+				Configure::write('BcRequest.agentPrefix', $setting['prefix']);
+				Configure::write('BcRequest.agentAlias', $setting['alias']);
 				break;
 			}
 		}
@@ -623,19 +622,18 @@ class PagesController extends AppController {
 
 		$page = Cache::read('page_preview_'.$id);
 
-		$settings = Configure::read('AgentSettings');
+		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
 			if(preg_match('/^\/'.$setting['prefix'].'\//is', $page['Page']['url'])){
-				Configure::write('AgentPrefix.on',true);
-				Configure::write('AgentPrefix.currentAgent', $key);
-				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
-				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
+				Configure::write('BcRequest.agent', $key);
+				Configure::write('BcRequest.agentPrefix', $setting['prefix']);
+				Configure::write('BcRequest.agentAlias', $setting['alias']);
 				break;
 			}
 		}
-		if(Configure::read('AgentPrefix.on')){
-			$this->layoutPath = Configure::read('AgentSettings.'.Configure::read('AgentPrefix.currentAgent').'.prefix');
-			if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+		if(Configure::read('BcRequest.agent')){
+			$this->layoutPath = Configure::read('BcAgent.'.Configure::read('BcRequest.agent').'.prefix');
+			if(Configure::read('BcRequest.agent') == 'mobile') {
 				$this->helpers[] = 'Mobile';
 			}
 		} else {
@@ -781,15 +779,15 @@ class PagesController extends AppController {
 			}
 
 		} else {
-			if(!Configure::read('Baser.mobile') || !Configure::read('Baser.smartphone')) {
+			if(!Configure::read('BcApp.mobile') || !Configure::read('BcApp.smartphone')) {
 				$conditions['or'] = array(
 					array('Page.page_category_id' => ''),
 					array('Page.page_category_id' => NULL));
 			}
-			if(!Configure::read('Baser.mobile')) {
+			if(!Configure::read('BcApp.mobile')) {
 				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('mobile'));
 			}
-			if(!Configure::read('Baser.smartphone')) {
+			if(!Configure::read('BcApp.smartphone')) {
 				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('smartphone'));
 			}
 		}

@@ -34,7 +34,7 @@ $(function(){
 
 <?php if(!$complete): ?>
 <p>baserCMSを初期化します。データベースのデータも全て削除されます。</p>
-	<?php if(isInstalled()): ?>
+	<?php if(BC_IS_INSTALLED): ?>
 <p>データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。</p>
 <ul><li><?php $baser->link('バックアップはこちらから', 	array('admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup')) ?></li></ul>
 	<?php endif ?>

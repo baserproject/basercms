@@ -194,7 +194,7 @@ class EmailExComponent extends EmailComponent {
 			$subject = $start . $subject . $end;
 			*/
 
-			$subject = mb_encode_mimeheader($subject,$this->charset,'B', Configure::read('Email.lfcode'));
+			$subject = mb_encode_mimeheader($subject,$this->charset,'B', Configure::read('BcEmail.lfcode'));
 
 			mb_internal_encoding($_enc);
 

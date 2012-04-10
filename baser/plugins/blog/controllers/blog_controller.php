@@ -339,7 +339,7 @@ class BlogController extends BlogAppController {
 					}
 					
 					$user = $this->AuthEx->user();
-					if(empty($this->params['admin']) && !empty($user) && !Configure::read('AgentPrefix.on')) {
+					if(empty($this->params['admin']) && !empty($user) && !Configure::read('BcRequest.agent')) {
 						$this->set('editLink', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
 					}
 

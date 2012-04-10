@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $prefix = '';
-if(Configure::read('AgentPrefix.on')) {
-	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+if(Configure::read('BcRequest.agent')) {
+	$prefix = '/'.Configure::read('BcRequest.agentAlias');
 }
 ?>
 <ul class="global-menu clearfix">
@@ -36,7 +36,7 @@ if(Configure::read('AgentPrefix.on')) {
 					<?php else: ?>
 						<?php $class = ' class="menu'.$no.'"' ?>
 					<?php endif ?>
-					<?php if(!Configure::read('AgentPrefix.on') && $this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
+					<?php if(!Configure::read('BcRequest.agent') && $this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
 	<?php /* PC版トップページ */ ?>
 	<li<?php echo $class ?>><?php echo str_replace('/index.php','',$baser->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>
 					<?php else: ?>

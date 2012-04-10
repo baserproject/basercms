@@ -18,13 +18,13 @@
  * @license			http://basercms.net/license/index.html
  */
 $pageType = array();
-if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
 	$pageType = array('1' => 'PC');	
 }
-if(Configure::read('Baser.mobile')) {
+if(Configure::read('BcApp.mobile')) {
 	$pageType['2'] = 'モバイル';
 }
-if(Configure::read('Baser.smartphone')) {
+if(Configure::read('BcApp.smartphone')) {
 	$pageType['3'] = 'スマートフォン';
 }
 ?>

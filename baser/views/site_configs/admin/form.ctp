@@ -152,11 +152,11 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.admin_ssl_on', '管理画面SSL設定') ?></th>
+			<th class="col-head"><?php echo $formEx->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.admin_ssl_on', array('type' => 'radio', 'options' => $textEx->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdminSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('SiteConfig.admin_ssl_on') ?>
+				<?php echo $formEx->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $textEx->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
+				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $formEx->error('SiteConfig.admin_ssl') ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
 					また、SSL用のWebサイトURLの指定が必要です。</div>
 			</td>

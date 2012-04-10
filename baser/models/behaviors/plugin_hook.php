@@ -110,7 +110,7 @@ class PluginHookBehavior extends ModelBehavior {
 			return;
 		}
 
-		$plugins = Configure::read('Baser.enablePlugins');
+		$plugins = Configure::read('BcStatus.enablePlugins');
 		
 		if(!$plugins) {
 			return;

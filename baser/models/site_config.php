@@ -80,7 +80,7 @@ class SiteConfig extends AppModel {
 			'message'	=> "WebサイトURLを入力してください。",
 			'required'	=> true
 		),
-		'admin_ssl_on' => array(
+		'admin_ssl' => array(
 			'rule'		=> array('sslUrlExists'),
 			'message'	=> "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
 		)

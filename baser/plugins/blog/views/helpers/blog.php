@@ -347,7 +347,7 @@ class BlogHelper extends AppHelper {
 		}
 		
 		$url = Router::url(am(array('admin'=>false,'plugin'=>'','controller'=>$blogContentName,'action'=>'archives'), $path));
-		$baseUrl = preg_replace('/\/$/', '', baseUrl());
+		$baseUrl = preg_replace('/\/$/', '', BC_BASE_URL);
 		return preg_replace('/^'.preg_quote($baseUrl, '/').'/', '', $url);
 
 	}
@@ -463,7 +463,7 @@ class BlogHelper extends AppHelper {
  */
 	function editPost($blogContentId,$blogPostId) {
 		
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
 		}
 		

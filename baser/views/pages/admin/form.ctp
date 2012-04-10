@@ -20,13 +20,13 @@
 $baser->css('ckeditor/editor', null, null, false);
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 $pageTypes = array();
-if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
 	$pageTypes = array('1' => 'PC');	
 }
-if(Configure::read('Baser.mobile')) {
+if(Configure::read('BcApp.mobile')) {
 	$pageTypes['2'] = 'モバイル';
 }
-if(Configure::read('Baser.smartphone')) {
+if(Configure::read('BcApp.smartphone')) {
 	$pageTypes['3'] = 'スマートフォン';
 }
 ?>
@@ -236,8 +236,8 @@ function pageTypeChengeHandler() {
 	<div id="PageCategoryOwnerId"><?php echo $formEx->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
 	<div id="RootSmartphoneId"><?php echo $rootSmartphoneId ?></div>
-	<div id="MobileOn"><?php echo Configure::read('Baser.mobile') ?></div>
-	<div id="SmartphoneOn"><?php echo Configure::read('Baser.smartphone') ?></div>
+	<div id="MobileOn"><?php echo Configure::read('BcApp.mobile') ?></div>
+	<div id="SmartphoneOn"><?php echo Configure::read('BcApp.smartphone') ?></div>
 	<div id="Action"><?php echo $this->action ?></div>
 </div>
 
