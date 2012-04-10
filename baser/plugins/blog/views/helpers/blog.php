@@ -582,8 +582,9 @@ class BlogHelper extends AppHelper {
 		}
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'installations.ctp'){
-				$template = basename($template, '.ctp');
+			$ext = Configure::read('BcApp.templateExt');
+			if($template != 'installations'.$ext){
+				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
 		}

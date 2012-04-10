@@ -152,7 +152,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 ","2","1","/smartphone/service","","1","","","","",""
 "","9","sitemap","サイトマップ","baserCMS inc.のサイトマップページ","<h2 class=""contents-head"">サイトマップ</h2>
 <?php $baser->sitemap() ?>
-<ul class=""section"">
+<ul class=""section sitemap"">
 	<li><?php $baser->link(""新着情報"",""/s/news/index"") ?></li>
 	<li><?php $baser->link(""お問い合わせ"",""/s/contact/index"") ?>	</li>
 </ul>

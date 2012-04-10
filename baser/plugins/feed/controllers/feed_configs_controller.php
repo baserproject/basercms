@@ -207,7 +207,7 @@ class FeedConfigsController extends FeedAppController {
  */
 	function redirectEditTemplate($template){
 		
-		$path = 'feed'.DS.$template.'.ctp';
+		$path = 'feed'.DS.$template.$this->ext;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
 		if($this->siteConfigs['theme']){

@@ -102,6 +102,8 @@ class InstallationsController extends AppController {
  */
 	function beforeFilter() {
 
+		parent::beforeFilter();
+		
 		/* インストール状態判別 */
 		if(file_exists(CONFIGS.'database.php')) {
 			$db = ConnectionManager::getInstance();
@@ -359,19 +361,13 @@ class InstallationsController extends AppController {
 		$db = ConnectionManager::getInstance();
 		if($db->config->baser['driver'] == '') {
 			// データベース設定を書き込む
-			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
-			// DB設定ファイルを再読み込みする為リダイレクトする
+			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());		// インストールファイルを生成する
+			$this->_createInstallFile();
+			$this->Session->write('InstallLastStep', true);
+			// DB設定ファイル、インストールファイルを再読み込みする為リダイレクトする
 			$this->redirect('step5');
-		} elseif(BC_IS_INSTALLED) {
+		} elseif(BC_INSTALLED && !$this->Session->read('InstallLastStep')) {
 			return;
-		}
-		
-		$message = '';
-
-		// インストールファイルを生成する
-		if(!$this->_createInstallFile()){
-			if($message) $message .= '<br />';
-			$message .= '/app/config/install.php インストール設定ファイルの設定ができませんでした。パーミションの確認をしてください。';
 		}
 		
 		// tmp フォルダを作成する
@@ -393,11 +389,9 @@ class InstallationsController extends AppController {
 		// pagesファイルを生成する
 		$this->_createPages();
 		ClassRegistry::removeObject('View');
-
-		if($message) {
-			$this->setFlash($message);
-		}
-
+		
+		$this->Session->del('InstallLastStep');
+		
 	}
 /**
  * インストールファイルを生成する
@@ -1007,11 +1001,13 @@ class InstallationsController extends AppController {
 			$messages = am(array('baserCMSを初期化しました。',''),$messages);
 
 			$message = implode('<br />', $messages);
-
+			ClassRegistry::flush();
 			clearAllCache();
 			$this->Session->setFlash($message);
+			$this->redirect('reset');
+			
+		} elseif(!BC_INSTALLED) {
 			$complete = true;
-
 		}else {
 			$complete = false;
 		}

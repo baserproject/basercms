@@ -578,7 +578,7 @@ class Page extends AppModel {
 				}
 			}
 		}
-		return $path.$file.'.ctp';
+		return $path.$file.Configure::read('BcApp.templateExt');
 
 	}
 /**
@@ -955,11 +955,11 @@ class Page extends AppModel {
 		if(!$files[1]) $files[1] = array();
 		foreach($files[1] as $path) {
 
-			if(preg_match('/\.ctp$/is',$path) == false) {
+			if(preg_match('/'.preg_quote(Configure::read('BcApp.templateExt')).'$/is',$path) == false) {
 				continue;
 			}
 
-			$pageName = basename($path, '.ctp');
+			$pageName = basename($path, Configure::read('BcApp.templateExt'));
 			$file = new File($path);
 			$contents = $file->read();
 			$file->close();

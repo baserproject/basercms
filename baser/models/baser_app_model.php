@@ -1351,7 +1351,7 @@ class BaserAppModel extends Model {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if (PHP5 && BC_IS_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('Cache') && 
+		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('Cache') && 
 				$this->Behaviors->enabled('Cache') && Configure::read('debug') == 0 ) {
 			if($this->cacheEnabled()) {
 				return $this->cacheMethod($cache, __FUNCTION__, $args);

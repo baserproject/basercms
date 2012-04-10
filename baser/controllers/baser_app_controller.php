@@ -126,7 +126,7 @@ class BaserAppController extends Controller {
 
 		parent::__construct();
 		
-		if(BC_IS_INSTALLED) {
+		if(BC_INSTALLED) {
 			
 			// サイト基本設定の読み込み
 			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
@@ -174,6 +174,9 @@ class BaserAppController extends Controller {
 			}
 		}
 		
+		// テンプレートの拡張子
+		$this->ext = Configure::read('BcApp.templateExt');
+		
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->params['prefix']を利用できない為。
@@ -194,19 +197,22 @@ class BaserAppController extends Controller {
 
 		parent::beforeFilter();
 		
+		if(!BC_INSTALLED) {
+			return;
+		}
 		
 		// テーマを設定
 		$this->setTheme($this->params);
 		
-		if(BC_IS_INSTALLED && $this->params['controller'] != 'installations') {
+		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
 			// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
 			// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
 			// 表示されてしまうので明示的に指定している。
 			// （例）
-			// [変更後] app/webroot/themed/demo/blog/news/index.ctp
-			// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.ctp
+			// [変更後] app/webroot/themed/demo/blog/news/index.php
+			// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.php
 			// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
 			// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
 			// ※ AppView::_pathsも関連している
@@ -320,7 +326,7 @@ class BaserAppController extends Controller {
  */
 	function setTheme($params) {
 		
-		if(BC_IS_INSTALLED && $params['controller'] != 'installations') {
+		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
 			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
 				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
@@ -467,7 +473,7 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (BC_IS_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
 			$this->set('user',$_SESSION['Auth']['User']);
 			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}

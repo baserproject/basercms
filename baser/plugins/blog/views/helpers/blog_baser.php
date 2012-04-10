@@ -28,7 +28,7 @@ class BlogBaserHelper extends AppHelper {
  * ブログ記事一覧出力
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $baser->blogPosts('news', 3) ?>
- * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.ctp
+ * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.php
  * 
  * @param int $contentsName
  * @param int $num

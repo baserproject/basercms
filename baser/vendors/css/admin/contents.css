@@ -434,6 +434,7 @@ table.sub-menu{
 	border-right: 1px solid #CCC;
 	border-top: 1px dotted #CCC;
 	border-bottom: 1px dotted #CCC;
+	vertical-align: middle;
 }
 .contents-body .form-table td textarea {
 	width: 86%;

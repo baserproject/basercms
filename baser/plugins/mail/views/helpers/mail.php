@@ -117,8 +117,9 @@ class MailHelper extends AppHelper {
 		}
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'installations.ctp'){
-				$template = basename($template, '.ctp');
+			$ext = Configure::read('BcApp.templateExt');
+			if($template != 'installations'.$ext){
+				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
 		}
@@ -194,8 +195,9 @@ class MailHelper extends AppHelper {
 		}
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'mail_data.ctp'){
-				$template = basename($template, '.ctp');
+			$ext = Configure::read('BcApp.templateExt');
+			if($template != 'mail_data'.$ext){
+				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
 		}

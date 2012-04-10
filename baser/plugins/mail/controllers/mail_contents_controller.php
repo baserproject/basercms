@@ -265,9 +265,9 @@ class MailContentsController extends MailAppController {
  */
 	function redirectEditLayout($template){
 		
-		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.'.ctp';
-		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.'.ctp',
-						BASER_VIEWS.'layouts'.DS.$template.'.ctp');
+		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
+		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.$this->ext,
+						BASER_VIEWS.'layouts'.DS.$template.$this->ext);
 		if($this->siteConfigs['theme']){
 			if(!file_exists($target)){
 				foreach($sorces as $source){
@@ -278,7 +278,7 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.'.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.$this->ext));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action' => 'index'));
@@ -295,7 +295,7 @@ class MailContentsController extends MailAppController {
 	function redirectEditMail($template){
 		
 		$type = 'elements';
-		$path = 'email'.DS.'text'.DS.$template.'.ctp';
+		$path = 'email'.DS.'text'.DS.$template.$this->ext;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$type.DS.$path);
 		if($this->siteConfigs['theme']){
@@ -331,7 +331,7 @@ class MailContentsController extends MailAppController {
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
 		if($this->siteConfigs['theme']){
-			if(!file_exists($target.DS.'index.ctp')){
+			if(!file_exists($target.DS.'index'.$this->ext)){
 				foreach($sorces as $source){
 					if(is_dir($source)){
 						$folder = new Folder();
@@ -342,7 +342,7 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index.ctp'));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index'.$this->ext));
 		}else{
 			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
 			$this->redirect(array('action' => 'index'));

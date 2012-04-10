@@ -24,7 +24,9 @@
 		// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 		// 管理システムテーマ
-		'adminTheme'		=> 'baseradmin'
+		'adminTheme'		=> 'baseradmin',
+		// テンプレートの基本となる拡張子（.php 推奨）
+		'templateExt'		=> '.php'
 	);
 /**
  * 環境設定 

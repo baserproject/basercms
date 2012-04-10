@@ -64,8 +64,9 @@ class FeedHelper extends TextExHelper {
 		}
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'ajax.ctp' && $template != 'error.ctp'){
-				$template = basename($template, '.ctp');
+			$ext = Configure::read('BcApp.templateExt');
+			if($template != 'ajax'.$ext && $template != 'error'.$ext){
+				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
 		}

@@ -77,7 +77,7 @@
 /**
  * インストール状態 
  */
-	define('BC_IS_INSTALLED', isInstalled());
+	define('BC_INSTALLED', isInstalled());
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
@@ -100,7 +100,7 @@
 /**
  * tmpフォルダ確認
  */
-	if(BC_IS_INSTALLED) {
+	if(BC_INSTALLED) {
 		checkTmpFolders();
 	}
 /**
@@ -211,7 +211,7 @@
 /**
  * データキャッシュ
  */
-if(BC_IS_INSTALLED) {
+if(BC_INSTALLED) {
 	Cache::config('_cake_data_', array(
 			'engine'		=> 'File',
 			'duration'		=> Configure::read('BcCache.dataCachetime'),
@@ -237,7 +237,7 @@ if(BC_IS_INSTALLED) {
 /**
  * プラグインの bootstrap を実行する
  */
- 	if(BC_IS_INSTALLED) {
+ 	if(BC_INSTALLED) {
 		$enablePlugins = getEnablePlugins();
 		Configure::write('BcStatus.enablePlugins', $enablePlugins);
 		$_pluginPaths = array(

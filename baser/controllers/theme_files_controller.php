@@ -168,7 +168,7 @@ class ThemeFilesController extends AppController {
  */
 	function _getFileType($file) {
 		
-		if(preg_match('/^(.+?)(\.ctp|\.css|\.js)$/is',$file)) {
+		if(preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is',$file)) {
 			return 'text';
 		} elseif(preg_match('/^(.+?)(\.png|\.gif|\.jpg)$/is',$file)) {
 			return 'image';

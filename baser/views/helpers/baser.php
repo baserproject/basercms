@@ -101,7 +101,7 @@ class BaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(BC_IS_INSTALLED){
+		if(BC_INSTALLED){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -629,7 +629,7 @@ class BaserHelper extends AppHelper {
  */
 	function scripts() {
 		
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->HtmlEx->themeWeb;
 			$this->HtmlEx->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
 			$this->css('admin/toolbar', null, null, false);
@@ -645,7 +645,7 @@ class BaserHelper extends AppHelper {
  * @access public
  */
 	function func() {
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {
+		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->_view->theme;
 			$this->_view->theme = $this->siteConfig['admin_theme'];
 			$this->element('admin/toolbar');

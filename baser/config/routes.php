@@ -24,7 +24,7 @@ if(Configure::read('BcRequest.asset')) {
 	return;
 }
 
-if(BC_IS_INSTALLED) {
+if(BC_INSTALLED) {
 	
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
