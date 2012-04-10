@@ -131,7 +131,7 @@ class SiteConfigsController extends AppController {
 					$this->Session->setFlash('システム設定を保存しました。');
 
 					// 環境設定を保存
-					$this->writeDebug($mode);
+					$this->writeInstallSetting('debug', $mode);
 					$this->writeInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
 					$this->writeInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
 					$this->writeInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
@@ -270,7 +270,7 @@ class SiteConfigsController extends AppController {
 	function _getSiteConfigData() {
 
 		$data['SiteConfig'] = $this->siteConfigs;
-		$data['SiteConfig']['mode'] = $this->readDebug();
+		$data['SiteConfig']['mode'] = Configure::read('debug');
 		$data['SiteConfig']['smart_url'] = $this->readSmartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');

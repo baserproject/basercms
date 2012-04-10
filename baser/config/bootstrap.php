@@ -75,14 +75,19 @@
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
-	$baserSettings = Configure::read('Baser');
+	$baserSettings = array();
+	$baserSettings['BcEnv'] = Configure::read('BcEnv');
+	$baserSettings['BcApp'] = Configure::read('BcApp');
 	if(Configure::load('baser')===false) {
+		$config = array();
 		include BASER_CONFIGS.'baser.php';
 		Configure::write($config);
 	}
 	if($baserSettings) {
-		foreach ($baserSettings as $key => $value) {
-			Configure::write('Baser.'.$key, $value);
+		foreach ($baserSettings as $key1 => $settings) {
+			foreach($settings as $key2 => $setting) {
+				Configure::write($key1.'.'.$key2, $setting);
+			}
 		}
 	}
 /**

@@ -394,9 +394,6 @@ class InstallationsController extends AppController {
 		$this->_createPages();
 		ClassRegistry::removeObject('View');
 
-		// デバッグモードを0に変更
-		$this->writeDebug(0);
-
 		if($message) {
 			$this->setFlash($message);
 		}

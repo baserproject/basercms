@@ -217,10 +217,12 @@ class BaserAppController extends Controller {
 				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
 			}
 		}
-		
+
 		// 初回アクセスメッセージ表示設定
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && Configure::read('Baser.firstAccess')) {
-			$this->writeInstallSetting('Baser.firstAccess', 'false');
+		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && !empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
 		}
 
 		// メンテナンス
@@ -591,8 +593,11 @@ class BaserAppController extends Controller {
 /**
  * /app/core.php のデバッグモードを書き換える
  * @param int $mode
+ * @deprecated
  */
 	function writeDebug($mode) {
+		
+		trigger_error("(Controller::writeDebug) は非推奨です。Controller::writeInstallSetting を利用してください。", E_USER_WARNING);
 		$file = new File(CONFIGS.'core.php');
 		$core = $file->read(false,'w');
 		if($core) {
@@ -604,12 +609,16 @@ class BaserAppController extends Controller {
 			$file->close();
 			return false;
 		}
+		
 	}
 /**
  * /app/core.phpのデバッグモードを取得する
  * @return string $mode
+ * @deprecated
  */
 	function readDebug() {
+		
+		trigger_error("(Controller::readDebug) は非推奨です。Configure::read('debug') を利用してください。", E_USER_WARNING);
 		$mode = '';
 		$file = new File(CONFIGS.'core.php');
 		$core = $file->read(false,'r');
@@ -617,6 +626,7 @@ class BaserAppController extends Controller {
 			$mode = trim($matches[1]);
 		}
 		return $mode;
+		
 	}
 /**
  * メールを送信する
