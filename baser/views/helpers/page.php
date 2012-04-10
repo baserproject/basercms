@@ -69,12 +69,12 @@ class PageHelper extends Helper {
 		if(isset($this->params['pass'][0])) {
 			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->data = $this->Page->findByUrl('/'.impload('/',$this->params['pass'][0]));
-			$param = Configure::read('Baser.urlParam');
+			$param = Configure::read('BcRequest.pureUrl');
 			if($param && preg_match('/\/$/is',$param)){
 				$param .= 'index';
 			}
-			if(Configure::read('AgentPrefix.on')) {
-				$param = Configure::read('AgentPrefix.currentPrefix').'/'.$param;
+			if(Configure::read('BcRequest.agent')) {
+				$param = Configure::read('BcRequest.agentPrefix').'/'.$param;
 			}
 			$this->data = $this->Page->findByUrl('/'.$param);
 		}

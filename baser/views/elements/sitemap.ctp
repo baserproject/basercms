@@ -24,8 +24,8 @@ if(!isset($recursive)) {
 	$recursive = 1;
 }
 $prefix = '';
-if(Configure::read('AgentPrefix.on')) {
-	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+if(Configure::read('BcRequest.agent')) {
+	$prefix = '/'.Configure::read('BcRequest.agentAlias');
 }
 ?>
 <ul class="sitemap section ul-level-<?php echo $recursive ?>">

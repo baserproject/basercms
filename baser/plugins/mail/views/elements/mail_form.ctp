@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $prefix = '';
-if(Configure::read('AgentPrefix.on')) {
-	$prefix = '/'.Configure::read('AgentPrefix.currentAlias');
+if(Configure::read('BcRequest.agent')) {
+	$prefix = '/'.Configure::read('BcRequest.agentAlias');
 }
 ?>
 <?php /* フォーム開始タグ */ ?>

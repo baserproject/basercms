@@ -617,7 +617,7 @@ class PageCategory extends AppModel {
  */
 	function getType($id) {
 
-		$types = array('' => '1', Configure::read('AgentSettings.mobile.prefix') => '2', Configure::read('AgentSettings.smartphone.prefix') => '3');
+		$types = array('' => '1', Configure::read('BcAgent.mobile.prefix') => '2', Configure::read('BcAgent.smartphone.prefix') => '3');
 		$path = $this->getpath($id, array('name'));
 		unset($path[count($path)-1]);
 

@@ -20,7 +20,7 @@
 if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 }
-$userModel = Configure::read('AuthPrefix.'.$this->params['prefix'].'.userModel');
+$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
 $this->addScript(<<< CSS_END
 <style type="text/css">
 #Contents {

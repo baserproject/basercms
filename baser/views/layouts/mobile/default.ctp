@@ -36,7 +36,7 @@
 	<?php $baser->element('contents_navi') ?><br />
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:1px solid #FF6600;" />
 	<span style="color:#FF6600">◆ </span>
-	<?php $baser->link('トップへ','/'.Configure::read('AgentSettings.mobile.alias').'/') ?>
+	<?php $baser->link('トップへ','/'.Configure::read('BcAgent.mobile.alias').'/') ?>
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#FF6600;background:#FF6600;border:1px solid #FF6600;" />
 	<center>
 		<?php $baser->img('baser.power.gif', array('alt'=> 'baserCMS : Based Website Development Project', 'border'=> "0")); ?>

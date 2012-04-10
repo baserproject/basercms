@@ -20,18 +20,18 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-if(Configure::read('Baser.Asset')) {
+if(Configure::read('BcRequest.asset')) {
 	return;
 }
 
 if(isInstalled()) {
 	
 	$parameter = getUrlParamFromEnv();
-	Configure::write('Baser.urlParam', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
-	$agentOn = Configure::read('AgentPrefix.on');
-	$agentAlias = Configure::read('AgentPrefix.currentAlias');
-	$agentPrefix = Configure::read('AgentPrefix.currentPrefix');
-	$authPrefixes = Configure::read('AuthPrefix');
+	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
+	$agent = Configure::read('BcRequest.agent');
+	$agentAlias = Configure::read('BcRequest.agentAlias');
+	$agentPrefix = Configure::read('BcRequest.agentPrefix');
+	$authPrefixes = Configure::read('BcAuthPrefix');
 	
 	$pluginMatch = array();
 	$plugins = Configure::listObjects('plugin');
@@ -59,7 +59,7 @@ if(isInstalled()) {
 		if($pluginContent) {
 			$pluginContentName = $pluginContent['PluginContent']['name'];
 			$pluginName = $pluginContent['PluginContent']['plugin'];
-			if(!$agentOn) {
+			if(!$agent) {
 				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller'=> $pluginName));
 			}else {
 				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName));
@@ -96,7 +96,7 @@ if(isInstalled()) {
 	/* 1.5.9以前との互換性の為残しておく */
 	// .html付きのアクセスの場合、pagesコントローラーを呼び出す
 	if(strpos($parameter, '.html') !== false) {
-		if($agentOn) {
+		if($agent) {
 			Router::connect("/{$agentAlias}/.*?\.html", array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display','pages/'.$parameter));
 		}else {
 			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
@@ -113,13 +113,13 @@ if(isInstalled()) {
 				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
 			}
 			foreach ($_parameters as $_parameter){
-				if(!$agentOn){
+				if(!$agent){
 					$url = "/{$_parameter}";
 				}else{
 					$url = "/{$agentPrefix}/{$_parameter}";
 				}
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
-					if(!$agentOn){
+					if(!$agent){
 						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{
 						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
@@ -133,7 +133,7 @@ if(isInstalled()) {
 /**
  * 携帯標準ルーティング
  */
-	if($agentOn) {
+	if($agent) {
 		// プラグイン
 		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);

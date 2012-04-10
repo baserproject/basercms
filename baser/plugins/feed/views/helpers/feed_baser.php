@@ -36,10 +36,10 @@ class FeedBaserHelper extends AppHelper {
 		
 		$url = array('plugin'=>'feed','controller'=>'feed','action'=>'index');
 		if($mobile===''){
-			$mobile = (Configure::read('AgentPrefix.currentAgent') == 'mobile');
+			$mobile = (Configure::read('BcRequest.agent') == 'mobile');
 		}
 		if($mobile){
-			$url['prefix'] = Configure::read('AgentSettings.mobile.prefix');
+			$url['prefix'] = Configure::read('BcAgent.mobile.prefix');
 		}
 		echo $this->requestAction($url,array('pass'=>array($id)));
 

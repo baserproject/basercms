@@ -55,13 +55,13 @@ class BlogBaserHelper extends AppHelper {
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
 		
-		$settings = Configure::read('AgentSettings');
+		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
 			if(isset($options[$key])) {
 				$agentOn = $options[$key];
 				unset($options[$key]);
 			} else {
-				$agentOn = (Configure::read('AgentPrefix.currentAgent') == $key);
+				$agentOn = (Configure::read('BcRequest.agent') == $key);
 			}
 			if($agentOn){
 				$url['prefix'] = $setting['prefix'];

@@ -80,7 +80,7 @@ class MailHelper extends AppHelper {
  */
 	function indexFields($mailContentId) {
 		
-		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('AgentPrefix.on')) {
+		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
 		

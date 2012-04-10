@@ -1,7 +1,7 @@
 <?php
 if (empty($_SESSION)) {
 	if ($iniSet) {
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+		if(Configure::read('BcRequest.agent') == 'mobile') {
 			ini_set('session.use_cookies', 0);
 			ini_set('session.use_trans_sid', 1);
 		} else {

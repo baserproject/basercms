@@ -76,7 +76,7 @@ class BaserAppModel extends Model {
 				}elseif($cm->config->baser['login']=='dummy' &&
 						$cm->config->baser['password']=='dummy' &&
 						$cm->config->baser['database'] == 'dummy' &&
-						Configure::read('Baser.urlParam')=='') {
+						Configure::read('BcRequest.pureUrl')=='') {
 					// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
 					// 初期化ページにリダイレクトする
 					App::import('Controller','App');

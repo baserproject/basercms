@@ -23,22 +23,27 @@
 	$config['Baser'] = array(
 		// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
-		// 標準キャッシュ時間
-		'cachetime'			=> '1 month',
 		// プラグインDBプレフィックス
 		'pluginDbPrefix'	=> 'pg_',
 		// 文字コードの検出順
 		'detectOrder'		=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
-		// モデルデータキャッシュの利用可否
-		'dataCachetime'		=> '1 month',
 		// 管理システムテーマ
 		'adminTheme'		=> 'baseradmin'
+	);
+/**
+ * キャッシュ設定 
+ */
+	$config['BcCache'] = array(
+		// 標準キャッシュ時間
+		'defaultCachetime'	=> '1 month',
+		// モデルデータキャッシュ時間
+		'dataCachetime'		=> '1 month'
 	);
 /**
  * 認証プレフィックス設定
  */
 	$adminPrefix = Configure::read('Routing.admin');
-	$config['AuthPrefix'] = array(
+	$config['BcAuthPrefix'] = array(
 		// 管理画面
 		'admin' => array(
 			'prefix'		=> 'admin',
@@ -61,14 +66,14 @@
 /**
  * Eメール設定
  */
-	$config['Email'] = array(
+	$config['BcEmail'] = array(
 		// 改行コード
 		'lfcode' => "\n"
 	);
 /**
  * エージェント設定
  */
-	$config['AgentSettings'] = array(
+	$config['BcAgent'] = array(
 		'mobile'	=> array(
 			'alias'	=> 'm',
 			'prefix'=> 'mobile',

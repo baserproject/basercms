@@ -42,11 +42,11 @@
 	<?php $url = preg_replace('/index$/', '', $data['Page']['url']) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Page']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['Page']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
-	<?php if(!preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url) && !preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
+	<?php if(!preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', $url) && !preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', $url)): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $url, array('title' => '確認', 'target' => '_blank')) ?>
-	<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.mobile.prefix').'\//is', $url)): ?>
+	<?php elseif(preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', $url)): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $baser->changePrefixToAlias($url, 'mobile'), array('title' => '確認', 'target' => '_blank')) ?>
-	<?php elseif(preg_match('/^\/'.Configure::read('AgentSettings.smartphone.prefix').'\//is', $url)): ?>
+	<?php elseif(preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', $url)): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $baser->changePrefixToAlias($url, 'smartphone'), array('title' => '確認', 'target' => '_blank')) ?>		
 	<?php endif ?>
 

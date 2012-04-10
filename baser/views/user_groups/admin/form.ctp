@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $authPrefixes = array();
-foreach(Configure::read('AuthPrefix') as $key => $authPrefix) {
+foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 	$authPrefixes[$key] = $key;
 }
 ?>

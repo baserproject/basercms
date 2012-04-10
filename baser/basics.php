@@ -202,7 +202,7 @@
  */
 	function getUrlParamFromEnv() {
 		
-		$agentAlias = Configure::read('AgentPrefix.currentAlias');
+		$agentAlias = Configure::read('BcRequest.agentAlias');
 		$url = getUrlFromEnv();
 		return preg_replace('/^'.$agentAlias.'\//','',$url);
 		
@@ -618,7 +618,7 @@
  */
 	function addSessionId($url, $force = false) {
 		
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
+		if(Configure::read('BcRequest.agent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
 			if(is_array($url)) {
 				$url["?"][session_name()] = session_id();
 			} else {

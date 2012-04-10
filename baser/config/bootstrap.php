@@ -54,7 +54,7 @@
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
-			Configure::write('Baser.Asset', true);
+			Configure::write('BcRequest.asset', true);
 			return;
 		}
 	}
@@ -118,12 +118,12 @@
  */
 	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
 	$parameter = getUrlParamFromEnv();
-	Configure::write('Baser.urlParam',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
+	Configure::write('BcRequest.pureUrl',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
 /**
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
  */
-	$agentSettings = Configure::read('AgentSettings');
+	$agentSettings = Configure::read('BcAgent');
 	if(!Configure::read('Baser.mobile')) {
 		unset($agentSettings['mobile']);
 	}
@@ -157,11 +157,9 @@
 				}
 			}
 			if($agentOn) {
-				Configure::write('AgentPrefix.currentAgent', $key);
-				Configure::write('AgentPrefix.currentPrefix', $setting['prefix']);
-				Configure::write('AgentPrefix.currentAlias', $setting['alias']);
-			}
-			if($agentOn) {
+				Configure::write('BcRequest.agent', $key);
+				Configure::write('BcRequest.agentPrefix', $setting['prefix']);
+				Configure::write('BcRequest.agentAlias', $setting['alias']);
 				break;
 			}
 		}
@@ -173,7 +171,7 @@
 		// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
 		// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
 		//======================================================================
-		$_parameter = preg_replace('/^'.Configure::read('AgentPrefix.currentAlias').'\//', '', $parameter);
+		$_parameter = preg_replace('/^'.Configure::read('BcRequest.agentAlias').'\//', '', $parameter);
 		if(preg_match('/^files/', $_parameter)) {
 			$redirectUrl = FULL_BASE_URL.'/'.$_parameter;
 			header("HTTP/1.1 301 Moved Permanently");
@@ -181,7 +179,6 @@
 			exit();
 		}
 	}
-	Configure::write('AgentPrefix.on', $agentOn);
 /**
  * Viewのキャッシュ設定
  */
@@ -209,7 +206,7 @@
 if(isInstalled()) {
 	Cache::config('_cake_data_', array(
 			'engine'		=> 'File',
-			'duration'		=> Configure::read('Baser.dataCachetime'),
+			'duration'		=> Configure::read('BcCache.dataCachetime'),
 			'probability'	=> 100,
 			'path'			=> CACHE.'datas',
 			'prefix'		=> 'cake_',

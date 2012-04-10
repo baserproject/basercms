@@ -149,9 +149,9 @@ class BaserAppController extends Controller {
 			$this->setTheme($params);
 			
 			// モバイルのエラー用
-			if(Configure::read('AgentPrefix.on')) {
-				$this->layoutPath = Configure::read('AgentPrefix.currentPrefix');
-				if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+			if(Configure::read('BcRequest.agent')) {
+				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
+				if(Configure::read('BcRequest.agent') == 'mobile') {
 					$this->helpers[] = 'Mobile';
 				}
 			}
@@ -163,12 +163,12 @@ class BaserAppController extends Controller {
 
 		}
 
-		if(Configure::read('AgentPrefix.currentAgent') == 'mobile') {
+		if(Configure::read('BcRequest.agent') == 'mobile') {
 			if(!Configure::read('Baser.mobile')) {
 				$this->notFound();
 			}
 		}
-		if(Configure::read('AgentPrefix.currentAgent') == 'smartphone') {
+		if(Configure::read('BcRequest.agent') == 'smartphone') {
 			if(!Configure::read('Baser.smartphone')) {
 				$this->notFound();
 			}
@@ -237,7 +237,7 @@ class BaserAppController extends Controller {
 
 		/* 認証設定 */
 		if(isset($this->AuthConfigure) && isset($this->params['prefix'])) {
-			$configs = Configure::read('AuthPrefix');
+			$configs = Configure::read('BcAuthPrefix');
 			if(isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
 			} else {
@@ -280,11 +280,11 @@ class BaserAppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('AgentPrefix.on') && isset($this->params['action']) && empty($this->params['requested'])) {
+		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->params['action']) && empty($this->params['requested'])) {
 			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
 				$user = $this->AuthEx->user();
 				$Permission = ClassRegistry::init('Permission');
-				$userModel = Configure::read('AuthPrefix.'.$this->params['prefix'].'.userModel');
+				$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
 				if(!$Permission->check($this->params['url']['url'],$user[$this->AuthEx->userModel]['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
 					$this->redirect($this->AuthEx->loginAction);
@@ -689,8 +689,8 @@ class BaserAppController extends Controller {
 		}
 		
 		// テンプレート
-		if(Configure::read('AgentPrefix.on')) {
-			$this->EmailEx->template = Configure::read('AgentPrefix.currentPrefix').DS.$template;
+		if(Configure::read('BcRequest.agent')) {
+			$this->EmailEx->template = Configure::read('BcRequest.agentPrefix').DS.$template;
 		}else {
 			$this->EmailEx->template = $template;
 		}

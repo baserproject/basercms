@@ -135,7 +135,7 @@ class UsersController extends AppController {
 		if($this->data) {
 			if ($user) {
 				if (!empty($this->data[$userModel]['saved'])) {
-					if(Configure::read('AgentPrefix.currentAlias') != 'mobile') {
+					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
 					} else {
 						$this->AuthEx->saveSerial();
@@ -158,7 +158,7 @@ class UsersController extends AppController {
 
 		$pageTitle = 'ログイン';
 		if(isset($this->params['prefix'])) {
-			$prefixAuth = Configure::read('AuthPrefix.'.$this->params['prefix']);
+			$prefixAuth = Configure::read('BcAuthPrefix.'.$this->params['prefix']);
 			if($prefixAuth && isset($prefixAuth['loginTitle'])) {
 				$pageTitle = $prefixAuth['loginTitle'];
 			}
@@ -188,7 +188,7 @@ class UsersController extends AppController {
 		if($this->data) {
 			if ($user) {
 				if (!empty($this->data[$userModel]['saved'])) {
-					if(Configure::read('AgentPrefix.currentAlias') != 'mobile') {
+					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
 					} else {
 						$this->AuthEx->saveSerial();
