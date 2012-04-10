@@ -165,7 +165,7 @@ class MailContent extends MailAppModel {
 	function checkSslUrl($check) {
 		
 		if($check[key($check)]) {
-			$sslUrl = Configure::read('Baser.sslUrl');
+			$sslUrl = Configure::read('BcEnv.sslUrl');
 			if(empty($sslUrl)) {
 				return false;
 			} else {

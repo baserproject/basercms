@@ -196,8 +196,8 @@ class PagesController extends AppController {
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('reflectMobile', Configure::read('Baser.mobile'));
-		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
+		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
+		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
 		$this->subMenuElements = array('pages','page_categories');
@@ -308,8 +308,8 @@ class PagesController extends AppController {
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
-		$this->set('reflectMobile', Configure::read('Baser.mobile'));
-		$this->set('reflectSmartphone', Configure::read('Baser.smartphone'));
+		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
+		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
 		$this->set('url', $url);
@@ -779,15 +779,15 @@ class PagesController extends AppController {
 			}
 
 		} else {
-			if(!Configure::read('Baser.mobile') || !Configure::read('Baser.smartphone')) {
+			if(!Configure::read('BcApp.mobile') || !Configure::read('BcApp.smartphone')) {
 				$conditions['or'] = array(
 					array('Page.page_category_id' => ''),
 					array('Page.page_category_id' => NULL));
 			}
-			if(!Configure::read('Baser.mobile')) {
+			if(!Configure::read('BcApp.mobile')) {
 				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('mobile'));
 			}
-			if(!Configure::read('Baser.smartphone')) {
+			if(!Configure::read('BcApp.smartphone')) {
 				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('smartphone'));
 			}
 		}

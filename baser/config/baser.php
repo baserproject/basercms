@@ -18,17 +18,27 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * baserCMS基本設定
+ * アプリケーション基本設定
  */
-	$config['Baser'] = array(
+	$config['BcApp'] = array(
 		// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
-		// プラグインDBプレフィックス
-		'pluginDbPrefix'	=> 'pg_',
-		// 文字コードの検出順
-		'detectOrder'		=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
 		// 管理システムテーマ
 		'adminTheme'		=> 'baseradmin'
+	);
+/**
+ * 環境設定 
+ */
+	$config['BcEnv'] = array(
+		// プラグインDBプレフィックス
+		'pluginDbPrefix'	=> 'pg_',
+	);
+/**
+ * 文字コード設定
+ */
+	$config['BcEncode'] = array(
+		// 文字コードの検出順
+		'detectOrder'	=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
 	);
 /**
  * キャッシュ設定 

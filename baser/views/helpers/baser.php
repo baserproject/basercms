@@ -871,9 +871,9 @@ class BaserHelper extends AppHelper {
 				$_url = 'index.php/'.$_url;
 			}
 			if(!$ssl && !$admin) {
-				$url = Configure::read('Baser.siteUrl').$_url;
+				$url = Configure::read('BcEnv.siteUrl').$_url;
 			} else {
-				$url = Configure::read('Baser.sslUrl').$_url;
+				$url = Configure::read('BcEnv.sslUrl').$_url;
 			}
 		} else {
 			$url = $_url;
@@ -1306,7 +1306,7 @@ class BaserHelper extends AppHelper {
 	function _initPluginBasers(){
 
 		$view = $this->_view;
-		$plugins = Configure::read('Baser.enablePlugins');
+		$plugins = Configure::read('BcStatus.enablePlugins');
 
 		if(!$plugins) {
 			return;

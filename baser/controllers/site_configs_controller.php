@@ -111,7 +111,7 @@ class SiteConfigsController extends AppController {
 					}
 				}
 				
-				$adminSslOn = $this->data['SiteConfig']['admin_ssl_on'];
+				$adminSsl = $this->data['SiteConfig']['admin_ssl'];
 				$mobile = $this->data['SiteConfig']['mobile'];
 				$smartphone = $this->data['SiteConfig']['smartphone'];
 
@@ -120,7 +120,7 @@ class SiteConfigsController extends AppController {
 				unset($this->data['SiteConfig']['smart_url']);
 				unset($this->data['SiteConfig']['site_url']);
 				unset($this->data['SiteConfig']['ssl_url']);
-				unset($this->data['SiteConfig']['admin_ssl_on']);
+				unset($this->data['SiteConfig']['admin_ssl']);
 				unset($this->data['SiteConfig']['mobile']);
 				unset($this->data['SiteConfig']['smartphone']);
 				
@@ -132,11 +132,11 @@ class SiteConfigsController extends AppController {
 
 					// 環境設定を保存
 					$this->writeDebug($mode);
-					$this->writeInstallSetting('Baser.siteUrl', "'".$siteUrl."'");
-					$this->writeInstallSetting('Baser.sslUrl', "'".$sslUrl."'");
-					$this->writeInstallSetting('Baser.adminSslOn', ($adminSslOn)? 'true' : 'false');
-					$this->writeInstallSetting('Baser.mobile', ($mobile)? 'true' : 'false');
-					$this->writeInstallSetting('Baser.smartphone', ($smartphone)? 'true' : 'false');
+					$this->writeInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
+					$this->writeInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
+					$this->writeInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
+					$this->writeInstallSetting('BcApp.mobile', ($mobile)? 'true' : 'false');
+					$this->writeInstallSetting('BcApp.smartphone', ($smartphone)? 'true' : 'false');
 					
 					if($this->readSmartUrl() != $smartUrl) {
 						$this->writeSmartUrl($smartUrl);
@@ -272,11 +272,11 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = $this->readDebug();
 		$data['SiteConfig']['smart_url'] = $this->readSmartUrl();
-		$data['SiteConfig']['site_url'] = Configure::read('Baser.siteUrl');
-		$data['SiteConfig']['ssl_url'] = Configure::read('Baser.sslUrl');
-		$data['SiteConfig']['admin_ssl_on'] = Configure::read('Baser.adminSslOn');
-		$data['SiteConfig']['mobile'] = Configure::read('Baser.mobile');
-		$data['SiteConfig']['smartphone'] = Configure::read('Baser.smartphone');
+		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
+		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
+		$data['SiteConfig']['admin_ssl'] = Configure::read('Baser.adminSslOn');
+		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
+		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {
 			$data['SiteConfig']['mobile'] = false;
 		}

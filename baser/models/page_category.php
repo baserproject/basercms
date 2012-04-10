@@ -173,10 +173,10 @@ class PageCategory extends AppModel {
 				$controlSources['parent_id'] = array();
 				
 				$excludeIds = array();
-				if(!Configure::read('Baser.mobile')) {
+				if(!Configure::read('BcApp.mobile')) {
 					$excludeIds = $this->getAgentCategoryIds('mobile');
 				}
-				if(!Configure::read('Baser.smartphone')) {
+				if(!Configure::read('BcApp.smartphone')) {
 					$excludeIds = $this->getAgentCategoryIds('smartphone');
 				}
 				foreach($parents as $key => $parent) {

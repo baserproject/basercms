@@ -658,4 +658,43 @@
 		return $url;
 		
 	}
+/**
+ * 利用可能なプラグインのリストを取得する
+ * 
+ * PluginHookBehavior::setup() で、プラグインリストを参照できるように、
+ * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
+ * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+ * 
+ * @return array
+ */
+	function getEnablePlugins() {
+		
+		$enablePlugins = array();
+		if(!Configure::read('Cache.disable')) {
+			$enablePlugins = Cache::read('enable_plugins');
+		}
+		if(!$enablePlugins) {
+			$db =& ConnectionManager::getDataSource('baser');
+			$sources = $db->listSources();
+			$pluginTable = $db->config['prefix'] . 'plugins';
+			$enablePlugins = array();
+			if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
+				App::import('Core', 'ClassRegistry');
+				// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
+				App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
+				App::import('Behavior', 'Cache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'cache.php'));
+				$Plugin = ClassRegistry::init('Plugin');
+				$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
+				ClassRegistry::removeObject('Plugin');
+				if($plugins) {
+					$enablePlugins = Set::extract('/Plugin/name',$plugins);
+					if(!Configure::read('Cache.disable')) {
+						Cache::write('enable_plugins', $enablePlugins);
+					}
+				}
+			}
+		}
+		return $enablePlugins;
+		
+	}
 ?>

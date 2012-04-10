@@ -2797,7 +2797,7 @@ class DboSource extends DataSource {
 		$models = array();
 		foreach($tables as $table) {
 			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches) &&
-					!preg_match("/^".Configure::read('Baser.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
 			}
 		}

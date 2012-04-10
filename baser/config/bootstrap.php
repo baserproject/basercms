@@ -98,7 +98,7 @@
 /**
  * 文字コードの検出順を指定
  */
-	mb_detect_order(Configure::read('Baser.detectOrder'));
+	mb_detect_order(Configure::read('BcEncode.detectOrder'));
 /**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
@@ -124,10 +124,10 @@
  * モバイル判定・簡易リダイレクト
  */
 	$agentSettings = Configure::read('BcAgent');
-	if(!Configure::read('Baser.mobile')) {
+	if(!Configure::read('BcApp.mobile')) {
 		unset($agentSettings['mobile']);
 	}
-	if(!Configure::read('Baser.smartphone')) {
+	if(!Configure::read('BcApp.smartphone')) {
 		unset($agentSettings['smartphone']);
 	}
 	$agentOn = false;
@@ -215,33 +215,11 @@ if(isInstalled()) {
 	 ));
 }
 /**
- * 利用可能プラグインの設定
- *
- * PluginHookBehavior::setup() で、Baser.enablePlugins を参照できるように、
- * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
- * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
- */
- 	if(isInstalled()) {
-		$db =& ConnectionManager::getDataSource('baser');
-		$sources = $db->listSources();
-		$pluginTable = $db->config['prefix'] . 'plugins';
-		$enablePlugins = array();
-		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			App::import('Core', 'ClassRegistry');
-			// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
-			App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
-			App::import('Behavior', 'Cache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'cache.php'));
-			$Plugin = ClassRegistry::init('Plugin');
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
-			ClassRegistry::removeObject('Plugin');
-			if($plugins) {
-				$enablePlugins = Set::extract('/Plugin/name',$plugins);
-				Configure::write('Baser.enablePlugins', $enablePlugins);
-			}
-		}
-/**
  * プラグインの bootstrap を実行する
  */
+ 	if(isInstalled()) {
+		$enablePlugins = getEnablePlugins();
+		Configure::write('BcStatus.enablePlugins', $enablePlugins);
 		$_pluginPaths = array(
 			APP.'plugins'.DS,
 			BASER_PLUGINS

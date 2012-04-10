@@ -164,12 +164,12 @@ class BaserAppController extends Controller {
 		}
 
 		if(Configure::read('BcRequest.agent') == 'mobile') {
-			if(!Configure::read('Baser.mobile')) {
+			if(!Configure::read('BcApp.mobile')) {
 				$this->notFound();
 			}
 		}
 		if(Configure::read('BcRequest.agent') == 'smartphone') {
-			if(!Configure::read('Baser.smartphone')) {
+			if(!Configure::read('BcApp.smartphone')) {
 				$this->notFound();
 			}
 		}
@@ -293,7 +293,7 @@ class BaserAppController extends Controller {
 		}
 
 		// SSLリダイレクト設定
-		if(Configure::read('Baser.adminSslOn') && !empty($this->params['admin'])) {
+		if(Configure::read('BcApp.adminSsl') && !empty($this->params['admin'])) {
 			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
 			if($adminSslMethods) {
 				$this->Security->blackHoleCallback = '_sslFail';
@@ -395,7 +395,7 @@ class BaserAppController extends Controller {
 				$url = 'index.php/'.$url;
 			}
 
-			$url = Configure::read('Baser.sslUrl').$url;
+			$url = Configure::read('BcEnv.sslUrl').$url;
 			$this->redirect($url);
 			exit();
 		}
@@ -640,7 +640,7 @@ class BaserAppController extends Controller {
 			}
 		}
 		if(!$formalName) {
-			$formalName = Configure::read('Baser.title');
+			$formalName = Configure::read('BcApp.title');
 		}
 		$_options = array('fromName' => $formalName,
 							'reply' => $email,

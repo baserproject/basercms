@@ -84,7 +84,7 @@ class PageCategoriesController extends AppController {
  */
 	function admin_index() {
 
-		if(!Configure::read('Baser.mobile')) {
+		if(!Configure::read('BcApp.mobile')) {
 			$this->data['PageCategory']['type'] = 'pc';
 		}
 			
@@ -147,13 +147,13 @@ class PageCategoriesController extends AppController {
 		}
 		
 		$pageType = array();
-		if(Configure::read('Baser.mobile') || Configure::read('Baser.smartphone')) {
+		if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
 			$pageType = array('pc' => 'PC');	
 		}
-		if(Configure::read('Baser.mobile')) {
+		if(Configure::read('BcApp.mobile')) {
 			$pageType['mobile'] = 'モバイル';
 		}
-		if(Configure::read('Baser.smartphone')) {
+		if(Configure::read('BcApp.smartphone')) {
 			$pageType['smartphone'] = 'スマートフォン';
 		}
 		if($pageType) {

@@ -43,7 +43,7 @@
 /**
  * モバイル設定を更新
  */
-	$result = $this->writeInstallSetting('Baser.mobile', 'true');
+	$result = $this->writeInstallSetting('BcApp.mobile', 'true');
 	if($result) {
 		$this->setMessage('モバイル設定の更新に成功しました。');
 	} else {
