@@ -409,15 +409,17 @@ class InstallationsController extends AppController {
 
 		$corefilename=CONFIGS.'install.php';
 		$siteUrl = siteUrl();
-		$installCoreData = array("<?php",	"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
-											"Configure::write('debug', 0);",
-											"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
-											"Configure::write('BcEnv.sslUrl', '');",
-											"Configure::write('BcApp.adminSsl', false);",
-											"Configure::write('BcApp.mobile', true);",
-											"Configure::write('BcApp.smartphone', true);",
-											"Configure::write('Cache.disable', false);",
-											"Cache::config('default', array('engine' => 'File'));","?>");
+		$installCoreData = array("<?php",	
+			"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
+			"Configure::write('Cache.disable', false);",
+			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
+			"Configure::write('BcEnv.sslUrl', '');",
+			"Configure::write('BcApp.adminSsl', false);",
+			"Configure::write('BcApp.mobile', true);",
+			"Configure::write('BcApp.smartphone', true);",
+			"Cache::config('default', array('engine' => 'File'));",
+			"Configure::write('debug', 0);",
+		"?>");
 		if(file_put_contents($corefilename, implode("\n", $installCoreData))) {
 			return chmod($corefilename,0666);
 		}else {
