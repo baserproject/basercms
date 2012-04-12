@@ -50,9 +50,13 @@ class MobileHelper extends Helper {
 
 			// 内部リンクの自動変換
 			$currentAlias = Configure::read('BcRequest.agentAlias');
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', BC_BASE_URL).'([^\"]+?)\"/', "href=\"".BC_BASE_URL.$currentAlias."/$1\"", $view->output);
-			$view->output = preg_replace('/href=\"'.str_replace('/', '\/', BC_BASE_URL).$currentAlias.'\/'.$currentAlias.'\//', "href=\"".BC_BASE_URL.$currentAlias."/", $view->output);
-
+			// 一旦プレフィックスを除外
+			$reg = '/href="'.preg_quote(BC_BASE_URL, '/').$currentAlias.'\/([^\"]*?)\"/';
+			$view->output = preg_replace($reg, 'href="'.BC_BASE_URL.'$1"', $view->output);
+			// プレフィックス追加
+			$reg = '/href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
+			$view->output = preg_replace($reg, 'href="'.BC_BASE_URL.$currentAlias.'/$1"', $view->output);
+			
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
 					isset($view->loaded['cache']) &&
