@@ -623,7 +623,7 @@
  */
 	function addSessionId($url, $force = false) {
 		
-		if(Configure::read('BcRequest.agent') == 'mobile' && (!ini_get('session.use_trans_sid') || $force)) {
+		if(Configure::read('BcRequest.agent') == 'mobile' && (ini_get('session.use_trans_sid') || $force)) {
 			if(is_array($url)) {
 				$url["?"][session_name()] = session_id();
 			} else {
