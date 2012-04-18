@@ -26,7 +26,7 @@ if(isset($user['user_group_id'])) {
 
 <tr>
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['BlogCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogCategory']['id'])) ?>
 <?php endif ?>		
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $blog->getCategoryUrl($data['BlogCategory']['id']), array('title' => '確認', 'target' => '_blank')) ?>

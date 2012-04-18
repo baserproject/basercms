@@ -31,7 +31,7 @@
 					<div>
 						<?php $baser->link($baser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $formEx->value('FeedConfig.id'))) ?>
 					</div>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 					<div>
 						<?php echo $formEx->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 						<?php echo $formEx->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>

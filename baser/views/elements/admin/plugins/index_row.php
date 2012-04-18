@@ -27,7 +27,7 @@ if(!$data['Plugin']['status']) {
 
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
 <?php endif ?>
 <?php if($data['Plugin']['update']): ?>

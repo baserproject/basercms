@@ -24,7 +24,7 @@
 	<thead>
 		<tr class="list-tool">
 			<th>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 				<div>
 					<?php echo $formEx->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $formEx->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '一括無効'), 'empty' => '一括処理')) ?>

@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 <tr>
 	<th>ユーザーグループ管理メニュー</th>
 	<td>

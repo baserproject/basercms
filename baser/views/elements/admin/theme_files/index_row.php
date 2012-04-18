@@ -26,7 +26,7 @@ if((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core'){
 
 <tr>
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 	<?php echo $formEx->checkbox('ListTool.batch_targets.'.str_replace('.','_',$data['name']), array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
 <?php endif ?>
 	<?php if($data['type']=='folder'): ?>

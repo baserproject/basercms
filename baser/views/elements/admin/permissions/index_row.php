@@ -31,7 +31,7 @@
 		<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え')) ?></span>
 		<?php echo $formEx->input('Sort.id' . $data['Permission']['id'], array('type' => 'hidden', 'class' => 'id', 'value'=>$data['Permission']['id'])) ?>
 <?php endif ?>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Permission']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Permission']['id'])) ?>
 <?php endif ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Permission']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>

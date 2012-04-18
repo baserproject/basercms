@@ -36,7 +36,7 @@
 		<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
 		<?php echo $formEx->input('Sort.id'.$data['Page']['id'], array('type'	=> 'hidden', 'class' => 'id', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 	<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Page']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
 	<?php $url = preg_replace('/index$/', '', $data['Page']['url']) ?>

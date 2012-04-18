@@ -29,7 +29,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 <?php endif; ?>
 <tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:22%">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Content']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id'])) ?>
 <?php endif ?>		
 		<?php $baser->img('ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader'.$data['Content']['id'], 'style'=>"vertical-align:middle;display:none")) ?>

@@ -27,7 +27,7 @@
 	<?php endif; ?>
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['BlogComment']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogComment']['id'])) ?>
 <?php endif ?>
 	<?php if(!empty($this->params['pass'][1])): ?>

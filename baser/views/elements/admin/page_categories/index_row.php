@@ -24,7 +24,7 @@
 
 <tr id="Row<?php echo $data['PageCategory']['id'] ?>"<?php echo $rowGroupClass ?>>
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['PageCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['PageCategory']['id'])) ?>
 <?php endif ?>
 <?php if(in_array($data['PageCategory']['owner_id'], $allowOwners)|| (!empty($user) && $user['user_group_id']==1)): ?>

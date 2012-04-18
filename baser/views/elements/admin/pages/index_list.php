@@ -39,7 +39,7 @@
 					<?php $baser->link($baser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0)) ?>
 <?php endif ?>
 				</div>
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 				<div>
 					<?php echo $formEx->checkbox('ListTool.checkall') ?>
 					<?php echo $formEx->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '公開', 'unpublish' => '非公開', 'del' => '削除'), 'empty' => '一括処理')) ?>

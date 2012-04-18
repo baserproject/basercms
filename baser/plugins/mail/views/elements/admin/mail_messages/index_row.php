@@ -22,7 +22,7 @@
 
 <tr id="Row<?php echo $count+1 ?>">
 	<td class="row-tools">
-<?php if($baser->isAdmin()): ?>
+<?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Message']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Message']['id'])) ?>
 <?php endif ?>		
 		<?php $baser->link($baser->getImg('admin/icn_tool_view.png', array('width' => 24, 'height' => 24, 'alt' => '詳細', 'class' => 'btn')), array('action' => 'view', $mailContent['MailContent']['id'], $data['Message']['id']), array('title' => '詳細', 'class' => 'btn-view')) ?>
