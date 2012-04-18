@@ -274,7 +274,7 @@ class CkeditorHelper extends AppHelper {
 		}
 		
 		$this->Javascript->codeBlock("var editor_" . $field . ";", array("inline" => false));
-		$jscode = "$(function(){";
+		$jscode = "window.onload = function(){";
 		if(!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
@@ -288,8 +288,8 @@ class CkeditorHelper extends AppHelper {
 		}
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
-		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->__name($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->domId($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
 			if($draftAreaId) {
@@ -313,7 +313,7 @@ class CkeditorHelper extends AppHelper {
 			}
 			$jscode .= " });";
 		}
-		$jscode .= "});";
+		$jscode .= "}";
 		return $this->Javascript->codeBlock($jscode);
 		
 	}
