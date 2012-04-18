@@ -116,9 +116,9 @@ class CacheBehavior extends ModelBehavior {
 		$list = Cache::read($cacheListKey);
 		if(empty($list)) return;
 		foreach($list as $key => $tmp){
-			Cache::delete($key);
+			Cache::delete($key, '_cake_data_');
 		}
-		Cache::delete($cacheListKey);
+		Cache::delete($cacheListKey, '_cake_data_');
 		
 	}
 /**
