@@ -1461,5 +1461,47 @@ END_FLASH;
 			return false;
 		}
 	}
+/**
+ * 固定ページ判定
+ * 
+ * @return boolean
+ * @access public
+ */
+	function isPage() {
+		return $this->Page->isPageUrl($this->getHere());
+	}
+/**
+ * 現在のページの純粋なURLを取得
+ * スマートURLかどうか、サブフォルダかどうかに依存しないスラッシュから始まるURL
+ * 
+ * @return string
+ * @access public
+ */
+	function getHere() {
+		return '/' . preg_replace('/^\//', '', $this->params['url']['url']);
+	}
+/**
+ * ページカテゴリのトップ判定
+ * 
+ * @return boolean
+ * @access public
+ */
+	function isCategoryTop() {
+		
+		$url = $this->getHere();
+		$url = preg_replace('/^\//', '', $url);
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		if(preg_match('/\/index$/', $url)) {
+			$param = explode('/', $url);
+			if(count($param) >= 2) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
 }
 ?>
