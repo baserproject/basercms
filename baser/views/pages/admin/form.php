@@ -275,6 +275,8 @@ function pageTypeChengeHandler() {
 			<?php echo $formEx->input('Page.page_type', array(
 					'type'		=> 'radio',
 					'options'	=> $pageTypes)) ?></span>　
+		<?php else: ?>
+			<?php echo $formEx->input('Page.page_type', array('type' => 'hidden')) ?></span>
 		<?php endif ?>
 				<?php echo $formEx->input('Page.page_category_id', array(
 						'type'		=> 'select',

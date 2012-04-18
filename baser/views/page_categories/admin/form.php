@@ -85,6 +85,9 @@ function pageTypeChengeHandler() {
 
 
 <?php echo $formEx->create('PageCategory') ?>
+<?php if(!$pageType): ?>
+	<?php echo $formEx->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
+<?php endif ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 <?php if($this->action == 'admin_edit'): ?>
@@ -100,8 +103,9 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $formEx->label('PageCategory.page_category_type', 'タイプ') ?></th>
 			<td class="col-input">
+	<?php if($pageType): ?>
 				<?php echo $formEx->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
-				<?php echo $formEx->input('PageCategory.id', array('type' => 'hidden')) ?>
+	<?php endif ?>
 			</td>
 		</tr>
 <?php endif ?>
