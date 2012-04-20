@@ -23,9 +23,7 @@
  * @modifiedby    $LastChangedBy: ryuring $
  * @lastmodified  $Date: 2011-07-07 01:11:32 +0900 (木, 07 7 2011) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
- * @deprecated		BcAuthComponent に移行
  */
-trigger_error('AuthExComponent は非推奨です。BcAuthComponent を利用してください。', E_USER_WARNING);
 App::import('Component', 'Auth');
 /**
  * Authentication control component class
@@ -35,7 +33,7 @@ App::import('Component', 'Auth');
  * @package cake
  * @subpackage cake.cake.libs.controller.components
  */
-class AuthExComponent extends AuthComponent {
+class BcAuthComponent extends AuthComponent {
 /**
  * 個体識別ID
  * @var string 

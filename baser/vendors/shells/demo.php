@@ -21,7 +21,7 @@
  * Include files
  */
 App::import('Core','Security');
-App::import('Component','BaserManager');
+App::import('Component','BcManager');
 /**
  * デモデータ操作用シェルスクリプト
  *
@@ -33,12 +33,12 @@ class DemoShell extends Shell {
  * 
  * @var array
  */
-	var $components = array('BaserManager');
+	var $components = array('BcManager');
 /**
  * スタートアップ
  */
     function startup() {
-        $this->BaserManager = new BaserManagerComponent();
+        $this->BcManager = new BcManagerComponent();
     }
 /**
  * デモ用のCSVデータを初期化する
@@ -46,7 +46,7 @@ class DemoShell extends Shell {
 	function initcsv() {
 	
 		// データベース初期化
-		if(!$this->BaserManager->initDb()){
+		if(!$this->BcManager->initDb()){
 			echo "データベースの初期化に失敗しました\n";
 			return;
 		}
@@ -79,13 +79,13 @@ class DemoShell extends Shell {
 		}
 		
 		// でもテーマの配置
-		if(!$this->BaserManager->deployTheme()) {
+		if(!$this->BcManager->deployTheme()) {
 			echo "デモテーマの配置に失敗しました。\n";
 			return;
 		}
 		
 		// スケルトンテーマの配置
-		if(!$this->BaserManager->deployTheme('skelton')) {
+		if(!$this->BcManager->deployTheme('skelton')) {
 			echo "テーマの配置に失敗しました。\n";
 			return;
 		}

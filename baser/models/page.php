@@ -53,7 +53,7 @@ class Page extends AppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('ContentsManager', 'Cache');
+	var $actsAs = array('BcContentsManager', 'BcCache');
 /**
  * 更新前のページファイルのパス
  * 

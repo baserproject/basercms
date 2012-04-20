@@ -46,7 +46,7 @@ class BlogCategory extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Tree', 'Cache');
+	var $actsAs = array('Tree', 'BcCache');
 /**
  * hasMany
  *

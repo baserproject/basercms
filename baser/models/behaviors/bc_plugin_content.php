@@ -29,15 +29,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcPluginContentBehavior に移行
  */
-trigger_error('PluginContentBehavior は非推奨です。BcPluginContentBehavior を利用してください。', E_USER_WARNING);
 /**
  * プラグインコンテンツビヘイビア
  *
  * @package baser.models.behaviors
  */
-class PluginContentBehavior extends ModelBehavior {
+class BcPluginContentBehavior extends ModelBehavior {
 /**
  * プラグインコンテンツモデル
  *

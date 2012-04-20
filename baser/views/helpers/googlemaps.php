@@ -189,8 +189,8 @@ INFO_END;
 
 	function getLocation($address) {
 		
-		App::import("Component","Gmaps");
-		$gmap = new GmapsComponent();
+		App::import("Component","BcGmaps");
+		$gmap = new BcGmapsComponent();
 		if ($gmap->getInfoLocation($address)) {
 			return array('latitude'=>$gmap->getLatitude(),'longitude'=>$gmap->getLongitude());
 		}else {

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * BaserManagerコンポーネント
+ * BcManagerコンポーネント
  *
  * PHP versions 5
  *
@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-class BaserManagerComponent extends Object {
+class BcManagerComponent extends Object {
 /**
  * データベースを初期化する
  * 

@@ -44,7 +44,7 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * モデル
  *
@@ -63,13 +63,13 @@ class PagesController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->AuthEx->allow('display','mobile_display', 'smartphone_display');
+		$this->BcAuth->allow('display','mobile_display', 'smartphone_display');
 
 		if(!empty($this->params['admin'])){
 			$this->crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
 		}
 		
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
 				$user[$userModel]['user_group_id'], 
@@ -813,7 +813,7 @@ class PagesController extends AppController {
  */
 	function admin_check_agent_page_addable($type, $id) {
 		
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$userGroupId = $user[$userModel]['user_group_id'];
 		$result = false;
@@ -933,7 +933,7 @@ class PagesController extends AppController {
 			$_options['empty'] = $options['empty'];
 		}
 		if(!empty($options['own'])) {
-			$user = $this->AuthEx->user();
+			$user = $this->BcAuth->user();
 			$userModel = $this->getUserModel();
 			$_options['userGroupId'] = $user[$userModel]['user_group_id'];
 		}
@@ -951,7 +951,7 @@ class PagesController extends AppController {
  */
 	function checkCurrentEditable($pageCategoryId, $ownerId) {
 		
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$editable = false;
 
@@ -1138,7 +1138,7 @@ class PagesController extends AppController {
  */
 	function _setAdminIndexViewData() {
 		
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if(!empty($user)) {
 			$allowOwners = array('', $user['User']['user_group_id']);

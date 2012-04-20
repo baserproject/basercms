@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcContentsManagerBehavior に移行
  */
-trigger_error('ContentsManagerBehavior は非推奨です。BcContentsManagerBehavior を利用してください。', E_USER_WARNING);
 /**
  * コンテンツ管理ビヘイビア
  *
  * @subpackage baser.models.behaviors
  */
-class ContentsManagerBehavior extends ModelBehavior {
+class BcContentsManagerBehavior extends ModelBehavior {
 /**
  * Content Model
  * 

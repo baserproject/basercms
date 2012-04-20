@@ -43,7 +43,7 @@ class GlobalMenusController extends AppController {
  * @var array
  * @accesspublic
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler');
 /**
  * ヘルパ
  *

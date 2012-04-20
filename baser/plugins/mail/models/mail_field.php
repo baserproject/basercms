@@ -37,7 +37,7 @@ class MailField extends MailAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 /**
  * validate
  *

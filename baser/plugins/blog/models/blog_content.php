@@ -39,7 +39,7 @@ class BlogContent extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('ContentsManager', 'PluginContent', 'Cache');
+	var $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
 /**
  * hasMany
  *

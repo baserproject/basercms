@@ -53,7 +53,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * ぱんくずナビ
  *
@@ -250,7 +250,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
-			$this->data = $this->BlogPost->getDefaultValue($this->AuthEx->user());
+			$this->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
 		}else {
 
 			$this->data['BlogPost']['blog_content_id'] = $blogContentId;
@@ -265,7 +265,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				$this->PluginHook->executeHook('afterBlogPostAdd', $this);
+				$this->BcPluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
@@ -275,7 +275,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
@@ -325,7 +325,7 @@ class BlogPostsController extends BlogAppController {
 				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->BlogPost->saveDbLog($message);
-				$this->PluginHook->executeHook('afterBlogPostEdit', $this);
+				$this->BcPluginHook->executeHook('afterBlogPostEdit', $this);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
 				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
@@ -334,7 +334,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// 表示設定
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$editable = false;
 		$blogCategoryId = '';

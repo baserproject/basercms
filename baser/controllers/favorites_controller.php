@@ -36,12 +36,12 @@ class FavoritesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure');
 
 	function admin_ajax_add () {
 		
 		if($this->data) {
-			$user = $this->AuthEx->user();
+			$user = $this->BcAuth->user();
 			if(!$user) {
 				exit();
 			}

@@ -53,7 +53,7 @@ class BlogCategoriesController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
@@ -167,7 +167,7 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
 		if($user[$userModel]['user_group_id'] != 1) {
@@ -219,7 +219,7 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$catOptions = array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],

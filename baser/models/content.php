@@ -36,6 +36,6 @@ class Content extends AppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 }
 ?>

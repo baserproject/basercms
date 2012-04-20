@@ -39,6 +39,6 @@ class BlogConfig extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 }
 ?>

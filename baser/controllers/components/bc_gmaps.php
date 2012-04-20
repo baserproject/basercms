@@ -17,9 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcGmapsComponent に移行
  */
-trigger_error('GmapsComponent は非推奨です。BcGmapsComponent を利用してください。', E_USER_WARNING);
 /**
  * defines
  */
@@ -30,7 +28,7 @@ define('MAPS_HOST', 'maps.google.com');
  * @package cake
  * @subpackage cake.app.controllers.components
  */
-class GmapsComponent  extends Object {
+class BcGmapsComponent  extends Object {
 /**
  * Latitude
  *

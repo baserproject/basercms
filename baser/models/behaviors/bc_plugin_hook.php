@@ -25,7 +25,7 @@
  *
  * @package baser.models.behavior
  */
-class PluginHookBehavior extends ModelBehavior {
+class BcPluginHookBehavior extends ModelBehavior {
 /**
  * プラグインフックオブジェクト
  * 

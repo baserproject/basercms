@@ -53,7 +53,7 @@ class BlogAppController extends PluginsController {
 	function beforeFilter() {
 		
 		parent::beforeFilter();
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		if(!$user || !$userModel) {
 			return;

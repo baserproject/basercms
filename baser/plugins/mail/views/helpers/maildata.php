@@ -29,7 +29,7 @@ App::import('Helper', 'BcText');
  */
 class MaildataHelper extends BcTextHelper {
 
-	var $helpers = array('TimeEx');
+	var $helpers = array('BcTime');
 /**
  * メール表示用のデータを出力する
  * 
@@ -118,7 +118,7 @@ class MaildataHelper extends BcTextHelper {
 
 			case 'date_time_wareki':
 				if(!is_array($value)) {
-					$value = $this->TimeEx->convertToWarekiArray($value);
+					$value = $this->BcTime->convertToWarekiArray($value);
 				}
 				$out = " ".$this->dateTimeWareki($value);
 				break;

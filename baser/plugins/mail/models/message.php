@@ -41,7 +41,7 @@ class Message extends MailAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 /**
  * メールフォーム情報
  *

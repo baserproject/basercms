@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcCacheBehavior に移行
  */
-trigger_error('CacheBehavior は非推奨です。BcCacheBehavior を利用してください。', E_USER_WARNING);
 /**
  * キャッシュビヘイビア
  *
  * @subpackage		baser.models.behaviors
  */
-class CacheBehavior extends ModelBehavior {
+class BcCacheBehavior extends ModelBehavior {
 /**
  * 利用状態
  * 

@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-class PluginHookComponent extends Object {
+class BcPluginHookComponent extends Object {
 /**
  * プラグインフックオブジェクト
  * 

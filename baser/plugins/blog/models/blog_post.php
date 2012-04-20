@@ -39,7 +39,7 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('ContentsManager', 'Cache');
+	var $actsAs = array('BcContentsManager', 'BcCache');
 /**
  * belongsTo
  *

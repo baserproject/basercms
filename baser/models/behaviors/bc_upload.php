@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcUploadBehavior に移行
  */
-trigger_error('UploadBehavior は非推奨です。BcUploadBehavior を利用してください。', E_USER_WARNING);
 /**
  * ファイルアップロードビヘイビア
  * 
  * @subpackage baser.models.behaviors
  */
-class UploadBehavior extends ModelBehavior {
+class BcUploadBehavior extends ModelBehavior {
 /**
  * 保存ディレクトリ
  * 

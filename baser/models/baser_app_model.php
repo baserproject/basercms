@@ -56,7 +56,7 @@ class BaserAppModel extends Model {
  * @var array
  * @access public
  */
-	var $actsAs = array('PluginHook');
+	var $actsAs = array('BcPluginHook');
 /**
  * コンストラクタ
  *
@@ -1351,8 +1351,8 @@ class BaserAppModel extends Model {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('Cache') && 
-				$this->Behaviors->enabled('Cache') && Configure::read('debug') == 0 ) {
+		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
+				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
 			if($this->cacheEnabled()) {
 				return $this->cacheMethod($cache, __FUNCTION__, $args);
 			}
@@ -1374,7 +1374,7 @@ class BaserAppModel extends Model {
 		
 		$result = parent::deleteAll($conditions, $cascade, $callbacks);
 		if($result) {
-			if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
 				if($this->cacheEnabled()) {
 					$this->cacheDelete($this);
 				}
@@ -1397,7 +1397,7 @@ class BaserAppModel extends Model {
 		
 		$result = parent::updateAll($fields, $conditions);
 		if($result) {
-			if ($this->Behaviors->attached('Cache') && $this->Behaviors->enabled('Cache')) {
+			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
 				if($this->cacheEnabled()) {
 					$this->cacheDelete($this);
 				}

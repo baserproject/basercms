@@ -21,7 +21,7 @@
  * Include files
  */
 App::import('View', 'AppView');
-App::import('Component','AuthConfigure');
+App::import('Component','BcAuthConfigure');
 //App::import('Component', 'Emoji');
 /**
  * Controller 拡張クラス
@@ -59,7 +59,7 @@ class BaserAppController extends Controller {
  * @var		array
  * @access	public
  */
-	var $components = array('PluginHook', 'RequestHandler', 'Security');
+	var $components = array('BcPluginHook', 'RequestHandler', 'Security');
 /**
  * サブディレクトリ
  *
@@ -244,14 +244,14 @@ class BaserAppController extends Controller {
 		}
 
 		/* 認証設定 */
-		if(isset($this->AuthConfigure) && isset($this->params['prefix'])) {
+		if(isset($this->BcAuthConfigure) && isset($this->params['prefix'])) {
 			$configs = Configure::read('BcAuthPrefix');
 			if(isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
 			} else {
 				$config = array();
 			}
-			$this->AuthConfigure->setting($config);
+			$this->BcAuthConfigure->setting($config);
 		}
 
 		// 送信データの文字コードを内部エンコーディングに変換
@@ -286,14 +286,14 @@ class BaserAppController extends Controller {
 		}
 
 		// 権限チェック
-		if(isset($this->AuthEx) && isset($this->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->params['action']) && empty($this->params['requested'])) {
-			if(!$this->AuthEx->allowedActions || !in_array($this->params['action'], $this->AuthEx->allowedActions)) {
-				$user = $this->AuthEx->user();
+		if(isset($this->BcAuth) && isset($this->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->params['action']) && empty($this->params['requested'])) {
+			if(!$this->BcAuth->allowedActions || !in_array($this->params['action'], $this->BcAuth->allowedActions)) {
+				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
 				$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
-				if(!$Permission->check($this->params['url']['url'],$user[$this->AuthEx->userModel]['user_group_id'])) {
+				if(!$Permission->check($this->params['url']['url'],$user[$this->BcAuth->userModel]['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
-					$this->redirect($this->AuthEx->loginAction);
+					$this->redirect($this->BcAuth->loginAction);
 				}
 			}
 		}
@@ -668,7 +668,7 @@ class BaserAppController extends Controller {
 
 		extract($options);
 
-		if(!isset($this->EmailEx)) {
+		if(!isset($this->BcEmail)) {
 			return false;
 		}
 
@@ -689,24 +689,24 @@ class BaserAppController extends Controller {
 
 		if(!empty($options['filePaths'])) {
 			if(!is_array($options['filePaths'])) {
-				$this->EmailEx->filePaths = array($options['filePaths']);
+				$this->BcEmail->filePaths = array($options['filePaths']);
 			} else {
-				$this->EmailEx->filePaths = $options['filePaths'];
+				$this->BcEmail->filePaths = $options['filePaths'];
 			}
 		}
 		if(!empty($options['attachments'])) {
 			if(!is_array($options['attachments'])) {
-				$this->EmailEx->attachments = array($options['attachments']);
+				$this->BcEmail->attachments = array($options['attachments']);
 			} else {
-				$this->EmailEx->attachments = $options['attachments'];
+				$this->BcEmail->attachments = $options['attachments'];
 			}
 		}
 		
 		// テンプレート
 		if(Configure::read('BcRequest.agent')) {
-			$this->EmailEx->template = Configure::read('BcRequest.agentPrefix').DS.$template;
+			$this->BcEmail->template = Configure::read('BcRequest.agentPrefix').DS.$template;
 		}else {
-			$this->EmailEx->template = $template;
+			$this->BcEmail->template = $template;
 		}
 
 		// データ
@@ -717,10 +717,10 @@ class BaserAppController extends Controller {
 		}
 
 		// 送信先アドレス
-		$this->EmailEx->to = $to;
+		$this->BcEmail->to = $to;
 
 		// 件名
-		$this->EmailEx->subject = $title;
+		$this->BcEmail->subject = $title;
 
 		// 送信元・返信先
 		if($from) {
@@ -728,20 +728,20 @@ class BaserAppController extends Controller {
 				$_from = split(',', $from);
 				$from = $_from[0];
 			}
-			$this->EmailEx->from = $from;
-			$this->EmailEx->additionalParams = '-f'.$from;
-			$this->EmailEx->return = $from;
-			$this->EmailEx->replyTo = $reply;
+			$this->BcEmail->from = $from;
+			$this->BcEmail->additionalParams = '-f'.$from;
+			$this->BcEmail->return = $from;
+			$this->BcEmail->replyTo = $reply;
 		} else {
-			$this->EmailEx->from = $to;
-			$this->EmailEx->additionalParams = '-f'.$to;
-			$this->EmailEx->return = $to;
-			$this->EmailEx->replyTo = $to;
+			$this->BcEmail->from = $to;
+			$this->BcEmail->additionalParams = '-f'.$to;
+			$this->BcEmail->return = $to;
+			$this->BcEmail->replyTo = $to;
 		}
 
 		// 送信元名
 		if($from && $fromName) {
-			$this->EmailEx->from = $fromName.' <'.$from.'>';
+			$this->BcEmail->from = $fromName.' <'.$from.'>';
 		}
 
 		// CC
@@ -751,7 +751,7 @@ class BaserAppController extends Controller {
 			}else{
 				$cc = array($cc);
 			}
-			$this->EmailEx->cc = $cc;
+			$this->BcEmail->cc = $cc;
 		}
 		
 		// BCC
@@ -761,10 +761,10 @@ class BaserAppController extends Controller {
 			}else{
 				$bcc = array($bcc);
 			}
-			$this->EmailEx->bcc = $bcc;
+			$this->BcEmail->bcc = $bcc;
 		}
 		
-		return $this->EmailEx->send();
+		return $this->BcEmail->send();
 
 	}
 /**
@@ -775,7 +775,7 @@ class BaserAppController extends Controller {
  */
 	function _setMail() {
 
-		if(!isset($this->EmailEx)) {
+		if(!isset($this->BcEmail)) {
 			return false;
 		}
 
@@ -784,19 +784,19 @@ class BaserAppController extends Controller {
 		} else {
 			$encode = 'ISO-2022-JP';
 		}
-		$this->EmailEx->reset();
-		$this->EmailEx->charset = $encode;
-		$this->EmailEx->sendAs = 'text';		// text or html or both
-		$this->EmailEx->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
+		$this->BcEmail->reset();
+		$this->BcEmail->charset = $encode;
+		$this->BcEmail->sendAs = 'text';		// text or html or both
+		$this->BcEmail->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if(!empty($this->siteConfigs['smtp_host'])) {
-			$this->EmailEx->delivery = 'smtp';	// mail or smtp or debug
-			$this->EmailEx->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
+			$this->BcEmail->delivery = 'smtp';	// mail or smtp or debug
+			$this->BcEmail->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
 					'port'	=>25,
 					'timeout'	=>30,
 					'username'=>($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user']:null,
 					'password'=>($this->siteConfigs['smtp_password'])?$this->siteConfigs['smtp_password']:null);
 		} else {
-			$this->EmailEx->delivery = "mail";
+			$this->BcEmail->delivery = "mail";
 		}
 
 		return true;
@@ -1166,7 +1166,7 @@ class BaserAppController extends Controller {
 	function isAuthorized() {
 
 		$requestedPrefix = '';
-		$authPrefix = $this->getAuthPreifx($this->AuthEx->user('name'));
+		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
 
 		if(!$authPrefix) {
 			// 1.6.8 以下の場合は authPrefix が取得できないので true を返して終了
@@ -1180,11 +1180,11 @@ class BaserAppController extends Controller {
 		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
 			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
 			$ref = $this->referer();
-			$loginAction = Router::normalize($this->AuthEx->loginAction);
+			$loginAction = Router::normalize($this->BcAuth->loginAction);
 			if($ref == $loginAction) {
 				$this->Session->delete('Auth.User');
 				$this->Session->delete('Message.flash');
-				$this->AuthEx->authError = $this->AuthEx->loginError;
+				$this->BcAuth->authError = $this->BcAuth->loginError;
 				return false;
 			} else {
 				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
@@ -1259,7 +1259,7 @@ class BaserAppController extends Controller {
 
 		$args = func_get_args();
 		$args[0] =& $this;
-		return call_user_func_array( array( &$this->PluginHook, $hook ), $args );
+		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
 
 	}
 /**
@@ -1270,10 +1270,10 @@ class BaserAppController extends Controller {
  */
 	function checkRootEditable() {
 		
-		if(!isset($this->AuthEx)) {
+		if(!isset($this->BcAuth)) {
 			return false;
 		}
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		if(!$user || !$userModel) {
 			return false;
@@ -1293,10 +1293,10 @@ class BaserAppController extends Controller {
  */
 	function getUserModel() {
 		
-		if(!isset($this->AuthEx)) {
+		if(!isset($this->BcAuth)) {
 			return false;
 		}
-		return $this->AuthEx->userModel;
+		return $this->BcAuth->userModel;
 		
 	}
 /**

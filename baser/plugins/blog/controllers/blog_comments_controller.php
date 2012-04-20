@@ -53,7 +53,7 @@ class BlogCommentsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure','RequestHandler','EmailEx','Security','Captcha');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler','BcEmail','Security','BcCaptcha');
 /**
  * ぱんくずナビ
  *
@@ -81,7 +81,7 @@ class BlogCommentsController extends BlogAppController {
 
 		parent::beforeFilter();
 
-		$this->AuthEx->allow('add','captcha', 'smartphone_add', 'smartphone_captcha');
+		$this->BcAuth->allow('add','captcha', 'smartphone_add', 'smartphone_captcha');
 
 		$crumbs = array();
 		if(!empty($this->params['pass'][1])) {
@@ -390,7 +390,7 @@ class BlogCommentsController extends BlogAppController {
 			// 画像認証を行う
 			$captchaResult = true;
 			if($this->blogContent['BlogContent']['auth_captcha']){
-				$captchaResult = $this->Captcha->check($this->data['BlogComment']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->data['BlogComment']['auth_captcha']);
 				if(!$captchaResult){
 					$this->set('dbData',false);
 					return false;
@@ -431,7 +431,7 @@ class BlogCommentsController extends BlogAppController {
     function captcha()
     {
 		
-        $this->Captcha->render();
+        $this->BcCaptcha->render();
 		
     } 
 /**
@@ -443,7 +443,7 @@ class BlogCommentsController extends BlogAppController {
     function smartphone_captcha()
     {
 		
-        $this->Captcha->render();
+        $this->BcCaptcha->render();
 		
     } 
 }

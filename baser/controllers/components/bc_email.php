@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcEmailComponent に移行
  */
-trigger_error('EmailExComponent は非推奨です。BcEmailComponent を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import('Component','Email');
  *
  * @package baser.plugins.feed.controller.components
  */
-class EmailExComponent extends EmailComponent {
+class BcEmailComponent extends EmailComponent {
 // CUSTOMIZE ADD 2011/05/07 ryuring
 // プラグインのテンプレートを指定できるようにした
 // >>>

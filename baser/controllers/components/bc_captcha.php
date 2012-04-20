@@ -16,10 +16,8 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcCaptchaComponent に移行
  */
-trigger_error('CaptchaComponent は非推奨です。BcCaptchaComponent を利用してください。', E_USER_WARNING);
-class CaptchaComponent extends Object {
+class BcCaptchaComponent extends Object {
 /**
  * Vendorsフォルダのパス
  * kcaptchaの設定ファイルを読み込む為に利用

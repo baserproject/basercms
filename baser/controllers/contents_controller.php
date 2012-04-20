@@ -44,7 +44,7 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパー
  *
@@ -65,7 +65,7 @@ class ContentsController extends AppController {
 		$this->Security->enabled = false;
 		
 		// 認証設定
-		$this->AuthEx->allow('search','get_page_list_recursive');
+		$this->BcAuth->allow('search','get_page_list_recursive');
 		
 		if(!empty($this->params['admin'])) {
 			$this->subMenuElements = array('site_configs', 'contents');

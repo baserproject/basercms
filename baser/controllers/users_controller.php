@@ -52,7 +52,7 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('ReplacePrefix', 'AuthEx','Cookie','AuthConfigure', 'EmailEx');
+	var $components = array('BcReplacePrefix', 'BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * サブメニューエレメント
  *
@@ -81,7 +81,7 @@ class UsersController extends AppController {
 		/* 認証設定 */
 		// beforeFilterの前に記述する必要あり
 		if(isset($this->params['prefix'])) {
-			$this->AuthEx->allow(
+			$this->BcAuth->allow(
 					$this->params['prefix'].'_login', 
 					$this->params['prefix'].'_logout', 
 					$this->params['prefix'].'_login_exec', 
@@ -95,7 +95,7 @@ class UsersController extends AppController {
 		
 		parent::beforeFilter();
 
-		$this->ReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
+		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
 
 	}
 /**
@@ -111,7 +111,7 @@ class UsersController extends AppController {
 		if(!$this->data) {
 			return false;
 		}
-		if($this->AuthEx->login($this->data)) {
+		if($this->BcAuth->login($this->data)) {
 			return true;
 		}
 		return false;
@@ -125,12 +125,12 @@ class UsersController extends AppController {
  */
 	function admin_login() {
 		
-		if($this->AuthEx->loginAction != ('/'.$this->params['url']['url'])) {
+		if($this->BcAuth->loginAction != ('/'.$this->params['url']['url'])) {
 			$this->notFound();
 		}
 		
-		$user = $this->AuthEx->user();
-		$userModel = $this->AuthEx->userModel;
+		$user = $this->BcAuth->user();
+		$userModel = $this->BcAuth->userModel;
 		
 		if($this->data) {
 			if ($user) {
@@ -138,7 +138,7 @@ class UsersController extends AppController {
 					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
 					} else {
-						$this->AuthEx->saveSerial();
+						$this->BcAuth->saveSerial();
 					}
 					unset($this->data[$userModel]['save']);
 				}else {
@@ -149,7 +149,7 @@ class UsersController extends AppController {
 		}
 
 		if ($user) {
-			$this->redirect($this->AuthEx->redirect());
+			$this->redirect($this->BcAuth->redirect());
 		} else {
 			if($this->data) {
 				$this->redirect($this->referer());
@@ -178,12 +178,12 @@ class UsersController extends AppController {
  */
 	function admin_ajax_login() {
 		
-		if(!$this->AuthEx->login($this->data)) {
+		if(!$this->BcAuth->login($this->data)) {
 			exit();
 		}
 		
-		$user = $this->AuthEx->user();
-		$userModel = $this->AuthEx->userModel;
+		$user = $this->BcAuth->user();
+		$userModel = $this->BcAuth->userModel;
 		
 		if($this->data) {
 			if ($user) {
@@ -191,7 +191,7 @@ class UsersController extends AppController {
 					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
 					} else {
-						$this->AuthEx->saveSerial();
+						$this->BcAuth->saveSerial();
 					}
 					unset($this->data[$userModel]['save']);
 				}else {
@@ -202,7 +202,7 @@ class UsersController extends AppController {
 		}
 
 		if ($user) {
-			exit(Router::url($this->AuthEx->redirect()));
+			exit(Router::url($this->BcAuth->redirect()));
 		}
 		exit();
 		
@@ -216,7 +216,7 @@ class UsersController extends AppController {
  */
 	function setAuthCookie($data) {
 		
-		$userModel = $this->AuthEx->userModel;
+		$userModel = $this->BcAuth->userModel;
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];				// ハッシュ化されている
@@ -231,8 +231,8 @@ class UsersController extends AppController {
  */
 	function admin_logout() {
 
-		$userModel = $this->AuthEx->userModel;
-		$this->AuthEx->logout();
+		$userModel = $this->BcAuth->userModel;
+		$this->BcAuth->logout();
 		$this->Cookie->del('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
 		$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
@@ -315,7 +315,7 @@ class UsersController extends AppController {
 				unset($this->data['User']['password_1']);
 				unset($this->data['User']['password_2']);
 				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->AuthEx->password($this->data['User']['password']);
+					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
 				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
@@ -330,7 +330,7 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		if($user[$userModel]['user_group_id'] != 1) {
 			unset($userGroups[1]);
@@ -360,7 +360,7 @@ class UsersController extends AppController {
 		}
 
 		$selfUpdate = false;
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		
 		if(empty($this->data)) {
@@ -384,7 +384,7 @@ class UsersController extends AppController {
 				unset($this->data['User']['password_1']);
 				unset($this->data['User']['password_2']);
 				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->AuthEx->password($this->data['User']['password']);
+					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
 				
@@ -404,7 +404,7 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
 			if($this->data['User']['user_group_id'] == 1) {
@@ -501,7 +501,7 @@ class UsersController extends AppController {
 	function admin_reset_password () {
 
 		$this->pageTitle = 'パスワードのリセット';
-		$userModel = $this->AuthEx->userModel;
+		$userModel = $this->BcAuth->userModel;
 		if($this->data) {
 
 			if(empty($this->data[$userModel]['email'])) {
@@ -515,7 +515,7 @@ class UsersController extends AppController {
 				return;
 			}
 			$password = $this->generatePassword();
-			$user['User']['password'] = $this->AuthEx->password($password);
+			$user['User']['password'] = $this->BcAuth->password($password);
 			$this->{$userModel}->set($user);
 			if(!$this->{$userModel}->save()) {
 				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');

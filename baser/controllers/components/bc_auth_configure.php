@@ -17,15 +17,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcAuthConfigureComponent に移行
- */
-trigger_error('AuthConfigureComponent は非推奨です。BcAuthConfigureComponent を利用してください。', E_USER_WARNING);
+ * /
 /**
  * 認証設定コンポーネント
  *
  * @package baser.controllers.components
  */
-class  AuthConfigureComponent extends Object {
+class  BcAuthConfigureComponent extends Object {
 /**
  * コントローラー
  * 
@@ -54,12 +52,12 @@ class  AuthConfigureComponent extends Object {
  */
 	function setting($config) {
 
-		if(empty($this->controller->AuthEx)) {
+		if(empty($this->controller->BcAuth)) {
 			return false;
 		}
 
 		$controller =& $this->controller;
-		$auth =& $controller->AuthEx;
+		$auth =& $controller->BcAuth;
 		$requestedPrefix = '';
 		
 		if(isset($controller->params['prefix'])) {

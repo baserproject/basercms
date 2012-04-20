@@ -53,7 +53,7 @@ class BlogController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx', 'Cookie', 'AuthConfigure', 'RequestHandler', 'EmailEx', 'Security');
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security');
 /**
  * ぱんくずナビ
  *
@@ -93,7 +93,7 @@ class BlogController extends BlogAppController {
 		parent::beforeFilter();
 
 		/* 認証設定 */
-		$this->AuthEx->allow(
+		$this->BcAuth->allow(
 			'index', 'mobile_index', 'smartphone_index',
 			'archives', 'mobile_archives', 'smartphone_archives',
 			'posts', 'mobile_posts', 'smartphone_posts',
@@ -338,7 +338,7 @@ class BlogController extends BlogAppController {
 						$this->notFound();
 					}
 					
-					$user = $this->AuthEx->user();
+					$user = $this->BcAuth->user();
 					if(empty($this->params['admin']) && !empty($user) && !Configure::read('BcRequest.agent')) {
 						$this->set('editLink', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
 					}

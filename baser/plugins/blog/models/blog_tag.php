@@ -39,7 +39,7 @@ class BlogTag extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 /**
  * HABTM
  *

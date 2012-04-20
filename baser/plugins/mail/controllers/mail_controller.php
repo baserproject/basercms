@@ -56,8 +56,8 @@ class MailController extends MailAppController {
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
-	//var $components = array('Email','EmailEx','Security','Captcha');
-	var $components = array('Email','EmailEx','Captcha');
+	//var $components = array('Email','BcEmail','Security','BcCaptcha');
+	var $components = array('Email','BcEmail','BcCaptcha');
 /**
  * CSS
  *
@@ -102,7 +102,7 @@ class MailController extends MailAppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		$this->AuthEx->allow(
+		$this->BcAuth->allow(
 				'index', 'mobile_index', 'smartphone_index',
 				'confirm', 'mobile_confirm', 'smartphone_confirm',
 				'submit', 'mobile_submit', 'smartphone_submit', 
@@ -192,7 +192,7 @@ class MailController extends MailAppController {
 		if($this->dbDatas['mailFields'])
 			$this->set('mailFields',$this->dbDatas['mailFields']);
 
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		if(!empty($user) && !Configure::read('BcRequest.agent')) {
 			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
@@ -242,7 +242,7 @@ class MailController extends MailAppController {
 
 			// 画像認証を行う
 			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
-				$captchaResult = $this->Captcha->check($this->data['Message']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
 				} else {
@@ -449,7 +449,7 @@ class MailController extends MailAppController {
     function captcha()
     {
 		
-        $this->Captcha->render();
+        $this->BcCaptcha->render();
 		
     }
 /**
@@ -461,7 +461,7 @@ class MailController extends MailAppController {
     function smartphone_captcha()
     {
 		
-        $this->Captcha->render();
+        $this->BcCaptcha->render();
 		
     }
 }

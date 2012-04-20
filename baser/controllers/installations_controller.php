@@ -46,7 +46,7 @@ class InstallationsController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('Session', 'EmailEx', 'BaserManager');
+	var $components = array('Session', 'BcEmail', 'BcManager');
 /**
  * レイアウトパス
  *
@@ -383,8 +383,8 @@ class InstallationsController extends AppController {
 		$this->_login();
 
 		// テーマを配置する
-		$this->BaserManager->deployTheme();
-		$this->BaserManager->deployTheme('skelton');
+		$this->BcManager->deployTheme();
+		$this->BcManager->deployTheme('skelton');
 
 		// pagesファイルを生成する
 		$this->_createPages();
@@ -554,17 +554,17 @@ class InstallationsController extends AppController {
 	function _constructionDb($nonDemoData = false) {
 
 		$dbConfig = $this->_readDbSettingFromSession();
-		if(!$this->BaserManager->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
 			return false;
 		}
 		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
-		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->BaserManager->constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
 			return false;
 		}
 
@@ -1032,10 +1032,10 @@ class InstallationsController extends AppController {
 			$pluginConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		}
 		if($baserConfig) {
-			$this->BaserManager->deleteTables('baser', $baserConfig);
+			$this->BcManager->deleteTables('baser', $baserConfig);
 		}
 		if($pluginConfig) {
-			$this->BaserManager->deleteTables('plugin', $pluginConfig);
+			$this->BcManager->deleteTables('plugin', $pluginConfig);
 		}
 		
 	}

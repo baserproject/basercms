@@ -31,10 +31,8 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcReplacePrefixComponent に移行
  */
-trigger_error('ReplacePrefixComponent は非推奨です。BcReplacePrefixComponent を利用してください。', E_USER_WARNING);
-class ReplacePrefixComponent extends Object {
+class BcReplacePrefixComponent extends Object {
 /**
  * プレフィックス置き換えを許可するアクション
  * プレフィックスなしの純粋なアクション名を指定する

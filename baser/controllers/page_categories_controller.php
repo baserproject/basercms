@@ -51,7 +51,7 @@ class PageCategoriesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx','Cookie','AuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * パンくず
  * @var array
@@ -67,7 +67,7 @@ class PageCategoriesController extends AppController {
 	function beforeFilter() {
 		
 		parent::beforeFilter();
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
 				$user[$userModel]['user_group_id'], 
@@ -220,7 +220,7 @@ class PageCategoriesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
 			'ownerId' => $user[$userModel]['user_group_id']
@@ -314,7 +314,7 @@ class PageCategoriesController extends AppController {
 		$this->set('indexPage',$indexPage);
 
 		/* 表示設定 */
-		$user = $this->AuthEx->user();
+		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$mobileId = $this->PageCategory->getAgentId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(

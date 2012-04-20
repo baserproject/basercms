@@ -39,7 +39,7 @@ class FeedConfig extends FeedAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('Cache');
+	var $actsAs = array('BcCache');
 /**
  * DB設定
  * @var string

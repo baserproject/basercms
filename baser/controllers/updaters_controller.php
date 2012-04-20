@@ -146,7 +146,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('AuthEx', 'Cookie', 'AuthConfigure');
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 /**
  * ヘルパー
  *
