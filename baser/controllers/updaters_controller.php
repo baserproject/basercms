@@ -153,7 +153,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('FormEx');
+	var $helpers = array('BcForm');
 /**
  * モデル
  *

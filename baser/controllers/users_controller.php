@@ -45,7 +45,7 @@ class UsersController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('HtmlEx','TimeEx','FormEx');
+	var $helpers = array('HtmlEx','TimeEx','BcForm');
 /**
  * コンポーネント
  *

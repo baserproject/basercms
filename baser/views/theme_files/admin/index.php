@@ -55,9 +55,9 @@ $(function(){
 
 <div class="submit">
 <?php if($writable): ?>
-	<?php echo $formEx->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url'=>array('action' => 'upload', $theme, $plugin, $type, $path), 'enctype' => 'multipart/form-data')) ?>
-	<?php echo $formEx->input('ThemeFile.file', array('type' => 'file')) ?>
-	<?php echo $formEx->end() ?>
+	<?php echo $bcForm->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url'=>array('action' => 'upload', $theme, $plugin, $type, $path), 'enctype' => 'multipart/form-data')) ?>
+	<?php echo $bcForm->input('ThemeFile.file', array('type' => 'file')) ?>
+	<?php echo $bcForm->end() ?>
 	<?php $baser->link('フォルダ新規作成', array('action' => 'add_folder', $theme, $type, $path), array('class' => 'btn-orange button')) ?>
 <?php endif ?>
 <?php if(($path || $type != 'etc') && $type != 'img' && $writable): ?>

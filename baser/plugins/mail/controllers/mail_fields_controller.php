@@ -46,7 +46,7 @@ class MailFieldsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','TimeEx','FormEx','TextEx','Csv');
+	var $helpers = array('Html','TimeEx','BcForm','TextEx','Csv');
 /**
  * コンポーネント
  *

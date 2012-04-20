@@ -34,10 +34,10 @@
 	<td class="row-tools" style="width:15%">
 <?php if($sortmode): ?>
 		<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
-		<?php echo $formEx->input('Sort.id'.$data['Page']['id'], array('type'	=> 'hidden', 'class' => 'id', 'value' => $data['Page']['id'])) ?>
+		<?php echo $bcForm->input('Sort.id'.$data['Page']['id'], array('type'	=> 'hidden', 'class' => 'id', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
 <?php if($baser->isAdminUser()): ?>
-	<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Page']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Page']['id'])) ?>
+	<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['Page']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
 	<?php $url = preg_replace('/index$/', '', $data['Page']['url']) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Page']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>

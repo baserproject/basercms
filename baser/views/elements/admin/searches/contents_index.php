@@ -23,19 +23,19 @@ $categories = am(array('none' => 'カテゴリなし'), unserialize($baser->site
 $types = unserialize($baser->siteConfig['content_types']);
 ?>
 
-<?php echo $formEx->create('Content', array('url' => array('action' => 'index'))) ?>
-<?php echo $formEx->hidden('Content.open', array('value' => true)) ?>
+<?php echo $bcForm->create('Content', array('url' => array('action' => 'index'))) ?>
+<?php echo $bcForm->hidden('Content.open', array('value' => true)) ?>
 <p>
-	<span><?php echo $formEx->label('Content.type', 'タイプ') ?> <?php echo $formEx->input('Content.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $formEx->label('Content.category', 'カテゴリ') ?> <?php echo $formEx->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $formEx->label('Content.keyword', 'キーワード') ?> <?php echo $formEx->input('Content.keyword', array('type' => 'text', 'size' => '30')) ?></span>
-	<span><?php echo $formEx->label('Content.status', '公開状態') ?> 
-	<?php echo $formEx->input('Content.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
-	<span><?php echo $formEx->label('Content.priority', '優先度') ?> 
-	<?php echo $formEx->input('Content.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $bcForm->label('Content.type', 'タイプ') ?> <?php echo $bcForm->input('Content.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $bcForm->label('Content.category', 'カテゴリ') ?> <?php echo $bcForm->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $bcForm->label('Content.keyword', 'キーワード') ?> <?php echo $bcForm->input('Content.keyword', array('type' => 'text', 'size' => '30')) ?></span>
+	<span><?php echo $bcForm->label('Content.status', '公開状態') ?> 
+	<?php echo $bcForm->input('Content.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('Content.priority', '優先度') ?> 
+	<?php echo $bcForm->input('Content.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
 </p>
 <div class="button">
 	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
 	<?php $baser->link($baser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
-<?php $formEx->end() ?>
+<?php $bcForm->end() ?>

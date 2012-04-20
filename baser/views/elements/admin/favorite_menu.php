@@ -278,13 +278,13 @@ $(function(){
 </div>
 
 <div id="FavoriteDialog" title="よく使う項目" class="display-none">
-	<?php echo $formEx->create('Favorite', array('action' => 'ajax', 'url' => array('plugin' => null))) ?>
-	<?php echo $formEx->input('Favorite.id', array('type' => 'hidden')) ?>
+	<?php echo $bcForm->create('Favorite', array('action' => 'ajax', 'url' => array('plugin' => null))) ?>
+	<?php echo $bcForm->input('Favorite.id', array('type' => 'hidden')) ?>
 	<dl>
-		<dt><?php echo $formEx->label('Favorite.name', 'タイトル') ?></dt><dd><?php echo $formEx->input('Favorite.name', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
-		<dt><?php echo $formEx->label('Favorite.url', 'URL') ?></dt><dd><?php echo $formEx->input('Favorite.url', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
+		<dt><?php echo $bcForm->label('Favorite.name', 'タイトル') ?></dt><dd><?php echo $bcForm->input('Favorite.name', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
+		<dt><?php echo $bcForm->label('Favorite.url', 'URL') ?></dt><dd><?php echo $bcForm->input('Favorite.url', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
 	</dl>
-	<?php echo $formEx->end() ?>
+	<?php echo $bcForm->end() ?>
 </div>
 
 	

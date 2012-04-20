@@ -84,41 +84,41 @@ function pageTypeChengeHandler() {
 
 
 
-<?php echo $formEx->create('PageCategory') ?>
+<?php echo $bcForm->create('PageCategory') ?>
 <?php if(!$pageType): ?>
-	<?php echo $formEx->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
+	<?php echo $bcForm->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
 <?php endif ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 <?php if($this->action == 'admin_edit'): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.id', 'NO') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.id', 'NO') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->value('PageCategory.id') ?>
-				<?php echo $formEx->input('PageCategory.id', array('type' => 'hidden')) ?>
+				<?php echo $bcForm->value('PageCategory.id') ?>
+				<?php echo $bcForm->input('PageCategory.id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
 <?php endif; ?>
 <?php if($pageType): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.page_category_type', 'タイプ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.page_category_type', 'タイプ') ?></th>
 			<td class="col-input">
 	<?php if($pageType): ?>
-				<?php echo $formEx->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
+				<?php echo $bcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
 	<?php endif ?>
 			</td>
 		</tr>
 <?php endif ?>
 <?php if($parents): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.parent_id', '親カテゴリ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.parent_id', '親カテゴリ') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('PageCategory.parent_id', array(
+				<?php echo $bcForm->input('PageCategory.parent_id', array(
 						'type'		=> 'select', 
 						'options'	=> $parents,
 						'escape'	=> false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('PageCategory.parent_id') ?>
+				<?php echo $bcForm->error('PageCategory.parent_id') ?>
 				<div class="helptext">
 					<ul>
 						<li>カテゴリの下の階層にカテゴリを作成するには親カテゴリを選択します。</li>
@@ -127,14 +127,14 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 <?php else: ?>
-		<?php echo $formEx->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
+		<?php echo $bcForm->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
 <?php endif ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.name', 'ページカテゴリー名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.name', 'ページカテゴリー名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('PageCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+				<?php echo $bcForm->input('PageCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('PageCategory.name') ?>
+				<?php echo $bcForm->error('PageCategory.name') ?>
 				<div class="helptext">
 					<ul>
 						<li>ページカテゴリ名はURLで利用します。</li>
@@ -144,11 +144,11 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.title', 'ページカテゴリータイトル') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.title', 'ページカテゴリータイトル') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('PageCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('PageCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('PageCategory.title') ?>
+				<?php echo $bcForm->error('PageCategory.title') ?>
 				<div class="helptext">
 					<ul>
 						<li>ページカテゴリタイトルはTitleタグとして出力されます。</li>
@@ -157,15 +157,15 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('PageCategory.contents_navi', array(
+				<?php echo $bcForm->input('PageCategory.contents_navi', array(
 						'type'		=> 'radio',
 						'options'	=> $textEx->booleanDolist('利用'),
 						'legend'	=> false,
 						'separator'		=> '&nbsp;&nbsp;')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('PageCategory.parent_id') ?>
+				<?php echo $bcForm->error('PageCategory.parent_id') ?>
 				<div class="helptext">
 					<ul>
 						<li>同カテゴリ内のページ間ナビゲーション（コンテンツナビ）を利用するには「利用する」を選択します。</li>
@@ -175,14 +175,14 @@ function pageTypeChengeHandler() {
 		</tr>
 <?php if($baser->siteConfig['category_permission']): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('PageCategory.owner_id', '管理グループ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('PageCategory.owner_id', array(
+				<?php echo $bcForm->input('PageCategory.owner_id', array(
 						'type'		=> 'select',
-						'options'	=> $formEx->getControlSource('PageCategory.owner_id'),
+						'options'	=> $bcForm->getControlSource('PageCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('PageCategory.owner_id') ?>
+				<?php echo $bcForm->error('PageCategory.owner_id') ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -195,15 +195,15 @@ function pageTypeChengeHandler() {
 </div>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit' && $formEx->value('PageCategory.name')!='mobile'): ?>
-	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
+<?php elseif ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
+	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php $baser->link('削除', 
-			array('action'=>'delete', $formEx->value('PageCategory.id')),
+			array('action'=>'delete', $bcForm->value('PageCategory.id')),
 			array('class'=>'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $formEx->value('PageCategory.name')),
+			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),
 			false); ?>
 <?php endif ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

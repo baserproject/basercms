@@ -232,8 +232,8 @@ function pageTypeChengeHandler() {
 	<div id="PreviewUrl"><?php $baser->url(array('action' => 'create_preview', $previewId)) ?></div>
 	<div id="CheckAgentPageAddableUrl"><?php $baser->url(array('action' => 'check_agent_page_addable')) ?></div>
 	<div id="AjaxCategorySourceUrl"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
-	<div id="PageCategoryId"><?php echo $formEx->value('PageCategory.id') ?></div>
-	<div id="PageCategoryOwnerId"><?php echo $formEx->value('PageCategory.owner_id') ?></div>
+	<div id="PageCategoryId"><?php echo $bcForm->value('PageCategory.id') ?></div>
+	<div id="PageCategoryOwnerId"><?php echo $bcForm->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
 	<div id="RootSmartphoneId"><?php echo $rootSmartphoneId ?></div>
 	<div id="MobileOn"><?php echo Configure::read('BcApp.mobile') ?></div>
@@ -243,7 +243,7 @@ function pageTypeChengeHandler() {
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-	<?php if($formEx->value('Page.status')): ?>
+	<?php if($bcForm->value('Page.status')): ?>
 	<strong>このページのURL：<?php $baser->link($baser->getUri($url), $url) ?></strong>
 	<?php else: ?>
 	<strong>このページのURL：<?php echo $baser->getUri($url) ?></strong>
@@ -251,50 +251,50 @@ function pageTypeChengeHandler() {
 </div>
 <?php endif ?>
 
-<?php echo $formEx->create('Page', array('id' => 'PageForm')) ?>
-<?php echo $formEx->input('Page.mode', array('type' => 'hidden')) ?>
-<?php echo $formEx->input('Page.sort', array('type' => 'hidden')) ?>
+<?php echo $bcForm->create('Page', array('id' => 'PageForm')) ?>
+<?php echo $bcForm->input('Page.mode', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('Page.sort', array('type' => 'hidden')) ?>
 
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 <?php if($this->action == 'admin_edit'): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.id', 'NO') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.id', 'NO') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->value('Page.id') ?>
-				<?php echo $formEx->input('Page.id', array('type' => 'hidden')) ?>
+				<?php echo $bcForm->value('Page.id') ?>
+				<?php echo $bcForm->input('Page.id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
 <?php endif; ?>
 <?php if($categories): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.page_category_id', 'カテゴリ') ?></th>
 			<td class="col-input">
 		<?php if($pageTypes): ?>
-			<?php echo $formEx->input('Page.page_type', array(
+			<?php echo $bcForm->input('Page.page_type', array(
 					'type'		=> 'radio',
 					'options'	=> $pageTypes)) ?></span>　
 		<?php else: ?>
-			<?php echo $formEx->input('Page.page_type', array('type' => 'hidden')) ?></span>
+			<?php echo $bcForm->input('Page.page_type', array('type' => 'hidden')) ?></span>
 		<?php endif ?>
-				<?php echo $formEx->input('Page.page_category_id', array(
+				<?php echo $bcForm->input('Page.page_category_id', array(
 						'type'		=> 'select',
 						'options'	=> $categories,
 						'escape'	=> false)) ?>
 				<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
-				<?php echo $formEx->error('Page.page_category_id') ?>
+				<?php echo $bcForm->error('Page.page_category_id') ?>
 			</td>
 		</tr>
 <?php else: ?>
-		<?php echo $formEx->hidden('Page.page_category_id') ?>
+		<?php echo $bcForm->hidden('Page.page_category_id') ?>
 <?php endif ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.name', 'ページ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.name', 'ページ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+				<?php echo $bcForm->input('Page.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('Page.name') ?>
+				<?php echo $bcForm->error('Page.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li>ページ名はURLに利用します。</li>
@@ -305,11 +305,11 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.title', 'タイトル') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.title', 'タイトル') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.title', array('type' => 'text', 'size'=> 40, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+				<?php echo $bcForm->input('Page.title', array('type' => 'text', 'size'=> 40, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTitle', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('Page.title') ?>
+				<?php echo $bcForm->error('Page.title') ?>
 				<div id="helptextTitle" class="helptext">
 					<ul>
 						<li>タイトルはTitleタグに利用し、ブラウザのタイトルバーに表示されます。</li>
@@ -322,11 +322,11 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.description', '説明文') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.description', '説明文') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.description', array('type' => 'textarea', 'cols' => 60,'rows' => 2, 'maxlength' => 255, 'counter' => true)) ?>
+				<?php echo $bcForm->input('Page.description', array('type' => 'textarea', 'cols' => 60,'rows' => 2, 'maxlength' => 255, 'counter' => true)) ?>
 				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('Page.description') ?>
+				<?php echo $bcForm->error('Page.description') ?>
 				<div id="helptextDescription" class="helptext">
 					<ul>
 						<li>説明文はMetaタグのdescription属性に利用されます。</li>
@@ -339,51 +339,51 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.contents', '本文') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.contents', '本文') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->ckeditor('Page.contents', 
+				<?php echo $bcForm->ckeditor('Page.contents', 
 						array('cols' => 60, 'rows' => 20),
 						$ckEditorOptions1) ?>
-				<?php echo $formEx->error('Page.contents') ?>
+				<?php echo $bcForm->error('Page.contents') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.status', array(
+				<?php echo $bcForm->input('Page.status', array(
 						'type'		=> 'radio',
 						'options'	=> array(0 => '非公開', 1 => '公開') ,
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
-				<?php echo $formEx->error('Page.status') ?>
+				<?php echo $bcForm->error('Page.status') ?>
 				&nbsp;&nbsp;
-				<?php echo $formEx->dateTimePicker('Page.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+				<?php echo $bcForm->dateTimePicker('Page.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 				&nbsp;〜&nbsp;
-				<?php echo $formEx->dateTimePicker('Page.publish_end', array('size' => 12, 'maxlength' => 10), true) ?><br />
-				<?php echo $formEx->input('Page.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
-				<?php echo $formEx->error('Page.publish_begin') ?>
-				<?php echo $formEx->error('Page.publish_end') ?>
+				<?php echo $bcForm->dateTimePicker('Page.publish_end', array('size' => 12, 'maxlength' => 10), true) ?><br />
+				<?php echo $bcForm->input('Page.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
+				<?php echo $bcForm->error('Page.publish_begin') ?>
+				<?php echo $bcForm->error('Page.publish_end') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.author_id', '作成者') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.author_id', '作成者') ?></th>
 			<td class="col-input">
 <?php if(isset($user) && $user['user_group_id'] == 1): ?>
-				<?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
-				<?php echo $formEx->error('Page.author_id') ?>
+				<?php echo $bcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
+				<?php echo $bcForm->error('Page.author_id') ?>
 <?php else: ?>
-		<?php if(isset($users[$formEx->value('Page.author_id')])): ?>
-				<?php echo $users[$formEx->value('Page.author_id')] ?>
+		<?php if(isset($users[$bcForm->value('Page.author_id')])): ?>
+				<?php echo $users[$bcForm->value('Page.author_id')] ?>
 		<?php endif ?>
-				<?php echo $formEx->hidden('Page.author_id') ?>
+				<?php echo $bcForm->hidden('Page.author_id') ?>
 <?php endif ?>
 			</td>
 		</tr>
 <?php if($reflectMobile): ?>
 		<tr id="RowReflectMobile" style="display: none">
-			<th class="col-head"><?php echo $formEx->label('Page.status', 'モバイル') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.status', 'モバイル') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+				<?php echo $bcForm->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpReflectMobile', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextReflectMobile" class="helptext">
 					<ul>
@@ -400,9 +400,9 @@ function pageTypeChengeHandler() {
 <?php endif ?>
 <?php if($reflectSmartphone): ?>
 		<tr id="RowReflectSmartphone" style="display: none">
-			<th class="col-head"><?php echo $formEx->label('Page.status', 'スマートフォン') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.status', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
+				<?php echo $bcForm->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpReflectSmartphone', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextReflectSmartphone" class="helptext">
 					<ul>
@@ -421,21 +421,21 @@ function pageTypeChengeHandler() {
 </div>
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
-	<?php echo $formEx->button('更新', array('label' => '更新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $bcForm->button('更新', array('label' => '更新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
 	<?php endif ?>
-	<?php echo $formEx->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
 	<?php $baser->link('削除',
-			array('action'=>'delete', $formEx->value('Page.id')),
+			array('action'=>'delete', $bcForm->value('Page.id')),
 			array('class'=>'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $formEx->value('Page.name')),
+			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('Page.name')),
 			false); ?>
 	<?php endif ?>
 <?php endif ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

@@ -150,23 +150,23 @@ function openCredit(completeHandler) {
 				
 		<h1>管理システムログイン</h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-		<?php echo $formEx->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
+		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
 		<div class="float-left login-input">
-			<?php echo $formEx->label($userModel.'.name', 'アカウント名') ?>
-			<?php echo $formEx->input($userModel.'.name', array('type' => 'text', 'size'=>16 ,'tabindex'=>1)) ?>
+			<?php echo $bcForm->label($userModel.'.name', 'アカウント名') ?>
+			<?php echo $bcForm->input($userModel.'.name', array('type' => 'text', 'size'=>16 ,'tabindex'=>1)) ?>
 		</div>
 		<div class="float-left login-input">
-			<?php echo $formEx->label($userModel.'.password', 'パスワード') ?>
-			<?php echo $formEx->input($userModel.'.password',array('type' => 'password', 'size'=>16,'tabindex'=>2)) ?>
+			<?php echo $bcForm->label($userModel.'.password', 'パスワード') ?>
+			<?php echo $bcForm->input($userModel.'.password',array('type' => 'password', 'size'=>16,'tabindex'=>2)) ?>
 		</div>
 		<div class="float-left submit">
-			<?php echo $formEx->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin','tabindex'=>4)) ?>
+			<?php echo $bcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin','tabindex'=>4)) ?>
 		</div>
 		<div class="clear login-etc">
-			<?php echo $formEx->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
+			<?php echo $bcForm->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
 			<?php $baser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?>
 		</div>
-		<?php echo $formEx->end() ?>
+		<?php echo $bcForm->end() ?>
 	</div>
 
 </div>

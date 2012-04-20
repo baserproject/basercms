@@ -34,9 +34,9 @@
 				</div>
 	<?php if($baser->isAdminUser()): ?>
 				<div>
-					<?php echo $formEx->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $formEx->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '有効', 'unpublish' => '無効', 'del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $formEx->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '有効', 'unpublish' => '無効', 'del' => '削除'), 'empty' => '一括処理')) ?>
+					<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 				</div>
 	<?php endif ?>
 			</th>

@@ -68,5 +68,5 @@ $(function(){
 <div id="AjaxBatchUrl" style="display:none"><?php $baser->url(array('controller' => 'contents', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="AjaxChangePriorityUrl" class="display-none"><?php echo $baser->url(array('action' => 'ajax_change_priority')) ?></div>
-<div id="ContentOpen" class="display-none"><?php echo $formEx->value('Content.open') ?></div>
+<div id="ContentOpen" class="display-none"><?php echo $bcForm->value('Content.open') ?></div>
 <div id="DataList"><?php $baser->element('contents/index_list') ?></div>

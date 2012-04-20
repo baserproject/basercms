@@ -29,10 +29,10 @@
 	<td style="width:25%" class="row-tools">
 <?php if($sortmode): ?>
 		<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え')) ?></span>
-		<?php echo $formEx->hidden('Sort.id' . $data['MailField']['id'], array('class' => 'id', 'value' => $data['MailField']['id'])) ?>
+		<?php echo $bcForm->hidden('Sort.id' . $data['MailField']['id'], array('class' => 'id', 'value' => $data['MailField']['id'])) ?>
 <?php endif ?>
 <?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['MailField']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailField']['id'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['MailField']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailField']['id'])) ?>
 <?php endif ?>	
 		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_unpublish', $mailContent['MailContent']['id'], $data['MailField']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '有効', 'class' => 'btn')), array('action' => 'ajax_publish', $mailContent['MailContent']['id'], $data['MailField']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>

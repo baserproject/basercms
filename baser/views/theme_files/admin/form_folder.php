@@ -24,31 +24,31 @@
 </div>
 
 <?php if($this->action == 'admin_add_folder'): ?>
-<?php echo $formEx->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'add_folder', $theme, $type, $path))) ?>
+<?php echo $bcForm->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'add_folder', $theme, $type, $path))) ?>
 <?php else: ?>
-<?php echo $formEx->create('ThemeFolder',array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type, $path))) ?>
+<?php echo $bcForm->create('ThemeFolder',array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type, $path))) ?>
 <?php endif ?>
 
-<?php echo $formEx->input('ThemeFolder.parent', array('type' => 'hidden')) ?>
-<?php echo $formEx->input('ThemeFolder.pastname', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('ThemeFolder.parent', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('ThemeFolder.pastname', array('type' => 'hidden')) ?>
 
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('ThemeFolder.name', 'フォルダ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('ThemeFolder.name', 'フォルダ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 	<?php if($this->action != 'admin_view_folder'): ?>
-				<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li>フォルダ名は半角で入力してください。</li>
 					</ul>
 				</div>
-				<?php echo $formEx->error('ThemeFolder.name') ?>
+				<?php echo $bcForm->error('ThemeFolder.name') ?>
 	<?php else: ?>
-				<?php echo $formEx->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'readonly' => 'readonly')) ?>
+				<?php echo $bcForm->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'readonly' => 'readonly')) ?>
 	<?php endif ?>
 			</td>
 		</tr>
@@ -61,13 +61,13 @@
 	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->action == 'admin_add_folder'): ?>
-	<?php echo $formEx->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $bcForm->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit_folder'): ?>
-	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php $baser->link('削除',
 			array('action'=>'del', $theme, $type, $path),
 			array('class'=>'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $formEx->value('ThemeFolder.name')),
+			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('ThemeFolder.name')),
 			false
 	) ?>
 <?php else: ?>
@@ -85,4 +85,4 @@
 <?php endif ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

@@ -23,8 +23,8 @@
 </h2>
 
 <div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;">
-	<?php echo $formEx->create(array('action' => $this->action)) ?>
-	<p><?php echo $formEx->label('Updater.plugin', 'タイプ') ?>&nbsp;<?php echo $formEx->input('Updater.plugin', array('type' => 'select', 'options' => $plugins, 'empty' => 'コア')) ?></p>
-	<p><?php echo $formEx->label('Updater.version', 'バージョン') ?>&nbsp;<?php echo $formEx->input('Updater.version', array('type' => 'text')) ?></p>
-	<?php echo $formEx->end(array('label' => '実行', 'class' => 'button btn-red')) ?>
+	<?php echo $bcForm->create(array('action' => $this->action)) ?>
+	<p><?php echo $bcForm->label('Updater.plugin', 'タイプ') ?>&nbsp;<?php echo $bcForm->input('Updater.plugin', array('type' => 'select', 'options' => $plugins, 'empty' => 'コア')) ?></p>
+	<p><?php echo $bcForm->label('Updater.version', 'バージョン') ?>&nbsp;<?php echo $bcForm->input('Updater.version', array('type' => 'text')) ?></p>
+	<?php echo $bcForm->end(array('label' => '実行', 'class' => 'button btn-red')) ?>
 </div>

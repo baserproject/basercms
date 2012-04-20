@@ -38,9 +38,9 @@ $(function(){
 <p>データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。</p>
 <ul><li><?php $baser->link('バックアップはこちらから', 	array('admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup')) ?></li></ul>
 	<?php endif ?>
-	<?php echo $formEx->create(array('action' => 'reset')) ?>
-	<?php echo $formEx->input('Installation.reset', array('type' => 'hidden', 'value' => true)) ?>
-	<?php echo $formEx->end(array('label' => '初期化する', 'class' => 'button btn-gray')) ?></p>
+	<?php echo $bcForm->create(array('action' => 'reset')) ?>
+	<?php echo $bcForm->input('Installation.reset', array('type' => 'hidden', 'value' => true)) ?>
+	<?php echo $bcForm->end(array('label' => '初期化する', 'class' => 'button btn-gray')) ?></p>
 <?php else: ?>
 <div class="section">
 <p>引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。</p>

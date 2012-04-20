@@ -77,20 +77,20 @@ function pageTypeChengeHandler() {
 
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
 
-<?php echo $formEx->create('Page', array('action' => 'index', 'url' => array('action' => 'index'))) ?>
+<?php echo $bcForm->create('Page', array('action' => 'index', 'url' => array('action' => 'index'))) ?>
 
 <p>
-	<span><?php echo $formEx->label('Page.name', 'ページ名') ?> <?php echo $formEx->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>
-	<span><?php echo $formEx->label('Page.status', '公開状態') ?> <?php echo $formEx->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
-	<span><?php echo $formEx->label('Page.author_id', '作成者') ?> <?php echo $formEx->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('Page.name', 'ページ名') ?> <?php echo $bcForm->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>
+	<span><?php echo $bcForm->label('Page.status', '公開状態') ?> <?php echo $bcForm->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('Page.author_id', '作成者') ?> <?php echo $bcForm->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 
 	<span style="white-space: nowrap">
 <?php if($pageType): ?>
-	<span><?php echo $formEx->label('Page.page_type', 'タイプ') ?> <?php echo $formEx->input('Page.page_type', array('type' => 'radio', 'options' => $pageType)) ?></span>　
+	<span><?php echo $bcForm->label('Page.page_type', 'タイプ') ?> <?php echo $bcForm->input('Page.page_type', array('type' => 'radio', 'options' => $pageType)) ?></span>　
 <?php endif ?>
 
 <?php if($pageCategories): ?>
-	<span><?php echo $formEx->label('Page.page_category_id', 'カテゴリ') ?> <?php echo $formEx->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
+	<span><?php echo $bcForm->label('Page.page_category_id', 'カテゴリ') ?> <?php echo $bcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
 <?php endif ?>
 	</span>
 </p>
@@ -100,5 +100,5 @@ function pageTypeChengeHandler() {
 	<?php $baser->link($baser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
 
-<?php echo $formEx->hidden('Page.open',array('value'=>true)) ?>
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->hidden('Page.open',array('value'=>true)) ?>
+<?php echo $bcForm->end() ?>

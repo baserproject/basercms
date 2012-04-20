@@ -25,7 +25,7 @@
 <tr id="Row<?php echo $data['PageCategory']['id'] ?>"<?php echo $rowGroupClass ?>>
 	<td class="row-tools">
 <?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['PageCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['PageCategory']['id'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['PageCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['PageCategory']['id'])) ?>
 <?php endif ?>
 <?php if(in_array($data['PageCategory']['owner_id'], $allowOwners)|| (!empty($user) && $user['user_group_id']==1)): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['PageCategory']['id']), array('title' => '編集')) ?>

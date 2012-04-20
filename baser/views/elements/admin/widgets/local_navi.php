@@ -19,7 +19,7 @@
  */
 $title = 'ローカルナビゲーション';
 $description = 'ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。';
-echo $formEx->hidden($key.'.cache',array('value'=>true));
+echo $bcForm->hidden($key.'.cache',array('value'=>true));
 ?>
 <br />
 <small>タイトルを表示する場合、カテゴリ名を表示します。</small>

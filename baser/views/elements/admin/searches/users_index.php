@@ -19,10 +19,10 @@
  */
 ?>
 
-<?php echo $formEx->create('User', array('url' => array('action' => 'index'))) ?>
+<?php echo $bcForm->create('User', array('url' => array('action' => 'index'))) ?>
 <p>
-	<?php echo $formEx->label('User.user_group_id', 'ユーザーグループ') ?> 
-	<?php echo $formEx->input('User.user_group_id', array('type' => 'select', 'options' => $formEx->getControlSource('User.user_group_id'), 'empty' => '指定なし')) ?>
+	<?php echo $bcForm->label('User.user_group_id', 'ユーザーグループ') ?> 
+	<?php echo $bcForm->input('User.user_group_id', array('type' => 'select', 'options' => $bcForm->getControlSource('User.user_group_id'), 'empty' => '指定なし')) ?>
 </p>
 <div class="button">
 	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 

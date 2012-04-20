@@ -25,38 +25,38 @@
 </div>
 
 <?php if($this->action == 'admin_add'): ?>
-<?php echo $formEx->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'add', $theme, $plugin, $type, $path))) ?>
+<?php echo $bcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'add', $theme, $plugin, $type, $path))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $formEx->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'edit', $theme, $plugin, $type, $path))) ?>
+<?php echo $bcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'edit', $theme, $plugin, $type, $path))) ?>
 <?php endif ?>
 
-<?php echo $formEx->input('ThemeFile.parent', array('type'=>'hidden')) ?>
+<?php echo $bcForm->input('ThemeFile.parent', array('type'=>'hidden')) ?>
 
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('ThemeFile.name', 'ファイル名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('ThemeFile.name', 'ファイル名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 	<?php if($this->action != 'admin_view'): ?>
-				<?php echo $formEx->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> .<?php echo $formEx->value('ThemeFile.ext') ?>
-				<?php echo $formEx->input('ThemeFile.ext', array('type' => 'hidden')) ?>
+				<?php echo $bcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> .<?php echo $bcForm->value('ThemeFile.ext') ?>
+				<?php echo $bcForm->input('ThemeFile.ext', array('type' => 'hidden')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('ThemeFile.name') ?>
+				<?php echo $bcForm->error('ThemeFile.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li>ファイル名は半角で入力してください。</li>
 					</ul>
 				</div>
 	<?php else: ?>
-				<?php echo $formEx->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'readonly' => 'readonly')) ?> .<?php echo $formEx->value('ThemeFile.ext') ?>
-				<?php echo $formEx->input('ThemeFile.ext', array('type' => 'hidden')) ?>
+				<?php echo $bcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'readonly' => 'readonly')) ?> .<?php echo $bcForm->value('ThemeFile.ext') ?>
+				<?php echo $bcForm->input('ThemeFile.ext', array('type' => 'hidden')) ?>
 	<?php endif ?>
 			</td>
 		</tr>
 	<?php if($this->action == 'admin_add' || (($this->action == 'admin_edit' || $this->action == 'admin_view') && in_array($this->data['ThemeFile']['type'], array('text', 'image')))): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('ThemeFile.contents', '内容') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('ThemeFile.contents', '内容') ?></th>
 			<td class="col-input">
 	<?php if(($this->action == 'admin_edit' || $this->action == 'admin_view') && $this->data['ThemeFile']['type'] == 'image'): ?>
 				<div class="align-center" style="margin:20px auto">
@@ -68,10 +68,10 @@
 				</div>
 	<?php elseif($this->action == 'admin_add' || $this->data['ThemeFile']['type'] == 'text'): ?>
 		<?php if($this->action != 'admin_view'): ?>
-				<?php echo $formEx->input('ThemeFile.contents', array('type' => 'textarea', 'cols' => 80, 'rows' => 30)) ?>
-				<?php echo $formEx->error('ThemeFile.contents') ?>
+				<?php echo $bcForm->input('ThemeFile.contents', array('type' => 'textarea', 'cols' => 80, 'rows' => 30)) ?>
+				<?php echo $bcForm->error('ThemeFile.contents') ?>
 			<?php else: ?>
-				<?php echo $formEx->input('ThemeFile.contents',array('type' => 'textarea', 'cols' => 80, 'rows' => 30, 'readonly' => 'readonly')) ?>
+				<?php echo $bcForm->input('ThemeFile.contents',array('type' => 'textarea', 'cols' => 80, 'rows' => 30, 'readonly' => 'readonly')) ?>
 		<?php endif ?>
 	<?php endif ?>
 			</td>
@@ -86,9 +86,9 @@
 	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $formEx->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $bcForm->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php $baser->link('削除', 
 			array('action' => 'del', $theme, $plugin, $type , $path) , array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', basename($path)),false
@@ -110,4 +110,4 @@
 <?php endif ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

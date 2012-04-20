@@ -28,7 +28,7 @@
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 <?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['BlogPost']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['BlogPost']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id'])) ?>
 <?php endif ?>		
 		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>

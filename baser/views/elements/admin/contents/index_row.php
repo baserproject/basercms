@@ -30,9 +30,9 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 <tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:22%">
 <?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Content']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['Content']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id'])) ?>
 <?php endif ?>		
-		<?php echo $formEx->input('Content.priority'.'_'.$data['Content']['id'], array(
+		<?php echo $bcForm->input('Content.priority'.'_'.$data['Content']['id'], array(
 				'type'		=> 'select', 
 				'options'	=> $priorities,
 				'empty'		=> '優先度', 

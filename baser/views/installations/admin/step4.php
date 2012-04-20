@@ -60,43 +60,43 @@ $(document).ready(function(){
 	
 	<h2>管理情報登録</h2>
 	
-	<?php echo $formEx->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
+	<?php echo $bcForm->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
 
 	<div class="panel-box corner10">
 		<div>
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
-				<li><?php echo $formEx->input('Installation.admin_email', array('type' => 'text', 'size'=>44)); ?></li>
+				<li><?php echo $bcForm->input('Installation.admin_email', array('type' => 'text', 'size'=>44)); ?></li>
 			</ul>
 			<h3>管理ユーザー登録</h3>
 			<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
 			<ul>
 				<li>
 					<label>管理者アカウント名</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
-					<?php echo $formEx->input('Installation.admin_username', array('type' => 'text')); ?>
+					<?php echo $bcForm->input('Installation.admin_username', array('type' => 'text')); ?>
 				</li>
 				<li class="clearfix">
 					<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
 					<div class="float-left">
-						<?php echo $formEx->input('Installation.admin_password', array('type' => 'password')); ?>
+						<?php echo $bcForm->input('Installation.admin_password', array('type' => 'password')); ?>
 					</div>
 					<div class="float-left">
-						<?php echo $formEx->input('Installation.admin_confirmpassword', array('type' => 'password')); ?><br />
+						<?php echo $bcForm->input('Installation.admin_confirmpassword', array('type' => 'password')); ?><br />
 						<small>確認の為もう一度入力してください</small>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<?php echo $formEx->input('clicked', array('type' => 'hidden')) ?>
+		<?php echo $bcForm->input('clicked', array('type' => 'hidden')) ?>
 		
 
 	</div>
 
 	<div class="submit">
-		<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
-		<?php echo $formEx->button('完了', array('class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
+		<?php echo $bcForm->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
+		<?php echo $bcForm->button('完了', array('class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
 	</div>
 
-	<?php echo $formEx->end() ?>
+	<?php echo $bcForm->end() ?>
 
 </div>

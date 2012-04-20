@@ -33,7 +33,7 @@ class TextExHelper extends TextHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('TimeEx','FormEx');
+	var $helpers = array('TimeEx','BcForm');
 /**
  * 文字数カット（日本語対応）
  * Cuts a string to the length of $length and replaces the last characters
@@ -414,7 +414,7 @@ class TextExHelper extends TextHelper {
  */
 	function listValue($field,$value) {
 
-		$list = $this->FormEx->getControlSource($field);
+		$list = $this->BcForm->getControlSource($field);
 		if($list && isset($list[$value])) {
 			return $list[$value];
 		}else {

@@ -88,27 +88,27 @@ $(function(){
 
 
 <div id="PermissionDialog" title="アクセス制限登録">
-	<?php echo $formEx->create('Permission', array('action' => 'ajax_add', 'url' => array('plugin' => null))) ?>
-	<?php echo $formEx->input('Permission.id') ?>
+	<?php echo $bcForm->create('Permission', array('action' => 'ajax_add', 'url' => array('plugin' => null))) ?>
+	<?php echo $bcForm->input('Permission.id') ?>
 	<dl>
-		<dt><?php echo $formEx->label('Permission.user_group_id', 'ユーザーグループ') ?></dt>
+		<dt><?php echo $bcForm->label('Permission.user_group_id', 'ユーザーグループ') ?></dt>
 		<dd class="col-input">
-			<?php echo $formEx->input('Permission.user_group_id', array('type' => 'select', 'options' => $formEx->getControlSource('Permission.user_group_id'))) ?>
+			<?php echo $bcForm->input('Permission.user_group_id', array('type' => 'select', 'options' => $bcForm->getControlSource('Permission.user_group_id'))) ?>
 		</dd>
-		<dt><h4><?php echo $formEx->label('Permission.name', 'ルール名') ?></h4></dt>
-		<dd><?php echo $formEx->input('Permission.name', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
-		<dt><?php echo $formEx->label('Permission.url', 'URL設定') ?></dt>
-		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.admin') ?>/</strong><?php echo $formEx->input('Permission.url', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
-		<dt><?php echo $formEx->label('Permission.auth', 'アクセス') ?></dt>
+		<dt><h4><?php echo $bcForm->label('Permission.name', 'ルール名') ?></h4></dt>
+		<dd><?php echo $bcForm->input('Permission.name', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
+		<dt><?php echo $bcForm->label('Permission.url', 'URL設定') ?></dt>
+		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.admin') ?>/</strong><?php echo $bcForm->input('Permission.url', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
+		<dt><?php echo $bcForm->label('Permission.auth', 'アクセス') ?></dt>
 		<dd>
-			<?php echo $formEx->input('Permission.auth', array(
+			<?php echo $bcForm->input('Permission.auth', array(
 				'type'		=> 'radio',
-				'options'	=> $formEx->getControlSource('Permission.auth'),
+				'options'	=> $bcForm->getControlSource('Permission.auth'),
 				'legend'	=> false,
 				'value'		=> 0,
 				'separator'	=> '　')) ?>
-			<?php echo $formEx->error('Permission.auth') ?>
+			<?php echo $bcForm->error('Permission.auth') ?>
 		</dd>
 	</dl>
-	<?php echo $formEx->end() ?>
+	<?php echo $bcForm->end() ?>
 </div>

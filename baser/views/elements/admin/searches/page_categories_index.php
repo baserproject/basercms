@@ -20,10 +20,10 @@
 ?>
 
 
-<?php echo $formEx->create('PageCategory', array('url' => array('action' => 'index'))) ?>
+<?php echo $bcForm->create('PageCategory', array('url' => array('action' => 'index'))) ?>
 <p>
-	<span><?php echo $formEx->label('PageCategory.type', 'タイプ') ?> 
-	<?php echo $formEx->input('PageCategory.type', array(
+	<span><?php echo $bcForm->label('PageCategory.type', 'タイプ') ?> 
+	<?php echo $bcForm->input('PageCategory.type', array(
 			'type'		=> 'select',
 			'options'	=> $pageType,
 			'escape'	=> false)) ?></span>
@@ -32,4 +32,4 @@
 	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
 	<?php $baser->link($baser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

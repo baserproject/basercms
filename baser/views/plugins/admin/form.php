@@ -20,26 +20,26 @@
 ?>
 
 
-<?php echo $formEx->create('Plugin',array('url' => array($this->data['Plugin']['name']))) ?>
-<?php echo $formEx->input('Plugin.name', array('type' => 'hidden')) ?>
-<?php echo $formEx->input('Plugin.title', array('type' => 'hidden')) ?>
-<?php echo $formEx->input('Plugin.status', array('type' => 'hidden')) ?>
-<?php echo $formEx->input('Plugin.version', array('type' => 'hidden')) ?>
+<?php echo $bcForm->create('Plugin',array('url' => array($this->data['Plugin']['name']))) ?>
+<?php echo $bcForm->input('Plugin.name', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('Plugin.title', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('Plugin.status', array('type' => 'hidden')) ?>
+<?php echo $bcForm->input('Plugin.version', array('type' => 'hidden')) ?>
 
 <div class="em-box">
-	<?php echo $formEx->value('Plugin.name').' '.$formEx->value('Plugin.version') ?>
-	<?php if($formEx->value('Plugin.title')): ?>
-		（<?php echo $formEx->value('Plugin.title') ?>）
+	<?php echo $bcForm->value('Plugin.name').' '.$bcForm->value('Plugin.version') ?>
+	<?php if($bcForm->value('Plugin.title')): ?>
+		（<?php echo $bcForm->value('Plugin.title') ?>）
 	<?php endif ?>
 </div>
 
 <div>
-	<?php echo $formEx->error('Plugin.name') ?>
-	<?php echo $formEx->error('Plugin.title') ?>
+	<?php echo $bcForm->error('Plugin.name') ?>
+	<?php echo $bcForm->error('Plugin.title') ?>
 </div>
 
 <div class="submit">
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

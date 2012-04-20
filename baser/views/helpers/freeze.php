@@ -20,11 +20,11 @@
 /**
  * Include files
  */
-App::import('Helper', 'FormEx', 'Upload');
+App::import('Helper', 'BcForm', 'Upload');
 /**
  * @package baser.view.helpers
  */
-class FreezeHelper extends FormExHelper {
+class FreezeHelper extends BcFormHelper {
 /**
  * 凍結状態
  * 
@@ -38,7 +38,7 @@ class FreezeHelper extends FormExHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','FormEx','Upload','TextEx','TimeEx','Javascript');
+	var $helpers = array('Html','BcForm','Upload','TextEx','TimeEx','Javascript');
 /**
  * フォームを凍結させる
  * 

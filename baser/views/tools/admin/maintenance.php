@@ -45,18 +45,18 @@
 <small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。<br />
 v1.6.6以前のバックアップデータの復元はできません。v1.6.6以前のデータを復元するには、phpMyAdminなどのDB管理ツールをご利用ください。</small></p>
 
-<?php echo $formEx->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
+<?php echo $bcForm->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.backup', 'バックアップファイル') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $bcForm->label('Tool.backup', 'バックアップファイル') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Tool.backup', array('type' => 'file')) ?>
-			<?php echo $formEx->error('Tool.backup') ?>
+			<?php echo $bcForm->input('Tool.backup', array('type' => 'file')) ?>
+			<?php echo $bcForm->error('Tool.backup') ?>
 		</td>
 	</tr>
 </table>
 
-<div class="submit"><?php echo $formEx->submit('アップロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="submit"><?php echo $bcForm->submit('アップロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

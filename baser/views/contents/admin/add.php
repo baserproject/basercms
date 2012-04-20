@@ -20,18 +20,18 @@
 ?>
 
 
-<?php echo $formEx->create('Content') ?>
+<?php echo $bcForm->create('Content') ?>
 
 
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('Page.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('Content.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('Content.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('Content.url') ?>
+				<?php echo $bcForm->error('Content.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
 						<li>サイト内で検索インデックスとして登録したいURLを指定します。</li>
@@ -47,7 +47,7 @@
 	</table>
 </div>
 <div class="submit">
-	<?php echo $formEx->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

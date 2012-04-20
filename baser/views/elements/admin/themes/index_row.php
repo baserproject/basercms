@@ -29,7 +29,7 @@
 	<td class="row-tools" style="width:110px;text-align: right">
 <?php if($data['name'] != 'core' && $data['name']!=$baser->siteConfig['theme']): ?>
 	<?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['name'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['name'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
 	<?php endif ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_apply.png', array('width' => 24, 'height' => 24, 'alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用')) ?>
 <?php endif ?>		

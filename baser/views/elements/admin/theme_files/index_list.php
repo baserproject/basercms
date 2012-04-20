@@ -26,9 +26,9 @@
 			<th style="width:160px" class="list-tool">
 <?php if($baser->isAdminUser()): ?>
 				<div>
-					<?php echo $formEx->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $formEx->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $formEx->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+					<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 <?php if($path): ?>
 					<?php $baser->link($baser->getImg('up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
 <?php endif ?>

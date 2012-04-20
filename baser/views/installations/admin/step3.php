@@ -152,7 +152,7 @@ $(document).ready( function() {
 	}
 </script>
 
-<?php echo $formEx->create(null, array('action' => 'step3', 'id' => 'dbsettings', 'name' => 'dbsettings')) ?>
+<?php echo $bcForm->create(null, array('action' => 'step3', 'id' => 'dbsettings', 'name' => 'dbsettings')) ?>
 
 <div class="step-3">
 	
@@ -165,28 +165,28 @@ $(document).ready( function() {
 		<h3>接続情報</h3>
 		<div>
 			<ul>
-				<li id="dbType"> <?php echo $formEx->label('Installation.dbType', 'データベースタイプ');?><br />
-					<?php echo $formEx->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
-				<li id="dbHost"> <?php echo $formEx->label('Installation.dbHost', 'データベースホスト名');?><br />
-					<?php echo $formEx->input('Installation.dbHost', array('type' => 'text', 'maxlength' => '300','size' => 45)); ?> </li>
+				<li id="dbType"> <?php echo $bcForm->label('Installation.dbType', 'データベースタイプ');?><br />
+					<?php echo $bcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
+				<li id="dbHost"> <?php echo $bcForm->label('Installation.dbHost', 'データベースホスト名');?><br />
+					<?php echo $bcForm->input('Installation.dbHost', array('type' => 'text', 'maxlength' => '300','size' => 45)); ?> </li>
 				<li id="dbUser" class="clearfix">
 					<label>ログイン情報</label>
 					<br />
-					<div class="float-left"> <?php echo $formEx->input('Installation.dbUsername',array('type' => 'text', 'maxlength'=>'100')); ?><br />
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbUsername',array('type' => 'text', 'maxlength'=>'100')); ?><br />
 						<small>ユーザー名</small> </div>
-					<div class="float-left"> <?php echo $formEx->input('Installation.dbPassword',array('type' => 'text', 'maxlength'=>'100','type'=>'password')); ?><br />
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPassword',array('type' => 'text', 'maxlength'=>'100','type'=>'password')); ?><br />
 						<small>パスワード</small> </div>
 				</li>
 				<li id="dbInfo" class="clearfix">
 					<label>データベース情報</label>
 					<br />
-					<div class="float-left"> <?php echo $formEx->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
 						<small>プレフィックス</small> </div>
-					<div class="float-left"> <?php echo $formEx->input('Installation.dbName',array('type' => 'text', 'maxlength'=>'100')); ?><br />
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbName',array('type' => 'text', 'maxlength'=>'100')); ?><br />
 						<small>データベース名</small> </div>
-					<div class="float-left"> <?php echo $formEx->input('Installation.dbPort',array('type' => 'text', 'maxlength'=>'5','size'=>5)); ?><br />
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPort',array('type' => 'text', 'maxlength'=>'5','size'=>5)); ?><br />
 						<small>ポート</small> </div>
-					<?php echo $formEx->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
+					<?php echo $bcForm->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
 					<br style="clear:both" /><br />
 					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />
 					※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。</small></li>
@@ -194,7 +194,7 @@ $(document).ready( function() {
 	<?php if (!empty($blDBSettingsOK)): ?>
 			<h3>オプション</h3>
 			<ul>
-				<li><?php echo $formEx->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
+				<li><?php echo $bcForm->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
 			</ul>
 	<?php endif ?>
 
@@ -202,15 +202,15 @@ $(document).ready( function() {
 	</div>
 	
 	<div class="submit">
-		<?php echo $formEx->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
-		<?php echo $formEx->button('接続テスト', array('class' => 'btn-orange button', 'id' => 'checkdb')) ?>
+		<?php echo $bcForm->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
+		<?php echo $bcForm->button('接続テスト', array('class' => 'btn-orange button', 'id' => 'checkdb')) ?>
 <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
-		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled')) ?>
+		<?php echo $bcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled')) ?>
 <?php else: ?>
-		<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext')) ?>
+		<?php echo $bcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext')) ?>
 <?php endif ?>
 	</div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>
 
 </div>

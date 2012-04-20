@@ -50,7 +50,7 @@ class UserGroupsController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Time','FormEx');
+	var $helpers = array('Time','BcForm');
 /**
  * サブメニューエレメント
  *

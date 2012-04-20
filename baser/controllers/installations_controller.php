@@ -67,7 +67,7 @@ class InstallationsController extends AppController {
  * @var array
  * @access	public
  */
-	var $helpers = array('Html', 'FormEx', 'Javascript', 'Time');
+	var $helpers = array('Html', 'BcForm', 'Javascript', 'Time');
 /**
  * モデル
  *

@@ -27,7 +27,7 @@ if((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core'){
 <tr>
 	<td class="row-tools">
 <?php if($baser->isAdminUser()): ?>
-	<?php echo $formEx->checkbox('ListTool.batch_targets.'.str_replace('.','_',$data['name']), array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
+	<?php echo $bcForm->checkbox('ListTool.batch_targets.'.str_replace('.','_',$data['name']), array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
 <?php endif ?>
 	<?php if($data['type']=='folder'): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_open_folder.png', array('width' => 24, 'height' => 24, 'alt' => '開く', 'class' => 'btn')), array('action' => 'index', $theme, $plugin, $type, $path, $data['name']), array('title' => '開く')) ?>

@@ -28,7 +28,7 @@ if(!$data['Plugin']['status']) {
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 <?php if($baser->isAdminUser()): ?>
-		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
+		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
 <?php endif ?>
 <?php if($data['Plugin']['update']): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_update.png', array('width' => 24, 'height' => 24, 'alt' => 'アップデート', 'class' => 'btn')), array('controller' => 'updaters', 'action' => 'plugin', $data['Plugin']['name']), array('title' => 'アップデート', 'class' => 'btn-update')); ?>

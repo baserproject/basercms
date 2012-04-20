@@ -23,10 +23,10 @@
 <div class="section">
 <p>パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />
 新しいパスワードをメールでお知らせします。</p>
-<?php echo $formEx->create('User', array('action' => 'reset_password', 'url' => array($this->params['prefix'] => true))) ?>
+<?php echo $bcForm->create('User', array('action' => 'reset_password', 'url' => array($this->params['prefix'] => true))) ?>
 <div class="submit">
-<?php echo $formEx->input('User.email', array('type' => 'text', 'size' => 60)) ?>
-<?php echo $formEx->submit('送信', array('div' => false, 'class' => 'btn-red button')) ?>
+<?php echo $bcForm->input('User.email', array('type' => 'text', 'size' => 60)) ?>
+<?php echo $bcForm->submit('送信', array('div' => false, 'class' => 'btn-red button')) ?>
 </div>
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>
 </div>

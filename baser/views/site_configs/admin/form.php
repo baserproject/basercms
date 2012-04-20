@@ -26,7 +26,7 @@ $(function(){
 	<?php else: ?>
 	var safeModeOn = 0;
 	<?php endif ?>
-	<?php if($formEx->value('SiteConfig.smart_url')): ?>
+	<?php if($bcForm->value('SiteConfig.smart_url')): ?>
 	var smartUrl = 1;
 	<?php else: ?>
 	var smartUrl = 0;
@@ -55,16 +55,16 @@ $(function(){
 <h2>基本項目</h2>
 
 
-<?php echo $formEx->create('SiteConfig',array('action'=>'form')) ?>
-<?php echo $formEx->hidden('SiteConfig.id') ?>
+<?php echo $bcForm->create('SiteConfig',array('action'=>'form')) ?>
+<?php echo $bcForm->hidden('SiteConfig.id') ?>
 
 <table cellpadding="0" cellspacing="0" class="form-table section">
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.formal_name', 'WEBサイト名') ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.formal_name', 'WEBサイト名') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $formEx->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55,'maxlength' => 255, 'class' => 'full-width')) ?>
+			<?php echo $bcForm->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55,'maxlength' => 255, 'class' => 'full-width')) ?>
 			<?php echo $html->image('admin/icn_help.png',array('id' => 'helpFormalName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('SiteConfig.formal_name') ?>
+			<?php echo $bcForm->error('SiteConfig.formal_name') ?>
 			<div id="helptextFormalName" class="helptext">
 				<ul>
 					<li>正式なWEBサイト名を指定します。</li>
@@ -74,11 +74,11 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.name', 'WEBサイトタイトル') ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.name', 'WEBサイトタイトル') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $formEx->input('SiteConfig.name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+			<?php echo $bcForm->input('SiteConfig.name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
 			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('SiteConfig.name') ?>
+			<?php echo $bcForm->error('SiteConfig.name') ?>
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li>Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）</li>
@@ -89,40 +89,40 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.keyword', 'サイト基本キーワード') ?></th>
-		<td class="col-input"><?php echo $formEx->input('SiteConfig.keyword', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.keyword', 'サイト基本キーワード') ?></th>
+		<td class="col-input"><?php echo $bcForm->input('SiteConfig.keyword', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
 			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpKeyword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('SiteConfig.keyword') ?>
+			<?php echo $bcForm->error('SiteConfig.keyword') ?>
 			<div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />
 				&lt;?php $baser->keywords() ?&gt; で出力します。</div>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.description', 'サイト基本説明文') ?></th>
-		<td class="col-input"><?php echo $formEx->input('SiteConfig.description', array('type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true)) ?>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.description', 'サイト基本説明文') ?></th>
+		<td class="col-input"><?php echo $bcForm->input('SiteConfig.description', array('type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true)) ?>
 			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-			<?php echo $formEx->error('SiteConfig.description') ?>
+			<?php echo $bcForm->error('SiteConfig.description') ?>
 			<div id="helptextDescription" class="helptext">テンプレートで利用する場合は、<br />
 				&lt;?php $baser->description() ?&gt; で出力します。</div>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.email', '管理者メールアドレス') ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.email', '管理者メールアドレス') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $formEx->input('SiteConfig.email', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-			<?php echo $formEx->error('SiteConfig.email') ?>
+			<?php echo $bcForm->input('SiteConfig.email', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+			<?php echo $bcForm->error('SiteConfig.email') ?>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $formEx->label('SiteConfig.admin_list_num', '管理システムの<br />初期一覧件数') ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.admin_list_num', '管理システムの<br />初期一覧件数') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $formEx->input('SiteConfig.admin_list_num', array('type' => 'select', 'options' => array(
+			<?php echo $bcForm->input('SiteConfig.admin_list_num', array('type' => 'select', 'options' => array(
 				10	=> '10件',
 				20	=> '20件',
 				50	=> '50件',
 				100 => '100件'
 			))) ?>
-			<?php echo $formEx->error('SiteConfig.admin_list_num') ?>
+			<?php echo $bcForm->error('SiteConfig.admin_list_num') ?>
 		</td>
 	</tr>
 </table>
@@ -132,50 +132,50 @@ $(function(){
 <div id ="formOptionBody" class="slide-body section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.login_credit', 'ログインページのクレジット表示') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.login_credit', 'ログインページのクレジット表示') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.login_credit', array('type' => 'radio', 'options' => $textEx->booleanDoList('利用'))) ?>
+				<?php echo $bcForm->input('SiteConfig.login_credit', array('type' => 'radio', 'options' => $textEx->booleanDoList('利用'))) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">ログインページに表示されているクレジット表示を利用するかどうか設定します。</div>
-				<?php echo $formEx->error('SiteConfig.login_credit') ?>
+				<?php echo $bcForm->error('SiteConfig.login_credit') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.site_url', 'WebサイトURL') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.site_url', 'WebサイトURL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.site_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?><br />
-				<?php echo $formEx->input('SiteConfig.ssl_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => '<small>[SSL]</small>')) ?>
+				<?php echo $bcForm->input('SiteConfig.site_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?><br />
+				<?php echo $bcForm->input('SiteConfig.ssl_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => '<small>[SSL]</small>')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('SiteConfig.site_url') ?>
-				<?php echo $formEx->error('SiteConfig.ssl_url') ?>
+				<?php echo $bcForm->error('SiteConfig.site_url') ?>
+				<?php echo $bcForm->error('SiteConfig.ssl_url') ?>
 				<div id="helptextSiteUrl" class="helptext">baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $textEx->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
+				<?php echo $bcForm->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $textEx->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('SiteConfig.admin_ssl') ?>
+				<?php echo $bcForm->error('SiteConfig.admin_ssl') ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
 					また、SSL用のWebサイトURLの指定が必要です。</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id'=>'helpAddress', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('SiteConfig.address') ?>
+				<?php echo $bcForm->error('SiteConfig.address') ?>
 				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所を入力してください。</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
+				<?php echo $bcForm->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
 				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpGoogleAnalyticsId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $formEx->error('SiteConfig.google_analytics_id') ?>
+				<?php echo $bcForm->error('SiteConfig.google_analytics_id') ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
@@ -184,9 +184,9 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.widget_area', '標準ウィジェットエリア') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.widget_area', '標準ウィジェットエリア') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.widget_area', array('type' => 'select', 'options' => $formEx->getControlSource('WidgetArea.id'), 'empty' => 'なし')) ?>
+				<?php echo $bcForm->input('SiteConfig.widget_area', array('type' => 'select', 'options' => $bcForm->getControlSource('WidgetArea.id'), 'empty' => 'なし')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextWidgetArea" class="helptext">
 					公開ページ全般で利用するウィジェットエリアを指定します。<br />
@@ -195,9 +195,9 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.maintenance', '公開状態') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.maintenance', '公開状態') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.maintenance', array('type' => 'select' , 'options' => array(0 => '公開中', 1 => 'メンテナンス中'))) ?>
+				<?php echo $bcForm->input('SiteConfig.maintenance', array('type' => 'select' , 'options' => array(0 => '公開中', 1 => 'メンテナンス中'))) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpMaintenance', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextMaintenance" class="helptext">
 					公開状態を指定します。<br />
@@ -207,9 +207,9 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.mode', '制作・開発モード') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mode', '制作・開発モード') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.mode', array('type' => 'select' , 'options' => $formEx->getControlSource('mode'))) ?>
+				<?php echo $bcForm->input('SiteConfig.mode', array('type' => 'select' , 'options' => $bcForm->getControlSource('mode'))) ?>
 				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpDebug', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
@@ -218,14 +218,14 @@ $(function(){
 		</tr>
 		<tr>
 			<th class="col-head">
-				<?php echo $formEx->label('SiteConfig.smart_url', 'スマートURL') ?><br />
+				<?php echo $bcForm->label('SiteConfig.smart_url', 'スマートURL') ?><br />
 			</th>
 			<td class="col-input">
 				<span>Rewriteモジュール利用可否：<strong>
 				<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
 				<?php $disabled = array() ?>
 				<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
-				<?php echo $formEx->input('SiteConfig.smart_url', array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン'))) ?>
+				<?php echo $bcForm->input('SiteConfig.smart_url', array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン'))) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSmartUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?><br />
 				<div id="helptextSmartUrl" class="helptext">
 					<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />
@@ -245,22 +245,22 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.mobile', 'モバイル') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+				<?php echo $bcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
 <?php if($baser->siteConfig['category_permission']): ?>
 		<tr>
-			<th class="col-head"><?php echo $formEx->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.root_owner_id', array('type' => 'select', 'options' => $userGroups, 'empty' => '指定しない')) ?>
+				<?php echo $bcForm->input('SiteConfig.root_owner_id', array('type' => 'select', 'options' => $userGroups, 'empty' => '指定しない')) ?>
 			</td>
 		</tr>
 <?php endif ?>
@@ -270,37 +270,37 @@ $(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th><?php echo $formEx->label('SiteConfig.mail_encode', 'メール送信文字コード') ?>&nbsp;<span class="required">*</span></th>
+			<th><?php echo $bcForm->label('SiteConfig.mail_encode', 'メール送信文字コード') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.mail_encode', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('SiteConfig.mail_encode', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpEncode', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextEncode" class="helptext">送信メールの文字コードを入力します。<br />基本的に変更する必要はありません。<br />（初期値）ISO-2022-JP</div>
-				<?php echo $formEx->error('SiteConfig.mail_encode') ?>
+				<?php echo $bcForm->error('SiteConfig.mail_encode') ?>
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $formEx->label('SiteConfig.smtp_host', 'SMTPホスト') ?></th>
+			<th><?php echo $bcForm->label('SiteConfig.smtp_host', 'SMTPホスト') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $formEx->error('SiteConfig.smtp_host') ?>
+				<?php echo $bcForm->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->error('SiteConfig.smtp_host') ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSmtpHost', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $formEx->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
+			<th><?php echo $bcForm->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.smtp_user', array('type' => 'text', 'size'=>35,'maxlength'=>255)) ?>
-				<?php echo $formEx->error('SiteConfig.smtp_user') ?>
+				<?php echo $bcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size'=>35,'maxlength'=>255)) ?>
+				<?php echo $bcForm->error('SiteConfig.smtp_user') ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSmtpUsername', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $formEx->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
+			<th><?php echo $bcForm->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
 			<td class="col-input">
-				<?php echo $formEx->input('SiteConfig.smtp_password', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $formEx->error('SiteConfig.smtp_password') ?>
+				<?php echo $bcForm->input('SiteConfig.smtp_password', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->error('SiteConfig.smtp_password') ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSmtpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 			</td>
@@ -309,7 +309,7 @@ $(function(){
 </div>
 
 <div class="submit">
-	<?php echo $formEx->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnSubmit')) ?>
+	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnSubmit')) ?>
 </div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

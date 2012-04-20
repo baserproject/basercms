@@ -19,5 +19,5 @@
  */
 $title = 'テキスト';
 $description = 'テキストやHTMLの入力ができます。';
-echo $formEx->textarea($key.'.text',array('cols'=>38,'rows'=>14));
+echo $bcForm->textarea($key.'.text',array('cols'=>38,'rows'=>14));
 ?>

@@ -173,7 +173,7 @@ class PluginHookHelper extends AppHelper {
 		
 	}
 /**
- * FormEx::create
+ * BcForm::create
  * 過去バージョンとの互換性の為残す
  * 
  * @param string $out
@@ -187,7 +187,7 @@ class PluginHookHelper extends AppHelper {
 		
 	}
 /**
- * FormEx::end
+ * BcForm::end
  * 過去バージョンとの互換性の為残す
  * 
  * @param string $out

@@ -37,9 +37,9 @@
 	</ul>
 <?php if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)): ?>
 	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
-		<?php echo $formEx->create(array('action' => $this->action, 'url' => array($plugin))) ?>
-		<?php echo $formEx->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
-		<?php echo $formEx->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
+		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($plugin))) ?>
+		<?php echo $bcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
+		<?php echo $bcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
 <?php else: ?>
 	<p>
 		<?php if(!$plugin): ?>

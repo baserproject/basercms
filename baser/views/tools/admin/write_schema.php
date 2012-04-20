@@ -44,32 +44,32 @@
 <p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <!-- list -->
-<?php echo $formEx->create('Tool', array('action' => 'write_schema')) ?>
+<?php echo $bcForm->create('Tool', array('action' => 'write_schema')) ?>
 <table cellpadding="0" cellspacing="0" class="admin-row-table-01">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.baser', 'コアテーブル名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $bcForm->label('Tool.baser', 'コアテーブル名') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Tool.baser', array(
+			<?php echo $bcForm->input('Tool.baser', array(
 				'type'		=> 'select',
-				'options'	=> $formEx->getControlSource('Tool.baser'),
+				'options'	=> $bcForm->getControlSource('Tool.baser'),
 				'multiple'	=> true,
 				'style'		=> 'width:400px;height:250px')) ?>
-			<?php echo $formEx->error('Tool.baser') ?>
+			<?php echo $bcForm->error('Tool.baser') ?>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $formEx->label('Tool.plugin', 'プラグインテーブル名') ?></th>
+		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $bcForm->label('Tool.plugin', 'プラグインテーブル名') ?></th>
 		<td class="col-input">
-			<?php echo $formEx->input('Tool.plugin', array(
+			<?php echo $bcForm->input('Tool.plugin', array(
 				'type'		=> 'select',
-				'options'	=> $formEx->getControlSource('Tool.plugin'),
+				'options'	=> $bcForm->getControlSource('Tool.plugin'),
 				'multiple'	=> true,
 				'style'		=> 'width:400px;height:250px')) ?>
-			<?php echo $formEx->error('Tool.plugin') ?>
+			<?php echo $bcForm->error('Tool.plugin') ?>
 		</td>
 	</tr>
 </table>
 
-<div class="align-center"><?php echo $formEx->submit('生　成', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="align-center"><?php echo $bcForm->submit('生　成', array('div' => false, 'class' => 'btn-red button')) ?></div>
 
-<?php echo $formEx->end() ?>
+<?php echo $bcForm->end() ?>

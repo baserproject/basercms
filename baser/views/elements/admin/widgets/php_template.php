@@ -20,7 +20,7 @@
 $title = 'PHPテンプレート';
 $description = 'PHPコードが書かれたテンプレートの読み込みが行えます。';
 ?>
-<?php echo $formEx->label($key.'.template','PHPテンプレート名') ?> 
-<?php echo $formEx->text($key.'.template',array('size'=>14)) ?> <?php echo $this->ext ?>
+<?php echo $bcForm->label($key.'.template','PHPテンプレート名') ?> 
+<?php echo $bcForm->text($key.'.template',array('size'=>14)) ?> <?php echo $this->ext ?>
 <p style="text-align:left"><small>テンプレートを利用中のテーマ内の次のパスに保存してください。<br />
 /app/webroot/themed/{テーマ名}/elements/widgets/</small></p>

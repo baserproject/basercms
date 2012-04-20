@@ -196,19 +196,19 @@ $(function(){
 		</div>
 	</div>
 
-	<?php echo $formEx->create(null, array('action' => 'step2', 'id' => 'checkenv')) ?>
-	<?php echo $formEx->hidden('clicked') ?>
+	<?php echo $bcForm->create(null, array('action' => 'step2', 'id' => 'checkenv')) ?>
+	<?php echo $bcForm->hidden('clicked') ?>
 
 	<div class="submit">
-		<?php echo $formEx->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
+		<?php echo $bcForm->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
 		<?php if (!$blRequirementsMet): ?>
-			<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
+			<?php echo $bcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
 		<?php else: ?>
-			<?php echo $formEx->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
+			<?php echo $bcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
 		<?php endif ?>
 	</div>
 
-	<?php echo $formEx->end() ?>
+	<?php echo $bcForm->end() ?>
 
 </div>
 
