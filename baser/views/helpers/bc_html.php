@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcHtmlHelper に移行
  */
-trigger_error('HtmlExHelper は非推奨です。BcHtmlHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import('Helper', 'Html');
  *
  * @package baser.views.helpers
  */
-class HtmlExHelper extends HtmlHelper {
+class BcHtmlHelper extends HtmlHelper {
 /**
  * Included helpers.
  *

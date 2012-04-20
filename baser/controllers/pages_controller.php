@@ -635,7 +635,7 @@ class PagesController extends AppController {
 		if(Configure::read('BcRequest.agent')){
 			$this->layoutPath = Configure::read('BcAgent.'.Configure::read('BcRequest.agent').'.prefix');
 			if(Configure::read('BcRequest.agent') == 'mobile') {
-				$this->helpers[] = 'Mobile';
+				$this->helpers[] = 'BcMobile';
 			}
 		} else {
 			$this->layoutPath = '';

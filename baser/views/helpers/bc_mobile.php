@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcMobileHelper に移行
  */
-trigger_error('MobileHelper は非推奨です。BcMobileHelper を利用してください。', E_USER_WARNING);
 /**
  * モバイルヘルパー
  *
  * @package baser.views.helpers
  */
-class MobileHelper extends Helper {
+class BcMobileHelper extends Helper {
 /**
  * afterLayout
  *

@@ -17,9 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$publishTheme = $baser->HtmlEx->themeWeb;
+$publishTheme = $baser->BcHtml->themeWeb;
 if($this->name != 'Installations') {
-	$baser->HtmlEx->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
+	$baser->BcHtml->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
 	$baser->Javascript->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
 }
 $baser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
@@ -79,4 +79,4 @@ $(function(){
 	</div>
 </div>
 
-<?php $baser->HtmlEx->themeWeb = $publishTheme ?>
+<?php $baser->BcHtml->themeWeb = $publishTheme ?>
