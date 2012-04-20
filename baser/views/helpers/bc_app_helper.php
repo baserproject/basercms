@@ -207,7 +207,7 @@ class BcAppHelper extends Helper {
 		$args = func_get_args();
 		$args[0] =& $this;
 
-		return call_user_func_array(array(&$this->_view->loaded['pluginHook'], $hook), $args);
+		return call_user_func_array(array(&$this->_view->loaded['bcPluginHook'], $hook), $args);
 		
 	}
 /**

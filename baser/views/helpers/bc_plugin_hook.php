@@ -22,7 +22,7 @@
  * 
  * @package baser.views.helpers
  */
-class PluginHookHelper extends AppHelper {
+class BcPluginHookHelper extends AppHelper {
 /**
  * プラグインフックオブジェクト
  * 
