@@ -93,15 +93,7 @@ if(BC_INSTALLED) {
  * それを /xxx で呼び出す為のルーティング
  */
 	$adminPrefix = Configure::read('Routing.admin');
-	/* 1.5.9以前との互換性の為残しておく */
-	// .html付きのアクセスの場合、pagesコントローラーを呼び出す
-	if(strpos($parameter, '.html') !== false) {
-		if($agent) {
-			Router::connect("/{$agentAlias}/.*?\.html", array('prefix' => $agentPrefix,'controller' => 'pages', 'action' => 'display','pages/'.$parameter));
-		}else {
-			Router::connect('.*?\.html', array('controller' => 'pages', 'action' => 'display','pages/'.$parameter));
-		}
-	}elseif(!preg_match("/^{$adminPrefix}/", $parameter)){
+	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
@@ -125,6 +117,19 @@ if(BC_INSTALLED) {
 						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}
 					break;
+				} else {
+					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
+						$url = $matches[1];
+						if($Page->isPageUrl($url) && $Page->checkPublish($url)){
+							$_parameter = str_replace('.html', '', $_parameter);
+							if(!$agent){
+								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
+							}else{
+								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+							}
+							break;
+						}
+					}
 				}
 			}
 		}
