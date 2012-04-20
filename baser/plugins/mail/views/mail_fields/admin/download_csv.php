@@ -18,5 +18,5 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $csv->addModelDatas(Inflector::camelize($contentName.'_message'),$messages) ?>
-<?php $csv->download($contentName) ?>
+<?php $bcCsv->addModelDatas(Inflector::camelize($contentName.'_message'),$messages) ?>
+<?php $bcCsv->download($contentName) ?>

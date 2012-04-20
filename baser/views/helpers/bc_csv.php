@@ -17,9 +17,7 @@
  *  @modifiedby    $LastChangedBy$
  *  @lastmodified  $Date$
  *  @license		http://basercms.net/smartcake/license.html
- *  @deprecated		BcFormHelperに移行
  */
-trigger_error('CsvHelper は非推奨です。BcCsvHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ trigger_error('CsvHelper は非推奨です。BcCsvHelper を利用してくだ�
  *
  * @package baser.views.helpers
  */
-class CsvHelper extends AppHelper {
+class BcCsvHelper extends AppHelper {
 /**
  * CSVヘッド
  *
