@@ -32,16 +32,16 @@ if(isset($mapId)) $_mapId = $mapId;
 if(isset($address)) $_address = $address;
 if(isset($markerText)) $_markerText = $markerText;
 if(isset($longitude)) {
-	$googlemaps->longitude = $longitude;
+	$bcGooglemaps->longitude = $longitude;
 }
 if(isset($latitude)) {
-	$googlemaps->latitude = $latitude;
+	$bcGooglemaps->latitude = $latitude;
 }
-$googlemaps->mapId = $_mapId;
-$googlemaps->zoom = $_zoom;
-$googlemaps->title = $baser->siteConfig['name'];
-$googlemaps->markerText = $_markerText;
-if(!$googlemaps->load($_address,$_width,$_height)){
+$bcGooglemaps->mapId = $_mapId;
+$bcGooglemaps->zoom = $_zoom;
+$bcGooglemaps->title = $baser->siteConfig['name'];
+$bcGooglemaps->markerText = $_markerText;
+if(!$bcGooglemaps->load($_address,$_width,$_height)){
 	echo 'Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。';
 }
 ?>

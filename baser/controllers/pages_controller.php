@@ -37,7 +37,7 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','Googlemaps', 'XmlEx', 'TextEx', 'BcFreeze', 'BcCkeditor', 'Page');
+	var $helpers = array('Html','BcGooglemaps', 'XmlEx', 'TextEx', 'BcFreeze', 'BcCkeditor', 'Page');
 /**
  * コンポーネント
  *

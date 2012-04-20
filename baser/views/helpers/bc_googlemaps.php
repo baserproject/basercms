@@ -17,9 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcGooglemaps に移行
  */
-trigger_error('GooglemapsHelper は非推奨です。BcGooglemapsHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -29,7 +27,7 @@ trigger_error('GooglemapsHelper は非推奨です。BcGooglemapsHelper を利�
  * @package cake
  * @subpackage cake.app.views.helpers
  */
-class GooglemapsHelper extends AppHelper {
+class BcGooglemapsHelper extends AppHelper {
 /**
  * タイトル
  * 

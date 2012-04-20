@@ -16,7 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcFormHelperに移行
+ * @deprecated		BcFormHelper に移行
  */
 trigger_error('FormExHelper は非推奨です。BcFormHelper を利用してください。', E_USER_WARNING);
 /**
