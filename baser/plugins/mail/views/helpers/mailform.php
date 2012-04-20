@@ -20,14 +20,14 @@
 /**
  * Include files
  */
-App::import('Helper', 'Freeze');
+App::import('Helper', 'BcFreeze');
 /**
  * メールフォームヘルパー
  *
  * @package baser.plugins.mail.views.helpers
  *
  */
-class MailformHelper extends FreezeHelper {
+class MailformHelper extends BcFreezeHelper {
 /**
  * メールフィールドのデータよりコントロールを生成する
  *

@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcFreezeHelperに移行
  */
-trigger_error('FreezeHelper は非推奨です。BcFreezeHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -26,7 +24,7 @@ App::import('Helper', 'BcForm', 'Upload');
 /**
  * @package baser.view.helpers
  */
-class FreezeHelper extends BcFormHelper {
+class BcFreezeHelper extends BcFormHelper {
 /**
  * 凍結状態
  * 
