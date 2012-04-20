@@ -31,6 +31,6 @@
 	<td><?php echo $data['BlogContent']['id']; ?></td>
 	<td><?php $baser->link($data['BlogContent']['name'], array('action' => 'edit', $data['BlogContent']['id'])) ?></td>
 	<td><?php echo $data['BlogContent']['title'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogContent']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['BlogContent']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogContent']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['BlogContent']['modified']); ?></td>
 </tr>

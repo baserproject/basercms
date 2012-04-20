@@ -46,7 +46,7 @@ class FeedConfigsController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('BcText','TimeEx','BcForm','Feed.Feed');
+	var $helpers = array('BcText','BcTime','BcForm','Feed.Feed');
 /**
  * コンポーネント
  *

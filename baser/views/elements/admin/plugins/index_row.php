@@ -57,7 +57,7 @@ if(!$data['Plugin']['status']) {
 	<td><?php echo $data['Plugin']['description'] ?></td>
 	<td><?php $baser->link($data['Plugin']['author'], $data['Plugin']['url'], array('target' => '_blank')) ?></td>
 	<td style="width:10%;white-space: nowrap">
-		<?php echo $timeEx->format('Y-m-d',$data['Plugin']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['Plugin']['modified']) ?>
+		<?php echo $bcTime->format('Y-m-d',$data['Plugin']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['Plugin']['modified']) ?>
 	</td>
 </tr>

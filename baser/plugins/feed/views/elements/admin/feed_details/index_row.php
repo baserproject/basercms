@@ -38,6 +38,6 @@
 	</td>
 	<td><?php echo $data['category_filter'] ?></td>
 	<td><?php echo $bcText->listValue('FeedDetail.cache_time', $data['cache_time']) ?></td>
-	<td><?php echo $timeEx->format('Y-m-d', $data['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d', $data['modified']) ?></td>
+	<td><?php echo $bcTime->format('Y-m-d', $data['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d', $data['modified']) ?></td>
 </tr>

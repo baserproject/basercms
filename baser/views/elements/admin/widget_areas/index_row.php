@@ -31,6 +31,6 @@
 	<td><?php echo $data['WidgetArea']['id']; ?></td>
 	<td><?php $baser->link($data['WidgetArea']['name'],array('action'=>'edit', $data['WidgetArea']['id'])); ?></td>
 	<td><?php echo $data['WidgetArea']['count']; ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['WidgetArea']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['WidgetArea']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['WidgetArea']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['WidgetArea']['modified']); ?></td>
 </tr>

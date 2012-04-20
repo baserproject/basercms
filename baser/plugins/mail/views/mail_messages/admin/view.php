@@ -23,7 +23,7 @@
 <!-- view -->
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr><th>NO</th><td><?php echo $message['Message']['id'] ?></td></tr>
-	<tr><th>受信日時</th><td><?php echo $timeEx->format('Y/m/d H:i:s', $message['Message']['created']) ?></td></tr>
+	<tr><th>受信日時</th><td><?php echo $bcTime->format('Y/m/d H:i:s', $message['Message']['created']) ?></td></tr>
 <?php 
 $groupField = null;
 foreach($mailFields as $key => $mailField) {

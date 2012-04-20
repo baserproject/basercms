@@ -46,7 +46,7 @@ class MailController extends MailAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('BcFreeze','Mailform','Javascript','BcArray','TimeEx','Maildata','Mailfield','Mail');
+	var $helpers = array('BcFreeze','Mailform','Javascript','BcArray','BcTime','Maildata','Mailfield','Mail');
 /**
  * Array of components a controller will use
  *

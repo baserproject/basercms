@@ -50,7 +50,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 		<?php echo $bcText->booleanMark($data['Content']['status']); ?><br />
 	</td>
 	<td style="width:10%;white-space: nowrap">
-		<?php echo $timeEx->format('Y-m-d',$data['Content']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['Content']['modified']) ?>
+		<?php echo $bcTime->format('Y-m-d',$data['Content']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['Content']['modified']) ?>
 	</td>
 </tr>

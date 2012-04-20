@@ -43,6 +43,6 @@ if(isset($user['user_group_id'])) {
 <?php endif ?>
 	</td>
 	<td><?php echo $data['BlogCategory']['title'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogCategory']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['BlogCategory']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogCategory']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['BlogCategory']['modified']); ?></td>
 </tr>

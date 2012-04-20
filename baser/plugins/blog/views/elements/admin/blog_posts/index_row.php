@@ -63,6 +63,6 @@
 		<?php echo $comment ?>
 		<?php endif ?></td>
 	<?php endif ?>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
-	<?php echo $timeEx->format('Y-m-d',$data['BlogPost']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
+	<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['modified']); ?></td>
 </tr>

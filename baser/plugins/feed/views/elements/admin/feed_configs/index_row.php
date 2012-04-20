@@ -32,6 +32,6 @@
 	<td><?php echo $data['FeedConfig']['id']; ?></td>
 	<td><?php $baser->link($data['FeedConfig']['name'], array('action' => 'edit', $data['FeedConfig']['id'])) ?></td>
 	<td><?php echo $data['FeedConfig']['display_number'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['FeedConfig']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['FeedConfig']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['FeedConfig']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['FeedConfig']['modified']); ?></td>
 </tr>

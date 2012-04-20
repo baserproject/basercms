@@ -32,6 +32,6 @@
 	<td><?php echo $data['MailContent']['id'] ?></td>
 	<td><?php $baser->link($data['MailContent']['name'], array('action' => 'edit', $data['MailContent']['id'])) ?></td>
 	<td><?php echo $data['MailContent']['title'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['MailContent']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['MailContent']['modified']) ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['MailContent']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['MailContent']['modified']) ?></td>
 </tr>

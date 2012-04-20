@@ -38,7 +38,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcForm','Upload','BcText','TimeEx','Javascript');
+	var $helpers = array('Html','BcForm','Upload','BcText','BcTime','Javascript');
 /**
  * フォームを凍結させる
  * 
@@ -262,21 +262,21 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 			}
 			if (strlen($selected) > 4 || $selected === 'now') {
-				$wareki = $this->TimeEx->convertToWareki(date('Y-m-d', strtotime($selected)));
-				$w = $this->TimeEx->wareki($wareki);
-				$wyear = $this->TimeEx->wyear($wareki);
+				$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
+				$w = $this->BcTime->wareki($wareki);
+				$wyear = $this->BcTime->wyear($wareki);
 				$selected = $w.'-'.$wyear;
-				$freezeText = $this->TimeEx->nengo($w) . ' ' . $wyear;
+				$freezeText = $this->BcTime->nengo($w) . ' ' . $wyear;
 			} elseif ($selected === false) {
 				$selected = null;
 				$freezeText = '';
 			} elseif(strpos($selected, '-')===false) {
-				$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
+				$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
 				if($wareki) {
-					$w = $this->TimeEx->wareki($wareki);
-					$wyear = $this->TimeEx->wyear($wareki);
+					$w = $this->BcTime->wareki($wareki);
+					$wyear = $this->BcTime->wyear($wareki);
 					$selected = $w.'-'.$wyear;
-					$freezeText = $this->TimeEx->nengo($w) . ' ' . $wyear;
+					$freezeText = $this->BcTime->nengo($w) . ' ' . $wyear;
 				} else {
 					$selected = null;
 					$freezeText = '';

@@ -34,6 +34,6 @@
 	<td><?php echo $data['UserGroup']['id'] ?></td>
 	<td><?php $baser->link($data['UserGroup']['name'],array('action'=>'edit', $data['UserGroup']['id'])) ?></td>
 	<td><?php echo $data['UserGroup']['title'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['UserGroup']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['UserGroup']['modified']) ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['UserGroup']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['UserGroup']['modified']) ?></td>
 </tr>

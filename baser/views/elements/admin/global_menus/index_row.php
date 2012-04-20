@@ -42,6 +42,6 @@
 	<td><?php echo $data['GlobalMenu']['no']; ?></td>
 	<td><?php $baser->link($data['GlobalMenu']['name'], array('action' => 'edit', $data['GlobalMenu']['id'])); ?><br />
 		<?php $baser->link($data['GlobalMenu']['link'], $data['GlobalMenu']['link'], array('target'=>'_blank')); ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['GlobalMenu']['created']); ?><br />
-	<?php echo $timeEx->format('Y-m-d',$data['GlobalMenu']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['GlobalMenu']['created']); ?><br />
+	<?php echo $bcTime->format('Y-m-d',$data['GlobalMenu']['modified']); ?></td>
 </tr>

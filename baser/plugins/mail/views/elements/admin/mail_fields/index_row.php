@@ -49,7 +49,7 @@
 	<td style="width:10%"><?php echo $data['MailField']['group_field'] ?></td>
 	<td style="width:8%;text-align:center"><?php echo $bcText->booleanMark($data['MailField']['not_empty']) ?></td>
 	<td style="width:12%;white-space:nowrap">
-			<?php echo $timeEx->format('Y-m-d',$data['MailField']['created']) ?><br />
-			<?php echo $timeEx->format('Y-m-d',$data['MailField']['modified']) ?>
+			<?php echo $bcTime->format('Y-m-d',$data['MailField']['created']) ?><br />
+			<?php echo $bcTime->format('Y-m-d',$data['MailField']['modified']) ?>
 	</td>
 </tr>

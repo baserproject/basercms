@@ -59,6 +59,6 @@
 		</strong><br />
 		<?php echo $data['BlogComment']['message'] ?>
 	</td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogComment']['created']); ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogComment']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogComment']['created']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogComment']['modified']); ?></td>
 </tr>

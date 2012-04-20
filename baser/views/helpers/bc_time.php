@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcTimeHelper に移行
  */
-trigger_error('TimeExHelper は非推奨です。BcTimeHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import("Helper","time");
  *
  * @package baser.views.helpers
  */
-class TimeExHelper extends TimeHelper {
+class BcTimeHelper extends TimeHelper {
 /**
  * 年号リスト
  *

@@ -56,6 +56,6 @@
 	<?php endif ?>
 	</td>
 	<td><?php echo $data['PageCategory']['title']; ?></td>
-	<td style="white-space:nowrap"><?php echo $timeEx->format('Y-m-d', $data['PageCategory']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d', $data['PageCategory']['modified']); ?></td>
+	<td style="white-space:nowrap"><?php echo $bcTime->format('Y-m-d', $data['PageCategory']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d', $data['PageCategory']['modified']); ?></td>
 </tr>

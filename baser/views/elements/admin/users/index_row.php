@@ -28,6 +28,6 @@
 	<td><?php $baser->link($data['User']['name'],array('action'=>'edit', $data['User']['id'])) ?></td>
 	<td><?php echo $bcText->listValue('User.user_group_id',$data['User']['user_group_id']); ?><br />
 		<?php echo $data['User']['real_name_1']; ?>&nbsp;<?php echo $data['User']['real_name_2'] ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['User']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['User']['modified']) ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['User']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['User']['modified']) ?></td>
 </tr>

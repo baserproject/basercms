@@ -19,7 +19,7 @@
 /**
  * Include files
  */
-App::import("Helper",array("Text","TimeEx"));
+App::import("Helper",array("Text","BcTime"));
 /**
  * Textヘルパー拡張
  *
@@ -32,7 +32,7 @@ class BcTextHelper extends TextHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('TimeEx','BcForm');
+	var $helpers = array('BcTime','BcForm');
 /**
  * 文字数カット（日本語対応）
  * Cuts a string to the length of $length and replaces the last characters
@@ -351,7 +351,7 @@ class BcTextHelper extends TextHelper {
 		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
 			return;
 		list($w,$year) = split('-', $arrDate['year']);
-		$wareki = $this->TimeEx->nengo($w);
+		$wareki = $this->BcTime->nengo($w);
 		return $wareki." ".$year."年 ".$arrDate['month']."月 ".$arrDate['day'].'日';
 
 	}

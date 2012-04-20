@@ -76,7 +76,7 @@
 	<?php endif ?>
 	</td>
 	<td style="width:10%;white-space: nowrap">
-		<?php echo $timeEx->format('Y-m-d',$data['Page']['created']) ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['Page']['modified']) ?>
+		<?php echo $bcTime->format('Y-m-d',$data['Page']['created']) ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['Page']['modified']) ?>
 	</td>
 </tr>

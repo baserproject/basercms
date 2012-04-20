@@ -30,6 +30,6 @@
 	</td>
 	<td><?php echo $data['BlogTag']['id'] ?></td>
 	<td><?php $baser->link($data['BlogTag']['name'], array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
-	<td><?php echo $timeEx->format('Y-m-d',$data['BlogTag']['created']); ?><br />
-		<?php echo $timeEx->format('Y-m-d',$data['BlogTag']['modified']); ?></td>
+	<td><?php echo $bcTime->format('Y-m-d',$data['BlogTag']['created']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['BlogTag']['modified']); ?></td>
 </tr>

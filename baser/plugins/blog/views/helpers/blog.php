@@ -35,7 +35,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','TimeEx','Baser');
+	var $helpers = array('Html','BcTime','Baser');
 /**
  * ブログカテゴリモデル
  * 
@@ -374,7 +374,7 @@ class BlogHelper extends AppHelper {
  */
 	function getPostDate($post,$format = 'Y/m/d') {
 		
-		return $this->TimeEx->format($format,$post['BlogPost']['posts_date']);
+		return $this->BcTime->format($format,$post['BlogPost']['posts_date']);
 		
 	}
 /**
