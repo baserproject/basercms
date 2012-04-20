@@ -1091,7 +1091,7 @@ DOC_END;
 		$_options = array('type'=>'textarea');
 		$options = am($_options,$options);
 		$method = $options['type'];
-		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
+		return $this->BcCkeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
 
 	}
 /**
