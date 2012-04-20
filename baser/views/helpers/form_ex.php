@@ -28,7 +28,7 @@ App::import('Helper',array('Form','TimeEx','TextEx','Ckeditor'));
  *
  * @package baser.views.helpers
  */
-class BcFormHelper extends FormHelper {
+class FormExHelper extends FormHelper {
 /**
  * ヘルパー
  *
