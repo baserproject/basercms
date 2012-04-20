@@ -623,7 +623,8 @@
  */
 	function addSessionId($url, $force = false) {
 		
-		if(Configure::read('BcRequest.agent') == 'mobile' && (ini_get('session.use_trans_sid') || $force)) {
+		// use_trans_sid が有効になっている場合、２重で付加されてしまう
+		if(Configure::read('BcRequest.agent') == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
 			if(is_array($url)) {
 				$url["?"][session_name()] = session_id();
 			} else {

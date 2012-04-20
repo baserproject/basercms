@@ -99,7 +99,8 @@
 				'Vodafone',
 				'J-PHONE',
 				'UP.Browser'
-			)
+			),
+			'sessionId'	=> true
 		),
 		'smartphone'	=> array(
 			'alias'		=> 's',
