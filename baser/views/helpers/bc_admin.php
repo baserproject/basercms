@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * BaserAdminヘルパー
+ * BcAdminヘルパー
  *
  * PHP versions 5
  *
@@ -22,12 +22,12 @@
  * Include files
  */
 /**
- * BaserAdminヘルパー
+ * BcAdminヘルパー
  *
  * @package cake
  * @subpackage baser.app.views.helpers
  */
-class BaserAdminHelper extends AppHelper {
+class BcAdminHelper extends AppHelper {
 /**
  * View
  * 
