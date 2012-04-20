@@ -32,7 +32,6 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 <?php if($baser->isAdminUser()): ?>
 		<?php echo $formEx->checkbox('ListTool.batch_targets.'.$data['Content']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id'])) ?>
 <?php endif ?>		
-		<?php $baser->img('ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader'.$data['Content']['id'], 'style'=>"vertical-align:middle;display:none")) ?>
 		<?php echo $formEx->input('Content.priority'.'_'.$data['Content']['id'], array(
 				'type'		=> 'select', 
 				'options'	=> $priorities,
@@ -40,6 +39,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 				'class'		=> 'priority',
 				'value'		=> $data['Content']['priority'])) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Content']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $baser->img('ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader'.$data['Content']['id'], 'style'=>"vertical-align:middle;display:none")) ?>
 	</td>
 	<td><?php echo $data['Content']['id'] ?></td>
 	<td style="width:15%"><?php echo $data['Content']['type'] ?><br /><?php echo $data['Content']['category'] ?></td>
