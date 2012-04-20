@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcUploadHelper に移行
  */
-trigger_error('UploadHelper は非推奨です。BcUploadHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import('Helper', 'Form');
  *
  * @package baser.views.helpers
  */
-class UploadHelper extends FormHelper {
+class BcUploadHelper extends FormHelper {
 /**
  * ファイルインプットボックス出力
  * 画像の場合は画像タグ、その他の場合はファイルへのリンク

@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper', 'BcForm', 'Upload');
+App::import('Helper', 'BcForm', 'BcUpload');
 /**
  * @package baser.view.helpers
  */
@@ -38,7 +38,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcForm','Upload','BcText','BcTime','Javascript');
+	var $helpers = array('Html','BcForm','BcUpload','BcText','BcTime','Javascript');
 /**
  * フォームを凍結させる
  * 
@@ -366,20 +366,20 @@ class BcFreezeHelper extends BcFormHelper {
 			$value = $this->value($fieldName);
 			if(is_array($value) && isset($value['session_key'])) {
 				$value = $value['session_key'];
-				return parent::hidden($fieldName."_tmp",array('value'=>$value)).$this->Upload->fileLink($fieldName,$options);
+				return parent::hidden($fieldName."_tmp",array('value'=>$value)).$this->BcUpload->fileLink($fieldName,$options);
 			}else {
 				if(!is_array($value)) {
 					$delValue = $this->value($fieldName.'_delete');
 					if($delValue) {
-						return parent::hidden($fieldName,array('value'=>$value)).parent::hidden($fieldName.'_delete',array('value'=>true)).$this->Upload->fileLink($fieldName,$options).'<br />削除する';
+						return parent::hidden($fieldName,array('value'=>$value)).parent::hidden($fieldName.'_delete',array('value'=>true)).$this->BcUpload->fileLink($fieldName,$options).'<br />削除する';
 					}else {
-						return parent::hidden($fieldName,array('value'=>$value)).$this->Upload->fileLink($fieldName,$options);
+						return parent::hidden($fieldName,array('value'=>$value)).$this->BcUpload->fileLink($fieldName,$options);
 					}
 				}
 			}
 
 		}else {
-			return $this->Upload->file($fieldName,$options);
+			return $this->BcUpload->file($fieldName,$options);
 		}
 		
 	}
