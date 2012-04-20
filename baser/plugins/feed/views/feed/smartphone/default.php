@@ -25,9 +25,9 @@
 <?php if(!empty($items)): ?>
 	<?php foreach($items as $key => $item): ?>
 		<?php $class = array('clearfix', 'post-'.($key+1)) ?>
-		<?php if($array->first($items, $key)): ?>
+		<?php if($bcArray->first($items, $key)): ?>
 			<?php $class[] = 'first' ?>
-		<?php elseif($array->last($items, $key)): ?>
+		<?php elseif($bcArray->last($items, $key)): ?>
 			<?php $class[] = 'last' ?>
 		<?php endif ?>
 <li class="<?php echo implode(' ', $class) ?>">

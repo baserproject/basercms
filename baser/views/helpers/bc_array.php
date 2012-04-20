@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcArrayHelperに移行
  */
-trigger_error('ArrayHelper は非推奨です。BcArrayHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import('Helper', 'Form');
  *
  * @package baser.views.helpers
  */
-class ArrayHelper extends AppHelper {
+class BcArrayHelper extends AppHelper {
 /**
  * 配列の最初の要素かどうか調べる
  *

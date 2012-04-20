@@ -25,12 +25,12 @@ if ($this->viewPath == 'home'){
 	$crumbs = $baser->getCrumbs();
 	if (!empty($crumbs)){
 		foreach($crumbs as $key => $crumb){
-			if($array->last($crumbs, $key+1)) {
+			if($bcArray->last($crumbs, $key+1)) {
 				if($crumbs[$key+1]['name'] == $crumb['name']) {
 					continue;
 				}
 			}
-			if($array->last($crumbs, $key)) {
+			if($bcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']){
 					$baser->addCrumb('<strong>'.$crumb['name'].'</strong>');
 				}elseif($this->name == 'CakeError'){

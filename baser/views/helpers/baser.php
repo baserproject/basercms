@@ -48,7 +48,7 @@ class BaserHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('HtmlEx','Javascript','Session','XmlEx', 'Array');
+	var $helpers = array('HtmlEx','Javascript','Session','XmlEx', 'BcArray');
 /**
  * コンテンツ
  * 
@@ -297,7 +297,7 @@ class BaserHelper extends AppHelper {
 		if($crumbs){
 			$crumbs = array_reverse($crumbs);
 			foreach ($crumbs as $key => $crumb) {
-				if($this->Array->first($crumbs, $key) && isset($crumbs[$key+1])) {
+				if($this->BcArray->first($crumbs, $key) && isset($crumbs[$key+1])) {
 					if($crumbs[$key+1]['name'] == $crumb['name']) {
 						continue;
 					}

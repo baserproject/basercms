@@ -73,10 +73,10 @@ if (!empty($mailFields)) {
 			}
 
 			/* 説明欄 */
-			if (($array->last($mailFields, $key)) ||
+			if (($bcArray->last($mailFields, $key)) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $array->first($mailFields,$key))) {
+					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $bcArray->first($mailFields,$key))) {
 
 				if ($field['group_valid']) {
 					if ($mailform->error("Message." . $field['group_field'] . "_format", "check")) {

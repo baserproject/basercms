@@ -50,10 +50,10 @@ foreach($mailFields as $key => $mailField) {
 			echo $field['after_attachment'];
 		}
 		echo '&nbsp;';
-		if (($array->last($mailFields, $key)) ||
+		if (($bcArray->last($mailFields, $key)) ||
 				($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field']) ||
 				(!$field['group_field'] && !$mailFields[$nextKey]['MailField']['group_field']) ||
-				($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field'] && $array->first($mailFields,$key))) {
+				($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field'] && $bcArray->first($mailFields,$key))) {
 			echo '</td></tr>';
 		}
 		$groupField=$field['group_field'];
