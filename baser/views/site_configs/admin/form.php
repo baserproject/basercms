@@ -134,7 +134,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.login_credit', 'ログインページのクレジット表示') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('SiteConfig.login_credit', array('type' => 'radio', 'options' => $textEx->booleanDoList('利用'))) ?>
+				<?php echo $bcForm->input('SiteConfig.login_credit', array('type' => 'radio', 'options' => $bcText->booleanDoList('利用'))) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">ログインページに表示されているクレジット表示を利用するかどうか設定します。</div>
 				<?php echo $bcForm->error('SiteConfig.login_credit') ?>
@@ -154,7 +154,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $textEx->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
+				<?php echo $bcForm->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $bcText->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('SiteConfig.admin_ssl') ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
@@ -247,13 +247,13 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+				<?php echo $bcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $textEx->booleanDoList('対応'))) ?>
+				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
 <?php if($baser->siteConfig['category_permission']): ?>

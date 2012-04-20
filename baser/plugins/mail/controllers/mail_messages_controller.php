@@ -43,7 +43,7 @@ class MailMessagesController extends MailAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Mail.maildata', 'Mail.mailfield', 'TextEx', 'BcArray');
+	var $helpers = array('Mail.maildata', 'Mail.mailfield', 'BcText', 'BcArray');
 /**
  * メールコンテンツデータ
  *

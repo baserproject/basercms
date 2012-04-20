@@ -39,7 +39,7 @@ if(isset($user['user_group_id'])) {
 	<td><?php $baser->link($data['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id'])) ?>
 <?php if($baser->siteConfig['category_permission']): ?>
 		<br />
-		<?php echo $textEx->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
+		<?php echo $bcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
 <?php endif ?>
 	</td>
 	<td><?php echo $data['BlogCategory']['title'] ?></td>

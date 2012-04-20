@@ -42,7 +42,7 @@ $(function(){
 <?php echo $bcForm->label($key.'.limit','表示数') ?>&nbsp;
 <?php echo $bcForm->text($key.'.limit', array('size' => 6)) ?>&nbsp;件<br />
 <?php echo $bcForm->label($key.'.view_count', '記事数表示') ?>&nbsp;
-<?php echo $bcForm->radio($key.'.view_count', $textEx->booleanDoList(''), array('legend' => false, 'default' => 0)) ?><br />
+<?php echo $bcForm->radio($key.'.view_count', $bcText->booleanDoList(''), array('legend' => false, 'default' => 0)) ?><br />
 <?php echo $bcForm->checkbox($key.'.by_year', array('label' => '年別に表示する')) ?><br />
 <p id="Span<?php echo $key ?>Depth"><?php echo $bcForm->label($key.'.depth', '深さ') ?>&nbsp;
 <?php echo $bcForm->text($key.'.depth', array('size' => 6, 'default' => 1)) ?>&nbsp;階層</p>

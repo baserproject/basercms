@@ -31,7 +31,7 @@ $users = $bcForm->getControlSource("BlogPost.user_id");
 	<?php if($blogContent['BlogContent']['tag_use'] && $blogTags): ?>
 	<span><?php echo $bcForm->label('BlogPost.blog_tag_id', 'タグ') ?> <?php echo $bcForm->input('BlogPost.blog_tag_id', array('type' => 'select', 'options' => $blogTags, 'escape' => false, 'empty' => '指定なし')) ?></span>　
 	<?php endif ?>
-	<span><?php echo $bcForm->label('BlogPost.status', '公開設定') ?> <?php echo $bcForm->input('BlogPost.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('BlogPost.status', '公開設定') ?> <?php echo $bcForm->input('BlogPost.status', array('type' => 'select', 'options' => $bcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
 	<span><?php echo $bcForm->label('BlogPost.user_id', '作成者') ?> <?php echo $bcForm->input('BlogPost.user_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 </p>
 <div class="button">

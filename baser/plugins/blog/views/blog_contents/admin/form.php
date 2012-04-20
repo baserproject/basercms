@@ -146,7 +146,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogContent.comment_use', array(
 					'type'		=> 'radio',
-					'options'	=> $textEx->booleanDoList('利用'),
+					'options'	=> $bcText->booleanDoList('利用'),
 					'legend'	=> false,
 					'separator'	=> '&nbsp;&nbsp;')) ?>
 				<?php echo $bcForm->error('BlogContent.comment_use') ?>
@@ -157,7 +157,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogContent.comment_approve', array(
 						'type'		=> 'radio',
-						'options'	=> $textEx->booleanDoList('利用'),
+						'options'	=> $bcText->booleanDoList('利用'),
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCommentApprove', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
@@ -170,7 +170,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogContent.auth_captcha', array(
 						'type'		=> 'radio',
-						'options'	=> $textEx->booleanDoList('利用'),
+						'options'	=> $bcText->booleanDoList('利用'),
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
@@ -188,7 +188,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogContent.tag_use', array(
 					'type'		=> 'radio',
-					'options'	=> $textEx->booleanDoList('利用'),
+					'options'	=> $bcText->booleanDoList('利用'),
 					'legend'	=> false,
 					'separator'	=> '&nbsp;&nbsp;')) ?>
 				<?php echo $bcForm->error('BlogContent.tag_use') ?>

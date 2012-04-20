@@ -68,7 +68,7 @@
 		<?php echo $data['Page']['title']; ?>
 	</td>
 	<td style="width:5%;" class="align-center status">
-		<?php echo $textEx->booleanMark($data['Page']['status']); ?><br />
+		<?php echo $bcText->booleanMark($data['Page']['status']); ?><br />
 	</td>
 	<td style="width:15%">
 	<?php if(isset($users[$data['Page']['author_id']])) : ?>

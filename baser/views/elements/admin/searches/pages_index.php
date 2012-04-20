@@ -81,7 +81,7 @@ function pageTypeChengeHandler() {
 
 <p>
 	<span><?php echo $bcForm->label('Page.name', 'ページ名') ?> <?php echo $bcForm->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>
-	<span><?php echo $bcForm->label('Page.status', '公開状態') ?> <?php echo $bcForm->input('Page.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('Page.status', '公開状態') ?> <?php echo $bcForm->input('Page.status', array('type' => 'select', 'options' => $bcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
 	<span><?php echo $bcForm->label('Page.author_id', '作成者') ?> <?php echo $bcForm->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 
 	<span style="white-space: nowrap">

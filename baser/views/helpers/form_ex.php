@@ -22,7 +22,7 @@ trigger_error('FormExHelper は非推奨です。BcFormHelper を利用してく
 /**
  * Include files
  */
-App::import('Helper',array('Form','TimeEx','TextEx', 'BcCkeditor'));
+App::import('Helper',array('Form','TimeEx','BcText', 'BcCkeditor'));
 /**
  * FormHelper 拡張クラス
  *
@@ -35,7 +35,7 @@ class FormExHelper extends FormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','TimeEx','TextEx','Javascript','BcCkeditor');
+	var $helpers = array('Html','TimeEx','BcText','Javascript','BcCkeditor');
 /**
  * sizeCounter用の関数読み込み可否
  * 
@@ -54,7 +54,7 @@ class FormExHelper extends FormHelper {
  */
 	function prefTag($fieldName, $selected = null, $attributes = array()) {
 
-		$pref = $this->TextEx->prefList();
+		$pref = $this->BcText->prefList();
 		return $this->select($fieldName, $pref, $selected, $attributes, false);
 
 	}

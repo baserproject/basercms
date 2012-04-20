@@ -63,7 +63,7 @@
 			<td class="col-input">
 				<?php echo $bcForm->input('GlobalMenu.status', array(
 						'type'		=> 'radio',
-						'options'	=> $textEx->booleanDoList("利用"),
+						'options'	=> $bcText->booleanDoList("利用"),
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
 				<?php echo $bcForm->error('GlobalMenu.status') ?>

@@ -45,9 +45,9 @@
 		<?php $baser->link($data['MailField']['field_name'], array('action' => 'edit', $mailContent['MailContent']['id'], $data['MailField']['id'])) ?><br />
 		<?php echo $data['MailField']['name'] ?>
 	</td>
-	<td style="width:15%"><?php echo $textEx->listValue('MailField.type',$data['MailField']['type']) ?></td>
+	<td style="width:15%"><?php echo $bcText->listValue('MailField.type',$data['MailField']['type']) ?></td>
 	<td style="width:10%"><?php echo $data['MailField']['group_field'] ?></td>
-	<td style="width:8%;text-align:center"><?php echo $textEx->booleanMark($data['MailField']['not_empty']) ?></td>
+	<td style="width:8%;text-align:center"><?php echo $bcText->booleanMark($data['MailField']['not_empty']) ?></td>
 	<td style="width:12%;white-space:nowrap">
 			<?php echo $timeEx->format('Y-m-d',$data['MailField']['created']) ?><br />
 			<?php echo $timeEx->format('Y-m-d',$data['MailField']['modified']) ?>

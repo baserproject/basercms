@@ -30,7 +30,7 @@ $types = unserialize($baser->siteConfig['content_types']);
 	<span><?php echo $bcForm->label('Content.category', 'カテゴリ') ?> <?php echo $bcForm->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
 	<span><?php echo $bcForm->label('Content.keyword', 'キーワード') ?> <?php echo $bcForm->input('Content.keyword', array('type' => 'text', 'size' => '30')) ?></span>
 	<span><?php echo $bcForm->label('Content.status', '公開状態') ?> 
-	<?php echo $bcForm->input('Content.status', array('type' => 'select', 'options' => $textEx->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<?php echo $bcForm->input('Content.status', array('type' => 'select', 'options' => $bcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
 	<span><?php echo $bcForm->label('Content.priority', '優先度') ?> 
 	<?php echo $bcForm->input('Content.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
 </p>

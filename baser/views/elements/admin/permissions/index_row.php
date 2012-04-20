@@ -47,7 +47,7 @@
 		<?php $baser->link($data['Permission']['name'], array('action' => 'edit', $data['Permission']['id'])); ?><br />
 		<?php echo $data['Permission']['url']; ?>
 	</td>
-	<td style="width:10%" class="align-center"><?php echo $textEx->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>
+	<td style="width:10%" class="align-center"><?php echo $bcText->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>
 	<td style="width:10%">
 		<?php echo $timeEx->format('Y-m-d', $data['Permission']['created']); ?><br />
 		<?php echo $timeEx->format('Y-m-d', $data['Permission']['modified']); ?>

@@ -174,7 +174,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('MailContent.auth_capthca', 'イメージ認証') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('MailContent.auth_captcha', array('type' => 'radio', 'options' => $textEx->booleanDoList('利用'), 'legend' => false)) ?>
+				<?php echo $bcForm->input('MailContent.auth_captcha', array('type' => 'radio', 'options' => $bcText->booleanDoList('利用'), 'legend' => false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
@@ -188,7 +188,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('MailContent.ssl_on', 'SSL通信') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('MailContent.ssl_on', array('type' => 'radio', 'options' => $textEx->booleanDoList('利用'), 'legend'=>false)) ?>
+				<?php echo $bcForm->input('MailContent.ssl_on', array('type' => 'radio', 'options' => $bcText->booleanDoList('利用'), 'legend'=>false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.ssl_on', 
 						'SSL通信を利用するには、'.$baser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、

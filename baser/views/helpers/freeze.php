@@ -40,7 +40,7 @@ class FreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcForm','Upload','TextEx','TimeEx','Javascript');
+	var $helpers = array('Html','BcForm','Upload','BcText','TimeEx','Javascript');
 /**
  * フォームを凍結させる
  * 
@@ -216,7 +216,7 @@ class FreezeHelper extends BcFormHelper {
 				$selects[] = $this->freezeControll($fieldName.".year", array(),$selectYearAttr)."年";
 			}
 
-			// TODO 値の出力はTextExにまとめた方がよいかも
+			// TODO 値の出力はBcTextにまとめた方がよいかも
 			// メール本文への出力も同じ処理を利用する。（改行の処理などはどうするか。。）
 			$selectMonthAttr['value'] = $month;
 			$selectDayAttr['value'] = $day;

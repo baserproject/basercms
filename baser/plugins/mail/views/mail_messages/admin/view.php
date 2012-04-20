@@ -40,7 +40,7 @@ foreach($mailFields as $key => $mailField) {
 			echo $field['before_attachment'];
 		}
 		if (!$field['no_send']) {
-			echo $textEx->autoLink(nl2br($maildata->control(
+			echo $bcText->autoLink(nl2br($maildata->control(
 				$mailField['MailField']['type'],
 				$message['Message'][$mailField['MailField']['field_name']],
 				$mailfield->getOptions($mailField['MailField'])

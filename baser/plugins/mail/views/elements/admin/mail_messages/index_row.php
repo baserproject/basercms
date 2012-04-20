@@ -42,6 +42,6 @@
 				) ?>
 			<?php endif ?>
 		<?php endforeach ?>
-		<?php echo $textEx->mbTruncate(implode(',',$inData),170) ?>
+		<?php echo $bcText->mbTruncate(implode(',',$inData),170) ?>
 	</td>
 </tr>

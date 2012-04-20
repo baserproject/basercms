@@ -54,7 +54,7 @@
 		<?php echo $data['User']['real_name_1']." ".$data['User']['real_name_2']; ?>
 		<?php endif ?>
 	</td>
-	<td style="text-align:center"><?php echo $textEx->booleanMark($data['BlogPost']['status']); ?></td>
+	<td style="text-align:center"><?php echo $bcText->booleanMark($data['BlogPost']['status']); ?></td>
 	<?php if($data['BlogContent']['comment_use']): ?>
 	<td><?php $comment = count($data['BlogComment']) ?>
 		<?php if($comment): ?>

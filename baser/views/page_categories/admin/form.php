@@ -161,7 +161,7 @@ function pageTypeChengeHandler() {
 			<td class="col-input">
 				<?php echo $bcForm->input('PageCategory.contents_navi', array(
 						'type'		=> 'radio',
-						'options'	=> $textEx->booleanDolist('利用'),
+						'options'	=> $bcText->booleanDolist('利用'),
 						'legend'	=> false,
 						'separator'		=> '&nbsp;&nbsp;')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>

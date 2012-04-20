@@ -85,7 +85,7 @@
 			<td class="col-input">
 				<?php echo $bcForm->input('Permission.status', array(
 					'type'		=> 'radio',
-					'options'	=> $textEx->booleanStatusList(),
+					'options'	=> $bcText->booleanStatusList(),
 					'legend'	=> false,
 					'separator'	=> '　')) ?>
 				<?php echo $bcForm->error('Permission.status') ?>

@@ -26,7 +26,7 @@
  * @package baser.plugins.feed.views.helpers
  *
  */
-class FeedHelper extends TextExHelper {
+class FeedHelper extends BcTextHelper {
 /**
  * ヘルパー
  * 

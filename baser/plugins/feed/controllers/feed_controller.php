@@ -52,7 +52,7 @@ class FeedController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Cache','TextEx','Feed.Feed', 'BcArray');
+	var $helpers = array('Cache','BcText','Feed.Feed', 'BcArray');
 /**
  * beforeFilter
  *

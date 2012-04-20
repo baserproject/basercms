@@ -20,14 +20,14 @@
 /**
  * Include files
  */
-App::import('Helper', 'TextEx');
+App::import('Helper', 'BcText');
 /**
  * メールデータヘルパー
  *
  * @package baser.plugins.mail.views.helpers
  *
  */
-class MaildataHelper extends TextExHelper {
+class MaildataHelper extends BcTextHelper {
 
 	var $helpers = array('TimeEx');
 /**

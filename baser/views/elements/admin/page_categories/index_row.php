@@ -52,7 +52,7 @@
 	<?php endif ?>
 	<?php if($baser->siteConfig['category_permission']): ?>
 	<br />
-	<?php echo $textEx->arrayValue($data['PageCategory']['owner_id'], $owners) ?>
+	<?php echo $bcText->arrayValue($data['PageCategory']['owner_id'], $owners) ?>
 	<?php endif ?>
 	</td>
 	<td><?php echo $data['PageCategory']['title']; ?></td>

@@ -44,10 +44,10 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 	<td><?php echo $data['Content']['id'] ?></td>
 	<td style="width:15%"><?php echo $data['Content']['type'] ?><br /><?php echo $data['Content']['category'] ?></td>
 	<td style="width:15%">
-		<?php echo $baser->link($textEx->noValue($data['Content']['title'], '設定なし'), $data['Content']['url'], array('target' => '_blank')) ?></td>
-	<td><?php echo $textEx->mbTruncate($data['Content']['detail'], 50) ?></td>
+		<?php echo $baser->link($bcText->noValue($data['Content']['title'], '設定なし'), $data['Content']['url'], array('target' => '_blank')) ?></td>
+	<td><?php echo $bcText->mbTruncate($data['Content']['detail'], 50) ?></td>
 	<td style="width:10%;text-align:center">
-		<?php echo $textEx->booleanMark($data['Content']['status']); ?><br />
+		<?php echo $bcText->booleanMark($data['Content']['status']); ?><br />
 	</td>
 	<td style="width:10%;white-space: nowrap">
 		<?php echo $timeEx->format('Y-m-d',$data['Content']['created']) ?><br />

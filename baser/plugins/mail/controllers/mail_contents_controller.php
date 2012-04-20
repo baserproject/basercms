@@ -46,7 +46,7 @@ class MailContentsController extends MailAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','TimeEx','BcForm','TextEx', 'Mail.Mail');
+	var $helpers = array('Html','TimeEx','BcForm','BcText', 'Mail.Mail');
 /**
  * コンポーネント
  *

@@ -16,9 +16,6 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcTextHelper に移行
- */
-trigger_error('TextExHelper は非推奨です。BcTextHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +25,7 @@ App::import("Helper",array("Text","TimeEx"));
  *
  * @package baser.views.helpers
  */
-class TextExHelper extends TextHelper {
+class BcTextHelper extends TextHelper {
 /**
  * ヘルパー
  *

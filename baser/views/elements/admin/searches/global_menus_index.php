@@ -23,7 +23,7 @@
 	<?php echo $bcForm->label('GlobalMenu.status', '利用状態') ?> 
 	<?php echo $bcForm->input('GlobalMenu.status', array(
 			'type'		=> 'select',
-			'options'	=> $textEx->booleanMarkList(),'empty' => '指定なし')) ?>　
+			'options'	=> $bcText->booleanMarkList(),'empty' => '指定なし')) ?>　
 </p>
 <div class="button">
 	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 

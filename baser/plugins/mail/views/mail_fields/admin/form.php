@@ -324,7 +324,7 @@ jQuery(function($) {
 			<td class="col-input">
 				<?php echo $bcForm->input('MailField.use_field', array(
 						'type'		=> 'radio',
-						'options'	=> $textEx->booleanStatusList(),
+						'options'	=> $bcText->booleanStatusList(),
 						'legend'	=> false,
 						'separator'	=>	'&nbsp;&nbsp;')) ?>
 				<?php echo $bcForm->error('MailField.use_field') ?>
