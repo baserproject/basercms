@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy: ryuring $
  * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcAppHelperに移行
  */
-trigger_error('BaserAppHelper は非推奨です。BcAppHelper を利用してください。', E_USER_WARNING);
 /**
  * Helper 拡張クラス
  *
  * @package			baser.view.helpers
  */
-class BaserAppHelper extends Helper {
+class BcAppHelper extends Helper {
 /**
  * view
  * キャッシュ用

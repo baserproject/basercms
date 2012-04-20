@@ -25,12 +25,12 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppHelper', array('search' => BASER_HELPERS));
+App::import('Core', 'BcAppHelper', array('search' => BASER_HELPERS));
 /**
  * Helper 拡張クラス
  *
  * @package baser.view.helpers
  */
-class AppHelper extends BaserAppHelper {
+class AppHelper extends BcAppHelper {
 }
 ?>
