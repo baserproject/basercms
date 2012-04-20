@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageCategory = $page->getCategory();
+$pageCategory = $bcPage->getCategory();
 ?>
 <?php if($pageCategory): ?>
 <div id="local-navi">

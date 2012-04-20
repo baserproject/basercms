@@ -20,7 +20,7 @@
 ?>
 
 
-<?php if (!$page->allowPublish($data)): ?>
+<?php if (!$bcPage->allowPublish($data)): ?>
 	<?php $class=' class="unpublish disablerow sortable"'; ?>
 <?php else: ?>
 	<?php $class=' class="publish sortable"'; ?>

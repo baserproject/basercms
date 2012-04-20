@@ -17,10 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($page)) {
+if(!isset($bcPage)) {
 	return;
 }
-$pageCategory = $page->getCategory();
+$pageCategory = $bcPage->getCategory();
 ?>
 <?php if($pageCategory): ?>
 <div class="widget widget-local-navi widget-local-navi-<?php echo $id ?>">

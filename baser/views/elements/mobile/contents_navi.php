@@ -17,13 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($page) || !$page->contensNaviAvailable()) {
+if(!isset($bcPage) || !$bcPage->contensNaviAvailable()) {
 	return;
 }
 ?>
 
 <div id="ContentsNavi">
-	<?php $page->prevLink() ?>
+	<?php $bcPage->prevLink() ?>
 	&nbsp;｜&nbsp;
-	<?php $page->nextLink() ?>
+	<?php $bcPage->nextLink() ?>
 </div>

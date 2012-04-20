@@ -16,15 +16,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcPageHelper に移行
  */
-trigger_error('PageExHelper は非推奨です。BcPageHelper を利用してください。', E_USER_WARNING);
 /**
  * ページヘルパー
  *
- * @package baser.views.helpers
+ * @packa	ge baser.views.helpers
  */
-class PageHelper extends Helper {
+class BcPageHelper extends Helper {
 /**
  * ページモデル
  * 
