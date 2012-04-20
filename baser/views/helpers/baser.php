@@ -48,7 +48,7 @@ class BaserHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('BcHtml','Javascript','Session','XmlEx', 'BcArray');
+	var $helpers = array('BcHtml','Javascript','Session','BcXml', 'BcArray');
 /**
  * コンテンツ
  * 
@@ -681,7 +681,7 @@ class BaserHelper extends AppHelper {
 		if(empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
 		}
-		echo $this->XmlEx->header($attrib)."\n";
+		echo $this->BcXml->header($attrib)."\n";
 		
 	}
 /**

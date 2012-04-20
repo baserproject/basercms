@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcXmlHelper に移行
  */
-trigger_error('XmlExHelper は非推奨です。BcXmlHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import("Helper","Xml");
  *
  * @package baser.views.helpers
  */
-class XmlExHelper extends XmlHelper {
+class BcXmlHelper extends XmlHelper {
 /**
  * XML宣言を生成
  * IE6以外の場合のみ生成する
