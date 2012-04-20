@@ -16,10 +16,8 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcCkeditorHelperに移行
  */
-trigger_error('CkeditorHelper は非推奨です。BcCkeditorHelper を利用してください。', E_USER_WARNING);
-class CkeditorHelper extends AppHelper {
+class BcCkeditorHelper extends AppHelper {
 /**
  * ヘルパー
  * @var array

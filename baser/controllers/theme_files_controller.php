@@ -37,7 +37,7 @@ class ThemeFilesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('BcForm','Ckeditor');
+	var $helpers = array('BcForm','BcCkeditor');
 /**
  * テーマファイルタイプ
  *

@@ -46,7 +46,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('TextEx','TimeEx','BcForm','Ckeditor', 'Blog.Blog');
+	var $helpers = array('TextEx','TimeEx','BcForm', 'BcCkeditor', 'Blog.Blog');
 /**
  * コンポーネント
  *
