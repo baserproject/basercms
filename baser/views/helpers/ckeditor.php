@@ -274,7 +274,7 @@ class CkeditorHelper extends AppHelper {
 		}
 		
 		$this->Javascript->codeBlock("var editor_" . $field . ";", array("inline" => false));
-		$jscode = "window.onload = function(){";
+		$jscode = "$(window).load(function(){";
 		if(!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
 			$this->inited = true;
@@ -313,7 +313,7 @@ class CkeditorHelper extends AppHelper {
 			}
 			$jscode .= " });";
 		}
-		$jscode .= "}";
+		$jscode .= "});";
 		return $this->Javascript->codeBlock($jscode);
 		
 	}
