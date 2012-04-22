@@ -59,7 +59,7 @@ $(function(){
 					</div>
 				</li>
 				<li class='<?php if ($configDirWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/config フォルダの書き込み権限（707 OR 777）
+					/app/config フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
 						<?php if ($configDirWritable): ?>
 						書き込み可
@@ -70,7 +70,7 @@ $(function(){
 					</div>
 				</li>
 				<li class='<?php if ($coreFileWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/config/core.php ファイルの書き込み権限（606 OR 666）<br />
+					/app/config/core.php ファイルの書き込み権限（606 OR 666 等、サーバー推奨がある場合はそちらに従ってください）<br />
 					<div class="check-result">
 						<?php if ($coreFileWritable): ?>
 						書き込み可
@@ -81,7 +81,7 @@ $(function(){
 					</div>
 				</li>
 				<li class='<?php if ($tmpDirWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/tmp フォルダの書き込み権限（707 OR 777）
+					/app/tmp フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
 						<?php if ($tmpDirWritable): ?>
 						書き込み可
@@ -95,7 +95,7 @@ $(function(){
 					<?php if(ROOT.DS != WWW_ROOT):?>
 					/app/webroot/themed フォルダの書き込み権限
 					<?php else: ?>
-					/themed フォルダの書き込み権限（707 OR 777）
+					/themed フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<?php endif ?>
 					<div class="check-result">
 						<?php if ($themeDirWritable): ?>
@@ -124,7 +124,7 @@ $(function(){
 				有効にするには、下記のフォルダへの書き込み権限が必要です </div>
 			<ul class="section">
 				<li class='<?php if ($dbDirWritable) echo 'check'; else echo 'failed'; ?>'>
-					/app/db/ の書き込み権限（707 OR 777）<br />
+					/app/db/ の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）<br />
 					<div class="check-result">
 						<?php if ($dbDirWritable): ?>
 						書き込み可
@@ -185,7 +185,7 @@ $(function(){
 			<div class="section">
 				上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。
 				baserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />
-				FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、フォルダ全てに書き込み権限（707 Or 777）を与えます。<br />
+				FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、フォルダ全てに書き込み権限（707 Or 777 等、サーバー推奨がある場合はそちらに従ってください）を与えます。<br />
 				コピーと権限の変更が完了したら次のステップに進みインストールを続けます。
 			</div>
 			<ul class="section"><li>/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/</li>
