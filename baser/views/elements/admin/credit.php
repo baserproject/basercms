@@ -30,6 +30,7 @@ $(function(){
 			$("#Wrap").css('height', '280px');
 			$("#LoginInner").css('color', '#333');
 		} else {
+			$("#Wrap").css('height', 'auto');
 			if(!openedFavorite) {
 				hideTarget = "#Contents";
 			} else {
@@ -37,7 +38,6 @@ $(function(){
 			}
 			$(hideTarget).fadeIn(1000);
 		}
-
 		$("#Page").css('height', pageHeight);
 		$("#Page").css('height', 'auto');
 		$("#Page").css('overflow', 'auto');
