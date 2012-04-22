@@ -151,11 +151,8 @@ class BaserHelper extends AppHelper {
  * @return array $globalMenus
  * @access public
  */
-	function getGlobalMenus ($menuType = null) {
+	function getMenus () {
 
-		if(!$menuType) {
-			$menuType = 'default';
-		}
 		if (ClassRegistry::init('GlobalMenu')) {
 			if(!file_exists(CONFIGS.'database.php')) {
 				return '';
@@ -175,7 +172,7 @@ class BaserHelper extends AppHelper {
 					} else {
 						$prefix = $this->params['prefix'];
 					}
-					return $GlobalMenu->find('all',array('conditions'=>array('menu_type'=>$menuType),'order'=>'sort'));
+					return $GlobalMenu->find('all', array('order' => 'sort'));
 				}
 			}
 		}
