@@ -266,6 +266,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 ----------------------------------------------- */
 #Footer{
 	width:100%;
+	min-width:960px;
     position:absolute;
     bottom:0px;
 }
@@ -275,9 +276,8 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	background-color: #333;
 	color: #EEE;
 	padding: 40px 30px 60px;
-
 	margin: 0;
-	min-width: 960px;
+	min-width:960px;
 }
 #FooterInner a{
 	color: #BBB;
@@ -303,7 +303,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	float: left;
 	background-image: url(../../img/admin/bg_border_2.png);
 	background-repeat: repeat-y;
-	padding-left:15px;
+	padding:0 30px 0 15px;
 }
 #FooterMenu h2,
 #FooterLink h2{
@@ -311,7 +311,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 }
 #FooterMenu li,
 #FooterLink li{
-	padding-right:30px;
+/*	padding-right:30px;*/
 	margin:5px 0;
 	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
 	padding-left:15px;
