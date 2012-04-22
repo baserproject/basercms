@@ -33,9 +33,9 @@ if(isset($paginator->params['paging'][$paginator->defaultModel()]['pageCount']))
 	
 <?php if($pageCount > 1): ?>
 	<div class="page-numbers">
-		<?php echo $paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
+		<?php echo $paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'prev disabled')) ?>
 		<?php echo $html->tag('span', $paginator->numbers(array('separator' => '', 'class' => 'number', 'modulus' => $modules), array('class' => 'page-numbers'))) ?>
-		<?php echo $paginator->next('次へ >', array('class'=>'next'), null, array('class'=>'disabled')) ?>
+		<?php echo $paginator->next('次へ >', array('class'=>'next'), null, array('class'=>'next disabled')) ?>
 	</div>
 <?php endif ?>
 	<div class="page-result">

@@ -218,7 +218,7 @@ table.sub-menu{
 }
 .pagination span span a {
     border: 1px solid #9C0;
-    margin: 0 2px;
+    margin: 0 2px 4px;
     text-decoration: none;
 	display:block;
 	float:left;
@@ -227,23 +227,16 @@ table.sub-menu{
     background-color: #8DC71C;
     color: #FFFFFF;
 }
-.pagination .disabled {
-    border: 1px solid #DFDFDF;
-    margin: 0 2px;
-	display:block;
-	float:left;
-	color:#DFDFDF;
-}
 .pagination .current {
 	background-color: #E2E2E2;
 	font-weight:bold;
 	border:1px solid #E2E2E2;
-    margin: 0 2px;
+    margin: 0 2px 4px;
 	display:block;
 	float:left;
 }
 .pagination .next, .pagination .prev {
-    margin: 0 2px;
+    margin: 0 2px 4px;
     text-decoration: none;
     border: 1px solid #9C0;
 	float:left;
@@ -259,6 +252,15 @@ table.sub-menu{
 }
 .pagination .next, .pagination .prev{
     padding: 3px 9px;
+}
+.pagination .disabled,
+.pagination .disabled:hover{
+	background-color: #FFF;
+    border: 1px solid #DFDFDF;
+    margin: 0 2px;
+	display:block;
+	float:left;
+	color:#DFDFDF;
 }
 #AdminDashboardIndex .pagination span span a,
 #AdminDashboardIndex .pagination .disabled,
