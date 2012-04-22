@@ -49,7 +49,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 <?php $baser->scripts() ?>
 </head>
 
-<body id="<?php $baser->contentsName(true) ?>" class="normal">
+<body id="<?php $baser->contentsName() ?>" class="normal">
 
 <div id="Page">
 	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $baser->url(array('action' => 'ajax_save_favorite_box')) ?></div>

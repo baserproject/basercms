@@ -36,6 +36,7 @@ body{
 	min-width: 960px;
 	width : expression(document.body.clientWidth < 940? "900px" : "auto"); /* IE */ 
 	line-height:2em;
+	height:100%;
 }
 
 /* anchor

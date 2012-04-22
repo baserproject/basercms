@@ -24,7 +24,7 @@
 	vertical-align:middle;
 }
 .contents-body ul{
-	margin-bottom:20px;
+	/*margin-bottom:20px;*/
 }
 .contents-body li {
 	padding: 0 20px;
@@ -262,13 +262,13 @@ table.sub-menu{
 	float:left;
 	color:#DFDFDF;
 }
-#AdminDashboardIndex .pagination span span a,
-#AdminDashboardIndex .pagination .disabled,
-#AdminDashboardIndex .pagination .current{
+#AdminDashboard .pagination span span a,
+#AdminDashboard .pagination .disabled,
+#AdminDashboard .pagination .current{
     padding: 1px 6px;
 }
-#AdminDashboardIndex .pagination .next, 
-#AdminDashboardIndex .pagination .prev{
+#AdminDashboard .pagination .next, 
+#AdminDashboard .pagination .prev{
     padding: 1px 4px;
 }
 
