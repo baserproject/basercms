@@ -62,14 +62,14 @@ $(function(){
 	$("#btnSave").click(function(){
 		if($("#PageReflectMobile").attr('checked')){
 			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
-						' ※ 「mobile」フォルダからの同階層に保存します。\n'+
+						' ※ モバイルカテゴリの同階層に保存します。\n'+
 						' ※ 既に存在する場合は上書きします。')){
 				return false;
 			}
 		}
 		if($("#PageReflectSmartphone").attr('checked')){
 			if(!confirm('このページを元にスマートフォンページを作成します。いいですか？\n\n'+
-						' ※ 「smartphone」フォルダからの同階層に保存します。\n'+
+						' ※ スマートフォンカテゴリの同階層に保存します。\n'+
 						' ※ 既に存在する場合は上書きします。')){
 				return false;
 			}
@@ -388,7 +388,7 @@ function pageTypeChengeHandler() {
 				<div id="helptextReflectMobile" class="helptext">
 					<ul>
 						<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
-						<li>モバイルページは「mobile」フォルダ内の同階層に保存します。</li>
+						<li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
 						<li>モバイルページが既に存在するする場合は上書きします。</li>
 					</ul>
 				</div>
@@ -407,7 +407,7 @@ function pageTypeChengeHandler() {
 				<div id="helptextReflectSmartphone" class="helptext">
 					<ul>
 						<li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
-						<li>スマートフォンページは「smartphone」フォルダ内の同階層に保存します。</li>
+						<li>スマートフォンページはスマートフォンカテゴリ内の同階層に保存します。</li>
 						<li>スマートフォンページが既に存在するする場合は上書きします。</li>
 					</ul>
 				</div>
