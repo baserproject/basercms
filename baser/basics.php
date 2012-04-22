@@ -688,7 +688,7 @@
 				App::import('Core', 'ClassRegistry');
 				// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
 				App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
-				App::import('Behavior', 'Cache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'cache.php'));
+				App::import('Behavior', 'BcCache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'bc_cache.php'));
 				$Plugin = ClassRegistry::init('Plugin');
 				$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
 				ClassRegistry::removeObject('Plugin');
