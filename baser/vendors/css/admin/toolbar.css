@@ -41,6 +41,7 @@ html, body {
 }
 #ToolbarInner {
 	padding: 0 30px;
+	min-width:960px;
 }
 #ToolBar a, #ToolBar span{
 	line-height: 30px;

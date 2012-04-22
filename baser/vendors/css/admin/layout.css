@@ -273,7 +273,8 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	background-repeat: repeat-x;
 	background-color: #333;
 	color: #EEE;
-	padding: 40px 20px 60px;
+	padding: 40px 30px 60px;
+
 	margin: 0;
 	min-width: 960px;
 }
@@ -289,20 +290,19 @@ ul.favorite-menu-list li.ui-sortable-helper {
 ----------------------------------------------- */
 
 #FooterLogo{
-	width: 200px;
+	width: 190px;
 	float: left;
-	padding: 65px 20px;	
+	padding: 65px 0;
 }
 
 /* FooterMenu / FooterLink
 ----------------------------------------------- */
 
 #FooterMenu{
-	width: 15%;
 	float: left;
 	background-image: url(../../img/admin/bg_border_2.png);
 	background-repeat: repeat-y;
-	padding-left:25px;
+	padding-left:15px;
 }
 #FooterMenu h2,
 #FooterLink h2{
@@ -310,7 +310,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 }
 #FooterMenu li,
 #FooterLink li{
-	padding: 0 20px;
+	padding-right:30px;
 	margin:5px 0;
 	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
 	padding-left:15px;
@@ -319,7 +319,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	float: left;
 	background-image: url(../../img/admin/bg_border_2.png);
 	background-repeat: repeat-y;
-	padding-left:25px;
+	padding-left:15px;
 }
 
 /* FooterBanner
