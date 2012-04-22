@@ -54,7 +54,8 @@ class BcCacheBehavior extends ModelBehavior {
 		static $cacheData = array();
 		$this->enabled = false;
 		// キャッシュキー
-		$cachekey = get_class($model) . '_' . $method . '_'  . $expire . '_' . md5(serialize($args));
+		$tableName = $model->tablePrefix.$model->table;
+		$cachekey = $tableName . '_' . $method . '_'  . $expire . '_' . md5(serialize($args));
 		// 変数キャッシュの場合
 		if(!$expire){
 			if (isset($cacheData[$cachekey])) {
