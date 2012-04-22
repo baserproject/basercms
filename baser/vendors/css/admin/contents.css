@@ -650,6 +650,7 @@ table.sub-menu{
 	padding:3px 8px;
 	margin-left:5px;
 	display:inline;
+	white-space: nowrap;
 }
 .ui-dialog .ui-button-text {
 	font-weight: bold;
@@ -663,18 +664,18 @@ table.sub-menu{
 	border-radius: 10px;
 }
 .ui-dialog .ui-dialog-titlebar {
--moz-border-radius-bottomright: 0;
--webkit-border-bottom-right-radius: 0;
--khtml-border-bottom-right-radius: 0;
-border-bottom-right-radius: 0;
--moz-border-radius-bottomleft: 0;
--webkit-border-bottom-left-radius: 0;
--khtml-border-bottom-left-radius: 0;
-border-bottom-left-radius: 0;
-border:none;
-background-color: #333;
-font-size: 11px;
-color:#FFF;
+	-moz-border-radius-bottomright: 0;
+	-webkit-border-bottom-right-radius: 0;
+	-khtml-border-bottom-right-radius: 0;
+	border-bottom-right-radius: 0;
+	-moz-border-radius-bottomleft: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-khtml-border-bottom-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border:none;
+	background-color: #333;
+	font-size: 11px;
+	color:#FFF;
 }
 .ui-widget-header {
 border: none;
