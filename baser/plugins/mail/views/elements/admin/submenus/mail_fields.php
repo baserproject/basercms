@@ -23,7 +23,7 @@
 <tr>
 	<th>メールフォーム管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('メールフィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $baser->link('新規メールフィールドを登録', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $baser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>

@@ -23,7 +23,7 @@
 <tr>
 	<th>ブログ管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('記事一覧', array('controller' => 'blog_posts','action'=>'index',$blogContent['BlogContent']['id'])) ?></li>
 <?php if(isset($newCatAddable) && $newCatAddable): ?>
 			<li><?php $baser->link('新規記事を登録', array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id'])) ?></li>

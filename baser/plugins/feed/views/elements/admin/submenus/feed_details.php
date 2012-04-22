@@ -23,7 +23,7 @@
 <tr>
 	<th>フィードメニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 <?php if($this->params['controller']=='feed_details'): ?>
 			<li><?php $baser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $form->value('FeedDetail.feed_config_id'))) ?></li>
 			<li><?php $baser->link('フィード設定に戻る', array('controller' => 'feed_configs', 'action' => 'edit', $form->value('FeedDetail.feed_config_id'))) ?></li>

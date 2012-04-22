@@ -39,7 +39,7 @@ if($theme == 'core'){
 <tr>
 	<th>[<?php echo $themeFile['title'] ?>] テーマ管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 <?php foreach($types as $key => $type): ?>
 			<li><?php $baser->link($type.'一覧', array('action' => 'index', $theme, $themeFile['name'], $key)) ?></li>
 <?php endforeach ?>

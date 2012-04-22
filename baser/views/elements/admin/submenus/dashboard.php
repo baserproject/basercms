@@ -24,7 +24,7 @@
 <tr>
 	<th>ダッシュボードメニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li>
 				<?php $baser->link('ユーザーを追加する', array('controller' => 'users', 'action' => 'add')) ?>
 			</li>

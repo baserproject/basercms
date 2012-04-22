@@ -23,7 +23,7 @@
 <tr>
 	<th>プラグイン管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('プラグイン一覧', array('plugin' => null, 'controller' => 'plugins', 'action' => 'index')) ?></li>
 		</ul>
 	</td>

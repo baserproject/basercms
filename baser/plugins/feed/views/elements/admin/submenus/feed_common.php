@@ -23,7 +23,7 @@
 <tr>
 	<th>フィード設定共通メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('フィード設定一覧',array('action' => 'index')) ?></li>
 			<li><?php $baser->link('新規フィード設定を登録',array('action' => 'add')) ?></li>
 <?php if($this->params['controller'] == 'feed_configs' && $this->action == 'admin_index'): ?>

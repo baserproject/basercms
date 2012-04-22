@@ -23,7 +23,7 @@
 <tr>
 	<th>ブログプラグイン共通メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('ブログ一覧',array('controller'=>'blog_contents','action'=>'index')) ?></li>
 			<li><?php $baser->link('新規ブログを登録',array('controller'=>'blog_contents','action'=>'add')) ?></li>
 			<li><?php $baser->link('タグ一覧',array('controller'=>'blog_tags','action'=>'index')) ?></li>

@@ -23,7 +23,7 @@
 <tr>
 	<th>固定ページ管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('一覧を表示する', array('controller' => 'pages', 'action' => 'index')) ?></li>
 <?php if($newCatAddable): ?>
 			<li><?php $baser->link('新規に登録する', array('controller' => 'pages', 'action' => 'add')) ?></li>

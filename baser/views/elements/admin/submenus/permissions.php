@@ -22,7 +22,7 @@
 <tr>
 	<th>アクセス制限設定管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('一覧を表示する', array('controller' => 'permissions', 'action' => 'index', $this->params['pass'][0])) ?></li>
 			<li><?php $baser->link('新規に登録する', array('controller' => 'permissions', 'action' => 'add', $this->params['pass'][0])) ?></li>
 		</ul>

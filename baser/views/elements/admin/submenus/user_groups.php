@@ -22,7 +22,7 @@
 <tr>
 	<th>ユーザーグループ管理メニュー</th>
 	<td>
-		<ul>
+		<ul class="cleafix">
 			<li><?php $baser->link('一覧を表示する', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
 			<li><?php $baser->link('新規に登録する', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
 		</ul>

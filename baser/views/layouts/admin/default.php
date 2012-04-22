@@ -82,7 +82,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 		<!-- / #SideBar --></div>
 		<?php endif ?>
 
-		<div id="Contents">
+		<div id="Contents" class="clearfix">
 
 			<div class="cbb">
 
