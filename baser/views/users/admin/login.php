@@ -148,7 +148,7 @@ function openCredit(completeHandler) {
 	
 	<div id="LoginInner">
 				
-		<h1>管理システムログイン</h1>
+		<h1><?php $baser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
 		<div class="float-left login-input">

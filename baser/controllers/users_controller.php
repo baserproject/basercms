@@ -79,14 +79,14 @@ class UsersController extends AppController {
 	function beforeFilter() {
 
 		/* 認証設定 */
-		// beforeFilterの前に記述する必要あり
+		// parent::beforeFilterの前に記述する必要あり
 		if(isset($this->params['prefix'])) {
 			$this->BcAuth->allow(
-					$this->params['prefix'].'_login', 
-					$this->params['prefix'].'_logout', 
-					$this->params['prefix'].'_login_exec', 
-					$this->params['prefix'].'_reset_password',
-					$this->params['prefix'].'_ajax_login',
+					'admin_login', 
+					'admin_logout', 
+					'admin_login_exec', 
+					'admin_reset_password',
+					'admin_ajax_login',
 					'admin_login_exec',
 					'admin_reset_password'
 			);
@@ -95,7 +95,7 @@ class UsersController extends AppController {
 		
 		parent::beforeFilter();
 
-		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
+		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'ajax_login');
 
 	}
 /**
