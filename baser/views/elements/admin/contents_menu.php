@@ -30,7 +30,9 @@
 <?php if(!empty($help)): ?>
 		<li><?php $baser->link($baser->getImg('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuHelp')) ?></li>
 <?php endif ?>
+<?php if($baser->isAdminUser()): ?>
 		<li><?php $baser->link($baser->getImg('admin/btn_menu_permission.png', array('alt' => '制限設定', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuPermission')) ?></li>
+<?php endif ?>
 	</ul>
 </div>
 <?php endif ?>
