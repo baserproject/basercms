@@ -69,7 +69,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 
 	<?php $baser->header() ?>
 
-	<div id="Wrap" class="clearfix">
+	<div id="Wrap" class="clearfix" style="display:none">
 
 		<?php if(!empty($user)): ?>
 		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
