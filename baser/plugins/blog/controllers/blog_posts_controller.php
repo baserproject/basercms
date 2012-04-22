@@ -179,7 +179,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
-		$name = '';
+		$name = $blogCategoryId = '';
 		if(isset($data['BlogPost']['name'])) {
 			$name = $data['BlogPost']['name'];
 		}
@@ -192,7 +192,10 @@ class BlogPostsController extends BlogAppController {
 		if(isset($data['BlogPost']['user_id']) && $data['BlogPost']['user_id'] === '') {
 			unset($data['BlogPost']['user_id']);
 		}
-		unset($data['BlogPost']['open']);
+		if(!empty($data['BlogPost']['blog_category_id'])) {
+			$blogCategoryId = $data['BlogPost']['blog_category_id'];
+		}
+		unset($data['BlogPost']['blog_category_id']);
 
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
@@ -210,9 +213,9 @@ class BlogPostsController extends BlogAppController {
 		unset($data['BlogPost']['blog_tag_id']);
 		
 		// ページカテゴリ（子カテゴリも検索条件に入れる）
-		if(!empty($data['BlogPost']['blog_category_id'])) {
-			$blogCategoryIds = array($data['BlogPost']['blog_category_id']);
-			$children = $this->BlogCategory->children($data['BlogPost']['blog_category_id']);
+		if($blogCategoryId) {
+			$blogCategoryIds = array($blogCategoryId);
+			$children = $this->BlogCategory->children($blogCategoryId);
 			if($children) {
 				foreach($children as $child) {
 					$blogCategoryIds[] = $child['BlogCategory']['id'];
