@@ -65,14 +65,25 @@
 			// ログイン画面タイトル
 			'loginTitle'	=> '管理システムログイン',
 			'loginAction'	=> '/'.$adminPrefix.'/users/login'
-		)/*,
-		'mypage' => array(
+		),
+		// マイページ
+		/*'mypage' => array(
 			'alias'			=> 'mypage',
 			'prefix'		=> 'mypage',
-			'loginRedirect'=>'/mypage/dashboard/index',
+			'loginRedirect'=>'/mypage/users/index',
 			'loginTitle'=>'マイページログイン',
 			'userModel'		=> 'User',
 			'loginAction'	=> '/mypage/users/login'
+		),*/
+		// モバイルマイページ
+		/*'mobile_mypage' => array(
+			'alias'			=> 'mobile_mypage',
+			'prefix'		=> 'mobile_mypage',
+			'loginRedirect'=>'/m/mypage/users/index',
+			'loginTitle'=>'マイページログイン',
+			'userModel'		=> 'User',
+			'loginAction'	=> '/m/mypage/users/login',
+			'userScope'		=> array('User.user_group_id' => 1)
 		)*/
 	);
 /**

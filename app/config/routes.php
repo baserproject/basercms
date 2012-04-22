@@ -25,6 +25,8 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+// ダブルプレフィックスルーティング
+//Router::connect('/m/mypage/:controller/:action/*', array('prefix' => 'mobile_mypage', 'mobile_mypage' => true));
 /**
  * Include Files
  *
