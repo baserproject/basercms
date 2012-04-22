@@ -74,14 +74,15 @@ function pageTypeChengeHandler() {
 
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
 
+<div class="em-box align-left">
 <?php if($this->action == 'admin_edit' && $indexPage): ?>
 	<?php if($indexPage['status']): ?>
-	<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong></p>
+	<strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
 	<?php else: ?>
-	<p><strong>このカテゴリのURL：<?php echo $baser->getUri('/' . $indexPage['url']) ?></strong></p>
+	<strong>このカテゴリのURL：<?php echo $baser->getUri('/' . $indexPage['url']) ?></strong>
 	<?php endif ?>
 <?php endif ?>
-
+</div>
 
 
 <?php echo $bcForm->create('PageCategory') ?>
