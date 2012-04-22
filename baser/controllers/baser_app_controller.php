@@ -1408,6 +1408,38 @@ class BaserAppController extends Controller {
 		exit();
 		
 	}
-	
+/**
+ * Internally redirects one action to another. Examples:
+ *
+ * setAction('another_action');
+ * setAction('action_with_parameters', $parameter1);
+ *
+ * @param string $action The new action to be redirected to
+ * @param mixed  Any other parameters passed to this method will be passed as
+ *               parameters to the new action.
+ * @return mixed Returns the return value of the called action
+ * @access public
+ */
+	function setAction($action) {
+		
+		// CUSTOMIZE ADD 2012/04/22 ryuring
+		// >>>
+		$_action = $this->action;
+		// <<<
+		
+		$this->action = $action;
+		$args = func_get_args();
+		unset($args[0]);
+		
+		// CUSTOMIZE MODIFY 2012/04/22 ryuring
+		// >>>
+		//return call_user_func_array(array(&$this, $action), $args);
+		// ---
+		$return = call_user_func_array(array(&$this, $action), $args);
+		$this->action = $_action;
+		return $return;
+		// <<<
+		
+	}
 }
 ?>
