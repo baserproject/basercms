@@ -1043,6 +1043,7 @@ class BaserHelper extends AppHelper {
  * ・キャメルケースで取得
  * ・URLのコントローラー名までを取得
  * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
+ * ・トップページは、Home
  * 
  * @param boolean $detail
  * @return string
@@ -1123,11 +1124,12 @@ class BaserHelper extends AppHelper {
 				$plugin = '';
 				$controller = $url0;
 			}
-			if($prefix)	{
-				$aryUrl[] = $prefix;
-			}
+			
 			if($plugin) {
-				$aryUrl[] = $plugin;
+				$controller = $plugin.'_'.$controller;
+			}
+			if($prefix)	{
+				$controller = $prefix.'_'.$controller;
 			}
 			if($controller) {
 				$aryUrl[] = $controller;
