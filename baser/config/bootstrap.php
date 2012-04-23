@@ -215,10 +215,6 @@
 	}
 if(BC_INSTALLED) {
 /**
- * サイト基本設定を読み込む 
- */
-	loadSiteConfig();
-/**
  * データキャッシュ
  */
 	Cache::config('_cake_data_', array(
@@ -242,6 +238,10 @@ if(BC_INSTALLED) {
 			'lock'			=> false,
 			'serialize'		=> true
 	 ));
+/**
+ * サイト基本設定を読み込む 
+ */
+	loadSiteConfig();
 /**
  * プラグインの bootstrap を実行する
  */

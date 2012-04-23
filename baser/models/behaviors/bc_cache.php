@@ -42,13 +42,13 @@ class BcCacheBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	function readCache(&$model, $expire, $query = array()){
+	function readCache(&$model, $expire, $type, $query = array()){
 		
 		static $cacheData = array();
 		
 		// キャッシュキー
 		$tableName = $model->tablePrefix.$model->table;
-		$cachekey = $tableName . '_' .  $expire . '_' . md5(serialize($query));
+		$cachekey = $tableName . '_' . $type . '_' . $expire . '_' . md5(serialize($query));
 		
 		// 変数キャッシュの場合
 		if(!$expire){
@@ -60,7 +60,7 @@ class BcCacheBehavior extends ModelBehavior {
 			}
 			$results = $db->read($model, $query);
 			$cacheData[$cachekey] = $results;
-			return $ret;
+			return $results;
 		}
 		
 		// サーバーキャッシュの場合

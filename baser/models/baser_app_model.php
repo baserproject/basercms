@@ -1345,17 +1345,6 @@ class BaserAppModel extends Model {
  */
 	function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
 		
-		// CUSTOMIZE ADD 2012/04/23 ryuring
-		// データキャッシュ
-		// >>>
-		$args = func_get_args();
-		$cache = true;
-		if(isset($args[1]['cache']) && is_bool($args[1]['cache'])) {
-			$cache = $args[1]['cache'];
-			unset($args[1]['cache']);
-		}
-		// <<<
-		
 		if (!is_string($conditions) || (is_string($conditions) && !array_key_exists($conditions, $this->_findMethods))) {
 			$type = 'first';
 			$query = array_merge(compact('conditions', 'fields', 'order', 'recursive'), array('limit' => 1));
@@ -1417,9 +1406,14 @@ class BaserAppModel extends Model {
 		}
 		$results = $db->read($this, $query);*/
 		// ---
+		$cache = true;
+		if(isset($query['cache']) && is_bool($query['cache'])) {
+			$cache = $query['cache'];
+			unset($query['cache']);
+		}
 		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
 				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
-			$results = $this->readCache($cache, $query);
+			$results = $this->readCache($cache, $type, $query);
 		} else {
 			if (!$db =& ConnectionManager::getDataSource($this->useDbConfig)) {
 				return false;
