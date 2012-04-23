@@ -47,7 +47,7 @@ class DashboardController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('time','javascript');
+	var $helpers = array('Time','Javascript');
 /**
  * コンポーネント
  *
