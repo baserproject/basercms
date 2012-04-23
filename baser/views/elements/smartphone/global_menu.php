@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'elements'.DS.'admin'.DS.'global_menu'.$this->ext;
+include BASER_VIEWS.'elements'.DS.'global_menu'.$this->ext;
 ?>
