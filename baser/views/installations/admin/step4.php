@@ -63,11 +63,13 @@ $(document).ready(function(){
 	<?php echo $bcForm->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
 
 	<div class="panel-box corner10">
-		<div>
+		<div class="section">
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
 				<li><?php echo $bcForm->input('Installation.admin_email', array('type' => 'text', 'size'=>44)); ?></li>
 			</ul>
+		</div>
+		<div class="section">
 			<h3>管理ユーザー登録</h3>
 			<p>ここで設定した管理者名とパスワードは忘れないように控えておいてください。</p>
 			<ul>

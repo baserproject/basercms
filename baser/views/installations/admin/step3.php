@@ -161,9 +161,9 @@ $(document).ready( function() {
 				<strong>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。</strong>
 	</div>
 	<h2>データベース設定</h2>
-	<div class="panel-box corner10 section">
-		<h3>接続情報</h3>
-		<div>
+	<div class="panel-box corner10">
+		<div class="section">
+			<h3>接続情報</h3>
 			<ul>
 				<li id="dbType"> <?php echo $bcForm->label('Installation.dbType', 'データベースタイプ');?><br />
 					<?php echo $bcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
@@ -191,14 +191,17 @@ $(document).ready( function() {
 					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />
 					※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。</small></li>
 			</ul>
+		</div>
+		
 	<?php if (!empty($blDBSettingsOK)): ?>
+		<div class="section">
 			<h3>オプション</h3>
 			<ul>
 				<li><?php echo $bcForm->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
 			</ul>
-	<?php endif ?>
-
 		</div>
+	<?php endif ?>
+		
 	</div>
 	
 	<div class="submit">

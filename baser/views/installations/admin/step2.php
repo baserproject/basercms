@@ -177,8 +177,8 @@ $(function(){
 				レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
 				サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。<br />
 			</div>
-			<pre class="section">AddHandler application/x-httpd-phpcgi .php
-		mod_gzip_on Off</pre>
+<pre class="section">AddHandler application/x-httpd-phpcgi .php
+mod_gzip_on Off</pre>
 			<div class="section">
 				<strong style="color:#F00">インストール中にCGIモードに切り替えた場合は、クッキーを削除した上で、「再チェック」をクリックしてください。</strong>
 			</div>
