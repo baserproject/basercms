@@ -261,10 +261,14 @@ if(BC_INSTALLED) {
 /**
  * テーマの bootstrap を実行する 
  */
-	$themeBootstrap = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'config'.DS.'bootstrap.php';
+	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
+	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
 	if(file_exists($themeBootstrap)) {
 		include $themeBootstrap;
 	}
-	
+/**
+ * テーマヘルパーのパスを追加する 
+ */
+	$helperPaths[] = $themePath.'helpers';
 }
 ?>

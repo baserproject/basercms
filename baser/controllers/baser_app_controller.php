@@ -209,6 +209,9 @@ class BaserAppController extends Controller {
 		// テーマを設定
 		$this->setTheme($this->params);
 		
+		// テーマのヘルパーをセット
+		$this->setThemeHelpers();
+		
 		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -1447,6 +1450,16 @@ class BaserAppController extends Controller {
 		return $return;
 		// <<<
 		
+	}
+	function setThemeHelpers() {
+		$themeHelpersPath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'helpers';
+		$Folder = new Folder($themeHelpersPath);
+		$files = $Folder->read(true, true);
+		if(!empty($files[1])) {
+			foreach($files[1] as $file) {
+				$this->helpers[] = Inflector::classify(basename($file, '.php'));
+			}
+		}
 	}
 }
 ?>
