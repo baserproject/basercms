@@ -607,7 +607,7 @@ table.sub-menu{
 #UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
-	color:#E02;
+	color:#F03;
 	font-weight:bold;
 	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
 	border:5px solid #E02;
@@ -644,9 +644,9 @@ table.sub-menu{
 	font-weight: bold;
 }
 .ui-dialog label.error, .error-message {
-	background-color:#C00;
+	background-color:#E02;
 	color:#FFF;
-	font-size: 10px;
+	font-size: 12px;
 	padding:3px 8px;
 	margin-left:5px;
 	display:inline;
