@@ -95,7 +95,7 @@
 		include BASER_CONFIGS.'baser.php';
 		Configure::write($config);
 	}
-	if($baserSettings) {
+	if(BC_INSTALLED && $baserSettings) {
 		foreach ($baserSettings as $key1 => $settings) {
 			foreach($settings as $key2 => $setting) {
 				Configure::write($key1.'.'.$key2, $setting);
