@@ -52,7 +52,10 @@ class BcPluginHookHelper extends AppHelper {
 
 		$view = ClassRegistry::getObject('View');
 		$plugins = Configure::read('BcStatus.enablePlugins');
-
+		// 現在のテーマのフックも登録する（テーマフック）
+		// TODO プラグインではないので、プラグインフックというこの仕組の名称自体を検討する必要がある？
+		$plugins[] = Configure::read('BcSite.theme');
+		
 		/* プラグインフックコンポーネントが実際に存在するかチェックしてふるいにかける */
 		$pluginHooks = array();
 		if($plugins) {
