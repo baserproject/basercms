@@ -26,19 +26,34 @@ class DboPostgresEx extends DboPostgres {
  * @return array Fields in table. Keys are name and type
  */
 	function &describe(&$model) {
-		$fields = parent::describe($model);
+		// >>> CUSTOMIZE MODIFY 2012/04/23 ryuring
+		//$fields = parent::describe($model);
+		// ---
+		$fields = $this->__describe($model);
+		// <<<
 		$table = $this->fullTableName($model, false);
 		$this->_sequenceMap[$table] = array();
 
 		if ($fields === null) {
-			$cols = $this->fetchAll(
+			// >>> CUSTOMIZE MODIFY 2012/04/23 ryuring
+			/*$cols = $this->fetchAll(
 				"SELECT DISTINCT column_name AS name, data_type AS type, is_nullable AS null,
 					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
 					character_octet_length AS oct_length FROM information_schema.columns
 				WHERE table_name = " . $this->value($table) . " AND table_schema = " .
 				$this->value($this->config['schema'])."  ORDER BY position",
 				false
+			);*/
+			// ---
+			$cols = $this->fetchAll(
+				"SELECT DISTINCT column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null,
+					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+					character_octet_length AS oct_length FROM information_schema.columns
+				WHERE table_name = " . $this->value($table) . " AND table_schema = " .
+				$this->value($this->config['schema'])."  ORDER BY position",
+				false
 			);
+			// <<<
 
 			foreach ($cols as $column) {
 				$colKey = array_keys($column);
@@ -64,7 +79,11 @@ class DboPostgresEx extends DboPostgres {
 							$length = intval($c['oct_length']);
 						}
 					} else {
-						$length = $this->length($c['type']);
+						// >>> CUSTOMIZE MODIFY 2012/04/23 ryuring
+						//$length = $this->length($c['type']);
+						// ---
+						$length = $this->length($c['udt']);
+						// <<<
 					}
 					$fields[$c['name']] = array(
 						'type'    => $this->column($c['type']),
@@ -324,6 +343,60 @@ class DboPostgresEx extends DboPostgres {
 		return $out;
 		
 	}
-	
+/**
+ * Gets the length of a database-native column description, or null if no length
+ *
+ * @param string $real Real database-layer column type (i.e. "varchar(255)")
+ * @return int An integer representing the length of the column
+ */
+	function length($real) {
+		
+		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
+		if(preg_match('/^int([0-9]+)$/', $real, $maches)) {
+			return intval($maches[1]);
+		}
+		// <<<
+		
+		$col = str_replace(array(')', 'unsigned'), '', $real);
+		$limit = null;
+
+		if (strpos($col, '(') !== false) {
+			list($col, $limit) = explode('(', $col);
+		}
+		if ($col == 'uuid') {
+			return 36;
+		}
+		if ($limit != null) {
+			return intval($limit);
+		}
+		return null;
+	}
+/**
+ * Returns a Model description (metadata) or null if none found.
+ * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
+ * Datasource::describe と同じ
+ * 
+ * @param Model $model
+ * @return mixed
+ * @access private
+ */
+	function __describe($model) {
+		
+		if ($this->cacheSources === false) {
+			return null;
+		}
+		$table = $this->fullTableName($model, false);
+		if (isset($this->__descriptions[$table])) {
+			return $this->__descriptions[$table];
+		}
+		$cache = $this->__cacheDescription($table);
+
+		if ($cache !== null) {
+			$this->__descriptions[$table] =& $cache;
+			return $cache;
+		}
+		return null;
+		
+	}
 }
 ?>
