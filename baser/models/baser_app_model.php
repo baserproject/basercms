@@ -1345,20 +1345,103 @@ class BaserAppModel extends Model {
  */
 	function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
 		
+		// CUSTOMIZE ADD 2012/04/23 ryuring
+		// データキャッシュ
+		// >>>
 		$args = func_get_args();
 		$cache = true;
 		if(isset($args[1]['cache']) && is_bool($args[1]['cache'])) {
 			$cache = $args[1]['cache'];
 			unset($args[1]['cache']);
 		}
-		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
-				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
-			if($this->cacheEnabled()) {
-				return $this->cacheMethod($cache, __FUNCTION__, $args);
+		// <<<
+		
+		if (!is_string($conditions) || (is_string($conditions) && !array_key_exists($conditions, $this->_findMethods))) {
+			$type = 'first';
+			$query = array_merge(compact('conditions', 'fields', 'order', 'recursive'), array('limit' => 1));
+		} else {
+			list($type, $query) = array($conditions, $fields);
+		}
+
+		$this->findQueryType = $type;
+		$this->id = $this->getID();
+
+		$query = array_merge(
+			array(
+				'conditions' => null, 'fields' => null, 'joins' => array(), 'limit' => null,
+				'offset' => null, 'order' => null, 'page' => null, 'group' => null, 'callbacks' => true
+			),
+			(array)$query
+		);
+
+		if ($type != 'all') {
+			if ($this->_findMethods[$type] === true) {
+				$query = $this->{'_find' . ucfirst($type)}('before', $query);
 			}
 		}
-		return parent::find($conditions, $fields, $order, $recursive);
+
+		if (!is_numeric($query['page']) || intval($query['page']) < 1) {
+			$query['page'] = 1;
+		}
+		if ($query['page'] > 1 && !empty($query['limit'])) {
+			$query['offset'] = ($query['page'] - 1) * $query['limit'];
+		}
+		if ($query['order'] === null && $this->order !== null) {
+			$query['order'] = $this->order;
+		}
+		$query['order'] = array($query['order']);
+
+		if ($query['callbacks'] === true || $query['callbacks'] === 'before') {
+			$return = $this->Behaviors->trigger($this, 'beforeFind', array($query), array(
+				'break' => true, 'breakOn' => false, 'modParams' => true
+			));
+			$query = (is_array($return)) ? $return : $query;
+
+			if ($return === false) {
+				return null;
+			}
+
+			$return = $this->beforeFind($query);
+			$query = (is_array($return)) ? $return : $query;
+
+			if ($return === false) {
+				return null;
+			}
+		}
+
+		// CUSTOMIZE MODIFY 2012/04/23 ryuring
+		// データキャッシュ
+		// >>>
+		/*if (!$db =& ConnectionManager::getDataSource($this->useDbConfig)) {
+			return false;
+		}
+		$results = $db->read($this, $query);*/
+		// ---
+		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
+				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
+			$results = $this->readCache($cache, $query);
+		} else {
+			if (!$db =& ConnectionManager::getDataSource($this->useDbConfig)) {
+				return false;
+			}
+			$results = $db->read($this, $query);
+		}
+		// <<<
 		
+		$this->resetAssociations();
+		$this->findQueryType = null;
+
+		if ($query['callbacks'] === true || $query['callbacks'] === 'after') {
+			$results = $this->__filterResults($results);
+		}
+
+		if ($type === 'all') {
+			return $results;
+		} else {
+			if ($this->_findMethods[$type] === true) {
+				return $this->{'_find' . ucfirst($type)}('after', $query, $results);
+			}
+		}
 	}
 /**
  * Deletes multiple model records based on a set of conditions.
@@ -1376,7 +1459,7 @@ class BaserAppModel extends Model {
 		if($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
 				if($this->cacheEnabled()) {
-					$this->cacheDelete($this);
+					$this->delCache($this);
 				}
 			}
 		}
@@ -1399,7 +1482,7 @@ class BaserAppModel extends Model {
 		if($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
 				if($this->cacheEnabled()) {
-					$this->cacheDelete($this);
+					$this->delCache($this);
 				}
 			}
 		}

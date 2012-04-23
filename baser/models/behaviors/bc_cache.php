@@ -48,6 +48,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @args mixed
  * @return mixed
  * @access public
+ * @deprecated readCache に移行
  */
 	function cacheMethod(&$model, $expire, $method, $args = array()){
 		
@@ -93,15 +94,56 @@ class BcCacheBehavior extends ModelBehavior {
 		
 	}
 /**
- * 再帰防止判定用
+ * キャッシュ処理
  * 
  * @param Model $model
- * @return boolean
+ * @param int $expire
+ * @param string $method
+ * @args mixed
+ * @return mixed
  * @access public
  */
-	function cacheEnabled(&$model){
+	function readCache(&$model, $expire, $query = array()){
 		
-		return $this->enabled;
+		static $cacheData = array();
+		
+		// キャッシュキー
+		$tableName = $model->tablePrefix.$model->table;
+		$cachekey = $tableName . '_' .  $expire . '_' . md5(serialize($query));
+		
+		// 変数キャッシュの場合
+		if(!$expire){
+			if (isset($cacheData[$cachekey])) {
+				return $cacheData[$cachekey];
+			}
+			if (!$db =& ConnectionManager::getDataSource($model->useDbConfig)) {
+				return false;
+			}
+			$results = $db->read($model, $query);
+			$cacheData[$cachekey] = $results;
+			return $ret;
+		}
+		
+		// サーバーキャッシュの場合
+		$results = Cache::read($cachekey, '_cake_data_');
+		if($results !== false){
+			if($results == "{false}") {
+				$results = false;
+			}
+			return $results;
+		}
+		
+		if (!$db =& ConnectionManager::getDataSource($model->useDbConfig)) {
+			return false;
+		}
+		$results = $db->read($model, $query);
+		Cache::write($cachekey, ($results === false)? "{false}" : $results, '_cake_data_');
+		// クリア用にモデル毎のキャッシュキーリストを作成
+		$cacheListKey = get_class($model) . '_cacheMethodList';
+		$list = Cache::read($cacheListKey);
+		$list[$cachekey] = 1;
+		Cache::write($cacheListKey, $list);
+		return $results;
 		
 	}
 /**
@@ -111,7 +153,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function cacheDelete(&$model){
+	function delCache(&$model){
 		
 		$cacheListKey = get_class($model) . '_cacheMethodList';
 		$list = Cache::read($cacheListKey);
@@ -157,7 +199,7 @@ class BcCacheBehavior extends ModelBehavior {
  */
 	function deleteAssocCache(&$model, $recursive = 0) {
 		
-		$this->cacheDelete($model);
+		$this->delCache($model);
 		if($recursive <= 3) {
 			$recursive++;
 			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
