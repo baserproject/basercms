@@ -21,8 +21,8 @@ class FavoritesSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => false, 'default' => NULL),
 		'url' => array('type' => 'string', 'null' => false, 'default' => NULL),
 		'sort' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8),
-		'created' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
