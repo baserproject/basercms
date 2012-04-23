@@ -700,8 +700,16 @@
 		return $enablePlugins;
 		
 	}
+/**
+ * サイト基本設定をConfigureへ読み込む
+ * 
+ * @return void
+ */
 	function loadSiteConfig() {
+		
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		Configure::write('BcSite', $SiteConfig->findExpanded());
+		ClassRegistry::removeObject('SiteConfig');
+		
 	}
 ?>

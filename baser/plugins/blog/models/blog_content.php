@@ -151,7 +151,7 @@ class BlogContent extends BlogAppModel {
 	function afterSave($created) {
 
 		// 検索用テーブルへの登録・削除
-		if(!$this->data['BlogContent']['exclude_search']) {
+		if(!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status'] ) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
 			$this->deleteContent($this->data['BlogContent']['id']);
@@ -224,6 +224,25 @@ class BlogContent extends BlogAppModel {
 		}
 		
 	}
-	
+/**
+ * フォームの初期値を取得する
+ *
+ * @return void
+ * @access protected
+ */
+	function getDefaultValue() {
+
+		$data['BlogContent']['comment_use'] = true;
+		$data['BlogContent']['comment_approve'] = false;
+		$data['BlogContent']['layout'] = 'default';
+		$data['BlogContent']['template'] = 'default';
+		$data['BlogContent']['list_count'] = 10;
+		$data['BlogContent']['feed_count'] = 10;
+		$data['BlogContent']['auth_captcha'] = 1;
+		$data['BlogContent']['tag_use'] = false;
+		$data['BlogContent']['status'] = false;
+		return $data;
+
+	}
 }
 ?>

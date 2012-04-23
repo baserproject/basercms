@@ -20,7 +20,12 @@
 ?>
 
 
-<tr>
+<?php if (!$data['BlogContent']['status']): ?>
+	<?php $class=' class="unpublish disablerow"'; ?>
+<?php else: ?>
+	<?php $class=' class="publish"'; ?>
+<?php endif; ?>
+<tr <?php echo $class; ?>>
 	<td class="row-tools">
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), '/'.$data['BlogContent']['name'], array('title' => '確認', 'target' => '_blank')) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), array('controller' => 'blog_posts', 'action' => 'index', $data['BlogContent']['id']), array('title' => '管理')) ?>

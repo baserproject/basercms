@@ -116,7 +116,7 @@ class BlogContentsController extends BlogAppController {
 		$this->pageTitle = '新規ブログ登録';
 
 		if(!$this->data) {
-			$this->data = $this->_getDefaultValue();
+			$this->data = $this->BlogContent->getDefaultValue();
 		}else {
 
 			/* 登録処理 */
@@ -303,25 +303,6 @@ class BlogContentsController extends BlogAppController {
 		}
 
 		exit();
-
-	}
-/**
- * フォームの初期値を取得する
- *
- * @return void
- * @access protected
- */
-	function _getDefaultValue() {
-
-		$data['BlogContent']['comment_use'] = true;
-		$data['BlogContent']['comment_approve'] = false;
-		$data['BlogContent']['layout'] = 'default';
-		$data['BlogContent']['template'] = 'default';
-		$data['BlogContent']['list_count'] = 10;
-		$data['BlogContent']['feed_count'] = 10;
-		$data['BlogContent']['auth_captcha'] = 1;
-		$data['BlogContent']['tag_use'] = false;
-		return $data;
 
 	}
 /**

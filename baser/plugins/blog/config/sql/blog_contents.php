@@ -22,7 +22,7 @@ class BlogContentsSchema extends CakeSchema {
 		'description' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'layout' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
 		'template' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'status' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 2),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'list_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 4),
 		'list_direction' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 4),
 		'feed_count' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 4),

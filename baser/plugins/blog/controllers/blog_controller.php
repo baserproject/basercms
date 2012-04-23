@@ -150,6 +150,10 @@ class BlogController extends BlogAppController {
  */
 	function index() {
 
+		if(!$this->blogContent['BlogContent']['status']) {
+			$this->notFound();
+		}
+		
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
 			$this->set('channel', array(
@@ -207,6 +211,10 @@ class BlogController extends BlogAppController {
  */
 	function archives() {
 
+		if(!$this->blogContent['BlogContent']['status']) {
+			$this->notFound();
+		}
+		
 		// パラメーター処理
 		$pass = $this->params['pass'];
 		$type = $year = $month = $day = $id = '';
@@ -859,8 +867,15 @@ class BlogController extends BlogAppController {
 
 		$this->layout = null;
 		$this->contentId = $blogContentId;
-		$datas = $this->_getBlogPosts(array('listCount' => $limit));
+		
+		if($this->blogContent['BlogContent']['status']) {
+			$datas = $this->_getBlogPosts(array('listCount' => $limit));
+		} else {
+			$datas = array();
+		}
+		
 		$this->set('posts', $datas);
+		
 
 		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
 

@@ -89,6 +89,18 @@ $(function(){
 				<?php echo $bcForm->error('BlogContent.description') ?>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogContent.exclude_search', '公開設定') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('BlogContent.status', array(
+						'type'		=> 'radio',
+						'options'	=> array(0 => '非公開', 1 => '公開') ,
+						'legend'	=> false,
+						'separator'	=> '&nbsp;&nbsp;')) ?><br />
+				<?php echo $bcForm->error('BlogContent.status') ?>
+				<?php echo $bcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
+			</td>
+		</tr>
 	</table>
 </div>
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
@@ -247,12 +259,6 @@ $(function(){
 						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 					</ul>
 				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogContent.exclude_search', '公開設定') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $bcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 			</td>
 		</tr>
 	</table>
