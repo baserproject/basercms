@@ -29,7 +29,7 @@ class MailContentsSchema extends CakeSchema {
 		'form_template' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
 		'mail_template' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
 		'redirect_url' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'status' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 2),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'auth_captcha' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
 		'widget_area' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 4),
 		'ssl_on' => array('type' => 'boolean', 'null' => true, 'default' => '0'),

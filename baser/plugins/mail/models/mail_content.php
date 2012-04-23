@@ -205,9 +205,10 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['layout_template'] = 'default';
 		$data['MailContent']['form_template'] = 'default';
 		$data['MailContent']['mail_template'] = 'mail_default';
-		$data['MailContent']['use_description'] = 1;
-		$data['MailContent']['auth_captcha'] = 0;
-		$data['MailContent']['ssl_on'] = 0;
+		$data['MailContent']['use_description'] = true;
+		$data['MailContent']['auth_captcha'] = false;
+		$data['MailContent']['ssl_on'] = false;
+		$data['MailContent']['status'] = false;
 		
 		return $data;
 
@@ -221,7 +222,7 @@ class MailContent extends MailAppModel {
 	function afterSave($created) {
 
 		// 検索用テーブルへの登録・削除
-		if(!$this->data['MailContent']['exclude_search']) {
+		if(!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status'] ) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
 			$this->deleteContent($this->data['MailContent']['id']);
@@ -259,7 +260,7 @@ class MailContent extends MailAppModel {
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];
 		$_data['Content']['url'] = '/'.$data['name'].'/index';
-		$_data['Content']['status'] = true;
+		$_data['Content']['status'] = $data['status'];
 
 		return $_data;
 

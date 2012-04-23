@@ -19,8 +19,12 @@
  */
 ?>
 
-
-<tr>
+<?php if (!$data['MailContent']['status']): ?>
+	<?php $class=' class="unpublish disablerow"'; ?>
+<?php else: ?>
+	<?php $class=' class="publish"'; ?>
+<?php endif; ?>
+<tr <?php echo $class; ?>>
 	<td class="row-tools">
 		<?php //echo $bcForm->checkbox('ListTool.batch_targets.'.$data['MailContent']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailContent']['id'])) ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), '/'.$data['MailContent']['name'].'/index', array('title' => '確認', 'target' => '_blank')) ?>

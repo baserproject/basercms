@@ -180,6 +180,10 @@ class MailController extends MailAppController {
  */
 	function index($id = null) {
 
+		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+			$this->notFound();
+		}
+		
 		// 初期値を取得
 		if(!isset($this->data['Message'])) {
 			$this->data = $this->Message->getDefaultValue();
@@ -234,6 +238,10 @@ class MailController extends MailAppController {
  */
 	function confirm($id = null) {
 
+		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+			$this->notFound();
+		}
+		
 		if(!$this->data) {
 			$this->redirect(array('action' => 'index', $id));
 		}else {
@@ -304,6 +312,10 @@ class MailController extends MailAppController {
  */
 	function submit($id = null) {
 
+		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+			$this->notFound();
+		}
+		
 		if(!$this->data) {
 			$this->redirect(array('action' => 'index', $id));
 		}else {
