@@ -1501,6 +1501,36 @@ END_FLASH;
 		return false;
 		
 	}
-
+/**
+ * ページをエレメントとして読み込む
+ * 
+ * ※ レイアウトは読み込まない
+ * @param int $id 
+ */
+	function page($id) {
+		
+		// 現在のページの情報を退避
+		$currentId = null;
+		$description = $this->getDescription();
+		$title = $this->getContentsTitle();
+		if(!empty($this->_view->loaded['bcPage'])) {
+			$currentId = $this->_view->loaded['bcPage']->data['Page']['id'];
+		}
+		
+		// urlを取得
+		$PageClass =& ClassRegistry::init('Page');
+		$page = $PageClass->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
+		$url = '/../pages'.$PageClass->getPageUrl($page);
+		
+		$this->element($url);
+		
+		// 現在のページの情報に戻す
+		$this->setDescription($description);
+		$this->setTitle($title);
+		if($currentId) {
+			$this->setPageEditLink($currentId);
+		}
+		
+	}
 }
 ?>
