@@ -67,8 +67,9 @@
 	}
 /**
  * 配置パターン
+ * Windows対策として、「\」を「/」へ変換してチェックする
  */
-	if(!preg_match('/'.preg_quote(docRoot(), '/').'/', ROOT)) {
+	if(!preg_match('/'.preg_quote(str_replace('\\', '/', docRoot()), '/').'/', ROOT)) {
 		// CakePHP標準の配置
 		define('BC_DEPLOY_PATTERN', 3);
 	} elseif(ROOT.DS == WWW_ROOT) {
