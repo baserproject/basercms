@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [ADMIN] ツールメニュー
+ * [ADMIN] スキーマ読み込みフォーム　ヘルプ
  *
  * PHP versions 5
  *
@@ -20,12 +20,5 @@
 ?>
 
 
-<tr>
-	<th>ツールメニュー</th>
-	<td>
-		<ul class="cleafix">
-			<li><?php $baser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>
-			<li><?php $baser->link('スキーマファイル読込', array('controller' => 'tools', 'action' => 'load_schema')) ?></li>
-		</ul>
-	</td>
-</tr>
+<p>スキーマファイルの読み込みテストを行えます。</p>
+<p>※ 単一ファイルのみ対応</p>

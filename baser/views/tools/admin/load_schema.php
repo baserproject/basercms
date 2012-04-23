@@ -18,23 +18,12 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2>
-	<?php $baser->contentsTitle() ?>
-	&nbsp;<?php echo $html->image('admin/icn_help.png',array('id'=>'helpAdmin','class'=>'slide-trigger','alt'=>'ヘルプ')) ?>
-</h2>
 
-<!-- help -->
-<div class="help-box corner10 display-none" id="helpAdminBody">
-	<h4>ユーザーヘルプ</h4>
-	<p>スキーマファイルの読み込みテストを行えます。</p>
-	<p>※ 単一ファイルのみ対応</p>
-</div>
-
-<p><small><span class="required">*</span> 印の項目は必須です。</small></p>
 
 <!-- form -->
 <?php echo $bcForm->create('Tool', array('action' => 'load_schema', 'type' => 'file')) ?>
-<table cellpadding="0" cellspacing="0" class="admin-row-table-01">
+
+<table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $bcForm->label('Tool.schema_type', 'スキーマタイプ') ?></th>
 		<td class="col-input">
@@ -55,6 +44,6 @@
 	</tr>
 </table>
 
-<div class="align-center"><?php echo $bcForm->submit('読み込み', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="submit"><?php echo $bcForm->submit('読み込み', array('div' => false, 'class' => 'btn-red button')) ?></div>
 
 <?php echo $bcForm->end() ?>

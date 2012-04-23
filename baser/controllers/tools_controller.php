@@ -277,6 +277,7 @@ class ToolsController extends AppController {
 
 		/* 表示設定 */
 		$this->pageTitle = 'スキーマファイル生成';
+		$this->help = 'tools_write_schema';
 
 	}
 /**
@@ -308,6 +309,7 @@ class ToolsController extends AppController {
 		}
 		/* 表示設定 */
 		$this->pageTitle = 'スキーマファイル読込';
+		$this->help = 'tools_load_schema';
 		
 	}
 /**
