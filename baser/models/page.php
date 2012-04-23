@@ -510,7 +510,7 @@ class Page extends AppModel {
 		$newPath = $this->_getPageFilePath($data);
 
 		// ファイルに保存
-		$newFile = new File($newPath);
+		$newFile = new File($newPath, true);
 		if($newFile->open('w')) {
 			if($newFile->append($contents)) {
 				// テーマやファイル名が変更された場合は元ファイルを削除する

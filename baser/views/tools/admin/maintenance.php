@@ -18,28 +18,15 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<h2>
-	<?php $baser->contentsTitle() ?>&nbsp;
-	<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdmin', 'class' => 'slide-trigger', 'alt' => 'ヘルプ')) ?>
-</h2>
 
-<div class="help-box corner10 display-none" id="helpAdminBody">
-	<h4>ユーザーヘルプ</h4>
-	<p>データベースのバックアップと復元が行えますので、定期的にバックアップを保存しておく事をおすすめします。</p>
-	<ul><li>データベースのデータと構造をバックアップします。</li>
-		<li>baserCMSのバージョンが違う場合は復元する事ができない場合があります。</li>
-		<li>環境によっては復元に失敗する可能性もあります。バックアップと復元は必ず自己責任で行ってください。<br />
-			<small>※ 運用を開始する前に、バックアップと復元が正常に動作するかの確認をおすすめします。</small></li>
-	</ul>
-</div>
 
-<h3>データのバックアップ</h3>
+<h2>データのバックアップ</h2>
 
 <p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
 
 <div class="submit"><?php $baser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
 
-<h3>データの復元</h3>
+<h2>データの復元</h2>
 
 <p>バックアップファイルをアップロードし、データベースのデータを復元します。<br />
 <small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。<br />

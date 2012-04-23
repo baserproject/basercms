@@ -97,7 +97,8 @@ class ToolsController extends AppController {
 		}
 		$this->pageTitle = 'データメンテナンス';
 		$this->subMenuElements = array('site_configs');
-
+		$this->help = 'tools_maintenance';
+		
 	}
 /**
  * バックアップファイルを復元する
@@ -197,7 +198,7 @@ class ToolsController extends AppController {
 	function _backupDb() {
 
 		$tmpDir = TMP . 'schemas' . DS;
-		$version = $this->getBaserVersion();
+		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
 		$this->_writeBackup('baser', $tmpDir.'baser'.DS);
 		$this->_writeBackup('plugin', $tmpDir.'plugin'.DS);
