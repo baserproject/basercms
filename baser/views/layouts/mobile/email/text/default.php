@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [EMAIL] MOBILE メール送信
+ * [EMAIL] 空レイアウト
  * 
  * PHP versions 5
  *
@@ -10,12 +10,11 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			baser.views.layout
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS.'mobile'.DS.'mail_default'.$this->ext;
-?>
+echo $content_for_layout; ?>

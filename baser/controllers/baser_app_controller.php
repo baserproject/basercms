@@ -711,13 +711,14 @@ class BaserAppController extends Controller {
 				$this->BcEmail->attachments = $options['attachments'];
 			}
 		}
-		
+
 		// テンプレート
 		if(Configure::read('BcRequest.agent')) {
-			$this->BcEmail->template = Configure::read('BcRequest.agentPrefix').DS.$template;
-		}else {
+			$this->BcEmail->layoutPath = Configure::read('BcRequest.agentPrefix');
+			$this->BcEmail->subDir = Configure::read('BcRequest.agentPrefix');
 			$this->BcEmail->template = $template;
 		}
+		$this->BcEmail->template = $template;
 
 		// データ
 		if(is_array($body)) {

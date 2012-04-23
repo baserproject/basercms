@@ -35,7 +35,7 @@
 ━◇◆━━━━━━━━━━━
 　◆ お問い合わせ内容 
 ━━━━━━━━━━━◆◇━
-<?php echo $this->element('email/text/mobile/mail_data') ?>
+<?php echo $baser->element('email/text/mail_data') ?>
  
  
  

@@ -339,6 +339,18 @@ class BcEmailComponent extends EmailComponent {
 		$View->layout = $this->layout;
 		$msg = array();
 
+		// CUSTOMIZE ADD 2012/04/23 ryuring
+		// layoutPath / subDir を指定できるようにした
+		// >>>
+		$layoutPath = $subDir = '';
+		if(!empty($this->layoutPath)) {
+			$layoutPath = $this->layoutPath.DS;
+		}
+		if(!empty($this->subDir)) {
+			$subDir = $this->subDir.DS;
+		}
+		// <<<
+		
 		$content = implode("\n", $content);
 
 		if ($this->sendAs === 'both') {
@@ -353,8 +365,16 @@ class BcEmailComponent extends EmailComponent {
 			$msg[] = 'Content-Transfer-Encoding: 7bit';
 			$msg[] = '';
 
-			$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
-			$View->layoutPath = 'email' . DS . 'text';
+			// CUSTOMIZE MODIRY 2012/04/23 ryuring
+			// layoutPath / subDir を指定できるようにした
+			// >>>	
+			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
+			//$View->layoutPath = 'email' . DS . 'text';
+			// ---
+			$content = $View->element($subDir . 'email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
+			$View->layoutPath = $layoutPath.'email' . DS . 'text';
+			// >>>
+			
 			$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
 			$msg = array_merge($msg, $content);
 
@@ -364,8 +384,16 @@ class BcEmailComponent extends EmailComponent {
 			$msg[] = 'Content-Transfer-Encoding: 7bit';
 			$msg[] = '';
 
-			$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
-			$View->layoutPath = 'email' . DS . 'html';
+			// CUSTOMIZE MODIRY 2012/04/23 ryuring
+			// layoutPath / subDir を指定できるようにした
+			// >>>	
+			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
+			//$View->layoutPath = 'email' . DS . 'html';
+			// ---
+			$htmlContent = $View->element($subDir . 'email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
+			$View->layoutPath = $layoutPath.'email' . DS . 'html';
+			// <<<
+			
 			$htmlContent = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($htmlContent)));
 			$msg = array_merge($msg, $htmlContent);
 			$msg[] = '';
@@ -390,21 +418,24 @@ class BcEmailComponent extends EmailComponent {
 				$msg[] = '';
 			}
 		}
-
+		
 		// CUSTOMIZE MODIFY 2011/04/25 ryuring
 		// プラグインのテンプレートを指定できるようにした
-		// >>>
-		// $content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content), true);
+		// CUSTOMIZE MODIRY 2012/04/23 ryuring
+		// layoutPath / subDir を指定できるようにした
+		// >>>		
+		//$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content), true);
+		//$View->layoutPath = 'email' . DS . $this->sendAs;
 		// ---
 		if($this->plugin) {
 			$options = array('content' => $content, 'plugin' => $this->plugin);
 		} else {
 			$options = array('content' => $content);
 		}
-		$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, $options, true);
+		$content = $View->element($subDir . 'email' . DS . $this->sendAs . DS . $this->template, $options, true);
+		$View->layoutPath = $layoutPath.'email' . DS . $this->sendAs;
 		// <<<
 		
-		$View->layoutPath = 'email' . DS . $this->sendAs;
 		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
 		$msg = array_merge($msg, $content);
 		ClassRegistry::removeObject('view');

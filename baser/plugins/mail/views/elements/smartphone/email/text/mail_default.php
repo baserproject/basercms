@@ -1,8 +1,8 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [EMAIL] MOBILE メール送信データ
- *
+ * [SMARTPHONE] 送信メール
+ * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS.'mobile'.DS.'mail_data'.$this->ext;
+include BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'mobile'.DS.'email'.DS.'text'.DS.'mail_default'.$this->ext;
 ?>
