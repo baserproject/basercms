@@ -31,6 +31,7 @@ App::import('Component','BcAuthConfigure');
 class BaserAppController extends Controller {
 /**
  * view
+ * 
  * @var string
  */
 	var $view = 'App';
