@@ -550,7 +550,8 @@ class BaserAppController extends Controller {
 /**
  * DBのバージョンを取得する
  *
- * @return	string
+ * @return string
+ * @access public
  */
 	function getSiteVersion($plugin = '') {
 
