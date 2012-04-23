@@ -24,7 +24,11 @@
 	require BASER.'basics.php';
 	/* ConnectionManager ハック */
 	// baserフォルダ内のデータソースも走査するようにした
+	// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
 	App::import('Core', 'ConnectionManager', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'connection_manager.php'));
+	App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
+	App::import('Behavior', 'BcCache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'bc_cache.php'));
+	App::import('Core', 'ClassRegistry');
 /**
  * Baserパス追加
  */
@@ -208,10 +212,14 @@
 			}
 		}
 	}
+if(BC_INSTALLED) {
+/**
+ * サイト基本設定を読み込む 
+ */
+	loadSiteConfig();
 /**
  * データキャッシュ
  */
-if(BC_INSTALLED) {
 	Cache::config('_cake_data_', array(
 			'engine'		=> 'File',
 			'duration'		=> Configure::read('BcCache.dataCachetime'),
@@ -233,24 +241,30 @@ if(BC_INSTALLED) {
 			'lock'			=> false,
 			'serialize'		=> true
 	 ));
-}
 /**
  * プラグインの bootstrap を実行する
  */
- 	if(BC_INSTALLED) {
-		$enablePlugins = getEnablePlugins();
-		Configure::write('BcStatus.enablePlugins', $enablePlugins);
-		$_pluginPaths = array(
-			APP.'plugins'.DS,
-			BASER_PLUGINS
-		);
-		foreach($enablePlugins as $enablePlugin) {
-			foreach($_pluginPaths as $_pluginPath) {
-				$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
-				if(file_exists($pluginBootstrap)) {
-					include $pluginBootstrap;
-				}
+	$enablePlugins = getEnablePlugins();
+	Configure::write('BcStatus.enablePlugins', $enablePlugins);
+	$_pluginPaths = array(
+		APP.'plugins'.DS,
+		BASER_PLUGINS
+	);
+	foreach($enablePlugins as $enablePlugin) {
+		foreach($_pluginPaths as $_pluginPath) {
+			$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
+			if(file_exists($pluginBootstrap)) {
+				include $pluginBootstrap;
 			}
 		}
 	}
+/**
+ * テーマの bootstrap を実行する 
+ */
+	$themeBootstrap = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'config'.DS.'bootstrap.php';
+	if(file_exists($themeBootstrap)) {
+		include $themeBootstrap;
+	}
+	
+}
 ?>
