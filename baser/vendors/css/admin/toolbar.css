@@ -38,6 +38,7 @@ html, body {
 	width:100%;
 	font-size: 12px;
 	border-bottom: 1px solid #444;
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important;
 }
 #ToolbarInner {
 	padding: 0 30px;
