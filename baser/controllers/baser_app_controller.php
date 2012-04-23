@@ -493,6 +493,7 @@ class BaserAppController extends Controller {
  * baserCMSのバージョンを取得する
  *
  * @return string Baserバージョン
+ * @access public
  */
 	function getBaserVersion($plugin = '') {
 
