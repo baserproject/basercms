@@ -103,6 +103,11 @@ class ThemesController extends AppController {
 		}else{
 			$theme['screenshot'] = false;
 		}
+		if(is_writable($path.DS.$themename.DS.'pages'.DS)){
+			$theme['is_writable_pages'] = true;
+		} else {
+			$theme['is_writable_pages'] = false;
+		}
 		$theme['name'] = $themename;
 		$theme['title'] = $title;
 		$theme['description'] = $description;
@@ -321,7 +326,7 @@ class ThemesController extends AppController {
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
 		if(!$this->Page->createAllPageTemplate()){
-				$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+				$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />テーマの適用をやり直すか、表示できないページについてページ管理より更新処理を行ってください。');
 		} else {
 			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		}

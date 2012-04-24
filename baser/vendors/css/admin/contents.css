@@ -450,7 +450,8 @@ table.sub-menu{
 .contents-body .form-table .checkbox {
 	float:left;
 }
-.contents-body .form-table .error-message {
+.contents-body .form-table .error-message,
+.contents-body .list-table .error-message{
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;

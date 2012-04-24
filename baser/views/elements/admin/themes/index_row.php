@@ -42,6 +42,9 @@
 <?php if($data['name'] != 'core'): ?>
 		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 <?php endif ?>
+<?php if(!$data['is_writable_pages'] && $data['name'] != 'core'): ?>
+		<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>
+<?php endif ?>
 	</td>
 	<td><?php echo $data['name'] ?></td>
 	<td style="width:220px">
