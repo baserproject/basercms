@@ -49,13 +49,15 @@ class BcMobileHelper extends Helper {
 			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
 
 			// 内部リンクの自動変換
-			$currentAlias = Configure::read('BcRequest.agentAlias');
-			// 一旦プレフィックスを除外
-			$reg = '/href="'.preg_quote(BC_BASE_URL, '/').$currentAlias.'\/([^\"]*?)\"/';
-			$view->output = preg_replace($reg, 'href="'.BC_BASE_URL.'$1"', $view->output);
-			// プレフィックス追加
-			$reg = '/href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
-			$view->output = preg_replace($reg, 'href="'.BC_BASE_URL.$currentAlias.'/$1"', $view->output);
+			if(Configure::read('BcAgent.mobile.autoLink')) {
+				$currentAlias = Configure::read('BcRequest.agentAlias');
+				// 一旦プレフィックスを除外
+				$reg = '/href="'.preg_quote(BC_BASE_URL, '/').'('.$currentAlias.'\/([^\"]*?))\"/';
+				$view->output = preg_replace_callback($reg, array($this, '_removeMobilePrefix'), $view->output);
+				// プレフィックス追加
+				$reg = '/href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
+				$view->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $view->output);
+			}
 			
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
@@ -100,6 +102,37 @@ class BcMobileHelper extends Helper {
 		}
 		
 	}
-	
+/**
+ * リンクからモバイル用のプレフィックスを除外する
+ * preg_replace_callback のコールバック関数
+ * 
+ * @param array $matches
+ * @return string
+ * @access protected 
+ */
+	function _removeMobilePrefix($matches) {
+		if(strpos($matches[1], 'mobile=off') === false) {
+			return 'href="'.BC_BASE_URL.$matches[2].'"';
+		} else {
+			return 'href="'.BC_BASE_URL.$matches[1].'"';
+		}
+	}
+/**
+ * リンクにモバイル用のプレフィックスを追加する
+ * preg_replace_callback のコールバック関数
+ * 
+ * @param array $matches
+ * @return string 
+ * @access protected
+ */
+	function _addMobilePrefix($matches) {
+		$currentAlias = Configure::read('BcRequest.agentAlias');
+		$url = $matches[1];
+		if(strpos($url, 'mobile=off') === false) {
+			return 'href="'.BC_BASE_URL.$currentAlias.'/'.$url.'"';
+		} else {
+			return 'href="'.BC_BASE_URL.$url.'"';
+		}
+	}	
 }
 ?>

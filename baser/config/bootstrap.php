@@ -133,6 +133,12 @@
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl',$parameter);	// ※ requestActionに対応する為、routes.php で上書きされる	
 /**
+ * セッションスタート 
+ */
+	App::import('Core','Session');
+	$Session = new CakeSession();
+	$Session->start();
+/**
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
  */
@@ -163,10 +169,38 @@
 					if($getParams == '/' || '/index.php') {
 						$getParams = '';
 					}
-					$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
-					header("HTTP/1.1 301 Moved Permanently");
-					header("Location: ".$redirectUrl);
-					exit();
+					
+					$redirect = true;
+					
+					// URLによる AUTO REDIRECT 設定
+					if(isset($_GET[$setting['prefix'].'_auto_redirect'])) {
+						if($_GET[$setting['prefix'].'_auto_redirect'] == 'on') {
+							$_SESSION[$setting['prefix'].'_auto_redirect'] = 'on';
+						} elseif($_GET[$setting['prefix'].'_auto_redirect'] == 'off') {
+							$_SESSION[$setting['prefix'].'_auto_redirect'] = 'off';
+						}
+					}
+					
+					if(isset($_SESSION[$setting['prefix'].'_auto_redirect'])) {
+						if($_SESSION[$setting['prefix'].'_auto_redirect'] == 'off') {
+							$redirect = false;
+						}
+					}	
+					
+					if(isset($_GET[$setting['prefix']])) {
+						if($_GET[$setting['prefix']] == 'on') {
+							$redirect = true;
+						} elseif($_GET[$setting['prefix']] == 'off') {
+							$redirect = false;
+						}
+					}
+
+					if($redirect) {
+						$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
+						header("HTTP/1.1 301 Moved Permanently");
+						header("Location: ".$redirectUrl);
+						exit();
+					}
 				}
 			}
 			if($agentOn) {
@@ -205,9 +239,6 @@
 			// TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
 			// セキュリティ上の問題もあるので実装は検討が必要。
 			// bootstrapで実装した場合、他ページへの負荷の問題もある
-			App::import('Core','Session');
-			$Session = new CakeSession();
-			$Session->start();
 			if(isset($_SESSION['Auth']['User'])) {
 				Configure::write('Cache.check', false);
 			}

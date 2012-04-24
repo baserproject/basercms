@@ -101,6 +101,7 @@
 			'alias'	=> 'm',
 			'prefix'=> 'mobile',
 			'autoRedirect'	=> true,
+			'autoLink'		=> true,
 			'agents'	=> array(
 				'Googlebot-Mobile',
 				'Y!J-SRD',

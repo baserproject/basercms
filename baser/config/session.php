@@ -1,7 +1,11 @@
 <?php
 if (empty($_SESSION)) {
 	if ($iniSet) {
-		if(Configure::read('BcRequest.agent') == 'mobile') {
+		$agentAgents = Configure::read('BcAgent.mobile.agents');
+		$agentAgents = implode('||', $agentAgents);
+		$agentAgents = preg_quote($agentAgents, '/');
+		$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
+		if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
 			ini_set('session.use_cookies', 0);
 			if(Configure::read('BcAgent.mobile.sessionId')) {
 				ini_set('session.use_trans_sid', 1);
