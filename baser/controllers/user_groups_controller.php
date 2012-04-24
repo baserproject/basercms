@@ -183,7 +183,7 @@ class UserGroupsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -238,12 +238,12 @@ class UserGroupsController extends AppController {
 	function admin_ajax_copy($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		$result = $this->UserGroup->copy($id);
 		if($result) {
-			$this->set('data', $result);
+			$this->ajaxError(500, $this->Page->validationErrors);
 		} else {
 			exit();
 		}

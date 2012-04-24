@@ -54,6 +54,8 @@ class FavoritesController extends AppController {
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
 				return;
+			} else {
+				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
 		exit();
@@ -69,7 +71,7 @@ class FavoritesController extends AppController {
 	function admin_ajax_edit ($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		if($this->data) {
@@ -79,6 +81,8 @@ class FavoritesController extends AppController {
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
 				return;
+			} else {
+				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
 		
@@ -98,6 +102,8 @@ class FavoritesController extends AppController {
 				$this->Favorite->saveDbLog('よく使う項目: '.$name.' を削除しました。');
 				exit(true);
 			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 		

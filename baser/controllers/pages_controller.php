@@ -671,10 +671,10 @@ class PagesController extends AppController {
 				clearDataCache();
 				echo true;
 			}else{
-				echo false;
+				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 			}
 		}else{
-			echo false;
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 
@@ -997,10 +997,12 @@ class PagesController extends AppController {
 	function admin_ajax_unpublish($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, false)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->Page->validationErrors);
 		}
 		exit();
 
@@ -1017,10 +1019,12 @@ class PagesController extends AppController {
 	function admin_ajax_publish($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, true)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->Page->validationErrors);
 		}
 		exit();
 
@@ -1096,7 +1100,7 @@ class PagesController extends AppController {
 	function admin_ajax_delete($id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		$page = $this->Page->read(null, $id);
@@ -1126,7 +1130,7 @@ class PagesController extends AppController {
 			ClassRegistry::removeObject('View');	// Page 保存時に requestAction で 固定ページテンプレート生成用に初期化される為
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->Page->validationErrors);
 		}
 		
 	}

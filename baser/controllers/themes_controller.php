@@ -186,13 +186,13 @@ class ThemesController extends AppController {
 	function admin_ajax_copy($theme){
 
 		if(!$theme){
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		$result = $this->_copy($theme);
 		if($result) {
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, 'テーマフォルダのアクセス権限を見直してください。');
 		}
 
 	}
@@ -222,7 +222,7 @@ class ThemesController extends AppController {
 		}
 		
 	}
-	/**
+/**
  * テーマを削除する　(ajax)
  *
  * @param string $theme
@@ -232,11 +232,13 @@ class ThemesController extends AppController {
 	function admin_ajax_delete($theme){
 
 		if(!$theme){
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_del($theme)) {
 			clearViewCache();
 			exit(true);
+		} else {
+			$this->ajaxError(500, 'テーマフォルダを手動で削除してください。');
 		}
 		exit();
 		

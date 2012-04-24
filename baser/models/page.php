@@ -1137,7 +1137,6 @@ class Page extends AppModel {
  */
 	function copy($id = null, $data = array()) {
 		
-		$data = array();
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
 		}
@@ -1158,7 +1157,7 @@ class Page extends AppModel {
 		if($result) {
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name'])) {
+			if(isset($this->validationErrors['name']) && $this->validationErrors['name'] != 'ページ名は50文字以内で入力してください。') {
 				return $this->copy(null, $data);
 			} else {
 				return false;

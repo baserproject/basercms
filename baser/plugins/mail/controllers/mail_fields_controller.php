@@ -250,7 +250,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		// メッセージ用にデータを取得
 		$mailField = $this->MailField->read(null, $id);
@@ -261,6 +261,8 @@ class MailFieldsController extends MailAppController {
 				$this->MailField->saveDbLog('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。');
 				exit(true);
 			}
+		} else {
+			$this->ajaxError(500, 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
 		}
 		exit();
 	}
@@ -405,8 +407,8 @@ class MailFieldsController extends MailAppController {
 	function admin_ajax_copy($mailContentId, $id) {
 
 		/* 除外処理 */
-		if(!$id) {
-			exit();
+		if(!$id || !$mailContentId) {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$result = $this->MailField->copy($id);
@@ -414,7 +416,7 @@ class MailFieldsController extends MailAppController {
 			$this->Message->construction($mailContentId);
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
 		}
 
 	}
@@ -451,11 +453,19 @@ class MailFieldsController extends MailAppController {
  */
 	function admin_ajax_update_sort ($mailContentId) {
 
+		if(!$mailContentId) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
 		if($this->data){
 			$conditions = $this->_createAdminIndexConditions($mailContentId);
 			if($this->MailField->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				exit(true);
+			} else {
+				$this->ajaxError(500, $this->MailField->validationErrors);
 			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 
@@ -485,10 +495,12 @@ class MailFieldsController extends MailAppController {
 	function admin_ajax_unpublish($mailContentId, $id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, false)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->MailField->validationErrors);
 		}
 		exit();
 
@@ -505,10 +517,12 @@ class MailFieldsController extends MailAppController {
 	function admin_ajax_publish($mailContentId, $id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, true)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->MailField->validationErrors);
 		}
 		exit();
 

@@ -137,9 +137,15 @@
 					$(config.alertBox).fadeIn(500);
 				}
 			},
-			error: function(){
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				var errorMessage = '';
+				if(XMLHttpRequest.responseText) {
+					errorMessage = '<br />'+XMLHttpRequest.responseText;
+				} else {
+					errorMessage = '<br />'+errorThrown;
+				}
 				sortTable.sortable("cancel");
-				$(config.alertBox).html('並び替えの保存に失敗しました。');
+				$(config.alertBox).html('並び替えの保存に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
 				$(config.alertBox).fadeIn(500);
 			},
 			complete: function() {

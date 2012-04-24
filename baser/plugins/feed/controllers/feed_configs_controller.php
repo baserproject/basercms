@@ -263,7 +263,7 @@ class FeedConfigsController extends FeedAppController {
 	function admin_ajax_delete($id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -275,6 +275,7 @@ class FeedConfigsController extends FeedAppController {
 			exit(true);
 		}
 		exit();
+		
 	}
 /**
  * [ADMIN] 削除

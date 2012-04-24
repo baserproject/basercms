@@ -180,7 +180,7 @@ class MailMessagesController extends MailAppController {
 	function admin_ajax_delete($mailContentId, $messageId) {
 
 		if(!$messageId) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_del($messageId)){
 			exit(true);

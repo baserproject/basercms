@@ -205,7 +205,7 @@ class MailContentsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -361,14 +361,14 @@ class MailContentsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$result = $this->MailContent->copy($id);
 		if($result) {
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->MailContent->validationErrors);
 		}
 
 	}

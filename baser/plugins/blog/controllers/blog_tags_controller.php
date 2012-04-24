@@ -181,7 +181,7 @@ class BlogTagsController extends BlogAppController {
 	function admin_ajax_delete($id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$data = $this->BlogTag->read(null, $id);
@@ -225,7 +225,11 @@ class BlogTagsController extends BlogAppController {
 			if($data = $this->BlogTag->save()) {
 				$result = array($this->BlogTag->id => $data['BlogTag']['name']);
 				$this->set('result', $result);
+			} else {
+				$this->ajaxError(500, $this->BlogTag->validationErrors);
 			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 	}

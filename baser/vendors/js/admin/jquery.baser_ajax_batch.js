@@ -100,10 +100,16 @@
 							$(config.alertBox).fadeIn(500);
 						}
 					},
-					error: function(){
+					error: function(XMLHttpRequest, textStatus, errorThrown){
+						var errorMessage = '';
+						if(XMLHttpRequest.responseText) {
+							errorMessage = '<br />'+XMLHttpRequest.responseText;
+						} else {
+							errorMessage = '<br />'+errorThrown;
+						}
 						$(config.loader).hide();
 						form.remove();
-						$(config.alertBox).html('一括処理に失敗しました。');
+						$(config.alertBox).html('一括処理に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
 						$(config.alertBox).fadeIn(500);
 						
 					}

@@ -271,7 +271,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		if($this->_del($id)){

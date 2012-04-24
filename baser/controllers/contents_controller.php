@@ -403,7 +403,7 @@ class ContentsController extends AppController {
 	function admin_ajax_delete($id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		/* 削除処理 */
@@ -413,6 +413,7 @@ class ContentsController extends AppController {
 			exit(true);
 		}
 		exit();
+		
 	}
 /**
  * [ADMIN] 検索インデックス削除

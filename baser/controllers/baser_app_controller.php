@@ -1452,6 +1452,12 @@ class BaserAppController extends Controller {
 		// <<<
 		
 	}
+/**
+ * テーマ用のヘルパーをセットする
+ *  
+ * @return void
+ * @access public
+ */
 	function setThemeHelpers() {
 		$themeHelpersPath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'helpers';
 		$Folder = new Folder($themeHelpersPath);
@@ -1461,6 +1467,24 @@ class BaserAppController extends Controller {
 				$this->helpers[] = Inflector::classify(basename($file, '.php'));
 			}
 		}
+	}
+/**
+ * Ajax用のエラーを出力する
+ * 
+ * @param int $errorNo
+ * @param mixed $message 
+ * @return void
+ * @access public
+ */
+	function ajaxError($errorNo = 500, $message = '') {
+		header('HTTP/1.1 '.$errorNo);
+		if($message) {
+			if(is_array($message)) {
+				$message = implode('<br />', $message);
+			}
+			echo $message;
+		}
+		exit();
 	}
 }
 ?>

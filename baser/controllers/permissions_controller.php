@@ -172,14 +172,20 @@ class PermissionsController extends AppController {
  */
 	function admin_ajax_add() {
 
-		$authPrefix = $this->Permission->UserGroup->getAuthPrefix($this->data['Permission']['user_group_id']);
-		$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
-		$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
-		$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
-		$this->Permission->create($this->data);
-		if($this->Permission->save()) {
-			$this->Permission->saveDbLog('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。');
-			exit(true);
+		if($this->data) {
+			$authPrefix = $this->Permission->UserGroup->getAuthPrefix($this->data['Permission']['user_group_id']);
+			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
+			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
+			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
+			$this->Permission->create($this->data);
+			if($this->Permission->save()) {
+				$this->Permission->saveDbLog('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。');
+				exit(true);
+			} else {
+				$this->ajaxError(500, $this->Page->validationErrors);
+			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 
@@ -265,7 +271,7 @@ class PermissionsController extends AppController {
 	function admin_ajax_delete($id = null) {
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -320,7 +326,11 @@ class PermissionsController extends AppController {
 			$conditions = $this->_createAdminIndexConditions($this->data);
 			if($this->Permission->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
+			} else {
+				$this->ajaxError(500, $this->Permission->validationErrors);
 			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 
@@ -357,7 +367,7 @@ class PermissionsController extends AppController {
 	function admin_ajax_copy($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		$result = $this->Permission->copy($id);
@@ -367,7 +377,7 @@ class PermissionsController extends AppController {
 			$this->set('sortmode', $this->passedArgs['sortmode']);
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->Permission->validationErrors);
 		}
 		
 	}
@@ -383,10 +393,12 @@ class PermissionsController extends AppController {
 	function admin_ajax_unpublish($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, false)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->Permission->validationErrors);
 		}
 		exit();
 
@@ -403,10 +415,12 @@ class PermissionsController extends AppController {
 	function admin_ajax_publish($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, true)) {
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->Permission->validationErrors);
 		}
 		exit();
 

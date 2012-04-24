@@ -290,7 +290,7 @@ class BlogContentsController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -315,13 +315,13 @@ class BlogContentsController extends BlogAppController {
 	function admin_ajax_copy($id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		$result = $this->BlogContent->copy($id);
 		if($result) {
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->BlogContent->validationErrors);
 		}
 		
 	}

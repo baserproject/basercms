@@ -389,7 +389,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_ajax_delete($blogContentId, $id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// 削除実行
@@ -586,11 +586,13 @@ class BlogPostsController extends BlogAppController {
 	function admin_ajax_unpublish($blogContentId, $id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, false)) {
 			clearViewCache();
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->BlogPost->validationErrors);
 		}
 		exit();
 
@@ -607,11 +609,13 @@ class BlogPostsController extends BlogAppController {
 	function admin_ajax_publish($blogContentId, $id) {
 		
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_changeStatus($id, true)) {
 			clearViewCache();
 			exit(true);
+		} else {
+			$this->ajaxError(500, $this->BlogPost->validationErrors);
 		}
 		exit();
 
@@ -692,7 +696,7 @@ class BlogPostsController extends BlogAppController {
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->BlogPost->validationErrors);
 		}
 		
 	}

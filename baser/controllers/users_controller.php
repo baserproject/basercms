@@ -179,7 +179,7 @@ class UsersController extends AppController {
 	function admin_ajax_login() {
 		
 		if(!$this->BcAuth->login($this->data)) {
-			exit();
+			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 		
 		$user = $this->BcAuth->user();
@@ -434,13 +434,13 @@ class UsersController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
 				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
-			exit();
+			$this->ajaxError(500, 'このユーザーは削除できません。');
 		}
 
 		// メッセージ用にデータを取得

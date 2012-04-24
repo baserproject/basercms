@@ -363,9 +363,14 @@ class ThemeFilesController extends AppController {
 	function admin_ajax_del () {
 
 		$args = $this->_parseArgs(func_get_args());
+		
+		if(!$args) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
 		extract($args);
 		if(!isset($this->_tempalteTypes[$type])) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		if($this->_del($args)){
@@ -485,9 +490,14 @@ class ThemeFilesController extends AppController {
 	function admin_ajax_copy() {
 
 		$args = $this->_parseArgs(func_get_args());
+		
+		if(!$args) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
 		extract($args);
 		if(!isset($this->_tempalteTypes[$type])) {
-			$this->notFound();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$themeFile = array();
@@ -534,7 +544,7 @@ class ThemeFilesController extends AppController {
 			$this->set('data', $themeFile);
 		}else {
 			$this->ThemeFile->saveDblog($target.' '.urldecode($path) .' のコピーに失敗しました。');
-			exit();
+			$this->ajaxError(500, '上位フォルダのアクセス権限を見直してください。');
 		}
 
 	}

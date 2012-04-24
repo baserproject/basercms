@@ -219,7 +219,7 @@ class FeedDetailsController extends FeedAppController {
 	function admin_ajax_delete($feedConfigId, $id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		if($this->_del($id)) {
 			exit(true);

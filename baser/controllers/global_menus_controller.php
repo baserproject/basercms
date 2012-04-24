@@ -229,7 +229,7 @@ class GlobalMenusController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		// メッセージ用にデータを取得
@@ -290,10 +290,10 @@ class GlobalMenusController extends AppController {
 			if($this->GlobalMenu->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
 			}else{
-				echo false;
+				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 			}
 		}else{
-			echo false;
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		exit();
 

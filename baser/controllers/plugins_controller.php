@@ -263,6 +263,10 @@ class PluginsController extends AppController {
  */
 	function admin_ajax_delete_file($pluginName) {
 		
+		if($pluginName) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
 		$pluginName = urldecode($pluginName);
 		$this->__deletePluginFile($pluginName);
 		$this->Plugin->saveDbLog('プラグイン「'.$pluginName.'」 を完全に削除しました。');
@@ -430,7 +434,7 @@ class PluginsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$data = $this->Plugin->read(null, $id);

@@ -404,7 +404,7 @@ class PageCategoriesController extends AppController {
 	function admin_ajax_delete($id = null) {
 
 		if(!$id) {
-			exit();
+			$this->ajaxError(500, '無効な処理です。');
 		}
 		
 		$data = $this->PageCategory->read(null, $id);
@@ -431,7 +431,7 @@ class PageCategoriesController extends AppController {
 			$this->_setAdminIndexViewData();
 			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->PageCategory->validationErrors);
 		}
 		
 	}
@@ -482,6 +482,8 @@ class PageCategoriesController extends AppController {
 		
 		if($this->PageCategory->moveup($id)) {
 			echo true;
+		} else {
+			$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 		}
 		exit();
 		
@@ -498,6 +500,8 @@ class PageCategoriesController extends AppController {
 		
 		if($this->PageCategory->movedown($id)) {
 			echo true;
+		} else {
+			$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 		}
 		exit();
 		
