@@ -1033,7 +1033,7 @@ class BaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function contentsName($detail = false) {
+	function contentsName($detail = false, $options = array()) {
 
 		echo $this->getContentsName($detail);
 		
@@ -1051,11 +1051,13 @@ class BaserHelper extends AppHelper {
  */
 	function getContentsName($detail = false, $options = array()) {
 
-		$options = am(array(
+		$options = array_merge(array(
 			'home'		=> 'Home',
 			'default'	=> 'Default',
-			'error'		=> 'Error'),
+			'error'		=> 'Error',
+			'underscore'=> false),
 		$options);
+		
 		extract($options);
 		
 		$prefix = '';
@@ -1144,18 +1146,35 @@ class BaserHelper extends AppHelper {
 		}
 
 		if ($this->_view->name == 'CakeError') {
+			
 			$contentsName = $error;
+			
 		} elseif(count($aryUrl) >= 2) {
+			
 			if(!$detail) {
-				$contentsName = Inflector::camelize($aryUrl[0]);
+				$contentsName = $aryUrl[0];
 			} else {
-				$contentsName =  Inflector::camelize(implode('_', $aryUrl));
+				$contentsName = implode('_', $aryUrl);
 			}
+			
 		} elseif(count($aryUrl) == 1 && $aryUrl[0] == 'index') {
+			
 			$contentsName = $home;
+			
 		} else {
-			$contentsName = $default;
+			if(!$detail) {	
+				$contentsName = $default;
+			} else {
+				$contentsName = $aryUrl[0];
+			}
 		}
+		
+		if($underscore) {
+			$contentsName = Inflector::underscore($contentsName);
+		} else {
+			$contentsName = Inflector::camelize($contentsName);
+		}
+			
 		return $contentsName;
 
 	}
