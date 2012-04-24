@@ -541,7 +541,8 @@ class BlogController extends BlogAppController {
 			$day = $_conditions['day'];
 			
 			$db=& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-			switch (str_replace('_ex','',$db->config['driver'])) {
+
+			switch (preg_replace('/^bc_/', '', $db->config['driver'])) {
 				case 'mysql':
 				case 'csv':
 					if($year) $conditions["YEAR(BlogPost.posts_date)"] = $year;

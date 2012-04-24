@@ -477,7 +477,7 @@ class BaserAppModel extends Model {
 	function restoreDb($config, $source) {
 
 		App::import('Vendor','DbRestore',array('file'=>'dbrestore.php'));
-		$dbType = preg_replace('/_ex$/i','',$config['driver']);
+		$dbType = preg_replace('/^bc_/', '', $config['driver']);
 		switch ($dbType) {
 			case 'mysql':
 				$connection = @mysql_connect($config['host'],$config['login'],$config['password']);
@@ -496,7 +496,7 @@ class BaserAppModel extends Model {
 
 			case 'sqlite':
 			case 'sqlite3':
-				if($config['driver']=='sqlite3_ex') {
+				if($config['driver']=='bc_sqlite3') {
 					$driver = 'sqlite3';
 				}else {
 					$driver = $config['driver'];

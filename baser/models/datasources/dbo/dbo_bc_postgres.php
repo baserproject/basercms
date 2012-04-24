@@ -16,11 +16,9 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		DboBcPostgres に移行
  */
-trigger_error('/app/config/database.php の driver を bc_postgres に書き換えてください。（２ヶ所）', E_USER_WARNING);
 App::import('Core','DboPostgres');
-class DboPostgresEx extends DboPostgres {
+class DboBcPostgres extends DboPostgres {
 /**
  * Returns an array of the fields in given table name.
  *

@@ -16,11 +16,9 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		DboBcMysql に移行
  */
-trigger_error('/app/config/database.php の driver を bc_mysql に書き換えてください。（２ヶ所）', E_USER_WARNING);
 App::import('Core','DboMysql');
-class DboMysqlEx extends DboMysql {
+class DboBcMysql extends DboMysql {
 /**
  * テーブル名のリネームステートメントを生成
  *

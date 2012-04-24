@@ -28,15 +28,13 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		DboBcCsv に移行
  */
-trigger_error('/app/config/database.php の driver を bc_csv に書き換えてください。（２ヶ所）', E_USER_WARNING);
 /**
  * CSV DBO Driver
  *
  * @package baser.models.datasources.dbo
  */
-class DboCsv extends DboSource {
+class DboBcCsv extends DboSource {
 /**
  * ドライバーの説明文
  *

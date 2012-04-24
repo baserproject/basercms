@@ -75,7 +75,7 @@ class BcManagerComponent extends Object {
 	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $nonDemoData = false) {
 
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
-		$driver = str_replace('_ex', '', $db->config['driver']);
+		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
 		if (!$db->connected && $driver != 'csv') {
 			return false;
@@ -160,7 +160,7 @@ class BcManagerComponent extends Object {
 		
 		/* 削除実行 */
 		// TODO schemaを有効活用すればここはスッキリしそうだが見送り
-		$dbType = str_replace('_ex','',$dbConfig['driver']);
+		$dbType = preg_replace('/^bc_/', '', $dbConfig['driver']);
 		switch ($dbType) {
 			case 'mysql':
 				$sources = $db->listSources();

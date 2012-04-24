@@ -664,7 +664,7 @@ class InstallationsController extends AppController {
 
 		/* dbName */
 		if(!empty($type) && !empty($name)) {
-			$type = str_replace('_ex','',$type);
+			$type = preg_replace('/^bc_/', '', $type);
 			if($type == 'sqlite3') {
 				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
 			}elseif($type == 'csv') {
@@ -696,7 +696,7 @@ class InstallationsController extends AppController {
 			$data['dbEncoding'] = 'sjis';
 		}
 		if($data['dbType'] == 'mysql' || $data['dbType'] == 'sqlite3' || $data['dbType'] == 'postgres') {
-			$data['dbType'] .= '_ex';
+			$data['dbType'] = 'bc_'.$data['dbType'];
 		}
 
 		$this->Session->write('Installation.dbType', $data['dbType']);
@@ -807,7 +807,7 @@ class InstallationsController extends AppController {
 			}
 
 			if($driver == 'mysql' || $driver == 'sqlite3' || $driver == 'postgres') {
-				$driver .= '_ex';
+				$driver = 'bc_'.$driver;
 			}
 
 			$dbfilehandler->create();

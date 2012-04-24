@@ -285,7 +285,7 @@ class BlogPost extends BlogAppModel {
 	function _getEntryDatesConditions($contentId,$year,$month) {
 
 		$dbConfig = new DATABASE_CONFIG();
-		$driver = str_replace('_ex','',$dbConfig->plugin['driver']);
+		$driver = preg_replace('/^bc_/', '', $dbConfig->plugin['driver']);
 
 		switch($driver) {
 			case 'mysql':

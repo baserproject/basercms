@@ -16,9 +16,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		DboBcSqlite3 に移行
  */
-trigger_error('/app/config/database.php の driver を bc_sqlite3 に書き換えてください。（２ヶ所）', E_USER_WARNING);
 /**
  * Include files
  */
@@ -28,7 +26,7 @@ App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo
  *
  * @package baser.models.datasources.dbo
  */
-class DboSqlite3Ex extends DboSqlite3 {
+class DboBcSqlite3 extends DboSqlite3 {
 /**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
