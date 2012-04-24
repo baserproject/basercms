@@ -1507,7 +1507,21 @@ END_FLASH;
  * ※ レイアウトは読み込まない
  * @param int $id 
  */
-	function page($id) {
+	function page($id, $params = array(), $options = array()) {
+
+		if(isset($this->_view->viewVars['pageRecursive']) && !$this->_view->viewVars['pageRecursive']) {
+			return;
+		}
+
+		$options = array_merge(array(
+			'loadHelpers'	=> false,
+			'subDir'		=> true,
+			'recursive'=> true
+		), $options);
+		
+		extract($options);
+
+		$this->_view->viewVars['pageRecursive'] = $recursive;
 		
 		// 現在のページの情報を退避
 		$currentId = null;
@@ -1519,16 +1533,19 @@ END_FLASH;
 		
 		// urlを取得
 		$PageClass =& ClassRegistry::init('Page');
-		$page = $PageClass->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
-		$url = '/../pages'.$PageClass->getPageUrl($page);
+		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
 		
-		$this->element($url);
-		
-		// 現在のページの情報に戻す
-		$this->setDescription($description);
-		$this->setTitle($title);
-		if($currentId) {
-			$this->setPageEditLink($currentId);
+		if($page) {
+			$url = '/../pages'.$PageClass->getPageUrl($page);
+
+			$this->element($url, $params, $loadHelpers = false, $subDir = true);
+
+			// 現在のページの情報に戻す
+			$this->setDescription($description);
+			$this->setTitle($title);
+			if($currentId) {
+				$this->setPageEditLink($currentId);
+			}
 		}
 		
 	}
