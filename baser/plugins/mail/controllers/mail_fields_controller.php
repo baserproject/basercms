@@ -115,11 +115,27 @@ class MailFieldsController extends MailAppController {
 		$datas = $this->MailField->find('all', array('conditions' => $conditions, 'order' => 'MailField.sort'));
 		$this->set('datas',$datas);
 		
+		$this->_setAdminIndexViewData();
+				
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
-	
+		
+		$this->set('publishLink', '/' . $this->mailContent['MailContent']['name'] . '/index');
+		$this->subMenuElements = array('mail_fields','mail_common');
+		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド一覧';
+		$this->help = 'mail_fields_index';
+
+	}
+/**
+ * 一覧の表示用データをセットする
+ * 
+ * @return void
+ * @access protected
+ */
+	function _setAdminIndexViewData() {
+		
 		/* セッション処理 */
 		if(isset($this->params['named']['sortmode'])){
 			$this->Session->write('SortMode.MailField', $this->params['named']['sortmode']);
@@ -132,11 +148,6 @@ class MailFieldsController extends MailAppController {
 			$this->set('sortmode', $this->Session->read('SortMode.MailField'));
 		}
 		
-		$this->set('publishLink', '/' . $this->mailContent['MailContent']['name'] . '/index');
-		$this->subMenuElements = array('mail_fields','mail_common');
-		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド一覧';
-		$this->help = 'mail_fields_index';
-
 	}
 /**
  * [ADMIN] メールフィールド追加
