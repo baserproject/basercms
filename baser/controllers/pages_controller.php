@@ -115,7 +115,7 @@ class PagesController extends AppController {
 		$this->_setAdminIndexViewData();
 		
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
-			Configure::write('debug', 1);
+			Configure::write('debug', 0);
 			$this->render('ajax_index');
 			return;
 		}
@@ -131,7 +131,6 @@ class PagesController extends AppController {
 		}
 
 		$this->set('search', 'pages_index');
-		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('pageCategories', $pageCategories);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページ一覧';
@@ -1150,6 +1149,7 @@ class PagesController extends AppController {
 		if(!empty($user)) {
 			$allowOwners = array('', $user['User']['user_group_id']);
 		}
+		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('allowOwners', $allowOwners);
 		$this->set('sortmode', $this->passedArgs['sortmode']);
 		
