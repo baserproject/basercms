@@ -275,7 +275,7 @@ class Permission extends AppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data) {
+	function copy($id, $data = array()) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));

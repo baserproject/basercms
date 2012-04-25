@@ -99,20 +99,36 @@ class PermissionsController extends AppController {
 		
 		$default = array('named' => array('sortmode' => 0));
 		$this->setViewConditions('Permission', array('default' => $default));
-		$conditions = $this->_createAdminIndexConditions($this->data);
+		$conditions = $this->_createAdminIndexConditions($userGroupId);
 		$datas = $this->Permission->find('all', array('conditions' => $conditions, 'order'=>'Permission.sort'));
-
 		if($datas) {
 			foreach($datas as $key => $data) {
 				$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $data['Permission']['url']);
 			}
 		}
+		$this->set('datas',$datas);
+		
+		$this->_setAdminIndexViewData();
+		
+		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
 		
 		$userGroupName = $this->Permission->UserGroup->field('title', array('UserGroup.id' => $userGroupId));
-		$this->set('datas',$datas);
-		$this->set('sortmode', $this->passedArgs['sortmode']);
 		$this->pageTitle = '['.$userGroupName.'] アクセス制限設定一覧';
 		$this->help = 'permissions_index';
+		
+	}
+/**
+ * 一覧の表示用データをセットする
+ * 
+ * @return void
+ * @access protected
+ */
+	function _setAdminIndexViewData() {
+		
+		$this->set('sortmode', $this->passedArgs['sortmode']);
 		
 	}
 /**
@@ -342,16 +358,12 @@ class PermissionsController extends AppController {
  * @return string
  * @access protected
  */
-	function _createAdminIndexConditions($data){
-
-		if(isset($data['Permission'])){
-			$data = $data['Permission'];
-		}
+	function _createAdminIndexConditions($userGroupId){
 
 		/* 条件を生成 */
 		$conditions = array();
-		if(!empty($data['user_group_id'])) {
-			$conditions['Permission.user_group_id'] = $data['user_group_id'];
+		if($userGroupId) {
+			$conditions['Permission.user_group_id'] = $userGroupId;
 		}
 		
 		return $conditions;
