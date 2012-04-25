@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$html->css('/mail/css/style',null,null,false);
+$baser->css('/mail/css/style', array('inline' => true));
 if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 	/* プラグインの為か、inlineが動作しない */
 	//$html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);

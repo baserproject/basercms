@@ -135,7 +135,7 @@ class BaserAppModel extends Model {
 			$data = $this->data;
 
 		// created,modifiedが更新されないバグ？対応
-		if (!$this->__exists) {
+		if (!$this->exists()) {
 			if(isset($data[$this->alias])) {
 				$data[$this->alias]['created']=null;
 			}else {

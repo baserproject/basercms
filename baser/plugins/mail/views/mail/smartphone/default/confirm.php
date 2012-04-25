@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$html->css(array('jquery-ui/ui.all'), null, null, false);
+$baser->css(array('jquery-ui/ui.all'), array('inline' => true));
 $baser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
 if($freezed){
 	$mailform->freeze();

@@ -390,7 +390,7 @@ class InstallationsController extends AppController {
 		$this->_createPages();
 		ClassRegistry::removeObject('View');
 		
-		$this->Session->del('InstallLastStep');
+		$this->Session->delete('InstallLastStep');
 		
 	}
 /**

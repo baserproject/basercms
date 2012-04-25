@@ -35,7 +35,7 @@ class FormExHelper extends FormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','TimeEx','BcText','Javascript','BcCkeditor');
+	var $helpers = array('Html','BcTime','BcText','Javascript','BcCkeditor');
 /**
  * sizeCounter用の関数読み込み可否
  * 
@@ -273,18 +273,18 @@ class FormExHelper extends FormHelper {
 		}
 
 		if (strlen($selected) > 4 || $selected === 'now') {
-			$wareki = $this->TimeEx->convertToWareki(date('Y-m-d', strtotime($selected)));
-			$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
-			$w = $this->TimeEx->wareki($wareki);
-			$wyear = $this->TimeEx->wyear($wareki);
+			$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
+			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+			$w = $this->BcTime->wareki($wareki);
+			$wyear = $this->BcTime->wyear($wareki);
 			$selected = $w.'-'.$wyear;
 		} elseif ($selected === false) {
 			$selected = null;
 		} elseif(strpos($selected, '-')===false) {
-			$wareki = $this->TimeEx->convertToWareki($this->value($fieldName));
+			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
 			if($wareki) {
-				$w = $this->TimeEx->wareki($wareki);
-				$wyear = $this->TimeEx->wyear($wareki);
+				$w = $this->BcTime->wareki($wareki);
+				$wyear = $this->BcTime->wyear($wareki);
 				$selected = $w.'-'.$wyear;
 			} else {
 				$selected = null;
@@ -354,7 +354,7 @@ class FormExHelper extends FormHelper {
 			$fields = array($idField,$displayField);
 		}
 
-		$list = $model->findAll($conditions,$fields,$order);
+		$list = $model->find( 'all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
 
 		if($list) {
 			return Set::combine($list,"{n}.".$modelName.".".$idField,"{n}.".$modelName.".".$displayField);
@@ -415,7 +415,7 @@ class FormExHelper extends FormHelper {
 		}
 
 		if($value) {
-			$attributes['value'] = date('Y/m/d',strtotime($this->TimeEx->format('Y/m/d',$value)));
+			$attributes['value'] = date('Y/m/d',strtotime($this->BcTime->format('Y/m/d',$value)));
 		}else {
 			unset($attributes['value']);
 		}
@@ -607,11 +607,11 @@ DOC_END;
 					list($min, $max) = array($max, $min);
 				}
 				for ($i = $min; $i <= $max; $i++) {
-					$wyears = $this->TimeEx->convertToWarekiYear($i);
+					$wyears = $this->BcTime->convertToWarekiYear($i);
 					if($wyears) {
 						foreach($wyears as $value) {
 							list($w,$year) = split('-', $value);
-							$data[$value] = $this->TimeEx->nengo($w).' '.$year;
+							$data[$value] = $this->BcTime->nengo($w).' '.$year;
 						}
 					}
 				}
@@ -1093,7 +1093,7 @@ DOC_END;
 		$_options = array('type'=>'textarea');
 		$options = am($_options,$options);
 		$method = $options['type'];
-		return $this->Ckeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
+		return $this->BcCkeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
 
 	}
 /**

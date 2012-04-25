@@ -1,5 +1,5 @@
 "id","sort","name","title","description","contents","page_category_id","status","url","draft","author_id","publish_begin","publish_end","exclude_search","modified","created"
-"","1","index","","","<?php echo $html->css(""top"",null,null,false) ?>
+"","1","index","","","<?php echo $baser->css(""top"", array(""inline"" => true)) ?>
 
 
 <div id=""news"" class=""clearfix"">

@@ -25,7 +25,7 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/get_recent_entries/'.$id.'/'.$count);
+$data = $this->requestAction('/blog/blog/get_recent_entries/'.$id.'/'.$count);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';

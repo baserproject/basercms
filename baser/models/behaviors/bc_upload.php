@@ -110,7 +110,7 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	function saveTmpFiles(&$model,$data,$tmpId) {
 		
-		$this->Session->del('Upload');
+		$this->Session->delete('Upload');
 		$model->data = $data;
 		$this->tmpId = $tmpId;
 		if($this->saveFiles($model)) {
@@ -263,8 +263,8 @@ class BcUploadBehavior extends ModelBehavior {
 		$tmpName = $this->savePath.$sessionKey;
 		$fileData = $this->Session->read('Upload.'.$sessionKey);
 		$fileType = $this->Session->read('Upload.'.$sessionKey.'_type');
-		$this->Session->del('Upload.'.$sessionKey);
-		$this->Session->del('Upload.'.$sessionKey.'_type');
+		$this->Session->delete('Upload.'.$sessionKey);
+		$this->Session->delete('Upload.'.$sessionKey.'_type');
 
 		// サイズを取得
 		if (ini_get('mbstring.func_overload') & 2 && function_exists('mb_strlen')) {
@@ -658,7 +658,7 @@ class BcUploadBehavior extends ModelBehavior {
 		if(!empty($model->data[$model->name]['id'])) {
 			$conditions[$model->name.'.id <>'] = $model->data[$model->name]['id'];
 		}
-		$datas = $model->findAll($conditions,$fieldName);
+		$datas = $model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName)));
 
 		if($datas) {
 			$prefixNo = 1;

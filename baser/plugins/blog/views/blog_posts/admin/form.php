@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', null, null, false);
+$baser->css('ckeditor/editor', array('inline' => true));
 $statuses = array(0=>'非公開', 1=>'公開');
 $baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>

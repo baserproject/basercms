@@ -46,7 +46,7 @@ class MailController extends MailAppController {
  * @var array
  * @access public
  */
-	var $helpers = array('BcFreeze','Mailform','Javascript','BcArray','BcTime','Maildata','Mailfield','Mail');
+	var $helpers = array('BcFreeze','Mail.Mailform','Javascript','BcArray','BcTime','Mail.Maildata','Mail.Mailfield','Mail.Mail');
 /**
  * Array of components a controller will use
  *
@@ -123,7 +123,7 @@ class MailController extends MailAppController {
 
 		$this->dbDatas['mailContent'] = $this->MailContent->find(array("id"=>$id));
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
-		$this->Message->mailFields = $this->dbDatas['mailFields'] = $this->MailField->findAll(array("mail_content_id"=>$id),null,'MailField.sort');
+		$this->Message->mailFields = $this->dbDatas['mailFields'] = $this->MailField->find('all', array('conditions' => array("mail_content_id"=>$id), 'order' => 'MailField.sort'));
 
 		// ページタイトルをセット
 		$this->pageTitle = $this->dbDatas['mailContent']['MailContent']['title'];

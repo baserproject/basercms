@@ -352,7 +352,7 @@ class BcFormHelper extends FormHelper {
 			$fields = array($idField,$displayField);
 		}
 
-		$list = $model->findAll($conditions,$fields,$order);
+		$list = $model->find( 'all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
 
 		if($list) {
 			return Set::combine($list,"{n}.".$modelName.".".$idField,"{n}.".$modelName.".".$displayField);

@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-echo $html->css('import');
 ?>
 
 <script type="text/javascript">

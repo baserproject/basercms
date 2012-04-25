@@ -85,7 +85,7 @@ class FeedController extends FeedAppController {
 
 		// feed設定データ取得
 		$feedConfig = $this->FeedConfig->read(null,$id);
-		$feedDetails = $this->FeedDetail->findAll("FeedDetail.feed_config_id=".$id);
+		$feedDetails = $this->FeedDetail->find('all', array('conditions' => array("FeedDetail.feed_config_id" => $id)));
 
 		// データが取得できなかった場合はエラーとする
 		if(!$feedConfig||!$feedDetails) {

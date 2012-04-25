@@ -28,7 +28,7 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$actionUrl = '/blog/get_posted_months/'.$id.'/'.$limit;
+$actionUrl = '/blog/blog/get_posted_months/'.$id.'/'.$limit;
 if($view_count) {
 	$actionUrl .= '/1';
 }

@@ -707,7 +707,7 @@ class Message extends MailAppModel {
 
 
 		// フィールドリストを取得
-		$mailFields = $mailFieldClass->findAll(array('MailField.mail_content_id'=>$mailContentId));
+		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $mailContentId)));
 		// コンテンツ名を取得
 		$contentName = $mailContentClass->field('name', array('MailContent.id'=>$mailContentId));
 

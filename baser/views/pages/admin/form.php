@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', null, null, false);
+$baser->css('ckeditor/editor', array('inline' => true));
 $baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 $pageTypes = array();
 if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {

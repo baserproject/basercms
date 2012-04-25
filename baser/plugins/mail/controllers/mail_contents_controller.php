@@ -79,7 +79,7 @@ class MailContentsController extends MailAppController {
  */
 	function admin_index() {
 
-		$listDatas = $this->MailContent->findAll();
+		$listDatas = $this->MailContent->find('all');
 		$this->set('listDatas',$listDatas);
 		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールフォーム一覧';
