@@ -35,7 +35,7 @@ class TextExHelper extends TextHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('TimeEx','BcForm');
+	var $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
 /**
  * 文字数カット（日本語対応）
  * Cuts a string to the length of $length and replaces the last characters

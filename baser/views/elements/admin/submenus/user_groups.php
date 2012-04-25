@@ -18,13 +18,13 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 <tr>
 	<th>ユーザーグループ管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('一覧を表示する', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
-			<li><?php $baser->link('新規に登録する', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
+			<li><?php $bcBaser->link('一覧を表示する', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('新規に登録する', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

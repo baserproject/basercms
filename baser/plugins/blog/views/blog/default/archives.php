@@ -17,10 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
-$baser->js('jquery.colorbox-min', false);
-//$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
-$baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
+$bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
+$bcBaser->js('jquery.colorbox-min', false);
+//$bcBaser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
+$bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <script type="text/javascript">
@@ -36,7 +36,7 @@ $(function(){
 
 <!-- archives title -->
 <h3 class="contents-head">
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h3>
 
 <!-- list -->
@@ -54,7 +54,7 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 	</span></div>
-	<?php $baser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 	<?php endforeach; ?>
 <?php else: ?>
@@ -62,4 +62,4 @@ $(function(){
 <?php endif; ?>
 
 <!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+<?php $bcBaser->pagination('simple'); ?>

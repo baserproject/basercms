@@ -75,7 +75,7 @@ function pageTypeChengeHandler() {
 }
 </script>
 
-<div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
+<div id="AjaxCategorySourceUrl" class="display-none"><?php $bcBaser->url(array('action' => 'ajax_category_source')) ?></div>
 
 <?php echo $bcForm->create('Page', array('action' => 'index', 'url' => array('action' => 'index'))) ?>
 
@@ -96,8 +96,8 @@ function pageTypeChengeHandler() {
 </p>
 
 <div class="button">
-	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
-	<?php $baser->link($baser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
+	<?php $bcBaser->link($bcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
+	<?php $bcBaser->link($bcBaser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
 
 <?php echo $bcForm->hidden('Page.open',array('value'=>true)) ?>

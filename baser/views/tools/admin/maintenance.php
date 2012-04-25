@@ -24,7 +24,7 @@
 
 <p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
 
-<div class="submit"><?php $baser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
+<div class="submit"><?php $bcBaser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
 
 <h2>データの復元</h2>
 

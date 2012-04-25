@@ -56,15 +56,15 @@
 </div>
 <div class="submit">
 <?php if($this->action == 'admin_add_folder'): ?>
-	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, $path), array('class' => 'btn-gray button')); ?>
+	<?php $bcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, $path), array('class' => 'btn-gray button')); ?>
 <?php else: ?>
-	<?php $baser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
+	<?php $bcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->action == 'admin_add_folder'): ?>
 	<?php echo $bcForm->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit_folder'): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除',
+	<?php $bcBaser->link('削除',
 			array('action'=>'del', $theme, $type, $path),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('ThemeFolder.name')),
@@ -73,7 +73,7 @@
 <?php else: ?>
 	<?php if(!$safeModeOn): ?>
 		<?php if($theme == 'core'): ?>
-	<?php $baser->link('現在のテーマにコピー',
+	<?php $bcBaser->link('現在のテーマにコピー',
 			array('action' => 'copy_folder_to_theme', $theme, $plugin, $type , $path),
 			array('class' => 'btn-red button'),
 			'本当に現在のテーマ「'.Inflector::camelize($siteConfig['theme']).'」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'

@@ -114,7 +114,7 @@ function loadAuthCaptcha(){
 }
 </script>
 
-<div id="BlogCommentCaptchaUrl" class="display-none"><?php echo $baser->getUrl($prefix.'/blog/blog_comments/captcha') ?></div>
+<div id="BlogCommentCaptchaUrl" class="display-none"><?php echo $bcBaser->getUrl($prefix.'/blog/blog_comments/captcha') ?></div>
 
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 <div id="BlogComment">
@@ -124,7 +124,7 @@ function loadAuthCaptcha(){
 	<div id="BlogCommentList">
 	<?php if(!empty($post['BlogComment'])): ?>
 		<?php foreach($post['BlogComment'] as $comment): ?>
-		<?php $baser->element('blog_comment', array('dbData'=>$comment)) ?>
+		<?php $bcBaser->element('blog_comment', array('dbData'=>$comment)) ?>
 		<?php endforeach ?>
 	<?php endif ?>
 	</div>
@@ -158,7 +158,7 @@ function loadAuthCaptcha(){
 	<?php if($blogContent['BlogContent']['auth_captcha']): ?>
 	<div class="auth-captcha clearfix">
 		<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
-		<?php $baser->img('/img/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id'=>'CaptchaLoader')) ?>
+		<?php $bcBaser->img('/img/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id'=>'CaptchaLoader')) ?>
 		<?php echo $bcForm->text('BlogComment.auth_captcha') ?><br />
 		&nbsp;画像の文字を入力してください<br />
 	</div>

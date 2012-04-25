@@ -109,7 +109,7 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php if ($bcForm->value('UserGroup.name') != 'admins'): ?>
-		<?php $baser->link('削除', 
+		<?php $bcBaser->link('削除', 
 				array('action'=>'delete', $bcForm->value('UserGroup.id')),
 				array('class'=>'btn-gray button'),
 				sprintf('%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。',

@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('page_categories/index_list');
+$bcBaser->element('page_categories/index_list');
 ?>

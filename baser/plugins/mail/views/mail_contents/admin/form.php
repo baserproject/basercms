@@ -67,8 +67,8 @@ function mailContentSender1ClickHandler(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">このメールフォームのURL：
-		<?php $baser->link(
-				$baser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), 
+		<?php $bcBaser->link(
+				$bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), 
 				'/' . $mailContent['MailContent']['name'] . '/index',
 				array('target'=>'_blank')) ?>
 </div>
@@ -191,7 +191,7 @@ function mailContentSender1ClickHandler(){
 				<?php echo $bcForm->input('MailContent.ssl_on', array('type' => 'radio', 'options' => $bcText->booleanDoList('利用'), 'legend'=>false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.ssl_on', 
-						'SSL通信を利用するには、'.$baser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、
+						'SSL通信を利用するには、'.$bcBaser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、
 						事前にSSL通信用のWebサイトURLを指定してください。', array('escape'=>false)) ?>
 				<div id="helptextSslOn" class="helptext">
 					管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。
@@ -224,7 +224,7 @@ function mailContentSender1ClickHandler(){
 				<?php echo $bcForm->error('MailContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
 					メールコンテンツで利用するウィジェットエリアを指定します。<br />
-					ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
+					ウィジェットエリアは「<?php $bcBaser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
 				</div>
 			</td>
 		</tr>
@@ -234,7 +234,7 @@ function mailContentSender1ClickHandler(){
 				<?php echo $bcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $mail->getLayoutTemplates())) ?>
 				<?php echo $bcForm->input('MailContent.edit_layout', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する','javascript:void(0)', array('id' => 'EditLayout')) ?>
+				<?php $bcBaser->link('≫ 編集する','javascript:void(0)', array('id' => 'EditLayout')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpLayoutTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.layout_template') ?>
@@ -252,7 +252,7 @@ function mailContentSender1ClickHandler(){
 				<?php echo $bcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $mail->getFormTemplates())) ?>
 				<?php echo $bcForm->input('MailContent.edit_mail_form', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
+				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFormTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.form_template') ?>
@@ -270,7 +270,7 @@ function mailContentSender1ClickHandler(){
 				<?php echo $bcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $mail->getMailTemplates())) ?>
 				<?php echo $bcForm->input('MailContent.edit_mail', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
+				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpMailTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailContent.mail_template') ?>
@@ -303,7 +303,7 @@ function mailContentSender1ClickHandler(){
 	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削　除', 
+	<?php $bcBaser->link('削　除', 
 			array('action' => 'delete', $bcForm->value('MailContent.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $bcForm->value('MailContent.name')),

@@ -19,7 +19,7 @@
  */
 ?>
 <h2>
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h2>
 
 <div class="corner10" style="background-color:#f2f2f2;padding:15px 5px;">

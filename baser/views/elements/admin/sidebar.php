@@ -19,5 +19,5 @@
  */
 ?>
 <div id="beta">
-	<?php $baser->element('submenu',array(),false,false) ?>
+	<?php $bcBaser->element('submenu',array(),false,false) ?>
 </div>

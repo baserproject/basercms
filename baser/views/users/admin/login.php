@@ -143,12 +143,12 @@ function openCredit(completeHandler) {
 }
 </script>
 
-<div id="LoginCredit"><?php echo $baser->siteConfig['login_credit'] ?></div>
+<div id="LoginCredit"><?php echo $bcBaser->siteConfig['login_credit'] ?></div>
 <div id="Login">
 	
 	<div id="LoginInner">
 				
-		<h1><?php $baser->contentsTitle() ?></h1>
+		<h1><?php $bcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
 		<div class="float-left login-input">
@@ -164,7 +164,7 @@ function openCredit(completeHandler) {
 		</div>
 		<div class="clear login-etc">
 			<?php echo $bcForm->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
-			<?php $baser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?>
+			<?php $bcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?>
 		</div>
 		<?php echo $bcForm->end() ?>
 	</div>

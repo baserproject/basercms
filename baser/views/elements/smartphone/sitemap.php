@@ -4,7 +4,7 @@
  * [PUBLISH] サイトマップ
  * 
  * カテゴリの階層構造を表現する為、再帰呼び出しを行う
- * $baser->sitemap() で呼び出す
+ * $bcBaser->sitemap() で呼び出す
  * 
  * PHP versions 5
  *

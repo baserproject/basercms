@@ -10,7 +10,7 @@ if(Configure::read('debug')==0){
 ?>
 
 <h2 class="contents-head">
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h2>
 <h3 class="contents-head">メール送信完了</h3>
 <div class="section">

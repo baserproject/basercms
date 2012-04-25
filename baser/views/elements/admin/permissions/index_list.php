@@ -25,14 +25,14 @@
 		<tr>
 			<th class="list-tool">
 				<div>
-					<?php $baser->link($baser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $this->params['pass'][0])) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $this->params['pass'][0])) ?>
 	<?php if(!$sortmode): ?>
-					<?php $baser->link($baser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array('sortmode' => 1, $this->params['pass'][0])) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array('sortmode' => 1, $this->params['pass'][0])) ?>
 	<?php else: ?>
-					<?php $baser->link($baser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0, $this->params['pass'][0])) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0, $this->params['pass'][0])) ?>
 	<?php endif ?>
 				</div>
-	<?php if($baser->isAdminUser()): ?>
+	<?php if($bcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '有効', 'unpublish' => '無効', 'del' => '削除'), 'empty' => '一括処理')) ?>
@@ -49,7 +49,7 @@
 	<tbody>
 	<?php if(!empty($datas)): ?>
 		<?php foreach($datas as $data): ?>
-			<?php $baser->element('permissions/index_row', array('data' => $data)) ?>
+			<?php $bcBaser->element('permissions/index_row', array('data' => $data)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

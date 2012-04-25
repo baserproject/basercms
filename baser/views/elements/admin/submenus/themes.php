@@ -23,7 +23,7 @@
 	<th>テーマ管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('テーマ一覧', array('plugin' => null, 'controller' => 'themes', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('テーマ一覧', array('plugin' => null, 'controller' => 'themes', 'action' => 'index')) ?></li>
 		</ul>
 	</td>
 </tr>

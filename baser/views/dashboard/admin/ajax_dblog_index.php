@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('dashboard/index_dblog_list');
+$bcBaser->element('dashboard/index_dblog_list');
 ?>

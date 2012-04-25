@@ -96,7 +96,7 @@
 <div class="submit">
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action'=>'delete', $this->params['pass'][0], $bcForm->value('Permission.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('Permission.name')),

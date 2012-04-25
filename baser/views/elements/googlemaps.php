@@ -23,8 +23,8 @@ $_width = 600;
 $_height = 400;
 $_zoom = 16;
 $_mapId = 'map';
-$_address = $baser->siteConfig['address'];
-$_markerText = '<span class="sitename">'.$baser->siteConfig['name'].'</span><br /><span class="address">'.$_address.'</span>';
+$_address = $bcBaser->siteConfig['address'];
+$_markerText = '<span class="sitename">'.$bcBaser->siteConfig['name'].'</span><br /><span class="address">'.$_address.'</span>';
 if(isset($width)) $_width = $width;
 if(isset($height)) $_height = $height;
 if(isset($zoom)) $_zoom = $zoom;
@@ -39,7 +39,7 @@ if(isset($latitude)) {
 }
 $bcGooglemaps->mapId = $_mapId;
 $bcGooglemaps->zoom = $_zoom;
-$bcGooglemaps->title = $baser->siteConfig['name'];
+$bcGooglemaps->title = $bcBaser->siteConfig['name'];
 $bcGooglemaps->markerText = $_markerText;
 if(!$bcGooglemaps->load($_address,$_width,$_height)){
 	echo 'Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。';

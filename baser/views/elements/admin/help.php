@@ -24,16 +24,16 @@ if(empty($help)) {
 <div id="Help" class="clearfix">
 
 	<h2 class="head">
-		<?php $baser->img('admin/head_help.png', array('width' => 69, 'height' => 16, 'alt' => 'ヘルプ')) ?>
+		<?php $bcBaser->img('admin/head_help.png', array('width' => 69, 'height' => 16, 'alt' => 'ヘルプ')) ?>
 	</h2>
 
 	<div class="body">
-		<?php $baser->element('helps/'.$help) ?>
+		<?php $bcBaser->element('helps/'.$help) ?>
 	</div>
 
 	<div class="clearfix close">
 		<div id="CloseHelp">
-			<a><?php $baser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
+			<a><?php $bcBaser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
 		</div>
 	</div>
 

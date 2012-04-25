@@ -25,7 +25,7 @@
 		<tr>
 			<th style="width:180px" class="list-tool">
 				<div>
-					<?php $baser->link($baser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
 	
 				</div>
 				<!--<div>
@@ -43,7 +43,7 @@
 	<tbody>
 	<?php if(!empty($listDatas)): ?>
 		<?php foreach($listDatas as $data): ?>
-			<?php $baser->element('mail_contents/index_row', array('data' => $data)) ?>
+			<?php $bcBaser->element('mail_contents/index_row', array('data' => $data)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr><td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td></tr>

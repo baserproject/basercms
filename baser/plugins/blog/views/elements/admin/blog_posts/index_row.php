@@ -27,15 +27,15 @@
 <?php endif; ?>
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['BlogPost']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id'])) ?>
 <?php endif ?>		
-		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'], array('title' => '確認', 'target' => '_blank')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '編集')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'], array('title' => '確認', 'target' => '_blank')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '編集')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
 	<td>
@@ -47,7 +47,7 @@
 			<span class="tag"><?php echo implode('</span><span class="tag">',$tags) ?></span>
 		<?php endif ?>
 		<br />
-		<?php $baser->link($data['BlogPost']['name'],array('action'=>'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
+		<?php $bcBaser->link($data['BlogPost']['name'],array('action'=>'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
 	</td>
 	<td>
 		<?php if(!empty($data['User'])): ?>
@@ -58,7 +58,7 @@
 	<?php if($data['BlogContent']['comment_use']): ?>
 	<td><?php $comment = count($data['BlogComment']) ?>
 		<?php if($comment): ?>
-		<?php $baser->link($comment,array('controller'=>'blog_comments','action'=>'index',$data['BlogContent']['id'],$data['BlogPost']['id'])) ?>
+		<?php $bcBaser->link($comment,array('controller'=>'blog_comments','action'=>'index',$data['BlogContent']['id'],$data['BlogPost']['id'])) ?>
 		<?php else: ?>
 		<?php echo $comment ?>
 		<?php endif ?></td>

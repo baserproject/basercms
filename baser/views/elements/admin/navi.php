@@ -19,15 +19,15 @@
  * @deprecated		2.0の次のバージョンで削除
  */
 if ($this->viewPath != 'dashboard'){
-	$baser->addCrumb('ダッシュボード',array('plugin' => null, 'controller' => 'dashboard'));
+	$bcBaser->addCrumb('ダッシュボード',array('plugin' => null, 'controller' => 'dashboard'));
 }
 if (!empty($navis)){
 	foreach($navis as $key => $navi){
-		$baser->addCrumb($key,$navi);
+		$bcBaser->addCrumb($key,$navi);
 	}
 }
 if ($title_for_element){
-	$baser->addCrumb('<strong>'.$title_for_element.'</strong>');
+	$bcBaser->addCrumb('<strong>'.$title_for_element.'</strong>');
 }
-$baser->crumbs(' &gt; ');
+$bcBaser->crumbs(' &gt; ');
 ?>

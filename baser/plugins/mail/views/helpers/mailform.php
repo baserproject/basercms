@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper', 'BcFreeze');
+App::import('Helper', array(BC_HTML_HELPER, BC_FREEZE_HELPER));
 /**
  * メールフォームヘルパー
  *

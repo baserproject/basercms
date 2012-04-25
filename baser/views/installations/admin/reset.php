@@ -36,7 +36,7 @@ $(function(){
 <p>baserCMSを初期化します。データベースのデータも全て削除されます。</p>
 	<?php if(BC_INSTALLED): ?>
 <p>データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。</p>
-<ul><li><?php $baser->link('バックアップはこちらから', 	array('admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup')) ?></li></ul>
+<ul><li><?php $bcBaser->link('バックアップはこちらから', 	array('admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup')) ?></li></ul>
 	<?php endif ?>
 	<?php echo $bcForm->create(array('action' => 'reset')) ?>
 	<?php echo $bcForm->input('Installation.reset', array('type' => 'hidden', 'value' => true)) ?>
@@ -46,6 +46,6 @@ $(function(){
 <p>引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。</p>
 </div>
 <div class="submit">
-	<?php $baser->link('インストールページへ', '/', array('class' => 'button btn-red')) ?>
+	<?php $bcBaser->link('インストールページへ', '/', array('class' => 'button btn-red')) ?>
 </div>
 <?php endif ?>

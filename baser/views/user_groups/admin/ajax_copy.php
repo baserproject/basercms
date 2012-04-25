@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('user_groups/index_row', array('data' => $data));
+$bcBaser->element('user_groups/index_row', array('data' => $data));
 ?>

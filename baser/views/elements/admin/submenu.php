@@ -24,7 +24,7 @@ if(!empty($user)) {
 	<table class="sub-menu">
 <?php
 		foreach ($subMenuElements as $subMenuElement){
-			$baser->element($elementPath.$subMenuElement);
+			$bcBaser->element($elementPath.$subMenuElement);
 		}
 ?>
 	</table>

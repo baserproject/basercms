@@ -72,14 +72,14 @@ function pageTypeChengeHandler() {
 }
 </script>
 
-<div id="AjaxCategorySourceUrl" class="display-none"><?php $baser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
+<div id="AjaxCategorySourceUrl" class="display-none"><?php $bcBaser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
 
 <?php if($this->action == 'admin_edit' && $indexPage): ?>
 <div class="em-box align-left">1
 	<?php if($indexPage['status']): ?>
-	<strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
+	<strong>このカテゴリのURL：<?php $bcBaser->link($bcBaser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
 	<?php else: ?>
-	<strong>このカテゴリのURL：<?php echo $baser->getUri('/' . $indexPage['url']) ?></strong>
+	<strong>このカテゴリのURL：<?php echo $bcBaser->getUri('/' . $indexPage['url']) ?></strong>
 	<?php endif ?>
 </div>
 <?php endif ?>
@@ -174,7 +174,7 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
-<?php if($baser->siteConfig['category_permission']): ?>
+<?php if($bcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
@@ -199,7 +199,7 @@ function pageTypeChengeHandler() {
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php elseif ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action'=>'delete', $bcForm->value('PageCategory.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),

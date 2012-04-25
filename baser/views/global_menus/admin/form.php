@@ -76,7 +76,7 @@
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('GlobalMenu.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('GlobalMenu.name')),

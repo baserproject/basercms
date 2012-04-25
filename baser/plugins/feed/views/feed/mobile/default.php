@@ -19,7 +19,7 @@
  */
 ?>
 <cake:nocache>
-	<?php $baser->cacheHeader() ?>
+	<?php $bcBaser->cacheHeader() ?>
 </cake:nocache>
 
 <?php if(!empty($items)): ?>

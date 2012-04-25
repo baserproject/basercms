@@ -64,7 +64,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 				<?php $title = $postedDate['year'].'年' ?>
 			<?php endif ?>
 		<li<?php echo $class ?>>
-			<?php $baser->link($title, array(
+			<?php $bcBaser->link($title, array(
 				'admin'			=> false, 
 				'plugin'		=> '', 
 				'controller'	=> $blogContent['BlogContent']['name'], 

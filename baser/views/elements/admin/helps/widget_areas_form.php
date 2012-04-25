@@ -34,5 +34,5 @@
 	<?php endif ?>
 </ul>
 <?php if($this->action == 'admin_edit'): ?>
-<pre>&lt;?php $baser->element('widget_area', array('no'=> <?php echo $bcForm->value('WidgetArea.id') ?> )) ?&gt;</pre>
+<pre>&lt;?php $bcBaser->element('widget_area', array('no'=> <?php echo $bcForm->value('WidgetArea.id') ?> )) ?&gt;</pre>
 <?php endif ?>

@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
+$bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>
 
@@ -31,14 +31,14 @@ $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 	
 	<!-- post title -->
 	<h3 class="contents-head">
-		<?php $baser->contentsTitle() ?><br />
+		<?php $bcBaser->contentsTitle() ?><br />
 		<small><?php $blog->postDate($post) ?></small>
 	</h3>
 
 	<?php $blog->postContent($post) ?>
 	
 	<div class="meta"><span><?php $blog->category($post) ?>&nbsp;<?php $blog->author($post) ?></span></div>
-	<?php $baser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 
 <!-- contents navi -->
@@ -48,4 +48,4 @@ $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 	<?php $blog->nextLink($post) ?>
 </div>
 <!-- comments -->
-<?php $baser->element('blog_comments') ?>
+<?php $bcBaser->element('blog_comments') ?>

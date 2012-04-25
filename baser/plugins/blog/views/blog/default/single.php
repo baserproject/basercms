@@ -17,9 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
-$baser->js('jquery.colorbox-min', false);
-$baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
+$bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
+$bcBaser->js('jquery.colorbox-min', false);
+$bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>
 
 <script type="text/javascript">
@@ -35,7 +35,7 @@ $(function(){
 
 <!-- post title -->
 <h3 class="contents-head">
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h3>
 
 <!-- post detail -->
@@ -48,7 +48,7 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 	</span></div>
-	<?php $baser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 
 <!-- contents navi -->
@@ -59,4 +59,4 @@ $(function(){
 </div>
 
 <!-- comments -->
-<?php $baser->element('blog_comments') ?>
+<?php $bcBaser->element('blog_comments') ?>

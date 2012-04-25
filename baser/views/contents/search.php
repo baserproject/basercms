@@ -19,7 +19,7 @@
  */
 ?>
 
-<h2 class="contents-head"><?php $baser->contentsTitle() ?></h2>
+<h2 class="contents-head"><?php $bcBaser->contentsTitle() ?></h2>
 
 <div class="section">
 <?php if(!empty($paginator)): ?>
@@ -28,15 +28,15 @@
 	</div>
 <?php endif ?>
 	<!-- list-num -->
-	<?php $baser->element('admin/list_num') ?>
+	<?php $bcBaser->element('admin/list_num') ?>
 </div>
 
 <?php if($datas): ?>
 	<?php foreach($datas as $data): ?>
 <div class="section">
-	<h3 class="result-head"><?php $baser->link($baser->mark($query, $data['Content']['title']), $data['Content']['url']) ?></h3>
-	<p class="result-body"><?php echo $baser->mark($query, $bcText->mbTruncate($data['Content']['detail'],100)) ?></p>
-	<p class="result-link"><small><?php $baser->link(fullUrl($data['Content']['url']), $data['Content']['url']) ?></small></p>
+	<h3 class="result-head"><?php $bcBaser->link($bcBaser->mark($query, $data['Content']['title']), $data['Content']['url']) ?></h3>
+	<p class="result-body"><?php echo $bcBaser->mark($query, $bcText->mbTruncate($data['Content']['detail'],100)) ?></p>
+	<p class="result-link"><small><?php $bcBaser->link(fullUrl($data['Content']['url']), $data['Content']['url']) ?></small></p>
 </div>
 	<?php endforeach ?>
 <?php else: ?>
@@ -47,5 +47,5 @@
 
 <div class="clearfix section">
 	<!-- pagination -->
-	<?php $baser->pagination('simple', array(), null, false) ?>
+	<?php $bcBaser->pagination('simple', array(), null, false) ?>
 </div>

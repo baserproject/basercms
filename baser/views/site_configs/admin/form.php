@@ -83,7 +83,7 @@ $(function(){
 				<ul>
 					<li>Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）</li>
 					<li>テンプレートで利用する場合は、<br />
-						&lt;?php $baser->title() ?&gt; で出力します。</li>
+						&lt;?php $bcBaser->title() ?&gt; で出力します。</li>
 				</ul>
 			</div>
 		</td>
@@ -94,7 +94,7 @@ $(function(){
 			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpKeyword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $bcForm->error('SiteConfig.keyword') ?>
 			<div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />
-				&lt;?php $baser->keywords() ?&gt; で出力します。</div>
+				&lt;?php $bcBaser->keywords() ?&gt; で出力します。</div>
 		</td>
 	</tr>
 	<tr>
@@ -103,7 +103,7 @@ $(function(){
 			<?php echo $html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $bcForm->error('SiteConfig.description') ?>
 			<div id="helptextDescription" class="helptext">テンプレートで利用する場合は、<br />
-				&lt;?php $baser->description() ?&gt; で出力します。</div>
+				&lt;?php $bcBaser->description() ?&gt; で出力します。</div>
 		</td>
 	</tr>
 	<tr>
@@ -179,7 +179,7 @@ $(function(){
 				<div id="helptextGoogleAnalyticsId" class="helptext">
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
-					テンプレートで利用する場合は、 <pre>&lt;?php $baser->element('google_analytics') ?&gt;</pre> で出力します。
+					テンプレートで利用する場合は、 <pre>&lt;?php $bcBaser->element('google_analytics') ?&gt;</pre> で出力します。
 				</div>
 			</td>
 		</tr>
@@ -190,7 +190,7 @@ $(function(){
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextWidgetArea" class="helptext">
 					公開ページ全般で利用するウィジェットエリアを指定します。<br />
-					ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理',array('controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
+					ウィジェットエリアは「<?php $bcBaser->link('ウィジェットエリア管理',array('controller'=>'widget_areas','action'=>'index')) ?>」より追加できます。
 				</div>
 			</td>
 		</tr>
@@ -256,7 +256,7 @@ $(function(){
 				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
 			</td>
 		</tr>
-<?php if($baser->siteConfig['category_permission']): ?>
+<?php if($bcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
 			<td class="col-input">

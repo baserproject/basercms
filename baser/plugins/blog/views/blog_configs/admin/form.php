@@ -22,7 +22,7 @@
 ?>
 
 <!-- title -->
-<h2><?php $baser->contentsTitle() ?></h2>
+<h2><?php $bcBaser->contentsTitle() ?></h2>
 
 <h3>WordPressデータの取り込み</h3>
 <p>WordPressから出力したXMLデータを取込みます。（<a href="http://ja.wordpress.org/" target="_blank">WordPress</a> 2.8.4 のみ動作確認済）</p>

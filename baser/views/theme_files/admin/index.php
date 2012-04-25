@@ -21,7 +21,7 @@ $writable = true;
 if((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core'){
 	$writable = false;
 }
-$baser->js(array(
+$bcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 
 	'admin/baser_ajax_data_list_config',
@@ -41,7 +41,7 @@ $(function(){
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $baser->url(array('controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type, $path)) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type, $path)) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 
 <!-- current -->
@@ -51,16 +51,16 @@ $(function(){
 <?php endif ?>
 </div>
 
-<div id="DataList"><?php $baser->element('theme_files/index_list') ?></div>
+<div id="DataList"><?php $bcBaser->element('theme_files/index_list') ?></div>
 
 <div class="submit">
 <?php if($writable): ?>
 	<?php echo $bcForm->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url'=>array('action' => 'upload', $theme, $plugin, $type, $path), 'enctype' => 'multipart/form-data')) ?>
 	<?php echo $bcForm->input('ThemeFile.file', array('type' => 'file')) ?>
 	<?php echo $bcForm->end() ?>
-	<?php $baser->link('フォルダ新規作成', array('action' => 'add_folder', $theme, $type, $path), array('class' => 'btn-orange button')) ?>
+	<?php $bcBaser->link('フォルダ新規作成', array('action' => 'add_folder', $theme, $type, $path), array('class' => 'btn-orange button')) ?>
 <?php endif ?>
 <?php if(($path || $type != 'etc') && $type != 'img' && $writable): ?>
-	<?php $baser->link('ファイル新規作成', array('action' => 'add', $theme, $type, $path), array('class' => 'btn-red button')) ?>
+	<?php $bcBaser->link('ファイル新規作成', array('action' => 'add', $theme, $type, $path), array('class' => 'btn-red button')) ?>
 <?php endif ?>
 </div>

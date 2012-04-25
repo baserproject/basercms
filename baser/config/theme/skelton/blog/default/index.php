@@ -2,9 +2,9 @@
 /**
  * ブログトップ
  */
-$baser->css('colorbox/colorbox', array('inline' => true));
-$baser->js('jquery.colorbox-min', false);
-$baser->setDescription($blog->getDescription());
+$bcBaser->css('colorbox/colorbox', array('inline' => true));
+$bcBaser->js('jquery.colorbox-min', false);
+$bcBaser->setDescription($blog->getDescription());
 ?>
 <!-- blog title -->
 
@@ -38,11 +38,11 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 		</span> </div>
-	<?php $baser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 <?php endforeach; ?>
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
 <!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+<?php $bcBaser->pagination('simple'); ?>

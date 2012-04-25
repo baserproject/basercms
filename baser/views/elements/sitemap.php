@@ -4,7 +4,7 @@
  * [PUBLISH] サイトマップ
  * 
  * カテゴリの階層構造を表現する為、再帰呼び出しを行う
- * $baser->sitemap() で呼び出す
+ * $bcBaser->sitemap() で呼び出す
  * 
  * PHP versions 5
  *
@@ -32,7 +32,7 @@ if(Configure::read('BcRequest.agent')) {
 <?php if(isset($pageList['pages'])): ?>
 	<?php foreach($pageList['pages'] as $page): ?>
 		<?php if($page['Page']['title']): ?>
-	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $baser->link($page['Page']['title'],$prefix.$page['Page']['url']) ?></li>
+	<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $bcBaser->link($page['Page']['title'],$prefix.$page['Page']['url']) ?></li>
 		<?php endif ?>
 	<?php endforeach; ?>
 <?php endif ?>
@@ -40,14 +40,14 @@ if(Configure::read('BcRequest.agent')) {
 	<?php foreach($pageList['pageCategories'] as $pageCategories): ?>
 	<li class="sitemap-page li-level-<?php echo $recursive ?>">
 		<?php if(!empty($pageCategories['PageCategory']['url'])): ?>
-			<?php $baser->link($pageCategories['PageCategory']['title'], $prefix.$pageCategories['PageCategory']['url']) ?>
+			<?php $bcBaser->link($pageCategories['PageCategory']['title'], $prefix.$pageCategories['PageCategory']['url']) ?>
 		<?php else: ?>
 			<?php if(isset($pageCategories['children'])): ?>
 				<?php echo $pageCategories['PageCategory']['title'] ?>
 			<?php endif ?>
 		<?php endif ?>
 		<?php if(isset($pageCategories['children'])): ?>
-			<?php $baser->element('sitemap', array('pageList' => $pageCategories['children'], 'recursive' => $recursive+1)) ?>
+			<?php $bcBaser->element('sitemap', array('pageList' => $pageCategories['children'], 'recursive' => $recursive+1)) ?>
 		<?php endif ?>
 	</li>
 	<?php endforeach ?>

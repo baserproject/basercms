@@ -17,9 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated		BcBaserHelperに移行
  */
-trigger_error('BaserHelper は非推奨です。BcBaserHelper を利用してください。', E_USER_WARNING);
 /**
  * Include files
  */
@@ -29,7 +27,7 @@ trigger_error('BaserHelper は非推奨です。BcBaserHelper を利用してく
  * @package cake
  * @subpackage baser.app.views.helpers
  */
-class BaserHelper extends AppHelper {
+class BcBaserHelper extends AppHelper {
 /**
  * View
  * 

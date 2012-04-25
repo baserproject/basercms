@@ -49,7 +49,10 @@ class BaserAppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('Session', 'BcPluginHook', 'Html', 'BcHtml', 'Form', 'BcForm', 'Javascript', 'Baser', 'BcXml', 'BcArray', 'BcAdmin');
+	var $helpers = array(
+		'Session', 'BcPluginHook', BC_HTML_HELPER, BC_HTML_HELPER, 'Form', BC_FORM_HELPER, 
+		'Javascript', BC_BASER_HELPER, BC_XML_HELPER, BC_ARRAY_HELPER, BC_BASER_ADMIN_HELPER
+	);
 /**
  * レイアウト
  *
@@ -164,7 +167,7 @@ class BaserAppController extends Controller {
 			if(Configure::read('BcRequest.agent')) {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
 				if(Configure::read('BcRequest.agent') == 'mobile') {
-					$this->helpers[] = 'BcMobile';
+					$this->helpers[] = BC_MOBILE_HELPER;
 				}
 			}
 
@@ -288,7 +291,7 @@ class BaserAppController extends Controller {
 			$this->layoutPath = str_replace('_', '/', $this->params['prefix']);
 			$this->subDir = str_replace('_', '/', $this->params['prefix']);
 			if(preg_match('/^mobile(|_)/', $this->params['prefix'])) {
-				$this->helpers[] = 'BcMobile';
+				$this->helpers[] = BC_MOBILE_HELPER;
 			}
 		}
 

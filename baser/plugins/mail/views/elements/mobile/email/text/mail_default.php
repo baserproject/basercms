@@ -35,7 +35,7 @@
 ━◇◆━━━━━━━━━━━
 　◆ お問い合わせ内容 
 ━━━━━━━━━━━◆◇━
-<?php echo $baser->element('email/text/mail_data') ?>
+<?php echo $bcBaser->element('email/text/mail_data') ?>
  
  
  

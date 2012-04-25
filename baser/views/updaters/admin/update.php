@@ -43,9 +43,9 @@
 <?php else: ?>
 	<p>
 		<?php if(!$plugin): ?>
-			<?php $baser->link('管理画面に移動する', array('controller' => 'dashboard', 'action' => 'index'), array('class' => 'outside-link')) ?>
+			<?php $bcBaser->link('管理画面に移動する', array('controller' => 'dashboard', 'action' => 'index'), array('class' => 'outside-link')) ?>
 		<?php else: ?>
-			<?php $baser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
+			<?php $bcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
 		<?php endif ?>
 	</p>
 <?php endif ?>
@@ -64,7 +64,7 @@
 			<?php endif ?>
 			<small>※ アップデート処理は自己責任で行ってください。</small><br />
 
-			<?php $baser->link('バックアップはこちらから', array('controller' => 'tools', 'action' => 'maintenance', 'backup'), array('class' => 'outside-link')) ?>
+			<?php $bcBaser->link('バックアップはこちらから', array('controller' => 'tools', 'action' => 'maintenance', 'backup'), array('class' => 'outside-link')) ?>
 
 		</p>
 	</div>

@@ -24,7 +24,7 @@ if(Configure::read('BcRequest.agent')) {
 ?>
 <ul class="global-menu clearfix">
 	<?php if(empty($menuType)) $menuType = '' ?>
-		<?php $globalMenus = $baser->getMenus() ?>
+		<?php $globalMenus = $bcBaser->getMenus() ?>
 		<?php if(!empty($globalMenus)): ?>
 			<?php foreach($globalMenus as $key => $globalMenu): ?>
 				<?php $no = sprintf('%02d',$key+1) ?>
@@ -38,10 +38,10 @@ if(Configure::read('BcRequest.agent')) {
 					<?php endif ?>
 					<?php if(!Configure::read('BcRequest.agent') && $this->base == '/index.php' && $globalMenu['GlobalMenu']['link'] == '/'): ?>
 	<?php /* PC版トップページ */ ?>
-	<li<?php echo $class ?>><?php echo str_replace('/index.php','',$baser->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>
+	<li<?php echo $class ?>><?php echo str_replace('/index.php','',$bcBaser->link($globalMenu['GlobalMenu']['name'],$globalMenu['GlobalMenu']['link'])) ?></li>
 					<?php else: ?>
 	<li<?php echo $class ?>>
-	<?php $baser->link($globalMenu['GlobalMenu']['name'], $prefix.$globalMenu['GlobalMenu']['link']) ?>
+	<?php $bcBaser->link($globalMenu['GlobalMenu']['name'], $prefix.$globalMenu['GlobalMenu']['link']) ?>
 	</li>
 					<?php endif ?>
 				<?php endif ?>

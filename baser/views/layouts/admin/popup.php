@@ -18,19 +18,19 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $baser->xmlHeader() ?>
-<?php $baser->docType() ?>
+<?php $bcBaser->xmlHeader() ?>
+<?php $bcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
 <meta name="robots" content="noindex,nofollow" />
-<?php $baser->charset() ?>
-<?php $baser->title() ?>
-<?php $baser->metaDescription() ?>
-<?php $baser->metaKeywords() ?>
-<?php $baser->icon() ?>
-<?php $baser->css('admin/import') ?>
-<!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
-<?php $baser->js(array(
+<?php $bcBaser->charset() ?>
+<?php $bcBaser->title() ?>
+<?php $bcBaser->metaDescription() ?>
+<?php $bcBaser->metaKeywords() ?>
+<?php $bcBaser->icon() ?>
+<?php $bcBaser->css('admin/import') ?>
+<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
+<?php $bcBaser->js(array(
 	'jquery-1.4.2.min',
 	'jquery.dimensions.min',
 	'jquery-ui-1.7.2.custom.min',
@@ -38,14 +38,14 @@
 	'jquery.bt.min',
 	'jquery.corner',
 	'functions')) ?>
-<?php $baser->scripts() ?>
+<?php $bcBaser->scripts() ?>
 </head>
-<body id="<?php $baser->contentsName() ?>" class="popup">
+<body id="<?php $bcBaser->contentsName() ?>" class="popup">
 
 	<!-- begin contentsBody -->
 	<div id="contentsBody">
-		<?php $baser->flash() ?>
-		<?php $baser->content() ?>
+		<?php $bcBaser->flash() ?>
+		<?php $bcBaser->content() ?>
 	</div>
 	<!-- end contentsBody -->
 

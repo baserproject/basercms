@@ -53,11 +53,11 @@ $ (function (){
 
 <?php if($viewDblogs): ?>
 <?php $this->passedArgs['action'] = 'ajax_dblog_index' ?>
-<?php $baser->element('pagination', array('modules' => 4)) ?>
+<?php $bcBaser->element('pagination', array('modules' => 4)) ?>
 <ul class="clear">
 	<?php foreach ($viewDblogs as $record): ?>
-	<li><span class="date"><?php echo $time->format('Y.m.d',$record['Dblog']['created']) ?></span>
-		<small><?php echo $time->format('H:i:s',$record['Dblog']['created']) ?>&nbsp;
+	<li><span class="date"><?php echo $bcTime->format('Y.m.d',$record['Dblog']['created']) ?></span>
+		<small><?php echo $bcTime->format('H:i:s',$record['Dblog']['created']) ?>&nbsp;
 			<?php if(!empty($record['User']['real_name_1'])): ?>
 			[<?php echo $record['User']['real_name_1'] . $record['User']['real_name_2'] ?>]
 			<?php endif ?>
@@ -65,9 +65,9 @@ $ (function (){
 		<?php echo $record['Dblog']['name'] ?></li>
 	<?php endforeach; ?>
 </ul>
-<?php $baser->element('list_num') ?>
+<?php $bcBaser->element('list_num') ?>
 <div class="submit clear">
-	<?php $baser->link('削除',
+	<?php $bcBaser->link('削除',
 			array('action' => 'del'),
 			array('class'=>'btn-gray button'),
 			'最近の動きのログを削除します。いいですか？') ?>

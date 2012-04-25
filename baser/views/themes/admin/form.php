@@ -81,7 +81,7 @@
 <?php if(!$folderDisabled): ?>
 <div class="submit">
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action' => 'del', $bcForm->value('Theme.name')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('Theme.name')),

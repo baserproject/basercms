@@ -1,12 +1,12 @@
 "id","sort","name","title","description","contents","page_category_id","status","url","draft","author_id","publish_begin","publish_end","exclude_search","modified","created"
-"","1","index","","","<?php echo $baser->css(""top"", array(""inline"" => true)) ?>
+"","1","index","","","<?php echo $bcBaser->css(""top"", array(""inline"" => true)) ?>
 
 
 <div id=""news"" class=""clearfix"">
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
 <div class=""body"">
-<?php $baser->blogPosts('news', 5) ?>
+<?php $bcBaser->blogPosts('news', 5) ?>
 </div>
 </div>
 
@@ -14,7 +14,7 @@
 <div class=""news"">
 <h2 id=""newsHead02"">baserCMS NEWS</h2>
 <div class=""body"">
-<?php $baser->js('/feed/ajax/1') ?>
+<?php $bcBaser->js('/feed/ajax/1') ?>
 </div>
 </div>
 </div>","","1","/index","","1","","","","",""
@@ -36,7 +36,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 
 <h3 class=""contents-head"">アクセスマップ</h3>
 <div class=""section"">
-<?php $baser->element(""googlemaps"", array(""width"" => 585)) ?>
+<?php $bcBaser->element(""googlemaps"", array(""width"" => 585)) ?>
 </div>
 ","","1","/about","","1","","","","",""
 "","3","service","サービス","baserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
@@ -69,41 +69,41 @@ WEBシステム開発事業（ダミー）</td></tr>
 </div>
 ","","1","/service","","1","","","","",""
 "","4","sitemap","サイトマップ","baserCMS inc.のサイトマップページ","<h2 class=""contents-head"">サイトマップ</h2>
-<?php $baser->sitemap() ?>
+<?php $bcBaser->sitemap() ?>
 <ul class=""section"">
-	<li><?php $baser->link(""新着情報"",""/news/index"") ?></li>
-	<li><?php $baser->link(""お問い合わせ"",""/contact/index"") ?>	</li>
+	<li><?php $bcBaser->link(""新着情報"",""/news/index"") ?></li>
+	<li><?php $bcBaser->link(""お問い合わせ"",""/contact/index"") ?>	</li>
 </ul>
 ","","1","/sitemap","","1","","","","",""
 "","5","index","","","<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">メインメニュー</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <span style=""color:#8ABE08"">◆</span>
-<?php $baser->link(""ニュースリリース"",array(""controller""=>""news"",""action""=>""index"")) ?>
+<?php $bcBaser->link(""ニュースリリース"",array(""controller""=>""news"",""action""=>""index"")) ?>
 <br />
 <span style=""color:#8ABE08"">◆</span>
-<?php $baser->link(""お問い合わせ"",array(""controller""=>""contact"",""action""=>""index"")) ?>
+<?php $bcBaser->link(""お問い合わせ"",array(""controller""=>""contact"",""action""=>""index"")) ?>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">NEWS RELEASE</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $baser->blogPosts('news', 5) ?> <div>&nbsp;</div>
+<?php $bcBaser->blogPosts('news', 5) ?> <div>&nbsp;</div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">baserCMS NEWS</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $baser->feed(1) ?>
+<?php $bcBaser->feed(1) ?>
 ","1","1","/mobile/index","","1","","","","",""
 "","6","index","","","
 <div id=""news"" class=""clearfix"">
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
 <div class=""body"">
-<?php $baser->blogPosts('news', 5) ?>
+<?php $bcBaser->blogPosts('news', 5) ?>
 </div>
 </div>
 <div class=""news"">
 <h2 id=""newsHead02"">baserCMS NEWS</h2>
 <div class=""body"">
-<?php $baser->js('/s/feed/ajax/1') ?>
+<?php $bcBaser->js('/s/feed/ajax/1') ?>
 </div>
 </div>
 </div>","2","1","/smartphone/index","","1","","","","",""
@@ -121,7 +121,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 </div>
 <h3 class=""contents-head"">アクセスマップ</h3>
 <div class=""section"">
-<?php $baser->element(""googlemaps"", array(""width"" => 585)) ?>
+<?php $bcBaser->element(""googlemaps"", array(""width"" => 585)) ?>
 </div>
 ","2","1","/smartphone/about","","1","","","","",""
 "","8","service","サービス","baserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
@@ -151,9 +151,9 @@ WEBシステム開発事業（ダミー）</td></tr>
 </div>
 ","2","1","/smartphone/service","","1","","","","",""
 "","9","sitemap","サイトマップ","baserCMS inc.のサイトマップページ","<h2 class=""contents-head"">サイトマップ</h2>
-<?php $baser->sitemap() ?>
+<?php $bcBaser->sitemap() ?>
 <ul class=""section sitemap"">
-	<li><?php $baser->link(""新着情報"",""/s/news/index"") ?></li>
-	<li><?php $baser->link(""お問い合わせ"",""/s/contact/index"") ?>	</li>
+	<li><?php $bcBaser->link(""新着情報"",""/s/news/index"") ?></li>
+	<li><?php $bcBaser->link(""お問い合わせ"",""/s/contact/index"") ?>	</li>
 </ul>
 ","2","1","/smartphone/sitemap","","1","","","","",""

@@ -19,5 +19,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('favorite_menu_row');
+$bcBaser->element('favorite_menu_row');
 ?>

@@ -17,13 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', array('inline' => true));
+$bcBaser->css('ckeditor/editor', array('inline' => true));
 $statuses = array(0=>'非公開', 1=>'公開');
-$baser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
+$bcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 
-<div id="CreatePreviewUrl" style="display:none"><?php echo $baser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
-<div id="AddTagUrl" style="display:none"><?php echo $baser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
+<div id="CreatePreviewUrl" style="display:none"><?php echo $bcBaser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
+<div id="AddTagUrl" style="display:none"><?php echo $bcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
 
 <script type="text/javascript">
 $(function(){
@@ -109,11 +109,11 @@ $(function(){
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
 	<?php if($bcForm->value('BlogPost.status')): ?>
-	この記事のURL：<?php $baser->link(
-			$baser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')),
+	この記事のURL：<?php $bcBaser->link(
+			$bcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')),
 			'/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')) ?>
 	<?php else: ?>
-	この記事のURL：<?php echo $baser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')) ?>
+	この記事のURL：<?php echo $bcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')) ?>
 	<?php endif ?>
 </div>
 <?php endif ?>
@@ -186,7 +186,7 @@ $(function(){
 				<?php echo $bcForm->error('BlogTag.BlogTag') ?>
 				<?php echo $bcForm->input('BlogTag.name', array('type' => 'text')) ?>
 				<?php echo $bcForm->button('新しいタグを追加', array('id' => 'BtnAddBlogTag')) ?>
-				<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
+				<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
 			</td>
 		</tr>
 	<?php endif ?>
@@ -244,7 +244,7 @@ $(function(){
 	<?php endif ?>
 	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
-	<?php $baser->link('削除',
+	<?php $bcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogPost.name')),

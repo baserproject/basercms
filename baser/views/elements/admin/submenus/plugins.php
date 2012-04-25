@@ -24,7 +24,7 @@
 	<th>プラグイン管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('プラグイン一覧', array('plugin' => null, 'controller' => 'plugins', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('プラグイン一覧', array('plugin' => null, 'controller' => 'plugins', 'action' => 'index')) ?></li>
 		</ul>
 	</td>
 </tr>

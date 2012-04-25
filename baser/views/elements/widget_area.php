@@ -4,7 +4,7 @@
  * [PUBLISH] ウィジェットエリア
  *
  * no を引き数で渡して利用する
- * <?php $baser->element('widget_areas',array('no'=>1)) ?>
+ * <?php $bcBaser->element('widget_areas',array('no'=>1)) ?>
  *
  *
  * PHP versions 5
@@ -37,7 +37,7 @@ if(!empty($no)){
 				}
 				$params = am($params,$widget[$key]);
 				$params[$no.'_'.$widget[$key]['id']] = $no.'_'.$widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
-				$baser->element('widgets/'.$widget[$key]['element'],$params, false, $subDir);
+				$bcBaser->element('widgets/'.$widget[$key]['element'],$params, false, $subDir);
 			}
 		}
 ?>

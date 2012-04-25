@@ -23,7 +23,7 @@
 if ($this->viewPath == 'home'){
 	echo '<strong>ホーム</strong>';
 }else{
-	$crumbs = $baser->getCrumbs();
+	$crumbs = $bcBaser->getCrumbs();
 	if (!empty($crumbs)){
 		foreach($crumbs as $key => $crumb){
 			if($bcArray->last($crumbs, $key+1)) {
@@ -33,15 +33,15 @@ if ($this->viewPath == 'home'){
 			}
 			if($bcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']){
-					$baser->addCrumb('<strong>'.$crumb['name'].'</strong>');
+					$bcBaser->addCrumb('<strong>'.$crumb['name'].'</strong>');
 				}elseif($this->name == 'CakeError'){
-					$baser->addCrumb('<strong>404 NOT FOUND</strong>');
+					$bcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 				}
 			} else {
-				$baser->addCrumb($crumb['name'], $crumb['url']);
+				$bcBaser->addCrumb($crumb['name'], $crumb['url']);
 			}
 		}
 	}
-	$baser->crumbs(' &gt; ','ホーム');
+	$bcBaser->crumbs(' &gt; ','ホーム');
 }
 ?>

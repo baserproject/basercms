@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->element('mail_contents/index_row', array('data' => $data, 'count' => 0));
+$bcBaser->element('mail_contents/index_row', array('data' => $data, 'count' => 0));
 ?>

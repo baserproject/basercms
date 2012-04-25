@@ -23,15 +23,15 @@
 <?php if(!empty($user)): ?>
 <div id="ContentsMenu">
 	<ul class="clearfix">
-		<li><?php $baser->link($baser->getImg('admin/btn_menu_favorite.png', array('alt' => 'よく使う項目', 'width' => 90, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuFavorite')) ?></li>
+		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_favorite.png', array('alt' => 'よく使う項目', 'width' => 90, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuFavorite')) ?></li>
 <?php if(!empty($search)): ?>
-		<li><?php $baser->link($baser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?></li>
+		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?></li>
 <?php endif ?>
 <?php if(!empty($help)): ?>
-		<li><?php $baser->link($baser->getImg('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuHelp')) ?></li>
+		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuHelp')) ?></li>
 <?php endif ?>
-<?php if($baser->isAdminUser()): ?>
-		<li><?php $baser->link($baser->getImg('admin/btn_menu_permission.png', array('alt' => '制限設定', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuPermission')) ?></li>
+<?php if($bcBaser->isAdminUser()): ?>
+		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_permission.png', array('alt' => '制限設定', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuPermission')) ?></li>
 <?php endif ?>
 	</ul>
 </div>

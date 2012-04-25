@@ -25,16 +25,16 @@ if(empty($search)) {
 <div id="Search" class="clearfix">
 
 	<h2 class="head">
-		<?php $baser->img('admin/head_search.png', array('width' => 53, 'height' => 16, 'alt' => '検索')) ?>
+		<?php $bcBaser->img('admin/head_search.png', array('width' => 53, 'height' => 16, 'alt' => '検索')) ?>
 	</h2>
 
 	<div class="body">
-		<?php $baser->element('searches/'.$search) ?>
+		<?php $bcBaser->element('searches/'.$search) ?>
 	</div>
 
 	<div class="clearfix close">
 		<div id="CloseSearch">
-			<a><?php $baser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
+			<a><?php $bcBaser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
 		</div>
 	</div>
 

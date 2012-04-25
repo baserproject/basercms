@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->js(array(
+$bcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 
 	'admin/baser_ajax_data_list_config',
@@ -38,7 +38,7 @@ $(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $baser->url(array('controller' => 'feed_details', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'feed_details', 'action' => 'ajax_batch')) ?></div>
 
 <div class="section">
 	<h2>基本項目</h2>
@@ -118,7 +118,7 @@ $(function(){
 				<?php echo $bcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $feed->getTemplates())) ?>
 				<?php echo $bcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
+				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('FeedConfig.template') ?>
@@ -139,7 +139,7 @@ $(function(){
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('FeedConfig.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('FeedConfig.name')),
@@ -151,4 +151,4 @@ $(function(){
 
 
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $baser->element('feed_details/index_list') ?></div>
+<div id="DataList"><?php $bcBaser->element('feed_details/index_list') ?></div>

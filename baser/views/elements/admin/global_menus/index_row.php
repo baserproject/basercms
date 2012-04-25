@@ -28,20 +28,20 @@
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $baser->img('sort.png',array('alt'=>'並び替え')) ?></span>
+		<span class="sort-handle"><?php $bcBaser->img('sort.png',array('alt'=>'並び替え')) ?></span>
 		<?php echo $bcForm->input('Sort.id'.$data['GlobalMenu']['id'], array(
 				'type'	=> 'hidden',
 				'class'	=> 'id',
 				'value'	=> $data['GlobalMenu']['id'])) ?>
 <?php endif ?>
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['GlobalMenu']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['GlobalMenu']['id'])) ?>
 <?php endif ?>		
-		<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['GlobalMenu']['id']), array('title' => '編集')) ?>			<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['GlobalMenu']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['GlobalMenu']['id']), array('title' => '編集')) ?>			<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['GlobalMenu']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['GlobalMenu']['no']; ?></td>
-	<td><?php $baser->link($data['GlobalMenu']['name'], array('action' => 'edit', $data['GlobalMenu']['id'])); ?><br />
-		<?php $baser->link($data['GlobalMenu']['link'], $data['GlobalMenu']['link'], array('target'=>'_blank')); ?></td>
+	<td><?php $bcBaser->link($data['GlobalMenu']['name'], array('action' => 'edit', $data['GlobalMenu']['id'])); ?><br />
+		<?php $bcBaser->link($data['GlobalMenu']['link'], $data['GlobalMenu']['link'], array('target'=>'_blank')); ?></td>
 	<td><?php echo $bcTime->format('Y-m-d',$data['GlobalMenu']['created']); ?><br />
 	<?php echo $bcTime->format('Y-m-d',$data['GlobalMenu']['modified']); ?></td>
 </tr>

@@ -38,7 +38,7 @@ class MailHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Baser');
+	var $helpers = array(BC_BASER_HELPER);
 /**
  * コンストラクタ
  *
@@ -80,8 +80,8 @@ class MailHelper extends AppHelper {
  */
 	function indexFields($mailContentId) {
 		
-		if(!empty($this->Baser->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
+		if(!empty($this->BcBaser->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
 		
 	}
@@ -95,8 +95,8 @@ class MailHelper extends AppHelper {
 	function getLayoutTemplates() {
 
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'layouts'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS,
@@ -136,8 +136,8 @@ class MailHelper extends AppHelper {
 	function getFormTemplates() {
 
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'mail'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'mail'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'mail'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
@@ -174,8 +174,8 @@ class MailHelper extends AppHelper {
 	function getMailTemplates() {
 
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;

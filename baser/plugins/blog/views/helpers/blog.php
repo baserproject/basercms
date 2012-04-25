@@ -35,7 +35,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcTime','Baser');
+	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
 /**
  * ブログカテゴリモデル
  * 
@@ -174,7 +174,7 @@ class BlogHelper extends AppHelper {
 
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
-		return $this->Baser->getLink($title, $url, $options);
+		return $this->BcBaser->getLink($title, $url, $options);
 		
 	}
 /**
@@ -303,7 +303,7 @@ class BlogHelper extends AppHelper {
 		if(!empty($post['BlogTag'])) {
 			foreach($post['BlogTag'] as $tag) {
 				$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', 'tag', $tag['name']);
-				$tagLinks[] = $this->Baser->getLink($tag['name'], $url);
+				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
 			}
 		}
 		if($tagLinks) {
@@ -464,7 +464,7 @@ class BlogHelper extends AppHelper {
 	function editPost($blogContentId,$blogPostId) {
 		
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">'.$this->Baser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
+			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
 		}
 		
 	}
@@ -506,7 +506,7 @@ class BlogHelper extends AppHelper {
 			if(!$title) {
 				$title = $arrow.$prevPost['BlogPost']['name'];
 			}
-			$this->Baser->link($title, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
+			$this->BcBaser->link($title, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
 		}
 
 	}
@@ -546,7 +546,7 @@ class BlogHelper extends AppHelper {
 			if(!$title) {
 				$title = $nextPost['BlogPost']['name'].$arrow;
 			}
-			$this->Baser->link($title, array('admin'=>false,'plugin'=>'','mobile'=>false,'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
+			$this->BcBaser->link($title, array('admin'=>false,'plugin'=>'','mobile'=>false,'controller'=>$this->blogContent['name'],'action'=>'archives', $no),$htmlAttributes);
 		}
 
 	}
@@ -560,8 +560,8 @@ class BlogHelper extends AppHelper {
 	function getLayoutTemplates() {
 
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'layouts'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
@@ -601,8 +601,8 @@ class BlogHelper extends AppHelper {
 	function getBlogTemplates() {
 
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'blog'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'blog'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'blog'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;
@@ -685,9 +685,9 @@ class BlogHelper extends AppHelper {
 		if(isset($matches[1][$num-1])) {
 			$url = $matches[1][$num-1];
 			$url = preg_replace('/^'.preg_quote($this->base, '/').'/', '', $url);
-			$img = $this->Baser->getImg($url, $options);
+			$img = $this->BcBaser->getImg($url, $options);
 			if($link) {
-				return $this->Baser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
+				return $this->BcBaser->getLink($img, $url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']));
 			} else {
 				return $img;
 			}

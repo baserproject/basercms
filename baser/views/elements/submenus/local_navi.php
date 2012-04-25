@@ -22,6 +22,6 @@ $pageCategory = $bcPage->getCategory();
 <?php if($pageCategory): ?>
 <div id="local-navi">
 	<h2><?php echo $pageCategory['title'] ?></h2>
-	<?php $baser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
+	<?php $bcBaser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
 </div>
 <?php endif ?>

@@ -24,8 +24,8 @@
 	<th>ユーザー管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('一覧を表示する', array('controller' => 'users', 'action' => 'index')) ?></li>
-			<li><?php $baser->link('新規に登録する', array('controller' => 'users', 'action' => 'add')) ?></li>
+			<li><?php $bcBaser->link('一覧を表示する', array('controller' => 'users', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('新規に登録する', array('controller' => 'users', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

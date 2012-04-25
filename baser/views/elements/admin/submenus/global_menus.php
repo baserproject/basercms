@@ -24,8 +24,8 @@
 	<th>メニュー管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('メニュー一覧', array('controller' => 'global_menus', 'action' => 'index')) ?></li>
-			<li><?php $baser->link('新規メニューを登録', array('controller' => 'global_menus', 'action' => 'add')) ?></li>
+			<li><?php $bcBaser->link('メニュー一覧', array('controller' => 'global_menus', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('新規メニューを登録', array('controller' => 'global_menus', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

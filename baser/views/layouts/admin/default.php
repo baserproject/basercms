@@ -19,20 +19,20 @@
  */
 $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 ?>
-<?php $baser->xmlHeader() ?>
-<?php $baser->docType() ?>
+<?php $bcBaser->xmlHeader() ?>
+<?php $bcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
 <meta name="robots" content="noindex,nofollow" />
-<?php $baser->charset() ?>
-<?php $baser->title() ?>
-<?php $baser->css(array(
+<?php $bcBaser->charset() ?>
+<?php $bcBaser->title() ?>
+<?php $bcBaser->css(array(
 	'jquery-ui/ui.all',
 	'admin/import', 
 	'../js/jquery.contextMenu-1.0/jquery.contextMenu', 
 	'colorbox/colorbox')) ?>
-<!--[if IE]><?php $baser->js(array('excanvas')) ?><![endif]-->
-<?php $baser->js(array(
+<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
+<?php $bcBaser->js(array(
 	'jquery-1.6.2.min',
 	'jquery-ui-1.8.14.custom.min',
 	'i18n/ui.datepicker-ja',
@@ -46,17 +46,17 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup')) ?>
-<?php $baser->scripts() ?>
+<?php $bcBaser->scripts() ?>
 </head>
 
-<body id="<?php $baser->contentsName() ?>" class="normal">
+<body id="<?php $bcBaser->contentsName() ?>" class="normal">
 
 <div id="Page">
-	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $baser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
-	<div id="SaveSearchBoxUrl" style="display:none"><?php $baser->url(array('action' => 'ajax_save_search_box', $baser->getContentsName(true))) ?></div>
+	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
+	<div id="SaveSearchBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_search_box', $bcBaser->getContentsName(true))) ?></div>
 	<div id="FavoriteBoxOpened" style="display:none"><?php echo (!empty($user))? $session->read('Baser.favorite_box_opened') : false ?></div>
-	<div id="SearchBoxOpened" style="display:none"><?php echo $session->read('Baser.searchBoxOpened.'.$baser->getContentsName(true)) ?></div>
-	<div id="CurrentPageName" style="display: none"><?php $baser->contentsTitle() ?></div>
+	<div id="SearchBoxOpened" style="display:none"><?php echo $session->read('Baser.searchBoxOpened.'.$bcBaser->getContentsName(true)) ?></div>
+	<div id="CurrentPageName" style="display: none"><?php $bcBaser->contentsTitle() ?></div>
 	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->params['url']['url'] ?></div>
 
 	<!-- Waiting -->
@@ -67,7 +67,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 		</div>
 	</div>
 
-	<?php $baser->header() ?>
+	<?php $bcBaser->header() ?>
 
 	<div id="Wrap" class="clearfix" style="display:none">
 
@@ -75,8 +75,8 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
 			<div class="cbb clearfix">
 
-				<?php $baser->element('favorite_menu') ?>
-				<?php $baser->element('permission') ?>
+				<?php $bcBaser->element('favorite_menu') ?>
+				<?php $bcBaser->element('permission') ?>
 
 			<!-- / .cbb .clearfix --></div>
 		<!-- / #SideBar --></div>
@@ -86,42 +86,42 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 
 			<div class="cbb">
 
-				<?php $baser->element('crumbs') ?>
+				<?php $bcBaser->element('crumbs') ?>
 
 				<div id="ContentsBody" class="contents-body clearfix">
 
 					<div class="clearfix">
-						<?php $baser->element('contents_menu') ?>
-						<h1><?php $baser->contentsTitle() ?></h1>
+						<?php $bcBaser->element('contents_menu') ?>
+						<h1><?php $bcBaser->contentsTitle() ?></h1>
 					</div>
 					
 					<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
-					<?php $baser->updateMessage() ?>
+					<?php $bcBaser->updateMessage() ?>
 					<?php endif ?>
 
-					<?php if($this->params['controller']!='installations' && !empty($baser->siteConfig['first_access'])): ?>
+					<?php if($this->params['controller']!='installations' && !empty($bcBaser->siteConfig['first_access'])): ?>
 					<div id="FirstMessage" class="em-box">
 						BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
-						<?php $baser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
+						<?php $bcBaser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
 					</div>
 					<?php endif ?>
 					
-					<?php $baser->flash() ?>
+					<?php $bcBaser->flash() ?>
 
-					<?php $baser->element('submenu') ?>
+					<?php $bcBaser->element('submenu') ?>
 
-					<?php $baser->element('help') ?>
+					<?php $bcBaser->element('help') ?>
 
-					<?php $baser->element('search') ?>
+					<?php $bcBaser->element('search') ?>
 
-					<?php $baser->content() ?>
+					<?php $bcBaser->content() ?>
 
 
 
 				<!-- / #ContentsBody .contents-body .clarfix --></div>
 
 				<?php if(!empty($user)): ?>
-				<div id="ToTop"><?php $baser->link('▲ トップへ', '#Header') ?></div>
+				<div id="ToTop"><?php $bcBaser->link('▲ トップへ', '#Header') ?></div>
 				<?php endif ?>
 
 			<!-- / .cbb --></div>
@@ -130,13 +130,13 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 
 	<!-- / #Wrap .clearfix --></div>
 
-	<?php $baser->footer() ?>
+	<?php $bcBaser->footer() ?>
 	
 <!-- / #Page --></div>
 
-<?php $baser->element('credit') ?>
+<?php $bcBaser->element('credit') ?>
 	
-<?php $baser->func() ?>
+<?php $bcBaser->func() ?>
 </body>
 
 </html>

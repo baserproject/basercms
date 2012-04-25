@@ -25,7 +25,7 @@
 <div class="float-left" style="width:33%">
 	<div class="panel-box corner10">
 		<h2>baserCMSニュース</h2>
-		<?php $baser->js('/feed/ajax/1') ?>
+		<?php $bcBaser->js('/feed/ajax/1') ?>
 		<br />
 		<small>baserCMSについて、不具合の発見・改善要望がありましたら<a href="http://forum.basercms.net" target="_blank">ユーザーズフォーラム</a> よりお知らせください。</small>
 	</div>
@@ -48,7 +48,7 @@
 	<div class="panel-box corner10">
 		<h2>最近の動き</h2>
 		<div id="DblogList">
-			<?php $baser->element('dashboard/index_dblog_list') ?>
+			<?php $bcBaser->element('dashboard/index_dblog_list') ?>
 		</div>
 	</div>
 </div>

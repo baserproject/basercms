@@ -77,7 +77,7 @@ $(function(){
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('User.user_group_id', 'グループを選択してください') ?>
 				<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
-					<?php $baser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
+					<?php $bcBaser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 					より新しいグループを追加しアクセス制限の設定をおこないます。</div>
 			</td>
 		</tr>
@@ -123,12 +123,12 @@ $(function(){
 
 <div class="submit">
 	<?php if ($this->action == 'admin_edit'): ?>
-		<?php if(isset($baser->siteConfig['demo_on']) && $baser->siteConfig['demo_on']): ?>
+		<?php if(isset($bcBaser->siteConfig['demo_on']) && $bcBaser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
 			<?php if($editable): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnEdit')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('User.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('User.name')), false); ?>

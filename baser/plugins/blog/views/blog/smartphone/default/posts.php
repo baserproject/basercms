@@ -4,7 +4,7 @@
  * [PUBLISH] 記事一覧
  *
  * BaserHelper::blogPosts( コンテンツ名, 件数 ) で呼び出す
- * （例）<?php $baser->blogPosts('news', 3) ?>
+ * （例）<?php $bcBaser->blogPosts('news', 3) ?>
  *
  * PHP versions 5
  *

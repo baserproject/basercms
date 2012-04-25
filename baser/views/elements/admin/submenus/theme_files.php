@@ -41,7 +41,7 @@ if($theme == 'core'){
 	<td>
 		<ul class="cleafix">
 <?php foreach($types as $key => $type): ?>
-			<li><?php $baser->link($type.'一覧', array('action' => 'index', $theme, $themeFile['name'], $key)) ?></li>
+			<li><?php $bcBaser->link($type.'一覧', array('action' => 'index', $theme, $themeFile['name'], $key)) ?></li>
 <?php endforeach ?>
 		</ul>
 	</td>

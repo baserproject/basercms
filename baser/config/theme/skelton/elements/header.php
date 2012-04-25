@@ -6,17 +6,17 @@
 
 <div id="Header">
 
-	<?php $baser->element('search') ?>
+	<?php $bcBaser->element('search') ?>
 
-	<h1><?php $baser->link($baser->siteConfig['name'],'/') ?></h1>
+	<h1><?php $bcBaser->link($bcBaser->siteConfig['name'],'/') ?></h1>
 
 	<div id="GlobalMenus">
-		<?php $baser->element('global_menu') ?>
+		<?php $bcBaser->element('global_menu') ?>
 	</div>
 
-	<?php if(!$baser->isTop()): ?>
+	<?php if(!$bcBaser->isTop()): ?>
 	<div id="Navigation">
-		<?php $baser->element('crumbs'); ?>
+		<?php $bcBaser->element('crumbs'); ?>
 	</div>
 	<?php endif ?>
 

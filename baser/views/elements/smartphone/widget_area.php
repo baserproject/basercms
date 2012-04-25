@@ -4,7 +4,7 @@
  * [PUBLISH] ウィジェットエリア
  *
  * no を引き数で渡して利用する
- * <?php $baser->element('widget_areas',array('no'=>1)) ?>
+ * <?php $bcBaser->element('widget_areas',array('no'=>1)) ?>
  *
  *
  * PHP versions 5

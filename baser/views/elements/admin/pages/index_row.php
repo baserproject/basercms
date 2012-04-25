@@ -26,35 +26,35 @@
 	<?php $class=' class="publish sortable"'; ?>
 <?php endif; ?>
 <?php if(empty($data['PageCategory']['id']) || $data['PageCategory']['name'] == 'mobile'): ?>
-	<?php $ownerId = $baser->siteConfig['root_owner_id'] ?>
+	<?php $ownerId = $bcBaser->siteConfig['root_owner_id'] ?>
 <?php else: ?>
 	<?php $ownerId = $data['PageCategory']['owner_id'] ?>
 <?php endif ?>
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:15%">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $baser->img('sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
+		<span class="sort-handle"><?php $bcBaser->img('sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
 		<?php echo $bcForm->input('Sort.id'.$data['Page']['id'], array('type'	=> 'hidden', 'class' => 'id', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 	<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['Page']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
 	<?php $url = preg_replace('/index$/', '', $data['Page']['url']) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Page']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['Page']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '非公開', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Page']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '公開', 'class' => 'btn')), array('action' => 'ajax_publish', $data['Page']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
 	<?php if(!preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', $url) && !preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', $url)): ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $url, array('title' => '確認', 'target' => '_blank')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $url, array('title' => '確認', 'target' => '_blank')) ?>
 	<?php elseif(preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//is', $url)): ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $baser->changePrefixToAlias($url, 'mobile'), array('title' => '確認', 'target' => '_blank')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $bcBaser->changePrefixToAlias($url, 'mobile'), array('title' => '確認', 'target' => '_blank')) ?>
 	<?php elseif(preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//is', $url)): ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $baser->changePrefixToAlias($url, 'smartphone'), array('title' => '確認', 'target' => '_blank')) ?>		
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $bcBaser->changePrefixToAlias($url, 'smartphone'), array('title' => '確認', 'target' => '_blank')) ?>		
 	<?php endif ?>
 
-	<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['Page']['id']), array('title' => '編集')) ?>
-	<?php $baser->link($baser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['Page']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['Page']['id']), array('title' => '編集')) ?>
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['Page']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 
 	<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id']==1)): ?>
-	<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Page']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Page']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	<?php endif ?>
 	</td>
 	<td style="width:5%"><?php echo $data['Page']['id']; ?></td>
@@ -64,7 +64,7 @@
 	<?php endif; ?>
 	</td>
 	<td style="width:35%">
-		<?php $baser->link($data['Page']['name'], array('action' => 'edit', $data['Page']['id'])); ?><br />
+		<?php $bcBaser->link($data['Page']['name'], array('action' => 'edit', $data['Page']['id'])); ?><br />
 		<?php echo $data['Page']['title']; ?>
 	</td>
 	<td style="width:5%;" class="align-center status">

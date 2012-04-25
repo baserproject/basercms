@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->js(array(
+$bcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 
 	'admin/baser_ajax_data_list_config',
@@ -34,7 +34,7 @@ $baser->js(array(
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $baser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $baser->element('themes/index_list') ?></div>
+<div id="DataList"><?php $bcBaser->element('themes/index_list') ?></div>
 

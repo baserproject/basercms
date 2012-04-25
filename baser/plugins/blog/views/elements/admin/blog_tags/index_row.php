@@ -22,14 +22,14 @@
 
 <tr>
 	<td class="row-tools">
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['BlogTag']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogTag']['id'])) ?>
 <?php endif ?>	
-		<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['BlogTag']['id']), array('title' => '編集')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogTag']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['BlogTag']['id']), array('title' => '編集')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogTag']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['BlogTag']['id'] ?></td>
-	<td><?php $baser->link($data['BlogTag']['name'], array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
+	<td><?php $bcBaser->link($data['BlogTag']['name'], array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
 	<td><?php echo $bcTime->format('Y-m-d',$data['BlogTag']['created']); ?><br />
 		<?php echo $bcTime->format('Y-m-d',$data['BlogTag']['modified']); ?></td>
 </tr>

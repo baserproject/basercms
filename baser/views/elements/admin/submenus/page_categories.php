@@ -24,9 +24,9 @@
 	<th>固定ページカテゴリー管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('一覧を表示する', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('一覧を表示する', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
 <?php if($newCatAddable): ?>
-			<li><?php $baser->link('新規に登録する', array('controller'=> 'page_categories', 'action' => 'add')) ?></li>
+			<li><?php $bcBaser->link('新規に登録する', array('controller'=> 'page_categories', 'action' => 'add')) ?></li>
 <?php endif ?>
 		</ul>
 	</td>

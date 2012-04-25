@@ -24,7 +24,7 @@
 	<thead>
 		<tr class="list-tool">
 			<th>
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '一括無効'), 'empty' => '一括処理')) ?>
@@ -42,7 +42,7 @@
 	<tbody>
 <?php if(!empty($datas)): ?>
 	<?php foreach($datas as $data): ?>
-		<?php $baser->element('plugins/index_row', array('data' => $data)) ?>
+		<?php $bcBaser->element('plugins/index_row', array('data' => $data)) ?>
 	<?php endforeach; ?>
 <?php else: ?>
 		<tr>

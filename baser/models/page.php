@@ -638,10 +638,10 @@ class Page extends AppModel {
 	function addBaserPageTag($id,$contents,$title,$description) {
 		
 		$tag = '<!-- BaserPageTagBegin -->'."\n";
-		$tag .= '<?php $baser->setTitle(\''.$title.'\') ?>'."\n";
-		$tag .= '<?php $baser->setDescription(\''.$description.'\') ?>'."\n";
+		$tag .= '<?php $bcBaser->setTitle(\''.$title.'\') ?>'."\n";
+		$tag .= '<?php $bcBaser->setDescription(\''.$description.'\') ?>'."\n";
 		if($id) {
-			$tag .= '<?php $baser->setPageEditLink('.$id.') ?>'."\n";
+			$tag .= '<?php $bcBaser->setPageEditLink('.$id.') ?>'."\n";
 		}
 		$tag .= '<!-- BaserPageTagEnd -->'."\n";
 		return $tag . $contents;
@@ -966,7 +966,7 @@ class Page extends AppModel {
 			$file = null;
 
 			// タイトル取得・置換
-			$titleReg = '/<\?php\s+?\$baser->setTitle\(\'(.*?)\'\)\s+?\?>/is';
+			$titleReg = '/<\?php\s+?\$bcBaser->setTitle\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($titleReg,$contents,$matches)) {
 				$title = trim($matches[1]);
 				$contents = preg_replace($titleReg,'',$contents);
@@ -975,7 +975,7 @@ class Page extends AppModel {
 			}
 
 			// 説明文取得・置換
-			$descriptionReg = '/<\?php\s+?\$baser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
+			$descriptionReg = '/<\?php\s+?\$bcBaser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($descriptionReg,$contents,$matches)) {
 				$description = trim($matches[1]);
 				$contents = preg_replace($descriptionReg,'',$contents);

@@ -22,7 +22,7 @@ trigger_error('FreezeHelper は非推奨です。BcFreezeHelper を利用して�
 /**
  * Include files
  */
-App::import('Helper', 'BcForm', 'Upload');
+App::import('Helper', BC_FORM_HELPER, 'Upload');
 /**
  * @package baser.view.helpers
  */
@@ -40,7 +40,7 @@ class FreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcForm','Upload','BcText','TimeEx','Javascript');
+	var $helpers = array(BC_HTML_HELPER, BC_FORM_HELPER, 'Upload', BC_TEXT_HELPER, 'TimeEx', 'Javascript');
 /**
  * フォームを凍結させる
  * 

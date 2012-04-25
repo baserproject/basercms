@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css('ckeditor/editor', array('inline' => true));
-$baser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
+$bcBaser->css('ckeditor/editor', array('inline' => true));
+$bcBaser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 $pageTypes = array();
 if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
 	$pageTypes = array('1' => 'PC');	
@@ -229,9 +229,9 @@ function pageTypeChengeHandler() {
 </script>
 
 <div class="display-none">
-	<div id="PreviewUrl"><?php $baser->url(array('action' => 'create_preview', $previewId)) ?></div>
-	<div id="CheckAgentPageAddableUrl"><?php $baser->url(array('action' => 'check_agent_page_addable')) ?></div>
-	<div id="AjaxCategorySourceUrl"><?php $baser->url(array('action' => 'ajax_category_source')) ?></div>
+	<div id="PreviewUrl"><?php $bcBaser->url(array('action' => 'create_preview', $previewId)) ?></div>
+	<div id="CheckAgentPageAddableUrl"><?php $bcBaser->url(array('action' => 'check_agent_page_addable')) ?></div>
+	<div id="AjaxCategorySourceUrl"><?php $bcBaser->url(array('action' => 'ajax_category_source')) ?></div>
 	<div id="PageCategoryId"><?php echo $bcForm->value('PageCategory.id') ?></div>
 	<div id="PageCategoryOwnerId"><?php echo $bcForm->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
@@ -244,9 +244,9 @@ function pageTypeChengeHandler() {
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
 	<?php if($bcForm->value('Page.status')): ?>
-	<strong>このページのURL：<?php $baser->link($baser->getUri($url), $url) ?></strong>
+	<strong>このページのURL：<?php $bcBaser->link($bcBaser->getUri($url), $url) ?></strong>
 	<?php else: ?>
-	<strong>このページのURL：<?php echo $baser->getUri($url) ?></strong>
+	<strong>このページのURL：<?php echo $bcBaser->getUri($url) ?></strong>
 	<?php endif ?>
 </div>
 <?php endif ?>
@@ -282,7 +282,7 @@ function pageTypeChengeHandler() {
 						'type'		=> 'select',
 						'options'	=> $categories,
 						'escape'	=> false)) ?>
-				<?php $baser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
+				<?php $bcBaser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
 				<?php echo $bcForm->error('Page.page_category_id') ?>
 			</td>
 		</tr>
@@ -314,7 +314,7 @@ function pageTypeChengeHandler() {
 					<ul>
 						<li>タイトルはTitleタグに利用し、ブラウザのタイトルバーに表示されます。</li>
 						<li>タイトルタグの出力するには、レイアウトテンプレートに次のように記述します。<br />
-							&lt;?php $baser->title() ?&gt;<br />
+							&lt;?php $bcBaser->title() ?&gt;<br />
 							<small>※ タイトルには、サイト基本設定で設定されたWEBサイト名が自動的に追加されます。<br />
 							トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
 					</ul>
@@ -332,7 +332,7 @@ function pageTypeChengeHandler() {
 						<li>説明文はMetaタグのdescription属性に利用されます。</li>
 						<li>他のページと重複しない説明文を推奨します。</li>
 						<li>Metaタグを出力する場合は、レイアウトテンプレートに次のように記述します。<br />
-							&lt;?php $baser->description() ?&gt;<br />
+							&lt;?php $bcBaser->description() ?&gt;<br />
 							<small>※ 省略した場合、上記タグではサイト基本設定で設定された説明文が出力されます。</small></li>
 					</ul>
 				</div>
@@ -393,7 +393,7 @@ function pageTypeChengeHandler() {
 					</ul>
 				</div>
 				<?php if(!empty($mobileExists)): ?>
-				<br />&nbsp;<?php $baser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
+				<br />&nbsp;<?php $bcBaser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
 				<?php endif ?>
 			</td>
 		</tr>
@@ -412,7 +412,7 @@ function pageTypeChengeHandler() {
 					</ul>
 				</div>
 				<?php if(!empty($smartphoneExists)): ?>
-				<br />&nbsp;<?php $baser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
+				<br />&nbsp;<?php $bcBaser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
 				<?php endif ?>
 			</td>
 		</tr>
@@ -429,7 +429,7 @@ function pageTypeChengeHandler() {
 	<?php endif ?>
 	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
-	<?php $baser->link('削除',
+	<?php $bcBaser->link('削除',
 			array('action'=>'delete', $bcForm->value('Page.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('Page.name')),

@@ -3,31 +3,31 @@
  * デフォルトレイアウト
  */
 ?>
-<?php $baser->xmlHeader() ?>
-<?php $baser->docType() ?>
+<?php $bcBaser->xmlHeader() ?>
+<?php $bcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
-<?php $baser->charset() ?>
-<?php $baser->title() ?>
-<?php $baser->metaDescription() ?>
-<?php $baser->metaKeywords() ?>
-<?php $baser->icon() ?>
-<?php $baser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
-<?php $baser->css(array('import')) ?>
-<?php $baser->js(array(
+<?php $bcBaser->charset() ?>
+<?php $bcBaser->title() ?>
+<?php $bcBaser->metaDescription() ?>
+<?php $bcBaser->metaKeywords() ?>
+<?php $bcBaser->icon() ?>
+<?php $bcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
+<?php $bcBaser->css(array('import')) ?>
+<?php $bcBaser->js(array(
 	'jquery-1.6.4.min',
 	'startup'
 )) ?>
-<?php $baser->scripts() ?>
-<?php $baser->element('google_analytics') ?>
+<?php $bcBaser->scripts() ?>
+<?php $bcBaser->element('google_analytics') ?>
 </head>
-<body id="<?php $baser->contentsName() ?>">
+<body id="<?php $bcBaser->contentsName() ?>">
 
 <!-- begin page -->
 <div id="page">
 
 	<!-- begin header -->
-	<?php $baser->header() ?>
+	<?php $bcBaser->header() ?>
 	<!-- end header -->
 	
 	<!-- begin contents -->
@@ -38,22 +38,22 @@
 		
 			<!-- begin contentsBody -->
 			<div id="contentsBody" class="clearfix">
-				<?php $baser->flash() ?>
-				<?php $baser->content() ?>
-				<?php $baser->element('contents_navi') ?>
+				<?php $bcBaser->flash() ?>
+				<?php $bcBaser->content() ?>
+				<?php $bcBaser->element('contents_navi') ?>
 			</div>
 			<!-- end contentsBody -->
 			
 		</div>
 		<!-- end alfa -->
 		
-		<?php if(!$baser->isTop()): ?>
+		<?php if(!$bcBaser->isTop()): ?>
 		<!-- begin beta -->
-		<?php $baser->element('sidebar') ?>
+		<?php $bcBaser->element('sidebar') ?>
 		<!-- end beta -->
 		<?php endif ?>
 		
-		<?php if(!$baser->isTop()): ?>
+		<?php if(!$bcBaser->isTop()): ?>
 		<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
 		<?php endif ?>
 		
@@ -64,9 +64,9 @@
 <!-- end page -->
 
 <!-- begin footer -->
-<?php $baser->footer() ?>
+<?php $bcBaser->footer() ?>
 <!-- end footer -->
 
-<?php $baser->func() ?>
+<?php $bcBaser->func() ?>
 </body>
 </html>

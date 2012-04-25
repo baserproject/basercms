@@ -24,8 +24,8 @@
 	<th>検索インデックスメニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('コンテンツ一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
-			<li><?php $baser->link('コンテンツ登録', array('controller' => 'contents', 'action' => 'add')) ?></li>
+			<li><?php $bcBaser->link('コンテンツ一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('コンテンツ登録', array('controller' => 'contents', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

@@ -22,10 +22,10 @@
 
 <tr>
 	<td class="row-tools">
-		<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['User']['id']), array('title' => '編集')) ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['User']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?></td>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['User']['id']), array('title' => '編集')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['User']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?></td>
 	<td><?php echo $data['User']['id'] ?></td>
-	<td><?php $baser->link($data['User']['name'],array('action'=>'edit', $data['User']['id'])) ?></td>
+	<td><?php $bcBaser->link($data['User']['name'],array('action'=>'edit', $data['User']['id'])) ?></td>
 	<td><?php echo $bcText->listValue('User.user_group_id',$data['User']['user_group_id']); ?><br />
 		<?php echo $data['User']['real_name_1']; ?>&nbsp;<?php echo $data['User']['real_name_2'] ?></td>
 	<td><?php echo $bcTime->format('Y-m-d',$data['User']['created']) ?><br />

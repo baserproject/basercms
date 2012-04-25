@@ -2,9 +2,9 @@
 /**
  * ブログ詳細ページ
  */
-$baser->css('colorbox/colorbox', array('inline' => true));
-$baser->js('jquery.colorbox-min', false);
-$baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
+$bcBaser->css('colorbox/colorbox', array('inline' => true));
+$bcBaser->js('jquery.colorbox-min', false);
+$bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>
 
 <script type="text/javascript">
@@ -17,7 +17,7 @@ $(function(){
 	<?php $blog->title() ?>
 </h2>
 <h3 class="contents-head">
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h3>
 <div class="post">
 	<?php $blog->postContent($post) ?>
@@ -28,11 +28,11 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 		</span> </div>
-	<?php $baser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 <div id="contentsNavi">
 	<?php $blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 	<?php $blog->nextLink($post) ?>
 </div>
-<?php $baser->element('blog_comments') ?>
+<?php $bcBaser->element('blog_comments') ?>

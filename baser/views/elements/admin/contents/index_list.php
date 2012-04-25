@@ -21,7 +21,7 @@
 
 
 <!-- pagination -->
-<?php $baser->element('pagination') ?>
+<?php $bcBaser->element('pagination') ?>
 
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="list-table sort-table" id="ListTable">
@@ -29,9 +29,9 @@
 		<tr>
 			<th class="list-tool">
 				<div>
-					<?php $baser->link($baser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
 				</div>
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
@@ -51,7 +51,7 @@
 	<?php if(!empty($datas)): ?>
 		<?php $count=0; ?>
 		<?php foreach($datas as $data): ?>
-			<?php $baser->element('contents/index_row', array('data' => $data, 'count' => $count)) ?>
+			<?php $bcBaser->element('contents/index_row', array('data' => $data, 'count' => $count)) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>
@@ -63,4 +63,4 @@
 </table>
 
 <!-- list-num -->
-<?php $baser->element('list_num') ?>
+<?php $bcBaser->element('list_num') ?>

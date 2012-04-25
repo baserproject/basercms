@@ -23,16 +23,16 @@
 <tr>
 	<td class="row-tools">
 <?php if($data['UserGroup']['name']!='admins'): ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_permission.png', array('width' => 24, 'height' => 24, 'alt' => '権限', 'class' => 'btn')), array('controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']), array('title' => '権限')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_permission.png', array('width' => 24, 'height' => 24, 'alt' => '権限', 'class' => 'btn')), array('controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']), array('title' => '権限')) ?>
 <?php endif ?>
-	<?php $baser->link($baser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UserGroup']['id']), array('title' => '編集')) ?>
-	<?php $baser->link($baser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UserGroup']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UserGroup']['id']), array('title' => '編集')) ?>
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UserGroup']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 <?php if($data['UserGroup']['name']!='admins'): ?>
-		<?php $baser->link($baser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UserGroup']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UserGroup']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 <?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>
-	<td><?php $baser->link($data['UserGroup']['name'],array('action'=>'edit', $data['UserGroup']['id'])) ?></td>
+	<td><?php $bcBaser->link($data['UserGroup']['name'],array('action'=>'edit', $data['UserGroup']['id'])) ?></td>
 	<td><?php echo $data['UserGroup']['title'] ?></td>
 	<td><?php echo $bcTime->format('Y-m-d',$data['UserGroup']['created']) ?><br />
 		<?php echo $bcTime->format('Y-m-d',$data['UserGroup']['modified']) ?></td>

@@ -22,7 +22,7 @@ if(!isset($count)) {
 }
 ?>
 <li id="FavoriteRow<?php echo $count ?>">
-	<?php $baser->link($favorite['Favorite']['name'], $favorite['Favorite']['url'], array('title' => Router::url($favorite['Favorite']['url'], true))) ?>
+	<?php $bcBaser->link($favorite['Favorite']['name'], $favorite['Favorite']['url'], array('title' => Router::url($favorite['Favorite']['url'], true))) ?>
 	<?php echo $bcForm->input('Favorite.id.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id')) ?>
 	<?php echo $bcForm->input('Favorite.name.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name')) ?>
 	<?php echo $bcForm->input('Favorite.url.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['url'], 'class' => 'favorite-url')) ?>

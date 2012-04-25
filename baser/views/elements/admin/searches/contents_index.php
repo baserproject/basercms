@@ -19,8 +19,8 @@
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 					'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');
-$categories = am(array('none' => 'カテゴリなし'), unserialize($baser->siteConfig['content_categories']));
-$types = unserialize($baser->siteConfig['content_types']);
+$categories = am(array('none' => 'カテゴリなし'), unserialize($bcBaser->siteConfig['content_categories']));
+$types = unserialize($bcBaser->siteConfig['content_types']);
 ?>
 
 <?php echo $bcForm->create('Content', array('url' => array('action' => 'index'))) ?>
@@ -35,7 +35,7 @@ $types = unserialize($baser->siteConfig['content_types']);
 	<?php echo $bcForm->input('Content.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
 </p>
 <div class="button">
-	<?php $baser->link($baser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
-	<?php $baser->link($baser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
+	<?php $bcBaser->link($bcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
+	<?php $bcBaser->link($bcBaser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
 <?php $bcForm->end() ?>

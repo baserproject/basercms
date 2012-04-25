@@ -33,7 +33,7 @@ class FeedHelper extends BcTextHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Baser');
+	var $helpers = array(BC_BASER_HELPER);
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
@@ -44,8 +44,8 @@ class FeedHelper extends BcTextHelper {
 	function getTemplates() {
 		
 		$templatesPathes = array();
-		if($this->Baser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->Baser->siteConfig['theme'].DS.'feed'.DS;
+		if($this->BcBaser->siteConfig['theme']){
+			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'feed'.DS;
 		}
 		$templatesPathes[] = BASER_PLUGINS.'feed'.DS.'views'.DS.'feed'.DS;
 		
@@ -83,8 +83,8 @@ class FeedHelper extends BcTextHelper {
 	function saveCachetime(){
 		
 		$feedId = $this->params['pass'][0];
-		if(isset($this->Baser->_view->viewVars['cachetime'])) {
-			$cachetime = $this->Baser->_view->viewVars['cachetime'];
+		if(isset($this->BcBaser->_view->viewVars['cachetime'])) {
+			$cachetime = $this->BcBaser->_view->viewVars['cachetime'];
 			cache('views'.DS.'feed_cachetime_'.$feedId.'.php',$cachetime);
 		}
 		
@@ -102,7 +102,7 @@ class FeedHelper extends BcTextHelper {
 	function cacheHeader(){
 		
 		$feedId = $this->params['pass'][0];
-		$this->Baser->cacheHeader(cache('views'.DS.'feed_cachetime_'.$feedId.'.php'));
+		$this->BcBaser->cacheHeader(cache('views'.DS.'feed_cachetime_'.$feedId.'.php'));
 		
 	}
 	

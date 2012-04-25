@@ -21,6 +21,6 @@
 <div class="side-navi">
 	<h2>ログインメニュー</h2>
 	<ul>
-		<li><?php $baser->link('管理者ログイン', array('plugin' => null, 'controller' => 'users', 'action' => 'login'), array('target' => '_blank')) ?></li>
+		<li><?php $bcBaser->link('管理者ログイン', array('plugin' => null, 'controller' => 'users', 'action' => 'login'), array('target' => '_blank')) ?></li>
 	</ul>
 </div>

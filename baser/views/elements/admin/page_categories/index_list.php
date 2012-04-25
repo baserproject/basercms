@@ -26,10 +26,10 @@
 			<th class="list-tool">
 				<div>
 	<?php if($newCatAddable): ?>
-					<?php $baser->link($baser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
 	<?php endif ?>
 				</div>
-	<?php if($baser->isAdminUser()): ?>
+	<?php if($bcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $bcForm->checkbox('ListTool.checkall') ?>&nbsp;
 					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
@@ -39,7 +39,7 @@
 			</th>
 			<th>NO</th>
 			<th>ページカテゴリー名
-	<?php if($baser->siteConfig['category_permission']): ?>
+	<?php if($bcBaser->siteConfig['category_permission']): ?>
 				<br />管理グループ
 	<?php endif ?>
 			</th>
@@ -70,7 +70,7 @@ foreach($rowIdTmps as $rowIdTmp) {
 $rowGroupClass = ' class="depth-'.$data['PageCategory']['depth'].' '.implode(' ', $rowGroupId).'"';
 ?>
 		<?php $currentDepth = $data['PageCategory']['depth'] ?>
-		<?php $baser->element('page_categories/index_row', array('datas' => $datas, 'data' => $data, 'count' => ($key + 1), 'rowGroupClass' => $rowGroupClass)) ?>
+		<?php $bcBaser->element('page_categories/index_row', array('datas' => $datas, 'data' => $data, 'count' => ($key + 1), 'rowGroupClass' => $rowGroupClass)) ?>
 	<?php endforeach; ?>
 <?php else: ?>
 	<tr>

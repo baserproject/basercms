@@ -37,7 +37,10 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcGooglemaps', 'BcXml', 'BcText', 'BcFreeze', 'BcCkeditor', 'BcPage');
+	var $helpers = array(
+		'Html', BC_GOOGLEMAPS_HELPER, BC_XML_HELPER, BC_TEXT_HELPER, 
+		BC_FREEZE_HELPER, BC_CKEDITOR_HELPER, BC_PAGE_HELPER
+	);
 /**
  * コンポーネント
  *
@@ -635,7 +638,7 @@ class PagesController extends AppController {
 		if(Configure::read('BcRequest.agent')){
 			$this->layoutPath = Configure::read('BcAgent.'.Configure::read('BcRequest.agent').'.prefix');
 			if(Configure::read('BcRequest.agent') == 'mobile') {
-				$this->helpers[] = 'BcMobile';
+				$this->helpers[] = BC_MOBILE_HELPER;
 			}
 		} else {
 			$this->layoutPath = '';

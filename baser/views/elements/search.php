@@ -25,8 +25,8 @@ if(!empty($this->passedArgs['num'])) {
 ?>
 <div class="section search-box">
 <?php echo $bcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
-<?php if(unserialize($baser->siteConfig['content_categories'])) : ?>
-<?php echo $bcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($baser->siteConfig['content_categories']), 'empty' => 'カテゴリ： 指定しない　')) ?>
+<?php if(unserialize($bcBaser->siteConfig['content_categories'])) : ?>
+<?php echo $bcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($bcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリ： 指定しない　')) ?>
 <?php endif ?>
 <?php echo $bcForm->input('Content.q') ?>
 <?php echo $bcForm->submit('検索', array('div'=>false)) ?>

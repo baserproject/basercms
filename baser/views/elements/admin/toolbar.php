@@ -17,12 +17,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$publishTheme = $baser->BcHtml->themeWeb;
+$publishTheme = $bcBaser->BcHtml->themeWeb;
 if($this->name != 'Installations') {
-	$baser->BcHtml->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
-	$baser->Javascript->themeWeb = 'themed/'.$baser->siteConfig['admin_theme'].'/';
+	$bcBaser->BcHtml->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
+	$bcBaser->Javascript->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
 }
-$baser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
+$bcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
 ?>
 <script type="text/javascript">
 $(function(){
@@ -36,17 +36,17 @@ $(function(){
 			<ul>
 				
 				<?php if($this->name == 'Installations'): ?>
-				<li><?php $baser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', array('target' => '_blank')) ?></li>
+				<li><?php $bcBaser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', array('target' => '_blank')) ?></li>
 				<?php elseif(empty($this->params['admin'])): ?>
-				<li><?php $baser->link($baser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
+				<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
 				<?php else: ?>
-				<li><?php $baser->link($baser->siteConfig['name'], '/') ?></li>
+				<li><?php $bcBaser->link($bcBaser->siteConfig['name'], '/') ?></li>
 				<?php endif ?>
-				<?php if($baser->existsEditLink()): ?>
-				<li><?php $baser->editLink() ?></li>
+				<?php if($bcBaser->existsEditLink()): ?>
+				<li><?php $bcBaser->editLink() ?></li>
 				<?php endif ?>
-				<?php if($baser->existsPublishLink()): ?>
-				<li><?php $baser->publishLink() ?></li>
+				<?php if($bcBaser->existsPublishLink()): ?>
+				<li><?php $bcBaser->publishLink() ?></li>
 				<?php endif ?>
 				<?php if(!empty($this->params['admin']) && $this->params['url']['url'] != 'admin/users/login'): ?>
 					<?php if(Configure::read('debug') == -1): ?>
@@ -62,15 +62,15 @@ $(function(){
 			<ul class="clearfix">
 				<li>
 					<?php if(!empty($user)): ?>
-					<?php $baser->link($user['real_name_1']." ".$user['real_name_2'].' '.$baser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+					<?php $bcBaser->link($user['real_name_1']." ".$user['real_name_2'].' '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
-						<li><?php $baser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
-						<li><?php $baser->link('ログアウト', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
+						<li><?php $bcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
+						<li><?php $bcBaser->link('ログアウト', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
 					</ul>
 					<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != 'admin/users/login'): ?>
-					<?php $baser->link('ログインしていません '.$baser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+					<?php $bcBaser->link('ログインしていません '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
-						<li><?php $baser->link('ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>
+						<li><?php $bcBaser->link('ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>
 					</ul>
 					<?php endif ?>
 				</li>
@@ -79,4 +79,4 @@ $(function(){
 	</div>
 </div>
 
-<?php $baser->BcHtml->themeWeb = $publishTheme ?>
+<?php $bcBaser->BcHtml->themeWeb = $publishTheme ?>

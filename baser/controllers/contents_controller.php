@@ -51,7 +51,7 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('BcText', 'BcForm');
+	var $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER);
 /**
  * beforeFilter
  *

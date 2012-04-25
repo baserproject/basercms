@@ -245,19 +245,19 @@ $(function(){
 	}
 </script>
 
-<div id="FavoriteDeleteUrl" style="display: none"><?php $baser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'ajax_delete')) ?></div>
-<div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $baser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort')) ?></div>
+<div id="FavoriteDeleteUrl" style="display: none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'ajax_delete')) ?></div>
+<div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort')) ?></div>
 
 <div id="FavoriteMenu">
 		
-	<h2><?php $baser->img('admin/head_favorite.png', array('alt' => 'よく使う項目')) ?></h2>
+	<h2><?php $bcBaser->img('admin/head_favorite.png', array('alt' => 'よく使う項目')) ?></h2>
 	
 <ul class="favorite-menu-list">
 <?php if($favorites): ?>
 	
 	<?php $count = 1 ?>
 	<?php foreach($favorites as $favorite): ?>
-		<?php $baser->element('favorite_menu_row', array('favorite' => $favorite, 'count' => $count)) ?>
+		<?php $bcBaser->element('favorite_menu_row', array('favorite' => $favorite, 'count' => $count)) ?>
 		<?php $count++ ?>
 	<?php endforeach ?>
 	
@@ -267,8 +267,8 @@ $(function(){
 </ul>
 
 	<ul class="favolite-menu-tools clearfix">
-		<li><?php $baser->img('admin/btn_add.png', array('url' => 'javascript:void(0)', 'width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn')) ?></li>
-		<li><?php $baser->img('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp')) ?>
+		<li><?php $bcBaser->img('admin/btn_add.png', array('url' => 'javascript:void(0)', 'width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn')) ?></li>
+		<li><?php $bcBaser->img('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp')) ?>
 			<div class="helptext">
 				<p>よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。</p>
 			</div>

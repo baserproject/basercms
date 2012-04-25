@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->cacheHeader(MONTH,'js');
+$bcBaser->cacheHeader(MONTH,'js');
 ?>
 document.write('<div id="feeds<?php echo $id; ?>"><?php echo $html->image('ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 

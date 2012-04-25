@@ -40,7 +40,7 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-	<strong>このブログのURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/index'),'/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
+	<strong>このブログのURL：<?php $bcBaser->link($bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index'),'/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
 </div>
 <?php endif ?>
 
@@ -146,7 +146,7 @@ $(function(){
 						<li>半角数字で入力してください。</li>
 						<?php if($this->action == 'admin_edit'): ?>
 						<li>RSSフィードのURLは
-							<?php $baser->link(Router::url('/'.$bcForm->value('BlogContent.name').'/index.rss', true),'/'.$bcForm->value('BlogContent.name').'/index.rss',array('target'=>'_blank')) ?>
+							<?php $bcBaser->link(Router::url('/'.$bcForm->value('BlogContent.name').'/index.rss', true),'/'.$bcForm->value('BlogContent.name').'/index.rss',array('target'=>'_blank')) ?>
 							となります。</li>
 						<?php endif ?>
 					</ul>
@@ -217,7 +217,7 @@ $(function(){
 				<?php echo $bcForm->error('BlogContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
 					ブログコンテンツで利用するウィジェットエリアを指定します。<br />
-					ウィジェットエリアは「<?php $baser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
+					ウィジェットエリアは「<?php $bcBaser->link('ウィジェットエリア管理', array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
 				</div>
 			</td>
 		</tr>
@@ -229,7 +229,7 @@ $(function(){
 							'options'	=> $blog->getLayoutTemplates())) ?>
 				<?php echo $bcForm->input('BlogContent.edit_layout_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditLayoutTemplate')) ?>
+				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditLayoutTemplate')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpLayout', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('BlogContent.layout') ?>
@@ -249,7 +249,7 @@ $(function(){
 						'options'	=> $blog->getBlogTemplates())) ?>
 				<?php echo $bcForm->input('BlogContent.edit_blog_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $baser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditBlogTemplate')) ?>
+				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditBlogTemplate')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('BlogContent.template') ?>
@@ -269,7 +269,7 @@ $(function(){
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除', 
+	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('BlogContent.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogContent.title')),

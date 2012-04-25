@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->setDescription($blog->getDescription());
+$bcBaser->setDescription($blog->getDescription());
 ?>
 
 <!-- title -->
@@ -46,4 +46,4 @@ $baser->setDescription($blog->getDescription());
 </section>
 
 <!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+<?php $bcBaser->pagination('simple'); ?>

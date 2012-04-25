@@ -24,13 +24,13 @@
 	<thead>
 		<tr>
 			<th style="width:160px" class="list-tool">
-<?php if($baser->isAdminUser()): ?>
+<?php if($bcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
 					<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 <?php if($path): ?>
-					<?php $baser->link($baser->getImg('up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
+					<?php $bcBaser->link($bcBaser->getImg('up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
 <?php endif ?>
 				</div>
 <?php endif ?>
@@ -41,7 +41,7 @@
 	<tbody>
 	<?php if(!empty($themeFiles)): ?>
 		<?php foreach($themeFiles as $data): ?>
-		<?php $baser->element('theme_files/index_row', array('data' => $data)) ?>
+		<?php $bcBaser->element('theme_files/index_row', array('data' => $data)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

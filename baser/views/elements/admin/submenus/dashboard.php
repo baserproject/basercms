@@ -26,7 +26,7 @@
 	<td>
 		<ul class="cleafix">
 			<li>
-				<?php $baser->link('ユーザーを追加する', array('controller' => 'users', 'action' => 'add')) ?>
+				<?php $bcBaser->link('ユーザーを追加する', array('controller' => 'users', 'action' => 'add')) ?>
 			</li>
 		</ul>
 	</td>

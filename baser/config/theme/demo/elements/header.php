@@ -6,20 +6,20 @@
 
 <div id="header">
 	<div id="headMain" class="clearfix">
-		<h1><?php $baser->link($baser->siteConfig['name'],'/') ?></h1>
-		<?php $baser->element('search') ?>
+		<h1><?php $bcBaser->link($bcBaser->siteConfig['name'],'/') ?></h1>
+		<?php $bcBaser->element('search') ?>
 	</div>
-	<?php if($baser->isTop()): ?>
-	<?php $baser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s baserCMS','border'=>'0')) ?>
+	<?php if($bcBaser->isTop()): ?>
+	<?php $bcBaser->img('/img/img_top_main.jpg',array('alt'=>'Let\'s baserCMS','border'=>'0')) ?>
 	<?php endif ?>
 	<div id="glbMenus">
 		<h2 class="display-none">グローバルメニュー</h2>
-		<?php $baser->element('global_menu') ?>
+		<?php $bcBaser->element('global_menu') ?>
 	</div>
-	<?php if(!$baser->isTop()): ?>
+	<?php if(!$bcBaser->isTop()): ?>
 	<!-- navigation -->
 	<div id="navigation">
-		<?php $baser->element('crumbs'); ?>
+		<?php $bcBaser->element('crumbs'); ?>
 	</div>
 	<?php endif ?>
 </div>

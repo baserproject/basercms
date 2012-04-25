@@ -26,7 +26,7 @@
 <div class="comment" id="Comment<?php echo $dbData['no'] ?>">
 	<span class="comment-name">≫
 		<?php if($dbData['url']): ?>
-		<?php echo $baser->link($dbData['name'], $dbData['url'], array('target' => '_blank')) ?>
+		<?php echo $bcBaser->link($dbData['name'], $dbData['url'], array('target' => '_blank')) ?>
 		<?php else: ?>
 		<?php echo $dbData['name'] ?>
 		<?php endif ?>

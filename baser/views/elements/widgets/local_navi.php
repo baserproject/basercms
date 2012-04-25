@@ -27,6 +27,6 @@ $pageCategory = $bcPage->getCategory();
 	<?php if($use_title): ?>
 	<h2><?php echo $pageCategory['title'] ?></h2>
 	<?php endif ?>
-	<?php $baser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
+	<?php $bcBaser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
 </div>
 <?php endif ?>

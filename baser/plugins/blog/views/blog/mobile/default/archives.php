@@ -17,17 +17,17 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
-$baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
+$bcBaser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
+$bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <!-- title -->
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $baser->getContentsTitle(); ?></span> </div>
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $bcBaser->getContentsTitle(); ?></span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 
 <!-- pagination -->
-<?php echo $baser->pagination() ?>
+<?php echo $bcBaser->pagination() ?>
 
 <!-- list -->
 <?php if(!empty($posts)): ?>
@@ -53,4 +53,4 @@ $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'の�
 <?php endif; ?>
 
 <!-- pagination -->
-<?php echo $baser->pagination() ?>
+<?php echo $bcBaser->pagination() ?>

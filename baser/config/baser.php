@@ -135,4 +135,26 @@
 			)
 		)
 	);
+/**
+ * １系互換用ヘルパ設定 
+ * 
+ * １系のヘルパをそのまま利用する場合は、下記の定数を１系のヘルパ名に書き換えてください。
+ * 但し、１系のヘルパは非推奨となりますので利用箇所のヘルパを全て書き換えた後、下記設定を元に戻して下さい。
+ */
+	define('BC_BASER_HELPER'		, 'BcBaser');		// （１系：Baser		/ ２系：BcBaser）
+	define('BC_BASER_ADMIN_HELPER'	, 'BcAdmin');		// （１系：BaserAdmin	/ ２系：BcAdmin）
+	define('BC_ARRAY_HELPER'		, 'BcArray');		// （１系：Array		/ ２系：BcArray）
+	define('BC_CKEDITOR_HELPER'		, 'BcCkeditor');	// （１系：Array		/ ２系：BcArray）
+	define('BC_CSV_HELPER'			, 'BcCsv');			// （１系：Csv		/ ２系：BcCsv）
+	define('BC_FORM_HELPER'			, 'BcForm');		// （１系：FormEx		/ ２系：BcForm）
+	define('BC_FREEZE_HELPER'		, 'BcFreeze');		// （１系：Freeze		/ ２系：BcFreeze）
+	define('BC_GOOGLEMAPS_HELPER'	, 'BcGooglemaps');	// （１系：Googlemaps	/ ２系：BcGooglemaps）
+	define('BC_HTML_HELPER'			, 'BcHtml');		// （１系：HtmlEx		/ ２系：BcHtml）
+	define('BC_MOBILE_HELPER'		, 'BcMobile');		// （１系：Mobile		/ ２系：BcMobile）
+	define('BC_PAGE_HELPER'			, 'BcPage');		// （１系：Page		/ ２系：BcPage）
+	define('BC_TEXT_HELPER'			, 'BcText');		// （１系：TextEx		/ ２系：BcText）
+	define('BC_TIME_HELPER'			, 'BcTime');		// （１系：TimeEx		/ ２系：BcTime）
+	define('BC_UPLOAD_HELPER'		, 'BcUpload');		// （１系：Upload		/ ２系：BcUpload）
+	define('BC_XML_HELPER'			, 'BcXml');			// （１系：XmlEx		/ ２系：BcXml）
+	
 ?>

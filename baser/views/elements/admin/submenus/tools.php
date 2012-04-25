@@ -24,8 +24,8 @@
 	<th>ツールメニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $baser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>
-			<li><?php $baser->link('スキーマファイル読込', array('controller' => 'tools', 'action' => 'load_schema')) ?></li>
+			<li><?php $bcBaser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>
+			<li><?php $bcBaser->link('スキーマファイル読込', array('controller' => 'tools', 'action' => 'load_schema')) ?></li>
 		</ul>
 	</td>
 </tr>

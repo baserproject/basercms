@@ -20,7 +20,7 @@
 $elementPath = 'submenus'.DS;
 if (!empty($subMenuElements)){
 	foreach ($subMenuElements as $subMenuElement){
-		$baser->element($elementPath.$subMenuElement);
+		$bcBaser->element($elementPath.$subMenuElement);
 	}
 }else{
 	echo '&nbsp';

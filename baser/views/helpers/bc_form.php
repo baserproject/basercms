@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper',array('Form','BcTime','BcText', 'BcCkeditor'));
+App::import('Helper',array('Html', 'Form', BC_TIME_HELPER, BC_TEXT_HELPER, BC_CKEDITOR_HELPER));
 /**
  * FormHelper 拡張クラス
  *
@@ -33,7 +33,7 @@ class BcFormHelper extends FormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcTime','BcText','Javascript','BcCkeditor');
+	var $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Javascript', BC_CKEDITOR_HELPER);
 /**
  * sizeCounter用の関数読み込み可否
  * 

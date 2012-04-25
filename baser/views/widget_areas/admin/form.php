@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<div id="DelWidgetUrl" style="display:none"><?php $baser->url(array('controller' => 'widget_areas', 'action' => 'del_widget', $bcForm->value('WidgetArea.id'))) ?></div>
+<div id="DelWidgetUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'widget_areas', 'action' => 'del_widget', $bcForm->value('WidgetArea.id'))) ?></div>
 <div id="CurrentAction" style="display:none"><?php echo $this->action ?></div>
 
 <script type="text/javascript">
@@ -334,7 +334,7 @@ function updateWidget(id) {
 <?php echo $bcForm->label('WidgetArea.name', 'ウィジェットエリア名') ?>&nbsp;
 <?php echo $bcForm->input('WidgetArea.name', array('type' => 'text', 'size' => 40)) ?>&nbsp;
 <?php echo $bcForm->end(array('label' => 'エリア名を保存する', 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit')) ?>
-<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader')) ?>
+<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader')) ?>
 <?php echo $bcForm->error('WidgetArea.name') ?>
 
 <?php if(!empty($widgetInfos)): ?>
@@ -401,7 +401,7 @@ function updateWidget(id) {
 					<?php echo $bcForm->label('Widget.name','タイトル') ?>&nbsp;
 					<?php echo $bcForm->input('Widget.name', array('type' => 'text', 'class' => 'name')) ?><br />
 					<?php echo $widget['setting'] ?><br />
-					<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader')) ?>
+					<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader')) ?>
 					<?php echo $bcForm->input('Widget.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title', 'checked' => 'checked')) ?>
 					<?php echo $bcForm->input('Widget.status', array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
 					<?php echo $bcForm->end(array('label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'button')) ?>
@@ -416,7 +416,7 @@ function updateWidget(id) {
 	<div id="TargetOuter">
 		<div id="Target">
 
-			<h2>利用中のウィジェット <?php $baser->img('ajax-loader-s.gif', array(
+			<h2>利用中のウィジェット <?php $bcBaser->img('ajax-loader-s.gif', array(
 				'style' => 'vertical-align:middle;display:none',
 				'id'	=> 'WidgetAreaUpdateSortLoader',
 				'class' => 'loader')) ?></h2>
@@ -447,8 +447,8 @@ function updateWidget(id) {
 						<?php echo $bcForm->input($key.'.sort', array('type' => 'hidden')) ?>
 						<?php echo $bcForm->label($key.'name','タイトル') ?>&nbsp;
 						<?php echo $bcForm->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
-						<?php $baser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit')) ?><br />
-						<?php $baser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
+						<?php $bcBaser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit')) ?><br />
+						<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
 						<?php echo $bcForm->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
 						<?php echo $bcForm->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>
 						<?php echo $bcForm->end(array('label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit'.$widget[$key]['id'], 'class' => 'button')) ?>

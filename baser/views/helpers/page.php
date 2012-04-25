@@ -44,7 +44,7 @@ class PageHelper extends Helper {
  * @var array
  * @access public
  */
-	var $helpers = array('Baser');
+	var $helpers = array(BC_BASER_HELPER);
 /**
  * construct
  * 
@@ -227,7 +227,7 @@ class PageHelper extends Helper {
 			if(!$title) {
 				$title = $nextPost['Page']['title'].$arrow;
 			}
-			$this->Baser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
+			$this->BcBaser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
 		}
 
 	}
@@ -273,7 +273,7 @@ class PageHelper extends Helper {
 			if(!$title) {
 				$title = $arrow.$nextPost['Page']['title'];
 			}
-			$this->Baser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
+			$this->BcBaser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
 		}
 
 	}

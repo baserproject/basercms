@@ -22,7 +22,7 @@ trigger_error('FormExHelper は非推奨です。BcFormHelper を利用してく
 /**
  * Include files
  */
-App::import('Helper',array('Form','TimeEx','BcText', 'BcCkeditor'));
+App::import('Helper',array('Form','TimeEx',BC_TEXT_HELPER, BC_CKEDITOR_HELPER));
 /**
  * FormHelper 拡張クラス
  *
@@ -35,7 +35,7 @@ class FormExHelper extends FormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html','BcTime','BcText','Javascript','BcCkeditor');
+	var $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_TEXT_HELPER, 'Javascript', BC_CKEDITOR_HELPER);
 /**
  * sizeCounter用の関数読み込み可否
  * 

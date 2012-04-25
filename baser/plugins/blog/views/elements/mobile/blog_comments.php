@@ -31,7 +31,7 @@
 	<?php if(!empty($post['BlogComment'])): ?>
 	<div id="BlogCommentList">
 		<?php foreach($post['BlogComment'] as $comment): ?>
-		<?php $baser->element('blog_comment',array('dbData'=>$comment)) ?>
+		<?php $bcBaser->element('blog_comment',array('dbData'=>$comment)) ?>
 		<?php endforeach ?>
 	</div>
 	<?php endif ?>

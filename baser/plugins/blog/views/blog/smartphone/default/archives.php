@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
+$bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <!-- title -->
@@ -27,7 +27,7 @@ $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'の�
 
 <!-- archives title -->
 <h3 class="contents-head">
-	<?php $baser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h3>
 
 <section class="box news">
@@ -44,4 +44,4 @@ $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'の�
 </section>
 
 <!-- pagination -->
-<?php $baser->pagination('simple'); ?>
+<?php $bcBaser->pagination('simple'); ?>

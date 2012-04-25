@@ -43,7 +43,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
 				<?php $class = '' ?>
 			<?php endif ?>
 		<li<?php echo $class ?>>
-			<?php $baser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no'])) ?>
+			<?php $bcBaser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no'])) ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>

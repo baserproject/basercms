@@ -21,7 +21,7 @@
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-<p><strong>このカテゴリのURL：<?php $baser->link($baser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>
+<p><strong>このカテゴリのURL：<?php $bcBaser->link($bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>
 </div>
 <?php endif ?>
 
@@ -82,7 +82,7 @@
 	<?php else: ?>
 		<?php echo $bcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
-	<?php if($baser->siteConfig['category_permission']): ?>
+	<?php if($bcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
@@ -108,7 +108,7 @@
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $baser->link('削除',
+	<?php $bcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $bcForm->value('BlogCategory.id')),
 			array('class' => 'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogCategory.name')),

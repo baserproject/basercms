@@ -18,27 +18,27 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $baser->xmlHeader() ?>
-<?php $baser->docType() ?>
+<?php $bcBaser->xmlHeader() ?>
+<?php $bcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
-<?php $baser->charset() ?>
-<?php $baser->title() ?>
-<?php $baser->metaDescription() ?>
-<?php $baser->metaKeywords() ?>
-<?php $baser->icon() ?>
-<?php $baser->css('font_small','stylesheet',array('title'=>'Small')) ?>
-<?php $baser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
-<?php $baser->css('font_large','stylesheet',array('title'=>'Large')) ?>
-<?php $baser->css('import') ?>
-<?php $baser->js(array(
+<?php $bcBaser->charset() ?>
+<?php $bcBaser->title() ?>
+<?php $bcBaser->metaDescription() ?>
+<?php $bcBaser->metaKeywords() ?>
+<?php $bcBaser->icon() ?>
+<?php $bcBaser->css('font_small','stylesheet',array('title'=>'Small')) ?>
+<?php $bcBaser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
+<?php $bcBaser->css('font_large','stylesheet',array('title'=>'Large')) ?>
+<?php $bcBaser->css('import') ?>
+<?php $bcBaser->js(array(
 	'jquery-1.6.2.min',
 	'jquery.corner',
 	'styleswitcher',
 	'startup')) ?>
-<?php $baser->scripts() ?>
+<?php $bcBaser->scripts() ?>
 </head>
-<body id="<?php $baser->contentsName() ?>" class="normal">
+<body id="<?php $bcBaser->contentsName() ?>" class="normal">
 
 <!-- begin page -->
 <div id="page">
@@ -47,7 +47,7 @@
 	<div id="gradationShadow">
 	
 		<!-- begin header -->
-		<?php $baser->element('header') ?>
+		<?php $bcBaser->element('header') ?>
 		<!-- end header -->
 		
 		<!-- begin contents -->
@@ -55,7 +55,7 @@
 		
 			<!-- navigation -->
 			<div id="navigation">
-				<?php $baser->element('navi',array('title_for_element'=>$baser->getContentsTitle())); ?>
+				<?php $bcBaser->element('navi',array('title_for_element'=>$bcBaser->getContentsTitle())); ?>
 			</div>
 			
 			<!-- begin alfa -->
@@ -63,9 +63,9 @@
 			
 				<!-- begin contentsBody -->
 				<div id="contentsBody">
-					<?php $baser->flash() ?>
-					<?php $baser->content() ?>
-					<?php $baser->element('contents_navi') ?>
+					<?php $bcBaser->flash() ?>
+					<?php $bcBaser->content() ?>
+					<?php $bcBaser->element('contents_navi') ?>
 				</div>
 				<!-- end contentsBody -->
 				
@@ -73,7 +73,7 @@
 			<!-- end alfa -->
 			
 			<!-- begin beta -->
-			<?php $baser->element('sidebar') ?>
+			<?php $bcBaser->element('sidebar') ?>
 			<!-- end beta -->
 			
 			<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
@@ -82,7 +82,7 @@
 		<!-- end contents -->
 		
 		<!-- begin footer -->
-		<?php $baser->element('footer') ?>
+		<?php $bcBaser->element('footer') ?>
 		<!-- end footer -->
 		
 	</div>
