@@ -179,6 +179,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _createAdminIndexConditions($blogContentId, $data) {
 
+		unset($data['ListTool']);
 		$name = $blogCategoryId = '';
 		if(isset($data['BlogPost']['name'])) {
 			$name = $data['BlogPost']['name'];
