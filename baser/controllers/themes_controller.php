@@ -71,12 +71,13 @@ class ThemesController extends AppController {
 			}
 		}
 		$datas[] = array(
-			'name'=>'core',
-			'title'=>'baserCMSコア',
-			'version'=>$this->getBaserVersion(),
-			'description'=>'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
-			'author'=>'basercms',
-			'url'=>'http://basercms.net'
+			'name'				=> 'core',
+			'title'				=> 'baserCMSコア',
+			'version'			=> $this->getBaserVersion(),
+			'description'		=> 'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
+			'author'			=> 'basercms',
+			'url'				=> 'http://basercms.net',
+			'is_writable_pages'	=> false
 		);
 		$this->set('datas',$datas);
 		$this->subMenuElements = array('themes');
