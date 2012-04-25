@@ -102,7 +102,7 @@ class UploadsController extends AppController {
 		}
 		Header("Content-type: ".$type."; name=".$name);
 		echo $data;
-		$this->Session->del('Upload.'.$sessioName);
+		$this->Session->delete('Upload.'.$sessioName);
 		exit();
 
 	}

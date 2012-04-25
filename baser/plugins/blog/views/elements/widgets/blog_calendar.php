@@ -22,7 +22,7 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$url = '/blog/get_calendar/'.$id;
+$url = '/blog/blog/get_calendar/'.$id;
 if(!empty($year)){
 	$url.='/'.$year;
 }

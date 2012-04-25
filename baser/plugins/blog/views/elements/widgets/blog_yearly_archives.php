@@ -28,7 +28,7 @@ if(isset($blogContent)){
 }else{
 	$id = $blog_content_id;
 }
-$actionUrl = '/blog/get_posted_years/'.$id;
+$actionUrl = '/blog/blog/get_posted_years/'.$id;
 if($limit) {
 	$actionUrl .= '/'.$limit;
 } else {

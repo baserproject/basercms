@@ -34,7 +34,7 @@ if(isset($blogContent)){
 if(empty($depth)) {
 	$depth = 1;
 }
-$actionUrl = '/blog/get_categories/'.$id.'/'.$limit.'/'.$view_count.'/'.$depth;
+$actionUrl = '/blog/blog/get_categories/'.$id.'/'.$limit.'/'.$view_count.'/'.$depth;
 if($by_year) {
 	$actionUrl .= '/year';
 }

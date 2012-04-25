@@ -2,7 +2,7 @@
 /**
  * ブログ詳細ページ
  */
-$baser->css('colorbox/colorbox', null, null, false);
+$baser->css('colorbox/colorbox', array('inline' => true));
 $baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>

@@ -36,13 +36,20 @@ class BaserAppController extends Controller {
  */
 	var $view = 'App';
 /**
+ * ページタイトル
+ *
+ * @var		string
+ * @access	public
+ */
+	var $pageTitle = '';
+/**
  * ヘルパー
  *
  * @var		mixed
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array('BcPluginHook', 'Html', 'BcHtml', 'Form', 'BcForm', 'Javascript', 'Baser', 'BcXml', 'BcArray', 'BcAdmin');
+	var $helpers = array('Session', 'BcPluginHook', 'Html', 'BcHtml', 'Form', 'BcForm', 'Javascript', 'Baser', 'BcXml', 'BcArray', 'BcAdmin');
 /**
  * レイアウト
  *
@@ -64,7 +71,7 @@ class BaserAppController extends Controller {
  * @var		array
  * @access	public
  */
-	var $components = array('BcPluginHook', 'RequestHandler', 'Security');
+	var $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session');
 /**
  * サブディレクトリ
  *
@@ -487,7 +494,7 @@ class BaserAppController extends Controller {
 		/* 携帯用絵文字データの読込 */
 		// TODO 実装するかどうか検討する
 		/*if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
-			$emojiData = $this->EmojiData->findAll();
+			$emojiData = $this->EmojiData->find('all');
 			$this->set('emoji',$this->Emoji->EmojiData($emojiData));
 		}*/
 
@@ -578,9 +585,16 @@ class BaserAppController extends Controller {
 		App::import('File');
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH.DS.CAKE.'VERSION.txt');
 		$versionData = $versionFile->read();
-		$aryVersionData = split("\n",$versionData);
-		if(!empty($aryVersionData[0])) {
-			return 'CakePHP '.$aryVersionData[0];
+		$lines = split("\n",$versionData);
+		$version = null;
+		foreach($lines as $line) {
+			if(preg_match('/^([0-9\.]+)$/', $line, $matches)) {
+				$version = $matches[1];
+				break;
+			}
+		}
+		if($version) {
+			return $version;
 		}else {
 			return false;
 		}

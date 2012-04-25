@@ -129,7 +129,7 @@ class  AuthConfigureComponent extends Object {
 			}
 			// インストールモードの場合は無条件に認証なし
 			if(Configure::read('debug')==-1) {
-				$controller->Session->del('Message.auth');
+				$controller->Session->delete('Message.auth');
 				$auth->allow();
 			}
 		}

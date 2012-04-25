@@ -629,7 +629,7 @@ class BaserHelper extends AppHelper {
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->BcHtml->themeWeb;
 			$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
-			$this->css('admin/toolbar', null, null, false);
+			$this->css('admin/toolbar', array('inline' => false));
 			$this->BcHtml->themeWeb = $publishTheme;
 		}
 		echo join("\n\t", $this->_view->__scripts);
@@ -715,8 +715,16 @@ class BaserHelper extends AppHelper {
  * @return void
  * @access public 
  */
-	function css($path, $rel = null, $htmlAttributes = array(), $inline = true) {
+	function css($path, $htmlAttributes = array(), $inline = true) {
 		
+		// Cake1.2系との互換対応
+		if (isset($htmlAttributes['inline']) && $inline == true) {
+			$inline = $htmlAttributes['inline'];
+		}
+		$rel = null;
+		if(!empty($htmlAttributes['rel'])) {
+			$rel = $htmlAttributes['rel'];
+		}
 		$ret = $this->BcHtml->css($path, $rel, $htmlAttributes, $inline);
 		if($inline) {
 			echo $ret;
@@ -876,7 +884,16 @@ class BaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		// Cake1.2系との互換対応
+		if (isset($htmlAttributes['escape']) && $escapeTitle == true) {
+			$escapeTitle = $htmlAttributes['escape'];
+		}
+		if(!$htmlAttributes) {
+			$htmlAttributes = array();
+		}
+		$htmlAttributes = array_merge($htmlAttributes, array('escape' => $escapeTitle));
+		
+		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
 
 		return $this->executeHook('afterBaserGetLink', $url, $out);
 		

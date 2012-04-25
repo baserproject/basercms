@@ -112,7 +112,7 @@ class MailFieldsController extends MailAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($mailContentId);
-		$datas = $this->MailField->findAll($conditions, null, 'MailField.sort');
+		$datas = $this->MailField->find('all', array('conditions' => $conditions, 'order' => 'MailField.sort'));
 		$this->set('datas',$datas);
 		
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
@@ -438,7 +438,7 @@ class MailFieldsController extends MailAppController {
 		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'].'_';
 		$this->Message->_schema = null;
 		$this->Message->cacheSources = false;
-		$messages = $this->Message->findAll();
+		$messages = $this->Message->find('all');
 		$this->set('messages',$messages);
 		$this->set('contentName',$this->mailContent['MailContent']['name']);
 

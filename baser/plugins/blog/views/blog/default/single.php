@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css(array('/blog/css/style','colorbox/colorbox'), null, null, false);
+$baser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
 $baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>

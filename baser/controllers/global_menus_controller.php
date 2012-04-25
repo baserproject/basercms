@@ -96,8 +96,8 @@ class GlobalMenusController extends AppController {
 		$conditions = $this->_createAdminIndexConditions($this->data);
 		
 		// TODO CSVドライバーが複数の並び替えフィールドを指定できないがtypeを指定したい
-		$listDatas = $this->GlobalMenu->findAll($conditions,null,array('sort'));
-
+		$listDatas = $this->GlobalMenu->find( 'all', array('conditions' => $conditions, 'order' => 'GlobalMenu.sort'));
+		
 		$this->set('listDatas',$listDatas);
 
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
@@ -310,13 +310,13 @@ class GlobalMenusController extends AppController {
 		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
 			$data['menu_type'] = $this->Session->read('Filter.GlobalMenu.menu_type');
 		}else {
-			$this->Session->del('Filter.GlobalMenu.menu_type');
+			$this->Session->delete('Filter.GlobalMenu.menu_type');
 			$data['menu_type'] = 'default';
 		}
 		if($this->Session->check('Filter.GlobalMenu.status')) {
 			$data['status'] = $this->Session->read('Filter.GlobalMenu.status');
 		}else {
-			$this->Session->del('Filter.GlobalMenu.status');
+			$this->Session->delete('Filter.GlobalMenu.status');
 		}
 		return array('GlobalMenu'=>$data);
 		

@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$baser->css(array('/blog/css/style','colorbox/colorbox'), null, null, false);
+$baser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
 $baser->js('jquery.colorbox-min', false);
 //$baser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
 $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');

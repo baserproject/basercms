@@ -2,7 +2,7 @@
 /**
  * ブログアーカイブ一覧
  */
-$baser->css('colorbox/colorbox', null, null, false);
+$baser->css('colorbox/colorbox', array('inline' => true));
 $baser->js('jquery.colorbox-min', false);
 $baser->setDescription($blog->getTitle().'｜'.$baser->getContentsTitle().'のアーカイブ一覧です。');
 ?>

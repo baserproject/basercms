@@ -109,7 +109,9 @@ class BlogComment extends BlogAppModel {
 		}
 
 		// サニタイズ
-		$data = Sanitize::html($data);
+		foreach($data as $key => $value) {
+			$data[$key] = Sanitize::html($value);
+		}
 		$data['url'] = str_replace('&#45;','-',$data['url']);
 		$data['email'] = str_replace('&#45;','-',$data['email']);
 		$data['blog_post_id'] = $postId;
