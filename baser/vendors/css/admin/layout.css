@@ -315,6 +315,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	margin:5px 0;
 	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
 	padding-left:15px;
+	line-height:18px;
 }
 #FooterLink{
 	float: left;
@@ -333,10 +334,12 @@ ul.favorite-menu-list li.ui-sortable-helper {
 #FooterBanner li {
 	text-align:right;
 	padding:0px 20px;
-	line-height:20px;
 }
 #FooterBanner li img{
 	vertical-align:bottom;
+}
+#FooterBanner li.lastChild{
+   margin-top:7px;
 }
 
 /* BaserVersion

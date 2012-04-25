@@ -531,6 +531,13 @@ table.sub-menu{
 	padding-top:5px;
 	padding-bottom:5.5px;
 }
+*:first-child+html .submit a.button,
+.ui-widget-content a.button{
+	position:absolute;
+	top:1px;
+	padding-top:3px;
+	padding-bottom:3px;
+}
 
 /* waiting-box
 ----------------------------------------------- */

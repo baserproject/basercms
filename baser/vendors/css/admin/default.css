@@ -193,6 +193,7 @@ input[type=button] {
 input[type=text], textarea, input[type=password] {
 	font-size: 1.4em;
 	padding: 3px 3px;
+	height:1.4em;
 }
 select {
 	font-size: 1.2em;
@@ -402,6 +403,7 @@ table.cake-sql-log tr td {
 	font-weight:bold;
 }
 .submit {
+	position:relative;
 	text-align:center;
 }
 .help{
