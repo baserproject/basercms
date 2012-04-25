@@ -162,7 +162,7 @@ class UserGroup extends AppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data, $recursive = true) {
+	function copy($id, $data = array(), $recursive = true) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
@@ -180,9 +180,11 @@ class UserGroup extends AppModel {
 			$result['UserGroup']['id'] = $this->getInsertID();
 			if($recursive) {
 				$permissions = $this->Permission->find('all', array('conditions' => array('Permission.user_group_id' => $id), 'recursive' => -1));
-				foreach($permissions as $permission) {
-					$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
-					$this->Permission->copy(null, $permission);
+				if($permissions) {
+					foreach($permissions as $permission) {
+						$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
+						$this->Permission->copy(null, $permission);
+					}
 				}
 			}
 			return $result;

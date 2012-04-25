@@ -243,11 +243,10 @@ class UserGroupsController extends AppController {
 		
 		$result = $this->UserGroup->copy($id);
 		if($result) {
-			$this->ajaxError(500, $this->Page->validationErrors);
+			$this->set('data', $result);
 		} else {
-			exit();
+			$this->ajaxError(500, $this->UserGroup->validationErrors);	
 		}
-		
 	}
 
 }
