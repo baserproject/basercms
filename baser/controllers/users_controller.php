@@ -233,7 +233,7 @@ class UsersController extends AppController {
 
 		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
-		$this->Cookie->del('Auth.'.$userModel);
+		$this->Cookie->delete('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
 		$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
 
