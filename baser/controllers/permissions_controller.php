@@ -193,6 +193,7 @@ class PermissionsController extends AppController {
 			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
 			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
 			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
+			$this->data['Permission']['status'] = true;
 			$this->Permission->create($this->data);
 			if($this->Permission->save()) {
 				$this->Permission->saveDbLog('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。');
