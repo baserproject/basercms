@@ -27,6 +27,20 @@ $bcBaser->js(array(
 
 <script type="text/javascript">
 $(function(){
+/**
+ * ログイン
+ */
+	$.baserAjaxDataList.config.methods.up = {
+		button: '.btn-login',
+		result: function(row, result) {
+			if(result) {
+				window.location.href = result;
+			}
+		},
+		initList: function() {
+
+		}
+	}
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });

@@ -171,6 +171,30 @@ class UsersController extends AppController {
 
 	}
 /**
+ * [ADMIN] 代理ログイン
+ * 
+ * @param int $id 
+ * @return ダッシュボードへのURL
+ * @access public
+ */
+	function admin_ajax_agent_login($id) {
+		if(!$this->Session->check('AuthAgent')) {
+			$user = $this->BcAuth->user();
+			$this->Session->write('AuthAgent', $user);
+		}
+		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		$this->setAction('admin_ajax_login');
+		exit();
+	}
+	function admin_back_agent() {
+		if($this->Session->check('AuthAgent')) {
+			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.'.$this->BcAuth->userModel));
+			$this->Session->delete('AuthAgent');
+			$this->Session->setFlash('元のユーザーに戻りました。');
+		}
+		$this->redirect('/admin');
+	}
+/**
  * [ADMIN] 管理者ログイン画面（Ajax）
  *
  * @return void

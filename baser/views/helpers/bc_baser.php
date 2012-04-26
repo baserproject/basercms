@@ -1489,8 +1489,11 @@ END_FLASH;
  * @return boolean 
  * @access public
  */
-	function isAdminUser() {
-		if(!empty($this->_view->viewVars['user']['user_group_id']) && $this->_view->viewVars['user']['user_group_id'] == 1) {
+	function isAdminUser($id = null) {
+		if(!$id && !empty($this->_view->viewVars['user']['user_group_id'])) {
+			$id = $this->_view->viewVars['user']['user_group_id'];
+		}
+		if($id == 1) {
 			return true;
 		} else {
 			return false;

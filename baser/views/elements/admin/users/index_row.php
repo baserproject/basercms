@@ -23,7 +23,11 @@
 <tr>
 	<td class="row-tools">
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['User']['id']), array('title' => '編集')) ?>
-		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['User']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?></td>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['User']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+	<?php if(!$bcBaser->isAdminUser($data['User']['user_group_id'])): ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_login.png', array('width' => 24, 'height' => 24, 'alt' => 'ログイン', 'class' => 'btn')), array('action' => 'ajax_agent_login', $data['User']['id']), array('title' => 'ログイン', 'class' => 'btn-login')) ?>
+	<?php endif ?>
+	</td>
 	<td><?php echo $data['User']['id'] ?></td>
 	<td><?php $bcBaser->link($data['User']['name'],array('action'=>'edit', $data['User']['id'])) ?></td>
 	<td><?php echo $bcText->listValue('User.user_group_id',$data['User']['user_group_id']); ?><br />
