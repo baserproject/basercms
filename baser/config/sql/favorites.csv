@@ -1,6 +1,1 @@
 "id","user_id","name","url","sort","created","modified"
-"","1","新着情報管理","/admin/blog/blog_posts/index/1","1","",""
-"","1","お問い合わせ管理","/admin/mail/mail_fields/index/1","2","",""
-"","1","受信メール一覧","/admin/mail/mail_messages/index/1","3","",""
-"","1","コメント一覧","/admin/blog/blog_comments/index/1","4","",""
-"","1","クレジット","javascript:credit();","5","",""

@@ -56,6 +56,20 @@ class User extends AppModel {
 	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
+ * hasMany
+ * 
+ * @var array
+ * @access public
+ */
+	var $hasMany = array('Favorite' => array(
+		'className'		=> 'Favorite',
+		'order'			=> 'Favorite.sort',
+		'foreignKey'	=> 'user_id',
+		'dependent'		=> false,
+		'exclusive'		=> false,
+		'finderQuery'	=> ''
+	));
+/**
  * validate
  *
  * @var array
@@ -286,6 +300,22 @@ class User extends AppModel {
 		}
 
 	}
-
+	function afterSave($created) {
+		parent::afterSave($created);
+		if($created) {
+			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data['User']['user_group_id']));
+			if($defaultFavorites) {
+				$defaultFavorites = unserialize($defaultFavorites);
+				if($defaultFavorites) {
+					$userId = $this->getLastInsertID();
+					foreach($defaultFavorites as $favorites) {
+						$favorites['user_id'] = $userId;
+						$this->Favorite->create($favorites);
+						$this->Favorite->save();
+					}
+				}
+			}
+		}
+	}
 }
 ?>

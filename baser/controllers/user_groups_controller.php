@@ -57,7 +57,7 @@ class UserGroupsController extends AppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array('users', 'user_groups');
+	var $subMenuElements = array('site_configs', 'users', 'user_groups');
 /**
  * ぱんくずナビ
  *
@@ -248,6 +248,29 @@ class UserGroupsController extends AppController {
 			$this->ajaxError(500, $this->UserGroup->validationErrors);	
 		}
 	}
+/**
+ * ユーザーグループのよく使う項目の初期値を登録する
+ * 
+ * @return boolean 
+ * @access public 
+ */
+	function admin_set_default_favorites() {
 
+		if(!$this->params['form']) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$user = $this->BcAuth->user();
+		$this->UserGroup->id = $user['User']['user_group_id'];
+		$this->UserGroup->recursive = -1;
+		$data = $this->UserGroup->read();
+		$data['UserGroup']['default_favorites'] = serialize($this->params['form']);
+		$this->UserGroup->set($data);
+		if($this->UserGroup->save()) {
+			echo true;
+		}
+		exit();
+	
+	}
+	
 }
 ?>

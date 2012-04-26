@@ -31,7 +31,7 @@
 	margin:5px 0;
 	background: url(../../img/admin/blt_list_2.png) no-repeat left 2px;
 	padding-left:15px;
-	line-height: 2em;
+	line-height: 1.8em;
 }
 .bt-content li {
 	padding: 0 20px;
@@ -261,15 +261,6 @@ table.sub-menu{
 	display:block;
 	float:left;
 	color:#DFDFDF;
-}
-#AdminDashboard .pagination span span a,
-#AdminDashboard .pagination .disabled,
-#AdminDashboard .pagination .current{
-    padding: 1px 6px;
-}
-#AdminDashboard .pagination .next, 
-#AdminDashboard .pagination .prev{
-    padding: 1px 4px;
 }
 
 /* list-num
@@ -809,12 +800,6 @@ background: #333;
 	padding:20px;
 	margin:10px;
 }
-.panel-box li{
-	margin-bottom: 5px;
-	border-left:5px solid #DFDFDF;
-	padding:3px 10px;
-	background: none;
-}
 .panel-box li .date {
 	font-weight: bold;
 }
@@ -1074,4 +1059,25 @@ background: #333;
 .btn-slide-form a:hover{
 	background-color: #ffffde;
 	text-decoration: none;
+}
+
+
+/* ==================================================================== */
+/*    Dashboard
+/* ==================================================================== */
+
+#AdminDashboard .pagination span span a,
+#AdminDashboard .pagination .disabled,
+#AdminDashboard .pagination .current{
+    padding: 1px 6px;
+}
+#AdminDashboard .pagination .next, 
+#AdminDashboard .pagination .prev{
+    padding: 1px 4px;
+}
+#AdminDashboard .panel-box li{
+	margin-bottom: 5px;
+	border-left:5px solid #DFDFDF;
+	padding:3px 10px;
+	background: none;
 }

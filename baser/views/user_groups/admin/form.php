@@ -105,7 +105,7 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 <?php endif ?>
 	</table>
 </div>
-<div class="submit align-center">
+<div class="submit align-center section">
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php if ($bcForm->value('UserGroup.name') != 'admins'): ?>
@@ -121,3 +121,22 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 </div>
 
 <?php echo $bcForm->end() ?>
+
+<?php if($this->action == 'admin_edit'): ?>
+<div class="section">
+	<div class="panel-box corner10">
+		<h2>「よく使う項目」の初期データ</h2>
+		<p>
+			<small>このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	</small>
+		</p>
+	<?php $favorites = unserialize($this->data['UserGroup']['default_favorites']) ?>
+	<?php if($favorites): ?>
+		<ul class="clearfix">
+		<?php foreach($favorites as $favorite): ?>
+			<li style="float:left"><?php $bcBaser->link($favorite['name'], $favorite['url']) ?></li>
+		<?php endforeach; ?>
+		</ul>
+	<?php endif ?>
+	</div>
+</div>
+<?php endif ?>

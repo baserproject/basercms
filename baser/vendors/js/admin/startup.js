@@ -192,7 +192,15 @@ $(function(){
 			$.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html()+'/'});
 		}
 	});
-	
+/**
+ * サブメニュー調整
+ * 空の項目を削除する
+ */
+	$("#SubMenu td ul").each(function(){
+		if(!$(this).html().replace(/^\s+|\s+$/g, "")) {
+			$(this).parent().parent().remove();
+		}
+	});
 });
 $(window).load(function(){
 	changeFavoriteBox($("#FavoriteBoxOpened").html());
@@ -212,5 +220,20 @@ function changeSearchBox(open) {
 		$('#Search').fadeIn(300);
 	} else {
 		$('#Search').fadeOut(300);
+	}
+}
+/**
+ * アラートボックスを表示する
+ * 
+ * 引き数なしの場合は、非表示にする
+ */
+function alertBox(message) {
+	if($("#AlertMessage").length) {
+		if(message) {
+			$("#AlertMessage").html(message);
+			$("#AlertMessage").fadeIn(500);
+		} else {
+			$("#AlertMessage").fadeOut(200);
+		}
 	}
 }

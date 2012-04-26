@@ -239,7 +239,8 @@ class Permission extends AppModel {
 			'/^admin\/dashboard\/.*?/',
 			'/^admin\/users\/edit\/'.$_SESSION['Auth']['User']['id'].'$/',
 			'/^admin\/users\/logout$/',
-			'/^admin\/users\/back_agent$/'
+			'/^admin\/users\/back_agent$/',
+			'/^admin\/user_groups\/set_default_favorites$/'
 		);
 		foreach($allows as $allow) {
 			if(preg_match($allow, $url)) {

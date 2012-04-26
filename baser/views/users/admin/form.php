@@ -18,6 +18,10 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
+<div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites')) ?></div>
+
 <script type="text/javascript">
 $(function(){
 	$("#btnEdit").click(function(){
@@ -30,12 +34,58 @@ $(function(){
 		}
 		return false;
 	});
+	$("#btnSetUserGroupDefault").click(function() {
+		if(!confirm('登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？')) {
+			return true;
+		}
+		var data = {};
+		$(".favorite-menu-list li").each(function(i){
+			data[i] ={
+				'name' : $(this).find('.favorite-name').val(), 
+				'url' :$(this).find('.favorite-url').val()
+			};
+		});
+		$.ajax({
+			url: $("#UserGroupSetDefaultFavoritesUrl").html(),
+			type: 'POST',
+			data: data,
+			dataType: 'html',
+			beforeSend: function() {
+				$("#Waiting").show();
+				alertBox();
+			},
+			success: function(result){
+				$("#ToTop a").click();
+				if(result) {
+					alertBox('登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。');
+				} else {
+					alertBox('処理に失敗しました。');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				var errorMessage = '';
+				if(XMLHttpRequest.status == 404) {
+					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
+				} else {
+					if(XMLHttpRequest.responseText) {
+						errorMessage = '<br />'+XMLHttpRequest.responseText;
+					} else {
+						errorMessage = '<br />'+errorThrown;
+					}
+				}
+				alertBox('処理に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
+			},
+			complete: function() {
+				$("#Waiting").hide();
+			}
+		});
+	});
 });
 </script>
 
 <div id="SelfUpdate" class="display-none"><?php echo $selfUpdate ?></div>
 
-
+<div id="AlertMessage" style="display: none"></div>
 
 <?php echo $bcForm->create('User') ?>
 <?php echo $bcForm->hidden('User.id') ?>
@@ -121,7 +171,7 @@ $(function(){
 	</table>
 </div>
 
-<div class="submit">
+<div class="submit section">
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php if(isset($bcBaser->siteConfig['demo_on']) && $bcBaser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
@@ -140,3 +190,20 @@ $(function(){
 </div>
 
 <?php echo $bcForm->end() ?>
+
+<?php if($this->action == 'admin_edit'): ?>
+<div class="panel-box corner10">
+	<h2>登録されている「よく使う項目」</h2>
+	<?php if($this->data['Favorite']): ?>
+	<ul class="clearfix">
+		<?php foreach($this->data['Favorite'] as $favorite): ?>
+		<li style="float:left"><?php $bcBaser->link($favorite['name'], $favorite['url']) ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<?php endif ?>
+	<?php if($session->check('AuthAgent') || $bcBaser->isAdminUser()): ?>
+	<div class="submit"><?php echo $bcForm->button($this->data['UserGroup']['title'].'グループの初期値に設定', array('label' => 'グループ初期値に設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button')) ?></div>
+	<?php endif ?>
+</div>
+<?php endif ?>
+
