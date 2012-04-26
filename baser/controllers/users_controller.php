@@ -186,11 +186,19 @@ class UsersController extends AppController {
 		$this->setAction('admin_ajax_login');
 		exit();
 	}
+/**
+ * 代理ログインをしている場合、元のユーザーに戻る
+ * 
+ * @return void
+ * @access public 
+ */
 	function admin_back_agent() {
 		if($this->Session->check('AuthAgent')) {
 			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.'.$this->BcAuth->userModel));
 			$this->Session->delete('AuthAgent');
 			$this->Session->setFlash('元のユーザーに戻りました。');
+		} else {
+			$this->Session->setFlash('不正な操作です。');
 		}
 		$this->redirect('/admin');
 	}
