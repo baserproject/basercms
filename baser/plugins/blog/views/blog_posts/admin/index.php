@@ -29,9 +29,6 @@ $bcBaser->js(array(
 
 <script type="text/javascript">
 $(document).ready(function(){
-	<?php if($form->value('BlogPost.open')): ?>
-	$("#BlogPostFilterBody").show();
-	<?php endif ?>
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });
