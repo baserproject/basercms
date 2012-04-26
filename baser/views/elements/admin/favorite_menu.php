@@ -18,15 +18,22 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
+<div id="FavoriteDeleteUrl" style="display: none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'ajax_delete')) ?></div>
+<div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort')) ?></div>
+
+
 <script type="text/javascript">
 $(function(){
-		
 	$("body").append($("#FavoritesMenu"));
 	$("#BtnFavoriteAdd").click(function(){
 		$('#FavoriteDialog').dialog('open');
 		return false;
 	});
-
+/**
+ * お気に入り初期化
+ */
 	initFavoriteList();
 /**
  * バリデーション
@@ -245,14 +252,11 @@ $(function(){
 	}
 </script>
 
-<div id="FavoriteDeleteUrl" style="display: none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'ajax_delete')) ?></div>
-<div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort')) ?></div>
-
 <div id="FavoriteMenu">
 		
 	<h2><?php $bcBaser->img('admin/head_favorite.png', array('alt' => 'よく使う項目')) ?></h2>
 	
-<ul class="favorite-menu-list">
+	<ul class="favorite-menu-list">
 <?php if($favorites): ?>
 	
 	<?php $count = 1 ?>
@@ -262,10 +266,10 @@ $(function(){
 	<?php endforeach ?>
 	
 <?php else: ?>
-	<li class="no-data">新規登録ボタンよりよく使う項目を登録しておく事ができます。</li>
+		<li class="no-data">新規登録ボタンよりよく使う項目を登録しておく事ができます。</li>
 <?php endif ?>
-</ul>
-
+	</ul>
+	
 	<ul class="favolite-menu-tools clearfix">
 		<li><?php $bcBaser->img('admin/btn_add.png', array('url' => 'javascript:void(0)', 'width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn')) ?></li>
 		<li><?php $bcBaser->img('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp')) ?>
