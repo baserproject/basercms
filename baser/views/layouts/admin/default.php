@@ -33,8 +33,8 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 	'colorbox/colorbox')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
-	'jquery-1.6.2.min',
-	'jquery-ui-1.8.14.custom.min',
+	'jquery-1.7.2.min',
+	'jquery-ui-1.8.19.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.corner-2.12',
 	'jquery.bt.min',
