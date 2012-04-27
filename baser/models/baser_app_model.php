@@ -1452,9 +1452,7 @@ class BaserAppModel extends Model {
 		$result = parent::deleteAll($conditions, $cascade, $callbacks);
 		if($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
-				if($this->cacheEnabled()) {
-					$this->delCache($this);
-				}
+				$this->delCache($this);
 			}
 		}
 		return $result;
@@ -1475,9 +1473,7 @@ class BaserAppModel extends Model {
 		$result = parent::updateAll($fields, $conditions);
 		if($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
-				if($this->cacheEnabled()) {
-					$this->delCache($this);
-				}
+				$this->delCache($this);
 			}
 		}
 		return $result;
