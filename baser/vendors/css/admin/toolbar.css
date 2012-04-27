@@ -217,6 +217,7 @@ span#DebugMode{
 #UserMenu .active div#SystemMenu div ul li a{
 	display: inline;
 	padding:0!important;
+	white-space: nowrap;
 }
 #UserMenu .active div#SystemMenu div ul li a:hover{
 	background-color: #FFF;
