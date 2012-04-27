@@ -508,28 +508,41 @@ class PageCategory extends AppModel {
  * @return int
  * @access public
  */
-	function getAgentId($type = 'mobile', $targetId = null) {
+	function getAgentId($type = 'mobile') {
 
-		if($targetId){
-			if(in_array($targetId, array($this->getAgentId('mobile'), $this->getAgentId('smartphone')))) {
-				$path = getViewPath().'pages'.DS.$type;
+		if(!isset($this->_agentId[$type])){
+			$agentId = $this->field('id',array('PageCategory.name'=>$type));
+			if($agentId) {
+				$this->_agentId[$type] = $agentId;
 			} else {
-				$path = $this->getPath($targetId, array('name'), -1);
-				$path = Set::extract('/PageCategory/name', $path);
-				$path = implode(DS, $path);
-				$path = getViewPath().'pages'.DS.$type.DS.$path;
+				return false;
 			}
-			$agentId = $this->getIdByPath($path);
-		}else{
-			if(!isset($this->_agentId[$type])){
-				$this->_agentId[$type] = $this->field('id',array('PageCategory.name'=>$type));
-			}
-			$agentId = $this->_agentId[$type];
 		}
-		return $agentId;
+
+		return $this->_agentId[$type];
 
 	}
 /**
+ * PCのIDを元にモバイル・スマホの相対階層のIDを取得する
+ * @param type $id
+ * @return type 
+ */
+	function getAgentRelativeId($type, $id) {
+		
+		if(!$id) {
+			return $this->getAgentId($type);
+		} else {
+			$path = $this->getPath($id, array('name'), -1);
+			$path = Set::extract('/PageCategory/name', $path);
+			$path = implode(DS, $path);
+			$path = getViewPath().'pages'.DS.$type.DS.$path;
+		}
+		$agentId = $this->getIdByPath($path);
+
+		return $agentId;
+		
+	}
+	/**
  * ツリーリストを取得する
  * 
  * @param array $fields

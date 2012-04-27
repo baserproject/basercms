@@ -813,14 +813,14 @@ class PagesController extends AppController {
  * @return boolean
  * @access public
  */
-	function admin_check_agent_page_addable($type, $id) {
+	function admin_check_agent_page_addable($type, $id = null) {
 		
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$userGroupId = $user[$userModel]['user_group_id'];
 		$result = false;
 		while(true) {
-			$agentId = $this->PageCategory->getAgentId($type, $id);
+			$agentId = $this->PageCategory->getAgentRelativeId($type, $id);
 			if($agentId) {
 				if($agentId == 1 || $agentId == 2) {
 					$ownerId = $this->siteConfigs['root_owner_id'];
@@ -840,9 +840,6 @@ class PagesController extends AppController {
 				} else {
 					$result = true;
 				}
-				break;
-			} elseif($agentId === false) {
-				$result = false;
 				break;
 			}
 			$pageCategory = $this->PageCategory->find('first', array(
