@@ -1,7 +1,10 @@
 _assets/
 _creating/
+app/config/database.php
+app/config/install.php
 app/db/*
 !app/db/empty
+app/plugins/*
 !app/plugins/blog
 !app/plugins/mail
 !app/plugins/feed
