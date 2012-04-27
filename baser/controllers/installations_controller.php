@@ -1004,7 +1004,9 @@ class InstallationsController extends AppController {
 			ClassRegistry::flush();
 			clearAllCache();
 			$this->Session->setFlash($message);
+			// アクション名で指定した場合、環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述
 			$this->redirect('reset');
+			$this->redirect('/index.php/installations/reset');
 			
 		} elseif(!BC_INSTALLED) {
 			$complete = true;
