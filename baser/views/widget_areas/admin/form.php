@@ -333,7 +333,7 @@ function updateWidget(id) {
 
 <?php echo $bcForm->label('WidgetArea.name', 'ウィジェットエリア名') ?>&nbsp;
 <?php echo $bcForm->input('WidgetArea.name', array('type' => 'text', 'size' => 40)) ?>&nbsp;
-<?php echo $bcForm->end(array('label' => 'エリア名を保存する', 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit')) ?>
+<span class="submit"><?php echo $bcForm->end(array('label' => 'エリア名を保存する', 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit')) ?></span>
 <?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader')) ?>
 <?php echo $bcForm->error('WidgetArea.name') ?>
 

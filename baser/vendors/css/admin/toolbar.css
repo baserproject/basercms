@@ -200,6 +200,13 @@ span#DebugMode{
 	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
 	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
 }
+#UserMenu .active div#SystemMenu div h2:active{
+	background:#cdcdcd;
+	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
+	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
+}
+
 #UserMenu .active div#SystemMenu div ul li{
 	width:auto;
 	border:none;

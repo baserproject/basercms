@@ -869,12 +869,36 @@ background: #333;
 #WidgetSetting .ui-widget-content{
 	cursor:move;
 	margin:10px auto 5px;
-	border:1px solid #DFDFDF;
-	background-color: #ffffff;
-	background: url(../../img/admin/bg_widget_head.png) repeat-x left top;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
+	border:0;
+	border-right:1px solid #DDD;
+	border-left:1px solid #DDD;
+	border-bottom:1px solid #EDEDED;
+	padding:0;
+}
+#WidgetSetting .ui-widget-content .head{
+	cursor:move;
+	margin:10px auto 5px;
+	font-weight: bold;
+	color:#000;
+	font-size:14px;
+	border-top:1px solid #DDD;
+	border-bottom:1px solid #EDEDED;
+	background:#F3F3F3;
+	background:-moz-linear-gradient(top,#FFF,#F3F3F3);
+	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
+	background:-o-linear-gradient(top,#FFF,#F3F3F3);
+}
+#WidgetSetting .ui-widget-content .head:hover{
+	background:#f4f4f4;
+	background:-moz-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
+	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+}
+#WidgetSetting .ui-widget-content .head:active{
+	background:#cdcdcd;
+	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
+	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
 }
 #WidgetSetting .ui-draggable-dragging {
 	/*width:100%;*/
@@ -883,6 +907,7 @@ background: #333;
 	height:24px;
 	padding:3px 10px;
 	font-weight: bold;
+	margin:0
 }
 #WidgetSetting .setting .head{
 	color:#999;
@@ -1042,25 +1067,39 @@ background: #333;
 	border-left:1px solid #CCC;
 	border-right:1px solid #CCC;
 	border-bottom:1px solid #CCC;
-	
 	text-align: center;
 	margin-left:auto;
 	margin-right:0;
 	padding:0!important;
 	/*position: absolute;*/
 	margin-top:-30px;
-	
 }
 .btn-slide-form a{
+	color:#333;
 	display: block;
-	color:#999;
 	padding:10px 20px;
+	-webkit-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	-moz-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	-o-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	background:#F3F3F3;
+	background:-moz-linear-gradient(top,#FFF,#F3F3F3);
+	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
+	background:-o-linear-gradient(top,#FFF,#F3F3F3);
 }
 .btn-slide-form a:hover{
-	background-color: #ffffde;
+	background:#f4f4f4;
+	background:-moz-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
+	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
 	text-decoration: none;
 }
-
+.btn-slide-form a:active{
+	background:#cdcdcd;
+	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
+	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
+}
 
 /* ==================================================================== */
 /*    Dashboard
