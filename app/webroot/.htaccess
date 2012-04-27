@@ -37,3 +37,8 @@
 # 【動作確認済レンタルサーバー】
 #	http://basercms.net/manuals/introductions/2.html
 #
+RewriteEngine on
+RewriteBase /app/webroot
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
