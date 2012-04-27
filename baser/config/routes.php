@@ -175,8 +175,11 @@ if (file_exists(APP . 'error.php')) {
 } elseif (file_exists(BASER . 'app_error.php')) {
 	include_once (BASER . 'app_error.php');
 }
+if(BC_INSTALLED) {
 /**
  * プラグインの bootstrap を実行する
+ * bootstrapではプラグインのパスが読み込めない為ここに定義
+ * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義する
  */
 	$enablePlugins = getEnablePlugins();
 	Configure::write('BcStatus.enablePlugins', $enablePlugins);
@@ -194,10 +197,13 @@ if (file_exists(APP . 'error.php')) {
 	}
 /**
  * テーマの bootstrap を実行する 
+ * bootstrapではプラグインのパスが読み込めない為ここに定義
+ * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義す
  */
 	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
 	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
 	if(file_exists($themeBootstrap)) {
 		include $themeBootstrap;
 	}
+}
 ?>
