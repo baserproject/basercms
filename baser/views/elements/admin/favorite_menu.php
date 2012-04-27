@@ -47,7 +47,7 @@ $(function(){
 		bgiframe: true,
 		autoOpen: false,
 		position: [250, 150],
-		width: 'auto',
+		width: '360px',
 		modal: true,
 		open: function(event, ui){
 
