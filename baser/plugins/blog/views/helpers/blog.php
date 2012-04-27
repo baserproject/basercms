@@ -498,7 +498,7 @@ class BlogHelper extends AppHelper {
 			'conditions'	=> $conditions,
 			'fields'		=> array('no','name'),
 			'order'			=> 'posts_date DESC',
-			'recursive'		=> -1,
+			'recursive'		=> 0,
 			'cache'			=> false
 		));
 		if($prevPost) {
@@ -538,7 +538,7 @@ class BlogHelper extends AppHelper {
 			'conditions'	=> $conditions,
 			'fields'		=> array('no','name'),
 			'order'			=> 'posts_date',
-			'recursive'		=> -1,
+			'recursive'		=> 0,
 			'cache'			=> false
 		));
 		if($nextPost) {
