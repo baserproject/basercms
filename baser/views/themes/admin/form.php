@@ -19,6 +19,13 @@
  */
 ?>
 
+
+<script type="text/javascript">
+$(window).load(function() {
+	$("#ThemeName").focus();
+});
+</script>
+
 <?php if($folderDisabled): ?>
 <p><span class="required">テーマフォルダに書込権限がありません。</span></p>
 <?php endif ?>

@@ -20,6 +20,12 @@
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#ContentUrl").focus();
+});
+</script>
+
 <?php echo $bcForm->create('Content') ?>
 
 

@@ -25,7 +25,11 @@ $bcBaser->js(array(
 ));
 ?>
 
+
 <script type="text/javascript">
+$(window).load(function() {
+	$("#FeedConfigName").focus();
+});
 $(function(){
 	$("#EditTemplate").click(function(){
 		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){

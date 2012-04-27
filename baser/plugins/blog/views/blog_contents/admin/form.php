@@ -19,7 +19,11 @@
  */
 ?>
 
+
 <script type="text/javascript">
+$(window).load(function() {
+	$("#BlogContentName").focus();
+});
 $(function(){
 	$("#EditLayoutTemplate").click(function(){
 		if(confirm('ブログ設定を保存して、レイアウトテンプレート '+$("#BlogContentLayout").val()+' の編集画面に移動します。よろしいですか？')){

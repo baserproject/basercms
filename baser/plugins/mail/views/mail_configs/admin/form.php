@@ -18,6 +18,14 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
+<script type="text/javascript">
+$(window).load(function() {
+	$("#MailConfigSiteName").focus();
+});
+</script>
+
 <!-- form -->
 <h2>基本項目</h2>
 

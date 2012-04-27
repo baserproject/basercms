@@ -20,6 +20,12 @@
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#GlobalMenuName").focus();
+});
+</script>
+
 
 <?php echo $bcForm->create('GlobalMenu') ?>
 <?php echo $bcForm->input('GlobalMenu.id', array('type' => 'hidden')) ?>

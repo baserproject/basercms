@@ -18,6 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <script type="text/javascript">
 $(function(){
 		
@@ -47,6 +49,7 @@ $(function(){
 			$("#PermissionName").val($("#CurrentPageName").html());
 			$("#PermissionUrl").val($("#CurrentPageUrl").html().replace($("#PermissionAdmin").html(), ''));
 			$("#PermissionAjaxAddForm").submit();
+			$("#PermissionName").focus();
 		},
 		close: function() {
 			$("#PermissionName").val('');

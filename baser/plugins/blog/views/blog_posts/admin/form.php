@@ -25,7 +25,11 @@ $bcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $b
 <div id="CreatePreviewUrl" style="display:none"><?php echo $bcBaser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
 <div id="AddTagUrl" style="display:none"><?php echo $bcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
 
+
 <script type="text/javascript">
+$(window).load(function() {
+	$("#BlogPostName").focus();
+});
 $(function(){
 	
 /**

@@ -44,7 +44,7 @@
 	</td>
 	<td style="width:10%"><?php echo $data['Permission']['no']; ?></td>
 	<td style="width:55%">
-		<?php $bcBaser->link($data['Permission']['name'], array('action' => 'edit', $data['Permission']['id'])); ?><br />
+		<?php $bcBaser->link($data['Permission']['name'], array('action' => 'edit', $this->params['pass'][0], $data['Permission']['id'])); ?><br />
 		<?php echo $data['Permission']['url']; ?>
 	</td>
 	<td style="width:10%" class="align-center"><?php echo $bcText->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>

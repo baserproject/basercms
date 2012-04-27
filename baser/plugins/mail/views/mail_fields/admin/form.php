@@ -19,7 +19,11 @@
  */
 ?>
 
+
 <script type="text/javascript">
+$(window).load(function() {
+	$("#MailFieldFieldName").focus();
+});
 jQuery(function($) {
 								
 	// タイプを選択すると入力するフィールドが切り替わる

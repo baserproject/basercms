@@ -18,7 +18,12 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <script type="text/javascript">
+$(window).load(function() {
+	$("#MailContentName").focus();
+});
 $(function(){
 	$('input[name="data[MailContent][sender_1_]"]').click(mailContentSender1ClickHandler);
 	$("#MailContentSender1").hide();

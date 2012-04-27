@@ -18,6 +18,14 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
+<script type="text/javascript">
+$(window).load(function() {
+	$("#ThemeFolderName").focus();
+});
+</script>
+
 <!-- current -->
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>

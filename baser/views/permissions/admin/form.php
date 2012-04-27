@@ -20,6 +20,13 @@
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#PermissionName").focus();
+});
+</script>
+
+
 <?php echo $bcForm->create('Permission', array('url' => array($this->params['pass'][0]))) ?>
 <?php echo $bcForm->input('Permission.id', array('type' => 'hidden')) ?>
 

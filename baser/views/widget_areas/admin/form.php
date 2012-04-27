@@ -22,6 +22,9 @@
 <div id="CurrentAction" style="display:none"><?php echo $this->action ?></div>
 
 <script type="text/javascript">
+$(window).load(function() {
+	$("#WidgetAreaName").focus();
+});
 $(function() {
 
 	var sortableOptions = {

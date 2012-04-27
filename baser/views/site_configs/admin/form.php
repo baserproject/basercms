@@ -19,6 +19,9 @@
  */
 ?>
 <script type="text/javascript">
+$(window).load(function() {
+	$("#SiteConfigFormalName").focus();
+});
 $(function(){
 	var theme = $("#SiteConfigTheme").val();
 	<?php if($safeModeOn): ?>

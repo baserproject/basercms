@@ -24,6 +24,12 @@ foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#UserGroupName").focus();
+});
+</script>
+
 <!-- form -->
 <?php echo $bcForm->create('UserGroup') ?>
 <div class="section">

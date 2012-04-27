@@ -20,6 +20,13 @@
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#FeedDetailName").focus();
+});
+</script>
+
+
 <div class="section">
 	<h2>基本項目</h2>
 	<?php if($this->action == 'admin_add'): ?>

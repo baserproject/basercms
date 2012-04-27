@@ -19,6 +19,14 @@
  */
 ?>
 
+
+<script type="text/javascript">
+$(window).load(function() {
+	$("#BlogCategoryName").focus();
+});
+</script>
+
+
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
 <p><strong>このカテゴリのURL：<?php $bcBaser->link($bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>

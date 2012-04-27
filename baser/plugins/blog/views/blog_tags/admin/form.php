@@ -20,6 +20,13 @@
 ?>
 
 
+<script type="text/javascript">
+$(window).load(function() {
+	$("#BlogTagName").focus();
+});
+</script>
+
+
 <!-- form -->
 <?php echo $bcForm->create('BlogTag') ?>
 <div class="section">

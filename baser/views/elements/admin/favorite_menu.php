@@ -62,6 +62,7 @@ $(function(){
 				$("#FavoriteUrl").val($(".favorite-menu-list .selected .favorite-url").val());
 			}
 			$("#FavoriteAjaxForm").submit();
+			$("#FavoriteName").focus();
 			
 		},
 		close: function() {

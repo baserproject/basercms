@@ -23,6 +23,9 @@
 <div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites')) ?></div>
 
 <script type="text/javascript">
+$(window).load(function() {
+	$("#UserName").focus();
+});
 $(function(){
 	$("#btnEdit").click(function(){
 		if($("#SelfUpdate").html()) {

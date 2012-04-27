@@ -33,6 +33,9 @@ if(Configure::read('BcApp.smartphone')) {
 
 
 <script type="text/javascript">
+$(window).load(function() {
+	$("#PageName").focus();
+});
 $(function(){
 	pageCategoryIdChangeHandler();
 /**
