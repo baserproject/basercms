@@ -26,7 +26,28 @@
 		// 管理システムテーマ
 		'adminTheme'		=> 'baseradmin',
 		// テンプレートの基本となる拡張子（.php 推奨）
-		'templateExt'		=> '.php'
+		'templateExt'		=> '.php',
+		// システムナビ
+		'adminNavi'		=> array('core' => array(
+			'name'		=> 'baserCMSコア',
+			'contents'	=> array(
+				array('name' => '固定ページ一覧',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'pages', 'action' => 'index')),
+				array('name' => 'ウィジェット管理',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
+				array('name' => 'テーマ管理',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
+				array('name' => 'プラグイン管理',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),
+				array('name' => 'システム設定',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form')),
+				array('name' => 'ユーザー一覧',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index')),
+				array('name' => 'ユーザー登録',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'add')),
+				array('name' => 'ユーザーグループ一覧',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
+				array('name' => 'ユーザーグループ登録',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
+				array('name' => '検索インデックス管理',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
+				array('name' => 'メニュー管理',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'index')),
+				array('name' => 'メニュー登録',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'add')),
+				array('name' => 'サーバーキャッシュ削除',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
+				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
+				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
+				array('name' => 'クレジット',				'url' => 'javascript:credit()')
+		)))
 	);
 /**
  * 環境設定 

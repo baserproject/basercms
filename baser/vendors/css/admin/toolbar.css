@@ -61,58 +61,14 @@ html, body {
 	background-color: #444;
 	color: #FFF;
 }
-#ToolMenu ul,#ToolMenu li,#UserMenu ul, #UserMenu li{
+#ToolMenu ul,#ToolMenu li,#UserMenu ul, #UserMenu li, #SystemMenu ul, #SystemMenu li{
 	margin:0;
 	padding:0;
 	list-style: none;
 }
-#UserMenu li img {
-	vertical-align: baseline;
-}
 #ToolMenu li{
 	float: left;
 	vertical-align: top;
-}
-#UserMenu{
-	margin-right:10px;
-	float: right;
-	vertical-align: top;
-	color:#3366CC;
-	height:30px;
-}
-#UserMenu ul li{
-    position: relative;
-}
-#UserMenu ul li ul{
-    display:none;
-    border: 1px solid #CCC;
-    box-shadow: 0 1px 3px #CCC;
-	background-color:#FFF;
-}
-#UserMenu .active ul{
-    display:block !important;
-	clear:both;
-}
-#UserMenu .active a {
-    background-color: #FFF;
-    box-shadow: 0 -1px 3px #CCC;
-}
-#UserMenu .active ul a {
-    position:relative;
-    z-index: 1;
-	margin-top: -1px;
-    box-shadow: 0 0 0 #CCCCCC;
-	color:#000;
-	padding:2px 30px 2px 15px;
-}
-#UserMenu .active a.title{
-    border: 1px solid #999;
-    border-bottom: 0;
-    color:#CCC;
-	float:right;
-}
-#UserMenu .active ul a:hover{
-	background-color:#EDF8C9;
 }
 span#DebugMode{
 	background-color:#E20;
@@ -120,4 +76,145 @@ span#DebugMode{
 	color:#FFF;
 	display: inline!important;
 	padding:3px 5px;
+}
+
+/* UserMenu
+----------------------------------------------- */
+
+#UserMenu li img {
+	vertical-align: baseline;
+}
+#UserMenu{
+	margin-right:10px;
+	float: right;
+	vertical-align: top;
+	height:30px;
+	text-align: left;
+}
+#UserMenu ul ul{
+	padding:0 20px 0 0;
+	position: absolute;
+}
+#UserMenu ul li{
+	float:left;
+	position: relative;
+}
+#UserMenu a {
+	outline: none;
+}
+#UserMenu ul li ul,
+#UserMenu ul div#SystemMenu{
+	position:absolute;
+	border: 1px solid #CCC!important;
+	box-shadow: 0 1px 3px #CCC;
+	margin-top: -1px;
+    display:none;
+	background-color:#FFF;
+}
+#UserMenu ul li ul{
+	width: 120px;
+}
+#UserMenu ul div#SystemMenu{
+	width:600px;
+}
+#UserMenu ul li ul li {
+	padding:0;
+	float:none;
+	margin:0;
+	width:100%;
+}
+#UserMenu .active a {
+	border:1px solid #CCC;
+    background-color: #FFF;
+	border-bottom: 0;
+    box-shadow: 0 -1px 3px #CCC;
+	display:block;
+	height:27px;
+	position: relative;
+    z-index: 1;
+	color:#CCC;
+}
+#UserMenu .active ul,
+#UserMenu .active div#SystemMenu {
+    display:block;
+	right:0;
+}
+#UserMenu .active ul a {
+    box-shadow: 0 0 0 #CCC;
+	color:#000;
+	border:0;
+	width:100%;
+	padding:2px 10px 2px 10px;
+}
+#UserMenu .active ul a:hover{
+	background-color:#EDF8C9;
+}
+#UserMenu .active div#SystemMenu {
+    background-color: #FFF;
+	border-bottom: 0;
+	color:#000;
+	border:0;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+#UserMenu .active div div{
+	border-left:1px solid #EDEDED;
+	border-right:1px solid #DDD;
+	border-bottom:1px solid #DDD;
+	margin:10px;
+}
+#UserMenu .active div#SystemMenu div ul{
+	position: relative;
+	width:auto;
+	padding: 0;
+	box-shadow: none;
+	border:none!important;
+	margin-bottom:10px;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom: 5px;
+	margin:0;
+	display: none;
+}
+#UserMenu .active div#SystemMenu div h2{
+	font-weight: bold;
+	font-size: 14px;
+	color:#000;
+	border-top:1px solid #DDD;
+	border-bottom:1px solid #EDEDED;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px;
+	background:#F3F3F3;
+	background:-moz-linear-gradient(top,#FFF,#F3F3F3);
+	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
+	background:-o-linear-gradient(top,#FFF,#F3F3F3);
+	cursor: pointer;
+	margin: 0!important;
+}
+#UserMenu .active div#SystemMenu div h2:hover{
+	background:#f4f4f4;
+	background:-moz-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
+	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+}
+#UserMenu .active div#SystemMenu div ul li{
+	width:auto;
+	border:none;
+	float:left;
+	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
+	padding: 0 20px 0 10px;
+}
+#UserMenu .active div#SystemMenu div ul li a{
+	display: inline;
+	padding:0!important;
+}
+#UserMenu .active div#SystemMenu div ul li a:hover{
+	background-color: #FFF;
+	color:#AAA;
+}
+div#SystemMenu div ul{
+
 }

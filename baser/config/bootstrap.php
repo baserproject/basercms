@@ -274,33 +274,9 @@ if(BC_INSTALLED) {
  */
 	loadSiteConfig();
 /**
- * プラグインの bootstrap を実行する
- */
-	$enablePlugins = getEnablePlugins();
-	Configure::write('BcStatus.enablePlugins', $enablePlugins);
-	$_pluginPaths = array(
-		APP.'plugins'.DS,
-		BASER_PLUGINS
-	);
-	foreach($enablePlugins as $enablePlugin) {
-		foreach($_pluginPaths as $_pluginPath) {
-			$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
-			if(file_exists($pluginBootstrap)) {
-				include $pluginBootstrap;
-			}
-		}
-	}
-/**
- * テーマの bootstrap を実行する 
- */
-	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
-	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
-	if(file_exists($themeBootstrap)) {
-		include $themeBootstrap;
-	}
-/**
  * テーマヘルパーのパスを追加する 
  */
+	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
 	$helperPaths[] = $themePath.'helpers';
 }
 ?>
