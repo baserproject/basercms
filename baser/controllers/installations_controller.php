@@ -406,6 +406,7 @@ class InstallationsController extends AppController {
 		$installCoreData = array("<?php",	
 			"Configure::write('Security.salt', '".$this->Session->read('Installation.salt')."');",
 			"Configure::write('Cache.disable', false);",
+			"Configure::write('Session.save', 'cake');",
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcApp.adminSsl', false);",
