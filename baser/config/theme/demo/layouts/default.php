@@ -15,7 +15,7 @@
 <?php $bcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 <?php $bcBaser->css(array('import')) ?>
 <?php $bcBaser->js(array(
-	'jquery-1.6.4.min',
+	'jquery-1.7.2.min',
 	'startup'
 )) ?>
 <?php $bcBaser->scripts() ?>
