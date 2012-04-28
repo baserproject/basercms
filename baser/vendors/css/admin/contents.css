@@ -1046,6 +1046,12 @@ background: #333;
 #Installations .panel-box {
 	margin:0 auto 20px auto;
 }
+#Installations .panel-box ul li {
+	margin-bottom: 10px;
+	border-left:5px solid #DFDFDF;
+	padding:3px 10px;
+	background: none;
+}
 #Installations .step-1 {
 	height:300px;
 	background: url(../../img/bg_install.png) no-repeat right bottom #fff;
