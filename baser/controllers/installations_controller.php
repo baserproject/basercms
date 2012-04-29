@@ -358,20 +358,26 @@ class InstallationsController extends AppController {
 	function step5() {
 
 		$this->pageTitle = 'baserCMSのインストール完了！';
-		$db = ConnectionManager::getInstance();
-		if($db->config->baser['driver'] == '') {
+			
+		if(!BC_INSTALLED) {
+			$installationData = $this->Session->read('Installation');
+			$installationData['lastStep'] = true;
+			checkTmpFolders();
+			Configure::write('Cache.disable', false);
+			Cache::config('default', array('engine' => 'File'));
+			// インストールファイルでセッションの保存方法を切り替える為、インストール情報をキャッシュに保存
+			Cache::write('Installation', $installationData, 'default');
 			// データベース設定を書き込む
-			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());		// インストールファイルを生成する
+			$this->_writeDatabaseConfig($this->_readDbSettingFromSession());
+			// インストールファイルを生成する
 			$this->_createInstallFile();
-			$this->Session->write('InstallLastStep', true);
-			// DB設定ファイル、インストールファイルを再読み込みする為リダイレクトする
 			$this->redirect('step5');
-		} elseif(BC_INSTALLED && !$this->Session->read('InstallLastStep')) {
-			return;
+		} elseif(BC_INSTALLED) {
+			$installationData = Cache::read('Installation', 'default');
+			if(empty($installationData['lastStep'])) {
+				return;
+			}
 		}
-		
-		// tmp フォルダを作成する
-		checkTmpFolders();
 
 		// ブログの投稿日を更新
 		$this->_updateEntryDate();
@@ -487,7 +493,8 @@ class InstallationsController extends AppController {
 
 		$extra = array();
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
-		$installationSetting = $this->Session->read('Installation');
+		$installationSetting = Cache::read('Installation', 'default');
+		Cache::delete('Installation', 'default');
 		Configure::write('Security.salt', $installationSetting['salt']);
 		$extra['data']['User']['name'] = $installationSetting['admin_username'];
 		$extra['data']['User']['password'] = $installationSetting['admin_password'];
