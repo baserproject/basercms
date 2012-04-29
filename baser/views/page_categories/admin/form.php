@@ -139,7 +139,6 @@ function pageTypeChengeHandler() {
 				<div class="helptext">
 					<ul>
 						<li>ページカテゴリ名はURLで利用します。</li>
-						<li>日本語の入力が可能です。</li>
 					</ul>
 				</div>
 			</td>
