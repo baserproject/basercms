@@ -101,7 +101,7 @@ class BcBaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(BC_INSTALLED){
+		if(BC_INSTALLED && !BC_IS_UPDATER && !BC_IS_MAINTENANCE){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -847,7 +847,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ページ公開チェック
-		if(empty($this->params['admin'])) {
+		if(isset($this->Page) && empty($this->params['admin'])) {
 			$adminPrefix = Configure::read('Routing.admin');
 			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
 				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {

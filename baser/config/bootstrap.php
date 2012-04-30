@@ -97,8 +97,10 @@
 	}
 	if(BC_INSTALLED && $baserSettings) {
 		foreach ($baserSettings as $key1 => $settings) {
-			foreach($settings as $key2 => $setting) {
-				Configure::write($key1.'.'.$key2, $setting);
+			if($settings) {
+				foreach($settings as $key2 => $setting) {
+					Configure::write($key1.'.'.$key2, $setting);
+				}
 			}
 		}
 	}
@@ -278,5 +280,23 @@ if(BC_INSTALLED) {
  */
 	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
 	$helperPaths[] = $themePath.'helpers';
+/**
+ * アップデート 
+ */
+	$isUpdater = false;
+	$bcSite = Configure::read('BcSite');
+	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
+		$isUpdater = true;
+	}elseif(BC_INSTALLED && ($parameter != 'maintenance/index') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+		if(preg_match('/^admin/', $parameter)) {
+			sendUpdateMail();
+			$message = 'baserCMSのアップデートURLを管理者アドレスに送信しました。';
+			$layout = 'default';
+			$Session->write('Message.flash', compact('message', 'layout'));
+		}
+		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
+	}
+	define('BC_IS_UPDATER', $isUpdater);
+	define('BC_IS_MAINTENANCE', false);
 }
 ?>

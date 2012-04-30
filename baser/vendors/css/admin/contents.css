@@ -1126,3 +1126,9 @@ background: #333;
 	padding:3px 10px;
 	background: none;
 }
+#Updaters #flashMessage {
+	color:#000;
+}
+#Updaters #flashMessage strong {
+	color:#F03;
+}

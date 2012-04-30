@@ -160,7 +160,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Updater', 'Plugin');
+	var $uses = null;
 /**
  * beforeFilter
  *
@@ -168,6 +168,16 @@ class UpdatersController extends AppController {
  * @access public
  */
 	function beforeFilter() {
+		
+		$this->Updater = ClassRegistry::init('Updater');
+		$this->Plugin = ClassRegistry::init('Plugin');
+		$this->SiteConfig = ClassRegistry::init('SiteConfig');
+		if($this->action == 'admin_plugin') {
+			$this->Favorite = ClassRegistry::init('Favorite');
+		}
+		$this->BcAuth->allow('index');
+		
+		parent::beforeFilter();
 		
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
@@ -180,10 +190,15 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	function index($id) {
 
 		clearAllCache();
 
+		$siteConfig = $this->SiteConfig->findExpanded();
+		if(empty($siteConfig['update_id']) || $siteConfig['update_id'] != $id) {
+			$this->notFound();
+		}
+		
 		$targetPlugins = array('blog', 'feed', 'mail');
 		$targets = $this->Plugin->find('list', array('fields'=>array('Plugin.name'), 'conditions'=>array('Plugin.status'=>true, 'Plugin.name'=> $targetPlugins)));
 		$targets = am(array(''), $targets);
@@ -195,16 +210,23 @@ class UpdatersController extends AppController {
 
 		/* スクリプト実行 */
 		if($this->data) {
+			
+			$plugins = $this->Plugin->find('all', array('fields' => array('Plugin.id'), 'conditions' => array('Plugin.status' => true)));
+			foreach($plugins as $plugin) {
+				$plugin['Plugin']['status'] = false;
+				$this->Plugin->set($plugin);
+				$this->Plugin->save();
+			}
 			$this->setMessage('アップデート処理を開始します。', false, true, true);
 			foreach($targets as $target) {
 				if(!$this->_update($target)){
 					$this->setMessage('アップデート処理が途中で失敗しました。', true);
 				}
 			}
-			$this->setMessage('全てのアップデート処理が完了しました。', false, true, true);
+			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'index', $id));
 
 		}
 
@@ -284,6 +306,8 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', $title);
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
+		$this->set('siteVerPoint',  verpoint($sourceVersion));
+		$this->set('baserVerPoint', verpoint($targetVersion));
 		$this->set('scriptNum',$scriptNum);
 		$this->set('plugin', $name);
 		$this->render('update');
@@ -322,7 +346,7 @@ class UpdatersController extends AppController {
 		$targetVerPoint = verpoint($targetVersion);
 
 		if($sourceVerPoint === false || $targetVerPoint === false) {
-			return false;
+			return array();
 		}
 		
 		if(!$plugin) {

@@ -17,6 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(BC_IS_MAINTENANCE) {
+	return;
+}
 if(!empty($this->passedArgs['num'])) {
 	$url = array('plugin' => null, 'controller' => 'contents', 'num' => $this->passedArgs['num']);
 } else {

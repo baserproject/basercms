@@ -21,6 +21,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(BC_IS_MAINTENANCE) {
+	return;
+}
 if(!empty($no)){
 	$widgets = $this->requestAction('/widget_areas/get_widgets/'.$no);
 	if($widgets){

@@ -703,9 +703,9 @@ class InstallationsController extends AppController {
 		if($data['dbType'] == 'csv') {
 			$data['dbEncoding'] = 'sjis';
 		}
-		if($data['dbType'] == 'mysql' || $data['dbType'] == 'sqlite3' || $data['dbType'] == 'postgres') {
-			$data['dbType'] = 'bc_'.$data['dbType'];
-		}
+		
+		$data['dbType'] = 'bc_'.$data['dbType'];
+		
 
 		$this->Session->write('Installation.dbType', $data['dbType']);
 		$this->Session->write('Installation.dbHost', $data['dbHost']);
