@@ -172,7 +172,9 @@ class UpdatersController extends AppController {
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		
+		if($this->action == 'admin_plugin') {
+			$this->Favorite = ClassRegistry::init('Favorite');
+		}
 		$this->BcAuth->allow('index');
 		
 		parent::beforeFilter();
@@ -304,6 +306,8 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', $title);
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
+		$this->set('siteVerPoint',  verpoint($sourceVersion));
+		$this->set('baserVerPoint', verpoint($targetVersion));
 		$this->set('scriptNum',$scriptNum);
 		$this->set('plugin', $name);
 		$this->render('update');
