@@ -18,5 +18,9 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-	<p>ログイン用のユーザーアカウントを登録する事ができます。<br />
-		パスワード欄は変更する場合のみ入力します。</p>
+
+
+<ul>
+	<li>ログイン用のユーザーアカウントを登録する事ができます。</li>
+	<?php if($this->action == 'admin_edit'): ?><li>パスワード欄は変更する場合のみ入力します。</li><?php endif ?>
+</ul>
