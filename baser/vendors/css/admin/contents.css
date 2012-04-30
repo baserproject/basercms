@@ -20,7 +20,8 @@
 /*    ContentsBody
 /* ==================================================================== */
 
-#ContentsBody li img{
+#ContentsBody li img,
+#ContentsBody p img {
 	vertical-align:middle;
 }
 .contents-body ul{
