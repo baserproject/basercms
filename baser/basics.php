@@ -712,4 +712,77 @@
 		ClassRegistry::removeObject('SiteConfig');
 		
 	}
+/**
+ * バージョンを取得する
+ * 
+ * @return string Or false
+ */
+	function getVersion($plugin = '') {
+		$corePlugins = array('blog', 'feed', 'mail');
+		if(!$plugin || in_array($plugin, $corePlugins)) {
+			$path = BASER.'VERSION.txt';
+		} else {
+			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
+			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
+			if(file_exists($appPath)) {
+				$path = $appPath;
+			}elseif(file_exists($baserPath)) {
+				$path = $baserPath;
+			} else {
+				return false;
+			}
+		}
+
+		App::import('File');
+		$versionFile = new File($path);
+		$versionData = $versionFile->read();
+		$aryVersionData = split("\n",$versionData);
+		if(!empty($aryVersionData[0])) {
+			return $aryVersionData[0];
+		}else {
+			return false;
+		}
+		
+	}
+/**
+ * アップデートのURLを記載したメールを送信する 
+ */
+	function sendUpdateMail() {
+
+		$bcSite = Configure::read('BcSite');
+		$bcSite['update_id'] = String::uuid();
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
+		ClassRegistry::removeObject('SiteConfig');
+
+		App::import('Core', 'Email');
+		App::import('Component', 'BcEmail', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'controllers'.DS.'components'.DS.'bc_email.php'));
+		$BcEmail = new BcEmailComponent();
+		if(!empty($bcSite['mail_encode'])) {
+			$encode = $bcSite['mail_encode'];
+		} else {
+			$encode = 'ISO-2022-JP';
+		}
+		$BcEmail->charset = $encode;
+		$BcEmail->sendAs = 'text';
+		$BcEmail->lineLength=105;
+		if(!empty($bcSite['smtp_host'])) {
+			$BcEmail->delivery = 'smtp';
+			$BcEmail->smtpOptions = array('host'	=>$bcSite['smtp_host'],
+					'port'		=> 25,
+					'timeout'	=> 30,
+					'username'	=> ($bcSite['smtp_user'])?$bcSite['smtp_user']:null,
+					'password'	=> ($bcSite['smtp_password'])?$bcSite['smtp_password']:null);
+		} else {
+			$BcEmail->delivery = "mail";
+		}
+		$BcEmail->to = $bcSite['email'];
+		$BcEmail->subject = 'baserCMSアップデート';
+		$BcEmail->from = $bcSite['name'].' <'.$bcSite['email'].'>';
+		$message = array();
+		$message[] = '下記のURLよりbaserCMSのアップデートを完了してください。';
+		$message[] = topLevelUrl(false).baseUrl().'updaters/index/'.$bcSite['update_id'];
+		$BcEmail->send($message);
+
+	}
 ?>

@@ -24,7 +24,7 @@ if(Configure::read('BcRequest.asset')) {
 	return;
 }
 
-if(BC_INSTALLED) {
+if(BC_INSTALLED && !BC_IS_UPDATER) {
 	
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
@@ -175,7 +175,7 @@ if (file_exists(APP . 'error.php')) {
 } elseif (file_exists(BASER . 'app_error.php')) {
 	include_once (BASER . 'app_error.php');
 }
-if(BC_INSTALLED) {
+if(BC_INSTALLED && !BC_IS_UPDATER) {
 /**
  * プラグインの bootstrap を実行する
  * bootstrapではプラグインのパスが読み込めない為ここに定義

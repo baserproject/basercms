@@ -160,7 +160,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Updater', 'Plugin');
+	var $uses = null;
 /**
  * beforeFilter
  *
@@ -168,6 +168,14 @@ class UpdatersController extends AppController {
  * @access public
  */
 	function beforeFilter() {
+		
+		$this->Updater = ClassRegistry::init('Updater');
+		$this->Plugin = ClassRegistry::init('Plugin');
+		$this->SiteConfig = ClassRegistry::init('SiteConfig');
+		
+		$this->BcAuth->allow('index');
+		
+		parent::beforeFilter();
 		
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
@@ -180,10 +188,15 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	function index($id) {
 
 		clearAllCache();
 
+		$siteConfig = $this->SiteConfig->findExpanded();
+		if(empty($siteConfig['update_id']) || $siteConfig['update_id'] != $id) {
+			$this->notFound();
+		}
+		
 		$targetPlugins = array('blog', 'feed', 'mail');
 		$targets = $this->Plugin->find('list', array('fields'=>array('Plugin.name'), 'conditions'=>array('Plugin.status'=>true, 'Plugin.name'=> $targetPlugins)));
 		$targets = am(array(''), $targets);
@@ -322,7 +335,7 @@ class UpdatersController extends AppController {
 		$targetVerPoint = verpoint($targetVersion);
 
 		if($sourceVerPoint === false || $targetVerPoint === false) {
-			return false;
+			return array();
 		}
 		
 		if(!$plugin) {

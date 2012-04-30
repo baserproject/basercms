@@ -212,7 +212,7 @@ class BaserAppController extends Controller {
 
 		parent::beforeFilter();
 		
-		if(!BC_INSTALLED) {
+		if(!BC_INSTALLED || BC_IS_UPDATER) {
 			return;
 		}
 		
@@ -489,7 +489,7 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !BC_IS_UPDATER) {
 			$this->set('user',$_SESSION['Auth']['User']);
 			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 		}
@@ -510,30 +510,7 @@ class BaserAppController extends Controller {
  */
 	function getBaserVersion($plugin = '') {
 
-		$corePlugins = array('blog', 'feed', 'mail');
-		if(!$plugin || in_array($plugin, $corePlugins)) {
-			$path = BASER.'VERSION.txt';
-		} else {
-			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
-			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
-			if(file_exists($appPath)) {
-				$path = $appPath;
-			}elseif(file_exists($baserPath)) {
-				$path = $baserPath;
-			} else {
-				return false;
-			}
-		}
-
-		App::import('File');
-		$versionFile = new File($path);
-		$versionData = $versionFile->read();
-		$aryVersionData = split("\n",$versionData);
-		if(!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
-		}else {
-			return false;
-		}
+		return getVersion($plugin);
 
 	}
 /**

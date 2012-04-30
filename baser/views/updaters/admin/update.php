@@ -35,25 +35,11 @@
 		<li>データベースのバージョンは最新です。</li>
 		<?php endif ?>
 	</ul>
-<?php if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)): ?>
-	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
-		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($plugin))) ?>
-		<?php echo $bcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
-		<?php echo $bcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
-<?php else: ?>
-	<p>
-		<?php if(!$plugin): ?>
-			<?php $bcBaser->link('管理画面に移動する', array('controller' => 'dashboard', 'action' => 'index'), array('class' => 'outside-link')) ?>
-		<?php else: ?>
-			<?php $bcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
-		<?php endif ?>
-	</p>
-<?php endif ?>
 </div>
 
 
-<?php if(!$scriptNum): ?>
-<div class="corner10 panel-box">
+<?php if($scriptNum): ?>
+<div class="corner10 panel-box section">
 	<div class="section">
 	<h2>データベースのバックアップは行いましたか？</h2>
 		<p>
@@ -62,10 +48,7 @@
 			<?php else: ?>
 			バックアップを行われていない場合は、アップデートを実行する前にデータベースのバックアップを行いましょう。<br />
 			<?php endif ?>
-			<small>※ アップデート処理は自己責任で行ってください。</small><br />
-
-			<?php $bcBaser->link('バックアップはこちらから', array('controller' => 'tools', 'action' => 'maintenance', 'backup'), array('class' => 'outside-link')) ?>
-
+			<small>※ アップデート処理は必ず自己責任で行ってください。</small><br />
 		</p>
 	</div>
 	<div class="section">
@@ -74,3 +57,20 @@
 	</div>
 </div>
 <?php endif ?>
+
+<div class="corner10 panel-box section">
+<?php if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)): ?>
+	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
+		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($plugin))) ?>
+		<?php echo $bcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
+		<?php echo $bcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
+<?php else: ?>
+	<p>
+		<?php if(!$plugin): ?>
+			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $bcBaser->link('baserCMSの協力制作会社', 'http://basercms.net/partners/', array('target' => '_blank')) ?>に相談するか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
+		<?php else: ?>
+			<?php $bcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
+		<?php endif ?>
+	</p>
+<?php endif ?>
+</div>
