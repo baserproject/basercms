@@ -65,3 +65,55 @@
 	} else {
 		$this->setMessage('site_configs テーブルのデータ更新に失敗しました。', true);
 	}
+/**
+ * global_menus データ更新
+ */
+	App::import('Model', 'GlobalMenu');
+	$GlobalMenu = new GlobalMenu();
+	$datas = $GlobalMenu->find('all', array('cache' => false));
+	if($datas) {
+		$result = true;
+		foreach($datas as $data) {
+			if($data['GlobalMenu']['menu_type'] == 'admin') {
+				if(!$GlobalMenu->delete($data['GlobalMenu']['id'])) {
+					$result = false;
+				}
+			}
+		}
+		if($result) {
+			$this->setMessage('global_menus テーブルのデータ更新に成功しました。');
+		} else {
+			$this->setMessage('global_menus テーブルのデータ更新に失敗しました。', true);
+		}
+	}
+/**
+ * permissions データ更新
+ */
+	App::import('Model', 'Permission');
+	App::import('Model', '$UserGroup');
+	$UserGroup = new UserGroup();
+	$Permission = new Permission();
+	$userGroups = $UserGroup->find('all', array('cache' => false, 'recursive' => -1));
+	if($userGroups) {
+		$result = true;
+		foreach($userGroups as $userGroup) {
+			$permission = array('Permission' => array(
+				'no'	=> $Permission->getMax('no', array('Permission.user_group_id' => $userGroup['UserGroup']['id']))+1,
+				'sort'	=> $Permission->getMax('sort', array('Permission.user_group_id' => $userGroup['UserGroup']['id']))+1,
+				'name'	=> 'よく使う項目',
+				'user_group_id'	=> $userGroup['UserGroup']['id'],
+				'url'	=> '/admin/favorites/*',
+				'auth'	=> true,
+				'status'=> true
+			));
+			$Permission->create($permission);
+			if(!$Permission->save()) {
+				$result = false;
+			}
+		}
+		if($result) {
+			$this->setMessage('permissions テーブルのデータ更新に成功しました。');
+		} else {
+			$this->setMessage('permissions テーブルのデータ更新に失敗しました。', true);
+		}
+	}
