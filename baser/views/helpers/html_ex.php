@@ -22,7 +22,7 @@ trigger_error('HtmlExHelper は非推奨です。BcHtmlHelper を利用してく
 /**
  * Include files
  */
-App::import('Helper', BC_HTML_HELPER);
+App::import('Helper', 'Html');
 /**
  * Htmlヘルパーの拡張クラス
  *

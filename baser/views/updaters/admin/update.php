@@ -17,6 +17,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)) {
+	$requireUpdate = true;
+} else {
+	$requireUpdate = false;
+}
 ?>
 
 
@@ -59,15 +64,22 @@
 <?php endif ?>
 
 <div class="corner10 panel-box section">
-<?php if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)): ?>
+<?php if($requireUpdate): ?>
 	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
+	<?php if(empty($plugin)): ?>
+		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($this->params['pass'][0]))) ?>
+	<?php else: ?>
 		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($plugin))) ?>
+	<?php endif ?>
 		<?php echo $bcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
 		<?php echo $bcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
 <?php else: ?>
 	<p>
 		<?php if(!$plugin): ?>
-			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $bcBaser->link('baserCMSの協力制作会社', 'http://basercms.net/partners/', array('target' => '_blank')) ?>に相談するか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
+			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $bcBaser->link('baserCMSの協力制作会社', 'http://basercms.net/partners/', array('target' => '_blank')) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
+			<?php if(!$requireUpdate): ?>
+				<?php $bcBaser->link('≫ 管理画面に移動する','/admin') ?>
+			<?php endif ?>
 		<?php else: ?>
 			<?php $bcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
 		<?php endif ?>

@@ -208,16 +208,23 @@ class UpdatersController extends AppController {
 
 		/* スクリプト実行 */
 		if($this->data) {
+			
+			$plugins = $this->Plugin->find('all', array('fields' => array('Plugin.id'), 'conditions' => array('Plugin.status' => true)));
+			foreach($plugins as $plugin) {
+				$plugin['Plugin']['status'] = false;
+				$this->Plugin->set($plugin);
+				$this->Plugin->save();
+			}
 			$this->setMessage('アップデート処理を開始します。', false, true, true);
 			foreach($targets as $target) {
 				if(!$this->_update($target)){
 					$this->setMessage('アップデート処理が途中で失敗しました。', true);
 				}
 			}
-			$this->setMessage('全てのアップデート処理が完了しました。', false, true, true);
+			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'index', $id));
 
 		}
 

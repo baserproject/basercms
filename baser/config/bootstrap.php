@@ -97,8 +97,10 @@
 	}
 	if(BC_INSTALLED && $baserSettings) {
 		foreach ($baserSettings as $key1 => $settings) {
-			foreach($settings as $key2 => $setting) {
-				Configure::write($key1.'.'.$key2, $setting);
+			if($settings) {
+				foreach($settings as $key2 => $setting) {
+					Configure::write($key1.'.'.$key2, $setting);
+				}
 			}
 		}
 	}
@@ -283,7 +285,7 @@ if(BC_INSTALLED) {
  */
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
-	if(preg_match('/^updaters\/index\//', $parameter)) {
+	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	}elseif(BC_INSTALLED && ($parameter != 'maintenance/index') && (getVersion() > $bcSite['version'])) {
 		if(preg_match('/^admin/', $parameter)) {
@@ -296,5 +298,6 @@ if(BC_INSTALLED) {
 		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
 	}
 	define('BC_IS_UPDATER', $isUpdater);
+	define('BC_IS_MAINTENANCE', false);
 }
 ?>

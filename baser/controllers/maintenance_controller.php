@@ -36,7 +36,7 @@ class MaintenanceController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array();
+	var $uses = null;
 /**
  * ぱんくずナビ
  *

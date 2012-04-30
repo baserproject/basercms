@@ -159,6 +159,8 @@ class BaserAppController extends Controller {
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
 			
+			$this->uses = null;
+			
 			$params = Router::parse(@$_SERVER['REQUEST_URI']);
 			
 			$this->setTheme($params);
@@ -489,9 +491,11 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !BC_IS_UPDATER) {
+		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !BC_IS_UPDATER && !BC_IS_MAINTENANCE && $this->name != 'CakeError') {
 			$this->set('user',$_SESSION['Auth']['User']);
-			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+			if(!empty($this->params['admin'])) {
+				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+			}
 		}
 
 		/* 携帯用絵文字データの読込 */

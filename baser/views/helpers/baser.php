@@ -103,7 +103,7 @@ class BaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(BC_INSTALLED){
+		if(BC_INSTALLED && !BC_IS_UPDATER && !BC_IS_MAINTENANCE){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -296,7 +296,7 @@ class BaserHelper extends AppHelper {
 		if($crumbs){
 			$crumbs = array_reverse($crumbs);
 			foreach ($crumbs as $key => $crumb) {
-				if($this->BcArray->first($crumbs, $key) && isset($crumbs[$key+1])) {
+				if($this->Array->first($crumbs, $key) && isset($crumbs[$key+1])) {
 					if($crumbs[$key+1]['name'] == $crumb['name']) {
 						continue;
 					}
@@ -410,7 +410,7 @@ class BaserHelper extends AppHelper {
  */
 	function metaKeywords() {
 		
-		echo $this->BcHtml->meta('keywords',$this->getkeywords());
+		echo $this->HtmlEx->meta('keywords',$this->getkeywords());
 		
 	}
 /**
@@ -421,7 +421,7 @@ class BaserHelper extends AppHelper {
  */
 	function metaDescription() {
 		
-		echo $this->BcHtml->meta('description', strip_tags($this->getDescription()));
+		echo $this->HtmlEx->meta('description', strip_tags($this->getDescription()));
 		
 	}
 /**
@@ -434,7 +434,7 @@ class BaserHelper extends AppHelper {
  */
 	function rss($title, $link) {
 		
-		echo $this->BcHtml->meta($title, $link, array('type' => 'rss'));
+		echo $this->HtmlEx->meta($title, $link, array('type' => 'rss'));
 		
 	}
 /**
@@ -629,10 +629,10 @@ class BaserHelper extends AppHelper {
 	function scripts() {
 		
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			$publishTheme = $this->BcHtml->themeWeb;
-			$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
+			$publishTheme = $this->HtmlEx->themeWeb;
+			$this->HtmlEx->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
 			$this->css('admin/toolbar', array('inline' => false));
-			$this->BcHtml->themeWeb = $publishTheme;
+			$this->HtmlEx->themeWeb = $publishTheme;
 		}
 		echo join("\n\t", $this->_view->__scripts);
 		
@@ -680,7 +680,7 @@ class BaserHelper extends AppHelper {
 		if(empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
 		}
-		echo $this->BcXml->header($attrib)."\n";
+		echo $this->XmlEx->header($attrib)."\n";
 		
 	}
 /**
@@ -691,7 +691,7 @@ class BaserHelper extends AppHelper {
  */
 	function icon() {
 		
-		echo  $this->BcHtml->meta('icon');
+		echo  $this->HtmlEx->meta('icon');
 		
 	}
 /**
@@ -703,7 +703,7 @@ class BaserHelper extends AppHelper {
  */
 	function docType($type = 'xhtml-trans') {
 		
-		echo $this->BcHtml->docType($type)."\n";
+		echo $this->HtmlEx->docType($type)."\n";
 		
 	}
 /**
@@ -727,7 +727,7 @@ class BaserHelper extends AppHelper {
 		if(!empty($htmlAttributes['rel'])) {
 			$rel = $htmlAttributes['rel'];
 		}
-		$ret = $this->BcHtml->css($path, $rel, $htmlAttributes, $inline);
+		$ret = $this->HtmlEx->css($path, $rel, $htmlAttributes, $inline);
 		if($inline) {
 			echo $ret;
 		}
@@ -772,7 +772,7 @@ class BaserHelper extends AppHelper {
  */
 	function getImg($path, $options = array()) {
 		
-		return $this->BcHtml->image($path, $options);
+		return $this->HtmlEx->image($path, $options);
 		
 	}
 /**
@@ -895,7 +895,7 @@ class BaserHelper extends AppHelper {
 		}
 		$htmlAttributes = array_merge($htmlAttributes, array('escape' => $escapeTitle));
 		
-		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
+		$out = $this->HtmlEx->link($title, $url, $htmlAttributes, $confirmMessage);
 
 		return $this->executeHook('afterBaserGetLink', $url, $out);
 		
@@ -927,7 +927,7 @@ class BaserHelper extends AppHelper {
 		if(!$charset && Configure::read('BcRequest.agent') == 'mobile'){
 			$charset = 'Shift-JIS';
 		}
-		echo $this->BcHtml->charset($charset);
+		echo $this->HtmlEx->charset($charset);
 		
 	}
 /**
@@ -1040,7 +1040,7 @@ class BaserHelper extends AppHelper {
 	function updateMessage() {
 		$adminPrefix = Configure::read('Routing.admin');
 		if($this->checkUpdate() && $this->params['controller'] != 'updaters') {
-			$updateLink = $this->BcHtml->link('ここ',"/{$adminPrefix}/updaters");
+			$updateLink = $this->HtmlEx->link('ここ',"/{$adminPrefix}/updaters");
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
 		
@@ -1208,13 +1208,13 @@ class BaserHelper extends AppHelper {
  */
 	function crumbs($separator = '&raquo;', $startText = false) {
 		
-		if (!empty($this->BcHtml->_crumbs)) {
+		if (!empty($this->HtmlEx->_crumbs)) {
 			$out = array();
 			if ($startText) {
 				$out[] = $this->getLink($startText, '/');
 			}
 
-			foreach ($this->BcHtml->_crumbs as $crumb) {
+			foreach ($this->HtmlEx->_crumbs as $crumb) {
 				if (!empty($crumb[1])) {
 					$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
 				} else {
@@ -1244,7 +1244,7 @@ class BaserHelper extends AppHelper {
 		} else {
 			$options = $_options;
 		}
-		$this->BcHtml->_crumbs[] = array($name, $link, $options);
+		$this->HtmlEx->_crumbs[] = array($name, $link, $options);
 		
 	}
 /**
@@ -1405,7 +1405,7 @@ class BaserHelper extends AppHelper {
 			$search = array($search);
 		}
 		foreach($search as $value) {
-			$text = str_replace($value, $this->BcHtml->tag($name, $value, $attributes, $escape), $text);
+			$text = str_replace($value, $this->HtmlEx->tag($name, $value, $attributes, $escape), $text);
 		}
 		return $text;
 		
