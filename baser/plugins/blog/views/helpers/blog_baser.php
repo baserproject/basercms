@@ -78,6 +78,18 @@ class BlogBaserHelper extends AppHelper {
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
 
 	}
-
+/**
+ * ブログのトップページ判定
+ * @return boolean 
+ */
+	function isBlogHome() {
+		if(empty($this->params['plugin']) || empty($this->params['controller']) || empty($this->params['action'])) {
+			return false;
+		}
+		if($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index') {
+			return true;
+		}
+		return false;
+	}
 }
 ?>
