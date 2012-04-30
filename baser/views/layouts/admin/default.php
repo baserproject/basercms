@@ -100,9 +100,13 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 					<?php endif ?>
 
 					<?php if($this->params['controller']!='installations' && !empty($bcBaser->siteConfig['first_access'])): ?>
-					<div id="FirstMessage" class="em-box">
-						BaserCMSへようこそ。短くスマートなURLを実現する「スマートURL」の設定は、
-						<?php $bcBaser->link('システム設定', '/admin/site_configs/form') ?>より行えます。
+					<div id="FirstMessage" class="em-box" style="text-align:left">
+						baserCMSへようこそ。<br />
+						<ul style="font-weight:normal;font-size:14px;"><li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
+							<li>よく使う機能については、画面右側にある「よく使う項目」をクリックして、お気に入りとして登録する事ができます。</li>
+							<li>短くスマートなURLを実現する「スマートURL」の設定は、
+						<?php $bcBaser->link('システム設定', '/admin/site_configs/form') ?>より行えます。</li>
+						</ul>
 					</div>
 					<?php endif ?>
 					
