@@ -101,7 +101,7 @@ class BcBaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(BC_INSTALLED && !BC_IS_UPDATER && !BC_IS_MAINTENANCE){
+		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');

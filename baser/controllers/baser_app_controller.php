@@ -214,7 +214,7 @@ class BaserAppController extends Controller {
 
 		parent::beforeFilter();
 		
-		if(!BC_INSTALLED || BC_IS_UPDATER) {
+		if(!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
 		
@@ -491,7 +491,7 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !BC_IS_UPDATER && !BC_IS_MAINTENANCE && $this->name != 'CakeError') {
+		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
 			$this->set('user',$_SESSION['Auth']['User']);
 			if(!empty($this->params['admin'])) {
 				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));

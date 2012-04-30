@@ -49,7 +49,7 @@ $(function(){
 			<ul>
 				<?php if($this->name == 'Installations'): ?>
 				<li><?php $bcBaser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', array('target' => '_blank')) ?></li>
-				<?php elseif(BC_IS_UPDATER): ?>
+				<?php elseif(Configure::read('BcRequest.isUpdater')): ?>
 				<li><?php $bcBaser->link('アップデートマニュアル', 'http://basercms.net/manuals/introductions/8.html', array('target' => '_blank')) ?></li>
 				<?php elseif(empty($this->params['admin'])): ?>
 				<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
@@ -83,7 +83,7 @@ $(function(){
 						<li><?php $bcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 						<li><?php $bcBaser->link('ログアウト', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
 					</ul>
-<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != 'admin/users/login' && !BC_IS_UPDATER): ?>
+<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != 'admin/users/login' && !Configure::read('BcRequest.isUpdater')): ?>
 					<?php $bcBaser->link('ログインしていません '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 						<li><?php $bcBaser->link('ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>

@@ -55,7 +55,7 @@ class BcAdminHelper extends AppHelper {
 		if(!BC_INSTALLED) {
 			return false;
 		}
-		if(BC_IS_UPDATER) {
+		if(Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user'])) {

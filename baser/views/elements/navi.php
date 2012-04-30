@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  * @deprecated		2.0の次のバージョンで削除
  */
-if(BC_IS_MAINTENANCE) {
+if(Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if ($this->viewPath == 'home'){

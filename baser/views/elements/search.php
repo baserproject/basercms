@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(BC_IS_MAINTENANCE) {
+if(Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if(!empty($this->passedArgs['num'])) {
