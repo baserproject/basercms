@@ -90,7 +90,7 @@ function pageTypeChengeHandler() {
 <?php endif ?>
 
 <?php if($pageCategories): ?>
-	<span><?php echo $bcForm->label('Page.page_category_id', 'カテゴリ') ?> <?php echo $bcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
+	<span><?php echo $bcForm->label('Page.page_category_id', 'カテゴリー') ?> <?php echo $bcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
 <?php endif ?>
 	</span>
 </p>

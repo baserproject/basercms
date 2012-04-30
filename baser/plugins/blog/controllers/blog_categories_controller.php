@@ -157,8 +157,8 @@ class BlogCategoriesController extends BlogAppController {
 
 			// データを保存
 			if($this->BlogCategory->save()) {
-				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
-				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を追加しました。');
+				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
+				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
@@ -209,8 +209,8 @@ class BlogCategoriesController extends BlogAppController {
 
 			/* 更新処理 */
 			if($this->BlogCategory->save($this->data)) {
-				$this->Session->setFlash('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
-				$this->BlogCategory->saveDbLog('カテゴリ「'.$this->data['BlogCategory']['name'].'」を更新しました。');
+				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
+				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
@@ -296,7 +296,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 削除処理 */
 		if($this->BlogCategory->del($id)) {
 	
-			$this->BlogCategory->saveDbLog('カテゴリ「'.$data['BlogCategory']['name'].'」を削除しました。');
+			$this->BlogCategory->saveDbLog('カテゴリー「'.$data['BlogCategory']['name'].'」を削除しました。');
 			return true;
 		}else {
 			return false;
@@ -326,7 +326,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 削除処理 */
 		if($this->BlogCategory->del($id)) {
 			$this->Session->setFlash($post['BlogCategory']['name'].' を削除しました。');
-			$this->BlogCategory->saveDbLog('カテゴリ「'.$post['BlogCategory']['name'].'」を削除しました。');
+			$this->BlogCategory->saveDbLog('カテゴリー「'.$post['BlogCategory']['name'].'」を削除しました。');
 		}else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}

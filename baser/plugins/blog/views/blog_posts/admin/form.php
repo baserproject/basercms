@@ -147,7 +147,7 @@ $(function(){
 	<?php endif; ?>
 	<?php if($categories): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogPost.blog_category_id', 'カテゴリ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>
 				<?php echo $bcForm->error('BlogPost.blog_category_id') ?>

@@ -272,7 +272,7 @@ function pageTypeChengeHandler() {
 <?php endif; ?>
 <?php if($categories): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('Page.page_category_id', 'カテゴリ') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.page_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
 		<?php if($pageTypes): ?>
 			<?php echo $bcForm->input('Page.page_type', array(

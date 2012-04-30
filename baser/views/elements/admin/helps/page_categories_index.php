@@ -24,6 +24,6 @@
 	また、各カテゴリは子カテゴリを持つ事ができるようになっています。</p>
 <p>初期状態では、PCページ用のカテゴリーのみ表示されていますので、携帯やスマートフォンページ用のカテゴリを表示する場合は、検索ボックスより検索してください。</p>
 <div class="example-box">
-	<div class="head">（例）カテゴリ「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
+	<div class="head">（例）カテゴリー「company」に属する、ページ名「about」として作成したページを表示させる為のURL</div>
 	<p>http://{baserCMS設置URL}/company/about</p>
 </div>
