@@ -205,7 +205,7 @@ $(function(){
 	</ul>
 	<?php endif ?>
 	<?php if($session->check('AuthAgent') || $bcBaser->isAdminUser()): ?>
-	<div class="submit"><?php echo $bcForm->button($this->data['UserGroup']['title'].'グループの初期値に設定', array('label' => 'グループ初期値に設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button')) ?></div>
+	<div class="submit"><?php echo $bcForm->button($this->data['UserGroup']['title'].'グループの初期値に設定', array('label' => 'グループ初期データに設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button')) ?></div>
 	<?php endif ?>
 </div>
 <?php endif ?>
