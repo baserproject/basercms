@@ -211,6 +211,11 @@ class UpdatersController extends AppController {
 		/* スクリプト実行 */
 		if($this->data) {
 			
+			if(function_exists('ini_set')) {
+				ini_set('max_excution_time', 0);
+				ini_set('max_excution_time', '128M');
+			}
+			
 			$plugins = $this->Plugin->find('all', array('fields' => array('Plugin.id'), 'conditions' => array('Plugin.status' => true)));
 			foreach($plugins as $plugin) {
 				$plugin['Plugin']['status'] = false;
