@@ -19,21 +19,4 @@
  * @deprecated		DboBcMysql に移行
  */
 trigger_error('/app/config/database.php の driver を bc_mysql に書き換えてください。（２ヶ所）', E_USER_WARNING);
-App::import('Core','DboMysql');
-class DboMysqlEx extends DboMysql {
-/**
- * テーブル名のリネームステートメントを生成
- *
- * @param string $sourceName
- * @param string $targetName
- * @return string
- * @access public
- */
-	function buildRenameTable($sourceName, $targetName) {
-		
-		return "ALTER TABLE `".$sourceName."` RENAME `".$targetName."`";
-	
-	}
-
-}
 ?>
