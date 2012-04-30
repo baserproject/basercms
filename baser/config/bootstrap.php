@@ -283,11 +283,16 @@ if(BC_INSTALLED) {
 /**
  * アップデート 
  */
+	if($parameter == 'maintenance/index') {
+		define('BC_IS_MAINTENANCE', true);
+	} else {
+		define('BC_IS_MAINTENANCE', false);
+	}
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
 	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
-	}elseif(BC_INSTALLED && ($parameter != 'maintenance/index') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+	}elseif(BC_INSTALLED && !BC_IS_MAINTENANCE && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
 		if(preg_match('/^admin/', $parameter)) {
 			sendUpdateMail();
 			$message = 'baserCMSのアップデートURLを管理者アドレスに送信しました。';
@@ -297,6 +302,6 @@ if(BC_INSTALLED) {
 		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
 	}
 	define('BC_IS_UPDATER', $isUpdater);
-	define('BC_IS_MAINTENANCE', false);
+	
 }
 ?>
