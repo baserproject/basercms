@@ -210,7 +210,7 @@ class UpdatersController extends AppController {
 
 		/* スクリプト実行 */
 		if($this->data) {
-			
+			clearAllCache();
 			if(function_exists('ini_set')) {
 				ini_set('max_excution_time', 0);
 				ini_set('max_excution_time', '128M');
@@ -228,6 +228,7 @@ class UpdatersController extends AppController {
 					$this->setMessage('アップデート処理が途中で失敗しました。', true);
 				}
 			}
+			clearAllCache();
 			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();

@@ -117,3 +117,45 @@
 			$this->setMessage('permissions テーブルのデータ更新に失敗しました。', true);
 		}
 	}
+/**
+ * blog_contents データ更新
+ */
+	App::import('Model', 'BlogContent');
+	$BlogContent = new BlogContent();
+	$blogContents = $BlogContent->find('all', array('cache' => false));
+	if($blogContents) {
+		$result = true;
+		foreach($blogContents as $blogContent) {
+			$blogContent['BlogContent']['status'] = true;
+			$BlogContent->set($blogContent);
+			if(!$BlogContent->save()) {
+				$result = false;
+			}
+		}
+		if($result) {
+			$this->setMessage('blog_contents テーブルのデータ更新に成功しました。');
+		} else {
+			$this->setMessage('blog_contents テーブルのデータ更新に失敗しました。', true);
+		}
+	}
+/**
+ * mail_contents データ更新
+ */
+	App::import('Model', 'MailContent');
+	$MailContent = new MailContent();
+	$mailContnets=  $MailContent->find('all', array('cache' => false));
+	if($mailContnets) {
+		$result = true;
+		foreach($mailContnets as $mailContnet) {
+			$mailContnet['BlogContent']['status'] = true;
+			$MailContnet->set($mailContnet);
+			if(!$MailContnet->save()) {
+				$result = false;
+			}
+		}
+		if($result) {
+			$this->setMessage('blog_contents テーブルのデータ更新に成功しました。');
+		} else {
+			$this->setMessage('blog_contents テーブルのデータ更新に失敗しました。', true);
+		}
+	}
