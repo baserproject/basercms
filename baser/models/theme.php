@@ -51,9 +51,15 @@ class Theme extends AppModel {
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'テーマ名を入力してください。'),
 			array(	'rule'		=> 'halfText',
-					'message'	=> 'テーマ名は半角のみで入力してください。'),
+					'message'	=> 'テーマ名は半角英数字のみで入力してください。'),
 			array(	'rule'		=> 'duplicate',
 					'message'	=> '既に存在するテーマ名です。')
+		),
+		'url' => array(
+			array(	'rule'		=> 'halfText',
+					'message'	=> 'URLは半角英数字のみで入力してください。'),
+			array(	'rule'		=> 'url',
+					'message'	=> 'URLの形式が間違っています。'),
 		)
 	);
 /**

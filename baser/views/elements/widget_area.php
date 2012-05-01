@@ -21,6 +21,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(Configure::read('BcRequest.isMaintenance')) {
+	return;
+}
 if(!empty($no)){
 	$widgets = $this->requestAction('/widget_areas/get_widgets/'.$no);
 	if($widgets){

@@ -92,6 +92,10 @@ class PageCategory extends AppModel {
 			array(	'rule'		=> array('minLength', 1),
 					'message'	=> 'ページカテゴリ名を入力してください。',
 					'required'	=> true),
+			'alphaNumericPlus' => array(
+				'rule'			=>	'alphaNumericPlus',
+				'message'		=> 'ページカテゴリ名は半角英数字とハイフン、アンダースコアのみで入力してください。'
+			),
 			array(	'rule'		=> array('maxLength', 50),
 					'message'	=> 'ページカテゴリ名は50文字以内で入力してください。'),
 			array(  'rule'		=> array('duplicatePageCategory'),

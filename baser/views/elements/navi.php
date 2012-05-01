@@ -20,6 +20,9 @@
  * @license			http://basercms.net/license/index.html
  * @deprecated		2.0の次のバージョンで削除
  */
+if(Configure::read('BcRequest.isMaintenance')) {
+	return;
+}
 if ($this->viewPath == 'home'){
 	echo '<strong>ホーム</strong>';
 }else{

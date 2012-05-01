@@ -159,6 +159,8 @@ class BaserAppController extends Controller {
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
 			
+			$this->uses = null;
+			
 			$params = Router::parse(@$_SERVER['REQUEST_URI']);
 			
 			$this->setTheme($params);
@@ -212,7 +214,7 @@ class BaserAppController extends Controller {
 
 		parent::beforeFilter();
 		
-		if(!BC_INSTALLED) {
+		if(!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
 		
@@ -489,9 +491,11 @@ class BaserAppController extends Controller {
 		$this->set('help', $this->help);
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations') {
+		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
 			$this->set('user',$_SESSION['Auth']['User']);
-			$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+			if(!empty($this->params['admin'])) {
+				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+			}
 		}
 
 		/* 携帯用絵文字データの読込 */
@@ -510,30 +514,7 @@ class BaserAppController extends Controller {
  */
 	function getBaserVersion($plugin = '') {
 
-		$corePlugins = array('blog', 'feed', 'mail');
-		if(!$plugin || in_array($plugin, $corePlugins)) {
-			$path = BASER.'VERSION.txt';
-		} else {
-			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
-			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
-			if(file_exists($appPath)) {
-				$path = $appPath;
-			}elseif(file_exists($baserPath)) {
-				$path = $baserPath;
-			} else {
-				return false;
-			}
-		}
-
-		App::import('File');
-		$versionFile = new File($path);
-		$versionData = $versionFile->read();
-		$aryVersionData = split("\n",$versionData);
-		if(!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
-		}else {
-			return false;
-		}
+		return getVersion($plugin);
 
 	}
 /**

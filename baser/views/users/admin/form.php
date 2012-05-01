@@ -153,7 +153,7 @@ $(function(){
 				<?php echo $bcForm->label('User.password_1', 'パスワード') ?>
 			</th>
 			<td class="col-input">
-				<small>[パスワードは変更する場合のみ入力してください]</small><br />
+				<?php if($this->action == "admin_edit"): ?><small>[パスワードは変更する場合のみ入力してください]</small><br /><?php endif ?>
 				<?php echo $bcForm->input('User.password_1', array('type' => 'password', 'size' => 20, 'maxlength' => 255)) ?>
 				<?php echo $bcForm->input('User.password_2', array('type' => 'password', 'size' => 20, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
@@ -205,7 +205,7 @@ $(function(){
 	</ul>
 	<?php endif ?>
 	<?php if($session->check('AuthAgent') || $bcBaser->isAdminUser()): ?>
-	<div class="submit"><?php echo $bcForm->button($this->data['UserGroup']['title'].'グループの初期値に設定', array('label' => 'グループ初期値に設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button')) ?></div>
+	<div class="submit"><?php echo $bcForm->button($this->data['UserGroup']['title'].'グループの初期値に設定', array('label' => 'グループ初期データに設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button')) ?></div>
 	<?php endif ?>
 </div>
 <?php endif ?>

@@ -20,7 +20,8 @@
 /*    ContentsBody
 /* ==================================================================== */
 
-#ContentsBody li img{
+#ContentsBody li img,
+#ContentsBody p img {
 	vertical-align:middle;
 }
 .contents-body ul{
@@ -1125,4 +1126,10 @@ background: #333;
 	border-left:5px solid #DFDFDF;
 	padding:3px 10px;
 	background: none;
+}
+#Updaters #flashMessage {
+	color:#000;
+}
+#Updaters #flashMessage strong {
+	color:#F03;
 }

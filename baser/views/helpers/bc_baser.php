@@ -101,7 +101,7 @@ class BcBaserHelper extends AppHelper {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
-		if(BC_INSTALLED){
+		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -120,15 +120,20 @@ class BcBaserHelper extends AppHelper {
 			}else {
 				$this->PageCategory = ClassRegistry::init('PageCategory');
 			}
-
+		}
+		
+		if(BC_INSTALLED) {
 			if(isset($this->_view->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_view->viewVars['siteConfig'];
 			}
-
+		}
+		
+		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 			// プラグインのBaserヘルパを初期化
 			$this->_initPluginBasers();
 
 		}
+		
 
 	}
 /**
@@ -847,7 +852,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ページ公開チェック
-		if(empty($this->params['admin'])) {
+		if(isset($this->Page) && empty($this->params['admin'])) {
 			$adminPrefix = Configure::read('Routing.admin');
 			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
 				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {

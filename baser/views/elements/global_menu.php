@@ -17,6 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(Configure::read('BcRequest.isMaintenance')) {
+	return;
+}
 $prefix = '';
 if(Configure::read('BcRequest.agent')) {
 	$prefix = '/'.Configure::read('BcRequest.agentAlias');

@@ -138,8 +138,7 @@ function pageTypeChengeHandler() {
 				<?php echo $bcForm->error('PageCategory.name') ?>
 				<div class="helptext">
 					<ul>
-						<li>ページカテゴリ名はURLで利用します。</li>
-						<li>日本語の入力が可能です。</li>
+						<li>ページカテゴリー名はURLで利用します。</li>
 					</ul>
 				</div>
 			</td>
@@ -152,7 +151,7 @@ function pageTypeChengeHandler() {
 				<?php echo $bcForm->error('PageCategory.title') ?>
 				<div class="helptext">
 					<ul>
-						<li>ページカテゴリタイトルはTitleタグとして出力されます。</li>
+						<li>ページカテゴリータイトルはTitleタグとして出力されます。</li>
 					</ul>
 				</div>
 			</td>

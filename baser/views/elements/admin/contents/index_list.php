@@ -40,7 +40,7 @@
 <?php endif ?>
 			</th>
 			<th>NO</th>
-			<th>タイプ<br />カテゴリ</th>
+			<th>タイプ<br />カテゴリー</th>
 			<th>タイトル</th>
 			<th>コンテンツ内容</th>
 			<th>公開状態</th>

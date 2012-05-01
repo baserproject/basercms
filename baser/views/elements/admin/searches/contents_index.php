@@ -27,7 +27,7 @@ $types = unserialize($bcBaser->siteConfig['content_types']);
 <?php echo $bcForm->hidden('Content.open', array('value' => true)) ?>
 <p>
 	<span><?php echo $bcForm->label('Content.type', 'タイプ') ?> <?php echo $bcForm->input('Content.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $bcForm->label('Content.category', 'カテゴリ') ?> <?php echo $bcForm->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $bcForm->label('Content.category', 'カテゴリー') ?> <?php echo $bcForm->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
 	<span><?php echo $bcForm->label('Content.keyword', 'キーワード') ?> <?php echo $bcForm->input('Content.keyword', array('type' => 'text', 'size' => '30')) ?></span>
 	<span><?php echo $bcForm->label('Content.status', '公開状態') ?> 
 	<?php echo $bcForm->input('Content.status', array('type' => 'select', 'options' => $bcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　

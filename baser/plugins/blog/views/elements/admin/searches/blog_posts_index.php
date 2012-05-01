@@ -26,7 +26,7 @@ $users = $bcForm->getControlSource("BlogPost.user_id");
 <p>
 	<span><?php echo $bcForm->label('BlogPost.name', 'タイトル') ?> <?php echo $bcForm->input('BlogPost.name', array('type' => 'text', 'size' => '30')) ?></span>
 	<?php if($blogCategories): ?>
-	<span><?php echo $bcForm->label('BlogPost.blog_category_id', 'カテゴリ') ?> <?php echo $bcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $blogCategories, 'escape'=>false, 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $bcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?> <?php echo $bcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $blogCategories, 'escape'=>false, 'empty' => '指定なし')) ?></span>　
 	<?php endif ?>
 	<?php if($blogContent['BlogContent']['tag_use'] && $blogTags): ?>
 	<span><?php echo $bcForm->label('BlogPost.blog_tag_id', 'タグ') ?> <?php echo $bcForm->input('BlogPost.blog_tag_id', array('type' => 'select', 'options' => $blogTags, 'escape' => false, 'empty' => '指定なし')) ?></span>　

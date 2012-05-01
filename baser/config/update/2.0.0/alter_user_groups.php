@@ -1,12 +1,10 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Plugins schema generated on: 2010-11-04 18:11:10 : 1288863010*/
-class PluginsSchema extends CakeSchema {
-	var $name = 'Plugins';
+/* UserGroups schema generated on: 2012-03-23 13:03:39 : 1332478179*/
+class UserGroupsSchema extends CakeSchema {
+	var $name = 'UserGroups';
 
-	var $path = '/Users/ryuring/Documents/Projects/basercms/app/tmp/schemas/';
-
-	var $file = 'plugins.php';
+	var $file = 'user_groups.php';
 
 	var $connection = 'baser';
 
@@ -17,14 +15,15 @@ class PluginsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $plugins = array(
+	var $user_groups = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
-		'version' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
+		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
+		'default_favorites' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }

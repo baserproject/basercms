@@ -17,6 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(Configure::read('BcRequest.isMaintenance')) {
+	return;
+}
 if(!empty($this->passedArgs['num'])) {
 	$url = array('plugin' => null, 'controller' => 'contents', 'num' => $this->passedArgs['num']);
 } else {
@@ -26,7 +29,7 @@ if(!empty($this->passedArgs['num'])) {
 <div class="section search-box">
 <?php echo $bcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
 <?php if(unserialize($bcBaser->siteConfig['content_categories'])) : ?>
-<?php echo $bcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($bcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリ： 指定しない　')) ?>
+<?php echo $bcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($bcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 <?php endif ?>
 <?php echo $bcForm->input('Content.q') ?>
 <?php echo $bcForm->submit('検索', array('div'=>false)) ?>
