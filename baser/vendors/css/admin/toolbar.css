@@ -176,6 +176,8 @@ span#DebugMode{
 	padding-bottom: 5px;
 	margin:0;
 	display: none;
+	overflow: auto;
+	max-height: 400px;
 }
 #UserMenu .active div#SystemMenu div h2{
 	font-weight: bold;
