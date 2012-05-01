@@ -120,7 +120,7 @@
 /**
  * blog_contents データ更新
  */
-	App::import('Model', 'BlogContent');
+	App::import('Model', 'Blog.BlogContent');
 	$BlogContent = new BlogContent();
 	$blogContents = $BlogContent->find('all', array('cache' => false));
 	if($blogContents) {
@@ -141,15 +141,15 @@
 /**
  * mail_contents データ更新
  */
-	App::import('Model', 'MailContent');
+	App::import('Model', 'Mail.MailContent');
 	$MailContent = new MailContent();
-	$mailContnets=  $MailContent->find('all', array('cache' => false));
-	if($mailContnets) {
+	$mailContents=  $MailContent->find('all', array('cache' => false));
+	if($mailContents) {
 		$result = true;
-		foreach($mailContnets as $mailContnet) {
-			$mailContnet['BlogContent']['status'] = true;
-			$MailContnet->set($mailContnet);
-			if(!$MailContnet->save()) {
+		foreach($mailContents as $mailContent) {
+			$mailContent['MailContent']['status'] = true;
+			$MailContent->set($mailContent);
+			if(!$MailContent->save()) {
 				$result = false;
 			}
 		}
