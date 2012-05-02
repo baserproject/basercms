@@ -90,7 +90,7 @@
  * permissions データ更新
  */
 	App::import('Model', 'Permission');
-	App::import('Model', '$UserGroup');
+	App::import('Model', 'UserGroup');
 	$UserGroup = new UserGroup();
 	$Permission = new Permission();
 	$userGroups = $UserGroup->find('all', array('cache' => false, 'recursive' => -1));
