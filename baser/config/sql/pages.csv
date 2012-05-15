@@ -1,6 +1,5 @@
 "id","sort","name","title","description","contents","page_category_id","status","url","draft","author_id","publish_begin","publish_end","exclude_search","modified","created"
-"","1","index","","","<?php echo $bcBaser->css(""top"", array(""inline"" => true)) ?>
-
+"","1","index","","","
 
 <div id=""news"" class=""clearfix"">
 <div class=""news"" style=""margin-right:28px;"">
