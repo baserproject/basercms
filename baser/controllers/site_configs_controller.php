@@ -91,7 +91,7 @@ class SiteConfigsController extends AppController {
 
 				$mode = 0;
 				$smartUrl = false;
-				$siteUrl = $sslUrl = $adminSslOn = '';
+				$siteUrl = $sslUrl = '';
 				if(isset($this->data['SiteConfig']['mode'])) {
 					$mode = $this->data['SiteConfig']['mode'];
 				}
@@ -274,7 +274,7 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['smart_url'] = $this->readSmartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
-		$data['SiteConfig']['admin_ssl'] = Configure::read('Baser.adminSslOn');
+		$data['SiteConfig']['admin_ssl'] = Configure::read('BcApp.adminSsl');
 		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
 		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {
