@@ -560,6 +560,11 @@ class BlogPost extends BlogAppModel {
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);
 		unset($data['BlogPost']['modified']);
+		if(!empty($data['BlogTag'])) {
+			foreach($data['BlogTag'] as $key => $tag) {
+				$data['BlogTag'][$key] = $tag['id'];
+			}
+		}
 		
 		$this->create($data);
 		$result = $this->save();
