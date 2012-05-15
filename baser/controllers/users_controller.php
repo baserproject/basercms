@@ -183,6 +183,7 @@ class UsersController extends AppController {
 			$this->Session->write('AuthAgent', $user);
 		}
 		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		Configure::write('debug', 0);
 		$this->setAction('admin_ajax_login');
 		exit();
 	}
@@ -233,9 +234,12 @@ class UsersController extends AppController {
 			}
 		}
 
+		Configure::write('debug', 0);
+		
 		if ($user) {
 			exit(Router::url($this->BcAuth->redirect()));
 		}
+		
 		exit();
 		
 	}
