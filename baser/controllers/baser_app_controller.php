@@ -191,9 +191,6 @@ class BaserAppController extends Controller {
 			}
 		}
 		
-		// テンプレートの拡張子
-		$this->ext = Configure::read('BcApp.templateExt');
-		
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->params['prefix']を利用できない為。
@@ -383,6 +380,11 @@ class BaserAppController extends Controller {
 
 		parent::beforeRender();
 
+		// テンプレートの拡張子
+		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
+		// beforeRenderにて設定する仕様にした
+		$this->ext = Configure::read('BcApp.templateExt');
+		
 		// モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
 		// エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
 		// 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。

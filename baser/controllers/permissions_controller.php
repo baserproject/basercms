@@ -337,10 +337,10 @@ class PermissionsController extends AppController {
  * @return boolean
  * @access	public
  */
-	function admin_ajax_update_sort () {
+	function admin_ajax_update_sort ($userGroupId) {
 
 		if($this->data){
-			$conditions = $this->_createAdminIndexConditions($this->data);
+			$conditions = $this->_createAdminIndexConditions($userGroupId);
 			if($this->Permission->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
 				echo true;
 			} else {
@@ -377,7 +377,7 @@ class PermissionsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($id) {
+	function admin_ajax_copy($userGroupId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');

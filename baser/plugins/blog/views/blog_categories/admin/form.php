@@ -110,6 +110,8 @@ $(window).load(function() {
 	<?php endif ?>
 	</table>
 </div>
+
+
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
