@@ -221,6 +221,9 @@ class BaserAppController extends Controller {
 		// テーマのヘルパーをセット
 		$this->setThemeHelpers();
 		
+		// テンプレートの拡張子
+		$this->ext = Configure::read('BcApp.templateExt');
+		
 		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -382,7 +385,7 @@ class BaserAppController extends Controller {
 
 		// テンプレートの拡張子
 		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
-		// beforeRenderにて設定する仕様にした
+		// beforeRenderでも再設定する仕様にした
 		$this->ext = Configure::read('BcApp.templateExt');
 		
 		// モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
