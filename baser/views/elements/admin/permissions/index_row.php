@@ -37,7 +37,7 @@
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_unpublish.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Permission']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_publish.png', array('width' => 24, 'height' => 24, 'alt' => '有効', 'class' => 'btn')), array('action' => 'ajax_publish', $data['Permission']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $this->params['pass'][0], $data['Permission']['id']), array('title' => '編集')) ?>
-		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['Permission']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $this->params['pass'][0], $data['Permission']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 <?php if($data['Permission']['name']!='admins'): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Permission']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 <?php endif ?>

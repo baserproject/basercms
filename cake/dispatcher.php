@@ -531,9 +531,17 @@ class Dispatcher extends Object {
 		} else {
 			$uri = env('QUERY_STRING');
 		}
-		if (is_string($uri) && strpos($uri, 'index.php') !== false) {
+		
+		// CUSTOMIZE 2012/05/31
+		// テーマファイル編集にて、ファイル名称が「index.php 」となっているファイルを編集する場合、
+		// URLが正常に取得できなくなってしまう。
+		// $uri には、$base が除外されたURLが入ってくるようなので処理自体が不要と判断しコメントアウト
+		// >>>
+		/*if (is_string($uri) && strpos($uri, 'index.php') !== false) {
 			list(, $uri) = explode('index.php', $uri, 2);
-		}
+		}*/
+		// <<<
+		
 		if (empty($uri) || $uri == '/' || $uri == '//') {
 			return '';
 		}

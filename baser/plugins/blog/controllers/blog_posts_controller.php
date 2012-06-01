@@ -693,9 +693,11 @@ class BlogPostsController extends BlogAppController {
 		
 		$result = $this->BlogPost->copy($id);
 		if($result) {
-			$result['BlogPost']['id'] = $this->BlogPost->getInsertID();
+			// タグ情報を取得するため読み込みなおす
+			$this->BlogPost->recursive = 1;
+			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
-			$this->set('data', $result);
+			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);
 		}

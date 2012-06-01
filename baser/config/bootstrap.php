@@ -57,7 +57,9 @@
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
 	$uri = @$_SERVER['REQUEST_URI'];
-	if (strpos($uri, BC_BASE_URL.'css/') !== false || strpos($uri, BC_BASE_URL.'js/') !== false || strpos($uri, BC_BASE_URL.'img/') !== false) {
+	if (preg_match('/^'.preg_quote(BC_BASE_URL, '/').'css\//', $uri) || 
+			preg_match('/^'.preg_quote(BC_BASE_URL, '/').'js\//', $uri) || 
+			preg_match('/^'.preg_quote(BC_BASE_URL, '/').'img\//', $uri)) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){

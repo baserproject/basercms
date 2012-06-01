@@ -197,7 +197,7 @@ class ThemeFilesController extends AppController {
 			if($type=='css' || $type == 'js') {
 				$ext = $type;
 			}else {
-				$ext = 'ctp';
+				$ext = 'php';
 			}
 			$this->data['ThemeFile']['ext'] = $ext;
 			$this->data['ThemeFile']['parent'] = $fullpath;

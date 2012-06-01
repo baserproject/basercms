@@ -2854,6 +2854,19 @@ class DboSource extends DataSource {
 			$path = $Schema->path;
 		}
 
+		// CakeSchema では、hasAndBelongsToMany に設定されているモデルも同時に書き出す仕様となっている為、
+		// 書き出さないように変更した。
+		// バックアップファイルの生成で問題が発生した為
+		foreach($model as $value) {
+			if (PHP5) {
+				$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
+			} else {
+				$Object =& ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
+			}
+			$Object->hasAndBelongsToMany = null;
+		}
+		
+		
 		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => $model));
 		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
