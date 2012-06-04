@@ -298,7 +298,7 @@ if(BC_INSTALLED) {
 		if(preg_match('/^admin/', $parameter)) {
 			sendUpdateMail();
 			$message = 'baserCMSのアップデートURLを管理者メールアドレスに送信しました。<br /><br />メールが届かない場合は、管理者メールアドレスの設定がうまくいっていない可能性があります。<br />'.
-						'baserCMSのバージョンを前のバージョンに戻してシステム設定よりメール設定を行うか、<br />データベースの site_configs テーブルでメール設定を直接調整してください。';
+						'baserCMSのバージョンを前のバージョンに戻してシステム設定よりメール設定を行うか、<br />データベースの site_configs テーブルでメール設定を直接調整し、管理システムのURLへ再度アクセスしてください。';
 			$layout = 'default';
 			$Session->write('Message.flash', compact('message', 'layout'));
 		}
