@@ -141,6 +141,9 @@ class BaserAppController extends Controller {
 
 		parent::__construct();
 		
+		// テンプレートの拡張子
+		$this->ext = Configure::read('BcApp.templateExt');
+		
 		if(BC_INSTALLED) {
 			
 			// サイト基本設定の読み込み
@@ -220,9 +223,6 @@ class BaserAppController extends Controller {
 		
 		// テーマのヘルパーをセット
 		$this->setThemeHelpers();
-		
-		// テンプレートの拡張子
-		$this->ext = Configure::read('BcApp.templateExt');
 		
 		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
