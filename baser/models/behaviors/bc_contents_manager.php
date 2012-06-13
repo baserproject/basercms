@@ -113,8 +113,8 @@ class BcContentsManagerBehavior extends ModelBehavior {
 		$db = ConnectionManager::getDataSource('baser');
 		$contentCategories = array();
 		$contentTypes = array();
-		if($db->config['driver']=='csv') {
-			// CSVの場合GROUP BYが利用できない（baserCMS 1.6.11）
+		if($db->config['driver']=='bc_csv') {
+			// CSVの場合GROUP BYが利用できない（baserCMS 2.0.2）
 			$contents = $this->Content->find('all', array('conditions' => array('Content.status' => true)));
 			foreach($contents as $content) {
 				if($content['Content']['category'] && !in_array($content['Content']['category'], $contentCategories)) {
