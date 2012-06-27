@@ -413,7 +413,12 @@ class BcFormHelper extends FormHelper {
 		}
 
 		if($value) {
-			$attributes['value'] = date('Y/m/d',strtotime($this->BcTime->format('Y/m/d',$value)));
+			$value = $this->BcTime->format('Y/m/d',$value);
+			if($value) {
+				$attributes['value'] = date('Y/m/d',strtotime($value));
+			} else {
+				$attributes['value'] = '';
+			}
 		}else {
 			unset($attributes['value']);
 		}
