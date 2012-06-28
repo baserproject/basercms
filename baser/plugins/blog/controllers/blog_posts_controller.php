@@ -666,7 +666,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _changeStatus($id, $status) {
 		
-		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
+		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => -1));
 		$data['BlogPost']['status'] = $status;
 		$data['BlogPost']['publish_begin'] = '';
