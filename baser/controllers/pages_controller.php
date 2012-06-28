@@ -1146,6 +1146,9 @@ class PagesController extends AppController {
 		if(!empty($user)) {
 			$allowOwners = array('', $user['User']['user_group_id']);
 		}
+		if(!isset($this->passedArgs['sortmode'])) {
+			$this->passedArgs['sortmode'] = false;
+		}
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('allowOwners', $allowOwners);
 		$this->set('sortmode', $this->passedArgs['sortmode']);
