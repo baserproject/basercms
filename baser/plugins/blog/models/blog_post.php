@@ -488,7 +488,15 @@ class BlogPost extends BlogAppModel {
 		if(!$this->data['BlogPost']['exclude_search']) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
-			$this->deleteContent($this->data['BlogPost']['id']);
+			
+			if (!empty($this->data['BlogPost']['id'])) {
+				$this->deleteContent($this->data['BlogPost']['id']);
+			} elseif (!empty($this->id)) {
+				$this->deleteContent($this->id);
+			} else {
+				$this->cakeError('Not found pk-value in BlogPost.');
+			}
+			
 		}
 		
 	}
