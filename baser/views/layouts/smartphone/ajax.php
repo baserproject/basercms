@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include LIBS.'view'.DS.'layouts'.DS.'ajax.php';
+include LIBS.'view'.DS.'layouts'.DS.'ajax.ctp';
 ?>
