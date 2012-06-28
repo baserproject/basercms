@@ -91,19 +91,19 @@
 		/*'mypage' => array(
 			'alias'			=> 'mypage',
 			'prefix'		=> 'mypage',
-			'loginRedirect'=>'/mypage/users/index',
+			'loginRedirect'=>'/mypage/members/edit',
 			'loginTitle'=>'マイページログイン',
 			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/users/login'
+			'loginAction'	=> '/mypage/members/login'
 		),*/
 		// モバイルマイページ
 		/*'mobile_mypage' => array(
 			'alias'			=> 'mobile_mypage',
 			'prefix'		=> 'mobile_mypage',
-			'loginRedirect'=>'/m/mypage/users/index',
+			'loginRedirect'=>'/m/mypage/members/edit',
 			'loginTitle'=>'マイページログイン',
 			'userModel'		=> 'User',
-			'loginAction'	=> '/m/mypage/users/login',
+			'loginAction'	=> '/m/mypage/members/login',
 			'userScope'		=> array('User.user_group_id' => 1)
 		)*/
 	);
