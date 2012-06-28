@@ -220,13 +220,14 @@ class BlogHelper extends AppHelper {
 		}
 
 		$out =	'<div class="post-body">'.$post['BlogPost']['content'].'</div>';
-		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
-			$out .= '<p class="more">'.$this->Html->link($moreText, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
-		}elseif($moreText && $post['BlogPost']['detail']) {
+		if($moreText && $post['BlogPost']['detail']) {
 			$out .=	'<div id="post-detail">'.$post['BlogPost']['detail'].'</div>';
 		}
 		if($cut) {
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
+		}
+		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
+			$out .= '<p class="more">'.$this->Html->link($moreText, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
 		}
 		return $out;
 
