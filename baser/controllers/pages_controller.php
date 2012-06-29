@@ -648,7 +648,9 @@ class PagesController extends AppController {
 		$this->params['controller'] = 'pages';
 		$this->params['action'] = 'display';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
-		$this->crumbs = $this->_getCrumbs($this->params['url']['url']);
+		Configure::write('BcRequest.pureUrl', $this->params['url']['url']);
+		$this->here = $this->base.'/'.$this->params['url']['url'];
+		$this->crumbs = $this->_getCrumbs('/'.$this->params['url']['url']);
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);
