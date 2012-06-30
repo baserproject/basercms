@@ -8,11 +8,11 @@ class SiteConfigsSchema extends CakeSchema {
 
 	public $connection = 'baser';
 
-	function before($event = array()) {
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
 	public $site_configs = array(

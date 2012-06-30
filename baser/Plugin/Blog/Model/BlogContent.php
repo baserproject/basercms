@@ -115,7 +115,7 @@ class BlogContent extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function alphaNumeric($check) {
+	public function alphaNumeric($check) {
 
 		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
 			return true;
@@ -131,7 +131,7 @@ class BlogContent extends BlogAppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field = null,$options = array()) {
+	public function getControlSource($field = null,$options = array()) {
 
 		$controlSources['id'] = $this->find('list');
 
@@ -148,7 +148,7 @@ class BlogContent extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 
 		if(empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();
@@ -169,7 +169,7 @@ class BlogContent extends BlogAppModel {
  * @return	boolean
  * @access	public
  */
-	function beforeDelete() {
+	public function beforeDelete() {
 
 		return $this->deleteContent($this->id);
 
@@ -181,7 +181,7 @@ class BlogContent extends BlogAppModel {
  * @return array
  * @access public
  */
-	function createContent($data) {
+	public function createContent($data) {
 
 		if(isset($data['BlogContent'])) {
 			$data = $data['BlogContent'];
@@ -206,7 +206,7 @@ class BlogContent extends BlogAppModel {
  * @param array $data
  * @return mixed BlogContent Or false
  */
-	function copy($id, $data = null) {
+	public function copy($id, $data = null) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
@@ -235,7 +235,7 @@ class BlogContent extends BlogAppModel {
  * @return void
  * @access protected
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 
 		$data['BlogContent']['comment_use'] = true;
 		$data['BlogContent']['comment_approve'] = false;

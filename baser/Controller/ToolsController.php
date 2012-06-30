@@ -68,7 +68,7 @@ class ToolsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_maintenance($mode='') {
+	public function admin_maintenance($mode='') {
 
 		switch($mode) {
 			case 'backup':
@@ -107,7 +107,7 @@ class ToolsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _restoreDb($data){
+	protected function _restoreDb($data){
 		
 		if(empty($data['Tool']['backup']['tmp_name'])){
 			return false;
@@ -149,7 +149,7 @@ class ToolsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _loadBackup($path, $configKeyName) {
+	protected function _loadBackup($path, $configKeyName) {
 
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
@@ -195,7 +195,7 @@ class ToolsController extends AppController {
  * @return void
  * @access protected
  */
-	function _backupDb() {
+	protected function _backupDb() {
 
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
@@ -221,7 +221,7 @@ class ToolsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _writeBackup($configKeyName, $path) {
+	protected function _writeBackup($configKeyName, $path) {
 
 		$db =& ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
@@ -249,7 +249,7 @@ class ToolsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_write_schema() {
+	public function admin_write_schema() {
 
 		$path = TMP.'schemas'.DS;
 		
@@ -286,7 +286,7 @@ class ToolsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_load_schema() {
+	public function admin_load_schema() {
 		
 		if(!$this->request->data) {
 			$this->request->data['Tool']['schema_type'] = 'create';
@@ -318,7 +318,7 @@ class ToolsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _resetTmpSchemaFolder() {
+	protected function _resetTmpSchemaFolder() {
 		
 		$path = TMP.'schemas'.DS;
 		return emptyFolder($path);

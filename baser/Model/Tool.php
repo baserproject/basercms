@@ -43,7 +43,7 @@ class Tool extends AppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource ($field) {
+	public function getControlSource ($field) {
 
 		// スキーマ用モデルリスト
 		$controlSources['connection'] = array('baser'=>'baser（コア）','plugin'=>'plugin（プラグイン）');
@@ -63,7 +63,7 @@ class Tool extends AppModel {
  * @return array
  * @access public
  */
-	function getListModels($configKeyName = 'baser'){
+	public function getListModels($configKeyName = 'baser'){
 
 		$db =& ConnectionManager::getDataSource($configKeyName);
 		$listSources = $db->listSources();
@@ -88,7 +88,7 @@ class Tool extends AppModel {
  * @return boolean
  * @access public
  */
-	function writeSchema($data, $path){
+	public function writeSchema($data, $path){
 		
 		if(isset($data['Tool'])){
 			$data = $data['Tool'];
@@ -120,7 +120,7 @@ class Tool extends AppModel {
  * @return boolean
  * @access public
  */
-	function loadSchema($data, $tmpPath) {
+	public function loadSchema($data, $tmpPath) {
 		
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if(move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
@@ -148,7 +148,7 @@ class Tool extends AppModel {
  * @return boolean
  * @access protected
  */
-	function _writeSchema($field, $values, $path) {
+	protected function _writeSchema($field, $values, $path) {
 
 		$db =& ConnectionManager::getDataSource($field);
 		$prefix = $db->config['prefix'];

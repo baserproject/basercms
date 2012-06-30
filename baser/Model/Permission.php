@@ -97,7 +97,7 @@ class Permission extends AppModel {
  * @return boolean True if the operation should continue, false if it should abort
  * @access public
  */
-	function checkUrl($check) {
+	public function checkUrl($check) {
 
 		if(!$check[key($check)]) {
 			return true;
@@ -132,7 +132,7 @@ class Permission extends AppModel {
  * @return string
  * @access public
  */
-	function getAuthPrefix($id) {
+	public function getAuthPrefix($id) {
 
 		// CSV の場合、他テーブルの fields を指定するとデータが取得できない
 		$data = $this->find('first', array(
@@ -152,7 +152,7 @@ class Permission extends AppModel {
  * @return array
  * @access public
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 		
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
@@ -166,7 +166,7 @@ class Permission extends AppModel {
  * @return array コントロールソース
  * @access	public
  */
-	function getControlSource($field = null) {
+	public function getControlSource($field = null) {
 
 		$controlSources['user_group_id'] = $this->UserGroup->find('list',array('conditions'=>array('UserGroup.id <>'=>1)));
 		$controlSources['auth'] = array('0'=>'不可','1'=>'可');
@@ -184,7 +184,7 @@ class Permission extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeSave($options) {
+	public function beforeSave($options) {
 		
 		if(isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
@@ -209,7 +209,7 @@ class Permission extends AppModel {
  * @return boolean
  * @access public
  */
-	function check($url, $userGroupId) {
+	public function check($url, $userGroupId) {
 
 		if($this->permissionsTmp === -1) {
 			$conditions = array('Permission.user_group_id' => $userGroupId);
@@ -281,7 +281,7 @@ class Permission extends AppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data = array()) {
+	public function copy($id, $data = array()) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));

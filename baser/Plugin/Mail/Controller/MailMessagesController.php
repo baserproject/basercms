@@ -81,7 +81,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function  beforeFilter() {
+	public function  beforeFilter() {
 		
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
@@ -99,7 +99,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 
 		parent::beforeRender();
 		$this->set('mailContent',$this->mailContent);
@@ -112,7 +112,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_index($mailContentId) {
+	public function admin_index($mailContentId) {
 
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('MailMessage', array('default' => $default));
@@ -140,7 +140,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_view($mailContentId, $messageId){
+	public function admin_view($mailContentId, $messageId){
 
 		if(!$mailContentId || !$messageId) {
 			$this->Session->setFlash('無効な処理です。');
@@ -168,7 +168,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		if($ids) {
 			foreach($ids as $id) {
 				$this->_del($id);
@@ -184,7 +184,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($mailContentId, $messageId) {
+	public function admin_ajax_delete($mailContentId, $messageId) {
 
 		if(!$messageId) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -203,7 +203,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function _del($id = null) {
+	protected function _del($id = null) {
 		if($this->Message->del($id)) {
 			$message = '受信データ NO「'.$id.'」 を削除しました。';
 			$this->Message->saveDbLog($message);
@@ -222,7 +222,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_delete($mailContentId, $messageId) {
+	public function admin_delete($mailContentId, $messageId) {
 
 		if(!$mailContentId || !$messageId) {
 			$this->Session->setFlash('無効な処理です。');

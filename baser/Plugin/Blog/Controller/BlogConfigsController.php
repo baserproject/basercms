@@ -70,7 +70,7 @@ class BlogConfigsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		if($this->params['prefix']=='admin') {
@@ -84,7 +84,7 @@ class BlogConfigsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_form() {
+	public function admin_form() {
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogConfig->read(null, 1);

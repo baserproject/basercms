@@ -29,7 +29,7 @@
  * 
  * @return string ベースURL
  */
-	function baseUrl() {
+	public function baseUrl() {
 
 		$baseUrl = Configure::read('App.baseUrl');
 		if($baseUrl) {
@@ -79,7 +79,7 @@
  *
  * @return string   ドキュメントルートの絶対パス
  */
-	function docRoot() {
+	public function docRoot() {
 
 		if(empty($_SERVER['SCRIPT_NAME'])) {
 			return '';
@@ -108,7 +108,7 @@
  * @param string    baserCMS形式のバージョン表記　（例）baserCMS 1.5.3.1600 beta
  * @return string   リビジョン番号
  */
-	function revision($version) {
+	public function revision($version) {
 		return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
 	}
 /**
@@ -120,7 +120,7 @@
  * 
  * @param mixed $version Or false
  */
-	function verpoint($version) {
+	public function verpoint($version) {
 		$version = str_replace('baserCMS ', '', $version);
 		if(preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
 			if(isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
@@ -144,7 +144,7 @@
  * @return	string	拡張子
  * @access	public
  */
-	function decodeContent($content,$fileName=null) {
+	public function decodeContent($content,$fileName=null) {
 
 		$contentsMaping=array(
 				"image/gif" => "gif",
@@ -207,7 +207,7 @@
  * モバイルプレフィックスは除外する
  * bootstrap実行後でのみ利用可
  */
-	function getUrlParamFromEnv() {
+	public function getUrlParamFromEnv() {
 		
 		$agentAlias = Configure::read('BcRequest.agentAlias');
 		$url = getUrlFromEnv();
@@ -222,7 +222,7 @@
  * baseUrlは除外する
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
-	function getUrlFromEnv() {
+	public function getUrlFromEnv() {
 		
 		if(!empty($_GET['url'])) {
 			return preg_replace('/^\//', '', $_GET['url']);
@@ -295,7 +295,7 @@
  * @return	void
  * @access	public
  */
-	function clearViewCache($url=null,$ext='.php') {
+	public function clearViewCache($url=null,$ext='.php') {
 
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
@@ -347,7 +347,7 @@
 /**
  * データキャッシュを削除する
  */
-	function clearDataCache() {
+	public function clearDataCache() {
 		
 		App::import('Core','Folder');
 		$folder = new Folder(CACHE.'datas'.DS);
@@ -361,7 +361,7 @@
 /**
  * キャッシュファイルを全て削除する
  */
-	function clearAllCache() {
+	public function clearAllCache() {
 
 		/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
 			Cache::clear();
@@ -392,7 +392,7 @@
  * baserCMSのインストールが完了しているかチェックする
  * @return	boolean
  */
-	function isInstalled () {
+	public function isInstalled () {
 		
 		if(getDbConfig() && file_exists(APP . 'Config' . DS.'install.php')){
 			return true;
@@ -406,7 +406,7 @@
  * @param string $name
  * @return mixed DatabaseConfig Or false 
  */
-	function getDbConfig($name = 'baser') {
+	public function getDbConfig($name = 'baser') {
 		
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
 			require_once APP . 'Config' . DS.'database.php';
@@ -422,7 +422,7 @@
  * 必要な一時フォルダが存在するかチェックし、
  * なければ生成する
  */
-	function checkTmpFolders(){
+	public function checkTmpFolders(){
 
 		if(!is_writable(TMP)){
 			return;
@@ -448,7 +448,7 @@
  * @param	string	$path
  * @return	boolean
  */
-	function emptyFolder($path) {
+	public function emptyFolder($path) {
 
 		$result = true;
 		$Folder = new Folder($path);
@@ -477,7 +477,7 @@
  *
  * @return string
  */
-	function getViewPath() {
+	public function getViewPath() {
 
 		if (ClassRegistry::isKeySet('SiteConfig')) {
 			$SiteConfig = ClassRegistry::getObject('SiteConfig');
@@ -502,7 +502,7 @@
  * @param 	string	enclosure
  * @return	mixed	ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
  */
-	function fgetcsvReg (&$handle, $length = null, $d = ',', $e = '"') {
+	public function fgetcsvReg (&$handle, $length = null, $d = ',', $e = '"') {
 		$d = preg_quote($d);
 		$e = preg_quote($e);
 		$_line = "";
@@ -528,7 +528,7 @@
  * @param	mixed	$url
  * @return	string
  */
-	function fullUrl($url) {
+	public function fullUrl($url) {
 		$url = Router::url($url);
 		return topLevelUrl(false).$url;
 	}
@@ -538,7 +538,7 @@
  * @param	boolean	$lastSlash
  * @return	string
   */
-	function topLevelUrl($lastSlash = true) {
+	public function topLevelUrl($lastSlash = true) {
 		$protocol = 'http://';
 		if(!empty($_SERVER['HTTPS'])) {
 			$protocol = 'https://';
@@ -557,7 +557,7 @@
  *
  * @return	string
  */
-	function siteUrl() {
+	public function siteUrl() {
 		$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
 		return topLevelUrl(false).$baseUrl;
 	}
@@ -568,7 +568,7 @@
  * @param	array	$b
  * @return	array
  */
-	function amr($a, $b) {
+	public function amr($a, $b) {
 
 		foreach ($b as $k => $v) {
 			if(is_array($v)) {
@@ -591,7 +591,7 @@
  * @param string $name
  * @return boolean
  */
-	function loadPluginConfig($name) {
+	public function loadPluginConfig($name) {
 
 		if(strpos($name, '.') === false) {
 			return false;
@@ -624,7 +624,7 @@
  * @param mixed $url
  * @return mixed
  */
-	function addSessionId($url, $force = false) {
+	public function addSessionId($url, $force = false) {
 		
 		// use_trans_sid が有効になっている場合、２重で付加されてしまう
 		if(Configure::read('BcRequest.agent') == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
@@ -676,7 +676,7 @@
  * 
  * @return array
  */
-	function getEnablePlugins() {
+	public function getEnablePlugins() {
 		
 		$enablePlugins = array();
 		if(!Configure::read('Cache.disable')) {
@@ -708,7 +708,7 @@
  * 
  * @return void
  */
-	function loadSiteConfig() {
+	public function loadSiteConfig() {
 		
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		Configure::write('BcSite', $SiteConfig->findExpanded());
@@ -720,7 +720,7 @@
  * 
  * @return string Or false
  */
-	function getVersion($plugin = '') {
+	public function getVersion($plugin = '') {
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		if(!$plugin || in_array($plugin, $corePlugins)) {
 			$path = BASER.'VERSION.txt';
@@ -750,7 +750,7 @@
 /**
  * アップデートのURLを記載したメールを送信する 
  */
-	function sendUpdateMail() {
+	public function sendUpdateMail() {
 
 		$bcSite = Configure::read('BcSite');
 		$bcSite['update_id'] = String::uuid();

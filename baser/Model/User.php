@@ -149,7 +149,7 @@ class User extends AppModel {
  * @return boolean True if there are no errors
  * @access public
  */
-	function validates($options = array()) {
+	public function validates($options = array()) {
 		
 		$result = parent::validates($options);
 		if(isset($this->validationErrors['password'])) {
@@ -166,7 +166,7 @@ class User extends AppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field) {
+	public function getControlSource($field) {
 
 		switch($field) {
 			
@@ -191,7 +191,7 @@ class User extends AppModel {
  * @return array
  * @access public
  */
-	function getUserList($conditions = array()) {
+	public function getUserList($conditions = array()) {
 
 		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2'), 'conditions'=>$conditions));
 		$list = array();
@@ -216,7 +216,7 @@ class User extends AppModel {
  * @return array 初期値データ
  * @access public
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 
 		$data[$this->alias]['user_group_id'] = 1;
 		return $data;
@@ -230,7 +230,7 @@ class User extends AppModel {
  * @return array 結果セット
  * @access	public
  */
-	function afterFind($results, $primary = false) {
+	public function afterFind($results, $primary = false) {
 
 		if(isset($results[0][$this->alias][0])) {
 			$results[0][$this->alias] = $this->convertResults($results[0][$this->alias]);
@@ -248,7 +248,7 @@ class User extends AppModel {
  * @return array 結果セット
  * @access public
  */
-	function convertResults($results) {
+	public function convertResults($results) {
 
 		if($results) {
 			if(isset($result[$this->alias])||isset($results[0][$this->alias])) {
@@ -275,7 +275,7 @@ class User extends AppModel {
  * @return array 結果セット
  * @access public
  */
-	function convertToView($data) {
+	public function convertToView($data) {
 
 		return $data;
 
@@ -286,7 +286,7 @@ class User extends AppModel {
  * @param string $userName
  * @return string
  */
-	function getAuthPrefix($userName) {
+	public function getAuthPrefix($userName) {
 
 		$user = $this->find('first', array(
 			'conditions'	=> array("{$this->alias}.name"=>$userName),
@@ -306,7 +306,7 @@ class User extends AppModel {
  * @param boolean $created 
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 		parent::afterSave($created);
 		if($created) {
 			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data[$this->alias]['user_group_id']));

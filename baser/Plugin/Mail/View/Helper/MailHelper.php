@@ -45,7 +45,7 @@ class MailHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function __construct() {
+	public function __construct() {
 
 		$this->_view =& ClassRegistry::getObject('view');
 		$this->setMailContent();
@@ -56,7 +56,7 @@ class MailHelper extends AppHelper {
  *
  * @param int $mailContentId
  */
-	function setMailContent($mailContentId = null) {
+	public function setMailContent($mailContentId = null) {
 
 		if(isset($this->mailContent) && !$mailContentId) {
 			return;
@@ -78,7 +78,7 @@ class MailHelper extends AppHelper {
  * @access public
  * @deprecated ツールバーに移行
  */
-	function indexFields($mailContentId) {
+	public function indexFields($mailContentId) {
 
 		if(!empty($this->BcBaser->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
@@ -92,7 +92,7 @@ class MailHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getLayoutTemplates() {
+	public function getLayoutTemplates() {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
@@ -137,7 +137,7 @@ class MailHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getFormTemplates() {
+	public function getFormTemplates() {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
@@ -178,7 +178,7 @@ class MailHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getMailTemplates() {
+	public function getMailTemplates() {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
@@ -216,14 +216,14 @@ class MailHelper extends AppHelper {
  * メールの説明文を取得する
  * @return string
  */
-	function getDescription() {
+	public function getDescription() {
 		return $this->mailContent['description'];
 	}
 /**
  * メールの説明文を表示する
  * @return void
  */
-	function description() {
+	public function description() {
 		echo $this->getDescription();
 	}
 /**
@@ -232,7 +232,7 @@ class MailHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function descriptionExists() {
+	public function descriptionExists() {
 
 		if(!empty($this->mailContent['description'])) {
 			return true;

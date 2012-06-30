@@ -74,7 +74,7 @@ class GlobalMenu extends AppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field = null) {
+	public function getControlSource($field = null) {
 
 		$controlSources['menu_type'] = array('default'=>'公開ページ','admin'=>'管理画面');
 		return $controlSources[$field];

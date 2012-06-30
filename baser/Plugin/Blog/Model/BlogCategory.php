@@ -94,7 +94,7 @@ class BlogCategory extends BlogAppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field,$options = array()) {
+	public function getControlSource($field,$options = array()) {
 
 		switch($field) {
 			case 'parent_id':
@@ -160,7 +160,7 @@ class BlogCategory extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function duplicateBlogCategory($check) {
+	public function duplicateBlogCategory($check) {
 
 		$conditions = array('BlogCategory.'.key($check)=>$check[key($check)],
 				'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
@@ -182,7 +182,7 @@ class BlogCategory extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function beforeDelete($cascade = true) {
+	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
 		$ret = true;
 		if(!empty($this->data['BlogCategory']['id'])){
@@ -209,7 +209,7 @@ class BlogCategory extends BlogAppModel {
  * @return array
  * @access public
  */
-	function getCategoryList($blogContentId, $options) {
+	public function getCategoryList($blogContentId, $options) {
 
 		$options = array_merge(array(
 			'depth'		=> 1,
@@ -255,7 +255,7 @@ class BlogCategory extends BlogAppModel {
  * @param array $fields
  * @return array
  */
-	function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = array()) {
+	protected function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = array()) {
 		
 		$datas = $this->find('all',array(
 			'conditions'=>array('BlogCategory.blog_content_id' => $blogContentId, 'BlogCategory.parent_id' => $id),
@@ -293,7 +293,7 @@ class BlogCategory extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
 		
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(

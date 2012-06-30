@@ -20,53 +20,53 @@ class DbRestore {
  * @var string
  * @access private
  */
-	protected $_dbType = null;
+	var $_dbType = null;
 /**
  * データベース名
  * @var string
  * @access private
  */
-	protected $_dbName = null;
+	var $_dbName = null;
 /**
  * ホスト名
  * @var string
  * @access private
  */
-	protected $_dbHost = null;
+	var $_dbHost = null;
 /**
  * ユーザー名
  * @var string
  * @access private
  */
-	protected $_dbUser = null;
+	var $_dbUser = null;
 /**
  * パスワード
  * @var string
  * @access private
  */
-	protected $_dbPassword = null;
+	var $_dbPassword = null;
 /**
  * ポート
  * @var string
  */
-	protected $_dbPort = null;
+	var $_dbPort = null;
 /**
  * DBリンク
  * @var resource
  * @access private
  */
-	protected $_dbLink = false;
+	var $_dbLink = false;
 /**
  * 初期状態のテーブル一覧
  * @var array
  * @access private
  */
-	protected $_initialTables = array();
+	var $_initialTables = array();
 /**
  * CREATE TABLE は存在しない場合のみに実行する
  * @var boolean
  */
-	public $creatingIfNotExists = true;
+	var $creatingIfNotExists = true;
 /**
  * コンストラクタ
  * @param string $db データベース名

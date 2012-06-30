@@ -34,7 +34,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return array Array of alter statements to make.
  * @access public
  */
-	function alterSchema($compare, $table = null) {
+	public function alterSchema($compare, $table = null) {
 		
 		if (!is_array($compare)) {
 			return false;
@@ -92,7 +92,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return array Fields in table. Keys are column and unique
  * @access public
  */
-	function index(&$model) {
+	public function index(&$model) {
 		
 		$index = array();
 		$table = $this->fullTableName($model, false);
@@ -138,7 +138,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return array Index alteration statements
  * @access protected
  */
-	function _alterIndexes($table, $indexes) {
+	protected function _alterIndexes($table, $indexes) {
 		
 		return array();
 		
@@ -150,7 +150,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-	function alterTable($options) {
+	public function alterTable($options) {
 
 		extract($options);
 
@@ -211,7 +211,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return string
  * @access public
  */
-	function buildRenameTable($sourceName, $targetName) {
+	public function buildRenameTable($sourceName, $targetName) {
 		
 		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
 		 
@@ -223,7 +223,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-	function renameColumn($options) {
+	public function renameColumn($options) {
 
 		extract($options);
 
@@ -292,7 +292,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return boolean
  * @access public
  */
-	function dropColumn($options) {
+	public function dropColumn($options) {
 
 		extract($options);
 
@@ -354,7 +354,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return booelan
  * @access protected
  */
-	function _moveData($sourceTableName,$targetTableName,$schema) {
+	protected function _moveData($sourceTableName,$targetTableName,$schema) {
 		
 		$sql = 'INSERT INTO '.$targetTableName.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$sourceTableName;
 		return $this->execute($sql);
@@ -366,7 +366,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return string
  * @access protected
  */
-	function _convertCsvFieldsFromSchema($schema) {
+	protected function _convertCsvFieldsFromSchema($schema) {
 		
 		$fields = '';
 		foreach($schema as $key => $field) {
@@ -381,7 +381,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return array Fields in table. Keys are name and type
  * @access public
  */
-	function describe(&$model) {
+	public function describe(&$model) {
 		
 		$cache = $this->__describe($model);
 		if ($cache != null) {
@@ -443,7 +443,7 @@ class DboBcSqlite3 extends DboSqlite3 {
  * @return mixed
  * @access private
  */
-	function __describe($model) {
+	private function __describe($model) {
 		
 		if ($this->cacheSources === false) {
 			return null;

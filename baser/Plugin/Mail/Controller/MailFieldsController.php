@@ -77,7 +77,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
@@ -91,7 +91,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 
 		parent::beforeRender();
 		$this->set('mailContent',$this->mailContent);
@@ -104,7 +104,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_index($mailContentId) {
+	public function admin_index($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
@@ -134,7 +134,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access protected
  */
-	function _setAdminIndexViewData() {
+	protected function _setAdminIndexViewData() {
 		
 		/* セッション処理 */
 		if(isset($this->params['named']['sortmode'])){
@@ -156,7 +156,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_add($mailContentId) {
+	public function admin_add($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
@@ -206,7 +206,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_edit($mailContentId,$id) {
+	public function admin_edit($mailContentId,$id) {
 
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
@@ -257,7 +257,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($mailContentId, $id = null) {
+	public function admin_ajax_delete($mailContentId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -285,7 +285,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_delete($mailContentId, $id = null) {
+	public function admin_delete($mailContentId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -319,7 +319,7 @@ class MailFieldsController extends MailAppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -346,7 +346,7 @@ class MailFieldsController extends MailAppController {
  * @return string
  * @access protected
  */
-	function _getDefaultValue() {
+	protected function _getDefaultValue() {
 
 		$data['MailField']['type'] = 'text';
 		$data['MailField']['use_field'] = 1;
@@ -363,7 +363,7 @@ class MailFieldsController extends MailAppController {
  * @access protected
  * @deprecated admin_ajax_copy に移行
  */
-	function admin_copy($mailContentId,$id) {
+	public function admin_copy($mailContentId,$id) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -415,7 +415,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access protected
  */
-	function admin_ajax_copy($mailContentId, $id) {
+	public function admin_ajax_copy($mailContentId, $id) {
 
 		/* 除外処理 */
 		if(!$id || !$mailContentId) {
@@ -438,7 +438,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_download_csv($mailContentId) {
+	public function admin_download_csv($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
 			$this->Session->setFlash('無効な処理です。');
@@ -462,7 +462,7 @@ class MailFieldsController extends MailAppController {
  * @return boolean
  * @access	public
  */
-	function admin_ajax_update_sort ($mailContentId) {
+	public function admin_ajax_update_sort ($mailContentId) {
 
 		if(!$mailContentId) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -488,7 +488,7 @@ class MailFieldsController extends MailAppController {
  * @return string
  * @access protected
  */
-	function _createAdminIndexConditions($mailContentId){
+	protected function _createAdminIndexConditions($mailContentId){
 
 		$conditions = array('MailField.mail_content_id'=>$mailContentId);
 		return $conditions;
@@ -503,7 +503,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_unpublish($mailContentId, $id) {
+	public function admin_ajax_unpublish($mailContentId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -525,7 +525,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_publish($mailContentId, $id) {
+	public function admin_ajax_publish($mailContentId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -545,7 +545,7 @@ class MailFieldsController extends MailAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_publish($ids) {
+	protected function _batch_publish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -562,7 +562,7 @@ class MailFieldsController extends MailAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_unpublish($ids) {
+	protected function _batch_unpublish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -579,7 +579,7 @@ class MailFieldsController extends MailAppController {
  * @param boolean $status
  * @return boolean 
  */
-	function _changeStatus($id, $status) {
+	protected function _changeStatus($id, $status) {
 		
 		$statusTexts = array(0 => '無効', 1 => '有効');
 		$data = $this->MailField->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));

@@ -36,7 +36,7 @@ class MobileController extends AppController {
  * return void
  * access public
  */
-	function ga() {
+	public function ga() {
 		
 		if(empty($this->siteConfigs['google_analytics_id']) || !version_compare ( preg_replace('/[a-z-]/','', phpversion()), '5','>=')) {
 			header("Content-Type: image/gif");

@@ -45,7 +45,7 @@ class RssEx extends Rss {
  * @return array RSSデータ
  * @access public
  */
-	function findAll($feedUrl, $limit = 10, $cacheExpires = null,$category = null) {
+	public function findAll($feedUrl, $limit = 10, $cacheExpires = null,$category = null) {
 
 		// simplepieでフィードを取得する
 		$feed = $this->__getSimplePie($feedUrl,$cacheExpires);
@@ -68,7 +68,7 @@ class RssEx extends Rss {
  * @return array $items
  * @access public
  */
-	function filteringCategory($items,$filterCategory = null) {
+	public function filteringCategory($items,$filterCategory = null) {
 
 		if(!$items || !$filterCategory) {
 			return $items;
@@ -116,7 +116,7 @@ class RssEx extends Rss {
  * @return array RSSデータ
  * @access private
  */
-	function __getSimplePie($url,$cacheExpires = null) {
+	private function __getSimplePie($url,$cacheExpires = null) {
 
 		if(!$url) {
 			return false;
@@ -179,7 +179,7 @@ class RssEx extends Rss {
  * @return array RSSデータ
  * @access private
  */
-	function __convertSimplePie($datas) {
+	private function __convertSimplePie($datas) {
 
 		if(!$datas) {
 			return null;

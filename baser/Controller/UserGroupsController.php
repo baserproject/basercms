@@ -73,7 +73,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter () {
+	public function beforeFilter () {
 		
 		parent::beforeFilter();
 		if($this->request->params['prefix']=='admin'){
@@ -87,7 +87,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		/* データ取得 */
 		$this->paginate = array('conditions'=>array(),
@@ -109,7 +109,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		if($this->request->data) {
 
@@ -142,7 +142,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -179,7 +179,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -205,7 +205,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -235,7 +235,7 @@ class UserGroupsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($id) {
+	public function admin_ajax_copy($id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -254,7 +254,7 @@ class UserGroupsController extends AppController {
  * @return boolean 
  * @access public 
  */
-	function admin_set_default_favorites($id) {
+	public function admin_set_default_favorites($id) {
 
 		if(!$this->request->params['form']) {
 			$this->ajaxError(500, '無効な処理です。');

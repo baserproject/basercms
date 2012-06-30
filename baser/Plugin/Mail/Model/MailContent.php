@@ -148,7 +148,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	function beforeValidate() {
+	public function beforeValidate() {
 
 		if($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
@@ -166,7 +166,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	function checkSslUrl($check) {
+	public function checkSslUrl($check) {
 		
 		if($check[key($check)]) {
 			$sslUrl = Configure::read('BcEnv.sslUrl');
@@ -187,7 +187,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	function alphaNumeric($check) {
+	public function alphaNumeric($check) {
 
 		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
 			return true;
@@ -202,7 +202,7 @@ class MailContent extends MailAppModel {
  * @return string
  * @access protected
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
 		$data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
@@ -223,7 +223,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 
 		// 検索用テーブルへの登録・削除
 		if(!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status'] ) {
@@ -239,7 +239,7 @@ class MailContent extends MailAppModel {
  * @return	boolean
  * @access	public
  */
-	function beforeDelete() {
+	public function beforeDelete() {
 
 		return $this->deleteContent($this->id);
 
@@ -251,7 +251,7 @@ class MailContent extends MailAppModel {
  * @return array
  * @access public
  */
-	function createContent($data) {
+	public function createContent($data) {
 
 		if(isset($data['MailContent'])) {
 			$data = $data['MailContent'];
@@ -276,7 +276,7 @@ class MailContent extends MailAppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data = array(), $recursive = true) {
+	public function copy($id, $data = array(), $recursive = true) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));

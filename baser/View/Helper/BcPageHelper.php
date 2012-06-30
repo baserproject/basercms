@@ -49,7 +49,7 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public
  */
-	function  __construct() {
+	public function  __construct() {
 		
 		if(ClassRegistry::isKeySet('Page')) {
 			$this->Page = ClassRegistry::getObject('Page');
@@ -64,7 +64,7 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 		
 		if(isset($this->request->params['pass'][0])) {
 			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
@@ -86,7 +86,7 @@ class BcPageHelper extends Helper {
  * @param array $page
  * @return string
  */
-	function url($page) {
+	public function url($page) {
 		
 		return $this->Page->getPageUrl($page);
 		
@@ -97,7 +97,7 @@ class BcPageHelper extends Helper {
  * @return array
  * @access public
  */
-	function getCategory() {
+	public function getCategory() {
 		
 		if(!empty($this->request->data['PageCategory']['id'])) {
 			return $this->request->data['PageCategory'];
@@ -113,7 +113,7 @@ class BcPageHelper extends Helper {
  * @return array
  * @access public
  */
-	function getParentCategory($top = false) {
+	public function getParentCategory($top = false) {
 		
 		$category = $this->getCategory();
 		if(empty($category['id'])) {
@@ -140,7 +140,7 @@ class BcPageHelper extends Helper {
  * @return array
  * @access public
  */
-	function getPageList($pageCategoryId, $recursive = null) {
+	public function getPageList($pageCategoryId, $recursive = null) {
 		
 		return $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		
@@ -151,7 +151,7 @@ class BcPageHelper extends Helper {
  * @return mixed string / false
  * @access public
  */
-	function getCategoryName(){
+	public function getCategoryName(){
 		
 		$category = $this->getCategory();
 		if($category['name']) {
@@ -168,7 +168,7 @@ class BcPageHelper extends Helper {
  * @return boolean 公開状態
  * @access public
  */
-	function allowPublish($data){
+	public function allowPublish($data){
 
 		if(isset($data['Page'])){
 			$data = $data['Page'];
@@ -192,7 +192,7 @@ class BcPageHelper extends Helper {
  * @param string $title
  * @param array $attributes
  */
-	function nextLink($title='', $attributes = array()) {
+	public function nextLink($title='', $attributes = array()) {
 
 		if(!$this->contensNaviAvailable()) {
 			return '';
@@ -238,7 +238,7 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public
  */
-	function prevLink($title='', $attributes = array()) {
+	public function prevLink($title='', $attributes = array()) {
 
 		if(!$this->contensNaviAvailable()) {
 			return '';
@@ -281,7 +281,7 @@ class BcPageHelper extends Helper {
  * @return	boolean
  * @access	public
  */
-	function contensNaviAvailable() {
+	public function contensNaviAvailable() {
 		
 		if(empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;

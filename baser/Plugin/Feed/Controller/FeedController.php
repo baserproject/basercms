@@ -59,7 +59,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		/* 認証設定 */
 		$this->BcAuth->allow('index', 'mobile_index', 'smartphone_index', 'ajax', 'smartphone_ajax');
@@ -73,7 +73,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function index($id) {
+	public function index($id) {
 
 		$this->navis = array();
 		
@@ -201,7 +201,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function mobile_index($id) {
+	public function mobile_index($id) {
 
 		$this->setAction('index',$id);
 
@@ -213,7 +213,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function smartphone_index($id) {
+	public function smartphone_index($id) {
 
 		$this->setAction('index',$id);
 
@@ -225,7 +225,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function ajax($id) {
+	public function ajax($id) {
 
 		if(strpos($id,'.js') !== false) {
 			$id = str_replace('.js','',$id);
@@ -246,7 +246,7 @@ class FeedController extends FeedAppController {
  * @return void
  * @access public
  */
-	function smartphone_ajax($id) {
+	public function smartphone_ajax($id) {
 
 		$this->setAction('ajax',$id);
 
@@ -259,7 +259,7 @@ class FeedController extends FeedAppController {
  * @return array
  * @access protected
  */
-	function _sortDescByTimestamp($a, $b) {
+	protected function _sortDescByTimestamp($a, $b) {
 		if ($a['timestamp'] == $b['timestamp']) {
 			return 0;
 		}
@@ -274,7 +274,7 @@ class FeedController extends FeedAppController {
  * @return array 並び替え後の配列
  * @access protected
  */
-	function _bsort(&$val, $flag = "", $order = "ASC") {
+	protected function _bsort(&$val, $flag = "", $order = "ASC") {
 
 		for($i=0;$i<count($val)-1;$i++) {
 			for($j=count($val)-1;$j>$i;$j--) {

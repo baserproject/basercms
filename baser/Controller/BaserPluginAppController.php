@@ -36,7 +36,7 @@ class BaserPluginAppController extends AppController {
  * @return void
  * @access private
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 
@@ -58,7 +58,7 @@ class BaserPluginAppController extends AppController {
  * @return int $pluginNo
  * @access public
  */
-	function getContentId() {
+	public function getContentId() {
 
 		// 管理画面の場合には取得しない
 		if(!empty($this->request->params['admin'])){

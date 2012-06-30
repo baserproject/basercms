@@ -102,7 +102,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		/* 認証設定 */
 		$this->BcAuth->allow(
@@ -166,7 +166,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 
 		parent::beforeRender();
 		if($this->dbDatas['mailContent']['MailContent']['widget_area']){
@@ -181,7 +181,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function index($id = null) {
+	public function index($id = null) {
 
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
@@ -215,7 +215,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function mobile_index($id=null) {
+	public function mobile_index($id=null) {
 
 		$this->setAction('index',$id);
 
@@ -227,7 +227,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function smartphone_index($id=null) {
+	public function smartphone_index($id=null) {
 
 		$this->setAction('index',$id);
 
@@ -239,7 +239,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function confirm($id = null) {
+	public function confirm($id = null) {
 
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
@@ -289,7 +289,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function mobile_confirm($id=null) {
+	public function mobile_confirm($id=null) {
 
 		$this->setAction('confirm',$id);
 
@@ -301,7 +301,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function smartphone_confirm($id=null) {
+	public function smartphone_confirm($id=null) {
 
 		$this->setAction('confirm',$id);
 
@@ -313,7 +313,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function submit($id = null) {
+	public function submit($id = null) {
 
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
@@ -407,7 +407,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function mobile_submit($id=null) {
+	public function mobile_submit($id=null) {
 
 		$this->setAction('submit',$id);
 
@@ -419,7 +419,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function smartphone_submit($id=null) {
+	public function smartphone_submit($id=null) {
 
 		$this->setAction('submit',$id);
 
@@ -430,7 +430,7 @@ class MailController extends MailAppController {
  * @return void
  * @access protected
  */
-	function _sendEmail() {
+	protected function _sendEmail() {
 
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];

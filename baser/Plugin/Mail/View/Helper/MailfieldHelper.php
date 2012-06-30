@@ -34,7 +34,7 @@ class MailfieldHelper extends AppHelper {
  * @return array html属性
  * @access public
  */
-	function getAttributes($data) {
+	public function getAttributes($data) {
 
 		if(isset($data['MailField'])) {
 			$data = $data['MailField'];
@@ -63,7 +63,7 @@ class MailfieldHelper extends AppHelper {
  * @return array コントロールソース
  * @access public
  */
-	function getOptions($data) {
+	public function getOptions($data) {
 
 		if(isset($data['MailField'])) {
 			$data = $data['MailField'];

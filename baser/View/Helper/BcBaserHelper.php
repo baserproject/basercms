@@ -98,7 +98,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function __construct() {
+	public function __construct() {
 
 		$this->_view =& ClassRegistry::getObject('view');
 
@@ -144,7 +144,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function afterRender() {
+	public function afterRender() {
 
 		parent::afterRender();
 		// コンテンツをフックする
@@ -159,7 +159,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getMenus () {
+	public function getMenus () {
 
 		if (ClassRegistry::init('GlobalMenu')) {
 			if(!file_exists(APP . 'Config' . DS.'database.php')) {
@@ -194,7 +194,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function setTitle($title,$categoryTitleOn = null) {
+	public function setTitle($title,$categoryTitleOn = null) {
 
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
@@ -209,7 +209,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function setKeywords($keywords) {
+	public function setKeywords($keywords) {
 
 		$this->_view->set('keywords',$keywords);
 
@@ -221,7 +221,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function setDescription($description) {
+	public function setDescription($description) {
 
 		$this->_view->set('description',$description);
 
@@ -236,7 +236,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function set($key,$value) {
+	public function set($key,$value) {
 
 		$this->_view->set($key,$value);
 
@@ -250,7 +250,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function setCategoryTitle($on = true) {
+	public function setCategoryTitle($on = true) {
 
 		$this->_categoryTitle = $on;
 
@@ -263,7 +263,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getKeywords() {
+	public function getKeywords() {
 
 		$keywords = '';
 		if(!empty($this->_view->viewVars['keywords'])) {
@@ -282,7 +282,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getDescription() {
+	public function getDescription() {
 
 		$description = '';
 		if(!empty($this->_view->viewVars['description'])) {
@@ -303,7 +303,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getTitle($separator='｜',$categoryTitleOn = null) {
+	public function getTitle($separator='｜',$categoryTitleOn = null) {
 
 		$title = '';
 		$crumbs = $this->getCrumbs($categoryTitleOn);
@@ -344,7 +344,7 @@ class BcBaserHelper extends AppHelper {
  * @todo 処理内容がわかりにくいので変数名のリファクタリング要
  * @manual
  */
-	function getCrumbs($categoryTitleOn = null){
+	public function getCrumbs($categoryTitleOn = null){
 
 		// ページカテゴリを追加
 		if(!is_null($categoryTitleOn)) {
@@ -380,7 +380,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getContentsTitle() {
+	public function getContentsTitle() {
 
 		$contentsTitle = '';
 		// トップページの場合は、タイトルをサイト名だけにする
@@ -401,7 +401,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function contentsTitle() {
+	public function contentsTitle() {
 
         echo $this->getContentsTitle();
 
@@ -415,7 +415,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function title($separator='｜',$categoryTitleOn = null) {
+	public function title($separator='｜',$categoryTitleOn = null) {
 
         echo '<title>'.strip_tags($this->getTitle($separator,$categoryTitleOn)) . "</title>\n";
 
@@ -427,7 +427,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function metaKeywords() {
+	public function metaKeywords() {
 
         echo $this->BcHtml->meta('keywords',$this->getkeywords()) . "\n";
 
@@ -439,7 +439,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function metaDescription() {
+	public function metaDescription() {
 
         echo $this->BcHtml->meta('description', strip_tags($this->getDescription())) . "\n";
 
@@ -453,7 +453,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function rss($title, $link) {
+	public function rss($title, $link) {
 
 		echo $this->BcHtml->meta($title, $link, array('type' => 'rss')) . "\n";
 
@@ -466,7 +466,7 @@ class BcBaserHelper extends AppHelper {
  * @deprecated isHomeに統合する
  * @manual
  */
-	function isTop() {
+	public function isTop() {
 
 		return $this->isHome();
 
@@ -478,7 +478,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function isHome() {
+	public function isHome() {
 
 		return ($this->request->params['url']['url'] == '/' ||
 						$this->request->params['url']['url'] == 'index' ||
@@ -493,7 +493,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function root() {
+	public function root() {
 
 		echo $this->getRoot();
 
@@ -505,7 +505,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getRoot() {
+	public function getRoot() {
 
 		return $this->request->base.'/';
 
@@ -519,7 +519,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function url($url,$full = false, $sessionId = true) {
+	public function url($url,$full = false, $sessionId = true) {
 
 		echo $this->getUrl($url,$full, $sessionId);
 
@@ -531,7 +531,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $full
  * @manual
  */
-	function getUrl($url,$full = false, $sessionId = true) {
+	public function getUrl($url,$full = false, $sessionId = true) {
 
 		return parent::url($url,$full, $sessionId);
 
@@ -548,7 +548,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
 		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
 
@@ -576,7 +576,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
 		echo $this->getElement($name, $params, $loadHelpers, $subDir);
 
@@ -589,7 +589,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $subDir
  * @manual
  */
-	function header($params = array(), $loadHelpers = false, $subDir = true) {
+	public function header($params = array(), $loadHelpers = false, $subDir = true) {
 
 		$out = $this->getElement('header', $params, $loadHelpers, $subDir);
 		echo $this->executeHook('baserHeader', $out);
@@ -605,7 +605,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function footer($params = array(), $loadHelpers = false, $subDir = true) {
+	public function footer($params = array(), $loadHelpers = false, $subDir = true) {
 
 		$out = $this->getElement('footer', $params, $loadHelpers, $subDir);
 		echo $this->executeHook('baserFooter', $out);
@@ -622,7 +622,7 @@ class BcBaserHelper extends AppHelper {
  * @deprecated
  * @manual
  */
-	function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
+	public function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
 
 		if(!$name) {
 			$name = 'default';
@@ -639,7 +639,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function content() {
+	public function content() {
 
 		echo $this->_content;
 
@@ -652,7 +652,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function flash($key='flash') {
+	public function flash($key='flash') {
 
 		if ($this->Session->check('Message.'.$key)) {
 			$this->Session->flash($key);
@@ -667,7 +667,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function scripts() {
+	public function scripts() {
 
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
@@ -697,7 +697,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function func() {
+	public function func() {
 
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
@@ -735,7 +735,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function setSubMenus($submenus) {
+	public function setSubMenus($submenus) {
 
 		$this->_view->set('subMenuElements',$submenus);
 
@@ -748,7 +748,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function xmlHeader($attrib = array()) {
+	public function xmlHeader($attrib = array()) {
 
 		if(empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
@@ -763,7 +763,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function icon() {
+	public function icon() {
 
         echo  $this->BcHtml->meta('icon') . "\n";
 
@@ -776,7 +776,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function docType($type = 'xhtml-trans') {
+	public function docType($type = 'xhtml-trans') {
 
 		echo $this->BcHtml->docType($type)."\n";
 
@@ -793,7 +793,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function css($path, $htmlAttributes = array(), $inline = true) {
+	public function css($path, $htmlAttributes = array(), $inline = true) {
 
 		// Cake1.2系との互換対応
 		if (isset($htmlAttributes['inline']) && $inline == true) {
@@ -818,7 +818,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function js($url, $inline = true) {
+	public function js($url, $inline = true) {
 
 		$ret = $this->Javascript->link($url, $inline);
 		if($inline) {
@@ -835,7 +835,7 @@ class BcBaserHelper extends AppHelper {
  * @access pub
  * @manual
  */
-	function img($path, $options = array()) {
+	public function img($path, $options = array()) {
 
 		echo $this->getImg($path, $options);
 
@@ -849,7 +849,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getImg($path, $options = array()) {
+	public function getImg($path, $options = array()) {
 
 		return $this->BcHtml->image($path, $options);
 
@@ -866,7 +866,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 
 		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
@@ -886,7 +886,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 
 		$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
@@ -988,7 +988,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function isSSL() {
+	public function isSSL() {
 
 		if(!empty($this->_view->viewVars['isSSL'])){
 			return true;
@@ -1005,7 +1005,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function charset($charset = null) {
+	public function charset($charset = null) {
 
 		if(!$charset && Configure::read('BcRequest.agent') == 'mobile'){
 			$charset = 'Shift-JIS';
@@ -1021,7 +1021,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function copyYear($begin) {
+	public function copyYear($begin) {
 
 		$year = date('Y');
 		if($begin == $year) {
@@ -1038,7 +1038,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function setPageEditLink($id) {
+	public function setPageEditLink($id) {
 
 		if(empty($this->request->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$this->_view->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
@@ -1051,7 +1051,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function editLink() {
+	public function editLink() {
 
 		if($this->existsEditLink()) {
 			$this->link('編集する', $this->_view->viewVars['editLink'], array('class' => 'tool-menu'));
@@ -1064,7 +1064,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function existsEditLink() {
+	public function existsEditLink() {
 
 		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
 
@@ -1075,7 +1075,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function publishLink() {
+	public function publishLink() {
 
 		if($this->existsPublishLink()) {
 			$this->link('公開ページ', $this->_view->viewVars['publishLink'], array('class' => 'tool-menu'));
@@ -1088,7 +1088,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function existsPublishLink() {
+	public function existsPublishLink() {
 
 		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['publishLink']));
 
@@ -1099,7 +1099,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function checkUpdate() {
+	public function checkUpdate() {
 
 		$baserVerpoint = verpoint($this->_view->viewVars['baserVersion']);
 		if(isset($this->siteConfig['version'])) {
@@ -1121,7 +1121,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function updateMessage() {
+	public function updateMessage() {
 		$adminPrefix = Configure::read('Routing.admin');
 		if($this->checkUpdate() && $this->request->params['controller'] != 'updaters') {
 			$updateLink = $this->BcHtml->link('ここ',"/{$adminPrefix}/updaters");
@@ -1137,7 +1137,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function contentsName($detail = false, $options = array()) {
+	public function contentsName($detail = false, $options = array()) {
 
 		echo $this->getContentsName($detail);
 
@@ -1154,7 +1154,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getContentsName($detail = false, $options = array()) {
+	public function getContentsName($detail = false, $options = array()) {
 
 		$options = array_merge(array(
 			'home'		=> 'Home',
@@ -1297,7 +1297,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function crumbs($separator = '&raquo;', $startText = false) {
+	public function crumbs($separator = '&raquo;', $startText = false) {
 
 		if (!empty($this->BcHtml->_crumbs)) {
 			$out = array();
@@ -1328,7 +1328,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function addCrumb($name, $link = null, $options = null) {
+	public function addCrumb($name, $link = null, $options = null) {
 
 		$_options = array('forceTitle'=>true);
 		if($options) {
@@ -1347,7 +1347,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getPageList($categoryId=null) {
+	public function getPageList($categoryId=null) {
 
 		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
@@ -1376,7 +1376,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function cacheHeader($expire = null, $type='html') {
+	public function cacheHeader($expire = null, $type='html') {
 
 		$contentType = array(
 			'html' => 'text/html',
@@ -1410,7 +1410,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function getUri($url, $sessionId = true){
+	public function getUri($url, $sessionId = true){
 		if(preg_match('/^http/is', $url)) {
 			return $url;
 		}else {
@@ -1437,7 +1437,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function _initPluginBasers(){
+	protected function _initPluginBasers(){
 
 		$view = $this->_view;
 		$plugins = Configure::read('BcStatus.enablePlugins');
@@ -1476,7 +1476,7 @@ class BcBaserHelper extends AppHelper {
  * @return ixed
  * @access protected
  */
-	function call__($method, $params) {
+	public function call__($method, $params) {
 
 		foreach($this->pluginBasers as $pluginBaser){
 			if(method_exists($pluginBaser,$method)){
@@ -1497,7 +1497,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
+	public function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
 
 		if(!is_array($search)) {
 			$search = array($search);
@@ -1517,7 +1517,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function sitemap($pageCategoryId = null, $recursive = null) {
+	public function sitemap($pageCategoryId = null, $recursive = null) {
 
 		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		$params = array('pageList' => $pageList);
@@ -1543,7 +1543,7 @@ class BcBaserHelper extends AppHelper {
  * @return string
  * @manual
  */
-	function swf($path, $id, $width, $height, $options = array()) {
+	public function swf($path, $id, $width, $height, $options = array()) {
 
 		$options = array_merge(array(
 			'version'	=> 7,
@@ -1584,7 +1584,7 @@ END_FLASH;
  * @param string $type mobile / smartphone
  * @return string URL
  */
-	function changePrefixToAlias($url, $type) {
+	public function changePrefixToAlias($url, $type) {
 		$alias = Configure::read("BcAgent.{$type}.alias");
 		$prefix = Configure::read("BcAgent.{$type}.prefix");
 		return preg_replace('/^\/'.$prefix.'\//is', '/'.$alias.'/', $url);
@@ -1596,7 +1596,7 @@ END_FLASH;
  * @access public
  * @manual
  */
-	function isAdminUser($id = null) {
+	public function isAdminUser($id = null) {
 		if(!$id && !empty($this->_view->viewVars['user']['user_group_id'])) {
 			$id = $this->_view->viewVars['user']['user_group_id'];
 		}
@@ -1613,7 +1613,7 @@ END_FLASH;
  * @access public
  * @manual
  */
-	function isPage() {
+	public function isPage() {
 		return $this->Page->isPageUrl($this->getHere());
 	}
 /**
@@ -1624,7 +1624,7 @@ END_FLASH;
  * @access public
  * @manual
  */
-	function getHere() {
+	public function getHere() {
 		return '/' . preg_replace('/^\//', '', $this->request->params['url']['url']);
 	}
 /**
@@ -1634,7 +1634,7 @@ END_FLASH;
  * @access public
  * @manual
  */
-	function isCategoryTop() {
+	public function isCategoryTop() {
 
 		$url = $this->getHere();
 		$url = preg_replace('/^\//', '', $url);
@@ -1657,7 +1657,7 @@ END_FLASH;
  * @param int $id
  * @manual
  */
-	function page($id, $params = array(), $options = array()) {
+	public function page($id, $params = array(), $options = array()) {
 
 		if(isset($this->_view->viewVars['pageRecursive']) && !$this->_view->viewVars['pageRecursive']) {
 			return;
@@ -1711,7 +1711,7 @@ END_FLASH;
  * @param int $no 
  * @access public
  */
-	function widgetArea($no = null) {
+	public function widgetArea($no = null) {
 		
 		if(!$no) {
 			$no = $this->_view->viewVars['widgetArea'];

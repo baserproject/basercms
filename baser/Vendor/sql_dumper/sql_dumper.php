@@ -22,9 +22,9 @@
  */
 class SqlDumper extends Object {
 
-	public $description = '';
+	var $description = '';
 
-	public $message = 'generator: SqlDumper for CakePHP ver 1.0.1';
+	var $message = 'generator: SqlDumper for CakePHP ver 1.0.1';
 
 	/**
 	 * output filename prefix
@@ -33,7 +33,7 @@ class SqlDumper extends Object {
 	 *
 	 * @var string
 	 */
-	public $file_prefix = 'sql_dump-';
+	var $file_prefix = 'sql_dump-';
 
 	/**
 	 * output filename suffix
@@ -42,31 +42,31 @@ class SqlDumper extends Object {
 	 *
 	 * @var string
 	 */
-	public $file_suffix = '-%Y%m%d_%H%M%S.sql';
+	var $file_suffix = '-%Y%m%d_%H%M%S.sql';
 
 	/**
 	 *
 	 * @var DboSource
 	 */
-	public $DataSource;
+	var $DataSource;
 
 	/**
 	 *
 	 * @var CakeSchema
 	 */
-	public $Schema;
+	var $Schema;
 
 	/**
 	 *
 	 * @var File
 	 */
-	public $File;
+	var $File;
 
 	/**
 	 *
 	 * @var array
 	 */
-	protected $_tables;
+	var $_tables;
 
 	/**
 	 *
@@ -221,7 +221,7 @@ class SqlDumper extends Object {
 
 		foreach ($tables as $table => $fields) {
 
-			/* @public $model AppModel */
+			/* @var $model AppModel */
 			$model = ClassRegistry::init(array('class' => Inflector::classify($table), 'table' => $table));
 
 			$field_names = array_keys($this->DataSource->describe($model));

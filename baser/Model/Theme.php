@@ -69,7 +69,7 @@ class Theme extends AppModel {
  * @return boolean
  * @access public
  */
-	function duplicate($check) {
+	public function duplicate($check) {
 		
 		$value = $check[key($check)];
 		if(!$value){
@@ -92,7 +92,7 @@ class Theme extends AppModel {
  * @return boolean
  * @access public
  */
-	function save($data = null, $validate = true, $fieldList = array()) {
+	public function save($data = null, $validate = true, $fieldList = array()) {
 
 		if(!$data){
 			$data = $this->data;
@@ -136,7 +136,7 @@ class Theme extends AppModel {
  * @return string
  * @access public
  */
-	function setConfig($theme,$key,$value){
+	public function setConfig($theme,$key,$value){
 
 		$path = WWW_ROOT.'themed'.DS;
 		$contents = file_get_contents($path.$theme.DS.'config.php');

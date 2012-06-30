@@ -116,7 +116,7 @@ class PageCategory extends AppModel {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = array()) {
 
 		switch ($field) {
 			
@@ -213,7 +213,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeSave() {
+	public function beforeSave() {
 
 		// セーフモードの場合はフォルダの自動生成は行わない
 		if(ini_get('safe_mode')) {
@@ -249,7 +249,7 @@ class PageCategory extends AppModel {
  * @return void
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 		
 		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
@@ -263,7 +263,7 @@ class PageCategory extends AppModel {
  * @return mixid カテゴリのパス / false
  * @access public
  */
-	function createPageCategoryFolder($data) {
+	public function createPageCategoryFolder($data) {
 		
 		$path = $this->getPageCategoryFolderPath($data);
 		$folder = new Folder();
@@ -281,7 +281,7 @@ class PageCategory extends AppModel {
  * @return string $path
  * @access public
  */
-	function getPageCategoryFolderPath($data) {
+	public function getPageCategoryFolderPath($data) {
 
 		if(isset($data['PageCategory'])) {
 			$data = $data['PageCategory'];
@@ -310,7 +310,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function duplicatePageCategory($check) {
+	public function duplicatePageCategory($check) {
 
 		$parentId = $this->data['PageCategory']['parent_id'];
 		if($parentId) {
@@ -344,7 +344,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeDelete($cascade = true) {
+	public function beforeDelete($cascade = true) {
 		
 		parent::beforeDelete($cascade);
 		$id = $this->data['PageCategory']['id'];
@@ -365,7 +365,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function releaseRelatedPagesRecursive($categoryId) {
+	public function releaseRelatedPagesRecursive($categoryId) {
 		
 		if(!$this->releaseRelatedPages($categoryId)){
 			return false;
@@ -387,7 +387,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function releaseRelatedPages($categoryId) {
+	public function releaseRelatedPages($categoryId) {
 		
 		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId),'recursive'=>-1));
 		$ret = true;
@@ -411,7 +411,7 @@ class PageCategory extends AppModel {
  * @return void
  * @access public
  */
-	function updateRelatedPageUrlRecursive($categoryId) {
+	public function updateRelatedPageUrlRecursive($categoryId) {
 		
 		if(!$this->updateRelatedPageUrl($categoryId)){
 			return false;
@@ -433,7 +433,7 @@ class PageCategory extends AppModel {
  * @return void
  * @access public
  */
-	function updateRelatedPageUrl($id) {
+	public function updateRelatedPageUrl($id) {
 		
 		if(!$id) {
 			return;
@@ -462,7 +462,7 @@ class PageCategory extends AppModel {
  * @return mixed
  * @access public
  */
-	function getIdByPath($path) {
+	public function getIdByPath($path) {
 		
 		if($this->_pageCategoryPathes == -1) {
 			$this->_pageCategoryPathes = array();
@@ -487,7 +487,7 @@ class PageCategory extends AppModel {
  * @return array $ids
  * @access public
  */
-	function getAgentCategoryIds($type = 'mobile', $top = true){
+	public function getAgentCategoryIds($type = 'mobile', $top = true){
 
 		$agentId = $this->getAgentId($type);
 		if(!$agentId){
@@ -512,7 +512,7 @@ class PageCategory extends AppModel {
  * @return int
  * @access public
  */
-	function getAgentId($type = 'mobile') {
+	public function getAgentId($type = 'mobile') {
 
 		if(!isset($this->_agentId[$type])){
 			$agentId = $this->field('id',array('PageCategory.name'=>$type));
@@ -531,7 +531,7 @@ class PageCategory extends AppModel {
  * @param type $id
  * @return type 
  */
-	function getAgentRelativeId($type, $id) {
+	public function getAgentRelativeId($type, $id) {
 		
 		if(!$id) {
 			return $this->getAgentId($type);
@@ -554,7 +554,7 @@ class PageCategory extends AppModel {
  * @return array
  * @access public 
  */
-	function getTreeList($fields,$id){
+	public function getTreeList($fields,$id){
 		
 		$this->recursive = -1;
 		$pageCategories = array();
@@ -574,7 +574,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	function checkNewCategoryAddable($userGroupId, $rootEditable) {
+	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
 		
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
@@ -600,7 +600,7 @@ class PageCategory extends AppModel {
  * @param array $data
  * @return mixed page Or false
  */
-	function copy($id = null, $data = array()) {
+	public function copy($id = null, $data = array()) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('PageCategory.id' => $id), 'recursive' => -1));
@@ -632,7 +632,7 @@ class PageCategory extends AppModel {
  * @return string 
  * @access public
  */
-	function getType($id) {
+	public function getType($id) {
 
 		$types = array('' => '1', Configure::read('BcAgent.mobile.prefix') => '2', Configure::read('BcAgent.smartphone.prefix') => '3');
 		$path = $this->getpath($id, array('name'));

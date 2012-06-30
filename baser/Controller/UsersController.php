@@ -76,7 +76,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		/* 認証設定 */
 		// parent::beforeFilterの前に記述する必要あり
@@ -118,7 +118,7 @@ class UsersController extends AppController {
  * @return boolean
  * @access public
  */
-	function admin_login_exec() {
+	public function admin_login_exec() {
 
 		if(!$this->request->data) {
 			return false;
@@ -135,7 +135,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_login() {
+	public function admin_login() {
 		
 		if($this->BcAuth->loginAction != ('/'.$this->request->params['url']['url'])) {
 			$this->notFound();
@@ -191,7 +191,7 @@ class UsersController extends AppController {
  * @return ダッシュボードへのURL
  * @access public
  */
-	function admin_ajax_agent_login($id) {
+	public function admin_ajax_agent_login($id) {
 		if(!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
@@ -207,7 +207,7 @@ class UsersController extends AppController {
  * @return void
  * @access public 
  */
-	function admin_back_agent() {
+	public function admin_back_agent() {
 		if($this->Session->check('AuthAgent')) {
 			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.'.$this->BcAuth->userModel));
 			$this->Session->delete('AuthAgent');
@@ -223,7 +223,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_login() {
+	public function admin_ajax_login() {
 		
 		if(!$this->BcAuth->login($this->request->data)) {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
@@ -264,7 +264,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function setAuthCookie($data) {
+	public function setAuthCookie($data) {
 		
 		$userModel = $this->BcAuth->userModel;
 		$cookie = array();
@@ -279,7 +279,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_logout() {
+	public function admin_logout() {
 
 		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
@@ -298,7 +298,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		/* データ取得 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -334,7 +334,7 @@ class UsersController extends AppController {
  * @return array $conditions
  * @access protected
  */
-	function _createAdminIndexConditions($data) {
+	protected function _createAdminIndexConditions($data) {
 
 		unset($data['_Token']);
 		if(isset($data['User']['user_group_id']) && $data['User']['user_group_id'] === '') {
@@ -354,7 +354,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		if(empty($this->request->data)) {
 			$this->request->data = $this->User->getDefaultValue();
@@ -405,7 +405,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->request->data)) {
@@ -486,7 +486,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -518,7 +518,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -554,7 +554,7 @@ class UsersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_reset_password () {
+	public function admin_reset_password () {
 
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->userModel;

@@ -39,7 +39,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	public function initialize(&$controller) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -86,7 +86,7 @@ class BcPluginHookComponent extends Component {
  * @return	void
  * @access	pubic
  */
-	function registerHook($hookName, $pluginName){
+	public function registerHook($hookName, $pluginName){
 
 		if(!isset($this->registerHooks[$hookName])){
 			$this->registerHooks[$hookName] = array();
@@ -102,7 +102,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function executeHook($hookName){
+	public function executeHook($hookName){
 		
 		$args = func_get_args();
 		unset($args[0]);
@@ -120,7 +120,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function startup(&$controller) {
+	public function startup(&$controller) {
 		
 		$this->executeHook('startup',$controller);
 		
@@ -132,7 +132,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function beforeRender(&$controller) {
+	public function beforeRender(&$controller) {
 		
 		$this->executeHook('beforeRender',$controller);
 		
@@ -144,7 +144,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
+	public function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
 		
 		$this->executeHook('beforeRedirect', $controller, $url, $status, $exit);
 		
@@ -156,7 +156,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function shutdown(&$controller) {
+	public function shutdown(&$controller) {
 		
 		$this->executeHook('shutdown', $controller);
 		
@@ -168,7 +168,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function afterPageAdd(&$controller) {
+	public function afterPageAdd(&$controller) {
 		
 		$this->executeHook('afterPageAdd', $controller);
 		
@@ -180,7 +180,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	function afterPageEdit(&$controller) {
+	public function afterPageEdit(&$controller) {
 		
 		$this->executeHook('afterPageEdit', $controller);
 		

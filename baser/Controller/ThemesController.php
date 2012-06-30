@@ -58,7 +58,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index(){
+	public function admin_index(){
 
 		$this->pageTitle = 'テーマ一覧';
 		$path = WWW_ROOT.'themed';
@@ -91,7 +91,7 @@ class ThemesController extends AppController {
  * @return array
  * @access protected
  */
-	function _loadThemeInfo($themename) {
+	protected function _loadThemeInfo($themename) {
 		
 		$path = WWW_ROOT.'themed';
 		$title = $description = $author = $url = $screenshot = '';
@@ -125,7 +125,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit($theme){
+	public function admin_edit($theme){
 		
 		if(!$theme){
 			$this->notFound();
@@ -184,7 +184,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($theme){
+	public function admin_ajax_copy($theme){
 
 		if(!$theme){
 			$this->ajaxError(500, '無効な処理です。');
@@ -204,7 +204,7 @@ class ThemesController extends AppController {
  * @return boolean
  * @access public
  */
-	function _copy($theme) {
+	protected function _copy($theme) {
 		
 		$basePath = WWW_ROOT.'themed'.DS;
 		$newTheme = $theme.'_copy';
@@ -230,7 +230,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($theme){
+	public function admin_ajax_delete($theme){
 
 		if(!$theme){
 			$this->ajaxError(500, '無効な処理です。');
@@ -251,7 +251,7 @@ class ThemesController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -269,7 +269,7 @@ class ThemesController extends AppController {
  * @return boolean 
  * @access protected
  */
-	function _del($theme) {
+	protected function _del($theme) {
 		
 		$path = WWW_ROOT.'themed'.DS.$theme;
 		$folder = new Folder();
@@ -293,7 +293,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_del($theme){
+	public function admin_del($theme){
 
 		if(!$theme){
 			$this->notFound();
@@ -319,7 +319,7 @@ class ThemesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_apply($theme){
+	public function admin_apply($theme){
 		
 		if(!$theme){
 			$this->notFound();

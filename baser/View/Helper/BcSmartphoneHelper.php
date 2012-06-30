@@ -29,7 +29,7 @@ class BcSmartphoneHelper extends Helper {
  * @return void
  * @access public
  */
-	function afterLayout() {
+	public function afterLayout() {
 		
 		/* 出力データをSJISに変換 */
 		$view =& ClassRegistry::getObject('view');
@@ -63,7 +63,7 @@ class BcSmartphoneHelper extends Helper {
  * @return string
  * @access protected 
  */
-	function _removePrefix($matches) {
+	protected function _removePrefix($matches) {
 		
 		if(strpos($matches[1], 'smartphone=off') === false) {
 			return 'href="'.BC_BASE_URL.$matches[2].'"';
@@ -80,7 +80,7 @@ class BcSmartphoneHelper extends Helper {
  * @return string 
  * @access protected
  */
-	function _addPrefix($matches) {
+	protected function _addPrefix($matches) {
 		
 		$currentAlias = Configure::read('BcRequest.agentAlias');
 		$url = $matches[1];

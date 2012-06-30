@@ -77,7 +77,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 
@@ -122,7 +122,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 		
 		parent::beforeRender();
 		if(!empty($this->blogContent)) {
@@ -136,7 +136,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_index($blogContentId,$blogPostId=null) {
+	public function admin_index($blogContentId,$blogPostId=null) {
 
 		if(!$blogContentId || empty($this->blogContent['BlogContent'])) {
 			$this->Session->setFlash('無効な処理です。');
@@ -176,7 +176,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -194,7 +194,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
+	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -218,7 +218,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function _del($id = null) {
+	protected function _del($id = null) {
 
 		/* 削除処理 */
 		if($this->BlogComment->del($id)) {
@@ -243,7 +243,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_delete($blogContentId,$blogPostId,$id = null) {
+	public function admin_delete($blogContentId,$blogPostId,$id = null) {
 
 		/* 除外処理 */
 		if(!$blogContentId || !$id) {
@@ -279,7 +279,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
+	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -302,7 +302,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_publish($blogContentId, $blogPostId, $id) {
+	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -323,7 +323,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_publish($ids) {
+	protected function _batch_publish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -341,7 +341,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_unpublish($ids) {
+	protected function _batch_unpublish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -359,7 +359,7 @@ class BlogCommentsController extends BlogAppController {
  * @param boolean $status
  * @return boolean 
  */
-	function _changeStatus($id, $status) {
+	protected function _changeStatus($id, $status) {
 		
 		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
 		$data = $this->BlogComment->find('first', array('conditions' => array('BlogComment.id' => $id), 'recursive' => -1));
@@ -388,7 +388,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean
  * @access public
  */
-	function add($blogContentId,$blogPostId) {
+	public function add($blogContentId,$blogPostId) {
 		
 		Configure::write('debug', 0);
 		
@@ -430,7 +430,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean
  * @access public
  */
-	function smartphone_add($blogContentId,$blogPostId) {
+	public function smartphone_add($blogContentId,$blogPostId) {
 		
 		$this->setAction('add', $blogContentId, $blogPostId);
 		

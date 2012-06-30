@@ -56,7 +56,7 @@ class BcCsvHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function addModelData($modelName,$data) {
+	public function addModelData($modelName,$data) {
 
 		if(!$modelName)
 			return false;
@@ -77,7 +77,7 @@ class BcCsvHelper extends AppHelper {
  * @param array $datas
  * @return $csv
  */
-	function addModelDatas($modelName,$datas) {
+	public function addModelDatas($modelName,$datas) {
 
 		if(!$modelName)
 			return false;
@@ -99,7 +99,7 @@ class BcCsvHelper extends AppHelper {
  * @return string|false $head
  * @access protected
  */
-	function _perseKey($data) {
+	protected function _perseKey($data) {
 
 		if(!is_array($data))
 			return false;
@@ -121,7 +121,7 @@ class BcCsvHelper extends AppHelper {
  * @return string $body
  * @access protected
  */
-	function _perseValue($data) {
+	protected function _perseValue($data) {
 
 		if(!is_array($data))
 			return false;
@@ -148,7 +148,7 @@ class BcCsvHelper extends AppHelper {
  * @param boolean $debug
  * @return void|string
  */
-	function download($fileName,$debug = false) {
+	public function download($fileName,$debug = false) {
 
 		if($this->exportCsvHead) {
 			$exportData = $this->csvHead.$this->csvBody;
@@ -172,7 +172,7 @@ class BcCsvHelper extends AppHelper {
  * @param $fileName
  * @return void
  */
-	function save($fileName) {
+	public function save($fileName) {
 		
 		if($this->exportCsvHead) {
 			$exportData = $this->csvHead.$this->csvBody;

@@ -78,7 +78,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
+	public function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
 
 		if ($errno==2) {
 			$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr);
@@ -92,7 +92,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 		
@@ -144,7 +144,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function index() {
+	public function index() {
 
 		$this->pageTitle = 'baserCMSのインストール';
 
@@ -173,7 +173,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function step2() {
+	public function step2() {
 
 		if($this->request->data && $this->request->data['clicked']=='next'){
 			$this->redirect('step3');
@@ -198,7 +198,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function step3() {
+	public function step3() {
 
 		$dbsource = $this->Session->read('Installation.dbSource');
 		if(!$dbsource) {
@@ -255,7 +255,7 @@ class InstallationsController extends AppController {
  * 
  * @return array 
  */
-	function _getDbDataPatterns() {
+	protected function _getDbDataPatterns() {
 		
 		$patterns = array();
 		// コア
@@ -284,7 +284,7 @@ class InstallationsController extends AppController {
  * @param string $theme
  * @return array 
  */
-	function _loadDbDataPatterns($path, $theme = 'core') {
+	protected function _loadDbDataPatterns($path, $theme = 'core') {
 		
 		$patterns = array();
 		$Folder = new Folder($path);
@@ -303,7 +303,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function step4() {
+	public function step4() {
 
 		if(!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
@@ -360,7 +360,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access protected
  */
-	function _sendCompleteMail($email, $name, $password) {
+	protected function _sendCompleteMail($email, $name, $password) {
 
 		$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
 		$this->sendMail($email, 'baserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
@@ -374,7 +374,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function step5() {
+	public function step5() {
 
 		$this->pageTitle = 'baserCMSのインストール完了！';
 			
@@ -420,7 +420,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access	protected
  */
-	function _login() {
+	protected function _login() {
 
 		$extra = array();
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
@@ -440,7 +440,7 @@ class InstallationsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _constructionDb($dbDataPattern = false) {
+	protected function _constructionDb($dbDataPattern = false) {
 
 		$dbConfig = $this->_readDbSettingFromSession();
 		if(!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
@@ -455,7 +455,7 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	function _getDefaultValuesStep3() {
+	protected function _getDefaultValuesStep3() {
 
 		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
@@ -489,7 +489,7 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	function _getDefaultValuesStep4() {
+	protected function _getDefaultValuesStep4() {
 
 		$data = array();
 		if ( $this->Session->read('Installation.admin_username') ) {
@@ -517,7 +517,7 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	function _readDbSettingFromSession() {
+	protected function _readDbSettingFromSession() {
 
 		$data = array();
 		$data['driver'] = $this->Session->read('Installation.dbType');
@@ -541,7 +541,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access	protected
  */
-	function _writeDbSettingToSession($data) {
+	protected function _writeDbSettingToSession($data) {
 
 		/* dbEncoding */
 		$data['dbEncoding'] = 'utf8';
@@ -578,7 +578,7 @@ class InstallationsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _testConnectDb($config){
+	protected function _testConnectDb($config){
 
 		set_error_handler(array($this, "dbErrorHandler"));
 
@@ -621,7 +621,7 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	function _getDbSource() {
+	protected function _getDbSource() {
 
 		/* DBソース取得 */
 		$dbsource = array();
@@ -674,7 +674,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public
  */
-	function alert() {
+	public function alert() {
 		
 		$this->pageTitle = 'baserCMSのインストールを開始できません';
 		
@@ -686,7 +686,7 @@ class InstallationsController extends AppController {
  * @return	void
  * @access	public
  */
-	function reset() {
+	public function reset() {
 
 		$this->pageTitle = 'baserCMSの初期化';
 		$this->layoutPath = 'admin';
@@ -731,7 +731,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public 
  */
-	function deleteAllTables() {
+	public function deleteAllTables() {
 		
 		$dbConfig = $this->_readDbSettingFromSession();
 		if(!$dbConfig) {

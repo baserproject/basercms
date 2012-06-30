@@ -35,7 +35,7 @@ class BcArrayHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function first($array, $key) {
+	public function first($array, $key) {
 
 		reset($array);
 		$first = key($array);
@@ -54,7 +54,7 @@ class BcArrayHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function last($array, $key) {
+	public function last($array, $key) {
 
 		end($array);
 		$end = key($array);
@@ -74,7 +74,7 @@ class BcArrayHelper extends AppHelper {
  * @return	array
  * @access	public
  */
-	function addText($array, $prefix = '', $suffix = '') {
+	public function addText($array, $prefix = '', $suffix = '') {
 		if($prefix || $suffix) {
 			array_walk($array, array($this, '__addText'), $prefix.','.$suffix);
 		}
@@ -89,7 +89,7 @@ class BcArrayHelper extends AppHelper {
  * @return	string
  * @access	private
  */
-	function __addText(&$value, $key, $add) {
+	private function __addText(&$value, $key, $add) {
 		if($add) {
 			list($prefix, $suffix) = split(',',$add);
 		}

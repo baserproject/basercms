@@ -47,7 +47,7 @@ class BcTextHelper extends TextHelper {
  * @return string Trimmed string.
  * @access public
  */
-	function mbTruncate($text, $length = 100, $ending = '...', $exact = true, $considerHtml = false) {
+	public function mbTruncate($text, $length = 100, $ending = '...', $exact = true, $considerHtml = false) {
 		
 		if (is_array($ending)) {
 			extract($ending);
@@ -134,7 +134,7 @@ class BcTextHelper extends TextHelper {
  * @return string ○―マーク
  * @access public
  */
-	function booleanMark($value) {
+	public function booleanMark($value) {
 
 		if($value) {
 			return "○";
@@ -149,7 +149,7 @@ class BcTextHelper extends TextHelper {
  * @return array ○―マークリスト
  * @access public
  */
-	function booleanMarkList() {
+	public function booleanMarkList() {
 
 		return array(0=>"―",1=>"○");
 
@@ -160,7 +160,7 @@ class BcTextHelper extends TextHelper {
  * @return array 有無リスト
  * @access public
  */
-	function booleanExistsList() {
+	public function booleanExistsList() {
 
 		return array(0=>"無",1=>"有");
 
@@ -171,7 +171,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  * @access public
  */
-	function booleanAllowList() {
+	public function booleanAllowList() {
 
 		return array(0=>"不可",1=>"可");
 
@@ -183,7 +183,7 @@ class BcTextHelper extends TextHelper {
  * @return array [〜する/〜しない]形式のリスト
  * @access public
  */
-	function booleanDoList($doText = null) {
+	public function booleanDoList($doText = null) {
 
 		return array(0=>$doText."しない",1=>$doText."する");
 
@@ -195,7 +195,7 @@ class BcTextHelper extends TextHelper {
  * @return array
  * @access public
  */
-	function booleanRequireList($requireText = null) {
+	public function booleanRequireList($requireText = null) {
 		
 		return array(0=>$requireText.'ない',1=>$requireText.'る');
 		
@@ -207,7 +207,7 @@ class BcTextHelper extends TextHelper {
  * @param string $text
  * @return mixed
  */
-	function booleanRequire($value,$text) {
+	public function booleanRequire($value,$text) {
 		
 		$booleanList = $this->booleanRequireList($text);
 		return $booleanList[$value];
@@ -221,7 +221,7 @@ class BcTextHelper extends TextHelper {
  * @return string
  * @access public
  */
-	function booleanDo($value,$doText = null) {
+	public function booleanDo($value,$doText = null) {
 
 		$booleanDoList = $this->booleanDoList($doText);
 		return $booleanDoList[$value];
@@ -233,7 +233,7 @@ class BcTextHelper extends TextHelper {
  * @return array 都道府県リスト
  * @access public
  */
-	function prefList($empty = '都道府県') {
+	public function prefList($empty = '都道府県') {
 
 		$pref = array();
 		if($empty) {
@@ -259,7 +259,7 @@ class BcTextHelper extends TextHelper {
  * @return string
  * @access public
  */
-	function sex($value) {
+	public function sex($value) {
 		$sexes = array(1=>'男',2=>'女');
 		return $sexes[$value];
 	}
@@ -271,7 +271,7 @@ class BcTextHelper extends TextHelper {
  * @return string	〒マーク、ハイフン付きの郵便番号
  * @access	public
  */
-	function zipFormat($value) {
+	public function zipFormat($value) {
 		
 		$right = substr($value,0,3);
 		$left = substr($value,3,4);
@@ -286,7 +286,7 @@ class BcTextHelper extends TextHelper {
  * @return string 都道府県名
  * @access	public
  */
-	function pref($value, $noValue='') {
+	public function pref($value, $noValue='') {
 
 		if(!$value) {
 			return $noValue;
@@ -303,7 +303,7 @@ class BcTextHelper extends TextHelper {
  * @return mixed
  * @access public
  */
-	function noValue($value, $noValue) {
+	public function noValue($value, $noValue) {
 
 		if(!$value) {
 			return $noValue;
@@ -319,7 +319,7 @@ class BcTextHelper extends TextHelper {
  * @return	string	可/不可
  * @access	public
  */
-	function booleanAllow($value) {
+	public function booleanAllow($value) {
 
 		$list = $this->booleanAllowList();
 		return $list[(int)$value];
@@ -332,7 +332,7 @@ class BcTextHelper extends TextHelper {
  * @return string 有/無
  * @access public
  */
-	function booleanExists($value) {
+	public function booleanExists($value) {
 
 		$list = $this->booleanExistsList();
 		return $list[(int)$value];
@@ -345,7 +345,7 @@ class BcTextHelper extends TextHelper {
  * @return string 和暦
  * @access public
  */
-	function dateTimeWareki($arrDate) {
+	public function dateTimeWareki($arrDate) {
 
 		if(!is_array($arrDate)) return;
 		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
@@ -362,7 +362,7 @@ class BcTextHelper extends TextHelper {
  * @param string $prefix
  * @return string
  */
-	function moneyFormat($value, $prefix='¥') {
+	public function moneyFormat($value, $prefix='¥') {
 		
 		if($value) {
 			return $prefix.number_format($value);
@@ -378,7 +378,7 @@ class BcTextHelper extends TextHelper {
  * @return string 日付
  * @access public
  */
-	function dateTime($arrDate) {
+	public function dateTime($arrDate) {
 
 		if(!$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
 			return;
@@ -394,7 +394,7 @@ class BcTextHelper extends TextHelper {
  * @return	string	変換後の文字列
  * @access	public
  */
-	function format($format,$value, $noValue = '') {
+	public function format($format,$value, $noValue = '') {
 		
 		if($value === '' || is_null($value)) {
 			return $noValue;
@@ -411,7 +411,7 @@ class BcTextHelper extends TextHelper {
  * @return string 表示用データ
  * @access public
  */
-	function listValue($field,$value) {
+	public function listValue($field,$value) {
 
 		$list = $this->BcForm->getControlSource($field);
 		if($list && isset($list[$value])) {
@@ -429,7 +429,7 @@ class BcTextHelper extends TextHelper {
  * @return array
  * @access public
  */
-	function toArray($separator,$value) {
+	public function toArray($separator,$value) {
 		
 		if($separator != '"') {
 			$value = str_replace('"','',$value);
@@ -457,7 +457,7 @@ class BcTextHelper extends TextHelper {
  * @param mixed type $noValue
  * @return mixied
  */
-	function arrayValue($key, $array, $noValue = '') {
+	public function arrayValue($key, $array, $noValue = '') {
 		
 		if(is_numeric($key)) {
 			$key = (int)$key;
@@ -478,7 +478,7 @@ class BcTextHelper extends TextHelper {
  * @return string
  * @access public
  */
-	function arrayValues($glue, $keys, $array) {
+	public function arrayValues($glue, $keys, $array) {
 
 		$values = array();
 		foreach($keys as $key) {
@@ -502,7 +502,7 @@ class BcTextHelper extends TextHelper {
  * @return mixed
  * @access public
  */
-	function age($birthday, $suffix='歳', $noValue = '不明') {
+	public function age($birthday, $suffix='歳', $noValue = '不明') {
 
 		if(!$birthday) {
 			return $noValue;
@@ -524,7 +524,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  * @access public
  */
-	function booleanStatusList() {
+	public function booleanStatusList() {
 
 		return array(0=>"無効",1=>"有効");
 
@@ -536,7 +536,7 @@ class BcTextHelper extends TextHelper {
  * @return string 無効/有効
  * @access public
  */
-	function booleanStatus($value) {
+	public function booleanStatus($value) {
 
 		$list = $this->booleanStatusList();
 		return $list[(int)$value];

@@ -29,7 +29,7 @@ class BcMobileHelper extends Helper {
  * @return void
  * @access public
  */
-	function afterLayout() {
+	public function afterLayout() {
 
 		/* 出力データをSJISに変換 */
 		$view =& ClassRegistry::getObject('view');
@@ -95,7 +95,7 @@ class BcMobileHelper extends Helper {
  * @return void
  * @access public
  */
-	function header(){
+	public function header(){
 		
 		if(Configure::read('BcRequest.agent') == 'mobile') {
 			header("Content-type: application/xhtml+xml");
@@ -110,7 +110,7 @@ class BcMobileHelper extends Helper {
  * @return string
  * @access protected 
  */
-	function _removeMobilePrefix($matches) {
+	protected function _removeMobilePrefix($matches) {
 		if(strpos($matches[1], 'mobile=off') === false) {
 			return 'href="'.BC_BASE_URL.$matches[2].'"';
 		} else {
@@ -125,7 +125,7 @@ class BcMobileHelper extends Helper {
  * @return string 
  * @access protected
  */
-	function _addMobilePrefix($matches) {
+	protected function _addMobilePrefix($matches) {
 		$currentAlias = Configure::read('BcRequest.agentAlias');
 		$url = $matches[1];
 		if(strpos($url, 'mobile=off') === false) {

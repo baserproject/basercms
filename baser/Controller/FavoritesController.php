@@ -38,7 +38,7 @@ class FavoritesController extends AppController {
  */
 	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 
-	function admin_ajax_add () {
+	public function admin_ajax_add () {
 		
 		if($this->request->data) {
 			$user = $this->BcAuth->user();
@@ -68,7 +68,7 @@ class FavoritesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_edit ($id) {
+	public function admin_ajax_edit ($id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -94,7 +94,7 @@ class FavoritesController extends AppController {
  * 
  * @param int $id 
  */
-	function admin_ajax_delete () {
+	public function admin_ajax_delete () {
 		
 		if($this->request->data) {
 			$name = $this->Favorite->field('name', array('Favorite.id' => $this->request->data['Favorite']['id']));
@@ -114,7 +114,7 @@ class FavoritesController extends AppController {
  * @access public
  * @return boolean
  */
-	function admin_update_sort () {
+	public function admin_update_sort () {
 
 		if($this->request->data){
 			if($this->Favorite->changeSort($this->request->data['Sort']['id'],$this->request->data['Sort']['offset'])){

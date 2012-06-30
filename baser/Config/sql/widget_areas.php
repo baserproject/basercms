@@ -8,11 +8,11 @@ class WidgetAreasSchema extends CakeSchema {
 
 	public $connection = 'baser';
 
-	function before($event = array()) {
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
 	public $widget_areas = array(

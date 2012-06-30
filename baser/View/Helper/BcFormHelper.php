@@ -57,7 +57,7 @@ class BcFormHelper extends FormHelper {
  * @return string 都道府県用のSELECTタグ
  * @access public
  */
-	function prefTag($fieldName, $selected = null, $attributes = array()) {
+	public function prefTag($fieldName, $selected = null, $attributes = array()) {
 
 		$pref = $this->BcText->prefList();
 		return $this->select($fieldName, $pref, $selected, $attributes, false);
@@ -80,7 +80,7 @@ class BcFormHelper extends FormHelper {
  * @return string The HTML formatted OPTION element
  * @access public
  */
-	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 
 		$year = $month = $day = $hour = $min = $meridian = null;
 
@@ -257,7 +257,7 @@ class BcFormHelper extends FormHelper {
  * @param boolean $showEmpty Show/hide the empty select option
  * @return string
  */
-	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
 		
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
@@ -313,7 +313,7 @@ class BcFormHelper extends FormHelper {
  * @return array コントロールソース
  * @access public
  */
-	function getControlSource($field,$options = array()) {
+	public function getControlSource($field,$options = array()) {
 		
 		$count = preg_match_all('/\./is',$field,$matches);
 		if($count == 1) {
@@ -347,7 +347,7 @@ class BcFormHelper extends FormHelper {
  * @return mixed リストまたは、false
  * @access public
  */
-	function generateList($modelName,$conditions = array(),$fields = array(),$order = array()) {
+	public function generateList($modelName,$conditions = array(),$fields = array(),$order = array()) {
 
 		$model =& ClassRegistry::getObject($modelName);
 
@@ -376,7 +376,7 @@ class BcFormHelper extends FormHelper {
  * @return array 属性
  * @access public
  */
-	function jsonList($field,$attributes) {
+	public function jsonList($field,$attributes) {
 
 		am(array("imgSrc"=>"","ajaxAddAction"=>"","ajaxDelAction"=>""),$attributes);
 		// JsonDb用Hiddenタグ
@@ -411,7 +411,7 @@ class BcFormHelper extends FormHelper {
  * @return string html
  * @access public
  */
-	function datepicker($fieldName, $attributes = array()) {
+	public function datepicker($fieldName, $attributes = array()) {
 
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
@@ -459,7 +459,7 @@ DOC_END;
  * @return string
  * @access public
  */
-	function dateTimePicker($fieldName, $attributes = array()) {
+	public function dateTimePicker($fieldName, $attributes = array()) {
 
 		$timeAttributes = array('size'=>8,'maxlength'=>8);
 		if (!isset($attributes['value'])) {
@@ -508,7 +508,7 @@ DOC_END;
  * @return array option lists
  * @access private
  */
-	function __generateOptions($name, $options = array()) {
+	private function __generateOptions($name, $options = array()) {
 		
 		if (!empty($this->options[$name])) {
 			return $this->options[$name];
@@ -647,7 +647,7 @@ DOC_END;
  * @return string An HTML text input element
  * @access public
  */
-	function checkbox($fieldName, $options = array()) {
+	public function checkbox($fieldName, $options = array()) {
 		
 		// CUSTOMIZE ADD 2011/05/07 ryuring
 		// >>> hiddenをデフォルトオプションに追加
@@ -720,7 +720,7 @@ DOC_END;
  * @return array
  * @access private
  */
-	function __selectOptions($elements = array(), $selected = null, $parents = array(), $showParents = null, $attributes = array()) {
+	private function __selectOptions($elements = array(), $selected = null, $parents = array(), $showParents = null, $attributes = array()) {
 		 
 		$select = array();
 		$attributes = array_merge(array('escape' => true, 'style' => null), $attributes);
@@ -831,7 +831,7 @@ DOC_END;
  * @return string Formatted SELECT element
  * @access public
  */
-	function select($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
+	public function select($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 		
 		$select = array();
 		$showParents = false;
@@ -955,7 +955,7 @@ DOC_END;
  * @return string
  * @access public
  */
-	function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
+	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 
 		$_attributes = array('separator'=>'<br />','quotes'=>true);
 		$attributes = Set::merge($_attributes,$attributes);
@@ -1000,7 +1000,7 @@ DOC_END;
  * @return string
  * @access public
  */
-	function hidden($fieldName, $options = array()) {
+	public function hidden($fieldName, $options = array()) {
 		
 		$secure = true;
 
@@ -1098,7 +1098,7 @@ DOC_END;
  * @return	string
  * @access	public
  */
-	function ckeditor($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+	public function ckeditor($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
 
 		$_options = array('type'=>'textarea');
 		$options = am($_options,$options);
@@ -1115,7 +1115,7 @@ DOC_END;
  * @return string
  * @access public
  */
-	function create($model = null, $options = array()) {
+	public function create($model = null, $options = array()) {
 
 		$this->__id = $this->_getId($model, $options);
 		
@@ -1134,7 +1134,7 @@ DOC_END;
  * @return	string
  * @access	public
  */
-	function end($options = null) {
+	public function end($options = null) {
 
 		$id = $this->__id;
 		$this->__id = null;
@@ -1161,7 +1161,7 @@ DOC_END;
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
  */
-	function input($fieldName, $options = array()) {
+	public function input($fieldName, $options = array()) {
 
 		$options = $this->executeHook('beforeFormInput', $fieldName, $options);
 		
@@ -1229,7 +1229,7 @@ DOC_END;
  * @param array $options
  * @return string
  */
-	function _getId($model = null, $options = array()) {
+	protected function _getId($model = null, $options = array()) {
 		
 		if (is_array($model) && empty($options)) {
 			$model = null;

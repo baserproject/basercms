@@ -47,7 +47,7 @@ class BcEmailComponent extends EmailComponent {
  * @return	boolean Success
  * @access	public
  */
-	function send($content = null, $template = null, $layout = null) {
+	public function send($content = null, $template = null, $layout = null) {
 		
 		$this->__createHeader();
 
@@ -118,7 +118,7 @@ class BcEmailComponent extends EmailComponent {
  * @return 	string Wrapped message
  * @access private
  */
-	function __wrap($message) {
+	private function __wrap($message) {
 
 		$message = $this->__strip($message);
 
@@ -145,7 +145,7 @@ class BcEmailComponent extends EmailComponent {
  * @return array
  * @access private
  */
-	function ___wrap($lines) {
+	private function ___wrap($lines) {
 
 		$formatted = array();
 		if ($this->_lineLength !== null) {
@@ -170,7 +170,7 @@ class BcEmailComponent extends EmailComponent {
  * @return 	string	Encoded string
  * @access	private
  */
-	function __encode($subject) {
+	private function __encode($subject) {
 		$subject = $this->__strip($subject);
 
 		if (strtolower($this->charset) !== 'iso-8859-15') {
@@ -230,7 +230,7 @@ class BcEmailComponent extends EmailComponent {
  *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
  *       強制的に$widthで改行する、とか？
  */
-	function mbFold($str, $width, $encoding = null) {
+	public function mbFold($str, $width, $encoding = null) {
 		
 		assert('$width >= 4');
 
@@ -298,7 +298,7 @@ class BcEmailComponent extends EmailComponent {
  * @return string Email address suitable for email headers or smtp pipe
  * @access private
  */
-	function __formatAddress($string, $smtp = false) {
+	private function __formatAddress($string, $smtp = false) {
 		
 		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
 		if ($smtp && $hasAlias) {
@@ -324,7 +324,7 @@ class BcEmailComponent extends EmailComponent {
  * @return array Email ready to be sent
  * @access private
  */
-	function __renderTemplate($content) {
+	private function __renderTemplate($content) {
 		
 		$viewClass = $this->Controller->view;
 

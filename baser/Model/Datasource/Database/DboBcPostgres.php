@@ -25,7 +25,7 @@ class DboBcPostgres extends DboPostgres {
  * @param string $tableName Name of database table to inspect
  * @return array Fields in table. Keys are name and type
  */
-	function &describe(&$model) {
+	public function &describe(&$model) {
 		// >>> CUSTOMIZE MODIFY 2012/04/23 ryuring
 		//$fields = parent::describe($model);
 		// ---
@@ -143,7 +143,7 @@ class DboBcPostgres extends DboPostgres {
  * @return string
  * @access public
  */
-	function buildRenameTable($sourceName, $targetName) {
+	public function buildRenameTable($sourceName, $targetName) {
 		
 		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
 		
@@ -155,7 +155,7 @@ class DboBcPostgres extends DboPostgres {
  * @return boolean
  * @access public
  */
-	function renameColumn($options) {
+	public function renameColumn($options) {
 
 		extract($options);
 
@@ -178,7 +178,7 @@ class DboBcPostgres extends DboPostgres {
  * @todo Add logic that formats/escapes data based on column type
  * @access public
  */
-	function value($data, $column = null, $read = true) {
+	public function value($data, $column = null, $read = true) {
 
 		// >>> CUSTOMIZE MODIFY 2011/03/23 ryuring
 		//$parent = parent::value($data, $column);
@@ -249,7 +249,7 @@ class DboBcPostgres extends DboPostgres {
  * @return mixed Prepared value or array of values.
  * @access private
  */
-	function __value($data, $column = null, $read = true) {
+	private function __value($data, $column = null, $read = true) {
 		
 		if (is_array($data) && !empty($data)) {
 			return array_map(
@@ -277,7 +277,7 @@ class DboBcPostgres extends DboPostgres {
  * @access public
  * @return array
  */
-	function alterSchema($compare, $table = null) {
+	public function alterSchema($compare, $table = null) {
 		
 		if (!is_array($compare)) {
 			return false;
@@ -355,7 +355,7 @@ class DboBcPostgres extends DboPostgres {
  * @param string $real Real database-layer column type (i.e. "varchar(255)")
  * @return int An integer representing the length of the column
  */
-	function length($real) {
+	public function length($real) {
 		
 		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
 		if(preg_match('/^int([0-9]+)$/', $real, $maches)) {
@@ -386,7 +386,7 @@ class DboBcPostgres extends DboPostgres {
  * @return mixed
  * @access private
  */
-	function __describe($model) {
+	private function __describe($model) {
 		
 		if ($this->cacheSources === false) {
 			return null;

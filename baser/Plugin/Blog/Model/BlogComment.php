@@ -90,7 +90,7 @@ class BlogComment extends BlogAppModel {
  * @return array 初期値データ
  * @access public
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 		$data[$this->name]['name'] = 'NO NAME';
 		return $data;
 	}
@@ -102,7 +102,7 @@ class BlogComment extends BlogAppModel {
  * @param string $commentApprove
  * @return boolean
  */
-	function add($data, $contentId, $postId, $commentApprove) {
+	public function add($data, $contentId, $postId, $commentApprove) {
 
 		if(isset($data['BlogComment'])) {
 			$data = $data['BlogComment'];

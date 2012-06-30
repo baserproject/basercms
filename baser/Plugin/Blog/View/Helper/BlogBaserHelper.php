@@ -37,7 +37,7 @@ class BlogBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function blogPosts ($contentsName, $num = 5, $options = array()) {
+	public function blogPosts ($contentsName, $num = 5, $options = array()) {
 
 		$_options = array(
 			'category'	=> null,
@@ -82,7 +82,7 @@ class BlogBaserHelper extends AppHelper {
  * ブログのトップページ判定
  * @return boolean 
  */
-	function isBlogHome() {
+	public function isBlogHome() {
 		if(empty($this->params['plugin']) || empty($this->params['controller']) || empty($this->params['action'])) {
 			return false;
 		}

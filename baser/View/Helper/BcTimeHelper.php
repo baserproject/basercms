@@ -41,7 +41,7 @@ class BcTimeHelper extends TimeHelper {
  * @return string 年号をあらわすアルファベット
  * @access public
  */
-	function nengo($w) {
+	public function nengo($w) {
 		
 		if(isset($this->nengos[$w])) {
 			return $this->nengos[$w];
@@ -57,7 +57,7 @@ class BcTimeHelper extends TimeHelper {
  * @return mixid string / false
  * @access public
  */
-	function wareki($date) {
+	public function wareki($date) {
 
 		$_date = split('/', $date);
 		if(!$_date) {
@@ -84,7 +84,7 @@ class BcTimeHelper extends TimeHelper {
  * @return mixid int / false
  * @access public
  */
-	function wyear($date) {
+	public function wyear($date) {
 		
 		$_date = split('/', $date);
 		if(!$_date) {
@@ -112,7 +112,7 @@ class BcTimeHelper extends TimeHelper {
  * @return array
  * @access public
  */
-	function convertToWarekiYear($year) {
+	public function convertToWarekiYear($year) {
 
 		if($year >= 1868 && $year <= 1911) {
 			return array('m-'.($year-1867));
@@ -141,7 +141,7 @@ class BcTimeHelper extends TimeHelper {
  * @return int
  * @access public
  */
-	function convertToSeirekiYear($year) {
+	public function convertToSeirekiYear($year) {
 
 		if(strpos($year, '-')===false) {
 			return false;
@@ -172,7 +172,7 @@ class BcTimeHelper extends TimeHelper {
  * @return array 和暦データ
  * @access public
  */
-	function convertToWarekiArray($date) {
+	public function convertToWarekiArray($date) {
 
 		if(!$date) {
 			return '';
@@ -224,7 +224,7 @@ class BcTimeHelper extends TimeHelper {
  * @return string 和暦データ
  * @access public
  */
-	function convertToWareki($date) {
+	public function convertToWareki($date) {
 
 		$dateArray = $this->convertToWarekiArray($date);
 		if(is_array($dateArray) && !empty($dateArray)) {
@@ -242,7 +242,7 @@ class BcTimeHelper extends TimeHelper {
  * @return mixed 分/null
  * @access	public
  */
-	function minutes($strDate) {
+	public function minutes($strDate) {
 
 		$time = strtotime($strDate,0);
 		$minutes = $time / 60;
@@ -263,7 +263,7 @@ class BcTimeHelper extends TimeHelper {
  * @return string Formatted date string
  * @access public
  */
-	function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
+	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
 
 		if($date != "00:00:00" && (!$date||$date === 0||$date=='0000-00-00 00:00:00')) {
 			return "";
@@ -282,7 +282,7 @@ class BcTimeHelper extends TimeHelper {
  * @return boolean 経過有無
  * @access public
  */
-	function pastDays($date,$days) {
+	public function pastDays($date,$days) {
 
 		if(!$date) return true;
 		$pastDate = strtotime($date);

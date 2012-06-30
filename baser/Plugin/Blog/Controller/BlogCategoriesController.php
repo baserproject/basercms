@@ -77,7 +77,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		
@@ -99,7 +99,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 		
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
@@ -111,7 +111,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_index($blogContentId) {
+	public function admin_index($blogContentId) {
 
 		$conditions = array('BlogCategory.blog_content_id'=>$blogContentId);
 		$_dbDatas = $this->BlogCategory->generatetreelist($conditions);
@@ -139,7 +139,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_add($blogContentId) {
+	public function admin_add($blogContentId) {
 
 		if(!$blogContentId) {
 			$this->Session->setFlash('無効なIDです。');
@@ -195,7 +195,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_edit($blogContentId,$id) {
+	public function admin_edit($blogContentId,$id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
@@ -250,7 +250,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -267,7 +267,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  * @access public
  */
-	function admin_ajax_delete($blogContentId, $id = null) {
+	public function admin_ajax_delete($blogContentId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -289,7 +289,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  * @access public
  */
-	function _del($id = null) {
+	protected function _del($id = null) {
 	
 		// メッセージ用にデータを取得
 		$data = $this->BlogCategory->read(null, $id);
@@ -312,7 +312,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  * @access public
  */
-	function admin_delete($blogContentId, $id = null) {
+	public function admin_delete($blogContentId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {

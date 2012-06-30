@@ -60,7 +60,7 @@ class ConnectionManager extends Object {
  * Constructor.
  *
  */
-	function __construct() {
+	public function __construct() {
 		if (class_exists('DATABASE_CONFIG')) {
 			$this->config =& new DATABASE_CONFIG();
 		}
@@ -72,7 +72,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function &getInstance() {
+	public function &getInstance() {
 		static $instance = array();
 
 		if (!$instance) {
@@ -89,7 +89,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function &getDataSource($name) {
+	public function &getDataSource($name) {
 		$_this =& ConnectionManager::getInstance();
 
 		if (!empty($_this->_dataSources[$name])) {
@@ -119,7 +119,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function sourceList() {
+	public function sourceList() {
 		$_this =& ConnectionManager::getInstance();
 		return array_keys($_this->_dataSources);
 	}
@@ -131,7 +131,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function getSourceName(&$source) {
+	public function getSourceName(&$source) {
 		$_this =& ConnectionManager::getInstance();
 		$names = array_keys($_this->_dataSources);
 		for ($i = 0, $count = count($names); $i < $count; $i++) {
@@ -151,7 +151,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function loadDataSource($connName) {
+	public function loadDataSource($connName) {
 		$_this =& ConnectionManager::getInstance();
 
 		if (is_array($connName)) {
@@ -195,7 +195,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function enumConnectionObjects() {
+	public function enumConnectionObjects() {
 		$_this =& ConnectionManager::getInstance();
 
 		if (!empty($_this->_connectionsEnum)) {
@@ -221,7 +221,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function &create($name = '', $config = array()) {
+	public function &create($name = '', $config = array()) {
 		$_this =& ConnectionManager::getInstance();
 
 		if (empty($name) || empty($config) || array_key_exists($name, $_this->_connectionsEnum)) {
@@ -240,7 +240,7 @@ class ConnectionManager extends Object {
  * @return array An indexed array with: filename, classname, and parent
  * @access private
  */
-	function __getDriver($config) {
+	private function __getDriver($config) {
 		if (!isset($config['datasource'])) {
 			$config['datasource'] = 'dbo';
 		}
@@ -261,7 +261,7 @@ class ConnectionManager extends Object {
  *
  * @access private
  */
-	function __destruct() {
+	public function __destruct() {
 		if (Configure::read('Session.save') == 'database' && function_exists('session_write_close')) {
 			session_write_close();
 		}

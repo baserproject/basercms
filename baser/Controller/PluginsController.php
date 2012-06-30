@@ -82,7 +82,7 @@ class PluginsController extends AppController {
  * @access private
  * @deprecated BaserPluginAppController に移行
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 
@@ -107,7 +107,7 @@ class PluginsController extends AppController {
  * @access public
  * @deprecated BaserPluginAppController に移行
  */
-	function getContentId() {
+	public function getContentId() {
 
 		// 管理画面の場合には取得しない
 		if(!empty($this->request->params['admin'])){
@@ -159,7 +159,7 @@ class PluginsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		$datas = $this->Plugin->find('all', array('order' => 'Plugin.name'));
 		if(!$datas) {
@@ -198,7 +198,7 @@ class PluginsController extends AppController {
  * @param string $file
  * @return array 
  */
-	function _getPluginInfo($datas, $file, $core = false) {
+	protected function _getPluginInfo($datas, $file, $core = false) {
 		
 		$plugin = basename($file);
 		$pluginData = array();
@@ -287,7 +287,7 @@ class PluginsController extends AppController {
  * @access public
  * @deprecated admin_ajax_delete_file に移行
  */
-	function admin_delete_file($pluginName) {
+	public function admin_delete_file($pluginName) {
 		
 		$this->__deletePluginFile($pluginName);
 		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
@@ -302,7 +302,7 @@ class PluginsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete_file($pluginName) {
+	public function admin_ajax_delete_file($pluginName) {
 		
 		if($pluginName) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -321,7 +321,7 @@ class PluginsController extends AppController {
  * @return void
  * @access private
  */
-	function __deletePluginFile($pluginName) {
+	private function __deletePluginFile($pluginName) {
 
 		$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql'.DS;
 		$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'.DS;
@@ -367,7 +367,7 @@ class PluginsController extends AppController {
  * @return  void
  * @access  public
  */
-	function admin_add($name) {
+	public function admin_add($name) {
 		
 		$name = urldecode($name);
 		if(!$this->request->data) {
@@ -455,7 +455,7 @@ class PluginsController extends AppController {
  * @access public
  * @deprecated admin_ajax_delete に移行
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -487,7 +487,7 @@ class PluginsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -514,7 +514,7 @@ class PluginsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
