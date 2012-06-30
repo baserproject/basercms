@@ -21,12 +21,12 @@ class CKEditor
 	 * The version of %CKEditor.
 	 * \private
 	 */
-	var $version = '3.6.5';
+	public $version = '3.6.5';
 	/**
 	 * A constant string unique for each release of %CKEditor.
 	 * \private
 	 */
-	var $_timestamp = 'C9A85WF';
+	protected $_timestamp = 'C9A85WF';
 
 	/**
 	 * URL to the %CKEditor installation directory (absolute or relative to document root).
@@ -37,7 +37,7 @@ class CKEditor
 	 * $CKEditor->basePath = '/ckeditor/';
 	 * @endcode
 	 */
-	var $basePath;
+	public $basePath;
 	/**
 	 * An array that holds the global %CKEditor configuration.
 	 * For the list of available options, see http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
@@ -49,13 +49,13 @@ class CKEditor
 	 * $CKEditor->config['width'] = '@@screen.width * 0.8';
 	 * @endcode
 	 */
-	var $config = array();
+	public $config = array();
 	/**
 	 * A boolean variable indicating whether CKEditor has been initialized.
 	 * Set it to true only if you have already included
 	 * &lt;script&gt; tag loading ckeditor.js in your website.
 	 */
-	var $initialized = false;
+	public $initialized = false;
 	/**
 	 * Boolean variable indicating whether created code should be printed out or returned by a function.
 	 *
@@ -68,29 +68,29 @@ class CKEditor
 	 * echo $code;
 	 * @endcode
 	 */
-	var $returnOutput = false;
+	public $returnOutput = false;
 	/**
 	 * An array with textarea attributes.
 	 *
 	 * When %CKEditor is created with the editor() method, a HTML &lt;textarea&gt; element is created,
 	 * it will be displayed to anyone with JavaScript disabled or with incompatible browser.
 	 */
-	var $textareaAttributes = array( "rows" => 8, "cols" => 60 );
+	public $textareaAttributes = array( "rows" => 8, "cols" => 60 );
 	/**
 	 * A string indicating the creation date of %CKEditor.
 	 * Do not change it unless you want to force browsers to not use previously cached version of %CKEditor.
 	 */
-	var $timestamp = "C9A85WF";
+	public $timestamp = "C9A85WF";
 	/**
 	 * An array that holds event listeners.
 	 * \private
 	 */
-	var $_events = array();
+	protected $_events = array();
 	/**
 	 * An array that holds global event listeners.
 	 * \private
 	 */
-	var $_globalEvents = array();
+	protected $_globalEvents = array();
 
 	/**
 	 * Main Constructor.

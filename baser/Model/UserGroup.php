@@ -32,28 +32,28 @@ class UserGroup extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'UserGroup';
+	public $name = 'UserGroup';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	var $hasMany = array('Permission'=>
+	public $hasMany = array('Permission'=>
 			array('className'=>'Permission',
 							'order'=>'id',
 							'foreignKey'=>'user_group_id',
@@ -73,7 +73,7 @@ class UserGroup extends AppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'ユーザーグループ名を入力してください。'),

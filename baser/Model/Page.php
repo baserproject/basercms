@@ -28,21 +28,21 @@ class Page extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Page';
+	public $name = 'Page';
 /**
  * データベース接続
  * 
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * belongsTo
  * 
  * @var array
  * @access public
  */
-	var $belongsTo = array(
+	public $belongsTo = array(
 			'PageCategory' =>   array(  'className'=>'PageCategory',
 							'foreignKey'=>'page_category_id'),
 			'User' => array('className'=> 'User',
@@ -53,14 +53,14 @@ class Page extends AppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('BcContentsManager', 'BcCache');
+	public $actsAs = array('BcContentsManager', 'BcCache');
 /**
  * 更新前のページファイルのパス
  * 
  * @var string
  * @access public
  */
-	var $oldPath = '';
+	public $oldPath = '';
 /**
  * ファイル保存可否
  * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
@@ -69,14 +69,14 @@ class Page extends AppModel {
  * @var boolean
  * @access public
  */
-	var $fileSave = true;
+	public $fileSave = true;
 /**
  * 検索テーブルへの保存可否
  *
  * @var boolean
  * @access public
  */
-	var $contentSaving = true;
+	public $contentSaving = true;
 /**
  * 非公開WebページURLリスト
  * キャッシュ用
@@ -85,7 +85,7 @@ class Page extends AppModel {
  * @deprecated
  * @access protected
  */
-	var $_unpublishes = -1;
+	protected $_unpublishes = -1;
 /**
  * 公開WebページURLリスト
  * キャッシュ用
@@ -93,7 +93,7 @@ class Page extends AppModel {
  * @var mixed
  * @access protected
  */
-	var $_publishes = -1;
+	protected $_publishes = -1;
 /**
  * WebページURLリスト
  * キャッシュ用
@@ -101,7 +101,7 @@ class Page extends AppModel {
  * @var mixed
  * @access protected
  */
-	var $_pages = -1;
+	protected $_pages = -1;
 /**
  * 最終登録ID
  * モバイルページへのコピー処理でスーパークラスの最終登録IDが上書きされ、
@@ -110,14 +110,14 @@ class Page extends AppModel {
  * @var int
  * @access private
  */
-	var $__pageInsertID = null;
+	private $__pageInsertID = null;
 /**
  * バリデーション
  *
  * @var array
  * @access	public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'ページ名を入力してください。',

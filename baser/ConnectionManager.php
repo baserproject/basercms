@@ -41,21 +41,21 @@ class ConnectionManager extends Object {
  * @var DATABASE_CONFIG
  * @access public
  */
-	var $config = null;
+	public $config = null;
 /**
  * Holds instances DataSource objects
  *
  * @var array
  * @access protected
  */
-	var $_dataSources = array();
+	protected $_dataSources = array();
 /**
  * Contains a list of all file and class names used in Connection settings
  *
  * @var array
  * @access protected
  */
-	var $_connectionsEnum = array();
+	protected $_connectionsEnum = array();
 /**
  * Constructor.
  *

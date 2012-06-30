@@ -32,5 +32,5 @@ class BaserPluginAppModel extends AppModel {
  * @var		string
  * @access 	public
  */
-	var $useDbConfig = 'plugin';
+	public $useDbConfig = 'plugin';
 }

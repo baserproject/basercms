@@ -32,35 +32,35 @@ class BlogPostsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $name = 'BlogPosts';
+	public $name = 'BlogPosts';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
+	public $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog');
+	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * ぱんくずナビ
  *
  * @var string
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
@@ -70,14 +70,14 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ブログコンテンツデータ
  *
  * @var array
  * @access public
  */
-	var $blogContent;
+	public $blogContent;
 /**
  * beforeFilter
  *

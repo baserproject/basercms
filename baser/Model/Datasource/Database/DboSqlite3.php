@@ -41,28 +41,28 @@ class DboSqlite3 extends DboSource {
  * @var string
  * @access public
  */
-	var $description = "SQLite3 DBO Driver";
+	public $description = "SQLite3 DBO Driver";
 /**
  * Enter description here...
  *
  * @var string
  * @access public
  */
-	var $startQuote = '"';
+	public $startQuote = '"';
 /**
  * Enter description here...
  *
  * @var string
  * @access public
  */
-	var $endQuote = '"';
+	public $endQuote = '"';
 /**
  * Base configuration settings for SQLite3 driver
  *
  * @var array
  * @access protected
  */
-	var $_baseConfig = array(
+	protected $_baseConfig = array(
 		'persistent' => false,
 		'database' => null,
 		'connect' => 'sqlite' //sqlite3 in pdo_sqlite is sqlite. sqlite2 is sqlite2
@@ -73,7 +73,7 @@ class DboSqlite3 extends DboSource {
  * @var array
  * @access public
  */
-	var $columns = array(
+	public $columns = array(
 		'primary_key' => array('name' => 'integer primary key autoincrement'),
 		'string' => array('name' => 'varchar', 'limit' => '255'),
 		'text' => array('name' => 'text'),
@@ -86,10 +86,10 @@ class DboSqlite3 extends DboSource {
 		'binary' => array('name' => 'blob'),
 		'boolean' => array('name' => 'boolean')
 	);
-	var $last_error = NULL;
-	var $pdo_statement = NULL;
-	var $rows = NULL;
-	var $row_count = NULL;
+	public $last_error = NULL;
+	public $pdo_statement = NULL;
+	public $rows = NULL;
+	public $row_count = NULL;
 
 /**
  * Connects to the database using config['database'] as a filename.

@@ -23,33 +23,33 @@ class ThemesController extends AppController {
  * @var string
  * @access	public
  */
-	var $name = 'Themes';
+	public $name = 'Themes';
 /**
  * モデル
  * @var array
  * @access public
  */
-	var $uses = array('Theme','Page');
+	public $uses = array('Theme','Page');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * パンくずナビ
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
 	);
 /**

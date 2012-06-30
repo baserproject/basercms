@@ -28,32 +28,32 @@ class WidgetAreasController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'WidgetAreas';
+	public $name = 'WidgetAreas';
 /**
  * コンポーネント
  * @var array
  * @access public
  */
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
 /**
  * ヘルパー
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * モデル
  * @var array
  * @access public
  */
-	var $uses = array('WidgetArea','Plugin');
+	public $uses = array('WidgetArea','Plugin');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'ウィジェットエリア管理', 'url' => array('controller' => 'widget_areas', 'action' => 'index'))
 	);
 /**
@@ -62,7 +62,7 @@ class WidgetAreasController extends AppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array('widget_areas');
+	public $subMenuElements = array('widget_areas');
 /**
  * beforeFilter
  * 

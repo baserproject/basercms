@@ -34,7 +34,7 @@ class RssEx extends Rss {
  * @var string
  * @access	public
  */
-	var $cacheFolder = 'views';
+	public $cacheFolder = 'views';
 /**
  * データを削除する（ログ記録オプション付）
  *

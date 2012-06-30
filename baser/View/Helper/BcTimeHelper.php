@@ -33,7 +33,7 @@ class BcTimeHelper extends TimeHelper {
  * @var array
  * @access public
  */
-	var $nengos = array("m"=>"明治","t"=>"大正","s"=>"昭和","h"=>"平成");
+	public $nengos = array("m"=>"明治","t"=>"大正","s"=>"昭和","h"=>"平成");
 /**
  * 年号を取得
  *

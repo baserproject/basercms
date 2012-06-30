@@ -32,27 +32,27 @@ class FeedConfig extends FeedAppModel {
  * @var string
  * @access public
  */
-	var $name = 'FeedConfig';
+	public $name = 'FeedConfig';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * DB設定
  * @var string
  * @access public
  */
-	var $useDbConfig = 'plugin';
+	public $useDbConfig = 'plugin';
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	var $hasMany = array("FeedDetail" =>
+	public $hasMany = array("FeedDetail" =>
 			array("className" => "Feed.FeedDetail",
 							"conditions" => "",
 							"order" => "FeedDetail.id ASC",
@@ -67,7 +67,7 @@ class FeedConfig extends FeedAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'フィード設定名を入力してください。',

@@ -32,21 +32,21 @@ class BlogComment extends BlogAppModel {
  * @var string
  * @access public
  */
-	var $name = 'BlogComment';
+	public $name = 'BlogComment';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * belongsTo
  *
  * @var array
  * @access public
  */
-	var $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
+	public $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
 							'foreignKey'=>'blog_post_id'));
 /**
  * validate
@@ -54,7 +54,7 @@ class BlogComment extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'お名前を入力してください。'),

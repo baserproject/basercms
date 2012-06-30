@@ -33,42 +33,42 @@ class DashboardController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Dashboard';
+	public $name = 'Dashboard';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Dblog', 'User', 'GlobalMenu', 'Page');
+	public $uses = array('Dblog', 'User', 'GlobalMenu', 'Page');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TIME_HELPER, 'Javascript');
+	public $helpers = array(BC_TIME_HELPER, 'Javascript');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var string
  * @access public
  */
-	var $crumbs = array();
+	public $crumbs = array();
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * [ADMIN] 管理者ダッシュボードページにajaxでデータを取得する
  *

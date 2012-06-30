@@ -31,21 +31,21 @@ class WidgetArea extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'WidgetArea';
+	public $name = 'WidgetArea';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
 				'rule'		=> array('notEmpty'),

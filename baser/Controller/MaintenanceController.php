@@ -29,28 +29,28 @@ class MaintenanceController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Maintenance';
+	public $name = 'Maintenance';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = null;
+	public $uses = null;
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array();
+	public $crumbs = array();
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * メンテナンス中ページを表示する
  *

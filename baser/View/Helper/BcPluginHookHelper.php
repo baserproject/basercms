@@ -29,14 +29,14 @@ class BcPluginHookHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $pluginHooks = array();
+	public $pluginHooks = array();
 /**
  * 登録済フックメソッド
 
  * @var array
  * @access public
  */
-	var $registerHooks = array();
+	public $registerHooks = array();
 /**
  * beforeRender
  * 

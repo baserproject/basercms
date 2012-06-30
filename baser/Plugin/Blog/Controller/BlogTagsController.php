@@ -32,28 +32,28 @@ class BlogTagsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $name = 'BlogTags';
+	public $name = 'BlogTags';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Blog.BlogCategory', 'Blog.BlogTag');
+	public $uses = array('Blog.BlogCategory', 'Blog.BlogTag');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var string
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
@@ -63,7 +63,7 @@ class BlogTagsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array('blog_common');
+	public $subMenuElements = array('blog_common');
 /**
  * [ADMIN] タグ一覧
  *

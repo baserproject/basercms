@@ -36,7 +36,7 @@ class BcEmailComponent extends EmailComponent {
  * @var string
  * @access public
  */
-	var $plugin = null;
+	public $plugin = null;
 // <<<
 /**
  * Send an email using the specified content, template and layout

@@ -33,7 +33,7 @@ class FeedHelper extends BcTextHelper {
  * @var array
  * @access public
  */
-	var $helpers = array(BC_BASER_HELPER);
+	public $helpers = array(BC_BASER_HELPER);
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用

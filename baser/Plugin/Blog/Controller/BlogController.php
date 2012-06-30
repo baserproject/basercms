@@ -32,49 +32,49 @@ class BlogController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $name = 'Blog';
+	public $name = 'Blog';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
+	public $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FREEZE_HELPER, BC_ARRAY_HELPER, 'Paginator', 'Blog.Blog', 'Cache');
+	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FREEZE_HELPER, BC_ARRAY_HELPER, 'Paginator', 'Blog.Blog', 'Cache');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array();
+	public $crumbs = array();
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ブログデータ
  *
  * @var array
  * @access public
  */
-	var $blogContent = array();
+	public $blogContent = array();
 /**
  * beforeFilter
  *

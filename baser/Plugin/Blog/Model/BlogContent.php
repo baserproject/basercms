@@ -32,21 +32,21 @@ class BlogContent extends BlogAppModel {
  * @var string
  * @access public
  */
-	var $name = 'BlogContent';
+	public $name = 'BlogContent';
 /**
  * behaviors
  *
  * @var array
  * @access public
  */
-	var $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	var $hasMany = array('BlogPost'=>
+	public $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
 							'order'=>'id DESC',
 							'limit'=>10,
@@ -68,7 +68,7 @@ class BlogContent extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 				array(	'rule'		=> array('halfText'),
 						'message'	=> 'ブログアカウント名は半角のみ入力してください。',

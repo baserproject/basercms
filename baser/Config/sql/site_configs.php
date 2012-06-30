@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* SiteConfigs schema generated on: 2010-11-04 18:11:10 : 1288863010*/
 class SiteConfigsSchema extends CakeSchema {
-	var $name = 'SiteConfigs';
+	public $name = 'SiteConfigs';
 
-	var $file = 'site_configs.php';
+	public $file = 'site_configs.php';
 
-	var $connection = 'baser';
+	public $connection = 'baser';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class SiteConfigsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $site_configs = array(
+	public $site_configs = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'value' => array('type' => 'text', 'null' => true, 'default' => NULL),

@@ -32,28 +32,28 @@ class BlogCategory extends BlogAppModel {
  * @var string
  * @access public
  */
-	var $name = 'BlogCategory';
+	public $name = 'BlogCategory';
 /**
  * バリデーション設定
  * 
  * @var array
  * @access public
  */
-	var $validationParams = array();
+	public $validationParams = array();
 /**
  * actsAs
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('Tree', 'BcCache');
+	public $actsAs = array('Tree', 'BcCache');
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	var $hasMany = array('BlogPost'=>
+	public $hasMany = array('BlogPost'=>
 			array('className'=>'Blog.BlogPost',
 							'order'=>'id DESC',
 							'limit'=>10,
@@ -67,7 +67,7 @@ class BlogCategory extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(  'rule'		=> array('notEmpty'),
 					'message'	=> "ブログカテゴリ名を入力してください。",

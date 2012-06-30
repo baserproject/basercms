@@ -32,19 +32,19 @@ class Favorite extends AppModel {
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * クラス名
  *
  * @var string
  * @access public
  */
-	var $name = 'Favorite';
+	public $name = 'Favorite';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 }

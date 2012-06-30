@@ -32,21 +32,21 @@ class MailController extends MailAppController {
  * @var string
  * @access public
  */
-	var $name = 'Mail';
+	public $name = 'Mail';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Mail.Message','Mail.MailContent','Mail.MailField','Mail.MailConfig');
+	public $uses = array('Mail.Message','Mail.MailContent','Mail.MailField','Mail.MailConfig');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(
+	public $helpers = array(
 		BC_FREEZE_HELPER, 'Mail.Mailform', 'Javascript', 
 		BC_ARRAY_HELPER, BC_TIME_HELPER, 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail'
 	);
@@ -59,43 +59,43 @@ class MailController extends MailAppController {
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
-	//var $components = array('Email','BcEmail','Security','BcCaptcha');
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha');
+	//public $components = array('Email','BcEmail','Security','BcCaptcha');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha');
 /**
  * CSS
  *
  * @var array
  * @access public
  */
-	var $css = array('mail/form');
+	public $css = array('mail/form');
 /**
  * ページタイトル
  *
  * @var string
  * @access public
  */
-	var $pageTitle = 'お問い合わせ';
+	public $pageTitle = 'お問い合わせ';
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * データベースデータ
  *
  * @var array
  * @access public
  */
-	var $dbDatas = null;
+	public $dbDatas = null;
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array();
+	public $crumbs = array();
 /**
  * beforeFilter.
  *

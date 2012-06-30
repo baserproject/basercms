@@ -28,14 +28,14 @@ class BcAppHelper extends Helper {
  * キャッシュ用
  * @var View
  */
-	var $_view = null;
+	protected $_view = null;
 /**
  * html tags used by this helper.
  *
  * @var 	array
  * @access	public
  */
-	var $tags = array(
+	public $tags = array(
 			'meta' => '<meta%s/>',
 			'metalink' => '<link href="%s"%s/>',
 			'link' => '<a href="%s"%s>%s</a>',

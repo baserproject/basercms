@@ -31,42 +31,42 @@ class UsersController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Users';
+	public $name = 'Users';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('User','GlobalMenu','UserGroup');
+	public $uses = array('User','GlobalMenu','UserGroup');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER);
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcReplacePrefix', 'BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
+	public $components = array('BcReplacePrefix', 'BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
 		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index'))
 	);

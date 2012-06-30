@@ -359,7 +359,7 @@ class BcManagerComponent extends Component {
 			$file->write("// Database Configuration File created by baserCMS Installation\n");
 			$file->write("//\n");
 			$file->write("class DATABASE_CONFIG {\n");
-			$file->write('var $baser = array('."\n");
+			$file->write('public $baser = array('."\n");
 			$file->write("\t'driver' => '".$driver."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
@@ -372,7 +372,7 @@ class BcManagerComponent extends Component {
 			$file->write("\t'encoding' => '".$encoding."'\n");
 			$file->write(");\n");
 
-			$file->write('var $plugin = array('."\n");
+			$file->write('public $plugin = array('."\n");
 			$file->write("\t'driver' => '".$driver."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");

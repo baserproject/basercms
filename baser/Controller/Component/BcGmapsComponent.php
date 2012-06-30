@@ -35,56 +35,56 @@ class BcGmapsComponent  extends Object {
  * @var double
  * @access protected
  */
-	var $_latitude;
+	protected $_latitude;
 /**
  * Longitude
  *
  * @var double
  * @access protected
  */
-	var $_longitude;
+	protected $_longitude;
 /**
  * Address
  *
  * @var string
  * @access protected
  */
-	var $_address;
+	protected $_address;
 /**
  * Country name
  *
  * @var string
  * @access protected
  */
-	var $_countryName;
+	protected $_countryName;
 /**
  * Country name code
  *
  * @var string
  * @access protected
  */
-	var $_countryNameCode;
+	protected $_countryNameCode;
 /**
  * Administrative area name
  *
  * @var string
  * @access protected
  */
-	var $_administrativeAreaName;
+	protected $_administrativeAreaName;
 /**
  * Postal Code
  *
  * @var string
  * @access protected
  */
-	var $_postalCode;
+	protected $_postalCode;
 /**
  * Base Url
  *
  * @var string
  * @access protected
  */
-	var $_baseUrl;
+	protected $_baseUrl;
 /**
  * Construct
  * 

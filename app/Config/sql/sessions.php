@@ -32,7 +32,7 @@
  */
 class SessionsSchema extends CakeSchema {
 
-	var $name = 'Sessions';
+	public $name = 'Sessions';
 
 	function before($event = array()) {
 		return true;
@@ -41,7 +41,7 @@ class SessionsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $cake_sessions = array(
+	public $cake_sessions = array(
 			'id' => array('type'=>'string', 'null' => false, 'key' => 'primary'),
 			'data' => array('type'=>'text', 'null' => true, 'default' => NULL),
 			'expires' => array('type'=>'integer', 'null' => true, 'default' => NULL),

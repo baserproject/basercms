@@ -30,34 +30,34 @@ class PageCategoriesController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'PageCategories';
+	public $name = 'PageCategories';
 /**
  * Default helper
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER, BC_ARRAY_HELPER);
 /**
  * This controller does not use a model
  *
  * @var array
  * @access public
  */
-	var $uses = array('PageCategory');
+	public $uses = array('PageCategory');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * パンくず
  * @var array
  * @access	public
  */
-	var $crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
+	public $crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
 /**
  * beforeFilter
  *

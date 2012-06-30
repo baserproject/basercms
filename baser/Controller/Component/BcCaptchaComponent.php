@@ -25,7 +25,7 @@ class BcCaptchaComponent extends Component {
  * @var string
  * @access public
  */
-	var $vendorsPath = BASER_VENDORS;
+	public $vendorsPath = BASER_VENDORS;
 /**
  * アルファベットの組み合わせ（半角記号も可）
  * kcaptcha_config.php で設定されたものを読み込む為に利用
@@ -33,7 +33,7 @@ class BcCaptchaComponent extends Component {
  * @var string
  * @access public
  */
-	var $alphabet = '';
+	public $alphabet = '';
 /**
  * 代替文字の組み合わせ
  * kcaptcha_config.php で設定されたものを読み込む為に利用
@@ -41,7 +41,7 @@ class BcCaptchaComponent extends Component {
  * @var string
  * @access public
  */
-	var $convert = '';
+	public $convert = '';
 /**
  * startup
  * 

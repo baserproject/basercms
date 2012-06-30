@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* PageCategories schema generated on: 2011-03-23 00:03:31 : 1300807471*/
 class PageCategoriesSchema extends CakeSchema {
-	var $name = 'PageCategories';
+	public $name = 'PageCategories';
 
-	var $file = 'page_categories.php';
+	public $file = 'page_categories.php';
 
-	var $connection = 'baser';
+	public $connection = 'baser';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class PageCategoriesSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $page_categories = array(
+	public $page_categories = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),

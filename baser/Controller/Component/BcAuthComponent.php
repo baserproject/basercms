@@ -39,7 +39,7 @@ class BcAuthComponent extends AuthComponent {
  * @var string 
  * CUSTOMIZE ADD 2011/09/25 ryuring
  */
-	var $serial = '';
+	public $serial = '';
 /**
  * Identifies a user based on specific criteria.
  *

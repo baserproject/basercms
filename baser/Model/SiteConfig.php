@@ -32,28 +32,28 @@ class SiteConfig extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'SiteConfig';
+	public $name = 'SiteConfig';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'formal_name' => array(
 			'rule'		=> array('notEmpty'),
 			'message'	=> 'Webサイト名を入力してください。',

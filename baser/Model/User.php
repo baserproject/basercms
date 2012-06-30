@@ -32,28 +32,28 @@ class User extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'User';
+	public $name = 'User';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * belongsTo
  * 
  * @var array
  * @access public
  */
-	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
+	public $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
  * hasMany
@@ -61,7 +61,7 @@ class User extends AppModel {
  * @var array
  * @access public
  */
-	var $hasMany = array('Favorite' => array(
+	public $hasMany = array('Favorite' => array(
 		'className'		=> 'Favorite',
 		'order'			=> 'Favorite.sort',
 		'foreignKey'	=> 'user_id',
@@ -75,7 +75,7 @@ class User extends AppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name'=>array(
 			'notEmpty' => array(
 				'rule'		=> array('notEmpty'),

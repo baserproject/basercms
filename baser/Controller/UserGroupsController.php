@@ -29,42 +29,42 @@ class UserGroupsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'UserGroups';
+	public $name = 'UserGroups';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('UserGroup');
+	public $uses = array('UserGroup');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパ
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array('site_configs', 'users', 'user_groups');
+	public $subMenuElements = array('site_configs', 'users', 'user_groups');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
 		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
 	);

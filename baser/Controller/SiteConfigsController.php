@@ -32,41 +32,41 @@ class SiteConfigsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'SiteConfigs';
+	public $name = 'SiteConfigs';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('SiteConfig','GlobalMenu','Page');
+	public $uses = array('SiteConfig','GlobalMenu','Page');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ヘルパー
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
+	public $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
 /**
  * [ADMIN] サイト基本設定
  *

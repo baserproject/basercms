@@ -29,12 +29,12 @@ class Content extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Content';
+	public $name = 'Content';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 }

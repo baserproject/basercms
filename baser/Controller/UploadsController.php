@@ -28,13 +28,13 @@ class UploadsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Uploads';
+	public $name = 'Uploads';
 /**
  * モデル
  * @var array
  * @access public
  */
-	var $uses = array();
+	public $uses = array();
 /**
  * セッションに保存した一時ファイルを出力する
  * @param string $name

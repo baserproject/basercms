@@ -32,28 +32,28 @@ class BlogPost extends BlogAppModel {
  * @var string
  * @access public
  */
-	var $name = 'BlogPost';
+	public $name = 'BlogPost';
 /**
  * 検索テーブルへの保存可否
  *
  * @var boolean
  * @access public
  */
-	var $contentSaving = true;
+	public $contentSaving = true;
 /**
  * ビヘイビア
  *
  * @var array
  * @access public
  */
-	var $actsAs = array('BcContentsManager', 'BcCache');
+	public $actsAs = array('BcContentsManager', 'BcCache');
 /**
  * belongsTo
  *
  * @var array
  * @access public
  */
-	var $belongsTo = array(
+	public $belongsTo = array(
 			'BlogCategory' =>   array(  'className'=>'Blog.BlogCategory',
 							'foreignKey'=>'blog_category_id'),
 			'User' =>           array(  'className'=>'User',
@@ -67,7 +67,7 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $hasMany = array('BlogComment'=>
+	public $hasMany = array('BlogComment'=>
 			array('className'=>'Blog.BlogComment',
 							'order'=>'created',
 							'foreignKey'=>'blog_post_id',
@@ -80,7 +80,7 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $hasAndBelongsToMany = array(
+	public $hasAndBelongsToMany = array(
 			'BlogTag' => array(
 				'className'				=> 'Blog.BlogTag',
 				'joinTable'				=> 'blog_posts_blog_tags',
@@ -99,7 +99,7 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(  'rule'		=> array('notEmpty'),
 					'message'	=> 'タイトルを入力してください。',

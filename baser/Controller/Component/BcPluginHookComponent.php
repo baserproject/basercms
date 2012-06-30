@@ -24,14 +24,14 @@ class BcPluginHookComponent extends Component {
  * @var array
  * @access	public
  */
-	var $pluginHooks = array();
+	public $pluginHooks = array();
 /**
  * 登録済プラグインフック
  * 
  * @var array
  * @access	public
  */
-	var $registerHooks = array();
+	public $registerHooks = array();
 /**
  * initialize
  * 

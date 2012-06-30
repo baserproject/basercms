@@ -32,21 +32,21 @@ class Theme extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Theme';
+	public $name = 'Theme';
 /**
  * テーブル
  *
  * @var string
  * @access public
  */
-	var $useTable = false;
+	public $useTable = false;
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'テーマ名を入力してください。'),

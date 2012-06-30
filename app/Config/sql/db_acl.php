@@ -32,7 +32,7 @@
  */
 class DbAclSchema extends CakeSchema {
 
-	var $name = 'DbAcl';
+	public $name = 'DbAcl';
 
 	function before($event = array()) {
 		return true;
@@ -41,7 +41,7 @@ class DbAclSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $acos = array(
+	public $acos = array(
 			'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 			'parent_id' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 			'model' => array('type'=>'string', 'null' => true),
@@ -52,7 +52,7 @@ class DbAclSchema extends CakeSchema {
 			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 		);
 
-	var $aros = array(
+	public $aros = array(
 			'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 			'parent_id' => array('type'=>'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 			'model' => array('type'=>'string', 'null' => true),
@@ -63,7 +63,7 @@ class DbAclSchema extends CakeSchema {
 			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 		);
 
-	var $aros_acos = array(
+	public $aros_acos = array(
 			'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 			'aro_id' => array('type'=>'integer', 'null' => false, 'length' => 10, 'key' => 'index'),
 			'aco_id' => array('type'=>'integer', 'null' => false, 'length' => 10),

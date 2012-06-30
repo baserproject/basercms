@@ -29,12 +29,12 @@ class Member extends User {
  * @var string
  * @access public
  */
-	var $name = 'Member';
+	public $name = 'Member';
 /**
  * テーブル名
  *
  * @var string
  * @access public
  */
-	var $useTable = 'users';
+	public $useTable = 'users';
 }

@@ -29,7 +29,7 @@ class MobileController extends AppController {
  * @var array
  * @access	public
  */
-	var $uses = null;
+	public $uses = null;
 /**
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
  * 

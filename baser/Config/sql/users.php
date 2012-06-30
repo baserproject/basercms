@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* Users schema generated on: 2010-11-04 18:11:11 : 1288863011*/
 class UsersSchema extends CakeSchema {
-	var $name = 'Users';
+	public $name = 'Users';
 
-	var $file = 'users.php';
+	public $file = 'users.php';
 
-	var $connection = 'baser';
+	public $connection = 'baser';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class UsersSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $users = array(
+	public $users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'password' => array('type' => 'string', 'null' => true, 'default' => NULL),

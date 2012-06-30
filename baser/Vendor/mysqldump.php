@@ -21,34 +21,34 @@ class MySQLDump {
 	/**
 	* @access private
 	*/
-	var $database = null;
+	public $database = null;
 
 	/**
 	* @access private
 	*/
-	var $compress = false;
+	public $compress = false;
 
 	/**
 	* @access private
 	*/
-	var $hexValue = false;
+	public $hexValue = false;
 
   /**
 	* The output filename
 	* @access private
 	*/
-	var $filename = null;
+	public $filename = null;
 
 	/**
 	* The pointer of the output file
 	* @access private
 	*/
-	var $file = null;
+	public $file = null;
 
 	/**
 	* @access private
 	*/
-	var $isWritten = false;
+	public $isWritten = false;
 
 	/**
 	* Class constructor

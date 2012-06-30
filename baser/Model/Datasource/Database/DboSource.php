@@ -39,49 +39,49 @@ class DboSource extends DataSource {
  * @var string
  * @access public
  */
-	var $description = "Database Data Source";
+	public $description = "Database Data Source";
 /**
  * index definition, standard cake, primary, index, unique
  *
  * @var array
  * @access public
  */
-	var $index = array('PRI' => 'primary', 'MUL' => 'index', 'UNI' => 'unique');
+	public $index = array('PRI' => 'primary', 'MUL' => 'index', 'UNI' => 'unique');
 /**
  * Database keyword used to assign aliases to identifiers.
  *
  * @var string
  * @access public
  */
-	var $alias = 'AS ';
+	public $alias = 'AS ';
 /**
  * Caches fields quoted in DboSource::name()
  *
  * @var array
  * @access public
  */
-	var $fieldCache = array();
+	public $fieldCache = array();
 /**
  * Bypass automatic adding of joined fields/associations.
  *
  * @var boolean
  * @access private
  */
-	var $__bypass = false;
+	private $__bypass = false;
 /**
  * The set of valid SQL operations usable in a WHERE statement
  *
  * @var array
  * @access private
  */
-	var $__sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', 'regexp', 'similar to');
+	private $__sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', 'regexp', 'similar to');
 /**
  * Index of basic SQL commands
  *
  * @var array
  * @access protected
  */
-	var $_commands = array(
+	protected $_commands = array(
 		'begin' => 'BEGIN',
 		'commit' => 'COMMIT',
 		'rollback' => 'ROLLBACK'
@@ -93,7 +93,7 @@ class DboSource extends DataSource {
  * @var array
  * @access	protected
  */
-	var $_encodingMaps = array('utf8'=>'UTF-8', 'sjis'=>'SJIS', 'ujis'=>'EUC-JP');
+	protected $_encodingMaps = array('utf8'=>'UTF-8', 'sjis'=>'SJIS', 'ujis'=>'EUC-JP');
 // <<<
 /**
  * Constructor

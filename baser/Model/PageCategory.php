@@ -29,28 +29,28 @@ class PageCategory extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'PageCategory';
+	public $name = 'PageCategory';
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * actsAs
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('Tree', 'BcCache');
+	public $actsAs = array('Tree', 'BcCache');
 /**
  * hasMany
  * 
  * @var array
  * @access @public
  */
-	var $hasMany = array('Page' => array('className'=>'Page',
+	public $hasMany = array('Page' => array('className'=>'Page',
 							'conditions'=>'',
 							'order'=>'Page.sort',
 							'limit'=>'',
@@ -66,28 +66,28 @@ class PageCategory extends AppModel {
  * @var mixed
  * @access protected
  */
-	var $_pageCategoryPathes = -1;
+	protected $_pageCategoryPathes = -1;
 /**
  * エージェントカテゴリのID
  * 
  * @var array
  * @access	protected
  */
-	var $_agentId = array();
+	protected $_agentId = array();
 /**
  * 保存時に関連ページを更新するかどうか
  * 
  * @var boolean
  * @access public
  */
-	var $updateRelatedPage = true;
+	public $updateRelatedPage = true;
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('minLength', 1),
 					'message'	=> 'ページカテゴリ名を入力してください。',

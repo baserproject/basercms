@@ -32,14 +32,14 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @var array
  * @access	public
  */
-	var $pluginHooks = array();
+	public $pluginHooks = array();
 /**
  * 登録済プラグインフック
  * 
  * @var array
  * @access	public
  */
-	var $registerHooks = array();
+	public $registerHooks = array();
 /**
  * ビヘイビア設定
  *
@@ -47,7 +47,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @access public
  * @see Model::$alias
  */
-	var $settings = array();
+	public $settings = array();
 /**
  * プラグインフックを登録する
  *

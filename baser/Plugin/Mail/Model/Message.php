@@ -34,21 +34,21 @@ class Message extends MailAppModel {
  * @var string
  * @access public
  */
-	var $name = 'Message';
+	public $name = 'Message';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * メールフォーム情報
  *
  * @var array
  * @access public
  */
-	var $mailFields = null;
+	public $mailFields = null;
 /**
  * Constructor.
  *

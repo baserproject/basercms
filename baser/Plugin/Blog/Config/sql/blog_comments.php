@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* BlogComments schema generated on: 2010-11-04 18:11:11 : 1288863011*/
 class BlogCommentsSchema extends CakeSchema {
-	var $name = 'BlogComments';
+	public $name = 'BlogComments';
 
-	var $file = 'blog_comments.php';
+	public $file = 'blog_comments.php';
 
-	var $connection = 'plugin';
+	public $connection = 'plugin';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class BlogCommentsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $blog_comments = array(
+	public $blog_comments = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
 		'blog_post_id' => array('type' => 'integer', 'null' => false, 'length' => 8),

@@ -10,11 +10,11 @@ class OAuthConsumer {
 	/**
 	 * @access	public
 	 */
-	var $key;
+	public $key;
 	/**
 	 * @access	public
 	 */
-	var $secret;
+	public $secret;
 
 	function OAuthConsumer($key, $secret, $callback_url=NULL) {
 		$this->key = $key;
@@ -32,11 +32,11 @@ class OAuthToken {
 	 * access tokens and request tokens
 	 * @access	public
 	 */
-	var $key;
+	public $key;
 	/**
 	 * @access	public
 	 */
-	var $secret;
+	public $secret;
 
 	/**
 	 * key = the token
@@ -203,28 +203,28 @@ class OAuthRequest {
 	/**
 	 * @access	private
 	 */
-	var $parameters;
+	public $parameters;
 	/**
 	 * @access	private
 	 */
-	var $http_method;
+	public $http_method;
 	/**
 	 * @access	private
 	 */
-	var $http_url;
+	public $http_url;
 	/**
 	 * for debug purposes
 	 * @access	public
 	 */
-	var $base_string;
+	public $base_string;
 	/**
 	 * @access	public
 	 */
-	var $version = '1.0';
+	public $version = '1.0';
 	/**
 	 * @access	public
 	 */
-	var $POST_INPUT = 'php://input';
+	public $POST_INPUT = 'php://input';
 
 	function OAuthRequest($http_method = null, $http_url=null, $parameters=NULL) {
 		@$parameters or $parameters = array();
@@ -500,19 +500,19 @@ class OAuthServer {
 	/**
 	 * @access	protected
 	 */
-	var $timestamp_threshold = 300; // in seconds, five minutes
+	public $timestamp_threshold = 300; // in seconds, five minutes
 	/**
 	 * @access	protected
 	 */
-	var $version = 1.0;             // hi blaine
+	public $version = 1.0;             // hi blaine
 	/**
 	 * @access	protected
 	 */
-	var $signature_methods = array();
+	public $signature_methods = array();
 	/**
 	 * @access	protected
 	 */
-	var $data_store;
+	public $data_store;
 
 	function OAuthServer($data_store) {
 		$this->data_store = $data_store;

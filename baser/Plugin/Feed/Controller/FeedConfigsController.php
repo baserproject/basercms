@@ -32,35 +32,35 @@ class FeedConfigsController extends FeedAppController {
  * @var string
  * @access public
  */
-	var $name = 'FeedConfigs';
+	public $name = 'FeedConfigs';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
+	public $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, 'Feed.Feed');
+	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, 'Feed.Feed');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
 	);
@@ -70,7 +70,7 @@ class FeedConfigsController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * before_filter
  *

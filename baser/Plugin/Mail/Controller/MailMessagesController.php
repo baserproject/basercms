@@ -29,49 +29,49 @@ class MailMessagesController extends MailAppController {
  * @var string
  * @access public
  */
-	var $name = 'MailMessages';
+	public $name = 'MailMessages';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
+	public $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array('Mail.maildata', 'Mail.mailfield', BC_TEXT_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array('Mail.maildata', 'Mail.mailfield', BC_TEXT_HELPER, BC_ARRAY_HELPER);
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * メールコンテンツデータ
  *
  * @var array
  * @access public
  */
-	var $mailContent;
+	public $mailContent;
 /**
  * サブメニュー
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array('mail_fields','mail_common');
+	public $subMenuElements = array('mail_fields','mail_common');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);

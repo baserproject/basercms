@@ -40,21 +40,21 @@ class BcReplacePrefixComponent extends Component {
  * @var array
  * @access public
  */
-	var $allowedPureActions = array();
+	public $allowedPureActions = array();
 /**
  * 置き換え後のプレフィックス
  *
  * @var string
  * @access public
  */
-	var $replacedPrefix = 'admin';
+	public $replacedPrefix = 'admin';
 /**
  * 対象コントローラーのメソッド
  *
  * @var array
  * @access	protected
  */
-	var $_methods;
+	protected $_methods;
 /**
  * Initializes
  *
