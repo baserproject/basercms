@@ -394,7 +394,7 @@
  */
 	function isInstalled () {
 		
-		if(getDbConfig() && file_exists(CONFIGS.'install.php')){
+		if(getDbConfig() && file_exists(APP . 'Config' . DS.'install.php')){
 			return true;
 		}
 		return false;
@@ -408,8 +408,8 @@
  */
 	function getDbConfig($name = 'baser') {
 		
-		if(file_exists(CONFIGS.'database.php')) {
-			require_once CONFIGS.'database.php';
+		if(file_exists(APP . 'Config' . DS.'database.php')) {
+			require_once APP . 'Config' . DS.'database.php';
 			$dbConfig = new DATABASE_CONFIG();
 			if(!empty($dbConfig->{$name}['driver'])){
 				return $dbConfig->{$name};
@@ -489,7 +489,7 @@
 		if($theme) {
 			return WWW_ROOT.'themed'.DS.$theme.DS;
 		}else {
-			return VIEWS;
+			return APP . 'View' . DS;
 		}
 
 	}

@@ -110,7 +110,7 @@ $fileName = $_SERVER['SCRIPT_FILENAME'];
 		$Dispatcher = new Dispatcher();
 		$Dispatcher->dispatch($url);
 	}
-	if (Configure::read() > 0) {
-		echo "<!-- " . round(getMicrotime() - $TIME_START, 4) . "s -->";
+	if (Configure::read('debug') > 0) {
+		echo "<!-- " . round(microtime(true) - $TIME_START, 4) . "s -->";
 	}
 ?>
