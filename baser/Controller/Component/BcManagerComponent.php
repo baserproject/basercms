@@ -531,7 +531,7 @@ class BcManagerComponent extends Component {
  */
 	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core') {
 		
-		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
 		// CSVの場合ロックを解除しないとデータの投入に失敗する
@@ -604,7 +604,7 @@ class BcManagerComponent extends Component {
  */
 	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
 
-		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
 		if (@!$db->connected && $driver != 'csv') {
@@ -667,7 +667,7 @@ class BcManagerComponent extends Component {
  */
 	public function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
 
-		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
 		
 		/* 削除実行 */
@@ -734,7 +734,7 @@ class BcManagerComponent extends Component {
 	public function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		
 		if($dbConfig) {
-			$db =& ConnectionManager::create($dbConfigKeyName, $dbConfig);
+			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
 			if(!$db) {
 				$db =& ConnectionManager::getDataSource($dbConfigKeyName);
 			}

@@ -1315,7 +1315,7 @@ class BaserAppController extends Controller {
 	public function executeHook($hook) {
 
 		$args = func_get_args();
-		$args[0] =& $this;
+		$args[0] = $this;
 		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
 
 	}

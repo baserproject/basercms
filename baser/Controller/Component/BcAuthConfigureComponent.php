@@ -56,8 +56,8 @@ class  BcAuthConfigureComponent extends Object {
 			return false;
 		}
 
-		$controller =& $this->controller;
-		$auth =& $controller->BcAuth;
+		$controller = $this->controller;
+		$auth = $controller->BcAuth;
 		$requestedPrefix = '';
 		
 		if(isset($controller->params['prefix'])) {

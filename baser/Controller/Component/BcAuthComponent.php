@@ -74,7 +74,7 @@ class BcAuthComponent extends AuthComponent {
 		}
 
 		// >>> ADD
-		$model =& $this->getModel();
+		$model = $this->getModel();
 		$alias = $model->alias;
 		// <<<
 		
@@ -100,7 +100,7 @@ class BcAuthComponent extends AuthComponent {
 			} else {
 				return false;
 			}
-			$model =& $this->getModel();
+			$model = $this->getModel();
 			$data = $model->find(array_merge($find, $conditions), null, null, 0);
 			if (empty($data) || empty($data[$this->userModel])) {
 				return null;
@@ -132,7 +132,7 @@ class BcAuthComponent extends AuthComponent {
 			// <<<
 
 		} elseif (!empty($user) && is_string($user)) {
-			$model =& $this->getModel();
+			$model = $this->getModel();
 			$data = $model->find(array_merge(array($model->escapeField() => $user), $conditions));
 
 			// >>> MODIFY
@@ -180,7 +180,7 @@ class BcAuthComponent extends AuthComponent {
 		// >>>
 		if(!empty($this->fields['serial']) && !$data) {
 			$serial = $this->getSerial();
-			$Model = $model =& $this->getModel();
+			$Model = $model = $this->getModel();
 			if($serial) {
 				$data = $Model->find('first', array('conditions' => array($Model->alias.'.'.$this->fields['serial'] => $serial), 'recursive' => -1));
 			}
@@ -211,7 +211,7 @@ class BcAuthComponent extends AuthComponent {
 		$user = $this->user();
 		if(!empty($this->fields['serial']) && $user) {
 			$serial = $this->getSerial();
-			$Model = $model =& $this->getModel();
+			$Model = $model = $this->getModel();
 			if($serial) {
 				$user[$this->userModel][$this->fields['serial']] = $serial;
 				$Model->set($user);
@@ -227,7 +227,7 @@ class BcAuthComponent extends AuthComponent {
 	public function deleteSerial() {
 		$user = $this->user();
 		if(!empty($this->fields['serial']) && $user) {
-			$Model = $model =& $this->getModel();
+			$Model = $model = $this->getModel();
 			$user[$this->userModel][$this->fields['serial']] = '';
 			$Model->set($user);
 			return $Model->save();
