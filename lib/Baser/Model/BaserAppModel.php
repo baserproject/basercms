@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-uses('sanitize');
+App::uses('Sanitize', 'Utility');
 /**
  * Model 拡張クラス
  *
@@ -69,13 +69,13 @@ class BaserAppModel extends Model {
 
 			// DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
 			// Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
-			$cm =& ConnectionManager::getInstance();
-			if(isset($cm->config->baser['driver'])) {
-				if($cm->config->baser['driver'] != '') {
+			$db = ConnectionManager::getDataSource('baser');
+			if(isset($db->config['driver'])) {
+				if($db->config['driver'] != '') {
 					parent::__construct($id, $table, $ds);
-				}elseif($cm->config->baser['login']=='dummy' &&
-						$cm->config->baser['password']=='dummy' &&
-						$cm->config->baser['database'] == 'dummy' &&
+				}elseif($db->config['login']=='dummy' &&
+						$db->config['password']=='dummy' &&
+						$db->config['database'] == 'dummy' &&
 						Configure::read('BcRequest.pureUrl')=='') {
 					// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
 					// 初期化ページにリダイレクトする

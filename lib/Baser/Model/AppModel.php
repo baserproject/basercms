@@ -25,7 +25,6 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppModel', array('search' => BASER_MODELS));
 /**
  * Model 拡張クラス
  * @package baser.models

@@ -25,7 +25,7 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppView', array('search' => BASER_VIEWS));
+App::uses('BaserAppView', 'View');
 /**
  * View 拡張クラス
  *

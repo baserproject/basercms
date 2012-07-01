@@ -25,7 +25,7 @@
 /**
  * Include files
  */
-App::import('Core', 'BcAppHelper', array('search' => BASER_HELPERS));
+App::uses('BcAppHelper', 'View/Helper');
 /**
  * Helper 拡張クラス
  *

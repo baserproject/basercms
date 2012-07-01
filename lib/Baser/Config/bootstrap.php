@@ -26,34 +26,35 @@
  * Baserパス追加
  */
 	App::build(array(
-		'Baser'						=> array(BASER),
-		'Baser/Controller'			=> array(BASER_CONTROLLERS),
-		'Baser/Model'				=> array(BASER_MODELS),
-		'Baser/Model/Behavior'		=> array(BASER_BEHAVIORS),
-		'Baser/Model/Datasource/Database'	=> array(BASER_MODELS.'Datasource'.DS.'Database'),
-		'Baser/Controller/Component'=> array(BASER_COMPONENTS),
+		'Controller'			=> array(BASER_CONTROLLERS),
+		'Model'				=> array(BASER_MODELS),
+		'Model/Behavior'		=> array(BASER_BEHAVIORS),
+		'Model/Datasource/Database'	=> array(BASER_DATABASE),
+		'Controller/Component'=> array(BASER_COMPONENTS),
 	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
 	// $html->css / $javascript->link 等では、/app/webroot/css/style.css というURLが生成される。
 	// 上記理由により以下のとおり変更
 	// ・HelperのwebrootメソッドをRouter::urlでパス解決をするように変更し、/index.php/css/style.css というURLを生成させる。
 	// ・走査URLをvendorsだけではなく、app/webroot内も追加
-		'Baser/View'				=> array(BASER_VIEWS, WWW_ROOT),
-		'Baser/View/Helper'			=> array(BASER_HELPERS),
-		'Baser/Plugin'				=> array(BASER_PLUGINS),
+		'View'				=> array(BASER_VIEWS, WWW_ROOT),
+		'View/Helper'			=> array(BASER_HELPERS),
+		'Plugin'				=> array(BASER_PLUGINS),
 		'Vendor'					=> array(BASER_VENDORS),
 		'Locale'					=> array(BASER_LOCALES),
 	));
-	App::uses('AppModel', 'Baser/Model');
-	App::uses('BcCache', 'Baser/Model/Behavior');
+	App::uses('AppModel', 'Model');
+	App::uses('BaserAppModel', 'Model');
+	App::uses('BcCache', 'Model/Behavior');
 	App::uses('ClassRegistry', 'Utility');
 	App::uses('Multibyte', 'I18n');
-	App::uses('DboBcCsv', 'Baser/Model/Datasource/Database');
-	App::uses('DboBcPostgres', 'Baser/Model/Datasource/Database');
-	App::uses('DboBcSqlite3', 'Baser/Model/Datasource/Database');
-	App::uses('DboBcMysql', 'Baser/Model/Datasource/Database');
+	App::uses('DboBcCsv', 'Model/Datasource/Database');
+	App::uses('DboBcPostgres', 'Model/Datasource/Database');
+	App::uses('DboBcSqlite3', 'Model/Datasource/Database');
+	App::uses('DboBcMysql', 'Model/Datasource/Database');
 	App::uses('PhpReader', 'Configure');
 	App::uses('CakeSession', 'Model/Datasource');
 	App::uses('Folder', 'Utility');
+	App::uses('File', 'Utility');
 /**
  * baserUrl取得
  */

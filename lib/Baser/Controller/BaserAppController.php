@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('ConnectionManager', 'Model');
 App::import('View', 'AppView');
 App::import('Component','BcAuthConfigure');
 //App::import('Component', 'Emoji');
@@ -34,7 +35,7 @@ class BaserAppController extends Controller {
  * 
  * @var string
  */
-	public $view = 'App';
+	public $viewClass = 'App';
 /**
  * ページタイトル
  *
@@ -51,7 +52,7 @@ class BaserAppController extends Controller {
 // TODO 見直し
 	public $helpers = array(
 		'Session', 'BcPluginHook', BC_HTML_HELPER, BC_HTML_HELPER, 'Form', BC_FORM_HELPER, 
-		'Javascript', BC_BASER_HELPER, BC_XML_HELPER, BC_ARRAY_HELPER, BC_BASER_ADMIN_HELPER
+		'Js', BC_BASER_HELPER, BC_XML_HELPER, BC_ARRAY_HELPER, BC_BASER_ADMIN_HELPER
 	);
 /**
  * レイアウト
@@ -144,9 +145,9 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	private
  */
-	public function __construct() {
+	public function __construct($request = null, $response = null) {
 
-		parent::__construct();
+		parent::__construct($request, $response);
 		
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');
@@ -402,6 +403,10 @@ class BaserAppController extends Controller {
 
 		parent::beforeRender();
 
+		if(!BC_INSTALLED) {
+			return;
+		}
+		
 		// テーマのヘルパーをセット
 		$this->setThemeHelpers();
 		
@@ -462,7 +467,25 @@ class BaserAppController extends Controller {
  */
 	public function notFound() {
 
-		return $this->cakeError('error404', array(array($this->request->here)));
+		$method = 'error404';
+		$messages = array(array($this->request->here));
+		
+		if (!class_exists('ErrorHandler')) {
+			App::import('Core', 'Error');
+
+			if (file_exists(APP . 'error.php')) {
+				include_once (APP . 'error.php');
+			} elseif (file_exists(APP . 'app_error.php')) {
+				include_once (APP . 'app_error.php');
+			}
+		}
+
+		if (class_exists('AppError')) {
+			$error = new AppError($method, $messages);
+		} else {
+			$error = new ErrorHandler($method, $messages);
+		}
+		return $error;
 
 	}
 /**

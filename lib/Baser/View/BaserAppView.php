@@ -20,20 +20,19 @@
 /**
  * Include files
  */
-App::import('Core','Theme');
 /**
  * view 拡張クラス
  *
  * @package			baser.views
  */
-class BaserAppView extends ThemeView {
+class BaserAppView extends View {
 /**
  * List of variables to collect from the associated controller
  *
  * @var array
  * @access protected
  */
-	private $__passedVars = array(
+	protected $_passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
 			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'
@@ -83,6 +82,11 @@ class BaserAppView extends ThemeView {
 		if ($plugin === null && $cached === true && !empty($this->__paths)) {
 			return $this->__paths;
 		}
+		
+		// TODO basercamp
+		// このメソッドは見なおし
+		return App::path('View');
+		
 		$paths = array();
 		$viewPaths = Configure::read('viewPaths');
 		$corePaths = array_flip(Configure::corePaths('view'));
@@ -118,101 +122,6 @@ class BaserAppView extends ThemeView {
 
 		return $this->loaded['pluginHook']->{$hook}($out);
 
-	}
-/**
- * Renders a piece of PHP with provided parameters and returns HTML, XML, or any other string.
- *
- * This realizes the concept of Elements, (or "partial layouts")
- * and the $params array is used to send data to be used in the
- * Element.  Elements can be cached through use of the cache key.
- *
- * @param string $name Name of template file in the/app/views/elements/ folder
- * @param array $params Array of data to be made available to the for rendered
- *                      view (i.e. the Element)
- *    Special params:
- *		cache - enable caching for this element accepts boolean or strtotime compatible string.
- *      Can also be an array
- *				if an array,'time' is used to specify duration of cache.  'key' can be used to
- *              create unique cache files.
- *
- * @return string Rendered Element
- * @access public
- */
-	public function element($name, $params = array(), $loadHelpers = false) {
-		$file = $plugin = $key = null;
-
-		if (isset($params['plugin'])) {
-			$plugin = $params['plugin'];
-		}
-
-		if (isset($this->plugin) && !$plugin) {
-			$plugin = $this->plugin;
-		}
-
-		if (isset($params['cache'])) {
-			$expires = '+1 day';
-
-			if (is_array($params['cache'])) {
-				$expires = $params['cache']['time'];
-				$key = Inflector::slug($params['cache']['key']);
-			} elseif ($params['cache'] !== true) {
-				$expires = $params['cache'];
-				$key = implode('_', array_keys($params));
-			}
-
-			if ($expires) {
-				$cacheFile = 'element_' . $key . '_' . $plugin . Inflector::slug($name);
-				$cache = cache('views' . DS . $cacheFile, null, $expires);
-
-				if (is_string($cache)) {
-					return $cache;
-				}
-			}
-		}
-		$paths = $this->_paths($plugin);
-
-		// CUSTOMIZE MODIFY 2012/04/11 ryuring
-		// 後方互換保持の為、ファイル走査の優先順位に.ctpを追加
-		// @deprecated .php への移行を推奨
-		// >>>
-		/*foreach ($paths as $path) {
-			if (file_exists($path . 'elements' . DS . $name . $this->ext)) {
-				$file = $path . 'elements' . DS . $name . $this->ext;
-				break;
-			} elseif (file_exists($path . 'elements' . DS . $name . '.thtml')) {
-				$file = $path . 'elements' . DS . $name . '.thtml';
-				break;
-			}
-		}*/
-		// ---
-		foreach ($paths as $path) {
-			if (file_exists($path . 'elements' . DS . $name . $this->ext)) {
-				$file = $path . 'elements' . DS . $name . $this->ext;
-				break;
-			}elseif (file_exists($path . 'elements' . DS . $name . '.ctp')) {
-				trigger_error('エレメントテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />'.$path . 'elements' . DS . $name . '.ctp', E_USER_WARNING);
-				$file = $path . 'elements' . DS . $name . '.ctp';
-				break;
-			} elseif (file_exists($path . 'elements' . DS . $name . '.thtml')) {
-				$file = $path . 'elements' . DS . $name . '.thtml';
-				break;
-			}
-		}
-		// <<<
-		
-		if (is_file($file)) {
-			$params = array_merge_recursive($params, $this->loaded);
-			$element = $this->_render($file, array_merge($this->viewVars, $params), $loadHelpers);
-			if (isset($params['cache']) && isset($cacheFile) && isset($expires)) {
-				cache('views' . DS . $cacheFile, $element, $expires);
-			}
-			return $element;
-		}
-		$file = $paths[0] . 'elements' . DS . $name . $this->ext;
-
-		if (Configure::read('debug') > 0) {
-			return "Not Found: " . $file;
-		}
 	}
 /**
  * Returns filename of given action's template file (.ctp) as a string.
@@ -287,7 +196,6 @@ class BaserAppView extends ThemeView {
 		}
 
 		$paths = $this->_paths(Inflector::underscore($this->plugin));
-		
 		$exts = array($this->ext, '.ctp', '.thtml');
 		
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
@@ -303,7 +211,9 @@ class BaserAppView extends ThemeView {
 		}*/
 		// ---
 		foreach ($paths as $path) {
+		
 			foreach ($exts as $ext) {
+				
 				if (file_exists($path . $name . $ext)) {
 					if($ext == '.ctp') {
 						trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />'.$path . $name . $ext, E_USER_WARNING);
@@ -374,74 +284,8 @@ class BaserAppView extends ThemeView {
 		
 		return $this->_missingView($paths[0] . $file . $this->ext, 'missingLayout');
 	}
-/**
- * Renders a layout. Returns output from _render(). Returns false on error.
- * Several variables are created for use in layout.
- *	title_for_layout - contains page title
- *	content_for_layout - contains rendered view file
- *	scripts_for_layout - contains scripts added to header
- *  cakeDebug - if debug is on, cake debug information is added.
- *
- * @param string $content_for_layout Content to render in a view, wrapped by the surrounding layout.
- * @return mixed Rendered output, or false on error
- */
-	public function renderLayout($content_for_layout, $layout = null) {
-		$layoutFileName = $this->_getLayoutFileName($layout);
-		if (empty($layoutFileName)) {
-			return $this->output;
-		}
-
-		$debug = '';
-
-		if (isset($this->viewVars['cakeDebug']) && Configure::read('debug') > 2) {
-			$params = array('controller' => $this->viewVars['cakeDebug']);
-			$debug = View::element('dump', $params, false);
-			unset($this->viewVars['cakeDebug']);
-		}
-
-		if ($this->pageTitle !== false) {
-			$pageTitle = $this->pageTitle;
-		} else {
-			$pageTitle = Inflector::humanize($this->viewPath);
-		}
-		$data_for_layout = array_merge($this->viewVars, array(
-			'title_for_layout' => $pageTitle,
-			'content_for_layout' => $content_for_layout,
-			'scripts_for_layout' => implode("\n\t", $this->__scripts),
-			'cakeDebug' => $debug
-		));
-
-		if (empty($this->loaded) && !empty($this->helpers)) {
-			$loadHelpers = true;
-		} else {
-			$loadHelpers = false;
-			$data_for_layout = array_merge($data_for_layout, $this->loaded);
-		}
-
-		$this->_triggerHelpers('beforeLayout');
-
-		// CUSTOMIZE MODIFY 2012/09/11 ryuring
-		// >>>
-		//if (substr($layoutFileName, -3) === 'ctp' || substr($layoutFileName, -5) === 'thtml') {
-		// ---
-		if (substr($layoutFileName, -3) === 'ctp' || substr($layoutFileName, -5) === 'thtml' || substr($layoutFileName, -3) === 'php') {
-		// <<<
-		
-			$this->output = View::_render($layoutFileName, $data_for_layout, $loadHelpers, true);
-		} else {
-			$this->output = $this->_render($layoutFileName, $data_for_layout, $loadHelpers);
-		}
-
-		if ($this->output === false) {
-			$this->output = $this->_render($layoutFileName, $data_for_layout);
-			$msg = __("Error in layout %s, got: <blockquote>%s</blockquote>");
-			trigger_error(sprintf($msg, $layoutFileName, $this->output), E_USER_ERROR);
-			return false;
-		}
-
-		$this->_triggerHelpers('afterLayout');
-
-		return $this->output;
+	function getScripts() {
+		return $this->_scripts;
 	}
 	
 }

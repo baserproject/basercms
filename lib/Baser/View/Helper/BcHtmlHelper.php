@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper', 'Html');
+App::uses('HtmlHelper', 'View/Helper');
 /**
  * Htmlヘルパーの拡張クラス
  *
@@ -33,7 +33,7 @@ class BcHtmlHelper extends HtmlHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Javascript');
+	public $helpers = array('Js');
 /**
  * Document type definitions
  * CUSTOMIZE MODIFY 2011/06/02 ryuring

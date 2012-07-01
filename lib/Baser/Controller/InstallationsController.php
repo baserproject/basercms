@@ -59,7 +59,7 @@ class InstallationsController extends AppController {
  * @var array
  * @access	public
  */
-	public $helpers = array(BC_HTML_HELPER, BC_FORM_HELPER, 'Javascript', BC_TIME_HELPER);
+	public $helpers = array(BC_HTML_HELPER, BC_FORM_HELPER, 'Js', BC_TIME_HELPER);
 /**
  * モデル
  *
@@ -98,8 +98,8 @@ class InstallationsController extends AppController {
 		
 		/* インストール状態判別 */
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
-			$db = ConnectionManager::getInstance();
-			if($db->config->baser['driver'] != '') {
+			$db = ConnectionManager::getDataSource('baser');
+			if($db->config['datasource'] != '') {
 				$installed = 'complete';
 			}else {
 				$installed = 'half';
@@ -139,6 +139,17 @@ class InstallationsController extends AppController {
 
 	}
 /**
+ * beforeRender 
+ */
+	public function beforeRender() {
+		
+		parent::beforeRender();
+		if(!empty($this->subDir)) {
+			$this->View->subDir = $this->subDir;
+		}
+		
+	}
+/**
  * Step 1: ウェルカムページ
  *
  * @return void
@@ -147,7 +158,7 @@ class InstallationsController extends AppController {
 	public function index() {
 
 		$this->pageTitle = 'baserCMSのインストール';
-
+return;
 		// 一時ファイルを削除する（再インストール用）
 		if(is_writable(TMP)) {
 			$folder = new Folder(TMP);
