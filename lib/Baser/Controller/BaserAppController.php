@@ -403,12 +403,10 @@ class BaserAppController extends Controller {
 
 		parent::beforeRender();
 
-		if(!BC_INSTALLED) {
-			return;
-		}
-		
 		// テーマのヘルパーをセット
-		$this->setThemeHelpers();
+		if(BC_INSTALLED) {
+			$this->setThemeHelpers();
+		}
 		
 		// テンプレートの拡張子
 		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
