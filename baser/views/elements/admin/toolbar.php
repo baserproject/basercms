@@ -36,7 +36,13 @@ $(function(){
 	});
 	$('#SystemMenu ul:first').show();
 	$("#UserMenu ul li div ul li").each(function(){
-		if(!$(this).html()) {
+		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
+			$(this).remove();
+		}
+	});
+	$("#UserMenu ul li div ul").each(function(){
+		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
+			$(this).prev().remove();
 			$(this).remove();
 		}
 	});
