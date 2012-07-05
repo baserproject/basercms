@@ -66,7 +66,7 @@ class PluginsController extends AppController {
  * @access public
  */
 	var $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('controller' => 'plugins', 'action' => 'index'))
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
 	);
 /**
  * コンテンツID
