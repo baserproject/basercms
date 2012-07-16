@@ -166,7 +166,7 @@ class BaserAppController extends Controller {
 			
 			$params = Router::parse(@$_SERVER['REQUEST_URI']);
 			
-			$this->setTheme($params);
+			$this->setTheme($params, true);
 			
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {
@@ -342,7 +342,13 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function setTheme($params) {
+	function setTheme($params, $isError = false) {
+		
+		// エラーの場合は強制的にフロントのテーマを設定する
+		if($isError) {
+			$this->theme = $this->siteConfigs['theme'];
+			return;
+		}
 		
 		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
