@@ -23,8 +23,11 @@ if(empty($paginator)) {
 if(!isset($modules)) {
 	$modules = 8;
 }
+$this->passedArgs['action'] = str_replace('smartphone_','',$this->passedArgs['action']);
+$this->passedArgs['plugin'] = '';
 ?>
 <?php $paginator->options = array('url' => $this->passedArgs) ?>
+<?php var_dump($paginator->options) ?>
 <?php if((int)$paginator->counter(array('format'=>'%pages%')) > 1): ?>
 <div class="pagination clearfix">
 <?php echo $paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
