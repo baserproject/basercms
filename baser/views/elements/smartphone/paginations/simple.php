@@ -23,6 +23,8 @@ if(empty($paginator)) {
 if(!isset($modules)) {
 	$modules = 8;
 }
+$this->passedArgs['action'] = str_replace('smartphone_','',$this->passedArgs['action']);
+$this->passedArgs['plugin'] = '';
 ?>
 <?php $paginator->options = array('url' => $this->passedArgs) ?>
 <?php if((int)$paginator->counter(array('format'=>'%pages%')) > 1): ?>
