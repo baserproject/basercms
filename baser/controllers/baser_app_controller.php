@@ -1463,11 +1463,17 @@ class BaserAppController extends Controller {
 	}
 /**
  * テーマ用のヘルパーをセットする
- *  
+ * 管理画面では読み込まない
+ * 
  * @return void
  * @access public
  */
 	function setThemeHelpers() {
+		
+		if(!empty($this->params['admin'])) {
+			return;
+		}
+		
 		$themeHelpersPath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'helpers';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
@@ -1476,6 +1482,7 @@ class BaserAppController extends Controller {
 				$this->helpers[] = Inflector::classify(basename($file, '.php'));
 			}
 		}
+		
 	}
 /**
  * Ajax用のエラーを出力する
