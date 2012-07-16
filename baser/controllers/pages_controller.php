@@ -528,6 +528,8 @@ class PagesController extends AppController {
 					} else {
 						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
 					}
+				} else {
+					$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
 				}
 			}
 		}
