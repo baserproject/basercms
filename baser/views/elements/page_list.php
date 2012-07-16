@@ -25,8 +25,8 @@ $current = str_replace($this->base, '', $this->here);
 if(!empty($pages)){
 	foreach($pages as $key => $page){
 		$class = '';
-		$classies = array('page-'.$no);
 		$no = sprintf('%02d',$key+1);
+		$classies = array('page-'.$no);
 		if($key == 0){
 			$classies[] = 'first';
 		}elseif($key == count($pages) - 1){
