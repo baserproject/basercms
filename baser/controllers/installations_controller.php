@@ -250,6 +250,9 @@ class InstallationsController extends AppController {
 
 			/* 「次のステップへ」クリック時 */
 			} elseif ($this->data['buttonclicked']=='createdb') {
+				
+				ini_set("max_execution_time",180);
+				
 				$nonDemoData = false;
 				if(isset($this->data['Installation']['non_demo_data'])) {
 					$nonDemoData = $this->data['Installation']['non_demo_data'];

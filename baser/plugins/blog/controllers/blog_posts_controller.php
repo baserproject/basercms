@@ -135,7 +135,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
 			$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-			if($db->config['driver'] != 'csv') {
+			if($db->config['driver'] != 'bc_csv') {
 				$joins = array(
 					array(
 						'table' => $db->config['prefix'].'blog_posts_blog_tags',
@@ -202,7 +202,7 @@ class BlogPostsController extends BlogAppController {
 
 		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
 		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-		if($db->config['driver'] == 'csv') {
+		if($db->config['driver'] == 'bc_csv') {
 			if(!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if($blogTags) {
@@ -666,7 +666,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _changeStatus($id, $status) {
 		
-		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
+		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => -1));
 		$data['BlogPost']['status'] = $status;
 		$data['BlogPost']['publish_begin'] = '';

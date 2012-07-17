@@ -141,6 +141,9 @@ class BaserAppController extends Controller {
 
 		parent::__construct();
 		
+		// テンプレートの拡張子
+		$this->ext = Configure::read('BcApp.templateExt');
+		
 		if(BC_INSTALLED) {
 			
 			// サイト基本設定の読み込み
@@ -163,7 +166,7 @@ class BaserAppController extends Controller {
 			
 			$params = Router::parse(@$_SERVER['REQUEST_URI']);
 			
-			$this->setTheme($params);
+			$this->setTheme($params, true);
 			
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {
@@ -339,7 +342,13 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function setTheme($params) {
+	function setTheme($params, $isError = false) {
+		
+		// エラーの場合は強制的にフロントのテーマを設定する
+		if($isError) {
+			$this->theme = $this->siteConfigs['theme'];
+			return;
+		}
 		
 		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
@@ -382,7 +391,7 @@ class BaserAppController extends Controller {
 
 		// テンプレートの拡張子
 		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
-		// beforeRenderにて設定する仕様にした
+		// beforeRenderでも再設定する仕様にした
 		$this->ext = Configure::read('BcApp.templateExt');
 		
 		// モバイルでは、mobileHelper::afterLayout をフックしてSJISへの変換が必要だが、
@@ -1454,11 +1463,17 @@ class BaserAppController extends Controller {
 	}
 /**
  * テーマ用のヘルパーをセットする
- *  
+ * 管理画面では読み込まない
+ * 
  * @return void
  * @access public
  */
 	function setThemeHelpers() {
+		
+		if(!empty($this->params['admin'])) {
+			return;
+		}
+		
 		$themeHelpersPath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'helpers';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
@@ -1467,6 +1482,7 @@ class BaserAppController extends Controller {
 				$this->helpers[] = Inflector::classify(basename($file, '.php'));
 			}
 		}
+		
 	}
 /**
  * Ajax用のエラーを出力する

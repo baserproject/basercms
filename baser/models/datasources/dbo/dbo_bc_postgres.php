@@ -214,6 +214,12 @@ class DboBcPostgres extends DboPostgres {
 				}
 			case 'inet':
 			case 'integer':
+				if ($data === '') {
+					return $read ? 'NULL' : 'DEFAULT';
+				}
+				if (!$read && $data == '') {
+					return 'NULL';
+				}
 			case 'date':
 			case 'datetime':
 			case 'timestamp':

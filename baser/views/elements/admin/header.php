@@ -20,7 +20,7 @@
 ?>
 <div id="Header" class="clearfix">
 	<?php $bcBaser->element('toolbar') ?>
-<?php if($this->name == 'Installations' || $this->params['url']['url'] == 'admin/users/login' || $bcAdmin->isAdminGlobalmenuUsed()): ?>
+<?php if($this->name == 'Installations' || $this->params['url']['url'] == $this->params['prefix'].'/users/login' || $bcAdmin->isAdminGlobalmenuUsed()): ?>
 	<div class="clearfix" id="HeaderInner">
 	
 	<?php if(!empty($user)): ?>

@@ -36,7 +36,13 @@ $(function(){
 	});
 	$('#SystemMenu ul:first').show();
 	$("#UserMenu ul li div ul li").each(function(){
-		if(!$(this).html()) {
+		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
+			$(this).remove();
+		}
+	});
+	$("#UserMenu ul li div ul").each(function(){
+		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
+			$(this).prev().remove();
 			$(this).remove();
 		}
 	});
@@ -62,7 +68,7 @@ $(function(){
 				<?php if($bcBaser->existsPublishLink()): ?>
 				<li><?php $bcBaser->publishLink() ?></li>
 				<?php endif ?>
-				<?php if(!empty($this->params['admin']) && $this->params['url']['url'] != 'admin/users/login'): ?>
+				<?php if(!empty($this->params['prefix']) && $this->params['url']['url'] != $this->params['prefix'].'/users/login'): ?>
 					<?php if(Configure::read('debug') == -1): ?>
 				<li>&nbsp;&nbsp;<span class="corner5" id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">インストールモード</span>&nbsp;&nbsp;</li>
 					<?php elseif(Configure::read('debug') > 0): ?>
@@ -83,7 +89,7 @@ $(function(){
 						<li><?php $bcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 						<li><?php $bcBaser->link('ログアウト', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
 					</ul>
-<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != 'admin/users/login' && !Configure::read('BcRequest.isUpdater')): ?>
+<?php elseif($this->name != 'Installations' && $this->params['url']['url'] != $this->params['prefix'].'/users/login' && !Configure::read('BcRequest.isUpdater')): ?>
 					<?php $bcBaser->link('ログインしていません '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 						<li><?php $bcBaser->link('ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>

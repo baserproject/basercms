@@ -17,12 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
-	'admin/baser_ajax_data_list_config',
-	'admin/baser_ajax_batch_config'
-));
 ?>
 
 
@@ -37,12 +31,8 @@ $(function(){
 			$("#FeedConfigEditForm").submit();
 		}
 	});
-	$.baserAjaxDataList.init();
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });
 </script>
-
-<div id="AjaxBatchUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'feed_details', 'action' => 'ajax_batch')) ?></div>
 
 <div class="section">
 	<h2>基本項目</h2>

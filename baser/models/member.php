@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] Ajaxレイアウト
+ * メンバーモデル
  *
  * PHP versions 5
  *
@@ -10,12 +10,31 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views.layouts
+ * @package			baser.models
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include LIBS.'view'.DS.'layouts'.DS.'ajax.ctp';
-?>
+/**
+ * メンバーモデル
+ *
+ * @package baser.models
+ */
+class Member extends User {
+/**
+ * クラス名
+ *
+ * @var string
+ * @access public
+ */
+	var $name = 'Member';
+/**
+ * テーブル名
+ *
+ * @var string
+ * @access public
+ */
+	var $useTable = 'users';
+}

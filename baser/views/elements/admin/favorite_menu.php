@@ -212,7 +212,12 @@ $(function(){
 		});
 
 		$(".favorite-menu-list li").each(function(i,v){
-			$(this).attr('id', 'FavoriteRow'+(i+1));
+			// アクセス制限によってリンクが出力されていない場合はLIごと削除する
+			if($(this).find('a').html() == null) {
+				$(this).remove();
+			} else {
+				$(this).attr('id', 'FavoriteRow'+(i+1));
+			}
 		});
 
 	}

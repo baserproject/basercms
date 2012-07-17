@@ -387,6 +387,9 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	function add($blogContentId,$blogPostId) {
+		
+		Configure::write('debug', 0);
+		
 		if(!$this->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
 			$this->notFound();
 		}else {

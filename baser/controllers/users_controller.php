@@ -93,6 +93,18 @@ class UsersController extends AppController {
 			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		}
 		
+		// =====================================================================
+		// Ajaxによるログインの場合、loginAction が、表示URLと違う為、
+		// BcAuthコンポーネントよりコントローラーのisAuthorized を呼びだせない。
+		// 正常な動作となるように書き換える。
+		// =====================================================================
+		if(!empty($this->params['prefix'])) {
+			$prefix = $this->params['prefix'];
+			if($this->RequestHandler->isAjax() && $this->action == $prefix.'_ajax_login') {
+				Configure::write('BcAuthPrefix.mypage.loginAction', '/'.$prefix.'/users/ajax_login');
+			}
+		}
+		
 		parent::beforeFilter();
 
 		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'ajax_login');

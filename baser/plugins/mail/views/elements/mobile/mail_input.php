@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+/* SVN FILE: $Id: mail_input.ctp 250 2011-12-08 10:15:44Z arata $ */
 /**
  * [MOBILE] メールフィールド
  *
@@ -67,10 +67,12 @@
 						<?php if($mailform->error("Message." . $record['MailField']['group_field'] . "_format", "check")): ?>
 <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_format", "形式が不正です",array('wrap' => false)) ?></font>
 						<?php else: ?>
+							<?php if($record['MailField']['valid']) : ?>
 <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "", "必須項目です",array('wrap' => false)) ?></font>
+							<?php endif; ?>
 						<?php endif; ?>
 <font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_same", "入力データが一致していません",array('wrap' => false)) ?></font> 
-<font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_complate", "入力データが不完全です",array('wrap' => false)) ?></font> 
+<font color="#FF0000"><?php echo $mailform->error("Message." . $record['MailField']['group_field'] . "_not_complate", "入力データが不完全です",array('wrap' => false)) ?></font>
 					<?php endif; ?>
 					<?php if(!$freezed): ?>
 <br />
