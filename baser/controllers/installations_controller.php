@@ -187,6 +187,9 @@ class InstallationsController extends AppController {
 			$this->redirect('step3');
 		}
 
+		// 文字コードチェック
+		$encoding = mb_internal_encoding();
+		$encodingOk = (eregi('UTF-8',$encoding) ?true : false);
 		// PHPバージョンチェック
 		$phpVersionOk= version_compare ( preg_replace('/[a-z-]/','', phpversion()),PHP_MINIMUM_VERSION,'>=');
 		// PHP memory limit チェック
@@ -209,6 +212,8 @@ class InstallationsController extends AppController {
 		$this->_writeDatabaseConfig();
 
 		/* viewに変数をセット */
+		$this->set('encoding', $encoding);
+		$this->set('encodingOk', $encodingOk);
 		$this->set('phpVersionOk', $phpVersionOk);
 		$this->set('phpActualVersion', preg_replace('/[a-z-]/','', phpversion()));
 		$this->set('phpMinimumVersion', PHP_MINIMUM_VERSION);
