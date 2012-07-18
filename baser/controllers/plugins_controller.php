@@ -212,7 +212,7 @@ class PluginsController extends AppController {
 				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
 					$pluginData['Plugin']['version'] = $matches[1];
 					$pluginData['Plugin']['old_version'] = true;
-				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'],array('blog', 'feed', 'mail'))) {
+				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
 					$pluginData['Plugin']['update'] = true;
 				}
 				$registereds[] = $pluginData;
@@ -236,6 +236,7 @@ class PluginsController extends AppController {
 
 		// 表示設定
 		$this->set('datas',$datas);
+		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';

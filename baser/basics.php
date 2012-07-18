@@ -718,7 +718,7 @@
  * @return string Or false
  */
 	function getVersion($plugin = '') {
-		$corePlugins = array('blog', 'feed', 'mail');
+		$corePlugins = Configure::read('BcApp.corePlugins');
 		if(!$plugin || in_array($plugin, $corePlugins)) {
 			$path = BASER.'VERSION.txt';
 		} else {

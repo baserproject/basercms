@@ -199,7 +199,7 @@ class UpdatersController extends AppController {
 			$this->notFound();
 		}
 		
-		$targetPlugins = array('blog', 'feed', 'mail');
+		$targetPlugins = Configure::read('BcApp.corePlugins');
 		$targets = $this->Plugin->find('list', array('fields'=>array('Plugin.name'), 'conditions'=>array('Plugin.status'=>true, 'Plugin.name'=> $targetPlugins)));
 		$targets = am(array(''), $targets);
 

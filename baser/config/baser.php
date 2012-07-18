@@ -47,7 +47,9 @@
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
 				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
 				array('name' => 'クレジット',				'url' => 'javascript:credit()')
-		)))
+		))),
+		// コアプラグイン
+		'corePlugins'	=> array('blog', 'feed', 'mail')
 	);
 /**
  * 環境設定 
