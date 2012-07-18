@@ -163,8 +163,7 @@ class BaserAppController extends Controller {
 		if($this->name == 'CakeError') {
 			
 			$this->uses = null;
-			
-			$params = Router::parse(@$_SERVER['REQUEST_URI']);
+			$params = Router::parse('/'.Configure::read('BcRequest.pureUrl'));
 			
 			$this->setTheme($params, true);
 			
@@ -174,11 +173,6 @@ class BaserAppController extends Controller {
 				if(Configure::read('BcRequest.agent') == 'mobile') {
 					$this->helpers[] = BC_MOBILE_HELPER;
 				}
-			}
-
-			if(!empty($params['admin'])) {
-				$this->layoutPath = 'admin';
-				$this->subDir = 'admin';
 			}
 
 		}
