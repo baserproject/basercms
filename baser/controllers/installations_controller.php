@@ -961,16 +961,6 @@ class InstallationsController extends AppController {
 		if(!empty($this->data['Installation']['reset'])) {
 
 			$messages = array();
-			$file = new File(CONFIGS.'core.php');
-			$data = $file->read();
-			$pattern = '/Configure\:\:write[\s]*\([\s]*\'App\.baseUrl\'[\s]*,[\s]*\'\'[\s]*\);\n/is';
-			if(preg_match($pattern, $data)) {
-				$data = preg_replace($pattern, "Configure::write('App.baseUrl', env('SCRIPT_NAME'));\n", $data);
-				if(!$file->write($data)){
-					$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
-				}
-				$file->close();
-			}
 			if(!$this->writeSmartUrl(false)){
 				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
 			}
@@ -1015,9 +1005,14 @@ class InstallationsController extends AppController {
 			ClassRegistry::flush();
 			clearAllCache();
 			$this->Session->setFlash($message);
-			// アクション名で指定した場合、環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述
-			$this->redirect('reset');
-			$this->redirect('/index.php/installations/reset');
+			
+			// スマートURLオンの際、アクション名でリダイレクトを指定した場合、
+			// 環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述
+			if(Configure::read('App.baseUrl')){
+				$this->redirect('reset');
+			} else {
+				$this->redirect('/index.php/installations/reset');
+			}
 			
 		} elseif(!BC_INSTALLED) {
 			$complete = true;
