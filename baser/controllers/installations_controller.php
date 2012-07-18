@@ -238,6 +238,12 @@ class InstallationsController extends AppController {
  */
 	function step3() {
 
+		$dbsource = $this->Session->read('Installation.dbSource');
+		if(!$dbsource) {
+			$dbsource = $this->_getDbSource();
+			$this->Session->write('Installation.dbSource', $dbsource);
+		}
+		
 		if(!$this->data) {
 			$this->data = $this->_getDefaultValuesStep3();
 		} else {
@@ -275,8 +281,9 @@ class InstallationsController extends AppController {
 
 		}
 
+		
 		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
-		$this->set('dbsource', $this->_getDbSource());
+		$this->set('dbsource', $dbsource);
 
 	}
 /**
@@ -752,10 +759,12 @@ class InstallationsController extends AppController {
 				$this->Session->setFlash('データベースへの接続に成功しました。');
 				return true;
 			} else {
+				
 				$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
 			}
 
 		} else {
+			
 			if (!$this->Session->read('Message.flash.message')) {
 				if($db->connection){
 					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
