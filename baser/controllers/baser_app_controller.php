@@ -238,13 +238,6 @@ class BaserAppController extends Controller {
 			}
 		}
 
-		// 初回アクセスメッセージ表示設定
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && !empty($this->siteConfigs['first_access'])) {
-			$data = array('SiteConfig' => array('first_access' => false));
-			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
-			$SiteConfig->saveKeyValue($data);
-		}
-
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
 					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
