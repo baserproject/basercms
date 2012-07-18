@@ -156,7 +156,9 @@ class BcAppHelper extends Helper {
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
 		// ---
-		$file = preg_replace('/'.preg_quote($this->webroot, '/').'/', '', $file);
+		if($this->webroot && $this->webroot != '/') {
+			$file = preg_replace('/'.preg_quote($this->webroot, '/').'/', '', $file);
+		}
 		$filePath = str_replace('/', DS, $file);
 		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
