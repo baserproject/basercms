@@ -368,7 +368,11 @@ class MailContentsController extends MailAppController {
 		if($result) {
 			$this->set('data', $result);
 		} else {
-			$this->ajaxError(500, $this->MailContent->validationErrors);
+			if(isset($this->MailContent->validationErrors['name']) && $this->MailContent->validate['name']['maxLength']['message'] == $this->MailContent->validationErrors['name']) {
+				$this->ajaxError(500, 'コピー元のメールコンテンツ名が長い為コピーに失敗しました。<br />コピー後のメールコンテンツ名は20文字以内になる必要があります。');
+			} else {
+				$this->ajaxError(500, $this->MailContent->validationErrors);
+			}
 		}
 
 	}

@@ -60,15 +60,19 @@ class MailContent extends MailAppModel {
  */
 	var $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('halfText'),
-					'message'	=> 'メールフォームアカウント名は半角のみで入力してください。',
-					'allowEmpty'=> false),
-			array(	'rule'		=> array('notInList', array('mail')),
-					'message'	=> 'メールフォームアカウント名に「mail」は利用できません。'),
-			array(	'rule'		=> array('isUnique'),
-					'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'メールフォームアカウント名は20文字以内で入力してください。')
+			'notInList' => array(
+				'rule'		=> array('halfText'),
+				'message'	=> 'メールフォームアカウント名は半角のみで入力してください。',
+				'allowEmpty'=> false),
+			'notInList' => array(
+				'rule'		=> array('notInList', array('mail')),
+				'message'	=> 'メールフォームアカウント名に「mail」は利用できません。'),
+			'isUnique' => array(
+				'rule'		=> array('isUnique'),
+				'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
+			'maxLength' => array(
+				'rule'		=> array('maxLength', 20),
+				'message'	=> 'メールフォームアカウント名は20文字以内で入力してください。')
 		),
 		'title' => array(
 			array(	'rule'		=> array('notEmpty'),
@@ -300,7 +304,8 @@ class MailContent extends MailAppModel {
 			}
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name'])) {
+			$this->log(count($data['MailContent']['name']));
+			if(isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 20) {
 				return $this->copy(null, $data, $recursive);
 			} else {
 				return false;
