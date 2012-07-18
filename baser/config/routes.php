@@ -23,9 +23,13 @@
 if(Configure::read('BcRequest.asset')) {
 	return;
 }
-
 if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
-	
+
+	// プラグインの基底クラス読み込み
+	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
+	App::import('Controller', 'BaserPluginApp');
+	App::import('Model', 'BaserPluginAppModel');
+
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$agent = Configure::read('BcRequest.agent');

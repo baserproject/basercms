@@ -60,7 +60,7 @@ class MailController extends MailAppController {
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
 	//var $components = array('Email','BcEmail','Security','BcCaptcha');
-	var $components = array('Email','BcEmail','BcCaptcha');
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha');
 /**
  * CSS
  *

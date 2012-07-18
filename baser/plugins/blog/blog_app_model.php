@@ -25,20 +25,4 @@
  *
  * @package			baser.plugins.blog
  */
-class BlogAppModel extends AppModel {
-/**
- * The name of the DataSource connection that this Model uses
- *
- * @var		string
- * @access 	public
- */
-	var $useDbConfig = 'plugin';
-/**
- * プラグイン名
- *
- * @var		string
- * @access 	public
- */
-	var $plugin = 'Blog';
-}
-?>
+class BlogAppModel extends BaserPluginAppModel {}

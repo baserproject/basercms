@@ -72,6 +72,7 @@ class PluginsController extends AppController {
  * コンテンツID
  *
  * @var int
+ * @deprecated BaserPluginAppController に移行
  */
 	var $contentId = null;
 /**
@@ -79,6 +80,7 @@ class PluginsController extends AppController {
  *
  * @return void
  * @access private
+ * @deprecated BaserPluginAppController に移行
  */
 	function beforeFilter() {
 
@@ -103,6 +105,7 @@ class PluginsController extends AppController {
  *
  * @return int $pluginNo
  * @access public
+ * @deprecated BaserPluginAppController に移行
  */
 	function getContentId() {
 
