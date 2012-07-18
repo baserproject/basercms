@@ -33,6 +33,7 @@ $bcBaser->js(array(
 <script type="text/javascript">
 $(function(){
 	$("#ThemeFileFile").change(function(){
+		$("#Waiting").show();
 		$("#ThemeFileUpload").submit();
 	});
 	$.baserAjaxDataList.init();
