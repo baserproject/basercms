@@ -64,10 +64,6 @@ class  BcAuthConfigureComponent extends Object {
 			$requestedPrefix = $controller->params['prefix'];
 		}
 		
-		if(!$requestedPrefix) {
-			return true;
-		}
-		
 		$_config = array(
 			'loginRedirect' => '/'.$requestedPrefix,
 			'username'		=> 'name',
@@ -96,14 +92,16 @@ class  BcAuthConfigureComponent extends Object {
 		$auth->authorize = 'controller';
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
 		$auth->userModel = $userModel;
-		// AppController::isAuthorizeでチェックするのでコメントアウト
-		/*if($requestedPrefix) {
-			//$auth->userScope = array('UserGroup.auth_prefix'=>$requestedPrefix);
-		}*/
+		
+		// 認証プレフィックス
+		if(!empty($config['auth_prefix'])) {
+			$auth->userScope = array('UserGroup.auth_prefix' => $config['auth_prefix']);
+		}
+		
+		// スコープ
 		if($userScope) {
 			$auth->userScope = $userScope;
 		}
-
 		// セッション識別
 		$auth->sessionKey = 'Auth.'.$userModel;
 		// ログインアクション
@@ -111,9 +109,9 @@ class  BcAuthConfigureComponent extends Object {
 
 		$redirect = $auth->Session->read('Auth.redirect');
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
-		if($redirect && strpos($redirect, $requestedPrefix)===false) {
+		/*if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
 			$auth->Session->write('Auth.redirect',null);
-		}
+		}*/
 
 		// ログイン後にリダイレクトするURL
 		$auth->loginRedirect = $loginRedirect;

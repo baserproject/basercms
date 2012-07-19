@@ -100,12 +100,12 @@ class BcReplacePrefixComponent extends Object {
 		}
 
 		if(!isset($controller->params['prefix'])) {
-			return;
+			$requestedPrefix = '';
 		} else {
 			$requestedPrefix = $controller->params['prefix'];
 		}
 
-		$pureAction = str_replace($requestedPrefix.'_', '', $controller->action);
+		$pureAction = preg_replace('/^'.$requestedPrefix.'_/', '', $controller->action);
 
 		if(!in_array($pureAction, $this->allowedPureActions)) {
 			return;
@@ -117,15 +117,20 @@ class BcReplacePrefixComponent extends Object {
 		$controller->action = $this->replacedPrefix.'_'.$pureAction;
 		$controller->layoutPath = $this->replacedPrefix;	// Baserに依存
 		$controller->subDir = $this->replacedPrefix;		// Baserに依存
-
-		if($controller->params['prefix'] != $this->replacedPrefix) {
+		
+		if($requestedPrefix != $this->replacedPrefix) {
 
 			// viewファイルが存在すればリクエストされたプレフィックスを優先する
 			$existsLoginView = false;
 			$viewPaths = $this->getViewPaths($controller);
 			$prefixPath = str_replace('_', DS, $requestedPrefix);
+			$controllerName = Inflector::underscore($controller->name);
 			foreach($viewPaths as $path) {
-				$file = $path.Inflector::underscore($controller->name).DS.$prefixPath.DS.$pureAction.$controller->ext;
+				if($prefixPath) {
+					$file = $path.$controllerName.DS.$prefixPath.DS.$pureAction.$controller->ext;
+				} else {
+					$file = $path.$controllerName.DS.$pureAction.$controller->ext;
+				}
 				if(file_exists($file)) {
 					$existsLoginView = true;
 					break;

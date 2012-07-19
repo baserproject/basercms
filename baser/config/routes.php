@@ -75,20 +75,19 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  */
 	if($authPrefixes && is_array($authPrefixes)) {
 		foreach($authPrefixes as $key => $authPrefix) {
-			if(empty($authPrefix['prefix'])) {
-				continue;
-			}
-			$prefix = $authPrefix['prefix'];
+			$prefix = $key;
 			if(!empty($authPrefix['alias'])) {
 				$alias = $authPrefix['alias'];
 			} else {
 				$alias = $prefix;
 			}
-			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
-			Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			if($alias) {
+				Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
+				Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			}
 		}
 	}
 /**

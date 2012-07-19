@@ -20,7 +20,7 @@
 if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 }
-$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
+$userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
 $this->addScript(<<< CSS_END
 <style type="text/css">
 #Contents {
@@ -150,7 +150,11 @@ function openCredit(completeHandler) {
 				
 		<h1><?php $bcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
+<?php if($currentPrefix == 'front'): ?>
+		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => 'users'))) ?>
+<?php else: ?>
 		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
+<?php endif ?>
 		<div class="float-left login-input">
 			<?php echo $bcForm->label($userModel.'.name', 'アカウント名') ?>
 			<?php echo $bcForm->input($userModel.'.name', array('type' => 'text', 'size'=>16 ,'tabindex'=>1)) ?>
@@ -164,7 +168,11 @@ function openCredit(completeHandler) {
 		</div>
 		<div class="clear login-etc">
 			<?php echo $bcForm->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
+<?php if($currentPrefix == 'front'): ?>
+			<?php $bcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
+<?php else: ?>
 			<?php $bcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?>
+<?php endif ?>
 		</div>
 		<?php echo $bcForm->end() ?>
 	</div>
