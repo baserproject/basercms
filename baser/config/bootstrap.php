@@ -292,7 +292,8 @@ if(BC_INSTALLED) {
 	}
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
-	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
+	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
+	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	}elseif(BC_INSTALLED && !Configure::read('BcRequest.isMaintenance') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
 		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();

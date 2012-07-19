@@ -49,7 +49,9 @@
 				array('name' => 'クレジット',				'url' => 'javascript:credit()')
 		))),
 		// コアプラグイン
-		'corePlugins'	=> array('blog', 'feed', 'mail')
+		'corePlugins'	=> array('blog', 'feed', 'mail'),
+		// アップデートキー
+		'updateKey'		=> 'update'
 	);
 /**
  * 環境設定 

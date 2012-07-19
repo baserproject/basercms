@@ -191,7 +191,17 @@ class UpdatersController extends AppController {
  * @access public
  */
 	function index() {
-
+		
+		$aryUrl = explode('/', $this->params['url']['url']);
+		if(empty($aryUrl[0])) {
+			$this->notFound();
+		}
+		// updateKey 以外でアクセスされた場合は NotFoundとする
+		$updateKey = Configure::read('BcApp.updateKey');
+		if($updateKey != $aryUrl[0]) {
+			$this->notFound();
+		}
+		
 		clearAllCache();
 		
 		$targetPlugins = Configure::read('BcApp.corePlugins');

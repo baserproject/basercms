@@ -163,6 +163,12 @@ else {
 	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
 }
 /**
+ * アップデーター用 
+ */
+$updateKey = Configure::read('BcApp.updateKey');
+Router::connect('/'.$updateKey, array('controller' => 'updaters', 'action' => 'index'));
+Router::connect('/'.$updateKey.'/index', array('controller' => 'updaters', 'action' => 'index'));
+/**
  * インストーラー用
  */
 Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));
