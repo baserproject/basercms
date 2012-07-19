@@ -221,20 +221,35 @@ class UpdatersController extends AppController {
 				ini_set('max_excution_time', '128M');
 			}
 			
+			// プラグインを一旦無効化
 			$plugins = $this->Plugin->find('all', array('fields' => array('Plugin.id'), 'conditions' => array('Plugin.status' => true)));
+			$enabledPluginIds = array();
 			foreach($plugins as $plugin) {
+				$enabledPluginIds[] = $plugin['Plugin']['id'];
 				$plugin['Plugin']['status'] = false;
 				$this->Plugin->set($plugin);
 				$this->Plugin->save();
 			}
+			
 			$this->setMessage('アップデート処理を開始します。', false, true, true);
 			foreach($targets as $target) {
 				if(!$this->_update($target)){
 					$this->setMessage('アップデート処理が途中で失敗しました。', true);
 				}
 			}
+			
+			// プラグインを有効化
+			foreach($enabledPluginIds as $pluginId) {
+				$plugin = array();
+				$plugin['Plugin']['id'] = $pluginId;
+				$plugin['Plugin']['status'] = true;
+				$this->Plugin->set($plugin);
+				$this->Plugin->save();
+			}
+			
 			clearAllCache();
-			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
+			
+			$this->setMessage('全てのアップデート処理が完了しました。', true, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
 			$this->redirect(array('action' => 'index'));
