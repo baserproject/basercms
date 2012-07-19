@@ -190,14 +190,9 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function index($id) {
+	function index() {
 
 		clearAllCache();
-
-		$siteConfig = $this->SiteConfig->findExpanded();
-		if(empty($siteConfig['update_id']) || $siteConfig['update_id'] != $id) {
-			$this->notFound();
-		}
 		
 		$targetPlugins = Configure::read('BcApp.corePlugins');
 		$targets = $this->Plugin->find('list', array('fields'=>array('Plugin.name'), 'conditions'=>array('Plugin.status'=>true, 'Plugin.name'=> $targetPlugins)));
@@ -232,7 +227,7 @@ class UpdatersController extends AppController {
 			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
-			$this->redirect(array('action' => 'index', $id));
+			$this->redirect(array('action' => 'index'));
 
 		}
 
