@@ -31,6 +31,7 @@ $(function(){
 	});
 });
 </script>
+<?php $bcBaser->js('admin/adjust_scroll',false) ?>
 
 <?php if(!$complete): ?>
 <p>baserCMSを初期化します。データベースのデータも全て削除されます。</p>
