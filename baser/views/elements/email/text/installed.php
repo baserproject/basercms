@@ -110,7 +110,7 @@ TIPSや最新情報をつぶやいてます！ Follow Me！
 
 ■ baserCMSの雑談広場（Facebook）
 http://www.facebook.com/groups/308200669249993/
-ちょっとした雑談やつぶやきに！初心者歓迎！お気軽にご参加ください。
+ちょっとした雑談やつぶやきに！初心者歓迎！
 
 ■ ユーザーズフォーラム
 http://forum.basercms.net/
@@ -122,11 +122,11 @@ http://study.basercms.net/
 
 ■ baserCMSユーザー会
 http://groups.google.com/group/basercms
-baserCMSの最新情報などを発信しています！まずはメーリングリストへのご参加を！
+baserCMSの最新情報などを発信しています！まずはメーリングリストへ参加！
 
 ■ baserCMSサポーターズ（Facebook）
 http://www.facebook.com/groups/331974406865338/
-baserCMSプロジェクトの運営に参加されませんか？一緒にbaserCMSを盛り上げよう！
+baserCMSプロジェクトの運営に参加されませんか？baserCMSを盛り上げよう！
 
 ■ baserCMS開発プロジェクト
 http://project.e-catchup.jp/projects/basercms
