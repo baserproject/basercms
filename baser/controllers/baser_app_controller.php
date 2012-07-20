@@ -251,7 +251,7 @@ class BaserAppController extends Controller {
 		}
 
 		/* 認証設定 */
-		//if(isset($this->BcAuthConfigure) && isset($this->params['prefix'])) {
+		if($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
 			$configs = Configure::read('BcAuthPrefix');
 			if(!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
@@ -263,13 +263,13 @@ class BaserAppController extends Controller {
 				$config = array();
 			}
 			$this->BcAuthConfigure->setting($config);
-		//}
 		
-		$authPrefix = $this->Session->read('Auth.User.authPrefix');
-		if(!$authPrefix) {
-			$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-			if($authPrefix) {
-				$this->Session->write('Auth.User.authPrefix', $authPrefix);
+			$authPrefix = $this->Session->read('Auth.User.authPrefix');
+			if(!$authPrefix) {
+				$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
+				if($authPrefix) {
+					$this->Session->write('Auth.User.authPrefix', $authPrefix);
+				}
 			}
 		}
 		

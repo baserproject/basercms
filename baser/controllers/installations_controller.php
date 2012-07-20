@@ -245,6 +245,7 @@ class InstallationsController extends AppController {
 		}
 		
 		if(!$this->data) {
+			clearAllCache();
 			$this->data = $this->_getDefaultValuesStep3();
 		} else {
 
