@@ -172,11 +172,15 @@ function resizeScroll() {
 						<li>Hiroyuki Kuwamura (<a href="http://twitter.com/staff_yg" target="_blank">staff_yg</a>)</li>
 					</ul>
 					<ul>
+						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki Arima</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
+						<li><a href="http://motto-web.jp/" target="_blank">Goichi Maniwa</a> (<a href="http://twitter.com/goichi_m" target="_blank">goichi_m</a>)</li>
 						<!-- ここからテスター -->
 						<li><a href="http://www.arbalest.or.jp/" target="_blank">Masahiro Kawai</a> (<a href="http://twitter.com/m68k" target="_blank">m68k</a>)</li>
 						<li><a href=" http://www.yaoto.com/" target="_blank">Yasuhiro Konishi</a> (<a href="http://twitter.com/yaotosys" target="_blank">yaotosys</a>)</li>
 						<li><a href="http://www.mmpf-develop.com" target="_blank">Nobuyuki Sato</a> (<a href="http://twitter.com/mmpf_develop" target="_blank">mmpf_develop</a>)</li>
 						<li><a href="http://kototoy.jp/" target="_blank">Taku Fujita</a> (<a href="http://twitter.com/takufujita" target="_blank">takufujita</a>)</li>
+					</ul>
+					<ul>
 						<li><a href="http://aht-records.com" target="_blank">Ippei Suzuki</a> (<a href="http://twitter.com/aht_Record" target="_blank">aht_Record</a>)</li>
 					</ul>
 				</div>
@@ -199,6 +203,17 @@ function resizeScroll() {
 						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
 						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
 					</ul>
+					<ul>
+						<li><a href="http://exittunes.com/index2.html" target="_blank">Programmersan</a> (<a href="http://twitter.com/programmersan" target="_blank">programmersan</a>)</li>
+						<li><a href="http://www.panic-net.org/" target="_blank">Min</a> (<a href="http://twitter.com/min_meou" target="_blank">min_meou</a>)</li>
+						<li><a href="http://blog.grooweb.jp/" target="_blank">Youhei Nishi</a> (<a href="http://twitter.com/nippei" target="_blank">nippei</a>)</li>
+						<li><a href="http://ryuring.blogspot.jp/" target="_blank">Ryuji Egashira</a> (<a href="http://twitter.com/ryuring" target="_blank">ryuring</a>)</li>
+						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
+						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
+					</ul>
+					<ul>
+						<li>Masanori Matsumoto (<a href="http://twitter.com/mattun0313" target="_blank">mattun0313</a>)</li>
+					</ul>
 				</div>
 
 				<h1 style="margin-top:400px;">baserCMS Users Community</h1>
@@ -207,3 +222,6 @@ function resizeScroll() {
 		</div>
 	</div>
 </div>
+
+<!-- template -->
+<!--<li><a href="http://publish" target="_blank">Name</a> (<a href="http://twitter.com/xxx" target="_blank">TwitterAcount</a>)</li>-->
