@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] メールフィールド フォーム
- * 
+ *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -25,7 +25,7 @@ $(window).load(function() {
 	$("#MailFieldFieldName").focus();
 });
 jQuery(function($) {
-								
+
 	// タイプを選択すると入力するフィールドが切り替わる
 	$("#MailFieldType").change(function(){loadSetting($("#MailFieldType").val())});
 	// 項目名を入力時に項目見出しを自動入力
@@ -169,9 +169,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $bcForm->label('MailField.not_empty', '必須マーク') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->input('MailField.not_empty', array('type' => 'checkbox', 'label'=>'項目見出しに必須マークを表示する')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpNotEmpty', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('MailField.not_empty') ?>
-				<div id="helptextNotEmpty" class="helptext">グループの場合、２番目以降のフィールドは不要です。</div>
 			</td>
 		</tr>
 		<tr id="rowValid">
