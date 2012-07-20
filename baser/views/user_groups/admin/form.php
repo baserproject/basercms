@@ -19,7 +19,7 @@
  */
 $authPrefixes = array();
 foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
-	$authPrefixes[$key] = $key;
+	$authPrefixes[$key] = $authPrefix['name'];
 }
 ?>
 
@@ -95,7 +95,7 @@ $(window).load(function() {
 		</tr>
 <?php if(count($authPrefixes) > 1): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('UserGroup.auth_prefix', '認証プレフィックス') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $bcForm->label('UserGroup.auth_prefix', '認証プレフィックス設定') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if($bcForm->value('UserGroup.name') == 'admins'): ?>
 					<?php echo $bcForm->value('UserGroup.auth_prefix') ?>
@@ -105,7 +105,10 @@ $(window).load(function() {
 				<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('UserGroup.auth_prefix') ?>
-				<div id="helptextAuthPrefix" class="helptext">所属するプレフィックスコンテンツを指定します。<br />ユーザーグループ名が admins の場合は編集できません。</div>
+				<div id="helptextAuthPrefix" class="helptext">
+					認証プレフィックスの設定を指定します。<br />
+					ユーザーグループ名が admins の場合は編集できません。
+				</div>
 			</td>
 		</tr>
 <?php endif ?>

@@ -47,7 +47,11 @@
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
 				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
 				array('name' => 'クレジット',				'url' => 'javascript:credit()')
-		)))
+		))),
+		// コアプラグイン
+		'corePlugins'	=> array('blog', 'feed', 'mail'),
+		// アップデートキー
+		'updateKey'		=> 'update'
 	);
 /**
  * 環境設定 
@@ -79,32 +83,46 @@
 	$config['BcAuthPrefix'] = array(
 		// 管理画面
 		'admin' => array(
-			'prefix'		=> 'admin',
+			// 認証設定名
+			'name'			=> '管理システム',
+			// URLにおけるエイリアス
 			'alias'			=> $adminPrefix,
 			// 認証後リダイレクト先
 			'loginRedirect'	=> '/'.$adminPrefix,
 			// ログイン画面タイトル
 			'loginTitle'	=> '管理システムログイン',
-			'loginAction'	=> '/'.$adminPrefix.'/users/login'
+			// ログインページURL
+			'loginAction'	=> '/'.$adminPrefix.'/users/login',
+			'toolbar'		=> true
 		),
-		// マイページ
+		// フロント（例）
+		'front' => array(
+			'name'			=> 'フロント',
+			'loginRedirect'	=> '/',
+			'userModel'		=> 'User',
+			'loginAction'	=> '/users/login',
+			'toolbar'		=> true
+		),
+		// マイページ（例）
 		/*'mypage' => array(
+			'name'			=> 'マイページ',
 			'alias'			=> 'mypage',
-			'prefix'		=> 'mypage',
-			'loginRedirect'=>'/mypage/members/edit',
-			'loginTitle'=>'マイページログイン',
+			'loginRedirect'	=> '/',
+			'loginTitle'	=> 'マイページログイン',
 			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/members/login'
+			'loginAction'	=> '/mypage/users/login',
+			'toolbar'		=> true
 		),*/
-		// モバイルマイページ
+		// モバイルマイページ（例）
 		/*'mobile_mypage' => array(
+			'name'			=> 'ケータイマイページ',
 			'alias'			=> 'mobile_mypage',
-			'prefix'		=> 'mobile_mypage',
-			'loginRedirect'=>'/m/mypage/members/edit',
-			'loginTitle'=>'マイページログイン',
+			'loginRedirect'	=> '/m/',
+			'loginTitle'	=> 'マイページログイン',
 			'userModel'		=> 'User',
-			'loginAction'	=> '/m/mypage/members/login',
-			'userScope'		=> array('User.user_group_id' => 1)
+			'loginAction'	=> '/m/mypage/users/login',
+			'toolbar'		=> false,
+			'userScope'		=> array()
 		)*/
 	);
 /**

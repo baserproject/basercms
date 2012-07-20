@@ -38,7 +38,7 @@ class FeedController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $components = array('RequestHandler');
+	var $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
 /**
  * モデル
  *

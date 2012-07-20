@@ -1,8 +1,8 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * メールプラグインコントローラー根底クラス
- *
+ * プラグイン拡張クラス
+ * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail
+ * @package			baser.models
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -21,8 +21,17 @@
  * Include files
  */
 /**
- * メールプラグインコントローラー根底クラス
- *
- * @package			baser.plugins.mail
+ * プラグイン拡張クラス
+ * プラグインのモデルより継承して利用します。
+ * @package baser.models
  */
-class MailAppController extends BaserPluginAppController {}
+class BaserPluginAppModel extends AppModel {
+/**
+ * The name of the DataSource connection that this Model uses
+ *
+ * @var		string
+ * @access 	public
+ */
+	var $useDbConfig = 'plugin';
+}
+?>

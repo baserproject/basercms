@@ -631,12 +631,17 @@ class BcBaserHelper extends AppHelper {
  */
 	function scripts() {
 		
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		$currentPrefix = $this->_view->viewVars['currentPrefix'];
+		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+
+		// ツールバー設定
+		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->BcHtml->themeWeb;
 			$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
 			$this->css('admin/toolbar', array('inline' => false));
 			$this->BcHtml->themeWeb = $publishTheme;
 		}
+		
 		echo join("\n\t", $this->_view->__scripts);
 		
 	}
@@ -647,12 +652,19 @@ class BcBaserHelper extends AppHelper {
  * @access public
  */
 	function func() {
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		
+		$currentPrefix = $this->_view->viewVars['currentPrefix'];
+		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+		
+		// ツールバー表示
+		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->_view->theme;
 			$this->_view->theme = $this->siteConfig['admin_theme'];
 			$this->element('admin/toolbar');
 			$this->_view->theme = $publishTheme;
 		}
+		
+		// デバッグ
 		if (isset($this->_view->viewVars['cakeDebug']) && Configure::read() > 2) {
 			$params = array('controller' => $this->_view->viewVars['cakeDebug']);
 			echo View::element('dump', $params, false);
@@ -972,7 +984,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function editLink() {
 		
-		if(!empty($this->_view->viewVars['editLink'])) {
+		if($this->existsEditLink()) {
 			$this->link('編集する', $this->_view->viewVars['editLink'], array('class' => 'tool-menu'));
 		}
 		
@@ -985,7 +997,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function existsEditLink() {
 		
-		return (!empty($this->_view->viewVars['editLink']));
+		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
 		
 	}
 /**
@@ -996,7 +1008,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function publishLink() {
 		
-		if(!empty($this->_view->viewVars['publishLink'])) {
+		if($this->existsPublishLink()) {
 			$this->link('公開ページ', $this->_view->viewVars['publishLink'], array('class' => 'tool-menu'));
 		}
 		
@@ -1009,7 +1021,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function existsPublishLink() {
 		
-		return (!empty($this->_view->viewVars['publishLink']));
+		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['publishLink']));
 		
 	}
 /**

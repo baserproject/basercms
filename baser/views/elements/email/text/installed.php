@@ -100,22 +100,34 @@ http://basercms.net/postworks/index
 http://basercms.net/
 最新版のダウンロード、利用方法やカスタマイズ方法はこちらから！
 
-■ baserCMSユーザー会
-http://groups.google.com/group/basercms
-baserCMSの最新情報などを発信しています！まずはこちらからご登録を！
+■ 公式Facebook
+http://www.facebook.com/basercms
+いいね！をクリックして普及にご協力ください！
+
+■ 公式Twitter
+http://twitter.com/#!/basercms
+TIPSや最新情報をつぶやいてます！ Follow Me！
+
+■ baserCMSの雑談広場（Facebook）
+http://www.facebook.com/groups/308200669249993/
+ちょっとした雑談やつぶやきに！初心者歓迎！
 
 ■ ユーザーズフォーラム
 http://forum.basercms.net/
 不具合や改善報告はこちらよりどうぞ！
 
-■ Facebook
-http://www.facebook.com/basercms
-いいね！をクリックして普及にご協力ください！
-
-■ Twitter
-http://twitter.com/#!/basercms
-TIPSや最新情報をつぶやいてます！ Follow Me！
-
 ■ 勉強会サイト
 http://study.basercms.net/
 勉強会の資料などを配布しています。
+
+■ baserCMSユーザー会
+http://groups.google.com/group/basercms
+baserCMSの最新情報などを発信しています！まずはメーリングリストへ参加！
+
+■ baserCMSサポーターズ（Facebook）
+http://www.facebook.com/groups/331974406865338/
+baserCMSプロジェクトの運営に参加されませんか？baserCMSを盛り上げよう！
+
+■ baserCMS開発プロジェクト
+http://project.e-catchup.jp/projects/basercms
+baserCMSの開発状況や、今後の開発タスクなどが確認できます。

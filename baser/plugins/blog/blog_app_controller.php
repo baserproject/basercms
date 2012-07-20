@@ -20,13 +20,12 @@
 /**
  * Include files
  */
-App::import('Controller', 'Plugins');
 /**
  * ブログコントローラー基底クラス
  *
  * @package			baser.plugins.blog
  */
-class BlogAppController extends PluginsController {
+class BlogAppController extends BaserPluginAppController {
 /**
  * コメントを管理者メールへメール送信する
  * @param array $data
@@ -67,4 +66,3 @@ class BlogAppController extends PluginsController {
 	}
 	
 }
-?>

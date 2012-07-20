@@ -45,6 +45,13 @@ class MailMessagesController extends MailAppController {
  */
 	var $helpers = array('Mail.maildata', 'Mail.mailfield', BC_TEXT_HELPER, BC_ARRAY_HELPER);
 /**
+ * コンポーネント
+ *
+ * @var array
+ * @access public
+ */
+	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+/**
  * メールコンテンツデータ
  *
  * @var array

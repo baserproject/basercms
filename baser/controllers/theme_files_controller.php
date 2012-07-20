@@ -278,7 +278,10 @@ class ThemeFilesController extends AppController {
 			if($this->ThemeFile->validates()) {
 
 				$oldPath = urldecode($fullpath);
-				$newPath = dirname($fullpath).DS.urldecode($this->data['ThemeFile']['name']).'.'.$this->data['ThemeFile']['ext'];
+				$newPath = dirname($fullpath).DS.urldecode($this->data['ThemeFile']['name']);
+				if($this->data['ThemeFile']['ext']) {
+					$newPath .= '.'.$this->data['ThemeFile']['ext'];
+				}
 				$this->data['ThemeFile']['type'] = $this->_getFileType(basename($newPath));
 				if($this->data['ThemeFile']['type'] == 'text') {
 					$file = new File($oldPath);
@@ -760,6 +763,7 @@ class ThemeFilesController extends AppController {
 
 		if(!empty($args)) {
 			$data['path'] = implode('/', $args);
+			$data['path'] = urldecode($data['path']);
 		}
 
 		if($data['plugin']) {
@@ -782,16 +786,14 @@ class ThemeFilesController extends AppController {
 
 		if($data['type']!='etc') {
 			$data['fullpath'] = $viewPath.$data['type'].DS.$data['path'];
-			if($data['path']) {
-				$pathinfo = pathinfo($data['fullpath']);
-				if(empty($pathinfo['extension'])) {
-					$data['fullpath'] .= '/';
-				}
-			}
 		}else {
 			$data['fullpath'] = $viewPath.$data['path'];
 		}
 
+		if($data['path'] && is_dir($data['fullpath']) && !preg_match('/\/$/', $data['fullpath'])) {
+			$data['fullpath'] .= '/';
+		}
+		
 		return $data;
 
 	}

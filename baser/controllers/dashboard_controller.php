@@ -102,6 +102,14 @@ class DashboardController extends AppController {
 				'order' =>'Dblog.created DESC',
 				'limit' => $this->passedArgs['num']
 		);
+		
+		// 初回アクセスメッセージ表示設定
+		if(!empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
+		}
+		
 		$this->set('viewDblogs',$this->paginate('Dblog'));
 		$publishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => true)));
 		$unpublishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => false)));

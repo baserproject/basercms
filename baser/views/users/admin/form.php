@@ -20,8 +20,6 @@
 ?>
 
 
-<div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites')) ?></div>
-
 <script type="text/javascript">
 $(window).load(function() {
 	$("#UserName").focus();
@@ -42,12 +40,13 @@ $(function(){
 			return true;
 		}
 		var data = {};
-		$(".favorite-menu-list li").each(function(i){
+		$("#DefaultFavorites li").each(function(i){
 			data[i] ={
 				'name' : $(this).find('.favorite-name').val(), 
 				'url' :$(this).find('.favorite-url').val()
 			};
 		});
+		console.log(data);
 		$.ajax({
 			url: $("#UserGroupSetDefaultFavoritesUrl").html(),
 			type: 'POST',
@@ -86,9 +85,11 @@ $(function(){
 });
 </script>
 
-<div id="SelfUpdate" class="display-none"><?php echo $selfUpdate ?></div>
 
+<div id="SelfUpdate" style="display: none"><?php echo $selfUpdate ?></div>
 <div id="AlertMessage" style="display: none"></div>
+<div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', $this->data['UserGroup']['id'])) ?></div>
+
 
 <?php echo $bcForm->create('User') ?>
 <?php echo $bcForm->hidden('User.id') ?>
@@ -198,9 +199,13 @@ $(function(){
 <div class="panel-box corner10">
 	<h2>登録されている「よく使う項目」</h2>
 	<?php if($this->data['Favorite']): ?>
-	<ul class="clearfix">
-		<?php foreach($this->data['Favorite'] as $favorite): ?>
-		<li style="float:left"><?php $bcBaser->link($favorite['name'], $favorite['url']) ?></li>
+	<ul class="clearfix" id="DefaultFavorites">
+		<?php foreach($this->data['Favorite'] as $key => $favorite): ?>
+		<li style="float:left">
+			<?php $bcBaser->link($favorite['name'], $favorite['url']) ?>
+			<?php echo $bcForm->input('Favorite.name.'.$key, array('type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name')) ?>
+			<?php echo $bcForm->input('Favorite.url.'.$key, array('type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url')) ?>
+		</li>
 		<?php endforeach; ?>
 	</ul>
 	<?php endif ?>

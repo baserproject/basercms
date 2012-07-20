@@ -28,3 +28,9 @@
 .cke_skin_kama .cke_browser_webkit a.cke_dialog_ui_button span.cke_dialog_ui_button {
 	line-height:18px;
 }
+.cke_skin_kama .cke_dialog_ui_labeled_label {
+	line-height: 16px;
+}
+.cke_skin_kama .cke_dialog_ui_vbox_child {
+	padding:2px;
+}

@@ -76,13 +76,6 @@ class BlogController extends BlogAppController {
  */
 	var $blogContent = array();
 /**
- * プレビューフラグ
- * 
- * @var boolean
- * @access public
- */
-	var $preview = false;
-/**
  * beforeFilter
  *
  * @return void

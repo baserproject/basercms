@@ -644,6 +644,8 @@ class PagesController extends AppController {
 		} else {
 			$this->layoutPath = '';
 		}
+		
+		$this->preview = true;
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';

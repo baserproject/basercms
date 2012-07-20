@@ -292,16 +292,10 @@ if(BC_INSTALLED) {
 	}
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
-	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
+	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
+	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	}elseif(BC_INSTALLED && !Configure::read('BcRequest.isMaintenance') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		if(preg_match('/^admin/', $parameter)) {
-			sendUpdateMail();
-			$message = 'baserCMSのアップデートURLを管理者メールアドレスに送信しました。<br /><br />メールが届かない場合は、管理者メールアドレスの設定がうまくいっていない可能性があります。<br />'.
-						'baserCMSのバージョンを前のバージョンに戻してシステム設定よりメール設定を行うか、<br />データベースの site_configs テーブルでメール設定を直接調整し、管理システムのURLへ再度アクセスしてください。';
-			$layout = 'default';
-			$Session->write('Message.flash', compact('message', 'layout'));
-		}
 		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);

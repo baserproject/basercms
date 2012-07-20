@@ -132,6 +132,13 @@ class BaserAppController extends Controller {
  */
 	var $siteConfigs = array();
 /**
+ * プレビューフラグ
+ * 
+ * @var boolean
+ * @access public
+ */
+	var $preview = false;
+/**
  * コンストラクタ
  *
  * @return	void
@@ -163,8 +170,7 @@ class BaserAppController extends Controller {
 		if($this->name == 'CakeError') {
 			
 			$this->uses = null;
-			
-			$params = Router::parse(@$_SERVER['REQUEST_URI']);
+			$params = Router::parse('/'.Configure::read('BcRequest.pureUrl'));
 			
 			$this->setTheme($params, true);
 			
@@ -174,11 +180,6 @@ class BaserAppController extends Controller {
 				if(Configure::read('BcRequest.agent') == 'mobile') {
 					$this->helpers[] = BC_MOBILE_HELPER;
 				}
-			}
-
-			if(!empty($params['admin'])) {
-				$this->layoutPath = 'admin';
-				$this->subDir = 'admin';
 			}
 
 		}
@@ -244,13 +245,6 @@ class BaserAppController extends Controller {
 			}
 		}
 
-		// 初回アクセスメッセージ表示設定
-		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && !empty($this->siteConfigs['first_access'])) {
-			$data = array('SiteConfig' => array('first_access' => false));
-			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
-			$SiteConfig->saveKeyValue($data);
-		}
-
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
 					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
@@ -264,16 +258,28 @@ class BaserAppController extends Controller {
 		}
 
 		/* 認証設定 */
-		if(isset($this->BcAuthConfigure) && isset($this->params['prefix'])) {
+		if($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
 			$configs = Configure::read('BcAuthPrefix');
-			if(isset($configs[$this->params['prefix']])) {
+			if(!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
+				$config['auth_prefix'] = $this->params['prefix'];
+			}elseif(isset($configs['front'])) {
+				$config = $configs['front'];
+				$config['auth_prefix'] = 'front';
 			} else {
 				$config = array();
 			}
 			$this->BcAuthConfigure->setting($config);
+		
+			$authPrefix = $this->Session->read('Auth.User.authPrefix');
+			if(!$authPrefix) {
+				$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
+				if($authPrefix) {
+					$this->Session->write('Auth.User.authPrefix', $authPrefix);
+				}
+			}
 		}
-
+		
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
 		
@@ -500,6 +506,7 @@ class BaserAppController extends Controller {
 		$this->set('crumbs',$this->crumbs);                       // パンくずなび
 		$this->set('search', $this->search);
 		$this->set('help', $this->help);
+		$this->set('preview', $this->preview);
 
 		/* ログインユーザー */
 		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
@@ -508,7 +515,15 @@ class BaserAppController extends Controller {
 				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 			}
 		}
-
+		
+		if(!empty($this->params['prefix'])) {
+			$currentPrefix = $this->params['prefix'];
+		} else {
+			$currentPrefix = 'front';
+		}
+		$this->set('currentPrefix', $currentPrefix);
+		$this->set('authPrefix', $this->Session->read('Auth.User.authPrefix'));
+		
 		/* 携帯用絵文字データの読込 */
 		// TODO 実装するかどうか検討する
 		/*if(isset($this->params['prefix']) && $this->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
@@ -1186,10 +1201,9 @@ class BaserAppController extends Controller {
 	function isAuthorized() {
 
 		$requestedPrefix = '';
-		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
 
+		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
 		if(!$authPrefix) {
-			// 1.6.8 以下の場合は authPrefix が取得できないので true を返して終了
 			return true;
 		}
 
