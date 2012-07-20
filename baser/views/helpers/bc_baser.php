@@ -633,9 +633,9 @@ class BcBaserHelper extends AppHelper {
 		
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
-		
+
 		// ツールバー設定
-		if($toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->BcHtml->themeWeb;
 			$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
 			$this->css('admin/toolbar', array('inline' => false));
@@ -657,7 +657,7 @@ class BcBaserHelper extends AppHelper {
 		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
 		
 		// ツールバー表示
-		if($toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->_view->theme;
 			$this->_view->theme = $this->siteConfig['admin_theme'];
 			$this->element('admin/toolbar');

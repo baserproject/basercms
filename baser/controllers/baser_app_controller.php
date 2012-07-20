@@ -132,6 +132,13 @@ class BaserAppController extends Controller {
  */
 	var $siteConfigs = array();
 /**
+ * プレビューフラグ
+ * 
+ * @var boolean
+ * @access public
+ */
+	var $preview = false;
+/**
  * コンストラクタ
  *
  * @return	void
@@ -499,6 +506,7 @@ class BaserAppController extends Controller {
 		$this->set('crumbs',$this->crumbs);                       // パンくずなび
 		$this->set('search', $this->search);
 		$this->set('help', $this->help);
+		$this->set('preview', $this->preview);
 
 		/* ログインユーザー */
 		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
