@@ -26,7 +26,7 @@ App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo
  *
  * @package baser.models.datasources.dbo
  */
-class DboBcSqlite3 extends DboSqlite3 {
+class BcSqlite3 extends DboSqlite3 {
 /**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *

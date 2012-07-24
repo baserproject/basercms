@@ -173,7 +173,7 @@ class PageCategory extends AppModel {
 					}
 				}
 
-				$parents = $this->generatetreelist($conditions);
+				$parents = $this->generateTreeList($conditions);
 				$controlSources['parent_id'] = array();
 				
 				$excludeIds = array();

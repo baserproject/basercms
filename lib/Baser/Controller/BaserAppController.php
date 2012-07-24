@@ -21,8 +21,8 @@
  * Include files
  */
 App::uses('ConnectionManager', 'Model');
-App::import('View', 'AppView');
-App::import('Component','BcAuthConfigure');
+App::uses('AppView', 'View');
+App::uses('BcAuthConfigure', 'Component');
 //App::import('Component', 'Emoji');
 /**
  * Controller 拡張クラス
@@ -163,7 +163,7 @@ class BaserAppController extends Controller {
 				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
 			
-		} elseif($this->name != 'Installations') {
+		} elseif($this->name != 'Installations' && $this->name != 'CakeError') {
 			$this->redirect('/');
 		}
 
@@ -241,14 +241,14 @@ class BaserAppController extends Controller {
 			// ===============================================================================
 			$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
 			$pluginPaths = Configure::read('pluginPaths');
-			if(!in_array($pluginThemePath, $pluginPaths)) {
+			if($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
 				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
 			}
 		}
 
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
-					($this->request->params['controller'] != 'maintenance' && $this->request->params['url']['url'] != 'maintenance') &&
+					($this->request->params['controller'] != 'maintenance' && $this->request->url != 'maintenance') &&
 					(!isset($this->request->params['prefix']) || $this->request->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
 			if(!empty($this->request->params['return']) && !empty($this->request->params['requested'])){
@@ -324,8 +324,7 @@ class BaserAppController extends Controller {
 			if(!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
-				$userModel = Configure::read('BcAuthPrefix.'.$this->request->params['prefix'].'.userModel');
-				if(!$Permission->check($this->request->params['url']['url'],$user[$this->BcAuth->userModel]['user_group_id'])) {
+				if(!$Permission->check($this->request->url,$user['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
 					$this->redirect($this->BcAuth->loginAction);
 				}
@@ -360,7 +359,9 @@ class BaserAppController extends Controller {
 		
 		// エラーの場合は強制的にフロントのテーマを設定する
 		if($isError) {
-			$this->theme = $this->siteConfigs['theme'];
+			if($params['controller'] != 'installations') {
+				$this->theme = $this->siteConfigs['theme'];
+			}
 			return;
 		}
 		
@@ -446,7 +447,7 @@ class BaserAppController extends Controller {
 
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
-			$url = $this->request->params['url']['url'];
+			$url = $this->request->url;
 			if(Configure::read('App.baseUrl')) {
 				$url = 'index.php/'.$url;
 			}
@@ -1356,8 +1357,8 @@ class BaserAppController extends Controller {
 		if(!$user || !$userModel) {
 			return false;
 		}
-		if(@$this->siteConfigs['root_owner_id'] == $user[$userModel]['user_group_id'] ||
-				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == 1) {
+		if(@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
+				!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == 1) {
 			return true;
 		} else {
 			return false;

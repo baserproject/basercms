@@ -96,7 +96,7 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 						<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 					</div>
 
-					<?php if($this->request->params['controller']!='installations' && $this->request->action != 'update'): ?>
+					<?php if($this->request->params['controller']!='installations' && $this->request->params['action'] != 'update'): ?>
 					<?php $this->BcBaser->updateMessage() ?>
 					<?php endif ?>
 

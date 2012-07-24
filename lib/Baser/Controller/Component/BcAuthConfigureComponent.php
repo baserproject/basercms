@@ -17,13 +17,15 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * /
+ */
+App::uses('Component', 'Controller');
 /**
  * 認証設定コンポーネント
  *
  * @package baser.controllers.components
  */
-class  BcAuthConfigureComponent extends Object {
+
+class  BcAuthConfigureComponent extends Component {
 /**
  * コントローラー
  * 
@@ -89,7 +91,7 @@ class  BcAuthConfigureComponent extends Object {
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
 		//ユーザIDとパスワードのフィールドを指定
 		$auth->fields = array('username' => $username, 'password' => $password, 'serial' => $serial);
-		$auth->authorize = 'controller';
+		$auth->authorize = 'Controller';
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
 		$auth->userModel = $userModel;
 		

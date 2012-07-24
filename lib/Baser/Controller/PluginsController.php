@@ -118,11 +118,11 @@ class PluginsController extends AppController {
 			return null;
 		}
 
-		if(!isset($this->request->params['url']['url'])) {
+		if(!isset($this->request->url)) {
 			return null;
 		}
 		$contentName = '';
-		$url = preg_replace('/^\//', '', $this->request->params['url']['url']);
+		$url = preg_replace('/^\//', '', $this->request->url);
 		$url = split('/', $url);
 		if($url[0]!=Configure::read('BcRequest.agentAlias')) {
 			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {

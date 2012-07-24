@@ -33,7 +33,7 @@
  * @package cake
  * @subpackage cake.cake.libs.model.datasources.dbo
  */
-class DboSqlite3 extends DboSource {
+class Sqlite3 extends DboSource {
 
 /**
  * Enter description here...

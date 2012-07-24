@@ -177,5 +177,3 @@ function openCredit(completeHandler) {
 	</div>
 
 </div>
-
-

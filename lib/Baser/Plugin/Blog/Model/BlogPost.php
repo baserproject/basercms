@@ -292,11 +292,11 @@ class BlogPost extends BlogAppModel {
 	protected function _getEntryDatesConditions($contentId,$year,$month) {
 
 		$dbConfig = new DATABASE_CONFIG();
-		$driver = preg_replace('/^bc_/', '', $dbConfig->plugin['driver']);
+		$datasource = preg_replace('/^bc_/', '', $dbConfig->plugin['datasource']);
 
-		switch($driver) {
-			case 'mysql':
-			case 'csv':
+		switch($datasource) {
+			case 'Database/BcMysql':
+			case 'Database/BcCsv':
 				if(!empty($year)) {
 					$conditions["YEAR(`BlogPost`.`posts_date`)"] = $year;
 				}else {
@@ -309,7 +309,7 @@ class BlogPost extends BlogAppModel {
 				}
 				break;
 
-			case 'postgres':
+			case 'Database/BcPostgres':
 				if(!empty($year)) {
 					$conditions["date_part('year', \"BlogPost\".\"posts_date\")"] = $year;
 				}else {
@@ -322,8 +322,8 @@ class BlogPost extends BlogAppModel {
 				}
 				break;
 
-			case 'sqlite':
-			case 'sqlite3':
+			case 'Database/BcSqlite':
+			case 'Database/BcSqlite3':
 				if(!empty($year)) {
 					$conditions["strftime('%Y',BlogPost.posts_date)"] = $year;
 				}else {

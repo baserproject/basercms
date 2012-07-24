@@ -34,7 +34,7 @@
  *
  * @package baser.models.datasources.dbo
  */
-class DboBcCsv extends DboSource {
+class BcCsv extends DboSource {
 /**
  * ドライバーの説明文
  *

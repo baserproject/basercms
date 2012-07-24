@@ -17,14 +17,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$relatedPosts = $blog->getRelatedPosts($post);
+$relatedPosts = $this->blog->getRelatedPosts($post);
 ?>
 <?php if($relatedPosts): ?>
 <div id="RelatedPosts">
 	<h4 class="contents-head">関連記事</h4>
 	<ul>
 	<?php foreach($relatedPosts as $relatedPost): ?>
-		<li><?php $blog->postTitle($relatedPost) ?></li>
+		<li><?php $this->blog->postTitle($relatedPost) ?></li>
 	<?php endforeach ?>
 	</ul>
 </div>

@@ -33,8 +33,8 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 
 	// プラグインの基底クラス読み込み
 	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
-	App::import('Controller', 'BaserPluginApp');
-	App::import('Model', 'BaserPluginAppModel');
+	App::uses('BaserPluginApp', 'Controller');
+	App::uses('BaserPluginAppModel', 'Model');
 
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
@@ -44,7 +44,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 	$authPrefixes = Configure::read('BcAuthPrefix');
 	
 	$pluginMatch = array();
-	$plugins = Configure::listObjects('plugin');
+	$plugins = CakePlugin::loaded();
 	if($plugins) {
 		foreach ($plugins as $key => $value) {
 			$plugins[$key] = Inflector::underscore($value);
@@ -106,11 +106,13 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング
  */
-	$adminPrefix = Configure::read('Routing.admin');
+	$adminPrefix = Configure::read('Routing.prefixes.0');
+	$test = Configure::read('Routing');
 	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
+			
 			if(!$parameter){
 				$_parameters = array('index');
 			}elseif(preg_match('/\/$/is', $parameter)) {
@@ -209,7 +211,10 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義する
  */
 	$enablePlugins = getEnablePlugins();
-	Configure::write('BcStatus.enablePlugins', $enablePlugins);
+	
+	// TODO basercamp
+	// とりま、一旦コメントアウト
+	/*Configure::write('BcStatus.enablePlugins', $enablePlugins);
 	$_pluginPaths = array(
 		APP.'plugins'.DS,
 		BASER_PLUGINS
@@ -221,7 +226,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 				include $pluginBootstrap;
 			}
 		}
-	}
+	}*/
 /**
  * テーマの bootstrap を実行する 
  * bootstrapではプラグインのパスが読み込めない為ここに定義

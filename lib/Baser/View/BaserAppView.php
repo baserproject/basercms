@@ -39,38 +39,6 @@ class BaserAppView extends View {
 	);
 /**
  * Return all possible paths to find view files in order
- *
- * @param string $plugin
- * @return array paths
- * @access private
- */
-	protected function _paths($plugin = null, $cached = true) {
-		$paths = $this->__paths($plugin, $cached);
-
-		if (!empty($this->theme)) {
-			$count = count($paths);
-			for ($i = 0; $i < $count; $i++) {
-				// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
-				// プラグインパスにテーマのパスを追加した為、
-				// テーマのパスをさらにテーマのパスに整形しないように調整
-				//$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
-				// ---
-				if(strpos($paths[$i],'themed') === false) {
-					$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
-				}
-				// <<<
-			}
-			$paths = array_merge($themePaths, $paths);
-		}
-
-		if (empty($this->__paths)) {
-			$this->__paths = $paths;
-		}
-
-		return $paths;
-	}
-/**
- * Return all possible paths to find view files in order
  * 
  * ※ _paths より直接呼び出されるようにする為だけに、Viewクラスより中身をコピー
  * 
@@ -149,10 +117,10 @@ class BaserAppView extends View {
 				$name = str_replace('admin_','',$this->request->action);
 			}
 		}
-		if($this->name == 'CakeError' && $this->viewPath == 'errors') {
+		if($this->name == 'CakeError' && $this->viewPath == 'Errors') {
 			// CakeErrorの場合はサブフォルダを除外
 			$subDir = $this->subDir;
-			$this->subDir = '';
+			$this->subDir = null;
 			$fileName = parent::_getViewFileName($name);
 			$this->subDir = $subDir;
 			return $fileName;
@@ -195,7 +163,7 @@ class BaserAppView extends View {
 			}
 		}
 
-		$paths = $this->_paths(Inflector::underscore($this->plugin));
+		$paths = $this->_paths(Inflector::classify($this->plugin));
 		$exts = array($this->ext, '.ctp', '.thtml');
 		
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
@@ -235,7 +203,7 @@ class BaserAppView extends View {
 				}
 			}
 		}
-		return $this->_missingView($defaultPath . $name . $this->ext, 'missingView');
+		return $this->_missingView($defaultPath . $name, 'missingView');
 	}
 
 /**
@@ -253,8 +221,8 @@ class BaserAppView extends View {
 		if (!is_null($this->layoutPath)) {
 			$subDir = $this->layoutPath . DS;
 		}
-		$paths = $this->_paths(Inflector::underscore($this->plugin));
-		$file = 'layouts' . DS . $subDir . $name;
+		$paths = $this->_paths(Inflector::camelize($this->plugin));
+		$file = 'Layouts' . DS . $subDir . $name;
 
 		$exts = array($this->ext, '.ctp', '.thtml');
 
@@ -270,6 +238,7 @@ class BaserAppView extends View {
 			}
 		}*/
 		// ---
+
 		foreach ($paths as $path) {
 			foreach ($exts as $ext) {
 				if (file_exists($path . $file . $ext)) {
@@ -287,6 +256,20 @@ class BaserAppView extends View {
 	function getScripts() {
 		return $this->_scripts;
 	}
-	
+/**
+ * Return a misssing view error message
+ *
+ * @param string $viewFileName the filename that should exist
+ * @return cakeError
+ */
+	function _missingView($file, $error = 'missingView') {
+
+		if ($error === 'missingView') {
+			throw new MissingViewException(array('file' => $file . $this->ext));
+		} elseif ($error === 'missingLayout') {
+			throw new MissingLayoutException(array('file' => $file . $this->ext));
+		}
+		
+	}
 }
 ?>

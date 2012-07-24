@@ -63,6 +63,7 @@
 					$requestUri = $_SERVER['REQUEST_URI'];
 				}
 				$baseUrl = preg_replace("/index$/", '', $requestUri);
+				$baseUrl = preg_replace("/test\.php$/", '', $requestUri);
 			}
 		}
 		if(!$baseUrl){
@@ -369,7 +370,6 @@
 			clearCache();
 		*/
 
-		App::import('Core','Folder');
 		$folder = new Folder(CACHE);
 
 		$files = $folder->read(true,true,true);
@@ -410,7 +410,7 @@
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
 			require_once APP . 'Config' . DS.'database.php';
 			$dbConfig = new DATABASE_CONFIG();
-			if(!empty($dbConfig->{$name}['driver'])){
+			if(!empty($dbConfig->{$name}['datasource'])){
 				return $dbConfig->{$name};
 			}
 		}
@@ -426,7 +426,6 @@
 		if(!is_writable(TMP)){
 			return;
 		}
-		App::import('Core','Folder');
 		$folder = new Folder();
 		$folder->create(TMP.'logs',0777);
 		$folder->create(TMP.'sessions',0777);

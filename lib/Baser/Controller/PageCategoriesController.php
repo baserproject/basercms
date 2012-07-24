@@ -68,9 +68,8 @@ class PageCategoriesController extends AppController {
 		
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
-				$user[$userModel]['user_group_id'], 
+				$user['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);
@@ -123,7 +122,7 @@ class PageCategoriesController extends AppController {
 		
 		$datas = array();
 		if($conditions) {
-			$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+			$_dbDatas = $this->PageCategory->generateTreeList($conditions);
 			$datas = array();
 			foreach($_dbDatas as $key => $dbData) {
 				$category = $this->PageCategory->find('first', array('conditions' => array('PageCategory.id'=>$key), 'recursive' => -1));
@@ -230,9 +229,8 @@ class PageCategoriesController extends AppController {
 
 		/* 表示設定 */
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
-			'ownerId' => $user[$userModel]['user_group_id']
+			'ownerId' => $user['user_group_id']
 		));
 		if($this->checkRootEditable()) {
 			if($parents) {

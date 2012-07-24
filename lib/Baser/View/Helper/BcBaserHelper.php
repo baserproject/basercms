@@ -34,7 +34,7 @@ class BcBaserHelper extends AppHelper {
  * @var View
  * @access protected
  */
-	protected $_view = null;
+	protected $_View = null;
 /**
  * サイト基本設定
  *
@@ -172,16 +172,14 @@ class BcBaserHelper extends AppHelper {
 			$GlobalMenu = ClassRegistry::getObject('GlobalMenu');
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
-				$sources = $db->listSources();
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
-					if (empty($this->request->params['prefix'])) {
-						$prefix = 'publish';
-					} else {
-						$prefix = $this->request->params['prefix'];
-					}
-					return $GlobalMenu->find('all', array('order' => 'sort'));
+			$sources = $db->listSources();
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
+				if (empty($this->request->params['prefix'])) {
+					$prefix = 'publish';
+				} else {
+					$prefix = $this->request->params['prefix'];
 				}
+				return $GlobalMenu->find('all', array('order' => 'sort'));
 			}
 		}
 		return '';
@@ -480,10 +478,10 @@ class BcBaserHelper extends AppHelper {
  */
 	public function isHome() {
 
-		return ($this->request->params['url']['url'] == '/' ||
-						$this->request->params['url']['url'] == 'index' ||
-						$this->request->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/' ||
-						$this->request->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/index');
+		return ($this->request->url == '/' ||
+						$this->request->url == 'index' ||
+						$this->request->url == Configure::read('BcRequest.agentAlias').'/' ||
+						$this->request->url == Configure::read('BcRequest.agentAlias').'/index');
 
 	}
 /**
@@ -640,9 +638,9 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function content() {
-
-		echo $this->_content;
-
+            echo $this->_View->fetch('content');
+            //basercamp TODO 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
+//		echo $this->_content;
 	}
 /**
  * セッションメッセージを出力する
@@ -655,7 +653,7 @@ class BcBaserHelper extends AppHelper {
 	public function flash($key='flash') {
 
 		if ($this->Session->check('Message.'.$key)) {
-			$this->Session->flash($key);
+			echo $this->Session->flash($key);
 		}
 
 	}
@@ -787,24 +785,21 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $path
  * @param string $rel
- * @param array $htmlAttributes
+ * @param array $options
  * @param boolean $inline
  * @return void
  * @access public
  * @manual
  */
-	public function css($path, $htmlAttributes = array(), $inline = true) {
+	public function css($path, $options = array()) {
 
-		// Cake1.2系との互換対応
-		if (isset($htmlAttributes['inline']) && $inline == true) {
-			$inline = $htmlAttributes['inline'];
-		}
 		$rel = null;
-		if(!empty($htmlAttributes['rel'])) {
-			$rel = $htmlAttributes['rel'];
+		if(!empty($options['rel'])) {
+			$rel = $options['rel'];
 		}
-		$ret = $this->BcHtml->css($path, $rel, $htmlAttributes, $inline);
-		if($inline) {
+		
+		$ret = $this->BcHtml->css($path, $rel, $options);
+		if(empty($options['inline'])) {
 			echo $ret;
 		}
 
@@ -1216,7 +1211,7 @@ class BcBaserHelper extends AppHelper {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
 				if(empty($pass)){
-					$pageUrl = h($this->request->params['url']['url']);
+					$pageUrl = h($this->request->url);
 				}else{
 					$pageUrl = implode('/', $pass);
 				}
@@ -1625,7 +1620,7 @@ END_FLASH;
  * @manual
  */
 	public function getHere() {
-		return '/' . preg_replace('/^\//', '', $this->request->params['url']['url']);
+		return '/' . preg_replace('/^\//', '', $this->request->url);
 	}
 /**
  * 現在のページがページカテゴリのトップかどうかを判定する

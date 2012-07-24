@@ -137,7 +137,7 @@ class UsersController extends AppController {
  */
 	public function admin_login() {
 		
-		if($this->BcAuth->loginAction != ('/'.$this->request->params['url']['url'])) {
+		if($this->BcAuth->loginAction != ('/'.$this->request->url)) {
 			$this->notFound();
 		}
 		
@@ -283,7 +283,7 @@ class UsersController extends AppController {
 
 		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
-		$this->Cookie->del('Auth.'.$userModel);
+		$this->Cookie->delete('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
 		if(empty($this->request->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
@@ -385,8 +385,7 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user['user_group_id'] != 1) {
 			unset($userGroups[1]);
 		}
 		
@@ -415,15 +414,14 @@ class UsersController extends AppController {
 
 		$selfUpdate = false;
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		
 		if(empty($this->request->data)) {
 			$this->request->data = $this->User->read(null, $id);
-			if($user[$userModel]['id'] == $this->request->data['User']['id']) {
+			if($user['id'] == $this->request->data['User']['id']) {
 				$selfUpdate = true;
 			}
 		}else {
-			if($user[$userModel]['id'] == $this->request->data['User']['id']) {
+			if($user['id'] == $this->request->data['User']['id']) {
 				$selfUpdate = true;
 			}
 			/* 更新処理 */
@@ -461,8 +459,7 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
+		if($user['user_group_id'] != 1 && Configure::read('debug') !== -1) {
 			if($this->request->data['User']['user_group_id'] == 1) {
 				$editable = false;
 			} else {
@@ -503,14 +500,13 @@ class UsersController extends AppController {
 		$user = $this->User->read(null, $id);
 
 		/* 削除処理 */
-		if($this->User->del($id)) {
+		if($this->User->delete($id)) {
 			$this->User->saveDbLog('ユーザー「'.$user['User']['name'].'」を削除しました。');
 			exit(true);
 		}
-
 		exit();
-
 	}
+
 	/**
  * [ADMIN] ユーザー情報削除
  *
@@ -537,7 +533,7 @@ class UsersController extends AppController {
 		$user = $this->User->read(null, $id);
 
 		/* 削除処理 */
-		if($this->User->del($id)) {
+		if($this->User->delete($id)) {
 			$this->Session->setFlash('ユーザー: '.$user['User']['name'].' を削除しました。');
 			$this->User->saveDbLog('ユーザー「'.$user['User']['name'].'」を削除しました。');
 		}else {
@@ -545,8 +541,8 @@ class UsersController extends AppController {
 		}
 
 		$this->redirect(array('action' => 'index'));
-
 	}
+
 /**
  * ログインパスワードをリセットする
  * 新しいパスワードを生成し、指定したメールアドレス宛に送信する

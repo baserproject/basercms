@@ -192,7 +192,7 @@ class UpdatersController extends AppController {
  */
 	public function index() {
 		
-		$aryUrl = explode('/', $this->request->params['url']['url']);
+		$aryUrl = explode('/', $this->request->url);
 		if(empty($aryUrl[0])) {
 			$this->notFound();
 		}

@@ -190,7 +190,7 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if($this->UserGroup->del($id)) {
+		if($this->UserGroup->delete($id)) {
 			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
 			$this->UserGroup->saveDbLog($message);
 			exit(true);
@@ -217,7 +217,7 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if($this->UserGroup->del($id)) {
+		if($this->UserGroup->delete($id)) {
 			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->UserGroup->saveDbLog($message);

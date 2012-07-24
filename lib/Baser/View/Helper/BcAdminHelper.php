@@ -36,15 +36,6 @@ class BcAdminHelper extends AppHelper {
  */
 	protected $_view = null;
 /**
- * コンストラクタ
- *
- * @return void
- * @access public
- */
-	public function __construct() {
-		$this->_view =& ClassRegistry::getObject('view');
-	}
-/**
  * 管理システムグローバルメニューの利用可否確認
  * 
  * @return boolean
@@ -58,11 +49,13 @@ class BcAdminHelper extends AppHelper {
 		if(Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
-		if(empty($this->request->params[Configure::read('Routing.admin')]) || empty($this->_view->viewVars['user'])) {
+		$prefix = Configure::read('Routing.prefixes');
+		$user = $this->_View->getVar('user');
+		if(empty($this->request->params[$prefix[0]]) || empty($user)) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::getObject('UserGroup');
-		return $UserGroup->isAdminGlobalmenuUsed($this->_view->viewVars['user']['user_group_id']);
+		return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
 		
 	}
 	

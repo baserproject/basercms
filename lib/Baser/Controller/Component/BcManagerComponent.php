@@ -120,14 +120,19 @@ class BcManagerComponent extends Component {
  * @return DboSource $db
  * @access public
  */
-	public function &connectDb($config, $name = 'baser') {
+	public function connectDb($config, $name = 'baser') {
 
 		if($name == 'plugin') {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		}
-		
+
+		// basercamp TODO エラー時に step1(index)にもどってしまう。
+		if(! $datasource = $this->getDatasourceName($config['driver'])) {
+			return ConnectionManager::getDataSource($name);
+		}
+
 		$result =  ConnectionManager::create($name ,array(
-				'driver' => $config['driver'],
+				'datasource' => $datasource,
 				'persistent' => false,
 				'host' => $config['host'],
 				'port' => $config['port'],
@@ -145,6 +150,34 @@ class BcManagerComponent extends Component {
 		}
 
 	}
+
+/**
+ * datasource名を取得
+ *
+ * @param string driver name.postgre.mysql.etc.
+ * @return string
+ * @access public
+ */
+	public function getDatasourceName($driver=null) {
+
+		$name = false ;
+		switch($driver){
+			case 'bc_postgres' :
+				$name = 'Database/BcPostgres';
+				break ;
+			case 'bc_mysql' :
+				$name = 'Database/BcMysql';
+				break ;
+			case 'bc_sqlite' :
+			case 'bc_sqlite3' :
+				$name = 'Database/BcSqlite';
+				break ;
+			default :
+
+		}
+		return $name ;
+	}
+
 /**
  * 実際の設定用のDB名を取得する
  *
@@ -244,7 +277,7 @@ class BcManagerComponent extends Component {
 	protected function _updateBlogEntryDate($dbConfig) {
 
 		$this->connectDb($dbConfig, 'plugin');
-		App::import('Model', 'Blog.BlogPost');
+		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
 		$BlogPost->contentSaving = false;
 		$datas = $BlogPost->find('all', array('recursive' => -1));
@@ -272,7 +305,7 @@ class BcManagerComponent extends Component {
  */
 	public function setAdminEmail($email) {
 		
-		App::import('Model','SiteConfig');
+		App::uses('SiteConfig', 'Model');
 		$data['SiteConfig']['email'] = $email;
 		$SiteConfig = new SiteConfig();
 		return $SiteConfig->saveKeyValue($data);
@@ -329,6 +362,7 @@ class BcManagerComponent extends Component {
 
 		$options = array_merge(array(
 			'driver'	=> '',
+			'datasource'=> '',
 			'host'		=> 'localhost',
 			'port'		=> '',
 			'login'		=> 'dummy',
@@ -341,7 +375,7 @@ class BcManagerComponent extends Component {
 		
 		extract($options);
 
-		App::import('File');
+		$datasource = $this->getDatasourceName($driver);
 
 		$dbfilename = APP . 'Config' . DS.'database.php';
 		$file = & new File($dbfilename);
@@ -360,7 +394,7 @@ class BcManagerComponent extends Component {
 			$file->write("//\n");
 			$file->write("class DATABASE_CONFIG {\n");
 			$file->write('public $baser = array('."\n");
-			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$datasource."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -373,7 +407,7 @@ class BcManagerComponent extends Component {
 			$file->write(");\n");
 
 			$file->write('public $plugin = array('."\n");
-			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$datasource."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -385,7 +419,6 @@ class BcManagerComponent extends Component {
 			$file->write("\t'encoding' => '".$encoding."'\n");
 			$file->write(");\n");
 			$file->write("}\n");
-			$file->write("?>\n");
 
 			$file->close();
 			return true;
@@ -481,7 +514,7 @@ class BcManagerComponent extends Component {
 		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach($corePlugins as $corePlugin) {
-			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
+			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'Config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
@@ -544,22 +577,22 @@ class BcManagerComponent extends Component {
 				$paths = array(BASER_CONFIGS.'data'.DS.$pattern);
 			} else {
 				$paths = array(
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
 				);
 			}
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern
+					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.$pattern
 				);
 			} else {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern.DS.$plugin,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern.DS.$plugin,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.$pattern.DS.$plugin,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
 				);
 			}
 		}
@@ -734,6 +767,9 @@ class BcManagerComponent extends Component {
 	public function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		
 		if($dbConfig) {
+			if(! isset($dbConfig['datasource'])){
+				$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['driver']);
+			}
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
 			if(!$db) {
 				$db =& ConnectionManager::getDataSource($dbConfigKeyName);
@@ -1078,23 +1114,23 @@ class BcManagerComponent extends Component {
 		);
 		
 		if(!$status['coreFileWritable']) {
-			chmod(APP . 'Config' . DS.'core.php', 0666);
+			@chmod(APP . 'Config' . DS.'core.php', 0666);
 			$status['coreFileWritable'] = is_writable(APP . 'Config' . DS.'core.php');
 		}
 		if(!$status['configDirWritable']) {
-			chmod(APP . 'Config' . DS, 0777);
+			@chmod(APP . 'Config' . DS, 0777);
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
 		}
 		if(!$status['themeDirWritable']) {
-			chmod(WWW_ROOT.'themed', 0777);
+			@chmod(WWW_ROOT.'themed', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
 		}
 		if(!$status['tmpDirWritable']) {
-			chmod(TMP, 0777);
+			@chmod(TMP, 0777);
 			$status['tmpDirWritable'] = is_writable(TMP);
 		}
 		if(!$status['dbDirWritable']) {
-			chmod(APP.'db', 0777);
+			@chmod(APP.'db', 0777);
 			$status['dbDirWritable'] = is_writable(APP.'db');
 		}
 		

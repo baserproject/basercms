@@ -59,7 +59,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 				<?php $title = $postedDate['year'].'年'.$postedDate['month'].'月' ?>
 			<?php endif ?>
 		<li<?php echo $class ?>>
-			<?php $bcBaser->link($title, array(
+			<?php $this->bcBaser->link($title, array(
 				'admin'			=> false,
 				'plugin'		=> '',
 				'controller'	=> $blogContent['BlogContent']['name'],

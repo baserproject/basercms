@@ -25,7 +25,7 @@ if(!empty($this->request->params['prefix'])) {
 ?>
 <div id="Header" class="clearfix">
 	<?php $this->BcBaser->element('toolbar') ?>
-<?php if($this->name == 'Installations' || $this->request->params['url']['url'] == $loginUrl || $this->BcAdmin->isAdminGlobalmenuUsed()): ?>
+<?php if($this->name == 'Installations' || $this->request->url == $loginUrl || $this->BcAdmin->isAdminGlobalmenuUsed()): ?>
 	<div class="clearfix" id="HeaderInner">
 	
 	<?php if(!empty($user)): ?>

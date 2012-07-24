@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Mysql', 'Model/Datasource/Database');
-class DboBcMysql extends Mysql {
+class BcMysql extends Mysql {
 /**
  * テーブル名のリネームステートメントを生成
  *
@@ -97,7 +97,8 @@ class DboBcMysql extends Mysql {
 				}
 		// <<<
 			default:
-				$data = "'" . mysql_real_escape_string($data, $this->connection) . "'";
+				$con = $this->getConnection();
+				$data = $con->quote($data);
 			break;
 		}
 		return $data;

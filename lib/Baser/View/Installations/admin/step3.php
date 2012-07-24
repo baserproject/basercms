@@ -83,7 +83,7 @@ $(document).ready( function() {
  * フォームを初期化する
  * @return void
  */
-	public function initForm() {
+	function initForm() {
 
 		var dbType = $('#InstallationDbType');
 		var port,host,dbName,prefix;
