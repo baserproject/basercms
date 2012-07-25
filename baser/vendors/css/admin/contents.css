@@ -303,6 +303,7 @@ table.sub-menu{
 	background-color: #E8F1CF;
 	padding:5px 10px;
 	border: 1px solid #CCC;
+	white-space: nowrap;
 }
 .contents-body .list-table th a{
 	text-decoration:none;
@@ -348,8 +349,8 @@ table.sub-menu{
 }
 .contents-body .list-table tr.hoverrow,
 .contents-body .list-table tr.hoverrow a{
-	background-color:#ffffde;
-	color:#333;
+	background-color:#ffffde!important;
+	color:#333!important;
 }
 .contents-body .list-table tr.selectedrow,
 .contents-body .list-table tr.selectedrow a{
