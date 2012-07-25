@@ -214,11 +214,8 @@ class BlogHelper extends AppHelper {
 	function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
 		if($moreLink === true) {
-			$moreText = '≫ 続きを読む';
-		}elseif($moreLink !== false) {
-			$moreText = $moreLink;
+			$moreLink = '≫ 続きを読む';
 		}
-
 		$out =	'<div class="post-body">'.$post['BlogPost']['content'].'</div>';
 		if($moreText && $post['BlogPost']['detail']) {
 			$out .=	'<div id="post-detail">'.$post['BlogPost']['detail'].'</div>';
@@ -227,7 +224,7 @@ class BlogHelper extends AppHelper {
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
 		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
-			$out .= '<p class="more">'.$this->Html->link($moreText, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
+			$out .= '<p class="more">'.$this->Html->link($moreLink, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
 		}
 		return $out;
 
