@@ -525,14 +525,20 @@ class BcBaserHelper extends AppHelper {
  */
 	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
+		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
+		
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
 			$params['subDir'] = true;
 		} else {
 			$params['subDir'] = false;
 		}
-		return $this->_view->element($name, $params, $loadHelpers);
+		$out = $this->_view->element($name, $params, $loadHelpers);
+		
+		$this->executeHook('afterElement', $name, $out);
 
+		return $out;
+		
 	}
 /**
  * エレメントを出力する
