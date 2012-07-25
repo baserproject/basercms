@@ -78,6 +78,7 @@
 	);
 /**
  * 認証プレフィックス設定
+ * ※ CSVは非対応
  */
 	$adminPrefix = Configure::read('Routing.admin');
 	$config['BcAuthPrefix'] = array(
@@ -96,13 +97,13 @@
 			'toolbar'		=> true
 		),
 		// フロント（例）
-		'front' => array(
+		/*'front' => array(
 			'name'			=> 'フロント',
 			'loginRedirect'	=> '/',
 			'userModel'		=> 'User',
 			'loginAction'	=> '/users/login',
 			'toolbar'		=> true
-		),
+		),*/
 		// マイページ（例）
 		/*'mypage' => array(
 			'name'			=> 'マイページ',
