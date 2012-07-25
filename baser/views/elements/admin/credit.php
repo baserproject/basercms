@@ -21,7 +21,7 @@
 <script type="text/javascript">
 var openedFavorite;
 $(function(){
-	
+
 	var pageHeight,hideTarget;
 	$("#Credit").click(function(){
 		$("#Credit").fadeOut(1000);
@@ -57,7 +57,7 @@ $(function(){
  * クレジットを表示する
  */
 function credit(){
-	
+
 	var hideTarget
 	if($("#SideBar").css('display') == 'none') {
 		openedFavorite = false;
@@ -87,12 +87,12 @@ function credit(){
     });
     $("#CreditScroller").fadeIn(1000);
   }
-  
+
   //リサイズイベント
   $(window).resize(function(){
     resizeScroll();
   });
-	
+
   var scrollSpeed = 1;
 	var height = $("#CreditScroller").height();
 	var posX = $(window).height();
@@ -118,7 +118,7 @@ function setViewSize() {
 function resizeScroll() {
 	$("html,body").height( $(this).height() - $("#ToolBar").outerHeight()*1);
 	$("#Credit").width( $("#Page").width());
-	$("#Credit").height( $("#Page").height() + $("#ToolBar").outerHeight()*1);  
+	$("#Credit").height( $("#Page").height() + $("#ToolBar").outerHeight()*1);
 }
 </script>
 
@@ -126,7 +126,7 @@ function resizeScroll() {
 	<div id="CreditInner">
 		<div id="CreditScroller">
 			<div id="CreditScrollerInner">
-				
+
 				<h1>Special Thanks Credit</h1>
 
 				<div class="section">
@@ -136,7 +136,7 @@ function resizeScroll() {
 						<li><a href="http://blog.clipdesign.jp/" target="_blank">Misuzu Nakamura</a> (<a href="http://twitter.com/mutsuking" target="_blank">clipdesign</a>)</li>
 					</ul>
 				</div>
-				
+
 				<div class="section">
 					<h2>Publishers</h2>
 					<ul>
@@ -204,20 +204,12 @@ function resizeScroll() {
 						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
 					</ul>
 					<ul>
-						<li><a href="http://exittunes.com/index2.html" target="_blank">Programmersan</a> (<a href="http://twitter.com/programmersan" target="_blank">programmersan</a>)</li>
-						<li><a href="http://www.panic-net.org/" target="_blank">Min</a> (<a href="http://twitter.com/min_meou" target="_blank">min_meou</a>)</li>
-						<li><a href="http://blog.grooweb.jp/" target="_blank">Youhei Nishi</a> (<a href="http://twitter.com/nippei" target="_blank">nippei</a>)</li>
-						<li><a href="http://ryuring.blogspot.jp/" target="_blank">Ryuji Egashira</a> (<a href="http://twitter.com/ryuring" target="_blank">ryuring</a>)</li>
-						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
-						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
-					</ul>
-					<ul>
 						<li>Masanori Matsumoto (<a href="http://twitter.com/mattun0313" target="_blank">mattun0313</a>)</li>
 					</ul>
 				</div>
 
 				<h1 style="margin-top:400px;">baserCMS Users Community</h1>
-				
+
 			</div>
 		</div>
 	</div>
