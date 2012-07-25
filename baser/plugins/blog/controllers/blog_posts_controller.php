@@ -159,6 +159,8 @@ class BlogPostsController extends BlogAppController {
 		);
 		$this->set('posts', $this->paginate('BlogPost'));
 		
+		$this->_setAdminIndexViewData();
+		
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
 			$this->render('ajax_index');
 			return;
@@ -168,6 +170,17 @@ class BlogPostsController extends BlogAppController {
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
 
+	}
+/**
+ * 一覧の表示用データをセットする
+ * 
+ * @return void
+ * @access protected
+ */
+	function _setAdminIndexViewData() {
+		
+		$this->set('users',$this->BlogPost->User->getUserList());
+		
 	}
 /**
  * ページ一覧用の検索条件を生成する

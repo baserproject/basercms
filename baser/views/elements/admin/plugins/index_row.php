@@ -53,7 +53,7 @@ if(!$data['Plugin']['status']) {
 <?php elseif($data['Plugin']['update']): ?>
 		<div class="annotation-text"><small>アップデートを完了させてください</small></div>
 <?php endif ?>
-	<?php echo $data['Plugin']['name'] ?>（<?php echo $data['Plugin']['title'] ?>）
+	<?php echo $data['Plugin']['name'] ?><?php if($data['Plugin']['title']): ?>（<?php echo $data['Plugin']['title'] ?>）<?php endif ?>
 	</td>
 	<td><?php echo $data['Plugin']['version'] ?></td>
 	<td><?php echo $data['Plugin']['description'] ?></td>

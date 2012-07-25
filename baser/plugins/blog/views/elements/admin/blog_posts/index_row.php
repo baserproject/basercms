@@ -17,14 +17,16 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$classies = array();
+if (!$blog->allowPublish($data)) {
+	$classies = array('unpublish', 'disablerow');
+} else {
+	$classies = array('publish');
+}
+$class=' class="'.implode(' ', $classies).'"';
 ?>
 
 
-<?php if (!$blog->allowPublish($data)): ?>
-	<?php $class=' class="unpublish disablerow"'; ?>
-<?php else: ?>
-	<?php $class=' class="publish"'; ?>
-<?php endif; ?>
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 <?php if($bcBaser->isAdminUser()): ?>
@@ -39,30 +41,34 @@
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
 	<td>
-		<?php if(!empty($data['BlogCategory']['title'])): ?>
+<?php if(!empty($data['BlogCategory']['title'])): ?>
 		<?php echo $data['BlogCategory']['title']; ?>
-		<?php endif; ?>
-		<?php if($data['BlogContent']['tag_use'] && !empty($data['BlogTag'])): ?>
+<?php endif; ?>
+<?php if($data['BlogContent']['tag_use'] && !empty($data['BlogTag'])): ?>
 			<?php $tags = Set::extract('/name', $data['BlogTag']) ?>
 			<span class="tag"><?php echo implode('</span><span class="tag">',$tags) ?></span>
-		<?php endif ?>
+<?php endif ?>
 		<br />
 		<?php $bcBaser->link($data['BlogPost']['name'],array('action'=>'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
 	</td>
 	<td>
-		<?php if(!empty($data['User'])): ?>
+<?php if(!empty($data['User'])): ?>
 		<?php echo $data['User']['real_name_1']." ".$data['User']['real_name_2']; ?>
-		<?php endif ?>
+<?php endif ?>
 	</td>
 	<td style="text-align:center"><?php echo $bcText->booleanMark($data['BlogPost']['status']); ?></td>
-	<?php if($data['BlogContent']['comment_use']): ?>
-	<td><?php $comment = count($data['BlogComment']) ?>
-		<?php if($comment): ?>
+<?php if($data['BlogContent']['comment_use']): ?>
+	<td>
+		<?php $comment = count($data['BlogComment']) ?>
+	<?php if($comment): ?>
 		<?php $bcBaser->link($comment,array('controller'=>'blog_comments','action'=>'index',$data['BlogContent']['id'],$data['BlogPost']['id'])) ?>
-		<?php else: ?>
+	<?php else: ?>
 		<?php echo $comment ?>
-		<?php endif ?></td>
 	<?php endif ?>
-	<td><?php echo $bcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
-	<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['modified']); ?></td>
+	</td>
+<?php endif ?>
+	<td>
+		<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
+		<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['modified']); ?>
+	</td>
 </tr>
