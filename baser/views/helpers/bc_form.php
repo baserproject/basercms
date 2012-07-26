@@ -42,6 +42,13 @@ class BcFormHelper extends FormHelper {
  */
 	var $sizeCounterFunctionLoaded = false;
 /**
+ * フォームID
+ * 
+ * @var string
+ * @access private
+ */
+	var $__id = null;
+/**
  * 都道府県用のSELECTタグを表示する
  *
  * @param string $fieldName Name attribute of the SELECT
@@ -1110,11 +1117,13 @@ DOC_END;
  */
 	function create($model = null, $options = array()) {
 
-		$options = $this->executeHook('beforeFormCreate', $model, $options);
+		$this->__id = $this->_getId($model, $options);
+		
+		$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
 		
 		$out = parent::create($model, $options);
 
-		return $this->executeHook('afterFormCreate', $out);
+		return $this->executeHook('afterFormCreate', $this->__id, $out);
 		
 	}
 /**
@@ -1127,11 +1136,13 @@ DOC_END;
  */
 	function end($options = null) {
 
-		$options = $this->executeHook('beforeFormEnd', $options);
+		$id = $this->__id;
+		$this->__id = null;
+		$options = $this->executeHook('beforeFormEnd', $id, $options);
 
 		$out = parent::end($options);
 		
-		return $this->executeHook('afterFormEnd', $out);
+		return $this->executeHook('afterFormEnd', $id, $out);
 		
 	}
 /**
@@ -1208,6 +1219,67 @@ DOC_END;
 		}
 		
 		return $this->executeHook('afterFormInput', $fieldName, $out);
+		
+	}
+/**
+ * フォームのIDを取得する
+ * BcForm::create より呼出される事が前提
+ * 
+ * @param string $model
+ * @param array $options
+ * @return string
+ */
+	function _getId($model = null, $options = array()) {
+		
+		if (is_array($model) && empty($options)) {
+			$model = null;
+		}
+
+		if (empty($model) && $model !== false && !empty($this->params['models'])) {
+			$model = $this->params['models'][0];
+		} elseif (empty($model) && empty($this->params['models'])) {
+			$model = false;
+		} elseif (is_string($model) && strpos($model, '.') !== false) {
+			$path = explode('.', $model);
+			$model = $path[count($path) - 1];
+		}
+		
+		if (ClassRegistry::isKeySet($model)) {
+			$object =& ClassRegistry::getObject($model);
+		}
+		
+		if (isset($object)) {
+			$key = $object->primaryKey;
+			$data = compact('key');
+		} else {
+			$data = $this->fieldset;
+		}
+		
+		$recordExists = (
+			isset($this->data[$model]) &&
+			isset($this->data[$model][$data['key']]) &&
+			!empty($this->data[$model][$data['key']])
+		);
+		
+		$created = false;
+		if ($recordExists) {
+			$created = true;
+		}
+		
+		if (empty($options['url']) || is_array($options['url'])) {
+			if (empty($options['action'])) {
+				$options['action'] = ($created) ? 'edit' : 'add';
+			}
+		}
+		
+		if (!empty($options['action']) && !isset($options['id'])) {
+			$id = $model . Inflector::camelize($options['action']) . 'Form';
+		} elseif(isset($options['id'])) {
+			$id = $options['id'];
+		} else {
+			$id = '';
+		}
+		return $id;
 		
 	}
 /**

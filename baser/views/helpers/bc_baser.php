@@ -525,14 +525,20 @@ class BcBaserHelper extends AppHelper {
  */
 	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
+		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
+		
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
 			$params['subDir'] = true;
 		} else {
 			$params['subDir'] = false;
 		}
-		return $this->_view->element($name, $params, $loadHelpers);
+		$out = $this->_view->element($name, $params, $loadHelpers);
+		
+		$this->executeHook('afterElement', $name, $out);
 
+		return $out;
+		
 	}
 /**
  * エレメントを出力する
@@ -632,7 +638,11 @@ class BcBaserHelper extends AppHelper {
 	function scripts() {
 		
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
-		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
+		$toolbar = true;
+		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
+			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		}
 
 		// ツールバー設定
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
@@ -654,7 +664,11 @@ class BcBaserHelper extends AppHelper {
 	function func() {
 		
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
-		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
+		$toolbar = true;
+		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
+			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		}
 		
 		// ツールバー表示
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {

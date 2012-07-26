@@ -342,11 +342,22 @@ class PluginsController extends AppController {
 		
 		$name = urldecode($name);
 		if(!$this->data) {
-			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'config.php')) {
-				include APP.'plugins'.DS.$name.DS.'config'.DS.'config.php';
-			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'config.php')) {
-				include BASER_PLUGINS.$name.DS.'config'.DS.'config.php';
+			
+			// TODO 互換性のため古いパスも対応
+			$oldAppConfigPath = APP.DS.'plugins'.DS.$name.DS.'config'.DS.'config.php';
+			$appConfigPath = APP.DS.'plugins'.DS.$name.DS.'config.php';
+			if(!file_exists($appConfigPath)) {
+				$appConfigPath = $oldAppConfigPath;
 			}
+			$baserConfigPath = BASER_PLUGINS.$name.DS.'config.php';
+			if(file_exists($appConfigPath)) {
+				include $appConfigPath;
+			} elseif(file_exists($oldAppConfigPath)) {
+				include $oldAppConfigPath;
+			}elseif(file_exists($baserConfigPath)) {
+				include $baserConfigPath;
+			}
+
 			$this->data['Plugin']['name']=$name;
 			if(isset($title)) {
 				$this->data['Plugin']['title'] = $title;

@@ -262,10 +262,14 @@ class BaserAppController extends Controller {
 			$configs = Configure::read('BcAuthPrefix');
 			if(!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
-				$config['auth_prefix'] = $this->params['prefix'];
+				if(count($configs) >= 2) {
+					$config['auth_prefix'] = $this->params['prefix'];
+				}
 			}elseif(isset($configs['front'])) {
 				$config = $configs['front'];
-				$config['auth_prefix'] = 'front';
+				if(count($configs) >= 2) {
+					$config['auth_prefix'] = 'front';
+				}
 			} else {
 				$config = array();
 			}
