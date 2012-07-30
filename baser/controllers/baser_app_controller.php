@@ -222,9 +222,6 @@ class BaserAppController extends Controller {
 		// テーマを設定
 		$this->setTheme($this->params);
 		
-		// テーマのヘルパーをセット
-		$this->setThemeHelpers();
-		
 		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -399,6 +396,9 @@ class BaserAppController extends Controller {
 
 		parent::beforeRender();
 
+		// テーマのヘルパーをセット
+		$this->setThemeHelpers();
+		
 		// テンプレートの拡張子
 		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
 		// beforeRenderでも再設定する仕様にした
