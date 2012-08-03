@@ -28,8 +28,8 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 <?php $bcBaser->title() ?>
 <?php $bcBaser->css(array(
 	'jquery-ui/ui.all',
-	'admin/import', 
-	'../js/jquery.contextMenu-1.0/jquery.contextMenu', 
+	'admin/import',
+	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
 	'colorbox/colorbox')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
@@ -45,7 +45,8 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 	'jquery.colorbox-min',
 	'validate_messages_ja',
 	'admin/functions',
-	'admin/startup')) ?>
+	'admin/startup',
+	'admin/adjust_scroll')) ?>
 <?php $bcBaser->scripts() ?>
 </head>
 
@@ -94,7 +95,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 						<?php $bcBaser->element('contents_menu') ?>
 						<h1><?php $bcBaser->contentsTitle() ?></h1>
 					</div>
-					
+
 					<?php if($this->params['controller']!='installations' && $this->action != 'update'): ?>
 					<?php $bcBaser->updateMessage() ?>
 					<?php endif ?>
@@ -109,7 +110,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 						</ul>
 					</div>
 					<?php endif ?>
-					
+
 					<?php $bcBaser->flash() ?>
 
 					<?php $bcBaser->element('submenu') ?>
@@ -135,11 +136,11 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 	<!-- / #Wrap .clearfix --></div>
 
 	<?php $bcBaser->footer() ?>
-	
+
 <!-- / #Page --></div>
 
 <?php $bcBaser->element('credit') ?>
-	
+
 <?php $bcBaser->func() ?>
 </body>
 
