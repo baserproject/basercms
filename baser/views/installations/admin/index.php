@@ -18,7 +18,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $bcBaser->js('admin/adjust_scroll',false) ?>
 
 <div class="step-1">
 
