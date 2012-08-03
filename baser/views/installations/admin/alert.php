@@ -18,7 +18,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $bcBaser->js('admin/adjust_scroll',false) ?>
 
 <p>インストールを開始するにはデバッグモードが -1 である必要があります。</p>
 <p>デバッグモードを変更するには次の手順のとおり操作してください。</p>
