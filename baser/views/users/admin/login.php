@@ -40,7 +40,6 @@ CSS_END
 );
 ?>
 
-<?php $bcBaser->js('admin/adjust_scroll',false) ?>
 <script type="text/javascript">
 $(function(){
 

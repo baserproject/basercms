@@ -19,7 +19,6 @@
  */
 ?>
 
-<?php $bcBaser->js('admin/adjust_scroll',false) ?>
 <div class="section">
 <p>パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />
 新しいパスワードをメールでお知らせします。</p>
