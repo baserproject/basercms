@@ -24,21 +24,20 @@
 	<th>システム設定共通メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $bcBaser->link('サイト基本設定', array('controller' => 'site_configs', 'action' => 'form')) ?></li>
-			<li><?php $bcBaser->link('ユーザー管理', array('controller' => 'users', 'action' => 'index')) ?></li>
-			<li><?php $bcBaser->link('検索インデックス管理', array('controller' => 'contents', 'action' => 'index')) ?></li>
-			<li><?php $bcBaser->link('メニュー管理', array('controller' => 'global_menus', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('サイト基本設定', array('controller' => 'site_configs', 'action' => 'form', 'plugin' => null)) ?></li>
+			<li><?php $bcBaser->link('ユーザー管理', array('controller' => 'users', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $bcBaser->link('検索インデックス管理', array('controller' => 'contents', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $bcBaser->link('メニュー管理', array('controller' => 'global_menus', 'action' => 'index', 'plugin' => null)) ?></li>
 		</ul>
 	</td>
 </tr>
-
 <tr>
 	<th>ユーティリティ</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $bcBaser->link('サーバーキャッシュ削除', array('controller' => 'site_configs', 'action' => 'del_cache'), array('confirm' => 'サーバーキャッシュを削除します。いいですか？')) ?></li>
-			<li><?php $bcBaser->link('データメンテナンス', array('controller' => 'tools', 'action' => 'maintenance')) ?></li>
-			<li><?php $bcBaser->link('環境情報', array('controller' => 'site_configs', 'action' => 'info')) ?></li>
+			<li><?php $bcBaser->link('サーバーキャッシュ削除', array('controller' => 'site_configs', 'action' => 'del_cache', 'plugin' => null), array('confirm' => 'サーバーキャッシュを削除します。いいですか？')) ?></li>
+			<li><?php $bcBaser->link('データメンテナンス', array('controller' => 'tools', 'action' => 'maintenance', 'plugin' => null)) ?></li>
+			<li><?php $bcBaser->link('環境情報', array('controller' => 'site_configs', 'action' => 'info', 'plugin' => null)) ?></li>
 			<li><?php $bcBaser->link('クレジット', 'javascript:void(0)', array('id' => 'BtnCredit')) ?></li>
 		</ul>
 	</td>
