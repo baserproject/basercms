@@ -19,3 +19,9 @@ baser/vendors/PEAR/
 cake/console/
 cake/tests/
 app/webroot/sitemap.xml
+
+app/tests/
+app/vendors/simpletest/
+app/webroot/test.php
+tests/
+
