@@ -312,6 +312,10 @@ class Message extends MailAppModel {
 
 		foreach($this->mailFields as $mailField) {
 			
+			if(!$mailField['MailField']['use_field']) {
+				continue;;
+			}
+			
 			$value = $data['Message'][$mailField['MailField']['field_name']];
 			
 			if(!empty($value)) {
