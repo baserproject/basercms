@@ -28,7 +28,7 @@
 　受信内容は下記のとおりです。
 
 　「<?php echo $blogPost['name'] ?>」
-　<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no']) ?>　
+　<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no'], false) ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ コメント内容 
@@ -41,6 +41,6 @@
 <?php echo ($blogComment['message']) ?>　
 
 コメントの公開状態を変更する場合は次のURLよりご確認ください。
-<?php echo $bcBaser->getUri('/admin/blog/blog_comments/index/' . $blogContent['id']) ?>　
+<?php echo $bcBaser->getUri('/admin/blog/blog_comments/index/' . $blogContent['id'], false) ?>　
 　
 　

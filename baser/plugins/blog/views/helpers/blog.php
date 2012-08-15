@@ -71,7 +71,7 @@ class BlogHelper extends AppHelper {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
 			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
-		} elseif(isset($this->_view->viewVars['blogContent'])) {
+		} elseif(isset($this->_view->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
 		}
 

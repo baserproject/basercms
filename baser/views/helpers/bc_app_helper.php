@@ -229,9 +229,11 @@ class BcAppHelper extends Helper {
  * @param boolean $full   If true, the full base URL will be prepended to the result
  * @return string  Full translated URL with base path.
  */
-	function url($url = null, $full = false) {
+	function url($url = null, $full = false, $sessionId = true) {
 		
-		$url = addSessionId($url);
+		if($sessionId) {
+			$url = addSessionId($url);
+		}
 		
 		//======================================================================
 		// FormHelper::createで id をキーとして使うので、ルーターでマッチしない場合がある。

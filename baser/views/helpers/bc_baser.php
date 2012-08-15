@@ -496,9 +496,9 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function url($url,$full = false) {
+	function url($url,$full = false, $sessionId = true) {
 		
-		echo $this->getUrl($url,$full);
+		echo $this->getUrl($url,$full, $sessionId);
 		
 	}
 /**
@@ -507,9 +507,9 @@ class BcBaserHelper extends AppHelper {
  * @param string $url
  * @param boolean $full
  */
-	function getUrl($url,$full = false) {
+	function getUrl($url,$full = false, $sessionId = true) {
 		
-		return parent::url($url,$full);
+		return parent::url($url,$full, $sessionId);
 		
 	}
 /**
@@ -1342,7 +1342,7 @@ class BcBaserHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getUri($url){
+	function getUri($url, $sessionId = true){
 		if(preg_match('/^http/is', $url)) {
 			return $url;
 		}else {
@@ -1351,7 +1351,7 @@ class BcBaserHelper extends AppHelper {
 			}else {
 				$protocol = 'https';
 			}
-			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url);
+			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url, false, $sessionId);
 		}
 	}
 /**

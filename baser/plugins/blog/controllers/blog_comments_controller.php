@@ -125,7 +125,9 @@ class BlogCommentsController extends BlogAppController {
 	function beforeRender() {
 		
 		parent::beforeRender();
-		$this->set('blogContent',$this->blogContent);
+		if(!empty($this->blogContent)) {
+			$this->set('blogContent',$this->blogContent);
+		}
 		
 	}
 /**
@@ -408,7 +410,11 @@ class BlogCommentsController extends BlogAppController {
 			
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
 			if($result && $captchaResult) {
-				$this->_sendComment($blogPostId, $this->data);
+				$this->_sendCommentAdmin($blogPostId, $this->data);
+				// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
+				if(!$this->blogContent['BlogContent']['comment_approve']) {
+					$this->_sendCommentContributor($blogPostId, $this->data);
+				}
 				$this->set('dbData',$result['BlogComment']);
 			}else{
 				$this->set('dbData',false);
