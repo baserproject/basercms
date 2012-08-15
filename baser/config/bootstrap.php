@@ -117,6 +117,13 @@
  */
 	mb_detect_order(Configure::read('BcEncode.detectOrder'));
 /**
+ * メモリー設定
+ */
+	$memoryLimit = (int) ini_get('memory_limit');
+	if($memoryLimit < 32 && $memoryLimit != -1) {
+		ini_set('memory_limit', '32M');
+	}
+/**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
  */

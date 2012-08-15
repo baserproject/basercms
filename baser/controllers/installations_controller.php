@@ -28,7 +28,7 @@
  *  @global integer PHP_MINIMUM_MEMORY_LIMIT in MB
  */
 define("PHP_MINIMUM_VERSION","4.3.0");
-define("PHP_MINIMUM_MEMORY_LIMIT", 16);
+define("PHP_MINIMUM_MEMORY_LIMIT", 32);
 /**
  * インストーラーコントローラー
  */
