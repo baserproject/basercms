@@ -152,7 +152,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getPostTitle($post, $link) {
+	function getPostTitle($post, $link = true) {
 
 		if($link) {
 			return $this->getPostLink($post, $post['BlogPost']['name']);
