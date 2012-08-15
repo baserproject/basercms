@@ -47,7 +47,7 @@ $(function(){
 	<h4 class="contents-head">
 		<?php $blog->postTitle($post) ?>
 	</h4>
-	<?php $blog->postContent($post,true,true) ?>
+	<?php $blog->postContent($post, false, true) ?>
 	<div class="meta"><span>
 		<?php $blog->category($post) ?>
 		&nbsp;

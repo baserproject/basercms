@@ -496,9 +496,9 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function url($url,$full = false) {
+	function url($url,$full = false, $sessionId = true) {
 		
-		echo $this->getUrl($url,$full);
+		echo $this->getUrl($url,$full, $sessionId);
 		
 	}
 /**
@@ -507,9 +507,9 @@ class BcBaserHelper extends AppHelper {
  * @param string $url
  * @param boolean $full
  */
-	function getUrl($url,$full = false) {
+	function getUrl($url,$full = false, $sessionId = true) {
 		
-		return parent::url($url,$full);
+		return parent::url($url,$full, $sessionId);
 		
 	}
 /**
@@ -525,14 +525,20 @@ class BcBaserHelper extends AppHelper {
  */
 	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
+		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
+		
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
 			$params['subDir'] = true;
 		} else {
 			$params['subDir'] = false;
 		}
-		return $this->_view->element($name, $params, $loadHelpers);
+		$out = $this->_view->element($name, $params, $loadHelpers);
+		
+		$this->executeHook('afterElement', $name, $out);
 
+		return $out;
+		
 	}
 /**
  * エレメントを出力する
@@ -632,7 +638,11 @@ class BcBaserHelper extends AppHelper {
 	function scripts() {
 		
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
-		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
+		$toolbar = true;
+		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
+			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		}
 
 		// ツールバー設定
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
@@ -654,7 +664,11 @@ class BcBaserHelper extends AppHelper {
 	function func() {
 		
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
-		$toolbar = Configure::read('BcAuthPrefix.'.$currentPrefix.'.toolbar');
+		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
+		$toolbar = true;
+		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
+			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		}
 		
 		// ツールバー表示
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
@@ -1328,7 +1342,7 @@ class BcBaserHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getUri($url){
+	function getUri($url, $sessionId = true){
 		if(preg_match('/^http/is', $url)) {
 			return $url;
 		}else {
@@ -1337,7 +1351,7 @@ class BcBaserHelper extends AppHelper {
 			}else {
 				$protocol = 'https';
 			}
-			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url);
+			return $protocol . '://'.$_SERVER['HTTP_HOST'].$this->getUrl($url, false, $sessionId);
 		}
 	}
 /**

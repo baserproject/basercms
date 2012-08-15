@@ -416,8 +416,11 @@ class MailController extends MailAppController {
 				$userMail = $value;
 			}
 			// 件名にフィールドの値を埋め込む
-			$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
-			$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
+			// 和暦など配列の場合は無視
+			if(!is_array($value)) {
+				$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
+				$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
+			}
 		}
 		
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
@@ -445,11 +448,12 @@ class MailController extends MailAppController {
 		if(!empty($adminMail)) {
 			$data['other']['mode'] = 'admin';
 			$options = array(
-				'fromName'	=> $mailContent['sender_name'],
-				'reply'		=> $userMail,
-				'from'		=> $adminMail,
-				'template'	=> $mailContent['mail_template'],
-				'bcc'		=> $mailContent['sender_2']
+				'fromName'		=> $mailContent['sender_name'],
+				'reply'			=> $userMail,
+				'from'			=> $adminMail,
+				'template'		=> $mailContent['mail_template'],
+				'bcc'			=> $mailContent['sender_2'],
+				'agentTemplate'	=> false
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}

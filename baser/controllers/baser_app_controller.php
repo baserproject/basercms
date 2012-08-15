@@ -222,9 +222,6 @@ class BaserAppController extends Controller {
 		// テーマを設定
 		$this->setTheme($this->params);
 		
-		// テーマのヘルパーをセット
-		$this->setThemeHelpers();
-		
 		if($this->params['controller'] != 'installations') {
 			// ===============================================================================
 			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
@@ -262,10 +259,14 @@ class BaserAppController extends Controller {
 			$configs = Configure::read('BcAuthPrefix');
 			if(!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
-				$config['auth_prefix'] = $this->params['prefix'];
+				if(count($configs) >= 2) {
+					$config['auth_prefix'] = $this->params['prefix'];
+				}
 			}elseif(isset($configs['front'])) {
 				$config = $configs['front'];
-				$config['auth_prefix'] = 'front';
+				if(count($configs) >= 2) {
+					$config['auth_prefix'] = 'front';
+				}
 			} else {
 				$config = array();
 			}
@@ -395,6 +396,9 @@ class BaserAppController extends Controller {
 
 		parent::beforeRender();
 
+		// テーマのヘルパーをセット
+		$this->setThemeHelpers();
+		
 		// テンプレートの拡張子
 		// RSSの場合、RequestHandlerのstartupで強制的に拡張子を.ctpに切り替えられてしまう為、
 		// beforeRenderでも再設定する仕様にした
@@ -690,15 +694,16 @@ class BaserAppController extends Controller {
 		if(!$formalName) {
 			$formalName = Configure::read('BcApp.title');
 		}
-		$_options = array('fromName' => $formalName,
-							'reply' => $email,
-							'cc' => '',
-							'bcc' => '',
-							'template' => 'default',
-							'from' => $email
-		);
 
-		$options = am($_options, $options);
+		$options = array_merge(array(
+			'fromName'		=> $formalName,
+			'reply'			=> $email,
+			'cc'			=> '',
+			'bcc'			=> '',
+			'template'		=> 'default',
+			'from'			=> $email,
+			'agentTemplate'	=> true
+		), $options);
 
 		extract($options);
 
@@ -737,10 +742,12 @@ class BaserAppController extends Controller {
 		}
 
 		// テンプレート
-		if(Configure::read('BcRequest.agent')) {
+		if($agentTemplate && Configure::read('BcRequest.agent')) {
 			$this->BcEmail->layoutPath = Configure::read('BcRequest.agentPrefix');
 			$this->BcEmail->subDir = Configure::read('BcRequest.agentPrefix');
-			$this->BcEmail->template = $template;
+		} else {
+			$this->BcEmail->layoutPath = '';
+			$this->BcEmail->subDir = '';
 		}
 		$this->BcEmail->template = $template;
 

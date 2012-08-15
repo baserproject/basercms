@@ -24,17 +24,23 @@
 　　　　　　　　◆◇　コメントを受付けました　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　<?php echo $siteConfig['name'] ?> へのコメントを受け付けました。
+　<?php echo $blogContent['title'] ?> へのコメントを受け付けました。
 　受信内容は下記のとおりです。
+
+　「<?php echo $blogPost['name'] ?>」
+　<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no'], false) ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ コメント内容 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
+
 送信者名： <?php echo ($blogComment['name']) ?>　
 Ｅメール： <?php echo ($blogComment['email']) ?>　
 ＵＲＬ　： <?php echo ($blogComment['url']) ?>　
 
-コメント：
 <?php echo ($blogComment['message']) ?>　
+
+コメントの公開状態を変更する場合は次のURLよりご確認ください。
+<?php echo $bcBaser->getUri('/admin/blog/blog_comments/index/' . $blogContent['id'], false) ?>　
 　
 　

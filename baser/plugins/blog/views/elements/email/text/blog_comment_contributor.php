@@ -21,18 +21,14 @@
 
                                            <?php echo date('Y-m-d H:i:s') ?> 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　◆◇　コメントを受付けました　◇◆ 
+　　　　　　　　◆◇　コメントが投稿されました　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　モバイル <?php echo $siteConfig['name'] ?> へのコメントを受け付けました。
-　受信内容は下記のとおりです。
-
-━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　◆ コメント内容 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-送信者名： <?php echo ($blogComment['name']) ?>　
-Ｅメール： <?php echo ($blogComment['email']) ?>　
-ＵＲＬ　： <?php echo ($blogComment['url']) ?>　
-
-コメント：
+<?php echo $blogComment['name'] ?>さんが、
+「<?php echo $blogPost['name'] ?>」にコメントしました。
+<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no'], false) ?>　
+ 
 <?php echo ($blogComment['message']) ?>　
+　
+　
+

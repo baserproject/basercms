@@ -28,20 +28,78 @@
 class BlogAppController extends BaserPluginAppController {
 /**
  * コメントを管理者メールへメール送信する
+ * 
+ * @param int $postId
  * @param array $data
+ * @return boolean
+ * @access protected
  */
-	function _sendComment() {
+	function _sendCommentAdmin($postId, $data) {
 
-		if(!$this->data || empty($this->siteConfigs['email'])) {
+		if(!$postId || !$data || empty($this->siteConfigs['email'])) {
 			return false;
-		}else {
-			$data = $this->data;
-			$data['SiteConfig'] = $this->siteConfigs;
 		}
+		
+		$data = array_merge($data, $this->BlogPost->find('first', array(
+			'conditions' => array('BlogPost.id' => $postId), 
+			'recursive' => 0
+		)));
+		$data['SiteConfig'] = $this->siteConfigs;
 		$to = $this->siteConfigs['email'];
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
-		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
+		return $this->sendMail($to, $title, $data, array(
+			'template'		=> 'blog_comment_admin',
+			'agentTemplate'	=> false
+		));
 
+	}
+/**
+ * コメント投稿者にアラートメールを送信する
+ * 
+ * @param int $postId
+ * @param array $data
+ * @return boolean 
+ * @access protected
+ */
+	function _sendCommentContributor($postId, $data) {
+		
+		if(!$postId || !$data || empty($this->siteConfigs['email'])) {
+			return false;
+		}
+		
+		$_data = $this->BlogPost->find('first', array(
+			'conditions' => array(
+				'BlogPost.id' => $postId
+			), 
+			'recursive' => 1
+		));
+		$this->log($_data);
+		// 公開されているコメントがない場合は true を返して終了
+		if(empty($_data['BlogComment'])) {
+			return true;
+		}
+		
+		$blogComments = $_data['BlogComment'];		
+		unset($_data['BlogComment']);
+		$data = array_merge($_data, $data);
+		
+		$data['SiteConfig'] = $this->siteConfigs;
+		$title = '【'.$this->siteConfigs['name'].'】コメントが投稿されました';
+		
+		$result = true;
+		$sended = array();
+		foreach($blogComments as $blogComment) {
+			if($blogComment['email'] && $blogComment['status'] && !in_array($blogComment['email'], $sended) && $blogComment['email'] != $data['BlogComment']['email']) {
+				$result = $this->sendMail($blogComment['email'], $title, $data, array(
+					'template'		=> 'blog_comment_contributor',
+					'agentTemplate'	=> false
+				));
+			}
+			$sended[] = $blogComment['email'];
+		}
+		
+		return $result;
+		
 	}
 /**
  * beforeFilter

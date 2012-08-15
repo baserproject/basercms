@@ -71,7 +71,7 @@ class BlogHelper extends AppHelper {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
 			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
-		} elseif(isset($this->_view->viewVars['blogContent'])) {
+		} elseif(isset($this->_view->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
 		}
 
@@ -152,7 +152,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getPostTitle($post, $link) {
+	function getPostTitle($post, $link = true) {
 
 		if($link) {
 			return $this->getPostLink($post, $post['BlogPost']['name']);
@@ -214,11 +214,8 @@ class BlogHelper extends AppHelper {
 	function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
 		if($moreLink === true) {
-			$moreText = '≫ 続きを読む';
-		}elseif($moreLink !== false) {
-			$moreText = $moreLink;
+			$moreLink = '≫ 続きを読む';
 		}
-
 		$out =	'<div class="post-body">'.$post['BlogPost']['content'].'</div>';
 		if($moreText && $post['BlogPost']['detail']) {
 			$out .=	'<div id="post-detail">'.$post['BlogPost']['detail'].'</div>';
@@ -227,7 +224,7 @@ class BlogHelper extends AppHelper {
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
 		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
-			$out .= '<p class="more">'.$this->Html->link($moreText, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
+			$out .= '<p class="more">'.$this->Html->link($moreLink, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
 		}
 		return $out;
 
@@ -735,5 +732,53 @@ class BlogHelper extends AppHelper {
 		return $BlogCategory->getparentnode($post['BlogCategory']['id']);
 		
 	}
+/**
+ * 同じタグの関連投稿を取得する
+ * 
+ * @param array $post
+ * @return array
+ * @access public
+ */
+	function getRelatedPosts($post) {
+		
+		if(empty($post['BlogTag'])) {
+			return array();
+		}
+		
+		$tagNames = array();
+		foreach($post['BlogTag'] as $tag) {
+			$tagNames[] = urldecode($tag['name']);
+		}
+		$BlogTag = ClassRegistry::init('Blog.BlogTag');
+		$tags = $BlogTag->find('all', array(
+			'conditions'=> array('BlogTag.name' => $tagNames), 
+			'recursive'	=> 1
+		));
+		
+		if(!isset($tags[0]['BlogPost'][0]['id'])) {
+			return array();
+		}
+		
+		$ids = Set::extract('/BlogPost/id',$tags);
+		
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		
+		$conditions = array(
+			array('BlogPost.id' => $ids), 
+			array('BlogPost.id <>' => $post['BlogPost']['id']),
+			'BlogPost.blog_content_id' => $post['BlogPost']['blog_content_id']
+		);
+		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+		
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$relatedPosts = $BlogPost->find('all', array(
+			'conditions'	=> $conditions,
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
+
+		return $relatedPosts;
+		
+	}
+	
 }
-?>

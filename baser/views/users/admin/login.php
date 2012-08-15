@@ -40,15 +40,14 @@ CSS_END
 );
 ?>
 
-
 <script type="text/javascript">
 $(function(){
-	
+
 	$("body").prepend($("#Login"));
 	$('#UserName').focus();
 	changeNavi('#UserName');
 	changeNavi('#UserPassword');
-		
+
 	$('#UserName,#UserPassword').bind('keyup', function(){
 		if($(this).val()) {
 			$(this).prev().hide();
@@ -60,7 +59,7 @@ $(function(){
 	$("#Login").click(function(){
 		changeView(false);
 	});
-	
+
 	$("#LoginInner").click(function(e){
 		if (e && e.stopPropagation) {
 			e.stopPropagation();
@@ -68,9 +67,9 @@ $(function(){
 			window.event.cancelBubble = true;
 		}
 	});
-	
+
 	$("#BtnLogin").click(function(e){
-		
+
 		$("#UserAjaxLoginForm").ajaxSubmit({
 			beforeSend: function() {
 				$("#Waiting").show();
@@ -99,15 +98,15 @@ $(function(){
 				$("#Waiting").hide();
 			}
 		});
-		
+
 		return false;
-		
+
 	});
 
 	if($("#LoginCredit").html() == 1) {
 		changeView($("#LoginCredit").html());
 	}
-	
+
 });
 function changeNavi(target){
 	if($(target).val()) {
@@ -127,7 +126,7 @@ function changeView(creditOn) {
 	} else {
 		openCredit();
 	}
-	
+
 }
 function openCredit(completeHandler) {
 	$("#LoginInner").css('color', '#333');
@@ -145,9 +144,9 @@ function openCredit(completeHandler) {
 
 <div id="LoginCredit"><?php echo $bcBaser->siteConfig['login_credit'] ?></div>
 <div id="Login">
-	
+
 	<div id="LoginInner">
-				
+
 		<h1><?php $bcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 <?php if($currentPrefix == 'front'): ?>
