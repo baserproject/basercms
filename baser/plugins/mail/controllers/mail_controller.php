@@ -445,11 +445,12 @@ class MailController extends MailAppController {
 		if(!empty($adminMail)) {
 			$data['other']['mode'] = 'admin';
 			$options = array(
-				'fromName'	=> $mailContent['sender_name'],
-				'reply'		=> $userMail,
-				'from'		=> $adminMail,
-				'template'	=> $mailContent['mail_template'],
-				'bcc'		=> $mailContent['sender_2']
+				'fromName'		=> $mailContent['sender_name'],
+				'reply'			=> $userMail,
+				'from'			=> $adminMail,
+				'template'		=> $mailContent['mail_template'],
+				'bcc'			=> $mailContent['sender_2'],
+				'agentTemplate'	=> false
 			);
 			$this->sendMail($adminMail,$mailContent['subject_admin'], $data, $options);
 		}

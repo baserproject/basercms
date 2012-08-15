@@ -745,6 +745,9 @@ class BaserAppController extends Controller {
 		if($agentTemplate && Configure::read('BcRequest.agent')) {
 			$this->BcEmail->layoutPath = Configure::read('BcRequest.agentPrefix');
 			$this->BcEmail->subDir = Configure::read('BcRequest.agentPrefix');
+		} else {
+			$this->BcEmail->layoutPath = '';
+			$this->BcEmail->subDir = '';
 		}
 		$this->BcEmail->template = $template;
 
