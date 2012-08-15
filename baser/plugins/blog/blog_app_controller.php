@@ -40,7 +40,10 @@ class BlogAppController extends BaserPluginAppController {
 		}
 		$to = $this->siteConfigs['email'];
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
-		$this->sendMail($to, $title, $data, array('template' => 'blog_comment'));
+		$this->sendMail($to, $title, $data, array(
+			'template'		=> 'blog_comment',
+			'agentTemplate'	=> false
+		));
 
 	}
 /**

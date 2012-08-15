@@ -694,15 +694,16 @@ class BaserAppController extends Controller {
 		if(!$formalName) {
 			$formalName = Configure::read('BcApp.title');
 		}
-		$_options = array('fromName' => $formalName,
-							'reply' => $email,
-							'cc' => '',
-							'bcc' => '',
-							'template' => 'default',
-							'from' => $email
-		);
 
-		$options = am($_options, $options);
+		$options = array_merge(array(
+			'fromName'		=> $formalName,
+			'reply'			=> $email,
+			'cc'			=> '',
+			'bcc'			=> '',
+			'template'		=> 'default',
+			'from'			=> $email,
+			'agentTemplate'	=> true
+		), $options);
 
 		extract($options);
 
@@ -741,10 +742,9 @@ class BaserAppController extends Controller {
 		}
 
 		// テンプレート
-		if(Configure::read('BcRequest.agent')) {
+		if($agentTemplate && Configure::read('BcRequest.agent')) {
 			$this->BcEmail->layoutPath = Configure::read('BcRequest.agentPrefix');
 			$this->BcEmail->subDir = Configure::read('BcRequest.agentPrefix');
-			$this->BcEmail->template = $template;
 		}
 		$this->BcEmail->template = $template;
 
