@@ -408,7 +408,7 @@ class BlogCommentsController extends BlogAppController {
 			
 			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
 			if($result && $captchaResult) {
-				$this->_sendComment();
+				$this->_sendComment($blogPostId, $this->data);
 				$this->set('dbData',$result['BlogComment']);
 			}else{
 				$this->set('dbData',false);

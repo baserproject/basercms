@@ -28,19 +28,27 @@
 class BlogAppController extends BaserPluginAppController {
 /**
  * コメントを管理者メールへメール送信する
+ * 
+ * @param int $postId
  * @param array $data
+ * @return boolean
+ * @access protected
  */
-	function _sendComment() {
+	function _sendComment($postId, $data) {
 
-		if(!$this->data || empty($this->siteConfigs['email'])) {
+		if(!$postId || !$this->data || empty($this->siteConfigs['email'])) {
 			return false;
-		}else {
-			$data = $this->data;
-			$data['SiteConfig'] = $this->siteConfigs;
 		}
+		
+		$data = array_merge($data, $this->BlogPost->find('first', array(
+			'conditions' => array('BlogPost.id' => $postId), 
+			'recursive' => 0
+		)));
+		$data['SiteConfig'] = $this->siteConfigs;
+
 		$to = $this->siteConfigs['email'];
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
-		$this->sendMail($to, $title, $data, array(
+		return $this->sendMail($to, $title, $data, array(
 			'template'		=> 'blog_comment',
 			'agentTemplate'	=> false
 		));
