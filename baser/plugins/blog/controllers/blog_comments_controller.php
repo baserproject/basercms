@@ -157,7 +157,7 @@ class BlogCommentsController extends BlogAppController {
 		// データを取得
 		$this->paginate = array('conditions'=>$conditions,
 				'fields'=> array(),
-				'order'	=> 'BlogComment.id',
+				'order'	=> 'BlogComment.created DESC',
 				'limit'	=> $this->passedArgs['num']
 		);
 
