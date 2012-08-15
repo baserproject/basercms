@@ -416,8 +416,11 @@ class MailController extends MailAppController {
 				$userMail = $value;
 			}
 			// 件名にフィールドの値を埋め込む
-			$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
-			$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
+			// 和暦など配列の場合は無視
+			if(!is_array($value)) {
+				$mailContent['subject_user'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_user']);
+				$mailContent['subject_admin'] = str_replace('{$'.$field.'}', $value, $mailContent['subject_admin']);
+			}
 		}
 		
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
