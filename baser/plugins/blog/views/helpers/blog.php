@@ -732,5 +732,53 @@ class BlogHelper extends AppHelper {
 		return $BlogCategory->getparentnode($post['BlogCategory']['id']);
 		
 	}
+/**
+ * 同じタグの関連投稿を取得する
+ * 
+ * @param array $post
+ * @return array
+ * @access public
+ */
+	function getRelatedPosts($post) {
+		
+		if(empty($post['BlogTag'])) {
+			return array();
+		}
+		
+		$tagNames = array();
+		foreach($post['BlogTag'] as $tag) {
+			$tagNames[] = urldecode($tag['name']);
+		}
+		$BlogTag = ClassRegistry::init('Blog.BlogTag');
+		$tags = $BlogTag->find('all', array(
+			'conditions'=> array('BlogTag.name' => $tagNames), 
+			'recursive'	=> 1
+		));
+		
+		if(!isset($tags[0]['BlogPost'][0]['id'])) {
+			return array();
+		}
+		
+		$ids = Set::extract('/BlogPost/id',$tags);
+		
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		
+		$conditions = array(
+			array('BlogPost.id' => $ids), 
+			array('BlogPost.id <>' => $post['BlogPost']['id']),
+			'BlogPost.blog_content_id' => $post['BlogPost']['blog_content_id']
+		);
+		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+		
+		// 毎秒抽出条件が違うのでキャッシュしない
+		$relatedPosts = $BlogPost->find('all', array(
+			'conditions'	=> $conditions,
+			'recursive'		=> -1,
+			'cache'			=> false
+		));
+
+		return $relatedPosts;
+		
+	}
+	
 }
-?>
