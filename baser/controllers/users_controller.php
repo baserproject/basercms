@@ -452,8 +452,8 @@ class UsersController extends AppController {
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'edit', $id));
 			}else {
-				$member = $this->User->read(null, $id);
-				$this->data = array_merge($member, $this->data);
+				// よく使う項目のデータを再セット
+				$this->data = array_merge($this->User->read(null, $id), $this->data);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 
