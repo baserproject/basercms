@@ -618,12 +618,17 @@ class BlogHelper extends AppHelper {
 				}
 			}
 		}
+		
+		$excludes = Configure::read('BcAgent');
+		$excludes = Set::extract('{.+?}.prefix', $excludes);
+		$excludes[] = 'rss';
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'rss' && $template != 'mobile'){
+			if(!in_array($template, $excludes)){
 				$templates[$template] = $template;
 			}
 		}
+		
 		return $templates;
 		
 	}
