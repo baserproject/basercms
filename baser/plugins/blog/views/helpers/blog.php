@@ -744,11 +744,19 @@ class BlogHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getRelatedPosts($post) {
+	function getRelatedPosts($post, $options = array()) {
 		
 		if(empty($post['BlogTag'])) {
 			return array();
 		}
+		
+		$options = array_merge(array(
+			'recursive' => -1,
+			'limit'		=> 5,
+			'order'		=> 'BlogPost.posts_date DESC'
+		), $options);
+		
+		extract($options);
 		
 		$tagNames = array();
 		foreach($post['BlogTag'] as $tag) {
@@ -778,7 +786,9 @@ class BlogHelper extends AppHelper {
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$relatedPosts = $BlogPost->find('all', array(
 			'conditions'	=> $conditions,
-			'recursive'		=> -1,
+			'recursive'		=> $recursive,
+			'order'			=> $order,
+			'limit'			=> $limit,
 			'cache'			=> false
 		));
 
