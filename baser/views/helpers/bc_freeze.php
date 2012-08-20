@@ -296,10 +296,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function checkbox($fieldName,$title,$attributes = array()) {
-
+	function checkbox($fieldName, $attributes = array()) {
+		
 		if($this->freezed) {
-			$options = array(0=>'',1=>$title);
+			$label = '';
+			if(isset($attributes['lable'])) {
+				$label = $attributes['label'];
+			}
+			$options = array(0 => '', 1 => $label);
 			return $this->freezeControll($fieldName, $options,$attributes);
 		}else {
 			return parent::checkbox($fieldName,$attributes);
@@ -428,7 +432,7 @@ class BcFreezeHelper extends BcFormHelper {
 				$path = DS.$imageAttributes['dir'].DS.Inflector::tableize($model).DS.$imageAttributes['id'].DS.$field.".".$imageAttributes['ext']."?".rand();
 				unset($imageAttributes['ext']);
 				$output = sprintf($this->Html->tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
-				$output .= "<br />".$this->checkbox($fieldName."_delete","削除する");
+				$output .= "<br />".$this->checkbox($fieldName."_delete", array('label' => '削除する'));
 			}
 			return parent::file($fieldName, $attributes)."<br />".$output;
 		}
