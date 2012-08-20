@@ -20,7 +20,7 @@
 if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 }
-$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
+$userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
 $this->addScript(<<< CSS_END
 <style type="text/css">
 #Contents {
@@ -40,15 +40,14 @@ CSS_END
 );
 ?>
 
-
 <script type="text/javascript">
 $(function(){
-	
+
 	$("body").prepend($("#Login"));
 	$('#UserName').focus();
 	changeNavi('#UserName');
 	changeNavi('#UserPassword');
-		
+
 	$('#UserName,#UserPassword').bind('keyup', function(){
 		if($(this).val()) {
 			$(this).prev().hide();
@@ -60,7 +59,7 @@ $(function(){
 	$("#Login").click(function(){
 		changeView(false);
 	});
-	
+
 	$("#LoginInner").click(function(e){
 		if (e && e.stopPropagation) {
 			e.stopPropagation();
@@ -68,9 +67,9 @@ $(function(){
 			window.event.cancelBubble = true;
 		}
 	});
-	
+
 	$("#BtnLogin").click(function(e){
-		
+
 		$("#UserAjaxLoginForm").ajaxSubmit({
 			beforeSend: function() {
 				$("#Waiting").show();
@@ -99,15 +98,15 @@ $(function(){
 				$("#Waiting").hide();
 			}
 		});
-		
+
 		return false;
-		
+
 	});
 
 	if($("#LoginCredit").html() == 1) {
 		changeView($("#LoginCredit").html());
 	}
-	
+
 });
 function changeNavi(target){
 	if($(target).val()) {
@@ -127,7 +126,7 @@ function changeView(creditOn) {
 	} else {
 		openCredit();
 	}
-	
+
 }
 function openCredit(completeHandler) {
 	$("#LoginInner").css('color', '#333');
@@ -145,12 +144,16 @@ function openCredit(completeHandler) {
 
 <div id="LoginCredit"><?php echo $bcBaser->siteConfig['login_credit'] ?></div>
 <div id="Login">
-	
+
 	<div id="LoginInner">
-				
+
 		<h1><?php $bcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
+<?php if($currentPrefix == 'front'): ?>
+		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => 'users'))) ?>
+<?php else: ?>
 		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
+<?php endif ?>
 		<div class="float-left login-input">
 			<?php echo $bcForm->label($userModel.'.name', 'アカウント名') ?>
 			<?php echo $bcForm->input($userModel.'.name', array('type' => 'text', 'size'=>16 ,'tabindex'=>1)) ?>
@@ -164,7 +167,11 @@ function openCredit(completeHandler) {
 		</div>
 		<div class="clear login-etc">
 			<?php echo $bcForm->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
+<?php if($currentPrefix == 'front'): ?>
+			<?php $bcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
+<?php else: ?>
 			<?php $bcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->params['prefix'] => true), array('rel' => 'popup')) ?>
+<?php endif ?>
 		</div>
 		<?php echo $bcForm->end() ?>
 	</div>

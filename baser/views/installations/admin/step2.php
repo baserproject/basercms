@@ -109,6 +109,17 @@ $(function(){
 						<?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($encodingOk) echo 'check'; else echo'failed';	?>'>
+					文字エンコーディングの設定 = UTF-8
+					<div class="check-result">
+						<?php echo $encoding ?><br />
+						<?php if (!$encodingOk): ?>
+						<small>phpの内部文字エンコーディングがUTF-8である必要があります</small>
+						<br />
+						<small>php.iniで「mbstring.internal_encoding」をUTF-8に設定してください</small>
+						<?php endif ?>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>

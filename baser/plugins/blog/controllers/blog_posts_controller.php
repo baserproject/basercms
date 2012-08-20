@@ -135,7 +135,7 @@ class BlogPostsController extends BlogAppController {
 
 		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
 			$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-			if($db->config['driver'] != 'csv') {
+			if($db->config['driver'] != 'bc_csv') {
 				$joins = array(
 					array(
 						'table' => $db->config['prefix'].'blog_posts_blog_tags',
@@ -159,6 +159,8 @@ class BlogPostsController extends BlogAppController {
 		);
 		$this->set('posts', $this->paginate('BlogPost'));
 		
+		$this->_setAdminIndexViewData();
+		
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
 			$this->render('ajax_index');
 			return;
@@ -168,6 +170,17 @@ class BlogPostsController extends BlogAppController {
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
 
+	}
+/**
+ * 一覧の表示用データをセットする
+ * 
+ * @return void
+ * @access protected
+ */
+	function _setAdminIndexViewData() {
+		
+		$this->set('users',$this->BlogPost->User->getUserList());
+		
 	}
 /**
  * ページ一覧用の検索条件を生成する
@@ -202,7 +215,7 @@ class BlogPostsController extends BlogAppController {
 
 		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
 		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-		if($db->config['driver'] == 'csv') {
+		if($db->config['driver'] == 'bc_csv') {
 			if(!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if($blogTags) {
@@ -666,7 +679,7 @@ class BlogPostsController extends BlogAppController {
  */
 	function _changeStatus($id, $status) {
 		
-		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
+		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => -1));
 		$data['BlogPost']['status'] = $status;
 		$data['BlogPost']['publish_begin'] = '';
@@ -693,9 +706,11 @@ class BlogPostsController extends BlogAppController {
 		
 		$result = $this->BlogPost->copy($id);
 		if($result) {
-			$result['BlogPost']['id'] = $this->BlogPost->getInsertID();
+			// タグ情報を取得するため読み込みなおす
+			$this->BlogPost->recursive = 1;
+			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
-			$this->set('data', $result);
+			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);
 		}

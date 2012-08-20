@@ -25,18 +25,7 @@
  *
  * @package			baser.plugins.mail
  */
-class MailAppModel extends AppModel {
-/**
- * The name of the DataSource connection that this Model uses
- *
- * @var		string
- * @access 	public
- */
-	var $useDbConfig = 'plugin';
-/**
- * プラグイン名
- */
-	var $plugin = 'Mail';
+class MailAppModel extends BaserPluginAppModel {
 /**
  * データの消毒をおこなう
  * @return array
@@ -78,4 +67,3 @@ class MailAppModel extends AppModel {
 	}
 
 }
-?>

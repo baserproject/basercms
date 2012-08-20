@@ -14,6 +14,9 @@
 <?php $bcBaser->icon() ?>
 <?php $bcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 <?php $bcBaser->css(array('import')) ?>
+<?php if($bcBaser->isHome()): ?>
+<?php $bcBaser->css(array('top')) ?>
+<?php endif ?>
 <?php $bcBaser->js(array(
 	'jquery-1.7.2.min',
 	'startup'
@@ -47,13 +50,13 @@
 		</div>
 		<!-- end alfa -->
 		
-		<?php if(!$bcBaser->isTop()): ?>
+		<?php if(!$bcBaser->isHome()): ?>
 		<!-- begin beta -->
 		<?php $bcBaser->element('sidebar') ?>
 		<!-- end beta -->
 		<?php endif ?>
 		
-		<?php if(!$bcBaser->isTop()): ?>
+		<?php if(!$bcBaser->isHome()): ?>
 		<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
 		<?php endif ?>
 		

@@ -42,7 +42,9 @@ if(!$data['Plugin']['status']) {
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_install.png', array('width' => 24, 'height' => 24, 'alt' => 'インストール', 'class' => 'btn')), array('action' => 'add', $data['Plugin']['name']), array('title' => 'インストール')) ?>
 <?php endif ?>
 <?php if(!$data['Plugin']['status']): ?>
+	<?php if(!in_array($data['Plugin']['name'], $corePlugins)): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete_file', $data['Plugin']['name']), array('title' => '削除', 'class' => 'btn-delfile')); ?>
+	<?php endif ?>
 <?php endif; ?>
 	</td>
 	<td>
@@ -51,7 +53,7 @@ if(!$data['Plugin']['status']) {
 <?php elseif($data['Plugin']['update']): ?>
 		<div class="annotation-text"><small>アップデートを完了させてください</small></div>
 <?php endif ?>
-	<?php echo $data['Plugin']['name'] ?>（<?php echo $data['Plugin']['title'] ?>）
+	<?php echo $data['Plugin']['name'] ?><?php if($data['Plugin']['title']): ?>（<?php echo $data['Plugin']['title'] ?>）<?php endif ?>
 	</td>
 	<td><?php echo $data['Plugin']['version'] ?></td>
 	<td><?php echo $data['Plugin']['description'] ?></td>

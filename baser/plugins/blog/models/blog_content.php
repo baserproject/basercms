@@ -150,10 +150,15 @@ class BlogContent extends BlogAppModel {
  */
 	function afterSave($created) {
 
+		if(empty($this->data['BlogContent']['id'])) {
+			$this->data['BlogContent']['id'] = $this->getInsertID();
+		}
+		
 		// 検索用テーブルへの登録・削除
 		if(!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status'] ) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
+			
 			$this->deleteContent($this->data['BlogContent']['id']);
 		}
 		
@@ -201,7 +206,7 @@ class BlogContent extends BlogAppModel {
  * @param array $data
  * @return mixed BlogContent Or false
  */
-	function copy($id, $data) {
+	function copy($id, $data = null) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));

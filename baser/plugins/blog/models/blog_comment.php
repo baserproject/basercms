@@ -102,7 +102,7 @@ class BlogComment extends BlogAppModel {
  * @param string $commentApprove
  * @return boolean
  */
-	function add($data,$contentId,$postId,$commentApprove) {
+	function add($data, $contentId, $postId, $commentApprove) {
 
 		if(isset($data['BlogComment'])) {
 			$data = $data['BlogComment'];
@@ -112,18 +112,23 @@ class BlogComment extends BlogAppModel {
 		foreach($data as $key => $value) {
 			$data[$key] = Sanitize::html($value);
 		}
-		$data['url'] = str_replace('&#45;','-',$data['url']);
-		$data['email'] = str_replace('&#45;','-',$data['email']);
+		
+		// Modelのバリデートに引っかからない為の対処
+		$data['url'] = str_replace('&#45;', '-', $data['url']);
+		$data['email'] = str_replace('&#45;', '-', $data['email']);
+		
 		$data['blog_post_id'] = $postId;
 		$data['blog_content_id'] = $contentId;
+		
 		if($commentApprove) {
 			$data['status'] = false;
 		}else {
 			$data['status'] = true;
 		}
 
-		$data['no'] = $this->getMax('no',array('blog_content_id'=>$contentId))+1;
+		$data['no'] = $this->getMax('no', array('blog_content_id' => $contentId)) + 1;
 		$this->create($data);
+		
 		return $this->save();
 
 	}

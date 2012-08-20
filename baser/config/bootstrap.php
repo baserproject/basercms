@@ -57,7 +57,9 @@
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
 	$uri = @$_SERVER['REQUEST_URI'];
-	if (strpos($uri, BC_BASE_URL.'css/') !== false || strpos($uri, BC_BASE_URL.'js/') !== false || strpos($uri, BC_BASE_URL.'img/') !== false) {
+	if (preg_match('/^'.preg_quote(BC_BASE_URL, '/').'css\//', $uri) || 
+			preg_match('/^'.preg_quote(BC_BASE_URL, '/').'js\//', $uri) || 
+			preg_match('/^'.preg_quote(BC_BASE_URL, '/').'img\//', $uri)) {
 		$assets = array('js' , 'css', 'gif' , 'jpg' , 'png' );
 		$ext = array_pop(explode('.', $uri));
 		if(in_array($ext, $assets)){
@@ -114,6 +116,13 @@
  * 文字コードの検出順を指定
  */
 	mb_detect_order(Configure::read('BcEncode.detectOrder'));
+/**
+ * メモリー設定
+ */
+	$memoryLimit = (int) ini_get('memory_limit');
+	if($memoryLimit < 32 && $memoryLimit != -1) {
+		ini_set('memory_limit', '32M');
+	}
 /**
  * セッションタイムアウト設定
  * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
@@ -290,9 +299,11 @@ if(BC_INSTALLED) {
 	}
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
-	if(preg_match('/^updaters(|\/index\/)/', $parameter)) {
+	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
+	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	}elseif(BC_INSTALLED && !Configure::read('BcRequest.isMaintenance') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+<<<<<<< HEAD
 		if(preg_match('/^admin/', $parameter)) {
 			sendUpdateMail();
 			$message = 'baserCMSのアップデートURLを管理者メールアドレスに送信しました。<br /><br />メールが届かない場合は、管理者メールアドレスの設定がうまくいっていない可能性があります。<br />'.
@@ -300,6 +311,8 @@ if(BC_INSTALLED) {
 			$layout = 'default';
 			$Session->write('Message.flash', compact('message', 'layout'));
 		}
+=======
+>>>>>>> fe385ebcf90c3b6dc209518aa0c549e9e9779678
 		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);

@@ -587,7 +587,7 @@ class BaserAppModel extends Model {
 
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
 		$this->recursive = -1;
-		if($db->config['driver']=='csv') {
+		if($db->config['driver']=='bc_csv') {
 			// CSVDBの場合はMAX関数が利用できない為、プログラムで処理する
 			// TODO dboでMAX関数の実装できたらここも変更する
 			$this->cacheQueries=false;

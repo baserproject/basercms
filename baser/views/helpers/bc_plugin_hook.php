@@ -212,9 +212,9 @@ class BcPluginHookHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function beforeFormCreate(&$form, $model = null, $options = array()) {
+	function beforeFormCreate(&$form, $id, $model = null, $options = array()) {
 		
-		return $this->executeHook('beforeFormCreate', $options, $form, $model, $options);
+		return $this->executeHook('beforeFormCreate', $options, $form, $id, $model, $options);
 		
 	}
 /**
@@ -224,9 +224,9 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function afterFormCreate(&$form, $out) {
+	function afterFormCreate(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormCreate', $out, $form, $out);
+		$out = $this->executeHook('afterFormCreate', $out, $form, $id, $out);
 		return $this->formExCreate($out);
 		
 	}
@@ -239,9 +239,9 @@ class BcPluginHookHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function beforeFormEnd(&$form, $options = array()) {
+	function beforeFormEnd(&$form, $id, $options = array()) {
 		
-		return $this->executeHook('beforeFormEnd', $options, $form, $options);
+		return $this->executeHook('beforeFormEnd', $options, $form, $id, $options);
 		
 	}
 /**
@@ -251,9 +251,9 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function afterFormEnd(&$form, $out) {
+	function afterFormEnd(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormEnd', $out, $form, $out);
+		$out = $this->executeHook('afterFormEnd', $out, $form, $id, $out);
 		return $this->formExEnd($out);
 		
 	}
@@ -311,7 +311,7 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 /**
- * Baser::header
+ * baserHeader
  *
  * @param string $out
  * @return string
@@ -323,7 +323,7 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 /**
- * Baser::footer
+ * baserFooter
  *
  * @param string $out
  * @return string
@@ -333,6 +333,27 @@ class BcPluginHookHelper extends AppHelper {
 		return $this->executeHook('baserFooter', $out, $out);
 		
 	}
-	
+/**
+ * Baser::beforeElement
+ *
+ * @param string $out
+ * @return string
+ */
+	function beforeElement(&$baser, $name, $params = array(), $loadHelpers = false, $subDir = true) {
+		
+		return $this->executeHook('beforeElement', $params, $name, $params, $loadHelpers, $subDir);
+		
+	}
+/**
+ * Baser::beforeElement
+ *
+ * @param string $out
+ * @return string
+ */
+	function afterElement(&$baser, $name, $out) {
+		
+		return $this->executeHook('afterElement', $out, $name, $out);
+		
+	}
 }
 ?>

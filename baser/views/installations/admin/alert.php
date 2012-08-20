@@ -2,7 +2,7 @@
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] インストール警告ページ
- * 
+ *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>

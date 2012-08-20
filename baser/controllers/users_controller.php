@@ -80,17 +80,31 @@ class UsersController extends AppController {
 
 		/* 認証設定 */
 		// parent::beforeFilterの前に記述する必要あり
-		if(isset($this->params['prefix'])) {
-			$this->BcAuth->allow(
-					'admin_login', 
-					'admin_logout', 
-					'admin_login_exec', 
-					'admin_reset_password',
-					'admin_ajax_login',
-					'admin_login_exec',
-					'admin_reset_password'
-			);
-			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
+		$this->BcAuth->allow(
+				'admin_login', 
+				'admin_logout', 
+				'admin_login_exec', 
+				'admin_reset_password',
+				'admin_ajax_login',
+				'admin_login_exec',
+				'admin_reset_password'
+		);
+		$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
+		
+		// =====================================================================
+		// Ajaxによるログインの場合、loginAction が、表示URLと違う為、
+		// BcAuthコンポーネントよりコントローラーのisAuthorized を呼びだせない。
+		// 正常な動作となるように書き換える。
+		// =====================================================================
+		if(!empty($this->params['prefix'])) {
+			$prefix = $this->params['prefix'];
+			if($this->RequestHandler->isAjax() && $this->action == $prefix.'_ajax_login') {
+				Configure::write('BcAuthPrefix.'.$prefix.'.loginAction', '/'.$prefix.'/users/ajax_login');
+			}
+		} else {
+			if($this->RequestHandler->isAjax() && $this->action == 'ajax_login') {
+				Configure::write('BcAuthPrefix.front.loginAction', '/users/ajax_login');
+			}
 		}
 		
 		parent::beforeFilter();
@@ -157,13 +171,15 @@ class UsersController extends AppController {
 		}
 
 		$pageTitle = 'ログイン';
-		if(isset($this->params['prefix'])) {
+		if(!empty($this->params['prefix'])) {
 			$prefixAuth = Configure::read('BcAuthPrefix.'.$this->params['prefix']);
-			if($prefixAuth && isset($prefixAuth['loginTitle'])) {
-				$pageTitle = $prefixAuth['loginTitle'];
-			}
+		} else {
+			$prefixAuth = Configure::read('BcAuthPrefix.front');
 		}
-
+		if($prefixAuth && isset($prefixAuth['loginTitle'])) {
+			$pageTitle = $prefixAuth['loginTitle'];
+		}
+			
 		/* 表示設定 */
 		$this->crumbs = array();
 		$this->subMenuElements = '';
@@ -183,6 +199,7 @@ class UsersController extends AppController {
 			$this->Session->write('AuthAgent', $user);
 		}
 		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		Configure::write('debug', 0);
 		$this->setAction('admin_ajax_login');
 		exit();
 	}
@@ -233,9 +250,12 @@ class UsersController extends AppController {
 			}
 		}
 
+		Configure::write('debug', 0);
+		
 		if ($user) {
 			exit(Router::url($this->BcAuth->redirect()));
 		}
+		
 		exit();
 		
 	}
@@ -267,7 +287,11 @@ class UsersController extends AppController {
 		$this->BcAuth->logout();
 		$this->Cookie->del('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
-		$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
+		if(empty($this->params['prefix'])) {
+			$this->redirect(array('action' => 'login'));
+		} else {
+			$this->redirect(array($this->params['prefix'] => true, 'action' => 'login'));
+		}
 
 	}
 /**
@@ -428,6 +452,8 @@ class UsersController extends AppController {
 				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'edit', $id));
 			}else {
+				// よく使う項目のデータを再セット
+				$this->data = array_merge($this->User->read(null, $id), $this->data);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
 

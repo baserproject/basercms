@@ -34,7 +34,7 @@ class WidgetAreasController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('RequestHandler');
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
 /**
  * ヘルパー
  * @var array
@@ -70,6 +70,7 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	function beforeFilter() {
+		$this->BcAuth->allow('get_widgets');
 		parent::beforeFilter();
 		$this->Security->validatePost = false;
 	}

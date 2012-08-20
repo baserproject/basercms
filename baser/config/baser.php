@@ -47,7 +47,11 @@
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
 				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
 				array('name' => 'クレジット',				'url' => 'javascript:credit()')
-		)))
+		))),
+		// コアプラグイン
+		'corePlugins'	=> array('blog', 'feed', 'mail'),
+		// アップデートキー
+		'updateKey'		=> 'update'
 	);
 /**
  * 環境設定 
@@ -74,37 +78,52 @@
 	);
 /**
  * 認証プレフィックス設定
+ * ※ CSVは非対応
  */
 	$adminPrefix = Configure::read('Routing.admin');
 	$config['BcAuthPrefix'] = array(
 		// 管理画面
 		'admin' => array(
-			'prefix'		=> 'admin',
+			// 認証設定名
+			'name'			=> '管理システム',
+			// URLにおけるエイリアス
 			'alias'			=> $adminPrefix,
 			// 認証後リダイレクト先
 			'loginRedirect'	=> '/'.$adminPrefix,
 			// ログイン画面タイトル
 			'loginTitle'	=> '管理システムログイン',
-			'loginAction'	=> '/'.$adminPrefix.'/users/login'
+			// ログインページURL
+			'loginAction'	=> '/'.$adminPrefix.'/users/login',
+			'toolbar'		=> true
 		),
-		// マイページ
-		/*'mypage' => array(
-			'alias'			=> 'mypage',
-			'prefix'		=> 'mypage',
-			'loginRedirect'=>'/mypage/users/index',
-			'loginTitle'=>'マイページログイン',
+		// フロント（例）
+		/*'front' => array(
+			'name'			=> 'フロント',
+			'loginRedirect'	=> '/',
 			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/users/login'
+			'loginAction'	=> '/users/login',
+			'toolbar'		=> true
 		),*/
-		// モバイルマイページ
+		// マイページ（例）
+		/*'mypage' => array(
+			'name'			=> 'マイページ',
+			'alias'			=> 'mypage',
+			'loginRedirect'	=> '/',
+			'loginTitle'	=> 'マイページログイン',
+			'userModel'		=> 'User',
+			'loginAction'	=> '/mypage/users/login',
+			'toolbar'		=> true
+		),*/
+		// モバイルマイページ（例）
 		/*'mobile_mypage' => array(
+			'name'			=> 'ケータイマイページ',
 			'alias'			=> 'mobile_mypage',
-			'prefix'		=> 'mobile_mypage',
-			'loginRedirect'=>'/m/mypage/users/index',
-			'loginTitle'=>'マイページログイン',
+			'loginRedirect'	=> '/m/',
+			'loginTitle'	=> 'マイページログイン',
 			'userModel'		=> 'User',
 			'loginAction'	=> '/m/mypage/users/login',
-			'userScope'		=> array('User.user_group_id' => 1)
+			'toolbar'		=> false,
+			'userScope'		=> array()
 		)*/
 	);
 /**

@@ -225,6 +225,8 @@ span#DebugMode{
 	background-color: #FFF;
 	color:#AAA;
 }
-div#SystemMenu div ul{
-
+#DebugMode {	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }

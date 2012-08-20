@@ -82,10 +82,12 @@ if (!empty($mailFields)) {
 					if ($mailform->error("Message." . $field['group_field'] . "_format", "check")) {
 						echo $mailform->error("Message." . $field['group_field'] . "_format", "形式が不正です");
 					} else {
-						echo $mailform->error("Message." . $field['group_field'] . "", "必須項目です");
+						if($field['valid']) {
+							echo $mailform->error("Message." . $field['group_field'] . "", "必須項目です");
+						}
 					}
 					echo $mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません");
-					$mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です");
+					echo $mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です");
 				}
 
 				echo '</span>';
@@ -97,4 +99,3 @@ if (!empty($mailFields)) {
 		}
 	}
 }
-?>

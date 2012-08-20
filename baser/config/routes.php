@@ -23,9 +23,13 @@
 if(Configure::read('BcRequest.asset')) {
 	return;
 }
-
 if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
-	
+
+	// プラグインの基底クラス読み込み
+	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
+	App::import('Controller', 'BaserPluginApp');
+	App::import('Model', 'BaserPluginAppModel');
+
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$agent = Configure::read('BcRequest.agent');
@@ -71,20 +75,19 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  */
 	if($authPrefixes && is_array($authPrefixes)) {
 		foreach($authPrefixes as $key => $authPrefix) {
-			if(empty($authPrefix['prefix'])) {
-				continue;
-			}
-			$prefix = $authPrefix['prefix'];
+			$prefix = $key;
 			if(!empty($authPrefix['alias'])) {
 				$alias = $authPrefix['alias'];
 			} else {
 				$alias = $prefix;
 			}
-			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
-			Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			if($alias) {
+				Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
+				Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			}
 		}
 	}
 /**
@@ -158,6 +161,12 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 else {
 	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
 }
+/**
+ * アップデーター用 
+ */
+$updateKey = Configure::read('BcApp.updateKey');
+Router::connect('/'.$updateKey, array('controller' => 'updaters', 'action' => 'index'));
+Router::connect('/'.$updateKey.'/index', array('controller' => 'updaters', 'action' => 'index'));
 /**
  * インストーラー用
  */

@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+include BASER_VENDORS.'imageresizer.php';
 /**
  * ファイルアップロードビヘイビア
  * 
@@ -412,8 +413,7 @@ class BcUploadBehavior extends ModelBehavior {
 	function resizeImage($source,$distination,$width=0,$height=0,$thumb = false) {
 
 		if($width>0 || $height>0) {
-			App::import('Vendor','Imageresizer');
-			$imageresizer = new Imageresizer(APP.'tmp');
+			$imageresizer = new Imageresizer();
 			$ret = $imageresizer->resize($source,$distination,$width,$height, $thumb);
 		}else {
 			$ret = copy($source,$distination);

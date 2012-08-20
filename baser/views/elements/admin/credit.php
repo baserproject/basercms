@@ -21,7 +21,7 @@
 <script type="text/javascript">
 var openedFavorite;
 $(function(){
-	
+
 	var pageHeight,hideTarget;
 	$("#Credit").click(function(){
 		$("#Credit").fadeOut(1000);
@@ -57,7 +57,7 @@ $(function(){
  * クレジットを表示する
  */
 function credit(){
-	
+
 	var hideTarget
 	if($("#SideBar").css('display') == 'none') {
 		openedFavorite = false;
@@ -87,12 +87,12 @@ function credit(){
     });
     $("#CreditScroller").fadeIn(1000);
   }
-  
+
   //リサイズイベント
   $(window).resize(function(){
     resizeScroll();
   });
-	
+
   var scrollSpeed = 1;
 	var height = $("#CreditScroller").height();
 	var posX = $(window).height();
@@ -118,7 +118,7 @@ function setViewSize() {
 function resizeScroll() {
 	$("html,body").height( $(this).height() - $("#ToolBar").outerHeight()*1);
 	$("#Credit").width( $("#Page").width());
-	$("#Credit").height( $("#Page").height() + $("#ToolBar").outerHeight()*1);  
+	$("#Credit").height( $("#Page").height() + $("#ToolBar").outerHeight()*1);
 }
 </script>
 
@@ -126,7 +126,7 @@ function resizeScroll() {
 	<div id="CreditInner">
 		<div id="CreditScroller">
 			<div id="CreditScrollerInner">
-				
+
 				<h1>Special Thanks Credit</h1>
 
 				<div class="section">
@@ -136,7 +136,7 @@ function resizeScroll() {
 						<li><a href="http://blog.clipdesign.jp/" target="_blank">Misuzu Nakamura</a> (<a href="http://twitter.com/mutsuking" target="_blank">clipdesign</a>)</li>
 					</ul>
 				</div>
-				
+
 				<div class="section">
 					<h2>Publishers</h2>
 					<ul>
@@ -172,11 +172,15 @@ function resizeScroll() {
 						<li>Hiroyuki Kuwamura (<a href="http://twitter.com/staff_yg" target="_blank">staff_yg</a>)</li>
 					</ul>
 					<ul>
+						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki Arima</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
+						<li><a href="http://motto-web.jp/" target="_blank">Goichi Maniwa</a> (<a href="http://twitter.com/goichi_m" target="_blank">goichi_m</a>)</li>
 						<!-- ここからテスター -->
 						<li><a href="http://www.arbalest.or.jp/" target="_blank">Masahiro Kawai</a> (<a href="http://twitter.com/m68k" target="_blank">m68k</a>)</li>
 						<li><a href=" http://www.yaoto.com/" target="_blank">Yasuhiro Konishi</a> (<a href="http://twitter.com/yaotosys" target="_blank">yaotosys</a>)</li>
 						<li><a href="http://www.mmpf-develop.com" target="_blank">Nobuyuki Sato</a> (<a href="http://twitter.com/mmpf_develop" target="_blank">mmpf_develop</a>)</li>
 						<li><a href="http://kototoy.jp/" target="_blank">Taku Fujita</a> (<a href="http://twitter.com/takufujita" target="_blank">takufujita</a>)</li>
+					</ul>
+					<ul>
 						<li><a href="http://aht-records.com" target="_blank">Ippei Suzuki</a> (<a href="http://twitter.com/aht_Record" target="_blank">aht_Record</a>)</li>
 					</ul>
 				</div>
@@ -199,11 +203,17 @@ function resizeScroll() {
 						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
 						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
 					</ul>
+					<ul>
+						<li>Masanori Matsumoto (<a href="http://twitter.com/mattun0313" target="_blank">mattun0313</a>)</li>
+					</ul>
 				</div>
 
 				<h1 style="margin-top:400px;">baserCMS Users Community</h1>
-				
+
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- template -->
+<!--<li><a href="http://publish" target="_blank">Name</a> (<a href="http://twitter.com/xxx" target="_blank">TwitterAcount</a>)</li>-->

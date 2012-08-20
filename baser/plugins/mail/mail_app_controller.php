@@ -20,13 +20,9 @@
 /**
  * Include files
  */
-App::import('Controller', 'Plugins');
 /**
  * メールプラグインコントローラー根底クラス
  *
  * @package			baser.plugins.mail
  */
-class MailAppController extends PluginsController {
-
-}
-?>
+class MailAppController extends BaserPluginAppController {}

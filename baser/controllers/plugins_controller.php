@@ -66,12 +66,13 @@ class PluginsController extends AppController {
  * @access public
  */
 	var $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('controller' => 'plugins', 'action' => 'index'))
+		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
 	);
 /**
  * コンテンツID
  *
  * @var int
+ * @deprecated BaserPluginAppController に移行
  */
 	var $contentId = null;
 /**
@@ -79,6 +80,7 @@ class PluginsController extends AppController {
  *
  * @return void
  * @access private
+ * @deprecated BaserPluginAppController に移行
  */
 	function beforeFilter() {
 
@@ -103,6 +105,7 @@ class PluginsController extends AppController {
  *
  * @return int $pluginNo
  * @access public
+ * @deprecated BaserPluginAppController に移行
  */
 	function getContentId() {
 
@@ -183,10 +186,18 @@ class PluginsController extends AppController {
 
 			// 設定ファイル読み込み
 			$title = $description = $author = $url = $adminLink = '';
-			$appConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config'.DS.'config.php';
-			$baserConfigPath = BASER_PLUGINS.$plugin.DS.'config'.DS.'config.php';
+			
+			// TODO 互換性のため古いパスも対応
+			$oldAppConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config'.DS.'config.php';
+			$appConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config.php';
+			if(!file_exists($appConfigPath)) {
+				$appConfigPath = $oldAppConfigPath;
+			}
+			$baserConfigPath = BASER_PLUGINS.$plugin.DS.'config.php';
 			if(file_exists($appConfigPath)) {
 				include $appConfigPath;
+			} elseif(file_exists($oldAppConfigPath)) {
+				include $oldAppConfigPath;
 			}elseif(file_exists($baserConfigPath)) {
 				include $baserConfigPath;
 			}
@@ -209,7 +220,7 @@ class PluginsController extends AppController {
 				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
 					$pluginData['Plugin']['version'] = $matches[1];
 					$pluginData['Plugin']['old_version'] = true;
-				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'],array('blog', 'feed', 'mail'))) {
+				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
 					$pluginData['Plugin']['update'] = true;
 				}
 				$registereds[] = $pluginData;
@@ -233,6 +244,7 @@ class PluginsController extends AppController {
 
 		// 表示設定
 		$this->set('datas',$datas);
+		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';
@@ -330,11 +342,22 @@ class PluginsController extends AppController {
 		
 		$name = urldecode($name);
 		if(!$this->data) {
-			if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'config.php')) {
-				include APP.'plugins'.DS.$name.DS.'config'.DS.'config.php';
-			}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'config.php')) {
-				include BASER_PLUGINS.$name.DS.'config'.DS.'config.php';
+			
+			// TODO 互換性のため古いパスも対応
+			$oldAppConfigPath = APP.DS.'plugins'.DS.$name.DS.'config'.DS.'config.php';
+			$appConfigPath = APP.DS.'plugins'.DS.$name.DS.'config.php';
+			if(!file_exists($appConfigPath)) {
+				$appConfigPath = $oldAppConfigPath;
 			}
+			$baserConfigPath = BASER_PLUGINS.$name.DS.'config.php';
+			if(file_exists($appConfigPath)) {
+				include $appConfigPath;
+			} elseif(file_exists($oldAppConfigPath)) {
+				include $oldAppConfigPath;
+			}elseif(file_exists($baserConfigPath)) {
+				include $baserConfigPath;
+			}
+
 			$this->data['Plugin']['name']=$name;
 			if(isset($title)) {
 				$this->data['Plugin']['title'] = $title;

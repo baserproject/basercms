@@ -46,7 +46,9 @@ $(window).load(function() {
 			<th class="col-head"><?php echo $bcForm->label('ThemeFile.name', 'ファイル名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 	<?php if($this->action != 'admin_view'): ?>
-				<?php echo $bcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> .<?php echo $bcForm->value('ThemeFile.ext') ?>
+				<?php echo $bcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> 
+				<?php if($bcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
+				<?php echo $bcForm->value('ThemeFile.ext') ?>
 				<?php echo $bcForm->input('ThemeFile.ext', array('type' => 'hidden')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('ThemeFile.name') ?>

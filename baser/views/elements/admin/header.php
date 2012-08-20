@@ -17,10 +17,15 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if(!empty($this->params['prefix'])) {
+	$loginUrl = $this->params['prefix'].'/users/login';
+} else {
+	$loginUrl = '/users/login';
+}
 ?>
 <div id="Header" class="clearfix">
 	<?php $bcBaser->element('toolbar') ?>
-<?php if($this->name == 'Installations' || $this->params['url']['url'] == 'admin/users/login' || $bcAdmin->isAdminGlobalmenuUsed()): ?>
+<?php if($this->name == 'Installations' || $this->params['url']['url'] == $loginUrl || $bcAdmin->isAdminGlobalmenuUsed()): ?>
 	<div class="clearfix" id="HeaderInner">
 	
 	<?php if(!empty($user)): ?>

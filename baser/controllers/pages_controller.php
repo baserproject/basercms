@@ -528,6 +528,8 @@ class PagesController extends AppController {
 					} else {
 						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
 					}
+				} else {
+					$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
 				}
 			}
 		}
@@ -642,13 +644,17 @@ class PagesController extends AppController {
 		} else {
 			$this->layoutPath = '';
 		}
+		
+		$this->preview = true;
 		$this->subDir = '';
 		$this->params['prefix'] = '';
 		$this->params['admin'] = '';
 		$this->params['controller'] = 'pages';
 		$this->params['action'] = 'display';
 		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
-		$this->crumbs = $this->_getCrumbs($this->params['url']['url']);
+		Configure::write('BcRequest.pureUrl', $this->params['url']['url']);
+		$this->here = $this->base.'/'.$this->params['url']['url'];
+		$this->crumbs = $this->_getCrumbs('/'.$this->params['url']['url']);
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);
@@ -1145,6 +1151,9 @@ class PagesController extends AppController {
 		$allowOwners = array();
 		if(!empty($user)) {
 			$allowOwners = array('', $user['User']['user_group_id']);
+		}
+		if(!isset($this->passedArgs['sortmode'])) {
+			$this->passedArgs['sortmode'] = false;
 		}
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('allowOwners', $allowOwners);

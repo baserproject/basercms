@@ -76,13 +76,6 @@ class BlogController extends BlogAppController {
  */
 	var $blogContent = array();
 /**
- * プレビューフラグ
- * 
- * @var boolean
- * @access public
- */
-	var $preview = false;
-/**
  * beforeFilter
  *
  * @return void
@@ -319,8 +312,12 @@ class BlogController extends BlogAppController {
 						$post['User'] = $author['User'];
 					}
 					
-					if(isset($this->data['BlogTag'])) {
-						$tags = $this->BlogPost->BlogTag->find('all', array('conditions' => $this->data['BlogTag']['BlogTag']));
+					
+					if(!empty($this->data['BlogTag']['BlogTag'])) {
+						$tags = $this->BlogPost->BlogTag->find('all', array(
+							'conditions'	=> array('BlogTag.id' => $this->data['BlogTag']['BlogTag']),
+							'recursive'	=> -1
+						));
 						if($tags) {
 							$tags = Set::extract('/BlogTag/.', $tags);
 							$post['BlogTag'] = $tags;
@@ -416,7 +413,11 @@ class BlogController extends BlogAppController {
 
 		if($this->BlogPost->BlogComment->add($this->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
 			
-			$this->_sendComment();
+			$this->_sendCommentAdmin($postId, $this->data);
+			// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
+			if(!$this->blogContent['BlogContent']['comment_approve']) {
+				$this->_sendCommentContributor($postId, $this->data);
+			}
 			if($this->blogContent['BlogContent']['comment_approve']) {
 				$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
 			}else {

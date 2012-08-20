@@ -228,9 +228,12 @@ class BaserAppView extends ThemeView {
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
 		// >>>
-		if(!$name && isset($this->params['prefix'])) {
-			$prefix = $this->params['prefix'];
-			if(preg_match('/^'.$prefix.'_/', $this->action)) {
+		if(!$name) {
+			$prefix = '';
+			if(isset($this->params['prefix'])) {
+				$prefix = $this->params['prefix'];
+			}
+			if($prefix && preg_match('/^'.$prefix.'_/', $this->action)) {
 				$name = str_replace($prefix.'_','',$this->action);
 			} elseif(preg_match('/^admin_/', $this->action)) {
 				// プレフィックスをadminとしてすり替え
