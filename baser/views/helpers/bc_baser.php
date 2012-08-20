@@ -120,15 +120,20 @@ class BcBaserHelper extends AppHelper {
 			}else {
 				$this->PageCategory = ClassRegistry::init('PageCategory');
 			}
-
+		}
+		
+		if(BC_INSTALLED) {
 			if(isset($this->_view->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_view->viewVars['siteConfig'];
 			}
-
+		}
+		
+		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 			// プラグインのBaserヘルパを初期化
 			$this->_initPluginBasers();
 
 		}
+		
 
 	}
 /**

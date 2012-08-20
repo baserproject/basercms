@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $publishTheme = $bcBaser->BcHtml->themeWeb;
-if($this->name != 'Installations' && !BC_IS_UPDATER) {
+if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	$bcBaser->BcHtml->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
 	$bcBaser->Javascript->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
 }
