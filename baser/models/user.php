@@ -197,7 +197,7 @@ class User extends AppModel {
 		$list = array();
 		if ($users) {
 			// 苗字が同じ場合にわかりにくいので、foreachで生成
-			//$this->set('users',Set::combine($users, '{n}.User.id', '{n}.User.real_name_1'));
+			//$this->set('users',Set::combine($users, "{n}.{$this->alias}.id", "{n}.{$this->alias}.real_name_1"));
 			foreach($users as $key => $user) {
 				if($user[$this->alias]['real_name_2']) {
 					$name = $user[$this->alias]['real_name_1']." ".$user[$this->alias]['real_name_2'];
@@ -218,7 +218,7 @@ class User extends AppModel {
  */
 	function getDefaultValue() {
 
-		$data['User']['user_group_id'] = 1;
+		$data[$this->alias]['user_group_id'] = 1;
 		return $data;
 
 	}
@@ -232,8 +232,8 @@ class User extends AppModel {
  */
 	function afterFind($results, $primary = false) {
 
-		if(isset($results[0]['User'][0])) {
-			$results[0]['User'] = $this->convertResults($results[0]['User']);
+		if(isset($results[0][$this->alias][0])) {
+			$results[0][$this->alias] = $this->convertResults($results[0][$this->alias]);
 		}else {
 			$results = $this->convertResults($results);
 		}
@@ -251,11 +251,11 @@ class User extends AppModel {
 	function convertResults($results) {
 
 		if($results) {
-			if(isset($result['User'])||isset($results[0]['User'])) {
+			if(isset($result[$this->alias])||isset($results[0][$this->alias])) {
 				foreach($results as $key => $result) {
-					if(isset($result['User'])) {
-						if($result['User']) {
-							$results[$key]['User'] = $this->convertToView($result['User']);
+					if(isset($result[$this->alias])) {
+						if($result[$this->alias]) {
+							$results[$key][$this->alias] = $this->convertToView($result[$this->alias]);
 						}
 					}elseif(!empty($result)) {
 						$results[$key] = $this->convertToView($result);
@@ -289,7 +289,7 @@ class User extends AppModel {
 	function getAuthPrefix($userName) {
 
 		$user = $this->find('first', array(
-			'conditions'	=> array('User.name'=>$userName),
+			'conditions'	=> array("{$this->alias}.name"=>$userName),
 			'recursive'		=> 1
 		));
 
@@ -300,10 +300,16 @@ class User extends AppModel {
 		}
 
 	}
+/**
+ * afterSave
+ * 
+ * @param boolean $created 
+ * @access public
+ */
 	function afterSave($created) {
 		parent::afterSave($created);
 		if($created) {
-			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data['User']['user_group_id']));
+			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data[$this->alias]['user_group_id']));
 			if($defaultFavorites) {
 				$defaultFavorites = unserialize($defaultFavorites);
 				if($defaultFavorites) {
@@ -319,4 +325,3 @@ class User extends AppModel {
 		}
 	}
 }
-?>
