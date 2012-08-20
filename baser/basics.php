@@ -65,9 +65,6 @@
 				$baseUrl = preg_replace("/index$/", '', $requestUri);
 			}
 		}
-		if(!$baseUrl){
-			$baseUrl = '/';
-		}
 		return $baseUrl;
 
 	}

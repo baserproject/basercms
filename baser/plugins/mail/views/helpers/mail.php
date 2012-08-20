@@ -99,8 +99,10 @@ class MailHelper extends AppHelper {
 			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'layouts'.DS;
-		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS,
-													BASER_VIEWS.'layouts'.DS));
+		$templatesPathes = am($templatesPathes,array(
+			BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS,
+			BASER_VIEWS.'layouts'.DS
+		));
 		
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
@@ -115,9 +117,11 @@ class MailHelper extends AppHelper {
 				}
 			}
 		}
+		
+		$_templates = array_unique($_templates);
 		$templates = array();
+		$ext = Configure::read('BcApp.templateExt');
 		foreach($_templates as $template){
-			$ext = Configure::read('BcApp.templateExt');
 			if($template != 'installations'.$ext){
 				$template = basename($template, $ext);
 				$templates[$template] = $template;
@@ -155,9 +159,12 @@ class MailHelper extends AppHelper {
 				}
 			}
 		}
+		
+		$excludes = Configure::read('BcAgent');
+		$excludes = Set::extract('{.+?}.prefix', $excludes);
 		$templates = array();
 		foreach($_templates as $template){
-			if($template != 'mobile'){
+			if(!in_array($template, $excludes)){
 				$templates[$template] = $template;
 			}
 		}
@@ -193,6 +200,7 @@ class MailHelper extends AppHelper {
 				}
 			}
 		}
+		
 		$templates = array();
 		foreach($_templates as $template){
 			$ext = Configure::read('BcApp.templateExt');

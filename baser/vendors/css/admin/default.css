@@ -193,12 +193,9 @@ input[type=button] {
 input[type=text], textarea, input[type=password] {
 	font-size: 1.4em;
 	padding: 3px 3px;
-<<<<<<< HEAD
-=======
 }
 input[type=text], input[type=password] {
 	height:1.4em;
->>>>>>> fe385ebcf90c3b6dc209518aa0c549e9e9779678
 }
 select {
 	font-size: 1.2em;

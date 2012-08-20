@@ -237,10 +237,6 @@ class UpdatersController extends AppController {
 					$this->setMessage('アップデート処理が途中で失敗しました。', true);
 				}
 			}
-<<<<<<< HEAD
-			clearAllCache();
-			$this->setMessage('全てのアップデート処理が完了しました。プラグインは全て無効化されていますので、プラグイン管理より有効化してください。', true, true, true);
-=======
 			
 			// プラグインを有効化
 			foreach($enabledPluginIds as $pluginId) {
@@ -254,7 +250,6 @@ class UpdatersController extends AppController {
 			clearAllCache();
 			
 			$this->setMessage('全てのアップデート処理が完了しました。', true, true, true);
->>>>>>> fe385ebcf90c3b6dc209518aa0c549e9e9779678
 			$this->Session->setFlash($this->_getUpadteMessage());
 			$this->_writeUpdateLog();
 			$this->redirect(array('action' => 'index'));
