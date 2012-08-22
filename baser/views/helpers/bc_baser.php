@@ -640,10 +640,11 @@ class BcBaserHelper extends AppHelper {
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
-		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
-			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		
+		if(isset($authPrefixes['toolbar'])) {
+			$toolbar = $authPrefixes['toolbar'];
 		}
-
+		
 		// ツールバー設定
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->BcHtml->themeWeb;
@@ -666,8 +667,8 @@ class BcBaserHelper extends AppHelper {
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
-		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
-			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		if(isset($authPrefixes['toolbar'])) {
+			$toolbar = $authPrefixes['toolbar'];
 		}
 		
 		// ツールバー表示

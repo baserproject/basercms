@@ -94,14 +94,12 @@ class  BcAuthConfigureComponent extends Object {
 		$auth->userModel = $userModel;
 		
 		// 認証プレフィックス
-		if(!empty($config['auth_prefix'])) {
+		if(!empty($config['auth_prefix']) && !isset($userScope)) {
 			$auth->userScope = array('UserGroup.auth_prefix' => $config['auth_prefix']);
-		}
-		
-		// スコープ
-		if($userScope) {
+		} elseif(isset($userScope)) {
 			$auth->userScope = $userScope;
 		}
+		
 		// セッション識別
 		$auth->sessionKey = 'Auth.'.$userModel;
 		// ログインアクション
