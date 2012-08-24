@@ -48,7 +48,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 /**
  * 名前付きパラメータを追加 
  */
-	Router::connectNamed(array('sortmode','num'));
+	Router::connectNamed(array('sortmode','num','page','sort','direction'));
 
 /**
  * プラグイン判定 ＆ プラグイン名の書き換え
