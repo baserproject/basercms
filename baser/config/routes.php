@@ -46,6 +46,11 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 		$pluginMatch = array('plugin' => implode('|', $plugins));
 	}
 /**
+ * 名前付きパラメータを追加 
+ */
+	Router::connectNamed(array('sortmode','num'));
+
+/**
  * プラグイン判定 ＆ プラグイン名の書き換え
  * 
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
