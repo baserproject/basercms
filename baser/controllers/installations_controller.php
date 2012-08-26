@@ -578,20 +578,9 @@ class InstallationsController extends AppController {
 	function _constructionDb($nonDemoData = false) {
 
 		$dbConfig = $this->_readDbSettingFromSession();
-		if(!$this->BcManager->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionDb($dbConfig, $nonDemoData)) {
 			return false;
 		}
-		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
-		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
-		}
-		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
-		}
-		if(!$this->BcManager->constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
-		}
-
 		return true;
 
 	}
@@ -975,50 +964,17 @@ class InstallationsController extends AppController {
 
 		if(!empty($this->data['Installation']['reset'])) {
 
-			$messages = array();
-			if(!$this->writeSmartUrl(false)){
-				$messages[] = 'スマートURLの設定を正常に初期化できませんでした。';
+			$dbConfig = $this->_readDbSettingFromSession();
+			if(!$dbConfig) {
+				$dbConfig = getDbConfig('baser');
 			}
 			
-			$this->deleteAllTables();
-			if(file_exists(CONFIGS.'database.php')) {
-				// データベースのデータを削除
-				unlink(CONFIGS.'database.php');
-			}
-			if(file_exists(CONFIGS.'install.php')) {
-				unlink(CONFIGS.'install.php');
+			if(!$this->BcManager->reset($dbConfig)) {
+				$message = 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。';
+			} else {
+				$message = 'baserCMSを初期化しました。';
 			}
 			
-			$themeFolder = new Folder(WWW_ROOT.'themed');
-			$themeFiles = $themeFolder->read(true,true,true);
-			foreach($themeFiles[0] as $theme){
-				$pagesFolder = new Folder($theme.DS.'pages');
-				$pathes = $pagesFolder->read(true,true,true);
-				foreach($pathes[0] as $path){
-					if(basename($path) != 'admin') {
-						$folder = new Folder();
-						$folder->delete($path);
-						$folder = null;
-					}
-				}
-				foreach($pathes[1] as $path){
-					if(basename($path) != 'empty') {
-						unlink($path);
-					}
-				}
-				$pagesFolder = null;
-			}
-			$themeFolder = null;
-
-			if($messages) {
-				$messages[] = '手動でサーバー上より上記ファイルを削除して初期化を完了させてください。';
-			}
-
-			$messages = am(array('baserCMSを初期化しました。',''),$messages);
-
-			$message = implode('<br />', $messages);
-			ClassRegistry::flush();
-			clearAllCache();
 			$this->Session->setFlash($message);
 			
 			// スマートURLオンの際、アクション名でリダイレクトを指定した場合、
@@ -1046,20 +1002,11 @@ class InstallationsController extends AppController {
  */
 	function deleteAllTables() {
 		
-		$baserConfig = $this->_readDbSettingFromSession();
-		if(!$baserConfig) {
-			$baserConfig = getDbConfig('baser');
-			$pluginConfig = getDbConfig('plugin');
-		} else {
-			$pluginConfig = $baserConfig;
-			$pluginConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
+		$dbConfig = $this->_readDbSettingFromSession();
+		if(!$dbConfig) {
+			$dbConfig = getDbConfig();
 		}
-		if($baserConfig) {
-			$this->BcManager->deleteTables('baser', $baserConfig);
-		}
-		if($pluginConfig) {
-			$this->BcManager->deleteTables('plugin', $pluginConfig);
-		}
+		$this->BcManager->deleteAllTables($dbConfig);
 		
 	}
 	
