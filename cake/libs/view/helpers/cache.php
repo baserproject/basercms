@@ -6,12 +6,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
@@ -54,6 +54,13 @@ class CacheHelper extends AppHelper {
  * @access public
  */
 	var $cacheAction;
+/**
+ * Counter used for counting nocache section tags.
+ *
+ * @var integer
+ */
+	var $_counter = 0;
+
 /**
  * Main method used to cache a view
  *
@@ -134,10 +141,13 @@ class CacheHelper extends AppHelper {
 		}
 
 		if ($cacheTime != '' && $cacheTime > 0) {
+			$out = preg_replace_callback('/<cake\:nocache>/', array($this, '_replaceSection'), $out);
+
 			$this->__parseFile($file, $out);
 			if ($cache === true) {
 				$cached = $this->__parseOutput($out);
 				$this->__writeFile($cached, $cacheTime, $useCallbacks);
+				$out = $this->_stripTags($out);
 			}
 			return $out;
 		} else {
@@ -157,7 +167,8 @@ class CacheHelper extends AppHelper {
 		} elseif ($file = fileExistsInPath($file)) {
 			$file = file_get_contents($file);
 		}
-		preg_match_all('/(<cake:nocache>(?<=<cake:nocache>)[\\s\\S]*?(?=<\/cake:nocache>)<\/cake:nocache>)/i', $cache, $outputResult, PREG_PATTERN_ORDER);
+
+		preg_match_all('/(<cake:nocache:\d{3}>(?<=<cake:nocache:\d{3}>)[\\s\\S]*?(?=<\/cake:nocache>)<\/cake:nocache>)/i', $cache, $outputResult, PREG_PATTERN_ORDER);
 		preg_match_all('/(?<=<cake:nocache>)([\\s\\S]*?)(?=<\/cake:nocache>)/i', $file, $fileResult, PREG_PATTERN_ORDER);
 		$fileResult = $fileResult[0];
 		$outputResult = $outputResult[0];
@@ -183,6 +194,30 @@ class CacheHelper extends AppHelper {
 			}
 		}
 	}
+/**
+ * Munges the output from a view with cache tags, and numbers the sections.
+ * This helps solve issues with empty/duplicate content.
+ *
+ * @param string $content The content to munge.
+ * @return string The content with cake:nocache tags replaced.
+ */
+	function _replaceSection($matches) {
+		$this->_counter += 1;
+		return sprintf('<cake:nocache:%03d>', $this->_counter);
+	}
+
+/**
+ * Strip cake:nocache tags from a string. Since View::render()
+ * only removes un-numbered nocache tags, remove all the numbered ones.
+ * This is the complement to _replaceSection.
+ *
+ * @param string $content String to remove tags from.
+ * @return string String with tags removed.
+ */
+	function _stripTags($content) {
+		return preg_replace('#<\/?cake\:nocache(\:\d{3})?>#', '', $content);
+	}
+
 /**
  * Parse the output and replace cache tags
  *
@@ -273,7 +308,8 @@ class CacheHelper extends AppHelper {
 				$controller->constructClasses();
 				$controller->Component->initialize($controller);
 				$controller->beforeFilter();
-				$controller->Component->startup($controller);';
+				$controller->Component->startup($controller);
+				$this->params = $controller->params;';
 		}
 
 		$file .= '

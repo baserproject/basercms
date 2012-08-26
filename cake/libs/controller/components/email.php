@@ -8,12 +8,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.controller.components
@@ -649,14 +649,15 @@ class EmailComponent extends Object{
  * @access private
  */
 	function __formatAddress($string, $smtp = false) {
-		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
+		$hasAlias = preg_match('/((.*))?\s?<(.+)>/', $string, $matches);
 		if ($smtp && $hasAlias) {
 			return $this->__strip('<' .  $matches[3] . '>');
 		} elseif ($smtp) {
 			return $this->__strip('<' . $string . '>');
 		}
+
 		if ($hasAlias && !empty($matches[2])) {
-			return $this->__strip($matches[2] . ' <' . $matches[3] . '>');
+			return $this->__encode($matches[2]) . $this->__strip(' <' . $matches[3] . '>');
 		}
 		return $this->__strip($string);
 	}

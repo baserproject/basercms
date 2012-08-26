@@ -11,12 +11,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -117,13 +117,6 @@ class CakeSession extends Object {
  */
 	var $id = null;
 /**
- * Session Started
- *
- * @var boolean
- * @access protected
- */
-	var $_started = false;
-/**
  * Hostname
  *
  * @var string
@@ -188,7 +181,7 @@ class CakeSession extends Object {
 			session_write_close();
 		}
 		$this->__initSession();
-		$this->_started = $this->__startSession();
+		$this->__startSession();
 		return $this->started();
 	}
 /**
@@ -198,7 +191,7 @@ class CakeSession extends Object {
  * @return boolean True if session has been started.
  */
 	function started() {
-		if (isset($_SESSION) && $this->_started) {
+		if (isset($_SESSION) && session_id()) {
 			return true;
 		}
 		return false;
@@ -792,6 +785,6 @@ class CakeSession extends Object {
 		$table = $db->fullTableName(Configure::read('Session.table'));
 		$db->execute("DELETE FROM " . $db->name($table) . " WHERE " . $db->name($table.'.expires') . " < ". $db->value(time()));
 		return true;
-	 }
+	}
 }
 ?>

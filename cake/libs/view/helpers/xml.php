@@ -6,12 +6,12 @@
  * Simplifies the output of XML documents.
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
@@ -39,6 +39,9 @@ class XmlHelper extends AppHelper {
  * @var string
  */
 	var $encoding = 'UTF-8';
+
+	var $Xml;
+	var $XmlElement;
 /**
  * Constructor
  * @return void
@@ -127,7 +130,7 @@ class XmlHelper extends AppHelper {
 		$out = $elem->toString(array('cdata' => $cdata, 'leaveOpen' => !$endTag));
 
 		if (!$endTag) {
-			$this->Xml =& $elem;
+			$this->XmlElement =& $elem;
 		}
 		return $this->output($out);
 	}
@@ -137,9 +140,10 @@ class XmlHelper extends AppHelper {
  * @return string
  */
 	function closeElem() {
-		$name = $this->Xml->name();
-		if ($parent =& $this->Xml->parent()) {
-			$this->Xml =& $parent;
+		$elem = (empty($this->XmlElement)) ? $this->Xml : $this->XmlElement;
+		$name = $elem->name();
+		if ($parent =& $elem->parent()) {
+			$this->XmlElement =& $parent;
 		}
 		return $this->output('</' . $name . '>');
 	}
