@@ -40,9 +40,9 @@ class BcManagerComponent extends Object {
 /**
  * データベースを構築する
  * 
- * @param type $dbConfig
- * @param type $nonDemoData
- * @return type
+ * @param array $dbConfig
+ * @param boolean $nonDemoData
+ * @return boolean
  * @access public
  */
 	function constructionDb($dbConfig = null, $nonDemoData = false) {
@@ -50,14 +50,13 @@ class BcManagerComponent extends Object {
 		if(!$this->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
 			return false;
 		}
-		if(!$this->constructionTable(BASER_PLUGINS.'blog'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
-		}
-		if(!$this->constructionTable(BASER_PLUGINS.'feed'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
-		}
-		if(!$this->constructionTable(BASER_PLUGINS.'mail'.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
-			return false;
+
+		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach($corePlugins as $corePlugin) {
+			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+				return false;
+			}
 		}
 		return true;
 
@@ -134,14 +133,21 @@ class BcManagerComponent extends Object {
 /**
  * 全てのテーブルを削除する
  * 
- * @param type $dbConfig 
- * @return void
+ * @param array $dbConfig 
+ * @return boolean
  * @access public
  */
 	function deleteAllTables($dbConfig = null) {
 		
-		$this->deleteTables('baser', $dbConfig);
-		$this->deleteTables('plugin', $dbConfig);
+		$result = true;
+		if(!$this->deleteTables('baser', $dbConfig)) {
+			$result = false;
+		}
+		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
+		if(!$this->deleteTables('plugin', $dbConfig)) {
+			$result = false;
+		}
+		return $result;
 		
 	}
 /**
