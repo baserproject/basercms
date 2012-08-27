@@ -48,7 +48,7 @@ class BcManagerComponent extends Object {
 				
 			}
 			$Folder = new Folder();
-			if(!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 0777)){
+			if(!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 00777)){
 				$this->log('データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。');
 				$result = false;
 			}
@@ -503,7 +503,7 @@ class BcManagerComponent extends Object {
 			return false;
 		} elseif($driver == 'csv') {
 			// CSVの場合はフォルダを作成する
-			$folder = new Folder($db->config['database'], true, 0777);
+			$folder = new Folder($db->config['database'], true, 00777);
 		} elseif($driver == 'sqlite3') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
@@ -688,8 +688,8 @@ class BcManagerComponent extends Object {
 			$targetPath = WWW_ROOT.'themed'.DS.$theme;
 			$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
 			$Folder->delete($targetPath);
-			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
-				if(!$Folder->create($targetPath.DS.'pages',0777)) {
+			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>00777,'skip'=>array('_notes')))) {
+				if(!$Folder->create($targetPath.DS.'pages',00777)) {
 					$result = false;
 				}
 			} else {
@@ -964,5 +964,63 @@ class BcManagerComponent extends Object {
 		return $return;
 
 	}
-	
+/**
+ * 環境チェック
+ * 
+ * @return array 
+ */
+	function checkEnv() {
+		
+		if(function_exists('apache_get_modules')) {
+			$rewriteInstalled = in_array('mod_rewrite', apache_get_modules());
+		}else {
+			$rewriteInstalled = -1;
+		}
+		
+		$status = array(
+			'encoding'		=> mb_internal_encoding(),
+			'phpVersion'	=> phpversion(),
+			'phpMemory'		=> intval(ini_get('memory_limit')),
+			'safeModeOff'	=> !ini_get('safe_mode'),
+			'configDirWritable'	=> is_writable(CONFIGS),
+			'coreFileWritable'	=> is_writable(CONFIGS.'core.php'),
+			'themeDirWritable'	=> is_writable(WWW_ROOT.'themed'),
+			'tmpDirWritable'	=> is_writable(TMP),
+			'dbDirWritable'		=> is_writable(APP.'db'),
+			'phpActualVersion'	=> preg_replace('/[a-z-]/','', phpversion()),
+			'phpGd'				=> extension_loaded('gd'),
+			'phpPdo'			=> extension_loaded('pdo'),
+			'apacheRewrite'		=> $rewriteInstalled
+		);
+		
+		$check = array(
+			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
+			'phpVersionOk'	=> version_compare ( preg_replace('/[a-z-]/','', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
+			'phpMemoryOk'	=> ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === TRUE)
+		);
+		
+		if(!$status['coreFileWritable']) {
+			chmod(CONFIGS.'core.php', 0666);
+			$status['coreFileWritable'] = is_writable(CONFIGS.'core.php');
+		}
+		if(!$status['configDirWritable']) {
+			chmod(CONFIGS, 0777);
+			$status['configDirWritable'] = is_writable(CONFIGS);
+		}
+		if(!$status['themeDirWritable']) {
+			chmod(WWW_ROOT.'themed', 0777);
+			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
+		}
+		if(!$status['tmpDirWritable']) {
+			chmod(TMP, 0777);
+			$status['tmpDirWritable'] = is_writable(TMP);
+		}
+		if(!$status['dbDirWritable']) {
+			chmod(APP.'db', 0777);
+			$status['dbDirWritable'] = is_writable(APP.'db');
+		}
+		
+		return $status + $check;
+
+	}
 }

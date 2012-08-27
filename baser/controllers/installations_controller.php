@@ -22,14 +22,6 @@
  * Include files
  */
 /**
- * インストール条件
- * 
- *  @global string PHP_MINIMUM_VERSION
- *  @global integer PHP_MINIMUM_MEMORY_LIMIT in MB
- */
-define("PHP_MINIMUM_VERSION","4.3.0");
-define("PHP_MINIMUM_MEMORY_LIMIT", 32);
-/**
  * インストーラーコントローラー
  */
 class InstallationsController extends AppController {
@@ -187,45 +179,15 @@ class InstallationsController extends AppController {
 			$this->redirect('step3');
 		}
 
-		// 文字コードチェック
-		$encoding = mb_internal_encoding();
-		$encodingOk = (eregi('UTF-8',$encoding) ?true : false);
-		// PHPバージョンチェック
-		$phpVersionOk= version_compare ( preg_replace('/[a-z-]/','', phpversion()),PHP_MINIMUM_VERSION,'>=');
-		// PHP memory limit チェック
-		$phpCurrentMemoryLimit = intval(ini_get('memory_limit'));
-		$phpMemoryOk = ((($phpCurrentMemoryLimit >= PHP_MINIMUM_MEMORY_LIMIT) || $phpCurrentMemoryLimit == -1) === TRUE);
-		// セーフモード
-		$safeModeOff = !ini_get('safe_mode');
-		// configs 書き込み権限
-		$configDirWritable = is_writable(CONFIGS);
-		// core.phpの書き込み権限
-		$coreFileWritable = is_writable(CONFIGS.'core.php');
-		// DEMO用のページディレクトリの書き込み権限
-		$themeDirWritable = is_writable(WWW_ROOT.'themed');
-		// 一時フォルダの書き込み権限
-		$tmpDirWritable = is_writable(TMP);
-		// SQLiteディレクトリ書き込み権限
-		$dbDirWritable = is_writable(APP.'db');
+		$checkResult = $this->BcManager->checkEnv();
 
 		/* ダミーのデータベース設定ファイルを保存 */
 		$this->BcManager->createDatabaseConfig();
 
-		/* viewに変数をセット */
-		$this->set('encoding', $encoding);
-		$this->set('encodingOk', $encodingOk);
-		$this->set('phpVersionOk', $phpVersionOk);
-		$this->set('phpActualVersion', preg_replace('/[a-z-]/','', phpversion()));
-		$this->set('phpMinimumVersion', PHP_MINIMUM_VERSION);
-		$this->set('phpMinimumMemoryLimit', PHP_MINIMUM_MEMORY_LIMIT);
-		$this->set('phpCurrentMemoryLimit', $phpCurrentMemoryLimit);
-		$this->set('phpMemoryOk', $phpMemoryOk);
-		$this->set('configDirWritable', $configDirWritable);
-		$this->set('coreFileWritable',$coreFileWritable);
-		$this->set('safeModeOff', $safeModeOff);
-		$this->set('dbDirWritable',$dbDirWritable);
-		$this->set('tmpDirWritable',$tmpDirWritable);
-		$this->set('themeDirWritable',$themeDirWritable);
+		$this->set($checkResult);
+		
+		extract($checkResult);
+		
 		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 

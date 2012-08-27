@@ -49,7 +49,7 @@ $(function(){
 		<div class="panel-box corner10">
 			<ul class="section">
 				<li class='<?php if ($phpVersionOk) echo 'check'; else echo 'failed'; ?>'>
-					PHPのバージョン >= <?php echo $phpMinimumVersion; ?>
+					PHPのバージョン >= <?php echo Configure::read('BcRequire.phpVersion'); ?>
 					<div class="check-result">現在のPHPバージョン： <?php echo $phpActualVersion; ?>
 						<?php if (!$phpVersionOk): ?>
 						<br />
@@ -149,15 +149,15 @@ $(function(){
 
 		<div class="panel-box corner10">
 			<h3>PHPのメモリ</h3>
-			<div class="section">PHPのメモリが <?php echo $phpMinimumMemoryLimit . " MB"; ?> より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。<br />
+			<div class="section">PHPのメモリが <?php echo Configure::read('BcRequire.phpMemory') . " MB"; ?> より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。<br />
 				<small>サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあります。その場合、サーバー業者等へサーバースペックを直接確認してください。</small> </div>
 			<ul class="section">
 				<li class='<?php if ($phpMemoryOk) echo 'check'; else echo 'failed'; ?>'>
-					PHPのメモリ上限 >= <?php echo $phpMinimumMemoryLimit . " MB"; ?>
-					<div class="check-result">現在のPHPのメモリ上限： <?php echo '&nbsp;'.$phpCurrentMemoryLimit . " MB"; ?>
+					PHPのメモリ上限 >= <?php echo Configure::read('BcRequire.phpMemory') . " MB"; ?>
+					<div class="check-result">現在のPHPのメモリ上限： <?php echo '&nbsp;'.$phpMemory . " MB"; ?>
 						<?php if (!$phpMemoryOk): ?>
 						<br />
-						<small>php.iniの設定変更が可能であれば、memory_limit の値を<?php echo $phpMinimumMemoryLimit . " MB"; ?>以上に設定してください</small>
+						<small>php.iniの設定変更が可能であれば、memory_limit の値を<?php echo Configure::read('BcRequire.phpMemory') . " MB"; ?>以上に設定してください</small>
 						<?php endif ?>
 					</div>
 				</li>

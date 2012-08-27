@@ -29,6 +29,7 @@
 	App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
 	App::import('Behavior', 'BcCache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'bc_cache.php'));
 	App::import('Core', 'ClassRegistry');
+	App::import('Core', 'Multibyte');
 /**
  * Baserパス追加
  */

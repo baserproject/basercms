@@ -48,6 +48,105 @@ class BcManagerShell extends BcAppShell {
 		}
 	}
 /**
+ * reset 
+ * 
+ * cake bc_manager reset
+ */
+	function reset() {
+		if(!$this->_reset()) {
+			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
+		}
+	}
+/**
+ * 再インストール
+ * 
+ * コマンドはインストールと同じ
+ */
+	function reinstall() {
+		
+		$result = true;
+		if(!$this->_reset()) {
+			$result = false;
+		}
+		if(!$this->_install()) {
+			$result = false;
+		}
+		if(!$result) {
+			$this->err("baserCMSの再インストールに失敗しました。ログファイルを確認してください。");
+		}
+		
+	}
+/**
+ * 環境チェック
+ * 
+ * cake bc_manager checkenv
+ */
+	function checkenv() {
+		
+		$checkResult = $this->BcManager->checkEnv();
+		$this->out('基本必須条件');
+		$this->hr();
+		$this->out('* PHP mbstring ('.$checkResult['encoding'].')：'.(($checkResult['encodingOk']) ? 'OK' : 'NG'));
+		if(!$checkResult['encodingOk']) {
+			$this->out('　mbstring.internal_encoding を UTF-8 に設定してください。');
+		}
+		$this->out('* PHP Version ('.$checkResult['phpVersion'].')：'.(($checkResult['phpVersionOk']) ? 'OK' : 'NG'));
+		if(!$checkResult['phpVersionOk']) {
+			$this->out('　古いバージョンのPHPです。動作保証はありません。');
+		}
+		$this->out('* PHP Memory Limit ('.$checkResult['phpMemory'].'MB)：'.(($checkResult['phpMemoryOk']) ? 'OK' : 'NG'));
+		if(!$checkResult['phpMemoryOk']) {
+			$this->out('　memoty_limit の設定値を '.Configure::read('BcRequire.phpMemory').'MB 以上に変更してください。');
+		}
+		$this->out('* Writable /app/config/ ('.(($checkResult['configDirWritable']) ? 'True' : 'False').')：'.(($checkResult['configDirWritable']) ? 'OK' : 'NG'));
+		if(!$checkResult['configDirWritable']) {
+			$this->out('　/app/config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+		}
+		$this->out('* Writable /app/config/config.php ('.(($checkResult['coreFileWritable']) ? 'True' : 'False').')：'.(($checkResult['coreFileWritable']) ? 'OK' : 'NG'));
+		if(!$checkResult['coreFileWritable']) {
+			$this->out('　/app/config/core.php に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+		}
+		$this->out('* Writable /app/webroot/themed/ ('.(($checkResult['themeDirWritable']) ? 'True' : 'False').')：'.(($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
+		if(!$checkResult['themeDirWritable']) {
+			$this->out('　/app/webroot/themed/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+		}
+		
+		$this->hr();
+		$this->out('オプション');
+		$this->hr();
+
+		$this->out('* PHP Safe Mode ('.(!($checkResult['safeModeOff']) ? 'On' : 'Off').')');
+		if(!$checkResult['safeModeOff']) {
+			$this->out('　Safe Mode が On の場合、動作保証はありません。');
+		}
+		$this->out('* PHP GD ('.(($checkResult['phpGd']) ? 'True' : 'False').')');
+		if(!$checkResult['phpGd']) {
+			$this->out('　PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。');
+		}
+		$this->out('* PHP PDO ('.(($checkResult['phpPdo']) ? 'True' : 'False').')');
+		if(!$checkResult['phpPdo']) {
+			$this->out('　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite3 は利用できません。');
+		}
+		$this->out('* Writable /app/db/ ('.(($checkResult['dbDirWritable']) ? 'True' : 'False').')');
+		if(!$checkResult['dbDirWritable']) {
+			$this->out('　/app/db/ に書き込み権限を与える事ができませんでした。');
+			$this->out('　SQLite3 や CSV など、ファイルベースのデータベースを利用するには、');
+			$this->out('　手動で書き込み権限を与えてください。');
+		}
+		if($checkResult['apacheRewrite']) {
+			$apacheRewrite = 'True';
+		}elseif($checkResult['apacheRewrite'] == -1) {
+			$apacheRewrite = '不明';
+		} else {
+			$apacheRewrite = 'False';
+		}
+		$this->out('* Apache Rewrite ('.$apacheRewrite.')');
+		if($checkResult['apacheRewrite'] > 0) {
+			$this->out('　Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。');
+		}
+		$this->hr();
+	}
+/**
  * インストール 
  */
 	function _install() {
@@ -171,40 +270,11 @@ class BcManagerShell extends BcAppShell {
 	}
 /**
  * reset 
- * 
- * cake bc_manager reset
- */
-	function reset() {
-		if(!$this->_reset()) {
-			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
-		}
-	}
-/**
- * reset 
  */
 	function _reset() {
 		
 		$dbConfig = getDbConfig();
 		return $this->BcManager->reset($dbConfig);
-		
-	}
-/**
- * 再インストール
- * 
- * コマンドはインストールと同じ
- */
-	function reinstall() {
-		
-		$result = true;
-		if(!$this->_reset()) {
-			$result = false;
-		}
-		if(!$this->_install()) {
-			$result = false;
-		}
-		if(!$result) {
-			$this->err("baserCMSの再インストールに失敗しました。ログファイルを確認してください。");
-		}
 		
 	}
 	
