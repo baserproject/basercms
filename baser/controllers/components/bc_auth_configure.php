@@ -69,7 +69,7 @@ class  BcAuthConfigureComponent extends Object {
 			'username'		=> 'name',
 			'password'		=> 'password',
 			'serial'		=> '',
-			'userScope'		=> '',
+			'userScope'		=> null,
 			'loginAction'	=> ''
 		);
 		$config = array_merge($_config, $config);
