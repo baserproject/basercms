@@ -20,7 +20,9 @@
 /**
  * Include files
  */
-App::import('Core', 'Error');
+if(!class_exists('ErrorHandler')) {
+	App::import('Core', 'Error');
+}
 /**
  * ErrorHandler 拡張クラス
  * @package baser

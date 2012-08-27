@@ -19,6 +19,429 @@
  */
 class BcManagerComponent extends Object {
 /**
+ * baserCMSのインストール
+ * 
+ * @param type $dbConfig
+ * @param type $adminUser
+ * @param type $adminPassword
+ * @param type $adminEmail
+ * @return boolean 
+ */
+	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '') {
+		
+		$result = true;
+		
+		// キャッシュ削除
+		clearAllCache();
+		
+		// 一時フォルダ作成
+		checkTmpFolders();
+		
+		if($dbConfig['driver'] == 'sqlite3' || $dbConfig['driver'] == 'csv') {
+			switch($dbConfig['driver']) {
+				case 'sqlite3':
+					$dbFolderPath = APP.'db'.DS.'sqlite';
+					break;
+				case 'csv':
+					$dbFolderPath = APP.'db'.DS.'csv';
+					break;
+				
+			}
+			$Folder = new Folder();
+			if(!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 0777)){
+				$this->log('データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。');
+				$result = false;
+			}
+		}
+		
+		// SecritySaltの設定
+		$securitySalt = $this->setSecuritySalt();
+
+		// インストールファイル作成
+		if(!$this->createInstallFile($securitySalt, $siteUrl)) {
+			$this->log('インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
+			$result = false;
+		}
+		
+		// データベース設定ファイル生成
+		if(!$this->createDatabaseConfig($dbConfig)) {
+			$this->log('データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
+			$result = false;
+		}
+		
+		// データベース初期化
+		if(!$this->constructionDb($dbConfig)) {
+			$this->log('データベースの初期化に失敗しました。データベースの設定を見なおしてください。');
+			$result = false;
+		}
+		
+		if($adminUser) {
+			// サイト基本設定登録
+			if(!$this->setAdminEmail($adminUser['email'])) {
+				$this->log('サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベースの設定を見なおしてください。');
+			}
+			// ユーザー登録
+			$adminUser['password_1'] = $adminUser['password'];
+			$adminUser['password_2'] = $adminUser['password'];
+			if(!$this->addDefaultUser($adminUser)) {
+				$this->log('初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。');
+				$result = false;
+			}
+		}
+		
+		// データベースの初期更新
+		if($this->executeDefaultUpdates($dbConfig)) {
+			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
+			return false;
+		}
+		
+		// テーマを配置
+		if(!$this->deployTheme()) {
+			$this->log('テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
+			$result = false;
+		}
+		
+		if($smartUrl) {
+			if(!$this->setSmartUrl(true, $baseUrl)) {
+				$this->log('スマートURLの設定に失敗しました。.htaccessの書き込み権限を確認してください。');
+			}
+		}
+
+		// ページファイルを生成
+		$this->createPageTemplates();
+		
+		return $result;
+		
+	}
+/**
+ * データベースに接続する
+ *
+ * @param array $config
+ * @return DboSource $db
+ * @access public
+ */
+	function &connectDb($config, $name = 'baser') {
+
+		if($name == 'plugin') {
+			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
+		}
+		
+		$result =  ConnectionManager::create($name ,array(
+				'driver' => $config['driver'],
+				'persistent' => false,
+				'host' => $config['host'],
+				'port' => $config['port'],
+				'login' => $config['login'],
+				'password' => $config['password'],
+				'database' => $config['database'],
+				'schema' => $config['schema'],
+				'prefix' =>  $config['prefix'],
+				'encoding' => $config['encoding']));
+
+		if($result) {
+			return $result;
+		} else {
+			return ConnectionManager::getDataSource($name);
+		}
+
+	}
+/**
+ * 実際の設定用のDB名を取得する
+ *
+ * @param string $type
+ * @param string $name
+ * @return string
+ * @access	public
+ */
+	function getRealDbName($type, $name) {
+
+		if(preg_match('/^\//', $name)) {
+			return $name;
+		}
+		/* dbName */
+		if(!empty($type) && !empty($name)) {
+			$type = preg_replace('/^bc_/', '', $type);
+			if($type == 'sqlite3') {
+				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
+			}elseif($type == 'csv') {
+				return APP.'db'.DS.'csv'.DS.$name;
+			}
+		}
+
+		return $name;
+
+	}
+/**
+ * テーマ用のページファイルを生成する
+ *
+ * @access	protected
+ */
+	function createPageTemplates() {
+
+		App::import('Model','Page');
+		$Page = new Page(null, null, 'baser');
+		$pages = $Page->find('all', array('recursive' => -1));
+		if($pages) {
+			foreach($pages as $page) {
+				$Page->data = $page;
+				$Page->afterSave(true);
+			}
+		}
+		ClassRegistry::removeObject('View');
+		
+	}
+/**
+ * データベースのデータに初期更新を行う
+ */
+	function executeDefaultUpdates($dbConfig) {
+		
+		$result = true;
+		if(!$this->_updateBlogEntryDate($dbConfig)) {
+			$result = false;
+		}
+		if(!$this->_updatePluginStatus()) {
+			$result = false;
+		}
+		return false;
+		
+	}
+/**
+ * プラグインのステータスを更新する
+ *
+ * @return boolean
+ * @access	protected
+ */
+	function _updatePluginStatus() {
+
+		$version = getVersion();
+		App::import('Model', 'Plugin');
+		$Plugin = new Plugin();
+		$datas = $Plugin->find('all', array('recursive' => -1));
+		if($datas){
+			$result = true;
+			foreach($datas as $data) {
+				$data['Plugin']['version'] = $version;
+				$data['Plugin']['status'] = true;
+				if(!$Plugin->save($data)) {
+					$result = false;
+				}
+			}
+			return $result;
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * 登録日を更新する
+ *
+ * @return boolean
+ * @access	protected
+ */
+	function _updateBlogEntryDate($dbConfig) {
+
+		$this->connectDb($dbConfig, 'plugin');
+		App::import('Model', 'Blog.BlogPost');
+		$BlogPost = new BlogPost();
+		$BlogPost->contentSaving = false;
+		$datas = $BlogPost->find('all', array('recursive' => -1));
+		if($datas) {
+			$ret = true;
+			foreach($datas as $data) {
+				$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
+				$BlogPost->set($data);
+				if(!$BlogPost->save($data)) {
+					$ret = false;
+				}
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * サイト基本設定に管理用メールアドレスを登録する
+ * 
+ * @param string $email
+ * @return boolean
+ * @access public 
+ */
+	function setAdminEmail($email) {
+		
+		App::import('Model','SiteConfig');
+		$data['SiteConfig']['email'] = $email;
+		$SiteConfig = new SiteConfig();
+		return $SiteConfig->saveKeyValue($data);
+		
+	}
+/**
+ * 初期ユーザーを登録する
+ * 
+ * @param array $user
+ * @return boolean 
+ */
+	function addDefaultUser($user, $securitySalt = '') {
+		
+		if($securitySalt) {
+			Configure::write('Security.salt', $securitySalt);
+		}
+		
+		$user += array(
+			'real_name_1'=> $user['name']
+		);
+		$user = array_merge(array(
+			'name'			=> '',
+			'real_name_1'	=> '',
+			'email'			=> '',
+			'user_group_id'	=> 1,
+			'password_1'	=> '',
+			'password_2'	=> ''
+		), $user);
+	
+		App::import('Model','User');
+		$User = new User();
+
+		$User->create($user);
+		if ($User->validates()) {
+			$user['password'] = Security::hash($user['password_1'], null, true);
+			return $User->save($user,false);
+		} else {
+			return false;
+		}
+		
+	}
+/**
+ * データベース設定ファイル[database.php]を保存する
+ *
+ * @param	array	$options
+ * @return boolean
+ * @access private
+ */
+	function createDatabaseConfig($options = array()) {
+
+		if(!is_writable(CONFIGS)) {
+			return false;
+		}
+
+		$options = array_merge(array(
+			'driver'	=> '',
+			'host'		=> 'localhost',
+			'port'		=> '',
+			'login'		=> 'dummy',
+			'password'	=> 'dummy',
+			'database'	=> 'dummy',
+			'prefix'	=> '',
+			'schema'	=> '',
+			'encoding'	=> 'utf8'
+		), $options);
+		
+		extract($options);
+
+		App::import('File');
+
+		$dbfilename = CONFIGS.'database.php';
+		$file = & new File($dbfilename);
+
+		if ($file!==false) {
+
+			if ($file->exists()) {
+				$file->delete();
+			}
+
+			$file->create();
+			$file->open('w',true);
+			$file->write("<?php\n");
+			$file->write("//\n");
+			$file->write("// Database Configuration File created by baserCMS Installation\n");
+			$file->write("//\n");
+			$file->write("class DATABASE_CONFIG {\n");
+			$file->write('var $baser = array('."\n");
+			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'persistent' => false,\n");
+			$file->write("\t'host' => '".$host."',\n");
+			$file->write("\t'port' => '".$port."',\n");
+			$file->write("\t'login' => '".$login."',\n");
+			$file->write("\t'password' => '".$password."',\n");
+			$file->write("\t'database' => '".$database."',\n");
+			$file->write("\t'schema' => '".$schema."',\n");
+			$file->write("\t'prefix' => '".$prefix."',\n");
+			$file->write("\t'encoding' => '".$encoding."'\n");
+			$file->write(");\n");
+
+			$file->write('var $plugin = array('."\n");
+			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'persistent' => false,\n");
+			$file->write("\t'host' => '".$host."',\n");
+			$file->write("\t'port' => '".$port."',\n");
+			$file->write("\t'login' => '".$login."',\n");
+			$file->write("\t'password' => '".$password."',\n");
+			$file->write("\t'database' => '".$database."',\n");
+			$file->write("\t'schema' => '".$schema."',\n");
+			$file->write("\t'prefix' => '".$prefix.Configure::read('BcEnv.pluginDbPrefix')."',\n");
+			$file->write("\t'encoding' => '".$encoding."'\n");
+			$file->write(");\n");
+			$file->write("}\n");
+			$file->write("?>\n");
+
+			$file->close();
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+/**
+ * インストール設定ファイルを生成する
+ * 
+ * @return boolean 
+ * @access public
+ */
+	function createInstallFile($securitySalt, $siteUrl = "") {
+
+		$installFileName = CONFIGS.'install.php';
+		
+		if(!$siteUrl) {
+			$siteUrl = siteUrl();
+		}
+		$installCoreData = array("<?php",	
+			"Configure::write('Security.salt', '{$securitySalt}');",
+			"Configure::write('Cache.disable', false);",
+			"Configure::write('Session.save', 'cake');",
+			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
+			"Configure::write('BcEnv.sslUrl', '');",
+			"Configure::write('BcApp.adminSsl', false);",
+			"Configure::write('BcApp.mobile', true);",
+			"Configure::write('BcApp.smartphone', true);",
+			"Cache::config('default', array('engine' => 'File'));",
+			"Configure::write('debug', 0);",
+		"?>");
+		if(file_put_contents($installFileName, implode("\n", $installCoreData))) {
+			return chmod($installFileName,0666);
+		}else {
+			return false;
+		}
+		
+	}
+/**
+ * セキュリティ用のキーを生成する
+ *
+ * @param	int $length
+ * @return string キー
+ * @access	protected
+ */
+	function setSecuritySalt($length = 40) {
+
+		$keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$randkey = "";
+		for ($i=0; $i<$length; $i++)
+			$randkey .= substr($keyset, rand(0,strlen($keyset)-1), 1);
+		Configure::write('Security.salt', $randkey);
+		return $randkey;
+
+	}
+/**
  * データベースを初期化する
  * 
  * @param type $reset
@@ -138,7 +561,7 @@ class BcManagerComponent extends Object {
  * @access public
  */
 	function deleteAllTables($dbConfig = null) {
-		
+
 		$result = true;
 		if(!$this->deleteTables('baser', $dbConfig)) {
 			$result = false;
@@ -246,21 +669,35 @@ class BcManagerComponent extends Object {
  * @return boolean
  * @access public
  */
-	function deployTheme($theme = 'demo') {
+	function deployTheme($theme = null) {
 
-		$targetPath = WWW_ROOT.'themed'.DS.$theme;
-		$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
-		$folder = new Folder();
-		$folder->delete($targetPath);
-		if($folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
-			if($folder->create($targetPath.DS.'pages',0777)) {
-				return true;
+		if($theme) {
+			if(is_array($theme)) {
+				$sources = $theme;
 			} else {
-				return false;
+				$sources = array($theme);
 			}
 		} else {
-			return false;
+			$Folder = new Folder(BASER_CONFIGS.'theme');
+			$files = $Folder->read();
+			$sources = $files[0];
 		}
+		
+		$result = true;
+		foreach($sources as $theme) {
+			$targetPath = WWW_ROOT.'themed'.DS.$theme;
+			$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
+			$Folder->delete($targetPath);
+			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>0777,'skip'=>array('_notes')))) {
+				if(!$Folder->create($targetPath.DS.'pages',0777)) {
+					$result = false;
+				}
+			} else {
+				$result = false;
+			}
+		}
+		
+		return $result;
 
 	}
 /**
@@ -389,7 +826,7 @@ class BcManagerComponent extends Object {
  * @return	boolean
  * @access	public
  */
-	function setSmartUrl($smartUrl) {
+	function setSmartUrl($smartUrl, $baseUrl = '') {
 
 		/* install.php の編集 */
 		if($smartUrl) {
@@ -409,11 +846,11 @@ class BcManagerComponent extends Object {
 		}
 
 		/* /app/webroot/.htaccess の編集 */
-		$this->_setSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
+		$this->_setSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase, $baseUrl);
 
 		if(BC_DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
-			$this->_setSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
+			$this->_setSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/', $baseUrl);
 		}
 
 		return true;
@@ -427,7 +864,7 @@ class BcManagerComponent extends Object {
  * @return	boolean
  * @access	protected
  */
-	function _setSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
+	function _setSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/', $baseUrl = '') {
 
 		//======================================================================
 		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
@@ -442,13 +879,13 @@ class BcManagerComponent extends Object {
 		switch($type) {
 			case 'root':
 				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteBase '.$this->getRewriteBase($rewriteBase, $baseUrl),
 											'RewriteRule ^$ '.APP_DIR.'/webroot/ [L]',
 											'RewriteRule (.*) '.APP_DIR.'/webroot/$1 [L]');
 				break;
 			case 'webroot':
 				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteBase '.$this->getRewriteBase($rewriteBase, $baseUrl),
 											'RewriteCond %{REQUEST_FILENAME} !-d',
 											'RewriteCond %{REQUEST_FILENAME} !-f',
 											'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
@@ -478,9 +915,12 @@ class BcManagerComponent extends Object {
  * @param	string	$base
  * @return	string
  */
-	function getRewriteBase($url){
+	function getRewriteBase($url, $baseUrl){
 
-		$baseUrl = BC_BASE_URL;
+		if(!$baseUrl) {
+			$baseUrl = BC_BASE_URL;
+		}
+		
 		if(preg_match("/index\.php/", $baseUrl)){
 			$baseUrl = str_replace('index.php/', '', $baseUrl);
 		}

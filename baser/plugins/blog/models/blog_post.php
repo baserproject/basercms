@@ -34,6 +34,13 @@ class BlogPost extends BlogAppModel {
  */
 	var $name = 'BlogPost';
 /**
+ * 検索テーブルへの保存可否
+ *
+ * @var boolean
+ * @access public
+ */
+	var $contentSaving = true;
+/**
  * ビヘイビア
  *
  * @var array
@@ -485,7 +492,7 @@ class BlogPost extends BlogAppModel {
 	function afterSave($created) {
 
 		// 検索用テーブルへの登録・削除
-		if(!$this->data['BlogPost']['exclude_search']) {
+		if($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
 			
