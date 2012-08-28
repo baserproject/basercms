@@ -179,6 +179,12 @@ class BlogPostsController extends BlogAppController {
  */
 	function _setAdminIndexViewData() {
 		
+		$user = $this->BcAuth->user();
+		$allowOwners = array();
+		if(!empty($user)) {
+			$allowOwners = array('', $user['User']['user_group_id']);
+		}
+		$this->set('allowOwners', $allowOwners);
 		$this->set('users',$this->BlogPost->User->getUserList());
 		
 	}
@@ -381,6 +387,7 @@ class BlogPostsController extends BlogAppController {
 			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->data['BlogPost']['no']);
 		}
 	
+		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->data['BlogPost']['id']);
