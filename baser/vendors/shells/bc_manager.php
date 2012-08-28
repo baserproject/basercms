@@ -43,6 +43,15 @@ class BcManagerShell extends BcAppShell {
  * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -smarturl "スマートURL（true / false）" -baseurl "RewriteBaseに設定するURL"
  */
 	function install() {
+		
+		if(BC_INSTALLED) {
+			$this->err("既にインストール済です。 cake bc_manager reset を実行してください。");
+			return;
+		}
+		if(Configure::read('debug') != -1) {
+			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			return false;
+		}
 		if(!$this->_install()) {
 			$this->err("baserCMSのインストールに失敗しました。ログファイルを確認してください。");
 		}
@@ -53,6 +62,11 @@ class BcManagerShell extends BcAppShell {
  * cake bc_manager reset
  */
 	function reset() {
+		
+		if(Configure::read('debug') != -1) {
+			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			return false;
+		}
 		if(!$this->_reset()) {
 			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
 		}
@@ -64,10 +78,15 @@ class BcManagerShell extends BcAppShell {
  */
 	function reinstall() {
 		
+		if(Configure::read('debug') != -1) {
+			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			return false;
+		}
 		$result = true;
 		if(!$this->_reset()) {
 			$result = false;
 		}
+		clearAllCache();
 		if(!$this->_install()) {
 			$result = false;
 		}
@@ -293,7 +312,13 @@ class BcManagerShell extends BcAppShell {
 			$baseUrl = '';
 		}
 		
-		return $this->BcManager->install($siteUrl, $dbConfig, $adminUser, $smartUrl, $baseUrl);
+		if(isset($this->params['data'])) {
+			$dataPattern = $this->params['data'];
+		} else {
+			$dataPattern = 'core.demo';
+		}
+		
+		return $this->BcManager->install($siteUrl, $dbConfig, $adminUser, $smartUrl, $baseUrl, $dataPattern);
 		
 	}
 /**

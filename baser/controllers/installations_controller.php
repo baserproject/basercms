@@ -227,12 +227,12 @@ class InstallationsController extends AppController {
 				
 				ini_set("max_execution_time",180);
 				
-				$nonDemoData = false;
-				if(isset($this->data['Installation']['non_demo_data'])) {
-					$nonDemoData = $this->data['Installation']['non_demo_data'];
+				$dbDataPattern = 'core.demo';
+				if(isset($this->data['Installation']['dbDataPattern'])) {
+					$dbDataPattern = $this->data['Installation']['dbDataPattern'];
 				}
 				$this->deleteAllTables();
-				if($this->_constructionDb($nonDemoData)) {
+				if($this->_constructionDb($dbDataPattern)) {
 					$this->Session->setFlash("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
@@ -244,10 +244,58 @@ class InstallationsController extends AppController {
 
 		}
 
-		
+		$dbDataPatterns = $this->_getDbDataPatterns();
+		$this->set('dbDataPatterns', $dbDataPatterns);
 		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
 		$this->set('dbsource', $dbsource);
 
+	}
+/**
+ * 初期データのセットを読み込む
+ * 
+ * @return array 
+ */
+	function _getDbDataPatterns() {
+		
+		$patterns = array();
+		// コア
+		$patterns = $this->_loadDbDataPatterns(BASER_CONFIGS.'data');
+		
+		// コアテーマ
+		$Folder = new Folder(BASER_CONFIGS.'theme');
+		$files = $Folder->read();
+		foreach($files[0] as $theme) {
+			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data', $theme));
+		}
+		// 外部テーマ
+		$Folder = new Folder(BASER_THEMES);
+		$files = $Folder->read();
+		foreach($files[0] as $theme) {
+			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_THEMES.$theme.DS.'config'.DS.'data', $theme));
+		}
+		
+		return $patterns;
+		
+	}
+/**
+ * 初期データのセットを読み込む
+ * 
+ * @param string $path
+ * @param string $theme
+ * @return array 
+ */
+	function _loadDbDataPatterns($path, $theme = 'core') {
+		
+		$patterns = array();
+		$Folder = new Folder($path);
+		$files = $Folder->read();
+		if($files[0]) {
+			foreach($files[0] as $pattern) {
+				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
+			}
+		}
+		return $patterns;
+		
 	}
 /**
  * Step 4: データベース生成／管理者ユーザー作成
@@ -392,10 +440,10 @@ class InstallationsController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _constructionDb($nonDemoData = false) {
+	function _constructionDb($dbDataPattern = false) {
 
 		$dbConfig = $this->_readDbSettingFromSession();
-		if(!$this->BcManager->constructionDb($dbConfig, $nonDemoData)) {
+		if(!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;
 		}
 		return true;
@@ -422,13 +470,16 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbName'] = $_data['database'];
 			$data['Installation']['dbUsername'] = $_data['login'];
 			$data['Installation']['dbPassword'] = $_data['password'];
+			$data['Installation']['dbDataPattern'] = $_data['dataPattern'];
 		} else {
 			$data['Installation']['dbType'] = 'mysql';
 			$data['Installation']['dbHost'] = 'localhost';
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'bc_';
 			$data['Installation']['dbName'] = 'basercms';
+			$data['Installation']['dbDataPattern'] = 'core.demo';
 		}
+		
 		return $data;
 
 	}
@@ -478,6 +529,7 @@ class InstallationsController extends AppController {
 		$data['database'] = $this->BcManager->getRealDbName($data['driver'], $this->Session->read('Installation.dbName'));
 		$data['schema'] = $this->Session->read('Installation.dbSchema');
 		$data['encoding'] = $this->Session->read('Installation.dbEncoding');
+		$data['dataPattern'] = $this->Session->read('Installation.dbDataPattern');
 		$data['persistent'] = false;
 		return $data;
 
@@ -516,6 +568,7 @@ class InstallationsController extends AppController {
 		$this->Session->write('Installation.dbName', $data['dbName']);
 		$this->Session->write('Installation.dbSchema',$data['dbSchema']);
 		$this->Session->write('Installation.dbEncoding',$data['dbEncoding']);
+		$this->Session->write('Installation.dbDataPattern',$data['dbDataPattern']);
 
 	}
 /**

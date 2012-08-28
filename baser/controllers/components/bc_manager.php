@@ -27,7 +27,7 @@ class BcManagerComponent extends Object {
  * @param type $adminEmail
  * @return boolean 
  */
-	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '') {
+	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = 'core.demo') {
 		
 		$result = true;
 		
@@ -70,7 +70,7 @@ class BcManagerComponent extends Object {
 		}
 		
 		// データベース初期化
-		if(!$this->constructionDb($dbConfig)) {
+		if(!$this->constructionDb($dbConfig, $dbDataPattern)) {
 			$this->log('データベースの初期化に失敗しました。データベースの設定を見なおしてください。');
 			$result = false;
 		}
@@ -90,7 +90,7 @@ class BcManagerComponent extends Object {
 		}
 		
 		// データベースの初期更新
-		if($this->executeDefaultUpdates($dbConfig)) {
+		if(!$this->executeDefaultUpdates($dbConfig)) {
 			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
 			return false;
 		}
@@ -449,45 +449,147 @@ class BcManagerComponent extends Object {
  * 
  * @param type $reset
  * @param type $dbConfig
- * @param type $nonDemoData
+ * @param type $dbDataPattern
  * @return type
  * @access public 
  */
-	function initDb($dbConfig, $reset = true, $nonDemoData = false) {
+	function initDb($dbConfig, $reset = true, $dbDataPattern = 'core.demo') {
 		
 		if($reset) {
 			$this->deleteTables();
 			$this->deleteTables('plugin');
 		}
 		
-		return $this->constructionDb($dbConfig, $nonDemoData);
+		return $this->constructionDb($dbConfig, $dbDataPattern);
 		
 	}
 /**
  * データベースを構築する
  * 
  * @param array $dbConfig
- * @param boolean $nonDemoData
+ * @param string $dbDataPattern
  * @return boolean
  * @access public
  */
-	function constructionDb($dbConfig, $nonDemoData = false) {
+	function constructionDb($dbConfig, $dbDataPattern = 'core.demo') {
 
-		if(!$this->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
+		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
-
 		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach($corePlugins as $corePlugin) {
-			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
 		}
+
+		if(strpos($dbDataPattern, '.') === false) {
+			$this->log("データパターンの形式が不正です。");
+			return false;
+		}
+		list($theme, $pattern) = explode('.', $dbDataPattern);
+		if($theme == 'core') {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern)) {
+				$this->log("コアの初期データのロードに失敗しました。");
+				return false;
+			}
+			foreach($corePlugins as $corePlugin) {
+				if(!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, 'core', $corePlugin)) {
+					$this->log("プラグインの初期データのロードに失敗しました。");
+					return false;
+				}
+			}
+		} else {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme)) {
+				$this->log("初期データのロードに失敗しました。");
+				return false;
+			}
+			foreach($corePlugins as $corePlugin) {
+				if(!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, $theme, $corePlugin)) {
+					$this->log("プラグインの初期データのロードに失敗しました。");
+					return false;
+				}
+			}
+		}
+		
 		return true;
 
+	}
+/**
+ * 初期データを読み込む
+ * 
+ * @param string $dbConfigKeyName
+ * @param array $dbConfig
+ * @param string $pattern
+ * @param string $theme
+ * @param string $plugin
+ * @return boolean 
+ */
+	function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core') {
+		
+		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
+		
+		// CSVの場合ロックを解除しないとデータの投入に失敗する
+		if($driver == 'csv') {
+			$db->reconnect();
+		}
+
+		if($theme == 'core') {
+			if($plugin == 'core') {
+				$paths = array(BASER_CONFIGS.'data'.DS.$pattern);
+			} else {
+				$paths = array(
+					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+				);
+			}
+		} else {
+			if($plugin == 'core') {
+				$paths = array(
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern
+				);
+			} else {
+				$paths = array(
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern.DS.$plugin,
+					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+				);
+			}
+		}
+		
+		$pathExists = false;
+		foreach($paths as $path) {
+			if(is_dir($path)) {
+				$pathExists = true;
+				break;
+			}
+		}
+
+		if(!$pathExists) {
+			$this->log("初期データフォルダが見つかりません。");
+			return false;
+		}
+		
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true, true);
+		// 初期データ投入
+		foreach($files[1] as $file) {
+			if(!preg_match('/\.csv$/',$file)) {
+				continue;
+			}
+			if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+				return false;
+			}
+		}
+		
+		return true;
+		
 	}
 /**
  * テーブルを構築する
@@ -495,31 +597,29 @@ class BcManagerComponent extends Object {
  * @param string	$path
  * @param string	$dbConfigKeyName
  * @param string	$dbConfig
- * @param string	$nonDemoData
+ * @param string	$dbDataPattern
  * @return boolean
  * @access public
  */
-	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $nonDemoData = false) {
+	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
 
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
-		if (!$db->connected && $driver != 'csv') {
+		if (@!$db->connected && $driver != 'csv') {
 			return false;
 		} elseif($driver == 'csv') {
 			// CSVの場合はフォルダを作成する
-			$folder = new Folder($db->config['database'], true, 00777);
+			$Folder = new Folder($db->config['database'], true, 00777);
 		} elseif($driver == 'sqlite3') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
 		}
 
-		$folder = new Folder($path);
-		$files = $folder->read(true, true, true);
-
+		// DB構築
+		$Folder = new Folder($path.'sql');
+		$files = $Folder->read(true, true, true);
 		if(isset($files[1])) {
-
-			// DB構築
 			foreach($files[1] as $file) {
 
 				if(!preg_match('/\.php$/',$file)) {
@@ -529,29 +629,6 @@ class BcManagerComponent extends Object {
 					return false;
 				}
 				
-			}
-
-			if($nonDemoData && $configKeyName == 'baser') {
-				$nonDemoData = false;
-				$folder = new Folder($path.DS.'non_demo');
-				$files = $folder->read(true, true, true);
-			}
-			if(!$nonDemoData) {
-
-				// CSVの場合ロックを解除しないとデータの投入に失敗する
-				if($driver == 'csv') {
-					$db->reconnect();
-				}
-
-				// 初期データ投入
-				foreach($files[1] as $file) {
-					if(!preg_match('/\.csv$/',$file)) {
-						continue;
-					}
-					if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
-						return false;
-					}
-				}
 			}
 		}
 		
@@ -770,11 +847,6 @@ class BcManagerComponent extends Object {
  * @access public
  */
 	function reset($dbConfig) {
-		
-		if(Configure::read('debug') != -1) {
-			$this->log('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
-			return false;
-		}
 
 		$result = true;
 

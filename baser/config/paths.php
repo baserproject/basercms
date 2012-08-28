@@ -68,4 +68,8 @@
  * BaserLocale
  */
 	define('BASER_LOCALES',BASER.'locale'.DS);
+/**
+ * Baserテーマ 
+ */
+	define('BASER_THEMES', WWW_ROOT.'themed'.DS);
 ?>

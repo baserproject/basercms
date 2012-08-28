@@ -336,18 +336,37 @@ class BaserAppModel extends Model {
 		if(!$pluginName) {
 			$path = BASER_CONFIGS.'sql';
 		} else {
-			$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql';
-			$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql';
-			if(file_exists($appPath)) {
-				$path = $appPath;
-			} elseif (file_exists($baserPath)) {
-				$path = $baserPath;
-			} else {
+			$schemaPaths = array(
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql',
+				BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'
+			);
+			$path = '';
+			foreach($schemaPaths as $schemaPath) {
+				if(is_dir($schemaPath)) {
+					$path = $schemaPath;
+					break;
+				}
+			}
+			if(!$path) {
 				return true;
 			}
 		}
 
 		if($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)){
+			$dataPaths = array(
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'data'.DS.'default',
+				BASER_PLUGINS.$pluginName.DS.'config'.DS.'data'.DS.'default'
+			);
+			$path = '';
+			foreach($dataPaths as $dataPath) {
+				if(is_dir($dataPath)) {
+					$path = $dataPath;
+					break;
+				}
+			}
+			if(!$path) {
+				return true;
+			}
 			if($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
 			} else {

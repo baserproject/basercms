@@ -212,7 +212,12 @@ class PluginsController extends AppController {
 		}
 
 		// プラグインのバージョンを取得
-		$version = $this->getBaserVersion($plugin);
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		if(in_array($plugin, $corePlugins)) {
+			$version = $this->getBaserVersion();
+		} else {
+			$version = $this->getBaserVersion($plugin);
+		}
 
 		// 設定ファイル読み込み
 		$title = $description = $author = $url = $adminLink = '';
@@ -389,7 +394,12 @@ class PluginsController extends AppController {
 				$this->data['Plugin']['title'] = $name;
 			}
 			$this->data['Plugin']['status'] = true;
-			$this->data['Plugin']['version'] = $this->getBaserVersion($name);
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if(in_array($name, $corePlugins)) {
+				$this->data['Plugin']['version'] = $this->getBaserVersion();
+			} else {
+				$this->data['Plugin']['version'] = $this->getBaserVersion($name);
+			}
 
 			if(!empty($installMessage)) {
 				$this->Session->setFlash($installMessage);
