@@ -21,8 +21,8 @@
 /**
  * Include files
  */
-App::import("Model","Feed.Rss",true,array(BASER_PLUGINS));
-App::import('Vendor','Feed.simplepie', true, array(BASER_PLUGINS)); // オブジェクトのシリアライズの問題があるのでここから動かさない事
+App::import("Model","Feed.Rss");
+App::import('Vendor','Feed.simplepie'); // オブジェクトのシリアライズの問題があるのでここから動かさない事
 /**
  * RSS取得モデルであるRssクラスを継承したクラス
  *

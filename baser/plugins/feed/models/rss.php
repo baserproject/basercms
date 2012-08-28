@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import("Model","Feed.WebModel",true,array(BASER_PLUGINS));
+App::import("Model","Feed.WebModel");
 /**
  * rss
  * 
