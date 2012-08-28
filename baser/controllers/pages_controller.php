@@ -297,7 +297,7 @@ class PagesController extends AppController {
 		}
 		
 		if(empty($this->data['PageCategory']['id']) || $this->data['PageCategory']['name'] == 'mobile' || $this->data['PageCategory']['name'] == 'smartphone') {
-			$currentCatOwner = $bcBaser->siteConfig['root_owner_id'];
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
 			$currentCatOwner = $data['PageCategory']['owner_id'];
 		}
