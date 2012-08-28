@@ -23,6 +23,12 @@
 if(Configure::read('BcRequest.asset')) {
 	return;
 }
+/**
+ * Object::cakeError() の為、router.php が読み込まれた事をマークしておく
+ * BaserAppModel::cakeError で利用
+ */
+Configure::write('BcRequest.routerLoaded', true);
+
 if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
 
 	// プラグインの基底クラス読み込み

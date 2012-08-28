@@ -1479,6 +1479,28 @@ class BaserAppModel extends Model {
 		return $result;
 		
 	}
-	
+/**
+ * Used to report user friendly errors.
+ * If there is a file app/error.php or app/app_error.php this file will be loaded
+ * error.php is the AppError class it should extend ErrorHandler class.
+ *
+ * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
+ * @param array $messages Message that is to be displayed by the error class
+ * @return error message
+ * @access public
+ */
+	function cakeError($method, $messages = array()) {
+		//======================================================================
+		// router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
+		// AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。
+		// router.php がロードされる前のタイミングでは、通常のエラー表示を行う
+		//======================================================================
+		if(!Configure::read('BcRequest.routerLoaded')) {
+			trigger_error($method, E_USER_ERROR);
+		} else {
+			parent::cakeError($method, $messages);
+		}
+		
+	}
 }
 ?>
