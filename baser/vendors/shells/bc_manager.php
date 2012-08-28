@@ -145,6 +145,114 @@ class BcManagerShell extends BcAppShell {
 			$this->out('　Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。');
 		}
 		$this->hr();
+		
+	}
+/**
+ * デモ用のCSVデータを初期化する
+ */
+	function initdemo() {
+	
+		$dbConfig = getDbConfig();
+		
+		// データベース初期化
+		if(!$this->BcManager->initDb($dbConfig)){
+			$message = "データベースの初期化に失敗しました";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+		
+		// キャッシュ削除
+		clearAllCache();
+
+		// ユーザー作成
+		if(!$this->_initDemoUsers()){
+			$message = "ユーザー「operator」の作成に失敗しました";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+
+		// サイト設定
+		if(!$this->_initDemoSiteConfigs()){
+			$message = "システム設定の更新に失敗しました";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+		
+		// DBデータの初期更新
+		if(!$this->BcManager->executeDefaultUpdates($dbConfig)) {
+			$message = "DBデータの初期更新に失敗しました。";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+		
+		// テーマの配置
+		if(!$this->BcManager->deployTheme()) {
+			$message = "デモテーマの配置に失敗しました。";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+		
+		// ページ初期化
+		if(!$this->BcManager->createPageTemplates()){
+			$message = "ページテンプレートの更新に失敗しました";
+			$this->log($message);
+			$this->err($message);
+			return;
+		}
+		
+		$this->out("デモデータを初期化しました。");
+		
+	}
+/**
+ * サイト設定の初期化
+ * 
+ * @return boolean
+ */
+	function _initDemoSiteConfigs() {
+		
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$siteConfig = $SiteConfig->findExpanded();
+		$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
+		$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
+		$siteConfig['demo_on'] = true;
+		return $SiteConfig->saveKeyValue($siteConfig);
+		
+	}
+/**
+ * 初期ユーザーの作成
+ * 
+ * @return boolean 
+ */
+	function _initDemoUsers() {
+		
+		$User = ClassRegistry::init('User');
+	
+		$ret = true;
+		$user['User']['name'] = 'admin';
+		$user['User']['password'] = Security::hash('demodemo', null, true);
+		$user['User']['password_1'] = 'demodemo';
+		$user['User']['password_2'] = 'demodemo';
+		$user['User']['real_name_1'] = 'admin';
+		$user['User']['user_group_id'] = 1;
+		$User->create($user);
+		if(!$User->save()) $ret = false;
+
+		$user['User']['name'] = 'operator';
+		$user['User']['password'] = Security::hash('demodemo', null, true);
+		$user['User']['password_1'] = 'demodemo';
+		$user['User']['password_2'] = 'demodemo';
+		$user['User']['real_name_1'] = 'member';
+		$user['User']['user_group_id'] = 2;
+		$User->create($user);
+		if(!$User->save()) $ret = false;
+		
+		return $ret;
+		
 	}
 /**
  * インストール 

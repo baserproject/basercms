@@ -484,9 +484,7 @@ class BaserAppController extends Controller {
 				if ($inenc != $outenc) {
 					// 半角カナは一旦全角に変換する
 					$value = mb_convert_kana($value, "KV",$inenc);
-					//var_dump($value);
 					$value = mb_convert_encoding($value, $outenc, $inenc);
-					//var_dump(mb_convert_encoding($value,'SJIS','UTF-8'));
 					$data[$key] = $value;
 				}
 

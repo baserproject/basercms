@@ -509,7 +509,6 @@ class Message extends MailAppModel {
 		}
 		foreach($this->mailFields as $mailField) {
 			if(!empty($dbData['message'][$mailField['MailField']['field_name']])) {
-				//var_dump(mb_convert_encoding($dbData['message'][$mailField['MailField']['field_name']],'SJIS','UTF-8'));
 				$dbData['message'][$mailField['MailField']['field_name']] = str_replace('<br />',"\n",$dbData['message'][$mailField['MailField']['field_name']]);
 				//$dbData['message'][$mailField['MailField']['field_name']] = mb_convert_kana($dbData['message'][$mailField['MailField']['field_name']], "K", "UTF-8");
 

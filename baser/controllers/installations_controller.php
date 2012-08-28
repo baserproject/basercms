@@ -341,7 +341,8 @@ class InstallationsController extends AppController {
 			// データベース設定を書き込む
 			$this->BcManager->createDatabaseConfig($this->_readDbSettingFromSession());
 			// インストールファイルを生成する
-			$this->BcManager->createInstallFile();
+			$secritySalt = $this->Session->read('Installation.salt');
+			$this->BcManager->createInstallFile($secritySalt);
 			$this->redirect('step5');
 		} elseif(BC_INSTALLED) {
 			$installationData = Cache::read('Installation', 'default');
@@ -351,7 +352,7 @@ class InstallationsController extends AppController {
 		}
 
 		// データベースのデータを初期設定に更新
-		$this->BcManager->executeDefaultUpdates();
+		$this->BcManager->executeDefaultUpdates($this->_readDbSettingFromSession());
 
 		// ログイン
 		$this->_login();

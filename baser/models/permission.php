@@ -267,7 +267,6 @@ class Permission extends AppModel {
 			$pattern = str_replace('/', '\/', $pattern);
 			$pattern = str_replace('*', '.*?', $pattern);
 			$pattern = '/^'.str_replace('\/.*?', '(|\/.*?)', $pattern).'$/is';
-			//var_dump($pattern);
 			if(preg_match($pattern, $url)) {
 				$ret = $permission['Permission']['auth'];
 			}

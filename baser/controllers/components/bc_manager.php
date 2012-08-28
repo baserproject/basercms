@@ -188,6 +188,7 @@ class BcManagerComponent extends Object {
 			}
 		}
 		ClassRegistry::removeObject('View');
+		return true;
 		
 	}
 /**
@@ -197,12 +198,14 @@ class BcManagerComponent extends Object {
 		
 		$result = true;
 		if(!$this->_updateBlogEntryDate($dbConfig)) {
+			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
 		if(!$this->_updatePluginStatus()) {
+			$this->log('プラグインの有効化に失敗しました。');
 			$result = false;
 		}
-		return false;
+		return $result;
 		
 	}
 /**
@@ -450,7 +453,7 @@ class BcManagerComponent extends Object {
  * @return type
  * @access public 
  */
-	function initDb($reset = true, $dbConfig = null, $nonDemoData = false) {
+	function initDb($dbConfig, $reset = true, $nonDemoData = false) {
 		
 		if($reset) {
 			$this->deleteTables();
@@ -468,9 +471,10 @@ class BcManagerComponent extends Object {
  * @return boolean
  * @access public
  */
-	function constructionDb($dbConfig = null, $nonDemoData = false) {
+	function constructionDb($dbConfig, $nonDemoData = false) {
 
 		if(!$this->constructionTable(BASER_CONFIGS.'sql', 'baser', $dbConfig, $nonDemoData)) {
+			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
 
@@ -478,6 +482,7 @@ class BcManagerComponent extends Object {
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach($corePlugins as $corePlugin) {
 			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS.'sql', 'plugin', $dbConfig, $nonDemoData)) {
+				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
 		}
