@@ -96,6 +96,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @return void
  * @access public
+ * @manual
  */
 	function __construct() {
 
@@ -141,6 +142,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function afterRender() {
 		
@@ -155,6 +157,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $menuType
  * @return array $globalMenus
  * @access public
+ * @manual
  */
 	function getMenus () {
 
@@ -189,6 +192,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @param string $title
  * @access public
+ * @manual
  */
 	function setTitle($title,$categoryTitleOn = null) {
 		
@@ -203,6 +207,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @param string $title
  * @access public
+ * @manual
  */
 	function setKeywords($keywords) {
 		
@@ -214,6 +219,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @param string $title
  * @access public
+ * @manual
  */
 	function setDescription($description) {
 		
@@ -228,6 +234,7 @@ class BcBaserHelper extends AppHelper {
  * @param mixed $value
  * @return void
  * @access public
+ * @manual
  */
 	function set($key,$value) {
 		
@@ -241,6 +248,7 @@ class BcBaserHelper extends AppHelper {
  * @param mixed $on boolean / 文字列（カテゴリ名として出力した文字を指定する）
  * @return void
  * @access public
+ * @manual
  */
 	function setCategoryTitle($on = true) {
 		
@@ -253,6 +261,7 @@ class BcBaserHelper extends AppHelper {
  * @return string $keyword
  * @return string
  * @access public
+ * @manual
  */
 	function getKeywords() {
 		
@@ -271,6 +280,7 @@ class BcBaserHelper extends AppHelper {
  * @return string $description
  * @return string
  * @access public
+ * @manual
  */
 	function getDescription() {
 		
@@ -291,6 +301,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $categoryTitleOn
  * @return string $description
  * @access public
+ * @manual
  */
 	function getTitle($separator='｜',$categoryTitleOn = null) {
 
@@ -331,6 +342,7 @@ class BcBaserHelper extends AppHelper {
  * @return array
  * @access public
  * @todo 処理内容がわかりにくいので変数名のリファクタリング要
+ * @manual
  */
 	function getCrumbs($categoryTitleOn = null){
 
@@ -366,6 +378,7 @@ class BcBaserHelper extends AppHelper {
  * コンテンツタイトルを取得する
  * @return string $description
  * @access public
+ * @manual
  */
 	function getContentsTitle() {
 
@@ -386,6 +399,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function contentsTitle() {
 		
@@ -399,6 +413,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $categoryTitleOn
  * @return void
  * @access public
+ * @manual
  */
 	function title($separator='｜',$categoryTitleOn = null) {
 		
@@ -410,6 +425,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function metaKeywords() {
 		
@@ -421,6 +437,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function metaDescription() {
 		
@@ -434,6 +451,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $link
  * @return void
  * @access public
+ * @manual
  */
 	function rss($title, $link) {
 		
@@ -446,6 +464,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  * @access public
  * @deprecated isHomeに統合する
+ * @manual
  */
 	function isTop() {
 		
@@ -457,6 +476,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return boolean
  * @access public
+ * @manual
  */
 	function isHome() {
 		
@@ -471,6 +491,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function root() {
 		
@@ -482,6 +503,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return string
  * @access public
+ * @manual
  */
 	function getRoot() {
 		
@@ -495,6 +517,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $full
  * @return void
  * @access public
+ * @manual
  */
 	function url($url,$full = false, $sessionId = true) {
 		
@@ -506,6 +529,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @param string $url
  * @param boolean $full
+ * @manual
  */
 	function getUrl($url,$full = false, $sessionId = true) {
 		
@@ -522,6 +546,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $subDir
  * @return string
  * @access public
+ * @manual
  */
 	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
@@ -549,6 +574,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $loadHelpers
  * @return void
  * @access public
+ * @manual
  */
 	function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
 		
@@ -561,6 +587,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $params
  * @param mixed $loadHelpers
  * @param boolean $subDir
+ * @manual
  */
 	function header($params = array(), $loadHelpers = false, $subDir = true) {
 		
@@ -576,6 +603,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $subDir
  * @return void
  * @access public
+ * @manual
  */
 	function footer($params = array(), $loadHelpers = false, $subDir = true) {
 		
@@ -592,6 +620,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  * @access public
  * @deprecated
+ * @manual
  */
 	function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
 		
@@ -608,6 +637,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function content() {
 		
@@ -620,6 +650,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $key
  * @return void
  * @access public
+ * @manual
  */
 	function flash($key='flash') {
 		
@@ -634,6 +665,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function scripts() {
 		
@@ -661,6 +693,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function func() {
 		
@@ -692,6 +725,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $submenus
  * @return void
  * @access public
+ * @manual
  */
 	function setSubMenus($submenus) {
 		
@@ -704,6 +738,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $attrib
  * @return void
  * @access public 
+ * @manual
  */
 	function xmlHeader($attrib = array()) {
 		
@@ -718,6 +753,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * @return void
  * @access public
+ * @manual
  */
 	function icon() {
 		
@@ -730,6 +766,7 @@ class BcBaserHelper extends AppHelper {
  * @param type $type
  * @return void
  * @access public
+ * @manual
  */
 	function docType($type = 'xhtml-trans') {
 		
@@ -746,6 +783,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $inline
  * @return void
  * @access public 
+ * @manual
  */
 	function css($path, $htmlAttributes = array(), $inline = true) {
 		
@@ -770,6 +808,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $inline 
  * @return void
  * @access public
+ * @manual
  */
 	function js($url, $inline = true) {
 		
@@ -786,6 +825,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $options 
  * @return void
  * @access pub
+ * @manual
  */
 	function img($path, $options = array()) {
 		
@@ -799,6 +839,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $options
  * @return array
  * @access public
+ * @manual
  */
 	function getImg($path, $options = array()) {
 		
@@ -815,6 +856,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $escapeTitle 
  * @return void
  * @access public
+ * @manual
  */
 	function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 		
@@ -834,6 +876,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $escapeTitle
  * @return string
  * @access public
+ * @manual
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 		
@@ -935,6 +978,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @return boolean
  * @access public
+ * @manual
  */
 	function isSSL() {
 		
@@ -951,6 +995,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $charset
  * @return void
  * @access public
+ * @manual
  */
 	function charset($charset = null) {
 		
@@ -966,6 +1011,7 @@ class BcBaserHelper extends AppHelper {
  * @param string 開始年
  * @return void
  * @access public
+ * @manual
  */
 	function copyYear($begin) {
 		
@@ -1081,6 +1127,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $detail 
  * @return void
  * @access public
+ * @manual
  */
 	function contentsName($detail = false, $options = array()) {
 
@@ -1097,6 +1144,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $detail
  * @return string
  * @access public
+ * @manual
  */
 	function getContentsName($detail = false, $options = array()) {
 
@@ -1235,6 +1283,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $startText This will be the first crumb, if false it defaults to first crumb in array
  * @return string
  * @access public
+ * @manual
  */
 	function crumbs($separator = '&raquo;', $startText = false) {
 		
@@ -1265,6 +1314,7 @@ class BcBaserHelper extends AppHelper {
  * @param mixed $options Link attributes e.g. array('id'=>'selected')
  * @return void
  * @access public 
+ * @manual
  */
 	function addCrumb($name, $link = null, $options = null) {
 		
@@ -1283,6 +1333,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $categoryId
  * @return mixed boolean / array
  * @access public
+ * @manual
  */
 	function getPageList($categoryId=null) {
 		
@@ -1311,6 +1362,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $type 
  * @return void
  * @access public
+ * @manual
  */
 	function cacheHeader($expire = DAY, $type='html') {
 
@@ -1342,6 +1394,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $url
  * @return string
  * @access public
+ * @manual
  */
 	function getUri($url, $sessionId = true){
 		if(preg_match('/^http/is', $url)) {
@@ -1428,6 +1481,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $escape エスケープ有無
  * @return string $text 変換後文字列
  * @access public
+ * @manual
  */
 	function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
 
@@ -1447,6 +1501,7 @@ class BcBaserHelper extends AppHelper {
  * @param string $recursive
  * @return void
  * @access public
+ * @manual
  */
 	function sitemap($pageCategoryId = null, $recursive = null) {
 
@@ -1472,6 +1527,7 @@ class BcBaserHelper extends AppHelper {
  * @param int $height
  * @param array $options
  * @return string 
+ * @manual
  */
 	function swf($path, $id, $width, $height, $options = array()) {
 		
@@ -1520,6 +1576,7 @@ END_FLASH;
  * 
  * @return boolean 
  * @access public
+ * @manual
  */
 	function isAdminUser($id = null) {
 		if(!$id && !empty($this->_view->viewVars['user']['user_group_id'])) {
@@ -1536,6 +1593,7 @@ END_FLASH;
  * 
  * @return boolean
  * @access public
+ * @manual
  */
 	function isPage() {
 		return $this->Page->isPageUrl($this->getHere());
@@ -1546,6 +1604,7 @@ END_FLASH;
  * 
  * @return string
  * @access public
+ * @manual
  */
 	function getHere() {
 		return '/' . preg_replace('/^\//', '', $this->params['url']['url']);
@@ -1555,6 +1614,7 @@ END_FLASH;
  * 
  * @return boolean
  * @access public
+ * @manual
  */
 	function isCategoryTop() {
 		
@@ -1577,6 +1637,7 @@ END_FLASH;
  * 
  * ※ レイアウトは読み込まない
  * @param int $id 
+ * @manual
  */
 	function page($id, $params = array(), $options = array()) {
 
