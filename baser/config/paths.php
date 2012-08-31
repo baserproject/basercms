@@ -71,5 +71,9 @@
 /**
  * Baserテーマ 
  */
-	define('BASER_THEMES', WWW_ROOT.'themed'.DS);
+	if(is_dir(WWW_ROOT.'themed')) {
+		define('BASER_THEMES', WWW_ROOT.'themed'.DS);
+	} elseif(is_dir(ROOT.DS.'themed')) {
+		define('BASER_THEMES', ROOT.DS.'themed'.DS);
+	}
 ?>
