@@ -29,7 +29,7 @@ class BlogBaserHelper extends AppHelper {
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $bcBaser->blogPosts('news', 3) ?>
  * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.php
- * 
+ *
  * @param int $contentsName
  * @param int $num
  * @param array $options
@@ -54,7 +54,7 @@ class BlogBaserHelper extends AppHelper {
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
 		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
-		
+
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
 			if(isset($options[$key])) {
