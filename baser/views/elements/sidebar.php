@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <div id="beta">
-	<?php if(!empty($widgetArea)): ?>
-	<?php $bcBaser->element('widget_area',array('no'=>$widgetArea)) ?>
-	<?php endif ?>
+	<?php //$bcBaser->widgetArea() ?>
 </div>
