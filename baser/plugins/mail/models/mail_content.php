@@ -270,13 +270,13 @@ class MailContent extends MailAppModel {
 
 	}
 /**
- * ユーザーグループデータをコピーする
+ * メールコンテンツデータをコピーする
  * 
  * @param int $id
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data, $recursive = true) {
+	function copy($id, $data = array(), $recursive = true) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
