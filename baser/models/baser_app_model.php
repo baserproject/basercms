@@ -355,6 +355,7 @@ class BaserAppModel extends Model {
 		if($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)){
 			$dataPaths = array(
 				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'data'.DS.'default',
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql',
 				BASER_PLUGINS.$pluginName.DS.'config'.DS.'data'.DS.'default'
 			);
 			$path = '';
