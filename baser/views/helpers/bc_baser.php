@@ -1654,23 +1654,23 @@ END_FLASH;
 			'subDir'		=> true,
 			'recursive'=> true
 		), $options);
-
+		
 		extract($options);
 
 		$this->_view->viewVars['pageRecursive'] = $recursive;
-
+		
 		// 現在のページの情報を退避
-		$currentId = null;
+		$editLink = null;
 		$description = $this->getDescription();
 		$title = $this->getContentsTitle();
-		if(!empty($this->_view->loaded['bcPage'])) {
-			$currentId = $this->_view->loaded['bcPage']->data['Page']['id'];
+		if($this->_view->viewVars['editLink']) {
+			$editLink = $this->_view->viewVars['editLink'];
 		}
-
+		
 		// urlを取得
 		$PageClass =& ClassRegistry::init('Page');
 		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
-
+		
 		if($page) {
 			$url = '/../pages'.$PageClass->getPageUrl($page);
 
@@ -1679,8 +1679,8 @@ END_FLASH;
 			// 現在のページの情報に戻す
 			$this->setDescription($description);
 			$this->setTitle($title);
-			if($currentId) {
-				$this->setPageEditLink($currentId);
+			if($editLink) {
+				$this->_view->viewVars['editLink'] = $editLink;
 			}
 		}
 
