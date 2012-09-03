@@ -1538,15 +1538,19 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		extract($options);
 
-		if(!preg_match('/^\//', $path)) {
-			$path = '/img/'.$path;
-		}
-		if(strpos($path, "\.") === false) {
+		if(!preg_match('/\.swf$/', $path)) {
 			$path .= '.swf';
 		}
-		$path = $this->webroot($path);
-		$path = 'http://projects.localhost:8888'.$path;
-		$out .= $this->js($script, true)."\n";
+		
+		if (is_array($path)) {
+			$path = $this->getUrl($path);
+		} elseif (strpos($path, '://') === false) {
+			if ($path[0] !== '/') {
+				$path = IMAGES_URL . $path;
+			}
+			$path = $this->webroot($path);
+		}		
+		$out = $this->js($script, true)."\n";
 		$out = <<< END_FLASH
 <div id="{$id}">{$noflash}</div>
 <script type="text/javascript">
