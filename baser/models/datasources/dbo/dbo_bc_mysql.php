@@ -43,9 +43,17 @@ class DboBcMysql extends DboMysql {
 	function value($data, $column = null, $safe = false) {
 		$parent = parent::value($data, $column, $safe);
 
-		if ($parent != null) {
+		// CUSTOMIZE MODIFY 2012/09/03 ryuring
+		// >>>
+		/*if ($parent != null) {
+			return $parent;
+		}*/
+		// ---
+		if ($column != 'datetime' && $parent != null) {
 			return $parent;
 		}
+		// <<<
+
 		if ($data === null || (is_array($data) && empty($data))) {
 			return 'NULL';
 		}
