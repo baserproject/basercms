@@ -76,7 +76,7 @@ if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $site
 <?php else: ?>
 	<p>
 		<?php if(!$plugin): ?>
-			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $bcBaser->link('baserCMSの制作パートナー', 'http://basercms.net/partners/', array('target' => '_blank')) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
+			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $bcBaser->link('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', array('target' => '_blank')) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
 			<?php if(!$requireUpdate): ?>
 				<?php $bcBaser->link('≫ 管理画面に移動する','/admin') ?>
 			<?php endif ?>
