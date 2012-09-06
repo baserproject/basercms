@@ -193,14 +193,14 @@ $(document).ready( function() {
 			</ul>
 		</div>
 		
-	<?php if (!empty($blDBSettingsOK)): ?>
 		<div class="section">
 			<h3>オプション</h3>
+			
 			<ul>
-				<li><?php echo $bcForm->input('Installation.non_demo_data', array('type'=>'checkbox', 'label'=>' デモデータを作成しない')); ?>
+				<li><label>初期データ</label><br />
+					<?php echo $bcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?></li>
 			</ul>
 		</div>
-	<?php endif ?>
 		
 	</div>
 	

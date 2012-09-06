@@ -74,7 +74,7 @@ class BaserAppController extends Controller {
  * @var		array
  * @access	public
  */
-	var $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session');
+	var $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session', 'BcManager');
 /**
  * サブディレクトリ
  *
@@ -484,9 +484,7 @@ class BaserAppController extends Controller {
 				if ($inenc != $outenc) {
 					// 半角カナは一旦全角に変換する
 					$value = mb_convert_kana($value, "KV",$inenc);
-					//var_dump($value);
 					$value = mb_convert_encoding($value, $outenc, $inenc);
-					//var_dump(mb_convert_encoding($value,'SJIS','UTF-8'));
 					$data[$key] = $value;
 				}
 
@@ -639,7 +637,7 @@ class BaserAppController extends Controller {
  */
 	function writeDebug($mode) {
 		
-		trigger_error("(Controller::writeDebug) は非推奨です。Controller::writeInstallSetting を利用してください。", E_USER_WARNING);
+		trigger_error("(Controller::writeDebug) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
 		$file = new File(CONFIGS.'core.php');
 		$core = $file->read(false,'w');
 		if($core) {
@@ -851,9 +849,11 @@ class BaserAppController extends Controller {
  * @param	string	$value
  * @return	boolean
  * @access	public
+ * @deprecated since v2.0.5
  */
 	function writeInstallSetting($key, $value) {
 		
+		trigger_error("(Controller::writeInstallSetting) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
 		/* install.php の編集 */
 		$setting = "Configure::write('".$key."', ".$value.");\n";
 		$key = str_replace('.', '\.', $key);
@@ -879,13 +879,17 @@ class BaserAppController extends Controller {
  *
  * @return	boolean
  * @access	public
+ * @deprecated since v2.0.5
  */
 	function readSmartUrl(){
+		
+		trigger_error("(Controller::readSmartUrl) は非推奨です。BcManager::smartUrl を利用してください。", E_USER_WARNING);
 		if (Configure::read('App.baseUrl')) {
 			return false;
 		} else {
 			return true;
 		}
+		
 	}
 /**
  * スマートURLの設定を行う
@@ -893,16 +897,18 @@ class BaserAppController extends Controller {
  * @param	boolean	$smartUrl
  * @return	boolean
  * @access	public
+ * @deprecated since v2.0.5
  */
 	function writeSmartUrl($smartUrl) {
 
+		trigger_error("(Controller::writeSmartUrl) は非推奨です。BcManager::setSmartUrl を利用してください。", E_USER_WARNING);
 		/* install.php の編集 */
 		if($smartUrl) {
-			if(!$this->writeInstallSetting('App.baseUrl', "''")){
+			if(!$this->BcManager->setInstallSetting('App.baseUrl', "''")){
 				return false;
 			}
 		} else {
-			if(!$this->writeInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
+			if(!$this->BcManager->setInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
 				return false;
 			}
 		}
@@ -914,11 +920,11 @@ class BaserAppController extends Controller {
 		}
 
 		/* /app/webroot/.htaccess の編集 */
-		$this->_writeSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
+		$this->BcManager->_setSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
 
 		if(BC_DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
-			$this->_writeSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
+			$this->BcManager->_setSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
 		}
 
 		return true;
@@ -927,13 +933,15 @@ class BaserAppController extends Controller {
 /**
  * .htaccess にスマートURLの設定を書きこむ
  *
- * @param	string	$path
- * @param	array	$rewriteSettings
- * @return	boolean
- * @access	protected
+ * @param string $path
+ * @param array $rewriteSettings
+ * @return boolean
+ * @access protected
+ * @deprecated since v2.0.5
  */
 	function _writeSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
 
+		trigger_error("(Controller::_writeSmartUrlToHtaccess) は非推奨です。BcManager::_setSmartUrlToHtaccess を利用してください。", E_USER_WARNING);
 		//======================================================================
 		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
 		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
@@ -947,13 +955,13 @@ class BaserAppController extends Controller {
 		switch($type) {
 			case 'root':
 				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteBase '.$this->BcManager->getRewriteBase($rewriteBase),
 											'RewriteRule ^$ '.APP_DIR.'/webroot/ [L]',
 											'RewriteRule (.*) '.APP_DIR.'/webroot/$1 [L]');
 				break;
 			case 'webroot':
 				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase),
+											'RewriteBase '.$this->BcManager->getRewriteBase($rewriteBase),
 											'RewriteCond %{REQUEST_FILENAME} !-d',
 											'RewriteCond %{REQUEST_FILENAME} !-f',
 											'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
@@ -982,9 +990,11 @@ class BaserAppController extends Controller {
  *
  * @param	string	$base
  * @return	string
+ * @deprecated since v2.0.5
  */
 	function getRewriteBase($url){
 
+		trigger_error("(Controller::getRewriteBase) は非推奨です。BcManager::getRewriteBase を利用してください。", E_USER_WARNING);
 		$baseUrl = BC_BASE_URL;
 		if(preg_match("/index\.php/", $baseUrl)){
 			$baseUrl = str_replace('index.php/', '', $baseUrl);

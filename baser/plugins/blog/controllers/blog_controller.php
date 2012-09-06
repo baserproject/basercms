@@ -233,14 +233,19 @@ class BlogController extends BlogAppController {
 					$this->notFound();
 				}
 
-				// 記事を取得
-				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
-
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
 					'BlogCategory.blog_content_id'	=> $this->contentId,
 					'BlogCategory.name'				=> $category
 				));
+				
+				if(!$categoryId) {
+					$this->notFound();
+				}
+				
+				// 記事を取得
+				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
+				
 				$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
 				if(count($blogCategories) > 1){
 					foreach($blogCategories as $key => $blogCategory) {
@@ -251,6 +256,7 @@ class BlogController extends BlogAppController {
 				}
 				$this->pageTitle = $blogCategories[count($blogCategories)-1]['BlogCategory']['title'];
 				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
+
 				break;
 			
 			/* タグ別記事一覧 */
@@ -482,13 +488,17 @@ class BlogController extends BlogAppController {
 				'BlogCategory.blog_content_id'	=> $this->contentId,
 				'BlogCategory.name'				=> $category
 			));
-			$categoryIds = array(0 => $categoryId);
-
-			// 指定したカテゴリ名にぶら下がる子カテゴリを取得
-			$catChildren = $this->BlogCategory->children($categoryId);
-			if($catChildren) {
-				$catChildren = Set::extract('/BlogCategory/id',$catChildren);
-				$categoryIds = am($categoryIds, $catChildren);
+			
+			if($categoryId === false) {
+				$categoryIds = '';
+			} else {
+				$categoryIds = array(0 => $categoryId);
+				// 指定したカテゴリ名にぶら下がる子カテゴリを取得
+				$catChildren = $this->BlogCategory->children($categoryId);
+				if($catChildren) {
+					$catChildren = Set::extract('/BlogCategory/id',$catChildren);
+					$categoryIds = am($categoryIds, $catChildren);
+				}
 			}
 			$conditions['BlogPost.blog_category_id'] = $categoryIds;
 			
@@ -606,7 +616,7 @@ class BlogController extends BlogAppController {
 				$order .= ", BlogPost.id ASC";
 			}
 		}
-		
+		//debug($conditions);
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$this->paginate = array(
 				'conditions'=> $conditions,

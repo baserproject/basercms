@@ -161,93 +161,122 @@ class PluginsController extends AppController {
  */
 	function admin_index() {
 
-		$datas = $this->Plugin->find('all');
+		$datas = $this->Plugin->find('all', array('order' => 'Plugin.name'));
 		if(!$datas) {
 			$datas = array();
 		}
+		
 		// プラグインフォルダーのチェックを行う。
-		// データベースに登録されていないプラグインをリストアップ
-		$pluginFolder = new Folder(APP.'plugins'.DS);
-		$plugins = $pluginFolder->read(true,true);
-		$unRegistereds = array();
-		$registereds = array();
-		foreach($plugins[0] as $plugin) {
-			$exists = false;
-			$pluginData = array();
-			foreach($datas as $data) {
-				if($plugin == $data['Plugin']['name']) {
-					$pluginData = $data;
-					$exists = true;
-					break;
-				}
-			}
-			// プラグインのバージョンを取得
-			$version = $this->getBaserVersion($plugin);
-
-			// 設定ファイル読み込み
-			$title = $description = $author = $url = $adminLink = '';
-			
-			// TODO 互換性のため古いパスも対応
-			$oldAppConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config'.DS.'config.php';
-			$appConfigPath = APP.DS.'plugins'.DS.$plugin.DS.'config.php';
-			if(!file_exists($appConfigPath)) {
-				$appConfigPath = $oldAppConfigPath;
-			}
-			$baserConfigPath = BASER_PLUGINS.$plugin.DS.'config.php';
-			if(file_exists($appConfigPath)) {
-				include $appConfigPath;
-			} elseif(file_exists($oldAppConfigPath)) {
-				include $oldAppConfigPath;
-			}elseif(file_exists($baserConfigPath)) {
-				include $baserConfigPath;
-			}
-
-			if(isset($title))
-				$pluginData['Plugin']['title'] = $title;
-			if(isset($description))
-				$pluginData['Plugin']['description'] = $description;
-			if(isset($author))
-				$pluginData['Plugin']['author'] = $author;
-			if(isset($url))
-				$pluginData['Plugin']['url'] = $url;
-
-			$pluginData['Plugin']['update'] = false;
-			$pluginData['Plugin']['old_version'] = false;
-			if($exists) {
-				if(isset($adminLink))
-					$pluginData['Plugin']['admin_link'] = $adminLink;
-				// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-				if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
-					$pluginData['Plugin']['version'] = $matches[1];
-					$pluginData['Plugin']['old_version'] = true;
-				}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
-					$pluginData['Plugin']['update'] = true;
-				}
-				$registereds[] = $pluginData;
-			} else {
-				// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-				if(preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version,$matches)) {
-					$version = $matches[1];
-					$pluginData['Plugin']['old_version'] = true;
-				}
-				$pluginData['Plugin']['id'] = '';
-				$pluginData['Plugin']['name'] = $plugin;
-				$pluginData['Plugin']['created'] = '';
-				$pluginData['Plugin']['version'] = $version;
-				$pluginData['Plugin']['status'] = false;
-				$pluginData['Plugin']['modified'] = '';
-				$pluginData['Plugin']['admin_link'] = '';
-				$unRegistereds[] = $pluginData;
-			}
+		$pluginInfos = array();
+		$Folder = new Folder(APP.'plugins'.DS);
+		$files = $Folder->read(true, true, true);
+		foreach($files[0] as $file) {
+			$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);
 		}
-		$datas = array_merge($registereds,$unRegistereds);
+		$Folder = new Folder(BASER_PLUGINS);
+		$files = $Folder->read(true, true, true);
+		foreach($files[0] as $file) {
+			$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file, true);
+		}
 
+		$pluginInfos = array_values($pluginInfos); // Set::sortの為、一旦キーを初期化
+		$pluginInfos = array_reverse($pluginInfos); // Set::sortの為、逆順に変更
+		$pluginInfos = Set::sort($pluginInfos, '{n}.Plugin.status', 'desc');
+		
 		// 表示設定
-		$this->set('datas',$datas);
+		$this->set('datas',$pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';
+
+	}
+/**
+ * プラグイン情報を取得する
+ * 
+ * @param array $pluginDatas
+ * @param string $file
+ * @return array 
+ */
+	function _getPluginInfo($datas, $file, $core = false) {
+		
+		$plugin = basename($file);
+		$pluginData = array();
+		$exists = false;
+		foreach($datas as $data) {
+			if($plugin == $data['Plugin']['name']) {
+				$pluginData = $data;
+				$exists = true;
+				break;
+			}
+		}
+
+		// プラグインのバージョンを取得
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		if(in_array($plugin, $corePlugins)) {
+			$version = $this->getBaserVersion();
+		} else {
+			$version = $this->getBaserVersion($plugin);
+		}
+
+		// 設定ファイル読み込み
+		$title = $description = $author = $url = $adminLink = '';
+
+		// TODO 互換性のため古いパスも対応
+		$oldAppConfigPath = $file.DS.'config'.DS.'config.php';
+		$appConfigPath = $file.DS.'config.php';
+		if(!file_exists($appConfigPath)) {
+			$appConfigPath = $oldAppConfigPath;
+		}
+
+		if(file_exists($appConfigPath)) {
+			include $appConfigPath;
+		} elseif(file_exists($oldAppConfigPath)) {
+			include $oldAppConfigPath;
+		}
+
+		if(isset($title))
+			$pluginData['Plugin']['title'] = $title;
+		if(isset($description))
+			$pluginData['Plugin']['description'] = $description;
+		if(isset($author))
+			$pluginData['Plugin']['author'] = $author;
+		if(isset($url))
+			$pluginData['Plugin']['url'] = $url;
+
+		$pluginData['Plugin']['update'] = false;
+		$pluginData['Plugin']['old_version'] = false;
+		$pluginData['Plugin']['core'] = $core;
+		
+		if($exists) {
+			
+			if(isset($adminLink))
+				$pluginData['Plugin']['admin_link'] = $adminLink;
+			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
+			if(!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
+				$pluginData['Plugin']['version'] = $matches[1];
+				$pluginData['Plugin']['old_version'] = true;
+			}elseif(verpoint ($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
+				$pluginData['Plugin']['update'] = true;
+			}
+			$pluginData['Plugin']['registered'] = true;
+			
+		} else {
+			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
+			if(preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version,$matches)) {
+				$version = $matches[1];
+				$pluginData['Plugin']['old_version'] = true;
+			}
+			$pluginData['Plugin']['id'] = '';
+			$pluginData['Plugin']['name'] = $plugin;
+			$pluginData['Plugin']['created'] = '';
+			$pluginData['Plugin']['version'] = $version;
+			$pluginData['Plugin']['status'] = false;
+			$pluginData['Plugin']['modified'] = '';
+			$pluginData['Plugin']['admin_link'] = '';
+			$pluginData['Plugin']['registered'] = false;
+		}
+		return $pluginData;
 
 	}
 /**
@@ -365,7 +394,12 @@ class PluginsController extends AppController {
 				$this->data['Plugin']['title'] = $name;
 			}
 			$this->data['Plugin']['status'] = true;
-			$this->data['Plugin']['version'] = $this->getBaserVersion($name);
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if(in_array($name, $corePlugins)) {
+				$this->data['Plugin']['version'] = $this->getBaserVersion();
+			} else {
+				$this->data['Plugin']['version'] = $this->getBaserVersion($name);
+			}
 
 			if(!empty($installMessage)) {
 				$this->Session->setFlash($installMessage);

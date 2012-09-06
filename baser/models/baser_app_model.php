@@ -336,18 +336,38 @@ class BaserAppModel extends Model {
 		if(!$pluginName) {
 			$path = BASER_CONFIGS.'sql';
 		} else {
-			$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql';
-			$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql';
-			if(file_exists($appPath)) {
-				$path = $appPath;
-			} elseif (file_exists($baserPath)) {
-				$path = $baserPath;
-			} else {
+			$schemaPaths = array(
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql',
+				BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'
+			);
+			$path = '';
+			foreach($schemaPaths as $schemaPath) {
+				if(is_dir($schemaPath)) {
+					$path = $schemaPath;
+					break;
+				}
+			}
+			if(!$path) {
 				return true;
 			}
 		}
 
 		if($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)){
+			$dataPaths = array(
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'data'.DS.'default',
+				APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql',
+				BASER_PLUGINS.$pluginName.DS.'config'.DS.'data'.DS.'default'
+			);
+			$path = '';
+			foreach($dataPaths as $dataPath) {
+				if(is_dir($dataPath)) {
+					$path = $dataPath;
+					break;
+				}
+			}
+			if(!$path) {
+				return true;
+			}
 			if($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
 			} else {
@@ -1479,6 +1499,28 @@ class BaserAppModel extends Model {
 		return $result;
 		
 	}
-	
+/**
+ * Used to report user friendly errors.
+ * If there is a file app/error.php or app/app_error.php this file will be loaded
+ * error.php is the AppError class it should extend ErrorHandler class.
+ *
+ * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
+ * @param array $messages Message that is to be displayed by the error class
+ * @return error message
+ * @access public
+ */
+	function cakeError($method, $messages = array()) {
+		//======================================================================
+		// router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
+		// AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。
+		// router.php がロードされる前のタイミングでは、通常のエラー表示を行う
+		//======================================================================
+		if(!Configure::read('BcRequest.routerLoaded')) {
+			trigger_error($method, E_USER_ERROR);
+		} else {
+			parent::cakeError($method, $messages);
+		}
+		
+	}
 }
 ?>

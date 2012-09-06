@@ -162,7 +162,7 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogPost.content', '本文') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('BlogPost.content', '概要') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.content', 
 						array('cols' => 60, 'rows' => 20),
@@ -171,7 +171,7 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogPost.detail', '詳細') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('BlogPost.detail', '本文') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.detail',
 						array('cols' => 60, 'rows' => 20),

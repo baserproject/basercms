@@ -174,13 +174,14 @@ function resizeScroll() {
 					<ul>
 						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki Arima</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
 						<li><a href="http://motto-web.jp/" target="_blank">Goichi Maniwa</a> (<a href="http://twitter.com/goichi_m" target="_blank">goichi_m</a>)</li>
+						<li><a href="http://yumemaru.com/" target="_blank">Yumemaru</a></li>
 						<!-- ここからテスター -->
 						<li><a href="http://www.arbalest.or.jp/" target="_blank">Masahiro Kawai</a> (<a href="http://twitter.com/m68k" target="_blank">m68k</a>)</li>
 						<li><a href=" http://www.yaoto.com/" target="_blank">Yasuhiro Konishi</a> (<a href="http://twitter.com/yaotosys" target="_blank">yaotosys</a>)</li>
 						<li><a href="http://www.mmpf-develop.com" target="_blank">Nobuyuki Sato</a> (<a href="http://twitter.com/mmpf_develop" target="_blank">mmpf_develop</a>)</li>
-						<li><a href="http://kototoy.jp/" target="_blank">Taku Fujita</a> (<a href="http://twitter.com/takufujita" target="_blank">takufujita</a>)</li>
 					</ul>
 					<ul>
+						<li><a href="http://kototoy.jp/" target="_blank">Taku Fujita</a> (<a href="http://twitter.com/takufujita" target="_blank">takufujita</a>)</li>
 						<li><a href="http://aht-records.com" target="_blank">Ippei Suzuki</a> (<a href="http://twitter.com/aht_Record" target="_blank">aht_Record</a>)</li>
 					</ul>
 				</div>

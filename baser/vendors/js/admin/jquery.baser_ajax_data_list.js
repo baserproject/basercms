@@ -75,17 +75,30 @@
 			
 			var config = $.baserAjaxDataList.config;
 			
+			var linkAjaxes = [];
+			
+			if(config.pagination) {
+				linkAjaxes.push(config.pagination + " a");
+			}
+			if(config.direction) {
+				linkAjaxes.push(config.direction);
+			}
+			if(config.listNum) {
+				linkAjaxes.push(config.listNum + " a");
+			}
+			linkAjaxes = linkAjaxes.join(',');
+			
 			// イベントを削除
-			$(config.pagination + " a, " + config.direction + ", " + config.listNum + " a").unbind();
+			$(linkAjaxes).unbind();
 			$(config.dataList + " tbody td").unbind();
 			$(config.dataList + " tbody td.row-tools a").unbind();
 
 			$.each(config.methods, function(){
 				$(this.button).unbind();
 			});
-			
+
 			// イベントを登録
-			$(config.pagination + " a, " + config.direction + ", " + config.listNum + " a").click(function(){
+			$(linkAjaxes).click(function(){
 				$.baserAjaxDataList.load($(this).attr('href'));
 				return false;
 			});

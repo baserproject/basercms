@@ -554,7 +554,7 @@ class Page extends AppModel {
 
 		// pagesディレクトリのパスを取得
 		if($theme) {
-			$path = WWW_ROOT.'themed'.DS.$theme.DS.'pages'.DS;
+			$path = BASER_THEMES.$theme.DS.'pages'.DS;
 		}else {
 			$path = VIEWS.'pages'.DS;
 

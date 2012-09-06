@@ -38,7 +38,7 @@
 		</div>
 
 		<div id="Beta">
-			<?php $bcBaser->element('widget_area',array('no'=>$widgetArea)) ?>
+			<?php $bcBaser->widgetArea() ?>
 		</div>
 		
 	</div>

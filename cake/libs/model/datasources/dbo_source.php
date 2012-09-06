@@ -8,12 +8,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.model.datasources
@@ -2108,7 +2108,7 @@ class DboSource extends DataSource {
 		$keys = preg_replace('/ORDER\\x20BY/i', '', $keys);
 
 		if (strpos($keys, '.')) {
-			preg_match_all('/([a-zA-Z0-9_]{1,})\\.([a-zA-Z0-9_]{1,})/', $keys, $result, PREG_PATTERN_ORDER);
+			preg_match_all('/([a-zA-Z0-9_-]{1,})\\.([a-zA-Z0-9_-]{1,})/', $keys, $result, PREG_PATTERN_ORDER);
 			$pregCount = count($result[0]);
 
 			for ($i = 0; $i < $pregCount; $i++) {

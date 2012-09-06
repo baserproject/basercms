@@ -30,63 +30,63 @@
 class BcBaserHelper extends AppHelper {
 /**
  * View
- * 
+ *
  * @var View
  * @access protected
  */
 	var $_view = null;
 /**
  * サイト基本設定
- * 
+ *
  * @var array
  * @access public
  */
 	var $siteConfig = array();
 /**
  * ヘルパー
- * 
+ *
  * @var array
  * @access public
  */
 	var $helpers = array(BC_HTML_HELPER, 'Javascript', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
 /**
  * コンテンツ
- * 
+ *
  * @var string
  * @access protected
  */
 	var $_content = null;
 /**
  * カテゴリタイトル設定
- * 
+ *
  * @var mixed
  * @access protected
  */
 	var $_categoryTitleOn = true;
 /**
  * カテゴリタイトル
- * 
+ *
  * @var mixed boolean Or string
  * @access protected
  */
 	var $_categoryTitle = true;
 /**
  * ページモデル
- * 
+ *
  * @var Page
  * @access public
  */
 	var $Page = null;
 /**
  * アクセス制限設定モデル
- * 
+ *
  * @var Permission
  * @access public
  */
 	var $Permission = null;
 /**
  * Plugin Basers
- * 
+ *
  * @var array
  * @access public
  */
@@ -96,6 +96,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @return void
  * @access public
+ * @manual
  */
 	function __construct() {
 
@@ -121,40 +122,42 @@ class BcBaserHelper extends AppHelper {
 				$this->PageCategory = ClassRegistry::init('PageCategory');
 			}
 		}
-		
+
 		if(BC_INSTALLED) {
 			if(isset($this->_view->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_view->viewVars['siteConfig'];
 			}
 		}
-		
+
 		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 			// プラグインのBaserヘルパを初期化
 			$this->_initPluginBasers();
 
 		}
-		
+
 
 	}
 /**
  * afterRender
- * 
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function afterRender() {
-		
+
 		parent::afterRender();
 		// コンテンツをフックする
 		$this->_content = ob_get_contents();
-		
+
 	}
 /**
- * メニューを取得する
- * 
+ * グローバルメニューを取得する
+ *
  * @param string $menuType
  * @return array $globalMenus
  * @access public
+ * @manual
  */
 	function getMenus () {
 
@@ -182,80 +185,86 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 		return '';
-		
+
 	}
 /**
- * タイトルをセットする
- * 
+ * タイトルを設定する
+ *
  * @param string $title
  * @access public
+ * @manual
  */
 	function setTitle($title,$categoryTitleOn = null) {
-		
+
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
 		$this->_view->set('title',$title);
-		
+
 	}
 /**
- * キーワードをセットする
- * 
+ * キーワードを設定する
+ *
  * @param string $title
  * @access public
+ * @manual
  */
 	function setKeywords($keywords) {
-		
+
 		$this->_view->set('keywords',$keywords);
-		
+
 	}
 /**
- * 説明文をセットする
- * 
+ * 説明文を設定する
+ *
  * @param string $title
  * @access public
+ * @manual
  */
 	function setDescription($description) {
-		
+
 		$this->_view->set('description',$description);
-		
+
 	}
 /**
- * レイアウト用の変数をセットする
+ * レイアウトで利用する為の変数を設定する
  * $view->set のラッパー
- * 
+ *
  * @param string $title
  * @param mixed $value
  * @return void
  * @access public
+ * @manual
  */
 	function set($key,$value) {
-		
+
 		$this->_view->set($key,$value);
-		
+
 	}
 /**
- * タイトルへのカテゴリタイトル表示を設定
+ * タイトルへのカテゴリタイトルの出力有無を設定する
  * コンテンツごとの個別設定
- * 
+ *
  * @param mixed $on boolean / 文字列（カテゴリ名として出力した文字を指定する）
  * @return void
  * @access public
+ * @manual
  */
 	function setCategoryTitle($on = true) {
-		
+
 		$this->_categoryTitle = $on;
-		
+
 	}
 /**
  * キーワードを取得する
- * 
+ *
  * @return string $keyword
  * @return string
  * @access public
+ * @manual
  */
 	function getKeywords() {
-		
+
 		$keywords = '';
 		if(!empty($this->_view->viewVars['keywords'])) {
 			$keywords = $this->_view->viewVars['keywords'];
@@ -263,17 +272,18 @@ class BcBaserHelper extends AppHelper {
 			$keywords = $this->siteConfig['keyword'];
 		}
 		return $keywords;
-		
+
 	}
 /**
- * 説明文を取得する
- * 
+ * ページ説明文を取得する
+ *
  * @return string $description
  * @return string
  * @access public
+ * @manual
  */
 	function getDescription() {
-		
+
 		$description = '';
 		if(!empty($this->_view->viewVars['description'])) {
 			$description = $this->_view->viewVars['description'];
@@ -281,16 +291,17 @@ class BcBaserHelper extends AppHelper {
 			$description = $this->siteConfig['description'];
 		}
 		return $description;
-		
+
 	}
 /**
- * タイトルを取得する
+ * タイトルタグを取得する
  * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
- * 
+ *
  * @param string $separator
  * @param string $categoryTitleOn
  * @return string $description
  * @access public
+ * @manual
  */
 	function getTitle($separator='｜',$categoryTitleOn = null) {
 
@@ -326,11 +337,12 @@ class BcBaserHelper extends AppHelper {
  * パンくず用の配列を取得する
  * 基本的には、コントローラーの crumbs プロパティで設定した値を取得する仕様だが
  * 事前に setCategoryTitle メソッドで出力内容をカスタマイズする事ができる
- * 
+ *
  * @param mixid $categoryTitleOn
  * @return array
  * @access public
  * @todo 処理内容がわかりにくいので変数名のリファクタリング要
+ * @manual
  */
 	function getCrumbs($categoryTitleOn = null){
 
@@ -353,12 +365,12 @@ class BcBaserHelper extends AppHelper {
 				}
 			}
 		}
-		
+
 		$contentsTitle = $this->getContentsTitle();
 		if($contentsTitle) {
 			$crumbs[] = array('name' => $contentsTitle, 'url' => '');
 		}
-		
+
 		return $crumbs;
 
 	}
@@ -366,6 +378,7 @@ class BcBaserHelper extends AppHelper {
  * コンテンツタイトルを取得する
  * @return string $description
  * @access public
+ * @manual
  */
 	function getContentsTitle() {
 
@@ -382,151 +395,163 @@ class BcBaserHelper extends AppHelper {
 
 	}
 /**
- * コンテンツタイトルを出力する
- * 
+ * コンテンツのタイトルを出力する
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function contentsTitle() {
-		
+
 		echo $this->getContentsTitle();
-		
+
 	}
 /**
- * タイトルを出力する
- * 
+ * タイトルタグを出力する
+ *
  * @param string $separator
  * @param string $categoryTitleOn
  * @return void
  * @access public
+ * @manual
  */
 	function title($separator='｜',$categoryTitleOn = null) {
-		
+
 		echo '<title>'.strip_tags($this->getTitle($separator,$categoryTitleOn)).'</title>';
-		
+
 	}
 /**
- * メタキーワードタグを出力する
- * 
+ * キーワード用のメタタグを出力する
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function metaKeywords() {
-		
+
 		echo $this->BcHtml->meta('keywords',$this->getkeywords());
-		
+
 	}
 /**
- * メタディスクリプションを出力する
- * 
+ * ページ説明文用のメタタグを出力する
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function metaDescription() {
-		
+
 		echo $this->BcHtml->meta('description', strip_tags($this->getDescription()));
-		
+
 	}
 /**
- * RSSリンクタグを出力する
- * 
+ * RSSフィードのリンクタグを出力する
+ *
  * @param string $title
  * @param string $link
  * @return void
  * @access public
+ * @manual
  */
 	function rss($title, $link) {
-		
+
 		echo $this->BcHtml->meta($title, $link, array('type' => 'rss'));
-		
+
 	}
 /**
  * トップページかどうか判断する
- * 
+ *
  * @return boolean
  * @access public
  * @deprecated isHomeに統合する
+ * @manual
  */
 	function isTop() {
-		
+
 		return $this->isHome();
-		
+
 	}
 /**
- * トップページかどうか判断する
- * 
+ * 現在のページがトップページかどうかを判定する
+ *
  * @return boolean
  * @access public
+ * @manual
  */
 	function isHome() {
-		
+
 		return ($this->params['url']['url'] == '/' ||
 						$this->params['url']['url'] == 'index' ||
 						$this->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/' ||
 						$this->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/index');
-		
+
 	}
 /**
- * webrootを出力する為だけのラッパー
- * 
+ * BaserCMSが設置されているパスを出力する
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function root() {
-		
+
 		echo $this->getRoot();
-		
+
 	}
 /**
- * webrootを取得する為だけのラッパー
- * 
+ * BaserCMSが設置されているパスを取得する
+ *
  * @return string
  * @access public
+ * @manual
  */
 	function getRoot() {
-		
+
 		return $this->base.'/';
-		
+
 	}
 /**
  * ベースを考慮したURLを出力
- * 
+ *
  * @param string $url
  * @param boolean $full
  * @return void
  * @access public
+ * @manual
  */
 	function url($url,$full = false, $sessionId = true) {
-		
+
 		echo $this->getUrl($url,$full, $sessionId);
-		
+
 	}
 /**
- * ベースを考慮したURLを取得
- * 
+ * 相対パスから実際のパスを取得する
+ *
  * @param string $url
  * @param boolean $full
+ * @manual
  */
 	function getUrl($url,$full = false, $sessionId = true) {
-		
+
 		return parent::url($url,$full, $sessionId);
-		
+
 	}
 /**
- * エレメントを取得する
+ * エレメント（部品）テンプレートを取得する
  * View::elementを取得するだけのラッパー
- * 
+ *
  * @param string $name
  * @param array $params
  * @param boolean $loadHelpers
  * @param boolean $subDir
  * @return string
  * @access public
+ * @manual
  */
 	function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
 
 		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
-		
+
 		if(!empty($this->_view->subDir) && $subDir) {
 			$name = $this->_view->subDir.DS.$name;
 			$params['subDir'] = true;
@@ -534,114 +559,122 @@ class BcBaserHelper extends AppHelper {
 			$params['subDir'] = false;
 		}
 		$out = $this->_view->element($name, $params, $loadHelpers);
-		
+
 		$this->executeHook('afterElement', $name, $out);
 
 		return $out;
-		
+
 	}
 /**
- * エレメントを出力する
+ * エレメント（部品）テンプレートを出力する
  * View::elementを出力するだけのラッパー
- * 
+ *
  * @param string $name
  * @param array $params
  * @param boolean $loadHelpers
  * @return void
  * @access public
+ * @manual
  */
 	function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
-		
+
 		echo $this->getElement($name, $params, $loadHelpers, $subDir);
-		
+
 	}
 /**
- * ヘッダーを出力する
- * 
+ * ヘッダーテンプレートを出力する
+ *
  * @param array $params
  * @param mixed $loadHelpers
  * @param boolean $subDir
+ * @manual
  */
 	function header($params = array(), $loadHelpers = false, $subDir = true) {
-		
+
 		$out = $this->getElement('header', $params, $loadHelpers, $subDir);
 		echo $this->executeHook('baserHeader', $out);
-		
+
 	}
 /**
- * フッターを出力する
+ * フッターテンプレートを出力する
  *
  * @param array $params
  * @param mixed $loadHelpers
  * @param boolean $subDir
  * @return void
  * @access public
+ * @manual
  */
 	function footer($params = array(), $loadHelpers = false, $subDir = true) {
-		
+
 		$out = $this->getElement('footer', $params, $loadHelpers, $subDir);
 		echo $this->executeHook('baserFooter', $out);
-		
+
 	}
 /**
  * ページネーションを出力する
- * [非推奨] 
+ * [非推奨]
  * @param string $name
  * @param array $params
  * @param boolean $loadHelpers
  * @return void
  * @access public
  * @deprecated
+ * @manual
  */
 	function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
-		
+
 		if(!$name) {
 			$name = 'default';
 		}
 		$file = 'paginations'.DS.$name;
 		echo $this->getElement($file,$params,$loadHelpers, $subDir);
-		
+
 	}
 /**
  * コンテンツを出力する
  * $content_for_layout を出力するだけのラッパー
- * 
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function content() {
-		
+
 		echo $this->_content;
-		
+
 	}
 /**
- * セッションメッセージをフラッシュするだけのラッパー
- * 
+ * セッションメッセージを出力する
+ *
  * @param array $key
  * @return void
  * @access public
+ * @manual
  */
 	function flash($key='flash') {
-		
+
 		if ($this->Session->check('Message.'.$key)) {
 			$this->Session->flash($key);
 		}
-		
+
 	}
 /**
- * スクリプトを出力する
+ * コンテンツ内で設定したCSSやjavascriptをレイアウトテンプレートに出力
  * $scripts_for_layout を出力する
- * 
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function scripts() {
-		
+
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
-		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
-			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+
+		if(isset($authPrefixes['toolbar'])) {
+			$toolbar = $authPrefixes['toolbar'];
 		}
 
 		// ツールバー設定
@@ -651,25 +684,26 @@ class BcBaserHelper extends AppHelper {
 			$this->css('admin/toolbar', array('inline' => false));
 			$this->BcHtml->themeWeb = $publishTheme;
 		}
-		
+
 		echo join("\n\t", $this->_view->__scripts);
-		
+
 	}
 /**
  * ツールバーやCakeのデバッグ出力を表示
- * 
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function func() {
-		
+
 		$currentPrefix = $this->_view->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
-		if(isset($authPrefixes[$currentPrefix]['toolbar'])) {
-			$toolbar = $authPrefixes[$currentPrefix]['toolbar'];
+		if(isset($authPrefixes['toolbar'])) {
+			$toolbar = $authPrefixes['toolbar'];
 		}
-		
+
 		// ツールバー表示
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$publishTheme = $this->_view->theme;
@@ -677,77 +711,82 @@ class BcBaserHelper extends AppHelper {
 			$this->element('admin/toolbar');
 			$this->_view->theme = $publishTheme;
 		}
-		
+
 		// デバッグ
 		if (isset($this->_view->viewVars['cakeDebug']) && Configure::read() > 2) {
 			$params = array('controller' => $this->_view->viewVars['cakeDebug']);
 			echo View::element('dump', $params, false);
 		}
-		
+
 	}
 /**
- * サブメニューをセットする
- * 
+ * サブメニューを設定する
+ *
  * @param array $submenus
  * @return void
  * @access public
+ * @manual
  */
 	function setSubMenus($submenus) {
-		
+
 		$this->_view->set('subMenuElements',$submenus);
-		
+
 	}
 /**
- * XMLヘッダを出力する
- * 
+ * XMLヘッダタグを出力する
+ *
  * @param array $attrib
  * @return void
- * @access public 
+ * @access public
+ * @manual
  */
 	function xmlHeader($attrib = array()) {
-		
+
 		if(empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile'){
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->BcXml->header($attrib)."\n";
-		
+
 	}
 /**
- * アイコンタグを出力するだけのラッパー
- * 
+ * アイコン（favicon）タグを出力する
+ *
  * @return void
  * @access public
+ * @manual
  */
 	function icon() {
-		
+
 		echo  $this->BcHtml->meta('icon');
-		
+
 	}
 /**
- * DOC TYPE を出力するだけのラッパー
- * 
+ * ドキュメントタイプを指定するタグを出力する
+ *
  * @param type $type
  * @return void
  * @access public
+ * @manual
  */
 	function docType($type = 'xhtml-trans') {
-		
+
 		echo $this->BcHtml->docType($type)."\n";
-		
+
 	}
 /**
- * 
- * CSSタグを出力するだけのラッパー
- * 
+ *
+ * CSSの読み込みタグを出力する
+ *
  * @param string $path
  * @param string $rel
  * @param array $htmlAttributes
  * @param boolean $inline
  * @return void
- * @access public 
+ * @access public
+ * @manual
  */
 	function css($path, $htmlAttributes = array(), $inline = true) {
-		
+
 		// Cake1.2系との互換対応
 		if (isset($htmlAttributes['inline']) && $inline == true) {
 			$inline = $htmlAttributes['inline'];
@@ -760,72 +799,76 @@ class BcBaserHelper extends AppHelper {
 		if($inline) {
 			echo $ret;
 		}
-		
+
 	}
 /**
- * Javascriptのlinkタグを出力するだけのラッパー
- * 
+ * javascriptの読み込みタグを出力する
+ *
  * @param boolean $url
- * @param boolean $inline 
+ * @param boolean $inline
  * @return void
  * @access public
+ * @manual
  */
 	function js($url, $inline = true) {
-		
+
 		$ret = $this->Javascript->link($url, $inline);
 		if($inline) {
 			echo $ret;
 		}
-		
+
 	}
 /**
- * imageタグを出力するだけのラッパー
- * 
+ * 画像読み込みタグを出力する
+ *
  * @param array $path
- * @param array $options 
+ * @param array $options
  * @return void
  * @access pub
+ * @manual
  */
 	function img($path, $options = array()) {
-		
+
 		echo $this->getImg($path, $options);
-		
+
 	}
 /**
- * imageタグを取得するだけのラッパー
- * 
+ * 画像タグを取得する
+ *
  * @param array $path
  * @param array $options
  * @return array
  * @access public
+ * @manual
  */
 	function getImg($path, $options = array()) {
-		
+
 		return $this->BcHtml->image($path, $options);
-		
+
 	}
 /**
- * aタグを表示するだけのラッパー関数
- * 
+ * アンカータグを出力する
+ *
  * @param string $title
  * @param string $url
  * @param array $htmlAttributes
  * @param boolean $confirmMessage
- * @param boolean $escapeTitle 
+ * @param boolean $escapeTitle
  * @return void
  * @access public
+ * @manual
  */
 	function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
-		
+
 		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
-		
+
 	}
 /**
  *
  */
 /**
- * aタグを取得するだけのラッパー
- * 
+ * アンカータグを取得する
+ *
  * @param string $title
  * @param string $url
  * @param array $htmlAttributes
@@ -833,9 +876,10 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $escapeTitle
  * @return string
  * @access public
+ * @manual
  */
 	function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
-		
+
 		$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 		if(!empty($htmlAttributes['prefix'])) {
@@ -857,14 +901,14 @@ class BcBaserHelper extends AppHelper {
 		}else {
 			$ssl = false;
 		}
-		
+
 		// 管理システムメニュー対策
 		// プレフィックスが変更された場合も正常動作させる為
 		// TODO メニューが廃止になったら削除
 		if(!is_array($url)) {
 			$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
 		}
-		
+
 		$url = $this->getUrl($url);
 		$_url = preg_replace('/^'.preg_quote($this->base, '/').'\//', '/', $url);
 		$enabled = true;
@@ -923,120 +967,123 @@ class BcBaserHelper extends AppHelper {
 			$htmlAttributes = array();
 		}
 		$htmlAttributes = array_merge($htmlAttributes, array('escape' => $escapeTitle));
-		
+
 		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
 
 		return $this->executeHook('afterBaserGetLink', $url, $out);
-		
+
 	}
 /**
- * 現在がSSL通信か確認する
+ * SSL通信かどうか確認する
  *
  * @return boolean
  * @access public
+ * @manual
  */
 	function isSSL() {
-		
+
 		if(!empty($this->_view->viewVars['isSSL'])){
 			return true;
 		} else {
 			return false;
 		}
-		
+
 	}
 /**
- * charsetを出力するだけのラッパー
- * 
+ * charsetメタタグを出力する
+ *
  * @param string $charset
  * @return void
  * @access public
+ * @manual
  */
 	function charset($charset = null) {
-		
+
 		if(!$charset && Configure::read('BcRequest.agent') == 'mobile'){
 			$charset = 'Shift-JIS';
 		}
 		echo $this->BcHtml->charset($charset);
-		
+
 	}
 /**
  * コピーライト用の年を出力する
- * 
+ *
  * @param string 開始年
  * @return void
  * @access public
+ * @manual
  */
 	function copyYear($begin) {
-		
+
 		$year = date('Y');
 		if($begin == $year) {
 			echo $year;
 		}else {
 			echo $begin.' - '.$year;
 		}
-		
+
 	}
 /**
  * ページ編集へのリンクを出力する
- * 
+ *
  * @param string $id
  * @return void
  * @access public
  */
 	function setPageEditLink($id) {
-		
+
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$this->_view->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
-		
+
 	}
 /**
  * 編集リンクを出力する
- * 
+ *
  * @return void
  * @access public
  */
 	function editLink() {
-		
+
 		if($this->existsEditLink()) {
 			$this->link('編集する', $this->_view->viewVars['editLink'], array('class' => 'tool-menu'));
 		}
-		
+
 	}
 /**
  * 編集リンクが存在するかチェックする
- * 
+ *
  * @return boolean
  * @access public
  */
 	function existsEditLink() {
-		
+
 		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
-		
+
 	}
 /**
  * 公開ページへのリンクを出力する
- * 
+ *
  * @return void
  * @access public
  */
 	function publishLink() {
-		
+
 		if($this->existsPublishLink()) {
 			$this->link('公開ページ', $this->_view->viewVars['publishLink'], array('class' => 'tool-menu'));
 		}
-		
+
 	}
 /**
  * 公開ページへのリンクが存在するかチェックする
- * 
+ *
  * @return boolean
  * @access public
  */
 	function existsPublishLink() {
-		
+
 		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['publishLink']));
-		
+
 	}
 /**
  * アップデート処理が必要かチェックする
@@ -1045,20 +1092,20 @@ class BcBaserHelper extends AppHelper {
  * @access public
  */
 	function checkUpdate() {
-		
+
 		$baserVerpoint = verpoint($this->_view->viewVars['baserVersion']);
 		if(isset($this->siteConfig['version'])) {
 			$siteVerpoint = verpoint($this->siteConfig['version']);
 		}else {
 			$siteVerpoint = 0;
 		}
-		
+
 		if(!$baserVerpoint === false || $siteVerpoint === false) {
 			return false;
 		} else {
 			return ($baserVerpoint > $siteVerpoint);
 		}
-		
+
 	}
 /**
  * アップデート用のメッセージを出力する
@@ -1072,30 +1119,32 @@ class BcBaserHelper extends AppHelper {
 			$updateLink = $this->BcHtml->link('ここ',"/{$adminPrefix}/updaters");
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';
 		}
-		
+
 	}
 /**
- * コンテンツ名を出力する
- * 
- * @param boolean $detail 
+ * コンテンツを特定するIDを出力する
+ *
+ * @param boolean $detail
  * @return void
  * @access public
+ * @manual
  */
 	function contentsName($detail = false, $options = array()) {
 
 		echo $this->getContentsName($detail);
-		
+
 	}
 /**
- * コンテンツ名を取得する
+ * コンテンツを特定するIDを取得する
  * ・キャメルケースで取得
  * ・URLのコントローラー名までを取得
  * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
  * ・トップページは、Home
- * 
+ *
  * @param boolean $detail
  * @return string
  * @access public
+ * @manual
  */
 	function getContentsName($detail = false, $options = array()) {
 
@@ -1105,9 +1154,9 @@ class BcBaserHelper extends AppHelper {
 			'error'		=> 'Error',
 			'underscore'=> false),
 		$options);
-		
+
 		extract($options);
-		
+
 		$prefix = '';
 		$plugin = '';
 		$controller = '';
@@ -1117,7 +1166,7 @@ class BcBaserHelper extends AppHelper {
 		$url1 = '';
 		$url2 = '';
 		$aryUrl = array();
-		
+
 		if(!empty($this->params['prefix']) && Configure::read('BcRequest.agentPrefix') != $this->params['prefix']) {
 			$prefix = h($this->params['prefix']);
 		}
@@ -1137,7 +1186,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		$url = split('/', h($this->params['url']['url']));
-		
+
 		if(Configure::read('BcRequest.agent')) {
 			array_shift($url);
 		}
@@ -1154,7 +1203,7 @@ class BcBaserHelper extends AppHelper {
 
 		// 固定ページの場合
 		if($controller=='pages' && $action=='display') {
-			
+
 			if(strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
@@ -1166,7 +1215,7 @@ class BcBaserHelper extends AppHelper {
 			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
 			$pageUrl = preg_replace('/^\//', '', $pageUrl);
 			$aryUrl = split('/',$pageUrl);
-			
+
 		} else {
 
 			// プラグインルーティングの場合
@@ -1174,7 +1223,7 @@ class BcBaserHelper extends AppHelper {
 				$plugin = '';
 				$controller = $url0;
 			}
-			
+
 			if($plugin) {
 				$controller = $plugin.'_'.$controller;
 			}
@@ -1194,35 +1243,35 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		if ($this->_view->name == 'CakeError') {
-			
+
 			$contentsName = $error;
-			
+
 		} elseif(count($aryUrl) >= 2) {
-			
+
 			if(!$detail) {
 				$contentsName = $aryUrl[0];
 			} else {
 				$contentsName = implode('_', $aryUrl);
 			}
-			
+
 		} elseif(count($aryUrl) == 1 && $aryUrl[0] == 'index') {
-			
+
 			$contentsName = $home;
-			
+
 		} else {
-			if(!$detail) {	
+			if(!$detail) {
 				$contentsName = $default;
 			} else {
 				$contentsName = $aryUrl[0];
 			}
 		}
-		
+
 		if($underscore) {
 			$contentsName = Inflector::underscore($contentsName);
 		} else {
 			$contentsName = Inflector::camelize($contentsName);
 		}
-			
+
 		return $contentsName;
 
 	}
@@ -1234,9 +1283,10 @@ class BcBaserHelper extends AppHelper {
  * @param string $startText This will be the first crumb, if false it defaults to first crumb in array
  * @return string
  * @access public
+ * @manual
  */
 	function crumbs($separator = '&raquo;', $startText = false) {
-		
+
 		if (!empty($this->BcHtml->_crumbs)) {
 			$out = array();
 			if ($startText) {
@@ -1252,10 +1302,10 @@ class BcBaserHelper extends AppHelper {
 			}
 			echo $this->output(implode($separator, $out));
 		}
-		
+
 	}
 /**
- * パンくずリストに要素を追加する
+ * パンくずリストの要素を追加する
  * アクセス制限がかかっているリンクの場合でもタイトルを表示できるオプションを付加
  * $options に forceTitle を指定する事で表示しない設定も可能
  *
@@ -1263,10 +1313,11 @@ class BcBaserHelper extends AppHelper {
  * @param string $link URL for link (if empty it won't be a link)
  * @param mixed $options Link attributes e.g. array('id'=>'selected')
  * @return void
- * @access public 
+ * @access public
+ * @manual
  */
 	function addCrumb($name, $link = null, $options = null) {
-		
+
 		$_options = array('forceTitle'=>true);
 		if($options) {
 			$options = am($_options,$options);
@@ -1274,17 +1325,18 @@ class BcBaserHelper extends AppHelper {
 			$options = $_options;
 		}
 		$this->BcHtml->_crumbs[] = array($name, $link, $options);
-		
+
 	}
 /**
- * ページリストを取得する
- * 
+ * ページ機能で作成したページの一覧データを取得する
+ *
  * @param string $categoryId
  * @return mixed boolean / array
  * @access public
+ * @manual
  */
 	function getPageList($categoryId=null) {
-		
+
 		if ($this->Page) {
 			$conditions = array('Page.status'=>1);
 			if($categoryId) {
@@ -1298,18 +1350,19 @@ class BcBaserHelper extends AppHelper {
 		}else {
 			return false;
 		}
-		
+
 	}
 /**
  *
  */
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
- * 
+ *
  * @param type $expire
- * @param array $type 
+ * @param array $type
  * @return void
  * @access public
+ * @manual
  */
 	function cacheHeader($expire = DAY, $type='html') {
 
@@ -1337,10 +1390,11 @@ class BcBaserHelper extends AppHelper {
 	}
 /**
  * httpから始まるURLを取得する
- * 
+ *
  * @param string $url
  * @return string
  * @access public
+ * @manual
  */
 	function getUri($url, $sessionId = true){
 		if(preg_match('/^http/is', $url)) {
@@ -1409,13 +1463,13 @@ class BcBaserHelper extends AppHelper {
  * @access protected
  */
 	function call__($method, $params) {
-		
+
 		foreach($this->pluginBasers as $pluginBaser){
 			if(method_exists($pluginBaser,$method)){
 				return call_user_func_array(array(&$pluginBaser, $method), $params);
 			}
 		}
-		
+
 	}
 /**
  * 文字列を検索しマークとしてタグをつける
@@ -1427,6 +1481,7 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $escape エスケープ有無
  * @return string $text 変換後文字列
  * @access public
+ * @manual
  */
 	function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
 
@@ -1437,15 +1492,16 @@ class BcBaserHelper extends AppHelper {
 			$text = str_replace($value, $this->BcHtml->tag($name, $value, $attributes, $escape), $text);
 		}
 		return $text;
-		
+
 	}
 /**
  * サイトマップを出力する
- * 
+ *
  * @param mixid $pageCategoryId / '' / 0
  * @param string $recursive
  * @return void
  * @access public
+ * @manual
  */
 	function sitemap($pageCategoryId = null, $recursive = null) {
 
@@ -1458,56 +1514,61 @@ class BcBaserHelper extends AppHelper {
 					'key' => $pageCategoryId))
 			);
 		}
-		
+
 		$this->element('sitemap', $params);
-		
+
 	}
 /**
  * Flashを表示する
- * 
+ *
  * @param string $path
  * @param string $id
  * @param int $width
  * @param int $height
  * @param array $options
- * @return string 
+ * @return string
+ * @manual
  */
 	function swf($path, $id, $width, $height, $options = array()) {
-		
+
 		$options = array_merge(array(
 			'version'	=> 7,
 			'script'	=> 'swfobject-2.2',
 			'noflash'	=> '&nbsp;'
 		), $options);
 		extract($options);
-		
-		if(!preg_match('/^\//', $path)) {
-			$path = '/img/'.$path;
-		}
-		if(strpos($path, "\.") === false) {
+
+		if(!preg_match('/\.swf$/', $path)) {
 			$path .= '.swf';
 		}
-		$path = $this->webroot($path);
-		$path = 'http://projects.localhost:8888'.$path;
-		$out .= $this->js($script, true)."\n";
+		
+		if (is_array($path)) {
+			$path = $this->getUrl($path);
+		} elseif (strpos($path, '://') === false) {
+			if ($path[0] !== '/') {
+				$path = IMAGES_URL . $path;
+			}
+			$path = $this->webroot($path);
+		}		
+		$out = $this->js($script, true)."\n";
 		$out = <<< END_FLASH
 <div id="{$id}">{$noflash}</div>
 <script type="text/javascript">
 	swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
 </script>
 END_FLASH;
-		
+
 		echo $out;
-		
+
 	}
 /**
  * URLをリンクとして利用可能なURLに変換する
  * ページの確認用URL取得に利用する
  * /smartphone/about → /s/about
- * 
+ *
  * @param string $url
  * @param string $type mobile / smartphone
- * @return string URL 
+ * @return string URL
  */
 	function changePrefixToAlias($url, $type) {
 		$alias = Configure::read("BcAgent.{$type}.alias");
@@ -1516,9 +1577,10 @@ END_FLASH;
 	}
 /**
  * 現在のログインユーザーが管理者グループかどうかチェックする
- * 
- * @return boolean 
+ *
+ * @return boolean
  * @access public
+ * @manual
  */
 	function isAdminUser($id = null) {
 		if(!$id && !empty($this->_view->viewVars['user']['user_group_id'])) {
@@ -1531,32 +1593,35 @@ END_FLASH;
 		}
 	}
 /**
- * 固定ページ判定
- * 
+ * 現在のページが固定ページかどうかを判定する
+ *
  * @return boolean
  * @access public
+ * @manual
  */
 	function isPage() {
 		return $this->Page->isPageUrl($this->getHere());
 	}
 /**
- * 現在のページの純粋なURLを取得
+ * 現在のページの純粋なURLを取得する
  * スマートURLかどうか、サブフォルダかどうかに依存しないスラッシュから始まるURL
- * 
+ *
  * @return string
  * @access public
+ * @manual
  */
 	function getHere() {
 		return '/' . preg_replace('/^\//', '', $this->params['url']['url']);
 	}
 /**
- * ページカテゴリのトップ判定
- * 
+ * 現在のページがページカテゴリのトップかどうかを判定する
+ *
  * @return boolean
  * @access public
+ * @manual
  */
 	function isCategoryTop() {
-		
+
 		$url = $this->getHere();
 		$url = preg_replace('/^\//', '', $url);
 		if(preg_match('/\/$/', $url)) {
@@ -1569,13 +1634,14 @@ END_FLASH;
 			}
 		}
 		return false;
-		
+
 	}
 /**
  * ページをエレメントとして読み込む
- * 
+ *
  * ※ レイアウトは読み込まない
- * @param int $id 
+ * @param int $id
+ * @manual
  */
 	function page($id, $params = array(), $options = array()) {
 
@@ -1594,11 +1660,11 @@ END_FLASH;
 		$this->_view->viewVars['pageRecursive'] = $recursive;
 		
 		// 現在のページの情報を退避
-		$currentId = null;
+		$editLink = null;
 		$description = $this->getDescription();
 		$title = $this->getContentsTitle();
-		if(!empty($this->_view->loaded['bcPage'])) {
-			$currentId = $this->_view->loaded['bcPage']->data['Page']['id'];
+		if($this->_view->viewVars['editLink']) {
+			$editLink = $this->_view->viewVars['editLink'];
 		}
 		
 		// urlを取得
@@ -1613,11 +1679,26 @@ END_FLASH;
 			// 現在のページの情報に戻す
 			$this->setDescription($description);
 			$this->setTitle($title);
-			if($currentId) {
-				$this->setPageEditLink($currentId);
+			if($editLink) {
+				$this->_view->viewVars['editLink'] = $editLink;
 			}
+		}
+
+	}
+/**
+ * ウィジェットエリアを出力する
+ * 
+ * @param int $no 
+ * @access public
+ */
+	function widgetArea($no = null) {
+		
+		if(!$no) {
+			$no = $this->_view->viewVars['widgetArea'];
+		}
+		if($no) {
+			$this->element('widget_area', array('no' => $no));
 		}
 		
 	}
 }
-?>

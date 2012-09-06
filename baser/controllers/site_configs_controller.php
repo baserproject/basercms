@@ -46,7 +46,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
 /**
  * サブメニューエレメント
  *
@@ -131,15 +131,15 @@ class SiteConfigsController extends AppController {
 					$this->Session->setFlash('システム設定を保存しました。');
 
 					// 環境設定を保存
-					$this->writeInstallSetting('debug', $mode);
-					$this->writeInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
-					$this->writeInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
-					$this->writeInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
-					$this->writeInstallSetting('BcApp.mobile', ($mobile)? 'true' : 'false');
-					$this->writeInstallSetting('BcApp.smartphone', ($smartphone)? 'true' : 'false');
+					$this->BcManager->setInstallSetting('debug', $mode);
+					$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
+					$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
+					$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
+					$this->BcManager->setInstallSetting('BcApp.mobile', ($mobile)? 'true' : 'false');
+					$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone)? 'true' : 'false');
 					
-					if($this->readSmartUrl() != $smartUrl) {
-						$this->writeSmartUrl($smartUrl);
+					if($this->BcManager->smartUrl() != $smartUrl) {
+						$this->BcManager->setSmartUrl($smartUrl);
 					}
 
 					// キャッシュをクリア
@@ -149,12 +149,12 @@ class SiteConfigsController extends AppController {
 					}
 
 					// リダイレクト
-					if($this->readSmartUrl() != $smartUrl) {
+					if($this->BcManager->smartUrl() != $smartUrl) {
 						$adminPrefix = Configure::read('Routing.admin');
 						if($smartUrl){
-							$redirectUrl = $this->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
+							$redirectUrl = $this->BcManager->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
 						}else{
-							$redirectUrl = $this->getRewriteBase('/index.php/'.$adminPrefix.'/site_configs/form');
+							$redirectUrl = $this->BcManager->getRewriteBase('/index.php/'.$adminPrefix.'/site_configs/form');
 						}
 						header('Location: '.FULL_BASE_URL.$redirectUrl);
 						exit();
@@ -248,7 +248,7 @@ class SiteConfigsController extends AppController {
 		$this->set('driver',$drivers[$driver]);
 		$this->set('smartUrl',$smartUrl);
 		$this->set('baserVersion',$this->siteConfigs['version']);
-		$this->set('cakeVersion',$this->getCakeVersion());
+		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = array('site_configs');
 
 	}
@@ -271,7 +271,7 @@ class SiteConfigsController extends AppController {
 
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = Configure::read('debug');
-		$data['SiteConfig']['smart_url'] = $this->readSmartUrl();
+		$data['SiteConfig']['smart_url'] = $this->BcManager->smartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
 		$data['SiteConfig']['admin_ssl'] = Configure::read('BcApp.adminSsl');

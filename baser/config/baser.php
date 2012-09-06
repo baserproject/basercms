@@ -54,6 +54,13 @@
 		'updateKey'		=> 'update'
 	);
 /**
+ * システム要件 
+ */
+	$config['BcRequire'] = array(
+		'phpVersion'	=> "5.2.0",
+		'phpMemory'=> "32"
+	);
+/**
  * 環境設定 
  */
 	$config['BcEnv'] = array(

@@ -295,6 +295,13 @@ class PagesController extends AppController {
 		if(!empty($this->data['PageCategory']['id'])) {
 			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
+		
+		if(empty($this->data['PageCategory']['id']) || $this->data['PageCategory']['name'] == 'mobile' || $this->data['PageCategory']['name'] == 'smartphone') {
+			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+		} else {
+			$currentCatOwner = $this->data['PageCategory']['owner_id'];
+		}
+		
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
 			'currentOwnerId'		=> $currentOwnerId,
 			'currentPageCategoryId'	=> $currentPageCategoryId,
@@ -308,6 +315,7 @@ class PagesController extends AppController {
 			$this->set('publishLink', $url);
 		}
 		
+		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);

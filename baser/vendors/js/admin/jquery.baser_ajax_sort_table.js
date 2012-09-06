@@ -34,7 +34,6 @@
 			flashBox	: '#flashMessage'
 		},
 		init: function(config){
-			
 			if(config) {
 				$.extend($.baserAjaxSortTable.config, config);
 			}
@@ -128,7 +127,7 @@
 			},
 			success: function(result){
 				if(result == '1') {
-					sortTable.find(config.listTable + " " + config.items).each(function(i,v){
+					sortTable.find(config.items).each(function(i,v){
 						$(this).attr('id','Row'+(i+1));
 					});
 				} else {
