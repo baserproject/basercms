@@ -34,10 +34,11 @@ $(function(){
 });
 </script>
 
-<div class="section">
-	<h2>基本項目</h2>
+<?php echo $bcForm->create('FeedConfig') ?>
 
-	<?php echo $bcForm->create('FeedConfig') ?>
+<div class="section">
+	
+	<h2>基本項目</h2>	
 
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 	<?php if($this->action == 'admin_edit'): ?>

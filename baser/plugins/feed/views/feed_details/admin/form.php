@@ -26,15 +26,16 @@ $(window).load(function() {
 });
 </script>
 
+<?php if($this->action == 'admin_add'): ?>
+	<?php echo $bcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'add', $bcForm->value('FeedDetail.feed_config_id')))) ?>
+<?php elseif($this->action == 'admin_edit'): ?>
+	<?php echo $bcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'edit', $bcForm->value('FeedDetail.feed_config_id'), $bcForm->value('FeedDetail.id'), 'id' => false))) ?>
+<?php endif; ?>
+
+<?php echo $bcForm->input('FeedDetail.feed_config_id', array('type' => 'hidden')) ?>
 
 <div class="section">
 	<h2>基本項目</h2>
-	<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'add', $bcForm->value('FeedDetail.feed_config_id')))) ?>
-	<?php elseif($this->action == 'admin_edit'): ?>
-	<?php echo $bcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'edit', $bcForm->value('FeedDetail.feed_config_id'), $bcForm->value('FeedDetail.id'), 'id' => false))) ?>
-	<?php endif; ?>
-	<?php echo $bcForm->input('FeedDetail.feed_config_id', array('type' => 'hidden')) ?>
 
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 	<?php if($this->action == 'admin_edit'): ?>
