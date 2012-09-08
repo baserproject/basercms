@@ -1534,4 +1534,3 @@ class BaserAppController extends Controller {
 		exit();
 	}
 }
-?>
