@@ -5,9 +5,7 @@ app/config/install.php
 app/db/*
 !app/db/empty
 app/plugins/*
-!app/plugins/blog
-!app/plugins/mail
-!app/plugins/feed
+!app/plugins/empty
 app/webroot/files/*
 !app/webroot/files/empty
 app/tmp/*
