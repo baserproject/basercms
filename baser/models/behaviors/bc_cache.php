@@ -157,4 +157,3 @@ class BcCacheBehavior extends ModelBehavior {
 	}
 	
 }
-?>

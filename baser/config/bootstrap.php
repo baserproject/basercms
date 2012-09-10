@@ -309,4 +309,3 @@ if(BC_INSTALLED) {
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 	
 }
-?>

@@ -133,4 +133,3 @@ class  BcAuthConfigureComponent extends Object {
 	}
 
 }
-?>

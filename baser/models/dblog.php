@@ -63,4 +63,3 @@ class Dblog extends AppModel {
 	);
 
 }
-?>

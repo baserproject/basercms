@@ -508,4 +508,3 @@ class PageCategoriesController extends AppController {
 	}
 	
 }
-?>

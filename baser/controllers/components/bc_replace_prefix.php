@@ -168,4 +168,3 @@ class BcReplacePrefixComponent extends Object {
 	}
 
 }
-?>

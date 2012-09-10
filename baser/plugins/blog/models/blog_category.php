@@ -312,4 +312,3 @@ class BlogCategory extends BlogAppModel {
 	}
 	
 }
-?>

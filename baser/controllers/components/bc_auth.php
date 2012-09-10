@@ -252,4 +252,3 @@ class BcAuthComponent extends AuthComponent {
 	}
 	
 }
-?>

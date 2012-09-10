@@ -23,4 +23,3 @@ $author = 'ryuring';
 $url = 'http://www.e-catchup.jp';
 $adminLink = array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index');
 $installMessage = '';
-?>

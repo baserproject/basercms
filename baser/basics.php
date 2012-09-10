@@ -788,4 +788,3 @@
 		$BcEmail->send($message);
 
 	}
-?>

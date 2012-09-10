@@ -70,4 +70,3 @@ class ThemeFile extends AppModel {
 	}
 	
 }
-?>

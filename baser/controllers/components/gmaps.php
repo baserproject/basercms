@@ -20,4 +20,3 @@
  * @deprecated		BcGmapsComponent に移行
  */
 trigger_error('GmapsComponent は非推奨です。BcGmapsComponent を利用してください。', E_USER_WARNING);
-?>

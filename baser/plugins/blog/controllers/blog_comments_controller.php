@@ -460,4 +460,3 @@ class BlogCommentsController extends BlogAppController {
 		
     } 
 }
-?>

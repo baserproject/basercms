@@ -82,4 +82,3 @@ class GlobalMenu extends AppModel {
 	}
 
 }
-?>

@@ -74,4 +74,3 @@ class WidgetArea extends AppModel {
 	}
 	
 }
-?>

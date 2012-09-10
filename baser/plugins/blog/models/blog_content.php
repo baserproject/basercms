@@ -250,4 +250,4 @@ class BlogContent extends BlogAppModel {
 
 	}
 }
-?>
+

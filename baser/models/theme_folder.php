@@ -74,4 +74,3 @@ class ThemeFolder extends AppModel {
 	}
 	
 }
-?>

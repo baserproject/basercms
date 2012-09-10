@@ -740,4 +740,3 @@ class Message extends MailAppModel {
 	}
 	
 }
-?>

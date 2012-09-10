@@ -108,4 +108,3 @@ class UploadsController extends AppController {
 	}
 	
 }
-?>

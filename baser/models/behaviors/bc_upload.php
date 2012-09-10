@@ -680,4 +680,3 @@ class BcUploadBehavior extends ModelBehavior {
 	}
 	
 }
-?>

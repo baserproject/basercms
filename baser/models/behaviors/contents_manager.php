@@ -19,4 +19,3 @@
  * @deprecated		BcContentsManagerBehavior に移行
  */
 trigger_error('ContentsManagerBehavior は非推奨です。BcContentsManagerBehavior を利用してください。', E_USER_WARNING);
-?>

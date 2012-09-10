@@ -152,4 +152,3 @@ class Theme extends AppModel {
 
 	}
 }
-?>

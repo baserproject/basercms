@@ -243,4 +243,3 @@ class BcGmapsComponent  extends Object {
 	}
 	
 }
-?>

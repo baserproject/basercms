@@ -142,4 +142,3 @@ class SiteConfig extends AppModel {
 	}
 	
 }
-?>

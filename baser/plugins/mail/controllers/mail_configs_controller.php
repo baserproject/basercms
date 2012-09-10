@@ -94,4 +94,3 @@ class MailConfigsController extends MailAppController {
 	}
 	
 }
-?>

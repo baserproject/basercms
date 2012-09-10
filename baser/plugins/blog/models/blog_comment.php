@@ -134,4 +134,3 @@ class BlogComment extends BlogAppModel {
 	}
 	
 }
-?>

@@ -187,4 +187,3 @@ class BcPluginHookComponent extends Object {
 	}
 	
 }
-?>
