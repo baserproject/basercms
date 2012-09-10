@@ -252,4 +252,3 @@ class BcPluginHookBehavior extends ModelBehavior {
 	}
 	
 }
-?>

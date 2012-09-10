@@ -33,4 +33,3 @@ App::import('Core', 'BaserAppController', array('search' => BASER_CONTROLLERS));
  */
 class AppController extends BaserAppController {
 }
-?>

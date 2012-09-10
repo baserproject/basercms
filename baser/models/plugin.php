@@ -96,4 +96,3 @@ class Plugin extends AppModel {
 	}
 	
 }
-?>

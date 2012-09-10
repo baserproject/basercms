@@ -315,4 +315,3 @@ class MailContent extends MailAppModel {
 	}
 	
 }
-?>

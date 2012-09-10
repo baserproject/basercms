@@ -19,4 +19,3 @@
  * @deprecated		BcEmailComponent に移行
  */
 trigger_error('EmailExComponent は非推奨です。BcEmailComponent を利用してください。', E_USER_WARNING);
-?>

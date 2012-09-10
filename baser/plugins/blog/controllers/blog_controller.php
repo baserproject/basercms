@@ -922,4 +922,3 @@ class BlogController extends BlogAppController {
 	}
 	
 }
-?>

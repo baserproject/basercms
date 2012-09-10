@@ -596,4 +596,3 @@ class BlogPost extends BlogAppModel {
 	}
 	
 }
-?>

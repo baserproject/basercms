@@ -135,4 +135,3 @@ class BcCaptchaComponent extends Object {
 	}
 	
 }
-?>

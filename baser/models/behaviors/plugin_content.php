@@ -32,4 +32,3 @@
  * @deprecated		BcPluginContentBehavior に移行
  */
 trigger_error('PluginContentBehavior は非推奨です。BcPluginContentBehavior を利用してください。', E_USER_WARNING);
-?>

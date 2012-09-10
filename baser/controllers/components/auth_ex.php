@@ -26,4 +26,3 @@
  * @deprecated		BcAuthComponent に移行
  */
 trigger_error('AuthExComponent は非推奨です。BcAuthComponent を利用してください。', E_USER_WARNING);
-?>

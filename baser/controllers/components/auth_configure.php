@@ -20,4 +20,3 @@
  * @deprecated		BcAuthConfigureComponent に移行
  */
 trigger_error('AuthConfigureComponent は非推奨です。BcAuthConfigureComponent を利用してください。', E_USER_WARNING);
-?>

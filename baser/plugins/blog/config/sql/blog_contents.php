@@ -37,4 +37,3 @@ class BlogContentsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('unique' => true, 'column' => 'id'))
 	);
 }
-?>

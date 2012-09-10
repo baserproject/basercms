@@ -208,4 +208,3 @@ class UserGroup extends AppModel {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
 	}
 }
-?>

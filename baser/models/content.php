@@ -38,4 +38,3 @@ class Content extends AppModel {
  */
 	var $actsAs = array('BcCache');
 }
-?>

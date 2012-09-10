@@ -19,4 +19,3 @@
  * @deprecated		BcCaptchaComponent に移行
  */
 trigger_error('CaptchaComponent は非推奨です。BcCaptchaComponent を利用してください。', E_USER_WARNING);
-?>

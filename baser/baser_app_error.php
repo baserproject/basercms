@@ -119,4 +119,3 @@ class BaserAppError extends ErrorHandler {
 		$this->_outputMessage('missingLayout');
 	}
 }
-?>
