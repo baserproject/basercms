@@ -649,4 +649,3 @@ class PageCategory extends AppModel {
 	}
 	
 }
-?>

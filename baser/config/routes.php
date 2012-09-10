@@ -226,4 +226,3 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 		include $themeBootstrap;
 	}
 }
-?>

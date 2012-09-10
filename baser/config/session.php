@@ -18,4 +18,3 @@ if (empty($_SESSION)) {
 		ini_set('session.cookie_path', $this->path);
 	}
 }
-?>

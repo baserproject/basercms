@@ -277,4 +277,3 @@ class WebModel extends AppModel
     }    
 	
 }
-?>

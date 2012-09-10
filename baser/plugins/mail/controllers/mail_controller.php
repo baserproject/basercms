@@ -484,4 +484,3 @@ class MailController extends MailAppController {
 		
     }
 }
-?>

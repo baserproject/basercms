@@ -273,4 +273,3 @@ class UserGroupsController extends AppController {
 	}
 	
 }
-?>

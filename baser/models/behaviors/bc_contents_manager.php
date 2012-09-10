@@ -147,4 +147,3 @@ class BcContentsManagerBehavior extends ModelBehavior {
 	}
 
 }
-?>

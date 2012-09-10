@@ -110,4 +110,3 @@ class BlogConfigsController extends BlogAppController {
 	}
 	
 }
-?>

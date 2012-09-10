@@ -947,4 +947,3 @@ class ThemeFilesController extends AppController {
 	}
 	
 }
-?>

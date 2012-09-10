@@ -497,4 +497,3 @@ class PermissionsController extends AppController {
 	}
 	
 }
-?>

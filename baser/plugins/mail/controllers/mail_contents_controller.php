@@ -377,4 +377,3 @@ class MailContentsController extends MailAppController {
 
 	}
 }
-?>

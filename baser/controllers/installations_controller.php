@@ -742,4 +742,3 @@ class InstallationsController extends AppController {
 	}
 	
 }
-?>

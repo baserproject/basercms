@@ -34,4 +34,3 @@ class BaserPluginAppModel extends AppModel {
  */
 	var $useDbConfig = 'plugin';
 }
-?>

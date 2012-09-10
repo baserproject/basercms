@@ -327,4 +327,3 @@ class BlogContentsController extends BlogAppController {
 	}
 	
 }
-?>

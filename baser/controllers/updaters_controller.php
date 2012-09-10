@@ -656,4 +656,3 @@ class UpdatersController extends AppController {
 	}
 
 }
-?>

@@ -597,4 +597,3 @@ class MailFieldsController extends MailAppController {
 	}
 	
 }
-?>

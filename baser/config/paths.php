@@ -76,4 +76,3 @@
 	} elseif(is_dir(ROOT.DS.'themed')) {
 		define('BASER_THEMES', ROOT.DS.'themed'.DS);
 	}
-?>

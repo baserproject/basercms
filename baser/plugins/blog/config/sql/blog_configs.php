@@ -20,4 +20,3 @@ class BlogConfigsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
-?>

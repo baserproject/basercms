@@ -23,4 +23,3 @@ $author = 'ryuring';
 $url = 'http://www.e-catchup.jp';
 $adminLink = array('plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'index');
 $installMessage = '';
-?>
