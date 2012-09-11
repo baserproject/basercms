@@ -313,4 +313,3 @@ class FeedController extends FeedAppController {
 	}
 	
 }
-?>

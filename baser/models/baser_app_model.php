@@ -1523,4 +1523,3 @@ class BaserAppModel extends Model {
 		
 	}
 }
-?>

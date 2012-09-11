@@ -41,4 +41,3 @@ class Updater extends AppModel {
  */
 	var $useTable = false;
 }
-?>

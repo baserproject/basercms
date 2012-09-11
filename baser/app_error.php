@@ -32,4 +32,3 @@ App::import('Core', 'BaserAppError', array('search' => BASER));
  */
 class AppError extends BaserAppError {
 }
-?>

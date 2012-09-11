@@ -240,4 +240,3 @@ class MailMessagesController extends MailAppController {
 	}
 
 }
-?>

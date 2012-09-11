@@ -235,4 +235,3 @@ class BlogTagsController extends BlogAppController {
 	}
 	
 }
-?>

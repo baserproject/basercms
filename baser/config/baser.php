@@ -201,4 +201,3 @@
 	define('BC_UPLOAD_HELPER'		, 'BcUpload');
 	define('BC_XML_HELPER'			, 'BcXml');
 	
-?>

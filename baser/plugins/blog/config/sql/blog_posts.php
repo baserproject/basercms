@@ -36,4 +36,3 @@ class BlogPostsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
-?>

@@ -278,4 +278,3 @@ class RssEx extends Rss {
 	}
 	
 }
-?>

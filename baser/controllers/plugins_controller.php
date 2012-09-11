@@ -532,4 +532,3 @@ class PluginsController extends AppController {
 	}
 	
 }
-?>

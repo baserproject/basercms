@@ -106,4 +106,3 @@ class PluginContent extends AppModel {
 	}
 
 }
-?>

@@ -32,4 +32,3 @@ App::import('Core', 'BaserAppModel', array('search' => BASER_MODELS));
  */
 class AppModel extends BaserAppModel {
 }
-?>

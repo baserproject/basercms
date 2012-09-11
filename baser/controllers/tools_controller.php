@@ -326,4 +326,3 @@ class ToolsController extends AppController {
 	}
 	
 }
-?>

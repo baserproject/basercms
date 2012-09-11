@@ -445,4 +445,3 @@ class BcEmailComponent extends EmailComponent {
 	}
 	
 }
-?>

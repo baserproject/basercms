@@ -229,4 +229,3 @@ class MailField extends MailAppModel {
 	}
 	
 }
-?>

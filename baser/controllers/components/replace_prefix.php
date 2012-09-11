@@ -34,4 +34,3 @@
  * @deprecated		BcReplacePrefixComponent に移行
  */
 trigger_error('ReplacePrefixComponent は非推奨です。BcReplacePrefixComponent を利用してください。', E_USER_WARNING);
-?>

@@ -19,4 +19,3 @@
  * @deprecated		BcCacheBehavior に移行
  */
 trigger_error('CacheBehavior は非推奨です。BcCacheBehavior を利用してください。', E_USER_WARNING);
-?>

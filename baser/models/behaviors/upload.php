@@ -19,4 +19,3 @@
  * @deprecated		BcUploadBehavior に移行
  */
 trigger_error('UploadBehavior は非推奨です。BcUploadBehavior を利用してください。', E_USER_WARNING);
-?>

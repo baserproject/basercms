@@ -174,4 +174,3 @@ class BcPluginContentBehavior extends ModelBehavior {
 	}
 
 }
-?>

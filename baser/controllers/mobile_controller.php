@@ -61,4 +61,3 @@ class MobileController extends AppController {
 	}
 	
 }
-?>

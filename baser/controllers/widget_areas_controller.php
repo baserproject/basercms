@@ -433,4 +433,3 @@ function widgetSort($a, $b){
 	}
 	
 }
-?>
