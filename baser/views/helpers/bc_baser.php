@@ -1364,7 +1364,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	function cacheHeader($expire = DAY, $type='html') {
+	function cacheHeader($expire = null, $type='html') {
 
 		$contentType = array(
 			'html' => 'text/html',
@@ -1374,10 +1374,12 @@ class BcBaserHelper extends AppHelper {
 		$fileModified = filemtime(WWW_ROOT.'index.php');
 
 		if(!$expire) {
-			$expire = strtotime(DAY);
-		} elseif(!is_numeric($expire)){
+			$expire = Configure::read('BcCache.defaultCachetime');
+		}
+		if(!is_numeric($expire)){
 			$expire = strtotime($expire);
 		}
+		
 		header("Date: " . date("D, j M Y G:i:s ", $fileModified) . 'GMT');
 		header("Last-Modified: " . gmdate( "D, d M Y H:i:s", $fileModified) . " GMT");
 		header('Content-type: ' . $contentType[$type]);

@@ -364,6 +364,75 @@ class BaserAppView extends ThemeView {
 		
 		return $this->_missingView($paths[0] . $file . $this->ext, 'missingLayout');
 	}
+/**
+ * Renders a layout. Returns output from _render(). Returns false on error.
+ * Several variables are created for use in layout.
+ *	title_for_layout - contains page title
+ *	content_for_layout - contains rendered view file
+ *	scripts_for_layout - contains scripts added to header
+ *  cakeDebug - if debug is on, cake debug information is added.
+ *
+ * @param string $content_for_layout Content to render in a view, wrapped by the surrounding layout.
+ * @return mixed Rendered output, or false on error
+ */
+	function renderLayout($content_for_layout, $layout = null) {
+		$layoutFileName = $this->_getLayoutFileName($layout);
+		if (empty($layoutFileName)) {
+			return $this->output;
+		}
+
+		$debug = '';
+
+		if (isset($this->viewVars['cakeDebug']) && Configure::read() > 2) {
+			$params = array('controller' => $this->viewVars['cakeDebug']);
+			$debug = View::element('dump', $params, false);
+			unset($this->viewVars['cakeDebug']);
+		}
+
+		if ($this->pageTitle !== false) {
+			$pageTitle = $this->pageTitle;
+		} else {
+			$pageTitle = Inflector::humanize($this->viewPath);
+		}
+		$data_for_layout = array_merge($this->viewVars, array(
+			'title_for_layout' => $pageTitle,
+			'content_for_layout' => $content_for_layout,
+			'scripts_for_layout' => implode("\n\t", $this->__scripts),
+			'cakeDebug' => $debug
+		));
+
+		if (empty($this->loaded) && !empty($this->helpers)) {
+			$loadHelpers = true;
+		} else {
+			$loadHelpers = false;
+			$data_for_layout = array_merge($data_for_layout, $this->loaded);
+		}
+
+		$this->_triggerHelpers('beforeLayout');
+
+		// CUSTOMIZE MODIFY 2012/09/11 ryuring
+		// >>>
+		//if (substr($layoutFileName, -3) === 'ctp' || substr($layoutFileName, -5) === 'thtml') {
+		// ---
+		if (substr($layoutFileName, -3) === 'ctp' || substr($layoutFileName, -5) === 'thtml' || substr($layoutFileName, -3) === 'php') {
+		// <<<
+		
+			$this->output = View::_render($layoutFileName, $data_for_layout, $loadHelpers, true);
+		} else {
+			$this->output = $this->_render($layoutFileName, $data_for_layout, $loadHelpers);
+		}
+
+		if ($this->output === false) {
+			$this->output = $this->_render($layoutFileName, $data_for_layout);
+			$msg = __("Error in layout %s, got: <blockquote>%s</blockquote>", true);
+			trigger_error(sprintf($msg, $layoutFileName, $this->output), E_USER_ERROR);
+			return false;
+		}
+
+		$this->_triggerHelpers('afterLayout');
+
+		return $this->output;
+	}
 	
 }
 ?>
