@@ -108,7 +108,7 @@ class BcUploadHelper extends FormHelper {
 		unset($options['imgsize']);
 		unset($options['rel']);
 		unset($options['title']);
-		$basePath = $this->base.DS.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
+		$basePath = $this->base.DS.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
 
 		if(empty($options['value'])) {
 			$value = $this->value($fieldName);
@@ -135,9 +135,9 @@ class BcUploadHelper extends FormHelper {
 
 		/* ファイルのパスを取得 */
 		/* 画像の場合はサイズを指定する */
-		if(isset($model->actsAs['Upload']['saveDir'])) {
+		if(isset($model->actsAs['BcUpload']['saveDir'])) {
 			if($value && !is_array($value)) {
-				$uploadSettings = $model->actsAs['Upload']['fields'][$field];
+				$uploadSettings = $model->actsAs['BcUpload']['fields'][$field];
 				if($uploadSettings['type']=='image') {
 					$options = array('imgsize'=>$imgsize,'rel'=>$rel,'title'=>$title);
 					if($tmp) {
@@ -237,9 +237,9 @@ class BcUploadHelper extends FormHelper {
 			return;
 		}
 
-		$fileUrl = '/files/'.$model->actsAs['Upload']['saveDir'].'/';
-		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['Upload']['saveDir'].DS;
-		$copySettings = $model->actsAs['Upload']['fields'][$field]['imagecopy'];
+		$fileUrl = '/files/'.$model->actsAs['BcUpload']['saveDir'].'/';
+		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
+		$copySettings = $model->actsAs['BcUpload']['fields'][$field]['imagecopy'];
 
 		if($tmp) {
 			$link = false;
