@@ -705,14 +705,15 @@ class BlogController extends BlogAppController {
 		$this->preview = true;
 		$this->layoutPath = '';
 		$this->subDir = '';
+		$no = ( isset($this->data['BlogPost']['no']) ) ? $this->data['BlogPost']['no'] : "" ;
 		unset($this->params['pass']);
 		unset($this->params['prefix']);
 		unset($this->params['plugin']);
 		unset($this->params['admin']);
 		$this->params['controller'] = $this->blogContent['BlogContent']['name'];
 		$this->params['action'] = 'archives';
-		$this->params['url']['url'] = $this->params['controller'].'/'.'archives'.'/'.$this->data['BlogPost']['no'];
-		$this->params['pass'][0] = $this->data['BlogPost']['no'];
+		$this->params['url']['url'] = $this->params['controller'].'/'.'archives'.'/'.$no;
+		$this->params['pass'][0] = $no ;
 		$this->theme = $this->siteConfigs['theme'];
 		$this->setAction('archives');
 
