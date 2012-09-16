@@ -27,9 +27,11 @@ $bcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false
 
 <h3 class="contents-head">入力フォーム</h3>
 
+<?php if($mail->descriptionExists()): ?>
 <div class="section mail-description">
 	<?php $mail->description() ?>
 </div>
+<?php endif ?>
 
 <div class="section">
 	<?php $bcBaser->flash() ?>
