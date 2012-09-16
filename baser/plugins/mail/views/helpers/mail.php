@@ -226,6 +226,20 @@ class MailHelper extends AppHelper {
 	function description() {
 		echo $this->getDescription();
 	}
+/**
+ * ブログの説明文が指定されているかどうかを判定する
+ *
+ * @return boolean
+ * @access public
+ */
+	function descriptionExists() {
+
+		if(!empty($this->mailContent['description'])) {
+			return true;
+		}else {
+			return false;
+		}
+
+	}
 
 }
-?>

@@ -35,9 +35,9 @@ $(function(){
 
 <!-- description -->
 <?php if($blog->descriptionExists()): ?>
-<p class="blog-description">
+<div class="blog-description">
 	<?php $blog->description() ?>
-</p>
+</div>
 <?php endif ?>
 
 <!-- list -->
