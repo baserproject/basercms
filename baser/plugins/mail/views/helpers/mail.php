@@ -227,7 +227,7 @@ class MailHelper extends AppHelper {
 		echo $this->getDescription();
 	}
 /**
- * ブログの説明文が指定されているかどうかを判定する
+ * メールの説明文が指定されているかどうかを判定する
  *
  * @return boolean
  * @access public
