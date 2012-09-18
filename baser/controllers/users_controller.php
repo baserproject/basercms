@@ -85,9 +85,7 @@ class UsersController extends AppController {
 				'admin_logout', 
 				'admin_login_exec', 
 				'admin_reset_password',
-				'admin_ajax_login',
-				'admin_login_exec',
-				'admin_reset_password'
+				'admin_ajax_login'
 		);
 		$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		
