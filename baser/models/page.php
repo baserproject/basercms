@@ -885,16 +885,18 @@ class Page extends AppModel {
  * @access protected
  */
 	function entryPageFiles($targetPath,$parentCategoryId = '') {
-
-		if(function_exists('ini_set')) {
-			ini_set('max_execution_time', 0);
-			ini_set('max_input_time', 0);
-			ini_set('memory_limit ', '256M');
+		
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->detach('BcCache');
+		}
+		if($this->PageCategory->Behaviors->attached('BcCache')) {
+			$this->PageCategory->Behaviors->detach('BcCache');
 		}
 		
 		$this->fileSave = false;
-		$folder = new Folder($targetPath);
-		$files = $folder->read(true,true,true);
+		$Folder = new Folder($targetPath);
+		$files = $Folder->read(true,true,true);
+		$Folder = null;
 		$insert = 0;
 		$update = 0;
 		$all = 0;
@@ -1027,6 +1029,7 @@ class Page extends AppModel {
 					$insert++;
 				}
 			}
+			$contents = $page = $pageName = $title = $description = $conditions = $descriptionReg = $titleReg = $pageTagReg = null;
 			$all++;
 		}
 
