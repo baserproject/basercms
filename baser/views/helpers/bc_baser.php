@@ -679,10 +679,12 @@ class BcBaserHelper extends AppHelper {
 
 		// ツールバー設定
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			$publishTheme = $this->BcHtml->themeWeb;
-			$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
-			$this->css('admin/toolbar', array('inline' => false));
-			$this->BcHtml->themeWeb = $publishTheme;
+			if(!isset($this->params['url']['toolbar']) || ($this->params['url']['toolbar'] !== false && $this->params['url']['toolbar'] !== 'false')) {
+				$publishTheme = $this->BcHtml->themeWeb;
+				$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
+				$this->css('admin/toolbar', array('inline' => false));
+				$this->BcHtml->themeWeb = $publishTheme;
+			}
 		}
 
 		echo join("\n\t", $this->_view->__scripts);
@@ -706,10 +708,12 @@ class BcBaserHelper extends AppHelper {
 
 		// ツールバー表示
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			$publishTheme = $this->_view->theme;
-			$this->_view->theme = $this->siteConfig['admin_theme'];
-			$this->element('admin/toolbar');
-			$this->_view->theme = $publishTheme;
+			if(!isset($this->params['url']['toolbar']) || ($this->params['url']['toolbar'] !== false && $this->params['url']['toolbar'] !== 'false')) {
+				$publishTheme = $this->_view->theme;
+				$this->_view->theme = $this->siteConfig['admin_theme'];
+				$this->element('admin/toolbar');
+				$this->_view->theme = $publishTheme;
+			}
 		}
 
 		// デバッグ
