@@ -33,7 +33,7 @@ class BcUploadHelper extends FormHelper {
  * そして削除用のチェックボックスを表示する
  * [カスタムオプション]
  * imgsize・・・画像のサイズを指定する
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -82,7 +82,7 @@ class BcUploadHelper extends FormHelper {
 	}
 /**
  * ファイルへのリンクを取得する
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -129,6 +129,8 @@ class BcUploadHelper extends FormHelper {
 					$tmp = true;
 					$value = $value['session_key'];
 					$basePath = $this->base.DS.'uploads'.DS.'tmp'.DS;
+				}else{
+					return false;
 				}
 			}
 		}
@@ -163,7 +165,7 @@ class BcUploadHelper extends FormHelper {
  * 上から順に大きい画像を並べている事が前提で
  * 指定したサイズ内で最大の画像を出力
  * リンク先は存在する最大の画像へのリンクとなる
- * 
+ *
  * @param string $fieldName
  * @param string $fileName
  * @param array $options
@@ -310,6 +312,6 @@ class BcUploadHelper extends FormHelper {
 		}
 
 	}
-	
+
 }
 ?>
