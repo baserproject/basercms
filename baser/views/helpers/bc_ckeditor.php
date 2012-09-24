@@ -40,6 +40,7 @@ class BcCkeditorHelper extends AppHelper {
  * @access public
  */
 	var $inited = false;
+	var $inited_styles = false;
 /**
  * 初期設定スタイル
  * StyleSet 名 basercms
@@ -281,11 +282,13 @@ class BcCkeditorHelper extends AppHelper {
 		} else {
 			$jscode .= '';
 		}
-		if($styles) {
+		if(!$this->inited_styles && $styles) {
 			foreach($styles as $key => $style) {
 				$jscode .= "CKEDITOR.addStylesSet('".$key."',".$this->Javascript->object($style).");";
 			}
+			$this->inited_styles = true;
 		}
+
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
