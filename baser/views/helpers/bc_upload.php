@@ -41,16 +41,27 @@ class BcUploadHelper extends FormHelper {
  */
 	function file($fieldName, $options = array()) {
 
-		$linkOptions = $_options = array('imgsize'=>'midium','rel'=>'','title'=>'');
+		$linkOptions = $_options = array('imgsize'=>'midium','rel'=>'','title'=>'', 'link' => true);
+		
+		if(isset($options['link'])) {
+			$linkOptions['link'] = $options['link'];
+			unset($options['link']);
+		}
+		if(isset($options['imgsize'])) {
+			$linkOptions['imgsize'] = $options['imgsize'];
+			unset($options['imgsize']);
+		}
+		if(isset($options['rel'])) {
+			$linkOptions['rel'] = $options['rel'];
+			unset($options['rel']);
+		}
+		if(isset($options['title'])) {
+			$linkOptions['title'] = $options['title'];
+			unset($options['title']);
+		}
+		
 		$options = $this->_initInputField($fieldName, Set::merge($_options,$options));
-
-		$linkOptions['imgsize'] = $options['imgsize'];
-		$linkOptions['rel'] = $options['rel'];
-		$linkOptions['title'] = $options['title'];
-		unset($options['imgsize']);
-		unset($options['rel']);
-		unset($options['title']);
-
+		
 		$view =& ClassRegistry::getObject('view');
 		$_field = $view->entity();
 		$modelName = $_field[0];
@@ -89,7 +100,26 @@ class BcUploadHelper extends FormHelper {
  */
 	function fileLink($fieldName, $options = array()) {
 
-		$_options = array('imgsize'=>'midium','rel'=>'','title'=>'');
+		$_options = array('imgsize' => 'midium', 'rel' => '', 'title' => '', 'link' => true);
+		
+		$link = $imgsize = $rel = $title = '';
+		if(isset($options['link'])) {
+			$link = $options['link'];
+			unset($options['link']);
+		}
+		if(isset($options['imgsize'])) {
+			$imgsize= $options['imgsize'];
+			unset($options['imgsize']);
+		}
+		if(isset($options['rel'])) {
+			$rel = $options['rel'];
+			unset($options['rel']);
+		}
+		if(isset($options['title'])) {
+			$title = $options['title'];
+			unset($options['title']);
+		}
+		
 		$options = $this->_initInputField($fieldName, Set::merge($_options,$options));
 		$view =& ClassRegistry::getObject('view');
 		$tmp = false;
@@ -101,13 +131,7 @@ class BcUploadHelper extends FormHelper {
 		}else {
 			return;
 		}
-
-		$imgsize = $options['imgsize'];
-		$rel = $options['rel'];
-		$title = $options['title'];
-		unset($options['imgsize']);
-		unset($options['rel']);
-		unset($options['title']);
+		
 		$basePath = $this->base.DS.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
 
 		if(empty($options['value'])) {
@@ -141,7 +165,7 @@ class BcUploadHelper extends FormHelper {
 			if($value && !is_array($value)) {
 				$uploadSettings = $model->actsAs['BcUpload']['fields'][$field];
 				if($uploadSettings['type']=='image') {
-					$options = array('imgsize'=>$imgsize,'rel'=>$rel,'title'=>$title);
+					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link);
 					if($tmp) {
 						$options['tmp'] = true;
 					}
@@ -314,4 +338,3 @@ class BcUploadHelper extends FormHelper {
 	}
 
 }
-?>
