@@ -417,7 +417,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function title($separator='｜',$categoryTitleOn = null) {
 
-		echo '<title>'.strip_tags($this->getTitle($separator,$categoryTitleOn)).'</title>';
+        echo '<title>'.strip_tags($this->getTitle($separator,$categoryTitleOn)) . "</title>\n";
 
 	}
 /**
@@ -429,7 +429,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function metaKeywords() {
 
-		echo $this->BcHtml->meta('keywords',$this->getkeywords());
+        echo $this->BcHtml->meta('keywords',$this->getkeywords()) . "\n";
 
 	}
 /**
@@ -441,7 +441,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function metaDescription() {
 
-		echo $this->BcHtml->meta('description', strip_tags($this->getDescription()));
+        echo $this->BcHtml->meta('description', strip_tags($this->getDescription())) . "\n";
 
 	}
 /**
@@ -455,7 +455,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function rss($title, $link) {
 
-		echo $this->BcHtml->meta($title, $link, array('type' => 'rss'));
+        echo $this->BcHtml->meta($title, $link, array('type' => 'rss')) . "\n";
 
 	}
 /**
@@ -761,7 +761,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function icon() {
 
-		echo  $this->BcHtml->meta('icon');
+        echo  $this->BcHtml->meta('icon') . "\n";
 
 	}
 /**
