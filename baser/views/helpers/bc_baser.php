@@ -709,10 +709,14 @@ class BcBaserHelper extends AppHelper {
 		// ツールバー表示
 		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->params['url']['toolbar']) || ($this->params['url']['toolbar'] !== false && $this->params['url']['toolbar'] !== 'false')) {
-				$publishTheme = $this->_view->theme;
-				$this->_view->theme = $this->siteConfig['admin_theme'];
+				// 2012/09/30 ryuring
+				// テーマフォルダに toolbar.php を配置しても読み込まれなかったのでコメントアウト
+				// 現在のところ特に影響はなさそう。
+				
+				//$publishTheme = $this->_view->theme;
+				//$this->_view->theme = $this->siteConfig['admin_theme'];
 				$this->element('admin/toolbar');
-				$this->_view->theme = $publishTheme;
+				//$this->_view->theme = $publishTheme;
 			}
 		}
 
