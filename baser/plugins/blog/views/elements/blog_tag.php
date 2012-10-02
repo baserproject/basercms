@@ -19,5 +19,7 @@
  */
 ?>
 <?php if(!empty($blog->blogContent['tag_use'])): ?>
+	<?php if(!empty($post['BlogTag'])) : ?>
 <div class="tag">タグ：<?php $blog->tag($post) ?></div>
+	<?php endif ?>
 <?php endif ?>
