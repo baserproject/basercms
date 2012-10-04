@@ -45,7 +45,7 @@ App::import('Helper','Blog.Blog');
 $blog = new BlogHelper();
 ?>
 
-
+<?php if(!empty($categories)) : ?>
 <div class="widget widget-blog-categories-archives widget-blog-categories-archives-<?php echo $id ?> blog-widget">
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
@@ -62,3 +62,4 @@ $blog = new BlogHelper();
 	<?php echo $blog->getCategoryList($categories, $depth, $view_count) ?>
 <?php endif ?>
 </div>
+<?php endif ?>
