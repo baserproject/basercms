@@ -292,7 +292,7 @@ class BlogController extends BlogAppController {
 				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 
 				if($day){
-					$this->set('blogArchiveType','dayly');
+					$this->set('blogArchiveType','daily');
 				}elseif($month){
 					$this->set('blogArchiveType','monthly');
 				}else{
