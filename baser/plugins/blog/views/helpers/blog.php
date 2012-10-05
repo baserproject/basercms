@@ -796,4 +796,20 @@ class BlogHelper extends AppHelper {
 
 	}
 
+/**
+ * ブログのアーカイブタイプを取得する
+ *
+ * @return string
+ * @access public
+ */
+	function getBlogArchiveType() {
+
+		if(!empty($this->_view->viewVars['blogArchiveType'])){
+			return $this->_view->viewVars['blogArchiveType'];
+		}else{
+			return '';
+		}
+
+	}
+
 }
