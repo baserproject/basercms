@@ -1673,7 +1673,7 @@ END_FLASH;
 		$editLink = null;
 		$description = $this->getDescription();
 		$title = $this->getContentsTitle();
-		if($this->_view->viewVars['editLink']) {
+		if(!empty($this->_view->viewVars['editLink'])) {
 			$editLink = $this->_view->viewVars['editLink'];
 		}
 		
@@ -1682,9 +1682,15 @@ END_FLASH;
 		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
 		
 		if($page) {
-			$url = '/../pages'.$PageClass->getPageUrl($page);
+			$view = ClassRegistry::getObject('View');
+			if(empty($view->subDir)){
+				$url = '/../pages'.$PageClass->getPageUrl($page);
+			}else{
+				$dirArr = explode('/', $view->subDir);
+				$url = str_repeat('/..', count($dirArr)).'/../pages'.$PageClass->getPageUrl($page);
+			}
 
-			$this->element($url, $params, $loadHelpers = false, $subDir = true);
+			$this->element($url, $params, $loadHelpers, $subDir);
 
 			// 現在のページの情報に戻す
 			$this->setDescription($description);
