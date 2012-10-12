@@ -295,7 +295,7 @@ class BcCkeditorHelper extends AppHelper {
 			$this->_initedStyles = true;
 		}
 
-		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,readonly';";
+		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->domId($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
