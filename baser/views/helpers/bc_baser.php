@@ -1210,12 +1210,16 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if($controller=='pages' && $action=='display') {
+		if($controller=='pages' && ($action=='display' || $action=='mobile_display' || $action=='smartphone_display')) {
 
 			if(strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
-				$pageUrl = h($this->params['url']['url']);
+				if(empty($pass)){
+					$pageUrl = h($this->params['url']['url']);
+				}else{
+					$pageUrl = implode('/', $pass);
+				}
 			}
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
