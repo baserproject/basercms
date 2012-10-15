@@ -130,6 +130,19 @@ class PagesController extends AppController {
 			$pageCategories += $_pageCategories;
 		}
 
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
+		
 		$this->set('search', 'pages_index');
 		$this->set('pageCategories', $pageCategories);
 		$this->subMenuElements = array('pages','page_categories');
@@ -194,13 +207,24 @@ class PagesController extends AppController {
 
 		}
 
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
 		/* 表示設定 */
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array('empty' => '指定しない', 'own' => true));
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
-		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
 		$this->subMenuElements = array('pages','page_categories');
@@ -314,12 +338,23 @@ class PagesController extends AppController {
 			$this->set('publishLink', $url);
 		}
 		
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentCatOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
-		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
-		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
 		$this->set('url', $url);
