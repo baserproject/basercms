@@ -256,6 +256,16 @@ class BaserAppView extends ThemeView {
 			$subDir = $this->subDir . DS;
 		}
 
+		// CUSTOMIZE MODIFY 2012/10/11 ryuring
+		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、
+		// サブフォルダを空に設定
+		$siteConfig = $this->getVar('siteConfig');
+		if($this->name == 'Pages' && preg_match('/(.+)_display$/', $this->action, $maches)) {
+			if(isset($siteConfig['linked_pages_'.$maches[1]]) && $siteConfig['linked_pages_'.$maches[1]]) {
+				$subDir = '';
+			}
+		}
+		
 		if ($name === null) {
 			$name = $this->action;
 		}

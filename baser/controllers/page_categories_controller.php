@@ -147,13 +147,23 @@ class PageCategoriesController extends AppController {
 		}
 		
 		$pageType = array();
-		if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || $this->siteConfigs['linked_pages_mobile'])=='0') {
+			$linkedPagesMobile = true;
+		} else {
+			$linkedPagesMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$linkedPagesSmartPhone = true;
+		} else {
+			$linkedPagesSmartPhone = false;
+		}
+		if($linkedPagesMobile || $linkedPagesSmartPhone) {
 			$pageType = array('pc' => 'PC');	
 		}
-		if(Configure::read('BcApp.mobile')) {
+		if($linkedPagesMobile) {
 			$pageType['mobile'] = 'モバイル';
 		}
-		if(Configure::read('BcApp.smartphone')) {
+		if($linkedPagesSmartPhone) {
 			$pageType['smartphone'] = 'スマートフォン';
 		}
 		if($pageType) {
@@ -165,7 +175,6 @@ class PageCategoriesController extends AppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー一覧';
-		$this->search = 'page_categories_index';
 		$this->help = 'page_categories_index';
 
 	}
@@ -241,6 +250,20 @@ class PageCategoriesController extends AppController {
 				unset($parents[$smartphoneId]);
 			}
 		}
+		
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '新規固定ページカテゴリー登録';
@@ -330,6 +353,20 @@ class PageCategoriesController extends AppController {
 		} elseif(isset($parents[$mobileId])) {
 			unset($parents[$mobileId]);
 		}
+		
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー情報編集：'.$this->data['PageCategory']['title'];
