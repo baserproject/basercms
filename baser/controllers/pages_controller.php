@@ -290,23 +290,22 @@ class PagesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$currentOwnerId = '';
 		$currentPageCategoryId = '';
 		if(!empty($this->data['PageCategory']['id'])) {
 			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
 		
 		if(empty($this->data['PageCategory']['id']) || $this->data['PageCategory']['name'] == 'mobile' || $this->data['PageCategory']['name'] == 'smartphone') {
-			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+			$currentCatOwnerId = $this->siteConfigs['root_owner_id'];
 		} else {
-			$currentCatOwner = $this->data['PageCategory']['owner_id'];
+			$currentCatOwnerId = $this->data['PageCategory']['owner_id'];
 		}
 		
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
-			'currentOwnerId'		=> $currentOwnerId,
+			'currentOwnerId'		=> $currentCatOwnerId,
 			'currentPageCategoryId'	=> $currentPageCategoryId,
-			'own'			=> true,
-			'empty'			=> '指定しない'
+			'own'					=> true,
+			'empty'					=> '指定しない'
 		));
 		
 		$url = $this->convertViewUrl($this->data['Page']['url']);
@@ -315,9 +314,9 @@ class PagesController extends AppController {
 			$this->set('publishLink', $url);
 		}
 		
-		$this->set('currentCatOwnerId', $currentCatOwner);
+		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('categories', $categories);
-		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
+		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentCatOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
 		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
 		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
@@ -972,9 +971,11 @@ class PagesController extends AppController {
 		
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
-		$editable = false;
 
-		if(!$pageCategoryId) {
+		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
+		
+		if(!$pageCategoryId || $pageCategoryId == $mobileId || $pageCategoryId == $smartphoneId) {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
 			$currentCatOwner = $ownerId;
