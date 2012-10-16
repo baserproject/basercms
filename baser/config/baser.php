@@ -165,6 +165,7 @@
 			'alias'		=> 's',
 			'prefix'	=> 'smartphone',
 			'autoRedirect'	=> true,
+			'autoLink'	=> true,
 			'agents'	=> array(
 				'iPhone',         // Apple iPhone
 				'iPod',           // Apple iPod touch
@@ -195,6 +196,7 @@
 	define('BC_GOOGLEMAPS_HELPER'	, 'BcGooglemaps');
 	define('BC_HTML_HELPER'			, 'BcHtml');
 	define('BC_MOBILE_HELPER'		, 'BcMobile');
+	define('BC_SMARTPHONE_HELPER'	, 'BcSmartphone');
 	define('BC_PAGE_HELPER'			, 'BcPage');
 	define('BC_TEXT_HELPER'			, 'BcText');
 	define('BC_TIME_HELPER'			, 'BcTime');

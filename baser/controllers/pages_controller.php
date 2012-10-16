@@ -684,10 +684,13 @@ class PagesController extends AppController {
 				break;
 			}
 		}
-		if(Configure::read('BcRequest.agent')){
-			$this->layoutPath = Configure::read('BcAgent.'.Configure::read('BcRequest.agent').'.prefix');
-			if(Configure::read('BcRequest.agent') == 'mobile') {
+		$agent = Configure::read('BcRequest.agent');
+		if($agent){
+			$this->layoutPath = Configure::read('BcAgent.'.$agent.'.prefix');
+			if($agent == 'mobile') {
 				$this->helpers[] = BC_MOBILE_HELPER;
+			} elseif($agent == 'smartphone') {
+				$this->helpers[] = BC_SMARTPHONE_HELPER;
 			}
 		} else {
 			$this->layoutPath = '';
