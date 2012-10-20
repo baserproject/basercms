@@ -754,8 +754,8 @@ class Page extends AppModel {
 				break;
 				
 			case 'user_id':
-				
-				$controlSources['user_id'] = $this->User->getUserList($options);
+			case 'author_id':
+				$controlSources[$field] = $this->User->getUserList($options);
 				break;
 			
 		}

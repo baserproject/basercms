@@ -280,6 +280,12 @@ class SiteConfigsController extends AppController {
 		if(is_null($data['SiteConfig']['mobile'])) {
 			$data['SiteConfig']['mobile'] = false;
 		}
+		if(!isset($data['SiteConfig']['linked_pages_mobile'])) {
+			$data['SiteConfig']['linked_pages_mobile'] = 0;
+		}
+		if(!isset($data['SiteConfig']['linked_pages_smartphone'])) {
+			$data['SiteConfig']['linked_pages_smartphone'] = 0;
+		}
 		return $data;
 
 	}

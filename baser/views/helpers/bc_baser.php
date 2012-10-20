@@ -1210,12 +1210,16 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if($controller=='pages' && $action=='display') {
+		if($controller=='pages' && ($action=='display' || $action=='mobile_display' || $action=='smartphone_display')) {
 
 			if(strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
-				$pageUrl = h($this->params['url']['url']);
+				if(empty($pass)){
+					$pageUrl = h($this->params['url']['url']);
+				}else{
+					$pageUrl = implode('/', $pass);
+				}
 			}
 			if(preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
@@ -1673,7 +1677,7 @@ END_FLASH;
 		$editLink = null;
 		$description = $this->getDescription();
 		$title = $this->getContentsTitle();
-		if($this->_view->viewVars['editLink']) {
+		if(!empty($this->_view->viewVars['editLink'])) {
 			$editLink = $this->_view->viewVars['editLink'];
 		}
 		
@@ -1682,9 +1686,15 @@ END_FLASH;
 		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
 		
 		if($page) {
-			$url = '/../pages'.$PageClass->getPageUrl($page);
+			$view = ClassRegistry::getObject('View');
+			if(empty($view->subDir)){
+				$url = '/../pages'.$PageClass->getPageUrl($page);
+			}else{
+				$dirArr = explode('/', $view->subDir);
+				$url = str_repeat('/..', count($dirArr)).'/../pages'.$PageClass->getPageUrl($page);
+			}
 
-			$this->element($url, $params, $loadHelpers = false, $subDir = true);
+			$this->element($url, $params, $loadHelpers, $subDir);
 
 			// 現在のページの情報に戻す
 			$this->setDescription($description);

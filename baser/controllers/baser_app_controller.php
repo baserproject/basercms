@@ -177,8 +177,11 @@ class BaserAppController extends Controller {
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
-				if(Configure::read('BcRequest.agent') == 'mobile') {
+				$agent = Configure::read('BcRequest.agent');
+				if($agent == 'mobile') {
 					$this->helpers[] = BC_MOBILE_HELPER;
+				} elseif($agent == 'smartphone') {
+					$this->helpers[] = BC_SMARTPHONE_HELPER;
 				}
 			}
 
@@ -298,9 +301,12 @@ class BaserAppController extends Controller {
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
 			$this->layoutPath = str_replace('_', '/', $this->params['prefix']);
-			$this->subDir = str_replace('_', '/', $this->params['prefix']);
-			if(preg_match('/^mobile(|_)/', $this->params['prefix'])) {
+			$this->subDir = str_replace('_', '/', $this->params['prefix']);		
+			$agent = Configure::read('BcRequest.agent');
+			if($agent == 'mobile') {
 				$this->helpers[] = BC_MOBILE_HELPER;
+			} elseif($agent == 'smartphone') {
+				$this->helpers[] = BC_SMARTPHONE_HELPER;
 			}
 		}
 
