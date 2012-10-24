@@ -32,7 +32,8 @@
 <?php /* 送信ボタン */ ?>
 <?php if($freezed): ?>
 <center>
-	<?php echo $mailform->submit('　送信する　', array("class"=>"btn-red button")) ?>
+	<?php echo $mailform->submit('　書き直す　', array('class' => 'btn-red button', 'name' => 'data[mode][back]'))  ?>
+	<?php echo $mailform->submit('　送信する　', array('class' => 'btn-red button', 'name' => 'data[mode][submit]'))  ?>
 </center>
 <?php elseif($this->action != 'submit'): ?>
 <center>
