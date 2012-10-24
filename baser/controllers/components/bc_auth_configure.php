@@ -105,11 +105,11 @@ class  BcAuthConfigureComponent extends Object {
 		// ログインアクション
 		$auth->loginAction = $loginAction;
 
-		$redirect = $auth->Session->read('Auth.redirect');
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
-		/*if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
+		$redirect = $auth->Session->read('Auth.redirect');
+		if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
 			$auth->Session->write('Auth.redirect',null);
-		}*/
+		}
 
 		// ログイン後にリダイレクトするURL
 		$auth->loginRedirect = $loginRedirect;
