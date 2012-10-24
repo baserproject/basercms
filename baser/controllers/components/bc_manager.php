@@ -411,7 +411,7 @@ class BcManagerComponent extends Object {
 		$installCoreData = array("<?php",	
 			"Configure::write('Security.salt', '{$securitySalt}');",
 			"Configure::write('Cache.disable', false);",
-			"Configure::write('Session.save', 'cake');",
+			"Configure::write('Session.save', 'session');",
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcApp.adminSsl', false);",
