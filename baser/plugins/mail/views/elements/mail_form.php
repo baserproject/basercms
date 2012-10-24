@@ -49,7 +49,8 @@ if(Configure::read('BcRequest.agent')) {
 	<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
 <?php endif; ?>
 <?php if($freezed): ?>
-	<?php echo $mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button', 'id' => 'MessageSubmit'))  ?>
+	<?php echo $mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button', 'id' => 'MessageBack', 'name' => 'data[mode][back]'))  ?>
+	<?php echo $mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button', 'id' => 'MessageSubmit', 'name' => 'data[mode][submit]'))  ?>
 <?php elseif($this->action != 'submit'): ?>
 	<?php echo $mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button', 'id' => 'MessageConfirm'))  ?>
 <?php endif; ?>

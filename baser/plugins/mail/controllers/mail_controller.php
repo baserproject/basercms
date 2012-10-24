@@ -319,10 +319,12 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		
+
 		if(!$this->data) {
 			$this->redirect(array('action' => 'index', $id));
-		}else {
-
+		} elseif( isset($this->data['mode']) && key($this->data['mode']) == 'back' ) {
+            $this->_back($id);
+		} else {
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
 			// ※ nameフィールドの名称を[message]以外にする
 			if($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
@@ -347,12 +349,57 @@ class MailController extends MailAppController {
 
 			}
 
+    		$this->set('mailContent',$this->dbDatas['mailContent']);
+    		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'submit');
 		}
+	}
+
+
+    /**
+     * [private] 確認画面から戻る
+     *
+     * @param mixed mail_content_id
+     * @return void
+     * @access public
+     */
+    function _back($id)
+    {
+        $this->set('freezed',false);
+        $this->set('error',false);
+
+        if($this->dbDatas['mailFields']){
+            $this->set('mailFields',$this->dbDatas['mailFields']);
+        }
+
+        //mailの重複チェックがある場合は、チェック用のデータを復帰
+        $sendVal = array();
+        $noSendVal = array();
+        foreach($this->dbDatas['mailContent']['MailField'] as $val){
+            if($val['valid_ex'] == 'VALID_EMAIL_CONFIRM'){
+                if(! $val['no_send'] ){
+                    $sendVal[$val['group_valid']] = $val['field_name'];
+                } else {
+                    $noSendVal[$val['group_valid']][] = $val['field_name'] ;
+                }
+            }
+        }
+        if(! empty($noSendVal) ){
+            foreach( $noSendVal as $key => $val){
+                foreach( $val as $v){
+                    if( isset($this->data['Message'][$sendVal[$key]]) ){
+                        $this->data['Message'][$v] = $this->data['Message'][$sendVal[$key]];
+                    }
+                }
+            }
+        }
+
+        $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 
 		$this->set('mailContent',$this->dbDatas['mailContent']);
-		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'submit');
+		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
+    }
 
-	}
+
 /**
  * [MOBILE] 送信完了ページ
  *
