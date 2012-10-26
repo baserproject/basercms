@@ -78,10 +78,10 @@ class BcCacheBehavior extends ModelBehavior {
 		$results = $db->read($model, $query);
 		Cache::write($cachekey, ($results === false)? "{false}" : $results, '_cake_data_');
 		// クリア用にモデル毎のキャッシュキーリストを作成
-		$cacheListKey = get_class($model) . '_dataCacheList';
-		$list = Cache::read($cacheListKey);
+		$cacheListKey = $model->useTable . '_dataCacheList';
+		$list = Cache::read($cacheListKey, '_cake_data_');
 		$list[$cachekey] = 1;
-		Cache::write($cacheListKey, $list);
+		Cache::write($cacheListKey, $list, '_cake_data_');
 		return $results;
 		
 	}
@@ -94,8 +94,8 @@ class BcCacheBehavior extends ModelBehavior {
  */
 	function delCache(&$model){
 		
-		$cacheListKey = get_class($model) . '_dataCacheList';
-		$list = Cache::read($cacheListKey);
+		$cacheListKey = $model->useTable . '_dataCacheList';
+		$list = Cache::read($cacheListKey, '_cake_data_');
 		if(empty($list)) return;
 		foreach($list as $key => $tmp){
 			Cache::delete($key, '_cake_data_');
