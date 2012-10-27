@@ -283,7 +283,9 @@ class Message extends MailAppModel {
 
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			if($mailField['MailField']['valid_ex']=='VALID_EMAIL_CONFIRM') {
-				$dists[$mailField['MailField']['group_valid']][] = $data['Message'][$mailField['MailField']['field_name']];
+                if( isset($data['Message'][$mailField['MailField']['field_name']]) ){
+                    $dists[$mailField['MailField']['group_valid']][] = $data['Message'][$mailField['MailField']['field_name']];
+                }
 			}
 
 		}

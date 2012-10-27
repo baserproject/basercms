@@ -125,20 +125,6 @@
 		ini_set('memory_limit', '32M');
 	}
 /**
- * セッションタイムアウト設定
- * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
- */
-	if (function_exists('ini_set')) {
-		$sessionTimeouts = array('high'=>10,'medium'=>100,'low'=>300);
-		$securityLevel = Configure::read('Security.level');
-		if (isset($sessionTimeouts[$securityLevel])) {
-			$sessionTimeout = $sessionTimeouts[$securityLevel] * Configure::read('Session.timeout');
-			ini_set('session.gc_maxlifetime', $sessionTimeout);
-		} else {
-			trigger_error('Security.level の設定が間違っています。', E_USER_WARNING);
-		}
-	}
-/**
  * パラメーター取得
  */
 	$url = getUrlFromEnv();	// 環境変数からパラメータを取得
