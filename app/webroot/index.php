@@ -55,7 +55,7 @@ if (!defined('ROOT')) {
 	// ---
 	
 	/* 通常パターン */
-	if(@is_dir(dirname(dirname(dirname($fileName))).DS.'cake')){
+	if(@is_dir(dirname(dirname(dirname($fileName))).DS.'lib'.DS.'Cake')){
 		define('ROOT', dirname(dirname(dirname($fileName))));
 	// app内にcakeを配置
 	// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
