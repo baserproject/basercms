@@ -1,42 +1,43 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
- * Short description for file.
+ * Index
  *
- * Long description for file
+ * The Front Controller for handling every request
  *
- * PHP versions 4 and 5
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.app.webroot
+ * @package       app.webroot
  * @since         CakePHP(tm) v 0.2.9
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+// CUSTOMIZE 2012/10/27 ryuring
+// >>>
+/**
+ * 実行ファイル名を取得する
  */
 $fileName = $_SERVER['SCRIPT_FILENAME'];
 /**
  * タイムゾーンを設定する
  */
-	if(!ini_get('date.timezone')) {
- 		ini_set('date.timezone', 'Asia/Tokyo');
- 	}
-	@putenv("TZ=JST-9");
+if(!ini_get('date.timezone')) {
+	ini_set('date.timezone', 'Asia/Tokyo');
+}
+@putenv("TZ=JST-9");
+// <<<
 /**
  * Use the DS to separate the directories in other defines
  */
-	if (!defined('DS')) {
-		define('DS', DIRECTORY_SEPARATOR);
-	}
+if (!defined('DS')) {
+	define('DS', DIRECTORY_SEPARATOR);
+}
 /**
  * These defines should only be edited if you have cake installed in
  * a directory layout other than the way it is distributed.
@@ -45,72 +46,85 @@ $fileName = $_SERVER['SCRIPT_FILENAME'];
 
 /**
  * The full path to the directory which holds "app", WITHOUT a trailing DS.
- * 
- * 基本的には、cake が配置されているディレクトリをROOTとみなす。
  */
-	if (!defined('ROOT')) {
-		/* 通常パターン */
-		if(@is_dir(dirname(dirname(dirname($fileName))).DS.'cake')){
-			define('ROOT', dirname(dirname(dirname($fileName))));
-		// app内にcakeを配置
-		// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
-		// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
-		/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){		
-			define('ROOT', dirname(dirname($fileName)));*/
-		
-		// WEBROOT配置
-		}elseif(is_dir(dirname($fileName).DS.'cake')){
-			define('ROOT', dirname($fileName));
-		}
+if (!defined('ROOT')) {
+	// CUSTOMIZE 2012/10/27 ryuring
+	// 基本的には、cake が配置されているディレクトリをROOTとみなす。
+	// >>>
+	//define('ROOT', dirname(dirname(dirname(__FILE__))));
+	// ---
+	
+	/* 通常パターン */
+	if(@is_dir(dirname(dirname(dirname($fileName))).DS.'cake')){
+		define('ROOT', dirname(dirname(dirname($fileName))));
+	// app内にcakeを配置
+	// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
+	// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
+	/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){		
+		define('ROOT', dirname(dirname($fileName)));*/
+
+	// WEBROOT配置
+	}elseif(is_dir(dirname($fileName).DS.'cake')){
+		define('ROOT', dirname($fileName));
 	}
+	// <<<
+	
+}
 /**
  * The actual directory name for the "app".
- * 
- * app ディレクトリは「WEBROOT配置」の絡みがあるので[app]固定とする
- * app ディレクトリの名称を変更する場合は、以下を変更する。
  */
-	if (!defined('APP_DIR')) {
-		//define('APP_DIR', basename(dirname(dirname($fileName))));
-		define('APP_DIR', 'app');
-	}
+if (!defined('APP_DIR')) {
+	// CUSTOMIZE 2012/10/27 ryuring
+	// app ディレクトリは「WEBROOT配置」の絡みがあるので[app]固定とする
+	// app ディレクトリの名称を変更する場合は、以下を変更する。
+	// >>>
+	//define('APP_DIR', basename(dirname(dirname($fileName))));
+	// ---
+	define('APP_DIR', 'app');
+	// <<<
+}
 /**
  * The absolute path to the "cake" directory, WITHOUT a trailing DS.
  *
+ * Un-comment this line to specify a fixed path to CakePHP.
+ * This should point at the directory containing `Cake`.
+ *
+ * For ease of development CakePHP uses PHP's include_path.  If you
+ * cannot modify your include_path set this value.
+ *
+ * Leaving this constant undefined will result in it being defined in Cake/bootstrap.php
  */
-	if (!defined('CAKE_CORE_INCLUDE_PATH')) {
-		define('CAKE_CORE_INCLUDE_PATH', ROOT);
-	}
+	//define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'lib');
 
 /**
  * Editing below this line should NOT be necessary.
  * Change at your own risk.
  *
  */
-	if (!defined('WEBROOT_DIR')) {
-		define('WEBROOT_DIR', basename(dirname($fileName)));
+if (!defined('WEBROOT_DIR')) {
+	define('WEBROOT_DIR', basename(dirname(__FILE__)));
+}
+if (!defined('WWW_ROOT')) {
+	define('WWW_ROOT', dirname(__FILE__) . DS);
+}
+
+if (!defined('CAKE_CORE_INCLUDE_PATH')) {
+	if (function_exists('ini_set')) {
+		ini_set('include_path', ROOT . DS . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
 	}
-	if (!defined('WWW_ROOT')) {
-		define('WWW_ROOT', dirname($fileName) . DS);
+	if (!include ('Cake' . DS . 'bootstrap.php')) {
+		$failed = true;
 	}
-	if (!defined('CORE_PATH')) {
-		if (function_exists('ini_set') && ini_set('include_path', CAKE_CORE_INCLUDE_PATH . PATH_SEPARATOR . ROOT . DS . APP_DIR . DS . PATH_SEPARATOR . ini_get('include_path'))) {
-			define('APP_PATH', null);
-			define('CORE_PATH', null);
-		} else {
-			define('APP_PATH', ROOT . DS . APP_DIR . DS);
-			define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-		}
+} else {
+	if (!include (CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php')) {
+		$failed = true;
 	}
-	if (!include(CORE_PATH . 'cake' . DS . 'bootstrap.php')) {
-		trigger_error("CakePHP core could not be found.  Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php.  It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
-	}
-	if (isset($_GET['url']) && $_GET['url'] === 'favicon.ico') {
-		return;
-	} else {
-		$Dispatcher = new Dispatcher();
-		$Dispatcher->dispatch($url);
-	}
-	if (Configure::read('debug') > 0) {
-		echo "<!-- " . round(microtime(true) - $TIME_START, 4) . "s -->";
-	}
-?>
+}
+if (!empty($failed)) {
+	trigger_error("CakePHP core could not be found.  Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php.  It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
+}
+
+App::uses('Dispatcher', 'Routing');
+
+$Dispatcher = new Dispatcher();
+$Dispatcher->dispatch(new CakeRequest(), new CakeResponse(array('charset' => Configure::read('App.encoding'))));
