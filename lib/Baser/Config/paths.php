@@ -23,7 +23,7 @@
 /**
  * Baserディレクトリ名
  */
-	define('BASER',ROOT.DS.'baser'.DS);
+	define('BASER',CORE_PATH.DS.'Baser'.DS);
 /**
  * Baserコントローラーパス
  */

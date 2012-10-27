@@ -333,7 +333,6 @@
 			$url = preg_replace('/\/index$/', '', $url);
 			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
 		}else {
-			App::import('Core','Folder');
 			$folder = new Folder(CACHE.'views'.DS);
 			$files = $folder->read(true,true);
 			foreach($files[1] as $file) {

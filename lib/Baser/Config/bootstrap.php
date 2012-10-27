@@ -20,36 +20,40 @@
 /**
  * Include files
  */
-	require ROOT.DS.'baser'.DS.'config'.DS.'paths.php';
+	require CORE_PATH.DS.'Baser'.DS.'Config'.DS.'paths.php';
 	require BASER.'basics.php';
-	/* ConnectionManager ハック */
-	// baserフォルダ内のデータソースも走査するようにした
-	// TODO パスを追加をApp::build に移行したら明示的に読み込まなくてもよいかも
-	App::import('Core', 'ConnectionManager', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'connection_manager.php'));
-	App::import('Model', 'AppModel', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'app_model.php'));
-	App::import('Behavior', 'BcCache', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'models'.DS.'behaviors'.DS.'bc_cache.php'));
-	App::import('Core', 'ClassRegistry');
-	App::import('Core', 'Multibyte');
 /**
  * Baserパス追加
  */
-	$modelPaths[] = BASER_MODELS;
-	$behaviorPaths[] = BASER_BEHAVIORS;
-	$controllerPaths[] = BASER_CONTROLLERS;
-	$componentPaths[] = BASER_COMPONENTS;
-	$viewPaths[] = BASER_VIEWS;
-	$viewPaths[] = WWW_ROOT;
-	$helperPaths[] = BASER_HELPERS;
-	$pluginPaths[] = BASER_PLUGINS;
+	App::build(array(
+		'Baser'						=> array(BASER),
+		'Baser/Controller'			=> array(BASER_CONTROLLERS),
+		'Baser/Model'				=> array(BASER_MODELS),
+		'Baser/Model/Behavior'		=> array(BASER_BEHAVIORS),
+		'Baser/Model/Datasource/Database'	=> array(BASER_MODELS.'Datasource'.DS.'Database'),
+		'Baser/Controller/Component'=> array(BASER_COMPONENTS),
 	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
 	// $html->css / $javascript->link 等では、/app/webroot/css/style.css というURLが生成される。
 	// 上記理由により以下のとおり変更
 	// ・HelperのwebrootメソッドをRouter::urlでパス解決をするように変更し、/index.php/css/style.css というURLを生成させる。
 	// ・走査URLをvendorsだけではなく、app/webroot内も追加
-	$vendorPaths[] = WWW_ROOT;
-	$vendorPaths[] = BASER_VENDORS;
-	$localePaths[] = BASER_LOCALES;
-	//$shellPaths[];
+		'Baser/View'				=> array(BASER_VIEWS, WWW_ROOT),
+		'Baser/View/Helper'			=> array(BASER_HELPERS),
+		'Baser/Plugin'				=> array(BASER_PLUGINS),
+		'Vendor'					=> array(BASER_VENDORS),
+		'Locale'					=> array(BASER_LOCALES),
+	));
+	App::uses('AppModel', 'Baser/Model');
+	App::uses('BcCache', 'Baser/Model/Behavior');
+	App::uses('ClassRegistry', 'Utility');
+	App::uses('Multibyte', 'I18n');
+	App::uses('DboBcCsv', 'Baser/Model/Datasource/Database');
+	App::uses('DboBcPostgres', 'Baser/Model/Datasource/Database');
+	App::uses('DboBcSqlite3', 'Baser/Model/Datasource/Database');
+	App::uses('DboBcMysql', 'Baser/Model/Datasource/Database');
+	App::uses('PhpReader', 'Configure');
+	App::uses('CakeSession', 'Model/Datasource');
+	App::uses('Folder', 'Utility');
 /**
  * baserUrl取得
  */
@@ -93,7 +97,8 @@
 	$baserSettings = array();
 	$baserSettings['BcEnv'] = Configure::read('BcEnv');
 	$baserSettings['BcApp'] = Configure::read('BcApp');
-	if(Configure::load('baser')===false) {
+	Configure::config('baser', new PhpReader(BASER_CONFIGS));
+	if(Configure::load('baser', 'baser')===false) {
 		$config = array();
 		include BASER_CONFIGS.'baser.php';
 		Configure::write($config);
@@ -133,7 +138,6 @@
 /**
  * セッションスタート 
  */
-	App::import('Core','Session');
 	$Session = new CakeSession();
 	$Session->start();
 /**
