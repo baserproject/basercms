@@ -84,7 +84,7 @@ class FeedDetail extends FeedAppModel {
  * @return array コントロールソース
  * @access	public
  */
-	function getControlSource($field = null) {
+	public function getControlSource($field = null) {
 
 		$controlSources['cache_time'] = array('+1 minute'=>'1分',
 				'+30 minutes'=>'30分',
@@ -101,7 +101,7 @@ class FeedDetail extends FeedAppModel {
  * @retun array $data
  * @access public
  */
-	function getDefaultValue($feedConfigId) {
+	public function getDefaultValue($feedConfigId) {
 
 		$feedConfig = $this->FeedConfig->find(array('FeedConfig.id'=>$feedConfigId));
 		$data[$this->name]['feed_config_id'] = $feedConfigId;

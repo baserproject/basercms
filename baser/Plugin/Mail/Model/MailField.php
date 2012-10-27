@@ -120,7 +120,7 @@ class MailField extends MailAppModel {
  * @return array source
  * @access public
  */
-	function getControlSource($field = null) {
+	public function getControlSource($field = null) {
 
 		$source['type'] = array(
 			'text'				=> 'テキスト',
@@ -167,7 +167,7 @@ class MailField extends MailAppModel {
  * @return boolean
  * @access public
  */
-	function duplicateMailField($check) {
+	public function duplicateMailField($check) {
 
 		$conditions = array('MailField.'.key($check)=>$check[key($check)],
 				'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']);
@@ -189,7 +189,7 @@ class MailField extends MailAppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data = array(), $options = array()) {
+	public function copy($id, $data = array(), $options = array()) {
 		
 		$options = array_merge(array(
 			'sortUpdateOff'	=> false,

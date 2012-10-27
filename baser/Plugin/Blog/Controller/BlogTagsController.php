@@ -70,7 +70,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_index () {
+	public function admin_index () {
 
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('BlogTag', array('default' => $default));
@@ -90,7 +90,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_add () {
+	public function admin_add () {
 
 		if(!empty($this->data)) {
 
@@ -117,7 +117,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_edit ($id) {
+	public function admin_edit ($id) {
 
 		if(!$id) {
 			$this->Session->setFlash('無効な処理です。');
@@ -151,7 +151,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		if(!$id) {
 			$this->Session->setFlash('無効な処理です。');
@@ -178,7 +178,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -200,7 +200,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		if($ids) {
 			foreach($ids as $id) {
 				$data = $this->BlogTag->read(null, $id);
@@ -218,7 +218,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_add () {
+	public function admin_ajax_add () {
 
 		if(!empty($this->data)) {
 			$this->BlogTag->create($this->data);

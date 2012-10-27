@@ -77,7 +77,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		if(isset($this->params['prefix']) && $this->params['prefix']=='admin') {
@@ -91,7 +91,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		$datas = $this->BlogContent->find('all',array('order'=>array('BlogContent.id')));
 		$this->set('datas', $datas);
@@ -111,7 +111,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		$this->pageTitle = '新規ブログ登録';
 
@@ -147,7 +147,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
@@ -197,7 +197,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function redirectEditLayout($template){
+	public function redirectEditLayout($template){
 		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS.$template.$this->ext,
@@ -226,7 +226,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function redirectEditBlog($template){
+	public function redirectEditBlog($template){
 		$path = 'blog'.DS.$template;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.$path);
@@ -256,7 +256,7 @@ class BlogContentsController extends BlogAppController {
  * @access public
  * @deprecated
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -286,7 +286,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -312,7 +312,7 @@ class BlogContentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($id) {
+	public function admin_ajax_copy($id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');

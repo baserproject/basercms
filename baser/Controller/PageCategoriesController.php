@@ -64,7 +64,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();
@@ -82,7 +82,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		if(!Configure::read('BcApp.mobile')) {
 			$this->request->data['PageCategory']['type'] = 'pc';
@@ -184,7 +184,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		if(empty($this->request->data)) {
 			$this->request->data = array('PageCategory' => array('contents_navi' => false, 'page_category_type' => 1));
@@ -278,7 +278,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->request->data)) {
@@ -381,7 +381,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -411,7 +411,7 @@ class PageCategoriesController extends AppController {
  * @access public
  * @deprecated admin_ajax_up に移行
  */
-	function admin_up($id) {
+	public function admin_up($id) {
 		
 		$this->PageCategory->moveup($id);
 		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
@@ -425,7 +425,7 @@ class PageCategoriesController extends AppController {
  * @access public
  * @deprecated admin_ajax_down に移行
  */
-	function admin_down($id) {
+	public function admin_down($id) {
 		
 		$this->PageCategory->movedown($id);
 		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
@@ -438,7 +438,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -460,7 +460,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($id = null) {
+	public function admin_ajax_copy($id = null) {
 		
 		$result = $this->PageCategory->copy($id);
 		if($result) {
@@ -478,7 +478,7 @@ class PageCategoriesController extends AppController {
  * @return void
  * @access protected
  */
-	function _setAdminIndexViewData() {
+	protected function _setAdminIndexViewData() {
 		
 		$allowOwners = array();
 		if(isset($user['user_group_id'])) {
@@ -495,7 +495,7 @@ class PageCategoriesController extends AppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -515,7 +515,7 @@ class PageCategoriesController extends AppController {
  * @return void 
  * @access public
  */
-	function admin_ajax_up($id) {
+	public function admin_ajax_up($id) {
 		
 		if($this->PageCategory->moveup($id)) {
 			echo true;
@@ -533,7 +533,7 @@ class PageCategoriesController extends AppController {
  * @access public
  * @deprecated
  */
-	function admin_ajax_down($id) {
+	public function admin_ajax_down($id) {
 		
 		if($this->PageCategory->movedown($id)) {
 			echo true;

@@ -45,7 +45,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return void
  * @access public
  */
-	function freeze() {
+	public function freeze() {
 		
 		$this->freezed = true;
 	
@@ -58,7 +58,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return	string	htmlタグ
  * @access	public
  */
-	function text($fieldName,$attributes = array()) {
+	public function text($fieldName,$attributes = array()) {
 
 		if($this->freezed) {
 			list($model,$field) = explode('.',$fieldName);
@@ -89,7 +89,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return	string $showEmpty htmlタグ
  * @access	public
  */
-	function select($fieldName, $options, $selected = null, $attributes = array(), $showEmpty = true) {
+	public function select($fieldName, $options, $selected = null, $attributes = array(), $showEmpty = true) {
 
 		if($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -121,7 +121,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 
 		if($this->freezed) {
 
@@ -241,7 +241,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string
  * @access public
  */
-	function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
 
 		if($this->freezed) {
 			if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
@@ -296,7 +296,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function checkbox($fieldName, $attributes = array()) {
+	public function checkbox($fieldName, $attributes = array()) {
 		
 		if($this->freezed) {
 			$label = '';
@@ -318,7 +318,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function textarea($fieldName,$attributes = array()) {
+	public function textarea($fieldName,$attributes = array()) {
 
 		if($this->freezed) {
 			list($model,$field) = explode('.',$fieldName);
@@ -347,7 +347,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function radio($fieldName,$options, $attributes = array()) {
+	public function radio($fieldName,$options, $attributes = array()) {
 
 		if($this->freezed) {
 			return $this->freezeControll($fieldName, $options,$attributes);
@@ -364,7 +364,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string
  * @access public
  */
-	function file($fieldName, $options = array()) {
+	public function file($fieldName, $options = array()) {
 		
 		if($this->freezed) {
 			$value = $this->value($fieldName);
@@ -397,7 +397,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	function image($fieldName, $attributes = array(), $imageAttributes = array()) {
+	public function image($fieldName, $attributes = array(), $imageAttributes = array()) {
 		
 		if(!$attributes)$attributes = array();
 		$output = "";
@@ -447,7 +447,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string	htmlタグ
  * @access public
  */
-	function jsonList($fieldName,$attributes) {
+	public function jsonList($fieldName,$attributes) {
 
 		if($this->freezed) {
 
@@ -475,7 +475,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string html
  * @access public
  */
-	function datepicker($fieldName, $attributes = array()) {
+	public function datepicker($fieldName, $attributes = array()) {
 
 		if($this->freezed) {
 			list($model,$field) = explode('.',$fieldName);
@@ -503,7 +503,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return	string	htmlタグ
  * @access	public
  */
-	function freezeControll($fieldName,$options,$attributes=array()) {
+	public function freezeControll($fieldName,$options,$attributes=array()) {
 
 		$attributes = array_merge(array('class' => ''), $attributes);
 		unset($attributes["separator"]);

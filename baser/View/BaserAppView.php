@@ -45,7 +45,7 @@ class BaserAppView extends ThemeView {
  * @return array paths
  * @access private
  */
-	function _paths($plugin = null, $cached = true) {
+	protected function _paths($plugin = null, $cached = true) {
 		$paths = $this->__paths($plugin, $cached);
 
 		if (!empty($this->theme)) {
@@ -77,9 +77,9 @@ class BaserAppView extends ThemeView {
  * 
  * @param string $plugin
  * @return array paths
- * @access protected
+ * @access private
  */
-	function __paths($plugin = null, $cached = true) {
+	private function __paths($plugin = null, $cached = true) {
 		if ($plugin === null && $cached === true && !empty($this->__paths)) {
 			return $this->__paths;
 		}
@@ -114,7 +114,7 @@ class BaserAppView extends ThemeView {
  * @param	string	$out
  * @return	mixed
  */
-	function executeHook($hook, $out) {
+	public function executeHook($hook, $out) {
 
 		return $this->loaded['pluginHook']->{$hook}($out);
 
@@ -138,7 +138,7 @@ class BaserAppView extends ThemeView {
  * @return string Rendered Element
  * @access public
  */
-	function element($name, $params = array(), $loadHelpers = false) {
+	public function element($name, $params = array(), $loadHelpers = false) {
 		$file = $plugin = $key = null;
 
 		if (isset($params['plugin'])) {
@@ -223,7 +223,7 @@ class BaserAppView extends ThemeView {
  * @return string Template filename
  * @access protected
  */
-	function _getViewFileName($name = null) {
+	protected function _getViewFileName($name = null) {
 		
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
@@ -334,7 +334,7 @@ class BaserAppView extends ThemeView {
  * @return string Filename for layout file (.ctp).
  * @access protected
  */
-	function _getLayoutFileName($name = null) {
+	protected function _getLayoutFileName($name = null) {
 		if ($name === null) {
 			$name = $this->layout;
 		}
@@ -385,7 +385,7 @@ class BaserAppView extends ThemeView {
  * @param string $content_for_layout Content to render in a view, wrapped by the surrounding layout.
  * @return mixed Rendered output, or false on error
  */
-	function renderLayout($content_for_layout, $layout = null) {
+	public function renderLayout($content_for_layout, $layout = null) {
 		$layoutFileName = $this->_getLayoutFileName($layout);
 		if (empty($layoutFileName)) {
 			return $this->output;

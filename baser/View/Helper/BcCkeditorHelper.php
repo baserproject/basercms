@@ -82,7 +82,7 @@ class BcCkeditorHelper extends AppHelper {
 					array( 	'name' => 'インライン(q)',
 							'element' => 'q')
 			);
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 
 	}
@@ -161,7 +161,7 @@ class BcCkeditorHelper extends AppHelper {
  * @return string
  * @access protected
  */
-	function _build($fieldName, $ckoptions = array(), $styles = array()) {
+	protected function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
 		if(isset($ckoptions['stylesSet'])) {
 			$stylesSet = $ckoptions['stylesSet'];
@@ -334,7 +334,7 @@ class BcCkeditorHelper extends AppHelper {
  * @param array $options
  * @return string
  */
-	function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+	public function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
 		
 		if(!$form){
 			$form = $this->Form;
@@ -358,7 +358,7 @@ class BcCkeditorHelper extends AppHelper {
  * @param array $tinyoptions
  * @return string
  */
-	function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+	public function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
 		
 		if(!$form){
 			$form = $this->Form;

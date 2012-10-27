@@ -84,7 +84,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 		
@@ -107,7 +107,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function beforeRender() {
+	public function beforeRender() {
 
 		parent::beforeRender();
 		$this->set('blogContent',$this->blogContent);
@@ -119,7 +119,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_index($blogContentId) {
+	public function admin_index($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
 			$this->Session->setFlash('無効な処理です。');
@@ -177,7 +177,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access protected
  */
-	function _setAdminIndexViewData() {
+	protected function _setAdminIndexViewData() {
 		
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
@@ -196,7 +196,7 @@ class BlogPostsController extends BlogAppController {
  * @return array $conditions
  * @access protected
  */
-	function _createAdminIndexConditions($blogContentId, $data) {
+	protected function _createAdminIndexConditions($blogContentId, $data) {
 
 		unset($data['ListTool']);
 		$name = $blogCategoryId = '';
@@ -265,7 +265,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_add($blogContentId) {
+	public function admin_add($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
 			$this->Session->setFlash('無効な処理です。');
@@ -326,7 +326,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_edit($blogContentId,$id) {
+	public function admin_edit($blogContentId,$id) {
 
 		if(!$blogContentId || !$id) {
 			$this->Session->setFlash('無効な処理です。');
@@ -407,7 +407,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($blogContentId, $id = null) {
+	public function admin_ajax_delete($blogContentId, $id = null) {
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -429,7 +429,7 @@ class BlogPostsController extends BlogAppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -446,7 +446,7 @@ class BlogPostsController extends BlogAppController {
  * @return boolean 
  * @access protected
  */
-	function _del($id) {
+	protected function _del($id) {
 		
 		// メッセージ用にデータを取得
 		$post = $this->BlogPost->read(null, $id);
@@ -468,7 +468,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_delete($blogContentId,$id = null) {
+	public function admin_delete($blogContentId,$id = null) {
 
 		if(!$blogContentId || !$id) {
 			$this->Session->setFlash('無効な処理です。');
@@ -498,7 +498,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_import() {
+	public function admin_import() {
 
 		// 入力チェック
 		$check = true;
@@ -604,7 +604,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_unpublish($blogContentId, $id) {
+	public function admin_ajax_unpublish($blogContentId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -627,7 +627,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_publish($blogContentId, $id) {
+	public function admin_ajax_publish($blogContentId, $id) {
 		
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -648,7 +648,7 @@ class BlogPostsController extends BlogAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_publish($ids) {
+	protected function _batch_publish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -666,7 +666,7 @@ class BlogPostsController extends BlogAppController {
  * @return boolean
  * @access protected 
  */
-	function _batch_unpublish($ids) {
+	protected function _batch_unpublish($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -684,7 +684,7 @@ class BlogPostsController extends BlogAppController {
  * @param boolean $status
  * @return boolean 
  */
-	function _changeStatus($id, $status) {
+	protected function _changeStatus($id, $status) {
 		
 		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => -1));
@@ -709,7 +709,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy($blogContentId, $id = null) {
+	public function admin_ajax_copy($blogContentId, $id = null) {
 		
 		$result = $this->BlogPost->copy($id);
 		if($result) {

@@ -49,7 +49,7 @@ class BcAuthComponent extends AuthComponent {
  * @return array User record data, or null, if the user could not be identified.
  * @access public
  */
-	function identify($user = null, $conditions = null) {
+	public function identify($user = null, $conditions = null) {
 		
 		if ($conditions === false) {
 			$conditions = null;
@@ -174,7 +174,7 @@ class BcAuthComponent extends AuthComponent {
  * @return boolean True on login success, false on failure
  * @access public
  */
-	function login($data = null) {
+	public function login($data = null) {
 		// CUSTOMIZE ADD 2011/09/25 ryuring
 		// 簡単ログイン
 		// >>>
@@ -197,7 +197,7 @@ class BcAuthComponent extends AuthComponent {
  * @see AuthComponent::$loginAction
  * @access public
  */
-	function logout() {
+	public function logout() {
 		if(!empty($this->fields['serial'])) {
 			$this->deleteSerial();
 		}
@@ -207,7 +207,7 @@ class BcAuthComponent extends AuthComponent {
  * 個体識別IDを保存する
  * @return boolean 
  */
-	function saveSerial() {
+	public function saveSerial() {
 		$user = $this->user();
 		if(!empty($this->fields['serial']) && $user) {
 			$serial = $this->getSerial();
@@ -224,7 +224,7 @@ class BcAuthComponent extends AuthComponent {
  * 
  * @return boolean
  */
-	function deleteSerial() {
+	public function deleteSerial() {
 		$user = $this->user();
 		if(!empty($this->fields['serial']) && $user) {
 			$Model = $model =& $this->getModel();
@@ -238,7 +238,7 @@ class BcAuthComponent extends AuthComponent {
  * 
  * @return string
  */
-	function getSerial() {
+	public function getSerial() {
 		
 		if(!empty($_SERVER['HTTP_X_DCMGUID'])) {
 			return $_SERVER['HTTP_X_DCMGUID'];

@@ -63,7 +63,7 @@ class BaserAppModel extends Model {
  * @return	void
  * @access	private
  */
-	function __construct($id = false, $table = null, $ds = null) {
+	public function __construct($id = false, $table = null, $ds = null) {
 
 		if($this->useDbConfig && ($this->name || !empty($id['name']))) {
 
@@ -96,7 +96,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function beforeSave($options) {
+	public function beforeSave($options) {
 
 		$result = parent::beforeSave($options);
 
@@ -129,7 +129,7 @@ class BaserAppModel extends Model {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  * @access 	public
  */
-	function save($data = null, $validate = true, $fieldList = array()) {
+	public function save($data = null, $validate = true, $fieldList = array()) {
 
 		if(!$data)
 			$data = $this->data;
@@ -162,7 +162,7 @@ class BaserAppModel extends Model {
  * @return	array	変換後のデータ
  * @access 	public
  */
-	function convertEncodingByArray($data, $outenc ,$inenc) {
+	public function convertEncodingByArray($data, $outenc ,$inenc) {
 		foreach($data as $key=>$value) {
 			if(is_array($value)) {
 				$data[$key] = $this->convertEncodingByArray($value, $outenc, $inenc);
@@ -181,7 +181,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function saveDbLog($message) {
+	public function saveDbLog($message) {
 
 		// ログを記録する
 		App::import('Model', 'Dblog');
@@ -199,7 +199,7 @@ class BaserAppModel extends Model {
  * @return 	array
  * @access	public
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 		return array();
 	}
 /**
@@ -210,7 +210,7 @@ class BaserAppModel extends Model {
  * @return 	array
  * @access	public
  */
-	function getControlSources() {
+	public function getControlSources() {
 		return array();
 	}
 /**
@@ -222,7 +222,7 @@ class BaserAppModel extends Model {
  * @return 	array
  * @access	public
  */
-	function getChildIdsList($id) {
+	public function getChildIdsList($id) {
 
 		$ids = array();
 		if($this->childcount($id)) {
@@ -244,7 +244,7 @@ class BaserAppModel extends Model {
  * @access	public
  * TODO AppExModeに移行すべきかも
  */
-	function replaceText($str) {
+	public function replaceText($str) {
 
 		$ret = $str;
 		$arr = array(
@@ -330,7 +330,7 @@ class BaserAppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
+	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 
 		// 初期データフォルダを走査
 		if(!$pluginName) {
@@ -388,7 +388,7 @@ class BaserAppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
+	public function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
@@ -461,7 +461,7 @@ class BaserAppModel extends Model {
  * @return 	boolean
  * @access	public
  */
-	function loadCsv($dbConfigName, $path, $filterTable='') {
+	public function loadCsv($dbConfigName, $path, $filterTable='') {
 
 		// テーブルリストを取得
 		$db =& ConnectionManager::getDataSource($dbConfigName);
@@ -494,7 +494,7 @@ class BaserAppModel extends Model {
  * @param array $config
  * @param string $source
  */
-	function restoreDb($config, $source) {
+	public function restoreDb($config, $source) {
 
 		App::import('Vendor','DbRestore',array('file'=>'dbrestore.php'));
 		$dbType = preg_replace('/^bc_/', '', $config['driver']);
@@ -556,7 +556,7 @@ class BaserAppModel extends Model {
  * @return boolean
  * @access public
  */
-	function minLength($check, $min) {
+	public function minLength($check, $min) {
 		$check=(is_array($check))?current($check):$check;
 		$length = mb_strlen($check,Configure::read('App.encoding'));
 		return ($length >= $min);
@@ -569,7 +569,7 @@ class BaserAppModel extends Model {
  * @param boolean
  * @access public
  */
-	function maxLength($check, $max) {
+	public function maxLength($check, $max) {
 		$check=(is_array($check))?current($check):$check;
 		$length = mb_strlen($check,Configure::read('App.encoding'));
 		return ($length <= $max);
@@ -583,7 +583,7 @@ class BaserAppModel extends Model {
  * @param boolean
  * @access public
  */
-	function between($check, $min, $max) {
+	public function between($check, $min, $max) {
 		$check=(is_array($check))?current($check):$check;
 		$length = mb_strlen($check,Configure::read('App.encoding'));
 		return ($length >= $min && $length <= $max);
@@ -597,7 +597,7 @@ class BaserAppModel extends Model {
  * @param array $conditions
  * @return int
  */
-	function getMax($field,$conditions=array()) {
+	public function getMax($field,$conditions=array()) {
 
 		if(strpos($field,'.') === false) {
 			$modelName = $this->alias;
@@ -643,7 +643,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function addField($options) {
+	public function addField($options) {
 
 		extract($options);
 
@@ -670,7 +670,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function editField($options) {
+	public function editField($options) {
 
 		extract($options);
 
@@ -697,7 +697,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function delField($options) {
+	public function delField($options) {
 
 		extract($options);
 
@@ -725,7 +725,7 @@ class BaserAppModel extends Model {
  * @return boolean
  * @access public
  */
-	function renameField($options) {
+	public function renameField($options) {
 
 		extract($options);
 
@@ -750,7 +750,7 @@ class BaserAppModel extends Model {
  * @param string $tableName
  * @return boolean
  */
-	function tableExists ($tableName) {
+	public function tableExists ($tableName) {
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
@@ -763,7 +763,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function alphaNumeric($check) {
+	public function alphaNumeric($check) {
 
 		if(!$check[key($check)]) {
 			return true;
@@ -784,7 +784,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function alphaNumericPlus($check) {
+	public function alphaNumericPlus($check) {
 
 		if(!$check[key($check)]) {
 			return true;
@@ -801,7 +801,7 @@ class BaserAppModel extends Model {
  * @param array $check
  * @return boolean
  */
-	function duplicate($check,$field) {
+	public function duplicate($check,$field) {
 
 		$conditions = array($this->alias.'.'.key($check)=>$check[key($check)]);
 		if($this->exists()) {
@@ -817,7 +817,7 @@ class BaserAppModel extends Model {
 /**
  * ファイルサイズチェック
  */
-	function fileSize($check,$size) {
+	public function fileSize($check,$size) {
 		$file = $check[key($check)];
 		if(!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
@@ -831,7 +831,7 @@ class BaserAppModel extends Model {
  * @param array $check
  * @return boolean
  */
-	function halfText($check) {
+	public function halfText($check) {
 		$value = $check[key($check)];
 		$len = strlen($value);
 		$mblen = mb_strlen($value,'UTF-8');
@@ -846,7 +846,7 @@ class BaserAppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	function sortup($id,$conditions) {
+	public function sortup($id,$conditions) {
 		return $this->changeSort($id,-1,$conditions);
 	}
 /**
@@ -855,7 +855,7 @@ class BaserAppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	function sortdown($id,$conditions) {
+	public function sortdown($id,$conditions) {
 		return $this->changeSort($id,1,$conditions);
 	}
 /**
@@ -865,7 +865,7 @@ class BaserAppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	function changeSort($id,$offset,$conditions=array()) {
+	public function changeSort($id,$offset,$conditions=array()) {
 
 		if($conditions) {
 			$_conditions = $conditions;
@@ -944,7 +944,7 @@ class BaserAppModel extends Model {
  * @return void
  * @access public
  */
-	function deleteModelCache() {
+	public function deleteModelCache() {
 		$this->_schema = null;
 		App::import('Core','Folder');
 		$folder = new Folder(CACHE.'models'.DS);
@@ -960,7 +960,7 @@ class BaserAppModel extends Model {
  * １レコードとしてデータを展開する
  * @return array
  */
-	function findExpanded() {
+	public function findExpanded() {
 
 		$dbDatas = $this->find('all',array('fields'=>array('name','value')));
 		$expandedData = array();
@@ -977,7 +977,7 @@ class BaserAppModel extends Model {
  * @param	array	$data
  * @return	boolean
  */
-	function saveKeyValue($data) {
+	public function saveKeyValue($data) {
 
 		if(isset($data[$this->alias])) {
 			$data = $data[$this->alias];
@@ -1019,7 +1019,7 @@ class BaserAppModel extends Model {
  * @return boolean Succcess
  * @access public
  */
-	function notInList($check, $list) {
+	public function notInList($check, $list) {
 		return !in_array($check[key($check)], $list);
 	}
 /**
@@ -1030,7 +1030,7 @@ class BaserAppModel extends Model {
  * @return mixed The resulting data that should be assigned to a field
  * @access public
  */
-	function deconstruct($field, $data) {
+	public function deconstruct($field, $data) {
 		if (!is_array($data)) {
 			return $data;
 		}
@@ -1148,7 +1148,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	function confirm($check, $fields) {
+	public function confirm($check, $fields) {
 
 		$value1 = $value2 = '';
 		if(is_array($fields) && count($fields) > 1) {
@@ -1179,7 +1179,7 @@ class BaserAppModel extends Model {
  * @return	mixed	$results
  * @access	public
  */
-	function afterFind($results) {
+	public function afterFind($results) {
 
 		/* データベース文字コードを内部文字コードに変換 */
 		// MySQL4.0 以下で動作
@@ -1325,7 +1325,7 @@ class BaserAppModel extends Model {
  * @param array $check
  * @return boolean 
  */
-	function emails($check) {
+	public function emails($check) {
 		
 		$Validation =& Validation::getInstance();
 		$emails = array();
@@ -1363,7 +1363,7 @@ class BaserAppModel extends Model {
  * @return type 
  * @access public
  */
-	function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
+	public function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
 		
 		if (!is_string($conditions) || (is_string($conditions) && !array_key_exists($conditions, $this->_findMethods))) {
 			$type = 'first';
@@ -1467,7 +1467,7 @@ class BaserAppModel extends Model {
  * @access public
  * @link http://book.cakephp.org/view/692/deleteAll
  */
-	function deleteAll($conditions, $cascade = true, $callbacks = false) {
+	public function deleteAll($conditions, $cascade = true, $callbacks = false) {
 		
 		$result = parent::deleteAll($conditions, $cascade, $callbacks);
 		if($result) {
@@ -1488,7 +1488,7 @@ class BaserAppModel extends Model {
  * @access public
  * @link http://book.cakephp.org/view/75/Saving-Your-Data
  */
-	function updateAll($fields, $conditions = true) {
+	public function updateAll($fields, $conditions = true) {
 		
 		$result = parent::updateAll($fields, $conditions);
 		if($result) {
@@ -1509,7 +1509,7 @@ class BaserAppModel extends Model {
  * @return error message
  * @access public
  */
-	function cakeError($method, $messages = array()) {
+	public function cakeError($method, $messages = array()) {
 		//======================================================================
 		// router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
 		// AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。

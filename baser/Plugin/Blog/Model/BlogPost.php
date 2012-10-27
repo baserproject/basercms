@@ -123,7 +123,7 @@ class BlogPost extends BlogAppModel {
  * @return array $authUser 初期値データ
  * @access public
  */
-	function getDefaultValue($authUser) {
+	public function getDefaultValue($authUser) {
 		
 		$data[$this->name]['user_id'] = $authUser['User']['id'];
 		$data[$this->name]['posts_date'] = date('Y/m/d H:i:s');
@@ -139,7 +139,7 @@ class BlogPost extends BlogAppModel {
  * @return array 月別リストデータ
  * @access public
  */
-	function getPostedDates($blogContentId, $options) {
+	public function getPostedDates($blogContentId, $options) {
 
 		$options = array_merge(array(
 			'category'	=> false,
@@ -242,7 +242,7 @@ class BlogPost extends BlogAppModel {
  * @return array
  * @access public
  */
-	function getEntryDates($contentId,$year,$month) {
+	public function getEntryDates($contentId,$year,$month) {
 
 		$entryDates = $this->find('all', array(
 			'fields'	=> array('BlogPost.posts_date'),
@@ -265,7 +265,7 @@ class BlogPost extends BlogAppModel {
  * @param	int $month
  * @return	boolean
  */
-	function existsEntry($contentId,$year,$month) {
+	public function existsEntry($contentId,$year,$month) {
 		
 		if($this->find('first', array(
 			'fields'	=> array('BlogPost.id'),
@@ -289,7 +289,7 @@ class BlogPost extends BlogAppModel {
  * @return string
  * @access private
  */
-	function _getEntryDatesConditions($contentId,$year,$month) {
+	protected function _getEntryDatesConditions($contentId,$year,$month) {
 
 		$dbConfig = new DATABASE_CONFIG();
 		$driver = preg_replace('/^bc_/', '', $dbConfig->plugin['driver']);
@@ -350,7 +350,7 @@ class BlogPost extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = array()) {
 
 		switch ($field) {
 			case 'blog_category_id':
@@ -420,7 +420,7 @@ class BlogPost extends BlogAppModel {
  * @return boolean 公開状態
  * @access public
  */
-	function allowPublish($data){
+	public function allowPublish($data){
 
 		if(isset($data['BlogPost'])){
 			$data = $data['BlogPost'];
@@ -450,7 +450,7 @@ class BlogPost extends BlogAppModel {
  * @return array
  * @access public 
  */
-	function getConditionAllowPublish() {
+	public function getConditionAllowPublish() {
 		
 		$conditions[$this->alias.'.status'] = true;
 		$conditions[] = array('or'=> array(array($this->alias.'.publish_begin <=' => date('Y-m-d H:i:s')),
@@ -469,7 +469,7 @@ class BlogPost extends BlogAppModel {
  * @return array
  * @access public
  */
-	function getPublishes ($options) {
+	public function getPublishes ($options) {
 
 		if(!empty($options['conditions'])) {
 			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
@@ -489,7 +489,7 @@ class BlogPost extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 
 		// 検索用テーブルへの登録・削除
 		if($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {
@@ -514,7 +514,7 @@ class BlogPost extends BlogAppModel {
  * @return array
  * @access public
  */
-	function createContent($data) {
+	public function createContent($data) {
 
 		if(isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
@@ -546,7 +546,7 @@ class BlogPost extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	function beforeDelete() {
+	public function beforeDelete() {
 
 		return $this->deleteContent($this->id);
 
@@ -558,7 +558,7 @@ class BlogPost extends BlogAppModel {
  * @param array $data
  * @return mixed page Or false
  */
-	function copy($id = null, $data = array()) {
+	public function copy($id = null, $data = array()) {
 		
 		$data = array();
 		if($id) {

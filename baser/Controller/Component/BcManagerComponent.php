@@ -27,7 +27,7 @@ class BcManagerComponent extends Component {
  * @param type $adminEmail
  * @return boolean 
  */
-	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = 'core.demo') {
+	public function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = 'core.demo') {
 		
 		$result = true;
 		
@@ -120,7 +120,7 @@ class BcManagerComponent extends Component {
  * @return DboSource $db
  * @access public
  */
-	function &connectDb($config, $name = 'baser') {
+	public function &connectDb($config, $name = 'baser') {
 
 		if($name == 'plugin') {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
@@ -153,7 +153,7 @@ class BcManagerComponent extends Component {
  * @return string
  * @access	public
  */
-	function getRealDbName($type, $name) {
+	public function getRealDbName($type, $name) {
 
 		if(preg_match('/^\//', $name)) {
 			return $name;
@@ -176,7 +176,7 @@ class BcManagerComponent extends Component {
  *
  * @access	protected
  */
-	function createPageTemplates() {
+	public function createPageTemplates() {
 
 		App::import('Model','Page');
 		$Page = new Page(null, null, 'baser');
@@ -194,7 +194,7 @@ class BcManagerComponent extends Component {
 /**
  * データベースのデータに初期更新を行う
  */
-	function executeDefaultUpdates($dbConfig) {
+	public function executeDefaultUpdates($dbConfig) {
 		
 		$result = true;
 		if(!$this->_updateBlogEntryDate($dbConfig)) {
@@ -214,7 +214,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access	protected
  */
-	function _updatePluginStatus() {
+	protected function _updatePluginStatus() {
 
 		$version = getVersion();
 		App::import('Model', 'Plugin');
@@ -241,7 +241,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access	protected
  */
-	function _updateBlogEntryDate($dbConfig) {
+	protected function _updateBlogEntryDate($dbConfig) {
 
 		$this->connectDb($dbConfig, 'plugin');
 		App::import('Model', 'Blog.BlogPost');
@@ -270,7 +270,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public 
  */
-	function setAdminEmail($email) {
+	public function setAdminEmail($email) {
 		
 		App::import('Model','SiteConfig');
 		$data['SiteConfig']['email'] = $email;
@@ -284,7 +284,7 @@ class BcManagerComponent extends Component {
  * @param array $user
  * @return boolean 
  */
-	function addDefaultUser($user, $securitySalt = '') {
+	public function addDefaultUser($user, $securitySalt = '') {
 		
 		if($securitySalt) {
 			Configure::write('Security.salt', $securitySalt);
@@ -321,7 +321,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access private
  */
-	function createDatabaseConfig($options = array()) {
+	public function createDatabaseConfig($options = array()) {
 
 		if(!is_writable(APP . 'Config' . DS)) {
 			return false;
@@ -401,7 +401,7 @@ class BcManagerComponent extends Component {
  * @return boolean 
  * @access public
  */
-	function createInstallFile($securitySalt, $siteUrl = "") {
+	public function createInstallFile($securitySalt, $siteUrl = "") {
 
 		$installFileName = APP . 'Config' . DS.'install.php';
 		
@@ -435,7 +435,7 @@ class BcManagerComponent extends Component {
  * @return string キー
  * @access	protected
  */
-	function setSecuritySalt($length = 40) {
+	public function setSecuritySalt($length = 40) {
 
 		$keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$randkey = "";
@@ -454,7 +454,7 @@ class BcManagerComponent extends Component {
  * @return type
  * @access public 
  */
-	function initDb($dbConfig, $reset = true, $dbDataPattern = 'core.demo') {
+	public function initDb($dbConfig, $reset = true, $dbDataPattern = 'core.demo') {
 		
 		if($reset) {
 			$this->deleteTables();
@@ -472,7 +472,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	function constructionDb($dbConfig, $dbDataPattern = 'core.demo') {
+	public function constructionDb($dbConfig, $dbDataPattern = 'core.demo') {
 
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
@@ -529,7 +529,7 @@ class BcManagerComponent extends Component {
  * @param string $plugin
  * @return boolean 
  */
-	function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core') {
+	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core') {
 		
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
@@ -602,7 +602,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
+	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
 
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
@@ -643,7 +643,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	function deleteAllTables($dbConfig = null) {
+	public function deleteAllTables($dbConfig = null) {
 
 		$result = true;
 		if(!$this->deleteTables('baser', $dbConfig)) {
@@ -665,7 +665,7 @@ class BcManagerComponent extends Component {
  * @access public
  * TODO 処理を DboSource に移動する
  */
-	function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
+	public function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
 
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
@@ -731,7 +731,7 @@ class BcManagerComponent extends Component {
  * @return DataSource
  * @access public
  */
-	function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
+	public function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		
 		if($dbConfig) {
 			$db =& ConnectionManager::create($dbConfigKeyName, $dbConfig);
@@ -752,7 +752,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	function deployTheme($theme = null) {
+	public function deployTheme($theme = null) {
 
 		if($theme) {
 			if(is_array($theme)) {
@@ -789,7 +789,7 @@ class BcManagerComponent extends Component {
  * @return boolean 
  * @access public
  */
-	function resetSetting() {
+	public function resetSetting() {
 
 		$result = true;
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
@@ -811,7 +811,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	function resetThemePages() {
+	public function resetThemePages() {
 		
 		$result = true;
 		$themeFolder = new Folder(WWW_ROOT.'themed');
@@ -847,7 +847,7 @@ class BcManagerComponent extends Component {
  * @param array $dbConfig 
  * @access public
  */
-	function reset($dbConfig) {
+	public function reset($dbConfig) {
 
 		$result = true;
 
@@ -890,7 +890,7 @@ class BcManagerComponent extends Component {
  * @return	boolean
  * @access	public
  */
-	function smartUrl(){
+	public function smartUrl(){
 		if (Configure::read('App.baseUrl')) {
 			return false;
 		} else {
@@ -904,7 +904,7 @@ class BcManagerComponent extends Component {
  * @return	boolean
  * @access	public
  */
-	function setSmartUrl($smartUrl, $baseUrl = '') {
+	public function setSmartUrl($smartUrl, $baseUrl = '') {
 
 		/* install.php の編集 */
 		if($smartUrl) {
@@ -942,7 +942,7 @@ class BcManagerComponent extends Component {
  * @return	boolean
  * @access	protected
  */
-	function _setSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/', $baseUrl = '') {
+	protected function _setSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/', $baseUrl = '') {
 
 		//======================================================================
 		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
@@ -993,7 +993,7 @@ class BcManagerComponent extends Component {
  * @param	string	$base
  * @return	string
  */
-	function getRewriteBase($url, $baseUrl){
+	public function getRewriteBase($url, $baseUrl){
 
 		if(!$baseUrl) {
 			$baseUrl = BC_BASE_URL;
@@ -1020,7 +1020,7 @@ class BcManagerComponent extends Component {
  * @return	boolean
  * @access	public
  */
-	function setInstallSetting($key, $value) {
+	public function setInstallSetting($key, $value) {
 		
 		/* install.php の編集 */
 		$setting = "Configure::write('".$key."', ".$value.");\n";
@@ -1047,7 +1047,7 @@ class BcManagerComponent extends Component {
  * 
  * @return array 
  */
-	function checkEnv() {
+	public function checkEnv() {
 		
 		if(function_exists('apache_get_modules')) {
 			$rewriteInstalled = in_array('mod_rewrite', apache_get_modules());

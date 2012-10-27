@@ -62,7 +62,7 @@ class BcReplacePrefixComponent extends Component {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	public function initialize(&$controller) {
 		
 		$this->_methods = $controller->methods;
 		
@@ -78,7 +78,7 @@ class BcReplacePrefixComponent extends Component {
  * @return void
  * @access public
  */
-	function allow() {
+	public function allow() {
 
 		$args = func_get_args();
 		if (isset($args[0]) && is_array($args[0])) {
@@ -93,7 +93,7 @@ class BcReplacePrefixComponent extends Component {
  * @return	void
  * @access	public
  */
-	function startup(&$controller) {
+	public function startup(&$controller) {
 
 		if(in_array($controller->action, $this->_methods)) {
 			return;
@@ -152,7 +152,7 @@ class BcReplacePrefixComponent extends Component {
  * @return array paths
  * @access private
  */
-	function getViewPaths($controller) {
+	public function getViewPaths($controller) {
 
 		$paths = Configure::read('viewPaths');
 

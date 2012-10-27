@@ -70,7 +70,7 @@ class MailConfigsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_form() {
+	public function admin_form() {
 
 		if(empty($this->data)) {
 			$this->data = $this->MailConfig->read(null, 1);

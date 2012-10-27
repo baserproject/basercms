@@ -38,7 +38,7 @@ class MailformHelper extends BcFreezeHelper {
  * @return string htmlタグ
  * @access public
  */
-	function control($type,$fieldName,$options, $attributes = array()) {
+	public function control($type,$fieldName,$options, $attributes = array()) {
 
 		$attributes['escape'] = false;
 

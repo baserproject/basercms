@@ -77,7 +77,7 @@ class Plugin extends AppModel {
  * @return boolean
  * @access public
  */
-	function initDb($plugin, $filterTable = '') {
+	public function initDb($plugin, $filterTable = '') {
 		
 		return parent::initDb('plugin', $plugin, true, $filterTable, 'create');
 		
@@ -89,7 +89,7 @@ class Plugin extends AppModel {
  * @return boolean
  * @access public
  */
-	function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
+	public function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
 		
 		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
 		

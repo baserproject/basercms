@@ -95,7 +95,7 @@ class BcAppHelper extends Helper {
  * @return	void
  * @access	private
  */
-	function __construct() {
+	public function __construct() {
 
 		parent::__construct();
 
@@ -111,7 +111,7 @@ class BcAppHelper extends Helper {
  * @param  string  $file
  * @return string  $webPath web path to file.
  */
-	function webroot($file) {
+	public function webroot($file) {
 
 		// CUSTOMIZE ADD 2010/05/19 ryuring
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
@@ -201,7 +201,7 @@ class BcAppHelper extends Helper {
  * @param	string	$hook
  * @return	mixed
  */
-	function executeHook($hook) {
+	public function executeHook($hook) {
 		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
@@ -229,7 +229,7 @@ class BcAppHelper extends Helper {
  * @param boolean $full   If true, the full base URL will be prepended to the result
  * @return string  Full translated URL with base path.
  */
-	function url($url = null, $full = false, $sessionId = true) {
+	public function url($url = null, $full = false, $sessionId = true) {
 		
 		if($sessionId) {
 			$url = addSessionId($url);

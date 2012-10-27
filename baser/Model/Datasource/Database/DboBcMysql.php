@@ -27,7 +27,7 @@ class DboBcMysql extends DboMysql {
  * @return string
  * @access public
  */
-	function buildRenameTable($sourceName, $targetName) {
+	public function buildRenameTable($sourceName, $targetName) {
 		
 		return "ALTER TABLE `".$sourceName."` RENAME `".$targetName."`";
 	
@@ -40,7 +40,7 @@ class DboBcMysql extends DboMysql {
  * @param boolean $safe Whether or not numeric data should be handled automagically if no column data is provided
  * @return string Quoted and escaped data
  */
-	function value($data, $column = null, $safe = false) {
+	public function value($data, $column = null, $safe = false) {
 		$parent = parent::value($data, $column, $safe);
 
 		// CUSTOMIZE MODIFY 2012/09/03 ryuring

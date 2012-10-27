@@ -49,7 +49,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function __construct() {
+	public function __construct() {
 
 		$this->_view =& ClassRegistry::getObject('view');
 		$this->_setBlogContent();
@@ -62,7 +62,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access protected
  */
-	function _setBlogContent($blogContentId = null) {
+	protected function _setBlogContent($blogContentId = null) {
 
 		if(isset($this->blogContent) && !$blogContentId) {
 			return;
@@ -82,7 +82,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function title() {
+	public function title() {
 
 		echo $this->getTitle();
 
@@ -93,7 +93,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getTitle() {
+	public function getTitle() {
 
 		return $this->blogContent['title'];
 
@@ -104,7 +104,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getDescription() {
+	public function getDescription() {
 
 		return $this->blogContent['description'];
 
@@ -115,7 +115,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function description() {
+	public function description() {
 		echo $this->getDescription();
 	}
 /**
@@ -124,7 +124,7 @@ class BlogHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function descriptionExists() {
+	public function descriptionExists() {
 
 		if(!empty($this->blogContent['description'])) {
 			return true;
@@ -139,7 +139,7 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return void
  */
-	function postTitle($post, $link = true) {
+	public function postTitle($post, $link = true) {
 
 		echo $this->getPostTitle($post, $link);
 
@@ -152,7 +152,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getPostTitle($post, $link = true) {
+	public function getPostTitle($post, $link = true) {
 
 		if($link) {
 			return $this->getPostLink($post, $post['BlogPost']['name']);
@@ -170,7 +170,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getPostLink($post, $title, $options = array()) {
+	public function getPostLink($post, $title, $options = array()) {
 
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
@@ -185,7 +185,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function postLink($post, $title, $options = array()) {
+	public function postLink($post, $title, $options = array()) {
 
 		echo $this->getPostLink($post, $title, $options);
 
@@ -198,7 +198,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function postContent($post,$moreText = true, $moreLink = false, $cut = false) {
+	public function postContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
 		echo $this->getPostContent($post, $moreText, $moreLink, $cut);
 
@@ -211,7 +211,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
+	public function getPostContent($post,$moreText = true, $moreLink = false, $cut = false) {
 
 		if($moreLink === true) {
 			$moreLink = '≫ 続きを読む';
@@ -236,7 +236,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access puublic
  */
-	function category($post, $options = array()) {
+	public function category($post, $options = array()) {
 
 		echo $this->getCategory($post, $options);
 
@@ -282,7 +282,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function tag($post, $separator = ' , ') {
+	public function tag($post, $separator = ' , ') {
 
 		echo $this->getTag($post, $separator);
 
@@ -295,7 +295,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function getTag($post, $separator = ' , ') {
+	public function getTag($post, $separator = ' , ') {
 
 		$tagLinks = array();
 		if(!empty($post['BlogTag'])) {
@@ -318,7 +318,7 @@ class BlogHelper extends AppHelper {
  * @param string $blogCategoyId
  * @return void
  */
-	function getCategoryUrl($blogCategoryId, $options = array()) {
+	public function getCategoryUrl($blogCategoryId, $options = array()) {
 
 		$options = array_merge(array(
 			'named'	=> array()
@@ -357,7 +357,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function postDate($post,$format = 'Y/m/d') {
+	public function postDate($post,$format = 'Y/m/d') {
 
 		echo $this->getPostDate($post, $format);
 
@@ -370,7 +370,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function getPostDate($post,$format = 'Y/m/d') {
+	public function getPostDate($post,$format = 'Y/m/d') {
 
 		return $this->BcTime->format($format,$post['BlogPost']['posts_date']);
 
@@ -382,7 +382,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function author($post) {
+	public function author($post) {
 
 		$author = '';
 		if(!empty($post['User']['real_name_1'])) {
@@ -402,7 +402,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getCategoryList($categories,$depth=3, $count = false, $options = array()) {
+	public function getCategoryList($categories,$depth=3, $count = false, $options = array()) {
 
 		return $this->_getCategoryList($categories,$depth, 1, $count, $options);
 
@@ -415,7 +415,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function _getCategoryList($categories, $depth=3, $current=1, $count = false, $options = array()) {
+	protected function _getCategoryList($categories, $depth=3, $current=1, $count = false, $options = array()) {
 
 		if($depth < $current) {
 			return '';
@@ -459,7 +459,7 @@ class BlogHelper extends AppHelper {
  * @access public
  * @deprecated ツールバーに移行
  */
-	function editPost($blogContentId,$blogPostId) {
+	public function editPost($blogContentId,$blogPostId) {
 
 		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
@@ -475,7 +475,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access pulic
  */
-	function prevLink($post,$title='',$htmlAttributes = array()) {
+	public function prevLink($post,$title='',$htmlAttributes = array()) {
 
 		if(ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
@@ -515,7 +515,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function nextLink($post,$title='',$htmlAttributes = array()) {
+	public function nextLink($post,$title='',$htmlAttributes = array()) {
 
 		if(ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
@@ -555,7 +555,7 @@ class BlogHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getLayoutTemplates() {
+	public function getLayoutTemplates() {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
@@ -596,7 +596,7 @@ class BlogHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getBlogTemplates() {
+	public function getBlogTemplates() {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
@@ -639,7 +639,7 @@ class BlogHelper extends AppHelper {
  * @return boolean 公開状態
  * @access	public
  */
-	function allowPublish($data){
+	public function allowPublish($data){
 
 		if(ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
@@ -657,7 +657,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function postImg($post, $options = array()) {
+	public function postImg($post, $options = array()) {
 
 		echo $this->getPostImg($post, $options);
 
@@ -670,7 +670,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function getPostImg($post, $options = array()) {
+	public function getPostImg($post, $options = array()) {
 
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
@@ -707,7 +707,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getHtmlById($post, $id) {
+	public function getHtmlById($post, $id) {
 
 		$content = $post['BlogPost']['content'].$post['BlogPost']['detail'];
 
@@ -727,7 +727,7 @@ class BlogHelper extends AppHelper {
  * @return array $parentCategory
  * @access public
  */
-	function getParentCategory($post) {
+	public function getParentCategory($post) {
 
 		if(empty($post['BlogCategory']['id'])) {
 			return null;
@@ -744,7 +744,7 @@ class BlogHelper extends AppHelper {
  * @return array
  * @access public
  */
-	function getRelatedPosts($post, $options = array()) {
+	public function getRelatedPosts($post, $options = array()) {
 
 		if(empty($post['BlogTag'])) {
 			return array();
@@ -802,7 +802,7 @@ class BlogHelper extends AppHelper {
  * @return string
  * @access public
  */
-	function getBlogArchiveType() {
+	public function getBlogArchiveType() {
 
 		if(!empty($this->_view->viewVars['blogArchiveType'])){
 			return $this->_view->viewVars['blogArchiveType'];

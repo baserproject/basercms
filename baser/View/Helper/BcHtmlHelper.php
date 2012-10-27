@@ -58,7 +58,7 @@ class BcHtmlHelper extends HtmlHelper {
  * @return int 乱数
  * @access public
  */
-	function rand() {
+	public function rand() {
 		
 		return rand();
 		

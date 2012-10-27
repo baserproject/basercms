@@ -73,7 +73,7 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_form() {
+	public function admin_form() {
 
 		if(empty($this->request->data)) {
 
@@ -219,7 +219,7 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_del_cache() {
+	public function admin_del_cache() {
 		
 		clearAllCache();
 		$this->Session->setFlash('サーバーキャッシュを削除しました。');
@@ -232,7 +232,7 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_info() {
+	public function admin_info() {
 
 		if(!empty($this->siteConfigs['demo_on'])) {
 			$this->notFound();
@@ -258,7 +258,7 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_phpinfo() {
+	public function admin_phpinfo() {
 		$this->layout = 'empty';
 	}
 /**
@@ -267,7 +267,7 @@ class SiteConfigsController extends AppController {
  * @return void
  * @access protected
  */
-	function _getSiteConfigData() {
+	protected function _getSiteConfigData() {
 
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = Configure::read('debug');

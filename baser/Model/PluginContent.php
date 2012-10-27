@@ -85,7 +85,7 @@ class PluginContent extends AppModel {
  * @return array Or false
  * @access public
  */
-	function currentPluginContent($url) {
+	public function currentPluginContent($url) {
 
 		if(!$url) {
 			return false;

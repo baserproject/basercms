@@ -84,7 +84,7 @@ class BcGooglemapsHelper extends AppHelper {
  * @return boolean
  * @access public 
  */
-	function load($address='',$width=null,$height=null) {
+	public function load($address='',$width=null,$height=null) {
 
 		if($address) $this->address = $address;
 
@@ -113,7 +113,7 @@ class BcGooglemapsHelper extends AppHelper {
  * @return string
  * @access public 
  */
-	function _getScript() {
+	protected function _getScript() {
 
 		if(!$this->longitude || !$this->latitude || !$this->mapId) {
 			return false;
@@ -162,7 +162,7 @@ INFO_END;
  * @return boolean
  * @access public
  */
-	function loadLocation() {
+	public function loadLocation() {
 		
 		if(!$this->address) {
 			return false;
@@ -185,7 +185,7 @@ INFO_END;
  * @access public
  */
 
-	function getLocation($address) {
+	public function getLocation($address) {
 		
 		App::import("Component","BcGmaps");
 		$gmap = new BcGmapsComponent();

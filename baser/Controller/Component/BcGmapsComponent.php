@@ -91,7 +91,7 @@ class BcGmapsComponent  extends Object {
  * @return void
  * @access private
  */
-	function __construct () {
+	public function __construct () {
 		
 		$this->_baseUrl= "http://" . MAPS_HOST . "/maps/geo?output=xml";
 		
@@ -105,7 +105,7 @@ class BcGmapsComponent  extends Object {
  * @return boolean
  * @access public
  */
-	function getInfoLocation ($address) {
+	public function getInfoLocation ($address) {
 		
 		if (!empty($address)) {
 			return $this->_connect($address);
@@ -120,7 +120,7 @@ class BcGmapsComponent  extends Object {
  * @return boolean
  * @access protected
  */
-	function _connect($param) {
+	protected function _connect($param) {
 
 		$request_url = $this->_baseUrl . "&oe=utf-8&q=" . urlencode($param);
 		App::import('Xml');
@@ -170,7 +170,7 @@ class BcGmapsComponent  extends Object {
  * @return string
  * @access public
  */
-	function getPostalCode () {
+	public function getPostalCode () {
 		
 		return $this->_postalCode;
 		
@@ -181,7 +181,7 @@ class BcGmapsComponent  extends Object {
  * @return string
  * @access public
  */
-	function getAddress () {
+	public function getAddress () {
 		
 		return $this->_address;
 		
@@ -192,7 +192,7 @@ class BcGmapsComponent  extends Object {
  * @return string
  * @access public
  */
-	function getCountryName () {
+	public function getCountryName () {
 		
 		return $this->_countryName;
 		
@@ -203,7 +203,7 @@ class BcGmapsComponent  extends Object {
  * @return string
  * @access public
  */
-	function getCountryNameCode () {
+	public function getCountryNameCode () {
 
 		return $this->_countryNameCode;
 		
@@ -214,7 +214,7 @@ class BcGmapsComponent  extends Object {
  * @return string
  * @access public
  */
-	function getAdministrativeAreaName () {
+	public function getAdministrativeAreaName () {
 
 		return $this->_administrativeAreaName;
 
@@ -225,7 +225,7 @@ class BcGmapsComponent  extends Object {
  * @return double
  * @access public
  */
-	function getLatitude () {
+	public function getLatitude () {
 
 		return $this->_latitude;
 
@@ -236,7 +236,7 @@ class BcGmapsComponent  extends Object {
  * @return double
  * @access public
  */
-	function getLongitude () {
+	public function getLongitude () {
 		
 		return $this->_longitude;
 		

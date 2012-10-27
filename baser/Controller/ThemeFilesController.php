@@ -72,7 +72,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -166,7 +166,7 @@ class ThemeFilesController extends AppController {
  * @param string $file
  * @return mixed false / type 
  */
-	function _getFileType($file) {
+	protected function _getFileType($file) {
 		
 		if(preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is',$file)) {
 			return 'text';
@@ -184,7 +184,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -251,7 +251,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit() {
+	public function admin_edit() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -331,7 +331,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_del () {
+	public function admin_del () {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -363,7 +363,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_del () {
+	public function admin_ajax_del () {
 
 		$args = $this->_parseArgs(func_get_args());
 		
@@ -389,7 +389,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function _del($args) {
+	protected function _del($args) {
 		
 		extract($args);
 		if(is_dir($fullpath)) {
@@ -414,7 +414,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			
@@ -454,7 +454,7 @@ class ThemeFilesController extends AppController {
  * @return	void
  * @access	public
  */
-	function admin_view() {
+	public function admin_view() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -490,7 +490,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_copy() {
+	public function admin_ajax_copy() {
 
 		$args = $this->_parseArgs(func_get_args());
 		
@@ -557,7 +557,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_upload() {
+	public function admin_upload() {
 
 		if(!$this->request->data) {
 			$this->notFound();
@@ -591,7 +591,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add_folder() {
+	public function admin_add_folder() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -630,7 +630,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit_folder() {
+	public function admin_edit_folder() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -682,7 +682,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_view_folder() {
+	public function admin_view_folder() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -716,7 +716,7 @@ class ThemeFilesController extends AppController {
  * @return array
  * @access protected
  */
-	function _parseArgs($args) {
+	protected function _parseArgs($args) {
 
 		$data = array('plugin' => '', 'theme' => '', 'type' => '', 'path' => '', 'fullpath' => '', 'assets' => false);
 		$assets = array('css', 'js', 'img');
@@ -803,7 +803,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_copy_to_theme() {
+	public function admin_copy_to_theme() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -840,7 +840,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_copy_folder_to_theme() {
+	public function admin_copy_folder_to_theme() {
 
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -881,7 +881,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_img() {
+	public function admin_img() {
 
 		$args = $this->_parseArgs(func_get_args());
 		$contents = array('jpg'=>'jpeg','gif'=>'gif','png'=>'png');
@@ -913,7 +913,7 @@ class ThemeFilesController extends AppController {
  * @return void
  * @access public
  */
-	function admin_img_thumb() {
+	public function admin_img_thumb() {
 
 		$args = func_get_args();
 		$width = $args[0];

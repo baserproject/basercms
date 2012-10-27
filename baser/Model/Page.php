@@ -146,7 +146,7 @@ class Page extends AppModel {
  * @return	array	初期値データ
  * @access	public
  */
-	function getDefaultValue() {
+	public function getDefaultValue() {
 
 		if(!empty($_SESSION['Auth']['User'])) {
 			$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
@@ -162,7 +162,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeSave() {
+	public function beforeSave() {
 
 		if(!$this->fileSave) {
 			return true;
@@ -213,7 +213,7 @@ class Page extends AppModel {
  * @param type $url
  * @return type 
  */
-	function removeAgentPrefixFromUrl($url) {
+	public function removeAgentPrefixFromUrl($url) {
 		if(preg_match('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//', $url)) {
 			$url = preg_replace('/^\/'.Configure::read('BcAgent.mobile.prefix').'\//', '/', $url);
 		} elseif(preg_match('/^\/'.Configure::read('BcAgent.smartphone.prefix').'\//', $url)) {
@@ -227,7 +227,7 @@ class Page extends AppModel {
  * @return	int
  * @access	public
  */
-	function getInsertID(){
+	public function getInsertID(){
 		
 		if(!$this->__pageInsertID){
 			$this->__pageInsertID = parent::getInsertID();
@@ -242,7 +242,7 @@ class Page extends AppModel {
  * @return	boolean
  * @access	public
  */
-	function checkOpenPageFile($data){
+	public function checkOpenPageFile($data){
 		
 		$path = $this->_getPageFilePath($data);
 		$File = new File($path);
@@ -262,7 +262,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function afterSave($created) {
+	public function afterSave($created) {
 
 		if(isset($this->data['Page'])){
 			$data = $this->data['Page'];
@@ -304,7 +304,7 @@ class Page extends AppModel {
  * @param array $data
  * @return boolean
  */
-	function refrect($type, $data) {
+	public function refrect($type, $data) {
 		
 		if(isset($this->data['Page'])){
 			$data = $this->data['Page'];
@@ -381,7 +381,7 @@ class Page extends AppModel {
  * @return array
  * @access public
  */
-	function createContent($data) {
+	public function createContent($data) {
 
 		if(isset($data['Page'])) {
 			$data = $data['Page'];
@@ -436,7 +436,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeDelete() {
+	public function beforeDelete() {
 		
 		return $this->deleteContent($this->id);
 		
@@ -453,7 +453,7 @@ class Page extends AppModel {
  * @return	array
  * @access public
  */
-	function allowedPublish($status, $publishBegin, $publishEnd) {
+	public function allowedPublish($status, $publishBegin, $publishEnd) {
 
 		if(!$status) {
 			return false;
@@ -480,7 +480,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function createAllPageTemplate(){
+	public function createAllPageTemplate(){
 		
 		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
@@ -499,7 +499,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function createPageTemplate($data){
+	public function createPageTemplate($data){
 
 		if(isset($data['Page'])){
 			$data = $data['Page'];
@@ -536,7 +536,7 @@ class Page extends AppModel {
  * @return string
  * @access protected
  */
-	function _getPageFilePath($data) {
+	protected function _getPageFilePath($data) {
 
 		if(isset($data['Page'])){
 			$data = $data['Page'];
@@ -586,7 +586,7 @@ class Page extends AppModel {
  * 
  * @param array $data
  */
-	function delFile($data) {
+	public function delFile($data) {
 		
 		$path = $this->_getPageFilePath($data);
 		if($path) {
@@ -602,7 +602,7 @@ class Page extends AppModel {
  * @return string
  * @access public
  */
-	function getPageUrl($data) {
+	public function getPageUrl($data) {
 
 		if(isset($data['Page'])) {
 			$data = $data['Page'];
@@ -635,7 +635,7 @@ class Page extends AppModel {
  * @return string
  * @access public
  */
-	function addBaserPageTag($id,$contents,$title,$description) {
+	public function addBaserPageTag($id,$contents,$title,$description) {
 		
 		$tag = '<!-- BaserPageTagBegin -->'."\n";
 		$tag .= '<?php $bcBaser->setTitle(\''.$title.'\') ?>'."\n";
@@ -654,7 +654,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function pageExists($check) {
+	public function pageExists($check) {
 		
 		if($this->exists()) {
 			return true;
@@ -687,7 +687,7 @@ class Page extends AppModel {
  * @return mixed $controlSource コントロールソース
  * @access public
  */
-	function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = array()) {
 
 		switch ($field) {
 			
@@ -775,7 +775,7 @@ class Page extends AppModel {
  * @access	public
  * @deprecated isPageUrl と組み合わせて checkPublish を利用してください。
  */
-	function checkUnPublish($url) {
+	public function checkUnPublish($url) {
 
 		if($this->_unpublishes == -1) {
 			
@@ -811,7 +811,7 @@ class Page extends AppModel {
  * @param string $url
  * @return mixed int or false
  */
-	function getCacheTime($url) {
+	public function getCacheTime($url) {
 		
 		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
@@ -832,7 +832,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function checkPublish($url) {
+	public function checkPublish($url) {
 
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
@@ -863,7 +863,7 @@ class Page extends AppModel {
  * @return array
  * @access public
  */
-	function getConditionAllowPublish() {
+	public function getConditionAllowPublish() {
 
 		$conditions[$this->alias.'.status'] = true;
 		$conditions[] = array('or'=> array(array($this->alias.'.publish_begin <=' => date('Y-m-d H:i:s')),
@@ -884,7 +884,7 @@ class Page extends AppModel {
  * @return array 処理結果 all / success
  * @access protected
  */
-	function entryPageFiles($targetPath,$parentCategoryId = '') {
+	public function entryPageFiles($targetPath,$parentCategoryId = '') {
 		
 		if($this->Behaviors->attached('BcCache')) {
 			$this->Behaviors->detach('BcCache');
@@ -1056,7 +1056,7 @@ class Page extends AppModel {
  * @return mixed ページID / false
  * @access public
  */
-	function agentExists ($type, $data) {
+	public function agentExists ($type, $data) {
 		
 		if(isset($data['Page'])){
 			$data = $data['Page'];
@@ -1076,7 +1076,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	function isPageUrl($url) {
+	public function isPageUrl($url) {
 		
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
@@ -1106,7 +1106,7 @@ class Page extends AppModel {
  * @access public
  * @link http://book.cakephp.org/view/690/del
  */
-	function del($id = null, $cascade = true) {
+	public function del($id = null, $cascade = true) {
 		
 		// メッセージ用にデータを取得
 		$page = $this->read(null, $id);
@@ -1138,7 +1138,7 @@ class Page extends AppModel {
  * @param array $data
  * @return mixed page Or false
  */
-	function copy($id = null, $data = array()) {
+	public function copy($id = null, $data = array()) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));

@@ -41,7 +41,7 @@ class BaserAdminHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function __construct() {
+	public function __construct() {
 		$this->_view =& ClassRegistry::getObject('view');
 	}
 /**
@@ -50,7 +50,7 @@ class BaserAdminHelper extends AppHelper {
  * @return boolean
  * @access public
  */
-	function isAdminGlobalmenuUsed() {
+	public function isAdminGlobalmenuUsed() {
 		
 		if(!BC_INSTALLED) {
 			return false;

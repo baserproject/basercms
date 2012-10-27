@@ -74,7 +74,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		/* セッション処理 */
 		if($this->request->data) {
@@ -118,7 +118,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		if(!$this->request->data) {
 			$this->request->data['GlobalMenu']['status'] = 0;
@@ -159,7 +159,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -202,7 +202,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		if($ids) {
 			foreach($ids as $id) {
 				// メッセージ用にデータを取得
@@ -225,7 +225,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -252,7 +252,7 @@ class GlobalMenusController extends AppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -282,7 +282,7 @@ class GlobalMenusController extends AppController {
  * @access	public
  * @return boolean
  */
-	function admin_ajax_update_sort () {
+	public function admin_ajax_update_sort () {
 
 		if($this->request->data){
 			$this->request->data = am($this->request->data,$this->_checkSession());
@@ -304,7 +304,7 @@ class GlobalMenusController extends AppController {
  * @return array()
  * @access	protected
  */
-	function _checkSession(){
+	protected function _checkSession(){
 		
 		$data = array();
 		if($this->Session->check('Filter.GlobalMenu.menu_type')) {
@@ -328,7 +328,7 @@ class GlobalMenusController extends AppController {
  * @return string
  * @access protected
  */
-	function _createAdminIndexConditions($data){
+	protected function _createAdminIndexConditions($data){
 
 		if(isset($data['GlobalMenu'])){
 			$data = $data['GlobalMenu'];

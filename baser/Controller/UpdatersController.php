@@ -167,7 +167,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
@@ -190,7 +190,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function index() {
+	public function index() {
 		
 		$aryUrl = explode('/', $this->request->params['url']['url']);
 		if(empty($aryUrl[0])) {
@@ -275,7 +275,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_exec_script() {
+	public function admin_exec_script() {
 
 		if($this->request->data) {
 			$this->setMessage('アップデートスクリプトの実行します。', false, true, true);
@@ -300,7 +300,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function admin_plugin($name) {
+	public function admin_plugin($name) {
 
 		if(!$name) {
 			$this->notFound();
@@ -346,7 +346,7 @@ class UpdatersController extends AppController {
  * @return int
  * @access protected
  */
-	function _getScriptNum($plugin= '') {
+	protected function _getScriptNum($plugin= '') {
 
 		/* バージョンアップ対象のバージョンを取得 */
 		$targetVersion = $this->getBaserVersion($plugin);
@@ -366,7 +366,7 @@ class UpdatersController extends AppController {
  * @return array $updates
  * @access protected
  */
-	function _getUpdaters($sourceVersion, $targetVersion, $plugin = ''){
+	protected function _getUpdaters($sourceVersion, $targetVersion, $plugin = ''){
 
 		$sourceVerPoint = verpoint($sourceVersion);
 		$targetVerPoint = verpoint($targetVersion);
@@ -421,7 +421,7 @@ class UpdatersController extends AppController {
  * @return mixed $path or false
  * @access protected
  */
-	function _getUpdateFolder($plugin='') {
+	protected function _getUpdateFolder($plugin='') {
 		
 		if(!$plugin) {
 			return BASER_CONFIGS.'update'.DS;
@@ -451,7 +451,7 @@ class UpdatersController extends AppController {
  * @return boolean
  * @access public
  */
-	function _update($plugin = '') {
+	protected function _update($plugin = '') {
 
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
@@ -509,7 +509,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function execScript($__plugin, $__version) {
+	public function execScript($__plugin, $__version) {
 		
 		$__path = $this->_getUpdateFolder($__plugin).$__version.DS.'updater.php';
 		
@@ -531,7 +531,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function setMessage($message, $strong = false, $head = false, $beforeBreak = false) {
+	public function setMessage($message, $strong = false, $head = false, $beforeBreak = false) {
 		
 		if($beforeBreak) {
 			$this->_updateMessage[] = '';
@@ -557,7 +557,7 @@ class UpdatersController extends AppController {
  * @return boolean
  * @access	public
  */
-	function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
+	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
 
 		$path = $this->_getUpdatePath($version, $plugin);
 		if(!$path) {
@@ -583,7 +583,7 @@ class UpdatersController extends AppController {
  * @return boolean
  * @access public
  */
-	function loadCsv($version, $plugin = '', $filterTable = '') {
+	public function loadCsv($version, $plugin = '', $filterTable = '') {
 
 		$path = $this->_getUpdatePath($version, $plugin);
 		if(!$path) {
@@ -604,7 +604,7 @@ class UpdatersController extends AppController {
  * @param string $plugin
  * @return string $path or ''
  */
-	function _getUpdatePath($version, $plugin = '') {
+	protected function _getUpdatePath($version, $plugin = '') {
 
 		$path = '';
 		$appPluginPath = APP.'plugins'.DS.$plugin.DS.'config'.DS.'update'.DS.$version;
@@ -634,7 +634,7 @@ class UpdatersController extends AppController {
  * 
  * @return string
  */
-	function _getUpadteMessage() {
+	protected function _getUpadteMessage() {
 		
 		return implode('<br />',$this->_updateMessage).'<br /><br />';
 		
@@ -645,7 +645,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access protected
  */
-	function _writeUpdateLog() {
+	protected function _writeUpdateLog() {
 		
 		if($this->_updateMessage) {
 			foreach($this->_updateMessage as $message) {

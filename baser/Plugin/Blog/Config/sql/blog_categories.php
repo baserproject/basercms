@@ -8,11 +8,11 @@ class BlogCategoriesSchema extends CakeSchema {
 
 	public $connection = 'plugin';
 
-	function before($event = array()) {
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
 	public $blog_categories = array(

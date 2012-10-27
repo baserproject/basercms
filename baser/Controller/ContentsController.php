@@ -58,7 +58,7 @@ class ContentsController extends AppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		
@@ -82,7 +82,7 @@ class ContentsController extends AppController {
  * @return void
  * @access public
  */
-	function search() {
+	public function search() {
 		
 		$datas = array();
 		$query = array();
@@ -120,7 +120,7 @@ class ContentsController extends AppController {
  * @return array
  * @access protected
  */
-	function _parseQuery($query) {
+	protected function _parseQuery($query) {
 		
 		$query = str_replace('　', ' ', $query);
 		if(strpos($query, ' ') !== false) {
@@ -138,7 +138,7 @@ class ContentsController extends AppController {
  * @return	array	$conditions
  * @access	protected
  */
-	function _createSearchConditions($data) {
+	protected function _createSearchConditions($data) {
 		
 		$conditions = array('Content.status' => true);
 		$query = '';
@@ -181,7 +181,7 @@ class ContentsController extends AppController {
  * @return type
  * @access public 
  */
-	function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
+	public function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		
 		return $this->__getPageListRecursive($parentCategoryId, $recursive);
 		
@@ -193,7 +193,7 @@ class ContentsController extends AppController {
  * @return string
  * @access private 
  */
-	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
+	private function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
 		$direct = false;
 		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('BcRequest.agent'));
@@ -286,7 +286,7 @@ class ContentsController extends AppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 		
 		$this->pageTitle = '検索インデックス コンテンツ一覧';
 
@@ -317,7 +317,7 @@ class ContentsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_add() {
+	public function admin_add() {
 		
 		$this->pageTitle = '検索インデックス コンテンツ登録';
 		
@@ -400,7 +400,7 @@ class ContentsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -422,7 +422,7 @@ class ContentsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		if(!$id) {
 			$this->Session->setFlash('無効なIDです。');
@@ -448,7 +448,7 @@ class ContentsController extends AppController {
  * @return	void
  * @access 	public
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 
 		if($ids){
 			
@@ -471,7 +471,7 @@ class ContentsController extends AppController {
  * @return boolean
  * @access public
  */
-	function admin_ajax_change_priority() {
+	public function admin_ajax_change_priority() {
 		
 		if($this->request->data) {
 			$this->Content->set($this->request->data);
@@ -489,7 +489,7 @@ class ContentsController extends AppController {
  * @return	string
  * @access	protected
  */
-	function _createAdminIndexConditions($data){
+	protected function _createAdminIndexConditions($data){
 		
 		if(empty($data['Content'])) {
 			return array();

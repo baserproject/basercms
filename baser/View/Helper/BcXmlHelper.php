@@ -34,7 +34,7 @@ class BcXmlHelper extends XmlHelper {
  * @param array $attrib
  * @return string XML宣言
  */
-	function header($attrib = array()) {
+	public function header($attrib = array()) {
 
 		$ua = @$_SERVER['HTTP_USER_AGENT'];
 		if (!(ereg("Windows",$ua) && ereg("MSIE",$ua)) || ereg("MSIE 7",$ua)) {

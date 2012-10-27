@@ -31,7 +31,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function setup(&$model, $config = array()) {}
+	public function setup(&$model, $config = array()) {}
 /**
  * キャッシュ処理
  * 
@@ -42,7 +42,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	function readCache(&$model, $expire, $type, $query = array()){
+	public function readCache(&$model, $expire, $type, $query = array()){
 		
 		static $cacheData = array();
 		
@@ -92,7 +92,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function delCache(&$model){
+	public function delCache(&$model){
 		
 		$cacheListKey = $model->useTable . '_dataCacheList';
 		$list = Cache::read($cacheListKey, '_cake_data_');
@@ -111,7 +111,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function afterSave(&$model, $created) {
+	public function afterSave(&$model, $created) {
 		
 		$this->delAssockCache($model);
 		
@@ -123,7 +123,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function afterDelete(&$model) {
+	public function afterDelete(&$model) {
 		
 		$this->delAssockCache($model);
 		
@@ -136,7 +136,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい
  */
-	function delAssockCache(&$model, $recursive = 0) {
+	public function delAssockCache(&$model, $recursive = 0) {
 		
 		$this->delCache($model);
 		if($recursive <= 3) {

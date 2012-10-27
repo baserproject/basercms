@@ -64,7 +64,7 @@ class Rss extends WebModel {
  * @return array
  * @access public
  */  
-	function findAll($feedUrl, $limit = 10, $cacheExpires = null)
+	public function findAll($feedUrl, $limit = 10, $cacheExpires = null)
     {
 		
         if (empty($feedUrl))
@@ -91,7 +91,7 @@ class Rss extends WebModel {
  * @return string
  * @access private
  */    
-	function __getRawRSS($feedUrl, $vars = array(), $cacheExpires = null)
+	private function __getRawRSS($feedUrl, $vars = array(), $cacheExpires = null)
     {
 		
         $url = $feedUrl;

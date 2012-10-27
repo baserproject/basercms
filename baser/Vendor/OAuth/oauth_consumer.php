@@ -20,19 +20,19 @@ class OAuth_Consumer {
 	/**
 	 * @access	private
 	 */
-	public $url = null;
+	var $url = null;
 	/**
 	 * @access	private
 	 */
-	public $consumerKey = null;
+	var $consumerKey = null;
 	/**
 	 * @access	private
 	 */
-	public $consumerSecret = null;
+	var $consumerSecret = null;
 	/**
 	 * @access	private
 	 */
-	public $fullResponse = null;
+	var $fullResponse = null;
 
 	function OAuth_Consumer($consumerKey, $consumerSecret = '') {
 		$this->consumerKey = $consumerKey;

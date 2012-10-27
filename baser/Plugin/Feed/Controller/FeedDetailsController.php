@@ -77,7 +77,7 @@ class FeedDetailsController extends FeedAppController {
  * @return void
  * @access public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 		
@@ -97,7 +97,7 @@ class FeedDetailsController extends FeedAppController {
  * @return void
  * @access public
  */
-	function admin_add($feedConfigId) {
+	public function admin_add($feedConfigId) {
 
 		/* 除外処理 */
 		if(!$feedConfigId) {
@@ -146,7 +146,7 @@ class FeedDetailsController extends FeedAppController {
  * @return	void
  * @access	public
  */
-	function admin_edit($feedConfigId,$id) {
+	public function admin_edit($feedConfigId,$id) {
 
 		if(!$id && empty($this->data)) {
 			$this->Session->setFlash('無効なIDです。');
@@ -194,7 +194,7 @@ class FeedDetailsController extends FeedAppController {
  * @return	void
  * @access	protected
  */
-	function _clearViewCatch($feedConfigId, $url) {
+	protected function _clearViewCatch($feedConfigId, $url) {
 		
 		clearViewCache('/feed/index/'.$feedConfigId);
 		clearViewCache('/feed/ajax/'.$feedConfigId);
@@ -216,7 +216,7 @@ class FeedDetailsController extends FeedAppController {
  * @return void
  * @access	public
  */
-	function admin_ajax_delete($feedConfigId, $id = null) {
+	public function admin_ajax_delete($feedConfigId, $id = null) {
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -235,7 +235,7 @@ class FeedDetailsController extends FeedAppController {
  * @return void
  * @access	public
  */
-	function admin_delete($feedConfigId, $id = null) {
+	public function admin_delete($feedConfigId, $id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -264,7 +264,7 @@ class FeedDetailsController extends FeedAppController {
  * @return boolean
  * @access protected
  */
-	function _batch_del($ids) {
+	protected function _batch_del($ids) {
 		
 		if($ids) {
 			foreach($ids as $id) {
@@ -281,7 +281,7 @@ class FeedDetailsController extends FeedAppController {
  * @return boolean 
  * @access protected
  */
-	function _del($id) {
+	protected function _del($id) {
 		
 		$data = $this->FeedDetail->read(null, $id);
 		if($this->FeedDetail->del($id)) {

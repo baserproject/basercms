@@ -62,7 +62,7 @@ class WidgetArea extends AppModel {
  * @return array
  * @access public
  */
-	function getControlSource($field) {
+	public function getControlSource($field) {
 
 		$controllSource['id'] = $this->find('list');
 		if (isset($controllSource[$field])) {

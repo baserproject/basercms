@@ -39,7 +39,7 @@ class MaildataHelper extends BcTextHelper {
  * @return string メール用データ
  * @access public
  */
-	function control($type,$value,$options = "") {
+	public function control($type,$value,$options = "") {
 
 		// コントロールソースの配列変換
 		if(!is_array($options)) {

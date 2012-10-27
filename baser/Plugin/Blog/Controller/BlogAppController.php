@@ -34,7 +34,7 @@ class BlogAppController extends BaserPluginAppController {
  * @return boolean
  * @access protected
  */
-	function _sendCommentAdmin($postId, $data) {
+	protected function _sendCommentAdmin($postId, $data) {
 
 		if(!$postId || !$data || empty($this->siteConfigs['email'])) {
 			return false;
@@ -61,7 +61,7 @@ class BlogAppController extends BaserPluginAppController {
  * @return boolean 
  * @access protected
  */
-	function _sendCommentContributor($postId, $data) {
+	protected function _sendCommentContributor($postId, $data) {
 		
 		if(!$postId || !$data || empty($this->siteConfigs['email'])) {
 			return false;
@@ -107,7 +107,7 @@ class BlogAppController extends BaserPluginAppController {
  * @return	void
  * @access 	public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 		
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();

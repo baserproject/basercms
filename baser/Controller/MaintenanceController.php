@@ -57,7 +57,7 @@ class MaintenanceController extends AppController {
  * @return void
  * @access	public
  */
-	function index() {
+	public function index() {
 
 		$this->pageTitle = 'メンテナンス中';
 
@@ -68,7 +68,7 @@ class MaintenanceController extends AppController {
  * @return void
  * @access	public
  */
-	function mobile_index() {
+	public function mobile_index() {
 		
 		$this->pageTitle = 'メンテナンス中';
 		

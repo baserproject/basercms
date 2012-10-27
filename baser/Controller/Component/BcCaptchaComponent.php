@@ -49,7 +49,7 @@ class BcCaptchaComponent extends Component {
  * @return void
  * @access public
  */
-	function startup(&$controller) {
+	public function startup(&$controller) {
 		
 		$this->controller =& $controller;
 	
@@ -60,7 +60,7 @@ class BcCaptchaComponent extends Component {
  * @return void
  * @access public
  */
-	function render()
+	public function render()
 	{
 		
 		App::import('Vendor','kcaptcha/kcaptcha');
@@ -75,7 +75,7 @@ class BcCaptchaComponent extends Component {
  * @return	boolean
  * @access public
  */
-	function check($value){
+	public function check($value){
 		
 		include $this->vendorsPath.'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;
@@ -95,7 +95,7 @@ class BcCaptchaComponent extends Component {
  * @return	string
  * @access	public
  */
-	function convert($key){
+	public function convert($key){
 
 		$alphabets = $this->strSplit($this->alphabet);
 		$converts = $this->strSplit($this->convert);
@@ -122,7 +122,7 @@ class BcCaptchaComponent extends Component {
  * @return	array
  * @access	public
  */
-	function strSplit($str) {
+	public function strSplit($str) {
 		
 		$arr = array();
 		if (is_string($str)) {

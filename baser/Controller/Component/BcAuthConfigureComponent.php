@@ -38,7 +38,7 @@ class  BcAuthConfigureComponent extends Object {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	public function initialize(&$controller) {
 		
 		$this->controller = $controller;
 		
@@ -50,7 +50,7 @@ class  BcAuthConfigureComponent extends Object {
  * @return boolean
  * @access public
  */
-	function setting($config) {
+	public function setting($config) {
 
 		if(empty($this->controller->BcAuth)) {
 			return false;

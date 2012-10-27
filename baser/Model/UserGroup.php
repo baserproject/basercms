@@ -103,7 +103,7 @@ class UserGroup extends AppModel {
  * @return boolean
  * @access public
  */
-	function beforeDelete($cascade = true) {
+	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
 		$ret = true;
 		if(!empty($this->data['UserGroup']['id'])){
@@ -127,7 +127,7 @@ class UserGroup extends AppModel {
  * @return	boolean
  * @access	void
  */
-	function checkOtherAdmins(){
+	public function checkOtherAdmins(){
 		if($this->find('first',array('conditions'=>array('UserGroup.id <>'=>1)))) {
 			return true;
 		}else {
@@ -141,7 +141,7 @@ class UserGroup extends AppModel {
  * @return	string
  * @access	public
  */
-	function getAuthPrefix($id) {
+	public function getAuthPrefix($id) {
 		
 		$data = $this->find('first', array(
 			'conditions'=>array('UserGroup.id'=>$id),
@@ -162,7 +162,7 @@ class UserGroup extends AppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	function copy($id, $data = array(), $recursive = true) {
+	public function copy($id, $data = array(), $recursive = true) {
 		
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
@@ -204,7 +204,7 @@ class UserGroup extends AppModel {
  * @return boolean
  * @access public
  */
-	function isAdminGlobalmenuUsed($id) {
+	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
 	}
 }

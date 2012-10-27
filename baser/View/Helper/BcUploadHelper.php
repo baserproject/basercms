@@ -39,7 +39,7 @@ class BcUploadHelper extends FormHelper {
  * @return string
  * @access public
  */
-	function file($fieldName, $options = array()) {
+	public function file($fieldName, $options = array()) {
 
 		$linkOptions = $_options = array('imgsize'=>'midium','rel'=>'','title'=>'', 'link' => true);
 		
@@ -98,7 +98,7 @@ class BcUploadHelper extends FormHelper {
  * @param array $options
  * @return string
  */
-	function fileLink($fieldName, $options = array()) {
+	public function fileLink($fieldName, $options = array()) {
 
 		$_options = array('imgsize' => 'midium', 'rel' => '', 'title' => '', 'link' => true);
 		
@@ -195,7 +195,7 @@ class BcUploadHelper extends FormHelper {
  * @param array $options
  * @return string
  */
-	function uploadImage($fieldName, $fileName, $options = array()) {
+	public function uploadImage($fieldName, $fileName, $options = array()) {
 
 		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true, 'mobile'=>false);
 		$options = Set::merge($_options,$options);

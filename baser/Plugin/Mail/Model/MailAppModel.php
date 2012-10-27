@@ -30,7 +30,7 @@ class MailAppModel extends BaserPluginAppModel {
  * データの消毒をおこなう
  * @return array
  */
-	function sanitizeData($datas) {
+	public function sanitizeData($datas) {
 
 		foreach ($datas as $key => $data) {
 
@@ -52,7 +52,7 @@ class MailAppModel extends BaserPluginAppModel {
  * サニタイズされたデータを復元する
  * @return array
  */
-	function restoreData($datas) {
+	public function restoreData($datas) {
 		foreach ($datas as $key => $data) {
 			if(!is_array($data)) {
 				$data = str_replace("<br />","",$data);

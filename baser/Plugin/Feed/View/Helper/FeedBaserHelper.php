@@ -32,7 +32,7 @@ class FeedBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	function feed ($id, $mobile='') {
+	public function feed ($id, $mobile='') {
 		
 		$url = array('plugin'=>'feed','controller'=>'feed','action'=>'index');
 		if($mobile===''){

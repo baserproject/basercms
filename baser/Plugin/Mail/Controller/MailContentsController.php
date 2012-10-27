@@ -77,7 +77,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_index() {
+	public function admin_index() {
 
 		$listDatas = $this->MailContent->find('all');
 		$this->set('listDatas',$listDatas);
@@ -92,7 +92,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_add() {
+	public function admin_add() {
 
 		$this->pageTitle = '新規メールフォーム登録';
 
@@ -135,7 +135,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_edit($id) {
+	public function admin_edit($id) {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
@@ -201,7 +201,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -229,7 +229,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function admin_delete($id = null) {
+	public function admin_delete($id = null) {
 
 		/* 除外処理 */
 		if(!$id) {
@@ -263,7 +263,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function redirectEditLayout($template){
+	public function redirectEditLayout($template){
 		
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
 		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.$this->ext,
@@ -292,7 +292,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function redirectEditMail($template){
+	public function redirectEditMail($template){
 		
 		$type = 'elements';
 		$path = 'email'.DS.'text'.DS.$template.$this->ext;
@@ -325,7 +325,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access public
  */
-	function redirectEditForm($template){
+	public function redirectEditForm($template){
 		
 		$path = 'mail'.DS.$template;
 		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
@@ -357,7 +357,7 @@ class MailContentsController extends MailAppController {
  * @return void
  * @access protected
  */
-	function admin_ajax_copy($id) {
+	public function admin_ajax_copy($id) {
 
 		/* 除外処理 */
 		if(!$id) {

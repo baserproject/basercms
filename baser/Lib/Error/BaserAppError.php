@@ -34,7 +34,7 @@ class BaserAppError extends ErrorHandler {
  * @param string $method Method producing the error
  * @param array $messages Error messages
  */
-	function __construct($method, $messages) {
+	public function __construct($method, $messages) {
 		App::import('Core', 'Sanitize');
 		static $__previousError = null;
 
@@ -87,7 +87,7 @@ class BaserAppError extends ErrorHandler {
  * クラスが見つからない
  * @param array $params
  */
-	function missingClass($params) {
+	public function missingClass($params) {
 		if($params['className']) {
 			$this->controller->set('className',$params['className']);
 		}
@@ -102,7 +102,7 @@ class BaserAppError extends ErrorHandler {
  * @param array $params Parameters for controller
  * @access public
  */
-	function missingLayout($params) {
+	public function missingLayout($params) {
 		extract($params, EXTR_OVERWRITE);
 		
 		$this->controller->layout = 'default';

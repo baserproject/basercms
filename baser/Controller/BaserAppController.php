@@ -144,7 +144,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	private
  */
-	function __construct() {
+	public function __construct() {
 
 		parent::__construct();
 		
@@ -214,7 +214,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	public
  */
-	function beforeFilter() {
+	public function beforeFilter() {
 
 		parent::beforeFilter();
 		
@@ -355,7 +355,7 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function setTheme($params, $isError = false) {
+	public function setTheme($params, $isError = false) {
 		
 		// エラーの場合は強制的にフロントのテーマを設定する
 		if($isError) {
@@ -389,7 +389,7 @@ class BaserAppController extends Controller {
  * @return	boolean
  * @access	public
  */
-	function _adminSslMethods($var) {
+	protected function _adminSslMethods($var) {
 		return preg_match('/^admin_/', $var);
 	}
 /**
@@ -398,7 +398,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	public
  */
-	function beforeRender() {
+	public function beforeRender() {
 
 		parent::beforeRender();
 
@@ -439,7 +439,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	protected
  */
-	function _sslFail($err) {
+	protected function _sslFail($err) {
 
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
@@ -460,7 +460,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	public
  */
-	function notFound() {
+	public function notFound() {
 
 		return $this->cakeError('error404', array(array($this->request->here)));
 
@@ -473,7 +473,7 @@ class BaserAppController extends Controller {
  * @return 	array	変換後データ
  * @access	protected
  */
-	function _autoConvertEncodingByArray($data, $outenc) {
+	protected function _autoConvertEncodingByArray($data, $outenc) {
 
 		foreach($data as $key=>$value) {
 
@@ -508,7 +508,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	private
  */
-	function __loadDataToView() {
+	private function __loadDataToView() {
 
 		$this->set('subMenuElements',$this->subMenuElements);	// サブメニューエレメント
 		$this->set('crumbs',$this->crumbs);                       // パンくずなび
@@ -546,7 +546,7 @@ class BaserAppController extends Controller {
  * @return string Baserバージョン
  * @access public
  */
-	function getBaserVersion($plugin = '') {
+	public function getBaserVersion($plugin = '') {
 
 		return getVersion($plugin);
 
@@ -558,7 +558,7 @@ class BaserAppController extends Controller {
  * @return	string
  * @access	public
  */
-	function getThemeVersion($theme) {
+	public function getThemeVersion($theme) {
 
 		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
 		if(!file_exists($path)) {
@@ -581,7 +581,7 @@ class BaserAppController extends Controller {
  * @return string
  * @access public
  */
-	function getSiteVersion($plugin = '') {
+	public function getSiteVersion($plugin = '') {
 
 		if(!$plugin) {
 			if(isset($this->siteConfigs['version'])) {
@@ -599,7 +599,7 @@ class BaserAppController extends Controller {
  *
  * @return string Baserバージョン
  */
-	function getCakeVersion() {
+	public function getCakeVersion() {
 		App::import('File');
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH.DS.CAKE.'VERSION.txt');
 		$versionData = $versionFile->read();
@@ -624,7 +624,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	private
  */
-	function __convertEncodingHttpInput() {
+	private function __convertEncodingHttpInput() {
 
 		// TODO Cakeマニュアルに合わせた方がよいかも
 		if(isset($this->request->params['form'])) {
@@ -641,7 +641,7 @@ class BaserAppController extends Controller {
  * @param int $mode
  * @deprecated
  */
-	function writeDebug($mode) {
+	public function writeDebug($mode) {
 		
 		trigger_error("(Controller::writeDebug) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
 		$file = new File(APP . 'Config' . DS.'core.php');
@@ -662,7 +662,7 @@ class BaserAppController extends Controller {
  * @return string $mode
  * @deprecated
  */
-	function readDebug() {
+	public function readDebug() {
 		
 		trigger_error("(Controller::readDebug) は非推奨です。Configure::read('debug') を利用してください。", E_USER_WARNING);
 		$mode = '';
@@ -684,7 +684,7 @@ class BaserAppController extends Controller {
  * @return	boolean			送信結果
  * @access	public
  */
-	function sendMail($to, $title = '', $body = '', $options = array()) {
+	public function sendMail($to, $title = '', $body = '', $options = array()) {
 
 		$formalName = $email = '';
 		if(!empty($this->siteConfigs)) {
@@ -819,7 +819,7 @@ class BaserAppController extends Controller {
  * @return	boolean 設定結果
  * @access	protected
  */
-	function _setMail() {
+	protected function _setMail() {
 
 		if(!isset($this->BcEmail)) {
 			return false;
@@ -857,7 +857,7 @@ class BaserAppController extends Controller {
  * @access	public
  * @deprecated since v2.0.5
  */
-	function writeInstallSetting($key, $value) {
+	public function writeInstallSetting($key, $value) {
 		
 		trigger_error("(Controller::writeInstallSetting) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
 		/* install.php の編集 */
@@ -887,7 +887,7 @@ class BaserAppController extends Controller {
  * @access	public
  * @deprecated since v2.0.5
  */
-	function readSmartUrl(){
+	public function readSmartUrl(){
 		
 		trigger_error("(Controller::readSmartUrl) は非推奨です。BcManager::smartUrl を利用してください。", E_USER_WARNING);
 		if (Configure::read('App.baseUrl')) {
@@ -905,7 +905,7 @@ class BaserAppController extends Controller {
  * @access	public
  * @deprecated since v2.0.5
  */
-	function writeSmartUrl($smartUrl) {
+	public function writeSmartUrl($smartUrl) {
 
 		trigger_error("(Controller::writeSmartUrl) は非推奨です。BcManager::setSmartUrl を利用してください。", E_USER_WARNING);
 		/* install.php の編集 */
@@ -945,7 +945,7 @@ class BaserAppController extends Controller {
  * @access protected
  * @deprecated since v2.0.5
  */
-	function _writeSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
+	protected function _writeSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
 
 		trigger_error("(Controller::_writeSmartUrlToHtaccess) は非推奨です。BcManager::_setSmartUrlToHtaccess を利用してください。", E_USER_WARNING);
 		//======================================================================
@@ -998,7 +998,7 @@ class BaserAppController extends Controller {
  * @return	string
  * @deprecated since v2.0.5
  */
-	function getRewriteBase($url){
+	public function getRewriteBase($url){
 
 		trigger_error("(Controller::getRewriteBase) は非推奨です。BcManager::getRewriteBase を利用してください。", E_USER_WARNING);
 		$baseUrl = BC_BASE_URL;
@@ -1023,7 +1023,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	public
  */
-	function setViewConditions($filterModels = array(), $options = array()) {
+	public function setViewConditions($filterModels = array(), $options = array()) {
 
 		$_options = array('type' => 'post', 'session' => true);
 		$options = am($_options, $options);
@@ -1043,7 +1043,7 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	protected
  */
-	function _saveViewConditions($filterModels = array(), $options = array()) {
+	protected function _saveViewConditions($filterModels = array(), $options = array()) {
 
 		$_options = array('action' => '', 'group' => '');
 		$options = am($_options, $options);
@@ -1080,7 +1080,7 @@ class BaserAppController extends Controller {
  * @param	string		$options
  * @access	protected
  */
-	function _loadViewConditions($filterModels = array(), $options = array()) {
+	protected function _loadViewConditions($filterModels = array(), $options = array()) {
 
 		$_options = array('default'=>array(), 'action' => '', 'group' => '', 'type' => 'post' , 'session' => true);
 		$options = am($_options, $options);
@@ -1155,7 +1155,7 @@ class BaserAppController extends Controller {
  * @return	string
  * @access	public
  */
-	function convertSelectTextCondition($fieldName, $values, $options = array()) {
+	public function convertSelectTextCondition($fieldName, $values, $options = array()) {
 
 		$_options = array('type'=>'string', 'conditionType'=>'or');
 		$options = am($_options, $options);
@@ -1181,7 +1181,7 @@ class BaserAppController extends Controller {
  * @return	array
  * @access	public
  */
-	function convertBetweenCondition($fieldName, $value) {
+	public function convertBetweenCondition($fieldName, $value) {
 
 		if(strpos($value, '-')===false) {
 			return false;
@@ -1204,7 +1204,7 @@ class BaserAppController extends Controller {
  * @return	string	$password
  * @access	public
  */
-	function generatePassword ($len = 8) {
+	public function generatePassword ($len = 8) {
 
 		srand ( (double) microtime () * 1000000);
 		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -1221,7 +1221,7 @@ class BaserAppController extends Controller {
  *
  * @return	boolean
  */
-	function isAuthorized() {
+	public function isAuthorized() {
 
 		$requestedPrefix = '';
 
@@ -1261,7 +1261,7 @@ class BaserAppController extends Controller {
  * @param	string	$userName
  * @return	string
  */
-	function getAuthPreifx($userName) {
+	public function getAuthPreifx($userName) {
 
 		if(isset($this->User)) {
 			$UserClass = $this->User;
@@ -1281,7 +1281,7 @@ class BaserAppController extends Controller {
  * @access public
  * @link http://book.cakephp.org/view/430/referer
  */
-	function referer($default = null, $local = false) {
+	public function referer($default = null, $local = false) {
 		$ref = env('HTTP_REFERER');
 		if (!empty($ref) && defined('FULL_BASE_URL')) {
 			// >>> CUSTOMIZE MODIFY 2011/01/18 ryuring
@@ -1312,7 +1312,7 @@ class BaserAppController extends Controller {
  * @param string $hook
  * @return mixed
  */
-	function executeHook($hook) {
+	public function executeHook($hook) {
 
 		$args = func_get_args();
 		$args[0] =& $this;
@@ -1325,7 +1325,7 @@ class BaserAppController extends Controller {
  * @return boolean
  * @access public
  */
-	function checkRootEditable() {
+	public function checkRootEditable() {
 		
 		if(!isset($this->BcAuth)) {
 			return false;
@@ -1348,7 +1348,7 @@ class BaserAppController extends Controller {
  * 
  * @return mixed string Or false
  */
-	function getUserModel() {
+	public function getUserModel() {
 		
 		if(!isset($this->BcAuth)) {
 			return false;
@@ -1366,7 +1366,7 @@ class BaserAppController extends Controller {
  * @return mixed void if $exit = false. Terminates script if $exit = true
  * @access public
  */
-	function redirect($url, $status = null, $exit = true) {
+	public function redirect($url, $status = null, $exit = true) {
 		
 		$url = addSessionId($url, true);
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
@@ -1388,7 +1388,7 @@ class BaserAppController extends Controller {
  *               of rendered action if 'return' is set in $extra.
  * @access public
  */
-	function requestAction($url, $extra = array()) {
+	public function requestAction($url, $extra = array()) {
 		
 		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
 		// 管理システムやプラグインでのURLの生成が CakePHP の標準仕様と違っていたので調整
@@ -1411,7 +1411,7 @@ class BaserAppController extends Controller {
  * 
  * @param mixed $open 1 Or ''
  */
-	function admin_ajax_save_favorite_box($open = '') {
+	public function admin_ajax_save_favorite_box($open = '') {
 		
 		$this->Session->write('Baser.favorite_box_opened', $open);
 		echo true;
@@ -1431,7 +1431,7 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function admin_ajax_batch () {
+	public function admin_ajax_batch () {
 		
 		$method = $this->request->data['ListTool']['batch'];
 		
@@ -1458,7 +1458,7 @@ class BaserAppController extends Controller {
  * 
  * @param mixed $open 1 Or ''
  */
-	function admin_ajax_save_search_box($key, $open = '') {
+	public function admin_ajax_save_search_box($key, $open = '') {
 		
 		$this->Session->write('Baser.searchBoxOpened.'.$key, $open);
 		echo true;
@@ -1477,7 +1477,7 @@ class BaserAppController extends Controller {
  * @return mixed Returns the return value of the called action
  * @access public
  */
-	function setAction($action) {
+	public function setAction($action) {
 		
 		// CUSTOMIZE ADD 2012/04/22 ryuring
 		// >>>
@@ -1505,7 +1505,7 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function setThemeHelpers() {
+	public function setThemeHelpers() {
 		
 		if(!empty($this->request->params['admin'])) {
 			return;
@@ -1529,7 +1529,7 @@ class BaserAppController extends Controller {
  * @return void
  * @access public
  */
-	function ajaxError($errorNo = 500, $message = '') {
+	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 '.$errorNo);
 		if($message) {
 			if(is_array($message)) {
