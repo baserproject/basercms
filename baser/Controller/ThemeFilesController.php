@@ -23,28 +23,28 @@ class ThemeFilesController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'ThemeFiles';
+	public $name = 'ThemeFiles';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('ThemeFile', 'ThemeFolder');
+	public $uses = array('ThemeFile', 'ThemeFolder');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER, BC_CKEDITOR_HELPER);
+	public $helpers = array(BC_FORM_HELPER, BC_CKEDITOR_HELPER);
 /**
  * テーマファイルタイプ
  *
  * @var array
  * @public protected
  */
-	var $_tempalteTypes = array('layouts'=>'レイアウトテンプレート',
+	protected $_tempalteTypes = array('layouts'=>'レイアウトテンプレート',
 			'elements'=>'エレメントテンプレート',
 			'etc'=>'コンテンツテンプレート',
 			'css'=>'スタイルシート',
@@ -56,14 +56,14 @@ class ThemeFilesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'テーマ管理', 'url' => array('admin' => true, 'controller' => 'themes', 'action' => 'index'))
 	);
 /**

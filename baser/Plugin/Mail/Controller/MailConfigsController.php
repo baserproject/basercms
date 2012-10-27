@@ -32,35 +32,35 @@ class MailConfigsController extends MailAppController {
  * @var string
  * @access public
  */
-	var $name = 'MailConfigs';
+	public $name = 'MailConfigs';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Mail.MailConfig');
+	public $uses = array('Mail.MailConfig');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);

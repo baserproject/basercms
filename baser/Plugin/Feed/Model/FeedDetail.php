@@ -32,21 +32,21 @@ class FeedDetail extends FeedAppModel {
  * @var string
  * @access public
  */
-	var $name = 'FeedDetail';
+	public $name = 'FeedDetail';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * belongsTo
  * 
  * @var array
  * @access public
  */
-	var $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
+	public $belongsTo = array('FeedConfig'=>array('className'=>'Feed.FeedConfig',
 							'conditions' => '',
 							'order'=> '',
 							'foreignKey' => 'feed_config_id'
@@ -57,7 +57,7 @@ class FeedDetail extends FeedAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> "フィード詳細名を入力してください。",

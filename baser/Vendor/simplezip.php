@@ -23,35 +23,35 @@ class Simplezip {
  * @var		array
  * @access	public
  */
-	var $compressedData = array();
+	public $compressedData = array();
 /**
  * Central Directory
  *
  * @var		array
  * @access	public
  */
-	var $centralDirectory = array();
+	public $centralDirectory = array();
 /**
  * End Of Central Directory Record
  *
  * @var		string
  * @access	public
  */
-	var $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
+	public $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
 /**
  * オフセット
  *
  * @var		int
  * @access	public
  */
-	var $oldOffset = 0;
+	public $oldOffset = 0;
 /**
  * エントリ（解凍用）
  * 
  * @var		array
  * @access	public
  */
-	var $entries = array();
+	public $entries = array();
 /**
  * Get Hexd Time
  *

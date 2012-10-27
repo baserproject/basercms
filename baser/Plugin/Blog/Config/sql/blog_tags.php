@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* BlogTags schema generated on: 2011-04-24 03:04:44 : 1303583084*/
 class BlogTagsSchema extends CakeSchema {
-	var $name = 'BlogTags';
+	public $name = 'BlogTags';
 
-	var $file = 'blog_tags.php';
+	public $file = 'blog_tags.php';
 
-	var $connection = 'plugin';
+	public $connection = 'plugin';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class BlogTagsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $blog_tags = array(
+	public $blog_tags = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),

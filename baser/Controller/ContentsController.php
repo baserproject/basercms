@@ -30,28 +30,28 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	var $name = 'Contents';
+	public $name = 'Contents';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Content', 'Page');
+	public $uses = array('Content', 'Page');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER);
+	public $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER);
 /**
  * beforeFilter
  *

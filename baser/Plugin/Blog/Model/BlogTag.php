@@ -32,21 +32,21 @@ class BlogTag extends BlogAppModel {
  * @var string
  * @access public
  */
-	var $name = 'BlogTag';
+	public $name = 'BlogTag';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * HABTM
  *
  * @var array
  * @access public
  */
-	var $hasAndBelongsToMany = array(
+	public $hasAndBelongsToMany = array(
 			'BlogPost' => array(
 				'className'				=> 'Blog.BlogPost',
 				'joinTable'				=> 'blog_posts_blog_tags',
@@ -65,7 +65,7 @@ class BlogTag extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name'=>array(
 			'notEmpty' => array(
 				'rule'		=> array('notEmpty'),

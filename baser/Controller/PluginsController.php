@@ -30,42 +30,42 @@ class PluginsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Plugins';
+	public $name = 'Plugins';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('GlobalMenu','Plugin','PluginContent');
+	public $uses = array('GlobalMenu','Plugin','PluginContent');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパ
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
 	);
 /**
@@ -74,7 +74,7 @@ class PluginsController extends AppController {
  * @var int
  * @deprecated BaserPluginAppController に移行
  */
-	var $contentId = null;
+	public $contentId = null;
 /**
  * beforeFilter
  *

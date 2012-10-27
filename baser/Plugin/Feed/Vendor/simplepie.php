@@ -398,55 +398,55 @@ class SimplePie
 	 * @var array Raw data
 	 * @access private
 	 */
-	var $data = array();
+	public $data = array();
 
 	/**
 	 * @var mixed Error string
 	 * @access private
 	 */
-	var $error;
+	public $error;
 
 	/**
 	 * @var object Instance of SimplePie_Sanitize (or other class)
 	 * @see SimplePie::set_sanitize_class()
 	 * @access private
 	 */
-	var $sanitize;
+	public $sanitize;
 
 	/**
 	 * @var string SimplePie Useragent
 	 * @see SimplePie::set_useragent()
 	 * @access private
 	 */
-	var $useragent = SIMPLEPIE_USERAGENT;
+	public $useragent = SIMPLEPIE_USERAGENT;
 
 	/**
 	 * @var string Feed URL
 	 * @see SimplePie::set_feed_url()
 	 * @access private
 	 */
-	var $feed_url;
+	public $feed_url;
 
 	/**
 	 * @var object Instance of SimplePie_File to use as a feed
 	 * @see SimplePie::set_file()
 	 * @access private
 	 */
-	var $file;
+	public $file;
 
 	/**
 	 * @var string Raw feed data
 	 * @see SimplePie::set_raw_data()
 	 * @access private
 	 */
-	var $raw_data;
+	public $raw_data;
 
 	/**
 	 * @var int Timeout for fetching remote files
 	 * @see SimplePie::set_timeout()
 	 * @access private
 	 */
-	var $timeout = 10;
+	public $timeout = 10;
 
 	/**
 	 * @var bool Forces fsockopen() to be used for remote files instead
@@ -454,7 +454,7 @@ class SimplePie
 	 * @see SimplePie::force_fsockopen()
 	 * @access private
 	 */
-	var $force_fsockopen = false;
+	public $force_fsockopen = false;
 
 	/**
 	 * @var bool Force the given data/URL to be treated as a feed no matter what
@@ -462,56 +462,56 @@ class SimplePie
 	 * @see SimplePie::force_feed()
 	 * @access private
 	 */
-	var $force_feed = false;
+	public $force_feed = false;
 
 	/**
 	 * @var bool Enable/Disable XML dump
 	 * @see SimplePie::enable_xml_dump()
 	 * @access private
 	 */
-	var $xml_dump = false;
+	public $xml_dump = false;
 
 	/**
 	 * @var bool Enable/Disable Caching
 	 * @see SimplePie::enable_cache()
 	 * @access private
 	 */
-	var $cache = true;
+	public $cache = true;
 
 	/**
 	 * @var int Cache duration (in seconds)
 	 * @see SimplePie::set_cache_duration()
 	 * @access private
 	 */
-	var $cache_duration = 3600;
+	public $cache_duration = 3600;
 
 	/**
 	 * @var int Auto-discovery cache duration (in seconds)
 	 * @see SimplePie::set_autodiscovery_cache_duration()
 	 * @access private
 	 */
-	var $autodiscovery_cache_duration = 604800; // 7 Days.
+	public $autodiscovery_cache_duration = 604800; // 7 Days.
 
 	/**
 	 * @var string Cache location (relative to executing script)
 	 * @see SimplePie::set_cache_location()
 	 * @access private
 	 */
-	var $cache_location = './cache';
+	public $cache_location = './cache';
 
 	/**
 	 * @var string Function that creates the cache filename
 	 * @see SimplePie::set_cache_name_function()
 	 * @access private
 	 */
-	var $cache_name_function = 'md5';
+	public $cache_name_function = 'md5';
 
 	/**
 	 * @var bool Reorder feed by date descending
 	 * @see SimplePie::enable_order_by_date()
 	 * @access private
 	 */
-	var $order_by_date = true;
+	public $order_by_date = true;
 
 	/**
 	 * @var mixed Force input encoding to be set to the follow value
@@ -519,119 +519,119 @@ class SimplePie
 	 * @see SimplePie::set_input_encoding()
 	 * @access private
 	 */
-	var $input_encoding = false;
+	public $input_encoding = false;
 
 	/**
 	 * @var int Feed Autodiscovery Level
 	 * @see SimplePie::set_autodiscovery_level()
 	 * @access private
 	 */
-	var $autodiscovery = SIMPLEPIE_LOCATOR_ALL;
+	public $autodiscovery = SIMPLEPIE_LOCATOR_ALL;
 
 	/**
 	 * @var string Class used for caching feeds
 	 * @see SimplePie::set_cache_class()
 	 * @access private
 	 */
-	var $cache_class = 'SimplePie_Cache';
+	public $cache_class = 'SimplePie_Cache';
 
 	/**
 	 * @var string Class used for locating feeds
 	 * @see SimplePie::set_locator_class()
 	 * @access private
 	 */
-	var $locator_class = 'SimplePie_Locator';
+	public $locator_class = 'SimplePie_Locator';
 
 	/**
 	 * @var string Class used for parsing feeds
 	 * @see SimplePie::set_parser_class()
 	 * @access private
 	 */
-	var $parser_class = 'SimplePie_Parser';
+	public $parser_class = 'SimplePie_Parser';
 
 	/**
 	 * @var string Class used for fetching feeds
 	 * @see SimplePie::set_file_class()
 	 * @access private
 	 */
-	var $file_class = 'SimplePie_File';
+	public $file_class = 'SimplePie_File';
 
 	/**
 	 * @var string Class used for items
 	 * @see SimplePie::set_item_class()
 	 * @access private
 	 */
-	var $item_class = 'SimplePie_Item';
+	public $item_class = 'SimplePie_Item';
 
 	/**
 	 * @var string Class used for authors
 	 * @see SimplePie::set_author_class()
 	 * @access private
 	 */
-	var $author_class = 'SimplePie_Author';
+	public $author_class = 'SimplePie_Author';
 
 	/**
 	 * @var string Class used for categories
 	 * @see SimplePie::set_category_class()
 	 * @access private
 	 */
-	var $category_class = 'SimplePie_Category';
+	public $category_class = 'SimplePie_Category';
 
 	/**
 	 * @var string Class used for enclosures
 	 * @see SimplePie::set_enclosures_class()
 	 * @access private
 	 */
-	var $enclosure_class = 'SimplePie_Enclosure';
+	public $enclosure_class = 'SimplePie_Enclosure';
 
 	/**
 	 * @var string Class used for Media RSS <media:text> captions
 	 * @see SimplePie::set_caption_class()
 	 * @access private
 	 */
-	var $caption_class = 'SimplePie_Caption';
+	public $caption_class = 'SimplePie_Caption';
 
 	/**
 	 * @var string Class used for Media RSS <media:copyright>
 	 * @see SimplePie::set_copyright_class()
 	 * @access private
 	 */
-	var $copyright_class = 'SimplePie_Copyright';
+	public $copyright_class = 'SimplePie_Copyright';
 
 	/**
 	 * @var string Class used for Media RSS <media:credit>
 	 * @see SimplePie::set_credit_class()
 	 * @access private
 	 */
-	var $credit_class = 'SimplePie_Credit';
+	public $credit_class = 'SimplePie_Credit';
 
 	/**
 	 * @var string Class used for Media RSS <media:rating>
 	 * @see SimplePie::set_rating_class()
 	 * @access private
 	 */
-	var $rating_class = 'SimplePie_Rating';
+	public $rating_class = 'SimplePie_Rating';
 
 	/**
 	 * @var string Class used for Media RSS <media:restriction>
 	 * @see SimplePie::set_restriction_class()
 	 * @access private
 	 */
-	var $restriction_class = 'SimplePie_Restriction';
+	public $restriction_class = 'SimplePie_Restriction';
 
 	/**
 	 * @var string Class used for content-type sniffing
 	 * @see SimplePie::set_content_type_sniffer_class()
 	 * @access private
 	 */
-	var $content_type_sniffer_class = 'SimplePie_Content_Type_Sniffer';
+	public $content_type_sniffer_class = 'SimplePie_Content_Type_Sniffer';
 
 	/**
 	 * @var string Class used for item sources.
 	 * @see SimplePie::set_source_class()
 	 * @access private
 	 */
-	var $source_class = 'SimplePie_Source';
+	public $source_class = 'SimplePie_Source';
 
 	/**
 	 * @var mixed Set javascript query string parameter (false, or
@@ -639,76 +639,76 @@ class SimplePie
 	 * @see SimplePie::set_javascript()
 	 * @access private
 	 */
-	var $javascript = 'js';
+	public $javascript = 'js';
 
 	/**
 	 * @var int Maximum number of feeds to check with autodiscovery
 	 * @see SimplePie::set_max_checked_feeds()
 	 * @access private
 	 */
-	var $max_checked_feeds = 10;
+	public $max_checked_feeds = 10;
 
 	/**
 	 * @var array All the feeds found during the autodiscovery process
 	 * @see SimplePie::get_all_discovered_feeds()
 	 * @access private
 	 */
-	var $all_discovered_feeds = array();
+	public $all_discovered_feeds = array();
 
 	/**
 	 * @var string Web-accessible path to the handler_favicon.php file.
 	 * @see SimplePie::set_favicon_handler()
 	 * @access private
 	 */
-	var $favicon_handler = '';
+	public $favicon_handler = '';
 
 	/**
 	 * @var string Web-accessible path to the handler_image.php file.
 	 * @see SimplePie::set_image_handler()
 	 * @access private
 	 */
-	var $image_handler = '';
+	public $image_handler = '';
 
 	/**
 	 * @var array Stores the URLs when multiple feeds are being initialized.
 	 * @see SimplePie::set_feed_url()
 	 * @access private
 	 */
-	var $multifeed_url = array();
+	public $multifeed_url = array();
 
 	/**
 	 * @var array Stores SimplePie objects when multiple feeds initialized.
 	 * @access private
 	 */
-	var $multifeed_objects = array();
+	public $multifeed_objects = array();
 
 	/**
 	 * @var array Stores the get_object_vars() array for use with multifeeds.
 	 * @see SimplePie::set_feed_url()
 	 * @access private
 	 */
-	var $config_settings = null;
+	public $config_settings = null;
 
 	/**
 	 * @var integer Stores the number of items to return per-feed with multifeeds.
 	 * @see SimplePie::set_item_limit()
 	 * @access private
 	 */
-	var $item_limit = 0;
+	public $item_limit = 0;
 
 	/**
 	 * @var array Stores the default attributes to be stripped by strip_attributes().
 	 * @see SimplePie::strip_attributes()
 	 * @access private
 	 */
-	var $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
+	public $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
 
 	/**
 	 * @var array Stores the default tags to be stripped by strip_htmltags().
 	 * @see SimplePie::strip_htmltags()
 	 * @access private
 	 */
-	var $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
+	public $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
 
 	/**
 	 * The SimplePie class contains feed level data and options
@@ -3108,8 +3108,8 @@ class SimplePie
 
 class SimplePie_Item
 {
-	var $feed;
-	var $data = array();
+	public $feed;
+	public $data = array();
 
 	function SimplePie_Item($feed, $data)
 	{
@@ -5724,8 +5724,8 @@ class SimplePie_Item
 
 class SimplePie_Source
 {
-	var $item;
-	var $data = array();
+	public $item;
+	public $data = array();
 
 	function SimplePie_Source($item, $data)
 	{
@@ -6275,9 +6275,9 @@ class SimplePie_Source
 
 class SimplePie_Author
 {
-	var $name;
-	var $link;
-	var $email;
+	public $name;
+	public $link;
+	public $email;
 
 	// Constructor, used to input the data
 	function SimplePie_Author($name = null, $link = null, $email = null)
@@ -6332,9 +6332,9 @@ class SimplePie_Author
 
 class SimplePie_Category
 {
-	var $term;
-	var $scheme;
-	var $label;
+	public $term;
+	public $scheme;
+	public $label;
 
 	// Constructor, used to input the data
 	function SimplePie_Category($term = null, $scheme = null, $label = null)
@@ -6389,33 +6389,33 @@ class SimplePie_Category
 
 class SimplePie_Enclosure
 {
-	var $bitrate;
-	var $captions;
-	var $categories;
-	var $channels;
-	var $copyright;
-	var $credits;
-	var $description;
-	var $duration;
-	var $expression;
-	var $framerate;
-	var $handler;
-	var $hashes;
-	var $height;
-	var $javascript;
-	var $keywords;
-	var $lang;
-	var $length;
-	var $link;
-	var $medium;
-	var $player;
-	var $ratings;
-	var $restrictions;
-	var $samplingrate;
-	var $thumbnails;
-	var $title;
-	var $type;
-	var $width;
+	public $bitrate;
+	public $captions;
+	public $categories;
+	public $channels;
+	public $copyright;
+	public $credits;
+	public $description;
+	public $duration;
+	public $expression;
+	public $framerate;
+	public $handler;
+	public $hashes;
+	public $height;
+	public $javascript;
+	public $keywords;
+	public $lang;
+	public $length;
+	public $link;
+	public $medium;
+	public $player;
+	public $ratings;
+	public $restrictions;
+	public $samplingrate;
+	public $thumbnails;
+	public $title;
+	public $type;
+	public $width;
 
 	// Constructor, used to input the data
 	function SimplePie_Enclosure($link = null, $type = null, $length = null, $javascript = null, $bitrate = null, $captions = null, $categories = null, $channels = null, $copyright = null, $credits = null, $description = null, $duration = null, $expression = null, $framerate = null, $hashes = null, $height = null, $keywords = null, $lang = null, $medium = null, $player = null, $ratings = null, $restrictions = null, $samplingrate = null, $thumbnails = null, $title = null, $width = null)
@@ -7344,11 +7344,11 @@ class SimplePie_Enclosure
 
 class SimplePie_Caption
 {
-	var $type;
-	var $lang;
-	var $startTime;
-	var $endTime;
-	var $text;
+	public $type;
+	public $lang;
+	public $startTime;
+	public $endTime;
+	public $text;
 
 	// Constructor, used to input the data
 	function SimplePie_Caption($type = null, $lang = null, $startTime = null, $endTime = null, $text = null)
@@ -7429,9 +7429,9 @@ class SimplePie_Caption
 
 class SimplePie_Credit
 {
-	var $role;
-	var $scheme;
-	var $name;
+	public $role;
+	public $scheme;
+	public $name;
 
 	// Constructor, used to input the data
 	function SimplePie_Credit($role = null, $scheme = null, $name = null)
@@ -7486,8 +7486,8 @@ class SimplePie_Credit
 
 class SimplePie_Copyright
 {
-	var $url;
-	var $label;
+	public $url;
+	public $label;
 
 	// Constructor, used to input the data
 	function SimplePie_Copyright($url = null, $label = null)
@@ -7529,8 +7529,8 @@ class SimplePie_Copyright
 
 class SimplePie_Rating
 {
-	var $scheme;
-	var $value;
+	public $scheme;
+	public $value;
 
 	// Constructor, used to input the data
 	function SimplePie_Rating($scheme = null, $value = null)
@@ -7572,9 +7572,9 @@ class SimplePie_Rating
 
 class SimplePie_Restriction
 {
-	var $relationship;
-	var $type;
-	var $value;
+	public $relationship;
+	public $type;
+	public $value;
 
 	// Constructor, used to input the data
 	function SimplePie_Restriction($relationship = null, $type = null, $value = null)
@@ -7632,15 +7632,15 @@ class SimplePie_Restriction
  */
 class SimplePie_File
 {
-	var $url;
-	var $useragent;
-	var $success = true;
-	var $headers = array();
-	var $body;
-	var $status_code;
-	var $redirects = 0;
-	var $error;
-	var $method = SIMPLEPIE_FILE_SOURCE_NONE;
+	public $url;
+	public $useragent;
+	public $success = true;
+	public $headers = array();
+	public $body;
+	public $status_code;
+	public $redirects = 0;
+	public $error;
+	public $method = SIMPLEPIE_FILE_SOURCE_NONE;
 
 	function SimplePie_File($url, $timeout = 10, $redirects = 5, $headers = null, $useragent = null, $force_fsockopen = false)
 	{
@@ -7872,7 +7872,7 @@ class SimplePie_HTTP_Parser
 	 * @access public
 	 * @var float
 	 */
-	var $http_version = 0.0;
+	public $http_version = 0.0;
 
 	/**
 	 * Status code
@@ -7880,7 +7880,7 @@ class SimplePie_HTTP_Parser
 	 * @access public
 	 * @var int
 	 */
-	var $status_code = 0;
+	public $status_code = 0;
 
 	/**
 	 * Reason phrase
@@ -7888,7 +7888,7 @@ class SimplePie_HTTP_Parser
 	 * @access public
 	 * @var string
 	 */
-	var $reason = '';
+	public $reason = '';
 
 	/**
 	 * Key/value pairs of the headers
@@ -7896,7 +7896,7 @@ class SimplePie_HTTP_Parser
 	 * @access public
 	 * @var array
 	 */
-	var $headers = array();
+	public $headers = array();
 
 	/**
 	 * Body of the response
@@ -7904,7 +7904,7 @@ class SimplePie_HTTP_Parser
 	 * @access public
 	 * @var string
 	 */
-	var $body = '';
+	public $body = '';
 
 	/**
 	 * Current state of the state machine
@@ -7912,7 +7912,7 @@ class SimplePie_HTTP_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $state = 'http_version';
+	public $state = 'http_version';
 
 	/**
 	 * Input data
@@ -7920,7 +7920,7 @@ class SimplePie_HTTP_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $data = '';
+	public $data = '';
 
 	/**
 	 * Input data length (to avoid calling strlen() everytime this is needed)
@@ -7928,7 +7928,7 @@ class SimplePie_HTTP_Parser
 	 * @access private
 	 * @var int
 	 */
-	var $data_length = 0;
+	public $data_length = 0;
 
 	/**
 	 * Current position of the pointer
@@ -7936,7 +7936,7 @@ class SimplePie_HTTP_Parser
 	 * @var int
 	 * @access private
 	 */
-	var $position = 0;
+	public $position = 0;
 
 	/**
 	 * Name of the hedaer currently being parsed
@@ -7944,7 +7944,7 @@ class SimplePie_HTTP_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $name = '';
+	public $name = '';
 
 	/**
 	 * Value of the hedaer currently being parsed
@@ -7952,7 +7952,7 @@ class SimplePie_HTTP_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $value = '';
+	public $value = '';
 
 	/**
 	 * Create an instance of the class with the input data
@@ -8302,35 +8302,35 @@ class SimplePie_gzdecode
 	 * @access private
 	 * @see gzdecode::$data
 	 */
-	var $compressed_data;
+	public $compressed_data;
 
 	/**
 	 * Size of compressed data
 	 *
 	 * @access private
 	 */
-	var $compressed_size;
+	public $compressed_size;
 
 	/**
 	 * Minimum size of a valid gzip string
 	 *
 	 * @access private
 	 */
-	var $min_compressed_size = 18;
+	public $min_compressed_size = 18;
 
 	/**
 	 * Current position of pointer
 	 *
 	 * @access private
 	 */
-	var $position = 0;
+	public $position = 0;
 
 	/**
 	 * Flags (FLG)
 	 *
 	 * @access private
 	 */
-	var $flags;
+	public $flags;
 
 	/**
 	 * Uncompressed data
@@ -8338,28 +8338,28 @@ class SimplePie_gzdecode
 	 * @access public
 	 * @see gzdecode::$compressed_data
 	 */
-	var $data;
+	public $data;
 
 	/**
 	 * Modified time
 	 *
 	 * @access public
 	 */
-	var $MTIME;
+	public $MTIME;
 
 	/**
 	 * Extra Flags
 	 *
 	 * @access public
 	 */
-	var $XFL;
+	public $XFL;
 
 	/**
 	 * Operating System
 	 *
 	 * @access public
 	 */
-	var $OS;
+	public $OS;
 
 	/**
 	 * Subfield ID 1
@@ -8368,7 +8368,7 @@ class SimplePie_gzdecode
 	 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI2
 	 */
-	var $SI1;
+	public $SI1;
 
 	/**
 	 * Subfield ID 2
@@ -8377,7 +8377,7 @@ class SimplePie_gzdecode
 	 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI1
 	 */
-	var $SI2;
+	public $SI2;
 
 	/**
 	 * Extra field content
@@ -8386,21 +8386,21 @@ class SimplePie_gzdecode
 	 * @see gzdecode::$SI1
 	 * @see gzdecode::$SI2
 	 */
-	var $extra_field;
+	public $extra_field;
 
 	/**
 	 * Original filename
 	 *
 	 * @access public
 	 */
-	var $filename;
+	public $filename;
 
 	/**
 	 * Human readable comment
 	 *
 	 * @access public
 	 */
-	var $comment;
+	public $comment;
 
 	/**
 	 * Don't allow anything to be set
@@ -8637,10 +8637,10 @@ class SimplePie_Cache
 
 class SimplePie_Cache_File
 {
-	var $location;
-	var $filename;
-	var $extension;
-	var $name;
+	public $location;
+	public $filename;
+	public $extension;
+	public $name;
 
 	function SimplePie_Cache_File($location, $filename, $extension)
 	{
@@ -8798,9 +8798,9 @@ class SimplePie_Cache_DB
 
 class SimplePie_Cache_MySQL extends SimplePie_Cache_DB
 {
-	var $mysql;
-	var $options;
-	var $id;
+	public $mysql;
+	public $options;
+	public $id;
 
 	function SimplePie_Cache_MySQL($mysql_location, $name, $extension)
 	{
@@ -11376,7 +11376,7 @@ class SimplePie_Decode_HTML_Entities
 	 * @access private
 	 * @var string
 	 */
-	var $data = '';
+	public $data = '';
 
 	/**
 	 * Currently consumed bytes
@@ -11384,7 +11384,7 @@ class SimplePie_Decode_HTML_Entities
 	 * @access private
 	 * @var string
 	 */
-	var $consumed = '';
+	public $consumed = '';
 
 	/**
 	 * Position of the current byte being parsed
@@ -11392,7 +11392,7 @@ class SimplePie_Decode_HTML_Entities
 	 * @access private
 	 * @var int
 	 */
-	var $position = 0;
+	public $position = 0;
 
 	/**
 	 * Create an instance of the class with the input data
@@ -11578,7 +11578,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $scheme;
+	public $scheme;
 
 	/**
 	 * User Information
@@ -11586,7 +11586,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $userinfo;
+	public $userinfo;
 
 	/**
 	 * Host
@@ -11594,7 +11594,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $host;
+	public $host;
 
 	/**
 	 * Port
@@ -11602,7 +11602,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $port;
+	public $port;
 
 	/**
 	 * Path
@@ -11610,7 +11610,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $path;
+	public $path;
 
 	/**
 	 * Query
@@ -11618,7 +11618,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $query;
+	public $query;
 
 	/**
 	 * Fragment
@@ -11626,7 +11626,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var string
 	 */
-	var $fragment;
+	public $fragment;
 
 	/**
 	 * Whether the object represents a valid IRI
@@ -11634,7 +11634,7 @@ class SimplePie_IRI
 	 * @access private
 	 * @var array
 	 */
-	var $valid = array();
+	public $valid = array();
 
 	/**
 	 * Return the entire IRI when you try and read the object as a string
@@ -12531,7 +12531,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var string
 	 */
-	var $date;
+	public $date;
 
 	/**
 	 * List of days, calendar day name => ordinal day number in the week
@@ -12539,7 +12539,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var array
 	 */
-	var $day = array(
+	public $day = array(
 		// English
 		'mon' => 1,
 		'monday' => 1,
@@ -12628,7 +12628,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var array
 	 */
-	var $month = array(
+	public $month = array(
 		// English
 		'jan' => 1,
 		'january' => 1,
@@ -12773,7 +12773,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var array
 	 */
-	var $timezone = array(
+	public $timezone = array(
 		'ACDT' => 37800,
 		'ACIT' => 28800,
 		'ACST' => 34200,
@@ -12981,7 +12981,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var string
 	 */
-	var $day_pcre;
+	public $day_pcre;
 
 	/**
 	 * Cached PCRE for SimplePie_Parse_Date::$month
@@ -12989,7 +12989,7 @@ class SimplePie_Parse_Date
 	 * @access protected
 	 * @var string
 	 */
-	var $month_pcre;
+	public $month_pcre;
 
 	/**
 	 * Array of user-added callback methods
@@ -12997,7 +12997,7 @@ class SimplePie_Parse_Date
 	 * @access private
 	 * @var array
 	 */
-	var $built_in = array();
+	public $built_in = array();
 
 	/**
 	 * Array of user-added callback methods
@@ -13005,7 +13005,7 @@ class SimplePie_Parse_Date
 	 * @access private
 	 * @var array
 	 */
-	var $user = array();
+	public $user = array();
 
 	/**
 	 * Create new SimplePie_Parse_Date object, and set self::day_pcre,
@@ -13468,7 +13468,7 @@ class SimplePie_Content_Type_Sniffer
 	 * @var SimplePie_File
 	 * @access private
 	 */
-	var $file;
+	public $file;
 
 	/**
 	 * Create an instance of the class with the input file
@@ -13744,7 +13744,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access public
 	 * @var string
 	 */
-	var $version = '1.0';
+	public $version = '1.0';
 
 	/**
 	 * Encoding
@@ -13752,7 +13752,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access public
 	 * @var string
 	 */
-	var $encoding = 'UTF-8';
+	public $encoding = 'UTF-8';
 
 	/**
 	 * Standalone
@@ -13760,7 +13760,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access public
 	 * @var bool
 	 */
-	var $standalone = false;
+	public $standalone = false;
 
 	/**
 	 * Current state of the state machine
@@ -13768,7 +13768,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $state = 'before_version_name';
+	public $state = 'before_version_name';
 
 	/**
 	 * Input data
@@ -13776,7 +13776,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access private
 	 * @var string
 	 */
-	var $data = '';
+	public $data = '';
 
 	/**
 	 * Input data length (to avoid calling strlen() everytime this is needed)
@@ -13784,7 +13784,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @access private
 	 * @var int
 	 */
-	var $data_length = 0;
+	public $data_length = 0;
 
 	/**
 	 * Current position of the pointer
@@ -13792,7 +13792,7 @@ class SimplePie_XML_Declaration_Parser
 	 * @var int
 	 * @access private
 	 */
-	var $position = 0;
+	public $position = 0;
 
 	/**
 	 * Create an instance of the class with the input data
@@ -14050,19 +14050,19 @@ class SimplePie_XML_Declaration_Parser
 
 class SimplePie_Locator
 {
-	var $useragent;
-	var $timeout;
-	var $file;
-	var $local = array();
-	var $elsewhere = array();
-	var $file_class = 'SimplePie_File';
-	var $cached_entities = array();
-	var $http_base;
-	var $base;
-	var $base_location = 0;
-	var $checked_feeds = 0;
-	var $max_checked_feeds = 10;
-	var $content_type_sniffer_class = 'SimplePie_Content_Type_Sniffer';
+	public $useragent;
+	public $timeout;
+	public $file;
+	public $local = array();
+	public $elsewhere = array();
+	public $file_class = 'SimplePie_File';
+	public $cached_entities = array();
+	public $http_base;
+	public $base;
+	public $base_location = 0;
+	public $checked_feeds = 0;
+	public $max_checked_feeds = 10;
+	public $content_type_sniffer_class = 'SimplePie_Content_Type_Sniffer';
 
 	function SimplePie_Locator(&$file, $timeout = 10, $useragent = null, $file_class = 'SimplePie_File', $max_checked_feeds = 10, $content_type_sniffer_class = 'SimplePie_Content_Type_Sniffer')
 	{
@@ -14307,21 +14307,21 @@ class SimplePie_Locator
 
 class SimplePie_Parser
 {
-	var $error_code;
-	var $error_string;
-	var $current_line;
-	var $current_column;
-	var $current_byte;
-	var $separator = ' ';
-	var $namespace = array('');
-	var $element = array('');
-	var $xml_base = array('');
-	var $xml_base_explicit = array(false);
-	var $xml_lang = array('');
-	var $data = array();
-	var $datas = array(array());
-	var $current_xhtml_construct = -1;
-	var $encoding;
+	public $error_code;
+	public $error_string;
+	public $current_line;
+	public $current_column;
+	public $current_byte;
+	public $separator = ' ';
+	public $namespace = array('');
+	public $element = array('');
+	public $xml_base = array('');
+	public $xml_base_explicit = array(false);
+	public $xml_lang = array('');
+	public $data = array();
+	public $datas = array(array());
+	public $current_xhtml_construct = -1;
+	public $encoding;
 
 	function parse(&$data, $encoding)
 	{
@@ -14649,26 +14649,26 @@ class SimplePie_Parser
 class SimplePie_Sanitize
 {
 	// Private vars
-	var $base;
+	public $base;
 
 	// Options
-	var $remove_div = true;
-	var $image_handler = '';
-	var $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
-	var $encode_instead_of_strip = false;
-	var $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
-	var $strip_comments = false;
-	var $output_encoding = 'UTF-8';
-	var $enable_cache = true;
-	var $cache_location = './cache';
-	var $cache_name_function = 'md5';
-	var $cache_class = 'SimplePie_Cache';
-	var $file_class = 'SimplePie_File';
-	var $timeout = 10;
-	var $useragent = '';
-	var $force_fsockopen = false;
+	public $remove_div = true;
+	public $image_handler = '';
+	public $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
+	public $encode_instead_of_strip = false;
+	public $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
+	public $strip_comments = false;
+	public $output_encoding = 'UTF-8';
+	public $enable_cache = true;
+	public $cache_location = './cache';
+	public $cache_name_function = 'md5';
+	public $cache_class = 'SimplePie_Cache';
+	public $file_class = 'SimplePie_File';
+	public $timeout = 10;
+	public $useragent = '';
+	public $force_fsockopen = false;
 
-	var $replace_url_attributes = array(
+	public $replace_url_attributes = array(
 		'a' => 'href',
 		'area' => 'href',
 		'blockquote' => 'cite',

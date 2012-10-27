@@ -41,7 +41,7 @@ class DboBcCsv extends DboSource {
  * @var string
  * @access public
  */
-	var $description = "CSV DBO Driver";
+	public $description = "CSV DBO Driver";
 /**
  * 開始クォート
  * TODO 空文字でいいかも
@@ -49,7 +49,7 @@ class DboBcCsv extends DboSource {
  * @var string
  * @access public
  */
-	var $startQuote = "`";
+	public $startQuote = "`";
 /**
  * 終了クォート
  * TODO 空文字でいいかも
@@ -57,49 +57,49 @@ class DboBcCsv extends DboSource {
  * @var string
  * @access public
  */
-	var $endQuote = "`";
+	public $endQuote = "`";
 /**
  * DBエンコーディング
  *
  * @var string
  * @access public
  */
-	var $dbEncoding = "SJIS";
+	public $dbEncoding = "SJIS";
 /**
  * アプリエンコーディング
  *
  * @var string
  * @access public
  */
-	var $appEncoding = "UTF-8";
+	public $appEncoding = "UTF-8";
 /**
  * コネクション
  *
  * @var array
  * @access public
  */
-	var $connection = array();
+	public $connection = array();
 /**
  * 接続状態
  *
  * @var boolean
  * @access public
  */
-	var $connected = false;
+	public $connected = false;
 /**
  * CSVファイル名（フルパス）
  *
  * @var string
  * @access public
  */
-	var $csvName = '';
+	public $csvName = '';
 /**
  * 最後に追加されたID
  *
  * @var string
  * @access protected
  */
-	var $_lastInsertId = '';
+	protected $_lastInsertId = '';
 /**
  * 基本SQLコマンドの一覧
  * 未実装
@@ -107,8 +107,8 @@ class DboBcCsv extends DboSource {
  * @var array
  * @access protected
  */
-	var $_command = array();
-	/*var $_commands = array(
+	protected $_command = array();
+	/*protected $_commands = array(
 		'begin'    => 'START TRANSACTION',
 		'commit'   => 'COMMIT',
 		'rollback' => 'ROLLBACK'
@@ -119,14 +119,14 @@ class DboBcCsv extends DboSource {
  * @var string
  * @access	private
  */
-	var $__resultModelName = 0;
+	private $__resultModelName = 0;
 /**
  * CSVドライバの基本設定
  *
  * @var array
  * @access	protected
  */
-	var $_baseConfig = array(
+	protected $_baseConfig = array(
 			'database' => 'cake'
 	);
 /**
@@ -135,7 +135,7 @@ class DboBcCsv extends DboSource {
  * @var array
  * @access public
  */
-	var $columns = array(
+	public $columns = array(
 			'primary_key' => array('name' => 'NOT NULL AUTO_INCREMENT'),
 			'string' => array('name' => 'varchar', 'limit' => '255'),
 			'text' => array('name' => 'text'),

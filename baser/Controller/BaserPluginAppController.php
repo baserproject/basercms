@@ -29,7 +29,7 @@ class BaserPluginAppController extends AppController {
  *
  * @var int
  */
-	var $contentId = null;
+	public $contentId = null;
 /**
  * beforeFilter
  *

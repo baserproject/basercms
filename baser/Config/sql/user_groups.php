@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* UserGroups schema generated on: 2012-03-23 13:03:39 : 1332478179*/
 class UserGroupsSchema extends CakeSchema {
-	var $name = 'UserGroups';
+	public $name = 'UserGroups';
 
-	var $file = 'user_groups.php';
+	public $file = 'user_groups.php';
 
-	var $connection = 'baser';
+	public $connection = 'baser';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class UserGroupsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $user_groups = array(
+	public $user_groups = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),

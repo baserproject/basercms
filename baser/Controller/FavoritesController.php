@@ -29,14 +29,14 @@ class FavoritesController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Favorites';
+	public $name = 'Favorites';
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 
 	function admin_ajax_add () {
 		

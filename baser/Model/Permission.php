@@ -32,27 +32,27 @@ class Permission extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Permission';
+	public $name = 'Permission';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * belongsTo
  * @var array
  * @access public
  */
-	var $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
+	public $belongsTo = array('UserGroup' =>   array(  'className'=>'UserGroup',
 							'foreignKey'=>'user_group_id'));
 /**
  * permissionsTmp
@@ -62,14 +62,14 @@ class Permission extends AppModel {
  * @var mixed
  * @access public
  */
-	var $permissionsTmp = -1;
+	public $permissionsTmp = -1;
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> '設定名を入力してください。'),

@@ -32,35 +32,35 @@ class BlogCommentsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $name = 'BlogComments';
+	public $name = 'BlogComments';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
+	public $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array();
+	public $helpers = array();
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler','BcEmail','Security','BcCaptcha');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler','BcEmail','Security','BcCaptcha');
 /**
  * ぱんくずナビ
  *
  * @var string
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
@@ -70,7 +70,7 @@ class BlogCommentsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * beforeFilter
  *

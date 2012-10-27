@@ -30,21 +30,21 @@ class MailField extends MailAppModel {
  * @var string
  * @access public
  */
-	var $name = 'MailField';
+	public $name = 'MailField';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * validate
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> "項目名を入力してください。"),

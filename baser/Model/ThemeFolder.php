@@ -25,21 +25,21 @@ class ThemeFolder extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'ThemeFolder';
+	public $name = 'ThemeFolder';
 /**
  * use table
  * 
  * @var boolean
  * @access public
  */
-	var $useTable = false;
+	public $useTable = false;
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'テーマフォルダ名を入力してください。',

@@ -32,35 +32,35 @@ class MailContentsController extends MailAppController {
  * @var string
  * @access public
  */
-	var $name = 'MailContents';
+	public $name = 'MailContents';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array("Mail.MailContent",'Mail.Message');
+	public $uses = array("Mail.MailContent",'Mail.Message');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_TEXT_HELPER, 'Mail.Mail');
+	public $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_TEXT_HELPER, 'Mail.Mail');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
@@ -70,7 +70,7 @@ class MailContentsController extends MailAppController {
  * @var string
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * [ADMIN] メールフォーム一覧
  *

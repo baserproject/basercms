@@ -33,21 +33,21 @@ class BcFormHelper extends FormHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Javascript', BC_CKEDITOR_HELPER);
+	public $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Javascript', BC_CKEDITOR_HELPER);
 /**
  * sizeCounter用の関数読み込み可否
  * 
  * @var boolean
  * @access public
  */
-	var $sizeCounterFunctionLoaded = false;
+	public $sizeCounterFunctionLoaded = false;
 /**
  * フォームID
  * 
  * @var string
  * @access private
  */
-	var $__id = null;
+	private $__id = null;
 /**
  * 都道府県用のSELECTタグを表示する
  *

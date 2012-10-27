@@ -30,14 +30,14 @@ class PagesController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Pages';
+	public $name = 'Pages';
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(
+	public $helpers = array(
 		'Html', BC_GOOGLEMAPS_HELPER, BC_XML_HELPER, BC_TEXT_HELPER, 
 		BC_FREEZE_HELPER, BC_CKEDITOR_HELPER, BC_PAGE_HELPER
 	);
@@ -47,14 +47,14 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcEmail');
 /**
  * モデル
  *
  * @var array
  * @access	public
  */
-	var $uses = array('Page', 'PageCategory');
+	public $uses = array('Page', 'PageCategory');
 /**
  * beforeFilter
  *

@@ -32,35 +32,35 @@ class FeedDetailsController extends FeedAppController {
  * @var string
  * @access public
  */
-	var $name = 'FeedDetails';
+	public $name = 'FeedDetails';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Feed.FeedDetail','Feed.FeedConfig', 'Feed.RssEx');
+	public $uses = array('Feed.FeedDetail','Feed.FeedConfig', 'Feed.RssEx');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
 	);
@@ -70,7 +70,7 @@ class FeedDetailsController extends FeedAppController {
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * beforeFilter
  *

@@ -33,7 +33,7 @@ class BaserAppView extends ThemeView {
  * @var array
  * @access protected
  */
-	var $__passedVars = array(
+	private $__passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
 			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'

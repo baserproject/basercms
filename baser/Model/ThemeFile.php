@@ -25,21 +25,21 @@ class ThemeFile extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'ThemeFile';
+	public $name = 'ThemeFile';
 /**
  * use table
  * 
  * @var boolean
  * @access	public
  */
-	var $useTable = false;
+	public $useTable = false;
 /**
  * バリデーション
  *
  * @var array
  * @access	public
  */
-	var $validate = array(
+	public $validate = array(
 			'name' => array(
 				array(	'rule'		=> array('notEmpty'),
 						'message'	=> "テーマファイル名を入力してください。",

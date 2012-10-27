@@ -42,7 +42,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @var Model
  * @access public
  */
-	var $PluginContent = null;
+	public $PluginContent = null;
 /**
  * setup
  *

@@ -29,42 +29,42 @@ class PermissionsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Permissions';
+	public $name = 'Permissions';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Permission');
+	public $uses = array('Permission');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパ
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TIME_HELPER, BC_FREEZE_HELPER);
+	public $helpers = array(BC_TIME_HELPER, BC_FREEZE_HELPER);
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array('site_configs', 'users','user_groups','permissions');
+	public $subMenuElements = array('site_configs', 'users','user_groups','permissions');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
 		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index')),
 		array('name' => 'アクセス制限設定管理', 'url' => array('controller' => 'permissions', 'action' => 'index'))

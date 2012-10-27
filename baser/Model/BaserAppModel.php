@@ -35,28 +35,28 @@ class BaserAppModel extends Model {
  * @var		string
  * @access	public
  */
-	var $driver = '';
+	public $driver = '';
 /**
  * プラグイン名
  *
  * @var		string
  * @access	public
  */
-	var $plugin = '';
+	public $plugin = '';
 /**
  * DB接続設定名
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcPluginHook');
+	public $actsAs = array('BcPluginHook');
 /**
  * コンストラクタ
  *

@@ -34,14 +34,14 @@ class BaserAppController extends Controller {
  * 
  * @var string
  */
-	var $view = 'App';
+	public $view = 'App';
 /**
  * ページタイトル
  *
  * @var		string
  * @access	public
  */
-	var $pageTitle = '';
+	public $pageTitle = '';
 /**
  * ヘルパー
  *
@@ -49,7 +49,7 @@ class BaserAppController extends Controller {
  * @access	public
  */
 // TODO 見直し
-	var $helpers = array(
+	public $helpers = array(
 		'Session', 'BcPluginHook', BC_HTML_HELPER, BC_HTML_HELPER, 'Form', BC_FORM_HELPER, 
 		'Javascript', BC_BASER_HELPER, BC_XML_HELPER, BC_ARRAY_HELPER, BC_BASER_ADMIN_HELPER
 	);
@@ -59,7 +59,7 @@ class BaserAppController extends Controller {
  * @var 		string
  * @access	public
  */
-	var $layout = 'default';
+	public $layout = 'default';
 /**
  * モデル
  *
@@ -67,77 +67,77 @@ class BaserAppController extends Controller {
  * @access protected
  * TODO メニュー管理を除外後、GlobalMenuを除外する
  */
-	var $uses = array('GlobalMenu', 'Favorite');
+	public $uses = array('GlobalMenu', 'Favorite');
 /**
  * コンポーネント
  *
  * @var		array
  * @access	public
  */
-	var $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session', 'BcManager');
+	public $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session', 'BcManager');
 /**
  * サブディレクトリ
  *
  * @var		string
  * @access	public
  */
-	var $subDir = null;
+	public $subDir = null;
 /**
  * サブメニューエレメント
  *
  * @var string
  * @access public
  */
-	var $subMenuElements = '';
+	public $subMenuElements = '';
 /**
  * パンくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array();
+	public $crumbs = array();
 /**
  * 検索ボックス
  * 
  * @var string
  * @access public
  */
-	var $search = '';
+	public $search = '';
 /**
  * ヘルプ
  * 
  * @var string
  * @access public
  */
-	var $help = '';
+	public $help = '';
 /**
  * ページ説明文
  *
  * @var string
  * @access public
  */
-	var $siteDescription = '';
+	public $siteDescription = '';
 /**
  * コンテンツタイトル
  *
  * @var string
  * @access public
  */
-	var $contentsTitle = '';
+	public $contentsTitle = '';
 /**
  * サイトコンフィグデータ
  * 
  * @var array
  * @access public
  */
-	var $siteConfigs = array();
+	public $siteConfigs = array();
 /**
  * プレビューフラグ
  * 
  * @var boolean
  * @access public
  */
-	var $preview = false;
+	public $preview = false;
 /**
  * コンストラクタ
  *

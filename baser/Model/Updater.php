@@ -32,12 +32,12 @@ class Updater extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Updater';
+	public $name = 'Updater';
 /**
  * テーブル
  *
  * @var string
  * @access public
  */
-	var $useTable = false;
+	public $useTable = false;
 }

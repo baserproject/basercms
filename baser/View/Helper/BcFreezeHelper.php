@@ -31,14 +31,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @var boolean
  * @access public
  */
-	var $freezed = false;
+	public $freezed = false;
 /**
  * ヘルパー
  * 
  * @var array
  * @access public
  */
-	var $helpers = array('Html', BC_FORM_HELPER, BC_UPLOAD_HELPER, BC_TEXT_HELPER, BC_TIME_HELPER, 'Javascript');
+	public $helpers = array('Html', BC_FORM_HELPER, BC_UPLOAD_HELPER, BC_TEXT_HELPER, BC_TIME_HELPER, 'Javascript');
 /**
  * フォームを凍結させる
  * 

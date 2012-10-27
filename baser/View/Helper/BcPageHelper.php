@@ -29,20 +29,20 @@ class BcPageHelper extends Helper {
  * @var Page
  * @access public
  */
-	var $Page = null;
+	public $Page = null;
 /**
  * data
  * @var array
  * @access public
  */
-	var $data = array();
+	public $data = array();
 /**
  * ヘルパー
  * 
  * @var array
  * @access public
  */
-	var $helpers = array(BC_BASER_HELPER);
+	public $helpers = array(BC_BASER_HELPER);
 /**
  * construct
  * 

@@ -30,21 +30,21 @@ class MailContent extends MailAppModel {
  * @var string
  * @access public
  */
-	var $name = 'MailContent';
+	public $name = 'MailContent';
 /**
  * behaviors
  *
  * @var array
  * @access public
  */
-	var $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	var $hasMany = array('MailField'=>
+	public $hasMany = array('MailField'=>
 			array('className'=>'Mail.MailField',
 							'order'=>'id',
 							'limit'=>100,
@@ -58,7 +58,7 @@ class MailContent extends MailAppModel {
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			'notInList' => array(
 				'rule'		=> array('halfText'),

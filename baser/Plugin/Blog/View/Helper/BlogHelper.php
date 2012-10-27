@@ -28,21 +28,21 @@ class BlogHelper extends AppHelper {
  * @var View
  * @access protected
  */
-	var $_view = null;
+	protected $_view = null;
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
+	public $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
 /**
  * ブログカテゴリモデル
  *
  * @var BlogCategory
  * @access public
  */
-	var $BlogCategory = null;
+	public $BlogCategory = null;
 /**
  * コンストラクタ
  *

@@ -31,42 +31,42 @@ class InstallationsController extends AppController {
  * @var string
  * @access	public
  */
-	var $name = 'Installations';
+	public $name = 'Installations';
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('Session', 'BcEmail', 'BcManager');
+	public $components = array('Session', 'BcEmail', 'BcManager');
 /**
  * レイアウトパス
  *
  * @var string
  * @access	public
  */
-	var $layoutPath = 'admin';
+	public $layoutPath = 'admin';
 /**
  * サブフォルダ
  *
  * @var string
  * @access	public
  */
-	var $subDir = 'admin';
+	public $subDir = 'admin';
 /**
  * ヘルパー
  *
  * @var array
  * @access	public
  */
-	var $helpers = array(BC_HTML_HELPER, BC_FORM_HELPER, 'Javascript', BC_TIME_HELPER);
+	public $helpers = array(BC_HTML_HELPER, BC_FORM_HELPER, 'Javascript', BC_TIME_HELPER);
 /**
  * モデル
  *
  * @var array
  * @access	public
  */
-	var $uses = null;
+	public $uses = null;
 /**
  * データベースエラーハンドラ
  *

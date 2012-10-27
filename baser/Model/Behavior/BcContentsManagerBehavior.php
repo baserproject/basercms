@@ -29,7 +29,7 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @var Content
  * @access public
  */
-	var $Content = null;
+	public $Content = null;
 /**
  * コンテンツデータを登録する
  * コンテンツデータを次のように作成して引き渡す

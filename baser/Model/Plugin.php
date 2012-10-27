@@ -32,28 +32,28 @@ class Plugin extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Plugin';
+	public $name = 'Plugin';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * データベース接続
  *
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('alphaNumericPlus'),
 					'message'	=> 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',

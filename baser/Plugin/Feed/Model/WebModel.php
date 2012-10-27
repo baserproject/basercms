@@ -24,13 +24,13 @@ class WebModel extends AppModel
  * @var boolean
  * @access public
  */
-    var $useTable = false;
+    public $useTable = false;
 /**
  *
  * @var int 
  * @access public
  */
-    var $connection_timeout = '30';
+    public $connection_timeout = '30';
     
 /**
  * Set this to active if security is very important for your ssl connection, however I had
@@ -39,7 +39,7 @@ class WebModel extends AppModel
  * @var boolean
  * @access public 
  */
-    var $ssl_strict = false;
+    public $ssl_strict = false;
     
 /**
  * This Model actually doesn't do any caching itself, this is left to the Models
@@ -48,7 +48,7 @@ class WebModel extends AppModel
  * @var string
  * @access public
  */    
-    var $cacheFolder = 'web';
+    public $cacheFolder = 'web';
 /**
  * construct
  * 

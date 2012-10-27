@@ -34,47 +34,47 @@ class BcGooglemapsHelper extends AppHelper {
  * @var string
  * @access public
  */
-	var $title = '';
+	public $title = '';
 /**
  * マーカーテキスト
  * @var string
  * @access public
  */
-	var $markerText = '';
+	public $markerText = '';
 /**
  * 地図を表示するDOM ID
  * 
  * @var string
  * @access public
  */
-	var $mapId = 'map';
+	public $mapId = 'map';
 /**
  * 住所
  * 
  * @var string
  * @access public
  */
-	var $address = '';
+	public $address = '';
 /**
  * latitude
  * 
  * @var string
  * @access public
  */
-	var $latitude = '';
+	public $latitude = '';
 /**
  * longitude
  * 
  * @var string
  * @access public
  */
-	var $longitude = '';
+	public $longitude = '';
 /**
  * ズーム
  * @var int
  * @access public
  */
-	var $zoom = 16;
+	public $zoom = 16;
 /**
  * Google マップ を読み込む
  * 

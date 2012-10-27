@@ -33,28 +33,28 @@ class Rss extends WebModel {
  * @var string 
  * @access public
  */
-    var $name = 'Rss';
+    public $name = 'Rss';
 /**
  * cacheExpires
  * 
  * @var string 
  * @access public
  */
-    var $cacheExpires = '+2 hours';
+    public $cacheExpires = '+2 hours';
 /**
  * cacheFolder
  * 
  * @var string 
  * @access public
  */
-    var $cacheFolder = 'web/rss';
+    public $cacheFolder = 'web/rss';
 /**
  * useDbConfig
  * 
  * @var string
  * @access public
  */
-    var $useDbConfig = null;
+    public $useDbConfig = null;
 /**
  * findAll
  * 

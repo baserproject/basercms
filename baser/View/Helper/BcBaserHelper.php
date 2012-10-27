@@ -34,63 +34,63 @@ class BcBaserHelper extends AppHelper {
  * @var View
  * @access protected
  */
-	var $_view = null;
+	protected $_view = null;
 /**
  * サイト基本設定
  *
  * @var array
  * @access public
  */
-	var $siteConfig = array();
+	public $siteConfig = array();
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_HTML_HELPER, 'Javascript', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array(BC_HTML_HELPER, 'Javascript', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
 /**
  * コンテンツ
  *
  * @var string
  * @access protected
  */
-	var $_content = null;
+	protected $_content = null;
 /**
  * カテゴリタイトル設定
  *
  * @var mixed
  * @access protected
  */
-	var $_categoryTitleOn = true;
+	protected $_categoryTitleOn = true;
 /**
  * カテゴリタイトル
  *
  * @var mixed boolean Or string
  * @access protected
  */
-	var $_categoryTitle = true;
+	protected $_categoryTitle = true;
 /**
  * ページモデル
  *
  * @var Page
  * @access public
  */
-	var $Page = null;
+	public $Page = null;
 /**
  * アクセス制限設定モデル
  *
  * @var Permission
  * @access public
  */
-	var $Permission = null;
+	public $Permission = null;
 /**
  * Plugin Basers
  *
  * @var array
  * @access public
  */
-	var $pluginBasers = array();
+	public $pluginBasers = array();
 /**
  * コンストラクタ
  *

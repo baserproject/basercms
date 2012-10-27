@@ -29,36 +29,36 @@ class ToolsController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Tools';
-	var $uses = array('Tool', 'Page');
+	public $name = 'Tools';
+	public $uses = array('Tool', 'Page');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * ヘルパ
  * 
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * サブメニュー
  * 
  * @var type
  * @access public 
  */
-	var $subMenuElements = array('tools');
+	public $subMenuElements = array('tools');
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
 	);
 /**

@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* FeedDetails schema generated on: 2010-11-04 18:11:13 : 1288863013*/
 class FeedDetailsSchema extends CakeSchema {
-	var $name = 'FeedDetails';
+	public $name = 'FeedDetails';
 
-	var $file = 'feed_details.php';
+	public $file = 'feed_details.php';
 
-	var $connection = 'plugin';
+	public $connection = 'plugin';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class FeedDetailsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $feed_details = array(
+	public $feed_details = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'feed_config_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),

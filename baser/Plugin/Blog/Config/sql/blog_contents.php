@@ -2,11 +2,11 @@
 /* SVN FILE: $Id$ */
 /* BlogContents schema generated on: 2012-08-16 03:08:57 : 1345055517*/
 class BlogContentsSchema extends CakeSchema {
-	var $name = 'BlogContents';
+	public $name = 'BlogContents';
 
-	var $file = 'blog_contents.php';
+	public $file = 'blog_contents.php';
 
-	var $connection = 'plugin';
+	public $connection = 'plugin';
 
 	function before($event = array()) {
 		return true;
@@ -15,7 +15,7 @@ class BlogContentsSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
-	var $blog_contents = array(
+	public $blog_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary', 'length' => 8),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),

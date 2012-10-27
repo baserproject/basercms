@@ -32,35 +32,35 @@ class BlogConfigsController extends BlogAppController {
  * @var string
  * @access public
  */
-	var $name = 'BlogConfigs';
+	public $name = 'BlogConfigs';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
+	public $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
  * @var string
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);

@@ -30,7 +30,7 @@ class  BcAuthConfigureComponent extends Object {
  * @var Controller
  * @access	public
  */
-	var $controller = null;
+	public $controller = null;
 /**
  * initialize
  *

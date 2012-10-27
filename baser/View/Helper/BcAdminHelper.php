@@ -34,7 +34,7 @@ class BcAdminHelper extends AppHelper {
  * @var View
  * @access protected
  */
-	var $_view = null;
+	protected $_view = null;
 /**
  * コンストラクタ
  *

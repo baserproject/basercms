@@ -23,7 +23,7 @@ class BcCkeditorHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Javascript', 'Form');
+	public $helpers = array('Javascript', 'Form');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
@@ -31,7 +31,7 @@ class BcCkeditorHelper extends AppHelper {
  * @var boolean
  * @access public
  */
-	var $_script = false;
+	protected $_script = false;
 /**
  * 初期化状態
  * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
@@ -39,14 +39,14 @@ class BcCkeditorHelper extends AppHelper {
  * @var boolean
  * @access public
  */
-	var $inited = false;
+	public $inited = false;
 /**
  * スタイル初期化判定
  * 
  * @var boolean
  * @access protected 
  */
-	var $_initedStyles = false;
+	protected $_initedStyles = false;
 /**
  * 初期設定スタイル
  * StyleSet 名 basercms
@@ -54,7 +54,7 @@ class BcCkeditorHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $style = array(
+	public $style = array(
 					array(	'name' => '青見出し(h3)',
 							'element' => 'h3',
 							'styles' => array('color'=>'Blue')),

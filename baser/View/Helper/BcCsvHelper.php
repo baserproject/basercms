@@ -33,21 +33,21 @@ class BcCsvHelper extends AppHelper {
  * @var string
  * @access public
  */
-	var $csvHead = '';
+	public $csvHead = '';
 /**
  * CSVボディ
  *
  * @var string
  * @access public
  */
-	var $csvBody = '';
+	public $csvBody = '';
 /**
  * CSVヘッドの出力
  *
  * @var boolean
  * @access public
  */
-	var $exportCsvHead = true;
+	public $exportCsvHead = true;
 /**
  * データを追加する（単数）
  *

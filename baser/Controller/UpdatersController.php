@@ -132,35 +132,35 @@ class UpdatersController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'Updaters';
+	public $name = 'Updaters';
 /**
  * アップデートメッセージ
  *
  * @var array
  * @access protected
  */
-	var $_updateMessage = array();
+	protected $_updateMessage = array();
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_FORM_HELPER);
+	public $helpers = array(BC_FORM_HELPER);
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = null;
+	public $uses = null;
 /**
  * beforeFilter
  *

@@ -30,12 +30,12 @@ class MailConfig extends MailAppModel {
  * @var string
  * @access public
  */
-	var $name = 'MailConfig';
+	public $name = 'MailConfig';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 }

@@ -32,27 +32,27 @@ class FeedController extends FeedAppController {
  * @var string
  * @access public
  */
-	var $name = 'Feed';
+	public $name = 'Feed';
 /**
  * コンポーネント
  * @var array
  * @access public
  */
-	var $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
+	public $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
+	public $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
 /**
  * ヘルパー
  *
  * @var array
  * @access public
  */
-	var $helpers = array('Cache',BC_TEXT_HELPER,'Feed.Feed', BC_ARRAY_HELPER);
+	public $helpers = array('Cache',BC_TEXT_HELPER,'Feed.Feed', BC_ARRAY_HELPER);
 /**
  * beforeFilter
  *

@@ -28,14 +28,14 @@ class Tool extends AppModel {
  * @var string
  * @access public
  */
-	var $name = 'Tool';
+	public $name = 'Tool';
 /**
  * テーブル
  * 
  * @var string
  * @access public
  */
-	var $useTable = false;
+	public $useTable = false;
 /**
  * コントロールソースを取得する
  *

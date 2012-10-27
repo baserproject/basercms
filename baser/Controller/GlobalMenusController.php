@@ -29,42 +29,42 @@ class GlobalMenusController extends AppController {
  * @var string
  * @access public
  */
-	var $name = 'GlobalMenus';
+	public $name = 'GlobalMenus';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('GlobalMenu');
+	public $uses = array('GlobalMenu');
 /**
  * コンポーネント
  *
  * @var array
  * @accesspublic
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler');
+	public $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler');
 /**
  * ヘルパ
  *
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
 /**
  * サブメニューエレメント
  *
  * @var array
  * @access public
  */
-	var $subMenuElements = array();
+	public $subMenuElements = array();
 /**
  * ぱんくずナビ
  *
  * @var array
  * @access public
  */
-	var $crumbs = array(
+	public $crumbs = array(
 		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
 		array('name' => 'メニュー管理', 'url' => array('controller' => 'global_menus', 'action' => 'index'))
 	);

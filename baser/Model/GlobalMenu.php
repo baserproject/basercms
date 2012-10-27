@@ -32,28 +32,28 @@ class GlobalMenu extends AppModel {
  * @var string
  * @access public
  */
-	var $useDbConfig = 'baser';
+	public $useDbConfig = 'baser';
 /**
  * クラス名
  *
  * @var string
  * @access public
  */
-	var $name = 'GlobalMenu';
+	public $name = 'GlobalMenu';
 /**
  * ビヘイビア
  * 
  * @var array
  * @access public
  */
-	var $actsAs = array('BcCache');
+	public $actsAs = array('BcCache');
 /**
  * バリデーション
  *
  * @var array
  * @access public
  */
-	var $validate = array(
+	public $validate = array(
 		'name' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> 'メニュー名を入力してください。'),

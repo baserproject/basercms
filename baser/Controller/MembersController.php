@@ -33,14 +33,14 @@ class MembersController extends UsersController {
  * @var string
  * @access public
  */
-	var $name = 'Members';
+	public $name = 'Members';
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	var $uses = array('Member', 'UserGroup');
+	public $uses = array('Member', 'UserGroup');
 /**
  * [MYPAGE] メンバー編集
  * 

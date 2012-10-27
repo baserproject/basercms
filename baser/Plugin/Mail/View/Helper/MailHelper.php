@@ -32,13 +32,13 @@ class MailHelper extends AppHelper {
  * @var		View
  * @access	protected
  */
-	var $_view = null;
+	protected $_view = null;
 /**
  * ヘルパー
  * @var array
  * @access public
  */
-	var $helpers = array(BC_BASER_HELPER);
+	public $helpers = array(BC_BASER_HELPER);
 /**
  * コンストラクタ
  *

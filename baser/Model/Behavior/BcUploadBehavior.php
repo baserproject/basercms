@@ -30,28 +30,28 @@ class BcUploadBehavior extends ModelBehavior {
  * @var string
  * @access public
  */
-	var $savePath = '';
+	public $savePath = '';
 /**
  * 設定
  * 
  * @var array
  * @access public
  */
-	var $settings =  null;
+	public $settings =  null;
 /**
  * 一時ID
  * 
  * @var string
  * @access public
  */
-	var $tmpId = null;
+	public $tmpId = null;
 /**
  * Session
  * 
  * @var Session
  * @access public
  */
-	var $Session = null;
+	public $Session = null;
 /**
  * セットアップ
  * 
