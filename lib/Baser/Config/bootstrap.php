@@ -54,6 +54,7 @@
 	App::uses('PhpReader', 'Configure');
 	App::uses('CakeSession', 'Model/Datasource');
 	App::uses('Folder', 'Utility');
+	App::uses('File', 'Utility');
 /**
  * baserUrl取得
  */

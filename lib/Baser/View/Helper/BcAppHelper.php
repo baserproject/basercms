@@ -96,9 +96,9 @@ class BcAppHelper extends Helper {
  * @return	void
  * @access	private
  */
-	public function __construct() {
+	public function __construct(View $View, $settings = array()) {
 
-		parent::__construct();
+		parent::__construct($View, $settings);
 
 		$this->tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />&nbsp;';
 		$this->tags['hiddenmultiple'] = '<input type="hidden" name="%s[]" %s />';
@@ -204,14 +204,10 @@ class BcAppHelper extends Helper {
  */
 	public function executeHook($hook) {
 		
-		if(!$this->_view){
-			$this->_view =& ClassRegistry::getObject('View');
-		}
-
 		$args = func_get_args();
 		$args[0] =& $this;
 
-		return call_user_func_array(array(&$this->_view->loaded['bcPluginHook'], $hook), $args);
+		return call_user_func_array(array($this->_View->Helpers->BcPluginHook, $hook), $args);
 		
 	}
 /**

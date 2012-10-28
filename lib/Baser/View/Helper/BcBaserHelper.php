@@ -48,7 +48,7 @@ class BcBaserHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_HTML_HELPER, 'Javascript', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array(BC_HTML_HELPER, 'Js', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
 /**
  * コンテンツ
  *
@@ -98,9 +98,9 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function __construct() {
+	public function __construct(View $View, $settings = array()) {
 
-		$this->_view =& ClassRegistry::getObject('view');
+		parent::__construct($View, $settings);
 
 		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 
@@ -124,8 +124,8 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		if(BC_INSTALLED) {
-			if(isset($this->_view->viewVars['siteConfig'])) {
-				$this->siteConfig = $this->_view->viewVars['siteConfig'];
+			if(isset($this->_View->viewVars['siteConfig'])) {
+				$this->siteConfig = $this->_View->viewVars['siteConfig'];
 			}
 		}
 
@@ -144,9 +144,9 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function afterRender() {
+	public function afterRender($viewFile) {
 
-		parent::afterRender();
+		parent::afterRender($viewFile);
 		// コンテンツをフックする
 		$this->_content = ob_get_contents();
 
@@ -199,7 +199,7 @@ class BcBaserHelper extends AppHelper {
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
-		$this->_view->set('title',$title);
+		$this->_View->set('title',$title);
 
 	}
 /**
@@ -211,7 +211,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function setKeywords($keywords) {
 
-		$this->_view->set('keywords',$keywords);
+		$this->_View->set('keywords',$keywords);
 
 	}
 /**
@@ -223,7 +223,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function setDescription($description) {
 
-		$this->_view->set('description',$description);
+		$this->_View->set('description',$description);
 
 	}
 /**
@@ -238,7 +238,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function set($key,$value) {
 
-		$this->_view->set($key,$value);
+		$this->_View->set($key,$value);
 
 	}
 /**
@@ -266,8 +266,8 @@ class BcBaserHelper extends AppHelper {
 	public function getKeywords() {
 
 		$keywords = '';
-		if(!empty($this->_view->viewVars['keywords'])) {
-			$keywords = $this->_view->viewVars['keywords'];
+		if(!empty($this->_View->viewVars['keywords'])) {
+			$keywords = $this->_View->viewVars['keywords'];
 		}elseif(!empty($this->siteConfig['keyword'])) {
 			$keywords = $this->siteConfig['keyword'];
 		}
@@ -285,8 +285,8 @@ class BcBaserHelper extends AppHelper {
 	public function getDescription() {
 
 		$description = '';
-		if(!empty($this->_view->viewVars['description'])) {
-			$description = $this->_view->viewVars['description'];
+		if(!empty($this->_View->viewVars['description'])) {
+			$description = $this->_View->viewVars['description'];
 		}elseif(!empty($this->siteConfig['description'])) {
 			$description = $this->siteConfig['description'];
 		}
@@ -354,8 +354,8 @@ class BcBaserHelper extends AppHelper {
 		$crumbs = array();
 		if($this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
-				if($this->_view->viewVars['crumbs']){
-					$crumbs = $this->_view->viewVars['crumbs'];
+				if(!empty($this->_View->viewVars['crumbs'])){
+					$crumbs = $this->_View->viewVars['crumbs'];
 				}
 			}else {
 				if(is_array($this->_categoryTitle)){
@@ -384,12 +384,12 @@ class BcBaserHelper extends AppHelper {
 
 		$contentsTitle = '';
 		// トップページの場合は、タイトルをサイト名だけにする
-		if (!empty($this->_view->viewVars['contentsTitle'])) {
-			$contentsTitle = $this->_view->viewVars['contentsTitle'];
-		}elseif($this->_view->pageTitle) {
-			$contentsTitle = $this->_view->pageTitle;
+		if (!empty($this->_View->viewVars['contentsTitle'])) {
+			$contentsTitle = $this->_View->viewVars['contentsTitle'];
+		}elseif($this->_View->pageTitle) {
+			$contentsTitle = $this->_View->pageTitle;
 		}
-		if ($this->_view->name != 'CakeError' && !empty($contentsTitle)) {
+		if ($this->_View->name != 'CakeError' && !empty($contentsTitle)) {
 			return $contentsTitle;
 		}
 
@@ -552,13 +552,13 @@ class BcBaserHelper extends AppHelper {
 
 		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
 
-		if(!empty($this->_view->subDir) && $subDir) {
-			$name = $this->_view->subDir.DS.$name;
+		if(!empty($this->_View->subDir) && $subDir) {
+			$name = $this->_View->subDir.DS.$name;
 			$params['subDir'] = true;
 		} else {
 			$params['subDir'] = false;
 		}
-		$out = $this->_view->element($name, $params, $loadHelpers);
+		$out = $this->_View->element($name, $params, $loadHelpers);
 
 		$this->executeHook('afterElement', $name, $out);
 
@@ -678,7 +678,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー設定
-		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_View->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
 				$publishTheme = $this->BcHtml->themeWeb;
 				$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
@@ -687,7 +687,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		echo join("\n\t", $this->_view->__scripts);
+		echo join("\n\t", $this->_View->getScripts());
 
 	}
 /**
@@ -699,7 +699,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function func() {
 
-		$currentPrefix = $this->_view->viewVars['currentPrefix'];
+		$currentPrefix = $this->_View->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
 		if(isset($authPrefixes['toolbar'])) {
@@ -707,22 +707,22 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー表示
-		if(!$this->_view->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_View->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
 				// 2012/09/30 ryuring
 				// テーマフォルダに toolbar.php を配置しても読み込まれなかったのでコメントアウト
 				// 現在のところ特に影響はなさそう。
 				
-				//$publishTheme = $this->_view->theme;
-				//$this->_view->theme = $this->siteConfig['admin_theme'];
+				//$publishTheme = $this->_View->theme;
+				//$this->_View->theme = $this->siteConfig['admin_theme'];
 				$this->element('admin/toolbar');
-				//$this->_view->theme = $publishTheme;
+				//$this->_View->theme = $publishTheme;
 			}
 		}
 
 		// デバッグ
-		if (isset($this->_view->viewVars['cakeDebug']) && Configure::read('debug') > 2) {
-			$params = array('controller' => $this->_view->viewVars['cakeDebug']);
+		if (isset($this->_View->viewVars['cakeDebug']) && Configure::read('debug') > 2) {
+			$params = array('controller' => $this->_View->viewVars['cakeDebug']);
 			echo View::element('dump', $params, false);
 		}
 
@@ -737,7 +737,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function setSubMenus($submenus) {
 
-		$this->_view->set('subMenuElements',$submenus);
+		$this->_View->set('subMenuElements',$submenus);
 
 	}
 /**
@@ -820,7 +820,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function js($url, $inline = true) {
 
-		$ret = $this->Javascript->link($url, $inline);
+		$ret = $this->BcHtml->script($url, array('inline' => $inline));
 		if($inline) {
 			echo $ret;
 		}
@@ -922,8 +922,8 @@ class BcBaserHelper extends AppHelper {
 		$enabled = true;
 
 		// 認証チェック
-		if(isset($this->Permission) && !empty($this->_view->viewVars['user']['user_group_id'])) {
-			$userGroupId = $this->_view->viewVars['user']['user_group_id'];
+		if(isset($this->Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
+			$userGroupId = $this->_View->viewVars['user']['user_group_id'];
 			if(!$this->Permission->check($_url,$userGroupId)) {
 				$enabled = false;
 			}
@@ -990,7 +990,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function isSSL() {
 
-		if(!empty($this->_view->viewVars['isSSL'])){
+		if(!empty($this->_View->viewVars['isSSL'])){
 			return true;
 		} else {
 			return false;
@@ -1040,8 +1040,8 @@ class BcBaserHelper extends AppHelper {
  */
 	public function setPageEditLink($id) {
 
-		if(empty($this->request->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			$this->_view->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
+		if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+			$this->_View->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
 
 	}
@@ -1054,7 +1054,7 @@ class BcBaserHelper extends AppHelper {
 	public function editLink() {
 
 		if($this->existsEditLink()) {
-			$this->link('編集する', $this->_view->viewVars['editLink'], array('class' => 'tool-menu'));
+			$this->link('編集する', $this->_View->viewVars['editLink'], array('class' => 'tool-menu'));
 		}
 
 	}
@@ -1066,7 +1066,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function existsEditLink() {
 
-		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
+		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_View->viewVars['editLink']));
 
 	}
 /**
@@ -1078,7 +1078,7 @@ class BcBaserHelper extends AppHelper {
 	public function publishLink() {
 
 		if($this->existsPublishLink()) {
-			$this->link('公開ページ', $this->_view->viewVars['publishLink'], array('class' => 'tool-menu'));
+			$this->link('公開ページ', $this->_View->viewVars['publishLink'], array('class' => 'tool-menu'));
 		}
 
 	}
@@ -1090,7 +1090,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function existsPublishLink() {
 
-		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['publishLink']));
+		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_View->viewVars['publishLink']));
 
 	}
 /**
@@ -1101,7 +1101,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function checkUpdate() {
 
-		$baserVerpoint = verpoint($this->_view->viewVars['baserVersion']);
+		$baserVerpoint = verpoint($this->_View->viewVars['baserVersion']);
 		if(isset($this->siteConfig['version'])) {
 			$siteVerpoint = verpoint($this->siteConfig['version']);
 		}else {
@@ -1254,7 +1254,7 @@ class BcBaserHelper extends AppHelper {
 
 		}
 
-		if ($this->_view->name == 'CakeError') {
+		if ($this->_View->name == 'CakeError') {
 
 			$contentsName = $error;
 
@@ -1439,7 +1439,7 @@ class BcBaserHelper extends AppHelper {
  */
 	protected function _initPluginBasers(){
 
-		$view = $this->_view;
+		$view = $this->_View;
 		$plugins = Configure::read('BcStatus.enablePlugins');
 
 		if(!$plugins) {
@@ -1597,8 +1597,8 @@ END_FLASH;
  * @manual
  */
 	public function isAdminUser($id = null) {
-		if(!$id && !empty($this->_view->viewVars['user']['user_group_id'])) {
-			$id = $this->_view->viewVars['user']['user_group_id'];
+		if(!$id && !empty($this->_View->viewVars['user']['user_group_id'])) {
+			$id = $this->_View->viewVars['user']['user_group_id'];
 		}
 		if($id == 1) {
 			return true;
@@ -1659,7 +1659,7 @@ END_FLASH;
  */
 	public function page($id, $params = array(), $options = array()) {
 
-		if(isset($this->_view->viewVars['pageRecursive']) && !$this->_view->viewVars['pageRecursive']) {
+		if(isset($this->_View->viewVars['pageRecursive']) && !$this->_View->viewVars['pageRecursive']) {
 			return;
 		}
 
@@ -1671,14 +1671,14 @@ END_FLASH;
 		
 		extract($options);
 
-		$this->_view->viewVars['pageRecursive'] = $recursive;
+		$this->_View->viewVars['pageRecursive'] = $recursive;
 		
 		// 現在のページの情報を退避
 		$editLink = null;
 		$description = $this->getDescription();
 		$title = $this->getContentsTitle();
-		if(!empty($this->_view->viewVars['editLink'])) {
-			$editLink = $this->_view->viewVars['editLink'];
+		if(!empty($this->_View->viewVars['editLink'])) {
+			$editLink = $this->_View->viewVars['editLink'];
 		}
 		
 		// urlを取得
@@ -1700,7 +1700,7 @@ END_FLASH;
 			$this->setDescription($description);
 			$this->setTitle($title);
 			if($editLink) {
-				$this->_view->viewVars['editLink'] = $editLink;
+				$this->_View->viewVars['editLink'] = $editLink;
 			}
 		}
 
@@ -1714,7 +1714,7 @@ END_FLASH;
 	public function widgetArea($no = null) {
 		
 		if(!$no) {
-			$no = $this->_view->viewVars['widgetArea'];
+			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if($no) {
 			$this->element('widget_area', array('no' => $no));

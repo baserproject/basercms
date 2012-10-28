@@ -20,13 +20,27 @@
 /**
  * Include files
  */
-App::import("Helper","Xml");
 /**
  * XMLヘルパー拡張
  *
  * @package baser.views.helpers
  */
-class BcXmlHelper extends XmlHelper {
+class BcXmlHelper extends AppHelper {
+/**
+ * XML document version
+ *
+ * @var string
+ * @access private
+ */
+	private $version = '1.0';
+
+/**
+ * XML document encoding
+ *
+ * @var string
+ * @access private
+ */
+	private $encoding = 'UTF-8';
 /**
  * XML宣言を生成
  * IE6以外の場合のみ生成する
@@ -38,7 +52,32 @@ class BcXmlHelper extends XmlHelper {
 
 		$ua = @$_SERVER['HTTP_USER_AGENT'];
 		if (!(ereg("Windows",$ua) && ereg("MSIE",$ua)) || ereg("MSIE 7",$ua)) {
-			return parent::header($attrib);
+			
+			if (Configure::read('App.encoding') !== null) {
+				$this->encoding = Configure::read('App.encoding');
+			}
+
+			if (is_array($attrib)) {
+				$attrib = array_merge(array('encoding' => $this->encoding), $attrib);
+			}
+			if (is_string($attrib) && strpos($attrib, 'xml') !== 0) {
+				$attrib = 'xml ' . $attrib;
+			}
+
+			$header = 'xml';
+			if (is_string($attrib)) {
+				$header = $attrib;
+			} else {
+
+				$attrib = array_merge(array('version' => $this->version, 'encoding' => $this->encoding), $attrib);
+				foreach ($attrib as $key=>$val) {
+					$header .= ' ' . $key . '="' . $val . '"';
+				}
+			}
+			$out = '<' . '?' . $header . ' ?' . '>';
+
+			return $out;
+		
 		}
 
 	}
