@@ -30,8 +30,10 @@ if(!empty($currentAuthPrefix['loginAction'])) {
 }
 if(!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = $currentAuthPrefix['name'];
-} else {
+} elseif(isset($this->BcBaser->siteConfig['name'])) {
 	$authName = $this->BcBaser->siteConfig['name'];
+} else {
+	$authName = '';
 }
 ?>
 <script type="text/javascript">
@@ -82,7 +84,7 @@ $(function(){
 <?php if($this->BcBaser->existsPublishLink()): ?>
 				<li><?php $this->BcBaser->publishLink() ?></li>
 <?php endif ?>
-<?php if($this->request->params['url']['url'] != $loginUrl): ?>
+<?php if($this->request->url != $loginUrl): ?>
 	<?php if(Configure::read('debug') == -1): ?>
 				<li>&nbsp;&nbsp;<span id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">インストールモード</span>&nbsp;&nbsp;</li>
 	<?php elseif(Configure::read('debug') > 0): ?>

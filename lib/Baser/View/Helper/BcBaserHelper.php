@@ -669,7 +669,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function scripts() {
 
-		$currentPrefix = $this->_view->viewVars['currentPrefix'];
+		$currentPrefix = $this->_View->viewVars['currentPrefix'];
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
 
@@ -1193,7 +1193,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		$url = split('/', h($this->request->params['url']['url']));
+		$url = split('/', h($this->request->url));
 
 		if(Configure::read('BcRequest.agent')) {
 			array_shift($url);
@@ -1336,7 +1336,7 @@ class BcBaserHelper extends AppHelper {
 		} else {
 			$options = $_options;
 		}
-		$this->BcHtml->_crumbs[] = array($name, $link, $options);
+		$this->BcHtml->addCrumb($name, $link, $options);
 
 	}
 /**
