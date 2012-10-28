@@ -35,7 +35,7 @@ class BaserAppView extends View {
 	protected $_passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'
+			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir', 'theme'
 	);
 /**
  * Return all possible paths to find view files in order

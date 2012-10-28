@@ -92,7 +92,7 @@
  *
  * And uncomment the App.baseUrl below:
  */
-	Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
+	//Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
 
 /**
  * Uncomment the define below to use CakePHP prefix routes.

@@ -67,6 +67,7 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	public $uses = null;
+	public $theme = 'baseradmin';
 /**
  * データベースエラーハンドラ
  *
@@ -133,8 +134,6 @@ class InstallationsController extends AppController {
 			$this->request->webroot = DS;
 		}
 
-		$this->theme = null;
-
 		$this->Security->validatePost = false;
 
 	}
@@ -158,6 +157,7 @@ class InstallationsController extends AppController {
 	public function index() {
 
 		$this->pageTitle = 'baserCMSのインストール';
+		// TODO basercamp
 return;
 		// 一時ファイルを削除する（再インストール用）
 		if(is_writable(TMP)) {
