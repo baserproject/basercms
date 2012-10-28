@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-App::import('Core','DboMysql');
-class DboBcMysql extends DboMysql {
+App::uses('Mysql', 'Model/Datasource/Database');
+class DboBcMysql extends Mysql {
 /**
  * テーブル名のリネームステートメントを生成
  *

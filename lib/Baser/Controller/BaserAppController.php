@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('ConnectionManager', 'Model');
 App::import('View', 'AppView');
 App::import('Component','BcAuthConfigure');
 //App::import('Component', 'Emoji');
@@ -144,9 +145,9 @@ class BaserAppController extends Controller {
  * @return	void
  * @access	private
  */
-	public function __construct() {
+	public function __construct($request = null, $response = null) {
 
-		parent::__construct();
+		parent::__construct($request, $response);
 		
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');

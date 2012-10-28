@@ -27,47 +27,47 @@
 /**
  * Baserコントローラーパス
  */
-	define('BASER_CONTROLLERS',BASER.'controllers'.DS);
+	define('BASER_CONTROLLERS',BASER.'Controller'.DS);
 /**
  * Baserモデルパス
  */
-	define('BASER_MODELS',BASER.'models'.DS);
+	define('BASER_MODELS',BASER.'Model'.DS);
 /**
  * Baserビューパス
  */
-	define('BASER_VIEWS',BASER.'views'.DS);
+	define('BASER_VIEWS',BASER.'View'.DS);
 /**
  * BaserVendorsパス
  */
-	define('BASER_VENDORS',BASER.'vendors'.DS);
+	define('BASER_VENDORS',BASER.'Vendor'.DS);
 /**
  * Baserコンポーネント
  */
-	define('BASER_COMPONENTS',BASER_CONTROLLERS.'components'.DS);
+	define('BASER_COMPONENTS',BASER_CONTROLLERS.'Component'.DS);
 /**
  * Baserヘルパー
  */
-	define('BASER_HELPERS',BASER_VIEWS.'helpers'.DS);
+	define('BASER_HELPERS',BASER_VIEWS.'Helper'.DS);
 /**
  * Baserビヘイビア
  */
-	define('BASER_BEHAVIORS',BASER_MODELS.'behaviors'.DS);
+	define('BASER_BEHAVIORS',BASER_MODELS.'Behavior'.DS);
 /**
  * Baserデータソース
  */
-	define('BASER_DBO',BASER_MODELS.'datasources'.DS.'dbo'.DS);
+	define('BASER_DATABASE',BASER_MODELS.'Datasource'.DS.'Database'.DS);
 /**
  * Baserプラグイン
  */
-	define('BASER_PLUGINS',BASER.'plugins'.DS);
+	define('BASER_PLUGINS',BASER.'Plugin'.DS);
 /**
  * Baserコンフィグ
  */
-	define('BASER_CONFIGS', BASER.'config'.DS);
+	define('BASER_CONFIGS', BASER.'Config'.DS);
 /**
  * BaserLocale
  */
-	define('BASER_LOCALES',BASER.'locale'.DS);
+	define('BASER_LOCALES',BASER.'Locale'.DS);
 /**
  * Baserテーマ 
  */

@@ -25,7 +25,7 @@
 /**
  * Include files
  */
-App::import('Core', 'BaserAppController', array('search' => BASER_CONTROLLERS));
+App::uses('BaserAppController', 'Controller');
 /**
  * Controller 拡張クラス
  * 

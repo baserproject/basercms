@@ -17,6 +17,7 @@
  * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Helper', 'View');
 /**
  * Helper 拡張クラス
  *

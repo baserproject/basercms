@@ -98,8 +98,8 @@ class InstallationsController extends AppController {
 		
 		/* インストール状態判別 */
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
-			$db = ConnectionManager::getInstance();
-			if($db->config->baser['driver'] != '') {
+			$db = ConnectionManager::getDataSource('baser');
+			if($db->config['datasource'] != '') {
 				$installed = 'complete';
 			}else {
 				$installed = 'half';
