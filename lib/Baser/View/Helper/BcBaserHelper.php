@@ -640,9 +640,9 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function content() {
-
-		echo $this->_content;
-
+            echo $this->fetch('content');
+            //basercamp TODO 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
+//		echo $this->_content;
 	}
 /**
  * セッションメッセージを出力する
