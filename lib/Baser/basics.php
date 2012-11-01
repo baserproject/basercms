@@ -410,7 +410,7 @@
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
 			require_once APP . 'Config' . DS.'database.php';
 			$dbConfig = new DATABASE_CONFIG();
-			if(!empty($dbConfig->{$name}['driver'])){
+			if(!empty($dbConfig->{$name}['datasource'])){
 				return $dbConfig->{$name};
 			}
 		}
