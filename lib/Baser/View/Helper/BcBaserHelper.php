@@ -34,7 +34,7 @@ class BcBaserHelper extends AppHelper {
  * @var View
  * @access protected
  */
-	protected $_view = null;
+	protected $_View = null;
 /**
  * サイト基本設定
  *
@@ -640,7 +640,7 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function content() {
-            echo $this->fetch('content');
+            echo $this->_View->fetch('content');
             //basercamp TODO 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
 //		echo $this->_content;
 	}
