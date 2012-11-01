@@ -881,7 +881,7 @@ DOC_END;
 		}
 
 		if (!empty($tag) || isset($template)) {
-			$this->__secure();
+			$this->_secure(true);// basercamp TODO 引数確認
 			$select[] = sprintf($tag, $attributes['name'], $this->_parseAttributes(
 				$attributes, array('name', 'value'))
 			);
