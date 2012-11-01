@@ -125,9 +125,14 @@ class BcManagerComponent extends Component {
 		if($name == 'plugin') {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		}
-		
+
+		// basercamp TODO エラー時に step1(index)にもどってしまう。
+		if(! $datasource = $this->getDatasourceName($config['driver'])) {
+			return ConnectionManager::getDataSource($name);
+		}
+
 		$result =  ConnectionManager::create($name ,array(
-				'driver' => $config['driver'],
+				'datasource' => $datasource,
 				'persistent' => false,
 				'host' => $config['host'],
 				'port' => $config['port'],
@@ -145,6 +150,34 @@ class BcManagerComponent extends Component {
 		}
 
 	}
+
+/**
+ * datasource名を取得
+ *
+ * @param string driver name.postgre.mysql.etc.
+ * @return string
+ * @access public
+ */
+	public function getDatasourceName($driver=null) {
+
+		$name = false ;
+		switch($driver){
+			case 'bc_postgres' :
+				$name = 'Database/BcPostgres';
+				break ;
+			case 'bc_mysql' :
+				$name = 'Database/BcMysql';
+				break ;
+			case 'bc_sqlite' :
+			case 'bc_sqlite3' :
+				$name = 'Database/BcSqlite';
+				break ;
+			default :
+
+		}
+		return $name ;
+	}
+
 /**
  * 実際の設定用のDB名を取得する
  *
@@ -734,6 +767,9 @@ class BcManagerComponent extends Component {
 	public function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		
 		if($dbConfig) {
+			if(! isset($dbConfig['datasource'])){
+				$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['driver']);
+			}
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
 			if(!$db) {
 				$db =& ConnectionManager::getDataSource($dbConfigKeyName);
