@@ -167,7 +167,6 @@ class InstallationsController extends AppController {
 				foreach($files[0] as $file) {
 					if(basename($file) != 'logs'){
 						$folder->delete($file);
-						echo $file;
 					}
 				}
 			}
