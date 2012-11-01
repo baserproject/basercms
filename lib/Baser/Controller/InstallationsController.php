@@ -99,8 +99,9 @@ class InstallationsController extends AppController {
 		
 		/* インストール状態判別 */
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
-			$db = ConnectionManager::getDataSource('baser');
-			if($db->config['datasource'] != '') {
+			ConnectionManager::sourceList();
+			$db = ConnectionManager::$config ;
+			if($db->baser['datasource'] != '') {
 				$installed = 'complete';
 			}else {
 				$installed = 'half';
@@ -134,6 +135,7 @@ class InstallationsController extends AppController {
 			$this->request->webroot = DS;
 		}
 
+		$this->Security->csrfCheck = false;
 		$this->Security->validatePost = false;
 
 	}
@@ -155,28 +157,37 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function index() {
-
 		$this->pageTitle = 'baserCMSのインストール';
-		// TODO basercamp
-return;
+
 		// 一時ファイルを削除する（再インストール用）
 		if(is_writable(TMP)) {
 			$folder = new Folder(TMP);
 			$files = $folder->read(true, true, true);
-			if(isset($files[0])) {
+			if(isset($files[0])) { // check directory
 				foreach($files[0] as $file) {
-					$folder->delete($file);
+					if(basename($file) != 'logs'){
+						$folder->delete($file);
+						echo $file;
+					}
 				}
 			}
-			if(isset($files[1])) {
+			if(isset($files[1])) { // check file
 				foreach($files[1] as $file) {
 					if(basename($file) != 'empty') {
 						$folder->delete($file);
 					}
 				}
 			}
+			//make cache dir and logs dir
+			if(! is_dir(TMP . 'cache')) {
+				$folder->create(TMP . 'cache', 0777);
+			}
+			if(! is_dir(TMP . 'logs')) {
+				$folder->create(TMP . 'logs', 0777);
+				touch(TMP . 'logs/error.log');
+				chmod(TMP . 'logs/error.log', 0777);
+			}
 		}
-
 	}
 /**
  * Step 2: 必須条件チェック
@@ -201,7 +212,6 @@ return;
 		
 		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
-
 	}
 /**
  * Step 3: データベースの接続設定
