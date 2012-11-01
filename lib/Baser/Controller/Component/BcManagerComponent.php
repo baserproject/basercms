@@ -360,7 +360,7 @@ class BcManagerComponent extends Component {
 			$file->write("//\n");
 			$file->write("class DATABASE_CONFIG {\n");
 			$file->write('public $baser = array('."\n");
-			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$driver."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -373,7 +373,7 @@ class BcManagerComponent extends Component {
 			$file->write(");\n");
 
 			$file->write('public $plugin = array('."\n");
-			$file->write("\t'driver' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$driver."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -1078,23 +1078,23 @@ class BcManagerComponent extends Component {
 		);
 		
 		if(!$status['coreFileWritable']) {
-			chmod(APP . 'Config' . DS.'core.php', 0666);
+			@chmod(APP . 'Config' . DS.'core.php', 0666);
 			$status['coreFileWritable'] = is_writable(APP . 'Config' . DS.'core.php');
 		}
 		if(!$status['configDirWritable']) {
-			chmod(APP . 'Config' . DS, 0777);
+			@chmod(APP . 'Config' . DS, 0777);
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
 		}
 		if(!$status['themeDirWritable']) {
-			chmod(WWW_ROOT.'themed', 0777);
+			@chmod(WWW_ROOT.'themed', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
 		}
 		if(!$status['tmpDirWritable']) {
-			chmod(TMP, 0777);
+			@chmod(TMP, 0777);
 			$status['tmpDirWritable'] = is_writable(TMP);
 		}
 		if(!$status['dbDirWritable']) {
-			chmod(APP.'db', 0777);
+			@chmod(APP.'db', 0777);
 			$status['dbDirWritable'] = is_writable(APP.'db');
 		}
 		
