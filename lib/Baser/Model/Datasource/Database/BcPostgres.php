@@ -17,7 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-App::import('Core','Postgres');
+
+App::uses('Postgres', 'Model/Datasource/Database');
 class BcPostgres extends Postgres {
 /**
  * Returns an array of the fields in given table name.
@@ -128,7 +129,7 @@ class BcPostgres extends Postgres {
 					// <<<
 				}
 			}
-			$this->__cacheDescription($table, $fields);
+			$this->_cacheDescription($table, $fields);
 		}
 		if (isset($model->sequence)) {
 			$this->_sequenceMap[$table][$model->primaryKey] = $model->sequence;
@@ -395,7 +396,7 @@ class BcPostgres extends Postgres {
 		if (isset($this->__descriptions[$table])) {
 			return $this->__descriptions[$table];
 		}
-		$cache = $this->__cacheDescription($table);
+		$cache = $this->_cacheDescription($table);
 
 		if ($cache !== null) {
 			$this->__descriptions[$table] =& $cache;
