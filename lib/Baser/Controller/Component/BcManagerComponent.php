@@ -305,7 +305,7 @@ class BcManagerComponent extends Component {
  */
 	public function setAdminEmail($email) {
 		
-		App::import('Model','SiteConfig');
+		App::uses('SiteConfig', 'Model');
 		$data['SiteConfig']['email'] = $email;
 		$SiteConfig = new SiteConfig();
 		return $SiteConfig->saveKeyValue($data);
