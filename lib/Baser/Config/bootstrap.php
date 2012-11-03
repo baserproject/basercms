@@ -42,6 +42,7 @@
 		'Plugin'				=> array(BASER_PLUGINS),
 		'Vendor'					=> array(BASER_VENDORS),
 		'Locale'					=> array(BASER_LOCALES),
+		'Lib'					=> array(BASER_LIBS),
 	));
 	App::uses('AppModel', 'Model');
 	App::uses('BaserAppModel', 'Model');

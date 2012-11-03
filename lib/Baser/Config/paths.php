@@ -74,6 +74,14 @@ define('BASER_CONFIGS', BASER . 'Config' . DS);
  */
 define('BASER_LOCALES', BASER . 'Locale' . DS);
 /**
+ * Baser TestSuite
+ */
+define('BASER_LIBS', BASER . 'Lib' . DS);
+/**
+ * Baser TestCase
+ */
+define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
+/**
  * Baserテーマ 
  */
 if (is_dir(WWW_ROOT . 'themed')) {
