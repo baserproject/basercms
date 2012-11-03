@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('BaserPluginAppController', 'Controller');
 /**
  * ブログコントローラー基底クラス
  *
@@ -111,12 +112,11 @@ class BlogAppController extends BaserPluginAppController {
 		
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if(!$user || !$userModel) {
+		if(!$user ) {
 			return;
 		}
 		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
-				$user[$userModel]['user_group_id'], 
+				$user['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);

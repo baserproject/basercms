@@ -21,8 +21,8 @@
  * Include files
  */
 App::uses('ConnectionManager', 'Model');
-App::import('View', 'AppView');
-App::import('Component','BcAuthConfigure');
+App::uses('AppView', 'View');
+App::uses('BcAuthConfigure', 'Component');
 //App::import('Component', 'Emoji');
 /**
  * Controller 拡張クラス

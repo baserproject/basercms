@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('AppController', 'Controller');
 /**
  * プラグイン拡張クラス
  * プラグインのコントローラーより継承して利用する

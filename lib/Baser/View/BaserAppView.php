@@ -163,7 +163,7 @@ class BaserAppView extends View {
 			}
 		}
 
-		$paths = $this->_paths(Inflector::underscore($this->plugin));
+		$paths = $this->_paths(Inflector::classify($this->plugin));
 		$exts = array($this->ext, '.ctp', '.thtml');
 		
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring

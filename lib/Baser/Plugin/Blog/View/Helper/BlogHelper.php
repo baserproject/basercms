@@ -171,10 +171,9 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostLink($post, $title, $options = array()) {
-
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
-		return $this->BcBaser->getLink($title, $url, $options);
+		return $this->getLink($title, $url, $options);
 
 	}
 /**
@@ -224,6 +223,9 @@ class BlogHelper extends AppHelper {
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
 		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
+			if(!isset($this->Html)){
+				$this->Html = new HtmlHelper();
+			}
 			$out .= '<p class="more">'.$this->Html->link($moreLink, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
 		}
 		return $out;
@@ -247,33 +249,31 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return string
  */
-   function getCategory($post, $options = array()) {
+	function getCategory($post, $options = array()) {
 
-       if(!empty($post['BlogCategory']['name'])) {
+		if(!empty($post['BlogCategory']['name'])) {
 
-           $options = am(array('link' => true), $options);
-           $link = false;
+			$options = am(array('link' => true), $options);
+			$link = false;
 
-           if($options['link']) {
-               $link = true;
-           }
+			if($options['link']) {
+				$link = true;
+			}
 
-           unset($options['link']);
+			unset($options['link']);
 
-           if($link) {
-               if(!isset($this->Html)){
-                   $this->Html = new HtmlHelper();
-               }
-               return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id'], $options),$options,null,false);
-           } else {
-               return $post['BlogCategory']['title'];
-           }
-
-       }else {
-           return '';
-       }
-
-   }
+			if($link) {
+				if(!isset($this->Html)){
+					$this->Html = new HtmlHelper();
+				}
+				return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id'], $options),$options,null,false);
+			} else {
+				return $post['BlogCategory']['title'];
+			}
+		} else {
+			return '';
+		}
+	}
 /**
  * タグを出力する
  *
@@ -371,9 +371,10 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostDate($post,$format = 'Y/m/d') {
-
+		if(!isset($this->BcTime)){
+			$this->BcTime = new BcTimeHelper();
+		}
 		return $this->BcTime->format($format,$post['BlogPost']['posts_date']);
-
 	}
 /**
  * 記事の投稿者を出力する

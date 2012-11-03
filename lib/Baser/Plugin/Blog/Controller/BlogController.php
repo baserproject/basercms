@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('BlogAppController', 'Blog.Controller');
 /**
  * ブログ記事コントローラー
  *
