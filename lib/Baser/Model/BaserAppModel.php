@@ -21,6 +21,7 @@
  * Include files
  */
 App::uses('Sanitize', 'Utility');
+App::uses('Model', 'Model');
 /**
  * Model 拡張クラス
  *
@@ -1401,9 +1402,12 @@ class BaserAppModel extends Model {
 		$query['order'] = array($query['order']);
 
 		if ($query['callbacks'] === true || $query['callbacks'] === 'before') {
+			// Behaviors->trigger は無くなったので、とりあえず、nullをかえすようにする。 basercamp TODO
+			$return = false ;
+			/*
 			$return = $this->Behaviors->trigger($this, 'beforeFind', array($query), array(
 				'break' => true, 'breakOn' => false, 'modParams' => true
-			));
+			));*/
 			$query = (is_array($return)) ? $return : $query;
 
 			if ($return === false) {
