@@ -39,7 +39,7 @@ class BcAllTest extends PHPUnit_Framework_TestSuite {
 //		$suite->addTestFile($path . 'BcAllDatabaseTest.php');
 //		$suite->addTestFile($path . 'BcAllErrorTest.php');
 //		$suite->addTestFile($path . 'BcAllEventTest.php');
-//		$suite->addTestFile($path . 'BcAllHelpersTest.php');
+		$suite->addTestFile($path . 'BcAllHelpersTest.php');
 //		$suite->addTestFile($path . 'BcAllLogTest.php');
 //		$suite->addTestFile($path . 'BcAllRoutingTest.php');
 //		$suite->addTestFile($path . 'BcAllNetworkTest.php');
