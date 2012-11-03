@@ -91,7 +91,7 @@ class  BcAuthConfigureComponent extends Component {
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
 		//ユーザIDとパスワードのフィールドを指定
 		$auth->fields = array('username' => $username, 'password' => $password, 'serial' => $serial);
-		$auth->authorize = 'controller';
+		$auth->authorize = 'Controller';
 		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
 		$auth->userModel = $userModel;
 		
