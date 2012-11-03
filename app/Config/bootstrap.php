@@ -182,4 +182,4 @@ CakeLog::config('error', array(
 /**
  * baser の bootstrap を読み込む 
  */
-require CORE_PATH.DS.'Baser'.DS.'Config'.DS.'bootstrap.php';
+require CORE_PATH.'Baser'.DS.'Config'.DS.'bootstrap.php';
