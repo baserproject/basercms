@@ -12,4 +12,4 @@ app/View/pages/
 app/webroot/themed/*
 !app/webroot/themed/empty
 app/webroot/sitemap.xml
-/nbproject/private/
+nbproject/

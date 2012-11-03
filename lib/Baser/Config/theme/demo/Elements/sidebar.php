@@ -6,5 +6,5 @@
 
 
 <div id="beta">
-	<?php $bcBaser->widgetArea() ?>
+	<?php $this->bcBaser->widgetArea() ?>
 </div>
