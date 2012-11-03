@@ -22,6 +22,7 @@
  */
 App::uses('Sanitize', 'Utility');
 App::uses('Model', 'Model');
+
 /**
  * Model 拡張クラス
  *
@@ -58,6 +59,18 @@ class BaserAppModel extends Model {
  * @access public
  */
 	public $actsAs = array('BcPluginHook');
+
+/**
+ * List of valid finder method options, supplied as the first parameter to find().
+ * CakePHP2.x では継承元のmodel.phpから削除されているので、こちらへ移植 basercamp
+ * TODO basrcamp  find method をマージ後併せて削除すること
+ * @var array
+ */
+	protected $_findMethods = array(
+		'all' => true, 'first' => true, 'count' => true,
+		'neighbors' => true, 'list' => true, 'threaded' => true
+	);
+
 /**
  * コンストラクタ
  *
@@ -1365,7 +1378,6 @@ class BaserAppModel extends Model {
  * @access public
  */
 	public function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
-		
 		if (!is_string($conditions) || (is_string($conditions) && !array_key_exists($conditions, $this->_findMethods))) {
 			$type = 'first';
 			$query = array_merge(compact('conditions', 'fields', 'order', 'recursive'), array('limit' => 1));
