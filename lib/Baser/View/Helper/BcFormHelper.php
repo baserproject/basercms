@@ -1021,7 +1021,7 @@ DOC_END;
 		// >>> ADD
 		if(!empty($options['multiple'])){
 			$secure = false;
-			$this->__secure();
+			$this->_secure();
 		}
 		// <<<
 
@@ -1031,7 +1031,7 @@ DOC_END;
 		$model = $this->model();
 
 		if ($fieldName !== '_method' && $model !== '_Token' && $secure) {
-			$this->__secure(null, '' . $options['value']);
+			$this->_secure(null, '' . $options['value']);
 		}
 
 		// CUSTOMIZE 2010/07/24 ryuring
