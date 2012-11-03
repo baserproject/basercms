@@ -1357,8 +1357,8 @@ class BaserAppController extends Controller {
 		if(!$user || !$userModel) {
 			return false;
 		}
-		if(@$this->siteConfigs['root_owner_id'] == $user[$userModel]['user_group_id'] ||
-				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == 1) {
+		if(@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
+				!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == 1) {
 			return true;
 		} else {
 			return false;

@@ -127,7 +127,7 @@ class BlogCategory extends BlogAppModel {
 					}
 				}
 
-				$parents = $this->generatetreelist($conditions);
+				$parents = $this->generateTreeList($conditions);
 				$controlSources['parent_id'] = array();
 				foreach($parents as $key => $parent) {
 					if(preg_match("/^([_]+)/i",$parent,$matches)) {

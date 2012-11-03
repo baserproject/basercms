@@ -123,7 +123,7 @@ class PageCategoriesController extends AppController {
 		
 		$datas = array();
 		if($conditions) {
-			$_dbDatas = $this->PageCategory->generatetreelist($conditions);
+			$_dbDatas = $this->PageCategory->generateTreeList($conditions);
 			$datas = array();
 			foreach($_dbDatas as $key => $dbData) {
 				$category = $this->PageCategory->find('first', array('conditions' => array('PageCategory.id'=>$key), 'recursive' => -1));
