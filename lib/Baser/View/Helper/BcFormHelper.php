@@ -40,7 +40,7 @@ class BcFormHelper extends FormHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Javascript', BC_CKEDITOR_HELPER);
+	public $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Js', BC_CKEDITOR_HELPER);
 /**
  * sizeCounter用の関数読み込み可否
  * 
@@ -503,7 +503,7 @@ $(function(){
    }
 });
 DOC_END;
-		$script = $this->Javascript->codeBlock($_script,array('inline'=>false));
+		$script = $this->Js->buffer($_script,array('inline'=>false));
 		return $dateTag.$timeTag.$hiddenTag;
 		
 	}
@@ -862,7 +862,7 @@ $(document).ready(function() {
     });
 });
 DOC_END;
-		$out .= $this->Javascript->codeBlock($script);
+		$out .= $this->Js->buffer($script);
 		return $out;
 		
 	}
@@ -1089,7 +1089,7 @@ function countSize() {
 DOC_END;
 				$this->sizeCounterFunctionLoaded = true;
 			}
-			$out = $out.$counter.$this->Javascript->codeBlock($script);
+			$out = $out.$counter.$this->Js->buffer($script);
 		}
 		
 		return $this->executeHook('afterFormInput', $fieldName, $out);
