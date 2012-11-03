@@ -1,67 +1,61 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
- * Short description for file.
+ * Dbo Source
  *
- * Long description for file
- *
- * PHP versions 5
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.cake.libs.model.datasources
+ * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
- * @version       $Revision$
- * @modifiedby    $LastChangedBy$
- * @lastmodified  $Date$
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-//App::import('Core', array('Set', 'String'));
+
 App::uses('DataSource', 'Model/Datasource');
 App::uses('String', 'Utility');
 App::uses('View', 'View');
+App::uses('Set', 'Utility');
+App::uses('String', 'Utility');
 
 /**
  * DboSource
+ *
  * Creates DBO-descendant objects from a given db connection configuration
  *
- * @package cake
- * @subpackage cake.cake.libs.model.datasources
+ * @package       Cake.Model.Datasource
  */
 class DboSource extends DataSource {
+
 /**
  * Description string for this Database Data Source.
  *
  * @var string
- * @access public
  */
 	public $description = "Database Data Source";
+
 /**
  * index definition, standard cake, primary, index, unique
  *
  * @var array
- * @access public
  */
 	public $index = array('PRI' => 'primary', 'MUL' => 'index', 'UNI' => 'unique');
+
 /**
  * Database keyword used to assign aliases to identifiers.
  *
  * @var string
- * @access public
  */
 	public $alias = 'AS ';
 /**
  * Caches fields quoted in DboSource::name()
  *
  * @var array
- * @access public
  */
 	public $fieldCache = array();
 /**
@@ -246,6 +240,104 @@ class DboSource extends DataSource {
 		return $this->_result;
 		
 	}
+
+/**
+ * Executes given SQL statement.
+ *
+ * @param string $sql SQL statement
+ * @param array $params list of params to be bound to query
+ * @param array $prepareOptions Options to be used in the prepare statement
+ * @return mixed PDOStatement if query executes with no problem, true as the result of a successful, false on error
+ * query returning no rows, such as a CREATE statement, false otherwise
+ * @throws PDOException
+ */
+	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
+		$sql = trim($sql);
+		if (preg_match('/^(?:CREATE|ALTER|DROP)\s+(?:TABLE|INDEX)/i', $sql)) {
+			$statements = array_filter(explode(';', $sql));
+			if (count($statements) > 1) {
+				$result = array_map(array($this, '_execute'), $statements);
+				return array_search(false, $result) === false;
+			}
+		}
+
+		try {
+			$query = $this->_connection->prepare($sql, $prepareOptions);
+			$query->setFetchMode(PDO::FETCH_LAZY);
+			if (!$query->execute($params)) {
+				$this->_results = $query;
+				$query->closeCursor();
+				return false;
+			}
+			if (!$query->columnCount()) {
+				$query->closeCursor();
+				if (!$query->rowCount()) {
+					return true;
+				}
+			}
+			return $query;
+		} catch (PDOException $e) {
+			if (isset($query->queryString)) {
+				$e->queryString = $query->queryString;
+			} else {
+				$e->queryString = $sql;
+			}
+			throw $e;
+		}
+	}
+
+/**
+ * Returns a formatted error message from previous database operation.
+ *
+ * @param PDOStatement $query the query to extract the error from if any
+ * @return string Error message with error number
+ */
+	public function lastError(PDOStatement $query = null) {
+		if ($query) {
+			$error = $query->errorInfo();
+		} else {
+			$error = $this->_connection->errorInfo();
+		}
+		if (empty($error[2])) {
+			return null;
+		}
+		return $error[1] . ': ' . $error[2];
+	}
+
+/**
+ * Read additional table parameters
+ *
+ * @param string $name
+ * @return array
+ */
+	public function readTableParameters($name) {
+		$parameters = array();
+		if (method_exists($this, 'listDetailedSources')) {
+			$currentTableDetails = $this->listDetailedSources($name);
+			foreach ($this->tableParameters as $paramName => $parameter) {
+				if (!empty($parameter['column']) && !empty($currentTableDetails[$parameter['column']])) {
+					$parameters[$paramName] = $currentTableDetails[$parameter['column']];
+				}
+			}
+		}
+		return $parameters;
+	}
+
+/**
+ * Disconnects from database.
+ *
+ * @return boolean True if the database could be disconnected, else false
+ */
+	public function disconnect() {
+		if ($this->_result instanceof PDOStatement) {
+			$this->_result->closeCursor();
+		}
+		unset($this->_connection);
+		$this->connected = false;
+		return true;
+	}
+
+
 /**
  * DataSource Query abstraction
  *
@@ -3332,17 +3424,42 @@ class DboSource extends DataSource {
 				if($_head[$key]=='created' && !$value){
 					$value = date('Y-m-d H:i:s');
 				}
-				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
+				@$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
+			}
+			// basercamp TODO 一旦、IDとそのフィールドを削除。PostgreSQL専用
+			// key value に入れ直して、型が合わないところを整形
+			$i = 0 ;
+			$newFields = array();
+			$newValues = array();
+			foreach($head as $val){
+//				echo $val ."<br>\n";
+				switch(str_replace('"', '', $val)){
+					case 'id' :
+					case 'modified' :
+						break ;
+					default :
+						$newFields[] = $val ;
+						if( $values[$i] == "''" ){
+							$newValues[] = 'NULL';
+						} else {
+							$newValues[] = $values[$i];
+						}
+				}
+				++$i;
 			}
 			$query = array(
 				'table' => $this->name($fullTableName),
-				'fields' => implode(', ', $head) ,
-				'values' => implode(', ', $values)
+				'fields' => implode(', ', $newFields) ,
+				'values' => implode(', ', $newValues)
+//				'fields' => implode(', ', $head) ,
+//				'values' => implode(', ', $values)
 			);
 			$sql = $this->renderStatement('create', $query);
+			//echo $sql . "<br>\n";
 			if (!$this->execute($sql)) {
 				return false;
 			}
+			unset($newFields, $newValues);
 
 		}
 		fclose($fp);
@@ -3504,4 +3621,3 @@ class DboSource extends DataSource {
 	}
 // <<<
 }
-?>
