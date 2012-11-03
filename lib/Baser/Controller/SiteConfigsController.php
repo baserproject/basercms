@@ -244,7 +244,9 @@ class SiteConfigsController extends AppController {
 		if(Configure::read('App.baseUrl')){
 			$smartUrl = 'OFF';
 		}
-		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
+
+		list($type, $name) = explode('/', $db->config['datasource'], 2);
+		$driver = preg_replace('/^bc/', '', strtolower($name));
 		$this->set('driver',$drivers[$driver]);
 		$this->set('smartUrl',$smartUrl);
 		$this->set('baserVersion',$this->siteConfigs['version']);

@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'layouts'.DS.'empty'.$this->ext;
+include BASER_VIEWS.'Layouts'.DS.'empty'.$this->ext;
 ?>
