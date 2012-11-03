@@ -84,8 +84,8 @@ class BaserAppModel extends Model {
 			// DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
 			// Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
 			$db = ConnectionManager::getDataSource('baser');
-			if(isset($db->config['driver'])) {
-				if($db->config['driver'] != '') {
+			if(isset($db->config['datasource'])) {
+				if($db->config['datasource'] != '') {
 					parent::__construct($id, $table, $ds);
 				}elseif($db->config['login']=='dummy' &&
 						$db->config['password']=='dummy' &&
