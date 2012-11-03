@@ -17,13 +17,15 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * /
+ */
+App::uses('Component', 'Controller');
 /**
  * 認証設定コンポーネント
  *
  * @package baser.controllers.components
  */
-class  BcAuthConfigureComponent extends Object {
+
+class  BcAuthConfigureComponent extends Component {
 /**
  * コントローラー
  * 

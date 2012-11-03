@@ -87,7 +87,8 @@
  * 認証プレフィックス設定
  * ※ CSVは非対応
  */
-	$adminPrefix = Configure::read('Routing.admin');
+	$prefixes = Configure::read('Routing.prefixes');
+	$adminPrefix = $prefixes[0];
 	$config['BcAuthPrefix'] = array(
 		// 管理画面
 		'admin' => array(
@@ -101,7 +102,10 @@
 			'loginTitle'	=> '管理システムログイン',
 			// ログインページURL
 			'loginAction'	=> '/'.$adminPrefix.'/users/login',
-			'toolbar'		=> true
+			// ツールバー利用
+			'toolbar'		=> true,
+			// モデル
+			'userModel'		=> 'User'
 		),
 		// フロント（例）
 		/*'front' => array(

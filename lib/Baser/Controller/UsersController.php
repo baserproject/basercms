@@ -137,7 +137,7 @@ class UsersController extends AppController {
  */
 	public function admin_login() {
 		
-		if($this->BcAuth->loginAction != ('/'.$this->request->params['url']['url'])) {
+		if($this->BcAuth->loginAction != ('/'.$this->request->url)) {
 			$this->notFound();
 		}
 		
@@ -283,7 +283,7 @@ class UsersController extends AppController {
 
 		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
-		$this->Cookie->del('Auth.'.$userModel);
+		$this->Cookie->delete('Auth.'.$userModel);
 		$this->Session->setFlash('ログアウトしました');
 		if(empty($this->request->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));

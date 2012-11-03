@@ -248,7 +248,7 @@ class BaserAppController extends Controller {
 
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
-					($this->request->params['controller'] != 'maintenance' && $this->request->params['url']['url'] != 'maintenance') &&
+					($this->request->params['controller'] != 'maintenance' && $this->request->url != 'maintenance') &&
 					(!isset($this->request->params['prefix']) || $this->request->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
 			if(!empty($this->request->params['return']) && !empty($this->request->params['requested'])){
@@ -324,8 +324,7 @@ class BaserAppController extends Controller {
 			if(!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
-				$userModel = Configure::read('BcAuthPrefix.'.$this->request->params['prefix'].'.userModel');
-				if(!$Permission->check($this->request->params['url']['url'],$user[$this->BcAuth->userModel]['user_group_id'])) {
+				if(!$Permission->check($this->request->url,$user['user_group_id'])) {
 					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
 					$this->redirect($this->BcAuth->loginAction);
 				}
@@ -446,7 +445,7 @@ class BaserAppController extends Controller {
 
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
-			$url = $this->request->params['url']['url'];
+			$url = $this->request->url;
 			if(Configure::read('App.baseUrl')) {
 				$url = 'index.php/'.$url;
 			}

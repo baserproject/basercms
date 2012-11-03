@@ -125,6 +125,16 @@ if (BC_INSTALLED) {
 	checkTmpFolders();
 }
 /**
+ * プラグインをCake側で有効化
+ */
+if(BC_INSTALLED) {
+	$Plugin = ClassRegistry::init('Plugin');
+	$plugins = $Plugin->find('list', array('Plugin.status' => true, 'fields' => array('name')));
+	foreach($plugins as $plugin) {
+		CakePlugin::load($plugin);
+	}
+}
+/**
  * 文字コードの検出順を指定
  */
 mb_detect_order(Configure::read('BcEncode.detectOrder'));
@@ -305,3 +315,16 @@ if (BC_INSTALLED) {
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
+
+
+
+
+// TODO basercamp
+// ログイン処理が完了していない為、無理やりログインした事にする
+$_SESSION['Auth']['User'] = array(
+	'id' => 1, 
+	'name' => 'admin', 
+	'user_group_id' => 1,
+	'real_name_1' => 'admin',
+	'real_name_2' => '!!'
+);

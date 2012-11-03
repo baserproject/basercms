@@ -20,7 +20,7 @@
 $publishTheme = $this->BcBaser->BcHtml->themeWeb;
 if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	$this->BcBaser->BcHtml->themeWeb = 'themed/'.$this->BcBaser->siteConfig['admin_theme'].'/';
-	$this->BcBaser->Javascript->themeWeb = 'themed/'.$this->BcBaser->siteConfig['admin_theme'].'/';
+	$this->BcBaser->Js->themeWeb = 'themed/'.$this->BcBaser->siteConfig['admin_theme'].'/';
 }
 $this->BcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
 $loginUrl = '';
@@ -69,7 +69,7 @@ $(function(){
 				<li><?php $this->BcBaser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', array('target' => '_blank')) ?></li>
 <?php elseif(Configure::read('BcRequest.isUpdater')): ?>
 				<li><?php $this->BcBaser->link('アップデートマニュアル', 'http://basercms.net/manuals/introductions/8.html', array('target' => '_blank')) ?></li>
-<?php elseif(!empty($this->request->params['admin']) || $authPrefix == $currentPrefix || ('/'.$this->request->params['url']['url']) == $loginUrl): ?>	
+<?php elseif(!empty($this->request->params['admin']) || $authPrefix == $currentPrefix || ('/'.$this->request->url) == $loginUrl): ?>	
 				<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'], '/') ?></li>	
 <?php else: ?>
 	<?php if($authPrefix == Configure::read('Routing.admin')): ?>
@@ -115,7 +115,7 @@ $(function(){
 						<li><?php $this->BcBaser->link('ログアウト', array($authPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
 		<?php endif ?>
 					</ul>
-<?php elseif($this->name != 'Installations' && $this->request->params['url']['url'] != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
+<?php elseif($this->name != 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
 					<?php $this->BcBaser->link('ログインしていません '.$this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 	<?php if($currentPrefix == 'front'): ?>

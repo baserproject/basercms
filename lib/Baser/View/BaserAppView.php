@@ -287,6 +287,20 @@ class BaserAppView extends View {
 	function getScripts() {
 		return $this->_scripts;
 	}
-	
+/**
+ * Return a misssing view error message
+ *
+ * @param string $viewFileName the filename that should exist
+ * @return cakeError
+ */
+	function _missingView($file, $error = 'missingView') {
+
+		if ($error === 'missingView') {
+			throw new MissingViewException(array('file' => $file . $this->ext));
+		} elseif ($error === 'missingLayout') {
+			throw new MissingLayoutException(array('file' => $file . $this->ext));
+		}
+		
+	}
 }
 ?>

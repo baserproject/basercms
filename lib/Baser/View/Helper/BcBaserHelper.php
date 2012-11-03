@@ -480,10 +480,10 @@ class BcBaserHelper extends AppHelper {
  */
 	public function isHome() {
 
-		return ($this->request->params['url']['url'] == '/' ||
-						$this->request->params['url']['url'] == 'index' ||
-						$this->request->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/' ||
-						$this->request->params['url']['url'] == Configure::read('BcRequest.agentAlias').'/index');
+		return ($this->request->url == '/' ||
+						$this->request->url == 'index' ||
+						$this->request->url == Configure::read('BcRequest.agentAlias').'/' ||
+						$this->request->url == Configure::read('BcRequest.agentAlias').'/index');
 
 	}
 /**
@@ -1216,7 +1216,7 @@ class BcBaserHelper extends AppHelper {
 				$pageUrl = str_replace('pages/','', $pass[0]);
 			} else {
 				if(empty($pass)){
-					$pageUrl = h($this->request->params['url']['url']);
+					$pageUrl = h($this->request->url);
 				}else{
 					$pageUrl = implode('/', $pass);
 				}
@@ -1625,7 +1625,7 @@ END_FLASH;
  * @manual
  */
 	public function getHere() {
-		return '/' . preg_replace('/^\//', '', $this->request->params['url']['url']);
+		return '/' . preg_replace('/^\//', '', $this->request->url);
 	}
 /**
  * 現在のページがページカテゴリのトップかどうかを判定する

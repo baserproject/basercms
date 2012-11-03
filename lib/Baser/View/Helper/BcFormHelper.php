@@ -1103,7 +1103,8 @@ DOC_END;
 		}
 
 		if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
-			$model = $this->request->params['models'][0];
+			$model = array_shift($this->request->params['models']);
+			$model = $model['className'];
 		} elseif (empty($model) && empty($this->request->params['models'])) {
 			$model = false;
 		} elseif (is_string($model) && strpos($model, '.') !== false) {

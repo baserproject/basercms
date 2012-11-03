@@ -28,7 +28,7 @@ define('MAPS_HOST', 'maps.google.com');
  * @package cake
  * @subpackage cake.app.controllers.components
  */
-class BcGmapsComponent  extends Object {
+class BcGmapsComponent  extends Component {
 /**
  * Latitude
  *
