@@ -97,7 +97,8 @@ class BcMysql extends Mysql {
 				}
 		// <<<
 			default:
-				$data = "'" . mysql_real_escape_string($data, $this->connection) . "'";
+				$con = $this->getConnection();
+				$data = $con->quote($data);
 			break;
 		}
 		return $data;
