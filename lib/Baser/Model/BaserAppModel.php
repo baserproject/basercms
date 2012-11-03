@@ -61,17 +61,6 @@ class BaserAppModel extends Model {
 	public $actsAs = array('BcPluginHook');
 
 /**
- * List of valid finder method options, supplied as the first parameter to find().
- * CakePHP2.x では継承元のmodel.phpから削除されているので、こちらへ移植 basercamp
- * TODO basrcamp  find method をマージ後併せて削除すること
- * @var array
- */
-	protected $_findMethods = array(
-		'all' => true, 'first' => true, 'count' => true,
-		'neighbors' => true, 'list' => true, 'threaded' => true
-	);
-
-/**
  * コンストラクタ
  *
  * @return	void
@@ -621,7 +610,7 @@ class BaserAppModel extends Model {
 
 		$db =& ConnectionManager::getDataSource($this->useDbConfig);
 		$this->recursive = -1;
-		if($db->config['driver']=='bc_csv') {
+		if($db->config['datasource']=='Database/BcCsv') {
 			// CSVDBの場合はMAX関数が利用できない為、プログラムで処理する
 			// TODO dboでMAX関数の実装できたらここも変更する
 			$this->cacheQueries=false;
@@ -821,7 +810,7 @@ class BaserAppModel extends Model {
 		if($this->exists()) {
 			$conditions['NOT'] = array($this->alias.'.id'=>$this->id);
 		}
-		$ret = $this->find($conditions);
+		$ret = $this->find('first', array('conditions' => $conditions));
 		if($ret) {
 			return false;
 		}else {
@@ -1358,120 +1347,6 @@ class BaserAppModel extends Model {
 		
 		return $result;
 		
-	}
-/**
- * find
- * 
- * キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
- * 
- * 【AppModelではキャッシュを定義しない事】
- * 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
- * （HABTMの更新がうまくいかなかったので）
- * 
- * 【PHP5限定】
- * PHP4では次のような処理ができない為
- * Model ⇒ Behavior ⇒ call_user_func_array ⇒ Model ⇒ Behavior
- * ※ ビヘイビア内で自モデルのメソッドを呼び出しそのメソッド内でさらにビヘイビアを使う
- *
- * @param mixed...
- * @return type 
- * @access public
- */
-	public function find($conditions = null, $fields = array(), $order = null, $recursive = null) {
-		if (!is_string($conditions) || (is_string($conditions) && !array_key_exists($conditions, $this->_findMethods))) {
-			$type = 'first';
-			$query = array_merge(compact('conditions', 'fields', 'order', 'recursive'), array('limit' => 1));
-		} else {
-			list($type, $query) = array($conditions, $fields);
-		}
-
-		$this->findQueryType = $type;
-		$this->id = $this->getID();
-
-		$query = array_merge(
-			array(
-				'conditions' => null, 'fields' => null, 'joins' => array(), 'limit' => null,
-				'offset' => null, 'order' => null, 'page' => null, 'group' => null, 'callbacks' => true
-			),
-			(array)$query
-		);
-
-		if ($type != 'all') {
-			if ($this->_findMethods[$type] === true) {
-				$query = $this->{'_find' . ucfirst($type)}('before', $query);
-			}
-		}
-
-		if (!is_numeric($query['page']) || intval($query['page']) < 1) {
-			$query['page'] = 1;
-		}
-		if ($query['page'] > 1 && !empty($query['limit'])) {
-			$query['offset'] = ($query['page'] - 1) * $query['limit'];
-		}
-		if ($query['order'] === null && $this->order !== null) {
-			$query['order'] = $this->order;
-		}
-		$query['order'] = array($query['order']);
-
-		if ($query['callbacks'] === true || $query['callbacks'] === 'before') {
-			// Behaviors->trigger は無くなったので、とりあえず、nullをかえすようにする。 basercamp TODO
-			$return = false ;
-			/*
-			$return = $this->Behaviors->trigger($this, 'beforeFind', array($query), array(
-				'break' => true, 'breakOn' => false, 'modParams' => true
-			));*/
-			$query = (is_array($return)) ? $return : $query;
-
-			if ($return === false) {
-				return null;
-			}
-
-			$return = $this->beforeFind($query);
-			$query = (is_array($return)) ? $return : $query;
-
-			if ($return === false) {
-				return null;
-			}
-		}
-
-		// CUSTOMIZE MODIFY 2012/04/23 ryuring
-		// データキャッシュ
-		// >>>
-		/*if (!$db =& ConnectionManager::getDataSource($this->useDbConfig)) {
-			return false;
-		}
-		$results = $db->read($this, $query);*/
-		// ---
-		$cache = true;
-		if(isset($query['cache']) && is_bool($query['cache'])) {
-			$cache = $query['cache'];
-			unset($query['cache']);
-		}
-		if (PHP5 && BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
-				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
-			$results = $this->readCache($cache, $type, $query);
-		} else {
-			if (!$db =& ConnectionManager::getDataSource($this->useDbConfig)) {
-				return false;
-			}
-			$results = $db->read($this, $query);
-		}
-		// <<<
-		
-		$this->resetAssociations();
-		$this->findQueryType = null;
-
-		if ($query['callbacks'] === true || $query['callbacks'] === 'after') {
-			$results = $this->__filterResults($results);
-		}
-
-		if ($type === 'all') {
-			return $results;
-		} else {
-			if ($this->_findMethods[$type] === true) {
-				return $this->{'_find' . ucfirst($type)}('after', $query, $results);
-			}
-		}
 	}
 /**
  * Deletes multiple model records based on a set of conditions.

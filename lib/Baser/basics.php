@@ -425,7 +425,6 @@
 		if(!is_writable(TMP)){
 			return;
 		}
-		App::import('Core','Folder');
 		$folder = new Folder();
 		$folder->create(TMP.'logs',0777);
 		$folder->create(TMP.'sessions',0777);

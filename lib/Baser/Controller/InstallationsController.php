@@ -359,7 +359,9 @@ class InstallationsController extends AppController {
 				);
 
 				if ($this->BcManager->addDefaultUser($user)) {
-					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
+					// TODO basercamp ryuring
+					// Eメール送信は根が深いので後回し
+					//$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
 					$message = '管理ユーザーを作成できませんでした。<br />'.$db->error;

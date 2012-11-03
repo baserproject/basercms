@@ -120,7 +120,7 @@ class BcManagerComponent extends Component {
  * @return DboSource $db
  * @access public
  */
-	public function &connectDb($config, $name = 'baser') {
+	public function connectDb($config, $name = 'baser') {
 
 		if($name == 'plugin') {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
@@ -277,7 +277,7 @@ class BcManagerComponent extends Component {
 	protected function _updateBlogEntryDate($dbConfig) {
 
 		$this->connectDb($dbConfig, 'plugin');
-		App::import('Model', 'Blog.BlogPost');
+		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
 		$BlogPost->contentSaving = false;
 		$datas = $BlogPost->find('all', array('recursive' => -1));
@@ -362,6 +362,7 @@ class BcManagerComponent extends Component {
 
 		$options = array_merge(array(
 			'driver'	=> '',
+			'datasource'=> '',
 			'host'		=> 'localhost',
 			'port'		=> '',
 			'login'		=> 'dummy',
@@ -374,7 +375,7 @@ class BcManagerComponent extends Component {
 		
 		extract($options);
 
-		App::import('File');
+		$datasource = $this->getDatasourceName($driver);
 
 		$dbfilename = APP . 'Config' . DS.'database.php';
 		$file = & new File($dbfilename);
@@ -393,7 +394,7 @@ class BcManagerComponent extends Component {
 			$file->write("//\n");
 			$file->write("class DATABASE_CONFIG {\n");
 			$file->write('public $baser = array('."\n");
-			$file->write("\t'datasource' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$datasource."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -406,7 +407,7 @@ class BcManagerComponent extends Component {
 			$file->write(");\n");
 
 			$file->write('public $plugin = array('."\n");
-			$file->write("\t'datasource' => '".$driver."',\n");
+			$file->write("\t'datasource' => '".$datasource."',\n");
 			$file->write("\t'persistent' => false,\n");
 			$file->write("\t'host' => '".$host."',\n");
 			$file->write("\t'port' => '".$port."',\n");
@@ -418,7 +419,6 @@ class BcManagerComponent extends Component {
 			$file->write("\t'encoding' => '".$encoding."'\n");
 			$file->write(");\n");
 			$file->write("}\n");
-			$file->write("?>\n");
 
 			$file->close();
 			return true;

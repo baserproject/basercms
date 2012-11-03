@@ -241,7 +241,7 @@ class BaserAppController extends Controller {
 			// ===============================================================================
 			$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
 			$pluginPaths = Configure::read('pluginPaths');
-			if(!in_array($pluginThemePath, $pluginPaths)) {
+			if($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
 				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
 			}
 		}

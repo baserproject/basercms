@@ -44,7 +44,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 	$authPrefixes = Configure::read('BcAuthPrefix');
 	
 	$pluginMatch = array();
-	$plugins = Configure::listObjects('plugin');
+	$plugins = CakePlugin::loaded();
 	if($plugins) {
 		foreach ($plugins as $key => $value) {
 			$plugins[$key] = Inflector::underscore($value);
@@ -209,7 +209,10 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義する
  */
 	$enablePlugins = getEnablePlugins();
-	Configure::write('BcStatus.enablePlugins', $enablePlugins);
+	
+	// TODO basercamp
+	// とりま、一旦コメントアウト
+	/*Configure::write('BcStatus.enablePlugins', $enablePlugins);
 	$_pluginPaths = array(
 		APP.'plugins'.DS,
 		BASER_PLUGINS
@@ -221,7 +224,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 				include $pluginBootstrap;
 			}
 		}
-	}
+	}*/
 /**
  * テーマの bootstrap を実行する 
  * bootstrapではプラグインのパスが読み込めない為ここに定義
