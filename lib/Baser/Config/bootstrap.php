@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-	require CORE_PATH.DS.'Baser'.DS.'Config'.DS.'paths.php';
+	require CORE_PATH.'Baser'.DS.'Config'.DS.'paths.php';
 	require BASER.'basics.php';
 /**
  * Baserパス追加
@@ -29,6 +29,7 @@
 		'Controller'			=> array(BASER_CONTROLLERS),
 		'Model'				=> array(BASER_MODELS),
 		'Model/Behavior'		=> array(BASER_BEHAVIORS),
+		'Model/Datasource'	=> array(BASER_DATASOURCE),
 		'Model/Datasource/Database'	=> array(BASER_DATABASE),
 		'Controller/Component'=> array(BASER_COMPONENTS),
 	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
@@ -47,10 +48,10 @@
 	App::uses('BcCache', 'Model/Behavior');
 	App::uses('ClassRegistry', 'Utility');
 	App::uses('Multibyte', 'I18n');
-	App::uses('DboBcCsv', 'Model/Datasource/Database');
-	App::uses('DboBcPostgres', 'Model/Datasource/Database');
-	App::uses('DboBcSqlite3', 'Model/Datasource/Database');
-	App::uses('DboBcMysql', 'Model/Datasource/Database');
+	App::uses('BcCsv', 'Model/Datasource/Database');
+	App::uses('BcPostgres', 'Model/Datasource/Database');
+	App::uses('BcSqlite3', 'Model/Datasource/Database');
+	App::uses('BcMysql', 'Model/Datasource/Database');
 	App::uses('PhpReader', 'Configure');
 	App::uses('CakeSession', 'Model/Datasource');
 	App::uses('Folder', 'Utility');
