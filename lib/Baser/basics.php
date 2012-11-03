@@ -63,6 +63,7 @@
 					$requestUri = $_SERVER['REQUEST_URI'];
 				}
 				$baseUrl = preg_replace("/index$/", '', $requestUri);
+				$baseUrl = preg_replace("/test\.php$/", '', $requestUri);
 			}
 		}
 		if(!$baseUrl){
