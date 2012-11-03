@@ -415,15 +415,14 @@ class UsersController extends AppController {
 
 		$selfUpdate = false;
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		
 		if(empty($this->request->data)) {
 			$this->request->data = $this->User->read(null, $id);
-			if($user[$userModel]['id'] == $this->request->data['User']['id']) {
+			if($user['id'] == $this->request->data['User']['id']) {
 				$selfUpdate = true;
 			}
 		}else {
-			if($user[$userModel]['id'] == $this->request->data['User']['id']) {
+			if($user['id'] == $this->request->data['User']['id']) {
 				$selfUpdate = true;
 			}
 			/* 更新処理 */
@@ -461,8 +460,7 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
+		if($user['user_group_id'] != 1 && Configure::read('debug') !== -1) {
 			if($this->request->data['User']['user_group_id'] == 1) {
 				$editable = false;
 			} else {

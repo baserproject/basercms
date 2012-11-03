@@ -20,7 +20,14 @@
 /**
  * Include files
  */
-App::import('Helper',array('Html', 'Form', BC_TIME_HELPER, BC_TEXT_HELPER, BC_CKEDITOR_HELPER));
+//App::import('Helper',array('Html', 'Form', BC_TIME_HELPER, BC_TEXT_HELPER, BC_CKEDITOR_HELPER));
+
+App::uses('HtmlHelper', 'View/Helper');
+App::uses('FormHelper', 'View/Helper');
+App::uses(BC_TIME_HELPER . 'Helper', 'View/Helper');
+App::uses(BC_TEXT_HELPER . 'Helper', 'View/Helper');
+App::uses(BC_CKEDITOR_HELPER . 'Helper', 'View/Helper');
+
 /**
  * FormHelper 拡張クラス
  *
