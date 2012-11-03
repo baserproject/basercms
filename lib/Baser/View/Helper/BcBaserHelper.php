@@ -787,24 +787,21 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $path
  * @param string $rel
- * @param array $htmlAttributes
+ * @param array $options
  * @param boolean $inline
  * @return void
  * @access public
  * @manual
  */
-	public function css($path, $htmlAttributes = array(), $inline = true) {
+	public function css($path, $options = array()) {
 
-		// Cake1.2系との互換対応
-		if (isset($htmlAttributes['inline']) && $inline == true) {
-			$inline = $htmlAttributes['inline'];
-		}
 		$rel = null;
-		if(!empty($htmlAttributes['rel'])) {
-			$rel = $htmlAttributes['rel'];
+		if(!empty($options['rel'])) {
+			$rel = $options['rel'];
 		}
-		$ret = $this->BcHtml->css($path, $rel, $htmlAttributes, $inline);
-		if($inline) {
+		
+		$ret = $this->BcHtml->css($path, $rel, $options);
+		if(empty($options['inline'])) {
 			echo $ret;
 		}
 

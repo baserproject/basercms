@@ -39,38 +39,6 @@ class BaserAppView extends View {
 	);
 /**
  * Return all possible paths to find view files in order
- *
- * @param string $plugin
- * @return array paths
- * @access private
- */
-	protected function _paths($plugin = null, $cached = true) {
-		$paths = $this->__paths($plugin, $cached);
-
-		if (!empty($this->theme)) {
-			$count = count($paths);
-			for ($i = 0; $i < $count; $i++) {
-				// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
-				// プラグインパスにテーマのパスを追加した為、
-				// テーマのパスをさらにテーマのパスに整形しないように調整
-				//$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
-				// ---
-				if(strpos($paths[$i],'themed') === false) {
-					$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
-				}
-				// <<<
-			}
-			$paths = array_merge($themePaths, $paths);
-		}
-
-		if (empty($this->__paths)) {
-			$this->__paths = $paths;
-		}
-
-		return $paths;
-	}
-/**
- * Return all possible paths to find view files in order
  * 
  * ※ _paths より直接呼び出されるようにする為だけに、Viewクラスより中身をコピー
  * 
@@ -149,10 +117,10 @@ class BaserAppView extends View {
 				$name = str_replace('admin_','',$this->request->action);
 			}
 		}
-		if($this->name == 'CakeError' && $this->viewPath == 'errors') {
+		if($this->name == 'CakeError' && $this->viewPath == 'Errors') {
 			// CakeErrorの場合はサブフォルダを除外
 			$subDir = $this->subDir;
-			$this->subDir = '';
+			$this->subDir = null;
 			$fileName = parent::_getViewFileName($name);
 			$this->subDir = $subDir;
 			return $fileName;

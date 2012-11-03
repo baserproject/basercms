@@ -163,7 +163,7 @@ class BaserAppController extends Controller {
 				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
 			
-		} elseif($this->name != 'Installations') {
+		} elseif($this->name != 'Installations' && $this->name != 'CakeError') {
 			$this->redirect('/');
 		}
 
@@ -359,7 +359,9 @@ class BaserAppController extends Controller {
 		
 		// エラーの場合は強制的にフロントのテーマを設定する
 		if($isError) {
-			$this->theme = $this->siteConfigs['theme'];
+			if($params['controller'] != 'installations') {
+				$this->theme = $this->siteConfigs['theme'];
+			}
 			return;
 		}
 		

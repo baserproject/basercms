@@ -27,9 +27,9 @@
 <?php $this->BcBaser->metaDescription() ?>
 <?php $this->BcBaser->metaKeywords() ?>
 <?php $this->BcBaser->icon() ?>
-<?php $this->BcBaser->css('font_small','stylesheet',array('title'=>'Small')) ?>
-<?php $this->BcBaser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
-<?php $this->BcBaser->css('font_large','stylesheet',array('title'=>'Large')) ?>
+<?php $this->BcBaser->css('font_small', array('title'=>'Small')) ?>
+<?php $this->BcBaser->css('font_medium', array('title'=>'Medium')) ?>
+<?php $this->BcBaser->css('font_large', array('title'=>'Large')) ?>
 <?php $this->BcBaser->css('import') ?>
 <?php $this->BcBaser->js(array(
 	'jquery-1.6.2.min',
