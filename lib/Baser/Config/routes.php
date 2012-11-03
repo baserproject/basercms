@@ -106,11 +106,13 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング
  */
-	$adminPrefix = Configure::read('Routing.admin');
+	$adminPrefix = Configure::read('Routing.prefixes.0');
+	$test = Configure::read('Routing');
 	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
 		if($Page){
+			
 			if(!$parameter){
 				$_parameters = array('index');
 			}elseif(preg_match('/\/$/is', $parameter)) {
