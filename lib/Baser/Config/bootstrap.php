@@ -44,6 +44,8 @@ App::build(array(
 	'Vendor' => array(BASER_VENDORS),
 	'Locale' => array(BASER_LOCALES),
 	'Lib' => array(BASER_LIBS),
+	'Console' => array(BASER_CONSOLES),
+	'Console/Command' => array(BASER_CONSOLES . 'Command' . DS),
 ));
 App::uses('AppModel', 'Model');
 App::uses('BaserAppModel', 'Model');

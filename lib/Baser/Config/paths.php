@@ -82,6 +82,10 @@ define('BASER_LIBS', BASER . 'Lib' . DS);
  */
 define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
 /**
+ * Baser Console
+ */
+define('BASER_CONSOLES', BASER . 'Console' . DS);
+/**
  * Baserテーマ 
  */
 if (is_dir(WWW_ROOT . 'themed')) {
