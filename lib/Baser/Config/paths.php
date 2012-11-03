@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * パス定義
@@ -23,60 +24,60 @@
 /**
  * Baserディレクトリ名
  */
-	define('BASER',CORE_PATH.'Baser'.DS);
+define('BASER', CORE_PATH . 'Baser' . DS);
 /**
  * Baserコントローラーパス
  */
-	define('BASER_CONTROLLERS',BASER.'Controller'.DS);
+define('BASER_CONTROLLERS', BASER . 'Controller' . DS);
 /**
  * Baserモデルパス
  */
-	define('BASER_MODELS',BASER.'Model'.DS);
+define('BASER_MODELS', BASER . 'Model' . DS);
 /**
  * Baserビューパス
  */
-	define('BASER_VIEWS',BASER.'View'.DS);
+define('BASER_VIEWS', BASER . 'View' . DS);
 /**
  * BaserVendorsパス
  */
-	define('BASER_VENDORS',BASER.'Vendor'.DS);
+define('BASER_VENDORS', BASER . 'Vendor' . DS);
 /**
  * Baserコンポーネント
  */
-	define('BASER_COMPONENTS',BASER_CONTROLLERS.'Component'.DS);
+define('BASER_COMPONENTS', BASER_CONTROLLERS . 'Component' . DS);
 /**
  * Baserヘルパー
  */
-	define('BASER_HELPERS',BASER_VIEWS.'Helper'.DS);
+define('BASER_HELPERS', BASER_VIEWS . 'Helper' . DS);
 /**
  * Baserビヘイビア
  */
-	define('BASER_BEHAVIORS',BASER_MODELS.'Behavior'.DS);
+define('BASER_BEHAVIORS', BASER_MODELS . 'Behavior' . DS);
 /**
  * Baserデータソース
  */
-	define('BASER_DATASOURCE',BASER_MODELS.'Datasource'.DS);
-	/**
+define('BASER_DATASOURCE', BASER_MODELS . 'Datasource' . DS);
+/**
  * Baserデータベース
  */
-	define('BASER_DATABASE',BASER_DATASOURCE.'Database'.DS);
+define('BASER_DATABASE', BASER_DATASOURCE . 'Database' . DS);
 /**
  * Baserプラグイン
  */
-	define('BASER_PLUGINS',BASER.'Plugin'.DS);
+define('BASER_PLUGINS', BASER . 'Plugin' . DS);
 /**
  * Baserコンフィグ
  */
-	define('BASER_CONFIGS', BASER.'Config'.DS);
+define('BASER_CONFIGS', BASER . 'Config' . DS);
 /**
  * BaserLocale
  */
-	define('BASER_LOCALES',BASER.'Locale'.DS);
+define('BASER_LOCALES', BASER . 'Locale' . DS);
 /**
  * Baserテーマ 
  */
-	if(is_dir(WWW_ROOT.'themed')) {
-		define('BASER_THEMES', WWW_ROOT.'themed'.DS);
-	} elseif(is_dir(ROOT.DS.'themed')) {
-		define('BASER_THEMES', ROOT.DS.'themed'.DS);
-	}
+if (is_dir(WWW_ROOT . 'themed')) {
+	define('BASER_THEMES', WWW_ROOT . 'themed' . DS);
+} elseif (is_dir(ROOT . DS . 'themed')) {
+	define('BASER_THEMES', ROOT . DS . 'themed' . DS);
+}
