@@ -203,7 +203,7 @@ class BaserAppView extends View {
 				}
 			}
 		}
-		return $this->_missingView($defaultPath . $name . $this->ext, 'missingView');
+		return $this->_missingView($defaultPath . $name, 'missingView');
 	}
 
 /**

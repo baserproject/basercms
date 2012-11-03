@@ -33,8 +33,8 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 
 	// プラグインの基底クラス読み込み
 	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
-	App::import('Controller', 'BaserPluginApp');
-	App::import('Model', 'BaserPluginAppModel');
+	App::uses('BaserPluginApp', 'Controller');
+	App::uses('BaserPluginAppModel', 'Model');
 
 	$parameter = getUrlParamFromEnv();
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
