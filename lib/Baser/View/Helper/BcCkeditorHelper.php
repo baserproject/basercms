@@ -82,8 +82,8 @@ class BcCkeditorHelper extends AppHelper {
 					array( 	'name' => 'インライン(q)',
 							'element' => 'q')
 			);
-	public function __construct() {
-		parent::__construct();
+	public function __construct(View $View, $settings = array()) {
+		parent::__construct($View, $settings);
 
 	}
 /**
