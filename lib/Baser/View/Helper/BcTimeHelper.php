@@ -184,7 +184,7 @@ class BcTimeHelper extends TimeHelper {
 			}
 		}
 
-		if(strtotime($date)==-1) {
+		if(strtotime($date) === false) {
 			return '';
 		}
 
