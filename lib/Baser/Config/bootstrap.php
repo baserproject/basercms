@@ -131,7 +131,7 @@ if(BC_INSTALLED) {
 	$Plugin = ClassRegistry::init('Plugin');
 	$plugins = $Plugin->find('list', array('Plugin.status' => true, 'fields' => array('name')));
 	foreach($plugins as $plugin) {
-		CakePlugin::load($plugin);
+		CakePlugin::load(Inflector::classify($plugin));
 	}
 }
 /**

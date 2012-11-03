@@ -24,7 +24,6 @@
  * @lastmodified  $Date: 2011-07-07 01:11:32 +0900 (木, 07 7 2011) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-App::import('Component', 'Auth');
 /**
  * Authentication control component class
  *

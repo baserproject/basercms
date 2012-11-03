@@ -514,7 +514,7 @@ class BcManagerComponent extends Component {
 		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach($corePlugins as $corePlugin) {
-			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
+			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'Config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
@@ -577,22 +577,22 @@ class BcManagerComponent extends Component {
 				$paths = array(BASER_CONFIGS.'data'.DS.$pattern);
 			} else {
 				$paths = array(
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
 				);
 			}
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern
+					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.$pattern
 				);
 			} else {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern.DS.$plugin,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
+					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern.DS.$plugin,
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.$pattern.DS.$plugin,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
+					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
 				);
 			}
 		}
