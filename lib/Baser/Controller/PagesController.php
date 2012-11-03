@@ -73,9 +73,8 @@ class PagesController extends AppController {
 		}
 		
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
-				$user[$userModel]['user_group_id'], 
+				$user['user_group_id'], 
 				$this->checkRootEditable()
 		);
 		$this->set('newCatAddable', $newCatAddable);
@@ -873,8 +872,7 @@ class PagesController extends AppController {
 	public function admin_check_agent_page_addable($type, $id = null) {
 		
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		$userGroupId = $user[$userModel]['user_group_id'];
+		$userGroupId = $user['user_group_id'];
 		$result = false;
 		while(true) {
 			$agentId = $this->PageCategory->getAgentRelativeId($type, $id);
@@ -990,8 +988,7 @@ class PagesController extends AppController {
 		}
 		if(!empty($options['own'])) {
 			$user = $this->BcAuth->user();
-			$userModel = $this->getUserModel();
-			$_options['userGroupId'] = $user[$userModel]['user_group_id'];
+			$_options['userGroupId'] = $user['user_group_id'];
 		}
 		
 		return $this->Page->getControlSource('page_category_id', $_options);
@@ -1008,7 +1005,6 @@ class PagesController extends AppController {
 	public function checkCurrentEditable($pageCategoryId, $ownerId) {
 		
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
 		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
@@ -1019,8 +1015,8 @@ class PagesController extends AppController {
 			$currentCatOwner = $ownerId;
 		}
 		
-		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+		return ($currentCatOwner == $user['user_group_id'] ||
+					$user['user_group_id'] == 1 || !$currentCatOwner);
 
 	}
 /**
@@ -1203,7 +1199,7 @@ class PagesController extends AppController {
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if(!empty($user)) {
-			$allowOwners = array('', $user['User']['user_group_id']);
+			$allowOwners = array('', $user['user_group_id']);
 		}
 		if(!isset($this->passedArgs['sortmode'])) {
 			$this->passedArgs['sortmode'] = false;

@@ -114,7 +114,7 @@ class BlogCategoriesController extends BlogAppController {
 	public function admin_index($blogContentId) {
 
 		$conditions = array('BlogCategory.blog_content_id'=>$blogContentId);
-		$_dbDatas = $this->BlogCategory->generatetreelist($conditions);
+		$_dbDatas = $this->BlogCategory->generateTreeList($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
 			$category = $this->BlogCategory->find(array('BlogCategory.id'=>$key));
