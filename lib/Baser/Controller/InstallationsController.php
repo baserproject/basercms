@@ -364,7 +364,9 @@ class InstallationsController extends AppController {
 					//$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
-					$message = '管理ユーザーを作成できませんでした。<br />'.$db->error;
+					$con = $db->getConnection();
+					$errorInfo = $con->errorInfo();
+					$message = '管理ユーザーを作成できませんでした。<br />' . $con->errorCode() . ' : ' . $errorInfo[2];
 					$this->Session->setFlash($message);
 				}
 			}
