@@ -369,7 +369,6 @@
 			clearCache();
 		*/
 
-		App::import('Core','Folder');
 		$folder = new Folder(CACHE);
 
 		$files = $folder->read(true,true,true);
