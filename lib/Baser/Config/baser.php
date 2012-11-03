@@ -49,7 +49,7 @@
 				array('name' => 'クレジット',				'url' => 'javascript:credit()')
 		))),
 		// コアプラグイン
-		'corePlugins'	=> array('blog', 'feed', 'mail'),
+		'corePlugins'	=> array('Blog', 'Feed', 'Mail'),
 		// アップデートキー
 		'updateKey'		=> 'update'
 	);

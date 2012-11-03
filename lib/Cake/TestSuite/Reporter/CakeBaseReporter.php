@@ -107,8 +107,9 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
  * @return string The base url for the request.
  */
 	public function baseUrl() {
-		if (!empty($_SERVER['PHP_SELF'])) {
-			return $_SERVER['PHP_SELF'];
+		if (!empty($_SERVER['REQUEST_URI'])) {
+			$baseUrl = explode('?', $_SERVER['REQUEST_URI']);
+			return $baseUrl[0];
 		}
 		return '';
 	}

@@ -172,16 +172,14 @@ class BcBaserHelper extends AppHelper {
 			$GlobalMenu = ClassRegistry::getObject('GlobalMenu');
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db =& ConnectionManager::getDataSource('baser');
-			if ($db->isInterfaceSupported('listSources')) {
-				$sources = $db->listSources();
-				if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
-					if (empty($this->request->params['prefix'])) {
-						$prefix = 'publish';
-					} else {
-						$prefix = $this->request->params['prefix'];
-					}
-					return $GlobalMenu->find('all', array('order' => 'sort'));
+			$sources = $db->listSources();
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
+				if (empty($this->request->params['prefix'])) {
+					$prefix = 'publish';
+				} else {
+					$prefix = $this->request->params['prefix'];
 				}
+				return $GlobalMenu->find('all', array('order' => 'sort'));
 			}
 		}
 		return '';

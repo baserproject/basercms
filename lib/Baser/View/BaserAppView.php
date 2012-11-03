@@ -222,7 +222,7 @@ class BaserAppView extends View {
 			$subDir = $this->layoutPath . DS;
 		}
 		$paths = $this->_paths(Inflector::underscore($this->plugin));
-		$file = 'layouts' . DS . $subDir . $name;
+		$file = 'Layouts' . DS . $subDir . $name;
 
 		$exts = array($this->ext, '.ctp', '.thtml');
 
@@ -238,6 +238,7 @@ class BaserAppView extends View {
 			}
 		}*/
 		// ---
+
 		foreach ($paths as $path) {
 			foreach ($exts as $ext) {
 				if (file_exists($path . $file . $ext)) {

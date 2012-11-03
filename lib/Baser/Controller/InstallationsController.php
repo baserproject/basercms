@@ -257,7 +257,9 @@ class InstallationsController extends AppController {
 					$this->redirect('step4');
 				}else {
 					$db =& ConnectionManager::getDataSource('baser');
-					$this->Session->setFlash("データベースの構築中にエラーが発生しました。<br />".$db->error);
+					$con = $db->getConnection();
+					$errorInfo = $con->errorInfo();
+					$this->Session->setFlash("データベースの構築中にエラーが発生しました。<br />".$con->errorCode() . ' : ' . $errorInfo[2]);
 				}
 
 			}

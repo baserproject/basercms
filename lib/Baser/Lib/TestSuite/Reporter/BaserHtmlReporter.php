@@ -27,7 +27,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  */
 	public function paintDocumentStart() {
 		ob_start();
-		$baseDir = $this->params['baseDir'];
+		$baseDir = baseUrl();
 		include BASER_LIBS . 'TestSuite' . DS . 'templates' . DS . 'header.php';
 	}
 
@@ -119,7 +119,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  * @return void
  */
 	public function paintDocumentEnd() {
-		$baseDir = $this->params['baseDir'];
+		$baseDir = baseUrl();
 		include BASER_LIBS. 'TestSuite' . DS . 'templates' . DS . 'footer.php';
 		if (ob_get_length()) {
 			ob_end_flush();
