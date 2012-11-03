@@ -23,7 +23,7 @@
 /**
  * Baserディレクトリ名
  */
-	define('BASER',CORE_PATH.DS.'Baser'.DS);
+	define('BASER',CORE_PATH.'Baser'.DS);
 /**
  * Baserコントローラーパス
  */
@@ -55,7 +55,11 @@
 /**
  * Baserデータソース
  */
-	define('BASER_DATABASE',BASER_MODELS.'Datasource'.DS.'Database'.DS);
+	define('BASER_DATASOURCE',BASER_MODELS.'Datasource'.DS);
+	/**
+ * Baserデータベース
+ */
+	define('BASER_DATABASE',BASER_DATASOURCE.'Database'.DS);
 /**
  * Baserプラグイン
  */
