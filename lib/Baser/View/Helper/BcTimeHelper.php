@@ -33,6 +33,13 @@ class BcTimeHelper extends TimeHelper {
 	public $nengos = array("m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成");
 
 /**
+ * 和暦文字列の正規表現
+ *
+ * @var string
+ */
+	public $warekiRegex = '!^(?<nengo>[mtsh])-(?<year>[0-9]{2})([/\-])(?<month>0?[0-9]|1[0-2])([/\-])(?<day>[0-2][0-9]|3[01])$!';
+
+/**
  * 年号を取得
  *
  * @param string $w
@@ -55,10 +62,10 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function wareki($date) {
-		if (!preg_match('!^([a-z])-([0-9]{2})([/\-])(0?[0-9]|1[0-2])([/\-])([0-2][0-9]|3[01])$!', $date, $matches)) {
+		if (!preg_match($this->warekiRegex, $date, $matches)) {
 			return false;
 		}
-		return $matches[1];
+		return $matches['nengo'];
 	}
 
 /**
@@ -69,22 +76,10 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function wyear($date) {
-		$_date = split('/', $date);
-		if (!$_date) {
-			$_date = split('-', $date);
-		}
-		if (count($_date) == 3) {
-			$wyear = split('-', $_date[0]);
-			if (isset($wyear[1])) {
-				return $wyear[1];
-			} else {
-				return false;
-			}
-		} elseif (count($_date) == 4) {
-			return $_date[1];
-		} else {
+		if (!preg_match($this->warekiRegex, $date, $matches)) {
 			return false;
 		}
+		return $matches['year'];
 	}
 
 /**
@@ -127,20 +122,16 @@ class BcTimeHelper extends TimeHelper {
 		if (strpos($year, '-') === false) {
 			return false;
 		}
-		list($w, $year) = split('-', $year);
+		list($w, $year) = explode('-', $year);
 		switch ($w) {
 			case 'm':
 				return $year + 1867;
-				break;
 			case 't':
 				return $year + 1911;
-				break;
 			case 's':
 				return $year + 1925;
-				break;
 			case 'h':
 				return $year + 1988;
-				break;
 			default:
 				return false;
 		}
@@ -156,22 +147,23 @@ class BcTimeHelper extends TimeHelper {
 	public function convertToWarekiArray($date) {
 		if (!$date) {
 			return '';
-		} elseif (is_array($date)) {
-			if (!empty($date['year']) && !empty($date['month']) && !empty($date['day'])) {
-				$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
-			} else {
+		}
+		if (is_array($date)) {
+			if (empty($date['year']) || empty($date['month']) || empty($date['day'])) {
 				return '';
 			}
+			$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
 		}
 
-		if (strtotime($date) === false) {
+		$time = strtotime($date);
+		if ($time === false) {
 			return '';
 		}
 
-		$ymd = date('Ymd', strtotime($date));
-		$y = date('Y', strtotime($date));
-		$m = date('m', strtotime($date));
-		$d = date('d', strtotime($date));
+		$ymd = date('Ymd', $time);
+		$y = date('Y', $time);
+		$m = date('m', $time);
+		$d = date('d', $time);
 
 		if ($ymd <= "19120729") {
 			$w = "m";
@@ -241,10 +233,9 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
-		if ($date !== "00:00:00" && (!$date || $date === 0 || $date == '0000-00-00 00:00:00')) {
+		if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
 			return "";
 		}
-
 		return parent::format($format, $date, $invalid, $userOffset);
 	}
 
@@ -265,16 +256,14 @@ class BcTimeHelper extends TimeHelper {
 		if (!$date) {
 			return true;
 		}
-		$pastDate = strtotime($date);
-		if (!$pastDate) {
+		$pastDateTime = strtotime($date);
+		if ($pastDateTime === false) {
 			return true;
 		}
-		$_days = $days * 86400;
-		if ($now > ($pastDate + $_days)) {
+		if ($now > strtotime($days . 'days', $pastDateTime)) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 }
