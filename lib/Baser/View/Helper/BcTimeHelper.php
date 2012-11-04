@@ -282,14 +282,15 @@ class BcTimeHelper extends TimeHelper {
  * @return boolean 経過有無
  * @access public
  */
-	public function pastDays($date,$days) {
-
+	public function pastDays($date,$days,$now = null) {
+		if (is_null($now)) {
+			$now = time();
+		}
 		if(!$date) return true;
 		$pastDate = strtotime($date);
 		if(!$pastDate) return true;
 		$_days = $days * 60 * 60 * 24;
-
-		if(time() > ($pastDate + $_days)) {
+		if($now > ($pastDate + $_days)) {
 			return true;
 		}else {
 			return false;
