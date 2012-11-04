@@ -19,7 +19,7 @@
  */
 ?>
 <?php if(!empty($this->blog->blogContent['tag_use'])): ?>
-	<?php if(!empty($this->post['BlogTag'])) : ?>
+	<?php if(!empty($this->blog->post['BlogTag'])) : ?>
 <div class="tag">タグ：<?php $this->blog->tag($post) ?></div>
 	<?php endif ?>
 <?php endif ?>

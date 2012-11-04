@@ -221,7 +221,7 @@ class BaserAppView extends View {
 		if (!is_null($this->layoutPath)) {
 			$subDir = $this->layoutPath . DS;
 		}
-		$paths = $this->_paths(Inflector::underscore($this->plugin));
+		$paths = $this->_paths(Inflector::camelize($this->plugin));
 		$file = 'Layouts' . DS . $subDir . $name;
 
 		$exts = array($this->ext, '.ctp', '.thtml');

@@ -42,7 +42,7 @@ $data = $this->requestAction($actionUrl);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
 App::import('Helper','Blog.Blog');
-$blog = new BlogHelper();
+$blog = new BlogHelper($this);
 ?>
 
 

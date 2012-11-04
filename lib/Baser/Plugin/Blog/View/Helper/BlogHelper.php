@@ -23,13 +23,6 @@
  */
 class BlogHelper extends AppHelper {
 /**
- * view
- *
- * @var View
- * @access protected
- */
-	protected $_view = null;
-/**
  * ヘルパー
  *
  * @var array
@@ -49,9 +42,8 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function __construct() {
-
-		$this->_view =& ClassRegistry::getObject('view');
+	public function __construct(View $View, $settings = array()) {
+		parent::__construct($View, $settings);
 		$this->_setBlogContent();
 
 	}
@@ -71,8 +63,8 @@ class BlogHelper extends AppHelper {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
 			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
-		} elseif(isset($this->_view->viewVars['blogContent']['BlogContent'])) {
-			$this->blogContent = $this->_view->viewVars['blogContent']['BlogContent'];
+		} elseif(isset($this->_View->viewVars['blogContent']['BlogContent'])) {
+			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
 
 	}
@@ -173,7 +165,7 @@ class BlogHelper extends AppHelper {
 	public function getPostLink($post, $title, $options = array()) {
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
-		return $this->getLink($title, $url, $options);
+		return $this->BcBaser->getLink($title, $url, $options);
 
 	}
 /**
@@ -224,7 +216,7 @@ class BlogHelper extends AppHelper {
 		}
 		if($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
 			if(!isset($this->Html)){
-				$this->Html = new HtmlHelper();
+				$this->Html = new HtmlHelper($this->_View);
 			}
 			$out .= '<p class="more">'.$this->Html->link($moreLink, array('admin'=>false,'plugin'=>'', 'controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no'],'#'=>'post-detail'), null,null,false).'</p>';
 		}
@@ -372,7 +364,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostDate($post,$format = 'Y/m/d') {
 		if(!isset($this->BcTime)){
-			$this->BcTime = new BcTimeHelper();
+			$this->BcTime = new BcTimeHelper($this->_View);
 		}
 		return $this->BcTime->format($format,$post['BlogPost']['posts_date']);
 	}
@@ -432,9 +424,9 @@ class BlogHelper extends AppHelper {
 				$url = $this->getCategoryUrl($category['BlogCategory']['id']);
 				$url = preg_replace('/^\//', '', $url);
 
-				if($this->_view->params['url']['url'] == $url) {
+				if($this->_View->params['url']['url'] == $url) {
 					$class = ' class="current"';
-				} elseif(!empty($this->_view->params['named']['category']) && $this->_view->params['named']['category'] == $category['BlogCategory']['name']) {
+				} elseif(!empty($this->_View->params['named']['category']) && $this->_View->params['named']['category'] == $category['BlogCategory']['name']) {
 					$class = ' class="selected"';
 				} else {
 					$class = '';
@@ -462,7 +454,7 @@ class BlogHelper extends AppHelper {
  */
 	public function editPost($blogContentId,$blogPostId) {
 
-		if(empty($this->params['admin']) && !empty($this->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(empty($this->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')).'</div>';
 		}
 
@@ -805,8 +797,8 @@ class BlogHelper extends AppHelper {
  */
 	public function getBlogArchiveType() {
 
-		if(!empty($this->_view->viewVars['blogArchiveType'])){
-			return $this->_view->viewVars['blogArchiveType'];
+		if(!empty($this->_View->viewVars['blogArchiveType'])){
+			return $this->_View->viewVars['blogArchiveType'];
 		}else{
 			return '';
 		}

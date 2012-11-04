@@ -63,4 +63,4 @@ $(function(){
 <?php endif; ?>
 
 <!-- pagination -->
-<?php $bcBaser->pagination('simple'); ?>
+<?php $this->bcBaser->pagination('simple'); ?>

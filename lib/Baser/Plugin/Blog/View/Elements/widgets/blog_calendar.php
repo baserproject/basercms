@@ -150,7 +150,7 @@ for($i=1;$i<=$num;$i++){
 			print "<td>&nbsp;</td>";
 		}
 		
-		$data = check($i,$w,$year,$month,$day,$entryDates,$bcBaser,$blogContent);
+		$data = check($i,$w,$year,$month,$day,$entryDates,$this->bcBaser,$blogContent);
 		print "$data";
 		if($w==6){
 			print "</tr>";
@@ -161,7 +161,7 @@ for($i=1;$i<=$num;$i++){
 		if($w==0){
 			print "<tr>";
 		}
-		$data = check($i,$w,$year,$month,$day,$entryDates,$bcBaser,$blogContent);
+		$data = check($i,$w,$year,$month,$day,$entryDates,$this->bcBaser,$blogContent);
 		print "$data";
 		if($w==6){
 			print "</tr>";
