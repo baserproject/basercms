@@ -265,7 +265,7 @@ class BcTimeHelper extends TimeHelper {
  */
 	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
 
-		if($date != "00:00:00" && (!$date||$date === 0||$date=='0000-00-00 00:00:00')) {
+		if($date !== "00:00:00" && (!$date||$date === 0||$date=='0000-00-00 00:00:00')) {
 			return "";
 		}
 

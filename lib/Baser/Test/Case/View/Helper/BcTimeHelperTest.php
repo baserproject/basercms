@@ -164,12 +164,38 @@ class BcTimeHelperTest extends CakeTestCase {
 		);
 	}
 
-	public function testMinutes() {
-		$this->markTestIncomplete();
+/**
+ * @dataProvider minutesDataProvider
+ */
+	public function testMinutes($data, $expects, $message) {
+		$result = $this->Helper->minutes($data);
+		$this->assertSame($expects, $result, $message);
 	}
 
-	public function testFormat() {
-		$this->markTestIncomplete();
+	public function minutesDataProvider() {
+		return array(
+			array('invalid time', null, '不正な日付形式'),
+			array('1 days', '1440分', '1日'),
+			array('2 week', '20160分', '2週間'),
+		);
+	}
+
+/**
+ * @dataProvider formatDataProvider
+ */
+	public function testFormat($format, $date, $expects, $message) {
+		$result = $this->Helper->format($format, $date);
+		$this->assertSame($expects, $result, $message);
+	}
+
+	public function formatDataProvider() {
+		return array(
+			array('Y-m-d', '2012-03-04 05:06:07', '2012-03-04', '日付'),
+			array('Y/m/d H:i:s', '2012-03-04 05:06:07', '2012/03/04 05:06:07', '日時'),
+			array('Y-m-d', '0000-00-00 00:00:00', '', 'nll datetime'),
+			array('Y-m-d', false, '', 'date is false'),
+			array('Y-m-d', 0, '', 'date is zero'),
+		);
 	}
 
 /**
