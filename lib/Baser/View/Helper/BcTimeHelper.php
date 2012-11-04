@@ -55,22 +55,10 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function wareki($date) {
-		$_date = split('/', $date);
-		if (!$_date) {
-			$_date = split('-', $date);
-		}
-		if (count($_date) == 3) {
-			$wyear = split('-', $_date[0]);
-			if (isset($wyear[0])) {
-				return $wyear[0];
-			} else {
-				return false;
-			}
-		} elseif (count($_date) == 4) {
-			return $_date[0];
-		} else {
+		if (!preg_match('!^([a-z])-([0-9]{2})([/\-])(0?[0-9]|1[0-2])([/\-])([0-2][0-9]|3[01])$!', $date, $matches)) {
 			return false;
 		}
+		return $matches[1];
 	}
 
 /**
