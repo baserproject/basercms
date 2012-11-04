@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id$ */
+
 /**
  * Timeヘルパー拡張
  *
@@ -10,30 +10,28 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::import("Helper","time");
+
+App::uses('TimeHelper', 'View/Helper');
+
 /**
  * Timeヘルパー拡張
  *
- * @package baser.views.helpers
+ * @package Baser.View.Helper
  */
 class BcTimeHelper extends TimeHelper {
+
 /**
  * 年号リスト
  *
  * @var array
  * @access public
  */
-	public $nengos = array("m"=>"明治","t"=>"大正","s"=>"昭和","h"=>"平成");
+	public $nengos = array("m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成");
+
 /**
  * 年号を取得
  *
@@ -42,14 +40,13 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function nengo($w) {
-		
-		if(isset($this->nengos[$w])) {
+		if (isset($this->nengos[$w])) {
 			return $this->nengos[$w];
 		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * 和暦を取得（アルファベット）
  *
@@ -58,25 +55,24 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function wareki($date) {
-
 		$_date = split('/', $date);
-		if(!$_date) {
+		if (!$_date) {
 			$_date = split('-', $date);
 		}
-		if(count($_date)==3) {
-			$wyear = split('-',$_date[0]);
-			if(isset($wyear[0])) {
+		if (count($_date) == 3) {
+			$wyear = split('-', $_date[0]);
+			if (isset($wyear[0])) {
 				return $wyear[0];
 			} else {
 				return false;
 			}
-		} elseif(count($_date)==4) {
+		} elseif (count($_date) == 4) {
 			return $_date[0];
 		} else {
 			return false;
 		}
-
 	}
+
 /**
  * 和暦の年を取得
  *
@@ -85,25 +81,24 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function wyear($date) {
-		
 		$_date = split('/', $date);
-		if(!$_date) {
+		if (!$_date) {
 			$_date = split('-', $date);
 		}
-		if(count($_date)==3) {
-			$wyear = split('-',$_date[0]);
-			if(isset($wyear[1])) {
+		if (count($_date) == 3) {
+			$wyear = split('-', $_date[0]);
+			if (isset($wyear[1])) {
 				return $wyear[1];
 			} else {
 				return false;
 			}
-		} elseif(count($_date)==4) {
+		} elseif (count($_date) == 4) {
 			return $_date[1];
 		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * 西暦を和暦の年に変換する
  * 西暦をまたがる場合があるので配列で返す
@@ -113,26 +108,25 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function convertToWarekiYear($year) {
-
-		if($year >= 1868 && $year <= 1911) {
-			return array('m-'.($year-1867));
+		if ($year >= 1868 && $year <= 1911) {
+			return array('m-' . ($year - 1867));
 		} elseif ($year == 1912) {
-			return array('m-'.($year-1867),'t-'.($year-1911));
+			return array('m-' . ($year - 1867), 't-' . ($year - 1911));
 		} elseif ($year >= 1913 && $year <= 1925) {
-			return array('t-'.($year-1911));
+			return array('t-' . ($year - 1911));
 		} elseif ($year == 1926) {
-			return array('t-'.($year-1911), 's-'.($year-1925));
+			return array('t-' . ($year - 1911), 's-' . ($year - 1925));
 		} elseif ($year >= 1927 && $year <= 1988) {
-			return array('s-'.($year-1925));
+			return array('s-' . ($year - 1925));
 		} elseif ($year == 1989) {
-			return array('s-'.($year-1925), 'h-'.($year-1988));
+			return array('s-' . ($year - 1925), 'h-' . ($year - 1988));
 		} elseif ($year >= 1990) {
-			return array('h-'.($year-1988));
+			return array('h-' . ($year - 1988));
 		} else {
 			return false;
 		}
-
 	}
+
 /**
  * 和暦の年を西暦に変換する
  * 和暦のフォーマット例：s-48
@@ -142,11 +136,10 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function convertToSeirekiYear($year) {
-
-		if(strpos($year, '-')===false) {
+		if (strpos($year, '-') === false) {
 			return false;
 		}
-		list($w,$year) = split('-', $year);
+		list($w, $year) = split('-', $year);
 		switch ($w) {
 			case 'm':
 				return $year + 1867;
@@ -163,8 +156,8 @@ class BcTimeHelper extends TimeHelper {
 			default:
 				return false;
 		}
-
 	}
+
 /**
  * 和暦変換(配列で返す)
  *
@@ -173,25 +166,24 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function convertToWarekiArray($date) {
-
-		if(!$date) {
+		if (!$date) {
 			return '';
-		} elseif(is_array($date)) {
-			if(!empty($date['year']) && !empty($date['month']) && !empty($date['day'])) {
-				$date = $date['year'].'-'.$date['month'].'-'.$date['day'];
+		} elseif (is_array($date)) {
+			if (!empty($date['year']) && !empty($date['month']) && !empty($date['day'])) {
+				$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
 			} else {
 				return '';
 			}
 		}
 
-		if(strtotime($date) === false) {
+		if (strtotime($date) === false) {
 			return '';
 		}
 
-		$ymd = date('Ymd',strtotime($date));
-		$y = date('Y',strtotime($date));
-		$m = date('m',strtotime($date));
-		$d = date('d',strtotime($date));
+		$ymd = date('Ymd', strtotime($date));
+		$y = date('Y', strtotime($date));
+		$m = date('m', strtotime($date));
+		$d = date('d', strtotime($date));
 
 		if ($ymd <= "19120729") {
 			$w = "m";
@@ -208,15 +200,15 @@ class BcTimeHelper extends TimeHelper {
 		}
 
 		$dataWareki = array(
-			'wareki'	=>	true,
-			'year'		=>	$w.'-'.$y,
-			'month'		=>	$m,
-			'day'		=>	$d
+			'wareki' => true,
+			'year' => $w . '-' . $y,
+			'month' => $m,
+			'day' => $d
 		);
 
 		return $dataWareki;
-
 	}
+
 /**
  * 和暦変換
  *
@@ -225,14 +217,12 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function convertToWareki($date) {
-
 		$dateArray = $this->convertToWarekiArray($date);
-		if(is_array($dateArray) && !empty($dateArray)) {
+		if (is_array($dateArray) && !empty($dateArray)) {
 			return $dateArray['year'] . '/' . $dateArray['month'] . '/' . $dateArray['day'];
 		} else {
 			return '';
 		}
-
 	}
 
 /**
@@ -243,16 +233,15 @@ class BcTimeHelper extends TimeHelper {
  * @access	public
  */
 	public function minutes($strDate) {
-
-		$time = strtotime($strDate,0);
+		$time = strtotime($strDate, 0);
 		$minutes = $time / 60;
-		if($minutes) {
+		if ($minutes) {
 			return $minutes . '分';
-		}else {
+		} else {
 			return null;
 		}
-
 	}
+
 /**
  * format 拡張
  *
@@ -264,14 +253,13 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
-
-		if($date !== "00:00:00" && (!$date||$date === 0||$date=='0000-00-00 00:00:00')) {
+		if ($date !== "00:00:00" && (!$date || $date === 0 || $date == '0000-00-00 00:00:00')) {
 			return "";
 		}
 
-		return parent::format($format,$date,$invalid,$userOffset);
-
+		return parent::format($format, $date, $invalid, $userOffset);
 	}
+
 /**
  * 指定した日数が経過しているか確認する
  * 経過していない場合はtrueを返す
@@ -282,21 +270,23 @@ class BcTimeHelper extends TimeHelper {
  * @return boolean 経過有無
  * @access public
  */
-	public function pastDays($date,$days,$now = null) {
+	public function pastDays($date, $days, $now = null) {
 		if (is_null($now)) {
 			$now = time();
 		}
-		if(!$date) return true;
-		$pastDate = strtotime($date);
-		if(!$pastDate) return true;
-		$_days = $days * 60 * 60 * 24;
-		if($now > ($pastDate + $_days)) {
+		if (!$date) {
 			return true;
-		}else {
+		}
+		$pastDate = strtotime($date);
+		if (!$pastDate) {
+			return true;
+		}
+		$_days = $days * 86400;
+		if ($now > ($pastDate + $_days)) {
+			return true;
+		} else {
 			return false;
 		}
-
 	}
-	
+
 }
-?>
