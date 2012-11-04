@@ -143,19 +143,76 @@ class BcTimeHelperTest extends CakeTestCase {
 		);
 	}
 
-	public function testConvertToWareki() {
-		$this->markTestIncomplete();
+/**
+ * @dataProvider convertToWarekiDataProvider
+ */
+	public function testConvertToWareki($data, $expects, $message) {
+		$result = $this->Helper->convertToWareki($data);
+		$this->assertSame($expects, $result, $message);
 	}
 
-	public function testMinutes() {
-		$this->markTestIncomplete();
+	public function convertToWarekiDataProvider() {
+		return array(
+			array(null, '', '未入力'),
+			array('invalid date', '', '不正な日付形式'),
+			array('19120729', 'm-45/07/29', '明治45年7月29日'),
+			array('19120730', 't-1/07/30', '大正元年7月30日'),
+			array('19261224', 't-15/12/24', '大正15年12月24日'),
+			array('19261225', 's-1/12/25', '昭和元年12月25日'),
+			array('19890107', 's-64/01/07', '昭和64年1月7日'),
+			array('19890108', 'h-1/01/08', '平成元年1月8日'),
+		);
 	}
 
-	public function testFormat() {
-		$this->markTestIncomplete();
+/**
+ * @dataProvider minutesDataProvider
+ */
+	public function testMinutes($data, $expects, $message) {
+		$result = $this->Helper->minutes($data);
+		$this->assertSame($expects, $result, $message);
 	}
 
-	public function testPastDays() {
-		$this->markTestIncomplete();
+	public function minutesDataProvider() {
+		return array(
+			array('invalid time', null, '不正な日付形式'),
+			array('1 days', '1440分', '1日'),
+			array('2 week', '20160分', '2週間'),
+		);
+	}
+
+/**
+ * @dataProvider formatDataProvider
+ */
+	public function testFormat($format, $date, $expects, $message) {
+		$result = $this->Helper->format($format, $date);
+		$this->assertSame($expects, $result, $message);
+	}
+
+	public function formatDataProvider() {
+		return array(
+			array('Y-m-d', '2012-03-04 05:06:07', '2012-03-04', '日付'),
+			array('Y/m/d H:i:s', '2012-03-04 05:06:07', '2012/03/04 05:06:07', '日時'),
+			array('Y-m-d', '0000-00-00 00:00:00', '', 'nll datetime'),
+			array('Y-m-d', false, '', 'date is false'),
+			array('Y-m-d', 0, '', 'date is zero'),
+		);
+	}
+
+/**
+ * @dataProvider pastDaysDataProvider
+ */
+	public function testPastDays($date, $days, $nowDate, $expects, $message) {
+		$now = strtotime($nowDate);
+		$result = $this->Helper->pastDays($date, $days, $now);
+		$this->assertSame($expects, $result, $message);
+	}
+
+	public function pastDaysDataProvider() {
+		return array(
+			array('2012-10-03 00:00:00', 1, '2012-10-04 00:00:01', true, '指定日から1日経過している'),
+			array('2012-10-03 00:00:00', 1, '2012-10-04 00:00:00', false, '指定日から1日経過していない'),
+			array('2012-10-03 00:00:00', 30, '2012-11-02 00:00:01', true, '指定日から30日経過している'),
+			array('2012-10-03 00:00:00', 30, '2012-11-02 00:00:00', false, '指定日から30日経過していない'),
+		);
 	}
 }
