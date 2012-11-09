@@ -17,7 +17,7 @@ class BlogContentsSchema extends CakeSchema {
 
 	var $blog_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary', 'length' => 8),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
+		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'description' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'layout' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
