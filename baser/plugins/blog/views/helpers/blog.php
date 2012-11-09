@@ -300,7 +300,12 @@ class BlogHelper extends AppHelper {
 		$tagLinks = array();
 		if(!empty($post['BlogTag'])) {
 			foreach($post['BlogTag'] as $tag) {
-				$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', 'tag', $tag['name']);
+				$url = array(
+					'admin'			=> false, 
+					'plugin'		=> '', 
+					'controller'	=> $post['BlogContent']['name'], 
+					'action'		=> 'archives', 'tag', $tag['name']
+				);
 				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
 			}
 		}
