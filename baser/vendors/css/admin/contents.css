@@ -531,7 +531,7 @@ table.sub-menu{
 	padding-top:3px;
 	padding-bottom:3px;
 }
-a.btn-white-grad{
+.button-small{
 	text-decoration: none;
 	display:inline-block;
 	padding:4px 10px 4px;
@@ -566,7 +566,7 @@ a.btn-white-grad{
 	border-color:#ccc;
 	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
 }
-a.btn-white-grad:hover{
+.button-small:hover{
 	background-color:#e6e6e6;
 	color:#333;
 	text-decoration:none;
