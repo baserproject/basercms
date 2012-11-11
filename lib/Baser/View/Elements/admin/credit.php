@@ -164,25 +164,27 @@ function resizeScroll() {
 						<li>Kou (<a href="http://twitter.com/k0567" target="_blank">k0567</a>)</li>
 					</ul>
 					<ul>
-						<li><a href="http://www.pictnotes.jp/" target="_blank">Sunao Kiyosue</a> (<a href="http://twitter.com/itm_kiyo" target="_blank">itm_kiyo</a>)</li>
 						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
 						<li><a href="http://www.goreydesign.com/" target="_blank">Matuki Okawa</a> (<a href="http://twitter.com/torchright" target="_blank">torchright</a>)</li>
 						<li><a href="http://one-push.info/" target="_blank">Ueda kazuhiro</a> (<a href="http://twitter.com/masyu21" target="_blank">masyu21</a>)</li>
 						<li><a href="http://jungledan.info/" target="_blank">Yasuyuki Nina</a> (<a href="http://twitter.com/jungledan" target="_blank">jungledan</a>)</li>
 						<li>Hiroyuki Kuwamura (<a href="http://twitter.com/staff_yg" target="_blank">staff_yg</a>)</li>
+						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki Arima</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
 					</ul>
 					<ul>
-						<li><a href="http://www.clotho-web.com/wp/" target="_blank">Kazuki Arima</a> (<a href="http://twitter.com/clothoweb" target="_blank">clothoweb</a>)</li>
 						<li><a href="http://motto-web.jp/" target="_blank">Goichi Maniwa</a> (<a href="http://twitter.com/goichi_m" target="_blank">goichi_m</a>)</li>
 						<li><a href="http://yumemaru.com/" target="_blank">Yumemaru</a></li>
 						<!-- ここからテスター -->
+						<li><a href="http://aht-records.com" target="_blank">Ippei Suzuki</a> (<a href="http://twitter.com/aht_Record" target="_blank">aht_Record</a>)</li>
 						<li><a href="http://www.arbalest.or.jp/" target="_blank">Masahiro Kawai</a> (<a href="http://twitter.com/m68k" target="_blank">m68k</a>)</li>
 						<li><a href=" http://www.yaoto.com/" target="_blank">Yasuhiro Konishi</a> (<a href="http://twitter.com/yaotosys" target="_blank">yaotosys</a>)</li>
 						<li><a href="http://www.mmpf-develop.com" target="_blank">Nobuyuki Sato</a> (<a href="http://twitter.com/mmpf_develop" target="_blank">mmpf_develop</a>)</li>
 					</ul>
 					<ul>
 						<li><a href="http://kototoy.jp/" target="_blank">Taku Fujita</a> (<a href="http://twitter.com/takufujita" target="_blank">takufujita</a>)</li>
-						<li><a href="http://aht-records.com" target="_blank">Ippei Suzuki</a> (<a href="http://twitter.com/aht_Record" target="_blank">aht_Record</a>)</li>
+						<li><a href="http://www.asparagus.jp/" target="_blank">Munenori Nishimura</a> (<a href="http://twitter.com/mune_nori" target="_blank">mune_nori</a>)</li>
+						<li><a href="http://caracri-works.com/" target="_blank">Shogo Tamura</a> (<a href="http://twitter.com/tamshow_" target="_blank">tamshow_</a>)</li>
+						<li>Atsushi Shibata (atsu)</li>
 					</ul>
 				</div>
 
@@ -201,11 +203,13 @@ function resizeScroll() {
 						<li><a href="http://www.panic-net.org/" target="_blank">Min</a> (<a href="http://twitter.com/min_meou" target="_blank">min_meou</a>)</li>
 						<li><a href="http://blog.grooweb.jp/" target="_blank">Youhei Nishi</a> (<a href="http://twitter.com/nippei" target="_blank">nippei</a>)</li>
 						<li><a href="http://ryuring.blogspot.jp/" target="_blank">Ryuji Egashira</a> (<a href="http://twitter.com/ryuring" target="_blank">ryuring</a>)</li>
-						<li>Daichi Shimoyama (<a href="http://twitter.com/daichi_shim" target="_blank">daichi_shim</a>)</li>
+						<li>Daichi Shimoyama (<a href="http://twitter.com/dublich" target="_blank">dublich</a>)</li>
 						<li><a href="http://www.ls-e.com" target="_blank">Tetuya Takahashi</a></li>
 					</ul>
 					<ul>
 						<li>Masanori Matsumoto (<a href="http://twitter.com/mattun0313" target="_blank">mattun0313</a>)</li>
+						<li><a href="http://www.pictnotes.jp/" target="_blank">Sunao Kiyosue</a> (<a href="http://twitter.com/itm_kiyo" target="_blank">itm_kiyo</a>)</li>
+						<li>Kanji Hatamoto (<a href="http://twitter.com/kanjihtmt" target="_blank">Kanji</a>)</li>
 					</ul>
 				</div>
 
