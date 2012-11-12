@@ -36,13 +36,6 @@ class Message extends MailAppModel {
  */
 	var $name = 'Message';
 /**
- * ビヘイビア
- * 
- * @var array
- * @access public
- */
-	var $actsAs = array('BcCache');
-/**
  * メールフォーム情報
  *
  * @var array

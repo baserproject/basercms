@@ -76,9 +76,7 @@ class MailContent extends MailAppModel {
 		),
 		'title' => array(
 			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "メールフォームタイトルを入力してください。"),
-			array(	'rule'		=> array('maxLength', 250),
-					'message'	=> 'メールフォームタイトルは250文字以内で入力してください。')
+					'message'	=> "メールフォームタイトルを入力してください。")
 		),
 		'sender_name' => array(
 			array(	'rule'		=> array('notEmpty'),
