@@ -77,8 +77,8 @@ class BlogContent extends BlogAppModel {
 						'message'	=> 'ブログアカウント名に「blog」は利用できません。'),
 				array(	'rule'		=> array('isUnique'),
 						'message'	=> '入力されたブログアカウント名は既に使用されています。'),
-				array(	'rule'		=> array('maxLength', 50),
-						'message'	=> 'ブログアカウント名は50文字以内で入力してください。')
+				array(	'rule'		=> array('maxLength', 100),
+						'message'	=> 'ブログアカウント名は100文字以内で入力してください。')
 		),
 		'title' => array(
 			array(	'rule'		=> array('notEmpty'),
