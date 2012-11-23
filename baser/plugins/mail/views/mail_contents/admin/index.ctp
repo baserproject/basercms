@@ -41,7 +41,7 @@
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="admin-col-table-01" id="TableMailContents">
 	<tr>
-		<th style="width:180px">操作</th>
+		<th style="width:128px">操作</th>
 		<th>NO</th>
 		<th>メールフォームアカウント</th>
 		<th>メールフォームタイトル</th>
@@ -56,17 +56,15 @@
 			<?php $class=''; ?>
 		<?php endif; ?>
 	<tr<?php echo $class; ?>>
-		<td class="operation-button">
+		<td class="operation-button" style="text-align: left;">
 			<?php $baser->link('確認', array('admin' => false, 'plugin' => '', 'controller' => $listData['MailContent']['name'], 'action' => 'index'), array('target' => '_blank', 'class' => 'btn-green-s button-s')) ?>
 			<?php $baser->link('管理', array('controller' => 'mail_fields', 'action' => 'index', $listData['MailContent']['id']), array('class' => 'btn-red-s button-s'), null, false) ?>
 			<?php $baser->link('編集', array('action' => 'edit', $listData['MailContent']['id']), array('class' => 'btn-orange-s button-s'), null, false) ?>
-			<?php $baser->link('削除', array('action' =>'delete', $listData['MailContent']['id']), array('class' => 'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $listData['MailContent']['title']), false); ?>
+			<div style="margin-top: 5px;text-align: right;">
+				<?php $baser->link('コピー', array('action' =>'copy', $listData['MailContent']['id']), array('class' => 'btn-red-s button-s'), sprintf('本当に「%s」を複製してもいいですか？', $listData['MailContent']['title']), false); ?>
+				<?php $baser->link('削除', array('action' =>'delete', $listData['MailContent']['id']), array('class' => 'btn-gray-s button-s'), sprintf('本当に「%s」を削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $listData['MailContent']['title']), false); ?>
+			</div>
 		</td>
-		<td><?php echo $listData['MailContent']['id'] ?></td>
-		<td><?php $baser->link($listData['MailContent']['name'], array('action' => 'edit', $listData['MailContent']['id'])) ?></td>
-		<td><?php echo $listData['MailContent']['title'] ?></td>
-		<td><?php echo $timeEx->format('y-m-d',$listData['MailContent']['created']) ?><br />
-			<?php echo $timeEx->format('y-m-d',$listData['MailContent']['modified']) ?></td>
 	</tr>
 		<?php $count++; ?>
 	<?php endforeach; ?>
