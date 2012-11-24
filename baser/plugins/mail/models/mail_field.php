@@ -182,6 +182,52 @@ class MailField extends MailAppModel {
 		}
 
 	}
-	
+/**
+ * フィールドデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed UserGroup Or false
+ */
+	function copy($id, $data = array(), $options = array()) {
+
+		$options = array_merge(array(
+			'sortUpdateOff'	=> false,
+		), $options);
+
+		extract($options);
+
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+		}
+
+		if($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
+			$data['MailField']['name'] .= '_copy';
+			$data['MailField']['field_name'] .= '_copy';
+			return $this->copy(null, $data, $options);	// 再帰処理
+		}
+
+		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		if(!$sortUpdateOff) {
+			$data['MailField']['sort'] = $this->getMax('sort') + 1;
+		}
+		// 1.6系にはバッチ処理がないためコピーしたフィールドは即有効化
+		$data['MailField']['use_field'] = true;
+
+		unset($data['MailField']['id']);
+		unset($data['MailField']['modified']);
+		unset($data['MailField']['created']);
+
+		$this->create($data);
+		$result = $this->save();
+		if($result) {
+			$result['MailField']['id'] = $this->getInsertID();
+			return $result;
+		} else {
+			return false;
+		}
+
+	}
+
 }
 ?>

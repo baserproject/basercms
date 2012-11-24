@@ -314,6 +314,37 @@ class MailContentsController extends MailAppController {
 		}
 		
 	}
+/**
+ * メールを複製する
+ *
+ * @param int $mailContentId
+ * @return void
+ * @access public
+ */
+	function admin_copy($id) {
+
+		/* 除外処理 */
+		if(!$id) {
+			$this->Session->setFlash('無効なIDです。');
+			$this->redirect(array('action'=>'admin_index'));
+		}
+
+		$result = $this->MailContent->copy($id);
+		if(!$result) {
+			if(isset($this->MailContent->validationErrors['name']) && $this->MailContent->validate['name']['maxLength']['message'] == $this->MailContent->validationErrors['name']) {
+				$this->Session->setFlash('コピー元のメールコンテンツ名が長い為コピーに失敗しました。<br />コピー後のメールコンテンツ名は255文字以内になる必要があります。');
+				$this->redirect(array('action'=>'admin_index'));
+			} else {
+				$this->Session->setFlash($this->MailContent->validationErrors);
+				$this->redirect(array('action'=>'admin_index'));
+			}
+		}
+
+		$listDatas = $this->MailContent->findAll();
+		$this->set('listDatas',$listDatas);
+		$this->redirect(array('action'=>'admin_index'));
+
+	}
 
 }
 ?>
