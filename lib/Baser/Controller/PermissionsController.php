@@ -167,7 +167,6 @@ class PermissionsController extends AppController {
 				$this->request->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->request->data['Permission']['url']);
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		/* 表示設定 */
@@ -178,8 +177,8 @@ class PermissionsController extends AppController {
 		$this->set('authPrefix', $authPrefix);
 		$this->help = 'permissions_form';
 		$this->render('form');
-
 	}
+
 /**
  * [ADMIN] 登録処理
  *

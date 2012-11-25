@@ -80,15 +80,11 @@ class SiteConfigsController extends AppController {
 			$this->request->data = $this->_getSiteConfigData();
 
 		}else {
-
 			$this->SiteConfig->set($this->request->data);
 
 			if(!$this->SiteConfig->validates()) {
-
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
-
 			}else {
-
 				$mode = 0;
 				$smartUrl = false;
 				$siteUrl = $sslUrl = '';

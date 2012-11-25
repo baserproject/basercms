@@ -95,7 +95,7 @@ class User extends AppModel {
 				'message'	=> '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule'		=> array('maxLength', 50),
-				'message'	=> 'アカウント名は50文字以内で入力してください。'
+				'message'	=> '名前[姓]は50文字以内で入力してください。'
 			)
 		),
 		'real_name_2' => array(
@@ -108,7 +108,7 @@ class User extends AppModel {
 			'minLength' => array(
 				'rule'		=> array('minLength',6),
 				'allowEmpty' => false,
-				'message'	=> 'パスワードは６文字以上で入力してください。'
+				'message'	=> 'パスワードは6文字以上で入力してください。'
 			),
 			'maxLength' => array(
 				'rule'		=> array('maxLength', 255),
@@ -177,7 +177,7 @@ class User extends AppModel {
  * ユーザーリストを取得する
  * 条件を指定する場合は引数を指定する
  * 
- * @param array $authUser
+ * @param array $conditions
  * @return array
  */
 	public function getUserList($conditions = array()) {
