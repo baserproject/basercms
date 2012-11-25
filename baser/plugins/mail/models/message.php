@@ -539,10 +539,8 @@ class Message extends MailAppModel {
 			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 		);
 		$ret = true;
-		if($contentName == 'messages') {
-			if($this->tableExists($fullTable)){
-				$ret = $db->dropTable(array('table'=>$table));
-			}
+		if($this->tableExists($fullTable)){
+			$ret = $db->dropTable(array('table'=>$table));
 		}
 		if(!$ret){
 			return false;

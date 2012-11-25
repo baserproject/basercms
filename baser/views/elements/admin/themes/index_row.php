@@ -31,8 +31,8 @@
 	<?php if($bcBaser->isAdminUser()): ?>
 		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['name'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name'])) ?>
 	<?php endif ?>
-		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_apply.png', array('width' => 24, 'height' => 24, 'alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用')) ?>
-<?php endif ?>		
+	<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_apply.png', array('width' => 24, 'height' => 24, 'alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用')) ?>
+<?php endif ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), array('controller'=>'theme_files','action' => 'index', $data['name']), array('title' => '管理')) ?>
 <?php if($data['name'] != 'core'): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['name']), array('title' => '編集')) ?>
@@ -41,6 +41,12 @@
 
 <?php if($data['name'] != 'core'): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+<?php endif ?>
+<?php if($data['name'] == $bcBaser->siteConfig['theme'] && $defaultDataPatterns && $bcBaser->isAdminUser()): ?>
+	<?php echo $bcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+	<br /><?php echo $bcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
+	<br /><?php echo $bcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
+	<?php echo $bcForm->end() ?>
 <?php endif ?>
 <?php if(!$data['is_writable_pages'] && $data['name'] != 'core'): ?>
 		<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>

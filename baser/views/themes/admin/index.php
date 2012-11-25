@@ -30,6 +30,15 @@ $bcBaser->js(array(
 	$(function(){
 		$.baserAjaxDataList.init();
 		$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
+		$("#BtnLoadDefaultDataPattern").click(function() {
+			if(confirm(
+				'初期データを読み込みます。よろしいですか？\n\n'+
+				'※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n'+
+				'※ プラグイン管理情報、管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。')) {
+				return true;
+			}
+			return false;
+		});
 	});
 </script>
 

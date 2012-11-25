@@ -515,8 +515,78 @@ class BcManagerComponent extends Object {
 			}
 		}
 		
+		if (!$this->initSystemData($dbConfig)) {
+			$this->log('システムデータの初期化に失敗しました。');
+			return false;
+		}
+		
 		return true;
 
+	}
+/**
+ * 全ての初期データセットのリストを取得する
+ * 
+ * @return type 
+ */
+	function getAllDefaultDataPatterns() {
+		
+		$patterns = array();
+		
+		// コア
+		$patterns = $this->getDefaultDataPatterns();
+		
+		// コアテーマ
+		$Folder = new Folder(BASER_CONFIGS.'theme');
+		$files = $Folder->read(true, true);
+		foreach($files[0] as $theme) {
+			if($theme != 'empty') {
+				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
+			}
+		}
+		
+		// 外部テーマ
+		$Folder = new Folder(BASER_THEMES);
+		$files = $Folder->read(true, true, false);
+		foreach($files[0] as $theme) {
+			if($theme != 'empty') {
+				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
+			}
+		}
+		
+		return $patterns;
+		
+	}
+/**
+ * 初期データのセットを取得する
+ * 
+ * @param string $path
+ * @param string $theme
+ * @return array 
+ */
+	function getDefaultDataPatterns($theme = 'core') {
+		
+		$path = '';
+ 		if($theme == 'core') {
+			$path = BASER_CONFIGS.'data';
+		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
+			$path = BASER_THEMES.$theme.DS.'config'.DS.'data';
+		} elseif(is_dir(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data')) {
+			$path = BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data';
+		} else {
+			return array();
+		}
+		
+		$patterns = array();
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if($files[0]) {
+			foreach($files[0] as $pattern) {
+				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
+			}
+		}
+		
+		return $patterns;
+		
 	}
 /**
  * 初期データを読み込む
@@ -528,7 +598,7 @@ class BcManagerComponent extends Object {
  * @param string $plugin
  * @return boolean 
  */
-	function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core') {
+	function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
 		
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
@@ -540,7 +610,10 @@ class BcManagerComponent extends Object {
 
 		if($theme == 'core') {
 			if($plugin == 'core') {
-				$paths = array(BASER_CONFIGS.'data'.DS.$pattern);
+				$paths = array(
+					BASER_CONFIGS.'data'.DS.$pattern,
+					BASER_CONFIGS.'data'.DS.'default',
+				);
 			} else {
 				$paths = array(
 					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
@@ -551,7 +624,7 @@ class BcManagerComponent extends Object {
 			if($plugin == 'core') {
 				$paths = array(
 					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.DS.$pattern
 				);
 			} else {
 				$paths = array(
@@ -576,19 +649,154 @@ class BcManagerComponent extends Object {
 			return false;
 		}
 		
-		$Folder = new Folder($path);
-		$files = $Folder->read(true, true, true);
-		// 初期データ投入
-		foreach($files[1] as $file) {
-			if(!preg_match('/\.csv$/',$file)) {
-				continue;
-			}
-			if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
-				return false;
-			}
+		if($plugin == 'core') {
+			$corePath = BASER_CONFIGS.'data'.DS.'default';
+		} else {
+			$corePath = BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default';
 		}
 		
+		$Folder = new Folder($corePath);
+		$files = $Folder->read(true, true);
+		$targetTables = $files[1];
+		
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true, true);
+		
+		$result = true;
+		
+		foreach ($targetTables as $targetTable) {
+			$targetTable = basename($targetTable, '.csv');
+			if(!in_array($targetTable, $excludes)) {
+				// 初期データ投入
+				$loaded = false;
+				foreach($files[1] as $file) {
+					if(!preg_match('/\.csv$/', $file)) {
+						continue;
+					}
+					$table = basename($file, '.csv');
+					if($table == $targetTable) {
+						if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+							$this->log($file . ' の読み込みに失敗。');
+							$result = false;
+						} else {
+							$loaded = true;
+							break;
+						}
+					}
+				}
+				// 存在しなかった場合は、コアのファイルを読み込む
+				if(!$loaded) {
+					if(!$db->loadCsv(array('path'=>$corePath.DS.$targetTable.'.csv', 'encoding'=>'SJIS'))){
+						$this->log($corePath . DS . $targetTable . ' の読み込みに失敗。');
+						$result = false;
+					}
+				}
+			}
+		}		
 		return true;
+		
+	}
+/**
+ * システムデータを初期化する
+ * 
+ * @param string $dbConfigKeyName
+ * @param array $dbConfig 
+ */
+	function initSystemData($dbConfig = null) {
+		
+		$db =& $this->_getDataSource('baser', $dbConfig);
+		$corePath = BASER_CONFIGS.'data'.DS.'default';
+		$result = true;
+		
+		/* page_categories の初期データをチェック＆設定 */
+		$PageCategory = ClassRegistry::init('PageCategory');
+		$mobileId = $PageCategory->field('id', array(
+				'PageCategory.parent_id' => null,
+				'PageCategory.name'		=> 'mobile'
+		));
+		$smartphoneId = $PageCategory->field('id', array(
+				'PageCategory.parent_id' => null,
+				'PageCategory.name'		=> 'smartphone'
+		));
+		// 一旦削除
+		$PageCategory->deleteAll(array(
+			'PageCategory.parent_id'	=> null,
+			'or' => array(
+				array('PageCategory.name' => 'mobile'),
+				array('PageCategory.name' => 'smartphone')
+		)), false);
+		// 再登録
+		if(!$db->loadCsv(array('path' => $corePath . DS . 'page_categories.csv', 'encoding'=>'SJIS'))){
+			$this->log($corePath . DS . 'page_categories.csv の読み込みに失敗。');
+			$result = false;
+		}
+		
+		// IDを更新
+		if($mobileId) {
+			if (!$PageCategory->updateAll(
+					array('PageCategory.id' => $mobileId), 
+					array('PageCategory.parent_id' => null, 'PageCategory.name' => 'mobile'
+					))) {
+				$this->log('page_categories テーブルで、システムデータ mobile の id 更新に失敗。');
+				$result = false;
+			}
+		}
+		if($smartphoneId) {
+			if (!$PageCategory->updateAll(
+					array('PageCategory.id' => $smartphoneId), 
+					array('PageCategory.parent_id' => null, 'PageCategory.name' => 'smartphone'
+					))) {
+				$this->log('page_categories テーブルで、システムデータ smartphone の id 更新に失敗。');
+				$result = false;
+			}
+		}
+
+		/* user_groupsの初期データをチェック＆設定 */
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		// 一旦削除
+		$UserGroup->delete($adminsId, false);
+		// 再登録
+		if(!$db->loadCsv(array('path' => $corePath . DS . 'user_groups.csv', 'encoding'=>'SJIS'))){
+			$this->log($corePath . DS . 'user_groups.csv の読み込みに失敗。');
+			$result = false;
+		}
+		// IDを更新
+		if($adminsId) {
+			if (!$UserGroup->updateAll(
+					array('UserGroup.id' => $adminsId),
+					array('UserGroup.name' => 'admins')
+					)) {
+				$this->log('user_groups テーブルで、システムデータ admins の id 更新に失敗。');
+				$result = false;
+			}
+		} else {
+			$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		}
+		
+		/* users は全てのユーザーを削除 */
+		//======================================================================
+		// ユーザーグループを新しく読み込んだ場合にデータの整合性がとれない可能性がある為
+		//======================================================================
+		if(!$db->truncate('users')) {
+			$this->log('users テーブルの初期化に失敗。');
+			$result = false;
+		}
+		
+		/* site_configs の初期データをチェック＆設定 */	
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		if(!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
+				!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'google_analytics_id')) ||
+				!$SiteConfig->updateAll(array('SiteConfig.value' => 1), array('SiteConfig.name' => 'first_access')) ||
+				!$SiteConfig->deleteAll(array('SiteConfig.name' => 'version'), false)) {
+			$this->log('site_configs テーブルの初期化に失敗');
+			$result = false;
+		}
+		
+		/* メールプラグインの受信データ用テーブルをチェック＆設定 */
+		
+		
+		return $result;
 		
 	}
 /**
@@ -648,9 +856,79 @@ class BcManagerComponent extends Object {
 		if(!$this->deleteTables('baser', $dbConfig)) {
 			$result = false;
 		}
-		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
+		if($dbConfig) {
+			$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
+		}
 		if(!$this->deleteTables('plugin', $dbConfig)) {
 			$result = false;
+		}
+		return $result;
+		
+	}
+/**
+ * プラグインも含めて全てのテーブルをリセットする
+ * 
+ * @param array $dbConfig 
+ * @return boolean
+ * @access public
+ */
+	function resetAllTables($dbConfig = null, $excludes = array()) {
+		
+		$result = true;
+		if(!$this->resetTables('baser', $dbConfig, 'core', $excludes)) {
+			$result = false;
+		}
+		if($dbConfig) {
+			$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
+		}
+		
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach($corePlugins as $corePlugin) {
+			if(!$this->resetTables('plugin', $dbConfig, $corePlugin, $excludes)) {
+				$result = false;
+			}
+		}
+
+		return $result;
+		
+	}
+/**
+ * テーブルをリセットする
+ * 
+ * @param type $dbConfigKeyName
+ * @param type $dbConfig
+ * @return boolean 
+ */
+	function resetTables($dbConfigKeyName = 'baser', $dbConfig = null, $plugin = 'core', $excludes = array()) {
+		
+		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$dbConfig = $db->config;
+		$sources = $db->listSources();
+		$result = true;
+		foreach ($sources as $source) {
+			if (preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source, $matches)) {
+				$table = $matches[1];	
+				if ($plugin == 'core') {
+					if(preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."/", $table)) {
+						continue;
+					}
+				} else {
+					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
+					if (!preg_match("/^".$plugin."_([^_].+)$/", $table)) {
+						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
+						if ($plugin != 'mail') {
+							continue;
+						} elseif (!preg_match("/messages$/", $table)) {
+							continue;
+						}
+					}
+				}
+				if(!in_array($table, $excludes)) {
+					if (!$db->truncate($table)) {
+						$result = false;
+					}
+				}
+			}
 		}
 		return $result;
 		

@@ -244,58 +244,11 @@ class InstallationsController extends AppController {
 
 		}
 
-		$dbDataPatterns = $this->_getDbDataPatterns();
+		$dbDataPatterns = $this->BcManager->getAllDefaultDataPatterns();
 		$this->set('dbDataPatterns', $dbDataPatterns);
 		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
 		$this->set('dbsource', $dbsource);
 
-	}
-/**
- * 初期データのセットを読み込む
- * 
- * @return array 
- */
-	function _getDbDataPatterns() {
-		
-		$patterns = array();
-		// コア
-		$patterns = $this->_loadDbDataPatterns(BASER_CONFIGS.'data');
-		
-		// コアテーマ
-		$Folder = new Folder(BASER_CONFIGS.'theme');
-		$files = $Folder->read();
-		foreach($files[0] as $theme) {
-			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data', $theme));
-		}
-		// 外部テーマ
-		$Folder = new Folder(BASER_THEMES);
-		$files = $Folder->read();
-		foreach($files[0] as $theme) {
-			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_THEMES.$theme.DS.'config'.DS.'data', $theme));
-		}
-		
-		return $patterns;
-		
-	}
-/**
- * 初期データのセットを読み込む
- * 
- * @param string $path
- * @param string $theme
- * @return array 
- */
-	function _loadDbDataPatterns($path, $theme = 'core') {
-		
-		$patterns = array();
-		$Folder = new Folder($path);
-		$files = $Folder->read();
-		if($files[0]) {
-			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
-			}
-		}
-		return $patterns;
-		
 	}
 /**
  * Step 4: データベース生成／管理者ユーザー作成
@@ -477,7 +430,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'bc_';
 			$data['Installation']['dbName'] = 'basercms';
-			$data['Installation']['dbDataPattern'] = 'core.demo';
+			$data['Installation']['dbDataPattern'] = 'demo.default';
 		}
 		
 		return $data;

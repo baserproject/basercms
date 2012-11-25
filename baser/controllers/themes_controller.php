@@ -36,7 +36,7 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
 /**
  * ヘルパー
  *
@@ -79,10 +79,133 @@ class ThemesController extends AppController {
 			'url'				=> 'http://basercms.net',
 			'is_writable_pages'	=> false
 		);
+		
 		$this->set('datas',$datas);
+		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme']));
+		
 		$this->subMenuElements = array('themes');
 		$this->help = 'themes_index';
 		
+	}
+/**
+ * 初期データセットを読み込む
+ * 
+ * @return void
+ */
+	function admin_load_default_data_pattern() {
+		
+		if (empty($this->data['Theme']['default_data_pattern'])) {
+			$this->Session->setFlash('不正な動作です。');
+			$this->redirect('index');
+		}
+		
+		$excludes = array('plugins', 'dblogs');
+		
+		$user = $this->BcAuth->user();
+		$User = ClassRegistry::init('User');
+		$user = $User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'recursive' => -1));
+		
+		/* データを削除する */
+		$this->BcManager->resetAllTables(null, $excludes);
+		
+		$dbDataPattern = $this->data['Theme']['default_data_pattern'];
+		list($theme, $pattern) = explode('.', $dbDataPattern);
+		$result = true;
+		
+		/* コアデータ */
+		if (!$this->BcManager->loadDefaultDataPattern('baser', null, $pattern, $theme, 'core', $excludes)) {
+			$result = false;
+			$this->log($dbDataPattern." の初期データのロードに失敗しました。");
+		}
+		
+		/* コアプラグインデータ */
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach ($corePlugins as $corePlugin) {
+			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $corePlugin, $excludes)) {
+				$result = false;
+				$this->log($dbDataPattern." のプラグインの初期データのロードに失敗しました。");
+			}
+		}
+		
+		if (!$result) {
+			/* 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる */
+			if (!$this->BcManager->loadDefaultDataPattern('baser', null, 'default', 'core', 'core', $excludes)) {
+				$this->log("コアの初期データのロードに失敗しました。");
+				$result = false;
+			}
+			foreach ($corePlugins as $corePlugin) {
+				if (!$this->BcManager->loadDefaultDataPattern('plugin', null, 'default', 'core', $corePlugin, $excludes)) {
+					$this->log("コアのプラグインの初期データのロードに失敗しました。");
+					$result = false;
+				}
+			}
+			if ($result) {
+				$this->Session->setFlash('初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。');
+			} else {
+				$this->Session->setFlash('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。');
+			}
+		}
+		
+		// システムデータの初期化
+		if (!$this->BcManager->initSystemData()) {
+			$result = false;
+			$this->log('システムデータの初期化に失敗しました。');
+		}
+		
+		// ユーザーデータの初期化
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		$User->create($user);
+		if (!$User->save()) {
+			$result = false;
+			$this->log('ユーザーデータの初期化に失敗しました。手動でユーザー情報を新しく登録してください。');
+		}
+		
+		// システム基本設定の更新
+		$siteConfigs = array('SiteConfig' => array(
+			'email'					=> $this->siteConfigs['email'],
+			'google_analytics_id'	=> $this->siteConfigs['google_analytics_id'],
+			'first_access'			=> null,
+			'version'				=> $this->siteConfigs['version']
+		));
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$SiteConfig->saveKeyValue($siteConfigs);
+		
+		// メール受信テーブルの作成
+		$PluginContent = ClassRegistry::init('PluginContent');
+		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
+		$Message = ClassRegistry::init('Mail.Message');
+		foreach($pluginContents as $pluginContent) {
+			if($Message->createTable($pluginContent['PluginContent']['name'])) {
+				if(!$Message->construction($pluginContent['PluginContent']['content_id'])) {
+					$result = false;
+					$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+				}
+			} else {
+				$result = false;
+				$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+			}
+		}
+		
+		clearAllCache();
+		
+		if(!$this->Page->createAllPageTemplate()){
+			$result = false;
+			$this->log(
+					'初期データの読み込み中にページテンプレートの生成に失敗しました。' .
+					'「pages」フォルダに書き込み権限が付与されていない可能性があります。' .
+					'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+			);
+		}
+		
+		if($result) {
+			$this->Session->setFlash('初期データの読み込みが完了しました。');
+		} else {
+			$this->Session->setFlash('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
+		}
+		
+		$this->redirect('index');
+
 	}
 /**
  * テーマ情報を読み込む
@@ -329,7 +452,11 @@ class ThemesController extends AppController {
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
 		if(!$this->Page->createAllPageTemplate()){
-				$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />テーマの適用をやり直すか、表示できないページについてページ管理より更新処理を行ってください。');
+				$this->Session->setFlash(
+						'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
+						'「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
+						'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+				);
 		} else {
 			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
 		}

@@ -3307,6 +3307,10 @@ class DboSource extends DataSource {
 
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
+		if(!$fp) {
+			return false;
+		}
+		
 		$_head = fgetcsv($fp,10240);
 		foreach($_head as $value) {
 			$head[] = $this->name($value);
