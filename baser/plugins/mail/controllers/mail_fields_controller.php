@@ -449,12 +449,12 @@ class MailFieldsController extends MailAppController {
 		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'].'_';
 		$this->Message->_schema = null;
 		$this->Message->cacheSources = false;
-		$messages = $this->Message->find('all');
-		$this->set('messages',$messages);
-		$this->set('contentName',$this->mailContent['MailContent']['name']);
+		$messages = $this->MailField->convertMessageData($mailContentId, $this->Message->find('all'), $this->Message->alias);
+
+		$this->set('messages', $messages);
+		$this->set('contentName', $this->mailContent['MailContent']['name']);
 
 	}
-
 /**
  * 並び替えを更新する [AJAX]
  *
@@ -595,5 +595,5 @@ class MailFieldsController extends MailAppController {
 		}
 		
 	}
-	
+
 }
