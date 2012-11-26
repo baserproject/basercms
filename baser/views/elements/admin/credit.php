@@ -185,6 +185,8 @@ function resizeScroll() {
 						<li><a href="http://www.asparagus.jp/" target="_blank">Munenori Nishimura</a> (<a href="http://twitter.com/mune_nori" target="_blank">mune_nori</a>)</li>
 						<li><a href="http://caracri-works.com/" target="_blank">Shogo Tamura</a> (<a href="http://twitter.com/tamshow_" target="_blank">tamshow_</a>)</li>
 						<li>Atsushi Shibata (atsu)</li>
+						<li><a href="http://webcake.no003.info/" target="_blank">Tsuyoshi Kaneko</a> (<a href="http://twitter.com/andante0727" target="_blank">andante0727</a>)</li>
+						<li><a href="http://pws-oconos.net" target="_blank">PC Work Supporter Oconos</a></li>
 					</ul>
 				</div>
 
@@ -210,6 +212,7 @@ function resizeScroll() {
 						<li>Masanori Matsumoto (<a href="http://twitter.com/mattun0313" target="_blank">mattun0313</a>)</li>
 						<li><a href="http://www.pictnotes.jp/" target="_blank">Sunao Kiyosue</a> (<a href="http://twitter.com/itm_kiyo" target="_blank">itm_kiyo</a>)</li>
 						<li>Kanji Hatamoto (<a href="http://twitter.com/kanjihtmt" target="_blank">Kanji</a>)</li>
+						<li><a href="http://blog.gufii.net" target="_blank">Takayuki Gondo</a> (<a href="http://twitter.com/gondoh_jp" target="_blank">gondoh_jp</a>)</li>
 					</ul>
 				</div>
 
