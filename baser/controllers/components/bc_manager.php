@@ -1267,7 +1267,7 @@ class BcManagerComponent extends Object {
  * @param	string	$base
  * @return	string
  */
-	function getRewriteBase($url, $baseUrl){
+	function getRewriteBase($url, $baseUrl = null){
 
 		if(!$baseUrl) {
 			$baseUrl = BC_BASE_URL;
