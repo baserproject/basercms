@@ -1,10 +1,10 @@
 <?php
 /* SVN FILE: $Id$ */
-/* 
+/*
  *  CSVヘルパー
- * 
+ *
  *  PHP versions 5
- * 
+ *
  *  SmartCake :  Smart Introduction Project <http://basercms.net>
  * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *  @filesource
@@ -90,7 +90,7 @@ class BcCsvHelper extends AppHelper {
 
 		}
 		return true;
-		
+
 	}
 /**
  * モデルデータよりCSV用のheadデータを取得する
@@ -110,7 +110,7 @@ class BcCsvHelper extends AppHelper {
 		}
 		$enc = mb_detect_encoding($head);
 		$head = substr($head,0,strlen($head)-1) . "\n";
-		$head = mb_convert_encoding($head,'SJIS',$enc);
+		$head = mb_convert_encoding($head,'SJIS-WIN',$enc);
 		return $head;
 
 	}
@@ -137,7 +137,7 @@ class BcCsvHelper extends AppHelper {
 
 		$enc = mb_detect_encoding($body);
 		$body = substr($body,0,strlen($body)-1) . "\n";
-		$body = mb_convert_encoding($body,'SJIS',$enc);
+		$body = mb_convert_encoding($body,'SJIS-WIN',$enc);
 		return $body;
 
 	}
@@ -173,7 +173,7 @@ class BcCsvHelper extends AppHelper {
  * @return void
  */
 	function save($fileName) {
-		
+
 		if($this->exportCsvHead) {
 			$exportData = $this->csvHead.$this->csvBody;
 		}else {
@@ -182,8 +182,8 @@ class BcCsvHelper extends AppHelper {
 		$fp = fopen($fileName,"w");
 		fputs($fp,$exportData,1024*1000*10);
 		fclose($fp);
-		
+
 	}
-	
+
 }
 ?>
