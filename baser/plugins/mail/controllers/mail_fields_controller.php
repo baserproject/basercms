@@ -449,7 +449,8 @@ class MailFieldsController extends MailAppController {
 		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'].'_';
 		$this->Message->_schema = null;
 		$this->Message->cacheSources = false;
-		$messages = $this->Message->find('all');
+		$this->Message->cacheSources = false;
+		$messages = $this->Message->convertMessageToCsv($mailContentId, $this->Message->find('all'));
 		$this->set('messages',$messages);
 		$this->set('contentName',$this->mailContent['MailContent']['name']);
 
