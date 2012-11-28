@@ -67,6 +67,19 @@ class SiteConfigsController extends AppController {
  * @access public
  */
 	public $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
+
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		//$this-
+		//$this->Security->validatePost = false;
+		$this->Security->validatePost = false;
+		parent::beforeFilter();
+	}
+
 /**
  * [ADMIN] サイト基本設定
  *
