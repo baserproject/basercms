@@ -787,7 +787,7 @@ class BcManagerComponent extends Object {
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		if(!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
 				!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'google_analytics_id')) ||
-				!$SiteConfig->updateAll(array('SiteConfig.value' => 1), array('SiteConfig.name' => 'first_access')) ||
+				!$SiteConfig->updateAll(array('SiteConfig.value' => true), array('SiteConfig.name' => 'first_access')) ||
 				!$SiteConfig->deleteAll(array('SiteConfig.name' => 'version'), false)) {
 			$this->log('site_configs テーブルの初期化に失敗');
 			$result = false;

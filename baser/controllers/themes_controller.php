@@ -495,6 +495,9 @@ class ThemesController extends AppController {
 			if(in_array($record[1], $targets)) {
 				$record[2] = '';
 			}
+			if($record[1] == 'first_access') {
+				$record[2] = '1';
+			}
 			$records[] = '"'.implode('","', $record).'"';
 		}
 		ftruncate($fp, 0);
