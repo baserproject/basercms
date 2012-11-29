@@ -100,7 +100,7 @@ class User extends AppModel {
 				'message'	=> '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule'		=> array('maxLength', 50),
-				'message'	=> 'アカウント名は50文字以内で入力してください。'
+				'message'	=> '名前[姓]は50文字以内で入力してください。'
 			)
 		),
 		'real_name_2' => array(
