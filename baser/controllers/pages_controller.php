@@ -135,7 +135,7 @@ class PagesController extends AppController {
 		} else {
 			$reflectMobile = false;
 		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
 			$reflectSmartphone = true;
 		} else {
 			$reflectSmartphone = false;
@@ -212,7 +212,7 @@ class PagesController extends AppController {
 		} else {
 			$reflectMobile = false;
 		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
 			$reflectSmartphone = true;
 		} else {
 			$reflectSmartphone = false;
@@ -343,7 +343,7 @@ class PagesController extends AppController {
 		} else {
 			$reflectMobile = false;
 		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
 			$reflectSmartphone = true;
 		} else {
 			$reflectSmartphone = false;
