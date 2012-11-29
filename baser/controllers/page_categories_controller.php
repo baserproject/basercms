@@ -190,34 +190,36 @@ class PageCategoriesController extends AppController {
 			$this->data = array('PageCategory' => array('contents_navi' => false, 'page_category_type' => 1));
 		} else {
 
-			if(!$this->data['PageCategory']['parent_id']) {
-				switch ($this->data['PageCategory']['page_category_type']) {
+			$data = $this->data;
+			
+			if(!$data['PageCategory']['parent_id']) {
+				switch ($data['PageCategory']['page_category_type']) {
 					case 1:
-						$this->data['PageCategory']['parent_id'] = '';
+						$data['PageCategory']['parent_id'] = '';
 						break;
 					case 2:
-						$this->data['PageCategory']['parent_id'] = $this->PageCategory->getAgentId('mobile');
+						$data['PageCategory']['parent_id'] = $this->PageCategory->getAgentId('mobile');
 						break;
 					case 3:
-						$this->data['PageCategory']['parent_id'] = $this->PageCategory->getAgentId('smartphone');
+						$data['PageCategory']['parent_id'] = $this->PageCategory->getAgentId('smartphone');
 						break;
 				}
 			}
 			
-			unset($this->data['PageCategory']['page_category_type']);
+			unset($data['PageCategory']['page_category_type']);
 			
 			/* 登録処理 */
-			$this->PageCategory->create($this->data);
+			$this->PageCategory->create($data);
 
 			if($this->PageCategory->validates()) {
-				if($this->PageCategory->save($this->data,false)) {
-					$message = '固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。';
+				if($this->PageCategory->save($data,false)) {
+					$message = '固定ページカテゴリー「'.$data['PageCategory']['name'].'」を追加しました。';
 					if(ini_get('safe_mode')) {
 						$message .= '<br />機能制限のセーフモードで動作しているので、手動で次のフォルダ内に追加したカテゴリと同階層のフォルダを作成し、書込権限を与える必要があります。<br />'.
 									WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'pages'.DS;
 					}
 					$this->Session->setFlash($message);
-					$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を追加しました。');
+					$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$data['PageCategory']['name'].'」を追加しました。');
 					$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
 				}else {
 					$this->Session->setFlash('保存中にエラーが発生しました。');
