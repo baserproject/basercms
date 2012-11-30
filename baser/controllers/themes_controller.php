@@ -468,7 +468,7 @@ class ThemesController extends AppController {
  */
 	function admin_download_default_data_pattern() {
 		
-		// コアのCSVを生成
+		/* コアのCSVを生成 */
 		$tmpDir = TMP . 'csv' . DS;
 		$Folder = new Folder();
 		$Folder->create($tmpDir);
@@ -478,7 +478,7 @@ class ThemesController extends AppController {
 		$excludes = array('plugins', 'dblogs', 'users');
 		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
 		
-		// コアプラグインのCSVを生成
+		/* コアプラグインのCSVを生成 */
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach($corePlugins as $corePlugin) {
 			$Folder->create($tmpDir . $corePlugin);
@@ -486,7 +486,7 @@ class ThemesController extends AppController {
 			$this->_writeCsv('plugin', $corePlugin, $tmpDir . $corePlugin . DS);
 		}
 		
-		// site_configsの編集 (email / google_analytics_id / version)
+		/* site_configsの編集 (email / google_analytics_id / version) */
 		$targets = array('email', 'google_analytics_id', 'version');
 		$path = $tmpDir . 'site_configs.csv';
 		$fp = fopen($path, 'a+');
@@ -503,7 +503,7 @@ class ThemesController extends AppController {
 		ftruncate($fp, 0);
 		fwrite($fp, implode("\n", $records));
 		
-		// ZIPに固めてダウンロード
+		/* ZIPに固めてダウンロード */
 		$fileName = 'default';
 		App::import('Vendor','Simplezip');
 		$Simplezip = new Simplezip();

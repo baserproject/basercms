@@ -197,12 +197,12 @@ class BcManagerComponent extends Object {
 	function executeDefaultUpdates($dbConfig) {
 		
 		$result = true;
-		if(!$this->_updateBlogEntryDate($dbConfig)) {
-			$this->log('ブログ記事の投稿日更新に失敗しました。');
+		if(!$this->_updatePluginStatus($dbConfig)) {
+			$this->log('プラグインの有効化に失敗しました。');
 			$result = false;
 		}
-		if(!$this->_updatePluginStatus()) {
-			$this->log('プラグインの有効化に失敗しました。');
+		if(!$this->_updateBlogEntryDate($dbConfig)) {
+			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
 		return $result;
@@ -214,25 +214,30 @@ class BcManagerComponent extends Object {
  * @return boolean
  * @access	protected
  */
-	function _updatePluginStatus() {
+	function _updatePluginStatus($dbConfig) {
 
+		$db =& $this->_getDataSource('baser', $dbConfig);
+		$db->truncate('plugins');
+		
 		$version = getVersion();
 		App::import('Model', 'Plugin');
 		$Plugin = new Plugin();
-		$datas = $Plugin->find('all', array('recursive' => -1));
-		if($datas){
-			$result = true;
-			foreach($datas as $data) {
-				$data['Plugin']['version'] = $version;
-				$data['Plugin']['status'] = true;
-				if(!$Plugin->save($data)) {
-					$result = false;
-				}
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		
+		$result = true;
+		foreach ($corePlugins as $corePlugin) {
+			$data = array();
+			include BASER_PLUGINS . $corePlugin . DS . 'config.php';
+			$data['Plugin']['name'] = $corePlugin;
+			$data['Plugin']['title'] = $title;
+			$data['Plugin']['version'] = $version;
+			$data['Plugin']['status'] = true;
+			$Plugin->create($data);
+			if(!$Plugin->save()) {
+				$result = false;
 			}
-			return $result;
-		} else {
-			return false;
 		}
+		return $result;
 
 	}
 /**
@@ -491,8 +496,11 @@ class BcManagerComponent extends Object {
 			return false;
 		}
 		list($theme, $pattern) = explode('.', $dbDataPattern);
+		
+		$coreExcludes = array('users', 'dblogs', 'plugins');
+		
 		if($theme == 'core') {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern)) {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
@@ -503,7 +511,7 @@ class BcManagerComponent extends Object {
 				}
 			}
 		} else {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme)) {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("初期データのロードに失敗しました。");
 				return false;
 			}
