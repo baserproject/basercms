@@ -23,7 +23,7 @@ class BcCkeditorHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Javascript', 'Form');
+	public $helpers = array('Html', 'Form', 'JqueryEngine');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
@@ -232,7 +232,7 @@ class BcCkeditorHelper extends AppHelper {
 
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
+			$this->Html->link('/js/ckeditor/ckeditor.js', false);
 		}
 		
 		$toolbar = array(
@@ -280,17 +280,17 @@ class BcCkeditorHelper extends AppHelper {
 			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
 		}
 		
-		$this->Javascript->codeBlock("var editor_" . $field . ";", array("inline" => false));
+		$this->Html->scriptBlock("var editor_" . $field . ";", array("inline" => false));
 		$jscode = "$(window).load(function(){";
 		if(!$this->inited) {
-			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->Javascript->object($this->style).");";
+			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->JqueryEngine->object($this->style).");";
 			$this->inited = true;
 		} else {
 			$jscode .= '';
 		}
 		if(!$this->_initedStyles && $styles) {
 			foreach($styles as $key => $style) {
-				$jscode .= "CKEDITOR.addStylesSet('".$key."',".$this->Javascript->object($style).");";
+				$jscode .= "CKEDITOR.addStylesSet('".$key."',".$this->JqueryEngine->object($style).");";
 			}
 			$this->_initedStyles = true;
 		}
@@ -298,7 +298,7 @@ class BcCkeditorHelper extends AppHelper {
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
-		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->domId($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
+		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->domId($fieldName) ."',". $this->JqueryEngine->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
 			if($draftAreaId) {
@@ -323,7 +323,7 @@ class BcCkeditorHelper extends AppHelper {
 			$jscode .= " });";
 		}
 		$jscode .= "});";
-		return $this->Javascript->codeBlock($jscode);
+		return $this->Html->scriptBlock($jscode);
 		
 	}
 /**

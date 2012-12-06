@@ -17,61 +17,63 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 /**
  * ユーザーグループモデル
  *
  * @package baser.models
  */
 class UserGroup extends AppModel {
+
 /**
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'UserGroup';
+
 /**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * データベース接続
  *
  * @var string
- * @access public
  */
 	public $useDbConfig = 'baser';
+
 /**
  * hasMany
  *
  * @var array
- * @access public
  */
-	public $hasMany = array('Permission'=>
-			array('className'=>'Permission',
-							'order'=>'id',
-							'foreignKey'=>'user_group_id',
-							'dependent'=>true,
-							'exclusive'=>false,
-							'finderQuery'=>''),
-			'User'=>
-			array('className'=>'User',
-							'order'=>'id',
-							'foreignKey'=>'user_group_id',
-							'dependent'=>false,
-							'exclusive'=>false,
-							'finderQuery'=>''));
+	public $hasMany = array(
+		'Permission' => array(
+			'className' => 'Permission',
+			'order' => 'id',
+			'foreignKey' => 'user_group_id',
+			'dependent' => true,
+			'exclusive' => false,
+			'finderQuery' => ''
+		),
+		'User' => array(
+			'className' => 'User',
+			'order' => 'id',
+			'foreignKey' => 'user_group_id',
+			'dependent' => false,
+			'exclusive' => false,
+			'finderQuery' => ''
+		)
+	);
+
 /**
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -96,25 +98,25 @@ class UserGroup extends AppModel {
 					'message'	=> '認証プレフィックスを入力してください。')
 		)
 	);
+
 /**
  * 関連するユーザーを管理者グループに変更し保存する
  * 
  * @param boolean $cascade
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
 		$ret = true;
-		if(!empty($this->data['UserGroup']['id'])){
+		if (!empty($this->data['UserGroup']['id'])) {
 			$id = $this->data['UserGroup']['id'];
-			$this->User->unBindModel(array('belongsTo'=>array('UserGroup')));
-			$datas = $this->User->find('all',array('conditions'=>array('User.user_group_id'=>$id)));
-			if($datas) {
-				foreach($datas as $data) {
+			$this->User->unBindModel(array('belongsTo' => array('UserGroup')));
+			$datas = $this->User->find('all', array('conditions' => array('User.user_group_id' => $id)));
+			if ($datas) {
+				foreach ($datas as $data) {
 					$data['User']['user_group_id'] = 1;
 					$this->User->set($data);
-					if(!$this->User->save()) {
+					if (!$this->User->save()) {
 						$ret = false;
 					}
 				}
@@ -122,39 +124,38 @@ class UserGroup extends AppModel {
 		}
 		return $ret;
 	}
+
 /**
  * 管理者グループ以外のグループが存在するかチェックする
  * @return	boolean
- * @access	void
  */
-	public function checkOtherAdmins(){
-		if($this->find('first',array('conditions'=>array('UserGroup.id <>'=>1)))) {
+	public function checkOtherAdmins() {
+		if ($this->find('first', array('conditions' => array('UserGroup.id <>' => 1)))) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
+
 /**
  * 認証プレフィックスを取得する
  *
  * @param	int	$id
  * @return	string
- * @access	public
  */
 	public function getAuthPrefix($id) {
-		
 		$data = $this->find('first', array(
-			'conditions'=>array('UserGroup.id'=>$id),
-			'fields'=>array('UserGroup.auth_prefix'),
-			'recursive'=>-1
+			'conditions' => array('UserGroup.id' => $id),
+			'fields' => array('UserGroup.auth_prefix'),
+			'recursive' => -1
 		));
-		if(isset($data['UserGroup']['auth_prefix'])) {
+		if (isset($data['UserGroup']['auth_prefix'])) {
 			return $data['UserGroup']['auth_prefix'];
 		} else {
 			return '';
 		}
-		
 	}
+
 /**
  * ユーザーグループデータをコピーする
  * 
@@ -163,25 +164,27 @@ class UserGroup extends AppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $recursive = true) {
-		
-		if($id) {
+		if ($id) {
 			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
 		}
 		$data['UserGroup']['name'] .= '_copy';
 		$data['UserGroup']['title'] .= '_copy';
-		
+
 		unset($data['UserGroup']['id']);
 		unset($data['UserGroup']['modified']);
 		unset($data['UserGroup']['created']);
-		
+
 		$this->create($data);
 		$result = $this->save();
-		if($result) {
+		if ($result) {
 			$result['UserGroup']['id'] = $this->getInsertID();
-			if($recursive) {
-				$permissions = $this->Permission->find('all', array('conditions' => array('Permission.user_group_id' => $id), 'recursive' => -1));
-				if($permissions) {
-					foreach($permissions as $permission) {
+			if ($recursive) {
+				$permissions = $this->Permission->find('all', array(
+					'conditions' => array('Permission.user_group_id' => $id),
+					'recursive' => -1
+				));
+				if ($permissions) {
+					foreach ($permissions as $permission) {
 						$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
 						$this->Permission->copy(null, $permission);
 					}
@@ -189,20 +192,19 @@ class UserGroup extends AppModel {
 			}
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name'])) {
+			if (isset($this->validationErrors['name'])) {
 				return $this->copy(null, $data, $recursive);
 			} else {
 				return false;
 			}
 		}
-		
 	}
+
 /**
  * グローバルメニューを利用可否確認
  * 
  * @param string $id
  * @return boolean
- * @access public
  */
 	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
