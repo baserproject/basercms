@@ -23,77 +23,74 @@
  * @package baser.controllers
  */
 class UserGroupsController extends AppController {
+
 /**
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'UserGroups';
+
 /**
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('UserGroup');
+
 /**
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * ヘルパ
  *
  * @var array
- * @access public
  */
 	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+
 /**
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array('site_configs', 'users', 'user_groups');
+
 /**
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
 		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
 	);
+
 /**
  * beforeFilter
  * @return void
- * @access public
  */
 	public function beforeFilter () {
-		
 		parent::beforeFilter();
-		if($this->request->params['prefix']=='admin'){
-			$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
+		if ($this->request->params['prefix'] == 'admin') {
+			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
 		}
-		
 	}
+
 /**
  * ユーザーグループの一覧を表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
-
 		/* データ取得 */
-		$this->paginate = array('conditions'=>array(),
-				'fields'=>array(),
-				'order'=>'UserGroup.id',
-				'limit'=>10
+		$this->paginate = array('conditions' => array(),
+				'fields' => array(),
+				'order' => 'UserGroup.id',
+				'limit' => 10
 		);
 		$datas = $this->paginate('UserGroup');
 
@@ -101,88 +98,80 @@ class UserGroupsController extends AppController {
 		$this->set('datas',$datas);
 		$this->pageTitle = 'ユーザーグループ一覧';
 		$this->help = 'user_groups_index';
-		
 	}
+
 /**
  * [ADMIN] 登録処理
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
-
-		if($this->request->data) {
+		if ($this->request->data) {
 
 			/* 登録処理 */
-			if(empty($this->request->data['UserGroup']['auth_prefix'])) {
+			if (empty($this->request->data['UserGroup']['auth_prefix'])) {
 				$this->request->data['UserGroup']['auth_prefix'] = 'admin';
 			}
 			$this->UserGroup->create($this->request->data);
-			if($this->UserGroup->save()) {
-				$message = '新規ユーザーグループ「'.$this->request->data['UserGroup']['title'].'」を追加しました。';
+			if ($this->UserGroup->save()) {
+				$message = '新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
 				$this->redirect(array('action' => 'index'));
-			}else {
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		/* 表示設定 */
 		$this->pageTitle = '新規ユーザーグループ登録';
 		$this->help = 'user_groups_form';
 		$this->render('form');
-
 	}
+
 /**
  * [ADMIN] 編集処理
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
-		if(!$id) {
+		if (!$id) {
 			$this->Session->setFlash('無効なIDです。');
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 			$this->request->data = $this->UserGroup->read(null, $id);
-		}else {
+		} else {
 
 			/* 更新処理 */
-			if($this->UserGroup->save($this->request->data)) {
-				$message = 'ユーザーグループ「'.$this->request->data['UserGroup']['name'].'」を更新しました。';
+			if ($this->UserGroup->save($this->request->data)) {
+				$message = 'ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。';
 				$this->Session->setFlash($message);
 				$this->UserGroup->saveDbLog($message);
 				$this->redirect(array('action' => 'index', $id));
-			}else {
+			} else {
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
 			}
-
 		}
 
 		/* 表示設定 */
-		$this->pageTitle = 'ユーザーグループ編集：'.$this->request->data['UserGroup']['title'];
+		$this->pageTitle = 'ユーザーグループ編集：' . $this->request->data['UserGroup']['title'];
 		$this->help = 'user_groups_form';
 		$this->render('form');
-
 	}
+
 /**
  * [ADMIN] 削除処理 (ajax)
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
-		if(!$id) {
+		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
@@ -190,25 +179,23 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if($this->UserGroup->delete($id)) {
-			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
+		if ($this->UserGroup->delete($id)) {
+			$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
 			$this->UserGroup->saveDbLog($message);
 			exit(true);
 		}
 		exit();
-
 	}
+
 /**
  * [ADMIN] 削除処理
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
-		if(!$id) {
+		if (!$id) {
 			$this->Session->setFlash('無効なIDです。');
 			$this->redirect(array('action' => 'index'));
 		}
@@ -217,46 +204,43 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if($this->UserGroup->delete($id)) {
-			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
+		if ($this->UserGroup->delete($id)) {
+			$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->UserGroup->saveDbLog($message);
-		}else {
+		} else {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
 		$this->redirect(array('action' => 'index'));
-
 	}
+
 /**
  * [ADMIN] データコピー（AJAX）
  * 
  * @param int $id 
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($id) {
-		
-		if(!$id) {
+		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		
+
 		$result = $this->UserGroup->copy($id);
-		if($result) {
+		if ($result) {
 			$this->set('data', $result);
 		} else {
-			$this->ajaxError(500, $this->UserGroup->validationErrors);	
+			$this->ajaxError(500, $this->UserGroup->validationErrors);
 		}
 	}
+
 /**
  * ユーザーグループのよく使う項目の初期値を登録する
  * 
  * @return boolean 
- * @access public 
  */
 	public function admin_set_default_favorites($id) {
-
-		if(!$this->request->params['form']) {
+		if (!$this->request->params['form']) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
@@ -265,11 +249,9 @@ class UserGroupsController extends AppController {
 		$data = $this->UserGroup->read();
 		$data['UserGroup']['default_favorites'] = serialize($this->request->params['form']);
 		$this->UserGroup->set($data);
-		if($this->UserGroup->save()) {
+		if ($this->UserGroup->save()) {
 			echo true;
 		}
 		exit();
-	
 	}
-	
 }
