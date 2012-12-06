@@ -797,7 +797,7 @@ class BcBaserHelper extends AppHelper {
 		if(!empty($options['rel'])) {
 			$rel = $options['rel'];
 		}
-		
+		$options['pathPrefix'] = str_replace(realpath( BASER_THEMES . '../../../' ),"", BASER_THEMES . "{$this->theme}/" . CSS_URL) ;
 		$ret = $this->BcHtml->css($path, $rel, $options);
 		if(empty($options['inline'])) {
 			echo $ret;
@@ -814,8 +814,8 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function js($url, $inline = true) {
-
-		$ret = $this->BcHtml->script($url, array('inline' => $inline));
+		$pathPrefix = str_replace(realpath( BASER_THEMES . '../../../' ),"", BASER_THEMES . "{$this->theme}/" . JS_URL) ;
+		$ret = $this->BcHtml->script($url, array('inline' => $inline, 'pathPrefix'=> $pathPrefix));
 		if($inline) {
 			echo $ret;
 		}
