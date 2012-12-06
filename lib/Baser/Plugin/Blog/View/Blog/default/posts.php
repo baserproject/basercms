@@ -31,8 +31,8 @@
 			<?php $class[] = 'last' ?>
 		<?php endif ?>
 	<li class="<?php echo implode(' ', $class) ?>">
-		<span class="date"><?php $blog->postDate($post, 'Y.m.d') ?></span><br />
-		<span class="title"><?php $blog->postTitle($post) ?></span>
+		<span class="date"><?php $this->blog->postDate($post, 'Y.m.d') ?></span><br />
+		<span class="title"><?php $this->blog->postTitle($post) ?></span>
 	</li>
 	<?php endforeach ?>
 </ul>
