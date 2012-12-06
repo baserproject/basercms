@@ -380,6 +380,34 @@ class MailFieldsController extends MailAppController {
 		$this->Message->_schema = null;
 		$this->Message->cacheSources = false;
 		$messages = $this->Message->findAll();
+
+		// フィールドの一覧を取得する
+		$mailFields = $this->MailField->find('all', array(
+			'conditions' => array('MailField.mail_content_id' => $mailContentId)
+		));
+
+		// フィールド名とデータの変換に必要なヘルパーを読み込む
+		App::import('Helper', 'Mail.maildata');
+		$maildata = new MaildataHelper();
+		App::import('Helper', 'Mail.mailfield');
+		$mailfield = new MailfieldHelper();
+
+		foreach ($messages as $key => $message) {
+
+			$inData = array();
+			// 届いているメッセージの内容を表示状態に変換する
+			foreach($mailFields as $mailField) {
+				$inData[$mailField['MailField']['field_name']] = $maildata->control(
+					$mailField['MailField']['type'],
+					$message[$this->Message->alias][$mailField['MailField']['field_name']],
+					$mailfield->getOptions($mailField['MailField'])
+				);
+			}
+			$convertData = array_merge($message[$this->Message->alias], $inData);
+			$messages[$key][$this->Message->alias] = $convertData;
+
+		}
+
 		$this->set('messages',$messages);
 		$this->set('contentName',$this->mailContent['MailContent']['name']);
 

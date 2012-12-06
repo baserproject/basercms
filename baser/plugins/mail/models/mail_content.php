@@ -68,8 +68,8 @@ class MailContent extends MailAppModel {
 			array(	'rule'		=> array('isUnique'),
 					'on'		=> 'create',
 					'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'メールフォームアカウント名は20文字以内で入力してください。')
+			array(	'rule'		=> array('maxLength', 255),
+					'message'	=> 'メールフォームアカウント名は255文字以内で入力してください。')
 		),
 		'title' => array(
 			array(	'rule'		=> array('notEmpty'),
