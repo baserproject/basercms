@@ -265,6 +265,50 @@ class MailContent extends MailAppModel {
 		return $_data;
 
 	}
-	
+/**
+ * メールコンテンツデータをコピーする
+ * 
+ * @param int $id
+ * @param array $data
+ * @return mixed array Or false
+ */
+	function copy($id, $data = array(), $recursive = true) {
+		
+		if($id) {
+			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
+		}
+		
+		$data['MailContent']['name'] .= '_copy';
+		$data['MailContent']['title'] .= '_copy';
+		unset($data['MailContent']['id']);
+		unset($data['MailContent']['created']);
+		unset($data['MailContent']['modified']);
+		
+		$this->create($data);
+		$result = $this->save($data);
+		if($result) {
+			$result['MailContent']['id'] = $this->getInsertID();
+			if($recursive) {
+				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
+				foreach($mailFields as $mailField) {
+					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
+					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
+				}
+				$Message = ClassRegistry::getObject('Message');
+				$Message->createTable($result['MailContent']['name']);
+				$Message->construction($result['MailContent']['id']);
+			}
+			return $result;
+		} else {
+			$this->log(count($data['MailContent']['name']));
+			if(isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 255) {
+				return $this->copy(null, $data, $recursive);
+			} else {
+				return false;
+			}
+		}
+		
+	}
+
 }
 ?>
