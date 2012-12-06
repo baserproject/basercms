@@ -27,7 +27,11 @@ class BcManagerComponent extends Object {
  * @param type $adminEmail
  * @return boolean 
  */
-	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = 'core.demo') {
+	function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = '') {
+		
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+		}
 		
 		$result = true;
 		
@@ -458,7 +462,11 @@ class BcManagerComponent extends Object {
  * @return type
  * @access public 
  */
-	function initDb($dbConfig, $reset = true, $dbDataPattern = 'core.demo') {
+	function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
+		
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
 		
 		if($reset) {
 			$this->deleteTables();
@@ -476,8 +484,12 @@ class BcManagerComponent extends Object {
  * @return boolean
  * @access public
  */
-	function constructionDb($dbConfig, $dbDataPattern = 'core.demo') {
+	function constructionDb($dbConfig, $dbDataPattern = '') {
 
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
+		
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
@@ -589,7 +601,7 @@ class BcManagerComponent extends Object {
 		$files = $Folder->read(true, true);
 		if($files[0]) {
 			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
+				$patterns[$theme.'.'.$pattern] = Inflector::camelize($theme).'.'.Inflector::camelize($pattern);
 			}
 		}
 		
@@ -814,8 +826,12 @@ class BcManagerComponent extends Object {
  * @return boolean
  * @access public
  */
-	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
+	function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
 
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
+		
 		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
