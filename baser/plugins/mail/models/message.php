@@ -731,5 +731,45 @@ class Message extends MailAppModel {
 		return true;
 
 	}
-	
+/**
+ * 受信メッセージの内容を表示状態に変換する
+ * 
+ * @param int $id
+ * @param array $messages
+ * @return array
+ * @access public
+ */
+	function convertMessageToCsv($id, $messages) {
+
+		App::import('Model','Mail.MailField');
+		$mailFieldClass = new MailField();
+
+		// フィールドの一覧を取得する
+		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $id)));
+
+		// フィールド名とデータの変換に必要なヘルパーを読み込む
+		App::import('Helper', 'Mail.maildata');
+		$maildata = new MaildataHelper();
+		App::import('Helper', 'Mail.mailfield');
+		$mailfield = new MailfieldHelper();
+
+		foreach ($messages as $key => $message) {
+
+			$inData = array();
+			foreach($mailFields as $mailField) {
+				$inData[$mailField['MailField']['field_name']] = $maildata->control(
+					$mailField['MailField']['type'],
+					$message[$this->alias][$mailField['MailField']['field_name']],
+					$mailfield->getOptions($mailField['MailField'])
+				);
+			}
+			$convertData = array_merge($message[$this->alias], $inData);
+			$messages[$key][$this->alias] = $convertData;
+
+		}
+
+		return $messages;
+
+	}
+
 }
