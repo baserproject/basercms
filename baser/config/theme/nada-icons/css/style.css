@@ -33,6 +33,10 @@ body {
 	border-radius: 17px 17px 17px 17px;
 	padding: 5px;
 }
+#ContentC{
+	margin-right: 15px;
+}
+
 a{/*リンクされた文字*/
     color:#6DAE0F;
     font-style:normal;
@@ -156,6 +160,9 @@ img {
 #GlobalMenus li.menu06{
     background: url("../img/icons/icons_ico_squ_06.png") no-repeat scroll 20px center transparent;
 }
+#GlobalMenus li.menu07{
+    background: url("../img/icons/icons_ico_00.png") no-repeat scroll 20px center transparent;
+}
 
 
 
@@ -272,7 +279,7 @@ h1{
 /*ContentsBody
 ----------------------------------------------- */
 
-.subpage#ContentsBody {
+#ContentsBody .subpage {
 	border-radius: 4px 4px 4px 4px;
     background-color: #FFF;
     border: 1px solid #E3E3E3;
@@ -281,9 +288,12 @@ h1{
 	-webkit-box-shadow :0 0 2px 2px rgba(0, 0, 0, 0.05) ;
     margin-bottom: 20px;
     min-height: 600px;
-	padding:10px;
+	padding:20px;
 }
 
+#ContentsBody .subpage p{
+    padding: 0 5px;
+}
 #ContentsBody h2{
 	border-radius: 4px 4px 4px 4px;
     background-color: #6DAE0F;
@@ -295,11 +305,12 @@ h1{
 }
 #ContentsBody h3 {
 	font-size:24px;
- 	margin: 10px;
+ 	margin-bottom: 10px;
+ 	padding: 10px 10px 0;
 	border-bottom:1px #CCC dotted;
 }
 #ContentsBody .post,.blog-description,.section{
-	padding:15px;
+	padding:10px;
 	margin-bottom: 23px;
 }
 #ContentsBody .blog-description{
@@ -358,13 +369,11 @@ h1{
 	color:#868686;
 }
 
-#sidebox-fb{
+.fb-like-box{
+	background:#FFFFFF;
 	margin-top:10px;
 }
 
-#sidebox-fb{
-	background:#FFFFFF;
-}
 
 /* widget
 ----------------------------------------------- */
@@ -423,9 +432,13 @@ table.blog-calendar td.today{
 	margin-bottom:10px;
 	border-radius: 4px 4px 4px 4px;
 }
+#top-main img{
+	text-align:left;
+	margin-bottom:10px;
+	border-radius: 4px 4px 4px 4px;
+}
 #top-main .bx-window{
     border-radius: 4px 4px 4px 4px;
-
 }
 
 #top-contents{
@@ -566,7 +579,7 @@ table.blog-calendar td.today{
 	color:#FFFFFF;
 }
 #footer-menu a:hover{
-	color:#ACD9E2;
+	color:#BAD98E;
 }
 
 
@@ -600,7 +613,7 @@ table.row-table-01{
 #top-main .pager-active{
   background: url(../img/slider/slide_pointer_on.png) left top;
 }
-#top-main .bx-prev ,.bx-next{
+#top-main .bx-prev , #top-main .bx-next{
 	display:none;
 }
 
@@ -676,14 +689,14 @@ table.row-table-01{
     width: 585px;
     margin: 0 auto;
 }
-.row-table-01 firstChild lastChild th,td{
+.row-table-01 firstChild lastChild th,.row-table-01 firstChild lastChild td{
     font-weight:normal;
     border-bottom: 1px #EDEDED solid;
     line-height: 3;
 }
 
 
-.row-table-01 input,select{
+.row-table-01 input,.row-table-01 select{
     height: 25px;
     font-size: 16px;
 }
