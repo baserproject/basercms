@@ -39,7 +39,8 @@
                 </div>
             </div>
 
-            <div id="sidebox-fb">
+            <!--FB-->
+                <div id="fb-root"></div>
                 <script>(function(d, s, id) {
                   var js, fjs = d.getElementsByTagName(s)[0];
                   if (d.getElementById(id)) return;
@@ -47,8 +48,7 @@
                   js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=227292817297961";
                   fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));</script>
-                <div class="fb-like-box" data-href="https://www.facebook.com/basercms" data-width="214" data-height="408" data-show-faces="true" data-border-color="#DDDDDD" data-stream="false" data-header="false"></div>
-                </div>
-                <?php //$bcBaser->widgetArea() ?>
-
+                <div class="fb-like-box" data-href="http://www.facebook.com/basercms" data-width="214" data-height="406" data-show-faces="true" data-border-color="#DDDDDD" data-stream="false" data-header="false"></div>
+            <!--FB_END-->
+            <?php //$bcBaser->widgetArea() ?>
         </div><!--Alfa-->
