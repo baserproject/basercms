@@ -356,6 +356,10 @@
 		foreach($files[1] as $file) {
 			@unlink($file);
 		}
+		$Folder = new Folder();
+		foreach($files[0] as $folder) {
+			$Folder->delete($folder);
+		}
 		
 	}
 /**
@@ -363,30 +367,14 @@
  */
 	function clearAllCache() {
 
-		/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
-			Cache::clear();
-			Cache::clear(false,'_cake_core_');
-			Cache::clear(false,'_cake_model_');
-			clearCache();
-		*/
-
-		App::import('Core','Folder');
-		$folder = new Folder(CACHE);
-
-		$files = $folder->read(true,true,true);
-		foreach($files[1] as $file) {
-			@unlink($file);
-		}
-		foreach($files[0] as $dir) {
-			$folder = new Folder($dir);
-			$caches = $folder->read(true,true,true);
-			foreach($caches[1] as $file) {
-				if(basename($file) != 'empty') {
-					@unlink($file);
-				}
-			}
-		}
-
+		Cache::clear(false,'_cake_core_');
+		Cache::clear(false,'_cake_model_');
+		Cache::clear(false,'_cake_env_');
+		// viewキャッシュ削除
+		clearCache();
+		// dataキャッシュ削除
+		clearDataCache();
+		
 	}
 /**
  * baserCMSのインストールが完了しているかチェックする

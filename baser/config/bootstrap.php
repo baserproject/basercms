@@ -252,7 +252,7 @@ if(BC_INSTALLED) {
 			'probability'	=> 100,
 			'path'			=> CACHE.'datas',
 			'prefix'		=> 'cake_',
-			'lock'			=> false,
+			'lock'			=> true,
 			'serialize'		=> true
 	 ));
 /**
