@@ -643,13 +643,13 @@ class BcManagerComponent extends Object {
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.DS.$pattern
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.DS.$pattern,
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern
 				);
 			} else {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
 					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern.DS.$plugin,
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
 					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
 					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
 				);
