@@ -37,7 +37,17 @@ class BcCacheBehavior extends ModelBehavior {
 			$setting = Cache::config('_cake_data_');
 			define('CACHE_DATA_PATH', $setting['settings']['path']);
 		}
-		$path = CACHE_DATA_PATH . DS . $model->table;
+		$this->createCacheFolder($model);
+		
+	}
+/**
+ * キャッシュフォルダーを生成する
+ * 
+ * @param Model $model 
+ */
+	function createCacheFolder(&$model) {
+		
+		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
 		if(!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
@@ -75,7 +85,7 @@ class BcCacheBehavior extends ModelBehavior {
 			return $results;
 		}
 		
-		$this->changeCachePath($model->table);
+		$this->changeCachePath($model->tablePrefix . $model->table);
 		
 		// サーバーキャッシュの場合
 		$results = Cache::read($cachekey, '_cake_data_');
@@ -92,13 +102,6 @@ class BcCacheBehavior extends ModelBehavior {
 		$results = $db->read($model, $query);
 		Cache::write($cachekey, ($results === false)? "{false}" : $results, '_cake_data_');
 		
-		// クリア用にモデル毎のキャッシュキーリストを作成
-		$this->changeCachePath();
-		$cacheListKey = $model->tablePrefix.$model->table . '_dataCacheList';
-		$list = Cache::read($cacheListKey, '_cake_data_');
-		$list[$cachekey] = 1;
-		Cache::write($cacheListKey, $list, '_cake_data_');
-		$this->changeCachePath($model->table);
 		return $results;
 		
 	}
@@ -107,12 +110,10 @@ class BcCacheBehavior extends ModelBehavior {
  * 
  * @param string $dir 
  */
-	function changeCachePath($table = '') {
+	function changeCachePath($table) {
 		
 		$path = CACHE_DATA_PATH;
-		if($table) {
-			$path .= DS . $table;
-		}
+		$path .= DS . $table;
 		Cache::config('_cake_data_', array('path' => $path));
 		
 	}
@@ -125,19 +126,10 @@ class BcCacheBehavior extends ModelBehavior {
  */
 	function delCache(&$model){
 		
-		$this->changeCachePath();
-		$cacheListKey = $model->tablePrefix.$model->table . '_dataCacheList';
-		$list = Cache::read($cacheListKey, '_cake_data_');
-		
-		$this->changeCachePath($model->table);
-		if(empty($list)) return;
-		foreach($list as $key => $tmp){
-			Cache::delete($key, '_cake_data_');
-		}
-		
-		$this->changeCachePath();
-		Cache::delete($cacheListKey, '_cake_data_');
-		$this->changeCachePath($model->table);
+		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
+		$Folder = new Folder();
+		$Folder->delete($path);
+		$this->createCacheFolder($model);
 		
 	}
 /**
