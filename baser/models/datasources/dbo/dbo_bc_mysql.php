@@ -103,4 +103,3 @@ class DboBcMysql extends DboMysql {
 		return $data;
 	}
 }
-?>
