@@ -399,4 +399,3 @@ class MySQLDump {
 			@fclose($file);
 	}
 }
-?>

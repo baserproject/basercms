@@ -463,4 +463,3 @@ class DboBcSqlite3 extends DboSqlite3 {
 	}
 	
 }
-?>
