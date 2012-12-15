@@ -19,4 +19,3 @@
  * @deprecated		DboBcSqlite3 に移行
  */
 trigger_error('/app/config/database.php の driver を bc_sqlite3 に書き換えてください。（２ヶ所）', E_USER_WARNING);
-?>

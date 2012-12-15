@@ -31,4 +31,3 @@
  * @deprecated		DboBcCsv に移行
  */
 trigger_error('/app/config/database.php の driver を bc_csv に書き換えてください。（２ヶ所）', E_USER_WARNING);
-?>
