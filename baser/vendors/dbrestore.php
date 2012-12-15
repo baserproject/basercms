@@ -266,4 +266,3 @@ class DbRestore {
 		return $tables;
 	}
 }
-?>
