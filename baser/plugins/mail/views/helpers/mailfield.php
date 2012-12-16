@@ -92,4 +92,3 @@ class MailfieldHelper extends AppHelper {
 	
 }
 
-?>

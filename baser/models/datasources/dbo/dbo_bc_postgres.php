@@ -405,4 +405,3 @@ class DboBcPostgres extends DboPostgres {
 		
 	}
 }
-?>

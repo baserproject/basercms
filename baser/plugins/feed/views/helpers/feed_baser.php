@@ -46,4 +46,3 @@ class FeedBaserHelper extends AppHelper {
 	}
 	
 }
-?>
