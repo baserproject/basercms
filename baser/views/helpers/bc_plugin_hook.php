@@ -176,34 +176,6 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 /**
- * BcForm::create
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	function formExCreate($out) {
-		
-		return $this->executeHook('formExCreate', $out, $out);
-		
-	}
-/**
- * BcForm::end
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	function formExEnd($out) {
-		
-		return $this->executeHook('formExEnd',$out, $out);
-		
-	}
-/**
  * before Form::create
  * 
  * @param Form $form
