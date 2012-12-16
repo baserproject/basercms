@@ -198,8 +198,7 @@ class BcPluginHookHelper extends AppHelper {
  */
 	function afterFormCreate(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormCreate', $out, $form, $id, $out);
-		return $this->formExCreate($out);
+		return $this->executeHook('afterFormCreate', $out, $form, $id, $out);
 		
 	}
 /**
@@ -225,8 +224,7 @@ class BcPluginHookHelper extends AppHelper {
  */
 	function afterFormEnd(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormEnd', $out, $form, $id, $out);
-		return $this->formExEnd($out);
+		return $this->executeHook('afterFormEnd', $out, $form, $id, $out);
 		
 	}
 /**
