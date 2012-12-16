@@ -590,11 +590,11 @@ class BcManagerComponent extends Object {
 		$themePath = $dataPath = $title = '';
  		if($theme == 'core') {
 			$dataPath = BASER_CONFIGS.'data';
-		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
-			$themePath = BASER_THEMES.$theme.DS;
-			$dataPath = $themePath.'config'.DS.'data';
 		} elseif(is_dir(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data')) {
 			$themePath = BASER_CONFIGS.'theme'.DS.$theme.DS;
+			$dataPath = $themePath.'config'.DS.'data';
+		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
+			$themePath = BASER_THEMES.$theme.DS;
 			$dataPath = $themePath.'config'.DS.'data';
 		} else {
 			return array();
@@ -618,7 +618,7 @@ class BcManagerComponent extends Object {
 		if($files[0]) {
 			foreach($files[0] as $pattern) {
 				if($useTitle) {
-					$patternName = $title . ' : ' . $pattern;
+					$patternName = $title . ' ( ' . $pattern . ' )';
 				} else {
 					$patternName = $pattern;
 				}
