@@ -579,29 +579,50 @@ class BcManagerComponent extends Object {
 /**
  * 初期データのセットを取得する
  * 
- * @param string $path
  * @param string $theme
  * @return array 
  */
-	function getDefaultDataPatterns($theme = 'core') {
+	function getDefaultDataPatterns($theme = 'core', $options = array()) {
 		
-		$path = '';
+		$options = array_merge(array('useTitle' => true), $options);
+		extract($options);
+		
+		$themePath = $dataPath = $title = '';
  		if($theme == 'core') {
-			$path = BASER_CONFIGS.'data';
+			$dataPath = BASER_CONFIGS.'data';
 		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_THEMES.$theme.DS.'config'.DS.'data';
+			$themePath = BASER_THEMES.$theme.DS;
+			$dataPath = $themePath.'config'.DS.'data';
 		} elseif(is_dir(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data';
+			$themePath = BASER_CONFIGS.'theme'.DS.$theme.DS;
+			$dataPath = $themePath.'config'.DS.'data';
 		} else {
 			return array();
 		}
 		
+		if($themePath) {
+			if(file_exists($themePath . 'config.php')) {
+				include $themePath . 'config.php';
+			}
+		} else {
+			$title = 'コア';
+		}
+		
+		if(!$title) {
+			$title = $theme;
+		}
+		
 		$patterns = array();
-		$Folder = new Folder($path);
+		$Folder = new Folder($dataPath);
 		$files = $Folder->read(true, true);
 		if($files[0]) {
 			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::camelize($theme).'.'.Inflector::camelize($pattern);
+				if($useTitle) {
+					$patternName = $title . ' : ' . $pattern;
+				} else {
+					$patternName = $pattern;
+				}
+				$patterns[$theme.'.'.$pattern] = $patternName;
 			}
 		}
 		
