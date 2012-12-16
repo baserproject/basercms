@@ -12,4 +12,3 @@ $description = '様々な色と相性のいい「グレー」で全体を形作�
 Fireworksで文字や色・写真などを入れ替えてご使用ください。';
 $author = 'nada designs';
 $url = 'https://twitter.com/fukuoka_yocco';
-?>
