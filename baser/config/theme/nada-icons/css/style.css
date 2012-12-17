@@ -374,6 +374,13 @@ h1{
 	margin-top:10px;
 }
 
+div.fb_iframe_widget span {
+	height:440px!important;
+}
+
+div.fb_iframe_widget iframe {
+	height:441px!important;
+}
 
 /* widget
 ----------------------------------------------- */
