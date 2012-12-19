@@ -15,6 +15,6 @@ jQuery(function($){
 		dayNamesMin: ['日','月','火','水','木','金','土'],
 		dateFormat: 'yy/mm/dd', firstDay: 0,
 		isRTL: false,
-		showMonthAfterYear: false};
+		showMonthAfterYear: true};
 	$.datepicker.setDefaults($.datepicker.regional['ja']);
 });
