@@ -39,7 +39,7 @@ class BlogBaserHelper extends AppHelper {
  */
 	function blogPosts ($contentsName, $num = 5, $options = array()) {
 
-		$_options = array(
+		$options = array_merge(array(
 			'category'	=> null,
 			'tag'		=> null,
 			'year'		=> null,
@@ -47,9 +47,11 @@ class BlogBaserHelper extends AppHelper {
 			'day'		=> null,
 			'id'		=> null,
 			'keyword'	=> null,
-			'template'	=> null
-		);
-		$options = am($_options, $options);
+			'template'	=> null,
+			'direction' => null,
+			'page'		=> null,
+			'sort'		=> null
+		), $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
@@ -75,7 +77,7 @@ class BlogBaserHelper extends AppHelper {
 		}
 		unset ($options['templates']);
 
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
 
 	}
 /**
@@ -83,6 +85,7 @@ class BlogBaserHelper extends AppHelper {
  * @return boolean 
  */
 	function isBlogHome() {
+		
 		if(empty($this->params['plugin']) || empty($this->params['controller']) || empty($this->params['action'])) {
 			return false;
 		}
@@ -90,6 +93,6 @@ class BlogBaserHelper extends AppHelper {
 			return true;
 		}
 		return false;
+		
 	}
 }
-?>

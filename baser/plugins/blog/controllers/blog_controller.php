@@ -462,33 +462,65 @@ class BlogController extends BlogAppController {
  * @access protected
  */
 	function _getBlogPosts($options = array()) {
-
-		$_options = array(
-			'listDirection'	=> $this->blogContent['BlogContent']['list_direction'],
-			'listCount'		=> $this->blogContent['BlogContent']['list_count'],
-			'conditions'	=> array()
-		);
-		$_conditions = array(
-			'category'	=> null,
+		
+		// listCountの処理 （num が優先）
+		// TODO num に統一する
+		if(!empty($options['listCount'])) {
+			if(empty($options['num'])) {
+				$options['num'] = $options['listCount'];
+			}
+		}
+		
+		// named の 処理
+		$named = array();
+		if(!empty($this->params['named'])) {
+			$named = $this->params['named'];
+		}
+		if(!empty($named['direction'])) {
+			$options['direction'] = $named['direction'];
+			unset($named['direction']);
+		}
+		if(!empty($named['num'])) {
+			$options['num'] = $named['num'];
+			unset($named['num']);
+		}
+		if(!empty($named['page'])) {
+			$options['page'] = $named['page'];
+			unset($named['page']);
+		}
+		if(!empty($named['sort'])) {
+			$options['sort'] = $named['sort'];
+			unset($named['sort']);
+		}
+		
+		$_conditions = array();
+		if(!empty($this->params['named'])) {
+			if(!empty($options['conditions'])) {
+				$_conditions = array_merge($options['conditions'], $this->params['named']);
+			} else {
+				$_conditions = $this->params['named'];
+			}
+		} else {
+			$_conditions = $options['conditions'];
+		}
+		unset($options['conditions']);
+		
+		$_conditions = array_merge(array(
+			'category'		=> null,
 			'tag'			=> null,
 			'year'			=> null,
 			'month'			=> null,
 			'day'			=> null,
 			'id'			=> null,
 			'keyword'		=> null
-		);
-
-		$options = am($_options, $options);
-
-		$__conditions = array();
-
-		if(!empty($this->params['named'])) {
-			$__conditions = am($options['conditions'], $this->params['named']);
-		} else {
-			$__conditions = $options['conditions'];
-		}
-		unset($options['conditions']);
-		$_conditions = am($_conditions, $__conditions);
+		), $_conditions);
+		
+		$options = array_merge(array(
+			'direction'	=> $this->blogContent['BlogContent']['list_direction'],
+			'num'			=> $this->blogContent['BlogContent']['list_count'],
+			'page'			=> 1,
+			'sort'			=> 'posts_date'
+		), $options);	
 
 		extract($options);
 
@@ -593,7 +625,7 @@ class BlogController extends BlogAppController {
 			$conditions["BlogPost.no"] = $_conditions['id'];
 			$expects[] = 'BlogComment';
 			$this->BlogPost->hasMany['BlogComment']['conditions'] = array('BlogComment.status'=>true);
-			$listCount = 1;
+			$num = 1;
 		}
 
 		unset($_conditions['category']);
@@ -610,33 +642,27 @@ class BlogController extends BlogAppController {
 
 		if($_conditions) {
 			// とりあえず BlogPost のフィールド固定
-			$conditions = am($conditions, $this->postConditions(array('BlogPost' => $_conditions)));
+			$conditions = array_merge($conditions, $this->postConditions(array('BlogPost' => $_conditions)));
 		}
 
 		// プレビューの場合は公開ステータスを条件にしない
 		if(!$this->preview) {
-			$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 
 		$this->BlogPost->expects($expects, false);
 
-		if(!empty($direction)) {
-			$listDirection = $direction;
+		$order = "BlogPost.{$sort} {$direction}";
+		if($sort != 'id') {
+			$order .= ", BlogPost.id ASC";
 		}
-		$order = "BlogPost.posts_date {$listDirection}";
-		if(!empty($sort)) {
-			$order = "BlogPost.{$sort} {$listDirection}";
-			if($sort != 'id') {
-				$order .= ", BlogPost.id ASC";
-			}
-		}
-		//debug($conditions);
+
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$this->paginate = array(
 				'conditions'=> $conditions,
 				'fields'	=> array(),
 				'order'		=> $order,
-				'limit'		=> $listCount,
+				'limit'		=> $num,
 				'recursive'	=> 1,
 				'cache'		=> false
 		);
@@ -902,7 +928,6 @@ class BlogController extends BlogAppController {
 		}
 
 		$this->set('posts', $datas);
-
 
 		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
 
