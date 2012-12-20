@@ -500,7 +500,7 @@ class BlogController extends BlogAppController {
 			} else {
 				$_conditions = $this->params['named'];
 			}
-		} else {
+		} elseif(!empty($options['conditions'])) {
 			$_conditions = $options['conditions'];
 		}
 		unset($options['conditions']);
