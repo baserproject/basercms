@@ -872,7 +872,7 @@ background: #888;
 #LoginInner {
 	margin:150px auto auto 50px;
 	color:#333;
-	padding:50px;
+	padding:50px 50px 94px 50px;
 	width:460px;
 }
 #Login input[type=text],#Login input[type=password] {
