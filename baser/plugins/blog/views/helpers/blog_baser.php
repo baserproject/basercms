@@ -25,6 +25,22 @@
  */
 class BlogBaserHelper extends AppHelper {
 /**
+ * ヘルパー
+ * @var array
+ */
+	var $helpers = array('Blog.Blog');
+/**
+ * コンストラクタ 
+ */
+	function __construct() {
+		
+		parent::__construct();
+		$View = ClassRegistry::getObject('View');
+		$helpers = $View->_loadHelpers($View->loaded, $this->helpers);
+		$this->Blog = $helpers['Blog'];
+		
+	}
+/**
  * ブログ記事一覧出力
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $bcBaser->blogPosts('news', 3) ?>
@@ -81,18 +97,53 @@ class BlogBaserHelper extends AppHelper {
 
 	}
 /**
- * ブログのトップページ判定
+ * カテゴリー別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogCategory() {
+		return $this->Blog->isCategory();
+	}
+/**
+ * タグ別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogTag() {
+		return $this->Blog->isTag();
+	}
+/**
+ * 日別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogDate() {
+		return $this->Blog->isDate();
+	}
+/**
+ * 月別記事一覧ページ判定
  * @return boolean 
  */
-	function isBlogHome() {
-		
-		if(empty($this->params['plugin']) || empty($this->params['controller']) || empty($this->params['action'])) {
-			return false;
-		}
-		if($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index') {
-			return true;
-		}
-		return false;
-		
+	function isBlogMonth() {
+		return $this->Blog->isMonth();
 	}
+/**
+ * 年別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogYear() {
+		return $this->Blog->isYear();
+	}
+/**
+ * 個別ページ判定
+ * @return boolean
+ */
+	function isBlogSingle() {
+		return $this->Blog->isSingle();
+	}
+/**
+ * インデックスページ判定
+ * @return boolean
+ */
+	function isBlogHome() {
+		return $this->Blog->isHome();
+	}
+	
 }
