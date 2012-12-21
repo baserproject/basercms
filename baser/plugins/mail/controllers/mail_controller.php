@@ -183,7 +183,7 @@ class MailController extends MailAppController {
  */
 	function index($id = null) {
 
-		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+		if(!$this->dbDatas['mailContent']['MailContent']['status'] && !$this->BcAuth->user()) {
 			$this->notFound();
 		}
 		
@@ -241,7 +241,7 @@ class MailController extends MailAppController {
  */
 	function confirm($id = null) {
 
-		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+		if(!$this->dbDatas['mailContent']['MailContent']['status'] && !$this->BcAuth->user()) {
 			$this->notFound();
 		}
 		
@@ -315,7 +315,7 @@ class MailController extends MailAppController {
  */
 	function submit($id = null) {
 
-		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
+		if(!$this->dbDatas['mailContent']['MailContent']['status'] && !$this->BcAuth->user()) {
 			$this->notFound();
 		}
 		
