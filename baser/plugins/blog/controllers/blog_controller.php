@@ -143,7 +143,7 @@ class BlogController extends BlogAppController {
  */
 	function index() {
 
-		if(!$this->blogContent['BlogContent']['status']) {
+		if(!$this->blogContent['BlogContent']['status'] && !$this->BcAuth->user()) {
 			$this->notFound();
 		}
 
@@ -204,7 +204,7 @@ class BlogController extends BlogAppController {
  */
 	function archives() {
 
-		if(!$this->blogContent['BlogContent']['status']) {
+		if(!$this->blogContent['BlogContent']['status'] && !$this->BcAuth->user()) {
 			$this->notFound();
 		}
 
@@ -921,7 +921,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		if($this->blogContent['BlogContent']['status']) {
+		if($this->blogContent['BlogContent']['status'] || $this->BcAuth->user()) {
 			$datas = $this->_getBlogPosts(array('listCount' => $limit));
 		} else {
 			$datas = array();
