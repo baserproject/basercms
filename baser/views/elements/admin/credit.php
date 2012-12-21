@@ -139,7 +139,7 @@ function resizeScroll() {
 					<ul>
 <?php endif ?>
 						<li><?php if(!empty($contributor['url'])): ?><?php $bcBaser->link($contributor['name'], $contributor['url'], array('target' => '_blank')) ?><?php else: ?><?php echo $contributor['name'] ?><?php endif ?> 
-							<?php if(!empty($contributor['twitter'])): ?> (<?php $bcBaser->link($contributor['twitter'], 'http://twitter.com/'.$contributor['url'], array('target' => '_blank')) ?>) <?php endif ?></li>
+							<?php if(!empty($contributor['twitter'])): ?> (<?php $bcBaser->link($contributor['twitter'], 'http://twitter.com/'.$contributor['twitter'], array('target' => '_blank')) ?>) <?php endif ?></li>
 <?php if($i%6==0 || $bcArray->last($credit, $key2)): ?>
 					</ul>
 <?php endif ?>
