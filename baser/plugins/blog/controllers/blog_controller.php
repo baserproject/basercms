@@ -646,7 +646,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// プレビューの場合は公開ステータスを条件にしない
-		if(!$this->preview) {
+		if(!$this->preview && empty($_SESSION['Auth']['User'])) {
 			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 
