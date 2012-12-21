@@ -131,7 +131,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 				}else{
 					$url = "/{$agentPrefix}/{$_parameter}";
 				}
-				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
+				if($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))){
 					if(!$agent){
 						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
 					}else{
@@ -139,9 +139,10 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 					}
 					break;
 				} else {
+					// 拡張子付き（.html）の場合
 					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
-						if($Page->isPageUrl($url) && $Page->checkPublish($url)){
+						if($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))){
 							$_parameter = str_replace('.html', '', $_parameter);
 							if(!$agent){
 								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
