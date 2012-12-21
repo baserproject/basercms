@@ -394,7 +394,6 @@ class BcManagerComponent extends Object {
 			$file->write("\t'encoding' => '".$encoding."'\n");
 			$file->write(");\n");
 			$file->write("}\n");
-			$file->write("?>\n");
 
 			$file->close();
 			return true;
@@ -427,8 +426,8 @@ class BcManagerComponent extends Object {
 			"Configure::write('BcApp.mobile', true);",
 			"Configure::write('BcApp.smartphone', true);",
 			"Cache::config('default', array('engine' => 'File'));",
-			"Configure::write('debug', 0);",
-		"?>");
+			"Configure::write('debug', 0);"
+		);
 		if(file_put_contents($installFileName, implode("\n", $installCoreData))) {
 			return chmod($installFileName,0666);
 		}else {
@@ -1349,12 +1348,12 @@ class BcManagerComponent extends Object {
 		if(file_exists(CONFIGS.'install.php')) {
 			$data = $file->read();
 		}else {
-			$data = "<?php\n?>";
+			$data = "<?php\n";
 		}
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
-			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
+			$data = $data.$setting;
 		}
 		$return = $file->write($data);
 		$file->close();
