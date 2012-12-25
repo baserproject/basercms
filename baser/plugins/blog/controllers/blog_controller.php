@@ -143,7 +143,7 @@ class BlogController extends BlogAppController {
  */
 	function index() {
 
-		if(!$this->blogContent['BlogContent']['status'] && !$this->BcAuth->user()) {
+		if(!$this->blogContent['BlogContent']['status']) {
 			$this->notFound();
 		}
 
@@ -204,7 +204,7 @@ class BlogController extends BlogAppController {
  */
 	function archives() {
 
-		if(!$this->blogContent['BlogContent']['status'] && !$this->BcAuth->user()) {
+		if(!$this->blogContent['BlogContent']['status']) {
 			$this->notFound();
 		}
 
@@ -646,7 +646,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// プレビューの場合は公開ステータスを条件にしない
-		if(!$this->preview && empty($_SESSION['Auth']['User'])) {
+		if(!$this->preview) {
 			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 
@@ -921,7 +921,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		if($this->blogContent['BlogContent']['status'] || $this->BcAuth->user()) {
+		if($this->blogContent['BlogContent']['status']) {
 			$datas = $this->_getBlogPosts(array('listCount' => $limit));
 		} else {
 			$datas = array();
