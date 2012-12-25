@@ -201,7 +201,7 @@ class MailController extends MailAppController {
 
 		$user = $this->BcAuth->user();
 		if(!empty($user) && !Configure::read('BcRequest.agent')) {
-			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 		
 		$this->set('mailContent',$this->dbDatas['mailContent']);

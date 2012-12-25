@@ -72,10 +72,13 @@ function mailContentSender1ClickHandler(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">このメールフォームのURL：
-		<?php $bcBaser->link(
-				$bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), 
-				'/' . $mailContent['MailContent']['name'] . '/index',
-				array('target'=>'_blank')) ?>
+	<?php if($mailContent['MailContent']['status']): ?>
+	<?php $bcBaser->link(
+			$bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'),
+			'/' . $mailContent['MailContent']['name'] . '/index') ?>
+	<?php else: ?>
+	<?php echo $bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index') ?>
+	<?php endif ?>
 </div>
 <?php endif ?>
 
