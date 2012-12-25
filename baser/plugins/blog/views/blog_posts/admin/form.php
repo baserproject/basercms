@@ -112,7 +112,7 @@ $(function(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-	<?php if($bcForm->value('BlogPost.status')): ?>
+	<?php if($bcForm->value('BlogPost.status') && $blogContent['BlogContent']['status']): ?>
 	この記事のURL：<?php $bcBaser->link(
 			$bcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')),
 			'/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')) ?>
