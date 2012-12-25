@@ -279,7 +279,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 
-				if($this->Page->save($this->data,false)) {
+				if($this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
