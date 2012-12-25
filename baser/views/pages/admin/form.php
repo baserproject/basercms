@@ -246,7 +246,11 @@ function pageTypeChengeHandler() {
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
+	<?php if($bcForm->value('Page.status')): ?>
 	<strong>このページのURL：<?php $bcBaser->link($bcBaser->getUri($url), $url) ?></strong>
+	<?php else: ?>
+	<strong>このページのURL：<?php echo $bcBaser->getUri($url) ?></strong>
+	<?php endif ?>
 </div>
 <?php endif ?>
 

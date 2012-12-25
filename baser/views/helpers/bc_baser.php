@@ -933,7 +933,7 @@ class BcBaserHelper extends AppHelper {
 		if(isset($this->Page) && empty($this->params['admin'])) {
 			$adminPrefix = Configure::read('Routing.admin');
 			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
-				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url) && empty($_SESSION['Auth']['User'])) {
+				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
 					$enabled = false;
 				}
 			}
