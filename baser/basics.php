@@ -330,8 +330,13 @@
 				clearCache($home);
 			}
 		}elseif($url) {
-			$url = preg_replace('/\/index$/', '', $url);
-			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
+			if(preg_match('/\/index$/', $url)) {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+				$url = preg_replace('/\/index$/', '', $url);
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+			} else {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+			}
 		}else {
 			App::import('Core','Folder');
 			$folder = new Folder(CACHE.'views'.DS);
