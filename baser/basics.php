@@ -297,6 +297,7 @@
  */
 	function clearViewCache($url=null,$ext='.php') {
 
+
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
 			$homes = array('','index','index_html');
