@@ -51,7 +51,7 @@ class BcCaptchaComponent extends Component {
  */
 	public function startup(&$controller) {
 		
-		$this->controller =& $controller;
+		$this->controller = $controller;
 	
 	}
 /**
