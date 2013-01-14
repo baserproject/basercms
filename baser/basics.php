@@ -735,7 +735,7 @@
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
+			return trim($aryVersionData[0]);
 		}else {
 			return false;
 		}
