@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->element('mail_messages/index_list');
+$this->bcBaser->element('mail_messages/index_list');
 ?>
