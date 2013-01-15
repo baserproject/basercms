@@ -2,10 +2,10 @@
 /**
  * フィード
  */
-$feed->saveCachetime();
+$this->feed->saveCachetime();
 ?>
 <cake:nocache>
-	<?php $feed->cacheHeader() ?>
+	<?php $this->feed->cacheHeader() ?>
 </cake:nocache>
 
 <?php if(!empty($items)): ?>
