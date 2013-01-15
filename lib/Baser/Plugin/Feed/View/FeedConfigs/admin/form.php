@@ -113,7 +113,7 @@ $(function(){
 				<?php echo $bcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $feed->getTemplates())) ?>
 				<?php echo $bcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
+				<?php $this->bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('FeedConfig.template') ?>
@@ -134,7 +134,7 @@ $(function(){
 	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $bcBaser->link('削除', 
+	<?php $this->bcBaser->link('削除',
 			array('action' => 'delete', $bcForm->value('FeedConfig.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('FeedConfig.name')),
@@ -146,4 +146,4 @@ $(function(){
 
 
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $bcBaser->element('feed_details/index_list') ?></div>
+<div id="DataList"><?php $this->bcBaser->element('feed_details/index_list') ?></div>
