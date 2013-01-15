@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
-$blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
+$this->bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
+$this->blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 ?>
 
 <!-- blog title -->
@@ -31,21 +31,21 @@ $blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
 	
 	<!-- post title -->
 	<h3 class="contents-head">
-		<?php $bcBaser->contentsTitle() ?><br />
-		<small><?php $blog->postDate($post) ?></small>
+		<?php $this->bcBaser->contentsTitle() ?><br />
+		<small><?php $this->blog->postDate($post) ?></small>
 	</h3>
 
 	<?php $blog->postContent($post) ?>
 	
-	<div class="meta"><span><?php $blog->category($post) ?>&nbsp;<?php $blog->author($post) ?></span></div>
-	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<div class="meta"><span><?php $this->blog->category($post) ?>&nbsp;<?php $this->blog->author($post) ?></span></div>
+	<?php $this->bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 
 <!-- contents navi -->
 <div id="contentsNavi">
-	<?php $blog->prevLink($post) ?>
+	<?php $this->blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
-	<?php $blog->nextLink($post) ?>
+	<?php $this->blog->nextLink($post) ?>
 </div>
 <!-- comments -->
-<?php $bcBaser->element('blog_comments') ?>
+<?php $this->bcBaser->element('blog_comments') ?>

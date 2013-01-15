@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->element('blog_posts/index_row', array('data' => $data, 'count' => 0));
+$this->bcBaser->element('blog_posts/index_row', array('data' => $data, 'count' => 0));
 ?>
