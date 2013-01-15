@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('BaserPluginAppController', 'Controller');
 /**
  * RSSリーダーコントローラー基底クラス
  *
