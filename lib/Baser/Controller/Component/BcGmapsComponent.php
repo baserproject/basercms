@@ -123,11 +123,9 @@ class BcGmapsComponent  extends Component {
 	protected function _connect($param) {
 
 		$request_url = $this->_baseUrl . "&oe=utf-8&q=" . urlencode($param);
-		App::import('Xml');
-		$Xml = new Xml($request_url);
-		$xmlArray = Set::reverse($Xml);
-
-		$xml = $xmlArray['Kml'];
+		App::uses('Xml','Utility');
+		$xmlArray = Xml::toArray(Xml::build($request_url));
+		$xml = $xmlArray['kml'];
 
 		if (! empty($xml['Response'])) {
 			if(!isset($xml['Response']['Placemark']['Point'])) {
