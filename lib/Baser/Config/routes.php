@@ -70,7 +70,21 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  */
 	$PluginContent = ClassRegistry::init('PluginContent');
 	if($PluginContent) {
+		// @TODO basercamp kiyosue
+		/* CakePHP2で、routes.php の __connectDefaultRoutes がなくなったため(defaultRouteClassに移ったのかなぁ？)
+		 * デフォルトで、$this->connect('/:plugin/:controller/:action/*', array(), $match);
+		 * が設定されなくなり、feedプラグインのルーティングがおかしくなってしまう。
+		 * mail blog プラグインも同様だけど、これらは、$pluginContentの処理でリネームされているため問題ない。
+		 * ただ、blogというフォルダを固定ページとかで作るとおかしくなるかも・・・要検証
+		 * feedがプラグインだけど同梱なのでここの扱いをどうするか、
+		 * とりあえず
+		 * ./lib/Baser/Model/PluginContent.php
+		 * currentPluginContent に処理を追加した
+		 * bc_plugin_contentsに、name = feed, plugin = feed でデフォルト登録するのが良いとおもう。江頭さんに相談だ。
+		 *
+		 */
 		$pluginContent = $PluginContent->currentPluginContent($parameter);
+
 		if($pluginContent) {
 			$pluginContentName = $pluginContent['PluginContent']['name'];
 			$pluginName = $pluginContent['PluginContent']['plugin'];
@@ -211,10 +225,10 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
  * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義する
  */
 	$enablePlugins = getEnablePlugins();
-	
+
 	// TODO basercamp
-	// とりま、一旦コメントアウト
-	/*Configure::write('BcStatus.enablePlugins', $enablePlugins);
+	// とりま、一旦コメントアウト -> 開発に影響が出てきたので、コメントアウト解消
+	Configure::write('BcStatus.enablePlugins', $enablePlugins);
 	$_pluginPaths = array(
 		APP.'plugins'.DS,
 		BASER_PLUGINS
@@ -226,7 +240,7 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 				include $pluginBootstrap;
 			}
 		}
-	}*/
+	}
 /**
  * テーマの bootstrap を実行する 
  * bootstrapではプラグインのパスが読み込めない為ここに定義
