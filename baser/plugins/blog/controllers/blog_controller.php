@@ -606,10 +606,10 @@ class BlogController extends BlogAppController {
 					if($month) $conditions["MONTH(BlogPost.posts_date)"] = $month;
 					if($day) $conditions["DAY(BlogPost.posts_date)"] = $day;
 					break;
-				case 'postres':
-					if($year) $conditions["date_part('year'(BlogPost.posts_date)"] = $year;
-					if($month) $conditions["date_part('month'(BlogPost.posts_date)"] = $month;
-					if($day) $conditions["date_part('day'(BlogPost.posts_date)"] = $day;
+				case 'postgres':
+					if($year) $conditions["date_part('year',BlogPost.posts_date)"] = $year;
+					if($month) $conditions["date_part('month',BlogPost.posts_date)"] = $month;
+					if($day) $conditions["date_part('day',BlogPost.posts_date)"] = $day;
 					break;
 				case 'sqlite':
 				case 'sqlite3':
