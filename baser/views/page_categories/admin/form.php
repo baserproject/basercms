@@ -194,13 +194,11 @@ function pageTypeChengeHandler() {
 	</table>
 </div>
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
 	<?php $bcBaser->link('削除', 
-			array('action'=>'delete', $bcForm->value('PageCategory.id')),
-			array('class'=>'btn-gray button'),
+			array('action' => 'delete', $bcForm->value('PageCategory.id')),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),
 			false); ?>
 <?php endif ?>

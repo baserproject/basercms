@@ -25,7 +25,7 @@ $(window).load(function() {
 	$("#UserName").focus();
 });
 $(function(){
-	$("#btnEdit").click(function(){
+	$("#BtnSave").click(function(){
 		if($("#SelfUpdate").html()) {
 			if(confirm('更新内容をログイン情報に反映する為、一旦ログアウトします。よろしいですか？')) {
 				return true;
@@ -176,20 +176,20 @@ $(function(){
 </div>
 
 <div class="submit section">
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php if(isset($bcBaser->siteConfig['demo_on']) && $bcBaser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
 			<?php if($editable): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnEdit')) ?>
 	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('User.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('User.name')), false); ?>
 			<?php endif ?>
 		<?php endif ?>
 	<?php else: ?>
-	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
+	
 	<?php endif ?>
 </div>
 

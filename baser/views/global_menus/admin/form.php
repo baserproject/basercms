@@ -78,13 +78,11 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('GlobalMenu.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('GlobalMenu.name')),
 			false); ?>
 <?php endif ?>
