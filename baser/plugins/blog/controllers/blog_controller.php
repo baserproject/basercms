@@ -461,7 +461,8 @@ class BlogController extends BlogAppController {
 			'month'			=> null,
 			'day'			=> null,
 			'id'			=> null,
-			'keyword'		=> null
+			'keyword'		=> null,
+			'author'		=> null
 		);
 
 		$options = am($_options, $options);
@@ -574,6 +575,17 @@ class BlogController extends BlogAppController {
 			}
 
 		}
+
+		//author条件
+		if($_conditions['author']) {
+			$author = $_conditions['author'];
+			App::import('Model', 'User');
+			$user = new User();
+			$userId = $user->field('id', array(
+				'User.name'	=> $author
+			));
+			$conditions['BlogPost.user_id'] = $userId;
+		}
 		
 		if($_conditions['id']) {
 			$conditions["BlogPost.no"] = $_conditions['id'];
@@ -582,6 +594,7 @@ class BlogController extends BlogAppController {
 			$listCount = 1;
 		}
 		
+		unset($_conditions['author']);
 		unset($_conditions['category']);
 		unset($_conditions['tag']);
 		unset($_conditions['keyword']);
