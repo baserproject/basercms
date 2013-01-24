@@ -17,8 +17,8 @@ class MailContentsSchema extends CakeSchema {
 
 	public $mail_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
+		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
+		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'description' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'sender_1' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'sender_2' => array('type' => 'string', 'null' => true, 'default' => NULL),

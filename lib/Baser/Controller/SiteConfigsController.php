@@ -67,6 +67,19 @@ class SiteConfigsController extends AppController {
  * @access public
  */
 	public $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
+
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		//$this-
+		//$this->Security->validatePost = false;
+		$this->Security->validatePost = false;
+		parent::beforeFilter();
+	}
+
 /**
  * [ADMIN] サイト基本設定
  *
@@ -80,15 +93,11 @@ class SiteConfigsController extends AppController {
 			$this->request->data = $this->_getSiteConfigData();
 
 		}else {
-
 			$this->SiteConfig->set($this->request->data);
 
 			if(!$this->SiteConfig->validates()) {
-
 				$this->Session->setFlash('入力エラーです。内容を修正してください。');
-
 			}else {
-
 				$mode = 0;
 				$smartUrl = false;
 				$siteUrl = $sslUrl = '';
