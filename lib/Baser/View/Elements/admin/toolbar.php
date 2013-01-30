@@ -19,7 +19,9 @@
  */
 $publishTheme = $this->BcBaser->BcHtml->themeWeb; // @TODO basercamp Cakephp1.2系の変数なので、CakePHP2で無くなった、必要無いなら削除。
 //var_dump($publishTheme); // null 1.2系だと、string 'themed/demo/' (length=12)　といった変数がはいっている
+$theme = $this->BcBaser->theme;
 if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
+	$this->BcBaser->theme = Configure::read('BcApp.adminTheme');
 	$this->BcBaser->BcHtml->theme = Configure::read('BcApp.adminTheme');
 }
 $this->BcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
@@ -156,6 +158,8 @@ $(function(){
 <?php
 if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	//元に戻しておく
-	$this->BcBaser->BcHtml->theme = $this->BcBaser->theme;
+	$this->BcBaser->theme = $theme;
+	$this->BcBaser->BcHtml->theme = $theme;
 }
+unset($theme);
 ?>

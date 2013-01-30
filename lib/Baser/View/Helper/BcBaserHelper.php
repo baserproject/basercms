@@ -796,10 +796,11 @@ class BcBaserHelper extends AppHelper {
 		if(!empty($options['rel'])) {
 			$rel = $options['rel'];
 		}
-		// @todo basercamp ハードコーディングなので後で修正
-		if( $this->theme != 'baseradmin' ){
-			$options['pathPrefix'] = str_replace(realpath( BASER_THEMES . '../../../' ),"", BASER_THEMES . "{$this->theme}/" . CSS_URL) ;
+
+		if( $this->theme != Configure::read('BcApp.adminTheme') ){
+			$options['pathPrefix'] = "themed/{$this->theme}/" . CSS_URL ;
 		}
+
 		$ret = $this->BcHtml->css($path, $rel, $options);
 		if(empty($options['inline'])) {
 			echo $ret;
@@ -817,40 +818,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function js($url, $inline = true) {
 
-		/*
-		 * @todo basercamp ハードコーディングなので後で修正
-		 * 一般ページからの呼び出しの場合 View/Elements/toolber.php の bcBaser の js を呼び出すとpathが
-		 * /js/hoge.js となってしまう。 /theme/baseradmin/js/hoge.js となってほしいが themeが違うため
-		 * pathが設定されない。
-		 *
-		 */
-		$outer_flag = false ;
-		if( is_array($url) ){
-			foreach($url as $val){
-				if( preg_match('/.*outerClick.*/', $val) ){
-					$outer_flag = true;
-				}
-			}
-		}else{
-			if( preg_match('/.*outerClick.*/', $url) ){
-				$outer_flag = true;
-			}
+		if( $this->theme != Configure::read('BcApp.adminTheme') ){
+			$pathPrefix = "themed/{$this->theme}/" . JS_URL ;
+			$ret = $this->BcHtml->script($url, array('inline' => $inline, 'pathPrefix'=> $pathPrefix));
+		} else {
+			$ret = $this->BcHtml->script($url, array('inline' => $inline));
 		}
 
-		//
-//		$admintheme = Configure::read('BcApp.adminTheme');
-//		var_dump($this->theme);
-		// @todo basercamp ハードコーディングなので後で修正
-//		if( $this->theme != $admintheme ){
-//			$pathPrefix = str_replace(realpath( BASER_THEMES . '../../../' ),"", BASER_THEMES . "{$this->theme}/" . JS_URL) ;
-//			$ret = $this->BcHtml->script($url, array('inline' => $inline, 'pathPrefix'=> $pathPrefix));
-			$ret = $this->BcHtml->script($url, array('inline' => $inline));
-//			} else {
-//			$ret = $this->BcHtml->script($url, array('inline' => $inline));
-//			if( $outer_flag ){
-			//	var_dump($ret);
-//			}
-//		}
 		if($inline) {
 			echo $ret;
 		}
