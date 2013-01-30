@@ -21,7 +21,7 @@ $allowOwners = array();
 if(isset($user['user_group_id'])) {
 	$allowOwners = array('', $user['user_group_id']);
 }
-$bcBaser->js(array(
+$this->bcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 
 	'admin/baser_ajax_data_list_config',
@@ -38,6 +38,6 @@ $(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $bcBaser->url(array('controller' => 'blog_categories', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->bcBaser->url(array('controller' => 'blog_categories', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $bcBaser->element('blog_categories/index_list') ?></div>
+<div id="DataList"><?php $this->bcBaser->element('blog_categories/index_list') ?></div>

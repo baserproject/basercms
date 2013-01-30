@@ -47,8 +47,7 @@ class MailController extends MailAppController {
  * @access public
  */
 	public $helpers = array(
-		BC_FREEZE_HELPER, 'Mail.Mailform', 'Javascript', 
-		BC_ARRAY_HELPER, BC_TIME_HELPER, 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail'
+		BC_FREEZE_HELPER, BC_ARRAY_HELPER, BC_TIME_HELPER, 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
 	);
 /**
  * Array of components a controller will use
@@ -124,7 +123,7 @@ class MailController extends MailAppController {
 		}
 
 
-		$this->dbDatas['mailContent'] = $this->MailContent->find(array("id"=>$id));
+		$this->dbDatas['mailContent'] = $this->MailContent->find('first', array("id"=>$id));
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
 		$this->Message->mailFields = $this->dbDatas['mailFields'] = $this->MailField->find('all', array('conditions' => array("mail_content_id"=>$id), 'order' => 'MailField.sort'));
 
@@ -245,11 +244,11 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		
-		if(!$this->data) {
+		if(!$this->request->data) {
 			$this->redirect(array('action' => 'index', $id));
 		}else {
 			// 入力データを整形し、モデルに引き渡す
-			$this->data = $this->Message->create($this->Message->autoConvert($this->data));
+			$this->request->data = $this->Message->create($this->Message->autoConvert($this->request->data));
 
 			// 画像認証を行う
 			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
@@ -257,7 +256,7 @@ class MailController extends MailAppController {
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
 				} else {
-					unset($this->data['Message']['auth_captcha']);
+					unset($this->request->data['Message']['auth_captcha']);
 				}
 			}
 
@@ -270,14 +269,12 @@ class MailController extends MailAppController {
 
 				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信してください。');
 			}
-
-			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
-
+			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
 		}
 
-		if($this->dbDatas['mailFields'])
+		if($this->dbDatas['mailFields']){
 			$this->set('mailFields',$this->dbDatas['mailFields']);
-
+		}
 		$this->set('mailContent',$this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'confirm');
 

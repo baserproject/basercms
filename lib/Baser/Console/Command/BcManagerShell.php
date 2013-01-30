@@ -117,13 +117,13 @@ class BcManagerShell extends BcAppShell {
 		if(!$checkResult['phpMemoryOk']) {
 			$this->out('　memoty_limit の設定値を '.Configure::read('BcRequire.phpMemory').'MB 以上に変更してください。');
 		}
-		$this->out('* Writable /app/config/ ('.(($checkResult['configDirWritable']) ? 'True' : 'False').')：'.(($checkResult['configDirWritable']) ? 'OK' : 'NG'));
+		$this->out('* Writable /app/Config/ ('.(($checkResult['configDirWritable']) ? 'True' : 'False').')：'.(($checkResult['configDirWritable']) ? 'OK' : 'NG'));
 		if(!$checkResult['configDirWritable']) {
-			$this->out('　/app/config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+			$this->out('　/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
 		}
-		$this->out('* Writable /app/config/config.php ('.(($checkResult['coreFileWritable']) ? 'True' : 'False').')：'.(($checkResult['coreFileWritable']) ? 'OK' : 'NG'));
+		$this->out('* Writable /app/Config/config.php ('.(($checkResult['coreFileWritable']) ? 'True' : 'False').')：'.(($checkResult['coreFileWritable']) ? 'OK' : 'NG'));
 		if(!$checkResult['coreFileWritable']) {
-			$this->out('　/app/config/core.php に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+			$this->out('　/app/Config/core.php に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
 		}
 		$this->out('* Writable /app/webroot/themed/ ('.(($checkResult['themeDirWritable']) ? 'True' : 'False').')：'.(($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
 		if(!$checkResult['themeDirWritable']) {

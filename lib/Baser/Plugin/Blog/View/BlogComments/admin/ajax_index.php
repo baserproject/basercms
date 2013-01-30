@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->element('blog_comments/index_list')
+$this->bcBaser->element('blog_comments/index_list')
 ?>

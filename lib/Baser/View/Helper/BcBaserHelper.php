@@ -792,12 +792,15 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function css($path, $options = array()) {
-
 		$rel = null;
 		if(!empty($options['rel'])) {
 			$rel = $options['rel'];
 		}
-		
+
+		if( $this->theme != Configure::read('BcApp.adminTheme') ){
+			$options['pathPrefix'] = "themed/{$this->theme}/" . CSS_URL ;
+		}
+
 		$ret = $this->BcHtml->css($path, $rel, $options);
 		if(empty($options['inline'])) {
 			echo $ret;
@@ -815,7 +818,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function js($url, $inline = true) {
 
-		$ret = $this->BcHtml->script($url, array('inline' => $inline));
+		if( $this->theme != Configure::read('BcApp.adminTheme') ){
+			$pathPrefix = "themed/{$this->theme}/" . JS_URL ;
+			$ret = $this->BcHtml->script($url, array('inline' => $inline, 'pathPrefix'=> $pathPrefix));
+		} else {
+			$ret = $this->BcHtml->script($url, array('inline' => $inline));
+		}
+
 		if($inline) {
 			echo $ret;
 		}
@@ -1453,11 +1462,12 @@ class BcBaserHelper extends AppHelper {
 		);
 		$c = count($vars);
 		foreach($pluginBasers as $key => $pluginBaser) {
-			$this->pluginBasers[$key] =& new $pluginBaser();
+//			var_dump($pluginBaser);
+			$this->pluginBasers[$key] =& new $pluginBaser($view);
 			for ($j = 0; $j < $c; $j++) {
 				if(isset($view->{$vars[$j]})) {
 					$this->pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
-				}
+					}
 			}
 		}
 
@@ -1465,14 +1475,14 @@ class BcBaserHelper extends AppHelper {
 /**
  * プラグインBaserヘルパ用マジックメソッド
  * Baserヘルパに存在しないメソッドが呼ばれた際プラグインのBaserヘルパを呼び出す
+ * call__ から __call へメソット名を変更、Helper.php の __call をオーバーライト
  *
  * @param string $method
  * @param array $params
  * @return ixed
  * @access protected
  */
-	public function call__($method, $params) {
-
+	public function __call($method, $params) {
 		foreach($this->pluginBasers as $pluginBaser){
 			if(method_exists($pluginBaser,$method)){
 				return call_user_func_array(array(&$pluginBaser, $method), $params);

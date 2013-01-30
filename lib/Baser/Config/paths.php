@@ -90,6 +90,6 @@ define('BASER_CONSOLES', BASER . 'Console' . DS);
  */
 if (is_dir(WWW_ROOT . 'themed')) {
 	define('BASER_THEMES', WWW_ROOT . 'themed' . DS);
-} elseif (is_dir(ROOT . DS . 'themed')) {
-	define('BASER_THEMES', ROOT . DS . 'themed' . DS);
+} elseif (is_dir(ROOT . DS . 'theme')) {
+	define('BASER_THEMES', ROOT . DS . 'theme' . DS);
 }

@@ -77,7 +77,9 @@ class MailformHelper extends BcFreezeHelper {
 				}else {
 					$showEmpty = true;
 				}
-				$out = $this->select($fieldName, $options, null, $attributes, $showEmpty);
+				$attributes['value'] = null ;
+				$attributes['empty'] = $showEmpty ;
+				$out = $this->select($fieldName, $options, $attributes);
 				break;
 
 			case 'pref':
@@ -93,10 +95,10 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-				$address1 = $this->__name(array(),$options[1]);
-				$address2 = $this->__name(array(),$options[2]);
+				$address1 = $this->_name(array(),$options[1]);
+				$address2 = $this->_name(array(),$options[2]);
 				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
-				$out = $this->Javascript->link('ajaxzip3.js').$this->text($fieldName,$attributes);
+				$out = $this->Html->script('ajaxzip3.js').$this->text($fieldName,$attributes);
 				break;
 
 			case 'check':
@@ -117,7 +119,9 @@ class MailformHelper extends BcFreezeHelper {
 					unset($attributes['separator']);
 				}
 				$attributes['multiple'] = 'checkbox';
-				$out = $this->select($fieldName,$options,null,$attributes,false);
+				$attributes['value'] = null ;
+				$attributes['empty'] = false ;
+				$out = $this->select($fieldName,$options,$attributes);
 				break;
 
 			case 'date_time_calender':

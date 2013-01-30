@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('BaserPluginAppController', 'Controller');
 /**
  * メールプラグインコントローラー根底クラス
  *

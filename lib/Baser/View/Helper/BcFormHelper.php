@@ -66,8 +66,10 @@ class BcFormHelper extends FormHelper {
  */
 	public function prefTag($fieldName, $selected = null, $attributes = array()) {
 
-		$pref = $this->BcText->prefList();
-		return $this->select($fieldName, $pref, $selected, $attributes, false);
+		$options = $this->BcText->prefList();
+		$attributes['value'] = $selected ;
+		$attributes['empty'] = false ;
+		return $this->select($fieldName, $options, $attributes);
 
 	}
 /**
