@@ -264,7 +264,7 @@ class PagesController extends AppController {
 			}
 		}else {
 
-			$before = $this->Page->read(null, $id);
+			$before = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
 			if(empty($this->data['Page']['page_type'])) {
 				$this->data['Page']['page_type'] = 1;
 			}
