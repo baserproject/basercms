@@ -371,7 +371,7 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('Page.author_id', '作成者') ?></th>
 			<td class="col-input">
-<?php if(isset($user) && $user['user_group_id'] == 1): ?>
+<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $bcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 				<?php echo $bcForm->error('Page.author_id') ?>
 <?php else: ?>

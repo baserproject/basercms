@@ -53,7 +53,9 @@
 		// コアプラグイン
 		'corePlugins'	=> array('blog', 'feed', 'mail'),
 		// アップデートキー
-		'updateKey'		=> 'update'
+		'updateKey'		=> 'update',
+		// 管理者グループID
+		'adminGroupId'	=> 1
 	);
 /**
  * システム要件 

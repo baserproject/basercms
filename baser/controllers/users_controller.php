@@ -386,7 +386,7 @@ class UsersController extends AppController {
 		$editable = true;
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			unset($userGroups[1]);
 		}
 		
@@ -462,12 +462,9 @@ class UsersController extends AppController {
 		$editable = true;
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
-			if($this->data['User']['user_group_id'] == 1) {
-				$editable = false;
-			} else {
-				unset($userGroups[1]);
-			}
+		
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
+			$editable = false;
 		}
 		
 		$this->set('userGroups', $userGroups);
@@ -494,8 +491,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
-				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
+		if($this->User->field('user_group_id', array('User.id'=>$id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
 			$this->ajaxError(500, 'このユーザーは削除できません。');
 		}
 
@@ -527,8 +524,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
-				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
+		if($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
 			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
 			$this->redirect(array('action' => 'index'));
 		}

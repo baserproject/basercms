@@ -218,7 +218,7 @@ class User extends AppModel {
  */
 	function getDefaultValue() {
 
-		$data[$this->alias]['user_group_id'] = 1;
+		$data[$this->alias]['user_group_id'] = Configure::read('BcApp.adminGroupId');
 		return $data;
 
 	}

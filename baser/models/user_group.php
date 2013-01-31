@@ -112,7 +112,7 @@ class UserGroup extends AppModel {
 			$datas = $this->User->find('all',array('conditions'=>array('User.user_group_id'=>$id)));
 			if($datas) {
 				foreach($datas as $data) {
-					$data['User']['user_group_id'] = 1;
+					$data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');
 					$this->User->set($data);
 					if(!$this->User->save()) {
 						$ret = false;

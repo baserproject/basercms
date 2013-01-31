@@ -273,5 +273,13 @@ if(BC_INSTALLED) {
 			'lock'			=> false,
 			'serialize'		=> true
 	 ));
+/**
+ * 管理者グループ
+ * 互換性用
+ * @deprecated v2.2.0 以降で削除 
+ */
+	if(!Configure::read('BcApp.adminGroupId')) {
+		Configure::write('BcApp.adminGroupId', 1);
+	}
 
 }

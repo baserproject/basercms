@@ -996,7 +996,7 @@ class PagesController extends AppController {
 		}
 		
 		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 
 	}
 /**

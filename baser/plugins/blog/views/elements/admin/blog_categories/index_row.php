@@ -30,7 +30,7 @@ if(isset($user['user_group_id'])) {
 		<?php echo $bcForm->checkbox('ListTool.batch_targets.'.$data['BlogCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogCategory']['id'])) ?>
 <?php endif ?>		
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '確認', 'class' => 'btn')), $blog->getCategoryUrl($data['BlogCategory']['id']), array('title' => '確認', 'target' => '_blank')) ?>
-	<?php if(in_array($data['BlogCategory']['owner_id'], $allowOwners)||(isset($user['user_group_id']) && $user['user_group_id']==1)): ?>
+	<?php if(in_array($data['BlogCategory']['owner_id'], $allowOwners)||(isset($user['user_group_id']) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId'))): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']), array('title' => '編集')) ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 		<?php endif ?>

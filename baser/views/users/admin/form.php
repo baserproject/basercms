@@ -46,7 +46,6 @@ $(function(){
 				'url' :$(this).find('.favorite-url').val()
 			};
 		});
-		console.log(data);
 		$.ajax({
 			url: $("#UserGroupSetDefaultFavoritesUrl").html(),
 			type: 'POST',
@@ -103,7 +102,7 @@ $(function(){
 				<?php echo $bcForm->input('User.id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
-<?php endif; ?>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.name', 'アカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -127,12 +126,17 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
+<?php if($editable): ?>
 				<?php echo $bcForm->input('User.user_group_id', array('type' => 'select', 'options' => $userGroups)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('User.user_group_id', 'グループを選択してください') ?>
 				<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 					<?php $bcBaser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 					より新しいグループを追加しアクセス制限の設定をおこないます。</div>
+<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['User']['user_group_id'], $userGroups) ?>
+				<?php echo $bcForm->input('User.user_group_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 			</td>
 		</tr>
 		<tr>
