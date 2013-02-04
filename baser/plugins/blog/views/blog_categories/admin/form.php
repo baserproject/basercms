@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$owners = $bcForm->getControlSource('BlogCategory.owner_id');
 ?>
 
 
@@ -90,16 +91,21 @@ $(window).load(function() {
 	<?php else: ?>
 		<?php echo $bcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
-	<?php if($bcBaser->siteConfig['category_permission']): ?>
+	
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+<?php if($bcBaser->siteConfig['category_permission'] && $bcAdmin->isSystemAdmin()): ?>
 				<?php echo $bcForm->input('BlogCategory.owner_id', array(
 						'type'		=> 'select',
-						'options'	=> $bcForm->getControlSource('BlogCategory.owner_id'),
+						'options'	=> $owners,
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('BlogCategory.owner_id') ?>
+<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['BlogCategory']['owner_id'], $owners) ?>
+				<?php echo $bcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 				<div id="helptextOwnerId" class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -107,7 +113,6 @@ $(window).load(function() {
 				</div>
 			</td>
 		</tr>
-	<?php endif ?>
 	</table>
 </div>
 

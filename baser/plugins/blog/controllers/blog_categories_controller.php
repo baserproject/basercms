@@ -147,7 +147,10 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
-			$this->data = $this->BlogCategory->getDefaultValue();
+			$user = $this->BcAuth->user();
+			$this->data = array('BlogCategory' => array(
+				'owner_id'			=> $user['User']['user_group_id']
+			));
 		}else {
 
 			/* 登録処理 */

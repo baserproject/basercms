@@ -65,5 +65,20 @@ class BcAdminHelper extends AppHelper {
 		return $UserGroup->isAdminGlobalmenuUsed($this->_view->viewVars['user']['user_group_id']);
 		
 	}
-	
+/**
+ * ログインユーザーがシステム管理者かチェックする
+ * 
+ * @return boolean 
+ */
+	function isSystemAdmin () {
+		
+		if(empty($this->params['admin']) || empty($this->_view->viewVars['user'])) {
+			return false;
+		}
+		if($this->_view->viewVars['user']['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			return true;
+		}
+		return false;
+		
+	}
 }

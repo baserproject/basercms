@@ -187,7 +187,12 @@ class PageCategoriesController extends AppController {
 	function admin_add() {
 
 		if(empty($this->data)) {
-			$this->data = array('PageCategory' => array('contents_navi' => false, 'page_category_type' => 1));
+			$user = $this->BcAuth->user();
+			$this->data = array('PageCategory' => array(
+				'contents_navi'		=> false, 
+				'page_category_type'=> 1,
+				'owner_id'			=> $user['User']['user_group_id']
+			));
 		} else {
 
 			$data = $this->data;
@@ -483,9 +488,10 @@ class PageCategoriesController extends AppController {
  */
 	function _setAdminIndexViewData() {
 		
+		$user = $this->BcAuth->user();
 		$allowOwners = array();
-		if(isset($user['user_group_id'])) {
-			$allowOwners = array('', $user['user_group_id']);
+		if(isset($user['User']['user_group_id'])) {
+			$allowOwners = array('', $user['User']['user_group_id']);
 		}
 		$this->set('allowOwners', $allowOwners);
 		$this->set('owners', $this->PageCategory->getControlSource('owner_id'));

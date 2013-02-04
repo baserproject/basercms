@@ -36,7 +36,12 @@ if(isset($user['user_group_id'])) {
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['BlogCategory']['no'] ?></td>
-	<td><?php $bcBaser->link($data['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id'])) ?>
+	<td>
+<?php if(in_array($data['BlogCategory']['owner_id'], $allowOwners) || $bcAdmin->isSystemAdmin()): ?>
+		<?php $bcBaser->link($data['BlogCategory']['name'], array('action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id'])) ?>
+<?php else: ?>
+		<?php echo $data['BlogCategory']['name'] ?>
+<?php endif ?>
 <?php if($bcBaser->siteConfig['category_permission']): ?>
 		<br />
 		<?php echo $bcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
