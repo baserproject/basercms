@@ -717,6 +717,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->recursive = 1;
 			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
+			$this->_setAdminIndexViewData();
 			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);

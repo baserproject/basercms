@@ -570,7 +570,7 @@ class BlogPost extends BlogAppModel {
 		
 		$data['BlogPost']['name'] .= '_copy';
 		$data['BlogPost']['no'] = $this->getMax('no', array('BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']))+1;
-		$data['BlogPost']['status'] = false;
+		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
 		
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);
