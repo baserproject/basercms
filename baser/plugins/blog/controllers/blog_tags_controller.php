@@ -77,7 +77,8 @@ class BlogTagsController extends BlogAppController {
 
 		$this->paginate = array(
 				'order'	=> 'BlogTag.id',
-				'limit'	=> $this->passedArgs['num']
+				'limit'	=> $this->passedArgs['num'],
+				'recursive' => 0
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
 
