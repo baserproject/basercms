@@ -39,7 +39,7 @@
 </div>
 
 <div class="submit">
-	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $bcForm->submit('インストール', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 </div>
 
 <?php echo $bcForm->end() ?>
