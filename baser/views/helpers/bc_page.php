@@ -292,4 +292,3 @@ class BcPageHelper extends Helper {
 	}
 	
 }
-?>

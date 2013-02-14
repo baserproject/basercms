@@ -97,4 +97,3 @@ class BcArrayHelper extends AppHelper {
 	}
 	
 }
-?>

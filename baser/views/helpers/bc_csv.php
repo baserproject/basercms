@@ -186,4 +186,3 @@ class BcCsvHelper extends AppHelper {
 	}
 
 }
-?>

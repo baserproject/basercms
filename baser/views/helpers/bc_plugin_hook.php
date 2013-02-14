@@ -326,4 +326,3 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 }
-?>

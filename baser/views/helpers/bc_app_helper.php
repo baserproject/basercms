@@ -254,4 +254,3 @@ class BcAppHelper extends Helper {
 		
 	}
 }
-?>

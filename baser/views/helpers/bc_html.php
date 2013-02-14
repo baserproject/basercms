@@ -65,4 +65,3 @@ class BcHtmlHelper extends HtmlHelper {
 	}
 
 }
-?>

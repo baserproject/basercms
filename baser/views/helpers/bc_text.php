@@ -544,4 +544,3 @@ class BcTextHelper extends TextHelper {
 	}
 	
 }
-?>

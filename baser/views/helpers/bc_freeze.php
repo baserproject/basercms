@@ -607,4 +607,3 @@ class BcFreezeHelper extends BcFormHelper {
 	}
 	
 }
-?>

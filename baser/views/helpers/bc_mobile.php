@@ -135,4 +135,3 @@ class BcMobileHelper extends Helper {
 		}
 	}	
 }
-?>
