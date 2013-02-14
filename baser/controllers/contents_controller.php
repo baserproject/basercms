@@ -218,7 +218,7 @@ class ContentsController extends AppController {
 		));
 
 		foreach($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $page['Page']['url']);
+			$pages[$key]['Page']['url'] = $page['Page']['url'] = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $page['Page']['url']);
 			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/'.Configure::read('BcAgent.smartphone.alias'), $page['Page']['url']);
 		}
 
@@ -262,7 +262,7 @@ class ContentsController extends AppController {
 						} else {
 							$parentCategoryPath = '/';
 						}
-						$parentCategoryPath = preg_replace('/^\/mobile/', '/m', $parentCategoryPath);
+						$parentCategoryPath = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $parentCategoryPath);
 						$pageCategories[$key]['PageCategory']['url'] = $parentCategoryPath.'index';
 					}
 				}
