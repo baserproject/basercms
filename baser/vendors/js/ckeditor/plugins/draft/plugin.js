@@ -67,6 +67,12 @@ CKEDITOR.plugins.add('draft',
 					event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 				}
 			}
+			// 初期データを読み込む
+			if(event.editor.draftMode == 'publish') {
+				editor.setData($('#'+editor.draftPublishAreaId).val());
+			} else if(event.editor.draftMode == 'draft') {
+				editor.setData($('#'+editor.draftDraftAreaId).val());
+			}
 		});
 		editor.on('mode', function(event) {
 			event.editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_OFF);
@@ -227,10 +233,11 @@ CKEDITOR.plugins.draft =
 		disablePublish :
 		{
 			exec : function( editor ) {
-				editor.execCommand('changeDraft');
+				editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_ON);
 				editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
+				editor.draftMode = 'draft';
 				editor.draftPublishAvailable = false;
 			},
 			canUndo : false,

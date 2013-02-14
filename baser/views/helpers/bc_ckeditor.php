@@ -212,22 +212,18 @@ class BcCkeditorHelper extends AppHelper {
 			$readOnlyPublish = false;
 		}
 
-		$jscode = '';
-		if(strpos($fieldName,'.')) {
-			list($model,$field) = explode('.',$fieldName);
+		$jscode = $model = $domId = '';
+		if(strpos($fieldName, '.')) {
+			list($model, $field) = explode('.', $fieldName);
 		}else {
 			$field = $fieldName;
 		}
 		if($useDraft) {
-			$srcField = $field;
+			$publishAreaId = Inflector::camelize($model . '_' . $field);
+			$draftAreaId = Inflector::camelize($model . '_' . $draftField);
 			$field .= '_tmp';
-			$srcFieldName = $fieldName;
 			$fieldName .= '_tmp';
-		}
-
-		if($useDraft) {
-			$publishAreaId = Inflector::camelize($model.'_'.$srcField);
-			$draftAreaId = Inflector::camelize($model.'_'.$draftField);
+			$domId = $this->domId($fieldName);
 		}
 
 		if (!$this->_script) {
@@ -298,7 +294,7 @@ class BcCkeditorHelper extends AppHelper {
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
-		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $this->domId($fieldName) ."',". $this->Javascript->object($ckoptions) .");";
+		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
 			if($draftAreaId) {
@@ -315,9 +311,11 @@ class BcCkeditorHelper extends AppHelper {
 		if($useDraft) {
 			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
 			if($disableDraft) {
+				$jscode .= "editor_{$field}.execCommand('changePublish');";
 				$jscode .= "editor_{$field}.execCommand('disableDraft');";
 			}
 			if($disablePublish) {
+				$jscode .= "editor_{$field}.execCommand('changeDraft');";
 				$jscode .= "editor_{$field}.execCommand('disablePublish');";
 			}
 			$jscode .= " });";
@@ -377,4 +375,3 @@ class BcCkeditorHelper extends AppHelper {
 	}
 	
 }
-?>

@@ -335,8 +335,6 @@ class BlogPostsController extends BlogAppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->read(null, $id);
-			$this->data['BlogPost']['content_tmp'] = $this->data['BlogPost']['content'];
-			$this->data['BlogPost']['detail_tmp'] = $this->data['BlogPost']['detail'];
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);

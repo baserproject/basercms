@@ -252,7 +252,6 @@ class PagesController extends AppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
-			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
 			$mobileIds = $this->PageCategory->getAgentCategoryIds('mobile');
 			$smartphoneIds = $this->PageCategory->getAgentCategoryIds('smartphone');
 			if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
