@@ -192,14 +192,20 @@ class UsersController extends AppController {
  * @access public
  */
 	function admin_ajax_agent_login($id) {
+		
 		if(!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
 		}
-		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
 		Configure::write('debug', 0);
+		$configs = Configure::read('BcAuthPrefix');
+		$config = $configs[$this->data['UserGroup']['auth_prefix']];
+		$config['auth_prefix'] = $this->data['UserGroup']['auth_prefix'];
+		$this->BcAuthConfigure->setting($config);
 		$this->setAction('admin_ajax_login');
 		exit();
+		
 	}
 /**
  * 代理ログインをしている場合、元のユーザーに戻る
@@ -207,15 +213,32 @@ class UsersController extends AppController {
  * @return void
  * @access public 
  */
-	function admin_back_agent() {
+	function back_agent() {
+		
+		$configs = Configure::read('BcAuthPrefix');
 		if($this->Session->check('AuthAgent')) {
-			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.'.$this->BcAuth->userModel));
+			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->userModel);
+			$this->Session->write($this->BcAuth->sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->Session->setFlash('元のユーザーに戻りました。');
+			$authPrefix = $data['authPrefix'];
 		} else {
 			$this->Session->setFlash('不正な操作です。');
+			if(!empty($this->params['prefix'])) {
+				$authPrefix = $this->params['prefix'];
+			} else {
+				$authPrefix = 'front';
+			}
 		}
-		$this->redirect('/admin');
+
+		if(!empty($configs[$authPrefix])) {
+			$redirect = $configs[$authPrefix]['loginRedirect'];
+		} else {
+			$redirect = '/';
+		}
+		
+		$this->redirect($redirect);
+		
 	}
 /**
  * [ADMIN] 管理者ログイン画面（Ajax）

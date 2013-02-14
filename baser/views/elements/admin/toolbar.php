@@ -98,7 +98,7 @@ $(function(){
 					<?php $bcBaser->link($user['real_name_1']." ".$user['real_name_2'].' '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 	<?php if($session->check('AuthAgent')): ?>
-						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
+						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
 	<?php endif ?>
 	<?php if($authPrefix == 'admin'): ?>
 		<?php if($authPrefix == 'front'): ?>
