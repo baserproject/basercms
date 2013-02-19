@@ -1707,15 +1707,23 @@ END_FLASH;
  * ウィジェットエリアを出力する
  * 
  * @param int $no 
+ * @param array $options
  * @access public
  */
-	function widgetArea($no = null) {
+	function widgetArea($no = null, $options = array()) {
 		
+		$options = array_merge(array(
+			'loadHelpers'	=> false,
+			'subDir'		=> true,
+		), $options);
+
+		extract($options);
+
 		if(!$no) {
 			$no = $this->_view->viewVars['widgetArea'];
 		}
 		if($no) {
-			$this->element('widget_area', array('no' => $no));
+			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), $loadHelpers, $subDir);
 		}
 		
 	}
