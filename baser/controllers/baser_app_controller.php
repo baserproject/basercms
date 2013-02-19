@@ -879,12 +879,15 @@ class BaserAppController extends Controller {
 		}
 
 	}
-/**
- * 画面の情報をセッションから読み込む
- *
- * @param	string		$options
- * @access	protected
- */
+
+    /**
+     * 画面の情報をセッションから読み込む
+     *
+     * @param array $filterModels
+     * @param array|string $options
+     * @return void
+     * @access    protected
+     */
 	function _loadViewConditions($filterModels = array(), $options = array()) {
 
 		$_options = array('default'=>array(), 'action' => '', 'group' => '', 'type' => 'post' , 'session' => true);
