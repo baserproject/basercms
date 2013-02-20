@@ -237,9 +237,7 @@ class Permission extends AppModel {
 			'/^admin$/',
 			'/^admin\/$/',
 			'/^admin\/dashboard\/.*?/',
-			
 			'/^admin\/users\/logout$/',
-			'/^admin\/users\/back_agent$/',
 			'/^admin\/user_groups\/set_default_favorites$/'
 		);
 		

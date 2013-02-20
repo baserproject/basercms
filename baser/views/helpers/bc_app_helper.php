@@ -246,8 +246,6 @@ class BcAppHelper extends Helper {
 		
 		if (!isset($url['admin']) && !empty($this->params['admin'])) {
 			$url['admin'] = true;
-		} elseif (isset($url['admin']) && !$url['admin']) {
-			unset($url['admin']);
 		}
 			
 		return parent::url($url, $full);
