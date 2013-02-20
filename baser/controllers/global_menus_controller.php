@@ -20,6 +20,9 @@
 /**
  * メニューコントローラー
  *
+ * @property GlobalMenu GlobalMenu
+ * @property SessionComponent Session
+ * @property RequestHandlerComponent RequestHandler
  * @package baser.controllers
  */
 class GlobalMenusController extends AppController {
@@ -155,7 +158,7 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 編集処理
  *
- * @param	int ID
+ * @param int $id
  * @return void
  * @access public
  */
@@ -198,8 +201,8 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 一括削除
  *
- * @param int ID
- * @return void
+ * @param array $ids
+ * @return boolean
  * @access public
  */
 	function _batch_del($ids) {
@@ -221,7 +224,7 @@ class GlobalMenusController extends AppController {
 /**
  * [ADMIN] 削除処理 (ajax)
  *
- * @param int ID
+ * @param int $id
  * @return void
  * @access public
  */
@@ -245,10 +248,10 @@ class GlobalMenusController extends AppController {
 		exit();
 
 	}
-	/**
+/**
  * [ADMIN] 削除処理
  *
- * @param int ID
+ * @param int $id
  * @return void
  * @access public
  */

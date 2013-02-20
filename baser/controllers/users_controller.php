@@ -22,6 +22,14 @@
  *
  * ユーザーを管理するコントローラー。ログイン処理を担当する。
  *
+ * @property BcAuthComponent BcAuth
+ * @property BcAuthConfigureComponent BcAuthConfigure
+ * @property BcReplacePrefixComponent BcReplacePrefix
+ * @property RequestHandlerComponent RequestHandler
+ * @property CookieComponent Cookie
+ * @property SessionComponent Session
+ * @property UserGroup UserGrou
+ * @property User User
  * @package baser.controllers
  */
 class UsersController extends AppController {
@@ -424,7 +432,7 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザー情報編集
  *
- * @param int user_id
+ * @param int $id
  * @return void
  * @access public
  */
