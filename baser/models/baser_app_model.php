@@ -984,9 +984,15 @@ class BaserAppModel extends Model {
 		}
 
 		$result = true;
-
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->disable('BcCache');
+		}
 		foreach($data as $key => $value) {
-
+			
+			if($this->find('count', array('conditions' => array('name' => $key))) > 1) {
+				$this->deleteAll(array('name' => $key));
+			}
+			
 			$dbData = $this->find('first', array('conditions'=>array('name'=>$key)));
 
 			if(!$dbData) {
@@ -1006,7 +1012,12 @@ class BaserAppModel extends Model {
 			}
 
 		}
-
+		
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->enable('BcCache');
+			$this->delCache();
+		}
+		
 		return true;
 
 	}
