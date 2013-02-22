@@ -87,7 +87,7 @@ class BcPluginHookBehavior extends ModelBehavior {
 				}
 			}
 			foreach($this->registerHooks[$model->alias][$hookName] as $pluginName) {
-				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), &$args);
 				if(isset($j)) {
 					$args[$j] = $return;
 				}
