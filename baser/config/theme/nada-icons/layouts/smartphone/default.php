@@ -39,12 +39,11 @@
 	
     <?php if($bcBaser->isTop()): ?>
     <div id="top-main">
-        <?php //$bcBaser->img('./top-main.png'); ?>
         <div id="slider">
-          <div><?php $bcBaser->img('./slider/01.png'); ?></div>
-          <div><?php $bcBaser->img('./slider/02.png'); ?></div>
-          <div><?php $bcBaser->img('./slider/03.png'); ?></div>
-          <div><?php $bcBaser->img('./slider/04.png'); ?></div>
+          <div><?php $bcBaser->img('slider/01.jpg'); ?></div>
+          <div><?php $bcBaser->img('slider/02.jpg'); ?></div>
+          <div><?php $bcBaser->img('slider/03.jpg'); ?></div>
+          <div><?php $bcBaser->img('slider/04.jpg'); ?></div>
         </div>
     </div>
     <?php 
