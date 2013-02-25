@@ -426,6 +426,7 @@ function pageTypeChengeHandler() {
 	
 <?php if($this->action == 'admin_add'): ?>
 	<?php echo $bcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
 	<?php echo $bcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
