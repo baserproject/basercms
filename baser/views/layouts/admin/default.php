@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 ?>
 <?php $bcBaser->xmlHeader() ?>
 <?php $bcBaser->docType() ?>
@@ -55,7 +54,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 <div id="Page">
 	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 	<div id="SaveSearchBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_search_box', $bcBaser->getContentsName(true))) ?></div>
-	<div id="FavoriteBoxOpened" style="display:none"><?php echo (!empty($user))? $session->read('Baser.favorite_box_opened') : false ?></div>
+	<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
 	<div id="SearchBoxOpened" style="display:none"><?php echo $session->read('Baser.searchBoxOpened.'.$bcBaser->getContentsName(true)) ?></div>
 	<div id="CurrentPageName" style="display: none"><?php $bcBaser->contentsTitle() ?></div>
 	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->params['url']['url'] ?></div>

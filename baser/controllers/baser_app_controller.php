@@ -428,7 +428,19 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
+		$user = $this->BcAuth->user();
+		if($user) {
+			if($this->Session->check('Baser.favorite_box_opened')) {
+				$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
+			} else {
+				$favoriteBoxOpened = true;
+			}
+		} else {
+			$favoriteBoxOpened = false;
+		}
+
 		$this->__loadDataToView();
+		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('contentsTitle',$this->contentsTitle);
