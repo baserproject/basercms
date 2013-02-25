@@ -72,9 +72,12 @@
 	<div id="Wrap" class="clearfix" style="display:none">
 
 		<?php if(!empty($user)): ?>
-		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
-			<div class="cbb clearfix">
-
+		<div id="SideBar">
+			
+			<div id="BtnSideBarOpener" style="width:30px;height:30px;position:absolute;z-index: 1;top:4px;left:174px;cursor: pointer;line-height:30px;text-align: center;font-weight: bold;border-left:1px solid #FFF;color:#fff;font-size:10px"></div>
+			
+			<div class="cbb clearfix">	
+				
 				<?php $bcBaser->element('favorite_menu') ?>
 				<?php $bcBaser->element('permission') ?>
 

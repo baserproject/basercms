@@ -183,15 +183,7 @@ $(function(){
 /**
  * よく使う項目
  */
-	$('#BtnMenuFavorite').click(function(){
-		if($('#SideBar').css('display')=='none'){
-			changeFavoriteBox(true);
-			$.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html()+'/1'});
-		}else{
-			changeFavoriteBox(false);
-			$.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html()+'/'});
-		}
-	});
+	$('#BtnSideBarOpener').click(btnSideBarOpenerClickHandler);
 /**
  * サブメニュー調整
  * 空の項目を削除する
@@ -203,24 +195,67 @@ $(function(){
 	});
 });
 $(window).load(function(){
-	changeFavoriteBox($("#FavoriteBoxOpened").html());
+	$('#SideBar').css('display', 'block');
+	changeSidebar($("#FavoriteBoxOpened").html());
 	changeSearchBox($("#SearchBoxOpened").html());
 });
-function changeFavoriteBox(open) {
-	if(open) {
-		$('#Contents').css('margin-left','210px');
-		$('#SideBar').show();
-	} else {
-		$('#SideBar').hide();
-		$('#Contents').css('margin-left','0');
+/**
+ * サイドバー開閉ボタンクリック時イベント
+ */
+function btnSideBarOpenerClickHandler(e) {
+	
+	e.stopPropagation();
+	if($('#SideBar').css('position')=='absolute'){
+		changeSidebar(true);
+		$.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html()+'/1'});
+	}else{
+		changeSidebar(false);
+		$.ajax({type: "GET", url: $("#SaveFavoriteBoxUrl").html()+'/'});
 	}
+	
 }
+/**
+ * サイドバーの開閉切り替え
+ */
+function changeSidebar(open) {
+
+	if(open){
+		$('#SideBar').show()
+			.unbind('click', btnSideBarOpenerClickHandler)
+			.css({
+				position:'relative',
+				left:'0',
+				cursor:'auto'
+		});
+		$('#Contents').css('margin-left','210px');
+		$("#BtnSideBarOpener").html('＜');
+		$('#FavoriteMenu ul').show();
+	} else {
+		var height = $('#FavoriteMenu').height();
+		$('#SideBar').bind("click", btnSideBarOpenerClickHandler)
+			.css({
+				cursor:'pointer',
+				position:'absolute',
+				left:'-174px'
+		});
+		$('#Contents').css('margin-left','0');
+		$("#BtnSideBarOpener").html('＞');
+		$('#FavoriteMenu ul').hide();
+		$('#FavoriteMenu').height(height);
+	}
+	
+}
+/**
+ * 検索ボックスの開閉切り替え
+ */
 function changeSearchBox(open) {
+	
 	if(open){
 		$('#Search').fadeIn(300);
 	} else {
 		$('#Search').fadeOut(300);
 	}
+	
 }
 /**
  * アラートボックスを表示する
@@ -228,6 +263,7 @@ function changeSearchBox(open) {
  * 引き数なしの場合は、非表示にする
  */
 function alertBox(message) {
+	
 	if($("#AlertMessage").length) {
 		if(message) {
 			$("#AlertMessage").html(message);
@@ -236,4 +272,5 @@ function alertBox(message) {
 			$("#AlertMessage").fadeOut(200);
 		}
 	}
+	
 }
