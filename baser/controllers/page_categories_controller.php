@@ -157,13 +157,13 @@ class PageCategoriesController extends AppController {
 		} else {
 			$linkedPagesSmartPhone = false;
 		}
-		if($linkedPagesMobile || $linkedPagesSmartPhone) {
+		if(!$linkedPagesMobile || !$linkedPagesSmartPhone) {
 			$pageType = array('pc' => 'PC');	
 		}
-		if($linkedPagesMobile) {
+		if(!$linkedPagesMobile) {
 			$pageType['mobile'] = 'モバイル';
 		}
-		if($linkedPagesSmartPhone) {
+		if(!$linkedPagesSmartPhone) {
 			$pageType['smartphone'] = 'スマートフォン';
 		}
 		if($pageType) {
