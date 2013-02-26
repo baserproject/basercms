@@ -428,15 +428,16 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
-		$user = $this->BcAuth->user();
-		if($user) {
-			if($this->Session->check('Baser.favorite_box_opened')) {
-				$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
-			} else {
-				$favoriteBoxOpened = true;
+		$favoriteBoxOpened = false;
+		if($this->BcAuth) {
+			$user = $this->BcAuth->user();
+			if($user) {
+				if($this->Session->check('Baser.favorite_box_opened')) {
+					$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
+				} else {
+					$favoriteBoxOpened = true;
+				}
 			}
-		} else {
-			$favoriteBoxOpened = false;
 		}
 
 		$this->__loadDataToView();
