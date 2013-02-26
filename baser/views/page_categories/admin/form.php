@@ -123,4 +123,89 @@ function pageTypeChengeHandler() {
 				<?php echo $bcForm->error('PageCategory.parent_id') ?>
 				<div class="helptext">
 					<ul>
-						<li>カテゴリの下の階層にカテゴリを作成するに
+						<li>カテゴリの下の階層にカテゴリを作成するには親カテゴリを選択します。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+<?php else: ?>
+		<?php echo $bcForm->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
+<?php endif ?>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.name', 'ページカテゴリー名') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('PageCategory.name') ?>
+				<div class="helptext">
+					<ul>
+						<li>ページカテゴリー名はURLで利用します。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.title', 'ページカテゴリータイトル') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('PageCategory.title') ?>
+				<div class="helptext">
+					<ul>
+						<li>ページカテゴリータイトルはTitleタグとして出力されます。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.contents_navi', array(
+						'type'		=> 'radio',
+						'options'	=> $bcText->booleanDolist('利用'),
+						'legend'	=> false,
+						'separator'		=> '&nbsp;&nbsp;')) ?>
+				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('PageCategory.parent_id') ?>
+				<div class="helptext">
+					<ul>
+						<li>同カテゴリ内のページ間ナビゲーション（コンテンツナビ）を利用するには「利用する」を選択します。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
+			<td class="col-input">
+<?php if($bcBaser->siteConfig['category_permission'] && $bcAdmin->isSystemAdmin()): ?>
+				<?php echo $bcForm->input('PageCategory.owner_id', array(
+						'type'		=> 'select',
+						'options'	=> $bcForm->getControlSource('PageCategory.owner_id'),
+						'empty'		=> '指定しない')) ?>
+				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('PageCategory.owner_id') ?>
+<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['PageCategory']['owner_id'], $owners) ?>
+				<?php echo $bcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
+<?php endif ?>
+				<div class="helptext">
+					<ul>
+						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="submit">
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
+	<?php $bcBaser->link('削除', 
+			array('action' => 'delete', $bcForm->value('PageCategory.id')),
+			array('class' => 'button'),
+			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),
+			false); ?>
+<?php endif ?>
+</div>
+
+<?php echo $bcForm->end() ?>
