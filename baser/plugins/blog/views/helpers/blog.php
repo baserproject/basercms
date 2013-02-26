@@ -678,9 +678,14 @@ class BlogHelper extends AppHelper {
 	function getPostImg($post, $options = array()) {
 
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
-		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
-		$options = am($_options, $options);
+		$options = array_merge($_options = array(
+			'num'	=> 1, 
+			'link'	=> true,
+			'alt'	=> $post['BlogPost']['name']
+		), $options);
+		
 		extract($options);
+		
 		unset($options['num']);
 		unset($options['link']);
 
