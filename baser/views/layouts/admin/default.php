@@ -74,7 +74,7 @@
 		<?php if(!empty($user)): ?>
 		<div id="SideBar">
 			
-			<div id="BtnSideBarOpener" style="width:30px;height:30px;position:absolute;z-index: 1;top:4px;left:174px;cursor: pointer;line-height:30px;text-align: center;font-weight: bold;border-left:1px solid #FFF;color:#fff;font-size:10px"></div>
+			<div id="BtnSideBarOpener"></div>
 			
 			<div class="cbb clearfix">	
 				
