@@ -151,7 +151,7 @@ function loadAuthCaptcha(){
 		</tr>
 		<tr>
 			<th><?php echo $bcForm->label('BlogComment.message','コメント') ?></th>
-			<td><?php echo $bcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 60)) ?></td>
+			<td><?php echo $bcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52)) ?></td>
 		</tr>
 	</table>
 
