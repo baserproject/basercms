@@ -654,17 +654,25 @@ table.sub-menu{
 /* flashMessage
 ----------------------------------------------- */
 
-#flashMessage,
+#MessageBox #flashMessage {
+	padding:10px 10px 10px 36px;
+	margin:20px 0;
+	font-weight:bold;
+	font-size:16px;
+}
+#MessageBox .message,
+#MessageBox .notice-message {
+	color:#669900;
+	border:5px solid #669900;
+	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+}
+#MessageBox .alert-message,
 #authMessage,
 #AlertMessage,
 #UpdateMessage {
-	padding:10px 10px 10px 36px;
-	margin:20px 0;
 	color:#F03;
-	font-weight:bold;
-	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+	background: url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
 	border:5px solid #E02;
-	font-size:16px;
 }
 .no-data {
 	padding:10px 10px 10px 10px;

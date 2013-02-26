@@ -78,10 +78,10 @@ class MailConfigsController extends MailAppController {
 
 			/* 更新処理 */
 			if($this->MailConfig->save($this->data)) {
-				$this->Session->setFlash('メールフォーム設定を保存しました。');
+				$this->setMessage('メールフォーム設定を保存しました。');
 				$this->redirect(array('action' => 'form'));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}

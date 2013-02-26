@@ -80,7 +80,7 @@
  * アップデート完了時に表示するメッセージを設定します。ログにも記録されます。
  * ログファイルの記録場所：/app/tmp/logs/update.log
  *
- * $this->_setMessage($message);
+ * $this->setUpdateLog($message);
  *
  * $message			メッセージを指定します。
  *
@@ -231,10 +231,10 @@ class UpdatersController extends AppController {
 				$this->Plugin->save();
 			}
 			
-			$this->_setMessage('アップデート処理を開始します。');
+			$this->setUpdateLog('アップデート処理を開始します。');
 			foreach($targets as $target) {
 				if(!$this->_update($target)){
-					$this->_setMessage('アップデート処理が途中で失敗しました。');
+					$this->setUpdateLog('アップデート処理が途中で失敗しました。');
 				}
 			}
 			
@@ -249,7 +249,7 @@ class UpdatersController extends AppController {
 			
 			clearAllCache();
 			
-			$this->Session->setFlash('全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+			$this->setMessage('全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
 			$this->redirect(array('action' => 'index'));
 
@@ -284,14 +284,14 @@ class UpdatersController extends AppController {
 	function admin_exec_script() {
 
 		if($this->data) {
-			$this->_setMessage('アップデートスクリプトの実行します。');
+			$this->setUpdateLog('アップデートスクリプトの実行します。');
 			if($this->_execScript($this->data['Updater']['plugin'], $this->data['Updater']['version'])) {
-				$this->_setMessage('アップデートスクリプトの実行が完了しました。');
+				$this->setUpdateLog('アップデートスクリプトの実行が完了しました。');
 				$this->_writeUpdateLog();
-				$this->Session->setFlash('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+				$this->setMessage('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 				$this->redirect(array('action' => 'exec_script'));
 			} else {
-				$this->Session->setFlash('アップデートスクリプトが見つかりません。');
+				$this->setMessage('アップデートスクリプトが見つかりません。', true);
 			}
 		}
 
@@ -334,7 +334,7 @@ class UpdatersController extends AppController {
 		if($this->data) {
 			clearAllCache();
 			$this->_update($name);
-			$this->Session->setFlash('アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+			$this->setMessage('アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
 			clearAllCache();
 			$this->redirect(array('action' => 'plugin', $name));
@@ -488,12 +488,12 @@ class UpdatersController extends AppController {
 			$name = $this->Plugin->field('title',array('name'=>$plugin)).'プラグイン';
 		}
 
-		$this->_setMessage($name.' '.$targetVersion.' へのアップデートを開始します。');
+		$this->setUpdateLog($name.' '.$targetVersion.' へのアップデートを開始します。');
 
 		if($updaters){
 			asort($updaters);
 			foreach($updaters as $version => $updateVerPoint) {
-				$this->_setMessage('アップデートプログラム '.$version.' を実行します。');
+				$this->setUpdateLog('アップデートプログラム '.$version.' を実行します。');
 				$this->_execScript($plugin, $version);
 			}
 		}
@@ -520,7 +520,7 @@ class UpdatersController extends AppController {
 			$result = true;
 		}
 
-		$this->_setMessage($name.' '.$targetVersion.' へのアップデートが完了しました。');
+		$this->setUpdateLog($name.' '.$targetVersion.' へのアップデートが完了しました。');
 
 		return $result;
 
@@ -555,7 +555,7 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function _setMessage($message) {
+	function setUpdateLog($message) {
 		
 		$this->_updateMessage[] = $message;
 		

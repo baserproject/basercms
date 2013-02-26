@@ -142,7 +142,7 @@ class BlogCategoriesController extends BlogAppController {
 	function admin_add($blogContentId) {
 
 		if(!$blogContentId) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -160,11 +160,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			// データを保存
 			if($this->BlogCategory->save()) {
-				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
-				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
+				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -202,7 +201,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -212,11 +211,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			/* 更新処理 */
 			if($this->BlogCategory->save($this->data)) {
-				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
-				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
+				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -319,7 +317,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -328,10 +326,9 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 削除処理 */
 		if($this->BlogCategory->del($id)) {
-			$this->Session->setFlash($post['BlogCategory']['name'].' を削除しました。');
-			$this->BlogCategory->saveDbLog('カテゴリー「'.$post['BlogCategory']['name'].'」を削除しました。');
+			$this->setMessage($post['BlogCategory']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action'=>'index',$blogContentId));

@@ -375,19 +375,19 @@ class ContentsController extends AppController {
 					));
 					$this->Content->create($data);
 					if($this->Content->save()) {
-						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
+						$this->setMessage('検索インデックスに '.$url.' を追加しました。');
 						$this->redirect(array('action' => 'index'));
 					} else {
-						$this->Session->setFlash('保存中にエラーが発生しました。');
+						$this->setMessage('保存中にエラーが発生しました。', true);
 					}
 				} else {
 					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 
 			} else {
 				$this->Content->invalidate('url', '既に登録済のURLです。');
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -425,17 +425,15 @@ class ContentsController extends AppController {
 	function admin_delete($id = null) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		/* 削除処理 */
 		if($this->Content->del($id)) {
-			$message = '検索インデックスより NO.'.$id.' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Content->saveDbLog($message);
+			$this->setMessage('検索インデックスより NO.'.$id.' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

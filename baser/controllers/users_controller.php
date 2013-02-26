@@ -164,7 +164,7 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				$this->setMessage("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
 			}
 		}
 
@@ -228,10 +228,10 @@ class UsersController extends AppController {
 			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->userModel);
 			$this->Session->write($this->BcAuth->sessionKey, $data);
 			$this->Session->delete('AuthAgent');
-			$this->Session->setFlash('元のユーザーに戻りました。');
+			$this->setMessage('元のユーザーに戻りました。');
 			$authPrefix = $data['authPrefix'];
 		} else {
-			$this->Session->setFlash('不正な操作です。');
+			$this->setMessage('不正な操作です。', true);
 			if(!empty($this->params['prefix'])) {
 				$authPrefix = $this->params['prefix'];
 			} else {
@@ -275,7 +275,7 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				$this->setMessage("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
 			}
 		}
 
@@ -315,7 +315,7 @@ class UsersController extends AppController {
 		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
 		$this->Cookie->del('Auth.'.$userModel);
-		$this->Session->setFlash('ログアウトしました');
+		$this->setMessage('ログアウトしました');
 		if(empty($this->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
 		} else {
@@ -403,11 +403,10 @@ class UsersController extends AppController {
 					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
-				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
-				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
+				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -440,7 +439,7 @@ class UsersController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -477,13 +476,12 @@ class UsersController extends AppController {
 					$this->admin_logout();
 				}
 
-				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
+				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $id));
 			}else {
 				// よく使う項目のデータを再セット
 				$this->data = array_merge($this->User->read(null, $id), $this->data);
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -550,14 +548,14 @@ class UsersController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
 				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
-			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
+			$this->setMessage('最後の管理者ユーザーは削除する事はできません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -566,10 +564,9 @@ class UsersController extends AppController {
 
 		/* 削除処理 */
 		if($this->User->del($id)) {
-			$this->Session->setFlash('ユーザー: '.$user['User']['name'].' を削除しました。');
-			$this->User->saveDbLog('ユーザー「'.$user['User']['name'].'」を削除しました。');
+			$this->setMessage('ユーザー: '.$user['User']['name'].' を削除しました。', true, false);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -589,28 +586,28 @@ class UsersController extends AppController {
 		if($this->data) {
 
 			if(empty($this->data[$userModel]['email'])) {
-				$this->Session->setFlash('メールアドレスを入力してください。');
+				$this->setMessage('メールアドレスを入力してください。', true);
 				return;
 			}
 			$email = $this->data[$userModel]['email'];
 			$user = $this->{$userModel}->findByEmail($email);
 			if(!$user) {
-				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
+				$this->setMessage('送信されたメールアドレスは登録されていません。', true);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user['User']['password'] = $this->BcAuth->password($password);
 			$this->{$userModel}->set($user);
 			if(!$this->{$userModel}->save()) {
-				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
+				$this->setMessage('新しいパスワードをデータベースに保存できませんでした。', true);
 				return;
 			}
 			$body = $email.' の新しいパスワードは、 '.$password.' です。';
 			if(!$this->sendMail($email, 'パスワードを変更しました', $body)) {
-				$this->Session->setFlash('メール送信時にエラーが発生しました。');
+				$this->setMessage('メール送信時にエラーが発生しました。', true);
 				return;
 			}
-			$this->Session->setFlash($email.' 宛に新しいパスワードを送信しました。');
+			$this->setMessage($email.' 宛に新しいパスワードを送信しました。');
 			$this->data = array();
 
 		}

@@ -225,10 +225,10 @@ class ThemeFilesController extends AppController {
 			}
 
 			if ($result) {
-				$this->Session->setFlash('ファイル ' .basename($fullpath). ' を作成しました。');
+				$this->setMessage('ファイル ' .basename($fullpath). ' を作成しました。');
 				$this->redirect(array('action' => 'edit', $theme, $type, $path, $this->data['ThemeFile']['name'].'.'.$this->data['ThemeFile']['ext']));
 			} else {
-				$this->Session->setFlash('ファイル ' .basename($fullpath). ' の作成に失敗しました。');
+				$this->setMessage('ファイル ' .basename($fullpath). ' の作成に失敗しました。', true);
 			}
 
 		}
@@ -305,10 +305,10 @@ class ThemeFilesController extends AppController {
 			}
 
 			if ($result) {
-				$this->Session->setFlash('ファイル ' .$filename. ' を更新しました。');
+				$this->setMessage('ファイル ' .$filename. ' を更新しました。');
 				$this->redirect(array($theme, $plugin, $type, dirname($path), basename($newPath)));
 			} else {
-				$this->Session->setFlash('ファイル ' .$filename. ' の更新に失敗しました。');
+				$this->setMessage('ファイル ' .$filename. ' の更新に失敗しました。', true);
 			}
 
 		}
@@ -349,9 +349,9 @@ class ThemeFilesController extends AppController {
 		}
 
 		if ($result) {
-			$this->Session->setFlash($target .' '.$path .' を削除しました。');
+			$this->setMessage($target .' '.$path .' を削除しました。');
 		} else {
-			$this->Session->setFlash($target .' '.$path .' の削除に失敗しました。');
+			$this->setMessage($target .' '.$path .' の削除に失敗しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
@@ -575,12 +575,12 @@ class ThemeFilesController extends AppController {
 			$Folder->create(dirname($filePath), 0777);
 
 			if(@move_uploaded_file($this->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-				$this->Session->setFlash('アップロードに成功しました。');
+				$this->setMessage('アップロードに成功しました。');
 			}else {
-				$this->Session->setFlash('アップロードに失敗しました。');
+				$this->setMessage('アップロードに失敗しました。', true);
 			}
 		//} else {
-			//$this->Session->setFlash('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。');
+			//$this->setMessage('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。', true);
 		//}
 		$this->redirect(array('action' => 'index', $theme, $type, $path));
 
@@ -605,10 +605,10 @@ class ThemeFilesController extends AppController {
 			$folder = new Folder();
 			$this->ThemeFolder->set($this->data);
 			if ($this->ThemeFolder->validates() && $folder->create($fullpath.$this->data['ThemeFolder']['name'], 0777)) {
-				$this->Session->setFlash('フォルダ '.$this->data['ThemeFolder']['name'].' を作成しました。');
+				$this->setMessage('フォルダ '.$this->data['ThemeFolder']['name'].' を作成しました。');
 				$this->redirect(array('action' => 'index', $theme, $type, $path));
 			} else {
-				$this->Session->setFlash('フォルダの作成に失敗しました。');
+				$this->setMessage('フォルダの作成に失敗しました。', true);
 			}
 		}
 
@@ -649,17 +649,17 @@ class ThemeFilesController extends AppController {
 			if ($this->ThemeFolder->validates()) {
 				if($fullpath != $newPath) {
 					if($folder->move(array('from'=>$fullpath,'to'=>$newPath,'chmod'=>0777,'skip'=>array('_notes')))) {
-						$this->Session->setFlash('フォルダ名を '.$this->data['ThemeFolder']['name'].' に変更しました。');
+						$this->setMessage('フォルダ名を '.$this->data['ThemeFolder']['name'].' に変更しました。');
 						$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
 					}else {
-						$this->Session->setFlash('フォルダ名の変更に失敗しました。');
+						$this->setMessage('フォルダ名の変更に失敗しました。', true);
 					}
 				}else {
-					$this->Session->setFlash('フォルダ名に変更はありませんでした。');
+					$this->setMessage('フォルダ名に変更はありませんでした。', true);
 					$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
 				}
 			} else {
-				$this->Session->setFlash('フォルダ名の変更に失敗しました。');
+				$this->setMessage('フォルダ名の変更に失敗しました。', true);
 			}
 		}
 
@@ -825,11 +825,11 @@ class ThemeFilesController extends AppController {
 		if(copy($fullpath,$themePath)) {
 			chmod($themePath,0666);
 			$_themePath = str_replace(ROOT,'',$themePath);
-			$this->Session->setFlash('コアファイル '.basename($path).' を テーマ '.Inflector::camelize($this->siteConfigs['theme']).' の次のパスとしてコピーしました。<br />'.$_themePath);
+			$this->setMessage('コアファイル '.basename($path).' を テーマ '.Inflector::camelize($this->siteConfigs['theme']).' の次のパスとしてコピーしました。<br />'.$_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		}else {
-			$this->Session->setFlash('コアファイル '.basename($path).' のコピーに失敗しました。');
+			$this->setMessage('コアファイル '.basename($path).' のコピーに失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'view', $theme, $plugin, $type, $path));
 
@@ -864,11 +864,11 @@ class ThemeFilesController extends AppController {
 		$folder->create(dirname($themePath),0777);
 		if($folder->copy(array('from'=>$fullpath,'to'=>$themePath,'chmod'=>0777,'skip'=>array('_notes')))) {
 			$_themePath = str_replace(ROOT,'',$themePath);
-			$this->Session->setFlash('コアフォルダ '.basename($path).' を テーマ '.Inflector::camelize($this->siteConfigs['theme']).' の次のパスとしてコピーしました。<br />'.$_themePath);
+			$this->setMessage('コアフォルダ '.basename($path).' を テーマ '.Inflector::camelize($this->siteConfigs['theme']).' の次のパスとしてコピーしました。<br />'.$_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		}else {
-			$this->Session->setFlash('コアフォルダ '.basename($path).' のコピーに失敗しました。');
+			$this->setMessage('コアフォルダ '.basename($path).' のコピーに失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'view_folder', $theme, $plugin, $type, $path));
 

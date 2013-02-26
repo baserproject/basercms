@@ -138,12 +138,10 @@ class GlobalMenusController extends AppController {
 			// データを保存
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$message = '新規メニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->GlobalMenu->saveDbLog($message);
+				$this->setMessage('新規メニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -166,7 +164,7 @@ class GlobalMenusController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -181,12 +179,10 @@ class GlobalMenusController extends AppController {
 			$this->GlobalMenu->set($this->data);
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$message = 'メニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->GlobalMenu->saveDbLog($message);
+				$this->setMessage('メニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -259,7 +255,7 @@ class GlobalMenusController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -269,11 +265,9 @@ class GlobalMenusController extends AppController {
 		/* 削除処理 */
 		if($this->GlobalMenu->del($id)) {
 			clearViewCache();
-			$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->GlobalMenu->saveDbLog($message);
+			$this->setMessage('メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

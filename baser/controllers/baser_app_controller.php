@@ -335,7 +335,7 @@ class BaserAppController extends Controller {
 				$Permission = ClassRegistry::init('Permission');
 				$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
 				if(!$Permission->check($this->params['url']['url'],$user[$this->BcAuth->userModel]['user_group_id'])) {
-					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+					$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 					$this->redirect($this->BcAuth->loginAction);
 				}
 			}
@@ -1064,7 +1064,7 @@ class BaserAppController extends Controller {
 				$this->BcAuth->authError = $this->BcAuth->loginError;
 				return false;
 			} else {
-				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 				return;
 			}
@@ -1359,4 +1359,32 @@ class BaserAppController extends Controller {
 		}
 		exit();
 	}
+/**
+ * メッセージをビューにセットする
+ * 
+ * @param string $message
+ * @param boolean $alert
+ * @param boolean $saveDblog
+ * @return void
+ */
+	function setMessage($message, $alert = false, $saveDblog = false) {
+		
+		if(!isset($this->Session)) {
+			return;
+		}
+		
+		$class = 'notice-message';
+		if($alert) {
+			$class = 'alert-message';
+		}
+		
+		$this->Session->setFlash($message, 'default', array('class' => $class));
+		
+		if($saveDblog) {
+			$AppModel = ClassRegistry::init('AppModel');
+			$AppModel->saveDblog($message);
+		}
+		
+	}
+
 }

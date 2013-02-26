@@ -180,11 +180,8 @@ class PagesController extends AppController {
 					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
 						clearViewCache();
 					}
-					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を追加しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
+
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を追加しました。', false, true);
 					
 					// afterPageAdd
 					$this->executeHook('afterPageAdd');
@@ -195,13 +192,13 @@ class PagesController extends AppController {
 					
 				}else {
 					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 					
 				}
 				
 			}else {
 				
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 				
 			}
 
@@ -246,7 +243,7 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -289,11 +286,8 @@ class PagesController extends AppController {
 						clearViewCache($this->data['Page']['url']);
 					}
 					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を更新しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
-					
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を更新しました。', false, true);
+
 					// afterPageEdit
 					$this->executeHook('afterPageEdit');
 					
@@ -301,13 +295,11 @@ class PagesController extends AppController {
 					$this->redirect(array('action' => 'edit', $id));
 					
 				}else {
-					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
-					
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -400,7 +392,7 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -410,14 +402,11 @@ class PagesController extends AppController {
 		/* 削除処理 */
 		if($this->Page->del($id)) {
 			
-			// 完了メッセージ
-			$message = '固定ページ: '.$page['Page']['name'].' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Page->saveDbLog($message);
+			$this->setMessage('固定ページ: '.$page['Page']['name'].' を削除しました。', false, true);
 			
 		}else {
 			
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			
 		}
 
@@ -442,8 +431,7 @@ class PagesController extends AppController {
 		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearViewCache();
-		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
-		$this->Session->setFlash($message);
+		$this->setMessage($result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。');
 		$this->redirect(array('action' => 'index'));
 
 	}
@@ -456,9 +444,9 @@ class PagesController extends AppController {
 	function admin_write_page_files() {
 
 		if($this->Page->createAllPageTemplate()){
-			$this->Session->setFlash('固定ページテンプレートの書き出しに成功しました。');
+			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
 		} else {
-			$this->Session->setFlash('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。');
+			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
 		$this->redirect(array('action' => 'index'));

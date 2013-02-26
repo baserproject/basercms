@@ -38,9 +38,9 @@
  * favorites テーブルの作成
  */
 	if($this->loadSchema('2.0.0', '', '', 'create')){
-		$this->setMessage('favorites テーブルの作成に成功しました。');
+		$this->setUpdateLog('favorites テーブルの作成に成功しました。');
 	} else {
-		$this->setMessage('favorites テーブルの作成に失敗しました。', true);
+		$this->setUpdateLog('favorites テーブルの作成に失敗しました。', true);
 	}
 /**
  * スキーマの読み込み
@@ -48,9 +48,9 @@
  * user_groups テーブルの構造変更
  */
 	if($this->loadSchema('2.0.0', '', '', 'alter')){
-		$this->setMessage('user_groups テーブルの構造変更に成功しました。');
+		$this->setUpdateLog('user_groups テーブルの構造変更に成功しました。');
 	} else {
-		$this->setMessage('user_groups テーブルの構造変更に失敗しました。', true);
+		$this->setUpdateLog('user_groups テーブルの構造変更に失敗しました。', true);
 	}
 /**
  * site_configs データ更新
@@ -61,9 +61,9 @@
 	$siteConfig['login_credit'] = true;
 	$siteConfig['admin_theme'] = '';
 	if($SiteConfig->saveKeyValue($siteConfig)) {
-		$this->setMessage('site_configs テーブルのデータ更新に成功しました。');
+		$this->setUpdateLog('site_configs テーブルのデータ更新に成功しました。');
 	} else {
-		$this->setMessage('site_configs テーブルのデータ更新に失敗しました。', true);
+		$this->setUpdateLog('site_configs テーブルのデータ更新に失敗しました。', true);
 	}
 /**
  * global_menus データ更新
@@ -81,9 +81,9 @@
 			}
 		}
 		if($result) {
-			$this->setMessage('global_menus テーブルのデータ更新に成功しました。');
+			$this->setUpdateLog('global_menus テーブルのデータ更新に成功しました。');
 		} else {
-			$this->setMessage('global_menus テーブルのデータ更新に失敗しました。', true);
+			$this->setUpdateLog('global_menus テーブルのデータ更新に失敗しました。', true);
 		}
 	}
 /**
@@ -112,9 +112,9 @@
 			}
 		}
 		if($result) {
-			$this->setMessage('permissions テーブルのデータ更新に成功しました。');
+			$this->setUpdateLog('permissions テーブルのデータ更新に成功しました。');
 		} else {
-			$this->setMessage('permissions テーブルのデータ更新に失敗しました。', true);
+			$this->setUpdateLog('permissions テーブルのデータ更新に失敗しました。', true);
 		}
 	}
 /**
@@ -133,9 +133,9 @@
 			}
 		}
 		if($result) {
-			$this->setMessage('blog_contents テーブルのデータ更新に成功しました。');
+			$this->setUpdateLog('blog_contents テーブルのデータ更新に成功しました。');
 		} else {
-			$this->setMessage('blog_contents テーブルのデータ更新に失敗しました。', true);
+			$this->setUpdateLog('blog_contents テーブルのデータ更新に失敗しました。', true);
 		}
 	}
 /**
@@ -154,8 +154,8 @@
 			}
 		}
 		if($result) {
-			$this->setMessage('blog_contents テーブルのデータ更新に成功しました。');
+			$this->setUpdateLog('blog_contents テーブルのデータ更新に成功しました。');
 		} else {
-			$this->setMessage('blog_contents テーブルのデータ更新に失敗しました。', true);
+			$this->setUpdateLog('blog_contents テーブルのデータ更新に失敗しました。', true);
 		}
 	}

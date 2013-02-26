@@ -107,7 +107,7 @@ class MailFieldsController extends MailAppController {
 	function admin_index($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
@@ -159,7 +159,7 @@ class MailFieldsController extends MailAppController {
 	function admin_add($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
@@ -176,18 +176,16 @@ class MailFieldsController extends MailAppController {
 				if($this->Message->addField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name'])) {
 					// データを保存
 					if($this->MailField->save(null, false)) {
-						$message = '新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。';
-						$this->Session->setFlash($message);
-						$this->MailField->saveDbLog($message);
+						$this->setMessage('新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。', false, true);
 						$this->redirect(array('controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 					}else {
-						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+						$this->setMessage('データベース処理中にエラーが発生しました。', true);
 					}
 				} else {
-					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
+					$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。', true);
 				}
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
@@ -209,7 +207,7 @@ class MailFieldsController extends MailAppController {
 	function admin_edit($mailContentId,$id) {
 
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -226,18 +224,16 @@ class MailFieldsController extends MailAppController {
 				if ($ret) {
 					/* 更新処理 */
 					if($this->MailField->save(null, false)) {
-						$message = 'メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。';
-						$this->Session->setFlash($message);
-						$this->MailField->saveDbLog($message);
+						$this->setMessage('メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。', false, true);
 						$this->redirect(array('action' => 'index', $mailContentId));
 					}else {
-						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+						$this->setMessage('データベース処理中にエラーが発生しました。', true);
 					}
 				} else {
-					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
+					$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。', true);
 				}
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
@@ -289,7 +285,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'admin_index'));
 		}
 
@@ -299,14 +295,12 @@ class MailFieldsController extends MailAppController {
 		/* 削除処理 */
 		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
 			if($this->MailField->del($id)) {
-				$message = 'メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。';
-				$this->Session->setFlash($message);
-				$this->MailField->saveDbLog($message);
+				$this->setMessage('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。', false, true);
 			}else {
-				$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+				$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			}
 		} else {
-			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
+			$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。', true);
 		}
 		
 		$this->redirect(array('action' => 'index', $mailContentId));
@@ -367,14 +361,14 @@ class MailFieldsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		/* コピー対象フィールドデータを読み込む */
 		$mailField = $this->MailField->read(null,$id);
 		if(!$mailField) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -395,13 +389,10 @@ class MailFieldsController extends MailAppController {
 		// データを保存
 		$this->MailField->create($mailField);
 		if($this->MailField->save()) {
-			$message = 'メールフィールド「'.$oldName.'」 をコピーしました。';
-			$this->Session->setFlash($message);
-			$this->MailField->saveDbLog($message);
+			$this->setMessage('メールフィールド「'.$oldName.'」 をコピーしました。', false, true);
 			$this->Message->construction($mailContentId);
 		}else {
-			$message = 'コピー中にエラーが発生しました。';
-			$this->Session->setFlash($message);
+			$this->setMessage('コピー中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index', $mailContentId));
@@ -441,7 +432,7 @@ class MailFieldsController extends MailAppController {
 	function admin_download_csv($mailContentId) {
 
 		if(!$mailContentId || !$this->mailContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
