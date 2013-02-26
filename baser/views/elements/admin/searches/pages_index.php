@@ -19,7 +19,7 @@
  */
 $pageType = array();
 if($reflectMobile || $reflectSmartphone) {
-	$pageType = array('1' => 'PC');	
+	$pageType = array('' => '全て', '1' => 'PC');	
 }
 if($reflectMobile) {
 	$pageType['2'] = 'モバイル';
