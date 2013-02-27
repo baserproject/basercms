@@ -1363,7 +1363,8 @@ class BaserAppController extends Controller {
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {
 			foreach($files[1] as $file) {
-				$this->helpers[] = Inflector::classify(basename($file, '.php'));
+				$file = str_replace('-', '_', $file);
+				$this->helpers[] = Inflector::camelize(basename($file, '.php'));
 			}
 		}
 		
