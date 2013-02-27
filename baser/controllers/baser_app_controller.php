@@ -280,7 +280,6 @@ class BaserAppController extends Controller {
 			
 			// ユーザーの存在チェック
 			$user = $this->BcAuth->user();
-			var_dump($this->Session->read('Auth'));
 			
 			if($user) {
 				$userModel = key($user);
