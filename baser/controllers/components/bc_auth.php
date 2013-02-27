@@ -175,6 +175,7 @@ class BcAuthComponent extends AuthComponent {
  * @access public
  */
 	function login($data = null) {
+		
 		// CUSTOMIZE ADD 2011/09/25 ryuring
 		// 簡単ログイン
 		// >>>
@@ -186,7 +187,16 @@ class BcAuthComponent extends AuthComponent {
 			}
 		}
 		// <<<
-		return parent::login($data);
+		
+		// CUSTOMIZE ADD 2011/09/25 ryuring
+		// ログイン時点でもモデルを保存しておく Session::user() のキーとして利用する
+		// >>>
+		$result = parent::login($data);
+		if($result) {
+			$this->Session->write('Auth.userModel', $this->userModel);
+		}
+		return $result;
+		// <<<
 		
 	}
 /**
@@ -249,6 +259,37 @@ class BcAuthComponent extends AuthComponent {
 		}
 		return '';
 		
+	}
+/**
+ * Get the current user from the session.
+ *
+ * @param string $key field to retrive.  Leave null to get entire User record
+ * @return mixed User record. or null if no user is logged in.
+ * @access public
+ */
+	function user($key = null) {
+		$this->__setDefaults();
+		if (!$this->Session->check($this->sessionKey)) {
+			return null;
+		}
+
+		if ($key == null) {
+			// CUSTOMIZE MODIFY 2013/02/27 ryuring
+			// ユーザーモデルを複数扱う場合、認証設定をしたタイミングでのモデルがキーとして強制的に入る
+			// 仕様となっている為、User固定となる仕様とした
+			// そのモデルをキーとして入れる仕様に変更
+			// >>>
+			//return array($this->userModel => $this->Session->read($this->sessionKey));
+			// ---
+			return array('User' => $this->Session->read($this->sessionKey));
+			// <<<
+		} else {
+			$user = $this->Session->read($this->sessionKey);
+			if (isset($user[$key])) {
+				return $user[$key];
+			}
+			return null;
+		}
 	}
 	
 }

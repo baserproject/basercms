@@ -24,9 +24,38 @@
 <head>
 <?php $bcBaser->charset() ?>
 <?php $bcBaser->title() ?>
+<?php $bcBaser->css(array(
+	'jquery-ui/ui.all',
+	'admin/import',
+	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
+	'colorbox/colorbox')) ?>
+<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
+<?php $bcBaser->js(array(
+	'jquery-1.7.2.min',
+	'jquery-ui-1.8.19.custom.min',
+	'i18n/ui.datepicker-ja',
+	'jquery.corner-2.12',
+	'jquery.bt.min',
+	'cb',
+	'jquery.contextMenu-1.0/jquery.contextMenu',
+	'jquery.form-2.94',
+	'jquery.validate.min',
+	'jquery.colorbox-min',
+	'validate_messages_ja',
+	'admin/functions',
+	'admin/startup',
+	'admin/adjust_scroll')) ?>
 <?php $bcBaser->scripts() ?>
 </head>
 <body id="<?php $bcBaser->contentsName() ?>" class="normal">
+	<!-- Waiting -->
+	<div id="Waiting" class="waiting-box" style="display:none">
+		<div class="corner10">
+		<?php echo $html->image('ajax-loader.gif') ?><br />
+		W A I T
+		</div>
+	</div>
+	<?php $bcBaser->flash() ?>
 	<?php $bcBaser->content() ?>
 <?php echo $cakeDebug; ?>
 </body>

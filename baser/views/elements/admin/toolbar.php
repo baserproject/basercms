@@ -33,6 +33,7 @@ if(!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 } else {
 	$authName = $bcBaser->siteConfig['name'];
 }
+$userController = Inflector::tableize($session->read('Auth.userModel'));
 ?>
 <script type="text/javascript">
 $(function(){
@@ -108,9 +109,9 @@ $(function(){
 		<?php endif ?>
 	<?php endif ?>
 		<?php if($authPrefix == 'front'): ?>
-						<li><?php $bcBaser->link('ログアウト', array('plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
+						<li><?php $bcBaser->link('ログアウト', array('plugin' => null, 'controller' => $userController, 'action' => 'logout')) ?></li>
 		<?php else: ?>
-						<li><?php $bcBaser->link('ログアウト', array($authPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
+						<li><?php $bcBaser->link('ログアウト', array($authPrefix => true, 'plugin' => null, 'controller' => $userController, 'action' => 'logout')) ?></li>
 		<?php endif ?>
 					</ul>
 <?php elseif($this->name != 'Installations' && $this->params['url']['url'] != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>

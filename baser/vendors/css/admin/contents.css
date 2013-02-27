@@ -654,7 +654,10 @@ table.sub-menu{
 /* flashMessage
 ----------------------------------------------- */
 
-#MessageBox #flashMessage {
+#authMessage,
+#flashMessage, 
+#AlertMessage, 
+#UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
 	font-weight:bold;

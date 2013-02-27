@@ -132,6 +132,7 @@ class UsersController extends AppController {
 			return false;
 		}
 		if($this->BcAuth->login($this->data)) {
+			$this->_setSessionAuthPrefix();
 			return true;
 		}
 		return false;
@@ -154,6 +155,7 @@ class UsersController extends AppController {
 		
 		if($this->data) {
 			if ($user) {
+				$this->_setSessionAuthPrefix();
 				if (!empty($this->data[$userModel]['saved'])) {
 					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
@@ -191,6 +193,22 @@ class UsersController extends AppController {
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
 
+	}
+/**
+ * ログイン時にセッションにauthPrefixを保存する 
+ */
+	function _setSessionAuthPrefix() {
+		
+		$authPrefix = $this->Session->read($this->BcAuth->sessionKey . '.authPrefix');
+		if (!$authPrefix) {
+			if(empty($this->params['prefix'])) {
+				$authPrefix = 'front';
+			} else {
+				$authPrefix = $this->params['prefix'];
+			}
+			$this->Session->write($this->BcAuth->sessionKey . '.authPrefix', $authPrefix);
+		}
+		
 	}
 /**
  * [ADMIN] 代理ログイン
@@ -260,6 +278,7 @@ class UsersController extends AppController {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 		
+		$this->_setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->userModel;
 		
@@ -275,7 +294,7 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->setMessage("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				$this->setMessage("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
 			}
 		}
 
@@ -580,7 +599,11 @@ class UsersController extends AppController {
  * @access public
  */
 	function admin_reset_password () {
-
+		
+		if(empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+			$this->notFound();
+		}
+		
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->userModel;
 		if($this->data) {

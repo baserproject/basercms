@@ -17,18 +17,23 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
+if(!$userModel) {
+	$userModel = 'User';
+}
 ?>
+
 
 <div class="section">
 <p>パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />
 新しいパスワードをメールでお知らせします。</p>
 <?php if($currentPrefix == 'front'): ?>
-<?php echo $bcForm->create('User', array('action' => 'reset_password')) ?>
+<?php echo $bcForm->create($userModel, array('action' => 'reset_password')) ?>
 <?php else: ?>
-<?php echo $bcForm->create('User', array('action' => 'reset_password', 'url' => array($this->params['prefix'] => true))) ?>
+<?php echo $bcForm->create($userModel, array('action' => 'reset_password', 'url' => array($this->params['prefix'] => true))) ?>
 <?php endif ?>
 <div class="submit">
-<?php echo $bcForm->input('User.email', array('type' => 'text', 'size' => 60)) ?>
+<?php echo $bcForm->input($userModel . '.email', array('type' => 'text', 'size' => 60)) ?>
 <?php echo $bcForm->submit('送信', array('div' => false, 'class' => 'btn-red button')) ?>
 </div>
 <?php echo $bcForm->end() ?>

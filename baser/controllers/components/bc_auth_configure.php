@@ -101,7 +101,8 @@ class  BcAuthConfigureComponent extends Object {
 		}
 		
 		// セッション識別
-		$auth->sessionKey = 'Auth.'.$userModel;
+		$auth->sessionKey = 'Auth.User';
+		
 		// ログインアクション
 		$auth->loginAction = $loginAction;
 
