@@ -308,7 +308,7 @@ class User extends AppModel {
  */
 	function afterSave($created) {
 		parent::afterSave($created);
-		if($created) {
+		if($created && !empty($this->UserGroup)) {
 			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data[$this->alias]['user_group_id']));
 			if($defaultFavorites) {
 				$defaultFavorites = unserialize($defaultFavorites);

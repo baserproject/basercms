@@ -116,15 +116,15 @@
 			'toolbar'		=> true
 		),*/
 		// マイページ（例）
-		/*'mypage' => array(
+		'mypage' => array(
 			'name'			=> 'マイページ',
 			'alias'			=> 'mypage',
 			'loginRedirect'	=> '/',
 			'loginTitle'	=> 'マイページログイン',
-			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/users/login',
+			'userModel'		=> 'Member',
+			'loginAction'	=> '/mypage/members/login',
 			'toolbar'		=> true
-		),*/
+		),
 		// モバイルマイページ（例）
 		/*'mobile_mypage' => array(
 			'name'			=> 'ケータイマイページ',
