@@ -294,6 +294,12 @@ class BcCkeditorHelper extends AppHelper {
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		$themeEditorCss = BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css';
+		if(file_exists($themeEditorCss)) {
+			$jscode .= "CKEDITOR.config.contentsCss = ['" . $this->webroot('/css/editor.css') . "'];";
+		} else {
+			$jscode .= "CKEDITOR.config.contentsCss = ['" . $this->webroot('/css/ckeditor/contents.css') . "'];";
+		}
 		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
