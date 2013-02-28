@@ -174,20 +174,21 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
+<?php if($bcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
-<?php if($bcBaser->siteConfig['category_permission'] && $bcAdmin->isSystemAdmin()): ?>
+	<?php if($bcAdmin->isSystemAdmin()): ?>
 				<?php echo $bcForm->input('PageCategory.owner_id', array(
 						'type'		=> 'select',
 						'options'	=> $bcForm->getControlSource('PageCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('PageCategory.owner_id') ?>
-<?php else: ?>
+	<?php else: ?>
 				<?php echo $bcText->arrayValue($this->data['PageCategory']['owner_id'], $owners) ?>
 				<?php echo $bcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
-<?php endif ?>
+	<?php endif ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -195,6 +196,7 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
+<?php endif ?>
 	</table>
 </div>
 <div class="submit">
