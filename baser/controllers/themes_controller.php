@@ -475,7 +475,7 @@ class ThemesController extends AppController {
 		emptyFolder($tmpDir);
 		clearAllCache();
 		
-		$excludes = array('plugins', 'dblogs', 'users');
+		$excludes = array('plugins', 'dblogs', 'users', 'favorites');
 		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
 		
 		/* コアプラグインのCSVを生成 */
