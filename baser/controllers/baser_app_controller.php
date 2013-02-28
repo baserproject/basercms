@@ -1051,7 +1051,7 @@ class BaserAppController extends Controller {
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
 			if($user) {
-				$userModel = key($user);
+				$userModel = $this->Session->read('Auth.userModel');
 				$authPrefixSettings = Configure::read('BcAuthPrefix');
 				foreach($authPrefixSettings as $key => $authPrefixSetting) {
 					if(!empty($authPrefixSetting['userModel'])) {
