@@ -200,7 +200,7 @@ class BcUploadHelper extends FormHelper {
 		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true, 'mobile'=>false);
 		$options = Set::merge($_options,$options);
 		$imgOptions = array();
-		$linkOptions = array();
+		$linkOptions = array('rel' => 'colorbox');
 		$noimage = false;
 		$link = true;
 		$tmp = false;
@@ -265,7 +265,11 @@ class BcUploadHelper extends FormHelper {
 
 		$fileUrl = '/files/'.$model->actsAs['BcUpload']['saveDir'].'/';
 		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
-		$copySettings = $model->actsAs['BcUpload']['fields'][$field]['imagecopy'];
+		if(isset($model->actsAs['BcUpload']['fields'][$field]['imagecopy'])) {
+			$copySettings = $model->actsAs['BcUpload']['fields'][$field]['imagecopy'];
+		} else {
+			$copySettings = "";
+		}
 
 		if($tmp) {
 			$link = false;
@@ -283,43 +287,45 @@ class BcUploadHelper extends FormHelper {
 			$check = false;
 			$maxSizeExists = false;
 			$mostSizeExists = false;
+			
+			if($copySettings) {
+				foreach($copySettings as $key => $copySetting) {
 
-			foreach($copySettings as $key => $copySetting) {
-
-				if($key == $imgsize) {
-					$check = true;
-				}
-				if(isset($copySetting['mobile'])) {
-					if($copySetting['mobile'] != $mobile) {
-						continue;
+					if($key == $imgsize) {
+						$check = true;
 					}
-				}else{
-					if($mobile != preg_match('/^mobile_/', $key)) {
-						continue;
+					if(isset($copySetting['mobile'])) {
+						if($copySetting['mobile'] != $mobile) {
+							continue;
+						}
+					}else{
+						if($mobile != preg_match('/^mobile_/', $key)) {
+							continue;
+						}
 					}
-				}
-				$imgPrefix = '';
-				$imgSuffix = '';
-				if(isset($copySetting['suffix']))
-					$imgSuffix = $copySetting['suffix'];
-				if(isset($copySetting['prefix']))
-					$imgPrefix = $copySetting['prefix'];
-				$pathinfo = pathinfo($fileName);
-				$ext = $pathinfo['extension'];
-				$basename = basename($fileName,'.'.$ext);
+					$imgPrefix = '';
+					$imgSuffix = '';
+					if(isset($copySetting['suffix']))
+						$imgSuffix = $copySetting['suffix'];
+					if(isset($copySetting['prefix']))
+						$imgPrefix = $copySetting['prefix'];
+					$pathinfo = pathinfo($fileName);
+					$ext = $pathinfo['extension'];
+					$basename = basename($fileName,'.'.$ext);
 
-				if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
-					if($check && !$mostSizeExists) {
-						$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
-						$mostSizeExists = true;
-					} elseif(!$mostSizeExists && !$maxSizeExists) {
-						$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
-						$maxSizeExists = true;
+					if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
+						if($check && !$mostSizeExists) {
+							$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+							$mostSizeExists = true;
+						} elseif(!$mostSizeExists && !$maxSizeExists) {
+							$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+							$maxSizeExists = true;
+						}
 					}
-				}
 
+				}
 			}
-
+			
 			if(!isset($mostSizeUrl)) {
 				$mostSizeUrl = $fileUrl.$fileName.'?'.rand();
 			}

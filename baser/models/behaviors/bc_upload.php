@@ -544,6 +544,8 @@ class BcUploadBehavior extends ModelBehavior {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($model,$setting,$pathinfo['extension']);
+					$newName = $this->getFileName($model, $setting['imageresize'], $newName);
+					
 					if(!$newName) {
 						return true;
 					}
@@ -598,7 +600,12 @@ class BcUploadBehavior extends ModelBehavior {
 		if(!empty($setting['nameformat'])) {
 			$basename = sprintf($setting['nameformat'],$basename);
 		}
-		return $basename . '_' . $setting['name'] . '.' . $ext;
+		
+		if(!isset($setting['nameadd']) || $setting['nameadd'] !== false) {
+			$basename .= '_' . $setting['name'];
+		}
+		
+		return $basename . '.' . $ext;
 
 	}
 /**

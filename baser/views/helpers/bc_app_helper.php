@@ -160,6 +160,11 @@ class BcAppHelper extends Helper {
 			$file = preg_replace('/'.preg_quote($this->webroot, '/').'/', '', $file);
 		}
 		$filePath = str_replace('/', DS, $file);
+		
+		if(strpos($filePath, '?') !== false) {
+			list($filePath) = explode('?', $filePath);
+		}
+		
 		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->webroot.$file;
@@ -193,6 +198,7 @@ class BcAppHelper extends Helper {
 			$webPath = str_replace("\\",'/',$webPath);
 		}
 		// <<<
+		
 		return $webPath;
 	}
 /**
@@ -247,8 +253,12 @@ class BcAppHelper extends Helper {
 		if (!isset($url['admin']) && !empty($this->params['admin'])) {
 			$url['admin'] = true;
 		}
-			
-		return parent::url($url, $full);
+		
+		if(!is_array($url)) {
+			return $this->webroot($url);
+		} else {
+			return parent::url($url, $full);
+		}
 		
 	}
 }

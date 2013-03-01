@@ -206,6 +206,14 @@ select {
 optgroup option{
 	padding-left:20px;
 }
+.upload-file input[type=file] {
+	margin-bottom: 5px;
+}
+.upload-file a {
+	padding:5px;
+	background-color: #F1F1F1;
+	display: inline-block;
+}
 
 
 /* ==================================================================== */
