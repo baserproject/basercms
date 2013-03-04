@@ -255,7 +255,11 @@ class BcAppHelper extends Helper {
 		}
 		
 		if(!is_array($url)) {
-			return $this->webroot($url);
+			if(!preg_match('/^javascript:/', $url)) {
+				return $this->webroot($url);
+			} else {
+				return $url;
+			}
 		} else {
 			return parent::url($url, $full);
 		}
