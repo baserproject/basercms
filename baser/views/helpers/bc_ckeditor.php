@@ -308,7 +308,6 @@ class BcCkeditorHelper extends AppHelper {
 				break;
 			}
 		}
-		var_dump($themeEditorCss['url']);
 		
 		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
