@@ -254,12 +254,10 @@ class BcAppHelper extends Helper {
 			$url['admin'] = true;
 		}
 		
-		if(!is_array($url)) {
-			if(!preg_match('/^javascript:/', $url)) {
-				return $this->webroot($url);
-			} else {
-				return $url;
-			}
+		if(!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
+			return $this->webroot($url);
+		} elseif(preg_match('/^javascript:/', $url)) {
+			return $url;
 		} else {
 			return parent::url($url, $full);
 		}
