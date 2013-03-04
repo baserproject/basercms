@@ -359,6 +359,9 @@ class InstallationsController extends AppController {
 
 		// テーマを配置する
 		$this->BcManager->deployTheme();
+		
+		// エディタテンプレート用の画像を配置
+		$this->BcManager->deployEditorTemplateImage();
 
 		// pagesファイルを生成する
 		$this->BcManager->createPageTemplates();

@@ -32,3 +32,21 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+/**
+ * スキーマ読み込み
+ *
+ * editor_templates テーブルの作成
+ */
+	if($this->loadSchema('2.1.0', '', '', 'create')){
+		$this->setUpdateLog('editor_templates テーブルの作成に成功しました。');
+	} else {
+		$this->setUpdateLog('editor_templates テーブルの作成に失敗しました。', true);
+	}
+/**
+ * CSV読み込み 
+ */
+	if($this->loadCsv('2.1.0')) {
+		$this->setUpdateLog('editor_templates テーブルの初期データ読み込みに成功しました。');
+	} else {
+		$this->setUpdateLog('editor_templates テーブルの初期データ読み込みに失敗しました。', true);
+	}

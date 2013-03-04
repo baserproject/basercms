@@ -105,6 +105,12 @@ class BcManagerComponent extends Object {
 			$result = false;
 		}
 		
+		// エディタテンプレート用の画像を配置
+		if(!$this->deployEditorTemplateImage()) {
+			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
+			$result = false;
+		}
+		
 		if($smartUrl) {
 			if(!$this->setSmartUrl(true, $baseUrl)) {
 				$this->log('スマートURLの設定に失敗しました。.htaccessの書き込み権限を確認してください。');
@@ -1102,6 +1108,36 @@ class BcManagerComponent extends Object {
 
 	}
 /**
+ * エディタテンプレート用のアイコン画像をデプロイ
+ * 
+ * @return boolean
+ * @access public
+ */
+	function deployEditorTemplateImage() {
+		
+		$path = WWW_ROOT . 'files' . DS . 'editor' . DS;
+		if(!is_dir($path)) {
+			$Folder = new Folder();
+			$Folder->create($path, 0777);
+		}
+		
+		$src = BASER_VENDORS . 'img' . DS . 'ckeditor' . DS;
+		$Folder = new Folder($src);
+		$files = $Folder->read(true, true);
+		if(!empty($files[1])) {
+			$result = true;
+			foreach($files[1] as $file) {
+				if(copy($src . $file, $path . $file)) {
+					@chmod($path . $file, 0666);
+				} else {
+					$result = false;
+				}
+			}
+		}
+		return $result;
+		
+	}
+/**
  * 設定ファイルをリセットする
  * 
  * @return boolean 
@@ -1381,6 +1417,7 @@ class BcManagerComponent extends Object {
 			'configDirWritable'	=> is_writable(CONFIGS),
 			'coreFileWritable'	=> is_writable(CONFIGS.'core.php'),
 			'themeDirWritable'	=> is_writable(WWW_ROOT.'themed'),
+			'filesDirWritable'	=> is_writable(WWW_ROOT.'files'),
 			'tmpDirWritable'	=> is_writable(TMP),
 			'dbDirWritable'		=> is_writable(APP.'db'),
 			'phpActualVersion'	=> preg_replace('/[a-z-]/','', phpversion()),
@@ -1406,6 +1443,10 @@ class BcManagerComponent extends Object {
 		if(!$status['themeDirWritable']) {
 			chmod(WWW_ROOT.'themed', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
+		}
+		if(!$status['filesDirWritable']) {
+			chmod(WWW_ROOT.'files', 0777);
+			$status['filesDirWritable'] = is_writable(WWW_ROOT.'files');
 		}
 		if(!$status['tmpDirWritable']) {
 			chmod(TMP, 0777);

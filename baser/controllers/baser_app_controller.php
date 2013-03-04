@@ -429,7 +429,7 @@ class BaserAppController extends Controller {
 		}
 
 		$favoriteBoxOpened = false;
-		if(!empty($this->BcAuth)) {
+		if(!empty($this->BcAuth) && $this->params['url']['url'] != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
 				if($this->Session->check('Baser.favorite_box_opened')) {
