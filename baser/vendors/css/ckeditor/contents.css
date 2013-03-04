@@ -8,6 +8,7 @@ body
 	color: #222;
 
 	/* Remove the background color to make it transparent */
+	background: none;
 	background-color: #fff;
 }
 
@@ -17,4 +18,48 @@ ol,ul,dl
 	*margin-right:0px;
 	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
     padding:0 40px;
+}
+
+.template-image-float-left .image {
+	float:left;
+	padding:0;
+	margin:0 10px 10px 0;
+	margin-right:10px;
+	margin-bottom:10px;
+}
+.template-image-float-right .image {
+	float:right;
+	padding:0;
+	margin:0 10px 10px 0;
+	margin-left:10px;
+	margin-bottom:10px;
+}
+.template-two-block .block-left {
+	float:left;
+	width:48%;
+	padding-right:2%;
+}
+.template-two-block .block-right {
+	float:right;
+	width:48%;
+	padding-left:2%;
+}
+
+/* clear
+----------------------------------------------- */
+
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
 }

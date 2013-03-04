@@ -82,6 +82,23 @@ class BcCkeditorHelper extends AppHelper {
 					array( 	'name' => 'インライン(q)',
 							'element' => 'q')
 			);
+	var $toolbars = array(
+			'simple' => array(
+				array(	'Bold', 'Underline', '-',
+						'NumberedList', 'BulletedList', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
+						'Format', 'FontSize', 'TextColor', 'BGColor', 'Link', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			),
+			'normal' => array(
+				array(	'Cut', 'Copy', 'Paste', '-','Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
+						'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-', 
+						'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
+						'Smiley', 'Table', 'HorizontalRule', '-'),
+				array(	'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
+				array(	'Maximize', 'ShowBlocks', 'Source')
+			)
+		);
 	function __construct() {
 		parent::__construct();
 
@@ -163,55 +180,51 @@ class BcCkeditorHelper extends AppHelper {
  */
 	function _build($fieldName, $ckoptions = array(), $styles = array()) {
 
-		if(isset($ckoptions['stylesSet'])) {
-			$stylesSet = $ckoptions['stylesSet'];
-			unset($ckoptions['stylesSet']);
-		} else {
-			$stylesSet = 'basercms';
+		$ckoptions = array_merge(array(
+			'language'			=> 'ja',		// 言語
+			'type'				=> 'normal',	// ツールバータイプ
+			'skin'				=> 'kama',		// スキン
+			'width'				=> '600px',		// エディタサイズ
+			'height'			=> '300px',		// エディタ高さ
+			'collapser'			=> false,		// 
+			'baseFloatZIndex'	=> 900,			//
+			'stylesSet'			=> 'basercms',	// スタイルセット
+			'useDraft'			=> false,		// 草稿利用
+			'draftField'		=> false,		// 草稿用フィールド
+			'disablePublish'	=> false,		// 本稿利用不可
+			'disableDraft'		=> true,		// 草稿利用不可
+			'disableCopyDraft'	=> false,		// 草稿へコピー利用不可
+			'disableCopyPublish'=> false,		// 本稿へコピー利用不可
+			'readOnlyPublish'	=> false,		// 本稿読み込みのみ許可
+			'useTemplates'		=> true			// テンプレート利用
+		), $ckoptions);
+		
+		extract($ckoptions);
+		
+		if(empty($ckoptions['toolbar'])) {
+			$ckoptions['toolbar'] = $this->toolbars[$ckoptions['type']];
+			if($useTemplates) {
+				switch ($ckoptions['type']) {
+					case 'simple':
+						$ckoptions['toolbar'][0][] = 'Templates';
+						break;
+					case 'normal':
+						$ckoptions['toolbar'][1][] = 'Templates';
+						break;
+				}
+			}
 		}
-		if(isset($ckoptions['useDraft'])) {
-			$useDraft = $ckoptions['useDraft'];
-			unset($ckoptions['useDraft']);
-		} else {
-			$useDraft = false;
-		}
-		if(isset($ckoptions['draftField'])) {
-			$draftField = $ckoptions['draftField'];
-			unset($ckoptions['draftField']);
-		} else {
-			$draftField = false;
-		}
-		if(isset($ckoptions['disablePublish'])) {
-			$disablePublish = $ckoptions['disablePublish'];
-			unset($ckoptions['disablePublish']);
-		} else {
-			$disablePublish = false;
-		}
-		if(isset($ckoptions['disableDraft'])) {
-			$disableDraft = $ckoptions['disableDraft'];
-			unset($ckoptions['disableDraft']);
-		} else {
-			$disableDraft = true;
-		}
-		if(isset($ckoptions['disableCopyDraft'])) {
-			$disableCopyDraft = $ckoptions['disableCopyDraft'];
-			unset($ckoptions['disableCopyDraft']);
-		} else {
-			$disableCopyDraft = false;
-		}
-		if(isset($ckoptions['disableCopyPublish'])) {
-			$disableCopyPublish = $ckoptions['disableCopyPublish'];
-			unset($ckoptions['disableCopyPublish']);
-		} else {
-			$disableCopyPublish = false;
-		}
-		if(isset($ckoptions['readOnlyPublish'])) {
-			$readOnlyPublish = $ckoptions['readOnlyPublish'];
-			unset($ckoptions['readOnlyPublish']);
-		} else {
-			$readOnlyPublish = false;
-		}
-
+		
+		if(isset($ckoptions['stylesSet'])) unset($ckoptions['stylesSet']);
+		if(isset($ckoptions['useDraft'])) unset($ckoptions['useDraft']);
+		if(isset($ckoptions['draftField'])) unset($ckoptions['draftField']);
+		if(isset($ckoptions['disablePublish'])) unset($ckoptions['disablePublish']);
+		if(isset($ckoptions['disableDraft'])) unset($ckoptions['disableDraft']);
+		if(isset($ckoptions['disableCopyDraft'])) unset($ckoptions['disableCopyDraft']);
+		if(isset($ckoptions['disableCopyPublish'])) unset($ckoptions['disableCopyPublish']);
+		if(isset($ckoptions['readOnlyPublish'])) unset($ckoptions['readOnlyPublish']);
+		if(isset($ckoptions['useTemplates'])) unset($ckoptions['useTemplates']);
+		
 		$jscode = $model = $domId = '';
 		if(strpos($fieldName, '.')) {
 			list($model, $field) = explode('.', $fieldName);
@@ -223,45 +236,13 @@ class BcCkeditorHelper extends AppHelper {
 			$draftAreaId = Inflector::camelize($model . '_' . $draftField);
 			$field .= '_tmp';
 			$fieldName .= '_tmp';
-			$domId = $this->domId($fieldName);
 		}
 
+		$domId = $this->domId($fieldName);
+		
 		if (!$this->_script) {
 			$this->_script = true;
 			$this->Javascript->link('/js/ckeditor/ckeditor.js', false);
-		}
-		
-		$toolbar = array(
-			'simple' => array(
-				array(	'Bold', 'Underline', '-',
-						'NumberedList', 'BulletedList', '-', 
-						'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-						'Format', 'FontSize', 'TextColor', 'BGColor', 'Link', 'Image'),
-				array(	'Maximize', 'ShowBlocks', 'Source')
-			),
-			'normal' => array(
-				array(	'Cut', 'Copy', 'Paste', '-','Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
-						'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-', 
-						'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-						'Smiley', 'Table', 'HorizontalRule', '-'),
-				array(	'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
-				array(	'Maximize', 'ShowBlocks', 'Source')
-			)
-		);
-
-		$_ckoptions = array('language' => 'ja',
-			'type'	=> 'normal',
-			'skin' => 'kama',
-			'width' => '600px',
-			'height' => '300px',
-			'collapser' => false,
-			'baseFloatZIndex' => 900,
-		);
-		
-		$ckoptions = array_merge($_ckoptions,$ckoptions);
-
-		if(empty($ckoptions['toolbar'])) {
-			$ckoptions['toolbar'] = $toolbar[$ckoptions['type']];
 		}
 
 		if($useDraft) {			
@@ -291,15 +272,44 @@ class BcCkeditorHelper extends AppHelper {
 			$this->_initedStyles = true;
 		}
 
+		if($useTemplates) {
+			$jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'js')) . "' ];";
+		}
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
-		$themeEditorCss = BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css';
-		if(file_exists($themeEditorCss)) {
-			$jscode .= "CKEDITOR.config.contentsCss = ['" . $this->webroot('/css/editor.css') . "'];";
-		} else {
-			$jscode .= "CKEDITOR.config.contentsCss = ['" . $this->webroot('/css/ckeditor/contents.css') . "'];";
+		
+		$themeEditorCsses = array(
+			array(
+				'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
+				'url'	=> $this->webroot('/css/editor.css')
+			),
+			array(
+				'path'	=> BASER_VENDORS . 'css' . DS . 'ckeditor' . DS . 'contents.css',
+				'url'	=> $this->webroot('/css/ckeditor/contents.css')
+			)
+		);
+		$agentPrefix = '';
+		if($this->data['Page']['page_type'] == 2) {
+			$agentPrefix = Configure::read('BcAgent.mobile.prefix');
+		} elseif($this->data['Page']['page_type'] == 3) {
+			$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
 		}
+		if($agentPrefix) {
+			array_unshift($themeEditorCsses, array(
+				'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $agentPrefix . DS . 'editor.css',
+				'url'	=> $this->webroot('/css/' . $agentPrefix . '/editor.css')
+			));
+		}
+		
+		foreach($themeEditorCsses as $themeEditorCss) {
+			if(file_exists($themeEditorCss['path'])) {
+				$jscode .= "CKEDITOR.config.contentsCss = ['" . $themeEditorCss['url'] . "'];";
+				break;
+			}
+		}
+		var_dump($themeEditorCss['url']);
+		
 		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->Javascript->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
