@@ -437,7 +437,7 @@ class BaserAppModel extends Model {
 				$tmpdir = TMP.'schemas'.DS;
 				copy($path.DS.$file,$tmpdir.$table.'.php');
 				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField));
-				@unlink($tmpdir.$file);
+				@unlink($tmpdir.$table.'.php');
 				if(!$result) {
 					return false;
 				}
