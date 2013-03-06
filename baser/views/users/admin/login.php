@@ -94,8 +94,18 @@ $(function(){
 					$("#AlertMessage").fadeIn(500);
 				}
 			},
-			error: function() {
-				$("#AlertMessage").html('ログイン処理に失敗しました。');
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				var errorMessage = '';
+				if(XMLHttpRequest.status == 404) {
+					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
+				} else {
+					if(XMLHttpRequest.responseText) {
+						errorMessage = '<br />'+XMLHttpRequest.responseText;
+					} else {
+						errorMessage = '<br />'+errorThrown;
+					}
+				}
+				$("#AlertMessage").html('ログイン処理に失敗しました。'+errorMessage);
 				$("#AlertMessage").fadeIn(500);
 			},
 			complete: function(){
