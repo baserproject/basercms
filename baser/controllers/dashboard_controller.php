@@ -80,7 +80,7 @@ class DashboardController extends AppController {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
 		$this->paginate = array(
-				'order' =>'Dblog.created DESC',
+				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
 				'limit' => $this->passedArgs['num']
 		);
 		$this->set('viewDblogs',$this->paginate('Dblog'));
@@ -99,7 +99,7 @@ class DashboardController extends AppController {
 		$this->setViewConditions('Dblog', array('default' => $default));
 		
 		$this->paginate = array(
-				'order' =>'Dblog.created DESC',
+				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
 				'limit' => $this->passedArgs['num']
 		);
 		
