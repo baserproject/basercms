@@ -209,6 +209,18 @@ class BcAppHelper extends Helper {
  */
 	function executeHook($hook) {
 		
+		$args = func_get_args();
+		return call_user_func_array(array(&$this, 'dispatchPluginHook'), $args);
+		
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
 		}
@@ -217,6 +229,20 @@ class BcAppHelper extends Helper {
 		$args[0] =& $this;
 
 		return call_user_func_array(array(&$this->_view->loaded['bcPluginHook'], $hook), $args);
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * @param type $hook
+ * @param type $return
+ * @return type 
+ */
+	function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		$View = ClassRegistry::getObject('View');
+		$BcPluginHook = $View->loaded['bcPluginHook'];
+		return call_user_func_array(array($BcPluginHook, 'executeHook'), $args);
 		
 	}
 /**

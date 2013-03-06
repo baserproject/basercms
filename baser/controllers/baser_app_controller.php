@@ -1171,9 +1171,34 @@ class BaserAppController extends Controller {
 	function executeHook($hook) {
 
 		$args = func_get_args();
+		return call_user_func_array(array(&$this, 'dispatchPluginHook'), $args);
+
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
 		$args[0] =& $this;
 		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
-
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	function executePluginHook($hook, $controller) {
+		
+		$args = func_get_args();
+		return call_user_func_array(array($this->BcPluginHook, 'executeHook'), $args);
+		
 	}
 /**
  * 現在のユーザーのドキュメントルートの書き込み権限確認

@@ -250,5 +250,37 @@ class BcPluginHookBehavior extends ModelBehavior {
 		$this->executeHook($model, 'onError', null, $error);
 		
 	}
+/**
+ * Magic method handler.
+ *
+ * @param string $method Method name
+ * @param array $params Parameters to send to method
+ * @return mixed Return value from method
+ * @access private
+ */
+	function __call($method, $params) {
+		if (!method_exists($this, 'call__')) {
+			trigger_error(sprintf(__('Magic method handler call__ not defined in %s', true), get_class($this)), E_USER_ERROR);
+		}
+		return $this->call__($method, $params);
+	}
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( &$Object, $method ), $args );
+		}
+
+	}
 	
 }

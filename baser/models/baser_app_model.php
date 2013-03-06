@@ -1533,4 +1533,31 @@ class BaserAppModel extends Model {
 		}
 		
 	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( &$this->Behaviors->BcPluginHook, $hook ), $args );
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		array_unshift($args, $this);
+		return call_user_func_array(array(&$this->Behaviors->BcPluginHook, 'executeHook'), $args);
+		
+	}
 }

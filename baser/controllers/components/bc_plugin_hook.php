@@ -17,7 +17,16 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-class BcPluginHookComponent extends Object {
+/**
+ * Include files
+ */
+App::import('Core', 'Overloadable');
+/**
+ * プラグインフックコンポーネント
+ *
+ * @package			baser.controllers.components
+ */
+class BcPluginHookComponent extends Overloadable {
 /**
  * プラグインフックオブジェクト
  * 
@@ -185,5 +194,22 @@ class BcPluginHookComponent extends Object {
 		$this->executeHook('afterPageEdit', $controller);
 		
 	}
-	
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( &$Object, $method ), $args );
+		}
+
+	}
 }
