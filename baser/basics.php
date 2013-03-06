@@ -800,3 +800,15 @@
 			Configure::write('debug', $debug);
 		}
 	}
+/**
+ * データベースのドライバー名を取得する
+ * 
+ * @param string $dbConfigKeyName
+ * @return string 
+ */
+	function getDbDriver($dbConfigKeyName = 'baser') {
+		
+		$db = ConnectionManager::getDataSource($dbConfigKeyName);
+		return $db->config['driver'];
+		
+	}

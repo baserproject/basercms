@@ -264,12 +264,20 @@ class BaserAppController extends Controller {
 			if (!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
 				if (count($configs) >= 2) {
-					$config['auth_prefix'] = $this->params['prefix'];
+					if(getDbDriver() != 'bc_csv') {
+						$config['auth_prefix'] = $this->params['prefix'];
+					} else {
+						trigger_error('csv を利用している場合、プレフィックス認証は利用できません。config/baser.php の設定を見なおしてください。', E_USER_ERROR);
+					}
 				}
 			} elseif (isset($configs['front'])) {
 				$config = $configs['front'];
 				if(count($configs) >= 2) {
-					$config['auth_prefix'] = 'front';
+					if(getDbDriver() != 'bc_csv') {
+						$config['auth_prefix'] = 'front';
+					} else {
+						trigger_error('csv を利用している場合、プレフィックス認証は利用できません。config/baser.php の設定を見なおしてください。', E_USER_ERROR);
+					}
 				}
 			} else {
 				$config = array();
@@ -429,7 +437,8 @@ class BaserAppController extends Controller {
 		}
 
 		$favoriteBoxOpened = false;
-		if(!empty($this->BcAuth) && $this->params['url']['url'] != 'update') {
+		
+		if(!empty($this->BcAuth) && !empty($this->params['url']['url']) && $this->params['url']['url'] != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
 				if($this->Session->check('Baser.favorite_box_opened')) {
