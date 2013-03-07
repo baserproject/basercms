@@ -36,7 +36,7 @@ $(function(){
 		return false;
 	});
 	$("#btnSetUserGroupDefault").click(function() {
-		if(!confirm('登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？？')) {
+		if(!confirm('登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？')) {
 			return true;
 		}
 		var data = {};
