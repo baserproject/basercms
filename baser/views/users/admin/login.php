@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -21,6 +21,10 @@ if ( $session->check('Message.auth') ) {
     $session->flash('auth');
 }
 $userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
+if(!$userModel) {
+	$userModel = 'User';
+}
+$userController = Inflector::tableize($userModel);
 $this->addScript(<<< CSS_END
 <style type="text/css">
 #Contents {
@@ -44,11 +48,11 @@ CSS_END
 $(function(){
 
 	$("body").prepend($("#Login"));
-	$('#UserName').focus();
-	changeNavi('#UserName');
-	changeNavi('#UserPassword');
+	$("#"+$("#UserModel").html()+"Name").focus();
+	changeNavi("#"+$("#UserModel").html()+"Name");
+	changeNavi("#"+$("#UserModel").html()+"Password");
 
-	$('#UserName,#UserPassword').bind('keyup', function(){
+	$("#"+$("#UserModel").html()+"Name,#"+$("#UserModel").html()+"Password").bind('keyup', function(){
 		if($(this).val()) {
 			$(this).prev().hide();
 		} else {
@@ -70,11 +74,11 @@ $(function(){
 
 	$("#BtnLogin").click(function(e){
 
-		$("#UserAjaxLoginForm").ajaxSubmit({
+		$("#"+$("#UserModel").html()+"AjaxLoginForm").ajaxSubmit({
 			beforeSend: function() {
 				$("#Waiting").show();
 			},
-			url: $("#UserAjaxLoginForm").attr('action'),
+			url: $("#"+$("#UserModel").html()+"AjaxLoginForm").attr('action'),
 			success: function(response, status) {
 				if(response) {
 					$("#Login").fadeOut(500);
@@ -90,8 +94,18 @@ $(function(){
 					$("#AlertMessage").fadeIn(500);
 				}
 			},
-			error: function() {
-				$("#AlertMessage").html('ログイン処理に失敗しました。');
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				var errorMessage = '';
+				if(XMLHttpRequest.status == 404) {
+					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
+				} else {
+					if(XMLHttpRequest.responseText) {
+						errorMessage = '<br />'+XMLHttpRequest.responseText;
+					} else {
+						errorMessage = '<br />'+errorThrown;
+					}
+				}
+				$("#AlertMessage").html('ログイン処理に失敗しました。'+errorMessage);
 				$("#AlertMessage").fadeIn(500);
 			},
 			complete: function(){
@@ -135,14 +149,20 @@ function openCredit(completeHandler) {
 	$("#Logo").css('z-index', '0');
 	$("#Wrap").css('height', '280px');
 	if(completeHandler) {
-		$("#Credit").fadeOut(1000, completeHandler);
+		if($("#Credit").length) {
+			$("#Credit").fadeOut(1000, completeHandler);
+		}
+		completeHandler();
 	} else {
-		$("#Credit").fadeOut(1000);
+		if($("#Credit").length) {
+			$("#Credit").fadeOut(1000);
+		}
 	}
 }
 </script>
 
-<div id="LoginCredit"><?php echo $bcBaser->siteConfig['login_credit'] ?></div>
+<div id="UserModel" style="display:none"><?php echo $userModel ?></div>
+<div id="LoginCredit" style="display:none"><?php echo $bcBaser->siteConfig['login_credit'] ?></div>
 <div id="Login">
 
 	<div id="LoginInner">
@@ -150,9 +170,9 @@ function openCredit(completeHandler) {
 		<h1><?php $bcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 <?php if($currentPrefix == 'front'): ?>
-		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => 'users'))) ?>
+		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => $userController))) ?>
 <?php else: ?>
-		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => 'users'))) ?>
+		<?php echo $bcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->params['prefix'] => true, 'controller' => $userController))) ?>
 <?php endif ?>
 		<div class="float-left login-input">
 			<?php echo $bcForm->label($userModel.'.name', 'アカウント名') ?>

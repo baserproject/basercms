@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -180,11 +180,8 @@ class PagesController extends AppController {
 					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
 						clearViewCache();
 					}
-					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を追加しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
+
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を追加しました。', false, true);
 					
 					// afterPageAdd
 					$this->executeHook('afterPageAdd');
@@ -195,13 +192,13 @@ class PagesController extends AppController {
 					
 				}else {
 					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 					
 				}
 				
 			}else {
 				
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 				
 			}
 
@@ -246,13 +243,12 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
-			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
 			$mobileIds = $this->PageCategory->getAgentCategoryIds('mobile');
 			$smartphoneIds = $this->PageCategory->getAgentCategoryIds('smartphone');
 			if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
@@ -264,7 +260,7 @@ class PagesController extends AppController {
 			}
 		}else {
 
-			$before = $this->Page->read(null, $id);
+			$before = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
 			if(empty($this->data['Page']['page_type'])) {
 				$this->data['Page']['page_type'] = 1;
 			}
@@ -279,7 +275,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 
-				if($this->Page->save($this->data,false)) {
+				if($this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
@@ -290,11 +286,8 @@ class PagesController extends AppController {
 						clearViewCache($this->data['Page']['url']);
 					}
 					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を更新しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
-					
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を更新しました。', false, true);
+
 					// afterPageEdit
 					$this->executeHook('afterPageEdit');
 					
@@ -302,13 +295,11 @@ class PagesController extends AppController {
 					$this->redirect(array('action' => 'edit', $id));
 					
 				}else {
-					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
-					
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -401,7 +392,7 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -411,14 +402,11 @@ class PagesController extends AppController {
 		/* 削除処理 */
 		if($this->Page->del($id)) {
 			
-			// 完了メッセージ
-			$message = '固定ページ: '.$page['Page']['name'].' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Page->saveDbLog($message);
+			$this->setMessage('固定ページ: '.$page['Page']['name'].' を削除しました。', false, true);
 			
 		}else {
 			
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			
 		}
 
@@ -443,8 +431,7 @@ class PagesController extends AppController {
 		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearViewCache();
-		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
-		$this->Session->setFlash($message);
+		$this->setMessage($result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。');
 		$this->redirect(array('action' => 'index'));
 
 	}
@@ -457,9 +444,9 @@ class PagesController extends AppController {
 	function admin_write_page_files() {
 
 		if($this->Page->createAllPageTemplate()){
-			$this->Session->setFlash('固定ページテンプレートの書き出しに成功しました。');
+			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
 		} else {
-			$this->Session->setFlash('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。');
+			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
 		$this->redirect(array('action' => 'index'));
@@ -476,21 +463,7 @@ class PagesController extends AppController {
 
 		$path = func_get_args();
 
-		$ext = '';
-		if(preg_match('/^pages/', $path[0])) {
-			// .htmlの拡張子がついている場合、$pathが正常に取得できないので取得しなおす
-			// 1.5.9 以前との互換性の為残しておく
-			$url = str_replace('pages','',$path[0]);
-			if($url == 'index.html') {
-				$url = '/index.html';
-			}
-			$params = Router::parse(str_replace('.html','',$path[0]));
-			$path = $params['pass'];
-			$this->params['pass'] = $path;
-			$ext = '.html';
-		} else {
-			$url = '/'.implode('/', $path);
-		}
+		$url = '/'.implode('/', $path);		
 
 		// モバイルディレクトリへのアクセスは Not Found
 		if(isset($path[0]) && ($path[0]==Configure::read('BcAgent.mobile.prefix') || $path[0]==Configure::read('BcAgent.smartphone.prefix'))){
@@ -512,15 +485,6 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
-		// 公開制限を確認
-		// 1.5.10 で、拡張子なしを標準に変更
-		// 拡張子なしの場合は、route.phpで認証がかかる為、ここでは処理を行わない
-		// 1.5.9 以前との互換性の為残しておく
-		if(($ext)) {
-			if(!$this->Page->checkPublish($url)) {
-				return $this->notFound();
-			}
-		}
 
 		// キャッシュ設定
 		if(!isset($_SESSION['Auth']['User'])){
@@ -531,7 +495,6 @@ class PagesController extends AppController {
 		// ナビゲーションを取得
 		$this->crumbs = $this->_getCrumbs($url);
 
-		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
 		$this->render(join('/', $path));
@@ -1020,7 +983,7 @@ class PagesController extends AppController {
 		}
 		
 		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 
 	}
 /**

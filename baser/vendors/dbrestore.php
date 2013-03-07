@@ -5,9 +5,9 @@
  *
  * PHP versions 4 and 5
  *
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://www.e-catchup.jp
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -266,4 +266,3 @@ class DbRestore {
 		return $tables;
 	}
 }
-?>

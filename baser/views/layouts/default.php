@@ -1,17 +1,17 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] デフォルトレイアウト
+ * [ADMIN] レイアウト
  *
- * PHP versions 5
+ * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views.layout
- * @since			baserCMS v 0.1.0
+ * @package			baser.views
+ * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
@@ -22,75 +22,28 @@
 <?php $bcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
+<meta name="robots" content="noindex,nofollow" />
 <?php $bcBaser->charset() ?>
 <?php $bcBaser->title() ?>
-<?php $bcBaser->metaDescription() ?>
-<?php $bcBaser->metaKeywords() ?>
-<?php $bcBaser->icon() ?>
-<?php $bcBaser->css('font_small','stylesheet',array('title'=>'Small')) ?>
-<?php $bcBaser->css('font_medium','stylesheet',array('title'=>'Medium')) ?>
-<?php $bcBaser->css('font_large','stylesheet',array('title'=>'Large')) ?>
-<?php $bcBaser->css('import') ?>
+<?php $bcBaser->css(array(
+	'import',
+	'colorbox/colorbox')) ?>
+<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
-	'jquery-1.6.2.min',
-	'jquery.corner',
-	'styleswitcher',
-	'startup')) ?>
+	'jquery-1.7.2.min',
+	'jquery-ui-1.8.19.custom.min',
+	'jquery.colorbox-min',
+	'admin/functions',
+	'admin/startup',
+	'admin/adjust_scroll')) ?>
 <?php $bcBaser->scripts() ?>
 </head>
+
 <body id="<?php $bcBaser->contentsName() ?>" class="normal">
 
-<!-- begin page -->
-<div id="page">
+	<div id="Page" style="text-align: center"><?php $bcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
 
-	<!-- begin gradationShadow -->
-	<div id="gradationShadow">
-	
-		<!-- begin header -->
-		<?php $bcBaser->element('header') ?>
-		<!-- end header -->
-		
-		<!-- begin contents -->
-		<div id="contents">
-		
-			<!-- navigation -->
-			<div id="navigation">
-				<?php $bcBaser->element('navi',array('title_for_element'=>$bcBaser->getContentsTitle())); ?>
-			</div>
-			
-			<!-- begin alfa -->
-			<div id="alfa" >
-			
-				<!-- begin contentsBody -->
-				<div id="contentsBody">
-					<?php $bcBaser->flash() ?>
-					<?php $bcBaser->content() ?>
-					<?php $bcBaser->element('contents_navi') ?>
-				</div>
-				<!-- end contentsBody -->
-				
-			</div>
-			<!-- end alfa -->
-			
-			<!-- begin beta -->
-			<?php $bcBaser->element('sidebar') ?>
-			<!-- end beta -->
-			
-			<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
-			
-		</div>
-		<!-- end contents -->
-		
-		<!-- begin footer -->
-		<?php $bcBaser->element('footer') ?>
-		<!-- end footer -->
-		
-	</div>
-	<!-- end gradationShadow -->
-	
-</div>
-<!-- end page -->
-
-<?php echo $cakeDebug; ?>
+<?php $bcBaser->func() ?>
 </body>
+
 </html>

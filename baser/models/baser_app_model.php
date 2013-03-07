@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			baserCMS v 0.1.0
@@ -210,7 +210,7 @@ class BaserAppModel extends Model {
  * @return 	array
  * @access	public
  */
-	function getControlSources() {
+	function getControlSource($field) {
 		return array();
 	}
 /**
@@ -437,7 +437,7 @@ class BaserAppModel extends Model {
 				$tmpdir = TMP.'schemas'.DS;
 				copy($path.DS.$file,$tmpdir.$table.'.php');
 				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField));
-				@unlink($tmpdir.$file);
+				@unlink($tmpdir.$table.'.php');
 				if(!$result) {
 					return false;
 				}
@@ -984,9 +984,15 @@ class BaserAppModel extends Model {
 		}
 
 		$result = true;
-
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->disable('BcCache');
+		}
 		foreach($data as $key => $value) {
-
+			
+			if($this->find('count', array('conditions' => array('name' => $key))) > 1) {
+				$this->deleteAll(array('name' => $key));
+			}
+			
 			$dbData = $this->find('first', array('conditions'=>array('name'=>$key)));
 
 			if(!$dbData) {
@@ -1006,7 +1012,12 @@ class BaserAppModel extends Model {
 			}
 
 		}
-
+		
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->enable('BcCache');
+			$this->delCache();
+		}
+		
 		return true;
 
 	}
@@ -1520,6 +1531,33 @@ class BaserAppModel extends Model {
 		} else {
 			parent::cakeError($method, $messages);
 		}
+		
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( &$this->Behaviors->BcPluginHook, $hook ), $args );
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		array_unshift($args, $this);
+		return call_user_func_array(array(&$this->Behaviors->BcPluginHook, 'executeHook'), $args);
 		
 	}
 }

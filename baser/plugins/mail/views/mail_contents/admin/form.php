@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -72,10 +72,13 @@ function mailContentSender1ClickHandler(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">このメールフォームのURL：
-		<?php $bcBaser->link(
-				$bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), 
-				'/' . $mailContent['MailContent']['name'] . '/index',
-				array('target'=>'_blank')) ?>
+	<?php if($mailContent['MailContent']['status']): ?>
+	<?php $bcBaser->link(
+			$bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'),
+			'/' . $mailContent['MailContent']['name'] . '/index') ?>
+	<?php else: ?>
+	<?php echo $bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index') ?>
+	<?php endif ?>
 </div>
 <?php endif ?>
 
@@ -304,13 +307,11 @@ function mailContentSender1ClickHandler(){
 	
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $bcForm->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $bcBaser->link('削　除', 
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
+	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('MailContent.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $bcForm->value('MailContent.name')),
 			false); ?>
 <?php endif ?>

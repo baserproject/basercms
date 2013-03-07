@@ -37,7 +37,7 @@ $(function(){
 	var smartUrlAlert = 'スマートURLの設定を変更されていますが、ヘルプメッセージは読まれましたか？\nサーバー環境によっては、設定変更後、.htaccessファイルを手動で調整しないとアクセスできない場合もありますのでご注意ください。';
 	var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
 						'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
-	$("#btnSubmit").click(function(){
+	$("#BtnSave").click(function(){
 		var result = true;
 		if(smartUrl != $("#SiteConfigSmartUrl").val()) {
 			if(!confirm(smartUrlAlert)){
@@ -338,7 +338,7 @@ $(function(){
 </div>
 
 <div class="submit">
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnSubmit')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 </div>
 
 <?php echo $bcForm->end() ?>

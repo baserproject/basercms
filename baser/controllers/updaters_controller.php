@@ -80,12 +80,9 @@
  * アップデート完了時に表示するメッセージを設定します。ログにも記録されます。
  * ログファイルの記録場所：/app/tmp/logs/update.log
  *
- * $this->setMessage($message, $strong = false, $head = false, $beforeBreak = false);
+ * $this->setUpdateLog($message);
  *
  * $message			メッセージを指定します。
- * $strong			強調タグを付加します。
- * $head			見出しとしてメッセージを指定する場合は true を指定します。
- * $beforeBreak		設定するメッセージの直前に空白行を挿入する場合には true を指定します。
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * 　開発時のテストについて
@@ -107,9 +104,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
@@ -160,7 +157,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = null;
+	var $uses = array('GlobalMenu', 'Favorite');
 /**
  * beforeFilter
  *
@@ -213,9 +210,12 @@ class UpdatersController extends AppController {
 			$scriptNum += $this->_getScriptNum($target);
 		}
 
+		$updateLogFile = TMP . 'logs' . DS . 'update.log';
+		
 		/* スクリプト実行 */
 		if($this->data) {
 			clearAllCache();
+			unlink($updateLogFile);
 			if(function_exists('ini_set')) {
 				ini_set('max_excution_time', 0);
 				ini_set('max_excution_time', '128M');
@@ -231,10 +231,10 @@ class UpdatersController extends AppController {
 				$this->Plugin->save();
 			}
 			
-			$this->setMessage('アップデート処理を開始します。', false, true, true);
+			$this->setUpdateLog('アップデート処理を開始します。');
 			foreach($targets as $target) {
 				if(!$this->_update($target)){
-					$this->setMessage('アップデート処理が途中で失敗しました。', true);
+					$this->setUpdateLog('アップデート処理が途中で失敗しました。');
 				}
 			}
 			
@@ -249,16 +249,22 @@ class UpdatersController extends AppController {
 			
 			clearAllCache();
 			
-			$this->setMessage('全てのアップデート処理が完了しました。', true, true, true);
-			$this->Session->setFlash($this->_getUpadteMessage());
+			$this->setMessage('全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
 			$this->redirect(array('action' => 'index'));
 
 		}
 
+		$updateLog = '';
+		if (file_exists($updateLogFile)) {
+			$File = new File(TMP . 'logs' . DS . 'update.log');
+			$updateLog = $File->read();
+		}
+		
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
 		$this->pageTitle = 'データベースアップデート（baserCMSコア）';
+		$this->set('log', $updateLog);
 		$this->set('updateTarget', 'baserCMSコア');
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
@@ -278,19 +284,28 @@ class UpdatersController extends AppController {
 	function admin_exec_script() {
 
 		if($this->data) {
-			$this->setMessage('アップデートスクリプトの実行します。', false, true, true);
-			if(!$this->execScript($this->data['Updater']['plugin'], $this->data['Updater']['version'])) {
-				$this->Session->setFlash('アップデートスクリプトが見つかりません。');
-			} else {
-				$this->setMessage('アップデートスクリプトの実行が完了しました。', false, true, true);
-				$this->Session->setFlash($this->_getUpadteMessage());
+			$this->setUpdateLog('アップデートスクリプトの実行します。');
+			if($this->_execScript($this->data['Updater']['plugin'], $this->data['Updater']['version'])) {
+				$this->setUpdateLog('アップデートスクリプトの実行が完了しました。');
+				$this->_writeUpdateLog();
+				$this->setMessage('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 				$this->redirect(array('action' => 'exec_script'));
+			} else {
+				$this->setMessage('アップデートスクリプトが見つかりません。', true);
 			}
 		}
 
+		$updateLogFile = TMP . 'logs' . DS . 'update.log';
+		$updateLog = '';
+		if (file_exists($updateLogFile)) {
+			$File = new File(TMP . 'logs' . DS . 'update.log');
+			$updateLog = $File->read();
+		}
+		
 		$this->pageTitle = 'アップデートスクリプト実行';
 		$plugins = $this->Plugin->find('list', array('fields' => array('name', 'title')));
 		$this->set('plugins', $plugins);
+		$this->set('log', $updateLog);
 		
 	}
 /**
@@ -317,18 +332,26 @@ class UpdatersController extends AppController {
 
 		/* スクリプト実行 */
 		if($this->data) {
-
+			clearAllCache();
 			$this->_update($name);
-			$this->Session->setFlash($this->_getUpadteMessage());
+			$this->setMessage('アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
+			clearAllCache();
 			$this->redirect(array('action' => 'plugin', $name));
-
 		}
 
+		$updateLogFile = TMP . 'logs' . DS . 'update.log';
+		$updateLog = '';
+		if (file_exists($updateLogFile)) {
+			$File = new File($updateLogFile);
+			$updateLog = $File->read();
+		}
+		
 		$targetVersion = $this->getBaserVersion($name);
 		$sourceVersion = $this->getSiteVersion($name);
 		$title = $this->Plugin->field('title',array('name'=>$name)).'プラグイン';
 		$this->pageTitle = 'データベースアップデート（'.$title.'）';
+		
 		$this->set('updateTarget', $title);
 		$this->set('siteVer',$sourceVersion);
 		$this->set('baserVer',$targetVersion);
@@ -336,6 +359,7 @@ class UpdatersController extends AppController {
 		$this->set('baserVerPoint', verpoint($targetVersion));
 		$this->set('scriptNum',$scriptNum);
 		$this->set('plugin', $name);
+		$this->set('log', $updateLog);
 		$this->render('update');
 
 	}
@@ -464,13 +488,13 @@ class UpdatersController extends AppController {
 			$name = $this->Plugin->field('title',array('name'=>$plugin)).'プラグイン';
 		}
 
-		$this->setMessage($name.' '.$targetVersion.' へのアップデートを開始します。', false, true, true);
+		$this->setUpdateLog($name.' '.$targetVersion.' へのアップデートを開始します。');
 
 		if($updaters){
 			asort($updaters);
 			foreach($updaters as $version => $updateVerPoint) {
-				$this->setMessage('アップデートプログラム '.$version.' を実行します。', false, true, true);
-				$this->execScript($plugin, $version);
+				$this->setUpdateLog('アップデートプログラム '.$version.' を実行します。');
+				$this->_execScript($plugin, $version);
 			}
 		}
 
@@ -496,7 +520,7 @@ class UpdatersController extends AppController {
 			$result = true;
 		}
 
-		$this->setMessage($name.' '.$targetVersion.' へのアップデートが完了しました。', false, true, true);
+		$this->setUpdateLog($name.' '.$targetVersion.' へのアップデートが完了しました。');
 
 		return $result;
 
@@ -507,9 +531,9 @@ class UpdatersController extends AppController {
  * @param string $__plugin
  * @param string $__version
  * @return void
- * @access public
+ * @access protected
  */
-	function execScript($__plugin, $__version) {
+	function _execScript($__plugin, $__version) {
 		
 		$__path = $this->_getUpdateFolder($__plugin).$__version.DS.'updater.php';
 		
@@ -531,19 +555,8 @@ class UpdatersController extends AppController {
  * @return void
  * @access public
  */
-	function setMessage($message, $strong = false, $head = false, $beforeBreak = false) {
+	function setUpdateLog($message) {
 		
-		if($beforeBreak) {
-			$this->_updateMessage[] = '';
-		}
-		if($head){
-			$message = '■ '.$message;
-		}else{
-			$message = '　　* '.$message;
-		}
-		if($strong) {
-			$message = '<strong>'.$message.'</strong>';
-		}
 		$this->_updateMessage[] = $message;
 		
 	}
@@ -627,17 +640,6 @@ class UpdatersController extends AppController {
 		}
 		return $path;
 
-	}
-/**
- * アップデートメッセージを取得する
- * 改行区切り
- * 
- * @return string
- */
-	function _getUpadteMessage() {
-		
-		return implode('<br />',$this->_updateMessage).'<br /><br />';
-		
 	}
 /**
  * アップデートメッセージを保存する

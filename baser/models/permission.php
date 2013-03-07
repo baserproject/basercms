@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			baserCMS v 0.1.0
@@ -168,7 +168,7 @@ class Permission extends AppModel {
  */
 	function getControlSource($field = null) {
 
-		$controlSources['user_group_id'] = $this->UserGroup->find('list',array('conditions'=>array('UserGroup.id <>'=>1)));
+		$controlSources['user_group_id'] = $this->UserGroup->find('list', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId'))));
 		$controlSources['auth'] = array('0'=>'不可','1'=>'可');
 		if(isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -237,9 +237,7 @@ class Permission extends AppModel {
 			'/^admin$/',
 			'/^admin\/$/',
 			'/^admin\/dashboard\/.*?/',
-			
 			'/^admin\/users\/logout$/',
-			'/^admin\/users\/back_agent$/',
 			'/^admin\/user_groups\/set_default_favorites$/'
 		);
 		

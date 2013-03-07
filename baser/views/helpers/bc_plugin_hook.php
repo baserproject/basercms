@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views.helpers
  * @since			baserCMS v 0.1.0
@@ -176,34 +176,6 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 /**
- * BcForm::create
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	function formExCreate($out) {
-		
-		return $this->executeHook('formExCreate', $out, $out);
-		
-	}
-/**
- * BcForm::end
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	function formExEnd($out) {
-		
-		return $this->executeHook('formExEnd',$out, $out);
-		
-	}
-/**
  * before Form::create
  * 
  * @param Form $form
@@ -226,8 +198,7 @@ class BcPluginHookHelper extends AppHelper {
  */
 	function afterFormCreate(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormCreate', $out, $form, $id, $out);
-		return $this->formExCreate($out);
+		return $this->executeHook('afterFormCreate', $out, $form, $id, $out);
 		
 	}
 /**
@@ -253,8 +224,7 @@ class BcPluginHookHelper extends AppHelper {
  */
 	function afterFormEnd(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormEnd', $out, $form, $id, $out);
-		return $this->formExEnd($out);
+		return $this->executeHook('afterFormEnd', $out, $form, $id, $out);
 		
 	}
 /**
@@ -355,5 +325,23 @@ class BcPluginHookHelper extends AppHelper {
 		return $this->executeHook('afterElement', $out, $name, $out);
 		
 	}
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( &$Object, $method ), $args );
+		}
+
+	}
+	
 }
-?>

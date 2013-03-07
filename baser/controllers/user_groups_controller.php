@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -119,12 +119,10 @@ class UserGroupsController extends AppController {
 			}
 			$this->UserGroup->create($this->data);
 			if($this->UserGroup->save()) {
-				$message = '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->UserGroup->saveDbLog($message);
+				$this->setMessage($message, '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -146,7 +144,7 @@ class UserGroupsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -156,12 +154,10 @@ class UserGroupsController extends AppController {
 
 			/* 更新処理 */
 			if($this->UserGroup->save($this->data)) {
-				$message = 'ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->UserGroup->saveDbLog($message);
+				$this->setMessage('ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -209,7 +205,7 @@ class UserGroupsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -218,11 +214,9 @@ class UserGroupsController extends AppController {
 
 		/* 削除処理 */
 		if($this->UserGroup->del($id)) {
-			$message = 'ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->UserGroup->saveDbLog($message);
+			$this->setMessage('ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

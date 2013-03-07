@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -23,7 +23,6 @@
 <?php if(!empty($user)): ?>
 <div id="ContentsMenu">
 	<ul class="clearfix">
-		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_favorite.png', array('alt' => 'よく使う項目', 'width' => 90, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuFavorite')) ?></li>
 <?php if(!empty($search)): ?>
 		<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?></li>
 <?php endif ?>

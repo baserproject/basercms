@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -60,7 +60,7 @@ $(function(){
 /**
  * フォーム送信時イベント
  */
-	$("#btnSave").click(function(){
+	$("#BtnSave").click(function(){
 		editor_content_tmp.execCommand('synchronize');
 		editor_detail_tmp.execCommand('synchronize');
 		$("#BlogPostMode").val('save');
@@ -112,7 +112,7 @@ $(function(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-	<?php if($bcForm->value('BlogPost.status')): ?>
+	<?php if($bcForm->value('BlogPost.status') && $blogContent['BlogContent']['status']): ?>
 	この記事のURL：<?php $bcBaser->link(
 			$bcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')),
 			'/' . $blogContent['BlogContent']['name'] . '/archives/' . $bcForm->value('BlogPost.no')) ?>
@@ -215,7 +215,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.user_id', '作成者') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-	<?php if(isset($user) && $user['user_group_id'] == 1): ?>
+	<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $bcForm->input('BlogPost.user_id', array(
 						'type'		=> 'select',
 						'options'	=> $users)) ?>
@@ -240,17 +240,17 @@ $(function(){
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
-	<?php echo $bcForm->button('更新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php endif ?>
-	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
 	<?php $bcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id')),
-			array('class'=>'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogPost.name')),
 			false); ?>
 	<?php endif ?>

@@ -6,9 +6,9 @@
  *  PHP versions 5
  *
  *  SmartCake :  Smart Introduction Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *  @filesource
- *  @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ *  @copyright		Copyright 2008 - 2013, baserCMS Users Community
  *  @link          http://basercms.net SmartCake Project
  *  @package       cake
  *  @subpackage    cake.baser.views.helpers
@@ -186,4 +186,3 @@ class BcCsvHelper extends AppHelper {
 	}
 
 }
-?>

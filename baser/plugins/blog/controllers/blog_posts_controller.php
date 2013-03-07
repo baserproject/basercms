@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -122,7 +122,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_index($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -268,7 +268,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_add($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -285,14 +285,12 @@ class BlogPostsController extends BlogAppController {
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
-				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->BlogPost->saveDbLog($message);
+				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を追加しました。', false, true);
 				$this->BcPluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -329,14 +327,12 @@ class BlogPostsController extends BlogAppController {
 	function admin_edit($blogContentId,$id) {
 
 		if(!$blogContentId || !$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->read(null, $id);
-			$this->data['BlogPost']['content_tmp'] = $this->data['BlogPost']['content'];
-			$this->data['BlogPost']['detail_tmp'] = $this->data['BlogPost']['detail'];
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
@@ -345,13 +341,11 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
-				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->BlogPost->saveDbLog($message);
+				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を更新しました。', false, true);
 				$this->BcPluginHook->executeHook('afterBlogPostEdit', $this);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -372,7 +366,7 @@ class BlogPostsController extends BlogAppController {
 		}
 		
 		$editable = ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
@@ -471,7 +465,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_delete($blogContentId,$id = null) {
 
 		if(!$blogContentId || !$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -481,11 +475,9 @@ class BlogPostsController extends BlogAppController {
 		// 削除実行
 		if($this->BlogPost->del($id)) {
 			clearViewCache();
-			$message = $post['BlogPost']['name'].' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->BlogPost->saveDbLog($message);
+			$this->setMessage($post['BlogPost']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index',$blogContentId));
@@ -537,7 +529,7 @@ class BlogPostsController extends BlogAppController {
 
 		// 送信内容に問題がある場合には元のページにリダイレクト
 		if(!$check) {
-			$this->Session->setFlash($message);
+			$this->setMessage($message, true);
 			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 		}
 
@@ -591,7 +583,7 @@ class BlogPostsController extends BlogAppController {
 
 		}
 
-		$this->Session->setFlash( $count . ' 件の記事を取り込みました');
+		$this->setMessage( $count . ' 件の記事を取り込みました');
 		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 
 	}
@@ -717,6 +709,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->recursive = 1;
 			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
+			$this->_setAdminIndexViewData();
 			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);

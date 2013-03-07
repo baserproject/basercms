@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 ?>
 <?php $bcBaser->xmlHeader() ?>
 <?php $bcBaser->docType() ?>
@@ -55,7 +54,7 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 <div id="Page">
 	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 	<div id="SaveSearchBoxUrl" style="display:none"><?php $bcBaser->url(array('action' => 'ajax_save_search_box', $bcBaser->getContentsName(true))) ?></div>
-	<div id="FavoriteBoxOpened" style="display:none"><?php echo (!empty($user))? $session->read('Baser.favorite_box_opened') : false ?></div>
+	<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
 	<div id="SearchBoxOpened" style="display:none"><?php echo $session->read('Baser.searchBoxOpened.'.$bcBaser->getContentsName(true)) ?></div>
 	<div id="CurrentPageName" style="display: none"><?php $bcBaser->contentsTitle() ?></div>
 	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->params['url']['url'] ?></div>
@@ -73,9 +72,12 @@ $favoriteBoxOpened = $session->read('Baser.favorite_box_opened');
 	<div id="Wrap" class="clearfix" style="display:none">
 
 		<?php if(!empty($user)): ?>
-		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
-			<div class="cbb clearfix">
-
+		<div id="SideBar">
+			
+			<div id="BtnSideBarOpener"></div>
+			
+			<div class="cbb clearfix">	
+				
 				<?php $bcBaser->element('favorite_menu') ?>
 				<?php $bcBaser->element('permission') ?>
 

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -157,13 +157,13 @@ class PageCategoriesController extends AppController {
 		} else {
 			$linkedPagesSmartPhone = false;
 		}
-		if($linkedPagesMobile || $linkedPagesSmartPhone) {
+		if(!$linkedPagesMobile || !$linkedPagesSmartPhone) {
 			$pageType = array('pc' => 'PC');	
 		}
-		if($linkedPagesMobile) {
+		if(!$linkedPagesMobile) {
 			$pageType['mobile'] = 'モバイル';
 		}
-		if($linkedPagesSmartPhone) {
+		if(!$linkedPagesSmartPhone) {
 			$pageType['smartphone'] = 'スマートフォン';
 		}
 		if($pageType) {
@@ -187,7 +187,12 @@ class PageCategoriesController extends AppController {
 	function admin_add() {
 
 		if(empty($this->data)) {
-			$this->data = array('PageCategory' => array('contents_navi' => false, 'page_category_type' => 1));
+			$user = $this->BcAuth->user();
+			$this->data = array('PageCategory' => array(
+				'contents_navi'		=> false, 
+				'page_category_type'=> 1,
+				'owner_id'			=> $user['User']['user_group_id']
+			));
 		} else {
 
 			$data = $this->data;
@@ -218,14 +223,13 @@ class PageCategoriesController extends AppController {
 						$message .= '<br />機能制限のセーフモードで動作しているので、手動で次のフォルダ内に追加したカテゴリと同階層のフォルダを作成し、書込権限を与える必要があります。<br />'.
 									WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'pages'.DS;
 					}
-					$this->Session->setFlash($message);
-					$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$data['PageCategory']['name'].'」を追加しました。');
+					$this->setMessage($message, false, true);
 					$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));
 				}else {
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -285,7 +289,7 @@ class PageCategoriesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -315,14 +319,13 @@ class PageCategoriesController extends AppController {
 
 			if($this->PageCategory->validates()) {
 				if($this->PageCategory->save($this->data,false)) {
-					$this->Session->setFlash('固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
-					$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。');
+					$this->setMessage('固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。', false, true);
 					$this->redirect(array('action' => 'index'));
 				}else {
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -388,7 +391,7 @@ class PageCategoriesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -397,10 +400,9 @@ class PageCategoriesController extends AppController {
 
 		/* 削除処理 */
 		if($this->PageCategory->del($id)) {
-			$this->Session->setFlash('固定ページカテゴリー: '.$page['PageCategory']['name'].' を削除しました。');
-			$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$page['PageCategory']['name'].'」を削除しました。');
+			$this->setMessage('固定ページカテゴリー: '.$page['PageCategory']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -483,9 +485,10 @@ class PageCategoriesController extends AppController {
  */
 	function _setAdminIndexViewData() {
 		
+		$user = $this->BcAuth->user();
 		$allowOwners = array();
-		if(isset($user['user_group_id'])) {
-			$allowOwners = array('', $user['user_group_id']);
+		if(isset($user['User']['user_group_id'])) {
+			$allowOwners = array('', $user['User']['user_group_id']);
 		}
 		$this->set('allowOwners', $allowOwners);
 		$this->set('owners', $this->PageCategory->getControlSource('owner_id'));

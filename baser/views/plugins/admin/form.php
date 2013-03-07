@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -39,7 +39,7 @@
 </div>
 
 <div class="submit">
-	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $bcForm->submit('インストール', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 </div>
 
 <?php echo $bcForm->end() ?>

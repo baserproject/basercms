@@ -101,10 +101,10 @@ textarea {
 .global-menu li a{
 	display:block;
 	width:106px;
-	padding:0;
+	padding:6px 0;
 	color: #FFFFFF;
 	text-decoration: none;
-	line-height: 1.6em;
+	line-height: 1.2em;
 }
 /* header
 ----------------------------------------------- */

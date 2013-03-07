@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -56,7 +56,7 @@ $url = preg_replace('/index$/', '', $data['Page']['url']);
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['Page']['id']), array('title' => '編集')) ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['Page']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 
-<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id']==1)): ?>
+<?php if(in_array($ownerId, $allowOwners)||(!empty($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId'))): ?>
 		<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Page']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 <?php endif ?>
 	</td>

@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.config
  * @since			baserCMS v 0.1.0
@@ -107,6 +107,12 @@
 			}
 		}
 	}
+/**
+ * クレジット読込 
+ */
+	$config = array();
+	include BASER_CONFIGS.'credit.php';
+	Configure::write($config);
 /**
  * tmpフォルダ確認
  */
@@ -252,7 +258,7 @@ if(BC_INSTALLED) {
 			'probability'	=> 100,
 			'path'			=> CACHE.'datas',
 			'prefix'		=> 'cake_',
-			'lock'			=> false,
+			'lock'			=> true,
 			'serialize'		=> true
 	 ));
 /**
@@ -268,30 +274,12 @@ if(BC_INSTALLED) {
 			'serialize'		=> true
 	 ));
 /**
- * サイト基本設定を読み込む 
+ * 管理者グループ
+ * 互換性用
+ * @deprecated v2.2.0 以降で削除 
  */
-	loadSiteConfig();
-/**
- * テーマヘルパーのパスを追加する 
- */
-	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
-	$helperPaths[] = $themePath.'helpers';
-/**
- * アップデート 
- */
-	if($parameter == 'maintenance/index') {
-		Configure::write('BcRequest.isMaintenance', true);
-	} else {
-		Configure::write('BcRequest.isMaintenance', false);
+	if(!Configure::read('BcApp.adminGroupId')) {
+		Configure::write('BcApp.adminGroupId', 1);
 	}
-	$isUpdater = false;
-	$bcSite = Configure::read('BcSite');
-	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
-	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
-		$isUpdater = true;
-	}elseif(BC_INSTALLED && !Configure::read('BcRequest.isMaintenance') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
-	}
-	Configure::write('BcRequest.isUpdater', $isUpdater);
-	
+
 }

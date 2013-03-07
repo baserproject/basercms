@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behavior
  * @since			baserCMS v 0.1.0
@@ -87,7 +87,7 @@ class BcPluginHookBehavior extends ModelBehavior {
 				}
 			}
 			foreach($this->registerHooks[$model->alias][$hookName] as $pluginName) {
-				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), &$args);
 				if(isset($j)) {
 					$args[$j] = $return;
 				}
@@ -249,6 +249,38 @@ class BcPluginHookBehavior extends ModelBehavior {
 		
 		$this->executeHook($model, 'onError', null, $error);
 		
+	}
+/**
+ * Magic method handler.
+ *
+ * @param string $method Method name
+ * @param array $params Parameters to send to method
+ * @return mixed Return value from method
+ * @access private
+ */
+	function __call($method, $params) {
+		if (!method_exists($this, 'call__')) {
+			trigger_error(sprintf(__('Magic method handler call__ not defined in %s', true), get_class($this)), E_USER_ERROR);
+		}
+		return $this->call__($method, $params);
+	}
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( &$Object, $method ), $args );
+		}
+
 	}
 	
 }

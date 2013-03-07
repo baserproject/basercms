@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -81,7 +81,7 @@ class ThemesController extends AppController {
 		);
 		
 		$this->set('datas',$datas);
-		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme']));
+		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
 		
 		$this->subMenuElements = array('themes');
 		$this->help = 'themes_index';
@@ -95,7 +95,7 @@ class ThemesController extends AppController {
 	function admin_load_default_data_pattern() {
 		
 		if (empty($this->data['Theme']['default_data_pattern'])) {
-			$this->Session->setFlash('不正な動作です。');
+			$this->setMessage('不正な操作です。', true);
 			$this->redirect('index');
 		}
 		
@@ -140,9 +140,9 @@ class ThemesController extends AppController {
 				}
 			}
 			if ($result) {
-				$this->Session->setFlash('初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。');
+				$this->setMessage('初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。', true);
 			} else {
-				$this->Session->setFlash('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。');
+				$this->setMessage('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。', true);
 			}
 		}
 		
@@ -199,9 +199,9 @@ class ThemesController extends AppController {
 		}
 		
 		if($result) {
-			$this->Session->setFlash('初期データの読み込みが完了しました。');
+			$this->setMessage('初期データの読み込みが完了しました。');
 		} else {
-			$this->Session->setFlash('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。');
+			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
 		}
 		
 		$this->redirect('index');
@@ -267,10 +267,10 @@ class ThemesController extends AppController {
 			$this->data['Theme']['old_name'] = $theme;
 			$this->Theme->set($this->data);
 			if($this->Theme->save()){
-				$this->Session->setFlash('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
+				$this->setMessage('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'index'));
 			}else{
-				$this->Session->setFlash('テーマ情報の変更に失敗しました。入力内容を確認してください。');
+				$this->setMessage('テーマ情報の変更に失敗しました。入力内容を確認してください。', true);
 			}
 		}
 
@@ -431,7 +431,7 @@ class ThemesController extends AppController {
 			$SiteConfig->saveKeyValue($siteConfig);
 		}
 		clearViewCache();
-		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
+		$this->setMessage('テーマ「'.$theme.'」を削除しました。');
 		$this->redirect(array('action' => 'index'));
 
 	}
@@ -452,13 +452,13 @@ class ThemesController extends AppController {
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
 		if(!$this->Page->createAllPageTemplate()){
-				$this->Session->setFlash(
+				$this->setMessage(
 						'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
 						'「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
 						'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
-				);
+				, true);
 		} else {
-			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
+			$this->setMessage('テーマ「'.$theme.'」を適用しました。');
 		}
 		$this->redirect(array('action' => 'index'));
 		
@@ -475,7 +475,7 @@ class ThemesController extends AppController {
 		emptyFolder($tmpDir);
 		clearAllCache();
 		
-		$excludes = array('plugins', 'dblogs', 'users');
+		$excludes = array('plugins', 'dblogs', 'users', 'favorites');
 		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
 		
 		/* コアプラグインのCSVを生成 */

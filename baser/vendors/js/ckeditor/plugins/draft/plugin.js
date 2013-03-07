@@ -12,9 +12,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -66,6 +66,12 @@ CKEDITOR.plugins.add('draft',
 					editor.setReadOnly(true);
 					event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 				}
+			}
+			// 初期データを読み込む
+			if(event.editor.draftMode == 'publish') {
+				editor.setData($('#'+editor.draftPublishAreaId).val());
+			} else if(event.editor.draftMode == 'draft') {
+				editor.setData($('#'+editor.draftDraftAreaId).val());
 			}
 		});
 		editor.on('mode', function(event) {
@@ -227,8 +233,8 @@ CKEDITOR.plugins.draft =
 		disablePublish :
 		{
 			exec : function( editor ) {
-				editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_ON);
+				editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.draftMode = 'draft';

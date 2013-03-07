@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -87,7 +87,7 @@ $(window).load(function() {
 </div>
 <?php if(!$folderDisabled): ?>
 <div class="submit">
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $bcBaser->link('削除', 
 			array('action' => 'del', $bcForm->value('Theme.name')),
 			array('class'=>'btn-gray button'),

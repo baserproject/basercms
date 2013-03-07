@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -27,6 +27,7 @@ if($reflectMobile) {
 if($reflectSmartphone) {
 	$pageType['3'] = 'スマートフォン';
 }
+$owners = $bcForm->getControlSource('PageCategory.owner_id');
 ?>
 
 <script type="text/javascript">
@@ -177,12 +178,17 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+	<?php if($bcAdmin->isSystemAdmin()): ?>
 				<?php echo $bcForm->input('PageCategory.owner_id', array(
 						'type'		=> 'select',
 						'options'	=> $bcForm->getControlSource('PageCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('PageCategory.owner_id') ?>
+	<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['PageCategory']['owner_id'], $owners) ?>
+				<?php echo $bcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
+	<?php endif ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -194,13 +200,11 @@ function pageTypeChengeHandler() {
 	</table>
 </div>
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
 	<?php $bcBaser->link('削除', 
-			array('action'=>'delete', $bcForm->value('PageCategory.id')),
-			array('class'=>'btn-gray button'),
+			array('action' => 'delete', $bcForm->value('PageCategory.id')),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),
 			false); ?>
 <?php endif ?>

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -85,7 +85,7 @@ class SiteConfigsController extends AppController {
 
 			if(!$this->SiteConfig->validates()) {
 
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 
 			}else {
 
@@ -128,7 +128,7 @@ class SiteConfigsController extends AppController {
 				// DBに保存
 				if($this->SiteConfig->saveKeyValue($this->data)) {
 
-					$this->Session->setFlash('システム設定を保存しました。');
+					$this->setMessage('システム設定を保存しました。');
 
 					// 環境設定を保存
 					$this->BcManager->setInstallSetting('debug', $mode);
@@ -222,7 +222,7 @@ class SiteConfigsController extends AppController {
 	function admin_del_cache() {
 		
 		clearAllCache();
-		$this->Session->setFlash('サーバーキャッシュを削除しました。');
+		$this->setMessage('サーバーキャッシュを削除しました。');
 		$this->redirect(array('action' => 'form'));
 		
 	}

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.components
  * @since			baserCMS v 0.1.0
@@ -102,6 +102,12 @@ class BcManagerComponent extends Object {
 		// テーマを配置
 		if(!$this->deployTheme()) {
 			$this->log('テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
+			$result = false;
+		}
+		
+		// エディタテンプレート用の画像を配置
+		if(!$this->deployEditorTemplateImage()) {
+			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
 			$result = false;
 		}
 		
@@ -394,7 +400,6 @@ class BcManagerComponent extends Object {
 			$file->write("\t'encoding' => '".$encoding."'\n");
 			$file->write(");\n");
 			$file->write("}\n");
-			$file->write("?>\n");
 
 			$file->close();
 			return true;
@@ -427,8 +432,8 @@ class BcManagerComponent extends Object {
 			"Configure::write('BcApp.mobile', true);",
 			"Configure::write('BcApp.smartphone', true);",
 			"Cache::config('default', array('engine' => 'File'));",
-			"Configure::write('debug', 0);",
-		"?>");
+			"Configure::write('debug', 0);"
+		);
 		if(file_put_contents($installFileName, implode("\n", $installCoreData))) {
 			return chmod($installFileName,0666);
 		}else {
@@ -579,29 +584,50 @@ class BcManagerComponent extends Object {
 /**
  * 初期データのセットを取得する
  * 
- * @param string $path
  * @param string $theme
  * @return array 
  */
-	function getDefaultDataPatterns($theme = 'core') {
+	function getDefaultDataPatterns($theme = 'core', $options = array()) {
 		
-		$path = '';
+		$options = array_merge(array('useTitle' => true), $options);
+		extract($options);
+		
+		$themePath = $dataPath = $title = '';
  		if($theme == 'core') {
-			$path = BASER_CONFIGS.'data';
-		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_THEMES.$theme.DS.'config'.DS.'data';
+			$dataPath = BASER_CONFIGS.'data';
 		} elseif(is_dir(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data';
+			$themePath = BASER_CONFIGS.'theme'.DS.$theme.DS;
+			$dataPath = $themePath.'config'.DS.'data';
+		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
+			$themePath = BASER_THEMES.$theme.DS;
+			$dataPath = $themePath.'config'.DS.'data';
 		} else {
 			return array();
 		}
 		
+		if($themePath) {
+			if(file_exists($themePath . 'config.php')) {
+				include $themePath . 'config.php';
+			}
+		} else {
+			$title = 'コア';
+		}
+		
+		if(!$title) {
+			$title = $theme;
+		}
+		
 		$patterns = array();
-		$Folder = new Folder($path);
+		$Folder = new Folder($dataPath);
 		$files = $Folder->read(true, true);
 		if($files[0]) {
 			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::camelize($theme).'.'.Inflector::camelize($pattern);
+				if($useTitle) {
+					$patternName = $title . ' ( ' . $pattern . ' )';
+				} else {
+					$patternName = $pattern;
+				}
+				$patterns[$theme.'.'.$pattern] = $patternName;
 			}
 		}
 		
@@ -643,13 +669,13 @@ class BcManagerComponent extends Object {
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.DS.$pattern
+					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.DS.$pattern,
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern
 				);
 			} else {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
 					BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data'.$pattern.DS.$plugin,
+					BASER_THEMES.$theme.DS.'config'.DS.'data'.DS.$pattern.DS.$plugin,
 					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.$pattern,
 					BASER_PLUGINS.$plugin.DS.'config'.DS.'data'.DS.'default'
 				);
@@ -1082,6 +1108,36 @@ class BcManagerComponent extends Object {
 
 	}
 /**
+ * エディタテンプレート用のアイコン画像をデプロイ
+ * 
+ * @return boolean
+ * @access public
+ */
+	function deployEditorTemplateImage() {
+		
+		$path = WWW_ROOT . 'files' . DS . 'editor' . DS;
+		if(!is_dir($path)) {
+			$Folder = new Folder();
+			$Folder->create($path, 0777);
+		}
+		
+		$src = BASER_VENDORS . 'img' . DS . 'ckeditor' . DS;
+		$Folder = new Folder($src);
+		$files = $Folder->read(true, true);
+		if(!empty($files[1])) {
+			$result = true;
+			foreach($files[1] as $file) {
+				if(copy($src . $file, $path . $file)) {
+					@chmod($path . $file, 0666);
+				} else {
+					$result = false;
+				}
+			}
+		}
+		return $result;
+		
+	}
+/**
  * 設定ファイルをリセットする
  * 
  * @return boolean 
@@ -1328,12 +1384,12 @@ class BcManagerComponent extends Object {
 		if(file_exists(CONFIGS.'install.php')) {
 			$data = $file->read();
 		}else {
-			$data = "<?php\n?>";
+			$data = "<?php\n";
 		}
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
-			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
+			$data = $data.$setting;
 		}
 		$return = $file->write($data);
 		$file->close();
@@ -1361,6 +1417,7 @@ class BcManagerComponent extends Object {
 			'configDirWritable'	=> is_writable(CONFIGS),
 			'coreFileWritable'	=> is_writable(CONFIGS.'core.php'),
 			'themeDirWritable'	=> is_writable(WWW_ROOT.'themed'),
+			'filesDirWritable'	=> is_writable(WWW_ROOT.'files'),
 			'tmpDirWritable'	=> is_writable(TMP),
 			'dbDirWritable'		=> is_writable(APP.'db'),
 			'phpActualVersion'	=> preg_replace('/[a-z-]/','', phpversion()),
@@ -1386,6 +1443,10 @@ class BcManagerComponent extends Object {
 		if(!$status['themeDirWritable']) {
 			chmod(WWW_ROOT.'themed', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
+		}
+		if(!$status['filesDirWritable']) {
+			chmod(WWW_ROOT.'files', 0777);
+			$status['filesDirWritable'] = is_writable(WWW_ROOT.'files');
 		}
 		if(!$status['tmpDirWritable']) {
 			chmod(TMP, 0777);

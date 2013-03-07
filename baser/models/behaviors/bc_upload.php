@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behaviors
  * @since			baserCMS v 0.1.0
@@ -52,6 +52,12 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	var $Session = null;
+/**
+ * 画像拡張子
+ * 
+ * @var array 
+ */
+	var $imgExts = array('gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png');
 /**
  * セットアップ
  * 
@@ -130,7 +136,6 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	function saveFiles(&$model) {
 
-		$imageExt = array('gif','jpg','png');
 		$serverData = $model->findById($model->id);
 
 		foreach($this->settings['fields'] as $key => $field) {
@@ -172,7 +177,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 				/* タイプ別除外 */
 				if($field['type'] == 'image') {
-					if(!in_array($field['ext'], $imageExt)) {
+					if(!in_array($field['ext'], $this->imgExts)) {
 						unset($model->data[$model->name][$field['name']]);
 						continue;
 					}
@@ -206,7 +211,7 @@ class BcUploadBehavior extends ModelBehavior {
 					$fileName = $this->saveFile($model,$field);
 					if($fileName) {
 
-						if(!$this->tmpId && ($field['type']=='all' || $field['type']=='image') && !empty($field['imagecopy']) && in_array($field['ext'],$imageExt)) {
+						if(!$this->tmpId && ($field['type']=='all' || $field['type']=='image') && !empty($field['imagecopy']) && in_array($field['ext'],$this->imgExts)) {
 
 							/* 画像をコピーする */
 							foreach($field['imagecopy'] as $copy) {
@@ -340,7 +345,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 				chmod($filePath,0666);
 				// ファイルをリサイズ
-				if(!empty($field['imageresize']) && ($field['ext']=='jpg' || $field['ext']=='gif' || $field['ext']=='png')) {
+				if(!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
 					if(!empty($field['imageresize']['thumb'])) {
 						$thumb = $field['imageresize']['thumb'];
 					}else {
@@ -539,6 +544,8 @@ class BcUploadBehavior extends ModelBehavior {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($model,$setting,$pathinfo['extension']);
+					$newName = $this->getFileName($model, $setting['imageresize'], $newName);
+					
 					if(!$newName) {
 						return true;
 					}
@@ -593,7 +600,12 @@ class BcUploadBehavior extends ModelBehavior {
 		if(!empty($setting['nameformat'])) {
 			$basename = sprintf($setting['nameformat'],$basename);
 		}
-		return $basename . '_' . $setting['name'] . '.' . $ext;
+		
+		if(!isset($setting['nameadd']) || $setting['nameadd'] !== false) {
+			$basename .= '_' . $setting['name'];
+		}
+		
+		return $basename . '.' . $ext;
 
 	}
 /**
@@ -649,10 +661,9 @@ class BcUploadBehavior extends ModelBehavior {
 	function getUniqueFileName(&$model, $fieldName, $fileName, $setting = null) {
 
 		$pathinfo = pathinfo($fileName);
-		$ext = $pathinfo['extension'];
+		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);
 
-		$basename = preg_replace("/\.".$ext."$/is",'',$fileName);
-
+		$ext = $setting['ext'];
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$model->name.'.'.$fieldName.' LIKE'] = $basename.'%'.$ext;
 		if(!empty($model->data[$model->name]['id'])) {
@@ -674,7 +685,7 @@ class BcUploadBehavior extends ModelBehavior {
 			return $basename.'__'.($prefixNo+1).'.'.$ext;
 
 		}else {
-			return $fileName;
+			return $basename.'.'.$ext;
 		}
 
 	}

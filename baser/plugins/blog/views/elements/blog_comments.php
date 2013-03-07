@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -151,7 +151,7 @@ function loadAuthCaptcha(){
 		</tr>
 		<tr>
 			<th><?php echo $bcForm->label('BlogComment.message','コメント') ?></th>
-			<td><?php echo $bcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 60)) ?></td>
+			<td><?php echo $bcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52)) ?></td>
 		</tr>
 	</table>
 

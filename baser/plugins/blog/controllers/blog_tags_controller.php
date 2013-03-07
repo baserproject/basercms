@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -77,7 +77,8 @@ class BlogTagsController extends BlogAppController {
 
 		$this->paginate = array(
 				'order'	=> 'BlogTag.id',
-				'limit'	=> $this->passedArgs['num']
+				'limit'	=> $this->passedArgs['num'],
+				'recursive' => 0
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
 
@@ -96,12 +97,10 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->create($this->data);
 			if($this->BlogTag->save()) {
-				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->BlogTag->saveDbLog($message);
+				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -120,7 +119,7 @@ class BlogTagsController extends BlogAppController {
 	function admin_edit ($id) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -130,12 +129,10 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->set($this->data);
 			if($this->BlogTag->save()) {
-				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->BlogTag->saveDbLog($message);
+				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -154,18 +151,16 @@ class BlogTagsController extends BlogAppController {
 	function admin_delete($id = null) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 
 		if($this->BlogTag->del($id)) {
-			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
-			$this->Session->setFlash($message);
-			$this->BlogTag->saveDbLog($message);
+			$this->setMessage('タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controller
  * @since			baserCMS v 0.1.0
@@ -201,7 +201,7 @@ class MailController extends MailAppController {
 
 		$user = $this->BcAuth->user();
 		if(!empty($user) && !Configure::read('BcRequest.agent')) {
-			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 		
 		$this->set('mailContent',$this->dbDatas['mailContent']);
@@ -268,7 +268,7 @@ class MailController extends MailAppController {
 				$this->set('freezed',false);
 				$this->set('error',true);
 
-				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信してください。');
+				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
 			}
 
 			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
@@ -344,7 +344,7 @@ class MailController extends MailAppController {
 
 			}else {
 
-				$this->Session->setFlash('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。');
+				$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
 				$this->set('sendError',true);
 
 			}

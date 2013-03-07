@@ -4,9 +4,9 @@
  * コンテンツ
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
@@ -654,17 +654,28 @@ table.sub-menu{
 /* flashMessage
 ----------------------------------------------- */
 
-#flashMessage,
 #authMessage,
-#AlertMessage,
+#flashMessage, 
+#AlertMessage, 
 #UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
-	color:#F03;
 	font-weight:bold;
-	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
-	border:5px solid #E02;
 	font-size:16px;
+}
+#MessageBox .message,
+#MessageBox .notice-message {
+	color:#669900;
+	border:5px solid #669900;
+	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+}
+#MessageBox .alert-message,
+#authMessage,
+#AlertMessage,
+#UpdateMessage {
+	color:#F03;
+	background: url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
+	border:5px solid #E02;
 }
 .no-data {
 	padding:10px 10px 10px 10px;
@@ -872,7 +883,7 @@ background: #888;
 #LoginInner {
 	margin:150px auto auto 50px;
 	color:#333;
-	padding:50px;
+	padding:50px 50px 94px 50px;
 	width:460px;
 }
 #Login input[type=text],#Login input[type=password] {
@@ -1179,10 +1190,4 @@ background: #888;
 	border-left:5px solid #DFDFDF;
 	padding:3px 10px;
 	background: none;
-}
-#Updaters #flashMessage {
-	color:#000;
-}
-#Updaters #flashMessage strong {
-	color:#F03;
 }

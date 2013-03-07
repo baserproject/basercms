@@ -3,7 +3,7 @@
  * toppage
  */
 ?>
-
+		<?php $bcBaser->flash() ?>
         <div id="top-contents" >
             <div id="top-contents-main">
                 <?php $bcBaser->content() ?>

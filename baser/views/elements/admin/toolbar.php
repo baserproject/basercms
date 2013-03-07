@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -33,6 +33,7 @@ if(!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 } else {
 	$authName = $bcBaser->siteConfig['name'];
 }
+$userController = Inflector::tableize($session->read('Auth.userModel'));
 ?>
 <script type="text/javascript">
 $(function(){
@@ -70,7 +71,7 @@ $(function(){
 <?php elseif(!empty($this->params['admin']) || $authPrefix == $currentPrefix || ('/'.$this->params['url']['url']) == $loginUrl): ?>	
 				<li><?php $bcBaser->link($bcBaser->siteConfig['name'], '/') ?></li>	
 <?php else: ?>
-	<?php if($authPrefix == Configure::read('Routing.admin')): ?>
+	<?php if($authPrefix == 'admin'): ?>
 				<li><?php $bcBaser->link($bcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
 	<?php else: ?>
 				<li><?php $bcBaser->link($authName, Configure::read('BcAuthPrefix.'.$currentPrefix.'.loginRedirect'), array('title' => $authName)) ?></li>
@@ -98,9 +99,9 @@ $(function(){
 					<?php $bcBaser->link($user['real_name_1']." ".$user['real_name_2'].' '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 	<?php if($session->check('AuthAgent')): ?>
-						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
+						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
 	<?php endif ?>
-	<?php if($authPrefix == Configure::read('Routing.admin')): ?>
+	<?php if($authPrefix == 'admin'): ?>
 		<?php if($authPrefix == 'front'): ?>
 						<li><?php $bcBaser->link('アカウント設定', array('plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 		<?php else: ?>
@@ -108,9 +109,9 @@ $(function(){
 		<?php endif ?>
 	<?php endif ?>
 		<?php if($authPrefix == 'front'): ?>
-						<li><?php $bcBaser->link('ログアウト', array('plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
+						<li><?php $bcBaser->link('ログアウト', array('plugin' => null, 'controller' => $userController, 'action' => 'logout')) ?></li>
 		<?php else: ?>
-						<li><?php $bcBaser->link('ログアウト', array($authPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'logout')) ?></li>
+						<li><?php $bcBaser->link('ログアウト', array($authPrefix => true, 'plugin' => null, 'controller' => $userController, 'action' => 'logout')) ?></li>
 		<?php endif ?>
 					</ul>
 <?php elseif($this->name != 'Installations' && $this->params['url']['url'] != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
@@ -124,7 +125,7 @@ $(function(){
 					</ul>
 <?php endif ?>
 				</li>
-<?php if(!empty($user) && $authPrefix == Configure::read('Routing.admin')): ?>
+<?php if(!empty($user) && $authPrefix == 'admin'): ?>
 				<li>
 					<?php $bcBaser->link('システムナビ'.' '.$bcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<div id="SystemMenu"><div>

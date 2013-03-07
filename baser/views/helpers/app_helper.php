@@ -33,4 +33,3 @@ App::import('Core', 'BcAppHelper', array('search' => BASER_HELPERS));
  */
 class AppHelper extends BcAppHelper {
 }
-?>

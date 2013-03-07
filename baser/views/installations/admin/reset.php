@@ -40,7 +40,7 @@ $(function(){
 	<?php endif ?>
 	<?php echo $bcForm->create(array('action' => 'reset')) ?>
 	<?php echo $bcForm->input('Installation.reset', array('type' => 'hidden', 'value' => true)) ?>
-	<?php echo $bcForm->end(array('label' => '初期化する', 'class' => 'button btn-gray')) ?></p>
+	<?php echo $bcForm->end(array('label' => '初期化する', 'class' => 'button btn-gray')) ?>
 <?php else: ?>
 <div class="section">
 <p>引き続きbaserCMSのインストールを行うには、「インストールページへ」ボタンをクリックしてください。</p>

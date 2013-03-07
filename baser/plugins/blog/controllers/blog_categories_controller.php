@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -142,12 +142,15 @@ class BlogCategoriesController extends BlogAppController {
 	function admin_add($blogContentId) {
 
 		if(!$blogContentId) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
-			$this->data = $this->BlogCategory->getDefaultValue();
+			$user = $this->BcAuth->user();
+			$this->data = array('BlogCategory' => array(
+				'owner_id'			=> $user['User']['user_group_id']
+			));
 		}else {
 
 			/* 登録処理 */
@@ -157,11 +160,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			// データを保存
 			if($this->BlogCategory->save()) {
-				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
-				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。');
+				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -170,7 +172,7 @@ class BlogCategoriesController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
@@ -199,7 +201,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -209,11 +211,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			/* 更新処理 */
 			if($this->BlogCategory->save($this->data)) {
-				$this->Session->setFlash('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
-				$this->BlogCategory->saveDbLog('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。');
+				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -225,7 +226,7 @@ class BlogCategoriesController extends BlogAppController {
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
 			'excludeParentId' => $this->data['BlogCategory']['id']
 		);
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
@@ -316,7 +317,7 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -325,10 +326,9 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 削除処理 */
 		if($this->BlogCategory->del($id)) {
-			$this->Session->setFlash($post['BlogCategory']['name'].' を削除しました。');
-			$this->BlogCategory->saveDbLog('カテゴリー「'.$post['BlogCategory']['name'].'」を削除しました。');
+			$this->setMessage($post['BlogCategory']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action'=>'index',$blogContentId));

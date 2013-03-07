@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.feed.controllers
  * @since			baserCMS v 0.1.0
@@ -101,7 +101,7 @@ class FeedDetailsController extends FeedAppController {
 
 		/* 除外処理 */
 		if(!$feedConfigId) {
-			$this->Session->setFlash('無効なIDです');
+			$this->setMessage('無効なIDです', true);
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
@@ -121,13 +121,12 @@ class FeedDetailsController extends FeedAppController {
 			if($this->FeedDetail->save()) {
 				
 				$id = $this->FeedDetail->getLastInsertId();
-				$this->Session->setFlash('フィード「'.$this->data['FeedDetail']['name'].'」を追加しました。');
-				$this->FeedDetail->saveDbLog('フィード「'.$this->data['FeedDetail']['name'].'」を追加しました。');
+				$this->setMessage('フィード「'.$this->data['FeedDetail']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
 
 			}else {
 
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 
 			}
 
@@ -149,7 +148,7 @@ class FeedDetailsController extends FeedAppController {
 	function admin_edit($feedConfigId,$id) {
 
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
@@ -169,13 +168,12 @@ class FeedDetailsController extends FeedAppController {
 			if($this->FeedDetail->save()) {
 				
 				$this->requestAction(array('controller' => 'feed_configs', 'action' => 'clear_cache'), array('pass' => array($this->data['FeedDetail']['feed_config_id'], $this->data['FeedDetail']['url'])));
-				$this->Session->setFlash('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
-				$this->FeedDetail->saveDbLog('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。');
+				$this->setMessage('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
 				
 			}else {
 				
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 				
 			}
 
@@ -239,7 +237,7 @@ class FeedDetailsController extends FeedAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
@@ -248,10 +246,9 @@ class FeedDetailsController extends FeedAppController {
 
 		// 削除実行
 		if($this->FeedDetail->del($id)) {
-			$this->Session->setFlash($FeedDetail['FeedDetail']['name'].' を削除しました。');
-			$this->FeedDetail->saveDbLog('フィード「'.$FeedDetail['FeedDetail']['name'].'」を削除しました。');
+			$this->setMessage($FeedDetail['FeedDetail']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -115,17 +115,15 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit align-center section">
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php if ($this->action == 'admin_edit'): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php if ($bcForm->value('UserGroup.name') != 'admins'): ?>
 		<?php $bcBaser->link('削除', 
-				array('action'=>'delete', $bcForm->value('UserGroup.id')),
-				array('class'=>'btn-gray button'),
+				array('action' => 'delete', $bcForm->value('UserGroup.id')),
+				array('class' => 'button'),
 				sprintf('%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。',
 				$bcForm->value('UserGroup.name')), false); ?>
 	<?php endif ?>
-<?php else: ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php endif ?>
 </div>
 

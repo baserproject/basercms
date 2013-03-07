@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -80,7 +80,7 @@ class DashboardController extends AppController {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
 		$this->paginate = array(
-				'order' =>'Dblog.created DESC',
+				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
 				'limit' => $this->passedArgs['num']
 		);
 		$this->set('viewDblogs',$this->paginate('Dblog'));
@@ -99,7 +99,7 @@ class DashboardController extends AppController {
 		$this->setViewConditions('Dblog', array('default' => $default));
 		
 		$this->paginate = array(
-				'order' =>'Dblog.created DESC',
+				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
 				'limit' => $this->passedArgs['num']
 		);
 		
@@ -127,9 +127,9 @@ class DashboardController extends AppController {
 	function admin_del(){
 
 		if($this->Dblog->deleteAll('1 = 1')){
-			$this->Session->setFlash('最近の動きのログを削除しました。');
+			$this->setMessage('最近の動きのログを削除しました。');
 		} else {
-			$this->Session->setFlash('最近の動きのログ削除に失敗しました。');
+			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'index'));
 
