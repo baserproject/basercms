@@ -737,7 +737,7 @@ class BlogController extends BlogAppController {
  */
 	function _createPreview($blogContentsId, $id) {
 
-		Cache::write('blog_posts_preview_'.$id, $this->data);
+		Cache::write('blog_posts_preview_'.$id, $this->data, '_cake_core_');
 		echo true;
 		exit();
 
@@ -752,8 +752,8 @@ class BlogController extends BlogAppController {
  */
 	function _viewPreview($blogContentsId, $id){
 
-		$data = Cache::read('blog_posts_preview_'.$id);
-		Cache::delete('blog_posts_preview_'.$id);
+		$data = Cache::read('blog_posts_preview_'.$id, '_cake_core_');
+		Cache::delete('blog_posts_preview_'.$id, '_cake_core_');
 		$this->data = $this->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';
