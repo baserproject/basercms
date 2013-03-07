@@ -82,6 +82,7 @@ $.extend($.baserAjaxDataList.config, {
 					row.removeClass('disablerow');
 					row.removeClass('unpublish');
 					row.addClass('publish');
+					row.find('.status').html('○');
 					$.baserAjaxDataList.config.methods.unpublish.initList();
 					$.baserAjaxDataList.config.methods.publish.initList();
 				} else {
@@ -107,6 +108,7 @@ $.extend($.baserAjaxDataList.config, {
 					row.removeClass('publish');
 					row.addClass('disablerow');
 					row.addClass('unpublish');
+					row.find('.status').html('―');
 					$.baserAjaxDataList.config.methods.unpublish.initList();
 					$.baserAjaxDataList.config.methods.publish.initList();
 				} else {
