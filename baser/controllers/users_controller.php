@@ -481,28 +481,39 @@ class UsersController extends AppController {
 				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
 
-			$this->User->set($this->data);
+			// システム管理グループのユーザが1件の場合は、権限を変更させない
+			$adminGroupId = Configure::read('BcApp.adminGroupId');
+			$adminGroupCount = $this->User->find('count', array(
+				'conditions' => array(
+					'user_group_id' => $adminGroupId
+				)
+			));
+			if ($adminGroupCount == 1 && $user[$userModel]['user_group_id'] == $adminGroupId &&
+				$this->data[$userModel]['user_group_id'] != $adminGroupCount) {
+				$this->setMessage('システム管理グループユーザが1件しかいない場合は変更できません。', true);
+			} else {
+				$this->User->set($this->data);
 
-			if($this->User->validates()) {
-				unset($this->data['User']['password_1']);
-				unset($this->data['User']['password_2']);
-				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
-				}
-				$this->User->save($this->data,false);
-				
-				if($selfUpdate) {
-					$this->admin_logout();
-				}
+				if($this->User->validates()) {
+					unset($this->data['User']['password_1']);
+					unset($this->data['User']['password_2']);
+					if(isset($this->data['User']['password'])) {
+						$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
+					}
+					$this->User->save($this->data,false);
+					
+					if($selfUpdate) {
+						$this->admin_logout();
+					}
 
-				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
-			}else {
-				// よく使う項目のデータを再セット
-				$this->data = array_merge($this->User->read(null, $id), $this->data);
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+					$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
+					$this->redirect(array('action' => 'edit', $id));
+				}else {
+					// よく使う項目のデータを再セット
+					$this->data = array_merge($this->User->read(null, $id), $this->data);
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
+				}
 			}
-
 		}
 
 		/* 表示設定 */
