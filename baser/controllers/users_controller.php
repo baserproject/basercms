@@ -489,7 +489,7 @@ class UsersController extends AppController {
 				)
 			));
 			if ($adminGroupCount == 1 && $user[$userModel]['user_group_id'] == $adminGroupId &&
-				$this->data[$userModel]['user_group_id'] != $adminGroupCount) {
+				$this->data[$userModel]['user_group_id'] != $adminGroupId) {
 				$this->setMessage('システム管理グループユーザが1件しかいない場合は変更できません。', true);
 			} else {
 				$this->User->set($this->data);
