@@ -481,23 +481,10 @@ class UsersController extends AppController {
 				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
 
-<<<<<<< HEAD
-			// システム管理グループのユーザが1件の場合は、権限を変更させない
-			$adminGroupId = Configure::read('BcApp.adminGroupId');
-			$adminGroupCount = $this->User->find('count', array(
-				'conditions' => array(
-					'user_group_id' => $adminGroupId
-				)
-			));
-			if ($adminGroupCount == 1 && $user[$userModel]['user_group_id'] == $adminGroupId &&
-				$this->data[$userModel]['user_group_id'] != $adminGroupId) {
-				$this->setMessage('システム管理グループユーザが1件しかいない場合は変更できません。', true);
-=======
 			// 自身のアカウントは変更出来ないようにチェック
 			if ($user[$userModel]['id'] == $this->data[$userModel]['id'] &&
 			    $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
 				$this->setMessage('自分のアカウントのグループは変更できません。', true);
->>>>>>> 3259
 			} else {
 				$this->User->set($this->data);
 
