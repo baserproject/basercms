@@ -289,17 +289,20 @@ class BcCkeditorHelper extends AppHelper {
 				'url'	=> $this->webroot('/css/ckeditor/contents.css')
 			)
 		);
-		$agentPrefix = '';
-		if($this->data['Page']['page_type'] == 2) {
-			$agentPrefix = Configure::read('BcAgent.mobile.prefix');
-		} elseif($this->data['Page']['page_type'] == 3) {
-			$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
-		}
-		if($agentPrefix) {
-			array_unshift($themeEditorCsses, array(
-				'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $agentPrefix . DS . 'editor.css',
-				'url'	=> $this->webroot('/css/' . $agentPrefix . '/editor.css')
-			));
+		
+		if(isset($this->data['Page']['page_type'])) {
+			$agentPrefix = '';
+			if($this->data['Page']['page_type'] == 2) {
+				$agentPrefix = Configure::read('BcAgent.mobile.prefix');
+			} elseif($this->data['Page']['page_type'] == 3) {
+				$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
+			}
+			if($agentPrefix) {
+				array_unshift($themeEditorCsses, array(
+					'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $agentPrefix . DS . 'editor.css',
+					'url'	=> $this->webroot('/css/' . $agentPrefix . '/editor.css')
+				));
+			}
 		}
 		
 		foreach($themeEditorCsses as $themeEditorCss) {
