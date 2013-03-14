@@ -16,7 +16,7 @@
 <?php $bcBaser->css('style') ?>
     
 <?php $bcBaser->js(array(
-    'jquery-1.7.2.min',
+    'jquery-1.8.3.min',
     'functions',
     'startup',
     'jquery.bxSlider.min',
