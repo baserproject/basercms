@@ -260,8 +260,6 @@ class MailController extends MailAppController {
 				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
-				} else {
-					unset($this->data['Message']['auth_captcha']);
 				}
 			}
 
@@ -337,6 +335,16 @@ class MailController extends MailAppController {
 				$prefix = "";
 			}
 
+			// 画像認証を行う
+			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
+				if(!$captchaResult){
+					$this->redirect(array('action' => 'index', $id));
+				} else {
+					unset($this->data['Message']['auth_captcha']);
+				}
+			}
+			
 			$this->Message->create($this->data);
 
 			if($this->Message->save(null,false)) {
