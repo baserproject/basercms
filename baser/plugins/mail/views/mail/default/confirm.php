@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $bcBaser->css(array('/mail/css/style', 'jquery-ui/ui.all'), array('inline' => true));
-$bcBaser->js(array('jquery-ui-1.10.1.custom.min','i18n/ui.datepicker-ja'), false);
+$bcBaser->js(array('jquery-ui-1.8.19.custom.min','i18n/ui.datepicker-ja'), false);
 if($freezed){
 	$mailform->freeze();
 }
