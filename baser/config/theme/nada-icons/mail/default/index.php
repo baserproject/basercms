@@ -3,7 +3,7 @@
  * メールフォーム
  */
 $bcBaser->css('jquery-ui/ui.all', array('inline' => true));
-$bcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
+$bcBaser->js(array('jquery-ui-1.10.1.custom.min','i18n/ui.datepicker-ja'), false);
 ?>
 
 <h2 class="contents-head">

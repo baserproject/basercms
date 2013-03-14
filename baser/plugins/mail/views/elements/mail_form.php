@@ -22,6 +22,17 @@ if(Configure::read('BcRequest.agent')) {
 	$prefix = '/'.Configure::read('BcRequest.agentAlias');
 }
 ?>
+
+<script type="text/javascript">
+$(function(){
+	$(".form-submit").click(function(){
+		var mode = $(this).attr('id').replace('BtnMessage', '');
+		$("#MessageMode").val(mode);
+		return true;
+	});
+});
+</script>
+
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
 <?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/confirm')) ?>
@@ -29,6 +40,8 @@ if(Configure::read('BcRequest.agent')) {
 <?php echo $mailform->create('Message', array('url' => $prefix.'/'.$mailContent['MailContent']['name'].'/submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
+
+<?php echo $mailform->hidden('Message.mode') ?>
 
 <table cellpadding="0" cellspacing="0" class="row-table-01">
 	<?php $bcBaser->element('mail_input', array('blockStart' => 1)) ?>
@@ -49,10 +62,10 @@ if(Configure::read('BcRequest.agent')) {
 	<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
 <?php endif; ?>
 <?php if($freezed): ?>
-	<?php echo $mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button', 'id' => 'MessageBack', 'name' => 'data[mode][back]'))  ?>
-	<?php echo $mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button', 'id' => 'MessageSubmit', 'name' => 'data[mode][submit]'))  ?>
+	<?php echo $mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageBack'))  ?>
+	<?php echo $mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageSubmit'))  ?>
 <?php elseif($this->action != 'submit'): ?>
-	<?php echo $mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button', 'id' => 'MessageConfirm'))  ?>
+	<?php echo $mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button form-submit', 'id' => 'BtnMessageConfirm'))  ?>
 <?php endif; ?>
 </div>
 
