@@ -132,7 +132,7 @@ class BcUploadHelper extends FormHelper {
 			return;
 		}
 		
-		$basePath = $this->base.DS.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
+		$basePath = '/files/' . $model->actsAs['BcUpload']['saveDir'] . '/';
 
 		if(empty($options['value'])) {
 			$value = $this->value($fieldName);
@@ -152,7 +152,7 @@ class BcUploadHelper extends FormHelper {
 				if(isset($value['session_key'])) {
 					$tmp = true;
 					$value = $value['session_key'];
-					$basePath = $this->base.DS.'uploads'.DS.'tmp'.DS;
+					$basePath = '/uploads/tmp/';
 				}else{
 					return false;
 				}
@@ -169,10 +169,10 @@ class BcUploadHelper extends FormHelper {
 					if($tmp) {
 						$options['tmp'] = true;
 					}
-					$fileLinkTag = $this->uploadImage($fieldName, $value, $options).'<br /><span class="file-name">'.$value.'</span>';
+					$fileLinkTag = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . $value . '</span>';
 				}else {
 					$filePath = $basePath.$value;
-					$fileLinkTag = $this->Html->link('ダウンロード ≫',$filePath).'<br /><span class="file-name">'.$value.'</span>';
+					$fileLinkTag = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . $value . '</span>';
 				}
 			}else {
 				$fileLinkTag = $value;
