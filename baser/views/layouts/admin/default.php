@@ -32,7 +32,7 @@
 	'colorbox/colorbox')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
-	'jquery-1.8.3.min',
+	'jquery-1.7.2.min',
 	'jquery-ui-1.8.19.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.corner-2.12',
