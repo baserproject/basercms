@@ -12,24 +12,22 @@ $(function() {
 	});
 	
 	//backToTopがクリックされたら上に戻る
-	$('#.to-top a').click(function() {
+	$('.to-top a').click(function() {
 		$('body,html').animate({
 			scrollTop:0
 		})
-		return false
+		return false;
 	});
 
 	//TOPページslider
 	$(document).ready(function(){
 		$('#slider').bxSlider({
-		auto: true,
-		pager: true,
-		easing: 'easeOutBounce',
-		speed: 3000,
-		pause:  8000
+			auto: true,
+			pager: true,
+			easing: 'easeOutBounce',
+			speed: 3000,
+			pause:  8000
 		});
-	
 		$('#top-main .pager-link').wrapInner('<span></span>');
-	
-	  });
+	});
 });

@@ -7,7 +7,7 @@
 "","email","","",""
 "","widget_area","","",""
 "","maintenance","0","",""
-"","mail_encode","ISO-2022-JP","",""
+"","mail_encode","UTF-8","",""
 "","smtp_host","","",""
 "","smtp_user","","",""
 "","smtp_password","","",""

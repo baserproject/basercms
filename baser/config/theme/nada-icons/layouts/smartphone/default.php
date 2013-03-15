@@ -13,9 +13,8 @@
 <?php $bcBaser->metaKeywords() ?>
 <?php $bcBaser->css(array('html5reset-1.6.1', 'smartphone/style')) ?>
 <?php $bcBaser->js(array(
-	'jquery-1.6.4.min',
-	'smartphone/startup.js',
     'jquery-1.7.2.min',
+	'smartphone/startup.js',
     'functions',
     'startup',
     'jquery.bxSlider.min',

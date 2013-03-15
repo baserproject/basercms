@@ -204,13 +204,20 @@
 /**
  * 環境変数よりURLパラメータを取得する
  * 
- * モバイルプレフィックスは除外する
- * bootstrap実行後でのみ利用可
+ * ＊ モバイルプレフィックスは除外する
+ * ＊ GETパラメーターは除外する
+ * 
+ * 《注意》
+ * bootstrap 実行後でのみ利用可
  */
 	function getUrlParamFromEnv() {
 		
 		$agentAlias = Configure::read('BcRequest.agentAlias');
 		$url = getUrlFromEnv();
+		if(strpos($url, '?') !== false) {
+			list($url) = explode('?', $url);
+		}
+		
 		return preg_replace('/^'.$agentAlias.'\//','',$url);
 		
 	}
@@ -218,8 +225,9 @@
  * 環境変数よりURLを取得する
  * 
  * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
- * 先頭のスラッシュは除外する
- * baseUrlは除外する
+ * ＊ 先頭のスラッシュは除外する
+ * ＊ baseUrlは除外する
+ * 
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
 	function getUrlFromEnv() {
@@ -296,7 +304,6 @@
  * @access	public
  */
 	function clearViewCache($url=null,$ext='.php') {
-
 
 		$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 		if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {

@@ -299,11 +299,11 @@ $(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th><?php echo $bcForm->label('SiteConfig.mail_encode', 'メール送信文字コード') ?>&nbsp;<span class="required">*</span></th>
+			<th><?php echo $bcForm->label('SiteConfig.mail_encode', 'メール送信文字コード') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('SiteConfig.mail_encode', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $bcForm->input('SiteConfig.mail_encode', array('type' => 'select', 'options' => Configure::read('BcEncode.mail'))) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpEncode', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<div id="helptextEncode" class="helptext">送信メールの文字コードを入力します。<br />基本的に変更する必要はありません。<br />（初期値）ISO-2022-JP</div>
+				<div id="helptextEncode" class="helptext">送信メールの文字コードを選択します。<br />受信したメールが文字化けする場合に変更します。</div>
 				<?php echo $bcForm->error('SiteConfig.mail_encode') ?>
 			</td>
 		</tr>

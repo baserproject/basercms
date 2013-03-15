@@ -253,7 +253,7 @@ class BaserAppController extends Controller {
 			if(!empty($this->params['return']) && !empty($this->params['requested'])){
 				return;
 			}else{
-				$this->redirect('/maintenance');
+				$this->redirect('/' . Configure::read('BcRequest.agentAlias') . '/maintenance');
 			}
 		}
 
@@ -436,8 +436,9 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
-		$favoriteBoxOpened = false;
+		$this->__updateFirstAccess();
 		
+		$favoriteBoxOpened = false;
 		if(!empty($this->BcAuth) && !empty($this->params['url']['url']) && $this->params['url']['url'] != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
@@ -460,6 +461,19 @@ class BaserAppController extends Controller {
 			$this->set('widgetArea',$this->siteConfigs['widget_area']);
 		}
 
+	}
+/**
+ * 初回アクセスメッセージ用のフラグを更新する
+ */
+	function __updateFirstAccess() {
+		
+		// 初回アクセスメッセージ表示設定
+		if(!empty($this->params['admin']) && !empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
+		}
+		
 	}
 /**
  * SSLエラー処理

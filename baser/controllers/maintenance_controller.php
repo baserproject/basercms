@@ -70,8 +70,18 @@ class MaintenanceController extends AppController {
  */
 	function mobile_index() {
 		
-		$this->pageTitle = 'メンテナンス中';
+		$this->setAction('index');
 		
 	}
-	
+/**
+ * [スマートフォン] メンテナンス中ページを表示する
+ * 
+ * @return void
+ * @access public 
+ */
+	function smartphone_index() {
+		
+		$this->setAction('index');
+		
+	}
 }
