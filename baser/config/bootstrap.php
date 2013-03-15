@@ -170,7 +170,7 @@
 				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
 				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
 					$getParams = str_replace(BC_BASE_URL.$parameter, '', $_SERVER['REQUEST_URI']);
-					if($getParams == '/' || '/index.php') {
+					if($getParams == '/' || $getParams == '/index.php') {
 						$getParams = '';
 					}
 					
@@ -200,7 +200,7 @@
 					}
 
 					if($redirect) {
-						$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
+						$redirectUrl = FULL_BASE_URL . BC_BASE_URL . $setting['alias'] . '/' . $parameter . $getParams;
 						header("HTTP/1.1 301 Moved Permanently");
 						header("Location: ".$redirectUrl);
 						exit();
