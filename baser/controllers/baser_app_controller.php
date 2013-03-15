@@ -253,7 +253,7 @@ class BaserAppController extends Controller {
 			if(!empty($this->params['return']) && !empty($this->params['requested'])){
 				return;
 			}else{
-				$this->redirect('/maintenance');
+				$this->redirect('/' . Configure::read('BcRequest.agentAlias') . '/maintenance');
 			}
 		}
 
