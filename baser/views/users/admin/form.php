@@ -123,6 +123,11 @@ $(function(){
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
 		</tr>
+
+		<?php if ($user['id'] == $this->data['User']['id'] && 
+					$user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
+		<?php echo $bcForm->hidden('User.user_group_id'); ?>
+		<?php else: ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -139,6 +144,7 @@ $(function(){
 <?php endif ?>
 			</td>
 		</tr>
+		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.email', 'Eメール') ?></th>
 			<td class="col-input">
