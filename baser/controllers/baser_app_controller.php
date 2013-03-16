@@ -247,7 +247,7 @@ class BaserAppController extends Controller {
 
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
-					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
+					($this->params['controller'] != 'maintenance' && @$this->params['url']['url'] != 'maintenance') &&
 					(!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
 			if(!empty($this->params['return']) && !empty($this->params['requested'])){
