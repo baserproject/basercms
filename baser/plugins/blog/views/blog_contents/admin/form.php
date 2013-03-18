@@ -93,7 +93,12 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogContent.description', 'ブログ説明文') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->ckeditor('BlogContent.description', null, array('width' => 'autos', 'height' => '120px', 'type' => 'simple')) ?>
+				<?php echo $bcForm->ckeditor('BlogContent.description', null, array(
+					'width'		=> 'auto', 
+					'height'	=> '120px', 
+					'type'		=> 'simple',
+					'enterBr'	=> @$siteConfig['editor_enter_br']
+				)) ?>
 				<?php echo $bcForm->error('BlogContent.description') ?>
 			</td>
 		</tr>

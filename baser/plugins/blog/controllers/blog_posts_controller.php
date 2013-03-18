@@ -305,9 +305,23 @@ class BlogPostsController extends BlogAppController {
 			'postEditable'	=> true,
 			'empty'			=> '指定しない'
 		));
+				
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'content_draft', 
+			'disableDraft'	=> true,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
 		
-		$ckEditorOptions1 = array('width' => 'auto', 'useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true);
-		$ckEditorOptions2 = array('width' => 'auto', 'useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true);
+		$ckEditorOptions2 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'detail_draft', 
+			'disableDraft'	=> true,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
 		$ckStyles = array();
 		if(!empty($this->siteConfigs['editor_styles'])) {
 			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
@@ -398,8 +412,22 @@ class BlogPostsController extends BlogAppController {
 			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->data['BlogPost']['no']);
 		}
 	
-		$ckEditorOptions1 = array('width' => 'auto', 'useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false);
-		$ckEditorOptions2 = array('width' => 'auto', 'useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false);
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'content_draft', 
+			'disableDraft'	=> false,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckEditorOptions2 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'detail_draft', 
+			'disableDraft'	=> false,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
 		$ckStyles = array();
 		if(!empty($this->siteConfigs['editor_styles'])) {
 			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));

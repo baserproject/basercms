@@ -196,7 +196,8 @@ class BcCkeditorHelper extends AppHelper {
 			'disableCopyDraft'	=> false,		// 草稿へコピー利用不可
 			'disableCopyPublish'=> false,		// 本稿へコピー利用不可
 			'readOnlyPublish'	=> false,		// 本稿読み込みのみ許可
-			'useTemplates'		=> true			// テンプレート利用
+			'useTemplates'		=> true,		// テンプレート利用
+			'enterBr'			=> false		// エンター時に改行を入れる
 		), $ckoptions);
 		
 		extract($ckoptions);
@@ -278,6 +279,10 @@ class BcCkeditorHelper extends AppHelper {
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '".$stylesSet."';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		
+		if($enterBr) {
+			$jscode .= "CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;";
+		}
 		
 		$themeEditorCsses = array(
 			array(

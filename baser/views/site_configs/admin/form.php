@@ -299,6 +299,15 @@ $(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.editor_enter_br', '改行モード') ?></th>
+		<td class="col-input">
+			<?php echo $bcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
+				'0' => '改行時に段落を挿入する',
+				'1' => '改行時にBRタグを挿入する'
+			))) ?>
+		</td>
+	</tr>
+	<tr>
 		<th class="col-head"><?php echo $bcForm->label('SiteConfig.editor_styles', 'エディタスタイルセット') ?></th>
 		<td class="col-input">
 			<?php echo $bcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>

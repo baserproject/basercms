@@ -223,7 +223,14 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
-		$ckEditorOptions1 = array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto');
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> true, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
 		$ckStyles = array();
 		if(!empty($this->siteConfigs['editor_styles'])) {
 			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
@@ -360,7 +367,14 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
-		$ckEditorOptions1 = array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto');
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> false, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
 		$ckStyles = array();
 		if(!empty($this->siteConfigs['editor_styles'])) {
 			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
