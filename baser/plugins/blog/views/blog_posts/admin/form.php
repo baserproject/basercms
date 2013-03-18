@@ -166,7 +166,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.content', 
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1) ?>
+						$ckEditorOptions1, $ckStyles) ?>
 				<?php echo $bcForm->error('BlogPost.content') ?>
 			</td>
 		</tr>
@@ -175,7 +175,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.detail',
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions2) ?>
+						$ckEditorOptions2, $ckStyles) ?>
 				<?php echo $bcForm->error('BlogPost.detail') ?>
 			</td>
 		</tr>

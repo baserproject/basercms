@@ -21,4 +21,33 @@
 "","admin_theme","","",""
 "","login_credit","1","",""
 "","first_access","1","",""
-"","version","","",""
+"","editor_styles","#青見出し
+h3 {
+	color:Blue;
+}
+#赤見出し
+h3 {
+	color:Red;
+}
+#黄マーカー
+span {
+	background-color:Yellow;
+}
+#緑マーカー
+span {
+	background-color:Lime;
+}
+#大文字
+big {}
+#小文字
+small {}
+#コード
+code {}
+#削除文
+del {}
+#挿入文
+ins {}
+#引用
+cite {}
+#インライン
+q {}","",""
