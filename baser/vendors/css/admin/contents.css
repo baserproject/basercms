@@ -360,6 +360,7 @@ table.sub-menu{
 	background-color:#2F6FAB;
 	color:#fff;
 }
+.contents-body .list-table tr.selectedrow small,
 .contents-body .list-table tr.selectedrow a{
 	color:#fff;
 }

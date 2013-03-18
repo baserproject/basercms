@@ -110,6 +110,14 @@ class PagesController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$datas = $this->paginate('Page');
+		foreach($datas as $key => $data) {
+			$path = $this->Page->PageCategory->getpath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
+			if($path) {
+				$titlePath = Set::extract('/PageCategory/title', $path);
+				$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+			}
+		}
+		
 		$this->set('datas',$datas);
 		
 		$this->_setAdminIndexViewData();

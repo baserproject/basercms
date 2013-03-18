@@ -49,10 +49,10 @@
 			</th>
 <?php if(!$sortmode): ?>
 			<th><?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' NO', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' NO'), 'id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
-			<th><?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' カテゴリー', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' カテゴリー'), 'page_category_id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th>
-				<?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' ページ名', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' ページ名'), 'name', array('escape' => false, 'class' => 'btn-direction')) ?><br />
+				<?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' カテゴリー', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' カテゴリー'), 'page_category_id', array('escape' => false, 'class' => 'btn-direction')) ?><br />
 				<?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' タイトル', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' タイトル'), 'title', array('escape' => false, 'class' => 'btn-direction')) ?>
+				&nbsp;(&nbsp;<?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' ページ名', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' ページ名'), 'name', array('escape' => false, 'class' => 'btn-direction')) ?>&nbsp;)
 			</th>
 			<th><?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 公開状態', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 公開状態'), 'status', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th><?php echo $paginator->sort(array('asc' => $bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 作成者', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 作成者'), 'author_id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
@@ -77,7 +77,7 @@
 	<?php endforeach; ?>
 <?php else: ?>
 		<tr>
-			<td colspan="7"><p class="no-data">データがありません。</p></td>
+			<td colspan="6"><p class="no-data">データがありません。</p></td>
 		</tr>
 <?php endif; ?>
 	</tbody>
