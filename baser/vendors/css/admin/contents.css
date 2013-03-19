@@ -1192,3 +1192,92 @@ background: #888;
 	padding:3px 10px;
 	background: none;
 }
+
+/* ==================================================================== */
+/*    Themes
+/* ==================================================================== */
+.list-panel li{
+	padding:15px;
+	margin:20px;
+	background: none;
+	background-color:#efefef;
+	width:244px;
+	float:left;
+	height:340px;
+}
+.list-panel .row-tools {
+	text-align: center;
+	margin-top:5px;
+	margin-bottom: 5px;
+	border:3px solid #ccc;
+	padding:3px;
+}
+.list-panel .theme-screenshot {
+	border:1px solid #e2e2e2;
+}
+.list-panel .theme-screenshot img {
+	width:242px;
+}
+.list-panel .theme-version,
+.list-panel .theme-author {
+	margin-bottom: 3px;
+}
+.list-panel .theme-author a {
+	color: #000;
+	text-decoration: underline;
+}
+.list-panel .theme-author a:hover {
+	text-decoration: none;
+}
+#CurrentTheme {
+	border:5px solid #e2e2e2;
+	padding:20px;	
+	margin-bottom: 20px;
+}
+#CurrentTheme .theme-screenshot {
+	border:1px solid #e2e2e2;
+	margin-bottom: 10px;
+}
+#CurrentTheme .theme-screenshot img {
+	width:298px;
+}
+#CurrentTheme .row-tools {
+	text-align: center;
+	margin-top:5px;
+	margin-bottom: 5px;
+	border:3px solid #ccc;
+	padding:3px;
+}
+#CurrentTheme .theme-info {
+	float:left;
+	width:240px;
+	background-color:#efefef;
+	padding:20px;
+	margin-right:50px;
+	height:90px;
+}
+
+#CurrentTheme .current-theme-left {
+	width:300px;
+	margin-right:20px;
+	float:left;
+}
+#CurrentTheme .theme-description {
+	line-height: 1.6em;
+	clear:right;
+}
+.theme-popup-contents {
+	padding:20px 20px 30px 20px;
+}
+.theme-popup-contents .theme-screenshot {
+	border:1px solid #e2e2e2;
+	float:left;
+	margin-right:20px;
+}
+.theme-popup-contents .theme-screenshot img {
+	width:298px;
+}
+.theme-popup-contents .theme-description {
+	padding-top:10px;
+	margin-top:10px;
+}

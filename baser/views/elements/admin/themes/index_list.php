@@ -20,35 +20,59 @@
 ?>
 
 
-<!-- list -->
-<table cellpadding="0" cellspacing="0" class="list-table sort-table" id="ListTable">
-	<thead>
-		<tr>
-			<th style="width:160px" class="list-tool">
-<?php if($bcBaser->isAdminUser()): ?>
-				<div>
-					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-				</div>
+<script type="text/javascript">
+$(function(){
+	$(".theme-popup").colorbox({inline:true, width:"60%"});
+});
+</script>
+
+
+<div id="CurrentTheme" class="clearfix">
+	<h2>現在のテーマ</h2>
+	<div class="current-theme-left">
+		<div class="theme-screenshot">
+			<?php if($currentTheme['screenshot']): ?>
+			<?php $bcBaser->img('/themed/'.$currentTheme['name'].'/screenshot.png',array('alt'=>$currentTheme['title'])) ?>
+			<?php endif ?>
+		</div>
+		<p class="row-tools">
+			<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), array('controller'=>'theme_files','action' => 'index', $currentTheme['name']), array('title' => '管理')) ?>
+			<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => '編集')) ?>
+			<?php $bcBaser->link($bcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+	<?php if(!$currentTheme['is_writable_pages']): ?>
+			<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>
+	<?php endif ?>
+		</p>
+	</div>
+		
+	<div class="theme-info">
+		<p class="theme-name"><strong><?php echo $currentTheme['title'] ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>&nbsp;)</p>
+		<p class="theme-version">バージョン：<?php echo $currentTheme['version'] ?></p>
+		<p class="theme-author">制作者：<?php if(!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
+			<?php $bcBaser->link($currentTheme['author'],$currentTheme['url'],array('target'=>'_blank')) ?>
+			<?php else: ?>
+			<?php echo $currentTheme['author'] ?>
+			<?php endif ?>
+		</p>
+	</div>
+	<br /><br />
+<?php if($defaultDataPatterns && $bcBaser->isAdminUser()): ?>
+	<?php echo $bcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+	<?php echo $bcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
+	<?php echo $bcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
+	<?php echo $bcForm->end() ?>
 <?php endif ?>
-			</th>
-			<th>テーマ名</th>
-			<th>タイトル</th>
-			<th>バージョン</th>
-			<th>説明</th>
-			<th>制作者</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php if(!empty($datas)): ?>
-			<?php foreach($datas as $data): ?>
-				<?php $bcBaser->element('themes/index_row', array('data' => $data)) ?>
-			<?php endforeach; ?>
-		<?php else: ?>
-		<tr>
-			<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
-		</tr>
-		<?php endif; ?>
-	</tbody>
-</table>
+	<br /><br /><br /><br />
+	<div class="theme-description"><?php echo nl2br($currentTheme['description']) ?></div>
+</div>
+
+<ul class="list-panel clearfix">
+<?php if(!empty($datas)): ?>
+	<?php foreach($datas as $data): ?>
+		<?php $bcBaser->element('themes/index_row', array('data' => $data)) ?>
+	<?php endforeach; ?>
+<?php else: ?>
+</ul>
+<p class="no-data">データが見つかりませんでした。</p>
+<?php endif; ?>
+
