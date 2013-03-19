@@ -92,8 +92,12 @@ class BlogBaserHelper extends AppHelper {
 			$templates = 'posts';
 		}
 		unset ($options['templates']);
-
+		
+		$View =& ClassRegistry::getObject('View');
+		ClassRegistry::removeObject('View');
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
+		ClassRegistry::removeObject('View');
+	 	ClassRegistry::addObject('View', $View);
 
 	}
 /**
