@@ -1379,7 +1379,7 @@ class BcManagerComponent extends Object {
 		/* install.php の編集 */
 		$setting = "Configure::write('".$key."', ".$value.");\n";
 		$key = str_replace('.', '\.', $key);
-		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
+		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);(\n|)/is';
 		$file = new File(CONFIGS.'install.php');
 		if(file_exists(CONFIGS.'install.php')) {
 			$data = $file->read();
