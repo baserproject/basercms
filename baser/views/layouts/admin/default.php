@@ -42,6 +42,7 @@
 	'jquery.form-2.94',
 	'jquery.validate.min',
 	'jquery.colorbox-min',
+	'jquery.mScroll',
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup',
