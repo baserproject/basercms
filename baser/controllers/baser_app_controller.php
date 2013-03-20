@@ -1070,7 +1070,7 @@ class BaserAppController extends Controller {
 		$requestedPrefix = '';
 
 		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-		if(!$authPrefix) {
+		if(!$authPrefix || !$this->BcAuth->userScope) {
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
 			if($user) {

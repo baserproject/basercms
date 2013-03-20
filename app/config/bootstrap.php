@@ -41,4 +41,3 @@
  */
 require ROOT.DS.'baser'.DS.'config'.DS.'bootstrap.php';
 //EOF
-?>

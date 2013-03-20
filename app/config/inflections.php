@@ -52,5 +52,3 @@
  *  $singularRules = array('/(s)tatuses$/i' => '\1\2tatus', '/(matr)ices$/i' =>'\1ix','/(vert|ind)ices$/i')
  */
 	$singularRules = array();
-
-?>

@@ -29,7 +29,8 @@
 	'jquery-ui/ui.all',
 	'admin/import',
 	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
-	'colorbox/colorbox')) ?>
+	'colorbox/colorbox',
+	'admin/toolbar')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
 	'jquery-1.7.2.min',
