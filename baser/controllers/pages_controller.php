@@ -543,7 +543,15 @@ class PagesController extends AppController {
 
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
-		$this->render(join('/', $path));
+		
+		$data = $this->Page->findByUrl('/'.$url);
+		
+		if(!empty($data['Page']['template'])) {
+			$this->set('pagePath', join('/', $path));
+			$this->render('templates/' . $data['Page']['template']);
+		} else {
+			$this->render(join('/', $path));
+		}
 
 	}
 /**
@@ -707,7 +715,7 @@ class PagesController extends AppController {
 		
 		$url = $page['Page']['url'];
 		$url = preg_replace('/^\/mobile\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
-		$url = preg_replace('/^\/smartphone//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		$url = preg_replace('/^\/smartphone\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
 		$url = preg_replace('/^\//i', '', $url);
 		
 		$this->preview = true;
