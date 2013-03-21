@@ -46,7 +46,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog');
+	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 /**
  * コンポーネント
  *
@@ -93,7 +93,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
 			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
-			
+			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if($this->params['prefix'] == 'admin') {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}

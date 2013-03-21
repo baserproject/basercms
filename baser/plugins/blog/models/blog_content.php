@@ -106,8 +106,30 @@ class BlogContent extends BlogAppModel {
 		),
 		'list_direction' => array(array(	'rule' => array('notEmpty'),
 						'message' => "一覧に表示する順番を指定してください。")
-		)
+		),
+		'eye_catch_size' => array(array(
+			'rule' => array('checkEyeCatchSize'),
+			'message' => 'アイキャッチ画像のサイズが不正です。'
+		))
 	);
+/**
+ * アイキャッチ画像サイズバリデーション
+ * 
+ * @return boolean 
+ */
+	function checkEyeCatchSize() {
+		
+		$data = $this->constructEyeCatchSize($this->data);
+		if(empty($data['BlogContent']['eye_catch_size_thumb_width']) ||
+				empty($data['BlogContent']['eye_catch_size_thumb_height']) ||
+				empty($data['BlogContent']['eye_catch_size_thumb_mobile_width']) ||
+				empty($data['BlogContent']['eye_catch_size_thumb_mobile_height'])) {
+			return false;
+		}
+		
+		return true;
+		
+	}
 /**
  * 英数チェック
  *
@@ -246,8 +268,52 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['auth_captcha'] = 1;
 		$data['BlogContent']['tag_use'] = false;
 		$data['BlogContent']['status'] = false;
+		$data['BlogContent']['eye_catch_size_thumb_width'] = 600;
+		$data['BlogContent']['eye_catch_size_thumb_height'] = 600;
+		$data['BlogContent']['eye_catch_size_thumb_mobile_width'] = 150;
+		$data['BlogContent']['eye_catch_size_thumb_mobile_height'] = 150;
+		
 		return $data;
 
 	}
+/**
+ * アイキャッチサイズフィールドの値をDB用に変換する
+ * 
+ * @param array $data
+ * @return array 
+ */
+	function deconstructEyeCatchSize($data) {
+		
+		$data['BlogContent']['eye_catch_size'] = serialize(array(
+			'thumb_width'			=> $data['BlogContent']['eye_catch_size_thumb_width'],
+			'thumb_height'			=> $data['BlogContent']['eye_catch_size_thumb_height'],
+			'thumb_mobile_width'	=> $data['BlogContent']['eye_catch_size_thumb_mobile_width'],
+			'thumb_mobile_height'	=> $data['BlogContent']['eye_catch_size_thumb_mobile_height'],
+		));
+		unset($data['BlogContent']['eye_catch_size_thumb_width']);
+		unset($data['BlogContent']['eye_catch_size_thumb_height']);
+		unset($data['BlogContent']['eye_catch_size_thumb_mobile_width']);
+		unset($data['BlogContent']['eye_catch_size_thumb_mobile_height']);
+		
+		return $data;
+		
+	}
+/**
+ * アイキャッチサイズフィールドの値をフォーム用に変換する
+ * 
+ * @param array $data
+ * @return array 
+ */
+	function constructEyeCatchSize($data) {
+		
+		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
+		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
+		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
+		$data['BlogContent']['eye_catch_size_thumb_mobile_width'] = $eyeCatchSize['thumb_mobile_width'];
+		$data['BlogContent']['eye_catch_size_thumb_mobile_height'] = $eyeCatchSize['thumb_mobile_height'];
+		return $data;
+		
+	}
+	
 }
 

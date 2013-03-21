@@ -41,54 +41,51 @@ class BcUploadHelper extends FormHelper {
  */
 	function file($fieldName, $options = array()) {
 
-		$linkOptions = $_options = array('imgsize'=>'midium','rel'=>'','title'=>'', 'link' => true);
+		$options = array_merge(array(
+			'imgsize'	=> 'midium',	// 画像サイズ
+			'rel'		=> '',			// rel属性
+			'title'		=> '',			// タイトル属性
+			'link'		=> true			// 大きいサイズの画像へのリンク有無
+		), $options);
 		
-		if(isset($options['link'])) {
-			$linkOptions['link'] = $options['link'];
-			unset($options['link']);
-		}
-		if(isset($options['imgsize'])) {
-			$linkOptions['imgsize'] = $options['imgsize'];
-			unset($options['imgsize']);
-		}
-		if(isset($options['rel'])) {
-			$linkOptions['rel'] = $options['rel'];
-			unset($options['rel']);
-		}
-		if(isset($options['title'])) {
-			$linkOptions['title'] = $options['title'];
-			unset($options['title']);
-		}
+		extract($options);
 		
-		$options = $this->_initInputField($fieldName, Set::merge($_options,$options));
+		unset($options['imgsize']);
+		unset($options['rel']);
+		unset($options['title']);
+		unset($options['link']);
+		
+		$linkOptions = array(
+			'imgsize'	=> $imgsize,
+			'rel'		=> $rel,
+			'title'		=> $title,
+			'link'		=> $link
+		);
+		
+		$options = $this->_initInputField($fieldName, $options);
 		
 		$view =& ClassRegistry::getObject('view');
-		$_field = $view->entity();
-		$modelName = $_field[0];
-		$field = $_field[1];
-
-		if (ClassRegistry::isKeySet($modelName)) {
-			$model =& ClassRegistry::getObject($modelName);
-		}else {
-			return;
-		}
+		list($modelName, $field) = $view->entity();
 
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName,$options);
 		$delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
 		$hiddenValue = $this->value($fieldName.'_');
 		$fileValue = $this->value($fieldName);
+		
 		if(is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
 			$hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$hiddenValue));
 		}else {
 			$hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$this->value($fieldName)));
 		}
+		
 		$out = $fileTag;
+		
 		if($fileLinkTag) {
-			$out .= '&nbsp;'.$delCheckTag.$hiddenTag.'<br />'.$fileLinkTag;
+			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
 		}
 
-		return '<div class="upload-file">'.$out.'</div>';
+		return '<div class="upload-file">' . $out . '</div>';
 
 	}
 /**
@@ -100,39 +97,24 @@ class BcUploadHelper extends FormHelper {
  */
 	function fileLink($fieldName, $options = array()) {
 
-		$_options = array('imgsize' => 'midium', 'rel' => '', 'title' => '', 'link' => true);
+		$options = array_merge(array(
+			'imgsize'	=> 'midium',	// 画像サイズ
+			'rel'		=> '',			// rel属性
+			'title'		=> '',			// タイトル属性
+			'link'		=> true			// 大きいサイズの画像へのリンク有無
+		), $options);
 		
-		$link = $imgsize = $rel = $title = '';
-		if(isset($options['link'])) {
-			$link = $options['link'];
-			unset($options['link']);
-		}
-		if(isset($options['imgsize'])) {
-			$imgsize= $options['imgsize'];
-			unset($options['imgsize']);
-		}
-		if(isset($options['rel'])) {
-			$rel = $options['rel'];
-			unset($options['rel']);
-		}
-		if(isset($options['title'])) {
-			$title = $options['title'];
-			unset($options['title']);
-		}
+		extract($options);
 		
-		$options = $this->_initInputField($fieldName, Set::merge($_options,$options));
+		$options = $this->_initInputField($fieldName, $options);
 		$view =& ClassRegistry::getObject('view');
 		$tmp = false;
-		$_field = $view->entity();
-		$modelName = $_field[0];
-		$field = $_field[1];
-		if (ClassRegistry::isKeySet($modelName)) {
-			$model =& ClassRegistry::getObject($modelName);
-		}else {
-			return;
-		}
+		list($modelName, $field) = $view->entity();
+		$model = ClassRegistry::init($modelName);
 		
-		$basePath = '/files/' . $model->actsAs['BcUpload']['saveDir'] . '/';
+		$settings = $model->Behaviors->BcUpload->settings;
+		
+		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
 		if(empty($options['value'])) {
 			$value = $this->value($fieldName);
@@ -161,18 +143,18 @@ class BcUploadHelper extends FormHelper {
 
 		/* ファイルのパスを取得 */
 		/* 画像の場合はサイズを指定する */
-		if(isset($model->actsAs['BcUpload']['saveDir'])) {
+		if(isset($settings['saveDir'])) {
 			if($value && !is_array($value)) {
-				$uploadSettings = $model->actsAs['BcUpload']['fields'][$field];
+				$uploadSettings = $settings['fields'][$field];
 				if($uploadSettings['type']=='image') {
 					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link);
 					if($tmp) {
 						$options['tmp'] = true;
 					}
-					$fileLinkTag = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . $value . '</span>';
+					$fileLinkTag = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . basename($value) . '</span>';
 				}else {
-					$filePath = $basePath.$value;
-					$fileLinkTag = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . $value . '</span>';
+					$filePath = $basePath . $value;
+					$fileLinkTag = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . basename($value) . '</span>';
 				}
 			}else {
 				$fileLinkTag = $value;
@@ -196,14 +178,41 @@ class BcUploadHelper extends FormHelper {
  * @return string
  */
 	function uploadImage($fieldName, $fileName, $options = array()) {
-
-		$_options = array('imgsize'=>'midium', 'escape'=>false, 'link'=>true, 'mobile'=>false);
-		$options = Set::merge($_options,$options);
-		$imgOptions = array();
-		$linkOptions = array('rel' => 'colorbox');
-		$noimage = false;
-		$link = true;
-		$tmp = false;
+		
+		$options = array_merge(array(
+			'imgsize'	=> 'midium',	// 画像サイズ
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
+			'escape'	=> false,		// エスケープ
+			'mobile'	=> false,		// モバイル
+			'alt'		=> '',			// alt属性
+			'width'		=> '',			// 横幅
+			'height'	=> '',			// 高さ
+			'noimage'	=> '',			// 画像がなかった場合に表示する画像
+			'tmp'		=> false
+		), $options);
+		
+		extract($options);
+		
+		unset($options['imgsize']);
+		unset($options['link']);
+		unset($options['escape']);
+		unset($options['mobile']);
+		unset($options['alt']);
+		unset($options['width']);
+		unset($options['height']);
+		unset($options['noimage']);
+		unset($options['tmp']);
+		
+		$imgOptions = array(
+			'alt'	=> $alt,
+			'width'	=> $width,
+			'height'=> $height
+		);
+		
+		$linkOptions = array(
+			'rel'		=> 'colorbox',
+			'escape'	=> $escape
+		);
 
 		if(is_array($fileName)) {
 			if(isset($fileName['session_key'])) {
@@ -214,59 +223,31 @@ class BcUploadHelper extends FormHelper {
 			}
 		}
 
-		$imgsize = $options['imgsize'];
-		if(isset($options['alt'])) {
-			$imgOptions['alt'] = $options['alt'];
-			unset($options['alt']);
-		}
-		if(isset($options['width'])) {
-			$imgOptions['width'] = $options['width'];
-			unset($options['width']);
-		}
-		if(isset($options['height'])) {
-			$imgOptions['height'] = $options['height'];
-			unset($options['height']);
-		}
-		unset($options['imgsize']);
-		if(isset($options['noimage'])) {
+		if($noimage) {
 			if(!$fileName) {
-				$fileName = $options['noimage'];
-				$noimage = true;
+				$fileName = $noimage;
 			}
-			unset($options['noimage']);
 		} else {
 			if(!$fileName) {
 				return '';
 			}
 		}
-		if(isset($options['link'])) {
-			$link = $options['link'];
-			unset($options['link']);
-		}
-		if(isset($options['escape'])) {
-			$linkOptions['escape'] = $options['escape'];
-			unset($options['escape']);
-		}
-		if(isset($options['tmp'])) {
-			$tmp = true;
-			unset($options['tmp']);
-		}
-		$mobile = $options['mobile'];
 
-		$_field = split('\.',$fieldName);
-		$modelName = $_field[0];
-		$field = $_field[1];
-
-		if (ClassRegistry::isKeySet($modelName)) {
-			$model =& ClassRegistry::getObject($modelName);
-		}else {
-			return;
+		if(strpos($fieldName, '.') === false) {
+			trigger_error('フィールド名は、 modelName.fieldName で指定してください。', E_USER_WARNING);
+			return false;
 		}
+		
+		list($modelName, $field) = explode('.',$fieldName);
+		$model = ClassRegistry::init($modelName);
 
-		$fileUrl = '/files/'.$model->actsAs['BcUpload']['saveDir'].'/';
-		$filePath = WWW_ROOT.'files'.DS.$model->actsAs['BcUpload']['saveDir'].DS;
-		if(isset($model->actsAs['BcUpload']['fields'][$field]['imagecopy'])) {
-			$copySettings = $model->actsAs['BcUpload']['fields'][$field]['imagecopy'];
+		$settings = $model->Behaviors->BcUpload->settings;
+		
+		$fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
+		
+		if(isset($settings['fields'][$field]['imagecopy'])) {
+			$copySettings = $settings['fields'][$field]['imagecopy'];
 		} else {
 			$copySettings = "";
 		}
@@ -289,11 +270,13 @@ class BcUploadHelper extends FormHelper {
 			$mostSizeExists = false;
 			
 			if($copySettings) {
+				
 				foreach($copySettings as $key => $copySetting) {
 
 					if($key == $imgsize) {
 						$check = true;
 					}
+					
 					if(isset($copySetting['mobile'])) {
 						if($copySetting['mobile'] != $mobile) {
 							continue;
@@ -303,42 +286,47 @@ class BcUploadHelper extends FormHelper {
 							continue;
 						}
 					}
+					
 					$imgPrefix = '';
 					$imgSuffix = '';
+					
 					if(isset($copySetting['suffix']))
 						$imgSuffix = $copySetting['suffix'];
 					if(isset($copySetting['prefix']))
 						$imgPrefix = $copySetting['prefix'];
+					
 					$pathinfo = pathinfo($fileName);
 					$ext = $pathinfo['extension'];
 					$basename = basename($fileName,'.'.$ext);
 
-					if(file_exists($filePath.$imgPrefix.$basename.$imgSuffix.'.'.$ext)) {
+					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
+					if(file_exists($filePath . str_replace('/' , DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext)) {
 						if($check && !$mostSizeExists) {
-							$mostSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
 							$mostSizeExists = true;
 						} elseif(!$mostSizeExists && !$maxSizeExists) {
-							$maxSizeUrl = $fileUrl.$imgPrefix.$basename.$imgSuffix.'.'.$ext.'?'.rand();
+							$maxSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
 							$maxSizeExists = true;
 						}
 					}
 
 				}
+				
 			}
 			
 			if(!isset($mostSizeUrl)) {
-				$mostSizeUrl = $fileUrl.$fileName.'?'.rand();
+				$mostSizeUrl = $fileUrl . $fileName . '?' . rand();
 			}
 			if(!isset($maxSizeUrl)) {
-				$maxSizeUrl = $fileUrl.$fileName.'?'.rand();
+				$maxSizeUrl = $fileUrl . $fileName . '?' . rand();
 			}
 
 		}
 
 		if($link && !$noimage) {
-			return $this->Html->link($this->Html->image($mostSizeUrl,$imgOptions),$maxSizeUrl,am($options, $linkOptions));
+			return $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, am($options, $linkOptions));
 		}else {
-			return $this->Html->image($mostSizeUrl,am($options, $imgOptions));
+			return $this->Html->image($mostSizeUrl, am($options, $imgOptions));
 		}
 
 	}

@@ -125,9 +125,9 @@ $(function(){
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-<?php echo $bcForm->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
+<?php echo $bcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $bcForm->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
+<?php echo $bcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
 <?php endif; ?>
 <?php echo $bcForm->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $bcForm->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
@@ -159,6 +159,13 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('BlogPost.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'counter' => true)) ?>
 				<?php echo $bcForm->error('BlogPost.name') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogPost.eye_catch', 'アイキャッチ画像') ?></th>
+			<td class="col-input">
+				<?php echo $bcUpload->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
+				<?php echo $bcForm->error('BlogPost.eye_catch') ?>
 			</td>
 		</tr>
 		<tr>

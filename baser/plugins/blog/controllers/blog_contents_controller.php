@@ -116,21 +116,26 @@ class BlogContentsController extends BlogAppController {
 		$this->pageTitle = '新規ブログ登録';
 
 		if(!$this->data) {
+			
 			$this->data = $this->BlogContent->getDefaultValue();
+			
 		}else {
 
-			/* 登録処理 */
+			$this->data = $this->BlogContent->deconstructEyeCatchSize($this->data);
 			$this->BlogContent->create($this->data);
-
-			// データを保存
+			
 			if($this->BlogContent->save()) {
+
 				$id = $this->BlogContent->getLastInsertId();
 				$this->setMessage('新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $id));
-			}else {
+
+			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
+			
 		}
 
 		// テーマの一覧を取得
@@ -154,11 +159,17 @@ class BlogContentsController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
+			
 			$this->data = $this->BlogContent->read(null, $id);
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
+			
 		}else {
+			
+			$this->data = $this->BlogContent->deconstructEyeCatchSize($this->data);
+			$this->BlogContent->set($this->data);
+			
+			if($this->BlogContent->save()) {
 
-			/* 更新処理 */
-			if($this->BlogContent->save($this->data)) {
 				$this->setMessage('ブログ「'.$this->data['BlogContent']['title'].'」を更新しました。', false, true);
 
 				if($this->data['BlogContent']['edit_layout_template']){
@@ -172,6 +183,8 @@ class BlogContentsController extends BlogAppController {
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
+			
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
 
 		}
 

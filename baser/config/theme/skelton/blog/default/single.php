@@ -19,6 +19,11 @@ $(function(){
 <h3 class="contents-head">
 	<?php $bcBaser->contentsTitle() ?>
 </h3>
+
+<div class="eye-catch">
+	<?php echo $blog->eyeCatch($post) ?>
+</div>
+
 <div class="post">
 	<?php $blog->postContent($post) ?>
 	<div class="meta"> <span>

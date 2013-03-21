@@ -320,7 +320,9 @@ h1{
 .contents-head{
 	margin-bottom:10px;
 }
-
+#ContentsBody .eye-catch {
+	padding:10px;
+}
 
 /* sidebox
 ----------------------------------------------- */
