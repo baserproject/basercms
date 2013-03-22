@@ -89,6 +89,15 @@ $(function(){
 <div id="AlertMessage" style="display: none"></div>
 <div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', $this->data['UserGroup']['id'])) ?></div>
 
+<?php 
+if ($selfUpdate && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+	foreach ($userGroups as $k => $v) {
+		if ($k != $user['user_group_id']){
+			unset($userGroups[$k]);
+		}
+	}
+}
+ ?>
 
 <?php echo $bcForm->create('User') ?>
 <?php echo $bcForm->hidden('User.id') ?>
@@ -124,10 +133,6 @@ $(function(){
 			</td>
 		</tr>
 
-		<?php if ($user['id'] == $this->data['User']['id'] && 
-					$user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
-		<?php echo $bcForm->hidden('User.user_group_id'); ?>
-		<?php else: ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -144,7 +149,6 @@ $(function(){
 <?php endif ?>
 			</td>
 		</tr>
-		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.email', 'Eメール') ?></th>
 			<td class="col-input">

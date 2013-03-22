@@ -482,8 +482,7 @@ class UsersController extends AppController {
 			}
 
 			// 自身のアカウントは変更出来ないようにチェック
-			if ($user[$userModel]['id'] == $this->data[$userModel]['id'] &&
-			    $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
+			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
 				$this->setMessage('自分のアカウントのグループは変更できません。', true);
 			} else {
 				$this->User->set($this->data);
