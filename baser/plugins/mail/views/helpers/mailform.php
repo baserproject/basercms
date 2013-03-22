@@ -149,6 +149,9 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['empty']);
 				unset($attributes['size']);
+				if ($attributes['maxlength'] === null) {
+					unset($attributes['maxlength']);
+				}
 				$out = $this->textarea($fieldName, $attributes);
 				break;
 			case 'hidden':

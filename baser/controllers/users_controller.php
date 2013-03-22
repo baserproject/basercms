@@ -481,43 +481,44 @@ class UsersController extends AppController {
 				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
 
-			$this->User->set($this->data);
+			// 自身のアカウントは変更出来ないようにチェック
+			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
+				$this->setMessage('自分のアカウントのグループは変更できません。', true);
+			} else {
+				$this->User->set($this->data);
 
-			if($this->User->validates()) {
-				unset($this->data['User']['password_1']);
-				unset($this->data['User']['password_2']);
-				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
-				}
-				$this->User->save($this->data,false);
-				
-				if($selfUpdate) {
-					$this->admin_logout();
-				}
+				if($this->User->validates()) {
+					unset($this->data['User']['password_1']);
+					unset($this->data['User']['password_2']);
+					if(isset($this->data['User']['password'])) {
+						$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
+					}
+					$this->User->save($this->data,false);
+					
+					if($selfUpdate) {
+						$this->admin_logout();
+					}
 
-				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
-			}else {
-				// よく使う項目のデータを再セット
-				$this->data = array_merge($this->User->read(null, $id), $this->data);
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+					$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
+					$this->redirect(array('action' => 'edit', $id));
+				}else {
+					// よく使う項目のデータを再セット
+					$this->data = array_merge($this->User->read(null, $id), $this->data);
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
+				}
 			}
-
 		}
 
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		
 		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 			$editable = false;
+		} else if ($selfUpdate && $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			$editable = false;
 		}
-		
-		$this->set('userGroups', $userGroups);
-		$this->set('editable', $editable);
-		$this->set('selfUpdate', $selfUpdate);
+		$this->set(compact('userGroups', 'editable', 'selfUpdate'));
 		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';
