@@ -83,12 +83,8 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	function admin_index() {
-
-		if(!Configure::read('BcApp.mobile')) {
-			$this->data['PageCategory']['type'] = 'pc';
-		}
 			
-		$default = array('PageCategory' => array('type'=>'pc'));
+		$default = array('PageCategory' => array('type'=>'1'));
 		$this->setViewConditions('PageCategory', array('default' => $default));
 
 		$mobileId = $this->PageCategory->getAgentId('mobile');
@@ -96,14 +92,14 @@ class PageCategoriesController extends AppController {
 		
 		$ids = array();
 		$conditions = array();
-		if($this->data['PageCategory']['type'] == 'pc' || empty($this->data['PageCategory']['type'])) {
+		if($this->data['PageCategory']['type'] == '1') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
 			}
 			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
-		} elseif($this->data['PageCategory']['type'] == 'mobile') {
+		} elseif($this->data['PageCategory']['type'] == '2') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
@@ -111,7 +107,7 @@ class PageCategoriesController extends AppController {
 			if($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
 			}
-		} elseif($this->data['PageCategory']['type'] == 'smartphone') {
+		} elseif($this->data['PageCategory']['type'] == '3') {
 			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
@@ -145,34 +141,10 @@ class PageCategoriesController extends AppController {
 			$this->render('ajax_index');
 			return;
 		}
-		
-		$pageType = array();
-		if(Configure::read('BcApp.mobile')) {
-			$linkedPagesMobile = !empty($this->siteConfigs['linked_pages_mobile']);
-		} else {
-			$linkedPagesMobile = false;
-		}
-		if(Configure::read('BcApp.smartphone')) {
-			$linkedPagesSmartPhone = !empty($this->siteConfigs['linked_pages_smartphone']);
-		} else {
-			$linkedPagesSmartPhone = false;
-		}
-		if(!$linkedPagesMobile || !$linkedPagesSmartPhone) {
-			$pageType = array('pc' => 'PC');	
-		}
-		if(!$linkedPagesMobile) {
-			$pageType['mobile'] = 'モバイル';
-		}
-		if(!$linkedPagesSmartPhone) {
-			$pageType['smartphone'] = 'スマートフォン';
-		}
-		if($pageType) {
-			$this->search = 'page_categories_index';
-		}
-		$this->help = 'page_categories_index';
-		$this->set('pageType', $pageType);
 
 		/* 表示設定 */
+		$this->help = 'page_categories_index';
+		$this->search = 'page_categories_index';
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー一覧';
 		

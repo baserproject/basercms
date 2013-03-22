@@ -17,16 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageType = array();
-if($reflectMobile || $reflectSmartphone) {
-	$pageType = array('' => '全て', '1' => 'PC');	
-}
-if($reflectMobile) {
-	$pageType['2'] = 'モバイル';
-}
-if($reflectSmartphone) {
-	$pageType['3'] = 'スマートフォン';
-}
+$pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
 
 <script type="text/javascript">

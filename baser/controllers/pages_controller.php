@@ -532,10 +532,16 @@ class PagesController extends AppController {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
 
+		$agentAlias = Configure::read('BcRequest.agentAlias');
+		if($agentAlias) {
+			$checkUrl = '/' . $agentAlias . $url;
+		} else {
+			$checkUrl = $url;
+		}
 		// キャッシュ設定
 		if(!isset($_SESSION['Auth']['User'])){
 			$this->helpers[] = 'Cache';
-			$this->cacheAction = $this->Page->getCacheTime($url);
+			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
 		
 		// ナビゲーションを取得
@@ -544,7 +550,7 @@ class PagesController extends AppController {
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
 		
-		$data = $this->Page->findByUrl($url);
+		$data = $this->Page->findByUrl($checkUrl);
 		
 		$template = $layout = $agent = '';
 		

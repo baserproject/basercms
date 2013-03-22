@@ -309,8 +309,8 @@ class BcPageHelper extends Helper {
 		if(!$agent) {
 			$path = '..' . DS . 'pages' . DS . $path;
 		} else {
-			$siteConfig = $View->getVar('siteConfig');
-			$linked = $siteConfig['linked_pages_' . $agent];
+			$url = '/'.implode('/', $this->params['pass']);
+			$linked = $this->Page->isLinked($agent, $url);
 			if(!$linked) {
 				$path = '..' . DS . 'pages' . DS . $agent . DS . $path;
 			} else {

@@ -772,6 +772,9 @@ class Page extends AppModel {
  */
 	function getCacheTime($url) {
 		
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
 		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
 		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
 		if(!$page) {
@@ -1137,5 +1140,34 @@ class Page extends AppModel {
 		}
 		
 	}
-	
+/**
+ * 連携チェック
+ * 
+ * @param string $agentPrefix
+ * @param string $url
+ * @return boolean 
+ */
+	function isLinked($agentPrefix, $url) {
+		
+		if(!$agentPrefix) {
+			return false;
+		}
+		
+		$siteConfig = Configure::read('BcSite');
+		$linked = false;
+		if(isset($siteConfig['linked_pages_'.$agentPrefix])) {
+			$linked = $siteConfig['linked_pages_'.$agentPrefix];
+		}
+			
+		if(preg_match('/\/$/', $url)) {
+			$url .= 'index';
+		}
+		
+		if($this->field('unlinked_' . $agentPrefix, array('Page.url' => $url))) {
+			$linked = false;
+		}
+		
+		return $linked;
+				
+	}
 }

@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Pages schema generated on: 2013-03-22 23:03:43 : 1363962943*/
+/* Pages schema generated on: 2013-03-23 04:03:08 : 1363981208*/
 class PagesSchema extends CakeSchema {
 	var $name = 'Pages';
 
@@ -31,6 +31,8 @@ class PagesSchema extends CakeSchema {
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
 		'code' => array('type' => 'text', 'null' => true, 'default' => NULL),
+		'unlinked_mobile' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'unlinked_smartphone' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

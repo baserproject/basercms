@@ -261,7 +261,9 @@ class BaserAppView extends ThemeView {
 		// サブフォルダを空に設定
 		$siteConfig = $this->getVar('siteConfig');
 		if($this->name == 'Pages' && preg_match('/(.+)_display$/', $this->action, $maches)) {
-			if(isset($siteConfig['linked_pages_'.$maches[1]]) && $siteConfig['linked_pages_'.$maches[1]]) {
+			$Page = ClassRegistry::getObject('Page');
+			$url = '/'.implode('/', $this->params['pass']);
+			if($Page->isLinked($maches[1], $url)) {
 				$subDir = '';
 			}
 		}
