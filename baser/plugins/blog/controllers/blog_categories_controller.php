@@ -334,5 +334,34 @@ class BlogCategoriesController extends BlogAppController {
 		$this->redirect(array('action'=>'index',$blogContentId));
 
 	}
+/**
+ * [ADMIN] 追加処理（AJAX）
+ * 
+ * @param int $blogContentId 
+ */
+	function admin_ajax_add($blogContentId) {
+		
+		if(!empty($this->data)) {
+			if (strlen($this->data['BlogCategory']['name']) == mb_strlen($this->data['BlogCategory']['name'])) {
+				$this->data['BlogCategory']['title'] = $this->data['BlogCategory']['name'];
+			} else {
+				$this->data['BlogCategory']['title'] = $this->data['BlogCategory']['name'];
+				$this->data['BlogCategory']['name'] = substr(urlencode($this->data['BlogCategory']['name']), 0, 49);
+			}
+			$this->data['BlogCategory']['blog_content_id'] = $blogContentId;
+			$this->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$blogContentId))+1;
+			$this->BlogCategory->create($this->data);
+			if($this->BlogCategory->save()) {
+				echo $this->BlogCategory->getInsertID();
+			} else {
+				$this->ajaxError(500, $this->BlogCategory->validationErrors);
+			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
+		exit();
+		
+	}
 	
 }
