@@ -41,6 +41,17 @@ class Favorite extends AppModel {
  */
 	var $name = 'Favorite';
 /**
+ * belongsTo
+ * 
+ * @var array
+ * @access public
+ */
+	var $belongsTo = array(
+			'User' => array(
+				'className'=> 'User',
+				'foreignKey'=>'user_id'
+	));
+/**
  * ビヘイビア
  * 
  * @var array
