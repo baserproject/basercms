@@ -495,7 +495,7 @@ class Page extends AppModel {
 		if(isset($data['Page'])){
 			$data = $data['Page'];
 		}
-		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'],$data['description']);
+		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'],$data['description'], $data['code']);
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->_getPageFilePath($data);
@@ -626,16 +626,22 @@ class Page extends AppModel {
  * @return string
  * @access public
  */
-	function addBaserPageTag($id,$contents,$title,$description) {
+	function addBaserPageTag($id,$contents,$title,$description, $code) {
 		
-		$tag = '<!-- BaserPageTagBegin -->'."\n";
-		$tag .= '<?php $bcBaser->setTitle(\''.$title.'\') ?>'."\n";
-		$tag .= '<?php $bcBaser->setDescription(\''.$description.'\') ?>'."\n";
+		$tag = array();
+		$tag[] = '<!-- BaserPageTagBegin -->';
+		$tag[] = '<?php $bcBaser->setTitle(\''.$title.'\') ?>';
+		$tag[] = '<?php $bcBaser->setDescription(\''.$description.'\') ?>';
 		if($id) {
-			$tag .= '<?php $bcBaser->setPageEditLink('.$id.') ?>'."\n";
+			$tag[] = '<?php $bcBaser->setPageEditLink('.$id.') ?>';
 		}
-		$tag .= '<!-- BaserPageTagEnd -->'."\n";
-		return $tag . $contents;
+		if($code) {
+			$tag[] = '<?php';
+			$tag[] = trim($code);
+			$tag[] = '?>';
+		}
+		$tag []= '<!-- BaserPageTagEnd -->';
+		return implode("\n", $tag) . "\n\n" . $contents;
 		
 	}
 /**

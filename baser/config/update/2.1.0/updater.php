@@ -43,12 +43,12 @@
 		$this->setUpdateLog('editor_templates テーブルの作成に失敗しました。', true);
 	}
 /**
- * page_categories テーブルの構造変更
+ * pages / page_categories テーブルの構造変更
  */
 	if($this->loadSchema('2.1.0', '', '', 'alter')){
-		$this->setUpdateLog('page_categories テーブルの構造変更に成功しました。');
+		$this->setUpdateLog('pages / page_categories テーブルの構造変更に成功しました。');
 	} else {
-		$this->setUpdateLog('page_categories テーブルの構造変更に失敗しました。', true);
+		$this->setUpdateLog('pages / page_categories テーブルの構造変更に失敗しました。', true);
 	}
 /**
  * CSV読み込み 
