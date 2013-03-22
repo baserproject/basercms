@@ -49,7 +49,9 @@ function pageTypeChengeHandler() {
 	var options = {
 		"data[Option][excludeParentId]": $("#PageCategoryId").val()
 	};
-	
+	if(pageType == undefined) {
+		pageType = 1;
+	}
 	$("#PageCategoryLayoutTemplate").attr('disabled', 'disabled');
 	$("#PageCategoryContentTemplate").attr('disabled', 'disabled');
 	$.getJSON($("#AjaxControlSources").html(), {type:pageType}, function(result){

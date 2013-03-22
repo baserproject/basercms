@@ -51,28 +51,41 @@ $(function(){
 		}
 		return result;
 	});
+	
 	$("[name='data[SiteConfig][mobile]']").click(function(){
 		if($("[name='data[SiteConfig][mobile]']:checked").val() == '1') {
 			$("#SpanLinkedPagesMobile").show();
+			$("#SpanRootLayoutTemplateMobile").show();
+			$("#SpanRootContentTemplateMobile").show();
 		} else {
 			$("#SpanLinkedPagesMobile").hide();
+			$("#SpanRootLayoutTemplateMobile").hide();
+			$("#SpanRootContentTemplateMobile").hide();
 			$('#SiteConfigLinkedPagesMobile0').attr('checked', 'checked'); 
 		}
 	});
 	$("[name='data[SiteConfig][smartphone]']").click(function(){
 		if($("[name='data[SiteConfig][smartphone]']:checked").val() == '1') {
 			$("#SpanLinkedPagesSmartphone").show();
+			$("#SpanRootLayoutTemplateSmartphone").show();
+			$("#SpanRootContentTemplateSmartphone").show();
 		} else {
 			$("#SpanLinkedPagesSmartphone").hide();
+			$("#SpanRootLayoutTemplateSmartphone").hide();
+			$("#SpanRootContentTemplateSmartphone").hide();
 			$('#SiteConfigLinkedPagesSmartphone0').attr('checked', 'checked'); 
 		}
 	});
 
 	if($("[name='data[SiteConfig][mobile]']:checked").val() == '0') {
 		$("#SpanLinkedPagesMobile").hide();
+		$("#SpanRootLayoutTemplateMobile").hide();
+		$("#SpanRootContentTemplateMobile").hide();
 	}
 	if($("[name='data[SiteConfig][smartphone]']:checked").val() == '0') {
 		$("#SpanLinkedPagesSmartphone").hide();
+		$("#SpanRootLayoutTemplateSmartphone").hide();
+		$("#SpanRootContentTemplateSmartphone").hide();
 	}
 	
 });
@@ -303,10 +316,10 @@ $(function(){
 		<td class="col-input">
 			<small>[PC]</small>&nbsp;
 			<?php echo $bcForm->input('SiteConfig.root_layout_template', array('type' => 'select', 'options' => $bcPage->getTemplates())) ?>　
-			<small>[携帯]</small>&nbsp;
-			<?php echo $bcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'mobile'))) ?>　
-			<small>[スマートフォン]</small>&nbsp;
-			<?php echo $bcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'smartphone'))) ?>
+			<span id="SpanRootLayoutTemplateMobile"><small>[携帯]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'mobile'))) ?>　</span>
+			<span id="SpanRootLayoutTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'smartphone'))) ?></span>
 		</td>
 	</tr>
 	<tr>
@@ -314,10 +327,10 @@ $(function(){
 		<td class="col-input">
 			<small>[PC]</small>&nbsp;
 			<?php echo $bcForm->input('SiteConfig.root_content_template', array('type' => 'select', 'options' => $bcPage->getTemplates('content'))) ?>　
-			<small>[携帯]</small>&nbsp;
-			<?php echo $bcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'mobile'))) ?>　
-			<small>[スマートフォン]</small>&nbsp;
-			<?php echo $bcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'smartphone'))) ?>
+			<span id="SpanRootContentTemplateMobile"><small>[携帯]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'mobile'))) ?>　</span>
+			<span id="SpanRootContentTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'smartphone'))) ?></span>
 		</td>
 	</tr>
 	</table>
