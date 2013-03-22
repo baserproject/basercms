@@ -54,7 +54,7 @@ class BlogPost extends BlogAppModel {
 				'fields'	=> array(
 					'eye_catch'	=> array(
 						'type'			=> 'image',
-						'namefield'		=> 'id',
+						'namefield'		=> 'no',
 						'nameformat'	=> '%08d'
 					)
 				)
@@ -619,6 +619,11 @@ class BlogPost extends BlogAppModel {
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);
 		unset($data['BlogPost']['modified']);
+		
+		// 一旦退避(afterSaveでリネームされてしまうのを避ける為）
+		$eyeCatch = $data['BlogPost']['eye_catch'];
+		unset($data['BlogPost']['eye_catch']);
+		
 		if(!empty($data['BlogTag'])) {
 			foreach($data['BlogTag'] as $key => $tag) {
 				$data['BlogTag'][$key] = $tag['id'];
@@ -627,7 +632,15 @@ class BlogPost extends BlogAppModel {
 		
 		$this->create($data);
 		$result = $this->save();
+		
 		if($result) {
+			if($eyeCatch) {
+				$data['BlogPost']['id'] = $this->getLastInsertID();
+				$data['BlogPost']['eye_catch'] = $eyeCatch;
+				$this->set($data);
+				$this->renameToFieldBasename(true);	// 内部でリネームされたデータが再セットされる
+				$result = $this->save();
+			}
 			return $result;
 		} else {
 			if(isset($this->validationErrors['name'])) {
