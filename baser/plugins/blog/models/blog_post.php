@@ -139,7 +139,7 @@ class BlogPost extends BlogAppModel {
  */
 	function  setupUpload($id) {
 		
-		$sizes = array('thumb', 'thumb_mobile');
+		$sizes = array('thumb', 'mobile_thumb');
 		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
 		$data = $this->BlogContent->constructEyeCatchSize($data);
 		$data = $data['BlogContent'];

@@ -29,6 +29,7 @@ $bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,fal
 
 <!-- detail -->
 <?php if(!empty($post)): ?>
+<?php $blog->eyeCatch($post, array('mobile' => true)) ?>
 <?php $blog->postContent($post) ?>
 <br />
 <p align="right">

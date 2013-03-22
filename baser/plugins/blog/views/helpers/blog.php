@@ -905,7 +905,7 @@ class BlogHelper extends AppHelper {
 		
 		$options = array_merge(array(
 			'imgsize'	=> 'thumb',		// 画像サイズ
-			'link'		=> false,		// 大きいサイズの画像へのリンク有無
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
 			'escape'	=> false,		// エスケープ
 			'mobile'	=> false,		// モバイル
 			'alt'		=> '',			// alt属性

@@ -51,7 +51,7 @@
 	if($datas) {
 		$result = true;
 		foreach($datas as $data) {
-			$data['BlogContent']['eye_catch_size'] = 'a:4:{s:11:"thumb_width";s:3:"300";s:12:"thumb_height";s:3:"300";s:18:"thumb_mobile_width";s:3:"100";s:19:"thumb_mobile_height";s:3:"100";}';
+			$data['BlogContent']['eye_catch_size'] = 'a:4:{s:11:"thumb_width";s:3:"300";s:12:"thumb_height";s:3:"300";s:18:"mobile_thumb_width";s:3:"100";s:19:"mobile_thumb_height";s:3:"100";}';
 			if(!$BlogContent->save($data)) {
 				$result = false;
 			}

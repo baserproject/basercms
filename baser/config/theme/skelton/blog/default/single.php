@@ -21,7 +21,7 @@ $(function(){
 </h3>
 
 <div class="eye-catch">
-	<?php echo $blog->eyeCatch($post) ?>
+	<?php $blog->eyeCatch($post) ?>
 </div>
 
 <div class="post">

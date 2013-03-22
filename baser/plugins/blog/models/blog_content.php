@@ -122,8 +122,8 @@ class BlogContent extends BlogAppModel {
 		$data = $this->constructEyeCatchSize($this->data);
 		if(empty($data['BlogContent']['eye_catch_size_thumb_width']) ||
 				empty($data['BlogContent']['eye_catch_size_thumb_height']) ||
-				empty($data['BlogContent']['eye_catch_size_thumb_mobile_width']) ||
-				empty($data['BlogContent']['eye_catch_size_thumb_mobile_height'])) {
+				empty($data['BlogContent']['eye_catch_size_mobile_thumb_width']) ||
+				empty($data['BlogContent']['eye_catch_size_mobile_thumb_height'])) {
 			return false;
 		}
 		
@@ -270,8 +270,8 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['status'] = false;
 		$data['BlogContent']['eye_catch_size_thumb_width'] = 600;
 		$data['BlogContent']['eye_catch_size_thumb_height'] = 600;
-		$data['BlogContent']['eye_catch_size_thumb_mobile_width'] = 150;
-		$data['BlogContent']['eye_catch_size_thumb_mobile_height'] = 150;
+		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = 150;
+		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = 150;
 		
 		return $data;
 
@@ -287,13 +287,13 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['eye_catch_size'] = serialize(array(
 			'thumb_width'			=> $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height'			=> $data['BlogContent']['eye_catch_size_thumb_height'],
-			'thumb_mobile_width'	=> $data['BlogContent']['eye_catch_size_thumb_mobile_width'],
-			'thumb_mobile_height'	=> $data['BlogContent']['eye_catch_size_thumb_mobile_height'],
+			'mobile_thumb_width'	=> $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
+			'mobile_thumb_height'	=> $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
 		));
 		unset($data['BlogContent']['eye_catch_size_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_thumb_height']);
-		unset($data['BlogContent']['eye_catch_size_thumb_mobile_width']);
-		unset($data['BlogContent']['eye_catch_size_thumb_mobile_height']);
+		unset($data['BlogContent']['eye_catch_size_mobile_thumb_width']);
+		unset($data['BlogContent']['eye_catch_size_mobile_thumb_height']);
 		
 		return $data;
 		
@@ -309,8 +309,8 @@ class BlogContent extends BlogAppModel {
 		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
-		$data['BlogContent']['eye_catch_size_thumb_mobile_width'] = $eyeCatchSize['thumb_mobile_width'];
-		$data['BlogContent']['eye_catch_size_thumb_mobile_height'] = $eyeCatchSize['thumb_mobile_height'];
+		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];
+		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = $eyeCatchSize['mobile_thumb_height'];
 		return $data;
 		
 	}

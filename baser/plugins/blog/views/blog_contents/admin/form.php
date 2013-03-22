@@ -280,8 +280,8 @@ $(function(){
 				<small>[幅]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
 				<small>[高さ]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_height', array('type' => 'text', 'size' => '8')) ?><br />
 				<span>携帯サイズ</span>　
-				<small>[幅]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_mobile_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
-				<small>[高さ]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_mobile_height', array('type' => 'text', 'size' => '8')) ?>
+				<small>[幅]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_mobile_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
+				<small>[高さ]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_mobile_thumb_height', array('type' => 'text', 'size' => '8')) ?>
 				<?php echo $bcForm->error('BlogContent.eye_catch_size') ?>
 				<div id="helptextTemplate" class="helptext">
 					<ul>
