@@ -320,7 +320,9 @@ h1{
 .contents-head{
 	margin-bottom:10px;
 }
-
+#ContentsBody .eye-catch {
+	padding:10px;
+}
 
 /* sidebox
 ----------------------------------------------- */
@@ -429,6 +431,12 @@ table.blog-calendar td.today{
 }
 .blog-widget ul{
 	list-style: none;
+}
+.blog-widget .depth-2 {
+	padding-left:10px;
+}
+.blog-widget .depth-3 {
+	padding-left:20px;
 }
 
 /*TopPage

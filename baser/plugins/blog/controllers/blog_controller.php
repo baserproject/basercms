@@ -100,6 +100,8 @@ class BlogController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
 		}
 
+		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+		
 		$this->subMenuElements = array('default');
 		$this->crumbs = array(array('name' => $this->blogContent['BlogContent']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/index'));
 

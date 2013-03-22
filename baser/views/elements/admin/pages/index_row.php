@@ -61,14 +61,15 @@ $url = preg_replace('/index$/', '', $data['Page']['url']);
 <?php endif ?>
 	</td>
 	<td style="width:5%"><?php echo $data['Page']['id']; ?></td>
-	<td style="width:15%">
+	<td style="width:50%">
 <?php if(!empty($data['PageCategory']['title'])): ?>
-		<?php echo $data['PageCategory']['title']; ?>
+		<small><?php echo $data['PageCategory']['title']; ?></small>
 <?php endif; ?>
-	</td>
-	<td style="width:35%">
-		<?php $bcBaser->link($data['Page']['name'], array('action' => 'edit', $data['Page']['id'])); ?><br />
-		<?php echo $data['Page']['title']; ?>
+		<br />
+<?php if(!empty($data['Page']['title'])): ?>
+		<?php echo $data['Page']['title']; ?>&nbsp;
+<?php endif; ?>
+		(&nbsp;<?php $bcBaser->link($data['Page']['name'], array('action' => 'edit', $data['Page']['id'])); ?>&nbsp;)
 	</td>
 	<td style="width:5%;" class="align-center status">
 		<?php echo $bcText->booleanMark($data['Page']['status']); ?><br />

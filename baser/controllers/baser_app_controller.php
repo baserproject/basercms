@@ -247,7 +247,7 @@ class BaserAppController extends Controller {
 
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
-					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
+					($this->params['controller'] != 'maintenance' && @$this->params['url']['url'] != 'maintenance') &&
 					(!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
 			if(!empty($this->params['return']) && !empty($this->params['requested'])){
@@ -1070,7 +1070,7 @@ class BaserAppController extends Controller {
 		$requestedPrefix = '';
 
 		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-		if(!$authPrefix) {
+		if(!$authPrefix || !$this->BcAuth->userScope) {
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
 			if($user) {

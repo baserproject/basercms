@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [ADMIN] Ajax 行コピー
+ * 固定ページデフォルトテンプレート
  * 
  * PHP versions 4 and 5
  *
@@ -17,5 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->element('themes/index_row');
-?>
+$bcPage->content();

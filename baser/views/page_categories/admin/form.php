@@ -49,6 +49,31 @@ function pageTypeChengeHandler() {
 	var options = {
 		"data[Option][excludeParentId]": $("#PageCategoryId").val()
 	};
+	if(pageType == undefined) {
+		pageType = 1;
+	}
+	$("#PageCategoryLayoutTemplate").attr('disabled', 'disabled');
+	$("#PageCategoryContentTemplate").attr('disabled', 'disabled');
+	$.getJSON($("#AjaxControlSources").html(), {type:pageType}, function(result){
+		if(!result) {
+			return;
+		}
+		var layoutTemplate = $("#PageCategoryLayoutTemplate").val();
+		var contentTemplate = $("#PageCategoryContentTemplate").val();
+		$("#PageCategoryLayoutTemplate option").remove();
+		$("#PageCategoryContentTemplate option").remove();
+		for(var key in result['layout']) {
+			$("#PageCategoryLayoutTemplate").append($("<option/>").val(key).html(result['layout'][key]));
+		}
+		for(var key in result['content']) {
+			$("#PageCategoryContentTemplate").append($("<option/>").val(key).html(result['content'][key]));
+		}
+		$("#PageCategoryLayoutTemplate").val(layoutTemplate);
+		$("#PageCategoryContentTemplate").val(contentTemplate);
+		$("#PageCategoryLayoutTemplate").attr('disabled', false);
+		$("#PageCategoryContentTemplate").attr('disabled', false);
+	});
+	
 	$.ajax({
 		type: "POST",
 		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
@@ -74,6 +99,7 @@ function pageTypeChengeHandler() {
 </script>
 
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $bcBaser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
+<div id="AjaxControlSources" class="display-none"><?php $bcBaser->url(array('controller' => 'page_categories', 'action' => 'ajax_control_sources')) ?></div>
 
 <?php if($this->action == 'admin_edit' && $indexPage): ?>
 <div class="em-box align-left">1
@@ -172,6 +198,27 @@ function pageTypeChengeHandler() {
 						<li>同カテゴリ内のページ間ナビゲーション（コンテンツナビ）を利用するには「利用する」を選択します。</li>
 					</ul>
 				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+
+<div id ="formOptionBody" class="slide-body section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.layout_template', 'レイアウトテンプレート') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.layout_template', array('type' => 'select', 'options' => $bcPage->getTemplates())) ?>
+				<?php echo $bcForm->error('PageCategory.layout_template') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.content_template', 'コンテンツテンプレート') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.content_template', array('type' => 'select', 'options' => $bcPage->getTemplates('content'))) ?>
+				<?php echo $bcForm->error('PageCategory.content_template') ?>
 			</td>
 		</tr>
 <?php if($bcBaser->siteConfig['category_permission']): ?>

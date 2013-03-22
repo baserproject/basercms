@@ -22,3 +22,50 @@
 "","admin_theme","","",""
 "","login_credit","1","",""
 "","first_access","1","",""
+"","editor_styles","#青見出し(h3)
+h3 {
+	color:Blue;
+}
+
+#赤見出し(h3)
+h3 {
+	color:Red;
+}
+
+#黄マーカー(span)
+span {
+	background-color:Yellow;
+}
+
+#緑マーカー(span)
+span {
+	background-color:Lime;
+}
+
+#大文字(big)
+big {}
+
+#小文字(small)
+small {}
+
+#コード(code)
+code {}
+
+#削除文(del)
+del {}
+
+#挿入文(ins)
+ins {}
+
+#引用(cite)
+cite {}
+
+#インライン(q)
+q {}","",""
+"","editor_enter_br","","",""
+"","root_layout_template","default","",""
+"","root_layout_template_mobile","default","",""
+"","root_layout_template_smartphone","default","",""
+"","root_content_template","default","",""
+"","root_content_template_mobile","default","",""
+"","root_content_template_smartphone","default","",""

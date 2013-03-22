@@ -37,7 +37,7 @@ class PageCategoriesController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER, BC_ARRAY_HELPER);
+	var $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER, BC_ARRAY_HELPER, 'BcPage');
 /**
  * This controller does not use a model
  *
@@ -147,13 +147,13 @@ class PageCategoriesController extends AppController {
 		}
 		
 		$pageType = array();
-		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || $this->siteConfigs['linked_pages_mobile'])=='0') {
-			$linkedPagesMobile = true;
+		if(Configure::read('BcApp.mobile')) {
+			$linkedPagesMobile = !empty($this->siteConfigs['linked_pages_mobile']);
 		} else {
 			$linkedPagesMobile = false;
 		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || $this->siteConfigs['linked_pages_smartphone'])=='0') {
-			$linkedPagesSmartPhone = true;
+		if(Configure::read('BcApp.smartphone')) {
+			$linkedPagesSmartPhone = !empty($this->siteConfigs['linked_pages_smartphone']);
 		} else {
 			$linkedPagesSmartPhone = false;
 		}
@@ -175,8 +175,7 @@ class PageCategoriesController extends AppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー一覧';
-		$this->help = 'page_categories_index';
-
+		
 	}
 /**
  * [ADMIN] 固定ページカテゴリー情報登録
@@ -191,7 +190,9 @@ class PageCategoriesController extends AppController {
 			$this->data = array('PageCategory' => array(
 				'contents_navi'		=> false, 
 				'page_category_type'=> 1,
-				'owner_id'			=> $user['User']['user_group_id']
+				'owner_id'			=> $user['User']['user_group_id'],
+				'layout_template'	=> 'default',
+				'content_template'	=> 'default'
 			));
 		} else {
 
@@ -546,6 +547,44 @@ class PageCategoriesController extends AppController {
 		} else {
 			$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 		}
+		exit();
+		
+	}
+/**
+ * カテゴリ編集フォームのコントロール用データをJSONで出力
+ * 
+ * $this->params['url']['type'] としてGETパラメーター受付
+ */
+	function admin_ajax_control_sources() {
+		
+		$type = $agent = '';
+		if(!empty($this->params['url']['type'])) {
+			$type = $this->params['url']['type'];
+		}
+		
+		switch($type) {
+			case '1':
+				$agent = '';
+				break;
+			case '2':
+				$agent = 'mobile';
+				break;
+			case '3':
+				$agent = 'smartphone';
+				break;
+			default:
+				exit();
+		}
+		
+		App::import('Helper', 'BcPage');
+		$BcPage = new BcPageHelper();
+		$result = array(
+			'layout'	=> $BcPage->getTemplates('layout', $agent),
+			'content'	=> $BcPage->getTemplates('content', $agent),
+		);
+		$this->RequestHandler->setContent('json');
+		$this->RequestHandler->respondAs('application/json; charset=UTF-8');
+		echo json_encode($result);
 		exit();
 		
 	}

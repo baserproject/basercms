@@ -110,6 +110,14 @@ class PagesController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$datas = $this->paginate('Page');
+		foreach($datas as $key => $data) {
+			$path = $this->Page->PageCategory->getpath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
+			if($path) {
+				$titlePath = Set::extract('/PageCategory/title', $path);
+				$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+			}
+		}
+		
 		$this->set('datas',$datas);
 		
 		$this->_setAdminIndexViewData();
@@ -215,6 +223,24 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> true, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+		
 		/* 表示設定 */
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array('empty' => '指定しない', 'own' => true));
 		$this->set('categories', $categories);
@@ -223,7 +249,8 @@ class PagesController extends AppController {
 		$this->set('reflectMobile', $reflectMobile);
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
@@ -340,6 +367,24 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> false, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentCatOwnerId));
@@ -347,7 +392,8 @@ class PagesController extends AppController {
 		$this->set('reflectMobile', $reflectMobile);
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->set('url', $url);
 		$this->set('mobileExists',$this->Page->agentExists('mobile', $this->data));
 		$this->set('smartphoneExists',$this->Page->agentExists('smartphone', $this->data));
@@ -430,7 +476,7 @@ class PagesController extends AppController {
 		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
-		clearViewCache();
+		clearAllCache();
 		$this->setMessage($result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。');
 		$this->redirect(array('action' => 'index'));
 
@@ -497,7 +543,45 @@ class PagesController extends AppController {
 
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
-		$this->render(join('/', $path));
+		
+		$data = $this->Page->findByUrl($url);
+		
+		$template = $layout = $agent = '';
+		
+		if(Configure::read('BcRequest.agent')) {
+			$agent = '_' . Configure::read('BcRequest.agent');
+		}
+		
+		if(empty($data['PageCategory']['id'])) {
+			if(!empty($this->siteConfigs['root_layout_template' . $agent])) {
+				$layout = $this->siteConfigs['root_layout_template' . $agent];
+			}
+			if(!empty($this->siteConfigs['root_content_template' . $agent])) {
+				$template = 'templates/' . $this->siteConfigs['root_content_template' . $agent];
+			} else {
+				$template = join('/', $path);
+			}
+		} else {
+			if(!empty($data['PageCategory']['layout_template'])) {
+				$layout = $data['PageCategory']['layout_template'];
+			}
+			if(!empty($data['PageCategory']['content_template'])) {
+				$template = 'templates/' . $data['PageCategory']['content_template'];
+			} else {
+				$template = join('/', $path);
+			}
+		}
+		
+		if($layout) {
+			$this->layout = $layout;
+		}
+		
+		if($template) {
+			$this->set('pagePath', join('/', $path));
+			$this->render($template);
+		} else {
+			$this->render(join('/', $path));
+		}
 
 	}
 /**
@@ -661,7 +745,7 @@ class PagesController extends AppController {
 		
 		$url = $page['Page']['url'];
 		$url = preg_replace('/^\/mobile\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
-		$url = preg_replace('/^\/smartphone//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		$url = preg_replace('/^\/smartphone\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
 		$url = preg_replace('/^\//i', '', $url);
 		
 		$this->preview = true;

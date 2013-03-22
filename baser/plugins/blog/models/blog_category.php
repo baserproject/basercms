@@ -274,8 +274,7 @@ class BlogCategory extends BlogAppModel {
 					));
 				}
 				if($current < $depth) {
-					$current++;
-					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current);
+					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current+1);
 					if($children) {
 						$datas[$key]['BlogCategory']['children'] = $children;
 					}

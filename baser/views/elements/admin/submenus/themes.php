@@ -24,6 +24,7 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $bcBaser->link('テーマ一覧', array('plugin' => null, 'controller' => 'themes', 'action' => 'index')) ?></li>
+			<li><?php $bcBaser->link('コアテンプレート確認', array('plugin' => null, 'controller'=>'theme_files','action' => 'index', 'core')) ?></li>
 			<li><?php $bcBaser->link('テーマ用初期データダウンロード', 
 					array('plugin' => null, 'controller' => 'themes', 'action' => 'download_default_data_pattern'), 
 					array('target' => '_blank'),

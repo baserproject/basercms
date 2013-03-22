@@ -82,12 +82,16 @@ $(function(){
 			success: function(response, status) {
 				if(response) {
 					$("#Login").fadeOut(500);
-					if($("#Credit").css('display') == 'none') {
-						document.location = response;
-					} else {
-						openCredit(function(){
+					if($("#Credit").size()) {
+						if($("#Credit").css('display') == 'none') {
 							document.location = response;
-						});
+						} else {
+							openCredit(function(){
+								document.location = response;
+							});
+						}
+					} else {
+						document.location = response;
 					}
 				} else {
 					$("#AlertMessage").html('ログインに失敗しました。アカウント名、パスワードを確認してください。');
@@ -131,6 +135,10 @@ function changeNavi(target){
 }
 function changeView(creditOn) {
 
+	if(!$("#Credit").size()) {
+		return;
+	}
+	
 	if(creditOn) {
 		credit();
 		$("#LoginInner").css('color', '#FFF');
@@ -143,6 +151,11 @@ function changeView(creditOn) {
 
 }
 function openCredit(completeHandler) {
+	
+	if(!$("#Credit").size()) {
+		return;
+	}
+	
 	$("#LoginInner").css('color', '#333');
 	$("#HeaderInner").css('height', 'auto');
 	$("#Logo").css('position', 'relative');

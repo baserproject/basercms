@@ -941,7 +941,13 @@ class DboBcCsv extends DboSource {
 		if($this->appEncoding != $this->dbEncoding) {
 			$head = mb_convert_encoding($head, $this->dbEncoding, $this->appEncoding);
 		}
-		return fwrite($this->connection[$queryData['tableName']], $head);
+		
+		$result = fwrite($this->connection[$queryData['tableName']], $head);
+		if($result) {
+			chmod($this->csvName[$queryData['tableName']], 0666);
+			return true;
+		}
+		return false;
 
 	}
 /**

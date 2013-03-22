@@ -32,12 +32,13 @@
 <?php /* 送信ボタン */ ?>
 <?php if($freezed): ?>
 <center>
-	<?php echo $mailform->submit('　書き直す　', array('class' => 'btn-red button', 'name' => 'data[mode][back]'))  ?>
-	<?php echo $mailform->submit('　送信する　', array('class' => 'btn-red button', 'name' => 'data[mode][submit]'))  ?>
+	<?php echo $mailform->hidden('Message.mode', array('value' => 'Submit')) ?>
+	<?php echo $mailform->submit('　送信する　', array('class' => 'button'))  ?>
 </center>
 <?php elseif($this->action != 'submit'): ?>
 <center>
-	<?php echo $mailform->submit('　入力内容を確認する　', array("class"=>"btn-orange button"))  ?>
+	<?php echo $mailform->hidden('Message.mode', array('value' => 'Confirm')) ?>
+	<?php echo $mailform->submit('　入力内容を確認する　', array("class"=>"button"))  ?>
 </center>
 <?php endif; ?>
 

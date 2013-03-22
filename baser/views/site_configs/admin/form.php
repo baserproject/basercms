@@ -51,28 +51,41 @@ $(function(){
 		}
 		return result;
 	});
+	
 	$("[name='data[SiteConfig][mobile]']").click(function(){
 		if($("[name='data[SiteConfig][mobile]']:checked").val() == '1') {
 			$("#SpanLinkedPagesMobile").show();
+			$("#SpanRootLayoutTemplateMobile").show();
+			$("#SpanRootContentTemplateMobile").show();
 		} else {
 			$("#SpanLinkedPagesMobile").hide();
+			$("#SpanRootLayoutTemplateMobile").hide();
+			$("#SpanRootContentTemplateMobile").hide();
 			$('#SiteConfigLinkedPagesMobile0').attr('checked', 'checked'); 
 		}
 	});
 	$("[name='data[SiteConfig][smartphone]']").click(function(){
 		if($("[name='data[SiteConfig][smartphone]']:checked").val() == '1') {
 			$("#SpanLinkedPagesSmartphone").show();
+			$("#SpanRootLayoutTemplateSmartphone").show();
+			$("#SpanRootContentTemplateSmartphone").show();
 		} else {
 			$("#SpanLinkedPagesSmartphone").hide();
+			$("#SpanRootLayoutTemplateSmartphone").hide();
+			$("#SpanRootContentTemplateSmartphone").hide();
 			$('#SiteConfigLinkedPagesSmartphone0').attr('checked', 'checked'); 
 		}
 	});
 
 	if($("[name='data[SiteConfig][mobile]']:checked").val() == '0') {
 		$("#SpanLinkedPagesMobile").hide();
+		$("#SpanRootLayoutTemplateMobile").hide();
+		$("#SpanRootContentTemplateMobile").hide();
 	}
 	if($("[name='data[SiteConfig][smartphone]']:checked").val() == '0') {
 		$("#SpanLinkedPagesSmartphone").hide();
+		$("#SpanRootLayoutTemplateSmartphone").hide();
+		$("#SpanRootContentTemplateSmartphone").hide();
 	}
 	
 });
@@ -293,6 +306,76 @@ $(function(){
 			</td>
 		</tr>
 <?php endif ?>
+	</table>
+	
+	<h2>固定ページ関連</h2>
+	
+	<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.root_layout_template', 'ルートレイアウトテンプレート') ?></th>
+		<td class="col-input">
+			<small>[PC]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_layout_template', array('type' => 'select', 'options' => $bcPage->getTemplates())) ?>　
+			<span id="SpanRootLayoutTemplateMobile"><small>[携帯]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'mobile'))) ?>　</span>
+			<span id="SpanRootLayoutTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('layout', 'smartphone'))) ?></span>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.root_content_template', 'ルートコンテンツテンプレート') ?></th>
+		<td class="col-input">
+			<small>[PC]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_content_template', array('type' => 'select', 'options' => $bcPage->getTemplates('content'))) ?>　
+			<span id="SpanRootContentTemplateMobile"><small>[携帯]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'mobile'))) ?>　</span>
+			<span id="SpanRootContentTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
+			<?php echo $bcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $bcPage->getTemplates('content', 'smartphone'))) ?></span>
+		</td>
+	</tr>
+	</table>
+	
+	<h2>エディタ設定関連</h2>
+	
+	<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.editor_enter_br', '改行モード') ?></th>
+		<td class="col-input">
+			<?php echo $bcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
+				'0' => '改行時に段落を挿入する',
+				'1' => '改行時にBRタグを挿入する'
+			))) ?>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $bcForm->label('SiteConfig.editor_styles', 'エディタスタイルセット') ?></th>
+		<td class="col-input">
+			<?php echo $bcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>
+			<?php echo $html->image('admin/icn_help.png',array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $bcForm->error('SiteConfig.editor_styles') ?>
+			<div id="helptextFormalName" class="helptext">
+<p>固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができます。</p>
+				<pre>
+# タイトル
+タグ {
+	プロパティ名：プロパティ値
+}
+
+ 《記述例》
+ # 見出し
+ h2 {
+	font-size:20px;
+	color:#333;
+ }
+</pre>
+<p>タグにプロパティを設定しない場合は次のように記述します。</p>
+<pre>
+# 見出し
+h2 {}
+</pre>
+			</div>
+		</td>
+	</tr>
 	</table>
 	
 	<h2>メール設定関連</h2>

@@ -29,7 +29,8 @@
 	'jquery-ui/ui.all',
 	'admin/import',
 	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
-	'colorbox/colorbox')) ?>
+	'colorbox/colorbox',
+	'admin/toolbar')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $bcBaser->js(array(
 	'jquery-1.7.2.min',
@@ -41,7 +42,8 @@
 	'jquery.contextMenu-1.0/jquery.contextMenu',
 	'jquery.form-2.94',
 	'jquery.validate.min',
-	'jquery.colorbox-min',
+	'jquery.colorbox-min-1.4.5',
+	'jquery.mScroll',
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup',

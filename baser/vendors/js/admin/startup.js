@@ -193,6 +193,10 @@ $(function(){
 			$(this).parent().parent().remove();
 		}
 	});
+/**
+ * トップへ
+ */
+	$('#ToTop a').mScroll({du:300});
 });
 $(window).load(function(){
 	$('#SideBar').css('display', 'block');

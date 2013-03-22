@@ -24,6 +24,8 @@ $bcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $b
 
 <div id="CreatePreviewUrl" style="display:none"><?php echo $bcBaser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
 <div id="AddTagUrl" style="display:none"><?php echo $bcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
+<div id="AddBlogCategoryUrl" style="display:none"><?php echo $bcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContent['BlogContent']['id'])) ?></div>
+<?php echo $bcForm->input('UseContent', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['use_content'])) ?>
 
 
 <script type="text/javascript">
@@ -31,15 +33,20 @@ $(window).load(function() {
 	$("#BlogPostName").focus();
 });
 $(function(){
-	
 /**
  * プレビューボタンクリック時イベント
  */
+	var useContent = $("#UseContent").html();
 	$("#BtnPreview").click(function(){
-		var content = $("#BlogPostContent").val();
+		
+		if(useContent) {
+			var content = $("#BlogPostContent").val();
+			$("#BlogPostContent").val(editor_content_tmp.getData());
+		}
+		
 		var detail = $("#BlogPostDetail").val();
-		$("#BlogPostContent").val(editor_content_tmp.getData());
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
+		
 		$.ajax({
 			type: "POST",
 			url: $("#CreatePreviewUrl").html(),
@@ -52,19 +59,31 @@ $(function(){
 				}
 			}
 		});
-		$("#BlogPostContent").val(content);
+		
+		if(useContent) {
+			$("#BlogPostContent").val(content);
+		}
+		
 		$("#BlogPostDetail").val(detail);
+		
 		return false;
+		
 	});
 	$("#LinkPreview").colorbox({width:"90%", height:"90%", iframe:true});
 /**
  * フォーム送信時イベント
  */
 	$("#BtnSave").click(function(){
-		editor_content_tmp.execCommand('synchronize');
+		
+		if(useContent) {
+			editor_content_tmp.execCommand('synchronize');
+		}
+		
 		editor_detail_tmp.execCommand('synchronize');
+		
 		$("#BlogPostMode").val('save');
 		$("#BlogPostForm").submit();
+		
 	});
 /**
  * ブログタグ追加
@@ -108,8 +127,49 @@ $(function(){
 			}
 		});
 	});
+/**
+ * ブログカテゴリ追加
+ */
+	$("#BtnAddBlogCategory").click(function(){
+		var category = prompt("新しいブログカテゴリを入力してください。");
+		if(!category) {
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: $("#AddBlogCategoryUrl").html(),
+			data: {'data[BlogCategory][name]': category},
+			dataType: 'script',
+			beforeSend: function() {
+				$("#BtnAddBlogCategory").attr('disabled', 'disabled');
+				$("#BlogCategoryLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
+					$("#BlogPostBlogCategoryId").val(result);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus){
+				if(XMLHttpRequest.responseText) {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
+				}
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogCategory").removeAttr('disabled');
+				$("#BlogCategoryLoader").hide();
+				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
+			}
+		});
+	});
 });
 </script>
+
+
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
 	<?php if($bcForm->value('BlogPost.status') && $blogContent['BlogContent']['status']): ?>
@@ -125,9 +185,9 @@ $(function(){
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action=='admin_add'): ?>
-<?php echo $bcForm->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
+<?php echo $bcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $bcForm->create('BlogPost', array('url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
+<?php echo $bcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $bcForm->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
 <?php endif; ?>
 <?php echo $bcForm->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $bcForm->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
@@ -136,7 +196,7 @@ $(function(){
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
-	<?php if($this->action == 'admin_edit'): ?>
+<?php if($this->action == 'admin_edit'): ?>
 		<tr>
 			<th class="col-head" style="width:53px"><?php echo $bcForm->label('BlogPost.no', 'NO') ?></th>
 			<td class="col-input">
@@ -144,16 +204,18 @@ $(function(){
 				<?php echo $bcForm->input('BlogPost.no', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
-	<?php endif; ?>
-	<?php if($categories): ?>
+<?php endif; ?>
+<?php if($categories): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>
+				<?php echo $bcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
+				<?php echo $bcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
 				<?php echo $bcForm->error('BlogPost.blog_category_id') ?>
 			</td>
 		</tr>
-	<?php endif ?>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.name', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -162,24 +224,33 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogPost.eye_catch', 'アイキャッチ画像') ?></th>
+			<td class="col-input">
+				<?php echo $bcUpload->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
+				<?php echo $bcForm->error('BlogPost.eye_catch') ?>
+			</td>
+		</tr>
+<?php if(!empty($blogContent['BlogContent']['use_content'])): ?>
+		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.content', '概要') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.content', 
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1) ?>
+						$ckEditorOptions1, $ckStyles) ?>
 				<?php echo $bcForm->error('BlogPost.content') ?>
 			</td>
 		</tr>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.detail', '本文') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('BlogPost.detail',
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions2) ?>
+						$ckEditorOptions2, $ckStyles) ?>
 				<?php echo $bcForm->error('BlogPost.detail') ?>
 			</td>
 		</tr>
-	<?php if(!empty($blogContent['BlogContent']['tag_use'])): ?>
+<?php if(!empty($blogContent['BlogContent']['tag_use'])): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogTag.BlogTag', 'タグ') ?></th>
 			<td class="col-input">
@@ -193,7 +264,7 @@ $(function(){
 				<?php $bcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
 			</td>
 		</tr>
-	<?php endif ?>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -215,17 +286,17 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogPost.user_id', '作成者') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-	<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
+<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $bcForm->input('BlogPost.user_id', array(
 						'type'		=> 'select',
 						'options'	=> $users)) ?>
 				<?php echo $bcForm->error('BlogPost.user_id') ?>
-	<?php else: ?>
-		<?php if(isset($users[$bcForm->value('BlogPost.user_id')])): ?>
+<?php else: ?>
+	<?php if(isset($users[$bcForm->value('BlogPost.user_id')])): ?>
 				<?php echo $users[$bcForm->value('BlogPost.user_id')] ?>
-		<?php endif ?>
-				<?php echo $bcForm->hidden('BlogPost.user_id') ?>
 	<?php endif ?>
+				<?php echo $bcForm->hidden('BlogPost.user_id') ?>
+<?php endif ?>
 			</td>
 		</tr>
 		<tr>
@@ -237,6 +308,7 @@ $(function(){
 		</tr>
 	</table>
 </div>
+
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>

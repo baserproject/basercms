@@ -38,6 +38,10 @@ $(function(){
 	<?php $bcBaser->contentsTitle() ?>
 </h3>
 
+<div class="eye-catch">
+	<?php $blog->eyeCatch($post) ?>
+</div>
+
 <!-- post detail -->
 <div class="post">
 	<?php $blog->postContent($post) ?>

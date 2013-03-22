@@ -35,7 +35,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
+	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER, 'BcUpload');
 /**
  * ブログカテゴリモデル
  *
@@ -882,6 +882,42 @@ class BlogHelper extends AppHelper {
 			return false;
 		}
 		return ($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index');
+	}
+/**
+ * アイキャッチ画像を出力する
+ * 
+ * @param array $post
+ * @param array $options 
+ */
+	function eyeCatch($post, $options = array()) {
+		
+		echo $this->getEyeCatch($post, $options);
+		
+	}
+/**
+ * アイキャッチ画像を取得する
+ * 
+ * @param array $post
+ * @param array $options
+ * @return string 
+ */
+	function getEyeCatch($post, $options = array()) {
+		
+		$options = array_merge(array(
+			'imgsize'	=> 'thumb',		// 画像サイズ
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
+			'escape'	=> false,		// エスケープ
+			'mobile'	=> false,		// モバイル
+			'alt'		=> '',			// alt属性
+			'width'		=> '',			// 横幅
+			'height'	=> '',			// 高さ
+			'noimage'	=> '',			// 画像がなかった場合に表示する画像
+			'tmp'		=> false,
+			'class'		=> 'img-eye-catch'
+		), $options);
+		
+		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
+		
 	}
 	
 }

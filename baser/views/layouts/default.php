@@ -32,7 +32,8 @@
 <?php $bcBaser->js(array(
 	'jquery-1.7.2.min',
 	'jquery-ui-1.8.19.custom.min',
-	'jquery.colorbox-min',
+	'jquery.colorbox-min-1.4.5',
+	'jquery.mScroll',
 	'admin/functions',
 	'admin/startup',
 	'admin/adjust_scroll')) ?>

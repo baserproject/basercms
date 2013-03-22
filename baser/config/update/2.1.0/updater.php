@@ -43,10 +43,35 @@
 		$this->setUpdateLog('editor_templates テーブルの作成に失敗しました。', true);
 	}
 /**
+ * page_categories テーブルの構造変更
+ */
+	if($this->loadSchema('2.1.0', '', '', 'alter')){
+		$this->setUpdateLog('page_categories テーブルの構造変更に成功しました。');
+	} else {
+		$this->setUpdateLog('page_categories テーブルの構造変更に失敗しました。', true);
+	}
+/**
  * CSV読み込み 
  */
 	if($this->loadCsv('2.1.0')) {
 		$this->setUpdateLog('editor_templates テーブルの初期データ読み込みに成功しました。');
 	} else {
 		$this->setUpdateLog('editor_templates テーブルの初期データ読み込みに失敗しました。', true);
+	}
+/**
+ * site_configs データ更新
+ */
+	App::import('Model', 'SiteConfig');
+	$SiteConfig = new SiteConfig();
+	$siteConfig = $SiteConfig->findExpanded();
+	$siteConfig['root_layout_template'] = 'default';
+	$siteConfig['root_layout_template_mobile'] = 'default';
+	$siteConfig['root_layout_template_smartphone'] = 'default';
+	$siteConfig['root_content_template'] = 'default';
+	$siteConfig['root_content_template_mobile'] = 'default';
+	$siteConfig['root_content_template_smartphone'] = 'default';
+	if($SiteConfig->saveKeyValue($siteConfig)) {
+		$this->setUpdateLog('site_configs テーブルのデータ更新に成功しました。');
+	} else {
+		$this->setUpdateLog('site_configs テーブルのデータ更新に失敗しました。', true);
 	}
