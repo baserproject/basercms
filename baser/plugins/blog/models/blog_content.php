@@ -272,6 +272,7 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['eye_catch_size_thumb_height'] = 600;
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = 150;
 		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = 150;
+		$data['BlogContent']['use_content'] = true;
 		
 		return $data;
 

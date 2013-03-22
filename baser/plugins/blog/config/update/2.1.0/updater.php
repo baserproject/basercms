@@ -38,9 +38,9 @@
  * blog_posts / blog_contents テーブルの構造変更
  */
 	if($this->loadSchema('2.1.0', '', '', 'alter')){
-		$this->setUpdateLog('blog_posts / blog_contents テーブルの作成に成功しました。');
+		$this->setUpdateLog('blog_posts / blog_contents テーブルの構造変更に成功しました。');
 	} else {
-		$this->setUpdateLog('blog_posts / blog_contents テーブルの作成に失敗しました。', true);
+		$this->setUpdateLog('blog_posts / blog_contents テーブルの構造変更に失敗しました。', true);
 	}
 /**
  * データ更新 
@@ -52,6 +52,7 @@
 		$result = true;
 		foreach($datas as $data) {
 			$data['BlogContent']['eye_catch_size'] = 'a:4:{s:11:"thumb_width";s:3:"300";s:12:"thumb_height";s:3:"300";s:18:"mobile_thumb_width";s:3:"100";s:19:"mobile_thumb_height";s:3:"100";}';
+			$data['BlogContent']['use_content'] = true;
 			if(!$BlogContent->save($data)) {
 				$result = false;
 			}

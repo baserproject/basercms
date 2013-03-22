@@ -290,6 +290,17 @@ $(function(){
 				</div>
 			</td>
 		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogContent.use_content', '記事概要') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('BlogContent.use_content', array(
+					'type'		=> 'radio',
+					'options'	=> $bcText->booleanDoList('利用'),
+					'legend'	=> false,
+					'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $bcForm->error('BlogContent.tag_use') ?>
+			</td>
+		</tr>
 	</table>
 </div>
 <!-- button -->
