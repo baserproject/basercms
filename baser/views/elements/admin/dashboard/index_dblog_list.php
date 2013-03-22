@@ -58,9 +58,12 @@ $ (function (){
 	<?php foreach ($viewDblogs as $record): ?>
 	<li><span class="date"><?php echo $bcTime->format('Y.m.d',$record['Dblog']['created']) ?></span>
 		<small><?php echo $bcTime->format('H:i:s',$record['Dblog']['created']) ?>&nbsp;
-			<?php if(!empty($record['User']['real_name_1'])): ?>
-			[<?php echo $record['User']['real_name_1'] . $record['User']['real_name_2'] ?>]
-			<?php endif ?>
+			<?php 
+				$userName = $bcBaser->getUserName($record['User']);
+				if($userName) {
+					echo '[' . $userName . ']';
+				}
+			?>
 		</small><br />
 		<?php echo $record['Dblog']['name'] ?></li>
 	<?php endforeach; ?>

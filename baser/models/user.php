@@ -193,18 +193,13 @@ class User extends AppModel {
  */
 	function getUserList($conditions = array()) {
 
-		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2'), 'conditions'=>$conditions));
+		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2', 'nickname'), 'conditions'=>$conditions));
 		$list = array();
 		if ($users) {
-			// 苗字が同じ場合にわかりにくいので、foreachで生成
-			//$this->set('users',Set::combine($users, "{n}.{$this->alias}.id", "{n}.{$this->alias}.real_name_1"));
+			App::import('Helper', 'BcBaser');
+			$BcBaser = new BcBaserHelper();
 			foreach($users as $key => $user) {
-				if($user[$this->alias]['real_name_2']) {
-					$name = $user[$this->alias]['real_name_1']." ".$user[$this->alias]['real_name_2'];
-				}else {
-					$name = $user[$this->alias]['real_name_1'];
-				}
-				$list[$user[$this->alias]['id']] = $name;
+				$list[$user[$this->alias]['id']] = $BcBaser->getUserName($user);;
 			}
 		}
 		return $list;

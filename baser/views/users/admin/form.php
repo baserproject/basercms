@@ -122,6 +122,17 @@ $(function(){
 				<?php echo $bcForm->error('User.real_name_2', '名を入力してください') ?>
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
+		</tr
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('User.nickname', 'ニックネーム') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('User.nickname', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $html->image('admin/icn_help.png',array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('User.nickname') ?>
+				<div class="helptext">
+					ニックネームを設定している場合は全ての表示にニックネームが利用されます。
+				</div>
+			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>

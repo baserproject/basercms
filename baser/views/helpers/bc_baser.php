@@ -131,7 +131,8 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
+		if($this->_view && BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
+
 			// プラグインのBaserヘルパを初期化
 			$this->_initPluginBasers();
 
@@ -1731,6 +1732,33 @@ END_FLASH;
 		
 		return ($this->getUrl($url) == $this->here);
 
+	}
+/**
+ * ユーザー名を整形して表示する
+ * 
+ * @param array $user
+ * @return string $userName
+ */
+	function getUserName($user) {
+		
+		if(isset($user['User'])) {
+			$user = $user['User'];
+		}
+		
+		if(!empty($user['nickname'])) {
+			$userName = $user['nickname'];
+		} else {
+			$userName = array();
+			if(!empty($user['real_name_1'])) {
+				$userName[] = $user['real_name_1'];
+			}
+			if(!empty($user['real_name_2'])) {
+				$userName[] = $user['real_name_2'];
+			}
+			$userName = implode(' ', $userName);
+		}
+		return $userName;
+		
 	}
 	
 }

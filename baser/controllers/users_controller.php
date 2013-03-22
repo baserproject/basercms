@@ -166,7 +166,9 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->setMessage("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				App::import('Helper', 'BcBaser');
+				$BcBaser = new BcBaserHelper();
+				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 			}
 		}
 
@@ -294,7 +296,9 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->setMessage("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
+				App::import('Helper', 'BcBaser');
+				$BcBaser = new BcBaserHelper();
+				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 			}
 		}
 
