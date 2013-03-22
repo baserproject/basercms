@@ -134,6 +134,7 @@ $(function(){
 				</div>
 			</td>
 		</tr>
+
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
