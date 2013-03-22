@@ -89,15 +89,6 @@ $(function(){
 <div id="AlertMessage" style="display: none"></div>
 <div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $bcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', $this->data['UserGroup']['id'])) ?></div>
 
-<?php 
-if ($selfUpdate && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-	foreach ($userGroups as $k => $v) {
-		if ($k != $user['user_group_id']){
-			unset($userGroups[$k]);
-		}
-	}
-}
- ?>
 
 <?php echo $bcForm->create('User') ?>
 <?php echo $bcForm->hidden('User.id') ?>
