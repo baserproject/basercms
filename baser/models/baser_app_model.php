@@ -398,6 +398,8 @@ class BaserAppModel extends Model {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 
+		$result = true;
+		
 		foreach($files[1] as $file) {
 			if(in_array($file, $excludePath)) {
 				continue;
@@ -436,20 +438,17 @@ class BaserAppModel extends Model {
 				}
 				$tmpdir = TMP.'schemas'.DS;
 				copy($path.DS.$file,$tmpdir.$table.'.php');
-				$result = $db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField));
-				@unlink($tmpdir.$table.'.php');
-				if(!$result) {
-					return false;
+				if(!$db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField))) {
+					$result = false;
 				}
+				@unlink($tmpdir.$table.'.php');
 
 			}
+			
 		}
-		$folder = new Folder(CACHE.'datas');
-		$files = $folder->read(true, true, true);
-		foreach($files[1] as $file) {
-			@unlink($file);
-		}
-		return true;
+		
+		clearAllCache();
+		return $result;
 
 	}
 /**

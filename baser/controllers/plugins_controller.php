@@ -284,8 +284,11 @@ class PluginsController extends AppController {
 	function admin_add($name) {
 		
 		$name = urldecode($name);
+		$dbInited = false;
+		
 		if(!$this->data) {
 			
+			$installMessage = '';
 			// TODO 互換性のため古いパスも対応
 			$oldAppConfigPath = APP.DS.'plugins'.DS.$name.DS.'config'.DS.'config.php';
 			$appConfigPath = APP.DS.'plugins'.DS.$name.DS.'config.php';
@@ -315,28 +318,33 @@ class PluginsController extends AppController {
 				$this->data['Plugin']['version'] = $this->getBaserVersion($name);
 			}
 
-			if(!empty($installMessage)) {
-				$this->setMessage($installMessage, true);
+			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
+			if($data) {
+				$dbInited = $data['Plugin']['db_inited'];
 			}
 
 		}else {
 
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
 
-			if($data) {
-				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
-				$data['Plugin']['name']=$this->data['Plugin']['name'];
-				$data['Plugin']['title']=$this->data['Plugin']['title'];
-				$data['Plugin']['status']=$this->data['Plugin']['status'];
-				$this->Plugin->set($data);
-			} else {
+			if(empty($data['Plugin']['db_inited'])) {
 				if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
 					include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
 				}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
 					include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
 				}
-				$data = $this->data;
-				$this->Plugin->create($data);
+			}
+			
+			if($data) {
+				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
+				$data['Plugin']['name'] = $this->data['Plugin']['name'];
+				$data['Plugin']['title'] = $this->data['Plugin']['title'];
+				$data['Plugin']['status'] = $this->data['Plugin']['status'];
+				$data['Plugin']['db_inited'] = true;
+				$this->Plugin->set($data);
+			} else {
+				$this->data['Plugin']['db_inited'] = true;
+				$this->Plugin->create($this->data);
 			}
 
 			// データを保存
@@ -347,17 +355,45 @@ class PluginsController extends AppController {
 				$this->redirect(array('action' => 'index'));
 
 			}else {
-				$this->setMessage('プラグインに問題がある為インストールを完了できません。開発者に確認してください。', true);
+				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
 			}
 
 		}
 
 		/* 表示設定 */
+		$this->set('installMessage', $installMessage);
+		$this->set('dbInited', $dbInited);
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = '新規プラグイン登録';
 		$this->help = 'plugins_form';
 		$this->render('form');
 
+	}
+/**
+ * データベースをリセットする 
+ */
+	function admin_reset_db() {
+		
+		if(!$this->data) {
+			$this->setMessage('無効な処理です。', true);
+		} else {
+			
+			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
+			$this->Plugin->resetDb($this->data['Plugin']['name']);
+			$data['Plugin']['db_inited'] = false;
+			$this->Plugin->set($data);
+			
+			// データを保存
+			if($this->Plugin->save()) {
+				clearAllCache();
+				$this->setMessage($data['Plugin']['title'] . ' プラグインのデータを初期化しました。', false, true);
+				$this->redirect(array('action' => 'add', $data['Plugin']['name']));
+			}else {
+				$this->setMessage('処理中にエラーが発生しました。プラグインの開発者に確認してください。', true);
+			}
+			
+		}
+		
 	}
 /**
  * [ADMIN] 削除処理
