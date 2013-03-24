@@ -219,6 +219,8 @@ class BlogController extends BlogAppController {
 
 		if($pass[0] == 'category') {
 			$type = 'category';
+		}elseif($pass[0] == 'author') {
+			$type = 'author';
 		}elseif($pass[0] == 'tag') {
 			$type = 'tag';
 		}elseif($pass[0] == 'date') {
@@ -262,7 +264,19 @@ class BlogController extends BlogAppController {
 				$this->set('blogArchiveType',$type);
 
 				break;
-
+				
+			case 'author':
+				$author = h($pass[count($pass)-1]);
+				$posts = $this->_getBlogPosts(array('conditions' => array('author' => $author)));
+				$data = $this->BlogPost->User->find('first', array('fields' => array('real_name_1', 'real_name_2', 'nickname'), 'conditions' => array('User.name' => $author)));
+				App::import('Helper', 'BcBaser');
+				$BcBaser = new BcBaserHelper();
+				$userName = $BcBaser->getUserName($data);
+				$this->pageTitle = urldecode($userName);
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
+				$this->set('blogArchiveType',$type);
+				break;
+			
 			/* タグ別記事一覧 */
 			case 'tag':
 
@@ -838,6 +852,24 @@ class BlogController extends BlogAppController {
 		));
 		return $data;
 
+	}
+/**
+ * 投稿者一覧ウィジェット用のデータを取得する
+ * 
+ * @param int $blogContentId
+ * @param boolean $limit
+ * @param int $viewCount 
+ */
+	function get_authors($blogContentId, $viewCount = false) {
+		
+		$data = array();
+		$this->BlogContent->recursive = -1;
+		$data['blogContent'] = $this->BlogContent->read(null, $blogContentId);
+		$data['authors'] = $this->BlogPost->getAuthors($blogContentId, array(
+			'viewCount'	=> $viewCount
+		));
+		return $data;
+		
 	}
 /**
  * 月別アーカイブ一覧用のデータを取得する
