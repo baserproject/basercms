@@ -46,9 +46,9 @@
  * pages / page_categories テーブルの構造変更
  */
 	if($this->loadSchema('2.1.0', '', '', 'alter')){
-		$this->setUpdateLog('users / pages / page_categories テーブルの構造変更に成功しました。');
+		$this->setUpdateLog('users / plugins / pages / page_categories テーブルの構造変更に成功しました。');
 	} else {
-		$this->setUpdateLog('users / pages / page_categories テーブルの構造変更に失敗しました。', true);
+		$this->setUpdateLog('users / pages / plugins / page_categories テーブルの構造変更に失敗しました。', true);
 	}
 /**
  * CSV読み込み 
@@ -74,4 +74,26 @@
 		$this->setUpdateLog('site_configs テーブルのデータ更新に成功しました。');
 	} else {
 		$this->setUpdateLog('site_configs テーブルのデータ更新に失敗しました。', true);
+	}
+/**
+ * plugins データ更新 
+ */
+	App::import('Model', 'Plugin');
+	$Plugin = new Plugin();
+	$datas = $Plugin->find('all', array('conditions' => array('Plugin.status' => true)));
+	$result = true;
+	if($datas) {
+		foreach($datas as $data) {
+			$data['Plugin']['db_inited'] = true;
+			$Plugin->set($data);
+			if(!$Plugin->save()) {
+				$result = false;
+			}
+		}
+		
+	}
+	if($result) {
+		$this->setUpdateLog('plugins テーブルのデータ更新に成功しました。');
+	} else {
+		$this->setUpdateLog('plugins テーブルのデータ更新に失敗しました。', true);
 	}
