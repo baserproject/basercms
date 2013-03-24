@@ -1133,6 +1133,10 @@ class BaserAppController extends Controller {
 		}
 		
 		$userModel = $this->Session->read('Auth.userModel');
+		if(!$userModel) {
+			$this->Session->delete('Auth');
+			return null;
+		}
 		if(isset($this->{$userModel})) {
 			$UserClass = $this->{$userModel};
 		} else {
