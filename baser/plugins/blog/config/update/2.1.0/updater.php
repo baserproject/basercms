@@ -37,7 +37,7 @@
  *
  * blog_posts / blog_contents テーブルの構造変更
  */
-	if($this->loadSchema('2.1.0', '', '', 'alter')){
+	if($this->loadSchema('2.1.0', 'plugin', '', 'alter')){
 		$this->setUpdateLog('blog_posts / blog_contents テーブルの構造変更に成功しました。');
 	} else {
 		$this->setUpdateLog('blog_posts / blog_contents テーブルの構造変更に失敗しました。', true);
