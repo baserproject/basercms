@@ -1,4 +1,4 @@
-"id","sort","name","title","description","contents","page_category_id","status","url","draft","author_id","publish_begin","publish_end","exclude_search","modified","created"
+"id","sort","name","title","description","contents","page_category_id","status","url","draft","author_id","publish_begin","publish_end","exclude_search","code","unlinked_mobile","unlinked_smartphone","modified","created"
 "","1","index","","","<div id=""news"" class=""clearfix"">
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
@@ -14,7 +14,7 @@
 <?php $bcBaser->js('/feed/ajax/1') ?>
 </div>
 </div>
-</div>","","1","/index","","1","","","0","",""
+</div>","","1","/index","","1","","","0","","","","",""
 "","2","about","会社案内","baserCMS inc.の会社案内ページ","<h2 class=""contents-head"">会社案内</h2>
 
 <h3 class=""contents-head"">会社データ</h3>
@@ -34,7 +34,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <h3 class=""contents-head"">アクセスマップ</h3>
 <div class=""section"">
 <?php $bcBaser->element(""googlemaps"", array(""width"" => 585)) ?>
-</div>","","1","/about","","1","","","0","",""
+</div>","","1","/about","","1","","","0","","","","",""
 "","3","service","サービス","baserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
 
 <div class=""section"">
@@ -62,7 +62,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 </p>
-</div>","","1","/service","","1","","","0","",""
+</div>","","1","/service","","1","","","0","","","","",""
 "","4","icons","アイコンの使い方","50種類のアイコンを自由にカスタマイズしよう。","<h2>
 	アイコンの使い方</h2>
 <h3>
@@ -163,7 +163,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <ul class=""section"">
 	<li><?php $bcBaser->link(""新着情報"",""/news/index"") ?></li>
 	<li><?php $bcBaser->link(""お問い合わせ"",""/contact/index"") ?>	</li>
-</ul>","","1","/sitemap","","1","","","0","",""
+</ul>","","1","/sitemap","","1","","","0","","","","",""
 "","5","index","","","<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">メインメニュー</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
@@ -179,7 +179,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
 <div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">baserCMS NEWS</span> </div>
 <hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $bcBaser->feed(1) ?>","1","1","/mobile/index","","1","","","0","",""
+<?php $bcBaser->feed(1) ?>","1","1","/mobile/index","","1","","","0","","","","",""
 "","6","index","","","<div id=""news"" class=""clearfix"">
 <div class=""news"" style=""margin-right:28px;"">
 <h2 id=""newsHead01"">NEWS RELEASE</h2>
@@ -193,7 +193,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <?php $bcBaser->js('/s/feed/ajax/1') ?>
 </div>
 </div>
-</div>","2","1","/smartphone/index","","1","","","0","",""
+</div>","2","1","/smartphone/index","","1","","","0","","","","",""
 "","7","about","会社案内","baserCMS inc.の会社案内ページ","<h2 class=""contents-head"">会社案内</h2>
 <h3 class=""contents-head"">会社データ</h3>
 <div class=""section"">
@@ -209,7 +209,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <h3 class=""contents-head"">アクセスマップ</h3>
 <div class=""section"">
 <?php $bcBaser->element(""googlemaps"", array(""width"" => 585)) ?>
-</div>","2","1","/smartphone/about","","1","","","0","",""
+</div>","2","1","/smartphone/about","","1","","","0","","","","",""
 "","8","service","サービス","baserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
 <div class=""section"">
 <p>
@@ -234,13 +234,13 @@ WEBシステム開発事業（ダミー）</td></tr>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 </p>
-</div>","2","1","/smartphone/service","","1","","","0","",""
+</div>","2","1","/smartphone/service","","1","","","0","","","","",""
 "","9","sitemap","サイトマップ","baserCMS inc.のサイトマップページ","<h2 class=""contents-head"">サイトマップ</h2>
 <?php $bcBaser->sitemap() ?>
 <ul class=""section sitemap"">
 	<li><?php $bcBaser->link(""新着情報"",""/s/news/index"") ?></li>
 	<li><?php $bcBaser->link(""お問い合わせ"",""/s/contact/index"") ?>	</li>
-</ul>","2","1","/smartphone/sitemap","","1","","","0","",""
+</ul>","2","1","/smartphone/sitemap","","1","","","0","","","","",""
 "","10","icons","アイコンの使い方","50種類のアイコンを自由にカスタマイズしよう。","<h2>
 	アイコンの使い方</h2>
 <h3>
@@ -335,4 +335,4 @@ WEBシステム開発事業（ダミー）</td></tr>
 <p>
 	&nbsp;</p>
 <p style=""text-align: center;"">
-	<?php $bcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","2","1","/smartphone/icons","","1","","","0","",""
+	<?php $bcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","2","1","/smartphone/icons","","1","","","0","","","","",""
