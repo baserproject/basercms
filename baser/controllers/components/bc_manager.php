@@ -242,6 +242,7 @@ class BcManagerComponent extends Object {
 			$data['Plugin']['title'] = $title;
 			$data['Plugin']['version'] = $version;
 			$data['Plugin']['status'] = true;
+			$data['Plugin']['db_inited'] = true;
 			$Plugin->create($data);
 			if(!$Plugin->save()) {
 				$result = false;
