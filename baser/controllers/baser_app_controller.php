@@ -844,11 +844,13 @@ class BaserAppController extends Controller {
 		$this->BcEmail->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$this->BcEmail->delivery = 'smtp';	// mail or smtp or debug
-			$this->BcEmail->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
-					'port'	=>25,
-					'timeout'	=>30,
-					'username'=>($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user']:null,
-					'password'=>($this->siteConfigs['smtp_password'])?$this->siteConfigs['smtp_password']:null);
+			$this->BcEmail->smtpOptions = array(
+					'host'		=> $this->siteConfigs['smtp_host'],
+					'port'		=> ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25,
+					'timeout'	=> 30,
+					'username'	=> ($this->siteConfigs['smtp_user'])? $this->siteConfigs['smtp_user'] : null,
+					'password'	=> ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : nul
+			);
 		} else {
 			$this->BcEmail->delivery = "mail";
 		}

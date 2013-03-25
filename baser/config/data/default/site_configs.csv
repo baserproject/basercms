@@ -11,6 +11,7 @@
 "","smtp_host","","",""
 "","smtp_user","","",""
 "","smtp_password","","",""
+"","smtp_port","","",""
 "","formal_name","baserCMS inc. [ƒfƒ‚]","",""
 "","mobile","1","",""
 "","admin_list_num","10","",""
