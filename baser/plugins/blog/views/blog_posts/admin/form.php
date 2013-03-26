@@ -36,7 +36,7 @@ $(function(){
 /**
  * プレビューボタンクリック時イベント
  */
-	var useContent = $("#UseContent").html();
+	var useContent = $("#UseContent").val();
 	$("#BtnPreview").click(function(){
 		
 		if(useContent) {
