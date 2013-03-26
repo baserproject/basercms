@@ -193,6 +193,10 @@ $(function(){
 <?php echo $bcForm->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
 <?php echo $bcForm->hidden('BlogPost.mode') ?>
 
+<?php if(empty($blogContent['BlogContent']['use_content'])): ?>
+<?php echo $bcForm->hidden('BlogPost.content') ?>
+<?php endif ?>
+
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
