@@ -29,7 +29,13 @@ if (!defined('PHP5')) {
 if (!defined('E_DEPRECATED')) {
 	define('E_DEPRECATED', 8192);
 }
-error_reporting(E_ALL & ~E_DEPRECATED);
+// CUSTOMIZE 2013/03/26 ryuring
+// PHP 5.3以降対応の為、E_STRICT を除外
+// >>>
+//error_reporting(E_ALL & ~E_DEPRECATED);
+// --
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+// <<<
 /**
  * Configuration, directory layout and standard libraries
  */
