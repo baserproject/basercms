@@ -275,8 +275,8 @@ class BcAppHelper extends Helper {
 			array_push($url, $url['id']);
 			unset($url['id']);
 		}
-		
-		if (!isset($url['admin']) && !empty($this->params['admin'])) {
+
+		if (is_array($url) && !isset($url['admin']) && !empty($this->params['admin'])) {
 			$url['admin'] = true;
 		}
 		

@@ -23,11 +23,13 @@
 <li>
 	<p class="theme-name"><strong><?php echo $data['title'] ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</p>
 	<p class="theme-screenshot">
-		<?php if($data['screenshot']): ?>
 		<a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($data['name']) ?>">
+<?php if($data['screenshot']): ?>
 			<?php $bcBaser->img('/themed/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
+<?php else: ?>
+			<?php $bcBaser->img('admin/no-screenshot.png', array('alt'=>$data['title'])) ?>
+<?php endif ?>
 		</a>
-		<?php endif ?>
 	</p>
 	<p class="row-tools">
 <?php if($data['name']!=$bcBaser->siteConfig['theme']): ?>
@@ -42,22 +44,30 @@
 <?php endif ?>
 	</p>
 	<p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
-	<p class="theme-author">制作者：<?php if(!empty($data['url']) && !empty($data['author'])): ?>
+	<p class="theme-author">制作者：
+<?php if(!empty($data['url']) && !empty($data['author'])): ?>
 		<?php $bcBaser->link($data['author'],$data['url'],array('target'=>'_blank')) ?>
-		<?php else: ?>
+<?php else: ?>
 		<?php echo $data['author'] ?>
-		<?php endif ?>
+<?php endif ?>
 	</p>
 	<div style='display:none'>
 		<div id="<?php echo 'Contents' . Inflector::camelize($data['name']) ?>" class="theme-popup-contents clearfix">
-			<div class="theme-screenshot"><?php $bcBaser->img('/themed/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?></div>
+			<div class="theme-screenshot">
+<?php if($data['screenshot']): ?>
+				<?php $bcBaser->img('/themed/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
+<?php else: ?>
+				<?php $bcBaser->img('admin/no-screenshot.png', array('alt'=>$data['title'])) ?>
+<?php endif ?>
+			</div>
 			<div class="theme-name"><strong><?php echo $data['title'] ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</div>
 			<div class="theme-version">バージョン：<?php echo $data['version'] ?></div>
-			<div class="theme-author">制作者：<?php if(!empty($data['url']) && !empty($data['author'])): ?>
+			<div class="theme-author">制作者：
+<?php if(!empty($data['url']) && !empty($data['author'])): ?>
 				<?php $bcBaser->link($data['author'],$data['url'],array('target'=>'_blank')) ?>
-				<?php else: ?>
+<?php else: ?>
 				<?php echo $data['author'] ?>
-				<?php endif ?>
+<?php endif ?>
 			</div>
 			<div class="theme-description"><?php echo nl2br($data['description']) ?></div>
 		</div>

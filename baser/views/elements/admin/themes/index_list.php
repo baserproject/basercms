@@ -33,6 +33,8 @@ $(function(){
 		<div class="theme-screenshot">
 			<?php if($currentTheme['screenshot']): ?>
 			<?php $bcBaser->img('/themed/'.$currentTheme['name'].'/screenshot.png',array('alt'=>$currentTheme['title'])) ?>
+			<?php else: ?>
+			<?php $bcBaser->img('admin/no-screenshot.png',array('alt'=>$currentTheme['title'])) ?>
 			<?php endif ?>
 		</div>
 		<p class="row-tools">

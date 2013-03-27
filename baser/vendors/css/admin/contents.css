@@ -1301,3 +1301,16 @@ background: #888;
 	padding-top:10px;
 	margin-top:10px;
 }
+#CurrentTheme {
+	position: relative;
+}
+.current-theme-left .error-message {
+	margin:0;
+	white-space:normal;
+	display: block;
+	line-height: 16px;
+	top:56px;
+	position: absolute;
+	padding:7px;
+	width:286px;
+}
