@@ -1078,17 +1078,22 @@ class BaserAppController extends Controller {
 			if($user) {
 				$userModel = $this->Session->read('Auth.userModel');
 				$authPrefixSettings = Configure::read('BcAuthPrefix');
-				foreach($authPrefixSettings as $key => $authPrefixSetting) {
-					if(!empty($authPrefixSetting['userModel'])) {
-						$currentUserModel = $authPrefixSetting['userModel'];
-					} else {
-						$currentUserModel = 'User';
-					}
-					if($currentUserModel == $userModel) {
-						$authPrefix = $key;
-						break;
+				if(!empty($user['User']['authPrefix']) && !empty($authPrefixSettings[$user['User']['authPrefix']])) {
+					$authPrefix = $user['User']['authPrefix'];
+				} else {
+					foreach($authPrefixSettings as $key => $authPrefixSetting) {
+						if(!empty($authPrefixSetting['userModel'])) {
+							$currentUserModel = $authPrefixSetting['userModel'];
+						} else {
+							$currentUserModel = 'User';
+						}
+						if($currentUserModel == $userModel) {
+							$authPrefix = $key;
+							break;
+						}
 					}
 				}
+
 			}
 			if(!$authPrefix) {
 				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
