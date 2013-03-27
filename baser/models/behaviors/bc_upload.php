@@ -98,9 +98,15 @@ class BcUploadBehavior extends ModelBehavior {
 			'saveDir'	=> '',
 			'fields'	=> array()
 		), $config);
-		$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
+		if($this->settings['saveDir']) {
+			$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
+		} else {
+			$this->savePath = WWW_ROOT . 'files'.DS;
+		}
+		
 		if(!is_dir($this->savePath)) {
 			$Folder = new Folder();
+			
 			$Folder->create($this->savePath);
 			$Folder->chmod($this->savePath, 0777, true);
 		}
