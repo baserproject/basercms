@@ -72,7 +72,6 @@ $(function(){
 		<?php $bcBaser->element('themes/index_row', array('data' => $data)) ?>
 	<?php endforeach; ?>
 <?php else: ?>
-</ul>
-<p class="no-data">データが見つかりませんでした。</p>
+	<li class="no-data">変更できるテーマがありません。<br /><a href="http://basercms.net/themes/index" target="_blank">baserCMSの公式サイト</a>では無償のテーマが公開されています。</li>
 <?php endif; ?>
-
+</ul>

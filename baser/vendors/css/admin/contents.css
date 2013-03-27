@@ -1229,6 +1229,26 @@ background: #888;
 .list-panel .theme-author a:hover {
 	text-decoration: none;
 }
+.list-panel li {
+	position: relative;
+}
+.list-panel .error-message {
+	margin:0;
+	white-space:normal;
+	display: block;
+	line-height: 16px;
+	top:44px;
+	position: absolute;
+	padding:7px;
+	width:230px;
+}
+.list-panel .no-data {
+	float:none;
+	width:auto;
+	margin:0;
+	text-align: center;
+	height: auto;
+}
 #CurrentTheme {
 	border:5px solid #e2e2e2;
 	padding:20px;	
