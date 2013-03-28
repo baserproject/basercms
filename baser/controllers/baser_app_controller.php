@@ -1196,7 +1196,7 @@ class BaserAppController extends Controller {
 	function executeHook($hook) {
 
 		$args = func_get_args();
-		return call_user_func_array(array(&$this, 'dispatchPluginHook'), $args);
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
 
 	}
 /**
@@ -1209,7 +1209,7 @@ class BaserAppController extends Controller {
 		
 		$args = func_get_args();
 		$args[0] =& $this;
-		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
+		return call_user_func_array( array( $this->BcPluginHook, $hook ), $args );
 		
 	}
 /**
@@ -1396,9 +1396,9 @@ class BaserAppController extends Controller {
 		
 		// CUSTOMIZE MODIFY 2012/04/22 ryuring
 		// >>>
-		//return call_user_func_array(array(&$this, $action), $args);
+		//return call_user_func_array(array($this, $action), $args);
 		// ---
-		$return = call_user_func_array(array(&$this, $action), $args);
+		$return = call_user_func_array(array($this, $action), $args);
 		$this->action = $_action;
 		return $return;
 		// <<<

@@ -1542,7 +1542,7 @@ class BaserAppModel extends Model {
 		
 		$args = func_get_args();
 		$args[0] =& $this;
-		return call_user_func_array( array( &$this->Behaviors->BcPluginHook, $hook ), $args );
+		return call_user_func_array( array( $this->Behaviors->BcPluginHook, $hook ), $args );
 		
 	}
 /**
@@ -1556,7 +1556,7 @@ class BaserAppModel extends Model {
 		
 		$args = func_get_args();
 		array_unshift($args, $this);
-		return call_user_func_array(array(&$this->Behaviors->BcPluginHook, 'executeHook'), $args);
+		return call_user_func_array(array($this->Behaviors->BcPluginHook, 'executeHook'), $args);
 		
 	}
 }

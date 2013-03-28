@@ -62,7 +62,7 @@ class BcReplacePrefixComponent extends Object {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	function initialize($controller) {
 		
 		$this->_methods = $controller->methods;
 		
@@ -93,7 +93,7 @@ class BcReplacePrefixComponent extends Object {
  * @return	void
  * @access	public
  */
-	function startup(&$controller) {
+	function startup($controller) {
 
 		if(in_array($controller->action, $this->_methods)) {
 			return;

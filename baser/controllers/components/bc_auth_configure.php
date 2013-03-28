@@ -38,7 +38,7 @@ class  BcAuthConfigureComponent extends Object {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	function initialize($controller) {
 		
 		$this->controller = $controller;
 		

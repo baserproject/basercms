@@ -1468,7 +1468,7 @@ class BcBaserHelper extends AppHelper {
 
 		foreach($this->pluginBasers as $pluginBaser){
 			if(method_exists($pluginBaser,$method)){
-				return call_user_func_array(array(&$pluginBaser, $method), $params);
+				return call_user_func_array(array($pluginBaser, $method), $params);
 			}
 		}
         return null;

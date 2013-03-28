@@ -48,7 +48,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	function initialize($controller) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -117,7 +117,7 @@ class BcPluginHookComponent extends Overloadable {
 		unset($args[0]);
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), $args);
 			}
 		}
 		
@@ -129,7 +129,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function startup(&$controller) {
+	function startup($controller) {
 		
 		$this->executeHook('startup',$controller);
 		
@@ -141,7 +141,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function beforeRender(&$controller) {
+	function beforeRender($controller) {
 		
 		$this->executeHook('beforeRender',$controller);
 		
@@ -153,7 +153,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
+	function beforeRedirect($controller, $url, $status = null, $exit = true) {
 		
 		$this->executeHook('beforeRedirect', $controller, $url, $status, $exit);
 		
@@ -165,7 +165,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function shutdown(&$controller) {
+	function shutdown($controller) {
 		
 		$this->executeHook('shutdown', $controller);
 		
@@ -177,7 +177,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function afterPageAdd(&$controller) {
+	function afterPageAdd($controller) {
 		
 		$this->executeHook('afterPageAdd', $controller);
 		
@@ -189,7 +189,7 @@ class BcPluginHookComponent extends Overloadable {
  * @return void
  * @access public
  */
-	function afterPageEdit(&$controller) {
+	function afterPageEdit($controller) {
 		
 		$this->executeHook('afterPageEdit', $controller);
 		
@@ -208,7 +208,7 @@ class BcPluginHookComponent extends Overloadable {
 		$args = $args[1];
 		$Object = $args[0];
 		if(method_exists($Object, $method)){
-			return call_user_func_array( array( &$Object, $method ), $args );
+			return call_user_func_array( array( $Object, $method ), $args );
 		}
 
 	}

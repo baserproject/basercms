@@ -210,7 +210,7 @@ class BcAppHelper extends Helper {
 	function executeHook($hook) {
 		
 		$args = func_get_args();
-		return call_user_func_array(array(&$this, 'dispatchPluginHook'), $args);
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
 		
 	}
 /**
@@ -228,7 +228,7 @@ class BcAppHelper extends Helper {
 		$args = func_get_args();
 		$args[0] =& $this;
 
-		return call_user_func_array(array(&$this->_view->loaded['bcPluginHook'], $hook), $args);
+		return call_user_func_array(array($this->_view->loaded['bcPluginHook'], $hook), $args);
 		
 	}
 /**
