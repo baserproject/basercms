@@ -130,6 +130,7 @@ class BlogPost extends BlogAppModel {
 					'message'	=> '投稿者を選択してください。')
 		)
 	);
+	var $__saveDir = '';
 /**
  * アップロードビヘイビアの設定
  *
@@ -156,8 +157,9 @@ class BlogPost extends BlogAppModel {
 		}
 		
 		$settings = $this->Behaviors->BcUpload->settings;
-		if(!preg_match('/' . preg_quote("blog" . DS . $data['name'] . DS . "blog_posts", '/') . '$/', $settings['saveDir'])) {
-			$settings['saveDir'] .= "blog" . DS . $data['name'] . DS . "blog_posts";
+		
+		if(empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '/', $settings['saveDir'])) {
+			$settings['saveDir'] = "blog" . DS . $data['name'] . DS . "blog_posts";
 		}
 		
 		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;

@@ -15,3 +15,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+function p(data) {
+	console.log(data);
+}
