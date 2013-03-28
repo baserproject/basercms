@@ -261,4 +261,3 @@ class ConnectionManager extends Object {
 		}
 	}
 }
-?>

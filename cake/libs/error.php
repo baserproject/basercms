@@ -374,4 +374,3 @@ class ErrorHandler extends Object {
 		echo $this->controller->output;
 	}
 }
-?>

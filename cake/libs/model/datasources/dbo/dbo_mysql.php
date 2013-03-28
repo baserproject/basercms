@@ -669,4 +669,3 @@ class DboMysql extends DboMysqlBase {
 		return mysql_client_encoding($this->connection);
 	}
 }
-?>

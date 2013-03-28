@@ -281,4 +281,3 @@ class Flay extends Object{
 		return $out;
 	}
 }
-?>

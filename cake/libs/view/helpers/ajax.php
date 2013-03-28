@@ -987,5 +987,3 @@ class AjaxHelper extends AppHelper {
 		}
 	}
 }
-
-?>

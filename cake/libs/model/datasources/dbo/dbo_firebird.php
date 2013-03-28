@@ -518,4 +518,3 @@ class DboFirebird extends DboSource {
 		}
 	}
 }
-?>

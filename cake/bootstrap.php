@@ -54,4 +54,3 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 	$url = null;
 
 	require CAKE . 'dispatcher.php';
-?>

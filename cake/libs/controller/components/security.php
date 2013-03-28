@@ -691,5 +691,3 @@ class SecurityComponent extends Object {
 		}
 	}
 }
-
-?>

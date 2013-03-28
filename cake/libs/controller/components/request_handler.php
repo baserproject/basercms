@@ -739,5 +739,3 @@ class RequestHandlerComponent extends Object {
 		$this->__typesInitialized = true;
 	}
 }
-
-?>

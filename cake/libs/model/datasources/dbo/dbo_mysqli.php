@@ -312,4 +312,3 @@ class DboMysqli extends DboMysqlBase {
 		return is_object($this->_result);
 	}
 }
-?>

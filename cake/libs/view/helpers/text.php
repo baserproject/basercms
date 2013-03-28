@@ -335,4 +335,3 @@ class TextHelper extends AppHelper {
  * @codeCoverageIgnoreEnd
  */
 }
-?>

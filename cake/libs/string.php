@@ -324,4 +324,3 @@ class String extends Object {
 		return $str;
 	}
 }
-?>

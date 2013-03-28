@@ -91,4 +91,3 @@ class ThemeView extends View {
 		return $paths;
 	}
 }
-?>

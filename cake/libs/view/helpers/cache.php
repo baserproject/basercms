@@ -326,4 +326,3 @@ class CacheHelper extends AppHelper {
 		return cache('views' . DS . $cache, $file, $timestamp);
 	}
 }
-?>

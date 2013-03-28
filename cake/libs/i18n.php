@@ -467,4 +467,3 @@ class I18n extends Object {
 		$this->__domains = array();
 	}
 }
-?>
