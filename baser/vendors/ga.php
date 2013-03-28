@@ -190,4 +190,3 @@
   }
 ?><?php
   trackPageView();
-?>

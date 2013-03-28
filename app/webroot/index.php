@@ -113,4 +113,3 @@ $fileName = $_SERVER['SCRIPT_FILENAME'];
 	if (Configure::read() > 0) {
 		echo "<!-- " . round(getMicrotime() - $TIME_START, 4) . "s -->";
 	}
-?>
