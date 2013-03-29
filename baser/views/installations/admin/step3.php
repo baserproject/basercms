@@ -180,10 +180,10 @@ $(document).ready( function() {
 				<li id="dbInfo" class="clearfix">
 					<label>データベース情報</label>
 					<br />
-					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
-						<small>プレフィックス</small> </div>
 					<div class="float-left"> <?php echo $bcForm->input('Installation.dbName',array('type' => 'text', 'maxlength'=>'100')); ?><br />
 						<small>データベース名</small> </div>
+					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
+						<small>プレフィックス</small> </div>
 					<div class="float-left"> <?php echo $bcForm->input('Installation.dbPort',array('type' => 'text', 'maxlength'=>'5','size'=>5)); ?><br />
 						<small>ポート</small> </div>
 					<?php echo $bcForm->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>
@@ -198,7 +198,10 @@ $(document).ready( function() {
 			
 			<ul>
 				<li><label>初期データ</label><br />
-					<?php echo $bcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?></li>
+					<?php echo $bcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?><br /><br />
+					<small>※ コアパッケージや、テーマが保有するデモンストレーション用データを選択します。<br />
+						※ 初めてインストールされる方は、「nada icons（ default ）」を選択してください。</small>
+				</li>
 			</ul>
 		</div>
 		
