@@ -146,7 +146,8 @@ class BcUploadHelper extends FormHelper {
 		if(isset($settings['saveDir'])) {
 			if($value && !is_array($value)) {
 				$uploadSettings = $settings['fields'][$field];
-				if($uploadSettings['type']=='image') {
+				$ext = decodeContent('', $value);
+				if($uploadSettings['type']=='image' || in_array($ext, $model->Behaviors->BcUpload->imgExts)) {
 					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link);
 					if($tmp) {
 						$options['tmp'] = true;
