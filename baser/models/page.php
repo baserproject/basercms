@@ -653,26 +653,25 @@ class Page extends AppModel {
  */
 	function pageExists($check) {
 		
+		$conditions['Page.name'] = $this->data['Page']['name'];
 		if($this->exists()) {
+			$conditions['Page.id <>'] = $this->data['Page']['id'];
+		}
+		if(empty($this->data['Page']['page_category_id'])) {
+			if(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
+				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
+				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
+			} else {
+				$conditions['Page.page_category_id'] = NULL;
+			}
+		}else {
+			$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
+		}
+		if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 			return true;
 		}else {
-			$conditions['Page.name'] = $this->data['Page']['name'];
-			if(empty($this->data['Page']['page_category_id'])) {
-				if(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
-					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
-				} elseif(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
-					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
-				} else {
-					$conditions['Page.page_category_id'] = NULL;
-				}
-			}else {
-				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
-			}
-			if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
-				return true;
-			}else {
-				return !file_exists($this->_getPageFilePath($this->data));
-			}
+			return !file_exists($this->_getPageFilePath($this->data));
 		}
 		
 	}
