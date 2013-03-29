@@ -1434,27 +1434,27 @@ class BcManagerComponent extends Object {
 		);
 		
 		if(!$status['coreFileWritable']) {
-			chmod(CONFIGS.'core.php', 0666);
+			@chmod(CONFIGS.'core.php', 0666);
 			$status['coreFileWritable'] = is_writable(CONFIGS.'core.php');
 		}
 		if(!$status['configDirWritable']) {
-			chmod(CONFIGS, 0777);
+			@chmod(CONFIGS, 0777);
 			$status['configDirWritable'] = is_writable(CONFIGS);
 		}
 		if(!$status['themeDirWritable']) {
-			chmod(WWW_ROOT.'themed', 0777);
+			@chmod(WWW_ROOT.'themed', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
 		}
 		if(!$status['filesDirWritable']) {
-			chmod(WWW_ROOT.'files', 0777);
+			@chmod(WWW_ROOT.'files', 0777);
 			$status['filesDirWritable'] = is_writable(WWW_ROOT.'files');
 		}
 		if(!$status['tmpDirWritable']) {
-			chmod(TMP, 0777);
+			@chmod(TMP, 0777);
 			$status['tmpDirWritable'] = is_writable(TMP);
 		}
 		if(!$status['dbDirWritable']) {
-			chmod(APP.'db', 0777);
+			@chmod(APP.'db', 0777);
 			$status['dbDirWritable'] = is_writable(APP.'db');
 		}
 		
