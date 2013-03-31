@@ -45,7 +45,8 @@ class BcUploadHelper extends FormHelper {
 			'imgsize'	=> 'midium',	// 画像サイズ
 			'rel'		=> '',			// rel属性
 			'title'		=> '',			// タイトル属性
-			'link'		=> true			// 大きいサイズの画像へのリンク有無
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
+			'delCheck' => true
 		), $options);
 		
 		extract($options);
@@ -54,12 +55,14 @@ class BcUploadHelper extends FormHelper {
 		unset($options['rel']);
 		unset($options['title']);
 		unset($options['link']);
+		unset($options['delCheck']);
 		
 		$linkOptions = array(
 			'imgsize'	=> $imgsize,
 			'rel'		=> $rel,
 			'title'		=> $title,
-			'link'		=> $link
+			'link'		=> $link,
+			'delCheck' => $delCheck
 		);
 		
 		$options = $this->_initInputField($fieldName, $options);
@@ -69,7 +72,10 @@ class BcUploadHelper extends FormHelper {
 
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName,$options);
-		$delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
+		$delCheckTag = '';
+		if($linkOptions['delCheck']) {
+			$delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
+		}
 		$hiddenValue = $this->value($fieldName.'_');
 		$fileValue = $this->value($fieldName);
 		
