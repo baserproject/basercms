@@ -164,7 +164,7 @@ function loadAuthCaptcha(){
 	</div>
 	<?php endif ?>
 
-	<?php echo $bcForm->end(array('label'=>'　　送信する　　','id'=>'BlogCommentAddButton')) ?>
+	<?php echo $bcForm->end(array('label'=>'送信する','id'=>'BlogCommentAddButton', 'class' => 'button')) ?>
 	
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 	

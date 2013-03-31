@@ -785,8 +785,7 @@ table.row-table-01 tr.odd th,
 table.row-table-01 tr.odd td {
 	background-color:#EFEFEF;
 }
-.submit .button,
-.ui-widget-content .button{
+.submit .button {
 	color:#333;
 	border:1px solid #CCC;
 	cursor:pointer;
@@ -810,8 +809,7 @@ table.row-table-01 tr.odd td {
 	white-space: nowrap;
 	line-height: 24px;
 }
-.submit .button:hover,
-.ui-widget-content .button:hover{
+.submit .button:hover {
 	border:1px solid #CCC;
 	text-decoration:none;
 	background:#f4f4f4;
@@ -819,25 +817,21 @@ table.row-table-01 tr.odd td {
 	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
 	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
 }
-.submit .button:active,
-.ui-widget-content .button:active{
+.submit .button:active {
 	border:1px solid #CCC;text-decoration:none;
 	background:#cdcdcd;
 	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
 	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
 	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
 }
-.submit .button[disabled],
-.ui-widget-content .button[disabled]{
+.submit .button[disabled] {
 	opacity:.5
 }
-.submit a.button,
-.ui-widget-content a.button{
+.submit a.button {
 	padding-top:5px;
 	padding-bottom:5.5px;
 }
-*:first-child+html .submit a.button,
-.ui-widget-content a.button{
+*:first-child+html .submit a.button {
 	position:absolute;
 	top:1px;
 	padding-top:3px;
