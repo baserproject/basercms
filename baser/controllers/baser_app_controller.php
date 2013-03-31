@@ -383,8 +383,8 @@ class BaserAppController extends Controller {
 		
 		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
-			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
-				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
+			if(empty($this->siteConfigs['admin_theme']) && Configure::read('BcApp.adminTheme')) {
+				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
 			}
 			
 			if(empty($params['admin'])) {
