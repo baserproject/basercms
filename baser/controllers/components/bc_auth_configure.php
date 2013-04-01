@@ -120,6 +120,7 @@ class  BcAuthConfigureComponent extends Object {
 			$cookie = $controller->Cookie->read($auth->sessionKey);
 			if(!empty($cookie)) {
 				$auth->login($cookie);
+				$this->setSessionAuthPrefix();
 				return true;
 			}
 			// インストールモードの場合は無条件に認証なし
@@ -132,5 +133,21 @@ class  BcAuthConfigureComponent extends Object {
 		return true;
 
 	}
-
+/**
+ * ログイン時にセッションにauthPrefixを保存する 
+ */
+	function setSessionAuthPrefix() {
+		
+		$authPrefix = $this->controller->Session->read($this->controller->BcAuth->sessionKey . '.authPrefix');
+		if (!$authPrefix) {
+			if(empty($this->controller->params['prefix'])) {
+				$authPrefix = 'front';
+			} else {
+				$authPrefix = $this->controller->params['prefix'];
+			}
+			$this->controller->Session->write($this->controller->BcAuth->sessionKey . '.authPrefix', $authPrefix);
+		}
+		
+	}
+	
 }

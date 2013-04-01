@@ -132,7 +132,7 @@ class UsersController extends AppController {
 			return false;
 		}
 		if($this->BcAuth->login($this->data)) {
-			$this->_setSessionAuthPrefix();
+			$this->BcAuthConfigure->setSessionAuthPrefix();
 			return true;
 		}
 		return false;
@@ -155,7 +155,7 @@ class UsersController extends AppController {
 		
 		if($this->data) {
 			if ($user) {
-				$this->_setSessionAuthPrefix();
+				$this->BcAuthConfigure->setSessionAuthPrefix();
 				if (!empty($this->data[$userModel]['saved'])) {
 					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
@@ -195,22 +195,6 @@ class UsersController extends AppController {
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
 
-	}
-/**
- * ログイン時にセッションにauthPrefixを保存する 
- */
-	function _setSessionAuthPrefix() {
-		
-		$authPrefix = $this->Session->read($this->BcAuth->sessionKey . '.authPrefix');
-		if (!$authPrefix) {
-			if(empty($this->params['prefix'])) {
-				$authPrefix = 'front';
-			} else {
-				$authPrefix = $this->params['prefix'];
-			}
-			$this->Session->write($this->BcAuth->sessionKey . '.authPrefix', $authPrefix);
-		}
-		
 	}
 /**
  * [ADMIN] 代理ログイン
@@ -280,7 +264,7 @@ class UsersController extends AppController {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 		
-		$this->_setSessionAuthPrefix();
+		$this->BcAuthConfigure->setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->userModel;
 		
@@ -324,7 +308,7 @@ class UsersController extends AppController {
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];				// ハッシュ化されている
-		$this->Cookie->write('Auth.'.$userModel, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$this->Cookie->write($this->BcAuth->sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 
 	}
 /**
@@ -335,9 +319,8 @@ class UsersController extends AppController {
  */
 	function admin_logout() {
 
-		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
-		$this->Cookie->del('Auth.'.$userModel);
+		$this->Cookie->del($this->BcAuth->sessionKey);
 		$this->setMessage('ログアウトしました');
 		if(empty($this->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
