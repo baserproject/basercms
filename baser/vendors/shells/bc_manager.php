@@ -224,6 +224,8 @@ class BcManagerShell extends BcAppShell {
 			return;
 		}
 		
+		clearAllCache();
+		
 		$this->out("デモデータを初期化しました。");
 		
 	}

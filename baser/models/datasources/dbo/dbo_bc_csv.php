@@ -1039,10 +1039,12 @@ class DboBcCsv extends DboSource {
 
 		// ボディを生成
 		$body = '';
-		foreach($records as $key => $record) {
-			if(!eval($queryData['conditions'])) {
-				$record = $this->_convertRecord($record);
-				$body .= implode(",",$record)."\n";
+		if($records) {
+			foreach($records as $key => $record) {
+				if(!eval($queryData['conditions'])) {
+					$record = $this->_convertRecord($record);
+					$body .= implode(",",$record)."\n";
+				}
 			}
 		}
 

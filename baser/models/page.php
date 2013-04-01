@@ -391,6 +391,12 @@ class Page extends AppModel {
 		// モバイル未対応
 		$PageCategory = ClassRegistry::init('PageCategory');
 		$excludeIds = am($PageCategory->getAgentCategoryIds('mobile'), $PageCategory->getAgentCategoryIds('smartphone'));
+		
+		// インストール時取得できないのでハードコーディング
+		if(!$excludeIds) {
+			$excludeIds = array(1, 2);
+		}
+		
 		if(in_array($data['page_category_id'], $excludeIds)) {
 			return array();
 		}
@@ -559,6 +565,14 @@ class Page extends AppModel {
 		if($categoryId) {
 			$this->PageCategory->cacheQueries = false;
 			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
+			if(!$categoryPath) {
+				// インストール時データの取得ができないので暫定対応
+				if($categoryId == 1) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'mobile')));
+				} elseif($categoryId == 2) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'smartphone')));
+				}
+			}
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
 					$path .= $category['PageCategory']['name'].DS;
