@@ -351,7 +351,7 @@ class PluginsController extends AppController {
 			if($this->Plugin->save()) {
 				
 				clearAllCache();
-				$this->setMessage('新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。', false, true);
+				$this->setMessage('新規プラグイン「'.$name.'」を baserCMS に登録しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 
 			}else {
