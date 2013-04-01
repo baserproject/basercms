@@ -626,7 +626,7 @@ class Page extends AppModel {
  * @return string
  * @access public
  */
-	function addBaserPageTag($id,$contents,$title,$description, $code) {
+	function addBaserPageTag($id, $contents, $title, $description, $code) {
 		
 		$tag = array();
 		$tag[] = '<!-- BaserPageTagBegin -->';
@@ -636,9 +636,7 @@ class Page extends AppModel {
 			$tag[] = '<?php $bcBaser->setPageEditLink('.$id.') ?>';
 		}
 		if($code) {
-			$tag[] = '<?php';
 			$tag[] = trim($code);
-			$tag[] = '?>';
 		}
 		$tag []= '<!-- BaserPageTagEnd -->';
 		return implode("\n", $tag) . "\n\n" . $contents;

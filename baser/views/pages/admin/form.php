@@ -460,7 +460,7 @@ function pageTypeChengeHandler() {
 <div id ="formOptionBody" class="slide-body section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('Page.code', 'PHPコード') ?></th>
+			<th class="col-head"><?php echo $bcForm->label('Page.code', 'コード') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->input('Page.code', array(
 					'type'			=> 'textarea', 
@@ -470,8 +470,8 @@ function pageTypeChengeHandler() {
 				)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">
-					固定ページの本文には、ソースコードに切り替えてPHPコードを埋め込む事ができますが、間違って削除してしまわないようにこちらに入力する事もできます。<br />
-					PHPの開始タグ（&lt;php）と終了タグ（?&gt;）は不要です。
+					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
+					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
 				</div>
 				<?php echo $bcForm->error('Page.code') ?>
 			</td>
