@@ -1471,7 +1471,7 @@ class DboBcCsv extends DboSource {
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
-		$dropPattern = "/DROP\sTABLE\s+([^\s]+);/si";
+		$dropPattern = "/DROP\sTABLE\s+([^\s]+)/si";
 
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)) {
