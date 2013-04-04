@@ -753,6 +753,11 @@ class BlogController extends BlogAppController {
  */
 	function _createPreview($blogContentsId, $id) {
 
+		if(!empty($this->data['BlogPost']['eye_catch_'])) {
+			$this->data['BlogPost']['eye_catch'] = $this->data['BlogPost']['eye_catch_'];
+		} else {
+			$this->data['BlogPost']['eye_catch'] = '';
+		}
 		Cache::write('blog_posts_preview_'.$id, $this->data, '_cake_core_');
 		echo true;
 		exit();
