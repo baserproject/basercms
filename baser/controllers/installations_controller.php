@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		cake.app.controllers
@@ -81,7 +81,7 @@ class InstallationsController extends AppController {
 	function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
 
 		if ($errno==2) {
-			$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr);
+			$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr, true);
 			restore_error_handler();
 		}
 
@@ -208,6 +208,7 @@ class InstallationsController extends AppController {
 		
 		if(!$this->data) {
 			clearAllCache();
+			checkTmpFolders();
 			$this->data = $this->_getDefaultValuesStep3();
 		} else {
 
@@ -227,75 +228,28 @@ class InstallationsController extends AppController {
 				
 				ini_set("max_execution_time",180);
 				
-				$dbDataPattern = 'core.demo';
+				$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 				if(isset($this->data['Installation']['dbDataPattern'])) {
 					$dbDataPattern = $this->data['Installation']['dbDataPattern'];
 				}
 				$this->deleteAllTables();
 				if($this->_constructionDb($dbDataPattern)) {
-					$this->Session->setFlash("データベースの構築に成功しました。");
+					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
 					$db =& ConnectionManager::getDataSource('baser');
-					$this->Session->setFlash("データベースの構築中にエラーが発生しました。<br />".$db->error);
+					$this->setMessage("データベースの構築中にエラーが発生しました。<br />".$db->error, true);
 				}
 
 			}
 
 		}
 
-		$dbDataPatterns = $this->_getDbDataPatterns();
+		$dbDataPatterns = $this->BcManager->getAllDefaultDataPatterns();
 		$this->set('dbDataPatterns', $dbDataPatterns);
 		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
 		$this->set('dbsource', $dbsource);
 
-	}
-/**
- * 初期データのセットを読み込む
- * 
- * @return array 
- */
-	function _getDbDataPatterns() {
-		
-		$patterns = array();
-		// コア
-		$patterns = $this->_loadDbDataPatterns(BASER_CONFIGS.'data');
-		
-		// コアテーマ
-		$Folder = new Folder(BASER_CONFIGS.'theme');
-		$files = $Folder->read();
-		foreach($files[0] as $theme) {
-			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data', $theme));
-		}
-		// 外部テーマ
-		$Folder = new Folder(BASER_THEMES);
-		$files = $Folder->read();
-		foreach($files[0] as $theme) {
-			$patterns = array_merge($patterns, $this->_loadDbDataPatterns(BASER_THEMES.$theme.DS.'config'.DS.'data', $theme));
-		}
-		
-		return $patterns;
-		
-	}
-/**
- * 初期データのセットを読み込む
- * 
- * @param string $path
- * @param string $theme
- * @return array 
- */
-	function _loadDbDataPatterns($path, $theme = 'core') {
-		
-		$patterns = array();
-		$Folder = new Folder($path);
-		$files = $Folder->read();
-		if($files[0]) {
-			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
-			}
-		}
-		return $patterns;
-		
 	}
 /**
  * Step 4: データベース生成／管理者ユーザー作成
@@ -342,8 +296,7 @@ class InstallationsController extends AppController {
 					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
-					$message = '管理ユーザーを作成できませんでした。<br />'.$db->error;
-					$this->Session->setFlash($message);
+					$this->setMessage('管理ユーザーを作成できませんでした。<br />'.$db->error, true);
 				}
 			}
 		}
@@ -381,7 +334,6 @@ class InstallationsController extends AppController {
 		if(!BC_INSTALLED) {
 			$installationData = $this->Session->read('Installation');
 			$installationData['lastStep'] = true;
-			checkTmpFolders();
 			Configure::write('Cache.disable', false);
 			Cache::config('default', array('engine' => 'File'));
 			// インストールファイルでセッションの保存方法を切り替える為、インストール情報をキャッシュに保存
@@ -407,6 +359,9 @@ class InstallationsController extends AppController {
 
 		// テーマを配置する
 		$this->BcManager->deployTheme();
+		
+		// エディタテンプレート用の画像を配置
+		$this->BcManager->deployEditorTemplateImage();
 
 		// pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
@@ -457,6 +412,7 @@ class InstallationsController extends AppController {
  */
 	function _getDefaultValuesStep3() {
 
+		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
 			$_data = $this->_readDbSettingFromSession();
@@ -477,7 +433,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'bc_';
 			$data['Installation']['dbName'] = 'basercms';
-			$data['Installation']['dbDataPattern'] = 'core.demo';
+			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
 		}
 		
 		return $data;
@@ -594,20 +550,20 @@ class InstallationsController extends AppController {
 
 			if ($result) {
 				$db->execute("drop TABLE $randomtablename");
-				$this->Session->setFlash('データベースへの接続に成功しました。');
+				$this->setMessage('データベースへの接続に成功しました。');
 				return true;
 			} else {
 				
-				$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
+				$this->setMessage("データベースへの接続でエラーが発生しました。<br />".$db->error, true);
 			}
 
 		} else {
 			
 			if (!$this->Session->read('Message.flash.message')) {
 				if($db->connection){
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
+					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。", true);
 				} else {
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。");
+					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。", true);
 				}
 			}
 		}
@@ -701,12 +657,10 @@ class InstallationsController extends AppController {
 			}
 			
 			if(!$this->BcManager->reset($dbConfig)) {
-				$message = 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。';
+				$this->setMessage('baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。', true);
 			} else {
-				$message = 'baserCMSを初期化しました。';
+				$this->setMessage('baserCMSを初期化しました。');
 			}
-			
-			$this->Session->setFlash($message);
 			
 			// スマートURLオンの際、アクション名でリダイレクトを指定した場合、
 			// 環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述
@@ -742,4 +696,3 @@ class InstallationsController extends AppController {
 	}
 	
 }
-?>

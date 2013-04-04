@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -44,7 +44,11 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
+	<?php if($bcForm->value('BlogContent.status')): ?>
 	<strong>このブログのURL：<?php $bcBaser->link($bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index'),'/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
+	<?php else: ?>
+	<strong>このブログのURL：<?php echo $bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
+	<?php endif ?>
 </div>
 <?php endif ?>
 
@@ -89,7 +93,12 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogContent.description', 'ブログ説明文') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->ckeditor('BlogContent.description', null, array('width' => 'autos', 'height' => '120px', 'type' => 'simple')) ?>
+				<?php echo $bcForm->ckeditor('BlogContent.description', null, array(
+					'width'		=> 'auto', 
+					'height'	=> '120px', 
+					'type'		=> 'simple',
+					'enterBr'	=> @$siteConfig['editor_enter_br']
+				)) ?>
 				<?php echo $bcForm->error('BlogContent.description') ?>
 			</td>
 		</tr>
@@ -264,18 +273,43 @@ $(function(){
 					</ul>
 				</div>
 			</td>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogContent.eye_catch_size_width', 'アイキャッチ画像サイズ') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<span>PCサイズ</span>　
+				<small>[幅]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
+				<small>[高さ]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_thumb_height', array('type' => 'text', 'size' => '8')) ?><br />
+				<span>携帯サイズ</span>　
+				<small>[幅]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_mobile_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
+				<small>[高さ]</small><?php echo $bcForm->input('BlogContent.eye_catch_size_mobile_thumb_height', array('type' => 'text', 'size' => '8')) ?>
+				<?php echo $bcForm->error('BlogContent.eye_catch_size') ?>
+				<div id="helptextTemplate" class="helptext">
+					<ul>
+						<li>アイキャッチ画像のサイズを指定します。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('BlogContent.use_content', '記事概要') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('BlogContent.use_content', array(
+					'type'		=> 'radio',
+					'options'	=> $bcText->booleanDoList('利用'),
+					'legend'	=> false,
+					'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $bcForm->error('BlogContent.tag_use') ?>
+			</td>
 		</tr>
 	</table>
 </div>
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('BlogContent.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogContent.title')),
 			false); ?>
 <?php endif ?>

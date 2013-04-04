@@ -12,9 +12,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -37,7 +37,6 @@ CKEDITOR.plugins.add('draft',
 		editor.addCommand( 'disableDraft', CKEDITOR.plugins.draft.commands.disableDraft );
 		editor.addCommand( 'disablePublish', CKEDITOR.plugins.draft.commands.disablePublish );
 		editor.addCommand( 'synchronize', CKEDITOR.plugins.draft.commands.synchronize );
-		editor.addCommand( 'changeReadOnly', CKEDITOR.plugins.draft.commands.changeReadOnly );
 		// モード（publish Or draft）
 		editor.draftMode = '';
 		// 本稿用フィールドID
@@ -51,7 +50,6 @@ CKEDITOR.plugins.add('draft',
 		// 本稿利用可否
 		editor.draftPublishAvailable = true;
 
-		CKEDITOR.plugins.readyOnly.readyOnlyCommands = { readonly:1,maximize:1,showblocks:1,showborders:1,preview:1,save:1,copy:1,print:1,selectAll:1,about:1, changeDraft:1, changePublish:1, copyPublish:1, 'copyDraft':1 };
 		if ( editor.ui.addButton )
 		{
 			editor.ui.addButton( 'Draft', { label : '草　稿', command : 'changeDraft'});
@@ -65,9 +63,15 @@ CKEDITOR.plugins.add('draft',
 		editor.on('instanceReady', function(event) {
 			if(editor.draftReadOnlyPublish) {
 				if(event.editor.draftMode == 'publish') {
-					editor.readOnly(true); 
+					editor.setReadOnly(true);
+					event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 				}
-				event.editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
+			}
+			// 初期データを読み込む
+			if(event.editor.draftMode == 'publish') {
+				editor.setData($('#'+editor.draftPublishAreaId).val());
+			} else if(event.editor.draftMode == 'draft') {
+				editor.setData($('#'+editor.draftDraftAreaId).val());
 			}
 		});
 		editor.on('mode', function(event) {
@@ -121,17 +125,22 @@ CKEDITOR.plugins.draft =
 				if(editor.getCommand('changeDraft').state==CKEDITOR.TRISTATE_OFF) {
 					editor.getCommand('changeDraft').setState(editor.getCommand('changeDraft').state!=CKEDITOR.TRISTATE_ON?CKEDITOR.TRISTATE_ON:CKEDITOR.TRISTATE_OFF);
 					editor.getCommand('changePublish').setState(editor.getCommand('changePublish').state!=CKEDITOR.TRISTATE_ON?CKEDITOR.TRISTATE_ON:CKEDITOR.TRISTATE_OFF);
-					$('#'+editor.draftPublishAreaId).val(editor.getData());
-					editor.setData($('#'+editor.draftDraftAreaId).val());
 					editor.draftMode = 'draft';
+					$('#'+editor.draftPublishAreaId).val(editor.getData());
 					if (editor.draftReadOnlyPublish) {
-						editor.readOnly(false);
+						editor.setReadOnly(false);
+						editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
+						editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_OFF);
+						editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_ON);
+						editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_OFF);
 					}
+					editor.setData($('#'+editor.draftDraftAreaId).val());
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false,
-			editorFocus : false
+			editorFocus : false,
+			readOnly : 'disable'
 		},
 	/**
 	 * 本稿に切り替える
@@ -142,18 +151,23 @@ CKEDITOR.plugins.draft =
 				if(editor.getCommand('changePublish').state==CKEDITOR.TRISTATE_OFF) {
 					editor.getCommand('changePublish').setState(editor.getCommand('changePublish').state!=CKEDITOR.TRISTATE_ON?CKEDITOR.TRISTATE_ON:CKEDITOR.TRISTATE_OFF);
 					editor.getCommand('changeDraft').setState(editor.getCommand('changeDraft').state!=CKEDITOR.TRISTATE_ON?CKEDITOR.TRISTATE_ON:CKEDITOR.TRISTATE_OFF);
-					$('#'+editor.draftDraftAreaId).val(editor.getData());
-					editor.setData($('#'+editor.draftPublishAreaId).val());
 					editor.draftMode = 'publish';
+					$('#'+editor.draftDraftAreaId).val(editor.getData());
 					if (editor.draftReadOnlyPublish) {
-						editor.readOnly(true); 
+						editor.setReadOnly(true);
+						editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
+						editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_OFF);
+						editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_OFF);
+						editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_ON);
 					}
+					editor.setData($('#'+editor.draftPublishAreaId).val());
 				}
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			state: CKEDITOR.TRISTATE_ON,
 			canUndo : false,
-			editorFocus : false
+			editorFocus : false,
+			readOnly : 'disable'
 		},
 	/**
 	 * 草稿を本稿にコピーする
@@ -173,7 +187,8 @@ CKEDITOR.plugins.draft =
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false,
-			editorFocus : false
+			editorFocus : false,
+			readOnly : 'disable'
 		},
 	/**
 	 * 本稿を草稿にコピーする
@@ -193,7 +208,8 @@ CKEDITOR.plugins.draft =
 				CKEDITOR.plugins.draft.commands.setBackGroundColor.exec(editor);
 			},
 			canUndo : false,
-			editorFocus : false
+			editorFocus : false,
+			readOnly : 'disable'
 		},
 	/**
 	 * 草稿機能を無効にする
@@ -217,8 +233,8 @@ CKEDITOR.plugins.draft =
 		disablePublish :
 		{
 			exec : function( editor ) {
-				editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('changeDraft').setState(CKEDITOR.TRISTATE_ON);
+				editor.getCommand('changePublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyPublish').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.getCommand('copyDraft').setState(CKEDITOR.TRISTATE_DISABLED);
 				editor.draftMode = 'draft';
@@ -258,7 +274,7 @@ CKEDITOR.plugins.draft =
 				if(editor.mode == 'wysiwyg') {
 					setTimeout(function(){
 						$('#cke_contents_'+editor.name+' iframe').contents().find('body').css('background-color',color);
-					}, 200);
+					}, 300);
 				} else if(editor.mode == 'source') {
 					$('#cke_contents_'+editor.name+' textarea').css('background-color', color);
 				}

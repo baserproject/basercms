@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			baserCMS v 0.1.0
@@ -100,7 +100,7 @@ class User extends AppModel {
 				'message'	=> '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule'		=> array('maxLength', 50),
-				'message'	=> 'アカウント名は50文字以内で入力してください。'
+				'message'	=> '名前[姓]は50文字以内で入力してください。'
 			)
 		),
 		'real_name_2' => array(
@@ -193,18 +193,13 @@ class User extends AppModel {
  */
 	function getUserList($conditions = array()) {
 
-		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2'), 'conditions'=>$conditions));
+		$users = $this->find("all",array('fields'=>array('id','real_name_1','real_name_2', 'nickname'), 'conditions'=>$conditions));
 		$list = array();
 		if ($users) {
-			// 苗字が同じ場合にわかりにくいので、foreachで生成
-			//$this->set('users',Set::combine($users, "{n}.{$this->alias}.id", "{n}.{$this->alias}.real_name_1"));
+			App::import('Helper', 'BcBaser');
+			$BcBaser = new BcBaserHelper();
 			foreach($users as $key => $user) {
-				if($user[$this->alias]['real_name_2']) {
-					$name = $user[$this->alias]['real_name_1']." ".$user[$this->alias]['real_name_2'];
-				}else {
-					$name = $user[$this->alias]['real_name_1'];
-				}
-				$list[$user[$this->alias]['id']] = $name;
+				$list[$user[$this->alias]['id']] = $BcBaser->getUserName($user);;
 			}
 		}
 		return $list;
@@ -218,7 +213,7 @@ class User extends AppModel {
  */
 	function getDefaultValue() {
 
-		$data[$this->alias]['user_group_id'] = 1;
+		$data[$this->alias]['user_group_id'] = Configure::read('BcApp.adminGroupId');
 		return $data;
 
 	}
@@ -308,7 +303,7 @@ class User extends AppModel {
  */
 	function afterSave($created) {
 		parent::afterSave($created);
-		if($created) {
+		if($created && !empty($this->UserGroup)) {
 			$defaultFavorites = $this->UserGroup->field('default_favorites', array('UserGroup.id' => $this->data[$this->alias]['user_group_id']));
 			if($defaultFavorites) {
 				$defaultFavorites = unserialize($defaultFavorites);

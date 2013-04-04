@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -110,6 +110,14 @@ class PagesController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$datas = $this->paginate('Page');
+		foreach($datas as $key => $data) {
+			$path = $this->Page->PageCategory->getpath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
+			if($path) {
+				$titlePath = Set::extract('/PageCategory/title', $path);
+				$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+			}
+		}
+		
 		$this->set('datas',$datas);
 		
 		$this->_setAdminIndexViewData();
@@ -130,6 +138,19 @@ class PagesController extends AppController {
 			$pageCategories += $_pageCategories;
 		}
 
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
+		
 		$this->set('search', 'pages_index');
 		$this->set('pageCategories', $pageCategories);
 		$this->subMenuElements = array('pages','page_categories');
@@ -167,11 +188,8 @@ class PagesController extends AppController {
 					if($this->Page->allowedPublish($this->data['Page']['status'], $this->data['Page']['publish_begin'], $this->data['Page']['publish_end'])) {
 						clearViewCache();
 					}
-					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を追加しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
+
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を追加しました。', false, true);
 					
 					// afterPageAdd
 					$this->executeHook('afterPageAdd');
@@ -182,27 +200,57 @@ class PagesController extends AppController {
 					
 				}else {
 					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 					
 				}
 				
 			}else {
 				
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 				
 			}
 
 		}
 
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> true, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+		
 		/* 表示設定 */
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array('empty' => '指定しない', 'own' => true));
 		$this->set('categories', $categories);
 		$this->set('editable', true);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
-		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
@@ -222,13 +270,12 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
 			$this->data = $this->Page->read(null, $id);
-			$this->data['Page']['contents_tmp'] = $this->data['Page']['contents'];
 			$mobileIds = $this->PageCategory->getAgentCategoryIds('mobile');
 			$smartphoneIds = $this->PageCategory->getAgentCategoryIds('smartphone');
 			if(in_array($this->data['Page']['page_category_id'], $mobileIds)) {
@@ -240,7 +287,7 @@ class PagesController extends AppController {
 			}
 		}else {
 
-			$before = $this->Page->read(null, $id);
+			$before = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
 			if(empty($this->data['Page']['page_type'])) {
 				$this->data['Page']['page_type'] = 1;
 			}
@@ -255,7 +302,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 
-				if($this->Page->save($this->data,false)) {
+				if($this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
@@ -266,11 +313,8 @@ class PagesController extends AppController {
 						clearViewCache($this->data['Page']['url']);
 					}
 					
-					// 完了メッセージ
-					$message = '固定ページ「'.$this->data['Page']['name'].'」を更新しました。';
-					$this->Session->setFlash($message);
-					$this->Page->saveDbLog($message);
-					
+					$this->setMessage('固定ページ「'.$this->data['Page']['name'].'」を更新しました。', false, true);
+
 					// afterPageEdit
 					$this->executeHook('afterPageEdit');
 					
@@ -278,35 +322,32 @@ class PagesController extends AppController {
 					$this->redirect(array('action' => 'edit', $id));
 					
 				}else {
-					
-					$this->Session->setFlash('保存中にエラーが発生しました。');
-					
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
 
 		/* 表示設定 */
-		$currentOwnerId = '';
 		$currentPageCategoryId = '';
 		if(!empty($this->data['PageCategory']['id'])) {
 			$currentPageCategoryId = $this->data['PageCategory']['id'];
 		}
 		
 		if(empty($this->data['PageCategory']['id']) || $this->data['PageCategory']['name'] == 'mobile' || $this->data['PageCategory']['name'] == 'smartphone') {
-			$currentCatOwner = $this->siteConfigs['root_owner_id'];
+			$currentCatOwnerId = $this->siteConfigs['root_owner_id'];
 		} else {
-			$currentCatOwner = $this->data['PageCategory']['owner_id'];
+			$currentCatOwnerId = $this->data['PageCategory']['owner_id'];
 		}
 		
 		$categories = $this->getCategorySource($this->data['Page']['page_type'], array(
-			'currentOwnerId'		=> $currentOwnerId,
+			'currentOwnerId'		=> $currentCatOwnerId,
 			'currentPageCategoryId'	=> $currentPageCategoryId,
-			'own'			=> true,
-			'empty'			=> '指定しない'
+			'own'					=> true,
+			'empty'					=> '指定しない'
 		));
 		
 		$url = $this->convertViewUrl($this->data['Page']['url']);
@@ -315,14 +356,44 @@ class PagesController extends AppController {
 			$this->set('publishLink', $url);
 		}
 		
-		$this->set('currentCatOwnerId', $currentCatOwner);
+		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> false, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+
+		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('categories', $categories);
-		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentOwnerId));
+		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentCatOwnerId));
 		$this->set('previewId', $this->data['Page']['id']);
-		$this->set('reflectMobile', Configure::read('BcApp.mobile'));
-		$this->set('reflectSmartphone', Configure::read('BcApp.smartphone'));
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->set('url', $url);
 		$this->set('mobileExists',$this->Page->agentExists('mobile', $this->data));
 		$this->set('smartphoneExists',$this->Page->agentExists('smartphone', $this->data));
@@ -367,7 +438,7 @@ class PagesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -377,14 +448,11 @@ class PagesController extends AppController {
 		/* 削除処理 */
 		if($this->Page->del($id)) {
 			
-			// 完了メッセージ
-			$message = '固定ページ: '.$page['Page']['name'].' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Page->saveDbLog($message);
+			$this->setMessage('固定ページ: '.$page['Page']['name'].' を削除しました。', false, true);
 			
 		}else {
 			
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			
 		}
 
@@ -399,12 +467,17 @@ class PagesController extends AppController {
  */
 	function admin_entry_page_files() {
 
+		if(function_exists('ini_set')) {
+			ini_set('max_execution_time', 0);
+			ini_set('max_input_time', 0);
+			ini_set('memory_limit ', '256M');
+		}
+		
 		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = getViewPath().'pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
-		clearViewCache();
-		$message = $result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。';
-		$this->Session->setFlash($message);
+		clearAllCache();
+		$this->setMessage($result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。');
 		$this->redirect(array('action' => 'index'));
 
 	}
@@ -417,9 +490,9 @@ class PagesController extends AppController {
 	function admin_write_page_files() {
 
 		if($this->Page->createAllPageTemplate()){
-			$this->Session->setFlash('固定ページテンプレートの書き出しに成功しました。');
+			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
 		} else {
-			$this->Session->setFlash('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。');
+			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
 		$this->redirect(array('action' => 'index'));
@@ -436,21 +509,7 @@ class PagesController extends AppController {
 
 		$path = func_get_args();
 
-		$ext = '';
-		if(preg_match('/^pages/', $path[0])) {
-			// .htmlの拡張子がついている場合、$pathが正常に取得できないので取得しなおす
-			// 1.5.9 以前との互換性の為残しておく
-			$url = str_replace('pages','',$path[0]);
-			if($url == 'index.html') {
-				$url = '/index.html';
-			}
-			$params = Router::parse(str_replace('.html','',$path[0]));
-			$path = $params['pass'];
-			$this->params['pass'] = $path;
-			$ext = '.html';
-		} else {
-			$url = '/'.implode('/', $path);
-		}
+		$url = '/'.implode('/', $path);		
 
 		// モバイルディレクトリへのアクセスは Not Found
 		if(isset($path[0]) && ($path[0]==Configure::read('BcAgent.mobile.prefix') || $path[0]==Configure::read('BcAgent.smartphone.prefix'))){
@@ -472,29 +531,63 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
-		// 公開制限を確認
-		// 1.5.10 で、拡張子なしを標準に変更
-		// 拡張子なしの場合は、route.phpで認証がかかる為、ここでは処理を行わない
-		// 1.5.9 以前との互換性の為残しておく
-		if(($ext)) {
-			if(!$this->Page->checkPublish($url)) {
-				return $this->notFound();
-			}
-		}
 
+		$agentAlias = Configure::read('BcRequest.agentAlias');
+		if($agentAlias) {
+			$checkUrl = '/' . $agentAlias . $url;
+		} else {
+			$checkUrl = $url;
+		}
 		// キャッシュ設定
 		if(!isset($_SESSION['Auth']['User'])){
 			$this->helpers[] = 'Cache';
-			$this->cacheAction = $this->Page->getCacheTime($url);
+			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
 		
 		// ナビゲーションを取得
 		$this->crumbs = $this->_getCrumbs($url);
 
-		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
-		$this->render(join('/', $path));
+		
+		$data = $this->Page->findByUrl($checkUrl);
+		
+		$template = $layout = $agent = '';
+		
+		if(Configure::read('BcRequest.agent')) {
+			$agent = '_' . Configure::read('BcRequest.agent');
+		}
+		
+		if(empty($data['PageCategory']['id'])) {
+			if(!empty($this->siteConfigs['root_layout_template' . $agent])) {
+				$layout = $this->siteConfigs['root_layout_template' . $agent];
+			}
+			if(!empty($this->siteConfigs['root_content_template' . $agent])) {
+				$template = 'templates/' . $this->siteConfigs['root_content_template' . $agent];
+			} else {
+				$template = join('/', $path);
+			}
+		} else {
+			if(!empty($data['PageCategory']['layout_template'])) {
+				$layout = $data['PageCategory']['layout_template'];
+			}
+			if(!empty($data['PageCategory']['content_template'])) {
+				$template = 'templates/' . $data['PageCategory']['content_template'];
+			} else {
+				$template = join('/', $path);
+			}
+		}
+		
+		if($layout) {
+			$this->layout = $layout;
+		}
+		
+		if($template) {
+			$this->set('pagePath', join('/', $path));
+			$this->render($template);
+		} else {
+			$this->render(join('/', $path));
+		}
 
 	}
 /**
@@ -555,7 +648,7 @@ class PagesController extends AppController {
 	function mobile_display() {
 		
 		$path = func_get_args();
-		call_user_func_array( array( &$this, 'display' ), $path );
+		call_user_func_array( array( $this, 'display' ), $path );
 		
 	}
 /**
@@ -568,7 +661,7 @@ class PagesController extends AppController {
 	function smartphone_display() {
 		
 		$path = func_get_args();
-		call_user_func_array( array( &$this, 'display' ), $path );
+		call_user_func_array( array( $this, 'display' ), $path );
 		
 	}
 /**
@@ -599,7 +692,7 @@ class PagesController extends AppController {
 			exit();
 		}
 
-		Cache::write('page_preview_'.$id, $page);
+		Cache::write('page_preview_'.$id, $page, '_cake_core_');
 
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
@@ -633,7 +726,7 @@ class PagesController extends AppController {
  */
 	function admin_preview($id){
 
-		$page = Cache::read('page_preview_'.$id);
+		$page = Cache::read('page_preview_'.$id, '_cake_core_');
 
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
@@ -644,14 +737,22 @@ class PagesController extends AppController {
 				break;
 			}
 		}
-		if(Configure::read('BcRequest.agent')){
-			$this->layoutPath = Configure::read('BcAgent.'.Configure::read('BcRequest.agent').'.prefix');
-			if(Configure::read('BcRequest.agent') == 'mobile') {
+		$agent = Configure::read('BcRequest.agent');
+		if($agent){
+			$this->layoutPath = Configure::read('BcAgent.'.$agent.'.prefix');
+			if($agent == 'mobile') {
 				$this->helpers[] = BC_MOBILE_HELPER;
+			} elseif($agent == 'smartphone') {
+				$this->helpers[] = BC_SMARTPHONE_HELPER;
 			}
 		} else {
 			$this->layoutPath = '';
 		}
+		
+		$url = $page['Page']['url'];
+		$url = preg_replace('/^\/mobile\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
+		$url = preg_replace('/^\/smartphone\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		$url = preg_replace('/^\//i', '', $url);
 		
 		$this->preview = true;
 		$this->subDir = '';
@@ -659,14 +760,14 @@ class PagesController extends AppController {
 		$this->params['admin'] = '';
 		$this->params['controller'] = 'pages';
 		$this->params['action'] = 'display';
-		$this->params['url']['url'] = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
-		Configure::write('BcRequest.pureUrl', $this->params['url']['url']);
-		$this->here = $this->base.'/'.$this->params['url']['url'];
-		$this->crumbs = $this->_getCrumbs('/'.$this->params['url']['url']);
+		$this->params['url']['url'] = $url;
+		Configure::write('BcRequest.pureUrl', $url);
+		$this->here = $this->base . '/' . $url;
+		$this->crumbs = $this->_getCrumbs('/' . $url);
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);
-		Cache::delete('page_preview_'.$id);
+		Cache::delete('page_preview_'.$id, '_cake_core_');
 
 	}
 /**
@@ -966,16 +1067,18 @@ class PagesController extends AppController {
 		
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
-		$editable = false;
 
-		if(!$pageCategoryId) {
+		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
+		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
+		
+		if(!$pageCategoryId || $pageCategoryId == $mobileId || $pageCategoryId == $smartphoneId) {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
 			$currentCatOwner = $ownerId;
 		}
 		
 		return ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 
 	}
 /**
@@ -1170,4 +1273,3 @@ class PagesController extends AppController {
 	}
 	
 }
-?>

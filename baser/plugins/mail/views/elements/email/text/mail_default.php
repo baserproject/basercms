@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -54,7 +54,7 @@
 
 　<?php echo $mailConfig['site_name'] ?>
  
-　<?php echo $mailConfig['site_url'] ?>　<?php echo $mailConfig['site_email'] ?>
+　<?php echo $mailConfig['site_url'] ?> <?php echo $mailConfig['site_email'] ?>
 <?php if($mailConfig['site_tel']): ?>
 
 　TEL　<?php echo $mailConfig['site_tel'] ?><?php endif; ?>

@@ -192,4 +192,3 @@ class Security extends Object {
 		return $out;
 	}
 }
-?>

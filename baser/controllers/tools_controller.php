@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -83,14 +83,16 @@ class ToolsController extends AppController {
 				$messages = array();
 				if($this->_restoreDb($this->data)) {
 					$messages[] = 'データの復元が完了しました。';
+					$error = false;
 				} else {
 					$messages[] = 'データの復元に失敗しました。';
+					$error = true;
 				}
 				if(!$this->Page->createAllPageTemplate()){
 					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
 				}
 				if($messages) {
-					$this->Session->setFlash(implode('<br />', $messages));
+					$this->setMessage(implode('<br />', $messages), $error);
 				}
 				$this->redirect(array('action' => 'maintenance'));
 				break;
@@ -257,10 +259,10 @@ class ToolsController extends AppController {
 			$this->data['Tool']['connection'] = 'baser';
 		} else {
 			if(empty($this->data['Tool'])) {
-				$this->Session->setFlash('テーブルを選択してください。');
+				$this->setMessage('テーブルを選択してください。', true);
 			}else {
 				if(!$this->_resetTmpSchemaFolder()){
-					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+					$this->setMessage('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
 					$this->redirect(array('action' => 'write_schema'));
 				}
 				if($this->Tool->writeSchema($this->data, $path)) {
@@ -270,7 +272,7 @@ class ToolsController extends AppController {
 					$Simplezip->download('schemas');
 					exit();
 				}else {
-					$this->Session->setFlash('スキーマファイルの生成に失敗しました。');
+					$this->setMessage('スキーマファイルの生成に失敗しました。', true);
 				}
 			}
 		}
@@ -294,17 +296,17 @@ class ToolsController extends AppController {
 			if(is_uploaded_file($this->data['Tool']['schema_file']['tmp_name'])) {
 				$path = TMP.'schemas'.DS;
 				if(!$this->_resetTmpSchemaFolder()){
-					$this->Session->setFlash('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+					$this->setMessage('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
 					$this->redirect(array('action' => 'load_schema'));
 				}
 				if($this->Tool->loadSchema($this->data, $path)) {
-					$this->Session->setFlash('スキーマファイルの読み込みに成功しました。');
+					$this->setMessage('スキーマファイルの読み込みに成功しました。');
 					$this->redirect(array('action' => 'load_schema'));
 				} else {
-					$this->Session->setFlash('スキーマファイルの読み込みに失敗しました。');
+					$this->setMessage('スキーマファイルの読み込みに失敗しました。', true);
 				}
 			}else {
-				$this->Session->setFlash('ファイルアップロードに失敗しました。');
+				$this->setMessage('ファイルアップロードに失敗しました。', true);
 			}
 		}
 		/* 表示設定 */
@@ -326,4 +328,3 @@ class ToolsController extends AppController {
 	}
 	
 }
-?>

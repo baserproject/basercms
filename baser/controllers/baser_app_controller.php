@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -177,8 +177,11 @@ class BaserAppController extends Controller {
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
-				if(Configure::read('BcRequest.agent') == 'mobile') {
+				$agent = Configure::read('BcRequest.agent');
+				if($agent == 'mobile') {
 					$this->helpers[] = BC_MOBILE_HELPER;
+				} elseif($agent == 'smartphone') {
+					$this->helpers[] = BC_SMARTPHONE_HELPER;
 				}
 			}
 
@@ -244,39 +247,56 @@ class BaserAppController extends Controller {
 
 		// メンテナンス
 		if(!empty($this->siteConfigs['maintenance']) &&
-					($this->params['controller'] != 'maintenance' && $this->params['url']['url'] != 'maintenance') &&
+					($this->params['controller'] != 'maintenance' && @$this->params['url']['url'] != 'maintenance') &&
 					(!isset($this->params['prefix']) || $this->params['prefix'] != 'admin') &&
 					(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))){
 			if(!empty($this->params['return']) && !empty($this->params['requested'])){
 				return;
 			}else{
-				$this->redirect('/maintenance');
+				$this->redirect('/' . Configure::read('BcRequest.agentAlias') . '/maintenance');
 			}
 		}
 
 		/* 認証設定 */
-		if($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
+		if ($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
+			
 			$configs = Configure::read('BcAuthPrefix');
-			if(!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
+			if (!empty($this->params['prefix']) && isset($configs[$this->params['prefix']])) {
 				$config = $configs[$this->params['prefix']];
-				if(count($configs) >= 2) {
-					$config['auth_prefix'] = $this->params['prefix'];
+				if (count($configs) >= 2) {
+					if(getDbDriver() != 'bc_csv') {
+						$config['auth_prefix'] = $this->params['prefix'];
+					} else {
+						trigger_error('csv を利用している場合、プレフィックス認証は利用できません。config/baser.php の設定を見なおしてください。', E_USER_ERROR);
+					}
 				}
-			}elseif(isset($configs['front'])) {
+			} elseif (isset($configs['front'])) {
 				$config = $configs['front'];
 				if(count($configs) >= 2) {
-					$config['auth_prefix'] = 'front';
+					if(getDbDriver() != 'bc_csv') {
+						$config['auth_prefix'] = 'front';
+					} else {
+						trigger_error('csv を利用している場合、プレフィックス認証は利用できません。config/baser.php の設定を見なおしてください。', E_USER_ERROR);
+					}
 				}
 			} else {
 				$config = array();
 			}
-			$this->BcAuthConfigure->setting($config);
 		
-			$authPrefix = $this->Session->read('Auth.User.authPrefix');
-			if(!$authPrefix) {
-				$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-				if($authPrefix) {
-					$this->Session->write('Auth.User.authPrefix', $authPrefix);
+			
+			$this->BcAuthConfigure->setting($config);
+			
+			// ユーザーの存在チェック
+			$user = $this->BcAuth->user();
+			
+			if($user) {
+				$userModel = key($user);
+				if($userModel) {
+					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
+						'conditions' => array($userModel . '.id' => $user[$userModel]['id'], $userModel . '.name' => $user[$userModel]['name']),
+						'recursive'	 => -1))) {
+						$this->Session->delete($this->BcAuth->sessionKey);
+					}
 				}
 			}
 		}
@@ -298,9 +318,12 @@ class BaserAppController extends Controller {
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->params['prefix'])) {
 			$this->layoutPath = str_replace('_', '/', $this->params['prefix']);
-			$this->subDir = str_replace('_', '/', $this->params['prefix']);
-			if(preg_match('/^mobile(|_)/', $this->params['prefix'])) {
+			$this->subDir = str_replace('_', '/', $this->params['prefix']);		
+			$agent = Configure::read('BcRequest.agent');
+			if($agent == 'mobile') {
 				$this->helpers[] = BC_MOBILE_HELPER;
+			} elseif($agent == 'smartphone') {
+				$this->helpers[] = BC_SMARTPHONE_HELPER;
 			}
 		}
 
@@ -317,10 +340,11 @@ class BaserAppController extends Controller {
 			if(!$this->BcAuth->allowedActions || !in_array($this->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
-				$userModel = Configure::read('BcAuthPrefix.'.$this->params['prefix'].'.userModel');
-				if(!$Permission->check($this->params['url']['url'],$user[$this->BcAuth->userModel]['user_group_id'])) {
-					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
-					$this->redirect($this->BcAuth->loginAction);
+				if($user) {
+					if(!$Permission->check($this->params['url']['url'], $user[key($user)]['user_group_id'])) {
+						$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+						$this->redirect($this->BcAuth->loginAction);
+					}
 				}
 			}
 		}
@@ -359,8 +383,8 @@ class BaserAppController extends Controller {
 		
 		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
-			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
-				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
+			if(empty($this->siteConfigs['admin_theme']) && Configure::read('BcApp.adminTheme')) {
+				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
 			}
 			
 			if(empty($params['admin'])) {
@@ -412,7 +436,22 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
+		$this->__updateFirstAccess();
+		
+		$favoriteBoxOpened = false;
+		if(!empty($this->BcAuth) && !empty($this->params['url']['url']) && $this->params['url']['url'] != 'update') {
+			$user = $this->BcAuth->user();
+			if($user) {
+				if($this->Session->check('Baser.favorite_box_opened')) {
+					$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
+				} else {
+					$favoriteBoxOpened = true;
+				}
+			}
+		}
+
 		$this->__loadDataToView();
+		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('contentsTitle',$this->contentsTitle);
@@ -422,6 +461,19 @@ class BaserAppController extends Controller {
 			$this->set('widgetArea',$this->siteConfigs['widget_area']);
 		}
 
+	}
+/**
+ * 初回アクセスメッセージ用のフラグを更新する
+ */
+	function __updateFirstAccess() {
+		
+		// 初回アクセスメッセージ表示設定
+		if(!empty($this->params['admin']) && !empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
+		}
+		
 	}
 /**
  * SSLエラー処理
@@ -631,44 +683,6 @@ class BaserAppController extends Controller {
 
 	}
 /**
- * /app/core.php のデバッグモードを書き換える
- * @param int $mode
- * @deprecated
- */
-	function writeDebug($mode) {
-		
-		trigger_error("(Controller::writeDebug) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
-		$file = new File(CONFIGS.'core.php');
-		$core = $file->read(false,'w');
-		if($core) {
-			$core = preg_replace('/Configure::write\(\'debug\',[\s\-0-9]+?\)\;/is',"Configure::write('debug', ".$mode.");",$core);
-			$file->write($core);
-			$file->close();
-			return true;
-		}else {
-			$file->close();
-			return false;
-		}
-		
-	}
-/**
- * /app/core.phpのデバッグモードを取得する
- * @return string $mode
- * @deprecated
- */
-	function readDebug() {
-		
-		trigger_error("(Controller::readDebug) は非推奨です。Configure::read('debug') を利用してください。", E_USER_WARNING);
-		$mode = '';
-		$file = new File(CONFIGS.'core.php');
-		$core = $file->read(false,'r');
-		if(preg_match('/Configure::write\(\'debug\',([\s\-0-9]+?)\)\;/is',$core,$matches)) {
-			$mode = trim($matches[1]);
-		}
-		return $mode;
-		
-	}
-/**
  * メールを送信する
  *
  * @param	string	$to		送信先アドレス
@@ -830,183 +844,18 @@ class BaserAppController extends Controller {
 		$this->BcEmail->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$this->BcEmail->delivery = 'smtp';	// mail or smtp or debug
-			$this->BcEmail->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
-					'port'	=>25,
-					'timeout'	=>30,
-					'username'=>($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user']:null,
-					'password'=>($this->siteConfigs['smtp_password'])?$this->siteConfigs['smtp_password']:null);
+			$this->BcEmail->smtpOptions = array(
+					'host'		=> $this->siteConfigs['smtp_host'],
+					'port'		=> ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25,
+					'timeout'	=> 30,
+					'username'	=> ($this->siteConfigs['smtp_user'])? $this->siteConfigs['smtp_user'] : null,
+					'password'	=> ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : nul
+			);
 		} else {
 			$this->BcEmail->delivery = "mail";
 		}
 
 		return true;
-
-	}
-/**
- * インストール設定を書き換える
- *
- * @param	string	$key
- * @param	string	$value
- * @return	boolean
- * @access	public
- * @deprecated since v2.0.5
- */
-	function writeInstallSetting($key, $value) {
-		
-		trigger_error("(Controller::writeInstallSetting) は非推奨です。BcManager::setInstallSetting を利用してください。", E_USER_WARNING);
-		/* install.php の編集 */
-		$setting = "Configure::write('".$key."', ".$value.");\n";
-		$key = str_replace('.', '\.', $key);
-		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);\n/is';
-		$file = new File(CONFIGS.'install.php');
-		if(file_exists(CONFIGS.'install.php')) {
-			$data = $file->read();
-		}else {
-			$data = "<?php\n?>";
-		}
-		if(preg_match($pattern, $data)) {
-			$data = preg_replace($pattern, $setting, $data);
-		} else {
-			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
-		}
-		$return = $file->write($data);
-		$file->close();
-		return $return;
-
-	}
-/**
- * スマートURLの設定を取得
- *
- * @return	boolean
- * @access	public
- * @deprecated since v2.0.5
- */
-	function readSmartUrl(){
-		
-		trigger_error("(Controller::readSmartUrl) は非推奨です。BcManager::smartUrl を利用してください。", E_USER_WARNING);
-		if (Configure::read('App.baseUrl')) {
-			return false;
-		} else {
-			return true;
-		}
-		
-	}
-/**
- * スマートURLの設定を行う
- *
- * @param	boolean	$smartUrl
- * @return	boolean
- * @access	public
- * @deprecated since v2.0.5
- */
-	function writeSmartUrl($smartUrl) {
-
-		trigger_error("(Controller::writeSmartUrl) は非推奨です。BcManager::setSmartUrl を利用してください。", E_USER_WARNING);
-		/* install.php の編集 */
-		if($smartUrl) {
-			if(!$this->BcManager->setInstallSetting('App.baseUrl', "''")){
-				return false;
-			}
-		} else {
-			if(!$this->BcManager->setInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
-				return false;
-			}
-		}
-
-		if(BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
-			$webrootRewriteBase = '/';
-		} else {
-			$webrootRewriteBase = '/'.APP_DIR.'/webroot';
-		}
-
-		/* /app/webroot/.htaccess の編集 */
-		$this->BcManager->_setSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase);
-
-		if(BC_DEPLOY_PATTERN == 1) {
-			/* /.htaccess の編集 */
-			$this->BcManager->_setSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/');
-		}
-
-		return true;
-
-	}
-/**
- * .htaccess にスマートURLの設定を書きこむ
- *
- * @param string $path
- * @param array $rewriteSettings
- * @return boolean
- * @access protected
- * @deprecated since v2.0.5
- */
-	function _writeSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/') {
-
-		trigger_error("(Controller::_writeSmartUrlToHtaccess) は非推奨です。BcManager::_setSmartUrlToHtaccess を利用してください。", E_USER_WARNING);
-		//======================================================================
-		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
-		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
-		// 内容をリセットし、ファイルポインタを先頭に戻している。
-		//======================================================================
-
-		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
-									"/\n[^\n#]*RewriteBase.+/i",
-									"/\n[^\n#]*RewriteCond.+/i",
-									"/\n[^\n#]*RewriteRule.+/i");
-		switch($type) {
-			case 'root':
-				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->BcManager->getRewriteBase($rewriteBase),
-											'RewriteRule ^$ '.APP_DIR.'/webroot/ [L]',
-											'RewriteRule (.*) '.APP_DIR.'/webroot/$1 [L]');
-				break;
-			case 'webroot':
-				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->BcManager->getRewriteBase($rewriteBase),
-											'RewriteCond %{REQUEST_FILENAME} !-d',
-											'RewriteCond %{REQUEST_FILENAME} !-f',
-											'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
-				break;
-		}
-
-		$file = new File($path);
-		$file->open('a+');
-		$data = $file->read();
-		foreach ($rewritePatterns as $rewritePattern) {
-			$data = preg_replace($rewritePattern, '', $data);
-		}
-		if($smartUrl) {
-			$data .= "\n".implode("\n", $rewriteSettings);
-		}
-		ftruncate($file->handle,0);
-		if(!$file->write($data)){
-			$file->close();
-			return false;
-		}
-		$file->close();
-
-	}
-/**
- * RewriteBase の設定を取得する
- *
- * @param	string	$base
- * @return	string
- * @deprecated since v2.0.5
- */
-	function getRewriteBase($url){
-
-		trigger_error("(Controller::getRewriteBase) は非推奨です。BcManager::getRewriteBase を利用してください。", E_USER_WARNING);
-		$baseUrl = BC_BASE_URL;
-		if(preg_match("/index\.php/", $baseUrl)){
-			$baseUrl = str_replace('index.php/', '', $baseUrl);
-		}
-		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
-		if($url != '/' || !$baseUrl) {
-			$url = $baseUrl.$url;
-		}else{
-			$url = $baseUrl;
-		}
-
-		return $url;
 
 	}
 /**
@@ -1068,12 +917,15 @@ class BaserAppController extends Controller {
 		}
 
 	}
-/**
- * 画面の情報をセッションから読み込む
- *
- * @param	string		$options
- * @access	protected
- */
+
+    /**
+     * 画面の情報をセッションから読み込む
+     *
+     * @param array $filterModels
+     * @param array|string $options
+     * @return void
+     * @access    protected
+     */
 	function _loadViewConditions($filterModels = array(), $options = array()) {
 
 		$_options = array('default'=>array(), 'action' => '', 'group' => '', 'type' => 'post' , 'session' => true);
@@ -1220,8 +1072,33 @@ class BaserAppController extends Controller {
 		$requestedPrefix = '';
 
 		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-		if(!$authPrefix) {
-			return true;
+		if(!$authPrefix || !$this->BcAuth->userScope) {
+			// ユーザーモデルがユーザーグループと関連していない場合
+			$user = $this->BcAuth->user();
+			if($user) {
+				$userModel = $this->Session->read('Auth.userModel');
+				$authPrefixSettings = Configure::read('BcAuthPrefix');
+				if(!empty($user['User']['authPrefix']) && !empty($authPrefixSettings[$user['User']['authPrefix']])) {
+					$authPrefix = $user['User']['authPrefix'];
+				} else {
+					foreach($authPrefixSettings as $key => $authPrefixSetting) {
+						if(!empty($authPrefixSetting['userModel'])) {
+							$currentUserModel = $authPrefixSetting['userModel'];
+						} else {
+							$currentUserModel = 'User';
+						}
+						if($currentUserModel == $userModel) {
+							$authPrefix = $key;
+							break;
+						}
+					}
+				}
+
+			}
+			if(!$authPrefix) {
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+				$this->redirect($ref);
+			}
 		}
 
 		if(!empty($this->params['prefix'])) {
@@ -1238,7 +1115,7 @@ class BaserAppController extends Controller {
 				$this->BcAuth->authError = $this->BcAuth->loginError;
 				return false;
 			} else {
-				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 				return;
 			}
@@ -1257,10 +1134,20 @@ class BaserAppController extends Controller {
  */
 	function getAuthPreifx($userName) {
 
-		if(isset($this->User)) {
-			$UserClass = $this->User;
+		$user = $this->BcAuth->user();
+		if(!$user) {
+			return;
+		}
+		
+		$userModel = $this->Session->read('Auth.userModel');
+		if(!$userModel) {
+			$this->Session->delete('Auth');
+			return null;
+		}
+		if(isset($this->{$userModel})) {
+			$UserClass = $this->{$userModel};
 		} else {
-			$UserClass = ClassRegistry::init('User');
+			$UserClass = ClassRegistry::init($userModel);
 		}
 
 		return $UserClass->getAuthPrefix($userName);
@@ -1309,9 +1196,34 @@ class BaserAppController extends Controller {
 	function executeHook($hook) {
 
 		$args = func_get_args();
-		$args[0] =& $this;
-		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
 
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( $this->BcPluginHook, $hook ), $args );
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	function executePluginHook($hook, $controller) {
+		
+		$args = func_get_args();
+		return call_user_func_array(array($this->BcPluginHook, 'executeHook'), $args);
+		
 	}
 /**
  * 現在のユーザーのドキュメントルートの書き込み権限確認
@@ -1330,7 +1242,7 @@ class BaserAppController extends Controller {
 			return false;
 		}
 		if(@$this->siteConfigs['root_owner_id'] == $user[$userModel]['user_group_id'] ||
-				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == 1) {
+				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;
@@ -1484,9 +1396,9 @@ class BaserAppController extends Controller {
 		
 		// CUSTOMIZE MODIFY 2012/04/22 ryuring
 		// >>>
-		//return call_user_func_array(array(&$this, $action), $args);
+		//return call_user_func_array(array($this, $action), $args);
 		// ---
-		$return = call_user_func_array(array(&$this, $action), $args);
+		$return = call_user_func_array(array($this, $action), $args);
 		$this->action = $_action;
 		return $return;
 		// <<<
@@ -1510,7 +1422,8 @@ class BaserAppController extends Controller {
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {
 			foreach($files[1] as $file) {
-				$this->helpers[] = Inflector::classify(basename($file, '.php'));
+				$file = str_replace('-', '_', $file);
+				$this->helpers[] = Inflector::camelize(basename($file, '.php'));
 			}
 		}
 		
@@ -1533,4 +1446,32 @@ class BaserAppController extends Controller {
 		}
 		exit();
 	}
+/**
+ * メッセージをビューにセットする
+ * 
+ * @param string $message
+ * @param boolean $alert
+ * @param boolean $saveDblog
+ * @return void
+ */
+	function setMessage($message, $alert = false, $saveDblog = false) {
+		
+		if(!isset($this->Session)) {
+			return;
+		}
+		
+		$class = 'notice-message';
+		if($alert) {
+			$class = 'alert-message';
+		}
+		
+		$this->Session->setFlash($message, 'default', array('class' => $class));
+		
+		if($saveDblog) {
+			$AppModel = ClassRegistry::init('AppModel');
+			$AppModel->saveDblog($message);
+		}
+		
+	}
+
 }

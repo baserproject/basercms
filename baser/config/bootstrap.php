@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.config
  * @since			baserCMS v 0.1.0
@@ -108,6 +108,12 @@
 		}
 	}
 /**
+ * クレジット読込 
+ */
+	$config = array();
+	include BASER_CONFIGS.'credit.php';
+	Configure::write($config);
+/**
  * tmpフォルダ確認
  */
 	if(BC_INSTALLED) {
@@ -123,20 +129,6 @@
 	$memoryLimit = (int) ini_get('memory_limit');
 	if($memoryLimit < 32 && $memoryLimit != -1) {
 		ini_set('memory_limit', '32M');
-	}
-/**
- * セッションタイムアウト設定
- * core.php で設定された値よりも早い段階でログアウトしてしまうのを防止
- */
-	if (function_exists('ini_set')) {
-		$sessionTimeouts = array('high'=>10,'medium'=>100,'low'=>300);
-		$securityLevel = Configure::read('Security.level');
-		if (isset($sessionTimeouts[$securityLevel])) {
-			$sessionTimeout = $sessionTimeouts[$securityLevel] * Configure::read('Session.timeout');
-			ini_set('session.gc_maxlifetime', $sessionTimeout);
-		} else {
-			trigger_error('Security.level の設定が間違っています。', E_USER_WARNING);
-		}
 	}
 /**
  * パラメーター取得
@@ -178,7 +170,7 @@
 				$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
 				if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
 					$getParams = str_replace(BC_BASE_URL.$parameter, '', $_SERVER['REQUEST_URI']);
-					if($getParams == '/' || '/index.php') {
+					if($getParams == '/' || $getParams == '/index.php') {
 						$getParams = '';
 					}
 					
@@ -208,7 +200,7 @@
 					}
 
 					if($redirect) {
-						$redirectUrl = FULL_BASE_URL.BC_BASE_URL.$setting['alias'].'/'.$parameter.$getParams;
+						$redirectUrl = FULL_BASE_URL . BC_BASE_URL . $setting['alias'] . '/' . $parameter . $getParams;
 						header("HTTP/1.1 301 Moved Permanently");
 						header("Location: ".$redirectUrl);
 						exit();
@@ -266,7 +258,7 @@ if(BC_INSTALLED) {
 			'probability'	=> 100,
 			'path'			=> CACHE.'datas',
 			'prefix'		=> 'cake_',
-			'lock'			=> false,
+			'lock'			=> true,
 			'serialize'		=> true
 	 ));
 /**
@@ -282,31 +274,12 @@ if(BC_INSTALLED) {
 			'serialize'		=> true
 	 ));
 /**
- * サイト基本設定を読み込む 
+ * 管理者グループ
+ * 互換性用
+ * @deprecated v2.2.0 以降で削除 
  */
-	loadSiteConfig();
-/**
- * テーマヘルパーのパスを追加する 
- */
-	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
-	$helperPaths[] = $themePath.'helpers';
-/**
- * アップデート 
- */
-	if($parameter == 'maintenance/index') {
-		Configure::write('BcRequest.isMaintenance', true);
-	} else {
-		Configure::write('BcRequest.isMaintenance', false);
+	if(!Configure::read('BcApp.adminGroupId')) {
+		Configure::write('BcApp.adminGroupId', 1);
 	}
-	$isUpdater = false;
-	$bcSite = Configure::read('BcSite');
-	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
-	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
-		$isUpdater = true;
-	}elseif(BC_INSTALLED && !Configure::read('BcRequest.isMaintenance') && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
-	}
-	Configure::write('BcRequest.isUpdater', $isUpdater);
-	
+
 }
-?>

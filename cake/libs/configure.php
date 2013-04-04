@@ -285,7 +285,13 @@ class Configure extends Object {
 		if (isset($config['debug'])) {
 			if ($_this->debug) {
 				error_reporting(E_ALL & ~E_DEPRECATED);
-
+				// CUSTOMIZE 2013/03/26 ryuring
+				// PHP 5.3以降対応の為、E_STRICT を除外
+				// >>>
+				//error_reporting(E_ALL & ~E_DEPRECATED);
+				// --
+				error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+				// <<<
 				if (function_exists('ini_set')) {
 					ini_set('display_errors', 1);
 				}
@@ -1192,4 +1198,3 @@ class App extends Object {
 		}
 	}
 }
-?>

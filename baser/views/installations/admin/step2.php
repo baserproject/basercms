@@ -90,6 +90,25 @@ $(function(){
 						<?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($filesDirWritable) echo 'check'; else echo'failed'; ?>'>
+					<?php if(ROOT.DS != WWW_ROOT):?>
+					/app/webroot/files フォルダの書き込み権限
+					<?php else: ?>
+					/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					<?php endif ?>
+					<div class="check-result">
+						<?php if ($filesDirWritable): ?>
+						書き込み可
+						<?php else: ?>
+						書き込み不可<br />
+						<?php if(ROOT.DS != WWW_ROOT):?>
+						<small>/app/webroot/files フォルダに書き込み権限が必要です</small>
+						<?php else: ?>
+						<small>/files フォルダに書き込み権限が必要です</small>
+						<?php endif ?>
+						<?php endif ?>
+					</div>
+				</li>
 				<li class='<?php if ($themeDirWritable) echo 'check'; else echo'failed'; ?>'>
 					<?php if(ROOT.DS != WWW_ROOT):?>
 					/app/webroot/themed フォルダの書き込み権限

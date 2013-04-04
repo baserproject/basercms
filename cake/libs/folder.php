@@ -765,4 +765,3 @@ class Folder extends Object {
 		return $lastChar === '/' || $lastChar === '\\';
 	}
 }
-?>

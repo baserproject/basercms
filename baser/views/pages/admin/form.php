@@ -19,16 +19,7 @@
  */
 $bcBaser->css('ckeditor/editor', array('inline' => true));
 $bcBaser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
-$pageTypes = array();
-if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
-	$pageTypes = array('1' => 'PC');	
-}
-if(Configure::read('BcApp.mobile')) {
-	$pageTypes['2'] = 'モバイル';
-}
-if(Configure::read('BcApp.smartphone')) {
-	$pageTypes['3'] = 'スマートフォン';
-}
+$pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
 
 
@@ -62,7 +53,7 @@ $(function(){
 /**
  * フォーム送信時イベント
  */
-	$("#btnSave").click(function(){
+	$("#BtnSave").click(function(){
 		if($("#PageReflectMobile").attr('checked')){
 			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
 						' ※ モバイルカテゴリの同階層に保存します。\n'+
@@ -86,6 +77,13 @@ $(function(){
  */
 	$("#PagePageCategoryId").change(pageCategoryIdChangeHandler);
 	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
+/**
+ * 連動機能変更時イベント
+ */
+	$("#PageUnlinkedMobile").change(setStateReflectMobile);
+	$("#PageUnlinkedSmartphone").click(setStateReflectSmartphone);
+	setStateReflectMobile();
+	setStateReflectSmartphone();
 });
 /**
  * モバイル反映欄の表示設定
@@ -95,7 +93,7 @@ function pageCategoryIdChangeHandler() {
 	var pageType = 1;
 	var previewWidth;
 	
-	if($("#MobileOn").html() || $("#SmartphoneOn").html()) {
+	if($("#ReflectMobileOn").html() || $("#ReflectSmartphoneOn").html()) {
 
 		var pageCategoryId = $("#PagePageCategoryId").val();
 
@@ -122,9 +120,9 @@ function pageCategoryIdChangeHandler() {
 				},
 				success: function(result){
 					if(result) {
-						changeStateReflectMobile(true);
+						changeStateMobile(pageType, true);
 					} else {
-						changeStateReflectMobile(false);
+						changeStateMobile(pageType, false);
 					}
 				},
 				complete: function() {
@@ -132,7 +130,7 @@ function pageCategoryIdChangeHandler() {
 				}
 			});
 		}else{
-			changeStateReflectMobile(false);
+			changeStateMobile(pageType, false);
 		}
 		// スマートフォンカテゴリを選択した場合は表示しない
 		if(pageType != 3 && $("#Action").html() == 'admin_edit'){
@@ -144,9 +142,9 @@ function pageCategoryIdChangeHandler() {
 				},
 				success: function(result){
 					if(result) {
-						changeStateReflectSmartphone(true);
+						changeStateSmartphone(pageType, true);
 					} else {
-						changeStateReflectSmartphone(false);
+						changeStateSmartphone(pageType, false);
 					}
 				},
 				complete: function() {
@@ -154,7 +152,7 @@ function pageCategoryIdChangeHandler() {
 				}
 			});
 		}else{
-			changeStateReflectSmartphone(false);
+			changeStateSmartphone(pageType, false);
 		}
 
 	}
@@ -171,23 +169,95 @@ function pageCategoryIdChangeHandler() {
 	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true});
 	
 }
-function changeStateReflectMobile(use) {
+/**
+ * モバイルコピー機能の表示設定
+ */
+function setStateReflectMobile() {
 
-	if(use) {
-		$("#RowReflectMobile").show();
-	}else{
-		$("#PageReflectMobile").attr('checked', false);
-		$("#RowReflectMobile").hide();
+	if (!$("#PageUnlinkedMobile").size() || $("#PageUnlinkedMobile").attr('checked')) {
+		changeStateReflectMobile(true);
+	} else {
+		changeStateReflectMobile(false);
 	}
 	
 }
+/**
+ * スマホコピー機能の表示設定
+ */
+function setStateReflectSmartphone() {
+
+	if (!$("#PageUnlinkedSmartphone").size() || $("#PageUnlinkedSmartphone").attr('checked')) {
+		changeStateReflectSmartphone(true);
+	} else {
+		changeStateReflectSmartphone(false);
+	}
+	
+}
+/**
+ * モバイルオプション表示切り替え
+ */
+function changeStateMobile(pageType, use) {
+	
+	if(use) {
+		if(pageType == 2 || pageType == 3) {
+			if($("#PageUnlinkedMobile").attr('checked')) {
+				$("#RowMobile").show();
+				$("#DivUnlinkedMobile").hide();
+			} else {
+				$("#RowMobile").hide();
+			}
+		} else {
+			$("#RowMobile").show();
+		}
+	}else{
+		$("#RowMobile").hide();
+	}
+		
+}
+/**
+ * スマートフォンオプション表示切り替え
+ */
+function changeStateSmartphone(pageType, use) {
+	
+	if(use) {
+		if(pageType == 2 || pageType == 3) {
+			if($("#PageUnlinkedSmartphone").attr('checked')) {
+				$("#RowSmartphone").show();
+				$("#DivUnlinkedSmartphone").hide();
+			} else {
+				$("#RowSmartphone").hide();
+			}
+		} else {
+			$("#RowSmartphone").show();
+		}
+	}else{
+		$("#RowSmartphone").hide();
+	}
+	
+}
+/**
+ * モバイルコピー機能表示切り替え
+ */
+function changeStateReflectMobile(use) {
+
+	if(use) {
+		$("#DivReflectMobile").show();
+	}else{
+		$("#PageReflectMobile").attr('checked', false);
+		$("#DivReflectMobile").hide();
+	}
+	
+}
+/**
+ * スマートフォンコピー機能表示切り替え
+ */
 function changeStateReflectSmartphone(use) {
 
 	if(use) {
-		$("#RowReflectSmartphone").show();
+		$("#DivReflectSmartphone").show();
 	}else{
 		$("#PageReflectSmartphone").attr('checked', false);
-		$("#RowReflectSmartphone").hide();
+		$("#DivReflectSmartphone").hide();
 	}
 	
 }
@@ -239,8 +309,8 @@ function pageTypeChengeHandler() {
 	<div id="PageCategoryOwnerId"><?php echo $bcForm->value('PageCategory.owner_id') ?></div>
 	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
 	<div id="RootSmartphoneId"><?php echo $rootSmartphoneId ?></div>
-	<div id="MobileOn"><?php echo Configure::read('BcApp.mobile') ?></div>
-	<div id="SmartphoneOn"><?php echo Configure::read('BcApp.smartphone') ?></div>
+	<div id="ReflectMobileOn"><?php echo $reflectMobile ?></div>
+	<div id="ReflectSmartphoneOn"><?php echo $reflectSmartphone ?></div>
 	<div id="Action"><?php echo $this->action ?></div>
 </div>
 
@@ -346,7 +416,7 @@ function pageTypeChengeHandler() {
 			<td class="col-input">
 				<?php echo $bcForm->ckeditor('Page.contents', 
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1) ?>
+						$ckEditorOptions1, $ckStyles) ?>
 				<?php echo $bcForm->error('Page.contents') ?>
 			</td>
 		</tr>
@@ -371,7 +441,7 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('Page.author_id', '作成者') ?></th>
 			<td class="col-input">
-<?php if(isset($user) && $user['user_group_id'] == 1): ?>
+<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $bcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 				<?php echo $bcForm->error('Page.author_id') ?>
 <?php else: ?>
@@ -382,59 +452,98 @@ function pageTypeChengeHandler() {
 <?php endif ?>
 			</td>
 		</tr>
-<?php if($reflectMobile): ?>
-		<tr id="RowReflectMobile" style="display: none">
-			<th class="col-head"><?php echo $bcForm->label('Page.status', 'モバイル') ?></th>
+	</table>
+</div>
+
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+
+<div id ="formOptionBody" class="slide-body section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('Page.code', 'コード') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpReflectMobile', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<div id="helptextReflectMobile" class="helptext">
-					<ul>
-						<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
-						<li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
-						<li>モバイルページが既に存在するする場合は上書きします。</li>
-					</ul>
+				<?php echo $bcForm->input('Page.code', array(
+					'type'			=> 'textarea', 
+					'cols'			=> 36, 
+					'rows'			=> 5,
+					'style'			=> 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
+				)) ?>
+				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">
+					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
+					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
 				</div>
-				<?php if(!empty($mobileExists)): ?>
-				<br />&nbsp;<?php $bcBaser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
-				<?php endif ?>
+				<?php echo $bcForm->error('Page.code') ?>
+			</td>
+		</tr>
+<?php if(Configure::read('BcApp.mobile')): ?>
+		<tr id="RowMobile">
+			<th class="col-head"><?php echo $bcForm->label('Page.unlinked_mobile', 'モバイル') ?></th>
+			<td class="col-input">
+	<?php if(@$bcBaser->siteConfig['linked_pages_mobile']): ?>
+				<div id="DivUnlinkedMobile">
+					<?php echo $bcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
+				</div>
+	<?php endif ?>
+				<div id="DivReflectMobile">
+					<?php echo $bcForm->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
+					<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">
+						<ul>
+							<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
+							<li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
+							<li>モバイルページが既に存在する場合は上書きします。</li>
+						</ul>
+					</div>
+	<?php if(!empty($mobileExists)): ?>
+					<br />&nbsp;<?php $bcBaser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
+	<?php endif ?>
+				</div>
 			</td>
 		</tr>
 <?php endif ?>
-<?php if($reflectSmartphone): ?>
-		<tr id="RowReflectSmartphone" style="display: none">
-			<th class="col-head"><?php echo $bcForm->label('Page.status', 'スマートフォン') ?></th>
+<?php if(Configure::read('BcApp.smartphone')): ?>
+		<tr id="RowSmartphone" style="display: none">
+			<th class="col-head"><?php echo $bcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpReflectSmartphone', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<div id="helptextReflectSmartphone" class="helptext">
-					<ul>
-						<li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
-						<li>スマートフォンページはスマートフォンカテゴリ内の同階層に保存します。</li>
-						<li>スマートフォンページが既に存在するする場合は上書きします。</li>
-					</ul>
+	<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
+				<div id="DivUnlinkedSmartphone">
+					<?php echo $bcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 				</div>
-				<?php if(!empty($smartphoneExists)): ?>
-				<br />&nbsp;<?php $bcBaser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
-				<?php endif ?>
+	<?php endif ?>
+				<div id="DivReflectSmartphone">
+					<?php echo $bcForm->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
+					<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">
+						<ul>
+							<li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
+							<li>スマートフォンページはスマートフォンカテゴリ内の同階層に保存します。</li>
+							<li>スマートフォンページが既に存在するする場合は上書きします。</li>
+						</ul>
+					</div>
+	<?php if(!empty($smartphoneExists)): ?>
+					<br />&nbsp;<?php $bcBaser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
+	<?php endif ?>
+				</div>
 			</td>
 		</tr>
 <?php endif ?>
 	</table>
 </div>
 <div class="submit">
+	
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
-	<?php echo $bcForm->button('更新', array('label' => '更新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $bcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php endif ?>
-	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $bcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
 	<?php $bcBaser->link('削除',
-			array('action'=>'delete', $bcForm->value('Page.id')),
-			array('class'=>'btn-gray button'),
+			array('action' => 'delete', $bcForm->value('Page.id')),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('Page.name')),
 			false); ?>
 	<?php endif ?>

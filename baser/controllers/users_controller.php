@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -22,6 +22,14 @@
  *
  * ユーザーを管理するコントローラー。ログイン処理を担当する。
  *
+ * @property BcAuthComponent BcAuth
+ * @property BcAuthConfigureComponent BcAuthConfigure
+ * @property BcReplacePrefixComponent BcReplacePrefix
+ * @property RequestHandlerComponent RequestHandler
+ * @property CookieComponent Cookie
+ * @property SessionComponent Session
+ * @property UserGroup UserGrou
+ * @property User User
  * @package baser.controllers
  */
 class UsersController extends AppController {
@@ -85,9 +93,7 @@ class UsersController extends AppController {
 				'admin_logout', 
 				'admin_login_exec', 
 				'admin_reset_password',
-				'admin_ajax_login',
-				'admin_login_exec',
-				'admin_reset_password'
+				'admin_ajax_login'
 		);
 		$this->set('usePermission',$this->UserGroup->checkOtherAdmins());
 		
@@ -99,11 +105,11 @@ class UsersController extends AppController {
 		if(!empty($this->params['prefix'])) {
 			$prefix = $this->params['prefix'];
 			if($this->RequestHandler->isAjax() && $this->action == $prefix.'_ajax_login') {
-				Configure::write('BcAuthPrefix.'.$prefix.'.loginAction', '/'.$prefix.'/users/ajax_login');
+				Configure::write('BcAuthPrefix.'.$prefix.'.loginAction', '/'.$prefix.'/' . $this->params['controller'] . '/ajax_login');
 			}
 		} else {
 			if($this->RequestHandler->isAjax() && $this->action == 'ajax_login') {
-				Configure::write('BcAuthPrefix.front.loginAction', '/users/ajax_login');
+				Configure::write('BcAuthPrefix.front.loginAction', '/' . $this->params['controller'] . '/ajax_login');
 			}
 		}
 		
@@ -126,6 +132,7 @@ class UsersController extends AppController {
 			return false;
 		}
 		if($this->BcAuth->login($this->data)) {
+			$this->BcAuthConfigure->setSessionAuthPrefix();
 			return true;
 		}
 		return false;
@@ -148,6 +155,7 @@ class UsersController extends AppController {
 		
 		if($this->data) {
 			if ($user) {
+				$this->BcAuthConfigure->setSessionAuthPrefix();
 				if (!empty($this->data[$userModel]['saved'])) {
 					if(Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->data);
@@ -158,7 +166,9 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				App::import('Helper', 'BcBaser');
+				$BcBaser = new BcBaserHelper();
+				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 			}
 		}
 
@@ -194,14 +204,20 @@ class UsersController extends AppController {
  * @access public
  */
 	function admin_ajax_agent_login($id) {
+		
 		if(!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
 		}
-		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
 		Configure::write('debug', 0);
+		$configs = Configure::read('BcAuthPrefix');
+		$config = $configs[$this->data['UserGroup']['auth_prefix']];
+		$config['auth_prefix'] = $this->data['UserGroup']['auth_prefix'];
+		$this->BcAuthConfigure->setting($config);
 		$this->setAction('admin_ajax_login');
 		exit();
+		
 	}
 /**
  * 代理ログインをしている場合、元のユーザーに戻る
@@ -209,15 +225,32 @@ class UsersController extends AppController {
  * @return void
  * @access public 
  */
-	function admin_back_agent() {
+	function back_agent() {
+		
+		$configs = Configure::read('BcAuthPrefix');
 		if($this->Session->check('AuthAgent')) {
-			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.'.$this->BcAuth->userModel));
+			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->userModel);
+			$this->Session->write($this->BcAuth->sessionKey, $data);
 			$this->Session->delete('AuthAgent');
-			$this->Session->setFlash('元のユーザーに戻りました。');
+			$this->setMessage('元のユーザーに戻りました。');
+			$authPrefix = $data['authPrefix'];
 		} else {
-			$this->Session->setFlash('不正な操作です。');
+			$this->setMessage('不正な操作です。', true);
+			if(!empty($this->params['prefix'])) {
+				$authPrefix = $this->params['prefix'];
+			} else {
+				$authPrefix = 'front';
+			}
 		}
-		$this->redirect('/admin');
+
+		if(!empty($configs[$authPrefix])) {
+			$redirect = $configs[$authPrefix]['loginRedirect'];
+		} else {
+			$redirect = '/';
+		}
+		
+		$this->redirect($redirect);
+		
 	}
 /**
  * [ADMIN] 管理者ログイン画面（Ajax）
@@ -231,6 +264,7 @@ class UsersController extends AppController {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 		
+		$this->BcAuthConfigure->setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->userModel;
 		
@@ -246,7 +280,9 @@ class UsersController extends AppController {
 				}else {
 					$this->Cookie->destroy();
 				}
-				$this->Session->setFlash("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				App::import('Helper', 'BcBaser');
+				$BcBaser = new BcBaserHelper();
+				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 			}
 		}
 
@@ -272,7 +308,7 @@ class UsersController extends AppController {
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];				// ハッシュ化されている
-		$this->Cookie->write('Auth.'.$userModel, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$this->Cookie->write($this->BcAuth->sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 
 	}
 /**
@@ -283,10 +319,9 @@ class UsersController extends AppController {
  */
 	function admin_logout() {
 
-		$userModel = $this->BcAuth->userModel;
 		$this->BcAuth->logout();
-		$this->Cookie->del('Auth.'.$userModel);
-		$this->Session->setFlash('ログアウトしました');
+		$this->Cookie->del($this->BcAuth->sessionKey);
+		$this->setMessage('ログアウトしました');
 		if(empty($this->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
 		} else {
@@ -374,11 +409,10 @@ class UsersController extends AppController {
 					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
 				}
 				$this->User->save($this->data,false);
-				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
-				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を追加しました。');
+				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -388,7 +422,7 @@ class UsersController extends AppController {
 		$editable = true;
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			unset($userGroups[1]);
 		}
 		
@@ -403,7 +437,7 @@ class UsersController extends AppController {
 /**
  * [ADMIN] ユーザー情報編集
  *
- * @param int user_id
+ * @param int $id
  * @return void
  * @access public
  */
@@ -411,7 +445,7 @@ class UsersController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -434,47 +468,44 @@ class UsersController extends AppController {
 				$this->data['User']['password'] = $this->data['User']['password_1'];
 			}
 
-			$this->User->set($this->data);
+			// 自身のアカウントは変更出来ないようにチェック
+			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
+				$this->setMessage('自分のアカウントのグループは変更できません。', true);
+			} else {
+				$this->User->set($this->data);
 
-			if($this->User->validates()) {
-				unset($this->data['User']['password_1']);
-				unset($this->data['User']['password_2']);
-				if(isset($this->data['User']['password'])) {
-					$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
-				}
-				$this->User->save($this->data,false);
-				
-				if($selfUpdate) {
-					$this->admin_logout();
-				}
+				if($this->User->validates()) {
+					unset($this->data['User']['password_1']);
+					unset($this->data['User']['password_2']);
+					if(isset($this->data['User']['password'])) {
+						$this->data['User']['password'] = $this->BcAuth->password($this->data['User']['password']);
+					}
+					$this->User->save($this->data,false);
+					
+					if($selfUpdate) {
+						$this->admin_logout();
+					}
 
-				$this->Session->setFlash('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->User->saveDbLog('ユーザー「'.$this->data['User']['name'].'」を更新しました。');
-				$this->redirect(array('action' => 'edit', $id));
-			}else {
-				// よく使う項目のデータを再セット
-				$this->data = array_merge($this->User->read(null, $id), $this->data);
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+					$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
+					$this->redirect(array('action' => 'edit', $id));
+				}else {
+					// よく使う項目のデータを再セット
+					$this->data = array_merge($this->User->read(null, $id), $this->data);
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
+				}
 			}
-
 		}
 
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if($user[$userModel]['user_group_id'] != 1 && Configure::read('debug') !== -1) {
-			if($this->data['User']['user_group_id'] == 1) {
-				$editable = false;
-			} else {
-				unset($userGroups[1]);
-			}
-		}
 		
-		$this->set('userGroups', $userGroups);
-		$this->set('editable', $editable);
-		$this->set('selfUpdate', $selfUpdate);
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
+			$editable = false;
+		} else if ($selfUpdate && $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			$editable = false;
+		}
+		$this->set(compact('userGroups', 'editable', 'selfUpdate'));
 		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';
@@ -496,8 +527,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
-				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
+		if($this->User->field('user_group_id', array('User.id'=>$id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
 			$this->ajaxError(500, 'このユーザーは削除できません。');
 		}
 
@@ -524,14 +555,14 @@ class UsersController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if($this->User->field('user_group_id',array('User.id'=>$id)) == 1 &&
-				$this->User->find('count',array('conditions'=>array('User.user_group_id'=>1))) == 1) {
-			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
+		if($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
+			$this->setMessage('最後の管理者ユーザーは削除する事はできません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -540,10 +571,9 @@ class UsersController extends AppController {
 
 		/* 削除処理 */
 		if($this->User->del($id)) {
-			$this->Session->setFlash('ユーザー: '.$user['User']['name'].' を削除しました。');
-			$this->User->saveDbLog('ユーザー「'.$user['User']['name'].'」を削除しました。');
+			$this->setMessage('ユーザー: '.$user['User']['name'].' を削除しました。', true, false);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -557,34 +587,38 @@ class UsersController extends AppController {
  * @access public
  */
 	function admin_reset_password () {
-
+		
+		if(empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+			$this->notFound();
+		}
+		
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->userModel;
 		if($this->data) {
 
 			if(empty($this->data[$userModel]['email'])) {
-				$this->Session->setFlash('メールアドレスを入力してください。');
+				$this->setMessage('メールアドレスを入力してください。', true);
 				return;
 			}
 			$email = $this->data[$userModel]['email'];
 			$user = $this->{$userModel}->findByEmail($email);
 			if(!$user) {
-				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
+				$this->setMessage('送信されたメールアドレスは登録されていません。', true);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user['User']['password'] = $this->BcAuth->password($password);
 			$this->{$userModel}->set($user);
 			if(!$this->{$userModel}->save()) {
-				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
+				$this->setMessage('新しいパスワードをデータベースに保存できませんでした。', true);
 				return;
 			}
 			$body = $email.' の新しいパスワードは、 '.$password.' です。';
 			if(!$this->sendMail($email, 'パスワードを変更しました', $body)) {
-				$this->Session->setFlash('メール送信時にエラーが発生しました。');
+				$this->setMessage('メール送信時にエラーが発生しました。', true);
 				return;
 			}
-			$this->Session->setFlash($email.' 宛に新しいパスワードを送信しました。');
+			$this->setMessage($email.' 宛に新しいパスワードを送信しました。');
 			$this->data = array();
 
 		}
@@ -592,4 +626,3 @@ class UsersController extends AppController {
 	}
 	
 }
-?>

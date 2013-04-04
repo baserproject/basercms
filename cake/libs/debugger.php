@@ -565,4 +565,3 @@ class Debugger extends Object {
 if (!defined('DISABLE_DEFAULT_ERROR_HANDLING')) {
 	Debugger::invoke(Debugger::getInstance());
 }
-?>

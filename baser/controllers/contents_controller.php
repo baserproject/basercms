@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -59,22 +59,22 @@ class ContentsController extends AppController {
  * @access public
  */
 	function beforeFilter() {
-		
+
 		parent::beforeFilter();
-		
+
 		$this->Security->enabled = false;
-		
+
 		// 認証設定
 		$this->BcAuth->allow('search','get_page_list_recursive');
-		
+
 		if(!empty($this->params['admin'])) {
 			$this->subMenuElements = array('site_configs', 'contents');
 			$this->crumbs = array(
-				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')), 
+				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
 				array('name' => '検索インデックス管理', 'url' => array('controller' => 'contents', 'action' => 'index'))
 			);
 		}
-		
+
 	}
 /**
  * コンテンツ検索
@@ -83,7 +83,7 @@ class ContentsController extends AppController {
  * @access public
  */
 	function search() {
-		
+
 		$datas = array();
 		$query = array();
 
@@ -96,7 +96,7 @@ class ContentsController extends AppController {
 			}
 		}
 		if(!empty($this->params['url']['q'])) {
-		
+
 			$this->paginate = array(
 				'conditions'=> $this->_createSearchConditions($this->data),
 				'order'		=> 'Content.priority DESC, Content.modified DESC, Content.id',
@@ -105,7 +105,7 @@ class ContentsController extends AppController {
 
 			$datas = $this->paginate('Content');
 			$query = $this->_parseQuery($this->params['url']['q']);
-			
+
 		}
 
 		$this->set('query', $query);
@@ -121,7 +121,7 @@ class ContentsController extends AppController {
  * @access protected
  */
 	function _parseQuery($query) {
-		
+
 		$query = str_replace('　', ' ', $query);
 		if(strpos($query, ' ') !== false) {
 			$query = explode(' ', $query);
@@ -129,7 +129,7 @@ class ContentsController extends AppController {
 			$query = array($query);
 		}
 		return h($query);
-		
+
 	}
 /**
  * 検索条件を生成する
@@ -139,7 +139,7 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	function _createSearchConditions($data) {
-		
+
 		$conditions = array('Content.status' => true);
 		$query = '';
 		unset($data['Content']['key']);
@@ -160,7 +160,7 @@ class ContentsController extends AppController {
 			}
 			unset($data['Content']['m']);
 		}
-		
+
 		$conditions = am($conditions, $this->postConditions($data));
 
 		if($query) {
@@ -170,28 +170,28 @@ class ContentsController extends AppController {
 				$conditions['and'][$key]['or'][] = array('Content.detail LIKE' => "%{$value}%");
 			}
 		}
-		
+
 		return $conditions;
-		
+
 	}
 /**
  * ページリストを取得する
- * 
+ *
  * @param mixid $parentCategoryId / '' / 0
  * @return type
- * @access public 
+ * @access public
  */
 	function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
-		
+
 		return $this->__getPageListRecursive($parentCategoryId, $recursive);
-		
+
 	}
 /**
  * ページリストを取得する（再帰）
  * TODO スマートフォン未対応
  * @param mixid $parentCategoryId / '' / 0
  * @return string
- * @access private 
+ * @access private
  */
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
 
@@ -205,23 +205,23 @@ class ContentsController extends AppController {
 		}elseif(!$parentCategoryId && Configure::read('BcRequest.agent') == Configure::read('BcAgent.mobile.prefix')) {
 			$parentCategoryId = $currentAgentId;
 		}
-		
+
 		// ページリスト取得
 		$conditions = array('Page.page_category_id' => $parentCategoryId);
 		$conditions = am($conditions, $this->Page->getConditionAllowPublish());
 		$pages = $this->Page->find('all', array(
 			'conditions'=> $conditions,
-			'fields'	=> array('name', 'title', 'url'), 
+			'fields'	=> array('name', 'title', 'url'),
 			'order'		=> 'Page.sort',
 			'recursive' => -1,
 			'cache'		=> false
 		));
 
 		foreach($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = preg_replace('/^\/mobile/', '/m', $page['Page']['url']);
-			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/s', $page['Page']['url']);
+			$pages[$key]['Page']['url'] = $page['Page']['url'] = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $page['Page']['url']);
+			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/'.Configure::read('BcAgent.smartphone.alias'), $page['Page']['url']);
 		}
-		
+
 		if(!$direct) {
 			// カテゴリリスト取得
 			$conditions = array('PageCategory.parent_id' => $parentCategoryId);
@@ -232,9 +232,9 @@ class ContentsController extends AppController {
 			} elseif($parentCategoryId == $smartphoneId) {
 				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $mobileId)));
 			}
-			
+
 			$pageCategories = $this->Page->PageCategory->find('all', array(
-				'conditions' => $conditions, 
+				'conditions' => $conditions,
 				'fields' => array('id', 'title'),
 				'order' => 'PageCategory.lft',
 				'recursive' => -1
@@ -242,7 +242,7 @@ class ContentsController extends AppController {
 		} else {
 			$pageCategories = array();
 		}
-		
+
 		// カテゴリごとの子カテゴリ取得
 		$children = array();
 		if($pageCategories) {
@@ -262,7 +262,7 @@ class ContentsController extends AppController {
 						} else {
 							$parentCategoryPath = '/';
 						}
-						$parentCategoryPath = preg_replace('/^\/mobile/', '/m', $parentCategoryPath);
+						$parentCategoryPath = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $parentCategoryPath);
 						$pageCategories[$key]['PageCategory']['url'] = $parentCategoryPath.'index';
 					}
 				}
@@ -276,18 +276,18 @@ class ContentsController extends AppController {
 		if($pageCategories) {
 			$result['pageCategories'] = $pageCategories;
 		}
-		
+
 		return $result;
-		
+
 	}
 /**
  * [ADMIN] 検索インデックス
- * 
+ *
  * @return void
  * @access public
  */
 	function admin_index() {
-		
+
 		$this->pageTitle = '検索インデックス コンテンツ一覧';
 
 		/* 画面情報設定 */
@@ -301,26 +301,26 @@ class ContentsController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$this->set('datas', $this->paginate('Content'));
-		
+
 		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
-		
+
 		$this->search = 'contents_index';
 		$this->help = 'contents_index';
 
 	}
 /**
  * [ADMIN] 検索インデックス登録
- * 
+ *
  * @return	void
  * @access 	public
  */
 	function admin_add() {
-		
+
 		$this->pageTitle = '検索インデックス コンテンツ登録';
-		
+
 		if($this->data) {
 			$url = $this->data['Content']['url'];
 			$url = str_replace(FULL_BASE_URL.$this->base, '', $url);
@@ -340,7 +340,7 @@ class ContentsController extends AppController {
 				// 元の設定を復元
 				Router::setRequestInfo(array($this->params, array('base' => $this->base, 'webroot' => $this->webroot)));
 				$title = '';
-				
+
 				if(!is_a($content, 'ErrorHandler')) {
 					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
 					$title = $View->pageTitle;
@@ -361,7 +361,7 @@ class ContentsController extends AppController {
 				} else {
 					unset($content);
 				}
-				
+
 				if(isset($content)) {
 					$content = Sanitize::stripAll($content);
 					$content = strip_tags($content);
@@ -375,21 +375,21 @@ class ContentsController extends AppController {
 					));
 					$this->Content->create($data);
 					if($this->Content->save()) {
-						$this->Session->setFlash('検索インデックスに '.$url.' を追加しました。');
+						$this->setMessage('検索インデックスに '.$url.' を追加しました。');
 						$this->redirect(array('action' => 'index'));
 					} else {
-						$this->Session->setFlash('保存中にエラーが発生しました。');
+						$this->setMessage('保存中にエラーが発生しました。', true);
 					}
 				} else {
 					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
-					$this->Session->setFlash('保存中にエラーが発生しました。');
+					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
-				
+
 			} else {
 				$this->Content->invalidate('url', '既に登録済のURLです。');
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
-			
+
 		}
 		$this->help = 'contents_add';
 	}
@@ -413,7 +413,7 @@ class ContentsController extends AppController {
 			exit(true);
 		}
 		exit();
-		
+
 	}
 /**
  * [ADMIN] 検索インデックス削除
@@ -425,17 +425,15 @@ class ContentsController extends AppController {
 	function admin_delete($id = null) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		/* 削除処理 */
 		if($this->Content->del($id)) {
-			$message = '検索インデックスより NO.'.$id.' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Content->saveDbLog($message);
+			$this->setMessage('検索インデックスより NO.'.$id.' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -451,28 +449,28 @@ class ContentsController extends AppController {
 	function _batch_del($ids) {
 
 		if($ids){
-			
+
 			foreach($ids as $id) {
-				
+
 			/* 削除処理 */
 				if($this->Content->del($id)) {
 					$message = '検索インデックスより NO.'.$id.' を削除しました。';
 					$this->Content->saveDbLog($message);
 				}
-				
+
 			}
-			
+
 		}
 		return true;
 	}
 /**
  * [AJAX] 優先順位を変更する
- * 
+ *
  * @return boolean
  * @access public
  */
 	function admin_ajax_change_priority() {
-		
+
 		if($this->data) {
 			$this->Content->set($this->data);
 			if($this->Content->save()) {
@@ -480,7 +478,7 @@ class ContentsController extends AppController {
 			}
 		}
 		exit();
-		
+
 	}
 /**
  * 管理画面ページ一覧の検索条件を取得する
@@ -490,14 +488,14 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	function _createAdminIndexConditions($data){
-		
+
 		if(empty($data['Content'])) {
 			return array();
 		}
-		
+
 		/* 条件を生成 */
 		$conditions = array();
-		
+
 		$type = $data['Content']['type'];
 		$category = $data['Content']['category'];
 		$status = $data['Content']['status'];
@@ -520,7 +518,7 @@ class ContentsController extends AppController {
 		if($data['Content']) {
 			$conditions = $this->postConditions($data);
 		}
-		
+
 		if($type) {
 			$conditions['Content.type'] = $type;
 		}
@@ -540,10 +538,10 @@ class ContentsController extends AppController {
 				'Content.detail LIKE' => '%'.$keyword.'%'
 			);
 		}
-		
+
 		return $conditions;
 
 	}
 
 }
-?>
+

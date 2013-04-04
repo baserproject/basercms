@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.config
  * @since			baserCMS v 0.1.0
@@ -23,6 +23,8 @@
 	$config['BcApp'] = array(
 		// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
+		// 初期テーマ
+		'defaultTheme'		=> 'nada-icons',
 		// 管理システムテーマ
 		'adminTheme'		=> 'baseradmin',
 		// テンプレートの基本となる拡張子（.php 推奨）
@@ -41,8 +43,10 @@
 				array('name' => 'ユーザーグループ一覧',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
 				array('name' => 'ユーザーグループ登録',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
 				array('name' => '検索インデックス管理',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
-				array('name' => 'メニュー管理',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'index')),
+				array('name' => 'メニュー一覧',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'index')),
 				array('name' => 'メニュー登録',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'add')),
+				array('name' => 'エディタテンプレート一覧',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
+				array('name' => 'エディタテンプレート登録',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'add')),				
 				array('name' => 'サーバーキャッシュ削除',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
 				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
@@ -51,7 +55,9 @@
 		// コアプラグイン
 		'corePlugins'	=> array('blog', 'feed', 'mail'),
 		// アップデートキー
-		'updateKey'		=> 'update'
+		'updateKey'		=> 'update',
+		// 管理者グループID
+		'adminGroupId'	=> 1
 	);
 /**
  * システム要件 
@@ -73,6 +79,10 @@
 	$config['BcEncode'] = array(
 		// 文字コードの検出順
 		'detectOrder'	=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
+		'mail'			=> array(
+			'UTF-8'			=> 'UTF-8',
+			'ISO-2022-JP'	=> 'ISO-2022-JP'
+		)
 	);
 /**
  * キャッシュ設定 
@@ -115,11 +125,11 @@
 		/*'mypage' => array(
 			'name'			=> 'マイページ',
 			'alias'			=> 'mypage',
-			'loginRedirect'	=> '/',
+			'loginRedirect'	=> '/mypage/members/edit',
 			'loginTitle'	=> 'マイページログイン',
-			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/users/login',
-			'toolbar'		=> true
+			'userModel'		=> 'Member',
+			'loginAction'	=> '/mypage/members/login',
+			'toolbar'		=> false
 		),*/
 		// モバイルマイページ（例）
 		/*'mobile_mypage' => array(
@@ -165,6 +175,7 @@
 			'alias'		=> 's',
 			'prefix'	=> 'smartphone',
 			'autoRedirect'	=> true,
+			'autoLink'	=> true,
 			'agents'	=> array(
 				'iPhone',         // Apple iPhone
 				'iPod',           // Apple iPod touch
@@ -195,10 +206,10 @@
 	define('BC_GOOGLEMAPS_HELPER'	, 'BcGooglemaps');
 	define('BC_HTML_HELPER'			, 'BcHtml');
 	define('BC_MOBILE_HELPER'		, 'BcMobile');
+	define('BC_SMARTPHONE_HELPER'	, 'BcSmartphone');
 	define('BC_PAGE_HELPER'			, 'BcPage');
 	define('BC_TEXT_HELPER'			, 'BcText');
 	define('BC_TIME_HELPER'			, 'BcTime');
 	define('BC_UPLOAD_HELPER'		, 'BcUpload');
 	define('BC_XML_HELPER'			, 'BcXml');
 	
-?>

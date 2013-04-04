@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -93,7 +93,7 @@ class PermissionsController extends AppController {
 
 		/* セッション処理 */
 		if(!$userGroupId) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'user_groups', 'action' => 'index'));
 		}
 		
@@ -159,13 +159,11 @@ class PermissionsController extends AppController {
 			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$userGroupId))+1;
 			$this->Permission->create($this->data);
 			if($this->Permission->save()) {
-				$message = '新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->Permission->saveDbLog($message);
+				$this->setMessage('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
 				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -218,7 +216,7 @@ class PermissionsController extends AppController {
 
 		/* 除外処理 */
 		if(!$userGroupId || !$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -235,13 +233,11 @@ class PermissionsController extends AppController {
 			/* 更新処理 */
 			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
 			if($this->Permission->save($this->data)) {
-				$message = 'アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->Permission->saveDbLog($message);
+				$this->setMessage('アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
 				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -312,7 +308,7 @@ class PermissionsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -321,11 +317,9 @@ class PermissionsController extends AppController {
 
 		/* 削除処理 */
 		if($this->Permission->del($id)) {
-			$message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Permission->saveDbLog($message);
+			$this->setMessage('アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -497,4 +491,3 @@ class PermissionsController extends AppController {
 	}
 	
 }
-?>

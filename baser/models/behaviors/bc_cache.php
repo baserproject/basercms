@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behaviors
  * @since			baserCMS v 0.1.0
@@ -31,7 +31,29 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function setup(&$model, $config = array()) {}
+	function setup($model, $config = array()) {
+		
+		if(!defined('CACHE_DATA_PATH')) {
+			$setting = Cache::config('_cake_data_');
+			define('CACHE_DATA_PATH', $setting['settings']['path']);
+		}
+		$this->createCacheFolder($model);
+		
+	}
+/**
+ * キャッシュフォルダーを生成する
+ * 
+ * @param Model $model 
+ */
+	function createCacheFolder($model) {
+		
+		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
+		if(!is_dir($path)) {
+			mkdir($path);
+			chmod($path, 0777);
+		}
+		
+	}
 /**
  * キャッシュ処理
  * 
@@ -42,7 +64,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	function readCache(&$model, $expire, $type, $query = array()){
+	function readCache($model, $expire, $type, $query = array()){
 		
 		static $cacheData = array();
 		
@@ -63,6 +85,8 @@ class BcCacheBehavior extends ModelBehavior {
 			return $results;
 		}
 		
+		$this->changeCachePath($model->tablePrefix . $model->table);
+		
 		// サーバーキャッシュの場合
 		$results = Cache::read($cachekey, '_cake_data_');
 		if($results !== false){
@@ -77,12 +101,20 @@ class BcCacheBehavior extends ModelBehavior {
 		}
 		$results = $db->read($model, $query);
 		Cache::write($cachekey, ($results === false)? "{false}" : $results, '_cake_data_');
-		// クリア用にモデル毎のキャッシュキーリストを作成
-		$cacheListKey = get_class($model) . '_dataCacheList';
-		$list = Cache::read($cacheListKey);
-		$list[$cachekey] = 1;
-		Cache::write($cacheListKey, $list);
+		
 		return $results;
+		
+	}
+/**
+ * データキャッシュのパスを指定する
+ * 
+ * @param string $dir 
+ */
+	function changeCachePath($table) {
+		
+		$path = CACHE_DATA_PATH;
+		$path .= DS . $table;
+		Cache::config('_cake_data_', array('path' => $path));
 		
 	}
 /**
@@ -92,15 +124,12 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function delCache(&$model){
+	function delCache($model){
 		
-		$cacheListKey = get_class($model) . '_dataCacheList';
-		$list = Cache::read($cacheListKey);
-		if(empty($list)) return;
-		foreach($list as $key => $tmp){
-			Cache::delete($key, '_cake_data_');
-		}
-		Cache::delete($cacheListKey, '_cake_data_');
+		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
+		$Folder = new Folder();
+		$Folder->delete($path);
+		$this->createCacheFolder($model);
 		
 	}
 /**
@@ -111,7 +140,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function afterSave(&$model, $created) {
+	function afterSave($model, $created) {
 		
 		$this->delAssockCache($model);
 		
@@ -123,7 +152,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function afterDelete(&$model) {
+	function afterDelete($model) {
 		
 		$this->delAssockCache($model);
 		
@@ -136,7 +165,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい
  */
-	function delAssockCache(&$model, $recursive = 0) {
+	function delAssockCache($model, $recursive = 0) {
 		
 		$this->delCache($model);
 		if($recursive <= 3) {
@@ -157,4 +186,3 @@ class BcCacheBehavior extends ModelBehavior {
 	}
 	
 }
-?>

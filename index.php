@@ -59,4 +59,3 @@ $fileName = $_SERVER['SCRIPT_FILENAME'];
 	$bootstrap = true;
 	$url = null;
 	require APP_DIR . DS . WEBROOT_DIR . DS . 'index.php';
-?>

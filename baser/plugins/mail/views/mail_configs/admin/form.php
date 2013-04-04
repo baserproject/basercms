@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -85,6 +85,6 @@ $(window).load(function() {
 		</tr>
 	</table>
 </div>
-<div class="submit"><?php echo $bcForm->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?></div>
+<div class="submit"><?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?></div>
 
 <?php echo $bcForm->end() ?>

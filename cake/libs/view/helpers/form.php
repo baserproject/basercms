@@ -1909,5 +1909,3 @@ class FormHelper extends AppHelper {
 		return $result;
 	}
 }
-
-?>

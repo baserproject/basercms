@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.models
  * @since			baserCMS v 0.1.0
@@ -46,7 +46,20 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array('BcContentsManager', 'BcCache');
+	var $actsAs = array(
+			'BcContentsManager', 
+			'BcCache', 
+			'BcUpload' => array(
+				'subdirDateFormat'	=> 'Y/m/',
+				'fields'	=> array(
+					'eye_catch'	=> array(
+						'type'			=> 'image',
+						'namefield'		=> 'no',
+						'nameformat'	=> '%08d'
+					)
+				)
+			)
+	);
 /**
  * belongsTo
  *
@@ -117,6 +130,42 @@ class BlogPost extends BlogAppModel {
 					'message'	=> '投稿者を選択してください。')
 		)
 	);
+	var $__saveDir = '';
+/**
+ * アップロードビヘイビアの設定
+ *
+ * @param	int		$id
+ * @param	string	$table
+ * @param	string	$ds
+ */
+	function  setupUpload($id) {
+		
+		$sizes = array('thumb', 'mobile_thumb');
+		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
+		$data = $this->BlogContent->constructEyeCatchSize($data);
+		$data = $data['BlogContent'];
+		
+		$imagecopy = array();
+		
+		foreach($sizes as $size) {
+			if(!isset($data['eye_catch_size_' . $size . '_width']) || !isset($data['eye_catch_size_' . $size . '_height'])) {
+				continue;
+			}
+			$imagecopy[$size] = array('suffix'	=> '__' . $size);
+			$imagecopy[$size]['width'] = $data['eye_catch_size_' . $size . '_width'];
+			$imagecopy[$size]['height'] = $data['eye_catch_size_' . $size . '_height'];
+		}
+		
+		$settings = $this->Behaviors->BcUpload->settings;
+		
+		if(empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '/', $settings['saveDir'])) {
+			$settings['saveDir'] = "blog" . DS . $data['name'] . DS . "blog_posts";
+		}
+		
+		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;
+		$this->Behaviors->attach('BcUpload', $settings);
+
+	}
 /**
  * 初期値を取得する
  *
@@ -256,6 +305,39 @@ class BlogPost extends BlogAppModel {
 		}
 		return $entryDates;
 
+	}
+/**
+ * 投稿者の一覧を取得する
+ * 
+ * @param int $blogContentId
+ * @param array $options
+ * @return array 
+ */
+	function getAuthors($blogContentId, $options) {
+		
+		$options = array_merge(array(
+			'viewCount' => false
+		), $options);
+		extract($options);
+		
+		$users = $this->User->find('all', array('recursive' => -1, array('order' => 'User.id'), 'fields' => array(
+			'User.id', 'User.name', 'User.real_name_1', 'User.real_name_2', 'User.nickname'
+		)));
+		$availableUsers = array();
+		foreach($users as $key => $user) {
+			$count = $this->find('count', array('conditions' => array_merge(array(
+				'BlogPost.user_id' => $user['User']['id'],
+				'BlogPost.blog_content_id' => $blogContentId
+			), $this->getConditionAllowPublish())));
+			if($count) {
+				if($viewCount) {
+					$user['count'] = $count;
+				}
+				$availableUsers[] = $user;
+			}
+		}
+		return $availableUsers;
+		
 	}
 /**
  * 指定した月の記事が存在するかチェックする
@@ -570,11 +652,16 @@ class BlogPost extends BlogAppModel {
 		
 		$data['BlogPost']['name'] .= '_copy';
 		$data['BlogPost']['no'] = $this->getMax('no', array('BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']))+1;
-		$data['BlogPost']['status'] = false;
+		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
 		
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);
 		unset($data['BlogPost']['modified']);
+		
+		// 一旦退避(afterSaveでリネームされてしまうのを避ける為）
+		$eyeCatch = $data['BlogPost']['eye_catch'];
+		unset($data['BlogPost']['eye_catch']);
+		
 		if(!empty($data['BlogTag'])) {
 			foreach($data['BlogTag'] as $key => $tag) {
 				$data['BlogTag'][$key] = $tag['id'];
@@ -583,7 +670,15 @@ class BlogPost extends BlogAppModel {
 		
 		$this->create($data);
 		$result = $this->save();
+		
 		if($result) {
+			if($eyeCatch) {
+				$data['BlogPost']['id'] = $this->getLastInsertID();
+				$data['BlogPost']['eye_catch'] = $eyeCatch;
+				$this->set($data);
+				$this->renameToFieldBasename(true);	// 内部でリネームされたデータが再セットされる
+				$result = $this->save();
+			}
 			return $result;
 		} else {
 			if(isset($this->validationErrors['name'])) {
@@ -596,4 +691,3 @@ class BlogPost extends BlogAppModel {
 	}
 	
 }
-?>

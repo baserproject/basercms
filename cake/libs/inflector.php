@@ -528,4 +528,3 @@ class Inflector extends Object {
 	function __enclose($string) {
 		return '(?:' . $string . ')';
 	}
-?>

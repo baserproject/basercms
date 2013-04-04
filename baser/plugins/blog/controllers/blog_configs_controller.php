@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -96,10 +96,10 @@ class BlogConfigsController extends BlogAppController {
 
 			/* 更新処理 */
 			if($this->BlogConfig->save($this->data)) {
-				$this->Session->setFlash('ブログ設定を保存しました。');
+				$this->setMessage('ブログ設定を保存しました。', false, true);
 				$this->redirect(array('action' => 'form'));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -110,4 +110,3 @@ class BlogConfigsController extends BlogAppController {
 	}
 	
 }
-?>

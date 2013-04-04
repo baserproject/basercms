@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views.helpers
  * @since			baserCMS v 0.1.0
@@ -35,7 +35,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
+	var $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER, 'BcUpload');
 /**
  * ブログカテゴリモデル
  *
@@ -300,7 +300,12 @@ class BlogHelper extends AppHelper {
 		$tagLinks = array();
 		if(!empty($post['BlogTag'])) {
 			foreach($post['BlogTag'] as $tag) {
-				$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', 'tag', $tag['name']);
+				$url = array(
+					'admin'			=> false, 
+					'plugin'		=> '', 
+					'controller'	=> $post['BlogContent']['name'], 
+					'action'		=> 'archives', 'tag', $tag['name']
+				);
 				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
 			}
 		}
@@ -384,14 +389,7 @@ class BlogHelper extends AppHelper {
  */
 	function author($post) {
 
-		$author = '';
-		if(!empty($post['User']['real_name_1'])) {
-			$author .= $post['User']['real_name_1'];
-		}
-		if(!empty($post['User']['real_name_2'])) {
-			$author .= " ".$post['User']['real_name_2'];
-		}
-		echo $author;
+		echo $this->BcBaser->getUserName($post['User']);
 
 	}
 /**
@@ -673,9 +671,14 @@ class BlogHelper extends AppHelper {
 	function getPostImg($post, $options = array()) {
 
 		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
-		$_options = array('num' => 1, 'link' => true, 'alt' => $post['BlogPost']['name']);
-		$options = am($_options, $options);
+		$options = array_merge($_options = array(
+			'num'	=> 1, 
+			'link'	=> true,
+			'alt'	=> $post['BlogPost']['name']
+		), $options);
+		
 		extract($options);
+		
 		unset($options['num']);
 		unset($options['link']);
 
@@ -796,4 +799,118 @@ class BlogHelper extends AppHelper {
 
 	}
 
+/**
+ * ブログのアーカイブタイプを取得する
+ *
+ * @return string
+ * @access public
+ */
+	function getBlogArchiveType() {
+
+		if(!empty($this->_view->viewVars['blogArchiveType'])){
+			return $this->_view->viewVars['blogArchiveType'];
+		}else{
+			return '';
+		}
+
+	}
+/**
+ * アーカイブページ判定
+ * @return boolean 
+ */
+	function isArchive() {
+		return ($this->getBlogArchiveType());
+	}
+/**
+ * カテゴリー別記事一覧ページ判定
+ * @return boolean
+ */
+	function isCategory() {
+		return ($this->getBlogArchiveType() == 'category');
+	}
+/**
+ * タグ別記事一覧ページ判定
+ * @return boolean
+ */
+	function isTag() {
+		return ($this->getBlogArchiveType() == 'tag');
+	}
+/**
+ * 日別記事一覧ページ判定
+ * @return boolean
+ */
+	function isDate() {
+		return ($this->getBlogArchiveType() == 'daily');
+	}
+/**
+ * 月別記事一覧ページ判定
+ * @return boolean 
+ */
+	function isMonth() {
+		return ($this->getBlogArchiveType() == 'monthly');
+	}
+/**
+ * 年別記事一覧ページ判定
+ * @return boolean
+ */
+	function isYear() {
+		return ($this->getBlogArchiveType() == 'yearly');
+	}
+/**
+ * 個別ページ判定
+ * @return boolean
+ */
+	function isSingle() {
+		if(empty($this->params['plugin'])) {
+			return false;
+		}
+		return ($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'archives' && !$this->getBlogArchiveType());
+	}
+/**
+ * インデックスページ判定
+ * @return boolean
+ */
+	function isHome() {
+		if(empty($this->params['plugin'])) {
+			return false;
+		}
+		return ($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index');
+	}
+/**
+ * アイキャッチ画像を出力する
+ * 
+ * @param array $post
+ * @param array $options 
+ */
+	function eyeCatch($post, $options = array()) {
+		
+		echo $this->getEyeCatch($post, $options);
+		
+	}
+/**
+ * アイキャッチ画像を取得する
+ * 
+ * @param array $post
+ * @param array $options
+ * @return string 
+ */
+	function getEyeCatch($post, $options = array()) {
+		
+		$options = array_merge(array(
+			'imgsize'	=> 'thumb',		// 画像サイズ
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
+			'escape'	=> false,		// エスケープ
+			'mobile'	=> false,		// モバイル
+			'alt'		=> '',			// alt属性
+			'width'		=> '',			// 横幅
+			'height'	=> '',			// 高さ
+			'noimage'	=> '',			// 画像がなかった場合に表示する画像
+			'tmp'		=> false,
+			'class'		=> 'img-eye-catch'
+		), $options);
+		
+		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
+		
+	}
+	
 }

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -25,7 +25,7 @@ $(window).load(function() {
 	$("#UserName").focus();
 });
 $(function(){
-	$("#btnEdit").click(function(){
+	$("#BtnSave").click(function(){
 		if($("#SelfUpdate").html()) {
 			if(confirm('更新内容をログイン情報に反映する為、一旦ログアウトします。よろしいですか？')) {
 				return true;
@@ -46,7 +46,6 @@ $(function(){
 				'url' :$(this).find('.favorite-url').val()
 			};
 		});
-		console.log(data);
 		$.ajax({
 			url: $("#UserGroupSetDefaultFavoritesUrl").html(),
 			type: 'POST',
@@ -103,7 +102,7 @@ $(function(){
 				<?php echo $bcForm->input('User.id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
-<?php endif; ?>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.name', 'アカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -123,16 +122,33 @@ $(function(){
 				<?php echo $bcForm->error('User.real_name_2', '名を入力してください') ?>
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
+		</tr
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('User.nickname', 'ニックネーム') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('User.nickname', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $html->image('admin/icn_help.png',array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $bcForm->error('User.nickname') ?>
+				<div class="helptext">
+					ニックネームを設定している場合は全ての表示にニックネームが利用されます。
+				</div>
+			</td>
 		</tr>
+
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
+<?php if($editable): ?>
 				<?php echo $bcForm->input('User.user_group_id', array('type' => 'select', 'options' => $userGroups)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('User.user_group_id', 'グループを選択してください') ?>
 				<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
 					<?php $bcBaser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 					より新しいグループを追加しアクセス制限の設定をおこないます。</div>
+<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['User']['user_group_id'], $userGroups) ?>
+				<?php echo $bcForm->input('User.user_group_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 			</td>
 		</tr>
 		<tr>
@@ -176,20 +192,20 @@ $(function(){
 </div>
 
 <div class="submit section">
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php if(isset($bcBaser->siteConfig['demo_on']) && $bcBaser->siteConfig['demo_on']): ?>
 	<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
 		<?php else: ?>
 			<?php if($editable): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button', 'id' => 'btnEdit')) ?>
 	<?php $bcBaser->link('削除', 
 			array('action' => 'delete', $bcForm->value('User.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('User.name')), false); ?>
 			<?php endif ?>
 		<?php endif ?>
 	<?php else: ?>
-	<?php echo $bcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
+	
 	<?php endif ?>
 </div>
 

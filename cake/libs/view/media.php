@@ -245,4 +245,3 @@ class MediaView extends View {
 		}
 	}
 }
-?>

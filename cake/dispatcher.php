@@ -703,4 +703,3 @@ class Dispatcher extends Object {
 		return false;
 	}
 }
-?>

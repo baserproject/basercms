@@ -5,9 +5,9 @@
  * Javascript / jQuery
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
@@ -82,6 +82,7 @@ $.extend($.baserAjaxDataList.config, {
 					row.removeClass('disablerow');
 					row.removeClass('unpublish');
 					row.addClass('publish');
+					row.find('.status').html('○');
 					$.baserAjaxDataList.config.methods.unpublish.initList();
 					$.baserAjaxDataList.config.methods.publish.initList();
 				} else {
@@ -107,6 +108,7 @@ $.extend($.baserAjaxDataList.config, {
 					row.removeClass('publish');
 					row.addClass('disablerow');
 					row.addClass('unpublish');
+					row.find('.status').html('―');
 					$.baserAjaxDataList.config.methods.unpublish.initList();
 					$.baserAjaxDataList.config.methods.publish.initList();
 				} else {

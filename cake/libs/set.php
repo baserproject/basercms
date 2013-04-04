@@ -1127,4 +1127,3 @@ class Set extends Object {
 		trigger_error('get() is deprecated. Set class should be called statically', E_USER_WARNING);
 	}
 }
-?>

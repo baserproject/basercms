@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -116,23 +116,26 @@ class BlogContentsController extends BlogAppController {
 		$this->pageTitle = '新規ブログ登録';
 
 		if(!$this->data) {
+			
 			$this->data = $this->BlogContent->getDefaultValue();
+			
 		}else {
 
-			/* 登録処理 */
+			$this->data = $this->BlogContent->deconstructEyeCatchSize($this->data);
 			$this->BlogContent->create($this->data);
-
-			// データを保存
+			
 			if($this->BlogContent->save()) {
+
 				$id = $this->BlogContent->getLastInsertId();
-				$message = '新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->BlogContent->saveDbLog($message);
+				$this->setMessage('新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $id));
-			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+
+			} else {
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
+			
 		}
 
 		// テーマの一覧を取得
@@ -151,19 +154,23 @@ class BlogContentsController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		if(empty($this->data)) {
+			
 			$this->data = $this->BlogContent->read(null, $id);
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
+			
 		}else {
+			
+			$this->data = $this->BlogContent->deconstructEyeCatchSize($this->data);
+			$this->BlogContent->set($this->data);
+			
+			if($this->BlogContent->save()) {
 
-			/* 更新処理 */
-			if($this->BlogContent->save($this->data)) {
-				$message = 'ブログ「'.$this->data['BlogContent']['title'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->BlogContent->saveDbLog($message);
+				$this->setMessage('ブログ「'.$this->data['BlogContent']['title'].'」を更新しました。', false, true);
 
 				if($this->data['BlogContent']['edit_layout_template']){
 					$this->redirectEditLayout($this->data['BlogContent']['layout']);
@@ -174,8 +181,10 @@ class BlogContentsController extends BlogAppController {
 				}
 				
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
+			
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->data);
 
 		}
 
@@ -214,7 +223,7 @@ class BlogContentsController extends BlogAppController {
 			}
 			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.$this->ext));
 		}else{
-			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 		
@@ -244,7 +253,7 @@ class BlogContentsController extends BlogAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index'.$this->ext));
 		}else{
-			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -260,7 +269,7 @@ class BlogContentsController extends BlogAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -269,11 +278,9 @@ class BlogContentsController extends BlogAppController {
 
 		/* 削除処理 */
 		if($this->BlogContent->del($id)) {
-			$message = 'ブログ「'.$post['BlogContent']['title'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->BlogContent->saveDbLog($message);
+			$this->setMessage('ブログ「'.$post['BlogContent']['title'].'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -327,4 +334,3 @@ class BlogContentsController extends BlogAppController {
 	}
 	
 }
-?>

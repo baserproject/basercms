@@ -499,4 +499,3 @@ class File extends Object {
 		return $this->Folder;
 	}
 }
-?>

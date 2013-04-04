@@ -925,4 +925,3 @@ class Validation extends Object {
 		$this->errors = array();
 	}
 }
-?>

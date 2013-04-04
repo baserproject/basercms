@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$owners = $bcForm->getControlSource('BlogCategory.owner_id');
 ?>
 
 
@@ -90,16 +91,21 @@ $(window).load(function() {
 	<?php else: ?>
 		<?php echo $bcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
-	<?php if($bcBaser->siteConfig['category_permission']): ?>
+<?php if($bcBaser->siteConfig['category_permission']): ?>	
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+	<?php if($bcAdmin->isSystemAdmin()): ?>
 				<?php echo $bcForm->input('BlogCategory.owner_id', array(
 						'type'		=> 'select',
-						'options'	=> $bcForm->getControlSource('BlogCategory.owner_id'),
+						'options'	=> $owners,
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('BlogCategory.owner_id') ?>
+	<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['BlogCategory']['owner_id'], $owners) ?>
+				<?php echo $bcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
+	<?php endif ?>
 				<div id="helptextOwnerId" class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -107,20 +113,18 @@ $(window).load(function() {
 				</div>
 			</td>
 		</tr>
-	<?php endif ?>
+<?php endif ?>
 	</table>
 </div>
 
 
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<?php $bcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $bcForm->value('BlogCategory.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogCategory.name')),
 			false); ?>
 <?php endif ?>

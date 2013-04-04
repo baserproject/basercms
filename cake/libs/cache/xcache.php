@@ -150,4 +150,3 @@ class XcacheEngine extends CacheEngine {
 		}
 	}
 }
-?>

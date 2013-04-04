@@ -522,4 +522,3 @@ class DboAdodb extends DboSource {
 		return is_object($this->_result) && !$this->_result->EOF;
 	}
 }
-?>

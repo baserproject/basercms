@@ -851,4 +851,3 @@ class EmailComponent extends Object{
 	}
 
 }
-?>

@@ -556,4 +556,3 @@ class CakeSchema extends Object {
 		return array_filter(compact('add', 'drop'));
 	}
 }
-?>

@@ -787,4 +787,3 @@ class CakeSession extends Object {
 		return true;
 	}
 }
-?>

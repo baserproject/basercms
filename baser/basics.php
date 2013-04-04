@@ -8,9 +8,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser
  * @since			baserCMS v 0.1.0
@@ -204,13 +204,20 @@
 /**
  * 環境変数よりURLパラメータを取得する
  * 
- * モバイルプレフィックスは除外する
- * bootstrap実行後でのみ利用可
+ * ＊ モバイルプレフィックスは除外する
+ * ＊ GETパラメーターは除外する
+ * 
+ * 《注意》
+ * bootstrap 実行後でのみ利用可
  */
 	function getUrlParamFromEnv() {
 		
 		$agentAlias = Configure::read('BcRequest.agentAlias');
 		$url = getUrlFromEnv();
+		if(strpos($url, '?') !== false) {
+			list($url) = explode('?', $url);
+		}
+		
 		return preg_replace('/^'.$agentAlias.'\//','',$url);
 		
 	}
@@ -218,8 +225,9 @@
  * 環境変数よりURLを取得する
  * 
  * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
- * 先頭のスラッシュは除外する
- * baseUrlは除外する
+ * ＊ 先頭のスラッシュは除外する
+ * ＊ baseUrlは除外する
+ * 
  * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
 	function getUrlFromEnv() {
@@ -330,8 +338,13 @@
 				clearCache($home);
 			}
 		}elseif($url) {
-			$url = preg_replace('/\/index$/', '', $url);
-			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
+			if(preg_match('/\/index$/', $url)) {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+				$url = preg_replace('/\/index$/', '', $url);
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+			} else {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+			}
 		}else {
 			App::import('Core','Folder');
 			$folder = new Folder(CACHE.'views'.DS);
@@ -356,6 +369,10 @@
 		foreach($files[1] as $file) {
 			@unlink($file);
 		}
+		$Folder = new Folder();
+		foreach($files[0] as $folder) {
+			$Folder->delete($folder);
+		}
 		
 	}
 /**
@@ -363,30 +380,14 @@
  */
 	function clearAllCache() {
 
-		/* 標準の関数だとemptyファイルまで削除されてしまい、開発時に不便なのでFolderクラスで削除
-			Cache::clear();
-			Cache::clear(false,'_cake_core_');
-			Cache::clear(false,'_cake_model_');
-			clearCache();
-		*/
-
-		App::import('Core','Folder');
-		$folder = new Folder(CACHE);
-
-		$files = $folder->read(true,true,true);
-		foreach($files[1] as $file) {
-			@unlink($file);
-		}
-		foreach($files[0] as $dir) {
-			$folder = new Folder($dir);
-			$caches = $folder->read(true,true,true);
-			foreach($caches[1] as $file) {
-				if(basename($file) != 'empty') {
-					@unlink($file);
-				}
-			}
-		}
-
+		Cache::clear(false,'_cake_core_');
+		Cache::clear(false,'_cake_model_');
+		Cache::clear(false,'_cake_env_');
+		// viewキャッシュ削除
+		clearCache();
+		// dataキャッシュ削除
+		clearDataCache();
+		
 	}
 /**
  * baserCMSのインストールが完了しているかチェックする
@@ -741,7 +742,7 @@
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
+			return trim($aryVersionData[0]);
 		}else {
 			return false;
 		}
@@ -788,4 +789,36 @@
 		$BcEmail->send($message);
 
 	}
-?>
+/**
+ * 展開出力
+ * 
+ * デバッグレベルが 0 の時でも強制的に出力する
+ * 
+ * @param mixed $var
+ * @return void
+ */
+	function p($var) {
+		$debug = Configure::read();
+		if($debug < 1) {
+			Configure::write('debug', 1);
+		}
+		$calledFrom = debug_backtrace();
+		echo '<strong style="font-size:10px">' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
+		echo '<span style="font-size:10px"> (line <strong>' . $calledFrom[0]['line'] . '</strong>)</span>';
+		debug($var, true, false);
+		if($debug < 1) {
+			Configure::write('debug', $debug);
+		}
+	}
+/**
+ * データベースのドライバー名を取得する
+ * 
+ * @param string $dbConfigKeyName
+ * @return string 
+ */
+	function getDbDriver($dbConfigKeyName = 'baser') {
+		
+		$db = ConnectionManager::getDataSource($dbConfigKeyName);
+		return $db->config['driver'];
+		
+	}

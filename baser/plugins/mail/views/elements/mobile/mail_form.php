@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -32,11 +32,13 @@
 <?php /* 送信ボタン */ ?>
 <?php if($freezed): ?>
 <center>
-	<?php echo $mailform->submit('　送信する　', array("class"=>"btn-red button")) ?>
+	<?php echo $mailform->hidden('Message.mode', array('value' => 'Submit')) ?>
+	<?php echo $mailform->submit('　送信する　', array('class' => 'button'))  ?>
 </center>
 <?php elseif($this->action != 'submit'): ?>
 <center>
-	<?php echo $mailform->submit('　入力内容を確認する　', array("class"=>"btn-orange button"))  ?>
+	<?php echo $mailform->hidden('Message.mode', array('value' => 'Confirm')) ?>
+	<?php echo $mailform->submit('　入力内容を確認する　', array("class"=>"button"))  ?>
 </center>
 <?php endif; ?>
 

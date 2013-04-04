@@ -506,4 +506,3 @@ class CacheEngine extends Object {
 		return $key;
 	}
 }
-?>

@@ -1363,4 +1363,3 @@ class Router extends Object {
 		return compact('pass', 'named');
 	}
 }
-?>

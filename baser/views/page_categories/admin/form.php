@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -17,16 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageType = array();
-if(Configure::read('BcApp.mobile') || Configure::read('BcApp.smartphone')) {
-	$pageType = array('1' => 'PC');	
-}
-if(Configure::read('BcApp.mobile')) {
-	$pageType['2'] = 'モバイル';
-}
-if(Configure::read('BcApp.smartphone')) {
-	$pageType['3'] = 'スマートフォン';
-}
+$pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
+$owners = $bcForm->getControlSource('PageCategory.owner_id');
 ?>
 
 <script type="text/javascript">
@@ -48,6 +40,31 @@ function pageTypeChengeHandler() {
 	var options = {
 		"data[Option][excludeParentId]": $("#PageCategoryId").val()
 	};
+	if(pageType == undefined) {
+		pageType = 1;
+	}
+	$("#PageCategoryLayoutTemplate").attr('disabled', 'disabled');
+	$("#PageCategoryContentTemplate").attr('disabled', 'disabled');
+	$.getJSON($("#AjaxControlSources").html(), {type:pageType}, function(result){
+		if(!result) {
+			return;
+		}
+		var layoutTemplate = $("#PageCategoryLayoutTemplate").val();
+		var contentTemplate = $("#PageCategoryContentTemplate").val();
+		$("#PageCategoryLayoutTemplate option").remove();
+		$("#PageCategoryContentTemplate option").remove();
+		for(var key in result['layout']) {
+			$("#PageCategoryLayoutTemplate").append($("<option/>").val(key).html(result['layout'][key]));
+		}
+		for(var key in result['content']) {
+			$("#PageCategoryContentTemplate").append($("<option/>").val(key).html(result['content'][key]));
+		}
+		$("#PageCategoryLayoutTemplate").val(layoutTemplate);
+		$("#PageCategoryContentTemplate").val(contentTemplate);
+		$("#PageCategoryLayoutTemplate").attr('disabled', false);
+		$("#PageCategoryContentTemplate").attr('disabled', false);
+	});
+	
 	$.ajax({
 		type: "POST",
 		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
@@ -73,6 +90,7 @@ function pageTypeChengeHandler() {
 </script>
 
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $bcBaser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
+<div id="AjaxControlSources" class="display-none"><?php $bcBaser->url(array('controller' => 'page_categories', 'action' => 'ajax_control_sources')) ?></div>
 
 <?php if($this->action == 'admin_edit' && $indexPage): ?>
 <div class="em-box align-left">1
@@ -173,16 +191,42 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
+	</table>
+</div>
+
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+
+<div id ="formOptionBody" class="slide-body section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.layout_template', 'レイアウトテンプレート') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.layout_template', array('type' => 'select', 'options' => $bcPage->getTemplates())) ?>
+				<?php echo $bcForm->error('PageCategory.layout_template') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $bcForm->label('PageCategory.content_template', 'コンテンツテンプレート') ?></th>
+			<td class="col-input">
+				<?php echo $bcForm->input('PageCategory.content_template', array('type' => 'select', 'options' => $bcPage->getTemplates('content'))) ?>
+				<?php echo $bcForm->error('PageCategory.content_template') ?>
+			</td>
+		</tr>
 <?php if($bcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+	<?php if($bcAdmin->isSystemAdmin()): ?>
 				<?php echo $bcForm->input('PageCategory.owner_id', array(
 						'type'		=> 'select',
 						'options'	=> $bcForm->getControlSource('PageCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('PageCategory.owner_id') ?>
+	<?php else: ?>
+				<?php echo $bcText->arrayValue($this->data['PageCategory']['owner_id'], $owners) ?>
+				<?php echo $bcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
+	<?php endif ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -194,13 +238,11 @@ function pageTypeChengeHandler() {
 	</table>
 </div>
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $bcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
 	<?php $bcBaser->link('削除', 
-			array('action'=>'delete', $bcForm->value('PageCategory.id')),
-			array('class'=>'btn-gray button'),
+			array('action' => 'delete', $bcForm->value('PageCategory.id')),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $bcForm->value('PageCategory.name')),
 			false); ?>
 <?php endif ?>

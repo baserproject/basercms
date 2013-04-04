@@ -287,4 +287,3 @@ class CakeSocket extends Object {
 		return true;
 	}
 }
-?>

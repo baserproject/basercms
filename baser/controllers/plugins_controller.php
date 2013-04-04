@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -68,91 +68,6 @@ class PluginsController extends AppController {
 	var $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
 	);
-/**
- * コンテンツID
- *
- * @var int
- * @deprecated BaserPluginAppController に移行
- */
-	var $contentId = null;
-/**
- * beforeFilter
- *
- * @return void
- * @access private
- * @deprecated BaserPluginAppController に移行
- */
-	function beforeFilter() {
-
-		parent::beforeFilter();
-
-		if(!isset($this->Plugin)) {
-			$this->cakeError('missingClass', array(array('className' => 'Plugin',
-							'notice'=>'プラグインでは、コントローラーで、Pluginモデルを読み込んでおく必要があります。usesプロパティを確認してください。')));
-		}
-
-		// 有効でないプラグインを実行させない
-		if($this->name != 'Plugins' && !$this->Plugin->find('all',array('conditions'=>array('name'=>$this->params['plugin'], 'status'=>true)))) {
-			$this->notFound();
-		}
-
-		$this->contentId = $this->getContentId();
-		
-	}
-/**
- * コンテンツIDを取得する
- * 一つのプラグインで複数のコンテンツを実装する際に利用する。
- *
- * @return int $pluginNo
- * @access public
- * @deprecated BaserPluginAppController に移行
- */
-	function getContentId() {
-
-		// 管理画面の場合には取得しない
-		if(!empty($this->params['admin'])){
-			return null;
-		}
-
-		if(!isset($this->PluginContent)) {
-			return null;
-		}
-
-		if(!isset($this->params['url']['url'])) {
-			return null;
-		}
-		$contentName = '';
-		$url = preg_replace('/^\//', '', $this->params['url']['url']);
-		$url = split('/', $url);
-		if($url[0]!=Configure::read('BcRequest.agentAlias')) {
-			if(!empty($this->params['prefix']) && $url[0] == $this->params['prefix']) {
-				if(isset($url[1])) {
-					$contentName = $url[1];
-				}
-			}else {
-				$contentName = $url[0];
-			}
-		}else {
-			if(!empty($this->params['prefix']) && $url[0] == $this->params['prefix']) {
-				$contentName = $url[2];
-			}else {
-				$contentName = $url[1];
-			}
-		}
-
-		// プラグインと同じ名前のコンテンツ名の場合に正常に動作しないので
-		// とりあえずコメントアウト
-		/*if( Inflector::camelize($url) == $this->name){
-			return null;
-		}*/
-		$pluginContent = $this->PluginContent->findByName($contentName);
-		if($pluginContent) {
-			return $pluginContent['PluginContent']['content_id'];
-		}else {
-			return null;
-		}
-
-	}
 /**
  * プラグインの一覧を表示する
  *
@@ -290,8 +205,7 @@ class PluginsController extends AppController {
 	function admin_delete_file($pluginName) {
 		
 		$this->__deletePluginFile($pluginName);
-		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
-		$this->Session->setFlash($message);
+		$this->setMessage('プラグイン「'.$pluginName.'」 を完全に削除しました。');
 		$this->redirect(array('action' => 'index'));
 		
 	}
@@ -370,8 +284,11 @@ class PluginsController extends AppController {
 	function admin_add($name) {
 		
 		$name = urldecode($name);
+		$dbInited = false;
+		
 		if(!$this->data) {
 			
+			$installMessage = '';
 			// TODO 互換性のため古いパスも対応
 			$oldAppConfigPath = APP.DS.'plugins'.DS.$name.DS.'config'.DS.'config.php';
 			$appConfigPath = APP.DS.'plugins'.DS.$name.DS.'config.php';
@@ -401,51 +318,82 @@ class PluginsController extends AppController {
 				$this->data['Plugin']['version'] = $this->getBaserVersion($name);
 			}
 
-			if(!empty($installMessage)) {
-				$this->Session->setFlash($installMessage);
+			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
+			if($data) {
+				$dbInited = $data['Plugin']['db_inited'];
 			}
 
 		}else {
 
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
 
-			if($data) {
-				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
-				$data['Plugin']['name']=$this->data['Plugin']['name'];
-				$data['Plugin']['title']=$this->data['Plugin']['title'];
-				$data['Plugin']['status']=$this->data['Plugin']['status'];
-				$this->Plugin->set($data);
-			} else {
+			if(empty($data['Plugin']['db_inited'])) {
 				if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
 					include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
 				}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
 					include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
 				}
-				$data = $this->data;
-				$this->Plugin->create($data);
+			}
+			
+			if($data) {
+				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
+				$data['Plugin']['name'] = $this->data['Plugin']['name'];
+				$data['Plugin']['title'] = $this->data['Plugin']['title'];
+				$data['Plugin']['status'] = $this->data['Plugin']['status'];
+				$data['Plugin']['db_inited'] = true;
+				$this->Plugin->set($data);
+			} else {
+				$this->data['Plugin']['db_inited'] = true;
+				$this->Plugin->create($this->data);
 			}
 
 			// データを保存
 			if($this->Plugin->save()) {
 				
 				clearAllCache();
-				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。';
-				$this->Session->setFlash($message);
-				$this->Plugin->saveDbLog($message);
+				$this->setMessage('新規プラグイン「'.$name.'」を baserCMS に登録しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 
 			}else {
-				$this->Session->setFlash('プラグインに問題がある為インストールを完了できません。開発者に確認してください。');
+				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
 			}
 
 		}
 
 		/* 表示設定 */
+		$this->set('installMessage', $installMessage);
+		$this->set('dbInited', $dbInited);
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = '新規プラグイン登録';
 		$this->help = 'plugins_form';
 		$this->render('form');
 
+	}
+/**
+ * データベースをリセットする 
+ */
+	function admin_reset_db() {
+		
+		if(!$this->data) {
+			$this->setMessage('無効な処理です。', true);
+		} else {
+			
+			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->data['Plugin']['name'])));
+			$this->Plugin->resetDb($this->data['Plugin']['name']);
+			$data['Plugin']['db_inited'] = false;
+			$this->Plugin->set($data);
+			
+			// データを保存
+			if($this->Plugin->save()) {
+				clearAllCache();
+				$this->setMessage($data['Plugin']['title'] . ' プラグインのデータを初期化しました。', false, true);
+				$this->redirect(array('action' => 'add', $data['Plugin']['name']));
+			}else {
+				$this->setMessage('処理中にエラーが発生しました。プラグインの開発者に確認してください。', true);
+			}
+			
+		}
+		
 	}
 /**
  * [ADMIN] 削除処理
@@ -459,7 +407,7 @@ class PluginsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -470,11 +418,9 @@ class PluginsController extends AppController {
 		/* 削除処理 */
 		if($this->Plugin->save($data)) {
 			clearAllCache();
-			$message = 'プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。';
-			$this->Session->setFlash($message);
-			$this->Plugin->saveDbLog($message);
+			$this->setMessage('プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -532,4 +478,3 @@ class PluginsController extends AppController {
 	}
 	
 }
-?>

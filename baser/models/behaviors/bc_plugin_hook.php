@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behavior
  * @since			baserCMS v 0.1.0
@@ -57,7 +57,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return void
  * @access pubic
  */
-	function registerHook(&$model, $hookName, $pluginName){
+	function registerHook($model, $hookName, $pluginName){
 
 		if(!isset($this->registerHooks[$model->alias][$hookName])){
 			$this->registerHooks[$model->alias][$hookName] = array();
@@ -74,7 +74,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	function executeHook(&$model, $hookName, $return = null){
+	function executeHook($model, $hookName, $return = null){
 
 		$args = func_get_args();
 		unset($args[1]);unset($args[2]);
@@ -87,7 +87,7 @@ class BcPluginHookBehavior extends ModelBehavior {
 				}
 			}
 			foreach($this->registerHooks[$model->alias][$hookName] as $pluginName) {
-				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), $args);
 				if(isset($j)) {
 					$args[$j] = $return;
 				}
@@ -103,7 +103,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param array $config Configuration settings for $model
  * @access public
  */
-	function setup(&$model, $config = array()) {
+	function setup($model, $config = array()) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -161,7 +161,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function beforeFind(&$model, $query) {
+	function beforeFind($model, $query) {
 		return $this->executeHook($model, 'beforeFind', $query, $query);
 	}
 /**
@@ -173,7 +173,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	function afterFind(&$model, $results, $primary) {
+	function afterFind($model, $results, $primary) {
 		
 		return $this->executeHook($model, 'afterFind', $results, $results, $primary);
 		
@@ -185,7 +185,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function beforeValidate(&$model) {
+	function beforeValidate($model) {
 		
 		return $this->executeHook($model, 'beforeValidate', true);
 		
@@ -197,7 +197,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function beforeSave(&$model) {
+	function beforeSave($model) {
 		
 		return $this->executeHook($model, 'beforeSave', true);
 		
@@ -209,7 +209,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param boolean $created
  * @access public
  */
-	function afterSave(&$model, $created) {
+	function afterSave($model, $created) {
 		
 		$this->executeHook($model, 'afterSave', null, $created);
 		
@@ -222,7 +222,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function beforeDelete(&$model, $cascade = true) {
+	function beforeDelete($model, $cascade = true) {
 		
 		return $this->executeHook($model, 'beforeDelete', true, $cascade);
 		
@@ -233,7 +233,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param object $model
  * @access public
  */
-	function afterDelete(&$model) {
+	function afterDelete($model) {
 		
 		$this->executeHook($model, 'afterDelete');
 		
@@ -245,11 +245,42 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param string $error
  * @access public
  */
-	function onError(&$model, $error) {
+	function onError($model, $error) {
 		
 		$this->executeHook($model, 'onError', null, $error);
 		
 	}
+/**
+ * Magic method handler.
+ *
+ * @param string $method Method name
+ * @param array $params Parameters to send to method
+ * @return mixed Return value from method
+ * @access private
+ */
+	function __call($method, $params) {
+		if (!method_exists($this, 'call__')) {
+			trigger_error(sprintf(__('Magic method handler call__ not defined in %s', true), get_class($this)), E_USER_ERROR);
+		}
+		return $this->call__($method, $params);
+	}
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ * @access protected
+ */
+	function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( $Object, $method ), $args );
+		}
+
+	}
 	
 }
-?>

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -52,9 +52,7 @@ $class=' class="'.implode(' ', $classies).'"';
 		<?php $bcBaser->link($data['BlogPost']['name'],array('action'=>'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
 	</td>
 	<td>
-<?php if(!empty($data['User'])): ?>
-		<?php echo $data['User']['real_name_1']." ".$data['User']['real_name_2']; ?>
-<?php endif ?>
+		<?php echo $bcBaser->getUserName($data['User']) ?>
 	</td>
 	<td style="text-align:center"><?php echo $bcText->booleanMark($data['BlogPost']['status']); ?></td>
 <?php if($data['BlogContent']['comment_use']): ?>
@@ -67,7 +65,7 @@ $class=' class="'.implode(' ', $classies).'"';
 	<?php endif ?>
 	</td>
 <?php endif ?>
-	<td>
+	<td style="white-space:nowrap">
 		<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
 		<?php echo $bcTime->format('Y-m-d',$data['BlogPost']['modified']); ?>
 	</td>

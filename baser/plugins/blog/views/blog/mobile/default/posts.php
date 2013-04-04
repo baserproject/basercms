@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -21,7 +21,7 @@
 
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $key => $post): ?>
-<span style="color:#FF6600">◆</span>&nbsp;<?php $blog->postDate($post, 'y.m.d') ?><br />
+<span style="color:#8ABE08">■</span>&nbsp;<?php $blog->postDate($post, 'y.m.d') ?><br />
 <?php $blog->postTitle($post) ?>
 <hr size="1" style="width:100%;height:1px;margin:5px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 	<?php endforeach; ?>

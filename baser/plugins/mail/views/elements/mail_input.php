@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.views
  * @since			baserCMS v 0.1.0
@@ -36,15 +36,15 @@ if (!empty($mailFields)) {
 			
 			/* 項目名 */
 			if ($group_field != $field['group_field']  || (!$group_field && !$field['group_field'])) {
-				echo '<tr id="RowMessage'.Inflector::camelize($record['MailField']['field_name']).'"';
+				echo '    <tr id="RowMessage'.Inflector::camelize($record['MailField']['field_name']).'"';
 				if ($field['type'] == 'hidden') {
 					echo ' style="display:none"';
 				}
-				echo '><th class="col-head" width="150">'.$mailform->label("Message." . $field['field_name'] . "", $field['head']);
+				echo '>' . "\n" . '        <th class="col-head" width="150">'.$mailform->label("Message." . $field['field_name'] . "", $field['head']);
 				if($field['not_empty']) {
 					echo '<span class="required">*</span>';
 				}
-				echo '</th><td class="col-input">';
+				echo '</th>' . "\n" . '        <td class="col-input">';
 			}
 
 			echo '<span id="FieldMessage'.Inflector::camelize($record['MailField']['field_name']).'">';
@@ -56,7 +56,7 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">'.$field['before_attachment'].'</span>';
 			}
 			if (!$field['no_send'] || !$freezed) {
-				echo $mailform->control($field['type'], "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record));
+				echo $mailform->control($field['type'], "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record)) ;
 			}
 			if (!$freezed || $mailform->value("Message." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">'.$field['after_attachment'].'</span>';
@@ -91,7 +91,7 @@ if (!empty($mailFields)) {
 				}
 
 				echo '</span>';
-				echo '</td></tr>';
+				echo "</td>\n    </tr>\n";
 			}else{
 				echo '</span>';
 			}

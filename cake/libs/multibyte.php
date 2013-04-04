@@ -1137,4 +1137,3 @@ class Multibyte extends Object {
 		return false;
 	}
 }
-?>

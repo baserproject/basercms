@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behaviors
  * @since			baserCMS v 0.1.0
@@ -20,6 +20,32 @@
 include BASER_VENDORS.'imageresizer.php';
 /**
  * ファイルアップロードビヘイビア
+ * 
+ * 《設定例》
+ * public $actsAs = array(
+ *	'BcUpload' => array(
+ * 		'saveDir'	=> "editor",
+ * 		'fields'	=> array(
+ * 			'image'	=> array(
+ * 				'type'			=> 'image',
+ * 				'namefield'		=> 'id',
+ * 				'nameadd'		=> false,
+ *				'subdirDateFormat'	=> 'Y/m'	// Or false
+ * 				'imageresize'	=> array('prefix' => 'template', 'width' => '100', 'height' => '100'),
+ *				'imagecopy'		=> array(
+ *					'thumb'			=> array('suffix' => 'template', 'width' => '150', 'height' => '150'),
+ *					'thumb_mobile'	=> array('suffix' => 'template', 'width' => '100', 'height' => '100')
+ *				)
+ * 			),
+ * 			'pdf' => array(
+ * 				'type'			=> 'pdf',
+ * 				'namefield'		=> 'id',
+ * 				'nameformat'	=> '%d',
+ * 				'nameadd'		=> false
+ * 			)
+ * 		)
+ * 	)
+ * );
  * 
  * @subpackage baser.models.behaviors
  */
@@ -53,6 +79,12 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	var $Session = null;
 /**
+ * 画像拡張子
+ * 
+ * @var array 
+ */
+	var $imgExts = array('gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png');
+/**
  * セットアップ
  * 
  * @param Model	$model
@@ -60,15 +92,25 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function setup(&$model, $config = array()) {
+	function setup($model, $config = array()) {
 
-		$this->settings = Set::merge(array('saveDir'=> '')
-				, $config);
-		$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
-		if(!is_dir($this->savePath)) {
-			mkdir($this->savePath);
-			chmod($this->savePath,0777);
+		$this->settings = Set::merge(array(
+			'saveDir'	=> '',
+			'fields'	=> array()
+		), $config);
+		if($this->settings['saveDir']) {
+			$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
+		} else {
+			$this->savePath = WWW_ROOT . 'files'.DS;
 		}
+		
+		if(!is_dir($this->savePath)) {
+			$Folder = new Folder();
+			
+			$Folder->create($this->savePath);
+			$Folder->chmod($this->savePath, 0777, true);
+		}
+		App::import('Component', 'Session');
 		$this->Session = new SessionComponent();
 
 	}
@@ -80,7 +122,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function beforeSave(&$model, $options) {
+	function beforeSave($model, $options) {
 		
 		return $this->saveFiles($model);
 		
@@ -94,7 +136,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function afterSave(&$model, $created, $options) {
+	function afterSave($model, $created, $options) {
 		
 		$this->renameToFieldBasename($model);
 		$model->data = $model->save($model->data, array('callbacks'=>false,'validate'=>false));
@@ -109,7 +151,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function saveTmpFiles(&$model,$data,$tmpId) {
+	function saveTmpFiles($model,$data,$tmpId) {
 		
 		$this->Session->delete('Upload');
 		$model->data = $data;
@@ -128,9 +170,8 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function saveFiles(&$model) {
+	function saveFiles($model) {
 
-		$imageExt = array('gif','jpg','png');
 		$serverData = $model->findById($model->id);
 
 		foreach($this->settings['fields'] as $key => $field) {
@@ -172,7 +213,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 				/* タイプ別除外 */
 				if($field['type'] == 'image') {
-					if(!in_array($field['ext'], $imageExt)) {
+					if(!in_array($field['ext'], $this->imgExts)) {
 						unset($model->data[$model->name][$field['name']]);
 						continue;
 					}
@@ -206,7 +247,7 @@ class BcUploadBehavior extends ModelBehavior {
 					$fileName = $this->saveFile($model,$field);
 					if($fileName) {
 
-						if(!$this->tmpId && ($field['type']=='all' || $field['type']=='image') && !empty($field['imagecopy']) && in_array($field['ext'],$imageExt)) {
+						if(!$this->tmpId && ($field['type']=='all' || $field['type']=='image') && !empty($field['imagecopy']) && in_array($field['ext'],$this->imgExts)) {
 
 							/* 画像をコピーする */
 							foreach($field['imagecopy'] as $copy) {
@@ -258,7 +299,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function moveFileSessionToTmp(&$model,$fieldName) {
+	function moveFileSessionToTmp($model,$fieldName) {
 
 		$sessionKey = $model->data[$model->alias][$fieldName.'_tmp'];
 		$tmpName = $this->savePath.$sessionKey;
@@ -305,7 +346,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return ファイル名 Or false
  * @access public
  */
-	function saveFile(&$model,$field) {
+	function saveFile($model,$field) {
 
 		// データを取得
 		$file = $model->data[$model->name][$field['name']];
@@ -340,7 +381,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 				chmod($filePath,0666);
 				// ファイルをリサイズ
-				if(!empty($field['imageresize']) && ($field['ext']=='jpg' || $field['ext']=='gif' || $field['ext']=='png')) {
+				if(!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
 					if(!empty($field['imageresize']['thumb'])) {
 						$thumb = $field['imageresize']['thumb'];
 					}else {
@@ -373,7 +414,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function copyImage(&$model,$field) {
+	function copyImage($model,$field) {
 
 		// データを取得
 		$file = $model->data[$model->name][$field['name']];
@@ -451,7 +492,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	function beforeDelete(&$model) {
+	function beforeDelete($model) {
 
 		$model->data = $model->findById($model->id);
 		$this->delFiles($model);
@@ -464,7 +505,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function delFiles(&$model,$fieldName = null) {
+	function delFiles($model,$fieldName = null) {
 
 		foreach($this->settings['fields'] as $key => $field) {
 			if(empty($field['name'])) $field['name'] = $key;
@@ -481,7 +522,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function delFile(&$model,$file,$field,$delImagecopy=true) {
+	function delFile($model,$file,$field,$delImagecopy=true) {
 
 		if(!$file) {
 			return true;
@@ -525,7 +566,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function renameToFieldBasename(&$model) {
+	function renameToFieldBasename($model, $copy = false) {
 
 		foreach($this->settings['fields'] as $key => $setting) {
 
@@ -539,23 +580,40 @@ class BcUploadBehavior extends ModelBehavior {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($model,$setting,$pathinfo['extension']);
+					
 					if(!$newName) {
 						return true;
 					}
 					if($oldName != $newName) {
-
-						rename($this->savePath.$oldName,$this->savePath.$newName);
+						
+						if(!empty($setting['imageresize'])) {
+							$newName = $this->getFileName($model, $setting['imageresize'], $newName);
+						} else {
+							$newName = $this->getFileName($model, null, $newName);
+						}
+						
+						if(!$copy) {
+							rename($this->savePath.$oldName,$this->savePath.$newName);
+						} else {
+							copy($this->savePath.$oldName,$this->savePath.$newName);
+						}
+						
 						$model->data[$model->alias][$setting['name']] = $newName;
-
+						
 						if(!empty($setting['imagecopy'])) {
 							foreach($setting['imagecopy'] as $copysetting) {
 								$oldCopyname = $this->getFileName($model,$copysetting,$oldName);
 								if(file_exists($this->savePath.$oldCopyname)) {
 									$newCopyname = $this->getFileName($model,$copysetting,$newName);
-									rename($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									if(!$copy) {
+										rename($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									} else {
+										copy($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									}
 								}
 							}
 						}
+						
 					}
 				}else {
 					$model->data[$model->alias][$setting['name']] = '';
@@ -574,7 +632,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return mixed false / string
  * @access public
  */
-	function getFieldBasename(&$model,$setting,$ext) {
+	function getFieldBasename($model,$setting,$ext) {
 
 		if(empty($setting['namefield'])) {
 			return false;
@@ -593,7 +651,27 @@ class BcUploadBehavior extends ModelBehavior {
 		if(!empty($setting['nameformat'])) {
 			$basename = sprintf($setting['nameformat'],$basename);
 		}
-		return $basename . '_' . $setting['name'] . '.' . $ext;
+		
+		if(!isset($setting['nameadd']) || $setting['nameadd'] !== false) {
+			$basename .= '_' . $setting['name'];
+		}
+		
+		$subdir = '';
+		if(!empty($this->settings['subdirDateFormat'])) {
+			$subdir = date($this->settings['subdirDateFormat']);
+			if(!preg_match('/\/$/', $subdir)) {
+				$subdir .= '/';
+			}
+			$subdir = str_replace('/', DS, $subdir);
+			$path = $this->savePath . $subdir;
+			if(!is_dir($path)) {
+				$Folder = new Folder();
+				$Folder->create($path);
+				$Folder->chmod($path, 0777);
+			}
+		}
+
+		return $subdir . $basename . '.' . $ext;
 
 	}
 /**
@@ -605,8 +683,11 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	function getFileName(&$model,$setting,$filename) {
+	function getFileName($model,$setting,$filename) {
 
+		if(empty($setting)) {
+			return $filename;
+		}
 		$pathinfo = pathinfo($filename);
 		$ext = $pathinfo['extension'];
 		// プレフィックス、サフィックスを取得
@@ -628,7 +709,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	function getBasename(&$model,$setting,$filename) {
+	function getBasename($model,$setting,$filename) {
 		
 		$pattern = "/^".$prefix."(.*?)".$suffix."\.[a-zA-Z0-9]*$/is";
 		if(preg_match($pattern, $filename,$maches)) {
@@ -646,13 +727,12 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	function getUniqueFileName(&$model, $fieldName, $fileName, $setting = null) {
+	function getUniqueFileName($model, $fieldName, $fileName, $setting = null) {
 
 		$pathinfo = pathinfo($fileName);
-		$ext = $pathinfo['extension'];
+		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);
 
-		$basename = preg_replace("/\.".$ext."$/is",'',$fileName);
-
+		$ext = $setting['ext'];
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$model->name.'.'.$fieldName.' LIKE'] = $basename.'%'.$ext;
 		if(!empty($model->data[$model->name]['id'])) {
@@ -674,10 +754,9 @@ class BcUploadBehavior extends ModelBehavior {
 			return $basename.'__'.($prefixNo+1).'.'.$ext;
 
 		}else {
-			return $fileName;
+			return $basename.'.'.$ext;
 		}
 
 	}
 	
 }
-?>

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -36,7 +36,7 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	var $components = array('BcAuth','Cookie','BcAuthConfigure');
+	var $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
 /**
  * ヘルパー
  *
@@ -65,24 +65,144 @@ class ThemesController extends AppController {
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
 		$datas = array();
+		$currentTheme = array();
 		foreach($files[0] as $themename){
 			if($themename != 'core' && $themename != '_notes'){
-				$datas[] = $this->_loadThemeInfo($themename);
+				if($themename == $this->siteConfigs['theme']) {
+					$currentTheme = $this->_loadThemeInfo($themename);
+				} else {
+					$datas[] = $this->_loadThemeInfo($themename);
+				}
 			}
 		}
-		$datas[] = array(
-			'name'				=> 'core',
-			'title'				=> 'baserCMSコア',
-			'version'			=> $this->getBaserVersion(),
-			'description'		=> 'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
-			'author'			=> 'basercms',
-			'url'				=> 'http://basercms.net',
-			'is_writable_pages'	=> false
-		);
+		
 		$this->set('datas',$datas);
+		$this->set('currentTheme', $currentTheme);
+		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
+		
 		$this->subMenuElements = array('themes');
 		$this->help = 'themes_index';
 		
+	}
+/**
+ * 初期データセットを読み込む
+ * 
+ * @return void
+ */
+	function admin_load_default_data_pattern() {
+		
+		if (empty($this->data['Theme']['default_data_pattern'])) {
+			$this->setMessage('不正な操作です。', true);
+			$this->redirect('index');
+		}
+		
+		$excludes = array('plugins', 'dblogs');
+		
+		$user = $this->BcAuth->user();
+		$User = ClassRegistry::init('User');
+		$user = $User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'recursive' => -1));
+		
+		/* データを削除する */
+		$this->BcManager->resetAllTables(null, $excludes);
+		
+		$dbDataPattern = $this->data['Theme']['default_data_pattern'];
+		list($theme, $pattern) = explode('.', $dbDataPattern);
+		$result = true;
+		
+		/* コアデータ */
+		if (!$this->BcManager->loadDefaultDataPattern('baser', null, $pattern, $theme, 'core', $excludes)) {
+			$result = false;
+			$this->log($dbDataPattern." の初期データのロードに失敗しました。");
+		}
+		
+		/* コアプラグインデータ */
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach ($corePlugins as $corePlugin) {
+			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $corePlugin, $excludes)) {
+				$result = false;
+				$this->log($dbDataPattern." のプラグインの初期データのロードに失敗しました。");
+			}
+		}
+		
+		if (!$result) {
+			/* 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる */
+			if (!$this->BcManager->loadDefaultDataPattern('baser', null, 'default', 'core', 'core', $excludes)) {
+				$this->log("コアの初期データのロードに失敗しました。");
+				$result = false;
+			}
+			foreach ($corePlugins as $corePlugin) {
+				if (!$this->BcManager->loadDefaultDataPattern('plugin', null, 'default', 'core', $corePlugin, $excludes)) {
+					$this->log("コアのプラグインの初期データのロードに失敗しました。");
+					$result = false;
+				}
+			}
+			if ($result) {
+				$this->setMessage('初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。', true);
+			} else {
+				$this->setMessage('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。', true);
+			}
+		}
+		
+		// システムデータの初期化
+		if (!$this->BcManager->initSystemData()) {
+			$result = false;
+			$this->log('システムデータの初期化に失敗しました。');
+		}
+		
+		// ユーザーデータの初期化
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		$User->create($user);
+		if (!$User->save()) {
+			$result = false;
+			$this->log('ユーザーデータの初期化に失敗しました。手動でユーザー情報を新しく登録してください。');
+		}
+		
+		// システム基本設定の更新
+		$siteConfigs = array('SiteConfig' => array(
+			'email'					=> $this->siteConfigs['email'],
+			'google_analytics_id'	=> $this->siteConfigs['google_analytics_id'],
+			'first_access'			=> null,
+			'version'				=> $this->siteConfigs['version']
+		));
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$SiteConfig->saveKeyValue($siteConfigs);
+		
+		// メール受信テーブルの作成
+		$PluginContent = ClassRegistry::init('PluginContent');
+		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
+		$Message = ClassRegistry::init('Mail.Message');
+		foreach($pluginContents as $pluginContent) {
+			if($Message->createTable($pluginContent['PluginContent']['name'])) {
+				if(!$Message->construction($pluginContent['PluginContent']['content_id'])) {
+					$result = false;
+					$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+				}
+			} else {
+				$result = false;
+				$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+			}
+		}
+		
+		clearAllCache();
+		
+		if(!$this->Page->createAllPageTemplate()){
+			$result = false;
+			$this->log(
+					'初期データの読み込み中にページテンプレートの生成に失敗しました。' .
+					'「pages」フォルダに書き込み権限が付与されていない可能性があります。' .
+					'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+			);
+		}
+		
+		if($result) {
+			$this->setMessage('初期データの読み込みが完了しました。');
+		} else {
+			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+		}
+		
+		$this->redirect('index');
+
 	}
 /**
  * テーマ情報を読み込む
@@ -144,10 +264,10 @@ class ThemesController extends AppController {
 			$this->data['Theme']['old_name'] = $theme;
 			$this->Theme->set($this->data);
 			if($this->Theme->save()){
-				$this->Session->setFlash('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
+				$this->setMessage('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'index'));
 			}else{
-				$this->Session->setFlash('テーマ情報の変更に失敗しました。入力内容を確認してください。');
+				$this->setMessage('テーマ情報の変更に失敗しました。入力内容を確認してください。', true);
 			}
 		}
 
@@ -191,7 +311,7 @@ class ThemesController extends AppController {
 		}
 		$result = $this->_copy($theme);
 		if($result) {
-			$this->set('data', $result);
+			exit(true);
 		} else {
 			$this->ajaxError(500, 'テーマフォルダのアクセス権限を見直してください。');
 		}
@@ -245,24 +365,6 @@ class ThemesController extends AppController {
 		
 	}
 /**
- * 一括削除
- * 
- * @param array $ids
- * @return boolean
- * @access protected
- */
-	function _batch_del($ids) {
-		
-		if($ids) {
-			foreach($ids as $id) {
-				$this->_del($id);
-			}
-		}
-		clearViewCache();
-		return true;
-		
-	}
-/**
  * データを削除する
  * 
  * @param int $id
@@ -308,7 +410,7 @@ class ThemesController extends AppController {
 			$SiteConfig->saveKeyValue($siteConfig);
 		}
 		clearViewCache();
-		$this->Session->setFlash('テーマ「'.$theme.'」を削除しました。');
+		$this->setMessage('テーマ「'.$theme.'」を削除しました。');
 		$this->redirect(array('action' => 'index'));
 
 	}
@@ -329,13 +431,110 @@ class ThemesController extends AppController {
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
 		if(!$this->Page->createAllPageTemplate()){
-				$this->Session->setFlash('テーマ変更中にページテンプレートの生成に失敗しました。<br />「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />テーマの適用をやり直すか、表示できないページについてページ管理より更新処理を行ってください。');
+				$this->setMessage(
+						'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
+						'「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
+						'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+				, true);
 		} else {
-			$this->Session->setFlash('テーマ「'.$theme.'」を適用しました。');
+			$this->setMessage('テーマ「'.$theme.'」を適用しました。');
 		}
 		$this->redirect(array('action' => 'index'));
 		
 	}
+/**
+ * 初期データセットをダウンロードする 
+ */
+	function admin_download_default_data_pattern() {
+		
+		/* コアのCSVを生成 */
+		$tmpDir = TMP . 'csv' . DS;
+		$Folder = new Folder();
+		$Folder->create($tmpDir);
+		emptyFolder($tmpDir);
+		clearAllCache();
+		
+		$excludes = array('plugins', 'dblogs', 'users', 'favorites');
+		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
+		
+		/* コアプラグインのCSVを生成 */
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach($corePlugins as $corePlugin) {
+			$Folder->create($tmpDir . $corePlugin);
+			emptyFolder($tmpDir . $corePlugin);
+			$this->_writeCsv('plugin', $corePlugin, $tmpDir . $corePlugin . DS);
+		}
+		
+		/* site_configsの編集 (email / google_analytics_id / version) */
+		$targets = array('email', 'google_analytics_id', 'version');
+		$path = $tmpDir . 'site_configs.csv';
+		$fp = fopen($path, 'a+');
+		$records = array();
+		while(($record = fgetcsvReg($fp, 10240)) !== false) {
+			if(in_array($record[1], $targets)) {
+				$record[2] = '';
+			}
+			if($record[1] == 'first_access') {
+				$record[2] = '1';
+			}
+			$records[] = '"'.implode('","', $record).'"';
+		}
+		ftruncate($fp, 0);
+		fwrite($fp, implode("\n", $records));
+		
+		/* ZIPに固めてダウンロード */
+		$fileName = 'default';
+		App::import('Vendor','Simplezip');
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($fileName);
+		emptyFolder($tmpDir);
+		exit();
+		
+	}
+/**
+ * CSVファイルを書きだす
+ *
+ * @param string $configKeyName
+ * @param string $path
+ * @return boolean
+ * @access protected
+ */
+	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
 
+		$db =& ConnectionManager::getDataSource($configKeyName);
+		$db->cacheSources = false;
+		$tables = $db->listSources();
+
+		foreach($tables as $table) {
+			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $table, $matches) &&
+					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+				$table = $matches[1];
+				
+				if(in_array($table, $exclude)) {
+					continue;
+				}
+				
+				if($plugin != 'core') {
+					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
+					if (!preg_match("/^".$plugin."_([^_].+)$/", $table)) {
+						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
+						if ($plugin != 'mail') {
+							continue;
+						} elseif (!preg_match("/messages$/", $table)) {
+							continue;
+						}
+					}
+				}
+				
+				if(!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding'=>'SJIS', 'init' => true))) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+
+	}
+	
 }
-?>

@@ -18,9 +18,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.datasources.dbo
  * @since			baserCMS v 0.1.0
@@ -941,7 +941,13 @@ class DboBcCsv extends DboSource {
 		if($this->appEncoding != $this->dbEncoding) {
 			$head = mb_convert_encoding($head, $this->dbEncoding, $this->appEncoding);
 		}
-		return fwrite($this->connection[$queryData['tableName']], $head);
+		
+		$result = fwrite($this->connection[$queryData['tableName']], $head);
+		if($result) {
+			chmod($this->csvName[$queryData['tableName']], 0666);
+			return true;
+		}
+		return false;
 
 	}
 /**
@@ -1033,10 +1039,12 @@ class DboBcCsv extends DboSource {
 
 		// ボディを生成
 		$body = '';
-		foreach($records as $key => $record) {
-			if(!eval($queryData['conditions'])) {
-				$record = $this->_convertRecord($record);
-				$body .= implode(",",$record)."\n";
+		if($records) {
+			foreach($records as $key => $record) {
+				if(!eval($queryData['conditions'])) {
+					$record = $this->_convertRecord($record);
+					$body .= implode(",",$record)."\n";
+				}
 			}
 		}
 
@@ -1465,7 +1473,7 @@ class DboBcCsv extends DboSource {
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
-		$dropPattern = "/DROP\sTABLE\s+([^\s]+);/si";
+		$dropPattern = "/DROP\sTABLE\s+([^\s]+)/si";
 
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)) {
@@ -2935,4 +2943,3 @@ class DboBcCsv extends DboSource {
 		$v[$j] = $temp;
 		
 	}
-?>

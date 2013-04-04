@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.view.helpers
  * @since			baserCMS v 0.1.0
@@ -160,6 +160,11 @@ class BcAppHelper extends Helper {
 			$file = preg_replace('/'.preg_quote($this->webroot, '/').'/', '', $file);
 		}
 		$filePath = str_replace('/', DS, $file);
+		
+		if(strpos($filePath, '?') !== false) {
+			list($filePath) = explode('?', $filePath);
+		}
+		
 		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->webroot.$file;
@@ -193,6 +198,7 @@ class BcAppHelper extends Helper {
 			$webPath = str_replace("\\",'/',$webPath);
 		}
 		// <<<
+		
 		return $webPath;
 	}
 /**
@@ -203,6 +209,18 @@ class BcAppHelper extends Helper {
  */
 	function executeHook($hook) {
 		
+		$args = func_get_args();
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
+		
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	function dispatchPluginHook($hook) {
+		
 		if(!$this->_view){
 			$this->_view =& ClassRegistry::getObject('View');
 		}
@@ -210,7 +228,21 @@ class BcAppHelper extends Helper {
 		$args = func_get_args();
 		$args[0] =& $this;
 
-		return call_user_func_array(array(&$this->_view->loaded['bcPluginHook'], $hook), $args);
+		return call_user_func_array(array($this->_view->loaded['bcPluginHook'], $hook), $args);
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * @param type $hook
+ * @param type $return
+ * @return type 
+ */
+	function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		$View = ClassRegistry::getObject('View');
+		$BcPluginHook = $View->loaded['bcPluginHook'];
+		return call_user_func_array(array($BcPluginHook, 'executeHook'), $args);
 		
 	}
 /**
@@ -243,15 +275,18 @@ class BcAppHelper extends Helper {
 			array_push($url, $url['id']);
 			unset($url['id']);
 		}
-		
-		if (!isset($url['admin']) && !empty($this->params['admin'])) {
+
+		if (is_array($url) && !isset($url['admin']) && !empty($this->params['admin'])) {
 			$url['admin'] = true;
-		} elseif (isset($url['admin']) && !$url['admin']) {
-			unset($url['admin']);
 		}
-			
-		return parent::url($url, $full);
+		
+		if(!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
+			return $this->webroot($url);
+		} elseif(!is_array($url) && preg_match('/^javascript:/', $url)) {
+			return $url;
+		} else {
+			return parent::url($url, $full);
+		}
 		
 	}
 }
-?>

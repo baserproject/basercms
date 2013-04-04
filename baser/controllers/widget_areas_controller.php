@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -110,10 +110,10 @@ class WidgetAreasController extends AppController {
 		if($this->data){			
 			$this->WidgetArea->set($this->data);
 			if($this->WidgetArea->save()){
-				$this->Session->setFlash('新しいウィジェットエリアを保存しました。');
+				$this->setMessage('新しいウィジェットエリアを保存しました。');
 				$this->redirect(array('action' => 'edit', $this->WidgetArea->getInsertID()));
 			}else{
-				$this->Session->setFlash('新しいウィジェットエリアの保存に失敗しました。');
+				$this->setMessage('新しいウィジェットエリアの保存に失敗しました。', true);
 			}
 		}
 		$this->help = 'widget_areas_form';
@@ -236,7 +236,7 @@ class WidgetAreasController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -245,11 +245,9 @@ class WidgetAreasController extends AppController {
 
 		/* 削除処理 */
 		if($this->WidgetArea->del($id)) {
-			$message = 'ウィジェットエリア「'.$post['WidgetArea']['name'].'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->WidgetArea->saveDbLog($message);
+			$this->setMessage('ウィジェットエリア「'.$post['WidgetArea']['name'].'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 		clearViewCache('element_widget','');
 		$this->redirect(array('action' => 'index'));
@@ -433,4 +431,3 @@ function widgetSort($a, $b){
 	}
 	
 }
-?>

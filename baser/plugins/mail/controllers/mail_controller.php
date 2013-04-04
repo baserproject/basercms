@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controller
  * @since			baserCMS v 0.1.0
@@ -59,8 +59,11 @@ class MailController extends MailAppController {
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
-	//var $components = array('Email','BcEmail','Security','BcCaptcha');
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha');
+	// var $components = array('Email','BcEmail','Security','BcCaptcha');
+	// 
+	// 2013/03/14 ryuring
+	// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security');
 /**
  * CSS
  *
@@ -139,12 +142,13 @@ class MailController extends MailAppController {
 
 		$this->subMenuElements = array('default');
 
+		// 2013/03/14 ryuring
+		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
 		$this->Security->enabled = true;
-		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
-		// 詳細はコンポーネント設定のコメントを参照
-		//$this->Security->requireAuth('submit');
-		$this->Security->validatePost = false;
-
+		$this->Security->requireAuth('confirm', 'submit');
+		$this->Security->validatePost = true;
+		$this->Security->disabledFields[] = 'Message.mode';
+		
 		// SSL設定
 		if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
 			$this->Security->blackHoleCallback = '_sslFail';
@@ -201,7 +205,7 @@ class MailController extends MailAppController {
 
 		$user = $this->BcAuth->user();
 		if(!empty($user) && !Configure::read('BcRequest.agent')) {
-			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', array('admin' => true, 'prefix' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 		
 		$this->set('mailContent',$this->dbDatas['mailContent']);
@@ -256,8 +260,6 @@ class MailController extends MailAppController {
 				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
-				} else {
-					unset($this->data['Message']['auth_captcha']);
 				}
 			}
 
@@ -268,7 +270,7 @@ class MailController extends MailAppController {
 				$this->set('freezed',false);
 				$this->set('error',true);
 
-				$this->Session->setFlash('【入力エラーです】<br />入力内容を確認して再度送信してください。');
+				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
 			}
 
 			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
@@ -319,10 +321,12 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		
+
 		if(!$this->data) {
 			$this->redirect(array('action' => 'index', $id));
-		}else {
-
+		} elseif( isset($this->data['Message']['mode']) && $this->data['Message']['mode'] == 'Back' ) {
+            $this->_back($id);
+		} else {
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
 			// ※ nameフィールドの名称を[message]以外にする
 			if($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
@@ -331,6 +335,16 @@ class MailController extends MailAppController {
 				$prefix = "";
 			}
 
+			// 画像認証を行う
+			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
+				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
+				if(!$captchaResult){
+					$this->redirect(array('action' => 'index', $id));
+				} else {
+					unset($this->data['Message']['auth_captcha']);
+				}
+			}
+			
 			$this->Message->create($this->data);
 
 			if($this->Message->save(null,false)) {
@@ -342,17 +356,62 @@ class MailController extends MailAppController {
 
 			}else {
 
-				$this->Session->setFlash('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。');
+				$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
 				$this->set('sendError',true);
 
 			}
 
+    		$this->set('mailContent',$this->dbDatas['mailContent']);
+    		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'submit');
 		}
+	}
+
+
+    /**
+     * [private] 確認画面から戻る
+     *
+     * @param mixed mail_content_id
+     * @return void
+     * @access public
+     */
+    function _back($id)
+    {
+        $this->set('freezed',false);
+        $this->set('error',false);
+
+        if($this->dbDatas['mailFields']){
+            $this->set('mailFields',$this->dbDatas['mailFields']);
+        }
+
+        //mailの重複チェックがある場合は、チェック用のデータを復帰
+        $sendVal = array();
+        $noSendVal = array();
+        foreach($this->dbDatas['mailContent']['MailField'] as $val){
+            if($val['valid_ex'] == 'VALID_EMAIL_CONFIRM'){
+                if(! $val['no_send'] ){
+                    $sendVal[$val['group_valid']] = $val['field_name'];
+                } else {
+                    $noSendVal[$val['group_valid']][] = $val['field_name'] ;
+                }
+            }
+        }
+        if(! empty($noSendVal) ){
+            foreach( $noSendVal as $key => $val){
+                foreach( $val as $v){
+                    if( isset($this->data['Message'][$sendVal[$key]]) ){
+                        $this->data['Message'][$v] = $this->data['Message'][$sendVal[$key]];
+                    }
+                }
+            }
+        }
+
+        $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 
 		$this->set('mailContent',$this->dbDatas['mailContent']);
-		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'submit');
+		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
+    }
 
-	}
+
 /**
  * [MOBILE] 送信完了ページ
  *
@@ -484,4 +543,3 @@ class MailController extends MailAppController {
 		
     }
 }
-?>

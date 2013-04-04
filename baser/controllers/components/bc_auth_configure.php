@@ -7,9 +7,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers.components
  * @since			baserCMS v 0.1.0
@@ -38,7 +38,7 @@ class  BcAuthConfigureComponent extends Object {
  * @return void
  * @access public
  */
-	function initialize(&$controller) {
+	function initialize($controller) {
 		
 		$this->controller = $controller;
 		
@@ -101,15 +101,16 @@ class  BcAuthConfigureComponent extends Object {
 		}
 		
 		// セッション識別
-		$auth->sessionKey = 'Auth.'.$userModel;
+		$auth->sessionKey = 'Auth.User';
+		
 		// ログインアクション
 		$auth->loginAction = $loginAction;
 
-		$redirect = $auth->Session->read('Auth.redirect');
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
-		/*if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
+		$redirect = $auth->Session->read('Auth.redirect');
+		if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
 			$auth->Session->write('Auth.redirect',null);
-		}*/
+		}
 
 		// ログイン後にリダイレクトするURL
 		$auth->loginRedirect = $loginRedirect;
@@ -119,6 +120,7 @@ class  BcAuthConfigureComponent extends Object {
 			$cookie = $controller->Cookie->read($auth->sessionKey);
 			if(!empty($cookie)) {
 				$auth->login($cookie);
+				$this->setSessionAuthPrefix();
 				return true;
 			}
 			// インストールモードの場合は無条件に認証なし
@@ -131,6 +133,21 @@ class  BcAuthConfigureComponent extends Object {
 		return true;
 
 	}
-
+/**
+ * ログイン時にセッションにauthPrefixを保存する 
+ */
+	function setSessionAuthPrefix() {
+		
+		$authPrefix = $this->controller->Session->read($this->controller->BcAuth->sessionKey . '.authPrefix');
+		if (!$authPrefix) {
+			if(empty($this->controller->params['prefix'])) {
+				$authPrefix = 'front';
+			} else {
+				$authPrefix = $this->controller->params['prefix'];
+			}
+			$this->controller->Session->write($this->controller->BcAuth->sessionKey . '.authPrefix', $authPrefix);
+		}
+		
+	}
+	
 }
-?>

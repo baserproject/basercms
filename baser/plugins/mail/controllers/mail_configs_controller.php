@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.controllers
  * @since			baserCMS v 0.1.0
@@ -78,10 +78,10 @@ class MailConfigsController extends MailAppController {
 
 			/* 更新処理 */
 			if($this->MailConfig->save($this->data)) {
-				$this->Session->setFlash('メールフォーム設定を保存しました。');
+				$this->setMessage('メールフォーム設定を保存しました。');
 				$this->redirect(array('action' => 'form'));
 			}else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
@@ -94,4 +94,3 @@ class MailConfigsController extends MailAppController {
 	}
 	
 }
-?>

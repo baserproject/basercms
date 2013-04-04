@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -42,7 +42,6 @@ if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $site
 	</ul>
 </div>
 
-
 <?php if($scriptNum): ?>
 <div class="corner10 panel-box section">
 	<div class="section">
@@ -67,7 +66,7 @@ if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $site
 <?php if($requireUpdate): ?>
 	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
 	<?php if(empty($plugin)): ?>
-		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($this->params['pass'][0]))) ?>
+		<?php echo $bcForm->create(array('action' => $this->action)) ?>
 	<?php else: ?>
 		<?php echo $bcForm->create(array('action' => $this->action, 'url' => array($plugin))) ?>
 	<?php endif ?>
@@ -86,3 +85,14 @@ if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $site
 	</p>
 <?php endif ?>
 </div>
+
+<?php if ($log): ?>
+<div class="corner10 panel-box section" id="UpdateLog">
+	<h2>アップデートログ</h2>
+<?php echo $bcForm->textarea('Updater.log', array(
+	'value'		=> $log, 
+	'style'		=> 'width:99%;height:200px;font-size:12px',
+	'readonly'	=> 'readonly'
+)) ?>
+</div>
+<?php endif ?>

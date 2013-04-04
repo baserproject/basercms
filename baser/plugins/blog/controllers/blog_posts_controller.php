@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -46,7 +46,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog');
+	var $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 /**
  * コンポーネント
  *
@@ -93,7 +93,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
 			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
-			
+			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if($this->params['prefix'] == 'admin') {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}
@@ -122,7 +122,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_index($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -268,7 +268,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_add($blogContentId) {
 
 		if(!$blogContentId || !$this->blogContent) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -285,14 +285,12 @@ class BlogPostsController extends BlogAppController {
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
-				$message = '記事「'.$this->data['BlogPost']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->BlogPost->saveDbLog($message);
+				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を追加しました。', false, true);
 				$this->BcPluginHook->executeHook('afterBlogPostAdd', $this);
 				// 編集画面にリダイレクト
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -307,11 +305,42 @@ class BlogPostsController extends BlogAppController {
 			'postEditable'	=> true,
 			'empty'			=> '指定しない'
 		));
+				
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'content_draft', 
+			'disableDraft'	=> true,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckEditorOptions2 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'detail_draft', 
+			'disableDraft'	=> true,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+			$ckEditorOptions2 = array_merge($ckEditorOptions2, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+		
 		$this->set('editable', true);
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('ckEditorOptions1', array('width' => 'auto', 'useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => true));
-		$this->set('ckEditorOptions2', array('width' => 'auto', 'useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => true));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckEditorOptions2', $ckEditorOptions2);
+		$this->set('ckStyles', $ckStyles);
 		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user[$userModel]['id'])));
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
 		$this->help = 'blog_posts_form';
@@ -329,14 +358,12 @@ class BlogPostsController extends BlogAppController {
 	function admin_edit($blogContentId,$id) {
 
 		if(!$blogContentId || !$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->read(null, $id);
-			$this->data['BlogPost']['content_tmp'] = $this->data['BlogPost']['content'];
-			$this->data['BlogPost']['detail_tmp'] = $this->data['BlogPost']['detail'];
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
@@ -345,13 +372,11 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
-				$message = '記事「'.$this->data['BlogPost']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->BlogPost->saveDbLog($message);
+				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を更新しました。', false, true);
 				$this->BcPluginHook->executeHook('afterBlogPostEdit', $this);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -372,7 +397,7 @@ class BlogPostsController extends BlogAppController {
 		}
 		
 		$editable = ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
@@ -387,13 +412,43 @@ class BlogPostsController extends BlogAppController {
 			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->data['BlogPost']['no']);
 		}
 	
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'content_draft', 
+			'disableDraft'	=> false,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckEditorOptions2 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'detail_draft', 
+			'disableDraft'	=> false,
+			'width'			=> 'auto', 
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+		
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::import('Vendor', 'CKEditorStyleParser', array('file' => 'CKEditorStyleParser.php'));
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+			$ckEditorOptions2 = array_merge($ckEditorOptions2, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+		
 		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->data['BlogPost']['id']);
 		$this->set('users',$this->BlogPost->User->getUserList());
-		$this->set('ckEditorOptions1', array('width' => 'auto', 'useDraft' => true, 'draftField' => 'content_draft', 'disableDraft' => false));
-		$this->set('ckEditorOptions2', array('width' => 'auto', 'useDraft' => true, 'draftField' => 'detail_draft', 'disableDraft' => false));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckEditorOptions2', $ckEditorOptions2);
+		$this->set('ckStyles', $ckStyles);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->data['BlogPost']['name'];
 		$this->help = 'blog_posts_form';
 		$this->render('form');
@@ -471,7 +526,7 @@ class BlogPostsController extends BlogAppController {
 	function admin_delete($blogContentId,$id = null) {
 
 		if(!$blogContentId || !$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
@@ -481,11 +536,9 @@ class BlogPostsController extends BlogAppController {
 		// 削除実行
 		if($this->BlogPost->del($id)) {
 			clearViewCache();
-			$message = $post['BlogPost']['name'].' を削除しました。';
-			$this->Session->setFlash($message);
-			$this->BlogPost->saveDbLog($message);
+			$this->setMessage($post['BlogPost']['name'].' を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index',$blogContentId));
@@ -537,7 +590,7 @@ class BlogPostsController extends BlogAppController {
 
 		// 送信内容に問題がある場合には元のページにリダイレクト
 		if(!$check) {
-			$this->Session->setFlash($message);
+			$this->setMessage($message, true);
 			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 		}
 
@@ -591,7 +644,7 @@ class BlogPostsController extends BlogAppController {
 
 		}
 
-		$this->Session->setFlash( $count . ' 件の記事を取り込みました');
+		$this->setMessage( $count . ' 件の記事を取り込みました');
 		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 
 	}
@@ -717,6 +770,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->recursive = 1;
 			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
+			$this->_setAdminIndexViewData();
 			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);
@@ -725,4 +779,3 @@ class BlogPostsController extends BlogAppController {
 	}
 	
 }
-?>

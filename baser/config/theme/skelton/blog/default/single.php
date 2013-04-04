@@ -3,7 +3,7 @@
  * ブログ詳細ページ
  */
 $bcBaser->css('colorbox/colorbox', array('inline' => true));
-$bcBaser->js('jquery.colorbox-min', false);
+$bcBaser->js('jquery.colorbox-min-1.4.5', false);
 $bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
 ?>
 
@@ -19,6 +19,11 @@ $(function(){
 <h3 class="contents-head">
 	<?php $bcBaser->contentsTitle() ?>
 </h3>
+
+<div class="eye-catch">
+	<?php $blog->eyeCatch($post) ?>
+</div>
+
 <div class="post">
 	<?php $blog->postContent($post) ?>
 	<div class="meta"> <span>

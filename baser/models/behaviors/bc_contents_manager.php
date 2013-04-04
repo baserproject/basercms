@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models.behaviors
  * @since			baserCMS v 0.1.0
@@ -47,7 +47,7 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function saveContent(&$model, $data) {
+	function saveContent($model, $data) {
 
 		if(!$data) {
 			return;
@@ -93,7 +93,7 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @param Model $model
  * @param string $url 
  */
-	function deleteContent(&$model, $id) {
+	function deleteContent($model, $id) {
 
 		$this->Content = ClassRegistry::init('Content');
 		if($this->Content->deleteAll(array('Content.model' => $model->alias, 'Content.model_id' => $id))) {
@@ -108,7 +108,7 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	function updateContentMeta(&$model) {
+	function updateContentMeta($model) {
 		
 		$db = ConnectionManager::getDataSource('baser');
 		$contentCategories = array();
@@ -147,4 +147,3 @@ class BcContentsManagerBehavior extends ModelBehavior {
 	}
 
 }
-?>

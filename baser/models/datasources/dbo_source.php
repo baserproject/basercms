@@ -2720,7 +2720,11 @@ class DboSource extends DataSource {
 	function loadSchema($options) {
 
 		App::import('Model','Schema');
-		$options = array_merge(array('dropField' => true), $options);
+		$options = array_merge(array(
+			'dropField'		=> true,
+			'oldSchemaPath'	=> ''	
+		), $options);
+		
 		extract($options);
 
 		if(!isset($type)){
@@ -2756,14 +2760,21 @@ class DboSource extends DataSource {
 				return $this->createTableBySchema(array('path'=>$path.$file));
 				break;
 			case 'alter':
-				$current = $path.basename($file,'.php').'_current.php';
-				if($this->writeCurrentSchema($current)) {
-					$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
-					unlink($current);
-					return $result;
+				if(!$oldSchemaPath) {
+					$current = $path.basename($file,'.php').'_current.php';
+					if(!$this->writeCurrentSchema($current)) {
+						return false;
+					}
 				} else {
-					return false;
+					$current = $oldSchemaPath;
 				}
+
+				$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
+				if(!$oldSchemaPath) {
+					unlink($current);
+				}
+				return $result;
+
 				break;
 			case 'drop':
 				return $this->dropTableBySchema(array('path'=>$path.$file));
@@ -2870,7 +2881,16 @@ class DboSource extends DataSource {
 		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => $model));
 		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
-		return $Schema->write($options);
+		$result = $Schema->write($options);
+		
+		// 不要コード削除、改行コードをLFに変更
+		$File = new File($path . DS . $file);
+		$data = $File->read();
+		$data = str_replace(array("\r\n","\r"), "\n", $data);
+		$data = preg_replace('/\tvar\s\$path.+;\n\n/', '', $data);
+		$File->write($data);
+		
+		return $result;
 
 	}
 /**
@@ -3307,6 +3327,10 @@ class DboSource extends DataSource {
 
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
+		if(!$fp) {
+			return false;
+		}
+		
 		$_head = fgetcsv($fp,10240);
 		foreach($_head as $value) {
 			$head[] = $this->name($value);
@@ -3390,18 +3414,26 @@ class DboSource extends DataSource {
  */
 	function writeCsv($options) {
 
+		$options = array_merge(array(
+			'path'		=> '',
+			'encoding'	=> '',
+			'table'		=> '',
+			'init'		=> false
+		), $options);
+		
 		extract($options);
-		if(!isset($path)) {
+		if(empty($path)) {
 			return false;
 		}
-		if(!isset($encoding)) {
+		if(empty($encoding)) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
-		if(!isset($table)) {
+		if(empty($table)) {
 			$table = basename($path, '.csv');
 		}
 
 		$schemas = $this->readSchema($table, false);
+		
 		if(!isset($schemas['tables'][$table])) {
 			return false;
 		}
@@ -3416,35 +3448,42 @@ class DboSource extends DataSource {
 
 		$appEncoding = Configure::read('App.encoding');
 		$fullTableName = $this->config['prefix'].$table;
-		$sql = $this->renderStatement('select', array('table'=>$this->name($fullTableName),
-														'fields'=>$fields,
-														'conditions'=>'WHERE 1=1',
-														'alias'=>'',
-														'joins'=>'',
-														'group'=>'',
-														'order'=>'',
-														'limit'=>''));
+		$sql = $this->renderStatement('select', array(
+			'table'		=> $this->name($fullTableName),
+			'fields'	=> $fields,
+			'conditions'=> 'WHERE 1=1',
+			'alias'		=> '',
+			'joins'		=> '',
+			'group'		=> '',
+			'order'		=> '',
+			'limit'		=> ''
+		));
+		
 		$datas = $this->query($sql);
-
-		if(!$datas) {
-			// データがない場合はtrueを返して終了
-			return true;
-		}
 
 		$fp = fopen($path, 'a');
 		ftruncate($fp,0);
 
 		// ヘッダを書込
-		if(isset($datas[0][$fullTableName])) {
-			$tablekey = $fullTableName;
+		if($datas) {
+			if(isset($datas[0][$fullTableName])) {
+				$tablekey = $fullTableName;
+			} else {
+				$tablekey = 0;
+			}
+			$heads = array();
+			foreach($datas[0][$tablekey] as $key => $value) {
+				$heads[] = '"'.$key.'"';
+			}
 		} else {
-			$tablekey = 0;
+			$fields = array_keys($schemas['tables'][$table]);
+			foreach($fields as $field) {
+				if($field != 'indexes') {
+					$heads[] = '"'.$field.'"';
+				}
+			}
 		}
-		$heads = array();
-		foreach($datas[0][$tablekey] as $key => $value) {
-			$heads[] = '"'.$key.'"';
-		}
-
+		
 		$head = implode(",",$heads)."\n";
 		if($encoding != $this->config['encoding']) {
 			$head = mb_convert_encoding($head, $encoding, $appEncoding);
@@ -3454,6 +3493,11 @@ class DboSource extends DataSource {
 		// データを書込
 		foreach($datas as $data) {
 			$record = $data[$tablekey];
+			if($init) {
+				$record['id'] = '';
+				$record['modified'] = '';
+				$record['created'] = '';
+			}
 			$record = $this->_convertRecordToCsv($record);
 			$csvRecord = implode(',',$record)."\n";
 			if($encoding != $appEncoding) {
@@ -3501,4 +3545,3 @@ class DboSource extends DataSource {
 	}
 // <<<
 }
-?>

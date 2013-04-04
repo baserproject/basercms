@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.mail.models
  * @since			baserCMS v 0.1.0
@@ -35,13 +35,6 @@ class Message extends MailAppModel {
  * @access public
  */
 	var $name = 'Message';
-/**
- * ビヘイビア
- * 
- * @var array
- * @access public
- */
-	var $actsAs = array('BcCache');
 /**
  * メールフォーム情報
  *
@@ -283,7 +276,9 @@ class Message extends MailAppModel {
 
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			if($mailField['MailField']['valid_ex']=='VALID_EMAIL_CONFIRM') {
-				$dists[$mailField['MailField']['group_valid']][] = $data['Message'][$mailField['MailField']['field_name']];
+                if( isset($data['Message'][$mailField['MailField']['field_name']]) ){
+                    $dists[$mailField['MailField']['group_valid']][] = $data['Message'][$mailField['MailField']['field_name']];
+                }
 			}
 
 		}
@@ -544,10 +539,8 @@ class Message extends MailAppModel {
 			'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 		);
 		$ret = true;
-		if($contentName == 'messages') {
-			if($this->tableExists($fullTable)){
-				$ret = $db->dropTable(array('table'=>$table));
-			}
+		if($this->tableExists($fullTable)){
+			$ret = $db->dropTable(array('table'=>$table));
 		}
 		if(!$ret){
 			return false;
@@ -738,6 +731,45 @@ class Message extends MailAppModel {
 		return true;
 
 	}
-	
+/**
+ * 受信メッセージの内容を表示状態に変換する
+ * 
+ * @param int $id
+ * @param array $messages
+ * @return array
+ * @access public
+ */
+	function convertMessageToCsv($id, $messages) {
+
+		App::import('Model','Mail.MailField');
+		$mailFieldClass = new MailField();
+
+		// フィールドの一覧を取得する
+		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $id)));
+
+		// フィールド名とデータの変換に必要なヘルパーを読み込む
+		App::import('Helper', 'Mail.maildata');
+		$maildata = new MaildataHelper();
+		App::import('Helper', 'Mail.mailfield');
+		$mailfield = new MailfieldHelper();
+
+		foreach ($messages as $key => $message) {
+
+			$inData = array();
+			foreach($mailFields as $mailField) {
+				$inData[$mailField['MailField']['field_name']] = $maildata->control(
+					$mailField['MailField']['type'],
+					$message[$this->alias][$mailField['MailField']['field_name']],
+					$mailfield->getOptions($mailField['MailField'])
+				);
+			}
+			$convertData = array_merge($message[$this->alias], $inData);
+			$messages[$key][$this->alias] = $convertData;
+
+		}
+
+		return $messages;
+
+	}
+
 }
-?>

@@ -318,4 +318,3 @@ class Rss extends WebModel {
 	
 }
 
-?>
