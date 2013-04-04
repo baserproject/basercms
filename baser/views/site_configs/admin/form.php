@@ -288,14 +288,14 @@ $(function(){
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
-				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('連携'))) ?>）</span>
+				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
 				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
-				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('連携'))) ?>）</span>
+				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 <?php if($bcBaser->siteConfig['category_permission']): ?>

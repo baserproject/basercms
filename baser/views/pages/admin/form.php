@@ -78,7 +78,7 @@ $(function(){
 	$("#PagePageCategoryId").change(pageCategoryIdChangeHandler);
 	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
 /**
- * 連携機能変更時イベント
+ * 連動機能変更時イベント
  */
 	$("#PageUnlinkedMobile").change(setStateReflectMobile);
 	$("#PageUnlinkedSmartphone").click(setStateReflectSmartphone);
@@ -482,7 +482,7 @@ function pageTypeChengeHandler() {
 			<td class="col-input">
 	<?php if(@$bcBaser->siteConfig['linked_pages_mobile']): ?>
 				<div id="DivUnlinkedMobile">
-					<?php echo $bcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連携しない')) ?>
+					<?php echo $bcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 				</div>
 	<?php endif ?>
 				<div id="DivReflectMobile">
@@ -508,7 +508,7 @@ function pageTypeChengeHandler() {
 			<td class="col-input">
 	<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
 				<div id="DivUnlinkedSmartphone">
-					<?php echo $bcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連携しない')) ?>
+					<?php echo $bcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 				</div>
 	<?php endif ?>
 				<div id="DivReflectSmartphone">
