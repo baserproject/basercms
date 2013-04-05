@@ -58,7 +58,7 @@ $(function(){
 					</div>
 				</li>
 				<li class='<?php if ($configDirWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/config フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					/app/Config フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
 						<?php if ($configDirWritable): ?>
 						書き込み可
@@ -69,13 +69,13 @@ $(function(){
 					</div>
 				</li>
 				<li class='<?php if ($coreFileWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/config/core.php ファイルの書き込み権限（606 OR 666 等、サーバー推奨がある場合はそちらに従ってください）<br />
+					/app/Config/core.php ファイルの書き込み権限（606 OR 666 等、サーバー推奨がある場合はそちらに従ってください）<br />
 					<div class="check-result">
 						<?php if ($coreFileWritable): ?>
 						書き込み可
 						<?php else: ?>
 						書き込み不可<br />
-						<small>/app/config/core.php ファイルに書き込み権限が必要です</small>
+						<small>/app/Config/core.php ファイルに書き込み権限が必要です</small>
 						<?php endif ?>
 					</div>
 				</li>

@@ -25,7 +25,7 @@
 <?php echo $mailform->create(null, array('controller' => $mailContent['MailContent']['name'], 'action' => 'submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
-<?php echo $bcBaser->element('mail_input',array('blockStart'=>1)) ?>
+<?php echo $this->bcBaser->element('mail_input',array('blockStart'=>1)) ?>
 
 <br />
 <br />

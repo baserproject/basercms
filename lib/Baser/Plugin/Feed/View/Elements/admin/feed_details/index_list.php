@@ -29,9 +29,9 @@
 			<tr>
 				<th scope="col"  style="width:160px" class="list-tool">
 					<div>
-						<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $bcForm->value('FeedConfig.id'))) ?>
+						<?php $this->bcBaser->link($this->bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $bcForm->value('FeedConfig.id'))) ?>
 					</div>
-<?php if($bcBaser->isAdminUser()): ?>
+<?php if($this->bcBaser->isAdminUser()): ?>
 					<div>
 						<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 						<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
@@ -48,7 +48,7 @@
 		<tbody>
 		<?php if(!empty($feedConfig['FeedDetail'])): ?>
 			<?php foreach($feedConfig['FeedDetail'] as $feedDetail): ?>
-				<?php $bcBaser->element('feed_details/index_row', array('data' => $feedDetail)) ?>
+				<?php $this->bcBaser->element('feed_details/index_row', array('data' => $feedDetail)) ?>
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>

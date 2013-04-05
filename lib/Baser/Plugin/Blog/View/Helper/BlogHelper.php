@@ -256,7 +256,7 @@ class BlogHelper extends AppHelper {
 
 			if($link) {
 				if(!isset($this->Html)){
-					$this->Html = new HtmlHelper();
+					$this->Html = new HtmlHelper($this->_View);
 				}
 				return $this->Html->link($post['BlogCategory']['title'],$this->getCategoryUrl($post['BlogCategory']['id'], $options),$options,null,false);
 			} else {

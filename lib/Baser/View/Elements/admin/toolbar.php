@@ -17,10 +17,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$publishTheme = $this->BcBaser->BcHtml->themeWeb;
+$publishTheme = $this->BcBaser->BcHtml->themeWeb; // @TODO basercamp Cakephp1.2系の変数なので、CakePHP2で無くなった、必要無いなら削除。
+//var_dump($publishTheme); // null 1.2系だと、string 'themed/demo/' (length=12)　といった変数がはいっている
+$theme = $this->BcBaser->theme;
 if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
-	$this->BcBaser->BcHtml->themeWeb = 'themed/'.$this->BcBaser->siteConfig['admin_theme'].'/';
-	$this->BcBaser->Js->themeWeb = 'themed/'.$this->BcBaser->siteConfig['admin_theme'].'/';
+	$this->BcBaser->theme = Configure::read('BcApp.adminTheme');
+	$this->BcBaser->BcHtml->theme = Configure::read('BcApp.adminTheme');
 }
 $this->BcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
 $loginUrl = '';
@@ -152,4 +154,12 @@ $(function(){
 	</div>
 </div>
 
-<?php $this->BcBaser->BcHtml->themeWeb = $publishTheme ?>
+<?php $this->BcBaser->BcHtml->themeWeb = $publishTheme ; // @TODO basercamp Cakephp1.2系の変数なので、CakePHP2で無くなった、必要無いなら削除。 ?>
+<?php
+if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
+	//元に戻しておく
+	$this->BcBaser->theme = $theme;
+	$this->BcBaser->BcHtml->theme = $theme;
+}
+unset($theme);
+?>

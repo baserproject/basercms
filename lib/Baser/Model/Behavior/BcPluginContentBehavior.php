@@ -8,10 +8,10 @@
  * プラグインコンテンツテーブルへの自動的なデータの追加と削除を実装する。
  *
  * 以下が必須項目
- * ◆ /app/config/plugin.php
+ * ◆ /app/Config/plugin.php
  * ◆ /app/models/plugin_content.php
  * ◆ plugin_contents テーブル
- * 詳しくは、/app/config/plugin.php を参照
+ * 詳しくは、/app/Config/plugin.php を参照
  *
  * 【注意点】
  * このビヘイビアを実装するモデルはプラグイン名と同じモデルもしくは、[プラグイン名Content]である必要がある

@@ -20,6 +20,6 @@
  * @license			http://basercms.net/license/index.html
  */
 if($dbData) {
-	$bcBaser->element('blog_comment',array('dbData'=>$dbData));
+	$this->bcBaser->element('blog_comment',array('dbData'=>$dbData));
 }
 ?>

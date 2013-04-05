@@ -33,4 +33,3 @@ App::uses('BcAppHelper', 'View/Helper');
  */
 class AppHelper extends BcAppHelper {
 }
-?>

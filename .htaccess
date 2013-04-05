@@ -24,13 +24,13 @@
 #		RewriteBase /
 #		RewriteRule ^$ app/webroot/ [L]
 #		RewriteRule (.*) app/webroot/$1 [L]
-#	■ /app/config/install.php に次の行を追加します。
+#	■ /app/Config/install.php に次の行を追加します。
 #		Configure::write('App.baseUrl', '');
 #
 # 【スマートURLを手動でオフにする】
 #	■ /.htaccess と、/app/webroot/.htaccess 内の、次の行で始まる行を全て削除します。
 #		RewriteEngine / RewriteBase / RewriteCond / RewriteRule
-#	■ /app/config/install.php の次の行を削除します。
+#	■ /app/Config/install.php の次の行を削除します。
 #		Configure::write('App.baseUrl', '');
 #
 # 【動作確認済レンタルサーバー】

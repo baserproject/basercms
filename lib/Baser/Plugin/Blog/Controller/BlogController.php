@@ -484,7 +484,7 @@ class BlogController extends BlogAppController {
 		$__conditions = array();
 
 		if(!empty($this->params['named'])) {
-			$__conditions = am($options['conditions'], $this->params['named']);
+			$__conditions = am($options['conditions'], array_intersect_key($_conditions, $this->params['named']));
 		} else {
 			$__conditions = $options['conditions'];
 		}
@@ -876,7 +876,7 @@ class BlogController extends BlogAppController {
 		return $data;
 
 	}
-/**
+	/**
  * 記事リストを出力
  * requestAction用
  *
@@ -891,8 +891,6 @@ class BlogController extends BlogAppController {
 		} else {
 			$template = 'posts';
 		}
-		unset($this->params['named']['template']);
-
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
