@@ -32,7 +32,7 @@ class BcPluginHookHelper extends AppHelper {
 	public $pluginHooks = array();
 /**
  * 登録済フックメソッド
-
+ * 
  * @var array
  * @access public
  */
@@ -43,7 +43,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function beforeRender() {
+	public function beforeRender($viewFile) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -148,7 +148,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function afterRender() {
+	public function afterRender($viewFile) {
 		
 		$this->executeHook('afterRender');
 		
@@ -159,7 +159,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function beforeLayout() {
+	public function beforeLayout($layoutFile) {
 		
 		$this->executeHook('beforeLayout');
 		
@@ -170,7 +170,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function afterLayout() {
+	public function afterLayout($layoutFile) {
 		
 		$this->executeHook('afterLayout');
 		

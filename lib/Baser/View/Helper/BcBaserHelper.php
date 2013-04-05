@@ -517,7 +517,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function url($url,$full = false, $sessionId = true) {
+	public function url($url = null, $full = false, $sessionId = true) {
 
 		echo $this->getUrl($url,$full, $sessionId);
 

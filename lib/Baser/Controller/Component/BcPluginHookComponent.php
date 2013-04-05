@@ -39,7 +39,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	public function initialize(&$controller) {
+	public function initialize(Controller $controller) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -120,7 +120,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	public function startup(&$controller) {
+	public function startup(Controller $controller) {
 		
 		$this->executeHook('startup',$controller);
 		
@@ -132,7 +132,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	public function beforeRender(&$controller) {
+	public function beforeRender(Controller $controller) {
 		
 		$this->executeHook('beforeRender',$controller);
 		
@@ -144,7 +144,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	public function beforeRedirect(&$controller, $url, $status = null, $exit = true) {
+	public function beforeRedirect(Controller $controller, $url, $status = null, $exit = true) {
 		
 		$this->executeHook('beforeRedirect', $controller, $url, $status, $exit);
 		
@@ -156,7 +156,7 @@ class BcPluginHookComponent extends Component {
  * @return void
  * @access public
  */
-	public function shutdown(&$controller) {
+	public function shutdown(Controller $controller) {
 		
 		$this->executeHook('shutdown', $controller);
 		
