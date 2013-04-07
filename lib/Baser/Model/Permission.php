@@ -184,7 +184,7 @@ class Permission extends AppModel {
  * @return boolean
  * @access public
  */
-	public function beforeSave($options) {
+	public function beforeSave($options = array()) {
 		
 		if(isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];

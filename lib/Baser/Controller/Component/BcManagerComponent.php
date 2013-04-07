@@ -778,10 +778,10 @@ class BcManagerComponent extends Component {
 			}
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
 			if(!$db) {
-				$db =& ConnectionManager::getDataSource($dbConfigKeyName);
+				$db = ConnectionManager::getDataSource($dbConfigKeyName);
 			}
 		} else {
-			$db =& ConnectionManager::getDataSource($dbConfigKeyName);
+			$db = ConnectionManager::getDataSource($dbConfigKeyName);
 		}
 		
 		return $db;

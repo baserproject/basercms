@@ -31,7 +31,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function setup(&$model, $config = array()) {}
+	public function setup(Model $model, $config = array()) {}
 /**
  * キャッシュ処理
  * 
@@ -111,7 +111,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function afterSave(&$model, $created) {
+	public function afterSave(Model $model, $created) {
 		
 		$this->delAssockCache($model);
 		
@@ -123,7 +123,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function afterDelete(&$model) {
+	public function afterDelete(Model $model) {
 		
 		$this->delAssockCache($model);
 		
