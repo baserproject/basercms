@@ -29,7 +29,7 @@ class BcMobileHelper extends Helper {
  * @return void
  * @access public
  */
-	public function afterLayout() {
+	public function afterLayout($layoutFile) {
 
 		/* 出力データをSJISに変換 */
 		$view =& ClassRegistry::getObject('view');
