@@ -410,7 +410,6 @@ class InstallationsController extends AppController {
 		if(!BC_INSTALLED) {
 			$installationData = $this->Session->read('Installation');
 			$installationData['lastStep'] = true;
-			checkTmpFolders();
 			Configure::write('Cache.disable', false);
 			Cache::config('default', array('engine' => 'File'));
 			// インストールファイルでセッションの保存方法を切り替える為、インストール情報をキャッシュに保存

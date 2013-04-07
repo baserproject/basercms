@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('BlogAppModel', 'Blog.Model');
 /**
  * 記事モデル
  *
