@@ -77,9 +77,9 @@ class Plugin extends AppModel {
  * @return boolean
  * @access public
  */
-	public function initDb($plugin, $filterTable = '') {
+	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 		
-		return parent::initDb('plugin', $plugin, true, $filterTable, 'create');
+		return parent::initDb('plugin', $pluginName, true, $filterTable, 'create');
 		
 	}
 /**

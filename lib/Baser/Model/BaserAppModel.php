@@ -97,7 +97,7 @@ class BaserAppModel extends Model {
  * @return	boolean
  * @access	public
  */
-	public function beforeSave($options) {
+	public function beforeSave($options = array()) {
 		$result = parent::beforeSave($options);
 
 		// 日付フィールドが空の場合、nullを保存する
@@ -590,7 +590,7 @@ class BaserAppModel extends Model {
 			list($modelName, $field) = split('\.', $field);
 		}
 
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$this->recursive = -1;
 		if ($db->config['datasource'] == 'Database/BcCsv') {
 			// CSVDBの場合はMAX関数が利用できない為、プログラムで処理する
@@ -1159,7 +1159,7 @@ class BaserAppModel extends Model {
  * @param	mixed	$results
  * @return	mixed	$results
  */
-	public function afterFind($results) {
+	public function afterFind($results, $primary = false) {
 		/* データベース文字コードを内部文字コードに変換 */
 		// MySQL4.0 以下で動作
 		if ($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {

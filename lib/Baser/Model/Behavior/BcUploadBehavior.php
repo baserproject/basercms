@@ -60,7 +60,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function setup(&$model, $config = array()) {
+	public function setup(Model $model, $config = array()) {
 
 		$this->settings = Set::merge(array('saveDir'=> '')
 				, $config);
@@ -80,7 +80,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeSave(&$model, $options) {
+	public function beforeSave(Model $model, $options) {
 		
 		return $this->saveFiles($model);
 		
@@ -94,7 +94,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function afterSave(&$model, $created, $options) {
+	public function afterSave(Model $model, $created, $options) {
 		
 		$this->renameToFieldBasename($model);
 		$model->data = $model->save($model->data, array('callbacks'=>false,'validate'=>false));
@@ -451,7 +451,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function beforeDelete(&$model) {
+	public function beforeDelete(Model $model) {
 
 		$model->data = $model->findById($model->id);
 		$this->delFiles($model);
@@ -520,7 +520,7 @@ class BcUploadBehavior extends ModelBehavior {
 	}
 /**
  * ファイル名をフィールド値ベースのファイル名に変更する
-
+ * 
  * @param Model $model
  * @return boolean
  * @access public

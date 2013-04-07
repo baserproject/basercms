@@ -213,7 +213,7 @@ class PageCategory extends AppModel {
  * @return boolean
  * @access public
  */
-	public function beforeSave() {
+	public function beforeSave($options = array()) {
 
 		// セーフモードの場合はフォルダの自動生成は行わない
 		if(ini_get('safe_mode')) {
