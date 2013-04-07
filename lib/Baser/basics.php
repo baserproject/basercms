@@ -681,7 +681,7 @@
 			$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 		}
 		if(!$enablePlugins) {
-			$db =& ConnectionManager::getDataSource('baser');
+			$db = ConnectionManager::getDataSource('baser');
 			$sources = $db->listSources();
 			$pluginTable = $db->config['prefix'] . 'plugins';
 			$enablePlugins = array();

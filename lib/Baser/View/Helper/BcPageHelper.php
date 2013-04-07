@@ -64,7 +64,7 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public
  */
-	public function beforeRender() {
+	public function beforeRender($viewFile) {
 		
 		if(isset($this->request->params['pass'][0])) {
 			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
