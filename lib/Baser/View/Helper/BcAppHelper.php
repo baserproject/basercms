@@ -29,7 +29,7 @@ class BcAppHelper extends Helper {
  * キャッシュ用
  * @var View
  */
-	protected $_view = null;
+	protected $_View = null;
 /**
  * html tags used by this helper.
  *
@@ -94,7 +94,7 @@ class BcAppHelper extends Helper {
  * Constructor.
  *
  * @return	void
- * @access	private
+ * @access	public
  */
 	public function __construct(View $View, $settings = array()) {
 

@@ -97,7 +97,12 @@ class PluginContent extends AppModel {
 		}else {
 			$name = $url;
 		}
-		
+
+		// @toto basercamp 暫定処理、routes.phpのコメント読むこと
+		if( $name === 'feed' ){
+			return  array('PluginContent' => array('name'=>'feed','plugin'=>'feed'));
+		}
+
 		return $pluginContent = $this->find('first', array(
 			'fields' => array('name', 'plugin'),
 			'conditions'=> array('PluginContent.name' => $name)

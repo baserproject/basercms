@@ -24,7 +24,7 @@
 
 <ul>
 	<li>次のファイルを開きます。<br />
-		<pre>/app/config/install.php</pre>
+		<pre>/app/Config/install.php</pre>
 	<li>
 	<li>core.phpより次の行を見つけます。<br />
 		<pre>Configure::write('debug', 0);</pre>

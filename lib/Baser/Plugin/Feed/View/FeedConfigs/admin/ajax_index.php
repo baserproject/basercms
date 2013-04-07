@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->element('feed_configs/index_list')
+$this->bcBaser->element('feed_configs/index_list')
 ?>

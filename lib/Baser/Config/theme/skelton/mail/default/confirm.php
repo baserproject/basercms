@@ -2,15 +2,15 @@
 /**
  * メールフォーム確認ページ
  */
-$bcBaser->css('jquery-ui/ui.all', array('inline' => true));
-$bcBaser->js(array('jquery-ui-1.8.14.custom.min', 'i18n/ui.datepicker-ja'), false);
+$this->bcBaser->css('jquery-ui/ui.all', array('inline' => true));
+$this->bcBaser->js(array('jquery-ui-1.8.14.custom.min', 'i18n/ui.datepicker-ja'), false);
 if($freezed){
 	$mailform->freeze();
 }
 ?>
 
 <h2 class="contents-head">
-	<?php $bcBaser->contentsTitle() ?>
+	<?php $this->bcBaser->contentsTitle() ?>
 </h2>
 <?php if($freezed): ?>
 <h3 class="contents-head">入力内容の確認</h3>
@@ -19,6 +19,6 @@ if($freezed){
 <h3 class="contents-head">入力フォーム</h3>
 <?php endif ?>
 <div class="section">
-	<?php $bcBaser->flash() ?>
-	<?php $bcBaser->element('mail_form') ?>
+	<?php $this->bcBaser->flash() ?>
+	<?php $this->bcBaser->element('mail_form') ?>
 </div>

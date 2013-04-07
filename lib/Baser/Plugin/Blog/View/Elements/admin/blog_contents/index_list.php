@@ -25,7 +25,7 @@
 		<tr>
 			<th class="list-tool">
 				<div>
-					<?php $bcBaser->link($bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $this->bcBaser->link($this->bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
 				</div>	
 			</th>
 			<th>NO</th>
@@ -38,7 +38,7 @@
 <?php if(!empty($datas)): ?>
 	<?php $count=1; ?>
 	<?php foreach($datas as $data): ?>
-		<?php $bcBaser->element('blog_contents/index_row', array('data' => $data, 'count' => $count)) ?>
+		<?php $this->bcBaser->element('blog_contents/index_row', array('data' => $data, 'count' => $count)) ?>
 		<?php $count++; ?>
 	<?php endforeach; ?>
 <?php else: ?>

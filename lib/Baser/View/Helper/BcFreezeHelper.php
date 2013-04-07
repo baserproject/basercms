@@ -38,7 +38,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_FORM_HELPER, BC_UPLOAD_HELPER, BC_TEXT_HELPER, BC_TIME_HELPER, 'Javascript');
+	public $helpers = array('Html', BC_FORM_HELPER, BC_UPLOAD_HELPER, BC_TEXT_HELPER, BC_TIME_HELPER, 'Js');
 /**
  * フォームを凍結させる
  * 

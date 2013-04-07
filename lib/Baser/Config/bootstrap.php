@@ -65,19 +65,8 @@ App::uses('File', 'Utility');
  */
 define('BC_BASE_URL', baseUrl());
 /**
- * vendors内の静的ファイルの読み込みの場合はスキップ
+ * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
  */
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'js\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'img\//', $uri)) {
-	$assets = array('js', 'css', 'gif', 'jpg', 'png');
-	$ext = array_pop(explode('.', $uri));
-	if (in_array($ext, $assets)) {
-		Configure::write('BcRequest.asset', true);
-		return;
-	}
-}
 /**
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
@@ -93,7 +82,7 @@ if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', 
 	define('BC_DEPLOY_PATTERN', 1);
 }
 /**
- * インストール状態 
+ * インストール状態
  */
 define('BC_INSTALLED', isInstalled());
 /**
@@ -109,6 +98,21 @@ if (Configure::load('baser', 'baser') === false) {
 	include BASER_CONFIGS . 'baser.php';
 	Configure::write($config);
 }
+/**
+ * vendors内の静的ファイルの読み込みの場合はスキップ
+ */
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
+	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'js\//', $uri) ||
+	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'img\//', $uri)) {
+	$assets = array('js', 'css', 'gif', 'jpg', 'png');
+	$ext = array_pop(explode('.', $uri));
+	if (in_array($ext, $assets)) {
+		Configure::write('BcRequest.asset', true);
+		return;
+	}
+}
+
 if (BC_INSTALLED && $baserSettings) {
 	foreach ($baserSettings as $key1 => $settings) {
 		if ($settings) {
