@@ -174,7 +174,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 					}
 					break;
 				} else {
-					// 拡張子付き（.html）の場合
+					// 拡張子付き（.html）の場合も透過的にマッチングさせる
 					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
 						if($Page->isPageUrl($url) && $Page->checkPublish($url)){

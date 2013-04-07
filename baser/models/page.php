@@ -1164,10 +1164,19 @@ class Page extends AppModel {
 			return false;
 		}
 		
+		if(!Configure::read('BcApp.'.$agentPrefix)) {
+			return false;
+		}
+		
 		$siteConfig = Configure::read('BcSite');
 		$linked = false;
+		
 		if(isset($siteConfig['linked_pages_'.$agentPrefix])) {
 			$linked = $siteConfig['linked_pages_'.$agentPrefix];
+		}
+		
+		if($linked) {
+			return false;
 		}
 			
 		if(preg_match('/\/$/', $url)) {
