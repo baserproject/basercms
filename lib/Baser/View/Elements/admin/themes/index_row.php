@@ -42,6 +42,12 @@
 <?php if($data['name'] != 'core'): ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 <?php endif ?>
+<?php if($data['name'] == $this->BcBaser->siteConfig['theme'] && $defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
+	<?php echo $this->BcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+	<br /><?php echo $this->BcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
+	<br /><?php echo $this->BcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
+	<?php echo $this->BcForm->end() ?>
+<?php endif ?>
 <?php if(!$data['is_writable_pages'] && $data['name'] != 'core'): ?>
 		<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>
 <?php endif ?>

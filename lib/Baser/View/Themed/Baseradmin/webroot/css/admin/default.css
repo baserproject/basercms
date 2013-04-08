@@ -4,9 +4,9 @@
  * タグ・クラスの基本設定
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
@@ -205,6 +205,14 @@ select {
 }
 optgroup option{
 	padding-left:20px;
+}
+.upload-file input[type=file] {
+	margin-bottom: 5px;
+}
+.upload-file a {
+	padding:5px;
+	background-color: #F1F1F1;
+	display: inline-block;
 }
 
 

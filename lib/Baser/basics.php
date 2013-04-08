@@ -786,3 +786,21 @@
 		$BcEmail->send($message);
 
 	}
+/**
+ * 展開出力
+ * 
+ * デバッグレベルが 0 の時でも強制的に出力する
+ * 
+ * @param mixed $var
+ * @return void
+ */
+	function prf($var) {
+		$debug = Configure::read();
+		if($debug < 1) {
+			Configure::write('debug', 1);
+		}
+		debug($var, true);
+		if($debug < 1) {
+			Configure::write('debug', $debug);
+		}
+	}

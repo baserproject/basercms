@@ -1,7 +1,2 @@
 "id","no","sort","status","name","link","menu_type","created","modified"
 "","1","1","1","ホーム","/","default","",""
-"","2","2","1","会社案内","/about","default","",""
-"","3","3","1","サービス","/service","default","",""
-"","4","4","1","新着情報","/news/index","default","",""
-"","5","5","1","お問い合わせ","/contact/index","default","",""
-"","6","6","1","サイトマップ","/sitemap","default","",""

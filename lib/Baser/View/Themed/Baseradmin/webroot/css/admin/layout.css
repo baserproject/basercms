@@ -4,9 +4,9 @@
  * レイアウト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
@@ -99,6 +99,22 @@ body > #Page {
 	float: left;
 	position:relative;
 	display: none;
+}
+
+#BtnSideBarOpener {
+	width:30px;
+	height:30px;
+	position:absolute;
+	z-index:1;
+	top:4px;
+	left:174px;
+	cursor:pointer;
+	line-height:30px;
+	text-align:center;
+	font-weight:bold;
+	border-left:1px solid #FFF;
+	color:#fff;
+	font-size:10px;
 }
 
 /* FavoriteMenu
