@@ -50,7 +50,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function setup(&$model, $config = array()) {
+	public function setup(Model $model, $config = array()) {
 
 		$this->PluginContent = ClassRegistry::init('PluginContent', 'Model');
 
@@ -63,7 +63,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function beforeSave(&$model,$options) {
+	public function beforeSave(Model $model,$options) {
 
 		if(!$model->exists()) {
 			$ret = $this->PluginContent->find(array('PluginContent.name'=>$model->data[$model->alias]['name']));
@@ -91,7 +91,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-	public function afterSave(&$model, $created) {
+	public function afterSave(Model $model, $created) {
 
 		// コンテンツIDを取得
 		if($created) {
@@ -150,7 +150,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-	public function beforeDelete(&$model) {
+	public function beforeDelete(Model $model) {
 
 		// プラグインコンテンツを自動削除する
 		$this->PluginContent->deleteAll(array('name'=>$model->data[$model->alias]['name']));

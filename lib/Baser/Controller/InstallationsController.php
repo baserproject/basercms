@@ -346,7 +346,7 @@ class InstallationsController extends AppController {
 			} elseif($this->request->data['clicked'] == 'finish') {
 
 				// DB接続
-				$db =& $this->BcManager->connectDb($this->_readDbSettingFromSession());
+				$db = $this->BcManager->connectDb($this->_readDbSettingFromSession());
 
 				// サイト基本設定登録
 				$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);

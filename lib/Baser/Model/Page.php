@@ -162,7 +162,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	public function beforeSave() {
+	public function beforeSave($options = array()) {
 
 		if(!$this->fileSave) {
 			return true;
@@ -436,7 +436,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	public function beforeDelete() {
+	public function beforeDelete($cascade = true) {
 		
 		return $this->deleteContent($this->id);
 		

@@ -103,7 +103,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param array $config Configuration settings for $model
  * @access public
  */
-	public function setup(&$model, $config = array()) {
+	public function setup(Model $model, $config = array()) {
 
 		/* 未インストール・インストール中の場合はすぐリターン */
 		if(!isInstalled ()) {
@@ -161,7 +161,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeFind(&$model, $query) {
+	public function beforeFind(Model $model, $query) {
 		return $this->executeHook($model, 'beforeFind', $query, $query);
 	}
 /**
@@ -173,7 +173,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	public function afterFind(&$model, $results, $primary) {
+	public function afterFind(Model $model, $results, $primary) {
 		
 		return $this->executeHook($model, 'afterFind', $results, $results, $primary);
 		
@@ -185,7 +185,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeValidate(&$model) {
+	public function beforeValidate(Model $model) {
 		
 		return $this->executeHook($model, 'beforeValidate', true);
 		
@@ -197,7 +197,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeSave(&$model) {
+	public function beforeSave(Model $model) {
 		
 		return $this->executeHook($model, 'beforeSave', true);
 		
@@ -209,7 +209,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param boolean $created
  * @access public
  */
-	public function afterSave(&$model, $created) {
+	public function afterSave(Model $model, $created) {
 		
 		$this->executeHook($model, 'afterSave', null, $created);
 		
@@ -222,7 +222,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeDelete(&$model, $cascade = true) {
+	public function beforeDelete(Model $model, $cascade = true) {
 		
 		return $this->executeHook($model, 'beforeDelete', true, $cascade);
 		
@@ -233,7 +233,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param object $model
  * @access public
  */
-	public function afterDelete(&$model) {
+	public function afterDelete(Model $model) {
 		
 		$this->executeHook($model, 'afterDelete');
 		
@@ -245,7 +245,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param string $error
  * @access public
  */
-	public function onError(&$model, $error) {
+	public function onError(Model $model, $error) {
 		
 		$this->executeHook($model, 'onError', null, $error);
 		
