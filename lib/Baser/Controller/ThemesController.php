@@ -464,4 +464,103 @@ class ThemesController extends AppController {
 		
 	}
 
+/**
+ * 初期データセットをダウンロードする 
+ */
+	function admin_download_default_data_pattern() {
+		
+		// コアのCSVを生成
+		$tmpDir = TMP . 'csv' . DS;
+		$Folder = new Folder();
+		$Folder->create($tmpDir);
+		emptyFolder($tmpDir);
+		clearAllCache();
+		
+		$excludes = array('plugins', 'dblogs', 'users');
+		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
+		
+		// コアプラグインのCSVを生成
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach($corePlugins as $corePlugin) {
+			$Folder->create($tmpDir . $corePlugin);
+			emptyFolder($tmpDir . $corePlugin);
+			$this->_writeCsv('plugin', $corePlugin, $tmpDir . $corePlugin . DS);
+		}
+		
+		// site_configsの編集 (email / google_analytics_id / version)
+		$targets = array('email', 'google_analytics_id', 'version');
+		$path = $tmpDir . 'site_configs.csv';
+		$fp = fopen($path, 'a+');
+		$records = array();
+		while(($record = fgetcsvReg($fp, 10240)) !== false) {
+			if(in_array($record[1], $targets)) {
+				$record[2] = '';
+			}
+			$records[] = '"'.implode('","', $record).'"';
+		}
+		ftruncate($fp, 0);
+		fwrite($fp, implode("\n", $records));
+		
+		// ZIPに固めてダウンロード
+		$fileName = 'default';
+		App::import('Vendor','Simplezip');
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($fileName);
+		emptyFolder($tmpDir);
+		exit();
+		
+	}
+/**
+ * CSVファイルを書きだす
+ *
+ * @param string $configKeyName
+ * @param string $path
+ * @return boolean
+ * @access protected
+ */
+	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
+
+		$pluginKey = Inflector::underscore($plugin);
+		$db = ConnectionManager::getDataSource($configKeyName);
+		$db->cacheSources = false;
+		$tables = $db->listSources();
+
+		$result = true;
+		foreach($tables as $table) {
+			if(preg_match("/^". $db->config['prefix'] . "([^_].+)$/", $table, $matches) &&
+					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+				$table = $matches[1];
+				
+				if(in_array($table, $exclude)) {
+					continue;
+				}
+				
+				if($pluginKey != 'core') {
+					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
+					if (!preg_match("/^". $pluginKey . "_([^_].+)$/", $table)) {
+						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
+						if ($pluginKey != 'mail') {
+							continue;
+						} elseif (!preg_match("/messages$/", $table)) {
+							continue;
+						}
+					}
+				}
+				
+				if(!$db->writeCsv(array(
+					'path'		=> $path . $table . '.csv', 
+					'encoding'	=>'SJIS', 
+					'init'		=> true, 
+					'plugin'	=> ($plugin == 'core')? null : $plugin
+				))) {
+					$result = false;
+				}
+			}
+		}
+		
+		return $result;
+
+	}
+
 }

@@ -24,6 +24,11 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('テーマ一覧', array('plugin' => null, 'controller' => 'themes', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link('テーマ用初期データダウンロード', 
+					array('plugin' => null, 'controller' => 'themes', 'action' => 'download_default_data_pattern'), 
+					array('target' => '_blank'),
+					'現在のデータベースの状態を元にテーマ用の初期データを生成しダウンロードします。よろしいですか？\n' .
+					'ダウンロードしたデータは、配布用テーマの config\/data\/ 内に配置してください。') ?></li>
 		</ul>
 	</td>
 </tr>

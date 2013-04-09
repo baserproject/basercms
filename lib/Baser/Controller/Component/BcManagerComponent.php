@@ -835,9 +835,6 @@ class BcManagerComponent extends Component {
 			$result = false;
 		}
 		
-		/* メールプラグインの受信データ用テーブルをチェック＆設定 */
-		
-		
 		return $result;
 		
 	}

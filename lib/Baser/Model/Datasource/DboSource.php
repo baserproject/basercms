@@ -3844,8 +3844,20 @@ class DboSource extends DataSource {
  * @return array $schema
  * @access public
  */
-	public function readSchema($table, $cache = true) {
+	public function readSchema($table, $options = array()) {
 
+		if(is_array($options)) {
+			$options = array_merge(array(
+				'cache'	=> true,
+				'plugin'=> null
+			), $options);
+			extract($options);
+		} else {
+			// 後方互換の為
+			$cache = $options;
+			$plugin = null;
+		}
+		
 		if($cache) {
 			$this->cacheSources = false;
 			ClassRegistry::flush();
@@ -3855,8 +3867,7 @@ class DboSource extends DataSource {
 			return false;
 		}
 		$model = Inflector::classify(Inflector::singularize($table));
-		//App::import('CakeSchema', 'Model');
-		$CakeSchema = ClassRegistry::init('CakeSchema');
+		$CakeSchema = ClassRegistry::init(array(array('class' => 'CakeSchema', 'plugin' => $plugin)));
 		$CakeSchema->connection = $this->configKeyName;
 		return $CakeSchema->read(array('models'=>array($model)));
 
@@ -4002,25 +4013,34 @@ class DboSource extends DataSource {
  */
 	public function writeCsv($options) {
 
+		$options = array_merge(array(
+			'path'		=> '',
+			'encoding'	=> '',
+			'table'		=> '',
+			'init'		=> false,
+			'plugin'	=> null
+		), $options);
+
 		extract($options);
-		if(!isset($path)) {
+		if(empty($path)) {
 			return false;
 		}
-		if(!isset($encoding)) {
+		if(empty($encoding)) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
-		if(!isset($table)) {
+		if(empty($table)) {
 			$table = basename($path, '.csv');
 		}
 
-		$schemas = $this->readSchema($table, false);
+		$schemas = $this->readSchema($table, array('plugin' => $plugin, 'cache' => false));
+		
 		if(!isset($schemas['tables'][$table])) {
 			return false;
 		}
 
 		$_fields = array();
 		foreach($schemas['tables'][$table] as $key => $schema) {
-			if($key != 'indexes') {
+			if($key != 'indexes' && $key != 'tableParameters') {
 				$_fields[] = $this->name($key);
 			}
 		}
@@ -4028,35 +4048,42 @@ class DboSource extends DataSource {
 
 		$appEncoding = Configure::read('App.encoding');
 		$fullTableName = $this->config['prefix'].$table;
-		$sql = $this->renderStatement('select', array('table'=>$this->name($fullTableName),
-														'fields'=>$fields,
-														'conditions'=>'WHERE 1=1',
-														'alias'=>'',
-														'joins'=>'',
-														'group'=>'',
-														'order'=>'',
-														'limit'=>''));
+		$sql = $this->renderStatement('select', array(
+			'table'		=> $this->name($fullTableName),
+			'fields'	=> $fields,
+			'conditions'=> 'WHERE 1=1',
+			'alias'		=> '',
+			'joins'		=> '',
+			'group'		=> '',
+			'order'		=> '',
+			'limit'		=> ''
+		));
+		
 		$datas = $this->query($sql);
-
-		if(!$datas) {
-			// データがない場合はtrueを返して終了
-			return true;
-		}
 
 		$fp = fopen($path, 'a');
 		ftruncate($fp,0);
 
 		// ヘッダを書込
-		if(isset($datas[0][$fullTableName])) {
-			$tablekey = $fullTableName;
+		if($datas) {
+			if(isset($datas[0][$fullTableName])) {
+				$tablekey = $fullTableName;
+			} else {
+				$tablekey = 0;
+			}
+			$heads = array();
+			foreach($datas[0][$tablekey] as $key => $value) {
+				$heads[] = '"'.$key.'"';
+			}
 		} else {
-			$tablekey = 0;
+			$fields = array_keys($schemas['tables'][$table]);
+			foreach($fields as $field) {
+				if($field != 'indexes') {
+					$heads[] = '"'.$field.'"';
+				}
+			}
 		}
-		$heads = array();
-		foreach($datas[0][$tablekey] as $key => $value) {
-			$heads[] = '"'.$key.'"';
-		}
-
+		
 		$head = implode(",",$heads)."\n";
 		if($encoding != $this->config['encoding']) {
 			$head = mb_convert_encoding($head, $encoding, $appEncoding);
@@ -4066,6 +4093,11 @@ class DboSource extends DataSource {
 		// データを書込
 		foreach($datas as $data) {
 			$record = $data[$tablekey];
+			if($init) {
+				$record['id'] = '';
+				$record['modified'] = '';
+				$record['created'] = '';
+			}
 			$record = $this->_convertRecordToCsv($record);
 			$csvRecord = implode(',',$record)."\n";
 			if($encoding != $appEncoding) {

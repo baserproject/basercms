@@ -30,7 +30,8 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 	'jquery-ui/ui.all',
 	'admin/import',
 	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
-	'colorbox/colorbox')) ?>
+	'colorbox/colorbox',
+	'admin/toolbar')) ?>
 <!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.7.2.min',
