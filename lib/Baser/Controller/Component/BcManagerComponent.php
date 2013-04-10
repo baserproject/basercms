@@ -642,10 +642,9 @@ class BcManagerComponent extends Component {
 	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
 		
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
-		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
 		
 		// CSVの場合ロックを解除しないとデータの投入に失敗する
-		if($driver == 'csv') {
+		if($db->config['datasource'] == 'Database/BcCsv') {
 			$db->reconnect();
 		}
 
@@ -707,6 +706,7 @@ class BcManagerComponent extends Component {
 		
 		foreach ($targetTables as $targetTable) {
 			$targetTable = basename($targetTable, '.csv');
+			$loaded = false;
 			if(!in_array($targetTable, $excludes)) {
 				// 初期データ投入
 				foreach($files[1] as $file) {

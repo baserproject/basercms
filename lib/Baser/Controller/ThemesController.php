@@ -29,14 +29,14 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('Theme','Page');
+	public $uses = array('Theme', 'Page');
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure', 'BcManager');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
 /**
  * ヘルパー
  *
@@ -93,7 +93,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_load_default_data_pattern() {
-		
+
 		if (empty($this->data['Theme']['default_data_pattern'])) {
 			$this->Session->setFlash('不正な動作です。');
 			$this->redirect('index');
@@ -103,7 +103,7 @@ class ThemesController extends AppController {
 		
 		$user = $this->BcAuth->user();
 		$User = ClassRegistry::init('User');
-		$user = $User->find('first', array('conditions' => array('User.id' => $user['User']['id']), 'recursive' => -1));
+		$user = $User->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
 		
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
@@ -145,13 +145,7 @@ class ThemesController extends AppController {
 				$this->Session->setFlash('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。');
 			}
 		}
-		
-		// システムデータの初期化
-		if (!$this->BcManager->initSystemData()) {
-			$result = false;
-			$this->log('システムデータの初期化に失敗しました。');
-		}
-		
+	
 		// ユーザーデータの初期化
 		$UserGroup = ClassRegistry::init('UserGroup');
 		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
@@ -196,6 +190,15 @@ class ThemesController extends AppController {
 					'「pages」フォルダに書き込み権限が付与されていない可能性があります。' .
 					'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
 			);
+		}
+		
+		// システムデータの初期化
+		// TODO $this->BcManager->initSystemData() は、$this->Page->createAllPageTemplate() の
+		// 後に呼出さないと $this->Page の実体が何故か AppModel にすりかわってしまい、
+		// createAllPageTemplate メソッドが呼び出せないので注意
+		if (!$this->BcManager->initSystemData()) {
+			$result = false;
+			$this->log('システムデータの初期化に失敗しました。');
 		}
 		
 		if($result) {

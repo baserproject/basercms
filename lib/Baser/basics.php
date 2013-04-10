@@ -794,13 +794,28 @@
  * @param mixed $var
  * @return void
  */
-	function prf($var) {
+	function p($var) {
 		$debug = Configure::read();
 		if($debug < 1) {
 			Configure::write('debug', 1);
 		}
-		debug($var, true);
+		$calledFrom = debug_backtrace();
+		echo '<strong style="font-size:10px">' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
+		echo '<span style="font-size:10px"> (line <strong>' . $calledFrom[0]['line'] . '</strong>)</span>';
+		debug($var, true, false);
 		if($debug < 1) {
 			Configure::write('debug', $debug);
 		}
+	}
+/**
+ * データベースのドライバー名を取得する
+ * 
+ * @param string $dbConfigKeyName
+ * @return string 
+ */
+	function getDbDriver($dbConfigKeyName = 'baser') {
+		
+		$db = ConnectionManager::getDataSource($dbConfigKeyName);
+		return $db->config['datasource'];
+		
 	}
