@@ -1105,21 +1105,12 @@ class BaserAppController extends Controller {
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];
 		}
-		
+
 		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
 			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
-			$ref = $this->referer();
-			$loginAction = Router::normalize($this->BcAuth->loginAction);
-			if($ref == $loginAction) {
-				$this->Session->delete('Auth.User');
-				$this->Session->delete('Message.flash');
-				$this->BcAuth->authError = $this->BcAuth->loginError;
-				return false;
-			} else {
-				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-				$this->redirect($ref);
-				return;
-			}
+			$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+			$this->redirect('/');
+			return;
 		}
 
 		return true;
