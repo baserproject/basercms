@@ -230,7 +230,12 @@ class DboBcPostgres extends DboPostgres {
 					return "'".date('Y-m-d H:i:s', 0)."'";
 				}
 				// <<<
-				if ($data === '') {
+				// >>> CUSTOMIZE MODIFY 2013/04/12 ryuring
+				// TreeBehavior::getpath() にて、引数 $id に、null、または、空文字を指定した場合に、
+				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
+				//if ($data === '') {
+				if ($data === '' || $data === false) {
+				// <<<
 					return $read ? 'NULL' : 'DEFAULT';
 				}
 			default:
