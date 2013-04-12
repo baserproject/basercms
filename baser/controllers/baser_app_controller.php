@@ -139,6 +139,12 @@ class BaserAppController extends Controller {
  */
 	var $preview = false;
 /**
+ * 管理画面テーマ
+ * 
+ * @var string
+ */
+	var $adminTheme = null;
+/**
  * コンストラクタ
  *
  * @return	void
@@ -387,14 +393,9 @@ class BaserAppController extends Controller {
 				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
 			}
 			
-			if(empty($params['admin'])) {
-				$this->theme = $this->siteConfigs['theme'];
-			} else {
-				if(!empty($this->siteConfigs['admin_theme'])) {
-					$this->theme = $this->siteConfigs['admin_theme'];
-				} else {
-					$this->theme = $this->siteConfigs['theme'];
-				}
+			$this->theme = $this->siteConfigs['theme'];
+			if(!empty($this->siteConfigs['admin_theme'])) {
+				$this->adminTheme = $this->siteConfigs['admin_theme'];
 			}
 
 		}

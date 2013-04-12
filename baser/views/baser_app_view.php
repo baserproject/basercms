@@ -36,7 +36,7 @@ class BaserAppView extends ThemeView {
 	var $__passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir'
+			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir', 'adminTheme'
 	);
 /**
  * Return all possible paths to find view files in order
@@ -46,23 +46,44 @@ class BaserAppView extends ThemeView {
  * @access private
  */
 	function _paths($plugin = null, $cached = true) {
+		
 		$paths = $this->__paths($plugin, $cached);
 
-		if (!empty($this->theme)) {
+		// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
+		// プラグインパスにテーマのパスを追加した為、
+		// テーマのパスをさらにテーマのパスに整形しないように調整
+		// 
+		//  >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
+		// 管理画面のテーマをフロントのテーマで上書きできるように調整
+		/*if (!empty($this->theme)) {
 			$count = count($paths);
 			for ($i = 0; $i < $count; $i++) {
-				// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
-				// プラグインパスにテーマのパスを追加した為、
-				// テーマのパスをさらにテーマのパスに整形しないように調整
-				//$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
-				// ---
-				if(strpos($paths[$i],'themed') === false) {
-					$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
+			
+				$themePaths[] = $paths[$i] . 'themed'. DS . $this->theme . DS;
+			}
+			$paths = array_merge($themePaths, $adminThemePaths, $paths);
+		}*/
+		// ---
+		$basePaths = $paths;
+		$count = count($basePaths);
+		if (!empty($this->adminTheme)) {
+			$adminThemePaths = array();
+			for ($i = 0; $i < $count; $i++) {
+				if(strpos($basePaths[$i], 'themed') === false) {
+					$adminThemePaths[] = $basePaths[$i] . 'themed'. DS . $this->adminTheme . DS;
 				}
-				// <<<
+			}
+			$paths = array_merge($adminThemePaths, $paths);
+		}
+		if (!empty($this->theme)) {
+			for ($i = 0; $i < $count; $i++) {
+				if(strpos($basePaths[$i], 'themed') === false) {
+					$themePaths[] = $basePaths[$i] . 'themed'. DS . $this->theme . DS;
+				}
 			}
 			$paths = array_merge($themePaths, $paths);
 		}
+		// <<<
 
 		if (empty($this->__paths)) {
 			$this->__paths = $paths;
