@@ -598,7 +598,7 @@ class BcUploadBehavior extends ModelBehavior {
 							copy($this->savePath.$oldName,$this->savePath.$newName);
 						}
 						
-						$model->data[$model->alias][$setting['name']] = $newName;
+						$model->data[$model->alias][$setting['name']] = str_replace(DS, '/', $newName);
 						
 						if(!empty($setting['imagecopy'])) {
 							foreach($setting['imagecopy'] as $copysetting) {
