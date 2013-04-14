@@ -455,7 +455,6 @@ class BaserAppController extends Controller {
 		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
-		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
 		$this->set('siteConfig',$this->siteConfigs);
 		if(isset($this->siteConfigs['widget_area'])){

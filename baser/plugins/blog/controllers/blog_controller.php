@@ -411,7 +411,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
-		$this->contentsTitle = $this->pageTitle;
 		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->layout = $this->blogContent['BlogContent']['layout'];
 		$this->render($template);
