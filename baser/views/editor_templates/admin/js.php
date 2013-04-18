@@ -30,7 +30,7 @@ CKEDITOR.addTemplates('default',{
 			<?php if(file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template['EditorTemplate']['image'])): ?>
 			image:'<?php echo $template['EditorTemplate']['image'] ?>',
 			<?php endif ?>
-			description:'<?php echo $template['EditorTemplate']['description'] ?>',
+			description:'<?php echo preg_replace("/(\n|\r)/", "", nl2br($template['EditorTemplate']['description'])) ?>',
 			html:'<?php echo preg_replace('/(\n|\r)/', '', $template['EditorTemplate']['html']) ?>'
 		}<?php if(!$bcArray->last($templates, $key)): ?>, <?php endif ?>
 	<?php endforeach ?>
