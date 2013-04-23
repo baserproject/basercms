@@ -744,6 +744,7 @@ class BlogPostsController extends BlogAppController {
 		$data['BlogPost']['status'] = $status;
 		$data['BlogPost']['publish_begin'] = '';
 		$data['BlogPost']['publish_end'] = '';
+		unset($data['BlogPost']['eye_catch']);	// No.3793対応
 		$this->BlogPost->set($data);
 		
 		if($this->BlogPost->save()) {
