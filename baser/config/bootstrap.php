@@ -159,7 +159,21 @@
 			$agentOn = false;
 			if(!empty($url)) {
 				$parameters = explode('/',$url);
-				if($parameters[0] == $setting['alias']) {
+				// /mのURLにSmartphoneでアクセスした場合はスマートフォンの画面を表示させる
+				// TODO: 暫定対応、本来はisSphone()やisMobile()のようなユーザエージェント検知メソッドが必要だと思う
+				if ($setting['alias'] == $agentSettings['mobile']['alias'] && 
+					$parameters[0] == $agentSettings['mobile']['alias']) {
+					$agentAgents = $agentSettings['smartphone']['agents'];
+					$agentAgents = implode('||', $agentAgents);
+					$agentAgents = preg_quote($agentAgents, '/');
+					$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
+					if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
+						//携帯のaliasを除去する
+						$regex = '/' . $agentSettings['mobile']['alias'] . '\//';
+						$parameter = preg_replace($regex, '', $parameter);
+						$agentOn = false;
+					}
+				} else if($parameters[0] == $setting['alias']) {
 					$agentOn = true;
 				}
 			}
