@@ -61,7 +61,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $bcForm->label('Permission.url', 'URL設定') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<strong>/<?php echo $authPrefix ?>/</strong>
+				<strong>/<?php echo $permissionAuthPrefix ?>/</strong>
 				<?php echo $bcForm->input('Permission.url', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $form->error('Permission.url') ?>

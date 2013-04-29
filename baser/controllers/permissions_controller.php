@@ -145,7 +145,7 @@ class PermissionsController extends AppController {
 		if(!$this->data) {
 			$this->data = $this->Permission->getDefaultValue();
 			$this->data['Permission']['user_group_id'] = $userGroupId;
-			$authPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
+			$permissionAuthPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
 		}else {
 			/* 登録処理 */
 			if(isset($this->data['Permission']['user_group_id'])){
@@ -153,27 +153,27 @@ class PermissionsController extends AppController {
 			}else{
 				$userGroupId = null;
 			}
-			$authPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
-			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
-			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$userGroupId))+1;
-			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$userGroupId))+1;
+			$permissionAuthPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
+			$this->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->data['Permission']['url'];
+			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$userGroupId)) + 1;
+			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$userGroupId)) + 1;
 			$this->Permission->create($this->data);
 			if($this->Permission->save()) {
 				$this->setMessage('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
-				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
+				$this->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->data['Permission']['url']);
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
 
 		/* 表示設定 */
-		if($authPrefix == 'admin') {
-			$authPrefix = Configure::read('Routing.admin');
+		if($permissionAuthPrefix == 'admin') {
+			$permissionAuthPrefix = Configure::read('Routing.admin');
 		}
 		$this->pageTitle = '['.$userGroup['UserGroup']['title'].'] 新規アクセス制限設定登録';
-		$this->set('authPrefix', $authPrefix);
+		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
 		$this->help = 'permissions_form';
 		$this->render('form');
 
@@ -188,7 +188,7 @@ class PermissionsController extends AppController {
 
 		if($this->data) {
 			$authPrefix = $this->Permission->UserGroup->getAuthPrefix($this->data['Permission']['user_group_id']);
-			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
+			$this->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->data['Permission']['url'];
 			$this->data['Permission']['no'] = $this->Permission->getMax('no',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
 			$this->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$this->data['Permission']['user_group_id']))+1;
 			$this->data['Permission']['status'] = true;
@@ -224,30 +224,31 @@ class PermissionsController extends AppController {
 															'fields' => array('id', 'title'),
 															'order'=>'UserGroup.id ASC','recursive'=>-1));
 		
-		$authPrefix = $this->Permission->getAuthPrefix($id);
+		$permissionAuthPrefix = $this->Permission->getAuthPrefix($id);
+		
 		if(empty($this->data)) {
 			$this->data = $this->Permission->read(null, $id);
-			$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
+			$this->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->data['Permission']['url']);
 		}else {
 
 			/* 更新処理 */
-			$this->data['Permission']['url'] = '/'.$authPrefix.'/'.$this->data['Permission']['url'];
+			$this->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->data['Permission']['url'];
 			if($this->Permission->save($this->data)) {
 				$this->setMessage('アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
-				$this->data['Permission']['url'] = preg_replace('/^\/'.$authPrefix.'\//', '', $this->data['Permission']['url']);
+				$this->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->data['Permission']['url']);
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 
 		}
 
 		/* 表示設定 */
-		if($authPrefix == 'admin') {
-			$authPrefix = Configure::read('Routing.admin');
+		if($permissionAuthPrefix == 'admin') {
+			$permissionAuthPrefix = Configure::read('Routing.admin');
 		}
 		$this->pageTitle = '['.$userGroup['UserGroup']['title'].'] アクセス制限設定編集：'.$this->data['Permission']['name'];
-		$this->set('authPrefix', $authPrefix);
+		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
 		$this->help = 'permissions_form';
 		$this->render('form');
 
