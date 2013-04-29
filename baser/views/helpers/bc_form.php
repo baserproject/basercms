@@ -620,7 +620,7 @@ DOC_END;
 					$wyears = $this->BcTime->convertToWarekiYear($i);
 					if($wyears) {
 						foreach($wyears as $value) {
-							list($w,$year) = split('-', $value);
+							list($w,$year) = explode('-', $value);
 							$data[$value] = $this->BcTime->nengo($w).' '.$year;
 						}
 					}

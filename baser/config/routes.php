@@ -168,9 +168,9 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$agent){
-						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}else{
-						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}
 					break;
 				} else {
@@ -182,7 +182,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 							if(!$agent){
 								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
 							}else{
-								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 							}
 							break;
 						}

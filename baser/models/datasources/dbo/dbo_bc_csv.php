@@ -743,7 +743,7 @@ class DboBcCsv extends DboSource {
 
 		/* ソート処理（１フィールドのみ対応） */
 		if(!empty($queryData['order'][0])) {
-			list($sortField,$direct) = split(" ",$queryData['order'][0]);
+			list($sortField,$direct) = explode(" ",$queryData['order'][0]);
 			qsort($records, 0, count($records)-1, $sortField,strtoupper($direct));
 		}
 
@@ -1539,7 +1539,7 @@ class DboBcCsv extends DboSource {
  * @access protected
  */
 	function _parseSqlFields($fields,$modelName) {
-		$aryFields = split(",",$fields);
+		$aryFields = explode(",",$fields);
 		foreach($aryFields as $key => $field) {
 			if(preg_match('/(max|MAX)\((.*?)\)\sAS\s(.*)/s',$field,$matches)) {
 				$field = $matches[2];
@@ -1587,7 +1587,7 @@ class DboBcCsv extends DboSource {
 	function _parseSqlClassName($fields) {
 		
 		$model = '';
-		$aryFields = split(",",$fields);
+		$aryFields = explode(",",$fields);
 		foreach($aryFields as $field) {
 			if(preg_match('/\((.*?)\)\sAS/is', $field, $matches)){
 				if(strpos($matches[1],".")!==false){
@@ -1613,7 +1613,7 @@ class DboBcCsv extends DboSource {
  */
 	function _parseSqlFieldsFromBuild($sql) {
 
-		$arySql = split(",",$sql);
+		$arySql = explode(",",$sql);
 		$fields = array();
 		foreach($arySql as $key => $value) {
 			if(strpos($value,'PRIMARY KEY')===false) {
@@ -1711,7 +1711,7 @@ class DboBcCsv extends DboSource {
 		$tables = str_replace("`","",$tables);
 
 		if(strpos($tables,"AS") !== false) {
-			list($tableName,$modelName) = split("AS",$tables);
+			list($tableName,$modelName) = explode("AS",$tables);
 		}else {
 			$tableName = trim($tables);
 		}
@@ -1816,7 +1816,7 @@ class DboBcCsv extends DboSource {
  */
 	function _parseSqlLimit($limit) {
 
-		$_config = split(",",$limit);
+		$_config = explode(",",$limit);
 		if(!empty($_config[1])) {
 			$config['offset'] = trim($_config[0]);
 			$config['limit'] = trim($_config[1]);
@@ -1844,7 +1844,7 @@ class DboBcCsv extends DboSource {
 
 		$strOrder = preg_replace("/`[^`]+?`\./s","",$strOrder);
 		$strOrder = str_replace("`","",$strOrder);
-		$aryOrders = split(",",$strOrder);
+		$aryOrders = explode(",",$strOrder);
 		foreach($aryOrders as $key =>$order) {
 			$_aryOrders[]=trim($order);
 		}

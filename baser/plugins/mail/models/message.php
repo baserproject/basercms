@@ -510,7 +510,7 @@ class Message extends MailAppModel {
 			}
 			if($mailField['MailField']['type']=='multi_check') {
 				if(!empty($dbData['message'][$mailField['MailField']['field_name']])) {
-					$dbData['message'][$mailField['MailField']['field_name']]= split("\|",$dbData['message'][$mailField['MailField']['field_name']]);
+					$dbData['message'][$mailField['MailField']['field_name']]= explode("|",$dbData['message'][$mailField['MailField']['field_name']]);
 				}
 			}
 
