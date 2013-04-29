@@ -12,12 +12,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
@@ -166,3 +166,4 @@ $config['0400_04ff'][] = array('upper' => 1272, 'status' => 'C', 'lower' => arra
 $config['0400_04ff'][] = array('upper' => 1274, 'status' => 'C', 'lower' => array(1275)); /* CYRILLIC CAPITAL LETTER GHE WITH STROKE AND HOOK */
 $config['0400_04ff'][] = array('upper' => 1276, 'status' => 'C', 'lower' => array(1277)); /* CYRILLIC CAPITAL LETTER HA WITH HOOK */
 $config['0400_04ff'][] = array('upper' => 1278, 'status' => 'C', 'lower' => array(1279)); /* CYRILLIC CAPITAL LETTER HA WITH STROKE */
+?>

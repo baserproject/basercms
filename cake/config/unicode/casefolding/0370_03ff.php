@@ -12,12 +12,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
@@ -104,3 +104,4 @@ $config['0370_03ff'][] = array('upper' => 1018, 'status' => 'C', 'lower' => arra
 $config['0370_03ff'][] = array('upper' => 1021, 'status' => 'C', 'lower' => array(891)); /* GREEK CAPITAL REVERSED LUNATE SIGMA SYMBOL */
 $config['0370_03ff'][] = array('upper' => 1022, 'status' => 'C', 'lower' => array(892)); /* GREEK CAPITAL DOTTED LUNATE SIGMA SYMBOL */
 $config['0370_03ff'][] = array('upper' => 1023, 'status' => 'C', 'lower' => array(893)); /* GREEK CAPITAL REVERSED DOTTED LUNATE SIGMA SYMBOL */
+?>

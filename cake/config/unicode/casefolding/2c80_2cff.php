@@ -12,12 +12,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
@@ -92,3 +92,4 @@ $config['2c80_2cff'][] = array('upper' => 11484, 'status' => 'C', 'lower' => arr
 $config['2c80_2cff'][] = array('upper' => 11486, 'status' => 'C', 'lower' => array(11487)); /* COPTIC CAPITAL LETTER OLD NUBIAN NGI */
 $config['2c80_2cff'][] = array('upper' => 11488, 'status' => 'C', 'lower' => array(11489)); /* COPTIC CAPITAL LETTER OLD NUBIAN NYI */
 $config['2c80_2cff'][] = array('upper' => 11490, 'status' => 'C', 'lower' => array(11491)); /* COPTIC CAPITAL LETTER OLD NUBIAN WAU */
+?>

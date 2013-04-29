@@ -12,12 +12,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
@@ -218,3 +218,4 @@ $config['1f00_1fff'][] = array('upper' => 8186, 'status' => 'C', 'lower' => arra
 $config['1f00_1fff'][] = array('upper' => 8187, 'status' => 'C', 'lower' => array(8061)); /* GREEK CAPITAL LETTER OMEGA WITH OXIA */
 $config['1f00_1fff'][] = array('upper' => 8188, 'status' => 'F', 'lower' => array(969, 953)); /* GREEK CAPITAL LETTER OMEGA WITH PROSGEGRAMMENI */
 $config['1f00_1fff'][] = array('upper' => 8188, 'status' => 'S', 'lower' => array(8179)); /* GREEK CAPITAL LETTER OMEGA WITH PROSGEGRAMMENI */
+?>
