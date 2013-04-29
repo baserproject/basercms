@@ -1058,7 +1058,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function existsEditLink() {
 
-		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
+		return ($this->_view->viewVars['authPrefix'] == 'admin' && !empty($this->_view->viewVars['editLink']));
 
 	}
 /**
