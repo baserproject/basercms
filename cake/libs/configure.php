@@ -125,7 +125,12 @@ class Configure extends Object {
 	function &getInstance($boot = true) {
 		static $instance = array();
 		if (!$instance) {
+			// CUSTOMIZE 2013/04/30 ryuring
+			// >>>
+			//$instance[0] =& new Configure();
+			// ---
 			$instance[0] = new Configure();
+			// <<<
 			$instance[0]->__loadBootstrap($boot);
 		}
 		return $instance[0];
@@ -215,7 +220,12 @@ class Configure extends Object {
 			require LIBS . 'folder.php';
 		}
 		$items = array();
+		// CUSTOMIZE 2013/04/30 ryuring
+		// >>>
+		//$Folder =& new Folder($path);
+		// ---
 		$Folder = new Folder($path);
+		// <<<
 		$contents = $Folder->read(false, true);
 
 		if (is_array($contents)) {
@@ -890,7 +900,12 @@ class App extends Object {
 	function &getInstance() {
 		static $instance = array();
 		if (!$instance) {
+			// CUSTOMIZE 2013/04/30 ryuring
+			// >>>
+			//$instance[0] =& new App();
+			// ---
 			$instance[0] = new App();
+			// <<<
 			$instance[0]->__map = Cache::read('file_map', '_cake_core_');
 		}
 		return $instance[0];
@@ -930,7 +945,12 @@ class App extends Object {
 				if (!class_exists('Folder')) {
 					require LIBS . 'folder.php';
 				}
+				// CUSTOMIZE 2013/04/30 ryuring
+				// >>>
+				//$Folder =& new Folder();
+				// ---
 				$Folder = new Folder();
+				// <<<
 				$directories = $Folder->tree($path, false, 'dir');
 				$this->__paths[$path] = $directories;
 			}
