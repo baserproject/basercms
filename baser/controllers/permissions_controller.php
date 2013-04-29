@@ -381,7 +381,11 @@ class PermissionsController extends AppController {
 		if($result) {
 			$this->setViewConditions('Permission', array('action' => 'admin_index'));
 			$result['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $result['Permission']['url']);
-			$this->set('sortmode', $this->passedArgs['sortmode']);
+			$sortmode = false;
+			if(isset($this->passedArgs['sortmode'])) {
+				$sortmode = $this->passedArgs['sortmode'];
+			}
+			$this->set('sortmode', $sortmode);
 			$this->set('data', $result);
 		} else {
 			$this->ajaxError(500, $this->Permission->validationErrors);
