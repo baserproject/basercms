@@ -8,12 +8,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -125,7 +125,12 @@ class Configure extends Object {
 	function &getInstance($boot = true) {
 		static $instance = array();
 		if (!$instance) {
-			$instance[0] =& new Configure();
+			// CUSTOMIZE 2013/04/30 ryuring
+			// >>>
+			//$instance[0] =& new Configure();
+			// ---
+			$instance[0] = new Configure();
+			// <<<
 			$instance[0]->__loadBootstrap($boot);
 		}
 		return $instance[0];
@@ -215,7 +220,12 @@ class Configure extends Object {
 			require LIBS . 'folder.php';
 		}
 		$items = array();
-		$Folder =& new Folder($path);
+		// CUSTOMIZE 2013/04/30 ryuring
+		// >>>
+		//$Folder =& new Folder($path);
+		// ---
+		$Folder = new Folder($path);
+		// <<<
 		$contents = $Folder->read(false, true);
 
 		if (is_array($contents)) {
@@ -284,14 +294,8 @@ class Configure extends Object {
 
 		if (isset($config['debug'])) {
 			if ($_this->debug) {
-				error_reporting(E_ALL & ~E_DEPRECATED);
-				// CUSTOMIZE 2013/03/26 ryuring
-				// PHP 5.3以降対応の為、E_STRICT を除外
-				// >>>
-				//error_reporting(E_ALL & ~E_DEPRECATED);
-				// --
 				error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
-				// <<<
+
 				if (function_exists('ini_set')) {
 					ini_set('display_errors', 1);
 				}
@@ -896,7 +900,12 @@ class App extends Object {
 	function &getInstance() {
 		static $instance = array();
 		if (!$instance) {
-			$instance[0] =& new App();
+			// CUSTOMIZE 2013/04/30 ryuring
+			// >>>
+			//$instance[0] =& new App();
+			// ---
+			$instance[0] = new App();
+			// <<<
 			$instance[0]->__map = Cache::read('file_map', '_cake_core_');
 		}
 		return $instance[0];
@@ -936,7 +945,12 @@ class App extends Object {
 				if (!class_exists('Folder')) {
 					require LIBS . 'folder.php';
 				}
-				$Folder =& new Folder();
+				// CUSTOMIZE 2013/04/30 ryuring
+				// >>>
+				//$Folder =& new Folder();
+				// ---
+				$Folder = new Folder();
+				// <<<
 				$directories = $Folder->tree($path, false, 'dir');
 				$this->__paths[$path] = $directories;
 			}
@@ -1198,3 +1212,4 @@ class App extends Object {
 		}
 	}
 }
+?>

@@ -59,12 +59,12 @@ class BcTimeHelper extends TimeHelper {
  */
 	function wareki($date) {
 
-		$_date = split('/', $date);
+		$_date = explode('/', $date);
 		if(!$_date) {
-			$_date = split('-', $date);
+			$_date = explode('-', $date);
 		}
 		if(count($_date)==3) {
-			$wyear = split('-',$_date[0]);
+			$wyear = explode('-',$_date[0]);
 			if(isset($wyear[0])) {
 				return $wyear[0];
 			} else {
@@ -86,12 +86,12 @@ class BcTimeHelper extends TimeHelper {
  */
 	function wyear($date) {
 		
-		$_date = split('/', $date);
+		$_date = explode('/', $date);
 		if(!$_date) {
-			$_date = split('-', $date);
+			$_date = explode('-', $date);
 		}
 		if(count($_date)==3) {
-			$wyear = split('-',$_date[0]);
+			$wyear = explode('-',$_date[0]);
 			if(isset($wyear[1])) {
 				return $wyear[1];
 			} else {
@@ -146,7 +146,7 @@ class BcTimeHelper extends TimeHelper {
 		if(strpos($year, '-')===false) {
 			return false;
 		}
-		list($w,$year) = split('-', $year);
+		list($w,$year) = explode('-', $year);
 		switch ($w) {
 			case 'm':
 				return $year + 1867;

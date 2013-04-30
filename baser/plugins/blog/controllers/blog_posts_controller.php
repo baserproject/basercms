@@ -609,7 +609,7 @@ class BlogPostsController extends BlogAppController {
 			$post['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$this->data['Import']['blog_content_id']))+1;
 			$post['name'] = $_post['title'];
 			$_post['Encoded'][0] = str_replace("\n","<br />",$_post['Encoded'][0]);
-			$encoded = split('<!--more-->',$_post['Encoded'][0]);
+			$encoded = explode('<!--more-->',$_post['Encoded'][0]);
 			$post['content'] = $encoded[0];
 			if(isset($encoded[1])) {
 				$post['detail'] = $encoded[1];
@@ -744,6 +744,7 @@ class BlogPostsController extends BlogAppController {
 		$data['BlogPost']['status'] = $status;
 		$data['BlogPost']['publish_begin'] = '';
 		$data['BlogPost']['publish_end'] = '';
+		unset($data['BlogPost']['eye_catch']);	// No.3793対応
 		$this->BlogPost->set($data);
 		
 		if($this->BlogPost->save()) {

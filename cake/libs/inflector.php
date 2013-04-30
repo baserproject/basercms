@@ -8,12 +8,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -127,7 +127,12 @@ class Inflector extends Object {
 		static $instance = array();
 
 		if (!$instance) {
-			$instance[0] =& new Inflector();
+			// CUSTOMIZE 2013/04/30 ryuring
+			// >>>
+			//$instance[0] =& new Inflector();
+			// ---
+			$instance[0] = new Inflector();
+			// <<<
 			if (file_exists(CONFIGS.'inflections.php')) {
 				include(CONFIGS.'inflections.php');
 				$instance[0]->__pluralRules = $pluralRules;
@@ -528,3 +533,4 @@ class Inflector extends Object {
 	function __enclose($string) {
 		return '(?:' . $string . ')';
 	}
+?>

@@ -165,7 +165,7 @@ class BlogController extends BlogAppController {
 		}
 
 		$datas = $this->_getBlogPosts(array('listCount' => $listCount));
-		$this->set('editLink', array('admin' => true, 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
+		$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
 		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
@@ -381,7 +381,7 @@ class BlogController extends BlogAppController {
 
 					$user = $this->BcAuth->user();
 					if(empty($this->params['admin']) && !empty($user) && !Configure::read('BcRequest.agent')) {
-						$this->set('editLink', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
+						$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
 					}
 
 				}
@@ -411,7 +411,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
-		$this->contentsTitle = $this->pageTitle;
 		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->layout = $this->blogContent['BlogContent']['layout'];
 		$this->render($template);

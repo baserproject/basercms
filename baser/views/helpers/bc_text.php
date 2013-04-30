@@ -350,7 +350,7 @@ class BcTextHelper extends TextHelper {
 		if(!is_array($arrDate)) return;
 		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
 			return;
-		list($w,$year) = split('-', $arrDate['year']);
+		list($w,$year) = explode('-', $arrDate['year']);
 		$wareki = $this->BcTime->nengo($w);
 		return $wareki." ".$year."年 ".$arrDate['month']."月 ".$arrDate['day'].'日';
 
@@ -444,7 +444,7 @@ class BcTextHelper extends TextHelper {
 				return array();
 			}
 		}
-		$values = split($separator,$value);
+		$values = explode($separator,$value);
 		return $values;
 		
 	}

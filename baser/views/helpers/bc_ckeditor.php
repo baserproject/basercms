@@ -284,6 +284,14 @@ class BcCkeditorHelper extends AppHelper {
 			$jscode .= "CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;";
 		}
 		
+		// $this->webroot で、フロントテーマのURLを取得できるようにするため、
+		// 一旦テーマをフロントのテーマに切り替える
+		$themeWeb = $this->themeWeb;
+		$theme = Configure::read('BcSite.theme');
+		if($theme) {
+			$this->themeWeb = 'themed/'. $theme .'/';
+		}
+		
 		$themeEditorCsses = array(
 			array(
 				'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
@@ -309,6 +317,8 @@ class BcCkeditorHelper extends AppHelper {
 				));
 			}
 		}
+		
+		$this->themeWeb = $themeWeb;
 		
 		foreach($themeEditorCsses as $themeEditorCss) {
 			if(file_exists($themeEditorCss['path'])) {

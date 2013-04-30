@@ -263,10 +263,10 @@
 			}
 			if(!empty($query)){
 				if(strpos($query, '&')){
-					$queries = split('&',$query);
+					$queries = explode('&',$query);
 					foreach($queries as $_query) {
 						if(strpos($_query, '=')){
-							list($key,$value) = split('=',$_query);
+							list($key,$value) = explode('=',$_query);
 							if($key=='url'){
 								$parameter = $value;
 								break;
@@ -275,7 +275,7 @@
 					}
 				}else{
 					if(strpos($query, '=')){
-						list($key,$value) = split('=',$query);
+						list($key,$value) = explode('=',$query);
 						if($key=='url'){
 							$parameter = $value;
 						}

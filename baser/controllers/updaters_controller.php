@@ -215,7 +215,7 @@ class UpdatersController extends AppController {
 		/* スクリプト実行 */
 		if($this->data) {
 			clearAllCache();
-			unlink($updateLogFile);
+			@unlink($updateLogFile);
 			if(function_exists('ini_set')) {
 				ini_set('max_excution_time', 0);
 				ini_set('max_excution_time', '128M');

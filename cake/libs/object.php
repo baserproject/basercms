@@ -9,12 +9,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -49,13 +49,17 @@ class Object {
  *
  * @return Object
  */
-	function Object() {
+	// CUSTOMIZE 2013/04/30 ryuring
+	// >>>
+	/*function Object() {
 		$args = func_get_args();
 		if (method_exists($this, '__destruct')) {
 			register_shutdown_function (array(&$this, '__destruct'));
 		}
 		call_user_func_array(array(&$this, '__construct'), $args);
-	}
+	}*/
+	// <<<
+	
 /**
  * Class constructor, overridden in descendant classes.
  */
@@ -294,3 +298,4 @@ class Object {
 		}
 	}
 }
+?>

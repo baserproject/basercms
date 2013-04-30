@@ -139,6 +139,12 @@ class BaserAppController extends Controller {
  */
 	var $preview = false;
 /**
+ * 管理画面テーマ
+ * 
+ * @var string
+ */
+	var $adminTheme = null;
+/**
  * コンストラクタ
  *
  * @return	void
@@ -387,14 +393,9 @@ class BaserAppController extends Controller {
 				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
 			}
 			
-			if(empty($params['admin'])) {
-				$this->theme = $this->siteConfigs['theme'];
-			} else {
-				if(!empty($this->siteConfigs['admin_theme'])) {
-					$this->theme = $this->siteConfigs['admin_theme'];
-				} else {
-					$this->theme = $this->siteConfigs['theme'];
-				}
+			$this->theme = $this->siteConfigs['theme'];
+			if(!empty($this->siteConfigs['admin_theme'])) {
+				$this->adminTheme = $this->siteConfigs['admin_theme'];
 			}
 
 		}
@@ -454,7 +455,6 @@ class BaserAppController extends Controller {
 		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
-		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
 		$this->set('siteConfig',$this->siteConfigs);
 		if(isset($this->siteConfigs['widget_area'])){
@@ -699,7 +699,7 @@ class BaserAppController extends Controller {
 			$formalName = $this->siteConfigs['formal_name'];
 			$email = $this->siteConfigs['email'];
 			if(strpos($email, ',') !== false) {
-				$email = split(',', $email);
+				$email = explode(',', $email);
 				$email = $email[0];
 			}
 		}
@@ -724,7 +724,7 @@ class BaserAppController extends Controller {
 		}
 
 		if(strpos($to, ',') !== false) {
-			$_to = split(',', $to);
+			$_to = explode(',', $to);
 			$to = $_to[0];
 			if(count($_to) > 1) {
 				unset($_to[0]);
@@ -779,7 +779,7 @@ class BaserAppController extends Controller {
 		// 送信元・返信先
 		if($from) {
 			if(strpos($from, ',') !== false) {
-				$_from = split(',', $from);
+				$_from = explode(',', $from);
 				$from = $_from[0];
 			}
 			$this->BcEmail->from = $from;
@@ -801,7 +801,7 @@ class BaserAppController extends Controller {
 		// CC
 		if($cc) {
 			if(strpos($cc, ',') !== false) {
-				$cc = split(',', $cc);
+				$cc = explode(',', $cc);
 			}else{
 				$cc = array($cc);
 			}
@@ -811,7 +811,7 @@ class BaserAppController extends Controller {
 		// BCC
 		if($bcc) {
 			if(strpos($bcc, ',') !== false) {
-				$bcc = split(',', $bcc);
+				$bcc = explode(',', $bcc);
 			}else{
 				$bcc = array($bcc);
 			}
@@ -1009,7 +1009,7 @@ class BaserAppController extends Controller {
 		extract($options);
 
 		if($type=='string' && !is_array($value)) {
-			$values = split(',',str_replace('\'', '', $values));
+			$values = explode(',',str_replace('\'', '', $values));
 		}
         if(!empty($values) && is_array($values)){
             foreach($values as $value){
@@ -1032,7 +1032,7 @@ class BaserAppController extends Controller {
 		if(strpos($value, '-')===false) {
 			return false;
 		}
-		list($start, $end) = split('-', $value);
+		list($start, $end) = explode('-', $value);
 		if(!$start) {
 			$conditions[$fieldName.' <='] = $end;
 		}elseif(!$end) {
@@ -1104,21 +1104,12 @@ class BaserAppController extends Controller {
 		if(!empty($this->params['prefix'])) {
 			$requestedPrefix = $this->params['prefix'];
 		}
-		
+
 		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
 			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
-			$ref = $this->referer();
-			$loginAction = Router::normalize($this->BcAuth->loginAction);
-			if($ref == $loginAction) {
-				$this->Session->delete('Auth.User');
-				$this->Session->delete('Message.flash');
-				$this->BcAuth->authError = $this->BcAuth->loginError;
-				return false;
-			} else {
-				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-				$this->redirect($ref);
-				return;
-			}
+			$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+			$this->redirect('/');
+			return;
 		}
 
 		return true;

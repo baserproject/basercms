@@ -91,7 +91,7 @@ class BcArrayHelper extends AppHelper {
  */
 	function __addText(&$value, $key, $add) {
 		if($add) {
-			list($prefix, $suffix) = split(',',$add);
+			list($prefix, $suffix) = explode(',',$add);
 		}
 		$value = $prefix.$value.$suffix;
 	}

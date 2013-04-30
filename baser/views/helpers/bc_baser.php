@@ -378,10 +378,7 @@ class BcBaserHelper extends AppHelper {
 	function getContentsTitle() {
 
 		$contentsTitle = '';
-		// トップページの場合は、タイトルをサイト名だけにする
-		if (!empty($this->_view->viewVars['contentsTitle'])) {
-			$contentsTitle = $this->_view->viewVars['contentsTitle'];
-		}elseif($this->_view->pageTitle) {
+		if($this->_view->pageTitle) {
 			$contentsTitle = $this->_view->pageTitle;
 		}
 		if ($this->_view->name != 'CakeError' && !empty($contentsTitle)) {
@@ -1061,7 +1058,7 @@ class BcBaserHelper extends AppHelper {
  */
 	function existsEditLink() {
 
-		return ($this->_view->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_view->viewVars['editLink']));
+		return ($this->_view->viewVars['authPrefix'] == 'admin' && !empty($this->_view->viewVars['editLink']));
 
 	}
 /**

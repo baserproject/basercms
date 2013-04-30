@@ -12,12 +12,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.config.unicode.casefolding
@@ -170,3 +170,4 @@ $config['1e00_1eff'][] = array('upper' => 7922, 'status' => 'C', 'lower' => arra
 $config['1e00_1eff'][] = array('upper' => 7924, 'status' => 'C', 'lower' => array(7925)); /* LATIN CAPITAL LETTER Y WITH DOT BELOW */
 $config['1e00_1eff'][] = array('upper' => 7926, 'status' => 'C', 'lower' => array(7927)); /* LATIN CAPITAL LETTER Y WITH HOOK ABOVE */
 $config['1e00_1eff'][] = array('upper' => 7928, 'status' => 'C', 'lower' => array(7929)); /* LATIN CAPITAL LETTER Y WITH TILDE */
+?>
