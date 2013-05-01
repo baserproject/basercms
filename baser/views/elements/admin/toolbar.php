@@ -22,7 +22,7 @@ if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	$bcBaser->BcHtml->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
 	$bcBaser->Javascript->themeWeb = 'themed/'.$bcBaser->siteConfig['admin_theme'].'/';
 }
-$bcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
+$bcBaser->js(array('outerClick','jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.'.$currentPrefix);
 if(!empty($currentAuthPrefix['loginAction'])) {
