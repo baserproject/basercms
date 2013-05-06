@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('HttpSocket', 'Core.Network/Http');
 /**
  * コンテンツコントローラー
  *
@@ -51,7 +52,7 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER);
+	public $helpers = array('BcText', 'BcForm');
 /**
  * beforeFilter
  *
@@ -345,7 +346,6 @@ class ContentsController extends AppController {
 					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
 					$title = $View->pageTitle;
 				} elseif (preg_match('/\.html/', $url)) {
-					App::import('Core', 'HttpSocket');
 					$socket = new HttpSocket();
 					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
 					$content = $socket->get(siteUrl().$url);

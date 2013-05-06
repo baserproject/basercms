@@ -40,7 +40,7 @@ jQuery(function($) {
 /**
  * タイプの値によってフィールドの表示設定を行う
  */
-	public function loadSetting(value){
+	function loadSetting(value){
 
 		switch ($("#MailFieldType").val()){
 			case 'text':

@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* Permissions schema generated on: 2010-11-04 18:11:09 : 1288863009*/
 class PermissionsSchema extends CakeSchema {
-	public $name = 'Permissions';
+	var $name = 'Permissions';
 
-	public $file = 'permissions.php';
+	var $file = 'permissions.php';
 
-	public $connection = 'baser';
+	var $connection = 'baser';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $permissions = array(
+	var $permissions = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'no' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'sort' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),

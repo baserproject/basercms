@@ -47,7 +47,7 @@ class MailController extends MailAppController {
  * @access public
  */
 	public $helpers = array(
-		BC_FREEZE_HELPER, BC_ARRAY_HELPER, BC_TIME_HELPER, 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
+		'BcFreeze', 'BcArray', 'BcTime', 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
 	);
 /**
  * Array of components a controller will use

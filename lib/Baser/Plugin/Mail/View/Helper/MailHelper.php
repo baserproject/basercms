@@ -38,7 +38,7 @@ class MailHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_BASER_HELPER);
+	public $helpers = array('BcBaser');
 /**
  * コンストラクタ
  *

@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('ga', 'Vendor');
 /**
  * モバイルコントローラー
  *
@@ -55,7 +56,6 @@ class MobileController extends AppController {
 			exit();
 		}
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
-		App::import('Vendor', 'ga');
 		exit();
 		
 	}

@@ -43,7 +43,7 @@ class MailMessagesController extends MailAppController {
  * @var array
  * @access public
  */
-	public $helpers = array('Mail.maildata', 'Mail.mailfield', BC_TEXT_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array('Mail.maildata', 'Mail.mailfield', 'BcText', 'BcArray');
 /**
  * コンポーネント
  *
@@ -88,6 +88,7 @@ class MailMessagesController extends MailAppController {
 		$this->mailContent = $this->MailContent->read(null,$this->params['pass'][0]);
 		if($this->mailContent['MailContent']['name'] != 'message') {
 			$prefix = $this->mailContent['MailContent']['name']."_";
+			App::uses('Message', 'Mail.Model');
 			$this->Message = new Message(false,null,null,$prefix);
 		}
 		$this->crumbs[] = array('name' => $this->mailContent['MailContent']['title'].'管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));

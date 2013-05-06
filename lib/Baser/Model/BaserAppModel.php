@@ -22,7 +22,11 @@
  * Include files
  */
 App::uses('Sanitize', 'Utility');
+App::uses('Folder', 'Utility');
 App::uses('Model', 'Model');
+App::uses('Dblog', 'Model');
+App::uses('AppController', 'Controller');
+App::uses('DbRestore', 'Vendor');
 
 /**
  * Model 拡張クラス
@@ -81,7 +85,6 @@ class BaserAppModel extends Model {
 					Configure::read('BcRequest.pureUrl') == '') {
 					// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
 					// 初期化ページにリダイレクトする
-					App::import('Controller','App');
 					$AppController = new AppController();
 					session_start();
 					$_SESSION['Message']['flash'] = array('message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default');
@@ -180,7 +183,6 @@ class BaserAppModel extends Model {
  */
 	public function saveDbLog($message) {
 		// ログを記録する
-		App::import('Model', 'Dblog');
 		$Dblog = new Dblog();
 		$logdata['Dblog']['name'] = $message;
 		$logdata['Dblog']['user_id'] = @$_SESSION['Auth']['User']['id'];
@@ -483,7 +485,7 @@ class BaserAppModel extends Model {
  * @param string $source
  */
 	public function restoreDb($config, $source) {
-		App::import('Vendor', 'DbRestore', array('file' => 'dbrestore.php'));
+		
 		$dbType = preg_replace('/^bc_/', '', $config['driver']);
 		switch ($dbType) {
 			case 'mysql':
@@ -929,8 +931,8 @@ class BaserAppModel extends Model {
  * @access public
  */
 	public function deleteModelCache() {
+		
 		$this->_schema = null;
-		App::import('Core', 'Folder');
 		$folder = new Folder(CACHE . 'models' . DS);
 		$caches = $folder->read(true, true);
 		foreach ($caches[1] as $cache) {
@@ -938,6 +940,7 @@ class BaserAppModel extends Model {
 				@unlink(CACHE . 'models' . DS . $cache);
 			}
 		}
+		
 	}
 
 /**

@@ -13,7 +13,7 @@
  */
 
 require('OAuth.php');
-App::import('Core', 'http_socket');
+App::uses('HttpSocket', 'Network/Http');
 
 // using an underscore in the class name to avoid a naming conflict with the OAuth library
 class OAuth_Consumer {

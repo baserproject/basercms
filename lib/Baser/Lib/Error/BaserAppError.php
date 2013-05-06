@@ -20,9 +20,8 @@
 /**
  * Include files
  */
-if(!class_exists('ErrorHandler')) {
-	App::import('Core', 'Error');
-}
+App::uses('ErrorHandler', 'Cake.Error');
+App::uses('Sanitize', 'Cake.Utility');
 /**
  * ErrorHandler 拡張クラス
  * @package baser
@@ -35,7 +34,7 @@ class BaserAppError extends ErrorHandler {
  * @param array $messages Error messages
  */
 	public function __construct($method, $messages) {
-		App::import('Core', 'Sanitize');
+		
 		static $__previousError = null;
 
 		if ($__previousError != array($method, $messages)) {

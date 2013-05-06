@@ -26,9 +26,9 @@
 	</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $bcBaser->link('メールフォーム一覧',array('controller'=>'mail_contents','action'=>'index')) ?></li>
-			<li><?php $bcBaser->link('新規メールフォームを登録',array('controller'=>'mail_contents','action'=>'add')) ?></li>
-			<li><?php $bcBaser->link('プラグイン基本設定',array('controller'=>'mail_configs','action'=>'form')) ?></li>
+			<li><?php $this->BcBaser->link('メールフォーム一覧',array('controller'=>'mail_contents','action'=>'index')) ?></li>
+			<li><?php $this->BcBaser->link('新規メールフォームを登録',array('controller'=>'mail_contents','action'=>'add')) ?></li>
+			<li><?php $this->BcBaser->link('プラグイン基本設定',array('controller'=>'mail_configs','action'=>'form')) ?></li>
 		</ul>
 	</td>
 </tr>

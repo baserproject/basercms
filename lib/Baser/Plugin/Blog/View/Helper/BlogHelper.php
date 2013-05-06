@@ -28,7 +28,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER);
+	public $helpers = array('Html', 'BcTime', 'BcBaser');
 /**
  * ブログカテゴリモデル
  *

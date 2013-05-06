@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* Contents schema generated on: 2011-08-20 02:08:53 : 1313774093*/
 class ContentsSchema extends CakeSchema {
-	public $name = 'Contents';
+	var $name = 'Contents';
 
-	public $file = 'contents.php';
+	var $file = 'contents.php';
 
-	public $connection = 'baser';
+	var $connection = 'baser';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $contents = array(
+	var $contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'type' => array('type' => 'string', 'null' => true, 'length' => 100),
 		'model' => array('type' => 'string', 'null' => false, 'length' => 50),

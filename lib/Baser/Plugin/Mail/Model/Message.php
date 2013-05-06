@@ -20,7 +20,8 @@
 /**
  * Include files
  */
-App::import('Model', 'MailField');
+App::uses('MailField', 'Mail.Model');
+App::uses('MailContent', 'Mail.Model');
 /**
  * メッセージモデル
  *
@@ -696,8 +697,6 @@ class Message extends MailAppModel {
  */
 	public function construction($mailContentId) {
 
-		App::import('Model','Mail.MailField');
-		App::import('Model','Mail.MailContent');
 		$mailFieldClass = new MailField();
 		$mailContentClass = new MailContent();
 
@@ -729,6 +728,47 @@ class Message extends MailAppModel {
 		}
 
 		return true;
+
+	}
+	
+/**
+ * 受信メッセージの内容を表示状態に変換する
+ * 
+ * @param int $id
+ * @param array $messages
+ * @return array
+ * @access public
+ */
+	public function convertMessageToCsv($id, $messages) {
+
+		App::uses('MailField','Mail.Model');
+		$mailFieldClass = new MailField();
+
+		// フィールドの一覧を取得する
+		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $id)));
+
+		// フィールド名とデータの変換に必要なヘルパーを読み込む
+		App::uses('MaildataHelper','Mail.View/Helper');
+		App::uses('MailfieldHelper','Mail.View/Helper');
+		$maildata = new MaildataHelper(new View());
+		$mailfield = new MailfieldHelper(new View());
+
+		foreach ($messages as $key => $message) {
+
+			$inData = array();
+			foreach($mailFields as $mailField) {
+				$inData[$mailField['MailField']['field_name']] = $maildata->control(
+					$mailField['MailField']['type'],
+					$message[$this->alias][$mailField['MailField']['field_name']],
+					$mailfield->getOptions($mailField['MailField'])
+				);
+			}
+			$convertData = array_merge($message[$this->alias], $inData);
+			$messages[$key][$this->alias] = $convertData;
+
+		}
+
+		return $messages;
 
 	}
 	

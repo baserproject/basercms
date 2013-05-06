@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Imageresizer', 'Vendor');
 /**
  * アップロードコントローラー
  * @package baser.controllers
@@ -89,7 +90,6 @@ class UploadsController extends AppController {
 			if(!empty($fileInfo['thumb'])){
 				$thumb = $fileInfo['thumb'];
 			}
-			App::import('Vendor','Imageresizer');
 			$imageresizer = new Imageresizer(APP.'tmp');
 			$imageresizer->resize($path, $path, $fileInfo['width'], $fileInfo['height'], $thumb);
 			$data = file_get_contents($path);

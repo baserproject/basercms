@@ -19,6 +19,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Folder', 'Utility');
+App::uses('File', 'Utility');
+App::uses('EmailComponent', 'Controller/Component');
+App::uses('BcEmailComponent', 'Controller/Component');
+
 /**
  * WEBサイトのベースとなるURLを取得する
  * 
@@ -349,7 +354,6 @@
  */
 	function clearDataCache() {
 		
-		App::import('Core','Folder');
 		$folder = new Folder(CACHE.'datas'.DS);
 
 		$files = $folder->read(true,true,true);
@@ -734,7 +738,6 @@
 			}
 		}
 
-		App::import('File');
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
@@ -756,8 +759,6 @@
 		$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
 		ClassRegistry::removeObject('SiteConfig');
 
-		App::import('Core', 'Email');
-		App::import('Component', 'BcEmail', array('file'=>CAKE_CORE_INCLUDE_PATH.DS.'baser'.DS.'controllers'.DS.'components'.DS.'bc_email.php'));
 		$BcEmail = new BcEmailComponent();
 		if(!empty($bcSite['mail_encode'])) {
 			$encode = $bcSite['mail_encode'];

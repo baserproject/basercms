@@ -50,7 +50,7 @@ class UserGroupsController extends AppController {
  *
  * @var array
  */
-	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array('BcTime', 'BcForm');
 
 /**
  * サブメニューエレメント

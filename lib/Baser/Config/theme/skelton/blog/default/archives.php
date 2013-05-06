@@ -2,9 +2,9 @@
 /**
  * ブログアーカイブ一覧
  */
-$this->bcBaser->css('colorbox/colorbox', array('inline' => true));
-$this->bcBaser->js('jquery.colorbox-min', false);
-$this->bcBaser->setDescription($blog->getTitle().'｜'.$this->bcBaser->getContentsTitle().'のアーカイブ一覧です。');
+$bcBaser->css('colorbox/colorbox', array('inline' => true));
+$bcBaser->js('jquery.colorbox-min-1.4.5', false);
+$bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <script type="text/javascript">
@@ -17,7 +17,7 @@ $(function(){
 	<?php $blog->title() ?>
 </h2>
 <h3 class="contents-head">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $bcBaser->contentsTitle() ?>
 </h3>
 
 <?php if(!empty($posts)): ?>
@@ -34,11 +34,11 @@ $(function(){
 		&nbsp;
 		<?php $blog->author($post) ?>
 		</span> </div>
-	<?php $this->bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 <?php endforeach; ?>
 <?php else: ?>
 <p class="no-data">記事がありません。</p>
 <?php endif; ?>
 <!-- pagination -->
-<?php $this->bcBaser->pagination('simple'); ?>
+<?php $bcBaser->pagination('simple'); ?>

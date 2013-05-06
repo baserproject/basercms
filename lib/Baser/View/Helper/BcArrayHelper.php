@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper', 'Form');
+App::uses('Form', 'View/Helper');
 /**
  * ArrayHelper
  *

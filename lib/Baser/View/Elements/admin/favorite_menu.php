@@ -128,13 +128,13 @@ $(function(){
 /**
 * 並び替え開始時イベント
 */
-	public function favoriteSortStartHandler(event, ui) {	
+	function favoriteSortStartHandler(event, ui) {	
 		$("ul.favorite-menu-list .placeholder").css('height',ui.item.height());
 	}
 /**
  * 並び順を更新時イベント
  */
-	public function favoriteSortUpdateHandler(event, ui){
+	function favoriteSortUpdateHandler(event, ui){
 
 		var target = ui.item;
 		var targetNum = $(".favorite-menu-list li").index(target)+1;
@@ -176,7 +176,7 @@ $(function(){
 /**
  * 行を初期化
  */
-	public function initFavoriteList() {
+	function initFavoriteList() {
 
 		// イベント削除
 		$(".favorite-menu-list li").unbind();
@@ -224,7 +224,7 @@ $(function(){
 /**
  * コンテキストメニュークリックハンドラ
  */
-	public function contextMenuClickHandler(action, el, pos) {
+	function contextMenuClickHandler(action, el, pos) {
 
 		// IEの場合、action値が正常に取得できないので整形する
 		var pos = action.indexOf("#");

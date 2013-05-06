@@ -19,7 +19,6 @@
  */
 ?>
 
-
 <!-- pagination -->
 <?php $this->bcBaser->element('pagination') ?>
 
@@ -30,14 +29,14 @@
 			<th style="white-space: nowrap" class="list-tool">
 <?php if($this->bcBaser->isAdminUser()): ?>
 				<div>
-					<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 				</div>
 <?php endif ?>
 		</th>
-			<th style="white-space: nowrap"><?php echo $paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' NO', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' NO'), 'id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
-			<th style="white-space: nowrap" colspan="2"><?php echo $paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 受信日時', 'desc' => $bcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 受信日時'), 'created', array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th style="white-space: nowrap"><?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' NO'), 'id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th style="white-space: nowrap" colspan="2"><?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 受信日時', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 受信日時'), 'created', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th style="white-space: nowrap">受信内容</th>
 		</tr>
 	</thead>
@@ -45,7 +44,7 @@
 	<?php if($messages): ?>
 		<?php $count=0; ?>
 		<?php foreach ($messages as $data): ?>
-			<?php $this->bcBaser->element('mail_messages/index_row', array('data' => $data, 'count' => $count)) ?>
+			<?php $this->BcBaser->element('mail_messages/index_row', array('data' => $data, 'count' => $count)) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>

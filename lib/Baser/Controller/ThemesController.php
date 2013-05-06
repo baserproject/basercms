@@ -17,6 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Simplezip', 'Vendor');
+		
 class ThemesController extends AppController {
 /**
  * コントローラー名
@@ -43,7 +45,7 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_FORM_HELPER);
+	public $helpers = array('BcForm');
 /**
  * パンくずナビ
  * @var array
@@ -506,7 +508,6 @@ class ThemesController extends AppController {
 		
 		// ZIPに固めてダウンロード
 		$fileName = 'default';
-		App::import('Vendor','Simplezip');
 		$Simplezip = new Simplezip();
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);

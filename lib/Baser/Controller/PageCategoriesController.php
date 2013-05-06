@@ -37,7 +37,7 @@ class PageCategoriesController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TEXT_HELPER, BC_FORM_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array('BcText', 'BcForm', 'BcArray');
 /**
  * This controller does not use a model
  *

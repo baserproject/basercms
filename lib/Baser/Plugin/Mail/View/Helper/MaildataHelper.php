@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import('Helper', BC_TEXT_HELPER);
+App::uses('BcTextHelper', 'View/Helper');
 /**
  * メールデータヘルパー
  *
@@ -29,7 +29,7 @@ App::import('Helper', BC_TEXT_HELPER);
  */
 class MaildataHelper extends BcTextHelper {
 
-	public $helpers = array(BC_TIME_HELPER);
+	public $helpers = array('BcTime');
 /**
  * メール表示用のデータを出力する
  * 

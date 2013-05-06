@@ -17,6 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Page', 'Model');
+App::uses('Plugin', 'Model');
+App::uses('User', 'Model');
+
 class BcManagerComponent extends Component {
 /**
  * baserCMSのインストール
@@ -211,7 +215,6 @@ class BcManagerComponent extends Component {
  */
 	public function createPageTemplates() {
 
-		App::import('Model','Page');
 		$Page = new Page(null, null, 'baser');
 		$pages = $Page->find('all', array('recursive' => -1));
 		if($pages) {
@@ -253,7 +256,6 @@ class BcManagerComponent extends Component {
 		$db->truncate('plugins');
 		
 		$version = getVersion();
-		App::import('Model', 'Plugin');
 		$Plugin = new Plugin();
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		
@@ -341,7 +343,6 @@ class BcManagerComponent extends Component {
 			'password_2'	=> ''
 		), $user);
 	
-		App::import('Model','User');
 		$User = new User();
 
 		$User->create($user);
@@ -1311,7 +1312,7 @@ class BcManagerComponent extends Component {
  * @param	string	$base
  * @return	string
  */
-	public function getRewriteBase($url, $baseUrl){
+	public function getRewriteBase($url, $baseUrl = null){
 
 		if(!$baseUrl) {
 			$baseUrl = BC_BASE_URL;

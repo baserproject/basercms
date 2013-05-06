@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Simplezip', 'Vendor');
 /**
  * ツールコントローラー
  *
@@ -44,7 +45,7 @@ class ToolsController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_FORM_HELPER);
+	public $helpers = array('BcForm');
 /**
  * サブメニュー
  * 
@@ -121,7 +122,6 @@ class ToolsController extends AppController {
 		}
 
 		/* ZIPファイルを解凍する */
-		App::import('Vendor', 'Simplezip');
 		$Simplezip = new Simplezip();
 		if(!$Simplezip->unzip($targetPath, $tmpPath)){
 			return false;
@@ -205,7 +205,6 @@ class ToolsController extends AppController {
 
 		// ZIP圧縮して出力
 		$fileName = 'baserbackup_'.$version.'_'.date('Ymd_His');
-		App::import('Vendor','Simplezip');
 		$Simplezip = new Simplezip();
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);
@@ -264,7 +263,6 @@ class ToolsController extends AppController {
 					$this->redirect(array('action' => 'write_schema'));
 				}
 				if($this->Tool->writeSchema($this->request->data, $path)) {
-					App::import('Vendor','Simplezip');
 					$Simplezip = new Simplezip();
 					$Simplezip->addFolder($path);
 					$Simplezip->download('schemas');

@@ -20,13 +20,12 @@
 /**
  * Include files
  */
-//App::import('Helper',array('Html', 'Form', BC_TIME_HELPER, BC_TEXT_HELPER, BC_CKEDITOR_HELPER));
 
 App::uses('HtmlHelper', 'View/Helper');
 App::uses('FormHelper', 'View/Helper');
-App::uses(BC_TIME_HELPER . 'Helper', 'View/Helper');
-App::uses(BC_TEXT_HELPER . 'Helper', 'View/Helper');
-App::uses(BC_CKEDITOR_HELPER . 'Helper', 'View/Helper');
+App::uses('BcTimeHelper', 'View/Helper');
+App::uses('BcTextHelper', 'View/Helper');
+App::uses('BcCkeditorHelper', 'View/Helper');
 
 /**
  * FormHelper 拡張クラス
@@ -40,7 +39,7 @@ class BcFormHelper extends FormHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_TIME_HELPER, BC_TEXT_HELPER, 'Js', BC_CKEDITOR_HELPER);
+	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcCkeditor');
 /**
  * sizeCounter用の関数読み込み可否
  * 

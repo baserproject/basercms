@@ -19,7 +19,8 @@
 /**
  * Include files
  */
-App::import("Helper",array("Text","BcTime"));
+App::uses('TextHelper', 'View/Helper');
+App::uses('BcTimeHelper', 'View/Helper');
 /**
  * Textヘルパー拡張
  *
@@ -32,7 +33,7 @@ class BcTextHelper extends TextHelper {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array('BcTime', 'BcForm');
 /**
  * 文字数カット（日本語対応）
  * Cuts a string to the length of $length and replaces the last characters

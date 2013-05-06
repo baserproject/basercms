@@ -20,7 +20,8 @@
 /**
  * Include files
  */
-App::import('Helper', array(BC_HTML_HELPER, BC_FREEZE_HELPER));
+App::uses('BcHtmlHelper', 'Mail.View/Helper');
+App::uses('BcFreezeHelper', 'Mail.View/Helper');
 /**
  * メールフォームヘルパー
  *

@@ -20,13 +20,14 @@
 /**
  * Include files
  */
-App::import('Core','DboSqlite3',array('file'=>BASER_MODELS.'datasources'.DS.'dbo'.DS.'dbo_sqlite3.php'));
+App::uses('Sqlite3', 'Model/Datasource/Database');
+App::uses('CakeSchema', 'Model');
 /**
  * SQLite3 DBO拡張
  *
  * @package baser.models.datasources.dbo
  */
-class BcSqlite3 extends DboSqlite3 {
+class BcSqlite3 extends Sqlite3 {
 /**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
@@ -236,7 +237,6 @@ class BcSqlite3 extends DboSqlite3 {
 		$model = Inflector::classify(Inflector::singularize($table));
 		$table = $prefix . $table;
 
-		App::import('Model','Schema');
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$schema = $Schema->read(array('models'=>array($model)));
@@ -307,7 +307,6 @@ class BcSqlite3 extends DboSqlite3 {
 		$model = Inflector::classify(Inflector::singularize($table));
 		$table = $prefix . $table;
 
-		App::import('Model','Schema');
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$schema = $Schema->read(array('models'=>array($model)));

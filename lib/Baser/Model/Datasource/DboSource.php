@@ -3549,7 +3549,6 @@ class DboSource extends DataSource {
 			$name = basename(Inflector::classify($file),'.php');
 		}
 
-		//App::import('CakeSchema','Model');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 
@@ -3578,7 +3577,6 @@ class DboSource extends DataSource {
 				return false;
 			}
 			$name = Inflector::pluralize(Inflector::classify($table));
-			//App::import('CakeSchema', 'Model');
 			$options = array('name'=>$name,
 							'connection' => $this->configKeyName,
 							$table => $schema);
@@ -3661,7 +3659,6 @@ class DboSource extends DataSource {
 		}
 
 		if(is_array($schema)) {
-			//App::import('CakeSchema', 'Model');
 			$name = Inflector::pluralize(Inflector::classify($table));
 			$options = array('name'=>$name,
 						'connection' => $this->configKeyName,
@@ -3728,7 +3725,6 @@ class DboSource extends DataSource {
 		$new = $old;
 		$new['tables'][$table][$field] = $column;
 
-			//App::import('CakeSchema', 'Model');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		$compare = $CakeSchema->compare($old, $new);
@@ -3766,7 +3762,6 @@ class DboSource extends DataSource {
 		$new = $old;
 		$new['tables'][$table][$field] = $column;
 
-			//App::import('CakeSchema', 'Model');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		$compare = $CakeSchema->compare($old, $new);
@@ -3796,7 +3791,6 @@ class DboSource extends DataSource {
 		$new = $old;
 		unset($new['tables'][$table][$field]);
 
-		//App::import('CakeSchema', 'Model');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 		$compare = $CakeSchema->compare($old, $new);

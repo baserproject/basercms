@@ -20,7 +20,8 @@
 /**
  * Include files
  */
-App::import('Helper', BC_FORM_HELPER, BC_UPLOAD_HELPER);
+App::uses('BcFormHelper', 'View/Helper');
+App::uses('BcUploadHelper', 'View/Helper');
 /**
  * @package baser.view.helpers
  */
@@ -38,7 +39,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_FORM_HELPER, BC_UPLOAD_HELPER, BC_TEXT_HELPER, BC_TIME_HELPER, 'Js');
+	public $helpers = array('Html', 'BcForm', 'BcUpload', 'BcText', 'BcTime', 'Js');
 /**
  * フォームを凍結させる
  * 

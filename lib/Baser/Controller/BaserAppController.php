@@ -22,8 +22,9 @@
  */
 App::uses('ConnectionManager', 'Model');
 App::uses('AppView', 'View');
-App::uses('BcAuthConfigure', 'Component');
-//App::import('Component', 'Emoji');
+App::uses('BcAuthConfigureComponent', 'Controller/Component');
+App::uses('File', 'Core.Utility');
+App::uses('ErrorHandler', 'Core.Error');
 /**
  * Controller 拡張クラス
  *
@@ -51,8 +52,8 @@ class BaserAppController extends Controller {
  */
 // TODO 見直し
 	public $helpers = array(
-		'Session', 'BcPluginHook', BC_HTML_HELPER, BC_HTML_HELPER, 'Form', BC_FORM_HELPER, 
-		'Js', BC_BASER_HELPER, BC_XML_HELPER, BC_ARRAY_HELPER, BC_BASER_ADMIN_HELPER
+		'Session', 'BcPluginHook', 'BcHtml', 'Form', 'BcForm', 
+		'Js', 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin'
 	);
 /**
  * レイアウト
@@ -180,9 +181,9 @@ class BaserAppController extends Controller {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
 				$agent = Configure::read('BcRequest.agent');
 				if($agent == 'mobile') {
-					$this->helpers[] = BC_MOBILE_HELPER;
+					$this->helpers[] = 'BcMobileHelper';
 				} elseif($agent == 'smartphone') {
-					$this->helpers[] = BC_SMARTPHONE_HELPER;
+					$this->helpers[] = 'BcSmartphoneHelper';
 				}
 			}
 
@@ -305,9 +306,9 @@ class BaserAppController extends Controller {
 			$this->subDir = str_replace('_', '/', $this->request->params['prefix']);		
 			$agent = Configure::read('BcRequest.agent');
 			if($agent == 'mobile') {
-				$this->helpers[] = BC_MOBILE_HELPER;
+				$this->helpers[] = 'BcMobileHelper';
 			} elseif($agent == 'smartphone') {
-				$this->helpers[] = BC_SMARTPHONE_HELPER;
+				$this->helpers[] = 'BcSmartphoneHelper';
 			}
 		}
 
@@ -470,8 +471,6 @@ class BaserAppController extends Controller {
 		$messages = array(array($this->request->here));
 		
 		if (!class_exists('ErrorHandler')) {
-			App::import('Core', 'Error');
-
 			if (file_exists(APP . 'error.php')) {
 				include_once (APP . 'error.php');
 			} elseif (file_exists(APP . 'app_error.php')) {
@@ -586,7 +585,6 @@ class BaserAppController extends Controller {
 		if(!file_exists($path)) {
 			return false;
 		}
-		App::import('File');
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
@@ -622,7 +620,7 @@ class BaserAppController extends Controller {
  * @return string Baserバージョン
  */
 	public function getCakeVersion() {
-		App::import('File');
+		
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH.DS.CAKE.'VERSION.txt');
 		$versionData = $versionFile->read();
 		$lines = split("\n",$versionData);
@@ -638,6 +636,7 @@ class BaserAppController extends Controller {
 		}else {
 			return false;
 		}
+		
 	}
 /**
  * http経由で送信されたデータを変換する

@@ -50,7 +50,7 @@ class GlobalMenusController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array('BcTime', 'BcForm');
 /**
  * サブメニューエレメント
  *

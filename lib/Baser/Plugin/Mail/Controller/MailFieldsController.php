@@ -46,7 +46,7 @@ class MailFieldsController extends MailAppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_TEXT_HELPER, BC_CSV_HELPER);
+	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'BcText', 'BcCsv');
 /**
  * コンポーネント
  *
@@ -447,9 +447,9 @@ class MailFieldsController extends MailAppController {
 
 		$this->Message->alias = Inflector::camelize($this->mailContent['MailContent']['name'].'_message');
 		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'].'_';
-		$this->Message->_schema = null;
+		$this->Message->schema(true);
 		$this->Message->cacheSources = false;
-		$messages = $this->Message->find('all');
+		$messages = $this->Message->convertMessageToCsv($mailContentId, $this->Message->find('all'));
 		$this->set('messages',$messages);
 		$this->set('contentName',$this->mailContent['MailContent']['name']);
 

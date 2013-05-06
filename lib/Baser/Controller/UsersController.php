@@ -46,7 +46,7 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $helpers = array(BC_HTML_HELPER, BC_TIME_HELPER, BC_FORM_HELPER);
+	public $helpers = array('BcHtml', 'BcTime', 'BcForm');
 
 /**
  * コンポーネント

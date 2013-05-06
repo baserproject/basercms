@@ -1,21 +1,21 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* PageCategories schema generated on: 2011-03-23 00:03:31 : 1300807471*/
+/* PageCategories schema generated on: 2013-03-22 16:03:48 : 1363938348*/
 class PageCategoriesSchema extends CakeSchema {
-	public $name = 'PageCategories';
+	var $name = 'PageCategories';
 
-	public $file = 'page_categories.php';
+	var $file = 'page_categories.php';
 
-	public $connection = 'baser';
+	var $connection = 'baser';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $page_categories = array(
+	var $page_categories = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
@@ -23,10 +23,13 @@ class PageCategoriesSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'sort' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
-		'contents_navi' => array('type' => 'boolean', 'null' => false, 'default' => false),
+		'contents_navi' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'owner_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
+		'layout_template' => array('type' => 'string', 'null' => true, 'default' => NULL),
+		'content_template' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
+?>

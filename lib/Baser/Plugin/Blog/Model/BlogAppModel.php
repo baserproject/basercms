@@ -20,7 +20,7 @@
 /**
  * includes
  */
-App::import('Model', 'BaserPluginAppModel');
+App::uses('BaserPluginAppModel', 'Model');
 /**
  * ブログモデル基底クラス
  *

@@ -17,6 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('BlogHelper','Blog.View/Helper');
+
 if(empty($view_count)) {
 	$view_count = '0';
 }
@@ -41,7 +43,6 @@ if($by_year) {
 $data = $this->requestAction($actionUrl);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
-App::import('Helper','Blog.Blog');
 $blog = new BlogHelper($this);
 ?>
 

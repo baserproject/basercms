@@ -187,23 +187,4 @@
 			)
 		)
 	);
-/**
- * ヘルパ設定 
- */
-	define('BC_BASER_HELPER'		, 'BcBaser');
-	define('BC_BASER_ADMIN_HELPER'	, 'BcAdmin');
-	define('BC_ARRAY_HELPER'		, 'BcArray');
-	define('BC_CKEDITOR_HELPER'		, 'BcCkeditor');
-	define('BC_CSV_HELPER'			, 'BcCsv');
-	define('BC_FORM_HELPER'			, 'BcForm');
-	define('BC_FREEZE_HELPER'		, 'BcFreeze');
-	define('BC_GOOGLEMAPS_HELPER'	, 'BcGooglemaps');
-	define('BC_HTML_HELPER'			, 'BcHtml');
-	define('BC_MOBILE_HELPER'		, 'BcMobile');
-	define('BC_SMARTPHONE_HELPER'	, 'BcSmartphone');
-	define('BC_PAGE_HELPER'			, 'BcPage');
-	define('BC_TEXT_HELPER'			, 'BcText');
-	define('BC_TIME_HELPER'			, 'BcTime');
-	define('BC_UPLOAD_HELPER'		, 'BcUpload');
-	define('BC_XML_HELPER'			, 'BcXml');
 	

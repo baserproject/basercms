@@ -20,7 +20,8 @@
 /**
  * Include files
  */
-App::import('Component','Email');
+App::uses('EmailComponent', 'Controller/Component');
+
 /**
  * Email 拡張モデル
  *

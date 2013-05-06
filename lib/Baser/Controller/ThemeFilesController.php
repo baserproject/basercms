@@ -17,6 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Imageresizer', 'Vendor');
+
 class ThemeFilesController extends AppController {
 /**
  * クラス名
@@ -37,7 +39,7 @@ class ThemeFilesController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_FORM_HELPER, BC_CKEDITOR_HELPER);
+	public $helpers = array('BcForm', 'BcCkeditor');
 /**
  * テーマファイルタイプ
  *
@@ -939,7 +941,6 @@ class ThemeFilesController extends AppController {
 		}
 
 		header("Content-type: image/".$contents[$pathinfo['extension']]);
-		App::import('Vendor','Imageresizer');
 		$Imageresizer = new Imageresizer();
 		$Imageresizer->resize($fullpath,'',$width,$height);
 		exit();

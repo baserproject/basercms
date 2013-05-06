@@ -17,6 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('kcaptcha', 'Vendor/kcaptcha');
+
 class BcCaptchaComponent extends Component {
 /**
  * Vendorsフォルダのパス
@@ -60,10 +62,8 @@ class BcCaptchaComponent extends Component {
  * @return void
  * @access public
  */
-	public function render()
-	{
+	public function render() {
 		
-		App::import('Vendor','kcaptcha/kcaptcha');
 		$kcaptcha = new KCAPTCHA();
 		$this->controller->Session->write('captcha', $kcaptcha->getKeyString());
 		
@@ -75,7 +75,7 @@ class BcCaptchaComponent extends Component {
  * @return	boolean
  * @access public
  */
-	public function check($value){
+	public function check($value) {
 		
 		include $this->vendorsPath.'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;

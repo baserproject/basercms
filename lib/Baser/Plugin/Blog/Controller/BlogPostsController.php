@@ -17,6 +17,7 @@
  * @lastmodified	$Date: 2011-08-24 04:20:59 +0900 (水, 24 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Xml', 'Utility');
 /**
  * Include files
  */
@@ -46,7 +47,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog');
+	public $helpers = array('BcText', 'BcTime', 'BcForm', 'BcCkeditor', 'Blog.Blog');
 /**
  * コンポーネント
  *
@@ -521,7 +522,6 @@ class BlogPostsController extends BlogAppController {
 		}else {
 
 			// XMLデータを読み込む
-			App::import('Xml');
 			$xml = new Xml($this->data['Import']['file']['tmp_name']);
 
 			$_posts = Set::reverse($xml);

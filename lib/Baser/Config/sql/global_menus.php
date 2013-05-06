@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008*/
 class GlobalMenusSchema extends CakeSchema {
-	public $name = 'GlobalMenus';
+	var $name = 'GlobalMenus';
 
-	public $file = 'global_menus.php';
+	var $file = 'global_menus.php';
 
-	public $connection = 'baser';
+	var $connection = 'baser';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $global_menus = array(
+	var $global_menus = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 3, 'key' => 'primary'),
 		'no' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 3),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),

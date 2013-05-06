@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('CakeSchema', 'Model');
 /**
  * ツールモデル
  * @package baser.models
@@ -124,7 +125,6 @@ class Tool extends AppModel {
 		
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if(move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
-			App::import('Model','Schema');
 			include $path;
 			$schemaName = basename(Inflector::classify(basename($path)),'.php').'Schema';
 			$Schema = new $schemaName();

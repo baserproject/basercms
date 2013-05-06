@@ -21,6 +21,7 @@
 /**
  * Include files
  */
+App::import('BcGmapsComponent', 'Controller/Component');
 /**
  * GoogleMapヘルパー
  *
@@ -187,7 +188,6 @@ INFO_END;
 
 	public function getLocation($address) {
 		
-		App::import("Component","BcGmaps");
 		$gmap = new BcGmapsComponent();
 		if ($gmap->getInfoLocation($address)) {
 			return array('latitude'=>$gmap->getLatitude(),'longitude'=>$gmap->getLongitude());

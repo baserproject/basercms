@@ -50,7 +50,7 @@ class PermissionsController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TIME_HELPER, BC_FREEZE_HELPER);
+	public $helpers = array('BcTime', 'BcFreeze');
 /**
  * サブメニューエレメント
  *

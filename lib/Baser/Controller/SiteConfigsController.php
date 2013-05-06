@@ -59,7 +59,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_FORM_HELPER);
+	public $helpers = array('BcForm');
 /**
  * ぱんくずナビ
  *

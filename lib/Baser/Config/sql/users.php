@@ -1,21 +1,21 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Users schema generated on: 2010-11-04 18:11:11 : 1288863011*/
+/* Users schema generated on: 2013-03-23 00:03:52 : 1363966852*/
 class UsersSchema extends CakeSchema {
-	public $name = 'Users';
+	var $name = 'Users';
 
-	public $file = 'users.php';
+	var $file = 'users.php';
 
-	public $connection = 'baser';
+	var $connection = 'baser';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $users = array(
+	var $users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'password' => array('type' => 'string', 'null' => true, 'default' => NULL),
@@ -23,8 +23,10 @@ class UsersSchema extends CakeSchema {
 		'real_name_2' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'email' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'user_group_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 4),
+		'nickname' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
+?>

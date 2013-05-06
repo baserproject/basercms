@@ -38,8 +38,8 @@ class PagesController extends AppController {
  * @access public
  */
 	public $helpers = array(
-		'Html', BC_GOOGLEMAPS_HELPER, BC_XML_HELPER, BC_TEXT_HELPER, 
-		BC_FREEZE_HELPER, BC_CKEDITOR_HELPER, BC_PAGE_HELPER
+		'Html', 'BcGooglemaps', 'BcXml', 'BcText', 
+		'BcFreeze', 'BcCkeditor', 'BcPage'
 	);
 /**
  * コンポーネント
@@ -687,9 +687,9 @@ class PagesController extends AppController {
 		if($agent){
 			$this->layoutPath = Configure::read('BcAgent.'.$agent.'.prefix');
 			if($agent == 'mobile') {
-				$this->helpers[] = BC_MOBILE_HELPER;
+				$this->helpers[] = 'BcMobile';
 			} elseif($agent == 'smartphone') {
-				$this->helpers[] = BC_SMARTPHONE_HELPER;
+				$this->helpers[] = 'BcSmartphone';
 			}
 		} else {
 			$this->layoutPath = '';

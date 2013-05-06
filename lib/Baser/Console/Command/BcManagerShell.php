@@ -20,8 +20,8 @@
 /**
  * Include files
  */
-App::import('Vendor', 'BcApp');
-App::import('Component','BcManager');
+App::uses('BcAppShell', 'Vendor');
+App::uses('BcManagerComponent', 'Controller/Component');
 /**
  * インストール用シェルスクリプト
  * 

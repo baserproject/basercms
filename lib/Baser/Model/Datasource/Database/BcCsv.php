@@ -2882,7 +2882,7 @@ class BcCsv extends DboSource {
  * @param string $order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
  * @return array ソート後の配列
  */
-	public function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
+	function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
 		
 		if ($left >= $right) {
 			return;
@@ -2928,7 +2928,7 @@ class BcCsv extends DboSource {
  * @return void
  * @access public
  */
-	public function swap(&$v, $i, $j) {
+	function swap(&$v, $i, $j) {
 		
 		$temp = $v[$i];
 		$v[$i] = $v[$j];

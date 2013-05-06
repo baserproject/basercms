@@ -48,7 +48,7 @@ class BcBaserHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_HTML_HELPER, 'Js', 'Session', BC_XML_HELPER, BC_ARRAY_HELPER);
+	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray');
 /**
  * コンテンツ
  *

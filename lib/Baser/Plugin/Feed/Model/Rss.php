@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::import("Model","Feed.WebModel");
+App::uses("WebModel","Feed.Model");
 /**
  * rss
  * 

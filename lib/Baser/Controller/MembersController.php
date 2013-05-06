@@ -20,7 +20,7 @@
 /**
  * Include files 
  */
-App::import('Controller', 'Users');
+App::uses('UsersController', 'UsersController');
 /**
  * メンバーコントローラー（デモ用）
  *

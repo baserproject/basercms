@@ -42,7 +42,7 @@ class BcPageHelper extends Helper {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_BASER_HELPER);
+	public $helpers = array('BcBaser');
 /**
  * construct
  * 
