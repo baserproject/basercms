@@ -250,7 +250,7 @@ class InstallationsController extends AppController {
 				
 				ini_set("max_execution_time",180);
 				
-				$dbDataPattern = 'core.demo';
+				$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 				if(isset($this->request->data['Installation']['dbDataPattern'])) {
 					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
 				}
@@ -438,6 +438,7 @@ class InstallationsController extends AppController {
  */
 	protected function _getDefaultValuesStep3() {
 
+		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
 			$_data = $this->_readDbSettingFromSession();
@@ -458,7 +459,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'bc_';
 			$data['Installation']['dbName'] = 'basercms';
-			$data['Installation']['dbDataPattern'] = 'demo.default';
+			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
 		}
 		
 		return $data;

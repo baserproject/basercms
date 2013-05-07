@@ -17,12 +17,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->css(array('/mail/css/style', 'jquery-ui/ui.all'), array('inline' => true));
-$this->bcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
+$this->BcBaser->css(array('/mail/css/style', 'jquery-ui/ui.all'), array('inline' => true));
+$this->BcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
 ?>
 
 <h2 class="contents-head">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h2>
 
 <h3 class="contents-head">入力フォーム</h3>
@@ -34,6 +34,6 @@ $this->bcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'),
 <?php endif ?>
 
 <div class="section">
-	<?php $this->bcBaser->flash() ?>
-	<?php $this->bcBaser->element('mail_form') ?>
+	<?php $this->BcBaser->flash() ?>
+	<?php $this->BcBaser->element('mail_form') ?>
 </div>

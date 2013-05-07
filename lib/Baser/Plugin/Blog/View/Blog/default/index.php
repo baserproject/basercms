@@ -17,9 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
-$this->bcBaser->js('jquery.colorbox-min', false);
-$this->bcBaser->setDescription($this->blog->getDescription());
+$this->BcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
+$this->BcBaser->js('jquery.colorbox-min', false);
+$this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
 <script type="text/javascript">
@@ -30,13 +30,13 @@ $(function(){
 
 <!-- title -->
 <h2 class="contents-head">
-	<?php $this->blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 
 <!-- description -->
-<?php if($this->blog->descriptionExists()): ?>
+<?php if($this->Blog->descriptionExists()): ?>
 <div class="blog-description">
-	<?php $this->blog->description() ?>
+	<?php $this->Blog->description() ?>
 </div>
 <?php endif ?>
 
@@ -45,17 +45,17 @@ $(function(){
 	<?php foreach($posts as $post): ?>
 <div class="post">
 	<h4 class="contents-head">
-		<?php $this->blog->postTitle($post) ?>
+		<?php $this->Blog->postTitle($post) ?>
 	</h4>
-	<?php $this->blog->postContent($post, false, true) ?>
+	<?php $this->Blog->postContent($post, false, true) ?>
 	<div class="meta"><span>
-		<?php $this->blog->category($post) ?>
+		<?php $this->Blog->category($post) ?>
 		&nbsp;
-		<?php $this->blog->postDate($post) ?>
+		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
-		<?php $this->blog->author($post) ?>
+		<?php $this->Blog->author($post) ?>
 	</span></div>
-	<?php $this->bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 	<?php endforeach; ?>
 <?php else: ?>
@@ -63,4 +63,4 @@ $(function(){
 <?php endif; ?>
 
 <!-- pagination -->
-<?php $this->bcBaser->pagination('simple'); ?>
+<?php $this->BcBaser->pagination('simple'); ?>

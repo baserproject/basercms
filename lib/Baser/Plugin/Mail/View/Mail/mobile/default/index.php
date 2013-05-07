@@ -21,12 +21,12 @@
 
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"><span style="color:white;">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 	</span></div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
 入力フォーム
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->mail->description() ?>
-<?php $this->bcBaser->flash() ?>
-<?php $this->bcBaser->element('mail_form') ?>
+<?php $this->BcBaser->flash() ?>
+<?php $this->BcBaser->element('mail_form') ?>

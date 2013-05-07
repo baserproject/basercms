@@ -17,26 +17,26 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->setTitle($this->pageTitle.'｜'.$this->blog->getTitle());
-$this->bcBaser->setDescription($this->blog->getTitle().'｜'.$this->blog->getPostContent($post,false,false,50));
+$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
+$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPostContent($post,false,false,50));
 ?>
 
 <!-- title -->
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $this->bcBaser->getContentsTitle(); ?></span> </div>
+<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;"><?php echo $this->BcBaser->getContentsTitle(); ?></span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
 
 <!-- detail -->
 <?php if(!empty($post)): ?>
-<?php $this->blog->postContent($post) ?>
+<?php $this->Blog->postContent($post) ?>
 <br />
 <p align="right">
-	<?php $this->blog->category($post) ?>
+	<?php $this->Blog->category($post) ?>
 	<br />
-	<?php $this->blog->postDate($post) ?>
+	<?php $this->Blog->postDate($post) ?>
 	<br />
-	<?php $this->blog->author($post) ?>
+	<?php $this->Blog->author($post) ?>
 </p>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
@@ -45,4 +45,4 @@ $this->bcBaser->setDescription($this->blog->getTitle().'｜'.$this->blog->getPos
 <?php endif; ?>
 
 <!-- comments -->
-<?php $this->bcBaser->element('blog_comments') ?>
+<?php $this->BcBaser->element('blog_comments') ?>

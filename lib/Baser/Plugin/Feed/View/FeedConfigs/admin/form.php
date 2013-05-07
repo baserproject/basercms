@@ -113,7 +113,7 @@ $(function(){
 				<?php echo $this->BcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $feed->getTemplates())) ?>
 				<?php echo $this->BcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
-				<?php $this->bcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
+				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
 	<?php endif ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.template') ?>
@@ -134,7 +134,7 @@ $(function(){
 	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
 	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $this->bcBaser->link('削除',
+	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $this->BcForm->value('FeedConfig.id')),
 			array('class'=>'btn-gray button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')),
@@ -146,4 +146,4 @@ $(function(){
 
 
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $this->bcBaser->element('feed_details/index_list') ?></div>
+<div id="DataList"><?php $this->BcBaser->element('feed_details/index_list') ?></div>

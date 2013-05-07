@@ -17,9 +17,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
-$this->bcBaser->js('jquery.colorbox-min', false);
-$this->bcBaser->setDescription($this->blog->getTitle().'｜'.$this->blog->getPostContent($post,false,false,50));
+$this->BcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
+$this->BcBaser->js('jquery.colorbox-min', false);
+$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPostContent($post,false,false,50));
 ?>
 
 <script type="text/javascript">
@@ -30,33 +30,33 @@ $(function(){
 
 <!-- blog title -->
 <h2 class="contents-head">
-	<?php $this->blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 
 <!-- post title -->
 <h3 class="contents-head">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h3>
 
 <!-- post detail -->
 <div class="post">
-	<?php $this->blog->postContent($post) ?>
+	<?php $this->Blog->postContent($post) ?>
 	<div class="meta"><span>
-		<?php $this->blog->category($post) ?>
+		<?php $this->Blog->category($post) ?>
 		&nbsp;
-		<?php $this->blog->postDate($post) ?>
+		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
-		<?php $this->blog->author($post) ?>
+		<?php $this->Blog->author($post) ?>
 	</span></div>
-	<?php $this->bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 
 <!-- contents navi -->
 <div id="contentsNavi">
-	<?php $this->blog->prevLink($post) ?>
+	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
-	<?php $this->blog->nextLink($post) ?>
+	<?php $this->Blog->nextLink($post) ?>
 </div>
 
 <!-- comments -->
-<?php $this->bcBaser->element('blog_comments') ?>
+<?php $this->BcBaser->element('blog_comments') ?>

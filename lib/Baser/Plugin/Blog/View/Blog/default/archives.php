@@ -17,10 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
-$this->bcBaser->js('jquery.colorbox-min', false);
+$this->BcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
+$this->BcBaser->js('jquery.colorbox-min', false);
 //$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
-$this->bcBaser->setDescription($this->blog->getTitle().'｜'.$this->bcBaser->getContentsTitle().'のアーカイブ一覧です。');
+$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->BcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <script type="text/javascript">
@@ -31,12 +31,12 @@ $(function(){
 
 <!-- title -->
 <h2 class="contents-head">
-	<?php $this->blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 
 <!-- archives title -->
 <h3 class="contents-head">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h3>
 
 <!-- list -->
@@ -44,17 +44,17 @@ $(function(){
 	<?php foreach($posts as $post): ?>
 <div class="post">
 	<h4 class="contents-head">
-		<?php $this->blog->postTitle($post) ?>
+		<?php $this->Blog->postTitle($post) ?>
 	</h4>
-	<?php $this->blog->postContent($post,true,true) ?>
+	<?php $this->Blog->postContent($post,true,true) ?>
 	<div class="meta"><span>
-		<?php $this->blog->category($post) ?>
+		<?php $this->Blog->category($post) ?>
 		&nbsp;
-		<?php $this->blog->postDate($post) ?>
+		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
-		<?php $this->blog->author($post) ?>
+		<?php $this->Blog->author($post) ?>
 	</span></div>
-	<?php $this->bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 	<?php endforeach; ?>
 <?php else: ?>
@@ -62,4 +62,4 @@ $(function(){
 <?php endif; ?>
 
 <!-- pagination -->
-<?php $this->bcBaser->pagination('simple'); ?>
+<?php $this->BcBaser->pagination('simple'); ?>

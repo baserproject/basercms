@@ -20,14 +20,14 @@
 ?>
 
 <!-- pagination -->
-<?php $this->bcBaser->element('pagination') ?>
+<?php $this->BcBaser->element('pagination') ?>
 
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="list-table sort-table" id="ListTable">
 	<thead>
 		<tr>
 			<th style="white-space: nowrap" class="list-tool">
-<?php if($this->bcBaser->isAdminUser()): ?>
+<?php if($this->BcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
@@ -54,4 +54,4 @@
 </table>
 
 <!-- list-num -->
-<?php $this->bcBaser->element('list_num') ?>
+<?php $this->BcBaser->element('list_num') ?>

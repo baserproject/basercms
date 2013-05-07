@@ -32,7 +32,11 @@ class BcManagerComponent extends Component {
  * @param type $adminEmail
  * @return boolean 
  */
-	public function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = 'core.demo') {
+	public function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = '') {
+		
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+		}
 		
 		$result = true;
 		
@@ -253,7 +257,7 @@ class BcManagerComponent extends Component {
  */
 	protected function _updatePluginStatus($dbConfig) {
 
-		$db =& $this->_getDataSource('baser', $dbConfig);
+		$db = $this->_getDataSource('baser', $dbConfig);
 		$db->truncate('plugins');
 		
 		$version = getVersion();
@@ -495,7 +499,11 @@ class BcManagerComponent extends Component {
  * @return type
  * @access public 
  */
-	public function initDb($dbConfig, $reset = true, $dbDataPattern = 'core.demo') {
+	public function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
+		
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
 		
 		if($reset) {
 			$this->deleteTables();
@@ -513,7 +521,11 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	public function constructionDb($dbConfig, $dbDataPattern = 'core.demo') {
+	public function constructionDb($dbConfig, $dbDataPattern = '') {
+
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
 
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
@@ -533,8 +545,11 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 		list($theme, $pattern) = explode('.', $dbDataPattern);
+		
+		$coreExcludes = array('users', 'dblogs', 'plugins');
+
 		if($theme == 'core') {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern)) {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
@@ -545,7 +560,7 @@ class BcManagerComponent extends Component {
 				}
 			}
 		} else {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme)) {
+			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("初期データのロードに失敗しました。");
 				return false;
 			}
@@ -591,7 +606,7 @@ class BcManagerComponent extends Component {
 		$files = $Folder->read(true, true, false);
 		foreach($files[0] as $theme) {
 			if($theme != 'empty') {
-				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
+				$patterns[$theme.'.'.$pattern] = Inflector::camelize($theme).'.'.Inflector::camelize($pattern);
 			}
 		}
 		
@@ -831,7 +846,7 @@ class BcManagerComponent extends Component {
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		if(!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
 				!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'google_analytics_id')) ||
-				!$SiteConfig->updateAll(array('SiteConfig.value' => 1), array('SiteConfig.name' => 'first_access')) ||
+				!$SiteConfig->updateAll(array('SiteConfig.value' => true), array('SiteConfig.name' => 'first_access')) ||
 				!$SiteConfig->deleteAll(array('SiteConfig.name' => 'version'), false)) {
 			$this->log('site_configs テーブルの初期化に失敗');
 			$result = false;
@@ -850,7 +865,11 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = 'core.demo') {
+	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
+
+		if(!$dbDataPattern) {
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+		}
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$driver = preg_replace('/^bc_/', '', $db->config['driver']);

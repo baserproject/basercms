@@ -111,6 +111,7 @@ class BcCsvHelper extends AppHelper {
 		$enc = mb_detect_encoding($head);
 		$head = substr($head,0,strlen($head)-1) . "\n";
 		$head = mb_convert_encoding($head, 'SJIS-WIN', $enc);
+
 		return $head;
 
 	}

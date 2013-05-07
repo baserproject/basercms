@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->js(array(
+$this->BcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch',
 	'admin/jquery.baser_ajax_sort_table', 
@@ -36,14 +36,14 @@ $(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->bcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_batch', $mailContent['MailContent']['id'])) ?></div>
-<div id="AjaxSorttableUrl" style="display:none"><?php $this->bcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id'])) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_batch', $mailContent['MailContent']['id'])) ?></div>
+<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id'])) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 
 <div class="em-box align-left">このメールフォームのURL：
-	<?php $this->bcBaser->link(
-			$this->bcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'),
+	<?php $this->BcBaser->link(
+			$this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'),
 			'/' . $mailContent['MailContent']['name'] . '/index') ?>
 </div>
 
-<div id="DataList"><?php $this->bcBaser->element('mail_fields/index_list') ?></div>
+<div id="DataList"><?php $this->BcBaser->element('mail_fields/index_list') ?></div>

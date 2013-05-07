@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->css('/mail/css/style', array('inline' => true));
+$this->BcBaser->css('/mail/css/style', array('inline' => true));
 if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 	/* プラグインの為か、inlineが動作しない */
 	//$html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
@@ -26,7 +26,7 @@ if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 ?>
 
 <h2 class="contents-head">
-	<?php $this->bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h2>
 
 <h3 class="contents-head">メール送信完了</h3>

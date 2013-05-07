@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->js(array(
+$this->BcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch',
 	'admin/baser_ajax_data_list_config',
@@ -34,5 +34,5 @@ $this->bcBaser->js(array(
 </script>
 
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="AjaxBatchUrl" style="display:none"><?php $this->bcBaser->url(array('controller' => 'blog_contents', 'action' => 'ajax_batch')) ?></div>
-<div id="DataList"><?php $this->bcBaser->element('../BlogContents/admin/ajax_index', null, false, false) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_contents', 'action' => 'ajax_batch')) ?></div>
+<div id="DataList"><?php $this->BcBaser->element('../BlogContents/admin/ajax_index', null, false, false) ?></div>

@@ -21,7 +21,7 @@
 
 
 <!-- pagination -->
-<?php $this->bcBaser->element('pagination') ?>
+<?php $this->BcBaser->element('pagination') ?>
 
 <!-- list -->
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
@@ -30,10 +30,10 @@
 			<th class="list-tool">
 				<div>
 <?php if($newCatAddable): ?>
-					<?php $this->bcBaser->link($this->bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
 <?php endif ?>
 				</div>
-<?php if($this->bcBaser->isAdminUser()): ?>
+<?php if($this->BcBaser->isAdminUser()): ?>
 				<div>
 					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '公開', 'unpublish' => '非公開', 'del' => '削除'), 'empty' => '一括処理')) ?>
@@ -41,26 +41,26 @@
 				</div>
 <?php endif ?>
 			</th>
-			<th><?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' NO'), 'no', array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th><?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' NO'), 'no', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th>
-				<?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' カテゴリー', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' カテゴリー'), 'BlogCategory.name', array('escape' => false, 'class' => 'btn-direction')) ?><?php if($blogContent['BlogContent']['tag_use']): ?><span class="tag">タグ</span><?php endif ?><br />
-				<?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' タイトル', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' タイトル'), 'name', array('escape' => false, 'class' => 'btn-direction')) ?>
+				<?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' カテゴリー', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' カテゴリー'), 'BlogCategory.name', array('escape' => false, 'class' => 'btn-direction')) ?><?php if($blogContent['BlogContent']['tag_use']): ?><span class="tag">タグ</span><?php endif ?><br />
+				<?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' タイトル', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' タイトル'), 'name', array('escape' => false, 'class' => 'btn-direction')) ?>
 			</th>
-			<th><?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 作成者', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 作成者'), 'user_id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
-			<th><?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 公開状態', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 公開状態'), 'status', array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th><?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 作成者', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 作成者'), 'user_id', array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th><?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 公開状態', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 公開状態'), 'status', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 			<th>コメント</th>
 <?php endif ?>
 			<th>
-				<?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 投稿日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 投稿日'), 'posts_date', array('escape' => false, 'class' => 'btn-direction')) ?><br />
-				<?php echo $this->Paginator->sort(array('asc' => $this->bcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 更新日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 更新日'), 'modified', array('escape' => false, 'class' => 'btn-direction')) ?>
+				<?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 投稿日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 投稿日'), 'posts_date', array('escape' => false, 'class' => 'btn-direction')) ?><br />
+				<?php echo $this->Paginator->sort(array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')).' 更新日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')).' 更新日'), 'modified', array('escape' => false, 'class' => 'btn-direction')) ?>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $data): ?>
-		<?php $this->bcBaser->element('blog_posts/index_row', array('data' => $data)) ?>
+		<?php $this->BcBaser->element('blog_posts/index_row', array('data' => $data)) ?>
 	<?php endforeach; ?>
 <?php else: ?>
 		<tr>
@@ -71,4 +71,4 @@
 </table>
 
 <!-- list-num -->
-<?php $this->bcBaser->element('list_num') ?>
+<?php $this->BcBaser->element('list_num') ?>

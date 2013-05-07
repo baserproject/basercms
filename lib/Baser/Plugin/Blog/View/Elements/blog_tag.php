@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if(!empty($this->blog->blogContent['tag_use'])): ?>
-	<?php if(!empty($this->blog->post['BlogTag'])) : ?>
-<div class="tag">タグ：<?php $this->blog->tag($post) ?></div>
+<?php if(!empty($this->Blog->blogContent['tag_use'])): ?>
+	<?php if(!empty($this->Blog->post['BlogTag'])) : ?>
+<div class="tag">タグ：<?php $this->Blog->tag($post) ?></div>
 	<?php endif ?>
 <?php endif ?>

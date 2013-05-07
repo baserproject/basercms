@@ -54,12 +54,12 @@ $this->Blog = new BlogHelper($this);
 <?php if($by_year): ?>
 	<ul>
 	<?php foreach($categories as $key => $category): ?>
-		<li class="category-year"><span><?php $this->bcBaser->link($key.'年', array('plugin' => null, 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $key)) ?></span>
-		<?php echo $this->blog->getCategoryList($category, $depth, $view_count, array('named' => array('year' => $key))) ?>
+		<li class="category-year"><span><?php $this->BcBaser->link($key.'年', array('plugin' => null, 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $key)) ?></span>
+		<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, array('named' => array('year' => $key))) ?>
 		</li>
 	<?php endforeach ?>
 	</ul>
 <?php else: ?>
-	<?php echo $this->blog->getCategoryList($categories, $depth, $view_count) ?>
+	<?php echo $this->Blog->getCategoryList($categories, $depth, $view_count) ?>
 <?php endif ?>
 </div>

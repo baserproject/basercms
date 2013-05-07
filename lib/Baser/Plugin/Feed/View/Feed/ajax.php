@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->bcBaser->cacheHeader(MONTH,'js');
+$this->BcBaser->cacheHeader(MONTH,'js');
 ?>
 document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('/theme/' . Configure::read('BcApp.adminTheme') . '/img/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
