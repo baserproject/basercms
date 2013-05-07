@@ -31,7 +31,7 @@ if(!isset($by_year)) {
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $blog_content_id;
+	$id = $this->Blog_content_id;
 }
 if(empty($depth)) {
 	$depth = 1;
@@ -43,7 +43,7 @@ if($by_year) {
 $data = $this->requestAction($actionUrl);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
-$blog = new BlogHelper($this);
+$this->Blog = new BlogHelper($this);
 ?>
 
 

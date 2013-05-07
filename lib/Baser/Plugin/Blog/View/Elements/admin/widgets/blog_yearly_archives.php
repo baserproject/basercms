@@ -22,10 +22,10 @@ $description = 'ブログの年別アーカイブー一覧を表示します。'
 ?>
 
 
-<?php echo $bcForm->label($key.'.limit','表示数') ?>&nbsp;
-<?php echo $bcForm->text($key.'.limit', array('size' => 6, 'default' => null)) ?>&nbsp;件<br />
-<?php echo $bcForm->label($key.'.view_count', '記事数表示') ?>&nbsp;
-<?php echo $bcForm->radio($key.'.view_count', $bcText->booleanDoList(''), array('legend' => false, 'default' => 0)) ?><br />
-<?php echo $bcForm->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
-<?php echo $bcForm->select($key.'.blog_content_id', $bcForm->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
+<?php echo $this->BcForm->label($key.'.limit','表示数') ?>&nbsp;
+<?php echo $this->BcForm->text($key.'.limit', array('size' => 6, 'default' => null)) ?>&nbsp;件<br />
+<?php echo $this->BcForm->label($key.'.view_count', '記事数表示') ?>&nbsp;
+<?php echo $this->BcForm->radio($key.'.view_count', $this->BcText->booleanDoList(''), array('legend' => false, 'default' => 0)) ?><br />
+<?php echo $this->BcForm->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
+<?php echo $this->BcForm->select($key.'.blog_content_id', $this->BcForm->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
 <small>ブログページを表示している場合は、上記の設定に関係なく、対象ブログの年別アーカイブ一覧を表示します。</small>

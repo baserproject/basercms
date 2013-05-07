@@ -17,17 +17,17 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'のアーカイブ一覧です。');
+$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->BcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 
 <!-- title -->
 <h2 class="contents-head">
-	<?php $blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 
 <!-- archives title -->
 <h3 class="contents-head">
-	<?php $bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h3>
 
 <section class="box news">
@@ -35,7 +35,7 @@ $bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'�
 <?php if(!empty($posts)): ?>
 <ul>
 	<?php foreach($posts as $post): ?>
-<li><?php $blog->postLink($post, '<span class="date">'.$blog->getPostDate($post).'</span><br />'.$blog->getPostTitle($post)) ?></li>
+<li><?php $this->Blog->postLink($post, '<span class="date">'.$this->Blog->getPostDate($post).'</span><br />'.$this->Blog->getPostTitle($post)) ?></li>
 	<?php endforeach; ?>
 </ul>
 <?php else: ?>
@@ -44,4 +44,4 @@ $bcBaser->setDescription($blog->getTitle().'｜'.$bcBaser->getContentsTitle().'�
 </section>
 
 <!-- pagination -->
-<?php $bcBaser->pagination('simple'); ?>
+<?php $this->BcBaser->pagination('simple'); ?>

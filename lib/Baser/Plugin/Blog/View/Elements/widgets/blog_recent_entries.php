@@ -23,7 +23,7 @@ if(!isset($count)) {
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $blog_content_id;
+	$id = $this->Blog_content_id;
 }
 $data = $this->requestAction('/blog/blog/get_recent_entries/'.$id.'/'.$count);
 $recentEntries = $data['recentEntries'];

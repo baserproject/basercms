@@ -23,15 +23,15 @@
 
 
 <!-- title -->
-<h2><?php $bcBaser->contentsTitle() ?></h2>
+<h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <h3>WordPressデータの取り込み</h3>
 <p>WordPressから出力したXMLデータを取込みます。（<a href="http://ja.wordpress.org/" target="_blank">WordPress</a> 2.8.4 のみ動作確認済）</p>
 
 <div class="align-center">
-	<?php echo $bcForm->create('BlogPost', array('action' => 'import', 'enctype' => 'multipart/form-data')) ?>
-	<?php echo $bcForm->input('Import.blog_content_id', array('type' => 'select', 'options' => $blogContentList)) ?>
-	<?php echo $bcForm->input('Import.user_id', array('type' => 'select', 'options' => $userList)) ?>
+	<?php echo $this->BcForm->create('BlogPost', array('action' => 'import', 'enctype' => 'multipart/form-data')) ?>
+	<?php echo $this->BcForm->input('Import.blog_content_id', array('type' => 'select', 'options' => $blogContentList)) ?>
+	<?php echo $this->BcForm->input('Import.user_id', array('type' => 'select', 'options' => $userList)) ?>
 	<?php echo $form->input('Import.file', array('type' => 'file')) ?>
 	<?php echo $form->end(array('label' => '取り込む', 'div' => false, 'class' => 'btn-orange button')) ?>
 </div>

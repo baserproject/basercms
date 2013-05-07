@@ -27,20 +27,20 @@
 　<?php echo $blogContent['title'] ?> へのコメントを受け付けました。
 　受信内容は下記のとおりです。
 
-　「<?php echo $blogPost['name'] ?>」
-　<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no'], false) ?>　
+　「<?php echo $this->BlogPost['name'] ?>」
+　<?php echo $this->BcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $this->BlogPost['no'], false) ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ コメント内容 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 
-送信者名： <?php echo ($blogComment['name']) ?>　
-Ｅメール： <?php echo ($blogComment['email']) ?>　
-ＵＲＬ　： <?php echo ($blogComment['url']) ?>　
+送信者名： <?php echo ($this->BlogComment['name']) ?>　
+Ｅメール： <?php echo ($this->BlogComment['email']) ?>　
+ＵＲＬ　： <?php echo ($this->BlogComment['url']) ?>　
 
-<?php echo ($blogComment['message']) ?>　
+<?php echo ($this->BlogComment['message']) ?>　
 
 コメントの公開状態を変更する場合は次のURLよりご確認ください。
-<?php echo $bcBaser->getUri('/admin/blog/blog_comments/index/' . $blogContent['id'], false) ?>　
+<?php echo $this->BcBaser->getUri('/admin/blog/blog_comments/index/' . $blogContent['id'], false) ?>　
 　
 　

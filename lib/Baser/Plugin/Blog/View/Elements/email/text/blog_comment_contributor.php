@@ -24,11 +24,11 @@
 　　　　　　　　◆◇　コメントが投稿されました　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<?php echo $blogComment['name'] ?>さんが、
-「<?php echo $blogPost['name'] ?>」にコメントしました。
-<?php echo $bcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $blogPost['no'], false) ?>　
+<?php echo $this->BlogComment['name'] ?>さんが、
+「<?php echo $this->BlogPost['name'] ?>」にコメントしました。
+<?php echo $this->BcBaser->getUri('/' . $blogContent['name'] . '/archives/' . $this->BlogPost['no'], false) ?>　
  
-<?php echo ($blogComment['message']) ?>　
+<?php echo ($this->BlogComment['message']) ?>　
 　
 　
 

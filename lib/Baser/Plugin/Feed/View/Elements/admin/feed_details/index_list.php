@@ -29,13 +29,13 @@
 			<tr>
 				<th scope="col"  style="width:160px" class="list-tool">
 					<div>
-						<?php $this->bcBaser->link($this->bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $bcForm->value('FeedConfig.id'))) ?>
+						<?php $this->bcBaser->link($this->bcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?>
 					</div>
 <?php if($this->bcBaser->isAdminUser()): ?>
 					<div>
-						<?php echo $bcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-						<?php echo $bcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-						<?php echo $bcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+						<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+						<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+						<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 					</div>
 <?php endif ?>
 				</th>

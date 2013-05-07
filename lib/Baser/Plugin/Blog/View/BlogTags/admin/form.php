@@ -28,23 +28,23 @@ $(window).load(function() {
 
 
 <!-- form -->
-<?php echo $bcForm->create('BlogTag') ?>
+<?php echo $this->BcForm->create('BlogTag') ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 	<?php if($this->action == 'admin_edit'): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogTag.id', 'NO') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.id', 'NO') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->value('BlogTag.id') ?>
-				<?php echo $bcForm->input('BlogTag.id', array('type' => 'hidden')) ?>
+				<?php echo $this->BcForm->value('BlogTag.id') ?>
+				<?php echo $this->BcForm->input('BlogTag.id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
 	<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogTag.name', 'ブログタグ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.name', 'ブログタグ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $bcForm->error('BlogTag.name') ?>
+				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>
 	</table>
@@ -52,15 +52,15 @@ $(window).load(function() {
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $bcBaser->link('削除',
-			array('action' => 'delete', $bcForm->value('BlogTag.id')),
+	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php $this->BcBaser->link('削除',
+			array('action' => 'delete', $this->BcForm->value('BlogTag.id')),
 			array('class' => 'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogTag.name')),
+			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogTag.name')),
 			false); ?>
 <?php endif ?>
 </div>
 
-<?php echo $bcForm->end() ?>
+<?php echo $this->BcForm->end() ?>

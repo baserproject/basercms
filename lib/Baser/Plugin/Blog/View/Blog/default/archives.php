@@ -19,7 +19,7 @@
  */
 $this->bcBaser->css(array('/blog/css/style','colorbox/colorbox'), array('inline' => true));
 $this->bcBaser->js('jquery.colorbox-min', false);
-//$bcBaser->setTitle($this->pageTitle.'｜'.$blog->getTitle());
+//$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
 $this->bcBaser->setDescription($this->blog->getTitle().'｜'.$this->bcBaser->getContentsTitle().'のアーカイブ一覧です。');
 ?>
 

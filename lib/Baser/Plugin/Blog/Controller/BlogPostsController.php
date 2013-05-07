@@ -183,7 +183,7 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if(!empty($user)) {
-			$allowOwners = array('', $user['User']['user_group_id']);
+			$allowOwners = array('', $user['user_group_id']);
 		}
 		$this->set('allowOwners', $allowOwners);
 		$this->set('users',$this->BlogPost->User->getUserList());
@@ -222,7 +222,8 @@ class BlogPostsController extends BlogAppController {
 
 		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
 		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-		if($db->config['driver'] == 'bc_csv') {
+		
+		if($db->config['database'] == 'bc_csv') {
 			if(!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if($blogTags) {
@@ -335,9 +336,10 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
-			$this->data = $this->BlogPost->read(null, $id);
-			$this->data['BlogPost']['content_tmp'] = $this->data['BlogPost']['content'];
-			$this->data['BlogPost']['detail_tmp'] = $this->data['BlogPost']['detail'];
+			$data = $this->BlogPost->read(null, $id);
+			$data['BlogPost']['content_tmp'] = $data['BlogPost']['content'];
+			$data['BlogPost']['detail_tmp'] = $data['BlogPost']['detail'];
+			$this->request->data = $data;
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
@@ -359,7 +361,6 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		$editable = false;
 		$blogCategoryId = '';
 		
@@ -372,14 +373,14 @@ class BlogPostsController extends BlogAppController {
 			$currentCatOwner = $this->data['BlogCategory']['owner_id'];
 		}
 		
-		$editable = ($currentCatOwner == $user[$userModel]['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == 1 || !$currentCatOwner);
+		$editable = ($currentCatOwner == $user['user_group_id'] ||
+					$user['user_group_id'] == 1 || !$currentCatOwner);
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
 			'rootEditable'	=> $this->checkRootEditable(),
 			'blogCategoryId'=> $blogCategoryId,
-			'userGroupId'	=> $user[$userModel]['user_group_id'],
+			'userGroupId'	=> $user['user_group_id'],
 			'postEditable'	=> $editable,
 			'empty'			=> '指定しない'
 		));

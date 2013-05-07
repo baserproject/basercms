@@ -29,38 +29,38 @@ $(window).load(function() {
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-<p><strong>このカテゴリのURL：<?php $bcBaser->link($bcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$bcForm->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>
+<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/archives/category/'.$this->BcForm->value('BlogCategory.name')),'/'.$blogContent['BlogContent']['name'].'/archives/category/'.$this->BcForm->value('BlogCategory.name'),array('target'=>'_blank')) ?></strong></p>
 </div>
 <?php endif ?>
 
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if($this->action == 'admin_add'): ?>
-<?php echo $bcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']))) ?>
+<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']))) ?>
 <?php elseif($this->action == 'admin_edit'): ?>
-<?php echo $bcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $bcForm->value('BlogCategory.id'), 'id' => false))) ?>
+<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false))) ?>
 <?php endif; ?>
 
-<?php echo $bcForm->input('BlogCategory.id', array('type' => 'hidden')) ?>
+<?php echo $this->BcForm->input('BlogCategory.id', array('type' => 'hidden')) ?>
 
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 	<?php if($this->action == 'admin_edit'): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogCategory.no', 'NO') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.no', 'NO') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->value('BlogCategory.no') ?>
-				<?php echo $bcForm->input('BlogCategory.no', array('type' => 'hidden')) ?>
+				<?php echo $this->BcForm->value('BlogCategory.no') ?>
+				<?php echo $this->BcForm->input('BlogCategory.no', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
 	<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogCategory.name', 'ブログカテゴリ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', 'ブログカテゴリ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $bcForm->error('BlogCategory.name') ?>
+				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li>URLに利用されます</li>
@@ -70,36 +70,36 @@ $(window).load(function() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogCategory.title', 'ブログカテゴリタイトル') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', 'ブログカテゴリタイトル') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $bcForm->error('BlogCategory.title') ?>
+				<?php echo $this->BcForm->input('BlogCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->error('BlogCategory.title') ?>
 			</td>
 		</tr>
 	<?php if($parents): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogCategory.parent_id', array(
+				<?php echo $this->BcForm->input('BlogCategory.parent_id', array(
 						'type'		=> 'select',
 						'options'	=> $parents,
 						'escape'	=> false)) ?>
-				<?php echo $bcForm->error('BlogCategory.parent_id') ?>
+				<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
 			</td>
 		</tr>
 	<?php else: ?>
-		<?php echo $bcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
+		<?php echo $this->BcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
-	<?php if($bcBaser->siteConfig['category_permission']): ?>
+	<?php if($this->BcBaser->siteConfig['category_permission']): ?>
 		<tr>
-			<th class="col-head"><?php echo $bcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
-				<?php echo $bcForm->input('BlogCategory.owner_id', array(
+				<?php echo $this->BcForm->input('BlogCategory.owner_id', array(
 						'type'		=> 'select',
-						'options'	=> $bcForm->getControlSource('BlogCategory.owner_id'),
+						'options'	=> $this->BcForm->getControlSource('BlogCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $bcForm->error('BlogCategory.owner_id') ?>
+				<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
 				<div id="helptextOwnerId" class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -115,15 +115,15 @@ $(window).load(function() {
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $bcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php else: ?>
-	<?php echo $bcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $bcBaser->link('削除',
-			array('action' => 'delete', $blogContent['BlogContent']['id'], $bcForm->value('BlogCategory.id')),
+	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php $this->BcBaser->link('削除',
+			array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')),
 			array('class' => 'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $bcForm->value('BlogCategory.name')),
+			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')),
 			false); ?>
 <?php endif ?>
 </div>
 
-<?php echo $bcForm->end() ?>
+<?php echo $this->BcForm->end() ?>

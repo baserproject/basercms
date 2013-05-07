@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!empty($paginator)){
+if(!empty($this->Paginator)){
 	$this->passedArgs['action'] = str_replace('mobile_','',$this->passedArgs['action']);
 	$this->passedArgs['plugin'] = '';
 	$this->Paginator->options = array('url' => $this->passedArgs);

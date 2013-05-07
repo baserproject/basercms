@@ -100,7 +100,7 @@ class BlogCommentsController extends BlogAppController {
 		}elseif(!empty($this->params['pass'][0])) {
 
 			$dbDatas = $this->BlogPost->BlogContent->read(null,$this->params['pass'][0]);
-			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
+			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 			$crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 
 		}

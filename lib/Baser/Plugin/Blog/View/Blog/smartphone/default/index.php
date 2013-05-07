@@ -17,18 +17,18 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$bcBaser->setDescription($blog->getDescription());
+$this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
 <!-- title -->
 <h2 class="contents-head">
-	<?php $blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 
 <!-- description -->
-<?php if($blog->descriptionExists()): ?>
+<?php if($this->Blog->descriptionExists()): ?>
 <section class="blog-description">
-	<?php $blog->description() ?>
+	<?php $this->Blog->description() ?>
 </section>
 <?php endif ?>
 
@@ -37,7 +37,7 @@ $bcBaser->setDescription($blog->getDescription());
 <?php if(!empty($posts)): ?>
 <ul>
 	<?php foreach($posts as $post): ?>
-<li><?php $blog->postLink($post, '<span class="date">'.$blog->getPostDate($post).'</span><br />'.$blog->getPostTitle($post)) ?></li>
+<li><?php $this->Blog->postLink($post, '<span class="date">'.$this->Blog->getPostDate($post).'</span><br />'.$this->Blog->getPostTitle($post)) ?></li>
 	<?php endforeach; ?>
 </ul>
 <?php else: ?>
@@ -46,4 +46,4 @@ $bcBaser->setDescription($blog->getDescription());
 </section>
 
 <!-- pagination -->
-<?php $bcBaser->pagination('simple'); ?>
+<?php $this->BcBaser->pagination('simple'); ?>

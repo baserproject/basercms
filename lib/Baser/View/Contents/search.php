@@ -22,7 +22,7 @@
 <h2 class="contents-head"><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <div class="section">
-<?php if(!empty($paginator)): ?>
+<?php if(!empty($this->Paginator)): ?>
 	<div class="search-result corner5">		
 		<?php echo $this->Paginator->counter(array('format' => '<strong>'.implode(' ', $query).'</strong> で検索した結果 <strong>%start%～%end%</strong>件目 / %count% 件')) ?>
 	</div>

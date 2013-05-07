@@ -31,7 +31,7 @@
 			<?php $class[] = 'last' ?>
 		<?php endif ?>
 	<li class="<?php echo implode(' ', $class) ?>">
-		<?php $blog->postLink($post, '<span class="date">'.$blog->getPostDate($post, 'Y.m.d').'</span><br />'.'<span class="title">'.$blog->getPostTitle($post, false).'</span>') ?>
+		<?php $this->Blog->postLink($post, '<span class="date">'.$this->Blog->getPostDate($post, 'Y.m.d').'</span><br />'.'<span class="title">'.$this->Blog->getPostTitle($post, false).'</span>') ?>
 	</li>
 	<?php endforeach ?>
 </ul>

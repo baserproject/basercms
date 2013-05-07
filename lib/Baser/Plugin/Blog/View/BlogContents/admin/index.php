@@ -35,4 +35,4 @@ $this->bcBaser->js(array(
 
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="AjaxBatchUrl" style="display:none"><?php $this->bcBaser->url(array('controller' => 'blog_contents', 'action' => 'ajax_batch')) ?></div>
-<div id="DataList"><?php $this->bcBaser->element('../blog_contents/admin/ajax_index', null, false, false) ?></div>
+<div id="DataList"><?php $this->bcBaser->element('../BlogContents/admin/ajax_index', null, false, false) ?></div>

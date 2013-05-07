@@ -26,7 +26,7 @@ if(!isset($limit)) {
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $blog_content_id;
+	$id = $this->Blog_content_id;
 }
 $actionUrl = '/blog/blog/get_posted_years/'.$id;
 if($limit) {
@@ -64,7 +64,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 				<?php $title = $postedDate['year'].'年' ?>
 			<?php endif ?>
 		<li<?php echo $class ?>>
-			<?php $bcBaser->link($title, array(
+			<?php $this->BcBaser->link($title, array(
 				'admin'			=> false, 
 				'plugin'		=> '', 
 				'controller'	=> $blogContent['BlogContent']['name'], 

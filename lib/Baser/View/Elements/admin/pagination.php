@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(empty($paginator)) {
+if(empty($this->Paginator)) {
 	return;
 }
 if(!isset($modules)) {

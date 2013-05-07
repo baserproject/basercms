@@ -20,6 +20,6 @@
 $title = 'ブログカレンダー';
 $description = 'ブログのカレンダーを表示します。';
 ?>
-<?php echo $bcForm->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
-<?php echo $bcForm->select($key.'.blog_content_id', $bcForm->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
+<?php echo $this->BcForm->label($key.'.blog_content_id', 'ブログ') ?>&nbsp;
+<?php echo $this->BcForm->select($key.'.blog_content_id', $this->BcForm->getControlSource('Blog.BlogContent.id'), null, null, false) ?><br />
 <small>ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカレンダーを表示します。</small>
