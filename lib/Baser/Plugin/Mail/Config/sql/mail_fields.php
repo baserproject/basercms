@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* MailFields schema generated on: 2010-11-04 18:11:13 : 1288863013*/
 class MailFieldsSchema extends CakeSchema {
-	public $name = 'MailFields';
+	var $name = 'MailFields';
 
-	public $file = 'mail_fields.php';
+	var $file = 'mail_fields.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $mail_fields = array(
+	var $mail_fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'mail_content_id' => array('type' => 'integer', 'null' => true, 'default' => NULL),
 		'no' => array('type' => 'integer', 'null' => true, 'default' => NULL),

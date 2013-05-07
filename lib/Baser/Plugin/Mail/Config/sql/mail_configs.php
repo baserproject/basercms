@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* MailConfigs schema generated on: 2010-11-04 18:11:13 : 1288863013*/
 class MailConfigsSchema extends CakeSchema {
-	public $name = 'MailConfigs';
+	var $name = 'MailConfigs';
 
-	public $file = 'mail_configs.php';
+	var $file = 'mail_configs.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $mail_configs = array(
+	var $mail_configs = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'site_name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'site_url' => array('type' => 'string', 'null' => true, 'default' => NULL),

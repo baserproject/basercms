@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* BlogPostsBlogTags schema generated on: 2011-04-24 03:04:43 : 1303583083*/
 class BlogPostsBlogTagsSchema extends CakeSchema {
-	public $name = 'BlogPostsBlogTags';
+	var $name = 'BlogPostsBlogTags';
 
-	public $file = 'blog_posts_blog_tags.php';
+	var $file = 'blog_posts_blog_tags.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $blog_posts_blog_tags = array(
+	var $blog_posts_blog_tags = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'blog_post_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
 		'blog_tag_id' => array('type' => 'integer', 'null' => false, 'length' => 8),

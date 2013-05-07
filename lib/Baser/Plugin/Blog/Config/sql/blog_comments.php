@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* BlogComments schema generated on: 2010-11-04 18:11:11 : 1288863011*/
 class BlogCommentsSchema extends CakeSchema {
-	public $name = 'BlogComments';
+	var $name = 'BlogComments';
 
-	public $file = 'blog_comments.php';
+	var $file = 'blog_comments.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $blog_comments = array(
+	var $blog_comments = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
 		'blog_post_id' => array('type' => 'integer', 'null' => false, 'length' => 8),

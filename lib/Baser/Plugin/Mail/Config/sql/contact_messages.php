@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* ContactMessages schema generated on: 2010-11-04 18:11:12 : 1288863012*/
 class ContactMessagesSchema extends CakeSchema {
-	public $name = 'ContactMessages';
+	var $name = 'ContactMessages';
 
-	public $file = 'contact_messages.php';
+	var $file = 'contact_messages.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $contact_messages = array(
+	var $contact_messages = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'name_1' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'name_2' => array('type' => 'string', 'null' => true, 'default' => NULL),

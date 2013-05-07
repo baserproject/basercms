@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* FeedConfigs schema generated on: 2010-11-04 18:11:12 : 1288863012*/
 class FeedConfigsSchema extends CakeSchema {
-	public $name = 'FeedConfigs';
+	var $name = 'FeedConfigs';
 
-	public $file = 'feed_configs.php';
+	var $file = 'feed_configs.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $feed_configs = array(
+	var $feed_configs = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'feed_title_index' => array('type' => 'string', 'null' => true, 'default' => NULL),
@@ -27,4 +27,3 @@ class FeedConfigsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 }
-?>

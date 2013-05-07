@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* BlogPosts schema generated on: 2011-08-20 02:08:54 : 1313774094*/
 class BlogPostsSchema extends CakeSchema {
-	public $name = 'BlogPosts';
+	var $name = 'BlogPosts';
 
-	public $file = 'blog_posts.php';
+	var $file = 'blog_posts.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $blog_posts = array(
+	var $blog_posts = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
 		'no' => array('type' => 'integer', 'null' => false),
@@ -31,6 +31,7 @@ class BlogPostsSchema extends CakeSchema {
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'eye_catch' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 30),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

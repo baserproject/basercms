@@ -2,20 +2,20 @@
 /* SVN FILE: $Id$ */
 /* MailContents schema generated on: 2011-08-20 02:08:54 : 1313774094*/
 class MailContentsSchema extends CakeSchema {
-	public $name = 'MailContents';
+	var $name = 'MailContents';
 
-	public $file = 'mail_contents.php';
+	var $file = 'mail_contents.php';
 
-	public $connection = 'plugin';
+	var $connection = 'plugin';
 
-	public function before($event = array()) {
+	function before($event = array()) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	function after($event = array()) {
 	}
 
-	public $mail_contents = array(
+	var $mail_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
