@@ -20,6 +20,7 @@
 App::uses('Page', 'Model');
 App::uses('Plugin', 'Model');
 App::uses('User', 'Model');
+App::uses('File', 'Utility');
 
 class BcManagerComponent extends Component {
 /**

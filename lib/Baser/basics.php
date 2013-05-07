@@ -19,8 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-App::uses('Folder', 'Utility');
-App::uses('File', 'Utility');
+
 App::uses('EmailComponent', 'Controller/Component');
 App::uses('BcEmailComponent', 'Controller/Component');
 
@@ -723,6 +722,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
  * @return string Or false
  */
 	function getVersion($plugin = '') {
+		
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		if(!$plugin || in_array($plugin, $corePlugins)) {
 			$path = BASER.'VERSION.txt';
@@ -738,6 +738,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			}
 		}
 
+		App::uses('File', 'Utility');
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);

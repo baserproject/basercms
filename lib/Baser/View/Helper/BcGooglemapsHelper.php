@@ -21,7 +21,7 @@
 /**
  * Include files
  */
-App::import('BcGmapsComponent', 'Controller/Component');
+App::uses('BcGmapsComponent', 'Controller/Component');
 /**
  * GoogleMapヘルパー
  *
