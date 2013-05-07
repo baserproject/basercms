@@ -606,7 +606,7 @@ class BcManagerComponent extends Component {
 		$files = $Folder->read(true, true, false);
 		foreach($files[0] as $theme) {
 			if($theme != 'empty') {
-				$patterns[$theme.'.'.$pattern] = Inflector::camelize($theme).'.'.Inflector::camelize($pattern);
+				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
 			}
 		}
 		
