@@ -25,6 +25,11 @@
  */
 class BlogBaserHelper extends AppHelper {
 /**
+ * ヘルパー
+ * @var array
+ */
+	var $helpers = array('Blog.Blog');
+/**
  * ブログ記事一覧出力
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $this->BcBaser->blogPosts('news', 3) ?>
@@ -39,7 +44,7 @@ class BlogBaserHelper extends AppHelper {
  */
 	public function blogPosts ($contentsName, $num = 5, $options = array()) {
 
-		$_options = array(
+		$options = array_merge(array(
 			'category'	=> null,
 			'tag'		=> null,
 			'year'		=> null,
@@ -47,8 +52,12 @@ class BlogBaserHelper extends AppHelper {
 			'day'		=> null,
 			'id'		=> null,
 			'keyword'	=> null,
-			'template'	=> null
-		);
+			'template'	=> null,
+			'direction' => null,
+			'page'		=> null,
+			'sort'		=> null
+		), $options);
+
 		$options = am($_options, $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
@@ -75,21 +84,58 @@ class BlogBaserHelper extends AppHelper {
 		}
 		unset ($options['templates']);
 
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num, $templates), 'named' => $options));
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
 
 	}
 /**
- * ブログのトップページ判定
+ * カテゴリー別記事一覧ページ判定
+ *
  * @return boolean 
  */
-	public function isBlogHome() {
-		if(empty($this->params['plugin']) || empty($this->params['controller']) || empty($this->params['action'])) {
-			return false;
-		}
-		if($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index') {
-			return true;
-		}
-		return false;
+	function isBlogCategory() {
+		return $this->Blog->isCategory();
 	}
+/**
+ * タグ別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogTag() {
+		return $this->Blog->isTag();
+	}
+/**
+ * 日別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogDate() {
+		return $this->Blog->isDate();
+	}
+/**
+ * 月別記事一覧ページ判定
+ * @return boolean 
+ */
+	function isBlogMonth() {
+		return $this->Blog->isMonth();
+	}
+/**
+ * 年別記事一覧ページ判定
+ * @return boolean
+ */
+	function isBlogYear() {
+		return $this->Blog->isYear();
+	}
+/**
+ * 個別ページ判定
+ * @return boolean
+ */
+	function isBlogSingle() {
+		return $this->Blog->isSingle();
+	}
+/**
+ * インデックスページ判定
+ * @return boolean
+ */
+	function isBlogHome() {
+		return $this->Blog->isHome();
+	}
+
 }
-?>

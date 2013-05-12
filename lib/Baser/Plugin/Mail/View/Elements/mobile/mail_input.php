@@ -32,7 +32,7 @@
 					<?php $description=$record['MailField']['description'] ?>
 <br />
 <br />
-<span style="color:#8ABE08">◆</span><?php echo $mailform->label("Message." . $record['MailField']['field_name'] . "", $record['MailField']['head']) ?>
+<span style="color:#8ABE08">■</span> <?php echo $mailform->label("Message." . $record['MailField']['field_name'] . "", $record['MailField']['head']) ?>
 					<?php if($record['MailField']['not_empty']): ?>
 <font color="#FF0000">*</font>
 					<?php endif; ?>

@@ -29,13 +29,6 @@
  */
 class BcAdminHelper extends AppHelper {
 /**
- * View
- * 
- * @var View
- * @access protected
- */
-	protected $_view = null;
-/**
  * 管理システムグローバルメニューの利用可否確認
  * 
  * @return boolean
@@ -49,9 +42,8 @@ class BcAdminHelper extends AppHelper {
 		if(Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
-		$prefix = Configure::read('Routing.prefixes');
 		$user = $this->_View->getVar('user');
-		if(empty($this->request->params[$prefix[0]]) || empty($user)) {
+		if(empty($this->request->params['admin']) || !$user) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::getObject('UserGroup');

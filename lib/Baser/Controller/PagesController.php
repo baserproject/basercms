@@ -278,7 +278,7 @@ class PagesController extends AppController {
 
 			if($this->Page->validates()) {
 
-				if($this->Page->save($this->request->data,false)) {
+				if($this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
@@ -475,21 +475,7 @@ class PagesController extends AppController {
 
 		$path = func_get_args();
 
-		$ext = '';
-		if(preg_match('/^pages/', $path[0])) {
-			// .htmlの拡張子がついている場合、$pathが正常に取得できないので取得しなおす
-			// 1.5.9 以前との互換性の為残しておく
-			$url = str_replace('pages','',$path[0]);
-			if($url == 'index.html') {
-				$url = '/index.html';
-			}
-			$params = Router::parse(str_replace('.html','',$path[0]));
-			$path = $params['pass'];
-			$this->request->params['pass'] = $path;
-			$ext = '.html';
-		} else {
-			$url = '/'.implode('/', $path);
-		}
+		$url = '/'.implode('/', $path);
 
 		// モバイルディレクトリへのアクセスは Not Found
 		if(isset($path[0]) && ($path[0]==Configure::read('BcAgent.mobile.prefix') || $path[0]==Configure::read('BcAgent.smartphone.prefix'))){
@@ -511,15 +497,6 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
-		// 公開制限を確認
-		// 1.5.10 で、拡張子なしを標準に変更
-		// 拡張子なしの場合は、route.phpで認証がかかる為、ここでは処理を行わない
-		// 1.5.9 以前との互換性の為残しておく
-		if(($ext)) {
-			if(!$this->Page->checkPublish($url)) {
-				return $this->notFound();
-			}
-		}
 
 		// キャッシュ設定
 		if(!isset($_SESSION['Auth']['User'])){
@@ -530,7 +507,6 @@ class PagesController extends AppController {
 		// ナビゲーションを取得
 		$this->crumbs = $this->_getCrumbs($url);
 
-		$path[count($path)-1] .= $ext;
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
 		$this->render(join('/', $path));

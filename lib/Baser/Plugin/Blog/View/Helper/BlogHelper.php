@@ -810,4 +810,67 @@ class BlogHelper extends AppHelper {
 
 	}
 
+/**
+ * アーカイブページ判定
+ * @return boolean 
+ */
+	function isArchive() {
+		return ($this->getBlogArchiveType());
+	}
+/**
+ * カテゴリー別記事一覧ページ判定
+ * @return boolean
+ */
+	function isCategory() {
+		return ($this->getBlogArchiveType() == 'category');
+	}
+/**
+ * タグ別記事一覧ページ判定
+ * @return boolean
+ */
+	function isTag() {
+		return ($this->getBlogArchiveType() == 'tag');
+	}
+/**
+ * 日別記事一覧ページ判定
+ * @return boolean
+ */
+	function isDate() {
+		return ($this->getBlogArchiveType() == 'daily');
+	}
+/**
+ * 月別記事一覧ページ判定
+ * @return boolean 
+ */
+	function isMonth() {
+		return ($this->getBlogArchiveType() == 'monthly');
+	}
+/**
+ * 年別記事一覧ページ判定
+ * @return boolean
+ */
+	function isYear() {
+		return ($this->getBlogArchiveType() == 'yearly');
+	}
+/**
+ * 個別ページ判定
+ * @return boolean
+ */
+	function isSingle() {
+		if(empty($this->params['plugin'])) {
+			return false;
+		}
+		return ($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'archives' && !$this->getBlogArchiveType());
+	}
+/**
+ * インデックスページ判定
+ * @return boolean
+ */
+	function isHome() {
+		if(empty($this->params['plugin'])) {
+			return false;
+		}
+		return ($this->params['plugin'] == 'blog' && $this->params['controller'] == 'blog' && $this->params['action'] == 'index');
+	}
+
 }

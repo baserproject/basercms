@@ -261,6 +261,7 @@ class BaserAppController extends Controller {
 
 		/* 認証設定 */
 		if($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
+			
 			$configs = Configure::read('BcAuthPrefix');
 			if(!empty($this->request->params['prefix']) && isset($configs[$this->request->params['prefix']])) {
 				$config = $configs[$this->request->params['prefix']];
@@ -275,8 +276,16 @@ class BaserAppController extends Controller {
 			} else {
 				$config = array();
 			}
-			$this->BcAuthConfigure->setting($config);
 		
+			// ユーザーの存在チェック
+			$this->BcAuthConfigure->setting($config);
+			$user = $this->BcAuth->user();
+			if ($user && !empty($this->User) && !$this->User->find('count', array(
+				'conditions' => array('User.id' => $user['User']['id'], 'User.name' => $user['User']['name']),
+				'recursive'	 => -1))) {
+				$this->Session->delete($this->BcAuth->sessionKey);
+			}
+
 			$authPrefix = $this->Session->read('Auth.User.authPrefix');
 			if(!$authPrefix) {
 				$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
@@ -284,6 +293,7 @@ class BaserAppController extends Controller {
 					$this->Session->write('Auth.User.authPrefix', $authPrefix);
 				}
 			}
+			
 		}
 		
 		// 送信データの文字コードを内部エンコーディングに変換

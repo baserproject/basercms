@@ -44,7 +44,11 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
+	<?php if($bcForm->value('BlogContent.status')): ?>
 	<strong>このブログのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index'),'/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
+	<?php else: ?>
+	<strong>このブログのURL：<?php echo $this->BcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
+	<?php endif ?>
 </div>
 <?php endif ?>
 

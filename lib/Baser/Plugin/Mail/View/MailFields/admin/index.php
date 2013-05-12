@@ -40,10 +40,4 @@ $(function(){
 <div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id'])) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 
-<div class="em-box align-left">このメールフォームのURL：
-	<?php $this->BcBaser->link(
-			$this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'),
-			'/' . $mailContent['MailContent']['name'] . '/index') ?>
-</div>
-
 <div id="DataList"><?php $this->BcBaser->element('mail_fields/index_list') ?></div>

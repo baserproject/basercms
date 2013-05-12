@@ -24,12 +24,49 @@ if(Configure::read('BcRequest.asset')) {
 	return;
 }
 /**
+ * サイト基本設定を読み込む
+ * bootstrapではモデルのロードは行わないようにする為ここで読み込む
+ */
+if(BC_INSTALLED) {
+	loadSiteConfig();
+/**
+ * テーマヘルパーのパスを追加する 
+ */
+	$helperPaths = Configure::read('helperPaths');
+	array_unshift($helperPaths, WWW_ROOT . 'themed' . DS . Configure::read('BcSite.theme') . DS. 'helpers');
+	Configure::write('helperPaths', $helperPaths);
+/**
+ * メンテナンスチェック
+ */
+	$parameter = Configure::read('BcRequest.pureUrl');
+	if($parameter == 'maintenance/index') {
+		$isMaintenance = true;
+		Configure::write('BcRequest.isMaintenance', true);
+	} else {
+		$isMaintenance = false;
+		Configure::write('BcRequest.isMaintenance', false);
+	}
+	Configure::write('BcRequest.isMaintenance', $isMaintenance);
+/**
+ * アップデートチェック
+ */
+	$isUpdater = false;
+	$bcSite = Configure::read('BcSite');
+	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
+	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
+		$isUpdater = true;
+	}elseif(BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
+	}
+	Configure::write('BcRequest.isUpdater', $isUpdater);
+}
+/**
  * Object::cakeError() の為、router.php が読み込まれた事をマークしておく
  * BaserAppModel::cakeError で利用
  */
 Configure::write('BcRequest.routerLoaded', true);
 
-if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
+if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 
 	// プラグインの基底クラス読み込み
 	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
@@ -155,9 +192,10 @@ if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('
 					}
 					break;
 				} else {
+					// 拡張子付き（.html）の場合
 					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
-						if($Page->isPageUrl($url) && $Page->checkPublish($url)){
+						if($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))){
 							$_parameter = str_replace('.html', '', $_parameter);
 							if(!$agent){
 								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
@@ -218,7 +256,7 @@ if (file_exists(APP . 'error.php')) {
 } elseif (file_exists(BASER . 'app_error.php')) {
 	include_once (BASER . 'app_error.php');
 }
-if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
+if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * プラグインの bootstrap を実行する
  * bootstrapではプラグインのパスが読み込めない為ここに定義

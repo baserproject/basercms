@@ -464,8 +464,8 @@ class BcManagerComponent extends Component {
 			"Configure::write('BcApp.mobile', true);",
 			"Configure::write('BcApp.smartphone', true);",
 			"Cache::config('default', array('engine' => 'File'));",
-			"Configure::write('debug', 0);",
-		"?>");
+			"Configure::write('debug', 0);"
+		);
 		if(file_put_contents($installFileName, implode("\n", $installCoreData))) {
 			return chmod($installFileName,0666);
 		}else {
@@ -1391,12 +1391,12 @@ class BcManagerComponent extends Component {
 		if(file_exists(APP . 'Config' . DS.'install.php')) {
 			$data = $file->read();
 		}else {
-			$data = "<?php\n?>";
+			$data = "<?php\n";
 		}
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
-			$data = preg_replace("/\n\?>/is", "\n".$setting.'?>', $data);
+			$data = $data.$setting;
 		}
 		$return = $file->write($data);
 		$file->close();

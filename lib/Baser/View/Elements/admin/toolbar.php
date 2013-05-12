@@ -63,7 +63,7 @@ $(function(){
 });
 </script>
 
-<div id="ToolBar">		
+<div id="ToolBar">
 	<div id="ToolbarInner" class="clearfix">
 		<div id="ToolMenu">
 			<ul>
@@ -74,7 +74,7 @@ $(function(){
 <?php elseif(!empty($this->request->params['admin']) || $authPrefix == $currentPrefix || ('/'.$this->request->url) == $loginUrl): ?>	
 				<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'], '/') ?></li>	
 <?php else: ?>
-	<?php if($authPrefix == Configure::read('Routing.admin')): ?>
+	<?php if($authPrefix == 'admin'): ?>
 				<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), '/admin', array('title' => 'baserCMS管理システム')) ?></li>
 	<?php else: ?>
 				<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.'.$currentPrefix.'.loginRedirect'), array('title' => $authName)) ?></li>
@@ -104,7 +104,7 @@ $(function(){
 	<?php if($this->Session->check('AuthAgent')): ?>
 						<li><?php $this->BcBaser->link('元のユーザーに戻る', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
 	<?php endif ?>
-	<?php if($authPrefix == Configure::read('Routing.admin')): ?>
+	<?php if($authPrefix == 'admin'): ?>
 		<?php if($authPrefix == 'front'): ?>
 						<li><?php $this->BcBaser->link('アカウント設定', array('plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 		<?php else: ?>
@@ -128,7 +128,7 @@ $(function(){
 					</ul>
 <?php endif ?>
 				</li>
-<?php if(!empty($user) && $authPrefix == Configure::read('Routing.admin')): ?>
+<?php if(!empty($user) && $authPrefix == 'admin'): ?>
 				<li>
 					<?php $this->BcBaser->link('システムナビ'.' '.$this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<div id="SystemMenu"><div>
@@ -162,4 +162,3 @@ if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	$this->BcBaser->BcHtml->theme = $theme;
 }
 unset($theme);
-?>
