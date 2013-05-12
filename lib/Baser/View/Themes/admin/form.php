@@ -87,7 +87,7 @@ $(window).load(function() {
 </div>
 <?php if(!$folderDisabled): ?>
 <div class="submit">
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action' => 'del', $this->BcForm->value('Theme.name')),
 			array('class'=>'btn-gray button'),

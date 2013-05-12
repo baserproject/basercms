@@ -60,7 +60,7 @@ $(function(){
 /**
  * フォーム送信時イベント
  */
-	$("#btnSave").click(function(){
+	$("#BtnSave").click(function(){
 		editor_content_tmp.execCommand('synchronize');
 		editor_detail_tmp.execCommand('synchronize');
 		$("#BlogPostMode").val('save');
@@ -240,17 +240,17 @@ $(function(){
 <!-- button -->
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
-	<?php echo $this->BcForm->button('更新', array('div'=>false, 'class' => 'btn-orange button', 'id'=>'btnSave')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php endif ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')),
-			array('class'=>'btn-gray button'),
+			array('class'=>'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogPost.name')),
 			false); ?>
 	<?php endif ?>

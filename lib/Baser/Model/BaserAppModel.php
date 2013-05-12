@@ -207,7 +207,7 @@ class BaserAppModel extends Model {
  *
  * @return 	array
  */
-	public function getControlSources() {
+	public function getControlSource($field) {
 		return array();
 	}
 

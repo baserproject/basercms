@@ -558,9 +558,7 @@ class BcBaserHelper extends AppHelper {
 		}
 		$out = $this->_View->element($name, $params, $loadHelpers);
 
-		$this->executeHook('afterElement', $name, $out);
-
-		return $out;
+		return $this->executeHook('afterElement', $name, $out);
 
 	}
 /**

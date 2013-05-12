@@ -101,15 +101,13 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit">
+<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php if ($this->request->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action'=>'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')),
-			array('class'=>'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')),
 			false); ?>
-<?php else: ?>
-	<?php echo $this->BcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
 <?php endif ?>
 </div>
 

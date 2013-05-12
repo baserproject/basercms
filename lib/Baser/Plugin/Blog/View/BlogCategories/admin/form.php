@@ -114,13 +114,11 @@ $(window).load(function() {
 
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')),
 			false); ?>
 <?php endif ?>

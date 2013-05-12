@@ -62,7 +62,7 @@ $(function(){
 /**
  * フォーム送信時イベント
  */
-	$("#btnSave").click(function(){
+	$("#BtnSave").click(function(){
 		if($("#PageReflectMobile").attr('checked')){
 			if(!confirm('このページを元にモバイルページを作成します。いいですか？\n\n'+
 						' ※ モバイルカテゴリの同階層に保存します。\n'+
@@ -425,16 +425,16 @@ function pageTypeChengeHandler() {
 <div class="submit">
 <?php if($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
-	<?php echo $this->BcForm->button('更新', array('label' => '更新', 'div' => false, 'class' => 'btn-orange button', 'id' => 'btnSave')) ?>
+	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php endif ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'btn-green button', 'id' => 'BtnPreview')) ?>
+	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 	<?php if($editable): ?>
 	<?php $this->BcBaser->link('削除',
 			array('action'=>'delete', $this->BcForm->value('Page.id')),
-			array('class'=>'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Page.name')),
 			false); ?>
 	<?php endif ?>

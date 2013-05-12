@@ -335,8 +335,13 @@ App::uses('BcEmailComponent', 'Controller/Component');
 				clearCache($home);
 			}
 		}elseif($url) {
-			$url = preg_replace('/\/index$/', '', $url);
-			clearCache(strtolower(Inflector::slug($url)),'views',$ext);
+			if(preg_match('/\/index$/', $url)) {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+				$url = preg_replace('/\/index$/', '', $url);
+				clearCache(strtolower(Inflector::slug($url)),'views',$ext);
+			} else {
+				clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
+			}
 		}else {
 			$folder = new Folder(CACHE.'views'.DS);
 			$files = $folder->read(true,true);
@@ -743,7 +748,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		$versionData = $versionFile->read();
 		$aryVersionData = split("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
+			return trim($aryVersionData[0]);
 		}else {
 			return false;
 		}

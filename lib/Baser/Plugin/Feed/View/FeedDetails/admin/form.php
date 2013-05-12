@@ -97,13 +97,11 @@ $(window).load(function() {
 
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action' => 'delete', $this->BcForm->value('FeedConfig.id'), $this->BcForm->value('FeedDetail.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')),false); ?>
 <?php endif ?>
 </div>

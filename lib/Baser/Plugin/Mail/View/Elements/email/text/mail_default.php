@@ -54,7 +54,7 @@
 
 　<?php echo $mailConfig['site_name'] ?>
  
-　<?php echo $mailConfig['site_url'] ?>　<?php echo $mailConfig['site_email'] ?>
+　<?php echo $mailConfig['site_url'] ?> <?php echo $mailConfig['site_email'] ?>
 <?php if($mailConfig['site_tel']): ?>
 
 　TEL　<?php echo $mailConfig['site_tel'] ?><?php endif; ?>

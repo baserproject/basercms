@@ -53,7 +53,7 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit">
-	<?php echo $this->BcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'btnSave')) ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

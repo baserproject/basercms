@@ -513,7 +513,8 @@ class BlogController extends BlogAppController {
 			'month'		=> null,
 			'day'		=> null,
 			'id'		=> null,
-			'keyword'	=> null
+			'keyword'	=> null,
+			'author'	=> null
 		), $conditions);
 
 		$options = array_merge(array(
@@ -607,10 +608,10 @@ class BlogController extends BlogAppController {
 					if($month) $conditions["MONTH(BlogPost.posts_date)"] = $month;
 					if($day) $conditions["DAY(BlogPost.posts_date)"] = $day;
 					break;
-				case 'postres':
-					if($year) $conditions["date_part('year'(BlogPost.posts_date)"] = $year;
-					if($month) $conditions["date_part('month'(BlogPost.posts_date)"] = $month;
-					if($day) $conditions["date_part('day'(BlogPost.posts_date)"] = $day;
+				case 'postgres':
+					if($year) $conditions["date_part('year',BlogPost.posts_date)"] = $year;
+					if($month) $conditions["date_part('month',BlogPost.posts_date)"] = $month;
+					if($day) $conditions["date_part('day',BlogPost.posts_date)"] = $day;
 					break;
 				case 'sqlite':
 				case 'sqlite3':
@@ -622,6 +623,17 @@ class BlogController extends BlogAppController {
 
 		}
 
+		//author条件
+		if($_conditions['author']) {
+			$author = $_conditions['author'];
+			App::import('Model', 'User');
+			$user = new User();
+			$userId = $user->field('id', array(
+				'User.name'	=> $author
+			));
+			$conditions['BlogPost.user_id'] = $userId;
+		}
+
 		if($_conditions['id']) {
 			$conditions["BlogPost.no"] = $_conditions['id'];
 			$expects[] = 'BlogComment';
@@ -629,6 +641,7 @@ class BlogController extends BlogAppController {
 			$num = 1;
 		}
 
+		unset($_conditions['author']);
 		unset($_conditions['category']);
 		unset($_conditions['tag']);
 		unset($_conditions['keyword']);

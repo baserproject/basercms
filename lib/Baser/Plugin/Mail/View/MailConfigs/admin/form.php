@@ -85,6 +85,6 @@ $(window).load(function() {
 		</tr>
 	</table>
 </div>
-<div class="submit"><?php echo $this->BcForm->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?></div>
+<div class="submit"><?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?></div>
 
 <?php echo $this->BcForm->end() ?>

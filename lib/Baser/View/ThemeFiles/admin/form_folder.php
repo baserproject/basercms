@@ -69,12 +69,12 @@ $(window).load(function() {
 	<?php $this->BcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->request->action == 'admin_add_folder'): ?>
-	<?php echo $this->BcForm->submit('作成', array('div' => false, 'class' => 'btn-red button')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php elseif ($this->request->action == 'admin_edit_folder'): ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除',
 			array('action'=>'del', $theme, $type, $path),
-			array('class'=>'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('ThemeFolder.name')),
 			false
 	) ?>

@@ -307,13 +307,11 @@ function mailContentSender1ClickHandler(){
 	
 <!-- button -->
 <div class="submit">
-<?php if($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->submit('登　録', array('div' => false, 'class' => 'btn-red button')) ?>
-<?php else: ?>
-	<?php echo $this->BcForm->submit('更　新', array('div' => false, 'class' => 'btn-orange button')) ?>
-	<?php $this->BcBaser->link('削　除', 
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if($this->action == 'admin_edit'): ?>
+	<?php $this->BcBaser->link('削除', 
 			array('action' => 'delete', $this->BcForm->value('MailContent.id')),
-			array('class' => 'btn-gray button'),
+			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。', $this->BcForm->value('MailContent.name')),
 			false); ?>
 <?php endif ?>
