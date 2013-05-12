@@ -15,9 +15,9 @@
         &nbsp; 
         <a href="http://cakephp.org/" target="_blank"><?php $this->BcBaser->img('cake.power.gif', array('alt'=> 'CakePHP(tm) : Rapid Development Framework')); ?></a>
         &nbsp; 
-        <a href="http://flagsystem.co.jp" target="_blank"><?php $this->BcBaser->img('./footer/flag.gif', array('alt'=> 'flagsystem.co.jp')); ?></a>
+        <a href="http://flagsystem.co.jp" target="_blank"><?php $this->BcBaser->img('footer/flag.gif', array('alt'=> 'flagsystem.co.jp')); ?></a>
         &nbsp; 
-        <a href="http://nadadesigns.flagsystem.co.jp/" target="_blank"><?php $this->BcBaser->img('./footer/nada.gif', array('alt'=> 'nada designs')); ?></a>
+        <a href="http://nadadesigns.flagsystem.co.jp/" target="_blank"><?php $this->BcBaser->img('footer/nada.gif', array('alt'=> 'nada designs')); ?></a>
 	</p>
     </div>
 </div>

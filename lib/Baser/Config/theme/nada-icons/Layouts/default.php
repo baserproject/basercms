@@ -46,13 +46,13 @@
 
             <?php if($this->BcBaser->isTop()): ?>
             <div id="top-main">
-                <?php //$this->BcBaser->img('./top-main.png'); ?>
+                <?php //$this->BcBaser->img('top-main.png'); ?>
                 <div id="slider">
-                  <div><?php $this->BcBaser->img('./slider/01.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('./slider/02.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('./slider/03.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('./slider/04.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('./slider/05.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/01.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/02.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/03.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/04.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/05.jpg'); ?></div>
                 </div>
             </div>
             <?php 
@@ -71,18 +71,18 @@
                     <?php $this->BcBaser->flash() ?>
                     <?php $this->BcBaser->content() ?>
                     <?php $this->BcBaser->element('contents_navi') ?>
-                    <div class="to-top"> <a href="#Page"><?php $this->BcBaser->img('./icons_up.png'); ?>ページトップへ戻る</a></div>
+                    <div class="to-top"> <a href="#Page"><?php $this->BcBaser->img('icons_up.png'); ?>ページトップへ戻る</a></div>
                 </div>
                 <?php endif ?>
 
             <div id="top-contents-main">
                 <div id="top-main-telfax-title">お気軽にお問い合わせ下さい</div>
                 <div id="top-main-telfax-left">
-                    <div id="top-main-telfax-tel"><?php $this->BcBaser->img('./icons/icons_ico_squ_07.png'); ?><?php $this->BcBaser->img('./icons_tel.png',array('class' => 'telfax-tel')); ?></div>
-                    <div id="top-main-telfax-fax"><?php $this->BcBaser->img('./icons/icons_ico_squ_08.png'); ?><?php $this->BcBaser->img('./icons_fax.png',array('class' => 'telfax-fax')); ?></div>
+                    <div id="top-main-telfax-tel"><?php $this->BcBaser->img('icons/icons_ico_squ_07.png'); ?><?php $this->BcBaser->img('icons_tel.png',array('class' => 'telfax-tel')); ?></div>
+                    <div id="top-main-telfax-fax"><?php $this->BcBaser->img('icons/icons_ico_squ_08.png'); ?><?php $this->BcBaser->img('icons_fax.png',array('class' => 'telfax-fax')); ?></div>
                 </div>
                 <div id="top-main-telfax-right">
-                    <div id="top-main-contact"><?php $this->BcBaser->img('./icons_contact.png',array('url' => '/contact')); ?></div>
+                    <div id="top-main-contact"><?php $this->BcBaser->img('icons_contact.png',array('url' => '/contact')); ?></div>
                     <div id="top-main-serch"><?php $this->BcBaser->element('search') ?></div>
                 </div>
             </div>

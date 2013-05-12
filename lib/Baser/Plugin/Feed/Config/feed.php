@@ -28,5 +28,3 @@
 				array('name' => 'フィードキャッシュ削除',	'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'))
 		)
 	);
-
-?>

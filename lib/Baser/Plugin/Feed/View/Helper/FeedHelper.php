@@ -107,4 +107,3 @@ class FeedHelper extends BcTextHelper {
 	}
 	
 }
-?>

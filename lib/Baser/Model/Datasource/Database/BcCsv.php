@@ -2935,4 +2935,3 @@ class BcCsv extends DboSource {
 		$v[$j] = $temp;
 		
 	}
-?>

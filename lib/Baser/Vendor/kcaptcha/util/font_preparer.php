@@ -39,4 +39,3 @@ if ($handle = opendir('../fonts0')) {
     }
     closedir($handle);
 }
-?> 

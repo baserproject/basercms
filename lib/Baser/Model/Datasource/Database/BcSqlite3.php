@@ -462,4 +462,3 @@ class BcSqlite3 extends Sqlite3 {
 	}
 	
 }
-?>

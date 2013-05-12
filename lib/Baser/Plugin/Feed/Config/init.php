@@ -18,4 +18,3 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->Plugin->initDb('feed');
-?>

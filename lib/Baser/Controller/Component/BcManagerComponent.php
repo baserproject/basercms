@@ -616,29 +616,51 @@ class BcManagerComponent extends Component {
 /**
  * 初期データのセットを取得する
  * 
- * @param string $path
  * @param string $theme
+ * @param array $options
  * @return array 
  */
-	public function getDefaultDataPatterns($theme = 'core') {
+	public function getDefaultDataPatterns($theme = 'core', $options = array()) {
 		
-		$path = '';
+		$options = array_merge(array('useTitle' => true), $options);
+		extract($options);
+
+		$themePath = $dataPath = $title = '';
  		if($theme == 'core') {
-			$path = BASER_CONFIGS.'data';
-		} elseif(is_dir(BASER_THEMES.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_THEMES.$theme.DS.'config'.DS.'data';
-		} elseif(is_dir(BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data')) {
-			$path = BASER_CONFIGS.'theme'.DS.$theme.DS.'config'.DS.'data';
+			$dataPath = BASER_CONFIGS . 'data';
+		} elseif(is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data')) {
+			$themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
+			$dataPath = $themePath . 'config' . DS . 'data';
+		} elseif(is_dir(BASER_THEMES . $theme . DS . 'config' . DS . 'data')) {
+			$themePath = BASER_THEMES . $theme . DS;
+			$dataPath = $themePath . 'config' . DS . 'data';
 		} else {
 			return array();
 		}
 		
+		if($themePath) {
+			if(file_exists($themePath . 'config.php')) {
+				include $themePath . 'config.php';
+			}
+		} else {
+			$title = 'コア';
+		}
+		
+		if(!$title) {
+			$title = $theme;
+		}		
+		
 		$patterns = array();
-		$Folder = new Folder($path);
+		$Folder = new Folder($dataPath);
 		$files = $Folder->read(true, true);
 		if($files[0]) {
 			foreach($files[0] as $pattern) {
-				$patterns[$theme.'.'.$pattern] = Inflector::classify($theme).'.'.Inflector::classify($pattern);
+				if($useTitle) {
+					$patternName = $title . ' ( ' . $pattern . ' )';
+				} else {
+					$patternName = $pattern;
+				}
+				$patterns[$theme.'.'.$pattern] = $patternName;
 			}
 		}
 		
@@ -668,27 +690,27 @@ class BcManagerComponent extends Component {
 		if($theme == 'core') {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_CONFIGS.'data'.DS.$pattern,
-					BASER_CONFIGS.'data'.DS.'default',
+					BASER_CONFIGS . 'data' . DS . $pattern,
+					BASER_CONFIGS . 'data' . DS . 'default',
 				);
 			} else {
 				$paths = array(
-					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
+					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
 				);
 			}
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.DS.$pattern
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern
 				);
 			} else {
 				$paths = array(
-					BASER_THEMES.$theme.DS.'Config'.DS.'data'.DS.$pattern.DS.$plugin,
-					BASER_CONFIGS.'theme'.DS.$theme.DS.'Config'.DS.'data'.$pattern.DS.$plugin,
-					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.$pattern,
-					BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default'
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
 				);
 			}
 		}
@@ -707,9 +729,9 @@ class BcManagerComponent extends Component {
 		}
 		
 		if($plugin == 'core') {
-			$corePath = BASER_CONFIGS.'data'.DS.'default';
+			$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		} else {
-			$corePath = BASER_PLUGINS.$plugin.DS.'Config'.DS.'data'.DS.'default';
+			$corePath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default';
 		}
 		
 		$Folder = new Folder($corePath);
@@ -732,7 +754,7 @@ class BcManagerComponent extends Component {
 					}
 					$table = basename($file, '.csv');
 					if($table == $targetTable) {
-						if(!$db->loadCsv(array('path'=>$file, 'encoding'=>'SJIS'))){
+						if(!$db->loadCsv(array('path' => $file, 'encoding' => 'SJIS'))){
 							return false;
 							$this->log($file . ' の読み込みに失敗。');
 							$result = false;
@@ -744,7 +766,7 @@ class BcManagerComponent extends Component {
 				}
 				// 存在しなかった場合は、コアのファイルを読み込む
 				if(!$loaded) {
-					if(!$db->loadCsv(array('path'=>$corePath.DS.$targetTable.'.csv', 'encoding'=>'SJIS'))){
+					if(!$db->loadCsv(array('path' => $corePath . DS . $targetTable . '.csv', 'encoding' => 'SJIS'))){
 						$this->log($corePath . DS . $targetTable . ' の読み込みに失敗。');
 						$result = false;
 					}

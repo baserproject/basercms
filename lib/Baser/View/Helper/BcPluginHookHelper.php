@@ -226,8 +226,7 @@ class BcPluginHookHelper extends AppHelper {
  */
 	public function afterFormCreate(&$form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormCreate', $out, $form, $id, $out);
-		return $this->formExCreate($out);
+		return $this->executeHook('afterFormCreate', $out, $form, $id, $out);
 		
 	}
 /**

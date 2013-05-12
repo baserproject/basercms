@@ -123,6 +123,12 @@ if (BC_INSTALLED && $baserSettings) {
 	}
 }
 /**
+ * クレジット読込 
+ */
+	$config = array();
+	include BASER_CONFIGS . 'credit.php';
+	Configure::write($config);
+/**
  * tmpフォルダ確認
  */
 if (BC_INSTALLED) {

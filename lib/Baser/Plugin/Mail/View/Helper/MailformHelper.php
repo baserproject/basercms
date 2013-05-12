@@ -167,4 +167,3 @@ class MailformHelper extends BcFreezeHelper {
 	}
 	
 }
-?>

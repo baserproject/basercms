@@ -104,4 +104,3 @@ class BcMysql extends Mysql {
 		return $data;
 	}
 }
-?>

@@ -290,4 +290,3 @@ class BcPostgres extends Postgres {
 		
 	}
 }
-?>

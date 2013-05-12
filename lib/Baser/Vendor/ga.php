@@ -188,6 +188,5 @@
     // Finally write the gif data to the response.
     writeGifData();
   }
-?><?php
+
   trackPageView();
-?>

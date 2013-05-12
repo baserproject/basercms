@@ -78,15 +78,6 @@ class Page extends AppModel {
  */
 	public $contentSaving = true;
 /**
- * 非公開WebページURLリスト
- * キャッシュ用
- * 
- * @var mixed
- * @deprecated
- * @access protected
- */
-	protected $_unpublishes = -1;
-/**
  * 公開WebページURLリスト
  * キャッシュ用
  * 
@@ -765,44 +756,6 @@ class Page extends AppModel {
 		}else {
 			return false;
 		}
-
-	}
-/**
- * 非公開チェックを行う
- * 
- * @param	string	$url
- * @return	boolean
- * @access	public
- * @deprecated isPageUrl と組み合わせて checkPublish を利用してください。
- */
-	public function checkUnPublish($url) {
-
-		if($this->_unpublishes == -1) {
-			
-			$conditions['or']['Page.status'] = false;
-			$conditions['or'][] = array(array('Page.publish_begin >' => date('Y-m-d H:i:s')),
-												array('Page.publish_begin <>' => '0000-00-00 00:00:00'),
-												array('Page.publish_begin <>' => NULL));
-			$conditions['or'][] = array(array('Page.publish_end <' => date('Y-m-d H:i:s')),
-												array('Page.publish_end <>' => '0000-00-00 00:00:00'),
-												array('Page.publish_end <>' => NULL));
-			$pages = $this->find('all',array('fields'=>'url','conditions'=>$conditions,'recursive'=>-1));
-			
-			if(!$pages) {
-				$this->_unpublishes = array();
-				return false;
-			}
-			
-			$this->_unpublishes = Set::extract('/Page/url', $pages);
-			
-		}
-
-		if(preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-		$url = preg_replace('/^\/'.Configure::read('BcRequest.agentAlias').'\//', '/'.Configure::read('BcRequest.agentPrefix').'/', $url);
-		
-		return in_array($url,$this->_unpublishes);
 
 	}
 /**
