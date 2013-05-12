@@ -35,7 +35,9 @@ class BcCacheBehavior extends ModelBehavior {
 		
 		if(!defined('CACHE_DATA_PATH')) {
 			$setting = Cache::config('_cake_data_');
-			define('CACHE_DATA_PATH', $setting['settings']['path']);
+			if(isset($setting['settings']['path'])) {
+				define('CACHE_DATA_PATH', $setting['settings']['path']);
+			}
 		}
 		$this->createCacheFolder($model);
 
