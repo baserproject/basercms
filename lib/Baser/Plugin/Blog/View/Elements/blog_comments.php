@@ -131,27 +131,27 @@ function loadAuthCaptcha(){
 	
 	<h4 class="contents-head">コメントを送る</h4>
 
-	<?php echo $this->bcForm->create('BlogComment', array('url' => $prefix.'/blog/blog_comments/add/'.$blogContent['BlogContent']['id'].'/'. $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
+	<?php echo $this->BcForm->create('BlogComment', array('url' => $prefix.'/blog/blog_comments/add/'.$blogContent['BlogContent']['id'].'/'. $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 	
 	<table cellpadding="0" cellspacing="0" class="row-table-01">
 		<tr>
-			<th><?php echo $this->bcForm->label('BlogComment.name','お名前') ?></th>
-			<td><?php echo $this->bcForm->input('BlogComment.name', array('type' => 'text')) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.name','お名前') ?></th>
+			<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text')) ?></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->bcForm->label('BlogComment.email','Eメール') ?></th>
+			<th><?php echo $this->BcForm->label('BlogComment.email','Eメール') ?></th>
 			<td>
-				<?php echo $this->bcForm->input('BlogComment.email', array('type' => 'text', 'size'=>30)) ?>&nbsp;
+				<?php echo $this->BcForm->input('BlogComment.email', array('type' => 'text', 'size'=>30)) ?>&nbsp;
 				<small>※ メールは公開されません</small>
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $this->bcForm->label('BlogComment.url','URL') ?></th>
-			<td><?php echo $this->bcForm->input('BlogComment.url',array('type' => 'text', 'size'=>30)) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.url','URL') ?></th>
+			<td><?php echo $this->BcForm->input('BlogComment.url',array('type' => 'text', 'size'=>30)) ?></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->bcForm->label('BlogComment.message','コメント') ?></th>
-			<td><?php echo $this->bcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 60)) ?></td>
+			<th><?php echo $this->BcForm->label('BlogComment.message','コメント') ?></th>
+			<td><?php echo $this->BcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52)) ?></td>
 		</tr>
 	</table>
 
@@ -159,12 +159,12 @@ function loadAuthCaptcha(){
 	<div class="auth-captcha clearfix">
 		<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
 		<?php $this->BcBaser->img('/img/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id'=>'CaptchaLoader')) ?>
-		<?php echo $this->bcForm->text('BlogComment.auth_captcha') ?><br />
+		<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br />
 		&nbsp;画像の文字を入力してください<br />
 	</div>
 	<?php endif ?>
 
-	<?php echo $this->bcForm->end(array('label'=>'　　送信する　　','id'=>'BlogCommentAddButton')) ?>
+	<?php echo $this->BcForm->end(array('label'=>'　　送信する　　','id'=>'BlogCommentAddButton')) ?>
 	
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 	

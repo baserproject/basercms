@@ -22,75 +22,26 @@
 <?php $this->BcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
+<meta name="robots" content="noindex,nofollow" />
 <?php $this->BcBaser->charset() ?>
 <?php $this->BcBaser->title() ?>
-<?php $this->BcBaser->metaDescription() ?>
-<?php $this->BcBaser->metaKeywords() ?>
-<?php $this->BcBaser->icon() ?>
-<?php $this->BcBaser->css('font_small', array('title'=>'Small')) ?>
-<?php $this->BcBaser->css('font_medium', array('title'=>'Medium')) ?>
-<?php $this->BcBaser->css('font_large', array('title'=>'Large')) ?>
-<?php $this->BcBaser->css('import') ?>
+<?php $bcBaser->css(array(
+	'import',
+	'colorbox/colorbox')) ?>
+<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
-	'jquery-1.6.2.min',
-	'jquery.corner',
-	'styleswitcher',
-	'startup')) ?>
+	'jquery-1.7.2.min',
+	'jquery-ui-1.8.19.custom.min',
+	'jquery.colorbox-min',
+	'admin/functions',
+	'admin/startup',
+	'admin/adjust_scroll')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
-<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
+<body id="<?php $bcBaser->contentsName() ?>" class="normal">
 
-<!-- begin page -->
-<div id="page">
+	<div id="Page" style="text-align: center"><?php $bcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
 
-	<!-- begin gradationShadow -->
-	<div id="gradationShadow">
-	
-		<!-- begin header -->
-		<?php $this->BcBaser->element('header') ?>
-		<!-- end header -->
-		
-		<!-- begin contents -->
-		<div id="contents">
-		
-			<!-- navigation -->
-			<div id="navigation">
-				<?php $this->BcBaser->element('navi',array('title_for_element'=>$this->BcBaser->getContentsTitle())); ?>
-			</div>
-			
-			<!-- begin alfa -->
-			<div id="alfa" >
-			
-				<!-- begin contentsBody -->
-				<div id="contentsBody">
-					<?php $this->BcBaser->flash() ?>
-					<?php $this->BcBaser->content() ?>
-					<?php $this->BcBaser->element('contents_navi') ?>
-				</div>
-				<!-- end contentsBody -->
-				
-			</div>
-			<!-- end alfa -->
-			
-			<!-- begin beta -->
-			<?php $this->BcBaser->element('sidebar') ?>
-			<!-- end beta -->
-			
-			<div class="to-top"> <a href="#page">このページの先頭へ戻る</a> </div>
-			
-		</div>
-		<!-- end contents -->
-		
-		<!-- begin footer -->
-		<?php $this->BcBaser->element('footer') ?>
-		<!-- end footer -->
-		
-	</div>
-	<!-- end gradationShadow -->
-	
-</div>
-<!-- end page -->
-
-<?php echo $cakeDebug; ?>
+<?php $bcBaser->func() ?>
 </body>
 </html>

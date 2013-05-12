@@ -139,7 +139,7 @@ class BlogCommentsController extends BlogAppController {
 	public function admin_index($blogContentId,$blogPostId=null) {
 
 		if(!$blogContentId || empty($this->blogContent['BlogContent'])) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 		
@@ -257,10 +257,9 @@ class BlogCommentsController extends BlogAppController {
 			}else {
 				$message = '記事「'.$this->blogContent['BlogContent']['title'].'」へのコメントを削除しました。';
 			}
-			$this->Session->setFlash($message);
-			$this->BlogComment->saveDbLog($message);
+			$this->setMessage($message, false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		if($blogPostId) {

@@ -82,7 +82,7 @@ class InstallationsController extends AppController {
 	public function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
 
 		if ($errno==2) {
-			$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr);
+			$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr, true);
 			restore_error_handler();
 		}
 
@@ -256,13 +256,13 @@ class InstallationsController extends AppController {
 				}
 				$this->deleteAllTables();
 				if($this->_constructionDb($dbDataPattern)) {
-					$this->Session->setFlash("データベースの構築に成功しました。");
+					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
 					$db =& ConnectionManager::getDataSource('baser');
 					$con = $db->getConnection();
 					$errorInfo = $con->errorInfo();
-					$this->Session->setFlash("データベースの構築中にエラーが発生しました。<br />".$con->errorCode() . ' : ' . $errorInfo[2]);
+					$this->setMessage("データベースの構築中にエラーが発生しました。<br />".$db->error, true);
 				}
 
 			}
@@ -322,10 +322,7 @@ class InstallationsController extends AppController {
 					//$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
-					$con = $db->getConnection();
-					$errorInfo = $con->errorInfo();
-					$message = '管理ユーザーを作成できませんでした。<br />' . $con->errorCode() . ' : ' . $errorInfo[2];
-					$this->Session->setFlash($message);
+					$this->setMessage('管理ユーザーを作成できませんでした。<br />'.$db->error, true);
 				}
 			}
 		}
@@ -576,20 +573,19 @@ class InstallationsController extends AppController {
 
 			if ($result) {
 				$db->execute("drop TABLE $randomtablename");
-				$this->Session->setFlash('データベースへの接続に成功しました。');
+				$this->setMessage('データベースへの接続に成功しました。');
 				return true;
 			} else {
-				
-				$this->Session->setFlash("データベースへの接続でエラーが発生しました。<br />".$db->error);
+				$this->setMessage("データベースへの接続でエラーが発生しました。<br />".$db->error, true);
 			}
 
 		} else {
 			
 			if (!$this->Session->read('Message.flash.message')) {
 				if($db->connection){
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。");
+					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。", true);
 				} else {
-					$this->Session->setFlash("データベースへの接続でエラーが発生しました。データベース設定を見直してください。");
+					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。", true);
 				}
 			}
 		}
@@ -683,12 +679,10 @@ class InstallationsController extends AppController {
 			}
 			
 			if(!$this->BcManager->reset($dbConfig)) {
-				$message = 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。';
+				$this->setMessage('baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。', true);
 			} else {
-				$message = 'baserCMSを初期化しました。';
+				$this->setMessage('baserCMSを初期化しました。');
 			}
-			
-			$this->Session->setFlash($message);
 			
 			// スマートURLオンの際、アクション名でリダイレクトを指定した場合、
 			// 環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述

@@ -23,7 +23,6 @@
 <?php if(!empty($user)): ?>
 <div id="ContentsMenu">
 	<ul class="clearfix">
-		<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_menu_favorite.png', array('alt' => 'よく使う項目', 'width' => 90, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuFavorite')) ?></li>
 <?php if(!empty($search)): ?>
 		<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?></li>
 <?php endif ?>

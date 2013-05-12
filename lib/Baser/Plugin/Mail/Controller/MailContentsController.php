@@ -109,18 +109,16 @@ class MailContentsController extends MailAppController {
 				if ($this->Message->createTable($this->data['MailContent']['name'])) {
 					/* データを保存 */
 					if ($this->MailContent->save(null,false)) {
-						$message = '新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。';
-						$this->Session->setFlash($message);
-						$this->MailContent->saveDbLog($message);
+						$this->setMessage('新規メールフォーム「'.$this->data['MailContent']['title'].'」を追加しました。', false, true);
 						$this->redirect(array('action' => 'edit', $this->MailContent->id));
 					} else {
-						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+						$this->setMessage('データベース処理中にエラーが発生しました。', true);
 					}
 				} else {
-					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。');
+					$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。', true);
 				}
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 		$this->subMenuElements = array('mail_common');
@@ -139,7 +137,7 @@ class MailContentsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->data)) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -161,9 +159,7 @@ class MailContentsController extends MailAppController {
 				if($ret) {
 					if($this->MailContent->save(null, false)) {
 
-						$message = 'メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。';
-						$this->Session->setFlash($message);
-						$this->MailContent->saveDbLog($message);
+						$this->setMessage('メールフォーム「'.$this->data['MailContent']['title'].'」を更新しました。', false, true);
 
 						if($this->data['MailContent']['edit_layout']){
 							$this->redirectEditLayout($this->data['MailContent']['layout_template']);
@@ -176,13 +172,13 @@ class MailContentsController extends MailAppController {
 						}
 
 					}else {
-						$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+						$this->setMessage('データベース処理中にエラーが発生しました。', true);
 					}
 				} else {
-					$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルのリネームに失敗しました。');
+					$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルのリネームに失敗しました。', true);
 				}
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
@@ -233,7 +229,7 @@ class MailContentsController extends MailAppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -243,14 +239,12 @@ class MailContentsController extends MailAppController {
 		/* 削除処理 */
 		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
 			if($this->MailContent->delete($id)) {
-				$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
-				$this->Session->setFlash($message);
-				$this->MailContent->saveDbLog($message);
+				$this->setMessage('メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。', false, true);
 			}else {
-				$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+				$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			}
 		} else {
-			$this->Session->setFlash('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。');
+			$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'index'));
 
@@ -280,7 +274,7 @@ class MailContentsController extends MailAppController {
 			}
 			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.$this->ext));
 		}else{
-			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 		
@@ -313,7 +307,7 @@ class MailContentsController extends MailAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		}else{
-			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 		
@@ -344,7 +338,7 @@ class MailContentsController extends MailAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path.'/index'.$this->ext));
 		}else{
-			$this->Session->setFlash('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。');
+			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 		

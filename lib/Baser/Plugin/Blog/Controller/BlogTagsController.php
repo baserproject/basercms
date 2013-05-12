@@ -97,12 +97,10 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->create($this->data);
 			if($this->BlogTag->save()) {
-				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->BlogTag->saveDbLog($message);
+				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -121,7 +119,7 @@ class BlogTagsController extends BlogAppController {
 	public function admin_edit ($id) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -131,12 +129,10 @@ class BlogTagsController extends BlogAppController {
 
 			$this->BlogTag->set($this->data);
 			if($this->BlogTag->save()) {
-				$message = 'タグ「'.$this->data['BlogTag']['name'].'」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->BlogTag->saveDbLog($message);
+				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
-				$this->Session->setFlash('エラーが発生しました。内容を確認してください。');
+				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 
 		}
@@ -155,18 +151,16 @@ class BlogTagsController extends BlogAppController {
 	public function admin_delete($id = null) {
 
 		if(!$id) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 
 		if($this->BlogTag->delete($id)) {
-			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
-			$this->Session->setFlash($message);
-			$this->BlogTag->saveDbLog($message);
+			$this->setMessage('タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

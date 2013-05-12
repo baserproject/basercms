@@ -127,9 +127,9 @@ class DashboardController extends AppController {
 	public function admin_del(){
 
 		if($this->Dblog->deleteAll('1 = 1')){
-			$this->Session->setFlash('最近の動きのログを削除しました。');
+			$this->setMessage('最近の動きのログを削除しました。');
 		} else {
-			$this->Session->setFlash('最近の動きのログ削除に失敗しました。');
+			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'index'));
 

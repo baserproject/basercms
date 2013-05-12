@@ -56,7 +56,7 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 <div id="Page">
 	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 	<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
-	<div id="FavoriteBoxOpened" style="display:none"><?php echo (!empty($user))? $this->Session->read('Baser.favorite_box_opened') : false ?></div>
+	<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
 	<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.'.$this->BcBaser->getContentsName(true)) ?></div>
 	<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
 	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->request->url ?></div>
@@ -74,7 +74,10 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 	<div id="Wrap" class="clearfix" style="display:none">
 
 		<?php if(!empty($user)): ?>
-		<div id="SideBar" <?php if(!$favoriteBoxOpened): ?> style="display:none"<?php endif ?>>
+		<div id="SideBar">
+			
+			<div id="BtnSideBarOpener"></div>
+			
 			<div class="cbb clearfix">
 
 				<?php $this->BcBaser->element('favorite_menu') ?>

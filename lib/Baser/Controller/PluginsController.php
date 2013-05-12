@@ -205,8 +205,7 @@ class PluginsController extends AppController {
 	public function admin_delete_file($pluginName) {
 		
 		$this->__deletePluginFile($pluginName);
-		$message = 'プラグイン「'.$pluginName.'」 を完全に削除しました。';
-		$this->Session->setFlash($message);
+		$this->setMessage('プラグイン「'.$pluginName.'」 を完全に削除しました。');
 		$this->redirect(array('action' => 'index'));
 		
 	}
@@ -317,7 +316,7 @@ class PluginsController extends AppController {
 			}
 
 			if(!empty($installMessage)) {
-				$this->Session->setFlash($installMessage);
+				$this->setMessage($installMessage, true);
 			}
 
 		}else {
@@ -344,13 +343,11 @@ class PluginsController extends AppController {
 			if($this->Plugin->save()) {
 				
 				clearAllCache();
-				$message = '新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。';
-				$this->Session->setFlash($message);
-				$this->Plugin->saveDbLog($message);
+				$this->setMessage('新規プラグイン「'.$data['Plugin']['name'].'」を baserCMS に登録しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 
 			}else {
-				$this->Session->setFlash('プラグインに問題がある為インストールを完了できません。開発者に確認してください。');
+				$this->setMessage('プラグインに問題がある為インストールを完了できません。開発者に確認してください。', true);
 			}
 
 		}
@@ -374,7 +371,7 @@ class PluginsController extends AppController {
 
 		/* 除外処理 */
 		if(!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -385,11 +382,9 @@ class PluginsController extends AppController {
 		/* 削除処理 */
 		if($this->Plugin->save($data)) {
 			clearAllCache();
-			$message = 'プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。';
-			$this->Session->setFlash($message);
-			$this->Plugin->saveDbLog($message);
+			$this->setMessage('プラグイン「'.$data['Plugin']['title'].'」 を 無効化しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

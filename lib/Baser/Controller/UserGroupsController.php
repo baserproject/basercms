@@ -114,12 +114,10 @@ class UserGroupsController extends AppController {
 			}
 			$this->UserGroup->create($this->request->data);
 			if ($this->UserGroup->save()) {
-				$message = '新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。';
-				$this->Session->setFlash($message);
-				$this->UserGroup->saveDbLog($message);
+				$this->setMessage($message, '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
@@ -138,7 +136,7 @@ class UserGroupsController extends AppController {
 	public function admin_edit($id) {
 		/* 除外処理 */
 		if (!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -148,12 +146,10 @@ class UserGroupsController extends AppController {
 
 			/* 更新処理 */
 			if ($this->UserGroup->save($this->request->data)) {
-				$message = 'ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。';
-				$this->Session->setFlash($message);
-				$this->UserGroup->saveDbLog($message);
+				$this->setMessage('ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			} else {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
@@ -196,7 +192,7 @@ class UserGroupsController extends AppController {
 	public function admin_delete($id = null) {
 		/* 除外処理 */
 		if (!$id) {
-			$this->Session->setFlash('無効なIDです。');
+			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
@@ -205,11 +201,9 @@ class UserGroupsController extends AppController {
 
 		/* 削除処理 */
 		if ($this->UserGroup->delete($id)) {
-			$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->UserGroup->saveDbLog($message);
+			$this->setMessage('ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。', false, true);
 		} else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));

@@ -651,7 +651,10 @@ class BcBaserHelper extends AppHelper {
 	public function flash($key='flash') {
 
 		if ($this->Session->check('Message.'.$key)) {
+			echo '<div id="MessageBox">';
 			echo $this->Session->flash($key);
+			echo '</div>';
+
 		}
 
 	}

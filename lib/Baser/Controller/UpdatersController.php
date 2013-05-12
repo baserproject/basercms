@@ -80,7 +80,7 @@
  * アップデート完了時に表示するメッセージを設定します。ログにも記録されます。
  * ログファイルの記録場所：/app/tmp/logs/update.log
  *
- * $this->setMessage($message, $strong = false, $head = false, $beforeBreak = false);
+ * $this->setUpdateLog($message);
  *
  * $message			メッセージを指定します。
  *

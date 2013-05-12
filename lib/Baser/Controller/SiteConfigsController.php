@@ -96,8 +96,11 @@ class SiteConfigsController extends AppController {
 			$this->SiteConfig->set($this->request->data);
 
 			if(!$this->SiteConfig->validates()) {
-				$this->Session->setFlash('入力エラーです。内容を修正してください。');
+				
+				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				
 			}else {
+				
 				$mode = 0;
 				$smartUrl = false;
 				$siteUrl = $sslUrl = '';
@@ -137,7 +140,7 @@ class SiteConfigsController extends AppController {
 				// DBに保存
 				if($this->SiteConfig->saveKeyValue($this->request->data)) {
 
-					$this->Session->setFlash('システム設定を保存しました。');
+					$this->setMessage('システム設定を保存しました。');
 
 					// 環境設定を保存
 					$this->BcManager->setInstallSetting('debug', $mode);
@@ -231,7 +234,7 @@ class SiteConfigsController extends AppController {
 	public function admin_del_cache() {
 		
 		clearAllCache();
-		$this->Session->setFlash('サーバーキャッシュを削除しました。');
+		$this->setMessage('サーバーキャッシュを削除しました。');
 		$this->redirect(array('action' => 'form'));
 		
 	}

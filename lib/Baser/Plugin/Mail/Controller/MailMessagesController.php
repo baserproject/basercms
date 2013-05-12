@@ -144,7 +144,7 @@ class MailMessagesController extends MailAppController {
 	public function admin_view($mailContentId, $messageId){
 
 		if(!$mailContentId || !$messageId) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
 		}
 		$message = $this->Message->find('first', array(
@@ -226,15 +226,13 @@ class MailMessagesController extends MailAppController {
 	public function admin_delete($mailContentId, $messageId) {
 
 		if(!$mailContentId || !$messageId) {
-			$this->Session->setFlash('無効な処理です。');
+			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
 		}
 		if($this->Message->delete($messageId)) {
-			$message = $this->mailContent['MailContent']['title'].'への受信データ NO「'.$messageId.'」 を削除しました。';
-			$this->Session->setFlash($message);
-			$this->Message->saveDbLog($message);
+			$this->setMessage($this->mailContent['MailContent']['title'].'への受信データ NO「'.$messageId.'」 を削除しました。', false, true);
 		}else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 		$this->redirect(array('action' => 'index', $mailContentId));
 

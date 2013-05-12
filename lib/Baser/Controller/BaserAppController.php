@@ -336,7 +336,7 @@ class BaserAppController extends Controller {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
 				if(!$Permission->check($this->request->url,$user['user_group_id'])) {
-					$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+					$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 					$this->redirect($this->BcAuth->loginAction);
 				}
 			}
@@ -433,7 +433,20 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
+		$favoriteBoxOpened = false;
+		if($this->BcAuth) {
+			$user = $this->BcAuth->user();
+			if($user) {
+				if($this->Session->check('Baser.favorite_box_opened')) {
+					$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
+				} else {
+					$favoriteBoxOpened = true;
+				}
+			}
+		}
+
 		$this->__loadDataToView();
+		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('contentsTitle',$this->contentsTitle);
@@ -1072,7 +1085,7 @@ class BaserAppController extends Controller {
 				$this->BcAuth->authError = $this->BcAuth->loginError;
 				return false;
 			} else {
-				$this->Session->setFlash('指定されたページへのアクセスは許可されていません。');
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 				return;
 			}
@@ -1367,4 +1380,33 @@ class BaserAppController extends Controller {
 		}
 		exit();
 	}
+	
+/**
+ * メッセージをビューにセットする
+ * 
+ * @param string $message
+ * @param boolean $alert
+ * @param boolean $saveDblog
+ * @return void
+ */
+	function setMessage($message, $alert = false, $saveDblog = false) {
+		
+		if(!isset($this->Session)) {
+			return;
+		}
+		
+		$class = 'notice-message';
+		if($alert) {
+			$class = 'alert-message';
+		}
+		
+		$this->Session->setFlash($message, 'default', array('class' => $class));
+		
+		if($saveDblog) {
+			$AppModel = ClassRegistry::init('AppModel');
+			$AppModel->saveDblog($message);
+		}
+		
+	}
+
 }
