@@ -1,3 +1,4 @@
+.idea
 app/Config/database.php
 app/Config/install.php
 app/db/*

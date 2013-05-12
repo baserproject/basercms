@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -17,8 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
-
 ?>
 
 
@@ -27,7 +25,7 @@
 <?php if($this->BcBaser->isAdminUser()): ?>
 		<?php echo $this->BcForm->checkbox('ListTool.batch_targets.'.$data['PageCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['PageCategory']['id'])) ?>
 <?php endif ?>
-<?php if(in_array($data['PageCategory']['owner_id'], $allowOwners)|| (!empty($user) && $user['user_group_id']==1)): ?>
+<?php if(in_array($data['PageCategory']['owner_id'], $allowOwners) || $this->BcAdmin->isSystemAdmin()): ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['PageCategory']['id']), array('title' => '編集')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['PageCategory']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['PageCategory']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
@@ -45,15 +43,15 @@
 	</td>
 	<td><?php echo $data['PageCategory']['id']; ?></td>
 	<td>
-	<?php if($data['PageCategory']['name']!='mobile'): ?>
+<?php if(in_array($data['PageCategory']['owner_id'], $allowOwners) || $this->BcAdmin->isSystemAdmin()): ?>
 		<?php $this->BcBaser->link($data['PageCategory']['name'], array('action' => 'edit', $data['PageCategory']['id'])); ?>
-	<?php else: ?>
+<?php else: ?>
 		<?php echo $data['PageCategory']['name'] ?>
-	<?php endif ?>
-	<?php if($this->BcBaser->siteConfig['category_permission']): ?>
+<?php endif ?>
+<?php if($this->BcBaser->siteConfig['category_permission']): ?>
 	<br />
 	<?php echo $this->BcText->arrayValue($data['PageCategory']['owner_id'], $owners) ?>
-	<?php endif ?>
+<?php endif ?>
 	</td>
 	<td><?php echo $data['PageCategory']['title']; ?></td>
 	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['PageCategory']['created']); ?><br />

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.models
  * @since			baserCMS v 0.1.0
@@ -571,7 +571,7 @@ class BlogPost extends BlogAppModel {
 		
 		$data['BlogPost']['name'] .= '_copy';
 		$data['BlogPost']['no'] = $this->getMax('no', array('BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']))+1;
-		$data['BlogPost']['status'] = false;
+		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
 		
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);

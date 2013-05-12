@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -215,7 +215,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.user_id', '作成者') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-	<?php if(isset($user) && $user['user_group_id'] == 1): ?>
+	<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $this->BcForm->input('BlogPost.user_id', array(
 						'type'		=> 'select',
 						'options'	=> $users)) ?>

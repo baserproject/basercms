@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -102,7 +102,7 @@ $(function(){
 					<?php $this->BcBaser->link($user['real_name_1']." ".$user['real_name_2'].' '.$this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 	<?php if($this->Session->check('AuthAgent')): ?>
-						<li><?php $this->BcBaser->link('元のユーザーに戻る', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
+						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
 	<?php endif ?>
 	<?php if($authPrefix == 'admin'): ?>
 		<?php if($authPrefix == 'front'): ?>

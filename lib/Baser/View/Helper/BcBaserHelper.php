@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		baser.app.view.helpers
@@ -1711,16 +1711,24 @@ END_FLASH;
 /**
  * ウィジェットエリアを出力する
  * 
- * @param int $no 
+ * @param int $no
+ * @param array $options
  * @access public
  */
-	public function widgetArea($no = null) {
+	public function widgetArea($no = null, $options = array()) {
 		
+		$options = array_merge(array(
+			'loadHelpers'	=> false,
+			'subDir'		=> true,
+		), $options);
+
+		extract($options);
+
 		if(!$no) {
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if($no) {
-			$this->element('widget_area', array('no' => $no));
+			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), $loadHelpers, $subDir);
 		}
 		
 	}

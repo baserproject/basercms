@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -186,7 +186,14 @@ class PageCategoriesController extends AppController {
 	public function admin_add() {
 
 		if(empty($this->request->data)) {
-			$this->request->data = array('PageCategory' => array('contents_navi' => false, 'page_category_type' => 1));
+
+			$user = $this->BcAuth->user();
+			$this->request->data = array('PageCategory' => array(
+				'contents_navi'		=> false, 
+				'page_category_type'=> 1,
+				'owner_id'			=> $user['user_group_id']
+			));
+
 		} else {
 
 			$data = $this->request->data;
@@ -480,6 +487,7 @@ class PageCategoriesController extends AppController {
  */
 	protected function _setAdminIndexViewData() {
 		
+		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if(isset($user['user_group_id'])) {
 			$allowOwners = array('', $user['user_group_id']);

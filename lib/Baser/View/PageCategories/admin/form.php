@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 0.1.0
@@ -27,6 +27,7 @@ if($reflectMobile) {
 if($reflectSmartphone) {
 	$pageType['3'] = 'スマートフォン';
 }
+$owners = $this->BcForm->getControlSource('PageCategory.owner_id');
 ?>
 
 <script type="text/javascript">
@@ -173,16 +174,20 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
-<?php if($this->BcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+<?php if($this->BcBaser->siteConfig['category_permission'] && $this->BcAdmin->isSystemAdmin()): ?>
 				<?php echo $this->BcForm->input('PageCategory.owner_id', array(
 						'type'		=> 'select',
 						'options'	=> $this->BcForm->getControlSource('PageCategory.owner_id'),
 						'empty'		=> '指定しない')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('PageCategory.owner_id') ?>
+<?php else: ?>
+				<?php echo $this->BcText->arrayValue($this->request->data['PageCategory']['owner_id'], $owners) ?>
+				<?php echo $this->BcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -190,7 +195,6 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
-<?php endif ?>
 	</table>
 </div>
 <div class="submit">

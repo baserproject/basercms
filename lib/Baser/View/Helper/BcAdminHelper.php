@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			cake
  * @subpackage		baser.app.view.helpers
@@ -50,5 +50,22 @@ class BcAdminHelper extends AppHelper {
 		return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
 		
 	}
-	
+/**
+ * ログインユーザーがシステム管理者かチェックする
+ * 
+ * @return boolean 
+ */
+	function isSystemAdmin () {
+		
+		$user = $this->_View->getVar('user');
+		if(empty($this->request->params['admin']) || !$user) {
+			return false;
+		}
+		if($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			return true;
+		}
+		return false;
+		
+	}
+
 }

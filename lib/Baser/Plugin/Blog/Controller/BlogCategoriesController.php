@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -147,7 +147,12 @@ class BlogCategoriesController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
-			$this->data = $this->BlogCategory->getDefaultValue();
+			
+			$user = $this->BcAuth->user();
+			$this->request->data = array('BlogCategory' => array(
+				'owner_id'			=> $use['user_group_id']
+			));
+
 		}else {
 
 			/* 登録処理 */
@@ -170,7 +175,7 @@ class BlogCategoriesController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$userModel = $this->getUserModel();
 		$catOptions = array('blogContentId' => $this->blogContent['BlogContent']['id']);
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
@@ -225,7 +230,7 @@ class BlogCategoriesController extends BlogAppController {
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
 			'excludeParentId' => $this->data['BlogCategory']['id']
 		);
-		if($user[$userModel]['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);

@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -903,7 +903,9 @@ class BaserAppController extends Controller {
 /**
  * 画面の情報をセッションから読み込む
  *
- * @param	string		$options
+ * @param array $filterModels
+ * @param array|string $options
+ * @return void
  * @access	protected
  */
 	protected function _loadViewConditions($filterModels = array(), $options = array()) {
@@ -1162,7 +1164,7 @@ class BaserAppController extends Controller {
 			return false;
 		}
 		if(@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
-				!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == 1) {
+				!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;

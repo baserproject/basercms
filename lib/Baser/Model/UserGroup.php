@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			baserCMS v 0.1.0
@@ -114,7 +114,7 @@ class UserGroup extends AppModel {
 			$datas = $this->User->find('all', array('conditions' => array('User.user_group_id' => $id)));
 			if ($datas) {
 				foreach ($datas as $data) {
-					$data['User']['user_group_id'] = 1;
+					$data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');
 					$this->User->set($data);
 					if (!$this->User->save()) {
 						$ret = false;

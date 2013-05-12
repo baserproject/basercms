@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -219,8 +219,8 @@ class ContentsController extends AppController {
 		));
 
 		foreach($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = preg_replace('/^\/mobile/', '/m', $page['Page']['url']);
-			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/s', $page['Page']['url']);
+			$pages[$key]['Page']['url'] = $page['Page']['url'] = preg_replace('/^\/mobile/', '/'.Configure::read('BcAgent.mobile.alias'), $page['Page']['url']);
+			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/'.Configure::read('BcAgent.smartphone.alias'), $page['Page']['url']);
 		}
 		
 		if(!$direct) {

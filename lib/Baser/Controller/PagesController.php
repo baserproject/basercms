@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -250,8 +250,8 @@ class PagesController extends AppController {
 		}
 
 		if(empty($this->request->data)) {
+			
 			$this->request->data = $this->Page->read(null, $id);
-			$this->request->data['Page']['contents_tmp'] = $this->request->data['Page']['contents'];
 			$mobileIds = $this->PageCategory->getAgentCategoryIds('mobile');
 			$smartphoneIds = $this->PageCategory->getAgentCategoryIds('smartphone');
 			if(in_array($this->request->data['Page']['page_category_id'], $mobileIds)) {
@@ -261,9 +261,10 @@ class PagesController extends AppController {
 			} else {
 				$this->request->data['Page']['page_type'] = 1;
 			}
+			
 		}else {
 
-			$before = $this->Page->read(null, $id);
+			$before = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
 			if(empty($this->request->data['Page']['page_type'])) {
 				$this->request->data['Page']['page_type'] = 1;
 			}
@@ -992,7 +993,7 @@ class PagesController extends AppController {
 		}
 		
 		return ($currentCatOwner == $user['user_group_id'] ||
-					$user['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 
 	}
 /**

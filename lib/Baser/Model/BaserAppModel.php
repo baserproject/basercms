@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.models
  * @since			baserCMS v 0.1.0
@@ -972,7 +972,15 @@ class BaserAppModel extends Model {
 
 		$result = true;
 
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->disable('BcCache');
+		}
+
 		foreach ($data as $key => $value) {
+
+			if($this->find('count', array('conditions' => array('name' => $key))) > 1) {
+				$this->deleteAll(array('name' => $key));
+			}
 
 			$dbData = $this->find('first', array('conditions' => array('name' => $key)));
 
@@ -991,6 +999,11 @@ class BaserAppModel extends Model {
 			if (!$this->save(null,false)) {
 				$result = false;
 			}
+		}
+
+		if($this->Behaviors->attached('BcCache')) {
+			$this->Behaviors->enable('BcCache');
+			$this->delCache();
 		}
 
 		return true;

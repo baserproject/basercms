@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.controllers
  * @since			baserCMS v 0.1.0
@@ -186,14 +186,21 @@ class UsersController extends AppController {
  * @return ダッシュボードへのURL
  */
 	public function admin_ajax_agent_login($id) {
+		
 		if (!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
 		}
-		$this->request->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => -1));
+		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
 		Configure::write('debug', 0);
+		$configs = Configure::read('BcAuthPrefix');
+		$config = $configs[$this->data['UserGroup']['auth_prefix']];
+		$config['auth_prefix'] = $this->data['UserGroup']['auth_prefix'];
+		$this->BcAuthConfigure->setting($config);
+
 		$this->setAction('admin_ajax_login');
 		exit();
+		
 	}
 
 /**
@@ -201,15 +208,31 @@ class UsersController extends AppController {
  * 
  * @return void
  */
-	public function admin_back_agent() {
+	public function back_agent() {
+		
+		$configs = Configure::read('BcAuthPrefix');
 		if ($this->Session->check('AuthAgent')) {
-			$this->Session->write($this->BcAuth->sessionKey, $this->Session->read('AuthAgent.' . $this->BcAuth->userModel));
+			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->userModel);
+			$this->Session->write($this->BcAuth->sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->Session->setFlash('元のユーザーに戻りました。');
+			$authPrefix = $data['authPrefix'];
 		} else {
 			$this->Session->setFlash('不正な操作です。');
+			if(!empty($this->request->params['prefix'])) {
+				$authPrefix = $this->request->params['prefix'];
+			} else {
+				$authPrefix = 'front';
+			}
 		}
-		$this->redirect('/admin');
+		if(!empty($configs[$authPrefix])) {
+			$redirect = $configs[$authPrefix]['loginRedirect'];
+		} else {
+			$redirect = '/';
+		}
+		
+		$this->redirect($redirect);
+
 	}
 
 /**
@@ -363,7 +386,7 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		if ($user['user_group_id'] != 1) {
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			unset($userGroups[1]);
 		}
 
@@ -434,12 +457,9 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		if ($user['user_group_id'] != 1 && Configure::read('debug') !== -1) {
-			if ($this->request->data['User']['user_group_id'] == 1) {
+		
+		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 				$editable = false;
-			} else {
-				unset($userGroups[1]);
-			}
 		}
 
 		$this->set('userGroups', $userGroups);
@@ -464,8 +484,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if ($this->User->field('user_group_id', array('User.id' => $id)) == 1 &&
-				$this->User->find('count', array('conditions' => array('User.user_group_id' => 1))) == 1) {
+		if($this->User->field('user_group_id', array('User.id'=>$id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
 			$this->ajaxError(500, 'このユーザーは削除できません。');
 		}
 
@@ -494,8 +514,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if ($this->User->field('user_group_id', array('User.id' => $id)) == 1 &&
-			$this->User->find('count', array('conditions' => array('User.user_group_id' => 1))) == 1) {
+		if($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
+				$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
 			$this->Session->setFlash('最後の管理者ユーザーは削除する事はできません。');
 			$this->redirect(array('action' => 'index'));
 		}

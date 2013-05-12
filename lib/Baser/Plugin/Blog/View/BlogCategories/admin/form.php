@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.views
  * @since			baserCMS v 0.1.0
@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 ?>
 
 
@@ -90,16 +91,20 @@ $(window).load(function() {
 	<?php else: ?>
 		<?php echo $this->BcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
-	<?php if($this->BcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
+<?php if($this->BcBaser->siteConfig['category_permission'] && $this->BcAdmin->isSystemAdmin()): ?>
 				<?php echo $this->BcForm->input('BlogCategory.owner_id', array(
 						'type'		=> 'select',
-						'options'	=> $this->BcForm->getControlSource('BlogCategory.owner_id'),
+						'options'	=> $owners,
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
+<?php else: ?>
+				<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
+				<?php echo $this->BcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
+<?php endif ?>
 				<div id="helptextOwnerId" class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -107,7 +112,6 @@ $(window).load(function() {
 				</div>
 			</td>
 		</tr>
-	<?php endif ?>
 	</table>
 </div>
 

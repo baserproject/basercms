@@ -6,9 +6,9 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.plugins.blog.controllers
  * @since			baserCMS v 0.1.0
@@ -336,10 +336,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		if(empty($this->data)) {
-			$data = $this->BlogPost->read(null, $id);
-			$data['BlogPost']['content_tmp'] = $data['BlogPost']['content'];
-			$data['BlogPost']['detail_tmp'] = $data['BlogPost']['detail'];
-			$this->request->data = $data;
+			$this->request->data = $this->BlogPost->read(null, $id);
 		}else {
 			if(!empty($this->data['BlogPost']['posts_date'])){
 				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
@@ -374,7 +371,7 @@ class BlogPostsController extends BlogAppController {
 		}
 		
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
-					$user['user_group_id'] == 1 || !$currentCatOwner);
+					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
@@ -718,6 +715,7 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->recursive = 1;
 			$data = $this->BlogPost->read();
 			$this->setViewConditions('BlogPost', array('action' => 'admin_index'));
+			$this->_setAdminIndexViewData();
 			$this->set('data', $data);
 		} else {
 			$this->ajaxError(500, $this->BlogPost->validationErrors);

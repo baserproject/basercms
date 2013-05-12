@@ -6,9 +6,9 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2011, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2011, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			baser.views
  * @since			baserCMS v 2.0.0
@@ -371,7 +371,7 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.author_id', '作成者') ?></th>
 			<td class="col-input">
-<?php if(isset($user) && $user['user_group_id'] == 1): ?>
+<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
 				<?php echo $this->BcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
 				<?php echo $this->BcForm->error('Page.author_id') ?>
 <?php else: ?>
@@ -424,8 +424,8 @@ function pageTypeChengeHandler() {
 </div>
 <div class="submit">
 <?php if($this->request->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->button('登録', array('div' => false, 'class' => 'btn-red button', 'id' => 'btnSave')) ?>
 	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
 	<?php if($editable): ?>
 	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
