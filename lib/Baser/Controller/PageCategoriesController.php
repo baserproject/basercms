@@ -393,7 +393,7 @@ class PageCategoriesController extends AppController {
 		$page = $this->PageCategory->read(null, $id);
 
 		/* 削除処理 */
-		if($this->PageCategory->del($id)) {
+		if($this->PageCategory->delete($id)) {
 			$this->Session->setFlash('固定ページカテゴリー: '.$page['PageCategory']['name'].' を削除しました。');
 			$this->PageCategory->saveDbLog('固定ページカテゴリー「'.$page['PageCategory']['name'].'」を削除しました。');
 		}else {
@@ -446,7 +446,7 @@ class PageCategoriesController extends AppController {
 		
 		$data = $this->PageCategory->read(null, $id);
 
-		if($this->PageCategory->del($id)) {			
+		if($this->PageCategory->delete($id)) {			
 			$this->PageCategory->saveDbLog('固定ページ: '.$data['PageCategory']['name'].' を削除しました。');
 			echo true;
 		}
@@ -500,7 +500,7 @@ class PageCategoriesController extends AppController {
 		if($ids) {
 			foreach($ids as $id) {
 				$data = $this->PageCategory->read(null, $id);
-				if($this->PageCategory->del($id)) {
+				if($this->PageCategory->delete($id)) {
 					$this->PageCategory->saveDbLog('固定ページカテゴリー: '.$data['PageCategory']['name'].' を削除しました。');
 				}
 			}

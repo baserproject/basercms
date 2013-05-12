@@ -407,7 +407,7 @@ class ContentsController extends AppController {
 		}
 
 		/* 削除処理 */
-		if($this->Content->del($id)) {
+		if($this->Content->delete($id)) {
 			$message = '検索インデックスより NO.'.$id.' を削除しました。';
 			$this->Content->saveDbLog($message);
 			exit(true);
@@ -430,7 +430,7 @@ class ContentsController extends AppController {
 		}
 
 		/* 削除処理 */
-		if($this->Content->del($id)) {
+		if($this->Content->delete($id)) {
 			$message = '検索インデックスより NO.'.$id.' を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Content->saveDbLog($message);
@@ -455,7 +455,7 @@ class ContentsController extends AppController {
 			foreach($ids as $id) {
 				
 			/* 削除処理 */
-				if($this->Content->del($id)) {
+				if($this->Content->delete($id)) {
 					$message = '検索インデックスより NO.'.$id.' を削除しました。';
 					$this->Content->saveDbLog($message);
 				}

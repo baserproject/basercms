@@ -221,7 +221,7 @@ class BlogCommentsController extends BlogAppController {
 	protected function _del($id = null) {
 
 		/* 削除処理 */
-		if($this->BlogComment->del($id)) {
+		if($this->BlogComment->delete($id)) {
 			if(isset($this->blogPost['BlogPost']['name'])) {
 				$message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを削除しました。';
 			}else {
@@ -251,7 +251,7 @@ class BlogCommentsController extends BlogAppController {
 		}
 
 		/* 削除処理 */
-		if($this->BlogComment->del($id)) {
+		if($this->BlogComment->delete($id)) {
 			if(isset($this->blogPost['BlogPost']['name'])) {
 				$message = '記事「'.$this->blogPost['BlogPost']['name'].'」へのコメントを削除しました。';
 			}else {

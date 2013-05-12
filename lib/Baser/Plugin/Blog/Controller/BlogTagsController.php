@@ -160,7 +160,7 @@ class BlogTagsController extends BlogAppController {
 
 		$data = $this->BlogTag->read(null, $id);
 
-		if($this->BlogTag->del($id)) {
+		if($this->BlogTag->delete($id)) {
 			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 			$this->Session->setFlash($message);
 			$this->BlogTag->saveDbLog($message);
@@ -185,7 +185,7 @@ class BlogTagsController extends BlogAppController {
 		}
 
 		$data = $this->BlogTag->read(null, $id);
-		if($this->BlogTag->del($id)) {
+		if($this->BlogTag->delete($id)) {
 			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 			$this->BlogTag->saveDbLog($message);
 			exit(true);
@@ -204,7 +204,7 @@ class BlogTagsController extends BlogAppController {
 		if($ids) {
 			foreach($ids as $id) {
 				$data = $this->BlogTag->read(null, $id);
-				if($this->BlogTag->del($id)) {
+				if($this->BlogTag->delete($id)) {
 					$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 					$this->BlogTag->saveDbLog($message);
 				}

@@ -209,7 +209,7 @@ class GlobalMenusController extends AppController {
 				$post = $this->GlobalMenu->read(null, $id);
 
 				/* 削除処理 */
-				if($this->GlobalMenu->del($id)) {
+				if($this->GlobalMenu->delete($id)) {
 					clearViewCache();
 					$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
 					$this->GlobalMenu->saveDbLog($message);
@@ -236,7 +236,7 @@ class GlobalMenusController extends AppController {
 		$post = $this->GlobalMenu->read(null, $id);
 
 		/* 削除処理 */
-		if($this->GlobalMenu->del($id)) {
+		if($this->GlobalMenu->delete($id)) {
 			clearViewCache();
 			$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
 			$this->GlobalMenu->saveDbLog($message);
@@ -264,7 +264,7 @@ class GlobalMenusController extends AppController {
 		$post = $this->GlobalMenu->read(null, $id);
 
 		/* 削除処理 */
-		if($this->GlobalMenu->del($id)) {
+		if($this->GlobalMenu->delete($id)) {
 			clearViewCache();
 			$message = 'メニュー「'.$post['GlobalMenu']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);

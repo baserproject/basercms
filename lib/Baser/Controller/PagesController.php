@@ -408,7 +408,7 @@ class PagesController extends AppController {
 		$page = $this->Page->read(null, $id);
 
 		/* 削除処理 */
-		if($this->Page->del($id)) {
+		if($this->Page->delete($id)) {
 			
 			// 完了メッセージ
 			$message = '固定ページ: '.$page['Page']['name'].' を削除しました。';
@@ -1031,7 +1031,7 @@ class PagesController extends AppController {
 		if($ids) {
 			foreach($ids as $id) {
 				$data = $this->Page->read(null, $id);
-				if($this->Page->del($id)) {
+				if($this->Page->delete($id)) {
 					$this->Page->saveDbLog('固定ページ: '.$data['Page']['name'].' を削除しました。');
 				}
 			}
@@ -1159,7 +1159,7 @@ class PagesController extends AppController {
 		
 		$page = $this->Page->read(null, $id);
 
-		if($this->Page->del($id)) {		
+		if($this->Page->delete($id)) {		
 			clearViewCache($page['Page']['url']);
 			$this->Page->saveDbLog('固定ページ: '.$page['Page']['name'].' を削除しました。');
 			echo true;

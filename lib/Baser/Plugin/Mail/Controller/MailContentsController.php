@@ -213,7 +213,7 @@ class MailContentsController extends MailAppController {
 
 		/* 削除処理 */
 		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
-			if($this->MailContent->del($id)) {
+			if($this->MailContent->delete($id)) {
 				$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
 				$this->MailContent->saveDbLog($message);
 				exit(true);
@@ -242,7 +242,7 @@ class MailContentsController extends MailAppController {
 
 		/* 削除処理 */
 		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
-			if($this->MailContent->del($id)) {
+			if($this->MailContent->delete($id)) {
 				$message = 'メールフォーム「'.$mailContent['MailContent']['title'].'」 を削除しました。';
 				$this->Session->setFlash($message);
 				$this->MailContent->saveDbLog($message);

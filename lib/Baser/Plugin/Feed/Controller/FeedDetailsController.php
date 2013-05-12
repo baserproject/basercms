@@ -247,7 +247,7 @@ class FeedDetailsController extends FeedAppController {
 		$FeedDetail = $this->FeedDetail->read(null, $id);
 
 		// 削除実行
-		if($this->FeedDetail->del($id)) {
+		if($this->FeedDetail->delete($id)) {
 			$this->Session->setFlash($FeedDetail['FeedDetail']['name'].' を削除しました。');
 			$this->FeedDetail->saveDbLog('フィード「'.$FeedDetail['FeedDetail']['name'].'」を削除しました。');
 		}else {
@@ -284,7 +284,7 @@ class FeedDetailsController extends FeedAppController {
 	protected function _del($id) {
 		
 		$data = $this->FeedDetail->read(null, $id);
-		if($this->FeedDetail->del($id)) {
+		if($this->FeedDetail->delete($id)) {
 			$this->FeedDetail->saveDbLog('フィード「'.$data['FeedDetail']['name'].'」を削除しました。');
 			return true;
 		} else {

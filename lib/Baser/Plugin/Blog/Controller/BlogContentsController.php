@@ -268,7 +268,7 @@ class BlogContentsController extends BlogAppController {
 		$post = $this->BlogContent->read(null, $id);
 
 		/* 削除処理 */
-		if($this->BlogContent->del($id)) {
+		if($this->BlogContent->delete($id)) {
 			$message = 'ブログ「'.$post['BlogContent']['title'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->BlogContent->saveDbLog($message);
@@ -297,7 +297,7 @@ class BlogContentsController extends BlogAppController {
 		$post = $this->BlogContent->read(null, $id);
 
 		/* 削除処理 */
-		if($this->BlogContent->del($id)) {
+		if($this->BlogContent->delete($id)) {
 			$this->BlogContent->saveDbLog('ブログ「'.$post['BlogContent']['title'].'」 を削除しました。');
 			echo true;
 		}

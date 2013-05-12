@@ -268,7 +268,7 @@ class MailFieldsController extends MailAppController {
 		
 		/* 削除処理 */
 		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
-			if($this->MailField->del($id)) {
+			if($this->MailField->delete($id)) {
 				$this->MailField->saveDbLog('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。');
 				exit(true);
 			}
@@ -298,7 +298,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 削除処理 */
 		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
-			if($this->MailField->del($id)) {
+			if($this->MailField->delete($id)) {
 				$message = 'メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。';
 				$this->Session->setFlash($message);
 				$this->MailField->saveDbLog($message);
@@ -329,7 +329,7 @@ class MailFieldsController extends MailAppController {
 				$mailContentName = $this->MailContent->field('name', array('MailContent.id' => $mailField['MailField']['mail_content_id']));
 				/* 削除処理 */
 				if ($this->Message->delField($mailContentName, $mailField['MailField']['field_name'])) {
-					if($this->MailField->del($id)) {
+					if($this->MailField->delete($id)) {
 						$this->MailField->saveDbLog('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。');
 					}
 				}

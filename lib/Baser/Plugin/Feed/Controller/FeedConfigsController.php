@@ -244,7 +244,7 @@ class FeedConfigsController extends FeedAppController {
 				$feedConfig = $this->FeedConfig->read(null, $id);
 
 				// 削除実行
-				if($this->FeedConfig->del($id)) {
+				if($this->FeedConfig->delete($id)) {
 					$this->FeedConfig->saveDbLog('フィード「'.$feedConfig['FeedConfig']['name'].'」を削除しました。');
 
 				}
@@ -270,7 +270,7 @@ class FeedConfigsController extends FeedAppController {
 		$feedConfig = $this->FeedConfig->read(null, $id);
 
 		// 削除実行
-		if($this->FeedConfig->del($id)) {
+		if($this->FeedConfig->delete($id)) {
 			$this->FeedConfig->saveDbLog('フィード「'.$feedConfig['FeedConfig']['name'].'」を削除しました。');
 			exit(true);
 		}
@@ -298,7 +298,7 @@ class FeedConfigsController extends FeedAppController {
 		$feedConfig = $this->FeedConfig->read(null, $id);
 
 		// 削除実行
-		if($this->FeedConfig->del($id)) {
+		if($this->FeedConfig->delete($id)) {
 
 			$this->Session->setFlash($feedConfig['FeedConfig']['name'].' を削除しました。');
 			$this->FeedConfig->saveDbLog('フィード「'.$feedConfig['FeedConfig']['name'].'」を削除しました。');

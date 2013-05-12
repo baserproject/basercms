@@ -454,7 +454,7 @@ class BlogPostsController extends BlogAppController {
 		$post = $this->BlogPost->read(null, $id);
 
 		// 削除実行
-		if($this->BlogPost->del($id)) {
+		if($this->BlogPost->delete($id)) {
 			$this->BlogPost->saveDbLog($post['BlogPost']['name'].' を削除しました。');
 			return true;
 		} else {
@@ -481,7 +481,7 @@ class BlogPostsController extends BlogAppController {
 		$post = $this->BlogPost->read(null, $id);
 
 		// 削除実行
-		if($this->BlogPost->del($id)) {
+		if($this->BlogPost->delete($id)) {
 			clearViewCache();
 			$message = $post['BlogPost']['name'].' を削除しました。';
 			$this->Session->setFlash($message);

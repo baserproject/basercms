@@ -196,7 +196,7 @@ class WidgetAreasController extends AppController {
 		$post = $this->WidgetArea->read(null, $id);
 
 		/* 削除処理 */
-		if($this->WidgetArea->del($id)) {
+		if($this->WidgetArea->delete($id)) {
 			$message = 'ウィジェットエリア「'.$post['WidgetArea']['name'].'」 を削除しました。';
 			exit(true);
 		}
@@ -216,7 +216,7 @@ class WidgetAreasController extends AppController {
 		if($ids) {
 			foreach($ids as $id) {
 				$data = $this->WidgetArea->read(null, $id);
-				if($this->WidgetArea->del($id)) {
+				if($this->WidgetArea->delete($id)) {
 					$this->WidgetArea->saveDbLog('ウィジェットエリア: '.$data['WidgetArea']['name'].' を削除しました。');
 				}
 			}
@@ -244,7 +244,7 @@ class WidgetAreasController extends AppController {
 		$post = $this->WidgetArea->read(null, $id);
 
 		/* 削除処理 */
-		if($this->WidgetArea->del($id)) {
+		if($this->WidgetArea->delete($id)) {
 			$message = 'ウィジェットエリア「'.$post['WidgetArea']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->WidgetArea->saveDbLog($message);

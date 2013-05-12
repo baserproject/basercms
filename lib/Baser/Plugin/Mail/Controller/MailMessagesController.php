@@ -205,7 +205,7 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	protected function _del($id = null) {
-		if($this->Message->del($id)) {
+		if($this->Message->delete($id)) {
 			$message = '受信データ NO「'.$id.'」 を削除しました。';
 			$this->Message->saveDbLog($message);
 			return true;
@@ -229,7 +229,7 @@ class MailMessagesController extends MailAppController {
 			$this->Session->setFlash('無効な処理です。');
 			$this->notFound();
 		}
-		if($this->Message->del($messageId)) {
+		if($this->Message->delete($messageId)) {
 			$message = $this->mailContent['MailContent']['title'].'への受信データ NO「'.$messageId.'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Message->saveDbLog($message);

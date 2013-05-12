@@ -294,7 +294,7 @@ class BlogCategoriesController extends BlogAppController {
 		// メッセージ用にデータを取得
 		$data = $this->BlogCategory->read(null, $id);
 		/* 削除処理 */
-		if($this->BlogCategory->del($id)) {
+		if($this->BlogCategory->delete($id)) {
 	
 			$this->BlogCategory->saveDbLog('カテゴリー「'.$data['BlogCategory']['name'].'」を削除しました。');
 			return true;
@@ -324,7 +324,7 @@ class BlogCategoriesController extends BlogAppController {
 		$post = $this->BlogCategory->read(null, $id);
 
 		/* 削除処理 */
-		if($this->BlogCategory->del($id)) {
+		if($this->BlogCategory->delete($id)) {
 			$this->Session->setFlash($post['BlogCategory']['name'].' を削除しました。');
 			$this->BlogCategory->saveDbLog('カテゴリー「'.$post['BlogCategory']['name'].'」を削除しました。');
 		}else {

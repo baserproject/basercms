@@ -269,7 +269,7 @@ class PermissionsController extends AppController {
 				// メッセージ用にデータを取得
 				$post = $this->Permission->read(null, $id);
 				/* 削除処理 */
-				if($this->Permission->del($id)) {
+				if($this->Permission->delete($id)) {
 					$message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
 				
 				}
@@ -294,7 +294,7 @@ class PermissionsController extends AppController {
 		$post = $this->Permission->read(null, $id);
 
 		/* 削除処理 */
-		if($this->Permission->del($id)) {
+		if($this->Permission->delete($id)) {
 			$message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
 			exit(true);
 		}
@@ -319,7 +319,7 @@ class PermissionsController extends AppController {
 		$post = $this->Permission->read(null, $id);
 
 		/* 削除処理 */
-		if($this->Permission->del($id)) {
+		if($this->Permission->delete($id)) {
 			$message = 'アクセス制限設定「'.$post['Permission']['name'].'」 を削除しました。';
 			$this->Session->setFlash($message);
 			$this->Permission->saveDbLog($message);
