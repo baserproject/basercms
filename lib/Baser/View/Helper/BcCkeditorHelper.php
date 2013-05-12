@@ -99,10 +99,6 @@ class BcCkeditorHelper extends AppHelper {
 				array(	'Maximize', 'ShowBlocks', 'Source')
 			)
 		);
-	function __construct() {
-		parent::__construct();
-
-	}
 /**
  * CKEditor のスクリプトを構築する
  * 【ボタン一覧】
