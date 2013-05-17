@@ -117,13 +117,16 @@ class UsersController extends AppController {
  * @return boolean
  */
 	public function admin_login_exec() {
+
 		if (!$this->request->data) {
 			return false;
 		}
 		if ($this->BcAuth->login($this->request->data)) {
+			$this->_setSessionAuthPrefix();
 			return true;
 		}
 		return false;
+
 	}
 
 /**
@@ -141,6 +144,7 @@ class UsersController extends AppController {
 
 		if ($this->request->data) {
 			if ($user) {
+				$this->_setSessionAuthPrefix();
 				if (!empty($this->request->data[$userModel]['saved'])) {
 					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->request->data);
@@ -177,6 +181,22 @@ class UsersController extends AppController {
 		$this->crumbs = array();
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
+	}
+
+/**
+ * ログイン時にセッションにauthPrefixを保存する
+ */
+	private function _setSessionAuthPrefix() {
+
+		$authPrefix = $this->Session->read($this->BcAuth->sessionKey . '.authPrefix');
+		if (!$authPrefix) {
+			if(empty($this->params['prefix'])) {
+				$authPrefix = 'front';
+			} else {
+				$authPrefix = $this->params['prefix'];
+			}
+			$this->Session->write($this->BcAuth->sessionKey . '.authPrefix', $authPrefix);
+		}
 	}
 
 /**
@@ -245,6 +265,7 @@ class UsersController extends AppController {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 
+		$this->_setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->userModel;
 
@@ -260,7 +281,7 @@ class UsersController extends AppController {
 				} else {
 					$this->Cookie->destroy();
 				}
-				$this->setMessage("ようこそ、".$user[$userModel]['real_name_1']." ".$user[$userModel]['real_name_2']."　さん。");
+				$this->setMessage("ようこそ、".$user['User']['real_name_1']." ".$user['User']['real_name_2']."　さん。");
 			}
 		}
 		Configure::write('debug', 0);
@@ -456,7 +477,7 @@ class UsersController extends AppController {
 		$editable = true;
 		$user = $this->BcAuth->user();
 		
-		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
+		if($user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 				$editable = false;
 		}
 
@@ -538,6 +559,11 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_reset_password () {
+
+		if(empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+			$this->notFound();
+		}
+		
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->userModel;
 		if ($this->request->data) {

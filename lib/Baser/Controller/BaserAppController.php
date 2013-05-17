@@ -277,23 +277,21 @@ class BaserAppController extends Controller {
 				$config = array();
 			}
 		
-			// ユーザーの存在チェック
-			$this->BcAuthConfigure->setting($config);
-			$user = $this->BcAuth->user();
-			if ($user && !empty($this->User) && !$this->User->find('count', array(
-				'conditions' => array('User.id' => $user['User']['id'], 'User.name' => $user['User']['name']),
-				'recursive'	 => -1))) {
-				$this->Session->delete($this->BcAuth->sessionKey);
-			}
 
-			$authPrefix = $this->Session->read('Auth.User.authPrefix');
-			if(!$authPrefix) {
-				$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-				if($authPrefix) {
-					$this->Session->write('Auth.User.authPrefix', $authPrefix);
+			$this->BcAuthConfigure->setting($config);
+			// ユーザーの存在チェック
+			$user = $this->BcAuth->user();
+
+			if($user) {
+				$userModel = key($user);
+				if($userModel) {
+					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
+						'conditions' => array($userModel . '.id' => $user[$userModel]['id'], $userModel . '.name' => $user[$userModel]['name']),
+						'recursive'	 => -1))) {
+						$this->Session->delete($this->BcAuth->sessionKey);
+					}
 				}
 			}
-			
 		}
 		
 		// 送信データの文字コードを内部エンコーディングに変換
@@ -335,9 +333,11 @@ class BaserAppController extends Controller {
 			if(!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
-				if(!$Permission->check($this->request->url,$user['user_group_id'])) {
-					$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-					$this->redirect($this->BcAuth->loginAction);
+				if($user) {
+					if(!$Permission->check($this->request->url,$user['user_group_id'])) {
+						$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+						$this->redirect($this->BcAuth->loginAction);
+					}
 				}
 			}
 		}
@@ -434,7 +434,7 @@ class BaserAppController extends Controller {
 		}
 
 		$favoriteBoxOpened = false;
-		if($this->BcAuth) {
+		if(!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
 				if($this->Session->check('Baser.favorite_box_opened')) {
@@ -1067,8 +1067,33 @@ class BaserAppController extends Controller {
 		$requestedPrefix = '';
 
 		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
-		if(!$authPrefix) {
-			return true;
+		if(!$authPrefix || !$this->BcAuth->userScope) {
+			// ユーザーモデルがユーザーグループと関連していない場合
+			$user = $this->BcAuth->user();
+			if($user) {
+				$userModel = $this->Session->read('Auth.userModel');
+				$authPrefixSettings = Configure::read('BcAuthPrefix');
+				if(!empty($user['User']['authPrefix']) && !empty($authPrefixSettings[$user['User']['authPrefix']])) {
+					$authPrefix = $user['User']['authPrefix'];
+				} else {
+					foreach($authPrefixSettings as $key => $authPrefixSetting) {
+						if(!empty($authPrefixSetting['userModel'])) {
+							$currentUserModel = $authPrefixSetting['userModel'];
+						} else {
+							$currentUserModel = 'User';
+						}
+						if($currentUserModel == $userModel) {
+							$authPrefix = $key;
+							break;
+						}
+					}
+				}
+
+			}
+			if(!$authPrefix) {
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+				$this->redirect($ref);
+			}
 		}
 
 		if(!empty($this->request->params['prefix'])) {
@@ -1104,6 +1129,18 @@ class BaserAppController extends Controller {
  */
 	public function getAuthPreifx($userName) {
 
+		$user = $this->BcAuth->user();
+		if(!$user) {
+			return;
+		}
+
+		$userModel = $this->Session->read('Auth.userModel');
+		//TODO: 2013.05.17 ここをマージすると無限ループしてしまう為コメントアウト
+		//if(!$userModel) {
+		//	$this->Session->delete('Auth');
+		//	return null;
+		//}
+		//TODO:  2013.05.17 下記は{$userModel}にする必要があるがnullなので変更しない
 		if(isset($this->User)) {
 			$UserClass = $this->User;
 		} else {
