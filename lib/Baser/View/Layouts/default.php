@@ -25,7 +25,7 @@
 <meta name="robots" content="noindex,nofollow" />
 <?php $this->BcBaser->charset() ?>
 <?php $this->BcBaser->title() ?>
-<?php $bcBaser->css(array(
+<?php $this->BcBaser->css(array(
 	'import',
 	'colorbox/colorbox')) ?>
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->

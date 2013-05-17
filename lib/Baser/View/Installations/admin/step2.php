@@ -64,7 +64,7 @@ $(function(){
 						書き込み可
 						<?php else: ?>
 						書き込み不可<br />
-						<small>/app/config フォルダに書き込み権限が必要です</small>
+						<small>/app/Config フォルダに書き込み権限が必要です</small>
 						<?php endif ?>
 					</div>
 				</li>

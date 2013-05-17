@@ -130,7 +130,9 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  */
 	public function delCache(Model $model){
-		
+		if(!defined('CACHE_DATA_PATH')) {
+			return;
+		}
 		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
 		$Folder = new Folder();
 		$Folder->delete($path);
