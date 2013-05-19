@@ -608,7 +608,7 @@ class PagesController extends AppController {
 			exit();
 		}
 
-		Cache::write('page_preview_'.$id, $page);
+		Cache::write('page_preview_'.$id, $page, '_cake_core_');
 
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
@@ -642,7 +642,7 @@ class PagesController extends AppController {
  */
 	public function admin_preview($id){
 
-		$page = Cache::read('page_preview_'.$id);
+		$page = Cache::read('page_preview_'.$id, '_cake_core_');
 
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
@@ -678,7 +678,7 @@ class PagesController extends AppController {
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);
-		Cache::delete('page_preview_'.$id);
+		Cache::delete('page_preview_'.$id, '_cake_core_');
 
 	}
 /**

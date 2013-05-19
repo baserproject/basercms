@@ -67,7 +67,7 @@ $class=' class="'.implode(' ', $classies).'"';
 	<?php endif ?>
 	</td>
 <?php endif ?>
-	<td>
+	<td style="white-space:nowrap">
 		<?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['modified']); ?>
 	</td>

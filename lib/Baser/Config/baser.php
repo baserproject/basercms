@@ -43,8 +43,10 @@
 				array('name' => 'ユーザーグループ一覧',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
 				array('name' => 'ユーザーグループ登録',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
 				array('name' => '検索インデックス管理',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
-				array('name' => 'メニュー管理',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'index')),
+				array('name' => 'メニュー一覧',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'index')),
 				array('name' => 'メニュー登録',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'global_menus', 'action' => 'add')),
+				array('name' => 'エディタテンプレート一覧',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
+				array('name' => 'エディタテンプレート登録',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'add')),				
 				array('name' => 'サーバーキャッシュ削除',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
 				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
@@ -125,8 +127,8 @@
 			'alias'			=> 'mypage',
 			'loginRedirect'	=> '/',
 			'loginTitle'	=> 'マイページログイン',
-			'userModel'		=> 'User',
-			'loginAction'	=> '/mypage/users/login',
+			'userModel'		=> 'Member',
+			'loginAction'	=> '/mypage/members/login',
 			'toolbar'		=> true
 		),*/
 		// モバイルマイページ（例）

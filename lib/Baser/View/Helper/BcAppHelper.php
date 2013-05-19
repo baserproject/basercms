@@ -166,6 +166,11 @@ class BcAppHelper extends Helper {
 			$file = preg_replace('/'.preg_quote($this->request->webroot, '/').'/', '', $file);
 		}
 		$filePath = str_replace('/', DS, $file);
+		
+		if(strpos($filePath, '?') !== false) {
+			list($filePath) = explode('?', $filePath);
+		}
+		
 		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
 			$webPath = $this->request->webroot.$file;
@@ -199,6 +204,7 @@ class BcAppHelper extends Helper {
 			$webPath = str_replace("\\",'/',$webPath);
 		}
 		// <<<
+		
 		return $webPath;
 	}
 /**
@@ -210,9 +216,40 @@ class BcAppHelper extends Helper {
 	public function executeHook($hook) {
 		
 		$args = func_get_args();
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
+		
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	public function dispatchPluginHook($hook) {
+		
+		if(!$this->_View){
+			$this->_View =& ClassRegistry::getObject('View');
+		}
+
+		$args = func_get_args();
 		$args[0] =& $this;
 
-		return call_user_func_array(array($this->_View->Helpers->BcPluginHook, $hook), $args);
+		// TODO basercamp loaded が参照できない 2013/05/19 ryuring
+		return call_user_func_array(array($this->_View->BcPluginHook, $hook), $args);
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * @param type $hook
+ * @param type $return
+ * @return type 
+ */
+	public function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		$View = ClassRegistry::getObject('View');
+		$BcPluginHook = $View->loaded['bcPluginHook'];
+		return call_user_func_array(array($BcPluginHook, 'executeHook'), $args);
 		
 	}
 /**
@@ -250,7 +287,14 @@ class BcAppHelper extends Helper {
 			$url['admin'] = true;
 		}
 			
-		return parent::url($url, $full);
+		if(!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
+			return $this->webroot($url);
+		} elseif(!is_array($url) && preg_match('/^javascript:/', $url)) {
+			return $url;
+		} else {
+			return parent::url($url, $full);
+		}
 		
 	}
+	
 }

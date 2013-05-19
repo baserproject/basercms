@@ -91,20 +91,21 @@ $(window).load(function() {
 	<?php else: ?>
 		<?php echo $this->BcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
 	<?php endif ?>
+<?php if($this->BcBaser->siteConfig['category_permission']): ?>	
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
-<?php if($this->BcBaser->siteConfig['category_permission'] && $this->BcAdmin->isSystemAdmin()): ?>
+	<?php if($this->BcAdmin->isSystemAdmin()): ?>
 				<?php echo $this->BcForm->input('BlogCategory.owner_id', array(
 						'type'		=> 'select',
 						'options'	=> $owners,
 						'empty'		=> '指定しない')) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
-<?php else: ?>
+	<?php else: ?>
 				<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
 				<?php echo $this->BcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
-<?php endif ?>
+	<?php endif ?>
 				<div id="helptextOwnerId" class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -112,6 +113,7 @@ $(window).load(function() {
 				</div>
 			</td>
 		</tr>
+<?php endif ?>
 	</table>
 </div>
 

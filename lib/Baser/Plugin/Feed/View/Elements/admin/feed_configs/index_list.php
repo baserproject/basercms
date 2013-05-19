@@ -20,6 +20,9 @@
 ?>
 
 
+<!-- pagination -->
+<?php $this->BcBaser->element('pagination') ?>
+
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<thead>
 		<tr>
@@ -54,3 +57,7 @@
 		<?php endif; ?>
 	</tbody>
 </table>
+
+
+<!-- list-num -->
+<?php $this->BcBaser->element('list_num') ?>

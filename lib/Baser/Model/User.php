@@ -288,8 +288,10 @@ class User extends AppModel {
  * @param boolean $created 
  */
 	public function afterSave($created) {
+		
 		parent::afterSave($created);
-		if ($created) {
+		
+		if($created && !empty($this->UserGroup)) {
 			$defaultFavorites = $this->UserGroup->field('default_favorites', array(
 				'UserGroup.id' => $this->data[$this->alias]['user_group_id']
 			));
@@ -306,5 +308,7 @@ class User extends AppModel {
 				}
 			}
 		}
+		
 	}
+	
 }

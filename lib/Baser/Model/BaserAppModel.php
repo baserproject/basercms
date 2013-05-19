@@ -429,7 +429,7 @@ class BaserAppModel extends Model {
 				copy($path . DS . $file, $tmpdir . $table . '.php');
 				$result = $db->loadSchema(array('type' => $type, 'path' => $tmpdir,
 					'file' => $table . '.php', 'dropField' => $dropField));
-				@unlink($tmpdir . $file);
+				@unlink($tmpdir.$table.'.php');
 				if (!$result) {
 					return false;
 				}
@@ -1363,4 +1363,32 @@ class BaserAppModel extends Model {
 			parent::cakeError($method, $messages);
 		}
 	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	public function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( $this->Behaviors->BcPluginHook, $hook ), $args );
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	public function executePluginHook($hook, $return) {
+		
+		$args = func_get_args();
+		array_unshift($args, $this);
+		return call_user_func_array(array($this->Behaviors->BcPluginHook, 'executeHook'), $args);
+		
+	}
+
 }

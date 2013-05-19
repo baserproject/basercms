@@ -227,6 +227,7 @@ class ThemeFilesController extends AppController {
 			}
 
 			if ($result) {
+				clearViewCache();
 				$this->setMessage('ファイル ' .basename($fullpath). ' を作成しました。');
 				$this->redirect(array('action' => 'edit', $theme, $type, $path, $this->request->data['ThemeFile']['name'].'.'.$this->request->data['ThemeFile']['ext']));
 			} else {
@@ -307,6 +308,7 @@ class ThemeFilesController extends AppController {
 			}
 
 			if ($result) {
+				clearViewCache();
 				$this->setMessage('ファイル ' .$filename. ' を更新しました。');
 				$this->redirect(array($theme, $plugin, $type, dirname($path), basename($newPath)));
 			} else {

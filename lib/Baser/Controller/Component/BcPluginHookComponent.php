@@ -17,7 +17,17 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-class BcPluginHookComponent extends Component {
+/**
+ * Include files
+ */
+/**
+ * プラグインフックコンポーネント
+ *
+ * @package			baser.controllers.components
+ */
+// TODO basercamp マジックメソッドの実装方法がわからない 2013/5/19 ryuring
+//class BcPluginHookComponent extends Overloadable {
+class BcPluginHookComponent extends Object {
 /**
  * プラグインフックオブジェクト
  * 
@@ -185,5 +195,22 @@ class BcPluginHookComponent extends Component {
 		$this->executeHook('afterPageEdit', $controller);
 		
 	}
-	
+/**
+ * call__ マジックメソッド
+ *
+ * @param string $method
+ * @param array $params
+ * @return mixed
+ */
+	protected function call__($method, $params) {
+
+		$args = func_get_args();
+		$args = $args[1];
+		$Object = $args[0];
+		if(method_exists($Object, $method)){
+			return call_user_func_array( array( &$Object, $method ), $args );
+		}
+
+	}
+
 }

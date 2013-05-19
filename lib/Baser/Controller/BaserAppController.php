@@ -1193,9 +1193,34 @@ class BaserAppController extends Controller {
 	public function executeHook($hook) {
 
 		$args = func_get_args();
-		$args[0] = $this;
-		return call_user_func_array( array( &$this->BcPluginHook, $hook ), $args );
+		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
 
+	}
+/**
+ * プラグインフックのイベントを発火させる
+ * 
+ * @param string $hook
+ * @return mixed 
+ */
+	public function dispatchPluginHook($hook) {
+		
+		$args = func_get_args();
+		$args[0] =& $this;
+		return call_user_func_array( array( $this->BcPluginHook, $hook ), $args );
+		
+	}
+/**
+ * プラグインフックのハンドラを実行する
+ * 
+ * @param string $hook
+ * @param mixed $return
+ * @return mixed 
+ */
+	public function executePluginHook($hook, $controller) {
+		
+		$args = func_get_args();
+		return call_user_func_array(array($this->BcPluginHook, 'executeHook'), $args);
+		
 	}
 /**
  * 現在のユーザーのドキュメントルートの書き込み権限確認
@@ -1394,7 +1419,8 @@ class BaserAppController extends Controller {
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {
 			foreach($files[1] as $file) {
-				$this->helpers[] = Inflector::classify(basename($file, '.php'));
+				$file = str_replace('-', '_', $file);
+				$this->helpers[] = Inflector::camelize(basename($file, '.php'));
 			}
 		}
 		
