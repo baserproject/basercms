@@ -44,7 +44,7 @@ $(function(){
 
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">
-	<?php if($bcForm->value('BlogContent.status')): ?>
+	<?php if($this->BcForm->value('BlogContent.status')): ?>
 	<strong>このブログのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index'),'/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
 	<?php else: ?>
 	<strong>このブログのURL：<?php echo $this->BcBaser->getUri('/'.$blogContent['BlogContent']['name'].'/index') ?></strong>
@@ -72,7 +72,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.name', 'ブログアカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogContent.name', array('type' => 'text', 'size'=>40,'maxlength'=>255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCategoryFilter', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpCategoryFilter', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.name') ?>
 				<div id="helptextCategoryFilter" class="helptext">
 					<ul>
@@ -118,7 +118,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.list_count', '一覧表示件数') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogContent.list_count', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpListCount', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpListCount', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.list_count') ?>
 				<div id="helptextListCount" class="helptext">
 					<ul>
@@ -132,7 +132,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.list_direction', '一覧に表示する順番') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogContent.list_direction', array('type' => 'select', 'options' => array('DESC' => '新しい記事順', 'ASC'=>'古い記事順'))) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpListDirection', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpListDirection', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.list_direction') ?>
 				<div id="helptextListDirection" class="helptext">
 					<ul>
@@ -146,7 +146,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.list_count', 'RSSフィード出力件数') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogContent.feed_count', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>&nbsp;件&nbsp;
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFeedCount', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpFeedCount', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.feed_count') ?>
 				<div id="helptextFeedCount" class="helptext">
 					<ul>
@@ -180,7 +180,7 @@ $(function(){
 						'options'	=> $this->BcText->booleanDoList('利用'),
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCommentApprove', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpCommentApprove', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.comment_approve') ?>
 				<div id="helptextCommentApprove" class="helptext">承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。</div>
 			</td>
@@ -193,7 +193,7 @@ $(function(){
 						'options'	=> $this->BcText->booleanDoList('利用'),
 						'legend'	=> false,
 						'separator'	=> '&nbsp;&nbsp;')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
 					<ul>
@@ -221,7 +221,7 @@ $(function(){
 						'type'		=> 'select',
 						'options'	=> $this->BcForm->getControlsource('WidgetArea.id'),
 						'empty'		=> 'サイト基本設定に従う')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
 					ブログコンテンツで利用するウィジェットエリアを指定します。<br />
@@ -239,7 +239,7 @@ $(function(){
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditLayoutTemplate')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpLayout', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpLayout', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.layout') ?>
 				<div id="helptextLayout" class="helptext">
 					<ul>
@@ -259,7 +259,7 @@ $(function(){
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditBlogTemplate')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.template') ?>
 				<div id="helptextTemplate" class="helptext">
 					<ul>

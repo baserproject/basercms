@@ -42,6 +42,6 @@
 
 	<div id="Page" style="text-align: center"><?php $bcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
 
-<?php $bcBaser->func() ?>
+<?php $this->BcBaser->func() ?>
 </body>
 </html>

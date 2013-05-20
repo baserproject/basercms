@@ -410,7 +410,7 @@ class InstallationsController extends AppController {
 		Configure::write('Security.salt', $installationSetting['salt']);
 		$extra['data']['User']['name'] = $installationSetting['admin_username'];
 		$extra['data']['User']['password'] = $installationSetting['admin_password'];
-		$this->requestAction(array('admin' => true, 'controller' => 'users', 'action' => 'login_exec'), $extra);
+		$this->requestAction(array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login_exec'), $extra);
 		$this->Session->write('Installation', $installationSetting);
 
 	}

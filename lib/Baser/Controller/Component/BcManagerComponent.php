@@ -296,6 +296,7 @@ class BcManagerComponent extends Component {
 	protected function _updateBlogEntryDate($dbConfig) {
 
 		$this->connectDb($dbConfig, 'plugin');
+		CakePlugin::load('Blog');
 		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
 		$BlogPost->contentSaving = false;

@@ -323,7 +323,7 @@ class BcCkeditorHelper extends AppHelper {
 			}
 		}
 		
-		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->Javascript->object($ckoptions) .");";
+		$jscode .= "editor_" . $field ." = CKEDITOR.replace('" . $domId ."',". $this->JqueryEngine->object($ckoptions) .");";
 		$jscode .= "editor_{$field}.on('pluginsLoaded', function(event) {";
 		if($useDraft) {
 			if($draftAreaId) {

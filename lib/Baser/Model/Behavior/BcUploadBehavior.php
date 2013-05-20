@@ -75,7 +75,7 @@ class BcUploadBehavior extends ModelBehavior {
 			mkdir($this->savePath);
 			chmod($this->savePath,0777);
 		}
-		$this->Session = new SessionComponent();
+		$this->Session = new SessionComponent(new ComponentCollection());
 
 	}
 /**
