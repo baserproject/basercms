@@ -449,26 +449,31 @@ class UsersController extends AppController {
 				$this->request->data['User']['password'] = $this->request->data['User']['password_1'];
 			}
 
-			$this->User->set($this->request->data);
-
-			if ($this->User->validates()) {
-				unset($this->request->data['User']['password_1']);
-				unset($this->request->data['User']['password_2']);
-				if (isset($this->request->data['User']['password'])) {
-					$this->request->data['User']['password'] = $this->BcAuth->password($this->request->data['User']['password']);
-				}
-				$this->User->save($this->request->data,false);
-
-				if ($selfUpdate) {
-					$this->admin_logout();
-				}
-
-				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
+			// 自身のアカウントは変更出来ないようにチェック
+			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
+				$this->setMessage('自分のアカウントのグループは変更できません。', true);
 			} else {
-				// よく使う項目のデータを再セット
-				$this->request->data = array_merge($this->User->read(null, $id), $this->request->data);
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->User->set($this->data);
+
+				if ($this->User->validates()) {
+					unset($this->request->data['User']['password_1']);
+					unset($this->request->data['User']['password_2']);
+					if (isset($this->request->data['User']['password'])) {
+						$this->request->data['User']['password'] = $this->BcAuth->password($this->request->data['User']['password']);
+					}
+					$this->User->save($this->request->data,false);
+
+					if ($selfUpdate) {
+						$this->admin_logout();
+					}
+
+					$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
+					$this->redirect(array('action' => 'edit', $id));
+				} else {
+					// よく使う項目のデータを再セット
+					$this->request->data = array_merge($this->User->read(null, $id), $this->request->data);
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
+				}
 			}
 		}
 

@@ -31,7 +31,7 @@
 <!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.7.2.min',
-	'jquery-ui-1.10.1.custom.min',
+	'jquery-ui-1.8.19.custom.min',
 	'jquery.colorbox-min',
 	'admin/functions',
 	'admin/startup',
