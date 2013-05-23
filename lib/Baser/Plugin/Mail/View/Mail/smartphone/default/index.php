@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('jquery-ui/ui.all', array('inline' => true));
-$this->BcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
-$this->mail->indexFields($mailContent['MailContent']['id']);
+$this->BcBaser->js(array('jquery-ui-1.10.1.custom.min','i18n/ui.datepicker-ja'), false);
+$this->Mail->indexFields($mailContent['MailContent']['id']);
 ?>
 
 <h2 class="contents-head">
@@ -29,7 +29,7 @@ $this->mail->indexFields($mailContent['MailContent']['id']);
 <h3 class="contents-head">入力フォーム</h3>
 
 <div class="section mail-description">
-	<?php $this->mail->description() ?>
+	<?php $this->Mail->description() ?>
 </div>
 
 <div class="section mail-form">

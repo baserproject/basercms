@@ -35,7 +35,7 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 <!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.7.2.min',
-	'jquery-ui-1.8.19.custom.min',
+	'jquery-ui-1.10.1.custom.min',
 	'i18n/ui.datepicker-ja',
 	'jquery.corner-2.12',
 	'jquery.bt.min',

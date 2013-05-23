@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css(array('/mail/css/style', 'jquery-ui/ui.all'), array('inline' => true));
-$this->BcBaser->js(array('jquery-ui-1.8.14.custom.min','i18n/ui.datepicker-ja'), false);
+$this->BcBaser->js(array('jquery-ui-1.10.1.custom.min','i18n/ui.datepicker-ja'), false);
 ?>
 
 <h2 class="contents-head">

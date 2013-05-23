@@ -58,8 +58,11 @@ class MailController extends MailAppController {
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
-	//public $components = array('Email','BcEmail','Security','BcCaptcha');
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha');
+	// var $components = array('Email','BcEmail','Security','BcCaptcha');
+	// 
+	// 2013/03/14 ryuring
+	// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
+	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security'); 
 /**
  * CSS
  *
@@ -133,16 +136,21 @@ class MailController extends MailAppController {
 		$this->layout = $this->dbDatas['mailContent']['MailContent']['layout_template'];
 
 		if(empty($this->contentId)) {
-			$this->contentId = $this->params['pass'][0];
+			// 配列のインデックスが無いためエラーとなるため修正
+			$this->contentId = isset($this->request->params['pass'][0]) ? $this->request->params['pass'][0] : null;
 		}
 
 		$this->subMenuElements = array('default');
 
+
+		// 2013/03/14 ryuring
+		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更 
 		$this->Security->enabled = true;
 		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 		// 詳細はコンポーネント設定のコメントを参照
-		//$this->Security->requireAuth('submit');
-		$this->Security->validatePost = false;
+		$this->Security->requireAuth('confirm', 'submit');
+		$this->Security->validatePost = true;
+		$this->Security->disabledFields[] = 'Message.mode'; 
 
 		// SSL設定
 		if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
@@ -316,10 +324,9 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		
-
 		if(!$this->data) {
 			$this->redirect(array('action' => 'index', $id));
-		} elseif( isset($this->data['mode']) && key($this->data['mode']) == 'back' ) {
+		} elseif( isset($this->data['Message']['mode']) && $this->data['Message']['mode'] == 'Back' ) { 
             $this->_back($id);
 		} else {
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。

@@ -101,7 +101,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.name', 'メールフォームアカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
@@ -142,7 +142,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_name', '送信先名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.sender_name', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSenderName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSenderName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.sender_name') ?>
 				<div id="helptextSenderName" class="helptext">自動返信メールの送信者に表示します。</div>
 			</td>
@@ -151,7 +151,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_user', '自動返信メール<br />件名<br />[ユーザー宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.subject_user', array('type' => 'text', 'size' => 80)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSubjectUser', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectUser', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.subject_user') ?>
 				<div id="helptextSubjectUser" class="helptext">ユーザー宛の自動返信メールの件名に表示します。</div>
 			</td>
@@ -160,7 +160,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_admin', '自動送信メール<br />件名<br />[管理者宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.subject_admin', array('type' => 'text', 'size' => 80)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSubjectAdmin', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectAdmin', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.subject_admin') ?>
 				<div id="helptextSubjectAdmin" class="helptext">管理者宛の自動送信メールの件名に表示します。</div>
 			</td>
@@ -169,7 +169,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.redirect_url', 'リダイレクトURL') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.redirect_url', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpRedirectUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpRedirectUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.redirect_url') ?>
 				<div id="helptextRedirectUrl" class="helptext">
 					<ul>
@@ -183,7 +183,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'), 'legend' => false)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
 					<ul>
@@ -197,7 +197,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.ssl_on', 'SSL通信') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.ssl_on', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'), 'legend'=>false)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.ssl_on', 
 						'SSL通信を利用するには、'.$this->BcBaser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、
 						事前にSSL通信用のWebサイトURLを指定してください。', array('escape'=>false)) ?>
@@ -216,7 +216,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_2', 'BCC用送信先メールアドレス') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.sender_2', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png',array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.sender_2') ?>
 				<div id="helptextSender2" class="helptext">
 					<ul><li>BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。</li>
@@ -228,7 +228,7 @@ function mailContentSender1ClickHandler(){
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.widget_area', 'ウィジェットエリア') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.widget_area', array('type' => 'select', 'options' => $this->BcForm->getControlsource('WidgetArea.id') , 'empty' => 'サイト基本設定に従う')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
 					メールコンテンツで利用するウィジェットエリアを指定します。<br />
@@ -239,12 +239,15 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.layout_template', 'レイアウトテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $mail->getLayoutTemplates())) ?>
+				<?php //echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $mail->getLayoutTemplates()))
+				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
+				echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => array()));
+				?>
 				<?php echo $this->BcForm->input('MailContent.edit_layout', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する','javascript:void(0)', array('id' => 'EditLayout')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpLayoutTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpLayoutTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.layout_template') ?>
 				<div id="helptextLayoutTemplate" class="helptext">
 					<ul>
@@ -257,12 +260,15 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.form_template', 'メールフォームテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $mail->getFormTemplates())) ?>
+				<?php //echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $mail->getFormTemplates())) 
+				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
+					  echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => array())) 
+				?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail_form', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFormTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpFormTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.form_template') ?>
 				<div id="helptextFormTemplate" class="helptext">
 					<ul>
@@ -275,12 +281,15 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.mail_template', '送信メールテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $mail->getMailTemplates())) ?>
+				<?php //echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $mail->getMailTemplates())) 
+				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
+						echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => array())) 
+				?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpMailTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpMailTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.mail_template') ?>
 				<div id="helptextMailTemplate" class="helptext">
 					<ul>
