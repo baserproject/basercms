@@ -46,13 +46,17 @@ $(function(){
 	<?php $this->BcBaser->element('mail_input', array('blockStart' => 1)) ?>
 </table>
 
-<?php if(!$freezed && $mailContent['MailContent']['auth_captcha']): ?>
+<?php if($mailContent['MailContent']['auth_captcha']): ?>
+  <?php if(!$freezed): ?>
 <div class="auth-captcha clearfix">
 	<?php $this->BcBaser->img($prefix.'/'.$mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
 	<?php echo $this->Mailform->text('Message.auth_captcha') ?><br />
 	&nbsp;画像の文字を入力してください<br clear="all" />
 	<?php echo $this->Mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
 </div>
+  <?php else: ?>
+<?php echo $this->Mailform->hidden('Message.auth_captcha') ?>
+  <?php endif ?> 
 <?php endif ?>
 
 <?php /* 送信ボタン */ ?>

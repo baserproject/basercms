@@ -21,6 +21,28 @@ include BASER_VENDORS.'imageresizer.php';
 /**
  * ファイルアップロードビヘイビア
  * 
+ * 《設定例》
+ * public $actsAs = array(
+ *  'BcUpload' => array(
+ *     'saveDir'  => "editor",
+ *     'fields'  => array(
+ *       'image'  => array(
+ *         'type'      => 'image',
+ *         'namefield'    => 'id',
+ *         'nameadd'    => false,
+ *         'imageresize'  => array('prefix' => 'template', 'width' => '100', 'height' => '100'),
+ *        'imagecopy'    => array('suffix' => 'template', 'width' => '100', 'height' => '100')
+ *       ),
+ *       'pdf' => array(
+ *         'type'      => 'pdf',
+ *         'namefield'    => 'id',
+ *         'nameformat'  => '%d',
+ *         'nameadd'    => false
+ *       )
+ *     )
+ *   )
+ * );
+ *  
  * @subpackage baser.models.behaviors
  */
 class BcUploadBehavior extends ModelBehavior {
@@ -544,13 +566,17 @@ class BcUploadBehavior extends ModelBehavior {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($model,$setting,$pathinfo['extension']);
-					$newName = $this->getFileName($model, $setting['imageresize'], $newName);
 					
 					if(!$newName) {
 						return true;
 					}
 					if($oldName != $newName) {
 
+						if(!empty($setting['imageresize'])) {
+							$newName = $this->getFileName($model, $setting['imageresize'], $newName);
+						} else {
+							$newName = $this->getFileName($model, null, $newName);
+						} 
 						rename($this->savePath.$oldName,$this->savePath.$newName);
 						$model->data[$model->alias][$setting['name']] = $newName;
 
@@ -618,6 +644,10 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function getFileName(&$model,$setting,$filename) {
+
+		if(empty($setting)) {
+			return $filename;
+		} 
 
 		$pathinfo = pathinfo($filename);
 		$ext = $pathinfo['extension'];
