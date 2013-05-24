@@ -667,16 +667,22 @@ class PagesController extends AppController {
 			$this->layoutPath = '';
 		}
 		
+		$url = $page['Page']['url'];
+		$url = preg_replace('/^\/mobile\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
+		$url = preg_replace('/^\/smartphone//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		$url = preg_replace('/^\//i', '', $url);
+     
 		$this->preview = true;
 		$this->subDir = '';
 		$this->request->params['prefix'] = '';
 		$this->request->params['admin'] = '';
 		$this->request->params['controller'] = 'pages';
 		$this->request->params['action'] = 'display';
-		$this->request->url = preg_replace('/^\//i','',preg_replace('/^\/mobile\//is','/m/',$page['Page']['url']));
-		Configure::write('BcRequest.pureUrl', $this->request->url);
-		$this->request->here = $this->request->base.'/'.$this->request->url;
-		$this->crumbs = $this->_getCrumbs('/'.$this->request->url);
+
+		$this->request->url = $url;
+		Configure::write('BcRequest.pureUrl', $url);
+		$this->here = $this->base . '/' . $url;
+		$this->crumbs = $this->_getCrumbs('/' . $url); 
 		$this->theme = $this->siteConfigs['theme'];
 		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);

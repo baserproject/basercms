@@ -433,7 +433,8 @@ class BaserAppController extends Controller {
 			ClassRegistry::removeObject('view');
 		}
 
-		$favoriteBoxOpened = false;
+		$this->__updateFirstAccess();
+
 		if(!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
@@ -457,6 +458,21 @@ class BaserAppController extends Controller {
 		}
 
 	}
+
+/**
+ * 初回アクセスメッセージ用のフラグを更新する
+ */
+	function __updateFirstAccess() {
+		
+		// 初回アクセスメッセージ表示設定
+		if(!empty($this->request->params['admin']) && !empty($this->siteConfigs['first_access'])) {
+			$data = array('SiteConfig' => array('first_access' => false));
+			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig->saveKeyValue($data);
+		}
+		
+	} 
+
 /**
  * SSLエラー処理
  *
