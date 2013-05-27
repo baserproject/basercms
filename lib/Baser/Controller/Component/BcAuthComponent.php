@@ -49,7 +49,10 @@ class BcAuthComponent extends AuthComponent {
  * @return array User record data, or null, if the user could not be identified.
  * @access public
  */
-	public function identify($user = null, $conditions = null) {
+	// TODO basercamp 2013/05/27 ryuring
+	// ハック箇所のフィードバックが大変そうだったので別のメソッド名に変更して逃げた
+	// identify → identifyOld
+	public function identifyOld($user = null, $conditions = null) {
 		
 		if ($conditions === false) {
 			$conditions = null;
@@ -293,5 +296,8 @@ class BcAuthComponent extends AuthComponent {
 	//		return null;
 	//	}
 	//}
+	public function setSessionKey($sessionKey) {
+		self::$sessionKey = $sessionKey;
+	}
 	
 }

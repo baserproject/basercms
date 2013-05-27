@@ -63,7 +63,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function beforeSave(Model $model,$options) {
+	public function beforeSave(Model $model) {
 
 		if(!$model->exists()) {
 			$ret = $this->PluginContent->find(array('PluginContent.name'=>$model->data[$model->alias]['name']));
@@ -150,7 +150,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-	public function beforeDelete(Model $model) {
+	public function beforeDelete(Model $model, $cascade = true) {
 
 		// プラグインコンテンツを自動削除する
 		$this->PluginContent->deleteAll(array('name'=>$model->data[$model->alias]['name']));

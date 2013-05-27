@@ -108,7 +108,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeSave(Model $model, $options) {
+	public function beforeSave(Model $model) {
 		
 		return $this->saveFiles($model);
 		
@@ -122,7 +122,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function afterSave(Model $model, $created, $options) {
+	public function afterSave(Model $model, $created) {
 		
 		$this->renameToFieldBasename($model);
 		$model->data = $model->save($model->data, array('callbacks'=>false,'validate'=>false));
@@ -478,7 +478,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function beforeDelete(Model $model) {
+	public function beforeDelete(Model $model, $cascade = true) {
 
 		$model->data = $model->findById($model->id);
 		$this->delFiles($model);

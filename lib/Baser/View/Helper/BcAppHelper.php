@@ -283,8 +283,8 @@ class BcAppHelper extends Helper {
 			unset($url['id']);
 		}
 		
-		if (!isset($url['admin']) && !empty($this->request->params['admin'])) {
-			$url['admin'] = true;
+		if (is_array($url) && !isset($url['admin']) && !empty($this->request->params['admin'])) {
+			$url = array_merge($url, array('admin' => true));
 		}
 			
 		if(!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {

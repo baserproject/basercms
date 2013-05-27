@@ -28,7 +28,7 @@
 <?php $this->BcBaser->css(array(
 	'import',
 	'colorbox/colorbox')) ?>
-<!--[if IE]><?php $bcBaser->js(array('excanvas')) ?><![endif]-->
+<!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.7.2.min',
 	'jquery-ui-1.8.19.custom.min',
@@ -38,9 +38,9 @@
 	'admin/adjust_scroll')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
-<body id="<?php $bcBaser->contentsName() ?>" class="normal">
+<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 
-	<div id="Page" style="text-align: center"><?php $bcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
+	<div id="Page" style="text-align: center"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
 
 <?php $this->BcBaser->func() ?>
 </body>

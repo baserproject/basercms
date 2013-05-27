@@ -1198,7 +1198,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		$url = split('/', h($this->request->url));
+		$url = explode('/', h($this->request->url));
 
 		if(Configure::read('BcRequest.agent')) {
 			array_shift($url);
@@ -1231,7 +1231,7 @@ class BcBaserHelper extends AppHelper {
 			}
 			$pageUrl = preg_replace('/\.html$/', '', $pageUrl);
 			$pageUrl = preg_replace('/^\//', '', $pageUrl);
-			$aryUrl = split('/',$pageUrl);
+			$aryUrl = explode('/',$pageUrl);
 
 		} else {
 

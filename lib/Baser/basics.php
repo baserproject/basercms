@@ -269,10 +269,10 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			}
 			if(!empty($query)){
 				if(strpos($query, '&')){
-					$queries = split('&',$query);
+					$queries = explode('&',$query);
 					foreach($queries as $_query) {
 						if(strpos($_query, '=')){
-							list($key,$value) = split('=',$_query);
+							list($key,$value) = explode('=',$_query);
 							if($key=='url'){
 								$parameter = $value;
 								break;
@@ -281,7 +281,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 					}
 				}else{
 					if(strpos($query, '=')){
-						list($key,$value) = split('=',$query);
+						list($key,$value) = explode('=',$query);
 						if($key=='url'){
 							$parameter = $value;
 						}
@@ -755,7 +755,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		App::uses('File', 'Utility');
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
-		$aryVersionData = split("\n",$versionData);
+		$aryVersionData = explode("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
 			return trim($aryVersionData[0]);
 		}else {

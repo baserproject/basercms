@@ -87,7 +87,7 @@ class BcPluginHookBehavior extends ModelBehavior {
 				}
 			}
 			foreach($this->registerHooks[$model->alias][$hookName] as $pluginName) {
-				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), &$args);
+				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), $args);
 				if(isset($j)) {
 					$args[$j] = $return;
 				}
@@ -257,7 +257,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @param array $params Parameters to send to method
  * @return mixed Return value from method
  */
-	private function __call($method, $params) {
+	public function __call($method, $params) {
 		if (!method_exists($this, 'call__')) {
 			trigger_error(sprintf(__('Magic method handler call__ not defined in %s', true), get_class($this)), E_USER_ERROR);
 		}

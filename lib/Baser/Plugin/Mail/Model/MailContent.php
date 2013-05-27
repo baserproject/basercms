@@ -146,7 +146,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	public function beforeValidate() {
+	public function beforeValidate($options = array()) {
 
 		if($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
@@ -237,7 +237,7 @@ class MailContent extends MailAppModel {
  * @return	boolean
  * @access	public
  */
-	public function beforeDelete() {
+	public function beforeDelete($cascade = true) {
 
 		return $this->deleteContent($this->id);
 

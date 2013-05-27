@@ -103,7 +103,10 @@ class  BcAuthConfigureComponent extends Component {
 		}
 		
 		// セッション識別
-		$auth->sessionKey = 'Auth.User';
+		// TODO basercamp 2013/05/27 ryuring
+		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
+		$auth->setSessionKey('Auth.User');
+		
 		// ログインアクション
 		$auth->loginAction = $loginAction;
 
