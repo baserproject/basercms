@@ -443,11 +443,11 @@ class BaserAppController extends Controller {
 				} else {
 					$favoriteBoxOpened = true;
 				}
+				$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 			}
 		}
 
 		$this->__loadDataToView();
-		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('contentsTitle',$this->contentsTitle);
