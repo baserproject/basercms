@@ -52,7 +52,7 @@ class Theme extends AppModel {
 					'message'	=> 'テーマ名を入力してください。'),
 			array(	'rule'		=> 'halfText',
 					'message'	=> 'テーマ名は半角英数字のみで入力してください。'),
-			array(	'rule'		=> 'duplicate',
+			array(	'rule'		=> 'themeDuplicate',
 					'message'	=> '既に存在するテーマ名です。')
 		),
 		'url' => array(
@@ -69,7 +69,7 @@ class Theme extends AppModel {
  * @return boolean
  * @access public
  */
-	public function duplicate($check) {
+	public function themeDuplicate($check) {
 		
 		$value = $check[key($check)];
 		if(!$value){

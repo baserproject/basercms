@@ -346,7 +346,7 @@ function pageTypeChengeHandler() {
 			<td class="col-input">
 				<?php echo $this->BcForm->ckeditor('Page.contents', 
 						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1) ?>
+						$ckEditorOptions1, $ckStyles) ?>
 				<?php echo $this->BcForm->error('Page.contents') ?>
 			</td>
 		</tr>

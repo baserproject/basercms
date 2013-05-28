@@ -28,7 +28,7 @@
 			<li><?php $this->BcBaser->link('ユーザー管理', array('controller' => 'users', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('検索インデックス管理', array('controller' => 'contents', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('メニュー管理', array('controller' => 'global_menus', 'action' => 'index', 'plugin' => null)) ?></li>
-			<li><?php $bcBaser->link('エディタテンプレート管理', array('controller' => 'editor_templates', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $this->BcBaser->link('エディタテンプレート管理', array('controller' => 'editor_templates', 'action' => 'index', 'plugin' => null)) ?></li>
 		</ul>
 	</td>
 </tr>

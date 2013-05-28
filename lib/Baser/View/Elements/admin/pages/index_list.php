@@ -49,10 +49,10 @@
 			</th>
 <?php if(!$sortmode): ?>
 			<th><?php echo $this->Paginator->sort('id', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'NO', array('escape' => false, 'class' => 'btn-direction')) ?></th>
-			<th><?php echo $this->Paginator->sort('page_category_id', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'カテゴリー', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th>
-				<?php echo $this->Paginator->sort('name', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'ページ名', array('escape' => false, 'class' => 'btn-direction')) ?><br />
+				<?php echo $this->Paginator->sort('page_category_id', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'カテゴリー', array('escape' => false, 'class' => 'btn-direction')) ?><br />
 				<?php echo $this->Paginator->sort('title', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'タイトル', array('escape' => false, 'class' => 'btn-direction')) ?>
+				&nbsp;(&nbsp;<?php echo $this->Paginator->sort('name', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . 'ページ名', array('escape' => false, 'class' => 'btn-direction')) ?>&nbsp;)
 			</th>
 			<th><?php echo $this->Paginator->sort('status', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . '公開状態', array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th><?php echo $this->Paginator->sort('author_id', $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . '作成者', array('escape' => false, 'class' => 'btn-direction')) ?></th>
@@ -77,7 +77,7 @@
 	<?php endforeach; ?>
 <?php else: ?>
 		<tr>
-			<td colspan="7"><p class="no-data">データがありません。</p></td>
+			<td colspan="6"><p class="no-data">データがありません。</p></td>
 		</tr>
 <?php endif; ?>
 	</tbody>

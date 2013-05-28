@@ -67,22 +67,20 @@ class ThemesController extends AppController {
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
 		$datas = array();
+		$currentTheme = array();
 		foreach($files[0] as $themename){
 			if($themename != 'core' && $themename != '_notes'){
-				$datas[] = $this->_loadThemeInfo($themename);
+				if($themename == $this->siteConfigs['theme']) {
+					$currentTheme = $this->_loadThemeInfo($themename);
+				} else {
+					$datas[] = $this->_loadThemeInfo($themename);
+				}
 			}
 		}
-		$datas[] = array(
-			'name'				=> 'core',
-			'title'				=> 'baserCMSコア',
-			'version'			=> $this->getBaserVersion(),
-			'description'		=> 'baserCMSのコアファイル。現在のテーマにコピーして利用する事ができます。',
-			'author'			=> 'basercms',
-			'url'				=> 'http://basercms.net',
-			'is_writable_pages'	=> false
-		);
+
 		
 		$this->set('datas',$datas);
+		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
 
 		$this->subMenuElements = array('themes');
@@ -319,7 +317,7 @@ class ThemesController extends AppController {
 		}
 		$result = $this->_copy($theme);
 		if($result) {
-			$this->set('data', $result);
+			exit(true);
 		} else {
 			$this->ajaxError(500, 'テーマフォルダのアクセス権限を見直してください。');
 		}
@@ -370,24 +368,6 @@ class ThemesController extends AppController {
 			$this->ajaxError(500, 'テーマフォルダを手動で削除してください。');
 		}
 		exit();
-		
-	}
-/**
- * 一括削除
- * 
- * @param array $ids
- * @return boolean
- * @access protected
- */
-	protected function _batch_del($ids) {
-		
-		if($ids) {
-			foreach($ids as $id) {
-				$this->_del($id);
-			}
-		}
-		clearViewCache();
-		return true;
 		
 	}
 /**

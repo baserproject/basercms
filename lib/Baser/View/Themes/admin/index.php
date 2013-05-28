@@ -19,17 +19,41 @@
  */
 $this->BcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
-	'admin/baser_ajax_data_list_config',
-	'admin/baser_ajax_batch_config'
+	'admin/baser_ajax_data_list_config'
 ));
 ?>
 
 
 <script type="text/javascript">
 	$(function(){
+		$.baserAjaxDataList.config.methods.copy = {
+			button: '.btn-copy',
+			confirm: '',
+			result: function(row, result) {
+				console.log(result);
+				var config = $.baserAjaxDataList.config;
+				if(result) {
+					$.baserAjaxDataList.load(document.location.href);
+				} else {
+					$(config.alertBox).html('コピーに失敗しました。');
+					$(config.alertBox).fadeIn(500);
+				}
+			}
+		}
+		$.baserAjaxDataList.config.methods.del = {
+			button: '.btn-delete',
+			confirm: 'このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。',
+			result: function(row, result) {
+				var config = $.baserAjaxDataList.config;
+				if(result) {
+					$.baserAjaxDataList.load(document.location.href);
+				} else {
+					$(config.alertBox).html('削除に失敗しました。');
+					$(config.alertBox).fadeIn(500);
+				}
+			}
+		}
 		$.baserAjaxDataList.init();
-		$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 		$("#BtnLoadDefaultDataPattern").click(function() {
 			if(confirm(
 				'初期データを読み込みます。よろしいですか？\n\n'+

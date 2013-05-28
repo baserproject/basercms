@@ -111,6 +111,14 @@ class PagesController extends AppController {
 				'limit' => $this->passedArgs['num']
 		);
 		$datas = $this->paginate('Page');
+		foreach($datas as $key => $data) {
+			$path = $this->Page->PageCategory->getPath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
+			if($path) {
+				$titlePath = Set::extract('/PageCategory/title', $path);
+				$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+			}
+		}
+		
 		$this->set('datas',$datas);
 		
 		$this->_setAdminIndexViewData();
@@ -217,6 +225,24 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> true, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::uses('CKEditorStyleParser', 'Vendor');
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+
 		/* 表示設定 */
 		$categories = $this->getCategorySource($this->request->data['Page']['page_type'], array('empty' => '指定しない', 'own' => true));
 		$this->set('categories', $categories);
@@ -225,7 +251,8 @@ class PagesController extends AppController {
 		$this->set('reflectMobile', $reflectMobile);
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => true, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
@@ -347,6 +374,24 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 		
+		$ckEditorOptions1 = array(
+			'useDraft'		=> true, 
+			'draftField'	=> 'draft', 
+			'disableDraft'	=> false, 
+			'width'			=> 'auto',
+			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
+		);
+
+		$ckStyles = array();
+		if(!empty($this->siteConfigs['editor_styles'])) {
+			App::uses('CKEditorStyleParser', 'Vendor');
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
+			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
+				'stylesSet'	=> 'default'
+			));
+		}
+
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('categories', $categories);
 		$this->set('editable', $this->checkCurrentEditable($currentPageCategoryId, $currentCatOwnerId));
@@ -354,7 +399,8 @@ class PagesController extends AppController {
 		$this->set('reflectMobile', $reflectMobile);
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('ckEditorOptions1', array('useDraft' => true, 'draftField' => 'draft', 'disableDraft' => false, 'width' => 'auto'));
+		$this->set('ckEditorOptions1', $ckEditorOptions1);
+		$this->set('ckStyles', $ckStyles);
 		$this->set('url', $url);
 		$this->set('mobileExists',$this->Page->agentExists('mobile', $this->request->data));
 		$this->set('smartphoneExists',$this->Page->agentExists('smartphone', $this->request->data));

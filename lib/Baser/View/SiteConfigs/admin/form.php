@@ -295,6 +295,49 @@ $(function(){
 <?php endif ?>
 	</table>
 	
+	<h2>エディタ設定関連</h2>
+	
+	<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', '改行モード') ?></th>
+		<td class="col-input">
+			<?php echo $bcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
+				'0' => '改行時に段落を挿入する',
+				'1' => '改行時にBRタグを挿入する'
+			))) ?>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_styles', 'エディタスタイルセット') ?></th>
+		<td class="col-input">
+			<?php echo $this->BcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>
+			<?php echo $this->Html->image('admin/icn_help.png',array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->error('SiteConfig.editor_styles') ?>
+			<div id="helptextFormalName" class="helptext">
+<p>固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができます。</p>
+				<pre>
+# タイトル
+タグ {
+	プロパティ名：プロパティ値
+}
+
+ 《記述例》
+ # 見出し
+ h2 {
+	font-size:20px;
+	color:#333;
+ }
+</pre>
+<p>タグにプロパティを設定しない場合は次のように記述します。</p>
+<pre>
+# 見出し
+h2 {}
+</pre>
+			</div>
+		</td>
+	</tr>
+	</table>
+	
 	<h2>メール設定関連</h2>
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">

@@ -20,35 +20,60 @@
 ?>
 
 
-<!-- list -->
-<table cellpadding="0" cellspacing="0" class="list-table sort-table" id="ListTable">
-	<thead>
-		<tr>
-			<th style="width:160px" class="list-tool">
-<?php if($this->BcBaser->isAdminUser()): ?>
-				<div>
-					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-				</div>
+<script type="text/javascript">
+$(function(){
+	$(".theme-popup").colorbox({inline:true, width:"60%"});
+});
+</script>
+
+
+<div id="CurrentTheme" class="clearfix">
+	<h2>現在のテーマ</h2>
+	<div class="current-theme-left">
+		<div class="theme-screenshot">
+			<?php if($currentTheme['screenshot']): ?>
+			<?php $this->BcBaser->img('/themed/'.$currentTheme['name'].'/screenshot.png',array('alt'=>$currentTheme['title'])) ?>
+			<?php else: ?>
+			<?php $this->BcBaser->img('admin/no-screenshot.png',array('alt'=>$currentTheme['title'])) ?>
+			<?php endif ?>
+		</div>
+		<p class="row-tools">
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), array('controller'=>'theme_files','action' => 'index', $currentTheme['name']), array('title' => '管理')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => '編集')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+	<?php if(!$currentTheme['is_writable_pages']): ?>
+			<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>
+	<?php endif ?>
+		</p>
+	</div>
+		
+	<div class="theme-info">
+		<p class="theme-name"><strong><?php echo $currentTheme['title'] ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>&nbsp;)</p>
+		<p class="theme-version">バージョン：<?php echo $currentTheme['version'] ?></p>
+		<p class="theme-author">制作者：<?php if(!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
+			<?php $this->BcBaser->link($currentTheme['author'],$currentTheme['url'],array('target'=>'_blank')) ?>
+			<?php else: ?>
+			<?php echo $currentTheme['author'] ?>
+			<?php endif ?>
+		</p>
+	</div>
+	<br /><br />
+<?php if($defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
+	<?php echo $this->BcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+	<?php echo $this->BcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
+	<?php echo $this->BcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
+	<?php echo $this->BcForm->end() ?>
 <?php endif ?>
-			</th>
-			<th>テーマ名</th>
-			<th>タイトル</th>
-			<th>バージョン</th>
-			<th>説明</th>
-			<th>制作者</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php if(!empty($datas)): ?>
-			<?php foreach($datas as $data): ?>
-				<?php $this->BcBaser->element('themes/index_row', array('data' => $data)) ?>
-			<?php endforeach; ?>
-		<?php else: ?>
-		<tr>
-			<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
-		</tr>
-		<?php endif; ?>
-	</tbody>
-</table>
+	<br /><br /><br /><br />
+	<div class="theme-description"><?php echo nl2br($currentTheme['description']) ?></div>
+</div>
+
+<ul class="list-panel clearfix">
+<?php if(!empty($datas)): ?>
+	<?php foreach($datas as $data): ?>
+		<?php $this->BcBaser->element('themes/index_row', array('data' => $data)) ?>
+	<?php endforeach; ?>
+<?php else: ?>
+	<li class="no-data">変更できるテーマがありません。<br /><a href="http://basercms.net/themes/index" target="_blank">baserCMSの公式サイト</a>では無償のテーマが公開されています。</li>
+<?php endif; ?>
+</ul>
