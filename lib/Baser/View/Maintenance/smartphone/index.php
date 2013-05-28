@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [SMARTPHONE] メンテナンス
+ * [MOBILE] メンテナンス
  *
  * PHP versions 5
  *

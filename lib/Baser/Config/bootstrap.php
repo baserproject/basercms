@@ -106,7 +106,8 @@ if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
 	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'js\//', $uri) ||
 	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'img\//', $uri)) {
 	$assets = array('js', 'css', 'gif', 'jpg', 'png');
-	$ext = array_pop(explode('.', $uri));
+	$aryUri = explode('.', $uri);
+	$ext = array_pop($aryUri);
 	if (in_array($ext, $assets)) {
 		Configure::write('BcRequest.asset', true);
 		return;

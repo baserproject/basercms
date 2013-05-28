@@ -79,6 +79,10 @@
 	$config['BcEncode'] = array(
 		// 文字コードの検出順
 		'detectOrder'	=> 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
+		'mail'			=> array(
+			'UTF-8'			=> 'UTF-8',
+			'ISO-2022-JP'	=> 'ISO-2022-JP'
+		)
 	);
 /**
  * キャッシュ設定 
