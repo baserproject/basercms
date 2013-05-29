@@ -1735,4 +1735,17 @@ END_FLASH;
 		}
 		
 	}
+/**
+ * 指定したURLが現在のURLかどうか判定する
+ * 
+ * @param string $url
+ * @return boolean 
+ * @access public
+ */
+	public function isCurrentUrl($url) {
+		
+		return ($this->getUrl($url) == $this->here);
+
+	}
+
 }
