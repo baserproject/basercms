@@ -40,7 +40,8 @@
 	'jquery.contextMenu-1.0/jquery.contextMenu',
 	'jquery.form-2.94',
 	'jquery.validate.min',
-	'jquery.colorbox-min',
+	'jquery.colorbox-min-1.4.5',
+	'jquery.mScroll',
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup',
@@ -57,6 +58,7 @@
 	</div>
 	<?php $this->BcBaser->flash() ?>
 	<?php $this->BcBaser->content() ?>
-<?php echo $cakeDebug; ?>
+
+	<?php $this->BcBaser->func() ?>
 </body>
 </html>

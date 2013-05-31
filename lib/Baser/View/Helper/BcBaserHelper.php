@@ -668,7 +668,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function scripts() {
 
-		$currentPrefix = $this->_View->viewVars['currentPrefix'];
+		$currentPrefix = $this->Session->read('Auth.User.authPrefix');
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
 
@@ -677,12 +677,15 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー設定
-		if(!$this->_View->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_view->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
-				$publishTheme = $this->BcHtml->themeWeb;
-				$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
-				$this->css('admin/toolbar', array('inline' => false));
-				$this->BcHtml->themeWeb = $publishTheme;
+
+				if(empty($this->request->params['admin']) && !empty($this->_view->viewVars['user'])) {
+					$publishTheme = $this->BcHtml->themeWeb;
+					$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
+					$this->css('admin/toolbar', array('inline' => false));
+					$this->BcHtml->themeWeb = $publishTheme;
+				}
 			}
 		}
 
@@ -698,7 +701,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function func() {
 
-		$currentPrefix = $this->_View->viewVars['currentPrefix'];
+		$currentPrefix = $this->Session->read('Auth.User.authPrefix');
 		$authPrefixes = Configure::read('BcAuthPrefix.'.$currentPrefix);
 		$toolbar = true;
 		if(isset($authPrefixes['toolbar'])) {
@@ -706,16 +709,11 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー表示
-		if(!$this->_View->viewVars['preview'] && $toolbar && empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!$this->_view->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
-				// 2012/09/30 ryuring
-				// テーマフォルダに toolbar.php を配置しても読み込まれなかったのでコメントアウト
-				// 現在のところ特に影響はなさそう。
-				
-				//$publishTheme = $this->_View->theme;
-				//$this->_View->theme = $this->siteConfig['admin_theme'];
-				$this->element('admin/toolbar');
-				//$this->_View->theme = $publishTheme;
+				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
+					$this->Element('admin/toolbar', null, false, false);
+				}
 			}
 		}
 

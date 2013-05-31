@@ -79,11 +79,15 @@ $(function(){
 				if(response) {
 					$("#Login").fadeOut(500);
 					if($("#Credit").size()) {
-						document.location = response;
-					} else {
-						openCredit(function(){
+						if($("#Credit").css('display') == 'none') {
 							document.location = response;
-						});
+						} else {
+							openCredit(function(){
+								document.location = response;
+							});
+						}
+					} else {
+						document.location = response;
 					}
 				} else {
 					$("#AlertMessage").html('ログインに失敗しました。アカウント名、パスワードを確認してください。');
@@ -126,6 +130,10 @@ function changeNavi(target){
 	}
 }
 function changeView(creditOn) {
+
+	if(!$("#Credit").size()) {
+		return;
+	}
 
 	if(creditOn) {
 		credit();

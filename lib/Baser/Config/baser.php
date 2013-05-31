@@ -129,11 +129,11 @@
 		/*'mypage' => array(
 			'name'			=> 'マイページ',
 			'alias'			=> 'mypage',
-			'loginRedirect'	=> '/',
+			'loginRedirect'	=> '/mypage/members/edit',
 			'loginTitle'	=> 'マイページログイン',
 			'userModel'		=> 'Member',
 			'loginAction'	=> '/mypage/members/login',
-			'toolbar'		=> true
+			'toolbar'		=> false
 		),*/
 		// モバイルマイページ（例）
 		/*'mobile_mypage' => array(

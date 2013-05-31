@@ -97,11 +97,11 @@ class UsersController extends AppController {
 		if (!empty($this->request->params['prefix'])) {
 			$prefix = $this->request->params['prefix'];
 			if ($this->RequestHandler->isAjax() && $this->request->action == $prefix . '_ajax_login') {
-				Configure::write('BcAuthPrefix.' . $prefix . '.loginAction', '/' . $prefix . '/users/ajax_login');
+				Configure::write('BcAuthPrefix.' . $prefix . '.loginAction', '/' . $prefix . '/' . $this->request->params['controller'] . '/ajax_login');
 			}
 		} else {
 			if ($this->RequestHandler->isAjax() && $this->request->action == 'ajax_login') {
-				Configure::write('BcAuthPrefix.front.loginAction', '/users/ajax_login');
+				Configure::write('BcAuthPrefix.front.loginAction', '/' . $this->request->params['controller'] . '/ajax_login');
 			}
 		}
 		parent::beforeFilter();
