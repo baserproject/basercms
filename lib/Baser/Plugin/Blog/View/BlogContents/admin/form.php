@@ -273,6 +273,22 @@ $(function(){
 					</ul>
 				</div>
 			</td>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.eye_catch_size_width', 'アイキャッチ画像サイズ') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<span>PCサイズ</span>　
+				<small>[幅]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
+				<small>[高さ]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_height', array('type' => 'text', 'size' => '8')) ?><br />
+				<span>携帯サイズ</span>　
+				<small>[幅]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
+				<small>[高さ]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_height', array('type' => 'text', 'size' => '8')) ?>
+				<?php echo $this->BcForm->error('BlogContent.eye_catch_size') ?>
+				<div id="helptextTemplate" class="helptext">
+					<ul>
+						<li>アイキャッチ画像のサイズを指定します。</li>
+					</ul>
+				</div>
+			</td>
 		</tr>
 	</table>
 </div>

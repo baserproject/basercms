@@ -100,14 +100,16 @@ class BlogController extends BlogAppController {
 		}else {
 			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
 		}
-
+		
+		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+		
 		$this->subMenuElements = array('default');
 		$this->crumbs = array(array('name' => $this->blogContent['BlogContent']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/index'));
 
 		// ページネーションのリンク対策
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
 		// Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
-		if(!isset($this->params['admin'])) {
+		if(!isset($this->request->params['admin'])) {
 			$this->passedArgs['controller'] = $this->blogContent['BlogContent']['name'];
 			$this->passedArgs['plugin'] = $this->blogContent['BlogContent']['name'];
 			$this->passedArgs['action'] = $this->action;

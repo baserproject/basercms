@@ -47,7 +47,20 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	public $actsAs = array('BcContentsManager', 'BcCache');
+	var $actsAs = array(
+			'BcContentsManager', 
+			'BcCache', 
+			'BcUpload' => array(
+				'subdirDateFormat'	=> 'Y/m/',
+				'fields'	=> array(
+					'eye_catch'	=> array(
+						'type'			=> 'image',
+						'namefield'		=> 'id',
+						'nameformat'	=> '%08d'
+					)
+				)
+			)
+	);
 /**
  * belongsTo
  *
@@ -118,6 +131,37 @@ class BlogPost extends BlogAppModel {
 					'message'	=> '投稿者を選択してください。')
 		)
 	);
+/**
+ * アップロードビヘイビアの設定
+ *
+ * @param	int		$id
+ * @param	string	$table
+ * @param	string	$ds
+ */
+	function  setupUpload($id) {
+		
+		$sizes = array('thumb', 'mobile_thumb');
+		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
+		$data = $this->BlogContent->constructEyeCatchSize($data);
+		$data = $data['BlogContent'];
+		
+		$imagecopy = array();
+		
+		foreach($sizes as $size) {
+			if(!isset($data['eye_catch_size_' . $size . '_width']) || !isset($data['eye_catch_size_' . $size . '_height'])) {
+				continue;
+			}
+			$imagecopy[$size] = array('suffix'	=> '__' . $size);
+			$imagecopy[$size]['width'] = $data['eye_catch_size_' . $size . '_width'];
+			$imagecopy[$size]['height'] = $data['eye_catch_size_' . $size . '_height'];
+		}
+		
+		$settings = $this->Behaviors->BcUpload->settings;
+		$settings['saveDir'] .= "blog" . DS . $data['name'] . DS . "blog_posts";
+		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;
+		$this->Behaviors->attach('BcUpload', $settings);
+
+	}
 /**
  * 初期値を取得する
  *

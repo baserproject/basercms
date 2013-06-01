@@ -115,22 +115,27 @@ class BlogContentsController extends BlogAppController {
 
 		$this->pageTitle = '新規ブログ登録';
 
-		if(!$this->data) {
-			$this->data = $this->BlogContent->getDefaultValue();
+		if(!$this->request->data) {
+			
+			$this->request->data = $this->BlogContent->getDefaultValue();
+			
 		}else {
 
-			/* 登録処理 */
-			$this->BlogContent->create($this->data);
-
-			// データを保存
+			$this->request->data = $this->BlogContent->deconstructEyeCatchSize($this->request->data);
+			$this->BlogContent->create($this->request->data);
+			
 			if($this->BlogContent->save()) {
+				
 				$id = $this->BlogContent->getLastInsertId();
-				$this->setMessage('新規ブログ「'.$this->data['BlogContent']['title'].'」を追加しました。', false, true);
+				$this->setMessage('新規ブログ「'.$this->request->data['BlogContent']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $id));
-			}else {
+				
+			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
-
+			
+			$this->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+			
 		}
 
 		// テーマの一覧を取得
@@ -148,40 +153,48 @@ class BlogContentsController extends BlogAppController {
 	public function admin_edit($id) {
 
 		/* 除外処理 */
-		if(!$id && empty($this->data)) {
+		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->data)) {
-			$this->data = $this->BlogContent->read(null, $id);
-		}else {
+		if(empty($this->request->data)) {
+			
+			$this->request->data = $this->BlogContent->read(null, $id);
+			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+			
+		} else {
+			
+			$this->request->data = $this->BlogContent->deconstructEyeCatchSize($this->request->data);
+			$this->BlogContent->set($this->request->data);
+			
+			if($this->BlogContent->save()) {
+				
+				$this->setMessage('ブログ「'.$this->request->data['BlogContent']['title'].'」を更新しました。', false, true);
 
-			/* 更新処理 */
-			if($this->BlogContent->save($this->data)) {
-				$this->setMessage('ブログ「'.$this->data['BlogContent']['title'].'」を更新しました。', false, true);
-
-				if($this->data['BlogContent']['edit_layout_template']){
-					$this->redirectEditLayout($this->data['BlogContent']['layout']);
-				}elseif ($this->data['BlogContent']['edit_blog_template']) {
-					$this->redirectEditBlog($this->data['BlogContent']['template']);
+				if($this->request->data['BlogContent']['edit_layout_template']){
+					$this->redirectEditLayout($this->request->data['BlogContent']['layout']);
+				}elseif ($this->request->data['BlogContent']['edit_blog_template']) {
+					$this->redirectEditBlog($this->request->data['BlogContent']['template']);
 				}else{
 					$this->redirect(array('action' => 'edit', $id));
 				}
 				
-			}else {
+			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
-
+			
+			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+			
 		}
 
-		$this->set('publishLink', '/'.$this->data['BlogContent']['name'].'/index');
+		$this->set('publishLink', '/'.$this->request->data['BlogContent']['name'].'/index');
 		
 		/* 表示設定 */
-		$this->set('blogContent',$this->data);
+		$this->set('blogContent',$this->request->data);
 		$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 		$this->set('themes',$this->SiteConfig->getThemes());
-		$this->pageTitle = 'ブログ設定編集：'.$this->data['BlogContent']['title'];
+		$this->pageTitle = 'ブログ設定編集：'.$this->request->data['BlogContent']['title'];
 		$this->help = 'blog_contents_form';
 		$this->render('form');
 

@@ -30,8 +30,12 @@ include BASER_VENDORS.'imageresizer.php';
  *         'type'      => 'image',
  *         'namefield'    => 'id',
  *         'nameadd'    => false,
+ *			'subdirDateFormat'	=> 'Y/m'	// Or false
  *         'imageresize'  => array('prefix' => 'template', 'width' => '100', 'height' => '100'),
- *        'imagecopy'    => array('suffix' => 'template', 'width' => '100', 'height' => '100')
+ *				'imagecopy'		=> array(
+ *					'thumb'			=> array('suffix' => 'template', 'width' => '150', 'height' => '150'),
+ *					'thumb_mobile'	=> array('suffix' => 'template', 'width' => '100', 'height' => '100')
+ *				)
  *       ),
  *       'pdf' => array(
  *         'type'      => 'pdf',
@@ -90,13 +94,17 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	public function setup(Model $model, $config = array()) {
 
-		$this->settings = Set::merge(array('saveDir'=> '')
-				, $config);
+		$this->settings = Set::merge(array(
+			'saveDir'	=> '',
+			'fields'	=> array()
+		), $config);
 		$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
 		if(!is_dir($this->savePath)) {
-			mkdir($this->savePath);
-			chmod($this->savePath,0777);
+			$Folder = new Folder();
+			$Folder->create($this->savePath);
+			$Folder->chmod($this->savePath, 0777, true);
 		}
+		App::import('Component', 'Session');
 		$this->Session = new SessionComponent(new ComponentCollection());
 
 	}
@@ -631,8 +639,23 @@ class BcUploadBehavior extends ModelBehavior {
 			$basename .= '_' . $setting['name'];
 		}
 		
-		return $basename . '.' . $ext;
-
+		$subdir = '';
+		if(!empty($this->settings['subdirDateFormat'])) {
+			$subdir = date($this->settings['subdirDateFormat']);
+			if(!preg_match('/\/$/', $subdir)) {
+				$subdir .= '/';
+			}
+			$subdir = str_replace('/', DS, $subdir);
+			$path = $this->savePath . $subdir;
+			if(!is_dir($path)) {
+				$Folder = new Folder();
+				$Folder->create($path);
+				$Folder->chmod($path, 0777);
+			}
+		}
+		
+		return $subdir . $basename . '.' . $ext;
+		
 	}
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する

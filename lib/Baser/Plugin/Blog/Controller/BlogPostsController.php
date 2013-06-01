@@ -47,7 +47,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	public $helpers = array('BcText', 'BcTime', 'BcForm', 'BcCkeditor', 'Blog.Blog');
+	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 /**
  * コンポーネント
  *
@@ -89,13 +89,13 @@ class BlogPostsController extends BlogAppController {
 
 		parent::beforeFilter();
 		
-		if(isset($this->params['pass'][0])) {
+		if(isset($this->request->params['pass'][0])) {
 			
 			$this->BlogContent->recursive = -1;
-			$this->blogContent = $this->BlogContent->read(null,$this->params['pass'][0]);
-			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
-			
-			if($this->params['prefix'] == 'admin') {
+			$this->blogContent = $this->BlogContent->read(null,$this->request->params['pass'][0]);
+			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->request->params['pass'][0]));
+			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+			if($this->request->params['prefix'] == 'admin') {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
 			}
 			
@@ -162,7 +162,7 @@ class BlogPostsController extends BlogAppController {
 		
 		$this->_setAdminIndexViewData();
 		
-		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
