@@ -857,6 +857,16 @@ class Page extends AppModel {
 		// カテゴリの取得・登録
 		$categoryName = basename($targetPath);
 		
+		$specialCategoryIds = array(
+			'',
+			$this->PageCategory->getAgentId('mobile'),
+			$this->PageCategory->getAgentId('smartphone')
+		);
+		
+		if(in_array($parentCategoryId, $specialCategoryIds) && $categoryName == 'templates') {
+			return array('all' => 0, 'insert' => 0, 'update' => 0);
+		}
+		
 		$pageCategoryId = '';
 		$this->PageCategory->updateRelatedPage = false;
 		if($categoryName != 'pages') {
