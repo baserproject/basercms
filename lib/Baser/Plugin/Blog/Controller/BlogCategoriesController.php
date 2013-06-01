@@ -146,23 +146,23 @@ class BlogCategoriesController extends BlogAppController {
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 			
 			$user = $this->BcAuth->user();
 			$this->request->data = array('BlogCategory' => array(
-				'owner_id'			=> $use['user_group_id']
+				'owner_id'			=> $user['user_group_id']
 			));
 
 		}else {
 
 			/* 登録処理 */
-			$this->data['BlogCategory']['blog_content_id'] = $blogContentId;
-			$this->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$blogContentId))+1;
-			$this->BlogCategory->create($this->data);
+			$this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
+			$this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$blogContentId))+1;
+			$this->BlogCategory->create($this->request->data);
 
 			// データを保存
 			if($this->BlogCategory->save()) {
-				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を追加しました。', false, true);
+				$this->setMessage('カテゴリー「'.$this->request->data['BlogCategory']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -202,18 +202,18 @@ class BlogCategoriesController extends BlogAppController {
 	public function admin_edit($blogContentId,$id) {
 
 		/* 除外処理 */
-		if(!$id && empty($this->data)) {
+		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->data)) {
-			$this->data = $this->BlogCategory->read(null, $id);
+		if(empty($this->request->data)) {
+			$this->request->data = $this->BlogCategory->read(null, $id);
 		}else {
 
 			/* 更新処理 */
-			if($this->BlogCategory->save($this->data)) {
-				$this->setMessage('カテゴリー「'.$this->data['BlogCategory']['name'].'」を更新しました。', false, true);
+			if($this->BlogCategory->save($this->request->data)) {
+				$this->setMessage('カテゴリー「'.$this->request->data['BlogCategory']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $blogContentId));
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -226,7 +226,7 @@ class BlogCategoriesController extends BlogAppController {
 		$userModel = $this->getUserModel();
 		$catOptions = array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
-			'excludeParentId' => $this->data['BlogCategory']['id']
+			'excludeParentId' => $this->request->data['BlogCategory']['id']
 		);
 		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			$catOptions['ownerId'] = $user[$userModel]['user_group_id'];
@@ -335,6 +335,35 @@ class BlogCategoriesController extends BlogAppController {
 
 		$this->redirect(array('action'=>'index',$blogContentId));
 
+	}
+/**
+ * [ADMIN] 追加処理（AJAX）
+ * 
+ * @param int $blogContentId 
+ */
+	function admin_ajax_add($blogContentId) {
+		
+		if(!empty($this->request->data)) {
+			if (strlen($this->request->data['BlogCategory']['name']) == mb_strlen($this->request->data['BlogCategory']['name'])) {
+				$this->request->data['BlogCategory']['title'] = $this->request->data['BlogCategory']['name'];
+			} else {
+				$this->request->data['BlogCategory']['title'] = $this->request->data['BlogCategory']['name'];
+				$this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
+			}
+			$this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
+			$this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$blogContentId))+1;
+			$this->BlogCategory->create($this->request->data);
+			if($this->BlogCategory->save()) {
+				echo $this->BlogCategory->getInsertID();
+			} else {
+				$this->ajaxError(500, $this->BlogCategory->validationErrors);
+			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		
+		exit();
+		
 	}
 	
 }

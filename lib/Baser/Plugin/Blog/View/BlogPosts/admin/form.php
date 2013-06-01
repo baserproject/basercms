@@ -24,6 +24,7 @@ $this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'previe
 
 <div id="CreatePreviewUrl" style="display:none"><?php echo $this->BcBaser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
 <div id="AddTagUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
+<div id="AddBlogCategoryUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContent['BlogContent']['id'])) ?></div>
 
 
 <script type="text/javascript">
@@ -108,6 +109,45 @@ $(function(){
 			}
 		});
 	});
+/**
+ * ブログカテゴリ追加
+ */
+	$("#BtnAddBlogCategory").click(function(){
+		var category = prompt("新しいブログカテゴリを入力してください。");
+		if(!category) {
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: $("#AddBlogCategoryUrl").html(),
+			data: {'data[BlogCategory][name]': category},
+			dataType: 'script',
+			beforeSend: function() {
+				$("#BtnAddBlogCategory").attr('disabled', 'disabled');
+				$("#BlogCategoryLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
+					$("#BlogPostBlogCategoryId").val(result);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus){
+				if(XMLHttpRequest.responseText) {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
+				}
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogCategory").removeAttr('disabled');
+				$("#BlogCategoryLoader").hide();
+				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
+			}
+		});
+	});
 });
 </script>
 <?php if($this->action == 'admin_edit'): ?>
@@ -149,7 +189,9 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>
+				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
+				<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php $this->BcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
 				<?php echo $this->BcForm->error('BlogPost.blog_category_id') ?>
 			</td>
 		</tr>
