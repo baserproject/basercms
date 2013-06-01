@@ -677,7 +677,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー設定
-		if(!$this->_view->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
+		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
 
 				if(empty($this->request->params['admin']) && !empty($this->_view->viewVars['user'])) {
@@ -709,7 +709,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー表示
-		if(!$this->_view->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
+		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->Element('admin/toolbar', null, false, false);
