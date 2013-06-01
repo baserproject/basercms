@@ -382,6 +382,30 @@ function pageTypeChengeHandler() {
 <?php endif ?>
 			</td>
 		</tr>
+	</table>
+</div>
+
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+
+<div id ="formOptionBody" class="slide-body section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'PHPコード') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('Page.code', array(
+					'type'			=> 'textarea', 
+					'cols'			=> 36, 
+					'rows'			=> 5,
+					'style'			=> 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
+				)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">
+					固定ページの本文には、ソースコードに切り替えてPHPコードを埋め込む事ができますが、間違って削除してしまわないようにこちらに入力する事もできます。<br />
+					PHPの開始タグ（&lt;php）と終了タグ（?&gt;）は不要です。
+				</div>
+				<?php echo $this->BcForm->error('Page.code') ?>
+			</td>
+		</tr>
 <?php if($reflectMobile): ?>
 		<tr id="RowReflectMobile" style="display: none">
 			<th class="col-head"><?php echo $this->BcForm->label('Page.status', 'モバイル') ?></th>
