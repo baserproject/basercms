@@ -49,6 +49,9 @@ function pageTypeChengeHandler() {
 	var options = {
 		"data[Option][excludeParentId]": $("#PageCategoryId").val()
 	};
+	if(pageType == undefined) {
+		pageType = 1;
+	}
 	$.ajax({
 		type: "POST",
 		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
