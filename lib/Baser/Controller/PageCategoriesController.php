@@ -146,13 +146,13 @@ class PageCategoriesController extends AppController {
 		}
 		
 		$pageType = array();
-		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
-			$linkedPagesMobile = true;
+		if(Configure::read('BcApp.mobile')) {
+			$linkedPagesMobile = !empty($this->siteConfigs['linked_pages_mobile']);
 		} else {
 			$linkedPagesMobile = false;
 		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
-			$linkedPagesSmartPhone = true;
+		if(Configure::read('BcApp.smartphone')) {
+			$linkedPagesSmartPhone = !empty($this->siteConfigs['linked_pages_smartphone']);
 		} else {
 			$linkedPagesSmartPhone = false;
 		}
