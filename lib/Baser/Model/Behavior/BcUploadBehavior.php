@@ -560,7 +560,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function renameToFieldBasename(&$model) {
+	public function renameToFieldBasename($model, $copy = false) {
 
 		foreach($this->settings['fields'] as $key => $setting) {
 
@@ -584,8 +584,14 @@ class BcUploadBehavior extends ModelBehavior {
 							$newName = $this->getFileName($model, $setting['imageresize'], $newName);
 						} else {
 							$newName = $this->getFileName($model, null, $newName);
-						} 
-						rename($this->savePath.$oldName,$this->savePath.$newName);
+						}
+						
+						if(!$copy) {
+							rename($this->savePath.$oldName,$this->savePath.$newName);
+						} else {
+							copy($this->savePath.$oldName,$this->savePath.$newName);
+						}
+						
 						$model->data[$model->alias][$setting['name']] = $newName;
 
 						if(!empty($setting['imagecopy'])) {
@@ -593,12 +599,16 @@ class BcUploadBehavior extends ModelBehavior {
 								$oldCopyname = $this->getFileName($model,$copysetting,$oldName);
 								if(file_exists($this->savePath.$oldCopyname)) {
 									$newCopyname = $this->getFileName($model,$copysetting,$newName);
-									rename($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									if(!$copy) {
+										rename($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									} else {
+										copy($this->savePath.$oldCopyname,$this->savePath.$newCopyname);
+									}
 								}
 							}
 						}
 					}
-				}else {
+				} else {
 					$model->data[$model->alias][$setting['name']] = '';
 				}
 			}
