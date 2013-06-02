@@ -211,11 +211,11 @@ class UsersController extends AppController {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
 		}
-		$this->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
+		$this->request->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
 		Configure::write('debug', 0);
 		$configs = Configure::read('BcAuthPrefix');
-		$config = $configs[$this->data['UserGroup']['auth_prefix']];
-		$config['auth_prefix'] = $this->data['UserGroup']['auth_prefix'];
+		$config = $configs[$this->request->data['UserGroup']['auth_prefix']];
+		$config['auth_prefix'] = $this->request->data['UserGroup']['auth_prefix'];
 		$this->BcAuthConfigure->setting($config);
 
 		$this->setAction('admin_ajax_login');
@@ -395,7 +395,7 @@ class UsersController extends AppController {
 					$this->request->data['User']['password'] = $this->BcAuth->password($this->request->data['User']['password']);
 				}
 				$this->User->save($this->request->data,false);
-				$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を追加しました。', false, true);
+				$this->setMessage('ユーザー「'.$this->request->data['User']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -450,10 +450,10 @@ class UsersController extends AppController {
 			}
 
 			// 自身のアカウントは変更出来ないようにチェック
-			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->data[$userModel]['user_group_id']) {
+			if ($selfUpdate && $user[$userModel]['user_group_id'] != $this->request->data[$userModel]['user_group_id']) {
 				$this->setMessage('自分のアカウントのグループは変更できません。', true);
 			} else {
-				$this->User->set($this->data);
+				$this->User->set($this->request->data);
 
 				if ($this->User->validates()) {
 					unset($this->request->data['User']['password_1']);
@@ -467,7 +467,7 @@ class UsersController extends AppController {
 						$this->admin_logout();
 					}
 
-					$this->setMessage('ユーザー「'.$this->data['User']['name'].'」を更新しました。', false, true);
+					$this->setMessage('ユーザー「'.$this->request->data['User']['name'].'」を更新しました。', false, true);
 					$this->redirect(array('action' => 'edit', $id));
 				} else {
 					// よく使う項目のデータを再セット
@@ -480,15 +480,14 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
-		$user = $this->BcAuth->user();
 		
 		if($user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
-				$editable = false;
+			$editable = false;
+		} else if ($selfUpdate && $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			$editable = false; 
 		}
 
-		$this->set('userGroups', $userGroups);
-		$this->set('editable', $editable);
-		$this->set('selfUpdate', $selfUpdate);
+		$this->set(compact('userGroups', 'editable', 'selfUpdate'));
 		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';

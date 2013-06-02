@@ -124,6 +124,7 @@ $(function(){
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
 		</tr>
+
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
