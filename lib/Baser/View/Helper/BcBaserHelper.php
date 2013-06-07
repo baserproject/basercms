@@ -102,7 +102,7 @@ class BcBaserHelper extends AppHelper {
 
 		parent::__construct($View, $settings);
 
-		if(BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
+		if($this->_View && BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')){
 
 			if (ClassRegistry::isKeySet('Permission')) {
 				$this->Permission = ClassRegistry::getObject('Permission');
@@ -1746,4 +1746,29 @@ END_FLASH;
 
 	}
 
+/**
+ * ユーザー名を整形して表示する
+ * 
+ * @param array $user
+ * @return string $userName
+ */
+	public function getUserName($user) {
+		if (isset($user['User'])) {
+			$user = $user['User'];
+		}
+		
+		if (!empty($user['nickname'])) {
+			$userName = $user['nickname'];
+		} else {
+			$userName = array();
+			if(!empty($user['real_name_1'])) {
+				$userName[] = $user['real_name_1'];
+			}
+			if(!empty($user['real_name_2'])) {
+				$userName[] = $user['real_name_2'];
+			}
+			$userName = implode(' ', $userName);
+		}
+		return $userName;
+	} 
 }

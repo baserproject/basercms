@@ -100,7 +100,7 @@ $(function(){
 			<ul class="clearfix">
 				<li>
 <?php if(!empty($user)): ?>
-					<?php $this->BcBaser->link($user['real_name_1']." ".$user['real_name_2'].' '.$this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 					<ul>
 	<?php if($this->Session->check('AuthAgent')): ?>
 						<li><?php $bcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>

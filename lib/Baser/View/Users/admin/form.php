@@ -124,7 +124,15 @@ $(function(){
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
 		</tr>
-
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('User.nickname', 'ニックネーム') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('User.nickname', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png',array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->error('User.nickname') ?>
+				<div id="helptextNickname" class="helptext">ニックネームを設定している場合は全ての表示にニックネームが利用されます。</div>
+			</td> 
+		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">

@@ -30,6 +30,7 @@
 	</td>
 	<td><?php echo $data['User']['id'] ?></td>
 	<td><?php $this->BcBaser->link($data['User']['name'],array('action'=>'edit', $data['User']['id'])) ?></td>
+	<td><?php echo $data['User']['nickname'] ?></td>
 	<td><?php echo $this->BcText->listValue('User.user_group_id',$data['User']['user_group_id']); ?><br />
 		<?php echo $data['User']['real_name_1']; ?>&nbsp;<?php echo $data['User']['real_name_2'] ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d',$data['User']['created']) ?><br />

@@ -52,9 +52,7 @@ $class=' class="'.implode(' ', $classies).'"';
 		<?php $this->BcBaser->link($data['BlogPost']['name'],array('action'=>'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
 	</td>
 	<td>
-<?php if(!empty($data['User'])): ?>
-		<?php echo $data['User']['real_name_1']." ".$data['User']['real_name_2']; ?>
-<?php endif ?>
+		<?php echo $this->BcBaser->getUserName($data['User']) ?>
 	</td>
 	<td style="text-align:center"><?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?></td>
 <?php if($data['BlogContent']['comment_use']): ?>

@@ -382,14 +382,7 @@ class BlogHelper extends AppHelper {
  */
 	public function author($post) {
 
-		$author = '';
-		if(!empty($post['User']['real_name_1'])) {
-			$author .= $post['User']['real_name_1'];
-		}
-		if(!empty($post['User']['real_name_2'])) {
-			$author .= " ".$post['User']['real_name_2'];
-		}
-		echo $author;
+		echo $this->BcBaser->getUserName($post['User']);
 
 	}
 /**
