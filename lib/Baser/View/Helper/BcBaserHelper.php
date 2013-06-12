@@ -21,6 +21,7 @@
 /**
  * Include files
  */
+App::uses('AppHelper', 'View/Helper');
 /**
  * Baserヘルパー
  *
