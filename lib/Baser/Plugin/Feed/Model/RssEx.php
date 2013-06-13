@@ -23,6 +23,7 @@
  */
 App::uses('Rss', 'Feed.Model');
 App::uses('SimplePie', 'Feed.Vendor'); // BASERCAMP 確認する → オブジェクトのシリアライズの問題があるのでここから動かさない事
+
 /**
  * RSS取得モデルであるRssクラスを継承したクラス
  *

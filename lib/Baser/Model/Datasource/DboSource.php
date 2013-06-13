@@ -3302,8 +3302,12 @@ class DboSource extends DataSource {
  */
 	public function loadSchema($options) {
 
-		//App::uses('CakeSchema', 'Model');
-		$options = array_merge(array('dropField' => true), $options);
+		App::uses('CakeSchema', 'Model');
+		$options = array_merge(array(
+			'dropField'		=> true,
+			'oldSchemaPath'	=> ''	
+		), $options);
+    
 		extract($options);
 
 		if(!isset($type)){
@@ -3339,14 +3343,21 @@ class DboSource extends DataSource {
 				return $this->createTableBySchema(array('path'=>$path.$file));
 				break;
 			case 'alter':
-				$current = $path.basename($file,'.php').'_current.php';
-				if($this->writeCurrentSchema($current)) {
-					$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
-					unlink($current);
-					return $result;
+				if(!$oldSchemaPath) {
+					$current = $path.basename($file,'.php').'_current.php';
+					if(!$this->writeCurrentSchema($current)) {
+						return false;
+					} 
 				} else {
-					return false;
+					$current = $oldSchemaPath;
 				}
+
+				$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
+				if(!$oldSchemaPath) {
+					unlink($current);
+				}
+				return $result;
+ 
 				break;
 			case 'drop':
 				return $this->dropTableBySchema(array('path'=>$path.$file));
