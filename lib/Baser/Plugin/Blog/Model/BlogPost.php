@@ -302,6 +302,40 @@ class BlogPost extends BlogAppModel {
 		return $entryDates;
 
 	}
+
+/**
+ * 投稿者の一覧を取得する
+ * 
+ * @param int $blogContentId
+ * @param array $options
+ * @return array 
+ */
+	function getAuthors($blogContentId, $options) {
+		
+		$options = array_merge(array(
+			'viewCount' => false
+		), $options);
+		extract($options);
+		
+		$users = $this->User->find('all', array('recursive' => -1, array('order' => 'User.id'), 'fields' => array(
+			'User.id', 'User.name', 'User.real_name_1', 'User.real_name_2', 'User.nickname'
+		)));
+		$availableUsers = array();
+		foreach($users as $key => $user) {
+			$count = $this->find('count', array('conditions' => array_merge(array(
+				'BlogPost.user_id' => $user['User']['id'],
+				'BlogPost.blog_content_id' => $blogContentId
+			), $this->getConditionAllowPublish())));
+			if($count) {
+				if($viewCount) {
+					$user['count'] = $count;
+				}
+				$availableUsers[] = $user;
+			}
+		}
+		return $availableUsers;
+		
+	} 
 /**
  * 指定した月の記事が存在するかチェックする
  *

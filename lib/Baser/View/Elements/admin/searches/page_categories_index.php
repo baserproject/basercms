@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
-
 
 <?php echo $this->BcForm->create('PageCategory', array('url' => array('action' => 'index'))) ?>
 <p>

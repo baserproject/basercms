@@ -82,6 +82,139 @@ class Plugin extends AppModel {
 		return parent::initDb('plugin', $pluginName, true, $filterTable, 'create');
 		
 	}
+
+/**
+ * データベースをプラグインインストール前の状態に戻す
+ * 
+ * @param string $plugin
+ * @return boolean 
+ */
+	function resetDb($plugin) {
+		
+		$schemaPaths = array(
+			APP.'plugins'.DS.$plugin.DS.'config'.DS.'sql',
+			BASER_PLUGINS.$plugin.DS.'config'.DS.'sql'
+		);
+		
+		$path = '';
+		foreach($schemaPaths as $schemaPath) {
+			if(is_dir($schemaPath)) {
+				$path = $schemaPath;
+				break;
+			}
+		}
+		
+		if(!$path) {
+			return true;
+		}
+		
+		$baserDb =& ConnectionManager::getDataSource('baser');
+		$baserDb->cacheSources = false;
+		$baserListSources = $baserDb->listSources();
+		$baserPrefix = $baserDb->config['prefix'];
+		$pluginDb =& ConnectionManager::getDataSource('plugin');
+		$pluginDb->cacheSources = false;
+		$pluginListSources = $pluginDb->listSources();
+		$pluginPrefix = $pluginDb->config['prefix'];
+		
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		
+		if(empty($files[1])) {
+			return true;
+		}
+		
+		$tmpdir = TMP . 'schemas' . DS;
+		$result = true;
+		
+		foreach($files[1] as $file) {
+			
+			
+			$oldSchemaPath = '';
+			
+			if(preg_match('/^(.*?)\.php$/', $file, $matches)) {
+				
+				$type = 'drop';
+				$table = $matches[1];
+				$File = new File($path . DS . $file);
+				$data = $File->read();
+				if(preg_match('/var\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
+					$conType = $matches[1];
+					$listSources = ${$conType.'ListSources'};
+					$prefix = ${$conType.'Prefix'};
+				} else {
+					continue;
+				}
+				
+				$schemaPath = $tmpdir;
+				if(preg_match('/^create_(.*?)\.php$/', $file, $matches)) {
+					$type = 'drop';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+					copy($path . DS . $file, $tmpdir . $table . '.php');
+					
+				} elseif (preg_match('/^alter_(.*?)\.php$/', $file, $matches)) {
+					$type = 'alter';
+					$table = $matches[1];
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+					
+					$corePlugins = implode('|', Configure::read('BcApp.corePlugins'));
+					if(preg_match('/^(' . $corePlugins . ')/', $table, $matches)) {
+						$pluginName = $matches[1];
+					}
+				
+					$File = new File($path . DS . $file);
+					$data = $File->read();
+					$data = preg_replace('/class\s+' . Inflector::camelize($table) . 'Schema/', 'class Alter' . Inflector::camelize($table) . 'Schema', $data);
+					$oldSchemaPath = $tmpdir . $file;
+					$File = new File($oldSchemaPath);
+					$File->write($data);
+					
+					if($conType == 'baser') {
+						$schemaPath = BASER_CONFIGS . 'sql' . DS;
+					} else {
+						$schemaPath = BASER_PLUGINS . $pluginName . DS . 'config' . DS . 'sql' . DS;
+					}
+					
+				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
+					$type = 'create';
+					$table = $matches[1];
+					if(in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+					copy($path . DS . $file, $tmpdir . $table . '.php');
+				} else {
+					if(!in_array($prefix . $table, $listSources)) {
+						continue;
+					}
+					copy($path . DS . $file, $tmpdir . $table . '.php');
+				}
+				
+				if($conType == 'baser') {
+					$db = $baserDb;
+				} else {
+					$db = $pluginDb;
+				}
+				
+				if(!$db->loadSchema(array('type'=>$type, 'path' => $schemaPath, 'file'=> $table.'.php', 'dropField' => true, 'oldSchemaPath' => $oldSchemaPath))) {
+					$result = false;
+				}
+				@unlink($tmpdir.$table.'.php');
+				if(file_exists($oldSchemaPath)) {
+					unlink($oldSchemaPath);
+				}
+
+			}
+			
+		}
+		
+		return $result;
+
+	} 
 /**
  * データベースの構造を変更する
  * 

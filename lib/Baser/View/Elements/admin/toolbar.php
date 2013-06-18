@@ -76,7 +76,7 @@ $(function(){
 				<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'], '/') ?></li>	
 <?php else: ?>
 	<?php if($authPrefix == 'admin'): ?>
-				<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), array('admin' => true, 'controller' => 'dashboard', 'action' => 'index'), array('title' => 'baserCMS管理システム')) ?></li>
+				<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), array('plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'), array('title' => 'baserCMS管理システム')) ?></li>
 	<?php else: ?>
 				<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.'.$currentPrefix.'.loginRedirect'), array('title' => $authName)) ?></li>
 	<?php endif ?>

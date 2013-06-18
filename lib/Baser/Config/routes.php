@@ -174,13 +174,10 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
 			}
 			
-			$siteConfig = Configure::read('BcSite');
-			$linkedPages = false;
-			if(isset($siteConfig['linked_pages_'.$agent])) {
-				$linkedPages = $siteConfig['linked_pages_'.$agent];
-			}
-			
 			foreach ($_parameters as $_parameter){
+
+				$linkedPages = $Page->isLinked($agentPrefix, '/'.$_parameter);
+			
 				if(!$agent || $linkedPages){
 					$url = "/{$_parameter}";
 				}else{

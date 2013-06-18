@@ -82,12 +82,8 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
-		if(!Configure::read('BcApp.mobile')) {
-			$this->request->data['PageCategory']['type'] = 'pc';
-		}
 			
-		$default = array('PageCategory' => array('type'=>'pc'));
+		$default = array('PageCategory' => array('type'=>'1'));
 		$this->setViewConditions('PageCategory', array('default' => $default));
 
 		$mobileId = $this->PageCategory->getAgentId('mobile');
@@ -95,14 +91,14 @@ class PageCategoriesController extends AppController {
 		
 		$ids = array();
 		$conditions = array();
-		if($this->request->data['PageCategory']['type'] == 'pc' || empty($this->request->data['PageCategory']['type'])) {
+		if($this->request->data['PageCategory']['type'] == '1') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
 			}
 			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
-		} elseif($this->request->data['PageCategory']['type'] == 'mobile') {
+		} elseif($this->request->data['PageCategory']['type'] == '2') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
@@ -110,7 +106,7 @@ class PageCategoriesController extends AppController {
 			if($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
 			}
-		} elseif($this->request->data['PageCategory']['type'] == 'smartphone') {
+		} elseif($this->request->data['PageCategory']['type'] == '3') {
 			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if($children) {
 				$ids = am($ids, Set::extract('/PageCategory/id', $children));
@@ -146,6 +142,8 @@ class PageCategoriesController extends AppController {
 		}
 
 		/* 表示設定 */
+		$this->help = 'page_categories_index';
+		$this->search = 'page_categories_index';
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー一覧';
 

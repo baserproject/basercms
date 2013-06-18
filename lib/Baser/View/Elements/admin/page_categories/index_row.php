@@ -35,7 +35,7 @@
 <?php else: ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_up.png', array('width' => 24, 'height' => 24, 'alt' => '上へ移動', 'class' => 'btn')), array('controller' => 'page_categories', 'action' => 'ajax_up', $data['PageCategory']['id']), array('class' => 'btn-up', 'title' => '上へ移動', 'style' => 'display:none')) ?>
 <?php endif ?>
-<?php if(count($datas) != $count || !isset($datas)): ?>
+<?php if(!isset($datas) || count($datas) != $count): ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', array('width' => 24, 'height' => 24, 'alt' => '下へ移動', 'class' => 'btn')), array('controller' => 'page_categories', 'action' => 'ajax_down', $data['PageCategory']['id']), array('class' => 'btn-down', 'title' => '下へ移動')) ?>
 <?php else: ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', array('width' => 24, 'height' => 24, 'alt' => '下へ移動', 'class' => 'btn')), array('controller' => 'page_categories', 'action' => 'ajax_down', $data['PageCategory']['id']), array('class' => 'btn-down', 'title' => '下へ移動', 'style' => 'display:none')) ?>
