@@ -3467,7 +3467,7 @@ class DboSource extends DataSource {
 		$result = $Schema->write($options);
 		
 		// 不要コード削除、改行コードをLFに変更
-		$File = new File($path.$file);
+		$File = new File($path . DS . $file);
 		$data = $File->read();
 		$data = str_replace(array("\r\n","\r"), "\n", $data);
 		$data = preg_replace('/\tvar\s\$path.+;\n\n/', '', $data);

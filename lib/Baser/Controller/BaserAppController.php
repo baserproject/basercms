@@ -1151,12 +1151,12 @@ class BaserAppController extends Controller {
 		}
 
 		$userModel = $this->Session->read('Auth.userModel');
-		//TODO: 2013.05.17 ここをマージすると無限ループしてしまう為コメントアウト
-		//if(!$userModel) {
+		// TODO basercamp 2013.05.17 ここをマージすると無限ループしてしまう為コメントアウト
+		// if(!$userModel) {
 		//	$this->Session->delete('Auth');
 		//	return null;
-		//}
-		//TODO:  2013.05.17 下記は{$userModel}にする必要があるがnullなので変更しない
+		// }
+		// TODO:  2013.05.17 下記は{$userModel}にする必要があるがnullなので変更しない
 		if(isset($this->User)) {
 			$UserClass = $this->User;
 		} else {
