@@ -1268,11 +1268,15 @@ class BaserAppController extends Controller {
 		$url = addSessionId($url, true);
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// ※ Routing.admin を変更した場合
-		if (!isset($url['admin']) && !empty($this->params['admin'])) {
-			$url['admin'] = true;
-		} elseif (isset($url['admin']) && !$url['admin']) {
-			unset($url['admin']);
+		// >>> CUSTOMIZE MODIFY 2013/06/17 arata
+		if(is_array($url)) {
+			if (!isset($url['admin']) && !empty($this->params['admin'])) {
+				$url['admin'] = true;
+			} elseif (isset($url['admin']) && !$url['admin']) {
+				unset($url['admin']);
+			}
 		}
+		// <<<
 		parent::redirect($url, $status, $exit);
 		
 	}
