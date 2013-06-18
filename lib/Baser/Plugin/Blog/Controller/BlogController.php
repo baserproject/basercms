@@ -218,15 +218,14 @@ class BlogController extends BlogAppController {
 		$single = false;
 		$posts = array();
 
-		if($pass[0] == 'category') {
+		if ($pass[0] == 'category') {
 			$type = 'category';
-		}elseif($pass[0] == 'author') {
+		} elseif ($pass[0] == 'author') {
 			$type = 'author';
-		}
-		}elseif($pass[0] == 'tag') {
+		} elseif ($pass[0] == 'tag') {
 			$type = 'tag';
-		}elseif($pass[0] == 'date') {
-			$type='date';
+		} elseif ($pass[0] == 'date') {
+			$type = 'date';
 		}
 
 		switch($type) {
