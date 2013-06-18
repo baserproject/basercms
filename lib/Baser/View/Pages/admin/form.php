@@ -79,7 +79,7 @@ $(function(){
 	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
 
 /**
- * 連携機能変更時イベント
+ * 連動機能変更時イベント
  */
 	$("#PageUnlinkedMobile").change(setStateReflectMobile);
 	$("#PageUnlinkedSmartphone").click(setStateReflectSmartphone);
@@ -466,7 +466,7 @@ function pageTypeChengeHandler() {
 <div id ="formOptionBody" class="slide-body section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'PHPコード') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'コード') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Page.code', array(
 					'type'			=> 'textarea', 
@@ -476,8 +476,8 @@ function pageTypeChengeHandler() {
 				)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">
-					固定ページの本文には、ソースコードに切り替えてPHPコードを埋め込む事ができますが、間違って削除してしまわないようにこちらに入力する事もできます。<br />
-					PHPの開始タグ（&lt;php）と終了タグ（?&gt;）は不要です。
+					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
+					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
 				</div>
 				<?php echo $this->BcForm->error('Page.code') ?>
 			</td>
@@ -489,7 +489,7 @@ function pageTypeChengeHandler() {
 				<td class="col-input">
 		<?php if(@$this->BcBaser->siteConfig['linked_pages_mobile']): ?>
 	      <div id="DivUnlinkedMobile">
-	        <?php echo $this->BcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連携しない')) ?>
+			<?php echo $this->BcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 	      </div>
 		<?php endif ?>
 	      <div id="DivReflectMobile">
@@ -499,7 +499,7 @@ function pageTypeChengeHandler() {
 	          <ul>
 	            <li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
 	            <li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
-	            <li>モバイルページが既に存在するする場合は上書きします。</li>
+				<li>モバイルページが既に存在する場合は上書きします。</li>
 	          </ul>
 	        </div>
 		<?php if(!empty($mobileExists)): ?>
@@ -518,7 +518,7 @@ function pageTypeChengeHandler() {
 
 		<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
 		      <div id="DivUnlinkedSmartphone">
-				<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連携しない')) ?>
+				<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 		      </div>
 		<?php endif ?>
 		      <div id="DivReflectSmartphone">

@@ -509,7 +509,7 @@ class BcManagerComponent extends Component {
 	public function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
 		
 		if(!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 		
 		if($reset) {
@@ -531,7 +531,7 @@ class BcManagerComponent extends Component {
 	public function constructionDb($dbConfig, $dbDataPattern = '') {
 
 		if(!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
@@ -897,7 +897,7 @@ class BcManagerComponent extends Component {
 	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
 
 		if(!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . 'default';
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);

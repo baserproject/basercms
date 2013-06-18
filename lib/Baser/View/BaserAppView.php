@@ -35,8 +35,51 @@ class BaserAppView extends View {
 	protected $_passedVars = array(
 			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
 			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir', 'theme'
+			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir', 'theme', 'adminTheme'
 	);
+/**
+ * Return all possible paths to find view files in order
+ *
+ * @param string $plugin Optional plugin name to scan for view files.
+ * @param boolean $cached Set to true to force a refresh of view paths.
+ * @return array paths
+ */
+	protected function _paths($plugin = null, $cached = true) {
+		
+		// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
+		// プラグインパスにテーマのパスを追加した為、テーマのパスをさらにテーマのパスに整形しないように調整
+		// 管理画面のテーマをフロントのテーマで上書きできるように調整
+		// 
+		// このメソッドの中身は、__paths に全て移動し、最初の行にて呼び出す。
+		// >>>
+		$paths = $this->__paths($plugin, $cached);
+		$basePaths = $paths;
+		$count = count($basePaths);
+		if (!empty($this->adminTheme)) {
+			$adminThemePaths = array();
+			for ($i = 0; $i < $count; $i++) {
+				if(strpos($basePaths[$i], 'themed') === false) {
+					$adminThemePaths[] = $basePaths[$i] . 'themed'. DS . $this->adminTheme . DS;
+				}
+			}
+			$paths = array_merge($adminThemePaths, $paths);
+		}
+		/*if (!empty($this->theme)) {
+			for ($i = 0; $i < $count; $i++) {
+				if(strpos($basePaths[$i], 'themed') === false) {
+					$themePaths[] = $basePaths[$i] . 'themed'. DS . $this->theme . DS;
+				}
+			}
+			$paths = array_merge($themePaths, $paths);
+		}*/
+		if (empty($this->__paths)) {
+			$this->__paths = $paths;
+		}
+		// <<<
+
+		return $paths;
+		
+	}
 /**
  * Return all possible paths to find view files in order
  * 
@@ -47,38 +90,43 @@ class BaserAppView extends View {
  * @access private
  */
 	private function __paths($plugin = null, $cached = true) {
-		if ($plugin === null && $cached === true && !empty($this->__paths)) {
-			return $this->__paths;
+		
+		if ($plugin === null && $cached === true && !empty($this->_paths)) {
+			return $this->_paths;
 		}
-		
-		// TODO basercamp
-		// このメソッドは見なおし
-		return App::path('View');
-		
 		$paths = array();
-		$viewPaths = Configure::read('viewPaths');
-		$corePaths = array_flip(Configure::corePaths('view'));
+		$viewPaths = App::path('View');
+		$corePaths = array_merge(App::core('View'), App::core('Console/Templates/skel/View'));
 
 		if (!empty($plugin)) {
 			$count = count($viewPaths);
 			for ($i = 0; $i < $count; $i++) {
-				if (!isset($corePaths[$viewPaths[$i]])) {
-					$paths[] = $viewPaths[$i] . 'plugins' . DS . $plugin . DS;
+				if (!in_array($viewPaths[$i], $corePaths)) {
+					$paths[] = $viewPaths[$i] . 'Plugin' . DS . $plugin . DS;
 				}
 			}
-			$pluginPaths = Configure::read('pluginPaths');
-			$count = count($pluginPaths);
+			$paths = array_merge($paths, App::path('View', $plugin));
+		}
 
-			for ($i = 0; $i < $count; $i++) {
-				$paths[] = $pluginPaths[$i] . $plugin . DS . 'views' . DS;
+		$paths = array_unique(array_merge($paths, $viewPaths));
+		if (!empty($this->theme)) {
+			$themePaths = array();
+			foreach ($paths as $path) {
+				if (strpos($path, DS . 'Plugin' . DS) === false) {
+					if ($plugin) {
+						$themePaths[] = $path . 'Themed' . DS . $this->theme . DS . 'Plugin' . DS . $plugin . DS;
+					}
+					$themePaths[] = $path . 'Themed' . DS . $this->theme . DS;
+				}
 			}
+			$paths = array_merge($themePaths, $paths);
 		}
-		$paths = array_merge($paths, $viewPaths);
-
-		if (empty($this->__paths)) {
-			$this->__paths = $paths;
+		$paths = array_merge($paths, $corePaths);
+		if ($plugin !== null) {
+			return $paths;
 		}
-		return $paths;
+		return $this->_paths = $paths;
+		
 	}
 /**
  * フック処理を実行する

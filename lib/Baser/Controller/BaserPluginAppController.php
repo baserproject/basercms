@@ -72,7 +72,7 @@ class BaserPluginAppController extends AppController {
 		
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->request->url);
-		$url = split('/', $url);
+		$url = explode('/', $url);
 		
 		if($url[0]!=Configure::read('BcRequest.agentAlias')) {
 			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {

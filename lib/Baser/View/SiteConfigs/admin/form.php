@@ -288,14 +288,14 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('対応'))) ?>
-				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連携'))) ?>）</span>
+				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('対応'))) ?>
-				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連携'))) ?>）</span>
+				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 <?php if($this->BcBaser->siteConfig['category_permission']): ?>
@@ -400,6 +400,15 @@ h2 {}
 			</td>
 		</tr>
 		<tr>
+			<th><?php echo $this->BcForm->label('SiteConfig.smtp_port', 'SMTPポート') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.smtp_port', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_port') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。入力を省略した場合、25番ポートを利用します。</div>
+			</td>
+		</tr>
+		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size'=>35,'maxlength'=>255)) ?>
@@ -411,7 +420,7 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255)) ?>
 				<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>

@@ -114,10 +114,8 @@ class BcAppHelper extends Helper {
  */
 	public function webroot($file) {
 		
-		
 		// TODO basercamp
 		// みなおし要
-		return parent::webroot($file);
 		
 		// CUSTOMIZE ADD 2010/05/19 ryuring
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
@@ -145,7 +143,10 @@ class BcAppHelper extends Helper {
 			}
 		}
 		//<<<
-
+		
+		$asset = explode('?', $file);
+		$asset[1] = isset($asset[1]) ? '?' . $asset[1] : null;
+		
 		// CUSTOMIZE MODIFY 2009/10/6 ryuring
 		// Rewriteモジュールが利用できない場合、$this->Html->css / $javascript->link では、
 		// app/webroot/を付加してURLを生成してしまう為、vendors 内のパス解決ができない。
@@ -160,52 +161,60 @@ class BcAppHelper extends Helper {
 		// $file に設定された場合でもパス解決ができるようにした。
 		//
 		// >>>
-		// $webPath = "{$this->request->webroot}" . $file;
+		//$webPath = "{$this->request->webroot}" . $asset[0];
 		// ---
 		if($this->request->webroot && $this->request->webroot != '/') {
-			$file = preg_replace('/'.preg_quote($this->request->webroot, '/').'/', '', $file);
+			$filePath = preg_replace('/'.preg_quote($this->request->webroot, '/').'/', '', $asset[0]);
+		} else {
+			$filePath = $asset[0];
 		}
-		$filePath = str_replace('/', DS, $file);
-		
-		if(strpos($filePath, '?') !== false) {
-			list($filePath) = explode('?', $filePath);
-		}
+		$filePath = str_replace('/', DS, $filePath);
 		
 		$docRoot = docRoot();
 		if(file_exists(WWW_ROOT . $filePath)) {
-			$webPath = $this->request->webroot.$file;
-		} elseif(file_exists($docRoot.DS.$filePath) && strpos($docRoot.DS.$filePath, ROOT.DS) !== false) {
+			$webPath = $this->request->webroot . $asset[0];
+		} elseif(file_exists($docRoot . DS . $filePath) && strpos($docRoot . DS . $filePath, ROOT . DS) !== false) {
 			// ※ ファイルのパスが ROOT 配下にある事が前提
-			$webPath = $file;
+			$webPath = $asset[0];
 		} else {
-			$webPath = Router::url('/'.$file);
+			$webPath = Router::url('/' . $asset[0]);
 		}
 		// <<<
+		
+		$file = $asset[0];
 
-		if (!empty($this->themeWeb)) {
-			$os = env('OS');
-			if (!empty($os) && strpos($os, 'Windows') !== false) {
-				if (strpos(WWW_ROOT . $this->themeWeb  . $filePath, '\\') !== false) {
-					$path = str_replace('/', '\\', WWW_ROOT . $this->themeWeb  . $filePath);
-				}
+		if (!empty($this->theme)) {
+			$file = trim($file, '/');
+			$theme = $this->theme . '/';
+
+			if (DS === '\\') {
+				$file = str_replace('/', '\\', $file);
+			}
+
+			if (file_exists(Configure::read('App.www_root') . 'theme' . DS . $this->theme . DS . $file)) {
+				$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 			} else {
-				$path = WWW_ROOT . $this->themeWeb  . $filePath;
-			}
-			if (file_exists($path)) {
-				$webPath = "{$this->request->webroot}" . $this->themeWeb . $file;
+				$themePath = App::themePath($this->theme);
+				$path = $themePath . 'webroot' . DS . $file;
+				if (file_exists($path)) {
+					$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+				}
 			}
 		}
-
 		if (strpos($webPath, '//') !== false) {
-			return str_replace('//', '/', $webPath);
+			return str_replace('//', '/', $webPath . $asset[1]);
 		}
-		// >>> CUSTOMIZE ADD 2010/02/12 ryuring
+		
+		// >>> CUSTOMIZE ADD 2013/06/18 ryuring
 		if (strpos($webPath, '\\') !== false) {
 			$webPath = str_replace("\\",'/',$webPath);
 		}
 		// <<<
 		
-		return $webPath;
+		return $webPath . $asset[1];
+		
+		
+		
 	}
 /**
  * フック処理を実行する

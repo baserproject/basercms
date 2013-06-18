@@ -391,6 +391,13 @@ class Page extends AppModel {
 		// モバイル未対応
 		$PageCategory = ClassRegistry::init('PageCategory');
 		$excludeIds = am($PageCategory->getAgentCategoryIds('mobile'), $PageCategory->getAgentCategoryIds('smartphone'));
+		
+		// インストール時取得できないのでハードコーディング
+		// TODO 検討
+		if(!$excludeIds) {
+			$excludeIds = array(1, 2);
+		}
+		
 		if(in_array($data['page_category_id'], $excludeIds)) {
 			return array();
 		}
@@ -411,8 +418,21 @@ class Page extends AppModel {
 			}
 		}
 		$_data['Content']['title'] = $data['title'];
-		$parameters = split('/', preg_replace("/^\//", '', $data['url']));
+		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
+		
+		// Viewオブジェクトを一旦削除しないと、Helper内で、View::getVar()を利用しても、
+		// 最初に生成したViewの値を使いまわしてしまうので、一旦退避させた上で削除する
+		$View = ClassRegistry::getObject('View');
+		if($View) {
+			ClassRegistry::removeObject('View');
+		}
+
 		$detail = $this->requestAction(array('controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
+		
+		if($View) {
+			ClassRegistry::addObject('View', $View);
+		}
+
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$_data['Content']['detail'] = $data['description'].' '.$detail;
 		$_data['Content']['url'] = $data['url'];
@@ -559,6 +579,15 @@ class Page extends AppModel {
 		if($categoryId) {
 			$this->PageCategory->cacheQueries = false;
 			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
+			// インストール時データの取得ができないので暫定対応
+			// TODO 検討
+			if(!$categoryPath) {
+				if($categoryId == 1) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'mobile')));
+				} elseif($categoryId == 2) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'smartphone')));
+				}
+			}
 			if($categoryPath) {
 				foreach($categoryPath as $category) {
 					$path .= $category['PageCategory']['name'].DS;
@@ -637,9 +666,7 @@ class Page extends AppModel {
 			$tag[] = '<?php $this->BcBaser->setPageEditLink('.$id.') ?>';
 		}
 		if($code) {
-			$tag[] = '<?php';
 			$tag[] = trim($code);
-			$tag[] = '?>';
 		}
 		$tag []= '<!-- BaserPageTagEnd -->';
 		return implode("\n", $tag) . "\n\n" . $contents;
@@ -654,26 +681,26 @@ class Page extends AppModel {
  */
 	public function pageExists($check) {
 		
+		$conditions['Page.name'] = $this->data['Page']['name'];
 		if($this->exists()) {
+			$conditions['Page.id <>'] = $this->data['Page']['id'];
+		}
+
+		if(empty($this->data['Page']['page_category_id'])) {
+			if(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
+				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
+				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
+			} else {
+				$conditions['Page.page_category_id'] = NULL;
+			}
+		}else {
+			$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
+		}
+		if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 			return true;
 		}else {
-			$conditions['Page.name'] = $this->data['Page']['name'];
-			if(empty($this->data['Page']['page_category_id'])) {
-				if(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
-					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
-				} elseif(isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
-					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
-				} else {
-					$conditions['Page.page_category_id'] = NULL;
-				}
-			}else {
-				$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
-			}
-			if(!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
-				return true;
-			}else {
-				return !file_exists($this->_getPageFilePath($this->data));
-			}
+			return !file_exists($this->_getPageFilePath($this->data));
 		}
 		
 	}
@@ -1157,12 +1184,21 @@ class Page extends AppModel {
 			return false;
 		}
 		
+		if(!Configure::read('BcApp.'.$agentPrefix)) {
+			return false;
+		}
+		
 		$siteConfig = Configure::read('BcSite');
 		$linked = false;
+		
 		if(isset($siteConfig['linked_pages_'.$agentPrefix])) {
 			$linked = $siteConfig['linked_pages_'.$agentPrefix];
 		}
 			
+		if($linked) {
+			return false;
+		}
+
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}

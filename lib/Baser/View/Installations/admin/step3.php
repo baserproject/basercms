@@ -198,7 +198,10 @@ $(document).ready( function() {
 			
 			<ul>
 				<li><label>初期データ</label><br />
-					<?php echo $this->BcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?></li>
+					<?php echo $this->BcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?><br /><br />
+					<small>※ コアパッケージや、テーマが保有するデモンストレーション用データを選択します。<br />
+						※ 初めてインストールされる方は、「nada icons（ default ）」を選択してください。</small>
+				</li>
 			</ul>
 		</div>
 		

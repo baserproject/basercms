@@ -24,7 +24,7 @@ if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
 	$this->BcBaser->theme = Configure::read('BcApp.adminTheme');
 	$this->BcBaser->BcHtml->theme = Configure::read('BcApp.adminTheme');
 }
-$this->BcBaser->js(array('outerClick','jquery.fixedMenu', 'yuga'));
+$this->BcBaser->js(array('outerClick','jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.'.$currentPrefix);
 if(!empty($currentAuthPrefix['loginAction'])) {

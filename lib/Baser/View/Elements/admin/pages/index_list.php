@@ -62,8 +62,9 @@
 			</th>
 <?php else: ?>
 			<th>NO</th>
-			<th>カテゴリー</th>
-			<th>ページ名<br />タイトル</th>
+			<th>カテゴリー<br />
+				タイトル&nbsp;(&nbsp;ページ名)
+			</th>
 			<th>公開状態</th>
 			<th>作成者</th>
 			<th>登録日<br />更新日</th>

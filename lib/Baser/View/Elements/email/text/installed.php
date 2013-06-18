@@ -71,7 +71,7 @@ http://basercms.net/about/guide.html
 スマートURLの設定はサーバー環境に深く依存します。
 「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますのでご注意ください。
 こちらより各種レンタルサーバーの動作状況を確認できます。
-http://basercms.net/manuals/introductions/2.html
+http://basercms.net/hosting/index
 
 ----------------------------------------
 スマートURLがうまく動作しない場合は、
@@ -87,7 +87,7 @@ http://basercms.net/manuals/introductions/2.html
 あなたが作った baserCMS の Webサイトを、公式サイトでアピールしませんか？
 
 ■ baserCMS導入事例
-http://basercms.net/cases/
+http://basercms.net/works/index
 
 ■ 事例掲載依頼フォーム
 http://basercms.net/postworks/index
@@ -96,15 +96,15 @@ http://basercms.net/postworks/index
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ ユーザーズコミュニティについて
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-■ 公式サイト
+■ baserCMS公式サイト
 http://basercms.net/
 最新版のダウンロード、利用方法やカスタマイズ方法はこちらから！
 
-■ 公式Facebook
+■ baserCMS公式Facebook
 http://www.facebook.com/basercms
 いいね！をクリックして普及にご協力ください！
 
-■ 公式Twitter
+■ baserCMS公式Twitter
 http://twitter.com/#!/basercms
 TIPSや最新情報をつぶやいてます！ Follow Me！
 
@@ -112,16 +112,20 @@ TIPSや最新情報をつぶやいてます！ Follow Me！
 http://www.facebook.com/groups/308200669249993/
 ちょっとした雑談やつぶやきに！初心者歓迎！
 
-■ ユーザーズフォーラム
+■ baserCMSユーザーズフォーラム
 http://forum.basercms.net/
 不具合や改善報告はこちらよりどうぞ！
 
-■ 勉強会サイト
+■ baserCMS勉強会サイト
 http://study.basercms.net/
 勉強会の資料などを配布しています。
 
 ■ baserCMSユーザー会
-http://groups.google.com/group/basercms
+http://basercms.net/
+baserCMSコミュニティの公式サイトです。
+
+■ baserCMSユーザー会メーリングリスト
+https://groups.google.com/forum/?fromgroups#!forum/basercms
 baserCMSの最新情報などを発信しています！まずはメーリングリストへ参加！
 
 ■ baserCMSサポーターズ（Facebook）

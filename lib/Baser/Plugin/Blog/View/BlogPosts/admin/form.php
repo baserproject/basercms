@@ -36,7 +36,7 @@ $(function(){
 /**
  * プレビューボタンクリック時イベント
  */
-	var useContent = $("#UseContent").html();
+	var useContent = Number($("#UseContent").val());
 	$("#BtnPreview").click(function(){
 		
 		if(useContent) {
@@ -192,6 +192,12 @@ $(function(){
 <?php echo $this->BcForm->input('BlogPost.id', array('type' => 'hidden')) ?>
 <?php echo $this->BcForm->input('BlogPost.blog_content_id', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['id'])) ?>
 <?php echo $this->BcForm->hidden('BlogPost.mode') ?>
+
+
+<?php if(empty($blogContent['BlogContent']['use_content'])): ?>
+<?php echo $this->BcForm->hidden('BlogPost.content') ?>
+<?php endif ?>
+
 
 <!-- form -->
 <div class="section">

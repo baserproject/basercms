@@ -36,7 +36,8 @@
 	'jquery.mScroll',
 	'admin/functions',
 	'admin/startup',
-	'admin/adjust_scroll')) ?>
+	'admin/adjust_scroll', 
+	'yuga')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>" class="normal">

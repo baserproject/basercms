@@ -93,7 +93,7 @@ class PluginContent extends AppModel {
 
 		$url = preg_replace('/^\//','',$url);
 		if(strpos($url, '/') !== false) {
-			list($name) = split('/',$url);
+			list($name) = explode('/',$url);
 		}else {
 			$name = $url;
 		}

@@ -141,6 +141,12 @@ class BaserAppController extends Controller {
  */
 	public $preview = false;
 /**
+ * 管理画面テーマ
+ * 
+ * @var string
+ */
+	public $adminTheme = null;
+/**
  * コンストラクタ
  *
  * @return	void
@@ -378,17 +384,19 @@ class BaserAppController extends Controller {
 		
 		if(BC_INSTALLED && $params['controller'] != 'installations') {
 			
-			if(empty($this->siteConfigs['admin_theme']) && Configure::read('Baser.adminTheme')) {
-				$this->siteConfigs['admin_theme'] = Configure::read('Baser.adminTheme');
+			if(empty($this->siteConfigs['admin_theme']) && Configure::read('BcApp.adminTheme')) {
+				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
 			}
 			
-			if(empty($params['admin'])) {
-				$this->theme = $this->siteConfigs['theme'];
-			} else {
-				if(!empty($this->siteConfigs['admin_theme'])) {
-					$this->theme = $this->siteConfigs['admin_theme'];
-				} else {
-					$this->theme = $this->siteConfigs['theme'];
+			$this->theme = $this->siteConfigs['theme'];
+			if(!empty($this->siteConfigs['admin_theme'])) {
+				$this->adminTheme = $this->siteConfigs['admin_theme'];
+				// TODO basercamp 2013/6/18 ryuring
+				// とりあえず、管理システムのCSS等のパスを正常に表示する為の暫定処置
+				// この仕様だと、プレビューなどがうまくいかないはず。
+				// BcAppHelper::webroot() を調整する必要があるかも
+				if(!empty($this->request->params['admin'])) {
+					$this->theme = $this->adminTheme;
 				}
 			}
 
@@ -450,7 +458,6 @@ class BaserAppController extends Controller {
 		$this->__loadDataToView();
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
-		$this->set('contentsTitle',$this->contentsTitle);
 		$this->set('baserVersion',$this->getBaserVersion());
 		$this->set('siteConfig',$this->siteConfigs);
 		if(isset($this->siteConfigs['widget_area'])){
@@ -626,7 +633,7 @@ class BaserAppController extends Controller {
 		}
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
-		$aryVersionData = split("\n",$versionData);
+		$aryVersionData = explode("\n",$versionData);
 		if(!empty($aryVersionData[0])) {
 			return $aryVersionData[0];
 		}else {
@@ -662,7 +669,7 @@ class BaserAppController extends Controller {
 		
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH.DS.CAKE.'VERSION.txt');
 		$versionData = $versionFile->read();
-		$lines = split("\n",$versionData);
+		$lines = explode("\n",$versionData);
 		$version = null;
 		foreach($lines as $line) {
 			if(preg_match('/^([0-9\.]+)$/', $line, $matches)) {
@@ -713,7 +720,7 @@ class BaserAppController extends Controller {
 			$formalName = $this->siteConfigs['formal_name'];
 			$email = $this->siteConfigs['email'];
 			if(strpos($email, ',') !== false) {
-				$email = split(',', $email);
+				$email = explode(',', $email);
 				$email = $email[0];
 			}
 		}
@@ -738,7 +745,7 @@ class BaserAppController extends Controller {
 		}
 
 		if(strpos($to, ',') !== false) {
-			$_to = split(',', $to);
+			$_to = explode(',', $to);
 			$to = $_to[0];
 			if(count($_to) > 1) {
 				unset($_to[0]);
@@ -793,7 +800,7 @@ class BaserAppController extends Controller {
 		// 送信元・返信先
 		if($from) {
 			if(strpos($from, ',') !== false) {
-				$_from = split(',', $from);
+				$_from = explode(',', $from);
 				$from = $_from[0];
 			}
 			$this->BcEmail->from = $from;
@@ -815,7 +822,7 @@ class BaserAppController extends Controller {
 		// CC
 		if($cc) {
 			if(strpos($cc, ',') !== false) {
-				$cc = split(',', $cc);
+				$cc = explode(',', $cc);
 			}else{
 				$cc = array($cc);
 			}
@@ -825,7 +832,7 @@ class BaserAppController extends Controller {
 		// BCC
 		if($bcc) {
 			if(strpos($bcc, ',') !== false) {
-				$bcc = split(',', $bcc);
+				$bcc = explode(',', $bcc);
 			}else{
 				$bcc = array($bcc);
 			}
@@ -858,11 +865,13 @@ class BaserAppController extends Controller {
 		$this->BcEmail->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$this->BcEmail->delivery = 'smtp';	// mail or smtp or debug
-			$this->BcEmail->smtpOptions = array('host'	=>$this->siteConfigs['smtp_host'],
-					'port'	=>25,
-					'timeout'	=>30,
-					'username'=>($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user']:null,
-					'password'=>($this->siteConfigs['smtp_password'])?$this->siteConfigs['smtp_password']:null);
+			$this->BcEmail->smtpOptions = array(
+					'host'		=> $this->siteConfigs['smtp_host'],
+					'port'		=> ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25,
+					'timeout'	=> 30,
+					'username'	=> ($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user'] : null,
+					'password'	=> ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : nul
+			);
 		} else {
 			$this->BcEmail->delivery = "mail";
 		}
@@ -1020,7 +1029,7 @@ class BaserAppController extends Controller {
 		extract($options);
 
 		if($type=='string' && !is_array($value)) {
-			$values = split(',',str_replace('\'', '', $values));
+			$values = explode(',',str_replace('\'', '', $values));
 		}
         if(!empty($values) && is_array($values)){
             foreach($values as $value){
@@ -1043,7 +1052,7 @@ class BaserAppController extends Controller {
 		if(strpos($value, '-')===false) {
 			return false;
 		}
-		list($start, $end) = split('-', $value);
+		list($start, $end) = explode('-', $value);
 		if(!$start) {
 			$conditions[$fieldName.' <='] = $end;
 		}elseif(!$end) {
@@ -1117,19 +1126,9 @@ class BaserAppController extends Controller {
 		}
 		
 		if($requestedPrefix && ($requestedPrefix != $authPrefix)) {
-			// 許可されていないプレフィックスへのアクセスの場合、認証できなかったものとする
-			$ref = $this->referer();
-			$loginAction = Router::normalize($this->BcAuth->loginAction);
-			if($ref == $loginAction) {
-				$this->Session->delete('Auth.User');
-				$this->Session->delete('Message.flash');
-				$this->BcAuth->authError = $this->BcAuth->loginError;
-				return false;
-			} else {
-				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-				$this->redirect($ref);
-				return;
-			}
+			$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+			$this->redirect('/');
+			return;
 		}
 
 		return true;
@@ -1290,10 +1289,12 @@ class BaserAppController extends Controller {
 		$url = addSessionId($url, true);
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// ※ Routing.admin を変更した場合
-		if (!isset($url['admin']) && !empty($this->request->params['admin'])) {
-			$url['admin'] = true;
-		} elseif (isset($url['admin']) && !$url['admin']) {
-			unset($url['admin']);
+		if(is_array($url)) {
+			if (!isset($url['admin']) && !empty($this->request->params['admin'])) {
+				$url['admin'] = true;
+			} elseif (isset($url['admin']) && !$url['admin']) {
+				unset($url['admin']);
+			}
 		}
 		parent::redirect($url, $status, $exit);
 		
@@ -1409,9 +1410,9 @@ class BaserAppController extends Controller {
 		
 		// CUSTOMIZE MODIFY 2012/04/22 ryuring
 		// >>>
-		//return call_user_func_array(array(&$this, $action), $args);
+		//return call_user_func_array(array($this, $action), $args);
 		// ---
-		$return = call_user_func_array(array(&$this, $action), $args);
+		$return = call_user_func_array(array($this, $action), $args);
 		$this->request->action = $_action;
 		return $return;
 		// <<<

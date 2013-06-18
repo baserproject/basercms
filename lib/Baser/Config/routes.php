@@ -185,13 +185,13 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				}
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$agent){
-						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}else{
-						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}
 					break;
 				} else {
-					// 拡張子付き（.html）の場合
+					// 拡張子付き（.html）の場合も透過的にマッチングさせる
 					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
 						if($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))){
@@ -199,7 +199,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 							if(!$agent){
 								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
 							}else{
-								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),split('/',$_parameter)));
+								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 							}
 							break;
 						}

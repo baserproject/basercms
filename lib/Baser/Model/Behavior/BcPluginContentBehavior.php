@@ -119,7 +119,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return	array
  * @access	protected
  */
-	protected function _generatePluginContentData(&$model, $contentId = '') {
+	protected function _generatePluginContentData(Model $model, $contentId = '') {
 		
 		// プラグイン名を取得
 		$pluginName = $this->getPluginName($model->alias);

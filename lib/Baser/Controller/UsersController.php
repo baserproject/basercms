@@ -122,7 +122,7 @@ class UsersController extends AppController {
 			return false;
 		}
 		if ($this->BcAuth->login($this->request->data)) {
-			$this->_setSessionAuthPrefix();
+			$this->BcAuthConfigure->setSessionAuthPrefix();
 			return true;
 		}
 		return false;
@@ -144,7 +144,7 @@ class UsersController extends AppController {
 
 		if ($this->request->data) {
 			if ($user) {
-				$this->_setSessionAuthPrefix();
+				$this->BcAuthConfigure->setSessionAuthPrefix();
 				if (!empty($this->request->data[$userModel]['saved'])) {
 					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
 						$this->setAuthCookie($this->request->data);
@@ -184,23 +184,6 @@ class UsersController extends AppController {
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
 	}
-
-/**
- * ログイン時にセッションにauthPrefixを保存する
- */
-	private function _setSessionAuthPrefix() {
-
-		$authPrefix = $this->Session->read($this->BcAuth->sessionKey . '.authPrefix');
-		if (!$authPrefix) {
-			if(empty($this->params['prefix'])) {
-				$authPrefix = 'front';
-			} else {
-				$authPrefix = $this->params['prefix'];
-			}
-			$this->Session->write($this->BcAuth->sessionKey . '.authPrefix', $authPrefix);
-		}
-	}
-
 /**
  * [ADMIN] 代理ログイン
  * 
@@ -267,7 +250,7 @@ class UsersController extends AppController {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 
-		$this->_setSessionAuthPrefix();
+		$this->BcAuthConfigure->setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->userModel;
 
@@ -303,11 +286,13 @@ class UsersController extends AppController {
  * @return void
  */
 	public function setAuthCookie($data) {
+		
 		$userModel = $this->BcAuth->userModel;
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];				   // ハッシュ化されている
-		$this->Cookie->write('Auth.' . $userModel, $cookie, true, '+2 weeks'); // 3つめの'true'で暗号化
+		$this->Cookie->write($this->BcAuth->sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+
 	}
 
 /**
@@ -316,23 +301,24 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_logout() {
-		$userModel = $this->BcAuth->userModel;
+		
 		$this->BcAuth->logout();
-		$this->Cookie->delete('Auth.' . $userModel);
+		$this->Cookie->delete($this->BcAuth->sessionKey);
 		$this->setMessage('ログアウトしました');
 		if (empty($this->request->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
 		} else {
 			$this->redirect(array($this->request->params['prefix'] => true, 'action' => 'login'));
 		}
+		
 	}
-
 /**
  * [ADMIN] ユーザーリスト
  *
  * @return void
  */
 	public function admin_index() {
+		
 		/* データ取得 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('User', array('default' => $default));
@@ -358,8 +344,8 @@ class UsersController extends AppController {
 		$this->pageTitle = 'ユーザー一覧';
 		$this->search = 'users_index';
 		$this->help = 'users_index';
+		
 	}
-
 /**
  * ページ一覧用の検索条件を生成する
  *
@@ -367,6 +353,7 @@ class UsersController extends AppController {
  * @return array $conditions
  */
 	protected function _createAdminIndexConditions($data) {
+		
 		unset($data['_Token']);
 		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] === '') {
 			unset($data['User']['user_group_id']);
@@ -377,14 +364,15 @@ class UsersController extends AppController {
 		} else {
 			return array();
 		}
+		
 	}
-
 /**
  * [ADMIN] ユーザー情報登録
  *
  * @return void
  */
 	public function admin_add() {
+		
 		if (empty($this->request->data)) {
 			$this->request->data = $this->User->getDefaultValue();
 		} else {
@@ -420,8 +408,8 @@ class UsersController extends AppController {
 		$this->pageTitle = '新規ユーザー登録';
 		$this->help = 'users_form';
 		$this->render('form');
+		
 	}
-
 /**
  * [ADMIN] ユーザー情報編集
  *
@@ -429,6 +417,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_edit($id) {
+		
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -496,8 +485,8 @@ class UsersController extends AppController {
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';
 		$this->render('form');
+		
 	}
-
 /**
  * [ADMIN] ユーザー情報削除　(ajax)
  *
@@ -505,6 +494,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -525,8 +515,8 @@ class UsersController extends AppController {
 			exit(true);
 		}
 		exit();
+		
 	}
-
 /**
  * [ADMIN] ユーザー情報削除
  *
@@ -534,6 +524,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -558,8 +549,8 @@ class UsersController extends AppController {
 		}
 
 		$this->redirect(array('action' => 'index'));
+		
 	}
-
 /**
  * ログインパスワードをリセットする
  * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
@@ -602,4 +593,5 @@ class UsersController extends AppController {
 			$this->request->data = array();
 		}
 	}
+	
 }

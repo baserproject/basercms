@@ -157,7 +157,10 @@ class BlogPost extends BlogAppModel {
 		}
 		
 		$settings = $this->Behaviors->BcUpload->settings;
-		$settings['saveDir'] .= "blog" . DS . $data['name'] . DS . "blog_posts";
+		if(empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '/', $settings['saveDir'])) {
+			$settings['saveDir'] = "blog" . DS . $data['name'] . DS . "blog_posts";
+		}
+		
 		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;
 		$this->Behaviors->attach('BcUpload', $settings);
 

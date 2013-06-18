@@ -300,7 +300,7 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public 
  */
-	function content() {
+	public function content() {
 		
 		$agent = '';
 		if(Configure::read('BcRequest.agentPrefix')) {
@@ -313,8 +313,8 @@ class BcPageHelper extends Helper {
 		if(!$agent) {
 			$path = '..' . DS . 'pages' . DS . $path;
 		} else {
-			$siteConfig = $View->getVar('siteConfig');
-			$linked = $siteConfig['linked_pages_' . $agent];
+			$url = '/'.implode('/', $this->request->params['pass']);
+			$linked = $this->Page->isLinked($agent, $url);
 			if(!$linked) {
 				$path = '..' . DS . 'pages' . DS . $agent . DS . $path;
 			} else {
@@ -334,7 +334,7 @@ class BcPageHelper extends Helper {
  * @return array
  * @access public
  */
-	function getTemplates($type = 'layout', $agent = '') {
+	public function getTemplates($type = 'layout', $agent = '') {
 
 		$agentPrefix = '';
 		if($agent) {
@@ -391,100 +391,4 @@ class BcPageHelper extends Helper {
 
 	}
 	
-/**
- * 固定ページのコンテンツを出力する
- * 
- * @return void
- * @access public 
- */
-	function content() {
-		
-		$agent = '';
-		if(Configure::read('BcRequest.agentPrefix')) {
-			$agent = Configure::read('BcRequest.agentPrefix');
-		}
-		
-		$View = ClassRegistry::getObject('View');
-		$path = $View->getVar('pagePath');
-		
-		if(!$agent) {
-			$path = '..' . DS . 'pages' . DS . $path;
-		} else {
-			$url = '/'.implode('/', $this->request->params['pass']);
-			$linked = $this->Page->isLinked($agent, $url);
-			if(!$linked) {
-				$path = '..' . DS . 'pages' . DS . $agent . DS . $path;
-			} else {
-				$path = '..' . DS . 'pages' . DS . $path;
-			}
-		}
-
-		$this->BcBaser->element($path, null, false, false);
-		
-	}
-/**
- * テンプレートを取得
- * セレクトボックスのソースとして利用
- * 
- * @param string $type layout Or content
- * @param string $agent '' Or mobile Or smartphone
- * @return array
- * @access public
- */
-	function getTemplates($type = 'layout', $agent = '') {
-
-		$agentPrefix = '';
-		if($agent) {
-			$agentPrefix = Configure::read('BcAgent.' . $agent . '.prefix');
-		}
-
-		$siteConfig = Configure::read('BcSite');
-		$themePath = WWW_ROOT . 'themed' . DS . $siteConfig['theme'] . DS;
-		
-		$viewPaths = array($themePath) + Configure::read('viewPaths');
-		
-		$ext = Configure::read('BcApp.templateExt');
-		
-		$templates = array();
-		
-		foreach($viewPaths as $viewPath) {
-			
-			$templatePath = '';
-			switch ($type) {
-				case 'layout':
-					if(!$agentPrefix) {
-						$templatePath = $viewPath . 'layouts' . DS;
-					} else {
-						$templatePath = $viewPath . 'layouts' . DS . $agentPrefix . DS;
-					}
-					break;
-				case 'content':
-					if(!$agentPrefix) {
-						$templatePath = $viewPath . 'pages' . DS . 'templates' . DS;
-					} else {
-						$templatePath = $viewPath . 'pages' . DS . $agentPrefix . DS . 'templates' . DS;
-					}
-					break;
-			}
-			
-			if(!$templatePath) {
-				continue;
-			}
-			
-			$Folder = new Folder($templatePath);
-			$files = $Folder->read(true, true);
-			if($files[1]) {
-				foreach($files[1] as $file) {
-					if(preg_match('/(.+)' . preg_quote($ext) . '$/', $file, $matches)) {
-						if(!in_array($matches[1], $templates)) {
-							$templates[] = $matches[1];
-						}
-					}
-				}
-			}
-		}
-		
-		return array_combine($templates, $templates);
-
-	}
 }

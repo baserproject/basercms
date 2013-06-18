@@ -332,7 +332,7 @@ class WidgetAreasController extends AppController {
 		if(!$widgetAreaId || !$this->request->data){
 			exit();
 		}
-		$ids = split(',',$this->request->data['WidgetArea']['sorted_ids']);
+		$ids = explode(',',$this->request->data['WidgetArea']['sorted_ids']);
 		$widgetArea = $this->WidgetArea->read(null,$widgetAreaId);
 		if($widgetArea['WidgetArea']['widgets']){
 			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);

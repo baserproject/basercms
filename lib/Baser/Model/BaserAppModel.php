@@ -586,7 +586,7 @@ class BaserAppModel extends Model {
 		if (strpos($field, '.') === false) {
 			$modelName = $this->alias;
 		} else {
-			list($modelName, $field) = split('\.', $field);
+			list($modelName, $field) = explode('\.', $field);
 		}
 
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
@@ -1105,7 +1105,7 @@ class BaserAppModel extends Model {
 					if ($val == 'wareki' && !empty($data['wareki'])) {
 						$warekis = array('m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988);
 						if (!empty($data['year'])) {
-							list($wareki, $year) = split('-', $data['year']);
+							list($wareki, $year) = explode('-', $data['year']);
 							$data['year'] = $year + $warekis[$wareki];
 						}
 					}

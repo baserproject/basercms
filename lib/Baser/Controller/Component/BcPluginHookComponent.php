@@ -118,7 +118,7 @@ class BcPluginHookComponent extends Object {
 		unset($args[0]);
 		if($this->registerHooks && isset($this->registerHooks[$hookName])){
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), $args);
 			}
 		}
 		
@@ -178,7 +178,7 @@ class BcPluginHookComponent extends Object {
  * @return void
  * @access public
  */
-	public function afterPageAdd(&$controller) {
+	public function afterPageAdd(Controller $controller) {
 		
 		$this->executeHook('afterPageAdd', $controller);
 		
@@ -190,7 +190,7 @@ class BcPluginHookComponent extends Object {
  * @return void
  * @access public
  */
-	public function afterPageEdit(&$controller) {
+	public function afterPageEdit(Controller $controller) {
 		
 		$this->executeHook('afterPageEdit', $controller);
 		
@@ -208,7 +208,7 @@ class BcPluginHookComponent extends Object {
 		$args = $args[1];
 		$Object = $args[0];
 		if(method_exists($Object, $method)){
-			return call_user_func_array( array( &$Object, $method ), $args );
+			return call_user_func_array( array( $Object, $method ), $args );
 		}
 
 	}

@@ -45,7 +45,8 @@ class BcUploadHelper extends FormHelper {
 			'imgsize'	=> 'midium',	// 画像サイズ
 			'rel'		=> '',			// rel属性
 			'title'		=> '',			// タイトル属性
-			'link'		=> true			// 大きいサイズの画像へのリンク有無
+			'link'		=> true,		// 大きいサイズの画像へのリンク有無
+			'delCheck' => true
 		), $options);
 		
 		extract($options);
@@ -54,12 +55,14 @@ class BcUploadHelper extends FormHelper {
 		unset($options['rel']);
 		unset($options['title']);
 		unset($options['link']);
+		unset($options['delCheck']);
 		
 		$linkOptions = array(
 			'imgsize'	=> $imgsize,
 			'rel'		=> $rel,
 			'title'		=> $title,
-			'link'		=> $link
+			'link'		=> $link,
+			'delCheck' => $delCheck
 		);
 		
 		$options = $this->_initInputField($fieldName, $options);
@@ -69,7 +72,10 @@ class BcUploadHelper extends FormHelper {
 		
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName,$options);
-		$delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
+		$delCheckTag = '';
+		if($linkOptions['delCheck']) {
+			$delCheckTag = parent::checkbox($modelName.'.'.$field.'_delete').parent::label($modelName.'.'.$field.'_delete','削除する');
+		}
 		$hiddenValue = $this->value($fieldName.'_');
 		$fileValue = $this->value($fieldName);
 		
@@ -145,8 +151,9 @@ class BcUploadHelper extends FormHelper {
 		/* 画像の場合はサイズを指定する */
 		if(isset($settings['saveDir'])) {
 			if($value && !is_array($value)) {
-				$uploadSettings = $settings['fields'][$field];
-				if($uploadSettings['type']=='image') {
+				$uploadSettings = $settings['fields'][$field];	
+				$ext = decodeContent('', $value);
+				if($uploadSettings['type']=='image' || in_array($ext, $model->Behaviors->BcUpload->imgExts)) {
 					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link);
 					if($tmp) {
 						$options['tmp'] = true;
@@ -216,6 +223,13 @@ class BcUploadHelper extends FormHelper {
 			unset($imgOptions['height']);
 		}		
 		
+		if($imgOptions['width'] === '') {
+			unset($imgOptions['width']);
+		}
+		if($imgOptions['height'] === '') {
+			unset($imgOptions['height']);
+		}		
+
 		$linkOptions = array(
 			'rel'		=> 'colorbox',
 			'escape'	=> $escape

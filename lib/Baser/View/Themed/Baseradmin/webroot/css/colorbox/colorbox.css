@@ -32,5 +32,5 @@
         #cboxNext.hover{background-position:bottom right;}
         #cboxLoadingOverlay{background:#000;}
         #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
-        #cboxClose{position:absolute; top:5px; right:5px; display:block; background:url(images/controls.png) no-repeat top center; width:38px; height:19px; text-indent:-9999px;}
+        #cboxClose{position:absolute; top:5px; right:5px; display:block; background:url(images/controls.png) no-repeat top center; width:38px; height:19px; text-indent:-9999px;border:none;}
         #cboxClose.hover{background-position:bottom center;}

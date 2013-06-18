@@ -98,7 +98,13 @@ class BcUploadBehavior extends ModelBehavior {
 			'saveDir'	=> '',
 			'fields'	=> array()
 		), $config);
-		$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
+		
+		if($this->settings['saveDir']) {
+			$this->savePath = WWW_ROOT . 'files'.DS.$this->settings['saveDir'] . DS;
+		} else {
+			$this->savePath = WWW_ROOT . 'files'.DS;
+		}
+		
 		if(!is_dir($this->savePath)) {
 			$Folder = new Folder();
 			$Folder->create($this->savePath);
@@ -145,7 +151,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function saveTmpFiles(&$model,$data,$tmpId) {
+	public function saveTmpFiles(Model $model,$data,$tmpId) {
 		
 		$this->Session->delete('Upload');
 		$model->data = $data;
@@ -164,7 +170,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function saveFiles(&$model) {
+	public function saveFiles(Model $model) {
 
 		$serverData = $model->findById($model->id);
 
@@ -293,7 +299,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function moveFileSessionToTmp(&$model,$fieldName) {
+	public function moveFileSessionToTmp(Model $model,$fieldName) {
 
 		$sessionKey = $model->data[$model->alias][$fieldName.'_tmp'];
 		$tmpName = $this->savePath.$sessionKey;
@@ -340,7 +346,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return ファイル名 Or false
  * @access public
  */
-	public function saveFile(&$model,$field) {
+	public function saveFile(Model $model,$field) {
 
 		// データを取得
 		$file = $model->data[$model->name][$field['name']];
@@ -408,7 +414,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function copyImage(&$model,$field) {
+	public function copyImage(Model $model,$field) {
 
 		// データを取得
 		$file = $model->data[$model->name][$field['name']];
@@ -499,7 +505,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function delFiles(&$model,$fieldName = null) {
+	public function delFiles(Model $model,$fieldName = null) {
 
 		foreach($this->settings['fields'] as $key => $field) {
 			if(empty($field['name'])) $field['name'] = $key;
@@ -516,7 +522,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function delFile(&$model,$file,$field,$delImagecopy=true) {
+	public function delFile(Model $model,$file,$field,$delImagecopy=true) {
 
 		if(!$file) {
 			return true;
@@ -560,7 +566,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function renameToFieldBasename($model, $copy = false) {
+	public function renameToFieldBasename(Model $model, $copy = false) {
 
 		foreach($this->settings['fields'] as $key => $setting) {
 
@@ -592,7 +598,7 @@ class BcUploadBehavior extends ModelBehavior {
 							copy($this->savePath.$oldName,$this->savePath.$newName);
 						}
 						
-						$model->data[$model->alias][$setting['name']] = $newName;
+						$model->data[$model->alias][$setting['name']] = str_replace(DS, '/', $newName);
 
 						if(!empty($setting['imagecopy'])) {
 							foreach($setting['imagecopy'] as $copysetting) {
@@ -625,7 +631,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return mixed false / string
  * @access public
  */
-	public function getFieldBasename(&$model,$setting,$ext) {
+	public function getFieldBasename(Model $model,$setting,$ext) {
 
 		if(empty($setting['namefield'])) {
 			return false;
@@ -676,7 +682,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	public function getFileName(&$model,$setting,$filename) {
+	public function getFileName(Model $model, $setting, $filename) {
 
 		if(empty($setting)) {
 			return $filename;
@@ -703,7 +709,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	public function getBasename(&$model,$setting,$filename) {
+	public function getBasename(Model $model, $setting, $filename) {
 		
 		$pattern = "/^".$prefix."(.*?)".$suffix."\.[a-zA-Z0-9]*$/is";
 		if(preg_match($pattern, $filename,$maches)) {
@@ -721,7 +727,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return string
  * @access public
  */
-	public function getUniqueFileName(&$model, $fieldName, $fileName, $setting = null) {
+	public function getUniqueFileName(Model $model, $fieldName, $fileName, $setting = null) {
 
 		$pathinfo = pathinfo($fileName);
 		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);

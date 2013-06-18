@@ -74,7 +74,7 @@ class BlogAppController extends BaserPluginAppController {
 			), 
 			'recursive' => 1
 		));
-		$this->log($_data);
+
 		// 公開されているコメントがない場合は true を返して終了
 		if(empty($_data['BlogComment'])) {
 			return true;

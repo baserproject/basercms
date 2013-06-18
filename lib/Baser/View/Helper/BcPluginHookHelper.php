@@ -132,7 +132,7 @@ class BcPluginHookHelper extends AppHelper {
 				}
 			}
 			foreach($this->registerHooks[$hookName] as $key => $pluginName) {
-				$return = call_user_func_array(array(&$this->pluginHooks[$pluginName], $hookName), $args);
+				$return = call_user_func_array(array($this->pluginHooks[$pluginName], $hookName), $args);
 				if(isset($j)) {
 					$args[$j] = $return;
 				}
@@ -176,34 +176,6 @@ class BcPluginHookHelper extends AppHelper {
 		
 	}
 /**
- * BcForm::create
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	public function formExCreate($out) {
-		
-		return $this->executeHook('formExCreate', $out, $out);
-		
-	}
-/**
- * BcForm::end
- * 過去バージョンとの互換性の為残す
- * 
- * @param string $out
- * @return string
- * @access public
- * @deprecated
- */
-	public function formExEnd($out) {
-		
-		return $this->executeHook('formExEnd',$out, $out);
-		
-	}
-/**
  * before Form::create
  * 
  * @param Form $form
@@ -212,7 +184,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return array
  * @access public
  */
-	public function beforeFormCreate(&$form, $id, $model = null, $options = array()) {
+	public function beforeFormCreate(FormHelper $form, $id, $model = null, $options = array()) {
 		
 		return $this->executeHook('beforeFormCreate', $options, $form, $id, $model, $options);
 		
@@ -224,7 +196,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function afterFormCreate(&$form, $id, $out) {
+	public function afterFormCreate(FormHelper $form, $id, $out) {
 		
 		return $this->executeHook('afterFormCreate', $out, $form, $id, $out);
 		
@@ -238,7 +210,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return array
  * @access public
  */
-	public function beforeFormEnd(&$form, $id, $options = array()) {
+	public function beforeFormEnd(FormHelper $form, $id, $options = array()) {
 		
 		return $this->executeHook('beforeFormEnd', $options, $form, $id, $options);
 		
@@ -250,10 +222,9 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function afterFormEnd(&$form, $id, $out) {
+	public function afterFormEnd(FormHelper $form, $id, $out) {
 		
-		$out = $this->executeHook('afterFormEnd', $out, $form, $id, $out);
-		return $this->formExEnd($out);
+		return $this->executeHook('afterFormEnd', $out, $form, $id, $out);
 		
 	}
 /**
@@ -263,7 +234,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function beforeFormInput(&$form, $fieldName, $options = array()) {
+	public function beforeFormInput(FormHelper $form, $fieldName, $options = array()) {
 		
 		return $this->executeHook('beforeFormInput', $options, $form, $fieldName, $options);
 		
@@ -275,7 +246,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function afterFormInput(&$form, $fieldName, $out) {
+	public function afterFormInput(FormHelper $form, $fieldName, $out) {
 		
 		return $this->executeHook('afterFormInput', $out, $form, $fieldName, $out);
 		
@@ -291,8 +262,8 @@ class BcPluginHookHelper extends AppHelper {
  * @param boolean $escapeTitle
  * @return string 
  */
-	public function beforeBaserGetLink(&$html, $title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
-		
+	public function beforeBaserGetLink($html, $title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = true) {
+
 		return $this->executeHook('beforeBaserGetLink', $htmlAttributes, $html, $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 		
 	}
@@ -304,7 +275,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return string 
  * @access public
  */
-	public function afterBaserGetLink(&$html, $url, $out) {
+	public function afterBaserGetLink($html, $url, $out) {
 		
 		return $this->executeHook('afterBaserGetLink', $out, $html, $url, $out);
 		
@@ -316,7 +287,7 @@ class BcPluginHookHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function baserHeader(&$baser, $out) {
+	public function baserHeader(BcBaserHelper $bcBaser, $out) {
 		
 		return $this->executeHook('baserHeader', $out, $out);
 		
@@ -327,7 +298,7 @@ class BcPluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	public function baserFooter(&$baser, $out) {
+	public function baserFooter(BcBaserHelper $bcBaser, $out) {
 		
 		return $this->executeHook('baserFooter', $out, $out);
 		
@@ -338,7 +309,7 @@ class BcPluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	public function beforeElement(&$baser, $name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function beforeElement(BcBaserHelper $bcBaser, $name, $params = array(), $loadHelpers = false, $subDir = true) {
 		
 		return $this->executeHook('beforeElement', $params, $name, $params, $loadHelpers, $subDir);
 		
@@ -349,9 +320,10 @@ class BcPluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	public function afterElement(&$baser, $name, $out) {
+	public function afterElement(BcBaserHelper $bcBaser, $name, $out) {
 		
 		return $this->executeHook('afterElement', $out, $name, $out);
 		
 	}
+	
 }

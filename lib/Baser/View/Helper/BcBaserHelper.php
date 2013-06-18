@@ -172,7 +172,7 @@ class BcBaserHelper extends AppHelper {
 			}
 			$GlobalMenu = ClassRegistry::getObject('GlobalMenu');
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-			$db =& ConnectionManager::getDataSource('baser');
+			$db = ConnectionManager::getDataSource('baser');
 			$sources = $db->listSources();
 			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
 				if (empty($this->request->params['prefix'])) {
@@ -382,10 +382,7 @@ class BcBaserHelper extends AppHelper {
 	public function getContentsTitle() {
 
 		$contentsTitle = '';
-		// トップページの場合は、タイトルをサイト名だけにする
-		if (!empty($this->_View->viewVars['contentsTitle'])) {
-			$contentsTitle = $this->_View->viewVars['contentsTitle'];
-		}elseif($this->_View->pageTitle) {
+		if($this->_View->pageTitle) {
 			$contentsTitle = $this->_View->pageTitle;
 		}
 		if ($this->_View->name != 'CakeError' && !empty($contentsTitle)) {
@@ -792,13 +789,10 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function css($path, $options = array()) {
+		
 		$rel = null;
 		if(!empty($options['rel'])) {
 			$rel = $options['rel'];
-		}
-
-		if( $this->theme != Configure::read('BcApp.adminTheme') ){
-			$options['pathPrefix'] = "themed/{$this->theme}/" . CSS_URL ;
 		}
 
 		$ret = $this->BcHtml->css($path, $rel, $options);
@@ -818,13 +812,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function js($url, $inline = true) {
 
-		if( $this->theme != Configure::read('BcApp.adminTheme') ){
-			$pathPrefix = "themed/{$this->theme}/" . JS_URL ;
-			$ret = $this->BcHtml->script($url, array('inline' => $inline, 'pathPrefix'=> $pathPrefix));
-		} else {
-			$ret = $this->BcHtml->script($url, array('inline' => $inline));
-		}
-
+		$ret = $this->BcHtml->script($url, array('inline' => $inline));
 		if($inline) {
 			echo $ret;
 		}
@@ -1070,7 +1058,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function existsEditLink() {
 
-		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_View->viewVars['editLink']));
+		return ($this->_View->viewVars['authPrefix'] == 'admin' && !empty($this->_View->viewVars['editLink']));
 
 	}
 /**
@@ -1483,9 +1471,10 @@ class BcBaserHelper extends AppHelper {
  * @access protected
  */
 	public function __call($method, $params) {
+		
 		foreach($this->pluginBasers as $pluginBaser){
 			if(method_exists($pluginBaser,$method)){
-				return call_user_func_array(array(&$pluginBaser, $method), $params);
+				return call_user_func_array(array($pluginBaser, $method), $params);
 			}
 		}
 

@@ -57,7 +57,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return void
  * @access pubic
  */
-	public function registerHook(&$model, $hookName, $pluginName){
+	public function registerHook(Model $model, $hookName, $pluginName){
 
 		if(!isset($this->registerHooks[$model->alias][$hookName])){
 			$this->registerHooks[$model->alias][$hookName] = array();
@@ -74,7 +74,7 @@ class BcPluginHookBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	public function executeHook(&$model, $hookName, $return = null){
+	public function executeHook(Model $model, $hookName, $return = null){
 
 		$args = func_get_args();
 		unset($args[1]);unset($args[2]);

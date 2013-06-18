@@ -302,7 +302,6 @@ class MailContent extends MailAppModel {
 			}
 			return $result;
 		} else {
-			$this->log(count($data['MailContent']['name']));
 			if(isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 20) {
 				return $this->copy(null, $data, $recursive);
 			} else {

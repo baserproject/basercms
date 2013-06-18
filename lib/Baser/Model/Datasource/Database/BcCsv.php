@@ -743,7 +743,7 @@ class BcCsv extends DboSource {
 
 		/* ソート処理（１フィールドのみ対応） */
 		if(!empty($queryData['order'][0])) {
-			list($sortField,$direct) = split(" ",$queryData['order'][0]);
+			list($sortField,$direct) = explode(" ",$queryData['order'][0]);
 			qsort($records, 0, count($records)-1, $sortField,strtoupper($direct));
 		}
 
@@ -1039,13 +1039,15 @@ class BcCsv extends DboSource {
 
 		// ボディを生成
 		$body = '';
-		foreach($records as $key => $record) {
-			if(!eval($queryData['conditions'])) {
-				$record = $this->_convertRecord($record);
-				$body .= implode(",",$record)."\n";
+		if($records) {
+			foreach($records as $key => $record) {
+				if(!eval($queryData['conditions'])) {
+					$record = $this->_convertRecord($record);
+					$body .= implode(",",$record)."\n";
+				}
 			}
 		}
-
+		
 		// ファイルサイズを0に
 		ftruncate($this->connection[$queryData['tableName']],0);
 
@@ -1471,7 +1473,7 @@ class BcCsv extends DboSource {
 		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
-		$dropPattern = "/DROP\sTABLE\s+([^\s]+);/si";
+		$dropPattern = "/DROP\sTABLE\s+([^\s]+)/si";
 
 		// CREATE
 		if(preg_match($createPattern,$sql,$matches)) {
@@ -1537,7 +1539,7 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlFields($fields,$modelName) {
-		$aryFields = split(",",$fields);
+		$aryFields = explode(",",$fields);
 		foreach($aryFields as $key => $field) {
 			if(preg_match('/(max|MAX)\((.*?)\)\sAS\s(.*)/s',$field,$matches)) {
 				$field = $matches[2];
@@ -1585,7 +1587,7 @@ class BcCsv extends DboSource {
 	protected function _parseSqlClassName($fields) {
 		
 		$model = '';
-		$aryFields = split(",",$fields);
+		$aryFields = explode(",",$fields);
 		foreach($aryFields as $field) {
 			if(preg_match('/\((.*?)\)\sAS/is', $field, $matches)){
 				if(strpos($matches[1],".")!==false){
@@ -1611,7 +1613,7 @@ class BcCsv extends DboSource {
  */
 	protected function _parseSqlFieldsFromBuild($sql) {
 
-		$arySql = split(",",$sql);
+		$arySql = explode(",",$sql);
 		$fields = array();
 		foreach($arySql as $key => $value) {
 			if(strpos($value,'PRIMARY KEY')===false) {
@@ -1709,7 +1711,7 @@ class BcCsv extends DboSource {
 		$tables = str_replace("`","",$tables);
 
 		if(strpos($tables,"AS") !== false) {
-			list($tableName,$modelName) = split("AS",$tables);
+			list($tableName,$modelName) = explode("AS",$tables);
 		}else {
 			$tableName = trim($tables);
 		}
@@ -1814,7 +1816,7 @@ class BcCsv extends DboSource {
  */
 	protected function _parseSqlLimit($limit) {
 
-		$_config = split(",",$limit);
+		$_config = explode(",",$limit);
 		if(!empty($_config[1])) {
 			$config['offset'] = trim($_config[0]);
 			$config['limit'] = trim($_config[1]);
@@ -1842,7 +1844,7 @@ class BcCsv extends DboSource {
 
 		$strOrder = preg_replace("/`[^`]+?`\./s","",$strOrder);
 		$strOrder = str_replace("`","",$strOrder);
-		$aryOrders = split(",",$strOrder);
+		$aryOrders = explode(",",$strOrder);
 		foreach($aryOrders as $key =>$order) {
 			$_aryOrders[]=trim($order);
 		}
