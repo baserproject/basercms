@@ -552,14 +552,45 @@ class PagesController extends AppController {
 		$this->subMenuElements = array('default');
 		$this->set(compact('page', 'subpage', 'title'));
 
-		$data = $this->Page->findByUrl('/'.$url);
+		$data = $this->Page->findByUrl($url);
 
-		if(!empty($data['Page']['template'])) {
+		$template = $layout = $agent = '';
+		
+		if(Configure::read('BcRequest.agent')) {
+			$agent = '_' . Configure::read('BcRequest.agent');
+		}
+		
+		if(empty($data['PageCategory']['id'])) {
+			if(!empty($this->siteConfigs['root_layout_template' . $agent])) {
+				$layout = $this->siteConfigs['root_layout_template' . $agent];
+			}
+			if(!empty($this->siteConfigs['root_content_template' . $agent])) {
+				$template = 'templates/' . $this->siteConfigs['root_content_template' . $agent];
+			} else {
+				$template = join('/', $path);
+			}
+		} else {
+			if(!empty($data['PageCategory']['layout_template'])) {
+				$layout = $data['PageCategory']['layout_template'];
+			}
+			if(!empty($data['PageCategory']['content_template'])) {
+				$template = 'templates/' . $data['PageCategory']['content_template'];
+			} else {
+				$template = join('/', $path);
+			}
+		}
+		
+		if($layout) {
+			$this->layout = $layout;
+		}
+		
+		if($template) {
 			$this->set('pagePath', join('/', $path));
-			$this->render('templates/' . $data['Page']['template']);
+			$this->render($template);
 		} else {
 			$this->render(join('/', $path));
 		}
+		
 	}
 /**
  * パンくずナビ用の配列を取得する

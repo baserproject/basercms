@@ -295,13 +295,40 @@ $(function(){
 <?php endif ?>
 	</table>
 	
+	<h2>固定ページ関連</h2>
+	
+	<table cellpadding="0" cellspacing="0" class="form-table">
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.root_layout_template', 'ルートレイアウトテンプレート') ?></th>
+		<td class="col-input">
+			<small>[PC]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_layout_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates())) ?>　
+			<small>[携帯]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'mobile'))) ?>　
+			<small>[スマートフォン]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'smartphone'))) ?>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.root_content_template', 'ルートコンテンツテンプレート') ?></th>
+		<td class="col-input">
+			<small>[PC]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_content_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content'))) ?>　
+			<small>[携帯]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'mobile'))) ?>　
+			<small>[スマートフォン]</small>&nbsp;
+			<?php echo $this->BcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'smartphone'))) ?>
+		</td>
+	</tr>
+	</table>
+	
 	<h2>エディタ設定関連</h2>
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', '改行モード') ?></th>
 		<td class="col-input">
-			<?php echo $bcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
+			<?php echo $this->BcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
 				'0' => '改行時に段落を挿入する',
 				'1' => '改行時にBRタグを挿入する'
 			))) ?>

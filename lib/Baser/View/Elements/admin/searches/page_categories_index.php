@@ -22,11 +22,10 @@
 
 <?php echo $this->BcForm->create('PageCategory', array('url' => array('action' => 'index'))) ?>
 <p>
-	<span><?php echo $this->BcForm->label('PageCategory.type', 'タイプ') ?> 
-	<?php echo $this->BcForm->input('PageCategory.type', array(
-			'type'		=> 'select',
-			'options'	=> $pageType,
-			'escape'	=> false)) ?></span>
+	<span>
+		<?php echo $this->BcForm->label('PageCategory.type', 'タイプ') ?> 
+		<?php echo $this->BcForm->input('PageCategory.type', array('type' => 'radio', 'options' => $pageType)) ?>
+	</span>
 </p>
 <div class="button">
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
