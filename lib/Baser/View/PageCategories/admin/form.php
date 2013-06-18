@@ -40,7 +40,8 @@ function pageTypeChengeHandler() {
 	var options = {
 		"data[Option][excludeParentId]": $("#PageCategoryId").val()
 	};
-	if(pageType == undefined) {
+	
+	if(pageType === undefined) {
 		pageType = 1;
 	}
 	
