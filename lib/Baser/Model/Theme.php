@@ -78,7 +78,7 @@ class Theme extends AppModel {
 		if($value == $this->data['Theme']['old_name']){
 			return true;
 		}
-		if(!is_dir(WWW_ROOT.'themed'.DS.$value)){
+		if(!is_dir(WWW_ROOT.'theme'.DS.$value)){
 			return true;
 		}else {
 			return false;
@@ -110,7 +110,7 @@ class Theme extends AppModel {
 			$data = $data['Theme'];
 		}
 
-		$path = WWW_ROOT.'themed'.DS;
+		$path = WWW_ROOT.'theme'.DS;
 		if($path.$data['old_name'] != $path.$data['name']) {
 			if(!rename($path.$data['old_name'], $path.$data['name'])){
 				return false;
@@ -138,7 +138,7 @@ class Theme extends AppModel {
  */
 	public function setConfig($theme,$key,$value){
 
-		$path = WWW_ROOT.'themed'.DS;
+		$path = WWW_ROOT.'theme'.DS;
 		$contents = file_get_contents($path.$theme.DS.'config.php');
 		$reg = '/\$'.$key.'[\s]*?=[\s]*?\'.*?\';/is';
 		if(preg_match($reg, $contents)){

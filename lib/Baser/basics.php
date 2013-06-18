@@ -502,7 +502,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		$siteConfig = $SiteConfig->findExpanded();
 		$theme = $siteConfig['theme'];
 		if($theme) {
-			return WWW_ROOT.'themed'.DS.$theme.DS;
+			return WWW_ROOT.'theme'.DS.$theme.DS;
 		}else {
 			return APP . 'View' . DS;
 		}

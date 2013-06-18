@@ -628,7 +628,7 @@ class BlogPost extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	public function beforeDelete() {
+	public function beforeDelete($cascade = true) {
 
 		return $this->deleteContent($this->id);
 

@@ -190,17 +190,6 @@ class BaserAppModel extends Model {
 	}
 
 /**
- * フォームの初期値を設定する
- *
- * 継承先でオーバーライドする事
- *
- * @return 	array
- */
-	public function getDefaultValue() {
-		return array();
-	}
-
-/**
  * コントロールソースを取得する
  *
  * 継承先でオーバーライドする事

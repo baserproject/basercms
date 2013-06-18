@@ -634,9 +634,9 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function content() {
-            echo $this->_View->fetch('content');
-            //basercamp TODO 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
-//		echo $this->_content;
+		echo $this->_View->fetch('content');
+		// TODO basercamp 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
+		// echo $this->_content;
 	}
 /**
  * セッションメッセージを出力する
@@ -673,21 +673,17 @@ class BcBaserHelper extends AppHelper {
 		if(isset($authPrefixes['toolbar'])) {
 			$toolbar = $authPrefixes['toolbar'];
 		}
-
+		
 		// ツールバー設定
 		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
-
-				if(empty($this->request->params['admin']) && !empty($this->_view->viewVars['user'])) {
-					$publishTheme = $this->BcHtml->themeWeb;
-					$this->BcHtml->themeWeb = 'themed/'.$this->siteConfig['admin_theme'].'/';
+				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar', array('inline' => false));
-					$this->BcHtml->themeWeb = $publishTheme;
 				}
 			}
 		}
 
-		echo join("\n\t", $this->_View->getScripts());
+		echo $this->_View->getScripts();
 
 	}
 /**

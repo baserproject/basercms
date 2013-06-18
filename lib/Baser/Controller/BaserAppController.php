@@ -240,13 +240,13 @@ class BaserAppController extends Controller {
 			// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
 			// 表示されてしまうので明示的に指定している。
 			// （例）
-			// [変更後] app/webroot/themed/demo/blog/news/index.php
-			// [正　規] app/plugins/blog/views/themed/demo/blog/news/index.php
+			// [変更後] app/webroot/theme/demo/blog/news/index.php
+			// [正　規] app/plugins/blog/views/theme/demo/blog/news/index.php
 			// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
 			// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
 			// ※ AppView::_pathsも関連している
 			// ===============================================================================
-			$pluginThemePath = WWW_ROOT.'themed' . DS . $this->theme . DS;
+			$pluginThemePath = WWW_ROOT.'theme' . DS . $this->theme . DS;
 			$pluginPaths = Configure::read('pluginPaths');
 			if($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
 				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
@@ -627,7 +627,7 @@ class BaserAppController extends Controller {
  */
 	public function getThemeVersion($theme) {
 
-		$path = WWW_ROOT.'themed'.DS.$theme.DS.'VERSION.txt';
+		$path = WWW_ROOT.'theme'.DS.$theme.DS.'VERSION.txt';
 		if(!file_exists($path)) {
 			return false;
 		}
@@ -1431,7 +1431,7 @@ class BaserAppController extends Controller {
 			return;
 		}
 		
-		$themeHelpersPath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS.'helpers';
+		$themeHelpersPath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS.'helpers';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {

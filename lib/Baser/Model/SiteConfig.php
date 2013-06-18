@@ -94,13 +94,13 @@ class SiteConfig extends AppModel {
 	public function getThemes() {
 
 		$themes = array();
-		$themedFolder = new Folder(APP . 'View' . DS.'themed'.DS);
-		$_themes = $themedFolder->read(true,true);
+		$themeFolder = new Folder(APP . 'View' . DS.'theme'.DS);
+		$_themes = $themeFolder->read(true,true);
 		foreach($_themes[0] as $theme) {
 			$themes[$theme] = Inflector::camelize($theme);
 		}
-		$themedFolder = new Folder(WWW_ROOT.'themed'.DS);
-		$_themes = array_merge($themes,$themedFolder->read(true,true));
+		$themeFolder = new Folder(WWW_ROOT.'theme'.DS);
+		$_themes = array_merge($themes,$themeFolder->read(true,true));
 		foreach($_themes[0] as $theme) {
 			$themes[$theme] = Inflector::camelize($theme);
 		}

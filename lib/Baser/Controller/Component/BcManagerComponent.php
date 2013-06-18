@@ -1136,7 +1136,7 @@ class BcManagerComponent extends Component {
 		
 		$result = true;
 		foreach($sources as $theme) {
-			$targetPath = WWW_ROOT.'themed'.DS.$theme;
+			$targetPath = WWW_ROOT . 'theme' . DS . $theme;
 			$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
 			$Folder->delete($targetPath);
 			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>00777,'skip'=>array('_notes')))) {
@@ -1212,10 +1212,10 @@ class BcManagerComponent extends Component {
 	public function resetThemePages() {
 		
 		$result = true;
-		$themeFolder = new Folder(WWW_ROOT.'themed');
-		$themeFiles = $themeFolder->read(true,true,true);
+		$themeFolder = new Folder(WWW_ROOT . 'theme');
+		$themeFiles = $themeFolder->read(true, true, true);
 		foreach($themeFiles[0] as $theme){
-			$pagesFolder = new Folder($theme.DS.'pages');
+			$pagesFolder = new Folder($theme . DS . 'pages');
 			$pathes = $pagesFolder->read(true,true,true);
 			foreach($pathes[0] as $path){
 				if(basename($path) != 'admin') {
@@ -1460,7 +1460,7 @@ class BcManagerComponent extends Component {
 			'safeModeOff'	=> !ini_get('safe_mode'),
 			'configDirWritable'	=> is_writable(APP . 'Config' . DS),
 			'coreFileWritable'	=> is_writable(APP . 'Config' . DS.'core.php'),
-			'themeDirWritable'	=> is_writable(WWW_ROOT.'themed'),
+			'themeDirWritable'	=> is_writable(WWW_ROOT.'theme'),
 			'filesDirWritable'	=> is_writable(WWW_ROOT.'files'),
 			'tmpDirWritable'	=> is_writable(TMP),
 			'dbDirWritable'		=> is_writable(APP.'db'),
@@ -1485,8 +1485,8 @@ class BcManagerComponent extends Component {
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
 		}
 		if(!$status['themeDirWritable']) {
-			@chmod(WWW_ROOT.'themed', 0777);
-			$status['themeDirWritable'] = is_writable(WWW_ROOT.'themed');
+			@chmod(WWW_ROOT.'theme', 0777);
+			$status['themeDirWritable'] = is_writable(WWW_ROOT.'theme');
 		}
 		if(!$status['filesDirWritable']) {
 			chmod(WWW_ROOT.'files', 0777);

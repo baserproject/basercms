@@ -159,7 +159,7 @@ class BcReplacePrefixComponent extends Component {
 		if (!empty($controller->theme)) {
 			$count = count($paths);
 			for ($i = 0; $i < $count; $i++) {
-				$themePaths[] = $paths[$i] . 'themed'. DS . $controller->theme . DS;
+				$themePaths[] = $paths[$i] . 'theme'. DS . $controller->theme . DS;
 			}
 			$paths = array_merge($themePaths, $paths);
 		}

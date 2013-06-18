@@ -88,8 +88,8 @@ define('BASER_CONSOLES', BASER . 'Console' . DS);
 /**
  * Baserテーマ 
  */
-if (is_dir(WWW_ROOT . 'themed')) {
-	define('BASER_THEMES', WWW_ROOT . 'themed' . DS);
+if (is_dir(WWW_ROOT . 'theme')) {
+	define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
 } elseif (is_dir(ROOT . DS . 'theme')) {
 	define('BASER_THEMES', ROOT . DS . 'theme' . DS);
 }

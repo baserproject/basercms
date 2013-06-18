@@ -33,7 +33,7 @@ class BlogBaserHelper extends AppHelper {
  * ブログ記事一覧出力
  * ページ編集画面等で利用する事ができる。
  * 利用例: <?php $this->BcBaser->blogPosts('news', 3) ?>
- * ビュー: app/webroot/themed/{テーマ名}/blog/{コンテンツテンプレート名}/posts.php
+ * ビュー: app/webroot/theme/{テーマ名}/blog/{コンテンツテンプレート名}/posts.php
  *
  * @param int $contentsName
  * @param int $num
@@ -52,13 +52,11 @@ class BlogBaserHelper extends AppHelper {
 			'day'		=> null,
 			'id'		=> null,
 			'keyword'	=> null,
-			'template'	=> null,
+			'templates'	=> null,
 			'direction' => null,
 			'page'		=> null,
 			'sort'		=> null
 		), $options);
-
-		$options = am($_options, $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
@@ -83,12 +81,19 @@ class BlogBaserHelper extends AppHelper {
 			$templates = 'posts';
 		}
 		unset ($options['templates']);
+
+		// TODO basercamp
+		// requestActionを実行する際、一旦、ViewオブジェクトをClassRegistryより削除しないと、
+		// requestAction後のViewにおいて、requestAction前のインスタンスを使いまわされてしまう為、
+		// 一旦削除する必要があったが、CakePHP２系より、ClassRegistry::getObject('View') で Viewは取得できず、
+		// ClassRegistryでViewのインスタンスは管理されてない様子？？
+		// とりあえずコメントアウトで対応
 		
-		$View =& ClassRegistry::getObject('View');
-		ClassRegistry::removeObject('View');
+		//$View =& ClassRegistry::getObject('View');
+		//ClassRegistry::removeObject('View');
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
-		ClassRegistry::removeObject('View');
-	 	ClassRegistry::addObject('View', $View);
+		//ClassRegistry::removeObject('View');
+	 	//ClassRegistry::addObject('View', $View);
 
 	}
 /**

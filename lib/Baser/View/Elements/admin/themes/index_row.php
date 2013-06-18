@@ -25,7 +25,7 @@
 	<p class="theme-screenshot">
 		<a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($data['name']) ?>">
 <?php if($data['screenshot']): ?>
-			<?php $this->BcBaser->img('/themed/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
+			<?php $this->BcBaser->img('/theme/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
 <?php else: ?>
 			<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt'=>$data['title'])) ?>
 <?php endif ?>
@@ -55,7 +55,7 @@
 		<div id="<?php echo 'Contents' . Inflector::camelize($data['name']) ?>" class="theme-popup-contents clearfix">
 			<div class="theme-screenshot">
 <?php if($data['screenshot']): ?>
-				<?php $this->BcBaser->img('/themed/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
+				<?php $this->BcBaser->img('/theme/'.$data['name'].'/screenshot.png',array('alt'=>$data['title'])) ?>
 <?php else: ?>
 				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt'=>$data['title'])) ?>
 <?php endif ?>

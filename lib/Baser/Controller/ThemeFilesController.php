@@ -785,7 +785,7 @@ class ThemeFilesController extends AppController {
 				$viewPath = BASER_VIEWS;
 			}
 		}else {
-			$viewPath = WWW_ROOT.'themed'.DS.$data['theme'].DS;
+			$viewPath = WWW_ROOT.'theme'.DS.$data['theme'].DS;
 		}
 
 		if($data['type']!='etc') {
@@ -817,12 +817,12 @@ class ThemeFilesController extends AppController {
 
 		if($type!='etc') {
 			if($plugin && $assets) {
-				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS.$path;
+				$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS.$path;
 			} else {
-				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
+				$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
 			}
 		}else {
-			$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
+			$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$path;
 		}
 		$folder = new Folder();
 		$folder->create(dirname($themePath),0777);
@@ -854,15 +854,15 @@ class ThemeFilesController extends AppController {
 
 		if($type!='etc') {
 			if($plugin && $assets) {
-				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS;
+				$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$plugin.DS.$type.DS;
 			} else {
-				$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$type.DS;
+				$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$type.DS;
 			}
 			if($path) {
 				$themePath .= $path.DS;
 			}
 		}else {
-			$themePath = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path.DS;
+			$themePath = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$path.DS;
 		}
 		$folder = new Folder();
 		$folder->create(dirname($themePath),0777);

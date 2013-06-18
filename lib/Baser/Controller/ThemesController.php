@@ -63,7 +63,7 @@ class ThemesController extends AppController {
 	public function admin_index(){
 
 		$this->pageTitle = 'テーマ一覧';
-		$path = WWW_ROOT.'themed';
+		$path = WWW_ROOT.'theme';
 		$folder = new Folder($path);
 		$files = $folder->read(true,true);
 		$datas = array();
@@ -219,7 +219,7 @@ class ThemesController extends AppController {
  */
 	protected function _loadThemeInfo($themename) {
 		
-		$path = WWW_ROOT.'themed';
+		$path = WWW_ROOT.'theme';
 		$title = $description = $author = $url = $screenshot = '';
 		$theme = array();
 		if(file_exists($path.DS.$themename.DS.'config.php')){
@@ -256,7 +256,7 @@ class ThemesController extends AppController {
 		if(!$theme){
 			$this->notFound();
 		}
-		$themePath = WWW_ROOT.'themed'.DS.$theme.DS;
+		$themePath = WWW_ROOT.'theme'.DS.$theme.DS;
 		$title = $description = $author = $url = '';
 		include $themePath.'config.php';
 		
@@ -332,7 +332,7 @@ class ThemesController extends AppController {
  */
 	protected function _copy($theme) {
 		
-		$basePath = WWW_ROOT.'themed'.DS;
+		$basePath = WWW_ROOT.'theme'.DS;
 		$newTheme = $theme.'_copy';
 		while(true){
 			if(!is_dir($basePath.$newTheme)){
@@ -379,7 +379,7 @@ class ThemesController extends AppController {
  */
 	protected function _del($theme) {
 		
-		$path = WWW_ROOT.'themed'.DS.$theme;
+		$path = WWW_ROOT.'theme'.DS.$theme;
 		$folder = new Folder();
 		if($folder->delete($path)) {
 			$siteConfig = array('SiteConfig'=>$this->siteConfigs);
@@ -407,7 +407,7 @@ class ThemesController extends AppController {
 			$this->notFound();
 		}
 		$siteConfig = array('SiteConfig'=>$this->siteConfigs);
-		$path = WWW_ROOT.'themed'.DS.$theme;
+		$path = WWW_ROOT.'theme'.DS.$theme;
 		$folder = new Folder();
 		$folder->delete($path);
 		if($theme == $siteConfig['SiteConfig']['theme']){

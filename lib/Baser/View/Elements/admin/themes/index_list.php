@@ -32,7 +32,7 @@ $(function(){
 	<div class="current-theme-left">
 		<div class="theme-screenshot">
 			<?php if($currentTheme['screenshot']): ?>
-			<?php $this->BcBaser->img('/themed/'.$currentTheme['name'].'/screenshot.png',array('alt'=>$currentTheme['title'])) ?>
+			<?php $this->BcBaser->img('/theme/'.$currentTheme['name'].'/screenshot.png',array('alt'=>$currentTheme['title'])) ?>
 			<?php else: ?>
 			<?php $this->BcBaser->img('admin/no-screenshot.png',array('alt'=>$currentTheme['title'])) ?>
 			<?php endif ?>

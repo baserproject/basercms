@@ -28,6 +28,6 @@
 	<li>テーマを削除するには、対象テーマの  <?php $this->BcBaser->img('admin/icn_tool_delete.png') ?> ボタンをクリックします。</li>
 </ul>
 <p>テーマを追加する場合には、
-/app/webroot/themed/{テーマ名}/ としてテーマフォルダを作成し、 そのフォルダの中にCakePHPのテンプレートファイルやcss、javascriptファイル等を配置します。<br />
+/app/webroot/theme/{テーマ名}/ としてテーマフォルダを作成し、 そのフォルダの中にCakePHPのテンプレートファイルやcss、javascriptファイル等を配置します。<br />
 <small>※ テーマ名には半角小文字のアルファベットを利用します。</small>
 </p>

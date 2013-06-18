@@ -195,7 +195,7 @@ class PageCategoriesController extends AppController {
 					$message = '固定ページカテゴリー「'.$data['PageCategory']['name'].'」を追加しました。';
 					if(ini_get('safe_mode')) {
 						$message .= '<br />機能制限のセーフモードで動作しているので、手動で次のフォルダ内に追加したカテゴリと同階層のフォルダを作成し、書込権限を与える必要があります。<br />'.
-									WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'pages'.DS;
+									WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.'pages'.DS;
 					}
 					$this->setMessage($message, false, true);
 					$this->redirect(array('controller' => 'page_categories', 'action' => 'index'));

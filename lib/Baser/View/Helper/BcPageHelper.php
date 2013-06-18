@@ -49,8 +49,9 @@ class BcPageHelper extends Helper {
  * @return void
  * @access public
  */
-	public function  __construct() {
+	public function  __construct(View $View) {
 		
+		parent::__construct($View);
 		if(ClassRegistry::isKeySet('Page')) {
 			$this->Page = ClassRegistry::getObject('Page');
 		}else {
@@ -306,19 +307,17 @@ class BcPageHelper extends Helper {
 		if(Configure::read('BcRequest.agentPrefix')) {
 			$agent = Configure::read('BcRequest.agentPrefix');
 		}
-		
-		$View = ClassRegistry::getObject('View');
-		$path = $View->getVar('pagePath');
+		$path = $this->_View->getVar('pagePath');
 		
 		if(!$agent) {
-			$path = '..' . DS . 'pages' . DS . $path;
+			$path = '..' . DS . 'Pages' . DS . $path;
 		} else {
 			$url = '/'.implode('/', $this->request->params['pass']);
 			$linked = $this->Page->isLinked($agent, $url);
 			if(!$linked) {
-				$path = '..' . DS . 'pages' . DS . $agent . DS . $path;
+				$path = '..' . DS . 'Pages' . DS . $agent . DS . $path;
 			} else {
-				$path = '..' . DS . 'pages' . DS . $path;
+				$path = '..' . DS . 'Pages' . DS . $path;
 			}
 		}
 
@@ -342,7 +341,7 @@ class BcPageHelper extends Helper {
 		}
 
 		$siteConfig = Configure::read('BcSite');
-		$themePath = WWW_ROOT . 'themed' . DS . $siteConfig['theme'] . DS;
+		$themePath = WWW_ROOT . 'theme' . DS . $siteConfig['theme'] . DS;
 		
 		$viewPaths = array($themePath) + Configure::read('viewPaths');
 		

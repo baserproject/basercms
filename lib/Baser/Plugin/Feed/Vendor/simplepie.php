@@ -9098,7 +9098,7 @@ class SimplePie_Misc
 		return $time;
 	}
 
-	function absolutize_url($relative, $base)
+	static public function absolutize_url($relative, $base)
 	{
 		$iri = SimplePie_IRI::absolutize(new SimplePie_IRI($base), $relative);
 		return $iri->get_iri();
@@ -9158,7 +9158,7 @@ class SimplePie_Misc
 		return $output . $input;
 	}
 
-	function get_element($realname, $string)
+	static public function get_element($realname, $string)
 	{
 		$return = array();
 		$name = preg_quote($realname, '/');
@@ -9195,7 +9195,7 @@ class SimplePie_Misc
 		return $return;
 	}
 
-	function element_implode($element)
+	static public function element_implode($element)
 	{
 		$full = "<$element[tag]";
 		foreach ($element['attribs'] as $key => $value)
@@ -10857,7 +10857,7 @@ class SimplePie_Misc
 	 * @param string $data Input data
 	 * @return string Output data
 	 */
-	function entities_decode($data)
+	static public function entities_decode($data)
 	{
 		$decoder =& new SimplePie_Decode_HTML_Entities($data);
 		return $decoder->parse();
@@ -11037,7 +11037,7 @@ class SimplePie_Misc
 		}
 	}
 
-	function is_isegment_nz_nc($string)
+	static public function is_isegment_nz_nc($string)
 	{
 		return (bool) preg_match('/^([A-Za-z0-9\-._~\x{A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}\x{10000}-\x{1FFFD}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}\x{40000}-\x{4FFFD}\x{50000}-\x{5FFFD}\x{60000}-\x{6FFFD}\x{70000}-\x{7FFFD}\x{80000}-\x{8FFFD}\x{90000}-\x{9FFFD}\x{A0000}-\x{AFFFD}\x{B0000}-\x{BFFFD}\x{C0000}-\x{CFFFD}\x{D0000}-\x{DFFFD}\x{E1000}-\x{EFFFD}!$&\'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u', $string);
 	}
@@ -11061,7 +11061,7 @@ class SimplePie_Misc
 		return $tokens;
 	}
 
-	function array_unique($array)
+	static public function array_unique($array)
 	{
 		if (version_compare(PHP_VERSION, '5.2', '>='))
 		{
@@ -11677,7 +11677,7 @@ class SimplePie_IRI
 	 * @param string $relative Relative IRI
 	 * @return SimplePie_IRI
 	 */
-	function absolutize($base, $relative)
+	static public function absolutize($base, $relative)
 	{
 		$relative = (string) $relative;
 		if ($relative !== '')
@@ -13043,7 +13043,7 @@ class SimplePie_Parse_Date
 	 *
 	 * @access public
 	 */
-	function get()
+	static public function get()
 	{
 		static $object;
 		if (!$object)

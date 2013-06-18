@@ -208,7 +208,7 @@ class BlogContentsController extends BlogAppController {
  */
 	public function redirectEditLayout($template){
 		
-		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
+		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS.$template.$this->ext,
 						BASER_VIEWS.'layouts'.DS.$template.$this->ext);
 		if($this->siteConfigs['theme']){
@@ -237,7 +237,7 @@ class BlogContentsController extends BlogAppController {
  */
 	public function redirectEditBlog($template){
 		$path = 'blog'.DS.$template;
-		$target = WWW_ROOT.'themed'.DS.$this->siteConfigs['theme'].DS.$path;
+		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$path;
 		$sorces = array(BASER_PLUGINS.'blog'.DS.'views'.DS.$path);
 		if($this->siteConfigs['theme']){
 			if(!file_exists($target.DS.'index'.$this->ext)){

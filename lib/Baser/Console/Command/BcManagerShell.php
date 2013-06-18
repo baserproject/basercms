@@ -125,9 +125,9 @@ class BcManagerShell extends BcAppShell {
 		if(!$checkResult['coreFileWritable']) {
 			$this->out('　/app/Config/core.php に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
 		}
-		$this->out('* Writable /app/webroot/themed/ ('.(($checkResult['themeDirWritable']) ? 'True' : 'False').')：'.(($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
+		$this->out('* Writable /app/webroot/theme/ ('.(($checkResult['themeDirWritable']) ? 'True' : 'False').')：'.(($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
 		if(!$checkResult['themeDirWritable']) {
-			$this->out('　/app/webroot/themed/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
+			$this->out('　/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
 		}
 		
 		$this->hr();

@@ -53,25 +53,27 @@ class BaserAppView extends View {
 		// このメソッドの中身は、__paths に全て移動し、最初の行にて呼び出す。
 		// >>>
 		$paths = $this->__paths($plugin, $cached);
+		
 		$basePaths = $paths;
 		$count = count($basePaths);
 		if (!empty($this->adminTheme)) {
 			$adminThemePaths = array();
 			for ($i = 0; $i < $count; $i++) {
-				if(strpos($basePaths[$i], 'themed') === false) {
-					$adminThemePaths[] = $basePaths[$i] . 'themed'. DS . $this->adminTheme . DS;
+				if(strpos($basePaths[$i], 'Themed') === false) {
+					$adminThemePaths[] = $basePaths[$i] . 'theme'. DS . $this->adminTheme . DS;
 				}
 			}
 			$paths = array_merge($adminThemePaths, $paths);
 		}
-		/*if (!empty($this->theme)) {
+		if (!empty($this->theme)) {
 			for ($i = 0; $i < $count; $i++) {
-				if(strpos($basePaths[$i], 'themed') === false) {
-					$themePaths[] = $basePaths[$i] . 'themed'. DS . $this->theme . DS;
+				if(strpos($basePaths[$i], 'Themed') === false) {
+					$themePaths[] = $basePaths[$i] . 'theme'. DS . $this->theme . DS;
 				}
 			}
 			$paths = array_merge($themePaths, $paths);
-		}*/
+		}
+		
 		if (empty($this->__paths)) {
 			$this->__paths = $paths;
 		}
@@ -303,8 +305,17 @@ class BaserAppView extends View {
 		
 		return $this->_missingView($paths[0] . $file . $this->ext, 'missingLayout');
 	}
+/**
+ * inline = false でセットしたコードを取得する
+ * TODO basercamp ビューブロックの仕組みを理解して書きなおす
+ * @return string
+ */
 	function getScripts() {
-		return $this->_scripts;
+		
+		$out = $this->fetch('css');
+		$out .= $this->fetch('js');
+		return $out;
+		
 	}
 /**
  * Return a misssing view error message

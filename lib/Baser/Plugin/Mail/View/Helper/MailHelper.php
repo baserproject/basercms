@@ -96,7 +96,7 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(
@@ -141,7 +141,7 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'mail'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'mail'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'mail'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
@@ -182,7 +182,7 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;

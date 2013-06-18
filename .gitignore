@@ -10,7 +10,7 @@ app/webroot/files/*
 app/tmp/*
 !app/tmp/empty
 app/View/pages/
-app/webroot/themed/*
-!app/webroot/themed/empty
+app/webroot/theme/*
+!app/webroot/theme/empty
 app/webroot/sitemap.xml
 nbproject/

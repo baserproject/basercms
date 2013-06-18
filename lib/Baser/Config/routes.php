@@ -33,7 +33,7 @@ if(BC_INSTALLED) {
  * テーマヘルパーのパスを追加する 
  */
 	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'themed' . DS . Configure::read('BcSite.theme') . DS. 'helpers');
+	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS. 'helpers');
 	App::build(array('View/Helper' => $helperPaths));
 /**
  * メンテナンスチェック
@@ -283,7 +283,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * bootstrapではプラグインのパスが読み込めない為ここに定義
  * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義す
  */
-	$themePath = WWW_ROOT.'themed'.DS.Configure::read('BcSite.theme').DS;
+	$themePath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS;
 	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
 	if(file_exists($themeBootstrap)) {
 		include $themeBootstrap;

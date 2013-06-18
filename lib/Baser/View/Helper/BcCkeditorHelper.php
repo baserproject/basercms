@@ -285,7 +285,7 @@ class BcCkeditorHelper extends AppHelper {
 		$themeWeb = $this->themeWeb;
 		$theme = Configure::read('BcSite.theme');
 		if($theme) {
-			$this->themeWeb = 'themed/'. $theme .'/';
+			$this->themeWeb = 'theme/'. $theme .'/';
 		}
 		
 		$themeEditorCsses = array(

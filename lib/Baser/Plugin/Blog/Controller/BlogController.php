@@ -530,7 +530,7 @@ class BlogController extends BlogAppController {
 			'id'		=> null,
 			'keyword'	=> null,
 			'author'	=> null
-		), $conditions);
+		), $_conditions);
 
 		$options = array_merge(array(
 			'direction'	=> $this->blogContent['BlogContent']['list_direction'],

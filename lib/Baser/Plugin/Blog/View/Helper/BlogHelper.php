@@ -28,7 +28,7 @@ class BlogHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', BC_TIME_HELPER, BC_BASER_HELPER, 'BcUpload');
+	public $helpers = array('Html', 'BcTime', 'BcBaser', 'BcUpload');
 /**
  * ブログカテゴリモデル
  *
@@ -43,6 +43,7 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function __construct(View $View, $settings = array()) {
+		
 		parent::__construct($View, $settings);
 		$this->_setBlogContent();
 
@@ -550,7 +551,7 @@ class BlogHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'layouts'.DS;
 		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
@@ -591,7 +592,7 @@ class BlogHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'themed'.DS.$this->BcBaser->siteConfig['theme'].DS.'blog'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'blog'.DS;
 		}
 		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'blog'.DS;
 		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;

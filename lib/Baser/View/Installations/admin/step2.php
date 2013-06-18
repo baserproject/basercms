@@ -111,9 +111,9 @@ $(function(){
 				</li>
 				<li class='<?php if ($themeDirWritable) echo 'check'; else echo'failed'; ?>'>
 					<?php if(ROOT.DS != WWW_ROOT):?>
-					/app/webroot/themed フォルダの書き込み権限
+					/app/webroot/theme フォルダの書き込み権限
 					<?php else: ?>
-					/themed フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					/theme フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<?php endif ?>
 					<div class="check-result">
 						<?php if ($themeDirWritable): ?>
@@ -121,9 +121,9 @@ $(function(){
 						<?php else: ?>
 						書き込み不可<br />
 						<?php if(ROOT.DS != WWW_ROOT):?>
-						<small>/app/webroot/themed フォルダに書き込み権限が必要です</small>
+						<small>/app/webroot/theme フォルダに書き込み権限が必要です</small>
 						<?php else: ?>
-						<small>/themed フォルダに書き込み権限が必要です</small>
+						<small>/theme フォルダに書き込み権限が必要です</small>
 						<?php endif ?>
 						<?php endif ?>
 					</div>
@@ -219,7 +219,7 @@ mod_gzip_on Off</pre>
 			</div>
 			<ul class="section"><li>/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/</li>
 				<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite / CSVを利用する場合）</li>
-				<li>/baser/config/theme/ 内の全て　→　/app/webroot/themed/</li>
+				<li>/baser/config/theme/ 内の全て　→　/app/webroot/theme/</li>
 			</ul>
 			<?php endif ?>
 		</div>
