@@ -683,7 +683,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		echo $this->_View->getScripts();
+		echo $this->_View->viewVars['scripts_for_layout'];
 
 	}
 /**

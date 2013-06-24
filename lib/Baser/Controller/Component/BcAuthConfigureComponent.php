@@ -89,12 +89,21 @@ class  BcAuthConfigureComponent extends Component {
 		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
 		// 権限が無いactionを実行した際のエラーメッセージ
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
-		//ユーザIDとパスワードのフィールドを指定
-		$auth->fields = array('username' => $username, 'password' => $password, 'serial' => $serial);
 		$auth->authorize = 'Controller';
-		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
-		$auth->userModel = $userModel;
 		
+		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
+		//ユーザIDとパスワードのフィールドを指定
+		$auth->authenticate = array(
+			'Form'	=> array(
+				'userModel'	=> $userModel,
+				'fields'	=> array(
+					'username'	=> $username,
+					'password'	=> $password
+					),
+				'serial'	=> $serial
+			)
+		);
+
 		// 認証プレフィックス
 		if(!empty($config['auth_prefix']) && !isset($userScope)) {
 			$auth->userScope = array('UserGroup.auth_prefix' => $config['auth_prefix']);
@@ -121,7 +130,7 @@ class  BcAuthConfigureComponent extends Component {
 
 		if(!$auth->user()) {
 			// クッキーがある場合にはクッキーで認証
-			$cookie = $controller->Cookie->read($auth->sessionKey);
+			$cookie = $controller->Cookie->read(BcAuthComponent::$sessionKey);
 			if(!empty($cookie)) {
 				$auth->login($cookie);
 				$this->setSessionAuthPrefix();
@@ -142,14 +151,14 @@ class  BcAuthConfigureComponent extends Component {
  */
 	function setSessionAuthPrefix() {
 		
-		$authPrefix = $this->controller->Session->read($this->controller->BcAuth->sessionKey . '.authPrefix');
+		$authPrefix = $this->controller->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
 		if (!$authPrefix) {
 			if(empty($this->controller->params['prefix'])) {
 				$authPrefix = 'front';
 			} else {
 				$authPrefix = $this->controller->params['prefix'];
 			}
-			$this->controller->Session->write($this->controller->BcAuth->sessionKey . '.authPrefix', $authPrefix);
+			$this->controller->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
 		}
 		
 	}

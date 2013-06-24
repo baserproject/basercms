@@ -21,6 +21,10 @@ if ( $this->Session->check('Message.auth') ) {
     $this->Session->flash('auth');
 }
 $userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
+if(!$userModel) {
+	$userModel = 'User';
+}
+$userController = Inflector::tableize($userModel);
 $this->addScript(<<< CSS_END
 <style type="text/css">
 #Contents {

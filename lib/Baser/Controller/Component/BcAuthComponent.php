@@ -195,7 +195,7 @@ class BcAuthComponent extends AuthComponent {
 		// >>>
 		$result = parent::login($data);
 		if($result) {
-			$this->Session->write('Auth.userModel', $this->userModel);
+			$this->Session->write('Auth.userModel', $this->authenticate['Form']['userModel']);
 		}
 		return $result;
 		// <<<
@@ -263,7 +263,7 @@ class BcAuthComponent extends AuthComponent {
 		
 	}
 
-	// TODO: 2013.05.17 コレをマージすると以下のエラーが出る為、マージはするがコメントアウトとする
+	// TODO basercamp 2013.05.17 コレをマージすると以下のエラーが出る為、マージはするがコメントアウトとする
 	// Error: Cannot make static method AuthComponent::user() non static in class BcAuthComponent
 /**
  * Get the current user from the session.
@@ -274,7 +274,7 @@ class BcAuthComponent extends AuthComponent {
  */
 	//function user($key = null) {
 	//	$this->__setDefaults();
-	//	if (!$this->Session->check($this->sessionKey)) {
+	//	if (!$this->Session->check(self::$sessionKey)) {
 	//		return null;
 	//	}
 
@@ -284,12 +284,12 @@ class BcAuthComponent extends AuthComponent {
 	//		// 仕様となっている為、User固定となる仕様とした
 	//		// そのモデルをキーとして入れる仕様に変更
 	//		// >>>
-	//		//return array($this->userModel => $this->Session->read($this->sessionKey));
+	//		//return array($this->userModel => $this->Session->read(self::$sessionKey);
 	//		// ---
-	//		return array('User' => $this->Session->read($this->sessionKey));
+	//		return array('User' => $this->Session->read(self::$sessionKey));
 	//		// <<<
 	//	} else {
-	//		$user = $this->Session->read($this->sessionKey);
+	//		$user = $this->Session->read(self::$sessionKey);
 	//		if (isset($user[$key])) {
 	//			return $user[$key];
 	//		}

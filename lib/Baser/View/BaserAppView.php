@@ -306,18 +306,6 @@ class BaserAppView extends View {
 		return $this->_missingView($paths[0] . $file . $this->ext, 'missingLayout');
 	}
 /**
- * inline = false でセットしたコードを取得する
- * TODO basercamp ビューブロックの仕組みを理解して書きなおす
- * @return string
- */
-	function getScripts() {
-		
-		$out = $this->fetch('css');
-		$out .= $this->fetch('js');
-		return $out;
-		
-	}
-/**
  * Return a misssing view error message
  *
  * @param string $viewFileName the filename that should exist

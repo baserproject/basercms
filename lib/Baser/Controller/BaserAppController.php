@@ -69,7 +69,7 @@ class BaserAppController extends Controller {
  * @access protected
  * TODO メニュー管理を除外後、GlobalMenuを除外する
  */
-	public $uses = array('GlobalMenu', 'Favorite');
+	public $uses = array('User', 'GlobalMenu', 'Favorite');
 /**
  * コンポーネント
  *
@@ -229,7 +229,7 @@ class BaserAppController extends Controller {
 		if(!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
-		
+				
 		// テーマを設定
 		$this->setTheme($this->request->params);
 		
@@ -289,12 +289,12 @@ class BaserAppController extends Controller {
 			$user = $this->BcAuth->user();
 
 			if($user) {
-				$userModel = key($user);
+				$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 				if($userModel) {
 					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
-						'conditions' => array($userModel . '.id' => $user[$userModel]['id'], $userModel . '.name' => $user[$userModel]['name']),
+						'conditions' => array($userModel . '.id' => $user['id'], $userModel . '.name' => $user['name']),
 						'recursive'	 => -1))) {
-						$this->Session->delete($this->BcAuth->sessionKey);
+						$this->Session->delete(BcAuthComponent::$sessionKey);
 					}
 				}
 			}
@@ -340,7 +340,7 @@ class BaserAppController extends Controller {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
 				if($user) {
-					if(!$Permission->check($this->request->url,$user['user_group_id'])) {
+					if(!$Permission->check($this->request->url, $user['user_group_id'])) {
 						$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 						$this->redirect($this->BcAuth->loginAction);
 					}
@@ -1116,6 +1116,7 @@ class BaserAppController extends Controller {
 
 			}
 			if(!$authPrefix) {
+				$ref = $this->referer();
 				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 			}
@@ -1271,7 +1272,7 @@ class BaserAppController extends Controller {
 		if(!isset($this->BcAuth)) {
 			return false;
 		}
-		return $this->BcAuth->userModel;
+		return $this->BcAuth->authenticate['Form']['userModel'];
 		
 	}
 /**

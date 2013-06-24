@@ -140,7 +140,7 @@ class UsersController extends AppController {
 		}
 
 		$user = $this->BcAuth->user();
-		$userModel = $this->BcAuth->userModel;
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 
 		if ($this->request->data) {
 			if ($user) {
@@ -217,8 +217,8 @@ class UsersController extends AppController {
 		
 		$configs = Configure::read('BcAuthPrefix');
 		if ($this->Session->check('AuthAgent')) {
-			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->userModel);
-			$this->Session->write($this->BcAuth->sessionKey, $data);
+			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->authenticate['Form']['userModel']);
+			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->setMessage('元のユーザーに戻りました。');
 			$authPrefix = $data['authPrefix'];
@@ -246,13 +246,13 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_login() {
-		if (!$this->BcAuth->login($this->request->data)) {
+		if (!$this->BcAuth->login()) {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
 
 		$this->BcAuthConfigure->setSessionAuthPrefix();
 		$user = $this->BcAuth->user();
-		$userModel = $this->BcAuth->userModel;
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 
 		if ($this->request->data) {
 			if ($user) {
@@ -287,11 +287,11 @@ class UsersController extends AppController {
  */
 	public function setAuthCookie($data) {
 		
-		$userModel = $this->BcAuth->userModel;
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];				   // ハッシュ化されている
-		$this->Cookie->write($this->BcAuth->sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$this->Cookie->write(BcAuthComponent::$sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 
 	}
 
@@ -303,7 +303,7 @@ class UsersController extends AppController {
 	public function admin_logout() {
 		
 		$this->BcAuth->logout();
-		$this->Cookie->delete($this->BcAuth->sessionKey);
+		$this->Cookie->delete(BcAuthComponent::$sessionKey);
 		$this->setMessage('ログアウトしました');
 		if (empty($this->request->params['prefix'])) {
 			$this->redirect(array('action' => 'login'));
@@ -564,7 +564,7 @@ class UsersController extends AppController {
 		}
 		
 		$this->pageTitle = 'パスワードのリセット';
-		$userModel = $this->BcAuth->userModel;
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if ($this->request->data) {
 
 			if (empty($this->request->data[$userModel]['email'])) {

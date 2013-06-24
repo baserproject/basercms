@@ -306,10 +306,10 @@ if (BC_INSTALLED) {
 
 // TODO basercamp
 // ログイン処理が完了していない為、無理やりログインした事にする
-$_SESSION['Auth']['User'] = array(
+/*$_SESSION['Auth']['User'] = array(
 	'id' => 1, 
 	'name' => 'admin', 
 	'user_group_id' => 1,
 	'real_name_1' => 'admin',
 	'real_name_2' => '!!'
-);
+);*/
