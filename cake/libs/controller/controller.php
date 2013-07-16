@@ -995,11 +995,11 @@ class Controller extends Object {
 		if (isset($options['show'])) {
 			$options['limit'] = $options['show'];
 		}
-                
-                if (isset($options['order']) && empty($options['sort'])) {
-                    $options['sort'] = $options['order'];
-                    unset($options['order']);
-                }
+
+		if (isset($options['order']) && empty($options['sort'])) {
+			$options['sort'] = $options['order'];
+			unset($options['order']);
+		}
 
 		if (isset($options['sort'])) {
 			$direction = null;
@@ -1021,9 +1021,9 @@ class Controller extends Object {
 			}
 			$value = $options['order'][$key];
 			unset($options['order'][$key]);
-                        $correctAlias = ($alias == $object->alias);
-                    
-                        if ($correctAlias && $object->hasField($field)) {
+			$correctAlias = ($alias == $object->alias);
+
+			if ($correctAlias && $object->hasField($field)) {
 				$options['order'][$object->alias . '.' . $field] = $value;
 			} elseif ($correctAlias && $object->hasField($key, true)) {
 				$options['order'][$field] = $value;
