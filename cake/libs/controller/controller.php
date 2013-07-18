@@ -996,6 +996,11 @@ class Controller extends Object {
 			$options['limit'] = $options['show'];
 		}
 
+		if (isset($options['order']) && empty($options['sort'])) {
+			$options['sort'] = $options['order'];
+			unset($options['order']);
+		}
+
 		if (isset($options['sort'])) {
 			$direction = null;
 			if (isset($options['direction'])) {
@@ -1016,11 +1021,14 @@ class Controller extends Object {
 			}
 			$value = $options['order'][$key];
 			unset($options['order'][$key]);
+			$correctAlias = ($alias == $object->alias);
 
-			if (isset($object->{$alias}) && $object->{$alias}->hasField($field)) {
-				$options['order'][$alias . '.' . $field] = $value;
-			} elseif ($object->hasField($field)) {
+			if ($correctAlias && $object->hasField($field)) {
 				$options['order'][$object->alias . '.' . $field] = $value;
+			} elseif ($correctAlias && $object->hasField($key, true)) {
+				$options['order'][$field] = $value;
+			} elseif (isset($object->{$alias}) && $object->{$alias}->hasField($field)) {
+				$options['order'][$alias . '.' . $field] = $value;
 			}
 		}
 		$vars = array('fields', 'order', 'limit', 'page', 'recursive');
