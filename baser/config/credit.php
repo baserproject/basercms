@@ -67,7 +67,7 @@
 			array('name' => 'Shinji Sakai', 'url' => 'http://shin2.mogtan.net/', 'twitter' => 'shin2'),		
 			array('name' => 'Masakazu Fuchigami', 'url' => 'http://www.materializing.net/', 'twitter' => 'arata'),
 			array('name' => 'Shintaro Sugimoto', 'url' => '', 'twitter' => 'withelmo'),		
-			array('name' => 'Programmersan', 'url' => 'http://exittunes.com/index2.html', 'twitter' => 'programmersan'),
+			array('name' => 'Kenji Kuramitsu', 'url' => '', 'twitter' => ''),
 			array('name' => 'Min', 'url' => 'http://www.panic-net.org/', 'twitter' => 'min_meou'),		
 			array('name' => 'Youhei Nishi', 'url' => 'http://blog.grooweb.jp/', 'twitter' => 'nippei'),
 			array('name' => 'Ryuji Egashira', 'url' => 'http://ryuring.blogspot.jp/', 'twitter' => 'ryuring'),		
