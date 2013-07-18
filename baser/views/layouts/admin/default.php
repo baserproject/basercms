@@ -47,7 +47,8 @@
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup',
-	'admin/adjust_scroll')) ?>
+	'admin/adjust_scroll', 
+	'yuga')) ?>
 <?php $bcBaser->scripts() ?>
 </head>
 

@@ -54,8 +54,11 @@
 			array('name' => 'Nobuyuki Sato', 'url' => 'http://www.mmpf-develop.com/', 'twitter' => 'mmpf_develop'),
 			array('name' => 'Taku Fujita', 'url' => 'http://kototoy.jp/', 'twitter' => 'takufujita'),
 			array('name' => 'Munenori Nishimura', 'url' => 'http://www.asparagus.jp/', 'twitter' => 'mune_nori'),
-			array('name' => 'Shogo Tamura', 'url' => 'http://caracri-works.com/', 'twitter' => 'tamshow_'),
-			array('name' => 'Atsushi Shibata', 'url' => '', 'twitter' => '')
+			array('name' => 'Shogo Tamura', 'url' => 'http://tamshow.com/', 'twitter' => 'tamshow_'),
+			array('name' => 'Atsushi Shibata', 'url' => '', 'twitter' => ''),
+			array('name' => 'Tsuyoshi Kaneko', 'url' => 'http://webcake.no003.info/', 'twitter' => 'andante0727'),
+			array('name' => 'PCWorkSupporter oconos', 'url' => 'http://pws-oconos.net/', 'twitter' => ''),
+			array('name' => 'king', 'url' => 'http://www.e-king.co.jp/', 'twitter' => 'king_rental')
 		),
 		'developpers' => array(
 			array('name' => 'Takason', 'url' => '', 'twitter' => 'takason'),
@@ -64,7 +67,7 @@
 			array('name' => 'Shinji Sakai', 'url' => 'http://shin2.mogtan.net/', 'twitter' => 'shin2'),		
 			array('name' => 'Masakazu Fuchigami', 'url' => 'http://www.materializing.net/', 'twitter' => 'arata'),
 			array('name' => 'Shintaro Sugimoto', 'url' => '', 'twitter' => 'withelmo'),		
-			array('name' => 'Programmersan', 'url' => 'http://exittunes.com/index2.html', 'twitter' => 'programmersan'),
+			array('name' => 'Kenji Kuramitsu', 'url' => '', 'twitter' => ''),
 			array('name' => 'Min', 'url' => 'http://www.panic-net.org/', 'twitter' => 'min_meou'),		
 			array('name' => 'Youhei Nishi', 'url' => 'http://blog.grooweb.jp/', 'twitter' => 'nippei'),
 			array('name' => 'Ryuji Egashira', 'url' => 'http://ryuring.blogspot.jp/', 'twitter' => 'ryuring'),		
@@ -72,6 +75,7 @@
 			array('name' => 'Tetuya Takahashi', 'url' => 'http://www.ls-e.com', 'twitter' => ''),		
 			array('name' => 'Masanori Matsumoto', 'url' => '', 'twitter' => 'mattun0313'),
 			array('name' => 'Sunao Kiyosue', 'url' => 'http://www.pictnotes.jp/', 'twitter' => 'itm_kiyo'),		
-			array('name' => 'Kanji Hatamoto', 'url' => '', 'twitter' => 'kanjihtmt')
+			array('name' => 'Kanji Hatamoto', 'url' => '', 'twitter' => 'kanjihtmt'),
+			array('name' => 'Takayuki.Gondoh', 'url' => 'http://blog.gufii.net', 'twitter' => 'gondoh_jp')
 		)
 	);
