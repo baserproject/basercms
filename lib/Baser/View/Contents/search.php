@@ -35,7 +35,7 @@
 	<?php foreach($datas as $data): ?>
 <div class="section">
 	<h3 class="result-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $data['Content']['title']), $data['Content']['url']) ?></h3>
-	<p class="result-body"><?php echo $this->BcBaser->mark($query, $this->BcText->mbTruncate($data['Content']['detail'],100)) ?></p>
+	<p class="result-body"><?php echo $this->BcBaser->mark($query, $this->Text->truncate($data['Content']['detail'],100)) ?></p>
 	<p class="result-link"><small><?php $this->BcBaser->link(fullUrl($data['Content']['url']), $data['Content']['url']) ?></small></p>
 </div>
 	<?php endforeach ?>
