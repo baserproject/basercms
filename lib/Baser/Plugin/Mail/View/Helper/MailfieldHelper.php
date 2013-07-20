@@ -47,7 +47,6 @@ class MailfieldHelper extends AppHelper {
 		$attributes['class']=$data['class'];
 
 		if(!empty($data['options'])) {
-
 			$options = explode("|",$data['options']);
 			$options = call_user_func_array('aa', $options);
 			$attributes = am($attributes,$options);
@@ -64,7 +63,6 @@ class MailfieldHelper extends AppHelper {
  * @access public
  */
 	public function getOptions($data) {
-
 		if(isset($data['MailField'])) {
 			$data = $data['MailField'];
 		}
@@ -75,7 +73,7 @@ class MailfieldHelper extends AppHelper {
 		if(!empty($data['source'])) {
 
 			if($data['type']!="check") {
-				$values = explode("\|",$data['source']);
+				$values = explode("|",$data['source']);
 				$i = 0;
 				foreach($values as $value) {
 					$i++;

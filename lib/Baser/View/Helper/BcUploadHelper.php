@@ -209,6 +209,7 @@ class BcUploadHelper extends FormHelper {
 		unset($options['height']);
 		unset($options['noimage']);
 		unset($options['tmp']);
+
 		$imgOptions = array(
 			'alt'	=> $alt,
 			'width'	=> $width,

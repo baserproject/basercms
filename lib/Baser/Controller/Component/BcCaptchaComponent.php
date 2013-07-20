@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-App::uses('kcaptcha', 'Vendor/kcaptcha');
+App::import('Vendor', 'kcaptcha/kcaptcha');
 
 class BcCaptchaComponent extends Component {
 /**

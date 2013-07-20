@@ -1469,9 +1469,10 @@ class BcManagerComponent extends Component {
 			'phpPdo'			=> extension_loaded('pdo'),
 			'apacheRewrite'		=> $rewriteInstalled
 		);
-		
 		$check = array(
 			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
+			'gdOk'	=> $status['phpGd'],
+			'pdoOk'	=> $status['phpPdo'],
 			'phpVersionOk'	=> version_compare ( preg_replace('/[a-z-]/','', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
 			'phpMemoryOk'	=> ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === TRUE)
 		);

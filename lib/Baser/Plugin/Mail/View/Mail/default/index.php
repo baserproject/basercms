@@ -27,9 +27,9 @@ $this->BcBaser->js(array('jquery-ui-1.8.19.custom.min','i18n/ui.datepicker-ja'),
 
 <h3 class="contents-head">入力フォーム</h3>
 
-<?php if($this->mail->descriptionExists()): ?>
+<?php if($this->Mail->descriptionExists()): ?>
 <div class="section mail-description">
-	<?php $this->mail->description() ?>
+	<?php $this->Mail->description() ?>
 </div>
 <?php endif ?>
 
