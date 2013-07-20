@@ -28,6 +28,7 @@
  * @subpackage baser.app.views.helpers
  */
 class BcAdminHelper extends AppHelper {
+
 /**
  * 管理システムグローバルメニューの利用可否確認
  * 
@@ -35,37 +36,33 @@ class BcAdminHelper extends AppHelper {
  * @access public
  */
 	public function isAdminGlobalmenuUsed() {
-		
-		if(!BC_INSTALLED) {
+		if (!BC_INSTALLED) {
 			return false;
 		}
-		if(Configure::read('BcRequest.isUpdater')) {
+		if (Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
 		$user = $this->_View->getVar('user');
-		if(empty($this->request->params['admin']) || !$user) {
+		if (empty($this->request->params['admin']) || !$user) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::getObject('UserGroup');
 		return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
-		
 	}
+
 /**
  * ログインユーザーがシステム管理者かチェックする
  * 
  * @return boolean 
  */
-	function isSystemAdmin () {
-		
+	public function isSystemAdmin() {
 		$user = $this->_View->getVar('user');
-		if(empty($this->request->params['admin']) || !$user) {
+		if (empty($this->request->params['admin']) || !$user) {
 			return false;
 		}
-		if($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+		if ($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		}
 		return false;
-		
 	}
-
 }
