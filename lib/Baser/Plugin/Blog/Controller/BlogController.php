@@ -614,7 +614,7 @@ class BlogController extends BlogAppController {
 			$month = $_conditions['month'];
 			$day = $_conditions['day'];
 
-			$db=& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			$db= ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
 
 			switch (preg_replace('/^bc_/', '', $db->config['driver'])) {
 				case 'mysql':

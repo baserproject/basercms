@@ -159,7 +159,7 @@ class ToolsController extends AppController {
 			return false;
 		}
 		
-		$db =& ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource($configKeyName);
 		
 		/* テーブルを削除する */
 		foreach($files[1] as $file) {
@@ -224,7 +224,7 @@ class ToolsController extends AppController {
  */
 	protected function _writeBackup($configKeyName, $path) {
 
-		$db =& ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 

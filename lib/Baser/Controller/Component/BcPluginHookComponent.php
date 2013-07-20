@@ -73,7 +73,7 @@ class BcPluginHookComponent extends Object {
 		foreach($pluginHooks as $pluginName) {
 			
 			$className = $pluginName.'HookComponent';
-			$this->pluginHooks[$pluginName] =& new $className();
+			$this->pluginHooks[$pluginName] = new $className();
 
 			// 各プラグインの関数をフックに登録する
 			if(isset($this->pluginHooks[$pluginName]->registerHooks)){

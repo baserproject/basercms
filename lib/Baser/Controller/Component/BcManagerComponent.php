@@ -792,7 +792,7 @@ class BcManagerComponent extends Component {
  */
 	public function initSystemData($dbConfig = null) {
 		
-		$db =& $this->_getDataSource('baser', $dbConfig);
+		$db = $this->_getDataSource('baser', $dbConfig);
 		$corePath = BASER_CONFIGS.'data'.DS.'default';
 		$result = true;
 		
@@ -989,7 +989,7 @@ class BcManagerComponent extends Component {
  */
 	public function resetTables($dbConfigKeyName = 'baser', $dbConfig = null, $plugin = 'core', $excludes = array()) {
 		
-		$db =& $this->_getDataSource($dbConfigKeyName, $dbConfig);
+		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
 		$sources = $db->listSources();
 		$result = true;

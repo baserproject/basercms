@@ -52,7 +52,7 @@ class Message extends MailAppModel {
 	public function __construct($id = false, $table = null, $ds = null, $tablePrefix = null) {
 
 		if($tablePrefix) {
-			$cm =& ConnectionManager::getDataSource($this->useDbConfig);
+			$cm = ConnectionManager::getDataSource($this->useDbConfig);
 			if(!empty($cm->config['prefix'])) {
 				$dbPrefix = $cm->config['prefix'];
 			}else {

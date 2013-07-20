@@ -454,7 +454,7 @@ class BcSqlite3 extends Sqlite3 {
 		$cache = $this->__cacheDescription($table);
 
 		if ($cache !== null) {
-			$this->__descriptions[$table] =& $cache;
+			$this->__descriptions[$table] = $cache;
 			return $cache;
 		}
 		return null;
