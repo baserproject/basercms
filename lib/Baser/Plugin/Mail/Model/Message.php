@@ -69,7 +69,7 @@ class Message extends MailAppModel {
  * @return boolean
  * @access public
  */
-	public function beforeSave() {
+	public function beforeSave($options = array()) {
 
 		$this->data = $this->convertToDb($this->data);
 		return true;
@@ -621,7 +621,7 @@ class Message extends MailAppModel {
  * @return array
  * @access public
  */
-	public function addField($contentName, $field) {
+	public function addMessageField($contentName, $field) {
 
 		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
 		$db = $this->getDataSource();
@@ -639,7 +639,7 @@ class Message extends MailAppModel {
  * @return array
  * @access public
  */
-	public function delField($contentName, $field) {
+	public function delMessageField($contentName, $field) {
 
 		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
 		$db = $this->getDataSource();
@@ -657,7 +657,7 @@ class Message extends MailAppModel {
  * @return array
  * @access private
  */
-	public function renameField($contentName, $oldFieldName,$newfieldName) {
+	public function renameMessageField($contentName, $oldFieldName,$newfieldName) {
 
 		$fullTable = $this->getTablePrefixByContentName($contentName).$this->useTable;
 		$db = $this->getDataSource();
@@ -721,7 +721,7 @@ class Message extends MailAppModel {
 			$messageFields = array_keys($schema);
 			foreach($mailFields as $mailField) {
 				if(!in_array($mailField['MailField']['field_name'], $messageFields)) {
-					$this->addField($contentName, $mailField['MailField']['field_name']);
+					$this->addMessageField($contentName, $mailField['MailField']['field_name']);
 				}
 			}
 
