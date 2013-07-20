@@ -398,7 +398,7 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 		$user = $this->BcAuth->user();
-		if($user[$userModel]['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
+		if($user['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
 			unset($userGroups[1]);
 		}
 

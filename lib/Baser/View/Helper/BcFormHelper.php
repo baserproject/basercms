@@ -1112,6 +1112,8 @@ DOC_END;
 			}
 			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
 			$id = $this->domId($domId . 'Form');
+		} else {
+			$id = $options['id'];
 		}
 		
 		return $id;
