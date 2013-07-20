@@ -1470,7 +1470,7 @@ class BcCsv extends DboSource {
 		$sql = preg_replace('/;$/', '', $sql);
 		$createPattern = "/INSERT INTO[\s]*([^\s]+)[\s]*\(([^\)]+)\)[\s]*VALUES[\s]*\((.+)\)[\s]*$/si";
 		$readPattern = "/SELECT(.+)FROM(.+?)(WHERE.+|ORDER\sBY.+|LIMIT.+|)$/si";
-		$updatePattern = "/UPDATE[\s]+(.+)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
+		$updatePattern = "/UPDATE[\s]+(.+?)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
 		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
 		$dropPattern = "/DROP\sTABLE\s+([^\s]+)/si";
