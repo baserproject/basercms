@@ -343,7 +343,7 @@ class BcPageHelper extends Helper {
 		$siteConfig = Configure::read('BcSite');
 		$themePath = WWW_ROOT . 'theme' . DS . $siteConfig['theme'] . DS;
 		
-		$viewPaths = array($themePath) + Configure::read('viewPaths');
+		$viewPaths = array($themePath) + App::path('View');
 		
 		$ext = Configure::read('BcApp.templateExt');
 		

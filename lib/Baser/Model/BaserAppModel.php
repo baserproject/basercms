@@ -835,6 +835,7 @@ class BaserAppModel extends Model {
  * @return boolean
  */
 	public function changeSort($id, $offset, $conditions = array()) {
+		
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -844,8 +845,11 @@ class BaserAppModel extends Model {
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
 
-		$current = $this->find(array($this->alias . '.id' => $id), array($this->alias . '.id', $this->alias . '.sort'));
-
+		$current = $this->find('first', array(
+			'conditions'=> array($this->alias . '.id' => $id), 
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort')
+		));
+		
 		// 変更相手のデータを取得
 		if ($offset > 0) {	// DOWN
 			$order = array($this->alias . '.sort');
@@ -859,13 +863,13 @@ class BaserAppModel extends Model {
 			return true;
 		}
 
-		$conditions = am($conditions,$_conditions);
-		$target = $this->find('all',array(
-			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
-			'order' => $order,
-			'limit' => $limit,
-			'recursive' => -1
+		$conditions = array_merge($conditions, $_conditions);
+		$target = $this->find('all', array(
+			'conditions'=> $conditions,
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
+			'order'		=> $order,
+			'limit'		=> $limit,
+			'recursive'	=> -1
 		));
 
 		if (!isset($target[count($target) - 1])) {
@@ -884,12 +888,13 @@ class BaserAppModel extends Model {
 			$conditions[$this->alias . '.sort <='] = $currentSort;
 			$conditions[$this->alias . '.sort >='] = $targetSort;
 		}
-		$conditions = am($conditions, $_conditions);
+		
+		$conditions = array_merge($conditions, $_conditions);
 		$datas = $this->find('all', array(
-			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
-			'order' => $order,
-			'recursive' => -1
+			'conditions'=> $conditions,
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
+			'order'		=> $order,
+			'recursive'	=> -1
 		));
 
 		// 全てのデータを更新
@@ -1273,7 +1278,6 @@ class BaserAppModel extends Model {
  * @return boolean 
  */
 	public function emails($check) {
-		$Validation =& Validation::getInstance();
 		$emails = array();
 		if (strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
@@ -1283,7 +1287,7 @@ class BaserAppModel extends Model {
 		}
 		$result = true;
 		foreach ($emails as $email) {
-			if (!$Validation->email($email)) {
+			if (!Validation::email($email)) {
 				$result = false;
 			}
 		}

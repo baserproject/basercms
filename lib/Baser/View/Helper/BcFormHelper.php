@@ -334,9 +334,9 @@ class BcFormHelper extends FormHelper {
 			$modelName = $this->model();
 		}
 		if(ClassRegistry::isKeySet($modelName)){
-			$model =& ClassRegistry::getObject($modelName);
+			$model = ClassRegistry::getObject($modelName);
 		}else{
-			$model =& ClassRegistry::init($modelName);
+			$model = ClassRegistry::init($modelName);
 		}
 		if($model) {
 			return $model->getControlSource($field,$options);
@@ -991,7 +991,7 @@ DOC_END;
  * @access public
  */
 	public function create($model = null, $options = array()) {
-
+		
 		$this->__id = $this->_getId($model, $options);
 		
 		$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
@@ -1106,55 +1106,14 @@ DOC_END;
  */
 	protected function _getId($model = null, $options = array()) {
 		
-		if (is_array($model) && empty($options)) {
-			$model = null;
-		}
-
-		if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
-			$model = array_shift($this->request->params['models']);
-			$model = $model['className'];
-		} elseif (empty($model) && empty($this->request->params['models'])) {
-			$model = false;
-		} elseif (is_string($model) && strpos($model, '.') !== false) {
-			$path = explode('.', $model);
-			$model = $path[count($path) - 1];
-		}
-		
-		if (ClassRegistry::isKeySet($model)) {
-			$object =& ClassRegistry::getObject($model);
-		}
-		
-		if (isset($object)) {
-			$key = $object->primaryKey;
-			$data = compact('key');
-		} else {
-			$data = $this->fieldset;
-		}
-		
-		$recordExists = (
-			isset($this->request->data[$model]) &&
-			isset($this->request->data[$model][$data['key']]) &&
-			!empty($this->request->data[$model][$data['key']])
-		);
-		
-		$created = false;
-		if ($recordExists) {
-			$created = true;
-		}
-		
-		if (empty($options['url']) || is_array($options['url'])) {
-			if (empty($options['action'])) {
-				$options['action'] = ($created) ? 'edit' : 'add';
+		if (!isset($options['id'])) {
+			if ($model !== false) {
+				$this->setEntity($model, true);
 			}
+			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
+			$id = $this->domId($domId . 'Form');
 		}
 		
-		if (!empty($options['action']) && !isset($options['id'])) {
-			$id = $model . Inflector::camelize($options['action']) . 'Form';
-		} elseif(isset($options['id'])) {
-			$id = $options['id'];
-		} else {
-			$id = '';
-		}
 		return $id;
 		
 	}
