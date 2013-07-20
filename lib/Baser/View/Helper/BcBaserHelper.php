@@ -1448,7 +1448,7 @@ class BcBaserHelper extends AppHelper {
 		$c = count($vars);
 		foreach($pluginBasers as $key => $pluginBaser) {
 //			var_dump($pluginBaser);
-			$this->pluginBasers[$key] =& new $pluginBaser($view);
+			$this->pluginBasers[$key] = new $pluginBaser($view);
 			for ($j = 0; $j < $c; $j++) {
 				if(isset($view->{$vars[$j]})) {
 					$this->pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
@@ -1673,7 +1673,7 @@ END_FLASH;
 		}
 		
 		// urlを取得
-		$PageClass =& ClassRegistry::init('Page');
+		$PageClass = ClassRegistry::init('Page');
 		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
 		
 		if($page) {

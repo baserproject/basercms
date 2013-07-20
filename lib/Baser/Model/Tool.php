@@ -66,7 +66,7 @@ class Tool extends AppModel {
  */
 	public function getListModels($configKeyName = 'baser'){
 
-		$db =& ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource($configKeyName);
 		$listSources = $db->listSources();
 		if(!$listSources){
 			return array();
@@ -121,14 +121,14 @@ class Tool extends AppModel {
  * @return boolean
  * @access public
  */
-	public function loadSchema($data, $tmpPath) {
+	public function loadSchemaFile($data, $tmpPath) {
 		
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if(move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
 			include $path;
 			$schemaName = basename(Inflector::classify(basename($path)),'.php').'Schema';
 			$Schema = new $schemaName();
-			$db =& ConnectionManager::getDataSource($Schema->connection);
+			$db = ConnectionManager::getDataSource($Schema->connection);
 			if($db->loadSchema(array('type'=>$data['Tool']['schema_type'],'path' => $tmpPath, 'file'=> $data['Tool']['schema_file']['name']))) {
 				return true;
 			} else {
@@ -150,7 +150,7 @@ class Tool extends AppModel {
  */
 	protected function _writeSchema($field, $values, $path) {
 
-		$db =& ConnectionManager::getDataSource($field);
+		$db = ConnectionManager::getDataSource($field);
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();

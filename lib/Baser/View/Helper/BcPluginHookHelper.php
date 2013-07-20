@@ -74,7 +74,7 @@ class BcPluginHookHelper extends AppHelper {
 
 			// 各プラグインのプラグインフックを初期化
 			$className=$pluginName.'HookHelper';
-			$this->pluginHooks[$pluginName] =& new $className();
+			$this->pluginHooks[$pluginName] = new $className();
 			for ($j = 0; $j < $c; $j++) {
 				if(isset($view->{$vars[$j]})) {
 					$this->pluginHooks[$pluginName]->{$vars[$j]} = $view->{$vars[$j]};

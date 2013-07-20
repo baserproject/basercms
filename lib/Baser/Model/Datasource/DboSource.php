@@ -3455,7 +3455,7 @@ class DboSource extends DataSource {
 			if (PHP5) {
 				$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
 			} else {
-				$Object =& ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
+				$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
 			}
 			$Object->hasAndBelongsToMany = null;
 		}

@@ -500,7 +500,7 @@ class Sqlite3 extends DboSource {
  */
 	public function resultSet(&$results) {
 		
-		$this->results =& $results;
+		$this->results = $results;
 		//echo "resultSet:results ";
 		//pr($results);
 		$this->map = array();

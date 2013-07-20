@@ -198,7 +198,7 @@ class WebModel extends AppModel
         uses('Folder');
         $path = TMP.'cache'.DS.$this->cacheFolder;
         
-        $folder =& new Folder($path);        
+        $folder = new Folder($path);        
         $cachedFiles = $folder->find();
         
 		if (!is_numeric($expires)) {

@@ -260,7 +260,7 @@ class InstallationsController extends AppController {
 					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
-					$db =& ConnectionManager::getDataSource('baser');
+					$db = ConnectionManager::getDataSource('baser');
 					$con = $db->getConnection();
 					$errorInfo = $con->errorInfo();
 					$this->setMessage("データベースの構築中にエラーが発生しました。<br />".$db->error, true);
@@ -568,7 +568,7 @@ class InstallationsController extends AppController {
 
 		/* データベース接続生成 */
 
-		$db =& $this->BcManager->connectDb($config);
+		$db = $this->BcManager->connectDb($config);
 
 		if ($db->connected) {
 

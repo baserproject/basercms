@@ -67,7 +67,7 @@ class BcUploadHelper extends FormHelper {
 		
 		$options = $this->_initInputField($fieldName, $options);
 		
-		$view =& ClassRegistry::getObject('view');
+		$view = ClassRegistry::getObject('view');
 		list($modelName, $field) = $view->entity();
 		
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
@@ -113,7 +113,7 @@ class BcUploadHelper extends FormHelper {
 		extract($options);
 		
 		$options = $this->_initInputField($fieldName, $options);		
-		$view =& ClassRegistry::getObject('view');
+		$view = ClassRegistry::getObject('view');
 		$tmp = false;
 		list($modelName, $field) = $view->entity();
 		$model = ClassRegistry::init($modelName);

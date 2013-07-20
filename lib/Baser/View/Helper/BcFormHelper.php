@@ -357,7 +357,7 @@ class BcFormHelper extends FormHelper {
  */
 	public function generateList($modelName,$conditions = array(),$fields = array(),$order = array()) {
 
-		$model =& ClassRegistry::getObject($modelName);
+		$model = ClassRegistry::getObject($modelName);
 
 		if($fields) {
 			list($idField,$displayField) = $fields;

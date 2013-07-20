@@ -251,11 +251,11 @@ class BcAppHelper extends Helper {
 	public function dispatchPluginHook($hook) {
 		
 		if(!$this->_View){
-			$this->_View =& ClassRegistry::getObject('View');
+			$this->_View = ClassRegistry::getObject('View');
 		}
 
 		$args = func_get_args();
-		$args[0] =& $this;
+		$args[0] = $this;
 
 		// TODO basercamp loaded が参照できない 2013/05/19 ryuring
 		return call_user_func_array(array($this->_View->BcPluginHook, $hook), $args);
