@@ -96,7 +96,7 @@
  *		'persistent' => true, // [optional] set this to false for non-persistent connections
  *	));
  */
-Cache::config('default', array('engine' => 'File'));
+//Cache::config('default', array('engine' => 'File'));
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
