@@ -96,8 +96,7 @@ class ContentsController extends AppController {
 				$this->request->data['Content'][$key] = h($value);
 			}
 		}
-		if(!empty($this->request->params['url']['q'])) {
-		
+		if(!empty($this->request->query['q'])) {
 			$this->paginate = array(
 				'conditions'=> $this->_createSearchConditions($this->request->data),
 				'order'		=> 'Content.priority DESC, Content.modified DESC, Content.id',
@@ -105,10 +104,9 @@ class ContentsController extends AppController {
 			);
 
 			$datas = $this->paginate('Content');
-			$query = $this->_parseQuery($this->request->params['url']['q']);
+			$query = $this->_parseQuery($this->request->query['q']);
 			
 		}
-
 		$this->set('query', $query);
 		$this->set('datas', $datas);
 		$this->pageTitle = '検索結果一覧';
