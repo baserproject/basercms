@@ -47,7 +47,8 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
+	public $helpers = array('Blog.Blog', 'BcUpload', 'BcCkeditor');
+//	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 /**
  * コンポーネント
  *
@@ -276,13 +277,14 @@ class BlogPostsController extends BlogAppController {
 
 		if(empty($this->data)) {
 			$this->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
-		}else {
+		} else {
 
 			$this->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->data['BlogPost']['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$blogContentId))+1;
 			$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
 			$this->BlogPost->create($this->data);
-
+			
+			
 			// データを保存
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
@@ -303,7 +305,7 @@ class BlogPostsController extends BlogAppController {
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],
 			'rootEditable'	=> $this->checkRootEditable(),
-			'userGroupId'	=> $user[$userModel]['user_group_id'],
+			'userGroupId'	=> $user['user_group_id'],
 			'postEditable'	=> true,
 			'empty'			=> '指定しない'
 		));
@@ -343,11 +345,9 @@ class BlogPostsController extends BlogAppController {
 		$this->set('ckEditorOptions1', $ckEditorOptions1);
 		$this->set('ckEditorOptions2', $ckEditorOptions2);
 		$this->set('ckStyles', $ckStyles);
-		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user[$userModel]['id'])));
-		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 新規記事登録';
+		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user['id'])));
 		$this->help = 'blog_posts_form';
 		$this->render('form');
-
 	}
 /**
  * [ADMIN] 編集処理
@@ -358,7 +358,7 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_edit($blogContentId,$id) {
-
+		
 		if(!$blogContentId || !$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -398,7 +398,7 @@ class BlogPostsController extends BlogAppController {
 		}
 		
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
-					$user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
+					$user['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
 		
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId'	=> $this->blogContent['BlogContent']['id'],

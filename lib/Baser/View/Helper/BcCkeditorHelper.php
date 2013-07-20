@@ -239,7 +239,7 @@ class BcCkeditorHelper extends AppHelper {
 		
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->Html->link('/js/ckeditor/ckeditor.js', false);
+			$this->Html->script('/theme/baseradmin/js/ckeditor/ckeditor.js', array("inline"=>false));
 		}
 
 		if($useDraft) {			
