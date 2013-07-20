@@ -27,6 +27,7 @@ App::uses('BcTimeHelper', 'View/Helper');
  * @package baser.views.helpers
  */
 class BcTextHelper extends TextHelper {
+
 /**
  * ヘルパー
  *
@@ -34,6 +35,7 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public $helpers = array('BcTime', 'BcForm');
+
 /**
  * 文字数カット（日本語対応）
  * Cuts a string to the length of $length and replaces the last characters
@@ -49,7 +51,6 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function mbTruncate($text, $length = 100, $ending = '...', $exact = true, $considerHtml = false) {
-		
 		if (is_array($ending)) {
 			extract($ending);
 		}
@@ -59,46 +60,46 @@ class BcTextHelper extends TextHelper {
 			}
 
 			preg_match_all('/(<.+?>)?([^<>]*)/s', $text, $lines, PREG_SET_ORDER);
-			$total_length = mb_strlen($ending);
-			$open_tags = array();
+			$totalLength = mb_strlen($ending);
+			$openTags = array();
 			$truncate = '';
 
-			foreach ($lines as $line_matchings) {
-				if (!empty($line_matchings[1])) {
-					if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1])) {
-					} elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings)) {
-						$pos = array_search($tag_matchings[1], $open_tags);
+			foreach ($lines as $lineMatchings) {
+				if (!empty($lineMatchings[1])) {
+					if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $lineMatchings[1])) {
+					} elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $lineMatchings[1], $tagMatchings)) {
+						$pos = array_search($tagMatchings[1], $openTags);
 						if ($pos !== false) {
-							unset($open_tags[$pos]);
+							unset($openTags[$pos]);
 						}
-					} elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings)) {
-						array_unshift($open_tags, strtolower($tag_matchings[1]));
+					} elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $lineMatchings[1], $tagMatchings)) {
+						array_unshift($openTags, strtolower($tagMatchings[1]));
 					}
-					$truncate .= $line_matchings[1];
+					$truncate .= $lineMatchings[1];
 				}
 
-				$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
-				if ($total_length+$content_length > $length) {
-					$left = $length - $total_length;
-					$entities_length = 0;
-					if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE)) {
+				$contentLength = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $lineMatchings[2]));
+				if ($totalLength + $contentLength > $length) {
+					$left = $length - $totalLength;
+					$entitiesLength = 0;
+					if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $lineMatchings[2], $entities, PREG_OFFSET_CAPTURE)) {
 						foreach ($entities[0] as $entity) {
-							if ($entity[1]+1-$entities_length <= $left) {
+							if ($entity[1] + 1 - $entitiesLength <= $left) {
 								$left--;
-								$entities_length += mb_strlen($entity[0]);
+								$entitiesLength += mb_strlen($entity[0]);
 							} else {
 								break;
 							}
 						}
 					}
-					$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length,mb_internal_encoding());
+					$truncate .= mb_substr($lineMatchings[2], 0, $left + $entitiesLength, mb_internal_encoding());
 					break;
 				} else {
-					$truncate .= $line_matchings[2];
-					$total_length += $content_length;
+					$truncate .= $lineMatchings[2];
+					$totalLength += $contentLength;
 				}
 
-				if ($total_length >= $length) {
+				if ($totalLength >= $length) {
 					break;
 				}
 			}
@@ -120,14 +121,14 @@ class BcTextHelper extends TextHelper {
 		$truncate .= $ending;
 
 		if ($considerHtml) {
-			foreach ($open_tags as $tag) {
+			foreach ($openTags as $tag) {
 				$truncate .= '</' . $tag . '>';
 			}
 		}
 
 		return $truncate;
-		
 	}
+
 /**
  * boolean型を○―マークで出力
  *
@@ -136,14 +137,13 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanMark($value) {
-
-		if($value) {
+		if ($value) {
 			return "○";
-		}else {
+		} else {
 			return "―";
 		}
-
 	}
+
 /**
  * boolean型用のリストを○―マークで出力
  *
@@ -151,10 +151,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanMarkList() {
-
-		return array(0=>"―",1=>"○");
-
+		return array(0 => "―", 1 => "○");
 	}
+
 /**
  * boolean型用のリストを有無で出力
  *
@@ -162,10 +161,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanExistsList() {
-
-		return array(0=>"無",1=>"有");
-
+		return array(0 => "無", 1 => "有");
 	}
+
 /**
  * boolean型用のリストを可、不可で出力
  *
@@ -173,10 +171,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanAllowList() {
-
-		return array(0=>"不可",1=>"可");
-
+		return array(0 => "不可", 1 => "可");
 	}
+
 /**
  * boolean型用のリストを[〜する/〜しない]形式で出力する
  *
@@ -185,10 +182,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanDoList($doText = null) {
-
-		return array(0=>$doText."しない",1=>$doText."する");
-
+		return array(0 => $doText . "しない", 1 => $doText . "する");
 	}
+
 /**
  * boolean型用のリストを[〜る/〜ない]形式で出力する
  * 
@@ -197,10 +193,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanRequireList($requireText = null) {
-		
-		return array(0=>$requireText.'ない',1=>$requireText.'る');
-		
+		return array(0 => $requireText . 'ない', 1 => $requireText . 'る');
 	}
+
 /**
  * boolean型用のリストを[〜る/〜ない]形式で出力する
  * 
@@ -209,11 +204,10 @@ class BcTextHelper extends TextHelper {
  * @return mixed
  */
 	public function booleanRequire($value,$text) {
-		
 		$booleanList = $this->booleanRequireList($text);
 		return $booleanList[$value];
-		
 	}
+
 /**
  * boolean型のデータを [〜する / 〜しない] 形式で出力する
  *
@@ -223,11 +217,10 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanDo($value,$doText = null) {
-
 		$booleanDoList = $this->booleanDoList($doText);
 		return $booleanDoList[$value];
-
 	}
+
 /**
  * 都道府県のリストを出力
  *
@@ -235,24 +228,25 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function prefList($empty = '都道府県') {
-
 		$pref = array();
-		if($empty) {
-			$pref = array(""=>$empty);
-		} elseif($pref !== false) {
-			$pref = array(""=>"");
+		if ($empty) {
+			$pref = array("" => $empty);
+		} elseif ($pref !== false) {
+			$pref = array("" => "");
 		}
 
-		$pref = $pref + array(1=>"北海道",2=>"青森県",3=>"岩手県",4=>"宮城県",5=>"秋田県",6=>"山形県",
-				7=>"福島県",8=>"茨城県",9=>"栃木県",10=>"群馬県",11=>"埼玉県",12=>"千葉県",13=>"東京都",14=>"神奈川県",
-				15=>"新潟県",16=>"富山県",17=>"石川県",18=>"福井県",19=>"山梨県",20=>"長野県",21=>"岐阜県",22=>"静岡県",
-				23=>"愛知県",24=>"三重県",25=>"滋賀県",26=>"京都府",27=>"大阪府",28=>"兵庫県",29=>"奈良県",30=>"和歌山県",
-				31=>"鳥取県",32=>"島根県",33=>"岡山県",34=>"広島県",35=>"山口県",36=>"徳島県",37=>"香川県",38=>"愛媛県",
-				39=>"高知県",40=>"福岡県",41=>"佐賀県",42=>"長崎県",43=>"熊本県",44=>"大分県",45=>"宮崎県",46=>"鹿児島県",
-				47=>"沖縄県");
+		$pref = $pref + array(
+			1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
+			8 => "茨城県", 9 => "栃木県", 10 => "群馬県", 11 => "埼玉県", 12 => "千葉県", 13 => "東京都", 14 => "神奈川県",
+			15 => "新潟県", 16 => "富山県", 17 => "石川県", 18 => "福井県", 19 => "山梨県", 20 => "長野県", 21 => "岐阜県",
+			22 => "静岡県", 23 => "愛知県", 24 => "三重県", 25 => "滋賀県", 26 => "京都府", 27 => "大阪府", 28 => "兵庫県",
+			29 => "奈良県", 30 => "和歌山県", 31 => "鳥取県", 32 => "島根県", 33 => "岡山県", 34 => "広島県", 35 => "山口県",
+			36 => "徳島県", 37 => "香川県", 38 => "愛媛県", 39 => "高知県", 40 => "福岡県", 41 => "佐賀県", 42 => "長崎県",
+			43 => "熊本県", 44 => "大分県", 45 => "宮崎県", 46 => "鹿児島県", 47 => "沖縄県"
+		);
 		return $pref;
-
 	}
+
 /**
  * 性別を出力
  * 
@@ -261,24 +255,28 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function sex($value) {
-		$sexes = array(1=>'男',2=>'女');
+		$sexes = array(1 => '男', 2 => '女');
 		return $sexes[$value];
 	}
+
 /**
  * 郵便番号にハイフンをつけて出力
- * TODO とりあえずの仕様
  *
- * @param string	$value ハイフンなしの郵便番号
+ * @param string $value 郵便番号
+ * @param string $prefix '〒'
  * @return string	〒マーク、ハイフン付きの郵便番号
  * @access	public
  */
-	public function zipFormat($value) {
-		
-		$right = substr($value,0,3);
-		$left = substr($value,3,4);
-		return "〒 ".$right."-".$left;
-		
+	public function zipFormat($value, $prefix = "〒 ") {
+		if (preg_match('/-/', $value)) {
+			return $prefix . $value;
+		}
+		$right = substr($value, 0, 3);
+		$left = substr($value, 3, 4);
+
+		return $prefix . $right . "-" . $left;
 	}
+
 /**
  * 番号を都道府県に変換して出力
  *
@@ -288,14 +286,13 @@ class BcTextHelper extends TextHelper {
  * @access	public
  */
 	public function pref($value, $noValue='') {
-
-		if(!$value) {
+		if (!$value) {
 			return $noValue;
 		}
 		$list = $this->prefList();
 		return $list[(int)$value];
-
 	}
+
 /**
  * データをチェックして空の場合に指定した値を返す
  *
@@ -305,14 +302,13 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function noValue($value, $noValue) {
-
-		if(!$value) {
+		if (!$value) {
 			return $noValue;
-		}else {
+		} else {
 			return $value;
 		}
-
 	}
+
 /**
  * boolean型用を可、不可で出力
  *
@@ -321,11 +317,10 @@ class BcTextHelper extends TextHelper {
  * @access	public
  */
 	public function booleanAllow($value) {
-
 		$list = $this->booleanAllowList();
 		return $list[(int)$value];
-
 	}
+
 /**
  * boolean型用を有無で出力
  *
@@ -334,11 +329,10 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanExists($value) {
-
 		$list = $this->booleanExistsList();
 		return $list[(int)$value];
-
 	}
+
 /**
  * form::dateTimeで取得した和暦データを文字列データに変換する
  *
@@ -347,15 +341,17 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function dateTimeWareki($arrDate) {
-
-		if(!is_array($arrDate)) return;
-		if(!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
+		if (!is_array($arrDate)) {
 			return;
+		}
+		if (!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
+			return;
+		}
 		list($w,$year) = explode('-', $arrDate['year']);
 		$wareki = $this->BcTime->nengo($w);
-		return $wareki." ".$year."年 ".$arrDate['month']."月 ".$arrDate['day'].'日';
-
+		return $wareki . " " . $year . "年 " . $arrDate['month'] . "月 " . $arrDate['day'] . '日';
 	}
+
 /**
  * 通貨表示
  *
@@ -364,14 +360,13 @@ class BcTextHelper extends TextHelper {
  * @return string
  */
 	public function moneyFormat($value, $prefix='¥') {
-		
-		if($value) {
-			return $prefix.number_format($value);
+		if ($value) {
+			return $prefix . number_format($value);
 		} else {
 			return '';
 		}
-		
 	}
+
 /**
  * form::dateTimeで取得したデータを文字列データに変換する
  *
@@ -380,12 +375,13 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function dateTime($arrDate) {
-
-		if(!$arrDate['year'] || !$arrDate['month'] || !$arrDate['day'])
+		if (!$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
 			return;
-		return $arrDate['year']."/".$arrDate['month']."/".$arrDate['day'];
+		}
 
+		return $arrDate['year'] . "/" . $arrDate['month'] . "/" . $arrDate['day'];
 	}
+
 /**
  * 文字をフォーマット形式で出力する
  *
@@ -396,14 +392,13 @@ class BcTextHelper extends TextHelper {
  * @access	public
  */
 	public function format($format,$value, $noValue = '') {
-		
-		if($value === '' || is_null($value)) {
+		if ($value === '' || is_null($value)) {
 			return $noValue;
 		} else {
 			return sprintf($format,$value);
 		}
-		
 	}
+
 /**
  * モデルのコントロールソースより表示用データを取得する
  *
@@ -413,15 +408,14 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function listValue($field,$value) {
-
 		$list = $this->BcForm->getControlSource($field);
-		if($list && isset($list[$value])) {
+		if ($list && isset($list[$value])) {
 			return $list[$value];
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * 区切り文字で区切られたテキストを配列に変換する
  * 
@@ -431,24 +425,24 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function toArray($separator,$value) {
-		
-		if($separator != '"') {
-			$value = str_replace('"','',$value);
+		if ($separator != '"') {
+			$value = str_replace('"', '', $value);
 		}
-		if($separator != "'") {
-			$value = str_replace("'",'',$value);
+		if ($separator != "'") {
+			$value = str_replace("'", '', $value);
 		}
-		if(strpos($value,$separator) === false) {
-			if($value) {
+		if (strpos($value,$separator) === false) {
+			if ($value) {
 				return array($value);
-			}else {
+			} else {
 				return array();
 			}
 		}
 		$values = explode($separator,$value);
+
 		return $values;
-		
 	}
+
 /**
  * 配列とキーを指定して値を取得する
  * 
@@ -459,16 +453,15 @@ class BcTextHelper extends TextHelper {
  * @return mixied
  */
 	public function arrayValue($key, $array, $noValue = '') {
-		
-		if(is_numeric($key)) {
+		if (is_numeric($key)) {
 			$key = (int)$key;
 		}
-		if(isset($array[$key])) {
+		if (isset($array[$key])) {
 			return $array[$key];
 		}
 		return $noValue;
-		
 	}
+
 /**
  * 連想配列とキーのリストより値のリストを取得し文字列で返す
  * 文字列に結合する際、指定した区切り文字を指定できる
@@ -480,20 +473,19 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function arrayValues($glue, $keys, $array) {
-
 		$values = array();
-		foreach($keys as $key) {
-			if(isset($array[$key])) {
+		foreach ($keys as $key) {
+			if (isset($array[$key])) {
 				$values[] = $array[$key];
 			}
 		}
-		if($values) {
+		if ($values) {
 			return implode($glue, $values);
 		} else {
 			return '';
 		}
-
 	}
+
 /**
  * 日付より年齢を取得する
  *
@@ -504,8 +496,7 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function age($birthday, $suffix='歳', $noValue = '不明') {
-
-		if(!$birthday) {
+		if (!$birthday) {
 			return $noValue;
 		}
 		$byear = date('Y', strtotime($birthday));
@@ -515,10 +506,13 @@ class BcTextHelper extends TextHelper {
 		$tmonth = date('m');
 		$tday = date('d');
 		$age = $tyear - $byear;
-		if($tmonth * 100 + $tday < $bmonth * 100 + $bday) $age--;
-		return $age.$suffix;
+		if ($tmonth * 100 + $tday < $bmonth * 100 + $bday) {
+			$age--;
+		}
 
+		return $age . $suffix;
 	}
+
 /**
  * boolean型用のリストを有効、無効で出力
  *
@@ -526,10 +520,9 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanStatusList() {
-
-		return array(0=>"無効",1=>"有効");
-
+		return array(0 => "無効", 1 => "有効");
 	}
+
 /**
  * boolean型用を無効・有効で出力
  *
@@ -538,10 +531,7 @@ class BcTextHelper extends TextHelper {
  * @access public
  */
 	public function booleanStatus($value) {
-
 		$list = $this->booleanStatusList();
 		return $list[(int)$value];
-
 	}
-	
 }
