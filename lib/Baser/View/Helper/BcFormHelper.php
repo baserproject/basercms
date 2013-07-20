@@ -334,9 +334,9 @@ class BcFormHelper extends FormHelper {
 			$modelName = $this->model();
 		}
 		if(ClassRegistry::isKeySet($modelName)){
-			$model =& ClassRegistry::getObject($modelName);
+			$model = ClassRegistry::getObject($modelName);
 		}else{
-			$model =& ClassRegistry::init($modelName);
+			$model = ClassRegistry::init($modelName);
 		}
 		if($model) {
 			return $model->getControlSource($field,$options);

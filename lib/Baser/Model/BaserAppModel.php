@@ -1273,7 +1273,6 @@ class BaserAppModel extends Model {
  * @return boolean 
  */
 	public function emails($check) {
-		$Validation =& Validation::getInstance();
 		$emails = array();
 		if (strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
@@ -1283,7 +1282,7 @@ class BaserAppModel extends Model {
 		}
 		$result = true;
 		foreach ($emails as $email) {
-			if (!$Validation->email($email)) {
+			if (!Validation::email($email)) {
 				$result = false;
 			}
 		}
