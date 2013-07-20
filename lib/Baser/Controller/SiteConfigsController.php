@@ -252,7 +252,7 @@ class SiteConfigsController extends AppController {
 		$this->pageTitle = '環境情報';
 		$drivers = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
 		$smartUrl = 'ON';
-		$db =& ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('baser');
 		if(Configure::read('App.baseUrl')){
 			$smartUrl = 'OFF';
 		}
@@ -288,7 +288,7 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['smart_url'] = $this->BcManager->smartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
-		$data['SiteConfig']['admin_ssl'] = Configure::read('BcApp.adminSsl');
+		$data['SiteConfig']['admin_ssl'] = (int) Configure::read('BcApp.adminSsl');
 		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
 		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
 		if(is_null($data['SiteConfig']['mobile'])) {

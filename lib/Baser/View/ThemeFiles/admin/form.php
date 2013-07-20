@@ -32,9 +32,9 @@ $(window).load(function() {
 </div>
 
 <?php if($this->request->action == 'admin_add'): ?>
-<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'add', $theme, $plugin, $type, $path))) ?>
+<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array_merge(array('action' => 'add'), array($theme, $plugin, $type), explode('/', $path)))) ?>
 <?php elseif($this->request->action == 'admin_edit'): ?>
-<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array('action' => 'edit', $theme, $plugin, $type, $path))) ?>
+<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array_merge(array('action' => 'edit'), array($theme, $plugin, $type), explode('/', $path)))) ?>
 <?php endif ?>
 
 <?php echo $this->BcForm->input('ThemeFile.parent', array('type'=>'hidden')) ?>

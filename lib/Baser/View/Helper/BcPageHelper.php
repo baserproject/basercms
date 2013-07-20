@@ -55,7 +55,7 @@ class BcPageHelper extends Helper {
 		if(ClassRegistry::isKeySet('Page')) {
 			$this->Page = ClassRegistry::getObject('Page');
 		}else {
-			$this->Page =& ClassRegistry::init('Page','Model');
+			$this->Page = ClassRegistry::init('Page','Model');
 		}
 		
 	}
@@ -204,9 +204,9 @@ class BcPageHelper extends Helper {
 		}
 
 		if(ClassRegistry::isKeySet('Page')) {
-			$PageClass =& ClassRegistry::getObject('Page');
+			$PageClass = ClassRegistry::getObject('Page');
 		} else {
-			$PageClass =& ClassRegistry::init('Page');
+			$PageClass = ClassRegistry::init('Page');
 		}
 
 		$_attributes = array('class'=>'next-link','arrow'=>' ≫');
@@ -250,9 +250,9 @@ class BcPageHelper extends Helper {
 		}
 
 		if(ClassRegistry::isKeySet('Page')) {
-			$PageClass =& ClassRegistry::getObject('Page');
+			$PageClass = ClassRegistry::getObject('Page');
 		} else {
-			$PageClass =& ClassRegistry::init('Page');
+			$PageClass = ClassRegistry::init('Page');
 		}
 
 		$_attributes = array('class'=>'prev-link','arrow'=>'≪ ');
@@ -343,7 +343,7 @@ class BcPageHelper extends Helper {
 		$siteConfig = Configure::read('BcSite');
 		$themePath = WWW_ROOT . 'theme' . DS . $siteConfig['theme'] . DS;
 		
-		$viewPaths = array($themePath) + Configure::read('viewPaths');
+		$viewPaths = array($themePath) + App::path('View');
 		
 		$ext = Configure::read('BcApp.templateExt');
 		

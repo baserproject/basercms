@@ -3452,11 +3452,7 @@ class DboSource extends DataSource {
 		// 書き出さないように変更した。
 		// バックアップファイルの生成で問題が発生した為
 		foreach($model as $value) {
-			if (PHP5) {
-				$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
-			} else {
-				$Object =& ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
-			}
+			$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
 			$Object->hasAndBelongsToMany = null;
 		}
 		

@@ -82,7 +82,7 @@ class BcCacheBehavior extends ModelBehavior {
 			if (isset($cacheData[$cachekey])) {
 				return $cacheData[$cachekey];
 			}
-			if (!$db =& ConnectionManager::getDataSource($model->useDbConfig)) {
+			if (!$db = ConnectionManager::getDataSource($model->useDbConfig)) {
 				return false;
 			}
 			$results = $db->read($model, $query);
@@ -101,7 +101,7 @@ class BcCacheBehavior extends ModelBehavior {
 			return $results;
 		}
 		
-		if (!$db =& ConnectionManager::getDataSource($model->useDbConfig)) {
+		if (!$db = ConnectionManager::getDataSource($model->useDbConfig)) {
 			return false;
 		}
 		$results = $db->read($model, $query);

@@ -108,11 +108,11 @@ class Plugin extends AppModel {
 			return true;
 		}
 		
-		$baserDb =& ConnectionManager::getDataSource('baser');
+		$baserDb = ConnectionManager::getDataSource('baser');
 		$baserDb->cacheSources = false;
 		$baserListSources = $baserDb->listSources();
 		$baserPrefix = $baserDb->config['prefix'];
-		$pluginDb =& ConnectionManager::getDataSource('plugin');
+		$pluginDb = ConnectionManager::getDataSource('plugin');
 		$pluginDb->cacheSources = false;
 		$pluginListSources = $pluginDb->listSources();
 		$pluginPrefix = $pluginDb->config['prefix'];

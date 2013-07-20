@@ -47,7 +47,7 @@ class MailHelper extends AppHelper {
  */
 	public function __construct() {
 
-		$this->_view =& ClassRegistry::getObject('view');
+		$this->_view = ClassRegistry::getObject('view');
 		$this->setMailContent();
 
 	}

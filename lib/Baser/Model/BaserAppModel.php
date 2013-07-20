@@ -371,7 +371,7 @@ class BaserAppModel extends Model {
  */
 	public function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
 		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
 		$listSources = $db->listSources();
 		$prefix = $db->config['prefix'];
@@ -440,7 +440,7 @@ class BaserAppModel extends Model {
  */
 	public function loadCsv($dbConfigName, $path, $filterTable='') {
 		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
 		$listSources = $db->listSources();
 		$prefix = $db->config['prefix'];
@@ -628,7 +628,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field, 'table' => $table, 'column' => $column);
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
@@ -653,7 +653,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field,'table' => $table, 'column' => $column);
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
@@ -679,7 +679,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field, 'table' => $table);
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
@@ -706,7 +706,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('new' => $new, 'old' => $old, 'table' => $table);
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
@@ -719,7 +719,7 @@ class BaserAppModel extends Model {
  * @return boolean
  */
 	public function tableExists ($tableName) {
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		return in_array($tableName, $tables);
@@ -835,6 +835,7 @@ class BaserAppModel extends Model {
  * @return boolean
  */
 	public function changeSort($id, $offset, $conditions = array()) {
+		
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -844,8 +845,11 @@ class BaserAppModel extends Model {
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
 
-		$current = $this->find(array($this->alias . '.id' => $id), array($this->alias . '.id', $this->alias . '.sort'));
-
+		$current = $this->find('first', array(
+			'conditions'=> array($this->alias . '.id' => $id), 
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort')
+		));
+		
 		// 変更相手のデータを取得
 		if ($offset > 0) {	// DOWN
 			$order = array($this->alias . '.sort');
@@ -859,13 +863,13 @@ class BaserAppModel extends Model {
 			return true;
 		}
 
-		$conditions = am($conditions,$_conditions);
-		$target = $this->find('all',array(
-			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
-			'order' => $order,
-			'limit' => $limit,
-			'recursive' => -1
+		$conditions = array_merge($conditions, $_conditions);
+		$target = $this->find('all', array(
+			'conditions'=> $conditions,
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
+			'order'		=> $order,
+			'limit'		=> $limit,
+			'recursive'	=> -1
 		));
 
 		if (!isset($target[count($target) - 1])) {
@@ -884,12 +888,13 @@ class BaserAppModel extends Model {
 			$conditions[$this->alias . '.sort <='] = $currentSort;
 			$conditions[$this->alias . '.sort >='] = $targetSort;
 		}
-		$conditions = am($conditions, $_conditions);
+		
+		$conditions = array_merge($conditions, $_conditions);
 		$datas = $this->find('all', array(
-			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
-			'order' => $order,
-			'recursive' => -1
+			'conditions'=> $conditions,
+			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
+			'order'		=> $order,
+			'recursive'	=> -1
 		));
 
 		// 全てのデータを更新
@@ -1041,11 +1046,11 @@ class BaserAppModel extends Model {
 
 			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
 			// メールフォームで生成するフィールドは全てテキストの為（暫定）
-			//$db =& ConnectionManager::getDataSource($this->useDbConfig);
+			//$db = ConnectionManager::getDataSource($this->useDbConfig);
 			//$format = $db->columns[$type]['format'];
 			// ---
 			if ($type != 'text' && $type != 'string') {
-				$db =& ConnectionManager::getDataSource($this->useDbConfig);
+				$db = ConnectionManager::getDataSource($this->useDbConfig);
 				$format = $db->columns[$type]['format'];
 			} else {
 				$format = 'Y-m-d H:i:s';
@@ -1273,7 +1278,6 @@ class BaserAppModel extends Model {
  * @return boolean 
  */
 	public function emails($check) {
-		$Validation =& Validation::getInstance();
 		$emails = array();
 		if (strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
@@ -1283,7 +1287,7 @@ class BaserAppModel extends Model {
 		}
 		$result = true;
 		foreach ($emails as $email) {
-			if (!$Validation->email($email)) {
+			if (!Validation::email($email)) {
 				$result = false;
 			}
 		}
@@ -1358,7 +1362,7 @@ class BaserAppModel extends Model {
 	public function dispatchPluginHook($hook) {
 		
 		$args = func_get_args();
-		$args[0] =& $this;
+		$args[0] = $this;
 		return call_user_func_array( array( $this->Behaviors->BcPluginHook, $hook ), $args );
 		
 	}
