@@ -27,6 +27,7 @@ App::uses('Form', 'View/Helper');
  * @package baser.views.helpers
  */
 class BcArrayHelper extends AppHelper {
+
 /**
  * 配列の最初の要素かどうか調べる
  *
@@ -36,16 +37,15 @@ class BcArrayHelper extends AppHelper {
  * @access public
  */
 	public function first($array, $key) {
-
 		reset($array);
 		$first = key($array);
-		if($key===$first) {
+		if ($key === $first) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * 配列の最後の要素かどうか調べる
  *
@@ -55,16 +55,15 @@ class BcArrayHelper extends AppHelper {
  * @access public
  */
 	public function last($array, $key) {
-
 		end($array);
 		$end = key($array);
-		if($key===$end) {
+		if ($key === $end) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * 配列にテキストを追加する
  *
@@ -75,11 +74,12 @@ class BcArrayHelper extends AppHelper {
  * @access	public
  */
 	public function addText($array, $prefix = '', $suffix = '') {
-		if($prefix || $suffix) {
-			array_walk($array, array($this, '__addText'), $prefix.','.$suffix);
+		if ($prefix || $suffix) {
+			array_walk($array, array($this, '__addText'), $prefix . ',' . $suffix);
 		}
 		return $array;
 	}
+
 /**
  * addTextToArrayのコールバックメソッド
  *
@@ -90,10 +90,9 @@ class BcArrayHelper extends AppHelper {
  * @access	private
  */
 	private function __addText(&$value, $key, $add) {
-		if($add) {
-			list($prefix, $suffix) = explode(',',$add);
+		if ($add) {
+			list($prefix, $suffix) = explode(',', $add);
 		}
-		$value = $prefix.$value.$suffix;
+		$value = $prefix . $value . $suffix;
 	}
-	
 }
