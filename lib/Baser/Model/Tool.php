@@ -121,7 +121,7 @@ class Tool extends AppModel {
  * @return boolean
  * @access public
  */
-	public function loadSchema($data, $tmpPath) {
+	public function loadSchemaFile($data, $tmpPath) {
 		
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if(move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {

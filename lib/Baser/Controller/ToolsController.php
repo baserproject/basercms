@@ -297,7 +297,7 @@ class ToolsController extends AppController {
 					$this->setMessage('フォルダ：'.$path.' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
 					$this->redirect(array('action' => 'load_schema'));
 				}
-				if($this->Tool->loadSchema($this->request->data, $path)) {
+				if($this->Tool->loadSchemaFile($this->request->data, $path)) {
 					$this->setMessage('スキーマファイルの読み込みに成功しました。');
 					$this->redirect(array('action' => 'load_schema'));
 				} else {
