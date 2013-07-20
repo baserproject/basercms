@@ -221,15 +221,8 @@ class BcUploadHelper extends FormHelper {
 		}
 		if($imgOptions['height'] === '') {
 			unset($imgOptions['height']);
-		}		
-		
-		if($imgOptions['width'] === '') {
-			unset($imgOptions['width']);
 		}
-		if($imgOptions['height'] === '') {
-			unset($imgOptions['height']);
-		}		
-
+		
 		$linkOptions = array(
 			'rel'		=> 'colorbox',
 			'escape'	=> $escape
