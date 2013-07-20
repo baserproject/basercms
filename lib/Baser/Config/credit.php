@@ -59,7 +59,7 @@
 			array('name' => 'Tsuyoshi Kaneko', 'url' => 'http://webcake.no003.info/', 'twitter' => 'andante0727'),
 			array('name' => 'PCWorkSupporter oconos', 'url' => 'http://pws-oconos.net/', 'twitter' => ''),
 			array('name' => 'king', 'url' => 'http://www.e-king.co.jp/', 'twitter' => 'king_rental')
-		),
+			),
 		'developpers' => array(
 			array('name' => 'Takason', 'url' => '', 'twitter' => 'takason'),
 			array('name' => 'Masaharu Takishita', 'url' => '', 'twitter' => 'ecworks_masap'),		
