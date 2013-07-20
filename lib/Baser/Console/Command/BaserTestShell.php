@@ -110,7 +110,7 @@ class BaserTestShell extends TestShell {
 
 		$title = "Core Test Cases:";
 		$category = 'core';
-		if ($app) {
+		if ($baser) {
 			$title = "Baser Test Cases:";
 			$category = 'baser';
 		} elseif ($app) {
