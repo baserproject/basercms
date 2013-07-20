@@ -21,6 +21,7 @@
  */
 App::uses('TextHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
+
 /**
  * Textヘルパー拡張
  *
@@ -93,29 +94,6 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * boolean型用のリストを[〜る/〜ない]形式で出力する
- * 
- * @param string $requireText Do文字列
- * @return array
- * @access public
- */
-	public function booleanRequireList($requireText = null) {
-		return array(0 => $requireText . 'ない', 1 => $requireText . 'る');
-	}
-
-/**
- * boolean型用のリストを[〜る/〜ない]形式で出力する
- * 
- * @param mixed $value
- * @param string $text
- * @return mixed
- */
-	public function booleanRequire($value,$text) {
-		$booleanList = $this->booleanRequireList($text);
-		return $booleanList[$value];
-	}
-
-/**
  * boolean型のデータを [〜する / 〜しない] 形式で出力する
  *
  * @param boolean $value 値
@@ -123,7 +101,7 @@ class BcTextHelper extends TextHelper {
  * @return string
  * @access public
  */
-	public function booleanDo($value,$doText = null) {
+	public function booleanDo($value, $doText = null) {
 		$booleanDoList = $this->booleanDoList($doText);
 		return $booleanDoList[$value];
 	}
@@ -161,9 +139,12 @@ class BcTextHelper extends TextHelper {
  * @return string
  * @access public
  */
-	public function sex($value) {
-		$sexes = array(1 => '男', 2 => '女');
-		return $sexes[$value];
+	public function sex($value = 1) {
+		if (preg_match('/[1|2]/', $value)) {
+			$sexes = array(1 => '男', 2 => '女');
+			return $sexes[$value];
+		}
+		return '';
 	}
 
 /**
@@ -192,12 +173,12 @@ class BcTextHelper extends TextHelper {
  * @return string 都道府県名
  * @access	public
  */
-	public function pref($value, $noValue='') {
-		if (!$value) {
-			return $noValue;
+	public function pref($value, $noValue = '') {
+		if (!empty($value) && ($value >= 1 && $value <= 47)) {
+			$list = $this->prefList();
+			return $list[(int)$value];
 		}
-		$list = $this->prefList();
-		return $list[(int)$value];
+		return $noValue;
 	}
 
 /**
