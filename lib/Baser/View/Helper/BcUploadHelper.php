@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::uses('Form', 'View/Helper');
+App::uses('FormHelper', 'View/Helper');
 /**
  * アップロードヘルパー
  *
@@ -67,9 +67,9 @@ class BcUploadHelper extends FormHelper {
 		
 		$options = $this->_initInputField($fieldName, $options);
 		
-		$view =& ClassRegistry::getObject('view');
-		list($modelName, $field) = $view->entity();
-		
+		$entity = $this->entity();
+		$modelName = array_shift($entity);
+		$field = $this->field();
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName,$options);
 		$delCheckTag = '';
@@ -113,13 +113,13 @@ class BcUploadHelper extends FormHelper {
 		extract($options);
 		
 		$options = $this->_initInputField($fieldName, $options);		
-		$view =& ClassRegistry::getObject('view');
 		$tmp = false;
-		list($modelName, $field) = $view->entity();
+		$entity = $this->entity();
+		$modelName = array_shift($entity);
+		$field = $this->field();
 		$model = ClassRegistry::init($modelName);
 		
 		$settings = $model->Behaviors->BcUpload->settings;
-		
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		
 		if(empty($options['value'])) {
@@ -209,19 +209,11 @@ class BcUploadHelper extends FormHelper {
 		unset($options['height']);
 		unset($options['noimage']);
 		unset($options['tmp']);
-		
 		$imgOptions = array(
 			'alt'	=> $alt,
 			'width'	=> $width,
 			'height'=> $height
 		);
-		
-		if($imgOptions['width'] === '') {
-			unset($imgOptions['width']);
-		}
-		if($imgOptions['height'] === '') {
-			unset($imgOptions['height']);
-		}		
 		
 		if($imgOptions['width'] === '') {
 			unset($imgOptions['width']);
