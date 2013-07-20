@@ -31,7 +31,7 @@
 		<?php echo $dbData['name'] ?>
 		<?php endif ?>
 	</span><br />
-	<span class="comment-message"><?php echo nl2br($this->bcText->autoLinkUrls($dbData['message'])) ?></span>
+	<span class="comment-message"><?php echo nl2br($this->BcText->autoLinkUrls($dbData['message'])) ?></span>
 </div>
 	<?php endif ?>
 <?php endif ?>

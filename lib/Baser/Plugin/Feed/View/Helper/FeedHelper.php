@@ -94,7 +94,7 @@ class FeedHelper extends BcTextHelper {
  * キャッシュ時間は管理画面で設定した値
  * ヘッダーを出力するには<cake:nocache>を利用する
  * <cake:nocache>内では動的変数を利用できないのでキャッシュファイルを利用する
- * 事前に $this->feed->saveCachetime() でキャッシュタイムを保存しておく
+ * 事前に $this->Feed->saveCachetime() でキャッシュタイムを保存しておく
  *
  * @return void
  * @access public

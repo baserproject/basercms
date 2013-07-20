@@ -76,7 +76,7 @@ if (!empty($mailFields)) {
 			if (($this->BcArray->last($mailFields, $key)) ||
 					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->bcArray->first($mailFields,$key))) {
+					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields,$key))) {
 
 				if ($field['group_valid']) {
 					if ($this->Mailform->error("Message." . $field['group_field'] . "_format", "check")) {
