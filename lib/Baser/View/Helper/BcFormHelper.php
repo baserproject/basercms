@@ -1127,21 +1127,16 @@ DOC_END;
 		if (isset($object)) {
 			$key = $object->primaryKey;
 			$data = compact('key');
+			$created = (
+				isset($this->request->data[$model]) &&
+				isset($this->request->data[$model][$data['key']]) &&
+				!empty($this->request->data[$model][$data['key']])
+			);
 		} else {
 			$data = $this->fieldset;
+			$created = false ;
 		}
-		
-		$recordExists = (
-			isset($this->request->data[$model]) &&
-			isset($this->request->data[$model][$data['key']]) &&
-			!empty($this->request->data[$model][$data['key']])
-		);
-		
-		$created = false;
-		if ($recordExists) {
-			$created = true;
-		}
-		
+
 		if (empty($options['url']) || is_array($options['url'])) {
 			if (empty($options['action'])) {
 				$options['action'] = ($created) ? 'edit' : 'add';
