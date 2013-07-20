@@ -102,10 +102,4 @@ class BcArrayHelperTest extends CakeTestCase {
 		);
 		$this->assertEquals($expect, $result);
 	}
-
-/**
- * 配列にテキストを追加する
- *
- **/
-	public function testAddTest() {
 }

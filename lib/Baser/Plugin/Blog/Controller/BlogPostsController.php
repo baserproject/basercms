@@ -135,7 +135,7 @@ class BlogPostsController extends BlogAppController {
 		$joins = array();
 
 		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
-			$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
 			if($db->config['driver'] != 'bc_csv') {
 				$joins = array(
 					array(
@@ -221,7 +221,7 @@ class BlogPostsController extends BlogAppController {
 		$conditions = array('BlogPost.blog_content_id'=>$blogContentId);
 
 		// CSVの場合はHABTM先のテーブルの条件を直接設定できない為、タグに関連するポストを抽出して条件を生成
-		$db =& ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
 		
 		if($db->config['database'] == 'bc_csv') {
 			if(!empty($data['BlogPost']['blog_tag_id'])) {

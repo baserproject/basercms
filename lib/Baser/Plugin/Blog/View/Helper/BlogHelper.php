@@ -324,7 +324,7 @@ class BlogHelper extends AppHelper {
 		extract($options);
 
 		if (!isset($this->BlogCategory)) {
-			$this->BlogCategory =& ClassRegistry::init('BlogCategory','Model');
+			$this->BlogCategory = ClassRegistry::init('BlogCategory','Model');
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
@@ -478,7 +478,7 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$BlogPost =& ClassRegistry::getObject('BlogPost');
+		$BlogPost = ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
@@ -518,7 +518,7 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes,$htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$BlogPost =& ClassRegistry::getObject('BlogPost');
+		$BlogPost = ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];

@@ -332,7 +332,7 @@ class ContentsController extends AppController {
 				Router::reload();
 				// URLのデータを取得
 				$content = $this->requestAction($url, array('return' => 1));
-				$View =& ClassRegistry::getObject('View');
+				$View = ClassRegistry::getObject('View');
 				// requestActionでインスタンス化されたViewを削除
 				// （管理システムではなく公開ページのView情報になっている可能性がある為）
 				ClassRegistry::removeObject('View');

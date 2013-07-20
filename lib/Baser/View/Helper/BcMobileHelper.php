@@ -32,7 +32,7 @@ class BcMobileHelper extends Helper {
 	public function afterLayout($layoutFile) {
 
 		/* 出力データをSJISに変換 */
-		$view =& ClassRegistry::getObject('view');
+		$view = ClassRegistry::getObject('view');
 
 		if(isset($this->request->params['url']['ext']) && $this->request->params['url']['ext'] == 'rss') {
 			$rss = true;
@@ -66,7 +66,7 @@ class BcMobileHelper extends Helper {
 			);
 			if ($caching) {
 				if (is_a($view->loaded['cache'], 'CacheHelper')) {
-					$cache =& $view->loaded['cache'];
+					$cache = $view->loaded['cache'];
 					$this->Cache->base = $view->base;
 					$this->Cache->here = $view->here;
 					$this->Cache->helpers = $view->helpers;

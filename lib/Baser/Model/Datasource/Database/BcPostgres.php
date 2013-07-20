@@ -289,7 +289,7 @@ class BcPostgres extends Postgres {
 		$cache = $this->_cacheDescription($table);
 
 		if ($cache !== null) {
-			$this->__descriptions[$table] =& $cache;
+			$this->__descriptions[$table] = $cache;
 			return $cache;
 		}
 		return null;

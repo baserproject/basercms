@@ -371,7 +371,7 @@ class BaserAppModel extends Model {
  */
 	public function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
 		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
 		$listSources = $db->listSources();
 		$prefix = $db->config['prefix'];
@@ -440,7 +440,7 @@ class BaserAppModel extends Model {
  */
 	public function loadCsv($dbConfigName, $path, $filterTable='') {
 		// テーブルリストを取得
-		$db =& ConnectionManager::getDataSource($dbConfigName);
+		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
 		$listSources = $db->listSources();
 		$prefix = $db->config['prefix'];
@@ -628,7 +628,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field, 'table' => $table, 'column' => $column);
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
@@ -653,7 +653,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field,'table' => $table, 'column' => $column);
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
@@ -679,7 +679,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('field' => $field, 'table' => $table);
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
@@ -706,7 +706,7 @@ class BaserAppModel extends Model {
 		}
 
 		$this->_schema = null;
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$options = array('new' => $new, 'old' => $old, 'table' => $table);
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
@@ -719,7 +719,7 @@ class BaserAppModel extends Model {
  * @return boolean
  */
 	public function tableExists ($tableName) {
-		$db =& ConnectionManager::getDataSource($this->useDbConfig);
+		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		return in_array($tableName, $tables);
@@ -1046,11 +1046,11 @@ class BaserAppModel extends Model {
 
 			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
 			// メールフォームで生成するフィールドは全てテキストの為（暫定）
-			//$db =& ConnectionManager::getDataSource($this->useDbConfig);
+			//$db = ConnectionManager::getDataSource($this->useDbConfig);
 			//$format = $db->columns[$type]['format'];
 			// ---
 			if ($type != 'text' && $type != 'string') {
-				$db =& ConnectionManager::getDataSource($this->useDbConfig);
+				$db = ConnectionManager::getDataSource($this->useDbConfig);
 				$format = $db->columns[$type]['format'];
 			} else {
 				$format = 'Y-m-d H:i:s';
@@ -1362,7 +1362,7 @@ class BaserAppModel extends Model {
 	public function dispatchPluginHook($hook) {
 		
 		$args = func_get_args();
-		$args[0] =& $this;
+		$args[0] = $this;
 		return call_user_func_array( array( $this->Behaviors->BcPluginHook, $hook ), $args );
 		
 	}

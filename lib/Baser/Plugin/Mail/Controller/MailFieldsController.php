@@ -173,7 +173,7 @@ class MailFieldsController extends MailAppController {
 			$this->data['MailField']['sort'] = $this->MailField->getMax('sort')+1;
 			$this->MailField->create($this->data);
 			if($this->MailField->validates()) {
-				if($this->Message->addField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name'])) {
+				if($this->Message->addMessageField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name'])) {
 					// データを保存
 					if($this->MailField->save(null, false)) {
 						$this->setMessage('新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。', false, true);
@@ -219,7 +219,7 @@ class MailFieldsController extends MailAppController {
 			if($this->MailField->validates()) {
 				$ret = true;
 				if ($old['MailField']['field_name'] != $this->data['MailField']['field_name']) {
-					$ret = $this->Message->renameField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->data['MailField']['field_name']);
+					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->data['MailField']['field_name']);
 				}
 				if ($ret) {
 					/* 更新処理 */
@@ -263,7 +263,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 		
 		/* 削除処理 */
-		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
+		if ($this->Message->delMessageField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
 			if($this->MailField->delete($id)) {
 				$this->MailField->saveDbLog('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。');
 				exit(true);
@@ -293,7 +293,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->Message->delField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
+		if ($this->Message->delMessageField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
 			if($this->MailField->delete($id)) {
 				$this->setMessage('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。', false, true);
 			}else {
@@ -322,7 +322,7 @@ class MailFieldsController extends MailAppController {
 				$mailField = $this->MailField->read(null, $id);
 				$mailContentName = $this->MailContent->field('name', array('MailContent.id' => $mailField['MailField']['mail_content_id']));
 				/* 削除処理 */
-				if ($this->Message->delField($mailContentName, $mailField['MailField']['field_name'])) {
+				if ($this->Message->delMessageField($mailContentName, $mailField['MailField']['field_name'])) {
 					if($this->MailField->delete($id)) {
 						$this->MailField->saveDbLog('メールフィールド「'.$mailField['MailField']['name'].'」 を削除しました。');
 					}
