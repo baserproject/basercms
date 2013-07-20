@@ -48,7 +48,8 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 	'validate_messages_ja',
 	'admin/functions',
 	'admin/startup',
-	'admin/adjust_scroll')) ?>
+	'admin/adjust_scroll',
+	'yuga')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
 
