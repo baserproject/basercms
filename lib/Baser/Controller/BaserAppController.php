@@ -355,15 +355,14 @@ class BaserAppController extends Controller {
 				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
-		} else {
-			$this->Security->enabled = false;
 		}
 
-		// 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if($this->Security->enabled && !empty($this->request->params['admin'])) {
+		// TODO basercamp 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		if(!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
+			$this->Security->csrfCheck = false;
 		}
-
+		
 	}
 /**
  * テーマをセットする
