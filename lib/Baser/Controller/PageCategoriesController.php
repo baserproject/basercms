@@ -160,9 +160,9 @@ class PageCategoriesController extends AppController {
 
 			$user = $this->BcAuth->user();
 			$this->request->data = array('PageCategory' => array(
-				'contents_navi'		=> false, 
+				'contents_navi'		=> 0, 
 				'page_category_type'=> 1,
-				'owner_id'			=> $user['User']['user_group_id'],
+				'owner_id'			=> $user['user_group_id'],
 				'layout_template'	=> 'default',
 				'content_template'	=> 'default'
 			));
@@ -316,11 +316,10 @@ class PageCategoriesController extends AppController {
 
 		/* 表示設定 */
 		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
 		$mobileId = $this->PageCategory->getAgentId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
 			'excludeParentId' => $this->request->data['PageCategory']['id'],
-			'ownerId' => $user[$userModel]['user_group_id']
+			'ownerId' => $user['user_group_id']
 		));
 		if($this->checkRootEditable()) {
 			if($parents) {
@@ -348,7 +347,7 @@ class PageCategoriesController extends AppController {
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページカテゴリー情報編集：'.$this->request->data['PageCategory']['title'];
-		$this->help = 'page_categories_form';
+		$this->help = 'page_categories_form';		
 		$this->render('form');
 
 	}

@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 $pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 $owners = $this->BcForm->getControlSource('PageCategory.owner_id');
 ?>
@@ -180,10 +181,9 @@ function pageTypeChengeHandler() {
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('PageCategory.contents_navi', array(
-						'type'		=> 'radio',
-						'options'	=> $this->BcText->booleanDolist('利用'),
-						'legend'	=> false,
-						'separator'		=> '&nbsp;&nbsp;')) ?>
+						'type'	=> 'checkbox',
+						'label'	=> '利用する',
+						)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('PageCategory.parent_id') ?>
 				<div class="helptext">
@@ -241,7 +241,7 @@ function pageTypeChengeHandler() {
 </div>
 <div class="submit">
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if ($this->action == 'admin_edit' && $bcForm->value('PageCategory.name')!='mobile'): ?>
+<?php if ($this->request->action == 'admin_edit' && $this->BcForm->value('PageCategory.name')!='mobile'): ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action'=>'delete', $this->BcForm->value('PageCategory.id')),
 			array('class'=>'button'),
