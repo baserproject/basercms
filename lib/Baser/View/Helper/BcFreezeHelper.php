@@ -84,13 +84,12 @@ class BcFreezeHelper extends BcFormHelper {
  * 
  * @param	string $fieldName フィールド文字列
  * @param	array $options コントロールソース
- * @param	mixed $selected
  * @param	array $attributes html属性
  * @param	array	空データの表示有無
  * @return	string $showEmpty htmlタグ
  * @access	public
  */
-	public function select($fieldName, $options = array(), $selected = null, $attributes = array()) {
+	public function select($fieldName, $options = array(), $attributes = array()) {
 
 		if($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -106,7 +105,7 @@ class BcFreezeHelper extends BcFormHelper {
 					}
 				}
 			}
-			return parent::select($fieldName, $options, $selected, $attributes);
+			return parent::select($fieldName, $options, $attributes);
 		}
 
 	}

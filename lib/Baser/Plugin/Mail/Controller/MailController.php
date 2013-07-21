@@ -395,11 +395,11 @@ class MailController extends MailAppController {
                 }
             }
         }
-        if(! empty($noSendVal) ){
+		if(! empty($noSendVal) ){
             foreach( $noSendVal as $key => $val){
                 foreach( $val as $v){
-                    if( isset($this->data['Message'][$sendVal[$key]]) ){
-                        $this->data['Message'][$v] = $this->data['Message'][$sendVal[$key]];
+                    if( isset($this->request->data['Message'][$sendVal[$key]]) ){
+                        $this->request->data['Message'][$v] = $this->request->data['Message'][$sendVal[$key]];
                     }
                 }
             }
