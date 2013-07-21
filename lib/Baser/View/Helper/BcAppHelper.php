@@ -200,16 +200,15 @@ class BcAppHelper extends Helper {
 					$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 				// CUSTOMIZE 2013/6/18 ryuring
 				// 管理システム用のアセットファイルを参照する為のURLを生成する
-				// TODO basercamp 暫定対応
 				// >>>
 				//}
 				// ---
 				} else {
-					$adminTheme = $this->_View->adminTheme . '/';
+					$adminTheme = $this->_View->adminTheme;
 					$themePath = App::themePath($adminTheme);
 					$path = $themePath . 'webroot' . DS . $file;
 					if (file_exists($path)) {
-						$webPath = "{$this->request->webroot}theme/" . $adminTheme . $asset[0];
+						$webPath = "{$this->request->webroot}theme/" . $adminTheme . '/' . $asset[0];
 					}
 				}
 				// <<<

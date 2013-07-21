@@ -674,16 +674,16 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefixes['toolbar'];
 		}
 		
+		echo $this->_View->viewVars['scripts_for_layout'];
+				
 		// ツールバー設定
 		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->params['url']['toolbar']) || ($this->request->params['url']['toolbar'] !== false && $this->request->params['url']['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
-					$this->css('admin/toolbar', array('inline' => false));
+					$this->css('admin/toolbar');
 				}
 			}
 		}
-
-		echo $this->_View->viewVars['scripts_for_layout'];
 
 	}
 /**
