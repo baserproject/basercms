@@ -122,7 +122,7 @@ class MailformHelper extends BcFreezeHelper {
 				$attributes['multiple'] = 'checkbox';
 				$attributes['value'] = null ;
 				$attributes['empty'] = false ;
-				$out = $this->select($fieldName,$options,$attributes);
+				$out = $this->select($fieldName, $options, $attributes);
 				break;
 
 			case 'date_time_calender':

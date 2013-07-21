@@ -72,7 +72,7 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_index () {
 
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort'=>'id', 'direction'=>'asc'));
 		$this->setViewConditions('BlogTag', array('default' => $default));
 
 		$this->paginate = array(
@@ -81,7 +81,7 @@ class BlogTagsController extends BlogAppController {
 				'recursive' => 0
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
-
+		
 		$this->pageTitle = 'ブログタグ一覧';
 		
 	}
