@@ -195,7 +195,7 @@ class BcAuthComponent extends AuthComponent {
 		// >>>
 		$result = parent::login($data);
 		if($result) {
-			$this->Session->write('Auth.userModel', $this->authenticate['Form']['userModel']);
+			$this->setSessionAuthAddition();
 		}
 		return $result;
 		// <<<
@@ -298,6 +298,27 @@ class BcAuthComponent extends AuthComponent {
 	//}
 	public function setSessionKey($sessionKey) {
 		self::$sessionKey = $sessionKey;
+	}
+/**
+ * 認証に関する付加情報を保存する
+ * authPrefix
+ * userModel
+ */
+	public function setSessionAuthAddition() {
+		
+		$authPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
+		if (!$authPrefix) {
+			$userModel = $this->authenticate['Form']['userModel'];
+			$User = ClassRegistry::init($userModel);
+			$authPrefix = $User->getAuthPrefix($this->user('name'));
+			if(empty($authPrefix)) {
+				$authPrefix = 'front';
+			}
+			
+		}
+		$this->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
+		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
+		
 	}
 	
 }

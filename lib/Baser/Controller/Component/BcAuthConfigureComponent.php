@@ -66,33 +66,47 @@ class  BcAuthConfigureComponent extends Component {
 			$requestedPrefix = $controller->params['prefix'];
 		}
 		
-		$_config = array(
-			'loginRedirect' => '/'.$requestedPrefix,
+		$config = array_merge(array(
+			'loginRedirect' => '/'. $requestedPrefix,
+			'logoutRedirect'=> '',
 			'username'		=> 'name',
 			'password'		=> 'password',
 			'serial'		=> '',
 			'userScope'		=> null,
 			'loginAction'	=> ''
-		);
-		$config = array_merge($_config, $config);
+		), $config);
 		extract($config);
 
 		if(empty($userModel)) {
 			$userModel = 'User';
 		}
+				
+		// ログインアクション
 		if(empty($loginAction)) {
-			$loginAction = '/'.$requestedPrefix.'/users/login';
+			if($requestedPrefix) {
+				$loginAction = array('prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login');
+			} else {
+				$loginAction = array('controller' => 'users', 'action' => 'login');
+			}
 		}
+		$auth->loginAction = $loginAction;
+		
+		// ログアウト時のリダイレクト先
+		if(!empty($logoutRedirect)) {
+			$auth->logoutRedirect = $logoutRedirect;
+		}
+
 		// オートリダイレクトをOFF
 		$auth->autoRedirect = false;
+		
 		// エラーメッセージ
 		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
+		
 		// 権限が無いactionを実行した際のエラーメッセージ
 		$auth->authError = '指定されたページを開くにはログインする必要があります。';
 		$auth->authorize = 'Controller';
 		
-		// ユーザIDとパスワードがあるmodelを指定('User'がデフォルト)
-		//ユーザIDとパスワードのフィールドを指定
+		// フォームの認証設定
 		$auth->authenticate = array(
 			'Form'	=> array(
 				'userModel'	=> $userModel,
@@ -104,7 +118,7 @@ class  BcAuthConfigureComponent extends Component {
 			)
 		);
 
-		// 認証プレフィックス
+		// 認証プレフィックスによるスコープ設定
 		if(!empty($config['auth_prefix']) && !isset($userScope)) {
 			$auth->userScope = array('UserGroup.auth_prefix' => $config['auth_prefix']);
 		} elseif(isset($userScope)) {
@@ -116,12 +130,9 @@ class  BcAuthConfigureComponent extends Component {
 		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
 		$auth->setSessionKey('Auth.User');
 		
-		// ログインアクション
-		$auth->loginAction = $loginAction;
-
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
 		$redirect = $auth->Session->read('Auth.redirect');
-		if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix)===false) {
+		if($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
 			$auth->Session->write('Auth.redirect',null);
 		}
 
@@ -133,7 +144,6 @@ class  BcAuthConfigureComponent extends Component {
 			$cookie = $controller->Cookie->read(BcAuthComponent::$sessionKey);
 			if(!empty($cookie)) {
 				if($auth->login($cookie)) {
-					$this->setSessionAuthPrefix();
 					return true;
 				}
 			}
@@ -146,21 +156,6 @@ class  BcAuthConfigureComponent extends Component {
 		
 		return true;
 
-	}
-/**
- * ログイン時にセッションにauthPrefixを保存する 
- */
-	function setSessionAuthPrefix() {
-		
-		$authPrefix = $this->controller->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
-		if (!$authPrefix) {
-			$authPrefix = $this->controller->getAuthPreifx($this->controller->BcAuth->user('name'));
-			if(empty($authPrefix)) {
-				$authPrefix = 'front';
-			}
-			$this->controller->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
-		}
-		
 	}
 
 }

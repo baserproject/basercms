@@ -356,14 +356,11 @@ class BcManagerComponent extends Component {
 		), $user);
 	
 		$User = new User();
-
+		
+		$user['password'] = $user['password_1'];
 		$User->create($user);
-		if ($User->validates()) {
-			$user['password'] = Security::hash($user['password_1'], null, true);
-			return $User->save($user,false);
-		} else {
-			return false;
-		}
+		
+		return $User->save();
 		
 	}
 /**

@@ -276,7 +276,21 @@ class User extends AppModel {
 			return '';
 		}
 	}
-
+/**
+ * beforeSave
+ * 
+ * @param type $options
+ * @return boolean
+ */
+	public function beforeSave($options = array()) {
+		
+		if(isset($this->data[$this->alias]['password'])) {
+			App::uses('AuthComponent', 'Controller/Component');
+			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
+		}
+		return true;
+		
+	}
 /**
  * afterSave
  * 
