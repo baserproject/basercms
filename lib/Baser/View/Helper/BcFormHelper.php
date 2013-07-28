@@ -896,17 +896,27 @@ DOC_END;
 		// >>> ADD
 		if(!empty($options['multiple'])){
 			$secure = false;
-			$this->_secure();
+			$this->_secure(true);//lock
 		}
 		// <<<
 
-		$options = $this->_initInputField($fieldName, array_merge(
-			$options, array('secure' => false)
-		));
+		// 2013/07/21
+		//既にsecureに登録されているのであれば、secure = false を追加しない
+		if( in_array($fieldName, $this->fields) ){
+			$options = $this->_initInputField($fieldName, array_merge(
+				$options, array('secure' => true)
+			));
+		}else{
+			$options = $this->_initInputField($fieldName, array_merge(
+				$options, array('secure' => false)
+			));
+		}
+
 		$model = $this->model();
 
 		if ($fieldName !== '_method' && $model !== '_Token' && $secure) {
-			$this->_secure(null, '' . $options['value']);
+			// ここを通す必要はなくなったのでコメントアウト //2013.07.21 kiysoue
+//			$this->_secure(null, '' . $options['value']);
 		}
 
 		// CUSTOMIZE 2010/07/24 ryuring

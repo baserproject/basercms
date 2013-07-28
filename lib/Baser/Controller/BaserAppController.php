@@ -25,6 +25,8 @@ App::uses('AppView', 'View');
 App::uses('BcAuthConfigureComponent', 'Controller/Component');
 App::uses('File', 'Core.Utility');
 App::uses('ErrorHandler', 'Core.Error');
+App::uses('CakeEmail', 'Network/Email');
+
 /**
  * Controller 拡張クラス
  *
@@ -714,35 +716,52 @@ class BaserAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 
-		$formalName = $email = '';
-		if(!empty($this->siteConfigs)) {
-			$formalName = $this->siteConfigs['formal_name'];
-			$email = $this->siteConfigs['email'];
-			if(strpos($email, ',') !== false) {
-				$email = explode(',', $email);
-				$email = $email[0];
-			}
-		}
-		if(!$formalName) {
-			$formalName = Configure::read('BcApp.title');
-		}
-
-		$options = array_merge(array(
-			'fromName'		=> $formalName,
-			'reply'			=> $email,
-			'cc'			=> '',
-			'bcc'			=> '',
-			'template'		=> 'default',
-			'from'			=> $email,
-			'agentTemplate'	=> true
-		), $options);
-
-		extract($options);
-
-		if(!isset($this->BcEmail)) {
-			return false;
+		//$smtp
+		if(!empty($this->siteConfigs['smtp_host'])) {
+			$transport = 'Smtp';
+			$host		= $this->siteConfigs['smtp_host'] ;
+			$port		= ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25 ;
+			$username	= ($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user'] : null ;
+			$password	= ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : null ;
+		} else {
+			$transport = 'Mail' ;
+			$host = 'localhost';
+			$port = null ;
+			$username = null;
+			$password = null;
 		}
 
+		$config = array(
+			'host' => $host,
+			'port' => $port,
+			'username' => $username,
+			'password' => $password,
+			'transport' => $transport
+		);
+
+		$cakeEmail = new CakeEmail($config);
+
+		// charset
+		if(!empty($this->siteConfigs['mail_encode'])) {
+			$encode = $this->siteConfigs['mail_encode'];
+		} else {
+			$encode = 'ISO-2022-JP';
+		}
+
+		//CakeEmailの内部処理のencodeを統一したいので先に値を渡しておく
+		$cakeEmail->headerCharset($encode);
+		$cakeEmail->charset($encode);
+
+		//$format
+		$format = 'text';
+
+		//bcc
+		$bcc = null;
+		
+		//cc
+		$cc = null;
+
+		// 送信先アドレス (最初の1人がTOで残りがBCC)
 		if(strpos($to, ',') !== false) {
 			$_to = explode(',', $to);
 			$to = $_to[0];
@@ -754,130 +773,133 @@ class BaserAppController extends Controller {
 				$bcc .= implode(',', $_to);
 			}
 		}
-		
-		// メール基本設定
-		$this->_setMail();
-
-		if(!empty($options['filePaths'])) {
-			if(!is_array($options['filePaths'])) {
-				$this->BcEmail->filePaths = array($options['filePaths']);
-			} else {
-				$this->BcEmail->filePaths = $options['filePaths'];
-			}
-		}
-		if(!empty($options['attachments'])) {
-			if(!is_array($options['attachments'])) {
-				$this->BcEmail->attachments = array($options['attachments']);
-			} else {
-				$this->BcEmail->attachments = $options['attachments'];
-			}
-		}
-
-		// テンプレート
-		if($agentTemplate && Configure::read('BcRequest.agent')) {
-			$this->BcEmail->layoutPath = Configure::read('BcRequest.agentPrefix');
-			$this->BcEmail->subDir = Configure::read('BcRequest.agentPrefix');
-		} else {
-			$this->BcEmail->layoutPath = '';
-			$this->BcEmail->subDir = '';
-		}
-		$this->BcEmail->template = $template;
-
-		// データ
-		if(is_array($body)) {
-			$this->set($body);
-		}else {
-			$this->set('body', $body);
-		}
-
-		// 送信先アドレス
-		$this->BcEmail->to = $to;
+		// $to array
+		$to = array($to=>'');
 
 		// 件名
-		$this->BcEmail->subject = $title;
+		$subject = $title;
+
+		//From array
+		$formalName = $from = '';
+		if(!empty($this->siteConfigs)) {
+			$formalName = $this->siteConfigs['formal_name'];
+			$from = $this->siteConfigs['email'];
+			if(strpos($from, ',') !== false) {
+				$from = explode(',', $from);
+				$from = $from[0];
+			}
+		}
+		if(!$formalName) {
+			$formalName = Configure::read('BcApp.title');
+		}
 
 		// 送信元・返信先
+		//replayTo array
+		$replayTo = null ;
+		//returnPath
+		$returnPath = null ;
 		if($from) {
 			if(strpos($from, ',') !== false) {
 				$_from = explode(',', $from);
 				$from = $_from[0];
 			}
-			$this->BcEmail->from = $from;
-			$this->BcEmail->additionalParams = '-f'.$from;
-			$this->BcEmail->return = $from;
-			$this->BcEmail->replyTo = $reply;
+			$from = $from;
+			$returnPath = $from;
+			$replyTo = $from;
 		} else {
-			$this->BcEmail->from = $to;
-			$this->BcEmail->additionalParams = '-f'.$to;
-			$this->BcEmail->return = $to;
-			$this->BcEmail->replyTo = $to;
+			$from = $to;
+			$returnPath = $to;
+			$replyTo = $to;
 		}
+		$from = array($from => $formalName);
 
-		// 送信元名
-		if($from && $fromName) {
-			$this->BcEmail->from = $fromName.' <'.$from.'>';
-		}
-
-		// CC
+		// CC @TODO 複数人対応に修正する事 @basercamp
 		if($cc) {
 			if(strpos($cc, ',') !== false) {
 				$cc = explode(',', $cc);
-			}else{
-				$cc = array($cc);
 			}
-			$this->BcEmail->cc = $cc;
+			$cc = array($cc => '');
+		}else{
+			$cc = null;
 		}
-		
-		// BCC
+
+		// BCC @TODO 複数人対応に修正する事 @basercamp
 		if($bcc) {
 			if(strpos($bcc, ',') !== false) {
 				$bcc = explode(',', $bcc);
-			}else{
-				$bcc = array($bcc);
 			}
-			$this->BcEmail->bcc = $bcc;
+			$bcc = array($bcc => '');
+		}else{
+			$bcc = null;
 		}
-		
-		return $this->BcEmail->send();
 
+		//$sender array
+		$sender = null ;
+
+		//$theme
+		$theme = null;
+
+		//layout
+		$layout = null;
+		$template = null ;
+
+		//template
+		if(Configure::read('BcRequest.agent')) {
+			$layout = Configure::read('BcRequest.agentPrefix');
+			$subDir = Configure::read('BcRequest.agentPrefix');
+			if( $subDir ){
+				die($subDir);
+			}
+		}
+
+		//viewRender
+		$viewClass = null;
+
+		//$attachments tmp file path @TODO @basercamp filePaths と attachments のどっちが
+		//本当の分か確認すること
+		$attachments = null ;
+		if(!empty($options['filePaths'])) {
+			if(!is_array($options['filePaths'])) {
+				$attachments = array($options['filePaths']);
+			} else {
+				$attachments = $options['filePaths'];
+			}
+		}
+		if(!empty($options['attachments'])) {
+			if(!is_array($options['attachments'])) {
+				$attachments = array($options['attachments']);
+			} else {
+				$attachments = $options['attachments'];
+			}
+		}
+
+		$cakeEmail->viewRender($viewClass);
+		$cakeEmail->emailFormat($format);
+		$cakeEmail->template($template, $layout);
+		$cakeEmail->theme($theme);
+
+		$cakeEmail->viewVars($this->request->data);
+
+		$cakeEmail->from($from);
+		$cakeEmail->sender($sender);
+		$cakeEmail->to($to);
+		$cakeEmail->cc($cc);
+		$cakeEmail->bcc($bcc);
+		$cakeEmail->replyTo($replyTo);
+		$cakeEmail->returnPath($returnPath);
+		$cakeEmail->subject($subject);
+		$cakeEmail->attachments($attachments);
+
+		if($cakeEmail->send()){
+			//メール送信が成功した場合ここで処理
+			var_dump($cakeEmail);exit;
+			return true ;
+		}else{
+			var_dump($cakeEmail);exit;
+			return false ;
+		}
 	}
-/**
- * メールコンポーネントの初期設定
- *
- * @return	boolean 設定結果
- * @access	protected
- */
-	protected function _setMail() {
 
-		if(!isset($this->BcEmail)) {
-			return false;
-		}
-
-		if(!empty($this->siteConfigs['mail_encode'])) {
-			$encode = $this->siteConfigs['mail_encode'];
-		} else {
-			$encode = 'ISO-2022-JP';
-		}
-		$this->BcEmail->reset();
-		$this->BcEmail->charset = $encode;
-		$this->BcEmail->sendAs = 'text';		// text or html or both
-		$this->BcEmail->lineLength=105;			// TODO ちゃんとした数字にならない大きめの数字で設定する必要がある。
-		if(!empty($this->siteConfigs['smtp_host'])) {
-			$this->BcEmail->delivery = 'smtp';	// mail or smtp or debug
-			$this->BcEmail->smtpOptions = array(
-					'host'		=> $this->siteConfigs['smtp_host'],
-					'port'		=> ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25,
-					'timeout'	=> 30,
-					'username'	=> ($this->siteConfigs['smtp_user'])?$this->siteConfigs['smtp_user'] : null,
-					'password'	=> ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : nul
-			);
-		} else {
-			$this->BcEmail->delivery = "mail";
-		}
-
-		return true;
-
-	}
 /**
  * 画面の情報をセットする
  *
