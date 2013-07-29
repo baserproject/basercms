@@ -1112,7 +1112,14 @@ class BaserAppController extends Controller {
 
 		$requestedPrefix = '';
 
-		$authPrefix = $this->getAuthPreifx($this->BcAuth->user('name'));
+		$userModel = $this->Session->read('Auth.userModel');
+		if(isset($this->{$userModel})) {
+			$UserClass = $this->$this->{$userModel};
+		} else {
+			$UserClass = ClassRegistry::init('User');
+		}
+		
+		$authPrefix = $UserClass->getAuthPreifx($this->BcAuth->user('name'));
 		if(!$authPrefix || !$this->BcAuth->userScope) {
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
@@ -1154,37 +1161,6 @@ class BaserAppController extends Controller {
 		}
 
 		return true;
-
-	}
-/**
- * 対象ユーザーの認証コンテンツのプレフィックスを取得
- *
- * TODO 認証完了後は、セッションに保存しておいてもよいのでは？
- *
- * @param	string	$userName
- * @return	string
- */
-	public function getAuthPreifx($userName) {
-
-		$user = $this->BcAuth->user();
-		if(!$user) {
-			return;
-		}
-
-		$userModel = $this->Session->read('Auth.userModel');
-		// TODO basercamp 2013.05.17 ここをマージすると無限ループしてしまう為コメントアウト
-		// if(!$userModel) {
-		//	$this->Session->delete('Auth');
-		//	return null;
-		// }
-		// TODO:  2013.05.17 下記は{$userModel}にする必要があるがnullなので変更しない
-		if(isset($this->User)) {
-			$UserClass = $this->User;
-		} else {
-			$UserClass = ClassRegistry::init('User');
-		}
-
-		return $UserClass->getAuthPrefix($userName);
 
 	}
 /**
