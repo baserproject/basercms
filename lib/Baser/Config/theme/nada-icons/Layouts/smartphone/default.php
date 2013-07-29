@@ -36,7 +36,7 @@
         </div>
 	</header>
 	
-    <?php if($this->BcBaser->isTop()): ?>
+    <?php if($this->BcBaser->isHome()): ?>
     <div id="top-main">
         <div id="slider">
           <div><?php $this->BcBaser->img('slider/01.jpg'); ?></div>

@@ -476,7 +476,11 @@ class BcBaserHelper extends AppHelper {
  */
 	public function isHome() {
 
-		return ($this->request->url == '/' ||
+		// TODO 2013/07/29 ryuring
+		// CakeRequestの仕様として、トップページの場合は、url には、false が設定される。
+		// here に変更したいところだが、スマートURLオフの場合、index.php も含まれていたような気がする。
+		// スマートURLオフでの動作が確認できるまで見送り。
+		return ($this->request->url == false ||
 						$this->request->url == 'index' ||
 						$this->request->url == Configure::read('BcRequest.agentAlias').'/' ||
 						$this->request->url == Configure::read('BcRequest.agentAlias').'/index');

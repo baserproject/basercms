@@ -38,13 +38,13 @@
         <?php $this->BcBaser->element('sidebox') ?>
 
         <div id="Beta">
-            <?php if(!$this->BcBaser->isTop()): ?>
+            <?php if(!$this->BcBaser->isHome()): ?>
             <div id="Navigation">
                 <?php $this->BcBaser->element('crumbs'); ?>
             </div>
             <?php endif ?>
 
-            <?php if($this->BcBaser->isTop()): ?>
+            <?php if($this->BcBaser->isHome()): ?>
             <div id="top-main">
                 <?php //$this->BcBaser->img('top-main.png'); ?>
                 <div id="slider">
