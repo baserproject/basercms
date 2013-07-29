@@ -198,7 +198,7 @@ class BcBaserHelper extends AppHelper {
 		if(!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
-		$this->_View->set('title',$title);
+		$this->_View->pageTitle = $title;
 
 	}
 /**
@@ -353,9 +353,7 @@ class BcBaserHelper extends AppHelper {
 		$crumbs = array();
 		if($this->_categoryTitleOn && $this->_categoryTitle) {
 			if($this->_categoryTitle === true) {
-				if(!empty($this->_View->viewVars['crumbs'])){
-					$crumbs = $this->_View->viewVars['crumbs'];
-				}
+				$crumbs = $this->_View->getVar('crumbs');
 			}else {
 				if(is_array($this->_categoryTitle)){
 					$crumbs = $this->_categoryTitle;
@@ -1293,13 +1291,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function crumbs($separator = '&raquo;', $startText = false) {
 
-		if (!empty($this->BcHtml->_crumbs)) {
+		$crumbs = $this->BcHtml->getStripCrumbs();
+		if (!empty($crumbs)) {
 			$out = array();
 			if ($startText) {
 				$out[] = $this->getLink($startText, '/');
 			}
-
-			foreach ($this->BcHtml->_crumbs as $crumb) {
+			foreach ($crumbs as $crumb) {
 				if (!empty($crumb[1])) {
 					$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
 				} else {

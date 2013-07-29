@@ -35,4 +35,11 @@ class BcHtmlHelper extends HtmlHelper {
  * @access public
  */
 	public $helpers = array('Js');
+/**
+ * タグにラッピングされていないパンくずデータを取得する
+ * @return array
+ */
+	public function getStripCrumbs() {
+		return $this->_crumbs;
+	}
 }
