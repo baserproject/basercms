@@ -1112,14 +1112,14 @@ class BaserAppController extends Controller {
 
 		$requestedPrefix = '';
 
-		$userModel = $this->Session->read('Auth.userModel');
+		$userModel = $this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
 		if(isset($this->{$userModel})) {
-			$UserClass = $this->$this->{$userModel};
+			$UserClass = $this->{$userModel};
 		} else {
 			$UserClass = ClassRegistry::init('User');
 		}
 		
-		$authPrefix = $UserClass->getAuthPreifx($this->BcAuth->user('name'));
+		$authPrefix = $UserClass->getAuthPrefix($this->BcAuth->user('name'));
 		if(!$authPrefix || !$this->BcAuth->userScope) {
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
