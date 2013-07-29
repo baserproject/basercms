@@ -23,42 +23,15 @@
 if(Configure::read('BcRequest.asset')) {
 	return;
 }
-/**
- * サイト基本設定を読み込む
- * bootstrapではモデルのロードは行わないようにする為ここで読み込む
- */
 if(BC_INSTALLED) {
-	loadSiteConfig();
+	$isMaintenance = Configure::read('BcRequest.isMaintenance');
+	$isUpdater = Configure::read('BcRequest.isUpdater');
 /**
  * テーマヘルパーのパスを追加する 
  */
 	$helperPaths = App::path('View/Helper');
 	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS. 'helpers');
 	App::build(array('View/Helper' => $helperPaths));
-/**
- * メンテナンスチェック
- */
-	$parameter = Configure::read('BcRequest.pureUrl');
-	if($parameter == 'maintenance/index') {
-		$isMaintenance = true;
-		Configure::write('BcRequest.isMaintenance', true);
-	} else {
-		$isMaintenance = false;
-		Configure::write('BcRequest.isMaintenance', false);
-	}
-	Configure::write('BcRequest.isMaintenance', $isMaintenance);
-/**
- * アップデートチェック
- */
-	$isUpdater = false;
-	$bcSite = Configure::read('BcSite');
-	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
-	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
-		$isUpdater = true;
-	}elseif(BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
-	}
-	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
 /**
  * Object::cakeError() の為、router.php が読み込まれた事をマークしておく
@@ -254,38 +227,4 @@ if (file_exists(APP . 'error.php')) {
 	include_once (APP . 'app_error.php');
 } elseif (file_exists(BASER . 'app_error.php')) {
 	include_once (BASER . 'app_error.php');
-}
-if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-/**
- * プラグインの bootstrap を実行する
- * bootstrapではプラグインのパスが読み込めない為ここに定義
- * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義する
- */
-	$enablePlugins = getEnablePlugins();
-
-	// TODO basercamp
-	// とりま、一旦コメントアウト -> 開発に影響が出てきたので、コメントアウト解消
-	Configure::write('BcStatus.enablePlugins', $enablePlugins);
-	$_pluginPaths = array(
-		APP.'plugins'.DS,
-		BASER_PLUGINS
-	);
-	foreach($enablePlugins as $enablePlugin) {
-		foreach($_pluginPaths as $_pluginPath) {
-			$pluginBootstrap = $_pluginPath.$enablePlugin.DS.'config'.DS.'bootstrap.php';
-			if(file_exists($pluginBootstrap)) {
-				include $pluginBootstrap;
-			}
-		}
-	}
-/**
- * テーマの bootstrap を実行する 
- * bootstrapではプラグインのパスが読み込めない為ここに定義
- * TODO CakePHP 1.3にアップしたら、App::buildでのパス設定にし、bootstrapに定義す
- */
-	$themePath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS;
-	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
-	if(file_exists($themeBootstrap)) {
-		include $themeBootstrap;
-	}
 }

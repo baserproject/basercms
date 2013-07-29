@@ -126,23 +126,64 @@ if (BC_INSTALLED && $baserSettings) {
 /**
  * クレジット読込 
  */
-	$config = array();
-	include BASER_CONFIGS . 'credit.php';
-	Configure::write($config);
+$config = array();
+include BASER_CONFIGS . 'credit.php';
+Configure::write($config);
+/**
+ * パラメーター取得
+ */
+$url = getUrlFromEnv(); // 環境変数からパラメータを取得
+$parameter = getUrlParamFromEnv();
+Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる	
+
+if (BC_INSTALLED) {
+/**
+ * サイト基本設定を読み込む
+ * bootstrapではモデルのロードは行わないようにする為ここで読み込む
+ */
+	loadSiteConfig();
 /**
  * tmpフォルダ確認
  */
-if (BC_INSTALLED) {
 	checkTmpFolders();
+/**
+ * メンテナンスチェック
+ */
+	$isMaintenance = ($parameter == 'maintenance/index');
+	Configure::write('BcRequest.isMaintenance', $isMaintenance);
+/**
+ * アップデートチェック
+ */
+	$isUpdater = false;
+	$bcSite = Configure::read('BcSite');
+	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
+	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
+		$isUpdater = true;
+	}elseif(BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
+	}
+	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
 /**
  * プラグインをCake側で有効化
  */
-if(BC_INSTALLED) {
-	$Plugin = ClassRegistry::init('Plugin');
-	$plugins = $Plugin->find('list', array('Plugin.status' => true, 'fields' => array('name')));
+if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+	$plugins = getEnablePlugins();
 	foreach($plugins as $plugin) {
-		CakePlugin::load(Inflector::classify($plugin));
+		CakePlugin::load($plugin);
+		// プラグインの bootstrap を実行する
+		if(file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'bootstrap.php')) {
+			CakePlugin::bootstrap($plugin);
+		}
+	}
+	Configure::write('BcStatus.enablePlugins', $plugins);
+/**
+ * テーマの bootstrap を実行する
+ */
+	$themePath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS;
+	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
+	if(file_exists($themeBootstrap)) {
+		include $themeBootstrap;
 	}
 }
 /**
@@ -156,12 +197,6 @@ $memoryLimit = (int)ini_get('memory_limit');
 if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
-/**
- * パラメーター取得
- */
-$url = getUrlFromEnv(); // 環境変数からパラメータを取得
-$parameter = getUrlParamFromEnv();
-Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる	
 /**
  * セッションスタート 
  */
@@ -300,16 +335,3 @@ if (BC_INSTALLED) {
 	));
 
 }
-
-
-
-
-// TODO basercamp
-// ログイン処理が完了していない為、無理やりログインした事にする
-/*$_SESSION['Auth']['User'] = array(
-	'id' => 1, 
-	'name' => 'admin', 
-	'user_group_id' => 1,
-	'real_name_1' => 'admin',
-	'real_name_2' => '!!'
-);*/

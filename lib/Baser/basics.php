@@ -698,12 +698,12 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 		}
 		if(!$enablePlugins) {
+			$Plugin = ClassRegistry::init('Plugin');			// ConnectionManager の前に呼出さないとエラーとなる
 			$db = ConnectionManager::getDataSource('baser');
 			$sources = $db->listSources();
 			$pluginTable = $db->config['prefix'] . 'plugins';
 			$enablePlugins = array();
 			if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-				$Plugin = ClassRegistry::init('Plugin');
 				$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
 				ClassRegistry::removeObject('Plugin');
 				if($plugins) {
