@@ -902,7 +902,8 @@ class BcBaserHelper extends AppHelper {
 		// プレフィックスが変更された場合も正常動作させる為
 		// TODO メニューが廃止になったら削除
 		if(!is_array($url)) {
-			$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+			$prefixes = Configure::read('Routing.prefixes');
+			$url = preg_replace('/^\/admin\//', '/' . $prefixes[0] . '/', $url);
 		}
 
 		$url = $this->getUrl($url);
