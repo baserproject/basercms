@@ -123,7 +123,7 @@ class PagesController extends AppController {
 		
 		$this->_setAdminIndexViewData();
 		
-		if($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			Configure::write('debug', 0);
 			$this->render('ajax_index');
 			return;

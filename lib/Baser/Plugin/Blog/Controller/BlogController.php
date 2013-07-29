@@ -784,7 +784,7 @@ class BlogController extends BlogAppController {
 		unset($this->params['admin']);
 		$this->params['controller'] = $this->blogContent['BlogContent']['name'];
 		$this->params['action'] = 'archives';
-		$this->params['url']['url'] = $this->params['controller'].'/'.'archives'.'/'.$no;
+		$this->request->url = $this->params['controller'].'/'.'archives'.'/'.$no;
 		$this->params['pass'][0] = $no ;
 		$this->theme = $this->siteConfigs['theme'];
 		$this->setAction('archives');

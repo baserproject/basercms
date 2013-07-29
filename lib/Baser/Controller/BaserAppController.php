@@ -305,13 +305,13 @@ class BaserAppController extends Controller {
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
 		
-		// $this->request->params['url'] の調整
+		// $this->request->query['url'] の調整
 		// 環境によって？キーにamp;が付加されてしまうため
-		if(isset($this->request->params['url']) && is_array($this->request->params['url'])) {
-			foreach ($this->request->params['url']  as $key => $val ) {
+		if(isset($this->request->query) && is_array($this->request->query)) {
+			foreach ($this->request->query as $key => $val ) {
 				if ( strpos( $key, 'amp;' ) === 0 ) {
-					$this->request->params['url'][substr( $key, 4 )] = $val;
-					unset( $this->request->params['url'][$key] );
+					$this->request->query[substr( $key, 4 )] = $val;
+					unset( $this->request->query[$key] );
 				}
 			}
 		}
@@ -329,7 +329,7 @@ class BaserAppController extends Controller {
 		}
 
 		// Ajax
-		if(isset($this->RequestHandler) && $this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if(isset($this->RequestHandler) && $this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			// キャッシュ対策
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Cache-Control: post-check=0, pre-check=0", false);
@@ -1010,8 +1010,8 @@ class BaserAppController extends Controller {
 				$named = am($named, $this->Session->read("{$contentsName}.named"));
 			}
 		} elseif($type == 'get') {
-			if(!empty($this->request->params['url'])) {
-				$url = $this->request->params['url'];
+			if(!empty($this->request->query)) {
+				$url = $this->request->query;
 				unset($url['url']);
 				unset($url['ext']);
 				unset($url['x']);

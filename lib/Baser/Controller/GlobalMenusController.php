@@ -100,7 +100,7 @@ class GlobalMenusController extends AppController {
 		
 		$this->set('listDatas',$listDatas);
 
-		if($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}

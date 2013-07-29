@@ -337,7 +337,7 @@ class UsersController extends AppController {
 			$this->set('users', $dbDatas);
 		}
 
-		if ($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}

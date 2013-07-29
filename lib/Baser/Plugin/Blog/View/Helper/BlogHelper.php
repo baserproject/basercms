@@ -423,7 +423,7 @@ class BlogHelper extends AppHelper {
 				$url = $this->getCategoryUrl($category['BlogCategory']['id']);
 				$url = preg_replace('/^\//', '', $url);
 
-				if($this->_View->params['url']['url'] == $url) {
+				if($this->_View->request->url == $url) {
 					$class = ' class="current"';
 				} elseif(!empty($this->_View->params['named']['category']) && $this->_View->params['named']['category'] == $category['BlogCategory']['name']) {
 					$class = ' class="selected"';

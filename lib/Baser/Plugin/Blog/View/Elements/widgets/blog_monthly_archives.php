@@ -48,7 +48,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 		<?php foreach($postedDates as $postedDate): ?>
 			<?php if(isset($this->params['named']['year']) && isset($this->params['named']['month']) && $this->params['named']['year'] == $postedDate['year'] && $this->params['named']['month'] == $postedDate['month']): ?>
 				<?php $class = ' class="selected"' ?>
-			<?php elseif($this->params['url']['url'] == $baseCurrentUrl.$postedDate['year'].'/'.$postedDate['month']): ?>
+			<?php elseif($this->request->url == $baseCurrentUrl.$postedDate['year'].'/'.$postedDate['month']): ?>
 				<?php $class = ' class="current"' ?>
 			<?php else: ?>
 				<?php $class = '' ?>

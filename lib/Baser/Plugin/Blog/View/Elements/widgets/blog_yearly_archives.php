@@ -53,7 +53,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/date/';
 		<?php foreach($postedDates as $postedDate): ?>
 			<?php if(isset($this->params['named']['year']) && $this->params['named']['year'] == $postedDate['year']): ?>
 				<?php $class = ' class="selected"' ?>
-			<?php elseif($this->params['url']['url'] == $baseCurrentUrl.$postedDate['year']): ?>
+			<?php elseif($this->request->url == $baseCurrentUrl.$postedDate['year']): ?>
 				<?php $class = ' class="current"' ?>
 			<?php else: ?>
 				<?php $class = '' ?>

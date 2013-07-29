@@ -136,7 +136,7 @@ class PageCategoriesController extends AppController {
 		$this->_setAdminIndexViewData();
 		$this->set('datas', $datas);
 		
-		if($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
@@ -495,7 +495,7 @@ class PageCategoriesController extends AppController {
 /**
  * カテゴリ編集フォームのコントロール用データをJSONで出力
  * 
- * $this->params['url']['type'] としてGETパラメーター受付
+ * $this->request->query['type'] としてGETパラメーター受付
  */
 	function admin_ajax_control_sources() {
 		

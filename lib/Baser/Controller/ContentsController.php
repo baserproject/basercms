@@ -301,7 +301,7 @@ class ContentsController extends AppController {
 		);
 		$this->set('datas', $this->paginate('Content'));
 		
-		if($this->RequestHandler->isAjax() || !empty($this->request->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}

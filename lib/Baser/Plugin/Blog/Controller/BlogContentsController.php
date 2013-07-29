@@ -96,7 +96,7 @@ class BlogContentsController extends BlogAppController {
 		$datas = $this->BlogContent->find('all',array('order'=>array('BlogContent.id')));
 		$this->set('datas', $datas);
 		
-		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}

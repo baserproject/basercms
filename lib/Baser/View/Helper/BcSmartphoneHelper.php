@@ -34,7 +34,7 @@ class BcSmartphoneHelper extends Helper {
 		/* 出力データをSJISに変換 */
 		$view = ClassRegistry::getObject('view');
 
-		if(isset($this->request->params['url']['ext']) && $this->request->params['url']['ext'] == 'rss') {
+		if(isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
 			$rss = true;
 		}else {
 			$rss = false;

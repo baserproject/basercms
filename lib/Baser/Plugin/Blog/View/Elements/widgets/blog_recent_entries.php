@@ -37,7 +37,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
 	<?php if($recentEntries): ?>
 	<ul>
 		<?php foreach($recentEntries as $recentEntry): ?>
-			<?php if($this->params['url']['url'] == $baseCurrentUrl.$recentEntry['BlogPost']['no']): ?>
+			<?php if($this->request->url == $baseCurrentUrl.$recentEntry['BlogPost']['no']): ?>
 				<?php $class = ' class="current"' ?>
 			<?php else: ?>
 				<?php $class = '' ?>

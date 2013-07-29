@@ -38,7 +38,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
   <ul>
     <?php foreach($authors as $author): ?>
       <?php 
-        if($this->params['url']['url'] == $baseCurrentUrl.$author['User']['name']) {
+        if($this->request->url == $baseCurrentUrl.$author['User']['name']) {
           $class = ' class="current"';
         } else {
           $class = '';

@@ -117,7 +117,7 @@ class MailFieldsController extends MailAppController {
 		
 		$this->_setAdminIndexViewData();
 				
-		if($this->RequestHandler->isAjax() || !empty($this->params['url']['ajax'])) {
+		if($this->RequestHandler->isAjax() || !empty($this->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
