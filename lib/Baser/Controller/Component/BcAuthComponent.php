@@ -41,151 +41,24 @@ class BcAuthComponent extends AuthComponent {
  */
 	public $serial = '';
 /**
- * Identifies a user based on specific criteria.
+ * Log a user in. If a $user is provided that data will be stored as the logged in user.  If `$user` is empty or not
+ * specified, the request will be used to identify a user. If the identification was successful,
+ * the user record is written to the session key specified in AuthComponent::$sessionKey. Logging in
+ * will also change the session id in order to help mitigate session replays.
  *
- * @param mixed $user Optional. The identity of the user to be validated.
- *              Uses the current user session if none specified.
- * @param array $conditions Optional. Additional conditions to a find.
- * @return array User record data, or null, if the user could not be identified.
- * @access public
- */
-	// TODO basercamp 2013/05/27 ryuring
-	// ハック箇所のフィードバックが大変そうだったので別のメソッド名に変更して逃げた
-	// identify → identifyOld
-	public function identifyOld($user = null, $conditions = null) {
-		
-		if ($conditions === false) {
-			$conditions = null;
-		} elseif (is_array($conditions)) {
-			$conditions = array_merge((array)$this->userScope, $conditions);
-		} else {
-			$conditions = $this->userScope;
-		}
-		if (empty($user)) {
-			$user = $this->user();
-			if (empty($user)) {
-				return null;
-			}
-		} elseif (is_object($user) && is_a($user, 'Model')) {
-			if (!$user->exists()) {
-				return null;
-			}
-			$user = $user->read();
-			$user = $user[$this->userModel];
-		} elseif (is_array($user) && isset($user[$this->userModel])) {
-			$user = $user[$this->userModel];
-		}
-
-		// >>> ADD
-		$model = $this->getModel();
-		$alias = $model->alias;
-		// <<<
-		
-		if (is_array($user) && (isset($user[$this->fields['username']]) || isset($user[$this->userModel . '.' . $this->fields['username']]))) {
-
-			// >>> MODIFY
-			/*if (isset($user[$this->fields['username']]) && !empty($user[$this->fields['username']])  && !empty($user[$this->fields['password']])) {
-				if (trim($user[$this->fields['username']]) == '=' || trim($user[$this->fields['password']]) == '=') {
-					return false;
-				}
-				$find = array(
-					$this->userModel.'.'.$this->fields['username'] => $user[$this->fields['username']],
-					$this->userModel.'.'.$this->fields['password'] => $user[$this->fields['password']]
-				);
-			} elseif (isset($user[$this->userModel . '.' . $this->fields['username']]) && !empty($user[$this->userModel . '.' . $this->fields['username']])) {
-				if (trim($user[$this->userModel . '.' . $this->fields['username']]) == '=' || trim($user[$this->userModel . '.' . $this->fields['password']]) == '=') {
-					return false;
-				}
-				$find = array(
-					$this->userModel.'.'.$this->fields['username'] => $user[$this->userModel . '.' . $this->fields['username']],
-					$this->userModel.'.'.$this->fields['password'] => $user[$this->userModel . '.' . $this->fields['password']]
-				);
-			} else {
-				return false;
-			}
-			$model = $this->getModel();
-			$data = $model->find(array_merge($find, $conditions), null, null, 0);
-			if (empty($data) || empty($data[$this->userModel])) {
-				return null;
-			}*/
-			// ---
-			if (isset($user[$this->fields['username']]) && !empty($user[$this->fields['username']])  && !empty($user[$this->fields['password']])) {
-				if (trim($user[$this->fields['username']]) == '=' || trim($user[$this->fields['password']]) == '=') {
-					return false;
-				}
-				$find = array(
-					$alias.'.'.$this->fields['username'] => $user[$this->fields['username']],
-					$alias.'.'.$this->fields['password'] => $user[$this->fields['password']]
-				);
-			} elseif (isset($user[$this->userModel . '.' . $this->fields['username']]) && !empty($user[$this->userModel . '.' . $this->fields['username']])) {
-				if (trim($user[$this->userModel . '.' . $this->fields['username']]) == '=' || trim($user[$this->userModel . '.' . $this->fields['password']]) == '=') {
-					return false;
-				}
-				$find = array(
-					$alias.'.'.$this->fields['username'] => $user[$this->userModel . '.' . $this->fields['username']],
-					$alias.'.'.$this->fields['password'] => $user[$this->userModel . '.' . $this->fields['password']]
-				);
-			} else {
-				return false;
-			}
-			$data = $model->find(array_merge($find, $conditions), null, null, 0);
-			if (empty($data) || empty($data[$alias])) {
-				return null;
-			}
-			// <<<
-
-		} elseif (!empty($user) && is_string($user)) {
-			$model = $this->getModel();
-			$data = $model->find(array_merge(array($model->escapeField() => $user), $conditions));
-
-			// >>> MODIFY
-			/*if (empty($data) || empty($data[$this->userModel])) {
-				return null;
-			}*/
-			// ---
-			if (empty($data) || empty($data[$alias])) {
-				return null;
-			}
-			// <<<
-		}
-
-		if (!empty($data)) {
-			// >>> MODIFY
-			/*if (!empty($data[$alias][$this->fields['password']])) {
-				unset($data[$alias][$this->fields['password']]);
-			}
-			return $data[$this->userModel];*/
-			// ---
-			if (!empty($data[$alias][$this->fields['password']])) {
-				unset($data[$alias][$this->fields['password']]);
-			}
-			return $data[$alias];
-			// <<<
-		}
-		return null;
-		
-	}
-/**
- * Manually log-in a user with the given parameter data.  The $data provided can be any data
- * structure used to identify a user in AuthComponent::identify().  If $data is empty or not
- * specified, POST data from Controller::$data will be used automatically.
- *
- * After (if) login is successful, the user record is written to the session key specified in
- * AuthComponent::$sessionKey.
- *
- * @param mixed $data User object
+ * @param array $user Either an array of user data, or null to identify a user using the current request.
  * @return boolean True on login success, false on failure
- * @access public
+ * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#identifying-users-and-logging-them-in
  */
-	public function login($data = null) {
+	public function login($user = null) {
 		// CUSTOMIZE ADD 2011/09/25 ryuring
 		// 簡単ログイン
 		// >>>
-		if(!empty($this->fields['serial']) && !$data) {
+		if(!empty($this->fields['serial']) && !$user) {
 			$serial = $this->getSerial();
 			$Model = $model = $this->getModel();
 			if($serial) {
-				$data = $Model->find('first', array('conditions' => array($Model->alias.'.'.$this->fields['serial'] => $serial), 'recursive' => -1));
+				$user = $Model->find('first', array('conditions' => array($Model->alias.'.'.$this->fields['serial'] => $serial), 'recursive' => -1));
 			}
 		}
 		// <<<
@@ -193,21 +66,23 @@ class BcAuthComponent extends AuthComponent {
 		// CUSTOMIZE ADD 2011/09/25 ryuring
 		// ログイン時点でもモデルを保存しておく Session::user() のキーとして利用する
 		// >>>
-		$result = parent::login($data);
+		$result = parent::login($user);
 		if($result) {
 			$this->setSessionAuthAddition();
 		}
 		return $result;
 		// <<<
-		
 	}
 /**
  * Logs a user out, and returns the login action to redirect to.
+ * Triggers the logout() method of all the authenticate objects, so they can perform
+ * custom logout logic.  AuthComponent will remove the session data, so
+ * there is no need to do that in an authentication object.  Logging out
+ * will also renew the session id.  This helps mitigate issues with session replays.
  *
- * @param mixed $url Optional URL to redirect the user to after logout
- * @return string AuthComponent::$loginAction
- * @see AuthComponent::$loginAction
- * @access public
+ * @return string AuthComponent::$logoutRedirect
+ * @see AuthComponent::$logoutRedirect
+ * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#logging-users-out
  */
 	public function logout() {
 		if(!empty($this->fields['serial'])) {
@@ -217,6 +92,7 @@ class BcAuthComponent extends AuthComponent {
 	}
 /**
  * 個体識別IDを保存する
+ * 
  * @return boolean 
  */
 	public function saveSerial() {
@@ -262,40 +138,11 @@ class BcAuthComponent extends AuthComponent {
 		return '';
 		
 	}
-
-	// TODO basercamp 2013.05.17 コレをマージすると以下のエラーが出る為、マージはするがコメントアウトとする
-	// Error: Cannot make static method AuthComponent::user() non static in class BcAuthComponent
 /**
- * Get the current user from the session.
- *
- * @param string $key field to retrive.  Leave null to get entire User record
- * @return mixed User record. or null if no user is logged in.
- * @access public
+ * セッションキーをセットする
+ * 
+ * @param string $sessionKey
  */
-	//function user($key = null) {
-	//	$this->__setDefaults();
-	//	if (!$this->Session->check(self::$sessionKey)) {
-	//		return null;
-	//	}
-
-	//	if ($key == null) {
-	//		// CUSTOMIZE MODIFY 2013/02/27 ryuring
-	//		// ユーザーモデルを複数扱う場合、認証設定をしたタイミングでのモデルがキーとして強制的に入る
-	//		// 仕様となっている為、User固定となる仕様とした
-	//		// そのモデルをキーとして入れる仕様に変更
-	//		// >>>
-	//		//return array($this->userModel => $this->Session->read(self::$sessionKey);
-	//		// ---
-	//		return array('User' => $this->Session->read(self::$sessionKey));
-	//		// <<<
-	//	} else {
-	//		$user = $this->Session->read(self::$sessionKey);
-	//		if (isset($user[$key])) {
-	//			return $user[$key];
-	//		}
-	//		return null;
-	//	}
-	//}
 	public function setSessionKey($sessionKey) {
 		self::$sessionKey = $sessionKey;
 	}
