@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('Helper', 'View');
 /**
  * ページヘルパー
  *
@@ -342,9 +343,7 @@ class BcPageHelper extends Helper {
 
 		$siteConfig = Configure::read('BcSite');
 		$themePath = WWW_ROOT . 'theme' . DS . $siteConfig['theme'] . DS;
-		
-		$viewPaths = array($themePath) + App::path('View');
-		
+		$viewPaths = array_merge(array($themePath), App::path('View'));
 		$ext = Configure::read('BcApp.templateExt');
 		
 		$templates = array();

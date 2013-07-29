@@ -500,8 +500,8 @@ class PageCategoriesController extends AppController {
 	function admin_ajax_control_sources() {
 		
 		$type = $agent = '';
-		if(!empty($this->request->params['url']['type'])) {
-			$type = $this->request->params['url']['type'];
+		if(!empty($this->request->query['type'])) {
+			$type = $this->request->query['type'];
 		}
 		
 		switch($type) {
@@ -518,8 +518,8 @@ class PageCategoriesController extends AppController {
 				exit();
 		}
 		
-		App::uses('BcPage', 'View/Helper');
-		$BcPage = new BcPageHelper();
+		App::uses('BcPageHelper', 'View/Helper');
+		$BcPage = new BcPageHelper(new View());
 		$result = array(
 			'layout'	=> $BcPage->getTemplates('layout', $agent),
 			'content'	=> $BcPage->getTemplates('content', $agent),
