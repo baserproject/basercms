@@ -383,6 +383,12 @@ class UsersController extends AppController {
 			$this->User->create($this->request->data);
 
 			if ($this->User->save()) {
+				
+				$this->request->data['User']['id'] = $this->User->id;
+				$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, array(
+					'user' => $this->request->data
+				)));
+					
 				$this->setMessage('ユーザー「'.$this->request->data['User']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
 			} else {
@@ -450,6 +456,10 @@ class UsersController extends AppController {
 
 				if ($this->User->save()) {
 
+					$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, array(
+						'user' => $this->request->data
+					)));
+					
 					if ($selfUpdate) {
 						$this->admin_logout();
 					}
