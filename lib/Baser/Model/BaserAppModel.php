@@ -38,13 +38,6 @@ App::uses('DbRestore', 'Vendor');
 class BaserAppModel extends Model {
 
 /**
- * driver
- *
- * @var		string
- */
-	public $driver = '';
-
-/**
  * プラグイン名
  *
  * @var		string
@@ -102,7 +95,6 @@ class BaserAppModel extends Model {
  */
 	public function beforeSave($options = array()) {
 		$result = parent::beforeSave($options);
-
 		// 日付フィールドが空の場合、nullを保存する
 		foreach ($this->_schema as $key => $field) {
 			if (('date' == $field['type'] ||
@@ -113,12 +105,6 @@ class BaserAppModel extends Model {
 					$this->data[$this->name][$key] = null;
 				}
 			}
-		}
-
-		/* 内部文字コードをデータベース文字コードに変換 */
-		// MySQL4.0 以下で動作
-		if ($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
-			$this->data = $this->convertEncodingByArray($this->data, Configure::read('Config.dbCharset'), mb_internal_encoding());
 		}
 		return $result;
 	}
@@ -462,65 +448,6 @@ class BaserAppModel extends Model {
 		}
 
 		return true;
-	}
-
-/**
- * データベースを復元する
- * 既にあるテーブルは上書きしない
- * @param array $config
- * @param string $source
- */
-	public function restoreDb($config, $source) {
-		
-		$dbType = preg_replace('/^bc_/', '', $config['driver']);
-		switch ($dbType) {
-			case 'mysql':
-				$connection = @mysql_connect($config['host'],$config['login'],$config['password']);
-				$sql = "SET NAMES " . Configure::read('internalEncodingByMySql');
-				mysql_query($sql);
-				$dbRestore = new DbRestore('mysql');
-				$dbRestore->connect($config['database'], $config['host'], $config['login'], $config['password'], $config['port']);
-				return $dbRestore->doRestore($source);
-				break;
-
-			case 'postgres':
-				$dbRestore = new DbRestore('postgres');
-				$dbRestore->connect($config['database'], $config['host'], $config['login'], $config['password'], $config['port']);
-				return $dbRestore->doRestore($source);
-				break;
-
-			case 'sqlite':
-			case 'sqlite3':
-				if ($config['driver'] == 'bc_sqlite3') {
-					$driver = 'sqlite3';
-				} else {
-					$driver = $config['driver'];
-				}
-				$dbRestore = new DbRestore($driver);
-				$dbRestore->connect($config['database']);
-				return $dbRestore->doRestore($source);
-				break;
-
-			case 'csv':
-				$targetDir = APP . 'db' . DS . 'csv' . DS . 'baser' . DS;
-				$folder = new Folder($source);
-				$files = $folder->read(true,true);
-				$ret = true;
-				foreach ($files[1] as $file) {
-					if ($file != 'empty' && $ret) {
-						if (!file_exists($targetDir . $config['prefix'] . $file)) {
-							$_ret = copy($source . $file, $targetDir . $config['prefix'] . $file);
-							if ($_ret) {
-								chmod($targetDir . $config['prefix'] . $file,0666);
-							} else {
-								$ret = $_ret;
-							}
-						}
-					}
-				}
-				return $ret;
-				break;
-		}
 	}
 
 /**
@@ -1158,22 +1085,6 @@ class BaserAppModel extends Model {
 			return false;
 		}
 		return true;
-	}
-
-/**
- * afterFind
- *
- * @param	mixed	$results
- * @return	mixed	$results
- */
-	public function afterFind($results, $primary = false) {
-		/* データベース文字コードを内部文字コードに変換 */
-		// MySQL4.0 以下で動作
-		if ($this->driver == 'mysql' && mysql_get_server_info() <= 4.0) {
-			$results = $this->convertEncodingByArray($results, mb_internal_encoding(), Configure::read('Config.dbCharset'));
-		}
-
-		return parent::afterFind($results);
 	}
 
 /**

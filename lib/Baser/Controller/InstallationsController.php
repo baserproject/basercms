@@ -444,7 +444,7 @@ class InstallationsController extends AppController {
 		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
 			$_data = $this->_readDbSettingFromSession();
-			$data['Installation']['dbType'] = $_data['driver'];
+			$data['Installation']['dbType'] = $_data['datasource'];
 			$data['Installation']['dbHost'] = $_data['host'];
 			$data['Installation']['dbPort'] = $_data['port'];
 			$data['Installation']['dbPrefix'] = $_data['prefix'];
@@ -504,13 +504,13 @@ class InstallationsController extends AppController {
 	protected function _readDbSettingFromSession() {
 
 		$data = array();
-		$data['driver'] = $this->Session->read('Installation.dbType');
+		$data['datasource'] = $this->Session->read('Installation.dbType');
 		$data['host'] = $this->Session->read('Installation.dbHost');
 		$data['port'] = $this->Session->read('Installation.dbPort');
 		$data['login'] = $this->Session->read('Installation.dbUsername');
 		$data['password'] = $this->Session->read('Installation.dbPassword');
 		$data['prefix'] = $this->Session->read('Installation.dbPrefix');
-		$data['database'] = $this->BcManager->getRealDbName($data['driver'], $this->Session->read('Installation.dbName'));
+		$data['database'] = $this->BcManager->getRealDbName($data['datasource'], $this->Session->read('Installation.dbName'));
 		$data['schema'] = $this->Session->read('Installation.dbSchema');
 		$data['encoding'] = $this->Session->read('Installation.dbEncoding');
 		$data['dataPattern'] = $this->Session->read('Installation.dbDataPattern');
@@ -539,9 +539,6 @@ class InstallationsController extends AppController {
 		if($data['dbType'] == 'csv') {
 			$data['dbEncoding'] = 'sjis';
 		}
-		
-		$data['dbType'] = 'bc_'.$data['dbType'];
-		
 
 		$this->Session->write('Installation.dbType', $data['dbType']);
 		$this->Session->write('Installation.dbHost', $data['dbHost']);

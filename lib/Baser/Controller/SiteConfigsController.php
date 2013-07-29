@@ -249,19 +249,21 @@ class SiteConfigsController extends AppController {
 		if(!empty($this->siteConfigs['demo_on'])) {
 			$this->notFound();
 		}
+		
 		$this->pageTitle = '環境情報';
-		$drivers = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
+		
 		$smartUrl = 'ON';
-		$db = ConnectionManager::getDataSource('baser');
 		if(Configure::read('App.baseUrl')){
 			$smartUrl = 'OFF';
 		}
 
+		$datasources = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
+		$db = ConnectionManager::getDataSource('baser');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
-		$driver = preg_replace('/^bc/', '', strtolower($name));
-		$this->set('driver',$drivers[$driver]);
-		$this->set('smartUrl',$smartUrl);
-		$this->set('baserVersion',$this->siteConfigs['version']);
+		$datasource = preg_replace('/^bc/', '', strtolower($name));
+		$this->set('datasource', @$datasources[$datasource]);
+		$this->set('smartUrl', $smartUrl);
+		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = array('site_configs');
 

@@ -427,7 +427,7 @@ class Page extends AppModel {
 			ClassRegistry::removeObject('View');
 		}
 
-		$detail = $this->requestAction(array('controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
+		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
 		
 		if($View) {
 			ClassRegistry::addObject('View', $View);

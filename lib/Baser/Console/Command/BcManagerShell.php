@@ -330,7 +330,7 @@ class BcManagerShell extends BcAppShell {
 	protected function _getDbParams() {
 		
 		$dbConfig = array(
-			'driver'	=> '',
+			'datasource'=> '',
 			'host'		=> '',
 			'database'	=> '',
 			'login'		=> '',
@@ -343,10 +343,10 @@ class BcManagerShell extends BcAppShell {
 		);
 		
 		if(!empty($this->args[1])) {
-			$dbConfig['driver'] = $this->args[1];
-			$drivers = array('mysql', 'postgres', 'sqlite3', 'csv');
-			if(in_array($dbConfig['driver'], $drivers) && !preg_match('/^bc_/', $dbConfig['driver'])) {
-				$dbConfig['driver'] = 'bc_'.$dbConfig['driver'];
+			$dbConfig['datasource'] = $this->args[1];
+			$datasources = array('mysql', 'postgres', 'sqlite3', 'csv');
+			if(!in_array($dbConfig['datasource'], $datasources)) {
+				return false;
 			}
 		} else {
 			return false;
@@ -355,37 +355,37 @@ class BcManagerShell extends BcAppShell {
 		if(!empty($this->params['login'])) {
 			$dbConfig['login'] = $this->params['login'];
 		} else {
-			if($dbConfig['driver'] == 'bc_mysql' || $dbConfig['driver'] == 'bc_postgres') {
+			if($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres') {
 				return false;
 			}
 		}
 		if(!empty($this->params['password'])) {
 			$dbConfig['password'] = $this->params['password'];
 		} else {
-			if($dbConfig['driver'] == 'bc_mysql' || $dbConfig['driver'] == 'bc_postgres') {
+			if($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres') {
 				return false;
 			}
 		}
 		if(!empty($this->params['host'])) {
 			$dbConfig['host'] = $this->params['host'];
 		} else {
-			if($dbConfig['driver'] == 'bc_mysql' || $dbConfig['driver'] == 'bc_postgres') {
+			if($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres') {
 				$dbConfig['host'] = 'localhost';
 			}
 		}
 		if(!empty($this->params['prefix'])) {
 			$dbConfig['prefix'] = $this->params['prefix'];
 		} else {
-			if($dbConfig['driver'] == 'bc_mysql' || $dbConfig['driver'] == 'bc_postgres') {
+			if($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres') {
 				$dbConfig['prefix'] = 'bc_';
 			}
 		}
 		if(!empty($this->params['port'])) {
 			$dbConfig['port'] = $this->params['port'];
 		} else {
-			if($dbConfig['driver'] == 'bc_mysql') {
+			if($dbConfig['datasource'] == 'mysql') {
 				$dbConfig['port'] = '3306';
-			} elseif($dbConfig['driver'] == 'bc_postgres') {
+			} elseif($dbConfig['datasource'] == 'postgres') {
 				$dbConfig['port'] = '5432';
 			}
 		}
@@ -394,9 +394,9 @@ class BcManagerShell extends BcAppShell {
 		} else {
 			$dbConfig['database'] = 'basercms';
 		}
-		$dbConfig['database'] = $this->BcManager->getRealDbName($dbConfig['driver'], $dbConfig['database']);
+		$dbConfig['database'] = $this->BcManager->getRealDbName($dbConfig['datasource'], $dbConfig['database']);
 		
-		if($dbConfig['driver'] == 'bc_postgres') {
+		if($dbConfig['datasource'] == 'postgres') {
 			$dbConfig['schema'] = 'public';
 		}
 		

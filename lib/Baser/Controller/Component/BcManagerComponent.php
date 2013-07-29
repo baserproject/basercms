@@ -46,8 +46,8 @@ class BcManagerComponent extends Component {
 		// 一時フォルダ作成
 		checkTmpFolders();
 		
-		if($dbConfig['driver'] == 'sqlite3' || $dbConfig['driver'] == 'csv') {
-			switch($dbConfig['driver']) {
+		if($dbConfig['datasource'] == 'sqlite3' || $dbConfig['datasource'] == 'csv') {
+			switch($dbConfig['datasource']) {
 				case 'sqlite3':
 					$dbFolderPath = APP.'db'.DS.'sqlite';
 					break;
@@ -142,7 +142,7 @@ class BcManagerComponent extends Component {
 		}
 
 		// TODO basercamp エラー時に step1(index)にもどってしまう。
-		if(! $datasource = $this->getDatasourceName($config['driver'])) {
+		if(! $datasource = $this->getDatasourceName($config['datasource'])) {
 			return ConnectionManager::getDataSource($name);
 		}
 
@@ -169,22 +169,21 @@ class BcManagerComponent extends Component {
 /**
  * datasource名を取得
  *
- * @param string driver name.postgre.mysql.etc.
+ * @param string datasource name.postgre.mysql.etc.
  * @return string
  * @access public
  */
-	public function getDatasourceName($driver=null) {
-
+	public function getDatasourceName($datasource = null) {
 		$name = false ;
-		switch($driver){
-			case 'bc_postgres' :
+		switch($datasource){
+			case 'postgres' :
 				$name = 'Database/BcPostgres';
 				break ;
-			case 'bc_mysql' :
+			case 'mysql' :
 				$name = 'Database/BcMysql';
 				break ;
-			case 'bc_sqlite' :
-			case 'bc_sqlite3' :
+			case 'sqlite' :
+			case 'sqlite3' :
 				$name = 'Database/BcSqlite';
 				break ;
 			default :
@@ -377,7 +376,6 @@ class BcManagerComponent extends Component {
 		}
 
 		$options = array_merge(array(
-			'driver'	=> '',
 			'datasource'=> '',
 			'host'		=> 'localhost',
 			'port'		=> '',
@@ -391,7 +389,7 @@ class BcManagerComponent extends Component {
 		
 		extract($options);
 
-		$datasource = $this->getDatasourceName($driver);
+		$datasource = $this->getDatasourceName($datasource);
 
 		$dbfilename = APP . 'Config' . DS.'database.php';
 		$file = & new File($dbfilename);
@@ -898,14 +896,14 @@ class BcManagerComponent extends Component {
 		}
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
-		$driver = preg_replace('/^bc_/', '', $db->config['driver']);
+		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
 		
-		if (@!$db->connected && $driver != 'csv') {
+		if (@!$db->connected && $datasource != 'csv') {
 			return false;
-		} elseif($driver == 'csv') {
+		} elseif($datasource == 'csv') {
 			// CSVの場合はフォルダを作成する
 			$Folder = new Folder($db->config['database'], true, 00777);
-		} elseif($driver == 'sqlite3') {
+		} elseif($datasource == 'sqlite3') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
 		}
@@ -1034,8 +1032,8 @@ class BcManagerComponent extends Component {
 		
 		/* 削除実行 */
 		// TODO schemaを有効活用すればここはスッキリしそうだが見送り
-		$dbType = preg_replace('/^bc_/', '', $dbConfig['driver']);
-		switch ($dbType) {
+		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
+		switch ($datasource) {
 			case 'mysql':
 				$sources = $db->listSources();
 				foreach($sources as $source) {
@@ -1093,12 +1091,10 @@ class BcManagerComponent extends Component {
  * @return DataSource
  * @access public
  */
-	public function &_getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
+	public function _getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		
 		if($dbConfig) {
-			if(! isset($dbConfig['datasource'])){
-				$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['driver']);
-			}
+			$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['datasource']);
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
 			if(!$db) {
 				$db = ConnectionManager::getDataSource($dbConfigKeyName);

@@ -137,7 +137,8 @@ class BlogPostsController extends BlogAppController {
 
 		if(!empty($this->request->data['BlogPost']['blog_tag_id'])) {
 			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-			if($db->config['driver'] != 'bc_csv') {
+			$datasouce = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
+			if($datasouce != 'csv') {
 				$joins = array(
 					array(
 						'table' => $db->config['prefix'].'blog_posts_blog_tags',
