@@ -135,7 +135,7 @@ class BlogPostsController extends BlogAppController {
 		/* 検索条件生成 */
 		$joins = array();
 
-		if(!empty($this->data['BlogPost']['blog_tag_id'])) {
+		if(!empty($this->request->data['BlogPost']['blog_tag_id'])) {
 			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
 			if($db->config['driver'] != 'bc_csv') {
 				$joins = array(
@@ -149,11 +149,11 @@ class BlogPostsController extends BlogAppController {
 						'table' => $db->config['prefix'].'blog_tags',
 						'alias' => 'BlogTag',
 						'type' => 'inner',
-						'conditions'=> array('BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->data['BlogPost']['blog_tag_id'])
+						'conditions'=> array('BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id'])
 				));
 			}
 		}
-		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->data);
+		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
 		$this->paginate = array('conditions'=>$conditions,
 				'joins'	=> $joins,
 				'order'	=>'BlogPost.no DESC',
@@ -275,22 +275,27 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
-		if(empty($this->data)) {
-			$this->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
+		if(empty($this->request->data)) {
+			$this->request->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
 		} else {
 
-			$this->data['BlogPost']['blog_content_id'] = $blogContentId;
-			$this->data['BlogPost']['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$blogContentId))+1;
-			$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
-			$this->BlogPost->create($this->data);
+			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
+			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$blogContentId))+1;
+			$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
+			$this->BlogPost->create($this->request->data);
 			
 			
 			// データを保存
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
-				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を追加しました。', false, true);
-				$this->BcPluginHook->executeHook('afterBlogPostAdd', $this);
+				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を追加しました。', false, true);
+				
+				$this->request->data['BlogPost']['id'] = $this->User->getInsertID();
+				$this->getEventManager()->dispatch(new CakeEvent('Blog.Controller.BlogPosts.afterAdd', $this, array(
+					'user' => $this->request->data
+				)));
+				
 				// 編集画面にリダイレクト
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
@@ -364,18 +369,20 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
 		}
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
 		}else {
-			if(!empty($this->data['BlogPost']['posts_date'])){
-				$this->data['BlogPost']['posts_date'] = str_replace('/','-',$this->data['BlogPost']['posts_date']);
+			if(!empty($this->request->data['BlogPost']['posts_date'])){
+				$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
 			}
-			$this->BlogPost->set($this->data);
+			$this->BlogPost->set($this->request->data);
 			// データを保存
 			if($this->BlogPost->saveAll()) {
 				clearViewCache();
-				$this->setMessage('記事「'.$this->data['BlogPost']['name'].'」を更新しました。', false, true);
-				$this->BcPluginHook->executeHook('afterBlogPostEdit', $this);
+				$this->getEventManager()->dispatch(new CakeEvent('Blog.Controller.BlogPosts.afterEdit', $this, array(
+					'user' => $this->request->data
+				)));
+				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
@@ -388,13 +395,13 @@ class BlogPostsController extends BlogAppController {
 		$editable = false;
 		$blogCategoryId = '';
 		
-		if(isset($this->data['BlogPost']['blog_category_id'])) {
-			$blogCategoryId = $this->data['BlogPost']['blog_category_id'];
+		if(isset($this->request->data['BlogPost']['blog_category_id'])) {
+			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
 		}
 		if(!$blogCategoryId) {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
-			$currentCatOwner = $this->data['BlogCategory']['owner_id'];
+			$currentCatOwner = $this->request->data['BlogCategory']['owner_id'];
 		}
 		
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
@@ -409,8 +416,8 @@ class BlogPostsController extends BlogAppController {
 			'empty'			=> '指定しない'
 		));
 		
-		if($this->data['BlogPost']['status']) {
-			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->data['BlogPost']['no']);
+		if($this->request->data['BlogPost']['status']) {
+			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->request->data['BlogPost']['no']);
 		}
 	
 		$ckEditorOptions1 = array(
@@ -445,12 +452,12 @@ class BlogPostsController extends BlogAppController {
 		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
-		$this->set('previewId', $this->data['BlogPost']['id']);
+		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users',$this->BlogPost->User->getUserList());
 		$this->set('ckEditorOptions1', $ckEditorOptions1);
 		$this->set('ckEditorOptions2', $ckEditorOptions2);
 		$this->set('ckStyles', $ckStyles);
-		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->data['BlogPost']['name'];
+		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->request->data['BlogPost']['name'];
 		$this->help = 'blog_posts_form';
 		$this->render('form');
 
@@ -557,25 +564,25 @@ class BlogPostsController extends BlogAppController {
 		// 入力チェック
 		$check = true;
 		$message = '';
-		if(!isset($this->data['Import']['blog_content_id']) || !$this->data['Import']['blog_content_id']) {
+		if(!isset($this->request->data['Import']['blog_content_id']) || !$this->request->data['Import']['blog_content_id']) {
 			$message .= '取り込み対象のブログを選択してください<br />';
 			$check = false;
 		}
-		if(!isset($this->data['Import']['user_id']) || !$this->data['Import']['user_id']) {
+		if(!isset($this->request->data['Import']['user_id']) || !$this->request->data['Import']['user_id']) {
 			$message .= '記事の投稿者を選択してください<br />';
 			$check = false;
 		}
-		if(!isset($this->data['Import']['file']['tmp_name'])) {
+		if(!isset($this->request->data['Import']['file']['tmp_name'])) {
 			$message .= 'XMLデータを選択してください<br />';
 			$check = false;
 		}
-		if($this->data['Import']['file']['type'] != 'text/xml') {
+		if($this->request->data['Import']['file']['type'] != 'text/xml') {
 			$message .= 'XMLデータを選択してください<br />';
 			$check = false;
 		}else {
 
 			// XMLデータを読み込む
-			$xml = new Xml($this->data['Import']['file']['tmp_name']);
+			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
 
 			$_posts = Set::reverse($xml);
 
@@ -595,7 +602,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		// カテゴリ一覧の取得
-		$blogCategoryList = $this->BlogCategory->find('list',array('conditions'=>array('blog_content_id'=>$this->data['Import']['blog_content_id'])));
+		$blogCategoryList = $this->BlogCategory->find('list',array('conditions'=>array('blog_content_id'=>$this->request->data['Import']['blog_content_id'])));
 		$blogCategoryList = array_flip($blogCategoryList);
 
 		// ポストデータに変換し１件ずつ保存
@@ -605,8 +612,8 @@ class BlogPostsController extends BlogAppController {
 				continue;
 			}
 			$post = array();
-			$post['blog_content_id'] = $this->data['Import']['blog_content_id'];
-			$post['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$this->data['Import']['blog_content_id']))+1;
+			$post['blog_content_id'] = $this->request->data['Import']['blog_content_id'];
+			$post['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$this->request->data['Import']['blog_content_id']))+1;
 			$post['name'] = $_post['title'];
 			$_post['Encoded'][0] = str_replace("\n","<br />",$_post['Encoded'][0]);
 			$encoded = explode('<!--more-->',$_post['Encoded'][0]);
@@ -626,14 +633,14 @@ class BlogPostsController extends BlogAppController {
 			if(isset($blogCategoryList[$_post['category']])) {
 				$post['blog_category_no'] = $blogCategoryList[$_post['category']];
 			}else {
-				$no = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$this->data['Import']['blog_content_id']))+1;
-				$this->BlogCategory->create(array('name'=>$_post['category'],'blog_content_id'=>$this->data['Import']['blog_content_id'],'no'=>$no));
+				$no = $this->BlogCategory->getMax('no',array('BlogCategory.blog_content_id'=>$this->request->data['Import']['blog_content_id']))+1;
+				$this->BlogCategory->create(array('name'=>$_post['category'],'blog_content_id'=>$this->request->data['Import']['blog_content_id'],'no'=>$no));
 				$this->BlogCategory->save();
 				$post['blog_category_id'] = $this->BlogCategory->getInsertID();
 				$blogCategoryList[$_post['category']] = $post['blog_category_id'];
 			}
 
-			$post['user_id'] = $this->data['Import']['user_id'];
+			$post['user_id'] = $this->request->data['Import']['user_id'];
 			$post['status'] = 1;
 			$post['posts_date'] = $_post['post_date'];
 
