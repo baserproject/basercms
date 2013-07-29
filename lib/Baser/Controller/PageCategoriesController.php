@@ -380,34 +380,6 @@ class PageCategoriesController extends AppController {
 
 	}
 /**
- * カテゴリの並び替え順を上げる
- * 
- * @param type $id
- * @return void 
- * @access public
- * @deprecated admin_ajax_up に移行
- */
-	public function admin_up($id) {
-		
-		$this->PageCategory->moveup($id);
-		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
-		
-	}
-/**
- * カテゴリの並び替え順を下げる
- * 
- * @param type $id 
- * @return void
- * @access public
- * @deprecated admin_ajax_down に移行
- */
-	public function admin_down($id) {
-		
-		$this->PageCategory->movedown($id);
-		$this->redirect(array('controller' => 'page_categories', 'action' => 'index', "#" => 'Row'.$id));
-		
-	}
-/**
  * [ADMIN] 固定ページカテゴリー削除
  *
  * @param int $id 固定ページカテゴリーID
@@ -494,7 +466,7 @@ class PageCategoriesController extends AppController {
  */
 	public function admin_ajax_up($id) {
 		
-		if($this->PageCategory->moveup($id)) {
+		if($this->PageCategory->moveUp($id)) {
 			echo true;
 		} else {
 			$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
@@ -512,7 +484,7 @@ class PageCategoriesController extends AppController {
  */
 	public function admin_ajax_down($id) {
 		
-		if($this->PageCategory->movedown($id)) {
+		if($this->PageCategory->moveDown($id)) {
 			echo true;
 		} else {
 			$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
