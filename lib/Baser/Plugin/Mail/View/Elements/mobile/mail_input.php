@@ -43,7 +43,7 @@
 <font size="1"><?php echo $record['MailField']['before_attachment'] ?></font>
 				<?php endif; ?>
 					<?php if(!$record['MailField']['no_send'] || !$freezed): ?>
-<?php echo $mailform->control($record['MailField']['type'], "Message." . $record['MailField']['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record)) ?>
+<?php echo $mailform->control($record['MailField']['type'], "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
 				<?php endif; ?>
 				<?php if(!$freezed): ?>
 <font size="1"><?php echo $record['MailField']['attention'] ?></font>

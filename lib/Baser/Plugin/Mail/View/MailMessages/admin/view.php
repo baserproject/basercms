@@ -40,17 +40,17 @@ foreach($mailFields as $key => $mailField) {
 			echo $field['before_attachment'];
 		}
 		if (!$field['no_send']) {
-			echo $this->BcText->autoLink(nl2br($maildata->control(
+			echo $this->BcText->autoLink(nl2br($this->Maildata->control(
 				$mailField['MailField']['type'],
 				$message['Message'][$mailField['MailField']['field_name']],
-				$mailfield->getOptions($mailField['MailField'])
+				$this->Mailfield->getOptions($mailField['MailField'])
 			)));
 		}
 		if(!empty($message['Message'][$mailField['MailField']['field_name']])) {
 			echo $field['after_attachment'];
 		}
 		echo '&nbsp;';
-		if (($bcArray->last($mailFields, $key)) ||
+		if (($this->BcArray->last($mailFields, $key)) ||
 				($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field']) ||
 				(!$field['group_field'] && !$mailFields[$nextKey]['MailField']['group_field']) ||
 				($field['group_field'] != $mailFields[$nextKey]['MailField']['group_field'] && $bcArray->first($mailFields,$key))) {

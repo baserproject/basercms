@@ -750,17 +750,17 @@ class Message extends MailAppModel {
 		// フィールド名とデータの変換に必要なヘルパーを読み込む
 		App::uses('MaildataHelper','Mail.View/Helper');
 		App::uses('MailfieldHelper','Mail.View/Helper');
-		$maildata = new MaildataHelper(new View());
-		$mailfield = new MailfieldHelper(new View());
+		$Maildata = new MaildataHelper(new View());
+		$Mailfield = new MailfieldHelper(new View());
 
 		foreach ($messages as $key => $message) {
 
 			$inData = array();
 			foreach($mailFields as $mailField) {
-				$inData[$mailField['MailField']['field_name']] = $maildata->control(
+				$inData[$mailField['MailField']['field_name']] = $Maildata->control(
 					$mailField['MailField']['type'],
 					$message[$this->alias][$mailField['MailField']['field_name']],
-					$mailfield->getOptions($mailField['MailField'])
+					$Mailfield->getOptions($mailField['MailField'])
 				);
 			}
 			$convertData = array_merge($message[$this->alias], $inData);

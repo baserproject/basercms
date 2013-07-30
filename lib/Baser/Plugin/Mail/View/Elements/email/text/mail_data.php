@@ -32,7 +32,7 @@ foreach($mailFields as $field) {
 		echo " ".$field['before_attachment'];
 	}
 	if(isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']){
-		echo $maildata->control($field['type'],$message[$field['field_name']],$mailfield->getOptions($field));
+		echo $this->Maildata->control($field['type'],$message[$field['field_name']],$this->Mailfield->getOptions($field));
 	}
 	if(!empty($field['after_attachment']) && isset($message[$field['field_name']])){
 		echo " ".$field['after_attachment'];
