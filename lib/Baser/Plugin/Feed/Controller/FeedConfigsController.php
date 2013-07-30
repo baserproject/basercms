@@ -190,7 +190,7 @@ class FeedConfigsController extends FeedAppController {
 		}
 
 		// 表示設定
-		$this->subMenuElements = am($this->subMenuElements,array('feed_details'));
+		$this->subMenuElements = array_merge($this->subMenuElements, array('feed_details'));
 		$this->pageTitle = 'フィード設定編集';
 		$this->help = 'feed_configs_form';
 		$this->render('form');

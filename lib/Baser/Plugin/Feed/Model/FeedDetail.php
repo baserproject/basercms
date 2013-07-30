@@ -103,7 +103,7 @@ class FeedDetail extends FeedAppModel {
  */
 	public function getDefaultValue($feedConfigId) {
 
-		$feedConfig = $this->FeedConfig->find(array('FeedConfig.id'=>$feedConfigId));
+		$feedConfig = $this->FeedConfig->find('first', array('conditions' => array('FeedConfig.id'=>$feedConfigId)));
 		$data[$this->name]['feed_config_id'] = $feedConfigId;
 		$data[$this->name]['name'] = $feedConfig['FeedConfig']['name'];
 		$data[$this->name]['cache_time'] = '+30 minutes';

@@ -167,7 +167,7 @@ class BlogCategory extends BlogAppModel {
 		if($this->exists()) {
 			$conditions['NOT'] = array('BlogCategory.id'=>$this->id);
 		}
-		$ret = $this->find($conditions);
+		$ret = $this->find('first', array('conditions' => $conditions));
 		if($ret) {
 			return false;
 		}else {

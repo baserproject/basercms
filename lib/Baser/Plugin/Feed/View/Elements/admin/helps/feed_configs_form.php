@@ -29,16 +29,18 @@
 	<li>フィードを追加するには、画面下の「フィード一覧」の「新規追加」ボタンをクリックします。</li>
 </ul>
 
+<?php if($this->request->action == 'admin_edit'): ?>
 <div class="section">
 	<h3 id="headHowTo">フィードの読み込み方法</h3>
 	<p>以下のjavascriptを読み込みたい場所に貼り付けてください。</p>
 	<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php echo $javascript->link('/feed/ajax/'.$this->request->data['FeedConfig']['id']) ?>
+<?php $this->BcBaser->js('/feed/ajax/' . $this->request->data['FeedConfig']['id']) ?>
 	</textarea>
 	<br />
 	<p>また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。</p>
 	<h4>jQueryの読み込み例</h4>
 	<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php echo $javascript->link('jquery-1.6.4.min') ?>
+<?php $this->BcBaser->js('jquery-1.6.2.min') ?>
 	</textarea>
 </div>
+<?php endif ?>

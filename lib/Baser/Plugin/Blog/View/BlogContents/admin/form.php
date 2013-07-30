@@ -105,11 +105,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.exclude_search', '公開設定') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.status', array(
-						'type'		=> 'radio',
-						'options'	=> array(0 => '非公開', 1 => '公開') ,
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?><br />
+				<?php echo $this->BcForm->input('BlogContent.status', array('type' => 'checkbox', 'label' => '公開中')) ?><br />
 				<?php echo $this->BcForm->error('BlogContent.status') ?>
 				<?php echo $this->BcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 			</td>
@@ -169,22 +165,14 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.comment_use', 'コメント受付機能') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.comment_use', array(
-					'type'		=> 'radio',
-					'options'	=> $this->BcText->booleanDoList('利用'),
-					'legend'	=> false,
-					'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogContent.comment_use', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->BcForm->error('BlogContent.comment_use') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.comment_approve', 'コメント承認機能') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.comment_approve', array(
-						'type'		=> 'radio',
-						'options'	=> $this->BcText->booleanDoList('利用'),
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogContent.comment_approve', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpCommentApprove', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.comment_approve') ?>
 				<div id="helptextCommentApprove" class="helptext">承認機能を利用すると、コメントが投稿されてもすぐに公開されず、管理者側で確認する事ができます。</div>
@@ -193,11 +181,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'コメントイメージ認証') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.auth_captcha', array(
-						'type'		=> 'radio',
-						'options'	=> $this->BcText->booleanDoList('利用'),
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogContent.auth_captcha', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
@@ -211,11 +195,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.tag_use', 'タグ機能') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.tag_use', array(
-					'type'		=> 'radio',
-					'options'	=> $this->BcText->booleanDoList('利用'),
-					'legend'	=> false,
-					'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogContent.tag_use', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->BcForm->error('BlogContent.tag_use') ?>
 			</td>
 		</tr>
@@ -293,11 +273,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.use_content', '記事概要') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.use_content', array(
-					'type'		=> 'radio',
-					'options'	=> $this->BcText->booleanDoList('利用'),
-					'legend'	=> false,
-					'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogContent.use_content', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->BcForm->error('BlogContent.tag_use') ?>
 			</td>
 		</tr>

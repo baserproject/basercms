@@ -251,7 +251,7 @@ class BlogController extends BlogAppController {
 				// 記事を取得
 				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
 
-				$blogCategories = $this->BlogCategory->getpath($categoryId,array('name','title'));
+				$blogCategories = $this->BlogCategory->getPath($categoryId,array('name','title'));
 				if(count($blogCategories) > 1){
 					foreach($blogCategories as $key => $blogCategory) {
 						if($key < count($blogCategories) -1 ) {
@@ -389,7 +389,7 @@ class BlogController extends BlogAppController {
 
 				// ナビゲーションを設定
 				if(!empty($post['BlogPost']['blog_category_id'])) {
-					$blogCategories = $this->BlogCategory->getpath($post['BlogPost']['blog_category_id'],array('name','title'));
+					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'],array('name','title'));
 					if($blogCategories) {
 						foreach($blogCategories as $blogCategory) {
 							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/'.$this->blogContent['BlogContent']['name'].'/archives/category/'.$blogCategory['BlogCategory']['name']);

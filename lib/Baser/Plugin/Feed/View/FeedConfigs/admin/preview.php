@@ -19,4 +19,4 @@
  */
 ?>
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
-<?php echo $javascript->link('/feed/ajax/'.$id) ?>
+<?php echo $this->BcBaser->js('/feed/ajax/' . $id) ?>

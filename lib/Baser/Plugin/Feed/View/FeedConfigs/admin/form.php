@@ -110,7 +110,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.template', 'テンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $feed->getTemplates())) ?>
+				<?php echo $this->BcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $this->Feed->getTemplates())) ?>
 				<?php echo $this->BcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
@@ -132,7 +132,6 @@ $(function(){
 <div class="submit">
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php if($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'btn-orange button')) ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $this->BcForm->value('FeedConfig.id')),
 			array('class' => 'button'),

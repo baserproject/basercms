@@ -126,7 +126,7 @@ class BcPageHelper extends Helper {
 			return false;
 		}
 		if($top) {
-			$path = $this->Page->PageCategory->getpath($category['id']);
+			$path = $this->Page->PageCategory->getPath($category['id']);
 			if($path) {
 				$parent = $path[0];
 			} else {

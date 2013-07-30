@@ -28,7 +28,7 @@ if(empty($help)) {
 	</h2>
 
 	<div class="body">
-		<?php $this->BcBaser->element('helps/'.$help) ?>
+		<?php $this->BcBaser->element('helps/' . $help) ?>
 	</div>
 
 	<div class="clearfix close">
