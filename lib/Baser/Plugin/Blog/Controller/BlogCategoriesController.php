@@ -117,7 +117,7 @@ class BlogCategoriesController extends BlogAppController {
 		$_dbDatas = $this->BlogCategory->generateTreeList($conditions);
 		$dbDatas = array();
 		foreach($_dbDatas as $key => $dbData) {
-			$category = $this->BlogCategory->find(array('BlogCategory.id'=>$key));
+			$category = $this->BlogCategory->find('first', array('conditions' => array('BlogCategory.id'=>$key)));
 			if(preg_match("/^([_]+)/i",$dbData,$matches)) {
 				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
 				$category['BlogCategory']['title'] = $prefix.'└'.$category['BlogCategory']['title'];
