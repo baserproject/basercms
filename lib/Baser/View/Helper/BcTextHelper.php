@@ -35,7 +35,7 @@ class BcTextHelper extends TextHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('BcTime', 'BcForm');
+	public $helpers = array('BcTime', 'BcForm', 'Html');
 
 /**
  * boolean型を○―マークで出力
