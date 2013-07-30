@@ -61,7 +61,7 @@ $favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 	<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
 	<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.'.$this->BcBaser->getContentsName(true)) ?></div>
 	<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
-	<div id="CurrentPageUrl" style="display: none"><?php echo '/'.$this->request->url ?></div>
+	<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/admin/dashboard/index': '/'.$this->request->url; ?></div>
 
 	<!-- Waiting -->
 	<div id="Waiting" class="waiting-box" style="display:none">
