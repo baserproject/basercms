@@ -1452,7 +1452,15 @@ class BaserAppController extends Controller {
 		header('HTTP/1.1 '.$errorNo);
 		if($message) {
 			if(is_array($message)) {
-				$message = implode('<br />', $message);
+				$aryMessage = array();
+				foreach($message as $value) {
+					if(is_array($value)) {
+						$aryMessage[] = implode('<br />', $value);
+					} else {
+						$aryMessage[] = $value;
+					}
+				}
+				$message = implode('<br />', $aryMessage);
 			}
 			echo $message;
 		}

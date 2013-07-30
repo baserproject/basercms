@@ -74,7 +74,7 @@ $(window).load(function() {
 					'type'		=> 'select',
 					'options'	=> $this->BcForm->getControlSource('cache_time'),
 					'empty'		=> 'なし')) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCacheTime', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpCacheTime', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedDetail.cache_time') ?>
 				<div id="helptextCacheTime" class="helptext"> 負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択してください。</div>
 			</td>
@@ -82,7 +82,7 @@ $(window).load(function() {
 			<th class="col-head"><?php echo $this->BcForm->label('FeedDetail.category_filter', 'カテゴリフィルター') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('FeedDetail.category_filter', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCategoryFilter', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpCategoryFilter', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedDetail.category_filter') ?>
 				<div id="helptextCategoryFilter" class="helptext">
 					<ul>

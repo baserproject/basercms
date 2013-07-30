@@ -114,7 +114,7 @@ class UserGroupsController extends AppController {
 			}
 			$this->UserGroup->create($this->request->data);
 			if ($this->UserGroup->save()) {
-				$this->setMessage($message, '新規ユーザーグループ「'.$this->data['UserGroup']['title'].'」を追加しました。', false, true);
+				$this->setMessage($message, '新規ユーザーグループ「'.$this->request->data['UserGroup']['title'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -146,7 +146,7 @@ class UserGroupsController extends AppController {
 
 			/* 更新処理 */
 			if ($this->UserGroup->save($this->request->data)) {
-				$this->setMessage('ユーザーグループ「'.$this->data['UserGroup']['name'].'」を更新しました。', false, true);
+				$this->setMessage('ユーザーグループ「'.$this->request->data['UserGroup']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);

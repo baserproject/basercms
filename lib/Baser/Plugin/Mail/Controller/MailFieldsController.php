@@ -163,20 +163,20 @@ class MailFieldsController extends MailAppController {
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
-		if(!$this->data) {
-			$this->data = $this->_getDefaultValue();
+		if(!$this->request->data) {
+			$this->request->data = $this->_getDefaultValue();
 		}else {
 
 			/* 登録処理 */
-			$this->data['MailField']['mail_content_id'] = $mailContentId;
-			$this->data['MailField']['no'] = $this->MailField->getMax('no',array('MailField.mail_content_id'=>$mailContentId))+1;
-			$this->data['MailField']['sort'] = $this->MailField->getMax('sort')+1;
-			$this->MailField->create($this->data);
+			$this->request->data['MailField']['mail_content_id'] = $mailContentId;
+			$this->request->data['MailField']['no'] = $this->MailField->getMax('no',array('MailField.mail_content_id'=>$mailContentId))+1;
+			$this->request->data['MailField']['sort'] = $this->MailField->getMax('sort')+1;
+			$this->MailField->create($this->request->data);
 			if($this->MailField->validates()) {
-				if($this->Message->addMessageField($this->mailContent['MailContent']['name'],$this->data['MailField']['field_name'])) {
+				if($this->Message->addMessageField($this->mailContent['MailContent']['name'],$this->request->data['MailField']['field_name'])) {
 					// データを保存
 					if($this->MailField->save(null, false)) {
-						$this->setMessage('新規メールフィールド「'.$this->data['MailField']['name'].'」を追加しました。', false, true);
+						$this->setMessage('新規メールフィールド「'.$this->request->data['MailField']['name'].'」を追加しました。', false, true);
 						$this->redirect(array('controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 					}else {
 						$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -206,25 +206,25 @@ class MailFieldsController extends MailAppController {
  */
 	public function admin_edit($mailContentId,$id) {
 
-		if(!$id && empty($this->data)) {
+		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if (empty($this->data)) {
-			$this->data = $this->MailField->read(null, $id);
+		if (empty($this->request->data)) {
+			$this->request->data = $this->MailField->read(null, $id);
 		}else {
 			$old = $this->MailField->read(null, $id);
-			$this->MailField->set($this->data);
+			$this->MailField->set($this->request->data);
 			if($this->MailField->validates()) {
 				$ret = true;
-				if ($old['MailField']['field_name'] != $this->data['MailField']['field_name']) {
-					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->data['MailField']['field_name']);
+				if ($old['MailField']['field_name'] != $this->request->data['MailField']['field_name']) {
+					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'],$this->request->data['MailField']['field_name']);
 				}
 				if ($ret) {
 					/* 更新処理 */
 					if($this->MailField->save(null, false)) {
-						$this->setMessage('メールフィールド「'.$this->data['MailField']['name'].'」を更新しました。', false, true);
+						$this->setMessage('メールフィールド「'.$this->request->data['MailField']['name'].'」を更新しました。', false, true);
 						$this->redirect(array('action' => 'index', $mailContentId));
 					}else {
 						$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -240,7 +240,7 @@ class MailFieldsController extends MailAppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields','mail_common');
 		$this->set('controlSource',$this->MailField->getControlSource());
-		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド編集：　'.$this->data['MailField']['name'];
+		$this->pageTitle = '['.$this->mailContent['MailContent']['title'].'] メールフィールド編集：　'.$this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 
@@ -459,9 +459,9 @@ class MailFieldsController extends MailAppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		
-		if($this->data){
+		if($this->request->data){
 			$conditions = $this->_createAdminIndexConditions($mailContentId);
-			if($this->MailField->changeSort($this->data['Sort']['id'],$this->data['Sort']['offset'],$conditions)){
+			if($this->MailField->changeSort($this->request->data['Sort']['id'],$this->request->data['Sort']['offset'],$conditions)){
 				exit(true);
 			} else {
 				$this->ajaxError(500, $this->MailField->validationErrors);

@@ -33,7 +33,7 @@
 	<h3 id="headHowTo">フィードの読み込み方法</h3>
 	<p>以下のjavascriptを読み込みたい場所に貼り付けてください。</p>
 	<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php echo $javascript->link('/feed/ajax/'.$this->data['FeedConfig']['id']) ?>
+<?php echo $javascript->link('/feed/ajax/'.$this->request->data['FeedConfig']['id']) ?>
 	</textarea>
 	<br />
 	<p>また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。</p>

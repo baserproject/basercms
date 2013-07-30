@@ -174,7 +174,7 @@ class MailField extends MailAppModel {
 		if($this->exists()) {
 			$conditions['NOT'] = array('MailField.id'=>$this->id);
 		}
-		$ret = $this->find($conditions);
+		$ret = $this->find('first', array('conditions' => $conditions));
 		if($ret) {
 			return false;
 		}else {

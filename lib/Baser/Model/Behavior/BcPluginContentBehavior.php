@@ -66,7 +66,7 @@ class BcPluginContentBehavior extends ModelBehavior {
 	public function beforeSave(Model $model) {
 
 		if(!$model->exists()) {
-			$ret = $this->PluginContent->find(array('PluginContent.name'=>$model->data[$model->alias]['name']));
+			$ret = $this->PluginContent->find('first', array('conditions' => array('PluginContent.name'=>$model->data[$model->alias]['name'])));
 			if($ret) {
 				// 新規登録で既に登録されている場合は、重複エラーとする
 				$model->invalidate('name','既に登録されています。');
@@ -127,9 +127,11 @@ class BcPluginContentBehavior extends ModelBehavior {
 		/*** プラグインコンテンツを取得 ***/
 		$pluginContent = array();
 		if($contentId) {
-			$conditions = array('PluginContent.content_id'=>$contentId,
-					'PluginContent.plugin'=>$pluginName);
-			$pluginContent = $this->PluginContent->find($conditions);
+			$conditions = array(
+				'PluginContent.content_id'=>$contentId,
+				'PluginContent.plugin'=>$pluginName
+			);
+			$pluginContent = $this->PluginContent->find('first', array('conditions' => $conditions));
 			if(!$pluginContent) {
 				$pluginContent = array();
 			}

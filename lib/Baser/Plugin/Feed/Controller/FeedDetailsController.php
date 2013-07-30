@@ -105,23 +105,23 @@ class FeedDetailsController extends FeedAppController {
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 
-			$this->data = $this->FeedDetail->getDefaultValue($feedConfigId);
+			$this->request->data = $this->FeedDetail->getDefaultValue($feedConfigId);
 
 		}else {
 
-			if(!preg_match('/^http/is', $this->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->data['FeedDetail']['url'])){
-				$this->data['FeedDetail']['url'] = '/'.$this->data['FeedDetail']['url'];
+			if(!preg_match('/^http/is', $this->request->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->request->data['FeedDetail']['url'])){
+				$this->request->data['FeedDetail']['url'] = '/'.$this->request->data['FeedDetail']['url'];
 			}
 			
-			$this->FeedDetail->create($this->data);
+			$this->FeedDetail->create($this->request->data);
 
 			// データを保存
 			if($this->FeedDetail->save()) {
 				
 				$id = $this->FeedDetail->getLastInsertId();
-				$this->setMessage('フィード「'.$this->data['FeedDetail']['name'].'」を追加しました。', false, true);
+				$this->setMessage('フィード「'.$this->request->data['FeedDetail']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
 
 			}else {
@@ -147,28 +147,28 @@ class FeedDetailsController extends FeedAppController {
  */
 	public function admin_edit($feedConfigId,$id) {
 
-		if(!$id && empty($this->data)) {
+		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 			
-			$this->data = $this->FeedDetail->read(null, $id);
+			$this->request->data = $this->FeedDetail->read(null, $id);
 			
 		}else {
 			
-			if(!preg_match('/^http/is', $this->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->data['FeedDetail']['url'])){
-				$this->data['FeedDetail']['url'] = '/'.$this->data['FeedDetail']['url'];
+			if(!preg_match('/^http/is', $this->request->data['FeedDetail']['url']) && !preg_match('/^\//is', $this->request->data['FeedDetail']['url'])){
+				$this->request->data['FeedDetail']['url'] = '/'.$this->request->data['FeedDetail']['url'];
 			}
 			
-			$this->FeedDetail->set($this->data);
+			$this->FeedDetail->set($this->request->data);
 			
 			// データを保存
 			if($this->FeedDetail->save()) {
 				
-				$this->requestAction(array('controller' => 'feed_configs', 'action' => 'clear_cache'), array('pass' => array($this->data['FeedDetail']['feed_config_id'], $this->data['FeedDetail']['url'])));
-				$this->setMessage('フィード詳細「'.$this->data['FeedDetail']['name'].'」を更新しました。', false, true);
+				$this->requestAction(array('controller' => 'feed_configs', 'action' => 'clear_cache'), array('pass' => array($this->request->data['FeedDetail']['feed_config_id'], $this->request->data['FeedDetail']['url'])));
+				$this->setMessage('フィード詳細「'.$this->request->data['FeedDetail']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
 				
 			}else {

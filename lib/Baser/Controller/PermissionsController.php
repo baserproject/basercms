@@ -159,7 +159,7 @@ class PermissionsController extends AppController {
 			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort',array('user_group_id'=>$userGroupId))+1;
 			$this->Permission->create($this->request->data);
 			if($this->Permission->save()) {
-				$this->setMessage('新規アクセス制限設定「'.$this->data['Permission']['name'].'」を追加しました。', false, true);
+				$this->setMessage('新規アクセス制限設定「'.$this->request->data['Permission']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
@@ -236,7 +236,7 @@ class PermissionsController extends AppController {
 			$this->request->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->request->data['Permission']['url'];
 
 			if($this->Permission->save($this->request->data)) {
-				$this->setMessage('アクセス制限設定「'.$this->data['Permission']['name'].'」を更新しました。', false, true);
+				$this->setMessage('アクセス制限設定「'.$this->request->data['Permission']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			}else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);

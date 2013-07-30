@@ -134,7 +134,7 @@ class BlogContentsController extends BlogAppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 			
-			$this->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 			
 		}
 

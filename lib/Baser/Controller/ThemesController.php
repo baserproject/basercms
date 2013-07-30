@@ -94,7 +94,7 @@ class ThemesController extends AppController {
  */
 	public function admin_load_default_data_pattern() {
 
-		if (empty($this->data['Theme']['default_data_pattern'])) {
+		if (empty($this->request->data['Theme']['default_data_pattern'])) {
 			$this->setMessage('不正な操作です。', true);
 			$this->redirect('index');
 		}
@@ -108,7 +108,7 @@ class ThemesController extends AppController {
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
 		
-		$dbDataPattern = $this->data['Theme']['default_data_pattern'];
+		$dbDataPattern = $this->request->data['Theme']['default_data_pattern'];
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 		$result = true;
 		
@@ -270,7 +270,7 @@ class ThemesController extends AppController {
 			$this->request->data['Theme']['old_name'] = $theme;
 			$this->Theme->set($this->request->data);
 			if($this->Theme->save()){
-				$this->setMessage('テーマ「'.$this->data['Theme']['name'].'」を更新しました。');
+				$this->setMessage('テーマ「'.$this->request->data['Theme']['name'].'」を更新しました。');
 				$this->redirect(array('action' => 'index'));
 			}else{
 				$this->setMessage('テーマ情報の変更に失敗しました。入力内容を確認してください。', true);

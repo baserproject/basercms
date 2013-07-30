@@ -299,11 +299,11 @@ class BcCkeditorHelper extends AppHelper {
 			)
 		);
 		
-		if(isset($this->data['Page']['page_type'])) {
+		if(isset($this->request->data['Page']['page_type'])) {
 			$agentPrefix = '';
-			if($this->data['Page']['page_type'] == 2) {
+			if($this->request->data['Page']['page_type'] == 2) {
 				$agentPrefix = Configure::read('BcAgent.mobile.prefix');
-			} elseif($this->data['Page']['page_type'] == 3) {
+			} elseif($this->request->data['Page']['page_type'] == 3) {
 				$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
 			}
 			if($agentPrefix) {

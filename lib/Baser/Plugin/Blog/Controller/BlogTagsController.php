@@ -93,11 +93,11 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_add () {
 
-		if(!empty($this->data)) {
+		if(!empty($this->request->data)) {
 
-			$this->BlogTag->create($this->data);
+			$this->BlogTag->create($this->request->data);
 			if($this->BlogTag->save()) {
-				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を追加しました。', false, true);
+				$this->setMessage('タグ「'.$this->request->data['BlogTag']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
@@ -123,13 +123,13 @@ class BlogTagsController extends BlogAppController {
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->data)) {
-			$this->data = $this->BlogTag->read(null, $id);
+		if(empty($this->request->data)) {
+			$this->request->data = $this->BlogTag->read(null, $id);
 		} else {
 
-			$this->BlogTag->set($this->data);
+			$this->BlogTag->set($this->request->data);
 			if($this->BlogTag->save()) {
-				$this->setMessage('タグ「'.$this->data['BlogTag']['name'].'」を更新しました。', false, true);
+				$this->setMessage('タグ「'.$this->request->data['BlogTag']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
@@ -137,7 +137,7 @@ class BlogTagsController extends BlogAppController {
 
 		}
 
-		$this->pageTitle = 'ブログタグ編集： '.$this->data['BlogTag']['name'];
+		$this->pageTitle = 'ブログタグ編集： '.$this->request->data['BlogTag']['name'];
 		$this->render('form');
 
 	}
@@ -215,8 +215,8 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_ajax_add () {
 
-		if(!empty($this->data)) {
-			$this->BlogTag->create($this->data);
+		if(!empty($this->request->data)) {
+			$this->BlogTag->create($this->request->data);
 			if($data = $this->BlogTag->save()) {
 				$result = array($this->BlogTag->id => $data['BlogTag']['name']);
 				$this->set('result', $result);

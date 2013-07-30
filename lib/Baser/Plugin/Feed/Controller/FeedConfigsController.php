@@ -119,19 +119,19 @@ class FeedConfigsController extends FeedAppController {
  */
 	public function admin_add() {
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 
-			$this->data = $this->FeedConfig->getDefaultValue();
+			$this->request->data = $this->FeedConfig->getDefaultValue();
 
 		}else {
 
-			$this->FeedConfig->create($this->data);
+			$this->FeedConfig->create($this->request->data);
 
 			// データを保存
 			if($this->FeedConfig->save()) {
 				
 				$id = $this->FeedConfig->getLastInsertId();
-				$this->setMessage('フィード「'.$this->data['FeedConfig']['name'].'」を追加しました。', false, true);
+				$this->setMessage('フィード「'.$this->request->data['FeedConfig']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $id, '#' => 'headFeedDetail'));
 
 			}else {
@@ -157,26 +157,26 @@ class FeedConfigsController extends FeedAppController {
  */
 	public function admin_edit($id) {
 
-		if(!$id && empty($this->data)) {
+		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->data)) {
+		if(empty($this->request->data)) {
 
-			$this->data = $this->FeedConfig->read(null, $id);
-			$this->set('feedConfig',$this->data);
+			$this->request->data = $this->FeedConfig->read(null, $id);
+			$this->set('feedConfig',$this->request->data);
 
 		}else {
 
 			// データを保存
-			if($this->FeedConfig->save($this->data)) {
+			if($this->FeedConfig->save($this->request->data)) {
 				
-				$this->_clearCache($this->data['FeedConfig']['id']);
-				$this->setMessage('フィード「'.$this->data['FeedConfig']['name'].'」を更新しました。', false, true);
+				$this->_clearCache($this->request->data['FeedConfig']['id']);
+				$this->setMessage('フィード「'.$this->request->data['FeedConfig']['name'].'」を更新しました。', false, true);
 
-				if($this->data['FeedConfig']['edit_template']){
-					$this->redirectEditTemplate($this->data['FeedConfig']['template']);
+				if($this->request->data['FeedConfig']['edit_template']){
+					$this->redirectEditTemplate($this->request->data['FeedConfig']['template']);
 				}else{
 					$this->redirect(array('action' => 'index'));
 				}

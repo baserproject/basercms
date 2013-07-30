@@ -391,28 +391,28 @@ class BlogCommentsController extends BlogAppController {
 		
 		Configure::write('debug', 0);
 		
-		if(!$this->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
+		if(!$this->request->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
 			$this->notFound();
 		}else {
 
 			// 画像認証を行う
 			$captchaResult = true;
 			if($this->blogContent['BlogContent']['auth_captcha']){
-				$captchaResult = $this->BcCaptcha->check($this->data['BlogComment']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->request->data['BlogComment']['auth_captcha']);
 				if(!$captchaResult){
 					$this->set('dbData',false);
 					return false;
 				} else {
-					unset($this->data['BlogComment']['auth_captcha']);
+					unset($this->request->data['BlogComment']['auth_captcha']);
 				}
 			}
 			
-			$result = $this->BlogComment->add($this->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
+			$result = $this->BlogComment->add($this->request->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
 			if($result && $captchaResult) {
-				$this->_sendCommentAdmin($blogPostId, $this->data);
+				$this->_sendCommentAdmin($blogPostId, $this->request->data);
 				// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 				if(!$this->blogContent['BlogContent']['comment_approve']) {
-					$this->_sendCommentContributor($blogPostId, $this->data);
+					$this->_sendCommentContributor($blogPostId, $this->request->data);
 				}
 				$this->set('dbData',$result['BlogComment']);
 			}else{

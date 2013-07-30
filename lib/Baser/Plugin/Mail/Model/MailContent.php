@@ -296,7 +296,9 @@ class MailContent extends MailAppModel {
 					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
 					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
-				$Message = ClassRegistry::getObject('Message');
+				App::uses('Message', 'Mail.Model');
+				$Message = new Message(false, null, null, $result['MailContent']['name'] . '_');
+				$Message->_sourceConfigured = true;	// 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 				$Message->createTable($result['MailContent']['name']);
 				$Message->construction($result['MailContent']['id']);
 			}

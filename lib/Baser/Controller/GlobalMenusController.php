@@ -135,7 +135,7 @@ class GlobalMenusController extends AppController {
 			// データを保存
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$this->setMessage('新規メニュー「'.$this->data['GlobalMenu']['name'].'」を追加しました。', false, true);
+				$this->setMessage('新規メニュー「'.$this->request->data['GlobalMenu']['name'].'」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -176,7 +176,7 @@ class GlobalMenusController extends AppController {
 			$this->GlobalMenu->set($this->request->data);
 			if($this->GlobalMenu->save()) {
 				clearViewCache();
-				$this->setMessage('メニュー「'.$this->data['GlobalMenu']['name'].'」を更新しました。', false, true);
+				$this->setMessage('メニュー「'.$this->request->data['GlobalMenu']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);

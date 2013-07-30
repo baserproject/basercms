@@ -291,7 +291,7 @@ class PageCategoriesController extends AppController {
 
 			if($this->PageCategory->validates()) {
 				if($this->PageCategory->save($this->request->data,false)) {
-					$this->setMessage('固定ページカテゴリー「'.$this->data['PageCategory']['name'].'」を更新しました。', false, true);
+					$this->setMessage('固定ページカテゴリー「'.$this->request->data['PageCategory']['name'].'」を更新しました。', false, true);
 					$this->redirect(array('action' => 'index'));
 				}else {
 					$this->setMessage('保存中にエラーが発生しました。', true);

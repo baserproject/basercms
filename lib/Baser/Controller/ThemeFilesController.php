@@ -609,7 +609,7 @@ class ThemeFilesController extends AppController {
 			$folder = new Folder();
 			$this->ThemeFolder->set($this->request->data);
 			if ($this->ThemeFolder->validates() && $folder->create($fullpath.$this->request->data['ThemeFolder']['name'], 0777)) {
-				$this->setMessage('フォルダ '.$this->data['ThemeFolder']['name'].' を作成しました。');
+				$this->setMessage('フォルダ '.$this->request->data['ThemeFolder']['name'].' を作成しました。');
 				$this->redirect(array('action' => 'index', $theme, $type, $path));
 			} else {
 				$this->setMessage('フォルダの作成に失敗しました。', true);
@@ -653,7 +653,7 @@ class ThemeFilesController extends AppController {
 			if ($this->ThemeFolder->validates()) {
 				if($fullpath != $newPath) {
 					if($folder->move(array('from'=>$fullpath,'to'=>$newPath,'chmod'=>0777,'skip'=>array('_notes')))) {
-						$this->setMessage('フォルダ名を '.$this->data['ThemeFolder']['name'].' に変更しました。');
+						$this->setMessage('フォルダ名を '.$this->request->data['ThemeFolder']['name'].' に変更しました。');
 						$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
 					}else {
 						$this->setMessage('フォルダ名の変更に失敗しました。', true);

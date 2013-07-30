@@ -195,10 +195,10 @@ class MailController extends MailAppController {
 		}
 		
 		// 初期値を取得
-		if(!isset($this->data['Message'])) {
-			$this->data = $this->Message->getDefaultValue();
+		if(!isset($this->request->data['Message'])) {
+			$this->request->data = $this->Message->getDefaultValue();
 		}else {
-			$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
+			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
 		}
 
 		$this->set('freezed',false);
@@ -260,7 +260,7 @@ class MailController extends MailAppController {
 
 			// 画像認証を行う
 			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
-				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->request->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->Message->invalidate('auth_captcha');
 				}
@@ -322,9 +322,9 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		
-		if(!$this->data) {
+		if(!$this->request->data) {
 			$this->redirect(array('action' => 'index', $id));
-		} elseif( isset($this->data['Message']['mode']) && $this->data['Message']['mode'] == 'Back' ) { 
+		} elseif( isset($this->request->data['Message']['mode']) && $this->request->data['Message']['mode'] == 'Back' ) { 
             $this->_back($id);
 		} else {
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
@@ -337,15 +337,15 @@ class MailController extends MailAppController {
 
 			// 画像認証を行う
 			if(Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']){
-				$captchaResult = $this->BcCaptcha->check($this->data['Message']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->request->data['Message']['auth_captcha']);
 				if(!$captchaResult){
 					$this->redirect(array('action' => 'index', $id));
 				} else {
-					unset($this->data['Message']['auth_captcha']);
+					unset($this->request->data['Message']['auth_captcha']);
 				}
 			}
 
-			$this->Message->create($this->data);
+			$this->Message->create($this->request->data);
 
 			if($this->Message->save(null,false)) {
 
@@ -449,7 +449,7 @@ class MailController extends MailAppController {
 		$userMail = '';
 
 		// データを整形
-		$data = $this->Message->restoreData($this->Message->convertToDb($this->data));
+		$data = $this->Message->restoreData($this->Message->convertToDb($this->request->data));
 		$data['message'] = $data['Message'];
 		$data['mailFields'] = $this->dbDatas['mailFields'];
 		$data['mailContents'] = $this->dbDatas['mailContent']['MailContent'];

@@ -20,8 +20,8 @@
 $this->BcBaser->css('/mail/css/style', array('inline' => true));
 if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 	/* プラグインの為か、inlineが動作しない */
-	//$html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
-	$this->addScript($html->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url'])));
+	//$this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
+	$this->addScript($this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url'])));
 }
 ?>
 

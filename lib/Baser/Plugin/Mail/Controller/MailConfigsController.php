@@ -72,12 +72,12 @@ class MailConfigsController extends MailAppController {
  */
 	public function admin_form() {
 
-		if(empty($this->data)) {
-			$this->data = $this->MailConfig->read(null, 1);
+		if(empty($this->request->data)) {
+			$this->request->data = $this->MailConfig->read(null, 1);
 		}else {
 
 			/* 更新処理 */
-			if($this->MailConfig->save($this->data)) {
+			if($this->MailConfig->save($this->request->data)) {
 				$this->setMessage('メールフォーム設定を保存しました。');
 				$this->redirect(array('action' => 'form'));
 			}else {

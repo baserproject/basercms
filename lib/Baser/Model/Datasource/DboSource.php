@@ -3739,7 +3739,23 @@ class DboSource extends DataSource {
 			return false;
 		}
 		$new = $old;
-		$new['tables'][$table][$field] = $column;
+		
+		// 配列の順番を考慮して新しいフィールドを追加しないと、$CakeSchema->compare() で、
+		// 間違った構成の情報を取得してしまう。（tableParametersをフィールドとして解析してしまう）
+		$fields = array();
+		foreach($new['tables'][$table] as $key => $value) {
+			if($key !== 'indexes' && $key !== 'tableParameters') {
+				$fields[$key] = $value;
+			}
+		}
+		$fields[$field] = $column;
+		if(!empty($new['tables'][$table]['indexes'])) {
+			$fields['indexes'] = $new['tables'][$table]['indexes'];
+		}
+		if(!empty($new['tables'][$table]['tableParameters'])) {
+			$fields['tableParameters'] = $new['tables'][$table]['tableParameters'];
+		}
+		$new['tables'][$table] = $fields;
 
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
@@ -3876,10 +3892,17 @@ class DboSource extends DataSource {
 		if(!in_array($this->config['prefix'].$table, $tables)){
 			return false;
 		}
-		$model = Inflector::classify(Inflector::singularize($table));
+		
 		$CakeSchema = ClassRegistry::init(array(array('class' => 'CakeSchema', 'plugin' => $plugin)));
 		$CakeSchema->connection = $this->configKeyName;
-		return $CakeSchema->read(array('models'=>array($model)));
+		
+		$model = Inflector::classify(Inflector::singularize($table));
+		if (!class_exists($model)) {
+			$model = false;
+		} else {
+			$model = array($model);
+		}
+		return $CakeSchema->read(array('models' => $model));
 
 	}
 /**

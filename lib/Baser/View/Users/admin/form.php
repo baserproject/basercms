@@ -144,7 +144,7 @@ $(function(){
 					<?php $this->BcBaser->link('ユーザーグループ管理',array('controller'=>'user_groups','action'=>'index')) ?>
 					より新しいグループを追加しアクセス制限の設定をおこないます。</div>
 <?php else: ?>
-				<?php echo $this->BcText->arrayValue($this->data['User']['user_group_id'], $userGroups) ?>
+				<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
 				<?php echo $this->BcForm->input('User.user_group_id', array('type' => 'hidden')) ?>
 <?php endif ?>	
 			</td>

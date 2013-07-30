@@ -603,7 +603,7 @@ class Message extends MailAppModel {
 			return true;
 		}
 		
-		$ret = $db->dropTable(array('table'=>$table));
+		$ret = $db->dropTable(array('table' => $table));
 		
 		if($ret && $contentName == 'messages') {
 			$ret = $this->createTable($contentName);

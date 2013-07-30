@@ -37,7 +37,7 @@ $(window).load(function() {
 			<th><?php echo $this->BcForm->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_name') ?>
 				<div id="helptextSiteName" class="helptext">自動送信メールの署名に挿入されます。</div>
 			</td>
@@ -46,7 +46,7 @@ $(window).load(function() {
 			<th><?php echo $this->BcForm->label('MailConfig.site_url', '署名：WEBサイトURL') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_url') ?>
 				<div id="helptextSiteUrl" class="helptext">自動送信メールの署名に挿入されます。</div>
 			</td>
@@ -55,7 +55,7 @@ $(window).load(function() {
 			<th><?php echo $this->BcForm->label('MailConfig.site_email', '署名：Eメール') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_email', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteEmail', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteEmail', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_email') ?>
 				<div id="helptextSiteEmail" class="helptext">
 					<ul>
@@ -69,7 +69,7 @@ $(window).load(function() {
 			<th><?php echo $this->BcForm->label('MailConfig.site_tel', '署名：電話番号') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_tel', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteTel', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteTel', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_tel') ?>
 				<div id="helptextSiteTel" class="helptext">自動送信メールの署名に挿入されます。</div>
 			</td>
@@ -78,7 +78,7 @@ $(window).load(function() {
 			<th><?php echo $this->BcForm->label('MailConfig.site_fax', '署名：FAX番号') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_fax', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteFax', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteFax', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_fax') ?>
 				<div id="helptextSiteFax" class="helptext">自動送信メールの署名に挿入されます。</div>
 			</td>

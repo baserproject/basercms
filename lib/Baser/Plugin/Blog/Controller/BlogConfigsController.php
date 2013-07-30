@@ -86,8 +86,8 @@ class BlogConfigsController extends BlogAppController {
  */
 	public function admin_form() {
 
-		if(empty($this->data)) {
-			$this->data = $this->BlogConfig->read(null, 1);
+		if(empty($this->request->data)) {
+			$this->request->data = $this->BlogConfig->read(null, 1);
 			$blogContentList = $this->BlogContent->find("list");
 			$this->set('blogContentList',$blogContentList);
 			$userList = $this->User->find("list");
@@ -95,7 +95,7 @@ class BlogConfigsController extends BlogAppController {
 		}else {
 
 			/* 更新処理 */
-			if($this->BlogConfig->save($this->data)) {
+			if($this->BlogConfig->save($this->request->data)) {
 				$this->setMessage('ブログ設定を保存しました。', false, true);
 				$this->redirect(array('action' => 'form'));
 			}else {

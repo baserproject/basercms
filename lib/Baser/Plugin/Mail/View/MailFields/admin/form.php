@@ -127,7 +127,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.field_name', 'フィールド名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.field_name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFieldName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpFieldName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.field_name') ?>
 				<div id="helptextFieldName" class="helptext">重複しない半角英数字で入力してください。</div>
 			</td>
@@ -136,7 +136,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.name', '項目名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.name') ?>
 				<div id="helptextName" class="helptext">項目を特定しやすいわかりやすい名前を入力してください。日本語可。</div>
 			</td>
@@ -145,7 +145,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.type', 'タイプ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.type', array('type' => 'select', 'options' => $controlSource['type'])) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpType', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpType', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.type') ?>
 				<div id="helptextType" class="helptext">
 					<ul>
@@ -160,7 +160,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.head', '項目見出し') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.head', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpHead', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpHead', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.head') ?>
 				<div id="helptextHead" class="helptext"> グループの場合、２番目以降のフィールドは不要です。 </div>
 			</td>
@@ -211,7 +211,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.source', '選択リスト') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.source', array('type' => 'textarea', 'cols' => 35, 'rows' => 4)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSource', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSource', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.source') ?>
 				<div id="helptextSource" class="helptext">
 					<ul>
@@ -233,7 +233,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.rows', '行数') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.rows', array('type' => 'text', 'size' => 10, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpRows', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpRows', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.rows') ?>
 				<div id="helptextRows" class="helptext">テキストボックスの場合の行数を指定します。</div>
 			</td>
@@ -261,7 +261,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.group_field', 'グループ名') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.group_field', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpGroupField', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpGroupField', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.group_field') ?>
 				<div id="helptextGroupField" class="helptext">
 					<ul>
@@ -275,7 +275,7 @@ jQuery(function($) {
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.group_valid', 'グループ入力チェック') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.group_valid', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpGroupValid', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpGroupValid', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.group_valid') ?>
 				<div id="helptextGroupValid" class="helptext">
 					<ul>
@@ -324,22 +324,14 @@ jQuery(function($) {
 		<tr id="rowUseField">
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.use_field', '利用状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.use_field', array(
-						'type'		=> 'radio',
-						'options'	=> $this->BcText->booleanStatusList(),
-						'legend'	=> false,
-						'separator'	=>	'&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('MailField.use_field', array('type' => 'checkbox', 'label' => '利用中')) ?>
 				<?php echo $this->BcForm->error('MailField.use_field') ?>
 			</td>
 		</tr>
 		<tr id="rowNoSend">
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.no_send', 'メール送信') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.no_send', array(
-						'type'		=> 'radio',
-						'options'	=> array(0 => '送信する', 1 => '送信しない'),
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('MailField.no_send', array('type' => 'checkbox', 'label' => '送信しない')) ?>
 				<?php echo $this->BcForm->error('MailField.no_send') ?>
 			</td>
 		</tr>

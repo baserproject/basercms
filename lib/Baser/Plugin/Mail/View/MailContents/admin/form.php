@@ -63,7 +63,7 @@ $(function(){
 });
 
 function mailContentSender1ClickHandler(){
-	if($('input[name="data[MailContent][sender_1_]"]:checked').val()=='1'){
+	if($('input[name="data[MailContent][sender_1_]"]:checked').val() == '1'){
 		$("#MailContentSender1").slideDown(100);
 	}else{
 		$("#MailContentSender1").slideUp(100);
@@ -72,7 +72,7 @@ function mailContentSender1ClickHandler(){
 </script>
 <?php if($this->action == 'admin_edit'): ?>
 <div class="em-box align-left">このメールフォームのURL：
-	<?php if($mailContent['MailContent']['status']): ?>
+	<?php if(!empty($mailContent['MailContent']['status'])): ?>
 		<?php $this->BcBaser->link(
 				$this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), 
 			'/' . $mailContent['MailContent']['name'] . '/index') ?>
@@ -187,7 +187,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'), 'legend' => false)) ?>
+				<?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
@@ -201,7 +201,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.ssl_on', 'SSL通信') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.ssl_on', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'), 'legend'=>false)) ?>
+				<?php echo $this->BcForm->input('MailContent.ssl_on', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailContent.ssl_on', 
 						'SSL通信を利用するには、'.$this->BcBaser->getLink('システム設定', array('controller'=>'site_configs', 'action'=>'form', 'plugin'=>null), array('target'=>'_blank')).'で、
@@ -244,10 +244,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.layout_template', 'レイアウトテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php //echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $mail->getLayoutTemplates()))
-				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
-				echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => array()));
-				?>
+				<?php echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $this->Mail->getLayoutTemplates())) ?>
 				<?php echo $this->BcForm->input('MailContent.edit_layout', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する','javascript:void(0)', array('id' => 'EditLayout')) ?>
@@ -265,10 +262,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.form_template', 'メールフォームテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php //echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $mail->getFormTemplates())) 
-				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
-					  echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => array())) 
-				?>
+				<?php echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $this->Mail->getFormTemplates())) ?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail_form', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
@@ -286,10 +280,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.mail_template', '送信メールテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php //echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $mail->getMailTemplates())) 
-				      //[TODO] 2013.05.23 暫定的に空の配列を渡す
-						echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => array())) 
-				?>
+				<?php echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $this->Mail->getMailTemplates())) ?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail', array('type' => 'hidden')) ?>
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
@@ -307,11 +298,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.exclude_search', '公開設定') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.status', array(
-						'type'		=> 'radio',
-						'options'	=> array(0 => '非公開', 1 => '公開') ,
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?><br />
+				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'checkbox', 'label' => '公開中')) ?><br />
 				<?php echo $this->BcForm->error('MailContent.status') ?>
 				<?php echo $this->BcForm->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'このメールフォームをサイト内検索の検索結果より除外する')) ?>
 			</td>

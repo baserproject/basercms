@@ -54,7 +54,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.name', 'フィード設定名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('FeedConfig.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
@@ -81,7 +81,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.feed_title_index', 'フィードタイトルリスト') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('FeedConfig.feed_title_index', array('type' => 'textarea', 'cols' => 36, 'rows' => 3)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpFeedTitleIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpFeedTitleIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.feed_title_index') ?>
 				<div id="helptextFeedTitleIndex" class="helptext">
 					<ul>
@@ -96,7 +96,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('FeedConfig.category_index', array('type' => 'textarea', 'cols'=>36,'rows'=>3)) ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpCategoryIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpCategoryIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.category_index') ?>
 				<div id="helptextCategoryIndex" class="helptext">
 					<ul>
@@ -115,7 +115,7 @@ $(function(){
 	<?php if($this->action == 'admin_edit'): ?>
 				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
 	<?php endif ?>
-				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.template') ?>
 				<div id="helptextTemplate" class="helptext">
 					<ul>

@@ -327,32 +327,32 @@ class BlogController extends BlogAppController {
 					$this->contentId = $pass[0];
 					if(!empty($pass[1])) {
 						$id = $pass[1];
-					} elseif(empty($this->data['BlogPost'])) {
+					} elseif(empty($this->request->data['BlogPost'])) {
 						$this->notFound();
 					}
 
-					$post['BlogPost'] = $this->data['BlogPost'];
+					$post['BlogPost'] = $this->request->data['BlogPost'];
 
-					if($this->data['BlogPost']['blog_category_id']) {
+					if($this->request->data['BlogPost']['blog_category_id']) {
 						$blogCategory = $this->BlogPost->BlogCategory->find('first', array(
-							'conditions'=> array('BlogCategory.id' => $this->data['BlogPost']['blog_category_id']),
+							'conditions'=> array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']),
 							'recursive'	=> -1
 						));
 						$post['BlogCategory'] = $blogCategory['BlogCategory'];
 					}
 
-					if($this->data['BlogPost']['user_id']) {
+					if($this->request->data['BlogPost']['user_id']) {
 						$author = $this->BlogPost->User->find('first', array(
-							'conditions'	=> array('User.id'	=> $this->data['BlogPost']['user_id']),
+							'conditions'	=> array('User.id'	=> $this->request->data['BlogPost']['user_id']),
 							'recursive'		=> -1
 						));
 						$post['User'] = $author['User'];
 					}
 
 
-					if(!empty($this->data['BlogTag']['BlogTag'])) {
+					if(!empty($this->request->data['BlogTag']['BlogTag'])) {
 						$tags = $this->BlogPost->BlogTag->find('all', array(
-							'conditions'	=> array('BlogTag.id' => $this->data['BlogTag']['BlogTag']),
+							'conditions'	=> array('BlogTag.id' => $this->request->data['BlogTag']['BlogTag']),
 							'recursive'	=> -1
 						));
 						if($tags) {
@@ -369,7 +369,7 @@ class BlogController extends BlogAppController {
 						$this->notFound();
 					}
 					// コメント送信
-					if(isset($this->data['BlogComment'])) {
+					if(isset($this->request->data['BlogComment'])) {
 						$this->add_comment($id);
 					}
 
@@ -447,19 +447,19 @@ class BlogController extends BlogAppController {
 			$postId = $data['BlogPost']['id'];
 		}
 
-		if($this->BlogPost->BlogComment->add($this->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
+		if($this->BlogPost->BlogComment->add($this->request->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
 
-			$this->_sendCommentAdmin($postId, $this->data);
+			$this->_sendCommentAdmin($postId, $this->request->data);
 			// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 			if(!$this->blogContent['BlogContent']['comment_approve']) {
-				$this->_sendCommentContributor($postId, $this->data);
+				$this->_sendCommentContributor($postId, $this->request->data);
 			}
 			if($this->blogContent['BlogContent']['comment_approve']) {
 				$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
 			}else {
 				$commentMessage = 'コメントの送信が完了しました。';
 			}
-			$this->data = null;
+			$this->request->data = null;
 
 		}else {
 
@@ -751,12 +751,12 @@ class BlogController extends BlogAppController {
  */
 	protected function _createPreview($blogContentsId, $id) {
 
-		if(!empty($this->data['BlogPost']['eye_catch_'])) {
-			$this->data['BlogPost']['eye_catch'] = $this->data['BlogPost']['eye_catch_'];
+		if(!empty($this->request->data['BlogPost']['eye_catch_'])) {
+			$this->request->data['BlogPost']['eye_catch'] = $this->request->data['BlogPost']['eye_catch_'];
 		} else {
-			$this->data['BlogPost']['eye_catch'] = '';
+			$this->request->data['BlogPost']['eye_catch'] = '';
 		}
-		Cache::write('blog_posts_preview_'.$id, $this->data, '_cake_core_');
+		Cache::write('blog_posts_preview_'.$id, $this->request->data, '_cake_core_');
 		echo true;
 		exit();
 
@@ -773,19 +773,19 @@ class BlogController extends BlogAppController {
 
 		$data = Cache::read('blog_posts_preview_'.$id, '_cake_core_');
 		Cache::delete('blog_posts_preview_'.$id, '_cake_core_');
-		$this->data = $this->params['data'] = $data;
+		$this->request->data = $this->request->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';
 		$this->subDir = '';
-		$no = ( isset($this->data['BlogPost']['no']) ) ? $this->data['BlogPost']['no'] : "" ;
-		unset($this->params['pass']);
-		unset($this->params['prefix']);
-		unset($this->params['plugin']);
-		unset($this->params['admin']);
-		$this->params['controller'] = $this->blogContent['BlogContent']['name'];
-		$this->params['action'] = 'archives';
+		$no = ( isset($this->request->data['BlogPost']['no']) ) ? $this->request->data['BlogPost']['no'] : "" ;
+		unset($this->request->params['pass']);
+		unset($this->request->params['prefix']);
+		unset($this->request->params['plugin']);
+		unset($this->request->params['admin']);
+		$this->request->params['controller'] = $this->blogContent['BlogContent']['name'];
+		$this->request->params['action'] = 'archives';
 		$this->request->url = $this->params['controller'].'/'.'archives'.'/'.$no;
-		$this->params['pass'][0] = $no ;
+		$this->request->params['pass'][0] = $no ;
 		$this->theme = $this->siteConfigs['theme'];
 		$this->setAction('archives');
 

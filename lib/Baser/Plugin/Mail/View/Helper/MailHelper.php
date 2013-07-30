@@ -28,12 +28,6 @@
  */
 class MailHelper extends AppHelper {
 /**
- * view
- * @var		View
- * @access	protected
- */
-	protected $_view = null;
-/**
  * ヘルパー
  * @var array
  * @access public
@@ -45,9 +39,9 @@ class MailHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function __construct() {
+	public function __construct(View $View) {
 
-		$this->_view = ClassRegistry::getObject('view');
+		parent::__construct($View);
 		$this->setMailContent();
 
 	}
@@ -65,8 +59,8 @@ class MailHelper extends AppHelper {
 			$MailContent = ClassRegistry::getObject('MailContent');
 			$MailContent->expects(array());
 			$this->mailContent = Set::extract('MailContent', $MailContent->read(null, $mailContentId));
-		} elseif(isset($this->_view->viewVars['mailContent'])) {
-			$this->mailContent = $this->_view->viewVars['mailContent']['MailContent'];
+		} elseif(isset($this->_View->viewVars['mailContent'])) {
+			$this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
 		}
 
 	}
@@ -80,7 +74,7 @@ class MailHelper extends AppHelper {
  */
 	public function indexFields($mailContentId) {
 
-		if(!empty($this->BcBaser->_view->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if(!empty($this->BcBaser->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">'.$this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')).'</div>';
 		}
 
@@ -96,12 +90,12 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
+			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS;
 		}
-		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'layouts'.DS;
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS;
 		$templatesPathes = am($templatesPathes,array(
-			BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS,
-			BASER_VIEWS.'layouts'.DS
+			BASER_PLUGINS . 'Mail' . DS . 'Views' . DS . 'Layouts'. DS,
+			BASER_VIEWS . 'Layouts' . DS
 		));
 
 		$_templates = array();
@@ -141,10 +135,10 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'mail'.DS;
+			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Mail' . DS;
 		}
-		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'mail'.DS;
-		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'mail'.DS;
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail'. DS . 'View' . DS . 'Mail' . DS;
+		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Mail' . DS;
 
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){
@@ -182,10 +176,10 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'elements'.DS.'email'.DS.'text'.DS;
+			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
 		}
-		$templatesPathes[] = APP . 'plugins' . DS . 'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
-		$templatesPathes[] = BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'email'.DS.'text'.DS;
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
+		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
