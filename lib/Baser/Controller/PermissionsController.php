@@ -103,7 +103,7 @@ class PermissionsController extends AppController {
 		$datas = $this->Permission->find('all', array('conditions' => $conditions, 'order'=>'Permission.sort'));
 		if($datas) {
 			foreach($datas as $key => $data) {
-				$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $data['Permission']['url']);
+				$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.prefixes.0').'/', $data['Permission']['url']);
 			}
 		}
 		$this->set('datas',$datas);
@@ -169,7 +169,7 @@ class PermissionsController extends AppController {
 
 		/* 表示設定 */
 		if($permissionAuthPrefix == 'admin') {
-			$permissionAuthPrefix = Configure::read('Routing.admin');
+			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		}
 		$this->pageTitle = '['.$userGroup['UserGroup']['title'].'] 新規アクセス制限設定登録';
 		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
@@ -247,7 +247,7 @@ class PermissionsController extends AppController {
 
 		/* 表示設定 */
 		if($permissionAuthPrefix == 'admin') {
-			$permissionAuthPrefix = Configure::read('Routing.admin');
+			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		}
 		$this->pageTitle = '['.$userGroup['UserGroup']['title'].'] アクセス制限設定編集：'.$this->request->data['Permission']['name'];
 		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
@@ -383,7 +383,7 @@ class PermissionsController extends AppController {
 		$result = $this->Permission->copy($id);
 		if($result) {
 			$this->setViewConditions('Permission', array('action' => 'admin_index'));
-			$result['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $result['Permission']['url']);
+			$result['Permission']['url'] = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.prefixes.0').'/', $result['Permission']['url']);
 			$sortmode = false;
 			if(isset($this->passedArgs['sortmode'])) {
 				$sortmode = $this->passedArgs['sortmode'];

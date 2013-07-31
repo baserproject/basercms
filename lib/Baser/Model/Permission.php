@@ -110,7 +110,7 @@ class Permission extends AppModel {
 		}
 		
 		// ルーティング設定に合わせて変換
-		$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.admin').'/', $url);
+		$url = preg_replace('/^\/admin\//', '/'.Configure::read('Routing.prefixes.0').'/', $url);
 		
 		if(preg_match('/^(\/[a-z_]+)\*$/is',$url,$matches)) {
 			$url = $matches[1].'/'.'*';

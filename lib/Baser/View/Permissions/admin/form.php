@@ -26,8 +26,7 @@ $(window).load(function() {
 });
 </script>
 
-
-<?php echo $this->BcForm->create('Permission', array('url' => array($this->request->params['pass'][0]))) ?>
+<?php echo $this->BcForm->create('Permission') ?>
 <?php echo $this->BcForm->input('Permission.id', array('type' => 'hidden')) ?>
 
 <!-- form -->
@@ -79,22 +78,14 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.auth', 'アクセス') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Permission.auth', array(
-					'type'		=> 'radio',
-					'options'	=> $this->BcForm->getControlSource('auth'),
-					'legend'	=> false,
-					'separator'	=> '　')) ?>
+				<?php echo $this->BcForm->input('Permission.auth', array('type' => 'checkbox', 'label' => 'アクセス可')) ?>
 				<?php echo $this->BcForm->error('Permission.auth') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.status', '利用状態') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Permission.status', array(
-					'type'		=> 'radio',
-					'options'	=> $this->BcText->booleanStatusList(),
-					'legend'	=> false,
-					'separator'	=> '　')) ?>
+				<?php echo $this->BcForm->input('Permission.status', array('type' => 'checkbox', 'label' => '有効')) ?>
 				<?php echo $this->BcForm->error('Permission.status') ?>
 			</td>
 		</tr>
