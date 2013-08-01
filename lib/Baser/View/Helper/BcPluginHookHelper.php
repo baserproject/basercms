@@ -309,9 +309,9 @@ class BcPluginHookHelper extends AppHelper {
  * @param string $out
  * @return string
  */
-	public function beforeElement(BcBaserHelper $bcBaser, $name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function beforeElement(BcBaserHelper $bcBaser, $name, $data = array(), $options = array()) {
 		
-		return $this->executeHook('beforeElement', $params, $name, $params, $loadHelpers, $subDir);
+		return $this->executeHook('beforeElement', $options, $name, $data, $options);
 		
 	}
 /**

@@ -17,7 +17,7 @@
 	'smartphone/startup.js'
 )) ?>
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics', null, false, false) ?>
+<?php $this->BcBaser->element('google_analytics', null, array('subDir' => false)) ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>">
 <div id="Page">

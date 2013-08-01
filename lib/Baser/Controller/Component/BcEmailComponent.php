@@ -369,10 +369,10 @@ class BcEmailComponent extends EmailComponent {
 			// CUSTOMIZE MODIRY 2012/04/23 ryuring
 			// layoutPath / subDir を指定できるようにした
 			// >>>	
-			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
+			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content));
 			//$View->layoutPath = 'email' . DS . 'text';
 			// ---
-			$content = $View->element($subDir . 'email' . DS . 'text' . DS . $this->template, array('content' => $content), true);
+			$content = $View->element($subDir . 'email' . DS . 'text' . DS . $this->template, array('content' => $content));
 			$View->layoutPath = $layoutPath.'email' . DS . 'text';
 			// >>>
 			
@@ -388,10 +388,10 @@ class BcEmailComponent extends EmailComponent {
 			// CUSTOMIZE MODIRY 2012/04/23 ryuring
 			// layoutPath / subDir を指定できるようにした
 			// >>>	
-			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
+			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
 			//$View->layoutPath = 'email' . DS . 'html';
 			// ---
-			$htmlContent = $View->element($subDir . 'email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent), true);
+			$htmlContent = $View->element($subDir . 'email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
 			$View->layoutPath = $layoutPath.'email' . DS . 'html';
 			// <<<
 			
@@ -425,7 +425,7 @@ class BcEmailComponent extends EmailComponent {
 		// CUSTOMIZE MODIRY 2012/04/23 ryuring
 		// layoutPath / subDir を指定できるようにした
 		// >>>		
-		//$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content), true);
+		//$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content));
 		//$View->layoutPath = 'email' . DS . $this->sendAs;
 		// ---
 		if($this->plugin) {
@@ -433,7 +433,7 @@ class BcEmailComponent extends EmailComponent {
 		} else {
 			$options = array('content' => $content);
 		}
-		$content = $View->element($subDir . 'email' . DS . $this->sendAs . DS . $this->template, $options, true);
+		$content = $View->element($subDir . 'email' . DS . $this->sendAs . DS . $this->template, $options);
 		$View->layoutPath = $layoutPath.'email' . DS . $this->sendAs;
 		// <<<
 		

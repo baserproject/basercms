@@ -40,7 +40,7 @@ if(!empty($no)){
 				}
 				$params = am($params,$widget[$key]);
 				$params[$no.'_'.$widget[$key]['id']] = $no.'_'.$widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
-				$this->BcBaser->element('widgets/'.$widget[$key]['element'],$params, false, $subDir);
+				$this->BcBaser->element('widgets/'.$widget[$key]['element'],$params, array('subDir' => $subDir));
 			}
 		}
 ?>

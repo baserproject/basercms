@@ -151,8 +151,8 @@ class WidgetAreasController extends AppController {
 		if($plugins){
 			$pluginWidgets = array();
 			foreach($plugins as $plugin) {
-				$appPath = APP.'plugins'.DS.$plugin['Plugin']['name'].DS.'views'.DS.'elements'.DS.'admin'.DS.'widgets';
-				$baserPath = BASER_PLUGINS.$plugin['Plugin']['name'].DS.'views'.DS.'elements'.DS.'admin'.DS.'widgets';
+				$appPath = APP.'Plugin' . DS . $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
+				$baserPath = BASER_PLUGINS . $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
 				$pluginWidget['paths'] = array();
 				if(is_dir($appPath)) {
 					$pluginWidget['paths'][] = $appPath;

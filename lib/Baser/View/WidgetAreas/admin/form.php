@@ -450,7 +450,7 @@ function updateWidget(id) {
 						<?php echo $this->BcForm->input($key.'.sort', array('type' => 'hidden')) ?>
 						<?php echo $this->BcForm->label($key.'name','タイトル') ?>&nbsp;
 						<?php echo $this->BcForm->input($key.'.name', array('type' => 'text', 'class'=>'name')) ?><br />
-						<?php $this->BcBaser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit')) ?><br />
+						<?php $this->BcBaser->element('widgets/'.$widget[$key]['element'], array('key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit'), array('plugin' => $widget[$key]['plugin'])) ?><br />
 						<?php $this->BcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader'.$widget[$key]['id'], 'class' => 'loader')) ?>
 						<?php echo $this->BcForm->input($key.'.use_title', array('type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title')) ?>
 						<?php echo $this->BcForm->input($key.'.status',array('type' => 'checkbox', 'label' => '利用する', 'class' => 'status')) ?>

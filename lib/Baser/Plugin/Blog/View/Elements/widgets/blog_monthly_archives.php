@@ -26,7 +26,7 @@ if(!isset($limit)) {
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $this->Blog_content_id;
+	$id = $blog_content_id;
 }
 $actionUrl = '/blog/blog/get_posted_months/'.$id.'/'.$limit;
 if($view_count) {

@@ -17,4 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('../maintenance/index', null, false, false);
+$this->BcBaser->element('../maintenance/index', null, array('subDir' => false));

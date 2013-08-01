@@ -546,17 +546,21 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function getElement($name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function getElement($name, $data = array(), $options = array()) {
 
-		$params = $this->executeHook('beforeElement', $name, $params, $loadHelpers, $subDir);
+		$options = array_merge(array(
+			'subDir'	=> true
+		), $options);
+		
+		$options = $this->executeHook('beforeElement', $name, $data, $options);
 
+		extract($options);
+		
 		if(!empty($this->_View->subDir) && $subDir) {
-			$name = $this->_View->subDir.DS.$name;
-			$params['subDir'] = true;
-		} else {
-			$params['subDir'] = false;
+			$name = $this->_View->subDir . DS . $name;
 		}
-		$out = $this->_View->element($name, $params, $loadHelpers);
+		
+		$out = $this->_View->element($name, $data, $options);
 
 		return $this->executeHook('afterElement', $name, $out);
 
@@ -572,9 +576,13 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function element($name, $params = array(), $loadHelpers = false, $subDir = true) {
+	public function element($name, $data = array(), $options = array()) {
 
-		echo $this->getElement($name, $params, $loadHelpers, $subDir);
+		$options = array_merge(array(
+			'subDir'	=> true
+		), $options);
+		
+		echo $this->getElement($name, $data, $options);
 
 	}
 /**
@@ -585,9 +593,13 @@ class BcBaserHelper extends AppHelper {
  * @param boolean $subDir
  * @manual
  */
-	public function header($params = array(), $loadHelpers = false, $subDir = true) {
+	public function header($data = array(), $options = array()) {
 
-		$out = $this->getElement('header', $params, $loadHelpers, $subDir);
+		$options = array_merge(array(
+			'subDir'	=> true
+		), $options);
+		
+		$out = $this->getElement('header', $data, $options);
 		echo $this->executeHook('baserHeader', $out);
 
 	}
@@ -601,9 +613,13 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function footer($params = array(), $loadHelpers = false, $subDir = true) {
+	public function footer($data = array(), $options = array()) {
 
-		$out = $this->getElement('footer', $params, $loadHelpers, $subDir);
+		$options = array_merge(array(
+			'subDir'	=> true
+		), $options);
+		
+		$out = $this->getElement('footer', $data, $options);
 		echo $this->executeHook('baserFooter', $out);
 
 	}
@@ -618,13 +634,19 @@ class BcBaserHelper extends AppHelper {
  * @deprecated
  * @manual
  */
-	public function pagination($name = 'default', $params = array(), $loadHelpers = false, $subDir = true) {
+	public function pagination($name = 'default', $data = array(), $options = array()) {
 
+		$options = array_merge(array(
+			'subDir'	=> true
+		), $options);
+		
 		if(!$name) {
 			$name = 'default';
 		}
-		$file = 'paginations'.DS.$name;
-		echo $this->getElement($file,$params,$loadHelpers, $subDir);
+		
+		$file = 'paginations' . DS . $name;
+		
+		echo $this->getElement($file , $data, $options);
 
 	}
 /**
@@ -1719,7 +1741,7 @@ END_FLASH;
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if($no) {
-			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), $loadHelpers, $subDir);
+			$this->element('widget_area', array('no' => $no), array('subDir' => $subDir));
 		}
 		
 	}

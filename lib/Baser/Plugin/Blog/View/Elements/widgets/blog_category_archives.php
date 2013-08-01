@@ -31,7 +31,7 @@ if(!isset($by_year)) {
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $this->Blog_content_id;
+	$id = $blog_content_id;
 }
 if(empty($depth)) {
 	$depth = 1;

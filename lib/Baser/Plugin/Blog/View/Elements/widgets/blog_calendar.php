@@ -20,7 +20,7 @@
 if(isset($blogContent)){
 	$id = $blogContent['BlogContent']['id'];
 }else{
-	$id = $this->Blog_content_id;
+	$id = $blog_content_id;
 }
 $url = '/blog/blog/get_calendar/'.$id;
 if(!empty($year)){

@@ -22,5 +22,5 @@
 <?php if($name && $use_title): ?>
 <h2><?php echo $name ?></h2>
 <?php endif ?>
-<?php $this->BcBaser->element('widgets'.DS.$template, array(), false, $subDir) ?>
+<?php $this->BcBaser->element('widgets'.DS.$template, array(), array('subDir' => $subDir)) ?>
 </div>
