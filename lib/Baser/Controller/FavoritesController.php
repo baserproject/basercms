@@ -46,7 +46,7 @@ class FavoritesController extends AppController {
 				exit();
 			}
 			$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort')+1;
-			$this->request->data['Favorite']['user_id'] = $user['User']['id'];
+			$this->request->data['Favorite']['user_id'] = $user['id'];
 			$this->Favorite->create($this->request->data);
 			$data = $this->Favorite->save();
 			if($data) {

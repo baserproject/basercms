@@ -234,14 +234,14 @@ class UserGroupsController extends AppController {
  * @return boolean 
  */
 	public function admin_set_default_favorites($id) {
-		if (!$this->request->params['form']) {
+		if (!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();
-		$data['UserGroup']['default_favorites'] = serialize($this->request->params['form']);
+		$data['UserGroup']['default_favorites'] = serialize($this->request->data);
 		$this->UserGroup->set($data);
 		if ($this->UserGroup->save()) {
 			echo true;

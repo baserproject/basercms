@@ -1126,8 +1126,8 @@ class BaserAppController extends Controller {
 			if($user) {
 				$userModel = $this->Session->read('Auth.userModel');
 				$authPrefixSettings = Configure::read('BcAuthPrefix');
-				if(!empty($user['User']['authPrefix']) && !empty($authPrefixSettings[$user['User']['authPrefix']])) {
-					$authPrefix = $user['User']['authPrefix'];
+				if(!empty($user['authPrefix']) && !empty($authPrefixSettings[$user['authPrefix']])) {
+					$authPrefix = $user['authPrefix'];
 				} else {
 					foreach($authPrefixSettings as $key => $authPrefixSetting) {
 						if(!empty($authPrefixSetting['userModel'])) {

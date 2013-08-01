@@ -143,6 +143,7 @@ class ContentsController extends AppController {
 		$query = '';
 		unset($data['Content']['key']);
 		unset($data['Content']['fields']);
+		unset($data['Content']['_Token']);
 		if(isset($data['Content']['q'])) {
 			$query = $data['Content']['q'];
 			unset($data['Content']['q']);

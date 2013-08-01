@@ -47,5 +47,5 @@
 
 <div class="clearfix section">
 	<!-- pagination -->
-	<?php $this->BcBaser->pagination('simple', array(), null, false) ?>
+	<?php $this->BcBaser->pagination('simple', array(), array('subDir' => false)) ?>
 </div>

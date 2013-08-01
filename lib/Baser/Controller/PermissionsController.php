@@ -325,7 +325,7 @@ class PermissionsController extends AppController {
 			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(array('action' => 'index', $userGroupId));
 
 	}
 /**

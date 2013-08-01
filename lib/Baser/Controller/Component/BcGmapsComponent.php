@@ -128,12 +128,12 @@ class BcGmapsComponent  extends Component {
 		$xmlArray = Xml::toArray(Xml::build($request_url));
 		$xml = $xmlArray['GeocodeResponse'];
 
-		if (! empty($xml['Result'])) {
-			if(!isset($xml['Result']['Geometry']['Location'])) {
+		if (! empty($xml['result'])) {
+			if(!isset($xml['result']['geometry']['location'])) {
 				return false;
 			}
 
-			$point= $xml['Result']['Geometry']['Location'];
+			$point= $xml['result']['geometry']['location'];
 			if (! empty($point)) {
 				$this->_latitude = $point['lat'];
 				$this->_longitude = $point['lng'];

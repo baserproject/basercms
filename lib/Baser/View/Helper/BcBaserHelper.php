@@ -730,7 +730,7 @@ class BcBaserHelper extends AppHelper {
 		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
-					$this->Element('admin/toolbar', null, false, false);
+					$this->Element('admin/toolbar', array(), array('subDir' => false));
 				}
 			}
 		}
@@ -1741,7 +1741,7 @@ END_FLASH;
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if($no) {
-			$this->element('widget_area', array('no' => $no), array('subDir' => $subDir));
+			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), array('subDir' => $subDir));
 		}
 		
 	}

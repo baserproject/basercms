@@ -194,16 +194,20 @@ class UsersController extends AppController {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
 		}
-		$this->request->data = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
-		Configure::write('debug', 0);
-		$configs = Configure::read('BcAuthPrefix');
-		$config = $configs[$this->request->data['UserGroup']['auth_prefix']];
-		$config['auth_prefix'] = $this->request->data['UserGroup']['auth_prefix'];
-		$this->BcAuthConfigure->setting($config);
-
-		$this->setAction('admin_ajax_login');
-		exit();
 		
+		$result = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
+		$user = $result['User'];
+		unset($user['password']);
+		unset($result['User']);
+		$user = array_merge($user, $result);
+		Configure::write('debug', 0);
+		if ($user) {
+			$this->Session->renew();
+			$this->Session->write(BcAuthComponent::$sessionKey, $user);
+			$this->BcAuth->setSessionAuthAddition();
+			exit(Router::url($this->BcAuth->redirect()));
+		}
+				
 	}
 
 /**
@@ -215,7 +219,7 @@ class UsersController extends AppController {
 		
 		$configs = Configure::read('BcAuthPrefix');
 		if ($this->Session->check('AuthAgent')) {
-			$data = $this->Session->read('AuthAgent.'.$this->BcAuth->authenticate['Form']['userModel']);
+			$data = $this->Session->read('AuthAgent');
 			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->setMessage('元のユーザーに戻りました。');
@@ -246,10 +250,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_login() {
-		
-		if (!$this->request->is('post')) {
-			$this->ajaxError(500, '無効な処理です。');
-		}
 		
 		if (!$this->BcAuth->login()) {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');

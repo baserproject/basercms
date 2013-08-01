@@ -780,7 +780,6 @@ class BlogController extends BlogAppController {
 		$no = ( isset($this->request->data['BlogPost']['no']) ) ? $this->request->data['BlogPost']['no'] : "" ;
 		unset($this->request->params['pass']);
 		unset($this->request->params['prefix']);
-		unset($this->request->params['plugin']);
 		unset($this->request->params['admin']);
 		$this->request->params['controller'] = $this->blogContent['BlogContent']['name'];
 		$this->request->params['action'] = 'archives';

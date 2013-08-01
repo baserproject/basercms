@@ -333,5 +333,18 @@ if (BC_INSTALLED) {
 		'lock' => false,
 		'serialize' => true
 	));
-
+	Cache::config('_cake_core_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_core_',
+		'path' => CACHE . 'persistent' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
+	Cache::config('_cake_model_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_model_',
+		'path' => CACHE . 'models' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
 }

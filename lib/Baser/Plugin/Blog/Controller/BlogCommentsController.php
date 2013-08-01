@@ -91,9 +91,10 @@ class BlogCommentsController extends BlogAppController {
 			if(!$dbDatas) {
 				$this->notFound();
 			}
+				
+			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
+			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 			
-			$this->blogPost['BlogPost'] = $dbDatas['BlogPost'];
-			$this->blogContent['BlogContent'] = $dbDatas['BlogContent'];
 			$crumbs[] = array('name' => $this->blogContent['BlogContent']['title'].'管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 			$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
 

@@ -283,11 +283,9 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$blogContentId))+1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
-			$this->BlogPost->create($this->request->data);
-			
 			
 			// データを保存
-			if($this->BlogPost->saveAll()) {
+			if($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
 				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を追加しました。', false, true);
@@ -376,9 +374,9 @@ class BlogPostsController extends BlogAppController {
 			if(!empty($this->request->data['BlogPost']['posts_date'])){
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
 			}
-			$this->BlogPost->set($this->request->data);
+			
 			// データを保存
-			if($this->BlogPost->saveAll()) {
+			if($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
 				$this->getEventManager()->dispatch(new CakeEvent('Blog.Controller.BlogPosts.afterEdit', $this, array(
 					'user' => $this->request->data

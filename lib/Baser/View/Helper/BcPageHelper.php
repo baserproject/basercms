@@ -322,7 +322,7 @@ class BcPageHelper extends Helper {
 			}
 		}
 
-		$this->BcBaser->element($path, null, array('subDir' => false));
+		$this->BcBaser->element($path, array(), array('subDir' => false));
 		
 	}
 /**

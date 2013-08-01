@@ -716,7 +716,7 @@ class PagesController extends AppController {
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
-		$path = TMP.'pages_preview_'.$id.$this->ext;
+		$path = TMP . 'pages_preview_' . $id . $this->ext;
 		$file = new File($path);
 		$file->open('w');
 		$file->append($contents);
@@ -775,7 +775,7 @@ class PagesController extends AppController {
 		$this->here = $this->base . '/' . $url;
 		$this->crumbs = $this->_getCrumbs('/' . $url); 
 		$this->theme = $this->siteConfigs['theme'];
-		$this->render('display',null,TMP.'pages_preview_'.$id.$this->ext);
+		$this->render(TMP.'pages_preview_'.$id.$this->ext);
 		@unlink(TMP.'pages_preview_'.$id.$this->ext);
 		Cache::delete('page_preview_'.$id, '_cake_core_');
 
