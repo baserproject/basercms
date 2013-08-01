@@ -302,6 +302,9 @@ class SiteConfigsController extends AppController {
 		if(!isset($data['SiteConfig']['linked_pages_smartphone'])) {
 			$data['SiteConfig']['linked_pages_smartphone'] = 0;
 		}
+		if(!isset($data['SiteConfig']['editor_enter_br'])) {
+			$data['SiteConfig']['editor_enter_br'] = 0;
+		}
 		return $data;
 
 	}

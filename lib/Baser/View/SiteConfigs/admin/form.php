@@ -52,8 +52,8 @@ $(function(){
 		return result;
 	});
 	
-	$("[name='data[SiteConfig][mobile]']").click(function(){
-		if($("[name='data[SiteConfig][mobile]']:checked").val() == '1') {
+	$("#SiteConfigMobile").click(function(){
+		if($("#SiteConfigMobile").attr('checked')) {
 			$("#SpanLinkedPagesMobile").show();
 			$("#SpanRootLayoutTemplateMobile").show();
 			$("#SpanRootContentTemplateMobile").show();			
@@ -64,8 +64,8 @@ $(function(){
 			$('#SiteConfigLinkedPagesMobile0').attr('checked', 'checked'); 
 		}
 	});
-	$("[name='data[SiteConfig][smartphone]']").click(function(){
-		if($("[name='data[SiteConfig][smartphone]']:checked").val() == '1') {
+	$("#SiteConfigSmartphone").click(function(){
+		if($("#SiteConfigSmartphone").attr('checked')) {
 			$("#SpanLinkedPagesSmartphone").show();
 			$("#SpanRootLayoutTemplateSmartphone").show();
 			$("#SpanRootContentTemplateSmartphone").show();
@@ -77,12 +77,12 @@ $(function(){
 		}
 	});
 
-	if($("[name='data[SiteConfig][mobile]']:checked").val() == '0') {
+	if(!$("#SiteConfigMobile").attr('checked')) {
 		$("#SpanLinkedPagesMobile").hide();
 		$("#SpanRootLayoutTemplateMobile").hide();
 		$("#SpanRootContentTemplateMobile").hide();
 	}
-	if($("[name='data[SiteConfig][smartphone]']:checked").val() == '0') {
+	if(!$("#SiteConfigSmartphone").attr('checked')) {
 		$("#SpanLinkedPagesSmartphone").hide();
 		$("#SpanRootLayoutTemplateSmartphone").hide();
 		$("#SpanRootContentTemplateSmartphone").hide();
@@ -287,14 +287,14 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('対応'))) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mobile', array('type' => 'checkbox', 'label' => '対応する')) ?>
 				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('対応'))) ?>
+				<?php echo $this->BcForm->input('SiteConfig.smartphone', array('type' => 'checkbox', 'label' => '対応する')) ?>
 				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
