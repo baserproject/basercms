@@ -37,7 +37,7 @@ if(!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 } else {
 	$authName = '';
 }
-$userController = Inflector::tableize($this->Session->read('Auth.userModel'));
+$userController = Inflector::tableize($this->Session->read(AuthComponent::$sessionKey . '.userModel'));
 ?>
 <script type="text/javascript">
 $(function(){

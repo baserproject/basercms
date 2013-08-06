@@ -167,5 +167,7 @@ class BcAuthComponent extends AuthComponent {
 		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
 		
 	}
-	
+	public function authenticatedUserModel() {
+		$this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
+	}
 }

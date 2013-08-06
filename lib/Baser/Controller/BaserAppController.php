@@ -1260,7 +1260,7 @@ class BaserAppController extends Controller {
 		
 	}
 /**
- * ユーザーモデルを取得する
+ * リクエストされた画面に対しての認証用ユーザーモデルを取得する
  * 
  * @return mixed string Or false
  */
