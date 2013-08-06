@@ -393,7 +393,7 @@ table.sub-menu{
 .list-tool select {
 	font-size: 12px;
 }
-.list-tool input[type=button] {
+.list-tool button {
 	padding:0px 7px;
 	cursor: pointer;
 }
