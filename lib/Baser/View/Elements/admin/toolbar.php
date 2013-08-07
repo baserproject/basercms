@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+App::uses('AuthComponent', 'Controller/Component');
 $publishTheme = $this->BcBaser->BcHtml->themeWeb; // @TODO basercamp Cakephp1.2系の変数なので、CakePHP2で無くなった、必要無いなら削除。
 //var_dump($publishTheme); // null 1.2系だと、string 'theme/demo/' (length=12)　といった変数がはいっている
 $theme = $this->BcBaser->theme;

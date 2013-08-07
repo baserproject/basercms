@@ -41,9 +41,12 @@
 <?php $this->BcBaser->scripts() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
-
-	<div id="Page" style="text-align: center"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:280px')) ?></div>
-
+	<div id="Page" style="text-align: center">
+		<?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?>
+		<div class="contents-body" style="text-align:left;width:1000px;margin-left:auto;margin-right:auto;margin-top:60px;background-color:#FFF;padding:40px;">
+			<?php $this->BcBaser->content() ?>
+		</div>
+	</div>
 <?php $this->BcBaser->func() ?>
 </body>
 </html>

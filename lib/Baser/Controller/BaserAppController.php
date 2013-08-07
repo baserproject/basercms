@@ -378,7 +378,13 @@ class BaserAppController extends Controller {
 		// エラーの場合は強制的にフロントのテーマを設定する
 		if($isError) {
 			if(!$params || $params['controller'] != 'installations') {
-				$this->theme = $this->siteConfigs['theme'];
+				if(!empty($this->siteConfigs['theme'])) {
+					$this->theme = $this->siteConfigs['theme'];
+				} elseif(!empty($this->siteConfigs['admin_theme'])) {
+					$this->theme = $this->siteConfigs['admin_theme'];
+				} else {
+					$this->theme = Configure::read('BcApp.adminTheme');
+				}
 			}
 			return;
 		}

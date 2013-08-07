@@ -20,6 +20,7 @@
 /**
  * Include files
  */
+App::uses('MailAppModel', 'Mail.Model');
 App::uses('MailField', 'Mail.Model');
 App::uses('MailContent', 'Mail.Model');
 /**
