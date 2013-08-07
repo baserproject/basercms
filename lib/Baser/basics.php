@@ -35,6 +35,14 @@ App::uses('BcEmailComponent', 'Controller/Component');
  */
 	function baseUrl() {
 
+		// TODO basercamp
+		// CakePHP2では、$_GET['url'] や、$_SERVER['QUERY_STRING'] に URLの情報は入ってこない
+		// 暫定処置として、サブディレクトリ、スマートURLオフ に未対応前提で、'/' を戻す
+
+		return '/';
+		
+		// 下記未実装
+		
 		$baseUrl = Configure::read('App.baseUrl');
 		if($baseUrl) {
 			if(!preg_match('/\/$/', $baseUrl)) {

@@ -139,7 +139,7 @@ class RssEx extends Rss {
 
 			// 一旦デバッグモードをオフに
 			$debug = Configure::read('debug');
-			Configure::write('debug',0);
+			Configure::write('debug',1);
 
 			$ret = $feed->init();
 
