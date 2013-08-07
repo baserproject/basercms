@@ -3438,6 +3438,10 @@ class DboSource extends DataSource {
 
 		$Schema = ClassRegistry::init('CakeSchema');
 
+		if(!empty($plugin)) {
+			$Schema->plugin = $plugin;
+		}
+		
 		if(isset($connection)) {
 			$Schema->connection = $connection;
 		} else {
@@ -3458,8 +3462,16 @@ class DboSource extends DataSource {
 		
 		
 		$this->cacheSources = false;
-		$options = $Schema->read(array('models' => $model));
-		$options = am($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
+		$options = $Schema->read(array('models' => false));
+		
+		if($options['tables'][$basename]) {
+			$options = array('tables' => array($basename => $options['tables'][$basename]));
+		} else {
+			// テーブルが存在しなかった場合はtrueを返して終了
+			return true;
+		}
+		$options = array_merge($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
+
 		$result = $Schema->write($options);
 		
 		// 不要コード削除、改行コードをLFに変更

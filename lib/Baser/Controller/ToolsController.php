@@ -203,7 +203,13 @@ class ToolsController extends AppController {
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
 		$this->_writeBackup('baser', $tmpDir.'baser'.DS);
-		$this->_writeBackup('plugin', $tmpDir.'plugin'.DS);
+		$Plugin = ClassRegistry::init('Plugin');
+		$plugins = $Plugin->find('all');
+		if($plugins) {
+			foreach($plugins as $plugin) {
+				$this->_writeBackup('plugin', $tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
+			}
+		}
 
 		// ZIP圧縮して出力
 		$fileName = 'baserbackup_'.$version.'_'.date('Ymd_His');
@@ -222,21 +228,32 @@ class ToolsController extends AppController {
  * @return boolean
  * @access protected
  */
-	protected function _writeBackup($configKeyName, $path) {
+	protected function _writeBackup($configKeyName, $path, $plugin = '') {
 
 		$db = ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
-
+		$pluginPrefix = Inflector::underscore($plugin) . '_';
+		
 		foreach($tables as $table) {
 			if(preg_match("/^".$db->config['prefix']."([^_].+)$/", $table, $matches) &&
 					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
 				$table = $matches[1];
+				if($plugin) {
+					if(!preg_match('/^' . $pluginPrefix . '([^_].+)$/', $table)) {
+						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
+						if ($plugin != 'Mail') {
+							continue;
+						} elseif (!preg_match("/messages$/", $table)) {
+							continue;
+						}
+					}
+				}
 				$model = Inflector::classify(Inflector::singularize($table));
-				if(!$db->writeSchema(array('path'=>$path, 'model'=>$model))){
+				if(!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))){
 					return false;
 				}
-				if(!$db->writeCsv(array('path'=>$path.$table.'.csv', 'encoding'=>'SJIS'))) {
+				if(!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => 'SJIS'))) {
 					return false;
 				}
 			}
