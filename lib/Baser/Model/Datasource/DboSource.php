@@ -3453,7 +3453,7 @@ class DboSource extends DataSource {
 		// バックアップファイルの生成で問題が発生した為
 		foreach($model as $value) {
 			$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
-			$Object->hasAndBelongsToMany = null;
+			$Object->hasAndBelongsToMany = array();
 		}
 		
 		
