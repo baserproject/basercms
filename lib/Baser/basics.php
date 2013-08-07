@@ -811,7 +811,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
  * @return void
  */
 	function p($var) {
-		$debug = Configure::read();
+		$debug = Configure::read('debug');
 		if($debug < 1) {
 			Configure::write('debug', 1);
 		}
