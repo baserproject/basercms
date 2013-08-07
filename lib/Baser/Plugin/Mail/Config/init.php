@@ -17,4 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->Plugin->initDb('mail');
+$this->Plugin->initDb('plugin', 'Mail');
