@@ -988,6 +988,7 @@ class BcManagerComponent extends Component {
 		$dbConfig = $db->config;
 		$sources = $db->listSources();
 		$result = true;
+		$plugin = Inflector::underscore($plugin);
 		foreach ($sources as $source) {
 			if (preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source, $matches)) {
 				$table = $matches[1];	

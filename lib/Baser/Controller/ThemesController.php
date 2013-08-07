@@ -145,25 +145,6 @@ class ThemesController extends AppController {
 				$this->setMessage('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。', true);
 			}
 		}
-	
-		// ユーザーデータの初期化
-		$UserGroup = ClassRegistry::init('UserGroup');
-		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
-		$User->create($user);
-		if (!$User->save()) {
-			$result = false;
-			$this->log('ユーザーデータの初期化に失敗しました。手動でユーザー情報を新しく登録してください。');
-		}
-		
-		// システム基本設定の更新
-		$siteConfigs = array('SiteConfig' => array(
-			'email'					=> $this->siteConfigs['email'],
-			'google_analytics_id'	=> $this->siteConfigs['google_analytics_id'],
-			'first_access'			=> null,
-			'version'				=> $this->siteConfigs['version']
-		));
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$SiteConfig->saveKeyValue($siteConfigs);
 		
 		// メール受信テーブルの作成
 		$PluginContent = ClassRegistry::init('PluginContent');
@@ -202,6 +183,25 @@ class ThemesController extends AppController {
 			$result = false;
 			$this->log('システムデータの初期化に失敗しました。');
 		}
+		
+		// ユーザーデータの初期化
+		$UserGroup = ClassRegistry::init('UserGroup');
+		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		$User->create($user);
+		if (!$User->save()) {
+			$result = false;
+			$this->log('ユーザーデータの初期化に失敗しました。手動でユーザー情報を新しく登録してください。');
+		}
+		
+		// システム基本設定の更新
+		$siteConfigs = array('SiteConfig' => array(
+			'email'					=> $this->siteConfigs['email'],
+			'google_analytics_id'	=> $this->siteConfigs['google_analytics_id'],
+			'first_access'			=> null,
+			'version'				=> $this->siteConfigs['version']
+		));
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$SiteConfig->saveKeyValue($siteConfigs);
 		
 		if($result) {
 			$this->setMessage('初期データの読み込みが完了しました。');
