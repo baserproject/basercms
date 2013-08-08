@@ -46,7 +46,8 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BaserPluginApp', 'Controller');
 	App::uses('BaserPluginAppModel', 'Model');
 
-	$parameter = getUrlParamFromEnv();
+	$parameter = preg_replace('/^\//', '', Router::url());
+	
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$agent = Configure::read('BcRequest.agent');
 	$agentAlias = Configure::read('BcRequest.agentAlias');

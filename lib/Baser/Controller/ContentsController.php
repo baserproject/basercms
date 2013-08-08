@@ -314,6 +314,12 @@ class ContentsController extends AppController {
 /**
  * [ADMIN] 検索インデックス登録
  * 
+ * TODO 2013/8/8 ryuring
+ * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
+ * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
+ * よって機能自体を一旦廃止する事とする。
+ * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
+ * 
  * @return	void
  * @access 	public
  */
@@ -331,11 +337,6 @@ class ContentsController extends AppController {
 				Router::reload();
 				// URLのデータを取得
 				$content = $this->requestAction($url, array('return' => 1));
-				$View = ClassRegistry::getObject('View');
-				// requestActionでインスタンス化されたViewを削除
-				// （管理システムではなく公開ページのView情報になっている可能性がある為）
-				ClassRegistry::removeObject('View');
-				// ルーティングのデフォルト設定を再読み込み（元の設定に復元する為）
 				Router::reload();
 				// 元の設定を復元
 				Router::setRequestInfo(array($this->request->params, array('base' => $this->request->base, 'webroot' => $this->request->webroot)));
@@ -343,7 +344,6 @@ class ContentsController extends AppController {
 				
 				if(!is_a($content, 'ErrorHandler')) {
 					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
-					$title = $View->pageTitle;
 				} elseif (preg_match('/\.html/', $url)) {
 					$socket = new HttpSocket();
 					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
