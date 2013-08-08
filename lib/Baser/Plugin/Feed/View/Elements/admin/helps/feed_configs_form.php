@@ -39,8 +39,6 @@
 	<br />
 	<p>また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。</p>
 	<h4>jQueryの読み込み例</h4>
-	<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php $this->BcBaser->js('jquery-1.6.2.min') ?>
-	</textarea>
+	<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly"><?php echo $this->BcHtml->script('jquery-1.7.2.min', array('once' => false)) ?></textarea>
 </div>
 <?php endif ?>
