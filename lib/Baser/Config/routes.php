@@ -65,7 +65,10 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * 名前付きパラメータを追加 
  */
 	Router::connectNamed(array('sortmode','num','page','sort','direction'));
-
+/**
+ * プラグインルーティング
+ */
+	CakePlugin::routes();
 /**
  * プラグイン判定 ＆ プラグイン名の書き換え
  * 

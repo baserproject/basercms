@@ -171,10 +171,12 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$plugins = getEnablePlugins();
 	foreach($plugins as $plugin) {
 		CakePlugin::load($plugin);
-		// プラグインの bootstrap を実行する
-		if(file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'bootstrap.php')) {
-			CakePlugin::bootstrap($plugin);
-		}
+		$config = array(
+			'bootstrap'	=> file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'bootstrap.php'),
+			'routes'	=> file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'routes.php')
+		);
+		CakePlugin::load($plugin, $config);
+		CakePlugin::bootstrap($plugin);
 	}
 	Configure::write('BcStatus.enablePlugins', $plugins);
 /**
