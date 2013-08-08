@@ -410,10 +410,12 @@ class BlogCommentsController extends BlogAppController {
 			
 			$result = $this->BlogComment->add($this->request->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
 			if($result && $captchaResult) {
-				$this->_sendCommentAdmin($blogPostId, $this->request->data);
+				// TODO basercamp メール送信が未実装の為コメントアウト
+				//$this->_sendCommentAdmin($blogPostId, $this->request->data);
 				// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 				if(!$this->blogContent['BlogContent']['comment_approve']) {
-					$this->_sendCommentContributor($blogPostId, $this->request->data);
+					// TODO basercamp メール送信が未実装の為コメントアウト
+					//$this->_sendCommentContributor($blogPostId, $this->request->data);
 				}
 				$this->set('dbData',$result['BlogComment']);
 			}else{
