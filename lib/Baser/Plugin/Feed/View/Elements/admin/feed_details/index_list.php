@@ -20,6 +20,57 @@
 ?>
 <?php if($this->action != 'admin_add'): ?>
 
+<?php
+$this->BcBaser->js(array(
+	'admin/jquery.baser_ajax_data_list', 
+	'admin/jquery.baser_ajax_batch', 
+	'admin/baser_ajax_data_list_config',
+	'admin/baser_ajax_batch_config'
+));
+?>
+
+<script type="text/javascript">
+$(function(){
+	$.baserAjaxBatch.config.methods.del.result = function() {
+		var config = $.baserAjaxBatch.config;
+		var colspan = $(config.targetCheckbox+":checked:first").parent().parent().find('td').length;
+		$(config.targetCheckbox+":checked").parent().parent().fadeOut(300, function(){
+			$(this).remove();
+			if($(config.listTable+" tbody td").length) {
+				$.baserAjaxDataList.initList();
+				$(config.listTable+" tbody tr").removeClass('even odd');
+				$.yuga.stripe();
+			} else {
+				$(config.listTable+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">データがありません。</p></td>');
+			}
+		});
+	};
+	$.baserAjaxDataList.config.methods.del.result = function(row, result) {
+		var config = $.baserAjaxDataList.config;
+		var colspan = $(config.dataList+" tbody td").length
+		if(result) {
+			row.fadeOut(300, function(){
+				row.remove();
+				if($(config.dataList+" tbody td").length) {
+					$.baserAjaxDataList.initList();
+					$(config.dataList+" tbody tr").removeClass('even odd');
+					$.yuga.stripe();
+				} else {
+					$(config.dataList+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">データがありません。</p></td>');
+				}
+			});
+		} else {
+			$(config.alertBox).html('削除に失敗しました。');
+			$(config.alertBox).fadeIn(500);
+		}
+	};
+	$.baserAjaxDataList.init();
+	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
+});
+</script>
+
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'feed', 'controller' => 'feed_details', 'action' => 'ajax_batch', $this->request->params['pass'][0])) ?></div>
+
 <div class="section">
 	
 	<h2 id="headFeedDetail">フィード一覧</h2>
