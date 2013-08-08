@@ -722,7 +722,106 @@ class BaserAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 
+/*
+ array (size=6)
+  'Message' =>
+    array (size=18)
+      'mode' => string 'Submit' (length=6)
+      'name_1' => string '清末' (length=6)
+      'name_2' => string '直' (length=3)
+      'name_kana_1' => string 'キヨスエ' (length=12)
+      'name_kana_2' => string 'スナオ' (length=9)
+      'sex' => string '1' (length=1)
+      'email_1' => string 'kiyo@itm.ne.jp' (length=14)
+      'tel_1' => string '092' (length=3)
+      'tel_2' => string '222' (length=3)
+      'tel_3' => string '3333' (length=4)
+      'zip' => string '810-0022' (length=8)
+      'address_1' => string '2' (length=1)
+      'address_2' => string 'hoge' (length=4)
+      'address_3' => string 'fuga' (length=4)
+      'category' => string '1|3' (length=3)
+      'message' => string 'test' (length=4)
+      'root' => string '2' (length=1)
+      'root_etc' => string 'hoge' (length=4)
+  'message' =>
+    array (size=18)
+      'mode' => string 'Submit' (length=6)
+      'name_1' => string '清末' (length=6)
+      'name_2' => string '直' (length=3)
+      'name_kana_1' => string 'キヨスエ' (length=12)
+      'name_kana_2' => string 'スナオ' (length=9)
+      'sex' => string '1' (length=1)
+      'email_1' => string 'kiyo@itm.ne.jp' (length=14)
+      'tel_1' => string '092' (length=3)
+      'tel_2' => string '222' (length=3)
+      'tel_3' => string '3333' (length=4)
+      'zip' => string '810-0022' (length=8)
+      'address_1' => string '2' (length=1)
+      'address_2' => string 'hoge' (length=4)
+      'address_3' => string 'fuga' (length=4)
+      'category' =>
+        array (size=1)
+          0 => string '1|3' (length=3)
+      'message' => string 'test' (length=4)
+      'root' => string '2' (length=1)
+      'root_etc' => string 'hoge' (length=4)
+  'mailFields' =>
+    array (size=18)
+      0 =>
+          'MailField' =>
+            array (size=30)
+              ...
+  'mailContents' =>
+    array (size=20)
+      'id' => int 1
+      'name' => string 'contact' (length=7)
+      'title' => string 'お問い合わせ' (length=18)
+      'description' => string '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>' (length=119)
+      'sender_1' => null
+      'sender_2' => null
+      'sender_name' => string 'baserCMS inc. [デモ]　お問い合わせ' (length=43)
+      'subject_user' => string '【baserCMS】お問い合わせ頂きありがとうございます。' (length=71)
+      'subject_admin' => string '【baserCMS】お問い合わせを受け付けました' (length=56)
+      'layout_template' => string 'default' (length=7)
+      'form_template' => string 'default' (length=7)
+      'mail_template' => string 'mail_default' (length=12)
+      'redirect_url' => string 'http://basercms.net/' (length=20)
+      'status' => boolean true
+      'auth_captcha' => boolean false
+      'widget_area' => null
+      'ssl_on' => boolean false
+      'exclude_search' => null
+      'created' => string '2013-07-20 15:47:58' (length=19)
+      'modified' => null
+  'mailConfig' =>
+    array (size=8)
+      'id' => int 1
+      'site_name' => string 'baserCMS - Based Website Development Project -' (length=46)
+      'site_url' => string 'http://basercms.net/' (length=20)
+      'site_email' => string 'info@basercms.net' (length=17)
+      'site_tel' => null
+      'site_fax' => null
+      'created' => string '2013-07-20 15:47:57' (length=19)
+      'modified' => null
+  'other' =>
+    array (size=2)
+      'date' => string '2013/08/08 18:02' (length=16)
+      'mode' => string 'user' (length=4)
+
+var_dump($body);
+ */
+
+/*
+array (size=4)
+  'fromName' => string 'baserCMS inc. [デモ]　お問い合わせ' (length=43)
+  'reply' => string 'kiyo@itm.ne.jp' (length=14)
+  'template' => string 'mail_default' (length=12)
+  'from' => string 'kiyo@itm.ne.jp' (length=14)
+*/
+
 		//$smtp
+		// @
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
 			$host		= $this->siteConfigs['smtp_host'] ;
@@ -732,17 +831,17 @@ class BaserAppController extends Controller {
 		} else {
 			$transport = 'Mail' ;
 			$host = 'localhost';
-			$port = null ;
+			$port = 25 ;
 			$username = null;
 			$password = null;
 		}
 
 		$config = array(
+			'transport' => $transport,
 			'host' => $host,
 			'port' => $port,
 			'username' => $username,
-			'password' => $password,
-			'transport' => $transport
+			'password' => $password
 		);
 
 		$cakeEmail = new CakeEmail($config);
@@ -759,107 +858,120 @@ class BaserAppController extends Controller {
 		$cakeEmail->charset($encode);
 
 		//$format
-		$format = 'text';
+		if(!empty($options['format'])){
+			$cakeEmail->emailFormat($options['format']);
+		} else {
+			$cakeEmail->emailFormat('text');
+		}
 
-		//bcc
-		$bcc = null;
-		
-		//cc
-		$cc = null;
+		//bcc 'mail@example.com,mail2@example.com'
+		/*
+		if(!empty($options['bcc'])){
+			if(strpos($options['bcc'], ',') !== false) {
+				$bcc = explode(',', $options['bcc']);
+				foreach($bcc as $val){
+					$cakeEmail->addCc($val);
+				}
+				unset($bcc);
+			}
+		}
+		*/
 
-		// 送信先アドレス (最初の1人がTOで残りがBCC)
+		//cc 'mail@example.com,mail2@example.com'
+		if(!empty($options['cc'])){
+			if(strpos($options['cc'], ',') !== false) {
+				$cc = explode(',', $options['cc']);
+				foreach($cc as $val){
+					$cakeEmail->addCc($val);
+				}
+				unset($cc);
+			}
+		}
+
+		// to 送信先アドレス (最初の1人がTOで残りがBCC)
 		if(strpos($to, ',') !== false) {
 			$_to = explode(',', $to);
-			$to = $_to[0];
-			if(count($_to) > 1) {
-				unset($_to[0]);
-				if($bcc) {
-					$bcc .= ',';
+			$i = 0 ;
+			if(count($_to) >= 1) {
+				foreach( $_to as $val ){
+					if($i==0){
+						$cakeEmail->addTo($val);
+						$toAddress = $val ;
+					}else{
+						$cakeEmail->addBcc($val);
+					}
+					++$i ;
 				}
-				$bcc .= implode(',', $_to);
 			}
+		}else{
+			$cakeEmail->addTo($to);
 		}
-		// $to array
-		$to = array($to=>'');
 
 		// 件名
-		$subject = $title;
+		$cakeEmail->subject($title);
 
-		//From array
-		$formalName = $from = '';
-		if(!empty($this->siteConfigs)) {
-			$formalName = $this->siteConfigs['formal_name'];
-			$from = $this->siteConfigs['email'];
-			if(strpos($from, ',') !== false) {
-				$from = explode(',', $from);
-				$from = $from[0];
-			}
-		}
-		if(!$formalName) {
-			$formalName = Configure::read('BcApp.title');
-		}
-
-		// 送信元・返信先
-		//replayTo array
-		$replayTo = null ;
-		//returnPath
-		$returnPath = null ;
-		if($from) {
-			if(strpos($from, ',') !== false) {
-				$_from = explode(',', $from);
-				$from = $_from[0];
-			}
-			$from = $from;
-			$returnPath = $from;
-			$replyTo = $from;
-		} else {
-			$from = $to;
-			$returnPath = $to;
-			$replyTo = $to;
-		}
-		$from = array($from => $formalName);
-
-		// CC @TODO 複数人対応に修正する事 @basercamp
-		if($cc) {
-			if(strpos($cc, ',') !== false) {
-				$cc = explode(',', $cc);
-			}
-			$cc = array($cc => '');
+		//From
+		$fromName = $from = '';
+		if(! empty($options['from'])){
+			$from = $options['from'];
 		}else{
-			$cc = null;
-		}
-
-		// BCC @TODO 複数人対応に修正する事 @basercamp
-		if($bcc) {
-			if(strpos($bcc, ',') !== false) {
-				$bcc = explode(',', $bcc);
+			if(!empty($this->siteConfigs['email'])) {
+				$from = $this->siteConfigs['email'];
+				if(strpos($from, ',') !== false) {
+					$from = explode(',', $from);
+				}
+			}else{
+				$from = $toAddress ;
 			}
-			$bcc = array($bcc => '');
-		}else{
-			$bcc = null;
 		}
 
-		//$sender array
-		$sender = null ;
+		if(! empty($options['fromName'])){
+			$fromName = $options['fromName'];
+		}else{
+			if(!empty($this->siteConfigs['formal_name'])) {
+				$fromName = $this->siteConfigs['formal_name'];
+			} else {
+				$formalName = Configure::read('BcApp.title');
+			}
+		}
+
+		$cakeEmail->from($from, $fromName);
+		$cakeEmail->replyTo($from);
+		$cakeEmail->returnPath($from);
+
+		//$sender
+		if(!empty($options['sender'])){
+			$cakeEmail->sender($options['sender']);
+		}
 
 		//$theme
-		$theme = null;
-
-		//layout
-		$layout = null;
-		$template = null ;
+		if(!empty($options['theme'])){
+			$cakeEmail->theme($options['theme']);
+		}
 
 		//template
-		if(Configure::read('BcRequest.agent')) {
-			$layout = Configure::read('BcRequest.agentPrefix');
-			$subDir = Configure::read('BcRequest.agentPrefix');
-			if( $subDir ){
-				die($subDir);
+		if(!empty($options['template'])){
+			if(!empty($options['layout'])){
+				$cakeEmail->template($options['template'],$options['layout']);
+			}else{
+				$cakeEmail->template($options['template']);
+			}
+		}else{
+			if(Configure::read('BcRequest.agent')) {
+				$layout = Configure::read('BcRequest.agentPrefix');
+				$subDir = Configure::read('BcRequest.agentPrefix');
+				if( $subDir ){
+					die($subDir);
+				}
 			}
 		}
 
 		//viewRender
 		$viewClass = null;
+		$cakeEmail->viewRender($viewClass);
+
+		//datas body
+		$cakeEmail->viewVars($body);
 
 		//$attachments tmp file path @TODO @basercamp filePaths と attachments のどっちが
 		//本当の分か確認すること
@@ -878,27 +990,12 @@ class BaserAppController extends Controller {
 				$attachments = $options['attachments'];
 			}
 		}
-
-		$cakeEmail->viewRender($viewClass);
-		$cakeEmail->emailFormat($format);
-		$cakeEmail->template($template, $layout);
-		$cakeEmail->theme($theme);
-
-		$cakeEmail->viewVars($this->request->data);
-
-		$cakeEmail->from($from);
-		$cakeEmail->sender($sender);
-		$cakeEmail->to($to);
-		$cakeEmail->cc($cc);
-		$cakeEmail->bcc($bcc);
-		$cakeEmail->replyTo($replyTo);
-		$cakeEmail->returnPath($returnPath);
-		$cakeEmail->subject($subject);
 		$cakeEmail->attachments($attachments);
 
-		if($cakeEmail->send()){
+//var_dump($cakeEmail);exit;
+		if($message = $cakeEmail->send()){
 			//メール送信が成功した場合ここで処理
-			var_dump($cakeEmail);exit;
+//			var_dump($cakeEmail);exit;
 			return true ;
 		}else{
 			var_dump($cakeEmail);exit;
