@@ -991,7 +991,11 @@ class PagesController extends AppController {
  */
 	public function admin_ajax_category_source($type) {
 		
-		$categorySource = $this->getCategorySource($type, $this->request->data['Option']);
+		$option = array();
+		if(!empty($this->request->data['Option'])) {
+			$option = $this->request->data['Option'];
+		}
+		$categorySource = $this->getCategorySource($type, $option);
 		$this->set('categorySource', $categorySource);
 
 	}

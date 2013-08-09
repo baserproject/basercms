@@ -630,12 +630,12 @@ class BcManagerComponent extends Component {
 		$themePath = $dataPath = $title = '';
  		if($theme == 'core') {
 			$dataPath = BASER_CONFIGS . 'data';
-		} elseif(is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data')) {
+		} elseif(is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data')) {
 			$themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
-			$dataPath = $themePath . 'config' . DS . 'data';
-		} elseif(is_dir(BASER_THEMES . $theme . DS . 'config' . DS . 'data')) {
+			$dataPath = $themePath . 'Config' . DS . 'data';
+		} elseif(is_dir(BASER_THEMES . $theme . DS . 'Config' . DS . 'data')) {
 			$themePath = BASER_THEMES . $theme . DS;
-			$dataPath = $themePath . 'config' . DS . 'data';
+			$dataPath = $themePath . 'Config' . DS . 'data';
 		} else {
 			return array();
 		}
@@ -704,13 +704,13 @@ class BcManagerComponent extends Component {
 		} else {
 			if($plugin == 'core') {
 				$paths = array(
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
-					BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern
 				);
 			} else {
 				$paths = array(
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . $pattern . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
 				);
@@ -1484,7 +1484,7 @@ class BcManagerComponent extends Component {
 			$status['themeDirWritable'] = is_writable(WWW_ROOT.'theme');
 		}
 		if(!$status['filesDirWritable']) {
-			chmod(WWW_ROOT.'files', 0777);
+			@chmod(WWW_ROOT.'files', 0777);
 			$status['filesDirWritable'] = is_writable(WWW_ROOT.'files');
 		}
 		if(!$status['tmpDirWritable']) {

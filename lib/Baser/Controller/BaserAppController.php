@@ -385,6 +385,8 @@ class BaserAppController extends Controller {
 				} else {
 					$this->theme = Configure::read('BcApp.adminTheme');
 				}
+			} elseif($params['controller'] == 'installations') {
+				$this->theme = Configure::read('BcApp.adminTheme');
 			}
 			return;
 		}
