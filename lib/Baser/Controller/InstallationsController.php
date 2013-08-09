@@ -560,8 +560,14 @@ class InstallationsController extends AppController {
 
 		set_error_handler(array($this, "dbErrorHandler"));
 
+		
+		/* データベース接続確認 */
+		if (!$this->BcManager->checkDbConnection($config)){
+			$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。", true);
+			return false;
+		}
+		
 		/* データベース接続生成 */
-
 		$db = $this->BcManager->connectDb($config);
 
 		if ($db->connected) {

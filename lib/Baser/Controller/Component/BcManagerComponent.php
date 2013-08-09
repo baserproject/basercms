@@ -1501,9 +1501,20 @@ class BcManagerComponent extends Component {
 	}
 	
 /**
+ * CakePHPを利用せずデータベースの接続を確認する
+ *
+ * @param array $config
+ * @return boolean
+ * @access public
+ */
+	public function checkDbConnection($dbConfig){
+		return $this->_checkDbConnection($dbConfig['datasource'], $dbConfig['database'], $dbConfig['login'], $dbConfig['password'], $dbConfig['host'], $dbConfig['port']);
+	}
+	
+/**
  * DB接続チェック
  * 
- * @param	string	$dbType 'MySQL' or 'PostgreSQL' or 'SQLite3' or 'CSV'
+ * @param	string	$dbType 'MySQL' or 'Postgres' or 'SQLite3' or 'CSV'
  * @param	string	$dbName データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
  * @param	string	$dbUsername 接続ユーザ名 テキストDBの場合は不要
  * @param	string	$dbPassword 接続パスワード テキストDBの場合は不要
@@ -1511,8 +1522,9 @@ class BcManagerComponent extends Component {
  * @param	string	$dbHost テキストDB or localhostの場合は不要
  * 
  * @return boolean
+ * @access private
  */
-	public function checkDbConnection($dbType, $dbName, $dbUsername = null, $dbPassword = null, $dbHost = null, $dbPort = null){
+	private function _checkDbConnection($dbType, $dbName, $dbUsername = null, $dbPassword = null, $dbHost = null, $dbPort = null){
 		$dbType = strtolower($dbType);
 		try{
 			if ($dbType == 'mysql'){
@@ -1521,7 +1533,7 @@ class BcManagerComponent extends Component {
 				if ($dbPort) $dsn .= ";port={$dbPort}";
 				$pdo = new PDO($dsn, $dbUsername, $dbPassword);
 
-			} elseif ($dbType == 'postgresql') {
+			} elseif ($dbType == 'postgres') {
 				$dsn = "pgsql:dbname={$dbName}";
 				if ($dbHost) $dsn .= ";host={$dbHost}";
 				if ($dbPort) $dsn .= ";port={$dbPort}";
@@ -1544,12 +1556,12 @@ class BcManagerComponent extends Component {
 
 			} else {
 				// ドライバが見つからない
-				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|PostgreSQL|SQLite3|CSV)");
+				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite3|CSV)");
 				return false;
 			}
 		}catch (PDOException $e){
 			// そのまま例外投げる?
-			// throw new PDOException($e);
+//			 throw new PDOException($e);
 			// 接続エラー
 			return false;
 		}
