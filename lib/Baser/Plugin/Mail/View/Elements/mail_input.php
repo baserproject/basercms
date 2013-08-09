@@ -66,9 +66,9 @@ if (!empty($mailFields)) {
 			}
 			if (!$field['group_valid']) {
 				if($this->Mailform->error("Message." . $field['field_name'] . "_format", "check")) {
-					echo $this->Mailform->error("Message." . $field['field_name'] . "_format", "形式が不正です");
+					echo $this->Mailform->error("Message." . $field['field_name'] . "_format", "形式が不正です。");
 				}else {
-					echo $this->Mailform->error("Message." . $field['field_name'] . "", "必須項目です");
+					echo $this->Mailform->error("Message." . $field['field_name']);
 				}
 			}
 
@@ -80,14 +80,14 @@ if (!empty($mailFields)) {
 
 				if ($field['group_valid']) {
 					if ($this->Mailform->error("Message." . $field['group_field'] . "_format", "check")) {
-						echo $this->Mailform->error("Message." . $field['group_field'] . "_format", "形式が不正です");
+						echo $this->Mailform->error("Message." . $field['group_field'] . "_format", "形式が不正です。");
 					} else {
 						if($field['valid']) {
-							echo $this->Mailform->error("Message." . $field['group_field'] . "", "必須項目です");
+							echo $this->Mailform->error("Message." . $field['group_field']);
 						}
 					}
-					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません");
-					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です");
+					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません。");
+					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です。");
 				}
 
 				echo '</span>';

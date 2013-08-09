@@ -65,6 +65,31 @@ class Message extends MailAppModel {
 
 	}
 /**
+ * テーブルプレフィックスを設定する
+ * 
+ * @param string $tablePrefix
+ * @return boolean
+ */
+	public function setTablePrefix($tablePrefix) {
+		
+		if(!$tablePrefix) {
+			return false;
+		}
+		
+		$cm = ConnectionManager::getDataSource($this->useDbConfig);
+		
+		if(!empty($cm->config['prefix'])) {
+			$dbPrefix = $cm->config['prefix'];
+		}else {
+			$dbPrefix = '';
+		}
+		
+		$this->tablePrefix = $dbPrefix . $tablePrefix;
+		
+		return true;
+		
+	}
+/**
  * beforeSave
  *
  * @return boolean
@@ -84,13 +109,12 @@ class Message extends MailAppModel {
  * @access	public
  * TODO beforeValidateに移行できないか検討
  */
-	public function invalidFields($options = array()) {
+	public function beforeValidate($options = array()) {
 
 		$data = $this->data;
 
+		// バリデーション設定
 		$this->_setValidate();
-		parent::invalidFields($options);
-
 		// Eメール確認チェック
 		$this->_validEmailCofirm($data);
 		// 不完全データチェック
@@ -102,7 +126,7 @@ class Message extends MailAppModel {
 		// エラー内容変換
 		$this->_validSingeErrorCheck();
 
-		return $this->validationErrors;
+		return parent::beforeValidate($options);
 
 	}
 /**
@@ -119,11 +143,24 @@ class Message extends MailAppModel {
 		foreach($this->mailFields as $mailField) {
 
 			if($mailField['MailField']['valid']&&!empty($mailField['MailField']['use_field'])) {
-				if(defined($mailField['MailField']['valid'])) {
-					$this->validate[$mailField['MailField']['field_name']] = constant($mailField['MailField']['valid']);
-				}else {
-					$this->validate[$mailField['MailField']['field_name']]=$mailField['MailField']['valid'];
+				
+				if($mailField['MailField']['valid'] == 'VALID_NOT_EMPTY') {
+					// 必須項目
+					$this->validate[$mailField['MailField']['field_name']] = array('notEmpty' => array(
+						'rule'		=> array('notEmpty'),
+						'message'	=> '必須項目です。',
+						'required'	=> true
+					));
+				} elseif ($mailField['MailField']['valid'] == 'VALID_EMAIL') {
+					// メール形式
+					$this->validate[$mailField['MailField']['field_name']] = array('email' => array(
+						'rule'		=> array('email'),
+						'message'	=> '形式が不正です。'
+					));
+				} else {
+					$this->validate[$mailField['MailField']['field_name']] = $mailField['MailField']['valid'];
 				}
+
 			}
 
 		}

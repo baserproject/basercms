@@ -161,8 +161,8 @@ class MailController extends MailAppController {
 		// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
 		// ※ nameフィールドの名称を[message]以外にする
 		if($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
-			$prefix = $this->dbDatas['mailContent']['MailContent']['name']."_";
-			$this->Message = new Message(false,null,null,$prefix);
+			$prefix = $this->dbDatas['mailContent']['MailContent']['name']."_";			
+			$this->Message->setTablePrefix($prefix);
 			$this->Message->mailFields = $this->dbDatas['mailFields'];
 		}
 
