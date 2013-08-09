@@ -141,9 +141,9 @@ class WidgetAreasController extends AppController {
 		}
 		$this->request->data = $widgetArea;
 
-		$widgetInfos = array(0=>array('title'=>'コアウィジェット','plugin'=>'','paths'=>array(BASER_VIEWS.'elements'.DS.'admin'.DS.'widgets')));
-		if(is_dir(APP . 'View' . DS.'elements'.DS.'admin'.DS.'widgets')){
-			$widgetInfos[0]['paths'][] = APP . 'View' . DS.'elements'.DS.'admin'.DS.'widgets';
+		$widgetInfos = array(0=>array('title'=>'コアウィジェット','plugin'=>'','paths'=>array(BASER_VIEWS.'Elements'.DS.'admin'.DS.'widgets')));
+		if(is_dir(APP . 'View' . DS.'Elements'.DS.'admin'.DS.'widgets')){
+			$widgetInfos[0]['paths'][] = APP . 'View' . DS.'Elements'.DS.'admin'.DS.'widgets';
 		}
 
 		$plugins = $this->Plugin->find('all', array('conditions'=>array('status'=>true)));

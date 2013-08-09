@@ -176,10 +176,10 @@ class MailHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
+			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Elements' . DS . 'Emails' . DS . 'text' . DS;
 		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
-		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'email' . DS . 'text' . DS;
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'Emails' . DS . 'text' . DS;
+		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'Emails' . DS . 'text' . DS;
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){

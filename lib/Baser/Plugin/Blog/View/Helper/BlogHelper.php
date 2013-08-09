@@ -551,11 +551,11 @@ class BlogHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'layouts'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Layouts'.DS;
 		}
-		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'layouts'.DS;
-		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'blog'.DS.'views'.DS.'layouts'.DS,
-														BASER_VIEWS.'layouts'.DS));
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Blog'.DS.'View'.DS.'Layouts'.DS;
+		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'Blog'.DS.'View'.DS.'Layouts'.DS,
+														BASER_VIEWS.'Layouts'.DS));
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
@@ -592,10 +592,10 @@ class BlogHelper extends AppHelper {
 
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'blog'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Blog'.DS;
 		}
-		$templatesPathes[] = APP . 'plugins' . DS . 'blog'.DS.'views'.DS.'blog'.DS;
-		$templatesPathes[] = BASER_PLUGINS.'blog'.DS.'views'.DS.'blog'.DS;
+		$templatesPathes[] = APP . 'Plugin' . DS . 'Blog'.DS.'View'.DS.'Blog'.DS;
+		$templatesPathes[] = BASER_PLUGINS.'Blog'.DS.'View'.DS.'Blog'.DS;
 
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){

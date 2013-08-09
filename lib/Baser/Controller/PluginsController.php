@@ -138,7 +138,7 @@ class PluginsController extends AppController {
 		$title = $description = $author = $url = $adminLink = '';
 
 		// TODO 互換性のため古いパスも対応
-		$oldAppConfigPath = $file.DS.'config'.DS.'config.php';
+		$oldAppConfigPath = $file.DS.'Config'.DS.'config.php';
 		$appConfigPath = $file.DS.'config.php';
 		if(!file_exists($appConfigPath)) {
 			$appConfigPath = $oldAppConfigPath;
@@ -237,9 +237,9 @@ class PluginsController extends AppController {
  */
 	private function __deletePluginFile($pluginName) {
 
-		$appPath = APP.'plugins'.DS.$pluginName.DS.'config'.DS.'sql'.DS;
-		$baserPath = BASER_PLUGINS.$pluginName.DS.'config'.DS.'sql'.DS;
-		$tmpPath = TMP.'schemas'.DS.'uninstall'.DS;
+		$appPath = APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+		$baserPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
 		$folder = new Folder();
 		$folder->delete($tmpPath);
 		$folder->create($tmpPath);
@@ -290,8 +290,8 @@ class PluginsController extends AppController {
 			
 			$installMessage = '';
 			// TODO 互換性のため古いパスも対応
-			$oldAppConfigPath = APP.DS.'plugins'.DS.$name.DS.'config'.DS.'config.php';
-			$appConfigPath = APP.DS.'plugins'.DS.$name.DS.'config.php';
+			$oldAppConfigPath = APP . DS . 'plugins' . DS . $name . DS . 'Config' . DS . 'config.php';
+			$appConfigPath = APP . DS . 'plugins' . DS . $name . DS . 'Config.php';
 			if(!file_exists($appConfigPath)) {
 				$appConfigPath = $oldAppConfigPath;
 			}
@@ -328,10 +328,10 @@ class PluginsController extends AppController {
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->request->data['Plugin']['name'])));
 
 			if(empty($data['Plugin']['db_inited'])) { 
-				if(file_exists(APP.'plugins'.DS.$name.DS.'config'.DS.'init.php')) {
-					include APP.'plugins'.DS.$name.DS.'config'.DS.'init.php';
-				}elseif(file_exists(BASER_PLUGINS.$name.DS.'config'.DS.'init.php')) {
-					include BASER_PLUGINS.$name.DS.'config'.DS.'init.php';
+				if(file_exists(APP.'plugins' . DS . $name . DS . 'Config' . DS . 'init.php')) {
+					include APP . 'plugins' . DS . $name . DS . 'Config' . DS . 'init.php';
+				}elseif(file_exists(BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php')) {
+					include BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php';
 				}
 			}
 

@@ -183,7 +183,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * テーマの bootstrap を実行する
  */
 	$themePath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS;
-	$themeBootstrap = $themePath.'config'.DS.'bootstrap.php';
+	$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
 	if(file_exists($themeBootstrap)) {
 		include $themeBootstrap;
 	}

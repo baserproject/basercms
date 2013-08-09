@@ -92,8 +92,8 @@ class Plugin extends AppModel {
 	function resetDb($plugin) {
 		
 		$schemaPaths = array(
-			APP.'plugins'.DS.$plugin.DS.'config'.DS.'sql',
-			BASER_PLUGINS.$plugin.DS.'config'.DS.'sql'
+			APP . 'plugins' . DS . $plugin . DS . 'Config' . DS . 'sql',
+			BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'sql'
 		);
 		
 		$path = '';
@@ -177,7 +177,7 @@ class Plugin extends AppModel {
 					if($conType == 'baser') {
 						$schemaPath = BASER_CONFIGS . 'sql' . DS;
 					} else {
-						$schemaPath = BASER_PLUGINS . $pluginName . DS . 'config' . DS . 'sql' . DS;
+						$schemaPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
 					}
 					
 				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {

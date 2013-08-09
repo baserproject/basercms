@@ -17,5 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include CAKE.'view'.DS.'layouts'.DS.'ajax.ctp';
-?>
+include CAKE.'View'.DS.'Layouts'.DS.'ajax.ctp';

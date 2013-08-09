@@ -19,5 +19,5 @@
  */
 $width = 294;
 $height = 400;
-include BASER_VIEWS.'elements'.DS.'googlemaps'.$this->ext;
+include BASER_VIEWS.'Elements'.DS.'googlemaps'.$this->ext;
 ?>

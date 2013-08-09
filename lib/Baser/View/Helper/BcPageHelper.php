@@ -354,9 +354,9 @@ class BcPageHelper extends Helper {
 			switch ($type) {
 				case 'layout':
 					if(!$agentPrefix) {
-						$templatePath = $viewPath . 'layouts' . DS;
+						$templatePath = $viewPath . 'Layouts' . DS;
 					} else {
-						$templatePath = $viewPath . 'layouts' . DS . $agentPrefix . DS;
+						$templatePath = $viewPath . 'Layouts' . DS . $agentPrefix . DS;
 					}
 					break;
 				case 'content':

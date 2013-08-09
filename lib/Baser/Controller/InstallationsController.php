@@ -69,25 +69,6 @@ class InstallationsController extends AppController {
 	public $uses = null;
 	public $theme = 'baseradmin';
 /**
- * データベースエラーハンドラ
- *
- * @param int $errno
- * @param string	$errstr
- * @param string	$errfile
- * @param int $errline
- * @param string	$errcontext
- * @return void
- * @access public
- */
-	public function dbErrorHandler( $errno, $errstr, $errfile=null, $errline=null, $errcontext=null ) {
-
-		if ($errno==2) {
-			$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />".$errstr, true);
-			restore_error_handler();
-		}
-
-	}
-/**
  * beforeFilter
  *
  * @return void
@@ -557,13 +538,16 @@ class InstallationsController extends AppController {
  * @access protected
  */
 	protected function _testConnectDb($config){
-
-		set_error_handler(array($this, "dbErrorHandler"));
-
 		
 		/* データベース接続確認 */
-		if (!$this->BcManager->checkDbConnection($config)){
-			$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。", true);
+		try{
+			$this->BcManager->checkDbConnection($config);
+		} catch (Exception $e) {
+			$message = 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。';
+			if(preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
+				$message .= '<br />' . $matches[1];
+			}
+			$this->setMessage($message, true);
 			return false;
 		}
 		

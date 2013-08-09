@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'mail'.DS.'views'.DS.'elements'.DS.'mobile'.DS.'email'.DS.'text'.DS.'mail_default'.$this->ext;
+include BASER_PLUGINS.'Mail'.DS.'View'.DS.'Elements'.DS.'mobile'.DS.'Emails'.DS.'text'.DS.'mail_default'.$this->ext;
 ?>

@@ -45,9 +45,9 @@ class FeedHelper extends BcTextHelper {
 		
 		$templatesPathes = array();
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'feed'.DS;
+			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Feed'.DS;
 		}
-		$templatesPathes[] = BASER_PLUGINS.'feed'.DS.'views'.DS.'feed'.DS;
+		$templatesPathes[] = BASER_PLUGINS.'Feed'.DS.'View'.DS.'Feed'.DS;
 		
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){

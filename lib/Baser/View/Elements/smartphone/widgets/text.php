@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'elements'.DS.'widgets'.DS.'text'.$this->ext;
+include BASER_VIEWS.'Elements'.DS.'widgets'.DS.'text'.$this->ext;
 ?>

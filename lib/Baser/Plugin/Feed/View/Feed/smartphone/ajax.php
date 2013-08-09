@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'feed'.DS.'views'.DS.'feed'.DS.'ajax'.$this->ext;
+include BASER_PLUGINS.'Feed'.DS.'View'.DS.'Feed'.DS.'ajax'.$this->ext;
 ?>

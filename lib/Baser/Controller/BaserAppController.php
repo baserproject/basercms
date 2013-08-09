@@ -1534,7 +1534,7 @@ array (size=4)
 			return;
 		}
 		
-		$themeHelpersPath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS.'helpers';
+		$themeHelpersPath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS.'Helpers';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {

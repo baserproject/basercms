@@ -259,9 +259,9 @@ class MailContentsController extends MailAppController {
  */
 	public function redirectEditLayout($template){
 		
-		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.'layouts'.DS.$template.$this->ext;
-		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.'layouts'.DS.$template.$this->ext,
-						BASER_VIEWS.'layouts'.DS.$template.$this->ext);
+		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.'Layouts'.DS.$template.$this->ext;
+		$sorces = array(BASER_PLUGINS.'Mail'.DS.'View'.DS.'Layouts'.DS.$template.$this->ext,
+						BASER_VIEWS.'Layouts'.DS.$template.$this->ext);
 		if($this->siteConfigs['theme']){
 			if(!file_exists($target)){
 				foreach($sorces as $source){
@@ -288,10 +288,10 @@ class MailContentsController extends MailAppController {
  */
 	public function redirectEditMail($template){
 		
-		$type = 'elements';
-		$path = 'email'.DS.'text'.DS.$template.$this->ext;
+		$type = 'Elements';
+		$path = 'Email'.DS.'text'.DS.$template.$this->ext;
 		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$type.DS.$path;
-		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$type.DS.$path);
+		$sorces = array(BASER_PLUGINS.'Mail'.DS.'View'.DS.$type.DS.$path);
 		if($this->siteConfigs['theme']){
 			if(!file_exists($target)){
 				foreach($sorces as $source){
@@ -321,9 +321,9 @@ class MailContentsController extends MailAppController {
  */
 	public function redirectEditForm($template){
 		
-		$path = 'mail'.DS.$template;
+		$path = 'Mail'.DS.$template;
 		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$path;
-		$sorces = array(BASER_PLUGINS.'mail'.DS.'views'.DS.$path);
+		$sorces = array(BASER_PLUGINS.'Mail'.DS.'View'.DS.$path);
 		if($this->siteConfigs['theme']){
 			if(!file_exists($target.DS.'index'.$this->ext)){
 				foreach($sorces as $source){

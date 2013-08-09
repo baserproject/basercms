@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'blog'.DS.'views'.DS.'elements'.DS.'widgets'.DS.'blog_category_archives'.$this->ext;
+include BASER_PLUGINS.'Blog'.DS.'View'.DS.'Elements'.DS.'widgets'.DS.'blog_category_archives'.$this->ext;
 ?>

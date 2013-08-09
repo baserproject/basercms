@@ -372,8 +372,8 @@ class BcEmailComponent extends EmailComponent {
 			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content));
 			//$View->layoutPath = 'email' . DS . 'text';
 			// ---
-			$content = $View->element($subDir . 'email' . DS . 'text' . DS . $this->template, array('content' => $content));
-			$View->layoutPath = $layoutPath.'email' . DS . 'text';
+			$content = $View->element($subDir . 'Emails' . DS . 'text' . DS . $this->template, array('content' => $content));
+			$View->layoutPath = $layoutPath.'Emails' . DS . 'text';
 			// >>>
 			
 			$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
@@ -391,8 +391,8 @@ class BcEmailComponent extends EmailComponent {
 			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
 			//$View->layoutPath = 'email' . DS . 'html';
 			// ---
-			$htmlContent = $View->element($subDir . 'email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
-			$View->layoutPath = $layoutPath.'email' . DS . 'html';
+			$htmlContent = $View->element($subDir . 'Emails' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
+			$View->layoutPath = $layoutPath.'Emails' . DS . 'html';
 			// <<<
 			
 			$htmlContent = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($htmlContent)));
@@ -433,8 +433,8 @@ class BcEmailComponent extends EmailComponent {
 		} else {
 			$options = array('content' => $content);
 		}
-		$content = $View->element($subDir . 'email' . DS . $this->sendAs . DS . $this->template, $options);
-		$View->layoutPath = $layoutPath.'email' . DS . $this->sendAs;
+		$content = $View->element($subDir . 'Emails' . DS . $this->sendAs . DS . $this->template, $options);
+		$View->layoutPath = $layoutPath.'Emails' . DS . $this->sendAs;
 		// <<<
 		
 		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));

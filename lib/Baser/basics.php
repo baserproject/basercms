@@ -627,7 +627,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		);
 		$config = null;
 		foreach($pluginPaths as $pluginPath) {
-			$configPath = $pluginPath.$plugin.DS.'config'.DS.$file.'.php';
+			$configPath = $pluginPath . $plugin . DS . 'Config' . DS . $file . '.php';
 			if(file_exists($configPath)) {
 				include $configPath;
 			}

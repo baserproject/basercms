@@ -1501,17 +1501,6 @@ class BcManagerComponent extends Component {
 	}
 	
 /**
- * CakePHPを利用せずデータベースの接続を確認する
- *
- * @param array $config
- * @return boolean
- * @access public
- */
-	public function checkDbConnection($dbConfig){
-		return $this->_checkDbConnection($dbConfig['datasource'], $dbConfig['database'], $dbConfig['login'], $dbConfig['password'], $dbConfig['host'], $dbConfig['port']);
-	}
-	
-/**
  * DB接続チェック
  * 
  * @param	string	$dbType 'MySQL' or 'Postgres' or 'SQLite3' or 'CSV'
@@ -1524,46 +1513,46 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access private
  */
-	private function _checkDbConnection($dbType, $dbName, $dbUsername = null, $dbPassword = null, $dbHost = null, $dbPort = null){
-		$dbType = strtolower($dbType);
+	public function checkDbConnection($config){
+		
+		extract($config);
+		
+		$datasource = strtolower($datasource);
+		
 		try{
-			if ($dbType == 'mysql'){
-				$dsn  = "mysql:dbname={$dbName}";
-				if ($dbHost) $dsn .= ";host={$dbHost}";
-				if ($dbPort) $dsn .= ";port={$dbPort}";
-				$pdo = new PDO($dsn, $dbUsername, $dbPassword);
+			if ($datasource == 'mysql'){
+				$dsn  = "mysql:dbname={$database}";
+				if ($host) $dsn .= ";host={$host}";
+				if ($port) $dsn .= ";port={$port}";
+				$pdo = new PDO($dsn, $login, $password);
 
-			} elseif ($dbType == 'postgres') {
-				$dsn = "pgsql:dbname={$dbName}";
-				if ($dbHost) $dsn .= ";host={$dbHost}";
-				if ($dbPort) $dsn .= ";port={$dbPort}";
-				$pdo = new PDO($dsn, $dbUsername, $dbPassword);
+			} elseif ($datasource == 'postgres') {
+				$dsn = "pgsql:dbname={$database}";
+				if ($host) $dsn .= ";host={$host}";
+				if ($port) $dsn .= ";port={$port}";
+				$pdo = new PDO($dsn, $login, $password);
 
-			} elseif ($dbType == 'sqlte3') {
+			} elseif ($datasource == 'sqlte3') {
 				// すでにある場合
-				if (file_exists($dbName)) {
-					if (!is_writable($dbName)) return false;
+				if (file_exists($database)) {
+					if (!is_writable($database)) throw new Exception("データベースファイルに書き込み権限がありません。");
 				// ない場合
 				} else {
-					if (!is_writable(dirname($dbName))) return false;
+					if (!is_writable(dirname($database))) throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
 				}
-				$dsn = "sqlite:".$dbName;
+				$dsn = "sqlite:".$database;
 				$pdo = new PDO($dsn);
-
-			} elseif ($dbType == 'csv') {
-				if (is_writable($dbName)) return true;
-				return false;
+				
+			} elseif ($datasource == 'csv') {
+				if (is_writable($database)) return true;
+				throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
 
 			} else {
 				// ドライバが見つからない
 				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite3|CSV)");
-				return false;
 			}
 		}catch (PDOException $e){
-			// そのまま例外投げる?
-//			 throw new PDOException($e);
-			// 接続エラー
-			return false;
+			 throw new PDOException($e);
 		}
 
 		// 接続できたよ
@@ -1572,6 +1561,7 @@ class BcManagerComponent extends Component {
 			unset($pdo);
 			return true;
 		}
+		
 	}
 
 	
