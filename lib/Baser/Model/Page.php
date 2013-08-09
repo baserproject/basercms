@@ -332,7 +332,7 @@ class Page extends AppModel {
 			if($data['page_category_id']){
 				$fields = array('parent_id','name','title');
 				$pageCategoryTree = $this->PageCategory->getTreeList($fields,$data['page_category_id']);
-				$path = getViewPath().'pages'.DS.Configure::read('BcAgent.'.$type.'.prefix');
+				$path = getViewPath().'Pages'.DS.Configure::read('BcAgent.'.$type.'.prefix');
 				$parentId = $agentId;
 				foreach($pageCategoryTree as $pageCategory) {
 					$path .= '/'.$pageCategory['PageCategory']['name'];
@@ -565,9 +565,9 @@ class Page extends AppModel {
 
 		// pagesディレクトリのパスを取得
 		if($theme) {
-			$path = BASER_THEMES.$theme.DS.'pages'.DS;
+			$path = BASER_THEMES.$theme.DS.'Pages'.DS;
 		}else {
-			$path = APP . 'View' . DS.'pages'.DS;
+			$path = APP . 'View' . DS.'Pages'.DS;
 
 		}
 
@@ -914,7 +914,7 @@ class Page extends AppModel {
 			$categoryTitles = Configure::read('Baser.pageCategoryTitles');
 			$categoryTitle = -1;
 			if($categoryTitles) {
-				$categoryNames = explode('/', str_replace(getViewPath().'pages'.DS, '', $targetPath));
+				$categoryNames = explode('/', str_replace(getViewPath() . 'Pages' . DS, '', $targetPath));
 				foreach($categoryNames as $key => $value) {
 					if(isset($categoryTitles[$value])) {
 						if(count($categoryNames) == ($key + 1)) {

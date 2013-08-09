@@ -22,8 +22,11 @@
  * Include files
  */
 App::uses('Rss', 'Feed.Model');
-App::uses('SimplePie', 'Feed.Vendor'); // TODO basercamp 確認する → オブジェクトのシリアライズの問題があるのでここから動かさない事
-
+// なぜか、サーバーによって、App::uses を利用するとクラスを初期化した瞬間に処理がストップしてしまう
+// include にしておくと大丈夫だった。
+// 再現サーバーは、Ubuntu Apache2 PHP5.2
+//App::uses('SimplePie', 'Feed.Vendor');	
+include BASER_PLUGINS . 'Feed' . DS . 'Vendor' . DS . 'simplepie.php';
 /**
  * RSS取得モデルであるRssクラスを継承したクラス
  *

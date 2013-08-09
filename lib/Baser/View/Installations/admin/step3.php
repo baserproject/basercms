@@ -180,10 +180,10 @@ $(document).ready( function() {
 				<li id="dbInfo" class="clearfix">
 					<label>データベース情報</label>
 					<br />
-					<div class="float-left"> <?php echo $this->BcForm->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
-						<small>プレフィックス</small> </div>
 					<div class="float-left"> <?php echo $this->BcForm->input('Installation.dbName',array('type' => 'text', 'maxlength'=>'100')); ?><br />
 						<small>データベース名</small> </div>
+					<div class="float-left"> <?php echo $this->BcForm->input('Installation.dbPrefix',array('type' => 'text', 'size'=>'10')); ?><br />
+						<small>プレフィックス</small> </div>
 					<div class="float-left"> <?php echo $this->BcForm->input('Installation.dbPort',array('type' => 'text', 'maxlength'=>'5','size'=>5)); ?><br />
 						<small>ポート</small> </div>
 					<?php echo $this->BcForm->input('buttonclicked',array('style'=>'display:none','type'=>'hidden')); ?>

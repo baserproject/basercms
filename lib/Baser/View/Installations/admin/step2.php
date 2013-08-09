@@ -238,19 +238,17 @@ mod_gzip_on Off</pre>
 		</div>
 	</div>
 
-	<?php echo $this->BcForm->create(null, array('action' => 'step2', 'id' => 'checkenv')) ?>
-	<?php echo $this->BcForm->hidden('clicked') ?>
-
-	<div class="submit">
-		<?php echo $this->BcForm->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
-		<?php if (!$blRequirementsMet): ?>
-			<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
-		<?php else: ?>
-			<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
-		<?php endif ?>
-	</div>
-
-	<?php echo $this->BcForm->end() ?>
+	<form action="<?php echo $this->request->base ?>/installations/step2" method="post" id="checkenv">
+		<?php echo $this->BcForm->hidden('clicked') ?>
+		<div class="submit">
+			<?php echo $this->BcForm->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
+			<?php if (!$blRequirementsMet): ?>
+				<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
+			<?php else: ?>
+				<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
+			<?php endif ?>
+		</div>
+	</form>
 
 </div>
 

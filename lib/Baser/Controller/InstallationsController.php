@@ -260,10 +260,7 @@ class InstallationsController extends AppController {
 					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				}else {
-					$db = ConnectionManager::getDataSource('baser');
-					$con = $db->getConnection();
-					$errorInfo = $con->errorInfo();
-					$this->setMessage("データベースの構築中にエラーが発生しました。<br />".$db->error, true);
+					$this->setMessage("データベースの構築中にエラーが発生しました。", true);
 				}
 
 			}
@@ -479,7 +476,7 @@ class InstallationsController extends AppController {
 		if ( $this->Session->read('Installation.admin_username') ) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
 		} else {
-			$data['Installation']['admin_username'] = 'admin';
+			$data['Installation']['admin_username'] = '';
 		}
 		if ( $this->Session->read('Installation.admin_password') ) {
 			$data['Installation']['admin_password'] = $this->Session->read('Installation.admin_password');
@@ -623,7 +620,7 @@ class InstallationsController extends AppController {
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
 				$dbFolderPath = APP.'db'.DS.'sqlite';
-				if($folder->create($dbFolderPath, 0777) && is_writable($dbFolderPath)){
+				if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
 					$dbsource['sqlite3'] = 'SQLite3';
 				}
 			}else {
@@ -641,7 +638,7 @@ class InstallationsController extends AppController {
 
 		/* CSV利用可否 */
 		$dbFolderPath = APP.'db'.DS.'csv';
-		if($folder->create($dbFolderPath, 0777) && is_writable($dbFolderPath)){
+		if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
 			$dbsource['csv'] = 'CSV';
 		}
 
