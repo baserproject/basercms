@@ -1499,4 +1499,69 @@ class BcManagerComponent extends Component {
 		return $status + $check;
 
 	}
+	
+/**
+ * DB接続チェック
+ * 
+ * @param	string	$dbType 'MySQL' or 'PostgreSQL' or 'SQLite3' or 'CSV'
+ * @param	string	$dbName データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
+ * @param	string	$dbUsername 接続ユーザ名 テキストDBの場合は不要
+ * @param	string	$dbPassword 接続パスワード テキストDBの場合は不要
+ * @param	string	$dbPort 接続ポート テキストDBの場合は不要
+ * @param	string	$dbHost テキストDB or localhostの場合は不要
+ * 
+ * @return boolean
+ */
+	public function checkDbConnection($dbType, $dbName, $dbUsername = null, $dbPassword = null, $dbHost = null, $dbPort = null){
+		$dbType = strtolower($dbType);
+		try{
+			if ($dbType == 'mysql'){
+				$dsn  = "mysql:dbname={$dbName}";
+				if ($dbHost) $dsn .= ";host={$dbHost}";
+				if ($dbPort) $dsn .= ";port={$dbPort}";
+				$pdo = new PDO($dsn, $dbUsername, $dbPassword);
+
+			} elseif ($dbType == 'postgresql') {
+				$dsn = "pgsql:dbname={$dbName}";
+				if ($dbHost) $dsn .= ";host={$dbHost}";
+				if ($dbPort) $dsn .= ";port={$dbPort}";
+				$pdo = new PDO($dsn, $dbUsername, $dbPassword);
+
+			} elseif ($dbType == 'sqlte3') {
+				// すでにある場合
+				if (file_exists($dbName)) {
+					if (!is_writable($dbName)) return false;
+				// ない場合
+				} else {
+					if (!is_writable(dirname($dbName))) return false;
+				}
+				$dsn = "sqlite:".$dbName;
+				$pdo = new PDO($dsn);
+
+			} elseif ($dbType == 'csv') {
+				if (is_writable($dbName)) return true;
+				return false;
+
+			} else {
+				// ドライバが見つからない
+				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|PostgreSQL|SQLite3|CSV)");
+				return false;
+			}
+		}catch (PDOException $e){
+			// そのまま例外投げる?
+			// throw new PDOException($e);
+			// 接続エラー
+			return false;
+		}
+
+		// 接続できたよ
+		if ($pdo){
+			// disconnect
+			unset($pdo);
+			return true;
+		}
+	}
+
+	
+	
 }
