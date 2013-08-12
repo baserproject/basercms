@@ -447,6 +447,7 @@ class BlogCommentsController extends BlogAppController {
     {
 		
         $this->BcCaptcha->render();
+		exit();
 		
     } 
 /**
@@ -459,6 +460,7 @@ class BlogCommentsController extends BlogAppController {
     {
 		
         $this->BcCaptcha->render();
+		exit();
 		
     } 
 }

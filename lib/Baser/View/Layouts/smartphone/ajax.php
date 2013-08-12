@@ -17,4 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include CAKE.'View'.DS.'Layouts'.DS.'ajax.ctp';
+include BASER_VIEWS . 'Layouts' . DS . 'ajax' . $this->ext;

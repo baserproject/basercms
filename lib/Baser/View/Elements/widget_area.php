@@ -24,6 +24,9 @@
 if(Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
+if(!isset($subDir)) {
+	$subDir = true;
+}
 if(!empty($no)){
 	$widgets = $this->requestAction('/widget_areas/get_widgets/'.$no);
 	if($widgets){

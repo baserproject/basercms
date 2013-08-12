@@ -68,7 +68,7 @@ if (!empty($mailFields)) {
 				if($this->Mailform->error("Message." . $field['field_name'] . "_format", "check")) {
 					echo $this->Mailform->error("Message." . $field['field_name'] . "_format", "形式が不正です。");
 				}else {
-					echo $this->Mailform->error("Message." . $field['field_name']);
+					echo $this->Mailform->error("Message." . $field['field_name'], "必須項目です。");
 				}
 			}
 
@@ -83,7 +83,7 @@ if (!empty($mailFields)) {
 						echo $this->Mailform->error("Message." . $field['group_field'] . "_format", "形式が不正です。");
 					} else {
 						if($field['valid']) {
-							echo $this->Mailform->error("Message." . $field['group_field']);
+							echo $this->Mailform->error("Message." . $field['group_field'], "必須項目です。");
 						}
 					}
 					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません。");

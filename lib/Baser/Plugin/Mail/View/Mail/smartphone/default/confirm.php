@@ -20,7 +20,7 @@
 $this->BcBaser->css(array('jquery-ui/ui.all'), array('inline' => true));
 $this->BcBaser->js(array('jquery-ui-1.8.19.custom.min','i18n/ui.datepicker-ja'), false);
 if($freezed){
-	$mailform->freeze();
+	$this->Mailform->freeze();
 }
 ?>
 

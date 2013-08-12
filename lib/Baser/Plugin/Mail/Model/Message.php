@@ -107,7 +107,6 @@ class Message extends MailAppModel {
  * @param	array	$options
  * @return 	array
  * @access	public
- * TODO beforeValidateに移行できないか検討
  */
 	public function beforeValidate($options = array()) {
 		
@@ -219,7 +218,7 @@ class Message extends MailAppModel {
 		foreach($this->validate as $key => $data) {
 
 			// VALID_NOT_EMPTY以外は形式エラーとする
-			if($data != '/.+/') {
+			if(key($data) != 'notEmpty') {
 				if(isset($this->validationErrors[$key])) {
 					$this->invalidate($key.'_format');
 				}
