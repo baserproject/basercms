@@ -110,11 +110,21 @@ class Message extends MailAppModel {
  * TODO beforeValidateに移行できないか検討
  */
 	public function beforeValidate($options = array()) {
-
-		$data = $this->data;
-
+		
 		// バリデーション設定
 		$this->_setValidate();
+
+		return parent::beforeValidate($options);
+
+	}
+/**
+ * Called after data has been checked for errors
+ *
+ * @return void
+ */
+	public function afterValidate() {
+		
+		$data = $this->data;
 		// Eメール確認チェック
 		$this->_validEmailCofirm($data);
 		// 不完全データチェック
@@ -125,9 +135,7 @@ class Message extends MailAppModel {
 		$this->_validGroupErrorCheck();
 		// エラー内容変換
 		$this->_validSingeErrorCheck();
-
-		return parent::beforeValidate($options);
-
+		
 	}
 /**
  * validate（入力チェック）を個別に設定する
@@ -242,12 +250,10 @@ class Message extends MailAppModel {
 
 		// エラーが発生しているかチェック
 		foreach($dists as $key =>$dist) {
-
 			foreach($dist as $data) {
 				if(isset($this->validationErrors[$data])) {
-
 					// VALID_NOT_EMPTY以外は形式エラーとする
-					if($this->validate[$data]!='/.+/') {
+					if(key($this->validate[$data]) != 'notEmpty') {
 						$this->invalidate($key);
 						$this->invalidate($key.'_format');
 					}else {
@@ -256,7 +262,6 @@ class Message extends MailAppModel {
 
 				}
 			}
-
 		}
 
 	}

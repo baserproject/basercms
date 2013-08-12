@@ -242,7 +242,6 @@ App::uses('BcEmailComponent', 'Controller/Component');
  * ＊ 先頭のスラッシュは除外する
  * ＊ baseUrlは除外する
  *  
- * TODO QUERY_STRING ではなく、全て REQUEST_URI で判定してよいのでは？
  */
 	function getUrlFromEnv() {
 		
@@ -271,40 +270,20 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			
 		}else {
 			
-			$parameter = '';
-			if(isset($_SERVER['QUERY_STRING'])) {
-				$query = $_SERVER['QUERY_STRING'];
+			if(strpos($requestUri, '?')) {
+				$aryRequestUri = explode('?', $requestUri);
+				$requestUri = $aryRequestUri[0];
 			}
-			if(!empty($query)){
-				if(strpos($query, '&')){
-					$queries = explode('&',$query);
-					foreach($queries as $_query) {
-						if(strpos($_query, '=')){
-							list($key,$value) = explode('=',$_query);
-							if($key=='url'){
-								$parameter = $value;
-								break;
-							}
-						}
-					}
-				}else{
-					if(strpos($query, '=')){
-						list($key,$value) = explode('=',$query);
-						if($key=='url'){
-							$parameter = $value;
-						}
-					}
-				}
 
-			}elseif (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $requestUri)){
+			if (preg_match('/^'.str_replace('/', '\/', baseUrl()).'/is', $requestUri)){
 				$parameter = preg_replace('/^'.str_replace('/', '\/', baseUrl()).'/is', '', $requestUri);
 			} else {
 				$parameter = $requestUri;
 			}
+			
 		}
-		$parameter = preg_replace('/^\//','',$parameter);
 		
-		return $parameter;
+		return preg_replace('/^\//','',$parameter);
 
 	}
 /**

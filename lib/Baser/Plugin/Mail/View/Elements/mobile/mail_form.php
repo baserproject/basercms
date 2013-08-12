@@ -20,9 +20,9 @@
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if(!$freezed): ?>
-<?php echo $this->Mailform->create(null, array('controller' => $mailContent['MailContent']['name'], 'action' => 'confirm')) ?>
+<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $mailContent['MailContent']['name'], 'action' => 'confirm'))) ?>
 <?php else: ?>
-<?php echo $this->Mailform->create(null, array('controller' => $mailContent['MailContent']['name'], 'action' => 'submit')) ?>
+<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $mailContent['MailContent']['name'], 'action' => 'submit'))) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 <?php echo $this->BcBaser->element('mail_input',array('blockStart'=>1)) ?>

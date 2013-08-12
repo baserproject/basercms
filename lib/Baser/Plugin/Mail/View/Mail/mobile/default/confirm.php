@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 if($freezed){
-	$mailform->freeze();
+	$this->Mailform->freeze();
 }
 ?>
 

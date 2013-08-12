@@ -189,9 +189,9 @@ class BaserAppController extends Controller {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
 				$agent = Configure::read('BcRequest.agent');
 				if($agent == 'mobile') {
-					$this->helpers[] = 'BcMobileHelper';
+					$this->helpers[] = 'BcMobile';
 				} elseif($agent == 'smartphone') {
-					$this->helpers[] = 'BcSmartphoneHelper';
+					$this->helpers[] = 'BcSmartphone';
 				}
 			}
 
@@ -322,9 +322,9 @@ class BaserAppController extends Controller {
 			$this->subDir = str_replace('_', '/', $this->request->params['prefix']);		
 			$agent = Configure::read('BcRequest.agent');
 			if($agent == 'mobile') {
-				$this->helpers[] = 'BcMobileHelper';
+				$this->helpers[] = 'BcMobile';
 			} elseif($agent == 'smartphone') {
-				$this->helpers[] = 'BcSmartphoneHelper';
+				$this->helpers[] = 'BcSmartphone';
 			}
 		}
 

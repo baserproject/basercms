@@ -46,7 +46,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BaserPluginApp', 'Controller');
 	App::uses('BaserPluginAppModel', 'Model');
 
-	$parameter = preg_replace('/^\//', '', Router::url());
+	$parameter = getUrlParamFromEnv();
 	
 	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 	$agent = Configure::read('BcRequest.agent');
@@ -137,7 +137,6 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * それを /xxx で呼び出す為のルーティング
  */
 	$adminPrefix = Configure::read('Routing.prefixes.0');
-	$test = Configure::read('Routing');
 	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
 		$Page = ClassRegistry::init('Page');
@@ -162,9 +161,9 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				}
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$agent){
-						Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
+						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}else{
-						Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
+						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
 					}
 					break;
 				} else {
