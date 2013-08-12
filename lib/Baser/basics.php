@@ -39,7 +39,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		// CakePHP2では、$_GET['url'] や、$_SERVER['QUERY_STRING'] に URLの情報は入ってこない
 		// 暫定処置として、サブディレクトリ、スマートURLオフ に未対応前提で、'/' を戻す
 
-		return '/';
+		//return '/';
 		
 		// 下記未実装
 		
@@ -49,11 +49,19 @@ App::uses('BcEmailComponent', 'Controller/Component');
 				$baseUrl .= '/';
 			}
 		}else {
-			if(!empty($_SERVER['QUERY_STRING'])) {
+			
+			// TODO basercamp スマートURLオフを考慮してない
+			$script = $_SERVER['SCRIPT_FILENAME'];
+			$script = str_replace(docRoot(), '', $script);
+			$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+			$baseUrl = preg_replace("/index$/", '', $baseUrl);
+			$baseUrl = preg_replace("/test\.php$/", '', $baseUrl);
+			
+			//if(!empty($_SERVER['QUERY_STRING'])) {
 				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
 				// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまい
 				// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-				$url = '';
+			/*	$url = '';
 				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
 					$url = $maches[1];
 				}
@@ -76,11 +84,14 @@ App::uses('BcEmailComponent', 'Controller/Component');
 				}
 				$baseUrl = preg_replace("/index$/", '', $requestUri);
 				$baseUrl = preg_replace("/test\.php$/", '', $requestUri);
-			}
+			}*/
+			
 		}
+
 		if(!$baseUrl){
 			$baseUrl = '/';
 		}
+
 		return $baseUrl;
 
 	}
