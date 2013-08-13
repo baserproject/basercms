@@ -30,6 +30,10 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
+ * Include files
+ */
+App::uses('DboSource', 'Model/Datasource');
+/**
  * CSV DBO Driver
  *
  * @package baser.models.datasources.dbo
@@ -179,13 +183,13 @@ class BcCsv extends DboSource {
  * @return array 結果セット
  * @access public
  */
-	public function read(&$model, $queryData = array(), $recursive = null) {
+	public function read(Model $model, $queryData = array(), $recursive = NULL) {
 
 		// DB接続
 		if(!$this->connect($model,false)) {
 			return false;
 		}
-		$queryData = $this->__scrubQueryData($queryData);
+		$queryData = $this->_scrubQueryData($queryData);
 		$null = null;
 		$array = array();
 		$linkedModels = array();
@@ -211,7 +215,9 @@ class BcCsv extends DboSource {
 		// 全てのフィールドを取得
 		$this->_loadCsvFields($model);
 
-		foreach ($model->__associations as $type) {
+		$_associations = $model->associations();
+		
+		foreach ($_associations as $type) {
 			foreach ($model->{$type} as $assoc => $assocData) {
 				if ($model->recursive > -1) {
 					$linkModel = $model->{$assoc};
@@ -236,10 +242,10 @@ class BcCsv extends DboSource {
 			return false;
 		}
 
-		$filtered = $this->__filterResults($resultSet, $model);
-
+		$filtered = $this->_filterResults($resultSet, $model);
+		$_associations = $model->associations();
 		if ($model->recursive > 0) {
-			foreach ($model->__associations as $type) {
+			foreach ($_associations as $type) {
 				foreach ($model->{$type} as $assoc => $assocData) {
 
 					$linkModel = $model->{$assoc};
@@ -253,7 +259,7 @@ class BcCsv extends DboSource {
 					}
 				}
 			}
-			$this->__filterResults($resultSet, $model, $filtered);
+			$this->_filterResults($resultSet, $model, $filtered);
 		}
 
 		if (!is_null($recursive)) {
@@ -273,7 +279,7 @@ class BcCsv extends DboSource {
  * @return boolean Success
  * @access public
  */
-	public function create(&$model, $fields = null, $values = null) {
+	public function create(Model $model, $fields = NULL, $values = NULL) {
 
 		// DB接続
 		if(!$this->connect($model,true)) {
@@ -327,7 +333,7 @@ class BcCsv extends DboSource {
  * @return boolean
  * @access public
  */
-	public function update(&$model, $fields = array(), $values = null, $conditions = null) {
+	public function update(Model $model, $fields = NULL, $values = NULL, $conditions = NULL) {
 
 		// DB接続
 		if(!$this->connect($model,true)) {
@@ -372,7 +378,7 @@ class BcCsv extends DboSource {
  * @return boolean Success
  * @access public
  */
-	public function delete(&$model, $conditions = null) {
+	public function delete(Model $model, $conditions = null) {
 
 		// DB接続
 		if(!$this->connect($model,true)) {
@@ -387,8 +393,10 @@ class BcCsv extends DboSource {
 
 		if (empty($conditions)) {
 			$alias = $joins = false;
+			$conditions = $this->conditions($this->defaultConditions($model, $conditions, $alias), true, true, $model);
+		} else {
+			$conditions = $this->conditions($conditions, true, true, $model);
 		}
-		$conditions = $this->conditions($this->defaultConditions($model, $conditions, $alias), true, true, $model);
 
 		if ($conditions === false) {
 			$this->disconnect($model->tablePrefix.$model->table);
@@ -662,7 +670,7 @@ class BcCsv extends DboSource {
  * @return mixed 配列の結果セットまたは、true/false
  * @access protected
  */
-	protected function _execute($sql) {
+	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
 
 		return $this->csvQuery($sql);
 
@@ -1472,7 +1480,7 @@ class BcCsv extends DboSource {
 		$readPattern = "/SELECT(.+)FROM(.+?)(WHERE.+|ORDER\sBY.+|LIMIT.+|)$/si";
 		$updatePattern = "/UPDATE[\s]+(.+?)[\s]+SET[\s]+(.+)[\s]+WHERE[\s]+(.+)/si";
 		$deletePattern = "/DELETE.+FROM[\s]+(.+)[\s]+WHERE[\s]+(.+)/si"; // deleteAllの場合は、DELETEとFROMの間にクラス名が入る
-		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\);/si";
+		$buildPattern = "/CREATE\sTABLE\s([^\s]+)\s*\((.+)\)\s*;/si";
 		$dropPattern = "/DROP\sTABLE\s+([^\s]+)/si";
 
 		// CREATE
@@ -1856,7 +1864,7 @@ class BcCsv extends DboSource {
  * 
  * @return array Array of tablenames in the database
  */
-	public function listSources() {
+	public function listSources($data = NULL) {
 
 		$cache = parent::listSources();
 		if ($cache != null) {
@@ -1886,7 +1894,7 @@ class BcCsv extends DboSource {
  * @return array フィールド情報のリスト
  * @access public
  */
-	public function describe(&$model) {
+	public function describe($model) {
 
 		$cache = parent::describe($model);
 		if ($cache != null) {
@@ -1961,7 +1969,7 @@ class BcCsv extends DboSource {
 				}
 			}
 		}
-		$this->__cacheDescription($this->fullTableName($model, false), $fields);
+		$this->_cacheDescription($this->fullTableName($model, false), $fields);
 
 		return $fields;
 
@@ -1977,11 +1985,22 @@ class BcCsv extends DboSource {
  */
 	public function value($data, $column = null, $safe = false) {
 		
-		$parent = parent::value($data, $column, $safe);
-
-		if ($parent != null) {
-			return $parent;
-		} elseif ($data === null) {
+		if (is_array($data) && !empty($data)) {
+			return array_map(
+				array(&$this, 'value'),
+				$data, array_fill(0, count($data), $column)
+			);
+		} elseif (is_object($data) && isset($data->type, $data->value)) {
+			if ($data->type == 'identifier') {
+				return $this->name($data->value);
+			} elseif ($data->type == 'expression') {
+				return $data->value;
+			}
+		} elseif (in_array($data, array('{$__cakeID__$}', '{$__cakeForeignKey__$}'), true)) {
+			return $data;
+		}
+		
+		if ($data === null) {
 			return 'NULL';
 		} elseif ($data === '') {
 			return  "''";
@@ -2004,6 +2023,7 @@ class BcCsv extends DboSource {
 				}
 			default:
 				$data = "'" . $this->escapeString($data) . "'";
+				
 				break;
 		}
 		return $data;
@@ -2030,7 +2050,7 @@ class BcCsv extends DboSource {
  * @return string Error message with error number
  * @access public
  */
-	public function lastError() {
+	public function lastError(PDOStatement $query = NULL) {
 		
 		/*if (mysql_errno($this->connection)) {
 		 return mysql_errno($this->connection).': '.mysql_error($this->connection);
@@ -2046,7 +2066,7 @@ class BcCsv extends DboSource {
  * @return integer Number of affected rows
  * @access public
  */
-	public function lastAffected() {
+	public function lastAffected($source = NULL) {
 		
 		/*
 		 if ($this->_result) {
@@ -2064,7 +2084,7 @@ class BcCsv extends DboSource {
  * @return integer Number of rows in resultset
  * @access public
  */
-	public function lastNumRows() {
+	public function lastNumRows($source = NULL) {
 		
 		if ($this->_result and is_resource($this->_result)) {
 			return @mysql_num_rows($this->_result);
@@ -2158,7 +2178,7 @@ class BcCsv extends DboSource {
  * @return void
  * @access public
  */
-	public function queryAssociation(&$model, &$linkModel, $type, $association, $assocData, &$queryData, $external = false, &$resultSet, $recursive, $stack) {
+	public function queryAssociation(Model $model, &$linkModel, $type, $association, $assocData, &$queryData, $external, &$resultSet, $recursive, $stack) {
 
 		// DB接続
 		if(!$this->connect($linkModel,false)) {
@@ -2210,7 +2230,7 @@ class BcCsv extends DboSource {
 						}
 					}
 				}
-				return $this->__mergeHasMany($resultSet, $fetch, $association, $model, $linkModel, $recursive);
+				return $this->_mergeHasMany($resultSet, $fetch, $association, $model, $linkModel, $recursive);
 			} elseif ($type === 'hasAndBelongsToMany') {
 				$ins = $fetch = array();
 				for ($i = 0; $i < $count; $i++) {
@@ -2336,16 +2356,16 @@ class BcCsv extends DboSource {
 						if (empty($merge) && !isset($row[$association])) {
 							$row[$association] = $merge;
 						} else {
-							$this->__mergeAssociation($resultSet[$i], $merge, $association, $type);
+							$this->_mergeAssociation($resultSet[$i], $merge, $association, $type);
 						}
 					} else {
-						$this->__mergeAssociation($resultSet[$i], $fetch, $association, $type, $selfJoin);
+						$this->_mergeAssociation($resultSet[$i], $fetch, $association, $type, $selfJoin);
 					}
 					$resultSet[$i][$association] = $linkModel->afterfind($resultSet[$i][$association]);
 
 				} else {
 					$tempArray[0][$association] = false;
-					$this->__mergeAssociation($resultSet[$i], $tempArray, $association, $type, $selfJoin);
+					$this->_mergeAssociation($resultSet[$i], $tempArray, $association, $type, $selfJoin);
 				}
 			}
 		}
@@ -2449,7 +2469,7 @@ class BcCsv extends DboSource {
  */
 	public function resultSet(&$results) {
 		
-		$this->results = $results;
+		$this->results =& $results;
 		$this->map = array();
 		$index = 0;
 
@@ -2656,7 +2676,7 @@ class BcCsv extends DboSource {
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
  */
-	public function begin(&$model) {
+	public function begin() {
 		
 		return null;
 		
@@ -2670,7 +2690,7 @@ class BcCsv extends DboSource {
  * or a transaction has not started).
  * @access pablic
  */
-	public function commit(&$model) {
+	public function commit() {
 		
 		return null;
 		
@@ -2685,7 +2705,7 @@ class BcCsv extends DboSource {
  * or a transaction has not started).
  *@access public
  */
-	public function rollback(&$model) {
+	public function rollback() {
 		
 		return null;
 		
@@ -2704,10 +2724,10 @@ class BcCsv extends DboSource {
  * @return mixed
  * @access public
  */
-	public function generateAssociationQuery(&$model, &$linkModel, $type, $association = null, $assocData = array(), &$queryData, $external = false, &$resultSet) {
+	public function generateAssociationQuery(Model $model, $linkModel, $type, $association, $assocData, &$queryData, $external, &$resultSet) {
 		
-		$queryData = $this->__scrubQueryData($queryData);
-		$assocData = $this->__scrubQueryData($assocData);
+		$queryData = $this->_scrubQueryData($queryData);
+		$assocData = $this->_scrubQueryData($assocData);
 
 		if (empty($queryData['fields'])) {
 			$queryData['fields'] = $this->fields($model, $model->alias);
@@ -2764,7 +2784,7 @@ class BcCsv extends DboSource {
 		switch ($type) {
 			case 'hasOne':
 			case 'belongsTo':
-				$conditions = $this->__mergeConditions(
+				$conditions = $this->_mergeConditions(
 					$assocData['conditions'],
 					$this->getConstraint($type, $model, $linkModel, $alias, array_merge($assocData, compact('external', 'self')))
 				);
@@ -2810,7 +2830,7 @@ class BcCsv extends DboSource {
 					$assocData['fields'] = array_merge($assocData['fields'], $this->fields($linkModel, $alias, array("{$alias}.{$assocData['foreignKey']}")));
 				}
 				$query = array(
-					'conditions' => $this->__mergeConditions($this->getConstraint('hasMany', $model, $linkModel, $alias, $assocData), $assocData['conditions']),
+					'conditions' => $this->_mergeConditions($this->getConstraint('hasMany', $model, $linkModel, $alias, $assocData), $assocData['conditions']),
 					'fields' => array_unique($assocData['fields']),
 					'table' => $this->fullTableName($linkModel),
 					'alias' => $alias,

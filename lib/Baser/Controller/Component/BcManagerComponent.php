@@ -185,6 +185,9 @@ class BcManagerComponent extends Component {
 			case 'sqlite' :
 				$name = 'Database/BcSqlite';
 				break ;
+			case 'csv' :
+				$name = 'Database/BcCsv';
+				break ;
 			default :
 
 		}

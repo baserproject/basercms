@@ -1088,7 +1088,7 @@ class BcSqlite extends DboSource {
 			}
 		}
 
-		$this->__cacheDescription($model->tablePrefix . $model->table, $fields);
+		$this->_cacheDescription($model->tablePrefix . $model->table, $fields);
 		return $fields;
 		
 	}
@@ -1110,7 +1110,7 @@ class BcSqlite extends DboSource {
 		if (isset($this->__descriptions[$table])) {
 			return $this->__descriptions[$table];
 		}
-		$cache = $this->__cacheDescription($table);
+		$cache = $this->_cacheDescription($table);
 
 		if ($cache !== null) {
 			$this->__descriptions[$table] = $cache;
@@ -1119,29 +1119,5 @@ class BcSqlite extends DboSource {
 		return null;
 		
 	}
-/**
- * Cache the DataSource description
- *
- * @param string $object The name of the object (model) to cache
- * @param mixed $data The description of the model, usually a string or array
- */
-	function __cacheDescription($object, $data = null) {
-		if ($this->cacheSources === false) {
-			return null;
-		}
 
-		if ($data !== null) {
-			$this->__descriptions[$object] =& $data;
-		}
-
-		$key = ConnectionManager::getSourceName($this) . '_' . $object;
-		$cache = Cache::read($key, '_cake_model_');
-
-		if (empty($cache)) {
-			$cache = $data;
-			Cache::write($key, $cache, '_cake_model_');
-		}
-
-		return $cache;
-	}
 }
