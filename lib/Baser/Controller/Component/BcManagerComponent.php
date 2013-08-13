@@ -65,9 +65,10 @@ class BcManagerComponent extends Component {
 		
 		// SecritySaltの設定
 		$securitySalt = $this->setSecuritySalt();
+		$securityCipherSeed = $this->setSecurityCipherSeed();
 
 		// インストールファイル作成
-		if(!$this->createInstallFile($securitySalt, $siteUrl)) {
+		if(!$this->createInstallFile($securitySalt, $securityCipherSeed, $siteUrl)) {
 			$this->log('インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
 			$result = false;
 		}
@@ -448,7 +449,7 @@ class BcManagerComponent extends Component {
  * @return boolean 
  * @access public
  */
-	public function createInstallFile($securitySalt, $siteUrl = "") {
+	public function createInstallFile($securitySalt, $secrityCipherSeed, $siteUrl = "") {
 
 		$installFileName = APP . 'Config' . DS.'install.php';
 		
@@ -457,6 +458,7 @@ class BcManagerComponent extends Component {
 		}
 		$installCoreData = array("<?php",	
 			"Configure::write('Security.salt', '{$securitySalt}');",
+			"Configure::write('Security.cipherSeed', '{$secrityCipherSeed}');",
 			"Configure::write('Cache.disable', false);",
 			"Configure::write('Cache.check', true);",
 			"Configure::write('Session.save', 'session');",
@@ -489,6 +491,23 @@ class BcManagerComponent extends Component {
 		for ($i=0; $i<$length; $i++)
 			$randkey .= substr($keyset, rand(0,strlen($keyset)-1), 1);
 		Configure::write('Security.salt', $randkey);
+		return $randkey;
+
+	}
+/**
+ * セキュリティ用の数字キーを生成する
+ *
+ * @param	int $length
+ * @return string 数字キー
+ * @access	public
+ */
+	public function setSecurityCipherSeed($length = 29) {
+
+		$keyset = "0123456789";
+		$randkey = "";
+		for ($i=0; $i<$length; $i++)
+			$randkey .= substr($keyset, rand(0,strlen($keyset)-1), 1);
+		Configure::write('Security.cipherSeed', $randkey);
 		return $randkey;
 
 	}

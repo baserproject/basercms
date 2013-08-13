@@ -286,6 +286,9 @@ class InstallationsController extends AppController {
 				// SecuritySalt設定
 				$salt = $this->BcManager->setSecuritySalt();
 				$this->Session->write('Installation.salt',$salt);
+				// SecurityCipherSeed設定
+				$cipherSeed = $this->BcManager->setSecurityCipherSeed();
+				$this->Session->write('Installation.cipherSeed',$cipherSeed);
 				
 				// 管理ユーザー登録
 				$user = array(
@@ -348,7 +351,8 @@ class InstallationsController extends AppController {
 			$this->BcManager->createDatabaseConfig($this->_readDbSettingFromSession());
 			// インストールファイルを生成する
 			$secritySalt = $this->Session->read('Installation.salt');
-			$this->BcManager->createInstallFile($secritySalt);
+			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
+			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
 			$this->redirect('step5');
 		} elseif(BC_INSTALLED) {
 			$installationData = Cache::read('Installation', 'default');
