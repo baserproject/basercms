@@ -24,7 +24,7 @@
 	<thead>
 		<tr>
 			<th style="width:160px" class="list-tool">
-<?php if($this->BcBaser->isAdminUser()): ?>
+<?php if($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
 				<div>
 					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
 					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
