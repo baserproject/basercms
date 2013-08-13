@@ -111,10 +111,6 @@ class DbRestore {
 				break;
 
 			case 'sqlite':
-				$this->_dbLink = sqlite_open($this->_dbName, 0666, $sqliteerror);
-				break;
-
-			case 'sqlite3':
 				$this->_dbLink = new PDO('sqlite:'.$dbName,'','');
 				break;
 
@@ -183,22 +179,16 @@ class DbRestore {
 		switch ($this->_dbType) {
 			case 'mysql':
 				$ret = mysql_query($sql);
-				//if (!$ret) print(mysql_error());
 				break;
 
 			case 'postgres':
 				$ret = pg_query($this->_dbLink,$sql);
-				//if (!$ret) print(pg_last_error());
 				break;
 
 			case 'sqlite':
-				$ret = sqlite_query($this->_dbLink, $sql, SQLITE_BOTH, $sqliteerror);
-				//if (!$ret) print($sqliteerror);
-				break;
-
-			case 'sqlite3':
 
 				$ret = $this->_dbLink->query($sql);
+				break;
 
 		}
 		return $ret;
@@ -222,10 +212,8 @@ class DbRestore {
 			case 'postgres':
 				$tables = $this->pg_list_tables($this->_dbLink);
 				break;
-			case 'sqlite':  // TODO 未実装
-				break;
 
-			case 'sqlite3':
+			case 'sqlite':
 				$sth = $this->_dbLink->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;");
 				$result = $sth->fetchAll();
 

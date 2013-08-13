@@ -46,9 +46,9 @@ class BcManagerComponent extends Component {
 		// 一時フォルダ作成
 		checkTmpFolders();
 		
-		if($dbConfig['datasource'] == 'sqlite3' || $dbConfig['datasource'] == 'csv') {
+		if($dbConfig['datasource'] == 'sqlite' || $dbConfig['datasource'] == 'csv') {
 			switch($dbConfig['datasource']) {
-				case 'sqlite3':
+				case 'sqlite':
 					$dbFolderPath = APP.'db'.DS.'sqlite';
 					break;
 				case 'csv':
@@ -183,7 +183,6 @@ class BcManagerComponent extends Component {
 				$name = 'Database/BcMysql';
 				break ;
 			case 'sqlite' :
-			case 'sqlite3' :
 				$name = 'Database/BcSqlite';
 				break ;
 			default :
@@ -208,7 +207,7 @@ class BcManagerComponent extends Component {
 		/* dbName */
 		if(!empty($type) && !empty($name)) {
 			$type = preg_replace('/^bc_/', '', $type);
-			if($type == 'sqlite3') {
+			if($type == 'sqlite') {
 				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
 			}elseif($type == 'csv') {
 				return APP.'db'.DS.'csv'.DS.$name;
@@ -903,7 +902,7 @@ class BcManagerComponent extends Component {
 		} elseif($datasource == 'csv') {
 			// CSVの場合はフォルダを作成する
 			$Folder = new Folder($db->config['database'], true, 00777);
-		} elseif($datasource == 'sqlite3') {
+		} elseif($datasource == 'sqlite') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
 		}
@@ -1066,7 +1065,6 @@ class BcManagerComponent extends Component {
 				break;
 
 			case 'sqlite':
-			case 'sqlite3':
 				@unlink($dbConfig['database']);
 				break;
 
@@ -1503,7 +1501,7 @@ class BcManagerComponent extends Component {
 /**
  * DB接続チェック
  * 
- * @param	string	$dbType 'MySQL' or 'Postgres' or 'SQLite3' or 'CSV'
+ * @param	string	$dbType 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
  * @param	string	$dbName データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
  * @param	string	$dbUsername 接続ユーザ名 テキストDBの場合は不要
  * @param	string	$dbPassword 接続パスワード テキストDBの場合は不要
@@ -1532,7 +1530,7 @@ class BcManagerComponent extends Component {
 				if ($port) $dsn .= ";port={$port}";
 				$pdo = new PDO($dsn, $login, $password);
 
-			} elseif ($datasource == 'sqlte3') {
+			} elseif ($datasource == 'sqlte') {
 				// すでにある場合
 				if (file_exists($database)) {
 					if (!is_writable($database)) throw new Exception("データベースファイルに書き込み権限がありません。");
@@ -1549,7 +1547,7 @@ class BcManagerComponent extends Component {
 
 			} else {
 				// ドライバが見つからない
-				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite3|CSV)");
+				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)");
 			}
 		}catch (PDOException $e){
 			 throw new PDOException($e);

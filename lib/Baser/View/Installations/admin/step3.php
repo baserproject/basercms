@@ -40,7 +40,7 @@ $(document).ready( function() {
 		
 		if (this.id != 'btnback' &&
 			$('#InstallationDbType').val() != 'csv' &&
-			$('#InstallationDbType').val() != 'sqlite3') {
+			$('#InstallationDbType').val() != 'sqlite') {
 			if ($("#InstallationDbHost").val() == "") {
 				alert("データベースのホスト名を入力してください。");
 				return false;
@@ -108,7 +108,7 @@ $(document).ready( function() {
 			dbName = 'baser';
 			port = '5432';
 			prefix = 'bc_'
-		} else if(dbType.val()=='sqlite3') {
+		} else if(dbType.val()=='sqlite') {
 			$('#dbHost').hide(500);
 			$('#dbUser').hide(500);
 			$('#dbInfo').hide(500);

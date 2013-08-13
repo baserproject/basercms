@@ -257,7 +257,7 @@ class SiteConfigsController extends AppController {
 			$smartUrl = 'OFF';
 		}
 
-		$datasources = array('csv'=>'CSV','sqlite3'=>'SQLite3','mysql'=>'MySQL','postgres'=>'PostgreSQL');
+		$datasources = array('csv'=>'CSV','sqlite'=>'SQLite','mysql'=>'MySQL','postgres'=>'PostgreSQL');
 		$db = ConnectionManager::getDataSource('baser');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
