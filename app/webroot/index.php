@@ -55,7 +55,7 @@ if (!defined('ROOT')) {
 	// ---
 	
 	/* 通常パターン */
-	if(@is_dir(dirname(dirname(dirname($fileName))).DS.'lib'.DS.'Cake')){
+	if(@is_dir(dirname(dirname(dirname($fileName))) . DS . 'lib' . DS . 'Cake')){
 		define('ROOT', dirname(dirname(dirname($fileName))));
 	// app内にcakeを配置
 	// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
@@ -64,11 +64,10 @@ if (!defined('ROOT')) {
 		define('ROOT', dirname(dirname($fileName)));*/
 
 	// WEBROOT配置
-	}elseif(is_dir(dirname($fileName).DS.'cake')){
+	}elseif(is_dir(dirname($fileName) . DS . 'lib' . DS . 'cake')){
 		define('ROOT', dirname($fileName));
 	}
 	// <<<
-	
 }
 /**
  * The actual directory name for the "app".

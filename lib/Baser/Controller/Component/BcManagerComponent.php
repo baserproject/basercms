@@ -1392,11 +1392,11 @@ class BcManagerComponent extends Component {
 		}
 		
 		if(preg_match("/index\.php/", $baseUrl)){
-			$baseUrl = str_replace('index.php/', '', $baseUrl);
+			$baseUrl = str_replace('/index.php', '', $baseUrl);
 		}
 		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
 		if($url != '/' || !$baseUrl) {
-			$url = $baseUrl.$url;
+			$url = $baseUrl . $url;
 		}else{
 			$url = $baseUrl;
 		}
