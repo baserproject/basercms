@@ -162,7 +162,7 @@ class SiteConfigsController extends AppController {
 
 					// リダイレクト
 					if($this->BcManager->smartUrl() != $smartUrl) {
-						$adminPrefix = Configure::read('Routing.admin');
+						$adminPrefix = Configure::read('Routing.prefixes.0');
 						if($smartUrl){
 							$redirectUrl = $this->BcManager->getRewriteBase('/'.$adminPrefix.'/site_configs/form');
 						}else{

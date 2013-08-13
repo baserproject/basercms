@@ -944,7 +944,7 @@ class BcBaserHelper extends AppHelper {
 
 		// ページ公開チェック
 		if(isset($this->Page) && empty($this->request->params['admin'])) {
-			$adminPrefix = Configure::read('Routing.admin');
+			$adminPrefix = Configure::read('Routing.prefixes.0');
 			if(isset($this->Page) && !preg_match('/^\/'.$adminPrefix.'/', $_url)) {
 				if($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
 					$enabled = false;
@@ -1104,7 +1104,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function existsPublishLink() {
 
-		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.admin') && !empty($this->_View->viewVars['publishLink']));
+		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['publishLink']));
 
 	}
 /**
@@ -1136,7 +1136,7 @@ class BcBaserHelper extends AppHelper {
  * @access public
  */
 	public function updateMessage() {
-		$adminPrefix = Configure::read('Routing.admin');
+		$adminPrefix = Configure::read('Routing.prefixes.0');
 		if($this->checkUpdate() && $this->request->params['controller'] != 'updaters') {
 			$updateLink = $this->BcHtml->link('ここ',"/{$adminPrefix}/updaters");
 			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。'.$updateLink.' からアップデートを完了させてください。</div>';

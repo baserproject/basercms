@@ -103,7 +103,7 @@
  * included primarily as a development convenience - and
  * thus not recommended for production applications.
  */
-	//Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
+	Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
 
 /**
  * Uncomment the define below to use CakePHP prefix routes.

@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$adminPrefix = Configure::read('Routing.admin');
+$adminPrefix = Configure::read('Routing.prefixes.0');
 ?>
 
 <script type="text/javascript">

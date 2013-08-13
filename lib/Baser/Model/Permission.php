@@ -228,7 +228,7 @@ class Permission extends AppModel {
 			$url = preg_replace('/^\//is', '', $url);
 		}
 		
-		$adminPrefix = Configure::read('Routing.admin');
+		$adminPrefix = Configure::read('Routing.prefixes.0');
 		
 		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
 		
