@@ -144,12 +144,12 @@ class BcManagerShell extends BcAppShell {
 		}
 		$this->out('* PHP PDO ('.(($checkResult['phpPdo']) ? 'True' : 'False').')');
 		if(!$checkResult['phpPdo']) {
-			$this->out('　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite3 は利用できません。');
+			$this->out('　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。');
 		}
 		$this->out('* Writable /app/db/ ('.(($checkResult['dbDirWritable']) ? 'True' : 'False').')');
 		if(!$checkResult['dbDirWritable']) {
 			$this->out('　/app/db/ に書き込み権限を与える事ができませんでした。');
-			$this->out('　SQLite3 や CSV など、ファイルベースのデータベースを利用するには、');
+			$this->out('　SQLite や CSV など、ファイルベースのデータベースを利用するには、');
 			$this->out('　手動で書き込み権限を与えてください。');
 		}
 		if($checkResult['apacheRewrite']) {
@@ -344,7 +344,7 @@ class BcManagerShell extends BcAppShell {
 		
 		if(!empty($this->args[1])) {
 			$dbConfig['datasource'] = $this->args[1];
-			$datasources = array('mysql', 'postgres', 'sqlite3', 'csv');
+			$datasources = array('mysql', 'postgres', 'sqlite', 'csv');
 			if(!in_array($dbConfig['datasource'], $datasources)) {
 				return false;
 			}

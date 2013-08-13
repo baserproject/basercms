@@ -54,7 +54,7 @@ App::uses('ClassRegistry', 'Utility');
 App::uses('Multibyte', 'I18n');
 App::uses('BcCsv', 'Model/Datasource/Database');
 App::uses('BcPostgres', 'Model/Datasource/Database');
-App::uses('BcSqlite3', 'Model/Datasource/Database');
+App::uses('BcSqlite', 'Model/Datasource/Database');
 App::uses('BcMysql', 'Model/Datasource/Database');
 App::uses('PhpReader', 'Configure');
 App::uses('CakeSession', 'Model/Datasource');

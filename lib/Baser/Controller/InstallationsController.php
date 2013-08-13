@@ -615,19 +615,10 @@ class InstallationsController extends AppController {
 			if(in_array('sqlite',$pdoDrivers)) {
 				$dbFolderPath = APP.'db'.DS.'sqlite';
 				if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
-					$dbsource['sqlite3'] = 'SQLite3';
+					$dbsource['sqlite'] = 'SQLite';
 				}
-			}else {
-				// TODO SQLite2 実装
-				// AlTER TABLE できないので、実装には、テーブル構造の解析が必要になる。
-				// 一度一時テーブルを作成し、データを移動させた上で、DROP。
-				// 新しい状態のテーブルを作成し、一時テーブルよりデータを移行。
-				// その後、一時テーブルを削除する必要がある。
-				// 【参考】http://seclan.dll.jp/dtdiary/2007/dt20070228.htm
-				// プラグインコンテンツのアカウント変更時、メールフォームのフィールド変更時の処理を実装する必要あり
-				//$dbsource['sqlite'] = 'SQLite';
 			}
-
+			
 		}
 
 		/* CSV利用可否 */

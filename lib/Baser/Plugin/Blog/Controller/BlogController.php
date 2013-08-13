@@ -634,7 +634,6 @@ class BlogController extends BlogAppController {
 					if($day) $conditions["date_part('day',BlogPost.posts_date)"] = $day;
 					break;
 				case 'sqlite':
-				case 'sqlite3':
 					if($year) $conditions["strftime('%Y',BlogPost.posts_date)"] = $year;
 					if($month) $conditions["strftime('%m',BlogPost.posts_date)"] = sprintf('%02d',$month);
 					if($day) $conditions["strftime('%d',BlogPost.posts_date)"] = sprintf('%02d',$day);

@@ -405,7 +405,6 @@ class BlogPost extends BlogAppModel {
 				break;
 
 			case 'Database/BcSqlite':
-			case 'Database/BcSqlite3':
 				if(!empty($year)) {
 					$conditions["strftime('%Y',BlogPost.posts_date)"] = $year;
 				}else {
