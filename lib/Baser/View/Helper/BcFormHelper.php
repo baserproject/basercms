@@ -900,23 +900,12 @@ DOC_END;
 		}
 		// <<<
 
-		// 2013/07/21
-		//既にsecureに登録されているのであれば、secure = false を追加しない
-		if( in_array($fieldName, $this->fields) ){
-			$options = $this->_initInputField($fieldName, array_merge(
-				$options, array('secure' => true)
-			));
-		}else{
-			$options = $this->_initInputField($fieldName, array_merge(
-				$options, array('secure' => false)
-			));
-		}
+		$options = $this->_initInputField($fieldName, array_merge(
+			$options, array('secure' => self::SECURE_SKIP)
+		));
 
-		$model = $this->model();
-
-		if ($fieldName !== '_method' && $model !== '_Token' && $secure) {
-			// ここを通す必要はなくなったのでコメントアウト //2013.07.21 kiysoue
-//			$this->_secure(null, '' . $options['value']);
+		if ($secure && $secure !== self::SECURE_SKIP) {
+			$this->_secure(true, null, '' . $options['value']);
 		}
 
 		// CUSTOMIZE 2010/07/24 ryuring
@@ -946,29 +935,17 @@ DOC_END;
 		}
 		// <<<
 		// >>> MODIFY
-		/*return $this->output(sprintf(
-		$this->Html->tags['hidden'],
-			$options['name'],
-			$this->_parseAttributes($options, array('name', 'class'), '', ' ')
-		));*/
+		// return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
 		// ---
 		if($multiple && is_array($value)) {
 			$out = array();
 			foreach($value as $_value) {
 				$options['value'] = $_value;
-				$out[] = $this->output(sprintf(
-					$this->Html->tags[$tagType],
-					$options['name'],
-					$this->_parseAttributes($options, array('name'), '', ' ')
-				));
+				$out[] = $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
 			}
 			return implode("\n", $out);
 		} else {
-			return $this->output(sprintf(
-				$this->Html->tags[$tagType],
-				$options['name'],
-				$this->_parseAttributes($options, array('name'), '', ' ')
-			));
+			return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
 		}
 		// <<<
 		
