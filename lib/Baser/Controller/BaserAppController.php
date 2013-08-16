@@ -375,40 +375,39 @@ class BaserAppController extends Controller {
  */
 	public function setTheme($params, $isError = false) {
 		
+		$theme = '';
+		if(!empty($this->siteConfigs['theme'])) {
+			$theme = $this->siteConfigs['theme'];
+		}
+		if(!empty($this->siteConfigs['admin_theme'])) {
+			$adminTheme = $this->siteConfigs['admin_theme'];
+		} else {
+			$adminTheme = Configure::read('BcApp.adminTheme');
+			$this->siteConfigs['admin_theme'] = $adminTheme;
+		}
+		$adminTheme = Inflector::camelize($adminTheme);
+		
 		// エラーの場合は強制的にフロントのテーマを設定する
 		if($isError) {
 			if(!$params || $params['controller'] != 'installations') {
-				if(!empty($this->siteConfigs['theme'])) {
-					$this->theme = $this->siteConfigs['theme'];
-				} elseif(!empty($this->siteConfigs['admin_theme'])) {
-					$this->theme = $this->siteConfigs['admin_theme'];
-				} else {
-					$this->theme = Configure::read('BcApp.adminTheme');
+				if($theme) {
+					$this->theme = $theme;
+				} elseif($adminTheme) {
+					$this->theme = $adminTheme;
 				}
 			} elseif($params['controller'] == 'installations') {
-				$this->theme = Configure::read('BcApp.adminTheme');
+				$this->theme = $adminTheme;
 			}
-			return;
-		}
-		
-		if(BC_INSTALLED && $params['controller'] != 'installations') {
-			
-			if(empty($this->siteConfigs['admin_theme']) && Configure::read('BcApp.adminTheme')) {
-				$this->siteConfigs['admin_theme'] = Configure::read('BcApp.adminTheme');
-			}
-			
-			$this->theme = $this->siteConfigs['theme'];
-			if(!empty($this->siteConfigs['admin_theme'])) {
-				$this->adminTheme = $this->siteConfigs['admin_theme'];
-				// TODO basercamp 2013/6/18 ryuring
-				// とりあえず、管理システムのCSS等のパスを正常に表示する為の暫定処置
-				// この仕様だと、プレビューなどがうまくいかないはず。
-				// BcAppHelper::webroot() を調整する必要があるかも
+		} else {
+			if(BC_INSTALLED && $params['controller'] != 'installations') {
+
+				$this->adminTheme = $adminTheme;
 				if(!empty($this->request->params['admin'])) {
-					$this->theme = $this->adminTheme;
+					$this->theme = $adminTheme;
+				} else {
+					$this->theme = $theme;
 				}
 			}
-
 		}
 		
 	}
