@@ -327,15 +327,19 @@ class BcEmailComponent extends EmailComponent {
  */
 	private function __renderTemplate($content) {
 		
-		$viewClass = $this->Controller->view;
+		$viewClass = $this->Controller->viewClass;
 
 		if ($viewClass != 'View') {
 			if (strpos($viewClass, '.') !== false) {
 				list($plugin, $viewClass) = explode('.', $viewClass);
+				$viewClass = $viewClass . 'View';
+				App::uses($viewClass, $plugin . '.View');
+			} else {
+				$viewClass = $viewClass . 'View';
 			}
-			$viewClass = $viewClass . 'View';
-			App::import('View', $this->Controller->view);
+			App::uses($viewClass, 'View');
 		}
+		
 		$View = new $viewClass($this->Controller);
 		$View->layout = $this->layout;
 		$msg = array();

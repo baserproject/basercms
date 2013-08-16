@@ -645,7 +645,7 @@ class BlogController extends BlogAppController {
 		//author条件
 		if($_conditions['author']) {
 			$author = $_conditions['author'];
-			App::import('Model', 'User');
+			App::uses('User', 'Model');
 			$user = new User();
 			$userId = $user->field('id', array(
 				'User.name'	=> $author

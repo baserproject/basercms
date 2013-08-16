@@ -110,7 +110,8 @@ class BcUploadBehavior extends ModelBehavior {
 			$Folder->create($this->savePath);
 			$Folder->chmod($this->savePath, 0777, true);
 		}
-		App::import('Component', 'Session');
+
+		App::uses('SessionComponent', 'Controller/Component');
 		$this->Session = new SessionComponent(new ComponentCollection());
 
 	}
