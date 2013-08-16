@@ -25,7 +25,7 @@ class Imageresizer {
  * @param 	int		高さ
  * @return 	boolean
  */
-	function resize($imgPath,$savePath='',$newWidth=null,$newHeight=null,$trimming = false) {
+	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false) {
 
 		// 元画像のサイズを取得
 		$imginfo = getimagesize($imgPath);

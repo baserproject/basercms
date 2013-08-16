@@ -27,6 +27,7 @@ $this->BcBaser->js(array(
 	'admin/baser_ajax_data_list_config',
 	'admin/baser_ajax_batch_config'
 ));
+$params = explode('/', $path);
 ?>
 
 
@@ -42,7 +43,7 @@ $(function(){
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type, $path)) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array_merge(array('controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type), $params)) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 
 <!-- current -->
@@ -56,12 +57,12 @@ $(function(){
 
 <div class="submit">
 <?php if($writable): ?>
-	<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url'=>array('action' => 'upload', $theme, $plugin, $type, $path), 'enctype' => 'multipart/form-data')) ?>
+	<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url' => array_merge(array('action' => 'upload', $theme, $plugin, $type), $params), 'enctype' => 'multipart/form-data')) ?>
 	<?php echo $this->BcForm->input('ThemeFile.file', array('type' => 'file')) ?>
 	<?php echo $this->BcForm->end() ?>
-	<?php $this->BcBaser->link('フォルダ新規作成', array('action' => 'add_folder', $theme, $type, $path), array('class' => 'btn-orange button')) ?>
+	<?php $this->BcBaser->link('フォルダ新規作成', array_merge(array('action' => 'add_folder', $theme, $type), $params), array('class' => 'btn-orange button')) ?>
 <?php endif ?>
 <?php if(($path || $type != 'etc') && $type != 'img' && $writable): ?>
-	<?php $this->BcBaser->link('ファイル新規作成', array('action' => 'add', $theme, $type, $path), array('class' => 'btn-red button')) ?>
+	<?php $this->BcBaser->link('ファイル新規作成', array_merge(array('action' => 'add', $theme, $type), $params), array('class' => 'btn-red button')) ?>
 <?php endif ?>
 </div>

@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$params = explode('/', $path);
 ?>
 
 
@@ -70,8 +71,8 @@ $(window).load(function() {
 	<?php if(($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && $this->request->data['ThemeFile']['type'] == 'image'): ?>
 				<div class="align-center" style="margin:20px auto">
 					<?php $this->BcBaser->link(
-							$this->BcBaser->getImg(array('action' => 'img_thumb', 550, 550, $theme, $plugin, $type, $path), array('alt' => basename($path))),
-							array('action' => 'img', $theme, $plugin, $type, $path),
+							$this->BcBaser->getImg(array_merge(array('action' => 'img_thumb', 550, 550, $theme, $plugin, $type), explode('/', $path)), array('alt' => basename($path))),
+							array_merge(array('action' => 'img', $theme, $plugin, $type), explode('/', $path)),
 							array('rel' => 'colorbox', 'title' => basename($path))
 					) ?>
 				</div>
@@ -90,16 +91,16 @@ $(window).load(function() {
 </div>
 <div class="submit">
 <?php if($this->request->action == 'admin_add'): ?>
-	<?php $this->BcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, $path), array('class' => 'btn-gray button')); ?>
+	<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>
 <?php else: ?>
-	<?php $this->BcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
+	<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除', 
-			array('action' => 'del', $theme, $plugin, $type , $path) , array('class' => 'button'),
+			array_merge(array('action' => 'del', $theme, $plugin, $type), $params) , array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', basename($path)),false
 	) ?>
 <?php else: ?>

@@ -172,7 +172,7 @@ class ThemeFilesController extends AppController {
 		
 		if(preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is',$file)) {
 			return 'text';
-		} elseif(preg_match('/^(.+?)(\.png|\.gif|\.jpg)$/is',$file)) {
+		} elseif(preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is',$file)) {
 			return 'image';
 		} else {
 			return 'file';
@@ -229,7 +229,7 @@ class ThemeFilesController extends AppController {
 			if ($result) {
 				clearViewCache();
 				$this->setMessage('ファイル ' .basename($fullpath). ' を作成しました。');
-				$this->redirect(array('action' => 'edit', $theme, $type, $path, $this->request->data['ThemeFile']['name'].'.'.$this->request->data['ThemeFile']['ext']));
+				$this->redirect(array_merge(array('action' => 'edit', $theme, $type), explode('/', $path), array($this->request->data['ThemeFile']['name'].'.'.$this->request->data['ThemeFile']['ext'])));
 			} else {
 				$this->setMessage('ファイル ' .basename($fullpath). ' の作成に失敗しました。', true);
 			}
@@ -310,7 +310,7 @@ class ThemeFilesController extends AppController {
 			if ($result) {
 				clearViewCache();
 				$this->setMessage('ファイル ' .$filename. ' を更新しました。');
-				$this->redirect(array($theme, $plugin, $type, dirname($path), basename($newPath)));
+				$this->redirect(array_merge(array($theme, $plugin, $type), explode('/', dirname($path)), array(basename($newPath))));
 			} else {
 				$this->setMessage('ファイル ' .$filename. ' の更新に失敗しました。', true);
 			}
@@ -358,7 +358,7 @@ class ThemeFilesController extends AppController {
 			$this->setMessage($target .' '.$path .' の削除に失敗しました。', true);
 		}
 
-		$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
+		$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', dirname($path))));
 
 	}
 /**
@@ -586,7 +586,7 @@ class ThemeFilesController extends AppController {
 		//} else {
 			//$this->setMessage('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。', true);
 		//}
-		$this->redirect(array('action' => 'index', $theme, $type, $path));
+		$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', $path)));
 
 	}
 /**
@@ -610,7 +610,7 @@ class ThemeFilesController extends AppController {
 			$this->ThemeFolder->set($this->request->data);
 			if ($this->ThemeFolder->validates() && $folder->create($fullpath.$this->request->data['ThemeFolder']['name'], 0777)) {
 				$this->setMessage('フォルダ '.$this->request->data['ThemeFolder']['name'].' を作成しました。');
-				$this->redirect(array('action' => 'index', $theme, $type, $path));
+				$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', $path)));
 			} else {
 				$this->setMessage('フォルダの作成に失敗しました。', true);
 			}
@@ -654,13 +654,13 @@ class ThemeFilesController extends AppController {
 				if($fullpath != $newPath) {
 					if($folder->move(array('from'=>$fullpath,'to'=>$newPath,'chmod'=>0777,'skip'=>array('_notes')))) {
 						$this->setMessage('フォルダ名を '.$this->request->data['ThemeFolder']['name'].' に変更しました。');
-						$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
+						$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', dirname($path))));
 					}else {
 						$this->setMessage('フォルダ名の変更に失敗しました。', true);
 					}
 				}else {
 					$this->setMessage('フォルダ名に変更はありませんでした。', true);
-					$this->redirect(array('action' => 'index', $theme, $type, dirname($path)));
+					$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', dirname($path))));
 				}
 			} else {
 				$this->setMessage('フォルダ名の変更に失敗しました。', true);
@@ -831,11 +831,11 @@ class ThemeFilesController extends AppController {
 			$_themePath = str_replace(ROOT,'',$themePath);
 			$this->setMessage('コアファイル '.basename($path).' を テーマ '.Inflector::camelize($this->siteConfigs['theme']).' の次のパスとしてコピーしました。<br />'.$_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
+			//$this->redirect(array_merge(array('action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
 		}else {
 			$this->setMessage('コアファイル '.basename($path).' のコピーに失敗しました。', true);
 		}
-		$this->redirect(array('action' => 'view', $theme, $plugin, $type, $path));
+		$this->redirect(array_merge(array('action' => 'view', $theme, $plugin, $type), explode('/', $path)));
 
 	}
 /**
@@ -874,7 +874,7 @@ class ThemeFilesController extends AppController {
 		}else {
 			$this->setMessage('コアフォルダ '.basename($path).' のコピーに失敗しました。', true);
 		}
-		$this->redirect(array('action' => 'view_folder', $theme, $plugin, $type, $path));
+		$this->redirect(array_merge(array('action' => 'view_folder', $theme, $plugin, $type), explode('/', $path)));
 
 	}
 /**
@@ -934,7 +934,7 @@ class ThemeFilesController extends AppController {
 		}
 
 		$args = $this->_parseArgs($args);
-		$contents = array('jpg'=>'jpeg','gif'=>'gif','png'=>'png');
+		$contents = array('jpeg' => 'jpeg', 'jpg'=>'jpeg','gif'=>'gif','png'=>'png');
 		extract($args);
 		$pathinfo = pathinfo($fullpath);
 
@@ -944,7 +944,7 @@ class ThemeFilesController extends AppController {
 
 		header("Content-type: image/".$contents[$pathinfo['extension']]);
 		$Imageresizer = new Imageresizer();
-		$Imageresizer->resize($fullpath,'',$width,$height);
+		$Imageresizer->resize($fullpath, null, $width, $height);
 		exit();
 
 	}

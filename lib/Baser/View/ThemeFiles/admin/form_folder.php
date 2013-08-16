@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$params = explode('/', $path);
 ?>
 
 
@@ -32,9 +33,9 @@ $(window).load(function() {
 </div>
 
 <?php if($this->request->action == 'admin_add_folder'): ?>
-<?php echo $this->BcForm->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'add_folder', $theme, $type, $path))) ?>
+<?php echo $this->BcForm->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array_merge(array('controller' => 'theme_files', 'action' => 'add_folder', $theme, $type), $params))) ?>
 <?php else: ?>
-<?php echo $this->BcForm->create('ThemeFolder',array('id' => 'TemplateForm', 'url' => array('controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type, $path))) ?>
+<?php echo $this->BcForm->create('ThemeFolder',array('id' => 'TemplateForm', 'url' => array_merge(array('controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type), $params))) ?>
 <?php endif ?>
 
 <?php echo $this->BcForm->input('ThemeFolder.parent', array('type' => 'hidden')) ?>
@@ -64,16 +65,16 @@ $(window).load(function() {
 </div>
 <div class="submit">
 <?php if($this->request->action == 'admin_add_folder'): ?>
-	<?php $this->BcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, $path), array('class' => 'btn-gray button')); ?>
+	<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', $path)), array('class' => 'btn-gray button')); ?>
 <?php else: ?>
-	<?php $this->BcBaser->link('一覧に戻る', array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('class' => 'btn-gray button')); ?>
+	<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
 <?php endif ?>
 <?php if($this->request->action == 'admin_add_folder'): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php elseif ($this->request->action == 'admin_edit_folder'): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除',
-			array('action'=>'del', $theme, $type, $path),
+			array_merge(array('action'=>'del', $theme, $type), $params),
 			array('class' => 'button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('ThemeFolder.name')),
 			false
@@ -82,7 +83,7 @@ $(window).load(function() {
 	<?php if(!$safeModeOn): ?>
 		<?php if($theme == 'core'): ?>
 	<?php $this->BcBaser->link('現在のテーマにコピー',
-			array('action' => 'copy_folder_to_theme', $theme, $plugin, $type , $path),
+			array_merge(array('action' => 'copy_folder_to_theme', $theme, $plugin, $type), $params),
 			array('class' => 'btn-red button'),
 			'本当に現在のテーマ「'.Inflector::camelize($siteConfig['theme']).'」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'
 	) ?>
