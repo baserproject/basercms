@@ -269,7 +269,145 @@ class BcPostgres extends Postgres {
 		return null;
 	}
 /**
- * Returns a Model description (metadata) or null if none found.
+ * Returns an array of the fields in given table name.
+ *
+ * @param Model|string $model Name of database table to inspect
+ * @return array Fields in table. Keys are name and type
+ */
+	public function describe($model) {
+		$table = $this->fullTableName($model, false, false);
+		
+		// CUSTOMIZE MODIFY 2013/08/16 ryuring
+		// >>>
+		//$fields = parent::describe($table);
+		// ---
+		$fields = $this->__describe($table);
+		// <<<
+		
+		$this->_sequenceMap[$table] = array();
+		$cols = null;
+
+		if ($fields === null) {
+			
+			// CUSTOMIZE MODIFY 2013/08/16 ryuring
+			// udt_name フィールドを追加
+			// >>>
+			/*$cols = $this->_execute(
+				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
+					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+					character_octet_length AS oct_length FROM information_schema.columns
+				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
+				array($table, $this->config['schema'])
+			);*/
+			// ---
+			$cols = $this->_execute(
+				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null,
+					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+					character_octet_length AS oct_length FROM information_schema.columns
+				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
+				array($table, $this->config['schema'])
+			);
+
+			// @codingStandardsIgnoreStart
+			// Postgres columns don't match the coding standards.
+			foreach ($cols as $c) {
+				$type = $c->type;
+				if (!empty($c->oct_length) && $c->char_length === null) {
+					if ($c->type == 'character varying') {
+						$length = null;
+						$type = 'text';
+					
+					// CUSTOMIZE ADD 2013/08/16 ryuring
+					// >>>
+					} elseif($c->type == 'text') {
+							$length = null;
+					// <<<
+							
+					} elseif ($c->type == 'uuid') {
+						$length = 36;
+					} else {
+						$length = intval($c->oct_length);
+					}
+				} elseif (!empty($c->char_length)) {
+					$length = intval($c->char_length);
+				} else {
+					
+					// CUSTOMIZE MODIFY 2013/08/16 ryuring
+					// >>>
+					//$length = $this->length($c->type);
+					// ---
+					$length = $this->length($c->udt);
+					// <<<
+					
+				}
+				if (empty($length)) {
+					$length = null;
+				}
+				$fields[$c->name] = array(
+					'type' => $this->column($type),
+					'null' => ($c->null == 'NO' ? false : true),
+					'default' => preg_replace(
+						"/^'(.*)'$/",
+						"$1",
+						preg_replace('/::.*/', '', $c->default)
+					),
+					'length' => $length
+				);
+				
+				// CUSTOMIZE ADD 2013/08/16 ryuring
+				// >>>
+				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
+					$fields[$c->name]['length'] = 8;
+				}
+				// <<<
+				
+				if ($model instanceof Model) {
+					if ($c->name == $model->primaryKey) {
+						$fields[$c->name]['key'] = 'primary';
+						if ($fields[$c->name]['type'] !== 'string') {
+							
+							// CUSTOMIZE MODIFY 2013/08/16 ryuring
+							// >>>
+							//$fields[$c->name]['length'] = 11;
+							// ---
+							$fields[$c->name]['length'] = 11;
+							// <<<
+						}
+					}
+				}
+				if (
+					$fields[$c->name]['default'] == 'NULL' ||
+					preg_match('/nextval\([\'"]?([\w.]+)/', $c->default, $seq)
+				) {
+					$fields[$c->name]['default'] = null;
+					if (!empty($seq) && isset($seq[1])) {
+						if (strpos($seq[1], '.') === false) {
+							$sequenceName = $c->schema . '.' . $seq[1];
+						} else {
+							$sequenceName = $seq[1];
+						}
+						$this->_sequenceMap[$table][$c->name] = $sequenceName;
+					}
+				}
+				if ($fields[$c->name]['type'] == 'boolean' && !empty($fields[$c->name]['default'])) {
+					$fields[$c->name]['default'] = constant($fields[$c->name]['default']);
+				}
+			}
+			$this->_cacheDescription($table, $fields);
+		}
+		// @codingStandardsIgnoreEnd
+
+		if (isset($model->sequence)) {
+			$this->_sequenceMap[$table][$model->primaryKey] = $model->sequence;
+		}
+
+		if ($cols) {
+			$cols->closeCursor();
+		}
+		return $fields;
+		
+	}
+/**
  * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ
  * 
@@ -277,12 +415,11 @@ class BcPostgres extends Postgres {
  * @return mixed
  * @access private
  */
-	private function __describe($model) {
+	private function __describe($table) {
 		
 		if ($this->cacheSources === false) {
 			return null;
 		}
-		$table = $this->fullTableName($model, false);
 		if (isset($this->__descriptions[$table])) {
 			return $this->__descriptions[$table];
 		}
@@ -295,4 +432,5 @@ class BcPostgres extends Postgres {
 		return null;
 		
 	}
+	
 }
