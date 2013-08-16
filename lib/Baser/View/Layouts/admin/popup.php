@@ -49,6 +49,6 @@
 	</div>
 	<!-- end contentsBody -->
 
-<?php echo $cakeDebug; ?>
+<?php $this->BcBaser->func() ?>
 </body>
 </html>

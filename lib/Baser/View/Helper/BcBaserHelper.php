@@ -730,15 +730,14 @@ class BcBaserHelper extends AppHelper {
 		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
-					$this->Element('admin/toolbar', array(), array('subDir' => false));
+					$this->element('admin/toolbar', array(), array('subDir' => false));
 				}
 			}
 		}
 
 		// デバッグ
-		if (isset($this->_View->viewVars['cakeDebug']) && Configure::read('debug') > 2) {
-			$params = array('controller' => $this->_View->viewVars['cakeDebug']);
-			echo View::element('dump', $params, false);
+		if (Configure::read('debug') >= 2) {
+			$this->element('sql_dump', array(), array('subDir' => false));
 		}
 
 	}
