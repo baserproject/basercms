@@ -3972,42 +3972,17 @@ class DboSource extends DataSource {
 				if($_head[$key]=='created' && !$value){
 					$value = date('Y-m-d H:i:s');
 				}
-				@$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
-			}
-			// basercamp TODO 一旦、IDとそのフィールドを削除。PostgreSQL専用
-			// key value に入れ直して、型が合わないところを整形
-			$i = 0 ;
-			$newFields = array();
-			$newValues = array();
-			foreach($head as $val){
-//				echo $val ."<br>\n";
-				switch(str_replace('"', '', $val)){
-					case 'id' :
-					case 'modified' :
-						break ;
-					default :
-						$newFields[] = $val ;
-						if( $values[$i] == "''" ){
-							$newValues[] = 'NULL';
-						} else {
-							$newValues[] = $values[$i];
-						}
-				}
-				++$i;
+				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
 			}
 			$query = array(
 				'table' => $this->name($fullTableName),
-				'fields' => implode(', ', $newFields) ,
-				'values' => implode(', ', $newValues)
-//				'fields' => implode(', ', $head) ,
-//				'values' => implode(', ', $values)
+				'fields' => implode(', ', $head) ,
+				'values' => implode(', ', $values)
 			);
 			$sql = $this->renderStatement('create', $query);
-			//echo $sql . "<br>\n";
 			if (!$this->execute($sql)) {
 				return false;
 			}
-			unset($newFields, $newValues);
 
 		}
 		fclose($fp);
