@@ -134,6 +134,44 @@ Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応
 
 if (BC_INSTALLED) {
 /**
+ * データキャッシュ
+ */
+	Cache::config('_cake_data_', array(
+		'engine' => 'File',
+		'duration' => Configure::read('BcCache.dataCachetime'),
+		'probability' => 100,
+		'path' => CACHE . 'datas',
+		'prefix' => 'cake_',
+		'lock' => false,
+		'serialize' => true
+	));
+/**
+ * 環境情報キャッシュ
+ */
+	Cache::config('_cake_env_', array(
+		'engine' => 'File',
+		'duration' => Configure::read('BcCache.defaultCachetime'),
+		'probability' => 100,
+		'path' => CACHE . 'environment',
+		'prefix' => 'cake_',
+		'lock' => false,
+		'serialize' => true
+	));
+	Cache::config('_cake_core_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_core_',
+		'path' => CACHE . 'persistent' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
+	Cache::config('_cake_model_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_model_',
+		'path' => CACHE . 'models' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
+/**
  * サイト基本設定を読み込む
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
@@ -305,44 +343,4 @@ if (Configure::read('debug') > 0) {
 			Configure::write('Cache.check', false);
 		}
 	}
-}
-if (BC_INSTALLED) {
-/**
- * データキャッシュ
- */
-	Cache::config('_cake_data_', array(
-		'engine' => 'File',
-		'duration' => Configure::read('BcCache.dataCachetime'),
-		'probability' => 100,
-		'path' => CACHE . 'datas',
-		'prefix' => 'cake_',
-		'lock' => false,
-		'serialize' => true
-	));
-/**
- * 環境情報キャッシュ
- */
-	Cache::config('_cake_env_', array(
-		'engine' => 'File',
-		'duration' => Configure::read('BcCache.defaultCachetime'),
-		'probability' => 100,
-		'path' => CACHE . 'environment',
-		'prefix' => 'cake_',
-		'lock' => false,
-		'serialize' => true
-	));
-	Cache::config('_cake_core_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_core_',
-		'path' => CACHE . 'persistent' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
-	));
-	Cache::config('_cake_model_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_model_',
-		'path' => CACHE . 'models' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
-	));
 }

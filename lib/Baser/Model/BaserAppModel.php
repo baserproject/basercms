@@ -1291,5 +1291,105 @@ class BaserAppModel extends Model {
 		return call_user_func_array(array($this->Behaviors->BcPluginHook, 'executeHook'), $args);
 		
 	}
+/**
+ * Queries the datasource and returns a result set array.
+ *
+ * Also used to perform notation finds, where the first argument is type of find operation to perform
+ * (all / first / count / neighbors / list / threaded),
+ * second parameter options for finding ( indexed array, including: 'conditions', 'limit',
+ * 'recursive', 'page', 'fields', 'offset', 'order')
+ *
+ * Eg:
+ * {{{
+ * 	find('all', array(
+ * 		'conditions' => array('name' => 'Thomas Anderson'),
+ * 		'fields' => array('name', 'email'),
+ * 		'order' => 'field3 DESC',
+ * 		'recursive' => 2,
+ * 		'group' => 'type'
+ * ));
+ * }}}
+ *
+ * In addition to the standard query keys above, you can provide Datasource, and behavior specific
+ * keys.  For example, when using a SQL based datasource you can use the joins key to specify additional
+ * joins that should be part of the query.
+ *
+ * {{{
+ * find('all', array(
+ * 		'conditions' => array('name' => 'Thomas Anderson'),
+ * 		'joins' => array(
+ *			array(
+ * 				'alias' => 'Thought',
+ * 				'table' => 'thoughts',
+ * 				'type' => 'LEFT',
+ * 				'conditions' => '`Thought`.`person_id` = `Person`.`id`'
+ *			)
+ * 		)
+ * ));
+ * }}}
+ *
+ * Behaviors and find types can also define custom finder keys which are passed into find().
+ *
+ * Specifying 'fields' for notation 'list':
+ *
+ *  - If no fields are specified, then 'id' is used for key and 'model->displayField' is used for value.
+ *  - If a single field is specified, 'id' is used for key and specified field is used for value.
+ *  - If three fields are specified, they are used (in order) for key, value and group.
+ *  - Otherwise, first and second fields are used for key and value.
+ *
+ *  Note: find(list) + database views have issues with MySQL 5.0. Try upgrading to MySQL 5.1 if you
+ *  have issues with database views.
+ * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
+ * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
+ * @return array Array of records
+ * @link http://book.cakephp.org/2.0/en/models/deleting-data.html#deleteall
+ */
+	public function find($type = 'first', $query = array()) {
+		$this->findQueryType = $type;
+		$this->id = $this->getID();
 
+		$query = $this->buildQuery($type, $query);
+		if (is_null($query)) {
+			return null;
+		}
+
+		// CUSTOMIZE MODIFY 2012/04/23 ryuring
+		// キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
+		// 
+		// 【AppModelではキャッシュを定義しない事】
+		// 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
+		// （HABTMの更新がうまくいかなかったので）
+		// >>>
+		//$results = $this->getDataSource()->read($this, $query);
+		// ---
+		$cache = true;
+		if(isset($query['cache']) && is_bool($query['cache'])) {
+			$cache = $query['cache'];
+			unset($query['cache']);
+		}
+		if (BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
+				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
+			$results = $this->readCache($cache, $type, $query);
+		} else {
+			$results = $this->getDataSource()->read($this, $query);
+		}
+		// <<<
+		
+		$this->resetAssociations();
+
+		if ($query['callbacks'] === true || $query['callbacks'] === 'after') {
+			$results = $this->_filterResults($results);
+		}
+
+		$this->findQueryType = null;
+
+		if ($type === 'all') {
+			return $results;
+		} else {
+			if ($this->findMethods[$type] === true) {
+				return $this->{'_find' . ucfirst($type)}('after', $query, $results);
+			}
+		}
+	}
+	
 }

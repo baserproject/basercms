@@ -46,7 +46,7 @@ class BcAdminHelper extends AppHelper {
 		if (empty($this->request->params['admin']) || !$user) {
 			return false;
 		}
-		$UserGroup = ClassRegistry::getObject('UserGroup');
+		$UserGroup = ClassRegistry::init('UserGroup');
 		return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
 	}
 

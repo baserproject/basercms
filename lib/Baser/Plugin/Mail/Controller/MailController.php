@@ -212,7 +212,7 @@ class MailController extends MailAppController {
 		}
 		
 		$this->set('mailContent',$this->dbDatas['mailContent']);
-		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
+		$this->render('Mail' . DS . $this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
 
 	}
 /**
@@ -282,7 +282,7 @@ class MailController extends MailAppController {
 			$this->set('mailFields',$this->dbDatas['mailFields']);
 		}
 		$this->set('mailContent',$this->dbDatas['mailContent']);
-		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'confirm');
+		$this->render('Mail' . DS . $this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'confirm');
 
 	}
 /**
@@ -362,7 +362,7 @@ class MailController extends MailAppController {
 			}
 
     		$this->set('mailContent',$this->dbDatas['mailContent']);
-    		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'submit');
+    		$this->render('Mail' . DS . $this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'submit');
 		}
 	}
 

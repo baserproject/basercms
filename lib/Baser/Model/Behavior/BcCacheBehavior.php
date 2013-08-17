@@ -118,7 +118,7 @@ class BcCacheBehavior extends ModelBehavior {
 	public function changeCachePath($table) {
 		
 		$path = CACHE_DATA_PATH;
-		$path .= DS . $table;
+		$path .= DS . $table . DS;
 		Cache::config('_cake_data_', array('path' => $path));
 		
 	}
