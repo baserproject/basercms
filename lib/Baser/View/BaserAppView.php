@@ -125,9 +125,9 @@ class BaserAppView extends View {
  * CamelCased action names will be under_scored! This means that you can have
  * LongActionNames that refer to long_action_names.ctp views.
  *
- * @param string $action Controller action to find template filename for
+ * @param string $name Controller action to find template filename for
  * @return string Template filename
- * @access protected
+ * @throws MissingViewException when a view file could not be found.
  */
 	protected function _getViewFileName($name = null) {
 		
@@ -162,9 +162,9 @@ class BaserAppView extends View {
 			$subDir = $this->subDir . DS;
 		}
 
-		// CUSTOMIZE MODIFY 2012/10/11 ryuring
-		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、
-		// サブフォルダを空に設定
+		// CUSTOMIZE ADD 2012/10/11 ryuring
+		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、サブフォルダを空に設定
+		// >>>
 		$siteConfig = $this->getVar('siteConfig');
 		if($this->name == 'Pages' && preg_match('/(.+)_display$/', $this->request->action, $maches)) {
 			$Page = ClassRegistry::getObject('Page');
@@ -173,29 +173,30 @@ class BaserAppView extends View {
 				$subDir = '';
 			}
 		}
+		// <<<
 		
 		if ($name === null) {
-			$name = $this->request->action;
+			$name = $this->view;
 		}
 		$name = str_replace('/', DS, $name);
+		list($plugin, $name) = $this->pluginSplit($name);
 
 		if (strpos($name, DS) === false && $name[0] !== '.') {
 			$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
 		} elseif (strpos($name, DS) !== false) {
-			if ($name{0} === DS || $name{1} === ':') {
+			if ($name[0] === DS || $name[1] === ':') {
 				if (is_file($name)) {
 					return $name;
 				}
 				$name = trim($name, DS);
-			} else if ($name[0] === '.') {
+			} elseif ($name[0] === '.') {
 				$name = substr($name, 3);
-			} else {
+			} elseif (!$plugin || $this->viewPath !== $this->name) {
 				$name = $this->viewPath . DS . $subDir . $name;
 			}
 		}
-
-		$paths = $this->_paths(Inflector::classify($this->plugin));
-		$exts = array($this->ext, '.ctp', '.thtml');
+		$paths = $this->_paths($plugin);
+		$exts = $this->_getExtensions();
 		
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
@@ -224,7 +225,7 @@ class BaserAppView extends View {
 		$defaultPath = $paths[0];
 
 		if ($this->plugin) {
-			$pluginPaths = Configure::read('pluginPaths');
+			$pluginPaths = App::path('plugins');
 			foreach ($paths as $path) {
 				if (strpos($path, $pluginPaths[0]) === 0) {
 					$defaultPath = $path;
@@ -232,16 +233,19 @@ class BaserAppView extends View {
 				}
 			}
 		}
-		return $this->_missingView($defaultPath . $name, 'missingView');
+		throw new MissingViewException(array('file' => $defaultPath . $name . $this->ext));
+		
 	}
 
 /**
  * Returns layout filename for this template as a string.
  *
+ * @param string $name The name of the layout to find.
  * @return string Filename for layout file (.ctp).
- * @access protected
+ * @throws MissingLayoutException when a layout cannot be located
  */
 	protected function _getLayoutFileName($name = null) {
+		
 		if ($name === null) {
 			$name = $this->layout;
 		}
@@ -250,11 +254,12 @@ class BaserAppView extends View {
 		if (!is_null($this->layoutPath)) {
 			$subDir = $this->layoutPath . DS;
 		}
-		$paths = $this->_paths(Inflector::camelize($this->plugin));
+		list($plugin, $name) = $this->pluginSplit($name);
+		$paths = $this->_paths($plugin);
 		$file = 'Layouts' . DS . $subDir . $name;
 
-		$exts = array($this->ext, '.ctp', '.thtml');
-
+		$exts = $this->_getExtensions();
+		
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
 		// @deprecated .php への移行を推奨
@@ -267,7 +272,6 @@ class BaserAppView extends View {
 			}
 		}*/
 		// ---
-
 		foreach ($paths as $path) {
 			foreach ($exts as $ext) {
 				if (file_exists($path . $file . $ext)) {
@@ -280,21 +284,7 @@ class BaserAppView extends View {
 		}
 		// <<<
 		
-		return $this->_missingView($paths[0] . $file . $this->ext, 'missingLayout');
-	}
-/**
- * Return a misssing view error message
- *
- * @param string $viewFileName the filename that should exist
- * @return cakeError
- */
-	function _missingView($file, $error = 'missingView') {
-
-		if ($error === 'missingView') {
-			throw new MissingViewException(array('file' => $file . $this->ext));
-		} elseif ($error === 'missingLayout') {
-			throw new MissingLayoutException(array('file' => $file . $this->ext));
-		}
+		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
 		
 	}
 }
