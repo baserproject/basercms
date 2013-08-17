@@ -809,13 +809,16 @@ class BcBaserHelper extends AppHelper {
  */
 	public function css($path, $options = array()) {
 		
-		$rel = null;
-		if(!empty($options['rel'])) {
-			$rel = $options['rel'];
-		}
-
+		$options = array_merge(array(
+			'rel'	=> 'stylesheet',
+			'inline'=> true
+		), $options);
+		
+		$rel = $options['rel'];
+		unset($options['rel']);
+		
 		$ret = $this->BcHtml->css($path, $rel, $options);
-		if(empty($options['inline'])) {
+		if($options['inline']) {
 			echo $ret;
 		}
 
