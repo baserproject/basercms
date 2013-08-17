@@ -182,8 +182,6 @@ class BaserAppController extends Controller {
 			$this->uses = null;
 			$params = Router::parse('/'.Configure::read('BcRequest.pureUrl'));
 			
-			$this->setTheme($params, true);
-			
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {
 				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
@@ -233,7 +231,7 @@ class BaserAppController extends Controller {
 		}
 				
 		// テーマを設定
-		$this->setTheme($this->request->params);
+		$this->setTheme();
 		
 		if($this->request->params['controller'] != 'installations') {
 			// ===============================================================================
@@ -318,8 +316,10 @@ class BaserAppController extends Controller {
 
 		/* レイアウトとビュー用サブディレクトリの設定 */
 		if(isset($this->request->params['prefix'])) {
-			$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
-			$this->subDir = str_replace('_', '/', $this->request->params['prefix']);		
+			if($this->name != 'CakeError') {
+				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
+				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
+			}
 			$agent = Configure::read('BcRequest.agent');
 			if($agent == 'mobile') {
 				$this->helpers[] = 'BcMobile';
@@ -369,11 +369,10 @@ class BaserAppController extends Controller {
 /**
  * テーマをセットする
  * 
- * @param array $params 
  * @return void
  * @access public
  */
-	public function setTheme($params, $isError = false) {
+	public function setTheme() {
 		
 		$theme = '';
 		if(!empty($this->siteConfigs['theme'])) {
@@ -385,31 +384,10 @@ class BaserAppController extends Controller {
 			$adminTheme = Configure::read('BcApp.adminTheme');
 			$this->siteConfigs['admin_theme'] = $adminTheme;
 		}
-		$adminTheme = Inflector::camelize($adminTheme);
-		
-		// エラーの場合は強制的にフロントのテーマを設定する
-		if($isError) {
-			if(!$params || $params['controller'] != 'installations') {
-				if($theme) {
-					$this->theme = $theme;
-				} elseif($adminTheme) {
-					$this->theme = $adminTheme;
-				}
-			} elseif($params['controller'] == 'installations') {
-				$this->theme = $adminTheme;
-			}
-		} else {
-			if(BC_INSTALLED && $params['controller'] != 'installations') {
 
-				$this->adminTheme = $adminTheme;
-				if(!empty($this->request->params['admin'])) {
-					$this->theme = $adminTheme;
-				} else {
-					$this->theme = $theme;
-				}
-			}
-		}
-		
+		$this->theme = $theme;
+		$this->adminTheme = $adminTheme;
+				
 	}
 /**
  * 管理画面用のメソッドを取得（コールバックメソッド）

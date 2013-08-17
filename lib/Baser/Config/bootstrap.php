@@ -23,29 +23,25 @@
  */
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
+
 /**
  * Baserパス追加
  */
 App::build(array(
-	'Controller' => array(BASER_CONTROLLERS),
-	'Model' => array(BASER_MODELS),
-	'Model/Behavior' => array(BASER_BEHAVIORS),
-	'Model/Datasource' => array(BASER_DATASOURCE),
-	'Model/Datasource/Database' => array(BASER_DATABASE),
-	'Controller/Component' => array(BASER_COMPONENTS),
-	// Rewriteモジュールなしの場合、/index.php/css/style.css 等ではCSSファイルが読み込まれず、
-	// $html->css / $javascript->link 等では、/app/webroot/css/style.css というURLが生成される。
-	// 上記理由により以下のとおり変更
-	// ・HelperのwebrootメソッドをRouter::urlでパス解決をするように変更し、/index.php/css/style.css というURLを生成させる。
-	// ・走査URLをvendorsだけではなく、app/webroot内も追加
-	'View' => array(BASER_VIEWS, WWW_ROOT),
-	'View/Helper' => array(BASER_HELPERS),
-	'Plugin' => array(BASER_PLUGINS),
-	'Vendor' => array(BASER_VENDORS),
-	'Locale' => array(BASER_LOCALES),
-	'Lib' => array(BASER_LIBS),
-	'Console' => array(BASER_CONSOLES),
-	'Console/Command' => array(BASER_CONSOLES . 'Command' . DS),
+	'Controller'				=> array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
+	'Model'						=> array_merge(App::path('Model'), array(BASER_MODELS)),
+	'Model/Behavior'			=> array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
+	'Model/Datasource'			=> array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
+	'Model/Datasource/Database'	=> array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
+	'Controller/Component'		=> array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'View'						=> array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
+	'View/Helper'				=> array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin'					=> array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
+	'Vendor'					=> array_merge(App::path('Vendor'), array(BASER_VENDORS)),
+	'Locale'					=> array_merge(App::path('Locale'), array(BASER_LOCALES)),
+	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
+	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
+	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
 ));
 App::uses('AppModel', 'Model');
 App::uses('BaserAppModel', 'Model');

@@ -45,54 +45,7 @@ class BaserAppView extends View {
  * @return array paths
  */
 	protected function _paths($plugin = null, $cached = true) {
-		
-		// >>> CUSTOMIZE MODIFY 2011/03/24 ryuring
-		// プラグインパスにテーマのパスを追加した為、テーマのパスをさらにテーマのパスに整形しないように調整
-		// 管理画面のテーマをフロントのテーマで上書きできるように調整
-		// 
-		// このメソッドの中身は、__paths に全て移動し、最初の行にて呼び出す。
-		// >>>
-		$paths = $this->__paths($plugin, $cached);
-		
-		$basePaths = $paths;
-		$count = count($basePaths);
-		if (!empty($this->adminTheme)) {
-			$adminThemePaths = array();
-			for ($i = 0; $i < $count; $i++) {
-				if(strpos($basePaths[$i], 'Themed') === false) {
-					$adminThemePaths[] = $basePaths[$i] . 'theme'. DS . $this->adminTheme . DS;
-				}
-			}
-			$paths = array_merge($adminThemePaths, $paths);
-		}
-		if (!empty($this->theme)) {
-			for ($i = 0; $i < $count; $i++) {
-				if(strpos($basePaths[$i], 'Themed') === false) {
-					$themePaths[] = $basePaths[$i] . 'theme'. DS . $this->theme . DS;
-				}
-			}
-			$paths = array_merge($themePaths, $paths);
-		}
-		
-		if (empty($this->__paths)) {
-			$this->__paths = $paths;
-		}
-		// <<<
 
-		return $paths;
-		
-	}
-/**
- * Return all possible paths to find view files in order
- * 
- * ※ _paths より直接呼び出されるようにする為だけに、Viewクラスより中身をコピー
- * 
- * @param string $plugin
- * @return array paths
- * @access private
- */
-	private function __paths($plugin = null, $cached = true) {
-		
 		if ($plugin === null && $cached === true && !empty($this->_paths)) {
 			return $this->_paths;
 		}
@@ -111,6 +64,24 @@ class BaserAppView extends View {
 		}
 
 		$paths = array_unique(array_merge($paths, $viewPaths));
+		
+		// CUSTOMIZE ADD 2013/08/17 ryuring
+		// >>>
+		$webroot = Configure::read('App.www_root');
+		if (!empty($this->adminTheme)) {
+			$adminThemePaths = array();
+			foreach ($paths as $path) {
+				if (strpos($path, DS . 'Plugin' . DS) === false) {
+					if ($plugin) {
+						$adminThemePaths[] = $path . 'Themed' . DS . $this->adminTheme . DS . 'Plugin' . DS . $plugin . DS;
+					}
+					$adminThemePaths[] = $path . 'Themed' . DS . $this->adminTheme . DS;
+				}
+			}
+			$adminThemePaths = array_merge(array($webroot . 'theme' . DS . $this->adminTheme . DS), $adminThemePaths);
+		}
+		// <<<
+		
 		if (!empty($this->theme)) {
 			$themePaths = array();
 			foreach ($paths as $path) {
@@ -121,7 +92,15 @@ class BaserAppView extends View {
 					$themePaths[] = $path . 'Themed' . DS . $this->theme . DS;
 				}
 			}
-			$paths = array_merge($themePaths, $paths);
+			
+			// CUSTOMIZE MODIFY 2013/08/17 ryuring
+			// >>>
+			//$paths = array_merge($themePaths, $paths);
+			// --
+			$themePaths = array_merge(array($webroot . 'theme' . DS . $this->theme . DS), $themePaths);
+			$paths = array_merge($themePaths, $adminThemePaths, $paths);
+			// <<<
+			
 		}
 		$paths = array_merge($paths, $corePaths);
 		if ($plugin !== null) {
@@ -231,12 +210,10 @@ class BaserAppView extends View {
 		}*/
 		// ---
 		foreach ($paths as $path) {
-		
 			foreach ($exts as $ext) {
-				
 				if (file_exists($path . $name . $ext)) {
 					if($ext == '.ctp') {
-						trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />'.$path . $name . $ext, E_USER_WARNING);
+						trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
 					}
 					return $path . $name . $ext;
 				}
