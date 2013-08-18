@@ -20,10 +20,10 @@
 /**
  * includes
  */
-App::uses('BaserPluginAppModel', 'Model');
+App::uses('BcPluginAppModel', 'Model');
 /**
  * ブログモデル基底クラス
  *
  * @package			baser.plugins.blog
  */
-class BlogAppModel extends BaserPluginAppModel {}
+class BlogAppModel extends BcPluginAppModel {}

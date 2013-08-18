@@ -25,7 +25,7 @@
  *
  * @package			baser.plugins.mail
  */
-class MailAppModel extends BaserPluginAppModel {
+class MailAppModel extends BcPluginAppModel {
 /**
  * データの消毒をおこなう
  * @return array

@@ -32,7 +32,7 @@ App::uses('CakeEmail', 'Network/Email');
  *
  * @package			baser.controllers
  */
-class BaserAppController extends Controller {
+class BcAppController extends Controller {
 /**
  * view
  * 
@@ -226,12 +226,12 @@ class BaserAppController extends Controller {
 
 		parent::beforeFilter();
 		
-		if(!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
-			return;
-		}
-				
 		// テーマを設定
 		$this->setTheme();
+
+		if(!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
+			return;
+		}		
 		
 		if($this->request->params['controller'] != 'installations') {
 			// ===============================================================================
@@ -377,6 +377,8 @@ class BaserAppController extends Controller {
 		$theme = '';
 		if(!empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
+		} elseif($this->name == 'Installations') {
+			$theme = Configure::read('BcApp.adminTheme');
 		}
 		if(!empty($this->siteConfigs['admin_theme'])) {
 			$adminTheme = $this->siteConfigs['admin_theme'];
@@ -384,7 +386,6 @@ class BaserAppController extends Controller {
 			$adminTheme = Configure::read('BcApp.adminTheme');
 			$this->siteConfigs['admin_theme'] = $adminTheme;
 		}
-
 		$this->theme = $theme;
 		$this->adminTheme = $adminTheme;
 				

@@ -20,10 +20,10 @@
 /**
  * Include files
  */
-App::uses('BaserPluginAppController', 'Controller');
+App::uses('BcPluginAppController', 'Controller');
 /**
  * メールプラグインコントローラー根底クラス
  *
  * @package			baser.plugins.mail
  */
-class MailAppController extends BaserPluginAppController {}
+class MailAppController extends BcPluginAppController {}

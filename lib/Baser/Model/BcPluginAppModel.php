@@ -25,7 +25,7 @@
  * プラグインのモデルより継承して利用します。
  * @package baser.models
  */
-class BaserPluginAppModel extends AppModel {
+class BcPluginAppModel extends AppModel {
 /**
  * The name of the DataSource connection that this Model uses
  *

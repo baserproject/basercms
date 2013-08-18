@@ -20,13 +20,13 @@
 /**
  * Include files
  */
-App::uses('BaserPluginAppController', 'Controller');
+App::uses('BcPluginAppController', 'Controller');
 /**
  * ブログコントローラー基底クラス
  *
  * @package			baser.plugins.blog
  */
-class BlogAppController extends BaserPluginAppController {
+class BlogAppController extends BcPluginAppController {
 /**
  * コメントを管理者メールへメール送信する
  * 

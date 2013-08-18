@@ -25,7 +25,7 @@
  *
  * @package			baser.views
  */
-class BaserAppView extends View {
+class BcAppView extends View {
 /**
  * List of variables to collect from the associated controller
  *
@@ -33,9 +33,9 @@ class BaserAppView extends View {
  * @access protected
  */
 	protected $_passedVars = array(
-			'viewVars', 'action', 'autoLayout', 'autoRender', 'ext', 'base', 'webroot',
-			'helpers', 'here', 'layout', 'name', 'pageTitle', 'layoutPath', 'viewPath',
-			'params', 'data', 'plugin', 'passedArgs', 'cacheAction', 'subDir', 'theme', 'adminTheme'
+		'viewVars', 'autoLayout', 'ext', 'helpers', 'view', 'layout', 'name', 'theme',
+		'layoutPath', 'viewPath', 'request', 'plugin', 'passedArgs', 'cacheAction', 
+		'subDir', 'adminTheme', 'pageTitle'
 	);
 /**
  * Return all possible paths to find view files in order
@@ -178,6 +178,7 @@ class BaserAppView extends View {
 		if ($name === null) {
 			$name = $this->view;
 		}
+		
 		$name = str_replace('/', DS, $name);
 		list($plugin, $name) = $this->pluginSplit($name);
 

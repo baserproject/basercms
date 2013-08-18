@@ -25,12 +25,12 @@
 /**
  * Include files
  */
-App::uses('BaserAppView', 'View');
+App::uses('BcAppView', 'View');
 /**
  * View 拡張クラス
  *
  * @package			baser.views
  */
-class AppView extends BaserAppView {
+class AppView extends BcAppView {
 }
 ?>

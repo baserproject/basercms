@@ -20,10 +20,10 @@
 /**
  * Include files
  */
-App::uses('BaserPluginAppController', 'Controller');
+App::uses('BcPluginAppController', 'Controller');
 /**
  * RSSリーダーコントローラー基底クラス
  *
  * @package			baser.plugins.feed
  */
-class FeedAppController extends BaserPluginAppController {}
+class FeedAppController extends BcPluginAppController {}

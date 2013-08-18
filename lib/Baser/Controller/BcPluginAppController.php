@@ -24,7 +24,7 @@ App::uses('AppController', 'Controller');
  *
  * @package baser.controllers
  */
-class BaserPluginAppController extends AppController {
+class BcPluginAppController extends AppController {
 /**
  * コンテンツID
  *

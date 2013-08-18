@@ -25,11 +25,11 @@
 /**
  * Include files
  */
-App::uses('BaserAppController', 'Controller');
+App::uses('BcAppController', 'Controller');
 /**
  * Controller 拡張クラス
  * 
  * @package			baser.controllers
  */
-class AppController extends BaserAppController {
+class AppController extends BcAppController {
 }

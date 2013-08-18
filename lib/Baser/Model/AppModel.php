@@ -29,5 +29,5 @@
  * Model 拡張クラス
  * @package baser.models
  */
-class AppModel extends BaserAppModel {
+class AppModel extends BcAppModel {
 }

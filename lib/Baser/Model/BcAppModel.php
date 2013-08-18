@@ -35,7 +35,7 @@ App::uses('DbRestore', 'Vendor');
  *
  * @package			baser.models
  */
-class BaserAppModel extends Model {
+class BcAppModel extends Model {
 
 /**
  * プラグイン名

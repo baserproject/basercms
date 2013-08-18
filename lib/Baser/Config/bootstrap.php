@@ -44,7 +44,7 @@ App::build(array(
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
 ));
 App::uses('AppModel',		'Model');
-App::uses('BaserAppModel',	'Model');
+App::uses('BcAppModel'	,	'Model');
 App::uses('BcCache',			'Model/Behavior');
 App::uses('ClassRegistry',	'Utility');
 App::uses('Multibyte',		'I18n');

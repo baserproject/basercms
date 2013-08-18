@@ -25,4 +25,4 @@
  *
  * @package			baser.plugins.feed
  */
-class FeedAppModel extends BaserPluginAppModel {}
+class FeedAppModel extends BcPluginAppModel {}
