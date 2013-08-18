@@ -179,7 +179,7 @@ class BcCkeditorHelper extends AppHelper {
 		$ckoptions = array_merge(array(
 			'language'			=> 'ja',		// 言語
 			'type'				=> 'normal',	// ツールバータイプ
-			'skin'				=> 'kama',		// スキン
+			'skin'				=> 'moono',		// スキン
 			'width'				=> '600px',		// エディタサイズ
 			'height'			=> '300px',		// エディタ高さ
 			'collapser'			=> false,		// 
