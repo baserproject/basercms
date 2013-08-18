@@ -477,6 +477,11 @@ table.sub-menu{
 .contents-body .form-table select.active {
 	background-color:#ffffde;
 }
+.contents-body .form-table button {
+	padding:0px 7px;
+	cursor: pointer;
+}
+
 /* button
 ----------------------------------------------- */
 
