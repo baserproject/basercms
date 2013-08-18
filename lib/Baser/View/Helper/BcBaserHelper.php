@@ -1474,7 +1474,6 @@ class BcBaserHelper extends AppHelper {
 		);
 		$c = count($vars);
 		foreach($pluginBasers as $key => $pluginBaser) {
-//			var_dump($pluginBaser);
 			$this->pluginBasers[$key] = new $pluginBaser($view);
 			for ($j = 0; $j < $c; $j++) {
 				if(isset($view->{$vars[$j]})) {

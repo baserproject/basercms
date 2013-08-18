@@ -787,8 +787,6 @@ class BaserAppController extends Controller {
     array (size=2)
       'date' => string '2013/08/08 18:02' (length=16)
       'mode' => string 'user' (length=4)
-
-var_dump($body);
  */
 
 /*
@@ -971,13 +969,10 @@ array (size=4)
 		}
 		$cakeEmail->attachments($attachments);
 
-//var_dump($cakeEmail);exit;
 		if($message = $cakeEmail->send()){
 			//メール送信が成功した場合ここで処理
-//			var_dump($cakeEmail);exit;
 			return true ;
 		}else{
-			var_dump($cakeEmail);exit;
 			return false ;
 		}
 	}
