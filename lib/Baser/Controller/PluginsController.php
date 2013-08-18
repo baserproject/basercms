@@ -83,7 +83,7 @@ class PluginsController extends AppController {
 		
 		// プラグインフォルダーのチェックを行う。
 		$pluginInfos = array();
-		$Folder = new Folder(APP.'plugins'.DS);
+		$Folder = new Folder(APP.'Plugin'.DS);
 		$files = $Folder->read(true, true, true);
 		foreach($files[0] as $file) {
 			$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);

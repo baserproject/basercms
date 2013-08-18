@@ -692,7 +692,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 	function getEnablePlugins() {
 		
 		$enablePlugins = array();
-		if(!Configure::read('Cache.disable')) {
+		if(!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 			$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 		}
 		if(!$enablePlugins) {
