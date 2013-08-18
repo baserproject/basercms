@@ -142,12 +142,14 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		$Page = ClassRegistry::init('Page');
 		if($Page){
 			
+			$parameter = urldecode($parameter);
+			
 			if(!$parameter){
 				$_parameters = array('index');
 			}elseif(preg_match('/\/$/is', $parameter)) {
-				$_parameters = array(urldecode($parameter.'index'));
+				$_parameters = array($parameter . 'index');
 			}else{
-				$_parameters = array(urldecode($parameter),urldecode($parameter).'/index');
+				$_parameters = array($parameter, $parameter . '/index');
 			}
 			
 			foreach ($_parameters as $_parameter){
@@ -159,6 +161,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				}else{
 					$url = "/{$agentPrefix}/{$_parameter}";
 				}
+				
 				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
 					if(!$agent){
 						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
@@ -167,6 +170,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 					}
 					break;
 				} else {
+					
 					// 拡張子付き（.html）の場合も透過的にマッチングさせる
 					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];

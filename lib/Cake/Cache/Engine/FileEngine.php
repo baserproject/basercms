@@ -1,7 +1,7 @@
 <?php
 /**
- * File Storage engine for cache.  Filestorage is the slowest cache storage
- * to read and write.  However, it is good for servers that don't have other storage
+ * File Storage engine for cache. Filestorage is the slowest cache storage
+ * to read and write. However, it is good for servers that don't have other storage
  * engine available, or have content which is not performance sensitive.
  *
  * You can configure a FileEngine cache, using Cache::config()
@@ -9,20 +9,21 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.2.0.4933
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
- * File Storage engine for cache.  Filestorage is the slowest cache storage
- * to read and write.  However, it is good for servers that don't have other storage
+ * File Storage engine for cache. Filestorage is the slowest cache storage
+ * to read and write. However, it is good for servers that don't have other storage
  * engine available, or have content which is not performance sensitive.
  *
  * You can configure a FileEngine cache, using Cache::config()
@@ -93,8 +94,8 @@ class FileEngine extends CacheEngine {
 
 /**
  * Garbage collection. Permanently remove all expired and deleted data
- * 
- * @param integer $expires [optional] An expires timestamp, invalidataing all data before.
+ *
+ * @param integer $expires [optional] An expires timestamp, invalidating all data before.
  * @return boolean True if garbage collection was successful, false on failure
  */
 	public function gc($expires = null) {
@@ -222,40 +223,77 @@ class FileEngine extends CacheEngine {
 		if (!$this->_init) {
 			return false;
 		}
-		$dir = dir($this->settings['path']);
+		$this->_File = null;
+
+		$threshold = $now = false;
 		if ($check) {
 			$now = time();
 			$threshold = $now - $this->settings['duration'];
 		}
+
+		$this->_clearDirectory($this->settings['path'], $now, $threshold);
+
+		$directory = new RecursiveDirectoryIterator($this->settings['path']);
+		$contents = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+		$cleared = array();
+		foreach ($contents as $path) {
+			if ($path->isFile()) {
+				continue;
+			}
+
+			$path = $path->getRealPath() . DS;
+			if (!in_array($path, $cleared)) {
+				$this->_clearDirectory($path, $now, $threshold);
+				$cleared[] = $path;
+			}
+		}
+		return true;
+	}
+
+/**
+ * Used to clear a directory of matching files.
+ *
+ * @param string $path The path to search.
+ * @param integer $now The current timestamp
+ * @param integer $threshold Any file not modified after this value will be deleted.
+ * @return void
+ */
+	protected function _clearDirectory($path, $now, $threshold) {
 		$prefixLength = strlen($this->settings['prefix']);
+
+		if (!is_dir($path)) {
+			return;
+		}
+
+		$dir = dir($path);
 		while (($entry = $dir->read()) !== false) {
 			if (substr($entry, 0, $prefixLength) !== $this->settings['prefix']) {
 				continue;
 			}
-			if ($this->_setKey($entry) === false) {
+			$filePath = $path . $entry;
+			if (!file_exists($filePath) || is_dir($filePath)) {
 				continue;
 			}
-			if ($check) {
-				$mtime = $this->_File->getMTime();
+			$file = new SplFileObject($path . $entry, 'r');
+
+			if ($threshold) {
+				$mtime = $file->getMTime();
 
 				if ($mtime > $threshold) {
 					continue;
 				}
-
-				$expires = (int)$this->_File->current();
+				$expires = (int)$file->current();
 
 				if ($expires > $now) {
 					continue;
 				}
 			}
-			$path = $this->_File->getRealPath();
-			$this->_File = null;
-			if (file_exists($path)) {
-				unlink($path);
+			if ($file->isFile()) {
+				$_path = $file->getRealPath();
+				$file = null;
+				unlink($_path);
 			}
 		}
-		$dir->close();
-		return true;
 	}
 
 /**
@@ -358,13 +396,15 @@ class FileEngine extends CacheEngine {
  * Recursively deletes all files under any directory named as $group
  *
  * @return boolean success
- **/
+ */
 	public function clearGroup($group) {
+		$this->_File = null;
 		$directoryIterator = new RecursiveDirectoryIterator($this->settings['path']);
 		$contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($contents as $object) {
 			$containsGroup = strpos($object->getPathName(), DS . $group . DS) !== false;
-			if ($object->isFile() && $containsGroup) {
+			$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
+			if ($object->isFile() && $containsGroup && $hasPrefix) {
 				unlink($object->getPathName());
 			}
 		}

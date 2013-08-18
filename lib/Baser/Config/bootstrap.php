@@ -43,19 +43,19 @@ App::build(array(
 	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
 ));
-App::uses('AppModel', 'Model');
-App::uses('BaserAppModel', 'Model');
-App::uses('BcCache', 'Model/Behavior');
-App::uses('ClassRegistry', 'Utility');
-App::uses('Multibyte', 'I18n');
-App::uses('BcCsv', 'Model/Datasource/Database');
-App::uses('BcPostgres', 'Model/Datasource/Database');
-App::uses('BcSqlite', 'Model/Datasource/Database');
-App::uses('BcMysql', 'Model/Datasource/Database');
-App::uses('PhpReader', 'Configure');
-App::uses('CakeSession', 'Model/Datasource');
-App::uses('Folder', 'Utility');
-App::uses('File', 'Utility');
+App::uses('AppModel',		'Model');
+App::uses('BaserAppModel',	'Model');
+App::uses('BcCache',			'Model/Behavior');
+App::uses('ClassRegistry',	'Utility');
+App::uses('Multibyte',		'I18n');
+App::uses('BcCsv',			'Model/Datasource/Database');
+App::uses('BcPostgres',		'Model/Datasource/Database');
+App::uses('BcSqlite',		'Model/Datasource/Database');
+App::uses('BcMysql',			'Model/Datasource/Database');
+App::uses('PhpReader',		'Configure');
+App::uses('CakeSession',		'Model/Datasource');
+App::uses('Folder',			'Utility');
+App::uses('File',			'Utility');
 /**
  * baserUrl取得
  */

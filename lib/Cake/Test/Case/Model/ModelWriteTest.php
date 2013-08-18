@@ -5,18 +5,26 @@
  * PHP 5
  *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
+App::uses('MockTransactionDboSource', 'Model/Datasource');
+App::uses('MockTransactionAssociatedDboSource', 'Model/Datasource');
+App::uses('MockManyTransactionDboSource', 'Model/Datasource');
+App::uses('MockAssociatedTransactionDboSource', 'Model/Datasource');
+
 require_once dirname(__FILE__) . DS . 'ModelTestBase.php';
+
 /**
  * ModelWriteTest
  *
@@ -25,9 +33,36 @@ require_once dirname(__FILE__) . DS . 'ModelTestBase.php';
 class ModelWriteTest extends BaseModelTest {
 
 /**
+ * override locale to the default (eng).
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+		Configure::write('Config.language', 'eng');
+	}
+
+/**
+ * Test save() failing when there is no data.
+ *
+ * @return void
+ */
+	public function testInsertNoData() {
+		$this->loadFixtures('Bid');
+		$Bid = ClassRegistry::init('Bid');
+
+		$this->assertFalse($Bid->save());
+
+		$result = $Bid->save(array('Bid' => array()));
+		$this->assertFalse($result);
+
+		$result = $Bid->save(array('Bid' => array('not in schema' => 1)));
+		$this->assertFalse($result);
+	}
+
+/**
  * testInsertAnotherHabtmRecordWithSameForeignKey method
  *
- * @access public
  * @return void
  */
 	public function testInsertAnotherHabtmRecordWithSameForeignKey() {
@@ -58,7 +93,7 @@ class ModelWriteTest extends BaseModelTest {
 		$lastInsertId = $TestModel->JoinAsJoinB->getLastInsertID();
 		$data['id'] = $lastInsertId;
 		$this->assertEquals(array('JoinAsJoinB' => $data), $result);
-		$this->assertTrue($lastInsertId != null);
+		$this->assertTrue($lastInsertId > 0);
 
 		$result = $TestModel->JoinAsJoinB->findById(1);
 		$expected = array(
@@ -257,6 +292,22 @@ class ModelWriteTest extends BaseModelTest {
 	}
 
 /**
+ * test that save() resets whitelist on failed save
+ */
+	public function testSaveFieldListResetsWhitelistOnFailedSave() {
+		$this->loadFixtures('Bidding');
+		$model = new Bidding();
+		$whitelist = array('title');
+		$model->whitelist = $whitelist;
+		$result = $model->save(
+			array(),
+			array('fieldList' => array('body'))
+		);
+		$this->assertFalse($result);
+		$this->assertEquals($whitelist, $model->whitelist);
+	}
+
+/**
  * testSaveWithCounterCache method
  *
  * @return void
@@ -356,7 +407,7 @@ class ModelWriteTest extends BaseModelTest {
 		$data[$Post->alias]['user_id'] = 301;
 		$Post->save($data);
 
-		$users = $User->find('all',array('order' => 'User.id'));
+		$users = $User->find('all', array('order' => 'User.id'));
 		$this->assertEquals(1, $users[0]['User']['post_count']);
 		$this->assertEquals(2, $users[1]['User']['post_count']);
 	}
@@ -383,7 +434,7 @@ class ModelWriteTest extends BaseModelTest {
 		$data[$Post->alias]['uid'] = 301;
 		$Post->save($data);
 
-		$users = $User->find('all',array('order' => 'User.uid'));
+		$users = $User->find('all', array('order' => 'User.uid'));
 		$this->assertEquals(1, $users[0]['User']['post_count']);
 		$this->assertEquals(2, $users[1]['User']['post_count']);
 	}
@@ -459,7 +510,6 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * Tests having multiple counter caches for an associated model
  *
- * @access public
  * @return void
  */
 	public function testCounterCacheMultipleCaches() {
@@ -481,10 +531,6 @@ class ModelWriteTest extends BaseModelTest {
 		), false);
 
 		// Count Increase
-		$user = $User->find('first', array(
-			'conditions' => array('id' => 66),
-			'recursive' => -1
-		));
 		$data = array('Post' => array(
 			'id' => 22,
 			'title' => 'New Post',
@@ -515,7 +561,7 @@ class ModelWriteTest extends BaseModelTest {
 		));
 		$data[$Post->alias]['user_id'] = 301;
 		$Post->save($data);
-		$result = $User->find('all',array('order' => 'User.id'));
+		$result = $User->find('all', array('order' => 'User.id'));
 		$this->assertEquals(2, $result[0]['User']['post_count']);
 		$this->assertEquals(1, $result[1]['User']['posts_published']);
 	}
@@ -1616,7 +1662,9 @@ class ModelWriteTest extends BaseModelTest {
 
 		$TestModel->id = 2;
 		$data = array('Tag' => array('Tag' => array(2)));
-		$TestModel->save($data);
+		$result = $TestModel->save($data);
+
+		$this->assertEquals($data['Tag'], $result['Tag']);
 
 		$result = $TestModel->findById(2);
 		$expected = array(
@@ -2029,7 +2077,7 @@ class ModelWriteTest extends BaseModelTest {
 		$Comment = new Comment();
 
 		$articles = $Article->find('all', array(
-			'fields' => array('id','title'),
+			'fields' => array('id', 'title'),
 			'recursive' => -1,
 			'order' => array('Article.id' => 'ASC')
 		));
@@ -2049,7 +2097,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals($expected, $articles);
 
 		$comments = $Comment->find('all', array(
-			'fields' => array('id','article_id','user_id','comment','published'),
+			'fields' => array('id', 'article_id', 'user_id', 'comment', 'published'),
 			'recursive' => -1,
 			'order' => array('Comment.id' => 'ASC')
 		));
@@ -2116,7 +2164,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertFalse(empty($result));
 
 		$articles = $Article->find('all', array(
-			'fields' => array('id','title'),
+			'fields' => array('id', 'title'),
 			'recursive' => -1,
 			'order' => array('Article.id' => 'ASC')
 		));
@@ -2136,7 +2184,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals($expected, $articles);
 
 		$comments = $Comment->find('all', array(
-			'fields' => array('id','article_id','user_id','comment','published'),
+			'fields' => array('id', 'article_id', 'user_id', 'comment', 'published'),
 			'recursive' => -1,
 			'order' => array('Comment.id' => 'ASC')
 		));
@@ -2201,7 +2249,6 @@ class ModelWriteTest extends BaseModelTest {
 	public function testCreationWithMultipleDataSameModel() {
 		$this->loadFixtures('Article');
 		$Article = new Article();
-		$SecondaryArticle = new Article();
 
 		$result = $Article->field('title', array('id' => 1));
 		$this->assertEquals('First Article', $result);
@@ -2228,7 +2275,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals('First Article', $result);
 
 		$articles = $Article->find('all', array(
-			'fields' => array('id','title'),
+			'fields' => array('id', 'title'),
 			'recursive' => -1,
 			'order' => array('Article.id' => 'ASC')
 		));
@@ -2261,7 +2308,6 @@ class ModelWriteTest extends BaseModelTest {
 	public function testCreationWithMultipleDataSameModelManualInstances() {
 		$this->loadFixtures('PrimaryModel');
 		$Primary = new PrimaryModel();
-		$Secondary = new PrimaryModel();
 
 		$result = $Primary->field('primary_name', array('id' => 1));
 		$this->assertEquals('Primary Name Existing', $result);
@@ -2452,6 +2498,7 @@ class ModelWriteTest extends BaseModelTest {
 	public function testHabtmSavingWithNoPrimaryKeyUuidJoinTable() {
 		$this->loadFixtures('UuidTag', 'Fruit', 'FruitsUuidTag');
 		$Fruit = new Fruit();
+		$Fruit->FruitsUuidTag->order = null;
 		$data = array(
 			'Fruit' => array(
 				'color' => 'Red',
@@ -4010,7 +4057,7 @@ class ModelWriteTest extends BaseModelTest {
 	public function testSaveAllAssociatedTransactionNoRollback() {
 		$testDb = ConnectionManager::getDataSource('test');
 
-		$mock = $this->getMock(
+		$this->getMock(
 			'DboSource',
 			array('connect', 'rollback', 'describe', 'create', 'update', 'begin'),
 			array(),
@@ -4220,7 +4267,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$result = $TestModel->find('all', array(
 			'recursive' => -1,
-			'fields' => array('author_id', 'title','body','published'),
+			'fields' => array('author_id', 'title', 'body', 'published'),
 			'order' => array('Post.created' => 'ASC')
 		));
 
@@ -4525,7 +4572,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $model->saveAll(array(
 			'Article' => array(
 				'title' => 'Post with Author',
-				'body' => 'This post will be saved  author'
+				'body' => 'This post will be saved author'
 			),
 			'Comment' => array(
 				array('comment' => 'First new comment'),
@@ -4536,7 +4583,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertFalse($result);
 
 		$result = $model->find('all');
-		$this->assertEquals(array(), $result);
+		$this->assertSame(array(), $result);
 		$expected = array('Comment' => array(
 			1 => array('comment' => array('This field cannot be left blank'))
 		));
@@ -4726,9 +4773,35 @@ class ModelWriteTest extends BaseModelTest {
 	}
 
 /**
+ * test that saveAll still behaves like previous versions (does not necessarily need a first argument)
+ *
+ * @return void
+ */
+	public function testSaveAllWithSet() {
+		$this->loadFixtures('Article', 'Tag', 'Comment', 'User', 'ArticlesTag');
+		$data = array(
+			'Article' => array(
+				'user_id' => 1,
+				'title' => 'Article Has and belongs to Many Tags'
+			),
+			'Tag' => array(
+				'Tag' => array(1, 2)
+			),
+			'Comment' => array(
+				array(
+					'comment' => 'Article comment',
+					'user_id' => 1
+		)));
+		$Article = new Article();
+		$Article->set($data);
+		$result = $Article->saveAll();
+		$this->assertFalse(empty($result));
+	}
+
+/**
  * test that saveAll behaves like plain save() when supplied empty data
  *
- * @link http://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
+ * @link https://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
  * @return void
  */
 	public function testSaveAllEmptyData() {
@@ -4740,7 +4813,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertFalse(empty($result));
 
 		$model = new ProductUpdateAll();
-		$result = $model->saveAll(array());
+		$result = $model->saveAll();
 		$this->assertFalse($result);
 	}
 
@@ -4828,6 +4901,51 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals(self::date(), $result[6]['Attachment']['created']);
 		unset($result[6]['Attachment']['updated'], $result[6]['Attachment']['created']);
 		$this->assertEquals($expected, $result[6]['Attachment']);
+	}
+
+/**
+ * Test that validate = first, atomic = false works when associated records
+ * fail validation.
+ *
+ * @return void
+ */
+	public function testSaveAssociatedAtomicFalseValidateFirstWithErrors() {
+		$this->loadFixtures('Comment', 'Article', 'User');
+		$Article = ClassRegistry::init('Article');
+		$Article->Comment->validator()->add('comment', array(
+			array('rule' => 'notEmpty')
+		));
+
+		$data = array(
+			'Article' => array(
+				'user_id' => 1,
+				'title' => 'Foo',
+				'body' => 'text',
+				'published' => 'N'
+			),
+			'Comment' => array(
+				array(
+					'user_id' => 1,
+					'comment' => '',
+					'published' => 'N',
+				)
+			),
+		);
+
+		$Article->saveAssociated(
+			$data,
+			array('validate' => 'first', 'atomic' => false)
+		);
+
+		$result = $Article->validationErrors;
+		$expected = array(
+			'Comment' => array(
+				array(
+					'comment' => array('This field cannot be left blank')
+				)
+			)
+		);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -5366,7 +5484,7 @@ class ModelWriteTest extends BaseModelTest {
 	public function testSaveAssociatedTransactionNoRollback() {
 		$testDb = ConnectionManager::getDataSource('test');
 
-		$mock = $this->getMock(
+		$this->getMock(
 			'DboSource',
 			array('connect', 'rollback', 'describe', 'create', 'begin'),
 			array(),
@@ -5581,7 +5699,7 @@ class ModelWriteTest extends BaseModelTest {
 
 		$result = $TestModel->find('all', array(
 			'recursive' => -1,
-			'fields' => array('author_id', 'title','body','published'),
+			'fields' => array('author_id', 'title', 'body', 'published'),
 			'order' => array('Post.created' => 'ASC')
 		));
 
@@ -5858,7 +5976,7 @@ class ModelWriteTest extends BaseModelTest {
 		$result = $model->saveAssociated(array(
 			'Article' => array(
 				'title' => 'Post with Author',
-				'body' => 'This post will be saved  author'
+				'body' => 'This post will be saved author'
 			),
 			'Comment' => array(
 				array('comment' => 'First new comment'),
@@ -5869,7 +5987,7 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertFalse($result);
 
 		$result = $model->find('all');
-		$this->assertEquals(array(), $result);
+		$this->assertSame(array(), $result);
 		$expected = array('Comment' => array(
 			1 => array('comment' => array('This field cannot be left blank'))
 		));
@@ -6071,7 +6189,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * test that saveMany behaves like plain save() when suplied empty data
  *
- * @link http://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
+ * @link https://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
  * @return void
  */
 	public function testSaveManyEmptyData() {
@@ -6090,7 +6208,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * test that saveAssociated behaves like plain save() when supplied empty data
  *
- * @link http://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
+ * @link https://cakephp.lighthouseapp.com/projects/42648/tickets/277-test-saveall-with-validation-returns-incorrect-boolean-when-saving-empty-data
  * @return void
  */
 	public function testSaveAssociatedEmptyData() {
@@ -6210,8 +6328,8 @@ class ModelWriteTest extends BaseModelTest {
 				'ProductUpdateAll' => array(
 					'id' => 1,
 					'name'	=> 'product one',
-					'groupcode'	 => 120,
-					'group_id'	=> 1),
+					'groupcode' => 120,
+					'group_id' => 1),
 				'Group' => array(
 					'id' => 1,
 					'name' => 'group one',
@@ -6221,7 +6339,7 @@ class ModelWriteTest extends BaseModelTest {
 				'ProductUpdateAll' => array(
 					'id' => 2,
 					'name'	=> 'product two',
-					'groupcode'	 => 120,
+					'groupcode'	=> 120,
 					'group_id'	=> 1),
 				'Group' => array(
 					'id' => 1,
@@ -6273,9 +6391,9 @@ class ModelWriteTest extends BaseModelTest {
 			'0' => array(
 				'ProductUpdateAll' => array(
 					'id' => 1,
-					'name'	=> 'new product',
-					'groupcode'	 => 120,
-					'group_id'	=> 1),
+					'name' => 'new product',
+					'groupcode'	=> 120,
+					'group_id' => 1),
 				'Group' => array(
 					'id' => 1,
 					'name' => 'group one',
@@ -6284,9 +6402,9 @@ class ModelWriteTest extends BaseModelTest {
 			'1' => array(
 				'ProductUpdateAll' => array(
 					'id' => 2,
-					'name'	=> 'new product',
-					'groupcode'	 => 120,
-					'group_id'	=> 1),
+					'name' => 'new product',
+					'groupcode' => 120,
+					'group_id' => 1),
 				'Group' => array(
 					'id' => 1,
 					'name' => 'group one',
@@ -6326,9 +6444,9 @@ class ModelWriteTest extends BaseModelTest {
 			'0' => array(
 				'ProductUpdateAll' => array(
 					'id' => 1,
-					'name'	=> 'new product',
-					'groupcode'	 => 120,
-					'group_id'	=> 1),
+					'name' => 'new product',
+					'groupcode'	=> 120,
+					'group_id' => 1),
 				'Group' => array(
 					'id' => 1,
 					'name' => 'group one',
@@ -6337,9 +6455,9 @@ class ModelWriteTest extends BaseModelTest {
 			'1' => array(
 				'ProductUpdateAll' => array(
 					'id' => 2,
-					'name'	=> 'new product',
-					'groupcode'	 => 120,
-					'group_id'	=> 1),
+					'name' => 'new product',
+					'groupcode' => 120,
+					'group_id' => 1),
 				'Group' => array(
 					'id' => 1,
 					'name' => 'group one',
@@ -6399,10 +6517,10 @@ class ModelWriteTest extends BaseModelTest {
 
 		// test belongsTo
 		$fieldList = array(
-			'Post' => array('title', 'author_id'),
+			'Post' => array('title'),
 			'Author' => array('user')
 		);
-		$TestModel->saveAll(array(
+		$data = array(
 			'Post' => array(
 				'title' => 'Post without body',
 				'body' => 'This will not be saved',
@@ -6411,11 +6529,14 @@ class ModelWriteTest extends BaseModelTest {
 				'user' => 'bob',
 				'test' => 'This will not be saved',
 
-		)), array('fieldList' => $fieldList));
+		));
+		$TestModel->saveAll($data, array('fieldList' => $fieldList));
 
-		$result = $TestModel->find('all');
+		$result = $TestModel->find('all', array(
+			'order' => 'Post.id ASC',
+		));
 		$expected = array(
-			'Post' => array (
+			'Post' => array(
 				'id' => '4',
 				'author_id' => '5',
 				'title' => 'Post without body',
@@ -6424,7 +6545,7 @@ class ModelWriteTest extends BaseModelTest {
 				'created' => self::date(),
 				'updated' => self::date(),
 			),
-			'Author' => array (
+			'Author' => array(
 				'id' => '5',
 				'user' => 'bob',
 				'password' => null,
@@ -6437,6 +6558,66 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals(4, count($result));
 		$this->assertEquals('', $result[3]['Post']['body']);
 		$this->assertEquals('working', $result[3]['Author']['test']);
+
+		$fieldList = array(
+			'Post' => array('title')
+		);
+		$data = array(
+			'Post' => array(
+				'title' => 'Post without body 2',
+				'body' => 'This will not be saved'
+			),
+			'Author' => array(
+				'user' => 'jack'
+			)
+		);
+		$TestModel->saveAll($data, array('fieldList' => $fieldList));
+		$result = $TestModel->find('all', array(
+			'order' => 'Post.id ASC',
+		));
+		$this->assertNull($result[4]['Post']['body']);
+
+		$fieldList = array(
+			'Author' => array('password')
+		);
+		$data = array(
+			'Post' => array(
+				'id' => '5',
+				'title' => 'Post title',
+				'body' => 'Post body'
+			),
+			'Author' => array(
+				'id' => '6',
+				'user' => 'will not change',
+				'password' => 'foobar'
+			)
+		);
+		$result = $TestModel->saveAll($data, array('fieldList' => $fieldList));
+		$this->assertTrue($result);
+
+		$result = $TestModel->find('all', array(
+			'order' => 'Post.id ASC',
+		));
+		$expected = array(
+			'Post' => array(
+				'id' => '5',
+				'author_id' => '6',
+				'title' => 'Post title',
+				'body' => 'Post body',
+				'published' => 'N',
+				'created' => self::date(),
+				'updated' => self::date()
+			),
+			'Author' => array(
+				'id' => '6',
+				'user' => 'jack',
+				'password' => 'foobar',
+				'created' => self::date(),
+				'updated' => self::date(),
+				'test' => 'working'
+			),
+		);
+		$this->assertEquals($expected, $result[4]);
 
 		// test multirecord
 		$this->db->truncate($TestModel);
@@ -6498,22 +6679,42 @@ class ModelWriteTest extends BaseModelTest {
 		$this->db->truncate($TestModel);
 		$this->db->truncate(new Comment());
 
-		$fieldList = array(
-			'Article' => array('id'),
-			'Comment' => array('article_id', 'user_id')
-		);
-		$result = $TestModel->saveAll(array(
-			'Article' => array('id' => 2, 'title' => 'I will not save'),
+		$data = array(
+			'Article' => array('title' => 'I will not save'),
 			'Comment' => array(
 				array('comment' => 'First new comment', 'published' => 'Y', 'user_id' => 1),
 				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
 			)
-		), array('fieldList' => $fieldList));
+		);
+
+		$fieldList = array(
+			'Article' => array('id'),
+			'Comment' => array('article_id', 'user_id')
+		);
+		$TestModel->saveAll($data, array('fieldList' => $fieldList));
 
 		$result = $TestModel->find('all');
 		$this->assertEquals('', $result[0]['Article']['title']);
 		$this->assertEquals('', $result[0]['Comment'][0]['comment']);
 		$this->assertEquals('', $result[0]['Comment'][1]['comment']);
+
+		$fieldList = array(
+			'Article' => array('id'),
+			'Comment' => array('user_id')
+		);
+		$TestModel->saveAll($data, array('fieldList' => $fieldList));
+		$result = $TestModel->find('all');
+
+		$this->assertEquals('', $result[1]['Article']['title']);
+		$this->assertEquals(2, count($result[1]['Comment']));
+
+		$TestModel->whitelist = array('id');
+		$TestModel->Comment->whitelist = array('user_id');
+		$TestModel->saveAll($data);
+		$result = $TestModel->find('all');
+
+		$this->assertEquals('', $result[2]['Article']['title']);
+		$this->assertEquals(2, count($result[2]['Comment']));
 	}
 
 /**
@@ -6550,6 +6751,59 @@ class ModelWriteTest extends BaseModelTest {
 		));
 		$this->assertTrue($result);
 		$this->assertEmpty($TestModel->validationErrors);
+	}
+
+/**
+ * testSaveAllFieldListHasOneAddFkToWhitelist method
+ *
+ * @return void
+ */
+	public function testSaveAllFieldListHasOneAddFkToWhitelist() {
+		$this->loadFixtures('ArticleFeatured', 'Featured');
+		$Article = new ArticleFeatured();
+		$Article->belongsTo = $Article->hasMany = array();
+		$Article->Featured->validate = array('end_date' => 'notEmpty');
+
+		$record = array(
+			'ArticleFeatured' => array(
+				'user_id' => 1,
+				'title' => 'First Article',
+				'body' => '',
+				'published' => 'Y'
+			),
+			'Featured' => array(
+				'category_id' => 1,
+				'end_date' => ''
+			)
+		);
+		$result = $Article->saveAll($record, array('validate' => 'only'));
+		$this->assertFalse($result);
+		$expected = array(
+			'body' => array(
+				'This field cannot be left blank'
+			),
+			'Featured' => array(
+				'end_date' => array(
+					'This field cannot be left blank'
+				)
+			)
+		);
+		$this->assertEquals($expected, $Article->validationErrors);
+
+		$fieldList = array(
+			'ArticleFeatured' => array('user_id', 'title'),
+			'Featured' => array('category_id')
+		);
+
+		$result = $Article->saveAll($record, array(
+			'fieldList' => $fieldList, 'validate' => 'first'
+		));
+		$this->assertTrue($result);
+		$this->assertEmpty($Article->validationErrors);
+
+		$Article->recursive = 0;
+		$result = $Article->find('first', array('order' => array('ArticleFeatured.created' => 'DESC')));
+		$this->assertSame($result['ArticleFeatured']['id'], $result['Featured']['article_featured_id']);
 	}
 
 /**

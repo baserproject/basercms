@@ -6,15 +6,16 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.2
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('AppShell', 'Console/Command');
@@ -66,7 +67,7 @@ class ProjectTask extends AppShell {
 		}
 
 		$response = false;
-		while ($response == false && is_dir($project) === true && file_exists($project . 'Config' . 'core.php')) {
+		while (!$response && is_dir($project) === true && file_exists($project . 'Config' . 'core.php')) {
 			$prompt = __d('cake_console', '<warning>A project already exists in this location:</warning> %s Overwrite?', $project);
 			$response = $this->in($prompt, array('y', 'n'), 'n');
 			if (strtolower($response) === 'n') {
@@ -89,6 +90,13 @@ class ProjectTask extends AppShell {
 				$this->out(__d('cake_console', ' * Random seed created for \'Security.cipherSeed\''));
 			} else {
 				$this->err(__d('cake_console', 'Unable to generate random seed for \'Security.cipherSeed\', you should change it in %s', APP . 'Config' . DS . 'core.php'));
+				$success = false;
+			}
+
+			if ($this->cachePrefix($path)) {
+				$this->out(__d('cake_console', ' * Cache prefix set'));
+			} else {
+				$this->err(__d('cake_console', 'The cache prefix was <error>NOT</error> set'));
 				$success = false;
 			}
 
@@ -122,7 +130,7 @@ class ProjectTask extends AppShell {
 			$Folder = new Folder($path);
 			if (!$Folder->chmod($path . 'tmp', 0777)) {
 				$this->err(__d('cake_console', 'Could not set permissions on %s', $path . DS . 'tmp'));
-				$this->out(__d('cake_console', 'chmod -R 0777 %s', $path . DS . 'tmp'));
+				$this->out('chmod -R 0777 ' . $path . DS . 'tmp');
 				$success = false;
 			}
 			if ($success) {
@@ -285,10 +293,27 @@ class ProjectTask extends AppShell {
 	}
 
 /**
+ * Writes cache prefix using app's name
+ *
+ * @param string $dir Path to project
+ * @return boolean Success
+ */
+	public function cachePrefix($dir) {
+		$app = basename($dir);
+		$File = new File($dir . 'Config' . DS . 'core.php');
+		$contents = $File->read();
+		if (preg_match('/(\$prefix = \'myapp_\';)/', $contents, $match)) {
+			$result = str_replace($match[0], '$prefix = \'' . $app . '_\';', $contents);
+			return $File->write($result);
+		}
+		return false;
+	}
+
+/**
  * Generates and writes CAKE_CORE_INCLUDE_PATH
  *
  * @param string $path Project path
- * @param boolean $hardCode Wether or not define calls should be hardcoded.
+ * @param boolean $hardCode Whether or not define calls should be hardcoded.
  * @return boolean Success
  */
 	public function corePath($path, $hardCode = true) {
@@ -325,10 +350,7 @@ class ProjectTask extends AppShell {
 		if (!file_put_contents($filename, $result)) {
 			return false;
 		}
-		if ($count == 0) {
-			return false;
-		}
-		return true;
+		return (bool)$count;
 	}
 
 /**
@@ -346,12 +368,9 @@ class ProjectTask extends AppShell {
 			if ($File->write($result)) {
 				Configure::write('Routing.prefixes', array($name));
 				return true;
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 /**
@@ -363,7 +382,7 @@ class ProjectTask extends AppShell {
 		$admin = '';
 		$prefixes = Configure::read('Routing.prefixes');
 		if (!empty($prefixes)) {
-			if (count($prefixes) == 1) {
+			if (count($prefixes) === 1) {
 				return $prefixes[0] . '_';
 			}
 			if ($this->interactive) {
@@ -382,16 +401,20 @@ class ProjectTask extends AppShell {
 		}
 		if ($this->interactive) {
 			$this->hr();
-			$this->out(__d('cake_console', 'You need to enable Configure::write(\'Routing.prefixes\',array(\'admin\')) in /app/Config/core.php to use prefix routing.'));
+			$this->out(__d('cake_console', 'You need to enable %s in %s to use prefix routing.',
+					'Configure::write(\'Routing.prefixes\', array(\'admin\'))',
+					'/app/Config/core.php'));
 			$this->out(__d('cake_console', 'What would you like the prefix route to be?'));
-			$this->out(__d('cake_console', 'Example: www.example.com/admin/controller'));
-			while ($admin == '') {
+			$this->out(__d('cake_console', 'Example: %s', 'www.example.com/admin/controller'));
+			while (!$admin) {
 				$admin = $this->in(__d('cake_console', 'Enter a routing prefix:'), null, 'admin');
 			}
 			if ($this->cakeAdmin($admin) !== true) {
-				$this->out(__d('cake_console', '<error>Unable to write to</error> /app/Config/core.php.'));
-				$this->out(__d('cake_console', 'You need to enable Configure::write(\'Routing.prefixes\',array(\'admin\')) in /app/Config/core.php to use prefix routing.'));
-				$this->_stop();
+				$this->out(__d('cake_console', '<error>Unable to write to</error> %s.', '/app/Config/core.php'));
+				$this->out(__d('cake_console', 'You need to enable %s in %s to use prefix routing.',
+					'Configure::write(\'Routing.prefixes\', array(\'admin\'))',
+					'/app/Config/core.php'));
+				return $this->_stop();
 			}
 			return $admin . '_';
 		}

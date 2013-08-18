@@ -7,15 +7,16 @@
  * PHP 5
  *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/2.0/en/development/testing.html
  * @since         CakePHP(tm) v 1.2.0.4433
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Shell', 'Console');
@@ -114,7 +115,7 @@ class TestShell extends Shell {
 		))->addOption('stop-on-failure', array(
 			'help' => __d('cake_console', 'Stop execution upon first failure.'),
 			'boolean' => true
-		))->addOption('stop-on-skipped ', array(
+		))->addOption('stop-on-skipped', array(
 			'help' => __d('cake_console', 'Stop execution upon first skipped test.'),
 			'boolean' => true
 		))->addOption('stop-on-incomplete', array(
@@ -132,7 +133,7 @@ class TestShell extends Shell {
 		))->addOption('no-globals-backup', array(
 			'help' => __d('cake_console', 'Do not backup and restore $GLOBALS for each test.'),
 			'boolean' => true
-		))->addOption('static-backup ', array(
+		))->addOption('static-backup', array(
 			'help' => __d('cake_console', 'Backup and restore static attributes for each test.'),
 			'boolean' => true
 		))->addOption('syntax-check', array(
@@ -170,8 +171,8 @@ class TestShell extends Shell {
  */
 	public function initialize() {
 		$this->_dispatcher = new CakeTestSuiteDispatcher();
-		$sucess = $this->_dispatcher->loadTestFramework();
-		if (!$sucess) {
+		$success = $this->_dispatcher->loadTestFramework();
+		if (!$success) {
 			throw new Exception(__d('cake_dev', 'Please install PHPUnit framework <info>(http://www.phpunit.de)</info>'));
 		}
 	}
@@ -303,7 +304,7 @@ class TestShell extends Shell {
 		$this->out($title);
 		$i = 1;
 		$cases = array();
-		foreach ($testCases as $testCaseFile => $testCase) {
+		foreach ($testCases as $testCase) {
 			$case = str_replace('Test.php', '', $testCase);
 			$this->out("[$i] $case");
 			$cases[$i] = $case;
@@ -325,7 +326,7 @@ class TestShell extends Shell {
 				break;
 			}
 
-			if ($choice == 'q') {
+			if ($choice === 'q') {
 				break;
 			}
 		}
@@ -335,10 +336,9 @@ class TestShell extends Shell {
  * Find the test case for the passed file. The file could itself be a test.
  *
  * @param string $file
- * @param string $category 
- * @param boolean $throwOnMissingFile 
- * @access protected
- * @return array(type, case)
+ * @param string $category
+ * @param boolean $throwOnMissingFile
+ * @return array array(type, case)
  * @throws Exception
  */
 	protected function _mapFileToCase($file, $category, $throwOnMissingFile = true) {
@@ -413,7 +413,6 @@ class TestShell extends Shell {
  * For the given file, what category of test is it? returns app, core or the name of the plugin
  *
  * @param string $file
- * @access protected
  * @return string
  */
 	protected function _mapFileToCategory($file) {

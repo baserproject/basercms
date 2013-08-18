@@ -10,16 +10,17 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v .0.10.0.1222
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Hash', 'Utility');
@@ -131,7 +132,7 @@ class CakeSession {
 		self::$time = time();
 
 		$checkAgent = Configure::read('Session.checkAgent');
-		if (($checkAgent === true || $checkAgent === null) && env('HTTP_USER_AGENT') != null) {
+		if (($checkAgent === true || $checkAgent === null) && env('HTTP_USER_AGENT')) {
 			self::$_userAgent = md5(env('HTTP_USER_AGENT') . Configure::read('Security.salt'));
 		}
 		self::_setPath($base);
@@ -152,10 +153,10 @@ class CakeSession {
 			return;
 		}
 		if (strpos($base, 'index.php') !== false) {
-			 $base = str_replace('index.php', '', $base);
+			$base = str_replace('index.php', '', $base);
 		}
 		if (strpos($base, '?') !== false) {
-			 $base = str_replace('?', '', $base);
+			$base = str_replace('?', '', $base);
 		}
 		self::$path = $base;
 	}
@@ -212,20 +213,27 @@ class CakeSession {
  * @return boolean True if variable is there
  */
 	public static function check($name = null) {
-		if (!self::started() && !self::start()) {
+		if (!self::start()) {
 			return false;
 		}
 		if (empty($name)) {
 			return false;
 		}
-		$result = Hash::get($_SESSION, $name);
-		return isset($result);
+		return Hash::get($_SESSION, $name) !== null;
 	}
 
 /**
- * Returns the Session id
+ * Returns the session id.
+ * Calling this method will not auto start the session. You might have to manually
+ * assert a started session.
  *
- * @param string $id
+ * Passing an id into it, you can also replace the session id if the session
+ * has not already been started.
+ * Note that depending on the session handler, not all characters are allowed
+ * within the session id. For example, the file session handler only allows
+ * characters in the range a-z A-Z 0-9 , (comma) and - (minus).
+ *
+ * @param string $id Id to replace the current session id
  * @return string Session id
  */
 	public static function id($id = null) {
@@ -248,14 +256,13 @@ class CakeSession {
 	public static function delete($name) {
 		if (self::check($name)) {
 			self::_overwrite($_SESSION, Hash::remove($_SESSION, $name));
-			return (self::check($name) == false);
+			return !self::check($name);
 		}
-		self::_setError(2, __d('cake_dev', "%s doesn't exist", $name));
 		return false;
 	}
 
 /**
- * Used to write new data to _SESSION, since PHP doesn't like us setting the _SESSION var itself
+ * Used to write new data to _SESSION, since PHP doesn't like us setting the _SESSION var itself.
  *
  * @param array $old Set of old variables => values
  * @param array $new New set of variable => value
@@ -283,9 +290,8 @@ class CakeSession {
 	protected static function _error($errorNumber) {
 		if (!is_array(self::$error) || !array_key_exists($errorNumber, self::$error)) {
 			return false;
-		} else {
-			return self::$error[$errorNumber];
 		}
+		return self::$error[$errorNumber];
 	}
 
 /**
@@ -320,7 +326,7 @@ class CakeSession {
 /**
  * Tests that the user agent is valid and that the session hasn't 'timed out'.
  * Since timeouts are implemented in CakeSession it checks the current self::$time
- * against the time the session is set to expire.  The User agent is only checked
+ * against the time the session is set to expire. The User agent is only checked
  * if Session.checkAgent == true.
  *
  * @return boolean
@@ -335,10 +341,10 @@ class CakeSession {
 	}
 
 /**
- * Get / Set the userAgent
+ * Get / Set the user agent
  *
- * @param string $userAgent Set the userAgent
- * @return void
+ * @param string $userAgent Set the user agent
+ * @return string Current user agent
  */
 	public static function userAgent($userAgent = null) {
 		if ($userAgent) {
@@ -357,7 +363,7 @@ class CakeSession {
  * @return mixed The value of the session variable
  */
 	public static function read($name = null) {
-		if (!self::started() && !self::start()) {
+		if (!self::start()) {
 			return false;
 		}
 		if (is_null($name)) {
@@ -371,7 +377,6 @@ class CakeSession {
 		if (isset($result)) {
 			return $result;
 		}
-		self::_setError(2, "$name doesn't exist");
 		return null;
 	}
 
@@ -396,7 +401,7 @@ class CakeSession {
  * @return boolean True if the write was successful, false if the write failed
  */
 	public static function write($name, $value = null) {
-		if (!self::started() && !self::start()) {
+		if (!self::start()) {
 			return false;
 		}
 		if (empty($name)) {
@@ -421,14 +426,13 @@ class CakeSession {
  * @return void
  */
 	public static function destroy() {
-		if (self::started()) {
-			session_destroy();
-		}
+		self::start();
+		session_destroy();
 		self::clear();
 	}
 
 /**
- * Clears the session, the session id, and renew's the session.
+ * Clears the session, the session id, and renews the session.
  *
  * @return void
  */
@@ -622,7 +626,7 @@ class CakeSession {
  * @return void
  */
 	protected static function _checkValid() {
-		if (!self::started() && !self::start()) {
+		if (!self::start()) {
 			self::$valid = false;
 			return false;
 		}
@@ -662,7 +666,7 @@ class CakeSession {
  */
 	public static function renew() {
 		if (session_id()) {
-			if (session_id() != '' || isset($_COOKIE[session_name()])) {
+			if (session_id() || isset($_COOKIE[session_name()])) {
 				setcookie(Configure::read('Session.cookie'), '', time() - 42000, self::$path);
 			}
 			session_regenerate_id(true);
