@@ -981,11 +981,14 @@ DOC_END;
 		
 		$this->__id = $this->_getId($model, $options);
 		
-		$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
+		// TODO basercamp CakeEvent
+		//$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
 		
 		$out = parent::create($model, $options);
 
-		return $this->executeHook('afterFormCreate', $this->__id, $out);
+		return $out;
+		// TODO basercamp CakeEvent
+		//return $this->executeHook('afterFormCreate', $this->__id, $out);
 		
 	}
 /**
@@ -1000,11 +1003,13 @@ DOC_END;
 
 		$id = $this->__id;
 		$this->__id = null;
-		$options = $this->executeHook('beforeFormEnd', $id, $options);
+		// TODO basercamp CakeEvent
+		//$options = $this->executeHook('beforeFormEnd', $id, $options);
 
 		$out = parent::end($options);
-		
-		return $this->executeHook('afterFormEnd', $id, $out);
+		return $out;
+		// TODO basercamp CakeEvent
+		//return $this->executeHook('afterFormEnd', $id, $out);
 		
 	}
 /**
@@ -1025,7 +1030,8 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
-		$options = $this->executeHook('beforeFormInput', $fieldName, $options);
+		// TODO basercamp CakeEvent
+		//$options = $this->executeHook('beforeFormInput', $fieldName, $options);
 		
 		$type = '';
 		if(isset($options['type'])) {
@@ -1080,7 +1086,9 @@ DOC_END;
 			$out = $out.$counter.$this->Js->buffer($script);
 		}
 		
-		return $this->executeHook('afterFormInput', $fieldName, $out);
+		return $out;
+		// TODO basercamp CakeEvent
+		//return $this->executeHook('afterFormInput', $fieldName, $out);
 		
 	}
 /**

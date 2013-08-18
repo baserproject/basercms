@@ -54,7 +54,7 @@ class BcAppController extends Controller {
  */
 // TODO 見直し
 	public $helpers = array(
-		'Session', 'BcPluginHook', 'BcHtml', 'Form', 'BcForm', 
+		'Session', 'BcHtml', 'Form', 'BcForm', 
 		'Js', 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin'
 	);
 /**
@@ -78,7 +78,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = array('BcPluginHook', 'RequestHandler', 'Security', 'Session', 'BcManager');
+	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager');
 /**
  * サブディレクトリ
  *
@@ -452,7 +452,6 @@ class BcAppController extends Controller {
 		}
 
 	}
-
 /**
  * 初回アクセスメッセージ用のフラグを更新する
  */
@@ -1274,44 +1273,6 @@ array (size=4)
 			return $default;
 		}
 		return '/';
-	}
-/**
- * フックメソッドを実行する
- * 
- * @param string $hook
- * @return mixed
- */
-	public function executeHook($hook) {
-
-		$args = func_get_args();
-		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
-
-	}
-/**
- * プラグインフックのイベントを発火させる
- * 
- * @param string $hook
- * @return mixed 
- */
-	public function dispatchPluginHook($hook) {
-		
-		$args = func_get_args();
-		$args[0] = $this;
-		return call_user_func_array( array( $this->BcPluginHook, $hook ), $args );
-		
-	}
-/**
- * プラグインフックのハンドラを実行する
- * 
- * @param string $hook
- * @param mixed $return
- * @return mixed 
- */
-	public function executePluginHook($hook, $controller) {
-		
-		$args = func_get_args();
-		return call_user_func_array(array($this->BcPluginHook, 'executeHook'), $args);
-		
 	}
 /**
  * 現在のユーザーのドキュメントルートの書き込み権限確認

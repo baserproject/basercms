@@ -552,7 +552,8 @@ class BcBaserHelper extends AppHelper {
 			'subDir'	=> true
 		), $options);
 		
-		$options = $this->executeHook('beforeElement', $name, $data, $options);
+		// TODO basercamp CakeEvent
+		//$options = $this->executeHook('beforeElement', $name, $data, $options);
 
 		extract($options);
 		
@@ -561,8 +562,9 @@ class BcBaserHelper extends AppHelper {
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
-
-		return $this->executeHook('afterElement', $name, $out);
+		return $out;
+		// TODO basercamp CakeEvent
+		//return $this->executeHook('afterElement', $name, $out);
 
 	}
 /**
@@ -600,7 +602,9 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('header', $data, $options);
-		echo $this->executeHook('baserHeader', $out);
+		echo $out;
+		// TODO basercamp CakeEvent
+		//echo $this->executeHook('baserHeader', $out);
 
 	}
 /**
@@ -620,7 +624,9 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('footer', $data, $options);
-		echo $this->executeHook('baserFooter', $out);
+		echo $out;
+		// TODO basercamp CakeEvent
+		//echo $this->executeHook('baserFooter', $out);
 
 	}
 /**
@@ -902,7 +908,8 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
 
-		$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		// TODO basercamp CakeEvent
+		//$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
 
 		if(!empty($htmlAttributes['prefix'])) {
 			if(!empty($this->request->params['prefix'])) {
@@ -994,7 +1001,9 @@ class BcBaserHelper extends AppHelper {
 
 		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
 
-		return $this->executeHook('afterBaserGetLink', $url, $out);
+		return $out;
+		// TODO basercamp CakeEvent
+		//return $this->executeHook('afterBaserGetLink', $url, $out);
 
 	}
 /**

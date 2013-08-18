@@ -683,7 +683,6 @@ App::uses('BcEmailComponent', 'Controller/Component');
 /**
  * 利用可能なプラグインのリストを取得する
  * 
- * PluginHookBehavior::setup() で、プラグインリストを参照できるように、
  * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
  * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
  * 

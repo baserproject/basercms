@@ -52,13 +52,6 @@ class BcAppModel extends Model {
 	public $useDbConfig = 'baser';
 
 /**
- * ビヘイビア
- * 
- * @var array
- */
-	public $actsAs = array('BcPluginHook');
-
-/**
  * コンストラクタ
  *
  * @return	void
@@ -1263,33 +1256,6 @@ class BcAppModel extends Model {
 		} else {
 			parent::cakeError($method, $messages);
 		}
-	}
-/**
- * プラグインフックのイベントを発火させる
- * 
- * @param string $hook
- * @return mixed 
- */
-	public function dispatchPluginHook($hook) {
-		
-		$args = func_get_args();
-		$args[0] = $this;
-		return call_user_func_array( array( $this->Behaviors->BcPluginHook, $hook ), $args );
-		
-	}
-/**
- * プラグインフックのハンドラを実行する
- * 
- * @param string $hook
- * @param mixed $return
- * @return mixed 
- */
-	public function executePluginHook($hook, $return) {
-		
-		$args = func_get_args();
-		array_unshift($args, $this);
-		return call_user_func_array(array($this->Behaviors->BcPluginHook, 'executeHook'), $args);
-		
 	}
 /**
  * Queries the datasource and returns a result set array.

@@ -110,17 +110,6 @@ class BcAppView extends View {
 		
 	}
 /**
- * フック処理を実行する
- *
- * @param	string	$out
- * @return	mixed
- */
-	public function executeHook($hook, $out) {
-
-		return $this->loaded['pluginHook']->{$hook}($out);
-
-	}
-/**
  * Returns filename of given action's template file (.ctp) as a string.
  * CamelCased action names will be under_scored! This means that you can have
  * LongActionNames that refer to long_action_names.ctp views.

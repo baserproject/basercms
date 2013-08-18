@@ -43,19 +43,26 @@ App::build(array(
 	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
 ));
-App::uses('AppModel',		'Model');
-App::uses('BcAppModel'	,	'Model');
-App::uses('BcCache',			'Model/Behavior');
-App::uses('ClassRegistry',	'Utility');
-App::uses('Multibyte',		'I18n');
-App::uses('BcCsv',			'Model/Datasource/Database');
-App::uses('BcPostgres',		'Model/Datasource/Database');
-App::uses('BcSqlite',		'Model/Datasource/Database');
-App::uses('BcMysql',			'Model/Datasource/Database');
-App::uses('PhpReader',		'Configure');
-App::uses('CakeSession',		'Model/Datasource');
-App::uses('Folder',			'Utility');
-App::uses('File',			'Utility');
+App::build(array(
+	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+), App::REGISTER);
+
+App::uses('AppModel',			'Model');
+App::uses('BcAppModel'	,		'Model');
+App::uses('BcCache',				'Model/Behavior');
+App::uses('ClassRegistry',		'Utility');
+App::uses('Multibyte',			'I18n');
+App::uses('BcCsv',				'Model/Datasource/Database');
+App::uses('BcPostgres',			'Model/Datasource/Database');
+App::uses('BcSqlite',			'Model/Datasource/Database');
+App::uses('BcMysql',				'Model/Datasource/Database');
+App::uses('PhpReader',			'Configure');
+App::uses('CakeSession',			'Model/Datasource');
+App::uses('Folder',				'Utility');
+App::uses('File',				'Utility');
+App::uses('BcControllerEvent',	'Event');
+App::uses('BcModelEvent',		'Event');
+App::uses('BcViewEvent',			'Event');
 /**
  * baserUrl取得
  */
@@ -205,14 +212,38 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$plugins = getEnablePlugins();
 	foreach($plugins as $plugin) {
 		CakePlugin::load($plugin);
+		$pluginPath = CakePlugin::path($plugin);
 		$config = array(
-			'bootstrap'	=> file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'bootstrap.php'),
-			'routes'	=> file_exists(CakePlugin::path($plugin) . 'Config' . DS . 'routes.php')
+			'bootstrap'	=> file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
+			'routes'	=> file_exists($pluginPath . 'Config' . DS . 'routes.php')
 		);
 		CakePlugin::load($plugin, $config);
 		CakePlugin::bootstrap($plugin);
+		$CakeEvent = CakeEventManager::instance();
+		
+		// プラグインイベント登録
+		$eventTargets = array('Controller', 'Model', 'View');
+		foreach($eventTargets as $eventTarget) {
+			$eventClass = $plugin . $eventTarget . 'Event';
+			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+				App::uses($eventClass, $plugin . '.Event');
+				$CakeEvent->attach(new $eventClass());
+			}
+		}
+		
 	}
 	Configure::write('BcStatus.enablePlugins', $plugins);
+	
+/**
+ * イベント登録
+ */
+	App::uses('BcControllerDispatch', 'Event');
+	App::uses('BcModelDispatch', 'Event');
+	App::uses('BcViewDispatch', 'Event');
+	$CakeEvent->attach(new BcControllerDispatch());
+	$CakeEvent->attach(new BcModelDispatch());
+	$CakeEvent->attach(new BcViewDispatch());
+	
 /**
  * テーマの bootstrap を実行する
  */

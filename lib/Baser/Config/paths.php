@@ -74,7 +74,11 @@ define('BASER_CONFIGS', BASER . 'Config' . DS);
  */
 define('BASER_LOCALES', BASER . 'Locale' . DS);
 /**
- * Baser TestSuite
+ * BaserEvent
+ */
+define('BASER_EVENTS', BASER . 'Event' . DS);
+/**
+ * Baser Libs
  */
 define('BASER_LIBS', BASER . 'Lib' . DS);
 /**

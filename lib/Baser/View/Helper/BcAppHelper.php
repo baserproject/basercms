@@ -243,51 +243,6 @@ class BcAppHelper extends Helper {
 		
 	}
 /**
- * フック処理を実行する
- * 
- * @param	string	$hook
- * @return	mixed
- */
-	public function executeHook($hook) {
-		
-		$args = func_get_args();
-		return call_user_func_array(array($this, 'dispatchPluginHook'), $args);
-		
-	}
-/**
- * プラグインフックのイベントを発火させる
- * 
- * @param string $hook
- * @return mixed 
- */
-	public function dispatchPluginHook($hook) {
-		
-		if(!$this->_View){
-			$this->_View = ClassRegistry::getObject('View');
-		}
-
-		$args = func_get_args();
-		$args[0] = $this;
-
-		// TODO basercamp loaded が参照できない 2013/05/19 ryuring
-		return call_user_func_array(array($this->_View->BcPluginHook, $hook), $args);
-		
-	}
-/**
- * プラグインフックのハンドラを実行する
- * @param type $hook
- * @param type $return
- * @return type 
- */
-	public function executePluginHook($hook, $return) {
-		
-		$args = func_get_args();
-		$View = ClassRegistry::getObject('View');
-		$BcPluginHook = $View->loaded['bcPluginHook'];
-		return call_user_func_array(array($BcPluginHook, 'executeHook'), $args);
-		
-	}
-/**
  * Finds URL for specified action.
  *
  * Returns an URL pointing to a combination of controller and action. Param
