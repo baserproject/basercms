@@ -549,7 +549,7 @@ class BcManagerComponent extends Component {
 		if(!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
-
+		
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
