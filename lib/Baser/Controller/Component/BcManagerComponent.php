@@ -1179,7 +1179,7 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 		
-		$src = App::themePath('baseradmin') . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
+		$src = App::themePath('Baseradmin') . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {

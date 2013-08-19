@@ -26,7 +26,7 @@
 		// 初期テーマ
 		'defaultTheme'		=> 'nada-icons',
 		// 管理システムテーマ
-		'adminTheme'		=> 'baseradmin',
+		'adminTheme'		=> 'Baseradmin',
 		// テンプレートの基本となる拡張子（.php 推奨）
 		'templateExt'		=> '.php',
 		// システムナビ

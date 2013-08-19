@@ -67,7 +67,12 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	public $uses = null;
-	public $theme = 'baseradmin';
+/**
+ * テーマ
+ * 
+ * @var string
+ */
+	public $theme = 'Baseradmin';
 /**
  * beforeFilter
  *
