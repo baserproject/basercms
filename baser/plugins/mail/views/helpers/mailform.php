@@ -94,7 +94,11 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['rows']);
 				unset($attributes['empty']);
 				$address1 = $this->__name(array(),$options[1]);
-				$address2 = $this->__name(array(),$options[2]);
+				if(empty($options[2])) {
+					$address2 = $this->__name(array(),$options[1]);
+				} else {
+					$address2 = $this->__name(array(),$options[2]);
+				}
 				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
 				$out = $this->Javascript->link('ajaxzip3.js').$this->text($fieldName,$attributes);
 				break;
