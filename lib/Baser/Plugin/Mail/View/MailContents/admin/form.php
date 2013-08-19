@@ -85,7 +85,7 @@ function mailContentSender1ClickHandler(){
 <!-- form -->
 <h2>基本項目</h2>
 
-<?php echo $this->BcForm->create('MailContent') ?>
+<?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 	<?php if($this->action == 'admin_edit'): ?>
@@ -185,7 +185,7 @@ function mailContentSender1ClickHandler(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthCaptcha', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
@@ -199,7 +199,7 @@ function mailContentSender1ClickHandler(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.ssl_on', 'SSL通信') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.ssl_on', 'SSL通信') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.ssl_on', array('type' => 'checkbox', 'label' => '利用する')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSslOn', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>

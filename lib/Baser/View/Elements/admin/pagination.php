@@ -23,7 +23,6 @@ if(empty($this->Paginator)) {
 if(!isset($modules)) {
 	$modules = 8;
 }
-$this->Paginator->options = array('url' => $this->passedArgs);
 $pageCount = 0;
 if(isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['pageCount'])) {
 	$pageCount = $this->Paginator->params['paging'][$this->Paginator->defaultModel()]['pageCount'];

@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->Paginator->options = array('url' => $this->passedArgs);
 ?>
 <div class="pagination">
 	<div class="page-result">
