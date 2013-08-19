@@ -301,10 +301,15 @@ class BcAppHelper extends Helper {
 		
 		$EventManager = $this->_View->getEventManager();
 		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
-			if(isset($params[$returnKey])) {
+			if(is_null($params)) {
+				return;
+			}
+			if(array_key_exists($returnKey, $params)) {
 				return $params[$returnKey];
+			} elseif(array_key_exists(0, $params)) {
+				return $params[0];
 			} else {
-				return $params;
+				return;
 			}
 		}
 		
