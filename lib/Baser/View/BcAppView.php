@@ -292,9 +292,12 @@ class BcAppView extends View {
 		
 		$EventManager = $this->getEventManager();
 		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
-			if(isset($params[$returnKey])) {
+			if(is_null($params)) {
+				return;
+			}
+			if(array_key_exists($returnKey, $params)) {
 				return $params[$returnKey];
-			} elseif(isset($params[0])) {
+			} elseif(array_key_exists(0, $params)) {
 				return $params[0];
 			} else {
 				return;

@@ -1019,9 +1019,8 @@ DOC_END;
 			'options'	=> $options
 		), 'options');
 
-
 		$out = parent::end($options);
-		
+
 		/*** Form.afterEnd ***/
 		return $this->dispatchEvent('Form.afterEnd', array(
 			'id'	=> $id,
