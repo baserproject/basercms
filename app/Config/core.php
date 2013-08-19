@@ -190,6 +190,7 @@
 	Configure::write('Session', array(
 		'defaults' => 'php'
 	));
+	Configure::write('Session.cookie', 'BASERCMS');
 
 /**
  * A random string used in security hashing methods.

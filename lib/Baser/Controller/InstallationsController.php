@@ -209,11 +209,7 @@ class InstallationsController extends AppController {
  */
 	public function step3() {
 
-		$dbsource = $this->Session->read('Installation.dbSource');
-		if(!$dbsource) {
-			$dbsource = $this->_getDbSource();
-			$this->Session->write('Installation.dbSource', $dbsource);
-		}
+		$dbsource = $this->_getDbSource();
 		
 		if(!$this->request->data) {
 			clearAllCache();
@@ -619,7 +615,7 @@ class InstallationsController extends AppController {
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
 				$dbFolderPath = APP.'db'.DS.'sqlite';
-				if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
+				if(is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)){
 					$dbsource['sqlite'] = 'SQLite';
 				}
 			}
@@ -628,7 +624,7 @@ class InstallationsController extends AppController {
 
 		/* CSV利用可否 */
 		$dbFolderPath = APP.'db'.DS.'csv';
-		if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
+		if(is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)){
 			$dbsource['csv'] = 'CSV';
 		}
 
