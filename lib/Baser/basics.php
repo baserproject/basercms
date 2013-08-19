@@ -49,11 +49,16 @@ App::uses('BcEmailComponent', 'Controller/Component');
 				$baseUrl .= '/';
 			}
 		}else {
-			
 			// TODO basercamp スマートURLオフを考慮してない
 			$script = $_SERVER['SCRIPT_FILENAME'];
 			$script = str_replace(docRoot(), '', $script);
-			$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+
+			if(BC_DEPLOY_PATTERN == 1) {
+				$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+			} elseif(BC_DEPLOY_PATTERN == 2) {
+				$baseUrl = preg_replace('/index\.php/', '', $script);
+			}
+			
 			$baseUrl = preg_replace("/index$/", '', $baseUrl);
 			$baseUrl = preg_replace("/test\.php$/", '', $baseUrl);
 			

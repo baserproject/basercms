@@ -64,10 +64,6 @@ App::uses('BcControllerEvent',	'Event');
 App::uses('BcModelEvent',		'Event');
 App::uses('BcViewEvent',		'Event');
 /**
- * baserUrl取得
- */
-define('BC_BASE_URL', baseUrl());
-/**
  * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
  */
 /**
@@ -84,6 +80,10 @@ if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', 
 	// baserCMS配布時の配置
 	define('BC_DEPLOY_PATTERN', 1);
 }
+/**
+ * baserUrl取得
+ */
+define('BC_BASE_URL', baseUrl());
 /**
  * インストール状態
  */
