@@ -981,14 +981,19 @@ DOC_END;
 		
 		$this->__id = $this->_getId($model, $options);
 		
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
+		/*** Form.beforeCreate ***/
+		$options = $this->dispatchEvent('Form.beforeCreate', array(
+			'id'		=> $this->__id,
+			'options'	=> $options
+		), 'options');
 		
 		$out = parent::create($model, $options);
 
-		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterFormCreate', $this->__id, $out);
+		/*** Form.afterCreate ***/
+		return $this->dispatchEvent('Form.afterCreate', array(
+			'id'	=> $this->__id,
+			'out'	=> $out
+		), 'out');
 		
 	}
 /**

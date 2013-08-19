@@ -63,6 +63,7 @@ App::uses('File',				'Utility');
 App::uses('BcControllerEvent',	'Event');
 App::uses('BcModelEvent',		'Event');
 App::uses('BcViewEvent',		'Event');
+App::uses('BcHelperEvent',		'Event');
 /**
  * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
  */
@@ -209,6 +210,7 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  */
 if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+	
 	$plugins = getEnablePlugins();
 	$CakeEvent = CakeEventManager::instance();
 	foreach($plugins as $plugin) {
@@ -222,7 +224,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		CakePlugin::bootstrap($plugin);
 
 		// プラグインイベント登録
-		$eventTargets = array('Controller', 'Model', 'View');
+		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach($eventTargets as $eventTarget) {
 			$eventClass = $plugin . $eventTarget . 'Event';
 			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {

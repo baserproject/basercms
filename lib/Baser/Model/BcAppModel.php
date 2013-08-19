@@ -1357,5 +1357,35 @@ class BcAppModel extends Model {
 			}
 		}
 	}
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $returnKey = null) {
+		
+		if(!preg_match('/^Model./', $name)) {
+			$name = 'Model.' . $name;
+		}
+		
+		$EventManager = $this->getEventManager();
+		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
+			if(isset($params[$returnKey])) {
+				return $params[$returnKey];
+			} elseif(isset($params[0])) {
+				return $params[0];
+			} else {
+				return;
+			}
+		}
+		
+		$event = new CakeEvent($name, $this, $params);
+		$EventManager->dispatch($event);
+		
+		return $event->result;
+		
+	}
 	
 }

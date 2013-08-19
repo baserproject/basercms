@@ -286,5 +286,33 @@ class BcAppHelper extends Helper {
 		}
 		
 	}
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $returnKey = null) {
+		
+		if(!preg_match('/^Helper\./', $name)) {
+			$name = 'Helper.' . $name;
+		}
+		
+		$EventManager = $this->_View->getEventManager();
+		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
+			if(isset($params[$returnKey])) {
+				return $params[$returnKey];
+			} else {
+				return $params;
+			}
+		}
+		
+		$event = new CakeEvent($name, $this, $params);
+		$EventManager->dispatch($event);
+		
+		return $event->result;
+		
+	}
 	
 }
