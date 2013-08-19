@@ -277,5 +277,36 @@ class BcAppView extends View {
 		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
 		
 	}
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $returnKey = null) {
+		
+		if(!preg_match('/^View./', $name)) {
+			$name = 'View.' . $name;
+		}
+		
+		$EventManager = $this->getEventManager();
+		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
+			if(isset($params[$returnKey])) {
+				return $params[$returnKey];
+			} elseif(isset($params[0])) {
+				return $params[0];
+			} else {
+				return;
+			}
+		}
+		
+		$event = new CakeEvent($name, $this, $params);
+		$EventManager->dispatch($event);
+		
+		return $event->result;
+		
+	}
+	
 }
 ?>

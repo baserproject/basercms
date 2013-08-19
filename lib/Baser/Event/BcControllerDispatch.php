@@ -11,19 +11,29 @@ class BcControllerDispatch extends Object implements CakeEventListener {
 		);
 	}
 	function initialize($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Controller.' . $event->subject->name . '.initialize', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.initialize', $event->data);
+		}
 	}
 	function startup($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Controller.' . $event->subject->name . '.startup', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.startup', $event->data);
+		}
 	}
 	function beforeRender($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Controller.' . $event->subject->name . '.beforeRender', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.beforeRender', $event->data);
+		}
 	}
 	function beforeRedirect($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Controller.' . $event->subject->name . '.beforeRedirect', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.beforeRedirect', $event->data);
+		}
 	}
 	function shutdown($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Controller.' . $event->subject->name . '.shutdown', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.shutdown', $event->data);
+		}
 	}
 
 }

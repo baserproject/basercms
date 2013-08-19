@@ -14,28 +14,28 @@ class BcModelDispatch extends Object implements CakeEventListener {
 		);
 	}
 	public function beforeFind($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.beforeFind', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.beforeFind', $event->data);
 	}
 	public function afterFind($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.afterFind', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.afterFind', $event->data);
 	}
 	public function beforeValidate($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.beforeValidate', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.beforeValidate', $event->data);
 	}
 	public function afterValidate($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.afterValidate', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.afterValidate', $event->data);
 	}
 	public function beforeSave($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.beforeSave', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.beforeSave', $event->data);
 	}
 	public function afterSave($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.afterSave', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.afterSave', $event->data);
 	}
 	public function beforeDelete($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.beforeDelete', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.beforeDelete', $event->data);
 	}
 	public function afterDelete($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('Model.' . $event->subject->name . '.afterDelete', $this, $event->data));
+		return $event->subject->dispatchEvent($event->subject->name . '.afterDelete', $event->data);
 	}
 	
 }

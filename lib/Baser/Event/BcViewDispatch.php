@@ -11,23 +11,35 @@ class BcViewDispatch extends Object implements CakeEventListener {
 			'View.afterLayout' => 'afterLayout'
 		);
 	}
-	public function beforeRenderFile($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.beforeRenderFile', $this, $event->data));
+	public function beforeRenderFile(CakeEvent $event) {
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.beforeRenderFile', $event->data);
+		}
 	}
 	public function afterRenderFile($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.afterRenderFile', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.afterRenderFile', $event->data);
+		}
 	}
 	public function beforeRender($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.beforeRender', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.beforeRender', $event->data);
+		}
 	}
 	public function afterRender($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.afterRender', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.afterRender', $event->data);
+		}
 	}
 	public function beforeLayout($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.beforeLayout', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.beforeLayout', $event->data);
+		}
 	}
 	public function afterLayout($event) {
-		$event->subject->getEventManager()->dispatch(new CakeEvent('View.' . $event->subject->name . '.afterLayout', $this, $event->data));
+		if($event->subject->name != 'CakeError') {
+			return $event->subject->dispatchEvent($event->subject->name . '.afterLayout', $event->data);
+		}
 	}
 	
 }
