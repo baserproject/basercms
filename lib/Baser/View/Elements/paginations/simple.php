@@ -24,7 +24,6 @@ if(!isset($modules)) {
 	$modules = 8;
 }
 ?>
-<?php $this->Paginator->options = array('url' => $this->passedArgs) ?>
 <?php if((int)$this->Paginator->counter(array('format'=>'%pages%')) > 1): ?>
 <div class="pagination">
 <?php echo $this->Paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
