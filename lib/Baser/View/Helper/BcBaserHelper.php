@@ -933,6 +933,10 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
 
+		if(!is_array($options)) {
+			$options = array($options);
+		}
+		
 		$options = array_merge(array(
 			'escape'	=> false,
 			'prefix'	=> false,
