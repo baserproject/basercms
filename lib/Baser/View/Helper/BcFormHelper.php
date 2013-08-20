@@ -986,18 +986,24 @@ DOC_END;
 		$this->__id = $this->_getId($model, $options);
 		
 		/*** Form.beforeCreate ***/
-		$options = $this->dispatchEvent('Form.beforeCreate', array(
+		$event = $this->dispatchEvent('Form.beforeCreate', array(
 			'id'		=> $this->__id,
 			'options'	=> $options
-		), 'options');
-		
+		));
+		if($event !== false) {
+			$options = $event->result[0];
+		}
 		$out = parent::create($model, $options);
 
 		/*** Form.afterCreate ***/
-		return $this->dispatchEvent('Form.afterCreate', array(
+		$event = $this->dispatchEvent('Form.afterCreate', array(
 			'id'	=> $this->__id,
 			'out'	=> $out
-		), 'out');
+		));
+		if($event !== false) {
+			$out = $event->result[0];
+		}
+		return $out;
 		
 	}
 /**
@@ -1014,18 +1020,26 @@ DOC_END;
 		$this->__id = null;
 
 		/*** Form.beforeEnd ***/
-		$options = $this->dispatchEvent('Form.beforeEnd', array(
+		$event = $this->dispatchEvent('Form.beforeEnd', array(
 			'id'		=> $id,
 			'options'	=> $options
-		), 'options');
-
+		));
+		if($event !== false) {
+			$options = $event->result[0];
+		}
+		
 		$out = parent::end($options);
 
 		/*** Form.afterEnd ***/
-		return $this->dispatchEvent('Form.afterEnd', array(
+		$event = $this->dispatchEvent('Form.afterEnd', array(
 			'id'	=> $id,
 			'out'	=> $out
-		), 'out');
+		));
+		
+		if($event !== false) {
+			$out = $event->result[0];
+		}
+		return $out;
 		
 	}
 /**
@@ -1047,10 +1061,13 @@ DOC_END;
 	public function input($fieldName, $options = array()) {
 
 		/*** Form.beforeInput ***/
-		$options = $this->dispatchEvent('Form.beforeInput', array(
+		$event = $this->dispatchEvent('Form.beforeInput', array(
 			'fieldName'	=> $fieldName,
 			'options'	=> $options
-		), 'options');
+		));
+		if($event !== false) {
+			$options = $event->result[0];
+		}
 		
 		$type = '';
 		if(isset($options['type'])) {
@@ -1106,11 +1123,16 @@ DOC_END;
 		}
 		
 		/*** Form.afterInput ***/
-		return $this->dispatchEvent('Form.afterInput', array(
+		$event = $this->dispatchEvent('Form.afterInput', array(
 			'fieldName'	=> $fieldName,
 			'out'		=> $out
-		), 'out');
+		));
 				
+		if($event !== false) {
+			$out = $event->result[0];
+		}
+		return $out;
+		
 	}
 /**
  * フォームのIDを取得する

@@ -1,5 +1,5 @@
 <?php
-class BcEvent extends Object implements CakeEventListener {
+class BcEventListener extends Object implements CakeEventListener {
 
 	public $events = array();
 	

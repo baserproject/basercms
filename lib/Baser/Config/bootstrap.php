@@ -60,10 +60,10 @@ App::uses('PhpReader',			'Configure');
 App::uses('CakeSession',		'Model/Datasource');
 App::uses('Folder',				'Utility');
 App::uses('File',				'Utility');
-App::uses('BcControllerEvent',	'Event');
-App::uses('BcModelEvent',		'Event');
-App::uses('BcViewEvent',		'Event');
-App::uses('BcHelperEvent',		'Event');
+App::uses('BcControllerEventListener',	'Event');
+App::uses('BcModelEventListener',		'Event');
+App::uses('BcViewEventListener',		'Event');
+App::uses('BcHelperEventListener',		'Event');
 /**
  * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
  */
@@ -226,8 +226,8 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach($eventTargets as $eventTarget) {
-			$eventClass = $plugin . $eventTarget . 'Event';
-			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+			$eventClass = $plugin . $eventTarget . 'EventListener';
+			if(file_exists($pluginPath . 'EventListener' . DS . $eventClass . '.php')) {
 				App::uses($eventClass, $plugin . '.Event');
 				$CakeEvent->attach(new $eventClass());
 			}
@@ -239,12 +239,12 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * イベント登録
  */
-	App::uses('BcControllerDispatch', 'Event');
-	App::uses('BcModelDispatch', 'Event');
-	App::uses('BcViewDispatch', 'Event');
-	$CakeEvent->attach(new BcControllerDispatch());
-	$CakeEvent->attach(new BcModelDispatch());
-	$CakeEvent->attach(new BcViewDispatch());
+	App::uses('BcControllerEventDispatcher', 'Event');
+	App::uses('BcModelEventDispatcher', 'Event');
+	App::uses('BcViewEventDispatcher', 'Event');
+	$CakeEvent->attach(new BcControllerEventDispatcher());
+	$CakeEvent->attach(new BcModelEventDispatcher());
+	$CakeEvent->attach(new BcViewEventDispatcher());
 	
 /**
  * テーマの bootstrap を実行する

@@ -1364,30 +1364,13 @@ class BcAppModel extends Model {
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array(), $returnKey = null) {
+	public function dispatchEvent($name, $params = array()) {
 		
 		if(!preg_match('/^Model./', $name)) {
 			$name = 'Model.' . $name;
 		}
-		
-		$EventManager = $this->getEventManager();
-		if(!$EventManager->listeners($name) && !CakeEventManager::instance()->listeners($name)) {
-			if(is_null($params)) {
-				return;
-			}
-			if(array_key_exists($returnKey, $params)) {
-				return $params[$returnKey];
-			} elseif(array_key_exists(0, $params)) {
-				return $params[0];
-			} else {
-				return;
-			}
-		}
-		
-		$event = new CakeEvent($name, $this, $params);
-		$EventManager->dispatch($event);
-		
-		return $event->result;
+		App::uses('BcEventDispatcher', 'Event');
+		return BcEventDispatcher::dispatch($this, $name, $params);
 		
 	}
 	
