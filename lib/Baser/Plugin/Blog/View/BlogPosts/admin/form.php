@@ -274,11 +274,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogPost.status', array(
-						'type'		=> 'radio',
-						'options'	=> $statuses,
-						'legend'	=> false,
-						'separator'	=> '&nbsp;&nbsp;')) ?>
+				<?php echo $this->BcForm->input('BlogPost.status', array('type' => 'radio', 'options' => $statuses)) ?>
 				<?php echo $this->BcForm->error('BlogPost.status') ?>
 				&nbsp;&nbsp;
 				<?php echo $this->BcForm->dateTimePicker('BlogPost.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>

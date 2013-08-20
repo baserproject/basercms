@@ -298,7 +298,7 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.exclude_search', '公開設定') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'checkbox', 'label' => '公開中')) ?><br />
+				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?><br />
 				<?php echo $this->BcForm->error('MailContent.status') ?>
 				<?php echo $this->BcForm->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'このメールフォームをサイト内検索の検索結果より除外する')) ?>
 			</td>

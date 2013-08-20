@@ -331,7 +331,7 @@ jQuery(function($) {
 		<tr id="rowNoSend">
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.no_send', 'メール送信') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.no_send', array('type' => 'checkbox', 'label' => '送信しない')) ?>
+				<?php echo $this->BcForm->input('MailField.no_send', array('type' => 'radio', 'options' => array('送信する', '送信しない'))) ?>
 				<?php echo $this->BcForm->error('MailField.no_send') ?>
 			</td>
 		</tr>

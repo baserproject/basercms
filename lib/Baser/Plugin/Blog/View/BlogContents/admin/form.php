@@ -105,7 +105,8 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.exclude_search', '公開設定') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.status', array('type' => 'checkbox', 'label' => '公開中')) ?><br />
+				
+				<?php echo $this->BcForm->input('BlogContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
 				<?php echo $this->BcForm->error('BlogContent.status') ?>
 				<?php echo $this->BcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 			</td>
