@@ -18,7 +18,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  */
 	function initialize(CakeEvent $event) {
 		if($event->subject->name != 'CakeError') {
-			$event->subject->dispatchEvent($event->subject->name . '.initialize', $event->data);
+			$event->subject->dispatchEvent('initialize', $event->data);
 		}
 	}
 /**
@@ -29,7 +29,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  */
 	function startup(CakeEvent $event) {
 		if($event->subject->name != 'CakeError') {
-			$event->subject->dispatchEvent($event->subject->name . '.startup', $event->data);
+			$event->subject->dispatchEvent('startup', $event->data);
 		}
 	}
 /**
@@ -40,7 +40,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  */
 	function beforeRender(CakeEvent $event) {
 		if($event->subject->name != 'CakeError') {
-			$event->subject->dispatchEvent($event->subject->name . '.beforeRender', $event->data);
+			$event->subject->dispatchEvent('beforeRender', $event->data);
 		}
 	}
 /**
@@ -51,7 +51,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  */
 	function beforeRedirect(CakeEvent $event) {
 		if($event->subject->name != 'CakeError') {
-			$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.beforeRedirect', $event->data);
+			$currentEvent = $event->subject->dispatchEvent('beforeRedirect', $event->data);
 			if($currentEvent) {
 				return $currentEvent->result;
 			}
@@ -66,7 +66,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  */
 	function shutdown(CakeEvent $event) {
 		if($event->subject->name != 'CakeError') {
-			$event->subject->dispatchEvent($event->subject->name . '.shutdown', $event->data);
+			$event->subject->dispatchEvent('shutdown', $event->data);
 		}
 	}
 

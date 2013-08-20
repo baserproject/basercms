@@ -1366,11 +1366,8 @@ class BcAppModel extends Model {
  */
 	public function dispatchEvent($name, $params = array()) {
 		
-		if(!preg_match('/^Model./', $name)) {
-			$name = 'Model.' . $name;
-		}
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($this, $name, $params);
+		return BcEventDispatcher::dispatch('Model', $name, $this, $params);
 		
 	}
 	

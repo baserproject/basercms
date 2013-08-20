@@ -286,11 +286,8 @@ class BcAppView extends View {
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
 		
-		if(!preg_match('/^View./', $name)) {
-			$name = 'View.' . $name;
-		}
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($this, $name, $params, $options);
+		return BcEventDispatcher::dispatch('View', $name, $this, $params);
 		
 	}
 	

@@ -985,8 +985,8 @@ DOC_END;
 		
 		$this->__id = $this->_getId($model, $options);
 		
-		/*** Form.beforeCreate ***/
-		$event = $this->dispatchEvent('Form.beforeCreate', array(
+		/*** beforeCreate ***/
+		$event = $this->dispatchEvent('beforeCreate', array(
 			'id'		=> $this->__id,
 			'options'	=> $options
 		));
@@ -995,8 +995,8 @@ DOC_END;
 		}
 		$out = parent::create($model, $options);
 
-		/*** Form.afterCreate ***/
-		$event = $this->dispatchEvent('Form.afterCreate', array(
+		/*** afterCreate ***/
+		$event = $this->dispatchEvent('afterCreate', array(
 			'id'	=> $this->__id,
 			'out'	=> $out
 		));
@@ -1019,8 +1019,8 @@ DOC_END;
 		$id = $this->__id;
 		$this->__id = null;
 
-		/*** Form.beforeEnd ***/
-		$event = $this->dispatchEvent('Form.beforeEnd', array(
+		/*** beforeEnd ***/
+		$event = $this->dispatchEvent('beforeEnd', array(
 			'id'		=> $id,
 			'options'	=> $options
 		));
@@ -1030,8 +1030,8 @@ DOC_END;
 		
 		$out = parent::end($options);
 
-		/*** Form.afterEnd ***/
-		$event = $this->dispatchEvent('Form.afterEnd', array(
+		/*** afterEnd ***/
+		$event = $this->dispatchEvent('afterEnd', array(
 			'id'	=> $id,
 			'out'	=> $out
 		));
@@ -1060,8 +1060,8 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
-		/*** Form.beforeInput ***/
-		$event = $this->dispatchEvent('Form.beforeInput', array(
+		/*** beforeInput ***/
+		$event = $this->dispatchEvent('beforeInput', array(
 			'fieldName'	=> $fieldName,
 			'options'	=> $options
 		));
@@ -1122,8 +1122,8 @@ DOC_END;
 			$out = $out.$counter.$this->Js->buffer($script);
 		}
 		
-		/*** Form.afterInput ***/
-		$event = $this->dispatchEvent('Form.afterInput', array(
+		/*** afterInput ***/
+		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName'	=> $fieldName,
 			'out'		=> $out
 		));

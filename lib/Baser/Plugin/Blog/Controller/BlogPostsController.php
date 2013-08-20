@@ -290,10 +290,12 @@ class BlogPostsController extends BlogAppController {
 				$id = $this->BlogPost->getLastInsertId();
 				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を追加しました。', false, true);
 				
-				$this->request->data['BlogPost']['id'] = $this->User->getInsertID();
-				$this->getEventManager()->dispatch(new CakeEvent('Blog.Controller.BlogPosts.afterAdd', $this, array(
-					'user' => $this->request->data
-				)));
+				$this->request->data['BlogPost']['id'] = $id;
+				
+				/*** afterAdd ***/
+				$this->dispatchEvent('afterAdd', array(
+					'user'	=> $this->request->data
+				));
 				
 				// 編集画面にリダイレクト
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
@@ -378,9 +380,12 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
-				$this->getEventManager()->dispatch(new CakeEvent('Blog.Controller.BlogPosts.afterEdit', $this, array(
-					'user' => $this->request->data
-				)));
+				
+				/*** afterEdit ***/
+				$this->dispatchEvent('afterEdit', array(
+					'user'	=> $this->request->data
+				));
+
 				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			}else {

@@ -25,7 +25,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function beforeFind(CakeEvent $event) {
-		$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.beforeFind', $event->data);
+		$currentEvent = $event->subject->dispatchEvent('beforeFind', $event->data);
 		if($currentEvent) {
 			return $currentEvent->result === true ? $currentEvent->data[0] : $currentEvent->result;
 		}
@@ -39,7 +39,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function afterFind(CakeEvent $event) {
-		$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.afterFind', $event->data);
+		$currentEvent = $event->subject->dispatchEvent('afterFind', $event->data);
 		if($currentEvent) {
 			return $currentEvent->result;
 		}
@@ -53,7 +53,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return boolean
  */
 	public function beforeValidate(CakeEvent $event) {
-		$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.beforeValidate', $event->data);
+		$currentEvent = $event->subject->dispatchEvent('beforeValidate', $event->data);
 		if($currentEvent) {
 			if ($currentEvent->isStopped()) {
 				return false;
@@ -69,7 +69,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterValidate(CakeEvent $event) {
-		$event->subject->dispatchEvent($event->subject->name . '.afterValidate', $event->data);
+		$event->subject->dispatchEvent('afterValidate', $event->data);
 	}
 	
 /**
@@ -79,7 +79,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return boolean
  */
 	public function beforeSave(CakeEvent $event) {
-		$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.beforeSave', $event->data);
+		$currentEvent = $event->subject->dispatchEvent('beforeSave', $event->data);
 		if($currentEvent) {
 			if (!$currentEvent->result) {
 				return false;
@@ -95,7 +95,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterSave(CakeEvent $event) {
-		$event->subject->dispatchEvent($event->subject->name . '.afterSave', $event->data);
+		$event->subject->dispatchEvent('afterSave', $event->data);
 	}
 	
 /**
@@ -105,7 +105,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return boolean
  */
 	public function beforeDelete(CakeEvent $event) {
-		$currentEvent = $event->subject->dispatchEvent($event->subject->name . '.beforeDelete', $event->data);
+		$currentEvent = $event->subject->dispatchEvent('beforeDelete', $event->data);
 		if($currentEvent) {
 			if ($event->isStopped()) {
 				return false;
@@ -120,7 +120,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @param CakeEvent $event
  */
 	public function afterDelete(CakeEvent $event) {
-		$event->subject->dispatchEvent($event->subject->name . '.afterDelete', $event->data);
+		$event->subject->dispatchEvent('afterDelete', $event->data);
 	}
 	
 }

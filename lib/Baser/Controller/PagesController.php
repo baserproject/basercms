@@ -193,9 +193,9 @@ class PagesController extends AppController {
 					// 完了メッセージ
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を追加しました。', false, true);
 					
-					// afterPageAdd
-					//$this->executeHook('afterPageAdd');
-					
+					/*** Pages.afterAdd ***/
+					$this->dispatchEvent('afterAdd');
+		
 					// 編集画面にリダイレクト
 					$id = $this->Page->getInsertID();
 					$this->redirect(array('controller' => 'pages', 'action' => 'edit', $id));
@@ -320,8 +320,8 @@ class PagesController extends AppController {
 					// 完了メッセージ
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を更新しました。', false, true);
 					
-					// afterPageEdit
-					//$this->executeHook('afterPageEdit');
+					/*** Pages.afterEdit ***/
+					$this->dispatchEvent('afterEdit');
 					
 					// 同固定ページへリダイレクト
 					$this->redirect(array('action' => 'edit', $id));

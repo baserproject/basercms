@@ -552,9 +552,16 @@ class BcBaserHelper extends AppHelper {
 			'subDir'	=> true
 		), $options);
 		
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeElement', $name, $data, $options);
-
+		/*** beforeElement ***/
+		$event = $this->dispatchEvent('beforeElement', array(
+			'name'		=> $name,
+			'data'		=> $data,
+			'options'	=> $options
+		));
+		if($event !== false) {
+			$options = $event->result[0];
+		}
+		
 		extract($options);
 		
 		if(!empty($this->_View->subDir) && $subDir) {
@@ -562,10 +569,17 @@ class BcBaserHelper extends AppHelper {
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
-		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterElement', $name, $out);
 
+		/*** afterElement ***/
+		$event = $this->dispatchEvent('afterElement', array(
+			'name'		=> $name,
+			'out'	=> $out
+		));
+		if($event !== false) {
+			$out = $event->result[0];
+		}
+		return $out;
+		
 	}
 /**
  * エレメント（部品）テンプレートを出力する
@@ -602,9 +616,15 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('header', $data, $options);
+		
+		/*** header ***/
+		$event = $this->dispatchEvent('header', array(
+			'out'	=> $out
+		));
+		if($event !== false) {
+			$out = $event->result[0];
+		}
 		echo $out;
-		// TODO basercamp CakeEvent
-		//echo $this->executeHook('baserHeader', $out);
 
 	}
 /**
@@ -624,9 +644,15 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('footer', $data, $options);
+
+		/*** footer ***/
+		$event = $this->dispatchEvent('footer', array(
+			'out'	=> $out
+		));
+		if($event) {
+			$out = $event->result[0];
+		}
 		echo $out;
-		// TODO basercamp CakeEvent
-		//echo $this->executeHook('baserFooter', $out);
 
 	}
 /**
@@ -881,14 +907,13 @@ class BcBaserHelper extends AppHelper {
  * @param string $url
  * @param array $htmlAttributes
  * @param boolean $confirmMessage
- * @param boolean $escapeTitle
  * @return void
  * @access public
  * @manual
  */
-	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false) {
 
-		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
 
 	}
 /**
@@ -906,30 +931,37 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
 
-		// TODO basercamp CakeEvent
-		//$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
-
-		if(!empty($htmlAttributes['prefix'])) {
-			if(!empty($this->request->params['prefix'])) {
+		$options = array_merge(array(
+			'escape'	=> false,
+			'prefix'	=> false,
+			'forceTitle'=> false,
+			'ssl'		=> false
+		), $options);
+		
+		/*** beforeGetLink ***/
+		$event = $this->dispatchEvent('beforeGetLink', array(
+			'title'				=> $title,
+			'url'				=> $url,
+			'options'			=> $options,
+			'confirmMessage'	=> $confirmMessage
+		));
+		if($event !== false) {
+			$options = $event->result[2];
+		}
+		
+		if($options['prefix']) {
+			if(!empty($this->request->params['prefix']) && is_array($url)) {
 				$url[$this->request->params['prefix']] = true;
 			}
-			unset($htmlAttributes['prefix']);
 		}
-		if(isset($htmlAttributes['forceTitle'])) {
-			$forceTitle = $htmlAttributes['forceTitle'];
-			unset($htmlAttributes['forceTitle']);
-		}else {
-			$forceTitle = false;
-		}
-
-		if(isset($htmlAttributes['ssl'])) {
-			$ssl = true;
-			unset($htmlAttributes['ssl']);
-		}else {
-			$ssl = false;
-		}
+		$forceTitle = $options['forceTitle'];
+		$ssl = $options['ssl'];
+		
+		unset($options['prefix']);
+		unset($options['forceTitle']);
+		unset($options['ssl']);
 
 		// 管理システムメニュー対策
 		// プレフィックスが変更された場合も正常動作させる為
@@ -990,20 +1022,22 @@ class BcBaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		// Cake1.2系との互換対応
-		if (isset($htmlAttributes['escape']) && $escapeTitle == true) {
-			$escapeTitle = $htmlAttributes['escape'];
+		if(!$options) {
+			$options = array();
 		}
-		if(!$htmlAttributes) {
-			$htmlAttributes = array();
+
+		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
+
+		/*** afterGetLink ***/
+		$event = $this->dispatchEvent('afterGetLink', array(
+			'url'	=> $url,
+			'out'	=> $out
+		));
+		
+		if($event !== false) {
+			$out = $event->result[1];
 		}
-		$htmlAttributes = array_merge($htmlAttributes, array('escape' => $escapeTitle));
-
-		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
-
 		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterBaserGetLink', $url, $out);
 
 	}
 /**

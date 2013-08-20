@@ -1542,11 +1542,8 @@ array (size=4)
  */
 	public function dispatchEvent($name, $params = array()) {
 		
-		if(!preg_match('/^Controller./', $name)) {
-			$name = 'Controller.' . $name;
-		}
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($this, $name, $params);
+		return BcEventDispatcher::dispatch('Controller', $name, $this, $params);
 		
 	}
 	

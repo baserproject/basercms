@@ -295,11 +295,8 @@ class BcAppHelper extends Helper {
  */
 	public function dispatchEvent($name, $params = array()) {
 		
-		if(!preg_match('/^Helper./', $name)) {
-			$name = 'Helper.' . $name;
-		}
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($this->_View, $name, $params);
+		return BcEventDispatcher::dispatch('Helper', $name, $this->_View, $params);
 		
 	}
 	
