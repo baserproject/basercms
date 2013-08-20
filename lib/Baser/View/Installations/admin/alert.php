@@ -26,7 +26,7 @@
 	<li>次のファイルを開きます。<br />
 		<pre>/app/Config/install.php</pre>
 	<li>
-	<li>core.phpより次の行を見つけます。<br />
+	<li>install.phpより次の行を見つけます。<br />
 		<pre>Configure::write('debug', 0);</pre>
 	</li>
 	<li>0 の部分を、 -1 に書き換えます。</li>

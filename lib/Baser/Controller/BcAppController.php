@@ -359,10 +359,9 @@ class BcAppController extends Controller {
 			}
 		}
 
-		// TODO basercamp 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
 		if(!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
 		}
 		
 	}
@@ -377,7 +376,7 @@ class BcAppController extends Controller {
 		$theme = '';
 		if(!empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
-		} elseif($this->name == 'Installations') {
+		} else {
 			$theme = Configure::read('BcApp.adminTheme');
 		}
 		if(!empty($this->siteConfigs['admin_theme'])) {
@@ -430,6 +429,7 @@ class BcAppController extends Controller {
 
 		$this->__updateFirstAccess();
 
+		$favoriteBoxOpened = false;
 		if(!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
 			$user = $this->BcAuth->user();
 			if($user) {
@@ -438,10 +438,10 @@ class BcAppController extends Controller {
 				} else {
 					$favoriteBoxOpened = true;
 				}
-				$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 			}
 		}
 
+		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->__loadDataToView();
 		$this->set('isSSL', $this->RequestHandler->isSSL());
 		$this->set('safeModeOn', ini_get('safe_mode'));
@@ -499,23 +499,7 @@ class BcAppController extends Controller {
  */
 	public function notFound() {
 
-		$method = 'error404';
-		$messages = array(array($this->request->here));
-		
-		if (!class_exists('ErrorHandler')) {
-			if (file_exists(APP . 'error.php')) {
-				include_once (APP . 'error.php');
-			} elseif (file_exists(APP . 'app_error.php')) {
-				include_once (APP . 'app_error.php');
-			}
-		}
-
-		if (class_exists('AppError')) {
-			$error = new AppError($method, $messages);
-		} else {
-			$error = new ErrorHandler($method, $messages);
-		}
-		return $error;
+		throw new NotFoundException('見つかりませんでした。');
 
 	}
 /**

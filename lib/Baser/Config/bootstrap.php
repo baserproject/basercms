@@ -44,7 +44,7 @@ App::build(array(
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
 ));
 App::build(array(
-	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Event'						=> array(APP . 'Event', BASER_EVENTS)
 ), App::REGISTER);
 
 App::uses('AppModel',			'Model');

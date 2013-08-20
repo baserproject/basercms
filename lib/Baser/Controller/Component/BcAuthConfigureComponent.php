@@ -126,7 +126,7 @@ class  BcAuthConfigureComponent extends Component {
 		}
 		
 		// セッション識別
-		// TODO basercamp 2013/05/27 ryuring
+		// TODO 2013/05/27 ryuring
 		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
 		// 現在のバージョン（3.0.0 beta）では、認証情報を複数持てる仕様となっていない
 		// 上記仕様に対応させる為には、ここの処理変更だけでなく全体的な認証の仕組みを見直す必要あり
