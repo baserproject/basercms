@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 ?>
 <?php $this->BcBaser->xmlHeader() ?>
 <?php $this->BcBaser->docType() ?>
