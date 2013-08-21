@@ -293,10 +293,17 @@ class BcAppHelper extends Helper {
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array()) {
+	public function dispatchEvent($name, $params = array(), $options = array()) {
+
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Helper',
+			'class'		=> str_replace('Helper', '', get_class($this))
+		), $options);
 		
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch('Helper', $name, $this->_View, $params);
+		return BcEventDispatcher::dispatch($name, $this->_View, $params, $options);
 		
 	}
 	

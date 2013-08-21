@@ -989,9 +989,9 @@ DOC_END;
 		$event = $this->dispatchEvent('beforeCreate', array(
 			'id'		=> $this->__id,
 			'options'	=> $options
-		));
+		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result[0];
+			$options = $event->result;
 		}
 		$out = parent::create($model, $options);
 
@@ -999,9 +999,9 @@ DOC_END;
 		$event = $this->dispatchEvent('afterCreate', array(
 			'id'	=> $this->__id,
 			'out'	=> $out
-		));
+		), array('class' => 'Form'));
 		if($event !== false) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
 		return $out;
 		
@@ -1023,9 +1023,9 @@ DOC_END;
 		$event = $this->dispatchEvent('beforeEnd', array(
 			'id'		=> $id,
 			'options'	=> $options
-		));
+		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result[0];
+			$options = $event->result;
 		}
 		
 		$out = parent::end($options);
@@ -1034,10 +1034,10 @@ DOC_END;
 		$event = $this->dispatchEvent('afterEnd', array(
 			'id'	=> $id,
 			'out'	=> $out
-		));
+		), array('class' => 'Form'));
 		
 		if($event !== false) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
 		return $out;
 		
@@ -1064,9 +1064,9 @@ DOC_END;
 		$event = $this->dispatchEvent('beforeInput', array(
 			'fieldName'	=> $fieldName,
 			'options'	=> $options
-		));
+		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result[0];
+			$options = $event->result;
 		}
 		
 		$type = '';
@@ -1126,10 +1126,10 @@ DOC_END;
 		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName'	=> $fieldName,
 			'out'		=> $out
-		));
+		), array('class' => 'Form'));
 				
 		if($event !== false) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
 		return $out;
 		

@@ -1364,10 +1364,17 @@ class BcAppModel extends Model {
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array()) {
-		
+	public function dispatchEvent($name, $params = array(), $options = array()) {
+
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Model',
+			'class'		=> $this->name
+		), $options);
+
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch('Model', $name, $this, $params);
+		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 		
 	}
 	

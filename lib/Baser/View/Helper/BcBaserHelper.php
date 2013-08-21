@@ -557,9 +557,19 @@ class BcBaserHelper extends AppHelper {
 			'name'		=> $name,
 			'data'		=> $data,
 			'options'	=> $options
-		));
+		), array('layer' => 'View', 'class' => ''));
 		if($event !== false) {
-			$options = $event->result[0];
+			$options = $event->result;
+		}
+		
+		/*** Controller.beforeElement ***/
+		$event = $this->dispatchEvent('beforeElement', array(
+			'name'		=> $name,
+			'data'		=> $data,
+			'options'	=> $options
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event !== false) {
+			$options = $event->result;
 		}
 		
 		extract($options);
@@ -574,10 +584,20 @@ class BcBaserHelper extends AppHelper {
 		$event = $this->dispatchEvent('afterElement', array(
 			'name'		=> $name,
 			'out'	=> $out
-		));
+		), array('layer' => 'View', 'class' => ''));
 		if($event !== false) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
+		
+		/*** Controller.afterElement ***/
+		$event = $this->dispatchEvent('afterElement', array(
+			'name'		=> $name,
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event !== false) {
+			$out = $event->result;
+		}
+		
 		return $out;
 		
 	}
@@ -620,9 +640,9 @@ class BcBaserHelper extends AppHelper {
 		/*** header ***/
 		$event = $this->dispatchEvent('header', array(
 			'out'	=> $out
-		));
+		), array('layer' => 'View', 'class' => $this->_View->name));
 		if($event !== false) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
 		echo $out;
 
@@ -648,9 +668,9 @@ class BcBaserHelper extends AppHelper {
 		/*** footer ***/
 		$event = $this->dispatchEvent('footer', array(
 			'out'	=> $out
-		));
+		), array('layer' => 'View', 'class' => $this->_View->name));
 		if($event) {
-			$out = $event->result[0];
+			$out = $event->result;
 		}
 		echo $out;
 
@@ -950,9 +970,9 @@ class BcBaserHelper extends AppHelper {
 			'url'				=> $url,
 			'options'			=> $options,
 			'confirmMessage'	=> $confirmMessage
-		));
+		), array('class' => 'Html'));
 		if($event !== false) {
-			$options = $event->result[2];
+			$options = $event->result;
 		}
 		
 		if($options['prefix']) {
@@ -1036,10 +1056,10 @@ class BcBaserHelper extends AppHelper {
 		$event = $this->dispatchEvent('afterGetLink', array(
 			'url'	=> $url,
 			'out'	=> $out
-		));
+		), array('class' => 'Html'));
 		
 		if($event !== false) {
-			$out = $event->result[1];
+			$out = $event->result;
 		}
 		return $out;
 

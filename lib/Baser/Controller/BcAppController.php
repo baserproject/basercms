@@ -1524,10 +1524,16 @@ array (size=4)
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array()) {
+	public function dispatchEvent($name, $params = array(), $options = array()) {
 		
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Controller',
+			'class'		=> $this->name
+		), $options);
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch('Controller', $name, $this, $params);
+		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 		
 	}
 	

@@ -286,8 +286,14 @@ class BcAppView extends View {
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
 		
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'View',
+			'class'		=> $this->name
+		), $options);
 		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch('View', $name, $this, $params);
+		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 		
 	}
 	

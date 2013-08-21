@@ -227,7 +227,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach($eventTargets as $eventTarget) {
 			$eventClass = $plugin . $eventTarget . 'EventListener';
-			if(file_exists($pluginPath . 'EventListener' . DS . $eventClass . '.php')) {
+			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 				App::uses($eventClass, $plugin . '.Event');
 				$CakeEvent->attach(new $eventClass());
 			}
