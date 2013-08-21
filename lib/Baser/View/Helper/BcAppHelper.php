@@ -114,9 +114,6 @@ class BcAppHelper extends Helper {
  */
 	public function webroot($file) {
 		
-		// TODO basercamp
-		// みなおし要
-		
 		// CUSTOMIZE ADD 2010/05/19 ryuring
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
 		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する

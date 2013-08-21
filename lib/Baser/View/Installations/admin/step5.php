@@ -17,10 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-// TODO basercamp 暫定対応 2013/05/20 ryuring
-// 複数のプレフィックスを設定している場合に順番が異なると正常に取得できない
-$prefixes = Configure::read('Routing.prefixes');
-$adminPrefix = $prefixes[0];
+$adminPrefix = Configure::read('Routing.prefixes.0');
 ?>
 
 <div class="step-5">

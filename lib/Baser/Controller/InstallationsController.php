@@ -126,20 +126,6 @@ class InstallationsController extends AppController {
 
 	}
 /**
- * beforeRender 
- */
-	public function beforeRender() {
-		
-		parent::beforeRender();
-		// TODO basercamp MASA-P
-		// beforeRenderのタイミングでViewオブジェクトは存在しないためエラーになる
-		// viewPathの中に記述する必要有り
-		//if(!empty($this->subDir)) {
-		//	$this->View->subDir = $this->subDir;
-		//}
-		
-	}
-/**
  * Step 1: ウェルカムページ
  *
  * @return void

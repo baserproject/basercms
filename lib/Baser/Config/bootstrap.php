@@ -142,6 +142,10 @@ Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応
 
 if (BC_INSTALLED) {
 /**
+ * tmpフォルダ確認
+ */
+	checkTmpFolders();
+/**
  * データキャッシュ
  */
 	Cache::config('_cake_data_', array(
@@ -184,10 +188,6 @@ if (BC_INSTALLED) {
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
 	loadSiteConfig();
-/**
- * tmpフォルダ確認
- */
-	checkTmpFolders();
 /**
  * メンテナンスチェック
  */
