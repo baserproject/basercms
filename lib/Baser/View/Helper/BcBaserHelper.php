@@ -640,6 +640,14 @@ class BcBaserHelper extends AppHelper {
 		/*** header ***/
 		$event = $this->dispatchEvent('header', array(
 			'out'	=> $out
+		), array('layer' => 'View', 'class' => ''));
+		if($event !== false) {
+			$out = $event->result;
+		}
+		
+		/*** Controller.header ***/
+		$event = $this->dispatchEvent('header', array(
+			'out'	=> $out
 		), array('layer' => 'View', 'class' => $this->_View->name));
 		if($event !== false) {
 			$out = $event->result;
@@ -666,6 +674,14 @@ class BcBaserHelper extends AppHelper {
 		$out = $this->getElement('footer', $data, $options);
 
 		/*** footer ***/
+		$event = $this->dispatchEvent('footer', array(
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => ''));
+		if($event) {
+			$out = $event->result;
+		}
+		
+		/*** Controller.footer ***/
 		$event = $this->dispatchEvent('footer', array(
 			'out'	=> $out
 		), array('layer' => 'View', 'class' => $this->_View->name));
