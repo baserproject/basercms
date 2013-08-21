@@ -161,7 +161,7 @@ class BlogController extends BlogAppController {
 			$listCount = $this->blogContent['BlogContent']['feed_count'];
 		}else {
 			$this->layout = $this->blogContent['BlogContent']['layout'];
-			$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'] . DS . 'index';
+			$template = $this->blogContent['BlogContent']['template'] . DS . 'index';
 			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
 
@@ -260,7 +260,7 @@ class BlogController extends BlogAppController {
 					}
 				}
 				$this->pageTitle = $blogCategories[count($blogCategories)-1]['BlogCategory']['title'];
-				$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'].DS.'archives';
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 
 				$this->set('blogArchiveType',$type);
 
@@ -274,7 +274,7 @@ class BlogController extends BlogAppController {
 				$BcBaser = new BcBaserHelper(new View());
 				$userName = $BcBaser->getUserName($data);
 				$this->pageTitle = urldecode($userName);
-				$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'].DS.'archives';
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 				$this->set('blogArchiveType',$type);
 				break;
 
@@ -287,7 +287,7 @@ class BlogController extends BlogAppController {
 				}
 				$posts = $this->_getBlogPosts(array('conditions' => array('tag' => $tag)));
 				$this->pageTitle = urldecode($tag);
-				$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'].DS.'archives';
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 
 				$this->set('blogArchiveType',$type);
 
@@ -306,7 +306,7 @@ class BlogController extends BlogAppController {
 				$this->pageTitle = $year.'年';
 				if($month) $this->pageTitle .= $month.'月';
 				if($day) $this->pageTitle .= $day.'日';
-				$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'].DS.'archives';
+				$template = $this->blogContent['BlogContent']['template'].DS.'archives';
 
 				if($day){
 					$this->set('blogArchiveType','daily');
@@ -398,7 +398,7 @@ class BlogController extends BlogAppController {
 				}
 				$this->pageTitle = $post['BlogPost']['name'];
 				$single = true;
-				$template = 'Blog' . DS . $this->blogContent['BlogContent']['template'].DS.'single';
+				$template = $this->blogContent['BlogContent']['template'].DS.'single';
 				if($this->preview) {
 					$this->blogContent['BlogContent']['comment_use'] = false;
 				}
@@ -980,7 +980,7 @@ class BlogController extends BlogAppController {
 
 		$this->set('posts', $datas);
 
-		$this->render('Blog' . DS . $this->blogContent['BlogContent']['template'].DS . $template);
+		$this->render($this->blogContent['BlogContent']['template'].DS . $template);
 
 	}
 /**

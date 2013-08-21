@@ -181,7 +181,13 @@ class BcAppView extends View {
 				$name = trim($name, DS);
 			} elseif ($name[0] === '.') {
 				$name = substr($name, 3);
-			} elseif (!$plugin || $this->viewPath !== $this->name) {
+			// CUSTOMIZE MODIFY 2013/08/21 ryuring
+			// サブフォルダが適用されない為調整
+			// >>>
+			//} elseif (!$plugin || $this->viewPath !== $this->name) {
+			// ---
+			} else {
+			// <<<
 				$name = $this->viewPath . DS . $subDir . $name;
 			}
 		}
