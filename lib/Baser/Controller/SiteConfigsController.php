@@ -75,7 +75,6 @@ class SiteConfigsController extends AppController {
  */
 	public function beforeFilter() {
 
-		$this->Security->validatePost = false;
 		parent::beforeFilter();
 		
 	}

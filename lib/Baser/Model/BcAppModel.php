@@ -688,7 +688,7 @@ class BcAppModel extends Model {
 	public function duplicate($check,$field) {
 		$conditions = array($this->alias . '.' . key($check) => $check[key($check)]);
 		if ($this->exists()) {
-			$conditions['NOT'] = array($this->alias . '.id' => $this->id);
+			$conditions['NOT'] = array($this->alias . '.'. $this->primaryKey => $this->id);
 		}
 		$ret = $this->find('first', array('conditions' => $conditions));
 		if ($ret) {

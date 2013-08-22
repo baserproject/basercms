@@ -70,8 +70,6 @@ class PagesController extends AppController {
 
 		if(!empty($this->request->params['admin'])){
 			$this->crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
-			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
 		}
 		
 		$user = $this->BcAuth->user();
