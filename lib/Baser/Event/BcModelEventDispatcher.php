@@ -137,7 +137,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 /**
