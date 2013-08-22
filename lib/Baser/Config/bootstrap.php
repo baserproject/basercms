@@ -47,24 +47,6 @@ App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS)
 ), App::REGISTER);
 
-App::uses('AppModel',			'Model');
-App::uses('BcAppModel'	,		'Model');
-App::uses('BcCache',			'Model/Behavior');
-App::uses('ClassRegistry',		'Utility');
-App::uses('Multibyte',			'I18n');
-App::uses('BcCsv',				'Model/Datasource/Database');
-App::uses('BcPostgres',			'Model/Datasource/Database');
-App::uses('BcSqlite',			'Model/Datasource/Database');
-App::uses('BcMysql',			'Model/Datasource/Database');
-App::uses('PhpReader',			'Configure');
-App::uses('CakeSession',		'Model/Datasource');
-App::uses('Folder',				'Utility');
-App::uses('File',				'Utility');
-App::uses('BcControllerEventListener',	'Event');
-App::uses('BcModelEventListener',		'Event');
-App::uses('BcViewEventListener',		'Event');
-App::uses('BcHelperEventListener',		'Event');
-
 /**
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
@@ -88,18 +70,34 @@ define('BC_BASE_URL', baseUrl());
 /**
  * 静的ファイルの読み込みの場合はスキップ
  */
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
 $uri = @$_SERVER['REQUEST_URI'];
-if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'js\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'img\//', $uri)) {
-	$assets = array('js', 'css', 'gif', 'jpg', 'png');
-	$aryUri = explode('.', $uri);
-	$ext = array_pop($aryUri);
-	if (in_array($ext, $assets)) {
-		Configure::write('BcRequest.asset', true);
-		return;
-	}
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	return;
 }
+
+/**
+ * クラスローダー設定
+ */
+App::uses('AppModel',			'Model');
+App::uses('BcAppModel'	,		'Model');
+App::uses('BcCache',			'Model/Behavior');
+App::uses('ClassRegistry',		'Utility');
+App::uses('Multibyte',			'I18n');
+App::uses('BcCsv',				'Model/Datasource/Database');
+App::uses('BcPostgres',			'Model/Datasource/Database');
+App::uses('BcSqlite',			'Model/Datasource/Database');
+App::uses('BcMysql',			'Model/Datasource/Database');
+App::uses('PhpReader',			'Configure');
+App::uses('CakeSession',		'Model/Datasource');
+App::uses('Folder',				'Utility');
+App::uses('File',				'Utility');
+App::uses('BcControllerEventListener',	'Event');
+App::uses('BcModelEventListener',		'Event');
+App::uses('BcViewEventListener',		'Event');
+App::uses('BcHelperEventListener',		'Event');
 
 /**
  * インストール状態
