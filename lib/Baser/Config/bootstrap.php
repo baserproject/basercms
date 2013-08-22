@@ -64,9 +64,7 @@ App::uses('BcControllerEventListener',	'Event');
 App::uses('BcModelEventListener',		'Event');
 App::uses('BcViewEventListener',		'Event');
 App::uses('BcHelperEventListener',		'Event');
-/**
- * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
- */
+
 /**
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
@@ -81,29 +79,14 @@ if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', 
 	// baserCMS配布時の配置
 	define('BC_DEPLOY_PATTERN', 1);
 }
+
 /**
  * baserUrl取得
  */
 define('BC_BASE_URL', baseUrl());
+
 /**
- * インストール状態
- */
-define('BC_INSTALLED', isInstalled());
-/**
- * 設定ファイル読み込み
- * install.php で設定している為、一旦読み込んで再設定
- */
-$baserSettings = array();
-$baserSettings['BcEnv'] = Configure::read('BcEnv');
-$baserSettings['BcApp'] = Configure::read('BcApp');
-Configure::config('baser', new PhpReader(BASER_CONFIGS));
-if (Configure::load('baser', 'baser') === false) {
-	$config = array();
-	include BASER_CONFIGS . 'baser.php';
-	Configure::write($config);
-}
-/**
- * vendors内の静的ファイルの読み込みの場合はスキップ
+ * 静的ファイルの読み込みの場合はスキップ
  */
 $uri = @$_SERVER['REQUEST_URI'];
 if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
@@ -118,6 +101,24 @@ if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
 	}
 }
 
+/**
+ * インストール状態
+ */
+define('BC_INSTALLED', isInstalled());
+
+/**
+ * 設定ファイル読み込み
+ * install.php で設定している為、一旦読み込んで再設定
+ */
+$baserSettings = array();
+$baserSettings['BcEnv'] = Configure::read('BcEnv');
+$baserSettings['BcApp'] = Configure::read('BcApp');
+Configure::config('baser', new PhpReader(BASER_CONFIGS));
+if (Configure::load('baser', 'baser') === false) {
+	$config = array();
+	include BASER_CONFIGS . 'baser.php';
+	Configure::write($config);
+}
 if (BC_INSTALLED && $baserSettings) {
 	foreach ($baserSettings as $key1 => $settings) {
 		if ($settings) {
@@ -127,6 +128,12 @@ if (BC_INSTALLED && $baserSettings) {
 		}
 	}
 }
+
+/**
+ * セッション設定
+ */
+require APP . 'Config' . DS . 'session.php';
+
 /**
  * クレジット読込 
  */

@@ -18,13 +18,14 @@
  * @license			http://basercms.net/license/index.html
  */
 if (empty($_SESSION)) {
-	if ($iniSet) {
+	
+	if (function_exists(('ini_set'))) {
 /**
  * 基本設定 
  */
 		ini_set('session.serialize_handler', 'php');
 		ini_set('session.name', Configure::read('Session.cookie'));
-		ini_set('session.cookie_path', $this->path);
+		//ini_set('session.cookie_path', $this->path);
 		ini_set('session.auto_start', 0);
 		ini_set('session.save_path', TMP . 'sessions');
 
@@ -51,13 +52,14 @@ if (empty($_SESSION)) {
  * ブラウザを閉じた後のセッションの有効期限
  * デフォルト：７日
  */
-		ini_set('session.cookie_lifetime', $this->cookieLifeTime);
+		//ini_set('session.cookie_lifetime', $this->cookieLifeTime);
 /**
  * ブラウザを開いた状態においてセッションが切れる条件
  * session.gc_maxlifetime で設定された秒数ごとに一定の確率ごとにセッションが切れる
  * 確率は、session.gc_probability で設定する。確実にタイムアウトさせたい場合は、100を設定する。
  * デフォルト：１日１回、100分の１の確率でセッションが切れる
  */
+		App::uses('Security', 'Utility');
 		$sessionTimeout = Security::inactiveMins() * Configure::read('Session.timeout');
 		ini_set('session.gc_maxlifetime', $sessionTimeout);
 		//ini_set('session.gc_probability', 1);
