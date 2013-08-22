@@ -743,7 +743,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		if(!$plugin || in_array($plugin, $corePlugins)) {
 			$path = BASER.'VERSION.txt';
 		} else {
-			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
+			$appPath = APP.'Plugin'.DS.$plugin.DS.'VERSION.txt';
 			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
 			if(file_exists($appPath)) {
 				$path = $appPath;
