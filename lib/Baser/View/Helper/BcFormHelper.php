@@ -991,7 +991,7 @@ DOC_END;
 			'options'	=> $options
 		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result;
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 		$out = parent::create($model, $options);
 
@@ -1001,8 +1001,9 @@ DOC_END;
 			'out'	=> $out
 		), array('class' => 'Form'));
 		if($event !== false) {
-			$out = $event->result;
+			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
+		
 		return $out;
 		
 	}
@@ -1025,7 +1026,7 @@ DOC_END;
 			'options'	=> $options
 		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result;
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 		
 		$out = parent::end($options);
@@ -1035,10 +1036,10 @@ DOC_END;
 			'id'	=> $id,
 			'out'	=> $out
 		), array('class' => 'Form'));
-		
 		if($event !== false) {
-			$out = $event->result;
+			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
+		
 		return $out;
 		
 	}
@@ -1066,7 +1067,7 @@ DOC_END;
 			'options'	=> $options
 		), array('class' => 'Form'));
 		if($event !== false) {
-			$options = $event->result;
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 		
 		$type = '';
@@ -1129,8 +1130,9 @@ DOC_END;
 		), array('class' => 'Form'));
 				
 		if($event !== false) {
-			$out = $event->result;
+			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
+		
 		return $out;
 		
 	}

@@ -38,13 +38,6 @@ App::uses('DbRestore', 'Vendor');
 class BcAppModel extends Model {
 
 /**
- * プラグイン名
- *
- * @var		string
- */
-	public $plugin = '';
-
-/**
  * DB接続設定名
  *
  * @var string
