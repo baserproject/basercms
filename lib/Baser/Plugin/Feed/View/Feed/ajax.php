@@ -19,7 +19,7 @@
  */
 $this->BcBaser->cacheHeader(MONTH,'js');
 ?>
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('/theme/' . Configure::read('BcApp.adminTheme') . '/img/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)

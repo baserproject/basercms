@@ -67,9 +67,9 @@ class BcAppView extends View {
 		
 		// CUSTOMIZE ADD 2013/08/17 ryuring
 		// >>>
+		$adminThemePaths = array();
 		$webroot = Configure::read('App.www_root');
 		if (!empty($this->adminTheme)) {
-			$adminThemePaths = array();
 			foreach ($paths as $path) {
 				if (strpos($path, DS . 'Plugin' . DS) === false) {
 					if ($plugin) {

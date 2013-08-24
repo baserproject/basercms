@@ -1015,6 +1015,12 @@ array (size=4)
 			}
 		}
 
+		// 表示件数の変更の場合は、ページ数を1にリセットする
+		// 表示件数が増えた際に、現在表示されているページ数が存在しない場合がある為
+		if(!empty($this->request->params['named']['num'])) {
+			$this->request->params['named']['page'] = 1;
+		}
+		
 		if(!empty($this->request->params['named'])) {
 			$named = am($this->Session->read("{$contentsName}.named"), $this->request->params['named']);
 			$this->Session->write("{$contentsName}.named", $named);

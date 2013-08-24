@@ -42,9 +42,11 @@ App::build(array(
 	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
 	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
 App::build(array(
-	'Event'						=> array(APP . 'Event', BASER_EVENTS)
+	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS)
 ), App::REGISTER);
 
 /**
@@ -66,6 +68,11 @@ if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', 
  * baserUrl取得
  */
 define('BC_BASE_URL', baseUrl());
+
+/**
+ * アセットフィルターを追加
+ */
+Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher')));
 
 /**
  * 静的ファイルの読み込みの場合はスキップ
