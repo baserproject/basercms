@@ -129,6 +129,10 @@ class BcManagerShell extends BcAppShell {
 		if(!$checkResult['themeDirWritable']) {
 			$this->out('　/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。');
 		}
+		$this->out('* PHP GD ('.(($checkResult['phpGd']) ? 'True' : 'False').')');
+		if(!$checkResult['phpGd']) {
+			$this->out('　PHP の GD は、必須モジュールです。GDが利用可能な状態にしてください。');
+		}
 		
 		$this->hr();
 		$this->out('オプション');
@@ -137,10 +141,6 @@ class BcManagerShell extends BcAppShell {
 		$this->out('* PHP Safe Mode ('.(!($checkResult['safeModeOff']) ? 'On' : 'Off').')');
 		if(!$checkResult['safeModeOff']) {
 			$this->out('　Safe Mode が On の場合、動作保証はありません。');
-		}
-		$this->out('* PHP GD ('.(($checkResult['phpGd']) ? 'True' : 'False').')');
-		if(!$checkResult['phpGd']) {
-			$this->out('　PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。');
 		}
 		$this->out('* PHP PDO ('.(($checkResult['phpPdo']) ? 'True' : 'False').')');
 		if(!$checkResult['phpPdo']) {
