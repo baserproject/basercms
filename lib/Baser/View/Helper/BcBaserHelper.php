@@ -574,8 +574,8 @@ class BcBaserHelper extends AppHelper {
 		
 		extract($options);
 		
-		if(!empty($this->_View->subDir) && $subDir) {
-			$name = $this->_View->subDir . DS . $name;
+		if(!$subDir) {
+			$this->_View->subDir = null;
 		}
 		
 		$out = $this->_View->element($name, $data, $options);

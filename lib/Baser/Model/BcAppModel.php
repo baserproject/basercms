@@ -510,11 +510,9 @@ class BcAppModel extends Model {
 		} else {
 			$this->cacheQueries = false;
 			// SQLiteの場合、Max関数にmodel名を含むと、戻り値の添字が崩れる（CakePHPのバグ）
-			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $field . ')')));
+			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $modelName . '.' . $field . ') AS max')));
 			$this->cacheQueries = true;
-			if (isset($dbData[0][0]['MAX(' . $field . ')'])) {
-				return $dbData[0][0]['MAX(' . $field . ')'];
-			} elseif (isset($dbData[0][0]['max'])) {
+			if (isset($dbData[0][0]['max'])) {
 				return $dbData[0][0]['max'];
 			} else {
 				return 0;
