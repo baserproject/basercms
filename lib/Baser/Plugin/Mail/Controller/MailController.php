@@ -126,7 +126,7 @@ class MailController extends MailAppController {
 		}
 
 
-		$this->dbDatas['mailContent'] = $this->MailContent->find('first', array("id"=>$id));
+		$this->dbDatas['mailContent'] = $this->MailContent->find('first', array('conditions' => array("MailContent.id" => $id)));
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
 		$this->Message->mailFields = $this->dbDatas['mailFields'] = $this->MailField->find('all', array('conditions' => array("mail_content_id"=>$id), 'order' => 'MailField.sort'));
 

@@ -235,11 +235,11 @@ $(function(){
 
 		switch (action){
 
-			case 'Edit':
+			case 'FavoriteEdit':
 				$('#FavoriteDialog').dialog('open');
 				break;
 
-			case 'Delete':
+			case 'FavoriteDelete':
 				if(confirm('本当に削除してもよろしいですか？')){
 					$("#Waiting").show();
 					$.post($("#FavoriteDeleteUrl").html(), {"data[Favorite][id]": $(".favorite-menu-list .selected .favorite-id").val()}, function(result){
@@ -277,7 +277,7 @@ $(function(){
 	</ul>
 	
 	<ul class="favolite-menu-tools clearfix">
-		<li><?php $this->BcBaser->img('admin/btn_add.png', array('url' => 'javascript:void(0)', 'width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn')) ?></li>
+		<li><?php $this->BcBaser->img('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn', 'style' => 'cursor:pointer')) ?></li>
 		<li><?php $this->BcBaser->img('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp')) ?>
 			<div class="helptext">
 				<p>よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。</p>
@@ -299,6 +299,6 @@ $(function(){
 
 	
 <ul id="FavoritesMenu" class="context-menu" style="display:none">
-    <li class="edit"><a href="#Edit">編集</a></li>
-    <li class="delete"><a href="#Delete">削除</a></li>
+    <li class="edit"><?php $this->BcBaser->link('編集', '#FavoriteEdit') ?></li>
+    <li class="delete"><?php $this->BcBaser->link('編集', '#FavoriteDelete') ?></li>
 </ul>

@@ -1015,6 +1015,10 @@ class BcBaserHelper extends AppHelper {
 		$_url = preg_replace('/^'.preg_quote($this->request->base, '/').'\//', '/', $url);
 		$enabled = true;
 
+		if($options == false) {
+			$enabled = false;
+		}
+		
 		// 認証チェック
 		if(isset($this->Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
 			$userGroupId = $this->_View->viewVars['user']['user_group_id'];

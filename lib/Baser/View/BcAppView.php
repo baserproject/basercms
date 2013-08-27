@@ -282,6 +282,19 @@ class BcAppView extends View {
 		}
 		// <<<
 		
+		// CUSTOMIZE ADD 2013/08/27 ryuring
+		// イベントを追加
+		// >>>
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => ''));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		// <<<
+		
 		$paths = $this->_paths($plugin);
 		$exts = $this->_getExtensions();
 		foreach ($exts as $ext) {

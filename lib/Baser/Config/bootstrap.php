@@ -105,6 +105,7 @@ App::uses('BcControllerEventListener',	'Event');
 App::uses('BcModelEventListener',		'Event');
 App::uses('BcViewEventListener',		'Event');
 App::uses('BcHelperEventListener',		'Event');
+App::uses('BcUtil'				, 'Lib');
 
 /**
  * インストール状態
