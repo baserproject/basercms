@@ -552,6 +552,10 @@ class BcBaserHelper extends AppHelper {
 			'subDir'	=> true
 		), $options);
 		
+		if(isset($options['plugin']) && !$options['plugin']) {
+			unset($options['plugin']);
+		}
+		
 		/*** beforeElement ***/
 		$event = $this->dispatchEvent('beforeElement', array(
 			'name'		=> $name,

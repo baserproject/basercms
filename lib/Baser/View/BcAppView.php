@@ -140,24 +140,22 @@ class BcAppView extends View {
 			$subDir = $this->subDir . DS;
 		}
 
+		if ($name === null) {
+			$name = $this->view;
+		}
+
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
-		// >>>
-		/*if ($name === null) {
-			$name = $this->view;
-		}*/
-		// ---
-		if(!$name) {
-			$prefix = '';
-			if(isset($this->request->params['prefix'])) {
-				$prefix = $this->request->params['prefix'];
-			}
-			if($prefix && preg_match('/^'.$prefix.'_/', $this->view)) {
-				$name = str_replace($prefix.'_','',$this->view);
-			} elseif(preg_match('/^admin_/', $this->view)) {
-				// プレフィックスをadminとしてすり替え
-				$name = str_replace('admin_','',$this->view);
-			}
+		// >>>		
+		$prefix = '';
+		if(!empty($this->request->params['prefix'])) {
+			$prefix = $this->request->params['prefix'];
+		}
+		if($prefix && preg_match('/^' . $prefix . '_/', $name)) {
+			$name = str_replace($prefix . '_' , '' , $name);
+		} elseif(preg_match('/^admin_/', $name)) {
+			// プレフィックスをadminとしてすり替え
+			$name = str_replace('admin_', '', $name);
 		}
 		// >>>
 		

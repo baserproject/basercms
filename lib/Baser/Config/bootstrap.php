@@ -138,7 +138,9 @@ if (BC_INSTALLED && $baserSettings) {
 /**
  * セッション設定
  */
-require APP . 'Config' . DS . 'session.php';
+if (BC_INSTALLED) {
+	require APP . 'Config' . DS . 'session.php';
+}
 
 /**
  * クレジット読込 
