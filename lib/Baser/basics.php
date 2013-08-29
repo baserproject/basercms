@@ -615,9 +615,8 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			return false;
 		}
 		list($plugin, $file) = explode('.', $name);
-		$plugin = Inflector::underscore($plugin);
 		$pluginPaths = array(
-			APP.'plugins'.DS,
+			APP . 'Plugin' . DS,
 			BASER_PLUGINS
 		);
 		$config = null;

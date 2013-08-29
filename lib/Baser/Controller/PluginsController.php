@@ -290,8 +290,8 @@ class PluginsController extends AppController {
 			
 			$installMessage = '';
 			// TODO 互換性のため古いパスも対応
-			$oldAppConfigPath = APP . DS . 'plugins' . DS . $name . DS . 'Config' . DS . 'config.php';
-			$appConfigPath = APP . DS . 'plugins' . DS . $name . DS . 'Config.php';
+			$oldAppConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config' . DS . 'config.php';
+			$appConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config.php';
 			if(!file_exists($appConfigPath)) {
 				$appConfigPath = $oldAppConfigPath;
 			}
@@ -328,8 +328,8 @@ class PluginsController extends AppController {
 			$data = $this->Plugin->find('first',array('conditions'=>array('name'=>$this->request->data['Plugin']['name'])));
 
 			if(empty($data['Plugin']['db_inited'])) { 
-				if(file_exists(APP.'plugins' . DS . $name . DS . 'Config' . DS . 'init.php')) {
-					include APP . 'plugins' . DS . $name . DS . 'Config' . DS . 'init.php';
+				if(file_exists(APP.'Plugin' . DS . $name . DS . 'Config' . DS . 'init.php')) {
+					include APP . 'Plugin' . DS . $name . DS . 'Config' . DS . 'init.php';
 				}elseif(file_exists(BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php')) {
 					include BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php';
 				}

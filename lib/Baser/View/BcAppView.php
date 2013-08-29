@@ -388,4 +388,3 @@ class BcAppView extends View {
 	}
 	
 }
-?>

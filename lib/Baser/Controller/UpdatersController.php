@@ -405,7 +405,7 @@ class UpdatersController extends AppController {
 				return array();
 			}
 		}else{
-			$appPath = APP . 'plugins' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
+			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
 			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
 			if(is_dir($appPath)){
 				$path = $appPath;
@@ -450,7 +450,7 @@ class UpdatersController extends AppController {
 		if(!$plugin) {
 			return BASER_CONFIGS.'update'.DS;
 		} else {
-			$appPath = APP . 'plugins' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
+			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
 			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
 			if(is_dir($appPath)) {
 				return $appPath;
@@ -620,7 +620,7 @@ class UpdatersController extends AppController {
 	protected function _getUpdatePath($version, $plugin = '') {
 
 		$path = '';
-		$appPluginPath = APP . 'plugins' . DS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
+		$appPluginPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
 		$baserPluginPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
 		$corePath = BASER_CONFIGS . 'update' . DS . $version;
 		if($plugin) {

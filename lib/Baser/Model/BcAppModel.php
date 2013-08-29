@@ -290,7 +290,7 @@ class BcAppModel extends Model {
 			$path = BASER_CONFIGS . 'sql';
 		} else {
 			$schemaPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql'
 			);
 			$path = '';
@@ -307,8 +307,8 @@ class BcAppModel extends Model {
 
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
 			$dataPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default'
 			);
 			$path = '';
