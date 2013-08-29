@@ -218,7 +218,7 @@ class PluginsController extends AppController {
  */
 	public function admin_ajax_delete_file($pluginName) {
 		
-		if($pluginName) {
+		if(!$pluginName) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		
@@ -237,7 +237,7 @@ class PluginsController extends AppController {
  */
 	private function __deletePluginFile($pluginName) {
 
-		$appPath = APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+		$appPath = APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
 		$baserPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
 		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
 		$folder = new Folder();
@@ -268,7 +268,7 @@ class PluginsController extends AppController {
 		$this->Plugin->loadSchema('plugin', $tmpPath);
 
 		// プラグインフォルダを削除
-		$folder->delete(APP.'plugins'.DS.$pluginName);
+		$folder->delete(APP . 'Plugin' . DS . $pluginName);
 
 		// 一時フォルダを削除
 		$folder->delete($tmpPath);
