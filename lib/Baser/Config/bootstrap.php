@@ -105,6 +105,7 @@ App::uses('BcControllerEventListener',	'Event');
 App::uses('BcModelEventListener',		'Event');
 App::uses('BcViewEventListener',		'Event');
 App::uses('BcHelperEventListener',		'Event');
+App::uses('BcUtil'				, 'Lib');
 
 /**
  * インストール状態
@@ -137,7 +138,9 @@ if (BC_INSTALLED && $baserSettings) {
 /**
  * セッション設定
  */
-require APP . 'Config' . DS . 'session.php';
+if (BC_INSTALLED) {
+	require APP . 'Config' . DS . 'session.php';
+}
 
 /**
  * クレジット読込 

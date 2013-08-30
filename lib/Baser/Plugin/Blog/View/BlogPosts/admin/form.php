@@ -133,7 +133,7 @@ $(function(){
 	$("#BtnAddBlogCategory").click(function(){
 		var category = prompt("新しいブログカテゴリを入力してください。");
 		if(!category) {
-			return;
+			return false;
 		}
 		$.ajax({
 			type: "POST",
@@ -297,7 +297,7 @@ $(function(){
 	<?php if(isset($users[$this->BcForm->value('BlogPost.user_id')])): ?>
 				<?php echo $users[$this->BcForm->value('BlogPost.user_id')] ?>
 	<?php endif ?>
-				<?php echo $bcForm->hidden('BlogPost.user_id') ?>
+				<?php echo $this->BcForm->hidden('BlogPost.user_id') ?>
 <?php endif ?>
 			</td>
 		</tr>

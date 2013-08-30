@@ -92,7 +92,7 @@ class Plugin extends AppModel {
 	function resetDb($plugin) {
 		
 		$schemaPaths = array(
-			APP . 'plugins' . DS . $plugin . DS . 'Config' . DS . 'sql',
+			APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'sql',
 			BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'sql'
 		);
 		

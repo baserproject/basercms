@@ -17,4 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-loadPluginConfig('blog.blog');
+loadPluginConfig('Blog.blog');

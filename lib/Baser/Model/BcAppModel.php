@@ -290,7 +290,7 @@ class BcAppModel extends Model {
 			$path = BASER_CONFIGS . 'sql';
 		} else {
 			$schemaPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql'
 			);
 			$path = '';
@@ -307,8 +307,8 @@ class BcAppModel extends Model {
 
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
 			$dataPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default'
 			);
 			$path = '';
@@ -510,11 +510,9 @@ class BcAppModel extends Model {
 		} else {
 			$this->cacheQueries = false;
 			// SQLiteの場合、Max関数にmodel名を含むと、戻り値の添字が崩れる（CakePHPのバグ）
-			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $field . ')')));
+			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $modelName . '.' . $field . ') AS max')));
 			$this->cacheQueries = true;
-			if (isset($dbData[0][0]['MAX(' . $field . ')'])) {
-				return $dbData[0][0]['MAX(' . $field . ')'];
-			} elseif (isset($dbData[0][0]['max'])) {
+			if (isset($dbData[0][0]['max'])) {
 				return $dbData[0][0]['max'];
 			} else {
 				return 0;

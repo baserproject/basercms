@@ -1,6 +1,14 @@
 <?php
 /**
- *
+ * BcAssetDispatcher
+ * 
+ * /app/View/webroot/ や、/baser/View/webroot/ 内のアセットファイルを
+ * 読み込めるようにする為のフィルター
+ * 
+ * （例）/css/style.css では、次のファイルを参照する事ができる
+ *		/app/View/webroot/css/style.css
+ *		/lib/Baser/View/webroot/css/style.css
+ * 
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)

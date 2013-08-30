@@ -552,6 +552,10 @@ class BcBaserHelper extends AppHelper {
 			'subDir'	=> true
 		), $options);
 		
+		if(isset($options['plugin']) && !$options['plugin']) {
+			unset($options['plugin']);
+		}
+		
 		/*** beforeElement ***/
 		$event = $this->dispatchEvent('beforeElement', array(
 			'name'		=> $name,
@@ -574,8 +578,8 @@ class BcBaserHelper extends AppHelper {
 		
 		extract($options);
 		
-		if(!empty($this->_View->subDir) && $subDir) {
-			$name = $this->_View->subDir . DS . $name;
+		if(!$subDir) {
+			$this->_View->subDir = null;
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
@@ -1015,6 +1019,10 @@ class BcBaserHelper extends AppHelper {
 		$_url = preg_replace('/^'.preg_quote($this->request->base, '/').'\//', '/', $url);
 		$enabled = true;
 
+		if($options == false) {
+			$enabled = false;
+		}
+		
 		// 認証チェック
 		if(isset($this->Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
 			$userGroupId = $this->_View->viewVars['user']['user_group_id'];
