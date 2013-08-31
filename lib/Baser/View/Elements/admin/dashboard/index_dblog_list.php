@@ -53,7 +53,7 @@ $ (function (){
 
 <?php if($viewDblogs): ?>
 <?php $this->passedArgs['action'] = 'ajax_dblog_index' ?>
-<?php $this->BcBaser->element('pagination', array('modules' => 4)) ?>
+<?php $this->BcBaser->element('pagination', array('modules' => 4, 'options' => array('url' => array('action' => 'ajax_dblog_index')))) ?>
 <ul class="clear">
 	<?php foreach ($viewDblogs as $record): ?>
 	<li><span class="date"><?php echo $this->BcTime->format('Y.m.d',$record['Dblog']['created']) ?></span>

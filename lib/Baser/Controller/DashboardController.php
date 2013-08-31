@@ -86,9 +86,6 @@ class DashboardController extends AppController {
 		$this->set('viewDblogs',$this->paginate('Dblog'));
 		
 	}
-	public function test() {
-		$this->render('aaa');
-	}
 /**
  * [ADMIN] 管理者ダッシュボードページを表示する
  *

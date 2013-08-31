@@ -13,9 +13,9 @@ class BcUtil extends Object {
  */
 	public static function isAdminSystem() {
 		
-		$url = Configure::write('BcRequest.pureUrl');
+		$url = Configure::read('BcRequest.pureUrl');
 		$adminPrefix = Configure::read('prefixes.0');
-		return preg_match('/^' . $adminPrefix. '\//', $url);
+		return (boolean) preg_match('/^' . $adminPrefix. '\//', $url);
 		
 	}
 	
