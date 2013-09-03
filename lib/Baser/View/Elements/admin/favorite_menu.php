@@ -137,7 +137,7 @@ $(function(){
 	function favoriteSortUpdateHandler(event, ui){
 
 		var target = ui.item;
-		var targetNum = $(".favorite-menu-list li").index(target)+1;
+		var targetNum = $(".favorite-menu-list li").index(target) + 1;
 		var sourceNum = target.attr('id').replace('FavoriteRow','');
 		var offset = targetNum - sourceNum;
 		var sortTable = $(".favorite-menu-list");
@@ -156,8 +156,10 @@ $(function(){
 			},
 			success: function(result){
 				if(result == '1') {
-					sortTable.find(".favorite-menu-list li").each(function(i,v){
-						$(this).attr('id','FavoriteRow'+(i+1));
+					var i = 0;
+					sortTable.find(".favorite-menu-list li").each(function(){
+						$(this).attr('id','FavoriteRow'+(i));
+						i++;
 					});
 				} else {
 					sortTable.sortable("cancel");
@@ -211,12 +213,14 @@ $(function(){
 			});
 		});
 
-		$(".favorite-menu-list li").each(function(i,v){
+		var i = 1;
+		$(".favorite-menu-list li").each(function(){
 			// アクセス制限によってリンクが出力されていない場合はLIごと削除する
 			if($(this).find('a').html() == null) {
 				$(this).remove();
 			} else {
-				$(this).attr('id', 'FavoriteRow'+(i+1));
+				$(this).attr('id', 'FavoriteRow'+(i));
+				i++;
 			}
 		});
 
@@ -264,11 +268,8 @@ $(function(){
 	
 	<ul class="favorite-menu-list">
 <?php if($favorites): ?>
-	
-	<?php $count = 1 ?>
 	<?php foreach($favorites as $favorite): ?>
-		<?php $this->BcBaser->element('favorite_menu_row', array('favorite' => $favorite, 'count' => $count)) ?>
-		<?php $count++ ?>
+		<?php $this->BcBaser->element('favorite_menu_row', array('favorite' => $favorite)) ?>
 	<?php endforeach ?>
 	
 <?php else: ?>

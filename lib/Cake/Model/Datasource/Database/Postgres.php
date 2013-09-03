@@ -131,6 +131,11 @@ class Postgres extends DboSource {
 			if (!empty($config['schema'])) {
 				$this->_execute('SET search_path TO ' . $config['schema']);
 			}
+			if (!empty($config['settings'])) {
+				foreach ($config['settings'] as $key => $value) {
+					$this->_execute("SET $key TO $value");
+				}
+			}
 		} catch (PDOException $e) {
 			throw new MissingConnectionException(array(
 				'class' => get_class($this),
@@ -748,11 +753,11 @@ class Postgres extends DboSource {
 
 				switch ($type) {
 					case 'bool':
-						$resultRow[$table][$column] = is_null($row[$index]) ? null : $this->boolean($row[$index]);
+						$resultRow[$table][$column] = $row[$index] === null ? null : $this->boolean($row[$index]);
 						break;
 					case 'binary':
 					case 'bytea':
-						$resultRow[$table][$column] = is_null($row[$index]) ? null : stream_get_contents($row[$index]);
+						$resultRow[$table][$column] = $row[$index] === null ? null : stream_get_contents($row[$index]);
 						break;
 					default:
 						$resultRow[$table][$column] = $row[$index];

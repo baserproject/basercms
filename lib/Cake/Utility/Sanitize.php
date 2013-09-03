@@ -29,6 +29,7 @@ App::import('Model', 'ConnectionManager');
  * and all of the above on arrays.
  *
  * @package       Cake.Utility
+ * @deprecated    Deprecated since version 2.4
  */
 class Sanitize {
 
@@ -67,10 +68,10 @@ class Sanitize {
  * @return string SQL safe string
  */
 	public static function escape($string, $connection = 'default') {
-		$db = ConnectionManager::getDataSource($connection);
 		if (is_numeric($string) || $string === null || is_bool($string)) {
 			return $string;
 		}
+		$db = ConnectionManager::getDataSource($connection);
 		$string = $db->value($string, 'string');
 		$start = 1;
 		if ($string{0} === 'N') {
