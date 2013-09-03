@@ -26,7 +26,7 @@ class MailFieldsSchema extends CakeSchema {
 		'attention' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'before_attachment' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'after_attachment' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'source' => array('type' => 'string', 'null' => true, 'default' => NULL),
+		'source' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'size' => array('type' => 'integer', 'null' => true, 'default' => NULL),
 		'rows' => array('type' => 'integer', 'null' => true, 'default' => NULL),
 		'maxlength' => array('type' => 'integer', 'null' => true, 'default' => NULL),
