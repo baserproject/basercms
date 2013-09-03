@@ -340,7 +340,8 @@ class PostgresTest extends CakeTestCase {
  */
 	public function testLocalizedFloats() {
 		$restore = setlocale(LC_NUMERIC, 0);
-		setlocale(LC_NUMERIC, 'de_DE');
+
+		$this->skipIf(setlocale(LC_NUMERIC, 'de_DE') === false, "The German locale isn't available.");
 
 		$result = $this->db->value(3.141593, 'float');
 		$this->assertEquals("3.141593", $result);
@@ -989,6 +990,22 @@ class PostgresTest extends CakeTestCase {
 		$result = $this->Dbo->rawQuery("SELECT currval('$sequence')");
 		$new = $result->fetch(PDO::FETCH_ASSOC);
 		$this->assertTrue($new['currval'] > $original['nextval'], 'Sequence did not update');
+	}
+
+	public function testSettings() {
+		Configure::write('Cache.disable', true);
+		$this->Dbo = ConnectionManager::getDataSource('test');
+		$this->skipIf(!($this->Dbo instanceof Postgres));
+
+		$config2 = $this->Dbo->config;
+		$config2['settings']['datestyle'] = 'sql, dmy';
+		ConnectionManager::create('test2', $config2);
+		$dbo2 = new Postgres($config2, true);
+		$expected = array(array('r' => date('d/m/Y')));
+		$r = $dbo2->fetchRow('SELECT now()::date AS "r"');
+		$this->assertEquals($expected, $r);
+		$dbo2->execute('SET DATESTYLE TO ISO');
+		$dbo2->disconnect();
 	}
 
 /**

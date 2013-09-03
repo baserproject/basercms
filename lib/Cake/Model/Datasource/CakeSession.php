@@ -132,7 +132,7 @@ class CakeSession {
 		self::$time = time();
 
 		$checkAgent = Configure::read('Session.checkAgent');
-		if (($checkAgent === true || $checkAgent === null) && env('HTTP_USER_AGENT')) {
+		if (env('HTTP_USER_AGENT')) {
 			self::$_userAgent = md5(env('HTTP_USER_AGENT') . Configure::read('Security.salt'));
 		}
 		self::_setPath($base);
@@ -366,7 +366,7 @@ class CakeSession {
 		if (!self::start()) {
 			return false;
 		}
-		if (is_null($name)) {
+		if ($name === null) {
 			return self::_returnSessionVars();
 		}
 		if (empty($name)) {
@@ -486,10 +486,7 @@ class CakeSession {
 			if (!empty($sessionConfig['ini']) && is_array($sessionConfig['ini'])) {
 				foreach ($sessionConfig['ini'] as $setting => $value) {
 					if (ini_set($setting, $value) === false) {
-						throw new CakeSessionException(sprintf(
-							__d('cake_dev', 'Unable to configure the session, setting %s failed.'),
-							$setting
-						));
+						throw new CakeSessionException(__d('cake_dev', 'Unable to configure the session, setting %s failed.', $setting));
 					}
 				}
 			}
@@ -557,7 +554,6 @@ class CakeSession {
 					'session.serialize_handler' => 'php',
 					'session.use_cookies' => 1,
 					'session.cookie_path' => self::$path,
-					'session.auto_start' => 0,
 					'session.save_path' => TMP . 'sessions',
 					'session.save_handler' => 'files'
 				)
@@ -568,7 +564,6 @@ class CakeSession {
 				'ini' => array(
 					'session.use_trans_sid' => 0,
 					'url_rewriter.tags' => '',
-					'session.auto_start' => 0,
 					'session.use_cookies' => 1,
 					'session.cookie_path' => self::$path,
 					'session.save_handler' => 'user',
@@ -584,7 +579,6 @@ class CakeSession {
 				'ini' => array(
 					'session.use_trans_sid' => 0,
 					'url_rewriter.tags' => '',
-					'session.auto_start' => 0,
 					'session.use_cookies' => 1,
 					'session.cookie_path' => self::$path,
 					'session.save_handler' => 'user',
