@@ -209,6 +209,9 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  */
 if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+
+	$CakeEvent = CakeEventManager::instance();
+
 	$plugins = getEnablePlugins();
 	foreach($plugins as $plugin) {
 		CakePlugin::load($plugin);
@@ -219,8 +222,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		);
 		CakePlugin::load($plugin, $config);
 		CakePlugin::bootstrap($plugin);
-		$CakeEvent = CakeEventManager::instance();
-		
+
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View');
 		foreach($eventTargets as $eventTarget) {
