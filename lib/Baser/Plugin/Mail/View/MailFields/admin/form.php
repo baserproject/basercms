@@ -322,16 +322,16 @@ jQuery(function($) {
 			</td>
 		</tr>
 		<tr id="rowUseField">
-			<th class="col-head"><?php echo $this->BcForm->label('MailField.use_field', '利用状態') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailField.use_field', '利用状態') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.use_field', array('type' => 'checkbox', 'label' => '利用中')) ?>
 				<?php echo $this->BcForm->error('MailField.use_field') ?>
 			</td>
 		</tr>
 		<tr id="rowNoSend">
-			<th class="col-head"><?php echo $this->BcForm->label('MailField.no_send', 'メール送信') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailField.no_send', 'メール送信') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.no_send', array('type' => 'checkbox', 'label' => '送信しない')) ?>
+				<?php echo $this->BcForm->input('MailField.no_send', array('type' => 'radio', 'options' => array('送信する', '送信しない'))) ?>
 				<?php echo $this->BcForm->error('MailField.no_send') ?>
 			</td>
 		</tr>

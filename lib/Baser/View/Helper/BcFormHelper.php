@@ -979,16 +979,32 @@ DOC_END;
  */
 	public function create($model = null, $options = array()) {
 		
+		$options = array_merge(array(
+			'novalidate' => true
+		), $options);
+		
 		$this->__id = $this->_getId($model, $options);
 		
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeFormCreate', $this->__id, $model, $options);
-		
+		/*** beforeCreate ***/
+		$event = $this->dispatchEvent('beforeCreate', array(
+			'id'		=> $this->__id,
+			'options'	=> $options
+		), array('class' => 'Form'));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
 		$out = parent::create($model, $options);
 
+		/*** afterCreate ***/
+		$event = $this->dispatchEvent('afterCreate', array(
+			'id'	=> $this->__id,
+			'out'	=> $out
+		), array('class' => 'Form'));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
 		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterFormCreate', $this->__id, $out);
 		
 	}
 /**
@@ -1003,13 +1019,28 @@ DOC_END;
 
 		$id = $this->__id;
 		$this->__id = null;
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeFormEnd', $id, $options);
 
+		/*** beforeEnd ***/
+		$event = $this->dispatchEvent('beforeEnd', array(
+			'id'		=> $id,
+			'options'	=> $options
+		), array('class' => 'Form'));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
+		
 		$out = parent::end($options);
+
+		/*** afterEnd ***/
+		$event = $this->dispatchEvent('afterEnd', array(
+			'id'	=> $id,
+			'out'	=> $out
+		), array('class' => 'Form'));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
 		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterFormEnd', $id, $out);
 		
 	}
 /**
@@ -1030,8 +1061,14 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeFormInput', $fieldName, $options);
+		/*** beforeInput ***/
+		$event = $this->dispatchEvent('beforeInput', array(
+			'fieldName'	=> $fieldName,
+			'options'	=> $options
+		), array('class' => 'Form'));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
 		
 		$type = '';
 		if(isset($options['type'])) {
@@ -1086,9 +1123,17 @@ DOC_END;
 			$out = $out.$counter.$this->Js->buffer($script);
 		}
 		
+		/*** afterInput ***/
+		$event = $this->dispatchEvent('afterInput', array(
+			'fieldName'	=> $fieldName,
+			'out'		=> $out
+		), array('class' => 'Form'));
+				
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
 		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterFormInput', $fieldName, $out);
 		
 	}
 /**

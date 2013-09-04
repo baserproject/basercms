@@ -29,6 +29,7 @@ $(function(){
 
 <div id="CurrentTheme" class="clearfix">
 	<h2>現在のテーマ</h2>
+<?php if($currentTheme): ?>
 	<div class="current-theme-left">
 		<div class="theme-screenshot">
 			<?php if($currentTheme['screenshot']): ?>
@@ -66,6 +67,9 @@ $(function(){
 <?php endif ?>
 	<br /><br /><br /><br />
 	<div class="theme-description"><?php echo nl2br($currentTheme['description']) ?></div>
+	<?php else: ?>
+	<p>現在、テーマが選択されていません。</p>
+	<?php endif ?>
 </div>
 
 <ul class="list-panel clearfix">

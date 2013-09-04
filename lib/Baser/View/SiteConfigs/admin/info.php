@@ -33,4 +33,4 @@
 
 <h2>PHP環境</h2>
 
-<iframe src="<?php $this->BcBaser->url(array('action' => 'phpinfo')) ?>" class="phpinfo" width="100%" height="100%"></iframe>
+<iframe src="<?php $this->BcBaser->url(array('action' => 'phpinfo')) ?>" class="phpinfo" width="100%" height="100%" style="min-height:600px"></iframe>

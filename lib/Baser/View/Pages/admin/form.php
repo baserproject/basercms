@@ -429,7 +429,7 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.status', array('type' => 'checkbox', 'label' => '公開中')) ?>
+				<?php echo $this->BcForm->input('Page.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
 				<?php echo $this->BcForm->error('Page.status') ?>
 				&nbsp;&nbsp;
 				<?php echo $this->BcForm->dateTimePicker('Page.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>

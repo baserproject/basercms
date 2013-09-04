@@ -67,7 +67,12 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	public $uses = null;
-	public $theme = 'baseradmin';
+/**
+ * テーマ
+ * 
+ * @var string
+ */
+	public $theme = 'Baseradmin';
 /**
  * beforeFilter
  *
@@ -119,20 +124,6 @@ class InstallationsController extends AppController {
 		$this->Security->csrfCheck = false;
 		$this->Security->validatePost = false;
 
-	}
-/**
- * beforeRender 
- */
-	public function beforeRender() {
-		
-		parent::beforeRender();
-		// TODO basercamp MASA-P
-		// beforeRenderのタイミングでViewオブジェクトは存在しないためエラーになる
-		// viewPathの中に記述する必要有り
-		//if(!empty($this->subDir)) {
-		//	$this->View->subDir = $this->subDir;
-		//}
-		
 	}
 /**
  * Step 1: ウェルカムページ
@@ -193,7 +184,7 @@ class InstallationsController extends AppController {
 		
 		extract($checkResult);
 		
-		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpGd && $tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 /**
@@ -204,11 +195,7 @@ class InstallationsController extends AppController {
  */
 	public function step3() {
 
-		$dbsource = $this->Session->read('Installation.dbSource');
-		if(!$dbsource) {
-			$dbsource = $this->_getDbSource();
-			$this->Session->write('Installation.dbSource', $dbsource);
-		}
+		$dbsource = $this->_getDbSource();
 		
 		if(!$this->request->data) {
 			clearAllCache();
@@ -614,7 +601,7 @@ class InstallationsController extends AppController {
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
 				$dbFolderPath = APP.'db'.DS.'sqlite';
-				if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
+				if(is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)){
 					$dbsource['sqlite'] = 'SQLite';
 				}
 			}
@@ -623,7 +610,7 @@ class InstallationsController extends AppController {
 
 		/* CSV利用可否 */
 		$dbFolderPath = APP.'db'.DS.'csv';
-		if(is_writable($dbFolderPath) && $folder->create($dbFolderPath, 0777)){
+		if(is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)){
 			$dbsource['csv'] = 'CSV';
 		}
 

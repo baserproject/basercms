@@ -116,8 +116,9 @@ class FavoritesController extends AppController {
  */
 	public function admin_update_sort () {
 
+		$user = $this->BcAuth->user();
 		if($this->request->data){
-			if($this->Favorite->changeSort($this->request->data['Sort']['id'],$this->request->data['Sort']['offset'])){
+			if($this->Favorite->changeSort($this->request->data['Sort']['id'],$this->request->data['Sort']['offset'], array('Favorite.user_id' => $user['id']))){
 				clearDataCache();
 				exit(true);
 			}

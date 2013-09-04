@@ -142,7 +142,6 @@ class BcManagerComponent extends Component {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		}
 
-		// TODO basercamp エラー時に step1(index)にもどってしまう。
 		if(! $datasource = $this->getDatasourceName($config['datasource'])) {
 			return ConnectionManager::getDataSource($name);
 		}
@@ -549,7 +548,7 @@ class BcManagerComponent extends Component {
 		if(!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
-
+		
 		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
@@ -1046,6 +1045,9 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  * TODO 処理を DboSource に移動する
+ * TODO コアのテーブルを削除する際、プレフィックスだけでは、プラグインを識別できないので、プラグインのテーブルも削除されてしまう。
+ *		その為、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
+ *		try で実行し、catch はスルーしている。
  */
 	public function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
 
@@ -1061,7 +1063,9 @@ class BcManagerComponent extends Component {
 				foreach($sources as $source) {
 					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
 						$sql = 'DROP TABLE '.$source;
-						$db->execute($sql);
+						try {
+							$db->execute($sql);
+						} catch (Exception $e) {}
 					}
 				}
 				break;
@@ -1071,7 +1075,9 @@ class BcManagerComponent extends Component {
 				foreach($sources as $source) {
 					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
 						$sql = 'DROP TABLE '.$source;
-						$db->execute($sql);
+						try {
+							$db->execute($sql);
+						} catch (Exception $e) {}
 					}
 				}
 				// シーケンスも削除
@@ -1081,7 +1087,9 @@ class BcManagerComponent extends Component {
 				foreach($sequences as $sequence) {
 					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
 						$sql = 'DROP SEQUENCE '.$sequence;
-						$db->execute($sql);
+						try {
+							$db->execute($sql);
+						} catch (Exception $e) {}
 					}
 				}
 				break;
@@ -1179,7 +1187,7 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 		
-		$src = App::themePath('baseradmin') . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
+		$src = App::themePath('Baseradmin') . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		if(!empty($files[1])) {

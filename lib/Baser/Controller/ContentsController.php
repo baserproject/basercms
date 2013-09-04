@@ -63,8 +63,6 @@ class ContentsController extends AppController {
 		
 		parent::beforeFilter();
 		
-		$this->Security->enabled = false;
-		
 		// 認証設定
 		$this->BcAuth->allow('search','get_page_list_recursive');
 		

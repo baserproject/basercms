@@ -20,6 +20,7 @@
 /**
  * includes
  */
+App::uses('BcPluginAppModel', 'Model');
 /**
  * メールプラグインモデル根底クラス
  *

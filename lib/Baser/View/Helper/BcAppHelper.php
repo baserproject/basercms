@@ -114,9 +114,6 @@ class BcAppHelper extends Helper {
  */
 	public function webroot($file) {
 		
-		// TODO basercamp
-		// みなおし要
-		
 		// CUSTOMIZE ADD 2010/05/19 ryuring
 		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
 		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
@@ -211,10 +208,10 @@ class BcAppHelper extends Helper {
 					}
 				} else {
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
-					$adminTheme = $this->_View->adminTheme . '/';
-					$themePath = App::themePath($adminTheme);
+					$themePath = App::themePath($this->_View->adminTheme);
 					$path = $themePath . 'webroot' . DS . $file;
 					if (file_exists($path)) {
+						$adminTheme = $this->_View->adminTheme . '/';
 						if($baseUrl) {
 							// スマートURLオフ
 							$webPath = Configure::read('App.baseUrl') . "/theme/" . $adminTheme . $asset[0];
@@ -223,6 +220,7 @@ class BcAppHelper extends Helper {
 							$webPath = "{$this->request->webroot}theme/" . $adminTheme . $asset[0];
 						}
 					}
+					
 				}
 				// <<<
 			}
@@ -284,6 +282,26 @@ class BcAppHelper extends Helper {
 		} else {
 			return parent::url($url, $full);
 		}
+		
+	}
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $options = array()) {
+
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Helper',
+			'class'		=> str_replace('Helper', '', get_class($this))
+		), $options);
+		
+		App::uses('BcEventDispatcher', 'Event');
+		return BcEventDispatcher::dispatch($name, $this->_View, $params, $options);
 		
 	}
 	

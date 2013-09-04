@@ -41,13 +41,11 @@
 				</div>
 <?php endif ?>
 			</th>
-			<?php $downImg = $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')); ?>
-			<?php $upImg = $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')); ?>
-			<th><?php echo $this->Paginator->sort('id', ($this->Paginator->options['url']['sort'] == 'id' && $this->Paginator->options['url']['direction'] == 'asc' ? $upImg : $downImg).' NO', array('escape'=>false, 'class' => 'btn-direction')) ?></th>
-			<th><?php echo $this->Paginator->sort('name', ($this->Paginator->options['url']['sort'] == 'name' && $this->Paginator->options['url']['direction'] == 'asc' ? $upImg : $downImg).' ブログタグ名', array('escape'=>false, 'class' => 'btn-direction')) ?></th>
+			<th><?php echo $this->Paginator->sort('id', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' NO'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
+			<th><?php echo $this->Paginator->sort('name', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' ブログタグ名', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' ブログタグ名'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
 			<th>
-				<?php echo $this->Paginator->sort('created', ($this->Paginator->options['url']['sort'] == 'created' && $this->Paginator->options['url']['direction'] == 'asc' ? $upImg : $downImg).' 登録日', array('escape'=>false, 'class' => 'btn-direction')) ?><br />
-				<?php echo $this->Paginator->sort('modified', ($this->Paginator->options['url']['sort'] == 'modified' && $this->Paginator->options['url']['direction'] == 'asc' ? $upImg : $downImg).' 更新日', array('escape'=>false, 'class' => 'btn-direction')) ?>
+				<?php echo $this->Paginator->sort('created', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 登録日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 登録日'), array('escape' => false, 'class' => 'btn-direction')) ?><br />
+				<?php echo $this->Paginator->sort('modified', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 更新日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 更新日'), array('escape' => false, 'class' => 'btn-direction')) ?>
 			</th>
 		</tr>
 	</thead>

@@ -67,7 +67,7 @@ if (!defined('ROOT')) {
 		define('ROOT', dirname(dirname($fileName)));*/
 
 	// WEBROOT配置
-	}elseif(is_dir(dirname($fileName) . DS . 'lib' . DS . 'cake')){
+	}elseif(is_dir(dirname($fileName) . DS . 'lib' . DS . 'Cake')){
 		define('ROOT', dirname($fileName));
 	}
 	// <<<

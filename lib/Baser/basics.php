@@ -49,11 +49,16 @@ App::uses('BcEmailComponent', 'Controller/Component');
 				$baseUrl .= '/';
 			}
 		}else {
-			
 			// TODO basercamp スマートURLオフを考慮してない
 			$script = $_SERVER['SCRIPT_FILENAME'];
 			$script = str_replace(docRoot(), '', $script);
-			$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+
+			if(BC_DEPLOY_PATTERN == 1) {
+				$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+			} elseif(BC_DEPLOY_PATTERN == 2) {
+				$baseUrl = preg_replace('/index\.php/', '', $script);
+			}
+			
 			$baseUrl = preg_replace("/index$/", '', $baseUrl);
 			$baseUrl = preg_replace("/test\.php$/", '', $baseUrl);
 			
@@ -610,9 +615,8 @@ App::uses('BcEmailComponent', 'Controller/Component');
 			return false;
 		}
 		list($plugin, $file) = explode('.', $name);
-		$plugin = Inflector::underscore($plugin);
 		$pluginPaths = array(
-			APP.'plugins'.DS,
+			APP . 'Plugin' . DS,
 			BASER_PLUGINS
 		);
 		$config = null;
@@ -738,7 +742,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		if(!$plugin || in_array($plugin, $corePlugins)) {
 			$path = BASER.'VERSION.txt';
 		} else {
-			$appPath = APP.'plugins'.DS.$plugin.DS.'VERSION.txt';
+			$appPath = APP.'Plugin'.DS.$plugin.DS.'VERSION.txt';
 			$baserPath = BASER_PLUGINS.$plugin.DS.'VERSION.txt';
 			if(file_exists($appPath)) {
 				$path = $appPath;

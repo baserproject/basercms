@@ -20,7 +20,6 @@
 if(!empty($this->Paginator)){
 	$this->passedArgs['action'] = str_replace('mobile_','',$this->passedArgs['action']);
 	$this->passedArgs['plugin'] = '';
-	$this->Paginator->options = array('url' => $this->passedArgs);
 	if($this->Paginator->counter(array('format'=>'%pages%'))>1){
 		echo $this->Paginator->prev('<<', null, null, null).'&nbsp;';
 		echo $this->Paginator->numbers(array('separator'=>'&nbsp;','modulus'=>4)).'&nbsp;';

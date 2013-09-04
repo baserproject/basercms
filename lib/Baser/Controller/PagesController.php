@@ -70,8 +70,6 @@ class PagesController extends AppController {
 
 		if(!empty($this->request->params['admin'])){
 			$this->crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
-			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
 		}
 		
 		$user = $this->BcAuth->user();
@@ -193,9 +191,9 @@ class PagesController extends AppController {
 					// 完了メッセージ
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を追加しました。', false, true);
 					
-					// afterPageAdd
-					$this->executeHook('afterPageAdd');
-					
+					/*** Pages.afterAdd ***/
+					$this->dispatchEvent('afterAdd');
+		
 					// 編集画面にリダイレクト
 					$id = $this->Page->getInsertID();
 					$this->redirect(array('controller' => 'pages', 'action' => 'edit', $id));
@@ -320,8 +318,8 @@ class PagesController extends AppController {
 					// 完了メッセージ
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を更新しました。', false, true);
 					
-					// afterPageEdit
-					$this->executeHook('afterPageEdit');
+					/*** Pages.afterEdit ***/
+					$this->dispatchEvent('afterEdit');
 					
 					// 同固定ページへリダイレクト
 					$this->redirect(array('action' => 'edit', $id));
@@ -715,7 +713,7 @@ class PagesController extends AppController {
 		
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
-		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
+		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description'], $page['Page']['code']);
 		$path = TMP . 'pages_preview_' . $id . $this->ext;
 		$file = new File($path);
 		$file->open('w');

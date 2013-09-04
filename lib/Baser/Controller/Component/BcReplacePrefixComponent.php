@@ -154,7 +154,7 @@ class BcReplacePrefixComponent extends Component {
  */
 	public function getViewPaths($controller) {
 
-		$paths = Configure::read('viewPaths');
+		$paths = App::path('View');
 
 		if (!empty($controller->theme)) {
 			$count = count($paths);

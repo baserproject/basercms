@@ -20,6 +20,7 @@
 /**
  * includes
  */
+App::uses('BcPluginAppModel', 'Model');
 /**
  * RSSリーダーモデル基底クラス
  *

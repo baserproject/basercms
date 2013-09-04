@@ -67,9 +67,9 @@ class BcAppView extends View {
 		
 		// CUSTOMIZE ADD 2013/08/17 ryuring
 		// >>>
+		$adminThemePaths = array();
 		$webroot = Configure::read('App.www_root');
 		if (!empty($this->adminTheme)) {
-			$adminThemePaths = array();
 			foreach ($paths as $path) {
 				if (strpos($path, DS . 'Plugin' . DS) === false) {
 					if ($plugin) {
@@ -102,6 +102,20 @@ class BcAppView extends View {
 			// <<<
 			
 		}
+		
+		// CUSTOMIZE ADD 2013/08/26 ryuring
+		// Baserディレクトリのパスの優先順位を下げる
+		// >>>
+		$baserPaths = array();
+		foreach($paths as $key => $path) {
+			if(strpos($path, BASER) !== false) {
+				unset($paths[$key]);
+				$baserPaths[] = $path;
+			}
+		}
+		$paths = array_merge($paths, $baserPaths);
+		// <<<
+		
 		$paths = array_merge($paths, $corePaths);
 		if ($plugin !== null) {
 			return $paths;
@@ -120,23 +134,38 @@ class BcAppView extends View {
  */
 	protected function _getViewFileName($name = null) {
 		
+		$subDir = null;
+
+		if (!is_null($this->subDir)) {
+			$subDir = $this->subDir . DS;
+		}
+
+		if ($name === null) {
+			$name = $this->view;
+		}
+
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
-		// >>>
-		if(!$name) {
-			$prefix = '';
-			if(isset($this->request->params['prefix'])) {
-				$prefix = $this->request->params['prefix'];
-			}
-			if($prefix && preg_match('/^'.$prefix.'_/', $this->request->action)) {
-				$name = str_replace($prefix.'_','',$this->request->action);
-			} elseif(preg_match('/^admin_/', $this->request->action)) {
-				// プレフィックスをadminとしてすり替え
-				$name = str_replace('admin_','',$this->request->action);
-			}
+		// >>>		
+		$prefix = '';
+		if(!empty($this->request->params['prefix'])) {
+			$prefix = $this->request->params['prefix'];
 		}
-		if($this->name == 'CakeError' && $this->viewPath == 'Errors') {
-			// CakeErrorの場合はサブフォルダを除外
+		if($prefix && preg_match('/^' . $prefix . '_/', $name)) {
+			$name = str_replace($prefix . '_' , '' , $name);
+		} elseif(preg_match('/^admin_/', $name)) {
+			// プレフィックスをadminとしてすり替え
+			$name = str_replace('admin_', '', $name);
+		}
+		// >>>
+		
+		$name = str_replace('/', DS, $name);
+		list($plugin, $name) = $this->pluginSplit($name);
+		
+		// CUSTOMIZE ADD 2012/04/11 ryuring
+		// CakeErrorの場合はサブフォルダを除外
+		// >>>
+		if($this->name == 'CakeError' && $this->viewPath == 'Errors') {	
 			$subDir = $this->subDir;
 			$this->subDir = null;
 			$fileName = parent::_getViewFileName($name);
@@ -145,11 +174,18 @@ class BcAppView extends View {
 		}
 		// <<<
 		
-		$subDir = null;
-
-		if (!is_null($this->subDir)) {
-			$subDir = $this->subDir . DS;
+		// CUSTOMIZE ADD 2013/08/25 ryuring
+		// イベントを追加
+		// >>>
+		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => ''));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
 		}
+		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		// <<<
 
 		// CUSTOMIZE ADD 2012/10/11 ryuring
 		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、サブフォルダを空に設定
@@ -164,13 +200,6 @@ class BcAppView extends View {
 		}
 		// <<<
 		
-		if ($name === null) {
-			$name = $this->view;
-		}
-		
-		$name = str_replace('/', DS, $name);
-		list($plugin, $name) = $this->pluginSplit($name);
-
 		if (strpos($name, DS) === false && $name[0] !== '.') {
 			$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
 		} elseif (strpos($name, DS) !== false) {
@@ -181,7 +210,13 @@ class BcAppView extends View {
 				$name = trim($name, DS);
 			} elseif ($name[0] === '.') {
 				$name = substr($name, 3);
-			} elseif (!$plugin || $this->viewPath !== $this->name) {
+			// CUSTOMIZE MODIFY 2013/08/21 ryuring
+			// サブフォルダが適用されない為調整
+			// >>>
+			//} elseif (!$plugin || $this->viewPath !== $this->name) {
+			// ---
+			} else {
+			// <<<
 				$name = $this->viewPath . DS . $subDir . $name;
 			}
 		}
@@ -228,6 +263,49 @@ class BcAppView extends View {
 	}
 
 /**
+ * Finds an element filename, returns false on failure.
+ *
+ * @param string $name The name of the element to find.
+ * @return mixed Either a string to the element filename or false when one can't be found.
+ */
+	protected function _getElementFileName($name) {
+		
+		list($plugin, $name) = $this->pluginSplit($name);
+		
+		// CUSTOMIZE ADD 2013/08/26 ryuring
+		// サブフォルダを追加
+		// >>>
+		if($this->subDir) {
+			$name = $this->subDir . DS . $name;
+		}
+		// <<<
+		
+		// CUSTOMIZE ADD 2013/08/27 ryuring
+		// イベントを追加
+		// >>>
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => ''));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		// <<<
+		
+		$paths = $this->_paths($plugin);
+		$exts = $this->_getExtensions();
+		foreach ($exts as $ext) {
+			foreach ($paths as $path) {
+				if (file_exists($path . 'Elements' . DS . $name . $ext)) {
+					return $path . 'Elements' . DS . $name . $ext;
+				}
+			}
+		}
+		return false;
+	}
+	
+/**
  * Returns layout filename for this template as a string.
  *
  * @param string $name The name of the layout to find.
@@ -241,6 +319,18 @@ class BcAppView extends View {
 		}
 		$subDir = null;
 
+		// CUSTOMIZE ADD 2013/08/25 ryuring
+		// >>>
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => ''));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name));
+		if($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		// <<<
+		
 		if (!is_null($this->layoutPath)) {
 			$subDir = $this->layoutPath . DS;
 		}
@@ -294,5 +384,28 @@ class BcAppView extends View {
 	}
 
 
+}
+
+
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $options = array()) {
+		
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'View',
+			'class'		=> $this->name
+		), $options);
+		App::uses('BcEventDispatcher', 'Event');
+		return BcEventDispatcher::dispatch($name, $this, $params, $options);
+		
+	}
+	
 }
 

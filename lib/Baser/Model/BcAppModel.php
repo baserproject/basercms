@@ -38,13 +38,6 @@ App::uses('DbRestore', 'Vendor');
 class BcAppModel extends Model {
 
 /**
- * プラグイン名
- *
- * @var		string
- */
-	public $plugin = '';
-
-/**
  * DB接続設定名
  *
  * @var string
@@ -57,8 +50,7 @@ class BcAppModel extends Model {
  * @return	void
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		if ($this->useDbConfig && ($this->name || !empty($id['name']))) {
-
+		if ($this->useDbConfig) {
 			// DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
 			// Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
 			$db = ConnectionManager::getDataSource('baser');
@@ -298,7 +290,7 @@ class BcAppModel extends Model {
 			$path = BASER_CONFIGS . 'sql';
 		} else {
 			$schemaPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql'
 			);
 			$path = '';
@@ -315,8 +307,8 @@ class BcAppModel extends Model {
 
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
 			$dataPaths = array(
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
-				APP . 'plugins' . DS . $pluginName . DS . 'Config' . DS . 'sql',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
+				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
 				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default'
 			);
 			$path = '';
@@ -518,11 +510,9 @@ class BcAppModel extends Model {
 		} else {
 			$this->cacheQueries = false;
 			// SQLiteの場合、Max関数にmodel名を含むと、戻り値の添字が崩れる（CakePHPのバグ）
-			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $field . ')')));
+			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $modelName . '.' . $field . ') AS max')));
 			$this->cacheQueries = true;
-			if (isset($dbData[0][0]['MAX(' . $field . ')'])) {
-				return $dbData[0][0]['MAX(' . $field . ')'];
-			} elseif (isset($dbData[0][0]['max'])) {
+			if (isset($dbData[0][0]['max'])) {
 				return $dbData[0][0]['max'];
 			} else {
 				return 0;
@@ -689,7 +679,7 @@ class BcAppModel extends Model {
 	public function duplicate($check,$field) {
 		$conditions = array($this->alias . '.' . key($check) => $check[key($check)]);
 		if ($this->exists()) {
-			$conditions['NOT'] = array($this->alias . '.id' => $this->id);
+			$conditions['NOT'] = array($this->alias . '.'. $this->primaryKey => $this->id);
 		}
 		$ret = $this->find('first', array('conditions' => $conditions));
 		if ($ret) {
@@ -1356,6 +1346,26 @@ class BcAppModel extends Model {
 				return $this->{'_find' . ucfirst($type)}('after', $query, $results);
 			}
 		}
+	}
+/**
+ * イベントを発火
+ * 
+ * @param string $name
+ * @param array $params
+ * @return mixed
+ */
+	public function dispatchEvent($name, $params = array(), $options = array()) {
+
+		$options = array_merge(array(
+			'modParams' => 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Model',
+			'class'		=> $this->name
+		), $options);
+
+		App::uses('BcEventDispatcher', 'Event');
+		return BcEventDispatcher::dispatch($name, $this, $params, $options);
+		
 	}
 	
 }

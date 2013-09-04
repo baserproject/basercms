@@ -25,8 +25,8 @@
 		'title'				=> 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 		// 初期テーマ
 		'defaultTheme'		=> 'nada-icons',
-		// 管理システムテーマ
-		'adminTheme'		=> 'baseradmin',
+		// 管理システムテーマ（キャメルケース）
+		'adminTheme'		=> '',
 		// テンプレートの基本となる拡張子（.php 推奨）
 		'templateExt'		=> '.php',
 		// システムナビ
@@ -49,8 +49,7 @@
 				array('name' => 'エディタテンプレート登録',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'add')),				
 				array('name' => 'サーバーキャッシュ削除',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
 				array('name' => 'データメンテナンス',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
-				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
-				array('name' => 'クレジット',				'url' => 'javascript:credit()')
+				array('name' => '環境情報',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info'))
 		))),
 		// コアプラグイン
 		'corePlugins'	=> array('Blog', 'Feed', 'Mail'),

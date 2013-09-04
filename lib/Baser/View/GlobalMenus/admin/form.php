@@ -67,7 +67,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('GlobalMenu.status', '利用状態') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('GlobalMenu.status', array('type' => 'checkbox', 'label'=> '利用する')) ?>
+				<?php echo $this->BcForm->input('GlobalMenu.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'))) ?>
 				<?php echo $this->BcForm->error('GlobalMenu.status') ?>
 			</td>
 		</tr>

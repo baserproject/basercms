@@ -84,28 +84,16 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  */
 	$PluginContent = ClassRegistry::init('PluginContent');
 	if($PluginContent) {
-		// @TODO basercamp kiyosue
-		/* CakePHP2で、routes.php の __connectDefaultRoutes がなくなったため(defaultRouteClassに移ったのかなぁ？)
-		 * デフォルトで、$this->connect('/:plugin/:controller/:action/*', array(), $match);
-		 * が設定されなくなり、feedプラグインのルーティングがおかしくなってしまう。
-		 * mail blog プラグインも同様だけど、これらは、$pluginContentの処理でリネームされているため問題ない。
-		 * ただ、blogというフォルダを固定ページとかで作るとおかしくなるかも・・・要検証
-		 * feedがプラグインだけど同梱なのでここの扱いをどうするか、
-		 * とりあえず
-		 * ./lib/Baser/Model/PluginContent.php
-		 * currentPluginContent に処理を追加した
-		 * bc_plugin_contentsに、name = feed, plugin = feed でデフォルト登録するのが良いとおもう。江頭さんに相談だ。
-		 *
-		 */
 		$pluginContent = $PluginContent->currentPluginContent($parameter);
-
 		if($pluginContent) {
 			$pluginContentName = $pluginContent['PluginContent']['name'];
 			$pluginName = $pluginContent['PluginContent']['plugin'];
 			if(!$agent) {
 				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller'=> $pluginName));
+				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller'=> $pluginName, 'action' => 'index'));
 			}else {
 				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName));
+				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName, 'action' => 'index'));
 			}
 		}
 	}
@@ -222,16 +210,3 @@ Router::connect('/'.$updateKey.'/index', array('controller' => 'updaters', 'acti
  * インストーラー用
  */
 Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));
-/**
- * エラーハンドラ読み込み
- * baserフォルダ内のAppErrorを読みこませる為に定義
- * bootstrapに記述するとAppControllerの未定義エラーとなる為仕方なくここに配置
- * また、controllerに記述するとAppControllerの重複定義となってしまう
- */
-if (file_exists(APP . 'error.php')) {
-	include_once (APP . 'error.php');
-} elseif (file_exists(APP . 'app_error.php')) {
-	include_once (APP . 'app_error.php');
-} elseif (file_exists(BASER . 'app_error.php')) {
-	include_once (BASER . 'app_error.php');
-}

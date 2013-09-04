@@ -88,10 +88,6 @@ class BcPageHelper extends Helper {
  * @param array $page
  * @return string
  */
-	// TODO basercamp 2013/05/27 ryuring
-	// オーバーライドの引数の問題があったのでメソッド名を変更
-	// 利用箇所を検索したところBaser 内では使われてない様子
-	// url → getUrl
 	public function getUrl($page) {
 		
 		return $this->Page->getPageUrl($page);

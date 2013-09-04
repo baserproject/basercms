@@ -99,7 +99,7 @@ class Security {
  *
  * @param string $string String to hash
  * @param string $type Method to use (sha1/sha256/md5/blowfish)
- * @param mixed $salt If true, automatically appends the application's salt
+ * @param mixed $salt If true, automatically prepends the application's salt
  *     value to $string (Security.salt). If you are using blowfish the salt
  *     must be false or a previously generated salt.
  * @return string Hash
@@ -180,11 +180,11 @@ class Security {
  * @param string $text Encrypted string to decrypt, normal string to encrypt
  * @param string $key Key to use
  * @return string Encrypted/Decrypted string
- * @deprecated This method will be removed in 3.x
+ * @deprecated Will be removed in 3.0.
  */
 	public static function cipher($text, $key) {
 		if (empty($key)) {
-			trigger_error(__d('cake_dev', 'You cannot use an empty key for Security::cipher()'), E_USER_WARNING);
+			trigger_error(__d('cake_dev', 'You cannot use an empty key for %s', 'Security::cipher()'), E_USER_WARNING);
 			return '';
 		}
 
@@ -217,7 +217,7 @@ class Security {
  */
 	public static function rijndael($text, $key, $operation) {
 		if (empty($key)) {
-			trigger_error(__d('cake_dev', 'You cannot use an empty key for Security::rijndael()'), E_USER_WARNING);
+			trigger_error(__d('cake_dev', 'You cannot use an empty key for %s', 'Security::rijndael()'), E_USER_WARNING);
 			return '';
 		}
 		if (empty($operation) || !in_array($operation, array('encrypt', 'decrypt'))) {

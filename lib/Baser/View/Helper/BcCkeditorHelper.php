@@ -23,7 +23,7 @@ class BcCkeditorHelper extends AppHelper {
  * @var array
  * @access public
  */
-	public $helpers = array('Html', 'Form', 'JqueryEngine');
+	public $helpers = array('BcHtml', 'BcForm', 'JqueryEngine');
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
@@ -239,7 +239,7 @@ class BcCkeditorHelper extends AppHelper {
 		
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->Html->script('/theme/baseradmin/js/ckeditor/ckeditor.js', array("inline"=>false));
+			$this->BcHtml->script('ckeditor/ckeditor.js', array("inline"=>false));
 		}
 
 		if($useDraft) {			
@@ -254,7 +254,7 @@ class BcCkeditorHelper extends AppHelper {
 			$ckoptions['toolbar'][count($ckoptions['toolbar'])-1] = $lastBar;
 		}
 		
-		$this->Html->scriptBlock("var editor_" . $field . ";", array("inline" => false));
+		$this->BcHtml->scriptBlock("var editor_" . $field . ";", array("inline" => false));
 		$jscode = "$(window).load(function(){";
 		if(!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms',".$this->JqueryEngine->object($this->style).");";
@@ -283,24 +283,25 @@ class BcCkeditorHelper extends AppHelper {
 		
 		// $this->webroot で、フロントテーマのURLを取得できるようにするため、
 		// 一旦テーマをフロントのテーマに切り替える
-		$themeWeb = $this->themeWeb;
+		$theme = $this->theme;
 		$theme = Configure::read('BcSite.theme');
 		if($theme) {
-			$this->themeWeb = 'theme/'. $theme .'/';
+			$this->theme = $theme;
 		}
 		
-		$themeEditorCsses = array(
-			array(
+		$themeEditorCsses = array();
+		if($theme) {
+			$themeEditorCsses[] = array(
 				'path'	=> BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
 				'url'	=> $this->webroot('/css/editor.css')
-			),
-			array(
-				'path'	=> BASER_VENDORS . 'css' . DS . 'ckeditor' . DS . 'contents.css',
-				'url'	=> $this->webroot('/css/ckeditor/contents.css')
-			)
+			);
+		}
+		$themeEditorCsses[] = array(
+			'path'	=> BASER_VIEWS . DS . 'webroot' . DS . 'css' . DS . 'ckeditor' . DS . 'contents.css',
+			'url'	=> $this->webroot('/css/ckeditor/contents.css')
 		);
 		
-		if(isset($this->request->data['Page']['page_type'])) {
+		if($theme && isset($this->request->data['Page']['page_type'])) {
 			$agentPrefix = '';
 			if($this->request->data['Page']['page_type'] == 2) {
 				$agentPrefix = Configure::read('BcAgent.mobile.prefix');
@@ -315,7 +316,7 @@ class BcCkeditorHelper extends AppHelper {
 			}
 		}
 		
-		$this->themeWeb = $themeWeb;
+		$this->theme = $theme;
 		
 		foreach($themeEditorCsses as $themeEditorCss) {
 			if(file_exists($themeEditorCss['path'])) {
@@ -351,7 +352,8 @@ class BcCkeditorHelper extends AppHelper {
 			$jscode .= " });";
 		}
 		$jscode .= "});";
-		return $this->Html->scriptBlock($jscode);
+		
+		return $this->BcHtml->scriptBlock($jscode);
 		
 	}
 /**
@@ -362,20 +364,17 @@ class BcCkeditorHelper extends AppHelper {
  * @param array $options
  * @return string
  */
-	public function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+	public function textarea($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
 		
-		if(!$form){
-			$form = $this->Form;
-		}
 		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
 			list($model,$field) = explode('.',$fieldName);
 			$inputFieldName = $fieldName.'_tmp';
-			$hidden = $this->Form->hidden($fieldName).$this->Form->hidden($model.'.'.$editorOptions['draftField']);
+			$hidden = $this->BcForm->hidden($fieldName).$this->BcForm->hidden($model.'.'.$editorOptions['draftField']);
 		} else {
 			$inputFieldName = $fieldName;
 			$hidden = '';
 		}
-		return $this->Form->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
+		return $this->BcForm->textarea($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
 		
 	}
 /**
@@ -386,21 +385,18 @@ class BcCkeditorHelper extends AppHelper {
  * @param array $tinyoptions
  * @return string
  */
-	public function input($fieldName, $options = array(), $editorOptions = array(), $styles = array(), $form = null) {
+	public function input($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
 		
-		if(!$form){
-			$form = $this->Form;
-		}
 		if(!empty($editorOptions['useDraft']) && !empty($editorOptions['draftField']) && strpos($fieldName,'.')){
 			list($model,$field) = explode('.',$fieldName);
 			$inputFieldName = $fieldName.'_tmp';
-			$hidden = $this->Form->hidden($fieldName).$this->Form->hidden($model.'.'.$editorOptions['draftField']);
+			$hidden = $this->BcForm->hidden($fieldName).$this->BcForm->hidden($model.'.'.$editorOptions['draftField']);
 		} else {
 			$inputFieldName = $fieldName;
 			$hidden = '';
 		}
 		$options['type'] = 'textarea';
-		return $this->Form->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles, $form);
+		return $this->BcForm->input($inputFieldName, $options) . $hidden . $this->_build($fieldName, $editorOptions, $styles);
 		
 	}
 	

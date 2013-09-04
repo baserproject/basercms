@@ -72,7 +72,6 @@ class WidgetAreasController extends AppController {
 	public function beforeFilter() {
 		$this->BcAuth->allow('get_widgets');
 		parent::beforeFilter();
-		$this->Security->validatePost = false;
 	}
 /**
  * 一覧

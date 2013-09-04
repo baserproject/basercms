@@ -17,4 +17,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-loadPluginConfig('mail.mail');
+loadPluginConfig('Mail.mail');

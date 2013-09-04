@@ -552,20 +552,58 @@ class BcBaserHelper extends AppHelper {
 			'subDir'	=> true
 		), $options);
 		
-		// TODO basercamp CakeEvent
-		//$options = $this->executeHook('beforeElement', $name, $data, $options);
-
+		if(isset($options['plugin']) && !$options['plugin']) {
+			unset($options['plugin']);
+		}
+		
+		/*** beforeElement ***/
+		$event = $this->dispatchEvent('beforeElement', array(
+			'name'		=> $name,
+			'data'		=> $data,
+			'options'	=> $options
+		), array('layer' => 'View', 'class' => ''));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
+		
+		/*** Controller.beforeElement ***/
+		$event = $this->dispatchEvent('beforeElement', array(
+			'name'		=> $name,
+			'data'		=> $data,
+			'options'	=> $options
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
+		
 		extract($options);
 		
-		if(!empty($this->_View->subDir) && $subDir) {
-			$name = $this->_View->subDir . DS . $name;
+		if(!$subDir) {
+			$this->_View->subDir = null;
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
-		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterElement', $name, $out);
 
+		/*** afterElement ***/
+		$event = $this->dispatchEvent('afterElement', array(
+			'name'		=> $name,
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => ''));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
+		/*** Controller.afterElement ***/
+		$event = $this->dispatchEvent('afterElement', array(
+			'name'		=> $name,
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
+		return $out;
+		
 	}
 /**
  * エレメント（部品）テンプレートを出力する
@@ -602,9 +640,23 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('header', $data, $options);
+		
+		/*** header ***/
+		$event = $this->dispatchEvent('header', array(
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => ''));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
+		/*** Controller.header ***/
+		$event = $this->dispatchEvent('header', array(
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
 		echo $out;
-		// TODO basercamp CakeEvent
-		//echo $this->executeHook('baserHeader', $out);
 
 	}
 /**
@@ -624,9 +676,23 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		
 		$out = $this->getElement('footer', $data, $options);
+
+		/*** footer ***/
+		$event = $this->dispatchEvent('footer', array(
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => ''));
+		if($event) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
+		
+		/*** Controller.footer ***/
+		$event = $this->dispatchEvent('footer', array(
+			'out'	=> $out
+		), array('layer' => 'View', 'class' => $this->_View->name));
+		if($event) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
+		}
 		echo $out;
-		// TODO basercamp CakeEvent
-		//echo $this->executeHook('baserFooter', $out);
 
 	}
 /**
@@ -881,14 +947,13 @@ class BcBaserHelper extends AppHelper {
  * @param string $url
  * @param array $htmlAttributes
  * @param boolean $confirmMessage
- * @param boolean $escapeTitle
  * @return void
  * @access public
  * @manual
  */
-	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false) {
 
-		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
+		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
 
 	}
 /**
@@ -906,30 +971,41 @@ class BcBaserHelper extends AppHelper {
  * @access public
  * @manual
  */
-	public function getLink($title, $url = null, $htmlAttributes = array(), $confirmMessage = false, $escapeTitle = false) {
+	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
 
-		// TODO basercamp CakeEvent
-		//$htmlAttributes = $this->executeHook('beforeBaserGetLink', $title, $url, $htmlAttributes, $confirmMessage, $escapeTitle);
-
-		if(!empty($htmlAttributes['prefix'])) {
-			if(!empty($this->request->params['prefix'])) {
+		if(!is_array($options)) {
+			$options = array($options);
+		}
+		
+		$options = array_merge(array(
+			'escape'	=> false,
+			'prefix'	=> false,
+			'forceTitle'=> false,
+			'ssl'		=> false
+		), $options);
+		
+		/*** beforeGetLink ***/
+		$event = $this->dispatchEvent('beforeGetLink', array(
+			'title'				=> $title,
+			'url'				=> $url,
+			'options'			=> $options,
+			'confirmMessage'	=> $confirmMessage
+		), array('class' => 'Html'));
+		if($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
+		}
+		
+		if($options['prefix']) {
+			if(!empty($this->request->params['prefix']) && is_array($url)) {
 				$url[$this->request->params['prefix']] = true;
 			}
-			unset($htmlAttributes['prefix']);
 		}
-		if(isset($htmlAttributes['forceTitle'])) {
-			$forceTitle = $htmlAttributes['forceTitle'];
-			unset($htmlAttributes['forceTitle']);
-		}else {
-			$forceTitle = false;
-		}
-
-		if(isset($htmlAttributes['ssl'])) {
-			$ssl = true;
-			unset($htmlAttributes['ssl']);
-		}else {
-			$ssl = false;
-		}
+		$forceTitle = $options['forceTitle'];
+		$ssl = $options['ssl'];
+		
+		unset($options['prefix']);
+		unset($options['forceTitle']);
+		unset($options['ssl']);
 
 		// 管理システムメニュー対策
 		// プレフィックスが変更された場合も正常動作させる為
@@ -943,6 +1019,10 @@ class BcBaserHelper extends AppHelper {
 		$_url = preg_replace('/^'.preg_quote($this->request->base, '/').'\//', '/', $url);
 		$enabled = true;
 
+		if($options == false) {
+			$enabled = false;
+		}
+		
 		// 認証チェック
 		if(isset($this->Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
 			$userGroupId = $this->_View->viewVars['user']['user_group_id'];
@@ -990,20 +1070,22 @@ class BcBaserHelper extends AppHelper {
 			$url = $_url;
 		}
 
-		// Cake1.2系との互換対応
-		if (isset($htmlAttributes['escape']) && $escapeTitle == true) {
-			$escapeTitle = $htmlAttributes['escape'];
+		if(!$options) {
+			$options = array();
 		}
-		if(!$htmlAttributes) {
-			$htmlAttributes = array();
+
+		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
+
+		/*** afterGetLink ***/
+		$event = $this->dispatchEvent('afterGetLink', array(
+			'url'	=> $url,
+			'out'	=> $out
+		), array('class' => 'Html'));
+		if($event !== false) {
+			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
-		$htmlAttributes = array_merge($htmlAttributes, array('escape' => $escapeTitle));
-
-		$out = $this->BcHtml->link($title, $url, $htmlAttributes, $confirmMessage);
-
+		
 		return $out;
-		// TODO basercamp CakeEvent
-		//return $this->executeHook('afterBaserGetLink', $url, $out);
 
 	}
 /**

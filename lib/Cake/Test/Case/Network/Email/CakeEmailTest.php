@@ -95,6 +95,20 @@ class EmailConfig {
 		'helpers' => array('Html', 'Form'),
 	);
 
+/**
+ * test config 2
+ *
+ * @var string
+ */
+	public $test2 = array(
+		'from' => array('some@example.com' => 'My website'),
+		'to' => array('test@example.com' => 'Testname'),
+		'subject' => 'Test mail subject',
+		'transport' => 'Smtp',
+		'host' => 'cakephp.org',
+		'timeout' => 60
+	);
+
 }
 
 /*
@@ -270,6 +284,69 @@ class CakeEmailTest extends CakeTestCase {
  */
 	public function testInvalidEmailAdd($value) {
 		$this->CakeEmail->addTo($value);
+	}
+
+/**
+ * test emailPattern method
+ *
+ * @return void
+ */
+	public function testEmailPattern() {
+		$regex = '/.+@.+\..+/i';
+		$this->assertNull($this->CakeEmail->emailPattern());
+		$this->assertSame($regex, $this->CakeEmail->emailPattern($regex)->emailPattern());
+	}
+
+/**
+ * Tests that it is possible to set email regex configuration to a CakeEmail object
+ *
+ * @return void
+ */
+	public function testConfigEmailPattern() {
+		$regex = '/.+@.+\..+/i';
+		$email = new CakeEmail(array('emailPattern' => $regex));
+		$this->assertSame($regex, $email->emailPattern());
+	}
+
+/**
+ * Tests that it is possible set custom email validation
+ */
+	public function testCustomEmailValidation() {
+		$regex = '/^[\.a-z0-9!#$%&\'*+\/=?^_`{|}~-]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]{2,6}$/i';
+
+		$this->CakeEmail->emailPattern($regex)->to('pass.@example.com');
+		$this->assertSame(array(
+			'pass.@example.com' => 'pass.@example.com',
+		), $this->CakeEmail->to());
+
+		$this->CakeEmail->addTo('pass..old.docomo@example.com');
+		$this->assertSame(array(
+			'pass.@example.com' => 'pass.@example.com',
+			'pass..old.docomo@example.com' => 'pass..old.docomo@example.com',
+		), $this->CakeEmail->to());
+
+		$this->CakeEmail->reset();
+		$emails = array(
+			'pass.@example.com',
+			'pass..old.docomo@example.com'
+		);
+		$additionalEmails = array(
+			'.extend.@example.com',
+			'.docomo@example.com'
+		);
+		$this->CakeEmail->emailPattern($regex)->to($emails);
+		$this->assertSame(array(
+			'pass.@example.com' => 'pass.@example.com',
+			'pass..old.docomo@example.com' => 'pass..old.docomo@example.com',
+		), $this->CakeEmail->to());
+
+		$this->CakeEmail->addTo($additionalEmails);
+		$this->assertSame(array(
+			'pass.@example.com' => 'pass.@example.com',
+			'pass..old.docomo@example.com' => 'pass..old.docomo@example.com',
+			'.extend.@example.com' => '.extend.@example.com',
+			'.docomo@example.com' => '.docomo@example.com',
+		), $this->CakeEmail->to());
 	}
 
 /**
@@ -726,12 +803,13 @@ class CakeEmailTest extends CakeTestCase {
 		$this->assertSame($this->CakeEmail->config(), $config);
 
 		$this->CakeEmail->config(array());
-		$this->assertSame($transportClass->config(), array());
+		$this->assertSame($transportClass->config(), $config);
 
 		$config = array('test' => 'test@example.com');
 		$this->CakeEmail->config($config);
 		$expected = array('test' => 'test@example.com', 'test2' => true);
 		$this->assertSame($expected, $this->CakeEmail->config());
+		$this->assertSame($expected, $transportClass->config());
 	}
 
 /**
@@ -763,6 +841,35 @@ class CakeEmailTest extends CakeTestCase {
 
 		$result = $this->CakeEmail->helpers();
 		$this->assertEquals($configs->test['helpers'], $result);
+	}
+
+/**
+ * Test updating config doesn't reset transport's config.
+ *
+ * @return void
+ */
+	public function testConfigMerge() {
+		$this->CakeEmail->config('test2');
+
+		$expected = array(
+			'host' => 'cakephp.org',
+			'port' => 25,
+			'timeout' => 60,
+			'username' => null,
+			'password' => null,
+			'client' => null,
+			'tls' => false
+		);
+		$this->assertEquals($expected, $this->CakeEmail->transportClass()->config());
+
+		$this->CakeEmail->config(array('log' => true));
+		$result = $this->CakeEmail->transportClass()->config();
+		$expected += array('log' => true);
+		$this->assertEquals($expected, $this->CakeEmail->transportClass()->config());
+
+		$this->CakeEmail->config(array('timeout' => 45));
+		$result = $this->CakeEmail->transportClass()->config();
+		$this->assertEquals(45, $result['timeout']);
 	}
 
 /**
@@ -861,6 +968,43 @@ class CakeEmailTest extends CakeTestCase {
 			"Content-Type: application/octet-stream\r\n" .
 			"Content-Transfer-Encoding: base64\r\n" .
 			"Content-Disposition: attachment; filename=\"basics.php\"\r\n\r\n";
+		$this->assertContains($expected, $result['message']);
+	}
+
+/**
+ * Test send() with no template and data string attachment
+ *
+ * @return void
+ */
+
+	public function testSendNoTemplateWithDataStringAttachment() {
+		$this->CakeEmail->transport('debug');
+		$this->CakeEmail->from('cake@cakephp.org');
+		$this->CakeEmail->to('cake@cakephp.org');
+		$this->CakeEmail->subject('My title');
+		$this->CakeEmail->emailFormat('text');
+		$data = file_get_contents(CAKE . 'Console/Templates/skel/webroot/img/cake.icon.png');
+		$this->CakeEmail->attachments(array('cake.icon.png' => array(
+				'data' => $data,
+				'mimetype' => 'image/png'
+		)));
+		$result = $this->CakeEmail->send('Hello');
+
+		$boundary = $this->CakeEmail->getBoundary();
+		$this->assertContains('Content-Type: multipart/mixed; boundary="' . $boundary . '"', $result['headers']);
+		$expected = "--$boundary\r\n" .
+				"Content-Type: text/plain; charset=UTF-8\r\n" .
+				"Content-Transfer-Encoding: 8bit\r\n" .
+				"\r\n" .
+				"Hello" .
+				"\r\n" .
+				"\r\n" .
+				"\r\n" .
+				"--$boundary\r\n" .
+				"Content-Type: image/png\r\n" .
+				"Content-Transfer-Encoding: base64\r\n" .
+				"Content-Disposition: attachment; filename=\"cake.icon.png\"\r\n\r\n";
+		$expected .= chunk_split(base64_encode($data), 76, "\r\n");
 		$this->assertContains($expected, $result['message']);
 	}
 
@@ -1007,7 +1151,7 @@ class CakeEmailTest extends CakeTestCase {
  */
 	public function testSendWithLog() {
 		CakeLog::config('email', array(
-			'engine' => 'FileLog',
+			'engine' => 'File',
 			'path' => TMP
 		));
 		CakeLog::drop('default');
@@ -1016,6 +1160,35 @@ class CakeEmailTest extends CakeTestCase {
 		$this->CakeEmail->from('cake@cakephp.org');
 		$this->CakeEmail->subject('My title');
 		$this->CakeEmail->config(array('log' => 'cake_test_emails'));
+		$result = $this->CakeEmail->send("Logging This");
+
+		App::uses('File', 'Utility');
+		$File = new File(TMP . 'cake_test_emails.log');
+		$log = $File->read();
+		$this->assertTrue(strpos($log, $result['headers']) !== false);
+		$this->assertTrue(strpos($log, $result['message']) !== false);
+		$File->delete();
+		CakeLog::drop('email');
+	}
+
+/**
+ * testSendWithLogAndScope method
+ *
+ * @return void
+ */
+	public function testSendWithLogAndScope() {
+		CakeLog::config('email', array(
+			'engine' => 'File',
+			'path' => TMP,
+			'types' => array('cake_test_emails'),
+			'scopes' => array('email')
+		));
+		CakeLog::drop('default');
+		$this->CakeEmail->transport('Debug');
+		$this->CakeEmail->to('me@cakephp.org');
+		$this->CakeEmail->from('cake@cakephp.org');
+		$this->CakeEmail->subject('My title');
+		$this->CakeEmail->config(array('log' => array('level' => 'cake_test_emails', 'scope' => 'email')));
 		$result = $this->CakeEmail->send("Logging This");
 
 		App::uses('File', 'Utility');
@@ -1046,6 +1219,26 @@ class CakeEmailTest extends CakeTestCase {
 		$this->assertContains('This email was sent using the CakePHP Framework', $result['message']);
 		$this->assertContains('Message-ID: ', $result['headers']);
 		$this->assertContains('To: ', $result['headers']);
+	}
+
+/**
+ * test sending and rendering with no layout
+ *
+ * @return void
+ */
+	public function testSendRenderNoLayout() {
+		$this->CakeEmail->reset();
+		$this->CakeEmail->transport('debug');
+
+		$this->CakeEmail->from('cake@cakephp.org');
+		$this->CakeEmail->to(array('you@cakephp.org' => 'You'));
+		$this->CakeEmail->subject('My title');
+		$this->CakeEmail->config(array('empty'));
+		$this->CakeEmail->template('default', null);
+		$result = $this->CakeEmail->send('message body.');
+
+		$this->assertContains('message body.', $result['message']);
+		$this->assertNotContains('This email was sent using the CakePHP Framework', $result['message']);
 	}
 
 /**
@@ -1406,11 +1599,13 @@ class CakeEmailTest extends CakeTestCase {
 	public function testReset() {
 		$this->CakeEmail->to('cake@cakephp.org');
 		$this->CakeEmail->theme('TestTheme');
+		$this->CakeEmail->emailPattern('/.+@.+\..+/i');
 		$this->assertSame($this->CakeEmail->to(), array('cake@cakephp.org' => 'cake@cakephp.org'));
 
 		$this->CakeEmail->reset();
 		$this->assertSame($this->CakeEmail->to(), array());
 		$this->assertSame(null, $this->CakeEmail->theme());
+		$this->assertSame(null, $this->CakeEmail->emailPattern());
 	}
 
 /**

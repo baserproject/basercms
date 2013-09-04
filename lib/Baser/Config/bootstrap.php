@@ -42,34 +42,13 @@ App::build(array(
 	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
 	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
 	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
 App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS)
 ), App::REGISTER);
 
-App::uses('AppModel',			'Model');
-App::uses('BcAppModel'	,		'Model');
-App::uses('BcCache',				'Model/Behavior');
-App::uses('ClassRegistry',		'Utility');
-App::uses('Multibyte',			'I18n');
-App::uses('BcCsv',				'Model/Datasource/Database');
-App::uses('BcPostgres',			'Model/Datasource/Database');
-App::uses('BcSqlite',			'Model/Datasource/Database');
-App::uses('BcMysql',				'Model/Datasource/Database');
-App::uses('PhpReader',			'Configure');
-App::uses('CakeSession',			'Model/Datasource');
-App::uses('Folder',				'Utility');
-App::uses('File',				'Utility');
-App::uses('BcControllerEvent',	'Event');
-App::uses('BcModelEvent',		'Event');
-App::uses('BcViewEvent',			'Event');
-/**
- * baserUrl取得
- */
-define('BC_BASE_URL', baseUrl());
-/**
- * define類は vendors内の静的ファイルの読み込みの場合はスキップの処理の時のnotice抑制の為上位に持ってきた
- */
 /**
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
@@ -84,10 +63,55 @@ if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', 
 	// baserCMS配布時の配置
 	define('BC_DEPLOY_PATTERN', 1);
 }
+
+/**
+ * baserUrl取得
+ */
+define('BC_BASE_URL', baseUrl());
+
+/**
+ * アセットフィルターを追加
+ */
+Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher')));
+
+/**
+ * 静的ファイルの読み込みの場合はスキップ
+ */
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	return;
+}
+
+/**
+ * クラスローダー設定
+ */
+App::uses('AppModel',			'Model');
+App::uses('BcAppModel'	,		'Model');
+App::uses('BcCache',			'Model/Behavior');
+App::uses('ClassRegistry',		'Utility');
+App::uses('Multibyte',			'I18n');
+App::uses('BcCsv',				'Model/Datasource/Database');
+App::uses('BcPostgres',			'Model/Datasource/Database');
+App::uses('BcSqlite',			'Model/Datasource/Database');
+App::uses('BcMysql',			'Model/Datasource/Database');
+App::uses('PhpReader',			'Configure');
+App::uses('CakeSession',		'Model/Datasource');
+App::uses('Folder',				'Utility');
+App::uses('File',				'Utility');
+App::uses('BcControllerEventListener',	'Event');
+App::uses('BcModelEventListener',		'Event');
+App::uses('BcViewEventListener',		'Event');
+App::uses('BcHelperEventListener',		'Event');
+App::uses('BcUtil'				, 'Lib');
+
 /**
  * インストール状態
  */
 define('BC_INSTALLED', isInstalled());
+
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
@@ -101,22 +125,6 @@ if (Configure::load('baser', 'baser') === false) {
 	include BASER_CONFIGS . 'baser.php';
 	Configure::write($config);
 }
-/**
- * vendors内の静的ファイルの読み込みの場合はスキップ
- */
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'css\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'js\//', $uri) ||
-	preg_match('/^' . preg_quote(BC_BASE_URL, '/') . 'img\//', $uri)) {
-	$assets = array('js', 'css', 'gif', 'jpg', 'png');
-	$aryUri = explode('.', $uri);
-	$ext = array_pop($aryUri);
-	if (in_array($ext, $assets)) {
-		Configure::write('BcRequest.asset', true);
-		return;
-	}
-}
-
 if (BC_INSTALLED && $baserSettings) {
 	foreach ($baserSettings as $key1 => $settings) {
 		if ($settings) {
@@ -126,6 +134,14 @@ if (BC_INSTALLED && $baserSettings) {
 		}
 	}
 }
+
+/**
+ * セッション設定
+ */
+if (BC_INSTALLED) {
+	require APP . 'Config' . DS . 'session.php';
+}
+
 /**
  * クレジット読込 
  */
@@ -140,6 +156,10 @@ $parameter = getUrlParamFromEnv();
 Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる	
 
 if (BC_INSTALLED) {
+/**
+ * tmpフォルダ確認
+ */
+	checkTmpFolders();
 /**
  * データキャッシュ
  */
@@ -184,10 +204,6 @@ if (BC_INSTALLED) {
  */
 	loadSiteConfig();
 /**
- * tmpフォルダ確認
- */
-	checkTmpFolders();
-/**
  * メンテナンスチェック
  */
 	$isMaintenance = ($parameter == 'maintenance/index');
@@ -209,10 +225,8 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  */
 if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-
-	$CakeEvent = CakeEventManager::instance();
-
 	$plugins = getEnablePlugins();
+	$CakeEvent = CakeEventManager::instance();
 	foreach($plugins as $plugin) {
 		CakePlugin::load($plugin);
 		$pluginPath = CakePlugin::path($plugin);
@@ -224,9 +238,9 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		CakePlugin::bootstrap($plugin);
 
 		// プラグインイベント登録
-		$eventTargets = array('Controller', 'Model', 'View');
+		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach($eventTargets as $eventTarget) {
-			$eventClass = $plugin . $eventTarget . 'Event';
+			$eventClass = $plugin . $eventTarget . 'EventListener';
 			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 				App::uses($eventClass, $plugin . '.Event');
 				$CakeEvent->attach(new $eventClass());
@@ -239,12 +253,12 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * イベント登録
  */
-	App::uses('BcControllerDispatch', 'Event');
-	App::uses('BcModelDispatch', 'Event');
-	App::uses('BcViewDispatch', 'Event');
-	$CakeEvent->attach(new BcControllerDispatch());
-	$CakeEvent->attach(new BcModelDispatch());
-	$CakeEvent->attach(new BcViewDispatch());
+	App::uses('BcControllerEventDispatcher', 'Event');
+	App::uses('BcModelEventDispatcher', 'Event');
+	App::uses('BcViewEventDispatcher', 'Event');
+	$CakeEvent->attach(new BcControllerEventDispatcher());
+	$CakeEvent->attach(new BcModelEventDispatcher());
+	$CakeEvent->attach(new BcViewEventDispatcher());
 	
 /**
  * テーマの bootstrap を実行する

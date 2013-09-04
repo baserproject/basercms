@@ -45,7 +45,8 @@ class BcPluginAppController extends AppController {
 		$this->PluginContent = ClassRegistry::init('PluginContent');
 
 		// 有効でないプラグインを実行させない
-		if(!$this->Plugin->find('all',array('conditions'=>array('name'=>$this->request->params['plugin'], 'status'=>true)))) {
+		$name = Inflector::camelize($this->request->params['plugin']);
+		if(!$this->Plugin->find('all',array('conditions'=>array('name'=>$name, 'status'=>true)))) {
 			$this->notFound();
 		}
 
