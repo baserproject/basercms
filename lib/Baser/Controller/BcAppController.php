@@ -926,12 +926,17 @@ array (size=4)
 			$cakeEmail->theme($options['theme']);
 		}
 
+		//viewRender (利用するviewクラスを設定する)
+		$viewClass = 'BcApp' ;
+		$cakeEmail->viewRender($viewClass);
+
 		//template
 		if(!empty($options['template'])){
+			$template = $this->__renderTemplate($options);
 			if(!empty($options['layout'])){
-				$cakeEmail->template($options['template'],$options['layout']);
+				$cakeEmail->template($template,$options['layout']);
 			}else{
-				$cakeEmail->template($options['template']);
+				$cakeEmail->template($template);
 			}
 		}else{
 			if(Configure::read('BcRequest.agent')) {
@@ -942,10 +947,6 @@ array (size=4)
 				}
 			}
 		}
-
-		//viewRender
-		$viewClass = null;
-		$cakeEmail->viewRender($viewClass);
 
 		//datas body
 		$cakeEmail->viewVars($body);
@@ -976,6 +977,34 @@ array (size=4)
 			return false ;
 		}
 	}
+
+	/**
+	 * template までのpathを取得
+	 *
+	 * @param array $options in template and layout
+	 * @return string layout
+	 * @access private
+	 */
+	private function __renderTemplate($options=null) {
+
+		$layoutPath = $subDir = $plugin = '';
+//var_dump($this);
+		if(!empty($this->layoutPath)) {
+			$layoutPath = $this->layoutPath.DS;
+		}
+		if(!empty($this->subDir)) {
+			$subDir = $this->subDir.DS;
+		}
+		if(!empty($this->plugin)) {
+			$plugin = $this->plugin  ;
+		}
+
+		//$template = $layoutPath . $plugin . $subDir . 'Emails' . DS . $this->sendAs . DS . $options['template'] ;
+
+		$template = "{$plugin}." .$options['template'] ;
+		return $template ;
+	}
+
 
 /**
  * 画面の情報をセットする

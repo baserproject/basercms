@@ -277,5 +277,22 @@ class BcAppView extends View {
 		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
 		
 	}
+
+
+	/**
+	 * Get the extensions that view files can use.
+	 *
+	 * @return array Array of extensions view files use.
+	 */
+	protected function _getExtensions() {
+		$this->ext = Configure::read('BcApp.templateExt');
+		$exts = array($this->ext);
+		if ($this->ext !== '.ctp') {
+			$exts[] = '.ctp';
+		}
+		return $exts;
+	}
+
+
 }
-?>
+
