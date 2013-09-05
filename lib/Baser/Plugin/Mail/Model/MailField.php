@@ -80,10 +80,10 @@ class MailField extends MailAppModel {
 			array(	'rule'		=> array('maxLength', 255),
 					'message'	=> '後見出しは255文字以内で入力してください。')
 		),
-		'source' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> '選択リストは255文字以内で入力してください。')
-		),
+//		'source' => array(
+//			array(	'rule'		=> array('maxLength', 255),
+//					'message'	=> '選択リストは255文字以内で入力してください。')
+//		),
 		'options' => array(
 			array(	'rule'		=> array('maxLength', 255),
 					'message'	=> 'オプションは255文字以内で入力してください。')

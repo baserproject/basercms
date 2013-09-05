@@ -184,7 +184,7 @@ class InstallationsController extends AppController {
 		
 		extract($checkResult);
 		
-		$this->set('blRequirementsMet', ($tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpGd && $tmpDirWritable && $configDirWritable && $coreFileWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 /**

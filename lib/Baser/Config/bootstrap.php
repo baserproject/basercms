@@ -225,7 +225,6 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  */
 if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	
 	$plugins = getEnablePlugins();
 	$CakeEvent = CakeEventManager::instance();
 	foreach($plugins as $plugin) {
