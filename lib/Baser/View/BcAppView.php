@@ -383,10 +383,6 @@ class BcAppView extends View {
 		return $exts;
 	}
 
-
-}
-
-
 /**
  * イベントを発火
  * 
