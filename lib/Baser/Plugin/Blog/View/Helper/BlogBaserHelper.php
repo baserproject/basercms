@@ -60,7 +60,7 @@ class BlogBaserHelper extends AppHelper {
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
-		$url = array('plugin'=>'blog','controller'=>'blog','action'=>'posts');
+		$url = array('admin' => false, 'plugin'=>'blog','controller'=>'blog','action'=>'posts');
 
 		$settings = Configure::read('BcAgent');
 		foreach($settings as $key => $setting) {
