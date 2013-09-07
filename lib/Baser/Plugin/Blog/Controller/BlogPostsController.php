@@ -315,20 +315,13 @@ class BlogPostsController extends BlogAppController {
 			'postEditable'	=> true,
 			'empty'			=> '指定しない'
 		));
-		
-		$ckEditorOptions1 = array(
-			'useDraft'		=> true, 
-			'draftField'	=> 'content_draft', 
-			'disableDraft'	=> true,
-			'width'			=> 'auto', 
-			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
-		);
-		
-		$ckEditorOptions2 = array(
+				
+		$ckEditorOptions = array(
 			'useDraft'		=> true, 
 			'draftField'	=> 'detail_draft', 
 			'disableDraft'	=> true,
 			'width'			=> 'auto', 
+			'height'		=> '480px',
 			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
 		);
 		
@@ -337,10 +330,7 @@ class BlogPostsController extends BlogAppController {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
-			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
-				'stylesSet'	=> 'default'
-			));
-			$ckEditorOptions2 = array_merge($ckEditorOptions2, array(
+			$ckEditorOptions = array_merge($ckEditorOptions, array(
 				'stylesSet'	=> 'default'
 			));
 		}
@@ -348,8 +338,7 @@ class BlogPostsController extends BlogAppController {
 		$this->set('editable', true);
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_'.mt_rand(0, 99999999));
-		$this->set('ckEditorOptions1', $ckEditorOptions1);
-		$this->set('ckEditorOptions2', $ckEditorOptions2);
+		$this->set('ckEditorOptions', $ckEditorOptions);
 		$this->set('ckStyles', $ckStyles);
 		$this->set('users',$this->BlogPost->User->getUserList(array('User.id' => $user['id'])));
 		$this->help = 'blog_posts_form';
@@ -423,20 +412,13 @@ class BlogPostsController extends BlogAppController {
 		if($this->request->data['BlogPost']['status']) {
 			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->request->data['BlogPost']['no']);
 		}
-	
-		$ckEditorOptions1 = array(
-			'useDraft'		=> true, 
-			'draftField'	=> 'content_draft', 
-			'disableDraft'	=> false,
-			'width'			=> 'auto', 
-			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
-		);
-		
-		$ckEditorOptions2 = array(
+			
+		$ckEditorOptions = array(
 			'useDraft'		=> true, 
 			'draftField'	=> 'detail_draft', 
 			'disableDraft'	=> false,
 			'width'			=> 'auto', 
+			'height'		=> '480px',
 			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
 		);
 
@@ -445,10 +427,7 @@ class BlogPostsController extends BlogAppController {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$ckStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
-			$ckEditorOptions1 = array_merge($ckEditorOptions1, array(
-				'stylesSet'	=> 'default'
-			));
-			$ckEditorOptions2 = array_merge($ckEditorOptions2, array(
+			$ckEditorOptions = array_merge($ckEditorOptions, array(
 				'stylesSet'	=> 'default'
 			));
 		}
@@ -458,8 +437,7 @@ class BlogPostsController extends BlogAppController {
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users',$this->BlogPost->User->getUserList());
-		$this->set('ckEditorOptions1', $ckEditorOptions1);
-		$this->set('ckEditorOptions2', $ckEditorOptions2);
+		$this->set('ckEditorOptions', $ckEditorOptions);
 		$this->set('ckStyles', $ckStyles);
 		$this->pageTitle = '['.$this->blogContent['BlogContent']['title'].'] 記事編集： '.$this->request->data['BlogPost']['name'];
 		$this->help = 'blog_posts_form';

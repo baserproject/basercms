@@ -43,15 +43,15 @@ class Imageresizer {
 		// 元となる画像のオブジェクトを生成
 		switch($image_type) {
 			case IMAGETYPE_GIF:
-				$srcImage = @imagecreatefromgif($imgPath);
+				$srcImage = imagecreatefromgif($imgPath);
 				break;
 
 			case IMAGETYPE_JPEG:
-				$srcImage = @imagecreatefromjpeg($imgPath);
+				$srcImage = imagecreatefromjpeg($imgPath);
 				break;
 
 			case IMAGETYPE_PNG:
-				$srcImage = @imagecreatefrompng($imgPath);
+				$srcImage = imagecreatefrompng($imgPath);
 				break;
 
 			default:

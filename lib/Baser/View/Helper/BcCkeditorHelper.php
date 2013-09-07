@@ -300,7 +300,7 @@ class BcCkeditorHelper extends AppHelper {
 			'path'	=> BASER_VIEWS . DS . 'webroot' . DS . 'css' . DS . 'ckeditor' . DS . 'contents.css',
 			'url'	=> $this->webroot('/css/ckeditor/contents.css')
 		);
-		
+
 		if($theme && isset($this->request->data['Page']['page_type'])) {
 			$agentPrefix = '';
 			if($this->request->data['Page']['page_type'] == 2) {
