@@ -17,7 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-?>
-<?php // echo $content_for_layout; ?>
-<?php echo $this->fetch('content'); ?>
-　
+echo $this->fetch('content');
+

@@ -142,6 +142,10 @@ class BcManagerShell extends BcAppShell {
 		if(!$checkResult['safeModeOff']) {
 			$this->out('　Safe Mode が On の場合、動作保証はありません。');
 		}
+		$this->out('* PHP GD ('.(($checkResult['phpGd']) ? 'True' : 'False').')');
+		if(!$checkResult['phpGd']) {
+			$this->out('　PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。');
+		}
 		$this->out('* PHP PDO ('.(($checkResult['phpPdo']) ? 'True' : 'False').')');
 		if(!$checkResult['phpPdo']) {
 			$this->out('　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。');
