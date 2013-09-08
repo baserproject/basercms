@@ -226,7 +226,7 @@ class BcTimeHelper extends TimeHelper {
  */
 	function convertToWareki($date) {
 	    
-	    // add start yuse@gmail.com
+		// add start yuse@gmail.com
 		// 配列形式の場合は、YMDが揃っていない場合も変換を走らせる為、
 		// Yがある場合、MDが空でもセットする。
 		if(is_array($date)){
