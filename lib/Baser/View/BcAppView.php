@@ -369,7 +369,7 @@ class BcAppView extends View {
 	}
 
 
-	/**
+/**
 	 * Get the extensions that view files can use.
 	 *
 	 * @return array Array of extensions view files use.

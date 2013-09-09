@@ -144,11 +144,11 @@ class MailController extends MailAppController {
 
 
 		// 2013/03/14 ryuring
-		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
+		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更 
 		if( Configure::read('debug') == 2){
 			$this->Security->enabled = false;
 		}else{
-			$this->Security->enabled = true;
+		$this->Security->enabled = true;
 		}
 		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 		// 詳細はコンポーネント設定のコメントを参照

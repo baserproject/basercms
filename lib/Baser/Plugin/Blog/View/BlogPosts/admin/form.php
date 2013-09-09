@@ -38,12 +38,7 @@ $(function(){
  */
 	var useContent = Number($("#UseContent").val());
 	$("#BtnPreview").click(function(){
-		
-		if(useContent) {
-			var content = $("#BlogPostContent").val();
-			$("#BlogPostContent").val(editor_content_tmp.getData());
-		}
-		
+				
 		var detail = $("#BlogPostDetail").val();
 		$("#BlogPostDetail").val(editor_detail_tmp.getData());
 		
@@ -59,11 +54,7 @@ $(function(){
 				}
 			}
 		});
-		
-		if(useContent) {
-			$("#BlogPostContent").val(content);
-		}
-		
+				
 		$("#BlogPostDetail").val(detail);
 		
 		return false;
@@ -74,11 +65,7 @@ $(function(){
  * フォーム送信時イベント
  */
 	$("#BtnSave").click(function(){
-		
-		if(useContent) {
-			editor_content_tmp.execCommand('synchronize');
-		}
-		
+			
 		editor_detail_tmp.execCommand('synchronize');
 		
 		$("#BlogPostMode").val('save');
@@ -240,22 +227,28 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.content', '概要') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('BlogPost.content', 
-						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1, $ckStyles) ?>
+				<?php echo $this->BcForm->ckeditor('BlogPost.content', null, array(
+					'width'		=> 'auto', 
+					'height'	=> '120px', 
+					'type'		=> 'simple',
+					'enterBr'	=> @$siteConfig['editor_enter_br']
+				)) ?>
 				<?php echo $this->BcForm->error('BlogPost.content') ?>
 			</td>
 		</tr>
 <?php endif ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.detail', '本文') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('BlogPost.detail',
-						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions2, $ckStyles) ?>
-				<?php echo $this->BcForm->error('BlogPost.detail') ?>
-			</td>
-		</tr>
+	</table>
+</div>
+
+<div class="section">
+	<?php echo $this->BcForm->ckeditor('BlogPost.detail',
+			array('height' => '1500'),
+			$ckEditorOptions, $ckStyles) ?>
+	<?php echo $this->BcForm->error('BlogPost.detail') ?>
+</div>
+
+<div class="section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
 <?php if(!empty($blogContent['BlogContent']['tag_use'])): ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.BlogTag', 'タグ') ?></th>

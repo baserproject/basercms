@@ -417,15 +417,18 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.contents', '本文') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('Page.contents', 
-						array('cols' => 60, 'rows' => 20),
-						$ckEditorOptions1, $ckStyles) ?>
-				<?php echo $this->BcForm->error('Page.contents') ?>
-			</td>
-		</tr>
+	</table>
+</div>
+
+<div class="section">
+	<?php echo $this->BcForm->ckeditor('Page.contents', 
+			array('cols' => 60, 'rows' => 20),
+			$ckEditorOptions1, $ckStyles) ?>
+	<?php echo $this->BcForm->error('Page.contents') ?>
+</div>
+
+<div class="section">
+	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">

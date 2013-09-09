@@ -228,6 +228,7 @@ class PagesController extends AppController {
 			'draftField'	=> 'draft', 
 			'disableDraft'	=> true, 
 			'width'			=> 'auto',
+			'height'		=> '480px',
 			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
 		);
 
@@ -377,6 +378,7 @@ class PagesController extends AppController {
 			'draftField'	=> 'draft', 
 			'disableDraft'	=> false, 
 			'width'			=> 'auto',
+			'height'		=> '480px',
 			'enterBr'		=> @$this->siteConfigs['editor_enter_br']
 		);
 
