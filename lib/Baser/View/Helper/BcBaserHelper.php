@@ -773,7 +773,7 @@ class BcBaserHelper extends AppHelper {
 		echo $this->_View->viewVars['scripts_for_layout'];
 				
 		// ツールバー設定
-		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
+		if(empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar');
@@ -799,7 +799,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ツールバー表示
-		if(!$this->_View->viewVars['preview'] && $toolbar && !Configure::read('BcRequest.agent')) {
+		if(empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
 			if(!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if(empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->element('admin/toolbar', array(), array('subDir' => false));
@@ -1834,7 +1834,7 @@ END_FLASH;
 
 		extract($options);
 
-		if(!$no) {
+		if(!$no && isset($this->_View->viewVars['widgetArea'])) {
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if($no) {

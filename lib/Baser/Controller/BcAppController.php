@@ -426,6 +426,7 @@ class BcAppController extends Controller {
 		// エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
 		if($this->name == 'CakeError') {
 			ClassRegistry::removeObject('view');
+			$this->response->disableCache();
 		}
 
 		$this->__updateFirstAccess();
@@ -1571,6 +1572,62 @@ array (size=4)
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 		
+	}
+	
+/**
+ * Instantiates the correct view class, hands it its data, and uses it to render the view output.
+ *
+ * @param string $view View to use for rendering
+ * @param string $layout Layout to use
+ * @return CakeResponse A response object containing the rendered view.
+ * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::render
+ */
+	public function render($view = null, $layout = null) {
+		
+		// CUSTOMIZE 2013/09/09 ryuring
+		// beforeRender 内でエラーが発生した場合、無限ループとなってしまうので、
+		// エラーの際には、イベントを実行しないように調整
+		// >>>
+		/*$event = new CakeEvent('Controller.beforeRender', $this);
+		$this->getEventManager()->dispatch($event);
+		if ($event->isStopped()) {
+			$this->autoRender = false;
+			return $this->response;
+		}*/
+		// ---
+		if($this->name != 'CakeError') {
+			$event = new CakeEvent('Controller.beforeRender', $this);
+			$this->getEventManager()->dispatch($event);
+			if ($event->isStopped()) {
+				$this->autoRender = false;
+				return $this->response;
+			}
+		}
+		// <<<
+		
+		if (!empty($this->uses) && is_array($this->uses)) {
+			foreach ($this->uses as $model) {
+				list($plugin, $className) = pluginSplit($model);
+				$this->request->params['models'][$className] = compact('plugin', 'className');
+			}
+		}
+
+		$this->View = $this->_getViewObject();
+
+		$models = ClassRegistry::keys();
+		foreach ($models as $currentModel) {
+			$currentObject = ClassRegistry::getObject($currentModel);
+			if (is_a($currentObject, 'Model')) {
+				$className = get_class($currentObject);
+				list($plugin) = pluginSplit(App::location($className));
+				$this->request->params['models'][$currentObject->alias] = compact('plugin', 'className');
+				$this->View->validationErrors[$currentObject->alias] =& $currentObject->validationErrors;
+			}
+		}
+
+		$this->autoRender = false;
+		$this->response->body($this->View->render($view, $layout));
+		return $this->response;
 	}
 	
 }

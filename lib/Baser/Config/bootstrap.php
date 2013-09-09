@@ -88,24 +88,26 @@ if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
 /**
  * クラスローダー設定
  */
-App::uses('AppModel',			'Model');
-App::uses('BcAppModel'	,		'Model');
-App::uses('BcCache',			'Model/Behavior');
-App::uses('ClassRegistry',		'Utility');
-App::uses('Multibyte',			'I18n');
-App::uses('BcCsv',				'Model/Datasource/Database');
-App::uses('BcPostgres',			'Model/Datasource/Database');
-App::uses('BcSqlite',			'Model/Datasource/Database');
-App::uses('BcMysql',			'Model/Datasource/Database');
-App::uses('PhpReader',			'Configure');
-App::uses('CakeSession',		'Model/Datasource');
-App::uses('Folder',				'Utility');
-App::uses('File',				'Utility');
+App::uses('AppModel',		'Model');
+App::uses('BcAppModel'	,	'Model');
+App::uses('BcCache',		'Model/Behavior');
+App::uses('ClassRegistry',	'Utility');
+App::uses('Multibyte',		'I18n');
+App::uses('BcCsv',			'Model/Datasource/Database');
+App::uses('BcPostgres',		'Model/Datasource/Database');
+App::uses('BcSqlite',		'Model/Datasource/Database');
+App::uses('BcMysql',		'Model/Datasource/Database');
+App::uses('PhpReader',		'Configure');
+App::uses('CakeSession',	'Model/Datasource');
+App::uses('Folder',			'Utility');
+App::uses('File',			'Utility');
+App::uses('BcUtil',			'Lib');
 App::uses('BcControllerEventListener',	'Event');
 App::uses('BcModelEventListener',		'Event');
 App::uses('BcViewEventListener',		'Event');
 App::uses('BcHelperEventListener',		'Event');
-App::uses('BcUtil'				, 'Lib');
+App::uses('BcPluginAppController',		'Controller');
+App::uses('BcPluginAppModel',			'Model');
 
 /**
  * インストール状態

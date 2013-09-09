@@ -837,3 +837,28 @@ table.row-table-01 tr.odd td {
 	padding-top:3px;
 	padding-bottom:3px;
 }
+#Error #ContentsBody p {
+	margin-bottom: 20px;
+}
+#Error #ContentsBody .error {
+	color:#F00;
+}
+#Error #ContentsBody pre {
+	margin-bottom: 20px;
+	background-color: #EFEFEF;
+}
+#Error #ContentsBody .notice {
+	font-size: 14px;
+	color:#CCC;
+}
+#Error #ContentsBody .cake-stack-trace {
+	font-size: 14px;
+	list-style-position: inside;
+	margin-bottom: 20px;
+	padding-left:20px;
+	padding-right:20px;
+}
+#Error #ContentsBody .cake-stack-trace li {
+	margin-top:5px;
+	margin-bottom: 5px;
+}
