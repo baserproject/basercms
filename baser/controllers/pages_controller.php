@@ -706,7 +706,8 @@ class PagesController extends AppController {
 		
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
-		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description']);
+		// modified #3726 codeを追加 yuse@gmail.com 
+		$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'],$page['Page']['description'],$page['Page']['code']); 
 		$path = TMP.'pages_preview_'.$id.$this->ext;
 		$file = new File($path);
 		$file->open('w');
