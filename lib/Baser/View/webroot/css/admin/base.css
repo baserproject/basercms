@@ -1,0 +1,174 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * サイトごとの基本設定
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 2.0.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+
+/* ==================================================================== */
+/*    T A G S
+/* ==================================================================== */
+
+/* html
+----------------------------------------------- */
+
+html{
+    /*height:100%;*/
+}
+
+/* body
+----------------------------------------------- */
+
+body{
+	font-size: 12px;
+	text-align: left;
+	min-width: 960px;
+	width : expression(document.body.clientWidth < 940? "900px" : "auto"); /* IE */
+	line-height:2em;
+	height:100%;
+}
+
+/* anchor
+----------------------------------------------- */
+
+a{
+	color: #669900;
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+}
+
+/* head
+----------------------------------------------- */
+
+.contents-body h1{
+	font-size: 18px;
+	line-height: 22px;
+	font-weight: bold;
+	padding: 15px 0;
+}
+.contents-body h2 {
+	font-size:16px;
+	margin-bottom:15px;
+	border-left:5px solid #690;
+	padding-left:12px;
+	font-weight: bold;
+	line-height: 20px;
+	color:#690;
+}
+.contents-body h3 {
+	font-size:14px;
+	line-height: 18px;
+	margin-bottom:15px;
+	font-weight: bold;
+    border-left:5px double #690;
+	padding-left:12px;
+	color:#690;
+}
+.contents-body h4 {
+	font-size:14px;
+	line-height: 18px;
+	margin-bottom:15px;
+	font-weight: bold;
+	background: url(../../img/admin/blt_head_h4.png) no-repeat left 6px;
+	padding-left:14px;
+}
+.contents-body h5 {
+	font-size:14px;
+	line-height: 18px;
+	margin-bottom:15px;
+	font-weight: bold;
+}
+.contents-body h6 {
+	font-size:14px;
+	line-height: 18px;
+	margin-bottom:15px;
+}
+.contents-body h7 {
+	font-size:12px;
+	line-height: 16px;
+	margin-bottom:15px;
+}
+
+/* table
+----------------------------------------------- */
+
+.contents-body table {
+	clear:both;
+	padding: 0;
+	margin: 0;
+	white-space: normal;
+	margin-left:auto;
+	margin-right:auto;
+}
+.contents-body table th {
+	padding:8px 8px;
+	font-weight:normal;
+	font-weight:bold;
+}
+.contents-body table tr td {
+	padding:10px 8px;
+	vertical-align:top;
+	border:none;
+}
+
+/* paragraph
+----------------------------------------------- */
+
+.contents-body p {
+	margin-bottom:10px;
+}
+.contents-body p small{
+	line-height:14px;
+}
+
+strong {
+	font-weight: bold;
+}
+
+/* ==================================================================== */
+/*    C L A S S E S
+/* ==================================================================== */
+
+
+/* section
+----------------------------------------------- */
+.contents-body .section {
+	margin-bottom:30px;
+	clear: both;
+}
+.contents-body .section p {
+	margin-bottom:10px;
+}
+.outside-link {
+	background: url(../../img/admin/blt_outside_link.png) no-repeat left -1px;
+	padding-left:18px;
+}
+
+/* section
+----------------------------------------------- */
+.corner5 {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.corner10 {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.full-width {
+	width:100%;
+}

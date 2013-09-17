@@ -1,0 +1,73 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * メールフォーム
+ *
+ * PHP versions 5
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			baser.plugins.mail.vendors.css
+ * @since			baserCMS v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+#mail table {
+	margin-left:15px;
+	margin-right:15px;
+	display:block;
+	width:auto;
+}
+#mail .col-input {
+	width:240px!important;
+}
+#mail .col-description {
+	font-size:10px;
+}
+.submit {
+	text-align:center;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+#flashMessage {
+	padding:10px 20px;
+	margin:15px auto!important;
+	color:#C30;
+	font-weight:bold;
+	border:5px solid #C30;
+}
+.error-message {
+	color:#C30;
+	background: url(images/warning.png) no-repeat left center;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
+}
+.required {
+	color:#C30!important;
+	font-size:16px;
+}
+.form-error {
+	background-color:#FCF5EB;
+}
+.message {
+	color:#C30;
+	font-weight:bold;
+	margin:20px;
+}
+.error {
+	color:#C30;
+}
+.error em {
+	color:#06C;
+	font-style:normal;
+	font-weight:bold;
+}
+.submit {
+	text-align:center;
+}

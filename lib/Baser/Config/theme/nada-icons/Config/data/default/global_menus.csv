@@ -1,0 +1,8 @@
+"id","no","name","link","menu_type","sort","status","created","modified"
+"","1","ホーム","/","default","1","1","",""
+"","2","会社案内","/about","default","2","1","",""
+"","3","サービス","/service","default","3","1","",""
+"","4","新着情報","/news/index","default","4","1","",""
+"","5","お問い合わせ","/contact/index","default","5","1","",""
+"","6","サイトマップ","/sitemap","default","7","1","",""
+"","7","アイコンの使い方","/icons","","6","1","",""

@@ -1,0 +1,111 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * ブログ
+ * 
+ * PHP versions 5
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			baser.plugins.blog.vendors.css
+ * @since			baserCMS v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+/* blog-description
+---------------------------------------------------*/
+.blog-description {
+	margin-left:30px;
+}
+/* post
+---------------------------------------------------*/
+.post {
+	margin-left:20px;
+	margin-right:20px;
+	margin-bottom:30px;
+}
+.post-body,
+#post-detail {
+	margin-left:10px;
+	margin-right:10px;
+	margin-bottom:30px;
+	line-height:2em;
+}
+.more {
+	text-align:right;
+	margin:20px 10px 40px 10px;
+}
+/* meta
+---------------------------------------------------*/
+.meta {
+	background-color:#F3F3F3;
+	color:#999999;
+	font-size:0.85em;
+	padding-bottom:5px;
+	padding-right:10px;
+	padding-top:5px;
+	text-align:right;
+}
+/* tag
+---------------------------------------------------*/
+.tag {
+	color:#999999;
+	font-size:0.85em;
+	padding-bottom:5px;
+	padding-right:10px;
+	padding-top:5px;
+	text-align: right;
+}
+/* calendar
+----------------------------------------------- */
+.widget-blog-calendar table {
+	margin-left:15px;
+}
+.widget-blog-calendar th {
+	border-bottom:1px solid #e2e2e2;
+}
+.widget-blog-calendar th,
+.widget-blog-calendar td {
+	padding:2px 3px;
+	font-size:12px;
+	text-align: center;
+}
+.widget-blog-calendar .sunday {
+	color:#ff6633;
+}
+.widget-blog-calendar .saturday {
+	color:#3366FF;
+}
+.widget-blog-calendar .today {
+	background-color:#e2e2e2;
+}
+
+/* BlogComment
+----------------------------------------------- */
+#BlogComment {
+	margin-top:40px;
+	padding:0;
+}
+#BlogCommentList {
+	padding:10px 20px;
+	margin-top:20px;
+}
+#BlogCommentAddForm {
+	padding:10px 20px;
+}
+#BlogCommentList .comment {
+	padding-bottom:8px;
+	border-bottom:1px dashed #CCCCCC;
+	margin-bottom:20px;
+}
+/* contentsNavi
+----------------------------------------------- */
+#contentsNavi {
+	text-align:center;
+}
