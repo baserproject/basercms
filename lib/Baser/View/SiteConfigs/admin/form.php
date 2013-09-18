@@ -183,8 +183,8 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.site_url', 'WebサイトURL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.site_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?><br />
-				<?php echo $this->BcForm->input('SiteConfig.ssl_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => '<small>[SSL]</small>')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.site_url', array_merge(array('type' => 'text', 'size' => 35, 'maxlength' => 255), $disableSettingInstallSetting)) ?><br />
+				<?php echo $this->BcForm->input('SiteConfig.ssl_url', array_merge(array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => '<small>[SSL]</small>'), $disableSettingInstallSetting)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.site_url') ?>
 				<?php echo $this->BcForm->error('SiteConfig.ssl_url') ?>
@@ -194,7 +194,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
+				<?php echo $this->BcForm->input('SiteConfig.admin_ssl', array_merge(array('type' => 'radio', 'options' => $this->BcText->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false), $disableSettingInstallSetting)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.admin_ssl') ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
@@ -249,7 +249,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mode', '制作・開発モード') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.mode', array('type' => 'select' , 'options' => $this->BcForm->getControlSource('mode'))) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mode', array_merge(array('type' => 'select' , 'options' => $this->BcForm->getControlSource('mode')), $disableSettingInstallSetting)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png',array('id' => 'helpDebug', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
@@ -263,9 +263,7 @@ $(function(){
 			<td class="col-input">
 				<span>Rewriteモジュール利用可否：<strong>
 				<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
-				<?php $disabled = array() ?>
-				<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
-				<?php echo $this->BcForm->input('SiteConfig.smart_url', array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン'))) ?>
+				<?php echo $this->BcForm->input('SiteConfig.smart_url', array_merge(array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン')), $disableSettingSmartUrl)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmartUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?><br />
 				<div id="helptextSmartUrl" class="helptext">
 					<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />
@@ -278,23 +276,20 @@ $(function(){
 						RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
 						詳細については、各.htaccessファイルのコメントを確認してください。</p>
 				</div>
-				<?php if(!$writableInstall): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/Config/install.php に書込権限を与えてください。</span><br /><?php endif ?>
-				<?php if(!$writableHtaccess): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>.htaccess に書込権限を与えてください。</span><br /><?php endif ?>
-				<?php if(!$writableHtaccess2): ?><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/webroot/.htaccess に書込権限を与えてください。</span><?php endif ?>
-				<p class="annotation-text"><small>設定を変更する場合は「？」マークのヘルプを必ずお読みください</small></p>
+				<?php if($writableInstall): ?><p class="annotation-text"><small>設定を変更する場合は「？」マークのヘルプを必ずお読みください</small></p><?php endif ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.mobile', array('type' => 'checkbox', 'label' => '対応する')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mobile', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
 				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.smartphone', array('type' => 'checkbox', 'label' => '対応する')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.smartphone', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
 				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>

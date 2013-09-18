@@ -212,13 +212,27 @@ class SiteConfigsController extends AppController {
 		$UserGroup = ClassRegistry::init('UserGroup');
 		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
 		
-		$this->set('userGroups', $userGroups);
-		$this->set('rewriteInstalled', $rewriteInstalled);
-		$this->set('writableInstall', $writableInstall);
-		$this->set('writableHtaccess', $writableHtaccess);
-		$this->set('writableHtaccess2', $writableHtaccess2);
-		$this->set('baseUrl', $baseUrl);
-		$this->set('smartUrlChangeable', $smartUrlChangeable);
+		$disableSettingSmartUrl = array();
+		$disableSettingInstallSetting = array();
+		if(!$smartUrlChangeable) {
+			$disableSettingSmartUrl = array('disabled'=>'disabled');
+		}
+		if(!$writableInstall) {
+			$disableSettingInstallSetting = array('disabled'=>'disabled');
+		}
+		
+		$this->set(compact(
+				'baseUrl', 
+				'userGroups', 
+				'rewriteInstalled', 
+				'writableInstall', 
+				'writableHtaccess', 
+				'writableHtaccess2', 
+				'smartUrlChangeable',
+				'disableSettingSmartUrl',
+				'disableSettingInstallSetting'
+		));
+
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
