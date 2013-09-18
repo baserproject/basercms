@@ -1,0 +1,422 @@
+@charset "UTF-8";
+/* SVN FILE: $Id$ */
+/**
+ * タグ・クラスの基本設定
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 2.0.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+
+/* ==================================================================== */
+/*    T A G S
+/* ==================================================================== */
+
+
+* {
+	margin:0px;
+	padding:0px;
+}
+html {
+	color: #000;
+	background: #FFF;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+select,
+p,
+blockquote,
+th,
+td {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+	text-align:center;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+p {
+	line-height: 150%;
+}
+fieldset,
+img {
+	border: 0;
+}
+img {
+	margin:auto;
+}
+address,
+button,
+caption,
+cite,
+code,
+dfn,
+em,
+input,
+optgroup,
+option,
+select,
+strong,
+textarea,
+th,
+var {
+    font:inherit;
+}
+small {
+	color:#666;
+}
+strong {
+}
+em {
+}
+del,
+ins {
+	text-decoration: none;
+}
+ul,
+dl {
+	line-height:normal;
+}
+dl {
+}
+dt {
+}
+dd {
+}
+li {
+	/*zoom: 1;*/
+	list-style: none;
+}
+li a {
+	zoom: 1;
+}
+caption,
+th {
+	text-align: left;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before,
+q:after {
+	content: '';
+}
+abbr,
+acronym {
+	border: 0;
+	font-variant: normal;
+}
+sup {
+	vertical-align: baseline;
+}
+sub {
+	vertical-align: baseline;
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
+}
+pre {
+	background-color:#F3F3F3;
+	text-align:left;
+	padding:10px 20px;
+	margin-bottom: 20px;
+	overflow:auto;
+	border:1px solid #E2E2E2;
+}
+form {
+	display:inline;
+}
+input, textarea, select, option {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+}
+input[type=text], textarea, select, input[type=password] {
+	margin:3px 2px;
+	padding: 3px 1px;
+	border:1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color:#fff;
+}
+input[type=checkbox] {
+	vertical-align: middle;
+}
+input[type=radio],
+input[type=checkbox] {
+	margin-left:5px;
+	margin-right:5px;
+}
+input[type=submit],
+input[type=reset],
+input[type=button] {
+	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif;
+}
+input[type=text], textarea, input[type=password] {
+	font-size: 1.4em;
+	padding: 3px 3px;
+}
+input[type=text], input[type=password] {
+	height:1.4em;
+}
+select {
+	font-size: 1.2em;
+}
+select {
+	padding: 1px;
+}
+optgroup option{
+	padding-left:20px;
+}
+.upload-file input[type=file] {
+	margin-bottom: 5px;
+}
+.upload-file a {
+	padding:5px;
+	background-color: #F1F1F1;
+	display: inline-block;
+}
+
+
+/* ==================================================================== */
+/*    C L A S S E S
+/* ==================================================================== */
+
+
+/* display
+----------------------------------------------- */
+
+.display-none {
+	display:none;
+}
+
+/* text
+----------------------------------------------- */
+
+.weight-normal {
+	font-weight: normal!important;
+}
+.weight-bold {
+	font-weight:bold!important;
+}
+.size-small {
+	font-size:small!important;
+}
+.size-smaller {
+	font-size: x-small!important;
+}
+.size-medium {
+	font-size:medium!important;
+}
+.size-large {
+	font-size:large!important;
+}
+.size-larger {
+	font-size: x-large!important;
+}
+.align-left {
+	text-align:left!important;
+}
+.align-right {
+	text-align:right!important;
+}
+.align-center {
+	text-align:center!important;
+}
+
+/* float
+----------------------------------------------- */
+
+.float-left {
+	float:left;
+}
+.float-right {
+	float:right;
+}
+.img-right {
+	float:right;
+	margin-left:10px;
+	margin-bottom:10px;
+}
+.img-left {
+	float:left;
+	margin-right:10px;
+	margin-bottom:10px;
+}
+
+/* clear
+----------------------------------------------- */
+
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+
+/* 縦方向中央揃え
+----------------------------------------------- */
+
+.vertical-middle{
+		position: relative!important;
+}
+.vertical-middle .inner{
+		position: absolute!important;
+		top: 50%!important;
+		margin-top: -1em!important;
+}
+		
+/* BaserCMS parts
+----------------------------------------------- */
+
+.edit-link {
+	margin-bottom:10px;
+	text-align:right;
+	font-size: 12px;
+}
+.edit-link a{
+	border:1px solid #1C98D4;
+	color:#1C98D4;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.edit-link a:hover{
+	color:#1C98D4;
+	text-decoration:underline;
+}
+
+/* CakePHP parts
+----------------------------------------------- */
+
+table.cake-sql-log {
+	width:90%;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	color:#333;
+	background-color: #fff;
+	clear:both;
+	padding: 0;
+	margin: 0 0 1em 0;
+	white-space: normal;
+	border-collapse:separate;
+	margin:20px auto;
+}
+table.cake-sql-log caption {
+	font-weight:bold;
+	text-align:center;
+}
+table.cake-sql-log th {
+	background-color: #e2e2e2;
+	padding:4px 8px;
+	font-weight:bold;
+	text-align:center;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #FFFFFF;
+	border-right-color: #666;
+	border-bottom-color: #666;
+	border-left-color: #FFFFFF;
+	font-size:0.8em;
+}
+table.cake-sql-log tr td {
+	background-color: #F7F7F7;
+	padding:6px 8px;
+	vertical-align:top;
+	text-align: left;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ccc;
+	border-bottom-color: #ccc;
+	font-size:0.8em;
+}
+.error-message {
+	color:#C30;
+	padding-left:24px;
+	font-weight: bold;
+	font-size: small;
+}
+.required {
+	color:#C30;
+	font-size:16px;
+}
+.form-error {
+	background-color:#FCF5EB;
+}
+.message {
+	color:#F30;
+	font-weight:bold;
+	margin:20px;
+}
+.error {
+	color:#C30;
+}
+.error em {
+	color:#06C;
+	font-style:normal;
+	font-weight:bold;
+}
+.submit {
+	position:relative;
+	text-align:center;
+}
+.help{
+	cursor: pointer;
+	vertical-align:middle;
+}

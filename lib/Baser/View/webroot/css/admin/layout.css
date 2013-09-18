@@ -1,0 +1,379 @@
+@charset "utf-8";
+/* SVN FILE: $Id$ */
+/**
+ * レイアウト
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 2.0.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
+ */
+
+ 
+/* ==================================================================== */
+/*    Page
+/* ==================================================================== */
+
+
+ * html div#Page{
+    height:100%;
+}
+div#Page {
+    margin:0px auto;
+    position:relative;
+    min-height: 100%;
+	background-color: #E8E8E8;
+}
+body > #Page {
+	height: auto;
+}
+
+
+/* ==================================================================== */
+/*    Header
+/* ==================================================================== */
+
+/* Header
+----------------------------------------------- */
+
+#Header {
+	background-color: #FFF;
+}
+
+/* Logo
+----------------------------------------------- */
+
+#Logo{
+	padding: 20px 40px;
+}
+
+/* GlobalMenu
+----------------------------------------------- */
+
+#GlobalMenu{
+	float: right;
+}
+#GlobalMenu ul{
+	padding: 22px 35px 18px;
+}
+#GlobalMenu ul li{
+	padding: 0 5px;
+	list-style:none;
+	float:left;
+	background-image: url(../../img/admin/bg_border_1.png);
+	background-repeat: repeat-y;
+	background-color: #FFF;
+}
+#GlobalMenu ul li.firstChild{
+	background-image: none;
+}
+
+
+/* ==================================================================== */
+/*    Wrap
+/* ==================================================================== */
+
+
+#Wrap{
+	min-width:960px;
+	background-color:#E8E8E8;
+	padding: 20px 40px 290px 40px;
+	background-image: url(../../img/admin/bg_main.png);
+	background-repeat: repeat-x;
+}
+
+
+/* ==================================================================== */
+/*    SideBar
+/* ==================================================================== */
+
+
+#SideBar{
+	width: 208px;
+	float: left;
+	position:relative;
+	display: none;
+}
+
+#BtnSideBarOpener {
+	width:30px;
+	height:30px;
+	position:absolute;
+	z-index:1;
+	top:4px;
+	left:174px;
+	cursor:pointer;
+	line-height:30px;
+	text-align:center;
+	font-weight:bold;
+	border-left:1px solid #FFF;
+	color:#fff;
+	font-size:10px;
+}
+
+/* FavoriteMenu
+----------------------------------------------- */
+
+#FavoriteMenu h2{
+	color: #FFF;
+	background: url(../../img/admin/bg_side_bar_title.png) repeat-x;
+	padding: 0 10px;
+}
+ul.favorite-menu-list a{
+	color: #333;
+	text-decoration: none;
+	display: block;
+	padding-top:3px;
+	padding-bottom: 3px;
+	padding-right: 5px;
+	padding-left: 22px;
+	background: url(../../img/admin/blt_favorite.png) no-repeat 5px 5px;
+}
+#FavoriteMenu a:hover{
+	color: #AAA;
+	text-decoration: none;
+}
+ul.favorite-menu-list{
+	padding: 10px 15px;
+}
+ul.favorite-menu-list li{
+	list-style: none;
+	list-style-position: inside;
+	margin: 0;
+	border:2px solid #FFF;
+	background-color:#FFF;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+ul.favorite-menu-list li.selected{
+	border:2px solid #690;
+}
+ul.favorite-menu-list li.ui-sortable-helper {
+	border:2px solid #CCC;
+}
+.favolite-menu-tools li{
+	padding: 50px 0 0 15px;
+	float: left;
+	margin-right:5px;
+}
+#FavoriteMenu .no-data {
+	padding:10px 10px;
+	border:3px dotted #CCC;
+	background: none;
+}
+
+/* ==================================================================== */
+/*    Contents
+/* ==================================================================== */
+
+
+/* Contents
+----------------------------------------------- */
+
+#Contents{
+	/*margin-left: 210px;*/
+
+}
+
+/* contents background
+----------------------------------------------- */
+.cbb {
+	margin:1em 0;
+	border:1px solid #CCC;
+	background:#fff;
+}
+.cb {
+	float: left;
+	width: 100%;
+}
+
+/* contents border top
+----------------------------------------------- */
+.bt{
+	background: url(../../img/admin/bg_box_2.png) no-repeat 100% 0;
+    height: 10px;
+	margin:0 0 0 11px;
+}
+.bt div {
+	position:relative;
+	left:-11px;
+	width:11px;
+	height:10px;
+	background:url(../../img/admin/bg_box_2.png) no-repeat 0 0;
+	font-size:0;
+	line-height:0;
+}
+
+/* contents border bottom
+----------------------------------------------- */
+.bb{
+	background: url(../../img/admin/bg_box_1.png) no-repeat scroll 100% 100% transparent;
+    height:10px;
+	margin:0 0 0 12px;
+}
+
+.bb div {
+	background:url(../../img/admin/bg_box_1.png) no-repeat scroll 0 100% transparent;
+	font-size:0;
+	height:10px;
+	left:-12px;
+	line-height:0;
+	position:relative;
+	width:12px;
+}
+
+/* contents border left
+----------------------------------------------- */
+.i1 {
+	padding: 0 0 0 4px;
+	background:url(../../img/admin/bg_borders.png) repeat-y 0 0;
+}
+
+/* contents border right
+----------------------------------------------- */
+.i2 {
+	padding: 0 4px 0 0 ;
+	background:url(../../img/admin/bg_borders.png) repeat-y 100% 0;
+}
+
+/* contents border inner
+----------------------------------------------- */
+.i3 {
+	display: block;
+	margin: 0;
+	background-color: #FFF;
+}
+.i3:after {
+	content: "."; 
+	display: block; 
+	height: 0; 
+	clear: both; 
+	visibility: hidden;
+}
+.i3 {display: inline-block;}
+.i3 {display: block;}
+
+
+/* ==================================================================== */
+/*    ContentsBody
+/* ==================================================================== */
+
+
+/* ContentsBody
+----------------------------------------------- */
+#ContentsBody{
+	padding: 0 20px 40px;
+}
+
+
+/* ==================================================================== */
+/*    Footer
+/* ==================================================================== */
+
+
+/* Footer
+----------------------------------------------- */
+#Footer{
+	width:100%;
+	min-width:960px;
+    position:absolute;
+    bottom:0px;
+}
+#FooterInner{
+	background-image: url(../../img/admin/bg_footer.png);
+	background-repeat: repeat-x;
+	background-color: #333;
+	color: #EEE;
+	padding: 40px 30px 60px;
+	margin: 0;
+	min-width:960px;
+}
+#FooterInner a{
+	color: #BBB;
+	text-decoration: none;
+}
+#FooterInner a:hover{
+	color: #EEE;
+}
+
+/* FooterLogo
+----------------------------------------------- */
+
+#FooterLogo{
+	width: 190px;
+	float: left;
+	padding: 65px 0;
+}
+
+/* FooterMenu / FooterLink
+----------------------------------------------- */
+
+#FooterMenu{
+	float: left;
+	background-image: url(../../img/admin/bg_border_2.png);
+	background-repeat: repeat-y;
+	padding:0 30px 0 15px;
+}
+#FooterMenu h2,
+#FooterLink h2{
+	margin-bottom:15px;
+}
+#FooterMenu li,
+#FooterLink li{
+/*	padding-right:30px;*/
+	margin:5px 0;
+	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
+	padding-left:15px;
+	line-height:18px;
+}
+#FooterLink{
+	float: left;
+	background-image: url(../../img/admin/bg_border_2.png);
+	background-repeat: repeat-y;
+	padding-left:15px;
+}
+
+/* FooterBanner
+----------------------------------------------- */
+
+#FooterBanner {
+	padding-top:5px;
+	margin-bottom:15px;
+}
+#FooterBanner li {
+	text-align:right;
+	padding:0px 20px;
+}
+#FooterBanner li img{
+	vertical-align:bottom;
+}
+#FooterBanner li.lastChild{
+   margin-top:7px;
+}
+
+/* BaserVersion
+----------------------------------------------- */
+
+#BaserVersion {
+	padding-right:20px;
+	text-align:right;
+	font-size:12px;
+	font-family:Tahoma, Geneva, sans-serif;
+	margin-bottom:15px;
+}
+
+/* Copyright
+----------------------------------------------- */
+
+#Copyright {
+	text-align:right;
+	font-size:10px;
+	padding-right:20px;
+}

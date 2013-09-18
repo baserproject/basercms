@@ -1,0 +1,2 @@
+"id","name","title","description","layout","template","status","list_count","list_direction","feed_count","comment_use","comment_approve","tag_use","auth_captcha","widget_area","exclude_search","eye_catch_size","use_content","created","modified"
+"","news","新着情報","baserCMS inc. [デモ] の最新の情報をお届けします。","default","default","1","10","DESC","10","1","0","1","1","2","","a:4:{s:11:""thumb_width"";s:3:""300"";s:12:""thumb_height"";s:3:""300"";s:18:""mobile_thumb_width"";s:3:""100"";s:19:""mobile_thumb_height"";s:3:""100"";}","1","",""

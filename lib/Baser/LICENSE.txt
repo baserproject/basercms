@@ -1,0 +1,5 @@
+baserCMS :  Based Website Development Project <http://basercms.net>
+Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+
+About License
+http://basercms.net/license/index.html
