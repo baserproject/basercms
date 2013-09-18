@@ -188,6 +188,7 @@ $(function(){
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('SiteConfig.site_url') ?>
 				<?php echo $bcForm->error('SiteConfig.ssl_url') ?>
+				<?php if(!$writableInstall): ?><br /><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><?php endif ?>
 				<div id="helptextSiteUrl" class="helptext">baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
 			</td>
 		</tr>
@@ -197,6 +198,7 @@ $(function(){
 				<?php echo $bcForm->input('SiteConfig.admin_ssl', array('type' => 'radio', 'options' => $bcText->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend'=>false)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $bcForm->error('SiteConfig.admin_ssl') ?>
+				<?php if(!$writableInstall): ?><br /><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><?php endif ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
 					また、SSL用のWebサイトURLの指定が必要です。</div>
 			</td>
@@ -251,6 +253,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('SiteConfig.mode', array('type' => 'select' , 'options' => $bcForm->getControlSource('mode'))) ?>
 				<?php echo $html->image('admin/icn_help.png',array('id' => 'helpDebug', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php if(!$writableInstall): ?><br /><span class="error">≫ 変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><?php endif ?>
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
@@ -265,7 +268,7 @@ $(function(){
 				<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
 				<?php $disabled = array() ?>
 				<?php if(!$smartUrlChangeable) $disabled = array('disabled'=>'disabled') ?>
-				<?php echo $bcForm->input('SiteConfig.smart_url', array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン'))) ?>
+				<?php echo $bcForm->input('SiteConfig.smart_url', array_merge(array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン')), $disabled)) ?>
 				<?php echo $html->image('admin/icn_help.png', array('id' => 'helpSmartUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?><br />
 				<div id="helptextSmartUrl" class="helptext">
 					<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />
@@ -289,6 +292,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('SiteConfig.mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
 				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $bcText->booleanDoList('連動'))) ?>）</span>
+				<?php if(!$writableInstall): ?><br /><span class="error">≫ 対応可否を変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><?php endif ?>
 			</td>
 		</tr>
 		<tr>
@@ -296,6 +300,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $bcForm->input('SiteConfig.smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('対応'))) ?>
 				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $bcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $bcText->booleanDoList('連動'))) ?>）</span>
+				<?php if(!$writableInstall): ?><br /><span class="error">≫ 対応可否を変更するには、 <?php echo $baseUrl ?>app/config/install.php に書込権限を与えてください。</span><?php endif ?>
 			</td>
 		</tr>
 <?php if($bcBaser->siteConfig['category_permission']): ?>
