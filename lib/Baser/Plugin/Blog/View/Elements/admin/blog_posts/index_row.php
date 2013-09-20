@@ -40,6 +40,7 @@ $class=' class="'.implode(' ', $classies).'"';
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
+	<td><?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?></td>
 	<td>
 <?php if(!empty($data['BlogCategory']['title'])): ?>
 		<?php echo $data['BlogCategory']['title']; ?>
@@ -66,7 +67,7 @@ $class=' class="'.implode(' ', $classies).'"';
 	</td>
 <?php endif ?>
 	<td style="white-space:nowrap">
-		<?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['posts_date']); ?><br />
+		<?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d',$data['BlogPost']['modified']); ?>
 	</td>
 </tr>
