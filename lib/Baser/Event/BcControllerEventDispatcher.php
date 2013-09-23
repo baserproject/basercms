@@ -91,7 +91,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
 				return $currentEvent->result;
 			}
 		}
-		return $event->data;
+		return null;
 	}
 	
 /**

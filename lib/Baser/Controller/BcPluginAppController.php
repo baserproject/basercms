@@ -70,10 +70,14 @@ class BcPluginAppController extends AppController {
 		if(!isset($this->request->url)) {
 			return null;
 		}
-		
+
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->request->url);
 		$url = explode('/', $url);
+		
+		if(!$url) {
+			return null;
+		}
 		
 		if($url[0]!=Configure::read('BcRequest.agentAlias')) {
 			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
