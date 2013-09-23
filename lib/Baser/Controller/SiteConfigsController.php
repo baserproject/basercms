@@ -248,7 +248,7 @@ class SiteConfigsController extends AppController {
 		
 		clearAllCache();
 		$this->setMessage('サーバーキャッシュを削除しました。');
-		$this->redirect(array('action' => 'form'));
+		$this->redirect($this->referer());
 		
 	}
 /**
