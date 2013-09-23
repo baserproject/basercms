@@ -88,15 +88,15 @@ class MailHelper extends AppHelper {
  */
 	public function getLayoutTemplates() {
 
-		$templatesPathes = array();
-		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS;
-		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS;
-		$templatesPathes = am($templatesPathes,array(
-			BASER_PLUGINS . 'Mail' . DS . 'Views' . DS . 'Layouts'. DS,
+		$templatesPathes = array(
+			APP . 'Plugin' . DS . 'Mail'. DS . 'View' . DS . 'Layouts' . DS,
+			APP . 'View' . DS . 'Layouts' . DS,
+			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Layouts'. DS,
 			BASER_VIEWS . 'Layouts' . DS
-		));
+		);
+		if($this->BcBaser->siteConfig['theme']){
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS);
+		}
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
@@ -133,13 +133,15 @@ class MailHelper extends AppHelper {
  */
 	public function getFormTemplates() {
 
-		$templatesPathes = array();
+		$templatesPathes = array(
+			APP . 'Plugin' . DS . 'Mail'. DS . 'View' . DS . 'Mail' . DS,
+			APP . 'View' . DS . 'Mail' . DS,
+			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Mail' . DS
+		);
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Mail' . DS;
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Mail' . DS);
 		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail'. DS . 'View' . DS . 'Mail' . DS;
-		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Mail' . DS;
-
+		
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){
 			$folder = new Folder($templatePath);
@@ -174,12 +176,15 @@ class MailHelper extends AppHelper {
  */
 	public function getMailTemplates() {
 
-		$templatesPathes = array();
+		$templatesPathes = array(
+			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
+			APP . 'View' . DS . 'Emails' . DS . 'text' . DS,
+			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
+			BASER_VIEWS . 'Emails' . DS . 'text' . DS
+		);
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Emails' . DS . 'text' . DS;
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Emails' . DS . 'text' . DS);
 		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS;
-		$templatesPathes[] = BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS;
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
@@ -196,9 +201,10 @@ class MailHelper extends AppHelper {
 		}
 
 		$templates = array();
+		$ext = Configure::read('BcApp.templateExt');
+		$excludes = array('empty', 'installed'.$ext, 'mail_data'.$ext);
 		foreach($_templates as $template){
-			$ext = Configure::read('BcApp.templateExt');
-			if($template != 'mail_data'.$ext){
+			if(!in_array($template, $excludes)){
 				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
