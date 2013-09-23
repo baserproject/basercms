@@ -87,6 +87,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
 		if($event->subject->name != 'CakeError') {
 			$currentEvent = $event->subject->dispatchEvent('beforeRedirect', $event->data);
 			if($currentEvent) {
+				$event->data = $currentEvent->data;
 				return $currentEvent->result;
 			}
 		}

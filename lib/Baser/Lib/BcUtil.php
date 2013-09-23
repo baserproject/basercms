@@ -15,7 +15,7 @@ class BcUtil extends Object {
 		
 		$url = Configure::read('BcRequest.pureUrl');
 		$adminPrefix = Configure::read('Routing.prefixes.0');
-		return (boolean) preg_match('/^' . $adminPrefix. '\//', $url);
+		return (boolean) (preg_match('/^' . $adminPrefix. '\//', $url) || preg_match('/^' . $adminPrefix. '$/', $url));
 		
 	}
 	
