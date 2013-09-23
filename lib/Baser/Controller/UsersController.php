@@ -39,7 +39,7 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User','GlobalMenu','UserGroup');
+	public $uses = array('User','Menu','UserGroup');
 
 /**
  * ヘルパー

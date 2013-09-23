@@ -17,5 +17,5 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('global_menus/index_list');
+$this->BcBaser->element('menus/index_list');
 ?>

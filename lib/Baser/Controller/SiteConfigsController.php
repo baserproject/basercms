@@ -39,7 +39,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('SiteConfig','GlobalMenu','Page');
+	public $uses = array('SiteConfig','Menu','Page');
 /**
  * コンポーネント
  *

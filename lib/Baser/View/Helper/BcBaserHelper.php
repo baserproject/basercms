@@ -162,7 +162,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getMenus () {
 
-		if (ClassRegistry::init('GlobalMenu')) {
+		if (ClassRegistry::init('Menu')) {
 			if(!file_exists(APP . 'Config' . DS.'database.php')) {
 				return '';
 			}
@@ -170,17 +170,17 @@ class BcBaserHelper extends AppHelper {
 			if(!$dbConfig->baser) {
 				return '';
 			}
-			$GlobalMenu = ClassRegistry::getObject('GlobalMenu');
+			$Menu = ClassRegistry::getObject('Menu');
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db = ConnectionManager::getDataSource('baser');
 			$sources = $db->listSources();
-			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'menus'), array_map('strtolower', $sources))) {
 				if (empty($this->request->params['prefix'])) {
 					$prefix = 'publish';
 				} else {
 					$prefix = $this->request->params['prefix'];
 				}
-				return $GlobalMenu->find('all', array('order' => 'sort'));
+				return $Menu->find('all', array('order' => 'sort'));
 			}
 		}
 		return '';

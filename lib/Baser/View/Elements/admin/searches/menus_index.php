@@ -18,10 +18,10 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php echo $this->BcForm->create('GlobalMenu',array('url' => array('action' => 'index'))) ?>
+<?php echo $this->BcForm->create('Menu',array('url' => array('action' => 'index'))) ?>
 <p>
-	<?php echo $this->BcForm->label('GlobalMenu.status', '利用状態') ?> 
-	<?php echo $this->BcForm->input('GlobalMenu.status', array(
+	<?php echo $this->BcForm->label('Menu.status', '利用状態') ?> 
+	<?php echo $this->BcForm->input('Menu.status', array(
 			'type'		=> 'select',
 			'options'	=> $this->BcText->booleanMarkList(),'empty' => '指定なし')) ?>　
 </p>

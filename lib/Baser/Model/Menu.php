@@ -25,7 +25,7 @@
  *
  * @package baser.models
  */
-class GlobalMenu extends AppModel {
+class Menu extends AppModel {
 /**
  * データベース接続
  *
@@ -39,7 +39,7 @@ class GlobalMenu extends AppModel {
  * @var string
  * @access public
  */
-	public $name = 'GlobalMenu';
+	public $name = 'Menu';
 /**
  * ビヘイビア
  * 

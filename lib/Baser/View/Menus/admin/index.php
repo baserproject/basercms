@@ -36,7 +36,7 @@ $(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'global_menus', 'action' => 'ajax_batch')) ?></div>
-<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'global_menus', 'action' => 'ajax_update_sort')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'menus', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'menus', 'action' => 'ajax_update_sort')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $this->BcBaser->element('global_menus/index_list') ?></div>
+<div id="DataList"><?php $this->BcBaser->element('menus/index_list') ?></div>

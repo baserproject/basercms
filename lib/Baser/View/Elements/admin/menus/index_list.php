@@ -48,7 +48,7 @@
 	<tbody>
 	<?php if(!empty($listDatas)): ?>
 		<?php foreach($listDatas as $data): ?>
-			<?php $this->BcBaser->element('global_menus/index_row', array('data' => $data)) ?>
+			<?php $this->BcBaser->element('menus/index_row', array('data' => $data)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
