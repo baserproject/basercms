@@ -301,5 +301,5 @@ $(function(){
 	
 <ul id="FavoritesMenu" class="context-menu" style="display:none">
     <li class="edit"><?php $this->BcBaser->link('編集', '#FavoriteEdit') ?></li>
-    <li class="delete"><?php $this->BcBaser->link('編集', '#FavoriteDelete') ?></li>
+    <li class="delete"><?php $this->BcBaser->link('削除', '#FavoriteDelete') ?></li>
 </ul>
