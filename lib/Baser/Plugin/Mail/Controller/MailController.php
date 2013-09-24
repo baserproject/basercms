@@ -545,6 +545,7 @@ class MailController extends MailAppController {
     {
 		
         $this->BcCaptcha->render();
+		exit();
 		
     }
 }

@@ -2,9 +2,9 @@
 /**
  * ブログ詳細ページ
  */
-$bcBaser->css('colorbox/colorbox', array('inline' => true));
-$bcBaser->js('jquery.colorbox-min-1.4.5', false);
-$bcBaser->setDescription($blog->getTitle().'｜'.$blog->getPostContent($post,false,false,50));
+$this->BcBaser->css('colorbox/colorbox', array('inline' => true));
+$this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPostContent($post,false,false,50));
 ?>
 
 <script type="text/javascript">
@@ -14,30 +14,30 @@ $(function(){
 </script>
 
 <h2 class="contents-head">
-	<?php $blog->title() ?>
+	<?php $this->Blog->title() ?>
 </h2>
 <h3 class="contents-head">
-	<?php $bcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h3>
 
 <div class="eye-catch">
-	<?php $blog->eyeCatch($post) ?>
+	<?php $this->Blog->eyeCatch($post) ?>
 </div>
 
 <div class="post">
-	<?php $blog->postContent($post) ?>
+	<?php $this->Blog->postContent($post) ?>
 	<div class="meta"> <span>
-		<?php $blog->category($post) ?>
+		<?php $this->Blog->category($post) ?>
 		&nbsp;
-		<?php $blog->postDate($post) ?>
+		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
-		<?php $blog->author($post) ?>
+		<?php $this->Blog->author($post) ?>
 		</span> </div>
-	<?php $bcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
 <div id="contentsNavi">
-	<?php $blog->prevLink($post) ?>
+	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
-	<?php $blog->nextLink($post) ?>
+	<?php $this->Blog->nextLink($post) ?>
 </div>
-<?php $bcBaser->element('blog_comments') ?>
+<?php $this->BcBaser->element('blog_comments') ?>
