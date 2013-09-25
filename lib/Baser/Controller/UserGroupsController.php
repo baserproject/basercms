@@ -86,18 +86,23 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_index() {
+		
 		/* データ取得 */
-		$this->paginate = array('conditions' => array(),
-				'fields' => array(),
-				'order' => 'UserGroup.id',
-				'limit' => 10
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('UserGroup', array('default' => $default));
+		$this->paginate = array(
+			'conditions' => array(),
+			'fields' => array(),
+			'order' => 'UserGroup.id',
+			'limit' => $this->passedArgs['num']
 		);
-		$datas = $this->paginate('UserGroup');
-
+		$dbDatas = $this->paginate('UserGroup');
+		
 		/* 表示設定 */
-		$this->set('datas',$datas);
+		$this->set('datas', $dbDatas);
 		$this->pageTitle = 'ユーザーグループ一覧';
 		$this->help = 'user_groups_index';
+		
 	}
 
 /**
