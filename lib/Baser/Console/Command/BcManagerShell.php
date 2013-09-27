@@ -96,10 +96,10 @@ class BcManagerShell extends BcAppShell {
 		}
 		
 		$Folder = new Folder();
-		$Folder->delete(TMP . cache);
-		$Folder->delete(TMP . logs);
-		$Folder->delete(TMP . schemas);
-		$Folder->delete(TMP . sessions);
+		$Folder->delete(TMP . 'cache');
+		$Folder->delete(TMP . 'logs');
+		$Folder->delete(TMP . 'schemas');
+		$Folder->delete(TMP . 'sessions');
 		
 	}
 /**
