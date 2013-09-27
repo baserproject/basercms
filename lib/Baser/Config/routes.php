@@ -129,6 +129,7 @@ if(BC_INSTALLED || isConsole()) {
 	$adminPrefix = Configure::read('Routing.prefixes.0');
 	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
+		App::uses('Page', 'Model');
 		$Page = new Page(null, null, 'baser');
 		if($Page){
 			
