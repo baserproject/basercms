@@ -230,7 +230,6 @@ class BcManagerComponent extends Component {
 	public function createPageTemplates() {
 		
 		$Page = new Page(null, null, 'baser');
-		$Page->PageCategory = new PageCategory(null, null, 'baser');
 		clearAllCache();
 		$pages = $Page->find('all', array('recursive' => -1));
 		if($pages) {

@@ -29,7 +29,7 @@ if(!empty($this->passedArgs['num'])) {
 <div class="section search-box">
 <?php echo $this->BcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
 <!--カテゴリが必要な場合は使って下さい。
-<?php if(unserialize($this->BcBaser->siteConfig['content_categories'])) : ?>
+<?php if($this->BcBaser->siteConfig['content_categories']) : ?>
 <?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 <?php endif ?>
 -->
