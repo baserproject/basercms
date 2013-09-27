@@ -161,10 +161,12 @@ class BcAppController extends Controller {
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');
 		
-		if(BC_INSTALLED) {
+		// コンソールベースのインストールの際のページテンプレート生成において、
+		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
+		if(BC_INSTALLED || isConsole()) {
 			
 			// サイト基本設定の読み込み
-			$SiteConfig = ClassRegistry::init('SiteConfig','Model');
+			$SiteConfig = ClassRegistry::init('SiteConfig');
 			$this->siteConfigs = $SiteConfig->findExpanded();
 
 			if(empty($this->siteConfigs['version'])) {

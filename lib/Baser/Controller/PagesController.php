@@ -73,12 +73,13 @@ class PagesController extends AppController {
 		}
 		
 		$user = $this->BcAuth->user();
-		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
-				$user['user_group_id'], 
-				$this->checkRootEditable()
-		);
-		$this->set('newCatAddable', $newCatAddable);
-		
+		if($user) {
+			$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
+					$user['user_group_id'], 
+					$this->checkRootEditable()
+			);
+			$this->set('newCatAddable', $newCatAddable);
+		}
 	}
 /**
  * [ADMIN] ページリスト
@@ -548,7 +549,10 @@ class PagesController extends AppController {
 		} 
 
 		// キャッシュ設定
-		if(!isset($_SESSION['Auth']['User'])){
+		// TODO 手法検討要
+		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
+		// Consoleの場合は実行しない
+		if(!isset($_SESSION['Auth']['User']) && !isConsole()){
 			$this->helpers[] = 'Cache';
 			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}

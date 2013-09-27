@@ -124,7 +124,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		if(BC_INSTALLED) {
+		if(BC_INSTALLED || isConsole()) {
 			if(isset($this->_View->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_View->viewVars['siteConfig'];
 			}

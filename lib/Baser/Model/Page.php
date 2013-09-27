@@ -131,6 +131,13 @@ class Page extends AppModel {
 					'message'	=> '説明文は255文字以内で入力してください。')
 		)
 	);
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		if(isConsole()) {
+			App::uses('PageCategory', 'Model');
+			$this->PageCategory = new PageCategory(null, null, 'baser');
+		}
+	}
 /**
  * フォームの初期値を設定する
  * 
@@ -388,9 +395,8 @@ class Page extends AppModel {
 			$data['title'] = Inflector::camelize($data['name']);
 		}
 		
-		// モバイル未対応
-		$PageCategory = ClassRegistry::init('PageCategory');
-		$excludeIds = am($PageCategory->getAgentCategoryIds('mobile'), $PageCategory->getAgentCategoryIds('smartphone'));
+		// モバイル未対応の為除外
+		$excludeIds = am($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
 		
 		// インストール時取得できないのでハードコーディング
 		// TODO 検討
@@ -428,7 +434,7 @@ class Page extends AppModel {
 		}
 
 		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
-		
+	
 		if($View) {
 			ClassRegistry::addObject('View', $View);
 		}

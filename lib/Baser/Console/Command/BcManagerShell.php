@@ -20,7 +20,7 @@
 /**
  * Include files
  */
-App::uses('BcAppShell', 'Vendor');
+App::uses('BcAppShell', 'Console/Command');
 App::uses('BcManagerComponent', 'Controller/Component');
 /**
  * インストール用シェルスクリプト
@@ -29,12 +29,51 @@ App::uses('BcManagerComponent', 'Controller/Component');
  */
 class BcManagerShell extends BcAppShell {
 /**
+ * get the option parser
+ *
+ * @return void
+ */
+	public function getOptionParser() {
+		$parser = parent::getOptionParser();
+		$parser->addOption('host', array(
+			'help'		=> 'ホスト名',
+			'default'	=> 'localhost'
+		))->addOption('database', array(
+			'help'		=> 'データベース名',
+			'default'	=> ''
+		))->addOption('login', array(
+			'help'		=> 'データベースログインユーザー名',
+			'default'	=> ''
+		))->addOption('password', array(
+			'help'		=> 'データベースログインパスワード',
+			'default'	=> ''
+		))->addOption('prefix', array(
+			'help'		=> 'データベーステーブルプレフィックス',
+			'default'	=> 'bc_'
+		))->addOption('port', array(
+			'help'		=> 'データベースポート番号',
+			'default'	=> ''
+		))->addOption('smarturl', array(
+			'help'		=> 'スマートURLの利用',
+			'default'	=> 'true'
+		))->addOption('baseurl', array(
+			'help'		=> 'ベースとなるURL',
+			'default'	=> '/'
+		))->addOption('data', array(
+			'help'		=> '初期データパターン',
+			'default'	=> 'core.nada-icons'
+		));
+		
+		return $parser;
+		
+	}
+/**
  * startup 
  */
 	public function startup() {
 		
 		parent::startup();
-		$this->BcManager = new BcManagerComponent($this);
+		$this->BcManager = new BcManagerComponent(new ComponentCollection());
 		
 	}
 /**

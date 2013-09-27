@@ -23,7 +23,7 @@
 if(Configure::read('BcRequest.asset')) {
 	return;
 }
-if(BC_INSTALLED) {
+if(BC_INSTALLED || isConsole()) {
 	$isMaintenance = Configure::read('BcRequest.isMaintenance');
 	$isUpdater = Configure::read('BcRequest.isUpdater');
 /**
@@ -38,22 +38,21 @@ if(BC_INSTALLED) {
  * BaserAppModel::cakeError で利用
  */
 Configure::write('BcRequest.routerLoaded', true);
+// プラグインの基底クラス読み込み
+// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
+App::uses('BaserPluginApp', 'Controller');
+App::uses('BaserPluginAppModel', 'Model');
+
+$parameter = getUrlParamFromEnv();
+
+Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
+$agent = Configure::read('BcRequest.agent');
+$agentAlias = Configure::read('BcRequest.agentAlias');
+$agentPrefix = Configure::read('BcRequest.agentPrefix');
+$authPrefixes = Configure::read('BcAuthPrefix');
 
 if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 
-	// プラグインの基底クラス読み込み
-	// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
-	App::uses('BaserPluginApp', 'Controller');
-	App::uses('BaserPluginAppModel', 'Model');
-
-	$parameter = getUrlParamFromEnv();
-	
-	Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
-	$agent = Configure::read('BcRequest.agent');
-	$agentAlias = Configure::read('BcRequest.agentAlias');
-	$agentPrefix = Configure::read('BcRequest.agentPrefix');
-	$authPrefixes = Configure::read('BcAuthPrefix');
-	
 	$pluginMatch = array();
 	$plugins = CakePlugin::loaded();
 	if($plugins) {
@@ -119,6 +118,9 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 			}
 		}
 	}
+}
+
+if(BC_INSTALLED || isConsole()) {
 /**
  * ページ機能拡張
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
@@ -127,7 +129,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$adminPrefix = Configure::read('Routing.prefixes.0');
 	if(!preg_match("/^{$adminPrefix}/", $parameter)){
 		/* 1.5.10 以降 */
-		$Page = ClassRegistry::init('Page');
+		$Page = new Page(null, null, 'baser');
 		if($Page){
 			
 			$parameter = urldecode($parameter);
