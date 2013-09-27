@@ -94,6 +94,13 @@ class BcManagerShell extends BcAppShell {
 		if(!$this->_install()) {
 			$this->err("baserCMSのインストールに失敗しました。ログファイルを確認してください。");
 		}
+		
+		$Folder = new Folder();
+		$Folder->delete(TMP . cache);
+		$Folder->delete(TMP . logs);
+		$Folder->delete(TMP . schemas);
+		$Folder->delete(TMP . sessions);
+		
 	}
 /**
  * reset 
