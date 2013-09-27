@@ -158,6 +158,9 @@ class BcAppController extends Controller {
 
 		parent::__construct($request, $response);
 		
+		if(isConsole()) {
+			unset($this->components['Session']);
+		}
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');
 		

@@ -286,8 +286,10 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 /**
  * セッションスタート 
  */
-$Session = new CakeSession();
-$Session->start();
+if(!isConsole()) {
+	$Session = new CakeSession();
+	$Session->start();
+}
 /**
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
