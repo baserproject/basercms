@@ -90,7 +90,7 @@ class BcPluginAppController extends AppController {
 		}else {
 			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
 				$contentName = $url[2];
-			}else {
+			}elseif(isset($url[1])) {
 				$contentName = $url[1];
 			}
 		}
