@@ -1784,7 +1784,7 @@ END_FLASH;
  * @param int $id
  * @manual
  */
-	public function page($id, $params = array(), $options = array()) {
+	public function page($url, $params = array(), $options = array()) {
 
 		if(isset($this->_View->viewVars['pageRecursive']) && !$this->_View->viewVars['pageRecursive']) {
 			return;
@@ -1809,26 +1809,20 @@ END_FLASH;
 		}
 		
 		// urlを取得
-		$PageClass = ClassRegistry::init('Page');
-		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
-		
-		if($page) {
-			$view = ClassRegistry::getObject('View');
-			if(empty($view->subDir)){
-				$url = '/../pages'.$PageClass->getPageUrl($page);
-			}else{
-				$dirArr = explode('/', $view->subDir);
-				$url = str_repeat('/..', count($dirArr)).'/../pages'.$PageClass->getPageUrl($page);
-			}
+		if(empty($this->_View->subDir)){
+			$url = '/../Pages' . $url;
+		}else{
+			$dirArr = explode('/', $this->_View->subDir);
+			$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
+		}
 
-			$this->element($url, $params, $loadHelpers, $subDir);
+		$this->element($url, $params, array('subDir' => $subDir));
 
-			// 現在のページの情報に戻す
-			$this->setDescription($description);
-			$this->setTitle($title);
-			if($editLink) {
-				$this->_View->viewVars['editLink'] = $editLink;
-			}
+		// 現在のページの情報に戻す
+		$this->setDescription($description);
+		$this->setTitle($title);
+		if($editLink) {
+			$this->_View->viewVars['editLink'] = $editLink;
 		}
 
 	}
