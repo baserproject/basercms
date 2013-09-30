@@ -18,4 +18,3 @@
  * @license			http://basercms.net/license/index.html
  */
 include BASER_PLUGINS.'Feed'.DS.'View'.DS.'Feed'.DS.'ajax'.$this->ext;
-?>
