@@ -361,7 +361,7 @@ function pageTypeChengeHandler() {
 						'type'		=> 'select',
 						'options'	=> $categories,
 						'escape'	=> false)) ?>
-				<?php $this->BcBaser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
+				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
 				<?php echo $this->BcForm->error('Page.page_category_id') ?>
 			</td>
 		</tr>

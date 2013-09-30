@@ -1188,7 +1188,7 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 		
-		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
+		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		$result = true;

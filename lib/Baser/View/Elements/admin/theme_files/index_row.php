@@ -61,10 +61,10 @@ array_push($params, $data['name']);
 				array('rel' => 'colorbox', 'title' => $data['name'], 'style' => 'display:block;padding:5px;important;float:left;background-color:#FFFFFF'), null, false) ?>&nbsp;
 		<?php echo $data['name'] ?>
 	<?php elseif($data['type'] == 'folder'): ?>
-		<?php $this->BcBaser->img('folder.gif', array('alt' => $data['name'])) ?>
+		<?php $this->BcBaser->img('admin/folder.gif', array('alt' => $data['name'])) ?>
 		<?php echo $data['name'] ?>/
 	<?php else: ?>
-		<?php $this->BcBaser->img('file.gif', array('alt' => $data['name'])) ?>
+		<?php $this->BcBaser->img('admin/file.gif', array('alt' => $data['name'])) ?>
 		<?php echo $data['name'] ?>
 	<?php endif ?>
 	</td>

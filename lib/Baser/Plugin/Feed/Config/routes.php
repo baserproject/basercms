@@ -24,3 +24,5 @@
 // 明示的に定義を記述
 Router::connect('/feed/index/*', array('plugin' => 'feed', 'controller' => 'feed'));
 Router::connect('/feed/ajax/*', array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
+Router::connect('/s/feed/index/*', array('smartphone' => true, 'plugin' => 'feed', 'controller' => 'feed'));
+Router::connect('/s/feed/ajax/*', array('smartphone' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));

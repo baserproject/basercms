@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->css('/blog/css/admin/style', array('inline' => true));
+$this->BcBaser->css('Blog.admin/style', array('inline' => true));
 $this->BcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 

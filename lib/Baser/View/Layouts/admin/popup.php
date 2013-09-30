@@ -29,15 +29,15 @@
 <?php $this->BcBaser->metaKeywords() ?>
 <?php $this->BcBaser->icon() ?>
 <?php $this->BcBaser->css('admin/import') ?>
-<!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
+<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.4.2.min',
-	'jquery.dimensions.min',
+	'admin/jquery.dimensions.min',
 	'jquery-ui-1.7.2.custom.min',
-	'i18n/ui.datepicker-ja',
-	'jquery.bt.min',
-	'jquery.corner',
-	'functions')) ?>
+	'admin/i18n/ui.datepicker-ja',
+	'admin/jquery.bt.min',
+	'admin/jquery.corner-2.12',
+	'admin/functions')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>" class="popup">

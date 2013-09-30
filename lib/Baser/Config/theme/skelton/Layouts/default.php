@@ -15,9 +15,8 @@
 <?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 <?php $this->BcBaser->css('style') ?>
 <?php $this->BcBaser->js(array(
-	'jquery-1.7.2.min',
-	'functions',
-	'startup')) ?>
+	'admin/jquery-1.7.2.min',
+	'admin/functions')) ?>
 <?php $this->BcBaser->scripts() ?>
 <?php $this->BcBaser->element('google_analytics') ?>
 </head>

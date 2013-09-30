@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js('sorttable',false);
+$this->BcBaser->js('admin/sorttable',false);
 $this->BcBaser->js(array(
 	'admin/jquery.baser_ajax_data_list', 
 	'admin/jquery.baser_ajax_batch', 

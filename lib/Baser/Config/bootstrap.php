@@ -25,6 +25,11 @@ require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
 
 /**
+ * インストール状態
+ */
+define('BC_INSTALLED', isInstalled());
+
+/**
  * Baserパス追加
  */
 App::build(array(
@@ -110,10 +115,6 @@ App::uses('BcPluginAppController',		'Controller');
 App::uses('BcPluginAppModel',			'Model');
 App::uses('BcManagerShell',				'Console/Command');
 
-/**
- * インストール状態
- */
-define('BC_INSTALLED', isInstalled());
 
 /**
  * 設定ファイル読み込み

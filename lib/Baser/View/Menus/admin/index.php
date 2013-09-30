@@ -27,7 +27,7 @@ $this->BcBaser->js(array(
 ?>
 
 
-<?php $this->BcBaser->js('sorttable',false) ?>
+<?php $this->BcBaser->js('admin/sorttable',false) ?>
 <script type="text/javascript">
 $(function(){
 	$.baserAjaxDataList.init();

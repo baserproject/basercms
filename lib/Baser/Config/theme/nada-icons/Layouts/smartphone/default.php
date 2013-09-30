@@ -13,9 +13,9 @@
 <?php $this->BcBaser->metaKeywords() ?>
 <?php $this->BcBaser->css(array('html5reset-1.6.1', 'smartphone/style')) ?>
 <?php $this->BcBaser->js(array(
-    'jquery-1.7.2.min',
+    'admin/jquery-1.7.2.min',
 	'smartphone/startup.js',
-    'functions',
+    'admin/functions',
     'startup',
     'jquery.bxSlider.min',
     'jquery.easing.1.3',

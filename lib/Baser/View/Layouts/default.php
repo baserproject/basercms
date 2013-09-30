@@ -27,17 +27,17 @@
 <?php $this->BcBaser->title() ?>
 <?php $this->BcBaser->css(array(
 	'import',
-	'colorbox/colorbox')) ?>
-<!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
+	'admin/colorbox/colorbox')) ?>
+<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
-	'jquery-1.7.2.min',
-	'jquery-ui-1.8.19.custom.min',
-	'jquery.colorbox-min-1.4.5',
-	'jquery.mScroll',
+	'admin/jquery-1.7.2.min',
+	'admin/jquery-ui-1.8.19.custom.min',
+	'admin/jquery.colorbox-min-1.4.5',
+	'admin/jquery.mScroll',
 	'admin/functions',
 	'admin/startup',
 	'admin/adjust_scroll', 
-	'yuga')) ?>
+	'admin/yuga')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>" class="normal">

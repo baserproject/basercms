@@ -28,7 +28,7 @@
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $this->BcBaser->img('sort.png',array('alt'=>'並び替え')) ?></span>
+		<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png',array('alt'=>'並び替え')) ?></span>
 		<?php echo $this->BcForm->input('Sort.id'.$data['Menu']['id'], array(
 				'type'	=> 'hidden',
 				'class'	=> 'id',

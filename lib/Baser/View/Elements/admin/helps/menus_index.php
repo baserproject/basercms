@@ -27,5 +27,5 @@
 	<li>一覧は、公開状態により絞り込みができます。</li>
 	<li>公開ページでメニューを出力するには、テンプレート上に次のコードを記述します。リストタグで出力されます。<br />
 		<pre>&lt;?php $this->BcBaser->element('global_menu') ?&gt;</pre></li>
-	<li>一覧左上の「並び替え」をクリックすると表示される<?php $this->BcBaser->img('sort.png',array('alt'=>'並び替え')) ?>マークをドラッグアンドドロップして、行の並び替えができます。</li>
+	<li>一覧左上の「並び替え」をクリックすると表示される<?php $this->BcBaser->img('admin/sort.png',array('alt'=>'並び替え')) ?>マークをドラッグアンドドロップして、行の並び替えができます。</li>
 </ul>

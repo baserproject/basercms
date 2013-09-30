@@ -1666,7 +1666,7 @@ class BcBaserHelper extends AppHelper {
 
 		$options = array_merge(array(
 			'version'	=> 7,
-			'script'	=> 'swfobject-2.2',
+			'script'	=> 'admin/swfobject-2.2',
 			'noflash'	=> '&nbsp;'
 		), $options);
 		extract($options);
@@ -1885,5 +1885,21 @@ END_FLASH;
 			$userName = implode(' ', $userName);
 		}
 		return $userName;
-	} 
+	}
+	public function includeCore($name, $data = array(), $options = array()) {
+		
+		$plugin = '';
+		if(strpos($name, '.') !== false) {
+			list($plugin, $name) = explode('.', $name);
+			$plugin = Inflector::camelize($plugin);
+			$name = '../../../lib/Baser/Plugin/' . $plugin . '/View/' . $name;
+		} else {
+			$name = '../../../lib/Baser/View/' . $name;
+		}
+		
+		$options = array_merge($options, array('subDir' => false));
+		$this->element($name, $data, $options);
+		
+	}
+	
 }
