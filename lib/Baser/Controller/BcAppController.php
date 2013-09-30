@@ -692,104 +692,6 @@ class BcAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 
-/*
- array (size=6)
-  'Message' =>
-    array (size=18)
-      'mode' => string 'Submit' (length=6)
-      'name_1' => string '清末' (length=6)
-      'name_2' => string '直' (length=3)
-      'name_kana_1' => string 'キヨスエ' (length=12)
-      'name_kana_2' => string 'スナオ' (length=9)
-      'sex' => string '1' (length=1)
-      'email_1' => string 'kiyo@itm.ne.jp' (length=14)
-      'tel_1' => string '092' (length=3)
-      'tel_2' => string '222' (length=3)
-      'tel_3' => string '3333' (length=4)
-      'zip' => string '810-0022' (length=8)
-      'address_1' => string '2' (length=1)
-      'address_2' => string 'hoge' (length=4)
-      'address_3' => string 'fuga' (length=4)
-      'category' => string '1|3' (length=3)
-      'message' => string 'test' (length=4)
-      'root' => string '2' (length=1)
-      'root_etc' => string 'hoge' (length=4)
-  'message' =>
-    array (size=18)
-      'mode' => string 'Submit' (length=6)
-      'name_1' => string '清末' (length=6)
-      'name_2' => string '直' (length=3)
-      'name_kana_1' => string 'キヨスエ' (length=12)
-      'name_kana_2' => string 'スナオ' (length=9)
-      'sex' => string '1' (length=1)
-      'email_1' => string 'kiyo@itm.ne.jp' (length=14)
-      'tel_1' => string '092' (length=3)
-      'tel_2' => string '222' (length=3)
-      'tel_3' => string '3333' (length=4)
-      'zip' => string '810-0022' (length=8)
-      'address_1' => string '2' (length=1)
-      'address_2' => string 'hoge' (length=4)
-      'address_3' => string 'fuga' (length=4)
-      'category' =>
-        array (size=1)
-          0 => string '1|3' (length=3)
-      'message' => string 'test' (length=4)
-      'root' => string '2' (length=1)
-      'root_etc' => string 'hoge' (length=4)
-  'mailFields' =>
-    array (size=18)
-      0 =>
-          'MailField' =>
-            array (size=30)
-              ...
-  'mailContents' =>
-    array (size=20)
-      'id' => int 1
-      'name' => string 'contact' (length=7)
-      'title' => string 'お問い合わせ' (length=18)
-      'description' => string '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>' (length=119)
-      'sender_1' => null
-      'sender_2' => null
-      'sender_name' => string 'baserCMS inc. [デモ]　お問い合わせ' (length=43)
-      'subject_user' => string '【baserCMS】お問い合わせ頂きありがとうございます。' (length=71)
-      'subject_admin' => string '【baserCMS】お問い合わせを受け付けました' (length=56)
-      'layout_template' => string 'default' (length=7)
-      'form_template' => string 'default' (length=7)
-      'mail_template' => string 'mail_default' (length=12)
-      'redirect_url' => string 'http://basercms.net/' (length=20)
-      'status' => boolean true
-      'auth_captcha' => boolean false
-      'widget_area' => null
-      'ssl_on' => boolean false
-      'exclude_search' => null
-      'created' => string '2013-07-20 15:47:58' (length=19)
-      'modified' => null
-  'mailConfig' =>
-    array (size=8)
-      'id' => int 1
-      'site_name' => string 'baserCMS - Based Website Development Project -' (length=46)
-      'site_url' => string 'http://basercms.net/' (length=20)
-      'site_email' => string 'info@basercms.net' (length=17)
-      'site_tel' => null
-      'site_fax' => null
-      'created' => string '2013-07-20 15:47:57' (length=19)
-      'modified' => null
-  'other' =>
-    array (size=2)
-      'date' => string '2013/08/08 18:02' (length=16)
-      'mode' => string 'user' (length=4)
- */
-
-/*
-array (size=4)
-  'fromName' => string 'baserCMS inc. [デモ]　お問い合わせ' (length=43)
-  'reply' => string 'kiyo@itm.ne.jp' (length=14)
-  'template' => string 'mail_default' (length=12)
-  'from' => string 'kiyo@itm.ne.jp' (length=14)
-*/
-
-		//$smtp
-		// @
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
 			$host		= $this->siteConfigs['smtp_host'] ;
@@ -969,17 +871,17 @@ array (size=4)
 		}
 	}
 
-	/**
-	 * template までのpathを取得
-	 *
-	 * @param array $options in template and layout
-	 * @return string layout
-	 * @access private
-	 */
+/**
+ * template までのpathを取得
+ *
+ * @param array $options in template and layout
+ * @return string layout
+ * @access private
+ */
 	private function __renderTemplate($options=null) {
 
 		$layoutPath = $subDir = $plugin = '';
-//var_dump($this);
+
 		if(!empty($this->layoutPath)) {
 			$layoutPath = $this->layoutPath.DS;
 		}
@@ -992,8 +894,9 @@ array (size=4)
 
 		//$template = $layoutPath . $plugin . $subDir . 'Emails' . DS . $this->sendAs . DS . $options['template'] ;
 
-		$template = "{$plugin}." .$options['template'] ;
+		$template = "{$plugin}." . $subDir . $options['template'] ;
 		return $template ;
+		
 	}
 
 

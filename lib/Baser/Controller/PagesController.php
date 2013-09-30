@@ -174,6 +174,15 @@ class PagesController extends AppController {
 
 			/* 登録処理 */
 			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
+						
+			/*** Pages.beforeAdd ***/
+			$event = $this->dispatchEvent('beforeAdd',array(
+				'data'	=> $this->request->data
+			));
+			if($event !== false) {
+				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			}
+			
 			$this->Page->create($this->request->data);
 			if($this->request->data['Page']['page_type'] == 2 && !$this->request->data['Page']['page_category_id']) {
 				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
@@ -182,7 +191,7 @@ class PagesController extends AppController {
 			}
 			if($this->Page->validates()) {
 				
-				if($this->Page->save($this->request->data,false)) {
+				if($data = $this->Page->save($this->request->data,false)) {
 					
 					// キャッシュを削除する
 					if($this->Page->allowedPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end'])) {
@@ -193,7 +202,9 @@ class PagesController extends AppController {
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を追加しました。', false, true);
 					
 					/*** Pages.afterAdd ***/
-					$this->dispatchEvent('afterAdd');
+					$this->dispatchEvent('afterAdd',array(
+						'data'	=> $data
+					));
 		
 					// 編集画面にリダイレクト
 					$id = $this->Page->getInsertID();
@@ -302,11 +313,21 @@ class PagesController extends AppController {
 				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
 			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
+			
+			
+			/*** Pages.beforeEdit ***/
+			$event = $this->dispatchEvent('beforeEdit',array(
+				'data'	=> $this->request->data
+			));
+			if($event !== false) {
+				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			}
+		
 			$this->Page->set($this->request->data);
 
 			if($this->Page->validates()) {
 
-				if($this->Page->save(null, false)) {
+				if($data = $this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
 					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
@@ -321,7 +342,9 @@ class PagesController extends AppController {
 					$this->setMessage('固定ページ「'.$this->request->data['Page']['name'].'」を更新しました。', false, true);
 					
 					/*** Pages.afterEdit ***/
-					$this->dispatchEvent('afterEdit');
+					$this->dispatchEvent('afterEdit',array(
+						'data'	=> $data
+					));
 					
 					// 同固定ページへリダイレクト
 					$this->redirect(array('action' => 'edit', $id));

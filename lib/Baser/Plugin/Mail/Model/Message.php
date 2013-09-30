@@ -241,7 +241,7 @@ class Message extends MailAppModel {
 		foreach($this->mailFields as $mailField) {
 
 			// 対象フィールドがあれば、バリデートグループごとに配列にフィールド名を格納する
-			if($mailField['MailField']['group_valid']) {
+            if(!empty($mailField['MailField']['use_field']) && $mailField['MailField']['group_valid']) {
 				$dists[$mailField['MailField']['group_valid']][] = $mailField['MailField']['field_name'];
 			}
 

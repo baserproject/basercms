@@ -67,7 +67,7 @@
                 <?php if($this->BcBaser->isHome()): ?>
                 <?php $this->BcBaser->element('toppage') ?>
                 <?php else: ?>
-                <div id="ContentsBody" class="subpage">
+                <div class="subpage">
                     <?php $this->BcBaser->flash() ?>
                     <?php $this->BcBaser->content() ?>
                     <?php $this->BcBaser->element('contents_navi') ?>

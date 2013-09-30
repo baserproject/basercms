@@ -577,13 +577,21 @@ class BcBaserHelper extends AppHelper {
 		}
 		
 		extract($options);
+
 		
-		if(!$subDir) {
+		if($subDir === false) {
+			if(!$this->_subDir && $this->_View->subDir) {
+				$this->_subDir = $this->_View->subDir;
+			}
 			$this->_View->subDir = null;
+		} else {
+			if($this->_subDir) {
+				$this->_View->subDir = $this->_subDir;
+			}			
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
-
+		
 		/*** afterElement ***/
 		$event = $this->dispatchEvent('afterElement', array(
 			'name'		=> $name,
