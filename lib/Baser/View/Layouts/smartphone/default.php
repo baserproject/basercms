@@ -11,7 +11,7 @@
 <?php $this->BcBaser->title() ?>
 <?php $this->BcBaser->metaDescription() ?>
 <?php $this->BcBaser->metaKeywords() ?>
-<?php $this->BcBaser->css(array('html5reset-1.6.1', 'smartphone/style')) ?>
+<?php $this->BcBaser->css(array('admin/html5reset-1.6.1', 'smartphone/style')) ?>
 <?php $this->BcBaser->js(array(
 	'admin/jquery-1.7.2.min',
 	'smartphone/startup.js'
