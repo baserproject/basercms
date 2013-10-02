@@ -185,7 +185,6 @@ class BcAppController extends Controller {
 		if($this->name == 'CakeError') {
 			
 			$this->uses = null;
-			$params = Router::parse('/'.Configure::read('BcRequest.pureUrl'));
 			
 			// モバイルのエラー用
 			if(Configure::read('BcRequest.agent')) {

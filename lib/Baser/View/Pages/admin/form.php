@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->css('ckeditor/editor', array('inline' => true));
+$this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 $pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
