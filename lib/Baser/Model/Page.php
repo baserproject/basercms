@@ -986,7 +986,7 @@ class Page extends AppModel {
 			}
 
 			// 説明文取得・置換
-			$descriptionReg = '/<\?php\s+?\$bcBaser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
+			$descriptionReg = '/<\?php\s+?\$this->BcBaser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($descriptionReg,$contents,$matches)) {
 				$description = trim($matches[1]);
 				$contents = preg_replace($descriptionReg,'',$contents);

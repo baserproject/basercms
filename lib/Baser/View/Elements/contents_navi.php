@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($bcPage) || !$this->BcPage->contensNaviAvailable()) {
+if(!isset($this->BcPage) || !$this->BcPage->contensNaviAvailable()) {
 	return;
 }
 ?>

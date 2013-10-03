@@ -515,7 +515,7 @@ function pageTypeChengeHandler() {
 			<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th> 
 			<td class="col-input">
 
-		<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
+		<?php if(@$this->BcBaser->siteConfig['linked_pages_smartphone']): ?>
 		      <div id="DivUnlinkedSmartphone">
 				<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 		      </div>

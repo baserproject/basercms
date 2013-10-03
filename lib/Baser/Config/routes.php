@@ -78,7 +78,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * プラグインごとの一意のキー[content_id]を保存しておく。
  *
  * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
- * Router::connectの引数として値を与えると、$html->linkなどで、
+ * Router::connectの引数として値を与えると、$this->Html->linkなどで、
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
  */
 	$PluginContent = ClassRegistry::init('PluginContent');
