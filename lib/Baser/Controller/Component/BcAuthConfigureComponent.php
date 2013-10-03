@@ -142,13 +142,17 @@ class  BcAuthConfigureComponent extends Component {
 		$auth->loginRedirect = $loginRedirect;
 
 		if(!$auth->user()) {
+			
 			// クッキーがある場合にはクッキーで認証
-			$cookie = $controller->Cookie->read(BcAuthComponent::$sessionKey);
-			if(!empty($cookie)) {
-				if($auth->login($cookie)) {
-					return true;
+			if(!empty($controller->Cookie)) {
+				$cookie = $controller->Cookie->read(BcAuthComponent::$sessionKey);
+				if(!empty($cookie)) {
+					if($auth->login($cookie)) {
+						return true;
+					}
 				}
 			}
+			
 			// インストールモードの場合は無条件に認証なし
 			if(Configure::read('debug')==-1) {
 				$controller->Session->delete('Message.auth');
