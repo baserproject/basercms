@@ -177,7 +177,7 @@ class BcAppController extends Controller {
 				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
 			
-		} elseif($this->name != 'Installations' && $this->name != 'CakeError') {
+		} elseif($this->name != 'Installations' && $this->name == 'CakeError') {
 			$this->redirect('/');
 		}
 

@@ -396,7 +396,7 @@ class Page extends AppModel {
 		}
 		
 		// モバイル未対応の為除外
-		$excludeIds = am($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
+		$excludeIds = array_merge($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
 		
 		// インストール時取得できないのでハードコーディング
 		// TODO 検討

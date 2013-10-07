@@ -2038,8 +2038,7 @@ class BcCsv extends DboSource {
  */
 	public function escapeString($value) {
 
-		$value = str_replace("'","\'",$value);
-		$value = str_replace(",","\,",$value);
+		$value = str_replace(array("'", ","), array("\'", "\,"), $value);
 		return $value;
 
 	}
@@ -2187,34 +2186,31 @@ class BcCsv extends DboSource {
 		// 全てのフィールドを取得
 		$this->_loadCsvFields($linkModel);
 
-		if ($query = $this->generateAssociationQuery($model, $linkModel, $type, $association, $assocData, $queryData, $external, $resultSet)) {
-			if (!isset($resultSet) || !is_array($resultSet)) {
-				if (Configure::read('debug') > 0) {
-					echo '<div style = "font: Verdana bold 12px; color: #FF0000">' . sprintf(__('SQL Error in model %s:'), $model->alias) . ' ';
-					if (isset($this->error) && $this->error != null) {
-						echo $this->error;
-					}
-					echo '</div>';
-				}
-				return null;
-			}
-			$count = count($resultSet);
+		if (isset($stack['_joined'])) {
+			$joined = $stack['_joined'];
+			unset($stack['_joined']);
+		}
 
+		if ($query = $this->generateAssociationQuery($model, $linkModel, $type, $association, $assocData, $queryData, $external, $resultSet)) {
+			if (!is_array($resultSet)) {
+				throw new CakeException(__d('cake_dev', 'Error in Model %s', get_class($model)));
+			}
 			if ($type === 'hasMany' && empty($assocData['limit']) && !empty($assocData['foreignKey'])) {
 				$ins = $fetch = array();
-				for ($i = 0; $i < $count; $i++) {
-					if ($in = $this->insertQueryData('{$__cakeID__$}', $resultSet[$i], $association, $assocData, $model, $linkModel, $stack)) {
+				foreach ($resultSet as &$result) {
+					if ($in = $this->insertQueryData('{$__cakeID__$}', $result, $association, $assocData, $model, $linkModel, $stack)) {
 						$ins[] = $in;
 					}
 				}
 
 				if (!empty($ins)) {
+					$ins = array_unique($ins);
 					$fetch = $this->fetchAssociated($model, $query, $ins);
 				}
 
 				if (!empty($fetch) && is_array($fetch)) {
 					if ($recursive > 0) {
-						foreach ($linkModel->__associations as $type1) {
+						foreach ($linkModel->associations() as $type1) {
 							foreach ($linkModel->{$type1} as $assoc1 => $assocData1) {
 								$deepModel = $linkModel->{$assoc1};
 								$tmpStack = $stack;
@@ -2230,18 +2226,27 @@ class BcCsv extends DboSource {
 						}
 					}
 				}
-				return $this->_mergeHasMany($resultSet, $fetch, $association, $model, $linkModel, $recursive);
+				if ($queryData['callbacks'] === true || $queryData['callbacks'] === 'after') {
+					$this->_filterResults($fetch, $model);
+				}
+				return $this->_mergeHasMany($resultSet, $fetch, $association, $model, $linkModel);
 			} elseif ($type === 'hasAndBelongsToMany') {
+				
 				$ins = $fetch = array();
-				for ($i = 0; $i < $count; $i++) {
-					if ($in = $this->insertQueryData('{$__cakeID__$}', $resultSet[$i], $association, $assocData, $model, $linkModel, $stack)) {
+				foreach ($resultSet as &$result) {
+					if ($in = $this->insertQueryData('{$__cakeID__$}', $result, $association, $assocData, $model, $linkModel, $stack)) {
 						$ins[] = $in;
 					}
 				}
 				if (!empty($ins)) {
-					$query = str_replace('{$__cakeID__$}', join(', ', $ins), $query);
-					$query = str_replace('= (', 'IN (', $query);
-					$query = str_replace('=  (', 'IN (', $query);
+					$ins = array_unique($ins);
+					if (count($ins) > 1) {
+						$query = str_replace('{$__cakeID__$}', '(' . implode(', ', $ins) . ')', $query);
+						$query = str_replace('= (', 'IN (', $query);
+					} else {
+						$query = str_replace('{$__cakeID__$}', $ins[0], $query);
+					}
+					$query = str_replace(' WHERE 1 = 1', '', $query);
 				}
 
 				$foreignKey = $model->hasAndBelongsToMany[$association]['foreignKey'];
@@ -2250,81 +2255,45 @@ class BcCsv extends DboSource {
 				$habtmFieldsCount = count($habtmFields);
 				$q = $this->insertQueryData($query, null, $association, $assocData, $model, $linkModel, $stack);
 
+				// スキーマデータを中間テーブル用に読込なおす
 				$tableName = $this->config['prefix'].$assocData['joinTable'];
 				$this->_loadCsvFields($tableName);
-
-				if ($q != false) {
-					$fetch = $this->fetchAll($q, $model->cacheQueries, $model->alias);
-					if($fetch) {
-						$query = $this->generateAssociationQuery($model, $linkModel, 'belongsTo', $association, $assocData, $queryData, $external, $resultSet);
-						$ins = Set::extract('/'.$assocData['with'].'/'.$assocData['associationForeignKey'], $fetch);
-						if (!empty($ins)) {
-							$query = str_replace('{$__cakeForeignKey__$}', '('.join(', ', $ins).')', $query);
-							$query = str_replace('= (', 'IN (', $query);
-							$query = str_replace('=  (', 'IN (', $query);
-						}
-						$q = $this->insertQueryData($query, null, $association, $assocData, $model, $linkModel, $stack);
-
-						$this->_loadCsvFields($linkModel);
-						$fetch2 = $this->fetchAll($q, $model->cacheQueries, $model->alias);
-						
-						$uniqueIds = $merge = array();
-						/*foreach($fetch2 as $row) {
-							foreach($fetch as $j => $data) {
-								if (
-								(isset($data[$with]) && $data[$with][$joinKeys[1]] === $row[$assocData['className']][$linkModel->primaryKey]) &&
-										(!in_array($data[$with][$joinKeys[1]], $uniqueIds))
-								) {
-									$uniqueIds[] = $data[$with][$joinKeys[1]];
-
-									if ($habtmFieldsCount <= 2) {
-										unset($data[$with]);
-									}
-									$data[$assocData['className']] = $row;
-									$merge[] = am($data, $row);
-								}
-							}
-						}*/
-
-						$merge = array();
-						foreach($fetch as $row) {
-							foreach($fetch2 as $data) {
-								if(isset($row[$with]) && $row[$with][$joinKeys[1]] === $data[$assocData['className']][$linkModel->primaryKey]) {
-									$merge[] = am($row, $data);
-								}
-							}
-						}
-						$fetch = $merge;
-					}
+				
+				if ($q !== false) {
+					$fetch = $this->fetchAll($q, $model->cacheQueries);
+					$fetch = array();
 				} else {
 					$fetch = null;
 				}
 			}
 
-			for ($i = 0; $i < $count; $i++) {
-				$row = $resultSet[$i];
-
+			$modelAlias = $model->alias;
+			$modelPK = $model->primaryKey;
+			foreach ($resultSet as &$row) {
 				if ($type !== 'hasAndBelongsToMany') {
-					$q = $this->insertQueryData($query, $resultSet[$i], $association, $assocData, $model, $linkModel, $stack);
-					if ($q != false) {
-						$fetch = $this->fetchAll($q, $model->cacheQueries, $model->alias);
-					} else {
-						$fetch = null;
+					$q = $this->insertQueryData($query, $row, $association, $assocData, $model, $linkModel, $stack);
+					$fetch = null;
+					if ($q !== false) {
+						$joinedData = array();
+						if (($type === 'belongsTo' || $type === 'hasOne') && isset($row[$linkModel->alias], $joined[$model->alias]) && in_array($linkModel->alias, $joined[$model->alias])) {
+							$joinedData = Hash::filter($row[$linkModel->alias]);
+							if (!empty($joinedData)) {
+								$fetch[0] = array($linkModel->alias => $row[$linkModel->alias]);
+							}
+						} else {
+							$fetch = $this->fetchAll($q, $model->cacheQueries);
+						}
 					}
 				}
-				$selfJoin = false;
-
-				if ($linkModel->name === $model->name) {
-					$selfJoin = true;
-				}
+				$selfJoin = $linkModel->name === $model->name;
 
 				if (!empty($fetch) && is_array($fetch)) {
 					if ($recursive > 0) {
-						foreach ($linkModel->__associations as $type1) {
+						foreach ($linkModel->associations() as $type1) {
 							foreach ($linkModel->{$type1} as $assoc1 => $assocData1) {
 								$deepModel = $linkModel->{$assoc1};
 
-								if (($type1 === 'belongsTo') || ($deepModel->alias === $model->alias && $type === 'belongsTo') || ($deepModel->alias != $model->alias)) {
+								if ($type1 === 'belongsTo' || ($deepModel->alias === $modelAlias && $type === 'belongsTo') || ($deepModel->alias !== $modelAlias)) {
 									$tmpStack = $stack;
 									$tmpStack[] = $assoc1;
 									if ($linkModel->useDbConfig == $deepModel->useDbConfig) {
@@ -2337,16 +2306,11 @@ class BcCsv extends DboSource {
 							}
 						}
 					}
-					if ($type == 'hasAndBelongsToMany') {
-						$uniqueIds = $merge = array();
+					if ($type === 'hasAndBelongsToMany') {
+						$merge = array();
 
-						foreach($fetch as $j => $data) {
-							if (
-							(isset($data[$with]) && $data[$with][$foreignKey] === $row[$model->alias][$model->primaryKey]) &&
-									(!in_array($data[$with][$joinKeys[1]], $uniqueIds))
-							) {
-								$uniqueIds[] = $data[$with][$joinKeys[1]];
-
+						foreach ($fetch as $data) {
+							if (isset($data[$with]) && $data[$with][$foreignKey] === $row[$modelAlias][$modelPK]) {
 								if ($habtmFieldsCount <= 2) {
 									unset($data[$with]);
 								}
@@ -2356,20 +2320,21 @@ class BcCsv extends DboSource {
 						if (empty($merge) && !isset($row[$association])) {
 							$row[$association] = $merge;
 						} else {
-							$this->_mergeAssociation($resultSet[$i], $merge, $association, $type);
+							$this->_mergeAssociation($row, $merge, $association, $type);
 						}
 					} else {
-						$this->_mergeAssociation($resultSet[$i], $fetch, $association, $type, $selfJoin);
+						$this->_mergeAssociation($row, $fetch, $association, $type, $selfJoin);
 					}
-					$resultSet[$i][$association] = $linkModel->afterfind($resultSet[$i][$association]);
-
+					if (isset($row[$association])) {
+						$row[$association] = $linkModel->afterFind($row[$association], false);
+					}
 				} else {
 					$tempArray[0][$association] = false;
-					$this->_mergeAssociation($resultSet[$i], $tempArray, $association, $type, $selfJoin);
+					$this->_mergeAssociation($row, $tempArray, $association, $type, $selfJoin);
 				}
 			}
 		}
-
+		
 		// 接続を解除
 		$this->disconnect($linkModel->tablePrefix.$linkModel->table);
 
