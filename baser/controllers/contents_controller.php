@@ -194,7 +194,12 @@ class ContentsController extends AppController {
  * @access private
  */
 	function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
-
+		
+		if(empty($this->Page->PageCategory)) {
+			App::import('Model', 'PageCateogry');
+			$this->Page->PageCategory = new PageCategory(false, null, 'baser');
+		}
+		
 		$direct = false;
 		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('BcRequest.agent'));
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');

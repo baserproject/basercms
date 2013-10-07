@@ -389,8 +389,7 @@ class Page extends AppModel {
 		}
 		
 		// モバイル未対応
-		$PageCategory = ClassRegistry::init('PageCategory');
-		$excludeIds = am($PageCategory->getAgentCategoryIds('mobile'), $PageCategory->getAgentCategoryIds('smartphone'));
+		$excludeIds = array_merge($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
 		
 		// インストール時取得できないのでハードコーディング
 		if(!$excludeIds) {
