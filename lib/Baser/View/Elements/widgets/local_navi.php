@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($bcPage)) {
+if(!isset($this->BcPage)) {
 	return;
 }
 $pageCategory = $this->BcPage->getCategory();

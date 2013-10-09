@@ -169,7 +169,6 @@ class BlogController extends BlogAppController {
 		$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
-		$this->subMenuElements = array_merge($this->subMenuElements, array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->pageTitle = $this->blogContent['BlogContent']['title'];
 		$this->crumbs = array();
 		$this->render($template);
@@ -369,8 +368,11 @@ class BlogController extends BlogAppController {
 						$this->notFound();
 					}
 					// コメント送信
-					if(isset($this->request->data['BlogComment'])) {
-						$this->add_comment($id);
+					if(isset($this->request->data['BlogComment'])) {						
+						// TODO 《暫定対応》モバイルの場合画像認証が効かないのでデモサイトではコメントを受け付けない仕様とした
+						if(empty($this->siteConfigs['demo']) || Configure::read('BcRequest.agent') != 'mobile') {
+							$this->add_comment($id);
+						}
 					}
 
 					$_posts = $this->_getBlogPosts(array('conditions' => array('id' => $id)));
@@ -412,7 +414,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
-		$this->subMenuElements = array_merge($this->subMenuElements,array('blog_calendar', 'blog_recent_entries', 'blog_category_archives', 'blog_monthly_archives'));
 		$this->layout = $this->blogContent['BlogContent']['layout'];
 		$this->render($template);
 

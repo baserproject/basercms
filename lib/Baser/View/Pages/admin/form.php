@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->css('ckeditor/editor', array('inline' => true));
+$this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
 $pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
@@ -361,7 +361,7 @@ function pageTypeChengeHandler() {
 						'type'		=> 'select',
 						'options'	=> $categories,
 						'escape'	=> false)) ?>
-				<?php $this->BcBaser->img('ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
+				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
 				<?php echo $this->BcForm->error('Page.page_category_id') ?>
 			</td>
 		</tr>
@@ -515,7 +515,7 @@ function pageTypeChengeHandler() {
 			<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th> 
 			<td class="col-input">
 
-		<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
+		<?php if(@$this->BcBaser->siteConfig['linked_pages_smartphone']): ?>
 		      <div id="DivUnlinkedSmartphone">
 				<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
 		      </div>

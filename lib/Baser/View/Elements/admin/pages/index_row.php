@@ -37,7 +37,7 @@ $url = preg_replace('/index$/', '', $data['Page']['url']);
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:15%">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $this->BcBaser->img('sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
+		<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
 		<?php echo $this->BcForm->input('Sort.id'.$data['Page']['id'], array('type'	=> 'hidden', 'class' => 'id', 'value' => $data['Page']['id'])) ?>
 <?php endif ?>
 <?php if($this->BcBaser->isAdminUser()): ?>

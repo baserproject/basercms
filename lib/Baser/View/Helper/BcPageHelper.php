@@ -357,9 +357,9 @@ class BcPageHelper extends Helper {
 					break;
 				case 'content':
 					if(!$agentPrefix) {
-						$templatePath = $viewPath . 'pages' . DS . 'templates' . DS;
+						$templatePath = $viewPath . 'Pages' . DS . 'templates' . DS;
 					} else {
-						$templatePath = $viewPath . 'pages' . DS . $agentPrefix . DS . 'templates' . DS;
+						$templatePath = $viewPath . 'Pages' . DS . $agentPrefix . DS . 'templates' . DS;
 					}
 					break;
 			}
@@ -381,7 +381,11 @@ class BcPageHelper extends Helper {
 			}
 		}
 		
-		return array_combine($templates, $templates);
+		if($templates) {
+			return array_combine($templates, $templates);
+		} else {
+			return array();
+		}
 
 	}
 	

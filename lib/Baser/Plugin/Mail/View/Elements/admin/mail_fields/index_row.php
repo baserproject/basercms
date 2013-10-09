@@ -28,7 +28,7 @@
 <tr id="Row<?php echo $count+1 ?>" <?php echo $class; ?>>
 	<td style="width:25%" class="row-tools">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $this->BcBaser->img('sort.png', array('alt' => '並び替え')) ?></span>
+		<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え')) ?></span>
 		<?php echo $this->BcForm->hidden('Sort.id' . $data['MailField']['id'], array('class' => 'id', 'value' => $data['MailField']['id'])) ?>
 <?php endif ?>
 <?php if($this->BcBaser->isAdminUser()): ?>

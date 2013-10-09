@@ -35,8 +35,8 @@
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ お問い合わせ内容 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-<?php echo $this->element('email/text/mail_data') ?>
- 
+<?php echo $this->element('../Emails/text/mail_data') ?>
+
  
  
 ───────────────────────────────────

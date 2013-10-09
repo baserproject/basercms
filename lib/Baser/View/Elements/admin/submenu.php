@@ -24,7 +24,12 @@ if(!empty($user)) {
 	<table class="sub-menu">
 <?php
 		foreach ($subMenuElements as $subMenuElement){
-			$this->BcBaser->element($elementPath.$subMenuElement);
+			$plugin = '';
+			if(strpos($subMenuElement, '.') !== false) {
+				list($plugin, $subMenuElement) = explode('.', $subMenuElement);
+				$plugin .= '.';
+			}
+			$this->BcBaser->element($plugin . $elementPath . $subMenuElement);
 		}
 ?>
 	</table>

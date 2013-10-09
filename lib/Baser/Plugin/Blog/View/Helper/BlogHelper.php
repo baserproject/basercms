@@ -549,13 +549,15 @@ class BlogHelper extends AppHelper {
  */
 	public function getLayoutTemplates() {
 
-		$templatesPathes = array();
+		$templatesPathes = array(
+			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Layouts' . DS,
+			APP . 'View' . DS . 'Layouts' . DS,
+			BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Layouts' . DS,
+			BASER_VIEWS . 'Layouts' . DS
+		);
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Layouts'.DS;
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS);
 		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Blog'.DS.'View'.DS.'Layouts'.DS;
-		$templatesPathes = am($templatesPathes,array(BASER_PLUGINS.'Blog'.DS.'View'.DS.'Layouts'.DS,
-														BASER_VIEWS.'Layouts'.DS));
 
 		$_templates = array();
 		foreach($templatesPathes as $templatesPath){
@@ -590,13 +592,15 @@ class BlogHelper extends AppHelper {
  */
 	public function getBlogTemplates() {
 
-		$templatesPathes = array();
+		$templatesPathes = array(
+			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Blog' . DS,
+			APP . 'View' . DS . 'Blog' . DS,
+			BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Blog' . DS
+		);
 		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Blog'.DS;
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Blog' . DS);
 		}
-		$templatesPathes[] = APP . 'Plugin' . DS . 'Blog'.DS.'View'.DS.'Blog'.DS;
-		$templatesPathes[] = BASER_PLUGINS.'Blog'.DS.'View'.DS.'Blog'.DS;
-
+		
 		$_templates = array();
 		foreach($templatesPathes as $templatePath){
 			$folder = new Folder($templatePath);

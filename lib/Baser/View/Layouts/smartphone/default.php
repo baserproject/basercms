@@ -11,13 +11,13 @@
 <?php $this->BcBaser->title() ?>
 <?php $this->BcBaser->metaDescription() ?>
 <?php $this->BcBaser->metaKeywords() ?>
-<?php $this->BcBaser->css('smartphone/import') ?>
+<?php $this->BcBaser->css(array('admin/html5reset-1.6.1', 'smartphone/style')) ?>
 <?php $this->BcBaser->js(array(
-	'jquery-1.6.4.min',
+	'admin/jquery-1.7.2.min',
 	'smartphone/startup.js'
 )) ?>
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics', null, array('subDir' => false)) ?>
+<?php $this->BcBaser->element('google_analytics', array(), array('subDir' => false)) ?>
 </head>
 <body id="<?php $this->BcBaser->contentsName() ?>">
 <div id="Page">

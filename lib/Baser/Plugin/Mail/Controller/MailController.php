@@ -145,21 +145,21 @@ class MailController extends MailAppController {
 
 		// 2013/03/14 ryuring
 		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更 
-		if( Configure::read('debug') == 2){
-			$this->Security->enabled = false;
-		}else{
-		$this->Security->enabled = true;
-		}
-		// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
-		// 詳細はコンポーネント設定のコメントを参照
-		$this->Security->requireAuth('confirm', 'submit');
-		$this->Security->validatePost = true;
-		$this->Security->disabledFields[] = 'Message.mode'; 
+		if( Configure::read('debug') > 0 ){
+			$this->Security->validatePost = false;
+			$this->Security->csrfCheck = false;
 
-		// SSL設定
-		if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
-			$this->Security->blackHoleCallback = '_sslFail';
-			$this->Security->requireSecure = am($this->Security->requireSecure, array('index', 'confirm', 'submit'));
+		}else{
+			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
+			// 詳細はコンポーネント設定のコメントを参照
+			$this->Security->requireAuth('confirm', 'submit');
+			$this->Security->disabledFields[] = 'Message.mode!'; 
+
+			// SSL設定
+			if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
+				$this->Security->blackHoleCallback = '_sslFail';
+				$this->Security->requireSecure = am($this->Security->requireSecure, array('index', 'confirm', 'submit'));
+			}
 		}
 
 		// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
@@ -353,10 +353,21 @@ class MailController extends MailAppController {
 
 			if($this->Message->save(null,false)) {
 
+				/*** Mail.beforeSendEmail ***/
+				$event = $this->dispatchEvent('beforeSendEmail', array(
+					'data'	=> $this->request->data
+				));
+				if($event !== false) {
+					$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+				}
+			
 				// メール送信
 				$this->_sendEmail();
-				// ビューを一旦初期化しないと携帯の場合に送信完了ページが文字化けしてしまう
-				ClassRegistry::removeObject('view');
+				
+				/*** Mail.afterSendEmail ***/
+				$this->dispatchEvent('afterSendEmail', array(
+					'data'	=> $this->request->data
+				));
 
 			}else {
 
@@ -467,7 +478,12 @@ class MailController extends MailAppController {
 		}else {
 			$adminMail = $this->siteConfigs['email'];
 		}
-
+		if(strpos($adminMail, ',') !== false) {
+			list($fromAdmin) = explode(',', $adminMail);
+		} else {
+			$fromAdmin = $adminMail;
+		}
+		
 		foreach($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
 			if(!isset($data['Message'][$field])) {
@@ -500,9 +516,9 @@ class MailController extends MailAppController {
 			$data['other']['mode'] = 'user';
 			$options = array(
 				'fromName'	=> $mailContent['sender_name'],
-				'reply'		=> $adminMail,
+				'reply'		=> $fromAdmin,
 				'template'	=> $mailContent['mail_template'],
-				'from'		=> $adminMail
+				'reply'		=> $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
@@ -513,7 +529,7 @@ class MailController extends MailAppController {
 			$options = array(
 				'fromName'		=> $mailContent['sender_name'],
 				'reply'			=> $userMail,
-				'from'			=> $adminMail,
+				'from'			=> $fromAdmin,
 				'template'		=> $mailContent['mail_template'],
 				'bcc'			=> $mailContent['sender_2'],
 				'agentTemplate'	=> false
@@ -545,6 +561,7 @@ class MailController extends MailAppController {
     {
 		
         $this->BcCaptcha->render();
+		exit();
 		
     }
 }

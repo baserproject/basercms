@@ -181,6 +181,9 @@ class ContentsController extends AppController {
  */
 	public function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		
+		if(isConsole()) {
+			$this->Page = new Page(null, null, 'baser');
+		}
 		return $this->__getPageListRecursive($parentCategoryId, $recursive);
 		
 	}
@@ -192,7 +195,11 @@ class ContentsController extends AppController {
  * @access private 
  */
 	private function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
-
+		
+		if(empty($this->Page->PageCategory)) {
+			// インストールの段階で呼出された場合 ClassRegistry::init() だと AppModelで初期化されてしまう
+			$this->Page->PageCategory = new PageCategory(false, null, 'baser');
+		}
 		$direct = false;
 		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('BcRequest.agent'));
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');

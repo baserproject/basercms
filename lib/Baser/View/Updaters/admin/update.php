@@ -66,9 +66,9 @@ if(!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $site
 <?php if($requireUpdate): ?>
 	<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
 	<?php if(empty($plugin)): ?>
-				<?php echo $bcForm->create(array('action' => $this->action)) ?>
+				<?php echo $this->BcForm->create('Updater', array('action' => $this->action)) ?>
 	<?php else: ?>
-		<?php echo $this->BcForm->create(array('action' => $this->request->action, 'url' => array($plugin))) ?>
+		<?php echo $this->BcForm->create('Updater', array('action' => $this->request->action, 'url' => array($plugin))) ?>
 	<?php endif ?>
 		<?php echo $this->BcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
 		<?php echo $this->BcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>

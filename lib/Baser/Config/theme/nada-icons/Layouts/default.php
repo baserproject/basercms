@@ -16,8 +16,8 @@
 <?php $this->BcBaser->css('style') ?>
     
 <?php $this->BcBaser->js(array(
-    'jquery-1.7.2.min',
-    'functions',
+    'admin/jquery-1.7.2.min',
+    'admin/functions',
     'startup',
     'jquery.bxSlider.min',
     'jquery.easing.1.3',
@@ -67,7 +67,7 @@
                 <?php if($this->BcBaser->isHome()): ?>
                 <?php $this->BcBaser->element('toppage') ?>
                 <?php else: ?>
-                <div id="ContentsBody" class="subpage">
+                <div class="subpage">
                     <?php $this->BcBaser->flash() ?>
                     <?php $this->BcBaser->content() ?>
                     <?php $this->BcBaser->element('contents_navi') ?>

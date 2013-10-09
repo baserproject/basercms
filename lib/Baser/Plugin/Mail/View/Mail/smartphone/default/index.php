@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->css('jquery-ui/ui.all', array('inline' => true));
-$this->BcBaser->js(array('jquery-ui-1.8.19.custom.min','i18n/ui.datepicker-ja'), false);
+$this->BcBaser->css('admin/jquery-ui/ui.all', array('inline' => true));
+$this->BcBaser->js(array('admin/jquery-ui-1.8.19.custom.min','admin/i18n/ui.datepicker-ja'), false);
 $this->Mail->indexFields($mailContent['MailContent']['id']);
 ?>
 

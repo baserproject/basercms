@@ -21,6 +21,8 @@ App::uses('Page', 'Model');
 App::uses('Plugin', 'Model');
 App::uses('User', 'Model');
 App::uses('File', 'Utility');
+App::uses('Component', 'Controller');
+App::uses('ConnectionManager', 'Model');
 
 class BcManagerComponent extends Component {
 /**
@@ -226,16 +228,16 @@ class BcManagerComponent extends Component {
  * @access	protected
  */
 	public function createPageTemplates() {
-
+		
 		$Page = new Page(null, null, 'baser');
+		clearAllCache();
 		$pages = $Page->find('all', array('recursive' => -1));
 		if($pages) {
 			foreach($pages as $page) {
-				$Page->data = $page;
+				$Page->create($page);
 				$Page->afterSave(true);
 			}
 		}
-		ClassRegistry::removeObject('View');
 		return true;
 		
 	}
@@ -300,7 +302,6 @@ class BcManagerComponent extends Component {
 		CakePlugin::load('Blog');
 		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
-		$BlogPost->contentSaving = false;
 		$datas = $BlogPost->find('all', array('recursive' => -1));
 		if($datas) {
 			$ret = true;
@@ -1187,11 +1188,11 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 		
-		$src = App::themePath('Baseradmin') . 'webroot' . DS . 'img' . DS . 'ckeditor' . DS;
+		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
+		$result = true;
 		if(!empty($files[1])) {
-			$result = true;
 			foreach($files[1] as $file) {
 				if(copy($src . $file, $path . $file)) {
 					@chmod($path . $file, 0666);
@@ -1455,7 +1456,7 @@ class BcManagerComponent extends Component {
 		if(preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
-			$data = $data.$setting;
+			$data = $data . "\n" . $setting;
 		}
 		$return = $file->write($data);
 		$file->close();

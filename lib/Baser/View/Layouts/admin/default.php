@@ -26,29 +26,29 @@
 <?php $this->BcBaser->charset() ?>
 <?php $this->BcBaser->title() ?>
 <?php $this->BcBaser->css(array(
-	'jquery-ui/ui.all',
+	'admin/jquery-ui/ui.all',
 	'admin/import',
-	'../js/jquery.contextMenu-1.0/jquery.contextMenu',
-	'colorbox/colorbox',
+	'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
+	'admin/colorbox/colorbox',
 	'admin/toolbar')) ?>
-<!--[if IE]><?php $this->BcBaser->js(array('excanvas')) ?><![endif]-->
+<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
-	'jquery-1.7.2.min',
-	'jquery-ui-1.8.19.custom.min',
-	'i18n/ui.datepicker-ja',
-	'jquery.corner-2.12',
-	'jquery.bt.min',
-	'cb',
-	'jquery.contextMenu-1.0/jquery.contextMenu',
-	'jquery.form-2.94',
-	'jquery.validate.min',
-	'jquery.colorbox-min-1.4.5',
-	'jquery.mScroll',
-	'validate_messages_ja',
+	'admin/jquery-1.7.2.min',
+	'admin/jquery-ui-1.8.19.custom.min',
+	'admin/i18n/ui.datepicker-ja',
+	'admin/jquery.corner-2.12',
+	'admin/jquery.bt.min',
+	'admin/cb',
+	'admin/jquery.contextMenu-1.0/jquery.contextMenu',
+	'admin/jquery.form-2.94',
+	'admin/jquery.validate.min',
+	'admin/jquery.colorbox-min-1.4.5',
+	'admin/jquery.mScroll',
+	'admin/validate_messages_ja',
 	'admin/functions',
 	'admin/startup',
 	'admin/adjust_scroll',
-	'yuga')) ?>
+	'admin/yuga')) ?>
 <?php $this->BcBaser->scripts() ?>
 </head>
 
@@ -65,7 +65,7 @@
 	<!-- Waiting -->
 	<div id="Waiting" class="waiting-box" style="display:none">
 		<div class="corner10">
-		<?php echo $this->Html->image('ajax-loader.gif') ?><br />
+		<?php echo $this->Html->image('admin/ajax-loader.gif') ?><br />
 		W A I T
 		</div>
 	</div>

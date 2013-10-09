@@ -43,7 +43,7 @@
 }
 .error-message {
 	color:#C30;
-	background: url(images/warning.png) no-repeat left center;
+	background: url(../../img/admin/warning.png) no-repeat left center;
 	padding-left:24px;
 	font-weight: bold;
 	font-size: small;

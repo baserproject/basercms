@@ -284,6 +284,14 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no',array('BlogPost.blog_content_id'=>$blogContentId))+1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
 			
+			/*** BlogPosts.beforeAdd ***/
+			$event = $this->dispatchEvent('beforeAdd',array(
+				'data'	=> $this->request->data
+			));
+			if($event !== false) {
+				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			}
+			
 			// データを保存
 			if($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
@@ -294,7 +302,7 @@ class BlogPostsController extends BlogAppController {
 				
 				/*** afterAdd ***/
 				$this->dispatchEvent('afterAdd', array(
-					'user'	=> $this->request->data
+					'data'	=> $this->BlogPost->read(null, $id)
 				));
 				
 				// 編集画面にリダイレクト
@@ -366,13 +374,21 @@ class BlogPostsController extends BlogAppController {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/','-',$this->request->data['BlogPost']['posts_date']);
 			}
 			
+			/*** BlogPosts.beforeEdit ***/
+			$event = $this->dispatchEvent('beforeEdit',array(
+				'data'	=> $this->request->data
+			));
+			if($event !== false) {
+				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			}
+			
 			// データを保存
 			if($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
 				
-				/*** afterEdit ***/
+				/*** BlogPosts.afterEdit ***/
 				$this->dispatchEvent('afterEdit', array(
-					'user'	=> $this->request->data
+					'data'	=> $this->BlogPost->read(null, $id)
 				));
 
 				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を更新しました。', false, true);

@@ -157,7 +157,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('GlobalMenu', 'Favorite');
+	var $uses = array('Menu', 'Favorite');
 /**
  * beforeFilter
  *

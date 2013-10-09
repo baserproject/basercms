@@ -826,3 +826,12 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		return $db->config['datasource'];
 		
 	}
+
+/**
+ * コンソコールから実行されているかチェックする
+ * 
+ * @return boolean
+ */
+	function isConsole() {
+		return preg_match('/Console\/cake\.php$/', $_SERVER['SCRIPT_FILENAME']);
+	}

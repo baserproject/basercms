@@ -40,7 +40,7 @@ class DashboardController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('Dblog', 'User', 'GlobalMenu', 'Page');
+	public $uses = array('Dblog', 'User', 'Menu', 'Page');
 /**
  * ヘルパー
  *

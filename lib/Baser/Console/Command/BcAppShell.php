@@ -34,15 +34,16 @@
  * 
  * @package baser.vendors.shells
  */
-class BcAppShell extends Shell {
+class BcAppShell extends AppShell {
 /**
  * startup
  */
 	public function startup() {
-		$this->out("\nWelcome to baserCMS v" . getVersion() . " Console");
-		$this->out("---------------------------------------------------------------");
-		$this->out('App : '. $this->params['app']);
-		$this->out('Path: '. $this->params['working']);
+		$this->clear();
+		$this->out("<info>Welcome to baserCMS v" . getVersion() . " Console</info>");
+		$this->hr();
+		$this->out('App : '. APP_DIR);
+		$this->out('Path: '. APP);
 		$this->hr();		
 	}
 	

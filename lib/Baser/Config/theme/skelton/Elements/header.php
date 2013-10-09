@@ -1,23 +1,20 @@
 <?php
+/* SVN FILE: $Id$ */
 /**
- * ヘッダー
+ * [PUBLISH] ヘッダー
+ * 
+ * PHP versions 5
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			baser.views
+ * @since			baserCMS v 0.1.0
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
+ * @license			http://basercms.net/license/index.html
  */
-?>
-
-<div id="Header">
-
-	<?php $bcBaser->element('search') ?>
-
-	<h1><?php $bcBaser->link($bcBaser->siteConfig['name'],'/') ?></h1>
-
-	<div id="GlobalMenus">
-		<?php $bcBaser->element('global_menu') ?>
-	</div>
-
-	<?php if(!$bcBaser->isTop()): ?>
-	<div id="Navigation">
-		<?php $bcBaser->element('crumbs'); ?>
-	</div>
-	<?php endif ?>
-
-</div>
+$this->BcBaser->includeCore('Elements/header');

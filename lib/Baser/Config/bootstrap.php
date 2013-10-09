@@ -25,6 +25,11 @@ require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
 
 /**
+ * インストール状態
+ */
+define('BC_INSTALLED', isInstalled());
+
+/**
  * Baserパス追加
  */
 App::build(array(
@@ -108,11 +113,8 @@ App::uses('BcViewEventListener',		'Event');
 App::uses('BcHelperEventListener',		'Event');
 App::uses('BcPluginAppController',		'Controller');
 App::uses('BcPluginAppModel',			'Model');
+App::uses('BcManagerShell',				'Console/Command');
 
-/**
- * インストール状態
- */
-define('BC_INSTALLED', isInstalled());
 
 /**
  * 設定ファイル読み込み
@@ -163,42 +165,36 @@ if (BC_INSTALLED) {
  */
 	checkTmpFolders();
 /**
- * データキャッシュ
+ * キャッシュ設定
  */
+	$cacheSetting = Cache::config('_cake_core_');
+	$cacheEngine = $cacheSetting['settings']['engine'];
+	$cachePrefix = preg_replace('/cake_model_$/', '', $cacheSetting['settings']['prefix']);
+	$cacheDuration = '+999 days';
+	if (Configure::read('debug') > 0) {
+		$cacheDuration = '+10 seconds';
+	}
+	// DBデータキャッシュ
 	Cache::config('_cake_data_', array(
-		'engine' => 'File',
+		'engine' => $cacheEngine,
 		'duration' => Configure::read('BcCache.dataCachetime'),
-		'probability' => 100,
 		'path' => CACHE . 'datas',
-		'prefix' => 'cake_',
+		'probability' => 100,
+		'prefix' => $prefix . 'cake_data_',
 		'lock' => false,
-		'serialize' => true
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => $cacheDuration
 	));
-/**
- * 環境情報キャッシュ
- */
+	// 環境情報キャッシュ
 	Cache::config('_cake_env_', array(
-		'engine' => 'File',
+		'engine' => $cacheEngine,
 		'duration' => Configure::read('BcCache.defaultCachetime'),
 		'probability' => 100,
 		'path' => CACHE . 'environment',
-		'prefix' => 'cake_',
+		'prefix' => 'cake_env_',
 		'lock' => false,
-		'serialize' => true
-	));
-	Cache::config('_cake_core_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_core_',
-		'path' => CACHE . 'persistent' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
-	));
-	Cache::config('_cake_model_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_model_',
-		'path' => CACHE . 'models' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => $cacheDuration
 	));
 /**
  * サイト基本設定を読み込む
@@ -285,8 +281,10 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 /**
  * セッションスタート 
  */
-$Session = new CakeSession();
-$Session->start();
+if(!isConsole()) {
+	$Session = new CakeSession();
+	$Session->start();
+}
 /**
  * パラメーター取得
  * モバイル判定・簡易リダイレクト
@@ -376,12 +374,9 @@ if ($agentOn) {
 	}
 }
 /**
- * Viewのキャッシュ設定
+ * Viewのキャッシュ設定・ログの設定
  */
-if (Configure::read('debug') > 0) {
-	Configure::write('Cache.check', false);
-	clearViewCache();
-} else {
+if (Configure::read('debug') == 0) {
 	if (Configure::read('Session.start')) {
 		// 管理ユーザーでログインしている場合、ページ機能の編集ページへのリンクを表示する為、キャッシュをオフにする。
 		// ただし、現在の仕様としては、セッションでチェックしているので、ブラウザを閉じてしまった場合、一度管理画面を表示する必要がある。
@@ -392,4 +387,12 @@ if (Configure::read('debug') > 0) {
 			Configure::write('Cache.check', false);
 		}
 	}
+	Configure::write('Exception', array(
+		'handler' => 'ErrorHandler::handleException',
+		'renderer' => 'ExceptionRenderer',
+		'log' => false
+	));
+} else {
+	Configure::write('Cache.check', false);
+	clearViewCache();
 }

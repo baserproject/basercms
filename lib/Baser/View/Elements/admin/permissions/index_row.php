@@ -28,7 +28,7 @@
 <tr<?php echo $class; ?>>
 	<td style="width:15%" class="row-tools">
 <?php if($sortmode): ?>
-		<span class="sort-handle"><?php $this->BcBaser->img('sort.png', array('alt' => '並び替え')) ?></span>
+		<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え')) ?></span>
 		<?php echo $this->BcForm->input('Sort.id' . $data['Permission']['id'], array('type' => 'hidden', 'class' => 'id', 'value'=>$data['Permission']['id'])) ?>
 <?php endif ?>
 <?php if($this->BcBaser->isAdminUser()): ?>

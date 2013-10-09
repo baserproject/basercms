@@ -39,7 +39,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 				'class'		=> 'priority',
 				'value'		=> $data['Content']['priority'])) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Content']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
-		<?php $this->BcBaser->img('ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader'.$data['Content']['id'], 'style'=>"vertical-align:middle;display:none")) ?>
+		<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader'.$data['Content']['id'], 'style'=>"vertical-align:middle;display:none")) ?>
 	</td>
 	<td><?php echo $data['Content']['id'] ?></td>
 	<td style="width:15%"><?php echo $data['Content']['type'] ?><br /><?php echo $data['Content']['category'] ?></td>

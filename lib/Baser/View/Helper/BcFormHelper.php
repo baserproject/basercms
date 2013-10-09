@@ -715,7 +715,7 @@ DOC_END;
 			$label = '';
 		}
 		return $this->output($output . sprintf(
-			$this->Html->tags['checkbox'],
+			$this->Html->_tags['checkbox'],
 			$options['name'],
 			$this->_parseAttributes($options, array('name'), null, ' ')
 		)).$label;
@@ -919,7 +919,6 @@ DOC_END;
 		$value = '';
 		if(!empty($options['multiple'])){
 			$multiple = true;
-			$tagType = 'hiddenmultiple';
 			$options['id'] = null;
 			if (!isset($options['value'])) {
 				$value = $this->value($fieldName);
@@ -930,8 +929,6 @@ DOC_END;
 				unset($options['value']);
 			}
 			unset($options['multiple']);
-		} else {
-			$tagType = 'hidden';
 		}
 		// <<<
 		// >>> MODIFY
@@ -941,7 +938,7 @@ DOC_END;
 			$out = array();
 			foreach($value as $_value) {
 				$options['value'] = $_value;
-				$out[] = $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
+				$out[] = $this->Html->useTag('hiddenmultiple', $options['name'], array_diff_key($options, array('name' => '')));
 			}
 			return implode("\n", $out);
 		} else {

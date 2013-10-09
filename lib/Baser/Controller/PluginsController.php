@@ -37,7 +37,7 @@ class PluginsController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('GlobalMenu','Plugin','PluginContent');
+	public $uses = array('Menu','Plugin','PluginContent');
 /**
  * コンポーネント
  *

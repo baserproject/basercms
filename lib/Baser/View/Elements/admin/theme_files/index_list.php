@@ -30,7 +30,7 @@
 					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
 					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 <?php if($path): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
 <?php endif ?>
 				</div>
 <?php endif ?>

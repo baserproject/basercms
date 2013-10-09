@@ -131,6 +131,13 @@ class Page extends AppModel {
 					'message'	=> '説明文は255文字以内で入力してください。')
 		)
 	);
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		if(isConsole()) {
+			App::uses('PageCategory', 'Model');
+			$this->PageCategory = new PageCategory(null, null, 'baser');
+		}
+	}
 /**
  * フォームの初期値を設定する
  * 
@@ -388,9 +395,8 @@ class Page extends AppModel {
 			$data['title'] = Inflector::camelize($data['name']);
 		}
 		
-		// モバイル未対応
-		$PageCategory = ClassRegistry::init('PageCategory');
-		$excludeIds = am($PageCategory->getAgentCategoryIds('mobile'), $PageCategory->getAgentCategoryIds('smartphone'));
+		// モバイル未対応の為除外
+		$excludeIds = array_merge($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
 		
 		// インストール時取得できないのでハードコーディング
 		// TODO 検討
@@ -412,7 +418,7 @@ class Page extends AppModel {
 		}
 		$_data['Content']['category'] = '';
 		if(!empty($data['page_category_id'])) {
-			$categoryPath = $PageCategory->getPath($data['page_category_id'], array('title'));
+			$categoryPath = $this->PageCategory->getPath($data['page_category_id'], array('title'));
 			if($categoryPath) {
 				$_data['Content']['category'] = $categoryPath[0]['PageCategory']['title'];
 			}
@@ -428,7 +434,7 @@ class Page extends AppModel {
 		}
 
 		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return') );
-		
+	
 		if($View) {
 			ClassRegistry::addObject('View', $View);
 		}
@@ -515,6 +521,8 @@ class Page extends AppModel {
 		if(isset($data['Page'])){
 			$data = $data['Page'];
 		}
+		
+		$data = array_merge(array('id' => '', 'contents' => '', 'title' => '', 'description' => '', 'code' => ''), $data);
 		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'],$data['description'], $data['code']);
 
 		// 新しいページファイルのパスを取得する
@@ -978,7 +986,7 @@ class Page extends AppModel {
 			}
 
 			// 説明文取得・置換
-			$descriptionReg = '/<\?php\s+?\$bcBaser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
+			$descriptionReg = '/<\?php\s+?\$this->BcBaser->setDescription\(\'(.*?)\'\)\s+?\?>/is';
 			if(preg_match($descriptionReg,$contents,$matches)) {
 				$description = trim($matches[1]);
 				$contents = preg_replace($descriptionReg,'',$contents);

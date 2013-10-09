@@ -124,7 +124,7 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		if(BC_INSTALLED) {
+		if(BC_INSTALLED || isConsole()) {
 			if(isset($this->_View->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_View->viewVars['siteConfig'];
 			}
@@ -162,7 +162,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getMenus () {
 
-		if (ClassRegistry::init('GlobalMenu')) {
+		if (ClassRegistry::init('Menu')) {
 			if(!file_exists(APP . 'Config' . DS.'database.php')) {
 				return '';
 			}
@@ -170,17 +170,17 @@ class BcBaserHelper extends AppHelper {
 			if(!$dbConfig->baser) {
 				return '';
 			}
-			$GlobalMenu = ClassRegistry::getObject('GlobalMenu');
+			$Menu = ClassRegistry::getObject('Menu');
 			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
 			$db = ConnectionManager::getDataSource('baser');
 			$sources = $db->listSources();
-			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'global_menus'), array_map('strtolower', $sources))) {
+			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'menus'), array_map('strtolower', $sources))) {
 				if (empty($this->request->params['prefix'])) {
 					$prefix = 'publish';
 				} else {
 					$prefix = $this->request->params['prefix'];
 				}
-				return $GlobalMenu->find('all', array('order' => 'sort'));
+				return $Menu->find('all', array('order' => 'sort'));
 			}
 		}
 		return '';
@@ -577,13 +577,21 @@ class BcBaserHelper extends AppHelper {
 		}
 		
 		extract($options);
+
 		
-		if(!$subDir) {
+		if($subDir === false) {
+			if(!$this->_subDir && $this->_View->subDir) {
+				$this->_subDir = $this->_View->subDir;
+			}
 			$this->_View->subDir = null;
+		} else {
+			if($this->_subDir) {
+				$this->_View->subDir = $this->_subDir;
+			}			
 		}
 		
 		$out = $this->_View->element($name, $data, $options);
-
+		
 		/*** afterElement ***/
 		$event = $this->dispatchEvent('afterElement', array(
 			'name'		=> $name,
@@ -942,6 +950,12 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getImg($path, $options = array()) {
 
+		// スマートURLオフ対策
+		// imgフォルダ内以外へのプログラムが生成するURLへのパスが解決できないので調整
+		if(!is_array($path) && preg_match('/^\//', $path) && !preg_match('/^\/(img|files|theme)\//', $path)) {
+			$path = $this->getUrl($path);
+		}
+		
 		return $this->BcHtml->image($path, $options);
 
 	}
@@ -1660,7 +1674,7 @@ class BcBaserHelper extends AppHelper {
 
 		$options = array_merge(array(
 			'version'	=> 7,
-			'script'	=> 'swfobject-2.2',
+			'script'	=> 'admin/swfobject-2.2',
 			'noflash'	=> '&nbsp;'
 		), $options);
 		extract($options);
@@ -1770,7 +1784,7 @@ END_FLASH;
  * @param int $id
  * @manual
  */
-	public function page($id, $params = array(), $options = array()) {
+	public function page($url, $params = array(), $options = array()) {
 
 		if(isset($this->_View->viewVars['pageRecursive']) && !$this->_View->viewVars['pageRecursive']) {
 			return;
@@ -1795,26 +1809,20 @@ END_FLASH;
 		}
 		
 		// urlを取得
-		$PageClass = ClassRegistry::init('Page');
-		$page = $PageClass->find('first', array('conditions' => am(array('Page.id' => $id), $PageClass->getConditionAllowPublish()), 'recursive' => -1));
-		
-		if($page) {
-			$view = ClassRegistry::getObject('View');
-			if(empty($view->subDir)){
-				$url = '/../pages'.$PageClass->getPageUrl($page);
-			}else{
-				$dirArr = explode('/', $view->subDir);
-				$url = str_repeat('/..', count($dirArr)).'/../pages'.$PageClass->getPageUrl($page);
-			}
+		if(empty($this->_View->subDir)){
+			$url = '/../Pages' . $url;
+		}else{
+			$dirArr = explode('/', $this->_View->subDir);
+			$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
+		}
 
-			$this->element($url, $params, $loadHelpers, $subDir);
+		$this->element($url, $params, array('subDir' => $subDir));
 
-			// 現在のページの情報に戻す
-			$this->setDescription($description);
-			$this->setTitle($title);
-			if($editLink) {
-				$this->_View->viewVars['editLink'] = $editLink;
-			}
+		// 現在のページの情報に戻す
+		$this->setDescription($description);
+		$this->setTitle($title);
+		if($editLink) {
+			$this->_View->viewVars['editLink'] = $editLink;
 		}
 
 	}
@@ -1879,5 +1887,21 @@ END_FLASH;
 			$userName = implode(' ', $userName);
 		}
 		return $userName;
-	} 
+	}
+	public function includeCore($name, $data = array(), $options = array()) {
+		
+		$plugin = '';
+		if(strpos($name, '.') !== false) {
+			list($plugin, $name) = explode('.', $name);
+			$plugin = Inflector::camelize($plugin);
+			$name = '../../../lib/Baser/Plugin/' . $plugin . '/View/' . $name;
+		} else {
+			$name = '../../../lib/Baser/View/' . $name;
+		}
+		
+		$options = array_merge($options, array('subDir' => false));
+		$this->element($name, $data, $options);
+		
+	}
+	
 }

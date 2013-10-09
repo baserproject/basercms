@@ -20,7 +20,7 @@
 ?>
 
 
-<?php $this->BcBaser->css('ckeditor/editor', array('inline' => true)); ?>
+<?php $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true)); ?>
 <?php echo $this->BcForm->create('EditorTemplate', array('type' => 'file')) ?>
 
 <div class="section">

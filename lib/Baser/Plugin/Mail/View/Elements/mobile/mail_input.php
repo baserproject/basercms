@@ -62,7 +62,7 @@
 				<?php if (($this->BcArray->last($mailFields, $key)) ||
 						($record['MailField']['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
 						(!$record['MailField']['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-						($record['MailField']['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $bcArray->first($mailFields,$key))): ?>
+						($record['MailField']['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields,$key))): ?>
 					<?php if($record['MailField']['group_valid']): ?>
 						<?php if($this->Mailform->error("Message." . $record['MailField']['group_field'] . "_format", "check")): ?>
 <font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['group_field'] . "_format", "形式が不正です", array('wrap' => false)) ?></font>

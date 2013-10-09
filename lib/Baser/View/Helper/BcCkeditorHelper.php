@@ -239,7 +239,7 @@ class BcCkeditorHelper extends AppHelper {
 		
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->BcHtml->script('ckeditor/ckeditor.js', array("inline"=>false));
+			$this->BcHtml->script('admin/ckeditor/ckeditor.js', array("inline"=>false));
 		}
 
 		if($useDraft) {			
@@ -297,8 +297,8 @@ class BcCkeditorHelper extends AppHelper {
 			);
 		}
 		$themeEditorCsses[] = array(
-			'path'	=> BASER_VIEWS . DS . 'webroot' . DS . 'css' . DS . 'ckeditor' . DS . 'contents.css',
-			'url'	=> $this->webroot('/css/ckeditor/contents.css')
+			'path'	=> BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
+			'url'	=> $this->webroot('/css/admin/ckeditor/contents.css')
 		);
 
 		if($theme && isset($this->request->data['Page']['page_type'])) {

@@ -39,7 +39,7 @@ class SiteConfigsController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('SiteConfig','GlobalMenu','Page');
+	public $uses = array('SiteConfig','Menu','Page');
 /**
  * コンポーネント
  *
@@ -248,7 +248,7 @@ class SiteConfigsController extends AppController {
 		
 		clearAllCache();
 		$this->setMessage('サーバーキャッシュを削除しました。');
-		$this->redirect(array('action' => 'form'));
+		$this->redirect($this->referer());
 		
 	}
 /**
