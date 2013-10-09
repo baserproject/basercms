@@ -59,7 +59,6 @@ if (empty($_SESSION)) {
 		'cookieTimeout'	=> $cookieTimeout,
 		'ini'	=> array(
 			'session.serialize_handler' => 'php',
-			'session.auto_start'		=> 0,
 			'session.save_path'			=> TMP . 'sessions',
 			'session.use_cookies'		=> $useCookies,
 			'session.use_trans_sid'		=> $useTransSid,
