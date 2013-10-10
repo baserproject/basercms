@@ -186,6 +186,9 @@ $(function(){
 				<?php echo $this->BcForm->input('SiteConfig.site_url', array_merge(array('type' => 'text', 'size' => 35, 'maxlength' => 255), $disableSettingInstallSetting)) ?><br />
 				<?php echo $this->BcForm->input('SiteConfig.ssl_url', array_merge(array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => '<small>[SSL]</small>'), $disableSettingInstallSetting)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php if($disableSettingInstallSetting): ?>
+				<?php echo $this->BcForm->input('SiteConfig.site_url', array('type' => 'hidden')) ?>
+				<?php endif ?>
 				<?php echo $this->BcForm->error('SiteConfig.site_url') ?>
 				<?php echo $this->BcForm->error('SiteConfig.ssl_url') ?>
 				<div id="helptextSiteUrl" class="helptext">baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
@@ -264,6 +267,9 @@ $(function(){
 				<span>Rewriteモジュール利用可否：<strong>
 				<?php if($rewriteInstalled === -1): ?>不明<?php elseif($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
 				<?php echo $this->BcForm->input('SiteConfig.smart_url', array_merge(array('type' => 'select', 'options' => array('0'=>'オフ', '1' => 'オン')), $disableSettingSmartUrl)) ?>
+				<?php if($disableSettingSmartUrl): ?>
+				<?php echo $this->BcForm->input('SiteConfig.smart_url', array('type' => 'hidden')) ?>
+				<?php endif ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmartUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?><br />
 				<div id="helptextSmartUrl" class="helptext">
 					<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />

@@ -87,6 +87,8 @@ class SiteConfigsController extends AppController {
  */
 	public function admin_form() {
 
+		$writableInstall = is_writable(APP . 'Config' . DS.'install.php');
+		
 		if(empty($this->request->data)) {
 
 			$this->request->data = $this->_getSiteConfigData();
@@ -122,9 +124,9 @@ class SiteConfigsController extends AppController {
 					}
 				}
 				
-				$adminSsl = $this->request->data['SiteConfig']['admin_ssl'];
-				$mobile = $this->request->data['SiteConfig']['mobile'];
-				$smartphone = $this->request->data['SiteConfig']['smartphone'];
+				$adminSsl = @$this->request->data['SiteConfig']['admin_ssl'];
+				$mobile = @$this->request->data['SiteConfig']['mobile'];
+				$smartphone = @$this->request->data['SiteConfig']['smartphone'];
 
 				unset($this->request->data['SiteConfig']['id']);
 				unset($this->request->data['SiteConfig']['mode']);
@@ -142,12 +144,14 @@ class SiteConfigsController extends AppController {
 					$this->setMessage('システム設定を保存しました。');
 
 					// 環境設定を保存
-					$this->BcManager->setInstallSetting('debug', $mode);
-					$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
-					$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
-					$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
-					$this->BcManager->setInstallSetting('BcApp.mobile', ($mobile)? 'true' : 'false');
-					$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone)? 'true' : 'false');
+					if($writableInstall) {
+						$this->BcManager->setInstallSetting('debug', $mode);
+						$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'".$siteUrl."'");
+						$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'".$sslUrl."'");
+						$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
+						$this->BcManager->setInstallSetting('BcApp.mobile', ($mobile)? 'true' : 'false');
+						$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone)? 'true' : 'false');
+					}
 					
 					if($this->BcManager->smartUrl() != $smartUrl) {
 						$this->BcManager->setSmartUrl($smartUrl);
@@ -186,7 +190,6 @@ class SiteConfigsController extends AppController {
 		}else {
 			$rewriteInstalled = -1;
 		}
-		$writableInstall = is_writable(APP . 'Config' . DS.'install.php');
 
 		if(BC_DEPLOY_PATTERN != 3) {
 			$htaccess1 = ROOT.DS.'.htaccess';
