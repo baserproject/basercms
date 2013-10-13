@@ -68,17 +68,6 @@ $(function(){
 						<?php endif ?>
 					</div>
 				</li>
-				<li class='<?php if ($coreFileWritable) echo 'check'; else echo'failed'; ?>'>
-					/app/Config/core.php ファイルの書き込み権限（606 OR 666 等、サーバー推奨がある場合はそちらに従ってください）<br />
-					<div class="check-result">
-						<?php if ($coreFileWritable): ?>
-						書き込み可
-						<?php else: ?>
-						書き込み不可<br />
-						<small>/app/Config/core.php ファイルに書き込み権限が必要です</small>
-						<?php endif ?>
-					</div>
-				</li>
 				<li class='<?php if ($tmpDirWritable) echo 'check'; else echo'failed'; ?>'>
 					/app/tmp フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
