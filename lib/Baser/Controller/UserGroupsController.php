@@ -86,11 +86,14 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_index() {
+		/* 画面情報設定 */
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('UserGroup', array('default' => $default));
 		/* データ取得 */
 		$this->paginate = array('conditions' => array(),
 				'fields' => array(),
 				'order' => 'UserGroup.id',
-				'limit' => 10
+				'limit' => $this->passedArgs['num']
 		);
 		$datas = $this->paginate('UserGroup');
 

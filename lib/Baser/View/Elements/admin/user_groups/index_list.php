@@ -18,7 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
+<!-- pagination -->
+<?php $this->BcBaser->element('pagination') ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<thead>
@@ -47,3 +48,6 @@
 	<?php endif; ?>
 	</tbody>
 </table>
+
+<!-- list-num -->
+<?php $this->BcBaser->element('list_num') ?>
