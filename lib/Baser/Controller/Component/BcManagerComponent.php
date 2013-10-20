@@ -113,6 +113,11 @@ class BcManagerComponent extends Component {
 			$result = false;
 		}
 		
+		// テーマに管理画面のアセットへのシンボリックリンクを作成する
+		if(!$this->isCreatedAdminAssetsSymlink()) {
+			$this->createAdminAssetsSymlink();
+		}
+		
 		// エディタテンプレート用の画像を配置
 		if(!$this->deployEditorTemplateImage()) {
 			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
@@ -1593,6 +1598,65 @@ class BcManagerComponent extends Component {
 		
 	}
 
+/**
+ * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックする
+ * 作成してないものがひとつでもあると true を返す
+ * 
+ * @return boolean
+ */
+	public function isCreatedAdminAssetsSymlink() {
+		
+		$viewPath = getViewPath();
+		$css = $viewPath . 'css'  . DS . 'admin';
+		$js = $viewPath . 'js'  . DS . 'admin';
+		$img = $viewPath . 'img'  . DS . 'admin';
+		$result = true;
+		if(!is_dir($css) && !is_link($css)) {
+			$result = false;
+		}
+		if(!is_dir($js) && !is_link($js)) {
+			$result = false;
+		}
+		if(!is_dir($img) && !is_link($img)) {
+			$result = false;
+		}
+		return $result;
+
+	}
 	
+/**
+ * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成する
+ * これにより、表示速度の改善を行う事ができる
+ * 
+ * @return boolean
+ */
+	public function createAdminAssetsSymlink() {
+		
+		$viewPath = getViewPath();
+		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css'  . DS . 'admin';
+		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js'  . DS . 'admin';
+		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img'  . DS . 'admin';
+		$css = $viewPath . 'css'  . DS . 'admin';
+		$js = $viewPath . 'js'  . DS . 'admin';
+		$img = $viewPath . 'img'  . DS . 'admin';
+		$result = true;
+		if(!is_dir($css) && !is_link($css)) {
+			if(!symlink($adminCss, $css)) {
+				$result = false;
+			}
+		}
+		if(!is_dir($js) && !is_link($js)) {
+			if(!symlink($adminJs, $js)) {
+				$result = false;
+			}
+		}
+		if(!is_dir($img) && !is_link($img)) {
+			if(!symlink($adminImg, $img)) {
+				$result = false;
+			}
+		}
+		return $result;
+		
+	}
 	
 }

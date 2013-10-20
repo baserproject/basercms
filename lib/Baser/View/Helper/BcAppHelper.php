@@ -97,6 +97,7 @@ class BcAppHelper extends Helper {
 		// >>>
 		//$webPath = "{$this->request->webroot}" . $asset[0];
 		// ---
+		$asset[0] = preg_replace('/^\//', '', $asset[0]);
 		if($this->request->webroot && $this->request->webroot != '/') {
 			$filePath = preg_replace('/'.preg_quote($this->request->webroot, '/').'/', '', $asset[0]);
 		} else {
@@ -145,19 +146,20 @@ class BcAppHelper extends Helper {
 					}
 				} else {
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
-					$themePath = App::themePath($this->_View->adminTheme);
-					$path = $themePath . 'webroot' . DS . $file;
-					if (file_exists($path)) {
-						$adminTheme = $this->_View->adminTheme . '/';
-						if($baseUrl) {
-							// スマートURLオフ
-							$webPath = Configure::read('App.baseUrl') . "/theme/" . $adminTheme . $asset[0];
-						} else {
-							// スマートURLオン
-							$webPath = "{$this->request->webroot}theme/" . $adminTheme . $asset[0];
+					if($this->_View->adminTheme) {
+						$themePath = App::themePath($this->_View->adminTheme);
+						$path = $themePath . 'webroot' . DS . $file;
+						if (file_exists($path)) {
+							$adminTheme = $this->_View->adminTheme . '/';
+							if($baseUrl) {
+								// スマートURLオフ
+								$webPath = Configure::read('App.baseUrl') . "/theme/" . $adminTheme . $asset[0];
+							} else {
+								// スマートURLオン
+								$webPath = "{$this->request->webroot}theme/" . $adminTheme . $asset[0];
+							}
 						}
 					}
-					
 				}
 				// <<<
 			}

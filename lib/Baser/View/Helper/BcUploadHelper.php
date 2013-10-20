@@ -46,7 +46,8 @@ class BcUploadHelper extends FormHelper {
 			'rel'		=> '',			// rel属性
 			'title'		=> '',			// タイトル属性
 			'link'		=> true,		// 大きいサイズの画像へのリンク有無
-			'delCheck' => true
+			'delCheck' => true,
+			'force'		=> false
 		), $options);
 		
 		extract($options);
@@ -56,13 +57,15 @@ class BcUploadHelper extends FormHelper {
 		unset($options['title']);
 		unset($options['link']);
 		unset($options['delCheck']);
+		unset($options['force']);
 		
 		$linkOptions = array(
 			'imgsize'	=> $imgsize,
 			'rel'		=> $rel,
 			'title'		=> $title,
 			'link'		=> $link,
-			'delCheck' => $delCheck
+			'delCheck'	=> $delCheck,
+			'force'	=> $force
 		);
 		
 		$options = $this->_initInputField($fieldName, $options);
@@ -107,7 +110,8 @@ class BcUploadHelper extends FormHelper {
 			'imgsize'	=> 'midium',	// 画像サイズ
 			'rel'		=> '',			// rel属性
 			'title'		=> '',			// タイトル属性
-			'link'		=> true			// 大きいサイズの画像へのリンク有無
+			'link'		=> true,			// 大きいサイズの画像へのリンク有無
+			'force'		=> false
 		), $options);
 		
 		extract($options);
@@ -154,7 +158,7 @@ class BcUploadHelper extends FormHelper {
 				$uploadSettings = $settings['fields'][$field];	
 				$ext = decodeContent('', $value);
 				if($uploadSettings['type']=='image' || in_array($ext, $model->Behaviors->BcUpload->imgExts)) {
-					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link);
+					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link, 'force' => $force);
 					if($tmp) {
 						$options['tmp'] = true;
 					}
@@ -195,7 +199,8 @@ class BcUploadHelper extends FormHelper {
 			'width'		=> '',			// 横幅
 			'height'	=> '',			// 高さ
 			'noimage'	=> '',			// 画像がなかった場合に表示する画像
-			'tmp'		=> false
+			'tmp'		=> false,
+			'force'		=> false
 		), $options);
 		
 		extract($options);
@@ -314,7 +319,7 @@ class BcUploadHelper extends FormHelper {
 					$basename = basename($fileName,'.'.$ext);
 					
 					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
-					if(file_exists($filePath . str_replace('/' , DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext)) {
+					if(file_exists($filePath . str_replace('/' , DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext) || $force) {
 						if($check && !$mostSizeExists) {
 							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
 							$mostSizeExists = true;

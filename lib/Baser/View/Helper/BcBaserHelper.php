@@ -1034,8 +1034,8 @@ class BcBaserHelper extends AppHelper {
 			$url = preg_replace('/^\/admin\//', '/' . $prefixes[0] . '/', $url);
 		}
 
-		$url = $this->getUrl($url);
-		$_url = preg_replace('/^'.preg_quote($this->request->base, '/').'\//', '/', $url);
+		$_url = $this->getUrl($url);
+		$_url = preg_replace('/^'.preg_quote($this->request->base, '/').'\//', '/', $_url);
 		$enabled = true;
 
 		if($options == false) {
@@ -1085,8 +1085,7 @@ class BcBaserHelper extends AppHelper {
 			} else {
 				$url = Configure::read('BcEnv.sslUrl').$_url;
 			}
-		} else {
-			$url = $_url;
+			
 		}
 
 		if(!$options) {

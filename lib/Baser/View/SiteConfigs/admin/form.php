@@ -88,6 +88,10 @@ $(function(){
 		$("#SpanRootContentTemplateSmartphone").hide();
 	}
 	
+	$("#BtnSpeedUp").click(function(){
+		location.href = './speedup';
+	});
+	
 });
 </script>
 

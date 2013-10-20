@@ -204,7 +204,7 @@ $(function(){
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
 				<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
-				<?php $this->BcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
+				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
 				<?php echo $this->BcForm->error('BlogPost.blog_category_id') ?>
 			</td>
 		</tr>
@@ -260,7 +260,7 @@ $(function(){
 				<?php echo $this->BcForm->error('BlogTag.BlogTag') ?>
 				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text')) ?>
 				<?php echo $this->BcForm->button('新しいタグを追加', array('id' => 'BtnAddBlogTag')) ?>
-				<?php $this->BcBaser->img('ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
+				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader')) ?>
 			</td>
 		</tr>
 <?php endif ?>

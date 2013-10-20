@@ -266,6 +266,11 @@ class BcManagerShell extends BcAppShell {
 			return;
 		}
 		
+		// テーマに管理画面のアセットへのシンボリックリンクを作成する
+		if(!$this->BcManager->isCreatedAdminAssetsSymlink()) {
+			$this->BcManager->createAdminAssetsSymlink();
+		}
+		
 		// ページ初期化
 		if(!$this->BcManager->createPageTemplates()){
 			$message = "ページテンプレートの更新に失敗しました";

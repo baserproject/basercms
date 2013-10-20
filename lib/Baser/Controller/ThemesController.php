@@ -447,6 +447,9 @@ class ThemesController extends AppController {
 		} else {
 			$this->setMessage('テーマ「'.$theme.'」を適用しました。');
 		}
+		if(!$this->BcManager->isCreatedAdminAssetsSymlink()) {
+			$this->BcManager->createAdminAssetsSymlink();
+		}
 		$this->redirect(array('action' => 'index'));
 		
 	}

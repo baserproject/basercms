@@ -18,11 +18,6 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('AuthComponent', 'Controller/Component');
-$theme = $this->BcBaser->theme;
-if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
-	$this->BcBaser->theme = Configure::read('BcApp.adminTheme');
-	$this->BcBaser->BcHtml->theme = Configure::read('BcApp.adminTheme');
-}
 $this->BcBaser->js(array('admin/outerClick','admin/jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.'.$currentPrefix);
@@ -153,11 +148,3 @@ $(function(){
 		</div>
 	</div>
 </div>
-
-<?php
-if($this->name != 'Installations' && !Configure::read('BcRequest.isUpdater')) {
-	//元に戻しておく
-	$this->BcBaser->theme = $theme;
-	$this->BcBaser->BcHtml->theme = $theme;
-}
-unset($theme);
