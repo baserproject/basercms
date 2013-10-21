@@ -393,14 +393,14 @@ class BlogPost extends BlogAppModel {
 
 			case 'Database/BcPostgres':
 				if(!empty($year)) {
-					$conditions["date_part('year', \"BlogPost\".\"posts_date\")"] = $year;
+					$conditions["date_part('year', \"BlogPost\".\"posts_date\") ="] = $year;
 				}else {
-					$conditions["date_part('year', \"BlogPost\".\"posts_date\")"] = date('Y');
+					$conditions["date_part('year', \"BlogPost\".\"posts_date\") ="] = date('Y');
 				}
 				if(!empty($month)) {
-					$conditions["date_part('month', \"BlogPost\".\"posts_date\")"] = $month;
+					$conditions["date_part('month', \"BlogPost\".\"posts_date\") ="] = $month;
 				}else {
-					$conditions["date_part('month', \"BlogPost\".\"posts_date\")"] = date('m');
+					$conditions["date_part('month', \"BlogPost\".\"posts_date\") ="] = date('m');
 				}
 				break;
 
