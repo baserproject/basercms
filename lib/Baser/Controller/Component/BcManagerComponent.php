@@ -1088,14 +1088,19 @@ class BcManagerComponent extends Component {
 				}
 				// シーケンスも削除
 				$sql = "SELECT sequence_name FROM INFORMATION_SCHEMA.sequences WHERE sequence_schema = '{$dbConfig['schema']}';";
-				$sequences = $db->query($sql);
-				$sequences = Set::extract('/0/sequence_name',$sequences);
-				foreach($sequences as $sequence) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
-						$sql = 'DROP SEQUENCE '.$sequence;
-						try {
-							$db->execute($sql);
-						} catch (Exception $e) {}
+				$sequences = array();
+				try {
+					$sequences = $db->query($sql);
+				} catch (Exception $e) {}
+				if($sequences) {
+					$sequences = Set::extract('/0/sequence_name',$sequences);
+					foreach($sequences as $sequence) {
+						if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
+							$sql = 'DROP SEQUENCE '.$sequence;
+							try {
+								$db->execute($sql);
+							} catch (Exception $e) {}
+						}
 					}
 				}
 				break;
