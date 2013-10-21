@@ -914,11 +914,6 @@ class BcBaserHelper extends AppHelper {
  */
 	public function js($url, $inline = true) {
 
-		// スマートURLオフ対策
-		// jsフォルダ内以外へのプログラムが生成するURLへのパスが解決できないので調整
-		if(!is_array($url) && preg_match('/^\//', $url) && !preg_match('/^\/js/', $url)) {
-			$url = $this->getUrl($url);
-		}
 		$ret = $this->BcHtml->script($url, array('inline' => $inline));
 		if($inline) {
 			echo $ret;
