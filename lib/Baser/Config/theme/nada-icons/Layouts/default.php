@@ -49,10 +49,10 @@
                 <?php //$this->BcBaser->img('top-main.png'); ?>
                 <div id="slider">
                   <div><?php $this->BcBaser->img('slider/01.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('slider/02.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('slider/03.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('slider/04.jpg'); ?></div>
-                  <div><?php $this->BcBaser->img('slider/05.jpg'); ?></div>
+                  <div><?php $this->BcBaser->img('slider/02.jpg', array('style' => 'display:none')); ?></div>
+                  <div><?php $this->BcBaser->img('slider/03.jpg', array('style' => 'display:none')); ?></div>
+                  <div><?php $this->BcBaser->img('slider/04.jpg', array('style' => 'display:none')); ?></div>
+                  <div><?php $this->BcBaser->img('slider/05.jpg', array('style' => 'display:none')); ?></div>
                 </div>
             </div>
             <?php 
