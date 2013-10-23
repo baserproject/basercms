@@ -944,12 +944,6 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function getImg($path, $options = array()) {
-
-		// スマートURLオフ対策
-		// imgフォルダ内以外へのプログラムが生成するURLへのパスが解決できないので調整
-		if(!is_array($path) && preg_match('/^\//', $path) && !preg_match('/^\/(img|files|theme)\//', $path)) {
-			$path = $this->getUrl($path);
-		}
 		
 		return $this->BcHtml->image($path, $options);
 

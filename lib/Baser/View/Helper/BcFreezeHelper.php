@@ -415,14 +415,14 @@ class BcFreezeHelper extends BcFormHelper {
 				$path = "tmp".DS.Inflector::underscore($model).DS."img".DS.$field.$imageAttributes['ext']."?".rand();
 				unset($imageAttributes['ext']);
 				$output = parent::text($fieldName."_exists", $attributes);
-				$output .= sprintf($this->Html->tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
+				$output .= sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
 				return $output;
 				// 通常表示
 			}else {
 				if(!empty($this->request->data[$model][$field.'_exists'])) {
 					$path = DS.$imageAttributes['dir'].DS.Inflector::tableize($model).DS.$imageAttributes['id'].DS.$field.".".$imageAttributes['ext']."?".rand();
 					unset($imageAttributes['ext']);
-					return sprintf($this->Html->tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
+					return sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
 				}else {
 					return "&nbsp;";
 				}
@@ -431,7 +431,7 @@ class BcFreezeHelper extends BcFormHelper {
 			if(!empty($this->request->data[$model][$field.'_exists'])) {
 				$path = DS.$imageAttributes['dir'].DS.Inflector::tableize($model).DS.$imageAttributes['id'].DS.$field.".".$imageAttributes['ext']."?".rand();
 				unset($imageAttributes['ext']);
-				$output = sprintf($this->Html->tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
+				$output = sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
 				$output .= "<br />".$this->checkbox($fieldName."_delete", array('label' => '削除する'));
 			}
 			return parent::file($fieldName, $attributes)."<br />".$output;
@@ -538,10 +538,10 @@ class BcFreezeHelper extends BcFormHelper {
 				$_value = "";
 				foreach($value as $data) {
 					if(isset($options[$data['id']])) {
-						$_value .= sprintf($this->Html->tags['li'], null, $options[$data['id']]);
+						$_value .= sprintf($this->Html->_tags['li'], null, $options[$data['id']]);
 					}
 				}
-				$value = sprintf($this->Html->tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
+				$value = sprintf($this->Html->_tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
 
 				$out = parent::hidden($fieldName, $attributes) . $value;
 
@@ -551,11 +551,11 @@ class BcFreezeHelper extends BcFormHelper {
 				$_value = "";
 				foreach($value as $key => $data) {
 					if(isset($options[$data])) {
-						$_value .= sprintf($this->Html->tags['li'], null, $options[$data]);
+						$_value .= sprintf($this->Html->_tags['li'], null, $options[$data]);
 					}
 				}
 
-				$out = sprintf($this->Html->tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
+				$out = sprintf($this->Html->_tags['ul'], " ".$this->_parseAttributes($attributes, null, '', ' '),$_value);
 				$out .= $this->hidden($fieldName, array('value'=>$value,'multiple'=>true));
 				
 				// 一般

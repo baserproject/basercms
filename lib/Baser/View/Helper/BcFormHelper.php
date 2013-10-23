@@ -704,7 +704,7 @@ DOC_END;
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// >>> label を追加
 		/*return $this->output($output . sprintf(
-			$this->Html->tags['checkbox'],
+			$this->Html->_tags['checkbox'],
 			$options['name'],
 			$this->_parseAttributes($options, array('name'), null, ' ')
 		));*/
@@ -740,9 +740,9 @@ DOC_END;
 			if (is_array($title) && (!isset($title['name']) || !isset($title['value']))) {
 				if (!empty($name)) {
 					if ($attributes['style'] === 'checkbox') {
-						$select[] = $this->Html->tags['fieldsetend'];
+						$select[] = $this->Html->_tags['fieldsetend'];
 					} else {
-						$select[] = $this->Html->tags['optiongroupend'];
+						$select[] = $this->Html->_tags['optiongroupend'];
 					}
 					$parents[] = $name;
 				}
@@ -752,9 +752,9 @@ DOC_END;
 
 				if (!empty($name)) {
 					if ($attributes['style'] === 'checkbox') {
-						$select[] = sprintf($this->Html->tags['fieldsetstart'], $name);
+						$select[] = sprintf($this->Html->_tags['fieldsetstart'], $name);
 					} else {
-						$select[] = sprintf($this->Html->tags['optiongroup'], $name, '');
+						$select[] = sprintf($this->Html->_tags['optiongroup'], $name, '');
 					}
 				}
 				$name = null;
@@ -797,7 +797,7 @@ DOC_END;
 						}
 						$label = $this->label(null, $title, $label);
 						$item = sprintf(
-								$this->Html->tags['checkboxmultiple'], $name,
+								$this->Html->_tags['checkboxmultiple'], $name,
 								$this->Html->_parseAttributes($htmlOptions)
 						);
 						// checkboxのdivを外せるオプションを追加
@@ -808,7 +808,7 @@ DOC_END;
 						}
 					} else {
 						$select[] = sprintf(
-								$this->Html->tags['selectoption'],
+								$this->Html->_tags['selectoption'],
 								$name, $this->Html->_parseAttributes($htmlOptions), $title
 						);
 					}
