@@ -200,7 +200,7 @@ class MailController extends MailAppController {
 		
 		// 初期値を取得
 		if(!isset($this->request->data['Message'])) {
-			$this->request->data = $this->Message->getDefaultValue();
+			$this->request->data = $this->Message->getDefaultValue($this->request->params['named']);
 		}else {
 			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
 		}

@@ -390,9 +390,9 @@ class Message extends MailAppModel {
  * @return array $data
  * @access public
  */
-	public function getDefaultValue() {
+	public function getDefaultValue($data) {
 		
-		$data = array();
+		$_data = array();
 
 		// 対象フィールドを取得
 		if($this->mailFields) {
@@ -402,15 +402,25 @@ class Message extends MailAppModel {
 				if(!is_null($mailField['MailField']['default_value']) && $mailField['MailField']['default_value'] !== "") {
 
 					if($mailField['MailField']['type']=='multi_check') {
-						$data['Message'][$mailField['MailField']['field_name']][0] = $mailField['MailField']['default_value'];
+						$_data['Message'][$mailField['MailField']['field_name']][0] = $mailField['MailField']['default_value'];
 					}else {
-						$data['Message'][$mailField['MailField']['field_name']] = $mailField['MailField']['default_value'];
+						$_data['Message'][$mailField['MailField']['field_name']] = $mailField['MailField']['default_value'];
 					}
 
 				}
-
 			}
 		}
+		
+		if($data) {
+			if(!isset($data['Message'])) {
+				$data = array('Message' => $data);
+			}
+			foreach($data['Message'] as $key => $value) {
+				$data['Message'][$key] = h($value);
+			}
+			$data = array_merge_recursive($_data, $data);
+		}
+		
 		return $data;
 
 	}
