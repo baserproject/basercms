@@ -153,8 +153,10 @@ class MailController extends MailAppController {
 			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 			// 詳細はコンポーネント設定のコメントを参照
 			$this->Security->requireAuth('confirm', 'submit');
-			$this->Security->disabledFields[] = 'Message.mode!'; 
-
+			$this->Security->disabledFields = array_merge($this->Security->disabledFields, array(
+				'Message.mode', 'x', 'y'
+			));
+			
 			// SSL設定
 			if($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
 				$this->Security->blackHoleCallback = '_sslFail';
