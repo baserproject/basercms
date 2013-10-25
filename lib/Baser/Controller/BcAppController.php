@@ -814,6 +814,9 @@ class BcAppController extends Controller {
 		}
 
 		//$theme
+		if($this->theme) {
+			$cakeEmail->theme($this->theme);
+		}
 		if(!empty($options['theme'])){
 			$cakeEmail->theme($options['theme']);
 		}
@@ -824,7 +827,7 @@ class BcAppController extends Controller {
 
 		//template
 		if(!empty($options['template'])){
-			$template = $this->__renderTemplate($options);
+			$template = $this->__getEmailTemplate($options);
 			if(!empty($options['layout'])){
 				$cakeEmail->template($template,$options['layout']);
 			}else{
@@ -877,7 +880,7 @@ class BcAppController extends Controller {
  * @return string layout
  * @access private
  */
-	private function __renderTemplate($options=null) {
+	private function __getEmailTemplate($options=null) {
 
 		$layoutPath = $subDir = $plugin = '';
 
