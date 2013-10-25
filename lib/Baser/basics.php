@@ -835,3 +835,30 @@ App::uses('BcEmailComponent', 'Controller/Component');
 	function isConsole() {
 		return preg_match('/Console\/cake\.php$/', $_SERVER['SCRIPT_FILENAME']);
 	}
+/**
+ * Constructs associative array from pairs of arguments.
+ *
+ * Example:
+ *
+ * `aa('a','b')`
+ *
+ * Would return:
+ *
+ * `array('a'=>'b')`
+ *
+ * @return array Associative array
+ * @link http://book.cakephp.org/view/695/aa
+ */
+	function aa() {
+		$args = func_get_args();
+		$argc = count($args);
+		for ($i = 0; $i < $argc; $i++) {
+			if ($i + 1 < $argc) {
+				$a[$args[$i]] = $args[$i + 1];
+			} else {
+				$a[$args[$i]] = null;
+			}
+			$i++;
+		}
+		return $a;
+	}
