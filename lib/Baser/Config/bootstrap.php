@@ -169,29 +169,27 @@ if (BC_INSTALLED) {
  */
 	$cacheSetting = Cache::config('_cake_core_');
 	$cacheEngine = $cacheSetting['settings']['engine'];
-	$cachePrefix = preg_replace('/cake_model_$/', '', $cacheSetting['settings']['prefix']);
-	$cacheDuration = '+999 days';
+	$cachePrefix = preg_replace('/cake_core_$/', '', $cacheSetting['settings']['prefix']);
+	$cacheDuration = Configure::read('BcCache.dataCachetime');
 	if (Configure::read('debug') > 0) {
 		$cacheDuration = '+10 seconds';
 	}
 	// DBデータキャッシュ
 	Cache::config('_cake_data_', array(
 		'engine' => $cacheEngine,
-		'duration' => Configure::read('BcCache.dataCachetime'),
 		'path' => CACHE . 'datas',
 		'probability' => 100,
-		'prefix' => $prefix . 'cake_data_',
-		'lock' => false,
+		'prefix' => $cachePrefix . 'cake_data_',
+		'lock' => true,
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// 環境情報キャッシュ
 	Cache::config('_cake_env_', array(
 		'engine' => $cacheEngine,
-		'duration' => Configure::read('BcCache.defaultCachetime'),
 		'probability' => 100,
 		'path' => CACHE . 'environment',
-		'prefix' => 'cake_env_',
+		'prefix' => $cachePrefix . 'cake_env_',
 		'lock' => false,
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
