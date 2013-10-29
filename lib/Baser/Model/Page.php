@@ -1202,10 +1202,6 @@ class Page extends AppModel {
 		if(isset($siteConfig['linked_pages_'.$agentPrefix])) {
 			$linked = $siteConfig['linked_pages_'.$agentPrefix];
 		}
-			
-		if($linked) {
-			return false;
-		}
 
 		if(preg_match('/\/$/', $url)) {
 			$url .= 'index';
