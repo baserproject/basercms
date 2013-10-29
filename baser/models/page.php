@@ -1168,7 +1168,7 @@ class Page extends AppModel {
  * @param string $url
  * @return boolean 
  */
-	function isLinked($agentPrefix, $url) {
+	public function isLinked($agentPrefix, $url) {
 		
 		if(!$agentPrefix) {
 			return false;
@@ -1181,12 +1181,8 @@ class Page extends AppModel {
 		$siteConfig = Configure::read('BcSite');
 		$linked = false;
 		
-		if(isset($siteConfig['linked_pages_'.$agentPrefix])) {
-			$linked = $siteConfig['linked_pages_'.$agentPrefix];
-		}
-		
-		if($linked) {
-			return false;
+		if(isset($siteConfig['linked_pages_'.$agentPrefix]) && $siteConfig['linked_pages_'.$agentPrefix]) {
+			$linked = true;
 		}
 			
 		if(preg_match('/\/$/', $url)) {
