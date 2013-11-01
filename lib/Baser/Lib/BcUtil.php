@@ -39,7 +39,13 @@ class BcUtil extends Object {
  */
 	public static function loginUser() {
 		$Session = new CakeSession();
-		return $Session->read('Auth.User');
+		$user = $Session->read('Auth.User');
+		if(!$user) {
+			if(!empty($_SESSION['Auth']['User'])) {
+				$user = $_SESSION['Auth']['User'];
+			}
+		}
+		return $user;
 	}
 	
 /**
