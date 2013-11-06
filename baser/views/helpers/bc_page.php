@@ -76,6 +76,10 @@ class BcPageHelper extends Helper {
 			if(Configure::read('BcRequest.agent')) {
 				$param = Configure::read('BcRequest.agentPrefix').'/'.$param;
 			}
+
+			// PageModelのurlからマッチ可能な形に変更
+			$param = preg_replace('/\.html$/', '', $param);
+
 			$this->data = $this->Page->findByUrl('/'.$param);
 		}
 		
