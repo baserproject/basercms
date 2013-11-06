@@ -103,6 +103,9 @@ class ThemeFilesController extends AppController {
 			$excludeList = array('_notes');
 			foreach($files[0] as $file) {
 				if(!in_array($file, $excludeList)) {
+					if($file == 'admin' && is_link($fullpath . $file)) {
+						continue;
+					}
 					$folder = array();
 					$folder['name'] = $file;
 					$folder['type'] = 'folder';
@@ -117,20 +120,20 @@ class ThemeFilesController extends AppController {
 			}
 			$themeFiles = am($folders,$themeFiles);
 
-		}else {
+		} else {
 
 			/* その他テンプレート */
 			$folder = new Folder($fullpath);
 			$files = $folder->read(true,true);
 			$themeFiles = array();
 			$folders = array();
+			$excludeFolderList = array();
+			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php');
 			if(!$path) {
-				$excludeList = array('css','elements','img','layouts','pages','_notes','helpers','js');
-			} else {
-				$excludeList = array();
+				$excludeFolderList = array('css','elements','img','layouts','pages','_notes','helpers','js');
 			}
 			foreach($files[0] as $file) {
-				if(!in_array($file, $excludeList)) {
+				if(!in_array($file, $excludeFolderList)) {
 					$folder = array();
 					$folder['name'] = $file;
 					$folder['type'] = 'folder';
@@ -138,7 +141,7 @@ class ThemeFilesController extends AppController {
 				}
 			}
 			foreach($files[1] as $file) {
-				if($file=='screenshot.png') {
+				if(in_array($file, $excludeFileList)) {
 					continue;
 				}
 				$themeFile = array();
@@ -571,21 +574,15 @@ class ThemeFilesController extends AppController {
 		if(!isset($this->_tempalteTypes[$type])) {
 			$this->notFound();
 		}
-		$pathinfo = pathinfo($this->request->data['ThemeFile']['file']['name']);
-		$ext = $pathinfo['extension'];
-		//if(in_array($ext, array('ctp', 'css', 'js', 'png', 'gif', 'jpg'))) {
-			$filePath = $fullpath .DS. $this->request->data['ThemeFile']['file']['name'];
-			$Folder = new Folder();
-			$Folder->create(dirname($filePath), 0777);
+		$filePath = $fullpath .DS. $this->request->data['ThemeFile']['file']['name'];
+		$Folder = new Folder();
+		$Folder->create(dirname($filePath), 0777);
 
-			if(@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-				$this->setMessage('アップロードに成功しました。');
-			}else {
-				$this->setMessage('アップロードに失敗しました。', true);
-			}
-		//} else {
-			//$this->setMessage('アップロードに失敗しました。<br />アップロードできるファイルは、拡張子が、ctp / css / js / png / gif / jpg のファイルのみです。', true);
-		//}
+		if(@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
+			$this->setMessage('アップロードに成功しました。');
+		}else {
+			$this->setMessage('アップロードに失敗しました。', true);
+		}
 		$this->redirect(array_merge(array('action' => 'index', $theme, $type), explode('/', $path)));
 
 	}
