@@ -58,7 +58,7 @@
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.html', 'コンテンツ') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('EditorTemplate.html', array('cols' => 60, 'rows' => 20), array('width' => 'auto', 'useTemplates' => false)) ?>
+				<?php echo $this->BcForm->ckeditor('EditorTemplate.html', array('editorWidth' => 'auto', 'editorUseTemplates' => false)) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.html') ?>
 				<?php echo $this->BcForm->error('EditorTemplate.html') ?>
 			</td>

@@ -957,12 +957,10 @@ DOC_END;
  * @return	string
  * @access	public
  */
-	public function ckeditor($fieldName, $options = array(), $editorOptions = array(), $styles = array()) {
+	public function ckeditor($fieldName, $options = array()) {
 
-		$_options = array('type'=>'textarea');
-		$options = am($_options,$options);
-		$method = $options['type'];
-		return $this->BcCkeditor->{$method}($fieldName, $options, $editorOptions, $styles, $this);
+		$options = array_merge(array('type' => 'textarea'), $options);
+		return $this->BcCkeditor->editor($fieldName, $options);
 
 	}
 /**
@@ -1156,6 +1154,38 @@ DOC_END;
 		return $id;
 		
 	}
+
+/**
+ * エディタを表示する
+ * 
+ * @param string $fieldName
+ * @param array $options
+ * @return string
+ */
+	public function editor($fieldName, $options = array()) {
+		
+		$options = array_merge(array(
+			'editor'	=> 'BcCkeditor',
+			'style'		=> 'width:99%;height:540px'
+		), $options);
+		
+		$editor = $options['editor'];
+		if(!empty($this->_View->{$editor})) {
+			return $this->_View->{$editor}->editor($fieldName, $options);
+		} elseif($editor == 'none') {
+			$_options = array();
+			foreach($options as $key => $value) {
+				if(!preg_match('/^editor/', $key)) {
+					$_options[$key] = $value;
+				}
+			}
+			return $this->input($fieldName, array_merge(array('type' => 'textarea'), $_options));
+		} else {
+			return $this->_View->BcCkeditor->editor($fieldName, $options);
+		}
+				
+	}
+	
 /**
  * 日付タグ
  * 和暦実装

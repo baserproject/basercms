@@ -77,6 +77,8 @@ $(function(){
 		}
 	});
 
+	$('input[name="data[SiteConfig][editor]"]').click(siteConfigEditorClickHandler);
+	
 	if(!$("#SiteConfigMobile").attr('checked')) {
 		$("#SpanLinkedPagesMobile").hide();
 		$("#SpanRootLayoutTemplateMobile").hide();
@@ -88,9 +90,15 @@ $(function(){
 		$("#SpanRootContentTemplateSmartphone").hide();
 	}
 	
-	$("#BtnSpeedUp").click(function(){
-		location.href = './speedup';
-	});
+	siteConfigEditorClickHandler();
+	
+	function siteConfigEditorClickHandler() {
+		if($('input[name="data[SiteConfig][editor]"]:checked').val() === 'BcCkeditor') {
+			$(".ckeditor-option").show();
+		} else {
+			$(".ckeditor-option").hide();
+		}
+	}
 	
 });
 </script>
@@ -344,6 +352,12 @@ $(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', 'WISIWYGエディタ') ?></th>
+		<td class="col-input">
+			<?php echo $this->BcForm->input('SiteConfig.editor', array('type' => 'radio', 'options' => Configure::read('BcApp.editors'))) ?>
+		</td>
+	</tr>
+	<tr class="ckeditor-option">
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', '改行モード') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('SiteConfig.editor_enter_br', array('type' => 'radio', 'options' => array(
@@ -352,7 +366,7 @@ $(function(){
 			))) ?>
 		</td>
 	</tr>
-	<tr>
+	<tr class="ckeditor-option">
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_styles', 'エディタスタイルセット') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>

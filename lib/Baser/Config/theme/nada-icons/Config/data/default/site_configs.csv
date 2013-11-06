@@ -22,6 +22,7 @@
 "","admin_theme","","",""
 "","login_credit","1","",""
 "","first_access","1","",""
+"","editor","BcCkeditor","",""
 "","editor_styles","#ÂŒ©o‚µ
 h3 {
 	color:Blue;

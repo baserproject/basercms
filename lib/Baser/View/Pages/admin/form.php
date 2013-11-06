@@ -421,9 +421,14 @@ function pageTypeChengeHandler() {
 </div>
 
 <div class="section">
-	<?php echo $this->BcForm->ckeditor('Page.contents', 
-			array('cols' => 60, 'rows' => 20),
-			$ckEditorOptions1, $ckStyles) ?>
+	<?php echo $this->BcForm->editor('Page.contents', array_merge(array(
+			'editor'			=> @$siteConfig['editor'],
+			'editorUseDraft'	=> true,
+			'editorDraftField'	=> 'draft', 
+			'editorWidth'		=> 'auto', 
+			'editorHeight'		=> '480px',
+			'editorEnterBr'		=> @$siteConfigs['editor_enter_br']
+			), $editorOptions)) ?>
 	<?php echo $this->BcForm->error('Page.contents') ?>
 </div>
 

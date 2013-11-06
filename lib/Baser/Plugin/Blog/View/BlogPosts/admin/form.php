@@ -227,11 +227,11 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.content', '概要') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('BlogPost.content', null, array(
-					'width'		=> 'auto', 
-					'height'	=> '120px', 
-					'type'		=> 'simple',
-					'enterBr'	=> @$siteConfig['editor_enter_br']
+				<?php echo $this->BcForm->ckeditor('BlogPost.content', array(
+					'editorWidth'	=> 'auto', 
+					'editorHeight'	=> '120px', 
+					'editorToolType'=> 'simple',
+					'editorEnterBr'	=> @$siteConfig['editor_enter_br']
 				)) ?>
 				<?php echo $this->BcForm->error('BlogPost.content') ?>
 			</td>
@@ -240,10 +240,15 @@ $(function(){
 	</table>
 </div>
 
-<div class="section">
-	<?php echo $this->BcForm->ckeditor('BlogPost.detail',
-			array('height' => '1500'),
-			$ckEditorOptions, $ckStyles) ?>
+<div class="section" style="text-align: center">
+	<?php echo $this->BcForm->editor('BlogPost.detail', array_merge(array(
+			'editor'			=> @$siteConfig['editor'],
+			'editorUseDraft'	=> true,
+			'editorDraftField'	=> 'detail_draft', 
+			'editorWidth'		=> 'auto', 
+			'editorHeight'		=> '480px',
+			'editorEnterBr'		=> @$siteConfigs['editor_enter_br']
+			), $editorOptions)) ?>
 	<?php echo $this->BcForm->error('BlogPost.detail') ?>
 </div>
 

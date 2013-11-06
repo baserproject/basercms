@@ -122,11 +122,11 @@ function mailContentSender1ClickHandler(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.description', 'メールフォーム説明文') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->ckeditor('MailContent.description', null, array(
-					'width'		=> 'auto', 
-					'height'	=> '120px', 
-					'type'		=> 'simple',
-					'enterBr'	=> @$siteConfig['editor_enter_br']
+				<?php echo $this->BcForm->ckeditor('MailContent.description', array(
+					'editorWidth'	=> 'auto', 
+					'editorHeight'	=> '120px', 
+					'editorToolType'=> 'simple',
+					'editorEnterBr'	=> @$siteConfig['editor_enter_br']
 				)) ?>
 				<?php echo $this->BcForm->error('MailContent.description') ?>
 			</td>

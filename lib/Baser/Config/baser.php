@@ -56,7 +56,12 @@
 		// アップデートキー
 		'updateKey'		=> 'update',
 		// 管理者グループID
-		'adminGroupId'	=> 1
+		'adminGroupId'	=> 1,
+		// エディター
+		'editors'		=> array(
+			'none'		=> 'なし', 
+			'BcCkeditor'=> 'CKEditor'
+		)
 	);
 /**
  * システム要件 
