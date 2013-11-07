@@ -352,7 +352,7 @@ $(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
-		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', 'WISIWYGエディタ') ?></th>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', 'エディタタイプ') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('SiteConfig.editor', array('type' => 'radio', 'options' => Configure::read('BcApp.editors'))) ?>
 		</td>
