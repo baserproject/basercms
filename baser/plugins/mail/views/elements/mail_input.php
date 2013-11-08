@@ -58,6 +58,9 @@ if (!empty($mailFields)) {
 			if (!$field['no_send'] || !$freezed) {
 				echo $mailform->control($field['type'], "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record)) ;
 			}
+			if ($field['no_send'] && $freezed) {
+				echo $mailform->control('hidden', "Message." . $field['field_name'] . "", $mailfield->getOptions($record), $mailfield->getAttributes($record)) ;
+			}
 			if (!$freezed || $mailform->value("Message." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">'.$field['after_attachment'].'</span>';
 			}

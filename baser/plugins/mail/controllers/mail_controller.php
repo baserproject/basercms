@@ -346,6 +346,23 @@ class MailController extends MailAppController {
 			}
 			
 			$this->Message->create($this->data);
+			
+			// 送信前入力検証
+			if($this->Message->validates()) {
+			}else {
+				$this->set('freezed',false);
+				$this->set('error',true);
+
+				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->data['Message'] = $this->Message->sanitizeData($this->data['Message']);
+
+				if($this->dbDatas['mailFields']) $this->set('mailFields',$this->dbDatas['mailFields']);
+
+				$this->set('mailContent',$this->dbDatas['mailContent']);
+				$this->params['action'] = 'confirm';
+				$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'confirm');
+				return ;
+			}
 
 			if($this->Message->save(null,false)) {
 
