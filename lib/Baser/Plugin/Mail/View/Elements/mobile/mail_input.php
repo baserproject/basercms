@@ -45,6 +45,9 @@
 					<?php if(!$record['MailField']['no_send'] || !$freezed): ?>
 <?php echo $this->Mailform->control($record['MailField']['type'], "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
 				<?php endif; ?>
+				<?php if($record['MailField']['no_send'] && $freezed): ?>
+<?php echo $this->Mailform->control('hidden', "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
+				<?php endif; ?>
 				<?php if(!$freezed): ?>
 <font size="1"><?php echo $record['MailField']['attention'] ?></font>
 				<?php endif; ?>
