@@ -122,5 +122,5 @@ class BlogAppController extends BcPluginAppController {
 		$this->set('newCatAddable', $newCatAddable);
 		
 	}
-	
+		
 }

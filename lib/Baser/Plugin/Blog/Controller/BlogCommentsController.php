@@ -81,7 +81,7 @@ class BlogCommentsController extends BlogAppController {
 
 		parent::beforeFilter();
 
-		$this->BcAuth->allow('add','captcha', 'smartphone_add', 'smartphone_captcha');
+		$this->BcAuth->allow('add','captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
 		$crumbs = array();
 		if(!empty($this->params['pass'][1])) {
@@ -410,12 +410,10 @@ class BlogCommentsController extends BlogAppController {
 			
 			$result = $this->BlogComment->add($this->request->data,$blogContentId,$blogPostId,$this->blogContent['BlogContent']['comment_approve']);
 			if($result && $captchaResult) {
-				// TODO basercamp メール送信が未実装の為コメントアウト
-				//$this->_sendCommentAdmin($blogPostId, $this->request->data);
+				$this->_sendCommentAdmin($blogPostId, $this->request->data);
 				// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 				if(!$this->blogContent['BlogContent']['comment_approve']) {
-					// TODO basercamp メール送信が未実装の為コメントアウト
-					//$this->_sendCommentContributor($blogPostId, $this->request->data);
+					$this->_sendCommentContributor($blogPostId, $this->request->data);
 				}
 				$this->set('dbData',$result['BlogComment']);
 			}else{
@@ -456,11 +454,22 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-    function smartphone_captcha()
-    {
+    function smartphone_captcha() {
 		
         $this->BcCaptcha->render();
 		exit();
 		
     } 
+	
+/**
+ * コメント送信用にAjax経由でトークンを取得する
+ */
+	public function get_token() {
+		if(!preg_match('/^' . preg_quote(Configure::read('BcEnv.siteUrl'), '/') . '/', $_SERVER['HTTP_REFERER'])) {
+			$this->notFound();
+		}
+		echo $this->Session->read('_Token.key');
+		exit();
+	}
+
 }
