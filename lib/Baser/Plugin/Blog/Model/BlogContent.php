@@ -170,7 +170,7 @@ class BlogContent extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 
 		if(empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();

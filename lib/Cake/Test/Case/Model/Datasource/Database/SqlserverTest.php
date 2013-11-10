@@ -118,7 +118,7 @@ class SqlserverTestModel extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -184,7 +184,7 @@ class SqlserverClientTestModel extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -250,7 +250,7 @@ class SqlserverTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var bool false
+ * @var boolean
  */
 	public $autoFixtures = false;
 
@@ -310,6 +310,10 @@ class SqlserverTest extends CakeTestCase {
 
 		$expected = "''";
 		$result = $this->db->value('', 'binary');
+		$this->assertSame($expected, $result);
+
+		$expected = 'NULL';
+		$result = $this->db->value(null, 'string');
 		$this->assertSame($expected, $result);
 	}
 

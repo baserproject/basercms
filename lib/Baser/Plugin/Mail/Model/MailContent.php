@@ -221,7 +221,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  * @access public
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 
 		// 検索用テーブルへの登録・削除
 		if(!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status'] ) {

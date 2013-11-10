@@ -68,6 +68,7 @@ class NumberHelper extends AppHelper {
 
 /**
  * Call methods from CakeNumber utility class
+ * @return mixed Whatever is returned by called method, or false on failure
  */
 	public function __call($method, $params) {
 		return call_user_func_array(array($this->_engine, $method), $params);
@@ -113,7 +114,7 @@ class NumberHelper extends AppHelper {
  * @see CakeNumber::format()
  *
  * @param float $number A floating point number
- * @param integer $options if int then places, if string then before, if (,.-) then use it
+ * @param integer $options If integer then places, if string then before, if (,.-) then use it
  *   or array with places and before keys
  * @return string formatted number
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/number.html#NumberHelper::format

@@ -210,7 +210,10 @@ class FileEngine extends CacheEngine {
 		}
 		$path = $this->_File->getRealPath();
 		$this->_File = null;
-		return unlink($path);
+
+		//@codingStandardsIgnoreStart
+		return @unlink($path);
+		//@codingStandardsIgnoreEnd
 	}
 
 /**
@@ -289,9 +292,12 @@ class FileEngine extends CacheEngine {
 				}
 			}
 			if ($file->isFile()) {
-				$_path = $file->getRealPath();
+				$filePath = $file->getRealPath();
 				$file = null;
-				unlink($_path);
+
+				//@codingStandardsIgnoreStart
+				@unlink($filePath);
+				//@codingStandardsIgnoreEnd
 			}
 		}
 	}
@@ -409,9 +415,16 @@ class FileEngine extends CacheEngine {
 		$contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($contents as $object) {
 			$containsGroup = strpos($object->getPathName(), DS . $group . DS) !== false;
-			$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
+			$hasPrefix = true;
+			if (strlen($this->settings['prefix']) !== 0) {
+				$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
+			}
 			if ($object->isFile() && $containsGroup && $hasPrefix) {
-				unlink($object->getPathName());
+				$path = $object->getPathName();
+				$object = null;
+				//@codingStandardsIgnoreStart
+				@unlink($path);
+				//@codingStandardsIgnoreEnd
 			}
 		}
 		return true;

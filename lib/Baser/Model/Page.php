@@ -260,7 +260,7 @@ class Page extends AppModel {
  * @return boolean
  * @access public
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 
 		if(isset($this->data['Page'])){
 			$data = $this->data['Page'];

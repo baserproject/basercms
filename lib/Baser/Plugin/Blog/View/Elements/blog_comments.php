@@ -76,6 +76,14 @@ function sendComment() {
 					comment.show(500);
 					resultMessage = 'コメントの送信が完了しました。';
 					<?php endif ?>
+					$.ajax({
+						url: $("#BlogCommentGetTokenUrl").html(),
+						type: 'GET',
+						dataType: 'text',
+						success: function(result) {
+							$('input[name="data[_Token][key]"]').val(result);
+						}
+					});
 					$("#ResultMessage").html(resultMessage);
 					$("#ResultMessage").slideDown();
 				}else{
@@ -115,6 +123,7 @@ function loadAuthCaptcha(){
 </script>
 
 <div id="BlogCommentCaptchaUrl" style="display:none"><?php echo $this->BcBaser->getUrl($prefix.'/blog/blog_comments/captcha') ?></div>
+<div id="BlogCommentGetTokenUrl" style="display:none"><?php echo $this->BcBaser->getUrl('/blog/blog_comments/get_token') ?></div>
 
 <?php if($blogContent['BlogContent']['comment_use']): ?>
 <div id="BlogComment">

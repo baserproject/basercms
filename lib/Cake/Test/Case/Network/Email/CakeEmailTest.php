@@ -27,6 +27,15 @@ App::uses('CakeEmail', 'Network/Email');
 class TestCakeEmail extends CakeEmail {
 
 /**
+ * Config classname.
+ *
+ * Use a the testing config class in this file.
+ *
+ * @var string
+ */
+	protected $_configClass = 'TestEmailConfig';
+
+/**
  * Config
  *
  */
@@ -79,7 +88,7 @@ class TestCakeEmail extends CakeEmail {
  * EmailConfig class
  *
  */
-class EmailConfig {
+class TestEmailConfig {
 
 /**
  * test config
@@ -179,6 +188,25 @@ class CakeEmailTest extends CakeTestCase {
 	}
 
 /**
+ * Test that from addresses using colons work.
+ *
+ * @return void
+ */
+	public function testFromWithColonsAndQuotes() {
+		$address = array(
+			'info@example.com' => '70:20:00 " Forum'
+		);
+		$this->CakeEmail->from($address);
+		$this->assertEquals($address, $this->CakeEmail->from());
+		$this->CakeEmail->to('info@example.com')
+			->subject('Test email')
+			->transport('Debug');
+
+		$result = $this->CakeEmail->send();
+		$this->assertContains('From: "70:20:00 \" Forum" <info@example.com>', $result['headers']);
+	}
+
+/**
  * testSender method
  *
  * @return void
@@ -192,7 +220,7 @@ class CakeEmailTest extends CakeTestCase {
 		$this->assertSame($this->CakeEmail->sender(), $expected);
 
 		$headers = $this->CakeEmail->getHeaders(array('from' => true, 'sender' => true));
-		$this->assertSame($headers['From'], false);
+		$this->assertFalse($headers['From']);
 		$this->assertSame($headers['Sender'], 'Name <cake@cakephp.org>');
 
 		$this->CakeEmail->from('cake@cakephp.org', 'CakePHP');
@@ -369,6 +397,10 @@ class CakeEmailTest extends CakeTestCase {
 
 		$result = $this->CakeEmail->formatAddress(array('me@example.com' => 'Last, First'));
 		$expected = array('"Last, First" <me@example.com>');
+		$this->assertSame($expected, $result);
+
+		$result = $this->CakeEmail->formatAddress(array('me@example.com' => '"Last" First'));
+		$expected = array('"\"Last\" First" <me@example.com>');
 		$this->assertSame($expected, $result);
 
 		$result = $this->CakeEmail->formatAddress(array('me@example.com' => 'Last First'));
@@ -818,7 +850,7 @@ class CakeEmailTest extends CakeTestCase {
  * @return void
  */
 	public function testConfigString() {
-		$configs = new EmailConfig();
+		$configs = new TestEmailConfig();
 		$this->CakeEmail->config('test');
 
 		$result = $this->CakeEmail->to();
@@ -870,6 +902,27 @@ class CakeEmailTest extends CakeTestCase {
 		$this->CakeEmail->config(array('timeout' => 45));
 		$result = $this->CakeEmail->transportClass()->config();
 		$this->assertEquals(45, $result['timeout']);
+	}
+
+/**
+ * Calling send() with no parameters should not overwrite the view variables.
+ *
+ * @return void
+ */
+	public function testSendWithNoContentDoesNotOverwriteViewVar() {
+		$this->CakeEmail->reset();
+		$this->CakeEmail->transport('Debug');
+		$this->CakeEmail->from('cake@cakephp.org');
+		$this->CakeEmail->to('you@cakephp.org');
+		$this->CakeEmail->subject('My title');
+		$this->CakeEmail->emailFormat('text');
+		$this->CakeEmail->template('default');
+		$this->CakeEmail->viewVars(array(
+			'content' => 'A message to you',
+		));
+
+		$result = $this->CakeEmail->send();
+		$this->assertContains('A message to you', $result['message']);
 	}
 
 /**
@@ -1744,8 +1797,8 @@ class CakeEmailTest extends CakeTestCase {
  * @return void
  */
 	public function testConstructWithConfigString() {
-		$configs = new EmailConfig();
-		$this->CakeEmail = new CakeEmail('test');
+		$configs = new TestEmailConfig();
+		$this->CakeEmail = new TestCakeEmail('test');
 
 		$result = $this->CakeEmail->to();
 		$this->assertEquals($configs->test['to'], $result);

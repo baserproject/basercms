@@ -88,9 +88,10 @@ class TreeBehavior extends ModelBehavior {
  *
  * @param Model $Model Model instance.
  * @param boolean $created indicates whether the node just saved was created or updated
+ * @param array $options Options passed from Model::save().
  * @return boolean true on success, false on failure
  */
-	public function afterSave(Model $Model, $created) {
+	public function afterSave(Model $Model, $created, $options = array()) {
 		extract($this->settings[$Model->alias]);
 		if ($created) {
 			if ((isset($Model->data[$Model->alias][$parent])) && $Model->data[$Model->alias][$parent]) {
@@ -175,9 +176,11 @@ class TreeBehavior extends ModelBehavior {
  *
  * @since         1.2
  * @param Model $Model Model instance
+ * @param array $options Options passed from Model::save().
  * @return boolean true to continue, false to abort the save
+ * @see Model::save()
  */
-	public function beforeSave(Model $Model) {
+	public function beforeSave(Model $Model, $options = array()) {
 		extract($this->settings[$Model->alias]);
 
 		$this->_addToWhitelist($Model, array($left, $right));
@@ -375,6 +378,12 @@ class TreeBehavior extends ModelBehavior {
 		} else {
 			array_unshift($valuePath, '%s' . $valuePath[0], '{n}.tree_prefix');
 		}
+
+		$conditions = (array)$conditions;
+		if ($scope) {
+			$conditions[] = $scope;
+		}
+
 		$order = $Model->escapeField($left) . " asc";
 		$results = $Model->find('all', compact('conditions', 'fields', 'order', 'recursive'));
 		$stack = array();
@@ -667,13 +676,13 @@ class TreeBehavior extends ModelBehavior {
 
 		$scope = $this->settings[$Model->alias]['scope'];
 		if ($scope && ($scope !== '1 = 1' && $scope !== true)) {
-			$conditions[] = $scope;
+			$params['conditions'][] = $scope;
 		}
 
 		$children = $Model->find('all', $params);
 		$hasChildren = (bool)$children;
 
-		if (!is_null($parentId)) {
+		if ($parentId !== null) {
 			if ($hasChildren) {
 				$Model->updateAll(
 					array($this->settings[$Model->alias]['left'] => $counter),
@@ -704,7 +713,7 @@ class TreeBehavior extends ModelBehavior {
 			$children = $Model->find('all', $params);
 		}
 
-		if (!is_null($parentId) && $hasChildren) {
+		if ($parentId !== null && $hasChildren) {
 			$Model->updateAll(
 				array($this->settings[$Model->alias]['right'] => $counter),
 				array($Model->escapeField() => $parentId)

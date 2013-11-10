@@ -98,7 +98,7 @@ class View extends Object {
  *
  * @var mixed A single name as a string or a list of names as an array.
  */
-	public $helpers = array('Html');
+	public $helpers = array();
 
 /**
  * Path to View.
@@ -136,7 +136,7 @@ class View extends Object {
 	public $layoutPath = null;
 
 /**
- * Turns on or off Cake's conventional mode of applying layout files. On by default.
+ * Turns on or off CakePHP's conventional mode of applying layout files. On by default.
  * Setting to off means that layouts will not be automatically applied to rendered views.
  *
  * @var boolean
@@ -144,7 +144,7 @@ class View extends Object {
 	public $autoLayout = true;
 
 /**
- * File extension. Defaults to Cake's template ".ctp".
+ * File extension. Defaults to CakePHP's template ".ctp".
  *
  * @var string
  */
@@ -504,6 +504,8 @@ class View extends Object {
 
 		if (empty($content)) {
 			$content = $this->Blocks->get('content');
+		} else {
+			$this->Blocks->set('content', $content);
 		}
 		$this->getEventManager()->dispatch(new CakeEvent('View.beforeLayout', $this, array($layoutFileName)));
 
@@ -537,7 +539,7 @@ class View extends Object {
 	public function renderCache($filename, $timeStart) {
 		$response = $this->response;
 		ob_start();
-		include ($filename);
+		include $filename;
 
 		$type = $response->mapType($response->type());
 		if (Configure::read('debug') > 0 && $type === 'html') {

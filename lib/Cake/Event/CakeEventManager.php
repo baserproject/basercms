@@ -32,7 +32,7 @@ class CakeEventManager {
 /**
  * The default priority queue value for new, attached listeners
  *
- * @var int
+ * @var integer
  */
 	public static $defaultPriority = 10;
 
@@ -250,24 +250,6 @@ class CakeEventManager {
 			if ($result === false) {
 				$event->stopPropagation();
 			}
-			
-			// CUSTOMIZE ADD 2013/09/23 ryuring
-			// ObjectCollection を継承しているイベントの場合、
-			// 複数のオブジェクトに対するイベントの結果が配列で返ってくるが、
-			// 全ての結果がNULLの場合、その前のイベントの結果が上書きされてしまう。
-			// 全ての結果がNULLの場合には、結果がNULLとみなし、上書きしない仕様に変更した
-			if(is_array($result) && array_key_exists(0, $result)) {
-				$notNull = false;
-				foreach ($result as $key => $val) {
-					if ($val !== null) {
-						$notNull = true;
-					}
-				}
-				if(!$notNull) {
-					$result = null;
-				}
-			}
-			
 			if ($result !== null) {
 				$event->result = $result;
 			}

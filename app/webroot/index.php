@@ -28,9 +28,7 @@ $fileName = $_SERVER['SCRIPT_FILENAME'];
 /**
  * タイムゾーンを設定する
  */
-if(!ini_get('date.timezone')) {
-	ini_set('date.timezone', 'Asia/Tokyo');
-}
+ini_set('date.timezone', 'Asia/Tokyo');
 @putenv("TZ=JST-9");
 // <<<
 /**

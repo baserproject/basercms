@@ -63,7 +63,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function beforeSave(Model $model) {
+	public function beforeSave(Model $model, $options = array()) {
 
 		if(!$model->exists()) {
 			$ret = $this->PluginContent->find('first', array('conditions' => array('PluginContent.name'=>$model->data[$model->alias]['name'])));
@@ -91,7 +91,7 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @return	void
  * @access	public
  */
-	public function afterSave(Model $model, $created) {
+	public function afterSave(Model $model, $created, $options = array()) {
 
 		// コンテンツIDを取得
 		if($created) {

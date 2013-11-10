@@ -859,7 +859,7 @@ class HtmlHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testScriptTimestamping() {
-		$this->skipIf(!is_writable(JS), 'webroot/js is not Writable, timestamp testing has been skipped.');
+		$this->skipIf(!is_writable(WWW_ROOT . 'js'), 'webroot/js is not Writable, timestamp testing has been skipped.');
 
 		Configure::write('debug', 2);
 		Configure::write('Asset.timestamp', true);
@@ -1844,13 +1844,13 @@ class HtmlHelperTest extends CakeTestCase {
 		$this->assertTags($result, array('div' => array('class' => 'class-name'), '&lt;text&gt;', '/div'));
 
 		$result = $this->Html->tag(false, '<em>stuff</em>');
-		$this->assertEquals($result, '<em>stuff</em>');
+		$this->assertEquals('<em>stuff</em>', $result);
 
 		$result = $this->Html->tag(null, '<em>stuff</em>');
-		$this->assertEquals($result, '<em>stuff</em>');
+		$this->assertEquals('<em>stuff</em>', $result);
 
 		$result = $this->Html->tag('', '<em>stuff</em>');
-		$this->assertEquals($result, '<em>stuff</em>');
+		$this->assertEquals('<em>stuff</em>', $result);
 	}
 
 /**
