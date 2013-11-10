@@ -34,6 +34,7 @@
 			'name'		=> 'baserCMSコア',
 			'contents'	=> array(
 				array('name' => '固定ページ一覧',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'pages', 'action' => 'index')),
+				array('name' => '固定ページカテゴリ一覧',	'url' => array('admin' => true, 'plugin' => null, 'controller' => 'page_categories', 'action' => 'index')),
 				array('name' => 'ウィジェット管理',		'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
 				array('name' => 'テーマ管理',				'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
 				array('name' => 'プラグイン管理',			'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),
