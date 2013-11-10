@@ -45,7 +45,7 @@ class BlogHelper extends AppHelper {
 	public function __construct(View $View, $settings = array()) {
 		
 		parent::__construct($View, $settings);
-		$this->_setBlogContent();
+		$this->setContent();
 
 	}
 /**
@@ -55,7 +55,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access protected
  */
-	protected function _setBlogContent($blogContentId = null) {
+	public function setContent($blogContentId = null) {
 
 		if(isset($this->blogContent) && !$blogContentId) {
 			return;
@@ -67,7 +67,11 @@ class BlogHelper extends AppHelper {
 		} elseif(isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
-
+		if($this->blogContent) {
+			$BlogPost = ClassRegistry::init('BLog.BlogPost');
+			$BlogPost->setupUpload($this->blogContent['id']);
+		}
+		
 	}
 /**
  * ブログタイトルを出力する
@@ -883,7 +887,7 @@ class BlogHelper extends AppHelper {
  */
 	function eyeCatch($post, $options = array()) {
 		
-		echo $this->getEyeCatch($post, $options);
+		echo $this->getEyeCatch($post, $options);		
 		
 	}
 /**
