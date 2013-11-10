@@ -85,7 +85,7 @@ $(window).load(function() {
 	<?php $this->BcBaser->link('現在のテーマにコピー',
 			array_merge(array('action' => 'copy_folder_to_theme', $theme, $plugin, $type), $params),
 			array('class' => 'btn-red button'),
-			'本当に現在のテーマ「'.Inflector::camelize($siteConfig['theme']).'」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'
+			'本当に現在のテーマ「'.Inflector::camelize($siteConfig['theme'])."」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"
 	) ?>
 		<?php endif ?>
 	<?php else: ?>
