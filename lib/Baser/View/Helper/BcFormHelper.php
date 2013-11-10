@@ -88,71 +88,41 @@ class BcFormHelper extends FormHelper {
  * @return string The HTML formatted OPTION element
  * @access public
  */
-	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
-
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
+		$attributes += array('empty' => true, 'value' => null);
 		$year = $month = $day = $hour = $min = $meridian = null;
 
-		if (empty($selected)) {
-			$selected = $this->value($fieldName);
+		if (empty($attributes['value'])) {
+			$attributes = $this->value($attributes, $fieldName);
 		}
 
-		if ($selected === null && $showEmpty != true) {
-			$selected = time();
-		}
-
-		if (!empty($selected)) {
-			if (is_array($selected)) {
-				extract($selected);
-			} else {
-				if (is_numeric($selected)) {
-					$selected = strftime('%Y-%m-%d %H:%M:%S', $selected);
-				}
-				$meridian = 'am';
-				$pos = strpos($selected, '-');
-				if ($pos !== false) {
-					$date = explode('-', $selected);
-					$days = explode(' ', $date[2]);
-					$day = $days[0];
-					$month = $date[1];
-					$year = $date[0];
-				} else {
-					$days[1] = $selected;
-				}
-
-				if ($timeFormat != 'NONE' && !empty($timeFormat)) {
-					$time = explode(':', $days[1]);
-					$check = str_replace(':', '', $days[1]);
-
-					if (($check > 115959) && $timeFormat == '12') {
-						$time[0] = $time[0] - 12;
-						$meridian = 'pm';
-					} elseif ($time[0] == '00' && $timeFormat == '12') {
-						$time[0] = 12;
-					} elseif ($time[0] > 12) {
-						$meridian = 'pm';
-					}
-					if ($time[0] == 0 && $timeFormat == '12') {
-						$time[0] = 12;
-					}
-					$hour = $time[0];
-					$min = $time[1];
-				}
+		if ($attributes['value'] === null && $attributes['empty'] != true) {
+			$attributes['value'] = time();
+			if (!empty($attributes['maxYear']) && $attributes['maxYear'] < date('Y')) {
+				$attributes['value'] = strtotime(date($attributes['maxYear'] . '-m-d'));
 			}
 		}
 
-		$elements = array('Day','Month','Year','Hour','Minute','Meridian');
+		if (!empty($attributes['value'])) {
+			list($year, $month, $day, $hour, $min, $meridian) = $this->_getDateTimeValue(
+				$attributes['value'],
+				$timeFormat
+			);
+		}
+		
 		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 		/*$defaults = array(
 			'minYear' => null, 'maxYear' => null, 'separator' => '-',
-			'interval' => 1, 'monthNames' => true
+			'interval' => 1, 'monthNames' => true, 'round' => null
 		);*/
 		// ---
 		$defaults = array(
 			'minYear' => null, 'maxYear' => null, 'separator' => ' ',
-			'interval' => 1, 'monthNames' => ''
+			'interval' => 1, 'monthNames' => '', 'round' => null
 		);
 		// <<<
-		$attributes = array_merge($defaults, (array) $attributes);
+		
+		$attributes = array_merge($defaults, (array)$attributes);
 		if (isset($attributes['minuteInterval'])) {
 			$attributes['interval'] = $attributes['minuteInterval'];
 			unset($attributes['minuteInterval']);
@@ -162,97 +132,140 @@ class BcFormHelper extends FormHelper {
 		$separator = $attributes['separator'];
 		$interval = $attributes['interval'];
 		$monthNames = $attributes['monthNames'];
+		$round = $attributes['round'];
 		$attributes = array_diff_key($attributes, $defaults);
 
-		if (isset($attributes['id'])) {
-			if (is_string($attributes['id'])) {
-				// build out an array version
-				foreach ($elements as $element) {
-					$selectAttrName = 'select' . $element . 'Attr';
-					${$selectAttrName} = $attributes;
-					${$selectAttrName}['id'] = $attributes['id'] . $element;
-				}
-			} elseif (is_array($attributes['id'])) {
-				// check for missing ones and build selectAttr for each element
-				foreach ($elements as $element) {
-					$selectAttrName = 'select' . $element . 'Attr';
-					${$selectAttrName} = $attributes;
-					${$selectAttrName}['id'] = $attributes['id'][strtolower($element)];
-				}
-			}
-		} else {
-			// build the selectAttrName with empty id's to pass
-			foreach ($elements as $element) {
-				$selectAttrName = 'select' . $element . 'Attr';
-				${$selectAttrName} = $attributes;
-			}
+		if ($timeFormat == 12 && $hour == 12) {
+			$hour = 0;
 		}
 
-		$opt = '';
-
-		if ($dateFormat != 'NONE') {
-			$selects = array();
-			foreach (preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
-				switch ($char) {
-					// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
-					case 'W':
-						$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
-						break;
-					// <<<
-					case 'Y':
-						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
-						/*$selects[] = $this->year(
-							$fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty
-						);*/
-						// ---
-						$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
-						$selects[] = $this->year(
-							$fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty
-						).$suffix;
-						// <<<
-					break;
-					case 'M':
-						$selectMonthAttr['monthNames'] = $monthNames;
-						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
-						//$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty);
-						// ---
-						$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
-						$selects[] = $this->month($fieldName, $month, $selectMonthAttr, $showEmpty).$suffix;
-						// <<<
-					break;
-					case 'D':
-						// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
-						//$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty);
-						// ---
-						$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
-						$selects[] = $this->day($fieldName, $day, $selectDayAttr, $showEmpty).$suffix;
-						// <<<
-					break;
-				}
-			}
-			$opt = implode($separator, $selects);
-		}
 		if (!empty($interval) && $interval > 1 && !empty($min)) {
-			$min = round($min * (1 / $interval)) * $interval;
+			$current = new DateTime();
+			if ($year !== null) {
+				$current->setDate($year, $month, $day);
+			}
+			if ($hour !== null) {
+				$current->setTime($hour, $min);
+			}
+			$changeValue = $min * (1 / $interval);
+			switch ($round) {
+				case 'up':
+					$changeValue = ceil($changeValue);
+					break;
+				case 'down':
+					$changeValue = floor($changeValue);
+					break;
+				default:
+					$changeValue = round($changeValue);
+			}
+			$change = ($changeValue * $interval) - $min;
+			$current->modify($change > 0 ? "+$change minutes" : "$change minutes");
+			$format = ($timeFormat == 12) ? 'Y m d h i a' : 'Y m d H i a';
+			$newTime = explode(' ', $current->format($format));
+			list($year, $month, $day, $hour, $min, $meridian) = $newTime;
 		}
-		$selectMinuteAttr['interval'] = $interval;
+
+		$keys = array('Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian');
+		$attrs = array_fill_keys($keys, $attributes);
+
+		$hasId = isset($attributes['id']);
+		if ($hasId && is_array($attributes['id'])) {
+			// check for missing ones and build selectAttr for each element
+			$attributes['id'] += array(
+				'month' => '',
+				'year' => '',
+				'day' => '',
+				'hour' => '',
+				'minute' => '',
+				'meridian' => ''
+			);
+			foreach ($keys as $key) {
+				$attrs[$key]['id'] = $attributes['id'][strtolower($key)];
+			}
+		}
+		if ($hasId && is_string($attributes['id'])) {
+			// build out an array version
+			foreach ($keys as $key) {
+				$attrs[$key]['id'] = $attributes['id'] . $key;
+			}
+		}
+
+		if (is_array($attributes['empty'])) {
+			$attributes['empty'] += array(
+				'month' => true,
+				'year' => true,
+				'day' => true,
+				'hour' => true,
+				'minute' => true,
+				'meridian' => true
+			);
+			foreach ($keys as $key) {
+				$attrs[$key]['empty'] = $attributes['empty'][strtolower($key)];
+			}
+		}
+
+		$selects = array();
+		foreach (preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
+			switch ($char) {
+				// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
+				case 'W':
+					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty)."年";
+					break;
+				// <<<
+				case 'Y':
+					$attrs['Year']['value'] = $year;
+					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+					/*$selects[] = $this->year(
+						$fieldName, $minYear, $maxYear, $attrs['Year']
+					);*/
+					// ---
+					$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
+					$selects[] = $this->year(
+						$fieldName, $minYear, $maxYear, $attrs['Year']
+					) . $suffix;
+					// <<<
+					break;
+				case 'M':
+					$attrs['Month']['value'] = $month;
+					$attrs['Month']['monthNames'] = $monthNames;
+					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+					/*$selects[] = $this->month($fieldName, $attrs['Month']);*/
+					// ---
+					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
+					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
+					// <<<
+					break;
+				case 'D':
+					$attrs['Day']['value'] = $day;
+					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
+					/*$selects[] = $this->day($fieldName, $attrs['Day']);*/
+					// ---
+					$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
+					$selects[] = $this->day($fieldName, $attrs['Day']) . $suffix;
+					// <<<
+					break;
+			}
+		}
+		$opt = implode($separator, $selects);
+
+		$attrs['Minute']['interval'] = $interval;
 		switch ($timeFormat) {
 			case '24':
-				$opt .= $this->hour($fieldName, true, $hour, $selectHourAttr, $showEmpty) . ':' .
-				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty);
-			break;
+				$attrs['Hour']['value'] = $hour;
+				$attrs['Minute']['value'] = $min;
+				$opt .= $this->hour($fieldName, true, $attrs['Hour']) . ':' .
+				$this->minute($fieldName, $attrs['Minute']);
+				break;
 			case '12':
-				$opt .= $this->hour($fieldName, false, $hour, $selectHourAttr, $showEmpty) . ':' .
-				$this->minute($fieldName, $min, $selectMinuteAttr, $showEmpty) . ' ' .
-				$this->meridian($fieldName, $meridian, $selectMeridianAttr, $showEmpty);
-			break;
-			case 'NONE':
-			default:
-				$opt .= '';
-			break;
+				$attrs['Hour']['value'] = $hour;
+				$attrs['Minute']['value'] = $min;
+				$attrs['Meridian']['value'] = $meridian;
+				$opt .= $this->hour($fieldName, false, $attrs['Hour']) . ':' .
+				$this->minute($fieldName, $attrs['Minute']) . ' ' .
+				$this->meridian($fieldName, $attrs['Meridian']);
+				break;
 		}
 		return $opt;
-		
 	}
 /**
  * 和暦年
@@ -487,6 +500,7 @@ DOC_END;
 		$hiddenTag = $this->hidden($fieldName, array('value'=>$value));
 		$domId = $this->domId();
 		$_script = <<< DOC_END
+<script type="text/javascript">
 $(function(){
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
@@ -503,8 +517,9 @@ $(function(){
 		}
    }
 });
+</script>
 DOC_END;
-		$script = $this->Js->buffer($_script,array('inline'=>false));
+		$script = $this->_View->addScript($_script);
 		return $dateTag.$timeTag.$hiddenTag;
 		
 	}

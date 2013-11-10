@@ -403,6 +403,9 @@ class BlogPostsController extends BlogAppController {
 		if(!$blogCategoryId) {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
+			if(empty($this->request->data['BlogCategory']['owner_id'])) {
+				$this->request->data = $this->BlogPost->read(null, $id);
+			}
 			$currentCatOwner = $this->request->data['BlogCategory']['owner_id'];
 		}
 		
