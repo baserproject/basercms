@@ -250,9 +250,9 @@ class CakeResponse {
 		'f4b' => 'audio/mp4',
 		'gif' => 'image/gif',
 		'ief' => 'image/ief',
-		'jpe' => 'image/jpeg',
-		'jpeg' => 'image/jpeg',
 		'jpg' => 'image/jpeg',
+		'jpeg' => 'image/jpeg',
+		'jpe' => 'image/jpeg',
 		'pbm' => 'image/x-portable-bitmap',
 		'pgm' => 'image/x-portable-graymap',
 		'png' => 'image/png',
@@ -570,7 +570,7 @@ class CakeResponse {
 			if (is_numeric($header)) {
 				list($header, $value) = array($value, null);
 			}
-			if (is_null($value)) {
+			if ($value === null) {
 				list($header, $value) = explode(':', $header, 2);
 			}
 			$this->_headers[$header] = is_array($value) ? array_map('trim', $value) : trim($value);
@@ -848,7 +848,7 @@ class CakeResponse {
  * If called with no parameters, this function will return the current max-age value if any
  *
  * @param integer $seconds if null, the method will return the current s-maxage value
- * @return int
+ * @return integer
  */
 	public function sharedMaxAge($seconds = null) {
 		if ($seconds !== null) {
@@ -868,7 +868,7 @@ class CakeResponse {
  * If called with no parameters, this function will return the current max-age value if any
  *
  * @param integer $seconds if null, the method will return the current max-age value
- * @return int
+ * @return integer
  */
 	public function maxAge($seconds = null) {
 		if ($seconds !== null) {

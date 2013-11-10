@@ -249,7 +249,7 @@ class PageCategory extends AppModel {
  * @return void
  * @access public
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 		
 		if(!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);

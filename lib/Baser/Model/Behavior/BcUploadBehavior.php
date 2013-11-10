@@ -137,7 +137,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function afterSave(Model $model, $created) {
+	public function afterSave(Model $model, $created, $options = array()) {
 		
 		$this->renameToFieldBasename($model);
 		$model->data = $model->save($model->data, array('callbacks'=>false,'validate'=>false));

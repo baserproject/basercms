@@ -25,8 +25,6 @@
  */
 class TestsAppsPostsController extends AppController {
 
-	public $name = 'TestsAppsPosts';
-
 	public $uses = array('Post');
 
 	public $viewPath = 'TestsApps';
@@ -46,7 +44,7 @@ class TestsAppsPostsController extends AppController {
 	}
 
 /**
- * check url params
+ * check URL params
  *
  */
 	public function url_var() {

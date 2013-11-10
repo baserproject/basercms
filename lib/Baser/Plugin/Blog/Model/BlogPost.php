@@ -570,7 +570,7 @@ class BlogPost extends BlogAppModel {
  * @return boolean
  * @access public
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 
 		// 検索用テーブルへの登録・削除
 		if($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {

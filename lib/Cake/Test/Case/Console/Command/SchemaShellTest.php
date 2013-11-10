@@ -137,7 +137,7 @@ class SchemaShellTest extends CakeTestCase {
 	public function testStartup() {
 		$this->Shell->startup();
 		$this->assertTrue(isset($this->Shell->Schema));
-		$this->assertTrue(is_a($this->Shell->Schema, 'CakeSchema'));
+		$this->assertInstanceOf('CakeSchema', $this->Shell->Schema);
 		$this->assertEquals(Inflector::camelize(Inflector::slug(APP_DIR)), $this->Shell->Schema->name);
 		$this->assertEquals('schema.php', $this->Shell->Schema->file);
 
@@ -582,6 +582,42 @@ class SchemaShellTest extends CakeTestCase {
 		$contents = file_get_contents($this->Shell->Schema->path . DS . 'custom_name.php');
 		$this->assertRegExp('/class CustomNameSchema/', $contents);
 		unlink($this->Shell->Schema->path . DS . 'custom_name.php');
+		CakePlugin::unload();
+	}
+
+/**
+ * test that passing name and file creates the passed filename with the
+ * passed classname
+ *
+ * @return void
+ */
+	public function testNameAndFile() {
+		App::build(array(
+			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
+		));
+		CakePlugin::load('TestPlugin');
+		$this->Shell->params = array(
+			'plugin' => 'TestPlugin',
+			'connection' => 'test',
+			'name' => 'custom_name',
+			'file' => 'other_name',
+			'force' => false,
+			'overwrite' => true,
+		);
+		$this->Shell->startup();
+		$file = $this->Shell->Schema->path . DS . 'other_name.php';
+		if (file_exists($file)) {
+			unlink($file);
+		}
+		$this->Shell->generate();
+
+		$this->assertFileExists($file);
+		$contents = file_get_contents($file);
+		$this->assertRegExp('/class CustomNameSchema/', $contents);
+
+		if (file_exists($file)) {
+			unlink($file);
+		}
 		CakePlugin::unload();
 	}
 

@@ -88,7 +88,7 @@ class Controller extends Object implements CakeEventListener {
  * An array containing the names of helpers this controller uses. The array elements should
  * not contain the "Helper" part of the classname.
  *
- * Example: `public $helpers = array('Html', 'Javascript', 'Time', 'Ajax');`
+ * Example: `public $helpers = array('Html', 'Js', 'Time', 'Ajax');`
  *
  * @var mixed A single name as a string or a list of names as an array.
  * @link http://book.cakephp.org/2.0/en/controllers.html#components-helpers-and-uses
@@ -207,7 +207,7 @@ class Controller extends Object implements CakeEventListener {
 	public $View;
 
 /**
- * File extension for view templates. Defaults to Cake's conventional ".ctp".
+ * File extension for view templates. Defaults to CakePHP's conventional ".ctp".
  *
  * @var string
  */
@@ -713,12 +713,12 @@ class Controller extends Object implements CakeEventListener {
 
 /**
  * Loads and instantiates models required by this controller.
- * If the model is non existent, it will throw a missing database table error, as Cake generates
+ * If the model is non existent, it will throw a missing database table error, as CakePHP generates
  * dynamic models for the time being.
  *
  * @param string $modelClass Name of model class to load
  * @param integer|string $id Initial ID the instanced model class should have
- * @return bool True if the model was found
+ * @return boolean True if the model was found
  * @throws MissingModelException if the model class cannot be found.
  */
 	public function loadModel($modelClass = null, $id = null) {
@@ -940,7 +940,7 @@ class Controller extends Object implements CakeEventListener {
 		$models = ClassRegistry::keys();
 		foreach ($models as $currentModel) {
 			$currentObject = ClassRegistry::getObject($currentModel);
-			if (is_a($currentObject, 'Model')) {
+			if ($currentObject instanceof Model) {
 				$className = get_class($currentObject);
 				list($plugin) = pluginSplit(App::location($className));
 				$this->request->params['models'][$currentObject->alias] = compact('plugin', 'className');
@@ -1105,7 +1105,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * If this method returns false the controller will not continue on to redirect the request.
  * The $url, $status and $exit variables have same meaning as for the controller's method. You can also
- * return a string which will be interpreted as the url to redirect to or return associative array with
+ * return a string which will be interpreted as the URL to redirect to or return associative array with
  * key 'url' and optionally 'status' and 'exit'.
  *
  * @param string|array $url A string or array-based URL pointing to another location within the app,
@@ -1114,7 +1114,7 @@ class Controller extends Object implements CakeEventListener {
  * @param boolean $exit If true, exit() will be called after the redirect
  * @return mixed
  *   false to stop redirection event,
- *   string controllers a new redirection url or
+ *   string controllers a new redirection URL or
  *   array with the keys url, status and exit to be used by the redirect method.
  * @link http://book.cakephp.org/2.0/en/controllers.html#request-life-cycle-callbacks
  */

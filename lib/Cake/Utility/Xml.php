@@ -23,7 +23,7 @@
 App::uses('HttpSocket', 'Network/Http');
 
 /**
- * XML handling for Cake.
+ * XML handling for CakePHP.
  *
  * The methods in these classes enable the datasources that use XML to work.
  *
@@ -81,7 +81,7 @@ class Xml {
  *   is disabled by default for security reasons.
  * - If using array as input, you can pass `options` from Xml::fromArray.
  *
- * @param string|array $input XML string, a path to a file, an URL or an array
+ * @param string|array $input XML string, a path to a file, a URL or an array
  * @param array $options The options to use
  * @return SimpleXMLElement|DOMDocument SimpleXMLElement or DOMDocument
  * @throws XmlException
