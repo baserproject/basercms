@@ -123,7 +123,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  * @access public
  */
-	public function beforeSave(Model $model) {
+	public function beforeSave(Model $model, $options = array()) {
 		
 		return $this->saveFiles($model);
 		

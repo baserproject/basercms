@@ -168,7 +168,7 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostLink($post, $title, $options = array()) {
-		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->setContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
 		return $this->BcBaser->getLink($title, $url, $options);
 
@@ -332,7 +332,7 @@ class BlogHelper extends AppHelper {
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
-		$this->_setBlogContent($blogContentId);
+		$this->setContent($blogContentId);
 		$blogContentName = $this->blogContent['name'];
 
 		$path = array('category');
@@ -672,7 +672,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostImg($post, $options = array()) {
 
-		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->setContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge($_options = array(
 			'num'	=> 1, 
 			'link'	=> true,
