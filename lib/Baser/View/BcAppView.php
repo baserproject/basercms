@@ -392,6 +392,12 @@ class BcAppView extends View {
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
 		
+		// CakeEmailより呼び出される場合、AppViewを直接呼び出す為、$this->nameに値が入らない。
+		// その際、View.beforeRenderをループで呼び出してしまうので、イベントを実行しない。
+		if(!$this->name) {
+			return false;
+		}
+		
 		$options = array_merge(array(
 			'modParams' => 0,
 			'plugin'	=> $this->plugin,

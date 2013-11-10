@@ -522,7 +522,7 @@ class MailController extends MailAppController {
 			$options = array(
 				'fromName'	=> $mailContent['sender_name'],
 				'reply'		=> $fromAdmin,
-				'template'	=> $mailContent['mail_template'],
+				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'reply'		=> $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
@@ -535,7 +535,7 @@ class MailController extends MailAppController {
 				'fromName'		=> $mailContent['sender_name'],
 				'reply'			=> $userMail,
 				'from'			=> $fromAdmin,
-				'template'		=> $mailContent['mail_template'],
+				'template'		=> 'Mail.' . $mailContent['mail_template'],
 				'bcc'			=> $mailContent['sender_2'],
 				'agentTemplate'	=> false
 			);

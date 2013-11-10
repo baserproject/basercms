@@ -691,6 +691,11 @@ class BcAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 
+		$options = array_merge(array(
+			'agentTemplate' => true,
+			'template'		=> 'default'
+		), $options);
+		
 		if(!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
 			$host		= $this->siteConfigs['smtp_host'] ;
@@ -822,29 +827,42 @@ class BcAppController extends Controller {
 		}
 
 		//viewRender (利用するviewクラスを設定する)
-		$viewClass = 'BcApp' ;
-		$cakeEmail->viewRender($viewClass);
+		$cakeEmail->viewRender('BcApp');
 
 		//template
 		if(!empty($options['template'])){
-			$template = $this->__getEmailTemplate($options);
+			
+			$layoutPath = $subDir = $plugin = '';
+			if($options['agentTemplate'] && Configure::read('BcRequest.agent')) {
+				$layoutPath = Configure::read('BcRequest.agentPrefix');
+				$subDir = Configure::read('BcRequest.agentPrefix');
+			}
+			
+			list($plugin, $template) = pluginSplit($options['template']);
+			
+			if($subDir) {
+				$template = "{$subDir}/{$template}";
+			}
+			
+			if(!empty($plugin)) {
+				$template = "{$plugin}.{$template}";
+			}
+
 			if(!empty($options['layout'])){
-				$cakeEmail->template($template,$options['layout']);
+				$cakeEmail->template($template, $options['layout']);
 			}else{
 				$cakeEmail->template($template);
 			}
-		}else{
-			if(Configure::read('BcRequest.agent')) {
-				$layout = Configure::read('BcRequest.agentPrefix');
-				$subDir = Configure::read('BcRequest.agentPrefix');
-				if( $subDir ){
-					die($subDir);
-				}
+			$content = '';
+			if(is_array($body)) {
+				$cakeEmail->viewVars($body);
+			} else {
+				$cakeEmail->viewVars(array('body' => $body));
 			}
-		}
 
-		//datas body
-		$cakeEmail->viewVars($body);
+		} else {
+			$content = $body;
+		}
 
 		//$attachments tmp file path @TODO @basercamp filePaths と attachments のどっちが
 		//本当の分か確認すること
@@ -865,42 +883,14 @@ class BcAppController extends Controller {
 		}
 		$cakeEmail->attachments($attachments);
 
-		if($message = $cakeEmail->send()){
+		if($cakeEmail->send($content)){
 			//メール送信が成功した場合ここで処理
 			return true ;
 		}else{
 			return false ;
 		}
-	}
-
-/**
- * template までのpathを取得
- *
- * @param array $options in template and layout
- * @return string layout
- * @access private
- */
-	private function __getEmailTemplate($options=null) {
-
-		$layoutPath = $subDir = $plugin = '';
-
-		if(!empty($this->layoutPath)) {
-			$layoutPath = $this->layoutPath.DS;
-		}
-		if(!empty($this->subDir)) {
-			$subDir = $this->subDir.DS;
-		}
-		if(!empty($this->plugin)) {
-			$plugin = $this->plugin  ;
-		}
-
-		//$template = $layoutPath . $plugin . $subDir . 'Emails' . DS . $this->sendAs . DS . $options['template'] ;
-
-		$template = "{$plugin}." . $subDir . $options['template'] ;
-		return $template ;
 		
 	}
-
 
 /**
  * 画面の情報をセットする

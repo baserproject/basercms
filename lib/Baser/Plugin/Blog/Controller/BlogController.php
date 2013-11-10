@@ -117,8 +117,13 @@ class BlogController extends BlogAppController {
 
 		// コメント送信用のトークンを出力する為にセキュリティコンポーネントを利用しているが、
 		// 表示用のコントローラーなのでポストデータのチェックは必要ない
-		$this->Security->enabled = true;
-		$this->Security->validatePost = false;
+		if( Configure::read('debug') > 0 ){
+			$this->Security->validatePost = false;
+			$this->Security->csrfCheck = false;
+		}else{
+			$this->Security->enabled = true;
+			$this->Security->validatePost = false;
+		}
 
 	}
 /**
@@ -450,14 +455,10 @@ class BlogController extends BlogAppController {
 
 		if($this->BlogPost->BlogComment->add($this->request->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
 
-			// TODO basercamp 2013/08/12 ryuring
-			// メール送信が実装されるまで一旦コメントアウト
-			//$this->_sendCommentAdmin($postId, $this->request->data);
+			$this->_sendCommentAdmin($postId, $this->request->data);
 			// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 			if(!$this->blogContent['BlogContent']['comment_approve']) {
-				// TODO basercamp 2013/08/12 ryuring
-				// メール送信が実装されるまで一旦コメントアウト
-				//$this->_sendCommentContributor($postId, $this->request->data);
+				$this->_sendCommentContributor($postId, $this->request->data);
 			}
 			if($this->blogContent['BlogContent']['comment_approve']) {
 				$commentMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
