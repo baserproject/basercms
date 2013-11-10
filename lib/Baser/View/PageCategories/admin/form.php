@@ -245,7 +245,7 @@ function pageTypeChengeHandler() {
 	<?php $this->BcBaser->link('削除', 
 			array('action'=>'delete', $this->BcForm->value('PageCategory.id')),
 			array('class'=>'button'),
-			sprintf('%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。', $this->BcForm->value('PageCategory.name')),
+			sprintf("%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。", $this->BcForm->value('PageCategory.name')),
 			false); ?>
 <?php endif ?>
 </div>
