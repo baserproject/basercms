@@ -1168,8 +1168,7 @@ DOC_END;
 			'editor'	=> 'BcCkeditor',
 			'style'		=> 'width:99%;height:540px'
 		), $options);
-		
-		$editor = $options['editor'];
+		list($plugin, $editor) = pluginSplit($options['editor']);
 		if(!empty($this->_View->{$editor})) {
 			return $this->_View->{$editor}->editor($fieldName, $options);
 		} elseif($editor == 'none') {
@@ -1183,7 +1182,7 @@ DOC_END;
 		} else {
 			return $this->_View->BcCkeditor->editor($fieldName, $options);
 		}
-				
+		
 	}
 	
 /**
