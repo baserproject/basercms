@@ -44,7 +44,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 	<td><?php echo $data['Content']['id'] ?></td>
 	<td style="width:15%"><?php echo $data['Content']['type'] ?><br /><?php echo $data['Content']['category'] ?></td>
 	<td style="width:15%">
-		<?php echo $this->BcBaser->link($this->BcText->noValue($data['Content']['title'], '設定なし'), $data['Content']['url'], array('target' => '_blank')) ?></td>
+		<?php echo $this->BcBaser->link($this->BcText->noValue($data['Content']['title'], '設定なし'), siteUrl() . preg_replace('/^\//', '', $data['Content']['url']), array('target' => '_blank')) ?></td>
 	<td><?php echo $this->Text->truncate($data['Content']['detail'], 50) ?></td>
 	<td style="width:10%;text-align:center">
 		<?php echo $this->BcText->booleanMark($data['Content']['status']); ?><br />

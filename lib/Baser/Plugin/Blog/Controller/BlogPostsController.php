@@ -47,7 +47,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	public $helpers = array('Blog.Blog', 'BcUpload', 'BcCkeditor');
+	public $helpers = array('Blog.Blog', 'BcUpload');
 //	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 /**
  * コンポーネント
@@ -98,6 +98,9 @@ class BlogPostsController extends BlogAppController {
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if($this->request->params['prefix'] == 'admin') {
 				$this->subMenuElements = array('blog_posts','blog_categories','blog_common');
+			}
+			if(!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+				$this->helpers[] = $this->siteConfigs['editor'];
 			}
 			
 		}
@@ -400,6 +403,9 @@ class BlogPostsController extends BlogAppController {
 		if(!$blogCategoryId) {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
+			if(empty($this->request->data['BlogCategory']['owner_id'])) {
+				$this->request->data = $this->BlogPost->read(null, $id);
+			}
 			$currentCatOwner = $this->request->data['BlogCategory']['owner_id'];
 		}
 		

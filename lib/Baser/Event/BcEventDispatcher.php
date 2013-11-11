@@ -33,9 +33,7 @@ class BcEventDispatcher extends Object {
  * 
  * 命名規則に従ったイベント名で、イベントをディスパッチする
  * 
- * @param string $layer
  * @param string $name
- * @param string $class
  * @param Object $subject
  * @param array $params
  * @param array $options

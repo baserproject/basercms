@@ -45,7 +45,7 @@ class BlogHelper extends AppHelper {
 	public function __construct(View $View, $settings = array()) {
 		
 		parent::__construct($View, $settings);
-		$this->_setBlogContent();
+		$this->setContent();
 
 	}
 /**
@@ -55,7 +55,7 @@ class BlogHelper extends AppHelper {
  * @return void
  * @access protected
  */
-	protected function _setBlogContent($blogContentId = null) {
+	public function setContent($blogContentId = null) {
 
 		if(isset($this->blogContent) && !$blogContentId) {
 			return;
@@ -67,7 +67,11 @@ class BlogHelper extends AppHelper {
 		} elseif(isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
-
+		if($this->blogContent) {
+			$BlogPost = ClassRegistry::init('BLog.BlogPost');
+			$BlogPost->setupUpload($this->blogContent['id']);
+		}
+		
 	}
 /**
  * ブログタイトルを出力する
@@ -164,7 +168,7 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostLink($post, $title, $options = array()) {
-		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->setContent($post['BlogPost']['blog_content_id']);
 		$url = array('admin'=>false,'plugin'=>'','controller'=>$this->blogContent['name'],'action'=>'archives', $post['BlogPost']['no']);
 		return $this->BcBaser->getLink($title, $url, $options);
 
@@ -328,7 +332,7 @@ class BlogHelper extends AppHelper {
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
-		$this->_setBlogContent($blogContentId);
+		$this->setContent($blogContentId);
 		$blogContentName = $this->blogContent['name'];
 
 		$path = array('category');
@@ -668,7 +672,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostImg($post, $options = array()) {
 
-		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
+		$this->setContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge($_options = array(
 			'num'	=> 1, 
 			'link'	=> true,
@@ -883,7 +887,7 @@ class BlogHelper extends AppHelper {
  */
 	function eyeCatch($post, $options = array()) {
 		
-		echo $this->getEyeCatch($post, $options);
+		echo $this->getEyeCatch($post, $options);		
 		
 	}
 /**

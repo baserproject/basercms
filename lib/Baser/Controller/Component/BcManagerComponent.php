@@ -1397,7 +1397,7 @@ class BcManagerComponent extends Component {
 											'RewriteBase '.$this->getRewriteBase($rewriteBase, $baseUrl),
 											'RewriteCond %{REQUEST_FILENAME} !-d',
 											'RewriteCond %{REQUEST_FILENAME} !-f',
-											'RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]');
+											'RewriteRule ^(.*)$ index.php [QSA,L]');
 				break;
 		}
 

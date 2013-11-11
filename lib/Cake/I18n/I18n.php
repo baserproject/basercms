@@ -98,8 +98,6 @@ class I18n {
 
 /**
  * Constructor, use I18n::getInstance() to get the i18n translation object.
- *
- * @return void
  */
 	public function __construct() {
 		$this->l10n = new L10n();
@@ -549,11 +547,11 @@ class I18n {
 				continue;
 			}
 			$count = count($parts);
-			if ($count == 2) {
+			if ($count === 2) {
 				$currentToken = $parts[0];
 				$value = $parts[1];
-			} elseif ($count == 1) {
-				$value .= $parts[0];
+			} elseif ($count === 1) {
+				$value = is_array($value) ? $parts[0] : $value . $parts[0];
 			} else {
 				continue;
 			}
@@ -575,7 +573,7 @@ class I18n {
 				$val = str_replace($replacements, $mustEscape, $val);
 				$value[$i] = $val;
 			}
-			if (count($value) == 1) {
+			if (count($value) === 1) {
 				$definitions[$currentToken] = array_pop($value);
 			} else {
 				$definitions[$currentToken] = $value;

@@ -89,7 +89,6 @@ class ExceptionRenderer {
  * code error depending on the code used to construct the error.
  *
  * @param Exception $exception Exception
- * @return mixed Return void or value returned by controller's `appError()` function
  */
 	public function __construct(Exception $exception) {
 		$this->controller = $this->_getController($exception);
@@ -298,7 +297,7 @@ class ExceptionRenderer {
 	protected function _outputMessageSafe($template) {
 		$this->controller->layoutPath = null;
 		$this->controller->subDir = null;
-		$this->controller->viewPath = 'Errors/';
+		$this->controller->viewPath = 'Errors';
 		$this->controller->layout = 'error';
 		$this->controller->helpers = array('Form', 'Html', 'Session');
 

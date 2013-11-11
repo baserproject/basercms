@@ -146,7 +146,7 @@ class SyslogLog extends BaseLog {
  *
  * @param integer $priority
  * @param string $message
- * @return bool
+ * @return boolean
  */
 	protected function _write($priority, $message) {
 		return syslog($priority, $message);
@@ -154,9 +154,7 @@ class SyslogLog extends BaseLog {
 
 /**
  * Closes the logger connection
- *
- * @return void
- **/
+ */
 	public function __destruct() {
 		closelog();
 	}

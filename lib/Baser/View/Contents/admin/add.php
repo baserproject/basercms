@@ -33,7 +33,14 @@ $(window).load(function() {
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Content.title', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('Content.title', array('type' => 'text', 'size' => 60, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->error('Content.title') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('Content.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Content.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>

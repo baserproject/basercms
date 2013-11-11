@@ -49,7 +49,7 @@ class BlogAppController extends BcPluginAppController {
 		$to = $this->siteConfigs['email'];
 		$title = '【'.$this->siteConfigs['name'].'】コメントを受け付けました';
 		return $this->sendMail($to, $title, $data, array(
-			'template'		=> 'blog_comment_admin',
+			'template'		=> 'Blog.blog_comment_admin',
 			'agentTemplate'	=> false
 		));
 
@@ -92,7 +92,7 @@ class BlogAppController extends BcPluginAppController {
 		foreach($blogComments as $blogComment) {
 			if($blogComment['email'] && $blogComment['status'] && !in_array($blogComment['email'], $sended) && $blogComment['email'] != $data['BlogComment']['email']) {
 				$result = $this->sendMail($blogComment['email'], $title, $data, array(
-					'template'		=> 'blog_comment_contributor',
+					'template'		=> 'Blog.blog_comment_contributor',
 					'agentTemplate'	=> false
 				));
 			}
@@ -122,5 +122,5 @@ class BlogAppController extends BcPluginAppController {
 		$this->set('newCatAddable', $newCatAddable);
 		
 	}
-	
+		
 }

@@ -934,108 +934,117 @@ class BcAppModel extends Model {
 			return $data;
 		}
 
-		$copy = $data;
 		$type = $this->getColumnType($field);
-
-		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
-		// メールフォームで生成するフィールドは全てテキストの為（暫定）
-		//if (in_array($type, array('datetime', 'timestamp', 'date', 'time'))) {
+		
+		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
+		/*if (!in_array($type, array('datetime', 'timestamp', 'date', 'time'))) {*/
 		// ---
-		if (in_array($type, array('string', 'text', 'datetime', 'timestamp', 'date', 'time'))) {
+		if (!in_array($type, array('string', 'text', 'datetime', 'timestamp', 'date', 'time'))) {
 		// <<<
-			$useNewDate = (isset($data['year']) || isset($data['month']) ||
-				isset($data['day']) || isset($data['hour']) || isset($data['minute']));
+			return $data;
+		}
 
-			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
-			//$dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
-			// ---
-			$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
-			// <<<
+		$useNewDate = (isset($data['year']) || isset($data['month']) ||
+			isset($data['day']) || isset($data['hour']) || isset($data['minute']));
 
-			$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
+		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
+		/*$dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');*/
+		// ---
+		$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
+		$dateFields = array('D' => 'date', 'T' => 'time');
+		// <<<
+		$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
+		$date = array();
 
-			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
-			// メールフォームで生成するフィールドは全てテキストの為（暫定）
-			//$db = ConnectionManager::getDataSource($this->useDbConfig);
-			//$format = $db->columns[$type]['format'];
-			// ---
-			if ($type != 'text' && $type != 'string') {
-				$db = ConnectionManager::getDataSource($this->useDbConfig);
-				$format = $db->columns[$type]['format'];
-			} else {
-				$format = 'Y-m-d H:i:s';
+		if (isset($data['meridian']) && empty($data['meridian'])) {
+			return null;
+		}
+
+		if (
+			isset($data['hour']) &&
+			isset($data['meridian']) &&
+			!empty($data['hour']) &&
+			$data['hour'] != 12 &&
+			$data['meridian'] === 'pm'
+		) {
+			$data['hour'] = $data['hour'] + 12;
+		}
+		if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] == 12 && $data['meridian'] === 'am') {
+			$data['hour'] = '00';
+		}
+		if ($type === 'time') {
+			foreach ($timeFields as $key => $val) {
+				if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
+					$data[$val] = '00';
+				} elseif ($data[$val] !== '') {
+					$data[$val] = sprintf('%02d', $data[$val]);
+				}
+				if (!empty($data[$val])) {
+					$date[$key] = $data[$val];
+				} else {
+					return null;
+				}
 			}
-			// <<<
-			$date = array();
+		}
 
-			if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] != 12 && 'pm' == $data['meridian']) {
-				$data['hour'] = $data['hour'] + 12;
-			}
-			if (isset($data['hour']) && isset($data['meridian']) && $data['hour'] == 12 && 'am' == $data['meridian']) {
-				$data['hour'] = '00';
-			}
-			if ($type == 'time') {
-				foreach ($timeFields as $key => $val) {
+		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
+		/*if ($type === 'datetime' || $type === 'timestamp' || $type === 'date') {*/
+		// ---
+		if ($type == 'text' || $type == 'string' || $type === 'datetime' || $type === 'timestamp' || $type === 'date') {
+		// <<<
+			foreach ($dateFields as $key => $val) {
+				if ($val === 'hour' || $val === 'min' || $val === 'sec') {
 					if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
 						$data[$val] = '00';
-					} elseif ($data[$val] === '') {
-						$data[$val] = '';
 					} else {
 						$data[$val] = sprintf('%02d', $data[$val]);
 					}
-					if (!empty($data[$val])) {
-						$date[$key] = $data[$val];
+				}
+				
+				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
+				if ($val == 'wareki' && !empty($data['wareki'])) {
+					$warekis = array('m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988);
+					if (!empty($data['year'])) {
+						list($wareki, $year) = explode('-', $data['year']);
+						$data['year'] = $year + $warekis[$wareki];
+					}
+				}
+				// <<<
+				
+				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
+				/*if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+					return null;*/
+				// ---
+				if ($val != 'wareki' && !isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+					if ($type == 'text' || $type == 'string') {
+						return $data;
 					} else {
 						return null;
 					}
 				}
-			}
-
-			// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	和暦対応
-			// メールフォームで生成するフィールドは全てテキストの為（暫定）
-			//if ($type == 'datetime' || $type == 'timestamp' || $type == 'date') {
-			// ---
-			if ($type == 'text' || $type == 'string' || $type == 'datetime' || $type == 'timestamp' || $type == 'date') {
-			// <<<
-				foreach ($dateFields as $key => $val) {
-					if ($val == 'hour' || $val == 'min' || $val == 'sec') {
-						if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
-							$data[$val] = '00';
-						} else {
-							$data[$val] = sprintf('%02d', $data[$val]);
-						}
-					}
-					// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
-					if ($val == 'wareki' && !empty($data['wareki'])) {
-						$warekis = array('m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988);
-						if (!empty($data['year'])) {
-							list($wareki, $year) = explode('-', $data['year']);
-							$data['year'] = $year + $warekis[$wareki];
-						}
-					}
-					// <<<
-
-					// >>> CUSTOMIZE MODIFY 2011/02/17 ryuring 和暦対応
-					// if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
-					//	return null;
-					// ---
-					if ($val != 'wareki' && (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-'))) {
-						if ($type != 'text' && $type != 'string') {
-							return null;
-						} else {
-							return $data;
-						}
-					// <<<
-					}
-					if (isset($data[$val]) && !empty($data[$val])) {
-						$date[$key] = $data[$val];
-					}
+				if (isset($data[$val]) && !empty($data[$val])) {
+					$date[$key] = $data[$val];
 				}
 			}
-			$date = str_replace(array_keys($date), array_values($date), $format);
-			if ($useNewDate && !empty($date)) {
-				return $date;
+		}
+
+		if ($useNewDate && !empty($date)) {
+			// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
+			/*$format = $this->getDataSource()->columns[$type]['format'];*/
+			// ---
+			if ($type == 'text' || $type == 'string') {
+				$format = 'Y-m-d H:i:s';
+			} else {
+				$format = $this->getDataSource()->columns[$type]['format'];
 			}
+			// <<<
+			
+			foreach (array('m', 'd', 'H', 'i', 's') as $index) {
+				if (isset($date[$index])) {
+					$date[$index] = sprintf('%02d', $date[$index]);
+				}
+			}
+			return str_replace(array_keys($date), array_values($date), $format);
 		}
 		return $data;
 	}

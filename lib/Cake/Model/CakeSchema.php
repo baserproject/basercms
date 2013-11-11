@@ -492,13 +492,7 @@ class CakeSchema extends Object {
 				if (!empty($old[$table][$field])) {
 					$diff = $this->_arrayDiffAssoc($value, $old[$table][$field]);
 					if (!empty($diff) && $field !== 'indexes' && $field !== 'tableParameters') {
-						// CUSTOMIZE 2013/09/20 ryuring
-						// リネームを行った場合、change としてみなすように調整
-						// >>>
-						//$tables[$table]['change'][$field] = $value;
-						// ---
-						$tables[$table]['change'][$field] = array_merge($old[$table][$field], $diff);
-						// <<<
+						$tables[$table]['change'][$field] = $value;
 					}
 				}
 
@@ -557,7 +551,7 @@ class CakeSchema extends Object {
 				continue;
 			}
 			$correspondingValue = $array2[$key];
-			if (is_null($value) !== is_null($correspondingValue)) {
+			if (($value === null) !== ($correspondingValue === null)) {
 				$difference[$key] = $value;
 				continue;
 			}

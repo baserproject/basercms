@@ -567,7 +567,7 @@ App::uses('BcEmailComponent', 'Controller/Component');
  */
 	function siteUrl() {
 		$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
-		return topLevelUrl(false).$baseUrl;
+		return topLevelUrl(false) . $baseUrl;
 	}
 /**
  * 配列を再帰的に上書きする

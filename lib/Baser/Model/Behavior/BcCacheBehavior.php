@@ -150,7 +150,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function afterSave(Model $model, $created) {
+	public function afterSave(Model $model, $created, $options = array()) {
 		
 		$this->delAssockCache($model);
 		

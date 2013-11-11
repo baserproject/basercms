@@ -42,7 +42,7 @@ class AclNodeTwoTestBase extends AclNode {
 /**
  * cacheSources property
  *
- * @var bool false
+ * @var boolean
  */
 	public $cacheSources = false;
 }
@@ -129,7 +129,7 @@ class PermissionTwoTest extends Permission {
 /**
  * cacheQueries property
  *
- * @var bool false
+ * @var boolean
  */
 	public $cacheQueries = false;
 
@@ -158,7 +158,6 @@ class DbAclTwoTest extends DbAcl {
 /**
  * construct method
  *
- * @return void
  */
 	public function __construct() {
 		$this->Aro = new AroTwoTest();

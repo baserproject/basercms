@@ -184,11 +184,11 @@ class TestView extends View {
 }
 
 /**
- * TestAfterHelper class
+ * TestBeforeAfterHelper class
  *
  * @package       Cake.Test.Case.View
  */
-class TestAfterHelper extends Helper {
+class TestBeforeAfterHelper extends Helper {
 
 /**
  * property property
@@ -949,10 +949,10 @@ class ViewTest extends CakeTestCase {
  * @return void
  */
 	public function testBeforeLayout() {
-		$this->PostsController->helpers = array('Session', 'TestAfter', 'Html');
+		$this->PostsController->helpers = array('Session', 'TestBeforeAfter', 'Html');
 		$View = new View($this->PostsController);
 		$View->render('index');
-		$this->assertEquals('Valuation', $View->Helpers->TestAfter->property);
+		$this->assertEquals('Valuation', $View->Helpers->TestBeforeAfter->property);
 	}
 
 /**
@@ -961,7 +961,7 @@ class ViewTest extends CakeTestCase {
  * @return void
  */
 	public function testAfterLayout() {
-		$this->PostsController->helpers = array('Session', 'TestAfter', 'Html');
+		$this->PostsController->helpers = array('Session', 'TestBeforeAfter', 'Html');
 		$this->PostsController->set('variable', 'values');
 
 		$View = new View($this->PostsController);
@@ -1356,7 +1356,7 @@ class ViewTest extends CakeTestCase {
 
 /**
  * Test setting a block's content to an object with __toString magic method
- * 
+ *
  * @return void
  */
 	public function testBlockSetObjectWithToString() {
@@ -1388,7 +1388,7 @@ class ViewTest extends CakeTestCase {
 	public function testBlockSetDecimal() {
 		$this->View->assign('testWithDecimal', 1.23456789);
 		$result = $this->View->fetch('testWithDecimal');
-		$this->assertEqual('1.23456789', $result);
+		$this->assertEquals('1.23456789', $result);
 	}
 
 /**
@@ -1419,7 +1419,6 @@ class ViewTest extends CakeTestCase {
 		$this->assertSame('Block' . $value, $result);
 	}
 
-
 /**
  * Test appending an object without __toString magic method to a block with append.
  *
@@ -1437,7 +1436,7 @@ class ViewTest extends CakeTestCase {
 
 /**
  * Test prepending to a block with prepend.
- * 
+ *
  * @dataProvider blockValueProvider
  * @return void
  */
@@ -1448,6 +1447,7 @@ class ViewTest extends CakeTestCase {
 		$result = $this->View->fetch('test');
 		$this->assertEquals($value . 'Block', $result);
 	}
+
 /**
  * Test prepending an object without __toString magic method to a block with prepend.
  *

@@ -296,7 +296,7 @@ class User extends AppModel {
  * 
  * @param boolean $created 
  */
-	public function afterSave($created) {
+	public function afterSave($created, $options = array()) {
 		
 		parent::afterSave($created);
 		

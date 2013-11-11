@@ -3,7 +3,7 @@
  * Dispatcher takes the URL information, parses it for parameters and
  * tells the involved controllers what to do.
  *
- * This is the heart of Cake's operation.
+ * This is the heart of CakePHP's operation.
  *
  * PHP 5
  *
@@ -192,9 +192,7 @@ class Dispatcher implements CakeEventListener {
 
 		if ($render && $controller->autoRender) {
 			$response = $controller->render();
-		} elseif (!($result instanceof CakeResponse) &&
-			$response->body() === null
-		) {
+		} elseif (!($result instanceof CakeResponse) && $response->body() === null) {
 			$response->body($result);
 		}
 		$controller->shutdownProcess();
@@ -243,7 +241,7 @@ class Dispatcher implements CakeEventListener {
  * Load controller and return controller classname
  *
  * @param CakeRequest $request
- * @return string|bool Name of controller class name
+ * @return string|boolean Name of controller class name
  */
 	protected function _loadController($request) {
 		$pluginName = $pluginPath = $controller = null;

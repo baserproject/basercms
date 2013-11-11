@@ -39,7 +39,7 @@ class PagesController extends AppController {
  */
 	public $helpers = array(
 		'Html', 'BcGooglemaps', 'BcXml', 'BcText', 
-		'BcFreeze', 'BcCkeditor', 'BcPage'
+		'BcFreeze', 'BcPage'
 	);
 /**
  * コンポーネント
@@ -80,6 +80,11 @@ class PagesController extends AppController {
 			);
 			$this->set('newCatAddable', $newCatAddable);
 		}
+		
+		if(!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+			$this->helpers[] = $this->siteConfigs['editor'];
+		}
+		
 	}
 /**
  * [ADMIN] ページリスト

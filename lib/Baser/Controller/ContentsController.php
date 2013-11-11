@@ -341,25 +341,31 @@ class ContentsController extends AppController {
 				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
 				Router::reload();
 				// URLのデータを取得
-				$content = $this->requestAction($url, array('return' => 1));
+				try {
+					$content = $this->requestAction($url, array('return' => 1));
+				} catch (Exception $e) {
+					$content = $e;
+				}
+
 				Router::reload();
 				// 元の設定を復元
-				Router::setRequestInfo(array($this->request->params, array('base' => $this->request->base, 'webroot' => $this->request->webroot)));
-				$title = '';
+				Router::setRequestInfo($this->request);
 				
-				if(!is_a($content, 'ErrorHandler')) {
+				if(!is_a($content, 'Exception')) {
 					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
 				} elseif (preg_match('/\.html/', $url)) {
+					App::uses('HttpSocket', 'Network/Http');
 					$socket = new HttpSocket();
 					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
-					$content = $socket->get(siteUrl().$url);
-					$code = $socket->response['status']['code'];
+					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
+					$code = $HttpSocketResponse->code;
 					if($code != 200) {
 						unset($content);
 					} else {
-						if(preg_match('/<title>([^<]+)<\/title>/', $content, $matches)) {
-							$title = $matches[1];
-							$content = preg_replace('/<title>[^<]+<\/title>/', '', $content);
+						if(preg_match('/<body>(.*?)<\/body>/is', $HttpSocketResponse->body, $matches)) {
+							$content = $matches[1];
+						} else {
+							$content = '';
 						}
 					}
 				} else {
@@ -370,7 +376,7 @@ class ContentsController extends AppController {
 					$content = Sanitize::stripAll($content);
 					$content = strip_tags($content);
 					$data = array('Content' => array(
-						'title'		=> $title,
+						'title'		=> $this->request->data['Content']['title'],
 						'detail'	=> $content,
 						'url'		=> $url,
 						'type'		=> 'その他',

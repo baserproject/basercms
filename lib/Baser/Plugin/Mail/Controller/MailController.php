@@ -353,33 +353,53 @@ class MailController extends MailAppController {
 
 			$this->Message->create($this->request->data);
 
-			if($this->Message->save(null,false)) {
-
-				/*** Mail.beforeSendEmail ***/
-				$event = $this->dispatchEvent('beforeSendEmail', array(
-					'data'	=> $this->request->data
-				));
-				if($event !== false) {
-					$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
-				}
-			
-				// メール送信
-				$this->_sendEmail();
+			// データの入力チェックを行う
+			if($this->Message->validates()) {
 				
-				/*** Mail.afterSendEmail ***/
-				$this->dispatchEvent('afterSendEmail', array(
-					'data'	=> $this->request->data
-				));
+				// validation OK
+				if($this->Message->save(null,false)) {
 
-			}else {
+					/*** Mail.beforeSendEmail ***/
+					$event = $this->dispatchEvent('beforeSendEmail', array(
+						'data'	=> $this->request->data
+					));
+					if($event !== false) {
+						$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+					}
 
-				$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
-				$this->set('sendError',true);
+					// メール送信
+					$this->_sendEmail();
 
-			}
+					/*** Mail.afterSendEmail ***/
+					$this->dispatchEvent('afterSendEmail', array(
+						'data'	=> $this->request->data
+					));
 
+				}else {
+
+					$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
+					$this->set('sendError',true);
+
+				}
+				
     		$this->set('mailContent',$this->dbDatas['mailContent']);
     		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'submit');
+				
+			// 入力検証エラー
+			} else {
+				$this->set('freezed',false);
+				$this->set('error',true);
+
+				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
+				$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
+				if($this->dbDatas['mailFields']){
+					$this->set('mailFields',$this->dbDatas['mailFields']);
+				}
+		
+				$this->set('mailContent',$this->dbDatas['mailContent']);
+				$this->render($this->dbDatas['mailContent']['MailContent']['form_template'].DS.'index');
+			}
 		}
 	}
 
@@ -401,26 +421,9 @@ class MailController extends MailAppController {
         }
 
         //mailの重複チェックがある場合は、チェック用のデータを復帰
-        $sendVal = array();
-        $noSendVal = array();
-        foreach($this->dbDatas['mailContent']['MailField'] as $val){
-            if($val['valid_ex'] == 'VALID_EMAIL_CONFIRM'){
-                if(! $val['no_send'] ){
-                    $sendVal[$val['group_valid']] = $val['field_name'];
-                } else {
-                    $noSendVal[$val['group_valid']][] = $val['field_name'] ;
-                }
-            }
-        }
-		if(! empty($noSendVal) ){
-            foreach( $noSendVal as $key => $val){
-                foreach( $val as $v){
-                    if( isset($this->request->data['Message'][$sendVal[$key]]) ){
-                        $this->request->data['Message'][$v] = $this->request->data['Message'][$sendVal[$key]];
-                    }
-                }
-            }
-        }
+		// ↓
+		// 2013/11/08 - gondoh mailヘッダインジェクション対策時に
+		// 確認画面にもhiddenタグ出力するよう変更したため削除
 
         $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 
@@ -519,7 +522,7 @@ class MailController extends MailAppController {
 			$options = array(
 				'fromName'	=> $mailContent['sender_name'],
 				'reply'		=> $fromAdmin,
-				'template'	=> $mailContent['mail_template'],
+				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'reply'		=> $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
@@ -532,7 +535,7 @@ class MailController extends MailAppController {
 				'fromName'		=> $mailContent['sender_name'],
 				'reply'			=> $userMail,
 				'from'			=> $fromAdmin,
-				'template'		=> $mailContent['mail_template'],
+				'template'		=> 'Mail.' . $mailContent['mail_template'],
 				'bcc'			=> $mailContent['sender_2'],
 				'agentTemplate'	=> false
 			);
