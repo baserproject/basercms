@@ -73,6 +73,8 @@ class InstallationsController extends AppController {
  * @var string
  */
 	public $theme = 'Baseradmin';
+	
+	public $isInstalled = false;
 /**
  * beforeFilter
  *
@@ -86,7 +88,7 @@ class InstallationsController extends AppController {
 		/* インストール状態判別 */
 		if(file_exists(APP . 'Config' . DS.'database.php')) {
 			ConnectionManager::sourceList();
-			$db = ConnectionManager::$config ;
+			$db = ConnectionManager::$config;
 			if($db->baser['datasource'] != '') {
 				$installed = 'complete';
 			}else {
@@ -110,8 +112,11 @@ class InstallationsController extends AppController {
 						$this->notFound();
 					}
 				}else {
-					if(Configure::read('debug') == 0) {
-						$this->redirect(array('action'=>'alert'));
+					$installationData = Cache::read('Installation', 'default');
+					if(empty($installationData['lastStep'])) {
+						if(Configure::read('debug') == 0) {
+							$this->redirect(array('action'=>'alert'));
+						}
 					}
 				}
 				break;
@@ -212,7 +217,7 @@ class InstallationsController extends AppController {
 			/* 接続テスト */
 			} elseif ($this->request->data['buttonclicked']=='checkdb') {
 
-				$this->set('blDBSettingsOK',$this->_testConnectDb($this->_readDbSettingFromSession()));
+				$this->set('blDBSettingsOK',$this->_testConnectDb($this->_readDbSetting()));
 
 			/* 「次のステップへ」クリック時 */
 			} elseif ($this->request->data['buttonclicked']=='createdb') {
@@ -265,7 +270,7 @@ class InstallationsController extends AppController {
 			} elseif($this->request->data['clicked'] == 'finish') {
 
 				// DB接続
-				$db = $this->BcManager->connectDb($this->_readDbSettingFromSession());
+				$db = $this->BcManager->connectDb($this->_readDbSetting());
 
 				// サイト基本設定登録
 				$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
@@ -286,9 +291,7 @@ class InstallationsController extends AppController {
 				);
 
 				if ($this->BcManager->addDefaultUser($user)) {
-					// TODO basercamp ryuring
-					// Eメール送信は根が深いので後回し
-					//$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
+					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
 					$this->setMessage('管理ユーザーを作成できませんでした。<br />'.$db->error, true);
@@ -325,23 +328,27 @@ class InstallationsController extends AppController {
 	public function step5() {
 
 		$this->pageTitle = 'baserCMSのインストール完了！';
-			
+		Cache::config('default', array('engine' => 'File'));
+		
 		if(!BC_INSTALLED) {
 			$installationData = $this->Session->read('Installation');
 			$installationData['lastStep'] = true;
 			checkTmpFolders();
 			Configure::write('Cache.disable', false);
-			Cache::config('default', array('engine' => 'File'));
 			// インストールファイルでセッションの保存方法を切り替える為、インストール情報をキャッシュに保存
 			Cache::write('Installation', $installationData, 'default');
 			// データベース設定を書き込む
-			$this->BcManager->createDatabaseConfig($this->_readDbSettingFromSession());
+			$this->BcManager->createDatabaseConfig($this->_readDbSetting());
 			// インストールファイルを生成する
 			$secritySalt = $this->Session->read('Installation.salt');
 			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
 			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
+			clearAllCache();
+			if(function_exists('opcache_reset')) {
+				opcache_reset();
+			}
 			$this->redirect('step5');
-		} elseif(BC_INSTALLED) {
+		} else {
 			$installationData = Cache::read('Installation', 'default');
 			if(empty($installationData['lastStep'])) {
 				return;
@@ -349,7 +356,7 @@ class InstallationsController extends AppController {
 		}
 
 		// データベースのデータを初期設定に更新
-		$this->BcManager->executeDefaultUpdates($this->_readDbSettingFromSession());
+		$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
 
 		// ログイン
 		$this->_login();
@@ -397,7 +404,7 @@ class InstallationsController extends AppController {
  */
 	protected function _constructionDb($dbDataPattern = false) {
 
-		$dbConfig = $this->_readDbSettingFromSession();
+		$dbConfig = $this->_readDbSetting();
 		if(!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;
 		}
@@ -415,7 +422,7 @@ class InstallationsController extends AppController {
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = array();
 		if( $this->Session->read('Installation.dbType') ){
-			$_data = $this->_readDbSettingFromSession();
+			$_data = $this->_readDbSetting();
 			$data['Installation']['dbType'] = $_data['datasource'];
 			$data['Installation']['dbHost'] = $_data['host'];
 			$data['Installation']['dbPort'] = $_data['port'];
@@ -473,19 +480,23 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	protected function _readDbSettingFromSession() {
-
+	protected function _readDbSetting($installationData = array()) {
+		
+		if(!$installationData) {
+			$installationData = $this->Session->read('Installation');
+		}
+		
 		$data = array();
-		$data['datasource'] = $this->Session->read('Installation.dbType');
-		$data['host'] = $this->Session->read('Installation.dbHost');
-		$data['port'] = $this->Session->read('Installation.dbPort');
-		$data['login'] = $this->Session->read('Installation.dbUsername');
-		$data['password'] = $this->Session->read('Installation.dbPassword');
-		$data['prefix'] = $this->Session->read('Installation.dbPrefix');
-		$data['database'] = $this->BcManager->getRealDbName($data['datasource'], $this->Session->read('Installation.dbName'));
-		$data['schema'] = $this->Session->read('Installation.dbSchema');
-		$data['encoding'] = $this->Session->read('Installation.dbEncoding');
-		$data['dataPattern'] = $this->Session->read('Installation.dbDataPattern');
+		$data['datasource'] = $installationData['dbType'];
+		$data['host'] = $installationData['dbHost'];
+		$data['port'] = $installationData['dbPort'];
+		$data['login'] = $installationData['dbUsername'];
+		$data['password'] = $installationData['dbPassword'];
+		$data['prefix'] = $installationData['dbPrefix'];
+		$data['database'] = $this->BcManager->getRealDbName($data['datasource'], $installationData['dbName']);
+		$data['schema'] = $installationData['dbSchema'];
+		$data['encoding'] = $installationData['dbEncoding'];
+		$data['dataPattern'] = $installationData['dbDataPattern'];
 		$data['persistent'] = false;
 		return $data;
 
@@ -647,7 +658,7 @@ class InstallationsController extends AppController {
 
 		if(!empty($this->request->data['Installation']['reset'])) {
 
-			$dbConfig = $this->_readDbSettingFromSession();
+			$dbConfig = $this->_readDbSetting();
 			if(!$dbConfig) {
 				$dbConfig = getDbConfig('baser');
 			}
@@ -683,7 +694,7 @@ class InstallationsController extends AppController {
  */
 	public function deleteAllTables() {
 		
-		$dbConfig = $this->_readDbSettingFromSession();
+		$dbConfig = $this->_readDbSetting();
 		if(!$dbConfig) {
 			$dbConfig = getDbConfig();
 		}
