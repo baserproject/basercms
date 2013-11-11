@@ -24,13 +24,13 @@
  * baserCMSシェル
  * 
  * [cakeにパスが通っている場合]
- * cake -app /absolute/path/to/myapp install
+ * cake -app /absolute/path/to/myapp bc_manager install
  * 
  * [cakeにパスが通っていない場合]
- * /absolute/path/to/cake/console/cake -app /absolute/path/to/myapp install
+ * /absolute/path/to/cake/console/cake -app /absolute/path/to/myapp bc_manager install
  * 
  * [phpにパスが通っていない場合]
- * /absolute/path/to/php /absolute/path/to/cake/console/cake.php -app /absolute/path/to/myapp install
+ * /absolute/path/to/php /absolute/path/to/cake/console/cake.php -app /absolute/path/to/myapp bc_manager install
  * 
  * @package baser.vendors.shells
  */

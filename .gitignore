@@ -14,3 +14,16 @@ app/webroot/theme/*
 !app/webroot/theme/empty
 app/webroot/sitemap.xml
 nbproject/
+lib/Cake/Console/Templates/skel/tmp/cache/models/*
+!lib/Cake/Console/Templates/skel/tmp/cache/models/empty
+lib/Cake/Console/Templates/skel/tmp/cache/persistent/*
+!lib/Cake/Console/Templates/skel/tmp/cache/persistent/empty
+lib/Cake/Console/Templates/skel/tmp/cache/views/*
+!lib/Cake/Console/Templates/skel/tmp/cache/views/empty
+lib/Cake/Console/Templates/skel/tmp/logs/*
+!lib/Cake/Console/Templates/skel/tmp/logs/empty
+lib/Cake/Console/Templates/skel/tmp/sessions/*
+!lib/Cake/Console/Templates/skel/tmp/sessions/empty
+lib/Cake/Console/Templates/skel/tmp/tests/*
+!lib/Cake/Console/Templates/skel/tmp/tests/empty
+
