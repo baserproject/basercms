@@ -49,7 +49,7 @@ class BcManagerShell extends BcAppShell {
 			'default'	=> ''
 		))->addOption('prefix', array(
 			'help'		=> 'データベーステーブルプレフィックス',
-			'default'	=> 'bc_'
+			'default'	=> 'mysite_'
 		))->addOption('port', array(
 			'help'		=> 'データベースポート番号',
 			'default'	=> ''
@@ -432,7 +432,7 @@ class BcManagerShell extends BcAppShell {
 			$dbConfig['prefix'] = $this->params['prefix'];
 		} else {
 			if($dbConfig['datasource'] == 'mysql' || $dbConfig['datasource'] == 'postgres') {
-				$dbConfig['prefix'] = 'bc_';
+				$dbConfig['prefix'] = 'mysite_';
 			}
 		}
 		if(!empty($this->params['port'])) {

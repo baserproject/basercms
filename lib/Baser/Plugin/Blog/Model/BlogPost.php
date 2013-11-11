@@ -374,7 +374,7 @@ class BlogPost extends BlogAppModel {
 	protected function _getEntryDatesConditions($contentId,$year,$month) {
 
 		$dbConfig = new DATABASE_CONFIG();
-		$datasource = preg_replace('/^bc_/', '', $dbConfig->plugin['datasource']);
+		$datasource = $dbConfig->plugin['datasource'];
 
 		switch($datasource) {
 			case 'Database/BcMysql':

@@ -739,7 +739,6 @@ class BcAppController extends Controller {
 		}
 
 		//bcc 'mail@example.com,mail2@example.com'
-		/*
 		if(!empty($options['bcc'])){
 			if(strpos($options['bcc'], ',') !== false) {
 				$bcc = explode(',', $options['bcc']);
@@ -749,7 +748,6 @@ class BcAppController extends Controller {
 				unset($bcc);
 			}
 		}
-		*/
 
 		//cc 'mail@example.com,mail2@example.com'
 		if(!empty($options['cc'])){

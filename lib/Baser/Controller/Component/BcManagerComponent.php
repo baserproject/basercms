@@ -216,7 +216,6 @@ class BcManagerComponent extends Component {
 		}
 		/* dbName */
 		if(!empty($type) && !empty($name)) {
-			$type = preg_replace('/^bc_/', '', $type);
 			if($type == 'sqlite') {
 				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
 			}elseif($type == 'csv') {

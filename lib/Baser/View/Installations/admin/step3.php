@@ -51,13 +51,13 @@ $(document).ready( function() {
 				alert("データベース名を入力してください。");
 				return false;
 			} else if ($("#InstallationDbPrefix").val() == "") {
-				alert("他のアプリケーションと重複しないプレフィックスを入力してください。（例）bc_");
+				alert("他のアプリケーションと重複しないプレフィックスを入力してください。（例）mysite_");
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
-				alert("プレフィックスの末尾はアンダースコアにしてください。（例）bc_");
+				alert("プレフィックスの末尾はアンダースコアにしてください。（例）mysite_");
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
-				alert("プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）bc_");
+				alert("プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）mysite_");
 				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert("データベースのポートナンバーを入力してください。");
@@ -97,7 +97,7 @@ $(document).ready( function() {
 			host = 'localhost';
 			dbName = 'baser';
 			port = '3306';
-			prefix = 'bc_'
+			prefix = 'mysite_';
 		} else if (dbType.val()=='postgres') {
 			$('#dbHost').show(500);
 			$('#dbUser').show(500);
@@ -107,7 +107,7 @@ $(document).ready( function() {
 			host = 'localhost';
 			dbName = 'baser';
 			port = '5432';
-			prefix = 'bc_'
+			prefix = 'mysite_';
 		} else if(dbType.val()=='sqlite') {
 			$('#dbHost').hide(500);
 			$('#dbUser').hide(500);
