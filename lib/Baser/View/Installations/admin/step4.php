@@ -95,8 +95,8 @@ $(document).ready(function(){
 	</div>
 
 	<div class="submit">
-		<?php echo $this->BcForm->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
-		<?php echo $this->BcForm->button('完了', array('class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
+		<?php echo $this->BcForm->button('戻る', array('type' => 'button', 'class' => 'btn-gray button', 'id' => 'btnback')) ?>
+		<?php echo $this->BcForm->button('完了', array('type' => 'button', 'class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
 	</div>
 
 	<?php echo $this->BcForm->end() ?>

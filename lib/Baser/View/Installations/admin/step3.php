@@ -208,12 +208,12 @@ $(document).ready( function() {
 	</div>
 	
 	<div class="submit">
-		<?php echo $this->BcForm->button('戻る', array('class' => 'btn-gray button', 'id' => 'btnback')) ?>
-		<?php echo $this->BcForm->button('接続テスト', array('class' => 'btn-orange button', 'id' => 'checkdb')) ?>
+		<?php echo $this->BcForm->button('戻る', array('type' => 'button', 'class' => 'btn-gray button', 'id' => 'btnback')) ?>
+		<?php echo $this->BcForm->button('接続テスト', array('type' => 'button', 'class' => 'btn-orange button', 'id' => 'checkdb')) ?>
 <?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
-		<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled')) ?>
+		<?php echo $this->BcForm->button('次のステップへ', array('type' => 'button', 'class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled')) ?>
 <?php else: ?>
-		<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext')) ?>
+		<?php echo $this->BcForm->button('次のステップへ', array('type' => 'button', 'class' => 'btn-red button', 'id' => 'btnnext', 'name' => 'btnnext')) ?>
 <?php endif ?>
 	</div>
 
