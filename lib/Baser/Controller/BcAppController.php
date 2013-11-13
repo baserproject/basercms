@@ -740,24 +740,42 @@ class BcAppController extends Controller {
 
 		//bcc 'mail@example.com,mail2@example.com'
 		if(!empty($options['bcc'])){
-			if(strpos($options['bcc'], ',') !== false) {
-				$bcc = explode(',', $options['bcc']);
-				foreach($bcc as $val){
-					$cakeEmail->addCc($val);
+			// 文字列の場合
+			$bcc = array();
+			if (is_string($options['bcc'])){
+				if(strpos($options['bcc'], ',') !== false) {
+					$bcc = explode(',', $options['bcc']);
+				} else {
+					$bcc[] = $options['bcc'];
 				}
-				unset($bcc);
+			// 配列の場合
+			} elseif (is_array($options['bcc'])){
+				$bcc = $options['bcc'];
 			}
+			foreach($bcc as $val){
+				if (Validation::email(trim($val))) $cakeEmail->addBcc($val);
+			}
+			unset($bcc);
 		}
 
 		//cc 'mail@example.com,mail2@example.com'
 		if(!empty($options['cc'])){
-			if(strpos($options['cc'], ',') !== false) {
-				$cc = explode(',', $options['cc']);
-				foreach($cc as $val){
-					$cakeEmail->addCc($val);
+			// 文字列の場合
+			$cc = array();
+			if (is_string($options['cc'])){
+				if(strpos($options['cc'], ',') !== false) {
+					$cc = explode(',', $options['cc']);
+				} else {
+					$cc[] = $options['cc'];
 				}
-				unset($cc);
+			// 配列の場合
+			} elseif (is_array($options['cc'])){
+				$cc = $options['cc'];
 			}
+			foreach($cc as $val){
+				if (Validation::email(trim($val))) $cakeEmail->addCc($val);
+			}
+			unset($cc);
 		}
 
 		// to 送信先アドレス (最初の1人がTOで残りがBCC)

@@ -50,26 +50,24 @@ class BcAppModel extends Model {
  * @return	void
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		if ($this->useDbConfig) {
-			// DBの設定がない場合、存在しないURLをリクエストすると、エラーが繰り返されてしまい
-			// Cakeの正常なエラーページが表示されないので、設定がある場合のみ親のコンストラクタを呼び出す。
-			$db = ConnectionManager::getDataSource('baser');
-			if (isset($db->config['datasource'])) {
-				if ($db->config['datasource'] != '') {
-					parent::__construct($id, $table, $ds);
-				} elseif ($db->config['login'] == 'dummy' &&
-					$db->config['password'] == 'dummy' &&
-					$db->config['database'] == 'dummy' &&
-					Configure::read('BcRequest.pureUrl') == '') {
-					// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
-					// 初期化ページにリダイレクトする
-					$AppController = new AppController();
-					session_start();
-					$_SESSION['Message']['flash'] = array('message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default');
-					$AppController->redirect(BC_BASE_URL . 'installations/reset');
-				}
+
+		$db = ConnectionManager::getDataSource('baser');
+		if (isset($db->config['datasource'])) {
+			if ($db->config['datasource'] != '') {
+				parent::__construct($id, $table, $ds);
+			} elseif ($db->config['login'] == 'dummy' &&
+				$db->config['password'] == 'dummy' &&
+				$db->config['database'] == 'dummy' &&
+				Configure::read('BcRequest.pureUrl') == '') {
+				// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
+				// 初期化ページにリダイレクトする
+				$AppController = new AppController();
+				session_start();
+				$_SESSION['Message']['flash'] = array('message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default');
+				$AppController->redirect(BC_BASE_URL . 'installations/reset');
 			}
 		}
+		
 	}
 
 /**
