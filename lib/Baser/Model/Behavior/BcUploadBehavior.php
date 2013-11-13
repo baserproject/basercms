@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VENDORS.'imageresizer.php';
+App::uses('Imageresizer', 'Vendor');
 /**
  * ファイルアップロードビヘイビア
  * 

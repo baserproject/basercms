@@ -47,7 +47,7 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	var $actsAs = array(
+	public $actsAs = array(
 			'BcContentsManager', 
 			'BcCache', 
 			'BcUpload' => array(

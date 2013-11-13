@@ -29,7 +29,7 @@
 
 	<header>
 		<div class="clearfix" id="BoxLogo">
-			<div id="Logo"><h1><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'],'/') ?></h1></div>
+			<div id="Logo"><h1><?php $this->BcBaser->logo(array('link' => '/s/')) ?></h1></div>
 		</div>
 		<div class="clearfix" id="global_menu">
     		<?php $this->BcBaser->element('global_menu') ?>
@@ -38,12 +38,7 @@
 	
     <?php if($this->BcBaser->isHome()): ?>
     <div id="top-main">
-        <div id="slider">
-          <div><?php $this->BcBaser->img('slider/01.jpg'); ?></div>
-          <div><?php $this->BcBaser->img('slider/02.jpg'); ?></div>
-          <div><?php $this->BcBaser->img('slider/03.jpg'); ?></div>
-          <div><?php $this->BcBaser->img('slider/04.jpg'); ?></div>
-        </div>
+        <?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'link' => '')) ?>
     </div>
     <?php 
     /*

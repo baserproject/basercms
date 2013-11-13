@@ -268,10 +268,8 @@ h1{
 }
 #Header-page h1 a{
 	display: block;
-	text-indent: -3000px;
 	height:54px;
 	width:214px;
-	background:url(../img/header/logo.png) no-repeat;
 }
 #Header-page h1 a:hover {
     opacity: 0.8;
@@ -640,6 +638,10 @@ table.row-table-01{
 }
 #top-main .bx-prev , #top-main .bx-next{
 	display:none;
+}
+#top-main ul{
+	height:300px;
+	overflow: hidden;
 }
 
 

@@ -420,3 +420,8 @@ table.cake-sql-log tr td {
 	cursor: pointer;
 	vertical-align:middle;
 }
+.photo {
+	padding:5px;
+	background-color: #FFF;
+	border:1px solid #DDD;
+}

@@ -121,10 +121,8 @@ header {
 }
 #Logo h1 a{
 	display: inline-block;
-	text-indent: -3000px;
 	height:54px;
 	width:214px;
-	background:url(../../img/header/logo.png) no-repeat;
 }
 
 /* footer

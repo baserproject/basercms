@@ -37,3 +37,6 @@
 #colorbox:focus {
 	outline: none!important;
 }
+#cboxContent button {
+	border:none;
+}

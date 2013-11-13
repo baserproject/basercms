@@ -23,6 +23,7 @@
  */
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
+require BASER . 'Error' . DS . 'exceptions.php';
 
 /**
  * インストール状態

@@ -13,11 +13,6 @@
  */
 class Imageresizer {
 /**
- * Constructor.
- */
-	function Imageresizer() {
-	}
-/**
  * 画像をリサイズする
  * @param 	string	ソースファイルのパス
  * @param 	string 	保存先のパス

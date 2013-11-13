@@ -1876,6 +1876,14 @@ END_FLASH;
 		}
 		return $userName;
 	}
+	
+/**
+ * コアテンプレートを読み込む
+ * 
+ * @param type $name
+ * @param type $data
+ * @param type $options
+ */
 	public function includeCore($name, $data = array(), $options = array()) {
 		
 		$plugin = '';
@@ -1892,4 +1900,173 @@ END_FLASH;
 		
 	}
 	
+/**
+ * ロゴを出力する
+ * 
+ * 《options》
+ * _getThemeImage() を参照
+ * 
+ * @param type $options
+ */
+	public function logo($options = array()) {
+		echo $this->_getThemeImage('logo', $options);
+	}
+	
+/**
+ * メインイメージを出力する
+ * 
+ * 《options》
+ * - `all`: 全ての画像を出力する。
+ * - `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
+ * - `id` : all を true とした場合、UL タグの id 属性を指定できる。
+ * 
+ * @param type $options
+ */
+	public function mainImage($options = array()) {
+		
+		$options = array_merge(array(
+			'num'	=> 1,
+			'all'	=> false,
+			'id'	=> 'MainImage'
+		), $options);
+		if($options['all']) {
+			$id = $options['id'];
+			$num = $options['num'];
+			unset($options['all']);
+			unset($options['id']);
+			$tag = '';
+			for($i = 1; $i <= $num; $i++) {
+				$options['num'] = $i;
+				$tag .= $this->_getThemeImage('main_image', $options);
+			}
+			echo '<ul id="' . $id . '">' . $tag . '</ul>';
+		} else {
+			echo $this->_getThemeImage('main_image', $options);
+		}
+		
+	}
+
+/**
+ * テーマ画像を取得する
+ * 
+ * 《options》
+ * - `thumb`: サムネイルを取得する
+ * - `class`: 画像に設定する class 属性
+ * - `popup`: ポップアップリンクを指定
+ * - `alt`	: 画像に設定する alt 属性。リンクの title 属性にも設定される。
+ * - `link`	: リンク先URL。popup を true とした場合、オリジナルの画像へのリンクとなる。
+ * - `maxWidth : 最大横幅
+ * - `maxHeight: 最大高さ
+ * 
+ * @param string $name
+ * @param type $options
+ * @return type
+ */
+	public function _getThemeImage($name, $options = array()) {
+
+		$ThemeConfig = ClassRegistry::init('ThemeConfig');
+		$data = $ThemeConfig->findExpanded();
+
+		$url = $imgPath = $uploadUrl = $uploadThumbUrl = $originUrl = '';
+		$thumbSuffix = '_thumb';
+		$dir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
+		$themeDir = $path = getViewPath() . 'img' . DS;
+		$num = '';
+		if(!empty($options['num'])) {
+			$num = '_' . $options['num'];
+		}
+		$options = array_merge(array(
+			'thumb'	=> false,
+			'class'	=> '',
+			'popup'	=> false,
+			'alt'	=> $data[$name . '_alt' . $num],
+			'link'	=> $data[$name . '_link' . $num],
+			'maxWidth'	=> '',
+			'maxHeight'=> ''
+		), $options);
+		$name = $name . $num;
+		
+		if($data[$name]) {
+			$pathinfo = pathinfo($data[$name]);
+			$uploadPath = $dir . $data[$name];
+			$uploadThumbPath = $dir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension'];
+			$uploadUrl = '/files/theme_configs/' . $data[$name];
+			$uploadThumbUrl = '/files/theme_configs/' . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension'];
+		}		
+		
+		if($data[$name]) {
+			if(!$options['thumb']) {
+				if(file_exists($uploadPath)) {
+					$imgPath = $uploadPath;
+					$url = $uploadUrl;
+				}
+			} else {
+				if(file_exists($uploadThumbPath)) {
+					$imgPath = $uploadThumbPath;
+					$url = $uploadThumbUrl;
+				}
+			}
+			$originUrl = $uploadUrl;
+		}
+		
+ 		if(!$url) {
+			$exts = array('png', 'jpg', 'gif');
+			foreach($exts as $ext) {
+				if(file_exists($themeDir . $name . '.' . $ext)) {
+					$url = '/theme/' . $this->siteConfig['theme'] . '/img/' . $name . '.' . $ext; 
+					$imgPath = $themeDir . $name . '.' . $ext;
+					$originUrl = $url;
+				}
+			}
+		}
+		
+		if(!$url) {
+			return;
+		}
+		
+		$imgOptions = array();
+		if($options['class']) {
+			$imgOptions['class'] = $options['class'];
+		}
+		if($options['alt']) {
+			$imgOptions['alt'] = $options['alt'];
+		}
+		if($options['maxWidth'] || $options['maxHeight']) {
+			$imginfo = getimagesize($imgPath);
+			$widthRate = $heightRate = 0;
+			if($options['maxWidth']) {
+				$widthRate = $imginfo[0] / $options['maxWidth'];
+			}
+			if($options['maxHeight']) {
+				$heightRate = $imginfo[1] / $options['maxHeight'];
+			}
+			if($widthRate > $heightRate) {
+				if($options['maxWidth'] && $imginfo[0] > $options['maxWidth']) {
+					$imgOptions['width'] = $options['maxWidth'];
+				}
+			} else {
+				if($options['maxHeight'] && ($imginfo[1] > $options['maxHeight'])) {
+					$imgOptions['height'] = $options['maxHeight'];
+				}			
+			}
+		}
+		
+		$tag = $this->getImg($url, $imgOptions);
+		if($options['link'] || $options['popup']) {
+			$linkOptions = array();
+			if($options['popup']) {
+				$linkOptions['rel'] = 'colorbox';
+				$link = $originUrl;
+			} elseif($options['link']) {
+				$link = $options['link'];
+			}
+			if($options['alt']) {
+				$linkOptions['title'] = $options['alt'];
+			}
+			$tag = $this->getLink($tag, $link, $linkOptions);
+		}
+		return $tag;
+		
+	}
+		
 }

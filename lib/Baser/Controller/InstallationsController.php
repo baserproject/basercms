@@ -367,6 +367,9 @@ class InstallationsController extends AppController {
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		$this->BcManager->createAdminAssetsSymlink();
 
+		// アップロード用初期フォルダを作成する
+		$this->BcManager->createDefaultFiles();
+		
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
 

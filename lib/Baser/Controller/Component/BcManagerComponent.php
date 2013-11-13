@@ -118,6 +118,12 @@ class BcManagerComponent extends Component {
 			$this->createAdminAssetsSymlink();
 		}
 		
+		// アップロード用初期フォルダを作成する
+		if(!$this->createDefaultFiles()) {
+			$this->log('アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限を確認してください。');
+			$result = false;
+		}
+		
 		// エディタテンプレート用の画像を配置
 		if(!$this->deployEditorTemplateImage()) {
 			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
@@ -1213,6 +1219,28 @@ class BcManagerComponent extends Component {
 		return $result;
 		
 	}
+	
+/**
+ * アップロード用初期フォルダを作成する
+ */
+	public function createDefaultFiles() {
+		
+		$dirs = array('blog', 'editor', 'theme_configs');
+		$path = WWW_ROOT . 'files' . DS;
+		$Folder = new Folder();
+		
+		$result = true;
+		foreach($dirs as $dir) {
+			if(!is_dir($path . $dir)) {
+				if(!$Folder->create($path . $dir, 0777)) {
+					$result = false;
+				}
+			}
+		}
+		return $result;
+		
+	}
+	
 /**
  * 設定ファイルをリセットする
  * 
@@ -1498,7 +1526,7 @@ class BcManagerComponent extends Component {
 			'phpActualVersion'	=> preg_replace('/[a-z-]/','', phpversion()),
 			'phpGd'				=> extension_loaded('gd'),
 			'phpPdo'			=> extension_loaded('pdo'),
-			'apacheRewrite'		=> $rewriteInstalled
+			'apacheRewrite'		=> $rewriteInstalled,
 		);
 		$check = array(
 			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),

@@ -123,6 +123,10 @@ class BcUploadHelper extends FormHelper {
 		$field = $this->field();
 		$model = ClassRegistry::init($modelName);
 		
+		if(empty($model->Behaviors->BcUpload)) {
+			throw new BaserException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+		}
+		
 		$settings = $model->Behaviors->BcUpload->settings;
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		

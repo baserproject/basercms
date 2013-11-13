@@ -302,6 +302,30 @@ App::uses('BcEmailComponent', 'Controller/Component');
 		return preg_replace('/^\//','',$parameter);
 
 	}
+	
+/**
+ * モバイルプレフィックスは除外したURLを取得する
+ * 
+ * @param CakeRequest $Request
+ * @return type
+ */
+	function getPureUrl($Request) {
+		
+		if(!$Request) {
+			$Request = new CakeRequest();
+		}
+		$agentAlias = Configure::read('BcRequest.agentAlias');
+		$url = $Request->url;
+		if($url === false) {
+			$url = '/';
+		}
+		if(strpos($url, '?') !== false) {
+			list($url) = explode('?', $url);
+		}
+		return preg_replace('/^'.$agentAlias.'\//','',$url);
+		
+	}
+	
 /**
  * Viewキャッシュを削除する
  * URLを指定しない場合は全てのViewキャッシュを削除する
