@@ -1967,7 +1967,9 @@ END_FLASH;
 			'alt'	=> $data[$name . '_alt' . $num],
 			'link'	=> $data[$name . '_link' . $num],
 			'maxWidth'	=> '',
-			'maxHeight'=> ''
+			'maxHeight'=> '',
+			'width'	=> '',
+			'height'=> ''
 		), $options);
 		$name = $name . $num;
 		
@@ -2034,6 +2036,12 @@ END_FLASH;
 					$imgOptions['height'] = $options['maxHeight'];
 				}			
 			}
+		}
+		if($options['width']) {
+			$imgOptions['width'] = $options['width'];
+		}
+		if($options['height']) {
+			$imgOptions['height'] = $options['height'];
 		}
 		
 		$tag = $this->getImg($url, $imgOptions);

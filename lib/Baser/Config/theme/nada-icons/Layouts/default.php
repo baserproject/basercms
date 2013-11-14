@@ -46,7 +46,7 @@
 
             <?php if($this->BcBaser->isHome()): ?>
             <div id="top-main">
-				<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5)) ?>
+				<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'width' => 750)) ?>
             </div>
             <?php 
             /*
