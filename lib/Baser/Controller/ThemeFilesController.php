@@ -46,8 +46,8 @@ class ThemeFilesController extends AppController {
  * @var array
  * @public protected
  */
-	protected $_tempalteTypes = array('layouts'=>'レイアウトテンプレート',
-			'elements'=>'エレメントテンプレート',
+	protected $_tempalteTypes = array('Layouts'=>'レイアウトテンプレート',
+			'Elements'=>'エレメントテンプレート',
 			'etc'=>'コンテンツテンプレート',
 			'css'=>'スタイルシート',
 			'js'=>'Javascript',
@@ -759,11 +759,11 @@ class ThemeFilesController extends AppController {
 		}
 
 		if(empty($data['type'])) {
-			$data['type'] = 'layouts';
+			$data['type'] = 'Layouts';
 		}
-
+		
 		if(!empty($args)) {
-			$data['path'] = implode('/', $args);
+			$data['path'] = implode(DS, $args);
 			$data['path'] = urldecode($data['path']);
 		}
 
@@ -792,7 +792,7 @@ class ThemeFilesController extends AppController {
 		}
 
 		if($data['path'] && is_dir($data['fullpath']) && !preg_match('/\/$/', $data['fullpath'])) {
-			$data['fullpath'] .= '/';
+			$data['fullpath'] .= DS;
 		}
 		
 		return $data;

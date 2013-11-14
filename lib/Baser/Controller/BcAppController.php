@@ -899,11 +899,12 @@ class BcAppController extends Controller {
 		}
 		$cakeEmail->attachments($attachments);
 
-		if($cakeEmail->send($content)){
-			//メール送信が成功した場合ここで処理
-			return true ;
-		}else{
-			return false ;
+		try {
+			$cakeEmail->send($content);
+			return true;
+		} catch (Exception $e) {
+			$this->log($e->getMessage());
+			return false;
 		}
 		
 	}

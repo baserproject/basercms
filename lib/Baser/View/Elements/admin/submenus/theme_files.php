@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $types = array(
-	'layouts'	=> 'レイアウト',
-	'elements'	=> 'エレメント',
+	'Layouts'	=> 'レイアウト',
+	'Elements'	=> 'エレメント',
 	'etc'		=> 'コンテンツ',
 	'css'		=> 'CSS',
 	'img'		=> 'イメージ',
