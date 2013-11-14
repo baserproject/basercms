@@ -130,7 +130,7 @@ class ThemeFilesController extends AppController {
 			$excludeFolderList = array();
 			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php');
 			if(!$path) {
-				$excludeFolderList = array('css','elements','img','layouts','pages','_notes','helpers','js');
+				$excludeFolderList = array('css', 'Elements', 'img', 'Layouts', 'Pages', '_notes', 'Helper', 'js');
 			}
 			foreach($files[0] as $file) {
 				if(!in_array($file, $excludeFolderList)) {

@@ -287,7 +287,7 @@ class PageCategory extends AppModel {
 			$data = $data['PageCategory'];
 		}
 
-		$path = $pagesPath = getViewPath().'pages'.DS;
+		$path = $pagesPath = getViewPath().'Pages'.DS;
 		$categoryName = $data['name'];
 		$parentId = $data['parent_id'];
 
@@ -539,7 +539,7 @@ class PageCategory extends AppModel {
 			$path = $this->getPath($id, array('name'), -1);
 			$path = Set::extract('/PageCategory/name', $path);
 			$path = implode(DS, $path);
-			$path = getViewPath().'pages'.DS.$type.DS.$path;
+			$path = getViewPath().'Pages'.DS.$type.DS.$path;
 		}
 		$agentId = $this->getIdByPath($path);
 

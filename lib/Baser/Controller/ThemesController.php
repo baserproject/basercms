@@ -170,7 +170,7 @@ class ThemesController extends AppController {
 			$result = false;
 			$this->log(
 					'初期データの読み込み中にページテンプレートの生成に失敗しました。' .
-					'「pages」フォルダに書き込み権限が付与されていない可能性があります。' .
+					'「Pages」フォルダに書き込み権限が付与されていない可能性があります。' .
 					'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
 			);
 		}
@@ -232,7 +232,7 @@ class ThemesController extends AppController {
 		}else{
 			$theme['screenshot'] = false;
 		}
-		if(is_writable($path.DS.$themename.DS.'pages'.DS)){
+		if(is_writable($path.DS.$themename.DS.'Pages'.DS)){
 			$theme['is_writable_pages'] = true;
 		} else {
 			$theme['is_writable_pages'] = false;
@@ -441,7 +441,7 @@ class ThemesController extends AppController {
 		if(!$this->Page->createAllPageTemplate()){
 				$this->setMessage(
 						'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
-						'「pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
+						'「Pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
 						'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
 				, true);
 		} else {

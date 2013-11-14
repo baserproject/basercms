@@ -1178,7 +1178,7 @@ class BcManagerComponent extends Component {
 			$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
 			$Folder->delete($targetPath);
 			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>00777,'skip'=>array('_notes')))) {
-				if(!$Folder->create($targetPath.DS.'pages',00777)) {
+				if(!$Folder->create($targetPath.DS.'Pages',00777)) {
 					$result = false;
 				}
 			} else {
@@ -1275,7 +1275,7 @@ class BcManagerComponent extends Component {
 		$themeFolder = new Folder(WWW_ROOT . 'theme');
 		$themeFiles = $themeFolder->read(true, true, true);
 		foreach($themeFiles[0] as $theme){
-			$pagesFolder = new Folder($theme . DS . 'pages');
+			$pagesFolder = new Folder($theme . DS . 'Pages');
 			$pathes = $pagesFolder->read(true,true,true);
 			foreach($pathes[0] as $path){
 				if(basename($path) != 'admin') {

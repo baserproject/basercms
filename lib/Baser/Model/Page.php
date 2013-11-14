@@ -571,7 +571,7 @@ class Page extends AppModel {
 		$siteConfig = $SiteConfig->findExpanded();
 		$theme = $siteConfig['theme'];
 
-		// pagesディレクトリのパスを取得
+		// Pagesディレクトリのパスを取得
 		if($theme) {
 			$path = BASER_THEMES.$theme.DS.'Pages'.DS;
 		}else {
@@ -883,7 +883,7 @@ class Page extends AppModel {
  * @return array 処理結果 all / success
  * @access protected
  */
-	public function entryPageFiles($targetPath,$parentCategoryId = '') {
+	public function entryPageFiles($targetPath, $parentCategoryId = '') {
 		
 		if($this->Behaviors->attached('BcCache')) {
 			$this->Behaviors->detach('BcCache');
@@ -915,7 +915,7 @@ class Page extends AppModel {
 		
 		$pageCategoryId = '';
 		$this->PageCategory->updateRelatedPage = false;
-		if($categoryName != 'pages') {
+		if($categoryName != 'Pages') {
 			
 			// カテゴリ名の取得
 			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく

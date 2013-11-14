@@ -373,7 +373,7 @@ class InstallationsController extends AppController {
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
 
-		// pagesファイルを生成する
+		// Pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
 		
 		$this->Session->delete('InstallLastStep');

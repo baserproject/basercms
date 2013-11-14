@@ -494,7 +494,7 @@ class PagesController extends AppController {
 		}
 		
 		// 現在のテーマの固定ページファイルのパスを取得
-		$pagesPath = getViewPath().'pages';
+		$pagesPath = getViewPath().'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
 		$this->setMessage($result['all'].' ページ中 '.$result['insert'].' ページの新規登録、 '. $result['update'].' ページの更新に成功しました。');
