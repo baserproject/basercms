@@ -23,9 +23,9 @@ App::uses('User', 'Model');
 
 class UserTest extends CakeTestCase {
 	public $fixtures = array(
-		'baser.user',
-		'baser.user_group',
-		'baser.favorite',
+		'baser.User',
+		'baser.UserGroup',
+		'baser.Favorite',
 	);
 	
 	public function setUp() {

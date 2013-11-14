@@ -21,6 +21,15 @@ App::uses('CakeHtmlReporter', 'TestSuite/Reporter');
 class BaserHtmlReporter extends CakeHtmlReporter {
 
 /**
+ * Get the baseUrl if one is available.
+ *
+ * @return string The base URL for the request.
+ */
+	public function baseUrl() {
+		return baseUrl() . 'test.php';
+	}
+	
+/**
  * Paints the document start content contained in header.php
  *
  * @return void

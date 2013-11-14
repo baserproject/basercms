@@ -43,7 +43,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeRenderFile(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeRenderFile', $event->data);
 		}
 	}
@@ -54,7 +54,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function afterRenderFile(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, array('modParams' => 1));
 			if($currentEvent) {
 				return $currentEvent->data[1];
@@ -69,7 +69,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeRender(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeRender', $event->data);
 		}
 	}
@@ -80,7 +80,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterRender(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('afterRender', $event->data);
 		}
 	}
@@ -91,7 +91,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeLayout(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeLayout', $event->data);
 		}
 	}
@@ -102,7 +102,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterLayout(CakeEvent $event) {
-		if($event->subject->name != 'CakeError') {
+		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('afterLayout', $event->data);
 		}
 	}

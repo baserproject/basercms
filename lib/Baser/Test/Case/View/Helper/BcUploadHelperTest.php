@@ -16,7 +16,7 @@
 App::uses('View', 'View');
 App::uses('Model', 'Model');
 App::uses('Controller','Controller');
-App::uses('BaserAppController','Controller');
+App::uses('BcAppController','Controller');
 App::uses('BcUploadHelper', 'View/Helper');
 App::uses('AppHelper', 'View/Helper');
 App::uses('EditorTemplate', 'Model');
@@ -25,15 +25,15 @@ App::uses('EditorTemplate', 'Model');
  * TestController class
  *
  */
-class TestController extends BaserAppController {
+class TestController extends BcAppController {
 	public $name = 'Test';
 	public $uses = null;
 }
 class BcUploadHelperTest extends CakeTestCase {
 
 	public $fixtures = array(
-		'baser.site_config',
-		'baser.editor_template',
+		'baser.SiteConfig',
+		'baser.EditorTemplate',
 	);
 
 	public function setUp() {

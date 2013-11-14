@@ -82,6 +82,10 @@ define('BASER_EVENTS', BASER . 'Event' . DS);
  */
 define('BASER_LIBS', BASER . 'Lib' . DS);
 /**
+ * Baser TestSuite
+ */
+define('BASER_TEST_SUITE', BASER_LIBS . 'TestSuite' . DS);
+/**
  * Baser TestCase
  */
 define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');

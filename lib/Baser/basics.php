@@ -55,12 +55,11 @@ App::uses('BcEmailComponent', 'Controller/Component');
 
 			if(BC_DEPLOY_PATTERN == 1) {
 				$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
+				$baseUrl = preg_replace('/app\/webroot\/test.php/', '', $baseUrl);
 			} elseif(BC_DEPLOY_PATTERN == 2) {
 				$baseUrl = preg_replace('/index\.php/', '', $script);
 			}
-			
 			$baseUrl = preg_replace("/index$/", '', $baseUrl);
-			$baseUrl = preg_replace("/test\.php$/", '', $baseUrl);
 			
 			//if(!empty($_SERVER['QUERY_STRING'])) {
 				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、

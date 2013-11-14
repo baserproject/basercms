@@ -52,7 +52,10 @@ App::build(array(
 ));
 App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS)
+	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'TestSuite'					=> array(BASER_TEST_SUITE),
+	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
+	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS)
 ), App::REGISTER);
 
 /**

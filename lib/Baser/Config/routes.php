@@ -43,7 +43,10 @@ Configure::write('BcRequest.routerLoaded', true);
 App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
-$request = self::$_requests[0];
+$request = null;
+if(!empty(self::$_requests[0])) {
+	$request = self::$_requests[0];
+}
 $parameter = getPureUrl($request);
 
 Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
