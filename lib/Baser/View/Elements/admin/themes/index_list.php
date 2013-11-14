@@ -43,7 +43,7 @@ $(function(){
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => '編集')) ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 	<?php if(!$currentTheme['is_writable_pages']): ?>
-			<br /><div class="error-message lastChild clearfix" style="clear:both">「pages」フォルダに書き込み権限を与えてください。</div>
+			<br /><div class="error-message lastChild clearfix" style="clear:both">「Pages」フォルダに書き込み権限を与えてください。</div>
 	<?php endif ?>
 		</p>
 	</div>

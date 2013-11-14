@@ -272,7 +272,7 @@ class MailContentsController extends MailAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'layouts', $template.$this->ext));
+			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'Layouts', $template.$this->ext));
 		}else{
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
