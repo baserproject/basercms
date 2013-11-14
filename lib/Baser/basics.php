@@ -35,61 +35,22 @@ App::uses('BcEmailComponent', 'Controller/Component');
  */
 	function baseUrl() {
 
-		// TODO basercamp
-		// CakePHP2では、$_GET['url'] や、$_SERVER['QUERY_STRING'] に URLの情報は入ってこない
-		// 暫定処置として、サブディレクトリ、スマートURLオフ に未対応前提で、'/' を戻す
-
-		//return '/';
-		
-		// 下記未実装
-		
 		$baseUrl = Configure::read('App.baseUrl');
 		if($baseUrl) {
 			if(!preg_match('/\/$/', $baseUrl)) {
 				$baseUrl .= '/';
 			}
 		}else {
-			// TODO basercamp スマートURLオフを考慮してない
 			$script = $_SERVER['SCRIPT_FILENAME'];
 			$script = str_replace(docRoot(), '', $script);
 
 			if(BC_DEPLOY_PATTERN == 1) {
 				$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
-				$baseUrl = preg_replace('/app\/webroot\/test.php/', '', $baseUrl);
+				$baseUrl = preg_replace('/app\/webroot\/test\.php/', '', $baseUrl);
 			} elseif(BC_DEPLOY_PATTERN == 2) {
 				$baseUrl = preg_replace('/index\.php/', '', $script);
 			}
 			$baseUrl = preg_replace("/index$/", '', $baseUrl);
-			
-			//if(!empty($_SERVER['QUERY_STRING'])) {
-				// $_GET['url'] からURLを取得する場合、Controller::requestAction では、
-				// $_GET['url'] をリクエストしたアクションのURLで書き換えてしまい
-				// ベースとなるURLが取得できないので、$_SERVER['QUERY_STRING'] を利用
-			/*	$url = '';
-				if(preg_match('/url=([^&]+)(&|$)/', $_SERVER['QUERY_STRING'], $maches)) {
-					$url = $maches[1];
-				}
-				if($url) {
-					$requestUri = '/';
-					if(!empty($_SERVER['REQUEST_URI'])) {
-						$requestUri = urldecode($_SERVER['REQUEST_URI']);
-					}
-					if(strpos($requestUri, '?') !== false) {
-						list($requestUri) = explode('?', $requestUri);
-					}
-					$baseUrl = str_replace($url, '', $requestUri);
-				}
-				
-			} else {
-				// /index の場合、$_SERVER['QUERY_STRING'] が入ってこない為
-				$requestUri = '/';
-				if(!empty($_SERVER['REQUEST_URI'])) {
-					$requestUri = $_SERVER['REQUEST_URI'];
-				}
-				$baseUrl = preg_replace("/index$/", '', $requestUri);
-				$baseUrl = preg_replace("/test\.php$/", '', $requestUri);
-			}*/
-			
 		}
 
 		if(!$baseUrl){

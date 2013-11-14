@@ -82,18 +82,7 @@ class BlogBaserHelper extends AppHelper {
 		}
 		unset ($options['templates']);
 
-		// TODO basercamp
-		// requestActionを実行する際、一旦、ViewオブジェクトをClassRegistryより削除しないと、
-		// requestAction後のViewにおいて、requestAction前のインスタンスを使いまわされてしまう為、
-		// 一旦削除する必要があったが、CakePHP２系より、ClassRegistry::getObject('View') で Viewは取得できず、
-		// ClassRegistryでViewのインスタンスは管理されてない様子？？
-		// とりあえずコメントアウトで対応
-		
-		//$View = ClassRegistry::getObject('View');
-		//ClassRegistry::removeObject('View');
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
-		//ClassRegistry::removeObject('View');
-	 	//ClassRegistry::addObject('View', $View);
 
 	}
 /**

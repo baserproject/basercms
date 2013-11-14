@@ -138,20 +138,7 @@ class BcBaserHelper extends AppHelper {
 
 
 	}
-/**
- * afterRender
- *
- * @return void
- * @access public
- * @manual
- */
-	public function afterRender($viewFile) {
 
-		parent::afterRender($viewFile);
-		// コンテンツをフックする
-		$this->_content = ob_get_contents();
-
-	}
 /**
  * グローバルメニューを取得する
  *
@@ -739,8 +726,6 @@ class BcBaserHelper extends AppHelper {
  */
 	public function content() {
 		echo $this->_View->fetch('content');
-		// TODO basercamp 元コード。$this->afterRender で使ってるので、そちらの影響範囲を確認する事
-		// echo $this->_content;
 	}
 /**
  * セッションメッセージを出力する
