@@ -1319,3 +1319,31 @@ background: #888;
 	padding:7px;
 	width:286px;
 }
+
+#PageTreeList {
+	padding:20px 20px;
+	border:1px solid #CCC;
+	margin-top:25px;
+	margin-left:5px;
+	margin-right:5px;
+}
+#TreeList {
+	font-size:14px;
+}
+#TreeList a {
+	color:#000;
+}
+#TreeList span:hover {
+	color:#000;
+}
+#cboxContent button {
+	border:none;
+}
+.filetree span.folder,
+.filetree span.file
+{ 
+	padding: 1px 0 1px 18px!important;
+	display: block;
+	line-height:1em;
+	margin-bottom: 10px;
+}

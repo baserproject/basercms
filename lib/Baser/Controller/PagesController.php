@@ -95,8 +95,10 @@ class PagesController extends AppController {
 	public function admin_index() {
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0),
-							'Page' => array('page_category_id' => '', 'page_type' => 1));
+		$default = array(
+			'named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0, 'view_type' => 1, 'page_type' => 1),
+			'Page' => array('page_category_id' => '', 'page_type' => 1)
+		);
 		$this->setViewConditions('Page', array('default' => $default));
 
 		// 並び替えモードの場合は、強制的にsortフィールドで並び替える
@@ -105,63 +107,103 @@ class PagesController extends AppController {
 			$this->passedArgs['direction'] = 'asc';
 		}
 
-		// 検索条件
-		$conditions = $this->_createAdminIndexConditions($this->request->data);
-
-		$this->paginate = array(
-				'conditions' => $conditions,
-				'fields' => array(),
-				'order' =>'Page.sort',
-				'limit' => $this->passedArgs['num']
-		);
-		$datas = $this->paginate('Page');
-		foreach($datas as $key => $data) {
-			$path = $this->Page->PageCategory->getPath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
-			if($path) {
-				$titlePath = Set::extract('/PageCategory/title', $path);
-				$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+		if(!isset($this->passedArgs['page_type'])) {
+			if(!isset($this->request->data['Page']['page_type'])) {
+				$this->request->data['Page']['page_type'] = 1;
+				$this->request->data['ViewSetting']['page_type'] = 1;
 			}
+		} else {
+			$this->request->data['ViewSetting']['page_type'] = $this->passedArgs['page_type'];
+			$this->request->data['Page']['page_type'] = $this->passedArgs['page_type'];
+		}
+		if(!isset($this->passedArgs['view_type'])) {
+			$this->request->data['ViewSetting']['view_type'] = 1;
+		} else {
+			$this->request->data['ViewSetting']['view_type'] = $this->passedArgs['view_type'];
 		}
 		
-		$this->set('datas',$datas);
-		
-		$this->_setAdminIndexViewData();
-		
-		if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
-			Configure::write('debug', 0);
-			$this->render('ajax_index');
-			return;
-		}
-		
-		/* 表示設定 */
-		if(!isset($this->request->data['Page']['page_type'])) {
-			$this->request->data['Page']['page_type'] = 1;
-		}
-		$pageCategories = array('' => '指定しない', 'noncat' => 'カテゴリなし');
-		$_pageCategories = $this->getCategorySource($this->request->data['Page']['page_type']);
-		if($_pageCategories) {
-			$pageCategories += $_pageCategories;
+		if($this->request->data['ViewSetting']['view_type'] == 1) {
+			// 検索条件
+			$conditions = $this->_createAdminIndexConditions($this->request->data);
+
+			$this->paginate = array(
+					'conditions' => $conditions,
+					'fields' => array(),
+					'order' =>'Page.sort',
+					'limit' => $this->passedArgs['num']
+			);
+
+			$datas = $this->paginate('Page');
+			foreach($datas as $key => $data) {
+				$path = $this->Page->PageCategory->getPath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
+				if($path) {
+					$titlePath = Set::extract('/PageCategory/title', $path);
+					$datas[$key]['PageCategory']['title'] =  implode(' > ', $titlePath);
+				}
+			}
+
+			$this->set('datas',$datas);
+			$this->_setAdminIndexViewData();
+
+			if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+				Configure::write('debug', 0);
+				$this->render('ajax_index');
+				return;
+			}
+			
+			/* 表示設定 */
+			$pageCategories = array('' => '指定しない', 'noncat' => 'カテゴリなし');
+			$_pageCategories = $this->getCategorySource($this->request->data['Page']['page_type']);
+			if($_pageCategories) {
+				$pageCategories += $_pageCategories;
+			}
+
+			if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+				$reflectMobile = true;
+			} else {
+				$reflectMobile = false;
+			}
+			if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
+				$reflectSmartphone = true;
+			} else {
+				$reflectSmartphone = false;
+			}
+			$this->set('reflectMobile', $reflectMobile);
+			$this->set('reflectSmartphone', $reflectSmartphone);
+
+			$this->set('search', 'pages_index');
+			$this->set('pageCategories', $pageCategories);
+
+			$this->search = 'pages_index';
+			$template = 'index';
+			
+		} else {
+			switch($this->request->data['ViewSetting']['page_type']) {
+				case '1':
+					$cateogryId = null;
+					break;
+				case '2':
+					$cateogryId = 1;
+					break;
+				case '3':
+					$cateogryId = 2;
+					break;
+			}
+			$datas = $this->Page->treeList($cateogryId);
+			$this->set('datas', $datas);
+			if($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+				Configure::write('debug', 0);
+				$this->render('ajax_index_tree');
+				return;
+			}
+			$template = 'index_tree';
+			
 		}
 
-		if(Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
-			$reflectMobile = true;
-		} else {
-			$reflectMobile = false;
-		}
-		if(Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
-			$reflectSmartphone = true;
-		} else {
-			$reflectSmartphone = false;
-		}
-		$this->set('reflectMobile', $reflectMobile);
-		$this->set('reflectSmartphone', $reflectSmartphone);
-		
-		$this->set('search', 'pages_index');
-		$this->set('pageCategories', $pageCategories);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->pageTitle = '固定ページ一覧';
-		$this->search = 'pages_index';
 		$this->help = 'pages_index';
+		$this->render($template);
 
 	}
 /**
@@ -260,7 +302,6 @@ class PagesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('editorOptions', $editorOptions);
-		$this->set('ckStyles', $ckStyles);
 		$this->subMenuElements = array('pages','page_categories');
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));

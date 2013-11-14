@@ -1186,7 +1186,7 @@ class Page extends AppModel {
  * @param string $url
  * @return boolean 
  */
-	function isLinked($agentPrefix, $url) {
+	public function isLinked($agentPrefix, $url) {
 		
 		if(!$agentPrefix) {
 			return false;
@@ -1214,4 +1214,41 @@ class Page extends AppModel {
 		return $linked;
 				
 	} 
+	
+	public function treeList($categoryId) {
+		return $this->_treeList($categoryId);
+	}
+	
+	protected function _treeList($categoryId) {
+		
+		$datas = array();
+		$pages = $this->find('all', array(
+			'conditions' => array('Page.page_category_id' => $categoryId), 
+			'recursive' => -1,
+			'order'		=> 'sort'
+		));
+		
+		$conditions = array('PageCategory.parent_id' => $categoryId);
+		if(!$categoryId) {
+			$conditions['PageCategory.id NOT IN'] = array(1, 2);
+		}
+		$pageCategories = $this->PageCategory->find('all', array(
+			'conditions' => $conditions,
+			'recursive' => -1,
+			'order'		=> 'lft'
+		));
+		foreach($pageCategories as $key => $pageCategory) {
+			$children = $this->_treeList($pageCategory['PageCategory']['id']);
+			if($children) {
+				$pageCategories[$key]['children'] = $children;
+			}
+		}
+		$datas = array(
+			'pageCategories'=> $pageCategories,
+			'pages'			=> $pages
+		);
+		return $datas;
+		
+	}
+	
 }

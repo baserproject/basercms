@@ -26,13 +26,15 @@ $pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォ
  */
 $(function() {
 	
-	$('input[name="data[Page][page_type]"]').click(pageTypeChengeHandler);
-	$.baserAjaxDataList.resetSearchBox = function() {
-		$("#PagePageType1").attr('checked', true);
-		pageTypeChengeHandler();
+	/*$('input[name="data[ViewSetting][page_type]"]').click(pageTypeChengeHandler);
+	if($.baserAjaxDataList) {
+		$.baserAjaxDataList.resetSearchBox = function() {
+			$("#PagePageType1").attr('checked', true);
+			pageTypeChengeHandler();
+		};
 	}
 	
-	pageTypeChengeHandler();
+	pageTypeChengeHandler();*/
 	
 });
 /**
@@ -40,7 +42,7 @@ $(function() {
  */
 function pageTypeChengeHandler() {
 	
-	var pageType = $('input[name="data[Page][page_type]"]:checked').val();
+	var pageType = $('input[name="data[ViewSetting][page_type]"]:checked').val();
 
 	$.ajax({
 		type: "POST",
@@ -76,10 +78,6 @@ function pageTypeChengeHandler() {
 	<span><?php echo $this->BcForm->label('Page.author_id', '作成者') ?> <?php echo $this->BcForm->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 
 	<span style="white-space: nowrap">
-<?php if($pageType): ?>
-	<span><?php echo $this->BcForm->label('Page.page_type', 'タイプ') ?> <?php echo $this->BcForm->input('Page.page_type', array('type' => 'radio', 'options' => $pageType)) ?></span>　
-<?php endif ?>
-
 <?php if($pageCategories): ?>
 	<span><?php echo $this->BcForm->label('Page.page_category_id', 'カテゴリー') ?> <?php echo $this->BcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
 <?php endif ?>

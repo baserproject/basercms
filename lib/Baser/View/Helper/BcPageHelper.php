@@ -389,4 +389,8 @@ class BcPageHelper extends Helper {
 
 	}
 	
+	public function treeList($datas, $recursive = 0) {
+		return $this->BcBaser->getElement('pages/index_tree_list', array('datas' => $datas, 'recursive' => $recursive));
+	}
+	
 }
