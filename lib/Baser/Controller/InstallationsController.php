@@ -626,10 +626,10 @@ class InstallationsController extends AppController {
 		}
 
 		/* CSV利用可否 */
-		$dbFolderPath = APP.'db'.DS.'csv';
+		/*$dbFolderPath = APP.'db'.DS.'csv';
 		if(is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)){
 			$dbsource['csv'] = 'CSV';
-		}
+		}*/
 
 		return $dbsource;
 

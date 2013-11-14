@@ -151,7 +151,7 @@ $(function(){
 
 		<div class="panel-box corner10">
 			<h3>ファイルデータベース</h3>
-			<div class="section"> データベースサーバーが利用できない場合には、SQLiteやCSVファイル等ファイルベースのデータベースを利用できます。
+			<div class="section"> データベースサーバーが利用できない場合には、ファイルベースデータベースの SQLite を利用できます。
 				有効にするには、下記のフォルダへの書き込み権限が必要です </div>
 			<ul class="section">
 				<li class='<?php if ($dbDirWritable) echo 'check'; else echo 'failed'; ?>'>
@@ -220,7 +220,7 @@ mod_gzip_on Off</pre>
 				コピーと権限の変更が完了したら次のステップに進みインストールを続けます。
 			</div>
 			<ul class="section"><li>/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/</li>
-				<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite / CSVを利用する場合）</li>
+				<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite を利用する場合）</li>
 				<li>/baser/config/theme/ 内の全て　→　/app/webroot/theme/</li>
 			</ul>
 			<?php endif ?>

@@ -128,10 +128,6 @@ baserCMSコミュニティの公式サイトです。
 https://groups.google.com/forum/?fromgroups#!forum/basercms
 baserCMSの最新情報などを発信しています！まずはメーリングリストへ参加！
 
-■ baserCMSサポーターズ（Facebook）
-http://www.facebook.com/groups/331974406865338/
-baserCMSプロジェクトの運営に参加されませんか？baserCMSを盛り上げよう！
-
 ■ baserCMS開発プロジェクト
 http://project.e-catchup.jp/projects/basercms
 baserCMSの開発状況や、今後の開発タスクなどが確認できます。
