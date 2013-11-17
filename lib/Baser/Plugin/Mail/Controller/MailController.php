@@ -196,6 +196,11 @@ class MailController extends MailAppController {
  */
 	public function index($id = null) {
 
+		if(!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
+			return;
+		}
+		
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
@@ -254,6 +259,10 @@ class MailController extends MailAppController {
  */
 	public function confirm($id = null) {
 
+		if(!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
+			return;
+		}
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
@@ -324,6 +333,10 @@ class MailController extends MailAppController {
  */
 	public function submit($id = null) {
 
+		if(!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
+			return;
+		}
 		if(!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}

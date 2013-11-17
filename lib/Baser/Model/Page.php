@@ -442,7 +442,7 @@ class Page extends AppModel {
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$_data['Content']['detail'] = $data['description'].' '.$detail;
 		$_data['Content']['url'] = $data['url'];
-		$_data['Content']['status'] = $this->allowedPublish($data['status'], $data['publish_begin'], $data['publish_end']);
+		$_data['Content']['status'] = $this->isPublish($data['status'], $data['publish_begin'], $data['publish_end']);
 
 		return $_data;
 
@@ -458,39 +458,7 @@ class Page extends AppModel {
 		return $this->deleteContent($this->id);
 		
 	}
-/**
- * データが公開済みかどうかチェックする
- * 同様のメソッド checkPublish があり DB接続前提でURLでチェックする仕組みだが
- * こちらは、実データで直接チェックする
- * TODO メソッド名のリファクタリング要
- *
- * @param boolean $status
- * @param boolean $publishBegin
- * @param boolean $publishEnd
- * @return	array
- * @access public
- */
-	public function allowedPublish($status, $publishBegin, $publishEnd) {
 
-		if(!$status) {
-			return false;
-		}
-
-		if($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
-			if($publishBegin < date('Y-m-d H:i:s')) {
-				return false;
-			}
-		}
-
-		if($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
-			if($publishEnd > date('Y-m-d H:i:s')) {
-				return false;
-			}
-		}
-
-		return true;
-
-	}
 /**
  * DBデータを元にページテンプレートを全て生成する
  * 

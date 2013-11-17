@@ -34,6 +34,8 @@ class MailContentsSchema extends CakeSchema {
 		'widget_area' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 4),
 		'ssl_on' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))

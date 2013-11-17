@@ -241,7 +241,7 @@ class PagesController extends AppController {
 				if($data = $this->Page->save($this->request->data,false)) {
 					
 					// キャッシュを削除する
-					if($this->Page->allowedPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end'])) {
+					if($this->Page->isPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end'])) {
 						clearViewCache();
 					}
 					
@@ -368,8 +368,8 @@ class PagesController extends AppController {
 				if($data = $this->Page->save(null, false)) {
 					
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
-					$beforeStatus = $this->Page->allowedPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
-					$afterStatus = $this->Page->allowedPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end']);
+					$beforeStatus = $this->Page->isPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
+					$afterStatus = $this->Page->isPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end']);
 					if($beforeStatus != $afterStatus || $before['Page']['title'] != $this->request->data['Page']['title'] || $before['Page']['url'] != $this->request->data['Page']['url']) {
 						clearViewCache();
 					} else {

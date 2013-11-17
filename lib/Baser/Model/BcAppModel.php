@@ -1375,4 +1375,35 @@ class BcAppModel extends Model {
 		
 	}
 	
+/**
+ * データが公開済みかどうかチェックする
+ *
+ * @param boolean $status
+ * @param boolean $publishBegin
+ * @param boolean $publishEnd
+ * @return	array
+ * @access public
+ */
+	public function isPublish($status, $publishBegin, $publishEnd) {
+
+		if(!$status) {
+			return false;
+		}
+
+		if($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if($publishBegin < date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+
+		if($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if($publishEnd > date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+	
 }

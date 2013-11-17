@@ -185,6 +185,26 @@ function mailContentSender1ClickHandler(){
 			</td>
 		</tr>
 		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.status', '公開期間') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
+				<?php echo $this->BcForm->error('MailContent.status') ?>
+				&nbsp;&nbsp;
+				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+				&nbsp;〜&nbsp;
+				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_end', array('size' => 12, 'maxlength' => 10), true) ?><br />
+				<?php echo $this->BcForm->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
+				<?php echo $this->BcForm->error('MailContent.publish_begin') ?>
+				<?php echo $this->BcForm->error('MailContent.publish_end') ?>
+			</td>
+		</tr>
+	</table>	
+</div>
+
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+<div class="section">
+	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
+		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'checkbox', 'label' => '利用する')) ?>
@@ -211,12 +231,6 @@ function mailContentSender1ClickHandler(){
 				</div>
 			</td>
 		</tr>
-	</table>	
-</div>
-
-<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
-<div class="section">
-	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_2', 'BCC用送信先メールアドレス') ?></th>
 			<td class="col-input">
@@ -293,14 +307,6 @@ function mailContentSender1ClickHandler(){
 						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
 					</ul>
 				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.exclude_search', '公開設定') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?><br />
-				<?php echo $this->BcForm->error('MailContent.status') ?>
-				<?php echo $this->BcForm->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'このメールフォームをサイト内検索の検索結果より除外する')) ?>
 			</td>
 		</tr>
 	</table>
