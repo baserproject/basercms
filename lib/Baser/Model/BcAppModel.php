@@ -1391,13 +1391,13 @@ class BcAppModel extends Model {
 		}
 
 		if($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
-			if($publishBegin < date('Y-m-d H:i:s')) {
+			if($publishBegin > date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
 
 		if($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
-			if($publishEnd > date('Y-m-d H:i:s')) {
+			if($publishEnd < date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
