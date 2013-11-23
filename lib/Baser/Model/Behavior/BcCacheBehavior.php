@@ -185,6 +185,7 @@ class BcCacheBehavior extends ModelBehavior {
 				if($model->{$assocType}) {
 					foreach($model->{$assocType} as $assoc) {
 						$className = $assoc['className'];
+						list($plugin, $className) = pluginSplit($className);
 						if(isset($model->{$className})) {
 							$this->delAssockCache($model->{$className}, $recursive);
 						}

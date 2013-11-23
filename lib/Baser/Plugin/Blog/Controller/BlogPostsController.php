@@ -301,7 +301,9 @@ class BlogPostsController extends BlogAppController {
 				$id = $this->BlogPost->getLastInsertId();
 				$this->setMessage('記事「'.$this->request->data['BlogPost']['name'].'」を追加しました。', false, true);
 				
-				$this->request->data['BlogPost']['id'] = $id;
+				// 下のBlogPost::read()で、BlogTagデータ無しのキャッシュを作ってしまわないように
+				// recursiveを設定
+				$this->BlogPost->recursive = 1;
 				
 				/*** afterAdd ***/
 				$this->dispatchEvent('afterAdd', array(
