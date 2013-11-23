@@ -68,7 +68,7 @@ class BcPageHelper extends Helper {
  */
 	public function beforeRender($viewFile) {
 		
-		if($this->request->params['controller'] == 'pages' && $this->request->paras['action'] == 'display' && isset($this->request->params['pass'][0])) {
+		if($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display' && isset($this->request->params['pass'][0])) {
 			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
@@ -129,7 +129,7 @@ class BcPageHelper extends Helper {
 				return false;
 			}
 		} else {
-			$parent = $this->Page->PageCategory->getparentnode($category['id']);
+			$parent = $this->Page->PageCategory->getParentNode($category['id']);
 		}
 		return $parent;
 		

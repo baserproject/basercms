@@ -739,7 +739,7 @@ class BlogHelper extends AppHelper {
 		}
 
 		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
-		return $BlogCategory->getparentnode($post['BlogCategory']['id']);
+		return $BlogCategory->getParentNode($post['BlogCategory']['id']);
 
 	}
 /**
