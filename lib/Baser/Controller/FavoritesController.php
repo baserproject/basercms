@@ -23,6 +23,7 @@
  * @package baser.controllers
  */
 class FavoritesController extends AppController {
+	
 /**
  * クラス名
  * 
@@ -30,6 +31,7 @@ class FavoritesController extends AppController {
  * @access public
  */
 	public $name = 'Favorites';
+	
 /**
  * コンポーネント
  *
@@ -38,6 +40,21 @@ class FavoritesController extends AppController {
  */
 	public $components = array('BcAuth','Cookie','BcAuthConfigure');
 
+/**
+ * beforeFilter
+ */
+	public function beforeFilter() {
+		
+		parent::beforeFilter();
+		$this->Favorite->setSession($this->Session);
+		
+	}
+	
+/**
+ * [ADMIN] よく使う項目を追加する（AJAX）
+ *  
+ * @return void
+ */
 	public function admin_ajax_add () {
 		
 		if($this->request->data) {
@@ -61,6 +78,7 @@ class FavoritesController extends AppController {
 		exit();
 		
 	}
+	
 /**
  * [ADMIN] よく使う項目編集
  * 
@@ -89,6 +107,7 @@ class FavoritesController extends AppController {
 		exit();
 		
 	}
+	
 /**
  * [ADMIN] 削除
  * 
@@ -108,6 +127,7 @@ class FavoritesController extends AppController {
 		exit();
 		
 	}
+	
 /**
  * [ADMIN] 並び替えを更新する
  *

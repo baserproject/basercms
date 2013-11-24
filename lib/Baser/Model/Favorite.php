@@ -18,14 +18,12 @@
  * @license			http://basercms.net/license/index.html
  */
 /**
- * Include files
- */
-/**
  * よく使う項目　モデル
  *
  * @package baser.models
  */
 class Favorite extends AppModel {
+	
 /**
  * データベース接続
  *
@@ -33,6 +31,7 @@ class Favorite extends AppModel {
  * @access public
  */
 	public $useDbConfig = 'baser';
+	
 /**
  * クラス名
  *
@@ -40,6 +39,7 @@ class Favorite extends AppModel {
  * @access public
  */
 	public $name = 'Favorite';
+	
 /**
  * belongsTo
  * 
@@ -51,6 +51,7 @@ class Favorite extends AppModel {
 				'className'=> 'User',
 				'foreignKey'=>'user_id'
 	));
+	
 /**
  * ビヘイビア
  * 
@@ -58,4 +59,49 @@ class Favorite extends AppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
+/**
+ * セッション
+ */
+	public $_Session;
+	
+/**
+ * バリデーション
+ *
+ * @var array
+ * @access public
+ */
+	public $validate = array(
+		'url' => array(
+			array(	'rule'		=> array('isPermitted'),
+					'message'	=> 'このURLの登録は許可されていません。')
+		)
+	);
+	
+/**
+ * セッションをセットする
+ * 
+ * @param SessionComponent $Session
+ */
+	public function setSession(SessionComponent $Session) {
+		$this->_Session = $Session;
+	}
+	
+/**
+ * アクセス権があるかチェックする
+ * 
+ * @param array $check
+ */
+	public function isPermitted($check) {
+		
+		$url = $check[key($check)];
+		$userGroupId = $this->_Session->read('Auth.User.user_group_id');
+		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
+			return true;
+		}
+		$Permission = ClassRegistry::init('Permission');
+		return $Permission->check($url, $userGroupId);
+		
+	}
+	
 }
