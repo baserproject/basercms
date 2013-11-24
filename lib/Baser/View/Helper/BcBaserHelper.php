@@ -773,7 +773,7 @@ class BcBaserHelper extends AppHelper {
 				}
 			}
 		}
-		if(!BcUtil::isAdminSystem() && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
+		if(!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
 
