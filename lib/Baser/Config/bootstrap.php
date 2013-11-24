@@ -128,9 +128,9 @@ $baserSettings = array();
 $baserSettings['BcEnv'] = Configure::read('BcEnv');
 $baserSettings['BcApp'] = Configure::read('BcApp');
 Configure::config('baser', new PhpReader(BASER_CONFIGS));
-if (Configure::load('baser', 'baser') === false) {
+if (Configure::load('setting', 'baser') === false) {
 	$config = array();
-	include BASER_CONFIGS . 'baser.php';
+	include BASER_CONFIGS . 'setting.php';
 	Configure::write($config);
 }
 if (BC_INSTALLED && $baserSettings) {

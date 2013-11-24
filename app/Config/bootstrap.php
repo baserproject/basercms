@@ -107,7 +107,13 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
 /**
  * baser の bootstrap を読み込む 
  */
 require CORE_PATH.'Baser'.DS.'Config'.DS.'bootstrap.php';
+
+/**
+ * app の設定ファイルを読み込む
+ */
+Configure::load('setting');
