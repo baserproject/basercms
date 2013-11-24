@@ -479,7 +479,7 @@ table.blog-calendar td.today{
 }
 
 #top-contents-main h2{
-	background:#FFFFFF;
+	background:#FFFFFF!important;
 	color:#868686;
 	font-size: 16px;
 	font-weight: normal;
