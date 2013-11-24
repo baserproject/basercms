@@ -247,7 +247,7 @@ $(function(){
 			'editorDraftField'	=> 'detail_draft', 
 			'editorWidth'		=> 'auto', 
 			'editorHeight'		=> '480px',
-			'editorEnterBr'		=> @$siteConfigs['editor_enter_br']
+			'editorEnterBr'		=> @$siteConfig['editor_enter_br']
 			), $editorOptions)) ?>
 	<?php echo $this->BcForm->error('BlogPost.detail') ?>
 </div>
