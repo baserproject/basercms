@@ -68,12 +68,15 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public $belongsTo = array(
-			'BlogCategory' =>   array(  'className'=>'Blog.BlogCategory',
-							'foreignKey'=>'blog_category_id'),
-			'User' =>           array(  'className'=>'User',
-							'foreignKey'=>'user_id'),
-			'BlogContent' =>    array(  'className'=>'Blog.BlogContent',
-							'foreignKey'=>'blog_content_id')
+			'BlogCategory' => array( 
+				'className'	=> 'Blog.BlogCategory',
+				'foreignKey'=> 'blog_category_id'),
+			'User' => array(
+				'className'	=> 'User',
+				'foreignKey'=> 'user_id'),
+			'BlogContent' => array(
+				'className'	=> 'Blog.BlogContent',
+				'foreignKey'=> 'blog_content_id')
 	);
 /**
  * hasMany
@@ -81,13 +84,15 @@ class BlogPost extends BlogAppModel {
  * @var array
  * @access public
  */
-	public $hasMany = array('BlogComment'=>
-			array('className'=>'Blog.BlogComment',
-							'order'=>'created',
-							'foreignKey'=>'blog_post_id',
-							'dependent'=>true,
-							'exclusive'=>false,
-							'finderQuery'=>''));
+	public $hasMany = array(
+		'BlogComment' => array(
+			'className'		=> 'Blog.BlogComment',
+			'order'			=> 'created',
+			'foreignKey'	=> 'blog_post_id',
+			'dependent'		=> true,
+			'exclusive'		=> false,
+			'finderQuery'	=> '')
+	);
 /**
  * HABTM
  * 
