@@ -94,6 +94,9 @@ class Favorite extends AppModel {
  */
 	public function isPermitted($check) {
 		
+		if(!$this->_Session) {
+			return true;
+		}
 		$url = $check[key($check)];
 		$userGroupId = $this->_Session->read('Auth.User.user_group_id');
 		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
