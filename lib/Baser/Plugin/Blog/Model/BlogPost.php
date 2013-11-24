@@ -52,7 +52,7 @@ class BlogPost extends BlogAppModel {
 			'BcCache', 
 			'BcUpload' => array(
 				'subdirDateFormat'	=> 'Y/m/',
-				'fields'	=> array(
+				'fields' => array(
 					'eye_catch'	=> array(
 						'type'			=> 'image',
 						'namefield'		=> 'no',
