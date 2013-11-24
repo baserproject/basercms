@@ -83,6 +83,7 @@ class ThemeConfigsController extends AppController {
 			if(!$this->ThemeConfig->validates()) {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			} else {
+				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
 				if($this->ThemeConfig->saveKeyValue($data)) {

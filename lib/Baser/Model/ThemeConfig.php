@@ -58,4 +58,21 @@ class ThemeConfig extends AppModel {
 		
 	}
 	
+	public function updateColorConfig($data) {
+		
+		$configPath = getViewPath() . 'css' . DS . 'config.css';
+		if(!file_exists($configPath)) {
+			return false;
+		}
+		$File = new File($configPath);
+		$config = $File->read();
+		$config = str_replace('MAIN', '#' . $data['ThemeConfig']['color_main'], $config);
+		$config = str_replace('SUB', '#' . $data['ThemeConfig']['color_sub'], $config);
+		$config = str_replace('LINK', '#' . $data['ThemeConfig']['color_link'], $config);
+		$config = str_replace('HOVER', '#' . $data['ThemeConfig']['color_hover'], $config);
+		$File = new File(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css', true, 0666);
+		$File->write($config);
+		$File->close();
+		
+	}
 }

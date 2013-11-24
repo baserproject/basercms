@@ -17,12 +17,45 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$this->BcBaser->css('admin/colpick', array('inline' => false));
+$this->BcBaser->js('admin/colpick', false);
 ?>
+<script type="text/javascript">
+$(function(){
+	$(".color-picker").each(function() {
+		var color;
+		if($(this).val()) {
+			$(this).css('border-right','36px solid #'+$(this).val());
+			color = $(this).val();
+		} else {
+			color = 'ffffff';
+		}
+		p(color);
+		$(this).colpick({
+			layout:'hex',
+			color:color,
+			onSubmit:function(hsb,hex,rgb,el) {
+				$(el).val(hex).css('border-right','36px solid #'+hex);
+				$(el).colpickHide();
+			}
+		});
+	});
+});
+</script>
 
 
 <?php echo $this->BcForm->create('ThemeConfig', array('type' => 'file')) ?>
 
 <table class="form-table">
+	<tr>
+		<th>テーマカラー</th>
+		<td>
+			<small>[メイン]</small> #<?php echo $this->BcForm->input('color_main', array('type' => 'text', 'size' => 6, 'class' => 'color-picker')) ?>　
+			<small>[サブ]</small> #<?php echo $this->BcForm->input('color_sub', array('type' => 'text', 'size' => 6, 'class' => 'color-picker')) ?><br />
+			<small>[テキストリンク]</small> #<?php echo $this->BcForm->input('color_link', array('type' => 'text', 'size' => 6, 'class' => 'color-picker')) ?>　
+			<small>[テキストホバー]</small> #<?php echo $this->BcForm->input('color_hover', array('type' => 'text', 'size' => 6, 'class' => 'color-picker')) ?>
+		</td>
+	</tr>
 	<tr>
 		<th>ロゴ</th>
 		<td>
