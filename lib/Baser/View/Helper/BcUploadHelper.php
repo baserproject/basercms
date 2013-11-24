@@ -83,9 +83,12 @@ class BcUploadHelper extends FormHelper {
 		$fileValue = $this->value($fieldName);
 		
 		if(is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
-			$hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$hiddenValue));
+			$hiddenTag = parent::hidden($modelName . '.' . $field . '_', array('value' => $hiddenValue));
 		} else {
-			$hiddenTag = parent::hidden($modelName.'.'.$field.'_',array('value'=>$this->value($fieldName)));
+			if(is_array($fileValue)) {
+				$fileValue = null;
+			}
+			$hiddenTag = parent::hidden($modelName . '.' . $field . '_', array('value' => $fileValue));
 		}
 		
 		$out = $fileTag;

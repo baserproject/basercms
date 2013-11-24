@@ -124,7 +124,9 @@ class BlogPost extends BlogAppModel {
 		'posts_date' => array(
 			array(	'rule'		=> array('notEmpty'),
 					'message'	=> '投稿日を入力してください。',
-					'required'	=> true)
+					'required'	=> true),
+			array(	'rule'		=> array('checkDate'),
+					'message'	=> '投稿日の形式が不正です。')
 		),
 		'user_id' => array(
 			array(	'rule'		=> array('notEmpty'),

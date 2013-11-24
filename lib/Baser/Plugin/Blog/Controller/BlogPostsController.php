@@ -406,9 +406,9 @@ class BlogPostsController extends BlogAppController {
 			$currentCatOwner = $this->siteConfigs['root_owner_id'];
 		} else {
 			if(empty($this->request->data['BlogCategory']['owner_id'])) {
-				$this->request->data = $this->BlogPost->read(null, $id);
+				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
 			}
-			$currentCatOwner = $this->request->data['BlogCategory']['owner_id'];
+			$currentCatOwner = $data['BlogCategory']['owner_id'];
 		}
 		
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
