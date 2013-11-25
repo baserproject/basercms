@@ -84,17 +84,6 @@ define('BC_BASE_URL', baseUrl());
 Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher')));
 
 /**
- * 静的ファイルの読み込みの場合はスキップ
- */
-$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
-	Configure::write('BcRequest.asset', true);
-	return;
-}
-
-/**
  * クラスローダー設定
  */
 App::uses('AppModel',		'Model');
@@ -119,7 +108,6 @@ App::uses('BcPluginAppController',		'Controller');
 App::uses('BcPluginAppModel',			'Model');
 App::uses('BcManagerShell',				'Console/Command');
 
-
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
@@ -141,6 +129,17 @@ if (BC_INSTALLED && $baserSettings) {
 			}
 		}
 	}
+}
+
+/**
+ * 静的ファイルの読み込みの場合はスキップ
+ */
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	return;
 }
 
 /**
