@@ -3514,7 +3514,7 @@ class DboSource extends DataSource {
 		$File = new File($path . DS . $file);
 		$data = $File->read();
 		$data = str_replace(array("\r\n","\r"), "\n", $data);
-		$data = preg_replace('/\tvar\s\$path.+;\n\n/', '', $data);
+		$data = preg_replace('/\t(var|public)\s\$path.+;\n\n/', '', $data);
 		$File->write($data);
 		
 		return $result;

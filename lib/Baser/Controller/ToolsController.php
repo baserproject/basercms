@@ -89,7 +89,7 @@ class ToolsController extends AppController {
 					$messages[] = 'データの復元に失敗しました。';
 					$error = true;
 				}
-				if(!$this->Page->createAllPageTemplate()){
+				if(!$error && !$this->Page->createAllPageTemplate()){
 					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
 				}
 				if($messages) {
