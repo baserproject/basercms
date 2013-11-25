@@ -97,17 +97,20 @@ $ vagrant destroy
 
 「vagrant ssh」内でスーパバイザになる場合や、データベースのアクセス、
 baserCMSの設定には次のユーザとパスワードを利用します。
+なお、初期データベースはvagrant upで作成されます。
 
 ・root
 pass : vagrant
 
 ・MySQL
-user : root
-pass : root
+database : basercms
+user     : root
+pass     : root
 
 ・PostgreSQL
-user : postgres
-pass : postgres
+database : basercms
+user     : postgres
+pass     : postgres
 
 
 ----------------------------------------
