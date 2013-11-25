@@ -96,7 +96,7 @@ Configure::write('Dispatcher.filters', array(
 /**
  * Configures default file logging options
  */
-App::uses('CakeLog', 'Log');
+/*App::uses('CakeLog', 'Log');
 CakeLog::config('debug', array(
 	'engine' => 'FileLog',
 	'types' => array('notice', 'info', 'debug'),
@@ -106,7 +106,7 @@ CakeLog::config('error', array(
 	'engine' => 'FileLog',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
-));
+));*/
 
 /**
  * baser の bootstrap を読み込む 

@@ -232,7 +232,7 @@ class FeedController extends FeedAppController {
 		}
 
 		Configure::write('debug', 1);
-		$this->cacheAction = Configure::read('BcCache.defaultCachetime');
+		$this->cacheAction = Configure::read('BcCache.duration');
 		$this->layout = "ajax";
 
 		// idを設定

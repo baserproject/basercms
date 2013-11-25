@@ -788,7 +788,7 @@ class Page extends AppModel {
 		if($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
 			return strtotime($page['Page']['publish_end']) - time();
 		} else {
-			return Configure::read('BcCache.defaultCachetime');
+			return Configure::read('BcCache.duration');
 		}
 		
 	}

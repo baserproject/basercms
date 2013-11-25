@@ -169,16 +169,45 @@ if (BC_INSTALLED) {
  * tmpフォルダ確認
  */
 	checkTmpFolders();
+	
+/**
+ * Configures default file logging options
+ */
+	App::uses('CakeLog', 'Log');
+	CakeLog::config('debug', array(
+		'engine' => 'FileLog',
+		'types' => array('notice', 'info', 'debug'),
+		'file' => 'debug',
+	));
+	CakeLog::config('error', array(
+		'engine' => 'FileLog',
+		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+		'file' => 'error',
+	));
+	
 /**
  * キャッシュ設定
  */
-	$cacheSetting = Cache::config('_cake_core_');
-	$cacheEngine = $cacheSetting['settings']['engine'];
-	$cachePrefix = preg_replace('/cake_core_$/', '', $cacheSetting['settings']['prefix']);
-	$cacheDuration = Configure::read('BcCache.dataCachetime');
-	if (Configure::read('debug') > 0) {
-		$cacheDuration = '+10 seconds';
-	}
+	$cacheEngine = Configure::read('BcCache.engine');
+	$cachePrefix = Configure::read('BcCache.prefix');
+	$cacheDuration = Configure::read('BcCache.duration');
+
+	// モデルスキーマ
+	Cache::config('_cake_model_', array(
+		'engine' => $cacheEngine,
+		'prefix' => $cachePrefix . 'cake_model_',
+		'path' => CACHE . 'models' . DS,
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => $cacheDuration
+	));
+	// コア環境
+	Cache::config('_cake_core_', array(
+		'engine' => $cacheEngine,
+		'prefix' => $cachePrefix . 'cake_core_',
+		'path' => CACHE . 'persistent' . DS,
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => $cacheDuration
+	));
 	// DBデータキャッシュ
 	Cache::config('_cake_data_', array(
 		'engine' => $cacheEngine,
@@ -199,16 +228,19 @@ if (BC_INSTALLED) {
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
+	
 /**
  * サイト基本設定を読み込む
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
 	loadSiteConfig();
+	
 /**
  * メンテナンスチェック
  */
 	$isMaintenance = ($parameter == 'maintenance/index');
 	Configure::write('BcRequest.isMaintenance', $isMaintenance);
+	
 /**
  * アップデートチェック
  */

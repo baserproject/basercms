@@ -89,15 +89,7 @@
 			'ISO-2022-JP'	=> 'ISO-2022-JP'
 		)
 	);
-/**
- * キャッシュ設定 
- */
-	$config['BcCache'] = array(
-		// 標準キャッシュ時間
-		'defaultCachetime'	=> '1 month',
-		// モデルデータキャッシュ時間
-		'dataCachetime'		=> '1 month'
-	);
+	
 /**
  * 認証プレフィックス設定
  * ※ CSVは非対応

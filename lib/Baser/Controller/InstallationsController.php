@@ -157,15 +157,6 @@ class InstallationsController extends AppController {
 					}
 				}
 			}
-			//make cache dir and logs dir
-			if(! is_dir(TMP . 'cache')) {
-				$folder->create(TMP . 'cache', 0777);
-			}
-			if(! is_dir(TMP . 'logs')) {
-				$folder->create(TMP . 'logs', 0777);
-				touch(TMP . 'logs/error.log');
-				chmod(TMP . 'logs/error.log', 0777);
-			}
 		}
 	}
 /**
@@ -204,7 +195,6 @@ class InstallationsController extends AppController {
 		
 		if(!$this->request->data) {
 			clearAllCache();
-			checkTmpFolders();
 			$this->request->data = $this->_getDefaultValuesStep3();
 		} else {
 

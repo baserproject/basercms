@@ -1488,7 +1488,7 @@ class BcBaserHelper extends AppHelper {
 		$fileModified = filemtime(WWW_ROOT.'index.php');
 
 		if(!$expire) {
-			$expire = Configure::read('BcCache.defaultCachetime');
+			$expire = Configure::read('BcCache.duration');
 		}
 		if(!is_numeric($expire)){
 			$expire = strtotime($expire);
@@ -1627,7 +1627,7 @@ class BcBaserHelper extends AppHelper {
 		if(empty($_SESSION['Auth']['User'])) {
 			$params = am($params, array(
 				'cache' => array(
-					'time' => Configure::read('BcCache.defaultCachetime'),
+					'time' => Configure::read('BcCache.duration'),
 					'key' => $pageCategoryId))
 			);
 		}
