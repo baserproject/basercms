@@ -21,13 +21,14 @@
  * Include files
  */
 App::uses('DboSource', 'Model/Datasource');
+App::uses('Sqlite', 'Model/Datasource/Database');
 App::uses('CakeSchema', 'Model');
 /**
  * SQLite DBO拡張
  *
  * @package baser.models.datasources.dbo
  */
-class BcSqlite extends DboSource {
+class BcSqlite extends Sqlite {
 
 /**
  * Enter description here...
@@ -345,19 +346,7 @@ class BcSqlite extends DboSource {
 		return false;*/
 		
 	}
-/**
- * Deletes all the records in a table and resets the count of the auto-incrementing
- * primary key, where applicable.
- *
- * @param mixed $table A string or model class representing the table to be truncated
- * @return boolean SQL TRUNCATE TABLE statement, false if not applicable.
- * @access public
- */
-	public function truncate($table) {
-		
-		return $this->execute('DELETE From ' . $this->fullTableName($table));
-		
-	}
+
 /**
  * Returns a formatted error message from previous database operation.
  *
@@ -454,50 +443,60 @@ class BcSqlite extends DboSource {
  * @return string
  * @access public
  */
-	public function resultSet(&$results) {
+	public function resultSet($results) {
 		
 		$this->results = $results;
-		//echo "resultSet:results ";
-		//pr($results);
 		$this->map = array();
-		$num_fields = $results->columnCount();
+		$numFields = $results->columnCount();
 		$index = 0;
 		$j = 0;
 
 		//PDO::getColumnMeta is experimental and does not work with sqlite3,
-		//so try to figure it out based on the querystring
+		//	so try to figure it out based on the querystring
 		$querystring = $results->queryString;
-		if (strpos($querystring,"SELECT") === 0)
-		{
-			$last = strpos($querystring,"FROM");
-			if ($last !== false)
-			{
-				$selectpart = substr($querystring,7,$last-8);
-				$selects = explode(",",$selectpart);
+		if (stripos($querystring, 'SELECT') === 0) {
+			$last = strripos($querystring, 'FROM');
+			if ($last !== false) {
+				$selectpart = substr($querystring, 7, $last - 8);
+				$selects = String::tokenize($selectpart, ',', '(', ')');
 			}
+		} elseif (strpos($querystring, 'PRAGMA table_info') === 0) {
+			$selects = array('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk');
+		} elseif (strpos($querystring, 'PRAGMA index_list') === 0) {
+			$selects = array('seq', 'name', 'unique');
+		} elseif (strpos($querystring, 'PRAGMA index_info') === 0) {
+			$selects = array('seqno', 'cid', 'name');
 		}
-		elseif (strpos($querystring,"PRAGMA table_info") === 0)
-		{
-			$selects = array("cid","name","type","notnull","dflt_value","pk");
-		}
-
-		while ($j < $num_fields) {
-			//echo "resultSet:columnmeta ";
-			//$columnName = str_replace('"', '', sqlite3_field_name($results, $j));
-
-			if(preg_match('/.*AS "(.*)".*/i', $selects[$j], $matches)){
-				$columnName = $matches[1];
-			}else{
+		while ($j < $numFields) {
+			if (!isset($selects[$j])) {
+				$j++;
+				continue;
+			}
+			if (preg_match('/\bAS\s+(.*)/i', $selects[$j], $matches)) {
+				$columnName = trim($matches[1], '"');
+			} else {
 				$columnName = trim(str_replace('"', '', $selects[$j]));
+			}
+
+			if (strpos($selects[$j], 'DISTINCT') === 0) {
+				$columnName = str_ireplace('DISTINCT', '', $columnName);
+			}
+
+			$metaType = false;
+			try {
+				$metaData = (array)$results->getColumnMeta($j);
+				if (!empty($metaData['sqlite:decl_type'])) {
+					$metaType = trim($metaData['sqlite:decl_type']);
+				}
+			} catch (Exception $e) {
 			}
 
 			if (strpos($columnName, '.')) {
 				$parts = explode('.', $columnName);
-				$this->map[$index++] = array(trim($parts[0]), trim($parts[1]));
+				$this->map[$index++] = array(trim($parts[0]), trim($parts[1]), $metaType);
 			} else {
-				$this->map[$index++] = array(0, $columnName);
+				$this->map[$index++] = array(0, $columnName, $metaType);
 			}
-
 			$j++;
 		}
 		
@@ -755,7 +754,7 @@ class BcSqlite extends DboSource {
 	public function index($model) {
 		
 		$index = array();
-		$table = $this->fullTableName($model, false);
+		$table = $this->fullTableName($model, false, false);
 		if ($table) {
 
 			$tableInfo = $this->query('PRAGMA table_info(' . $table . ')');

@@ -310,7 +310,7 @@ class User extends AppModel {
 					$userId = $this->getLastInsertID();
 					foreach ($defaultFavorites as $favorites) {
 						$favorites['user_id'] = $userId;
-						$favorites['sort'] = $this->Favorite->getMax('sort') + 1;
+						$favorites['sort'] = $this->Favorite->getMax('sort', array('Favorite.user_id' => $userId)) + 1;
 						$this->Favorite->create($favorites);
 						$this->Favorite->save();
 					}
