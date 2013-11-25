@@ -87,6 +87,7 @@ class ThemeConfigsController extends AppController {
 				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
 				if($this->ThemeConfig->saveKeyValue($data)) {
+					clearViewCache();
 					$this->setMessage('システム設定を保存しました。');
 					$this->redirect('form');
 				} else {
