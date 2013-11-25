@@ -55,7 +55,8 @@ App::build(array(
 	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
 	'TestSuite'					=> array(BASER_TEST_SUITE),
 	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
-	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS)
+	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS),
+	'Network'					=> array(BASER . 'Network' . DS)
 ), App::REGISTER);
 
 /**
@@ -107,6 +108,7 @@ App::uses('BcHelperEventListener',		'Event');
 App::uses('BcPluginAppController',		'Controller');
 App::uses('BcPluginAppModel',			'Model');
 App::uses('BcManagerShell',				'Console/Command');
+App::uses('CakeRequest',				'Network');
 
 /**
  * 設定ファイル読み込み
