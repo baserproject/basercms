@@ -3800,7 +3800,7 @@ class DboSource extends DataSource {
 		if(!empty($new['tables'][$table]['indexes'])) {
 			$fields['indexes'] = $new['tables'][$table]['indexes'];
 		}
-		if(!empty($new['tables'][$table]['tableParameters'])) {
+		if(isset($new['tables'][$table]['tableParameters'])) {
 			$fields['tableParameters'] = $new['tables'][$table]['tableParameters'];
 		}
 		$new['tables'][$table] = $fields;
