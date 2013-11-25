@@ -27,9 +27,9 @@
 			<li><?php $this->BcBaser->link('コアテンプレート確認', array('plugin' => null, 'controller'=>'theme_files','action' => 'index', 'core')) ?></li>
 			<li><?php $this->BcBaser->link('テーマ用初期データダウンロード', 
 					array('plugin' => null, 'controller' => 'themes', 'action' => 'download_default_data_pattern'), 
-					array('target' => '_blank'),
+					array(),
 					"現在のデータベースの状態を元にテーマ用の初期データを生成しダウンロードします。よろしいですか？\n" .
-					"ダウンロードしたデータは、配布用テーマの config/data/ 内に配置してください。") ?></li>
+					"ダウンロードしたデータは、配布用テーマの Config/data/ 内に配置してください。") ?></li>
 			<li><?php $this->BcBaser->link('テーマ設定', array('plugin' => null, 'controller'=>'theme_configs','action' => 'form')) ?></li>
 		</ul>
 	</td>
