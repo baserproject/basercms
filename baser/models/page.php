@@ -410,7 +410,7 @@ class Page extends AppModel {
 		}
 		$_data['Content']['category'] = '';
 		if(!empty($data['page_category_id'])) {
-			$categoryPath = $PageCategory->getPath($data['page_category_id'], array('title'));
+			$categoryPath = $this->PageCategory->getPath($data['page_category_id'], array('title'));
 			if($categoryPath) {
 				$_data['Content']['category'] = $categoryPath[0]['PageCategory']['title'];
 			}
