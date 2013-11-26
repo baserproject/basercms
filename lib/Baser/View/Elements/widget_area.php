@@ -37,13 +37,18 @@ if(!empty($no)){
 			$key = key($widget);
 			if($widget[$key]['status']){
 				$params = array();
+				$plugin = '';
 				$params['widget']=true;
 				if(empty($_SESSION['Auth']['User']) && !isset($cache)){
 					$params['cache']='+1 month';
 				}
 				$params = am($params,$widget[$key]);
 				$params[$no.'_'.$widget[$key]['id']] = $no.'_'.$widget[$key]['id'];	// 同じタイプのウィジェットでキャッシュを特定する為に必要
-				$this->BcBaser->element('widgets/'.$widget[$key]['element'], $params, array('subDir' => $subDir));
+				if(!empty($params['plugin'])) {
+					$plugin = $params['plugin'] . '.';
+					unset($params['plugin']);
+				}
+				$this->BcBaser->element($plugin . 'widgets/'.$widget[$key]['element'], $params, array('subDir' => $subDir));
 			}
 		}
 ?>
