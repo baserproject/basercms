@@ -503,7 +503,7 @@ function pageTypeChengeHandler() {
 		</tr>
 <?php endif ?>
 <?php if(Configure::read('BcApp.smartphone')): ?>
-		<tr id="RowSmartphone" style="display: none">
+		<tr id="RowSmartphone">
 			<th class="col-head"><?php echo $bcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
 	<?php if(@$bcBaser->siteConfig['linked_pages_smartphone']): ?>
