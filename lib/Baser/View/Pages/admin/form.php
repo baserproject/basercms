@@ -516,7 +516,7 @@ function pageTypeChengeHandler() {
 
 
 <?php if(Configure::read('BcApp.smartphone')): ?>
-		<tr id="RowSmartphone" style="display: none">
+		<tr id="RowSmartphone">
 			<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th> 
 			<td class="col-input">
 
