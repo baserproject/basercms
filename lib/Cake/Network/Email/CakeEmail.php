@@ -2,8 +2,6 @@
 /**
  * CakePHP Email
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -326,7 +324,7 @@ class CakeEmail {
 	protected $_emailPattern = null;
 
 /**
- * The classname used for email configuration.
+ * The class name used for email configuration.
  *
  * @var string
  */

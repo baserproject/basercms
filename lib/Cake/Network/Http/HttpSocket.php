@@ -2,8 +2,6 @@
 /**
  * HTTP Socket connection class.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -78,7 +76,7 @@ class HttpSocket extends CakeSocket {
 	public $response = null;
 
 /**
- * Response classname
+ * Response class name
  *
  * @var string
  */
@@ -691,8 +689,8 @@ class HttpSocket extends CakeSocket {
 		}
 		if (!empty($this->config['context']['ssl']['verify_host'])) {
 			$this->config['context']['ssl']['CN_match'] = $host;
-			unset($this->config['context']['ssl']['verify_host']);
 		}
+		unset($this->config['context']['ssl']['verify_host']);
 	}
 
 /**

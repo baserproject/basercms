@@ -2,8 +2,6 @@
 /**
  * Acl Shell provides Acl access in the CLI environment
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -91,7 +89,7 @@ class AclShell extends AppShell {
 				$this->args = null;
 				return $this->DbConfig->execute();
 			}
-			require_once (APP . 'Config' . DS . 'database.php');
+			require_once APP . 'Config' . DS . 'database.php';
 
 			if (!in_array($this->command, array('initdb'))) {
 				$collection = new ComponentCollection();

@@ -1,6 +1,6 @@
 <?php
 /**
- * PHP 5
+ *
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -72,9 +72,13 @@ class ViewBlock {
  * using View::get();
  *
  * @param string $name The name of the block to capture for.
+ * @throws CakeException When starting a block twice
  * @return void
  */
 	public function start($name) {
+		if (in_array($name, $this->_active)) {
+			throw new CakeException(__("A view block with the name '%s' is already/still open.", $name));
+		}
 		$this->_active[] = $name;
 		ob_start();
 	}

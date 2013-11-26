@@ -2,8 +2,6 @@
 /**
  * SchemaShellTest Test file
  *
- * PHP 5
- *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -587,7 +585,7 @@ class SchemaShellTest extends CakeTestCase {
 
 /**
  * test that passing name and file creates the passed filename with the
- * passed classname
+ * passed class name
  *
  * @return void
  */

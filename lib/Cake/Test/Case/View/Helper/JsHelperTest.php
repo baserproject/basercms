@@ -4,8 +4,6 @@
  *
  * TestCase for the JsHelper
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -367,7 +365,7 @@ class JsHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testWriteScriptsInFile() {
-		$this->skipIf(!is_writable(JS), 'webroot/js is not Writable, script caching test has been skipped.');
+		$this->skipIf(!is_writable(WWW_ROOT . 'js'), 'webroot/js is not Writable, script caching test has been skipped.');
 
 		Configure::write('Cache.disable', false);
 		$this->Js->request->webroot = '/';

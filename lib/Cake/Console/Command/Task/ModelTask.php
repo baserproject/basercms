@@ -2,8 +2,6 @@
 /**
  * The ModelTask handles creating and updating models files.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -863,7 +861,7 @@ class ModelTask extends BakeTask {
  * @return array
  */
 	public function listAll($useDbConfig = null) {
-		$this->_tables = (array)$this->getAllTables($useDbConfig);
+		$this->_tables = $this->getAllTables($useDbConfig);
 
 		$this->_modelNames = array();
 		$count = count($this->_tables);
@@ -942,6 +940,7 @@ class ModelTask extends BakeTask {
 			$this->err(__d('cake_console', 'Your database does not have any tables.'));
 			return $this->_stop();
 		}
+		sort($tables);
 		return $tables;
 	}
 

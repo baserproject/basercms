@@ -6,8 +6,6 @@
  *
  * You can configure a FileEngine cache, using Cache::config()
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -44,7 +42,7 @@ class FileEngine extends CacheEngine {
  *
  * - path = absolute path to cache directory, default => CACHE
  * - prefix = string prefix for filename, default => cake_
- * - lock = enable file locking on write, default => false
+ * - lock = enable file locking on write, default => true
  * - serialize = serialize the data, default => true
  *
  * @var array

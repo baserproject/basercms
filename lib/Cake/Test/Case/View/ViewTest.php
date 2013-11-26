@@ -2,8 +2,6 @@
 /**
  * ViewTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -1513,6 +1511,20 @@ class ViewTest extends CakeTestCase {
 
 		$this->assertEquals('In first In first', $this->View->fetch('first'));
 		$this->assertEquals('In second', $this->View->fetch('second'));
+	}
+
+/**
+ * Test that starting the same block twice throws an exception
+ *
+ * @expectedException CakeException
+ * @return void
+ */
+	public function testStartBlocksTwice() {
+		$this->View->start('first');
+		echo 'In first ';
+		$this->View->start('second');
+		echo 'In second';
+		$this->View->start('first');
 	}
 
 /**
