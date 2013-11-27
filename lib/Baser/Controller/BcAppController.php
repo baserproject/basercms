@@ -176,11 +176,14 @@ class BcAppController extends Controller {
 				$this->siteConfigs['version'] = $this->getBaserVersion();
 				$SiteConfig->saveKeyValue($this->siteConfigs);
 			}
-			
-		} elseif($this->name != 'Installations' && $this->name != 'CakeError') {
-			$this->redirect('/');
+		} else {
+			if($this->name != 'Installations') {
+				if($this->name == 'CakeError' && $request->params['controller'] != 'installations') {
+					$this->redirect('/');
+				}
+			}
 		}
-
+		
 		// TODO beforeFilterでも定義しているので整理する
 		if($this->name == 'CakeError') {
 			
