@@ -268,8 +268,10 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 			'routes'	=> file_exists($pluginPath . 'Config' . DS . 'routes.php')
 		);
 		CakePlugin::load($plugin, $config);
+		if(file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+			Configure::load($plugin . '.setting');
+		}
 		CakePlugin::bootstrap($plugin);
-
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach($eventTargets as $eventTarget) {
