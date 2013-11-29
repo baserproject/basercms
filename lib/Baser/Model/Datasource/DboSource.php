@@ -3500,7 +3500,7 @@ class DboSource extends DataSource {
 		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => false));
 		
-		if($options['tables'][$basename]) {
+		if(!empty($options['tables'][$basename])) {
 			$options = array('tables' => array($basename => $options['tables'][$basename]));
 		} else {
 			// テーブルが存在しなかった場合はtrueを返して終了
