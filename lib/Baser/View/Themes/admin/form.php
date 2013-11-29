@@ -72,7 +72,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Theme.url', 'URL') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Theme.url', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'disabled' => $configDisabled)) ?>
+				<?php echo $this->BcForm->input('Theme.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255, 'disabled' => $configDisabled)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('Theme.url') ?>
 				<div id="helptextUrl" class="helptext">
@@ -85,7 +85,7 @@ $(window).load(function() {
 		</tr>
 	</table>
 </div>
-<?php if(!$folderDisabled): ?>
+<?php if(!$folderDisabled && $siteConfig['theme'] != $this->BcForm->value('Theme.name')): ?>
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除', 
