@@ -34,7 +34,9 @@ $(function(){
  */
 	$("#BtnPreview").click(function(){
 		var contents = $("#PageContents").val();
-		$("#PageContents").val(editor_contents_tmp.getData());
+		if(typeof editor_contents_tmp != "undefined") {
+			$("#PageContents").val(editor_contents_tmp.getData());
+		}
 		$.ajax({
 			type: "POST",
 			url: $("#PreviewUrl").html(),
@@ -68,7 +70,9 @@ $(function(){
 				return false;
 			}
 		}
-		editor_contents_tmp.execCommand('synchronize');
+		if(typeof editor_contents_tmp != "undefined") {
+			editor_contents_tmp.execCommand('synchronize');
+		}
 		$("#PageMode").val('save');
 		$("#PageForm").submit();
 	});

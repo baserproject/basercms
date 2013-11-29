@@ -40,7 +40,9 @@ $(function(){
 	$("#BtnPreview").click(function(){
 				
 		var detail = $("#BlogPostDetail").val();
-		$("#BlogPostDetail").val(editor_detail_tmp.getData());
+		if(typeof editor_detail_tmp != "undefined") {
+			$("#BlogPostDetail").val(editor_detail_tmp.getData());
+		}
 		
 		$.ajax({
 			type: "POST",
@@ -65,8 +67,9 @@ $(function(){
  * フォーム送信時イベント
  */
 	$("#BtnSave").click(function(){
-			
-		editor_detail_tmp.execCommand('synchronize');
+		if(typeof editor_detail_tmp != "undefined") {
+			editor_detail_tmp.execCommand('synchronize');
+		}
 		
 		$("#BlogPostMode").val('save');
 		$("#BlogPostForm").submit();
