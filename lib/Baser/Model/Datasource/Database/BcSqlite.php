@@ -714,9 +714,6 @@ class BcSqlite extends Sqlite {
 							foreach ($column as $field => $col) {
 								$col['name'] = $field;
 								$alter = 'ADD '.$this->buildColumn($col);
-								if (isset($col['after'])) {
-									$alter .= ' AFTER '. $this->name($col['after']);
-								}
 								$colList[] = $alter;
 							}
 						break;
@@ -967,7 +964,8 @@ class BcSqlite extends Sqlite {
 
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
-		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $this->readSchema($_table);
+		//$schema = $Schema->read(array('models'=>array($model)));
 		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
@@ -1027,7 +1025,9 @@ class BcSqlite extends Sqlite {
 		
 		$fields = '';
 		foreach($schema as $key => $field) {
-			$fields .= '"'.$key.'",';
+			if($key != 'tableParameters') {
+				$fields .= '"'.$key.'",';
+			}
 		}
 		return substr($fields,0,strlen($fields)-1);
 	}
