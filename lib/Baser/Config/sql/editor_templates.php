@@ -18,7 +18,7 @@ class EditorTemplatesSchema extends CakeSchema {
 	var $editor_templates = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
-		'image' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
+		'image' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
 		'description' => array('type' => 'string', 'null' => false, 'default' => NULL),
 		'html' => array('type' => 'text', 'null' => false, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
