@@ -78,32 +78,36 @@ class UsersController extends AppController {
  * @return void
  */
 	public function beforeFilter() {
-		/* 認証設定 */
-		// parent::beforeFilterの前に記述する必要あり
-		$this->BcAuth->allow(
-			'admin_login',
-			'admin_logout',
-			'admin_login_exec',
-			'admin_reset_password',
-			'admin_ajax_login'
-		);
-		$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
+		
+		if(BC_INSTALLED) {
+			/* 認証設定 */
+			// parent::beforeFilterの前に記述する必要あり
+			$this->BcAuth->allow(
+				'admin_login',
+				'admin_logout',
+				'admin_login_exec',
+				'admin_reset_password',
+				'admin_ajax_login'
+			);
+			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
 
-		// =====================================================================
-		// Ajaxによるログインの場合、loginAction が、表示URLと違う為、
-		// BcAuthコンポーネントよりコントローラーのisAuthorized を呼びだせない。
-		// 正常な動作となるように書き換える。
-		// =====================================================================
-		if (!empty($this->request->params['prefix'])) {
-			$prefix = $this->request->params['prefix'];
-			if ($this->RequestHandler->isAjax() && $this->request->action == $prefix . '_ajax_login') {
-				Configure::write('BcAuthPrefix.' . $prefix . '.loginAction', '/' . $prefix . '/' . $this->request->params['controller'] . '/ajax_login');
-			}
-		} else {
-			if ($this->RequestHandler->isAjax() && $this->request->action == 'ajax_login') {
-				Configure::write('BcAuthPrefix.front.loginAction', '/' . $this->request->params['controller'] . '/ajax_login');
+			// =====================================================================
+			// Ajaxによるログインの場合、loginAction が、表示URLと違う為、
+			// BcAuthコンポーネントよりコントローラーのisAuthorized を呼びだせない。
+			// 正常な動作となるように書き換える。
+			// =====================================================================
+			if (!empty($this->request->params['prefix'])) {
+				$prefix = $this->request->params['prefix'];
+				if ($this->RequestHandler->isAjax() && $this->request->action == $prefix . '_ajax_login') {
+					Configure::write('BcAuthPrefix.' . $prefix . '.loginAction', '/' . $prefix . '/' . $this->request->params['controller'] . '/ajax_login');
+				}
+			} else {
+				if ($this->RequestHandler->isAjax() && $this->request->action == 'ajax_login') {
+					Configure::write('BcAuthPrefix.front.loginAction', '/' . $this->request->params['controller'] . '/ajax_login');
+				}
 			}
 		}
+			
 		parent::beforeFilter();
 
 		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'ajax_login');
