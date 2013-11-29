@@ -1415,8 +1415,10 @@ class BcAppModel extends Model {
 	public function checkDate($check) {
 		
 		$value = $check[key($check)];
-		if(!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d') ){
-			return false;
+		if (DS != '\\') {
+			if(!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d') ){
+				return false;
+			}
 		}
 		if(date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
 			return false;
