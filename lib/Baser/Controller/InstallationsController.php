@@ -603,7 +603,8 @@ class InstallationsController extends AppController {
 		}
 
 		/* SQLite利用可否チェック */
-		if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=')) {
+		// windowsは一旦非サポート
+		if(class_exists('PDO') && version_compare ( preg_replace('/[a-z-]/','', phpversion()),'5','>=') && (DS != '\\')) {
 
 			$pdoDrivers = PDO::getAvailableDrivers();
 			if(in_array('sqlite',$pdoDrivers)) {
