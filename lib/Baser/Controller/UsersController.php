@@ -473,7 +473,7 @@ class UsersController extends AppController {
 				} else {
 					
 					// よく使う項目のデータを再セット
-					$user = $this->User->read(null, $id);
+					$user = $this->User->find('first', array('conditions' => array('User.id' => $id)));
 					unset($user['User']);
 					$this->request->data = array_merge($user, $this->request->data);
 					$this->setMessage('入力エラーです。内容を修正してください。', true);
