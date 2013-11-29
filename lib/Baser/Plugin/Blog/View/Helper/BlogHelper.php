@@ -68,7 +68,7 @@ class BlogHelper extends AppHelper {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
 		if($this->blogContent) {
-			$BlogPost = ClassRegistry::init('BLog.BlogPost');
+			$BlogPost = ClassRegistry::init('Blog.BlogPost');
 			$BlogPost->setupUpload($this->blogContent['id']);
 		}
 		
