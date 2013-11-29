@@ -11,7 +11,7 @@
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			cake
- * @subpackage		cake.app.controllers.components
+ * @subpackage		Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ define('MAPS_HOST', 'maps.googleapis.com');
  * GoogleMap コンポーネント
  *
  * @package cake
- * @subpackage cake.app.controllers.components
+ * @subpackage Baser.Controller.Component
  */
 class BcGmapsComponent  extends Component {
 /**

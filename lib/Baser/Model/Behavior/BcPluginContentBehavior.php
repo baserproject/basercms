@@ -7,15 +7,6 @@
  * [http://example/コンテンツ名/コントローラー/アクション]形式のURLでアクセスする為のビヘイビア
  * プラグインコンテンツテーブルへの自動的なデータの追加と削除を実装する。
  *
- * 以下が必須項目
- * ◆ /app/Config/plugin.php
- * ◆ /app/models/plugin_content.php
- * ◆ plugin_contents テーブル
- * 詳しくは、/app/Config/plugin.php を参照
- *
- * 【注意点】
- * このビヘイビアを実装するモデルはプラグイン名と同じモデルもしくは、[プラグイン名Content]である必要がある
- *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -23,7 +14,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.models.behaviors
+ * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -33,7 +24,7 @@
 /**
  * プラグインコンテンツビヘイビア
  *
- * @package baser.models.behaviors
+ * @package Baser.Model.Behavior
  */
 class BcPluginContentBehavior extends ModelBehavior {
 /**

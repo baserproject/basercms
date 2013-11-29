@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.models
+ * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,7 +20,7 @@
 /**
  * よく使う項目　モデル
  *
- * @package baser.models
+ * @package Baser.Model
  */
 class Favorite extends AppModel {
 	

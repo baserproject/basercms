@@ -25,7 +25,7 @@
  * BcAdminヘルパー
  *
  * @package cake
- * @subpackage baser.app.views.helpers
+ * @subpackage Baser.View.Helper
  */
 class BcAdminHelper extends AppHelper {
 

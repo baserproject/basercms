@@ -23,7 +23,7 @@
 /**
  * XMLヘルパー拡張
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcXmlHelper extends AppHelper {
 /**

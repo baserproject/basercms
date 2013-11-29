@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.models.behaviors
+ * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,7 +20,7 @@
 /**
  * キャッシュビヘイビア
  *
- * @subpackage		baser.models.behaviors
+ * @subpackage		Baser.Model.Behavior
  */
 class BcCacheBehavior extends ModelBehavior {
 /**

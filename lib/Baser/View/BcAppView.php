@@ -23,7 +23,7 @@
 /**
  * view 拡張クラス
  *
- * @package			baser.views
+ * @package			Baser.View
  */
 class BcAppView extends View {
 /**

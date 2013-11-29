@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2012, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$

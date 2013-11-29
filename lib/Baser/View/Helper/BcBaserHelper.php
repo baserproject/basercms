@@ -26,7 +26,7 @@ App::uses('AppHelper', 'View/Helper');
  * Baserヘルパー
  *
  * @package cake
- * @subpackage baser.app.views.helpers
+ * @subpackage Baser.View.Helper
  */
 class BcBaserHelper extends AppHelper {
 /**

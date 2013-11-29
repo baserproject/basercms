@@ -21,7 +21,7 @@ App::uses('Helper', 'View');
 /**
  * ページヘルパー
  *
- * @packa	ge baser.views.helpers
+ * @packa	ge Web.helpers
  */
 class BcPageHelper extends Helper {
 /**

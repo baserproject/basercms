@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@
 <div class="example-box">
 	<div class="head">新しいプラグインのインストール方法</div>
 	<ol>
-		<li>app/plugins/ フォルダに、入手したプラグインのフォルダをアップロードします。</li>
+		<li>app/Plugin/ フォルダに、入手したプラグインのフォルダをアップロードします。</li>
 		<li>プラグイン一覧に、新しいプラグインが表示されますので、その行の<?php $this->BcBaser->img('admin/icn_tool_install.png') ?>をクリックします。</li>
 		<li>登録画面が表示されますので「登録」ボタンをクリックしてインストールを完了します。</li>
 	</ol>

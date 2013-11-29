@@ -26,7 +26,7 @@ App::uses('BcGmapsComponent', 'Controller/Component');
  * GoogleMapヘルパー
  *
  * @package cake
- * @subpackage cake.app.views.helpers
+ * @subpackage Baser.View.Helper
  */
 class BcGooglemapsHelper extends AppHelper {
 /**

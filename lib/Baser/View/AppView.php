@@ -29,7 +29,7 @@ App::uses('BcAppView', 'View');
 /**
  * View 拡張クラス
  *
- * @package			baser.views
+ * @package			Baser.View
  */
 class AppView extends BcAppView {
 }

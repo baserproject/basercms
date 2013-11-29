@@ -11,7 +11,7 @@
  *  @copyright		Copyright 2008 - 2013, baserCMS Users Community
  *  @link          http://basercms.net SmartCake Project
  *  @package       cake
- *  @subpackage    cake.baser.views.helpers
+ *  @subpackage    cake.Web.helpers
  *  @since         SmartCake v 0.1.0
  *  @version       $Revision$
  *  @modifiedby    $LastChangedBy$
@@ -24,7 +24,7 @@
 /**
  * CSVヘルパー
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcCsvHelper extends AppHelper {
 /**

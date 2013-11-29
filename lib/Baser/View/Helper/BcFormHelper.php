@@ -30,7 +30,7 @@ App::uses('BcCkeditorHelper', 'View/Helper');
 /**
  * FormHelper 拡張クラス
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcFormHelper extends FormHelper {
 /**

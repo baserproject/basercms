@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.controllers
+ * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -24,7 +24,7 @@ App::uses('UsersController', 'Controller');
 /**
  * メンバーコントローラー（デモ用）
  *
- * @package baser.controllers
+ * @package Baser.Controller
  */
 class MembersController extends UsersController {
 /**

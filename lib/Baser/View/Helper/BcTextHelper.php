@@ -25,7 +25,7 @@ App::uses('BcTimeHelper', 'View/Helper');
 /**
  * Textヘルパー拡張
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcTextHelper extends TextHelper {
 

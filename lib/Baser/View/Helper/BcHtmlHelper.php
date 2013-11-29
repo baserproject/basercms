@@ -24,7 +24,7 @@ App::uses('HtmlHelper', 'View/Helper');
 /**
  * Htmlヘルパーの拡張クラス
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcHtmlHelper extends HtmlHelper {
 

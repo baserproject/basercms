@@ -20,7 +20,7 @@
 /**
  * モバイルヘルパー
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcMobileHelper extends Helper {
 /**

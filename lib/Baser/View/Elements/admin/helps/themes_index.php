@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,7 +20,7 @@
 ?>
 
 <p>ここではテーマを切り替えたり、テーマファイルを閲覧、編集したりとテーマの管理を行う事ができます。<br />
-	なお、テーマ「core」は、baserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
+	なお、コアテンプレートとは、baserCMSコアで準備しているテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
 <ul>
 	<li>テーマを切り替えるには、対象テーマの <?php $this->BcBaser->img('admin/icn_tool_apply.png') ?> ボタンをクリックします。</li>
 	<li>テーマを丸ごとコピーするには、対象テーマの <?php $this->BcBaser->img('admin/icn_tool_copy.png') ?> ボタンをクリックします。</li>

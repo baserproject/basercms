@@ -22,7 +22,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.models.datasources.dbo
+ * @package			Baser.Model.datasources.dbo
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -36,7 +36,7 @@ App::uses('DboSource', 'Model/Datasource');
 /**
  * CSV DBO Driver
  *
- * @package baser.models.datasources.dbo
+ * @package Baser.Model.datasources.dbo
  */
 class BcCsv extends DboSource {
 /**

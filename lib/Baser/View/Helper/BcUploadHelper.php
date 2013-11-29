@@ -24,7 +24,7 @@ App::uses('FormHelper', 'View/Helper');
 /**
  * アップロードヘルパー
  *
- * @package baser.views.helpers
+ * @package Web.helpers
  */
 class BcUploadHelper extends FormHelper {
 /**

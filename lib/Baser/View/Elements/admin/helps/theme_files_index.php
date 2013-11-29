@@ -10,7 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,7 +20,7 @@
 ?>
 
 <p>ここでは各テーマファイルの閲覧、編集、削除等を行う事ができます。<br />
-	なお、テーマ「core」は、baserCMSの核となるテーマで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
+	なお、コアテンプレートとは、baserCMSコアで準備しているテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。</p>
 <ul>
 	<li>上層のフォルダへ移動するには、
 		<?php $this->BcBaser->img('admin/up.gif',array('alt'=>'上へ','width'=>18)) ?>

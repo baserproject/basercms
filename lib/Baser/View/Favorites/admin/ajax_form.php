@@ -12,7 +12,7 @@
  *
  * @copyright		Copyright 2008 - 2013, Catchup, Inc.
  * @link			http://basercms.net BaserCMS Project
- * @package			uploader.views
+ * @package			Baser.View
  * @since			Baser v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
