@@ -50,8 +50,27 @@
 	</thead>
 	<tbody>
 	<?php if(!empty($dbDatas)): ?>
+		<?php $currentDepth = 0 ?>
 		<?php foreach($dbDatas as $data): ?>
-			<?php $this->BcBaser->element('blog_categories/index_row', array('data' => $data)) ?>
+<?php
+$rowIdTmps[$data['BlogCategory']['depth']] = $data['BlogCategory']['id'];
+// 階層が上がったタイミングで同階層よりしたのIDを削除
+if($currentDepth > $data['BlogCategory']['depth']) {
+	$i=$data['BlogCategory']['depth']+1;
+	while(isset($rowIdTmps[$i])) {
+		unset($rowIdTmps[$i]);
+		$i++;
+	}
+}
+$currentDepth = $data['BlogCategory']['depth'];
+$rowGroupId = array();
+foreach($rowIdTmps as $rowIdTmp) {
+	$rowGroupId[] = 'row-group-'.$rowIdTmp;
+}
+$rowGroupClass = ' class="depth-'.$data['BlogCategory']['depth'].' '.implode(' ', $rowGroupId).'"';
+?>
+			<?php $currentDepth = $data['BlogCategory']['depth'] ?>
+			<?php $this->BcBaser->element('blog_categories/index_row', array('data' => $data, 'rowGroupClass' => $rowGroupClass)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

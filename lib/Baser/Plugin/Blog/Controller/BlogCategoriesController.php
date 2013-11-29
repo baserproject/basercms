@@ -121,6 +121,9 @@ class BlogCategoriesController extends BlogAppController {
 			if(preg_match("/^([_]+)/i",$dbData,$matches)) {
 				$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
 				$category['BlogCategory']['title'] = $prefix.'└'.$category['BlogCategory']['title'];
+				$category['BlogCategory']['depth'] = strlen($matches[1]);
+			} else {
+				$category['BlogCategory']['depth'] = 0;
 			}
 			$dbDatas[] = $category;
 		}

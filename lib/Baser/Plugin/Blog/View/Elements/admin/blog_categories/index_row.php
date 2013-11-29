@@ -24,7 +24,7 @@ if(isset($user['user_group_id'])) {
 ?>
 
 
-<tr>
+<tr<?php echo $rowGroupClass ?>>
 	<td class="row-tools">
 <?php if($this->BcBaser->isAdminUser()): ?>
 		<?php echo $this->BcForm->checkbox('ListTool.batch_targets.'.$data['BlogCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogCategory']['id'])) ?>
