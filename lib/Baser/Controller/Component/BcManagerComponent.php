@@ -1646,6 +1646,11 @@ class BcManagerComponent extends Component {
  */
 	public function isCreatedAdminAssetsSymlink() {
 		
+		// Windowsの場合シンボリックリンクをサポートしないのでそのままtrueを返す
+		if (DS == '\\') {
+			return true;
+		}
+		
 		$viewPath = getViewPath();
 		$css = $viewPath . 'css'  . DS . 'admin';
 		$js = $viewPath . 'js'  . DS . 'admin';
