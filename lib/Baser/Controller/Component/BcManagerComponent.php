@@ -1681,17 +1681,17 @@ class BcManagerComponent extends Component {
 		$img = $viewPath . 'img'  . DS . 'admin';
 		$result = true;
 		if(!is_dir($css) && !is_link($css)) {
-			if(!symlink($adminCss, $css)) {
+			if(!@symlink($adminCss, $css)) {
 				$result = false;
 			}
 		}
 		if(!is_dir($js) && !is_link($js)) {
-			if(!symlink($adminJs, $js)) {
+			if(!@symlink($adminJs, $js)) {
 				$result = false;
 			}
 		}
 		if(!is_dir($img) && !is_link($img)) {
-			if(!symlink($adminImg, $img)) {
+			if(!@symlink($adminImg, $img)) {
 				$result = false;
 			}
 		}
