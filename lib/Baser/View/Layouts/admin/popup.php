@@ -32,8 +32,7 @@
 <!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 <?php $this->BcBaser->js(array(
 	'jquery-1.4.2.min',
-	'admin/jquery.dimensions.min',
-	'jquery-ui-1.7.2.custom.min',
+	'jquery-ui-1.8.19.custom.min',
 	'admin/i18n/ui.datepicker-ja',
 	'admin/jquery.bt.min',
 	'admin/jquery.corner-2.12',

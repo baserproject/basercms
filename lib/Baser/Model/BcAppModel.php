@@ -26,7 +26,6 @@ App::uses('Folder', 'Utility');
 App::uses('Model', 'Model');
 App::uses('Dblog', 'Model');
 App::uses('AppController', 'Controller');
-App::uses('DbRestore', 'Vendor');
 
 /**
  * Model 拡張クラス
