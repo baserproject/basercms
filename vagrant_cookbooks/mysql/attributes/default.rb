@@ -1,0 +1,1 @@
+default["mysql"]["password"] = "root"

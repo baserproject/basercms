@@ -1,0 +1,27 @@
+#Header {
+	border-top-color:MAIN;
+}
+a {
+	color:LINK;
+}
+a:link {
+	color:LINK;
+}
+a:visited {
+	color:LINK;
+}
+a:hover {
+	color:HOVER;
+}
+#top-main-telfax-title{
+	background-color:MAIN;
+}
+#Footer {
+	background-color:MAIN;
+}
+#ContentsBody h2{
+    background-color:MAIN;
+}
+table.blog-calendar td.today{
+	color:MAIN;
+}

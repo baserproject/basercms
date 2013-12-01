@@ -1,1 +1,0 @@
-<?php require ROOT.DS.'baser'.DS.'config'.DS.'session.php'; ?>

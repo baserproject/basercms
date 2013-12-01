@@ -1,0 +1,1 @@
+default["postgres"]["password"] = "root"
