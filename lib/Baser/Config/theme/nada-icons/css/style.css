@@ -551,11 +551,42 @@ table.blog-calendar td.today{
 	float:left;
 	border-right:1px #CCCCCC dotted;
 }
-#top-main-telfax-tel{
-	padding:10px 0;
+#top-main-telfax-tel {
+    background: url("../img/tel_icon.png") no-repeat scroll 0 2px transparent;
+    height: 27px;
+    margin-top: 10px;
+    padding: 10px 0;
+    position: relative;
+}
+.top-tel {
+    font-size: 22px;
+    left: 33px;
+    position: absolute;
+    top: 0;
+}
+.top-tel-time {
+    font-size: 12px;
+    left: 255px;
+    position: absolute;
+    top: -3px;
 }
 #top-main-telfax-fax{
-	padding:10px 0;
+    background: url("../img/fax_icon.png") no-repeat scroll 0 2px transparent;
+    height: 27px;
+    padding: 10px 0;
+    position: relative;
+}
+.top-fax {
+    font-size: 22px;
+    left: 33px;
+    position: absolute;
+    top: 0;
+}
+.top-fax-time {
+    font-size: 12px;
+    left: 255px;
+    position: absolute;
+    top: -3px;
 }
 .telfax-tel{
 	margin-left:5px;
@@ -568,8 +599,15 @@ table.blog-calendar td.today{
 	width:315px;
 	float:right;
 }
-#top-main-contact{
-	padding:10px 0;
+#top-main-contact {
+    background-color: #FFFFFF;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    padding: 10px 10px 5px;
 }
 #top-main-serch .search-box{
 	padding:0;
@@ -578,7 +616,9 @@ table.blog-calendar td.today{
 #top-main-serch #ContentSearchForm #ContentQ{
 	width:245px;
 }
-
+#top-main-webcontact {
+    padding: 10px 0;
+}
 
 #footer-menu{
     margin: 0 auto;
