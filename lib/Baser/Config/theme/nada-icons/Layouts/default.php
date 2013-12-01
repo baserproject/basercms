@@ -71,11 +71,17 @@
             <div id="top-contents-main">
                 <div id="top-main-telfax-title">お気軽にお問い合わせ下さい</div>
                 <div id="top-main-telfax-left">
-                    <div id="top-main-telfax-tel"><?php $this->BcBaser->img('icons/icons_ico_squ_07.png'); ?><?php $this->BcBaser->img('icons_tel.png',array('class' => 'telfax-tel')); ?></div>
-                    <div id="top-main-telfax-fax"><?php $this->BcBaser->img('icons/icons_ico_squ_08.png'); ?><?php $this->BcBaser->img('icons_fax.png',array('class' => 'telfax-fax')); ?></div>
+                    <div id="top-main-telfax-tel">
+                        <p class="top-tel">TEL 092-000-5555</p>
+                        <p class="top-tel-time">受付時間：平日<br>9:30〜18:30</p>
+                    </div>
+                    <div id="top-main-telfax-fax">
+                        <p class="top-fax">FAX 092-000-5555</p>
+                        <p class="top-fax-time">受付時間<br>24時間受付</p>
+                    </div>
                 </div>
                 <div id="top-main-telfax-right">
-                    <div id="top-main-contact"><?php $this->BcBaser->img('icons_contact.png',array('url' => '/contact')); ?></div>
+                    <div id="top-main-webcontact"><?php $this->BcBaser->img('icons_contact.png',array('url' => '/contact')); ?></div>
                     <div id="top-main-serch"><?php $this->BcBaser->element('search') ?></div>
                 </div>
             </div>
