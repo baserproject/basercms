@@ -62,6 +62,19 @@ class EditorTemplatesController extends AppController {
  * @var array
  */
 	public $helpers = array('BcUpload');
+	
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();		
+		if(!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+			$this->helpers[] = $this->siteConfigs['editor'];
+		}		
+	}
+	
 /**
  * [ADMIN] 一覧 
  */
