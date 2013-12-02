@@ -45,10 +45,10 @@ class BcSmartphoneHelper extends Helper {
 			if(Configure::read('BcAgent.smartphone.autoLink')) {
 				$currentAlias = Configure::read('BcRequest.agentAlias');
 				// 一旦プレフィックスを除外
-				$reg = '/<a.*?href="'.preg_quote(BC_BASE_URL, '/').'('.$currentAlias.'\/([^\"]*?))\"/';
+				$reg = '/href="'.preg_quote(BC_BASE_URL, '/').'('.$currentAlias.'\/([^\"]*?))\"/';
 				$view->output = preg_replace_callback($reg, array($this, '_removePrefix'), $view->output);
 				// プレフィックス追加
-				$reg = '/<a.*?href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
+				$reg = '/href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
 				$view->output = preg_replace_callback($reg, array($this, '_addPrefix'), $view->output);
 			}
 			
