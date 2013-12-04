@@ -99,7 +99,7 @@ class DashboardController extends AppController {
 		$this->setViewConditions('Dblog', array('default' => $default));
 		
 		$this->paginate = array(
-				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
+				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
 				'limit' => $this->passedArgs['num']
 		);
 		
