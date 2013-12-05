@@ -63,7 +63,7 @@ App::build(array(
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
  */
-if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', ROOT)) {
+if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
 	// CakePHP標準の配置
 	define('BC_DEPLOY_PATTERN', 3);
 } elseif (ROOT . DS == WWW_ROOT) {
