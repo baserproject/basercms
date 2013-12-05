@@ -303,8 +303,10 @@ class InstallationsController extends AppController {
  */
 	protected function _sendCompleteMail($email, $name, $password) {
 
-		$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
-		$this->sendMail($email, 'baserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
+		if (DS !== '\\') {
+			$body = array('name'=>$name, 'password'=>$password, 'siteUrl' => siteUrl());
+			$this->sendMail($email, 'baserCMSインストール完了', $body, array('template'=>'installed', 'from'=>$email));
+		}
 
 	}
 /**
