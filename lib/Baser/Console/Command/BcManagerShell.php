@@ -74,7 +74,6 @@ class BcManagerShell extends BcAppShell {
  * startup 
  */
 	public function startup() {
-
 		parent::startup();
 		$this->BcManager = new BcManagerComponent(new ComponentCollection());
 	}
@@ -85,7 +84,6 @@ class BcManagerShell extends BcAppShell {
  * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -smarturl "スマートURL（true / false）" -baseurl "RewriteBaseに設定するURL"
  */
 	public function install() {
-
 		if (BC_INSTALLED) {
 			$this->err("既にインストール済です。 cake bc_manager reset を実行してください。");
 			return;
@@ -111,7 +109,6 @@ class BcManagerShell extends BcAppShell {
  * cake bc_manager reset
  */
 	public function reset() {
-
 		if (Configure::read('debug') != -1) {
 			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
 			return false;
@@ -127,7 +124,6 @@ class BcManagerShell extends BcAppShell {
  * コマンドはインストールと同じ
  */
 	public function reinstall() {
-
 		if (Configure::read('debug') != -1) {
 			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
 			return false;
@@ -151,7 +147,6 @@ class BcManagerShell extends BcAppShell {
  * cake bc_manager checkenv
  */
 	public function checkenv() {
-
 		$checkResult = $this->BcManager->checkEnv();
 		$this->out('基本必須条件');
 		$this->hr();
@@ -224,7 +219,6 @@ class BcManagerShell extends BcAppShell {
  * デモ用のCSVデータを初期化する
  */
 	public function initdemo() {
-
 		$dbConfig = getDbConfig();
 
 		// データベース初期化
@@ -294,7 +288,6 @@ class BcManagerShell extends BcAppShell {
  * @return boolean
  */
 	protected function _initDemoSiteConfigs() {
-
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$siteConfig = $SiteConfig->findExpanded();
 		$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
@@ -309,7 +302,6 @@ class BcManagerShell extends BcAppShell {
  * @return boolean 
  */
 	protected function _initDemoUsers() {
-
 		$User = ClassRegistry::init('User');
 
 		$ret = true;
@@ -320,8 +312,9 @@ class BcManagerShell extends BcAppShell {
 		$user['User']['real_name_1'] = 'admin';
 		$user['User']['user_group_id'] = 1;
 		$User->create($user);
-		if (!$User->save())
+		if (!$User->save()) {
 			$ret = false;
+		}
 
 		$user['User']['name'] = 'operator';
 		$user['User']['password'] = Security::hash('demodemo', null, true);
@@ -330,8 +323,9 @@ class BcManagerShell extends BcAppShell {
 		$user['User']['real_name_1'] = 'member';
 		$user['User']['user_group_id'] = 2;
 		$User->create($user);
-		if (!$User->save())
+		if (!$User->save()) {
 			$ret = false;
+		}
 
 		return $ret;
 	}
@@ -340,7 +334,6 @@ class BcManagerShell extends BcAppShell {
  * インストール 
  */
 	protected function _install() {
-
 		if (count($this->args) < 2) {
 			$this->err("引数を見なおしてください。");
 			return false;
@@ -364,7 +357,7 @@ class BcManagerShell extends BcAppShell {
 		);
 
 		if (isset($this->params['smarturl'])) {
-			$smartUrl = (boolean) $this->params['smarturl'];
+			$smartUrl = (boolean)$this->params['smarturl'];
 		} else {
 			$smartUrl = false;
 		}
@@ -389,18 +382,17 @@ class BcManagerShell extends BcAppShell {
  * @return mixed Array Or false
  */
 	protected function _getDbParams() {
-
 		$dbConfig = array(
-			'datasource'=> '',
-			'host'		=> '',
-			'database'	=> '',
-			'login'		=> '',
-			'password'	=> '',
-			'prefix'	=> '',
-			'port'		=> '',
-			'persistent'=> false,
-			'schema'	=> '',
-			'encoding'	=> 'utf8'
+			'datasource'	=> '',
+			'host'			=> '',
+			'database'		=> '',
+			'login'			=> '',
+			'password'		=> '',
+			'prefix'		=> '',
+			'port'			=> '',
+			'persistent'	=> false,
+			'schema'		=> '',
+			'encoding'		=> 'utf8'
 		);
 
 		if (!empty($this->args[1])) {
@@ -468,7 +460,6 @@ class BcManagerShell extends BcAppShell {
  * reset 
  */
 	protected function _reset() {
-
 		$dbConfig = getDbConfig();
 		return $this->BcManager->reset($dbConfig);
 	}

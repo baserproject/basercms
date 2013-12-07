@@ -215,7 +215,7 @@ class BaserTestShell extends TestShell {
 			}
 
 			return $testCase;
-		} else if ($category === 'baser') {
+		} elseif ($category === 'baser') {
 
 			$testCase = str_replace(DS, '/', $file);
 			$testCase = preg_replace('@.*lib/Baser/@', '', $file);
