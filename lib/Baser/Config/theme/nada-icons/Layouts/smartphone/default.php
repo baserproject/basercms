@@ -32,32 +32,32 @@
 					<div id="Logo"><h1><?php $this->BcBaser->logo(array('link' => '/s/')) ?></h1></div>
 				</div>
 				<div class="clearfix" id="global_menu">
-<?php $this->BcBaser->element('global_menu') ?>
+					<?php $this->BcBaser->element('global_menu') ?>
 				</div>
 			</header>
 
-				<?php if ($this->BcBaser->isHome()): ?>
-				<div id="top-main">
-				<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'link' => '')) ?>
-				</div>
-				<?php
-				/*
-				 * スライダーは色々設定ができるので参考にして下さい  http://zxcvbnmnbvcxz.com/demonstration/bxslide.html 
-				 * 設定ファイルは js/nada-icons です
-				 */
-				?>
-				<?php endif ?>
+		<?php if ($this->BcBaser->isHome()): ?>
+			<div id="top-main">
+			<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'link' => '')) ?>
+			</div>
+			<?php
+			/*
+			 * スライダーは色々設定ができるので参考にして下さい  http://zxcvbnmnbvcxz.com/demonstration/bxslide.html
+			 * 設定ファイルは js/nada-icons です
+			 */
+			?>
+		<?php endif; ?>
 
 			<div id="ContentsBody" class="contents-body clearfix">
 				<?php $this->BcBaser->flash() ?>
-<?php $this->BcBaser->content() ?>
-<?php $this->BcBaser->element('contents_navi') ?>
+				<?php $this->BcBaser->content() ?>
+				<?php $this->BcBaser->element('contents_navi') ?>
 			</div>
 
 			<div>
-		<?php if(!empty($widgetArea)): ?>
-		<?php $this->BcBaser->element('widget_area',array('no'=>$widgetArea)) ?>
-<?php endif ?>
+			<?php if(!empty($widgetArea)): ?>
+				<?php $this->BcBaser->element('widget_area', array('no' => $widgetArea)); ?>
+			<?php endif; ?>
 			</div>
 
 			<section id="ToTop">
@@ -66,17 +66,17 @@
 
 			<footer>
 				<div class="clearfix" id="global_menu">
-<?php $this->BcBaser->element('global_menu') ?>
+					<?php $this->BcBaser->element('global_menu') ?>
 				</div>
 
 				<address>Copyright(C) 2008 - <?php echo date('Y') ?> <br />baserCMS All rights Reserved.</address>
 				<div class="banner">
-<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project', 'border' => "0")), 'http://basercms.net') ?>
-<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0")), 'http://cakephp.jp') ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project', 'border' => "0")), 'http://basercms.net') ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0")), 'http://cakephp.jp') ?>
 				</div>
 			</footer>
 
 		</div>
-<?php $this->BcBaser->func() ?>
+		<?php $this->BcBaser->func() ?>
 	</body>
 </html>

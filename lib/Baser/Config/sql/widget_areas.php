@@ -5,24 +5,25 @@
 
 class WidgetAreasSchema extends CakeSchema {
 
-	var $name = 'WidgetAreas';
-	var $file = 'widget_areas.php';
-	var $connection = 'baser';
+	public $name = 'WidgetAreas';
 
-	function before($event = array()) {
+	public $file = 'widget_areas.php';
+
+	public $connection = 'baser';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
-		
+	public function after($event = array()) {
 	}
 
-	var $widget_areas = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 4, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'widgets' => array('type' => 'text', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $widget_areas = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 4, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null),
+		'widgets' => array('type' => 'text', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 

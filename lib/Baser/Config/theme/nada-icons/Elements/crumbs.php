@@ -44,4 +44,3 @@ if ($this->viewPath == 'home') {
 	}
 	$this->BcBaser->crumbs(' &gt; ', 'ホーム');
 }
-?>

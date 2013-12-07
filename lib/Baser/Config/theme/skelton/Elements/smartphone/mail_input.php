@@ -17,10 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($blockStart)) {
+if (!isset($blockStart)) {
 	$blockStart = 0;
 }
-if(!isset($blockEnd)) {
+if (!isset($blockEnd)) {
 	$blockEnd = null;
 }
 $data = array(

@@ -38,35 +38,35 @@
 					<?php $this->BcBaser->element('sidebox') ?>
 
 				<div id="Beta">
-						<?php if (!$this->BcBaser->isHome()): ?>
-						<div id="Navigation">
+					<?php if (!$this->BcBaser->isHome()): ?>
+					<div id="Navigation">
 						<?php $this->BcBaser->element('crumbs'); ?>
-						</div>
+					</div>
+					<?php endif; ?>
+
+					<?php if ($this->BcBaser->isHome()): ?>
+					<div id="top-main">
+						<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'width' => 750)) ?>
+					</div>
+					<?php
+					/*
+					 * スライダーは色々設定ができるので参考にして下さい  http://zxcvbnmnbvcxz.com/demonstration/bxslide.html
+					 * 設定ファイルは js/nada-icons です
+					 */
+					?>
 					<?php endif ?>
 
-						<?php if ($this->BcBaser->isHome()): ?>
-						<div id="top-main">
-						<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'width' => 750)) ?>
-						</div>
-						<?php
-						/*
-						 * スライダーは色々設定ができるので参考にして下さい  http://zxcvbnmnbvcxz.com/demonstration/bxslide.html 
-						 * 設定ファイルは js/nada-icons です
-						 */
-						?>
-						<?php endif ?>
-
 					<div id="ContentsBody" class="clearfix">
-						<?php if ($this->BcBaser->isHome()): ?>
-								<?php $this->BcBaser->element('toppage') ?>
-							<?php else: ?>
-							<div class="subpage">
-								<?php $this->BcBaser->flash() ?>
-	<?php $this->BcBaser->content() ?>
+					<?php if ($this->BcBaser->isHome()): ?>
+						<?php $this->BcBaser->element('toppage') ?>
+					<?php else: ?>
+						<div class="subpage">
+							<?php $this->BcBaser->flash() ?>
+							<?php $this->BcBaser->content() ?>
 							<?php $this->BcBaser->element('contents_navi') ?>
-								<div class="to-top"> <a href="#Page"><?php $this->BcBaser->img('icons_up.png'); ?>ページトップへ戻る</a></div>
-							</div>
-<?php endif ?>
+							<div class="to-top"> <a href="#Page"><?php $this->BcBaser->img('icons_up.png'); ?>ページトップへ戻る</a></div>
+						</div>
+					<?php endif ?>
 
 						<div id="top-contents-main">
 							<div id="top-main-telfax-title">お気軽にお問い合わせ下さい</div>

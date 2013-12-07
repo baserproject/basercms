@@ -3,6 +3,7 @@
 class ThemeConfigsSchema extends CakeSchema {
 
 	public $file = 'theme_configs.php';
+
 	public $connection = 'baser';
 
 	public function before($event = array()) {
@@ -10,7 +11,6 @@ class ThemeConfigsSchema extends CakeSchema {
 	}
 
 	public function after($event = array()) {
-		
 	}
 
 	public $theme_configs = array(

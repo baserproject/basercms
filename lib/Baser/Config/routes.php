@@ -141,28 +141,28 @@ if (BC_INSTALLED || isConsole()) {
 			$parameter = urldecode($parameter);
 
 			if (!$parameter) {
-				$_parameters = array('index');
+				$params = array('index');
 			} elseif (preg_match('/\/$/is', $parameter)) {
-				$_parameters = array($parameter . 'index');
+				$params = array($parameter . 'index');
 			} else {
-				$_parameters = array($parameter, $parameter . '/index');
+				$params = array($parameter, $parameter . '/index');
 			}
 
-			foreach ($_parameters as $_parameter) {
+			foreach ($params as $param) {
 
-				$linkedPages = $Page->isLinked($agentPrefix, '/' . $_parameter);
+				$linkedPages = $Page->isLinked($agentPrefix, '/' . $param);
 
 				if (!$agent || $linkedPages) {
-					$url = "/{$_parameter}";
+					$url = "/{$param}";
 				} else {
-					$url = "/{$agentPrefix}/{$_parameter}";
+					$url = "/{$agentPrefix}/{$param}";
 				}
 
 				if ($Page->isPageUrl($url) && $Page->checkPublish($url)) {
 					if (!$agent) {
-						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $_parameter)));
+						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 					} else {
-						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $_parameter)));
+						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 					}
 					break;
 				} else {
@@ -171,11 +171,11 @@ if (BC_INSTALLED || isConsole()) {
 					if (preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
 						if ($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))) {
-							$_parameter = str_replace('.html', '', $_parameter);
+							$param = str_replace('.html', '', $param);
 							if (!$agent) {
-								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
+								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $param));
 							} else {
-								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $_parameter)));
+								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 							}
 							break;
 						}

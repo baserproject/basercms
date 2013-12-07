@@ -5,25 +5,26 @@
 
 class PluginContentsSchema extends CakeSchema {
 
-	var $name = 'PluginContents';
-	var $file = 'plugin_contents.php';
-	var $connection = 'baser';
+	public $name = 'PluginContents';
 
-	function before($event = array()) {
+	public $file = 'plugin_contents.php';
+
+	public $connection = 'baser';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
-		
+	public function after($event = array()) {
 	}
 
-	var $plugin_contents = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'content_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
-		'plugin' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $plugin_contents = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'content_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'plugin' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 

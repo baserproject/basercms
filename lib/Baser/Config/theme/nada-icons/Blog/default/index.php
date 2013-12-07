@@ -17,11 +17,11 @@ $(function(){
 <?php $this->Blog->title() ?>
 </h2>
 <!-- blog description -->
-	<?php if ($this->Blog->descriptionExists()): ?>
+<?php if ($this->Blog->descriptionExists()): ?>
 	<p class="blog-description">
 	<?php $this->Blog->description() ?>
 	</p>
-<?php endif ?>
+<?php endif; ?>
 
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $post): ?>

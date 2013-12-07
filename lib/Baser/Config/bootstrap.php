@@ -34,29 +34,29 @@ define('BC_INSTALLED', isInstalled());
  * Baserパス追加
  */
 App::build(array(
-	'Controller'                => array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
-	'Model'                     => array_merge(App::path('Model'), array(BASER_MODELS)),
-	'Model/Behavior'            => array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
-	'Model/Datasource'          => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
+	'Controller' => array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
+	'Model' => array_merge(App::path('Model'), array(BASER_MODELS)),
+	'Model/Behavior' => array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
+	'Model/Datasource' => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
 	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
-	'Controller/Component'      => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
-	'View'                      => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
-	'View/Helper'               => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
-	'Plugin'                    => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
-	'Vendor'                    => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
-	'Locale'                    => array_merge(App::path('Locale'), array(BASER_LOCALES)),
-	'Lib'                       => array_merge(App::path('Lib'), array(BASER_LIBS)),
-	'Console'                   => array_merge(App::path('Console'), array(BASER_CONSOLES)),
-	'Console/Command'           => array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
-	'Routing/Filter'            => array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
+	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
+	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
+	'Vendor' => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
+	'Locale' => array_merge(App::path('Locale'), array(BASER_LOCALES)),
+	'Lib' => array_merge(App::path('Lib'), array(BASER_LIBS)),
+	'Console' => array_merge(App::path('Console'), array(BASER_CONSOLES)),
+	'Console/Command' => array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter' => array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
 App::build(array(
-	'Event'              => array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter'     => array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'TestSuite'          => array(BASER_TEST_SUITE),
+	'Event' => array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter' => array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'TestSuite' => array(BASER_TEST_SUITE),
 	'TestSuite/Reporter' => array(BASER_TEST_SUITE . 'Reporter' . DS),
-	'TestSuite/Fixture'  => array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network'            => array(BASER . 'Network' . DS)
+	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
+	'Network' => array(BASER . 'Network' . DS)
 	), App::REGISTER);
 
 /**
@@ -162,7 +162,7 @@ Configure::write($config);
  */
 $url = getUrlFromEnv(); // 環境変数からパラメータを取得
 $parameter = getUrlParamFromEnv();
-Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる	
+Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる
 
 if (BC_INSTALLED) {
 /**
@@ -311,7 +311,7 @@ mb_detect_order(Configure::read('BcEncode.detectOrder'));
 /**
  * メモリー設定
  */
-$memoryLimit = (int) ini_get('memory_limit');
+$memoryLimit = (int)ini_get('memory_limit');
 if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
@@ -402,9 +402,9 @@ if ($agentOn) {
 	// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
 	// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
 	//======================================================================
-	$_parameter = preg_replace('/^' . Configure::read('BcRequest.agentAlias') . '\//', '', $parameter);
-	if (preg_match('/^files/', $_parameter)) {
-		$redirectUrl = FULL_BASE_URL . '/' . $_parameter;
+	$param = preg_replace('/^' . Configure::read('BcRequest.agentAlias') . '\//', '', $parameter);
+	if (preg_match('/^files/', $param)) {
+		$redirectUrl = FULL_BASE_URL . '/' . $param;
 		header("HTTP/1.1 301 Moved Permanently");
 		header("Location: " . $redirectUrl);
 		exit();

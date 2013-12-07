@@ -185,7 +185,7 @@ $config['BcAgent'] = array(
 			'dream',			// Pre 1.5 Android
 			'CUPCAKE',			// 1.5+ Android
 			'blackberry9500',	// Storm
-			'blackberry9530',	 // Storm
+			'blackberry9530',	// Storm
 			'blackberry9520',	// Storm v2
 			'blackberry9550',	// Storm v2
 			'blackberry9800',	// Torch
