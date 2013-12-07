@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * エディタテンプレート　モデル
@@ -20,18 +21,21 @@
 /**
  * Include files
  */
+
 /**
  * エディタテンプレート　モデル
  *
  * @package Baser.Model
  */
 class EditorTemplate extends AppModel {
+
 /**
  * モデル名
  * 
  * @var string 
  */
 	public $name = 'EditorTemplate';
+
 /**
  * behaviors
  *
@@ -40,15 +44,16 @@ class EditorTemplate extends AppModel {
  */
 	public $actsAs = array(
 		'BcUpload' => array(
-			'saveDir'	=> "editor",
-			'fields'	=> array(
-				'image'	=> array(
-					'type'			=> 'image',
-					'namefield'		=> 'id',
-					'nameadd'		=> false,
-					'imageresize'	=> array('prefix' => 'template', 'width' => '100', 'height' => '100')
+			'saveDir' => "editor",
+			'fields' => array(
+				'image' => array(
+					'type' => 'image',
+					'namefield' => 'id',
+					'nameadd' => false,
+					'imageresize' => array('prefix' => 'template', 'width' => '100', 'height' => '100')
 				)
 			)
 		)
 	);
+
 }

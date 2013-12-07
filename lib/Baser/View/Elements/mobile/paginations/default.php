@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [MOBILE] ページネーション
@@ -17,13 +18,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!empty($this->Paginator)){
-	$this->passedArgs['action'] = str_replace('mobile_','',$this->passedArgs['action']);
+if (!empty($this->Paginator)) {
+	$this->passedArgs['action'] = str_replace('mobile_', '', $this->passedArgs['action']);
 	$this->passedArgs['plugin'] = '';
-	if($this->Paginator->counter(array('format'=>'%pages%'))>1){
-		echo $this->Paginator->prev('<<', null, null, null).'&nbsp;';
-		echo $this->Paginator->numbers(array('separator'=>'&nbsp;','modulus'=>4)).'&nbsp;';
+	if ($this->Paginator->counter(array('format' => '%pages%')) > 1) {
+		echo $this->Paginator->prev('<<', null, null, null) . '&nbsp;';
+		echo $this->Paginator->numbers(array('separator' => '&nbsp;', 'modulus' => 4)) . '&nbsp;';
 		echo $this->Paginator->next('>>', null, null, null);
 	}
 }
-?>

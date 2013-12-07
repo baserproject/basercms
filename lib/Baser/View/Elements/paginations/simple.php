@@ -17,17 +17,17 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(empty($this->Paginator)) {
+if (empty($this->Paginator)) {
 	return;
 }
-if(!isset($modules)) {
+if (!isset($modules)) {
 	$modules = 8;
 }
 ?>
-<?php if((int)$this->Paginator->counter(array('format'=>'%pages%')) > 1): ?>
-<div class="pagination">
-<?php echo $this->Paginator->prev('< 前へ', array('class'=>'prev'), null, array('class'=>'disabled')) ?>
-<?php echo $this->Html->tag('span', $this->Paginator->numbers(array('separator' => '', 'class' => 'number', 'modulus' => $modules), array('class' => 'page-numbers'))) ?>
-<?php echo $this->Paginator->next('次へ >', array('class'=>'next'), null, array('class'=>'disabled')) ?>
-</div>
+<?php if ((int) $this->Paginator->counter(array('format' => '%pages%')) > 1): ?>
+	<div class="pagination">
+		<?php echo $this->Paginator->prev('< 前へ', array('class' => 'prev'), null, array('class' => 'disabled')) ?>
+		<?php echo $this->Html->tag('span', $this->Paginator->numbers(array('separator' => '', 'class' => 'number', 'modulus' => $modules), array('class' => 'page-numbers'))) ?>
+		<?php echo $this->Paginator->next('次へ >', array('class' => 'next'), null, array('class' => 'disabled')) ?>
+	</div>
 <?php endif; ?>

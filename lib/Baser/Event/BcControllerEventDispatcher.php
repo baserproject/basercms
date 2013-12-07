@@ -1,5 +1,6 @@
 <?php
-/** 
+
+/**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -25,7 +26,7 @@
  * Controller.ControllerName.eventName
  */
 class BcControllerEventDispatcher extends Object implements CakeEventListener {
-	
+
 /**
  * implementedEvents
  * 
@@ -40,7 +41,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
 			'Controller.shutdown' => array('callable' => 'shutdown'),
 		);
 	}
-	
+
 /**
  * initialize
  * 
@@ -48,11 +49,11 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	function initialize(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('initialize', $event->data);
 		}
 	}
-	
+
 /**
  * startup
  * 
@@ -60,11 +61,11 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	function startup(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('startup', $event->data);
 		}
 	}
-	
+
 /**
  * beforeRender
  * 
@@ -72,11 +73,11 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	function beforeRender(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeRender', $event->data);
 		}
 	}
-	
+
 /**
  * beforeRedirect
  * 
@@ -84,16 +85,16 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return Responcse
  */
 	function beforeRedirect(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$currentEvent = $event->subject->dispatchEvent('beforeRedirect', $event->data);
-			if($currentEvent) {
+			if ($currentEvent) {
 				$event->data = $currentEvent->data;
 				return $currentEvent->result;
 			}
 		}
 		return null;
 	}
-	
+
 /**
  * shutdown
  * 
@@ -101,7 +102,7 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	function shutdown(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('shutdown', $event->data);
 		}
 	}

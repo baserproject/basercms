@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] メールフィールド Ajax 行コピー
@@ -18,4 +19,3 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->element('mail_fields/index_row', array('data' => $data, 'count' => 0));
-?>

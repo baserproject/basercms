@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* BlogComments schema generated on: 2010-11-04 18:11:11 : 1288863011*/
+/* BlogComments schema generated on: 2010-11-04 18:11:11 : 1288863011 */
+
 class BlogCommentsSchema extends CakeSchema {
+
 	var $name = 'BlogComments';
-
 	var $file = 'blog_comments.php';
-
 	var $connection = 'plugin';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class BlogCommentsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $blog_comments = array(
@@ -29,4 +31,5 @@ class BlogCommentsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

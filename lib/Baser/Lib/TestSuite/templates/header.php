@@ -127,7 +127,7 @@
 			div.code-coverage-results span.result-bad { color: #a00; }
 			div.code-coverage-results span.result-ok { color: #fa0; }
 			div.code-coverage-results span.result-good { color: #0a0; }
-			
+
 			div#version {
 				padding-top: 2px;
 				float: right;
@@ -139,8 +139,8 @@
 	<body>
 		<div id="container">
 			<div id="header">
-			<div id="version">PHPUnit: <?php echo class_exists('PHPUnit_Runner_Version') ? PHPUnit_Runner_Version::id() : 'n/a'; ?></div>
+				<div id="version">PHPUnit: <?php echo class_exists('PHPUnit_Runner_Version') ? PHPUnit_Runner_Version::id() : 'n/a'; ?></div>
 				<h1>CakePHP: the rapid development php framework</h1>
 			</div>
 			<div id="content">
-			<h2>CakePHP Test Suite 2.2</h2>
+				<h2>CakePHP Test Suite 2.2</h2>

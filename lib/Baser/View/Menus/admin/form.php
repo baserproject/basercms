@@ -31,15 +31,15 @@ $(window).load(function() {
 <?php echo $this->BcForm->input('Menu.id', array('type' => 'hidden')) ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
-<?php if($this->request->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Menu.id', 'NO') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('Menu.no') ?>
-				<?php echo $this->BcForm->input('Menu.no', array('type' => 'hidden')) ?>
-			</td>
-		</tr>
-<?php endif; ?>
+		<?php if ($this->request->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('Menu.id', 'NO') ?></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('Menu.no') ?>
+					<?php echo $this->BcForm->input('Menu.no', array('type' => 'hidden')) ?>
+				</td>
+			</tr>
+		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Menu.name', 'メニュー名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -74,14 +74,10 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit">
-<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('削除', 
-			array('action' => 'delete', $this->BcForm->value('Menu.id')),
-			array('class' => 'button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Menu.name')),
-			false); ?>
-<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php if ($this->action == 'admin_edit'): ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('Menu.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Menu.name')), false); ?>
+	<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

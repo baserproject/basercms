@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakeRequest
  *
@@ -16,7 +17,6 @@
  * @since         CakePHP(tm) v 2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Hash', 'Utility');
 
 /**
@@ -108,11 +108,11 @@ class CakeRequest implements ArrayAccess {
 		'ajax' => array('env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'),
 		'flash' => array('env' => 'HTTP_USER_AGENT', 'pattern' => '/^(Shockwave|Adobe) Flash/'),
 		'mobile' => array('env' => 'HTTP_USER_AGENT', 'options' => array(
-			'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
-			'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
-			'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
-			'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
-		)),
+				'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
+				'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
+				'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
+				'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
+			)),
 		'requested' => array('param' => 'requested', 'value' => 1)
 	);
 
@@ -168,8 +168,8 @@ class CakeRequest implements ArrayAccess {
 			($this->is('put') || $this->is('delete')) &&
 			strpos(env('CONTENT_TYPE'), 'application/x-www-form-urlencoded') === 0
 		) {
-				$data = $this->_readInput();
-				parse_str($data, $this->data);
+			$data = $this->_readInput();
+			parse_str($data, $this->data);
 		}
 		if (ini_get('magic_quotes_gpc') === '1') {
 			$this->data = stripslashes_deep($this->data);
@@ -251,9 +251,9 @@ class CakeRequest implements ArrayAccess {
 		// CUSTOMIZE ADD 2013/11/25 ryuring
 		// サブフォルダに設置した場合URIを正常に取得できない為調整
 		// >>>
-		if(Configure::read('App.baseUrl')) {
+		if (Configure::read('App.baseUrl')) {
 			$dir = dirname($this->base);
-			if(strpos($uri, $dir) === 0) {
+			if (strpos($uri, $dir) === 0) {
 				//$uri = substr($uri, strlen($dir));	
 			}
 		}
@@ -337,23 +337,23 @@ class CakeRequest implements ArrayAccess {
 
 		$docRoot = env('DOCUMENT_ROOT');
 		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
-		
+
 		// CUSTOMIZE MODIFY 2013/11/25 ryuring
 		// >>>
 		//if (!empty($base) || !$docRootContainsWebroot) {
 		// ---
-		
-		if(!$docRootContainsWebroot) {
+
+		if (!$docRootContainsWebroot) {
 			// サブフォルダに対応
 			$docRootContainsWebroot = (strpos(WWW_ROOT, $dir . DS . $webroot));
 		}
-		if(!$docRootContainsWebroot) {
+		if (!$docRootContainsWebroot) {
 			// BC_DEPLOY_PATTERN 2 に対応
 			$docRootContainsWebroot = (strpos(WWW_ROOT, $webroot));
 		}
-		
+
 		if (!empty($base) && !$docRootContainsWebroot) {
-		// <<<
+			// <<<
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/';
 			}
@@ -533,11 +533,11 @@ class CakeRequest implements ArrayAccess {
 				return env($detect['env']) == $detect['value'];
 			}
 			if (isset($detect['pattern'])) {
-				return (bool)preg_match($detect['pattern'], env($detect['env']));
+				return (bool) preg_match($detect['pattern'], env($detect['env']));
 			}
 			if (isset($detect['options'])) {
 				$pattern = '/' . implode('|', $detect['options']) . '/i';
-				return (bool)preg_match($pattern, env($detect['env']));
+				return (bool) preg_match($pattern, env($detect['env']));
 			}
 		}
 		if (isset($detect['param'])) {
@@ -624,7 +624,7 @@ class CakeRequest implements ArrayAccess {
  * @return The current object, you can chain this method.
  */
 	public function addParams($params) {
-		$this->params = array_merge($this->params, (array)$params);
+		$this->params = array_merge($this->params, (array) $params);
 		return $this;
 	}
 

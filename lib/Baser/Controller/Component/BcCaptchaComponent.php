@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * キャプチャコンポーネント
@@ -20,6 +21,7 @@
 App::import('Vendor', 'kcaptcha/kcaptcha');
 
 class BcCaptchaComponent extends Component {
+
 /**
  * Vendorsフォルダのパス
  * kcaptchaの設定ファイルを読み込む為に利用
@@ -28,6 +30,7 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public $vendorsPath = BASER_VENDORS;
+
 /**
  * アルファベットの組み合わせ（半角記号も可）
  * kcaptcha_config.php で設定されたものを読み込む為に利用
@@ -36,6 +39,7 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public $alphabet = '';
+
 /**
  * 代替文字の組み合わせ
  * kcaptcha_config.php で設定されたものを読み込む為に利用
@@ -44,6 +48,7 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public $convert = '';
+
 /**
  * startup
  * 
@@ -52,10 +57,10 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function startup(Controller $controller) {
-		
+
 		$this->controller = $controller;
-	
 	}
+
 /**
  * キャプチャ画象を表示する
  * 
@@ -63,11 +68,11 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function render() {
-		
+
 		$kcaptcha = new KCAPTCHA();
 		$this->controller->Session->write('captcha', $kcaptcha->getKeyString());
-		
 	}
+
 /**
  * 認証を行う
  * 
@@ -76,18 +81,18 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function check($value) {
-		
-		include $this->vendorsPath.'kcaptcha/kcaptcha_config.php';
+
+		include $this->vendorsPath . 'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;
 		$this->convert = $convert;
 		$_value = $this->convert($this->controller->Session->read('captcha'));
-		if(!$_value){
+		if (!$_value) {
 			return false;
-		}else{
+		} else {
 			return ($value == $_value);
 		}
-			
 	}
+
 /**
  * kcaptchaで定義されたアルファベットを $convert に定義された任意の文字列に変換する
  * 
@@ -95,25 +100,25 @@ class BcCaptchaComponent extends Component {
  * @return	string
  * @access	public
  */
-	public function convert($key){
+	public function convert($key) {
 
 		$alphabets = $this->strSplit($this->alphabet);
 		$converts = $this->strSplit($this->convert);
 
 		$value = '';
 		$keys = $this->strSplit($key);
-		foreach ($keys as $key){
+		foreach ($keys as $key) {
 			$idx = array_search($key, $alphabets);
-			if($idx === false){
+			if ($idx === false) {
 				return false;
 			} else {
 				$value .= $converts[$idx];
 			}
 		}
-		
+
 		return $value;
-	
 	}
+
 /**
  * 文字列を１文字づつ分割して配列にする
  * PHP5であれば、str_splitが使える
@@ -123,15 +128,14 @@ class BcCaptchaComponent extends Component {
  * @access	public
  */
 	public function strSplit($str) {
-		
+
 		$arr = array();
 		if (is_string($str)) {
-			for ($i = 0; $i < mb_strlen($str,'UTF-8'); $i++) {
+			for ($i = 0; $i < mb_strlen($str, 'UTF-8'); $i++) {
 				array_push($arr, mb_substr($str, $i, 1, 'UTF-8'));
 			}
 		}
 		return $arr;
-		
 	}
-	
+
 }

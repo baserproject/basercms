@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* BlogCategories schema generated on: 2010-11-04 18:11:11 : 1288863011*/
+/* BlogCategories schema generated on: 2010-11-04 18:11:11 : 1288863011 */
+
 class BlogCategoriesSchema extends CakeSchema {
+
 	var $name = 'BlogCategories';
-
 	var $file = 'blog_categories.php';
-
 	var $connection = 'plugin';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class BlogCategoriesSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $blog_categories = array(
@@ -30,4 +32,5 @@ class BlogCategoriesSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

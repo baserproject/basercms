@@ -22,14 +22,14 @@
 <div id="errorPage">
 	<h2>クラスが見つかりません</h2>
 	<p class="error"> <strong>
-		<?php echo __('Error'); ?>
-		: </strong> <?php echo " <em>{$className}</em>"?> クラスが見つかりません。 </p>
+			<?php echo __('Error'); ?>
+			: </strong> <?php echo " <em>{$className}</em>" ?> クラスが見つかりません。 </p>
 	<p class="error"> <strong>
-		<?php echo __('Error'); ?>
-		: </strong> <?php echo " <em>{$className}</em>"?> クラスを定義するか、読み込まれているか確認してください。 </p>
-	<?php if($notice): ?>
-	<p class="notice"> <strong>
-		<?php echo __('Notice'); ?>
-		: </strong> <?php echo $notice ?> </p>
+			<?php echo __('Error'); ?>
+			: </strong> <?php echo " <em>{$className}</em>" ?> クラスを定義するか、読み込まれているか確認してください。 </p>
+	<?php if ($notice): ?>
+		<p class="notice"> <strong>
+				<?php echo __('Notice'); ?>
+				: </strong> <?php echo $notice ?> </p>
 	<?php endif ?>
 </div>

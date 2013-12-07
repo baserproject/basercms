@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [EMAIL] 空レイアウト
@@ -17,4 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-echo $content_for_layout; ?>
+echo $content_for_layout;

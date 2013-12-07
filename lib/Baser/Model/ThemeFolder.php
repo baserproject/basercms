@@ -1,5 +1,7 @@
 <?php
+
 /* SVN FILE: $Id$ */
+
 /**
  * テーマフォルダモデル
  * DB接続はしない
@@ -19,6 +21,7 @@
  * @license			http://basercms.net/license/index.html
  */
 class ThemeFolder extends AppModel {
+
 /**
  * クラス名
  *
@@ -26,6 +29,7 @@ class ThemeFolder extends AppModel {
  * @access public
  */
 	public $name = 'ThemeFolder';
+
 /**
  * use table
  * 
@@ -33,6 +37,7 @@ class ThemeFolder extends AppModel {
  * @access public
  */
 	public $useTable = false;
+
 /**
  * バリデーション
  *
@@ -41,36 +46,36 @@ class ThemeFolder extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'テーマフォルダ名を入力してください。',
-					'required'	=> true),
-			array(	'rule'		=> array('halfText'),
-					'message'	=> 'テーマフォルダ名は半角のみで入力してください。'),
-			array(  'rule'		=> array('duplicateThemeFolder'),
-					'message'	=> '入力されたテーマフォルダ名は、同一階層に既に存在します。')
+			array('rule' => array('notEmpty'),
+				'message' => 'テーマフォルダ名を入力してください。',
+				'required' => true),
+			array('rule' => array('halfText'),
+				'message' => 'テーマフォルダ名は半角のみで入力してください。'),
+			array('rule' => array('duplicateThemeFolder'),
+				'message' => '入力されたテーマフォルダ名は、同一階層に既に存在します。')
 		)
 	);
+
 /**
  * フォルダの重複チェック
  * 
  * @param array $check
  * @return boolean
  */
-	public function duplicateThemeFolder ($check) {
+	public function duplicateThemeFolder($check) {
 
-		if(!$check[key($check)]) {
+		if (!$check[key($check)]) {
 			return true;
 		}
-		if($check[key($check)] == $this->data['ThemeFolder']['pastname']) {
+		if ($check[key($check)] == $this->data['ThemeFolder']['pastname']) {
 			return true;
 		}
-		$targetPath = $this->data['ThemeFolder']['parent'].DS.$check[key($check)];
-		if(is_dir($targetPath)) {
+		$targetPath = $this->data['ThemeFolder']['parent'] . DS . $check[key($check)];
+		if (is_dir($targetPath)) {
 			return false;
-		}else {
+		} else {
 			return true;
 		}
-
 	}
-	
+
 }

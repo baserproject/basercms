@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * BcManagerコンポーネント
@@ -25,6 +26,7 @@ App::uses('Component', 'Controller');
 App::uses('ConnectionManager', 'Model');
 
 class BcManagerComponent extends Component {
+
 /**
  * baserCMSのインストール
  * 
@@ -35,113 +37,112 @@ class BcManagerComponent extends Component {
  * @return boolean 
  */
 	public function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = '') {
-		
-		if(!$dbDataPattern) {
+
+		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
-		
+
 		$result = true;
-		
+
 		// キャッシュ削除
 		clearAllCache();
-		
+
 		// 一時フォルダ作成
 		checkTmpFolders();
-		
-		if($dbConfig['datasource'] == 'sqlite' || $dbConfig['datasource'] == 'csv') {
-			switch($dbConfig['datasource']) {
+
+		if ($dbConfig['datasource'] == 'sqlite' || $dbConfig['datasource'] == 'csv') {
+			switch ($dbConfig['datasource']) {
 				case 'sqlite':
-					$dbFolderPath = APP.'db'.DS.'sqlite';
+					$dbFolderPath = APP . 'db' . DS . 'sqlite';
 					break;
 				case 'csv':
-					$dbFolderPath = APP.'db'.DS.'csv';
+					$dbFolderPath = APP . 'db' . DS . 'csv';
 					break;
-				
 			}
 			$Folder = new Folder();
-			if(!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 00777)){
+			if (!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 00777)) {
 				$this->log('データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。');
 				$result = false;
 			}
 		}
-		
+
 		// SecritySaltの設定
 		$securitySalt = $this->setSecuritySalt();
 		$securityCipherSeed = $this->setSecurityCipherSeed();
 
 		// インストールファイル作成
-		if(!$this->createInstallFile($securitySalt, $securityCipherSeed, $siteUrl)) {
+		if (!$this->createInstallFile($securitySalt, $securityCipherSeed, $siteUrl)) {
 			$this->log('インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
 			$result = false;
 		}
-		
+
 		// データベース設定ファイル生成
-		if(!$this->createDatabaseConfig($dbConfig)) {
+		if (!$this->createDatabaseConfig($dbConfig)) {
 			$this->log('データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
 			$result = false;
 		}
-		
+
 		// データベース初期化
-		if(!$this->constructionDb($dbConfig, $dbDataPattern)) {
+		if (!$this->constructionDb($dbConfig, $dbDataPattern)) {
 			$this->log('データベースの初期化に失敗しました。データベースの設定を見なおしてください。');
 			$result = false;
 		}
-		
-		if($adminUser) {
+
+		if ($adminUser) {
 			// サイト基本設定登録
-			if(!$this->setAdminEmail($adminUser['email'])) {
+			if (!$this->setAdminEmail($adminUser['email'])) {
 				$this->log('サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベースの設定を見なおしてください。');
 			}
 			// ユーザー登録
 			$adminUser['password_1'] = $adminUser['password'];
 			$adminUser['password_2'] = $adminUser['password'];
-			if(!$this->addDefaultUser($adminUser)) {
+			if (!$this->addDefaultUser($adminUser)) {
 				$this->log('初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。');
 				$result = false;
 			}
 		}
-		
+
 		// データベースの初期更新
-		if(!$this->executeDefaultUpdates($dbConfig)) {
+		if (!$this->executeDefaultUpdates($dbConfig)) {
 			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
 			return false;
 		}
-		
+
 		// テーマを配置
-		if(!$this->deployTheme()) {
+		if (!$this->deployTheme()) {
 			$this->log('テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
 			$result = false;
 		}
-		
+
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		if(!$this->isCreatedAdminAssetsSymlink()) {
+		if (!$this->isCreatedAdminAssetsSymlink()) {
 			$this->createAdminAssetsSymlink();
 		}
-		
+
 		// アップロード用初期フォルダを作成する
-		if(!$this->createDefaultFiles()) {
+		if (!$this->createDefaultFiles()) {
 			$this->log('アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限を確認してください。');
 			$result = false;
 		}
-		
+
 		// エディタテンプレート用の画像を配置
-		if(!$this->deployEditorTemplateImage()) {
+		if (!$this->deployEditorTemplateImage()) {
 			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
 			$result = false;
 		}
 
-		if($smartUrl) {
-			if(!$this->setSmartUrl(true, $baseUrl)) {
+		if ($smartUrl) {
+			if (!$this->setSmartUrl(true, $baseUrl)) {
 				$this->log('スマートURLの設定に失敗しました。.htaccessの書き込み権限を確認してください。');
 			}
 		}
 
 		// ページファイルを生成
 		$this->createPageTemplates();
-		
+
 		return $result;
-		
 	}
+
 /**
  * データベースに接続する
  *
@@ -151,15 +152,15 @@ class BcManagerComponent extends Component {
  */
 	public function connectDb($config, $name = 'baser') {
 
-		if($name == 'plugin') {
+		if ($name == 'plugin') {
 			$config['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		}
 
-		if(! $datasource = $this->getDatasourceName($config['datasource'])) {
+		if (!$datasource = $this->getDatasourceName($config['datasource'])) {
 			return ConnectionManager::getDataSource($name);
 		}
 
-		$result =  ConnectionManager::create($name ,array(
+		$result = ConnectionManager::create($name, array(
 				'datasource' => $datasource,
 				'persistent' => false,
 				'host' => $config['host'],
@@ -168,15 +169,14 @@ class BcManagerComponent extends Component {
 				'password' => $config['password'],
 				'database' => $config['database'],
 				'schema' => $config['schema'],
-				'prefix' =>  $config['prefix'],
+				'prefix' => $config['prefix'],
 				'encoding' => $config['encoding']));
 
-		if($result) {
+		if ($result) {
 			return $result;
 		} else {
 			return ConnectionManager::getDataSource($name);
 		}
-
 	}
 
 /**
@@ -187,24 +187,23 @@ class BcManagerComponent extends Component {
  * @access public
  */
 	public function getDatasourceName($datasource = null) {
-		$name = false ;
-		switch($datasource){
+		$name = false;
+		switch ($datasource) {
 			case 'postgres' :
 				$name = 'Database/BcPostgres';
-				break ;
+				break;
 			case 'mysql' :
 				$name = 'Database/BcMysql';
-				break ;
+				break;
 			case 'sqlite' :
 				$name = 'Database/BcSqlite';
-				break ;
+				break;
 			case 'csv' :
 				$name = 'Database/BcCsv';
-				break ;
+				break;
 			default :
-
 		}
-		return $name ;
+		return $name;
 	}
 
 /**
@@ -217,57 +216,57 @@ class BcManagerComponent extends Component {
  */
 	public function getRealDbName($type, $name) {
 
-		if(preg_match('/^\//', $name)) {
+		if (preg_match('/^\//', $name)) {
 			return $name;
 		}
 		/* dbName */
-		if(!empty($type) && !empty($name)) {
-			if($type == 'sqlite') {
-				return APP.'db'.DS.'sqlite'.DS.$name.'.db';
-			}elseif($type == 'csv') {
-				return APP.'db'.DS.'csv'.DS.$name;
+		if (!empty($type) && !empty($name)) {
+			if ($type == 'sqlite') {
+				return APP . 'db' . DS . 'sqlite' . DS . $name . '.db';
+			} elseif ($type == 'csv') {
+				return APP . 'db' . DS . 'csv' . DS . $name;
 			}
 		}
 
 		return $name;
-
 	}
+
 /**
  * テーマ用のページファイルを生成する
  *
  * @access	protected
  */
 	public function createPageTemplates() {
-		
+
 		$Page = new Page(null, null, 'baser');
 		clearAllCache();
 		$pages = $Page->find('all', array('recursive' => -1));
-		if($pages) {
-			foreach($pages as $page) {
+		if ($pages) {
+			foreach ($pages as $page) {
 				$Page->create($page);
 				$Page->afterSave(true);
 			}
 		}
 		return true;
-		
 	}
+
 /**
  * データベースのデータに初期更新を行う
  */
 	public function executeDefaultUpdates($dbConfig) {
-		
+
 		$result = true;
-		if(!$this->_updatePluginStatus($dbConfig)) {
+		if (!$this->_updatePluginStatus($dbConfig)) {
 			$this->log('プラグインの有効化に失敗しました。');
 			$result = false;
 		}
-		if(!$this->_updateBlogEntryDate($dbConfig)) {
+		if (!$this->_updateBlogEntryDate($dbConfig)) {
 			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
 		return $result;
-		
 	}
+
 /**
  * プラグインのステータスを更新する
  *
@@ -278,11 +277,11 @@ class BcManagerComponent extends Component {
 
 		$db = $this->_getDataSource('baser', $dbConfig);
 		$db->truncate('plugins');
-		
+
 		$version = getVersion();
 		$Plugin = new Plugin();
 		$corePlugins = Configure::read('BcApp.corePlugins');
-		
+
 		$result = true;
 		foreach ($corePlugins as $corePlugin) {
 			$data = array();
@@ -293,13 +292,13 @@ class BcManagerComponent extends Component {
 			$data['Plugin']['status'] = true;
 			$data['Plugin']['db_inited'] = true;
 			$Plugin->create($data);
-			if(!$Plugin->save()) {
+			if (!$Plugin->save()) {
 				$result = false;
 			}
 		}
 		return $result;
-
 	}
+
 /**
  * 登録日を更新する
  *
@@ -313,12 +312,12 @@ class BcManagerComponent extends Component {
 		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
 		$datas = $BlogPost->find('all', array('recursive' => -1));
-		if($datas) {
+		if ($datas) {
 			$ret = true;
-			foreach($datas as $data) {
+			foreach ($datas as $data) {
 				$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
 				$BlogPost->set($data);
-				if(!$BlogPost->save($data)) {
+				if (!$BlogPost->save($data)) {
 					$ret = false;
 				}
 			}
@@ -326,8 +325,8 @@ class BcManagerComponent extends Component {
 		} else {
 			return false;
 		}
-
 	}
+
 /**
  * サイト基本設定に管理用メールアドレスを登録する
  * 
@@ -336,13 +335,13 @@ class BcManagerComponent extends Component {
  * @access public 
  */
 	public function setAdminEmail($email) {
-		
+
 		App::uses('SiteConfig', 'Model');
 		$data['SiteConfig']['email'] = $email;
 		$SiteConfig = new SiteConfig();
 		return $SiteConfig->saveKeyValue($data);
-		
 	}
+
 /**
  * 初期ユーザーを登録する
  * 
@@ -350,31 +349,31 @@ class BcManagerComponent extends Component {
  * @return boolean 
  */
 	public function addDefaultUser($user, $securitySalt = '') {
-		
-		if($securitySalt) {
+
+		if ($securitySalt) {
 			Configure::write('Security.salt', $securitySalt);
 		}
-		
+
 		$user += array(
-			'real_name_1'=> $user['name']
+			'real_name_1' => $user['name']
 		);
 		$user = array_merge(array(
-			'name'			=> '',
-			'real_name_1'	=> '',
-			'email'			=> '',
-			'user_group_id'	=> 1,
-			'password_1'	=> '',
-			'password_2'	=> ''
-		), $user);
-	
+			'name' => '',
+			'real_name_1' => '',
+			'email' => '',
+			'user_group_id' => 1,
+			'password_1' => '',
+			'password_2' => ''
+			), $user);
+
 		$User = new User();
-		
+
 		$user['password'] = $user['password_1'];
 		$User->create($user);
-		
+
 		return $User->save();
-		
 	}
+
 /**
  * データベース設定ファイル[database.php]を保存する
  *
@@ -384,7 +383,7 @@ class BcManagerComponent extends Component {
  */
 	public function createDatabaseConfig($options = array()) {
 
-		if(!is_writable(APP . 'Config' . DS)) {
+		if (!is_writable(APP . 'Config' . DS)) {
 			return false;
 		}
 
@@ -398,76 +397,75 @@ class BcManagerComponent extends Component {
 			'prefix'	=> '',
 			'schema'	=> '',
 			'encoding'	=> 'utf8'
-		), $options);
-		
+			), $options);
+
 		extract($options);
 
 		$datasource = $this->getDatasourceName($datasource);
 
-		$dbfilename = APP . 'Config' . DS.'database.php';
+		$dbfilename = APP . 'Config' . DS . 'database.php';
 		$file = & new File($dbfilename);
 
-		if ($file!==false) {
+		if ($file !== false) {
 
 			if ($file->exists()) {
 				$file->delete();
 			}
 
 			$file->create();
-			$file->open('w',true);
+			$file->open('w', true);
 			$file->write("<?php\n");
 			$file->write("//\n");
 			$file->write("// Database Configuration File created by baserCMS Installation\n");
 			$file->write("//\n");
 			$file->write("class DATABASE_CONFIG {\n");
-			$file->write('public $baser = array('."\n");
-			$file->write("\t'datasource' => '".$datasource."',\n");
+			$file->write('public $baser = array(' . "\n");
+			$file->write("\t'datasource' => '" . $datasource . "',\n");
 			$file->write("\t'persistent' => false,\n");
-			$file->write("\t'host' => '".$host."',\n");
-			$file->write("\t'port' => '".$port."',\n");
-			$file->write("\t'login' => '".$login."',\n");
-			$file->write("\t'password' => '".$password."',\n");
-			$file->write("\t'database' => '".$database."',\n");
-			$file->write("\t'schema' => '".$schema."',\n");
-			$file->write("\t'prefix' => '".$prefix."',\n");
-			$file->write("\t'encoding' => '".$encoding."'\n");
+			$file->write("\t'host' => '" . $host . "',\n");
+			$file->write("\t'port' => '" . $port . "',\n");
+			$file->write("\t'login' => '" . $login . "',\n");
+			$file->write("\t'password' => '" . $password . "',\n");
+			$file->write("\t'database' => '" . $database . "',\n");
+			$file->write("\t'schema' => '" . $schema . "',\n");
+			$file->write("\t'prefix' => '" . $prefix . "',\n");
+			$file->write("\t'encoding' => '" . $encoding . "'\n");
 			$file->write(");\n");
 
-			$file->write('public $plugin = array('."\n");
-			$file->write("\t'datasource' => '".$datasource."',\n");
+			$file->write('public $plugin = array(' . "\n");
+			$file->write("\t'datasource' => '" . $datasource . "',\n");
 			$file->write("\t'persistent' => false,\n");
-			$file->write("\t'host' => '".$host."',\n");
-			$file->write("\t'port' => '".$port."',\n");
-			$file->write("\t'login' => '".$login."',\n");
-			$file->write("\t'password' => '".$password."',\n");
-			$file->write("\t'database' => '".$database."',\n");
-			$file->write("\t'schema' => '".$schema."',\n");
-			$file->write("\t'prefix' => '".$prefix.Configure::read('BcEnv.pluginDbPrefix')."',\n");
-			$file->write("\t'encoding' => '".$encoding."'\n");
+			$file->write("\t'host' => '" . $host . "',\n");
+			$file->write("\t'port' => '" . $port . "',\n");
+			$file->write("\t'login' => '" . $login . "',\n");
+			$file->write("\t'password' => '" . $password . "',\n");
+			$file->write("\t'database' => '" . $database . "',\n");
+			$file->write("\t'schema' => '" . $schema . "',\n");
+			$file->write("\t'prefix' => '" . $prefix . Configure::read('BcEnv.pluginDbPrefix') . "',\n");
+			$file->write("\t'encoding' => '" . $encoding . "'\n");
 			$file->write(");\n");
 
-			$file->write('public $test = array('."\n");
-			$file->write("\t'datasource' => '".$datasource."',\n");
+			$file->write('public $test = array(' . "\n");
+			$file->write("\t'datasource' => '" . $datasource . "',\n");
 			$file->write("\t'persistent' => false,\n");
-			$file->write("\t'host' => '".$host."',\n");
-			$file->write("\t'port' => '".$port."',\n");
-			$file->write("\t'login' => '".$login."',\n");
-			$file->write("\t'password' => '".$password."',\n");
-			$file->write("\t'database' => '".$database."',\n");
-			$file->write("\t'schema' => '".$schema."',\n");
+			$file->write("\t'host' => '" . $host . "',\n");
+			$file->write("\t'port' => '" . $port . "',\n");
+			$file->write("\t'login' => '" . $login . "',\n");
+			$file->write("\t'password' => '" . $password . "',\n");
+			$file->write("\t'database' => '" . $database . "',\n");
+			$file->write("\t'schema' => '" . $schema . "',\n");
 			$file->write("\t'prefix' => 'test_',\n");
-			$file->write("\t'encoding' => '".$encoding."'\n");
+			$file->write("\t'encoding' => '" . $encoding . "'\n");
 			$file->write(");\n");
 			$file->write("}\n");
-			
+
 			$file->close();
 			return true;
-
 		} else {
 			return false;
 		}
-
 	}
+
 /**
  * インストール設定ファイルを生成する
  * 
@@ -476,12 +474,12 @@ class BcManagerComponent extends Component {
  */
 	public function createInstallFile($securitySalt, $secrityCipherSeed, $siteUrl = "") {
 
-		$installFileName = APP . 'Config' . DS.'install.php';
-		
-		if(!$siteUrl) {
+		$installFileName = APP . 'Config' . DS . 'install.php';
+
+		if (!$siteUrl) {
 			$siteUrl = siteUrl();
 		}
-		$installCoreData = array("<?php",	
+		$installCoreData = array("<?php",
 			"Configure::write('Security.salt', '{$securitySalt}');",
 			"Configure::write('Security.cipherSeed', '{$secrityCipherSeed}');",
 			"Configure::write('Cache.disable', false);",
@@ -495,13 +493,13 @@ class BcManagerComponent extends Component {
 			"Cache::config('default', array('engine' => 'File'));",
 			"Configure::write('debug', 0);"
 		);
-		if(file_put_contents($installFileName, implode("\n", $installCoreData))) {
-			return chmod($installFileName,0666);
-		}else {
+		if (file_put_contents($installFileName, implode("\n", $installCoreData))) {
+			return chmod($installFileName, 0666);
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * セキュリティ用のキーを生成する
  *
@@ -513,12 +511,12 @@ class BcManagerComponent extends Component {
 
 		$keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$randkey = "";
-		for ($i=0; $i<$length; $i++)
-			$randkey .= substr($keyset, rand(0,strlen($keyset)-1), 1);
+		for ($i = 0; $i < $length; $i++)
+			$randkey .= substr($keyset, rand(0, strlen($keyset) - 1), 1);
 		Configure::write('Security.salt', $randkey);
 		return $randkey;
-
 	}
+
 /**
  * セキュリティ用の数字キーを生成する
  *
@@ -530,12 +528,12 @@ class BcManagerComponent extends Component {
 
 		$keyset = "0123456789";
 		$randkey = "";
-		for ($i=0; $i<$length; $i++)
-			$randkey .= substr($keyset, rand(0,strlen($keyset)-1), 1);
+		for ($i = 0; $i < $length; $i++)
+			$randkey .= substr($keyset, rand(0, strlen($keyset) - 1), 1);
 		Configure::write('Security.cipherSeed', $randkey);
 		return $randkey;
-
 	}
+
 /**
  * データベースを初期化する
  * 
@@ -546,19 +544,19 @@ class BcManagerComponent extends Component {
  * @access public 
  */
 	public function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
-		
-		if(!$dbDataPattern) {
+
+		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
-		
-		if($reset) {
+
+		if ($reset) {
 			$this->deleteTables();
 			$this->deleteTables('plugin');
 		}
-		
+
 		return $this->constructionDb($dbConfig, $dbDataPattern);
-		
 	}
+
 /**
  * データベースを構築する
  * 
@@ -569,96 +567,96 @@ class BcManagerComponent extends Component {
  */
 	public function constructionDb($dbConfig, $dbDataPattern = '') {
 
-		if(!$dbDataPattern) {
+		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
-		
-		if(!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
+
+		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
 		$dbConfig['prefix'].=Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach($corePlugins as $corePlugin) {
-			if(!$this->constructionTable(BASER_PLUGINS.$corePlugin.DS.'Config'.DS, 'plugin', $dbConfig, $dbDataPattern)) {
+		foreach ($corePlugins as $corePlugin) {
+			if (!$this->constructionTable(BASER_PLUGINS . $corePlugin . DS . 'Config' . DS, 'plugin', $dbConfig, $dbDataPattern)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
 		}
 
-		if(strpos($dbDataPattern, '.') === false) {
+		if (strpos($dbDataPattern, '.') === false) {
 			$this->log("データパターンの形式が不正です。");
 			return false;
 		}
 		list($theme, $pattern) = explode('.', $dbDataPattern);
-		
+
 		$coreExcludes = array('users', 'dblogs', 'plugins');
 
-		if($theme == 'core') {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
+		if ($theme == 'core') {
+			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
-			foreach($corePlugins as $corePlugin) {
-				if(!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, 'core', $corePlugin)) {
+			foreach ($corePlugins as $corePlugin) {
+				if (!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, 'core', $corePlugin)) {
 					$this->log("プラグインの初期データのロードに失敗しました。");
 					return false;
 				}
 			}
 		} else {
-			if(!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
+			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("初期データのロードに失敗しました。");
 				return false;
 			}
-			foreach($corePlugins as $corePlugin) {
-				if(!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, $theme, $corePlugin)) {
+			foreach ($corePlugins as $corePlugin) {
+				if (!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, $theme, $corePlugin)) {
 					$this->log("プラグインの初期データのロードに失敗しました。");
 					return false;
 				}
 			}
 		}
-		
+
 		if (!$this->initSystemData($dbConfig)) {
 			$this->log('システムデータの初期化に失敗しました。');
 			return false;
 		}
 
 		return true;
-
 	}
+
 /**
  * 全ての初期データセットのリストを取得する
  * 
  * @return array 
  */
 	public function getAllDefaultDataPatterns() {
-		
+
 		$patterns = array();
-		
+
 		// コア
 		$patterns = $this->getDefaultDataPatterns();
-		
+
 		// コアテーマ
-		$Folder = new Folder(BASER_CONFIGS.'theme');
+		$Folder = new Folder(BASER_CONFIGS . 'theme');
 		$files = $Folder->read(true, true);
-		foreach($files[0] as $theme) {
-			if($theme != 'empty') {
+		foreach ($files[0] as $theme) {
+			if ($theme != 'empty') {
 				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
 			}
 		}
-		
+
 		// 外部テーマ
 		$Folder = new Folder(BASER_THEMES);
 		$files = $Folder->read(true, true, false);
-		foreach($files[0] as $theme) {
-			if($theme != 'empty') {
+		foreach ($files[0] as $theme) {
+			if ($theme != 'empty') {
 				$patterns = array_merge($patterns, $this->getDefaultDataPatterns($theme));
 			}
 		}
-		
+
 		return $patterns;
-		
 	}
+
 /**
  * 初期データのセットを取得する
  * 
@@ -667,51 +665,50 @@ class BcManagerComponent extends Component {
  * @return array 
  */
 	public function getDefaultDataPatterns($theme = 'core', $options = array()) {
-		
+
 		$options = array_merge(array('useTitle' => true), $options);
 		extract($options);
 
 		$themePath = $dataPath = $title = '';
- 		if($theme == 'core') {
+		if ($theme == 'core') {
 			$dataPath = BASER_CONFIGS . 'data';
-		} elseif(is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data')) {
+		} elseif (is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data')) {
 			$themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
 			$dataPath = $themePath . 'Config' . DS . 'data';
-		} elseif(is_dir(BASER_THEMES . $theme . DS . 'Config' . DS . 'data')) {
+		} elseif (is_dir(BASER_THEMES . $theme . DS . 'Config' . DS . 'data')) {
 			$themePath = BASER_THEMES . $theme . DS;
 			$dataPath = $themePath . 'Config' . DS . 'data';
 		} else {
 			return array();
 		}
-		
-		if($themePath) {
-			if(file_exists($themePath . 'config.php')) {
+
+		if ($themePath) {
+			if (file_exists($themePath . 'config.php')) {
 				include $themePath . 'config.php';
 			}
 		} else {
 			$title = 'コア';
 		}
-		
-		if(!$title) {
+
+		if (!$title) {
 			$title = $theme;
-		}		
-		
+		}
+
 		$patterns = array();
 		$Folder = new Folder($dataPath);
 		$files = $Folder->read(true, true);
-		if($files[0]) {
-			foreach($files[0] as $pattern) {
-				if($useTitle) {
+		if ($files[0]) {
+			foreach ($files[0] as $pattern) {
+				if ($useTitle) {
 					$patternName = $title . ' ( ' . $pattern . ' )';
 				} else {
 					$patternName = $pattern;
 				}
-				$patterns[$theme.'.'.$pattern] = $patternName;
+				$patterns[$theme . '.' . $pattern] = $patternName;
 			}
 		}
-		
+
 		return $patterns;
-		
 	}
 
 /**
@@ -725,16 +722,16 @@ class BcManagerComponent extends Component {
  * @return boolean 
  */
 	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
-		
+
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
-		
+
 		// CSVの場合ロックを解除しないとデータの投入に失敗する
-		if($db->config['datasource'] == 'Database/BcCsv') {
+		if ($db->config['datasource'] == 'Database/BcCsv') {
 			$db->reconnect();
 		}
 
-		if($theme == 'core') {
-			if($plugin == 'core') {
+		if ($theme == 'core') {
+			if ($plugin == 'core') {
 				$paths = array(
 					BASER_CONFIGS . 'data' . DS . $pattern,
 					BASER_CONFIGS . 'data' . DS . 'default',
@@ -746,7 +743,7 @@ class BcManagerComponent extends Component {
 				);
 			}
 		} else {
-			if($plugin == 'core') {
+			if ($plugin == 'core') {
 				$paths = array(
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern
@@ -760,26 +757,26 @@ class BcManagerComponent extends Component {
 				);
 			}
 		}
-		
+
 		$pathExists = false;
-		foreach($paths as $path) {
-			if(is_dir($path)) {
+		foreach ($paths as $path) {
+			if (is_dir($path)) {
 				$pathExists = true;
 				break;
 			}
 		}
 
-		if(!$pathExists) {
+		if (!$pathExists) {
 			$this->log("初期データフォルダが見つかりません。");
 			return false;
 		}
-		
-		if($plugin == 'core') {
+
+		if ($plugin == 'core') {
 			$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		} else {
 			$corePath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default';
 		}
-		
+
 		$Folder = new Folder($corePath);
 		$files = $Folder->read(true, true);
 		$targetTables = $files[1];
@@ -788,19 +785,19 @@ class BcManagerComponent extends Component {
 		$files = $Folder->read(true, true, true);
 
 		$result = true;
-		
+
 		foreach ($targetTables as $targetTable) {
 			$targetTable = basename($targetTable, '.csv');
 			$loaded = false;
-			if(!in_array($targetTable, $excludes)) {
+			if (!in_array($targetTable, $excludes)) {
 				// 初期データ投入
-				foreach($files[1] as $file) {
-					if(!preg_match('/\.csv$/',$file)) {
+				foreach ($files[1] as $file) {
+					if (!preg_match('/\.csv$/', $file)) {
 						continue;
 					}
 					$table = basename($file, '.csv');
-					if($table == $targetTable) {
-						if(!$db->loadCsv(array('path' => $file, 'encoding' => 'SJIS'))){
+					if ($table == $targetTable) {
+						if (!$db->loadCsv(array('path' => $file, 'encoding' => 'SJIS'))) {
 							return false;
 							$this->log($file . ' の読み込みに失敗。');
 							$result = false;
@@ -811,18 +808,18 @@ class BcManagerComponent extends Component {
 					}
 				}
 				// 存在しなかった場合は、コアのファイルを読み込む
-				if(!$loaded) {
-					if(!$db->loadCsv(array('path' => $corePath . DS . $targetTable . '.csv', 'encoding' => 'SJIS'))){
+				if (!$loaded) {
+					if (!$db->loadCsv(array('path' => $corePath . DS . $targetTable . '.csv', 'encoding' => 'SJIS'))) {
 						$this->log($corePath . DS . $targetTable . ' の読み込みに失敗。');
 						$result = false;
 					}
-				}		
+				}
 			}
 		}
-		
+
 		return true;
-		
 	}
+
 /**
  * システムデータを初期化する
  * 
@@ -830,49 +827,47 @@ class BcManagerComponent extends Component {
  * @param array $dbConfig 
  */
 	public function initSystemData($dbConfig = null) {
-		
+
 		$db = $this->_getDataSource('baser', $dbConfig);
-		$corePath = BASER_CONFIGS.'data'.DS.'default';
+		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
-		
+
 		/* page_categories の初期データをチェック＆設定 */
 		$PageCategory = ClassRegistry::init('PageCategory');
 		$mobileId = $PageCategory->field('id', array(
-				'PageCategory.parent_id' => null,
-				'PageCategory.name'		=> 'mobile'
+			'PageCategory.parent_id' => null,
+			'PageCategory.name' => 'mobile'
 		));
 		$smartphoneId = $PageCategory->field('id', array(
-				'PageCategory.parent_id' => null,
-				'PageCategory.name'		=> 'smartphone'
+			'PageCategory.parent_id' => null,
+			'PageCategory.name' => 'smartphone'
 		));
 		// 一旦削除
 		$PageCategory->deleteAll(array(
-			'PageCategory.parent_id'	=> null,
+			'PageCategory.parent_id' => null,
 			'or' => array(
 				array('PageCategory.name' => 'mobile'),
 				array('PageCategory.name' => 'smartphone')
-		)), false);
+			)), false);
 		// 再登録
-		if(!$db->loadCsv(array('path' => $corePath . DS . 'page_categories.csv', 'encoding'=>'SJIS'))){
+		if (!$db->loadCsv(array('path' => $corePath . DS . 'page_categories.csv', 'encoding' => 'SJIS'))) {
 			$this->log($corePath . DS . 'page_categories.csv の読み込みに失敗。');
 			$result = false;
 		}
-		
+
 		// IDを更新
-		if($mobileId) {
+		if ($mobileId) {
 			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $mobileId), 
-					array('PageCategory.parent_id' => null, 'PageCategory.name' => 'mobile'
-					))) {
+					array('PageCategory.id' => $mobileId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'mobile'
+				))) {
 				$this->log('page_categories テーブルで、システムデータ mobile の id 更新に失敗。');
 				$result = false;
 			}
 		}
-		if($smartphoneId) {
+		if ($smartphoneId) {
 			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $smartphoneId), 
-					array('PageCategory.parent_id' => null, 'PageCategory.name' => 'smartphone'
-					))) {
+					array('PageCategory.id' => $smartphoneId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'smartphone'
+				))) {
 				$this->log('page_categories テーブルで、システムデータ smartphone の id 更新に失敗。');
 				$result = false;
 			}
@@ -884,45 +879,44 @@ class BcManagerComponent extends Component {
 		// 一旦削除
 		$UserGroup->delete($adminsId, false);
 		// 再登録
-		if(!$db->loadCsv(array('path' => $corePath . DS . 'user_groups.csv', 'encoding'=>'SJIS'))){
+		if (!$db->loadCsv(array('path' => $corePath . DS . 'user_groups.csv', 'encoding' => 'SJIS'))) {
 			$this->log($corePath . DS . 'user_groups.csv の読み込みに失敗。');
 			$result = false;
 		}
 		// IDを更新
-		if($adminsId) {
+		if ($adminsId) {
 			if (!$UserGroup->updateAll(
-					array('UserGroup.id' => $adminsId),
-					array('UserGroup.name' => 'admins')
-					)) {
+					array('UserGroup.id' => $adminsId), array('UserGroup.name' => 'admins')
+				)) {
 				$this->log('user_groups テーブルで、システムデータ admins の id 更新に失敗。');
 				$result = false;
 			}
 		} else {
 			$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
 		}
-		
+
 		/* users は全てのユーザーを削除 */
 		//======================================================================
 		// ユーザーグループを新しく読み込んだ場合にデータの整合性がとれない可能性がある為
 		//======================================================================
-		if(!$db->truncate('users')) {
+		if (!$db->truncate('users')) {
 			$this->log('users テーブルの初期化に失敗。');
 			$result = false;
 		}
-		
-		/* site_configs の初期データをチェック＆設定 */	
+
+		/* site_configs の初期データをチェック＆設定 */
 		$SiteConfig = ClassRegistry::init('SiteConfig');
-		if(!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
-				!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'google_analytics_id')) ||
-				!$SiteConfig->updateAll(array('SiteConfig.value' => true), array('SiteConfig.name' => 'first_access')) ||
-				!$SiteConfig->deleteAll(array('SiteConfig.name' => 'version'), false)) {
+		if (!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
+			!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'google_analytics_id')) ||
+			!$SiteConfig->updateAll(array('SiteConfig.value' => true), array('SiteConfig.name' => 'first_access')) ||
+			!$SiteConfig->deleteAll(array('SiteConfig.name' => 'version'), false)) {
 			$this->log('site_configs テーブルの初期化に失敗');
 			$result = false;
 		}
-		
+
 		return $result;
-		
 	}
+
 /**
  * テーブルを構築する
  *
@@ -935,42 +929,41 @@ class BcManagerComponent extends Component {
  */
 	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
 
-		if(!$dbDataPattern) {
+		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
-		
+
 		if (@!$db->connected && $datasource != 'csv') {
 			return false;
-		} elseif($datasource == 'csv') {
+		} elseif ($datasource == 'csv') {
 			// CSVの場合はフォルダを作成する
 			$Folder = new Folder($db->config['database'], true, 00777);
-		} elseif($datasource == 'sqlite') {
+		} elseif ($datasource == 'sqlite') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
 		}
 
 		// DB構築
-		$Folder = new Folder($path.'sql');
+		$Folder = new Folder($path . 'sql');
 		$files = $Folder->read(true, true, true);
-		if(isset($files[1])) {
-			foreach($files[1] as $file) {
+		if (isset($files[1])) {
+			foreach ($files[1] as $file) {
 
-				if(!preg_match('/\.php$/',$file)) {
+				if (!preg_match('/\.php$/', $file)) {
 					continue;
 				}
-				if(!$db->createTableBySchema(array('path'=>$file))){
+				if (!$db->createTableBySchema(array('path' => $file))) {
 					return false;
 				}
-				
 			}
 		}
-		
-		return true;
 
+		return true;
 	}
+
 /**
  * 全てのテーブルを削除する
  * 
@@ -981,18 +974,18 @@ class BcManagerComponent extends Component {
 	public function deleteAllTables($dbConfig = null) {
 
 		$result = true;
-		if(!$this->deleteTables('baser', $dbConfig)) {
+		if (!$this->deleteTables('baser', $dbConfig)) {
 			$result = false;
 		}
-		if($dbConfig) {
+		if ($dbConfig) {
 			$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		}
-		if(!$this->deleteTables('plugin', $dbConfig)) {
+		if (!$this->deleteTables('plugin', $dbConfig)) {
 			$result = false;
 		}
 		return $result;
-		
 	}
+
 /**
  * プラグインも含めて全てのテーブルをリセットする
  * 
@@ -1000,25 +993,25 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function resetAllTables($dbConfig = null, $excludes = array()) {
-		
+
 		$result = true;
-		if(!$this->resetTables('baser', $dbConfig, 'core', $excludes)) {
+		if (!$this->resetTables('baser', $dbConfig, 'core', $excludes)) {
 			$result = false;
 		}
-		if($dbConfig) {
+		if ($dbConfig) {
 			$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		}
-		
+
 		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach($corePlugins as $corePlugin) {
-			if(!$this->resetTables('plugin', $dbConfig, $corePlugin, $excludes)) {
+		foreach ($corePlugins as $corePlugin) {
+			if (!$this->resetTables('plugin', $dbConfig, $corePlugin, $excludes)) {
 				$result = false;
 			}
 		}
 
 		return $result;
-		
 	}
+
 /**
  * テーブルをリセットする
  * 
@@ -1027,22 +1020,22 @@ class BcManagerComponent extends Component {
  * @return boolean 
  */
 	public function resetTables($dbConfigKeyName = 'baser', $dbConfig = null, $plugin = 'core', $excludes = array()) {
-		
+
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
 		$sources = $db->listSources();
 		$result = true;
 		$plugin = Inflector::underscore($plugin);
 		foreach ($sources as $source) {
-			if (preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source, $matches)) {
-				$table = $matches[1];	
+			if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $source, $matches)) {
+				$table = $matches[1];
 				if ($plugin == 'core') {
-					if(preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."/", $table)) {
+					if (preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "/", $table)) {
 						continue;
 					}
 				} else {
 					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
-					if (!preg_match("/^".$plugin."_([^_].+)$/", $table)) {
+					if (!preg_match("/^" . $plugin . "_([^_].+)$/", $table)) {
 						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
 						if ($plugin != 'mail') {
 							continue;
@@ -1051,7 +1044,7 @@ class BcManagerComponent extends Component {
 						}
 					}
 				}
-				if(!in_array($table, $excludes)) {
+				if (!in_array($table, $excludes)) {
 					if (!$db->truncate($table)) {
 						$result = false;
 					}
@@ -1059,8 +1052,8 @@ class BcManagerComponent extends Component {
 			}
 		}
 		return $result;
-		
 	}
+
 /**
  * テーブルを削除する
  * 
@@ -1070,38 +1063,42 @@ class BcManagerComponent extends Component {
  * @access public
  * TODO 処理を DboSource に移動する
  * TODO コアのテーブルを削除する際、プレフィックスだけでは、プラグインを識別できないので、プラグインのテーブルも削除されてしまう。
- *		その為、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
- *		try で実行し、catch はスルーしている。
+ * 		その為、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
+ * 		try で実行し、catch はスルーしている。
  */
 	public function deleteTables($dbConfigKeyName = 'baser', $dbConfig = null) {
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
-		
+
 		/* 削除実行 */
 		// TODO schemaを有効活用すればここはスッキリしそうだが見送り
 		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
 		switch ($datasource) {
 			case 'mysql':
 				$sources = $db->listSources();
-				foreach($sources as $source) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
-						$sql = 'DROP TABLE '.$source;
+				foreach ($sources as $source) {
+					if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $source)) {
+						$sql = 'DROP TABLE ' . $source;
 						try {
 							$db->execute($sql);
-						} catch (Exception $e) {}
+						} catch (Exception $e) {
+							
+						}
 					}
 				}
 				break;
 
 			case 'postgres':
 				$sources = $db->listSources();
-				foreach($sources as $source) {
-					if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $source)) {
-						$sql = 'DROP TABLE '.$source;
+				foreach ($sources as $source) {
+					if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $source)) {
+						$sql = 'DROP TABLE ' . $source;
 						try {
 							$db->execute($sql);
-						} catch (Exception $e) {}
+						} catch (Exception $e) {
+							
+						}
 					}
 				}
 				// シーケンスも削除
@@ -1109,15 +1106,19 @@ class BcManagerComponent extends Component {
 				$sequences = array();
 				try {
 					$sequences = $db->query($sql);
-				} catch (Exception $e) {}
-				if($sequences) {
-					$sequences = Set::extract('/0/sequence_name',$sequences);
-					foreach($sequences as $sequence) {
-						if(preg_match("/^".$dbConfig['prefix']."([^_].+)$/", $sequence)) {
-							$sql = 'DROP SEQUENCE '.$sequence;
+				} catch (Exception $e) {
+					
+				}
+				if ($sequences) {
+					$sequences = Set::extract('/0/sequence_name', $sequences);
+					foreach ($sequences as $sequence) {
+						if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $sequence)) {
+							$sql = 'DROP SEQUENCE ' . $sequence;
 							try {
 								$db->execute($sql);
-							} catch (Exception $e) {}
+							} catch (Exception $e) {
+								
+							}
 						}
 					}
 				}
@@ -1129,18 +1130,17 @@ class BcManagerComponent extends Component {
 
 			case 'csv':
 				$folder = new Folder($dbConfig['database']);
-				$files = $folder->read(true,true,true);
-				foreach($files[1] as $file) {
-					if(basename($file) != 'empty') {
+				$files = $folder->read(true, true, true);
+				foreach ($files[1] as $file) {
+					if (basename($file) != 'empty') {
 						@unlink($file);
 					}
 				}
 				break;
-
 		}
 		return true;
-
 	}
+
 /**
  * データソースを取得する
  * 
@@ -1150,20 +1150,20 @@ class BcManagerComponent extends Component {
  * @access public
  */
 	public function _getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
-		
-		if($dbConfig) {
+
+		if ($dbConfig) {
 			$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['datasource']);
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);
-			if(!$db) {
+			if (!$db) {
 				$db = ConnectionManager::getDataSource($dbConfigKeyName);
 			}
 		} else {
 			$db = ConnectionManager::getDataSource($dbConfigKeyName);
 		}
-		
+
 		return $db;
-		
 	}
+
 /**
  * テーマを配置する
  *
@@ -1173,35 +1173,35 @@ class BcManagerComponent extends Component {
  */
 	public function deployTheme($theme = null) {
 
-		if($theme) {
-			if(is_array($theme)) {
+		if ($theme) {
+			if (is_array($theme)) {
 				$sources = $theme;
 			} else {
 				$sources = array($theme);
 			}
 		} else {
-			$Folder = new Folder(BASER_CONFIGS.'theme');
+			$Folder = new Folder(BASER_CONFIGS . 'theme');
 			$files = $Folder->read();
 			$sources = $files[0];
 		}
-		
+
 		$result = true;
-		foreach($sources as $theme) {
+		foreach ($sources as $theme) {
 			$targetPath = WWW_ROOT . 'theme' . DS . $theme;
-			$sourcePath = BASER_CONFIGS.'theme'.DS.$theme;
+			$sourcePath = BASER_CONFIGS . 'theme' . DS . $theme;
 			$Folder->delete($targetPath);
-			if($Folder->copy(array('to'=>$targetPath,'from'=>$sourcePath,'mode'=>00777,'skip'=>array('_notes')))) {
-				if(!$Folder->create($targetPath.DS.'Pages',00777)) {
+			if ($Folder->copy(array('to' => $targetPath, 'from' => $sourcePath, 'mode' => 00777, 'skip' => array('_notes')))) {
+				if (!$Folder->create($targetPath . DS . 'Pages', 00777)) {
 					$result = false;
 				}
 			} else {
 				$result = false;
 			}
 		}
-		
-		return $result;
 
+		return $result;
 	}
+
 /**
  * エディタテンプレート用のアイコン画像をデプロイ
  * 
@@ -1209,20 +1209,20 @@ class BcManagerComponent extends Component {
  * @access public
  */
 	public function deployEditorTemplateImage() {
-		
+
 		$path = WWW_ROOT . 'files' . DS . 'editor' . DS;
-		if(!is_dir($path)) {
+		if (!is_dir($path)) {
 			$Folder = new Folder();
 			$Folder->create($path, 0777);
 		}
-		
+
 		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		$result = true;
-		if(!empty($files[1])) {
-			foreach($files[1] as $file) {
-				if(copy($src . $file, $path . $file)) {
+		if (!empty($files[1])) {
+			foreach ($files[1] as $file) {
+				if (copy($src . $file, $path . $file)) {
 					@chmod($path . $file, 0666);
 				} else {
 					$result = false;
@@ -1230,30 +1230,28 @@ class BcManagerComponent extends Component {
 			}
 		}
 		return $result;
-		
 	}
-	
+
 /**
  * アップロード用初期フォルダを作成する
  */
 	public function createDefaultFiles() {
-		
+
 		$dirs = array('blog', 'editor', 'theme_configs');
 		$path = WWW_ROOT . 'files' . DS;
 		$Folder = new Folder();
-		
+
 		$result = true;
-		foreach($dirs as $dir) {
-			if(!is_dir($path . $dir)) {
-				if(!$Folder->create($path . $dir, 0777)) {
+		foreach ($dirs as $dir) {
+			if (!is_dir($path . $dir)) {
+				if (!$Folder->create($path . $dir, 0777)) {
 					$result = false;
 				}
 			}
 		}
 		return $result;
-		
 	}
-	
+
 /**
  * 設定ファイルをリセットする
  * 
@@ -1263,19 +1261,19 @@ class BcManagerComponent extends Component {
 	public function resetSetting() {
 
 		$result = true;
-		if(file_exists(APP . 'Config' . DS.'database.php')) {
-			if(!unlink(APP . 'Config' . DS.'database.php')) {
+		if (file_exists(APP . 'Config' . DS . 'database.php')) {
+			if (!unlink(APP . 'Config' . DS . 'database.php')) {
 				$result = false;
 			}
 		}
-		if(file_exists(APP . 'Config' . DS.'install.php')) {
-			if(!unlink(APP . 'Config' . DS.'install.php')) {
+		if (file_exists(APP . 'Config' . DS . 'install.php')) {
+			if (!unlink(APP . 'Config' . DS . 'install.php')) {
 				$result = false;
 			}
 		}
 		return $result;
-		
 	}
+
 /**
  * テーマのページテンプレートを初期化する 
  * 
@@ -1283,25 +1281,25 @@ class BcManagerComponent extends Component {
  * @access public
  */
 	public function resetThemePages() {
-		
+
 		$result = true;
 		$themeFolder = new Folder(WWW_ROOT . 'theme');
 		$themeFiles = $themeFolder->read(true, true, true);
-		foreach($themeFiles[0] as $theme){
+		foreach ($themeFiles[0] as $theme) {
 			$pagesFolder = new Folder($theme . DS . 'Pages');
-			$pathes = $pagesFolder->read(true,true,true);
-			foreach($pathes[0] as $path){
-				if(basename($path) != 'admin') {
+			$pathes = $pagesFolder->read(true, true, true);
+			foreach ($pathes[0] as $path) {
+				if (basename($path) != 'admin') {
 					$folder = new Folder();
-					if(!$folder->delete($path)) {
+					if (!$folder->delete($path)) {
 						$result = false;
 					}
 					$folder = null;
 				}
 			}
-			foreach($pathes[1] as $path){
-				if(basename($path) != 'empty') {
-					if(!unlink($path)) {
+			foreach ($pathes[1] as $path) {
+				if (basename($path) != 'empty') {
+					if (!unlink($path)) {
 						$result = false;
 					}
 				}
@@ -1310,8 +1308,8 @@ class BcManagerComponent extends Component {
 		}
 		$themeFolder = null;
 		return $result;
-		
 	}
+
 /**
  * baserCMSをリセットする
  * 
@@ -1323,51 +1321,52 @@ class BcManagerComponent extends Component {
 		$result = true;
 
 		// スマートURLをオフに設定
-		if($this->smartUrl()) {
-			if(!$this->setSmartUrl(false)){
+		if ($this->smartUrl()) {
+			if (!$this->setSmartUrl(false)) {
 				$result = false;
 				$this->log('スマートURLの設定を正常に初期化できませんでした。');
 			}
 		}
-		
-		if(BC_INSTALLED) {
+
+		if (BC_INSTALLED) {
 			// 設定ファイルを初期化
-			if(!$this->resetSetting()) {
+			if (!$this->resetSetting()) {
 				$result = false;
 				$this->log('設定ファイルを正常に初期化できませんでした。');
 			}
 			// テーブルを全て削除
-			if(!$this->deleteAllTables($dbConfig)) {
+			if (!$this->deleteAllTables($dbConfig)) {
 				$result = false;
 				$this->log('データベースを正常に初期化できませんでした。');
 			}
 		}
-		
+
 		// テーマのページテンプレートを初期化
-		if(!$this->resetThemePages()) {
+		if (!$this->resetThemePages()) {
 			$result = false;
 			$this->log('テーマのページテンプレートを初期化できませんでした。');
 		}
-		
+
 		ClassRegistry::flush();
 		clearAllCache();
 
 		return $result;
-
 	}
+
 /**
  * スマートURLの設定を取得
  *
  * @return	boolean
  * @access	public
  */
-	public function smartUrl(){
+	public function smartUrl() {
 		if (Configure::read('App.baseUrl')) {
 			return false;
 		} else {
 			return true;
 		}
 	}
+
 /**
  * スマートURLの設定を行う
  *
@@ -1378,33 +1377,33 @@ class BcManagerComponent extends Component {
 	public function setSmartUrl($smartUrl, $baseUrl = '') {
 
 		/* install.php の編集 */
-		if($smartUrl) {
-			if(!$this->setInstallSetting('App.baseUrl', "''")){
+		if ($smartUrl) {
+			if (!$this->setInstallSetting('App.baseUrl', "''")) {
 				return false;
 			}
 		} else {
-			if(!$this->setInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')){
+			if (!$this->setInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')) {
 				return false;
 			}
 		}
 
-		if(BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
+		if (BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
 			$webrootRewriteBase = '/';
 		} else {
-			$webrootRewriteBase = '/'.APP_DIR.'/webroot';
+			$webrootRewriteBase = '/' . APP_DIR . '/webroot';
 		}
 
 		/* /app/webroot/.htaccess の編集 */
-		$this->_setSmartUrlToHtaccess(WWW_ROOT.'.htaccess', $smartUrl, 'webroot', $webrootRewriteBase, $baseUrl);
+		$this->_setSmartUrlToHtaccess(WWW_ROOT . '.htaccess', $smartUrl, 'webroot', $webrootRewriteBase, $baseUrl);
 
-		if(BC_DEPLOY_PATTERN == 1) {
+		if (BC_DEPLOY_PATTERN == 1) {
 			/* /.htaccess の編集 */
-			$this->_setSmartUrlToHtaccess(ROOT.DS.'.htaccess', $smartUrl, 'root', '/', $baseUrl);
+			$this->_setSmartUrlToHtaccess(ROOT . DS . '.htaccess', $smartUrl, 'root', '/', $baseUrl);
 		}
 
 		return true;
-
 	}
+
 /**
  * .htaccess にスマートURLの設定を書きこむ
  *
@@ -1421,23 +1420,23 @@ class BcManagerComponent extends Component {
 		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
 
-		$rewritePatterns = array(	"/\n[^\n#]*RewriteEngine.+/i",
-									"/\n[^\n#]*RewriteBase.+/i",
-									"/\n[^\n#]*RewriteCond.+/i",
-									"/\n[^\n#]*RewriteRule.+/i");
-		switch($type) {
+		$rewritePatterns = array("/\n[^\n#]*RewriteEngine.+/i",
+			"/\n[^\n#]*RewriteBase.+/i",
+			"/\n[^\n#]*RewriteCond.+/i",
+			"/\n[^\n#]*RewriteRule.+/i");
+		switch ($type) {
 			case 'root':
-				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase, $baseUrl),
-											'RewriteRule ^$ '.APP_DIR.'/webroot/ [L]',
-											'RewriteRule (.*) '.APP_DIR.'/webroot/$1 [L]');
+				$rewriteSettings = array('RewriteEngine on',
+					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
+					'RewriteRule ^$ ' . APP_DIR . '/webroot/ [L]',
+					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]');
 				break;
 			case 'webroot':
-				$rewriteSettings = array(	'RewriteEngine on',
-											'RewriteBase '.$this->getRewriteBase($rewriteBase, $baseUrl),
-											'RewriteCond %{REQUEST_FILENAME} !-d',
-											'RewriteCond %{REQUEST_FILENAME} !-f',
-											'RewriteRule ^(.*)$ index.php [QSA,L]');
+				$rewriteSettings = array('RewriteEngine on',
+					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
+					'RewriteCond %{REQUEST_FILENAME} !-d',
+					'RewriteCond %{REQUEST_FILENAME} !-f',
+					'RewriteRule ^(.*)$ index.php [QSA,L]');
 				break;
 		}
 
@@ -1447,42 +1446,42 @@ class BcManagerComponent extends Component {
 		foreach ($rewritePatterns as $rewritePattern) {
 			$data = preg_replace($rewritePattern, '', $data);
 		}
-		if($smartUrl) {
-			$data .= "\n".implode("\n", $rewriteSettings);
+		if ($smartUrl) {
+			$data .= "\n" . implode("\n", $rewriteSettings);
 		}
-		ftruncate($file->handle,0);
-		if(!$file->write($data)){
+		ftruncate($file->handle, 0);
+		if (!$file->write($data)) {
 			$file->close();
 			return false;
 		}
 		$file->close();
-
 	}
+
 /**
  * RewriteBase の設定を取得する
  *
  * @param	string	$base
  * @return	string
  */
-	public function getRewriteBase($url, $baseUrl = null){
+	public function getRewriteBase($url, $baseUrl = null) {
 
-		if(!$baseUrl) {
+		if (!$baseUrl) {
 			$baseUrl = BC_BASE_URL;
 		}
-		
-		if(preg_match("/index\.php/", $baseUrl)){
+
+		if (preg_match("/index\.php/", $baseUrl)) {
 			$baseUrl = str_replace('/index.php', '', $baseUrl);
 		}
-		$baseUrl = preg_replace("/\/$/",'',$baseUrl);
-		if($url != '/' || !$baseUrl) {
+		$baseUrl = preg_replace("/\/$/", '', $baseUrl);
+		if ($url != '/' || !$baseUrl) {
 			$url = $baseUrl . $url;
-		}else{
+		} else {
 			$url = $baseUrl;
 		}
 
 		return $url;
-
 	}
+
 /**
  * インストール設定を書き換える
  *
@@ -1492,18 +1491,18 @@ class BcManagerComponent extends Component {
  * @access	public
  */
 	public function setInstallSetting($key, $value) {
-		
+
 		/* install.php の編集 */
-		$setting = "Configure::write('".$key."', ".$value.");\n";
+		$setting = "Configure::write('" . $key . "', " . $value . ");\n";
 		$key = str_replace('.', '\.', $key);
-		$pattern = '/Configure\:\:write[\s]*\([\s]*\''.$key.'\'[\s]*,[\s]*([^\s]*)[\s]*\);(\n|)/is';
-		$file = new File(APP . 'Config' . DS.'install.php');
-		if(file_exists(APP . 'Config' . DS.'install.php')) {
+		$pattern = '/Configure\:\:write[\s]*\([\s]*\'' . $key . '\'[\s]*,[\s]*([^\s]*)[\s]*\);(\n|)/is';
+		$file = new File(APP . 'Config' . DS . 'install.php');
+		if (file_exists(APP . 'Config' . DS . 'install.php')) {
 			$data = $file->read();
-		}else {
+		} else {
 			$data = "<?php\n";
 		}
-		if(preg_match($pattern, $data)) {
+		if (preg_match($pattern, $data)) {
 			$data = preg_replace($pattern, $setting, $data);
 		} else {
 			$data = $data . "\n" . $setting;
@@ -1511,69 +1510,68 @@ class BcManagerComponent extends Component {
 		$return = $file->write($data);
 		$file->close();
 		return $return;
-
 	}
+
 /**
  * 環境チェック
  * 
  * @return array 
  */
 	public function checkEnv() {
-		
-		if(function_exists('apache_get_modules')) {
+
+		if (function_exists('apache_get_modules')) {
 			$rewriteInstalled = in_array('mod_rewrite', apache_get_modules());
-		}else {
+		} else {
 			$rewriteInstalled = -1;
 		}
-		
+
 		$status = array(
-			'encoding'		=> mb_internal_encoding(),
-			'phpVersion'	=> phpversion(),
-			'phpMemory'		=> intval(ini_get('memory_limit')),
-			'safeModeOff'	=> !ini_get('safe_mode'),
-			'configDirWritable'	=> is_writable(APP . 'Config' . DS),
-			'themeDirWritable'	=> is_writable(WWW_ROOT.'theme'),
-			'filesDirWritable'	=> is_writable(WWW_ROOT.'files'),
-			'tmpDirWritable'	=> is_writable(TMP),
-			'dbDirWritable'		=> is_writable(APP.'db'),
-			'phpActualVersion'	=> preg_replace('/[a-z-]/','', phpversion()),
-			'phpGd'				=> extension_loaded('gd'),
-			'phpPdo'			=> extension_loaded('pdo'),
-			'apacheRewrite'		=> $rewriteInstalled,
+			'encoding'    => mb_internal_encoding(),
+			'phpVersion'  => phpversion(),
+			'phpMemory'   => intval(ini_get('memory_limit')),
+			'safeModeOff' => !ini_get('safe_mode'),
+			'configDirWritable' => is_writable(APP . 'Config' . DS),
+			'themeDirWritable'  => is_writable(WWW_ROOT . 'theme'),
+			'filesDirWritable'  => is_writable(WWW_ROOT . 'files'),
+			'tmpDirWritable'    => is_writable(TMP),
+			'dbDirWritable'     => is_writable(APP . 'db'),
+			'phpActualVersion'  => preg_replace('/[a-z-]/', '', phpversion()),
+			'phpGd'         => extension_loaded('gd'),
+			'phpPdo'        => extension_loaded('pdo'),
+			'apacheRewrite' => $rewriteInstalled,
 		);
 		$check = array(
-			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
-			'gdOk'	=> $status['phpGd'],
-			'pdoOk'	=> $status['phpPdo'],
-			'phpVersionOk'	=> version_compare ( preg_replace('/[a-z-]/','', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
-			'phpMemoryOk'	=> ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === TRUE)
+			'encodingOk'   => (eregi('UTF-8', $status['encoding']) ? true : false),
+			'gdOk'         => $status['phpGd'],
+			'pdoOk'        => $status['phpPdo'],
+			'phpVersionOk' => version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
+			'phpMemoryOk'  => ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === TRUE)
 		);
-		
-		if(!$status['configDirWritable']) {
+
+		if (!$status['configDirWritable']) {
 			@chmod(APP . 'Config' . DS, 0777);
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
 		}
-		if(!$status['themeDirWritable']) {
-			@chmod(WWW_ROOT.'theme', 0777);
-			$status['themeDirWritable'] = is_writable(WWW_ROOT.'theme');
+		if (!$status['themeDirWritable']) {
+			@chmod(WWW_ROOT . 'theme', 0777);
+			$status['themeDirWritable'] = is_writable(WWW_ROOT . 'theme');
 		}
-		if(!$status['filesDirWritable']) {
-			@chmod(WWW_ROOT.'files', 0777);
-			$status['filesDirWritable'] = is_writable(WWW_ROOT.'files');
+		if (!$status['filesDirWritable']) {
+			@chmod(WWW_ROOT . 'files', 0777);
+			$status['filesDirWritable'] = is_writable(WWW_ROOT . 'files');
 		}
-		if(!$status['tmpDirWritable']) {
+		if (!$status['tmpDirWritable']) {
 			@chmod(TMP, 0777);
 			$status['tmpDirWritable'] = is_writable(TMP);
 		}
-		if(!$status['dbDirWritable']) {
-			@chmod(APP.'db', 0777);
-			$status['dbDirWritable'] = is_writable(APP.'db');
+		if (!$status['dbDirWritable']) {
+			@chmod(APP . 'db', 0777);
+			$status['dbDirWritable'] = is_writable(APP . 'db');
 		}
-		
-		return $status + $check;
 
+		return $status + $check;
 	}
-	
+
 /**
  * DB接続チェック
  * 
@@ -1587,55 +1585,57 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access private
  */
-	public function checkDbConnection($config){
-		
-		extract($config);
-		
-		$datasource = strtolower($datasource);
-		
-		try{
-			if ($datasource == 'mysql'){
-				$dsn  = "mysql:dbname={$database}";
-				if ($host) $dsn .= ";host={$host}";
-				if ($port) $dsn .= ";port={$port}";
-				$pdo = new PDO($dsn, $login, $password);
+	public function checkDbConnection($config) {
 
+		extract($config);
+
+		$datasource = strtolower($datasource);
+
+		try {
+			if ($datasource == 'mysql') {
+				$dsn = "mysql:dbname={$database}";
+				if ($host)
+					$dsn .= ";host={$host}";
+				if ($port)
+					$dsn .= ";port={$port}";
+				$pdo = new PDO($dsn, $login, $password);
 			} elseif ($datasource == 'postgres') {
 				$dsn = "pgsql:dbname={$database}";
-				if ($host) $dsn .= ";host={$host}";
-				if ($port) $dsn .= ";port={$port}";
+				if ($host)
+					$dsn .= ";host={$host}";
+				if ($port)
+					$dsn .= ";port={$port}";
 				$pdo = new PDO($dsn, $login, $password);
-
 			} elseif ($datasource == 'sqlte') {
 				// すでにある場合
 				if (file_exists($database)) {
-					if (!is_writable($database)) throw new Exception("データベースファイルに書き込み権限がありません。");
-				// ない場合
+					if (!is_writable($database))
+						throw new Exception("データベースファイルに書き込み権限がありません。");
+					// ない場合
 				} else {
-					if (!is_writable(dirname($database))) throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
+					if (!is_writable(dirname($database)))
+						throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
 				}
-				$dsn = "sqlite:".$database;
+				$dsn = "sqlite:" . $database;
 				$pdo = new PDO($dsn);
-				
 			} elseif ($datasource == 'csv') {
-				if (is_writable($database)) return true;
+				if (is_writable($database))
+					return true;
 				throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
-
 			} else {
 				// ドライバが見つからない
 				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)");
 			}
-		}catch (PDOException $e){
-			 throw new PDOException($e);
+		} catch (PDOException $e) {
+			throw new PDOException($e);
 		}
 
 		// 接続できたよ
-		if ($pdo){
+		if ($pdo) {
 			// disconnect
 			unset($pdo);
 			return true;
 		}
-		
 	}
 
 /**
@@ -1645,30 +1645,29 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function isCreatedAdminAssetsSymlink() {
-		
+
 		// Windowsの場合シンボリックリンクをサポートしないのでそのままtrueを返す
 		if (DS == '\\') {
 			return true;
 		}
-		
+
 		$viewPath = getViewPath();
-		$css = $viewPath . 'css'  . DS . 'admin';
-		$js = $viewPath . 'js'  . DS . 'admin';
-		$img = $viewPath . 'img'  . DS . 'admin';
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
 		$result = true;
-		if(!is_dir($css) && !is_link($css)) {
+		if (!is_dir($css) && !is_link($css)) {
 			$result = false;
 		}
-		if(!is_dir($js) && !is_link($js)) {
+		if (!is_dir($js) && !is_link($js)) {
 			$result = false;
 		}
-		if(!is_dir($img) && !is_link($img)) {
+		if (!is_dir($img) && !is_link($img)) {
 			$result = false;
 		}
 		return $result;
-
 	}
-	
+
 /**
  * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成する
  * これにより、表示速度の改善を行う事ができる
@@ -1676,32 +1675,31 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function createAdminAssetsSymlink() {
-		
+
 		$viewPath = getViewPath();
-		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css'  . DS . 'admin';
-		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js'  . DS . 'admin';
-		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img'  . DS . 'admin';
-		$css = $viewPath . 'css'  . DS . 'admin';
-		$js = $viewPath . 'js'  . DS . 'admin';
-		$img = $viewPath . 'img'  . DS . 'admin';
+		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
+		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
+		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
 		$result = true;
-		if(!is_dir($css) && !is_link($css)) {
-			if(!@symlink($adminCss, $css)) {
+		if (!is_dir($css) && !is_link($css)) {
+			if (!@symlink($adminCss, $css)) {
 				$result = false;
 			}
 		}
-		if(!is_dir($js) && !is_link($js)) {
-			if(!@symlink($adminJs, $js)) {
+		if (!is_dir($js) && !is_link($js)) {
+			if (!@symlink($adminJs, $js)) {
 				$result = false;
 			}
 		}
-		if(!is_dir($img) && !is_link($img)) {
-			if(!@symlink($adminImg, $img)) {
+		if (!is_dir($img) && !is_link($img)) {
+			if (!@symlink($adminImg, $img)) {
 				$result = false;
 			}
 		}
 		return $result;
-		
 	}
-	
+
 }

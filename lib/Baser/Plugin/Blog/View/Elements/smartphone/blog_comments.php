@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログコメント一覧
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'Blog'.DS.'View'.DS.'Elements'.DS.'blog_comments'.$this->ext;
-?>
+include BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Elements' . DS . 'blog_comments' . $this->ext;

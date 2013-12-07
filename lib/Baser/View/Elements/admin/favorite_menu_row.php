@@ -20,7 +20,7 @@
 ?>
 <li>
 	<?php $this->BcBaser->link($favorite['Favorite']['name'], $favorite['Favorite']['url'], array('title' => Router::url($favorite['Favorite']['url'], true))) ?>
-	<?php echo $this->BcForm->input('Favorite.id.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id')) ?>
-	<?php echo $this->BcForm->input('Favorite.name.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name')) ?>
-	<?php echo $this->BcForm->input('Favorite.url.'.$favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['url'], 'class' => 'favorite-url')) ?>
+	<?php echo $this->BcForm->input('Favorite.id.' . $favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id')) ?>
+	<?php echo $this->BcForm->input('Favorite.name.' . $favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name')) ?>
+	<?php echo $this->BcForm->input('Favorite.url.' . $favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['url'], 'class' => 'favorite-url')) ?>
 </li>

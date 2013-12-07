@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * スマホヘルパー
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * スマホヘルパー
  *
  * @package Web.helpers
  */
 class BcSmartphoneHelper extends Helper {
+
 /**
  * afterLayout
  *
@@ -30,31 +33,30 @@ class BcSmartphoneHelper extends Helper {
  * @access public
  */
 	public function afterLayout($layoutFile) {
-		
+
 		/* 出力データをSJISに変換 */
 		$view = ClassRegistry::getObject('view');
 
-		if(isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
+		if (isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
 			$rss = true;
-		}else {
+		} else {
 			$rss = false;
 		}
 
-		if($view && !$rss && Configure::read('BcRequest.agent') == 'smartphone' && $view->layoutPath != 'email'.DS.'text') {	
+		if ($view && !$rss && Configure::read('BcRequest.agent') == 'smartphone' && $view->layoutPath != 'email' . DS . 'text') {
 			// 内部リンクの自動変換
-			if(Configure::read('BcAgent.smartphone.autoLink')) {
+			if (Configure::read('BcAgent.smartphone.autoLink')) {
 				$currentAlias = Configure::read('BcRequest.agentAlias');
 				// 一旦プレフィックスを除外
-				$reg = '/href="'.preg_quote(BC_BASE_URL, '/').'('.$currentAlias.'\/([^\"]*?))\"/';
+				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
 				$view->output = preg_replace_callback($reg, array($this, '_removePrefix'), $view->output);
 				// プレフィックス追加
-				$reg = '/href=\"'.preg_quote(BC_BASE_URL, '/').'([^\"]*?)\"/';
+				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
 				$view->output = preg_replace_callback($reg, array($this, '_addPrefix'), $view->output);
 			}
-			
 		}
-		
 	}
+
 /**
  * リンクからモバイル用のプレフィックスを除外する
  * preg_replace_callback のコールバック関数
@@ -64,14 +66,14 @@ class BcSmartphoneHelper extends Helper {
  * @access protected 
  */
 	protected function _removePrefix($matches) {
-		
-		if(strpos($matches[1], 'smartphone=off') === false) {
-			return 'href="'.BC_BASE_URL.$matches[2].'"';
+
+		if (strpos($matches[1], 'smartphone=off') === false) {
+			return 'href="' . BC_BASE_URL . $matches[2] . '"';
 		} else {
-			return 'href="'.BC_BASE_URL.$matches[1].'"';
+			return 'href="' . BC_BASE_URL . $matches[1] . '"';
 		}
-		
 	}
+
 /**
  * リンクにモバイル用のプレフィックスを追加する
  * preg_replace_callback のコールバック関数
@@ -81,15 +83,14 @@ class BcSmartphoneHelper extends Helper {
  * @access protected
  */
 	protected function _addPrefix($matches) {
-		
+
 		$currentAlias = Configure::read('BcRequest.agentAlias');
 		$url = $matches[1];
-		if(strpos($url, 'smartphone=off') === false) {
-			return 'href="'.BC_BASE_URL.$currentAlias.'/'.$url.'"';
+		if (strpos($url, 'smartphone=off') === false) {
+			return 'href="' . BC_BASE_URL . $currentAlias . '/' . $url . '"';
 		} else {
-			return 'href="'.BC_BASE_URL.$url.'"';
+			return 'href="' . BC_BASE_URL . $url . '"';
 		}
-		
 	}
-	
+
 }

@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* Contents schema generated on: 2011-08-20 02:08:53 : 1313774093*/
+/* Contents schema generated on: 2011-08-20 02:08:53 : 1313774093 */
+
 class ContentsSchema extends CakeSchema {
+
 	var $name = 'Contents';
-
 	var $file = 'contents.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class ContentsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $contents = array(
@@ -30,4 +32,5 @@ class ContentsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

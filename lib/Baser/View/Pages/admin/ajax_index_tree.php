@@ -1,1 +1,1 @@
-<?php $this->BcBaser->element('pages/index_tree') ?>
+<?php $this->BcBaser->element('pages/index_tree'); ?>

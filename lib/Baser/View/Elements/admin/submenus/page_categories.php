@@ -25,9 +25,9 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('一覧を表示する', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
-<?php if($newCatAddable): ?>
-			<li><?php $this->BcBaser->link('新規に登録する', array('controller'=> 'page_categories', 'action' => 'add')) ?></li>
-<?php endif ?>
+			<?php if ($newCatAddable): ?>
+				<li><?php $this->BcBaser->link('新規に登録する', array('controller' => 'page_categories', 'action' => 'add')) ?></li>
+			<?php endif; ?>
 		</ul>
 	</td>
 </tr>

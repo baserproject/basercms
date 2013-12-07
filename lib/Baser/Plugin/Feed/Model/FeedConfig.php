@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィード設定モデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * フィード設定モデル
  *
  * @package baser.plugins.feed.models
  */
 class FeedConfig extends FeedAppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class FeedConfig extends FeedAppModel {
  * @access public
  */
 	public $name = 'FeedConfig';
+
 /**
  * ビヘイビア
  * 
@@ -40,12 +44,14 @@ class FeedConfig extends FeedAppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * DB設定
  * @var string
  * @access public
  */
 	public $useDbConfig = 'plugin';
+
 /**
  * hasMany
  *
@@ -53,14 +59,15 @@ class FeedConfig extends FeedAppModel {
  * @access public
  */
 	public $hasMany = array("FeedDetail" =>
-			array("className" => "Feed.FeedDetail",
-							"conditions" => "",
-							"order" => "FeedDetail.id ASC",
-							"limit" => 10,
-							"foreignKey" => "feed_config_id",
-							"dependent" => true,
-							"exclusive" => false,
-							"finderQuery" => ""));
+		array("className" => "Feed.FeedDetail",
+			"conditions" => "",
+			"order" => "FeedDetail.id ASC",
+			"limit" => 10,
+			"foreignKey" => "feed_config_id",
+			"dependent" => true,
+			"exclusive" => false,
+			"finderQuery" => ""));
+
 /**
  * validate
  *
@@ -69,34 +76,35 @@ class FeedConfig extends FeedAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'フィード設定名を入力してください。',
-					'required'	=> true),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'フィード設定名は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'フィード設定名を入力してください。',
+				'required' => true),
+			array('rule' => array('maxLength', 50),
+				'message' => 'フィード設定名は50文字以内で入力してください。')
 		),
 		'feed_title_index' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'フィードタイトルリストは255文字以内で入力してください。')
+			array('rule' => array('maxLength', 255),
+				'message' => 'フィードタイトルリストは255文字以内で入力してください。')
 		),
 		'category_index' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'カテゴリリストは255文字以内で入力してください。')
+			array('rule' => array('maxLength', 255),
+				'message' => 'カテゴリリストは255文字以内で入力してください。')
 		),
 		'display_number' => array(
-			array(	'rule'		=> 'numeric',
-					'message'	=> '数値を入力してください。',
-					'required'	=> true)
+			array('rule' => 'numeric',
+				'message' => '数値を入力してください。',
+				'required' => true)
 		),
 		'template' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'テンプレート名を入力してください。'),
-			array(	'rule'		=> 'halfText',
-					'message'	=> 'テンプレート名は半角のみで入力してください。'),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'テンプレート名は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'テンプレート名を入力してください。'),
+			array('rule' => 'halfText',
+				'message' => 'テンプレート名は半角のみで入力してください。'),
+			array('rule' => array('maxLength', 50),
+				'message' => 'テンプレート名は50文字以内で入力してください。')
 		)
 	);
+
 /**
  * 初期値を取得
  * 
@@ -108,7 +116,6 @@ class FeedConfig extends FeedAppModel {
 		$data['FeedConfig']['display_number'] = '5';
 		$data['FeedConfig']['template'] = 'default';
 		return $data;
-
 	}
-	
+
 }

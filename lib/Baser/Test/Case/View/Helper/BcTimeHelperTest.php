@@ -215,4 +215,5 @@ class BcTimeHelperTest extends CakeTestCase {
 			array('2012-10-03 00:00:00', 30, '2012-11-02 00:00:00', false, '指定日から30日経過していない'),
 		);
 	}
+
 }

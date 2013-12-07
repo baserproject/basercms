@@ -1,9 +1,10 @@
 <?php
+
 /**
  * MailContentFixture
  *
  */
-App::uses('MailContent','Mail.Model');
+App::uses('MailContent', 'Mail.Model');
 
 class MailContentFixture extends CakeTestFixture {
 
@@ -13,9 +14,9 @@ class MailContentFixture extends CakeTestFixture {
  * @var array
  */
 	public $import = array(
-        'model' => 'Mail.MailContent',
-        'records' => true,
-        'connection' => 'plugin'
-    );
+		'model' => 'Mail.MailContent',
+		'records' => true,
+		'connection' => 'plugin'
+	);
 
 }

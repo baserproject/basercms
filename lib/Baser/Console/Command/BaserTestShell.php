@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Custom TestShell Command
  *
@@ -13,7 +14,6 @@
  * @license			http://basercms.net/license/index.html
  * 
  */
-
 App::uses('TestShell', 'Console/Command');
 App::uses('BaserTestSuiteDispatcher', 'TestSuite');
 App::uses('BaserTestSuiteCommand', 'TestSuite');
@@ -233,9 +233,7 @@ class BaserTestShell extends TestShell {
 			$testFile = str_replace(APP, APP . 'Test/Case/', $file) . 'Test.php';
 		} else {
 			$testFile = preg_replace(
-				"@((?:plugins|Plugin)[\\/]{$category}[\\/])(.*)$@",
-				'\1Test/Case/\2Test.php',
-				$file
+				"@((?:plugins|Plugin)[\\/]{$category}[\\/])(.*)$@", '\1Test/Case/\2Test.php', $file
 			);
 		}
 

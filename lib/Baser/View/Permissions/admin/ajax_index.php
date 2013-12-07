@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] アクセス制限設定一覧
@@ -18,4 +19,3 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->element('permissions/index_list');
-?>

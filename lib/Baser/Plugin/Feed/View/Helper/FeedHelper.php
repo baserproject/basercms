@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィードヘルパー
@@ -20,6 +21,7 @@
 /**
  * Include files
  */
+
 /**
  * フィードヘルパー
  *
@@ -27,6 +29,7 @@
  *
  */
 class FeedHelper extends BcTextHelper {
+
 /**
  * ヘルパー
  * 
@@ -34,6 +37,7 @@ class FeedHelper extends BcTextHelper {
  * @access public
  */
 	public $helpers = array('BcBaser');
+
 /**
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
@@ -42,37 +46,37 @@ class FeedHelper extends BcTextHelper {
  * @access public
  */
 	public function getTemplates() {
-		
+
 		$templatesPathes = array();
-		if($this->BcBaser->siteConfig['theme']){
-			$templatesPathes[] = WWW_ROOT.'theme'.DS.$this->BcBaser->siteConfig['theme'].DS.'Feed'.DS;
+		if ($this->BcBaser->siteConfig['theme']) {
+			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Feed' . DS;
 		}
-		$templatesPathes[] = BASER_PLUGINS.'Feed'.DS.'View'.DS.'Feed'.DS;
-		
+		$templatesPathes[] = BASER_PLUGINS . 'Feed' . DS . 'View' . DS . 'Feed' . DS;
+
 		$_templates = array();
-		foreach($templatesPathes as $templatesPath){
+		foreach ($templatesPathes as $templatesPath) {
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
 			$foler = null;
-			if($files[1]){
-				if($_templates){
-					$_templates = am($_templates,$files[1]);
-				}else{
+			if ($files[1]) {
+				if ($_templates) {
+					$_templates = am($_templates, $files[1]);
+				} else {
 					$_templates = $files[1];
 				}
 			}
 		}
 		$templates = array();
-		foreach($_templates as $template){
+		foreach ($_templates as $template) {
 			$ext = Configure::read('BcApp.templateExt');
-			if($template != 'ajax'.$ext && $template != 'error'.$ext){
+			if ($template != 'ajax' . $ext && $template != 'error' . $ext) {
 				$template = basename($template, $ext);
 				$templates[$template] = $template;
 			}
 		}
 		return $templates;
-		
 	}
+
 /**
  * フィードのキャッシュタイムをキャッシュファイルに保存
  * <cake:nocache>でキャッシュタイムを参照できるようにする
@@ -80,15 +84,15 @@ class FeedHelper extends BcTextHelper {
  * @return void
  * @access public
  */
-	public function saveCachetime(){
-		
+	public function saveCachetime() {
+
 		$feedId = $this->params['pass'][0];
-		if(isset($this->BcBaser->_view->viewVars['cachetime'])) {
+		if (isset($this->BcBaser->_view->viewVars['cachetime'])) {
 			$cachetime = $this->BcBaser->_view->viewVars['cachetime'];
-			cache('views'.DS.'feed_cachetime_'.$feedId.'.php',$cachetime);
+			cache('views' . DS . 'feed_cachetime_' . $feedId . '.php', $cachetime);
 		}
-		
 	}
+
 /**
  * フィードリストのキャッシュヘッダーを出力する
  * キャッシュ時間は管理画面で設定した値
@@ -99,11 +103,10 @@ class FeedHelper extends BcTextHelper {
  * @return void
  * @access public
  */
-	public function cacheHeader(){
-		
+	public function cacheHeader() {
+
 		$feedId = $this->params['pass'][0];
-		$this->BcBaser->cacheHeader(cache('views'.DS.'feed_cachetime_'.$feedId.'.php'));
-		
+		$this->BcBaser->cacheHeader(cache('views' . DS . 'feed_cachetime_' . $feedId . '.php'));
 	}
-	
+
 }

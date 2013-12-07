@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログコンテンツモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログコンテンツモデル
  *
  * @package baser.plugins.blog.models
  */
 class BlogContent extends BlogAppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public $name = 'BlogContent';
+
 /**
  * behaviors
  *
@@ -40,28 +44,30 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	public $hasMany = array('BlogPost'=>
-			array('className'=>'Blog.BlogPost',
-							'order'=>'id DESC',
-							'limit'=>10,
-							'foreignKey'=>'blog_content_id',
-							'dependent'=>true,
-							'exclusive'=>false,
-							'finderQuery'=>''),
-			'BlogCategory'=>
-			array('className'=>'Blog.BlogCategory',
-							'order'=>'id',
-							'limit'=>10,
-							'foreignKey'=>'blog_content_id',
-							'dependent'=>true,
-							'exclusive'=>false,
-							'finderQuery'=>''));
+	public $hasMany = array('BlogPost' =>
+		array('className' => 'Blog.BlogPost',
+			'order' => 'id DESC',
+			'limit' => 10,
+			'foreignKey' => 'blog_content_id',
+			'dependent' => true,
+			'exclusive' => false,
+			'finderQuery' => ''),
+		'BlogCategory' =>
+		array('className' => 'Blog.BlogCategory',
+			'order' => 'id',
+			'limit' => 10,
+			'foreignKey' => 'blog_content_id',
+			'dependent' => true,
+			'exclusive' => false,
+			'finderQuery' => ''));
+
 /**
  * validate
  *
@@ -70,66 +76,67 @@ class BlogContent extends BlogAppModel {
  */
 	public $validate = array(
 		'name' => array(
-				array(	'rule'		=> array('halfText'),
-						'message'	=> 'ブログアカウント名は半角のみ入力してください。',
-						'allowEmpty'=> false),
-				array(	'rule'		=> array('notInList', array('blog')),
-						'message'	=> 'ブログアカウント名に「blog」は利用できません。'),
-				array(	'rule'		=> array('isUnique'),
-						'message'	=> '入力されたブログアカウント名は既に使用されています。'),
-				array(	'rule'		=> array('maxLength', 100),
-						'message'	=> 'ブログアカウント名は100文字以内で入力してください。')
+			array('rule' => array('halfText'),
+				'message' => 'ブログアカウント名は半角のみ入力してください。',
+				'allowEmpty' => false),
+			array('rule' => array('notInList', array('blog')),
+				'message' => 'ブログアカウント名に「blog」は利用できません。'),
+			array('rule' => array('isUnique'),
+				'message' => '入力されたブログアカウント名は既に使用されています。'),
+			array('rule' => array('maxLength', 100),
+				'message' => 'ブログアカウント名は100文字以内で入力してください。')
 		),
 		'title' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'ブログタイトルを入力してください。'),
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'ブログタイトルは255文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'ブログタイトルを入力してください。'),
+			array('rule' => array('maxLength', 255),
+				'message' => 'ブログタイトルは255文字以内で入力してください。')
 		),
 		'layout' => array(
-			array(	'rule'		=> 'halfText',
-					'message'	=> 'レイアウトテンプレート名は半角で入力してください。',
-					'allowEmpty'=>false),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'レイアウトテンプレート名は20文字以内で入力してください。')
+			array('rule' => 'halfText',
+				'message' => 'レイアウトテンプレート名は半角で入力してください。',
+				'allowEmpty' => false),
+			array('rule' => array('maxLength', 20),
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
 		),
 		'template' => array(
-			array(	'rule'		=> 'halfText',
-					'message'	=> 'コンテンツテンプレート名は半角で入力してください。',
-					'allowEmpty'=>false),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'レイアウトテンプレート名は20文字以内で入力してください。')
+			array('rule' => 'halfText',
+				'message' => 'コンテンツテンプレート名は半角で入力してください。',
+				'allowEmpty' => false),
+			array('rule' => array('maxLength', 20),
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
 		),
-		'list_count' => array(array(	'rule' => 'halfText',
-						'message' => "一覧表示件数は半角で入力してください。",
-						'allowEmpty'=>false)
+		'list_count' => array(array('rule' => 'halfText',
+				'message' => "一覧表示件数は半角で入力してください。",
+				'allowEmpty' => false)
 		),
-		'list_direction' => array(array(	'rule' => array('notEmpty'),
-						'message' => "一覧に表示する順番を指定してください。")
+		'list_direction' => array(array('rule' => array('notEmpty'),
+				'message' => "一覧に表示する順番を指定してください。")
 		),
 		'eye_catch_size' => array(array(
-			'rule' => array('checkEyeCatchSize'),
-			'message' => 'アイキャッチ画像のサイズが不正です。'
-		))
+				'rule' => array('checkEyeCatchSize'),
+				'message' => 'アイキャッチ画像のサイズが不正です。'
+			))
 	);
+
 /**
  * アイキャッチ画像サイズバリデーション
  * 
  * @return boolean 
  */
 	function checkEyeCatchSize() {
-		
+
 		$data = $this->constructEyeCatchSize($this->data);
-		if(empty($data['BlogContent']['eye_catch_size_thumb_width']) ||
-				empty($data['BlogContent']['eye_catch_size_thumb_height']) ||
-				empty($data['BlogContent']['eye_catch_size_mobile_thumb_width']) ||
-				empty($data['BlogContent']['eye_catch_size_mobile_thumb_height'])) {
+		if (empty($data['BlogContent']['eye_catch_size_thumb_width']) ||
+			empty($data['BlogContent']['eye_catch_size_thumb_height']) ||
+			empty($data['BlogContent']['eye_catch_size_mobile_thumb_width']) ||
+			empty($data['BlogContent']['eye_catch_size_mobile_thumb_height'])) {
 			return false;
 		}
-		
+
 		return true;
-		
 	}
+
 /**
  * 英数チェック
  *
@@ -139,13 +146,13 @@ class BlogContent extends BlogAppModel {
  */
 	public function alphaNumeric($check) {
 
-		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
+		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * コントロールソースを取得する
  *
@@ -153,17 +160,17 @@ class BlogContent extends BlogAppModel {
  * @return array コントロールソース
  * @access public
  */
-	public function getControlSource($field = null,$options = array()) {
+	public function getControlSource($field = null, $options = array()) {
 
 		$controlSources['id'] = $this->find('list');
 
-		if(isset($controlSources[$field])) {
+		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * afterSave
  *
@@ -172,19 +179,19 @@ class BlogContent extends BlogAppModel {
  */
 	public function afterSave($created, $options = array()) {
 
-		if(empty($this->data['BlogContent']['id'])) {
+		if (empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();
 		}
-		
+
 		// 検索用テーブルへの登録・削除
-		if(!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status'] ) {
+		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
-			
+
 			$this->deleteContent($this->data['BlogContent']['id']);
 		}
-		
 	}
+
 /**
  * beforeDelete
  *
@@ -194,8 +201,8 @@ class BlogContent extends BlogAppModel {
 	public function beforeDelete($cascade = true) {
 
 		return $this->deleteContent($this->id);
-
 	}
+
 /**
  * 検索用データを生成する
  *
@@ -205,7 +212,7 @@ class BlogContent extends BlogAppModel {
  */
 	public function createContent($data) {
 
-		if(isset($data['BlogContent'])) {
+		if (isset($data['BlogContent'])) {
 			$data = $data['BlogContent'];
 		}
 
@@ -215,12 +222,12 @@ class BlogContent extends BlogAppModel {
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];
-		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['url'] = '/' . $data['name'] . '/index';
 		$_data['Content']['status'] = true;
 
 		return $_data;
-
 	}
+
 /**
  * ユーザーグループデータをコピーする
  * 
@@ -229,8 +236,8 @@ class BlogContent extends BlogAppModel {
  * @return mixed BlogContent Or false
  */
 	public function copy($id, $data = null) {
-		
-		if($id) {
+
+		if ($id) {
 			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
 		}
 		$data['BlogContent']['name'] .= '_copy';
@@ -239,18 +246,18 @@ class BlogContent extends BlogAppModel {
 		unset($data['BlogContent']['id']);
 		$this->create($data);
 		$result = $this->save();
-		if($result) {
+		if ($result) {
 			$result['BlogContent']['id'] = $this->getInsertID();
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name'])) {
+			if (isset($this->validationErrors['name'])) {
 				return $this->copy(null, $data);
 			} else {
 				return false;
 			}
 		}
-		
 	}
+
 /**
  * フォームの初期値を取得する
  *
@@ -273,10 +280,10 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = 150;
 		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = 150;
 		$data['BlogContent']['use_content'] = true;
-		
-		return $data;
 
+		return $data;
 	}
+
 /**
  * アイキャッチサイズフィールドの値をDB用に変換する
  * 
@@ -284,21 +291,21 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	function deconstructEyeCatchSize($data) {
-		
+
 		$data['BlogContent']['eye_catch_size'] = serialize(array(
-			'thumb_width'			=> $data['BlogContent']['eye_catch_size_thumb_width'],
-			'thumb_height'			=> $data['BlogContent']['eye_catch_size_thumb_height'],
-			'mobile_thumb_width'	=> $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
-			'mobile_thumb_height'	=> $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
+			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
+			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
+			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
+			'mobile_thumb_height' => $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
 		));
 		unset($data['BlogContent']['eye_catch_size_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_thumb_height']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_height']);
-		
+
 		return $data;
-		
 	}
+
 /**
  * アイキャッチサイズフィールドの値をフォーム用に変換する
  * 
@@ -306,14 +313,13 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	function constructEyeCatchSize($data) {
-		
+
 		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = $eyeCatchSize['mobile_thumb_height'];
 		return $data;
-		
 	}
-	
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Textヘルパー拡張
@@ -16,7 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
-/**
+  /**
  * Include files
  */
 App::uses('TextHelper', 'View/Helper');
@@ -176,7 +177,7 @@ class BcTextHelper extends TextHelper {
 	public function pref($value, $noValue = '') {
 		if (!empty($value) && ($value >= 1 && $value <= 47)) {
 			$list = $this->prefList();
-			return $list[(int)$value];
+			return $list[(int) $value];
 		}
 		return $noValue;
 	}
@@ -206,7 +207,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function booleanAllow($value) {
 		$list = $this->booleanAllowList();
-		return $list[(int)$value];
+		return $list[(int) $value];
 	}
 
 /**
@@ -218,7 +219,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function booleanExists($value) {
 		$list = $this->booleanExistsList();
-		return $list[(int)$value];
+		return $list[(int) $value];
 	}
 
 /**
@@ -235,7 +236,7 @@ class BcTextHelper extends TextHelper {
 		if (!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
 			return;
 		}
-		list($w,$year) = explode('-', $arrDate['year']);
+		list($w, $year) = explode('-', $arrDate['year']);
 		$wareki = $this->BcTime->nengo($w);
 		return $wareki . " " . $year . "年 " . $arrDate['month'] . "月 " . $arrDate['day'] . '日';
 	}
@@ -247,7 +248,7 @@ class BcTextHelper extends TextHelper {
  * @param string $prefix
  * @return string
  */
-	public function moneyFormat($value, $prefix='¥') {
+	public function moneyFormat($value, $prefix = '¥') {
 		if ($value) {
 			return $prefix . number_format($value);
 		} else {
@@ -279,11 +280,11 @@ class BcTextHelper extends TextHelper {
  * @return	string	変換後の文字列
  * @access	public
  */
-	public function format($format,$value, $noValue = '') {
+	public function format($format, $value, $noValue = '') {
 		if ($value === '' || is_null($value)) {
 			return $noValue;
 		} else {
-			return sprintf($format,$value);
+			return sprintf($format, $value);
 		}
 	}
 
@@ -295,7 +296,7 @@ class BcTextHelper extends TextHelper {
  * @return string 表示用データ
  * @access public
  */
-	public function listValue($field,$value) {
+	public function listValue($field, $value) {
 		$list = $this->BcForm->getControlSource($field);
 		if ($list && isset($list[$value])) {
 			return $list[$value];
@@ -312,21 +313,21 @@ class BcTextHelper extends TextHelper {
  * @return array
  * @access public
  */
-	public function toArray($separator,$value) {
+	public function toArray($separator, $value) {
 		if ($separator != '"') {
 			$value = str_replace('"', '', $value);
 		}
 		if ($separator != "'") {
 			$value = str_replace("'", '', $value);
 		}
-		if (strpos($value,$separator) === false) {
+		if (strpos($value, $separator) === false) {
 			if ($value) {
 				return array($value);
 			} else {
 				return array();
 			}
 		}
-		$values = explode($separator,$value);
+		$values = explode($separator, $value);
 
 		return $values;
 	}
@@ -342,7 +343,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function arrayValue($key, $array, $noValue = '') {
 		if (is_numeric($key)) {
-			$key = (int)$key;
+			$key = (int) $key;
 		}
 		if (isset($array[$key])) {
 			return $array[$key];
@@ -383,7 +384,7 @@ class BcTextHelper extends TextHelper {
  * @return mixed
  * @access public
  */
-	public function age($birthday, $suffix='歳', $noValue = '不明') {
+	public function age($birthday, $suffix = '歳', $noValue = '不明') {
 		if (!$birthday) {
 			return $noValue;
 		}
@@ -420,6 +421,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function booleanStatus($value) {
 		$list = $this->booleanStatusList();
-		return $list[(int)$value];
+		return $list[(int) $value];
 	}
+
 }

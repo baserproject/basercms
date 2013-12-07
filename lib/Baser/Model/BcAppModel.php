@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Model 拡張クラス
@@ -17,7 +18,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
 /**
  * Include files
  */
@@ -66,7 +66,6 @@ class BcAppModel extends Model {
 				$AppController->redirect(BC_BASE_URL . 'installations/reset');
 			}
 		}
-		
 	}
 
 /**
@@ -80,8 +79,8 @@ class BcAppModel extends Model {
 		// 日付フィールドが空の場合、nullを保存する
 		foreach ($this->_schema as $key => $field) {
 			if (('date' == $field['type'] ||
-				 'datetime' == $field['type'] ||
-				 'time' == $field['type']) &&
+				'datetime' == $field['type'] ||
+				'time' == $field['type']) &&
 				isset($this->data[$this->name][$key])) {
 				if ($this->data[$this->name][$key] == '') {
 					$this->data[$this->name][$key] = null;
@@ -181,7 +180,7 @@ class BcAppModel extends Model {
 		if ($this->childcount($id)) {
 			$children = $this->children($id);
 			foreach ($children as $child) {
-				$ids[] = (int)$child[$this->name]['id'];
+				$ids[] = (int) $child[$this->name]['id'];
 			}
 		}
 		return $ids;
@@ -337,7 +336,7 @@ class BcAppModel extends Model {
  * @param	string	更新タイプ指定
  * @return 	boolean
  */
-	public function loadSchema($dbConfigName, $path, $filterTable='', $filterType='', $excludePath = array(), $dropField = true) {
+	public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = array(), $dropField = true) {
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -386,11 +385,10 @@ class BcAppModel extends Model {
 				}
 				$tmpdir = TMP . 'schemas' . DS;
 				copy($path . DS . $file, $tmpdir . $table . '.php');
-				if(!$db->loadSchema(array('type'=>$type, 'path' => $tmpdir, 'file'=> $table.'.php', 'dropField' => $dropField))) {
-					$result = false; 
+				if (!$db->loadSchema(array('type' => $type, 'path' => $tmpdir, 'file' => $table . '.php', 'dropField' => $dropField))) {
+					$result = false;
 				}
-				@unlink($tmpdir.$table.'.php');
-
+				@unlink($tmpdir . $table . '.php');
 			}
 		}
 
@@ -406,7 +404,7 @@ class BcAppModel extends Model {
  * @param	string	テーブル指定
  * @return 	boolean
  */
-	public function loadCsv($dbConfigName, $path, $filterTable='') {
+	public function loadCsv($dbConfigName, $path, $filterTable = '') {
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -457,6 +455,7 @@ class BcAppModel extends Model {
 		$length = mb_strlen($check, Configure::read('App.encoding'));
 		return ($length <= $max);
 	}
+
 /**
  * 範囲を指定しての長さチェック
  *
@@ -480,7 +479,7 @@ class BcAppModel extends Model {
  * @param array $conditions
  * @return int
  */
-	public function getMax($field,$conditions=array()) {
+	public function getMax($field, $conditions = array()) {
 		if (strpos($field, '.') === false) {
 			$modelName = $this->alias;
 		} else {
@@ -561,7 +560,7 @@ class BcAppModel extends Model {
 
 		$this->_schema = null;
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
-		$options = array('field' => $field,'table' => $table, 'column' => $column);
+		$options = array('field' => $field, 'table' => $table, 'column' => $column);
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
 		return $ret;
@@ -625,13 +624,13 @@ class BcAppModel extends Model {
  * @param string $tableName
  * @return boolean
  */
-	public function tableExists ($tableName) {
+	public function tableExists($tableName) {
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		return in_array($tableName, $tables);
 	}
-	
+
 /**
  * 英数チェック
  *
@@ -673,10 +672,10 @@ class BcAppModel extends Model {
  * @param array $check
  * @return boolean
  */
-	public function duplicate($check,$field) {
+	public function duplicate($check, $field) {
 		$conditions = array($this->alias . '.' . key($check) => $check[key($check)]);
 		if ($this->exists()) {
-			$conditions['NOT'] = array($this->alias . '.'. $this->primaryKey => $this->id);
+			$conditions['NOT'] = array($this->alias . '.' . $this->primaryKey => $this->id);
 		}
 		$ret = $this->find('first', array('conditions' => $conditions));
 		if ($ret) {
@@ -689,12 +688,14 @@ class BcAppModel extends Model {
 /**
  * ファイルサイズチェック
  */
-	public function fileSize($check,$size) {
+	public function fileSize($check, $size) {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
-			if (!$file['size']) return false;
-			if ($file['size'] > $size) return;
+			if (!$file['size'])
+				return false;
+			if ($file['size'] > $size)
+				return;
 		}
 		return true;
 	}
@@ -742,7 +743,7 @@ class BcAppModel extends Model {
  * @return boolean
  */
 	public function changeSort($id, $offset, $conditions = array()) {
-		
+
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -753,16 +754,16 @@ class BcAppModel extends Model {
 		$this->cacheQueries = false;
 
 		$current = $this->find('first', array(
-			'conditions'=> array($this->alias . '.id' => $id), 
-			'fields'	=> array($this->alias . '.id', $this->alias . '.sort')
+			'conditions' => array($this->alias . '.id' => $id),
+			'fields' => array($this->alias . '.id', $this->alias . '.sort')
 		));
-		
+
 		// 変更相手のデータを取得
-		if ($offset > 0) {	// DOWN
+		if ($offset > 0) { // DOWN
 			$order = array($this->alias . '.sort');
 			$limit = $offset;
 			$conditions[$this->alias . '.sort >'] = $current[$this->alias]['sort'];
-		} elseif ($offset < 0) {	// UP
+		} elseif ($offset < 0) { // UP
 			$order = array($this->alias . '.sort DESC');
 			$limit = $offset * -1;
 			$conditions[$this->alias . '.sort <'] = $current[$this->alias]['sort'];
@@ -772,11 +773,11 @@ class BcAppModel extends Model {
 
 		$conditions = array_merge($conditions, $_conditions);
 		$target = $this->find('all', array(
-			'conditions'=> $conditions,
-			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
-			'order'		=> $order,
-			'limit'		=> $limit,
-			'recursive'	=> -1
+			'conditions' => $conditions,
+			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
+			'order' => $order,
+			'limit' => $limit,
+			'recursive' => -1
 		));
 
 		if (!isset($target[count($target) - 1])) {
@@ -788,20 +789,20 @@ class BcAppModel extends Model {
 
 		// current から target までのデータをsortで範囲指定して取得
 		$conditions = array();
-		if ($offset > 0) {	// DOWN
+		if ($offset > 0) { // DOWN
 			$conditions[$this->alias . '.sort >='] = $currentSort;
 			$conditions[$this->alias . '.sort <='] = $targetSort;
-		} elseif ($offset < 0) {	// UP
+		} elseif ($offset < 0) { // UP
 			$conditions[$this->alias . '.sort <='] = $currentSort;
 			$conditions[$this->alias . '.sort >='] = $targetSort;
 		}
-		
+
 		$conditions = array_merge($conditions, $_conditions);
 		$datas = $this->find('all', array(
-			'conditions'=> $conditions,
-			'fields'	=> array($this->alias . '.id', $this->alias . '.sort'),
-			'order'		=> $order,
-			'recursive'	=> -1
+			'conditions' => $conditions,
+			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
+			'order' => $order,
+			'recursive' => -1
 		));
 
 		// 全てのデータを更新
@@ -810,9 +811,9 @@ class BcAppModel extends Model {
 				$data[$this->alias]['sort'] = $targetSort;
 			} else {
 				if ($offset > 0) {
-					$data[$this->alias]['sort']--;
+					$data[$this->alias]['sort'] --;
 				} elseif ($offset < 0) {
-					$data[$this->alias]['sort']++;
+					$data[$this->alias]['sort'] ++;
 				}
 			}
 			if (!$this->save($data, false)) {
@@ -829,7 +830,7 @@ class BcAppModel extends Model {
  * @access public
  */
 	public function deleteModelCache() {
-		
+
 		$this->_schema = null;
 		$folder = new Folder(CACHE . 'models' . DS);
 		$caches = $folder->read(true, true);
@@ -838,7 +839,6 @@ class BcAppModel extends Model {
 				@unlink(CACHE . 'models' . DS . $cache);
 			}
 		}
-		
 	}
 
 /**
@@ -870,13 +870,13 @@ class BcAppModel extends Model {
 
 		$result = true;
 
-		if($this->Behaviors->attached('BcCache')) {
+		if ($this->Behaviors->attached('BcCache')) {
 			$this->Behaviors->disable('BcCache');
 		}
 
 		foreach ($data as $key => $value) {
 
-			if($this->find('count', array('conditions' => array('name' => $key))) > 1) {
+			if ($this->find('count', array('conditions' => array('name' => $key))) > 1) {
 				$this->deleteAll(array('name' => $key));
 			}
 
@@ -894,12 +894,12 @@ class BcAppModel extends Model {
 
 			// SQliteの場合、トランザクション用の関数をサポートしていない場合があるので、
 			// 個別に保存するようにした。
-			if (!$this->save(null,false)) {
+			if (!$this->save(null, false)) {
 				$result = false;
 			}
 		}
 
-		if($this->Behaviors->attached('BcCache')) {
+		if ($this->Behaviors->attached('BcCache')) {
 			$this->Behaviors->enable('BcCache');
 			$this->delCache();
 		}
@@ -932,12 +932,12 @@ class BcAppModel extends Model {
 		}
 
 		$type = $this->getColumnType($field);
-		
+
 		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-		/*if (!in_array($type, array('datetime', 'timestamp', 'date', 'time'))) {*/
+		/* if (!in_array($type, array('datetime', 'timestamp', 'date', 'time'))) { */
 		// ---
 		if (!in_array($type, array('string', 'text', 'datetime', 'timestamp', 'date', 'time'))) {
-		// <<<
+			// <<<
 			return $data;
 		}
 
@@ -945,7 +945,7 @@ class BcAppModel extends Model {
 			isset($data['day']) || isset($data['hour']) || isset($data['minute']));
 
 		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-		/*$dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');*/
+		/* $dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'); */
 		// ---
 		$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
 		$dateFields = array('D' => 'date', 'T' => 'time');
@@ -985,10 +985,10 @@ class BcAppModel extends Model {
 		}
 
 		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-		/*if ($type === 'datetime' || $type === 'timestamp' || $type === 'date') {*/
+		/* if ($type === 'datetime' || $type === 'timestamp' || $type === 'date') { */
 		// ---
 		if ($type == 'text' || $type == 'string' || $type === 'datetime' || $type === 'timestamp' || $type === 'date') {
-		// <<<
+			// <<<
 			foreach ($dateFields as $key => $val) {
 				if ($val === 'hour' || $val === 'min' || $val === 'sec') {
 					if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
@@ -997,7 +997,7 @@ class BcAppModel extends Model {
 						$data[$val] = sprintf('%02d', $data[$val]);
 					}
 				}
-				
+
 				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
 				if ($val == 'wareki' && !empty($data['wareki'])) {
 					$warekis = array('m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988);
@@ -1007,10 +1007,9 @@ class BcAppModel extends Model {
 					}
 				}
 				// <<<
-				
 				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
-				/*if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
-					return null;*/
+				/* if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+				  return null; */
 				// ---
 				if ($val != 'wareki' && !isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
 					if ($type == 'text' || $type == 'string') {
@@ -1027,7 +1026,7 @@ class BcAppModel extends Model {
 
 		if ($useNewDate && !empty($date)) {
 			// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
-			/*$format = $this->getDataSource()->columns[$type]['format'];*/
+			/* $format = $this->getDataSource()->columns[$type]['format']; */
 			// ---
 			if ($type == 'text' || $type == 'string') {
 				$format = 'Y-m-d H:i:s';
@@ -1035,7 +1034,7 @@ class BcAppModel extends Model {
 				$format = $this->getDataSource()->columns[$type]['format'];
 			}
 			// <<<
-			
+
 			foreach (array('m', 'd', 'H', 'i', 's') as $index) {
 				if (isset($date[$index])) {
 					$date[$index] = sprintf('%02d', $date[$index]);
@@ -1057,7 +1056,7 @@ class BcAppModel extends Model {
 		$value1 = $value2 = '';
 		if (is_array($fields) && count($fields) > 1) {
 			if (isset($this->data[$this->alias][$fields[0]]) &&
-					isset($this->data[$this->alias][$fields[1]])) {
+				isset($this->data[$this->alias][$fields[1]])) {
 				$value1 = $this->data[$this->alias][$fields[0]];
 				$value2 = $this->data[$this->alias][$fields[1]];
 			}
@@ -1119,7 +1118,7 @@ class BcAppModel extends Model {
 			}
 		}
 
-		$relationTypes = array ('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
+		$relationTypes = array('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
 
 		foreach ($models as $bindingName => $children) {
 			$model = null;
@@ -1218,7 +1217,7 @@ class BcAppModel extends Model {
  * Updates multiple model records based on a set of conditions.
  *
  * @param array $fields Set of fields and values, indexed by fields.
- *	Fields are treated as SQL snippets, to insert literal values manually escape your data.
+ * 	Fields are treated as SQL snippets, to insert literal values manually escape your data.
  * @param mixed $conditions Conditions to match, true for all records
  * @return boolean True on success, false on failure
  * @link http://book.cakephp.org/view/75/Saving-Your-Data
@@ -1253,6 +1252,7 @@ class BcAppModel extends Model {
 			parent::cakeError($method, $messages);
 		}
 	}
+
 /**
  * Queries the datasource and returns a result set array.
  *
@@ -1280,12 +1280,12 @@ class BcAppModel extends Model {
  * find('all', array(
  * 		'conditions' => array('name' => 'Thomas Anderson'),
  * 		'joins' => array(
- *			array(
+ * 			array(
  * 				'alias' => 'Thought',
  * 				'table' => 'thoughts',
  * 				'type' => 'LEFT',
  * 				'conditions' => '`Thought`.`person_id` = `Person`.`id`'
- *			)
+ * 			)
  * 		)
  * ));
  * }}}
@@ -1325,18 +1325,18 @@ class BcAppModel extends Model {
 		//$results = $this->getDataSource()->read($this, $query);
 		// ---
 		$cache = true;
-		if(isset($query['cache']) && is_bool($query['cache'])) {
+		if (isset($query['cache']) && is_bool($query['cache'])) {
 			$cache = $query['cache'];
 			unset($query['cache']);
 		}
-		if (BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') && 
-				$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0 ) {
+		if (BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') &&
+			$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0) {
 			$results = $this->readCache($cache, $type, $query);
 		} else {
 			$results = $this->getDataSource()->read($this, $query);
 		}
 		// <<<
-		
+
 		$this->resetAssociations();
 
 		if ($query['callbacks'] === true || $query['callbacks'] === 'after') {
@@ -1353,6 +1353,7 @@ class BcAppModel extends Model {
 			}
 		}
 	}
+
 /**
  * イベントを発火
  * 
@@ -1364,16 +1365,15 @@ class BcAppModel extends Model {
 
 		$options = array_merge(array(
 			'modParams' => 0,
-			'plugin'	=> $this->plugin,
-			'layer'		=> 'Model',
-			'class'		=> $this->name
-		), $options);
+			'plugin' => $this->plugin,
+			'layer' => 'Model',
+			'class' => $this->name
+			), $options);
 
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
-		
 	}
-	
+
 /**
  * データが公開済みかどうかチェックする
  *
@@ -1385,26 +1385,25 @@ class BcAppModel extends Model {
  */
 	public function isPublish($status, $publishBegin, $publishEnd) {
 
-		if(!$status) {
+		if (!$status) {
 			return false;
 		}
 
-		if($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
-			if($publishBegin > date('Y-m-d H:i:s')) {
+		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if ($publishBegin > date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
 
-		if($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
-			if($publishEnd < date('Y-m-d H:i:s')) {
+		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if ($publishEnd < date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
 
 		return true;
-
 	}
-	
+
 /**
  * 日付の正当性チェック
  * 
@@ -1412,17 +1411,17 @@ class BcAppModel extends Model {
  * @return boolean
  */
 	public function checkDate($check) {
-		
+
 		$value = $check[key($check)];
 		if (DS != '\\') {
-			if(!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d') ){
+			if (!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d')) {
 				return false;
 			}
 		}
-		if(date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
+		if (date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
 			return false;
 		}
 		return true;
-		
 	}
+
 }

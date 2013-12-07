@@ -1,4 +1,5 @@
 <?php
+
 /**
  * test for MailController
  *
@@ -12,30 +13,32 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
-App::uses('MailController','Mail.Controller');
-App::uses('Message','Mail.Model');
+App::uses('MailController', 'Mail.Controller');
+App::uses('Message', 'Mail.Model');
 
 class MailControllerTest extends ControllerTestCase {
 
-    public $fixtures = array(
-        'baser.site_config',
-        'baser.page',
-        'plugin.blog.blog_content',
-        'plugin.mail.message',
-    );
+	public $fixtures = array(
+		'baser.site_config',
+		'baser.page',
+		'plugin.blog.blog_content',
+		'plugin.mail.message',
+	);
 
-    public function setUp() {
-        parent::setUp();
-    }
+	public function setUp() {
+		parent::setUp();
+	}
 
-    public function tearDown() {
-        parent::tearDown();
-    }
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 /**
  * [test_index description]
  * @return [type] [description]
  */
-    public function test_index(){
-        // $result = $this->testAction('/contact/index');
-    }
+	public function test_index() {
+		// $result = $this->testAction('/contact/index');
+	}
+
 }

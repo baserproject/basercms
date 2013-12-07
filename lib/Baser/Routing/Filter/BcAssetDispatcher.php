@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BcAssetDispatcher
  * 
@@ -6,8 +7,8 @@
  * 読み込めるようにする為のフィルター
  * 
  * （例）/css/style.css では、次のファイルを参照する事ができる
- *		/app/View/webroot/css/style.css
- *		/lib/Baser/View/webroot/css/style.css
+ * 		/app/View/webroot/css/style.css
+ * 		/lib/Baser/View/webroot/css/style.css
  * 
  * PHP 5
  *
@@ -24,7 +25,6 @@
  * @since		  CakePHP(tm) v 2.2
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('DispatcherFilter', 'Routing');
 
 /**
@@ -84,11 +84,11 @@ class BcAssetDispatcher extends DispatcherFilter {
 		$parts = explode('/', $url);
 		$fileFragment = implode(DS, $parts);
 		$path = APP . 'View' . DS . 'webroot' . DS;
-		if( file_exists($path . $fileFragment )) {
+		if (file_exists($path . $fileFragment)) {
 			return $path . $fileFragment;
 		} else {
 			$path = BASER_VIEWS . 'webroot' . DS;
-			if( file_exists($path . $fileFragment )) {
+			if (file_exists($path . $fileFragment)) {
 				return $path . $fileFragment;
 			}
 		}

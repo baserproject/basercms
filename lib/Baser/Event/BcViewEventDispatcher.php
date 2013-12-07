@@ -1,5 +1,6 @@
 <?php
-/** 
+
+/**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -25,7 +26,7 @@
  * View.ControllerName.eventName
  */
 class BcViewEventDispatcher extends Object implements CakeEventListener {
-	
+
 	public function implementedEvents() {
 		return array(
 			'View.beforeRenderFile' => 'beforeRenderFile',
@@ -36,6 +37,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
 			'View.afterLayout' => 'afterLayout'
 		);
 	}
+
 /**
  * beforeRenderFile
  * 
@@ -43,10 +45,11 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeRenderFile(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeRenderFile', $event->data);
 		}
 	}
+
 /**
  * afterRenderFile
  * 
@@ -54,14 +57,15 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function afterRenderFile(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, array('modParams' => 1));
-			if($currentEvent) {
+			if ($currentEvent) {
 				return $currentEvent->data[1];
 			}
 		}
 		return $event->data[1];
 	}
+
 /**
  * beforeRender
  * 
@@ -69,10 +73,11 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeRender(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeRender', $event->data);
 		}
 	}
+
 /**
  * afterRender
  * 
@@ -80,10 +85,11 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterRender(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('afterRender', $event->data);
 		}
 	}
+
 /**
  * beforeLayout
  * 
@@ -91,10 +97,11 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function beforeLayout(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('beforeLayout', $event->data);
 		}
 	}
+
 /**
  * afterLayout
  * 
@@ -102,9 +109,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  * @return void
  */
 	public function afterLayout(CakeEvent $event) {
-		if($event->subject->name != 'CakeError' && $event->subject->name != '') {
+		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
 			$event->subject->dispatchEvent('afterLayout', $event->data);
 		}
 	}
-	
+
 }

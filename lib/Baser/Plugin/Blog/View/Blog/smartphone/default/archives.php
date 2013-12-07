@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->BcBaser->getContentsTitle().'のアーカイブ一覧です。');
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
 
 <!-- title -->
@@ -31,16 +31,16 @@ $this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->BcBaser->get
 </h3>
 
 <section class="box news">
-<!-- list -->
-<?php if(!empty($posts)): ?>
-<ul>
-	<?php foreach($posts as $post): ?>
-<li><?php $this->Blog->postLink($post, '<span class="date">'.$this->Blog->getPostDate($post).'</span><br />'.$this->Blog->getPostTitle($post)) ?></li>
-	<?php endforeach; ?>
-</ul>
-<?php else: ?>
-<p class="no-data">記事がありません。</p>
-<?php endif; ?>
+	<!-- list -->
+	<?php if (!empty($posts)): ?>
+		<ul>
+			<?php foreach ($posts as $post): ?>
+				<li><?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post) . '</span><br />' . $this->Blog->getPostTitle($post)) ?></li>
+			<?php endforeach; ?>
+		</ul>
+	<?php else: ?>
+		<p class="no-data">記事がありません。</p>
+	<?php endif; ?>
 </section>
 
 <!-- pagination -->

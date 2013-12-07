@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ページナビゲーション
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'Elements'.DS.'contents_navi'.$this->ext;
-?>
+include BASER_VIEWS . 'Elements' . DS . 'contents_navi' . $this->ext;

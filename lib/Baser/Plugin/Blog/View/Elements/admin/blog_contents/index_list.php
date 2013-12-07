@@ -35,16 +35,16 @@
 		</tr>
 	</thead>
 	<tbody>
-<?php if(!empty($datas)): ?>
-	<?php $count=1; ?>
-	<?php foreach($datas as $data): ?>
-		<?php $this->BcBaser->element('blog_contents/index_row', array('data' => $data, 'count' => $count)) ?>
-		<?php $count++; ?>
-	<?php endforeach; ?>
-<?php else: ?>
+		<?php if (!empty($datas)): ?>
+			<?php $count = 1; ?>
+			<?php foreach ($datas as $data): ?>
+				<?php $this->BcBaser->element('blog_contents/index_row', array('data' => $data, 'count' => $count)) ?>
+				<?php $count++; ?>
+			<?php endforeach; ?>
+		<?php else: ?>
 		<tr>
 			<td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
-<?php endif; ?>
+		<?php endif; ?>
 	</tbody>
 </table>

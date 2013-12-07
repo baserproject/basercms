@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * プラグイン拡張クラス
@@ -18,6 +19,7 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('AppController', 'Controller');
+
 /**
  * プラグイン拡張クラス
  * プラグインのコントローラーより継承して利用する
@@ -25,12 +27,14 @@ App::uses('AppController', 'Controller');
  * @package Baser.Controller
  */
 class BcPluginAppController extends AppController {
+
 /**
  * コンテンツID
  *
  * @var int
  */
 	public $contentId = null;
+
 /**
  * beforeFilter
  *
@@ -46,13 +50,13 @@ class BcPluginAppController extends AppController {
 
 		// 有効でないプラグインを実行させない
 		$name = Inflector::camelize($this->request->params['plugin']);
-		if(!$this->Plugin->find('all',array('conditions'=>array('name'=>$name, 'status'=>true)))) {
+		if (!$this->Plugin->find('all', array('conditions' => array('name' => $name, 'status' => true)))) {
 			$this->notFound();
 		}
 
 		$this->contentId = $this->getContentId();
-		
 	}
+
 /**
  * コンテンツIDを取得する
  * 一つのプラグインで複数のコンテンツを実装する際に利用する。
@@ -63,50 +67,49 @@ class BcPluginAppController extends AppController {
 	public function getContentId() {
 
 		// 管理画面の場合には取得しない
-		if(!empty($this->request->params['admin'])){
+		if (!empty($this->request->params['admin'])) {
 			return null;
 		}
 
-		if(!isset($this->request->url)) {
+		if (!isset($this->request->url)) {
 			return null;
 		}
 
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->request->url);
 		$url = explode('/', $url);
-		
-		if(!$url) {
+
+		if (!$url) {
 			return null;
 		}
-		
-		if($url[0]!=Configure::read('BcRequest.agentAlias')) {
-			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
-				if(isset($url[1])) {
+
+		if ($url[0] != Configure::read('BcRequest.agentAlias')) {
+			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
+				if (isset($url[1])) {
 					$contentName = $url[1];
 				}
-			}else {
+			} else {
 				$contentName = $url[0];
 			}
-		}else {
-			if(!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
+		} else {
+			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
 				$contentName = $url[2];
-			}elseif(isset($url[1])) {
+			} elseif (isset($url[1])) {
 				$contentName = $url[1];
 			}
 		}
 
 		// プラグインと同じ名前のコンテンツ名の場合に正常に動作しないので
 		// とりあえずコメントアウト
-		/*if( Inflector::camelize($url) == $this->name){
-			return null;
-		}*/
+		/* if( Inflector::camelize($url) == $this->name){
+		  return null;
+		  } */
 		$pluginContent = $this->PluginContent->findByName($contentName);
-		if($pluginContent) {
+		if ($pluginContent) {
 			return $pluginContent['PluginContent']['content_id'];
-		}else {
+		} else {
 			return null;
 		}
-
 	}
-	
+
 }

@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* Dblogs schema generated on: 2011-06-12 11:06:13 : 1307847253*/
+/* Dblogs schema generated on: 2011-06-12 11:06:13 : 1307847253 */
+
 class DblogsSchema extends CakeSchema {
+
 	var $name = 'Dblogs';
-
 	var $file = 'dblogs.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class DblogsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $dblogs = array(
@@ -23,4 +25,5 @@ class DblogsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

@@ -1,6 +1,7 @@
 <?php
+
 class BcUtil extends Object {
-	
+
 /**
  * 管理システムかチェック
  * 
@@ -12,13 +13,12 @@ class BcUtil extends Object {
  * @return boolean
  */
 	public static function isAdminSystem() {
-		
+
 		$url = Configure::read('BcRequest.pureUrl');
 		$adminPrefix = Configure::read('Routing.prefixes.0');
-		return (boolean) (preg_match('/^' . $adminPrefix. '\//', $url) || preg_match('/^' . $adminPrefix. '$/', $url));
-		
+		return (boolean) (preg_match('/^' . $adminPrefix . '\//', $url) || preg_match('/^' . $adminPrefix . '$/', $url));
 	}
-	
+
 /**
  * 管理ユーザーかチェック
  * 
@@ -26,7 +26,7 @@ class BcUtil extends Object {
  */
 	public static function isAdminUser() {
 		$user = self::loginUser();
-		if(empty($user['UserGroup']['name'])) {
+		if (empty($user['UserGroup']['name'])) {
 			return false;
 		}
 		return ($user['UserGroup']['name'] == 'admins');
@@ -40,14 +40,14 @@ class BcUtil extends Object {
 	public static function loginUser() {
 		$Session = new CakeSession();
 		$user = $Session->read('Auth.User');
-		if(!$user) {
-			if(!empty($_SESSION['Auth']['User'])) {
+		if (!$user) {
+			if (!empty($_SESSION['Auth']['User'])) {
 				$user = $_SESSION['Auth']['User'];
 			}
 		}
 		return $user;
 	}
-	
+
 /**
  * ログインしているユーザー名を取得
  * 
@@ -55,11 +55,11 @@ class BcUtil extends Object {
  */
 	public static function loginUserName() {
 		$user = self::loginUser();
-		if(!empty($user['name'])) {
+		if (!empty($user['name'])) {
 			return $user['name'];
 		} else {
 			return '';
 		}
 	}
-	
+
 }

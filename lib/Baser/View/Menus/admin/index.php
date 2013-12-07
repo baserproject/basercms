@@ -18,16 +18,16 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
-	'admin/jquery.baser_ajax_sort_table', 
+	'admin/jquery.baser_ajax_data_list',
+	'admin/jquery.baser_ajax_batch',
+	'admin/jquery.baser_ajax_sort_table',
 	'admin/baser_ajax_data_list_config',
 	'admin/baser_ajax_batch_config'
 ));
 ?>
 
 
-<?php $this->BcBaser->js('admin/sorttable',false) ?>
+<?php $this->BcBaser->js('admin/sorttable', false) ?>
 <script type="text/javascript">
 $(function(){
 	$.baserAjaxDataList.init();

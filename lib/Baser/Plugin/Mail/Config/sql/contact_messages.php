@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* ContactMessages schema generated on: 2010-11-04 18:11:12 : 1288863012*/
+/* ContactMessages schema generated on: 2010-11-04 18:11:12 : 1288863012 */
+
 class ContactMessagesSchema extends CakeSchema {
+
 	var $name = 'ContactMessages';
-
 	var $file = 'contact_messages.php';
-
 	var $connection = 'plugin';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class ContactMessagesSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $contact_messages = array(
@@ -39,4 +41,5 @@ class ContactMessagesSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

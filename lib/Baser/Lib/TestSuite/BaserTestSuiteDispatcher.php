@@ -13,7 +13,6 @@
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
-
 require_once CAKE . 'TestSuite' . DS . 'CakeTestSuiteDispatcher.php';
 App::uses('BaserTestSuiteCommand', 'TestSuite');
 
@@ -122,9 +121,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 				$this->_checkXdebug();
 			}
 		}
-		if (empty($this->params['plugin'])
-			&& empty($this->params['core'])
-			&& empty($this->params['baser'])) {
+		if (empty($this->params['plugin']) && empty($this->params['core']) && empty($this->params['baser'])) {
 			$this->params['app'] = true;
 		}
 		$this->params['baseUrl'] = $this->_baseUrl;

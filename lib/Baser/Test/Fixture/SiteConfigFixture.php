@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SiteConfigFixture
  *
@@ -11,9 +12,9 @@ class SiteConfigFixture extends CakeTestFixture {
  * @var array
  */
 	public $import = array(
-        'model' => 'SiteConfig',
-        'records' => true,
-        'connection' => 'baser'
-    );
+		'model' => 'SiteConfig',
+		'records' => true,
+		'connection' => 'baser'
+	);
 
 }

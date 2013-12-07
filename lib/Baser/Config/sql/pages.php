@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* Pages schema generated on: 2013-03-23 04:03:08 : 1363981208*/
+/* Pages schema generated on: 2013-03-23 04:03:08 : 1363981208 */
+
 class PagesSchema extends CakeSchema {
+
 	var $name = 'Pages';
-
 	var $file = 'pages.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class PagesSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $pages = array(
@@ -37,5 +39,7 @@ class PagesSchema extends CakeSchema {
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }
+
 ?>

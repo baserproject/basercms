@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] 検索インデックス一覧　Ajax
@@ -18,4 +19,3 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->element('contents/index_list');
-?>

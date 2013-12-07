@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id: mail_input.ctp 250 2011-12-08 10:15:44Z arata $ */
 /**
  * [MOBILE] メールフィールド
@@ -17,14 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($blockStart)) {
+if (!isset($blockStart)) {
 	$blockStart = 0;
 }
-if(!isset($blockEnd)) {
+if (!isset($blockEnd)) {
 	$blockEnd = null;
 }
 $data = array(
-	'blockStart'	=> $blockStart,
-	'blockEnd'		=> $blockEnd
+	'blockStart' => $blockStart,
+	'blockEnd' => $blockEnd
 );
 $this->BcBaser->includeCore('Mail.Elements/mobile/mail_input', $data);

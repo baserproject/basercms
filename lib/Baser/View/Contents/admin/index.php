@@ -18,8 +18,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
+	'admin/jquery.baser_ajax_data_list',
+	'admin/jquery.baser_ajax_batch',
 	'admin/baser_ajax_data_list_config',
 	'admin/baser_ajax_batch_config'
 ));
@@ -62,7 +62,6 @@ $(function(){
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 
 });
-
 </script>
 
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'contents', 'action' => 'ajax_batch')) ?></div>

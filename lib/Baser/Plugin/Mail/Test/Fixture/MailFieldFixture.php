@@ -1,9 +1,10 @@
 <?php
+
 /**
  * MailFieldFixture
  *
  */
-App::uses('MailField','Mail.Model');
+App::uses('MailField', 'Mail.Model');
 
 class MailFieldFixture extends CakeTestFixture {
 
@@ -13,9 +14,9 @@ class MailFieldFixture extends CakeTestFixture {
  * @var array
  */
 	public $import = array(
-        'model' => 'Mail.MailField',
-        'records' => true,
-        'connection' => 'plugin'
-    );
+		'model' => 'Mail.MailField',
+		'records' => true,
+		'connection' => 'plugin'
+	);
 
 }

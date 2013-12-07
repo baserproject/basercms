@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * GoogleMapヘルパー
@@ -22,6 +23,7 @@
  * Include files
  */
 App::uses('BcGmapsComponent', 'Controller/Component');
+
 /**
  * GoogleMapヘルパー
  *
@@ -29,6 +31,7 @@ App::uses('BcGmapsComponent', 'Controller/Component');
  * @subpackage Baser.View.Helper
  */
 class BcGooglemapsHelper extends AppHelper {
+
 /**
  * タイトル
  * 
@@ -36,12 +39,14 @@ class BcGooglemapsHelper extends AppHelper {
  * @access public
  */
 	public $title = '';
+
 /**
  * マーカーテキスト
  * @var string
  * @access public
  */
 	public $markerText = '';
+
 /**
  * 地図を表示するDOM ID
  * 
@@ -49,6 +54,7 @@ class BcGooglemapsHelper extends AppHelper {
  * @access public
  */
 	public $mapId = 'map';
+
 /**
  * 住所
  * 
@@ -56,6 +62,7 @@ class BcGooglemapsHelper extends AppHelper {
  * @access public
  */
 	public $address = '';
+
 /**
  * latitude
  * 
@@ -63,6 +70,7 @@ class BcGooglemapsHelper extends AppHelper {
  * @access public
  */
 	public $latitude = '';
+
 /**
  * longitude
  * 
@@ -70,12 +78,14 @@ class BcGooglemapsHelper extends AppHelper {
  * @access public
  */
 	public $longitude = '';
+
 /**
  * ズーム
  * @var int
  * @access public
  */
 	public $zoom = 16;
+
 /**
  * Google マップ を読み込む
  * 
@@ -85,29 +95,30 @@ class BcGooglemapsHelper extends AppHelper {
  * @return boolean
  * @access public 
  */
-	public function load($address='',$width=null,$height=null) {
+	public function load($address = '', $width = null, $height = null) {
 
-		if($address) $this->address = $address;
+		if ($address)
+			$this->address = $address;
 
-		if(!$this->longitude || !$this->latitude) {
-			if(!$this->loadLocation()) {
+		if (!$this->longitude || !$this->latitude) {
+			if (!$this->loadLocation()) {
 				return false;
 			}
 		}
 		$script = $this->_getScript();
-		if($script) {
-			if($width || $height) {
-				echo '<div id="'.$this->mapId.'" style="width: '.$width.'px; height:'.$height.'px"></div>';
-			}else {
-				echo '<div id="'.$this->mapId.'"></div>';
+		if ($script) {
+			if ($width || $height) {
+				echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"></div>';
+			} else {
+				echo '<div id="' . $this->mapId . '"></div>';
 			}
 			echo $this->_getScript();
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * Google マップ読み込み用のjavascriptを生成する
  * 
@@ -116,12 +127,11 @@ class BcGooglemapsHelper extends AppHelper {
  */
 	protected function _getScript() {
 
-		if(!$this->longitude || !$this->latitude || !$this->mapId) {
+		if (!$this->longitude || !$this->latitude || !$this->mapId) {
 			return false;
 		}
-		
-		$script =
-<<< DOC_END
+
+		$script = <<< DOC_END
 			var latlng = new google.maps.LatLng({$this->latitude},{$this->longitude});
 			var options = {
 				zoom: {$this->zoom},
@@ -138,10 +148,10 @@ class BcGooglemapsHelper extends AppHelper {
 				title:"{$this->title}"
 			});
 DOC_END;
-	
-		if($this->markerText) {
+
+		if ($this->markerText) {
 			$script .=
-<<< INFO_END
+				<<< INFO_END
 			var infowindow = new google.maps.InfoWindow({
 				content: '{$this->markerText}'
 			});
@@ -154,9 +164,9 @@ INFO_END;
 
 		$googleScript = '<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
 
-		return $googleScript.'<script type="text/javascript">'.$script.'</script>';
-
+		return $googleScript . '<script type="text/javascript">' . $script . '</script>';
 	}
+
 /**
  * 位置情報を読み込む
  * 
@@ -164,20 +174,20 @@ INFO_END;
  * @access public
  */
 	public function loadLocation() {
-		
-		if(!$this->address) {
+
+		if (!$this->address) {
 			return false;
 		}
 		$location = $this->getLocation($this->address);
-		if($location) {
+		if ($location) {
 			$this->latitude = $location['latitude'];
 			$this->longitude = $location['longitude'];
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * 位置情報を取得する
  *
@@ -185,16 +195,14 @@ INFO_END;
  * @return boolean 
  * @access public
  */
-
 	public function getLocation($address) {
-		
+
 		$gmap = new BcGmapsComponent();
 		if ($gmap->getInfoLocation($address)) {
-			return array('latitude'=>$gmap->getLatitude(),'longitude'=>$gmap->getLongitude());
-		}else {
+			return array('latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude());
+		} else {
 			return false;
 		}
-		
 	}
-	
+
 }

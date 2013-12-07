@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ウィジェットエリアモデル
@@ -20,18 +21,21 @@
 /**
  * Include files
  */
+
 /**
  * ウィジェットエリアモデル
  *
  * @package Baser.Model
  */
 class WidgetArea extends AppModel {
+
 /**
  * クラス名
  * @var string
  * @access public
  */
 	public $name = 'WidgetArea';
+
 /**
  * ビヘイビア
  * 
@@ -39,6 +43,7 @@ class WidgetArea extends AppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * バリデーション
  *
@@ -48,14 +53,15 @@ class WidgetArea extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule'		=> array('notEmpty'),
-				'message'	=> 'ウィジェットエリア名を入力してください。'),
+				'rule' => array('notEmpty'),
+				'message' => 'ウィジェットエリア名を入力してください。'),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'ウィジェットエリア名は255文字以内で入力してください。'
+				'rule' => array('maxLength', 255),
+				'message' => 'ウィジェットエリア名は255文字以内で入力してください。'
 			)
 		)
 	);
+
 /**
  * コントロールソース取得
  * @param string $field
@@ -70,7 +76,6 @@ class WidgetArea extends AppModel {
 		} else {
 			return array();
 		}
-		
 	}
-	
+
 }

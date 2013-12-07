@@ -22,5 +22,5 @@
 
 <ul>
 	<li>ログイン用のユーザーアカウントを登録する事ができます。</li>
-	<?php if($this->request->action == 'admin_edit'): ?><li>パスワード欄は変更する場合のみ入力します。</li><?php endif ?>
+	<?php if ($this->request->action == 'admin_edit'): ?><li>パスワード欄は変更する場合のみ入力します。</li><?php endif ?>
 </ul>

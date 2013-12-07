@@ -25,20 +25,20 @@ $this->BcBaser->js('admin/baser_favorite');
 <div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort')) ?></div>
 
 <div id="FavoriteMenu">
-		
+
 	<h2><?php $this->BcBaser->img('admin/head_favorite.png', array('alt' => 'よく使う項目')) ?></h2>
-	
+
 	<ul class="favorite-menu-list">
-<?php if($favorites): ?>
-	<?php foreach($favorites as $favorite): ?>
-		<?php $this->BcBaser->element('favorite_menu_row', array('favorite' => $favorite)) ?>
-	<?php endforeach ?>
-	
-<?php else: ?>
-		<li class="no-data">新規登録ボタンよりよく使う項目を登録しておく事ができます。</li>
-<?php endif ?>
+		<?php if ($favorites): ?>
+			<?php foreach ($favorites as $favorite): ?>
+				<?php $this->BcBaser->element('favorite_menu_row', array('favorite' => $favorite)) ?>
+			<?php endforeach ?>
+
+		<?php else: ?>
+			<li class="no-data">新規登録ボタンよりよく使う項目を登録しておく事ができます。</li>
+		<?php endif ?>
 	</ul>
-	
+
 	<ul class="favolite-menu-tools clearfix">
 		<li><?php $this->BcBaser->img('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'id' => 'BtnFavoriteAdd', 'class' => 'btn', 'style' => 'cursor:pointer')) ?></li>
 		<li><?php $this->BcBaser->img('admin/btn_menu_help.png', array('alt' => 'ヘルプ', 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp')) ?>
@@ -60,7 +60,7 @@ $this->BcBaser->js('admin/baser_favorite');
 	<?php echo $this->BcForm->end() ?>
 </div>
 
-	
+
 <ul id="FavoritesMenu" class="context-menu" style="display:none">
     <li class="edit"><?php $this->BcBaser->link('編集', '#FavoriteEdit') ?></li>
     <li class="delete"><?php $this->BcBaser->link('削除', '#FavoriteDelete') ?></li>

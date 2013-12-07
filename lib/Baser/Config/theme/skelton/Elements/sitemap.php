@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] サイトマップ
@@ -20,7 +21,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($recursive)) {
+if (!isset($recursive)) {
 	$recursive = 1;
 }
 $this->BcBaser->includeCore('Elements/sitemap', array('pageList' => $pageList, 'recursive' => $recursive));

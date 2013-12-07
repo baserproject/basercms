@@ -17,35 +17,35 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($count)) {
+if (!isset($count)) {
 	$count = 5;
 }
-if(isset($blogContent)){
+if (isset($blogContent)) {
 	$id = $blogContent['BlogContent']['id'];
-}else{
+} else {
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/blog/get_recent_entries/'.$id.'/'.$count);
+$data = $this->requestAction('/blog/blog/get_recent_entries/' . $id . '/' . $count);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $blogContent['BlogContent']['name'].'/archives/';
+$baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
 ?>
 <div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?> blog-widget">
-<?php if($name && $use_title): ?>
-<h2><?php echo $name ?></h2>
-<?php endif ?>
-	<?php if($recentEntries): ?>
-	<ul>
-		<?php foreach($recentEntries as $recentEntry): ?>
-			<?php if($this->request->url == $baseCurrentUrl.$recentEntry['BlogPost']['no']): ?>
-				<?php $class = ' class="current"' ?>
-			<?php else: ?>
-				<?php $class = '' ?>
-			<?php endif ?>
-		<li<?php echo $class ?>>
-			<?php $this->BcBaser->link($recentEntry['BlogPost']['name'],array('admin'=>false,'plugin'=>'','controller'=>$blogContent['BlogContent']['name'],'action'=>'archives',$recentEntry['BlogPost']['no'])) ?>
-		</li>
-		<?php endforeach; ?>
-	</ul>
+	<?php if ($name && $use_title): ?>
+		<h2><?php echo $name ?></h2>
+	<?php endif ?>
+	<?php if ($recentEntries): ?>
+		<ul>
+			<?php foreach ($recentEntries as $recentEntry): ?>
+				<?php if ($this->request->url == $baseCurrentUrl . $recentEntry['BlogPost']['no']): ?>
+					<?php $class = ' class="current"' ?>
+				<?php else: ?>
+					<?php $class = '' ?>
+				<?php endif ?>
+				<li<?php echo $class ?>>
+					<?php $this->BcBaser->link($recentEntry['BlogPost']['name'], array('admin' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', $recentEntry['BlogPost']['no'])) ?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	<?php endif; ?>
 </div>

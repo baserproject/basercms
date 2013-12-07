@@ -35,15 +35,15 @@
 				更新日</th>
 		</tr>
 	</thead>
-	<tbody>
-		<?php if(!empty($datas)): ?>
-			<?php foreach($datas as $data): ?>
-				<?php $this->BcBaser->element('editor_templates/index_row', array('data' => $data)) ?>
-			<?php endforeach; ?>
-		<?php else: ?>
+<tbody>
+	<?php if (!empty($datas)): ?>
+		<?php foreach ($datas as $data): ?>
+			<?php $this->BcBaser->element('editor_templates/index_row', array('data' => $data)) ?>
+		<?php endforeach; ?>
+	<?php else: ?>
 		<tr>
 			<td colspan="5"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
-		<?php endif; ?>
-	</tbody>
+	<?php endif; ?>
+</tbody>
 </table>

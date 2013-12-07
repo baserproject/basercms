@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(empty($help)) {
+if (empty($help)) {
 	return;
 }
 ?>

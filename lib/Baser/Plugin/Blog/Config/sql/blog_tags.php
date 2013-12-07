@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* BlogTags schema generated on: 2011-04-24 03:04:44 : 1303583084*/
+/* BlogTags schema generated on: 2011-04-24 03:04:44 : 1303583084 */
+
 class BlogTagsSchema extends CakeSchema {
+
 	var $name = 'BlogTags';
-
 	var $file = 'blog_tags.php';
-
 	var $connection = 'plugin';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class BlogTagsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $blog_tags = array(
@@ -22,4 +24,5 @@ class BlogTagsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

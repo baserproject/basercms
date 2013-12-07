@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * コンテンツモデル
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * コンテンツモデル
  *
  * @package Baser.Model
  */
 class Content extends AppModel {
+
 /**
  * クラス名
  * 
@@ -30,6 +33,7 @@ class Content extends AppModel {
  * @access public
  */
 	public $name = 'Content';
+
 /**
  * ビヘイビア
  * 
@@ -37,4 +41,5 @@ class Content extends AppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 }

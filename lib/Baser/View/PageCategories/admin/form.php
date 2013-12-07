@@ -17,7 +17,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
 $pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 $owners = $this->BcForm->getControlSource('PageCategory.owner_id');
 ?>
@@ -95,62 +94,64 @@ function pageTypeChengeHandler() {
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $this->BcBaser->url(array('controller' => 'pages', 'action' => 'ajax_category_source')) ?></div>
 <div id="AjaxControlSources" class="display-none"><?php $this->BcBaser->url(array('controller' => 'page_categories', 'action' => 'ajax_control_sources')) ?></div>
 
-<?php if($this->request->action == 'admin_edit' && $indexPage): ?>
-<div class="em-box align-left">1
-	<?php if($indexPage['status']): ?>
-	<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
-	<?php else: ?>
-	<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri('/' . $indexPage['url']) ?></strong>
-	<?php endif ?>
-</div>
+<?php if ($this->request->action == 'admin_edit' && $indexPage): ?>
+	<div class="em-box align-left">1
+		<?php if ($indexPage['status']): ?>
+			<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
+		<?php else: ?>
+			<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri('/' . $indexPage['url']) ?></strong>
+		<?php endif ?>
+	</div>
 <?php endif ?>
 
 
 <?php echo $this->BcForm->create('PageCategory') ?>
-<?php if(!$pageType): ?>
+<?php if (!$pageType): ?>
 	<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
 <?php endif ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
-<?php if($this->request->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.id', 'NO') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('PageCategory.id') ?>
-				<?php echo $this->BcForm->input('PageCategory.id', array('type' => 'hidden')) ?>
-			</td>
-		</tr>
-<?php endif; ?>
-<?php if($pageType): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.page_category_type', 'タイプ') ?></th>
-			<td class="col-input">
-	<?php if($pageType): ?>
-				<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
-	<?php endif ?>
-			</td>
-		</tr>
-<?php endif ?>
-<?php if($parents): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.parent_id', '親カテゴリ') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('PageCategory.parent_id', array(
-						'type'		=> 'select', 
-						'options'	=> $parents,
-						'escape'	=> false)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('PageCategory.parent_id') ?>
-				<div class="helptext">
-					<ul>
-						<li>カテゴリの下の階層にカテゴリを作成するには親カテゴリを選択します。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-<?php else: ?>
-		<?php echo $this->BcForm->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
-<?php endif ?>
+		<?php if ($this->request->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('PageCategory.id', 'NO') ?></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('PageCategory.id') ?>
+					<?php echo $this->BcForm->input('PageCategory.id', array('type' => 'hidden')) ?>
+				</td>
+			</tr>
+		<?php endif; ?>
+		<?php if ($pageType): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('PageCategory.page_category_type', 'タイプ') ?></th>
+				<td class="col-input">
+					<?php if ($pageType): ?>
+						<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
+					<?php endif ?>
+				</td>
+			</tr>
+		<?php endif ?>
+		<?php if ($parents): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('PageCategory.parent_id', '親カテゴリ') ?></th>
+				<td class="col-input">
+					<?php
+					echo $this->BcForm->input('PageCategory.parent_id', array(
+						'type' => 'select',
+						'options' => $parents,
+						'escape' => false))
+					?>
+					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<?php echo $this->BcForm->error('PageCategory.parent_id') ?>
+					<div class="helptext">
+						<ul>
+							<li>カテゴリの下の階層にカテゴリを作成するには親カテゴリを選択します。</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		<?php else: ?>
+			<?php echo $this->BcForm->input('PageCategory.parent_id', array('type' => 'hidden')) ?>
+		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.name', 'ページカテゴリー名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -181,9 +182,9 @@ function pageTypeChengeHandler() {
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.contents_navi', 'コンテンツナビ') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('PageCategory.contents_navi', array(
-						'type'	=> 'checkbox',
-						'label'	=> '利用する',
-						)) ?>
+					'type' => 'checkbox',
+					'label' => '利用する',
+				)); ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('PageCategory.parent_id') ?>
 				<div class="helptext">
@@ -210,25 +211,25 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.content_template', 'コンテンツテンプレート') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('PageCategory.content_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content'))) ?>
-				<?php echo $this->BcForm->error('PageCategory.content_template') ?>
+		<?php echo $this->BcForm->input('PageCategory.content_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content'))) ?>
+		<?php echo $this->BcForm->error('PageCategory.content_template') ?>
 			</td>
 		</tr>
-<?php if($this->BcBaser->siteConfig['category_permission']): ?>
+		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('PageCategory.owner_id', '管理グループ') ?></th>
 			<td class="col-input">
-	<?php if($this->BcAdmin->isSystemAdmin()): ?>
-				<?php echo $this->BcForm->input('PageCategory.owner_id', array(
-						'type'		=> 'select',
-						'options'	=> $this->BcForm->getControlSource('PageCategory.owner_id'),
-						'empty'		=> '指定しない')) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('PageCategory.owner_id') ?>
-	<?php else: ?>
-				<?php echo $this->BcText->arrayValue($this->request->data['PageCategory']['owner_id'], $owners) ?>
-				<?php echo $this->BcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
-	<?php endif ?>
+				<?php if ($this->BcAdmin->isSystemAdmin()): ?>
+					<?php echo $this->BcForm->input('PageCategory.owner_id', array(
+						'type' => 'select',
+						'options' => $this->BcForm->getControlSource('PageCategory.owner_id'),
+						'empty' => '指定しない')); ?>
+					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<?php echo $this->BcForm->error('PageCategory.owner_id') ?>
+				<?php else: ?>
+					<?php echo $this->BcText->arrayValue($this->request->data['PageCategory']['owner_id'], $owners) ?>
+					<?php echo $this->BcForm->input('PageCategory.owner_id', array('type' => 'hidden')) ?>
+				<?php endif; ?>
 				<div class="helptext">
 					<ul>
 						<li>管理グループを指定した場合、このカテゴリに属したページは、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -236,18 +237,14 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
-<?php endif ?>
+		<?php endif; ?>
 	</table>
 </div>
 <div class="submit">
-<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if ($this->request->action == 'admin_edit' && $this->BcForm->value('PageCategory.name')!='mobile'): ?>
-	<?php $this->BcBaser->link('削除', 
-			array('action'=>'delete', $this->BcForm->value('PageCategory.id')),
-			array('class'=>'button'),
-			sprintf("%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。", $this->BcForm->value('PageCategory.name')),
-			false); ?>
-<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php if ($this->request->action == 'admin_edit' && $this->BcForm->value('PageCategory.name') != 'mobile'): ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('PageCategory.id')), array('class' => 'button'), sprintf("%s を本当に削除してもいいですか？\n\nこのカテゴリに関連するページは、どのカテゴリにも関連しない状態として残ります。", $this->BcForm->value('PageCategory.name')), false); ?>
+	<?php endif; ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcForm->end(); ?>

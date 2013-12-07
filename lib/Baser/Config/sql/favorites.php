@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* Favorites schema generated on: 2012-01-20 15:01:33 : 1327040553*/
+/* Favorites schema generated on: 2012-01-20 15:01:33 : 1327040553 */
+
 class FavoritesSchema extends CakeSchema {
+
 	var $name = 'Favorites';
-
 	var $file = 'favorites.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class FavoritesSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $favorites = array(
@@ -25,4 +27,5 @@ class FavoritesSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

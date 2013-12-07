@@ -18,18 +18,18 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php if($this->action != 'admin_add'): ?>
+<?php if ($this->action != 'admin_add'): ?>
 
-<?php
-$this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
-	'admin/baser_ajax_data_list_config',
-	'admin/baser_ajax_batch_config'
-));
-?>
+	<?php
+	$this->BcBaser->js(array(
+		'admin/jquery.baser_ajax_data_list',
+		'admin/jquery.baser_ajax_batch',
+		'admin/baser_ajax_data_list_config',
+		'admin/baser_ajax_batch_config'
+	));
+	?>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 $(function(){
 	$.baserAjaxBatch.config.methods.del.result = function() {
 		var config = $.baserAjaxBatch.config;
@@ -67,48 +67,48 @@ $(function(){
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });
-</script>
+	</script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'feed', 'controller' => 'feed_details', 'action' => 'ajax_batch', $this->request->params['pass'][0])) ?></div>
+	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'feed', 'controller' => 'feed_details', 'action' => 'ajax_batch', $this->request->params['pass'][0])) ?></div>
 
-<div class="section">
-	
-	<h2 id="headFeedDetail">フィード一覧</h2>
+	<div class="section">
 
-	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
-		<thead>
-			<tr>
-				<th scope="col"  style="width:160px" class="list-tool">
-					<div>
-						<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?>
-					</div>
-<?php if($this->BcBaser->isAdminUser()): ?>
-					<div>
-						<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-						<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-						<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-					</div>
-<?php endif ?>
-				</th>
-				<th scope="col">フィード名</th>
-				<th scope="col">カテゴリフィルター</th>
-				<th scope="col">キャッシュ時間</th>
-				<th scope="col">登録日<br />更新日</th>
+		<h2 id="headFeedDetail">フィード一覧</h2>
+
+		<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
+			<thead>
+				<tr>
+					<th scope="col"  style="width:160px" class="list-tool">
+			<div>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?>
+			</div>
+			<?php if ($this->BcBaser->isAdminUser()): ?>
+				<div>
+					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+				</div>
+			<?php endif ?>
+			</th>
+			<th scope="col">フィード名</th>
+			<th scope="col">カテゴリフィルター</th>
+			<th scope="col">キャッシュ時間</th>
+			<th scope="col">登録日<br />更新日</th>
 			</tr>
-		</thead>
-		<tbody>
-		<?php if(!empty($feedConfig['FeedDetail'])): ?>
-			<?php foreach($feedConfig['FeedDetail'] as $feedDetail): ?>
-				<?php $this->BcBaser->element('feed_details/index_row', array('data' => $feedDetail)) ?>
-			<?php endforeach; ?>
-		<?php else: ?>
-			<tr>
-				<td colspan="6"><p class="no-data">データが見つかりませんでした。「追加する」ボタンをクリックしてフィード詳細を登録してください。</p></td>
-			</tr>
-		<?php endif; ?>
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				<?php if (!empty($feedConfig['FeedDetail'])): ?>
+					<?php foreach ($feedConfig['FeedDetail'] as $feedDetail): ?>
+						<?php $this->BcBaser->element('feed_details/index_row', array('data' => $feedDetail)) ?>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan="6"><p class="no-data">データが見つかりませんでした。「追加する」ボタンをクリックしてフィード詳細を登録してください。</p></td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
 
-</div>
+	</div>
 
 <?php endif ?>

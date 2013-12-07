@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] サイドメニュー
@@ -17,12 +18,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$elementPath = 'submenus'.DS;
-if (!empty($subMenuElements)){
-	foreach ($subMenuElements as $subMenuElement){
-		$this->BcBaser->element($elementPath.$subMenuElement);
+$elementPath = 'submenus' . DS;
+if (!empty($subMenuElements)) {
+	foreach ($subMenuElements as $subMenuElement) {
+		$this->BcBaser->element($elementPath . $subMenuElement);
 	}
-}else{
+} else {
 	echo '&nbsp';
 }
-?>

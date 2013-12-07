@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] フィード読み込みAJAX
@@ -17,4 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'Feed'.DS.'View'.DS.'Feed'.DS.'ajax'.$this->ext;
+include BASER_PLUGINS . 'Feed' . DS . 'View' . DS . 'Feed' . DS . 'ajax' . $this->ext;

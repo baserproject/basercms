@@ -18,4 +18,3 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->element('pages/index_list');
-?>

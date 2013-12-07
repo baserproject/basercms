@@ -1,11 +1,12 @@
 <?php
+
 /* SVN FILE: $Id$ */
-/* Plugins schema generated on: 2010-11-04 18:11:10 : 1288863010*/
+/* Plugins schema generated on: 2010-11-04 18:11:10 : 1288863010 */
+
 class PluginsSchema extends CakeSchema {
+
 	var $name = 'Plugins';
-
 	var $file = 'plugins.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class PluginsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $plugins = array(
@@ -26,4 +28,5 @@ class PluginsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

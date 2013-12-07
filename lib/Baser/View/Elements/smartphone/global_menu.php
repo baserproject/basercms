@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] グロバールメニュー
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'Elements'.DS.'global_menu'.$this->ext;
-?>
+include BASER_VIEWS . 'Elements' . DS . 'global_menu' . $this->ext;

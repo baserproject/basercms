@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] PHP INFO （iframe用）
@@ -18,4 +19,3 @@
  * @license			http://basercms.net/license/index.html
  */
 phpinfo();
-?>

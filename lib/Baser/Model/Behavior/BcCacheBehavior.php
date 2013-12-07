@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * キャッシュビヘイビア
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * キャッシュビヘイビア
  *
  * @subpackage		Baser.Model.Behavior
  */
 class BcCacheBehavior extends ModelBehavior {
+
 /**
  * setup
  * 
@@ -32,33 +35,33 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  */
 	public function setup(Model $model, $config = array()) {
-		
-		if(!defined('CACHE_DATA_PATH')) {
+
+		if (!defined('CACHE_DATA_PATH')) {
 			$setting = Cache::config('_cake_data_');
-			if($setting) {
+			if ($setting) {
 				define('CACHE_DATA_PATH', $setting['settings']['path']);
 			}
 		}
 		$this->createCacheFolder($model);
-
 	}
+
 /**
  * キャッシュフォルダーを生成する
  * 
  * @param Model $model 
  */
 	public function createCacheFolder(Model $model) {
-		
-		if(!defined('CACHE_DATA_PATH')) {
+
+		if (!defined('CACHE_DATA_PATH')) {
 			return;
 		}
 		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
-		if(!is_dir($path)) {
+		if (!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
 		}
-		
 	}
+
 /**
  * キャッシュ処理
  * 
@@ -69,16 +72,16 @@ class BcCacheBehavior extends ModelBehavior {
  * @return mixed
  * @access public
  */
-	public function readCache(Model $model, $expire, $type, $query = array()){
-		
+	public function readCache(Model $model, $expire, $type, $query = array()) {
+
 		static $cacheData = array();
-		
+
 		// キャッシュキー
-		$tableName = $model->tablePrefix.$model->table;
+		$tableName = $model->tablePrefix . $model->table;
 		$cachekey = $tableName . '_' . $type . '_' . $expire . '_' . md5(serialize($query));
-		
+
 		// 変数キャッシュの場合
-		if(!$expire){
+		if (!$expire) {
 			if (isset($cacheData[$cachekey])) {
 				return $cacheData[$cachekey];
 			}
@@ -89,42 +92,42 @@ class BcCacheBehavior extends ModelBehavior {
 			$cacheData[$cachekey] = $results;
 			return $results;
 		}
-		
+
 		$this->changeCachePath($model->tablePrefix . $model->table);
-		
+
 		// サーバーキャッシュの場合
 		$results = Cache::read($cachekey, '_cake_data_');
-		if($results !== false){
-			if($results == "{false}") {
+		if ($results !== false) {
+			if ($results == "{false}") {
 				$results = false;
 			}
 			return $results;
 		}
-		
+
 		if (!$db = ConnectionManager::getDataSource($model->useDbConfig)) {
 			return false;
 		}
 		$results = $db->read($model, $query);
-		Cache::write($cachekey, ($results === false)? "{false}" : $results, '_cake_data_');
-		
+		Cache::write($cachekey, ($results === false) ? "{false}" : $results, '_cake_data_');
+
 		return $results;
-		
 	}
+
 /**
  * データキャッシュのパスを指定する
  * 
  * @param string $dir 
  */
 	public function changeCachePath($table) {
-		
-		if(!defined('CACHE_DATA_PATH')) {
+
+		if (!defined('CACHE_DATA_PATH')) {
 			return;
 		}
 		$path = CACHE_DATA_PATH;
 		$path .= DS . $table . DS;
 		Cache::config('_cake_data_', array('path' => $path));
-		
 	}
+
 /**
  * キャッシュを削除する
  * 
@@ -132,16 +135,16 @@ class BcCacheBehavior extends ModelBehavior {
  * @return void
  * @access public
  */
-	public function delCache(Model $model){
-		if(!defined('CACHE_DATA_PATH')) {
+	public function delCache(Model $model) {
+		if (!defined('CACHE_DATA_PATH')) {
 			return;
 		}
 		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
 		$Folder = new Folder();
 		$Folder->delete($path);
 		$this->createCacheFolder($model);
-		
 	}
+
 /**
  * afterSave
  * 
@@ -151,10 +154,10 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  */
 	public function afterSave(Model $model, $created, $options = array()) {
-		
+
 		$this->delAssockCache($model);
-		
 	}
+
 /**
  * afterDelete
  * 
@@ -163,10 +166,10 @@ class BcCacheBehavior extends ModelBehavior {
  * @access public
  */
 	public function afterDelete(Model $model) {
-		
+
 		$this->delAssockCache($model);
-		
 	}
+
 /**
  * 関連モデルを含めてキャッシュを削除する
  * 
@@ -176,24 +179,23 @@ class BcCacheBehavior extends ModelBehavior {
  * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい
  */
 	public function delAssockCache(Model $model, $recursive = 0) {
-		
+
 		$this->delCache($model);
-		if($recursive <= 3) {
+		if ($recursive <= 3) {
 			$recursive++;
 			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
-			foreach($assocTypes as $assocType) {
-				if($model->{$assocType}) {
-					foreach($model->{$assocType} as $assoc) {
+			foreach ($assocTypes as $assocType) {
+				if ($model->{$assocType}) {
+					foreach ($model->{$assocType} as $assoc) {
 						$className = $assoc['className'];
 						list($plugin, $className) = pluginSplit($className);
-						if(isset($model->{$className})) {
+						if (isset($model->{$className})) {
 							$this->delAssockCache($model->{$className}, $recursive);
 						}
 					}
 				}
 			}
 		}
-		
 	}
-	
+
 }

@@ -28,7 +28,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 	public function baseUrl() {
 		return baseUrl() . 'test.php';
 	}
-	
+
 /**
  * Paints the document start content contained in header.php
  *
@@ -129,7 +129,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  */
 	public function paintDocumentEnd() {
 		$baseDir = baseUrl();
-		include BASER_LIBS. 'TestSuite' . DS . 'templates' . DS . 'footer.php';
+		include BASER_LIBS . 'TestSuite' . DS . 'templates' . DS . 'footer.php';
 		if (ob_get_length()) {
 			ob_end_flush();
 		}

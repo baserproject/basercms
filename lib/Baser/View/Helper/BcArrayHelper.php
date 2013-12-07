@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * 配列操作ヘルパー
@@ -21,6 +22,7 @@
  * Include files
  */
 App::uses('Form', 'View/Helper');
+
 /**
  * ArrayHelper
  *
@@ -95,4 +97,5 @@ class BcArrayHelper extends AppHelper {
 		}
 		$value = $prefix . $value . $suffix;
 	}
+
 }

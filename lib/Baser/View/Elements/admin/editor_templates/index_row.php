@@ -27,12 +27,12 @@
 	</td>
 	<td><?php echo $data['EditorTemplate']['id'] ?></td>
 	<td>
-<?php if($data['EditorTemplate']['image']): ?>
-		<?php $this->BcBaser->img('/files/editor/' . $data['EditorTemplate']['image'], array('url' => array('action'=>'edit', $data['EditorTemplate']['id']), 'alt' => $data['EditorTemplate']['name'], 'title' => $data['EditorTemplate']['name'], 'style' => 'float:left;margin-right:10px;height:36px')) ?>
-<?php endif ?>
-		<?php $this->BcBaser->link($data['EditorTemplate']['name'], array('action'=>'edit', $data['EditorTemplate']['id'])) ?>
+		<?php if ($data['EditorTemplate']['image']): ?>
+			<?php $this->BcBaser->img('/files/editor/' . $data['EditorTemplate']['image'], array('url' => array('action' => 'edit', $data['EditorTemplate']['id']), 'alt' => $data['EditorTemplate']['name'], 'title' => $data['EditorTemplate']['name'], 'style' => 'float:left;margin-right:10px;height:36px')) ?>
+		<?php endif ?>
+		<?php $this->BcBaser->link($data['EditorTemplate']['name'], array('action' => 'edit', $data['EditorTemplate']['id'])) ?>
 	</td>
 	<td><?php echo $data['EditorTemplate']['description']; ?></td>
-	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d',$data['EditorTemplate']['created']) ?><br />
-		<?php echo $this->BcTime->format('Y-m-d',$data['EditorTemplate']['modified']) ?></td>
+	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['created']) ?><br />
+		<?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['modified']) ?></td>
 </tr>

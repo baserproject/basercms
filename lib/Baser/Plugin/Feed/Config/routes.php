@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィードルーティング定義
@@ -17,7 +18,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
 // Ajax 経由で、/feed/index/x を呼び出す際、cacheを false に設定すると
 // /feed/index/x?_=xxxxxxx といった形式に対しリクエストされる事なり、
 // CakePHPにおけるプラグインのデフォルトコントローラー機能が正常動作しない為、

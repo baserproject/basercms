@@ -1,5 +1,7 @@
 <?php
+
 /* SVN FILE: $Id$ */
+
 /**
  * リプレースプレフィックスコンポーネント
  *
@@ -33,6 +35,7 @@
  * @license			http://basercms.net/license/index.html
  */
 class BcReplacePrefixComponent extends Component {
+
 /**
  * プレフィックス置き換えを許可するアクション
  * プレフィックスなしの純粋なアクション名を指定する
@@ -41,6 +44,7 @@ class BcReplacePrefixComponent extends Component {
  * @access public
  */
 	public $allowedPureActions = array();
+
 /**
  * 置き換え後のプレフィックス
  *
@@ -48,6 +52,7 @@ class BcReplacePrefixComponent extends Component {
  * @access public
  */
 	public $replacedPrefix = 'admin';
+
 /**
  * 対象コントローラーのメソッド
  *
@@ -55,6 +60,7 @@ class BcReplacePrefixComponent extends Component {
  * @access	protected
  */
 	protected $_methods;
+
 /**
  * Initializes
  *
@@ -63,10 +69,10 @@ class BcReplacePrefixComponent extends Component {
  * @access public
  */
 	public function initialize(Controller $controller) {
-		
+
 		$this->_methods = $controller->methods;
-		
 	}
+
 /**
  * プレフィックスの置き換えを許可するアクションを設定する
  *
@@ -85,8 +91,8 @@ class BcReplacePrefixComponent extends Component {
 			$args = $args[0];
 		}
 		$this->allowedPureActions = array_merge($this->allowedPureActions, $args);
-
 	}
+
 /**
  * startup
  *
@@ -95,56 +101,55 @@ class BcReplacePrefixComponent extends Component {
  */
 	public function startup(Controller $controller) {
 
-		if(in_array($controller->action, $this->_methods)) {
+		if (in_array($controller->action, $this->_methods)) {
 			return;
 		}
 
-		if(!isset($controller->params['prefix'])) {
+		if (!isset($controller->params['prefix'])) {
 			$requestedPrefix = '';
 		} else {
 			$requestedPrefix = $controller->params['prefix'];
 		}
 
-		$pureAction = preg_replace('/^'.$requestedPrefix.'_/', '', $controller->action);
+		$pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $controller->action);
 
-		if(!in_array($pureAction, $this->allowedPureActions)) {
+		if (!in_array($pureAction, $this->allowedPureActions)) {
 			return;
 		}
-		if(!in_array($this->replacedPrefix.'_'.$pureAction, $this->_methods)) {
+		if (!in_array($this->replacedPrefix . '_' . $pureAction, $this->_methods)) {
 			return;
 		}
 
-		$controller->action = $this->replacedPrefix.'_'.$pureAction;
-		$controller->layoutPath = $this->replacedPrefix;	// Baserに依存
-		$controller->subDir = $this->replacedPrefix;		// Baserに依存
-		
-		if($requestedPrefix != $this->replacedPrefix) {
+		$controller->action = $this->replacedPrefix . '_' . $pureAction;
+		$controller->layoutPath = $this->replacedPrefix; // Baserに依存
+		$controller->subDir = $this->replacedPrefix;  // Baserに依存
+
+		if ($requestedPrefix != $this->replacedPrefix) {
 
 			// viewファイルが存在すればリクエストされたプレフィックスを優先する
 			$existsLoginView = false;
 			$viewPaths = $this->getViewPaths($controller);
 			$prefixPath = str_replace('_', DS, $requestedPrefix);
 			$controllerName = Inflector::underscore($controller->name);
-			foreach($viewPaths as $path) {
-				if($prefixPath) {
-					$file = $path.$controllerName.DS.$prefixPath.DS.$pureAction.$controller->ext;
+			foreach ($viewPaths as $path) {
+				if ($prefixPath) {
+					$file = $path . $controllerName . DS . $prefixPath . DS . $pureAction . $controller->ext;
 				} else {
-					$file = $path.$controllerName.DS.$pureAction.$controller->ext;
+					$file = $path . $controllerName . DS . $pureAction . $controller->ext;
 				}
-				if(file_exists($file)) {
+				if (file_exists($file)) {
 					$existsLoginView = true;
 					break;
 				}
 			}
 
-			if($existsLoginView) {
+			if ($existsLoginView) {
 				$controller->subDir = $prefixPath;
 				$controller->layoutPath = $prefixPath;
 			}
-
 		}
-
 	}
+
 /**
  * Return all possible paths to find view files in order
  *
@@ -159,12 +164,11 @@ class BcReplacePrefixComponent extends Component {
 		if (!empty($controller->theme)) {
 			$count = count($paths);
 			for ($i = 0; $i < $count; $i++) {
-				$themePaths[] = $paths[$i] . 'theme'. DS . $controller->theme . DS;
+				$themePaths[] = $paths[$i] . 'theme' . DS . $controller->theme . DS;
 			}
 			$paths = array_merge($themePaths, $paths);
 		}
 		return $paths;
-
 	}
 
 }

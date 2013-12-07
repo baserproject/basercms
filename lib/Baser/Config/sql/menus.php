@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008*/
+/* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008 */
+
 class MenusSchema extends CakeSchema {
+
 	var $name = 'Menus';
-
 	var $file = 'menus.php';
-
 	var $connection = 'baser';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class MenusSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $menus = array(
@@ -27,4 +29,5 @@ class MenusSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }
