@@ -40,7 +40,6 @@ class BcEventDispatcher extends Object {
  * @return boolean|\CakeEvent
  */
 	public static function dispatch($name, $subject, $params = array(), $options = array()) {
-
 		$options = array_merge(array(
 			'modParams' => 0,
 			'layer' => '',

@@ -53,7 +53,6 @@ class BcEventListener extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-
 		$events = array();
 		if ($this->events) {
 			foreach ($this->events as $registerEvent) {
