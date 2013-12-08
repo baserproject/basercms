@@ -44,7 +44,6 @@ class BcAuthConfigureComponent extends Component {
  * @access public
  */
 	public function initialize(Controller $controller) {
-
 		$this->controller = $controller;
 	}
 
@@ -56,7 +55,6 @@ class BcAuthConfigureComponent extends Component {
  * @access public
  */
 	public function setting($config) {
-
 		if (empty($this->controller->BcAuth)) {
 			return false;
 		}
@@ -70,13 +68,13 @@ class BcAuthConfigureComponent extends Component {
 		}
 
 		$config = array_merge(array(
-			'loginRedirect'  => '/' . $requestedPrefix,
-			'logoutRedirect' => '',
-			'username'       => 'name',
-			'password'       => 'password',
-			'serial'         => '',
-			'userScope'      => null,
-			'loginAction'    => ''
+			'loginRedirect'		=> '/' . $requestedPrefix,
+			'logoutRedirect'	=> '',
+			'username'			=> 'name',
+			'password'			=> 'password',
+			'serial'			=> '',
+			'userScope'			=> null,
+			'loginAction'		=> ''
 			), $config);
 		extract($config);
 

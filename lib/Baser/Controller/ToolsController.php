@@ -34,6 +34,7 @@ class ToolsController extends AppController {
  * @access public
  */
 	public $name = 'Tools';
+
 	public $uses = array('Tool', 'Page');
 
 /**
@@ -78,7 +79,6 @@ class ToolsController extends AppController {
  * @access public
  */
 	public function admin_maintenance($mode = '') {
-
 		switch ($mode) {
 			case 'backup':
 				set_time_limit(0);
@@ -119,7 +119,6 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _restoreDb($data) {
-
 		if (empty($data['Tool']['backup']['tmp_name'])) {
 			return false;
 		}
@@ -160,7 +159,6 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _loadBackup($path, $configKeyName) {
-
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
@@ -206,7 +204,6 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _backupDb() {
-
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
@@ -237,7 +234,6 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _writeBackup($configKeyName, $path, $plugin = '') {
-
 		$db = ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
@@ -276,7 +272,6 @@ class ToolsController extends AppController {
  * @access public
  */
 	public function admin_write_schema() {
-
 		$path = TMP . 'schemas' . DS;
 
 		if (!$this->request->data) {
@@ -312,7 +307,6 @@ class ToolsController extends AppController {
  * @access public
  */
 	public function admin_load_schema() {
-
 		if (!$this->request->data) {
 			$this->request->data['Tool']['schema_type'] = 'create';
 		} else {
@@ -344,7 +338,6 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _resetTmpSchemaFolder() {
-
 		$path = TMP . 'schemas' . DS;
 		return emptyFolder($path);
 	}

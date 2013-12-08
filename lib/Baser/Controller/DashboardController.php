@@ -85,7 +85,6 @@ class DashboardController extends AppController {
  * @access public
  */
 	public function admin_ajax_dblog_index() {
-
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
 		$this->paginate = array(
@@ -102,7 +101,6 @@ class DashboardController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$this->pageTitle = '管理者ダッシュボード';
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default));
@@ -127,7 +125,6 @@ class DashboardController extends AppController {
  * @access public
  */
 	public function admin_del() {
-
 		if ($this->Dblog->deleteAll('1 = 1')) {
 			$this->setMessage('最近の動きのログを削除しました。');
 		} else {

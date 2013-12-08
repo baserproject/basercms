@@ -48,7 +48,6 @@ class UploadsController extends AppController {
  * @access public
  */
 	public function tmp() {
-
 		$size = '';
 		$args = func_get_args();
 		if (func_num_args() > 1) {

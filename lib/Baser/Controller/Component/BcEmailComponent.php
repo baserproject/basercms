@@ -30,18 +30,16 @@ App::uses('EmailComponent', 'Controller/Component');
  */
 class BcEmailComponent extends EmailComponent {
 
-// CUSTOMIZE ADD 2011/05/07 ryuring
-// プラグインのテンプレートを指定できるようにした
-// >>>
 /**
  * プラグイン名
+ * CUSTOMIZE ADD 2011/05/07 ryuring
+ * プラグインのテンプレートを指定できるようにした
  * 
  * @var string
  * @access public
  */
 	public $plugin = null;
 
-// <<<
 /**
  * Send an email using the specified content, template and layout
  *
@@ -52,7 +50,6 @@ class BcEmailComponent extends EmailComponent {
  * @access	public
  */
 	public function send($content = null, $template = null, $layout = null) {
-
 		$this->__createHeader();
 
 		if ($template) {
@@ -92,7 +89,6 @@ class BcEmailComponent extends EmailComponent {
 
 		$this->__message = $message;
 
-
 		if (!empty($this->attachments)) {
 			$this->__attachFiles();
 		}
@@ -123,7 +119,6 @@ class BcEmailComponent extends EmailComponent {
  * @access private
  */
 	private function __wrap($message) {
-
 		$message = $this->__strip($message);
 
 		// MODIFIED 2008/6/22 ryuring
@@ -149,7 +144,6 @@ class BcEmailComponent extends EmailComponent {
  * @access private
  */
 	private function ___wrap($lines) {
-
 		$formatted = array();
 		if ($this->_lineLength !== null) {
 			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
@@ -234,7 +228,6 @@ class BcEmailComponent extends EmailComponent {
  *       強制的に$widthで改行する、とか？
  */
 	public function mbFold($str, $width, $encoding = null) {
-
 		assert('$width >= 4');
 
 		if (!isset($str)) {
@@ -247,7 +240,7 @@ class BcEmailComponent extends EmailComponent {
 
 		// 元々の配列も文字列中の改行もとにかく展開してひとつの配列にする
 		$strings = array();
-		foreach ((array) $str as $s) {
+		foreach ((array)$str as $s) {
 			// NOTE: 何故かmb_split()だと改行でうまく分割できない
 			//       どうせメジャーなエンコーディングなら制御コードは
 			//       leading byteにもtrailing byteにもかぶらないので
@@ -286,7 +279,7 @@ class BcEmailComponent extends EmailComponent {
 					$line .= $char;
 				}
 			}
-			$lines[] = $line;   // 端数or空行
+			$lines[] = $line;	// 端数or空行
 		}
 
 		return $lines;
@@ -300,7 +293,6 @@ class BcEmailComponent extends EmailComponent {
  * @access private
  */
 	private function __formatAddress($string, $smtp = false) {
-
 		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
 		if ($smtp && $hasAlias) {
 			return $this->__strip('<' . $matches[3] . '>');
@@ -326,7 +318,6 @@ class BcEmailComponent extends EmailComponent {
  * @access private
  */
 	private function __renderTemplate($content) {
-
 		$viewClass = $this->Controller->viewClass;
 
 		if ($viewClass != 'View') {
@@ -372,7 +363,7 @@ class BcEmailComponent extends EmailComponent {
 
 			// CUSTOMIZE MODIRY 2012/04/23 ryuring
 			// layoutPath / subDir を指定できるようにした
-			// >>>	
+			// >>>
 			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content));
 			//$View->layoutPath = 'email' . DS . 'text';
 			// ---
@@ -391,7 +382,7 @@ class BcEmailComponent extends EmailComponent {
 
 			// CUSTOMIZE MODIRY 2012/04/23 ryuring
 			// layoutPath / subDir を指定できるようにした
-			// >>>	
+			// >>>
 			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
 			//$View->layoutPath = 'email' . DS . 'html';
 			// ---
@@ -428,7 +419,7 @@ class BcEmailComponent extends EmailComponent {
 		// プラグインのテンプレートを指定できるようにした
 		// CUSTOMIZE MODIRY 2012/04/23 ryuring
 		// layoutPath / subDir を指定できるようにした
-		// >>>		
+		// >>>
 		//$content = $View->element('email' . DS . $this->sendAs . DS . $this->template, array('content' => $content));
 		//$View->layoutPath = 'email' . DS . $this->sendAs;
 		// ---

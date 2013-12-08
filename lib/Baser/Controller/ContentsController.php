@@ -67,7 +67,6 @@ class ContentsController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		// 認証設定
@@ -89,7 +88,6 @@ class ContentsController extends AppController {
  * @access public
  */
 	public function search() {
-
 		$datas = array();
 		$query = array();
 
@@ -124,7 +122,6 @@ class ContentsController extends AppController {
  * @access protected
  */
 	protected function _parseQuery($query) {
-
 		$query = str_replace('　', ' ', $query);
 		if (strpos($query, ' ') !== false) {
 			$query = explode(' ', $query);
@@ -142,7 +139,6 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	protected function _createSearchConditions($data) {
-
 		$conditions = array('Content.status' => true);
 		$query = '';
 		unset($data['Content']['key']);
@@ -186,7 +182,6 @@ class ContentsController extends AppController {
  * @access public 
  */
 	public function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
-
 		if (isConsole()) {
 			$this->Page = new Page(null, null, 'baser');
 		}
@@ -201,7 +196,6 @@ class ContentsController extends AppController {
  * @access private 
  */
 	private function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
-
 		if (empty($this->Page->PageCategory)) {
 			// インストールの段階で呼出された場合 ClassRegistry::init() だと AppModelで初期化されてしまう
 			$this->Page->PageCategory = new PageCategory(false, null, 'baser');
@@ -298,7 +292,6 @@ class ContentsController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$this->pageTitle = '検索インデックス コンテンツ一覧';
 
 		/* 画面情報設定 */
@@ -335,7 +328,6 @@ class ContentsController extends AppController {
  * @access 	public
  */
 	public function admin_add() {
-
 		$this->pageTitle = '検索インデックス コンテンツ登録';
 
 		if ($this->request->data) {
@@ -382,12 +374,12 @@ class ContentsController extends AppController {
 					$content = Sanitize::stripAll($content);
 					$content = strip_tags($content);
 					$data = array('Content' => array(
-							'title'    => $this->request->data['Content']['title'],
-							'detail'   => $content,
-							'url'      => $url,
-							'type'     => 'その他',
-							'status'   => true,
-							'priority' => 0.5
+							'title'		=> $this->request->data['Content']['title'],
+							'detail'	=> $content,
+							'url'		=> $url,
+							'type'		=> 'その他',
+							'status'	=> true,
+							'priority'	=> 0.5
 					));
 					$this->Content->create($data);
 					if ($this->Content->save()) {
@@ -416,7 +408,6 @@ class ContentsController extends AppController {
  * @access 	public
  */
 	public function admin_ajax_delete($id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -438,7 +429,6 @@ class ContentsController extends AppController {
  * @access 	public
  */
 	public function admin_delete($id = null) {
-
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -462,7 +452,6 @@ class ContentsController extends AppController {
  * @access 	public
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 
 			foreach ($ids as $id) {
@@ -484,7 +473,6 @@ class ContentsController extends AppController {
  * @access public
  */
 	public function admin_ajax_change_priority() {
-
 		if ($this->request->data) {
 			$this->Content->set($this->request->data);
 			if ($this->Content->save()) {
@@ -502,7 +490,6 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	protected function _createAdminIndexConditions($data) {
-
 		if (empty($data['Content'])) {
 			return array();
 		}

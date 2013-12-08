@@ -72,7 +72,6 @@ class ThemeConfigsController extends AppController {
  * [ADMIN] 設定編集
  */
 	public function admin_form() {
-
 		$this->pageTitle = 'テーマ設定';
 		$this->help = 'theme_configs_form';
 

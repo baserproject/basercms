@@ -83,7 +83,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 
@@ -178,7 +177,6 @@ class ThemeFilesController extends AppController {
  * @return mixed false / type 
  */
 	protected function _getFileType($file) {
-
 		if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
 			return 'text';
 		} elseif (preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is', $file)) {
@@ -196,7 +194,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_add() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -262,7 +259,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_edit() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -340,7 +336,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_del() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -372,7 +367,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_ajax_del() {
-
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
@@ -398,7 +392,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	protected function _del($args) {
-
 		extract($args);
 		if (is_dir($fullpath)) {
 			$folder = new Folder();
@@ -423,7 +416,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 
 			$result = true;
@@ -462,7 +454,6 @@ class ThemeFilesController extends AppController {
  * @access	public
  */
 	public function admin_view() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -498,7 +489,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_ajax_copy() {
-
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
@@ -565,7 +555,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_upload() {
-
 		if (!$this->request->data) {
 			$this->notFound();
 		}
@@ -593,7 +582,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_add_folder() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -632,7 +620,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_edit_folder() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -684,7 +671,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_view_folder() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -718,7 +704,6 @@ class ThemeFilesController extends AppController {
  * @access protected
  */
 	protected function _parseArgs($args) {
-
 		$data = array('plugin' => '', 'theme' => '', 'type' => '', 'path' => '', 'fullpath' => '', 'assets' => false);
 		$assets = array('css', 'js', 'img');
 
@@ -803,7 +788,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_copy_to_theme() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -840,7 +824,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_copy_folder_to_theme() {
-
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -881,7 +864,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_img() {
-
 		$args = $this->_parseArgs(func_get_args());
 		$contents = array('jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png');
 		extract($args);
@@ -913,7 +895,6 @@ class ThemeFilesController extends AppController {
  * @access public
  */
 	public function admin_img_thumb() {
-
 		$args = func_get_args();
 		$width = $args[0];
 		$height = $args[1];

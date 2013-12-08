@@ -103,7 +103,6 @@ class BcGmapsComponent extends Component {
  * @access private
  */
 	public function __construct() {
-
 		$this->_baseUrl = "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
 	}
 
@@ -117,7 +116,6 @@ class BcGmapsComponent extends Component {
  * @access public
  */
 	public function getInfoLocation($address) {
-
 		if (!empty($address)) {
 			return $this->_connect($address);
 		}
@@ -132,11 +130,10 @@ class BcGmapsComponent extends Component {
  * @access protected
  */
 	protected function _connect($param) {
-
-		$request_url = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
+		$requestUrl = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
 
 		App::uses('Xml', 'Utility');
-		$xmlArray = Xml::toArray(Xml::build($request_url));
+		$xmlArray = Xml::toArray(Xml::build($requestUrl));
 		$xml = $xmlArray['GeocodeResponse'];
 
 		if (!empty($xml['result'])) {
@@ -181,55 +178,49 @@ class BcGmapsComponent extends Component {
  * @return string
  * @access public
  */
-/* 	public function getPostalCode () {
+	//public function getPostalCode () {
+	//	return $this->_postalCode;
+	//}
 
-	  return $this->_postalCode;
-
-	  } */
 /**
  * get the Address
  *
  * @return string
  * @access public
  */
-/* 	public function getAddress () {
+	//public function getAddress () {
+	//	return $this->_address;
+	//}
 
-	  return $this->_address;
-
-	  } */
 /**
  * get the Country name
  *
  * @return string
  * @access public
  */
-/* 	public function getCountryName () {
+	//public function getCountryName () {
+	//	return $this->_countryName;
+	//}
 
-	  return $this->_countryName;
-
-	  } */
 /**
  * get the Country name code
  *
  * @return string
  * @access public
  */
-/* 	public function getCountryNameCode () {
+	//public function getCountryNameCode () {
+	//	return $this->_countryNameCode;
+	//}
 
-	  return $this->_countryNameCode;
-
-	  } */
 /**
  * get the Administrative area name
  *
  * @return string
  * @access public
  */
-/* 	public function getAdministrativeAreaName () {
-
-	  return $this->_administrativeAreaName;
-
-	  } */
+	//public function getAdministrativeAreaName () {
+	//	return $this->_administrativeAreaName;
+	//}
 
 /**
  * get the Latitude coordinate
@@ -238,7 +229,6 @@ class BcGmapsComponent extends Component {
  * @access public
  */
 	public function getLatitude() {
-
 		return $this->_latitude;
 	}
 
@@ -249,7 +239,6 @@ class BcGmapsComponent extends Component {
  * @access public
  */
 	public function getLongitude() {
-
 		return $this->_longitude;
 	}
 

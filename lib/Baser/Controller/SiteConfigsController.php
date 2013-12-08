@@ -82,7 +82,6 @@ class SiteConfigsController extends AppController {
  * @return void
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 	}
 
@@ -93,7 +92,6 @@ class SiteConfigsController extends AppController {
  * @access public
  */
 	public function admin_form() {
-
 		$writableInstall = is_writable(APP . 'Config' . DS . 'install.php');
 
 		if (empty($this->request->data)) {
@@ -141,7 +139,6 @@ class SiteConfigsController extends AppController {
 				unset($this->request->data['SiteConfig']['admin_ssl']);
 				unset($this->request->data['SiteConfig']['mobile']);
 				unset($this->request->data['SiteConfig']['smartphone']);
-
 
 				// DBに保存
 				if ($this->SiteConfig->saveKeyValue($this->request->data)) {
@@ -242,7 +239,6 @@ class SiteConfigsController extends AppController {
  * @access public
  */
 	public function admin_del_cache() {
-
 		clearAllCache();
 		$this->setMessage('サーバーキャッシュを削除しました。');
 		$this->redirect($this->referer());
@@ -255,7 +251,6 @@ class SiteConfigsController extends AppController {
  * @access public
  */
 	public function admin_info() {
-
 		if (!empty($this->siteConfigs['demo_on'])) {
 			$this->notFound();
 		}
@@ -295,13 +290,12 @@ class SiteConfigsController extends AppController {
  * @access protected
  */
 	protected function _getSiteConfigData() {
-
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = Configure::read('debug');
 		$data['SiteConfig']['smart_url'] = $this->BcManager->smartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
-		$data['SiteConfig']['admin_ssl'] = (int) Configure::read('BcApp.adminSsl');
+		$data['SiteConfig']['admin_ssl'] = (int)Configure::read('BcApp.adminSsl');
 		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
 		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
 		if (is_null($data['SiteConfig']['mobile'])) {

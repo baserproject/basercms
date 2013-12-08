@@ -56,7 +56,7 @@ class BcAppController extends Controller {
  * @var		mixed
  * @access	public
  */
-// TODO 見直し
+	// TODO 見直し
 	public $helpers = array(
 		'Session', 'BcHtml', 'Form', 'BcForm',
 		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin'
@@ -173,7 +173,6 @@ class BcAppController extends Controller {
  * @access	private
  */
 	public function __construct($request = null, $response = null) {
-
 		parent::__construct($request, $response);
 
 		if (isConsole()) {
@@ -246,7 +245,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		// テーマを設定
@@ -305,7 +303,6 @@ class BcAppController extends Controller {
 			} else {
 				$config = array();
 			}
-
 
 			$this->BcAuthConfigure->setting($config);
 			// ユーザーの存在チェック
@@ -396,7 +393,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function setTheme() {
-
 		$theme = '';
 		if (!empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
@@ -431,7 +427,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 
 		// テーマのヘルパーをセット
@@ -481,8 +476,7 @@ class BcAppController extends Controller {
 /**
  * 初回アクセスメッセージ用のフラグを更新する
  */
-	function __updateFirstAccess() {
-
+	private function __updateFirstAccess() {
 		// 初回アクセスメッセージ表示設定
 		if (!empty($this->request->params['admin']) && !empty($this->siteConfigs['first_access'])) {
 			$data = array('SiteConfig' => array('first_access' => false));
@@ -502,7 +496,6 @@ class BcAppController extends Controller {
  * @access	protected
  */
 	protected function _sslFail($err) {
-
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
 			$url = $this->request->url;
@@ -521,9 +514,9 @@ class BcAppController extends Controller {
  *
  * @return	void
  * @access	public
+ * @throws	NotFoundException
  */
 	public function notFound() {
-
 		throw new NotFoundException('見つかりませんでした。');
 	}
 
@@ -536,7 +529,6 @@ class BcAppController extends Controller {
  * @access	protected
  */
 	protected function _autoConvertEncodingByArray($data, $outenc) {
-
 		foreach ($data as $key => $value) {
 
 			if (is_array($value)) {
@@ -569,9 +561,8 @@ class BcAppController extends Controller {
  * @access	private
  */
 	private function __loadDataToView() {
-
-		$this->set('subMenuElements', $this->subMenuElements); // サブメニューエレメント
-		$this->set('crumbs', $this->crumbs);					   // パンくずなび
+		$this->set('subMenuElements', $this->subMenuElements);	// サブメニューエレメント
+		$this->set('crumbs', $this->crumbs);					// パンくずなび
 		$this->set('search', $this->search);
 		$this->set('help', $this->help);
 		$this->set('preview', $this->preview);
@@ -607,7 +598,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function getBaserVersion($plugin = '') {
-
 		return getVersion($plugin);
 	}
 
@@ -619,7 +609,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function getThemeVersion($theme) {
-
 		$path = WWW_ROOT . 'theme' . DS . $theme . DS . 'VERSION.txt';
 		if (!file_exists($path)) {
 			return false;
@@ -641,7 +630,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function getSiteVersion($plugin = '') {
-
 		if (!$plugin) {
 			if (isset($this->siteConfigs['version'])) {
 				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
@@ -660,7 +648,6 @@ class BcAppController extends Controller {
  * @return string Baserバージョン
  */
 	public function getCakeVersion() {
-
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'VERSION.txt');
 		$versionData = $versionFile->read();
 		$lines = explode("\n", $versionData);
@@ -686,7 +673,6 @@ class BcAppController extends Controller {
  * @access	private
  */
 	private function __convertEncodingHttpInput() {
-
 		// TODO Cakeマニュアルに合わせた方がよいかも
 		if (isset($this->request->params['form'])) {
 			$this->request->params['form'] = $this->_autoConvertEncodingByArray($this->request->params['form'], 'UTF-8');
@@ -708,7 +694,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
-
 		$options = array_merge(array(
 			'agentTemplate' => true,
 			'template' => 'default'
@@ -771,8 +756,9 @@ class BcAppController extends Controller {
 				$bcc = $options['bcc'];
 			}
 			foreach ($bcc as $val) {
-				if (Validation::email(trim($val)))
+				if (Validation::email(trim($val))) {
 					$cakeEmail->addBcc($val);
+				}
 			}
 			unset($bcc);
 		}
@@ -792,8 +778,9 @@ class BcAppController extends Controller {
 				$cc = $options['cc'];
 			}
 			foreach ($cc as $val) {
-				if (Validation::email(trim($val)))
+				if (Validation::email(trim($val))) {
 					$cakeEmail->addCc($val);
+				}
 			}
 			unset($cc);
 		}
@@ -899,7 +886,7 @@ class BcAppController extends Controller {
 			$content = $body;
 		}
 
-		// TODO $attachments tmp file path 
+		// TODO $attachments tmp file path
 		// filePaths と attachments のどっちが本当の分か確認すること
 		$attachments = null;
 		if (!empty($options['filePaths'])) {
@@ -936,7 +923,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function setViewConditions($filterModels = array(), $options = array()) {
-
 		$_options = array('type' => 'post', 'session' => true);
 		$options = am($_options, $options);
 		extract($options);
@@ -956,7 +942,6 @@ class BcAppController extends Controller {
  * @access	protected
  */
 	protected function _saveViewConditions($filterModels = array(), $options = array()) {
-
 		$_options = array('action' => '', 'group' => '');
 		$options = am($_options, $options);
 		extract($options);
@@ -1001,7 +986,6 @@ class BcAppController extends Controller {
  * @access	protected
  */
 	protected function _loadViewConditions($filterModels = array(), $options = array()) {
-
 		$_options = array('default' => array(), 'action' => '', 'group' => '', 'type' => 'post', 'session' => true);
 		$options = am($_options, $options);
 		$named = array();
@@ -1075,7 +1059,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function convertSelectTextCondition($fieldName, $values, $options = array()) {
-
 		$_options = array('type' => 'string', 'conditionType' => 'or');
 		$options = am($_options, $options);
 		$conditions = array();
@@ -1101,7 +1084,6 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function convertBetweenCondition($fieldName, $value) {
-
 		if (strpos($value, '-') === false) {
 			return false;
 		}
@@ -1124,8 +1106,7 @@ class BcAppController extends Controller {
  * @access	public
  */
 	public function generatePassword($len = 8) {
-
-		srand((double) microtime() * 1000000);
+		srand((double)microtime() * 1000000);
 		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		$password = "";
 		while ($len--) {
@@ -1141,7 +1122,6 @@ class BcAppController extends Controller {
  * @return	boolean
  */
 	public function isAuthorized() {
-
 		$requestedPrefix = '';
 
 		$userModel = $this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
@@ -1236,7 +1216,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function checkRootEditable() {
-
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
@@ -1259,7 +1238,6 @@ class BcAppController extends Controller {
  * @return mixed string Or false
  */
 	public function getUserModel() {
-
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
@@ -1277,7 +1255,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function redirect($url, $status = null, $exit = true) {
-
 		$url = addSessionId($url, true);
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// ※ Routing.admin を変更した場合
@@ -1301,7 +1278,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function requestAction($url, $extra = array()) {
-
 		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
 		// 管理システムやプラグインでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// >>> CUSTOMIZE MODIFY 2012/1/28 ryuring
@@ -1324,7 +1300,6 @@ class BcAppController extends Controller {
  * @param mixed $open 1 Or ''
  */
 	public function admin_ajax_save_favorite_box($open = '') {
-
 		$this->Session->write('Baser.favorite_box_opened', $open);
 		echo true;
 		exit();
@@ -1344,7 +1319,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function admin_ajax_batch() {
-
 		$method = $this->request->data['ListTool']['batch'];
 
 		if ($this->request->data['ListTool']['batch_targets']) {
@@ -1371,7 +1345,6 @@ class BcAppController extends Controller {
  * @param mixed $open 1 Or ''
  */
 	public function admin_ajax_save_search_box($key, $open = '') {
-
 		$this->Session->write('Baser.searchBoxOpened.' . $key, $open);
 		echo true;
 		exit();
@@ -1390,7 +1363,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function setAction($action) {
-
 		// CUSTOMIZE ADD 2012/04/22 ryuring
 		// >>>
 		$_action = $this->request->action;
@@ -1418,7 +1390,6 @@ class BcAppController extends Controller {
  * @access public
  */
 	public function setThemeHelpers() {
-
 		if (!empty($this->request->params['admin'])) {
 			return;
 		}
@@ -1469,8 +1440,7 @@ class BcAppController extends Controller {
  * @param boolean $saveDblog
  * @return void
  */
-	function setMessage($message, $alert = false, $saveDblog = false) {
-
+	public function setMessage($message, $alert = false, $saveDblog = false) {
 		if (!isset($this->Session)) {
 			return;
 		}
@@ -1496,12 +1466,11 @@ class BcAppController extends Controller {
  * @return mixed
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
-
 		$options = array_merge(array(
-			'modParams' => 0,
-			'plugin'    => $this->plugin,
-			'layer'     => 'Controller',
-			'class'     => $this->name
+			'modParams'	=> 0,
+			'plugin'	=> $this->plugin,
+			'layer'		=> 'Controller',
+			'class'		=> $this->name
 			), $options);
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);

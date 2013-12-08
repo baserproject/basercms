@@ -42,7 +42,6 @@ class BcPluginAppController extends AppController {
  * @access private
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		$this->Plugin = ClassRegistry::init('Plugin');
@@ -65,7 +64,6 @@ class BcPluginAppController extends AppController {
  * @access public
  */
 	public function getContentId() {
-
 		// 管理画面の場合には取得しない
 		if (!empty($this->request->params['admin'])) {
 			return null;

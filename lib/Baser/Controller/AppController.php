@@ -34,5 +34,4 @@ App::uses('BcAppController', 'Controller');
  * @package			Baser.Controller
  */
 class AppController extends BcAppController {
-	
 }

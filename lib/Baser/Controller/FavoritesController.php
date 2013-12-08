@@ -46,7 +46,6 @@ class FavoritesController extends AppController {
  * beforeFilter
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		$this->Favorite->setSession($this->Session);
 	}
@@ -57,7 +56,6 @@ class FavoritesController extends AppController {
  * @return void
  */
 	public function admin_ajax_add() {
-
 		if ($this->request->data) {
 			$user = $this->BcAuth->user();
 			if (!$user) {
@@ -87,7 +85,6 @@ class FavoritesController extends AppController {
  * @access public
  */
 	public function admin_ajax_edit($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -113,7 +110,6 @@ class FavoritesController extends AppController {
  * @param int $id 
  */
 	public function admin_ajax_delete() {
-
 		if ($this->request->data) {
 			$name = $this->Favorite->field('name', array('Favorite.id' => $this->request->data['Favorite']['id']));
 			if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
@@ -133,7 +129,6 @@ class FavoritesController extends AppController {
  * @return boolean
  */
 	public function admin_update_sort() {
-
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {
 			if ($this->Favorite->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], array('Favorite.user_id' => $user['id']))) {

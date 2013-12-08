@@ -85,7 +85,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', true);
@@ -99,7 +98,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_index($userGroupId = null) {
-
 		/* セッション処理 */
 		if (!$userGroupId) {
 			$this->setMessage('無効な処理です。', true);
@@ -136,7 +134,6 @@ class PermissionsController extends AppController {
  * @access protected
  */
 	protected function _setAdminIndexViewData() {
-
 		$this->set('sortmode', $this->passedArgs['sortmode']);
 	}
 
@@ -147,7 +144,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_add($userGroupId) {
-
 		$userGroup = $this->Permission->UserGroup->find('first', array('conditions' => array('UserGroup.id' => $userGroupId),
 			'fields' => array('id', 'title'),
 			'order' => 'UserGroup.id ASC', 'recursive' => -1));
@@ -193,7 +189,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_ajax_add() {
-
 		if ($this->request->data) {
 			$authPrefix = $this->Permission->UserGroup->getAuthPrefix($this->request->data['Permission']['user_group_id']);
 			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
@@ -221,7 +216,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_edit($userGroupId, $id) {
-
 		/* 除外処理 */
 		if (!$userGroupId || !$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -316,7 +310,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_delete($userGroupId, $id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -343,7 +336,6 @@ class PermissionsController extends AppController {
  * @access	public
  */
 	public function admin_ajax_update_sort($userGroupId) {
-
 		if ($this->request->data) {
 			$conditions = $this->_createAdminIndexConditions($userGroupId);
 			if ($this->Permission->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
@@ -365,7 +357,6 @@ class PermissionsController extends AppController {
  * @access protected
  */
 	protected function _createAdminIndexConditions($userGroupId) {
-
 		/* 条件を生成 */
 		$conditions = array();
 		if ($userGroupId) {
@@ -383,7 +374,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_ajax_copy($userGroupId, $id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -413,7 +403,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_ajax_unpublish($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -435,7 +424,6 @@ class PermissionsController extends AppController {
  * @access public
  */
 	public function admin_ajax_publish($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -455,7 +443,6 @@ class PermissionsController extends AppController {
  * @access protected 
  */
 	protected function _batch_publish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, true);
@@ -472,7 +459,6 @@ class PermissionsController extends AppController {
  * @access protected 
  */
 	protected function _batch_unpublish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, false);
@@ -489,7 +475,6 @@ class PermissionsController extends AppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-
 		$statusTexts = array(0 => '無効', 1 => '有効');
 		$data = $this->Permission->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
 		$data['Permission']['status'] = $status;

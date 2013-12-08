@@ -79,7 +79,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function beforeFilter() {
-
 		if (BC_INSTALLED) {
 			/* 認証設定 */
 			// parent::beforeFilterの前に記述する必要あり
@@ -118,7 +117,6 @@ class UsersController extends AppController {
  * @return boolean
  */
 	public function admin_login_exec() {
-
 		if (!$this->request->data) {
 			return false;
 		}
@@ -190,7 +188,6 @@ class UsersController extends AppController {
  * @return ダッシュボードへのURL
  */
 	public function admin_ajax_agent_login($id) {
-
 		if (!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
 			$this->Session->write('AuthAgent', $user);
@@ -216,7 +213,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function back_agent() {
-
 		$configs = Configure::read('BcAuthPrefix');
 		if ($this->Session->check('AuthAgent')) {
 			$data = $this->Session->read('AuthAgent');
@@ -249,7 +245,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_login() {
-
 		if (!$this->BcAuth->login()) {
 			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
 		}
@@ -290,12 +285,11 @@ class UsersController extends AppController {
  * @return void
  */
 	public function setAuthCookie($data) {
-
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
-		$cookie['password'] = $data[$userModel]['password'];	   // ハッシュ化されている
-		$this->Cookie->write(BcAuthComponent::$sessionKey, $cookie, true, '+2 weeks'); // 3つめの'true'で暗号化
+		$cookie['password'] = $data[$userModel]['password'];							// ハッシュ化されている
+		$this->Cookie->write(BcAuthComponent::$sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 	}
 
 /**
@@ -304,7 +298,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_logout() {
-
 		$logoutRedirect = $this->BcAuth->logout();
 		$this->Cookie->delete(BcAuthComponent::$sessionKey);
 		$this->setMessage('ログアウトしました');
@@ -317,7 +310,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_index() {
-
 		/* データ取得 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('User', array('default' => $default));
@@ -352,7 +344,6 @@ class UsersController extends AppController {
  * @return array $conditions
  */
 	protected function _createAdminIndexConditions($data) {
-
 		unset($data['_Token']);
 		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] === '') {
 			unset($data['User']['user_group_id']);
@@ -371,7 +362,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_add() {
-
 		if (empty($this->request->data)) {
 			$this->request->data = $this->User->getDefaultValue();
 		} else {
@@ -416,7 +406,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -478,7 +467,7 @@ class UsersController extends AppController {
 
 		if ($user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 			$editable = false;
-		} else if ($selfUpdate && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+		} elseif ($selfUpdate && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			$editable = false;
 		}
 
@@ -496,7 +485,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -526,7 +514,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -560,7 +547,6 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_reset_password() {
-
 		if (empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}

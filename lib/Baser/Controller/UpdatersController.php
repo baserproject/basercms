@@ -164,7 +164,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Menu', 'Favorite');
+	public $uses = array('Menu', 'Favorite');
 
 /**
  * beforeFilter
@@ -173,7 +173,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
@@ -196,7 +195,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function index() {
-
 		$aryUrl = explode('/', $this->request->url);
 		if (empty($aryUrl[0])) {
 			$this->notFound();
@@ -289,7 +287,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function admin_exec_script() {
-
 		if ($this->request->data) {
 			$this->setUpdateLog('アップデートスクリプトの実行します。');
 			if ($this->_execScript($this->request->data['Updater']['plugin'], $this->request->data['Updater']['version'])) {
@@ -323,7 +320,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function admin_plugin($name) {
-
 		if (!$name) {
 			$this->notFound();
 		}
@@ -378,7 +374,6 @@ class UpdatersController extends AppController {
  * @access protected
  */
 	protected function _getScriptNum($plugin = '') {
-
 		/* バージョンアップ対象のバージョンを取得 */
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
@@ -398,7 +393,6 @@ class UpdatersController extends AppController {
  * @access protected
  */
 	protected function _getUpdaters($sourceVersion, $targetVersion, $plugin = '') {
-
 		$sourceVerPoint = verpoint($sourceVersion);
 		$targetVerPoint = verpoint($targetVersion);
 
@@ -452,7 +446,6 @@ class UpdatersController extends AppController {
  * @access protected
  */
 	protected function _getUpdateFolder($plugin = '') {
-
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
 		} else {
@@ -482,7 +475,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	protected function _update($plugin = '') {
-
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
 		$path = $this->_getUpdateFolder($plugin);
@@ -540,7 +532,6 @@ class UpdatersController extends AppController {
  * @access protected
  */
 	public function _execScript($__plugin, $__version) {
-
 		$__path = $this->_getUpdateFolder($__plugin) . $__version . DS . 'updater.php';
 
 		if (!file_exists($__path)) {
@@ -562,7 +553,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function setUpdateLog($message) {
-
 		$this->_updateMessage[] = $message;
 	}
 
@@ -577,7 +567,6 @@ class UpdatersController extends AppController {
  * @access	public
  */
 	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
-
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {
 			return false;
@@ -603,7 +592,6 @@ class UpdatersController extends AppController {
  * @access public
  */
 	public function loadCsv($version, $plugin = '', $filterTable = '') {
-
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {
 			return false;
@@ -624,7 +612,6 @@ class UpdatersController extends AppController {
  * @return string $path or ''
  */
 	protected function _getUpdatePath($version, $plugin = '') {
-
 		$path = '';
 		$appPluginPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
 		$baserPluginPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
@@ -654,7 +641,6 @@ class UpdatersController extends AppController {
  * @access protected
  */
 	protected function _writeUpdateLog() {
-
 		if ($this->_updateMessage) {
 			foreach ($this->_updateMessage as $message) {
 				$this->log(strip_tags($message), 'update');

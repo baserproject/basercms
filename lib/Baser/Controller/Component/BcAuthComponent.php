@@ -134,7 +134,6 @@ class BcAuthComponent extends AuthComponent {
  * @return string
  */
 	public function getSerial() {
-
 		if (!empty($_SERVER['HTTP_X_DCMGUID'])) {
 			return $_SERVER['HTTP_X_DCMGUID'];
 		} elseif (!empty($_SERVER['HTTP_X_UP_SUBNO'])) {
@@ -160,7 +159,6 @@ class BcAuthComponent extends AuthComponent {
  * userModel
  */
 	public function setSessionAuthAddition() {
-
 		$authPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
 		if (!$authPrefix) {
 			$userModel = $this->authenticate['Form']['userModel'];

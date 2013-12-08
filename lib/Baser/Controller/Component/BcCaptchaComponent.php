@@ -57,7 +57,6 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function startup(Controller $controller) {
-
 		$this->controller = $controller;
 	}
 
@@ -68,7 +67,6 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function render() {
-
 		$kcaptcha = new KCAPTCHA();
 		$this->controller->Session->write('captcha', $kcaptcha->getKeyString());
 	}
@@ -81,7 +79,6 @@ class BcCaptchaComponent extends Component {
  * @access public
  */
 	public function check($value) {
-
 		include $this->vendorsPath . 'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;
 		$this->convert = $convert;
@@ -101,7 +98,6 @@ class BcCaptchaComponent extends Component {
  * @access	public
  */
 	public function convert($key) {
-
 		$alphabets = $this->strSplit($this->alphabet);
 		$converts = $this->strSplit($this->convert);
 
@@ -128,10 +124,10 @@ class BcCaptchaComponent extends Component {
  * @access	public
  */
 	public function strSplit($str) {
-
 		$arr = array();
 		if (is_string($str)) {
-			for ($i = 0; $i < mb_strlen($str, 'UTF-8'); $i++) {
+			$len = mb_strlen($str, 'UTF-8');
+			for ($i = 0; $i < $len; $i++) {
 				array_push($arr, mb_substr($str, $i, 1, 'UTF-8'));
 			}
 		}

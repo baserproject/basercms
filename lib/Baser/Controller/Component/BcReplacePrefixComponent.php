@@ -69,7 +69,6 @@ class BcReplacePrefixComponent extends Component {
  * @access public
  */
 	public function initialize(Controller $controller) {
-
 		$this->_methods = $controller->methods;
 	}
 
@@ -85,7 +84,6 @@ class BcReplacePrefixComponent extends Component {
  * @access public
  */
 	public function allow() {
-
 		$args = func_get_args();
 		if (isset($args[0]) && is_array($args[0])) {
 			$args = $args[0];
@@ -100,7 +98,6 @@ class BcReplacePrefixComponent extends Component {
  * @access	public
  */
 	public function startup(Controller $controller) {
-
 		if (in_array($controller->action, $this->_methods)) {
 			return;
 		}
@@ -121,11 +118,10 @@ class BcReplacePrefixComponent extends Component {
 		}
 
 		$controller->action = $this->replacedPrefix . '_' . $pureAction;
-		$controller->layoutPath = $this->replacedPrefix; // Baserに依存
-		$controller->subDir = $this->replacedPrefix;  // Baserに依存
+		$controller->layoutPath = $this->replacedPrefix;	// Baserに依存
+		$controller->subDir = $this->replacedPrefix;		// Baserに依存
 
 		if ($requestedPrefix != $this->replacedPrefix) {
-
 			// viewファイルが存在すればリクエストされたプレフィックスを優先する
 			$existsLoginView = false;
 			$viewPaths = $this->getViewPaths($controller);
@@ -158,7 +154,6 @@ class BcReplacePrefixComponent extends Component {
  * @access private
  */
 	public function getViewPaths($controller) {
-
 		$paths = App::path('View');
 
 		if (!empty($controller->theme)) {

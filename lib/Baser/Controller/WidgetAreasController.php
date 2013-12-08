@@ -89,7 +89,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$this->pageTitle = 'ウィジェットエリア一覧';
 		$widgetAreas = $this->WidgetArea->find('all');
 		if ($widgetAreas) {
@@ -113,7 +112,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_add() {
-
 		$this->pageTitle = '新規ウィジェットエリア登録';
 
 		if ($this->request->data) {
@@ -136,7 +134,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		$this->pageTitle = 'ウィジェットエリア編集';
 
 		$widgetArea = $this->WidgetArea->read(null, $id);
@@ -195,7 +192,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -221,7 +217,6 @@ class WidgetAreasController extends AppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->WidgetArea->read(null, $id);
@@ -242,7 +237,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -269,7 +263,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_update_title() {
-
 		if (!$this->request->data) {
 			$this->notFound();
 		}
@@ -289,7 +282,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_update_widget($widgetAreaId) {
-
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();
 		}
@@ -337,7 +329,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_update_sort($widgetAreaId) {
-
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();
 		}
@@ -372,7 +363,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function admin_del_widget($widgetAreaId, $id) {
-
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
 		if (!$widgetArea['WidgetArea']['widgets']) {
 			exit();
@@ -408,7 +398,6 @@ class WidgetAreasController extends AppController {
  * @access public
  */
 	public function get_widgets($id) {
-
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if ($widgetArea['WidgetArea']['widgets']) {
 			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
@@ -428,7 +417,6 @@ class WidgetAreasController extends AppController {
  * @return int
  */
 function widgetSort($a, $b) {
-
 	$aKey = key($a);
 	$bKey = key($b);
 	if ($a[$aKey]['sort'] == $b[$bKey]['sort']) {

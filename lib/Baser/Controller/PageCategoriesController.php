@@ -73,7 +73,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();
 		$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
@@ -89,7 +88,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$default = array('PageCategory' => array('type' => '1'));
 		$this->setViewConditions('PageCategory', array('default' => $default));
 
@@ -162,16 +160,15 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_add() {
-
 		if (empty($this->request->data)) {
 
 			$user = $this->BcAuth->user();
 			$this->request->data = array('PageCategory' => array(
-					'contents_navi'      => 0,
-					'page_category_type' => 1,
-					'owner_id'           => $user['user_group_id'],
-					'layout_template'    => 'default',
-					'content_template'   => 'default'
+					'contents_navi'			=> 0,
+					'page_category_type'	=> 1,
+					'owner_id'				=> $user['user_group_id'],
+					'layout_template'		=> 'default',
+					'content_template'		=> 'default'
 			));
 		} else {
 
@@ -263,7 +260,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -363,7 +359,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -391,7 +386,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -413,7 +407,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_ajax_copy($id = null) {
-
 		$result = $this->PageCategory->copy($id);
 		if ($result) {
 			$result['PageCategory']['id'] = $this->PageCategory->getInsertID();
@@ -431,7 +424,6 @@ class PageCategoriesController extends AppController {
  * @access protected
  */
 	protected function _setAdminIndexViewData() {
-
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if (isset($user['user_group_id'])) {
@@ -449,7 +441,6 @@ class PageCategoriesController extends AppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->PageCategory->read(null, $id);
@@ -469,7 +460,6 @@ class PageCategoriesController extends AppController {
  * @access public
  */
 	public function admin_ajax_up($id) {
-
 		if ($this->PageCategory->moveUp($id)) {
 			echo true;
 		} else {
@@ -487,7 +477,6 @@ class PageCategoriesController extends AppController {
  * @deprecated
  */
 	public function admin_ajax_down($id) {
-
 		if ($this->PageCategory->moveDown($id)) {
 			echo true;
 		} else {
@@ -501,8 +490,7 @@ class PageCategoriesController extends AppController {
  * 
  * $this->request->query['type'] としてGETパラメーター受付
  */
-	function admin_ajax_control_sources() {
-
+	public function admin_ajax_control_sources() {
 		$type = $agent = '';
 		if (!empty($this->request->query['type'])) {
 			$type = $this->request->query['type'];

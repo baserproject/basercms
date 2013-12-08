@@ -86,7 +86,6 @@ class EditorTemplatesController extends AppController {
  * [ADMIN] 一覧 
  */
 	public function admin_index() {
-
 		$this->pageTitle = 'エディタテンプレート一覧';
 		$this->help = 'editor_templates_index';
 
@@ -97,7 +96,6 @@ class EditorTemplatesController extends AppController {
  * [ADMIN] 新規登録 
  */
 	public function admin_add() {
-
 		$this->pageTitle = 'エディタテンプレート新規登録';
 		$this->help = 'editor_templates_form';
 
@@ -119,7 +117,6 @@ class EditorTemplatesController extends AppController {
  * @param int $id 
  */
 	public function admin_edit($id) {
-
 		$this->pageTitle = 'エディタテンプレート編集';
 		$this->help = 'editor_templates_form';
 
@@ -144,7 +141,6 @@ class EditorTemplatesController extends AppController {
  * @param int $id
  */
 	public function admin_delete($id) {
-
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -163,7 +159,6 @@ class EditorTemplatesController extends AppController {
  * @param int $id 
  */
 	public function admin_ajax_delete($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -179,7 +174,6 @@ class EditorTemplatesController extends AppController {
  * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する 
  */
 	public function admin_js() {
-
 		header('Content-Type: text/javascript; name="editor_templates.js"');
 		$this->layout = 'empty';
 		$this->set('templates', $this->EditorTemplate->find('all'));

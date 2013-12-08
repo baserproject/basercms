@@ -68,7 +68,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$this->pageTitle = 'テーマ一覧';
 		$path = WWW_ROOT . 'theme';
 		$folder = new Folder($path);
@@ -85,7 +84,6 @@ class ThemesController extends AppController {
 			}
 		}
 
-
 		$this->set('datas', $datas);
 		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
@@ -100,7 +98,6 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_load_default_data_pattern() {
-
 		if (empty($this->request->data['Theme']['default_data_pattern'])) {
 			$this->setMessage('不正な操作です。', true);
 			$this->redirect('index');
@@ -227,7 +224,6 @@ class ThemesController extends AppController {
  * @access protected
  */
 	protected function _loadThemeInfo($themename) {
-
 		$path = WWW_ROOT . 'theme';
 		$title = $description = $author = $url = $screenshot = '';
 		$theme = array();
@@ -261,7 +257,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_edit($theme) {
-
 		if (!$theme) {
 			$this->notFound();
 		}
@@ -320,7 +315,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_ajax_copy($theme) {
-
 		if (!$theme) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -340,7 +334,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	protected function _copy($theme) {
-
 		$basePath = WWW_ROOT . 'theme' . DS;
 		$newTheme = $theme . '_copy';
 		while (true) {
@@ -366,7 +359,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($theme) {
-
 		if (!$theme) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -387,7 +379,6 @@ class ThemesController extends AppController {
  * @access protected
  */
 	protected function _del($theme) {
-
 		$path = WWW_ROOT . 'theme' . DS . $theme;
 		$folder = new Folder();
 		if ($folder->delete($path)) {
@@ -411,7 +402,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_del($theme) {
-
 		if (!$theme) {
 			$this->notFound();
 		}
@@ -437,7 +427,6 @@ class ThemesController extends AppController {
  * @access public
  */
 	public function admin_apply($theme) {
-
 		if (!$theme) {
 			$this->notFound();
 		}
@@ -449,8 +438,7 @@ class ThemesController extends AppController {
 			$this->setMessage(
 				'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
 				'「Pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
-				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
-				, true);
+				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。', true);
 		} else {
 			$this->setMessage('テーマ「' . $theme . '」を適用しました。');
 		}
@@ -463,8 +451,7 @@ class ThemesController extends AppController {
 /**
  * 初期データセットをダウンロードする 
  */
-	function admin_download_default_data_pattern() {
-
+	public function admin_download_default_data_pattern() {
 		/* コアのCSVを生成 */
 		$tmpDir = TMP . 'csv' . DS;
 		$Folder = new Folder();
@@ -515,7 +502,6 @@ class ThemesController extends AppController {
  * @access protected
  */
 	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
-
 		$pluginKey = Inflector::underscore($plugin);
 		$db = ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;

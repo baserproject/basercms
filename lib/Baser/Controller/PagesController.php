@@ -69,7 +69,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		// 認証設定
@@ -99,7 +98,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		/* 画面情報設定 */
 		$default = array(
 			'named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0, 'view_type' => 1, 'page_type' => 1),
@@ -217,7 +215,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_add() {
-
 		if (empty($this->request->data)) {
 			$this->request->data = $this->Page->getDefaultValue();
 			$this->request->data['Page']['page_type'] = 1;
@@ -317,7 +314,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -349,7 +345,6 @@ class PagesController extends AppController {
 				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
 			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
-
 
 			/*			 * * Pages.beforeEdit ** */
 			$event = $this->dispatchEvent('beforeEdit', array(
@@ -470,7 +465,6 @@ class PagesController extends AppController {
  * @return string
  */
 	public function convertViewUrl($url) {
-
 		$url = preg_replace('/\/index$/', '/', $url);
 		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', $url)) {
 			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
@@ -489,7 +483,6 @@ class PagesController extends AppController {
  * @deprecated admin_ajax_delete で Ajax化
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -519,7 +512,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_entry_page_files() {
-
 		if (function_exists('ini_set')) {
 			ini_set('max_execution_time', 0);
 			ini_set('max_input_time', 0);
@@ -541,7 +533,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_write_page_files() {
-
 		if ($this->Page->createAllPageTemplate()) {
 			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
 		} else {
@@ -559,7 +550,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function display() {
-
 		$path = func_get_args();
 
 		$url = '/' . implode('/', $path);
@@ -655,7 +645,6 @@ class PagesController extends AppController {
  * @access protected
  */
 	protected function _getCrumbs($url) {
-
 		if (Configure::read('BcRequest.agent')) {
 			$url = '/' . Configure::read('BcRequest.agentAlias') . $url;
 		}
@@ -703,7 +692,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function mobile_display() {
-
 		$path = func_get_args();
 		call_user_func_array(array($this, 'display'), $path);
 	}
@@ -716,7 +704,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function smartphone_display() {
-
 		$path = func_get_args();
 		call_user_func_array(array($this, 'display'), $path);
 	}
@@ -729,7 +716,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_create_preview($id) {
-
 		if (isset($this->request->data['Page'])) {
 			$page = $this->request->data;
 			if (empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 2) {
@@ -782,7 +768,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_preview($id) {
-
 		$page = Cache::read('page_preview_' . $id, '_cake_core_');
 
 		$settings = Configure::read('BcAgent');
@@ -835,7 +820,6 @@ class PagesController extends AppController {
  * @return boolean
  */
 	public function admin_ajax_update_sort() {
-
 		if ($this->request->data) {
 			$this->setViewConditions('Page', array('action' => 'admin_index'));
 			$conditions = $this->_createAdminIndexConditions($this->request->data);
@@ -862,7 +846,6 @@ class PagesController extends AppController {
  * @access protected
  */
 	protected function _createAdminIndexConditions($data) {
-
 		/* 条件を生成 */
 		$conditions = array();
 		$pageCategoryId = '';
@@ -943,7 +926,7 @@ class PagesController extends AppController {
 
 				//カテゴリなし
 				if ($pageType == 1) {
-					$conditions['or'] = array(array('Page.page_category_id' => ''), array('Page.page_category_id' => NULL));
+					$conditions['or'] = array(array('Page.page_category_id' => ''), array('Page.page_category_id' => null));
 				} elseif ($pageType == 2) {
 					$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
 				} elseif ($pageType == 3) {
@@ -954,7 +937,7 @@ class PagesController extends AppController {
 			if (!Configure::read('BcApp.mobile') || !Configure::read('BcApp.smartphone')) {
 				$conditions['or'] = array(
 					array('Page.page_category_id' => ''),
-					array('Page.page_category_id' => NULL));
+					array('Page.page_category_id' => null));
 			}
 			if (!Configure::read('BcApp.mobile')) {
 				$conditions['or'][] = array('Page.page_category_id <>' => $this->PageCategory->getAgentId('mobile'));
@@ -983,7 +966,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_check_agent_page_addable($type, $id = null) {
-
 		$user = $this->BcAuth->user();
 		$userGroupId = $user['user_group_id'];
 		$result = false;
@@ -1033,7 +1015,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_ajax_category_source($type) {
-
 		$option = array();
 		if (!empty($this->request->data['Option'])) {
 			$option = $this->request->data['Option'];
@@ -1052,7 +1033,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function getCategorySource($type, $options = array()) {
-
 		$editable = true;
 
 		if (isset($options['currentPageCategoryId']) && isset($options['currentOwnerId'])) {
@@ -1081,11 +1061,11 @@ class PagesController extends AppController {
 		}
 
 		$_options = array(
-			'rootEditable'    => $this->checkRootEditable(),
-			'pageEditable'    => $editable,
-			'agentRoot'       => false,
-			'parentId'        => $parentId,
-			'excludeParentId' => $excludeParentId
+			'rootEditable'		=> $this->checkRootEditable(),
+			'pageEditable'		=> $editable,
+			'agentRoot'			=> false,
+			'parentId'			=> $parentId,
+			'excludeParentId'	=> $excludeParentId
 		);
 		$_options['currentPageCategoryId'] = 58;
 		if (isset($options['currentPageCategoryId'])) {
@@ -1118,7 +1098,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function checkCurrentEditable($pageCategoryId, $ownerId) {
-
 		$user = $this->BcAuth->user();
 
 		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
@@ -1142,7 +1121,6 @@ class PagesController extends AppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->Page->read(null, $id);
@@ -1164,7 +1142,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_ajax_unpublish($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -1186,7 +1163,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_ajax_publish($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -1206,7 +1182,6 @@ class PagesController extends AppController {
  * @access protected 
  */
 	protected function _batch_publish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, true);
@@ -1223,7 +1198,6 @@ class PagesController extends AppController {
  * @access protected 
  */
 	protected function _batch_unpublish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, false);
@@ -1240,7 +1214,6 @@ class PagesController extends AppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-
 		$statusTexts = array(0 => '非公開', 1 => '公開');
 		$data = $this->Page->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
 		$data['Page']['status'] = $status;
@@ -1267,7 +1240,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -1290,7 +1262,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_ajax_copy($id = null) {
-
 		$result = $this->Page->copy($id);
 		if ($result) {
 			$result['Page']['id'] = $this->Page->getInsertID();
@@ -1310,7 +1281,6 @@ class PagesController extends AppController {
  * @access protected
  */
 	protected function _setAdminIndexViewData() {
-
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if (!empty($user)) {

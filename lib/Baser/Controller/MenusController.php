@@ -84,7 +84,6 @@ class MenusController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		/* セッション処理 */
 		if ($this->request->data) {
 			$this->Session->write('Filter.Menu.status', $this->request->data['Menu']['status']);
@@ -128,7 +127,6 @@ class MenusController extends AppController {
  * @access public
  */
 	public function admin_add() {
-
 		if (!$this->request->data) {
 			$this->request->data['Menu']['status'] = 0;
 		} else {
@@ -166,7 +164,6 @@ class MenusController extends AppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -230,7 +227,6 @@ class MenusController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -257,7 +253,6 @@ class MenusController extends AppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -285,7 +280,6 @@ class MenusController extends AppController {
  * @return boolean
  */
 	public function admin_ajax_update_sort() {
-
 		if ($this->request->data) {
 			$this->request->data = am($this->request->data, $this->_checkSession());
 			$conditions = $this->_createAdminIndexConditions($this->request->data);
@@ -307,7 +301,6 @@ class MenusController extends AppController {
  * @access	protected
  */
 	protected function _checkSession() {
-
 		$data = array();
 		if ($this->Session->check('Filter.Menu.menu_type')) {
 			$data['menu_type'] = $this->Session->read('Filter.Menu.menu_type');
@@ -331,7 +324,6 @@ class MenusController extends AppController {
  * @access protected
  */
 	protected function _createAdminIndexConditions($data) {
-
 		if (isset($data['Menu'])) {
 			$data = $data['Menu'];
 		}

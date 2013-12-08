@@ -82,6 +82,7 @@ class InstallationsController extends AppController {
  * @var string
  */
 	public $theme = 'Baseradmin';
+
 	public $isInstalled = false;
 
 /**
@@ -91,7 +92,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		/* インストール状態判別 */
@@ -176,7 +176,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function step2() {
-
 		if ($this->request->data && $this->request->data['clicked'] == 'next') {
 			$this->redirect('step3');
 		}
@@ -201,7 +200,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function step3() {
-
 		$dbsource = $this->_getDbSource();
 
 		if (!$this->request->data) {
@@ -252,7 +250,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function step4() {
-
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
 		} else {
@@ -310,7 +307,6 @@ class InstallationsController extends AppController {
  * @access protected
  */
 	protected function _sendCompleteMail($email, $name, $password) {
-
 		$body = array('name' => $name, 'password' => $password, 'siteUrl' => siteUrl());
 		$this->sendMail($email, 'baserCMSインストール完了', $body, array('template' => 'installed', 'from' => $email));
 	}
@@ -324,7 +320,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function step5() {
-
 		$this->pageTitle = 'baserCMSのインストール完了！';
 		Cache::config('default', array('engine' => 'File'));
 
@@ -384,7 +379,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _login() {
-
 		$extra = array();
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
 		$installationSetting = Cache::read('Installation', 'default');
@@ -404,7 +398,6 @@ class InstallationsController extends AppController {
  * @access protected
  */
 	protected function _constructionDb($dbDataPattern = false) {
-
 		$dbConfig = $this->_readDbSetting();
 		if (!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;
@@ -419,7 +412,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _getDefaultValuesStep3() {
-
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = array();
 		if ($this->Session->read('Installation.dbType')) {
@@ -454,7 +446,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _getDefaultValuesStep4() {
-
 		$data = array();
 		if ($this->Session->read('Installation.admin_username')) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
@@ -482,7 +473,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _readDbSetting($installationData = array()) {
-
 		if (!$installationData) {
 			$installationData = $this->Session->read('Installation');
 		}
@@ -510,7 +500,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _writeDbSettingToSession($data) {
-
 		/* dbEncoding */
 		$data['dbEncoding'] = 'utf8';
 
@@ -544,7 +533,6 @@ class InstallationsController extends AppController {
  * @access protected
  */
 	protected function _testConnectDb($config) {
-
 		/* データベース接続確認 */
 		try {
 			$this->BcManager->checkDbConnection($config);
@@ -594,7 +582,6 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _getDbSource() {
-
 		/* DBソース取得 */
 		$dbsource = array();
 		$folder = new Folder();
@@ -638,7 +625,6 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function alert() {
-
 		$this->pageTitle = 'baserCMSのインストールを開始できません';
 	}
 
@@ -650,7 +636,6 @@ class InstallationsController extends AppController {
  * @access	public
  */
 	public function reset() {
-
 		$this->pageTitle = 'baserCMSの初期化';
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
@@ -692,7 +677,6 @@ class InstallationsController extends AppController {
  * @access public 
  */
 	public function deleteAllTables() {
-
 		$dbConfig = $this->_readDbSetting();
 		if (!$dbConfig) {
 			$dbConfig = getDbConfig();

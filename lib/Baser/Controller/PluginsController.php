@@ -84,7 +84,6 @@ class PluginsController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$datas = $this->Plugin->find('all', array('order' => 'Plugin.name'));
 		if (!$datas) {
 			$datas = array();
@@ -123,7 +122,6 @@ class PluginsController extends AppController {
  * @return array 
  */
 	protected function _getPluginInfo($datas, $file, $core = false) {
-
 		$plugin = basename($file);
 		$pluginData = array();
 		$exists = false;
@@ -159,14 +157,18 @@ class PluginsController extends AppController {
 			include $oldAppConfigPath;
 		}
 
-		if (isset($title))
+		if (isset($title)) {
 			$pluginData['Plugin']['title'] = $title;
-		if (isset($description))
+		}
+		if (isset($description)) {
 			$pluginData['Plugin']['description'] = $description;
-		if (isset($author))
+		}
+		if (isset($author)) {
 			$pluginData['Plugin']['author'] = $author;
-		if (isset($url))
+		}
+		if (isset($url)) {
 			$pluginData['Plugin']['url'] = $url;
+		}
 
 		$pluginData['Plugin']['update'] = false;
 		$pluginData['Plugin']['old_version'] = false;
@@ -174,8 +176,9 @@ class PluginsController extends AppController {
 
 		if ($exists) {
 
-			if (isset($adminLink))
+			if (isset($adminLink)) {
 				$pluginData['Plugin']['admin_link'] = $adminLink;
+			}
 			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
 			if (!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
 				$pluginData['Plugin']['version'] = $matches[1];
@@ -211,7 +214,6 @@ class PluginsController extends AppController {
  * @deprecated admin_ajax_delete_file に移行
  */
 	public function admin_delete_file($pluginName) {
-
 		$this->__deletePluginFile($pluginName);
 		$this->setMessage('プラグイン「' . $pluginName . '」 を完全に削除しました。');
 		$this->redirect(array('action' => 'index'));
@@ -225,7 +227,6 @@ class PluginsController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete_file($pluginName) {
-
 		if (!$pluginName) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -244,7 +245,6 @@ class PluginsController extends AppController {
  * @access private
  */
 	private function __deletePluginFile($pluginName) {
-
 		$appPath = APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
 		$baserPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
 		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
@@ -290,7 +290,6 @@ class PluginsController extends AppController {
  * @access  public
  */
 	public function admin_add($name) {
-
 		$name = urldecode($name);
 		$dbInited = false;
 
@@ -377,8 +376,7 @@ class PluginsController extends AppController {
 /**
  * データベースをリセットする 
  */
-	function admin_reset_db() {
-
+	public function admin_reset_db() {
 		if (!$this->request->data) {
 			$this->setMessage('無効な処理です。', true);
 		} else {
@@ -408,13 +406,11 @@ class PluginsController extends AppController {
  * @deprecated admin_ajax_delete に移行
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
-
 
 		$data = $this->Plugin->read(null, $id);
 		$data['Plugin']['status'] = false;
@@ -438,7 +434,6 @@ class PluginsController extends AppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -465,7 +460,6 @@ class PluginsController extends AppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->Plugin->read(null, $id);
