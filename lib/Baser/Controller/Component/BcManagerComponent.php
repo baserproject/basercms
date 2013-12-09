@@ -800,7 +800,27 @@ class BcManagerComponent extends Component {
 				}
 			}
 		}
-
+		
+		App::uses('Page', 'Model');
+		App::uses('PageCategory', 'Model');
+		$Page = new Page();
+		$PageCategory = new PageCategory();
+		
+		// モバイルのID書き換え（ClearDB対策）
+		$agents = array(1 => 'mobile', 2 => 'smartphone');
+		foreach ($agents as $key => $agent) {
+			$agentId = $PageCategory->getAgentId($agent);
+			if($agentId != $key) {
+				$pages = $Page->find('all', array('conditions' => array('Page.page_category_id' => $key), 'recursive' => -1));
+				foreach($pages as $page) {
+					$page['Page']['page_category_id'] = $agentId;
+					$Page->fileSave = false;
+					$Page->contentSaving = false;
+					$Page->set($page);
+					$Page->save();
+				}
+			}
+		}
 		return true;
 	}
 
