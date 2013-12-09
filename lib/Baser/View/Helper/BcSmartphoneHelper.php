@@ -45,10 +45,10 @@ class BcSmartphoneHelper extends Helper {
 			if (Configure::read('BcAgent.smartphone.autoLink')) {
 				$currentAlias = Configure::read('BcRequest.agentAlias');
 				// 一旦プレフィックスを除外
-				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
+				$reg = '/a(.*?)href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
 				$this->_View->output = preg_replace_callback($reg, array($this, '_removePrefix'), $this->_View->output);
 				// プレフィックス追加
-				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
+				$reg = '/a(.*?)href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
 				$this->_View->output = preg_replace_callback($reg, array($this, '_addPrefix'), $this->_View->output);
 			}
 		}
@@ -63,11 +63,16 @@ class BcSmartphoneHelper extends Helper {
  * @access protected 
  */
 	protected function _removePrefix($matches) {
-
-		if (strpos($matches[1], 'smartphone=off') === false) {
-			return 'href="' . BC_BASE_URL . $matches[2] . '"';
+		$etc = $matches[1];
+		if (strpos($matches[2], 'smartphone=off') === false) {
+			$url = $matches[3];
 		} else {
-			return 'href="' . BC_BASE_URL . $matches[1] . '"';
+			$url = $matches[2];
+		}
+		if (strpos($matches[1], 'smartphone=off') === false) {
+			return 'a' . $etc . 'href="' . BC_BASE_URL . $url . '"';
+		} else {
+			return 'a' . $etc . 'href="' . BC_BASE_URL . $url . '"';
 		}
 	}
 
@@ -80,13 +85,13 @@ class BcSmartphoneHelper extends Helper {
  * @access protected
  */
 	protected function _addPrefix($matches) {
-
 		$currentAlias = Configure::read('BcRequest.agentAlias');
-		$url = $matches[1];
+		$etc = $matches[1];
+		$url = $matches[2];
 		if (strpos($url, 'smartphone=off') === false) {
-			return 'href="' . BC_BASE_URL . $currentAlias . '/' . $url . '"';
+			return 'a' . $etc . 'href="' . BC_BASE_URL . $currentAlias . '/' . $url . '"';
 		} else {
-			return 'href="' . BC_BASE_URL . $url . '"';
+			return 'a' . $etc . 'href="' . BC_BASE_URL . $url . '"';
 		}
 	}
 
