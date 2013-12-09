@@ -45,7 +45,7 @@ if (!empty($no)) {
 					$params = am($params, $widget[$key]);
 					$params[$no . '_' . $widget[$key]['id']] = $no . '_' . $widget[$key]['id']; // 同じタイプのウィジェットでキャッシュを特定する為に必要
 					if (!empty($params['plugin'])) {
-						$plugin = $params['plugin'] . '.';
+						$plugin = Inflector::camelize($params['plugin']) . '.';
 						unset($params['plugin']);
 					}
 					$this->BcBaser->element($plugin . 'widgets/' . $widget[$key]['element'], $params, array('subDir' => $subDir));
