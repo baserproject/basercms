@@ -38,7 +38,6 @@ class BaserTestLoader extends CakeTestLoader {
 					CakePlugin::load($params['plugin']);
 					$result = CakePlugin::path($params['plugin']) . 'Test' . DS . 'Case';
 				} catch (MissingPluginException $e) {
-					
 				}
 			} else {
 				$result = CakePlugin::path($params['plugin']) . 'Test' . DS . 'Case';
