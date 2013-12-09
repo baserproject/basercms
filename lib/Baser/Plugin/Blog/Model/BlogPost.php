@@ -155,8 +155,7 @@ class BlogPost extends BlogAppModel {
  * @param	string	$table
  * @param	string	$ds
  */
-	function setupUpload($id) {
-
+	public function setupUpload($id) {
 		$sizes = array('thumb', 'mobile_thumb');
 		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
 		$data = $this->BlogContent->constructEyeCatchSize($data);
@@ -189,7 +188,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function getDefaultValue($authUser) {
-
 		$data[$this->name]['user_id'] = $authUser['id'];
 		$data[$this->name]['posts_date'] = date('Y/m/d H:i:s');
 		$data[$this->name]['status'] = 0;
@@ -205,7 +203,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function getPostedDates($blogContentId, $options) {
-
 		$options = array_merge(array(
 			'category' => false,
 			'limit' => false,
@@ -306,7 +303,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function getEntryDates($contentId, $year, $month) {
-
 		$entryDates = $this->find('all', array(
 			'fields' => array('BlogPost.posts_date'),
 			'conditions' => $this->_getEntryDatesConditions($contentId, $year, $month),
@@ -327,8 +323,7 @@ class BlogPost extends BlogAppModel {
  * @param array $options
  * @return array 
  */
-	function getAuthors($blogContentId, $options) {
-
+	public function getAuthors($blogContentId, $options) {
 		$options = array_merge(array(
 			'viewCount' => false
 			), $options);
@@ -362,7 +357,6 @@ class BlogPost extends BlogAppModel {
  * @return	boolean
  */
 	public function existsEntry($contentId, $year, $month) {
-
 		if ($this->find('first', array(
 				'fields' => array('BlogPost.id'),
 				'conditions' => $this->_getEntryDatesConditions($contentId, $year, $month),
@@ -386,7 +380,6 @@ class BlogPost extends BlogAppModel {
  * @access private
  */
 	protected function _getEntryDatesConditions($contentId, $year, $month) {
-
 		$dbConfig = new DATABASE_CONFIG();
 		$datasource = $dbConfig->plugin['datasource'];
 
@@ -445,7 +438,6 @@ class BlogPost extends BlogAppModel {
  * @access	public
  */
 	public function getControlSource($field, $options = array()) {
-
 		switch ($field) {
 			case 'blog_category_id':
 
@@ -514,18 +506,17 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function allowPublish($data) {
-
 		if (isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
 		}
 
-		$allowPublish = (int) $data['status'];
+		$allowPublish = (int)$data['status'];
 
 		if ($data['publish_begin'] == '0000-00-00 00:00:00') {
-			$data['publish_begin'] = NULL;
+			$data['publish_begin'] = null;
 		}
 		if ($data['publish_end'] == '0000-00-00 00:00:00') {
-			$data['publish_end'] = NULL;
+			$data['publish_end'] = null;
 		}
 
 		// 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
@@ -544,13 +535,12 @@ class BlogPost extends BlogAppModel {
  * @access public 
  */
 	public function getConditionAllowPublish() {
-
 		$conditions[$this->alias . '.status'] = true;
 		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => NULL),
+				array($this->alias . '.publish_begin' => null),
 				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
 		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => NULL),
+				array($this->alias . '.publish_end' => null),
 				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
 		return $conditions;
 	}
@@ -563,7 +553,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function getPublishes($options) {
-
 		if (!empty($options['conditions'])) {
 			$options['conditions'] = array_merge($this->getConditionAllowPublish(), $options['conditions']);
 		} else {
@@ -583,7 +572,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-
 		// 検索用テーブルへの登録・削除
 		if ($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {
 			$this->saveContent($this->createContent($this->data));
@@ -607,7 +595,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function createContent($data) {
-
 		if (isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
 		}
@@ -639,7 +626,6 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function beforeDelete($cascade = true) {
-
 		return $this->deleteContent($this->id);
 	}
 
@@ -651,7 +637,6 @@ class BlogPost extends BlogAppModel {
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
-
 		$data = array();
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => 1));

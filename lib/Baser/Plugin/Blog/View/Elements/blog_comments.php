@@ -69,7 +69,7 @@ if (Configure::read('BcRequest.agent')) {
 						var resultMessage = '';
 <?php if ($blogContent['BlogContent']['comment_approve']): ?>
 							resultMessage = '送信が完了しました。送信された内容は確認後公開させて頂きます。';
-<?php else: ?>
+	<?php else: ?>
 							var comment = $(result);
 							comment.hide();
 							$("#BlogCommentList").append(comment);

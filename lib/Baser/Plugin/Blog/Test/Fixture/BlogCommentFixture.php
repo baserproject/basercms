@@ -7,11 +7,6 @@
 App::uses('BlogComment', 'Blog.Model');
 
 class BlogCommentFixture extends CakeTestFixture {
-/**
- * Import
- *
- * @var array
- */
 
 /**
  * Import

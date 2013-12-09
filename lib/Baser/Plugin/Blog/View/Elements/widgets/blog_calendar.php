@@ -24,10 +24,10 @@ if (isset($blogContent)) {
 }
 $url = '/blog/blog/get_calendar/' . $id;
 if (!empty($year)) {
-	$url.='/' . $year;
+	$url .= '/' . $year;
 }
 if (!empty($month)) {
-	$url.='/' . $month;
+	$url .= '/' . $month;
 }
 $data = $this->requestAction($url);
 $blogContent = $data['blogContent'];
@@ -152,9 +152,8 @@ $entryDates = $data['entryDates'];
 			if ($w == 6) {
 				print "</tr>";
 			}
-		}
 		//一日目以降の場合
-		else {
+		} else {
 			if ($w == 0) {
 				print "<tr>";
 			}
@@ -167,9 +166,10 @@ $entryDates = $data['entryDates'];
 	}
 	print "</table>";
 
-//特定の日付の場合の処理
+/**
+ * 特定の日付の場合の処理
+ */
 	function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent) {
-
 		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
 				$change = '<td class="today">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
@@ -189,5 +189,6 @@ $entryDates = $data['entryDates'];
 		}
 		return $change;
 	}
+
 	?>
 </div>

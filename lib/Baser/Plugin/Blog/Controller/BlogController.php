@@ -93,7 +93,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		/* 認証設定 */
@@ -140,7 +139,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 
 		$this->set('blogContent', $this->blogContent);
@@ -157,7 +155,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function index() {
-
 		if (!$this->blogContent['BlogContent']['status']) {
 			$this->notFound();
 		}
@@ -193,7 +190,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function mobile_index() {
-
 		$this->setAction('index');
 	}
 
@@ -204,7 +200,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function smartphone_index() {
-
 		$this->setAction('index');
 	}
 
@@ -217,7 +212,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function archives() {
-
 		if (!$this->blogContent['BlogContent']['status']) {
 			$this->notFound();
 		}
@@ -315,10 +309,12 @@ class BlogController extends BlogAppController {
 				}
 				$posts = $this->_getBlogPosts(array('conditions' => array('year' => $year, 'month' => $month, 'day' => $day)));
 				$this->pageTitle = $year . '年';
-				if ($month)
+				if ($month) {
 					$this->pageTitle .= $month . '月';
-				if ($day)
+				}
+				if ($day) {
 					$this->pageTitle .= $day . '日';
+				}
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
 				if ($day) {
@@ -361,7 +357,6 @@ class BlogController extends BlogAppController {
 						));
 						$post['User'] = $author['User'];
 					}
-
 
 					if (!empty($this->request->data['BlogTag']['BlogTag'])) {
 						$tags = $this->BlogPost->BlogTag->find('all', array(
@@ -437,7 +432,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function add_comment($id) {
-
 		// blog_post_idを取得
 		$conditions = array(
 			'BlogPost.no' => $id,
@@ -488,7 +482,6 @@ class BlogController extends BlogAppController {
  * @access protected
  */
 	protected function _getBlogPosts($options = array()) {
-
 		// listCountの処理 （num が優先）
 		// TODO num に統一する
 		if (!empty($options['listCount'])) {
@@ -628,28 +621,37 @@ class BlogController extends BlogAppController {
 			switch ($datasouce) {
 				case 'mysql':
 				case 'csv':
-					if ($year)
+					if ($year) {
 						$conditions["YEAR(BlogPost.posts_date)"] = $year;
-					if ($month)
+					}
+					if ($month) {
 						$conditions["MONTH(BlogPost.posts_date)"] = $month;
-					if ($day)
+					}
+					if ($day) {
 						$conditions["DAY(BlogPost.posts_date)"] = $day;
+					}
 					break;
 				case 'postgres':
-					if ($year)
+					if ($year) {
 						$conditions["date_part('year',BlogPost.posts_date) = "] = $year;
-					if ($month)
+					}
+					if ($month) {
 						$conditions["date_part('month',BlogPost.posts_date) = "] = $month;
-					if ($day)
+					}
+					if ($day) {
 						$conditions["date_part('day',BlogPost.posts_date) = "] = $day;
+					}
 					break;
 				case 'sqlite':
-					if ($year)
+					if ($year) {
 						$conditions["strftime('%Y',BlogPost.posts_date)"] = $year;
-					if ($month)
+					}
+					if ($month) {
 						$conditions["strftime('%m',BlogPost.posts_date)"] = sprintf('%02d', $month);
-					if ($day)
+					}
+					if ($day) {
 						$conditions["strftime('%d',BlogPost.posts_date)"] = sprintf('%02d', $day);
+					}
 					break;
 			}
 		}
@@ -721,7 +723,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function mobile_archives() {
-
 		$this->setAction('archives');
 	}
 
@@ -734,7 +735,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function smartphone_archives() {
-
 		$this->setAction('archives');
 	}
 
@@ -748,7 +748,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function admin_preview($blogContentsId, $id, $mode) {
-
 		if ($mode == 'create') {
 			$this->_createPreview($blogContentsId, $id);
 		} elseif ($mode == 'view') {
@@ -765,7 +764,6 @@ class BlogController extends BlogAppController {
  * @access protected
  */
 	protected function _createPreview($blogContentsId, $id) {
-
 		if (!empty($this->request->data['BlogPost']['eye_catch_'])) {
 			$this->request->data['BlogPost']['eye_catch'] = $this->request->data['BlogPost']['eye_catch_'];
 		} else {
@@ -785,7 +783,6 @@ class BlogController extends BlogAppController {
  * @access protected
  */
 	protected function _viewPreview($blogContentsId, $id) {
-
 		$data = Cache::read('blog_posts_preview_' . $id, '_cake_core_');
 		Cache::delete('blog_posts_preview_' . $id, '_cake_core_');
 		$this->request->data = $this->request->params['data'] = $data;
@@ -814,7 +811,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function get_calendar($id, $year = '', $month = '') {
-
 		$year = h($year);
 		$month = h($month);
 		$this->BlogContent->recursive = -1;
@@ -854,7 +850,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function get_categories($id, $limit = false, $viewCount = false, $depth = 1, $contentType = null) {
-
 		if ($limit === '0') {
 			$limit = false;
 		}
@@ -877,8 +872,7 @@ class BlogController extends BlogAppController {
  * @param boolean $limit
  * @param int $viewCount 
  */
-	function get_authors($blogContentId, $viewCount = false) {
-
+	public function get_authors($blogContentId, $viewCount = false) {
 		$data = array();
 		$this->BlogContent->recursive = -1;
 		$data['blogContent'] = $this->BlogContent->read(null, $blogContentId);
@@ -896,7 +890,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function get_posted_months($id, $limit = 12, $viewCount = false) {
-
 		if ($limit === '0') {
 			$limit = false;
 		}
@@ -920,7 +913,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function get_posted_years($id, $limit = false, $viewCount = false) {
-
 		if ($limit === '0') {
 			$limit = false;
 		}
@@ -944,7 +936,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function get_recent_entries($id, $limit = 5) {
-
 		if ($limit === '0') {
 			$limit = false;
 		}
@@ -974,7 +965,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function posts($blogContentId, $limit = 5) {
-
 		if (!empty($this->params['named']['template'])) {
 			$template = $this->params['named']['template'];
 		} else {
@@ -1004,7 +994,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function mobile_posts($blogContentId, $limit = 5) {
-
 		$this->setAction('posts', $blogContentId, $limit);
 	}
 
@@ -1018,7 +1007,6 @@ class BlogController extends BlogAppController {
  * @access public
  */
 	public function smartphone_posts($blogContentId, $limit = 5) {
-
 		$this->setAction('posts', $blogContentId, $limit);
 	}
 

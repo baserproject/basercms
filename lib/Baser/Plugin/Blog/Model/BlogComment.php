@@ -111,7 +111,6 @@ class BlogComment extends BlogAppModel {
  * @return boolean
  */
 	public function add($data, $contentId, $postId, $commentApprove) {
-
 		if (isset($data['BlogComment'])) {
 			$data = $data['BlogComment'];
 		}

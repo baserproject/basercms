@@ -87,7 +87,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
@@ -109,7 +108,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 		$this->set('blogContent', $this->blogContent);
 	}
@@ -121,7 +119,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function admin_index($blogContentId) {
-
 		$conditions = array('BlogCategory.blog_content_id' => $blogContentId);
 		$_dbDatas = $this->BlogCategory->generateTreeList($conditions);
 		$dbDatas = array();
@@ -152,7 +149,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function admin_add($blogContentId) {
-
 		if (!$blogContentId) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -209,7 +205,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function admin_edit($blogContentId, $id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -261,7 +256,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_del($id);
@@ -279,7 +273,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -301,7 +294,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	protected function _del($id = null) {
-
 		// メッセージ用にデータを取得
 		$data = $this->BlogCategory->read(null, $id);
 		/* 削除処理 */
@@ -323,7 +315,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public function admin_delete($blogContentId, $id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -348,8 +339,7 @@ class BlogCategoriesController extends BlogAppController {
  * 
  * @param int $blogContentId 
  */
-	function admin_ajax_add($blogContentId) {
-
+	public function admin_ajax_add($blogContentId) {
 		if (!empty($this->request->data)) {
 			if (strlen($this->request->data['BlogCategory']['name']) == mb_strlen($this->request->data['BlogCategory']['name'])) {
 				$this->request->data['BlogCategory']['title'] = $this->request->data['BlogCategory']['name'];

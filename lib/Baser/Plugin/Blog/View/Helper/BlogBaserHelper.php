@@ -31,7 +31,7 @@ class BlogBaserHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	var $helpers = array('Blog.Blog');
+	public $helpers = array('Blog.Blog');
 
 /**
  * ブログ記事一覧出力
@@ -47,7 +47,6 @@ class BlogBaserHelper extends AppHelper {
  * @access public
  */
 	public function blogPosts($contentsName, $num = 5, $options = array()) {
-
 		$options = array_merge(array(
 			'category' => null,
 			'tag' => null,
@@ -94,7 +93,7 @@ class BlogBaserHelper extends AppHelper {
  *
  * @return boolean 
  */
-	function isBlogCategory() {
+	public function isBlogCategory() {
 		return $this->Blog->isCategory();
 	}
 
@@ -102,7 +101,7 @@ class BlogBaserHelper extends AppHelper {
  * タグ別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogTag() {
+	public function isBlogTag() {
 		return $this->Blog->isTag();
 	}
 
@@ -110,7 +109,7 @@ class BlogBaserHelper extends AppHelper {
  * 日別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogDate() {
+	public function isBlogDate() {
 		return $this->Blog->isDate();
 	}
 
@@ -118,7 +117,7 @@ class BlogBaserHelper extends AppHelper {
  * 月別記事一覧ページ判定
  * @return boolean 
  */
-	function isBlogMonth() {
+	public function isBlogMonth() {
 		return $this->Blog->isMonth();
 	}
 
@@ -126,7 +125,7 @@ class BlogBaserHelper extends AppHelper {
  * 年別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogYear() {
+	public function isBlogYear() {
 		return $this->Blog->isYear();
 	}
 
@@ -134,7 +133,7 @@ class BlogBaserHelper extends AppHelper {
  * 個別ページ判定
  * @return boolean
  */
-	function isBlogSingle() {
+	public function isBlogSingle() {
 		return $this->Blog->isSingle();
 	}
 
@@ -142,7 +141,7 @@ class BlogBaserHelper extends AppHelper {
  * インデックスページ判定
  * @return boolean
  */
-	function isBlogHome() {
+	public function isBlogHome() {
 		return $this->Blog->isHome();
 	}
 

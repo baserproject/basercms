@@ -35,6 +35,6 @@
 			</li>
 		<?php endforeach ?>
 	</ul>
-<?php else: ?>
+	<?php else: ?>
 	<p class="no-data">記事がありません</p>
 <?php endif ?>
