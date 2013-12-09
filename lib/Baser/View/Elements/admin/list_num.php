@@ -43,5 +43,5 @@ if ($links) {
 	<div class="list-num">
 		<strong>表示件数</strong><p><?php echo $link ?></p>
 	</div>
-<?php endif ；?>
+<?php endif ?>
 	
