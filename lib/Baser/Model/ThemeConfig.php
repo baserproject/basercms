@@ -11,7 +11,6 @@ class ThemeConfig extends AppModel {
  * @return array
  */
 	public function saveImage($data) {
-
 		// TODO インストール時にfilesの書き込み権限チェック＆フォルダ作成
 
 		$saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
@@ -41,7 +40,6 @@ class ThemeConfig extends AppModel {
 	}
 
 	public function deleteImage($data) {
-
 		$saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
 		$images = array('logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5');
 		$thumbSuffix = '_thumb';
@@ -59,7 +57,6 @@ class ThemeConfig extends AppModel {
 	}
 
 	public function updateColorConfig($data) {
-
 		$configPath = getViewPath() . 'css' . DS . 'config.css';
 		if (!file_exists($configPath)) {
 			return false;

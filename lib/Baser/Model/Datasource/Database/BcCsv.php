@@ -124,11 +124,12 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected $_command = array();
-/* protected $_commands = array(
-	  'begin'    => 'START TRANSACTION',
-	  'commit'   => 'COMMIT',
-	  'rollback' => 'ROLLBACK'
-	  ); */
+
+	//protected $_commands = array(
+	//	'begin'    => 'START TRANSACTION',
+	//	'commit'   => 'COMMIT',
+	//	'rollback' => 'ROLLBACK'
+	//);
 
 /**
  * resultTable
@@ -177,7 +178,6 @@ class BcCsv extends DboSource {
  * @access private
  */
 	public function __construct($config = null, $autoConnect = true) {
-
 		// TODO 現在の仕様として、$connected は、配列にしてしまっているので、
 		// 次の処理を行うと処理がうまくいかなくなってしまう。
 		// 配列の接続データは別のプロパティに持たせるようにした方が？
@@ -199,8 +199,7 @@ class BcCsv extends DboSource {
  * @return array 結果セット
  * @access public
  */
-	public function read(Model $model, $queryData = array(), $recursive = NULL) {
-
+	public function read(Model $model, $queryData = array(), $recursive = null) {
 		// DB接続
 		if (!$this->connect($model, false)) {
 			return false;
@@ -251,7 +250,6 @@ class BcCsv extends DboSource {
 		$query = $this->generateAssociationQuery($model, $null, null, null, null, $queryData, false, $null); // SQL生成
 		$resultSet = $this->fetchAll($query, $model->cacheQueries, $model->alias); // SQL実行
 
-
 		if ($resultSet === false) {
 			$model->onError();
 			$this->disconnect($model->tablePrefix . $model->table);
@@ -295,8 +293,7 @@ class BcCsv extends DboSource {
  * @return boolean Success
  * @access public
  */
-	public function create(Model $model, $fields = NULL, $values = NULL) {
-
+	public function create(Model $model, $fields = null, $values = null) {
 		// DB接続
 		if (!$this->connect($model, true)) {
 			return false;
@@ -349,8 +346,7 @@ class BcCsv extends DboSource {
  * @return boolean
  * @access public
  */
-	public function update(Model $model, $fields = NULL, $values = NULL, $conditions = NULL) {
-
+	public function update(Model $model, $fields = null, $values = null, $conditions = null) {
 		// DB接続
 		if (!$this->connect($model, true)) {
 			return false;
@@ -395,7 +391,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function delete(Model $model, $conditions = null) {
-
 		// DB接続
 		if (!$this->connect($model, true)) {
 			return false;
@@ -438,7 +433,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function connect(&$model, $lock = true) {
-
 		$config = $this->config;
 		$tableName = $this->fullTableName($model, false);
 
@@ -466,7 +460,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function setEncoding($enc) {
-
 		$this->dbEncoding = $this->_dbEncToPhp($enc);
 		return true;
 	}
@@ -479,7 +472,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function getEncoding() {
-
 		return $this->_phpEncToDb($this->dbEncoding);
 	}
 
@@ -492,7 +484,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function reconnect($config = array()) {
-
 		$this->disconnect();
 		$this->setConfig($config);
 		$this->_sources = null;
@@ -508,7 +499,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _connect($tableName, $lock = true, $force = false) {
-
 		if (!empty($this->connection[$tableName])) {
 			return $this->connection[$tableName];
 		}
@@ -542,7 +532,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function disconnect($tableName = null) {
-
 		if ($tableName) {
 			if (empty($this->connection[$tableName])) {
 				// 接続がない場合は既に切断されているとみなしてtrueを返す
@@ -575,11 +564,10 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function isConnected($tableName = null) {
-
 		if (!empty($this->connected)) {
 			if ($tableName && !empty($this->connected[$tableName])) {
 				return $this->connected[$tableName];
-			} else if (!empty($this->connected[0])) {
+			} elseif (!empty($this->connected[0])) {
 				return $this->connected[0];
 			} else {
 				return false;
@@ -597,7 +585,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function csvConnect($file) {
-
 		// ファイルを開く
 		$fp = fopen($file, 'r');
 		return $fp;
@@ -612,7 +599,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function csvConnectByLocked($file) {
-
 		/* 念の為バックアップ */
 		// TODO すぐに上書きされてしまうので意味がないかも
 		// 上書きしないように一意の名称でバックアップをとるとゴミが溜まりすぎる
@@ -647,7 +633,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function csvCloseByLocked(&$fp) {
-
 		if (is_array($fp)) {
 			$ret = true;
 			foreach ($fp as $key => $value) {
@@ -668,7 +653,6 @@ class BcCsv extends DboSource {
  * @access private
  */
 	private function __csvCloseByLocked(&$fp) {
-
 		$ret = false;
 		if ($fp) {
 			//ロックの開放
@@ -688,7 +672,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
-
 		return $this->csvQuery($sql);
 	}
 
@@ -700,7 +683,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function csvQuery($sql) {
-
 		// SQL文を解析して、CSV操作用のクエリデータを生成する
 		$this->__resultModelName = 0;
 		$queryData = $this->parseSql($sql);
@@ -742,7 +724,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function readCsv($queryData) {
-
 		$queryData = am($queryData, array('option' => ''));
 
 		if (preg_match("/^COUNT\(\*\)\sAS\scount$/s", trim($queryData['fields'][0]))) {
@@ -812,8 +793,9 @@ class BcCsv extends DboSource {
 
 				$count++;
 				// 件数制限がある場合は、件数を超えた時点で抜ける
-				if ($queryData['limit'] && $count >= $queryData['limit'])
+				if ($queryData['limit'] && $count >= $queryData['limit']) {
 					break;
+				}
 			}
 		}
 
@@ -848,7 +830,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function createCsv($queryData) {
-
 		if (!$this->_connect($queryData['tableName'])) {
 			return false;
 		}
@@ -927,7 +908,6 @@ class BcCsv extends DboSource {
  * @access private
  */
 	private function __checkDuplicateId($table, $id) {
-
 		$queryData['crud'] = 'read';
 		$queryData['className'] = Inflector::classify(str_replace($this->config['prefix'], '', $table));
 		$queryData['fields'] = array('id');
@@ -955,7 +935,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function buildCsv($queryData) {
-
 		if (file_exists($this->config['database'] . DS . $queryData['tableName'] . '.csv')) {
 			return false;
 		}
@@ -981,7 +960,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function dropCsv($queryData) {
-
 		$path = $this->config['database'] . DS . $queryData['tableName'] . '.csv';
 		if (!file_exists($path)) {
 			return false;
@@ -998,7 +976,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function updateCsv($queryData) {
-
 		$records = $this->_readCsvFile($queryData['tableName']);
 
 		// ヘッダーの生成
@@ -1054,7 +1031,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function deleteCsv($queryData) {
-
 		$records = $this->_readCsvFile($queryData['tableName']);
 
 		// ヘッダーの生成
@@ -1094,7 +1070,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _readCsvFile($tableName = null, $conditions = null) {
-
 		if ($tableName) {
 			$index = $tableName;
 		} else {
@@ -1145,7 +1120,6 @@ class BcCsv extends DboSource {
  * @access protecteds
  */
 	protected function _getMaxId($tableName) {
-
 		if ($tableName) {
 			$index = $tableName;
 		} else {
@@ -1187,7 +1161,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _getCsvHead($fields = null) {
-
 		if (!$fields) {
 			$fields = $this->_csvFields;
 		}
@@ -1207,7 +1180,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _convertField($value, $dc = true) {
-
 		if ($dc) {
 			$value = str_replace('"', '""', $value);
 		}
@@ -1225,7 +1197,6 @@ class BcCsv extends DboSource {
  * @return array
  */
 	protected function _convertRecord($record) {
-
 		foreach ($record as $field => $value) {
 			$record[$field] = $this->_convertField($value);
 		}
@@ -1240,7 +1211,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	public function addColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($column)) {
@@ -1314,7 +1284,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	public function changeColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($column)) {
@@ -1402,7 +1371,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	public function dropColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($field)) {
@@ -1480,7 +1448,6 @@ class BcCsv extends DboSource {
  * @access	public
  */
 	public function parseSql($sql) {
-
 		$parseData = array(
 			'conditions' => array(),
 			'fields' => array(),
@@ -1610,7 +1577,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlClassName($fields) {
-
 		$model = '';
 		$aryFields = explode(",", $fields);
 		foreach ($aryFields as $field) {
@@ -1637,7 +1603,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlFieldsFromBuild($sql) {
-
 		$arySql = explode(",", $sql);
 		$fields = array();
 		foreach ($arySql as $key => $value) {
@@ -1659,7 +1624,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlValuesFromCreate($fields, $values) {
-
 		$values = str_replace('), (', '),(', $values);
 		if (strpos($values, '),(') !== false) {
 			$values = explode('),(', $values);
@@ -1676,7 +1640,8 @@ class BcCsv extends DboSource {
 			$value = str_replace("\"", '""', $value);
 			$arrValues = explode(",", $value);
 			$record = array();
-			for ($i = 0; $i < count($arrFields); $i++) {
+			$count = count($arrFields);
+			for ($i = 0; $i < $count; $i++) {
 				$arrFields[$i] = trim($arrFields[$i]);
 				$record[$arrFields[$i]] = $this->_convertField($arrValues[$i], false);
 			}
@@ -1696,7 +1661,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlValuesFromUpdate($sql) {
-
 		$fields = array();
 		$values = array();
 		// エスケープされたカンマを一旦変換
@@ -1732,7 +1696,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlTableName($tables) {
-
 		$tables = str_replace("`", "", $tables);
 
 		if (strpos($tables, "AS") !== false) {
@@ -1752,7 +1715,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlCondition($conditions, $fields, $tableName = '') {
-
 		if (is_array($conditions)) {
 			foreach ($conditions as $key => $condition) {
 				if (!isset($tmpConditions)) {
@@ -1791,15 +1753,15 @@ class BcCsv extends DboSource {
 		if (preg_match("/([`a-z0-9_]+?)\sIN\s\((.*?)\)/s", $conditions, $matches)) {
 			$fieldName = $matches[1];
 			$values = explode(",", $matches[2]);
-			$in_conditions = "";
+			$inConditions = "";
 			foreach ($values as $value) {
-				if ($in_conditions) {
-					$in_conditions .= " || " . $fieldName . " == " . $value;
+				if ($inConditions) {
+					$inConditions .= " || " . $fieldName . " == " . $value;
 				} else {
-					$in_conditions = $fieldName . " == " . $value;
+					$inConditions = $fieldName . " == " . $value;
 				}
 			}
-			$conditions = preg_replace("/[`a-z0-9_]+?\sIN\s\(.*?\)/s", '(' . $in_conditions . ')', $conditions);
+			$conditions = preg_replace("/[`a-z0-9_]+?\sIN\s\(.*?\)/s", '(' . $inConditions . ')', $conditions);
 		}
 
 		// TODO NOT句（２重カッコに対応できていない）
@@ -1840,7 +1802,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlLimit($limit) {
-
 		$_config = explode(",", $limit);
 		if (!empty($_config[1])) {
 			$config['offset'] = trim($_config[0]);
@@ -1866,7 +1827,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _parseSqlOrder($strOrder) {
-
 		$strOrder = preg_replace("/`[^`]+?`\./s", "", $strOrder);
 		$strOrder = str_replace("`", "", $strOrder);
 		$aryOrders = explode(",", $strOrder);
@@ -1881,8 +1841,7 @@ class BcCsv extends DboSource {
  * 
  * @return array Array of tablenames in the database
  */
-	public function listSources($data = NULL) {
-
+	public function listSources($data = null) {
 		$cache = parent::listSources();
 		if ($cache != null) {
 			return $cache;
@@ -1912,7 +1871,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function describe($model) {
-
 		$cache = parent::describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -2001,7 +1959,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function value($data, $column = null, $safe = false) {
-
 		if (is_array($data) && !empty($data)) {
 			return array_map(
 				array(&$this, 'value'), $data, array_fill(0, count($data), $column)
@@ -2027,7 +1984,7 @@ class BcCsv extends DboSource {
 
 		switch ($column) {
 			case 'boolean':
-				return $this->boolean((bool) $data);
+				return $this->boolean((bool)$data);
 				break;
 			case 'integer':
 			case 'float':
@@ -2053,7 +2010,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function escapeString($value) {
-
 		$value = str_replace(array("'", ","), array("\'", "\,"), $value);
 		return $value;
 	}
@@ -2065,8 +2021,7 @@ class BcCsv extends DboSource {
  * @return string Error message with error number
  * @access public
  */
-	public function lastError(PDOStatement $query = NULL) {
-
+	public function lastError(PDOStatement $query = null) {
 		/* if (mysql_errno($this->connection)) {
 		  return mysql_errno($this->connection).': '.mysql_error($this->connection);
 		  } */
@@ -2081,8 +2036,7 @@ class BcCsv extends DboSource {
  * @return integer Number of affected rows
  * @access public
  */
-	public function lastAffected($source = NULL) {
-
+	public function lastAffected($source = null) {
 		/*
 		  if ($this->_result) {
 		  return mysql_affected_rows($this->connection);
@@ -2099,9 +2053,8 @@ class BcCsv extends DboSource {
  * @return integer Number of rows in resultset
  * @access public
  */
-	public function lastNumRows($source = NULL) {
-
-		if ($this->_result and is_resource($this->_result)) {
+	public function lastNumRows($source = null) {
+		if ($this->_result && is_resource($this->_result)) {
 			return @mysql_num_rows($this->_result);
 		}
 		return null;
@@ -2115,7 +2068,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function lastInsertId($source = null) {
-
 		if (!empty($this->_lastInsertId)) {
 			return $this->_lastInsertId;
 		} else {
@@ -2132,7 +2084,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function column($real) {
-
 		if (is_array($real)) {
 			$col = $real['name'];
 			if (isset($real['limit'])) {
@@ -2190,11 +2141,11 @@ class BcCsv extends DboSource {
  * @param array $resultSet
  * @param integer $recursive Number of levels of association
  * @param array $stack
+ * @throws CakeException
  * @return void
  * @access public
  */
 	public function queryAssociation(Model $model, &$linkModel, $type, $association, $assocData, &$queryData, $external, &$resultSet, $recursive, $stack) {
-
 		// DB接続
 		if (!$this->connect($linkModel, false)) {
 			return false;
@@ -2363,7 +2314,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _loadCsvFields($model) {
-
 		if (is_object($model)) {
 			$this->_csvFields = array_keys($model->schema());
 		} else {
@@ -2384,7 +2334,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function fetchAll($sql, $cache = true, $modelName = null) {
-
 		if ($cache && isset($this->_queryCache[$sql])) {
 			if (preg_match('/^\s*select/i', $sql)) {
 				return $this->_queryCache[$sql];
@@ -2421,7 +2370,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function fetchRow($sql = null) {
-
 		if (!empty($sql) && is_string($sql) && strlen($sql) > 5) {
 			if (!$this->execute($sql)) {
 				return null;
@@ -2448,14 +2396,14 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function resultSet(&$results) {
-
 		$this->results = & $results;
 		$this->map = array();
 		$index = 0;
 
 		// 要素がない場合は戻る
-		if (!$row = current($results))
+		if (!$row = current($results)) {
 			return;
+		}
 
 		reset($row);
 
@@ -2472,7 +2420,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function fetchResult() {
-
 		if ($row = each($this->results)) {
 			$resultRow = array();
 			$i = 0;
@@ -2515,7 +2462,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function index($model) {
-
 		$index = array('PRIMARY' => array('unique' => 1, 'column' => 'id'));
 		return $index;
 	}
@@ -2529,9 +2475,7 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function alterSchema($compare, $table = null) {
-
-		return false
-		;
+		return false;
 	}
 
 /**
@@ -2544,7 +2488,6 @@ class BcCsv extends DboSource {
  * @access protected
  */
 	protected function _alterIndexes($table, $indexes) {
-
 		return array();
 	}
 
@@ -2556,7 +2499,6 @@ class BcCsv extends DboSource {
  * @access	public
  */
 	public function renameTable($options) {
-
 		extract($options);
 
 		if (!isset($new) || !isset($old)) {
@@ -2587,7 +2529,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function alterTable($options) {
-
 		extract($options);
 
 		if (!isset($old) || !isset($new)) {
@@ -2644,7 +2585,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function truncate($table) {
-
 		// TODO 現状、CSVのDELETE文はWHERE句がないと実行されない
 		return $this->execute('DELETE From ' . $this->fullTableName($table) . ' WHERE 1=1');
 	}
@@ -2659,7 +2599,6 @@ class BcCsv extends DboSource {
  * or a transaction has not started).
  */
 	public function begin() {
-
 		return null;
 	}
 
@@ -2673,7 +2612,6 @@ class BcCsv extends DboSource {
  * @access pablic
  */
 	public function commit() {
-
 		return null;
 	}
 
@@ -2688,7 +2626,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function rollback() {
-
 		return null;
 	}
 
@@ -2707,7 +2644,6 @@ class BcCsv extends DboSource {
  * @access public
  */
 	public function generateAssociationQuery(Model $model, $linkModel, $type, $association, $assocData, &$queryData, $external, &$resultSet) {
-
 		$queryData = $this->_scrubQueryData($queryData);
 		$assocData = $this->_scrubQueryData($assocData);
 
@@ -2890,39 +2826,38 @@ class BcCsv extends DboSource {
  * @param string $order = ソートの昇順(ASC)・降順(DESC)　デフォルトは昇順
  * @return array ソート後の配列
  */
-function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
-
+function qsort(&$intArray, $left = 0, $right, $flag = "", $order = "ASC") {
 	if ($left >= $right) {
 		return;
 	}
-	swap($int_array, $left, intval(($left + $right) / 2));
+	swap($intArray, $left, intval(($left + $right) / 2));
 	$last = $left;
 	for ($i = $left + 1; $i <= $right; $i++) {
 		if ($flag) {
 			if ($order == "DESC") {
-				if ($int_array[$i]["" . $flag . ""] > $int_array[$left]["" . $flag . ""]) {
-					swap($int_array, ++$last, $i);
+				if ($intArray[$i]["" . $flag . ""] > $intArray[$left]["" . $flag . ""]) {
+					swap($intArray, ++$last, $i);
 				}
 			} else {
-				if ($int_array[$i]["" . $flag . ""] < $int_array[$left]["" . $flag . ""]) {
-					swap($int_array, ++$last, $i);
+				if ($intArray[$i]["" . $flag . ""] < $intArray[$left]["" . $flag . ""]) {
+					swap($intArray, ++$last, $i);
 				}
 			}
 		} else {
 			if ($order == "DESC") {
-				if ($int_array[$i] > $int_array[$left]) {
-					swap($int_array, ++$last, $i);
+				if ($intArray[$i] > $intArray[$left]) {
+					swap($intArray, ++$last, $i);
 				}
 			} else {
-				if ($int_array[$i] < $int_array[$left]) {
-					swap($int_array, ++$last, $i);
+				if ($intArray[$i] < $intArray[$left]) {
+					swap($intArray, ++$last, $i);
 				}
 			}
 		}
 	}
-	swap($int_array, $left, $last);
-	qsort($int_array, $left, $last - 1, $flag = $flag, $order = $order);
-	qsort($int_array, $last + 1, $right, $flag = $flag, $order = $order);
+	swap($intArray, $left, $last);
+	qsort($intArray, $left, $last - 1, $flag = $flag, $order = $order);
+	qsort($intArray, $last + 1, $right, $flag = $flag, $order = $order);
 }
 
 /**
@@ -2937,7 +2872,6 @@ function qsort(&$int_array, $left = 0, $right, $flag = "", $order = "ASC") {
  * @access public
  */
 function swap(&$v, $i, $j) {
-
 	$temp = $v[$i];
 	$v[$i] = $v[$j];
 	$v[$j] = $temp;

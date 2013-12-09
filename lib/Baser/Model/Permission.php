@@ -107,7 +107,6 @@ class Permission extends AppModel {
  * @access public
  */
 	public function checkUrl($check) {
-
 		if (!$check[key($check)]) {
 			return true;
 		}
@@ -142,7 +141,6 @@ class Permission extends AppModel {
  * @access public
  */
 	public function getAuthPrefix($id) {
-
 		// CSV の場合、他テーブルの fields を指定するとデータが取得できない
 		$data = $this->find('first', array(
 			'conditions' => array('Permission.id' => $id),
@@ -162,7 +160,6 @@ class Permission extends AppModel {
  * @access public
  */
 	public function getDefaultValue() {
-
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
 		return $data;
@@ -176,7 +173,6 @@ class Permission extends AppModel {
  * @access	public
  */
 	public function getControlSource($field = null) {
-
 		$controlSources['user_group_id'] = $this->UserGroup->find('list', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId'))));
 		$controlSources['auth'] = array('0' => '不可', '1' => '可');
 		if (isset($controlSources[$field])) {
@@ -194,7 +190,6 @@ class Permission extends AppModel {
  * @access public
  */
 	public function beforeSave($options = array()) {
-
 		if (isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
 		} else {
@@ -219,7 +214,6 @@ class Permission extends AppModel {
  * @access public
  */
 	public function check($url, $userGroupId) {
-
 		if ($this->permissionsTmp === -1) {
 			$conditions = array('Permission.user_group_id' => $userGroupId);
 			$permissions = $this->find('all', array('conditions' => $conditions, 'order' => 'sort', 'recursive' => -1));
@@ -289,7 +283,6 @@ class Permission extends AppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array()) {
-
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
 		}

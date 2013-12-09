@@ -50,7 +50,6 @@ class Tool extends AppModel {
  * @access public
  */
 	public function getControlSource($field) {
-
 		// スキーマ用モデルリスト
 		$controlSources['connection'] = array('baser' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
 		$controlSources = $this->getListModels($field);
@@ -70,7 +69,6 @@ class Tool extends AppModel {
  * @access public
  */
 	public function getListModels($configKeyName = 'baser') {
-
 		$db = ConnectionManager::getDataSource($configKeyName);
 		$listSources = $db->listSources();
 		if (!$listSources) {
@@ -95,7 +93,6 @@ class Tool extends AppModel {
  * @access public
  */
 	public function writeSchema($data, $path) {
-
 		if (isset($data['Tool'])) {
 			$data = $data['Tool'];
 		}
@@ -127,7 +124,6 @@ class Tool extends AppModel {
  * @access public
  */
 	public function loadSchemaFile($data, $tmpPath) {
-
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if (move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
 			include $path;
@@ -154,7 +150,6 @@ class Tool extends AppModel {
  * @access protected
  */
 	protected function _writeSchema($field, $values, $path) {
-
 		$db = ConnectionManager::getDataSource($field);
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);

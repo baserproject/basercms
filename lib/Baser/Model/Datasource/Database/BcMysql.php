@@ -31,7 +31,6 @@ class BcMysql extends Mysql {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-
 		return "ALTER TABLE `" . $sourceName . "` RENAME `" . $targetName . "`";
 	}
 
@@ -79,7 +78,7 @@ class BcMysql extends Mysql {
 
 		switch ($column) {
 			case 'boolean':
-				return $this->boolean((bool) $data);
+				return $this->boolean((bool)$data);
 				break;
 			case 'integer':
 			case 'float':
@@ -91,14 +90,16 @@ class BcMysql extends Mysql {
 					$data[0] != '0' && strpos($data, 'e') === false)) {
 					return $data;
 				}
-			// CUSTOMIZE ADD ryuring 2012/08/31
-			// datetime を追加
-			// >>>
+
+				// CUSTOMIZE ADD ryuring 2012/08/31
+				// datetime を追加
+				// >>>
 			case 'datetime':
 				if ($data === '') {
 					return 'NULL';
 				}
-			// <<<
+				// <<<
+
 			default:
 				$con = $this->getConnection();
 				$data = $con->quote($data);

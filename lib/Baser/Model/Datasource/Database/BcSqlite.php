@@ -87,10 +87,14 @@ class BcSqlite extends Sqlite {
 		'binary' => array('name' => 'blob'),
 		'boolean' => array('name' => 'boolean')
 	);
-	public $last_error = NULL;
-	public $pdo_statement = NULL;
-	public $rows = NULL;
-	public $row_count = NULL;
+
+	public $last_error = null;
+
+	public $pdo_statement = null;
+
+	public $rows = null;
+
+	public $row_count = null;
 
 /**
  * Connects to the database using config['database'] as a filename.
@@ -100,7 +104,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function connect() {
-
 		//echo "runs connect\n";
 		$this->last_error = null;
 		$config = $this->config;
@@ -122,10 +125,9 @@ class BcSqlite extends Sqlite {
  * @return boolean True if the database could be disconnected, else false
  */
 	public function disconnect() {
-
 		//echo "runs disconnect\n";
 		//@sqlite3_close($this->_connection);
-		$this->_connection = NULL;
+		$this->_connection = null;
 		$this->connected = false;
 		return $this->connected;
 	}
@@ -138,13 +140,12 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
-
 		//echo "runs execute\n";
 		//return sqlite3_query($this->_connection, $sql);
 
 		for ($i = 0; $i < 2; $i++) {
 			try {
-				$this->last_error = NULL;
+				$this->last_error = null;
 				$this->pdo_statement = $this->_connection->query($sql);
 				if (is_object($this->pdo_statement)) {
 					$this->rows = $this->pdo_statement->fetchAll(PDO::FETCH_NUM);
@@ -153,8 +154,9 @@ class BcSqlite extends Sqlite {
 				}
 			} catch (PDOException $e) {
 				// Schema change; re-run query
-				if ($e->errorInfo[1] === 17)
+				if ($e->errorInfo[1] === 17) {
 					continue;
+				}
 				$this->last_error = $e->getMessage();
 			}
 		}
@@ -167,8 +169,7 @@ class BcSqlite extends Sqlite {
  * @return array Array of tablenames in the database
  * @access public
  */
-	public function listSources($data = NULL) {
-
+	public function listSources($data = null) {
 		//echo "runs listSources\n";
 		$db = $this->config['database'];
 		$this->config['database'] = basename($this->config['database']);
@@ -221,7 +222,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function value($data, $column = null, $safe = false) {
-
 		$parent = parent::value($data, $column, $safe);
 
 		if ($parent != null) {
@@ -237,7 +237,7 @@ class BcSqlite extends Sqlite {
 				if ($data === '') {
 					return 0;
 				}
-				$data = $this->boolean((bool) $data);
+				$data = $this->boolean((bool)$data);
 				break;
 			case 'integer';
 				if ($data === '') {
@@ -273,8 +273,7 @@ class BcSqlite extends Sqlite {
  * @return array
  * @access public
  */
-	public function update(Model $model, $fields = NULL, $values = NULL, $conditions = NULL) {
-
+	public function update(Model $model, $fields = null, $values = null, $conditions = null) {
 		if (empty($values) && !empty($fields)) {
 			foreach ($fields as $field => $value) {
 				if (strpos($field, $model->alias . '.') !== false) {
@@ -299,7 +298,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function begin() {
-
 		return null;
 		/* if (parent::begin($model)) {
 		  if ($this->_connection->beginTransaction()) {
@@ -322,7 +320,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function commit() {
-
 		return null;
 		/* if (parent::commit($model)) {
 		  $this->_transactionStarted = false;
@@ -343,7 +340,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function rollback() {
-
 		return null;
 		/* if (parent::rollback($model)) {
 		  return $this->_connection->rollBack();
@@ -358,7 +354,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function lastError(PDOStatement $query = null) {
-
 		return $this->last_error;
 	}
 
@@ -368,8 +363,7 @@ class BcSqlite extends Sqlite {
  * @return integer Number of affected rows
  * @access public
  */
-	public function lastAffected($source = NULL) {
-
+	public function lastAffected($source = null) {
 		if ($this->_result) {
 			return $this->pdo_statement->rowCount();
 		}
@@ -383,8 +377,7 @@ class BcSqlite extends Sqlite {
  * @return integer Number of rows in resultset
  * @access public
  */
-	public function lastNumRows($source = NULL) {
-
+	public function lastNumRows($source = null) {
 		if ($this->pdo_statement) {
 			// pdo_statement->rowCount() doesn't work for this case
 			return $this->row_count;
@@ -398,8 +391,7 @@ class BcSqlite extends Sqlite {
  * @return int
  * @access public
  */
-	public function lastInsertId($source = NULL) {
-
+	public function lastInsertId($source = null) {
 		//return sqlite3_last_insert_rowid($this->_connection);
 		return $this->_connection->lastInsertId($source);
 	}
@@ -412,7 +404,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function column($real) {
-
 		if (is_array($real)) {
 			$col = $real['name'];
 			if (isset($real['limit'])) {
@@ -448,7 +439,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function resultSet($results) {
-
 		$this->results = $results;
 		$this->map = array();
 		$numFields = $results->columnCount();
@@ -488,12 +478,11 @@ class BcSqlite extends Sqlite {
 
 			$metaType = false;
 			try {
-				$metaData = (array) $results->getColumnMeta($j);
+				$metaData = (array)$results->getColumnMeta($j);
 				if (!empty($metaData['sqlite:decl_type'])) {
 					$metaType = trim($metaData['sqlite:decl_type']);
 				}
 			} catch (Exception $e) {
-				
 			}
 
 			if (strpos($columnName, '.')) {
@@ -513,7 +502,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function fetchResult() {
-
 		//if ($row = sqlite3_fetch_array($this->results, SQLITE3_ASSOC)) {
 		if (count($this->rows)) {
 			$row = array_shift($this->rows);
@@ -524,7 +512,7 @@ class BcSqlite extends Sqlite {
 
 			foreach ($row as $index => $field) {
 				//pr($index);
-				if (isset($this->map[$index]) and $this->map[$index] != "") {
+				if (isset($this->map[$index]) && $this->map[$index] != "") {
 					//echo "asdf: ".$this->map[$index];
 					list($table, $column) = $this->map[$index];
 					$resultRow[$table][$column] = $row[$index];
@@ -549,7 +537,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function limit($limit, $offset = null) {
-
 		if ($limit) {
 			$rt = '';
 			if (!strpos(strtolower($limit), 'limit') || strpos(strtolower($limit), 'limit') === 0) {
@@ -573,7 +560,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function buildColumn($column) {
-
 		$name = $type = null;
 		$column = array_merge(array('null' => true), $column);
 		extract($column);
@@ -629,7 +615,6 @@ class BcSqlite extends Sqlite {
  * @return string
  */
 	public function buildIndex($indexes, $table = null) {
-
 		$join = array();
 
 		foreach ($indexes as $name => $value) {
@@ -660,7 +645,6 @@ class BcSqlite extends Sqlite {
  * @return string
  */
 	public function renderStatement($type, $data) {
-
 		switch (strtolower($type)) {
 			case 'schema':
 				extract($data);
@@ -683,7 +667,6 @@ class BcSqlite extends Sqlite {
  * PDO deals in objects, not resources, so overload accordingly.
  */
 	public function hasResult() {
-
 		return is_object($this->_result);
 	}
 
@@ -695,7 +678,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function alterSchema($compare, $table = null) {
-
 		if (!is_array($compare)) {
 			return false;
 		}
@@ -750,7 +732,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function index($model) {
-
 		$index = array();
 		$table = $this->fullTableName($model, false, false);
 		if ($table) {
@@ -796,7 +777,6 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _alterIndexes($table, $indexes) {
-
 		return array();
 	}
 
@@ -808,7 +788,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function alterTable($options) {
-
 		extract($options);
 
 		if (!isset($old) || !isset($new)) {
@@ -869,7 +848,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
 
@@ -881,7 +859,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function renameColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($new) || !isset($old)) {
@@ -949,7 +926,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function dropColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($field)) {
@@ -1011,7 +987,6 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _moveData($sourceTableName, $targetTableName, $schema) {
-
 		$sql = 'INSERT INTO ' . $targetTableName . ' SELECT ' . $this->_convertCsvFieldsFromSchema($schema) . ' FROM ' . $sourceTableName;
 		return $this->execute($sql);
 	}
@@ -1023,7 +998,6 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _convertCsvFieldsFromSchema($schema) {
-
 		$fields = '';
 		foreach ($schema as $key => $field) {
 			if ($key != 'tableParameters') {
@@ -1041,7 +1015,6 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function describe($model) {
-
 		$cache = $this->__describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -1064,7 +1037,7 @@ class BcSqlite extends Sqlite {
 			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
 			if ($fields[$column[0]['name']]['default'] == 'NULL') {
-				$fields[$column[0]['name']]['default'] = NULL;
+				$fields[$column[0]['name']]['default'] = null;
 			}
 			// >>> CUSTOMIZE ADD 2011/08/22 ryuring
 			if ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
@@ -1103,7 +1076,6 @@ class BcSqlite extends Sqlite {
  * @access private
  */
 	private function __describe($model) {
-
 		if ($this->cacheSources === false) {
 			return null;
 		}

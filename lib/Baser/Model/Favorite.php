@@ -48,7 +48,7 @@ class Favorite extends AppModel {
  * @var array
  * @access public
  */
-	var $belongsTo = array(
+	public $belongsTo = array(
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id'
@@ -95,7 +95,6 @@ class Favorite extends AppModel {
  * @param array $check
  */
 	public function isPermitted($check) {
-
 		if (!$this->_Session) {
 			return true;
 		}
