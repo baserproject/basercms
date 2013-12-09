@@ -282,7 +282,11 @@ class BcAppController extends Controller {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
 			} else {
-				$this->redirect('/' . Configure::read('BcRequest.agentAlias') . '/maintenance');
+				$redirectUrl = '/maintenance';
+				if(Configure::read('BcRequest.agentAlias')) {
+					$redirectUrl = '/' . Configure::read('BcRequest.agentAlias') . $redirectUrl;
+				}
+				$this->redirect($redirectUrl);
 			}
 		}
 
