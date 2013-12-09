@@ -22,7 +22,7 @@
 ?>
 <cake:nocache>
 	<?php
-	$baseUrl = "/mobile/ga";
+	$baseUrl = $this->BcBaser->getUrl("/mobile/ga");
 	if (!empty($_SERVER["HTTP_REFERER"])) {
 		$referer = $_SERVER["HTTP_REFERER"];
 	} else {

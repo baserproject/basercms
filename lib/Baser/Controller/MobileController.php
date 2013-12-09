@@ -41,7 +41,7 @@ class MobileController extends AppController {
  * return void
  * access public
  */
-	public function mobile_ga() {
+	public function ga () {
 		if (empty($this->siteConfigs['google_analytics_id']) || !version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=')) {
 			header("Content-Type: image/gif");
 			header("Cache-Control: " .
@@ -60,6 +60,16 @@ class MobileController extends AppController {
 		}
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
 		exit();
+	}
+	
+/**
+ * モバイル GoogleAnalytics 用 ライブラリを読み込む
+ * 
+ * return void
+ * access public
+ */
+	public function mobile_ga() {
+		$this->setAction('ga');
 	}
 
 }
