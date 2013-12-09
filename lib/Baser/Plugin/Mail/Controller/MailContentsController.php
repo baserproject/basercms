@@ -296,7 +296,7 @@ class MailContentsController extends MailAppController {
 	public function redirectEditMail($template) {
 
 		$type = 'Elements';
-		$path = 'Email' . DS . 'text' . DS . $template . $this->ext;
+		$path = 'Emails' . DS . 'text' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
 		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $type . DS . $path);
 		if ($this->siteConfigs['theme']) {

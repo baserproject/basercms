@@ -34,25 +34,22 @@ class BcSmartphoneHelper extends Helper {
  */
 	public function afterLayout($layoutFile) {
 
-		/* 出力データをSJISに変換 */
-		$view = ClassRegistry::getObject('view');
-
 		if (isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
 			$rss = true;
 		} else {
 			$rss = false;
 		}
 
-		if ($view && !$rss && Configure::read('BcRequest.agent') == 'smartphone' && $view->layoutPath != 'email' . DS . 'text') {
+		if (!$rss && Configure::read('BcRequest.agent') == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
 			// 内部リンクの自動変換
 			if (Configure::read('BcAgent.smartphone.autoLink')) {
 				$currentAlias = Configure::read('BcRequest.agentAlias');
 				// 一旦プレフィックスを除外
 				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
-				$view->output = preg_replace_callback($reg, array($this, '_removePrefix'), $view->output);
+				$this->_View->output = preg_replace_callback($reg, array($this, '_removePrefix'), $this->_View->output);
 				// プレフィックス追加
 				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
-				$view->output = preg_replace_callback($reg, array($this, '_addPrefix'), $view->output);
+				$this->_View->output = preg_replace_callback($reg, array($this, '_addPrefix'), $this->_View->output);
 			}
 		}
 	}

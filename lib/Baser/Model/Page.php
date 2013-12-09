@@ -440,18 +440,7 @@ class Page extends AppModel {
 		$_data['Content']['title'] = $data['title'];
 		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
 
-		// Viewオブジェクトを一旦削除しないと、Helper内で、View::getVar()を利用しても、
-		// 最初に生成したViewの値を使いまわしてしまうので、一旦退避させた上で削除する
-		$View = ClassRegistry::getObject('View');
-		if ($View) {
-			ClassRegistry::removeObject('View');
-		}
-
 		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
-
-		if ($View) {
-			ClassRegistry::addObject('View', $View);
-		}
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$_data['Content']['detail'] = $data['description'] . ' ' . $detail;
