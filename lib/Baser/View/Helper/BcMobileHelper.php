@@ -35,7 +35,7 @@ class BcMobileHelper extends Helper {
 	public function afterLayout($layoutFile) {
 
 		/* 出力データをSJISに変換 */
-		$view = ClassRegistry::getObject('view');
+		$View = $this->_View;
 
 		if (isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
 			$rss = true;
@@ -43,47 +43,45 @@ class BcMobileHelper extends Helper {
 			$rss = false;
 		}
 
-		if ($view && !$rss && Configure::read('BcRequest.agent') == 'mobile' && $view->layoutPath != 'email' . DS . 'text') {
+		if (!$rss && Configure::read('BcRequest.agent') == 'mobile' && $View->layoutPath != 'Emails' . DS . 'text') {
 
-			$view->output = str_replace('＆', '&amp;', $view->output);
-			$view->output = str_replace('＜', '&lt;', $view->output);
-			$view->output = str_replace('＞', '&gt;', $view->output);
-			$view->output = mb_convert_kana($view->output, "rak", "UTF-8");
-			$view->output = mb_convert_encoding($view->output, "SJIS-win", "UTF-8");
+			$View->output = str_replace('＆', '&amp;', $View->output);
+			$View->output = str_replace('＜', '&lt;', $View->output);
+			$View->output = str_replace('＞', '&gt;', $View->output);
+			$View->response->charset('Shift_JIS');
+			$View->output = mb_convert_kana($View->output, "rak", "UTF-8");
+			$View->output = mb_convert_encoding($View->output, "SJIS-win", "UTF-8");
 
 			// 内部リンクの自動変換
 			if (Configure::read('BcAgent.mobile.autoLink')) {
 				$currentAlias = Configure::read('BcRequest.agentAlias');
 				// 一旦プレフィックスを除外
 				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
-				$view->output = preg_replace_callback($reg, array($this, '_removeMobilePrefix'), $view->output);
+				$View->output = preg_replace_callback($reg, array($this, '_removeMobilePrefix'), $View->output);
 				// プレフィックス追加
 				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
-				$view->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $view->output);
+				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
 			}
 
 			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
 			$caching = (
-				isset($view->loaded['cache']) &&
-				(($view->cacheAction != false)) && (Configure::read('Cache.check') === true)
-				);
+				isset($View->Cache) &&
+				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
+			);
 			if ($caching) {
-				if (is_a($view->loaded['cache'], 'CacheHelper')) {
-					$cache = $view->loaded['cache'];
-					$this->Cache->base = $view->base;
-					$this->Cache->here = $view->here;
-					$this->Cache->helpers = $view->helpers;
-					$this->Cache->action = $view->action;
-					$this->Cache->controllerName = $view->name;
-					$this->Cache->layout = $view->layout;
-					$this->Cache->cacheAction = $view->cacheAction;
-					$this->Cache->cache($___viewFn, $view->output, true);
-				}
+				$this->Cache->base = $View->base;
+				$this->Cache->here = $View->here;
+				$this->Cache->helpers = $View->helpers;
+				$this->Cache->action = $View->action;
+				$this->Cache->controllerName = $View->name;
+				$this->Cache->layout = $View->layout;
+				$this->Cache->cacheAction = $View->cacheAction;
+				$this->Cache->cache($___viewFn, $View->output, true);
 			} else {
 				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
 				// nocache タグが残ってしまってエラーになるので除去する
-				$view->output = str_replace('<cake:nocache>', '', $view->output);
-				$view->output = str_replace('</cake:nocache>', '', $view->output);
+				$View->output = str_replace('<cake:nocache>', '', $View->output);
+				$View->output = str_replace('</cake:nocache>', '', $View->output);
 			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
@@ -98,7 +96,6 @@ class BcMobileHelper extends Helper {
  * @access public
  */
 	public function header() {
-
 		if (Configure::read('BcRequest.agent') == 'mobile') {
 			header("Content-type: application/xhtml+xml");
 		}
