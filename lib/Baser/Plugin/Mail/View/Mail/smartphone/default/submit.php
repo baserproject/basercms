@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
-	/* プラグインの為か、inlineが動作しない */
+if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
+/* プラグインの為か、inlineが動作しない */
 	//$this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
 	//$this->addScript($this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url'])));
 }
@@ -33,8 +33,8 @@ if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']){
 <div class="section">
 	<p>お問い合わせ頂きありがとうございました。<br />
 		確認次第、ご連絡させて頂きます。</p>
-<?php if(Configure::read('debug')==0 && $mailContent['MailContent']['redirect_url']): ?>
-	<p>※５秒後にトップページへ自動的に移動します。</p>
-	<p><a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックしてください。≫</a></p>
-<?php endif; ?>
+	<?php if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']): ?>
+		<p>※５秒後にトップページへ自動的に移動します。</p>
+		<p><a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックしてください。≫</a></p>
+	<?php endif; ?>
 </div>

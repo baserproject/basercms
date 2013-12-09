@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールフィールドヘルパー
@@ -20,6 +21,7 @@
 /**
  * Include files
  */
+
 /**
  * メールフィールドヘルパー
  *
@@ -27,6 +29,7 @@
  *
  */
 class MailfieldHelper extends AppHelper {
+
 /**
  * htmlの属性を取得する
  *
@@ -36,25 +39,24 @@ class MailfieldHelper extends AppHelper {
  */
 	public function getAttributes($data) {
 
-		if(isset($data['MailField'])) {
+		if (isset($data['MailField'])) {
 			$data = $data['MailField'];
 		}
 
-		$attributes['size']=$data['size'];
-		$attributes['rows']=$data['rows'];
-		$attributes['maxlength']=$data['maxlength'];
-		$attributes['separator']=$data['separator'];
-		$attributes['class']=$data['class'];
+		$attributes['size'] = $data['size'];
+		$attributes['rows'] = $data['rows'];
+		$attributes['maxlength'] = $data['maxlength'];
+		$attributes['separator'] = $data['separator'];
+		$attributes['class'] = $data['class'];
 
-		if(!empty($data['options'])) {
-			$options = explode("|",$data['options']);
+		if (!empty($data['options'])) {
+			$options = explode("|", $data['options']);
 			$options = call_user_func_array('aa', $options);
-			$attributes = am($attributes,$options);
-
+			$attributes = am($attributes, $options);
 		}
 		return $attributes;
-
 	}
+
 /**
  * コントロールのソースを取得する
  *
@@ -63,29 +65,26 @@ class MailfieldHelper extends AppHelper {
  * @access public
  */
 	public function getOptions($data) {
-		if(isset($data['MailField'])) {
+		if (isset($data['MailField'])) {
 			$data = $data['MailField'];
 		}
 
 		$attributes = $this->getAttributes($data);
 
 		// コントロールソースを変換
-		if(!empty($data['source'])) {
+		if (!empty($data['source'])) {
 
-			if($data['type']!="check") {
-				$values = explode("|",$data['source']);
+			if ($data['type'] != "check") {
+				$values = explode("|", $data['source']);
 				$i = 0;
-				foreach($values as $value) {
+				foreach ($values as $value) {
 					$i++;
 					$source[$i] = $value;
 				}
 
 				return $source;
-
 			}
-
 		}
-
 	}
-	
+
 }

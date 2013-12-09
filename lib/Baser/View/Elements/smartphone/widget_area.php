@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ウィジェットエリア
@@ -21,5 +22,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'Elements'.DS.'widget_area'.$this->ext;
-?>
+include BASER_VIEWS . 'Elements' . DS . 'widget_area' . $this->ext;

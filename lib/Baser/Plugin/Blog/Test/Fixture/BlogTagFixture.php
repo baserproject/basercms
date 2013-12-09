@@ -1,9 +1,11 @@
 <?php
+
 /**
  * BlogTagFixture
  *
  */
-App::uses('BlogTag','Blog.Model');
+App::uses('BlogTag', 'Blog.Model');
+
 class BlogTagFixture extends CakeTestFixture {
 
 /**
@@ -11,9 +13,10 @@ class BlogTagFixture extends CakeTestFixture {
  *
  * @var array
  */
-    public $import = array(
-        'model' => 'blog.BlogTag',
-        'records' => true,
-        'connection' => 'plugin'
-    );
+	public $import = array(
+		'model' => 'blog.BlogTag',
+		'records' => true,
+		'connection' => 'plugin'
+	);
+
 }

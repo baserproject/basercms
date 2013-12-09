@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* FeedConfigs schema generated on: 2010-11-04 18:11:12 : 1288863012*/
+/* FeedConfigs schema generated on: 2010-11-04 18:11:12 : 1288863012 */
+
 class FeedConfigsSchema extends CakeSchema {
+
 	var $name = 'FeedConfigs';
-
 	var $file = 'feed_configs.php';
-
 	var $connection = 'plugin';
 
 	function before($event = array()) {
@@ -13,6 +14,7 @@ class FeedConfigsSchema extends CakeSchema {
 	}
 
 	function after($event = array()) {
+		
 	}
 
 	var $feed_configs = array(
@@ -26,4 +28,5 @@ class FeedConfigsSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

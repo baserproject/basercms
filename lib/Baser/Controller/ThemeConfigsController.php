@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * テーマ設定コントローラー
@@ -24,7 +25,7 @@
  * @package Baser.Controller
  */
 class ThemeConfigsController extends AppController {
-	
+
 /**
  * クラス名
  *
@@ -32,7 +33,7 @@ class ThemeConfigsController extends AppController {
  * @access public
  */
 	public $name = 'ThemeConfigs';
-	
+
 /**
  * モデル
  *
@@ -40,15 +41,15 @@ class ThemeConfigsController extends AppController {
  * @access public
  */
 	public $uses = array('ThemeConfig');
-	
+
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
-	
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * サブメニューエレメント
  *
@@ -56,7 +57,7 @@ class ThemeConfigsController extends AppController {
  * @access public
  */
 	public $subMenuElements = array('themes');
-	
+
 /**
  * ぱんくずナビ
  *
@@ -66,27 +67,26 @@ class ThemeConfigsController extends AppController {
 	public $crumbs = array(
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
 	);
-	
+
 /**
  * [ADMIN] 設定編集
  */
 	public function admin_form() {
-		
 		$this->pageTitle = 'テーマ設定';
 		$this->help = 'theme_configs_form';
-		
-		if(empty($this->request->data)) {
+
+		if (empty($this->request->data)) {
 			$this->request->data = array('ThemeConfig' => $this->ThemeConfig->findExpanded());
 		} else {
-			
+
 			$this->ThemeConfig->set($this->request->data);
-			if(!$this->ThemeConfig->validates()) {
+			if (!$this->ThemeConfig->validates()) {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			} else {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
-				if($this->ThemeConfig->saveKeyValue($data)) {
+				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
 					$this->setMessage('システム設定を保存しました。');
 					$this->redirect('form');
@@ -94,9 +94,7 @@ class ThemeConfigsController extends AppController {
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 			}
-
 		}
-		
 	}
-	
+
 }

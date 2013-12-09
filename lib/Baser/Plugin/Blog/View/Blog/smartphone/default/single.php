@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPostContent($post,false,false,50));
-$this->Blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id']);
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
+$this->Blog->editPost($post['BlogPost']['blog_content_id'], $post['BlogPost']['id']);
 ?>
 
 <!-- blog title -->
@@ -28,7 +28,7 @@ $this->Blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id
 
 <!-- post detail -->
 <div class="post">
-	
+
 	<!-- post title -->
 	<h3 class="contents-head">
 		<?php $this->BcBaser->contentsTitle() ?><br />
@@ -36,7 +36,7 @@ $this->Blog->editPost($post['BlogPost']['blog_content_id'],$post['BlogPost']['id
 	</h3>
 
 	<?php $this->Blog->postContent($post) ?>
-	
+
 	<div class="meta"><span><?php $this->Blog->category($post) ?>&nbsp;<?php $this->Blog->author($post) ?></span></div>
 	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>

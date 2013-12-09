@@ -1,4 +1,5 @@
 <?php
+
 /**
  * run all controller baser mail tests
  *
@@ -12,7 +13,6 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
-
 class MailAllControllerTest extends PHPUnit_Framework_TestSuite {
 
 /**
@@ -20,10 +20,11 @@ class MailAllControllerTest extends PHPUnit_Framework_TestSuite {
  *
  * @return void
  */
-    public static function suite() {
-        $suite = new CakeTestSuite('All Helper tests');
-        $suite->addTestDirectory(__DIR__ . DS . 'Controller'. DS);
-        $suite->addTestDirectory(__DIR__ . DS . 'Controller'. DS . 'Component'.DS);
-        return $suite;
-    }
+	public static function suite() {
+		$suite = new CakeTestSuite('All Helper tests');
+		$suite->addTestDirectory(__DIR__ . DS . 'Controller' . DS);
+		$suite->addTestDirectory(__DIR__ . DS . 'Controller' . DS . 'Component' . DS);
+		return $suite;
+	}
+
 }

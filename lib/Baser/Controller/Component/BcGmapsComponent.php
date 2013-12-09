@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * GoogleMap コンポーネント
@@ -22,13 +23,15 @@
  * defines
  */
 define('MAPS_HOST', 'maps.googleapis.com');
+
 /**
  * GoogleMap コンポーネント
  *
  * @package cake
  * @subpackage Baser.Controller.Component
  */
-class BcGmapsComponent  extends Component {
+class BcGmapsComponent extends Component {
+
 /**
  * Latitude
  *
@@ -36,6 +39,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_latitude;
+
 /**
  * Longitude
  *
@@ -43,6 +47,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_longitude;
+
 /**
  * Address
  *
@@ -50,6 +55,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_address;
+
 /**
  * Country name
  *
@@ -57,6 +63,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_countryName;
+
 /**
  * Country name code
  *
@@ -64,6 +71,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_countryNameCode;
+
 /**
  * Administrative area name
  *
@@ -71,6 +79,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_administrativeAreaName;
+
 /**
  * Postal Code
  *
@@ -78,6 +87,7 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_postalCode;
+
 /**
  * Base Url
  *
@@ -85,17 +95,17 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected $_baseUrl;
+
 /**
  * Construct
  * 
  * @return void
  * @access private
  */
-	public function __construct () {
-		
-		$this->_baseUrl= "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
-		
+	public function __construct() {
+		$this->_baseUrl = "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
 	}
+
 /**
  * getInfoLocation
  *
@@ -105,14 +115,13 @@ class BcGmapsComponent  extends Component {
  * @return boolean
  * @access public
  */
-	public function getInfoLocation ($address) {
-		
+	public function getInfoLocation($address) {
 		if (!empty($address)) {
 			return $this->_connect($address);
-			
 		}
 		return false;
 	}
+
 /**
  * connect to Google Maps
  *
@@ -121,125 +130,116 @@ class BcGmapsComponent  extends Component {
  * @access protected
  */
 	protected function _connect($param) {
+		$requestUrl = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
 
-		$request_url = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
-		
-		App::uses('Xml','Utility');
-		$xmlArray = Xml::toArray(Xml::build($request_url));
+		App::uses('Xml', 'Utility');
+		$xmlArray = Xml::toArray(Xml::build($requestUrl));
 		$xml = $xmlArray['GeocodeResponse'];
 
-		if (! empty($xml['result'])) {
-			if(!isset($xml['result']['geometry']['location'])) {
+		if (!empty($xml['result'])) {
+			if (!isset($xml['result']['geometry']['location'])) {
 				return false;
 			}
 
-			$point= $xml['result']['geometry']['location'];
-			if (! empty($point)) {
+			$point = $xml['result']['geometry']['location'];
+			if (!empty($point)) {
 				$this->_latitude = $point['lat'];
 				$this->_longitude = $point['lng'];
 			}
-			
+
 			/*
-			$this->_address= $xml['Response']['Placemark']['address'];
+			  $this->_address= $xml['Response']['Placemark']['address'];
 
-			if(isset($xml['Response']['Placemark']['AddressDetails'])) {
-				$this->_countryName= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryName'];
-				$this->_countryNameCode= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryNameCode'];
-				if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'])) {
-					$this->_administrativeAreaName= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'];
-				}
-				if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'])) {
-					$administrativeArea= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'];
-				}
-			}
+			  if(isset($xml['Response']['Placemark']['AddressDetails'])) {
+			  $this->_countryName= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryName'];
+			  $this->_countryNameCode= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryNameCode'];
+			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'])) {
+			  $this->_administrativeAreaName= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'];
+			  }
+			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'])) {
+			  $administrativeArea= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'];
+			  }
+			  }
 
-			if (!empty($administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'])) {
-				$this->_postalCode= $administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'];
-			} elseif (!empty($administrativeArea['Locality']['PostalCode']['PostalCodeNumber'])) {
-				$this->_postalCode= $administrativeArea['Locality']['PostalCode']['PostalCodeNumber'];
-			}*/
+			  if (!empty($administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'])) {
+			  $this->_postalCode= $administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'];
+			  } elseif (!empty($administrativeArea['Locality']['PostalCode']['PostalCodeNumber'])) {
+			  $this->_postalCode= $administrativeArea['Locality']['PostalCode']['PostalCodeNumber'];
+			  } */
 			return true;
 		} else {
 			return false;
 		}
-	
 	}
+
 /**
  * get the Postal Code
  *
  * @return string
  * @access public
  */
-/*	public function getPostalCode () {
-		
-		return $this->_postalCode;
-		
-	}*/
+	//public function getPostalCode () {
+	//	return $this->_postalCode;
+	//}
+
 /**
  * get the Address
  *
  * @return string
  * @access public
  */
-/*	public function getAddress () {
-		
-		return $this->_address;
-		
-	}*/
+	//public function getAddress () {
+	//	return $this->_address;
+	//}
+
 /**
  * get the Country name
  *
  * @return string
  * @access public
  */
-/*	public function getCountryName () {
-		
-		return $this->_countryName;
-		
-	}*/
+	//public function getCountryName () {
+	//	return $this->_countryName;
+	//}
+
 /**
  * get the Country name code
  *
  * @return string
  * @access public
  */
-/*	public function getCountryNameCode () {
+	//public function getCountryNameCode () {
+	//	return $this->_countryNameCode;
+	//}
 
-		return $this->_countryNameCode;
-		
-	}*/
 /**
  * get the Administrative area name
  *
  * @return string
  * @access public
  */
-/*	public function getAdministrativeAreaName () {
+	//public function getAdministrativeAreaName () {
+	//	return $this->_administrativeAreaName;
+	//}
 
-		return $this->_administrativeAreaName;
-
-	}*/
 /**
  * get the Latitude coordinate
  *
  * @return double
  * @access public
  */
-	public function getLatitude () {
-
+	public function getLatitude() {
 		return $this->_latitude;
-
 	}
+
 /**
  * get the Longitude coordinate
  *
  * @return double
  * @access public
  */
-	public function getLongitude () {
-		
+	public function getLongitude() {
 		return $this->_longitude;
-		
 	}
-	
+
 }

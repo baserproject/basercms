@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ページカテゴリーモデル
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * ページカテゴリーモデル
  *
  * @package Baser.Model
  */
 class PageCategory extends AppModel {
+
 /**
  * クラス名
  *
@@ -30,6 +33,7 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public $name = 'PageCategory';
+
 /**
  * データベース接続
  *
@@ -37,6 +41,7 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public $useDbConfig = 'baser';
+
 /**
  * actsAs
  * 
@@ -44,20 +49,22 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public $actsAs = array('Tree', 'BcCache');
+
 /**
  * hasMany
  * 
  * @var array
  * @access @public
  */
-	public $hasMany = array('Page' => array('className'=>'Page',
-							'conditions'=>'',
-							'order'=>'Page.sort',
-							'limit'=>'',
-							'foreignKey'=>'page_category_id',
-							'dependent'=>false,
-							'exclusive'=>false,
-							'finderQuery'=>''));
+	public $hasMany = array('Page' => array('className' => 'Page',
+			'conditions' => '',
+			'order' => 'Page.sort',
+			'limit' => '',
+			'foreignKey' => 'page_category_id',
+			'dependent' => false,
+			'exclusive' => false,
+			'finderQuery' => ''));
+
 /**
  * ページカテゴリフォルダのパスリスト
  * キーはカテゴリID
@@ -67,6 +74,7 @@ class PageCategory extends AppModel {
  * @access protected
  */
 	protected $_pageCategoryPathes = -1;
+
 /**
  * エージェントカテゴリのID
  * 
@@ -74,6 +82,7 @@ class PageCategory extends AppModel {
  * @access	protected
  */
 	protected $_agentId = array();
+
 /**
  * 保存時に関連ページを更新するかどうか
  * 
@@ -81,6 +90,7 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public $updateRelatedPage = true;
+
 /**
  * バリデーション
  *
@@ -89,26 +99,27 @@ class PageCategory extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('minLength', 1),
-					'message'	=> 'ページカテゴリ名を入力してください。',
-					'required'	=> true),
+			array('rule' => array('minLength', 1),
+				'message' => 'ページカテゴリ名を入力してください。',
+				'required' => true),
 			'alphaNumericPlus' => array(
-				'rule'			=>	'alphaNumericPlus',
-				'message'		=> 'ページカテゴリ名は半角英数字とハイフン、アンダースコアのみで入力してください。'
+				'rule' => 'alphaNumericPlus',
+				'message' => 'ページカテゴリ名は半角英数字とハイフン、アンダースコアのみで入力してください。'
 			),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'ページカテゴリ名は50文字以内で入力してください。'),
-			array(  'rule'		=> array('duplicatePageCategory'),
-					'message'	=> '入力されたページカテゴリー名は、同一階層に既に登録されています。')
+			array('rule' => array('maxLength', 50),
+				'message' => 'ページカテゴリ名は50文字以内で入力してください。'),
+			array('rule' => array('duplicatePageCategory'),
+				'message' => '入力されたページカテゴリー名は、同一階層に既に登録されています。')
 		),
 		'title' => array(
-			array(	'rule'		=> array('minLength', 1),
-					'message'	=> 'ページカテゴリタイトルを入力してください。',
-					'required'	=> true),
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'ページカテゴリタイトルは255文字以内で入力してください。')
+			array('rule' => array('minLength', 1),
+				'message' => 'ページカテゴリタイトルを入力してください。',
+				'required' => true),
+			array('rule' => array('maxLength', 255),
+				'message' => 'ページカテゴリタイトルは255文字以内で入力してください。')
 		)
 	);
+
 /**
  * コントロールソースを取得する
  *
@@ -119,54 +130,54 @@ class PageCategory extends AppModel {
 	public function getControlSource($field, $options = array()) {
 
 		switch ($field) {
-			
+
 			case 'parent_id':
-				
+
 				$conditions = array();
-				if(isset($options['conditions'])) {
+				if (isset($options['conditions'])) {
 					$conditions = $options['conditions'];
 				}
-				
-				if(!empty($options['excludeParentId'])) {
-					if(!is_array($options['excludeParentId'])) {
+
+				if (!empty($options['excludeParentId'])) {
+					if (!is_array($options['excludeParentId'])) {
 						$options['excludeParentId'] = array($options['excludeParentId']);
 					}
 					$excludeIds = array();
-					foreach($options['excludeParentId'] as $excludeParentId) {
+					foreach ($options['excludeParentId'] as $excludeParentId) {
 						$children = $this->children($excludeParentId);
-						if($children) {
+						if ($children) {
 							$excludeIds = am($excludeIds, Set::extract('/PageCategory/id', $children));
 						}
 						$excludeIds[] = $excludeParentId;
 					}
 					$conditions['NOT']['PageCategory.id'] = $excludeIds;
 				}
-				
+
 				$parentIds = array();
-				if(!empty($options['parentId'])) {
-					if(!is_array($options['parentId'])) {
+				if (!empty($options['parentId'])) {
+					if (!is_array($options['parentId'])) {
 						$options['parentId'] = array($options['parentId']);
 					}
-					foreach($options['parentId'] as $parentId) {
+					foreach ($options['parentId'] as $parentId) {
 						$children = $this->children($parentId);
-						if($children) {
+						if ($children) {
 							$parentIds = am($parentIds, Set::extract('/PageCategory/id', $children));
 						} else {
 							return array();
 						}
 					}
 				}
-				
-				if($parentIds) {
+
+				if ($parentIds) {
 					$conditions['PageCategory.id'] = $parentIds;
 				}
-				
-				if(isset($options['ownerId'])) {
+
+				if (isset($options['ownerId'])) {
 					$ownerIdConditions = array(
 						array('PageCategory.owner_id' => null),
 						array('PageCategory.owner_id' => $options['ownerId']),
 					);
-					if(isset($conditions['OR'])) {
+					if (isset($conditions['OR'])) {
 						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
 					} else {
 						$conditions['OR'] = $ownerIdConditions;
@@ -175,20 +186,20 @@ class PageCategory extends AppModel {
 
 				$parents = $this->generateTreeList($conditions);
 				$controlSources['parent_id'] = array();
-				
+
 				$excludeIds = array();
-				if(!Configure::read('BcApp.mobile')) {
+				if (!Configure::read('BcApp.mobile')) {
 					$excludeIds = $this->getAgentCategoryIds('mobile');
 				}
-				if(!Configure::read('BcApp.smartphone')) {
+				if (!Configure::read('BcApp.smartphone')) {
 					$excludeIds = $this->getAgentCategoryIds('smartphone');
 				}
-				foreach($parents as $key => $parent) {
-					if($parent && !in_array($key, $excludeIds)) {
-						if(preg_match("/^([_]+)/i",$parent,$matches)) {
-							$parent = preg_replace("/^[_]+/i",'',$parent);
-							$prefix = str_replace('_','&nbsp&nbsp&nbsp',$matches[1]);
-							$parent = $prefix.'└'.$parent;
+				foreach ($parents as $key => $parent) {
+					if ($parent && !in_array($key, $excludeIds)) {
+						if (preg_match("/^([_]+)/i", $parent, $matches)) {
+							$parent = preg_replace("/^[_]+/i", '', $parent);
+							$prefix = str_replace('_', '&nbsp&nbsp&nbsp', $matches[1]);
+							$parent = $prefix . '└' . $parent;
 						}
 						$controlSources['parent_id'][$key] = $parent;
 					}
@@ -199,14 +210,14 @@ class PageCategory extends AppModel {
 				$controlSources['owner_id'] = $UserGroup->find('list', array('fields' => array('id', 'title'), 'recursive' => -1));
 				break;
 		}
-		
-		if(isset($controlSources[$field])) {
+
+		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * beforeSave
  * 
@@ -216,32 +227,32 @@ class PageCategory extends AppModel {
 	public function beforeSave($options = array()) {
 
 		// セーフモードの場合はフォルダの自動生成は行わない
-		if(ini_get('safe_mode')) {
+		if (ini_get('safe_mode')) {
 			return true;
 		}
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->createPageCategoryFolder($this->data);
-		if($this->exists()) {
-			$oldPath = $this->createPageCategoryFolder($this->find('first',array('conditions'=>array('id'=>$this->id))));
-			if($newPath != $oldPath) {
+		if ($this->exists()) {
+			$oldPath = $this->createPageCategoryFolder($this->find('first', array('conditions' => array('id' => $this->id))));
+			if ($newPath != $oldPath) {
 				$dir = new Folder();
-				$ret = $dir->move(array('to'=>$newPath,'from'=>$oldPath,'chmod'=>0777));
-			}else {
-				if(!is_dir($newPath)) {
+				$ret = $dir->move(array('to' => $newPath, 'from' => $oldPath, 'chmod' => 0777));
+			} else {
+				if (!is_dir($newPath)) {
 					$dir = new Folder();
 					$ret = $dir->create($newPath, 0777);
 				}
 				$ret = true;
 			}
-		}else {
+		} else {
 			$dir = new Folder();
 			$ret = $dir->create($newPath, 0777);
 		}
 
 		return $ret;
-
 	}
+
 /**
  * afterSave
  * 
@@ -250,12 +261,12 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-		
-		if(!$created && $this->updateRelatedPage) {
+
+		if (!$created && $this->updateRelatedPage) {
 			$this->updateRelatedPageUrlRecursive($this->data['PageCategory']['id']);
 		}
-		
 	}
+
 /**
  * ページカテゴリのフォルダを生成してパスを返す
  * 
@@ -264,16 +275,16 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function createPageCategoryFolder($data) {
-		
+
 		$path = $this->getPageCategoryFolderPath($data);
 		$folder = new Folder();
-		if($folder->create($path, 0777)){
+		if ($folder->create($path, 0777)) {
 			return $path;
-		}else{
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * カテゴリフォルダのパスを取得する
  * 
@@ -283,25 +294,25 @@ class PageCategory extends AppModel {
  */
 	public function getPageCategoryFolderPath($data) {
 
-		if(isset($data['PageCategory'])) {
+		if (isset($data['PageCategory'])) {
 			$data = $data['PageCategory'];
 		}
 
-		$path = $pagesPath = getViewPath().'Pages'.DS;
+		$path = $pagesPath = getViewPath() . 'Pages' . DS;
 		$categoryName = $data['name'];
 		$parentId = $data['parent_id'];
 
-		if($parentId) {
+		if ($parentId) {
 			$categoryPath = $this->getPath($parentId);
-			if($categoryPath) {
-				foreach($categoryPath as $category) {
-					$path .= $category['PageCategory']['name'].DS;
+			if ($categoryPath) {
+				foreach ($categoryPath as $category) {
+					$path .= $category['PageCategory']['name'] . DS;
 				}
 			}
 		}
-		return $path.$categoryName;
-
+		return $path . $categoryName;
 	}
+
 /**
  * 同一階層に同じニックネームのカテゴリがないかチェックする
  * 同じテーマが条件
@@ -313,30 +324,30 @@ class PageCategory extends AppModel {
 	public function duplicatePageCategory($check) {
 
 		$parentId = $this->data['PageCategory']['parent_id'];
-		if($parentId) {
+		if ($parentId) {
 			$conditions['PageCategory.parent_id'] = $parentId;
-		}else {
-			$conditions['OR'] = array('PageCategory.parent_id'=>'');
-			$conditions['OR'] = array('PageCategory.parent_id'=>null);
+		} else {
+			$conditions['OR'] = array('PageCategory.parent_id' => '');
+			$conditions['OR'] = array('PageCategory.parent_id' => null);
 		}
 
-		$children = $this->find('all',array('conditions'=>$conditions));
+		$children = $this->find('all', array('conditions' => $conditions));
 
-		if($children) {
-			foreach($children as $child) {
-				if($this->exists()) {
-					if($this->id == $child['PageCategory']['id']) {
+		if ($children) {
+			foreach ($children as $child) {
+				if ($this->exists()) {
+					if ($this->id == $child['PageCategory']['id']) {
 						continue;
 					}
 				}
-				if($child['PageCategory']['name'] == $check[key($check)]) {
+				if ($child['PageCategory']['name'] == $check[key($check)]) {
 					return false;
 				}
 			}
 		}
 		return true;
-
 	}
+
 /**
  * 関連するページデータをカテゴリ無所属に変更し保存する
  * 
@@ -345,19 +356,19 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function beforeDelete($cascade = true) {
-		
+
 		parent::beforeDelete($cascade);
 		$id = $this->data['PageCategory']['id'];
-		if($this->releaseRelatedPagesRecursive($id)){
-			$path = $this->createPageCategoryFolder($this->find('first',array('conditions'=>array('id'=>$id))));
+		if ($this->releaseRelatedPagesRecursive($id)) {
+			$path = $this->createPageCategoryFolder($this->find('first', array('conditions' => array('id' => $id))));
 			$folder = new Folder();
 			$folder->delete($path);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * 関連するページのカテゴリを解除する（再帰的）
  * 
@@ -366,20 +377,20 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function releaseRelatedPagesRecursive($categoryId) {
-		
-		if(!$this->releaseRelatedPages($categoryId)){
+
+		if (!$this->releaseRelatedPages($categoryId)) {
 			return false;
 		}
 		$children = $this->children($categoryId);
 		$ret = true;
-		foreach($children as $child) {
-			if(!$this->releaseRelatedPages($child['PageCategory']['id'])) {
+		foreach ($children as $child) {
+			if (!$this->releaseRelatedPages($child['PageCategory']['id'])) {
 				$ret = false;
 			}
 		}
 		return $ret;
-		
 	}
+
 /**
  * 関連するページのカテゴリを解除する
  * 
@@ -388,22 +399,22 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function releaseRelatedPages($categoryId) {
-		
-		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$categoryId),'recursive'=>-1));
+
+		$pages = $this->Page->find('all', array('conditions' => array('Page.page_category_id' => $categoryId), 'recursive' => -1));
 		$ret = true;
-		if($pages) {
-			foreach($pages as $page) {
+		if ($pages) {
+			foreach ($pages as $page) {
 				$page['Page']['page_category_id'] = '';
 				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
-				if(!$this->Page->save()) {
+				if (!$this->Page->save()) {
 					$ret = false;
 				}
 			}
 		}
 		return $ret;
-		
 	}
+
 /**
  * 関連するページデータのURLを更新する
  * 
@@ -412,20 +423,20 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function updateRelatedPageUrlRecursive($categoryId) {
-		
-		if(!$this->updateRelatedPageUrl($categoryId)){
+
+		if (!$this->updateRelatedPageUrl($categoryId)) {
 			return false;
 		}
 		$children = $this->children($categoryId);
 		$ret = true;
-		foreach($children as $child) {
-			if(!$this->updateRelatedPageUrl($child['PageCategory']['id'])) {
+		foreach ($children as $child) {
+			if (!$this->updateRelatedPageUrl($child['PageCategory']['id'])) {
 				$ret = false;
 			}
 		}
 		return $ret;
-		
 	}
+
 /**
  * 関連するページデータのURLを更新する
  * 
@@ -434,26 +445,26 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function updateRelatedPageUrl($id) {
-		
-		if(!$id) {
+
+		if (!$id) {
 			return;
 		}
-		$pages = $this->Page->find('all',array('conditions'=>array('Page.page_category_id'=>$id),'recursive'=>-1));
+		$pages = $this->Page->find('all', array('conditions' => array('Page.page_category_id' => $id), 'recursive' => -1));
 		$result = true;
 		// ページデータのURLを更新
-		if($pages) {
+		if ($pages) {
 			$this->Page->saveFile = false;
-			foreach($pages as $page) {
+			foreach ($pages as $page) {
 				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
-				if(!$this->Page->save()){
+				if (!$this->Page->save()) {
 					$result = false;
 				}
 			}
 		}
 		return $result;
-		
 	}
+
 /**
  * カテゴリフォルダのパスから対象となるデータが存在するかチェックする
  * 存在する場合は id を返す
@@ -463,23 +474,23 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function getIdByPath($path) {
-		
-		if($this->_pageCategoryPathes == -1) {
+
+		if ($this->_pageCategoryPathes == -1) {
 			$this->_pageCategoryPathes = array();
 			$pageCategories = $this->find('all');
-			if($pageCategories) {
-				foreach($pageCategories as $pageCategory) {
+			if ($pageCategories) {
+				foreach ($pageCategories as $pageCategory) {
 					$this->_pageCategoryPathes[$pageCategory['PageCategory']['id']] = $this->getPageCategoryFolderPath($pageCategory);
 				}
 			}
 		}
-		if(in_array($path, $this->_pageCategoryPathes)) {
-			return array_search($path,$this->_pageCategoryPathes);
-		}else{
+		if (in_array($path, $this->_pageCategoryPathes)) {
+			return array_search($path, $this->_pageCategoryPathes);
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * モバイル用のカテゴリIDをリストで取得する
  * 
@@ -487,24 +498,24 @@ class PageCategory extends AppModel {
  * @return array $ids
  * @access public
  */
-	public function getAgentCategoryIds($type = 'mobile', $top = true){
+	public function getAgentCategoryIds($type = 'mobile', $top = true) {
 
 		$agentId = $this->getAgentId($type);
-		if(!$agentId){
+		if (!$agentId) {
 			return array();
 		}
 		$ids = array();
-		if($top) {
+		if ($top) {
 			$ids[] = $agentId;
 		}
-		$children = $this->children($agentId, false, array('PageCategory.id'),array('PageCategory.id'));
-		if($children){
-			$children = Set::extract('/PageCategory/id',$children);
-			$ids = am($ids,$children);
+		$children = $this->children($agentId, false, array('PageCategory.id'), array('PageCategory.id'));
+		if ($children) {
+			$children = Set::extract('/PageCategory/id', $children);
+			$ids = am($ids, $children);
 		}
 		return $ids;
-
 	}
+
 /**
  * エージェントカテゴリのIDを取得する
  * 
@@ -514,9 +525,9 @@ class PageCategory extends AppModel {
  */
 	public function getAgentId($type = 'mobile') {
 
-		if(!isset($this->_agentId[$type])){
-			$agentId = $this->field('id',array('PageCategory.name'=>$type));
-			if($agentId) {
+		if (!isset($this->_agentId[$type])) {
+			$agentId = $this->field('id', array('PageCategory.name' => $type));
+			if ($agentId) {
 				$this->_agentId[$type] = $agentId;
 			} else {
 				return false;
@@ -524,29 +535,29 @@ class PageCategory extends AppModel {
 		}
 
 		return $this->_agentId[$type];
-
 	}
+
 /**
  * PCのIDを元にモバイル・スマホの相対階層のIDを取得する
  * @param type $id
  * @return type 
  */
 	public function getAgentRelativeId($type, $id) {
-		
-		if(!$id) {
+
+		if (!$id) {
 			return $this->getAgentId($type);
 		} else {
 			$path = $this->getPath($id, array('name'), -1);
 			$path = Set::extract('/PageCategory/name', $path);
 			$path = implode(DS, $path);
-			$path = getViewPath().'Pages'.DS.$type.DS.$path;
+			$path = getViewPath() . 'Pages' . DS . $type . DS . $path;
 		}
 		$agentId = $this->getIdByPath($path);
 
 		return $agentId;
-		
 	}
-	/**
+
+/**
  * ツリーリストを取得する
  * 
  * @param array $fields
@@ -554,18 +565,18 @@ class PageCategory extends AppModel {
  * @return array
  * @access public 
  */
-	public function getTreeList($fields,$id){
-		
+	public function getTreeList($fields, $id) {
+
 		$this->recursive = -1;
 		$pageCategories = array();
-		$pageCategories[] = $pageCategory = $this->read($fields,$id);
-		if($pageCategory['PageCategory']['parent_id']){
-			$parents = $this->getTreeList($fields,$pageCategory['PageCategory']['parent_id']);
-			$pageCategories = am($parents,$pageCategories);
+		$pageCategories[] = $pageCategory = $this->read($fields, $id);
+		if ($pageCategory['PageCategory']['parent_id']) {
+			$parents = $this->getTreeList($fields, $pageCategory['PageCategory']['parent_id']);
+			$pageCategories = am($parents, $pageCategories);
 		}
 		return $pageCategories;
-		
 	}
+
 /**
  * 新しいカテゴリが追加できる状態かチェックする
  * 
@@ -575,7 +586,7 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
-		
+
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
 			'conditions' => array(
@@ -587,12 +598,12 @@ class PageCategory extends AppModel {
 				array('PageCategory.id <>' => $this->getAgentId('smartphone'))
 		)));
 
-		if($ownerCats || $rootEditable) {
+		if ($ownerCats || $rootEditable) {
 			$newCatAddable = true;
 		}
 		return $newCatAddable;
-		
 	}
+
 /**
  * ページカテゴリーをコピーする
  * 
@@ -601,8 +612,8 @@ class PageCategory extends AppModel {
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
-		
-		if($id) {
+
+		if ($id) {
 			$data = $this->find('first', array('conditions' => array('PageCategory.id' => $id), 'recursive' => -1));
 		}
 		$data['PageCategory']['name'] .= '_copy';
@@ -610,20 +621,20 @@ class PageCategory extends AppModel {
 		unset($data['PageCategory']['id']);
 		unset($data['PageCategory']['created']);
 		unset($data['PageCategory']['modified']);
-		
+
 		$this->create($data);
 		$result = $this->save();
-		if($result) {
+		if ($result) {
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name'])) {
+			if (isset($this->validationErrors['name'])) {
 				return $this->copy(null, $data);
 			} else {
 				return false;
 			}
 		}
-		
 	}
+
 /**
  * ページカテゴリタイプを取得する
  * 1:PC / 2:ケータイ / 3:スマフォ
@@ -636,16 +647,15 @@ class PageCategory extends AppModel {
 
 		$types = array('' => '1', Configure::read('BcAgent.mobile.prefix') => '2', Configure::read('BcAgent.smartphone.prefix') => '3');
 		$path = $this->getPath($id, array('name'));
-		unset($path[count($path)-1]);
+		unset($path[count($path) - 1]);
 
-		if(!empty($path[0]['PageCategory']['name'])) {
-			if(isset($types[$path[0]['PageCategory']['name']])) {
+		if (!empty($path[0]['PageCategory']['name'])) {
+			if (isset($types[$path[0]['PageCategory']['name']])) {
 				return $types[$path[0]['PageCategory']['name']];
 			}
 		}
-		
+
 		return 1;
-		
 	}
-	
+
 }

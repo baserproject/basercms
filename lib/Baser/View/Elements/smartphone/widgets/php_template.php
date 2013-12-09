@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] PHPテンプレート読み込みウィジェット
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'Elements'.DS.'widgets'.DS.'php_template'.$this->ext;
-?>
+include BASER_VIEWS . 'Elements' . DS . 'widgets' . DS . 'php_template' . $this->ext;

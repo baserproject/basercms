@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * アップロードコントローラー
@@ -18,11 +19,13 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Imageresizer', 'Vendor');
+
 /**
  * アップロードコントローラー
  * @package Baser.Controller
  */
 class UploadsController extends AppController {
+
 /**
  * クラス名
  *
@@ -30,12 +33,14 @@ class UploadsController extends AppController {
  * @access public
  */
 	public $name = 'Uploads';
+
 /**
  * モデル
  * @var array
  * @access public
  */
 	public $uses = array();
+
 /**
  * セッションに保存した一時ファイルを出力する
  * @param string $name
@@ -43,68 +48,65 @@ class UploadsController extends AppController {
  * @access public
  */
 	public function tmp() {
-
 		$size = '';
 		$args = func_get_args();
-		if(func_num_args() > 1) {
+		if (func_num_args() > 1) {
 			$size = $args[0];
 			$name = $args[1];
 		} else {
 			$name = $args[0];
 		}
-		$sessioName = str_replace('.','_',$name);
-		$sessionData = $this->Session->read('Upload.'.$sessioName);
+		$sessioName = str_replace('.', '_', $name);
+		$sessionData = $this->Session->read('Upload.' . $sessioName);
 
-		Configure::write('debug',0);
+		Configure::write('debug', 0);
 		$type = $sessionData['type'];
-		$ext = decodeContent($type,$name);
-		if(!$ext) {
+		$ext = decodeContent($type, $name);
+		if (!$ext) {
 			$this->notFound();
 		}
 
 		$fileInfo = array();
-		if(isset($sessionData['imagecopy'][$size])) {
+		if (isset($sessionData['imagecopy'][$size])) {
 			$fileInfo = $sessionData['imagecopy'][$size];
-		} elseif(isset($sessionData['imageresize'])) {
+		} elseif (isset($sessionData['imageresize'])) {
 			$fileInfo = $sessionData['imageresize'];
 		} else {
 			$size = '';
 		}
 
-		if(!$size) {
-			$data = $this->Session->read('Upload.'.$sessioName.'.data');
+		if (!$size) {
+			$data = $this->Session->read('Upload.' . $sessioName . '.data');
 		} else {
 
-			if(is_dir(TMP.'uploads')) {
-				mkdir(TMP.'uploads');
-				chmod(TMP.'uploads',0777);
+			if (is_dir(TMP . 'uploads')) {
+				mkdir(TMP . 'uploads');
+				chmod(TMP . 'uploads', 0777);
 			}
 
-			$path = TMP.'uploads'.DS.$name;
+			$path = TMP . 'uploads' . DS . $name;
 			$file = new File($path, true);
-			$file->write($this->Session->read('Upload.'.$sessioName.'.data'), 'wb');
+			$file->write($this->Session->read('Upload.' . $sessioName . '.data'), 'wb');
 			$file->close();
 
 			$thumb = false;
 
-			if(!empty($fileInfo['thumb'])){
+			if (!empty($fileInfo['thumb'])) {
 				$thumb = $fileInfo['thumb'];
 			}
-			$imageresizer = new Imageresizer(APP.'tmp');
+			$imageresizer = new Imageresizer(APP . 'tmp');
 			$imageresizer->resize($path, $path, $fileInfo['width'], $fileInfo['height'], $thumb);
 			$data = file_get_contents($path);
 			unlink($path);
-
 		}
 
-		if($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
-			Header("Content-disposition: attachment; filename=".$name);
+		if ($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
+			Header("Content-disposition: attachment; filename=" . $name);
 		}
-		Header("Content-type: ".$type."; name=".$name);
+		Header("Content-type: " . $type . "; name=" . $name);
 		echo $data;
-		$this->Session->delete('Upload.'.$sessioName);
+		$this->Session->delete('Upload.' . $sessioName);
 		exit();
-
 	}
-	
+
 }

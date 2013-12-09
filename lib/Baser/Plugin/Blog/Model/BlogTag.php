@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログタグモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログタグモデル
  *
  * @package baser.plugins.blog.models
  */
 class BlogTag extends BlogAppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogTag extends BlogAppModel {
  * @access public
  */
 	public $name = 'BlogTag';
+
 /**
  * ビヘイビア
  * 
@@ -40,6 +44,7 @@ class BlogTag extends BlogAppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * HABTM
  *
@@ -47,18 +52,19 @@ class BlogTag extends BlogAppModel {
  * @access public
  */
 	public $hasAndBelongsToMany = array(
-			'BlogPost' => array(
-				'className'				=> 'Blog.BlogPost',
-				'joinTable'				=> 'blog_posts_blog_tags',
-				'foreignKey'			=> 'blog_tag_id',
-				'associationForeignKey'	=> 'blog_post_id',
-				'conditions'			=> '',
-				'order'					=> '',
-				'limit'					=> '',
-				'unique'				=> true,
-				'finderQuery'			=> '',
-				'deleteQuery'			=> ''
-		));
+		'BlogPost' => array(
+			'className' => 'Blog.BlogPost',
+			'joinTable' => 'blog_posts_blog_tags',
+			'foreignKey' => 'blog_tag_id',
+			'associationForeignKey' => 'blog_post_id',
+			'conditions' => '',
+			'order' => '',
+			'limit' => '',
+			'unique' => true,
+			'finderQuery' => '',
+			'deleteQuery' => ''
+	));
+
 /**
  * validate
  *
@@ -66,14 +72,15 @@ class BlogTag extends BlogAppModel {
  * @access public
  */
 	public $validate = array(
-		'name'=>array(
+		'name' => array(
 			'notEmpty' => array(
-				'rule'		=> array('notEmpty'),
-				'message'	=> 'ブログタグを入力してください。'
+				'rule' => array('notEmpty'),
+				'message' => 'ブログタグを入力してください。'
 			),
 			'duplicate' => array(
-				'rule'		=>	array('duplicate','name'),
-				'message'	=> '既に登録のあるタグです。'
+				'rule' => array('duplicate', 'name'),
+				'message' => '既に登録のあるタグです。'
 			)
-		));
+	));
+
 }

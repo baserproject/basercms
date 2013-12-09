@@ -1,4 +1,5 @@
 <?php
+
 /**
  * run all baser mail tests
  *
@@ -29,8 +30,9 @@ class MailAllTest extends PHPUnit_Framework_TestSuite {
 		$path = __DIR__ . DS;
 
 		$suite->addTestFile($path . 'MailAllControllerTest.php');
-        $suite->addTestFile($path . 'MailAllModelTest.php');
+		$suite->addTestFile($path . 'MailAllModelTest.php');
 		$suite->addTestFile($path . 'MailAllHelpersTest.php');
 		return $suite;
 	}
+
 }

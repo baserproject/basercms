@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [SMARTPHONE] 送信メールデータ
@@ -17,4 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS . 'mobile'. DS . 'mail_data'.$this->ext;
+include BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS . 'mobile' . DS . 'mail_data' . $this->ext;

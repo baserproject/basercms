@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログ設定コントローラー
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログ設定コントローラー
  *
  * @package baser.plugins.blog.controllers
  */
 class BlogConfigsController extends BlogAppController {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogConfigsController extends BlogAppController {
  * @access public
  */
 	public $name = 'BlogConfigs';
+
 /**
  * モデル
  *
@@ -40,13 +44,15 @@ class BlogConfigsController extends BlogAppController {
  * @access public
  */
 	public $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
+
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * サブメニューエレメント
  *
@@ -54,6 +60,7 @@ class BlogConfigsController extends BlogAppController {
  * @access public
  */
 	public $subMenuElements = array();
+
 /**
  * ぱんくずナビ
  *
@@ -64,6 +71,7 @@ class BlogConfigsController extends BlogAppController {
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
+
 /**
  * before_filter
  *
@@ -71,13 +79,13 @@ class BlogConfigsController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-		
+
 		parent::beforeFilter();
-		if($this->params['prefix']=='admin') {
+		if ($this->params['prefix'] == 'admin') {
 			$this->subMenuElements = array('blog_common');
 		}
-		
 	}
+
 /**
  * [ADMIN] サイト基本設定
  *
@@ -86,27 +94,25 @@ class BlogConfigsController extends BlogAppController {
  */
 	public function admin_form() {
 
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogConfig->read(null, 1);
 			$blogContentList = $this->BlogContent->find("list");
-			$this->set('blogContentList',$blogContentList);
+			$this->set('blogContentList', $blogContentList);
 			$userList = $this->User->find("list");
-			$this->set('userList',$userList);
-		}else {
+			$this->set('userList', $userList);
+		} else {
 
 			/* 更新処理 */
-			if($this->BlogConfig->save($this->request->data)) {
+			if ($this->BlogConfig->save($this->request->data)) {
 				$this->setMessage('ブログ設定を保存しました。', false, true);
 				$this->redirect(array('action' => 'form'));
-			}else {
+			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
-
 		}
 
 		/* 表示設定 */
 		$this->pageTitle = 'ブログ設定';
-
 	}
-	
+
 }

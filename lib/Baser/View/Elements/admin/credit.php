@@ -129,24 +129,24 @@ function resizeScroll() {
 			<div id="CreditScrollerInner">
 
 				<h1>Special Thanks Credit</h1>
-<?php foreach($credits as $key => $credit) : ?>
-				<div class="section">
-					<h2><?php echo Inflector::camelize($key) ?></h2>
-<?php $i = 0 ?>
-<?php foreach($credit as $key2 => $contributor): ?>
-<?php $i++ ?>
-<?php if($i%6==1): ?>
-					<ul>
-<?php endif ?>
-						<li><?php if(!empty($contributor['url'])): ?><?php $this->BcBaser->link($contributor['name'], $contributor['url'], array('target' => '_blank')) ?><?php else: ?><?php echo $contributor['name'] ?><?php endif ?> 
-							<?php if(!empty($contributor['twitter'])): ?> (<?php $this->BcBaser->link($contributor['twitter'], 'http://twitter.com/'.$contributor['twitter'], array('target' => '_blank')) ?>) <?php endif ?></li>
-<?php if($i%6==0 || $this->BcArray->last($credit, $key2)): ?>
-					</ul>
-<?php endif ?>
-<?php endforeach ?>
-				</div>
-<?php endforeach ?>
-				
+				<?php foreach ($credits as $key => $credit) : ?>
+					<div class="section">
+						<h2><?php echo Inflector::camelize($key) ?></h2>
+						<?php $i = 0 ?>
+						<?php foreach ($credit as $key2 => $contributor): ?>
+							<?php $i++ ?>
+							<?php if ($i % 6 == 1): ?>
+								<ul>
+								<?php endif ?>
+								<li><?php if (!empty($contributor['url'])): ?><?php $this->BcBaser->link($contributor['name'], $contributor['url'], array('target' => '_blank')) ?><?php else: ?><?php echo $contributor['name'] ?><?php endif ?> 
+									<?php if (!empty($contributor['twitter'])): ?> (<?php $this->BcBaser->link($contributor['twitter'], 'http://twitter.com/' . $contributor['twitter'], array('target' => '_blank')) ?>) <?php endif ?></li>
+								<?php if ($i % 6 == 0 || $this->BcArray->last($credit, $key2)): ?>
+								</ul>
+							<?php endif ?>
+						<?php endforeach ?>
+					</div>
+				<?php endforeach ?>
+
 				<h1 style="margin-top:400px;">baserCMS Users Community</h1>
 
 			</div>

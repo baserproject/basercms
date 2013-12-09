@@ -104,14 +104,16 @@ $(function(){
 		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>/</strong><?php echo $this->BcForm->input('Permission.url', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>
 		<dt><?php echo $this->BcForm->label('Permission.auth', 'アクセス') ?></dt>
 		<dd>
-			<?php echo $this->BcForm->input('Permission.auth', array(
-				'type'		=> 'radio',
-				'options'	=> $this->BcForm->getControlSource('Permission.auth'),
-				'legend'	=> false,
-				'value'		=> 0,
-				'separator'	=> '　')) ?>
-			<?php echo $this->BcForm->error('Permission.auth') ?>
+			<?php
+			echo $this->BcForm->input('Permission.auth', array(
+				'type' => 'radio',
+				'options' => $this->BcForm->getControlSource('Permission.auth'),
+				'legend' => false,
+				'value' => 0,
+				'separator' => '　'))
+			?>
+	<?php echo $this->BcForm->error('Permission.auth') ?>
 		</dd>
 	</dl>
-	<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcForm->end() ?>
 </div>

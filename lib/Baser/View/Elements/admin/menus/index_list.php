@@ -24,30 +24,30 @@
 	<thead>
 		<tr>
 			<th style="width:170px" class="list-tool">
-				<div>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
-	<?php if(!$sortmode): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array('sortmode' => 1)) ?>
-	<?php else: ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0)) ?>
+	<div>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+		<?php if (!$sortmode): ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array('sortmode' => 1)) ?>
+		<?php else: ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0)) ?>
+		<?php endif ?>
+	</div>
+	<?php if ($this->BcBaser->isAdminUser()): ?>
+		<div>
+			<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+			<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+			<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+		</div>
 	<?php endif ?>
-				</div>
-	<?php if($this->BcBaser->isAdminUser()): ?>
-				<div>
-					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-				</div>
-	<?php endif ?>
-			</th>
-			<th>NO</th>
-			<th>メニュー名<br />リンクURL</th>
-			<th>登録日<br />更新日</th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php if(!empty($listDatas)): ?>
-		<?php foreach($listDatas as $data): ?>
+</th>
+<th>NO</th>
+<th>メニュー名<br />リンクURL</th>
+<th>登録日<br />更新日</th>
+</tr>
+</thead>
+<tbody>
+	<?php if (!empty($listDatas)): ?>
+		<?php foreach ($listDatas as $data): ?>
 			<?php $this->BcBaser->element('menus/index_row', array('data' => $data)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
@@ -55,5 +55,5 @@
 			<td colspan="7"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
-	</tbody>
+</tbody>
 </table>

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * BcAdminヘルパー
@@ -21,6 +22,7 @@
 /**
  * Include files
  */
+
 /**
  * BcAdminヘルパー
  *
@@ -65,4 +67,5 @@ class BcAdminHelper extends AppHelper {
 		}
 		return false;
 	}
+
 }

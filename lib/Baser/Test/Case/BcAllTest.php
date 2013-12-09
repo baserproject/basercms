@@ -1,4 +1,5 @@
 <?php
+
 /**
  * run all baser tests
  *
@@ -48,4 +49,5 @@ class BcAllTest extends PHPUnit_Framework_TestSuite {
 //		$suite->addTestFile($path . 'BcAllI18nTest.php');
 		return $suite;
 	}
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [MOBILE] RSS
@@ -19,17 +20,20 @@
  */
 ?>
 <?php
-if($posts){
-	echo $rss->items($posts,'transformRSS');
+
+if ($posts) {
+	echo $rss->items($posts, 'transformRSS');
 }
+
 function transformRSS($data) {
 	return array(
 		'title' => $data['BlogPost']['name'],
-		'link' => Router::url('/'.Configure::read('BcRequest.agentAlias').'/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no']),
-		'guid' => Router::url('/'.Configure::read('BcRequest.agentAlias').'/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no']),
+		'link' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no']),
+		'guid' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no']),
 		'category' => $data['BlogCategory']['title'],
 		'description' => $data['BlogPost']['content'],
 		'pubDate' => $data['BlogPost']['posts_date']
 	);
 }
+
 ?>

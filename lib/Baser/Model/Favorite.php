@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * よく使う項目　モデル
@@ -17,13 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * よく使う項目　モデル
  *
  * @package Baser.Model
  */
 class Favorite extends AppModel {
-	
+
 /**
  * データベース接続
  *
@@ -31,7 +33,7 @@ class Favorite extends AppModel {
  * @access public
  */
 	public $useDbConfig = 'baser';
-	
+
 /**
  * クラス名
  *
@@ -39,7 +41,7 @@ class Favorite extends AppModel {
  * @access public
  */
 	public $name = 'Favorite';
-	
+
 /**
  * belongsTo
  * 
@@ -47,11 +49,11 @@ class Favorite extends AppModel {
  * @access public
  */
 	var $belongsTo = array(
-			'User' => array(
-				'className'=> 'User',
-				'foreignKey'=>'user_id'
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id'
 	));
-	
+
 /**
  * ビヘイビア
  * 
@@ -64,7 +66,7 @@ class Favorite extends AppModel {
  * セッション
  */
 	public $_Session;
-	
+
 /**
  * バリデーション
  *
@@ -73,11 +75,11 @@ class Favorite extends AppModel {
  */
 	public $validate = array(
 		'url' => array(
-			array(	'rule'		=> array('isPermitted'),
-					'message'	=> 'このURLの登録は許可されていません。')
+			array('rule' => array('isPermitted'),
+				'message' => 'このURLの登録は許可されていません。')
 		)
 	);
-	
+
 /**
  * セッションをセットする
  * 
@@ -86,25 +88,24 @@ class Favorite extends AppModel {
 	public function setSession(SessionComponent $Session) {
 		$this->_Session = $Session;
 	}
-	
+
 /**
  * アクセス権があるかチェックする
  * 
  * @param array $check
  */
 	public function isPermitted($check) {
-		
-		if(!$this->_Session) {
+
+		if (!$this->_Session) {
 			return true;
 		}
 		$url = $check[key($check)];
 		$userGroupId = $this->_Session->read('Auth.User.user_group_id');
-		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
+		if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		}
 		$Permission = ClassRegistry::init('Permission');
 		return $Permission->check($url, $userGroupId);
-		
 	}
-	
+
 }

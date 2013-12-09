@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * SQLite DBO拡張
@@ -23,6 +24,7 @@
 App::uses('DboSource', 'Model/Datasource');
 App::uses('Sqlite', 'Model/Datasource/Database');
 App::uses('CakeSchema', 'Model');
+
 /**
  * SQLite DBO拡張
  *
@@ -37,6 +39,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public $description = "SQLite3 DBO Driver";
+
 /**
  * Enter description here...
  *
@@ -44,6 +47,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public $startQuote = '"';
+
 /**
  * Enter description here...
  *
@@ -51,6 +55,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public $endQuote = '"';
+
 /**
  * Base configuration settings for SQLite3 driver
  *
@@ -62,6 +67,7 @@ class BcSqlite extends Sqlite {
 		'database' => null,
 		'connect' => 'sqlite' //sqlite3 in pdo_sqlite is sqlite. sqlite2 is sqlite2
 	);
+
 /**
  * SQLite3 column definition
  *
@@ -85,6 +91,7 @@ class BcSqlite extends Sqlite {
 	public $pdo_statement = NULL;
 	public $rows = NULL;
 	public $row_count = NULL;
+
 /**
  * Connects to the database using config['database'] as a filename.
  *
@@ -93,37 +100,36 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function connect() {
-		
+
 		//echo "runs connect\n";
 		$this->last_error = null;
 		$config = $this->config;
 		//$this->_connection = $config['connect']($config['database']);
 		try {
-			$this->_connection = new PDO($config['connect'].':'.$config['database']);
+			$this->_connection = new PDO($config['connect'] . ':' . $config['database']);
 			$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connected = is_resource($this->_connection);
 			$this->connected = is_object($this->_connection);
-		}
-		catch(PDOException $e) {
-			$this->last_error = array('Error connecting to database.',$e->getMessage());
+		} catch (PDOException $e) {
+			$this->last_error = array('Error connecting to database.', $e->getMessage());
 		}
 		return $this->connected;
-		
 	}
+
 /**
  * Disconnects from database.
  *
  * @return boolean True if the database could be disconnected, else false
  */
 	public function disconnect() {
-		
+
 		//echo "runs disconnect\n";
 		//@sqlite3_close($this->_connection);
 		$this->_connection = NULL;
 		$this->connected = false;
 		return $this->connected;
-		
 	}
+
 /**
  * Executes given SQL statement.
  *
@@ -132,7 +138,7 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
-		
+
 		//echo "runs execute\n";
 		//return sqlite3_query($this->_connection, $sql);
 
@@ -145,16 +151,16 @@ class BcSqlite extends Sqlite {
 					$this->row_count = count($this->rows);
 					return $this->pdo_statement;
 				}
-			}
-			catch(PDOException $e) {
+			} catch (PDOException $e) {
 				// Schema change; re-run query
-				if ($e->errorInfo[1] === 17) continue;
+				if ($e->errorInfo[1] === 17)
+					continue;
 				$this->last_error = $e->getMessage();
 			}
 		}
 		return false;
-		
 	}
+
 /**
  * Returns an array of tables in the database. If there are no tables, an error is raised and the application exits.
  *
@@ -162,7 +168,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function listSources($data = NULL) {
-		
+
 		//echo "runs listSources\n";
 		$db = $this->config['database'];
 		$this->config['database'] = basename($this->config['database']);
@@ -203,9 +209,8 @@ class BcSqlite extends Sqlite {
 		}
 		$this->config['database'] = $db;
 		return array();
-		
 	}
-	
+
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
  *
@@ -215,8 +220,8 @@ class BcSqlite extends Sqlite {
  * @return string Quoted and escaped
  * @access public
  */
-	public function value ($data, $column = null, $safe = false) {
-		
+	public function value($data, $column = null, $safe = false) {
+
 		$parent = parent::value($data, $column, $safe);
 
 		if ($parent != null) {
@@ -232,7 +237,7 @@ class BcSqlite extends Sqlite {
 				if ($data === '') {
 					return 0;
 				}
-				$data = $this->boolean((bool)$data);
+				$data = $this->boolean((bool) $data);
 				break;
 			case 'integer';
 				if ($data === '') {
@@ -240,7 +245,7 @@ class BcSqlite extends Sqlite {
 				}
 				break;
 			case 'datetime':
-				if($data) {
+				if ($data) {
 					$data = trim(str_replace('/', '-', $data));
 				}
 				if ($data === '' || $data == '0000-00-00 00:00:00') {
@@ -256,8 +261,8 @@ class BcSqlite extends Sqlite {
 				break;
 		}
 		return "'" . $data . "'";
-		
 	}
+
 /**
  * Generates and executes an SQL UPDATE statement for given model, fields, and values.
  *
@@ -269,7 +274,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function update(Model $model, $fields = NULL, $values = NULL, $conditions = NULL) {
-		
+
 		if (empty($values) && !empty($fields)) {
 			foreach ($fields as $field => $value) {
 				if (strpos($field, $model->alias . '.') !== false) {
@@ -281,8 +286,8 @@ class BcSqlite extends Sqlite {
 			}
 		}
 		return parent::update($model, $fields, $values, $conditions);
-		
 	}
+
 /**
  * Begin a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
@@ -293,18 +298,18 @@ class BcSqlite extends Sqlite {
  * (i.e. if the database/model does not support transactions).
  * @access public
  */
-	public function begin () {
-		
+	public function begin() {
+
 		return null;
-		/*if (parent::begin($model)) {
-			if ($this->_connection->beginTransaction()) {
-				$this->_transactionStarted = true;
-				return true;
-			}
-		}
-		return false;*/
-		
+		/* if (parent::begin($model)) {
+		  if ($this->_connection->beginTransaction()) {
+		  $this->_transactionStarted = true;
+		  return true;
+		  }
+		  }
+		  return false; */
 	}
+
 /**
  * Commit a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
@@ -316,16 +321,16 @@ class BcSqlite extends Sqlite {
  * or a transaction has not started).
  * @access public
  */
-	public function commit () {
-		
+	public function commit() {
+
 		return null;
-		/*if (parent::commit($model)) {
-			$this->_transactionStarted = false;
-			return $this->_connection->commit();
-		}
-		return false;*/
-		
+		/* if (parent::commit($model)) {
+		  $this->_transactionStarted = false;
+		  return $this->_connection->commit();
+		  }
+		  return false; */
 	}
+
 /**
  * Rollback a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
@@ -337,14 +342,13 @@ class BcSqlite extends Sqlite {
  * or a transaction has not started).
  * @access public
  */
-	public function rollback () {
-		
+	public function rollback() {
+
 		return null;
-		/*if (parent::rollback($model)) {
-			return $this->_connection->rollBack();
-		}
-		return false;*/
-		
+		/* if (parent::rollback($model)) {
+		  return $this->_connection->rollBack();
+		  }
+		  return false; */
 	}
 
 /**
@@ -354,10 +358,10 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function lastError(PDOStatement $query = null) {
-		
+
 		return $this->last_error;
-		
 	}
+
 /**
  * Returns number of affected rows in previous database operation. If no previous operation exists, this returns false.
  *
@@ -365,13 +369,13 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function lastAffected($source = NULL) {
-		
+
 		if ($this->_result) {
 			return $this->pdo_statement->rowCount();
 		}
 		return false;
-		
 	}
+
 /**
  * Returns number of rows in previous resultset. If no previous resultset exists,
  * this returns false.
@@ -379,15 +383,15 @@ class BcSqlite extends Sqlite {
  * @return integer Number of rows in resultset
  * @access public
  */
-	public function lastNumRows($source = NULL) { 
-		
+	public function lastNumRows($source = NULL) {
+
 		if ($this->pdo_statement) {
 			// pdo_statement->rowCount() doesn't work for this case
 			return $this->row_count;
 		}
 		return false;
-		
 	}
+
 /**
  * Returns the ID generated from the previous INSERT operation.
  *
@@ -395,11 +399,11 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function lastInsertId($source = NULL) {
-		
+
 		//return sqlite3_last_insert_rowid($this->_connection);
 		return $this->_connection->lastInsertId($source);
-		
 	}
+
 /**
  * Converts database-layer column types to basic types
  *
@@ -408,11 +412,11 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function column($real) {
-		
+
 		if (is_array($real)) {
 			$col = $real['name'];
 			if (isset($real['limit'])) {
-				$col .= '('.$real['limit'].')';
+				$col .= '(' . $real['limit'] . ')';
 			}
 			return $col;
 		}
@@ -434,8 +438,8 @@ class BcSqlite extends Sqlite {
 			return 'float';
 		}
 		return 'text';
-		
 	}
+
 /**
  * Enter description here...
  *
@@ -444,7 +448,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function resultSet($results) {
-		
+
 		$this->results = $results;
 		$this->map = array();
 		$numFields = $results->columnCount();
@@ -484,11 +488,12 @@ class BcSqlite extends Sqlite {
 
 			$metaType = false;
 			try {
-				$metaData = (array)$results->getColumnMeta($j);
+				$metaData = (array) $results->getColumnMeta($j);
 				if (!empty($metaData['sqlite:decl_type'])) {
 					$metaType = trim($metaData['sqlite:decl_type']);
 				}
 			} catch (Exception $e) {
+				
 			}
 
 			if (strpos($columnName, '.')) {
@@ -499,7 +504,6 @@ class BcSqlite extends Sqlite {
 			}
 			$j++;
 		}
-		
 	}
 
 /**
@@ -509,7 +513,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function fetchResult() {
-		
+
 		//if ($row = sqlite3_fetch_array($this->results, SQLITE3_ASSOC)) {
 		if (count($this->rows)) {
 			$row = array_shift($this->rows);
@@ -534,8 +538,8 @@ class BcSqlite extends Sqlite {
 		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * Returns a limit statement in the correct format for the particular database.
  *
@@ -544,8 +548,8 @@ class BcSqlite extends Sqlite {
  * @return string SQL limit/offset statement
  * @access public
  */
-	public function limit ($limit, $offset = null) {
-		
+	public function limit($limit, $offset = null) {
+
 		if ($limit) {
 			$rt = '';
 			if (!strpos(strtolower($limit), 'limit') || strpos(strtolower($limit), 'limit') === 0) {
@@ -558,8 +562,8 @@ class BcSqlite extends Sqlite {
 			return $rt;
 		}
 		return null;
-		
 	}
+
 /**
  * Generate a database-native column schema string
  *
@@ -569,7 +573,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function buildColumn($column) {
-		
+
 		$name = $type = null;
 		$column = array_merge(array('null' => true), $column);
 		extract($column);
@@ -615,7 +619,6 @@ class BcSqlite extends Sqlite {
 			}
 		}
 		return $out;
-		
 	}
 
 /**
@@ -626,7 +629,7 @@ class BcSqlite extends Sqlite {
  * @return string
  */
 	public function buildIndex($indexes, $table = null) {
-		
+
 		$join = array();
 
 		foreach ($indexes as $name => $value) {
@@ -647,7 +650,6 @@ class BcSqlite extends Sqlite {
 			$join[] = $out;
 		}
 		return $join;
-		
 	}
 
 /**
@@ -658,7 +660,7 @@ class BcSqlite extends Sqlite {
  * @return string
  */
 	public function renderStatement($type, $data) {
-		
+
 		switch (strtolower($type)) {
 			case 'schema':
 				extract($data);
@@ -670,22 +672,21 @@ class BcSqlite extends Sqlite {
 				}
 
 				return "CREATE TABLE {$table} (\n{$columns});\n{$indexes}";
-			break;
+				break;
 			default:
 				return parent::renderStatement($type, $data);
-			break;
+				break;
 		}
-		
 	}
 
-	/**
-	 * PDO deals in objects, not resources, so overload accordingly.
-	 */
+/**
+ * PDO deals in objects, not resources, so overload accordingly.
+ */
 	public function hasResult() {
-		
+
 		return is_object($this->_result);
-		
 	}
+
 /**
  * Generate a MySQL Alter Table syntax for the given Schema comparison
  *
@@ -694,7 +695,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function alterSchema($compare, $table = null) {
-		
+
 		if (!is_array($compare)) {
 			return false;
 		}
@@ -713,24 +714,24 @@ class BcSqlite extends Sqlite {
 						case 'add':
 							foreach ($column as $field => $col) {
 								$col['name'] = $field;
-								$alter = 'ADD '.$this->buildColumn($col);
+								$alter = 'ADD ' . $this->buildColumn($col);
 								$colList[] = $alter;
 							}
-						break;
+							break;
 						case 'drop':
 							foreach ($column as $field => $col) {
 								$col['name'] = $field;
-								$colList[] = 'DROP '.$this->name($field);
+								$colList[] = 'DROP ' . $this->name($field);
 							}
-						break;
+							break;
 						case 'change':
 							foreach ($column as $field => $col) {
 								if (!isset($col['name'])) {
 									$col['name'] = $field;
 								}
-								$colList[] = 'CHANGE '. $this->name($field).' '.$this->buildColumn($col);
+								$colList[] = 'CHANGE ' . $this->name($field) . ' ' . $this->buildColumn($col);
 							}
-						break;
+							break;
 					}
 				}
 				$colList = array_merge($colList, $this->_alterIndexes($curTable, $indexes));
@@ -738,8 +739,8 @@ class BcSqlite extends Sqlite {
 			}
 		}
 		return $out;
-		
 	}
+
 /**
  * Overrides DboSource::index to handle SQLite indexe introspection
  * Returns an array of the indexes in given table name.
@@ -749,15 +750,15 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function index($model) {
-		
+
 		$index = array();
 		$table = $this->fullTableName($model, false, false);
 		if ($table) {
 
 			$tableInfo = $this->query('PRAGMA table_info(' . $table . ')');
 			$primary = array();
-			foreach($tableInfo as $info) {
-				if(!empty($info[0]['pk'])){
+			foreach ($tableInfo as $info) {
+				if (!empty($info[0]['pk'])) {
 					$primary = array('PRIMARY' => array('unique' => true, 'column' => $info[0]['name']));
 				}
 			}
@@ -783,8 +784,8 @@ class BcSqlite extends Sqlite {
 			$index = am($primary, $index);
 		}
 		return $index;
-		
 	}
+
 /**
  * Generate index alteration statements for a table.
  * TODO 未サポート
@@ -795,10 +796,10 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _alterIndexes($table, $indexes) {
-		
+
 		return array();
-		
 	}
+
 /**
  * テーブル構造を変更する
  *
@@ -810,7 +811,7 @@ class BcSqlite extends Sqlite {
 
 		extract($options);
 
-		if(!isset($old) || !isset($new)){
+		if (!isset($old) || !isset($new)) {
 			return false;
 		}
 
@@ -818,22 +819,22 @@ class BcSqlite extends Sqlite {
 		$Schema->connection = $this->configKeyName;
 		$compare = $Schema->compare($old, $new);
 
-		if(!$compare) {
+		if (!$compare) {
 			return false;
 		}
 
-		foreach($compare as $table => $types) {
-			if(!$types){
+		foreach ($compare as $table => $types) {
+			if (!$types) {
 				return false;
 			}
-			foreach($types as $type => $fields) {
-				if(!$fields){
+			foreach ($types as $type => $fields) {
+				if (!$fields) {
 					return false;
 				}
-				foreach($fields as $fieldName => $column) {
+				foreach ($fields as $fieldName => $column) {
 					switch ($type) {
 						case 'add':
-							if(!$this->addColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+							if (!$this->addColumn(array('field' => $fieldName, 'table' => $table, 'column' => $column))) {
 								return false;
 							}
 							break;
@@ -842,12 +843,12 @@ class BcSqlite extends Sqlite {
 							// SQLiteでは、SQLで実装できない？ので、フィールドの作り直しとなる可能性が高い
 							// その場合、changeColumnメソッドをオーバライドして実装する
 							return false;
-							/*if(!$this->changeColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
-								return false;
-							}*/
+							/* if(!$this->changeColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
+							  return false;
+							  } */
 							break;
 						case 'drop':
-							if(!$this->dropColumn(array('field'=>$fieldName,'table'=>$table))){
+							if (!$this->dropColumn(array('field' => $fieldName, 'table' => $table))) {
 								return false;
 							}
 							break;
@@ -857,8 +858,8 @@ class BcSqlite extends Sqlite {
 		}
 
 		return true;
-
 	}
+
 /**
  * テーブル名のリネームステートメントを生成
  *
@@ -868,10 +869,10 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-		
-		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
-		 
+
+		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
+
 /**
  * カラムを変更する
  * 
@@ -883,7 +884,7 @@ class BcSqlite extends Sqlite {
 
 		extract($options);
 
-		if(!isset($table) || !isset($new) || !isset($old)) {
+		if (!isset($table) || !isset($new) || !isset($old)) {
 			return false;
 		}
 
@@ -894,52 +895,52 @@ class BcSqlite extends Sqlite {
 
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
-		$schema = $Schema->read(array('models'=>array($model)));
+		$schema = $Schema->read(array('models' => array($model)));
 		$schema = $schema['tables'][$_table];
 
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable(array('old'=>$_table, 'new'=>$_table.'_temp'))) {
+		if (!$this->renameTable(array('old' => $_table, 'new' => $_table . '_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// スキーマのキーを変更（並び順を変えないように）
 		$newSchema = array();
-		foreach($schema as $key => $field) {
-			if($key == $old) {
+		foreach ($schema as $key => $field) {
+			if ($key == $old) {
 				$key = $new;
 			}
 			$newSchema[$key] = $field;
 		}
 
 		// フィールドを変更した新しいテーブルを作成
-		if(!$this->createTable(array('schema'=>$newSchema, 'table'=>$_table))) {
+		if (!$this->createTable(array('schema' => $newSchema, 'table' => $_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
 		unset($schema['indexes']);
-		$sql = 'INSERT INTO '.$table.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$table.'_temp';
-		$sql = str_replace($old,$old.' AS '.$new, $sql);
-		if(!$this->execute($sql)) {
+		$sql = 'INSERT INTO ' . $table . ' SELECT ' . $this->_convertCsvFieldsFromSchema($schema) . ' FROM ' . $table . '_temp';
+		$sql = str_replace($old, $old . ' AS ' . $new, $sql);
+		if (!$this->execute($sql)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
 		// dropTableメソッドはモデルありきなので利用できない
-		if(!$this->execute('DROP TABLE '.$table.'_temp')) {
+		if (!$this->execute('DROP TABLE ' . $table . '_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		$this->execute('COMMIT;');
 		return true;
-
 	}
+
 /**
  * カラムを削除する
  * 
@@ -951,11 +952,11 @@ class BcSqlite extends Sqlite {
 
 		extract($options);
 
-		if(!isset($table) || !isset($field)) {
+		if (!isset($table) || !isset($field)) {
 			return false;
 		}
 
-		if(!isset($prefix)){
+		if (!isset($prefix)) {
 			$prefix = $this->config['prefix'];
 		}
 		$_table = $table;
@@ -971,36 +972,36 @@ class BcSqlite extends Sqlite {
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if(!$this->renameTable(array('old'=>$_table, 'new'=>$_table.'_temp'))) {
+		if (!$this->renameTable(array('old' => $_table, 'new' => $_table . '_temp'))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// フィールドを削除した新しいテーブルを作成
 		unset($schema[$field]);
-		if(!$this->createTable(array('schema'=>$schema, 'table'=>$_table))) {
+		if (!$this->createTable(array('schema' => $schema, 'table' => $_table))) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// データの移動
 		unset($schema['indexes']);
-		if(!$this->_moveData($table.'_temp',$table,$schema)) {
+		if (!$this->_moveData($table . '_temp', $table, $schema)) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// 一時テーブルを削除
 		// dropTableメソッドはモデルありきなので利用できない
-		if(!$this->execute('DROP TABLE '.$table.'_temp')) {
+		if (!$this->execute('DROP TABLE ' . $table . '_temp')) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		$this->execute('COMMIT;');
 		return true;
-
 	}
+
 /**
  * テーブルからテーブルへデータを移動する
  * @param string	$sourceTableName
@@ -1009,12 +1010,12 @@ class BcSqlite extends Sqlite {
  * @return booelan
  * @access protected
  */
-	protected function _moveData($sourceTableName,$targetTableName,$schema) {
-		
-		$sql = 'INSERT INTO '.$targetTableName.' SELECT '.$this->_convertCsvFieldsFromSchema($schema).' FROM '.$sourceTableName;
+	protected function _moveData($sourceTableName, $targetTableName, $schema) {
+
+		$sql = 'INSERT INTO ' . $targetTableName . ' SELECT ' . $this->_convertCsvFieldsFromSchema($schema) . ' FROM ' . $sourceTableName;
 		return $this->execute($sql);
-		
 	}
+
 /**
  * スキーマ情報よりCSV形式のフィールドリストを取得する
  * @param array $schema
@@ -1022,15 +1023,16 @@ class BcSqlite extends Sqlite {
  * @access protected
  */
 	protected function _convertCsvFieldsFromSchema($schema) {
-		
+
 		$fields = '';
-		foreach($schema as $key => $field) {
-			if($key != 'tableParameters') {
-				$fields .= '"'.$key.'",';
+		foreach ($schema as $key => $field) {
+			if ($key != 'tableParameters') {
+				$fields .= '"' . $key . '",';
 			}
 		}
-		return substr($fields,0,strlen($fields)-1);
+		return substr($fields, 0, strlen($fields) - 1);
 	}
+
 /**
  * Returns an array of the fields in given table name.
  *
@@ -1039,7 +1041,7 @@ class BcSqlite extends Sqlite {
  * @access public
  */
 	public function describe($model) {
-		
+
 		$cache = $this->__describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -1049,34 +1051,34 @@ class BcSqlite extends Sqlite {
 
 		foreach ($result as $column) {
 			$fields[$column[0]['name']] = array(
-				'type'		=> $this->column($column[0]['type']),
-				'null'		=> !$column[0]['notnull'],
-				'default'	=> $column[0]['dflt_value'],
-			// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
-			// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
-			//	'length'	=> $this->length($column[0]['type'])
-			// ---
-				'length'	=> ($column[0]['type'])? $this->length($column[0]['type']) : ''
-			// <<<
+				'type' => $this->column($column[0]['type']),
+				'null' => !$column[0]['notnull'],
+				'default' => $column[0]['dflt_value'],
+				// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
+				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
+				//	'length'	=> $this->length($column[0]['type'])
+				// ---
+				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
+				// <<<
 			);
 			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
-			if($fields[$column[0]['name']]['default']=='NULL'){
+			if ($fields[$column[0]['name']]['default'] == 'NULL') {
 				$fields[$column[0]['name']]['default'] = NULL;
 			}
 			// >>> CUSTOMIZE ADD 2011/08/22 ryuring
-			if($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
+			if ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
 				$fields[$column[0]['name']]['default'] = 1;
-			} elseif($fields[$column[0]['name']]['type']=='boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
+			} elseif ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
 				$fields[$column[0]['name']]['default'] = 0;
 			}
 			// >>>
-			if($column[0]['pk'] == 1) {
+			if ($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
-					'type'		=> $fields[$column[0]['name']]['type'],
-					'null'		=> false,
-					'default'	=> $column[0]['dflt_value'],
-					'key'		=> $this->index['PRI'],
+					'type' => $fields[$column[0]['name']]['type'],
+					'null' => false,
+					'default' => $column[0]['dflt_value'],
+					'key' => $this->index['PRI'],
 					// >>> CUSTOMIZE MODIFY 2010/03/23 ryuring
 					// baserCMSのプライマリーキーの初期値は8バイトで統一
 					//'length'	=> 11
@@ -1089,8 +1091,8 @@ class BcSqlite extends Sqlite {
 
 		$this->_cacheDescription($model->tablePrefix . $model->table, $fields);
 		return $fields;
-		
 	}
+
 /**
  * Returns a Model description (metadata) or null if none found.
  * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
@@ -1101,7 +1103,7 @@ class BcSqlite extends Sqlite {
  * @access private
  */
 	private function __describe($model) {
-		
+
 		if ($this->cacheSources === false) {
 			return null;
 		}
@@ -1116,7 +1118,6 @@ class BcSqlite extends Sqlite {
 			return $cache;
 		}
 		return null;
-		
 	}
 
 }

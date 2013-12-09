@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * セッション設定
@@ -24,10 +25,10 @@ if (empty($_SESSION)) {
 	$agentAgents = Configure::read('BcAgent.mobile.agents');
 	$agentAgents = implode('||', $agentAgents);
 	$agentAgents = preg_quote($agentAgents, '/');
-	$regex = '/'.str_replace('\|\|', '|', $agentAgents).'/i';
-	if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
+	$regex = '/' . str_replace('\|\|', '|', $agentAgents) . '/i';
+	if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
 		$useCookies = 0;
-		if(Configure::read('BcAgent.mobile.sessionId')) {
+		if (Configure::read('BcAgent.mobile.sessionId')) {
 			$useTransSid = 1;
 		} else {
 			$useTransSid = 0;
@@ -44,7 +45,7 @@ if (empty($_SESSION)) {
  * 確率は、session.gc_probability で設定する。確実にタイムアウトさせたい場合は、100を設定する。
  * デフォルト：１日１回、100分の１の確率でセッションが切れる
  */
-	$timeout = 60 * 24;	// １日
+	$timeout = 60 * 24; // １日
 /**
  * ブラウザを閉じた後のセッションの有効期限
  * デフォルト：７日
@@ -54,16 +55,15 @@ if (empty($_SESSION)) {
  * 設定
  */
 	Configure::write('Session', array_merge(Configure::read('Session'), array(
-		'cookie'		=> 'BASERCMS',
-		'timeout'		=> $timeout,
-		'cookieTimeout'	=> $cookieTimeout,
-		'ini'	=> array(
+		'cookie' => 'BASERCMS',
+		'timeout' => $timeout,
+		'cookieTimeout' => $cookieTimeout,
+		'ini' => array(
 			'session.serialize_handler' => 'php',
-			'session.save_path'			=> TMP . 'sessions',
-			'session.use_cookies'		=> $useCookies,
-			'session.use_trans_sid'		=> $useTransSid,
-			'session.gc_maxlifetime'	=> $timeout * 60
+			'session.save_path' => TMP . 'sessions',
+			'session.use_cookies' => $useCookies,
+			'session.use_trans_sid' => $useTransSid,
+			'session.gc_maxlifetime' => $timeout * 60
 		)
 	)));
-	
 }

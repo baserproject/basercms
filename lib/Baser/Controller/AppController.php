@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Controller 拡張クラス
@@ -26,6 +27,7 @@
  * Include files
  */
 App::uses('BcAppController', 'Controller');
+
 /**
  * Controller 拡張クラス
  * 

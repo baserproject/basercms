@@ -11,39 +11,39 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 <script type="text/javascript">
 $(function(){
 	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
-});
+	});
 </script>
 <h2 class="contents-head">
-	<?php $this->Blog->title() ?>
+<?php $this->Blog->title() ?>
 </h2>
 <!-- blog description -->
-<?php if($this->Blog->descriptionExists()): ?>
-<p class="blog-description">
+<?php if ($this->Blog->descriptionExists()): ?>
+	<p class="blog-description">
 	<?php $this->Blog->description() ?>
-</p>
-<?php endif ?>
+	</p>
+<?php endif; ?>
 
-<?php if(!empty($posts)): ?>
-<?php foreach($posts as $post): ?>
-<div class="post">
-	<h4 class="contents-head">
-		<?php $this->Blog->postTitle($post) ?>
-	</h4>
-	<?php $this->Blog->postContent($post,true,true) ?>
-	<div class="meta"> 
-	   <span class="date">
-        <?php $this->Blog->postDate($post) ?>
-	   </span>
-	   <span class="category">
-		<?php $this->Blog->category($post) ?>
-		&nbsp;
-		<?php $this->Blog->author($post) ?>
-		</span> </div>
-	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
-</div>
-<?php endforeach; ?>
+<?php if (!empty($posts)): ?>
+	<?php foreach ($posts as $post): ?>
+		<div class="post">
+			<h4 class="contents-head">
+			<?php $this->Blog->postTitle($post) ?>
+			</h4>
+		<?php $this->Blog->postContent($post, true, true) ?>
+			<div class="meta"> 
+				<span class="date">
+		<?php $this->Blog->postDate($post) ?>
+				</span>
+				<span class="category">
+					<?php $this->Blog->category($post) ?>
+					&nbsp;
+			<?php $this->Blog->author($post) ?>
+				</span> </div>
+		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		</div>
+	<?php endforeach; ?>
 <?php else: ?>
-<p class="no-data">記事がありません。</p>
+	<p class="no-data">記事がありません。</p>
 <?php endif; ?>
 <!-- pagination -->
 <?php $this->BcBaser->pagination('simple'); ?>

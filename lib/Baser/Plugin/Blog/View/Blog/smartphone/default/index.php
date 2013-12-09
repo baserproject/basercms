@@ -26,23 +26,23 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 </h2>
 
 <!-- description -->
-<?php if($this->Blog->descriptionExists()): ?>
-<section class="blog-description">
-	<?php $this->Blog->description() ?>
-</section>
+<?php if ($this->Blog->descriptionExists()): ?>
+	<section class="blog-description">
+		<?php $this->Blog->description() ?>
+	</section>
 <?php endif ?>
 
 <section class="box news">
-<!-- list -->
-<?php if(!empty($posts)): ?>
-<ul>
-	<?php foreach($posts as $post): ?>
-<li><?php $this->Blog->postLink($post, '<span class="date">'.$this->Blog->getPostDate($post).'</span><br />'.$this->Blog->getPostTitle($post)) ?></li>
-	<?php endforeach; ?>
-</ul>
-<?php else: ?>
-<p class="no-data">記事がありません。</p>
-<?php endif; ?>
+	<!-- list -->
+	<?php if (!empty($posts)): ?>
+		<ul>
+			<?php foreach ($posts as $post): ?>
+				<li><?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post) . '</span><br />' . $this->Blog->getPostTitle($post)) ?></li>
+			<?php endforeach; ?>
+		</ul>
+	<?php else: ?>
+		<p class="no-data">記事がありません。</p>
+	<?php endif; ?>
 </section>
 
 <!-- pagination -->

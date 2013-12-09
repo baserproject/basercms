@@ -1,5 +1,7 @@
 <?php
+
 /* SVN FILE: $Id$ */
+
 /**
  * ユーザーモデル
  *
@@ -57,12 +59,12 @@ class User extends AppModel {
  * @var array
  */
 	public $hasMany = array('Favorite' => array(
-		'className'		=> 'Favorite',
-		'order'			=> 'Favorite.sort',
-		'foreignKey'	=> 'user_id',
-		'dependent'		=> false,
-		'exclusive'		=> false,
-		'finderQuery'	=> ''
+			'className' => 'Favorite',
+			'order' => 'Favorite.sort',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'exclusive' => false,
+			'finderQuery' => ''
 	));
 
 /**
@@ -73,68 +75,68 @@ class User extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule'		=> array('notEmpty'),
-				'message'	=> 'アカウント名を入力してください。'
+				'rule' => array('notEmpty'),
+				'message' => 'アカウント名を入力してください。'
 			),
 			'alphaNumericPlus' => array(
-				'rule'		=>	'alphaNumericPlus',
-				'message'	=> 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'
+				'rule' => 'alphaNumericPlus',
+				'message' => 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'
 			),
 			'duplicate' => array(
-				'rule'		=>	array('duplicate','name'),
-				'message'	=> '既に登録のあるアカウント名です。'
+				'rule' => array('duplicate', 'name'),
+				'message' => '既に登録のあるアカウント名です。'
 			),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'アカウント名は255文字以内で入力してください。'
+				'rule' => array('maxLength', 255),
+				'message' => 'アカウント名は255文字以内で入力してください。'
 			)
 		),
 		'real_name_1' => array(
 			'notEmpty' => array(
-				'rule'		=> array('notEmpty'),
-				'message'	=> '名前[姓]を入力してください。'),
+				'rule' => array('notEmpty'),
+				'message' => '名前[姓]を入力してください。'),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 50),
-				'message'	=> '名前[姓]は50文字以内で入力してください。'
+				'rule' => array('maxLength', 50),
+				'message' => '名前[姓]は50文字以内で入力してください。'
 			)
 		),
 		'real_name_2' => array(
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 50),
-				'message'	=> '名前[名]は50文字以内で入力してください。'
+				'rule' => array('maxLength', 50),
+				'message' => '名前[名]は50文字以内で入力してください。'
 			)
 		),
 		'password' => array(
 			'minLength' => array(
-				'rule'		=> array('minLength',6),
+				'rule' => array('minLength', 6),
 				'allowEmpty' => false,
-				'message'	=> 'パスワードは6文字以上で入力してください。'
+				'message' => 'パスワードは6文字以上で入力してください。'
 			),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'パスワードは255文字以内で入力してください。'
+				'rule' => array('maxLength', 255),
+				'message' => 'パスワードは255文字以内で入力してください。'
 			),
 			'alphaNumeric' => array(
-				'rule'		=> 'alphaNumericPlus',
-				'message'	=> 'パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。'
+				'rule' => 'alphaNumericPlus',
+				'message' => 'パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。'
 			),
 			'confirm' => array(
-				'rule'		=> array('confirm', array('password_1', 'password_2')),
-				'message'	=> 'パスワードが同じものではありません。'
+				'rule' => array('confirm', array('password_1', 'password_2')),
+				'message' => 'パスワードが同じものではありません。'
 			)
 		),
 		'email' => array(
 			'email' => array(
-				'rule'		=> array('email'),
-				'message'	=> 'Eメールの形式が不正です。',
+				'rule' => array('email'),
+				'message' => 'Eメールの形式が不正です。',
 				'allowEmpty' => true),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'Eメールは255文字以内で入力してください。')
+				'rule' => array('maxLength', 255),
+				'message' => 'Eメールは255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			'rule'		=> array('notEmpty'),
-			'message'	=> 'グループを選択してください。'
+			'rule' => array('notEmpty'),
+			'message' => 'グループを選択してください。'
 		)
 	);
 
@@ -160,7 +162,7 @@ class User extends AppModel {
  * @return array コントロールソース
  */
 	public function getControlSource($field) {
-		switch($field) {
+		switch ($field) {
 			case 'user_group_id':
 				$controlSources['user_group_id'] = $this->UserGroup->find('list');
 				break;
@@ -181,7 +183,7 @@ class User extends AppModel {
  * @return array
  */
 	public function getUserList($conditions = array()) {
-		$users = $this->find("all",array(
+		$users = $this->find("all", array(
 			'fields' => array('id', 'real_name_1', 'real_name_2', 'nickname'),
 			'conditions' => $conditions
 		));
@@ -219,7 +221,7 @@ class User extends AppModel {
 		} else {
 			$results = $this->convertResults($results);
 		}
-		return parent::afterFind($results,$primary);
+		return parent::afterFind($results, $primary);
 	}
 
 /**
@@ -276,6 +278,7 @@ class User extends AppModel {
 			return '';
 		}
 	}
+
 /**
  * beforeSave
  * 
@@ -283,24 +286,24 @@ class User extends AppModel {
  * @return boolean
  */
 	public function beforeSave($options = array()) {
-		
-		if(isset($this->data[$this->alias]['password'])) {
+
+		if (isset($this->data[$this->alias]['password'])) {
 			App::uses('AuthComponent', 'Controller/Component');
 			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
 		}
 		return true;
-		
 	}
+
 /**
  * afterSave
  * 
  * @param boolean $created 
  */
 	public function afterSave($created, $options = array()) {
-		
+
 		parent::afterSave($created);
-		
-		if($created && !empty($this->UserGroup)) {
+
+		if ($created && !empty($this->UserGroup)) {
 			$defaultFavorites = $this->UserGroup->field('default_favorites', array(
 				'UserGroup.id' => $this->data[$this->alias]['user_group_id']
 			));
@@ -317,7 +320,6 @@ class User extends AppModel {
 				}
 			}
 		}
-		
 	}
-	
+
 }

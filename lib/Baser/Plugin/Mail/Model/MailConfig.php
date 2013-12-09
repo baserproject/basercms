@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メール設定モデル
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * メール設定モデル
  *
@@ -24,6 +26,7 @@
  *
  */
 class MailConfig extends MailAppModel {
+
 /**
  * クラス名
  *
@@ -31,6 +34,7 @@ class MailConfig extends MailAppModel {
  * @access public
  */
 	public $name = 'MailConfig';
+
 /**
  * ビヘイビア
  * 
@@ -38,4 +42,5 @@ class MailConfig extends MailAppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 }

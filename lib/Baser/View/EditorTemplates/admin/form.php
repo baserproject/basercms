@@ -25,15 +25,15 @@
 
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
-<?php if($this->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.id', 'NO') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('EditorTemplate.id') ?>
-				<?php echo $this->BcForm->input('EditorTemplate.id', array('type' => 'hidden')) ?>
-			</td>
-		</tr>
-<?php endif ?>
+		<?php if ($this->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.id', 'NO') ?></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('EditorTemplate.id') ?>
+					<?php echo $this->BcForm->input('EditorTemplate.id', array('type' => 'hidden')) ?>
+				</td>
+			</tr>
+		<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.name', 'テンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -68,11 +68,10 @@
 
 <div class="submit section">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('削除', 
-				array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')),
-				array('class' => 'button'),
-				sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false); ?>
+	<?php if ($this->action == 'admin_edit'): ?>
+		<?php
+		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
+		?>
 	<?php endif ?>
 </div>
 

@@ -21,33 +21,35 @@
 <?php $this->BcBaser->xmlHeader() ?>
 <?php $this->BcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
-<head>
-<meta name="robots" content="noindex,nofollow" />
-<?php $this->BcBaser->charset() ?>
-<?php $this->BcBaser->title() ?>
-<?php $this->BcBaser->metaDescription() ?>
-<?php $this->BcBaser->metaKeywords() ?>
-<?php $this->BcBaser->icon() ?>
-<?php $this->BcBaser->css('admin/import') ?>
-<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
-<?php $this->BcBaser->js(array(
-	'jquery-1.4.2.min',
-	'jquery-ui-1.8.19.custom.min',
-	'admin/i18n/ui.datepicker-ja',
-	'admin/jquery.bt.min',
-	'admin/jquery.corner-2.12',
-	'admin/functions')) ?>
+	<head>
+		<meta name="robots" content="noindex,nofollow" />
+		<?php $this->BcBaser->charset() ?>
+		<?php $this->BcBaser->title() ?>
+		<?php $this->BcBaser->metaDescription() ?>
+		<?php $this->BcBaser->metaKeywords() ?>
+		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->css('admin/import') ?>
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+		<?php
+		$this->BcBaser->js(array(
+			'jquery-1.4.2.min',
+			'jquery-ui-1.8.19.custom.min',
+			'admin/i18n/ui.datepicker-ja',
+			'admin/jquery.bt.min',
+			'admin/jquery.corner-2.12',
+			'admin/functions'))
+		?>
 <?php $this->BcBaser->scripts() ?>
-</head>
-<body id="<?php $this->BcBaser->contentsName() ?>" class="popup">
+	</head>
+	<body id="<?php $this->BcBaser->contentsName() ?>" class="popup">
 
-	<!-- begin contentsBody -->
-	<div id="contentsBody">
-		<?php $this->BcBaser->flash() ?>
-		<?php $this->BcBaser->content() ?>
-	</div>
-	<!-- end contentsBody -->
+		<!-- begin contentsBody -->
+		<div id="contentsBody">
+<?php $this->BcBaser->flash() ?>
+<?php $this->BcBaser->content() ?>
+		</div>
+		<!-- end contentsBody -->
 
 <?php $this->BcBaser->func() ?>
-</body>
+	</body>
 </html>

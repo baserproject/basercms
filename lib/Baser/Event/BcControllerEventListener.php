@@ -1,5 +1,6 @@
 <?php
-/** 
+
+/**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -13,7 +14,6 @@
  * @since			baserCMS v 3.0.0
  * @license			http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('BcEventListener', 'Event');
 
 /**
@@ -40,5 +40,5 @@ class BcControllerEventListener extends BcEventListener {
  * @var string
  */
 	public $layer = 'Controller';
-	
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * RSSリーダーモデル基底クラス
@@ -21,9 +22,12 @@
  * includes
  */
 App::uses('BcPluginAppModel', 'Model');
+
 /**
  * RSSリーダーモデル基底クラス
  *
  * @package			baser.plugins.feed
  */
-class FeedAppModel extends BcPluginAppModel {}
+class FeedAppModel extends BcPluginAppModel {
+	
+}

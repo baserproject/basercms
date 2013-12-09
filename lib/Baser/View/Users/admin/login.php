@@ -17,11 +17,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if ( $this->Session->check('Message.auth') ) {
-    $this->Session->flash('auth');
+if ($this->Session->check('Message.auth')) {
+	$this->Session->flash('auth');
 }
-$userModel = Configure::read('BcAuthPrefix.'.$currentPrefix.'.userModel');
-if(!$userModel) {
+$userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
+if (!$userModel) {
 	$userModel = 'User';
 }
 $userController = Inflector::tableize($userModel);
@@ -182,29 +182,29 @@ function openCredit(completeHandler) {
 
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-<?php if($currentPrefix == 'front'): ?>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => $userController))) ?>
-<?php else: ?>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
-<?php endif ?>
+		<?php if ($currentPrefix == 'front'): ?>
+			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => $userController))) ?>
+		<?php else: ?>
+			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
+		<?php endif ?>
 		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel.'.name', 'アカウント名') ?>
-			<?php echo $this->BcForm->input($userModel.'.name', array('type' => 'text', 'size'=>16 ,'tabindex'=>1)) ?>
+			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
+			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>
 		</div>
 		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel.'.password', 'パスワード') ?>
-			<?php echo $this->BcForm->input($userModel.'.password',array('type' => 'password', 'size'=>16,'tabindex'=>2)) ?>
+			<?php echo $this->BcForm->label($userModel . '.password', 'パスワード') ?>
+			<?php echo $this->BcForm->input($userModel . '.password', array('type' => 'password', 'size' => 16, 'tabindex' => 2)) ?>
 		</div>
 		<div class="float-left submit">
-			<?php echo $this->BcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin','tabindex'=>4)) ?>
+			<?php echo $this->BcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4)) ?>
 		</div>
 		<div class="clear login-etc">
-			<?php echo $this->BcForm->input($userModel.'.saved', array('type' => 'checkbox', 'label' => '保存する','tabindex'=>3)) ?>　
-<?php if($currentPrefix == 'front'): ?>
-			<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
-<?php else: ?>
-			<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->request->params['prefix'] => true), array('rel' => 'popup')) ?>
-<?php endif ?>
+			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => '保存する', 'tabindex' => 3)) ?>　
+			<?php if ($currentPrefix == 'front'): ?>
+				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
+			<?php else: ?>
+				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->request->params['prefix'] => true), array('rel' => 'popup')) ?>
+			<?php endif ?>
 		</div>
 		<?php echo $this->BcForm->end() ?>
 	</div>

@@ -28,10 +28,10 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_type', 'スキーマタイプ') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('Tool.schema_type', array(
-					'type' => 'radio',
-					'options' => array('create'=>'テーブル作成', 'alter'=>'テーブル構造変更', 'drop' => 'テーブル削除'),
-					'legend' => false,
-					'separator' => '　')) ?>
+				'type' => 'radio',
+				'options' => array('create' => 'テーブル作成', 'alter' => 'テーブル構造変更', 'drop' => 'テーブル削除'),
+				'legend' => false,
+				'separator' => '　')); ?>
 			<?php echo $this->BcForm->error('Tool.schema_type') ?>
 		</td>
 	</tr>
@@ -46,4 +46,4 @@
 
 <div class="submit"><?php echo $this->BcForm->submit('読み込み', array('div' => false, 'class' => 'btn-red button')) ?></div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcForm->end(); ?>

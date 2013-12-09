@@ -34,30 +34,30 @@ define('BC_INSTALLED', isInstalled());
  * Baserパス追加
  */
 App::build(array(
-	'Controller'				=> array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
-	'Model'						=> array_merge(App::path('Model'), array(BASER_MODELS)),
-	'Model/Behavior'			=> array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
-	'Model/Datasource'			=> array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
-	'Model/Datasource/Database'	=> array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
-	'Controller/Component'		=> array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
-	'View'						=> array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
-	'View/Helper'				=> array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
-	'Plugin'					=> array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
-	'Vendor'					=> array_merge(App::path('Vendor'), array(BASER_VENDORS)),
-	'Locale'					=> array_merge(App::path('Locale'), array(BASER_LOCALES)),
-	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
-	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
-	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
-	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
+	'Controller' => array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
+	'Model' => array_merge(App::path('Model'), array(BASER_MODELS)),
+	'Model/Behavior' => array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
+	'Model/Datasource' => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
+	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
+	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
+	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
+	'Vendor' => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
+	'Locale' => array_merge(App::path('Locale'), array(BASER_LOCALES)),
+	'Lib' => array_merge(App::path('Lib'), array(BASER_LIBS)),
+	'Console' => array_merge(App::path('Console'), array(BASER_CONSOLES)),
+	'Console/Command' => array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter' => array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
 App::build(array(
-	'Event'						=> array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'TestSuite'					=> array(BASER_TEST_SUITE),
-	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
-	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network'					=> array(BASER . 'Network' . DS)
-), App::REGISTER);
+	'Event' => array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter' => array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'TestSuite' => array(BASER_TEST_SUITE),
+	'TestSuite/Reporter' => array(BASER_TEST_SUITE . 'Reporter' . DS),
+	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
+	'Network' => array(BASER . 'Network' . DS)
+	), App::REGISTER);
 
 /**
  * 配置パターン
@@ -87,28 +87,28 @@ Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.f
 /**
  * クラスローダー設定
  */
-App::uses('AppModel',		'Model');
-App::uses('BcAppModel'	,	'Model');
-App::uses('BcCache',		'Model/Behavior');
-App::uses('ClassRegistry',	'Utility');
-App::uses('Multibyte',		'I18n');
-App::uses('BcCsv',			'Model/Datasource/Database');
-App::uses('BcPostgres',		'Model/Datasource/Database');
-App::uses('BcSqlite',		'Model/Datasource/Database');
-App::uses('BcMysql',		'Model/Datasource/Database');
-App::uses('PhpReader',		'Configure');
-App::uses('CakeSession',	'Model/Datasource');
-App::uses('Folder',			'Utility');
-App::uses('File',			'Utility');
-App::uses('BcUtil',			'Lib');
-App::uses('BcControllerEventListener',	'Event');
-App::uses('BcModelEventListener',		'Event');
-App::uses('BcViewEventListener',		'Event');
-App::uses('BcHelperEventListener',		'Event');
-App::uses('BcPluginAppController',		'Controller');
-App::uses('BcPluginAppModel',			'Model');
-App::uses('BcManagerShell',				'Console/Command');
-App::uses('CakeRequest',				'Network');
+App::uses('AppModel', 'Model');
+App::uses('BcAppModel', 'Model');
+App::uses('BcCache', 'Model/Behavior');
+App::uses('ClassRegistry', 'Utility');
+App::uses('Multibyte', 'I18n');
+App::uses('BcCsv', 'Model/Datasource/Database');
+App::uses('BcPostgres', 'Model/Datasource/Database');
+App::uses('BcSqlite', 'Model/Datasource/Database');
+App::uses('BcMysql', 'Model/Datasource/Database');
+App::uses('PhpReader', 'Configure');
+App::uses('CakeSession', 'Model/Datasource');
+App::uses('Folder', 'Utility');
+App::uses('File', 'Utility');
+App::uses('BcUtil', 'Lib');
+App::uses('BcControllerEventListener', 'Event');
+App::uses('BcModelEventListener', 'Event');
+App::uses('BcViewEventListener', 'Event');
+App::uses('BcHelperEventListener', 'Event');
+App::uses('BcPluginAppController', 'Controller');
+App::uses('BcPluginAppModel', 'Model');
+App::uses('BcManagerShell', 'Console/Command');
+App::uses('CakeRequest', 'Network');
 
 /**
  * 設定ファイル読み込み
@@ -162,14 +162,14 @@ Configure::write($config);
  */
 $url = getUrlFromEnv(); // 環境変数からパラメータを取得
 $parameter = getUrlParamFromEnv();
-Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる	
+Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる
 
 if (BC_INSTALLED) {
 /**
  * tmpフォルダ確認
  */
 	checkTmpFolders();
-	
+
 /**
  * Configures default file logging options
  */
@@ -184,7 +184,7 @@ if (BC_INSTALLED) {
 		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 		'file' => 'error',
 	));
-	
+
 /**
  * キャッシュ設定
  */
@@ -228,63 +228,63 @@ if (BC_INSTALLED) {
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
-	
+
 /**
  * サイト基本設定を読み込む
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
 	loadSiteConfig();
-	
+
 /**
  * メンテナンスチェック
  */
 	$isMaintenance = ($parameter == 'maintenance/index');
 	Configure::write('BcRequest.isMaintenance', $isMaintenance);
-	
+
 /**
  * アップデートチェック
  */
 	$isUpdater = false;
 	$bcSite = Configure::read('BcSite');
 	$updateKey = preg_quote(Configure::read('BcApp.updateKey'), '/');
-	if(preg_match('/^'.$updateKey.'(|\/index\/)/', $parameter)) {
+	if (preg_match('/^' . $updateKey . '(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
-	}elseif(BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: '.topLevelUrl(false).baseUrl().'maintenance/index');exit();
+	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
+		header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+		exit();
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
 /**
  * プラグインをCake側で有効化
  */
-if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$plugins = getEnablePlugins();
 	$CakeEvent = CakeEventManager::instance();
-	foreach($plugins as $plugin) {
+	foreach ($plugins as $plugin) {
 		CakePlugin::load($plugin);
 		$pluginPath = CakePlugin::path($plugin);
 		$config = array(
-			'bootstrap'	=> file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
-			'routes'	=> file_exists($pluginPath . 'Config' . DS . 'routes.php')
+			'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
+			'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
 		);
 		CakePlugin::load($plugin, $config);
-		if(file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+		if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
 			Configure::load($plugin . '.setting');
 		}
 		CakePlugin::bootstrap($plugin);
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
-		foreach($eventTargets as $eventTarget) {
+		foreach ($eventTargets as $eventTarget) {
 			$eventClass = $plugin . $eventTarget . 'EventListener';
-			if(file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+			if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 				App::uses($eventClass, $plugin . '.Event');
 				$CakeEvent->attach(new $eventClass());
 			}
 		}
-		
 	}
 	Configure::write('BcStatus.enablePlugins', $plugins);
-	
+
 /**
  * イベント登録
  */
@@ -294,13 +294,13 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
-	
+
 /**
  * テーマの bootstrap を実行する
  */
-	$themePath = WWW_ROOT.'theme'.DS.Configure::read('BcSite.theme').DS;
+	$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
 	$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
-	if(file_exists($themeBootstrap)) {
+	if (file_exists($themeBootstrap)) {
 		include $themeBootstrap;
 	}
 }
@@ -318,7 +318,7 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 /**
  * セッションスタート 
  */
-if(!isConsole()) {
+if (!isConsole()) {
 	$Session = new CakeSession();
 	$Session->start();
 }
@@ -350,7 +350,7 @@ if ($agentSettings) {
 			$regex = '/' . str_replace('\|\|', '|', $agentAgents) . '/i';
 			if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
 				$getParams = str_replace(BC_BASE_URL . $parameter, '', $_SERVER['REQUEST_URI']);
-				if($getParams == '/' || $getParams == '/index.php') { 
+				if ($getParams == '/' || $getParams == '/index.php') {
 					$getParams = '';
 				}
 
@@ -402,9 +402,9 @@ if ($agentOn) {
 	// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
 	// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
 	//======================================================================
-	$_parameter = preg_replace('/^' . Configure::read('BcRequest.agentAlias') . '\//', '', $parameter);
-	if (preg_match('/^files/', $_parameter)) {
-		$redirectUrl = FULL_BASE_URL . '/' . $_parameter;
+	$param = preg_replace('/^' . Configure::read('BcRequest.agentAlias') . '\//', '', $parameter);
+	if (preg_match('/^files/', $param)) {
+		$redirectUrl = FULL_BASE_URL . '/' . $param;
 		header("HTTP/1.1 301 Moved Permanently");
 		header("Location: " . $redirectUrl);
 		exit();

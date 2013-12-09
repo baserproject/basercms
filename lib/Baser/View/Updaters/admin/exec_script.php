@@ -29,12 +29,12 @@
 
 
 <?php if ($log): ?>
-<div class="corner10 panel-box section" id="UpdateLog">
-	<h2>アップデートログ</h2>
-<?php echo $this->BcForm->textarea('Updater.log', array(
-	'value'		=> $log, 
-	'style'		=> 'width:99%;height:200px;font-size:12px',
-	'readonly'	=> 'readonly'
-)) ?>
-</div>
-<?php endif ?>
+	<div class="corner10 panel-box section" id="UpdateLog">
+		<h2>アップデートログ</h2>
+		<?php echo $this->BcForm->textarea('Updater.log', array(
+			'value' => $log,
+			'style' => 'width:99%;height:200px;font-size:12px',
+			'readonly' => 'readonly'
+		)); ?>
+	</div>
+<?php endif; ?>

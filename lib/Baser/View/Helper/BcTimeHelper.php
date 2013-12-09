@@ -14,7 +14,6 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-
 App::uses('TimeHelper', 'View/Helper');
 
 /**
@@ -197,16 +196,16 @@ class BcTimeHelper extends TimeHelper {
  * @access public
  */
 	public function convertToWareki($date) {
-		
+
 		// add start yuse@gmail.com
 		// 配列形式の場合は、YMDが揃っていない場合も変換を走らせる為、
 		// Yがある場合、MDが空でもセットする。
-		if(is_array($date)){
-			if(!empty($date['year'])){
-				if(empty($date['month'])){
+		if (is_array($date)) {
+			if (!empty($date['year'])) {
+				if (empty($date['month'])) {
 					$date['month'] = "01";
 				}
-				if(empty($date['day'])){
+				if (empty($date['day'])) {
 					$date['day'] = "01";
 				}
 			}
@@ -218,7 +217,6 @@ class BcTimeHelper extends TimeHelper {
 		} else {
 			return '';
 		}
-		
 	}
 
 /**

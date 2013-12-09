@@ -26,6 +26,7 @@ App::uses('AppHelper', 'View/Helper');
  * @property BcTextHelper $Helper
  */
 class BcTextHelperTest extends CakeTestCase {
+
 	public function setUp() {
 		parent::setUp();
 		$this->Helper = new BcTextHelper(new View(null));
@@ -39,7 +40,7 @@ class BcTextHelperTest extends CakeTestCase {
 /**
  * boolean型を○―マークで出力するヘルパーのテスト
  *
- **/
+ * */
 	public function testBooleanMark() {
 		$result = $this->Helper->booleanMark(true);
 		$this->assertEquals("○", $result);
@@ -51,7 +52,7 @@ class BcTextHelperTest extends CakeTestCase {
 /**
  * boolean型用のリストを有無で出力するヘルパーのテスト
  *
- **/
+ * */
 	public function testBooleanMarkList() {
 		$result = $this->Helper->booleanMarkList();
 		$expect = array(
@@ -63,7 +64,7 @@ class BcTextHelperTest extends CakeTestCase {
 
 /**
  * boolean型用のリストを有無で出力するヘルパーのテスト
- **/
+ * */
 	public function testBooleanExistsList() {
 		$result = $this->Helper->booleanExistsList();
 		$expect = array(
@@ -75,7 +76,7 @@ class BcTextHelperTest extends CakeTestCase {
 
 /**
  * boolean型用のリストを可、不可で出力するヘルパーのテスト
- **/
+ * */
 	public function testBooleanAllowList() {
 		$result = $this->Helper->booleanAllowList();
 		$expect = array(
@@ -106,7 +107,6 @@ class BcTextHelperTest extends CakeTestCase {
 		$this->assertEquals('baserCMSをしない', $result);
 		$this->assertEquals('baserCMSをする', $result2);
 	}
-
 
 /**
  * 都道府県のリストを出力するヘルパーのテスト
@@ -185,4 +185,5 @@ class BcTextHelperTest extends CakeTestCase {
 		$this->assertEquals('沖縄県', $this->Helper->pref(47));
 		$this->assertEquals('', $this->Helper->pref(48));
 	}
+
 }

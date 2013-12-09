@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メンテナンスコントローラー
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * メンテナンスコントローラー
  *
  * @package Baser.Controller
  */
 class MaintenanceController extends AppController {
+
 /**
  * クラス名
  *
@@ -30,6 +33,7 @@ class MaintenanceController extends AppController {
  * @access public
  */
 	public $name = 'Maintenance';
+
 /**
  * モデル
  *
@@ -37,6 +41,7 @@ class MaintenanceController extends AppController {
  * @access public
  */
 	public $uses = null;
+
 /**
  * ぱんくずナビ
  *
@@ -44,6 +49,7 @@ class MaintenanceController extends AppController {
  * @access public
  */
 	public $crumbs = array();
+
 /**
  * サブメニューエレメント
  *
@@ -51,6 +57,7 @@ class MaintenanceController extends AppController {
  * @access public
  */
 	public $subMenuElements = array();
+
 /**
  * メンテナンス中ページを表示する
  *
@@ -58,10 +65,9 @@ class MaintenanceController extends AppController {
  * @access	public
  */
 	public function index() {
-
 		$this->pageTitle = 'メンテナンス中';
-
 	}
+
 /**
  * [モバイル] メンテナンス中ページを表示する
  *
@@ -69,10 +75,9 @@ class MaintenanceController extends AppController {
  * @access	public
  */
 	public function mobile_index() {
-		
 		$this->setAction('index');
-		
 	}
+
 /**
  * [スマートフォン] メンテナンス中ページを表示する
  * 
@@ -80,9 +85,7 @@ class MaintenanceController extends AppController {
  * @access public 
  */
 	public function smartphone_index() {
-		
 		$this->setAction('index');
-		
 	}
 
 }

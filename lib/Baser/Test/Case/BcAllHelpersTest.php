@@ -1,4 +1,5 @@
 <?php
+
 /**
  * run all helpers baser tests
  *
@@ -28,4 +29,5 @@ class BcAllHelpersTest extends PHPUnit_Framework_TestSuite {
 		$suite->addTestDirectory(BASER_TEST_CASES . DS . 'View' . DS . 'Helper' . DS);
 		return $suite;
 	}
+
 }

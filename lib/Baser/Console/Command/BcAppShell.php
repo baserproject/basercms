@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * baserCMSシェル
@@ -20,6 +21,7 @@
 /**
  * Include files
  */
+
 /**
  * baserCMSシェル
  * 
@@ -35,6 +37,7 @@
  * @package baser.vendors.shells
  */
 class BcAppShell extends AppShell {
+
 /**
  * startup
  */
@@ -42,9 +45,9 @@ class BcAppShell extends AppShell {
 		$this->clear();
 		$this->out("<info>Welcome to baserCMS v" . getVersion() . " Console</info>");
 		$this->hr();
-		$this->out('App : '. APP_DIR);
-		$this->out('Path: '. APP);
-		$this->hr();		
+		$this->out('App : ' . APP_DIR);
+		$this->out('Path: ' . APP);
+		$this->hr();
 	}
-	
+
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * BlogCategoryFixture
  *
  */
-App::uses('BlogCategory','Blog.Model');
+App::uses('BlogCategory', 'Blog.Model');
+
 class BlogCategoryFixture extends CakeTestFixture {
 
 /**
@@ -12,9 +14,9 @@ class BlogCategoryFixture extends CakeTestFixture {
  * @var array
  */
 	public $import = array(
-        'model' => 'blog.BlogCategory',
-        'records' => true,
-        'connection' => 'plugin'
-    );
+		'model' => 'blog.BlogCategory',
+		'records' => true,
+		'connection' => 'plugin'
+	);
 
 }

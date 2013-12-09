@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
-$this->BcBaser->link('&nbsp;', array('action'=>'preview', $previewId), array('style'=>'display:none', 'id'=>'LinkPreview'));
+$this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
 $pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
 ?>
 
@@ -324,14 +324,14 @@ function pageTypeChengeHandler() {
 	<div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php if($this->request->action == 'admin_edit'): ?>
-<div class="em-box align-left">
-	<?php if($this->BcForm->value('Page.status')): ?>
-	<strong>このページのURL：<?php $this->BcBaser->link($this->BcBaser->getUri($url), $url) ?></strong>
-	<?php else: ?>
-	<strong>このページのURL：<?php echo $this->BcBaser->getUri($url) ?></strong>
-	<?php endif ?>
-</div>
+<?php if ($this->request->action == 'admin_edit'): ?>
+	<div class="em-box align-left">
+		<?php if ($this->BcForm->value('Page.status')): ?>
+			<strong>このページのURL：<?php $this->BcBaser->link($this->BcBaser->getUri($url), $url) ?></strong>
+		<?php else: ?>
+			<strong>このページのURL：<?php echo $this->BcBaser->getUri($url) ?></strong>
+		<?php endif ?>
+	</div>
 <?php endif ?>
 
 <?php echo $this->BcForm->create('Page', array('id' => 'PageForm')) ?>
@@ -341,43 +341,47 @@ function pageTypeChengeHandler() {
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
-<?php if($this->request->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.id', 'NO') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('Page.id') ?>
-				<?php echo $this->BcForm->input('Page.id', array('type' => 'hidden')) ?>
-			</td>
-		</tr>
-<?php endif; ?>
-<?php if($categories): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.page_category_id', 'カテゴリー') ?></th>
-			<td class="col-input">
-		<?php if($pageTypes): ?>
-			<?php echo $this->BcForm->input('Page.page_type', array(
-					'type'		=> 'radio',
-					'options'	=> $pageTypes)) ?></span>　
-		<?php else: ?>
-			<?php echo $this->BcForm->input('Page.page_type', array('type' => 'hidden')) ?></span>
-		<?php endif ?>
-				<?php echo $this->BcForm->input('Page.page_category_id', array(
-						'type'		=> 'select',
-						'options'	=> $categories,
-						'escape'	=> false)) ?>
-				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
-				<?php echo $this->BcForm->error('Page.page_category_id') ?>
-			</td>
-		</tr>
+		<?php if ($this->request->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('Page.id', 'NO') ?></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('Page.id') ?>
+					<?php echo $this->BcForm->input('Page.id', array('type' => 'hidden')) ?>
+				</td>
+			</tr>
+		<?php endif; ?>
+		<?php if ($categories): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('Page.page_category_id', 'カテゴリー') ?></th>
+				<td class="col-input">
+					<?php if ($pageTypes): ?>
+						<?php
+						echo $this->BcForm->input('Page.page_type', array(
+							'type' => 'radio',
+							'options' => $pageTypes))
+						?></span>　
+					<?php else: ?>
+						<?php echo $this->BcForm->input('Page.page_type', array('type' => 'hidden')) ?></span>
+					<?php endif ?>
+					<?php
+					echo $this->BcForm->input('Page.page_category_id', array(
+						'type' => 'select',
+						'options' => $categories,
+						'escape' => false))
+					?>
+			<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'CategoryAjaxLoader', 'class' => 'display-none', 'style' => 'vertical-align:middle')) ?>
+			<?php echo $this->BcForm->error('Page.page_category_id') ?>
+				</td>
+			</tr>
 <?php else: ?>
-		<?php echo $this->BcForm->hidden('Page.page_category_id') ?>
-<?php endif ?>
+					<?php echo $this->BcForm->hidden('Page.page_category_id') ?>
+				<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.name', 'ページ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('Page.name') ?>
+<?php echo $this->BcForm->input('Page.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+<?php echo $this->BcForm->error('Page.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li>ページ名はURLに利用します。</li>
@@ -390,7 +394,7 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.title', 'タイトル') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.title', array('type' => 'text', 'size'=> 40, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+				<?php echo $this->BcForm->input('Page.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpTitle', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('Page.title') ?>
 				<div id="helptextTitle" class="helptext">
@@ -399,7 +403,7 @@ function pageTypeChengeHandler() {
 						<li>タイトルタグの出力するには、レイアウトテンプレートに次のように記述します。<br />
 							&lt;?php $this->BcBaser->title() ?&gt;<br />
 							<small>※ タイトルには、サイト基本設定で設定されたWEBサイト名が自動的に追加されます。<br />
-							トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
+								トップページの場合など、WEBサイト名のみをタイトルバーに表示したい場合は空にします。</small></li>
 					</ul>
 				</div>
 			</td>
@@ -407,8 +411,8 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.description', '説明文') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.description', array('type' => 'textarea', 'cols' => 60,'rows' => 2, 'maxlength' => 255, 'counter' => true)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png',array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('Page.description', array('type' => 'textarea', 'cols' => 60, 'rows' => 2, 'maxlength' => 255, 'counter' => true)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('Page.description') ?>
 				<div id="helptextDescription" class="helptext">
 					<ul>
@@ -426,13 +430,13 @@ function pageTypeChengeHandler() {
 
 <div class="section" style="text-align:center">
 	<?php echo $this->BcForm->editor('Page.contents', array_merge(array(
-			'editor'			=> @$siteConfig['editor'],
-			'editorUseDraft'	=> true,
-			'editorDraftField'	=> 'draft', 
-			'editorWidth'		=> 'auto', 
-			'editorHeight'		=> '480px',
-			'editorEnterBr'		=> @$siteConfig['editor_enter_br']
-			), $editorOptions)) ?>
+		'editor' => @$siteConfig['editor'],
+		'editorUseDraft' => true,
+		'editorDraftField' => 'draft',
+		'editorWidth' => 'auto',
+		'editorHeight' => '480px',
+		'editorEnterBr' => @$siteConfig['editor_enter_br']
+			), $editorOptions)); ?>
 	<?php echo $this->BcForm->error('Page.contents') ?>
 </div>
 
@@ -455,15 +459,15 @@ function pageTypeChengeHandler() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.author_id', '作成者') ?></th>
 			<td class="col-input">
-<?php if(isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
-				<?php echo $this->BcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
-				<?php echo $this->BcForm->error('Page.author_id') ?>
-<?php else: ?>
-		<?php if(isset($users[$this->BcForm->value('Page.author_id')])): ?>
-				<?php echo $users[$this->BcForm->value('Page.author_id')] ?>
-		<?php endif ?>
+				<?php if (isset($user) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')): ?>
+					<?php echo $this->BcForm->input('Page.author_id', array('type' => 'select', 'options' => $users)) ?>
+					<?php echo $this->BcForm->error('Page.author_id') ?>
+				<?php else: ?>
+					<?php if (isset($users[$this->BcForm->value('Page.author_id')])): ?>
+						<?php echo $users[$this->BcForm->value('Page.author_id')] ?>
+					<?php endif; ?>
 				<?php echo $this->BcForm->hidden('Page.author_id') ?>
-<?php endif ?>
+				<?php endif; ?>
 			</td>
 		</tr>
 	</table>
@@ -477,11 +481,11 @@ function pageTypeChengeHandler() {
 			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'コード') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Page.code', array(
-					'type'			=> 'textarea', 
-					'cols'			=> 36, 
-					'rows'			=> 5,
-					'style'			=> 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
-				)) ?>
+					'type' => 'textarea',
+					'cols' => 36,
+					'rows' => 5,
+					'style' => 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
+				)); ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">
 					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
@@ -491,80 +495,76 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 
-	<?php if(Configure::read('BcApp.mobile')): ?>
-			<tr id="RowMobile">
-				<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_mobile', 'モバイル') ?></th> 
-				<td class="col-input">
-		<?php if(@$this->BcBaser->siteConfig['linked_pages_mobile']): ?>
-	      <div id="DivUnlinkedMobile">
-			<?php echo $this->BcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
-	      </div>
-		<?php endif ?>
-	      <div id="DivReflectMobile">
-	        <?php echo $this->BcForm->input('Page.reflect_mobile', array('type' => 'checkbox', 'label'=>'モバイルページとしてコピー')) ?>
-	        <?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-	        <div class="helptext">
-	          <ul>
-	            <li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
-	            <li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
-				<li>モバイルページが既に存在する場合は上書きします。</li>
-	          </ul>
-	        </div>
-		<?php if(!empty($mobileExists)): ?>
-	        <br />&nbsp;<?php $this->BcBaser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
-		<?php endif ?> 
-			</div>
+		<?php if (Configure::read('BcApp.mobile')): ?>
+		<tr id="RowMobile">
+			<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_mobile', 'モバイル') ?></th> 
+			<td class="col-input">
+			<?php if (@$this->BcBaser->siteConfig['linked_pages_mobile']): ?>
+				<div id="DivUnlinkedMobile">
+					<?php echo $this->BcForm->input('Page.unlinked_mobile', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
+				</div>
+			<?php endif; ?>
+				<div id="DivReflectMobile">
+					<?php echo $this->BcForm->input('Page.reflect_mobile', array('type' => 'checkbox', 'label' => 'モバイルページとしてコピー')) ?>
+					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">
+						<ul>
+							<li>このページのデータを元にモバイルページとしてコピーする場合はチェックを入れます。</li>
+							<li>モバイルページはモバイルカテゴリの同階層に保存します。</li>
+							<li>モバイルページが既に存在する場合は上書きします。</li>
+						</ul>
+					</div>
+					<?php if (!empty($mobileExists)): ?>
+					<br />&nbsp;<?php $this->BcBaser->link('≫ モバイルページの編集画面に移動', array($mobileExists)) ?>
+					<?php endif; ?> 
+				</div>
 			</td>
 		</tr>
-	<?php endif ?>
+		<?php endif ?>
 
 
-<?php if(Configure::read('BcApp.smartphone')): ?>
+		<?php if (Configure::read('BcApp.smartphone')): ?>
 		<tr id="RowSmartphone">
 			<th class="col-head"><?php echo $this->BcForm->label('Page.unlinked_smartphone', 'スマートフォン') ?></th> 
 			<td class="col-input">
 
-		<?php if(@$this->BcBaser->siteConfig['linked_pages_smartphone']): ?>
-		      <div id="DivUnlinkedSmartphone">
-				<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
-		      </div>
-		<?php endif ?>
-		      <div id="DivReflectSmartphone">
-		        <?php echo $this->BcForm->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label'=>'スマートフォンページとしてコピー')) ?>
-		        <?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-		        <div class="helptext">
-		          <ul>
-		            <li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
-		            <li>スマートフォンページはスマートフォンカテゴリ内の同階層に保存します。</li>
-		            <li>スマートフォンページが既に存在するする場合は上書きします。</li>
-		          </ul>
-		        </div>
-		<?php if(!empty($smartphoneExists)): ?>
-		        <br />&nbsp;<?php $this->BcBaser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
-		<?php endif ?> 
+			<?php if (@$this->BcBaser->siteConfig['linked_pages_smartphone']): ?>
+				<div id="DivUnlinkedSmartphone">
+					<?php echo $this->BcForm->input('Page.unlinked_smartphone', array('type' => 'checkbox', 'label' => 'このページだけ連動しない')) ?>
+				</div>
+			<?php endif; ?>
+				<div id="DivReflectSmartphone">
+					<?php echo $this->BcForm->input('Page.reflect_smartphone', array('type' => 'checkbox', 'label' => 'スマートフォンページとしてコピー')) ?>
+					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">
+						<ul>
+							<li>このページのデータを元にスマートフォンページとしてコピーする場合はチェックを入れます。</li>
+							<li>スマートフォンページはスマートフォンカテゴリ内の同階層に保存します。</li>
+							<li>スマートフォンページが既に存在するする場合は上書きします。</li>
+						</ul>
+					</div>
+					<?php if (!empty($smartphoneExists)): ?>
+					<br />&nbsp;<?php $this->BcBaser->link('≫ スマートフォンページの編集画面に移動', array($smartphoneExists)) ?>
+					<?php endif; ?> 
 				</div>
 			</td>
 		</tr>
-<?php endif ?>
+		<?php endif; ?>
 	</table>
 </div>
 <div class="submit">
-<?php if($this->request->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
-<?php elseif ($this->request->action == 'admin_edit'): ?>
-	<?php if($editable): ?>
-	<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php endif ?>
-	<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
-	<?php if($editable): ?>
-	<?php $this->BcBaser->link('削除',
-			array('action'=>'delete', $this->BcForm->value('Page.id')),
-			array('class' => 'button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Page.name')),
-			false); ?>
-	<?php endif ?>
-<?php endif ?>
+	<?php if ($this->request->action == 'admin_add'): ?>
+		<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+		<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
+	<?php elseif ($this->request->action == 'admin_edit'): ?>
+		<?php if ($editable): ?>
+			<?php echo $this->BcForm->button('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+		<?php endif ?>
+		<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
+	<?php if ($editable): ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('Page.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Page.name')), false); ?>
+	<?php endif; ?>
+<?php endif; ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcForm->end(); ?>

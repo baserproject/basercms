@@ -28,7 +28,7 @@
 	<li>画面上部ユーティリティの「データメンテナンス」から、データベースに格納されたデータのバックアップを行う事ができます。</li>
 	<li>編集不可となっている項目が存在する場合、<?php echo $baseUrl ?>app/Config/install.php に書き込み権限がありません。書き込み権限を与えるか、該当ファイルを直接編集してください。</li>
 	<li>管理システムよりスマートURLの切り替えを行うには、上記 install.php の他、下記二つのファイルにも書き込み権限が必要です。変更後は、必ず権限を元に戻してください。<br />
-<pre><?php echo $baseUrl ?>.htaccess<?php if(!$writableHtaccess): ?>　<small>[現在書き込み権限がありません]</small><?php endif ?> 
-<?php echo $baseUrl ?>app/webroot/.htaccess<?php if(!$writableHtaccess2): ?>　<small>[現在書き込み権限がありません]</small><?php endif ?></pre>
+		<pre><?php echo $baseUrl ?>.htaccess<?php if (!$writableHtaccess): ?>　<small>[現在書き込み権限がありません]</small><?php endif ?> 
+			<?php echo $baseUrl ?>app/webroot/.htaccess<?php if (!$writableHtaccess2): ?>　<small>[現在書き込み権限がありません]</small><?php endif ?></pre>
 	</li>
 </ul>

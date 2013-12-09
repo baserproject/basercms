@@ -25,9 +25,9 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('ブログカテゴリ一覧', array('controller' => 'blog_categories', 'action' => 'index', $blogContent['BlogContent']['id'])) ?></li>
-<?php if(isset($newCatAddable) && $newCatAddable): ?>
-			<li><?php $this->BcBaser->link('新規ブログカテゴリを登録', array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id'])) ?></li>
-<?php endif ?>
+			<?php if (isset($newCatAddable) && $newCatAddable): ?>
+				<li><?php $this->BcBaser->link('新規ブログカテゴリを登録', array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id'])) ?></li>
+			<?php endif ?>
 		</ul>
 	</td>
 </tr>

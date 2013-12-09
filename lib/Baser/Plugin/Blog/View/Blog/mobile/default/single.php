@@ -17,8 +17,8 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
-$this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPostContent($post,false,false,50));
+$this->BcBaser->setTitle($this->pageTitle . '｜' . $this->Blog->getTitle());
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
 <!-- title -->
@@ -28,21 +28,21 @@ $this->BcBaser->setDescription($this->Blog->getTitle().'｜'.$this->Blog->getPos
 <br />
 
 <!-- detail -->
-<?php if(!empty($post)): ?>
-<?php $this->Blog->eyeCatch($post, array('mobile' => true)) ?>
-<?php $this->Blog->postContent($post) ?>
-<br />
-<p align="right">
-	<?php $this->Blog->category($post) ?>
+<?php if (!empty($post)): ?>
+	<?php $this->Blog->eyeCatch($post, array('mobile' => true)) ?>
+	<?php $this->Blog->postContent($post) ?>
 	<br />
-	<?php $this->Blog->postDate($post) ?>
+	<p align="right">
+		<?php $this->Blog->category($post) ?>
+		<br />
+		<?php $this->Blog->postDate($post) ?>
+		<br />
+		<?php $this->Blog->author($post) ?>
+	</p>
+	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 	<br />
-	<?php $this->Blog->author($post) ?>
-</p>
-<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-<br />
 <?php else: ?>
-<p class="no-data">記事がありません。</p>
+	<p class="no-data">記事がありません。</p>
 <?php endif; ?>
 
 <!-- comments -->

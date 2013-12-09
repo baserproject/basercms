@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * MySQL DBO拡張
@@ -18,7 +19,9 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Mysql', 'Model/Datasource/Database');
+
 class BcMysql extends Mysql {
+
 /**
  * テーブル名のリネームステートメントを生成
  *
@@ -28,10 +31,10 @@ class BcMysql extends Mysql {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-		
-		return "ALTER TABLE `".$sourceName."` RENAME `".$targetName."`";
-	
+
+		return "ALTER TABLE `" . $sourceName . "` RENAME `" . $targetName . "`";
 	}
+
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
  *
@@ -45,9 +48,9 @@ class BcMysql extends Mysql {
 
 		// CUSTOMIZE MODIFY 2012/09/03 ryuring
 		// >>>
-		/*if ($parent != null) {
-			return $parent;
-		}*/
+		/* if ($parent != null) {
+		  return $parent;
+		  } */
 		// ---
 		if ($column != 'datetime' && $parent != null) {
 			return $parent;
@@ -57,27 +60,27 @@ class BcMysql extends Mysql {
 		if ($data === null || (is_array($data) && empty($data))) {
 			return 'NULL';
 		}
-		
+
 		// CUSTOMIZE MODIFY 2012/08/31 ryuring
 		// datetimeを条件に追加
 		// >>>
-		/*if ($data === '' && $column !== 'integer' && $column !== 'float' && $column !== 'boolean') {
-			return  "''";
-		}*/
+		/* if ($data === '' && $column !== 'integer' && $column !== 'float' && $column !== 'boolean') {
+		  return  "''";
+		  } */
 		// ---
 		if ($data === '' && $column !== 'integer' && $column !== 'float' && $column !== 'boolean' && $column !== 'datetime') {
-			return  "''";
+			return "''";
 		}
 		// <<<
-		
+
 		if (empty($column)) {
 			$column = $this->introspectType($data);
 		}
 
 		switch ($column) {
 			case 'boolean':
-				return $this->boolean((bool)$data);
-			break;
+				return $this->boolean((bool) $data);
+				break;
 			case 'integer':
 			case 'float':
 				if ($data === '') {
@@ -86,21 +89,22 @@ class BcMysql extends Mysql {
 				if ((is_int($data) || is_float($data) || $data === '0') || (
 					is_numeric($data) && strpos($data, ',') === false &&
 					$data[0] != '0' && strpos($data, 'e') === false)) {
-						return $data;
-					}
-		// CUSTOMIZE ADD ryuring 2012/08/31
-		// datetime を追加
-		// >>>
+					return $data;
+				}
+			// CUSTOMIZE ADD ryuring 2012/08/31
+			// datetime を追加
+			// >>>
 			case 'datetime':
 				if ($data === '') {
 					return 'NULL';
 				}
-		// <<<
+			// <<<
 			default:
 				$con = $this->getConnection();
 				$data = $con->quote($data);
-			break;
+				break;
 		}
 		return $data;
 	}
+
 }

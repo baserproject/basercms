@@ -57,16 +57,16 @@ $(document).ready(function(){
 		最後に管理情報を登録します。<br />
 		ここで入力した管理者アカウント名やパスワードは忘れないようにしておいてください。
 	</div>
-	
+
 	<h2>管理情報登録</h2>
-	
+
 	<?php echo $this->BcForm->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
 
 	<div class="panel-box corner10">
 		<div class="section">
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
-				<li><?php echo $this->BcForm->input('Installation.admin_email', array('type' => 'text', 'size'=>44)); ?></li>
+				<li><?php echo $this->BcForm->input('Installation.admin_email', array('type' => 'text', 'size' => 44)); ?></li>
 			</ul>
 		</div>
 		<div class="section">
@@ -90,7 +90,7 @@ $(document).ready(function(){
 			</ul>
 		</div>
 		<?php echo $this->BcForm->input('clicked', array('type' => 'hidden')) ?>
-		
+
 
 	</div>
 

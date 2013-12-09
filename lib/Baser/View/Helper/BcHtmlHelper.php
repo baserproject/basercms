@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Htmlヘルパーの拡張クラス
@@ -21,6 +22,7 @@
  * Include files
  */
 App::uses('HtmlHelper', 'View/Helper');
+
 /**
  * Htmlヘルパーの拡張クラス
  *
@@ -35,6 +37,7 @@ class BcHtmlHelper extends HtmlHelper {
  * @access public
  */
 	public $helpers = array('Js');
+
 /**
  * タグにラッピングされていないパンくずデータを取得する
  * @return array
@@ -42,4 +45,5 @@ class BcHtmlHelper extends HtmlHelper {
 	public function getStripCrumbs() {
 		return $this->_crumbs;
 	}
+
 }

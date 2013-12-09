@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * View 拡張クラス
@@ -26,11 +27,12 @@
  * Include files
  */
 App::uses('BcAppView', 'View');
+
 /**
  * View 拡張クラス
  *
  * @package			Baser.View
  */
 class AppView extends BcAppView {
+	
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールプラグインモデル根底クラス
@@ -21,12 +22,14 @@
  * includes
  */
 App::uses('BcPluginAppModel', 'Model');
+
 /**
  * メールプラグインモデル根底クラス
  *
  * @package			baser.plugins.mail
  */
 class MailAppModel extends BcPluginAppModel {
+
 /**
  * データの消毒をおこなう
  * @return array
@@ -35,32 +38,31 @@ class MailAppModel extends BcPluginAppModel {
 
 		foreach ($datas as $key => $data) {
 
-			if(!is_array($data)) {
+			if (!is_array($data)) {
 
 				// エラー時用のサニタイズ処理を一旦元の形式に復元した上で再度サイニタイズ処理をかける。
-				$data = str_replace("&lt;!--","<!--",$data);
+				$data = str_replace("&lt;!--", "<!--", $data);
 
 				$data = htmlspecialchars($data);
 				//$data = str_replace("\n","<br />",$data);
 				$datas[$key] = $data;
-
 			}
-
 		}
 		return $datas;
 	}
+
 /**
  * サニタイズされたデータを復元する
  * @return array
  */
 	public function restoreData($datas) {
 		foreach ($datas as $key => $data) {
-			if(!is_array($data)) {
-				$data = str_replace("<br />","",$data);
-				$data = str_replace('&lt;','<',$data);
-				$data = str_replace('&gt;','>',$data);
-				$data = str_replace('&amp;','&',$data);
-				$data = str_replace('&quot;','"',$data);
+			if (!is_array($data)) {
+				$data = str_replace("<br />", "", $data);
+				$data = str_replace('&lt;', '<', $data);
+				$data = str_replace('&gt;', '>', $data);
+				$data = str_replace('&amp;', '&', $data);
+				$data = str_replace('&quot;', '"', $data);
 				$datas[$key] = $data;
 			}
 		}

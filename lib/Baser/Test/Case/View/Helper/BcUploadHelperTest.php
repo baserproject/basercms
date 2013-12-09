@@ -1,4 +1,5 @@
 <?php
+
 /**
  * test for BcUploadHelper
  *
@@ -12,11 +13,10 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
-
 App::uses('View', 'View');
 App::uses('Model', 'Model');
-App::uses('Controller','Controller');
-App::uses('BcAppController','Controller');
+App::uses('Controller', 'Controller');
+App::uses('BcAppController', 'Controller');
 App::uses('BcUploadHelper', 'View/Helper');
 App::uses('AppHelper', 'View/Helper');
 App::uses('EditorTemplate', 'Model');
@@ -26,9 +26,12 @@ App::uses('EditorTemplate', 'Model');
  *
  */
 class TestController extends BcAppController {
+
 	public $name = 'Test';
 	public $uses = null;
+
 }
+
 class BcUploadHelperTest extends CakeTestCase {
 
 	public $fixtures = array(
@@ -48,14 +51,14 @@ class BcUploadHelperTest extends CakeTestCase {
 		$this->BcUpload->request->webroot = '/';
 		$this->BcUpload->request->base = '/';
 
-		ClassRegistry::addObject('EditorTemplTate',new EditorTemplate());
-
+		ClassRegistry::addObject('EditorTemplTate', new EditorTemplate());
 	}
 
 	public function tearDown() {
 		unset($this->BcUpload);
 		parent::tearDown();
 	}
+
 /**
  * [test_file description]
  * @return [type] [description]
@@ -63,7 +66,7 @@ class BcUploadHelperTest extends CakeTestCase {
 	public function test_file() {
 		$result = $this->BcUpload->file('EditorTemplate.image');
 		$expects = '<div class="upload-file"><input type="file" name="data[EditorTemplate][image]"  id="EditorTemplateImage"/></div>';
-		$this->assertEqual($expects,$result);
+		$this->assertEqual($expects, $result);
 	}
 
 /**
@@ -81,45 +84,48 @@ class BcUploadHelperTest extends CakeTestCase {
 			)
 		);
 		$result = $this->BcUpload->fileLink('EditorTemplate.image');
-		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/',$result);
+		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
 	}
+
 /**
  * [test_uploadImage description]
  * @return [type] [description]
  */
 	public function test_uploadImage1() {
 		$options = array(
-			'imgsize'	=> 'midium',
-			'link'		=> false,
-			'escape'	=> false,
-			'mobile'	=> false,
-			'alt'		=> '',
-			'width'		=> '',
-			'height'	=> '',
-			'noimage'	=> '',
-			'tmp'		=> false
+			'imgsize' => 'midium',
+			'link' => false,
+			'escape' => false,
+			'mobile' => false,
+			'alt' => '',
+			'width' => '',
+			'height' => '',
+			'noimage' => '',
+			'tmp' => false
 		);
-		$result = $this->BcUpload->uploadImage('EditorTemplate.image','template1.jpg',$options);
-		$this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg/',$result);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+		$this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg/', $result);
 	}
+
 /**
  * [test_uploadImage description]
  * @return [type] [description]
  */
 	public function test_uploadImage2() {
 		$options = array(
-			'imgsize'	=> 'midium',
-			'link'		=> false,
-			'escape'	=> false,
-			'mobile'	=> true,
-			'alt'		=> '',
-			'width'		=> '100',
-			'height'	=> '80',
-			'noimage'	=> '',
-			'tmp'		=> true
+			'imgsize' => 'midium',
+			'link' => false,
+			'escape' => false,
+			'mobile' => true,
+			'alt' => '',
+			'width' => '100',
+			'height' => '80',
+			'noimage' => '',
+			'tmp' => true
 		);
-		$result = $this->BcUpload->uploadImage('EditorTemplate.image','template1.jpg',$options);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$expects = '<img src="/uploads/tmp/midium/template1.jpg" alt="" width="100" height="80" />';
-		$this->assertEqual($expects,$result);
+		$this->assertEqual($expects, $result);
 	}
+
 }

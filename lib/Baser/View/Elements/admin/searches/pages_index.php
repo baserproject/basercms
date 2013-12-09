@@ -78,9 +78,9 @@ function pageTypeChengeHandler() {
 	<span><?php echo $this->BcForm->label('Page.author_id', '作成者') ?> <?php echo $this->BcForm->input('Page.author_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
 
 	<span style="white-space: nowrap">
-<?php if($pageCategories): ?>
-	<span><?php echo $this->BcForm->label('Page.page_category_id', 'カテゴリー') ?> <?php echo $this->BcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
-<?php endif ?>
+		<?php if ($pageCategories): ?>
+			<span><?php echo $this->BcForm->label('Page.page_category_id', 'カテゴリー') ?> <?php echo $this->BcForm->input('Page.page_category_id', array('type' => 'select', 'options' => $pageCategories, 'escape' => false)) ?></span>
+		<?php endif ?>
 	</span>
 </p>
 
@@ -89,5 +89,5 @@ function pageTypeChengeHandler() {
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
 </div>
 
-<?php echo $this->BcForm->hidden('Page.open',array('value'=>true)) ?>
+<?php echo $this->BcForm->hidden('Page.open', array('value' => true)) ?>
 <?php echo $this->BcForm->end() ?>
