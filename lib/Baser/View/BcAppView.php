@@ -295,6 +295,16 @@ class BcAppView extends View {
 		$paths = $this->_paths($plugin);
 		$exts = $this->_getExtensions();
 		foreach ($exts as $ext) {
+			// Pagesを表示する際にElementsディレクトリがなくても動作するよう対応
+			// ./Elements/../Pages/index.php ようようなpathの場合Elementsディレクトリが無いと動作しない
+			if (strpos($name, '..'.DS.'Pages') === 0) {
+				$pagesName = preg_replace('/^\.\.\//', '', $name);
+				foreach ($paths as $path) {
+					if (file_exists($path . $pagesName . $ext)) {
+						return $path . $pagesName . $ext;
+					}
+				}
+			}
 			foreach ($paths as $path) {
 				if (file_exists($path . 'Elements' . DS . $name . $ext)) {
 					return $path . 'Elements' . DS . $name . $ext;
