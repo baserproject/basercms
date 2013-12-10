@@ -416,7 +416,7 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_host', 'SMTPホスト') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 <?php echo $this->BcForm->error('SiteConfig.smtp_host') ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpHost', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
@@ -425,7 +425,7 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_port', 'SMTPポート') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_port', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('SiteConfig.smtp_port', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 <?php echo $this->BcForm->error('SiteConfig.smtp_port') ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。入力を省略した場合、25番ポートを利用します。</div>
@@ -434,7 +434,7 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 <?php echo $this->BcForm->error('SiteConfig.smtp_user') ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpUsername', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
@@ -443,7 +443,7 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 <?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
