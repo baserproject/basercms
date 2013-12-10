@@ -312,19 +312,15 @@ class BcPageHelper extends Helper {
 		}
 		$path = $this->_View->getVar('pagePath');
 
-		if (!$agent) {
-			$path = '..' . DS . 'Pages' . DS . $path;
-		} else {
+		if ($agent) {
 			$url = '/' . implode('/', $this->request->params['pass']);
 			$linked = $this->Page->isLinked($agent, $url);
 			if (!$linked) {
-				$path = '..' . DS . 'Pages' . DS . $agent . DS . $path;
-			} else {
-				$path = '..' . DS . 'Pages' . DS . $path;
+				$path = $agent . DS . $path;
 			}
 		}
+		echo $this->_View->evaluate(getViewPath() . 'Pages' . DS . $path . '.php', $this->_View->viewVars);
 
-		$this->BcBaser->element($path, array(), array('subDir' => false));
 	}
 
 /**

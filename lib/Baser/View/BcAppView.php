@@ -404,5 +404,17 @@ class BcAppView extends View {
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}
-
+	
+/**
+ * Sandbox method to evaluate a template / view script in.
+ *
+ * @param string $viewFn Filename of the view
+ * @param array $dataForView Data to include in rendered view.
+ *    If empty the current View::$viewVars will be used.
+ * @return string Rendered output
+ */
+	public function evaluate($viewFile, $dataForView) {
+		return $this->_evaluate($viewFile, $dataForView);
+	}
+	
 }
