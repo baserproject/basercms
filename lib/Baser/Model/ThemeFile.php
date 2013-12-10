@@ -62,7 +62,6 @@ class ThemeFile extends AppModel {
  * @access public
  */
 	public function duplicateThemeFile($check) {
-
 		if (!$check[key($check)]) {
 			return true;
 		}

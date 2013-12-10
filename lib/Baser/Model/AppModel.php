@@ -32,5 +32,4 @@
  * @package Baser.Model
  */
 class AppModel extends BcAppModel {
-	
 }

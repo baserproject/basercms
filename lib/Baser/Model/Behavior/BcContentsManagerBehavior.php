@@ -52,7 +52,6 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @access public
  */
 	public function saveContent(Model $model, $data) {
-
 		if (!$data) {
 			return;
 		}
@@ -98,7 +97,6 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @param string $url 
  */
 	public function deleteContent(Model $model, $id) {
-
 		$this->Content = ClassRegistry::init('Content');
 		if ($this->Content->deleteAll(array('Content.model' => $model->alias, 'Content.model_id' => $id))) {
 			return $this->updateContentMeta($model);
@@ -113,7 +111,6 @@ class BcContentsManagerBehavior extends ModelBehavior {
  * @access public
  */
 	public function updateContentMeta(Model $model) {
-
 		$db = ConnectionManager::getDataSource('baser');
 		$contentCategories = array();
 		$contentTypes = array();

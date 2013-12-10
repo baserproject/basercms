@@ -34,7 +34,7 @@ $(function(){
 </script>
 <?php if (!empty($this->params['pass'][1])): ?>
 	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_comments', 'action' => 'ajax_batch', $blogContent['BlogContent']['id'], $this->params['pass'][1])) ?></div>
-<?php else: ?>
+	<?php else: ?>
 	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_comments', 'action' => 'ajax_batch', $blogContent['BlogContent']['id'], 0)) ?></div>
 <?php endif ?>
 <div id="AlertMessage" class="message" style="display:none"></div>

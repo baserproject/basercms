@@ -69,7 +69,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';
 					))
 					?>
 				</li>
-		<?php endforeach; ?>
+			<?php endforeach; ?>
 		</ul>
-<?php endif; ?>
+	<?php endif; ?>
 </div>

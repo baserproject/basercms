@@ -19,8 +19,8 @@
  */
 $this->BcBaser->css('Blog.admin/style', array('inline' => true));
 $this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list', 
-	'admin/jquery.baser_ajax_batch', 
+	'admin/jquery.baser_ajax_data_list',
+	'admin/jquery.baser_ajax_batch',
 	'admin/baser_ajax_data_list_config',
 	'admin/baser_ajax_batch_config'
 ));

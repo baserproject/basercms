@@ -5,23 +5,24 @@
 
 class BlogTagsSchema extends CakeSchema {
 
-	var $name = 'BlogTags';
-	var $file = 'blog_tags.php';
-	var $connection = 'plugin';
+	public $name = 'BlogTags';
 
-	function before($event = array()) {
+	public $file = 'blog_tags.php';
+
+	public $connection = 'plugin';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
-		
+	public function after($event = array()) {
 	}
 
-	var $blog_tags = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $blog_tags = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 

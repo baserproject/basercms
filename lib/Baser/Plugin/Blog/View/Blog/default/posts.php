@@ -34,8 +34,8 @@
 				<span class="date"><?php $this->Blog->postDate($post, 'Y.m.d') ?></span><br />
 				<span class="title"><?php $this->Blog->postTitle($post) ?></span>
 			</li>
-		<?php endforeach ?>
+		<?php endforeach; ?>
 	</ul>
-<?php else: ?>
+	<?php else: ?>
 	<p class="no-data">記事がありません</p>
 <?php endif ?>

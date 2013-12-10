@@ -87,7 +87,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
 			$this->subMenuElements = array('blog_common');
@@ -101,7 +100,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function admin_index() {
-
 		$datas = $this->BlogContent->find('all', array('order' => array('BlogContent.id')));
 		$this->set('datas', $datas);
 
@@ -121,7 +119,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function admin_add() {
-
 		$this->pageTitle = '新規ブログ登録';
 
 		if (!$this->request->data) {
@@ -157,7 +154,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -210,7 +206,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function redirectEditLayout($template) {
-
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
 		$sorces = array(BASER_PLUGINS . 'blog' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
 			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext);
@@ -270,7 +265,6 @@ class BlogContentsController extends BlogAppController {
  * @deprecated
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -298,7 +292,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -324,7 +317,6 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_copy($id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

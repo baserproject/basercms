@@ -63,7 +63,6 @@ class ThemeFolder extends AppModel {
  * @return boolean
  */
 	public function duplicateThemeFolder($check) {
-
 		if (!$check[key($check)]) {
 			return true;
 		}

@@ -103,7 +103,6 @@ class BlogCategory extends BlogAppModel {
  * @access public
  */
 	public function getControlSource($field, $options = array()) {
-
 		switch ($field) {
 			case 'parent_id':
 				if (!isset($options['blogContentId'])) {
@@ -152,7 +151,6 @@ class BlogCategory extends BlogAppModel {
 				break;
 		}
 
-
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {
@@ -169,7 +167,6 @@ class BlogCategory extends BlogAppModel {
  * @access public
  */
 	public function duplicateBlogCategory($check) {
-
 		$conditions = array('BlogCategory.' . key($check) => $check[key($check)],
 			'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
 		if ($this->exists()) {
@@ -219,7 +216,6 @@ class BlogCategory extends BlogAppModel {
  * @access public
  */
 	public function getCategoryList($blogContentId, $options) {
-
 		$options = array_merge(array(
 			'depth' => 1,
 			'type' => null,
@@ -265,7 +261,6 @@ class BlogCategory extends BlogAppModel {
  * @return array
  */
 	protected function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = array()) {
-
 		$datas = $this->find('all', array(
 			'conditions' => array('BlogCategory.blog_content_id' => $blogContentId, 'BlogCategory.parent_id' => $id),
 			'fields' => $fields,
@@ -301,7 +296,6 @@ class BlogCategory extends BlogAppModel {
  * @access public
  */
 	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
-
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
 			'conditions' => array(

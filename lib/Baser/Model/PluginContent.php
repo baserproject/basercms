@@ -93,7 +93,6 @@ class PluginContent extends AppModel {
  * @access public
  */
 	public function currentPluginContent($url) {
-
 		if (!$url) {
 			return false;
 		}

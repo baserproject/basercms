@@ -254,7 +254,7 @@ class CakeRequest implements ArrayAccess {
 		if (Configure::read('App.baseUrl')) {
 			$dir = dirname($this->base);
 			if (strpos($uri, $dir) === 0) {
-				//$uri = substr($uri, strlen($dir));	
+				//$uri = substr($uri, strlen($dir));
 			}
 		}
 		// <<<
@@ -533,11 +533,11 @@ class CakeRequest implements ArrayAccess {
 				return env($detect['env']) == $detect['value'];
 			}
 			if (isset($detect['pattern'])) {
-				return (bool) preg_match($detect['pattern'], env($detect['env']));
+				return (bool)preg_match($detect['pattern'], env($detect['env']));
 			}
 			if (isset($detect['options'])) {
 				$pattern = '/' . implode('|', $detect['options']) . '/i';
-				return (bool) preg_match($pattern, env($detect['env']));
+				return (bool)preg_match($pattern, env($detect['env']));
 			}
 		}
 		if (isset($detect['param'])) {
@@ -624,7 +624,7 @@ class CakeRequest implements ArrayAccess {
  * @return The current object, you can chain this method.
  */
 	public function addParams($params) {
-		$this->params = array_merge($this->params, (array) $params);
+		$this->params = array_merge($this->params, (array)$params);
 		return $this;
 	}
 

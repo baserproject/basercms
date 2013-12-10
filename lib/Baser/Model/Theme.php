@@ -76,7 +76,6 @@ class Theme extends AppModel {
  * @access public
  */
 	public function themeDuplicate($check) {
-
 		$value = $check[key($check)];
 		if (!$value) {
 			return true;
@@ -99,7 +98,6 @@ class Theme extends AppModel {
  * @access public
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
-
 		if (!$data) {
 			$data = $this->data;
 		} else {
@@ -143,7 +141,6 @@ class Theme extends AppModel {
  * @access public
  */
 	public function setConfig($theme, $key, $value) {
-
 		$path = WWW_ROOT . 'theme' . DS;
 		$contents = file_get_contents($path . $theme . DS . 'config.php');
 		$reg = '/\$' . $key . '[\s]*?=[\s]*?\'.*?\';/is';

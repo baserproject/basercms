@@ -39,7 +39,6 @@ class BlogAppController extends BcPluginAppController {
  * @access protected
  */
 	protected function _sendCommentAdmin($postId, $data) {
-
 		if (!$postId || !$data || empty($this->siteConfigs['email'])) {
 			return false;
 		}
@@ -66,7 +65,6 @@ class BlogAppController extends BcPluginAppController {
  * @access protected
  */
 	protected function _sendCommentContributor($postId, $data) {
-
 		if (!$postId || !$data || empty($this->siteConfigs['email'])) {
 			return false;
 		}
@@ -112,7 +110,6 @@ class BlogAppController extends BcPluginAppController {
  * @access 	public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		$user = $this->BcAuth->user();
 		if (!$user) {

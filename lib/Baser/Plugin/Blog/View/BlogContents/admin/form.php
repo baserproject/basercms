@@ -160,7 +160,7 @@ $(function(){
 							<li>RSSフィードのURLは
 							<?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('BlogContent.name') . '/index.rss', true), '/' . $this->BcForm->value('BlogContent.name') . '/index.rss', array('target' => '_blank')) ?>
 								となります。</li>
-<?php endif ?>
+							<?php endif ?>
 					</ul>
 				</div>
 			</td>

@@ -22,7 +22,7 @@
 
 <?php if (!$data['BlogContent']['status']): ?>
 	<?php $class = ' class="unpublish disablerow"'; ?>
-<?php else: ?>
+	<?php else: ?>
 	<?php $class = ' class="publish"'; ?>
 <?php endif; ?>
 <tr <?php echo $class; ?>>

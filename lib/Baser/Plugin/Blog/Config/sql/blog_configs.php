@@ -5,20 +5,21 @@
 
 class BlogConfigsSchema extends CakeSchema {
 
-	var $name = 'BlogConfigs';
-	var $file = 'blog_configs.php';
-	var $connection = 'plugin';
+	public $name = 'BlogConfigs';
 
-	function before($event = array()) {
+	public $file = 'blog_configs.php';
+
+	public $connection = 'plugin';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
-		
+	public function after($event = array()) {
 	}
 
-	var $blog_configs = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2, 'key' => 'primary'),
+	public $blog_configs = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 2, 'key' => 'primary'),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 

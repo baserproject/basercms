@@ -124,8 +124,7 @@ class BlogContent extends BlogAppModel {
  * 
  * @return boolean 
  */
-	function checkEyeCatchSize() {
-
+	public function checkEyeCatchSize() {
 		$data = $this->constructEyeCatchSize($this->data);
 		if (empty($data['BlogContent']['eye_catch_size_thumb_width']) ||
 			empty($data['BlogContent']['eye_catch_size_thumb_height']) ||
@@ -145,7 +144,6 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public function alphaNumeric($check) {
-
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return true;
 		} else {
@@ -161,7 +159,6 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public function getControlSource($field = null, $options = array()) {
-
 		$controlSources['id'] = $this->find('list');
 
 		if (isset($controlSources[$field])) {
@@ -178,7 +175,6 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-
 		if (empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();
 		}
@@ -199,7 +195,6 @@ class BlogContent extends BlogAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-
 		return $this->deleteContent($this->id);
 	}
 
@@ -211,7 +206,6 @@ class BlogContent extends BlogAppModel {
  * @access public
  */
 	public function createContent($data) {
-
 		if (isset($data['BlogContent'])) {
 			$data = $data['BlogContent'];
 		}
@@ -236,7 +230,6 @@ class BlogContent extends BlogAppModel {
  * @return mixed BlogContent Or false
  */
 	public function copy($id, $data = null) {
-
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
 		}
@@ -265,7 +258,6 @@ class BlogContent extends BlogAppModel {
  * @access protected
  */
 	public function getDefaultValue() {
-
 		$data['BlogContent']['comment_use'] = true;
 		$data['BlogContent']['comment_approve'] = false;
 		$data['BlogContent']['layout'] = 'default';
@@ -290,8 +282,7 @@ class BlogContent extends BlogAppModel {
  * @param array $data
  * @return array 
  */
-	function deconstructEyeCatchSize($data) {
-
+	public function deconstructEyeCatchSize($data) {
 		$data['BlogContent']['eye_catch_size'] = serialize(array(
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
@@ -312,8 +303,7 @@ class BlogContent extends BlogAppModel {
  * @param array $data
  * @return array 
  */
-	function constructEyeCatchSize($data) {
-
+	public function constructEyeCatchSize($data) {
 		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
