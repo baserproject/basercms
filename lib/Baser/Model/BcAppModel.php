@@ -49,7 +49,6 @@ class BcAppModel extends Model {
  * @return	void
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-
 		$db = ConnectionManager::getDataSource('baser');
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
@@ -99,8 +98,9 @@ class BcAppModel extends Model {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
-		if (!$data)
+		if (!$data) {
 			$data = $this->data;
+		}
 
 		// created,modifiedが更新されないバグ？対応
 		if (!$this->exists()) {
@@ -180,7 +180,7 @@ class BcAppModel extends Model {
 		if ($this->childcount($id)) {
 			$children = $this->children($id);
 			foreach ($children as $child) {
-				$ids[] = (int) $child[$this->name]['id'];
+				$ids[] = (int)$child[$this->name]['id'];
 			}
 		}
 		return $ids;
@@ -692,10 +692,12 @@ class BcAppModel extends Model {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
-			if (!$file['size'])
+			if (!$file['size']) {
 				return false;
-			if ($file['size'] > $size)
+			}
+			if ($file['size'] > $size) {
 				return;
+			}
 		}
 		return true;
 	}
@@ -743,7 +745,6 @@ class BcAppModel extends Model {
  * @return boolean
  */
 	public function changeSort($id, $offset, $conditions = array()) {
-
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -830,7 +831,6 @@ class BcAppModel extends Model {
  * @access public
  */
 	public function deleteModelCache() {
-
 		$this->_schema = null;
 		$folder = new Folder(CACHE . 'models' . DS);
 		$caches = $folder->read(true, true);
@@ -863,7 +863,6 @@ class BcAppModel extends Model {
  * @return	boolean
  */
 	public function saveKeyValue($data) {
-
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
@@ -1317,7 +1316,7 @@ class BcAppModel extends Model {
 
 		// CUSTOMIZE MODIFY 2012/04/23 ryuring
 		// キャッシュビヘイビアが利用状態の場合、モデルデータキャッシュを読み込む
-		// 
+		//
 		// 【AppModelではキャッシュを定義しない事】
 		// 自動的に生成されるクラス定義のない関連モデルの処理で勝手にキャッシュを利用されないようにする為
 		// （HABTMの更新がうまくいかなかったので）
@@ -1362,7 +1361,6 @@ class BcAppModel extends Model {
  * @return mixed
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
-
 		$options = array_merge(array(
 			'modParams' => 0,
 			'plugin' => $this->plugin,
@@ -1384,7 +1382,6 @@ class BcAppModel extends Model {
  * @access public
  */
 	public function isPublish($status, $publishBegin, $publishEnd) {
-
 		if (!$status) {
 			return false;
 		}
@@ -1411,7 +1408,6 @@ class BcAppModel extends Model {
  * @return boolean
  */
 	public function checkDate($check) {
-
 		$value = $check[key($check)];
 		if (DS != '\\') {
 			if (!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d')) {

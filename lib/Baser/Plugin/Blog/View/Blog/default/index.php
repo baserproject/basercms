@@ -38,7 +38,7 @@ $(function(){
 	<div class="blog-description">
 	<?php $this->Blog->description() ?>
 	</div>
-<?php endif ?>
+	<?php endif ?>
 
 <!-- list -->
 <?php if (!empty($posts)): ?>

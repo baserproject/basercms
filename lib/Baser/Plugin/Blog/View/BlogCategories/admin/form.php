@@ -38,7 +38,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']))) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false))) ?>
 <?php endif; ?>
 
@@ -92,8 +92,8 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 			</tr>
 		<?php else: ?>
 			<?php echo $this->BcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
-<?php endif ?>
-<?php if ($this->BcBaser->siteConfig['category_permission']): ?>	
+		<?php endif ?>
+		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
 				<td class="col-input">
@@ -106,10 +106,10 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 						?>
 						<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 						<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
-	<?php else: ?>
-		<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
-		<?php echo $this->BcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
-	<?php endif ?>
+					<?php else: ?>
+						<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
+						<?php echo $this->BcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
+					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>
 							<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
@@ -117,7 +117,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 					</div>
 				</td>
 			</tr>
-<?php endif ?>
+		<?php endif ?>
 	</table>
 </div>
 
@@ -129,7 +129,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 		<?php
 		$this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
 		?>
-<?php endif ?>
+	<?php endif ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

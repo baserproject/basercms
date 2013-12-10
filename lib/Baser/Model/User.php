@@ -286,7 +286,6 @@ class User extends AppModel {
  * @return boolean
  */
 	public function beforeSave($options = array()) {
-
 		if (isset($this->data[$this->alias]['password'])) {
 			App::uses('AuthComponent', 'Controller/Component');
 			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
@@ -300,7 +299,6 @@ class User extends AppModel {
  * @param boolean $created 
  */
 	public function afterSave($created, $options = array()) {
-
 		parent::afterSave($created);
 
 		if ($created && !empty($this->UserGroup)) {

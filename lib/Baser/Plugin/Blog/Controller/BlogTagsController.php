@@ -79,7 +79,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_index() {
-
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc'));
 		$this->setViewConditions('BlogTag', array('default' => $default));
 
@@ -100,7 +99,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_add() {
-
 		if (!empty($this->request->data)) {
 
 			$this->BlogTag->create($this->request->data);
@@ -124,7 +122,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
@@ -155,7 +152,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
@@ -180,7 +176,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -221,7 +216,6 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_add() {
-
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($data = $this->BlogTag->save()) {

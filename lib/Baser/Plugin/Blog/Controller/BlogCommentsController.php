@@ -87,7 +87,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
@@ -131,7 +130,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 		if (!empty($this->blogContent)) {
 			$this->set('blogContent', $this->blogContent);
@@ -145,7 +143,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function admin_index($blogContentId, $blogPostId = null) {
-
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -186,7 +183,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_del($id);
@@ -205,7 +201,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -228,7 +223,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	protected function _del($id = null) {
-
 		/* 削除処理 */
 		if ($this->BlogComment->delete($id)) {
 			if (isset($this->blogPost['BlogPost']['name'])) {
@@ -253,7 +247,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function admin_delete($blogContentId, $blogPostId, $id = null) {
-
 		/* 除外処理 */
 		if (!$blogContentId || !$id) {
 			$this->notFound();
@@ -288,7 +281,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -311,7 +303,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -332,7 +323,6 @@ class BlogCommentsController extends BlogAppController {
  * @access protected 
  */
 	protected function _batch_publish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, true);
@@ -350,7 +340,6 @@ class BlogCommentsController extends BlogAppController {
  * @access protected 
  */
 	protected function _batch_unpublish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, false);
@@ -368,7 +357,6 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-
 		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
 		$data = $this->BlogComment->find('first', array('conditions' => array('BlogComment.id' => $id), 'recursive' => -1));
 		$data['BlogComment']['status'] = $status;
@@ -397,7 +385,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function add($blogContentId, $blogPostId) {
-
 		Configure::write('debug', 0);
 
 		if (!$this->request->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
@@ -439,7 +426,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public function smartphone_add($blogContentId, $blogPostId) {
-
 		$this->setAction('add', $blogContentId, $blogPostId);
 	}
 
@@ -449,8 +435,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function captcha() {
-
+	public function captcha() {
 		$this->BcCaptcha->render();
 		exit();
 	}
@@ -461,8 +446,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  * @access public
  */
-	function smartphone_captcha() {
-
+	public function smartphone_captcha() {
 		$this->BcCaptcha->render();
 		exit();
 	}

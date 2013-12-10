@@ -145,7 +145,7 @@ class Page extends AppModel {
 		)
 	);
 
-	function __construct($id = false, $table = null, $ds = null) {
+	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		if (isConsole()) {
 			App::uses('PageCategory', 'Model');
@@ -160,7 +160,6 @@ class Page extends AppModel {
  * @access	public
  */
 	public function getDefaultValue() {
-
 		if (!empty($_SESSION['Auth']['User'])) {
 			$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
 		}
@@ -176,7 +175,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function beforeSave($options = array()) {
-
 		if (!$this->fileSave) {
 			return true;
 		}
@@ -242,7 +240,6 @@ class Page extends AppModel {
  * @access	public
  */
 	public function getInsertID() {
-
 		if (!$this->__pageInsertID) {
 			$this->__pageInsertID = parent::getInsertID();
 		}
@@ -257,7 +254,6 @@ class Page extends AppModel {
  * @access	public
  */
 	public function checkOpenPageFile($data) {
-
 		$path = $this->_getPageFilePath($data);
 		$File = new File($path);
 		if ($File->open('w')) {
@@ -277,7 +273,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-
 		if (isset($this->data['Page'])) {
 			$data = $this->data['Page'];
 		} else {
@@ -318,7 +313,6 @@ class Page extends AppModel {
  * @return boolean
  */
 	public function refrect($type, $data) {
-
 		if (isset($this->data['Page'])) {
 			$data = $this->data['Page'];
 		}
@@ -394,7 +388,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function createContent($data) {
-
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -457,7 +450,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function beforeDelete($cascade = true) {
-
 		return $this->deleteContent($this->id);
 	}
 
@@ -468,7 +460,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function createAllPageTemplate() {
-
 		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
 		foreach ($pages as $page) {
@@ -487,7 +478,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function createPageTemplate($data) {
-
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -526,7 +516,6 @@ class Page extends AppModel {
  * @access protected
  */
 	protected function _getPageFilePath($data) {
-
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -584,7 +573,6 @@ class Page extends AppModel {
  * @param array $data
  */
 	public function delFile($data) {
-
 		$path = $this->_getPageFilePath($data);
 		if ($path) {
 			return unlink($path);
@@ -600,7 +588,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function getPageUrl($data) {
-
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -633,7 +620,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
-
 		$tag = array();
 		$tag[] = '<!-- BaserPageTagBegin -->';
 		$tag[] = '<?php $this->BcBaser->setTitle(\'' . $title . '\') ?>';
@@ -645,7 +631,7 @@ class Page extends AppModel {
 		if ($code) {
 			$tag[] = trim($code);
 		}
-		$tag [] = '<!-- BaserPageTagEnd -->';
+		$tag[] = '<!-- BaserPageTagEnd -->';
 		return implode("\n", $tag) . "\n\n" . $contents;
 	}
 
@@ -657,7 +643,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function pageExists($check) {
-
 		$conditions['Page.name'] = $this->data['Page']['name'];
 		if ($this->exists()) {
 			$conditions['Page.id <>'] = $this->data['Page']['id'];
@@ -669,7 +654,7 @@ class Page extends AppModel {
 			} elseif (isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
 				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			} else {
-				$conditions['Page.page_category_id'] = NULL;
+				$conditions['Page.page_category_id'] = null;
 			}
 		} else {
 			$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
@@ -690,7 +675,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function getControlSource($field, $options = array()) {
-
 		switch ($field) {
 
 			case 'page_category_id':
@@ -774,7 +758,6 @@ class Page extends AppModel {
  * @return mixed int or false
  */
 	public function getCacheTime($url) {
-
 		if (preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
@@ -799,7 +782,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function checkPublish($url) {
-
 		if (preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
@@ -830,13 +812,12 @@ class Page extends AppModel {
  * @access public
  */
 	public function getConditionAllowPublish() {
-
 		$conditions[$this->alias . '.status'] = true;
 		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => NULL),
+				array($this->alias . '.publish_begin' => null),
 				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
 		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => NULL),
+				array($this->alias . '.publish_end' => null),
 				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
 		return $conditions;
 	}
@@ -851,7 +832,6 @@ class Page extends AppModel {
  * @access protected
  */
 	public function entryPageFiles($targetPath, $parentCategoryId = '') {
-
 		if ($this->Behaviors->attached('BcCache')) {
 			$this->Behaviors->detach('BcCache');
 		}
@@ -930,8 +910,9 @@ class Page extends AppModel {
 		}
 
 		// ファイル読み込み・ページ登録
-		if (!$files[1])
+		if (!$files[1]) {
 			$files[1] = array();
+		}
 		foreach ($files[1] as $path) {
 
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
@@ -1011,8 +992,9 @@ class Page extends AppModel {
 		}
 
 		// フォルダー内の登録
-		if (!$files[0])
+		if (!$files[0]) {
 			$files[0] = array();
+		}
 		foreach ($files[0] as $file) {
 			$folderName = basename($file);
 			if ($folderName != '_notes' && $folderName != 'admin') {
@@ -1035,7 +1017,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function agentExists($type, $data) {
-
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -1055,7 +1036,6 @@ class Page extends AppModel {
  * @access public
  */
 	public function isPageUrl($url) {
-
 		if (preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
@@ -1085,7 +1065,6 @@ class Page extends AppModel {
  * @link http://book.cakephp.org/view/690/del
  */
 	public function del($id = null, $cascade = true) {
-
 		// メッセージ用にデータを取得
 		$page = $this->read(null, $id);
 
@@ -1115,7 +1094,6 @@ class Page extends AppModel {
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
-
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
 		}
@@ -1152,7 +1130,6 @@ class Page extends AppModel {
  * @return boolean 
  */
 	public function isLinked($agentPrefix, $url) {
-
 		if (!$agentPrefix) {
 			return false;
 		}
@@ -1184,7 +1161,6 @@ class Page extends AppModel {
 	}
 
 	protected function _treeList($categoryId) {
-
 		$datas = array();
 		$pages = $this->find('all', array(
 			'conditions' => array('Page.page_category_id' => $categoryId),

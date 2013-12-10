@@ -54,7 +54,7 @@
 		<?php foreach ($dbDatas as $data): ?>
 			<?php
 			$rowIdTmps[$data['BlogCategory']['depth']] = $data['BlogCategory']['id'];
-// 階層が上がったタイミングで同階層よりしたのIDを削除
+			// 階層が上がったタイミングで同階層よりしたのIDを削除
 			if ($currentDepth > $data['BlogCategory']['depth']) {
 				$i = $data['BlogCategory']['depth'] + 1;
 				while (isset($rowIdTmps[$i])) {

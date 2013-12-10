@@ -240,7 +240,8 @@ class DboSource extends DataSource {
  * @var boolean
  */
 	protected $_methodCacheChange = false;
-// >>> CUSTOMIZE ADD 2010/12/17 ryuring
+
+	// >>> CUSTOMIZE ADD 2010/12/17 ryuring
 /**
  * PHP←→DBエンコーディングマップ
  *
@@ -249,7 +250,7 @@ class DboSource extends DataSource {
  */
 	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
 
-// <<<
+	// <<<
 
 /**
  * Constructor
@@ -1098,7 +1099,7 @@ class DboSource extends DataSource {
 		if ($model->recursive > -1) {
 			$joined = array();
 			if (isset($queryData['joins'][0]['alias'])) {
-				$joined[$model->alias] = (array) Hash::extract($queryData['joins'], '{n}.alias');
+				$joined[$model->alias] = (array)Hash::extract($queryData['joins'], '{n}.alias');
 			}
 			foreach ($_associations as $type) {
 				foreach ($model->{$type} as $assoc => $assocData) {
@@ -1798,7 +1799,7 @@ class DboSource extends DataSource {
 		}
 
 		if (is_array($query)) {
-			return array_merge((array) $assoc, $query);
+			return array_merge((array)$assoc, $query);
 		}
 
 		if (!empty($query)) {
@@ -2003,7 +2004,7 @@ class DboSource extends DataSource {
  * @return string An SQL calculation function
  */
 	public function calculate(Model $model, $func, $params = array()) {
-		$params = (array) $params;
+		$params = (array)$params;
 
 		switch (strtolower($func)) {
 			case 'count':
@@ -2243,7 +2244,7 @@ class DboSource extends DataSource {
 			$base = array_fill_keys(array('conditions', 'fields', 'joins', 'order', 'limit', 'offset', 'group'), array());
 			$base['callbacks'] = null;
 		}
-		return (array) $data + $base;
+		return (array)$data + $base;
 	}
 
 /**
@@ -2411,7 +2412,7 @@ class DboSource extends DataSource {
 			return $clause . implode(' AND ', $out);
 		}
 		if (is_bool($conditions)) {
-			return $clause . (int) $conditions . ' = 1';
+			return $clause . (int)$conditions . ' = 1';
 		}
 
 		if (empty($conditions) || trim($conditions) === '') {
@@ -2944,7 +2945,6 @@ class DboSource extends DataSource {
  * @return boolean|void success.
  */
 	public function resetSequence($table, $column) {
-		
 	}
 
 /**
@@ -3317,8 +3317,9 @@ class DboSource extends DataSource {
 		}
 	}
 
-// CUSTOM ADD 2010/10/04 ryuring
-// >>>
+	// CUSTOM ADD 2010/10/04 ryuring
+	// >>>
+
 /**
  * スキーマファイルを利用してテーブルを生成する
  *
@@ -3328,7 +3329,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function loadSchema($options) {
-
 		App::uses('CakeSchema', 'Model');
 		$options = array_merge(array(
 			'dropField' => true,
@@ -3402,7 +3402,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function writeCurrentSchema($filename) {
-
 		$this->cacheSources = false;
 		$file = basename($filename);
 		$path = dirname($filename);
@@ -3434,7 +3433,6 @@ class DboSource extends DataSource {
  * @access	public
  */
 	public function writeSchema($options) {
-
 		//App::uses('CakeSchema', 'Model');
 		extract($options);
 
@@ -3487,7 +3485,6 @@ class DboSource extends DataSource {
 			$Object->hasAndBelongsToMany = array();
 		}
 
-
 		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => false));
 
@@ -3519,7 +3516,6 @@ class DboSource extends DataSource {
  * @access	public
  */
 	public function createTableBySchema($options) {
-
 		extract($options);
 
 		if (!isset($path)) {
@@ -3550,7 +3546,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function alterTableBySchema($options) {
-
 		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
@@ -3589,7 +3584,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropTableBySchema($options) {
-
 		extract($options);
 
 		if (!isset($path)) {
@@ -3619,7 +3613,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function createTable($options) {
-
 		extract($options);
 
 		if (!isset($schema)) {
@@ -3653,7 +3646,6 @@ class DboSource extends DataSource {
  * @access	public
  */
 	public function alterTable($options) {
-
 		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
@@ -3696,7 +3688,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropTable($options) {
-
 		extract($options);
 
 		if (!isset($schema) && !isset($table)) {
@@ -3736,7 +3727,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function renameTable($options) {
-
 		extract($options);
 
 		if (!isset($new) || !isset($old)) {
@@ -3757,7 +3747,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function addColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($column)) {
@@ -3810,7 +3799,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function changeColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($column)) {
@@ -3847,7 +3835,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($field)) {
@@ -3876,7 +3863,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function renameColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($new) || !isset($old)) {
@@ -3897,7 +3883,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-
 		return "ALTER TABLE " . $sourceName . " RENAME " . $targetName;
 	}
 
@@ -3909,7 +3894,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function readSchema($table, $options = array()) {
-
 		if (is_array($options)) {
 			$options = array_merge(array(
 				'cache' => true,
@@ -3951,7 +3935,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function loadCsv($options) {
-
 		extract($options);
 		if (!isset($path)) {
 			return false;
@@ -4023,7 +4006,6 @@ class DboSource extends DataSource {
  * @return string
  */
 	protected function _convertFieldToCsv($value, $dc = true) {
-
 		if ($dc) {
 			$value = str_replace('"', '""', $value);
 		}
@@ -4042,7 +4024,6 @@ class DboSource extends DataSource {
  * @access protected
  */
 	protected function _convertRecordToCsv($record) {
-
 		foreach ($record as $field => $value) {
 			$record[$field] = $this->_convertFieldToCsv($value);
 		}
@@ -4057,7 +4038,6 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function writeCsv($options) {
-
 		$options = array_merge(array(
 			'path' => '',
 			'encoding' => '',
@@ -4164,7 +4144,6 @@ class DboSource extends DataSource {
  * @access protected
  */
 	protected function _dbEncToPhp($enc) {
-
 		if (!empty($this->_encodingMaps[$enc])) {
 			return $this->_encodingMaps[$enc];
 		} else {
@@ -4179,7 +4158,6 @@ class DboSource extends DataSource {
  * @return string
  */
 	protected function _phpEncToDb($enc) {
-
 		$encs = array_keys($this->_encodingMaps, $enc);
 		if ($encs && is_array($encs)) {
 			return $encs[0];
@@ -4188,5 +4166,6 @@ class DboSource extends DataSource {
 		}
 	}
 
-// <<<
+	// <<<
+
 }

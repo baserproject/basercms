@@ -48,7 +48,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function __construct(View $View, $settings = array()) {
-
 		parent::__construct($View, $settings);
 		$this->setContent();
 	}
@@ -61,7 +60,6 @@ class BlogHelper extends AppHelper {
  * @access protected
  */
 	public function setContent($blogContentId = null) {
-
 		if (isset($this->blogContent) && !$blogContentId) {
 			return;
 		}
@@ -85,7 +83,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function title() {
-
 		echo $this->getTitle();
 	}
 
@@ -96,7 +93,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getTitle() {
-
 		return $this->blogContent['title'];
 	}
 
@@ -107,7 +103,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getDescription() {
-
 		return $this->blogContent['description'];
 	}
 
@@ -128,7 +123,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function descriptionExists() {
-
 		if (!empty($this->blogContent['description'])) {
 			return true;
 		} else {
@@ -143,7 +137,6 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function postTitle($post, $link = true) {
-
 		echo $this->getPostTitle($post, $link);
 	}
 
@@ -156,7 +149,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostTitle($post, $link = true) {
-
 		if ($link) {
 			return $this->getPostLink($post, $post['BlogPost']['name']);
 		} else {
@@ -188,7 +180,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function postLink($post, $title, $options = array()) {
-
 		echo $this->getPostLink($post, $title, $options);
 	}
 
@@ -201,7 +192,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function postContent($post, $moreText = true, $moreLink = false, $cut = false) {
-
 		echo $this->getPostContent($post, $moreText, $moreLink, $cut);
 	}
 
@@ -214,7 +204,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false) {
-
 		if ($moreLink === true) {
 			$moreLink = '≫ 続きを読む';
 		}
@@ -236,13 +225,12 @@ class BlogHelper extends AppHelper {
 
 /**
  * 記事が属するカテゴリ名を出力する
-
+ * 
  * @param array $post
  * @return void
  * @access puublic
  */
 	public function category($post, $options = array()) {
-
 		echo $this->getCategory($post, $options);
 	}
 
@@ -252,8 +240,7 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @return string
  */
-	function getCategory($post, $options = array()) {
-
+	public function getCategory($post, $options = array()) {
 		if (!empty($post['BlogCategory']['name'])) {
 
 			$options = am(array('link' => true), $options);
@@ -287,7 +274,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function tag($post, $separator = ' , ') {
-
 		echo $this->getTag($post, $separator);
 	}
 
@@ -300,7 +286,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getTag($post, $separator = ' , ') {
-
 		$tagLinks = array();
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
@@ -328,7 +313,6 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function getCategoryUrl($blogCategoryId, $options = array()) {
-
 		$options = array_merge(array(
 			'named' => array()
 			), $options);
@@ -367,7 +351,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function postDate($post, $format = 'Y/m/d') {
-
 		echo $this->getPostDate($post, $format);
 	}
 
@@ -394,7 +377,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function author($post) {
-
 		echo $this->BcBaser->getUserName($post['User']);
 	}
 
@@ -407,7 +389,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getCategoryList($categories, $depth = 3, $count = false, $options = array()) {
-
 		return $this->_getCategoryList($categories, $depth, 1, $count, $options);
 	}
 
@@ -420,7 +401,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = array()) {
-
 		if ($depth < $current) {
 			return '';
 		}
@@ -444,9 +424,9 @@ class BlogHelper extends AppHelper {
 				}
 				$out .= '<li' . $class . '>' . $this->getCategory($category, $options);
 				if (!empty($category['BlogCategory']['children'])) {
-					$out.= $this->_getCategoryList($category['BlogCategory']['children'], $depth, $current, $count, $options);
+					$out .= $this->_getCategoryList($category['BlogCategory']['children'], $depth, $current, $count, $options);
 				}
-				$out.='</li>';
+				$out .= '</li>';
 			}
 			$out .= '</ul>';
 			return $out;
@@ -464,7 +444,6 @@ class BlogHelper extends AppHelper {
  * @deprecated ツールバーに移行
  */
 	public function editPost($blogContentId, $blogPostId) {
-
 		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')) . '</div>';
 		}
@@ -480,7 +459,6 @@ class BlogHelper extends AppHelper {
  * @access pulic
  */
 	public function prevLink($post, $title = '', $htmlAttributes = array()) {
-
 		if (ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
 		} else {
@@ -520,7 +498,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function nextLink($post, $title = '', $htmlAttributes = array()) {
-
 		if (ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
 		} else {
@@ -560,7 +537,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getLayoutTemplates() {
-
 		$templatesPathes = array(
 			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Layouts' . DS,
 			APP . 'View' . DS . 'Layouts' . DS,
@@ -603,7 +579,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getBlogTemplates() {
-
 		$templatesPathes = array(
 			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Blog' . DS,
 			APP . 'View' . DS . 'Blog' . DS,
@@ -648,7 +623,6 @@ class BlogHelper extends AppHelper {
  * @access	public
  */
 	public function allowPublish($data) {
-
 		if (ClassRegistry::isKeySet('BlogPost')) {
 			$BlogPost = ClassRegistry::getObject('BlogPost');
 		} else {
@@ -666,7 +640,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function postImg($post, $options = array()) {
-
 		echo $this->getPostImg($post, $options);
 	}
 
@@ -679,7 +652,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getPostImg($post, $options = array()) {
-
 		$this->setContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge($_options = array(
 			'num' => 1,
@@ -721,7 +693,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getHtmlById($post, $id) {
-
 		$content = $post['BlogPost']['content'] . $post['BlogPost']['detail'];
 
 		$values = array();
@@ -741,7 +712,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getParentCategory($post) {
-
 		if (empty($post['BlogCategory']['id'])) {
 			return null;
 		}
@@ -758,7 +728,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getRelatedPosts($post, $options = array()) {
-
 		if (empty($post['BlogTag'])) {
 			return array();
 		}
@@ -815,7 +784,6 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function getBlogArchiveType() {
-
 		if (!empty($this->_View->viewVars['blogArchiveType'])) {
 			return $this->_View->viewVars['blogArchiveType'];
 		} else {
@@ -827,7 +795,7 @@ class BlogHelper extends AppHelper {
  * アーカイブページ判定
  * @return boolean 
  */
-	function isArchive() {
+	public function isArchive() {
 		return ($this->getBlogArchiveType());
 	}
 
@@ -835,7 +803,7 @@ class BlogHelper extends AppHelper {
  * カテゴリー別記事一覧ページ判定
  * @return boolean
  */
-	function isCategory() {
+	public function isCategory() {
 		return ($this->getBlogArchiveType() == 'category');
 	}
 
@@ -843,7 +811,7 @@ class BlogHelper extends AppHelper {
  * タグ別記事一覧ページ判定
  * @return boolean
  */
-	function isTag() {
+	public function isTag() {
 		return ($this->getBlogArchiveType() == 'tag');
 	}
 
@@ -851,7 +819,7 @@ class BlogHelper extends AppHelper {
  * 日別記事一覧ページ判定
  * @return boolean
  */
-	function isDate() {
+	public function isDate() {
 		return ($this->getBlogArchiveType() == 'daily');
 	}
 
@@ -859,7 +827,7 @@ class BlogHelper extends AppHelper {
  * 月別記事一覧ページ判定
  * @return boolean 
  */
-	function isMonth() {
+	public function isMonth() {
 		return ($this->getBlogArchiveType() == 'monthly');
 	}
 
@@ -867,7 +835,7 @@ class BlogHelper extends AppHelper {
  * 年別記事一覧ページ判定
  * @return boolean
  */
-	function isYear() {
+	public function isYear() {
 		return ($this->getBlogArchiveType() == 'yearly');
 	}
 
@@ -875,7 +843,7 @@ class BlogHelper extends AppHelper {
  * 個別ページ判定
  * @return boolean
  */
-	function isSingle() {
+	public function isSingle() {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
@@ -886,7 +854,7 @@ class BlogHelper extends AppHelper {
  * インデックスページ判定
  * @return boolean
  */
-	function isHome() {
+	public function isHome() {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
@@ -899,8 +867,7 @@ class BlogHelper extends AppHelper {
  * @param array $post
  * @param array $options 
  */
-	function eyeCatch($post, $options = array()) {
-
+	public function eyeCatch($post, $options = array()) {
 		echo $this->getEyeCatch($post, $options);
 	}
 
@@ -911,8 +878,7 @@ class BlogHelper extends AppHelper {
  * @param array $options
  * @return string 
  */
-	function getEyeCatch($post, $options = array()) {
-
+	public function getEyeCatch($post, $options = array()) {
 		$options = array_merge(array(
 			'imgsize' => 'thumb', // 画像サイズ
 			'link' => true, // 大きいサイズの画像へのリンク有無

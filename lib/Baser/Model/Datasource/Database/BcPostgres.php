@@ -31,7 +31,6 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
 
@@ -43,7 +42,6 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function renameColumn($options) {
-
 		extract($options);
 
 		if (!isset($table) || !isset($new) || !isset($old)) {
@@ -66,7 +64,6 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function value($data, $column = null, $read = true) {
-
 		// >>> CUSTOMIZE MODIFY 2011/03/23 ryuring
 		//$parent = parent::value($data, $column);
 		// ---
@@ -142,7 +139,6 @@ class BcPostgres extends Postgres {
  * @access private
  */
 	private function __value($data, $column = null, $read = true) {
-
 		if (is_array($data) && !empty($data)) {
 			return array_map(
 				array(&$this, 'value'), $data, array_fill(0, count($data), $column), array_fill(0, count($data), $read)
@@ -167,7 +163,6 @@ class BcPostgres extends Postgres {
  * @return int An integer representing the length of the column
  */
 	public function length($real) {
-
 		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
 		if (preg_match('/^int([0-9]+)$/', $real, $maches)) {
 			return intval($maches[1]);
@@ -332,7 +327,6 @@ class BcPostgres extends Postgres {
  * @access private
  */
 	private function __describe($table) {
-
 		if ($this->cacheSources === false) {
 			return null;
 		}

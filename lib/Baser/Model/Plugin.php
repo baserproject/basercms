@@ -85,7 +85,6 @@ class Plugin extends AppModel {
  * @access public
  */
 	public function initDb($dbConfigName = 'plugin', $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
-
 		return parent::initDb($dbConfigName, $pluginName, true, $filterTable, 'create');
 	}
 
@@ -95,8 +94,7 @@ class Plugin extends AppModel {
  * @param string $plugin
  * @return boolean 
  */
-	function resetDb($plugin) {
-
+	public function resetDb($plugin) {
 		$schemaPaths = array(
 			APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'sql',
 			BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'sql'
@@ -134,7 +132,6 @@ class Plugin extends AppModel {
 		$result = true;
 
 		foreach ($files[1] as $file) {
-
 
 			$oldSchemaPath = '';
 
@@ -225,7 +222,6 @@ class Plugin extends AppModel {
  * @access public
  */
 	public function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
-
 		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
 	}
 

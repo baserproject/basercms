@@ -52,8 +52,9 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
+	//public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
 	public $helpers = array('Blog.Blog', 'BcUpload');
-//	public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
+
 /**
  * コンポーネント
  *
@@ -96,7 +97,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		if (isset($this->request->params['pass'][0])) {
@@ -121,7 +121,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 		$this->set('blogContent', $this->blogContent);
 	}
@@ -133,7 +132,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_index($blogContentId) {
-
 		if (!$blogContentId || !$this->blogContent) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -192,7 +190,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected
  */
 	protected function _setAdminIndexViewData() {
-
 		$user = $this->BcAuth->user();
 		$allowOwners = array();
 		if (!empty($user)) {
@@ -211,7 +208,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected
  */
 	protected function _createAdminIndexConditions($blogContentId, $data) {
-
 		unset($data['ListTool']);
 		$name = $blogCategoryId = '';
 		if (isset($data['BlogPost']['name'])) {
@@ -281,7 +277,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_add($blogContentId) {
-
 		if (!$blogContentId || !$this->blogContent) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -364,7 +359,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_edit($blogContentId, $id) {
-
 		if (!$blogContentId || !$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -465,7 +459,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -487,7 +480,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_del($id);
@@ -504,7 +496,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected
  */
 	protected function _del($id) {
-
 		// メッセージ用にデータを取得
 		$post = $this->BlogPost->read(null, $id);
 
@@ -526,7 +517,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_delete($blogContentId, $id = null) {
-
 		if (!$blogContentId || !$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -554,7 +544,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_import() {
-
 		// 入力チェック
 		$check = true;
 		$message = '';
@@ -657,7 +646,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_unpublish($blogContentId, $id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -680,7 +668,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_publish($blogContentId, $id) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -701,7 +688,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected 
  */
 	protected function _batch_publish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, true);
@@ -719,7 +705,6 @@ class BlogPostsController extends BlogAppController {
  * @access protected 
  */
 	protected function _batch_unpublish($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_changeStatus($id, false);
@@ -737,7 +722,6 @@ class BlogPostsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-
 		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => -1));
 		$data['BlogPost']['status'] = $status;
@@ -763,7 +747,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_copy($blogContentId, $id = null) {
-
 		$result = $this->BlogPost->copy($id);
 		if ($result) {
 			// タグ情報を取得するため読み込みなおす

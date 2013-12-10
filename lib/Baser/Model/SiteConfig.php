@@ -99,7 +99,6 @@ class SiteConfig extends AppModel {
  * @access public
  */
 	public function getThemes() {
-
 		$themes = array();
 		$themeFolder = new Folder(APP . 'View' . DS . 'theme' . DS);
 		$_themes = $themeFolder->read(true, true);
@@ -122,7 +121,6 @@ class SiteConfig extends AppModel {
  * @access public
  */
 	public function getControlSource($field = null) {
-
 		$controlSources['mode'] = array(-1 => 'インストールモード', 0 => 'ノーマルモード', 1 => 'デバッグモード１', 2 => 'デバッグモード２', 3 => 'デバッグモード３');
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
@@ -139,7 +137,6 @@ class SiteConfig extends AppModel {
  * @access public
  */
 	public function sslUrlExists($check) {
-
 		$sslOn = $check[key($check)];
 		if ($sslOn && empty($this->data['SiteConfig']['ssl_url'])) {
 			return false;

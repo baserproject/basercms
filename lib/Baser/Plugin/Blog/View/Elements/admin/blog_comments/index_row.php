@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] ブログ記事コメント 一覧　行
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 if (!$data['BlogComment']['status']) {
 	$class = ' class="disablerow unpublish"';
 } else {

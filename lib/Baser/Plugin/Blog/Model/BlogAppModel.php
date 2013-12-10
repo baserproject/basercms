@@ -29,5 +29,4 @@ App::uses('BcPluginAppModel', 'Model');
  * @package			baser.plugins.blog
  */
 class BlogAppModel extends BcPluginAppModel {
-	
 }
