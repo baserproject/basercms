@@ -62,17 +62,18 @@ class WebModel extends AppModel {
  * @return void
  * @access private
  */
-	function __construct($id = false, $table = null, $ds = null) {
-
+	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 
 		$this->cacheFolder = str_replace('/', DS, $this->cacheFolder);
 
-		if ($this->cacheFolder == 'web' || empty($this->cacheFolder))
+		if ($this->cacheFolder == 'web' || empty($this->cacheFolder)) {
 			$this->cacheFolder = 'web' . DS;
+		}
 
-		if (substr($this->cacheFolder, -1, 1) != DS)
+		if (substr($this->cacheFolder, -1, 1) != DS) {
 			$this->cacheFolder = $this->cacheFolder . DS;
+		}
 	}
 
 /**
@@ -86,8 +87,7 @@ class WebModel extends AppModel {
  * @return mixed 
  * @access public
  */
-	function httpPost($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null) {
-
+	public function httpPost($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null) {
 		$vars = $this->__toUrlData($vars);
 
 		$ch = curl_init();
@@ -98,22 +98,24 @@ class WebModel extends AppModel {
 
 		// Don't check certifications that closley if not required, fixed some issues for me before
 		if ($this->ssl_strict == false) {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		}
 
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
 
-		if (empty($timeout))
+		if (empty($timeout)) {
 			$timeout = $this->connection_timeout;
+		}
 
 		curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // follow redirects recursively    	
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // follow redirects recursively
 
-		if (!empty($headers))
+		if (!empty($headers)) {
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		}
 
 		if (!empty($cookie_file)) {
 			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
@@ -137,11 +139,10 @@ class WebModel extends AppModel {
  * @return string
  * @access string 
  */
-	function httpGet($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null) {
-
-		if (!empty($vars))
+	public function httpGet($url, $vars = null, $headers = null, $cookie_file = null, $timeout = null) {
+		if (!empty($vars)) {
 			$url = $url . '?' . $this->__toUrlData($vars);
-
+		}
 
 		$ch = curl_init();
 
@@ -149,19 +150,21 @@ class WebModel extends AppModel {
 
 		// Don't check certifications that closley if not required, fixed some issues for me before
 		if ($this->ssl_strict == false) {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		}
 
 		curl_setopt($ch, CURLOPT_URL, $url);
 
-		if (empty($timeout))
+		if (empty($timeout)) {
 			$timeout = $this->connection_timeout;
+		}
 
 		curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 
-		if (!empty($headers))
+		if (!empty($headers)) {
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		}
 
 		if (!empty($cookie_file)) {
 			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
@@ -176,7 +179,6 @@ class WebModel extends AppModel {
 
 		curl_close($ch);
 
-
 		return $ret;
 	}
 
@@ -188,8 +190,7 @@ class WebModel extends AppModel {
  * @return array
  * @access public
  */
-	function cleanUpCacheFolder($expires = '+2 hours', $pattern = '.*') {
-
+	public function cleanUpCacheFolder($expires = '+2 hours', $pattern = '.*') {
 		uses('Folder');
 		$path = TMP . 'cache' . DS . $this->cacheFolder;
 
@@ -216,10 +217,11 @@ class WebModel extends AppModel {
 			}
 		}
 
-		if (empty($errors))
+		if (empty($errors)) {
 			return true;
-		else
+		} else {
 			return $errors;
+		}
 	}
 
 /**
@@ -229,8 +231,7 @@ class WebModel extends AppModel {
  * @return array
  * @access private 
  */
-	function __toUrlData($arrayData) {
-
+	public function __toUrlData($arrayData) {
 		$postData = array();
 
 		foreach ($arrayData as $key => $val) {
@@ -247,8 +248,7 @@ class WebModel extends AppModel {
  * @return string Returns a unique file path
  * @access private 
  */
-	function __createCacheHash($ext = '.txt') {
-
+	public function __createCacheHash($ext = '.txt') {
 		$args = func_get_args();
 		array_shift($args);
 

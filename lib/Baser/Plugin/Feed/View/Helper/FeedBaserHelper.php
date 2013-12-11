@@ -36,7 +36,6 @@ class FeedBaserHelper extends AppHelper {
  * @access public
  */
 	public function feed($id, $mobile = '') {
-
 		$url = array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
 		if ($mobile === '') {
 			$mobile = (Configure::read('BcRequest.agent') == 'mobile');

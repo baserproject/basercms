@@ -112,7 +112,6 @@ class FeedConfig extends FeedAppModel {
  * @access public
  */
 	public function getDefaultValue() {
-
 		$data['FeedConfig']['display_number'] = '5';
 		$data['FeedConfig']['template'] = 'default';
 		return $data;

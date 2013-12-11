@@ -67,7 +67,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		/* 認証設定 */
 		$this->BcAuth->allow('index', 'mobile_index', 'smartphone_index', 'ajax', 'smartphone_ajax');
 		parent::beforeFilter();
@@ -81,7 +80,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function index($id) {
-
 		$this->navis = array();
 
 		// IDの指定がなかった場合はエラーとする
@@ -141,7 +139,6 @@ class FeedController extends FeedAppController {
 			return;
 		}
 
-
 		// フィードタイトルをtitle_noとしてインデックス番号に変換する
 		if ($feedConfig['FeedConfig']['feed_title_index']) {
 			$titleIndex = explode("|", $feedConfig['FeedConfig']['feed_title_index']);
@@ -178,8 +175,9 @@ class FeedController extends FeedAppController {
 		}
 		// 日付を秒数に変換
 		foreach ($items as $key => $item) {
-			if (!empty($item['pubDate']['value']))
+			if (!empty($item['pubDate']['value'])) {
 				$items[$key]['timestamp'] = strtotime($item['pubDate']['value']);
+			}
 		}
 
 		// 日付で並び替え
@@ -206,7 +204,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function mobile_index($id) {
-
 		$this->setAction('index', $id);
 	}
 
@@ -218,7 +215,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function smartphone_index($id) {
-
 		$this->setAction('index', $id);
 	}
 
@@ -230,7 +226,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function ajax($id) {
-
 		if (strpos($id, '.js') !== false) {
 			$id = str_replace('.js', '', $id);
 		}
@@ -252,7 +247,6 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function smartphone_ajax($id) {
-
 		$this->setAction('ajax', $id);
 	}
 
@@ -271,7 +265,7 @@ class FeedController extends FeedAppController {
 		return ($a['timestamp'] > $b['timestamp']) ? -1 : 1;
 	}
 
-/*
+/**
  * バブルソート
  *
  * @param array $val = ソートする配列
@@ -280,11 +274,10 @@ class FeedController extends FeedAppController {
  * @return array 並び替え後の配列
  * @access protected
  */
-
 	protected function _bsort(&$val, $flag = "", $order = "ASC") {
-
-		for ($i = 0; $i < count($val) - 1; $i++) {
-			for ($j = count($val) - 1; $j > $i; $j--) {
+		$count = count($val);
+		for ($i = 0; $i < $count - 1; $i++) {
+			for ($j = $count - 1; $j > $i; $j--) {
 				if ($flag) {
 					if ($order == "DESC") {
 						if ($val[$j]["" . $flag . ""] > $val[$j - 1]["" . $flag . ""]) {

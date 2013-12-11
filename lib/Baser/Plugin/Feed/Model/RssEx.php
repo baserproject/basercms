@@ -26,7 +26,7 @@ App::uses('Rss', 'Feed.Model');
 // なぜか、サーバーによって、App::uses を利用するとクラスを初期化した瞬間に処理がストップしてしまう
 // include にしておくと大丈夫だった。
 // 再現サーバーは、Ubuntu Apache2 PHP5.2
-//App::uses('SimplePie', 'Feed.Vendor');	
+//App::uses('SimplePie', 'Feed.Vendor');
 include BASER_PLUGINS . 'Feed' . DS . 'Vendor' . DS . 'simplepie.php';
 
 /**
@@ -54,7 +54,6 @@ class RssEx extends Rss {
  * @access public
  */
 	public function findAll($feedUrl, $limit = 10, $cacheExpires = null, $category = null) {
-
 		// simplepieでフィードを取得する
 		$feed = $this->__getSimplePie($feedUrl, $cacheExpires);
 
@@ -77,7 +76,6 @@ class RssEx extends Rss {
  * @access public
  */
 	public function filteringCategory($items, $filterCategory = null) {
-
 		if (!$items || !$filterCategory) {
 			return $items;
 		}
@@ -85,8 +83,9 @@ class RssEx extends Rss {
 		$_items = array();
 		foreach ($items as $item) {
 
-			if (empty($item['category']['value']))
+			if (empty($item['category']['value'])) {
 				continue;
+			}
 
 			/* 属しているカテゴリを取得 */
 			$category = '';
@@ -125,7 +124,6 @@ class RssEx extends Rss {
  * @access private
  */
 	private function __getSimplePie($url, $cacheExpires = null) {
-
 		if (!$url) {
 			return false;
 		}
@@ -139,7 +137,6 @@ class RssEx extends Rss {
 		$rssData = cache($cachePath, null, $cacheExpires);
 
 		if (empty($rssData)) {
-
 			$feed = new SimplePie();
 			$feed->feed_url = $url;
 			$feed->enable_cache(false);
@@ -186,7 +183,6 @@ class RssEx extends Rss {
  * @access private
  */
 	private function __convertSimplePie($datas) {
-
 		if (!$datas) {
 			return null;
 		}

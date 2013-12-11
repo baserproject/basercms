@@ -46,7 +46,6 @@ class FeedHelper extends BcTextHelper {
  * @access public
  */
 	public function getTemplates() {
-
 		$templatesPathes = array();
 		if ($this->BcBaser->siteConfig['theme']) {
 			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Feed' . DS;
@@ -85,7 +84,6 @@ class FeedHelper extends BcTextHelper {
  * @access public
  */
 	public function saveCachetime() {
-
 		$feedId = $this->params['pass'][0];
 		if (isset($this->BcBaser->_view->viewVars['cachetime'])) {
 			$cachetime = $this->BcBaser->_view->viewVars['cachetime'];
@@ -104,7 +102,6 @@ class FeedHelper extends BcTextHelper {
  * @access public
  */
 	public function cacheHeader() {
-
 		$feedId = $this->params['pass'][0];
 		$this->BcBaser->cacheHeader(cache('views' . DS . 'feed_cachetime_' . $feedId . '.php'));
 	}

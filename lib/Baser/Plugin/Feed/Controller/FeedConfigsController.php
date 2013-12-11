@@ -87,7 +87,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		if ($this->params['prefix'] == 'admin') {
@@ -102,7 +101,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_index() {
-
 		// データを取得
 		$this->paginate = array('conditions' => array(),
 			'fields' => array(),
@@ -127,7 +125,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_add() {
-
 		if (empty($this->request->data)) {
 
 			$this->request->data = $this->FeedConfig->getDefaultValue();
@@ -161,7 +158,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -205,7 +201,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function redirectEditTemplate($template) {
-
 		$path = 'Feed' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
 		$sorces = array(BASER_PLUGINS . 'Feed' . DS . 'View' . DS . $path);
@@ -236,7 +231,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				// メッセージ用にデータを取得
@@ -259,7 +253,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -283,7 +276,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		if (!$id) {
 
 			$this->setMessage('無効なIDです。', true);
@@ -314,9 +306,9 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_preview($id) {
-
-		if (!$id)
+		if (!$id) {
 			$this->notFound();
+		}
 		$this->pageTitle = 'プレビュー：' . $this->FeedConfig->field('name', array('FeedConfig.id' => $id));
 		$this->set('id', $id);
 	}
@@ -328,7 +320,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_delete_cache() {
-
 		$this->_clearCache();
 		$this->setMessage('フィードのキャッシュを削除しました。');
 		$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
@@ -343,7 +334,6 @@ class FeedConfigsController extends FeedAppController {
  * @access protected
  */
 	public function admin_clear_cache($feedConfigId = '', $url = '') {
-
 		$this->_clearCache($feedConfigId, $url);
 	}
 
@@ -359,7 +349,6 @@ class FeedConfigsController extends FeedAppController {
  * @access	protected
  */
 	protected function _clearCache($feedConfigId = '', $url = '') {
-
 		if ($feedConfigId) {
 			clearViewCache('/feed/index/' . $feedConfigId);
 			clearViewCache('/feed/ajax/' . $feedConfigId);
