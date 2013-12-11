@@ -87,7 +87,6 @@ class FeedDetailsController extends FeedAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 
 		$feedConfig = $this->FeedConfig->read(null, $this->params['pass'][0]);
@@ -107,7 +106,6 @@ class FeedDetailsController extends FeedAppController {
  * @access public
  */
 	public function admin_add($feedConfigId) {
-
 		/* 除外処理 */
 		if (!$feedConfigId) {
 			$this->setMessage('無効なIDです', true);
@@ -151,7 +149,6 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_edit($feedConfigId, $id) {
-
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
@@ -194,7 +191,6 @@ class FeedDetailsController extends FeedAppController {
  * @access	protected
  */
 	protected function _clearViewCatch($feedConfigId, $url) {
-
 		clearViewCache('/feed/index/' . $feedConfigId);
 		clearViewCache('/feed/ajax/' . $feedConfigId);
 		clearViewCache('/feed/cachetime/' . $feedConfigId);
@@ -216,7 +212,6 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_ajax_delete($feedConfigId, $id = null) {
-
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -235,7 +230,6 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_delete($feedConfigId, $id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -263,7 +257,6 @@ class FeedDetailsController extends FeedAppController {
  * @access protected
  */
 	protected function _batch_del($ids) {
-
 		if ($ids) {
 			foreach ($ids as $id) {
 				$this->_del($id);
@@ -280,7 +273,6 @@ class FeedDetailsController extends FeedAppController {
  * @access protected
  */
 	protected function _del($id) {
-
 		$data = $this->FeedDetail->read(null, $id);
 		if ($this->FeedDetail->delete($id)) {
 			$this->FeedDetail->saveDbLog('フィード「' . $data['FeedDetail']['name'] . '」を削除しました。');

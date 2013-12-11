@@ -28,7 +28,7 @@ $(window).load(function() {
 
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedDetail.feed_config_id')))) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'edit', $this->BcForm->value('FeedDetail.feed_config_id'), $this->BcForm->value('FeedDetail.id'), 'id' => false))) ?>
 <?php endif; ?>
 
@@ -101,10 +101,8 @@ $(window).load(function() {
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
-		<?php
-		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('FeedConfig.id'), $this->BcForm->value('FeedDetail.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')), false);
-		?>
-<?php endif ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('FeedConfig.id'), $this->BcForm->value('FeedDetail.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')), false); ?>
+	<?php endif ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

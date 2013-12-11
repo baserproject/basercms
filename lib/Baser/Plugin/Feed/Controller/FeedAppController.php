@@ -29,5 +29,4 @@ App::uses('BcPluginAppController', 'Controller');
  * @package			baser.plugins.feed
  */
 class FeedAppController extends BcPluginAppController {
-	
 }

@@ -72,14 +72,15 @@ class Rss extends WebModel {
  * @access public
  */
 	public function findAll($feedUrl, $limit = 10, $cacheExpires = null) {
-
-		if (empty($feedUrl))
+		if (empty($feedUrl)) {
 			return array();
+		}
 
 		$feed = $this->__parseRSS($this->__getRawRSS($feedUrl, null, $cacheExpires));
 
-		if (isset($feed['Error']))
+		if (isset($feed['Error'])) {
 			return $feed;
+		}
 
 		if (count($feed['Items'] > $limit)) {
 			$feed['Items'] = array_slice($feed['Items'], 0, $limit);
@@ -98,16 +99,17 @@ class Rss extends WebModel {
  * @access private
  */
 	private function __getRawRSS($feedUrl, $vars = array(), $cacheExpires = null) {
-
 		$url = $feedUrl;
 
 		$cachePath = $this->cacheFolder . $this->__createCacheHash('.rss', $url, $vars);
 
-		if (empty($cacheExpires))
+		if (empty($cacheExpires)) {
 			$cacheExpires = $this->cacheExpires;
+		}
 
-		if (empty($vars))
+		if (empty($vars)) {
 			$vars = array();
+		}
 
 		$rssData = cache($cachePath, null, $cacheExpires);
 
@@ -126,20 +128,22 @@ class Rss extends WebModel {
  * @access private
  */
 	function __parseRSS($data) {
-
-		if (empty($data))
+		if (empty($data)) {
 			return array();
+		}
 
 		$regex = '/\<rss.+version="(.+)".*\>/iUs';
 
 		preg_match($regex, $data, $match);
-		if (empty($match))
+		if (empty($match)) {
 			return array('Error' => 'No valid feed (no feed version found).');
+		}
 
 		list($raw, $version) = $match;
 
-		if (empty($version))
+		if (empty($version)) {
 			$version = '2.0';
+		}
 
 		// Check if we have a valid version number
 		if (!preg_match('/^[0-9.]+$/iUs', $version)) {
@@ -163,10 +167,8 @@ class Rss extends WebModel {
  * @access private
  */
 	function __parseRSS_2_0($data) {
-
 		// First thing we need to do, is to identify all html/otherwise formated contents
 		preg_match_all('/\<\!\[CDATA\[(.+)\]\]\>/iUs', $data, $cdata, PREG_SET_ORDER);
-
 
 		// Create the md5 hash of the data to parse
 		$dataHash = md5($data);
@@ -178,7 +180,6 @@ class Rss extends WebModel {
 			$data = str_replace($cdataItem[0], '[[CDATA:' . $dataHash . ':' . $cdataNum . ']]', $data);
 		}
 
-
 		// Let's get the information about the channel
 		$regex = '/\<channel\>(.+)\<item\>/iUs';
 		preg_match($regex, $data, $match);
@@ -186,8 +187,9 @@ class Rss extends WebModel {
 			list($raw, $channel) = $match;
 
 			$channel = $this->__getNodeFields($channel, $cdata, $dataHash, 'channel');
-		} else
+		} else {
 			$channel = array();
+		}
 
 		// This will get us a list with all Items contained in the feed
 		$regex = '/\<item\>(.+)\<\/item\>/iUs';
@@ -201,8 +203,7 @@ class Rss extends WebModel {
 
 			// Loop through all Item Matches
 			foreach ($matches as $itemNr => $item) {
-				// Find all fields in our Item           
-
+				// Find all fields in our Item
 				$items[$itemNr] = $this->__getNodeFields($item[1], $cdata, $dataHash);
 			}
 		}
@@ -222,8 +223,7 @@ class Rss extends WebModel {
  * @return string 
  * @access private
  */
-	function __getNodeFields($rawFields, $cdata = null, $dataHash = null, $type = null) {
-
+	public function __getNodeFields($rawFields, $cdata = null, $dataHash = null, $type = null) {
 		// Don't ask - it works. No seriously, I spent a lot of time and thought on this regex
 		// if you are interested in how it works feel free to contact me. In case you wonder about
 		// the \x00's, that's an optimization trick to generate a character set that matches new lines
@@ -235,9 +235,9 @@ class Rss extends WebModel {
 		// Loop through those fields
 		foreach ($fieldMatches as $fieldMatch) {
 			// Assign the preg_match_all contents to a couple of variables
-			if (count($fieldMatch) == 4)
+			if (count($fieldMatch) == 4) {
 				list($raw, $field, $attributes, $value) = $fieldMatch;
-			else {
+			} else {
 				// This is for <nodes ... /> that don't have enclosed content
 				list($raw,,,, $field, $attributes) = $fieldMatch;
 				$value = null;
@@ -263,8 +263,9 @@ class Rss extends WebModel {
 				'attributes' => $attributes);
 		}
 
-		if (!isset($fields))
+		if (!isset($fields)) {
 			$fields = $rawFields;
+		}
 
 		return $fields;
 	}
@@ -276,15 +277,16 @@ class Rss extends WebModel {
  * @return array
  * @access private 
  */
-	function __getXMLNodeAttributes($attributesData) {
-
-		if (empty($attributesData))
+	public function __getXMLNodeAttributes($attributesData) {
+		if (empty($attributesData)) {
 			return array();
+		}
 
 		preg_match_all('/ ([^ \r\n]+)=(["\'])(.+)\\2/iUs', $attributesData, $attributeMatches, PREG_SET_ORDER);
 
-		if (empty($attributeMatches))
+		if (empty($attributeMatches)) {
 			return array();
+		}
 
 		$attributes = array();
 
