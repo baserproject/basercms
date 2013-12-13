@@ -412,12 +412,12 @@ class Message extends MailAppModel {
 				$data = array('Message' => $data);
 			}
 			foreach ($data['Message'] as $key => $value) {
-				$data['Message'][$key] = h($value);
+				if(isset($data['Message'][$key])) {
+					$_data['Message'][$key] = h($value);
+				}
 			}
-			$data = array_merge_recursive($_data, $data);
 		}
-
-		return $data;
+		return $_data;
 	}
 
 /**
