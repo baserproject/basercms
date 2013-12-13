@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] メールコンテンツ一覧　行
@@ -17,13 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+if (!$data['MailContent']['status']) {
+	$class = ' class="unpublish disablerow"';
+} else {
+	$class = ' class="publish"';
+}
 ?>
 
-<?php if (!$data['MailContent']['status']): ?>
-	<?php $class = ' class="unpublish disablerow"'; ?>
-<?php else: ?>
-	<?php $class = ' class="publish"'; ?>
-<?php endif; ?>
 <tr <?php echo $class; ?>>
 	<td class="row-tools">
 		<?php //echo $this->BcForm->checkbox('ListTool.batch_targets.'.$data['MailContent']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailContent']['id'])) ?>

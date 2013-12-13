@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
-/* プラグインの為か、inlineが動作しない */
+	/* プラグインの為か、inlineが動作しない */
 	//$this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url']),false);
 	//$this->addScript($this->BcHtml->meta(array('http-equiv'=>'Refresh'),null,array('content'=>'5;url='.$mailContent['MailContent']['redirect_url'])));
 }

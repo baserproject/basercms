@@ -43,7 +43,6 @@ class MailformHelper extends BcFreezeHelper {
  * @access public
  */
 	public function control($type, $fieldName, $options, $attributes = array()) {
-
 		$attributes['escape'] = false;
 
 		switch ($type) {
@@ -133,7 +132,6 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
-				;
 				$out = $this->datepicker($fieldName, $attributes);
 				break;
 

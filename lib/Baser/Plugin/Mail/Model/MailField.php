@@ -123,7 +123,6 @@ class MailField extends MailAppModel {
  * @access public
  */
 	public function getControlSource($field = null) {
-
 		$source['type'] = array(
 			'text' => 'テキスト',
 			'textarea' => 'テキストエリア',
@@ -170,7 +169,6 @@ class MailField extends MailAppModel {
  * @access public
  */
 	public function duplicateMailField($check) {
-
 		$conditions = array('MailField.' . key($check) => $check[key($check)],
 			'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']);
 		if ($this->exists()) {
@@ -192,7 +190,6 @@ class MailField extends MailAppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $options = array()) {
-
 		$options = array_merge(array(
 			'sortUpdateOff' => false,
 			), $options);

@@ -79,7 +79,6 @@ class MailConfigsController extends MailAppController {
  * @access public
  */
 	public function admin_form() {
-
 		if (empty($this->request->data)) {
 			$this->request->data = $this->MailConfig->read(null, 1);
 		} else {
