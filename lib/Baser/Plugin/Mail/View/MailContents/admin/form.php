@@ -79,9 +79,9 @@ function mailContentSender1ClickHandler(){
 			?>
 		<?php else: ?>
 			<?php echo $this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index') ?>
-	<?php endif ?>
+		<?php endif; ?>
 	</div>
-<?php endif ?>
+		<?php endif; ?>
 
 <!-- form -->
 <h2>基本項目</h2>
@@ -324,7 +324,7 @@ function mailContentSender1ClickHandler(){
 		<?php
 		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('MailContent.id')), array('class' => 'button'), sprintf("%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。", $this->BcForm->value('MailContent.name')), false);
 		?>
-<?php endif ?>
+	<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

@@ -65,10 +65,10 @@ class MailController extends MailAppController {
 	// そのためSecurityコンポーネントが利用できない
 	// 同じエレメント内で全てのフォーム部品を完結できればよいがその場合デザインの自由度が失われてしまう。
 	// var $components = array('Email','BcEmail','Security','BcCaptcha');
-	// 
+	//
 	// 2013/03/14 ryuring
 	// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
-	var $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security');
 
 /**
  * CSS
@@ -117,7 +117,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		/* 認証設定 */
 		$this->BcAuth->allow(
 			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha'
@@ -133,7 +132,6 @@ class MailController extends MailAppController {
 		} else {
 			$id = 1;
 		}
-
 
 		$this->dbDatas['mailContent'] = $this->MailContent->find('first', array('conditions' => array("MailContent.id" => $id)));
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
@@ -151,9 +149,8 @@ class MailController extends MailAppController {
 
 		$this->subMenuElements = array('default');
 
-
 		// 2013/03/14 ryuring
-		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更 
+		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
 		if (Configure::read('debug') > 0) {
 			$this->Security->validatePost = false;
 			$this->Security->csrfCheck = false;
@@ -188,7 +185,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 		if ($this->dbDatas['mailContent']['MailContent']['widget_area']) {
 			$this->set('widgetArea', $this->dbDatas['mailContent']['MailContent']['widget_area']);
@@ -203,7 +199,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function index($id = null) {
-
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
@@ -222,8 +217,9 @@ class MailController extends MailAppController {
 
 		$this->set('freezed', false);
 
-		if ($this->dbDatas['mailFields'])
+		if ($this->dbDatas['mailFields']) {
 			$this->set('mailFields', $this->dbDatas['mailFields']);
+		}
 
 		$user = $this->BcAuth->user();
 		if (!empty($user) && !Configure::read('BcRequest.agent')) {
@@ -242,7 +238,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function mobile_index($id = null) {
-
 		$this->setAction('index', $id);
 	}
 
@@ -254,7 +249,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function smartphone_index($id = null) {
-
 		$this->setAction('index', $id);
 	}
 
@@ -266,7 +260,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function confirm($id = null) {
-
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
@@ -316,7 +309,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function mobile_confirm($id = null) {
-
 		$this->setAction('confirm', $id);
 	}
 
@@ -328,7 +320,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function smartphone_confirm($id = null) {
-
 		$this->setAction('confirm', $id);
 	}
 
@@ -340,7 +331,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function submit($id = null) {
-
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
@@ -429,7 +419,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function _back($id) {
+	public function _back($id) {
 		$this->set('freezed', false);
 		$this->set('error', false);
 
@@ -456,7 +446,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function mobile_submit($id = null) {
-
 		$this->setAction('submit', $id);
 	}
 
@@ -468,7 +457,6 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function smartphone_submit($id = null) {
-
 		$this->setAction('submit', $id);
 	}
 
@@ -479,7 +467,6 @@ class MailController extends MailAppController {
  * @access protected
  */
 	protected function _sendEmail() {
-
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];
 		$userMail = '';
@@ -565,8 +552,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function captcha() {
-
+	public function captcha() {
 		$this->BcCaptcha->render();
 		exit();
 	}
@@ -577,8 +563,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	function smartphone_captcha() {
-
+	public function smartphone_captcha() {
 		$this->BcCaptcha->render();
 		exit();
 	}

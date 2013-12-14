@@ -154,7 +154,6 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function beforeValidate($options = array()) {
-
 		if ($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
 				array('rule' => 'email',
@@ -172,7 +171,6 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function checkSslUrl($check) {
-
 		if ($check[key($check)]) {
 			$sslUrl = Configure::read('BcEnv.sslUrl');
 			if (empty($sslUrl)) {
@@ -193,7 +191,6 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function alphaNumeric($check) {
-
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return true;
 		} else {
@@ -208,7 +205,6 @@ class MailContent extends MailAppModel {
  * @access protected
  */
 	public function getDefaultValue() {
-
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
 		$data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
 		$data['MailContent']['layout_template'] = 'default';
@@ -229,7 +225,6 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-
 		// 検索用テーブルへの登録・削除
 		if (!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status']) {
 			$this->saveContent($this->createContent($this->data));
@@ -245,7 +240,6 @@ class MailContent extends MailAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-
 		return $this->deleteContent($this->id);
 	}
 
@@ -257,7 +251,6 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function createContent($data) {
-
 		if (isset($data['MailContent'])) {
 			$data = $data['MailContent'];
 		}
@@ -282,7 +275,6 @@ class MailContent extends MailAppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $recursive = true) {
-
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
 		}

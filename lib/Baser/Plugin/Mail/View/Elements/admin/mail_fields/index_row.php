@@ -17,14 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+if (!$data['MailField']['use_field']) {
+	$class = ' class="unpublish disablerow sortable"';
+} else {
+	$class = ' class="publish sortable"';
+}
 ?>
 
-
-<?php if (!$data['MailField']['use_field']): ?>
-	<?php $class = ' class="unpublish disablerow sortable"'; ?>
-<?php else: ?>
-	<?php $class = ' class="publish sortable"'; ?>
-<?php endif; ?>
 <tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
 	<td style="width:25%" class="row-tools">
 		<?php if ($sortmode): ?>

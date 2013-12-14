@@ -87,7 +87,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function admin_index() {
-
 		$listDatas = $this->MailContent->find('all');
 		$this->set('listDatas', $listDatas);
 		$this->subMenuElements = array('mail_common');
@@ -102,7 +101,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function admin_add() {
-
 		$this->pageTitle = '新規メールフォーム登録';
 
 		if (!$this->request->data) {
@@ -143,7 +141,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function admin_edit($id) {
-
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
@@ -206,7 +203,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -234,7 +230,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -265,7 +260,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function redirectEditLayout($template) {
-
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
 		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
 			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext);
@@ -294,7 +288,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function redirectEditMail($template) {
-
 		$type = 'Elements';
 		$path = 'Emails' . DS . 'text' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
@@ -327,7 +320,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function redirectEditForm($template) {
-
 		$path = 'Mail' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
 		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $path);
@@ -359,7 +351,6 @@ class MailContentsController extends MailAppController {
  * @access protected
  */
 	public function admin_ajax_copy($id) {
-
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');

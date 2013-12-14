@@ -29,5 +29,4 @@ App::uses('BcPluginAppController', 'Controller');
  * @package			baser.plugins.mail
  */
 class MailAppController extends BcPluginAppController {
-	
 }

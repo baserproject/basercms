@@ -44,7 +44,6 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function __construct(View $View) {
-
 		parent::__construct($View);
 		$this->setMailContent();
 	}
@@ -55,7 +54,6 @@ class MailHelper extends AppHelper {
  * @param int $mailContentId
  */
 	public function setMailContent($mailContentId = null) {
-
 		if (isset($this->mailContent) && !$mailContentId) {
 			return;
 		}
@@ -77,7 +75,6 @@ class MailHelper extends AppHelper {
  * @deprecated ツールバーに移行
  */
 	public function indexFields($mailContentId) {
-
 		if (!empty($this->BcBaser->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')) . '</div>';
 		}
@@ -91,7 +88,6 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getLayoutTemplates() {
-
 		$templatesPathes = array(
 			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS,
 			APP . 'View' . DS . 'Layouts' . DS,
@@ -136,7 +132,6 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getFormTemplates() {
-
 		$templatesPathes = array(
 			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Mail' . DS,
 			APP . 'View' . DS . 'Mail' . DS,
@@ -179,7 +174,6 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getMailTemplates() {
-
 		$templatesPathes = array(
 			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
 			APP . 'View' . DS . 'Emails' . DS . 'text' . DS,
@@ -239,7 +233,6 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function descriptionExists() {
-
 		if (!empty($this->mailContent['description'])) {
 			return true;
 		} else {
