@@ -966,7 +966,8 @@ class BlogController extends BlogAppController {
  */
 	public function posts($blogContentId, $limit = 5) {
 		if (!empty($this->params['named']['template'])) {
-			$template = $this->params['named']['template'];
+			$template = $this->request->params['named']['template'];
+			unset($this->request->params['named']['template']);
 		} else {
 			$template = 'posts';
 		}
