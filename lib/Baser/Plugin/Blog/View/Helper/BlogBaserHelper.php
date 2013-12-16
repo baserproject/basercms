@@ -79,9 +79,6 @@ class BlogBaserHelper extends AppHelper {
 			}
 		}
 
-		if (!isset($options['templates'])) {
-			$templates = 'posts';
-		}
 		$options['template'] = $options['templates'];
 		unset($options['templates']);
 
