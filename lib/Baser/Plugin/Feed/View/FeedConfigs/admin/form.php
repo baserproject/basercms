@@ -28,7 +28,7 @@ $(function(){
 	$("#EditTemplate").click(function(){
 		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){
 			$("#FeedConfigEditTemplate").val(true);
-			$("#FeedConfigEditForm").submit();
+			$("#FeedConfigAdminEditForm").submit();
 		}
 	});
 });

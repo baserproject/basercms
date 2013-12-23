@@ -40,7 +40,7 @@ $(function(){
 			$("#MailContentEditLayout").val(1);
 			$("#MailContentEditMailForm").val('');
 			$("#MailContentEditMail").val('');
-			$("#MailContentEditForm").submit();
+			$("#MailContentAdminEditForm").submit();
 		}
 	});
 	$("#EditForm").click(function(){
@@ -48,7 +48,7 @@ $(function(){
 			$("#MailContentEditLayout").val('');
 			$("#MailContentEditMailForm").val(1);
 			$("#MailContentEditMail").val('');
-			$("#MailContentEditForm").submit();
+			$("#MailContentAdminEditForm").submit();
 		}
 	});
 	$("#EditMail").click(function(){
@@ -56,7 +56,7 @@ $(function(){
 			$("#MailContentEditLayout").val('');
 			$("#MailContentEditMailForm").val('');
 			$("#MailContentEditMail").val(1);
-			$("#MailContentEditForm").submit();
+			$("#MailContentAdminEditForm").submit();
 		}
 	});
 	mailContentSender1ClickHandler();
