@@ -31,7 +31,7 @@ if (BC_INSTALLED || isConsole()) {
  * テーマヘルパーのパスを追加する 
  */
 	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper');
+	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
 	App::build(array('View/Helper' => $helperPaths));
 }
 /**
