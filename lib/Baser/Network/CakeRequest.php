@@ -259,8 +259,14 @@ class CakeRequest implements ArrayAccess {
 		}
 		// <<<
 
-		$base = $this->base;
-
+		// CUSTOMIZE MODIFY 2013/09/30 ryuring
+		// サブディレクトリ設置時のスマートURLオフに対応していなかったので調整
+		// >>>
+		//$base = $this->base;
+		// ---
+		$base = str_replace('/index.php', '', $this->base);
+		// <<<
+		
 		if (strlen($base) > 0 && strpos($uri, $base) === 0) {
 			$uri = substr($uri, strlen($base));
 		}
