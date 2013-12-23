@@ -78,11 +78,8 @@ class BlogBaserHelper extends AppHelper {
 				break;
 			}
 		}
-		if (isset($options['templates'])) {
-			$templates = $options['templates'];
-		} else {
-			$templates = 'posts';
-		}
+
+		$options['template'] = $options['templates'];
 		unset($options['templates']);
 
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
