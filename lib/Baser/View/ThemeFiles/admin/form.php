@@ -106,7 +106,7 @@ $(window).load(function() {
 		<?php if (!$safeModeOn): ?>
 			<?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
 			<?php if ($theme == 'core'): ?>
-				<?php $this->BcBaser->link('現在のテーマにコピー', array('action' => 'copy_to_theme', $theme, $plugin, $type, $path), array('class' => 'btn-red button'), '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
+				<?php $this->BcBaser->link('現在のテーマにコピー', array_merge(array('action' => 'copy_to_theme', $theme, $plugin, $type), explode('/', $path)), array('class' => 'btn-red button'), '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
 			<?php endif; ?>
 		<?php else: ?>
 			機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。
