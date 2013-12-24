@@ -1250,7 +1250,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function contentsName($detail = false, $options = array()) {
 
-		echo $this->getContentsName($detail);
+		echo $this->getContentsName($detail, $options);
 	}
 
 /**
