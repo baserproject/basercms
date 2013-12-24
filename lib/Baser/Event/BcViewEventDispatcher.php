@@ -46,6 +46,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function beforeRenderFile(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return;
+			}
 			$event->subject->dispatchEvent('beforeRenderFile', $event->data);
 		}
 	}
@@ -58,6 +61,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function afterRenderFile(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return $event->data[1];
+			}
 			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, array('modParams' => 1));
 			if ($currentEvent) {
 				return $currentEvent->data[1];
@@ -74,6 +80,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function beforeRender(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return;
+			}
 			$event->subject->dispatchEvent('beforeRender', $event->data);
 		}
 	}
@@ -86,6 +95,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function afterRender(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return;
+			}
 			$event->subject->dispatchEvent('afterRender', $event->data);
 		}
 	}
@@ -98,6 +110,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function beforeLayout(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return;
+			}
 			$event->subject->dispatchEvent('beforeLayout', $event->data);
 		}
 	}
@@ -110,6 +125,9 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
  */
 	public function afterLayout(CakeEvent $event) {
 		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
+			if(!method_exists($event->subject(), 'dispatchEvent')) {
+				return;
+			}
 			$event->subject->dispatchEvent('afterLayout', $event->data);
 		}
 	}
