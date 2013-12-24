@@ -49,6 +49,14 @@ template "/etc/phpPgAdmin/config.inc.php" do
   mode 0644
 end
 
+template "/etc/php.d/xdebug.ini" do
+  source "xdebug.ini.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :reload, 'service[httpd]'
+end
+
 directory "/root/cron" do
   owner "root"
   group "root"
