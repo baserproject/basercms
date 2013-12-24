@@ -27,7 +27,17 @@
  */
 define('APP_DIR', 'app');
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__FILE__));
+
+// CUSTOMIZE MODIFY 2013/12/24 ryuring
+// 環境によって、 __FILE__ で取得できる値と、$_SERVER['SCRIPT_FILENAME'] で取得できる値が違う場合がある為、
+// $_SERVER['SCRIPT_FILENAME'] に統一した
+// Heteml にて再現
+// >>>
+// define('ROOT', dirname(__FILE__));
+// ---
+define('ROOT', dirname($_SERVER['SCRIPT_FILENAME']));
+// <<<
+
 define('WEBROOT_DIR', 'webroot');
 define('WWW_ROOT', ROOT . DS . APP_DIR . DS . WEBROOT_DIR . DS);
 
