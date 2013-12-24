@@ -430,6 +430,7 @@ class ThemesController extends AppController {
 		if (!$theme) {
 			$this->notFound();
 		}
+		$this->BcManager->deleteDeployedAdminAssets();
 		$siteConfig['SiteConfig']['theme'] = $theme;
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
@@ -442,9 +443,7 @@ class ThemesController extends AppController {
 		} else {
 			$this->setMessage('テーマ「' . $theme . '」を適用しました。');
 		}
-		if (!$this->BcManager->isCreatedAdminAssetsSymlink()) {
-			$this->BcManager->createAdminAssetsSymlink();
-		}
+		$this->BcManager->deployAdminAssets();
 		$this->redirect(array('action' => 'index'));
 	}
 

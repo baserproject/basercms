@@ -114,8 +114,9 @@ class BcManagerComponent extends Component {
 		}
 
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		if (!$this->isCreatedAdminAssetsSymlink()) {
-			$this->createAdminAssetsSymlink();
+		$this->deleteDeployedAdminAssets();
+		if (!$this->deployAdminAssets()) {
+			$this->log('管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
 		}
 
 		// アップロード用初期フォルダを作成する
@@ -1633,6 +1634,7 @@ class BcManagerComponent extends Component {
  * 作成してないものがひとつでもあると true を返す
  * 
  * @return boolean
+ * @deprecated since version 3.0.1
  */
 	public function isCreatedAdminAssetsSymlink() {
 		// Windowsの場合シンボリックリンクをサポートしないのでそのままtrueを返す
@@ -1662,6 +1664,7 @@ class BcManagerComponent extends Component {
  * これにより、表示速度の改善を行う事ができる
  * 
  * @return boolean
+ * @deprecated since version 3.0.1
  */
 	public function createAdminAssetsSymlink() {
 		$viewPath = getViewPath();
@@ -1690,4 +1693,66 @@ class BcManagerComponent extends Component {
 		return $result;
 	}
 
+/**
+ * テーマに配置された管理システム用アセットを削除する
+ * 
+ * @return boolean
+ */
+	public function deleteDeployedAdminAssets() {
+		$viewPath = getViewPath();
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
+		$result = true;
+		$Folder = new Folder();
+		if(!$Folder->delete($css)) {
+			$result = false;
+		}
+		if(!$Folder->delete($js)) {
+			$result = false;
+		}
+		if(!$Folder->delete($img)) {
+			$result = false;
+		}
+		return $result;
+	}
+	
+/**
+ * テーマに管理システム用アセットを配置する
+ * 
+ * @return boolean
+ */
+	public function deployAdminAssets() {
+		$viewPath = getViewPath();
+		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
+		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
+		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
+		$result = true;
+		$Folder = new Folder();
+		if(!$Folder->copy(array(
+			'from'	=> $adminCss,
+			'to'	=> $css,
+			'mode'	=> 0777
+		))) {
+			$result = false;
+		}
+		if(!$Folder->copy(array(
+			'from'	=> $adminJs,
+			'to'	=> $js,
+			'mode'	=> 0777
+		))) {
+			
+		}
+		if(!$Folder->copy(array(
+			'from'	=> $adminImg,
+			'to'	=> $img,
+			'mode'	=> 0777
+		))) {
+			$result = false;
+		}
+		return $result;
+	}
 }

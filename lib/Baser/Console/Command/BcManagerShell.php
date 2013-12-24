@@ -258,15 +258,18 @@ class BcManagerShell extends BcAppShell {
 
 		// テーマの配置
 		if (!$this->BcManager->deployTheme()) {
-			$message = "デモテーマの配置に失敗しました。";
+			$message = "テーマの配置に失敗しました。";
 			$this->log($message);
 			$this->err($message);
 			return;
 		}
 
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		if (!$this->BcManager->isCreatedAdminAssetsSymlink()) {
-			$this->BcManager->createAdminAssetsSymlink();
+		$this->BcManager->deleteDeployedAdminAssets();
+		if (!$this->BcManager->deployAdminAssets()) {
+			$message = "管理システムのアセットファイルの配置に失敗しました。";
+			$this->log($message);
+			$this->err($message);
 		}
 
 		// ページ初期化
