@@ -2069,5 +2069,20 @@ END_FLASH;
 		}
 		return $tag;
 	}
-
+	
+/**
+ * テーマのURLを取得する
+ * @return string
+ */
+	public function getThemeUrl() {
+		return $this->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+	}
+	
+/**
+ * テーマのURLを出力する
+ */
+	public function themeUrl() {
+		echo $this->getThemeUrl();
+	}
+	
 }

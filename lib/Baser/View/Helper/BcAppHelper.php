@@ -53,33 +53,6 @@ class BcAppHelper extends Helper {
  */
 	public function webroot($file) {
 
-		// CUSTOMIZE ADD 2010/05/19 ryuring
-		// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
-		// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
-		// CUSTOMIZE MODIFY 2011/03/17 ryuring
-		// BC_DEPLOY_PATTERN 2 について対応
-		// >>>
-		$dir = Configure::read('App.dir');
-		$webroot = Configure::read('App.webroot');
-		$baseUrl = Configure::read('App.baseUrl');
-		if ($baseUrl) {
-			switch (BC_DEPLOY_PATTERN) {
-				case 1:
-					if (strpos($this->request->webroot, $dir) === false) {
-						$this->request->webroot .= $dir . '/';
-					}
-					if (strpos($this->request->webroot, $webroot) === false) {
-						$this->request->webroot .= $webroot . '/';
-					}
-					break;
-				case 2:
-					$baseDir = str_replace('index.php', '', $baseUrl);
-					$this->request->webroot = $baseDir;
-					break;
-			}
-		}
-		//<<<
-
 		$asset = explode('?', $file);
 		$asset[1] = isset($asset[1]) ? '?' . $asset[1] : null;
 
