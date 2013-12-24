@@ -243,4 +243,17 @@ class BcAppHelper extends Helper {
 		return BcEventDispatcher::dispatch($name, $this->_View, $params, $options);
 	}
 
+/**
+ * afterLayout
+ * 
+ * @param type $layoutFile
+ */
+	public function afterLayout($layoutFile) {
+		parent::afterLayout($layoutFile);
+		// 出力時にインデント用のタブを除去
+		// インデントの調整がちゃんとできてないので取り急ぎ除去するようにした
+		// 半角スペースは除去した場合レイアウトが崩れる可能性がある為除去しない
+		$this->_View->output = preg_replace("/\n[\t]+?([^\t])/", "\n$1", $this->_View->output);
+	}
+	
 }
