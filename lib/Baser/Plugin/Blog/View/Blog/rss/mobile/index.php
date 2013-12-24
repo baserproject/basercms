@@ -20,9 +20,8 @@
  */
 ?>
 <?php
-
-if ($posts) {
-	echo $rss->items($posts, 'transformRSS');
+if($posts){
+	echo $this->Rss->items($posts,'transformRSS');
 }
 
 function transformRSS($data) {
@@ -35,5 +34,4 @@ function transformRSS($data) {
 		'pubDate' => $data['BlogPost']['posts_date']
 	);
 }
-
 ?>
