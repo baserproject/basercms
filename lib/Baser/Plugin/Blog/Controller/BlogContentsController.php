@@ -249,7 +249,7 @@ class BlogContentsController extends BlogAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path . '/index' . $this->ext));
+			$this->redirect(array_merge(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path . '/index' . $this->ext)));
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));

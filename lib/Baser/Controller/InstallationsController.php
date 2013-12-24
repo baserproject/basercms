@@ -131,9 +131,9 @@ class InstallationsController extends AppController {
 				break;
 		}
 
-		if (strpos($this->request->webroot, 'webroot') === false) {
+		/*if (strpos($this->request->webroot, 'webroot') === false) {
 			$this->request->webroot = DS;
-		}
+		}*/
 
 		$this->Security->csrfCheck = false;
 		$this->Security->validatePost = false;

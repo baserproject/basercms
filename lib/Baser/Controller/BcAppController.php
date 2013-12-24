@@ -1404,7 +1404,7 @@ class BcAppController extends Controller {
 		if (!empty($files[1])) {
 			foreach ($files[1] as $file) {
 				$file = str_replace('-', '_', $file);
-				$this->helpers[] = Inflector::camelize(basename($file, '.php'));
+				$this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
 			}
 		}
 	}

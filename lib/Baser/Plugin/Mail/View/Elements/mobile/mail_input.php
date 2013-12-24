@@ -17,10 +17,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+$group_field = null;
+$iteration = 0;
+if (!isset($blockEnd)) {
+	$blockEnd = 0;
+}
 ?>
-<?php $group_field = null ?>
-<?php $iteration = 0; ?>
-<?php if (!isset($blockEnd)) $blockEnd = 0 ?>
+
 <?php foreach ($mailFields as $key => $record): ?>
 	<?php $iteration++; ?>
 	<?php if ($record['MailField']['use_field']): ?>
@@ -56,9 +60,9 @@
 				<?php endif; ?>
 				<?php if (!$record['MailField']['group_valid']): ?>
 					<?php if ($this->Mailform->error("Message." . $record['MailField']['field_name'] . "_format", "check")): ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['field_name'] . "_format", "形式が不正です", array('wrap' => false)) ?></font>
+						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['field_name'] . "_format", "形式が不正です", array('wrap' => false)); ?></font>
 					<?php else: ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['field_name'] . "", "必須項目です", array('wrap' => false)) ?></font>
+						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['field_name'] . "", "必須項目です", array('wrap' => false)); ?></font>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php /* 説明欄 */ ?>

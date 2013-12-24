@@ -43,7 +43,6 @@ class MaildataHelper extends BcTextHelper {
  * @access public
  */
 	public function control($type, $value, $options = "") {
-
 		// コントロールソースの配列変換
 		if (!is_array($options)) {
 			$options = explode("|", $options);

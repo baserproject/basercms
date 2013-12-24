@@ -92,7 +92,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function beforeFilter() {
-
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
@@ -111,7 +110,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function beforeRender() {
-
 		parent::beforeRender();
 		$this->set('mailContent', $this->mailContent);
 	}
@@ -124,7 +122,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function admin_index($mailContentId) {
-
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('MailMessage', array('default' => $default));
 		$this->paginate = array(
@@ -152,7 +149,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function admin_view($mailContentId, $messageId) {
-
 		if (!$mailContentId || !$messageId) {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
@@ -197,7 +193,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function admin_ajax_delete($mailContentId, $messageId) {
-
 		if (!$messageId) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -235,7 +230,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public function admin_delete($mailContentId, $messageId) {
-
 		if (!$mailContentId || !$messageId) {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();

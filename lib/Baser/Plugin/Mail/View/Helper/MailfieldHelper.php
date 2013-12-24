@@ -38,7 +38,6 @@ class MailfieldHelper extends AppHelper {
  * @access public
  */
 	public function getAttributes($data) {
-
 		if (isset($data['MailField'])) {
 			$data = $data['MailField'];
 		}

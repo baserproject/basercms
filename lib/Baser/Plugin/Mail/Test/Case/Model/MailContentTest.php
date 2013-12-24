@@ -39,7 +39,6 @@ class MailContentTest extends CakeTestCase {
  * @return [type] [description]
  */
 	public function test_copy() {
-		
 	}
 
 }

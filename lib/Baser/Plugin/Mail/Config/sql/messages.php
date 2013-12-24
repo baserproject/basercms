@@ -5,22 +5,23 @@
 
 class MessagesSchema extends CakeSchema {
 
-	var $name = 'Messages';
-	var $file = 'messages.php';
-	var $connection = 'plugin';
+	public $name = 'Messages';
 
-	function before($event = array()) {
+	public $file = 'messages.php';
+
+	public $connection = 'plugin';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
-		
+	public function after($event = array()) {
 	}
 
-	var $messages = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $messages = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 

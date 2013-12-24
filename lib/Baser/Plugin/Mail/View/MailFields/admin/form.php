@@ -104,7 +104,7 @@ jQuery(function($) {
 				<?php /* MailContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('MailField', array('url' => array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id']))) ?>
-<?php elseif ($this->action == 'admin_edit'): ?>
+	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('MailField', array('url' => array('controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id'), 'id' => false))) ?>
 <?php endif; ?>
 				<?php echo $this->BcForm->hidden('MailField.id') ?>

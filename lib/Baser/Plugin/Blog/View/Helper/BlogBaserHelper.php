@@ -55,7 +55,7 @@ class BlogBaserHelper extends AppHelper {
 			'day' => null,
 			'id' => null,
 			'keyword' => null,
-			'templates' => null,
+			'template' => null,
 			'direction' => null,
 			'page' => null,
 			'sort' => null
@@ -78,12 +78,6 @@ class BlogBaserHelper extends AppHelper {
 				break;
 			}
 		}
-		if (isset($options['templates'])) {
-			$templates = $options['templates'];
-		} else {
-			$templates = 'posts';
-		}
-		unset($options['templates']);
 
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
 	}

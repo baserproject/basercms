@@ -17,25 +17,26 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 $group_field = null;
 foreach ($mailFields as $field) {
 	$field = $field['MailField'];
-	if ( $field['use_field'] && isset($message[$field['field_name']]) &&  ($group_field != $field['group_field']  || (!$group_field && !$field['group_field']))):
+	if ($field['use_field'] && isset($message[$field['field_name']]) && ($group_field != $field['group_field'] || (!$group_field && !$field['group_field']))) {
 ?>
 
 
-◇◆ <?php echo $field['head'] ?> 
+◇◆ <?php echo $field['head']; ?> 
 ----------------------------------------
 <?php
-	endif;
-	if (!empty($field['before_attachment']) && isset($message[$field['field_name']])){
-		echo " ".$field['before_attachment'];
 	}
-	if (isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']){
-		echo $this->Maildata->control($field['type'],$message[$field['field_name']],$this->Mailfield->getOptions($field));
+	if (!empty($field['before_attachment']) && isset($message[$field['field_name']])) {
+		echo " " . $field['before_attachment'];
 	}
-	if (!empty($field['after_attachment']) && isset($message[$field['field_name']])){
-		echo " ".$field['after_attachment'];
+	if (isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']) {
+		echo $this->Maildata->control($field['type'], $message[$field['field_name']], $this->Mailfield->getOptions($field));
+	}
+	if (!empty($field['after_attachment']) && isset($message[$field['field_name']])) {
+		echo " " . $field['after_attachment'];
 	}
 	$group_field = $field['group_field'];
 }

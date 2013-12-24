@@ -35,7 +35,6 @@ class MailAppModel extends BcPluginAppModel {
  * @return array
  */
 	public function sanitizeData($datas) {
-
 		foreach ($datas as $key => $data) {
 
 			if (!is_array($data)) {
