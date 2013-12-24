@@ -20,7 +20,7 @@
 ?>
 <?php
 if($posts){
-	echo $rss->items($posts,'transformRSS');
+	echo $this->Rss->items($posts,'transformRSS');
 }
 function transformRSS($data) {
 	return array(
