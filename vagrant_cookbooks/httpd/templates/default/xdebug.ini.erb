@@ -1,0 +1,10 @@
+; Enable xdebug extension module
+zend_extension=/usr/lib64/php/modules/xdebug.so
+
+; see http://xdebug.org/docs/all_settings
+xdebug.remote_enable=1
+xdebug.remote_autostart=0
+xdebug.remote_handler=dbgp
+xdebug.remote_host=<%= node[:xdebug][:remote_host] %>
+xdebug.remote_port=<%= node[:xdebug][:remote_port] %>
+xdebug.remote_mode=req
