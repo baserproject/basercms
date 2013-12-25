@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * PostgreSQL DBO拡張
@@ -17,9 +18,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-
 App::uses('Postgres', 'Model/Datasource/Database');
+
 class BcPostgres extends Postgres {
+
 /**
  * テーブル名のリネームステートメントを生成
  *
@@ -29,10 +31,9 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-		
-		return "ALTER TABLE ".$sourceName." RENAME TO ".$targetName;
-		
+		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
+
 /**
  * カラム名を変更する
  *
@@ -41,18 +42,17 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function renameColumn($options) {
-
 		extract($options);
 
-		if(!isset($table) || !isset($new) || !isset($old)) {
+		if (!isset($table) || !isset($new) || !isset($old)) {
 			return false;
 		}
 
 		$table = $this->config['prefix'] . $table;
-		$sql = 'ALTER TABLE "'.$table.'" RENAME "'.$old.'" TO "'.$new.'"';
+		$sql = 'ALTER TABLE "' . $table . '" RENAME "' . $old . '" TO "' . $new . '"';
 		return $this->execute($sql);
-		
 	}
+
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
  *
@@ -64,7 +64,6 @@ class BcPostgres extends Postgres {
  * @access public
  */
 	public function value($data, $column = null, $read = true) {
-
 		// >>> CUSTOMIZE MODIFY 2011/03/23 ryuring
 		//$parent = parent::value($data, $column);
 		// ---
@@ -81,10 +80,10 @@ class BcPostgres extends Postgres {
 			$column = $this->introspectType($data);
 		}
 
-		switch($column) {
+		switch ($column) {
 			case 'binary':
 				$data = pg_escape_bytea($data);
-			break;
+				break;
 			case 'boolean':
 				if ($data === true || $data === 't' || $data === 'true') {
 					return 'TRUE';
@@ -92,7 +91,7 @@ class BcPostgres extends Postgres {
 					return 'FALSE';
 				}
 				return (!empty($data) ? 'TRUE' : 'FALSE');
-			break;
+				break;
 			case 'float':
 				if (is_float($data)) {
 					$data = sprintf('%F', $data);
@@ -112,25 +111,24 @@ class BcPostgres extends Postgres {
 				// >>> CUSTOMIZE ADD 2010/03/23 ryuring
 				// postgresql の場合、0000-00-00 00:00:00 を指定すると範囲外エラーとなる為
 				if ($data === '0000-00-00 00:00:00') {
-					return "'".date('Y-m-d H:i:s', 0)."'";
+					return "'" . date('Y-m-d H:i:s', 0) . "'";
 				}
 				// <<<
-
 				// >>> CUSTOMIZE MODIFY 2013/04/12 ryuring
 				// TreeBehavior::getPath() にて、引数 $id に、null、または、空文字を指定した場合に、
 				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
 				//if ($data === '') {
 				if ($data === '' || $data === false) {
-				// <<<
+					// <<<
 					return $read ? 'NULL' : 'DEFAULT';
 				}
 			default:
 				$data = pg_escape_string($data);
-			break;
+				break;
 		}
 		return "'" . $data . "'";
-		
 	}
+
 /**
  * Prepares a value, or an array of values for database queries by quoting and escaping them.
  *
@@ -141,11 +139,9 @@ class BcPostgres extends Postgres {
  * @access private
  */
 	private function __value($data, $column = null, $read = true) {
-		
 		if (is_array($data) && !empty($data)) {
 			return array_map(
-				array(&$this, 'value'),
-				$data, array_fill(0, count($data), $column), array_fill(0, count($data), $read)
+				array(&$this, 'value'), $data, array_fill(0, count($data), $column), array_fill(0, count($data), $read)
 			);
 		} elseif (is_object($data) && isset($data->type)) {
 			if ($data->type == 'identifier') {
@@ -158,7 +154,6 @@ class BcPostgres extends Postgres {
 		} else {
 			return null;
 		}
-		
 	}
 
 /**
@@ -168,13 +163,12 @@ class BcPostgres extends Postgres {
  * @return int An integer representing the length of the column
  */
 	public function length($real) {
-		
 		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
-		if(preg_match('/^int([0-9]+)$/', $real, $maches)) {
+		if (preg_match('/^int([0-9]+)$/', $real, $maches)) {
 			return intval($maches[1]);
 		}
 		// <<<
-		
+
 		$col = str_replace(array(')', 'unsigned'), '', $real);
 		$limit = null;
 
@@ -189,6 +183,7 @@ class BcPostgres extends Postgres {
 		}
 		return null;
 	}
+
 /**
  * Returns an array of the fields in given table name.
  *
@@ -197,36 +192,35 @@ class BcPostgres extends Postgres {
  */
 	public function describe($model) {
 		$table = $this->fullTableName($model, false, false);
-		
+
 		// CUSTOMIZE MODIFY 2013/08/16 ryuring
 		// >>>
 		//$fields = parent::describe($table);
 		// ---
 		$fields = $this->__describe($table);
 		// <<<
-		
+
 		$this->_sequenceMap[$table] = array();
 		$cols = null;
 
 		if ($fields === null) {
-			
+
 			// CUSTOMIZE MODIFY 2013/08/16 ryuring
 			// udt_name フィールドを追加
 			// >>>
-			/*$cols = $this->_execute(
-				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
-					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
-					character_octet_length AS oct_length FROM information_schema.columns
-				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-				array($table, $this->config['schema'])
-			);*/
+			/* $cols = $this->_execute(
+			  "SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
+			  column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+			  character_octet_length AS oct_length FROM information_schema.columns
+			  WHERE table_name = ? AND table_schema = ?  ORDER BY position",
+			  array($table, $this->config['schema'])
+			  ); */
 			// ---
 			$cols = $this->_execute(
 				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null,
 					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
 					character_octet_length AS oct_length FROM information_schema.columns
-				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-				array($table, $this->config['schema'])
+				WHERE table_name = ? AND table_schema = ?  ORDER BY position", array($table, $this->config['schema'])
 			);
 
 			// @codingStandardsIgnoreStart
@@ -237,13 +231,12 @@ class BcPostgres extends Postgres {
 					if ($c->type == 'character varying') {
 						$length = null;
 						$type = 'text';
-					
-					// CUSTOMIZE ADD 2013/08/16 ryuring
-					// >>>
-					} elseif($c->type == 'text') {
-							$length = null;
-					// <<<
-							
+
+						// CUSTOMIZE ADD 2013/08/16 ryuring
+						// >>>
+					} elseif ($c->type == 'text') {
+						$length = null;
+						// <<<
 					} elseif ($c->type == 'uuid') {
 						$length = 36;
 					} else {
@@ -252,14 +245,13 @@ class BcPostgres extends Postgres {
 				} elseif (!empty($c->char_length)) {
 					$length = intval($c->char_length);
 				} else {
-					
+
 					// CUSTOMIZE MODIFY 2013/08/16 ryuring
 					// >>>
 					//$length = $this->length($c->type);
 					// ---
 					$length = $this->length($c->udt);
 					// <<<
-					
 				}
 				if (empty($length)) {
 					$length = null;
@@ -268,25 +260,23 @@ class BcPostgres extends Postgres {
 					'type' => $this->column($type),
 					'null' => ($c->null == 'NO' ? false : true),
 					'default' => preg_replace(
-						"/^'(.*)'$/",
-						"$1",
-						preg_replace('/::.*/', '', $c->default)
+						"/^'(.*)'$/", "$1", preg_replace('/::.*/', '', $c->default)
 					),
 					'length' => $length
 				);
-				
+
 				// CUSTOMIZE ADD 2013/08/16 ryuring
 				// >>>
 				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
 					$fields[$c->name]['length'] = 8;
 				}
 				// <<<
-				
+
 				if ($model instanceof Model) {
 					if ($c->name == $model->primaryKey) {
 						$fields[$c->name]['key'] = 'primary';
 						if ($fields[$c->name]['type'] !== 'string') {
-							
+
 							// CUSTOMIZE MODIFY 2013/08/16 ryuring
 							// >>>
 							//$fields[$c->name]['length'] = 11;
@@ -326,8 +316,8 @@ class BcPostgres extends Postgres {
 			$cols->closeCursor();
 		}
 		return $fields;
-		
 	}
+
 /**
  * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ
@@ -337,7 +327,6 @@ class BcPostgres extends Postgres {
  * @access private
  */
 	private function __describe($table) {
-		
 		if ($this->cacheSources === false) {
 			return null;
 		}
@@ -351,7 +340,6 @@ class BcPostgres extends Postgres {
 			return $cache;
 		}
 		return null;
-		
 	}
-	
+
 }

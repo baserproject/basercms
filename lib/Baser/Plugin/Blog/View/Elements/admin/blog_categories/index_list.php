@@ -25,50 +25,50 @@
 	<thead>
 		<tr>
 			<th style="width:160px" class="list-tool">
-				<div>
-	<?php if($newCatAddable): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add' ,$blogContent['BlogContent']['id'])) ?>
+	<div>
+		<?php if ($newCatAddable): ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
+		<?php endif ?>
+	</div>
+	<?php if ($this->BcBaser->isAdminUser()): ?>
+		<div>
+			<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+			<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+			<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+		</div>
 	<?php endif ?>
-				</div>
-	<?php if($this->BcBaser->isAdminUser()): ?>
-				<div>
-					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-				</div>
+</th>
+<th>NO</th>
+<th>ブログカテゴリ名
+	<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
+		<br />管理グループ
 	<?php endif ?>
-			</th>
-			<th>NO</th>
-			<th>ブログカテゴリ名
-				<?php if($this->BcBaser->siteConfig['category_permission']): ?>
-				<br />管理グループ
-				<?php endif ?>
-			</th>
-			<th>ブログカテゴリタイトル</th>
-			<th>登録日<br />更新日</th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php if(!empty($dbDatas)): ?>
+</th>
+<th>ブログカテゴリタイトル</th>
+<th>登録日<br />更新日</th>
+</tr>
+</thead>
+<tbody>
+	<?php if (!empty($dbDatas)): ?>
 		<?php $currentDepth = 0 ?>
-		<?php foreach($dbDatas as $data): ?>
-<?php
-$rowIdTmps[$data['BlogCategory']['depth']] = $data['BlogCategory']['id'];
-// 階層が上がったタイミングで同階層よりしたのIDを削除
-if($currentDepth > $data['BlogCategory']['depth']) {
-	$i=$data['BlogCategory']['depth']+1;
-	while(isset($rowIdTmps[$i])) {
-		unset($rowIdTmps[$i]);
-		$i++;
-	}
-}
-$currentDepth = $data['BlogCategory']['depth'];
-$rowGroupId = array();
-foreach($rowIdTmps as $rowIdTmp) {
-	$rowGroupId[] = 'row-group-'.$rowIdTmp;
-}
-$rowGroupClass = ' class="depth-'.$data['BlogCategory']['depth'].' '.implode(' ', $rowGroupId).'"';
-?>
+		<?php foreach ($dbDatas as $data): ?>
+			<?php
+			$rowIdTmps[$data['BlogCategory']['depth']] = $data['BlogCategory']['id'];
+			// 階層が上がったタイミングで同階層よりしたのIDを削除
+			if ($currentDepth > $data['BlogCategory']['depth']) {
+				$i = $data['BlogCategory']['depth'] + 1;
+				while (isset($rowIdTmps[$i])) {
+					unset($rowIdTmps[$i]);
+					$i++;
+				}
+			}
+			$currentDepth = $data['BlogCategory']['depth'];
+			$rowGroupId = array();
+			foreach ($rowIdTmps as $rowIdTmp) {
+				$rowGroupId[] = 'row-group-' . $rowIdTmp;
+			}
+			$rowGroupClass = ' class="depth-' . $data['BlogCategory']['depth'] . ' ' . implode(' ', $rowGroupId) . '"';
+			?>
 			<?php $currentDepth = $data['BlogCategory']['depth'] ?>
 			<?php $this->BcBaser->element('blog_categories/index_row', array('data' => $data, 'rowGroupClass' => $rowGroupClass)) ?>
 		<?php endforeach; ?>
@@ -77,5 +77,5 @@ $rowGroupClass = ' class="depth-'.$data['BlogCategory']['depth'].' '.implode(' '
 			<td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
-	</tbody>
+</tbody>
 </table>

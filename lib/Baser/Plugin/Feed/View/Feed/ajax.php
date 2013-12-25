@@ -18,7 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 header("Content-type: text/javascript charset=UTF-8");
-$this->BcBaser->cacheHeader(MONTH,'js');
+$this->BcBaser->cacheHeader(MONTH, 'js');
 ?>
 document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 

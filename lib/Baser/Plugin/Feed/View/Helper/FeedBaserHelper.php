@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィードBaserヘルパー
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * フィードBaserヘルパー
  *
@@ -24,6 +26,7 @@
  *
  */
 class FeedBaserHelper extends AppHelper {
+
 /**
  * フィード出力
  * 
@@ -32,17 +35,15 @@ class FeedBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function feed ($id, $mobile='') {
-		
-		$url = array('plugin'=>'feed','controller'=>'feed','action'=>'index');
-		if($mobile===''){
+	public function feed($id, $mobile = '') {
+		$url = array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
+		if ($mobile === '') {
 			$mobile = (Configure::read('BcRequest.agent') == 'mobile');
 		}
-		if($mobile){
+		if ($mobile) {
 			$url['prefix'] = Configure::read('BcAgent.mobile.prefix');
 		}
-		echo $this->requestAction($url,array('pass'=>array($id)));
-
+		echo $this->requestAction($url, array('pass' => array($id)));
 	}
-	
+
 }

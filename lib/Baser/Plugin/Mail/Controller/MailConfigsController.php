@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールフォーム設定コントローラー
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * メールフォーム設定コントローラー
  *
  * @package baser.plugins.mail.controllers
  */
 class MailConfigsController extends MailAppController {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class MailConfigsController extends MailAppController {
  * @access public
  */
 	public $name = 'MailConfigs';
+
 /**
  * モデル
  *
@@ -40,13 +44,15 @@ class MailConfigsController extends MailAppController {
  * @access public
  */
 	public $uses = array('Mail.MailConfig');
+
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * サブメニューエレメント
  *
@@ -54,6 +60,7 @@ class MailConfigsController extends MailAppController {
  * @access public
  */
 	public $subMenuElements = array();
+
 /**
  * ぱんくずナビ
  *
@@ -64,6 +71,7 @@ class MailConfigsController extends MailAppController {
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
+
 /**
  * [ADMIN] メールフォーム設定
  *
@@ -71,26 +79,23 @@ class MailConfigsController extends MailAppController {
  * @access public
  */
 	public function admin_form() {
-
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 			$this->request->data = $this->MailConfig->read(null, 1);
-		}else {
+		} else {
 
 			/* 更新処理 */
-			if($this->MailConfig->save($this->request->data)) {
+			if ($this->MailConfig->save($this->request->data)) {
 				$this->setMessage('メールフォーム設定を保存しました。');
 				$this->redirect(array('action' => 'form'));
-			}else {
+			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
-
 		}
 
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールプラグイン基本設定';
 		$this->help = 'mail_configs_form';
-
 	}
-	
+
 }

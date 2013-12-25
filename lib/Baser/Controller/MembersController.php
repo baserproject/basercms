@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メンバーコントローラー（デモ用）
@@ -21,12 +22,14 @@
  * Include files 
  */
 App::uses('UsersController', 'Controller');
+
 /**
  * メンバーコントローラー（デモ用）
  *
  * @package Baser.Controller
  */
 class MembersController extends UsersController {
+
 /**
  * クラス名
  *
@@ -34,6 +37,7 @@ class MembersController extends UsersController {
  * @access public
  */
 	public $name = 'Members';
+
 /**
  * モデル
  *
@@ -41,6 +45,7 @@ class MembersController extends UsersController {
  * @access public
  */
 	public $uses = array('Member', 'UserGroup');
+
 /**
  * [MYPAGE] メンバー編集
  * 
@@ -48,4 +53,5 @@ class MembersController extends UsersController {
 	public function mypage_edit() {
 		$this->pageTitle = 'メンバーマイページ（デモ）';
 	}
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dbo Source
  *
@@ -17,13 +18,12 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('DataSource', 'Model/Datasource');
 App::uses('String', 'Utility');
 App::uses('View', 'View');
 App::uses('Set', 'Utility');
 App::uses('String', 'Utility');
-App::uses('CakeSchema', 'Model');// CUSTOMIZE ADD 2012/11/04 itm_kiyo
+App::uses('CakeSchema', 'Model'); // CUSTOMIZE ADD 2012/11/04 itm_kiyo
 /**
  * DboSource
  *
@@ -31,6 +31,7 @@ App::uses('CakeSchema', 'Model');// CUSTOMIZE ADD 2012/11/04 itm_kiyo
  *
  * @package       Cake.Model.Datasource
  */
+
 class DboSource extends DataSource {
 
 /**
@@ -240,15 +241,16 @@ class DboSource extends DataSource {
  */
 	protected $_methodCacheChange = false;
 
-// >>> CUSTOMIZE ADD 2010/12/17 ryuring
+	// >>> CUSTOMIZE ADD 2010/12/17 ryuring
 /**
  * PHP←→DBエンコーディングマップ
  *
  * @var array
  * @access	protected
  */
-	protected $_encodingMaps = array('utf8'=>'UTF-8', 'sjis'=>'SJIS', 'ujis'=>'EUC-JP');
-// <<<
+	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
+
+	// <<<
 
 /**
  * Constructor
@@ -265,9 +267,9 @@ class DboSource extends DataSource {
 		$this->fullDebug = Configure::read('debug') > 1;
 		if (!$this->enabled()) {
 			throw new MissingConnectionException(array(
-				'class' => get_class($this),
-				'message' => __d('cake_dev', 'Selected driver is not enabled'),
-				'enabled' => false
+			'class' => get_class($this),
+			'message' => __d('cake_dev', 'Selected driver is not enabled'),
+			'enabled' => false
 			));
 		}
 		if ($autoConnect) {
@@ -331,8 +333,7 @@ class DboSource extends DataSource {
 	public function value($data, $column = null) {
 		if (is_array($data) && !empty($data)) {
 			return array_map(
-				array(&$this, 'value'),
-				$data, array_fill(0, count($data), $column)
+				array(&$this, 'value'), $data, array_fill(0, count($data), $column)
 			);
 		} elseif (is_object($data) && isset($data->type, $data->value)) {
 			if ($data->type === 'identifier') {
@@ -828,28 +829,24 @@ class DboSource extends DataSource {
 				return $this->cacheMethod(__FUNCTION__, $cacheKey, $this->startQuote . $data . $this->endQuote);
 			}
 			$items = explode('.', $data);
-			return $this->cacheMethod(__FUNCTION__, $cacheKey,
-				$this->startQuote . implode($this->endQuote . '.' . $this->startQuote, $items) . $this->endQuote
+			return $this->cacheMethod(__FUNCTION__, $cacheKey, $this->startQuote . implode($this->endQuote . '.' . $this->startQuote, $items) . $this->endQuote
 			);
 		}
 		if (preg_match('/^[\w-]+\.\*$/', $data)) { // string.*
-			return $this->cacheMethod(__FUNCTION__, $cacheKey,
-				$this->startQuote . str_replace('.*', $this->endQuote . '.*', $data)
+			return $this->cacheMethod(__FUNCTION__, $cacheKey, $this->startQuote . str_replace('.*', $this->endQuote . '.*', $data)
 			);
 		}
 		if (preg_match('/^([\w-]+)\((.*)\)$/', $data, $matches)) { // Functions
-			return $this->cacheMethod(__FUNCTION__, $cacheKey,
-				$matches[1] . '(' . $this->name($matches[2]) . ')'
+			return $this->cacheMethod(__FUNCTION__, $cacheKey, $matches[1] . '(' . $this->name($matches[2]) . ')'
 			);
 		}
 		if (
 			preg_match('/^([\w-]+(\.[\w-]+|\(.*\))*)\s+' . preg_quote($this->alias) . '\s*([\w-]+)$/i', $data, $matches
-		)) {
+			)) {
 			return $this->cacheMethod(
-				__FUNCTION__, $cacheKey,
-				preg_replace(
-					'/\s{2,}/', ' ', $this->name($matches[1]) . ' ' . $this->alias . ' ' . $this->name($matches[3])
-				)
+					__FUNCTION__, $cacheKey, preg_replace(
+						'/\s{2,}/', ' ', $this->name($matches[1]) . ' ' . $this->alias . ' ' . $this->name($matches[3])
+					)
 			);
 		}
 		if (preg_match('/^[\w-_\s]*[\w-_]+/', $data)) {
@@ -1509,7 +1506,7 @@ class DboSource extends DataSource {
 
 		if ($linkModel === null) {
 			return $this->buildStatement(
-				array(
+					array(
 					'fields' => array_unique($queryData['fields']),
 					'table' => $this->fullTableName($model),
 					'alias' => $modelAlias,
@@ -1519,8 +1516,7 @@ class DboSource extends DataSource {
 					'conditions' => $queryData['conditions'],
 					'order' => $queryData['order'],
 					'group' => $queryData['group']
-				),
-				$model
+					), $model
 			);
 		}
 		if ($external && !empty($assocData['finderQuery'])) {
@@ -1541,8 +1537,7 @@ class DboSource extends DataSource {
 			case 'hasOne':
 			case 'belongsTo':
 				$conditions = $this->_mergeConditions(
-					$assocData['conditions'],
-					$this->getConstraint($type, $model, $linkModel, $association, array_merge($assocData, compact('external', 'self')))
+					$assocData['conditions'], $this->getConstraint($type, $model, $linkModel, $association, array_merge($assocData, compact('external', 'self')))
 				);
 
 				if (!$self && $external) {
@@ -1626,10 +1621,10 @@ class DboSource extends DataSource {
 					'order' => $assocData['order'],
 					'group' => null,
 					'joins' => array(array(
-						'table' => $joinTbl,
-						'alias' => $joinAssoc,
-						'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $association)
-					))
+							'table' => $joinTbl,
+							'alias' => $joinAssoc,
+							'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $association)
+						))
 				);
 				break;
 		}
@@ -1691,7 +1686,7 @@ class DboSource extends DataSource {
 			'alias' => null,
 			'table' => 'join_table',
 			'conditions' => array()
-		), $join);
+			), $join);
 
 		if (!empty($data['alias'])) {
 			$data['alias'] = $this->alias . $this->name($data['alias']);
@@ -1724,14 +1719,14 @@ class DboSource extends DataSource {
 			}
 		}
 		return $this->renderStatement('select', array(
-			'conditions' => $this->conditions($query['conditions'], true, true, $model),
-			'fields' => implode(', ', $query['fields']),
-			'table' => $query['table'],
-			'alias' => $this->alias . $this->name($query['alias']),
-			'order' => $this->order($query['order'], 'ASC', $model),
-			'limit' => $this->limit($query['limit'], $query['offset']),
-			'joins' => implode(' ', $query['joins']),
-			'group' => $this->group($query['group'], $model)
+				'conditions' => $this->conditions($query['conditions'], true, true, $model),
+				'fields' => implode(', ', $query['fields']),
+				'table' => $query['table'],
+				'alias' => $this->alias . $this->name($query['alias']),
+				'order' => $this->order($query['order'], 'ASC', $model),
+				'limit' => $this->limit($query['limit'], $query['offset']),
+				'joins' => implode(' ', $query['joins']),
+				'group' => $this->group($query['group'], $model)
 		));
 	}
 
@@ -1873,7 +1868,7 @@ class DboSource extends DataSource {
 				$quoted = $model->escapeField($field);
 			} elseif (!$alias && strpos($field, '.') !== false) {
 				$quoted = $this->name(str_replace($quotedAlias . '.', '', str_replace(
-					$model->alias . '.', '', $field
+							$model->alias . '.', '', $field
 				)));
 			} else {
 				$quoted = $this->name($field);
@@ -1891,7 +1886,7 @@ class DboSource extends DataSource {
 				$update .= $this->boolean($value, true);
 			} elseif (!$alias) {
 				$update .= str_replace($quotedAlias . '.', '', str_replace(
-					$model->alias . '.', '', $value
+						$model->alias . '.', '', $value
 				));
 			} else {
 				$update .= $value;
@@ -1992,8 +1987,7 @@ class DboSource extends DataSource {
 					'alias' => $assoc,
 					'type' => isset($assocData['type']) ? $assocData['type'] : 'LEFT',
 					'conditions' => trim($this->conditions(
-						$this->_mergeConditions($assocData['conditions'], $this->getConstraint($assocData['association'], $model, $model->{$assoc}, $assoc, $assocData)),
-						true, false, $model
+							$this->_mergeConditions($assocData['conditions'], $this->getConstraint($assocData['association'], $model, $model->{$assoc}, $assoc, $assocData)), true, false, $model
 					))
 				));
 			}
@@ -2355,7 +2349,7 @@ class DboSource extends DataSource {
 						$prefix = !(
 							strpos($fields[$i], ' ') !== false ||
 							strpos($fields[$i], '(') !== false
-						);
+							);
 						$fields[$i] = $this->name(($prefix ? $alias . '.' : '') . $fields[$i]);
 					} else {
 						if (strpos($fields[$i], ',') === false) {
@@ -2454,7 +2448,7 @@ class DboSource extends DataSource {
 				$valueInsert = (
 					!empty($value) &&
 					(substr_count($key, '?') === count($value) || substr_count($key, ':') === count($value))
-				);
+					);
 			}
 
 			if (is_numeric($key) && empty($value)) {
@@ -2589,7 +2583,7 @@ class DboSource extends DataSource {
 				strpos($key, '(') !== false ||
 				strpos($key, ')') !== false ||
 				strpos($key, '|') !== false
-			);
+				);
 			$key = $isKey ? $this->_quoteFields($key) : $this->name($key);
 		}
 
@@ -2650,9 +2644,7 @@ class DboSource extends DataSource {
 		}
 		$conditions = str_replace(array($start, $end), '', $conditions);
 		$conditions = preg_replace_callback(
-			'/(?:[\'\"][^\'\"\\\]*(?:\\\.[^\'\"\\\]*)*[\'\"])|([a-z0-9_][a-z0-9\\-_]*\\.[a-z0-9_][a-z0-9_\\-]*)/i',
-			array(&$this, '_quoteMatchedField'),
-			$conditions
+			'/(?:[\'\"][^\'\"\\\]*(?:\\\.[^\'\"\\\]*)*[\'\"])|([a-z0-9_][a-z0-9\\-_]*\\.[a-z0-9_][a-z0-9_\\-]*)/i', array(&$this, '_quoteMatchedField'), $conditions
 		);
 		if ($conditions !== null) {
 			return $conditions;
@@ -3325,9 +3317,9 @@ class DboSource extends DataSource {
 		}
 	}
 
+	// CUSTOM ADD 2010/10/04 ryuring
+	// >>>
 
-// CUSTOM ADD 2010/10/04 ryuring
-// >>>
 /**
  * スキーマファイルを利用してテーブルを生成する
  *
@@ -3337,72 +3329,71 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function loadSchema($options) {
-
 		App::uses('CakeSchema', 'Model');
 		$options = array_merge(array(
-			'dropField'		=> true,
-			'oldSchemaPath'	=> ''	
-		), $options);
-    
+			'dropField' => true,
+			'oldSchemaPath' => ''
+			), $options);
+
 		extract($options);
 
-		if(!isset($type)){
+		if (!isset($type)) {
 			return false;
 		}
 
-		if(!isset($file)) {
-			if(isset($table)) {
-				$file = $table.'.php';
-			} elseif(isset($model)) {
-				$file = Inflector::tableize($model).'.php';
-			} elseif(isset($name)) {
-				$file = Inflector::underscore($name).'.php';
+		if (!isset($file)) {
+			if (isset($table)) {
+				$file = $table . '.php';
+			} elseif (isset($model)) {
+				$file = Inflector::tableize($model) . '.php';
+			} elseif (isset($name)) {
+				$file = Inflector::underscore($name) . '.php';
 			} else {
 				return false;
 			}
 		}
 
-		if(!isset($name)){
-			if(isset($table)) {
+		if (!isset($name)) {
+			if (isset($table)) {
 				$name = Inflector::camelize($table);
 			} elseif (isset($model)) {
 				$name = Inflector::pluralize($model);
 			} elseif (isset($file)) {
-				$name = basename(Inflector::classify($file),'.php');
+				$name = basename(Inflector::classify($file), '.php');
 			} else {
 				return false;
 			}
 		}
 
-		switch($type) {
+		switch ($type) {
 			case 'create':
-				return $this->createTableBySchema(array('path'=>$path.$file));
+				return $this->createTableBySchema(array('path' => $path . $file));
 				break;
 			case 'alter':
-				if(!$oldSchemaPath) {
-					$current = $path.basename($file,'.php').'_current.php';
-					if(!$this->writeCurrentSchema($current)) {
+				if (!$oldSchemaPath) {
+					$current = $path . basename($file, '.php') . '_current.php';
+					if (!$this->writeCurrentSchema($current)) {
 						return false;
-					} 
+					}
 				} else {
 					$current = $oldSchemaPath;
 				}
 
-				$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path.$file, 'dropField' => $dropField));
-				if(!$oldSchemaPath) {
+				$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path . $file, 'dropField' => $dropField));
+				if (!$oldSchemaPath) {
 					unlink($current);
 				}
 				return $result;
- 
+
 				break;
 			case 'drop':
-				return $this->dropTableBySchema(array('path'=>$path.$file));
+				return $this->dropTableBySchema(array('path' => $path . $file));
 				break;
 		}
 
 		return false;
-
 	}
+
 /**
  * 現在の接続のスキーマを生成する
  *
@@ -3410,8 +3401,7 @@ class DboSource extends DataSource {
  * @return boolean
  * @access public
  */
-	public function writeCurrentSchema($filename){
-
+	public function writeCurrentSchema($filename) {
 		$this->cacheSources = false;
 		$file = basename($filename);
 		$path = dirname($filename);
@@ -3419,35 +3409,34 @@ class DboSource extends DataSource {
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->connection;
 
-		if(empty($path)){
+		if (empty($path)) {
 			$path = $Schema->path;
 		}
 
 		$tables = $this->listSources();
 		$models = array();
-		foreach($tables as $table) {
-			if(preg_match("/^".$this->config['prefix']."([^_].+)$/", $table, $matches) &&
-					!preg_match("/^".Configure::read('BcEnv.pluginDbPrefix')."[^_].+$/", $matches[1])) {
+		foreach ($tables as $table) {
+			if (preg_match("/^" . $this->config['prefix'] . "([^_].+)$/", $table, $matches) &&
+				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
 				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
 			}
 		}
-		return $this->writeSchema(array('name'=>$name, 'model'=>$models, 'path' => $path, 'file' => $file));
-
+		return $this->writeSchema(array('name' => $name, 'model' => $models, 'path' => $path, 'file' => $file));
 	}
+
 /**
  * モデル名を指定してスキーマファイルを生成する
  *
  * @param	array	model	モデル名
- *					path	スキーマファイルの生成場所
+ * 					path	スキーマファイルの生成場所
  * @return	mixed	スキーマファイルの内容 Or false
  * @access	public
  */
-	public function writeSchema($options){
-
+	public function writeSchema($options) {
 		//App::uses('CakeSchema', 'Model');
 		extract($options);
 
-		if(!isset($model)){
+		if (!isset($model)) {
 			return false;
 		}
 
@@ -3456,70 +3445,69 @@ class DboSource extends DataSource {
 		// コアとプラグインを連続して書き出すとプラグインのテーブルが見つからない
 		ClassRegistry::flush();
 
-		if(!isset($file)){
-			if(is_array($model)) {
+		if (!isset($file)) {
+			if (is_array($model)) {
 				$basename = $this->configKeyName;
 			} else {
 				$basename = Inflector::tableize($model);
 				$model = array($model);
 			}
-			$file = $basename.'.php';
+			$file = $basename . '.php';
 		} else {
 			$basename = basename($file, '.php');
 		}
 
-		if(!isset($name)) {
+		if (!isset($name)) {
 			$name = Inflector::camelize($basename);
 		}
 
 		$Schema = ClassRegistry::init('CakeSchema');
 
-		if(!empty($plugin)) {
+		if (!empty($plugin)) {
 			$Schema->plugin = $plugin;
 		}
-		
-		if(isset($connection)) {
+
+		if (isset($connection)) {
 			$Schema->connection = $connection;
 		} else {
 			$Schema->connection = $this->configKeyName;
 		}
 
-		if(!isset($path)){
+		if (!isset($path)) {
 			$path = $Schema->path;
 		}
 
 		// CakeSchema では、hasAndBelongsToMany に設定されているモデルも同時に書き出す仕様となっている為、
 		// 書き出さないように変更した。
 		// バックアップファイルの生成で問題が発生した為
-		foreach($model as $value) {
+		foreach ($model as $value) {
 			$Object = ClassRegistry::init(array('class' => $value, 'ds' => $Schema->connection));
 			$Object->hasAndBelongsToMany = array();
 		}
-		
-		
+
 		$this->cacheSources = false;
 		$options = $Schema->read(array('models' => false));
-		
-		if(!empty($options['tables'][$basename])) {
+
+		if (!empty($options['tables'][$basename])) {
 			$options = array('tables' => array($basename => $options['tables'][$basename]));
 		} else {
 			// テーブルが存在しなかった場合はtrueを返して終了
 			return true;
 		}
-		$options = array_merge($options,array('name'=>$name, 'file'=>$file, 'path'=>$path));
+		$options = array_merge($options, array('name' => $name, 'file' => $file, 'path' => $path));
 
 		$result = $Schema->write($options);
-		
+
 		// 不要コード削除、改行コードをLFに変更
 		$File = new File($path . DS . $file);
 		$data = $File->read();
-		$data = str_replace(array("\r\n","\r"), "\n", $data);
+		$data = str_replace(array("\r\n", "\r"), "\n", $data);
 		$data = preg_replace('/\t(var|public)\s\$path.+;\n\n/', '', $data);
 		$File->write($data);
-		
-		return $result;
 
+		return $result;
 	}
+
 /**
  * スキーマファイルからテーブルを生成する
  *
@@ -3528,29 +3516,28 @@ class DboSource extends DataSource {
  * @access	public
  */
 	public function createTableBySchema($options) {
-
 		extract($options);
 
-		if(!isset($path)){
+		if (!isset($path)) {
 			return false;
 		}
 
 		$dir = dirname($path);
 		$file = basename($path);
 
-		if(!isset($name)){
-			$name = basename(Inflector::classify($file),'.php');
+		if (!isset($name)) {
+			$name = basename(Inflector::classify($file), '.php');
 		}
 
 		//App::uses('CakeSchema', 'Model');
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 
-		$schema = $CakeSchema->load(array('name'=>$name,'path'=>$dir,'file'=>$file));
+		$schema = $CakeSchema->load(array('name' => $name, 'path' => $dir, 'file' => $file));
 
-		return $this->createTable(array('schema'=>$schema));
-
+		return $this->createTable(array('schema' => $schema));
 	}
+
 /**
  * スキーマファイルからテーブル構造を変更する
  *
@@ -3558,13 +3545,11 @@ class DboSource extends DataSource {
  * @return boolean
  * @access public
  */
-
-	public function alterTableBySchema($options){
-
+	public function alterTableBySchema($options) {
 		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
-		if(!isset($oldPath) || !isset($newPath)){
+		if (!isset($oldPath) || !isset($newPath)) {
 			return false;
 		}
 
@@ -3573,23 +3558,23 @@ class DboSource extends DataSource {
 		$oldFile = basename($oldPath);
 		$newFile = basename($newPath);
 
-		if(!isset($oldName)){
-			$oldName = basename(Inflector::classify($oldFile),'.php');
+		if (!isset($oldName)) {
+			$oldName = basename(Inflector::classify($oldFile), '.php');
 		}
-		if(!isset($newName)){
-			$newName = basename(Inflector::classify($newFile),'.php');
+		if (!isset($newName)) {
+			$newName = basename(Inflector::classify($newFile), '.php');
 		}
-		
+
 		//App::uses('CakeSchema', 'Model');
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 
-		$old = $Schema->load(array('name'=>$oldName,'path'=>$oldDir,'file'=>$oldFile));
-		$new = $Schema->load(array('name'=>$newName,'path'=>$newDir,'file'=>$newFile));
+		$old = $Schema->load(array('name' => $oldName, 'path' => $oldDir, 'file' => $oldFile));
+		$new = $Schema->load(array('name' => $newName, 'path' => $newDir, 'file' => $newFile));
 
 		return $this->alterTable(array('old' => $old, 'new' => $new, 'dropField' => $dropField));
-
 	}
+
 /**
  * スキーマファイルからテーブルを削除する
  *
@@ -3599,28 +3584,27 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropTableBySchema($options) {
-
 		extract($options);
 
-		if(!isset($path)){
+		if (!isset($path)) {
 			return false;
 		}
 
 		$dir = dirname($path);
 		$file = basename($path);
 
-		if(!isset($name)){
-			$name = basename(Inflector::classify($file),'.php');
+		if (!isset($name)) {
+			$name = basename(Inflector::classify($file), '.php');
 		}
 
 		$CakeSchema = ClassRegistry::init('CakeSchema');
 		$CakeSchema->connection = $this->configKeyName;
 
-		$schema = $CakeSchema->load(array('name'=>$name,'path'=>$dir,'file'=>$file));
+		$schema = $CakeSchema->load(array('name' => $name, 'path' => $dir, 'file' => $file));
 
-		return $this->dropTable(array('schema'=>$schema));
-
+		return $this->dropTable(array('schema' => $schema));
 	}
+
 /**
  * テーブルを作成する
  *
@@ -3628,22 +3612,21 @@ class DboSource extends DataSource {
  * @return boolean
  * @access public
  */
-	public function createTable($options){
-
+	public function createTable($options) {
 		extract($options);
 
-		if(!isset($schema)) {
+		if (!isset($schema)) {
 			return false;
 		}
 
 		if (is_array($schema)) {
-			if(empty($table)){
+			if (empty($table)) {
 				return false;
 			}
 			$name = Inflector::pluralize(Inflector::classify($table));
-			$options = array('name'=>$name,
-							'connection' => $this->configKeyName,
-							$table => $schema);
+			$options = array('name' => $name,
+				'connection' => $this->configKeyName,
+				$table => $schema);
 			$schema = new CakeSchema($options);
 		}
 
@@ -3653,8 +3636,8 @@ class DboSource extends DataSource {
 		// とりあえずキャッシュを全て削除
 		clearCache(null, 'models');
 		return $return;
-
 	}
+
 /**
  * テーブル構造を変更する
  *
@@ -3663,11 +3646,10 @@ class DboSource extends DataSource {
  * @access	public
  */
 	public function alterTable($options) {
-
 		$options = array_merge(array('dropField' => true), $options);
 		extract($options);
 
-		if(!isset($old) || !isset($new)){
+		if (!isset($old) || !isset($new)) {
 			return false;
 		}
 
@@ -3675,10 +3657,10 @@ class DboSource extends DataSource {
 		$Schema->connection = $this->configKeyName;
 		$compare = $Schema->compare($old, $new);
 
-		if(!$dropField) {
-			foreach($compare as $table => $alter) {
-				foreach($alter as $method => $field) {
-					if($method == 'drop') {
+		if (!$dropField) {
+			foreach ($compare as $table => $alter) {
+				foreach ($alter as $method => $field) {
+					if ($method == 'drop') {
 						unset($compare[$table]['drop']);
 						break;
 					}
@@ -3688,7 +3670,7 @@ class DboSource extends DataSource {
 
 		$sql = $this->alterSchema($compare);
 
-		if($sql) {
+		if ($sql) {
 			$return = $this->execute($sql);
 			// とりあえずキャッシュを全て削除
 			clearCache(null, 'models');
@@ -3696,8 +3678,8 @@ class DboSource extends DataSource {
 		} else {
 			return false;
 		}
-
 	}
+
 /**
  * テーブルを削除する
  *
@@ -3706,27 +3688,26 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropTable($options) {
-
 		extract($options);
 
-		if(!isset($schema) && !isset($table)) {
+		if (!isset($schema) && !isset($table)) {
 			return false;
 		}
 
-		if(!isset($schema)){
+		if (!isset($schema)) {
 			$schema = $this->readSchema($table);
-			if(isset($schema['tables'][$table])) {
+			if (isset($schema['tables'][$table])) {
 				$schema = $schema['tables'][$table];
 			} else {
 				return false;
 			}
 		}
 
-		if(is_array($schema)) {
+		if (is_array($schema)) {
 			$name = Inflector::pluralize(Inflector::classify($table));
-			$options = array('name'=>$name,
-						'connection' => $this->configKeyName,
-						$table => $schema);
+			$options = array('name' => $name,
+				'connection' => $this->configKeyName,
+				$table => $schema);
 			$schema = new CakeSchema($options);
 		}
 
@@ -3735,8 +3716,8 @@ class DboSource extends DataSource {
 		// とりあえずキャッシュを全て削除
 		clearCache(null, 'models');
 		return $return;
-
 	}
+
 /**
  * テーブル名をリネームする
  *
@@ -3746,19 +3727,18 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function renameTable($options) {
-
 		extract($options);
 
-		if(!isset($new) || !isset($old)) {
+		if (!isset($new) || !isset($old)) {
 			return false;
 		}
 
-		$new = $this->config['prefix'].$new;
-		$old = $this->config['prefix'].$old;
+		$new = $this->config['prefix'] . $new;
+		$old = $this->config['prefix'] . $old;
 		$sql = $this->buildRenameTable($old, $new);
 		return $this->execute($sql);
-
 	}
+
 /**
  * カラムを追加する
  *
@@ -3767,15 +3747,14 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function addColumn($options) {
-
 		extract($options);
 
-		if(!isset($table) || !isset($column)) {
+		if (!isset($table) || !isset($column)) {
 			return false;
 		}
 
-		if(!isset($column['name'])) {
-			if(isset($field)) {
+		if (!isset($column['name'])) {
+			if (isset($field)) {
 				$column['name'] = $field;
 			} else {
 				return false;
@@ -3783,24 +3762,24 @@ class DboSource extends DataSource {
 		}
 
 		$old = $this->readSchema($table);
-		if(isset($old['tables'][$table][$field])) {
+		if (isset($old['tables'][$table][$field])) {
 			return false;
 		}
 		$new = $old;
-		
+
 		// 配列の順番を考慮して新しいフィールドを追加しないと、$CakeSchema->compare() で、
 		// 間違った構成の情報を取得してしまう。（tableParametersをフィールドとして解析してしまう）
 		$fields = array();
-		foreach($new['tables'][$table] as $key => $value) {
-			if($key !== 'indexes' && $key !== 'tableParameters') {
+		foreach ($new['tables'][$table] as $key => $value) {
+			if ($key !== 'indexes' && $key !== 'tableParameters') {
 				$fields[$key] = $value;
 			}
 		}
 		$fields[$field] = $column;
-		if(!empty($new['tables'][$table]['indexes'])) {
+		if (!empty($new['tables'][$table]['indexes'])) {
 			$fields['indexes'] = $new['tables'][$table]['indexes'];
 		}
-		if(isset($new['tables'][$table]['tableParameters'])) {
+		if (isset($new['tables'][$table]['tableParameters'])) {
 			$fields['tableParameters'] = $new['tables'][$table]['tableParameters'];
 		}
 		$new['tables'][$table] = $fields;
@@ -3810,8 +3789,8 @@ class DboSource extends DataSource {
 		$compare = $CakeSchema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
-
 	}
+
 /**
  * カラムを変更する
  *
@@ -3820,23 +3799,22 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function changeColumn($options) {
-
 		extract($options);
 
-		if(!isset($table) || !isset($column)) {
+		if (!isset($table) || !isset($column)) {
 			return false;
 		}
 
-		if(!isset($field)) {
-			if(isset($column['name'])){
+		if (!isset($field)) {
+			if (isset($column['name'])) {
 				$field = $column['name'];
-			} else{
+			} else {
 				return false;
 			}
 		}
 
 		$old = $this->readSchema($table);
-		if(!isset($old['tables'][$table][$field])) {
+		if (!isset($old['tables'][$table][$field])) {
 			return false;
 		}
 		$new = $old;
@@ -3847,8 +3825,8 @@ class DboSource extends DataSource {
 		$compare = $CakeSchema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
-
 	}
+
 /**
  * カラムを削除する
  *
@@ -3857,15 +3835,14 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function dropColumn($options) {
-
 		extract($options);
 
-		if(!isset($table) || !isset($field)) {
+		if (!isset($table) || !isset($field)) {
 			return false;
 		}
 
 		$old = $this->readSchema($table);
-		if(!isset($old['tables'][$table][$field])) {
+		if (!isset($old['tables'][$table][$field])) {
 			return false;
 		}
 		$new = $old;
@@ -3876,8 +3853,8 @@ class DboSource extends DataSource {
 		$compare = $CakeSchema->compare($old, $new);
 		$sql = $this->alterSchema($compare);
 		return $this->execute($sql);
-
 	}
+
 /**
  * カラム名を変更する
  *
@@ -3886,18 +3863,17 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function renameColumn($options) {
-
 		extract($options);
 
-		if(!isset($table) || !isset($new) || !isset($old)) {
+		if (!isset($table) || !isset($new) || !isset($old)) {
 			return false;
 		}
 
 		$column['name'] = $new;
-		$options = array('field'=>$old,'table'=>$table, 'column'=>$column);
+		$options = array('field' => $old, 'table' => $table, 'column' => $column);
 		return $this->changeColumn($options);
-
 	}
+
 /**
  * テーブル名のリネームステートメントを生成
  *
@@ -3907,10 +3883,9 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
-		
-		return "ALTER TABLE ".$sourceName." RENAME ".$targetName;
-		
+		return "ALTER TABLE " . $sourceName . " RENAME " . $targetName;
 	}
+
 /**
  * データベースよりスキーマ情報を読み込む
  *
@@ -3919,31 +3894,30 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function readSchema($table, $options = array()) {
-
-		if(is_array($options)) {
+		if (is_array($options)) {
 			$options = array_merge(array(
-				'cache'	=> true,
-				'plugin'=> null
-			), $options);
+				'cache' => true,
+				'plugin' => null
+				), $options);
 			extract($options);
 		} else {
 			// 後方互換の為
 			$cache = $options;
 			$plugin = null;
 		}
-		
-		if($cache) {
+
+		if ($cache) {
 			$this->cacheSources = false;
 			ClassRegistry::flush();
 		}
 		$tables = $this->listSources();
-		if(!in_array($this->config['prefix'].$table, $tables)){
+		if (!in_array($this->config['prefix'] . $table, $tables)) {
 			return false;
 		}
-		
+
 		$CakeSchema = ClassRegistry::init(array(array('class' => 'CakeSchema', 'plugin' => $plugin)));
 		$CakeSchema->connection = $this->configKeyName;
-		
+
 		$model = Inflector::classify(Inflector::singularize($table));
 		if (!class_exists($model)) {
 			$model = false;
@@ -3951,8 +3925,8 @@ class DboSource extends DataSource {
 			$model = array($model);
 		}
 		return $CakeSchema->read(array('models' => $model));
-
 	}
+
 /**
  * CSVファイルをDBに読み込む
  *
@@ -3961,20 +3935,19 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function loadCsv($options) {
-
 		extract($options);
-		if(!isset($path)) {
+		if (!isset($path)) {
 			return false;
 		}
-		if(!isset($encoding)) {
+		if (!isset($encoding)) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
 
 		$appEncoding = Configure::read('App.encoding');
 		$table = basename($path, '.csv');
-		$fullTableName = $this->config['prefix'].$table;
+		$fullTableName = $this->config['prefix'] . $table;
 		$schema = $this->readSchema(basename($path, '.csv'));
-		if(isset($schema['tables'][$table]['indexes']['PRIMARY']['column'])) {
+		if (isset($schema['tables'][$table]['indexes']['PRIMARY']['column'])) {
 			$indexField = $schema['tables'][$table]['indexes']['PRIMARY']['column'];
 		} else {
 			$indexField = '';
@@ -3982,50 +3955,49 @@ class DboSource extends DataSource {
 
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
-		if(!$fp) {
+		if (!$fp) {
 			return false;
 		}
 
-		$_head = fgetcsv($fp,10240);
-		foreach($_head as $value) {
+		$_head = fgetcsv($fp, 10240);
+		foreach ($_head as $value) {
 			$head[] = $this->name($value);
 		}
 
-		while(($_record = fgetcsvReg($fp, 10240)) !== false) {
+		while (($_record = fgetcsvReg($fp, 10240)) !== false) {
 
-			if($appEncoding != $encoding) {
+			if ($appEncoding != $encoding) {
 				mb_convert_variables($appEncoding, $encoding, $_record);
 			}
 
 			$values = array();
 			// 配列の添え字をフィールド名に変換
-			foreach($_record as $key => $value) {
+			foreach ($_record as $key => $value) {
 				// 主キーでデータが空の場合はスキップ
-				if($_head[$key]==$indexField && !$value) {
+				if ($_head[$key] == $indexField && !$value) {
 					unset($head[$key]);
 					continue;
 				}
-				if($_head[$key]=='created' && !$value){
+				if ($_head[$key] == 'created' && !$value) {
 					$value = date('Y-m-d H:i:s');
 				}
 				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
 			}
 			$query = array(
 				'table' => $this->name($fullTableName),
-				'fields' => implode(', ', $head) ,
+				'fields' => implode(', ', $head),
 				'values' => implode(', ', $values)
 			);
 			$sql = $this->renderStatement('create', $query);
 			if (!$this->execute($sql)) {
 				return false;
 			}
-
 		}
 		fclose($fp);
 
 		return true;
-
 	}
+
 /**
  * CSV用のフィールドデータに変換する
  *
@@ -4033,18 +4005,17 @@ class DboSource extends DataSource {
  * @param boolean $dc （ " を "" に変換するか）
  * @return string
  */
-	protected function _convertFieldToCsv($value,$dc = true) {
-		
-		if($dc) {
-			$value = str_replace('"','""',$value);
+	protected function _convertFieldToCsv($value, $dc = true) {
+		if ($dc) {
+			$value = str_replace('"', '""', $value);
 		}
-		$value = trim(trim($value),"\'");
-		$value = str_replace("\\'","'",$value);
-		$value = str_replace('{CM}',',',$value);
-		$value = '"'.$value.'"';
+		$value = trim(trim($value), "\'");
+		$value = str_replace("\\'", "'", $value);
+		$value = str_replace('{CM}', ',', $value);
+		$value = '"' . $value . '"';
 		return $value;
-		
 	}
+
 /**
  * CSV用のレコードデータに変換する
  *
@@ -4053,13 +4024,12 @@ class DboSource extends DataSource {
  * @access protected
  */
 	protected function _convertRecordToCsv($record) {
-		
-		foreach($record as $field => $value) {
+		foreach ($record as $field => $value) {
 			$record[$field] = $this->_convertFieldToCsv($value);
 		}
 		return $record;
-		
 	}
+
 /**
  * DBのデータをCSVファイルとして書きだす
  *
@@ -4068,95 +4038,94 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function writeCsv($options) {
-
 		$options = array_merge(array(
-			'path'		=> '',
-			'encoding'	=> '',
-			'table'		=> '',
-			'init'		=> false,
-			'plugin'	=> null
-		), $options);
+			'path' => '',
+			'encoding' => '',
+			'table' => '',
+			'init' => false,
+			'plugin' => null
+			), $options);
 
 		extract($options);
-		if(empty($path)) {
+		if (empty($path)) {
 			return false;
 		}
-		if(empty($encoding)) {
+		if (empty($encoding)) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
-		if(empty($table)) {
+		if (empty($table)) {
 			$table = basename($path, '.csv');
 		}
 
 		$schemas = $this->readSchema($table, array('plugin' => $plugin, 'cache' => false));
-		
-		if(!isset($schemas['tables'][$table])) {
+
+		if (!isset($schemas['tables'][$table])) {
 			return false;
 		}
 
 		$_fields = array();
-		foreach($schemas['tables'][$table] as $key => $schema) {
-			if($key != 'indexes' && $key != 'tableParameters') {
+		foreach ($schemas['tables'][$table] as $key => $schema) {
+			if ($key != 'indexes' && $key != 'tableParameters') {
 				$_fields[] = $this->name($key);
 			}
 		}
 		$fields = implode(',', $_fields);
 
 		$appEncoding = Configure::read('App.encoding');
-		$fullTableName = $this->config['prefix'].$table;
+		$fullTableName = $this->config['prefix'] . $table;
 		$sql = $this->renderStatement('select', array(
-			'table'		=> $this->name($fullTableName),
-			'fields'	=> $fields,
-			'conditions'=> 'WHERE 1=1',
-			'alias'		=> '',
-			'joins'		=> '',
-			'group'		=> '',
-			'order'		=> '',
-			'limit'		=> ''
+			'table' => $this->name($fullTableName),
+			'fields' => $fields,
+			'conditions' => 'WHERE 1=1',
+			'alias' => '',
+			'joins' => '',
+			'group' => '',
+			'order' => '',
+			'limit' => ''
 		));
-		
+
 		$datas = $this->query($sql);
 
 		$fp = fopen($path, 'a');
-		ftruncate($fp,0);
+		ftruncate($fp, 0);
 
 		// ヘッダを書込
-		if($datas) {
-			if(isset($datas[0][$fullTableName])) {
+		if ($datas) {
+			if (isset($datas[0][$fullTableName])) {
 				$tablekey = $fullTableName;
 			} else {
 				$tablekey = 0;
 			}
 			$heads = array();
-			foreach($datas[0][$tablekey] as $key => $value) {
-				$heads[] = '"'.$key.'"';
+			foreach ($datas[0][$tablekey] as $key => $value) {
+				$heads[] = '"' . $key . '"';
 			}
 		} else {
 			$fields = array_keys($schemas['tables'][$table]);
-			foreach($fields as $field) {
-				if($field != 'indexes') {
-					$heads[] = '"'.$field.'"';
+			foreach ($fields as $field) {
+				if ($field != 'indexes') {
+					$heads[] = '"' . $field . '"';
 				}
 			}
 		}
-		
-		$head = implode(",",$heads)."\n";
-		if($encoding != $this->config['encoding']) {
+
+		$head = implode(",", $heads) . "\n";
+		if ($encoding != $this->config['encoding']) {
 			$head = mb_convert_encoding($head, $encoding, $appEncoding);
 		}
 		fwrite($fp, $head);
 
 		// データを書込
-		foreach($datas as $data) {
+		foreach ($datas as $data) {
 			$record = $data[$tablekey];
-			if($init) {
+			if ($init) {
 				$record['id'] = '';
 				$record['modified'] = '';
 				$record['created'] = '';
 			}
 			$record = $this->_convertRecordToCsv($record);
-			$csvRecord = implode(',',$record)."\n";
-			if($encoding != $appEncoding) {
+			$csvRecord = implode(',', $record) . "\n";
+			if ($encoding != $appEncoding) {
 				$csvRecord = mb_convert_encoding($csvRecord, $encoding, $appEncoding);
 			}
 			fwrite($fp, $csvRecord);
@@ -4165,8 +4134,8 @@ class DboSource extends DataSource {
 		fclose($fp);
 
 		return true;
-
 	}
+
 /**
  * DB用エンコーディング名称をPHP用エンコーディング名称に変換する
  *
@@ -4175,29 +4144,28 @@ class DboSource extends DataSource {
  * @access protected
  */
 	protected function _dbEncToPhp($enc) {
-		
-		if(!empty($this->_encodingMaps[$enc])) {
+		if (!empty($this->_encodingMaps[$enc])) {
 			return $this->_encodingMaps[$enc];
 		} else {
 			return $enc;
 		}
-		
 	}
+
 /**
  * PHP用エンコーディング名称をDB用のエンコーディング名称に変換する
  *
  * @param string $enc
  * @return string
  */
-	protected function _phpEncToDb ($enc) {
-		
+	protected function _phpEncToDb($enc) {
 		$encs = array_keys($this->_encodingMaps, $enc);
-		if($encs && is_array($encs)) {
+		if ($encs && is_array($encs)) {
 			return $encs[0];
 		} else {
 			return $enc;
 		}
-		
 	}
-// <<<
+
+	// <<<
+
 }

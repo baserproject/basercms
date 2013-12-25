@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] フィード設定一覧　Ajax
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('feed_configs/index_list')
-?>
+$this->BcBaser->element('feed_configs/index_list');

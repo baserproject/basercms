@@ -1,29 +1,33 @@
 <?php
+
 /* SVN FILE: $Id$ */
-/* Plugins schema generated on: 2010-11-04 18:11:10 : 1288863010*/
+/* Plugins schema generated on: 2010-11-04 18:11:10 : 1288863010 */
+
 class PluginsSchema extends CakeSchema {
-	var $name = 'Plugins';
 
-	var $file = 'plugins.php';
+	public $name = 'Plugins';
 
-	var $connection = 'baser';
+	public $file = 'plugins.php';
 
-	function before($event = array()) {
+	public $connection = 'baser';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
-	var $plugins = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
-		'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
-		'version' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
-		'db_inited' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $plugins = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'version' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'db_inited' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

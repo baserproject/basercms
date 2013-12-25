@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * プラグイン拡張クラス
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * プラグイン拡張クラス
  * プラグインのモデルより継承して利用します。
  * @package Baser.Model
  */
 class BcPluginAppModel extends AppModel {
+
 /**
  * The name of the DataSource connection that this Model uses
  *
@@ -33,4 +36,5 @@ class BcPluginAppModel extends AppModel {
  * @access 	public
  */
 	public $useDbConfig = 'plugin';
+
 }

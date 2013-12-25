@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ユーザモデルのテスト
  *
@@ -22,12 +23,13 @@ App::uses('User', 'Model');
 //}
 
 class UserTest extends CakeTestCase {
+
 	public $fixtures = array(
 		'baser.User',
 		'baser.UserGroup',
 		'baser.Favorite',
 	);
-	
+
 	public function setUp() {
 		parent::setUp();
 		$this->User = ClassRegistry::init('User');
@@ -109,10 +111,11 @@ class UserTest extends CakeTestCase {
 	}
 
 	public function test半角英数チェック() {
-
+		
 	}
 
 	public function test既存ユーザチェック() {
-
+		
 	}
+
 }

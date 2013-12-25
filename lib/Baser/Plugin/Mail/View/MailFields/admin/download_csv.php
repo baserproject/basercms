@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] CSVダウンロード
@@ -18,5 +19,5 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $this->BcCsv->addModelDatas(Inflector::camelize($contentName.'_message'),$messages) ?>
+<?php $this->BcCsv->addModelDatas(Inflector::camelize($contentName . '_message'), $messages) ?>
 <?php $this->BcCsv->download($contentName) ?>

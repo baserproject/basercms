@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールフォームヘルパー
@@ -22,6 +23,7 @@
  */
 App::uses('BcHtmlHelper', 'Mail.View/Helper');
 App::uses('BcFreezeHelper', 'Mail.View/Helper');
+
 /**
  * メールフォームヘルパー
  *
@@ -29,6 +31,7 @@ App::uses('BcFreezeHelper', 'Mail.View/Helper');
  *
  */
 class MailformHelper extends BcFreezeHelper {
+
 /**
  * メールフィールドのデータよりコントロールを生成する
  *
@@ -39,18 +42,17 @@ class MailformHelper extends BcFreezeHelper {
  * @return string htmlタグ
  * @access public
  */
-	public function control($type,$fieldName,$options, $attributes = array()) {
-
+	public function control($type, $fieldName, $options, $attributes = array()) {
 		$attributes['escape'] = false;
 
-		switch($type) {
+		switch ($type) {
 
 			case 'text':
 			case 'email':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-				$out = $this->text($fieldName,$attributes);
+				$out = $this->text($fieldName, $attributes);
 				break;
 
 			case 'radio':
@@ -60,9 +62,9 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['empty']);
 				$attributes['legend'] = false;
 				$attributes['div'] = true;
-				if(!empty($attributes['separator'])) {
+				if (!empty($attributes['separator'])) {
 					$attributes['separator'] = $attributes['separator'];
-				}else {
+				} else {
 					$attributes['separator'] = "&nbsp;&nbsp;";
 				}
 				$out = $this->radio($fieldName, $options, $attributes);
@@ -73,13 +75,13 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
-				if(isset($attributes['empty'])) {
+				if (isset($attributes['empty'])) {
 					$showEmpty = $attributes['empty'];
-				}else {
+				} else {
 					$showEmpty = true;
 				}
-				$attributes['value'] = null ;
-				$attributes['empty'] = $showEmpty ;
+				$attributes['value'] = null;
+				$attributes['empty'] = $showEmpty;
 				$out = $this->select($fieldName, $options, $attributes);
 				break;
 
@@ -96,10 +98,10 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-				$address1 = $this->_name(array(),$options[1]);
-				$address2 = $this->_name(array(),$options[2]);
+				$address1 = $this->_name(array(), $options[1]);
+				$address2 = $this->_name(array(), $options[2]);
 				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
-				$out = $this->Html->script('admin/ajaxzip3.js').$this->text($fieldName,$attributes);
+				$out = $this->Html->script('admin/ajaxzip3.js') . $this->text($fieldName, $attributes);
 				break;
 
 			case 'check':
@@ -116,12 +118,12 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
-				if($this->freezed) {
+				if ($this->freezed) {
 					unset($attributes['separator']);
 				}
 				$attributes['multiple'] = 'checkbox';
-				$attributes['value'] = null ;
-				$attributes['empty'] = false ;
+				$attributes['value'] = null;
+				$attributes['empty'] = false;
 				$out = $this->select($fieldName, $options, $attributes);
 				break;
 
@@ -129,7 +131,7 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['size']);
 				unset($attributes['rows']);
 				unset($attributes['maxlength']);
-				unset($attributes['empty']);;
+				unset($attributes['empty']);
 				$out = $this->datepicker($fieldName, $attributes);
 				break;
 
@@ -140,13 +142,13 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['empty']);
 				$attributes['monthNames'] = false;
 				$attributes['separator'] = '&nbsp;';
-				if(isset($attributes['minYear']) && $attributes['minYear'] == 'today') {
+				if (isset($attributes['minYear']) && $attributes['minYear'] == 'today') {
 					$attributes['minYear'] = intval(date('Y'));
 				}
-				if(isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
+				if (isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
 					$attributes['maxYear'] = intval(date('Y'));
 				}
-				$out = $this->dateTime($fieldName,'WMD',null,null,$attributes);
+				$out = $this->dateTime($fieldName, 'WMD', null, null, $attributes);
 				break;
 
 			case 'textarea':
@@ -166,7 +168,6 @@ class MailformHelper extends BcFreezeHelper {
 				$out = $this->hidden($fieldName, $attributes);
 		}
 		return $out;
-
 	}
-	
+
 }

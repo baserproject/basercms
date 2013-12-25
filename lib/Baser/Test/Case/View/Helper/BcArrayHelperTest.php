@@ -26,6 +26,7 @@ App::uses('AppHelper', 'View/Helper');
  * @property      BcAdminHelper $Helper
  */
 class BcArrayHelperTest extends CakeTestCase {
+
 	private $data;
 
 	public function setUp() {
@@ -42,7 +43,7 @@ class BcArrayHelperTest extends CakeTestCase {
 /**
  * 配列の最初のキーを判定する
  *
- **/
+ * */
 	public function testFirst() {
 		$this->assertTrue($this->Helper->first($this->data, 'b'));
 		$this->assertFalse($this->Helper->first($this->data, 'c'));
@@ -51,7 +52,7 @@ class BcArrayHelperTest extends CakeTestCase {
 /**
  * 配列の最後のキーを判定する
  *
- **/
+ * */
 	public function testLast() {
 		$this->assertTrue($this->Helper->last($this->data, 'c'));
 		$this->assertFalse($this->Helper->last($this->data, 'd'));
@@ -60,7 +61,7 @@ class BcArrayHelperTest extends CakeTestCase {
 /**
  * 配列にテキストを追加する
  *
- **/
+ * */
 	public function testAddTest() {
 		// prefixとsuffix両方指定
 		$result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
@@ -102,4 +103,5 @@ class BcArrayHelperTest extends CakeTestCase {
 		);
 		$this->assertEquals($expect, $result);
 	}
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * アップデーターモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * アップデーターモデル
  *
  * @package Baser.Model
  */
 class Updater extends AppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class Updater extends AppModel {
  * @access public
  */
 	public $name = 'Updater';
+
 /**
  * テーブル
  *
@@ -40,4 +44,5 @@ class Updater extends AppModel {
  * @access public
  */
 	public $useTable = false;
+
 }

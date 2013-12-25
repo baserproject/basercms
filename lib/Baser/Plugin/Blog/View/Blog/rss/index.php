@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] RSS
@@ -20,15 +21,16 @@
 ?>
 <?php
 if($posts){
-	echo $rss->items($posts,'transformRSS');
+	echo $this->Rss->items($posts,'transformRSS');
 }
+
 function transformRSS($data) {
 	return array(
 		'title' => $data['BlogPost']['name'],
-		'link' => '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'],
-		'guid' => '/'.$data['BlogContent']['name'].'/archives/'.$data['BlogPost']['no'],
+		'link' => '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'guid' => '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no'],
 		'category' => $data['BlogCategory']['title'],
-		'description' => $data['BlogPost']['content'].$data['BlogPost']['detail'],
+		'description' => $data['BlogPost']['content'] . $data['BlogPost']['detail'],
 		'pubDate' => $data['BlogPost']['posts_date']
 	);
 }

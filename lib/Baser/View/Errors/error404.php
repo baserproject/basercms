@@ -17,12 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(strpos($message,'.html') !== false) $message = str_replace('pages/','',$message);
+if (strpos($message, '.html') !== false)
+	$message = str_replace('pages/', '', $message);
 ?>
 
 <div id="errorPage">
 	<h2>404 NOT FOUND</h2>
 	<p class="error"> <strong>
-		<?php echo __('Error'); ?>
-		: </strong> <?php echo sprintf(__("The requested address %s was not found on this server."), "<strong>'{$message}'</strong>")?> </p>
+<?php echo __('Error'); ?>
+			: </strong> <?php echo sprintf(__("The requested address %s was not found on this server."), "<strong>'{$message}'</strong>") ?> </p>
 </div>

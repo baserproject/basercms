@@ -1,5 +1,6 @@
 <?php
-/** 
+
+/**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -31,43 +32,41 @@
  * 
  */
 class BcEventListener extends Object implements CakeEventListener {
+
 /**
  * 登録イベント
  * 
  * @var array
  */
 	public $events = array();
-	
+
 /**
  * レイヤー名
  * 
  * @var string
  */
 	public $layer = '';
-	
+
 /**
  * implementedEvents
  * 
  * @return array
  */
-    public function implementedEvents() {
-
+	public function implementedEvents() {
 		$events = array();
-		if($this->events) {
-			foreach($this->events as $registerEvent) {
-				
+		if ($this->events) {
+			foreach ($this->events as $registerEvent) {
+
 				$eventName = $this->layer . '.' . $registerEvent;
-				if(strpos($registerEvent, '.') !== false) {
+				if (strpos($registerEvent, '.') !== false) {
 					$aryRegisterEvent = explode('.', $registerEvent);
 					$registerEvent = Inflector::variable(implode('_', $aryRegisterEvent));
 				}
 				$events[$eventName] = array('callable' => $registerEvent);
-				
 			}
 		}
-		
-        return $events;
-		
-    }
+
+		return $events;
+	}
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログコメント登録完了
@@ -19,7 +20,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if($dbData) {
-	$this->BcBaser->element('blog_comment',array('dbData'=>$dbData));
+if ($dbData) {
+	$this->BcBaser->element('blog_comment', array('dbData' => $dbData));
 }
-?>

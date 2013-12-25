@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ユーザーグループコントローラー
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * ユーザーグループコントローラー
  *
@@ -73,7 +75,7 @@ class UserGroupsController extends AppController {
  * beforeFilter
  * @return void
  */
-	public function beforeFilter () {
+	public function beforeFilter() {
 		parent::beforeFilter();
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
@@ -88,14 +90,14 @@ class UserGroupsController extends AppController {
 	public function admin_index() {
 		/* データ取得 */
 		$this->paginate = array('conditions' => array(),
-				'fields' => array(),
-				'order' => 'UserGroup.id',
-				'limit' => 10
+			'fields' => array(),
+			'order' => 'UserGroup.id',
+			'limit' => 10
 		);
 		$datas = $this->paginate('UserGroup');
 
 		/* 表示設定 */
-		$this->set('datas',$datas);
+		$this->set('datas', $datas);
 		$this->pageTitle = 'ユーザーグループ一覧';
 		$this->help = 'user_groups_index';
 	}
@@ -114,7 +116,7 @@ class UserGroupsController extends AppController {
 			}
 			$this->UserGroup->create($this->request->data);
 			if ($this->UserGroup->save()) {
-				$this->setMessage('新規ユーザーグループ「'.$this->request->data['UserGroup']['title'].'」を追加しました。', false, true);
+				$this->setMessage('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -146,7 +148,7 @@ class UserGroupsController extends AppController {
 
 			/* 更新処理 */
 			if ($this->UserGroup->save($this->request->data)) {
-				$this->setMessage('ユーザーグループ「'.$this->request->data['UserGroup']['name'].'」を更新しました。', false, true);
+				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -201,7 +203,7 @@ class UserGroupsController extends AppController {
 
 		/* 削除処理 */
 		if ($this->UserGroup->delete($id)) {
-			$this->setMessage('ユーザーグループ「'.$post['UserGroup']['title'].'」 を削除しました。', false, true);
+			$this->setMessage('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
@@ -248,4 +250,5 @@ class UserGroupsController extends AppController {
 		}
 		exit();
 	}
+
 }

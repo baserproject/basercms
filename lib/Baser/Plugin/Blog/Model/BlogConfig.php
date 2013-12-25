@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログ設定モデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログ設定モデル
  *
  * @package baser.plugins.blog.models
  */
 class BlogConfig extends BlogAppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogConfig extends BlogAppModel {
  * @access public
  */
 	public $name = 'BlogConfig';
+
 /**
  * ビヘイビア
  * 
@@ -40,4 +44,5 @@ class BlogConfig extends BlogAppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 }

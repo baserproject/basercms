@@ -18,32 +18,32 @@
  * @license			http://basercms.net/license/index.html
  */
 $types = array(
-	'Layouts'	=> 'レイアウト',
-	'Elements'	=> 'エレメント',
-	'etc'		=> 'コンテンツ',
-	'css'		=> 'CSS',
-	'img'		=> 'イメージ',
-	'js'		=> 'Javascript'
+	'Layouts' => 'レイアウト',
+	'Elements' => 'エレメント',
+	'etc' => 'コンテンツ',
+	'css' => 'CSS',
+	'img' => 'イメージ',
+	'js' => 'Javascript'
 );
-if($theme == 'core'){
-	$themeFiles = array(0=>array('name'=>'','title'=>'コア'));
+if ($theme == 'core') {
+	$themeFiles = array(0 => array('name' => '', 'title' => 'コア'));
 	$Plugin = ClassRegistry::init('Plugin');
-	$plugins = $Plugin->find('all',array('fields'=>array('name','title')));
-	$themeFiles = am($themeFiles,Set::extract('/Plugin/.',$plugins));
-}else{
+	$plugins = $Plugin->find('all', array('fields' => array('name', 'title')));
+	$themeFiles = am($themeFiles, Set::extract('/Plugin/.', $plugins));
+} else {
 	$themeFiles = array(0 => array('name' => '', 'title' => Inflector::camelize($theme)));
 }
 ?>
 
-<?php foreach($themeFiles as $themeFile): ?>
-<tr>
-	<th>[<?php echo $themeFile['title'] ?>] テーマ管理メニュー</th>
-	<td>
-		<ul class="cleafix">
-<?php foreach($types as $key => $type): ?>
-			<li><?php $this->BcBaser->link($type.'一覧', array('action' => 'index', $theme, $themeFile['name'], $key)) ?></li>
-<?php endforeach ?>
-		</ul>
-	</td>
-</tr>
+<?php foreach ($themeFiles as $themeFile): ?>
+	<tr>
+		<th>[<?php echo $themeFile['title'] ?>] テーマ管理メニュー</th>
+		<td>
+			<ul class="cleafix">
+				<?php foreach ($types as $key => $type): ?>
+					<li><?php $this->BcBaser->link($type . '一覧', array('action' => 'index', $theme, $themeFile['name'], $key)) ?></li>
+				<?php endforeach ?>
+			</ul>
+		</td>
+	</tr>
 <?php endforeach ?>

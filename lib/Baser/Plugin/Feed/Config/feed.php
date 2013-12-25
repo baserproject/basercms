@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィード設定
@@ -20,11 +21,11 @@
 /**
  * システムナビ
  */
-	$config['BcApp.adminNavi.feed'] = array(
-			'name'		=> 'フィードプラグイン',
-			'contents'	=> array(
-				array('name' => 'フィード設定一覧',		'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index')),
-				array('name' => 'フィード設定登録',		'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add')),
-				array('name' => 'フィードキャッシュ削除',	'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'))
-		)
-	);
+$config['BcApp.adminNavi.feed'] = array(
+	'name' => 'フィードプラグイン',
+	'contents' => array(
+		array('name' => 'フィード設定一覧', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index')),
+		array('name' => 'フィード設定登録', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add')),
+		array('name' => 'フィードキャッシュ削除', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'))
+	)
+);

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールコンテンツモデル
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * メールコンテンツモデル
  *
@@ -24,6 +26,7 @@
  *
  */
 class MailContent extends MailAppModel {
+
 /**
  * クラス名
  *
@@ -31,6 +34,7 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public $name = 'MailContent';
+
 /**
  * behaviors
  *
@@ -38,20 +42,22 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+
 /**
  * hasMany
  *
  * @var array
  * @access public
  */
-	public $hasMany = array('MailField'=>
-			array('className'=>'Mail.MailField',
-							'order'=>'id',
-							'limit'=>100,
-							'foreignKey'=>'mail_content_id',
-							'dependent'=>true,
-							'exclusive'=>false,
-							'finderQuery'=>''));
+	public $hasMany = array('MailField' =>
+		array('className' => 'Mail.MailField',
+			'order' => 'id',
+			'limit' => 100,
+			'foreignKey' => 'mail_content_id',
+			'dependent' => true,
+			'exclusive' => false,
+			'finderQuery' => ''));
+
 /**
  * validate
  *
@@ -61,85 +67,86 @@ class MailContent extends MailAppModel {
 	public $validate = array(
 		'name' => array(
 			'notInList' => array(
-				'rule'		=> array('halfText'),
-				'message'	=> 'メールフォームアカウント名は半角のみで入力してください。',
-				'allowEmpty'=> false),
+				'rule' => array('halfText'),
+				'message' => 'メールフォームアカウント名は半角のみで入力してください。',
+				'allowEmpty' => false),
 			'notInList' => array(
-				'rule'		=> array('notInList', array('mail')),
-				'message'	=> 'メールフォームアカウント名に「mail」は利用できません。'),
+				'rule' => array('notInList', array('mail')),
+				'message' => 'メールフォームアカウント名に「mail」は利用できません。'),
 			'isUnique' => array(
-				'rule'		=> array('isUnique'),
-				'message'	=> '入力されたメールフォームアカウント名は既に使用されています。'),
+				'rule' => array('isUnique'),
+				'message' => '入力されたメールフォームアカウント名は既に使用されています。'),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 100),
-				'message'	=> 'メールフォームアカウント名は100文字以内で入力してください。')
+				'rule' => array('maxLength', 100),
+				'message' => 'メールフォームアカウント名は100文字以内で入力してください。')
 		),
 		'title' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "メールフォームタイトルを入力してください。")
+			array('rule' => array('notEmpty'),
+				'message' => "メールフォームタイトルを入力してください。")
 		),
 		'sender_name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "送信先名を入力してください。"),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> '送信先名は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => "送信先名を入力してください。"),
+			array('rule' => array('maxLength', 50),
+				'message' => '送信先名は50文字以内で入力してください。')
 		),
 		'subject_user' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "自動返信メール件名[ユーザー宛]を入力してください。"),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => "自動返信メール件名[ユーザー宛]を入力してください。"),
+			array('rule' => array('maxLength', 50),
+				'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
 		),
 		'subject_admin' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "自動送信メール件名[管理者宛]を入力してください。"),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> '自動返信メール件名[管理者宛]は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => "自動送信メール件名[管理者宛]を入力してください。"),
+			array('rule' => array('maxLength', 50),
+				'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。')
 		),
 		'layout_template' => array(
-			array(	'rule'		=> array('halfText'),
-					'message'	=> 'レイアウトテンプレート名は半角のみで入力してください。',
-					'allowEmpty'=> false),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'レイアウトテンプレート名は20文字以内で入力してください。')
+			array('rule' => array('halfText'),
+				'message' => 'レイアウトテンプレート名は半角のみで入力してください。',
+				'allowEmpty' => false),
+			array('rule' => array('maxLength', 20),
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
 		),
 		'form_template' => array(
-			array(	'rule'		=> array('halfText'),
-					'message'	=> "メールフォームテンプレート名は半角のみで入力してください。",
-					'allowEmpty'=> false),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'フォームテンプレート名は20文字以内で入力してください。')
+			array('rule' => array('halfText'),
+				'message' => "メールフォームテンプレート名は半角のみで入力してください。",
+				'allowEmpty' => false),
+			array('rule' => array('maxLength', 20),
+				'message' => 'フォームテンプレート名は20文字以内で入力してください。')
 		),
 		'mail_template' => array(
-			array(	'rule'		=> array('halfText'),
-					'message'	=> "送信メールテンプレートは半角のみで入力してください。",
-					'allowEmpty'=> false),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'メールテンプレート名は20文字以内で入力してください。')
+			array('rule' => array('halfText'),
+				'message' => "送信メールテンプレートは半角のみで入力してください。",
+				'allowEmpty' => false),
+			array('rule' => array('maxLength', 20),
+				'message' => 'メールテンプレート名は20文字以内で入力してください。')
 		),
 		'redirect_url' => array(
-			array(	'rule'		=> array('url'),
-					'message'	=> "リダイレクトURLの形式が不正です。",
-					'allowEmpty'=> true),
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'リダイレクトURLは255文字以内で入力してください。')
+			array('rule' => array('url'),
+				'message' => "リダイレクトURLの形式が不正です。",
+				'allowEmpty' => true),
+			array('rule' => array('maxLength', 255),
+				'message' => 'リダイレクトURLは255文字以内で入力してください。')
 		),
 		'sender_1' => array(
-			array(	'rule'		=> array('email'),
-					'allowEmpty'=> true,
-					'message'	=> '送信先メールアドレスの形式が不正です。'),
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> '送信先メールアドレスは255文字以内で入力してください。')
+			array('rule' => array('email'),
+				'allowEmpty' => true,
+				'message' => '送信先メールアドレスの形式が不正です。'),
+			array('rule' => array('maxLength', 255),
+				'message' => '送信先メールアドレスは255文字以内で入力してください。')
 		),
 		'sender_2' => array(
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'CC用送信先メールアドレスは255文字以内で入力してください。')
+			array('rule' => array('maxLength', 255),
+				'message' => 'CC用送信先メールアドレスは255文字以内で入力してください。')
 		),
 		'ssl_on' => array(
-			'rule'		=> 'checkSslUrl',
-			"message"	=> 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。'
+			'rule' => 'checkSslUrl',
+			"message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。'
 		)
 	);
+
 /**
  * beforeValidate
  *
@@ -147,16 +154,15 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function beforeValidate($options = array()) {
-
-		if($this->data['MailContent']['sender_1']) {
+		if ($this->data['MailContent']['sender_1']) {
 			$this->validate['sender_1'] = array(
-				array(	'rule'		=> 'email',
-						'message'	=> '送信先メールアドレスの形式が不正です。'));
+				array('rule' => 'email',
+					'message' => '送信先メールアドレスの形式が不正です。'));
 		}
 
 		return true;
-		
 	}
+
 /**
  * SSL用のURLが設定されているかチェックする
  * 
@@ -165,10 +171,9 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function checkSslUrl($check) {
-		
-		if($check[key($check)]) {
+		if ($check[key($check)]) {
 			$sslUrl = Configure::read('BcEnv.sslUrl');
-			if(empty($sslUrl)) {
+			if (empty($sslUrl)) {
 				return false;
 			} else {
 				return true;
@@ -176,8 +181,8 @@ class MailContent extends MailAppModel {
 		} else {
 			return true;
 		}
-		
 	}
+
 /**
  * 英数チェック
  *
@@ -186,14 +191,13 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function alphaNumeric($check) {
-
-		if(preg_match("/^[a-z0-9]+$/",$check[key($check)])) {
+		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
 	}
+
 /**
  * フォームの初期値を取得する
  *
@@ -201,7 +205,6 @@ class MailContent extends MailAppModel {
  * @access protected
  */
 	public function getDefaultValue() {
-
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
 		$data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
 		$data['MailContent']['layout_template'] = 'default';
@@ -211,10 +214,10 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['auth_captcha'] = false;
 		$data['MailContent']['ssl_on'] = false;
 		$data['MailContent']['status'] = false;
-		
-		return $data;
 
+		return $data;
 	}
+
 /**
  * afterSave
  *
@@ -222,15 +225,14 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function afterSave($created, $options = array()) {
-
 		// 検索用テーブルへの登録・削除
-		if(!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status'] ) {
+		if (!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status']) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
 			$this->deleteContent($this->data['MailContent']['id']);
 		}
-
 	}
+
 /**
  * beforeDelete
  *
@@ -238,10 +240,9 @@ class MailContent extends MailAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-
 		return $this->deleteContent($this->id);
-
 	}
+
 /**
  * 検索用データを生成する
  *
@@ -250,8 +251,7 @@ class MailContent extends MailAppModel {
  * @access public
  */
 	public function createContent($data) {
-
-		if(isset($data['MailContent'])) {
+		if (isset($data['MailContent'])) {
 			$data = $data['MailContent'];
 		}
 
@@ -261,12 +261,12 @@ class MailContent extends MailAppModel {
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];
-		$_data['Content']['url'] = '/'.$data['name'].'/index';
+		$_data['Content']['url'] = '/' . $data['name'] . '/index';
 		$_data['Content']['status'] = $data['status'];
 
 		return $_data;
-
 	}
+
 /**
  * メールコンテンツデータをコピーする
  * 
@@ -275,42 +275,40 @@ class MailContent extends MailAppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $recursive = true) {
-		
-		if($id) {
+		if ($id) {
 			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
 		}
-		
+
 		$data['MailContent']['name'] .= '_copy';
 		$data['MailContent']['title'] .= '_copy';
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
-		
+
 		$this->create($data);
 		$result = $this->save();
-		if($result) {
+		if ($result) {
 			$result['MailContent']['id'] = $this->getInsertID();
-			if($recursive) {
+			if ($recursive) {
 				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
-				foreach($mailFields as $mailField) {
+				foreach ($mailFields as $mailField) {
 					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
 					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
 				App::uses('Message', 'Mail.Model');
 				$Message = new Message(false, null, null, $result['MailContent']['name'] . '_');
-				$Message->_sourceConfigured = true;	// 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
+				$Message->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 				$Message->createTable($result['MailContent']['name']);
 				$Message->construction($result['MailContent']['id']);
 			}
 			return $result;
 		} else {
-			if(isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 20) {
+			if (isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 20) {
 				return $this->copy(null, $data, $recursive);
 			} else {
 				return false;
 			}
 		}
-		
 	}
-	
+
 }

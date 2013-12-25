@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Model 拡張クラス
@@ -25,6 +26,7 @@
 /**
  * Include files
  */
+
 /**
  * Model 拡張クラス
  * @package Baser.Model

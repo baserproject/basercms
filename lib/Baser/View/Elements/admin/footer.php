@@ -19,24 +19,24 @@
  */
 ?>
 <div id="Footer">
-	
+
 	<div id="FooterInner" class="clearfix">
-		
+
 		<div id="FooterLogo">
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_footer.png', array('width' => 155, 'height' => 30, 'alt' => 'baserCMSロゴ')), array('controller' => 'dashboard', 'action' => 'index')) ?>
 		</div>
 
-		<?php if(!empty($user)): ?>
-		<div id="FooterMenu">
-			<h2><?php $this->BcBaser->img('admin/head_menu.png', array('width' => 44, 'height' => 16, 'alt' => 'MENU')) ?></h2>
-			<ul>
-				<li><?php $this->BcBaser->link('固定ページ管理', array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>
-				<li><?php $this->BcBaser->link('ウィジェット管理', array('plugin' => '', 'controller' => 'widget_areas', 'action' => 'index')) ?></li>
-				<li><?php $this->BcBaser->link('テーマ管理', array('plugin' => '', 'controller' => 'themes', 'action' => 'index')) ?></li>
-				<li><?php $this->BcBaser->link('プラグイン管理', array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')) ?></li>
-				<li><?php $this->BcBaser->link('システム管理', array('plugin' => '', 'controller' => 'site_configs', 'action' => 'form')) ?></li>
-			</ul>
-		</div>
+		<?php if (!empty($user)): ?>
+			<div id="FooterMenu">
+				<h2><?php $this->BcBaser->img('admin/head_menu.png', array('width' => 44, 'height' => 16, 'alt' => 'MENU')) ?></h2>
+				<ul>
+					<li><?php $this->BcBaser->link('固定ページ管理', array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>
+					<li><?php $this->BcBaser->link('ウィジェット管理', array('plugin' => '', 'controller' => 'widget_areas', 'action' => 'index')) ?></li>
+					<li><?php $this->BcBaser->link('テーマ管理', array('plugin' => '', 'controller' => 'themes', 'action' => 'index')) ?></li>
+					<li><?php $this->BcBaser->link('プラグイン管理', array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')) ?></li>
+					<li><?php $this->BcBaser->link('システム管理', array('plugin' => '', 'controller' => 'site_configs', 'action' => 'form')) ?></li>
+				</ul>
+			</div>
 		<?php endif ?>
 
 		<div id="FooterLink">
@@ -60,6 +60,6 @@
 			<div id="Copyright">Copyright (C) baserCMS Users Community <?php $this->BcBaser->copyYear(2009) ?> All rights reserved.</div>
 		</div>
 
-	<!-- / #FooterInner --></div>
-	
-<!-- / #Footer --></div>
+		<!-- / #FooterInner --></div>
+
+	<!-- / #Footer --></div>

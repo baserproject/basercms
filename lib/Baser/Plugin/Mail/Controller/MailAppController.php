@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メールプラグインコントローラー根底クラス
@@ -21,9 +22,11 @@
  * Include files
  */
 App::uses('BcPluginAppController', 'Controller');
+
 /**
  * メールプラグインコントローラー根底クラス
  *
  * @package			baser.plugins.mail
  */
-class MailAppController extends BcPluginAppController {}
+class MailAppController extends BcPluginAppController {
+}

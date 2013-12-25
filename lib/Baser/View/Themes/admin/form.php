@@ -26,11 +26,11 @@ $(window).load(function() {
 });
 </script>
 
-<?php if($folderDisabled): ?>
-<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
+<?php if ($folderDisabled): ?>
+	<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
 <?php endif ?>
-<?php if($configDisabled): ?>
-<p><span class="required">テーマ設定ファイルに書込権限がありません。</span></p>
+<?php if ($configDisabled): ?>
+	<p><span class="required">テーマ設定ファイルに書込権限がありません。</span></p>
 <?php endif ?>
 
 
@@ -85,15 +85,11 @@ $(window).load(function() {
 		</tr>
 	</table>
 </div>
-<?php if(!$folderDisabled && $siteConfig['theme'] != $this->BcForm->value('Theme.name')): ?>
-<div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php $this->BcBaser->link('削除', 
-			array('action' => 'del', $this->BcForm->value('Theme.name')),
-			array('class'=>'btn-gray button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Theme.name')),
-			false); ?>
-</div>
-<?php endif ?>
+<?php if (!$folderDisabled && $siteConfig['theme'] != $this->BcForm->value('Theme.name')): ?>
+	<div class="submit">
+		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'del', $this->BcForm->value('Theme.name')), array('class' => 'btn-gray button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Theme.name')), false); ?>
+	</div>
+	<?php endif; ?>
 
 <?php echo $this->BcForm->end() ?>

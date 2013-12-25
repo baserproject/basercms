@@ -19,6 +19,6 @@
  */
 ?>
 <p>テーマ情報の編集が行えます。編集内容は、テーマフォルダ名と、テーマ設定ファイルに反映されます。<br />
-	<small>テーマフォルダ：<?php echo WWW_ROOT.'theme'.DS.$theme.DS ?></small><br />
-	<small>テーマ設定ファイル：<?php echo WWW_ROOT.'theme'.DS.$theme.DS.'config.php' ?></small>
+	<small>テーマフォルダ：<?php echo WWW_ROOT . 'theme' . DS . $theme . DS ?></small><br />
+	<small>テーマ設定ファイル：<?php echo WWW_ROOT . 'theme' . DS . $theme . DS . 'config.php' ?></small>
 </p>

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] タグ
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'Blog'.DS.'View'.DS.'Elements'.DS.'blog_tag'.$this->ext;
-?>
+include BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Elements' . DS . 'blog_tag' . $this->ext;

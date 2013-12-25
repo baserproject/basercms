@@ -28,7 +28,7 @@ $(function(){
 	$("#EditTemplate").click(function(){
 		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){
 			$("#FeedConfigEditTemplate").val(true);
-			$("#FeedConfigEditForm").submit();
+			$("#FeedConfigAdminEditForm").submit();
 		}
 	});
 });
@@ -37,19 +37,19 @@ $(function(){
 <?php echo $this->BcForm->create('FeedConfig') ?>
 
 <div class="section">
-	
+
 	<h2>基本項目</h2>	
 
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
-	<?php if($this->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.id', 'NO') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('FeedConfig.id') ?>
-				<?php echo $this->BcForm->input('FeedConfig.id', array('type' => 'hidden')) ?>
-			</td>
-		</tr>
-	<?php endif; ?>
+		<?php if ($this->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.id', 'NO') ?>&nbsp;<span class="required">*</span></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('FeedConfig.id') ?>
+					<?php echo $this->BcForm->input('FeedConfig.id', array('type' => 'hidden')) ?>
+				</td>
+			</tr>
+		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.name', 'フィード設定名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -95,7 +95,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.category_index', 'カテゴリリスト') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('FeedConfig.category_index', array('type' => 'textarea', 'cols'=>36,'rows'=>3)) ?>
+				<?php echo $this->BcForm->input('FeedConfig.category_index', array('type' => 'textarea', 'cols' => 36, 'rows' => 3)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpCategoryIndex', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.category_index') ?>
 				<div id="helptextCategoryIndex" class="helptext">
@@ -112,9 +112,9 @@ $(function(){
 			<td class="col-input">
 				<?php echo $this->BcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $this->Feed->getTemplates())) ?>
 				<?php echo $this->BcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
-	<?php if($this->action == 'admin_edit'): ?>
-				<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
-	<?php endif ?>
+				<?php if ($this->action == 'admin_edit'): ?>
+					<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
+				<?php endif ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.template') ?>
 				<div id="helptextTemplate" class="helptext">
@@ -130,14 +130,10 @@ $(function(){
 
 <!-- button -->
 <div class="submit">
-<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('削除',
-			array('action' => 'delete', $this->BcForm->value('FeedConfig.id')),
-			array('class' => 'button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')),
-			false); ?>
-<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php if ($this->action == 'admin_edit'): ?>
+	<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('FeedConfig.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')), false); ?>
+	<?php endif ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

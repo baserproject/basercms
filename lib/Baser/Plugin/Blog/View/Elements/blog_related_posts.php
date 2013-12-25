@@ -19,13 +19,13 @@
  */
 $relatedPosts = $this->Blog->getRelatedPosts($post);
 ?>
-<?php if($relatedPosts): ?>
-<div id="RelatedPosts">
-	<h4 class="contents-head">関連記事</h4>
-	<ul>
-	<?php foreach($relatedPosts as $relatedPost): ?>
-		<li><?php $this->Blog->postTitle($relatedPost) ?></li>
-	<?php endforeach ?>
-	</ul>
-</div>
+<?php if ($relatedPosts): ?>
+	<div id="RelatedPosts">
+		<h4 class="contents-head">関連記事</h4>
+		<ul>
+			<?php foreach ($relatedPosts as $relatedPost): ?>
+				<li><?php $this->Blog->postTitle($relatedPost) ?></li>
+			<?php endforeach ?>
+		</ul>
+	</div>
 <?php endif ?>

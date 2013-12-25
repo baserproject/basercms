@@ -1,24 +1,28 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* Messages schema generated on: 2010-11-04 18:11:13 : 1288863013*/
+/* Messages schema generated on: 2010-11-04 18:11:13 : 1288863013 */
+
 class MessagesSchema extends CakeSchema {
-	var $name = 'Messages';
 
-	var $file = 'messages.php';
+	public $name = 'Messages';
 
-	var $connection = 'plugin';
+	public $file = 'messages.php';
 
-	function before($event = array()) {
+	public $connection = 'plugin';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
-	var $messages = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $messages = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

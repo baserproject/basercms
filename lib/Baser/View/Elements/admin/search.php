@@ -17,7 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(empty($search)) {
+if (empty($search)) {
 	return;
 }
 ?>
@@ -29,7 +29,7 @@ if(empty($search)) {
 	</h2>
 
 	<div class="body">
-		<?php $this->BcBaser->element('searches/'.$search) ?>
+		<?php $this->BcBaser->element('searches/' . $search) ?>
 	</div>
 
 	<div class="clearfix close">
@@ -38,4 +38,4 @@ if(empty($search)) {
 		</div>
 	</div>
 
-<!-- / #Search clearfix --></div>
+	<!-- / #Search clearfix --></div>

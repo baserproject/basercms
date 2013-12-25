@@ -21,24 +21,24 @@
  */
 ?>
 <cake:nocache>
-<?php
-$baseUrl = "/mobile/ga";
-if(!empty($_SERVER["HTTP_REFERER"])) {
-	$referer = $_SERVER["HTTP_REFERER"];
-} else {
-	$referer = "-";
-}
-if (!empty($_SERVER["REQUEST_URI"])) {
-	$path = $_SERVER["REQUEST_URI"];
-} else {
-	$path = '';
-}
+	<?php
+	$baseUrl = $this->BcBaser->getUrl("/mobile/ga");
+	if (!empty($_SERVER["HTTP_REFERER"])) {
+		$referer = $_SERVER["HTTP_REFERER"];
+	} else {
+		$referer = "-";
+	}
+	if (!empty($_SERVER["REQUEST_URI"])) {
+		$path = $_SERVER["REQUEST_URI"];
+	} else {
+		$path = '';
+	}
 
-$url = $baseUrl . "?";
-$url .= "&utmn=" . rand(0, 0x7fffffff);
-$url .= "&utmr=" . urlencode($referer);
-$url .= "&utmp=" . urlencode($path);
-$url .= "&guid=ON";
-echo '<img src="'.str_replace("&", "&amp;", $url).'" width="1" height="1" />';
-?>
+	$url = $baseUrl . "?";
+	$url .= "&utmn=" . rand(0, 0x7fffffff);
+	$url .= "&utmr=" . urlencode($referer);
+	$url .= "&utmp=" . urlencode($path);
+	$url .= "&guid=ON";
+	echo '<img src="' . str_replace("&", "&amp;", $url) . '" width="1" height="1" />';
+	?>
 </cake:nocache>

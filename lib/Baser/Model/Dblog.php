@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * DBログモデル
@@ -17,12 +18,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * DBログモデル
  *
  * @package Baser.Model
  */
 class Dblog extends AppModel {
+
 /**
  * クラス名
  *
@@ -30,6 +33,7 @@ class Dblog extends AppModel {
  * @access public
  */
 	public $name = 'Dblog';
+
 /**
  * ビヘイビア
  * 
@@ -37,6 +41,7 @@ class Dblog extends AppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * belongsTo
  * 
@@ -44,10 +49,11 @@ class Dblog extends AppModel {
  * @access public
  */
 	public $belongsTo = array(
-			'User' => array(
-				'className'=> 'User',
-				'foreignKey'=>'user_id'
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id'
 	));
+
 /**
  * バリデーション
  *
@@ -55,10 +61,10 @@ class Dblog extends AppModel {
  * @access public
  */
 	public $validate = array(
-		'name'	=> array(
-			array(	'rule' => array('notEmpty'),
-					'message' => "ログ内容を入力してください。",
-					'required' => true)
+		'name' => array(
+			array('rule' => array('notEmpty'),
+				'message' => "ログ内容を入力してください。",
+				'required' => true)
 		)
 	);
 

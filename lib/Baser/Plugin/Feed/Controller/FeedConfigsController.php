@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * フィード設定コントローラー
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * フィード設定コントローラー
  *
  * @package baser.plugins.feed.controllers
  */
 class FeedConfigsController extends FeedAppController {
+
 /**
  * クラス名
  *
@@ -33,13 +36,15 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public $name = 'FeedConfigs';
+
 /**
  * モデル
  *
  * @var array
  * @access public
  */
-	public $uses = array("Feed.FeedConfig","Feed.FeedDetail","Feed.RssEx");
+	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.RssEx");
+
 /**
  * ヘルパー
  *
@@ -47,13 +52,15 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Feed.Feed');
+
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * ぱんくずナビ
  *
@@ -64,6 +71,7 @@ class FeedConfigsController extends FeedAppController {
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
 	);
+
 /**
  * サブメニューエレメント
  *
@@ -71,6 +79,7 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public $subMenuElements = array();
+
 /**
  * before_filter
  *
@@ -78,14 +87,13 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function beforeFilter() {
-		
 		parent::beforeFilter();
-		
-		if($this->params['prefix'] == 'admin') {
+
+		if ($this->params['prefix'] == 'admin') {
 			$this->subMenuElements = array('feed_common');
 		}
-		
 	}
+
 /**
  * [ADMIN] 一覧表示
  *
@@ -93,24 +101,23 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_index() {
-
 		// データを取得
-		$this->paginate = array('conditions'=>array(),
-				'fields'=>array(),
-				'order'=>'FeedConfig.id',
-				'limit'=>10
+		$this->paginate = array('conditions' => array(),
+			'fields' => array(),
+			'order' => 'FeedConfig.id',
+			'limit' => 10
 		);
 		$feedConfigs = $this->paginate('FeedConfig');
 
-		if($feedConfigs) {
-			$this->set('feedConfigs',$feedConfigs);
+		if ($feedConfigs) {
+			$this->set('feedConfigs', $feedConfigs);
 		}
 
 		// 表示設定
 		$this->pageTitle = 'フィード設定一覧';
 		$this->help = 'feed_configs_index';
-
 	}
+
 /**
  * [ADMIN] 登録
  *
@@ -118,36 +125,31 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_add() {
-
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 
 			$this->request->data = $this->FeedConfig->getDefaultValue();
-
-		}else {
+		} else {
 
 			$this->FeedConfig->create($this->request->data);
 
 			// データを保存
-			if($this->FeedConfig->save()) {
-				
-				$id = $this->FeedConfig->getLastInsertId();
-				$this->setMessage('フィード「'.$this->request->data['FeedConfig']['name'].'」を追加しました。', false, true);
-				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $id, '#' => 'headFeedDetail'));
+			if ($this->FeedConfig->save()) {
 
-			}else {
+				$id = $this->FeedConfig->getLastInsertId();
+				$this->setMessage('フィード「' . $this->request->data['FeedConfig']['name'] . '」を追加しました。', false, true);
+				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $id, '#' => 'headFeedDetail'));
+			} else {
 
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
-
 			}
-
 		}
 
 		// 表示設定
 		$this->pageTitle = '新規フィード設定登録';
 		$this->help = 'feed_configs_form';
 		$this->render('form');
-
 	}
+
 /**
  * [ADMIN] 編集
  *
@@ -156,37 +158,32 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_edit($id) {
-
-		if(!$id && empty($this->request->data)) {
+		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 
 			$this->request->data = $this->FeedConfig->read(null, $id);
-			$this->set('feedConfig',$this->request->data);
-
-		}else {
+			$this->set('feedConfig', $this->request->data);
+		} else {
 
 			// データを保存
-			if($this->FeedConfig->save($this->request->data)) {
-				
-				$this->_clearCache($this->request->data['FeedConfig']['id']);
-				$this->setMessage('フィード「'.$this->request->data['FeedConfig']['name'].'」を更新しました。', false, true);
+			if ($this->FeedConfig->save($this->request->data)) {
 
-				if($this->request->data['FeedConfig']['edit_template']){
+				$this->_clearCache($this->request->data['FeedConfig']['id']);
+				$this->setMessage('フィード「' . $this->request->data['FeedConfig']['name'] . '」を更新しました。', false, true);
+
+				if ($this->request->data['FeedConfig']['edit_template']) {
 					$this->redirectEditTemplate($this->request->data['FeedConfig']['template']);
-				}else{
+				} else {
 					$this->redirect(array('action' => 'index'));
 				}
-
-			}else {
+			} else {
 
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
-
 			}
-
 		}
 
 		// 表示設定
@@ -194,8 +191,8 @@ class FeedConfigsController extends FeedAppController {
 		$this->pageTitle = 'フィード設定編集';
 		$this->help = 'feed_configs_form';
 		$this->render('form');
-
 	}
+
 /**
  * テンプレート編集画面にリダイレクトする
  * 
@@ -203,30 +200,29 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  * @access public
  */
-	public function redirectEditTemplate($template){
-		
-		$path = 'Feed'.DS.$template.$this->ext;
-		$target = WWW_ROOT.'theme'.DS.$this->siteConfigs['theme'].DS.$path;
-		$sorces = array(BASER_PLUGINS.'Feed'.DS.'View'.DS.$path);
-		if($this->siteConfigs['theme']){
-			if(!file_exists($target)){
-				foreach($sorces as $source){
-					if(file_exists($source)){
+	public function redirectEditTemplate($template) {
+		$path = 'Feed' . DS . $template . $this->ext;
+		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
+		$sorces = array(BASER_PLUGINS . 'Feed' . DS . 'View' . DS . $path);
+		if ($this->siteConfigs['theme']) {
+			if (!file_exists($target)) {
+				foreach ($sorces as $source) {
+					if (file_exists($source)) {
 						$folder = new Folder();
 						$folder->create(dirname($target), 0777);
-						copy($source,$target);
-						chmod($target,0666);
+						copy($source, $target);
+						chmod($target, 0666);
 						break;
 					}
 				}
 			}
-			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc', $path));
-		}else{
+			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path)));
+		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
 			$this->redirect(array('action' => 'index'));
 		}
-		
 	}
+
 /**
  * [ADMIN] 削除　(ajax)
  *
@@ -235,22 +231,20 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-
-		if($ids) {
-			foreach($ids as $id) {
+		if ($ids) {
+			foreach ($ids as $id) {
 				// メッセージ用にデータを取得
 				$feedConfig = $this->FeedConfig->read(null, $id);
 
 				// 削除実行
-				if($this->FeedConfig->delete($id)) {
-					$this->FeedConfig->saveDbLog('フィード「'.$feedConfig['FeedConfig']['name'].'」を削除しました。');
-
+				if ($this->FeedConfig->delete($id)) {
+					$this->FeedConfig->saveDbLog('フィード「' . $feedConfig['FeedConfig']['name'] . '」を削除しました。');
 				}
 			}
-	
 		}
 		return true;
 	}
+
 /**
  * [ADMIN] 削除　(ajax)
  *
@@ -259,8 +253,7 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
-		if(!$id) {
+		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
@@ -268,13 +261,13 @@ class FeedConfigsController extends FeedAppController {
 		$feedConfig = $this->FeedConfig->read(null, $id);
 
 		// 削除実行
-		if($this->FeedConfig->delete($id)) {
-			$this->FeedConfig->saveDbLog('フィード「'.$feedConfig['FeedConfig']['name'].'」を削除しました。');
+		if ($this->FeedConfig->delete($id)) {
+			$this->FeedConfig->saveDbLog('フィード「' . $feedConfig['FeedConfig']['name'] . '」を削除しました。');
 			exit(true);
 		}
 		exit();
-		
 	}
+
 /**
  * [ADMIN] 削除
  *
@@ -283,32 +276,28 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
-		if(!$id) {
+		if (!$id) {
 
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
 			return;
-
 		}
 
 		// メッセージ用にデータを取得
 		$feedConfig = $this->FeedConfig->read(null, $id);
 
 		// 削除実行
-		if($this->FeedConfig->delete($id)) {
+		if ($this->FeedConfig->delete($id)) {
 
-			$this->setMessage($feedConfig['FeedConfig']['name'].' を削除しました。', false, true);
-
-		}else {
+			$this->setMessage($feedConfig['FeedConfig']['name'] . ' を削除しました。', false, true);
+		} else {
 
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-
 		}
 
 		$this->redirect(array('action' => 'index'));
-
 	}
+
 /**
  * 読み込んだフィードをプレビュー表示する
  *
@@ -317,12 +306,13 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_preview($id) {
-		
-		if(!$id) $this->notFound();
-		$this->pageTitle = 'プレビュー：'.$this->FeedConfig->field('name',array('FeedConfig.id'=>$id));
-		$this->set('id',$id);
-		
+		if (!$id) {
+			$this->notFound();
+		}
+		$this->pageTitle = 'プレビュー：' . $this->FeedConfig->field('name', array('FeedConfig.id' => $id));
+		$this->set('id', $id);
 	}
+
 /**
  * フィードのキャッシュを全て削除する
  * 
@@ -330,12 +320,11 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_delete_cache() {
-		
 		$this->_clearCache();
 		$this->setMessage('フィードのキャッシュを削除しました。');
 		$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
-		
 	}
+
 /**
  * フィードのキャッシュを削除する（requestAction用）
  *
@@ -345,10 +334,9 @@ class FeedConfigsController extends FeedAppController {
  * @access protected
  */
 	public function admin_clear_cache($feedConfigId = '', $url = '') {
-
 		$this->_clearCache($feedConfigId, $url);
-		
 	}
+
 /**
  * フィードのキャッシュを削除する
  * TODO 第2引き数がない場合、全てのRSSのキャッシュを削除してしまう仕様となっているので
@@ -361,28 +349,26 @@ class FeedConfigsController extends FeedAppController {
  * @access	protected
  */
 	protected function _clearCache($feedConfigId = '', $url = '') {
-		
-		if($feedConfigId) {
-			clearViewCache('/feed/index/'.$feedConfigId);
-			clearViewCache('/feed/ajax/'.$feedConfigId);
-			clearViewCache('/feed/cachetime/'.$feedConfigId);
+		if ($feedConfigId) {
+			clearViewCache('/feed/index/' . $feedConfigId);
+			clearViewCache('/feed/ajax/' . $feedConfigId);
+			clearViewCache('/feed/cachetime/' . $feedConfigId);
 		} else {
 			clearViewCache('/feed/index');
 			clearViewCache('/feed/ajax');
 			clearViewCache('/feed/cachetime');
 		}
-		if($url) {
-			if(strpos($url,'http')===false) {
+		if ($url) {
+			if (strpos($url, 'http') === false) {
 				// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
-				clearCache($this->RssEx->__createCacheHash('', 'http://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
-				clearCache($this->RssEx->__createCacheHash('', 'https://'.$_SERVER['HTTP_HOST'].$this->base.$url), 'views', '.rss');
-			}else {
-				clearCache($this->RssEx->__createCacheHash('', $url),'views','.rss');
+				clearCache($this->RssEx->__createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+				clearCache($this->RssEx->__createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+			} else {
+				clearCache($this->RssEx->__createCacheHash('', $url), 'views', '.rss');
 			}
 		} else {
-			clearViewCache(null,'rss');
+			clearViewCache(null, 'rss');
 		}
-		
 	}
-	
+
 }

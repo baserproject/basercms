@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メニューモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * メニューモデル
  *
  * @package Baser.Model
  */
 class Menu extends AppModel {
+
 /**
  * データベース接続
  *
@@ -33,6 +36,7 @@ class Menu extends AppModel {
  * @access public
  */
 	public $useDbConfig = 'baser';
+
 /**
  * クラス名
  *
@@ -40,6 +44,7 @@ class Menu extends AppModel {
  * @access public
  */
 	public $name = 'Menu';
+
 /**
  * ビヘイビア
  * 
@@ -47,6 +52,7 @@ class Menu extends AppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * バリデーション
  *
@@ -55,18 +61,19 @@ class Menu extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'メニュー名を入力してください。'),
-			array(	'rule'		=> array('maxLength', 20),
-					'message'	=> 'メニュー名は20文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'メニュー名を入力してください。'),
+			array('rule' => array('maxLength', 20),
+				'message' => 'メニュー名は20文字以内で入力してください。')
 		),
 		'link' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'リンクURLを入力してください。'),
-			array(	'rule'		=> array('maxLength', 255),
-					'message'	=> 'リンクURLは255文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'リンクURLを入力してください。'),
+			array('rule' => array('maxLength', 255),
+				'message' => 'リンクURLは255文字以内で入力してください。')
 		)
 	);
+
 /**
  * コントロールソースを取得する
  *
@@ -75,10 +82,8 @@ class Menu extends AppModel {
  * @access public
  */
 	public function getControlSource($field = null) {
-
-		$controlSources['menu_type'] = array('default'=>'公開ページ','admin'=>'管理画面');
+		$controlSources['menu_type'] = array('default' => '公開ページ', 'admin' => '管理画面');
 		return $controlSources[$field];
-
 	}
 
 }

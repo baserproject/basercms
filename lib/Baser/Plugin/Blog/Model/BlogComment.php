@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログコメントモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログコメントモデル
  *
  * @package baser.plugins.blog.models
  */
 class BlogComment extends BlogAppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogComment extends BlogAppModel {
  * @access public
  */
 	public $name = 'BlogComment';
+
 /**
  * ビヘイビア
  * 
@@ -40,14 +44,16 @@ class BlogComment extends BlogAppModel {
  * @access public
  */
 	public $actsAs = array('BcCache');
+
 /**
  * belongsTo
  *
  * @var array
  * @access public
  */
-	public $belongsTo = array('BlogPost' =>    array(  'className'=>'Blog.BlogPost',
-							'foreignKey'=>'blog_post_id'));
+	public $belongsTo = array('BlogPost' => array('className' => 'Blog.BlogPost',
+			'foreignKey' => 'blog_post_id'));
+
 /**
  * validate
  *
@@ -56,34 +62,35 @@ class BlogComment extends BlogAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'お名前を入力してください。'),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'お名前は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'お名前を入力してください。'),
+			array('rule' => array('maxLength', 50),
+				'message' => 'お名前は50文字以内で入力してください。')
 		),
 		'email' => array(
 			'email' => array(
-				'rule'		=> array('email'),
-				'message'	=> 'Eメールの形式が不正です。',
-				'allowEmpty'=> true),
+				'rule' => array('email'),
+				'message' => 'Eメールの形式が不正です。',
+				'allowEmpty' => true),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'Eメールは255文字以内で入力してください。')
+				'rule' => array('maxLength', 255),
+				'message' => 'Eメールは255文字以内で入力してください。')
 		),
 		'url' => array(
 			'url' => array(
-				'rule'		=> array('url'),
-				'message'	=> 'URLの形式が不正です。',
-				'allowEmpty'=> true),
+				'rule' => array('url'),
+				'message' => 'URLの形式が不正です。',
+				'allowEmpty' => true),
 			'maxLength' => array(
-				'rule'		=> array('maxLength', 255),
-				'message'	=> 'URLは255文字以内で入力してください。')
+				'rule' => array('maxLength', 255),
+				'message' => 'URLは255文字以内で入力してください。')
 		),
 		'message' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> "コメントを入力してください。")
+			array('rule' => array('notEmpty'),
+				'message' => "コメントを入力してください。")
 		)
 	);
+
 /**
  * 初期値を取得する
  *
@@ -94,6 +101,7 @@ class BlogComment extends BlogAppModel {
 		$data[$this->name]['name'] = 'NO NAME';
 		return $data;
 	}
+
 /**
  * コメントを追加する
  * @param array $data
@@ -103,34 +111,32 @@ class BlogComment extends BlogAppModel {
  * @return boolean
  */
 	public function add($data, $contentId, $postId, $commentApprove) {
-
-		if(isset($data['BlogComment'])) {
+		if (isset($data['BlogComment'])) {
 			$data = $data['BlogComment'];
 		}
 
 		// サニタイズ
-		foreach($data as $key => $value) {
+		foreach ($data as $key => $value) {
 			$data[$key] = Sanitize::html($value);
 		}
-		
+
 		// Modelのバリデートに引っかからない為の対処
 		$data['url'] = str_replace('&#45;', '-', $data['url']);
 		$data['email'] = str_replace('&#45;', '-', $data['email']);
-		
+
 		$data['blog_post_id'] = $postId;
 		$data['blog_content_id'] = $contentId;
-		
-		if($commentApprove) {
+
+		if ($commentApprove) {
 			$data['status'] = false;
-		}else {
+		} else {
 			$data['status'] = true;
 		}
 
 		$data['no'] = $this->getMax('no', array('blog_content_id' => $contentId)) + 1;
 		$this->create($data);
-		
-		return $this->save();
 
+		return $this->save();
 	}
-	
+
 }

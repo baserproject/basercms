@@ -1,30 +1,34 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008*/
+/* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008 */
+
 class MenusSchema extends CakeSchema {
-	var $name = 'Menus';
 
-	var $file = 'menus.php';
+	public $name = 'Menus';
 
-	var $connection = 'baser';
+	public $file = 'menus.php';
 
-	function before($event = array()) {
+	public $connection = 'baser';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
-	var $menus = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 3, 'key' => 'primary'),
-		'no' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 3),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'link' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'menu_type' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
-		'sort' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 3),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $menus = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 3, 'key' => 'primary'),
+		'no' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
+		'link' => array('type' => 'string', 'null' => true, 'default' => null),
+		'menu_type' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
+		'sort' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * テーマモデル
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * テーマモデル
  *
  * @package Baser.Model
  */
 class Theme extends AppModel {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class Theme extends AppModel {
  * @access public
  */
 	public $name = 'Theme';
+
 /**
  * テーブル
  *
@@ -40,6 +44,7 @@ class Theme extends AppModel {
  * @access public
  */
 	public $useTable = false;
+
 /**
  * バリデーション
  *
@@ -48,20 +53,21 @@ class Theme extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'テーマ名を入力してください。'),
-			array(	'rule'		=> 'halfText',
-					'message'	=> 'テーマ名は半角英数字のみで入力してください。'),
-			array(	'rule'		=> 'themeDuplicate',
-					'message'	=> '既に存在するテーマ名です。')
+			array('rule' => array('notEmpty'),
+				'message' => 'テーマ名を入力してください。'),
+			array('rule' => 'halfText',
+				'message' => 'テーマ名は半角英数字のみで入力してください。'),
+			array('rule' => 'themeDuplicate',
+				'message' => '既に存在するテーマ名です。')
 		),
 		'url' => array(
-			array(	'rule'		=> 'halfText',
-					'message'	=> 'URLは半角英数字のみで入力してください。'),
-			array(	'rule'		=> 'url',
-					'message'	=> 'URLの形式が間違っています。'),
+			array('rule' => 'halfText',
+				'message' => 'URLは半角英数字のみで入力してください。'),
+			array('rule' => 'url',
+				'message' => 'URLの形式が間違っています。'),
 		)
 	);
+
 /**
  * 重複チェック
  *
@@ -70,21 +76,20 @@ class Theme extends AppModel {
  * @access public
  */
 	public function themeDuplicate($check) {
-		
 		$value = $check[key($check)];
-		if(!$value){
+		if (!$value) {
 			return true;
 		}
-		if($value == $this->data['Theme']['old_name']){
+		if ($value == $this->data['Theme']['old_name']) {
 			return true;
 		}
-		if(!is_dir(WWW_ROOT.'theme'.DS.$value)){
+		if (!is_dir(WWW_ROOT . 'theme' . DS . $value)) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-		
 	}
+
 /**
  * 保存
  *
@@ -93,40 +98,39 @@ class Theme extends AppModel {
  * @access public
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
-
-		if(!$data){
+		if (!$data) {
 			$data = $this->data;
-		}else{
+		} else {
 			$this->set($data);
 		}
 
-		if($validate){
-			if(!$this->validates()){
+		if ($validate) {
+			if (!$this->validates()) {
 				return false;
 			}
 		}
 
-		if(isset($data['Theme'])){
+		if (isset($data['Theme'])) {
 			$data = $data['Theme'];
 		}
 
-		$path = WWW_ROOT.'theme'.DS;
-		if($path.$data['old_name'] != $path.$data['name']) {
-			if(!rename($path.$data['old_name'], $path.$data['name'])){
+		$path = WWW_ROOT . 'theme' . DS;
+		if ($path . $data['old_name'] != $path . $data['name']) {
+			if (!rename($path . $data['old_name'], $path . $data['name'])) {
 				return false;
 			}
 		}
 
-		$keys = array('title','description','author','url');
-		foreach($keys as $key){
-			if(isset($data[$key])){
+		$keys = array('title', 'description', 'author', 'url');
+		foreach ($keys as $key) {
+			if (isset($data[$key])) {
 				$this->setConfig($data['name'], $key, $data[$key]);
 			}
 		}
 
 		return true;
-
 	}
+
 /**
  * テーマ設定ファイルに値を設定する
  *
@@ -136,19 +140,18 @@ class Theme extends AppModel {
  * @return string
  * @access public
  */
-	public function setConfig($theme,$key,$value){
-
-		$path = WWW_ROOT.'theme'.DS;
-		$contents = file_get_contents($path.$theme.DS.'config.php');
-		$reg = '/\$'.$key.'[\s]*?=[\s]*?\'.*?\';/is';
-		if(preg_match($reg, $contents)){
-			$contents = preg_replace($reg, '$'.$key.' = \''.$value.'\';', $contents);
-		}else{
-			$contents = str_replace("?>", "\$".$key." = '".$value."';\n?>", $contents);
+	public function setConfig($theme, $key, $value) {
+		$path = WWW_ROOT . 'theme' . DS;
+		$contents = file_get_contents($path . $theme . DS . 'config.php');
+		$reg = '/\$' . $key . '[\s]*?=[\s]*?\'.*?\';/is';
+		if (preg_match($reg, $contents)) {
+			$contents = preg_replace($reg, '$' . $key . ' = \'' . $value . '\';', $contents);
+		} else {
+			$contents = str_replace("?>", "\$" . $key . " = '" . $value . "';\n?>", $contents);
 		}
-		$file = new File($path.$theme.DS.'config.php');
+		$file = new File($path . $theme . DS . 'config.php');
 		$file->write($contents, 'w');
 		$file->close();
-
 	}
+
 }

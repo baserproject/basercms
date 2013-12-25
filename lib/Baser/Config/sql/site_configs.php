@@ -1,26 +1,30 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
-/* SiteConfigs schema generated on: 2010-11-04 18:11:10 : 1288863010*/
+/* SiteConfigs schema generated on: 2010-11-04 18:11:10 : 1288863010 */
+
 class SiteConfigsSchema extends CakeSchema {
-	var $name = 'SiteConfigs';
 
-	var $file = 'site_configs.php';
+	public $name = 'SiteConfigs';
 
-	var $connection = 'baser';
+	public $file = 'site_configs.php';
 
-	function before($event = array()) {
+	public $connection = 'baser';
+
+	public function before($event = array()) {
 		return true;
 	}
 
-	function after($event = array()) {
+	public function after($event = array()) {
 	}
 
-	var $site_configs = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'value' => array('type' => 'text', 'null' => true, 'default' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+	public $site_configs = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null),
+		'value' => array('type' => 'text', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
+
 }

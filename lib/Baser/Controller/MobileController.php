@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * モバイルコントローラー
@@ -18,12 +19,14 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('ga', 'Vendor');
+
 /**
  * モバイルコントローラー
  *
  * @package Baser.Controller
  */
 class MobileController extends AppController {
+
 /**
  * モデル
  *
@@ -31,15 +34,15 @@ class MobileController extends AppController {
  * @access	public
  */
 	public $uses = null;
+
 /**
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
  * 
  * return void
  * access public
  */
-	public function mobile_ga() {
-		
-		if(empty($this->siteConfigs['google_analytics_id']) || !version_compare ( preg_replace('/[a-z-]/','', phpversion()), '5','>=')) {
+	public function ga () {
+		if (empty($this->siteConfigs['google_analytics_id']) || !version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=')) {
 			header("Content-Type: image/gif");
 			header("Cache-Control: " .
 				"private, no-cache, no-cache=Set-Cookie, proxy-revalidate");
@@ -57,7 +60,16 @@ class MobileController extends AppController {
 		}
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
 		exit();
-		
 	}
 	
+/**
+ * モバイル GoogleAnalytics 用 ライブラリを読み込む
+ * 
+ * return void
+ * access public
+ */
+	public function mobile_ga() {
+		$this->setAction('ga');
+	}
+
 }

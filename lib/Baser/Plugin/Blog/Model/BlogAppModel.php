@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログモデル基底クラス
@@ -21,9 +22,11 @@
  * includes
  */
 App::uses('BcPluginAppModel', 'Model');
+
 /**
  * ブログモデル基底クラス
  *
  * @package			baser.plugins.blog
  */
-class BlogAppModel extends BcPluginAppModel {}
+class BlogAppModel extends BcPluginAppModel {
+}

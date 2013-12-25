@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * メンバーモデル
@@ -18,12 +19,14 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('User', 'Model');
+
 /**
  * メンバーモデル
  *
  * @package Baser.Model
  */
 class Member extends User {
+
 /**
  * クラス名
  *
@@ -31,6 +34,7 @@ class Member extends User {
  * @access public
  */
 	public $name = 'Member';
+
 /**
  * テーブル名
  *
@@ -38,4 +42,5 @@ class Member extends User {
  * @access public
  */
 	public $useTable = 'users';
+
 }

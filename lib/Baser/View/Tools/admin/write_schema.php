@@ -27,10 +27,10 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.baser', 'コアテーブル名') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('Tool.baser', array(
-				'type'		=> 'select',
-				'options'	=> $this->BcForm->getControlSource('Tool.baser'),
-				'multiple'	=> true,
-				'style'		=> 'width:400px;height:250px')) ?>
+				'type' => 'select',
+				'options' => $this->BcForm->getControlSource('Tool.baser'),
+				'multiple' => true,
+				'style' => 'width:400px;height:250px')); ?>
 			<?php echo $this->BcForm->error('Tool.baser') ?>
 		</td>
 	</tr>
@@ -38,10 +38,10 @@
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.plugin', 'プラグインテーブル名') ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('Tool.plugin', array(
-				'type'		=> 'select',
-				'options'	=> $this->BcForm->getControlSource('Tool.plugin'),
-				'multiple'	=> true,
-				'style'		=> 'width:400px;height:250px')) ?>
+				'type' => 'select',
+				'options' => $this->BcForm->getControlSource('Tool.plugin'),
+				'multiple' => true,
+				'style' => 'width:400px;height:250px')); ?>
 			<?php echo $this->BcForm->error('Tool.plugin') ?>
 		</td>
 	</tr>

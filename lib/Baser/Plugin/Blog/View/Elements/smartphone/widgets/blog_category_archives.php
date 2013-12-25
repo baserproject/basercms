@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログカテゴリー一覧
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_PLUGINS.'Blog'.DS.'View'.DS.'Elements'.DS.'widgets'.DS.'blog_category_archives'.$this->ext;
-?>
+include BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Elements' . DS . 'widgets' . DS . 'blog_category_archives' . $this->ext;

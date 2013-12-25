@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * Helper 拡張クラス
@@ -26,10 +27,12 @@
  * Include files
  */
 App::uses('BcAppHelper', 'View/Helper');
+
 /**
  * Helper 拡張クラス
  *
  * @package baser.view.helpers
  */
 class AppHelper extends BcAppHelper {
+	
 }

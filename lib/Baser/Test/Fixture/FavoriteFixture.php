@@ -1,4 +1,5 @@
 <?php
+
 /**
  * FavoriteFixture
  *
@@ -128,4 +129,5 @@ class FavoriteFixture extends CakeTestFixture {
 			'modified' => '2012-11-04 05:09:02'
 		),
 	);
+
 }

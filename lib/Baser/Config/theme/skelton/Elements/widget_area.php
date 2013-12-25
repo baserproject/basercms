@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ウィジェットエリア
@@ -21,7 +22,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if(!isset($subDir)) {
+if (!isset($subDir)) {
 	$subDir = true;
 }
 $this->BcBaser->includeCore('Elements/widget_area', array('subDir' => $subDir, 'no' => $no));

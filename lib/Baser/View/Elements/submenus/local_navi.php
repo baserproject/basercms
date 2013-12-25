@@ -19,9 +19,9 @@
  */
 $pageCategory = $this->BcPage->getCategory();
 ?>
-<?php if($pageCategory): ?>
-<div id="local-navi">
-	<h2><?php echo $pageCategory['title'] ?></h2>
-	<?php $this->BcBaser->element('page_list',array('categoryId'=>$pageCategory['id'])) ?>
-</div>
-<?php endif ?>
+<?php if ($pageCategory): ?>
+	<div id="local-navi">
+		<h2><?php echo $pageCategory['title'] ?></h2>
+		<?php $this->BcBaser->element('page_list', array('categoryId' => $pageCategory['id'])) ?>
+	</div>
+<?php endif; ?>

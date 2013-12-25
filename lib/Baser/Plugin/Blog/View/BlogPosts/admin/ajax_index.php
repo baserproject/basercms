@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] ブログ記事 一覧　Ajax
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('blog_posts/index_list')
-?>
+$this->BcBaser->element('blog_posts/index_list');

@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ナビゲーション
@@ -19,21 +20,21 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if ($this->viewPath == 'home'){
+if ($this->viewPath == 'home') {
 	echo '<strong>ホーム</strong>';
-}else{
+} else {
 	$crumbs = $this->BcBaser->getCrumbs();
-	if (!empty($crumbs)){
-		foreach($crumbs as $key => $crumb){
-			if($this->BcArray->last($crumbs, $key+1)) {
-				if($crumbs[$key+1]['name'] == $crumb['name']) {
+	if (!empty($crumbs)) {
+		foreach ($crumbs as $key => $crumb) {
+			if ($this->BcArray->last($crumbs, $key + 1)) {
+				if ($crumbs[$key + 1]['name'] == $crumb['name']) {
 					continue;
 				}
 			}
-			if($this->BcArray->last($crumbs, $key)) {
-				if ($this->viewPath != 'home' && $crumb['name']){
-					$this->BcBaser->addCrumb('<strong>'.$crumb['name'].'</strong>');
-				}elseif($this->name == 'CakeError'){
+			if ($this->BcArray->last($crumbs, $key)) {
+				if ($this->viewPath != 'home' && $crumb['name']) {
+					$this->BcBaser->addCrumb('<strong>' . $crumb['name'] . '</strong>');
+				} elseif ($this->name == 'CakeError') {
 					$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 				}
 			} else {
@@ -41,6 +42,5 @@ if ($this->viewPath == 'home'){
 			}
 		}
 	}
-	$this->BcBaser->crumbs(' &gt; ','ホーム');
+	$this->BcBaser->crumbs(' &gt; ', 'ホーム');
 }
-?>

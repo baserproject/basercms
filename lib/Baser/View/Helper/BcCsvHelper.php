@@ -1,6 +1,7 @@
 <?php
+
 /* SVN FILE: $Id$ */
-/* 
+/*
  *  CSVヘルパー
  * 
  *  PHP versions 5
@@ -21,12 +22,14 @@
 /**
  * Include files
  */
+
 /**
  * CSVヘルパー
  *
  * @package Web.helpers
  */
 class BcCsvHelper extends AppHelper {
+
 /**
  * CSVヘッド
  *
@@ -34,6 +37,7 @@ class BcCsvHelper extends AppHelper {
  * @access public
  */
 	public $csvHead = '';
+
 /**
  * CSVボディ
  *
@@ -41,6 +45,7 @@ class BcCsvHelper extends AppHelper {
  * @access public
  */
 	public $csvBody = '';
+
 /**
  * CSVヘッドの出力
  *
@@ -48,6 +53,7 @@ class BcCsvHelper extends AppHelper {
  * @access public
  */
 	public $exportCsvHead = true;
+
 /**
  * データを追加する（単数）
  *
@@ -56,20 +62,20 @@ class BcCsvHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function addModelData($modelName,$data) {
+	public function addModelData($modelName, $data) {
 
-		if(!$modelName)
+		if (!$modelName)
 			return false;
-		if(!isset($data[$modelName]))
+		if (!isset($data[$modelName]))
 			return false;
 
-		if(!$this->csvHead) {
+		if (!$this->csvHead) {
 			$this->csvHead = $this->_perseKey($data[$modelName]);
 		}
 		$this->csvBody .= $this->_perseValue($data[$modelName]);
 		return true;
-
 	}
+
 /**
  * データをセットする（複数）
  *
@@ -77,21 +83,20 @@ class BcCsvHelper extends AppHelper {
  * @param array $datas
  * @return $csv
  */
-	public function addModelDatas($modelName,$datas) {
+	public function addModelDatas($modelName, $datas) {
 
-		if(!$modelName)
+		if (!$modelName)
 			return false;
-		if(!isset($datas[0][$modelName]))
+		if (!isset($datas[0][$modelName]))
 			return false;
 
-		foreach($datas as $data) {
+		foreach ($datas as $data) {
 
-			$this->addModelData($modelName,$data);
-
+			$this->addModelData($modelName, $data);
 		}
 		return true;
-		
 	}
+
 /**
  * モデルデータよりCSV用のheadデータを取得する
  *
@@ -101,20 +106,20 @@ class BcCsvHelper extends AppHelper {
  */
 	protected function _perseKey($data) {
 
-		if(!is_array($data))
+		if (!is_array($data))
 			return false;
 
 		$head = '';
-		foreach($data as $key => $value) {
-			$head .= '"'.$key.'"' . ',';
+		foreach ($data as $key => $value) {
+			$head .= '"' . $key . '"' . ',';
 		}
 		$enc = mb_detect_encoding($head);
-		$head = substr($head,0,strlen($head)-1) . "\n";
+		$head = substr($head, 0, strlen($head) - 1) . "\n";
 		$head = mb_convert_encoding($head, 'SJIS-WIN', $enc);
 
 		return $head;
-
 	}
+
 /**
  * モデルデータよりCSV用の本体データを取得する
  *
@@ -124,24 +129,24 @@ class BcCsvHelper extends AppHelper {
  */
 	protected function _perseValue($data) {
 
-		if(!is_array($data))
+		if (!is_array($data))
 			return false;
 
 		$body = '';
-		foreach($data as $key => $value) {
-			$value = str_replace(",","、",$value);
-			if(is_array($value)) {
-				$value = implode('|',$value);
+		foreach ($data as $key => $value) {
+			$value = str_replace(",", "、", $value);
+			if (is_array($value)) {
+				$value = implode('|', $value);
 			}
-			$body .= '"'.$value.'"' . ',';
+			$body .= '"' . $value . '"' . ',';
 		}
 
 		$enc = mb_detect_encoding($body);
-		$body = substr($body,0,strlen($body)-1) . "\n";
+		$body = substr($body, 0, strlen($body) - 1) . "\n";
 		$body = mb_convert_encoding($body, 'SJIS-WIN', $enc);
 		return $body;
-
 	}
+
 /**
  * CSVファイルをダウンロードする
  *
@@ -149,24 +154,24 @@ class BcCsvHelper extends AppHelper {
  * @param boolean $debug
  * @return void|string
  */
-	public function download($fileName,$debug = false) {
+	public function download($fileName, $debug = false) {
 
-		if($this->exportCsvHead) {
-			$exportData = $this->csvHead.$this->csvBody;
-		}else {
+		if ($this->exportCsvHead) {
+			$exportData = $this->csvHead . $this->csvBody;
+		} else {
 			$exportData = $this->csvBody;
 		}
 
-		if(!$debug) {
-			Header("Content-disposition: attachment; filename=".$fileName.".csv");
-			Header("Content-type: application/octet-stream; name=".$fileName.".csv");
+		if (!$debug) {
+			Header("Content-disposition: attachment; filename=" . $fileName . ".csv");
+			Header("Content-type: application/octet-stream; name=" . $fileName . ".csv");
 			echo $exportData;
 			exit();
-		}else {
+		} else {
 			return $exportData;
 		}
-
 	}
+
 /**
  * ファイルを保存する
  *
@@ -174,16 +179,15 @@ class BcCsvHelper extends AppHelper {
  * @return void
  */
 	public function save($fileName) {
-		
-		if($this->exportCsvHead) {
-			$exportData = $this->csvHead.$this->csvBody;
-		}else {
+
+		if ($this->exportCsvHead) {
+			$exportData = $this->csvHead . $this->csvBody;
+		} else {
 			$exportData = $this->csvBody;
 		}
-		$fp = fopen($fileName,"w");
-		fputs($fp,$exportData,1024*1000*10);
+		$fp = fopen($fileName, "w");
+		fputs($fp, $exportData, 1024 * 1000 * 10);
 		fclose($fp);
-		
 	}
-	
+
 }

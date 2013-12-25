@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] サイト内検索フォームウィジェット
@@ -17,5 +18,4 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS.'Elements'.DS.'widgets'.DS.'search'.$this->ext;
-?>
+include BASER_VIEWS . 'Elements' . DS . 'widgets' . DS . 'search' . $this->ext;

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /* SVN FILE: $Id$ */
 /**
  * [ADMIN] ページ フォーム
@@ -18,7 +19,7 @@
  * @license			http://basercms.net/license/index.html
  */
 echo $this->BcForm->input('Page.page_category_id', array(
-	'type'	=> 'select',
+	'type' => 'select',
 	'options' => $categorySource,
-	'escape'	=> false
-)) ?>
+	'escape' => false
+));

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 class ThemeConfigsSchema extends CakeSchema {
 
 	public $file = 'theme_configs.php';

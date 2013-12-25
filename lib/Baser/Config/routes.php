@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ルーティング定義
@@ -20,17 +21,17 @@
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-if(Configure::read('BcRequest.asset')) {
+if (Configure::read('BcRequest.asset')) {
 	return;
 }
-if(BC_INSTALLED || isConsole()) {
+if (BC_INSTALLED || isConsole()) {
 	$isMaintenance = Configure::read('BcRequest.isMaintenance');
 	$isUpdater = Configure::read('BcRequest.isUpdater');
 /**
  * テーマヘルパーのパスを追加する 
  */
 	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS. 'Helper');
+	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
 	App::build(array('View/Helper' => $helperPaths));
 }
 /**
@@ -44,9 +45,31 @@ App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
 $request = null;
-if(!empty(self::$_requests[0])) {
+if (!empty(self::$_requests[0])) {
 	$request = self::$_requests[0];
 }
+// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
+// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
+$dir = Configure::read('App.dir');
+$webroot = Configure::read('App.webroot');
+$baseUrl = Configure::read('App.baseUrl');
+if ($baseUrl) {
+	switch (BC_DEPLOY_PATTERN) {
+		case 1:
+			if (strpos($request->webroot, $dir) === false) {
+				$request->webroot .= $dir . '/';
+			}
+			if (strpos($request->webroot, $webroot) === false) {
+				$request->webroot .= $webroot . '/';
+			}
+			break;
+		case 2:
+			$baseDir = str_replace('index.php', '', $baseUrl);
+			$request->webroot = $baseDir;
+			break;
+	}
+}
+// パラメータ取得
 $parameter = getPureUrl($request);
 
 Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
@@ -55,11 +78,11 @@ $agentAlias = Configure::read('BcRequest.agentAlias');
 $agentPrefix = Configure::read('BcRequest.agentPrefix');
 $authPrefixes = Configure::read('BcAuthPrefix');
 
-if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 
 	$pluginMatch = array();
 	$plugins = CakePlugin::loaded();
-	if($plugins) {
+	if ($plugins) {
 		foreach ($plugins as $key => $value) {
 			$plugins[$key] = Inflector::underscore($value);
 		}
@@ -68,7 +91,7 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * 名前付きパラメータを追加 
  */
-	Router::connectNamed(array('sortmode','num','page','sort','direction'));
+	Router::connectNamed(array('sortmode', 'num', 'page', 'sort', 'direction'));
 /**
  * プラグインルーティング
  */
@@ -86,34 +109,34 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
  */
 	$PluginContent = ClassRegistry::init('PluginContent');
-	if($PluginContent) {
+	if ($PluginContent) {
 		$pluginContent = $PluginContent->currentPluginContent($parameter);
-		if($pluginContent) {
+		if ($pluginContent) {
 			$pluginContentName = $pluginContent['PluginContent']['name'];
 			$pluginName = $pluginContent['PluginContent']['plugin'];
-			if(!$agent) {
-				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller'=> $pluginName));
-				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller'=> $pluginName, 'action' => 'index'));
-			}else {
-				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName));
-				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix'	=> $agentPrefix, 'plugin' => $pluginName, 'controller'=> $pluginName, 'action' => 'index'));
+			if (!$agent) {
+				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller' => $pluginName));
+				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
+			} else {
+				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName));
+				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
 			}
 		}
 	}
 /**
  * 認証プレフィックス
  */
-	if($authPrefixes && is_array($authPrefixes)) {
-		foreach($authPrefixes as $key => $authPrefix) {
+	if ($authPrefixes && is_array($authPrefixes)) {
+		foreach ($authPrefixes as $key => $authPrefix) {
 			$prefix = $key;
-			if(!empty($authPrefix['alias'])) {
+			if (!empty($authPrefix['alias'])) {
 				$alias = $authPrefix['alias'];
 			} else {
 				$alias = $prefix;
 			}
-			if($alias) {
-				Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action'=> 'index'));
-				if(CakePlugin::loaded()) {
+			if ($alias) {
+				Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index'));
+				if (CakePlugin::loaded()) {
 					Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 					Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 					Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
@@ -124,57 +147,57 @@ if(BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	}
 }
 
-if(BC_INSTALLED || isConsole()) {
+if (BC_INSTALLED || isConsole()) {
 /**
  * ページ機能拡張
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング
  */
 	$adminPrefix = Configure::read('Routing.prefixes.0');
-	if(!preg_match("/^{$adminPrefix}/", $parameter)){
+	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
 		/* 1.5.10 以降 */
 		App::uses('Page', 'Model');
 		$Page = new Page(null, null, 'baser');
-		if($Page){
-			
-			$parameter = urldecode($parameter);
-			
-			if(!$parameter){
-				$_parameters = array('index');
-			}elseif(preg_match('/\/$/is', $parameter)) {
-				$_parameters = array($parameter . 'index');
-			}else{
-				$_parameters = array($parameter, $parameter . '/index');
-			}
-			
-			foreach ($_parameters as $_parameter){
+		if ($Page) {
 
-				$linkedPages = $Page->isLinked($agentPrefix, '/'.$_parameter);
-			
-				if(!$agent || $linkedPages){
-					$url = "/{$_parameter}";
-				}else{
-					$url = "/{$agentPrefix}/{$_parameter}";
+			$parameter = urldecode($parameter);
+
+			if (!$parameter) {
+				$params = array('index');
+			} elseif (preg_match('/\/$/is', $parameter)) {
+				$params = array($parameter . 'index');
+			} else {
+				$params = array($parameter, $parameter . '/index');
+			}
+
+			foreach ($params as $param) {
+
+				$linkedPages = $Page->isLinked($agentPrefix, '/' . $param);
+
+				if (!$agent || $linkedPages) {
+					$url = "/{$param}";
+				} else {
+					$url = "/{$agentPrefix}/{$param}";
 				}
-				
-				if($Page->isPageUrl($url) && $Page->checkPublish($url)){
-					if(!$agent){
-						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
-					}else{
-						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
+
+				if ($Page->isPageUrl($url) && $Page->checkPublish($url)) {
+					if (!$agent) {
+						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
+					} else {
+						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 					}
 					break;
 				} else {
-					
+
 					// 拡張子付き（.html）の場合も透過的にマッチングさせる
-					if(preg_match('/^(.+?)\.html$/', $url, $matches)) {
+					if (preg_match('/^(.+?)\.html$/', $url, $matches)) {
 						$url = $matches[1];
-						if($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))){
-							$_parameter = str_replace('.html', '', $_parameter);
-							if(!$agent){
-								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $_parameter));
-							}else{
-								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'),explode('/',$_parameter)));
+						if ($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))) {
+							$param = str_replace('.html', '', $param);
+							if (!$agent) {
+								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $param));
+							} else {
+								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 							}
 							break;
 						}
@@ -187,7 +210,7 @@ if(BC_INSTALLED || isConsole()) {
 /**
  * 携帯標準ルーティング
  */
-	if($agent) {
+	if ($agent) {
 		// プラグイン
 		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
@@ -203,16 +226,15 @@ if(BC_INSTALLED || isConsole()) {
  * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
  */
 	Router::parseExtensions('rss');
-}
-else {
+} else {
 	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
 }
 /**
  * アップデーター用 
  */
 $updateKey = Configure::read('BcApp.updateKey');
-Router::connect('/'.$updateKey, array('controller' => 'updaters', 'action' => 'index'));
-Router::connect('/'.$updateKey.'/index', array('controller' => 'updaters', 'action' => 'index'));
+Router::connect('/' . $updateKey, array('controller' => 'updaters', 'action' => 'index'));
+Router::connect('/' . $updateKey . '/index', array('controller' => 'updaters', 'action' => 'index'));
 /**
  * インストーラー用
  */

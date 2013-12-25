@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EditorTemplateFixture
  *
@@ -11,9 +12,9 @@ class EditorTemplateFixture extends CakeTestFixture {
  * @var array
  */
 	public $import = array(
-        'model'      => 'EditorTemplate',
-        'records'    => true,
-        'connection' => 'baser'
-    );
+		'model' => 'EditorTemplate',
+		'records' => true,
+		'connection' => 'baser'
+	);
 
 }

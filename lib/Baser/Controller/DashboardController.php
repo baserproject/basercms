@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ダッシュボードコントローラー
@@ -20,6 +21,7 @@
 /**
  * Include files
  */
+
 /**
  * ダッシュボードコントローラー
  * 管理者ログインやメンバーログインのダッシュボードページを表示する
@@ -27,6 +29,7 @@
  * @package Baser.Controller
  */
 class DashboardController extends AppController {
+
 /**
  * クラス名
  *
@@ -34,6 +37,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $name = 'Dashboard';
+
 /**
  * モデル
  *
@@ -41,6 +45,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $uses = array('Dblog', 'User', 'Menu', 'Page');
+
 /**
  * ヘルパー
  *
@@ -48,6 +53,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $helpers = array('BcTime', 'Js');
+
 /**
  * コンポーネント
  *
@@ -55,6 +61,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * ぱんくずナビ
  *
@@ -62,6 +69,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $crumbs = array();
+
 /**
  * サブメニューエレメント
  *
@@ -69,6 +77,7 @@ class DashboardController extends AppController {
  * @access public
  */
 	public $subMenuElements = array();
+
 /**
  * [ADMIN] 管理者ダッシュボードページにajaxでデータを取得する
  *
@@ -76,16 +85,15 @@ class DashboardController extends AppController {
  * @access public
  */
 	public function admin_ajax_dblog_index() {
-
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
 		$this->paginate = array(
-				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
+				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
 				'limit' => $this->passedArgs['num']
 		);
-		$this->set('viewDblogs',$this->paginate('Dblog'));
-		
+		$this->set('viewDblogs', $this->paginate('Dblog'));
 	}
+
 /**
  * [ADMIN] 管理者ダッシュボードページを表示する
  *
@@ -93,39 +101,36 @@ class DashboardController extends AppController {
  * @access public
  */
 	public function admin_index() {
-
 		$this->pageTitle = '管理者ダッシュボード';
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('Dblog', array('default' => $default));
-		
+
 		$this->paginate = array(
-				'order' => array('Dblog.created DESC', 'Dblog.id DESC'),
+				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
 				'limit' => $this->passedArgs['num']
 		);
-		
-		$this->set('viewDblogs',$this->paginate('Dblog'));
+
+		$this->set('viewDblogs', $this->paginate('Dblog'));
 		$publishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => true)));
 		$unpublishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => false)));
 		$totalPages = $publishedPages + $unpublishedPages;
 		$this->set(compact('publishedPages', 'unpublishedPages', 'totalPages'));
 		$this->help = 'dashboard_index';
-
 	}
+
 /**
  * [ADMIN] 最近の動きを削除
  * 
  * @return void
  * @access public
  */
-	public function admin_del(){
-
-		if($this->Dblog->deleteAll('1 = 1')){
+	public function admin_del() {
+		if ($this->Dblog->deleteAll('1 = 1')) {
 			$this->setMessage('最近の動きのログを削除しました。');
 		} else {
 			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
 		}
 		$this->redirect(array('action' => 'index'));
-
 	}
-	
+
 }

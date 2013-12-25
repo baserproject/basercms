@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ユーザーグループモデル
@@ -77,25 +78,24 @@ class UserGroup extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> 'ユーザーグループ名を入力してください。'),
-			array(	'rule'		=> array('halfText'),
-					'message'	=> 'ユーザーグループ名は半角のみで入力してください。'),
-			array(	'rule'		=> array('duplicate','name'),
-					'message'	=> '既に登録のあるユーザーグループ名です。'),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> 'ユーザーグループ名は50文字以内で入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => 'ユーザーグループ名を入力してください。'),
+			array('rule' => array('halfText'),
+				'message' => 'ユーザーグループ名は半角のみで入力してください。'),
+			array('rule' => array('duplicate', 'name'),
+				'message' => '既に登録のあるユーザーグループ名です。'),
+			array('rule' => array('maxLength', 50),
+				'message' => 'ユーザーグループ名は50文字以内で入力してください。')
 		),
 		'title' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> '表示名を入力してください。'),
-			array(	'rule'		=> array('maxLength', 50),
-					'message'	=> '表示名は50文字以内で入力してください。')
-
+			array('rule' => array('notEmpty'),
+				'message' => '表示名を入力してください。'),
+			array('rule' => array('maxLength', 50),
+				'message' => '表示名は50文字以内で入力してください。')
 		),
 		'auth_prefix' => array(
-			array(	'rule'		=> array('notEmpty'),
-					'message'	=> '認証プレフィックスを入力してください。')
+			array('rule' => array('notEmpty'),
+				'message' => '認証プレフィックスを入力してください。')
 		)
 	);
 
@@ -209,4 +209,5 @@ class UserGroup extends AppModel {
 	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
 	}
+
 }

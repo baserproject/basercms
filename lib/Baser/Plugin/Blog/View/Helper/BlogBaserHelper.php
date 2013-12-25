@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * BlogBaserヘルパー
@@ -17,6 +18,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * BlogBaserヘルパー
  *
@@ -24,11 +26,13 @@
  *
  */
 class BlogBaserHelper extends AppHelper {
+
 /**
  * ヘルパー
  * @var array
  */
-	var $helpers = array('Blog.Blog');
+	public $helpers = array('Blog.Blog');
+
 /**
  * ブログ記事一覧出力
  * ページ編集画面等で利用する事ができる。
@@ -42,97 +46,96 @@ class BlogBaserHelper extends AppHelper {
  * @return void
  * @access public
  */
-	public function blogPosts ($contentsName, $num = 5, $options = array()) {
-
+	public function blogPosts($contentsName, $num = 5, $options = array()) {
 		$options = array_merge(array(
-			'category'	=> null,
-			'tag'		=> null,
-			'year'		=> null,
-			'month'		=> null,
-			'day'		=> null,
-			'id'		=> null,
-			'keyword'	=> null,
-			'templates'	=> null,
+			'category' => null,
+			'tag' => null,
+			'year' => null,
+			'month' => null,
+			'day' => null,
+			'id' => null,
+			'keyword' => null,
+			'template' => null,
 			'direction' => null,
-			'page'		=> null,
-			'sort'		=> null
+			'page' => null,
+			'sort' => null
 		), $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$id = $BlogContent->field('id', array('BlogContent.name'=>$contentsName));
-		$url = array('admin' => false, 'plugin'=>'blog','controller'=>'blog','action'=>'posts');
+		$id = $BlogContent->field('id', array('BlogContent.name' => $contentsName));
+		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
 
 		$settings = Configure::read('BcAgent');
-		foreach($settings as $key => $setting) {
-			if(isset($options[$key])) {
+		foreach ($settings as $key => $setting) {
+			if (isset($options[$key])) {
 				$agentOn = $options[$key];
 				unset($options[$key]);
 			} else {
 				$agentOn = (Configure::read('BcRequest.agent') == $key);
 			}
-			if($agentOn){
+			if ($agentOn) {
 				$url['prefix'] = $setting['prefix'];
 				break;
 			}
 		}
-		if(isset($options['templates'])) {
-			$templates = $options['templates'];
-		} else {
-			$templates = 'posts';
-		}
-		unset ($options['templates']);
 
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
-
 	}
+
 /**
  * カテゴリー別記事一覧ページ判定
  *
  * @return boolean 
  */
-	function isBlogCategory() {
+	public function isBlogCategory() {
 		return $this->Blog->isCategory();
 	}
+
 /**
  * タグ別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogTag() {
+	public function isBlogTag() {
 		return $this->Blog->isTag();
 	}
+
 /**
  * 日別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogDate() {
+	public function isBlogDate() {
 		return $this->Blog->isDate();
 	}
+
 /**
  * 月別記事一覧ページ判定
  * @return boolean 
  */
-	function isBlogMonth() {
+	public function isBlogMonth() {
 		return $this->Blog->isMonth();
 	}
+
 /**
  * 年別記事一覧ページ判定
  * @return boolean
  */
-	function isBlogYear() {
+	public function isBlogYear() {
 		return $this->Blog->isYear();
 	}
+
 /**
  * 個別ページ判定
  * @return boolean
  */
-	function isBlogSingle() {
+	public function isBlogSingle() {
 		return $this->Blog->isSingle();
 	}
+
 /**
  * インデックスページ判定
  * @return boolean
  */
-	function isBlogHome() {
+	public function isBlogHome() {
 		return $this->Blog->isHome();
 	}
 

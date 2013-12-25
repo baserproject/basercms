@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakeRequest
  *
@@ -16,7 +17,6 @@
  * @since         CakePHP(tm) v 2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Hash', 'Utility');
 
 /**
@@ -108,11 +108,11 @@ class CakeRequest implements ArrayAccess {
 		'ajax' => array('env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'),
 		'flash' => array('env' => 'HTTP_USER_AGENT', 'pattern' => '/^(Shockwave|Adobe) Flash/'),
 		'mobile' => array('env' => 'HTTP_USER_AGENT', 'options' => array(
-			'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
-			'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
-			'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
-			'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
-		)),
+				'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
+				'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
+				'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
+				'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
+			)),
 		'requested' => array('param' => 'requested', 'value' => 1)
 	);
 
@@ -168,8 +168,8 @@ class CakeRequest implements ArrayAccess {
 			($this->is('put') || $this->is('delete')) &&
 			strpos(env('CONTENT_TYPE'), 'application/x-www-form-urlencoded') === 0
 		) {
-				$data = $this->_readInput();
-				parse_str($data, $this->data);
+			$data = $this->_readInput();
+			parse_str($data, $this->data);
 		}
 		if (ini_get('magic_quotes_gpc') === '1') {
 			$this->data = stripslashes_deep($this->data);
@@ -251,16 +251,22 @@ class CakeRequest implements ArrayAccess {
 		// CUSTOMIZE ADD 2013/11/25 ryuring
 		// サブフォルダに設置した場合URIを正常に取得できない為調整
 		// >>>
-		if(Configure::read('App.baseUrl')) {
+		if (Configure::read('App.baseUrl')) {
 			$dir = dirname($this->base);
-			if(strpos($uri, $dir) === 0) {
-				//$uri = substr($uri, strlen($dir));	
+			if (strpos($uri, $dir) === 0) {
+				//$uri = substr($uri, strlen($dir));
 			}
 		}
 		// <<<
 
-		$base = $this->base;
-
+		// CUSTOMIZE MODIFY 2013/09/30 ryuring
+		// サブディレクトリ設置時のスマートURLオフに対応していなかったので調整
+		// >>>
+		//$base = $this->base;
+		// ---
+		$base = str_replace('/index.php', '', $this->base);
+		// <<<
+		
 		if (strlen($base) > 0 && strpos($uri, $base) === 0) {
 			$uri = substr($uri, strlen($base));
 		}
@@ -337,23 +343,23 @@ class CakeRequest implements ArrayAccess {
 
 		$docRoot = env('DOCUMENT_ROOT');
 		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
-		
+
 		// CUSTOMIZE MODIFY 2013/11/25 ryuring
 		// >>>
 		//if (!empty($base) || !$docRootContainsWebroot) {
 		// ---
-		
-		if(!$docRootContainsWebroot) {
+
+		if (!$docRootContainsWebroot) {
 			// サブフォルダに対応
 			$docRootContainsWebroot = (strpos(WWW_ROOT, $dir . DS . $webroot));
 		}
-		if(!$docRootContainsWebroot) {
+		if (!$docRootContainsWebroot) {
 			// BC_DEPLOY_PATTERN 2 に対応
 			$docRootContainsWebroot = (strpos(WWW_ROOT, $webroot));
 		}
-		
+
 		if (!empty($base) && !$docRootContainsWebroot) {
-		// <<<
+			// <<<
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/';
 			}

@@ -40,14 +40,14 @@ $(window).load(function() {
 				<?php echo $this->BcForm->input('Permission.user_group_id', array('type' => 'hidden')) ?>
 			</td>
 		</tr>
-<?php if($this->request->action == 'admin_edit'): ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Permission.id', 'NO') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->value('Permission.no') ?>
-			</td>
-		</tr>
-<?php endif; ?>
+		<?php if ($this->request->action == 'admin_edit'): ?>
+			<tr>
+				<th class="col-head"><?php echo $this->BcForm->label('Permission.id', 'NO') ?></th>
+				<td class="col-input">
+					<?php echo $this->BcForm->value('Permission.no') ?>
+				</td>
+			</tr>
+		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.name', 'ルール名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -92,14 +92,10 @@ $(window).load(function() {
 	</table>
 </div>
 <div class="submit">
-<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-<?php if ($this->request->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('削除', 
-			array('action'=>'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')),
-			array('class' => 'button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')),
-			false); ?>
-<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php if ($this->request->action == 'admin_edit'): ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')), false); ?>
+	<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Requests collector.
  *
  *  This file collects requests if:
- *	- no mod_rewrite is available or .htaccess files are not supported
+ * 	- no mod_rewrite is available or .htaccess files are not supported
  *  - requires App.baseUrl to be uncommented in app/Config/core.php
- *	- app/webroot is not set as a document root.
+ * 	- app/webroot is not set as a document root.
  *
  * PHP 5
  *
@@ -21,13 +22,22 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 /**
  *  Get Cake's root directory
  */
 define('APP_DIR', 'app');
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__FILE__));
+
+// CUSTOMIZE MODIFY 2013/12/24 ryuring
+// 環境によって、 __FILE__ で取得できる値と、$_SERVER['SCRIPT_FILENAME'] で取得できる値が違う場合がある為、
+// $_SERVER['SCRIPT_FILENAME'] に統一した
+// Heteml にて再現
+// >>>
+// define('ROOT', dirname(__FILE__));
+// ---
+define('ROOT', dirname($_SERVER['SCRIPT_FILENAME']));
+// <<<
+
 define('WEBROOT_DIR', 'webroot');
 define('WWW_ROOT', ROOT . DS . APP_DIR . DS . WEBROOT_DIR . DS);
 

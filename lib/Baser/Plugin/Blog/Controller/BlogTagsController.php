@@ -1,4 +1,5 @@
 <?php
+
 /* SVN FILE: $Id$ */
 /**
  * ブログタグコントローラー
@@ -20,12 +21,14 @@
 /**
  * Include files
  */
+
 /**
  * ブログタグコントローラー
  *
  * @package baser.plugins.blog.controllers
  */
 class BlogTagsController extends BlogAppController {
+
 /**
  * クラス名
  *
@@ -33,6 +36,7 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public $name = 'BlogTags';
+
 /**
  * モデル
  *
@@ -40,13 +44,15 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogTag');
+
 /**
  * コンポーネント
  *
  * @var array
  * @access public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+
 /**
  * ぱんくずナビ
  *
@@ -57,6 +63,7 @@ class BlogTagsController extends BlogAppController {
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
+
 /**
  * サブメニューエレメント
  *
@@ -64,51 +71,49 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public $subMenuElements = array('blog_common');
+
 /**
  * [ADMIN] タグ一覧
  *
  * @return void
  * @access public
  */
-	public function admin_index () {
-
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort'=>'id', 'direction'=>'asc'));
+	public function admin_index() {
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc'));
 		$this->setViewConditions('BlogTag', array('default' => $default));
 
 		$this->paginate = array(
-				'order'	=> 'BlogTag.id',
-				'limit'	=> $this->passedArgs['num'],
-				'recursive' => 0
+			'order' => 'BlogTag.id',
+			'limit' => $this->passedArgs['num'],
+			'recursive' => 0
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
-		
+
 		$this->pageTitle = 'ブログタグ一覧';
-		
 	}
+
 /**
  * [ADMIN] タグ登録
  *
  * @return void
  * @access public
  */
-	public function admin_add () {
-
-		if(!empty($this->request->data)) {
+	public function admin_add() {
+		if (!empty($this->request->data)) {
 
 			$this->BlogTag->create($this->request->data);
-			if($this->BlogTag->save()) {
-				$this->setMessage('タグ「'.$this->request->data['BlogTag']['name'].'」を追加しました。', false, true);
+			if ($this->BlogTag->save()) {
+				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
-			}else {
+			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
-
 		}
 
 		$this->pageTitle = '新規ブログタグ登録';
 		$this->render('form');
-		
 	}
+
 /**
  * [ADMIN] タグ編集
  *
@@ -116,31 +121,29 @@ class BlogTagsController extends BlogAppController {
  * @return void
  * @access public
  */
-	public function admin_edit ($id) {
-
-		if(!$id) {
+	public function admin_edit($id) {
+		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if(empty($this->request->data)) {
+		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogTag->read(null, $id);
 		} else {
 
 			$this->BlogTag->set($this->request->data);
-			if($this->BlogTag->save()) {
-				$this->setMessage('タグ「'.$this->request->data['BlogTag']['name'].'」を更新しました。', false, true);
+			if ($this->BlogTag->save()) {
+				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index'));
-			}else {
+			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
-
 		}
 
-		$this->pageTitle = 'ブログタグ編集： '.$this->request->data['BlogTag']['name'];
+		$this->pageTitle = 'ブログタグ編集： ' . $this->request->data['BlogTag']['name'];
 		$this->render('form');
-
 	}
+
 /**
  * [ADMIN] 削除処理
  *
@@ -149,23 +152,22 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_delete($id = null) {
-
-		if(!$id) {
+		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 
-		if($this->BlogTag->delete($id)) {
+		if ($this->BlogTag->delete($id)) {
 			$this->setMessage('タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。', false, true);
-		}else {
+		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
 		$this->redirect(array('action' => 'index'));
-
 	}
+
 /**
  * [ADMIN] 削除処理　(ajax)
  *
@@ -174,20 +176,19 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	public function admin_ajax_delete($id = null) {
-
-		if(!$id) {
+		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
 		$data = $this->BlogTag->read(null, $id);
-		if($this->BlogTag->delete($id)) {
+		if ($this->BlogTag->delete($id)) {
 			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 			$this->BlogTag->saveDbLog($message);
 			exit(true);
 		}
 		exit();
-
 	}
+
 /**
  * [ADMIN] 一括削除
  *
@@ -196,10 +197,10 @@ class BlogTagsController extends BlogAppController {
  * @access public
  */
 	protected function _batch_del($ids) {
-		if($ids) {
-			foreach($ids as $id) {
+		if ($ids) {
+			foreach ($ids as $id) {
 				$data = $this->BlogTag->read(null, $id);
-				if($this->BlogTag->delete($id)) {
+				if ($this->BlogTag->delete($id)) {
 					$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
 					$this->BlogTag->saveDbLog($message);
 				}
@@ -207,17 +208,17 @@ class BlogTagsController extends BlogAppController {
 		}
 		return true;
 	}
+
 /**
  * [ADMIN] AJAXタグ登録
  *
  * @return void
  * @access public
  */
-	public function admin_ajax_add () {
-
-		if(!empty($this->request->data)) {
+	public function admin_ajax_add() {
+		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
-			if($data = $this->BlogTag->save()) {
+			if ($data = $this->BlogTag->save()) {
 				$result = array($this->BlogTag->id => $data['BlogTag']['name']);
 				$this->set('result', $result);
 			} else {
@@ -226,7 +227,6 @@ class BlogTagsController extends BlogAppController {
 		} else {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-
 	}
-	
+
 }
