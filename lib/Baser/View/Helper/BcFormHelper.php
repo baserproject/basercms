@@ -1128,7 +1128,7 @@ function countSize() {
 DOC_END;
 				$this->sizeCounterFunctionLoaded = true;
 			}
-			$out = $out . $counter . $this->Js->buffer($script);
+			$out = $out . $counter . $this->Html->scriptblock($script);
 		}
 
 		/*		 * * afterInput ** */
