@@ -62,7 +62,6 @@ class FeedConfig extends FeedAppModel {
 		array("className" => "Feed.FeedDetail",
 			"conditions" => "",
 			"order" => "FeedDetail.id ASC",
-			"limit" => 10,
 			"foreignKey" => "feed_config_id",
 			"dependent" => true,
 			"exclusive" => false,
