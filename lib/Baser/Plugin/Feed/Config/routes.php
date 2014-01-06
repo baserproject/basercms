@@ -25,5 +25,5 @@
 $prefix = Configure::read('BcAgent.smartphone.alias');
 Router::connect('/feed/index/*', array('plugin' => 'feed', 'controller' => 'feed'));
 Router::connect('/feed/ajax/*', array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
-Router::connect('/' . $prefix . '/feed/index/*', array('smartphone' => true, 'plugin' => 'feed', 'controller' => 'feed'));
-Router::connect('/' . $prefix . '/feed/ajax/*', array('smartphone' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
+Router::connect('/' . $prefix . '/feed/index/*', array('prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed'));
+Router::connect('/' . $prefix . '/feed/ajax/*', array('prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
