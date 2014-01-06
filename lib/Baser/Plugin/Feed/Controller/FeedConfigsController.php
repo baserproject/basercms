@@ -101,11 +101,13 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_index() {
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('FeedConfig', array('default' => $default));
 		// データを取得
 		$this->paginate = array('conditions' => array(),
 			'fields' => array(),
 			'order' => 'FeedConfig.id',
-			'limit' => 10
+			'limit' => $this->passedArgs['num']
 		);
 		$feedConfigs = $this->paginate('FeedConfig');
 
