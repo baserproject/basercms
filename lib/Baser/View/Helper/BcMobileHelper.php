@@ -69,6 +69,7 @@ class BcMobileHelper extends Helper {
 				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
 			);
 			if ($caching) {
+				$this->Cache = new CacheHelper();
 				$this->Cache->base = $View->base;
 				$this->Cache->here = $View->here;
 				$this->Cache->helpers = $View->helpers;
