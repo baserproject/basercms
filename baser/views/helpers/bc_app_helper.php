@@ -152,6 +152,9 @@ class BcAppHelper extends Helper {
 		// CUSTOMIZE MODIFY 2011/04/11 ryuring
 		// Rewriteモジュールが利用できない場合、画像等で出力されるURL形式（/app/webroot/img/...）が
 		// $file に設定された場合でもパス解決ができるようにした。
+		// 
+		// CUSTOMIZE MODIFY 2014/01/16 gondoh
+		// https環境のフルパスURLを渡される場合に対応
 		//
 		// >>>
 		// $webPath = "{$this->webroot}" . $file;
@@ -172,6 +175,7 @@ class BcAppHelper extends Helper {
 			// ※ ファイルのパスが ROOT 配下にある事が前提
 			$webPath = $file;
 		} else {
+			if (strpos($file, 'https://') !== false) return $file;
 			$webPath = Router::url('/'.$file);
 		}
 		// <<<
