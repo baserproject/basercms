@@ -18,4 +18,6 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$this->request->params['action'] = str_replace('mobile_', '', $this->request->params['action']);
 include BASER_VIEWS . 'Contents' . DS . 'search' . $this->ext;
+$this->request->params['action'] = 'mobile_' . $this->request->params['action'];
