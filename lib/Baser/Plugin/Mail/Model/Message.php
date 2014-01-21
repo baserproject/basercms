@@ -785,4 +785,22 @@ class Message extends MailAppModel {
 		return $messages;
 	}
 
+	
+/**
+ * find
+ * 
+ * @param String $type
+ * @param mixed $query
+ * @return Array
+ */
+	public function find($type = 'first', $query = array()) {
+		// テーブルを共用しているため、環境によってはデータ取得に失敗する。
+		// その原因のキャッシュメソッドをfalseに設定。
+		$db = ConnectionManager::getDataSource('plugin');
+		$db->cacheMethods = false;
+		$result = parent::find($type, $query);
+		$db->cacheMethods = true;
+		return $result;
+	}
+
 }
