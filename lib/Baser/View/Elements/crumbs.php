@@ -20,7 +20,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if ($this->viewPath == 'home') {
+if ($this->BcBaser->isHome()) {
 	echo '<strong>ホーム</strong>';
 } else {
 	$crumbs = $this->BcBaser->getCrumbs();
@@ -34,12 +34,15 @@ if ($this->viewPath == 'home') {
 			if ($this->BcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']) {
 					$this->BcBaser->addCrumb('<strong>' . $crumb['name'] . '</strong>');
-				} elseif ($this->name == 'CakeError') {
-					$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 				}
 			} else {
 				$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
 			}
+		}
+	}
+	elseif (empty($crumbs)) {
+		if ($this->name == 'CakeError') {
+			$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 		}
 	}
 	$this->BcBaser->crumbs(' &gt; ', 'ホーム');

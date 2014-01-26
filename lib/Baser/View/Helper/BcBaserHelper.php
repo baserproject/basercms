@@ -1766,7 +1766,9 @@ END_FLASH;
  * ページをエレメントとして読み込む
  *
  * ※ レイアウトは読み込まない
- * @param int $id
+ * @param string $url
+ * @param array $params
+ * @param array $options
  * @manual
  */
 	public function page($url, $params = array(), $options = array()) {

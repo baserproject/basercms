@@ -70,7 +70,7 @@ class ContentsController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->BcAuth->allow('search', 'get_page_list_recursive');
+		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search', 'get_page_list_recursive');
 
 		if (!empty($this->request->params['admin'])) {
 			$this->subMenuElements = array('site_configs', 'contents');
@@ -114,6 +114,20 @@ class ContentsController extends AppController {
 		$this->pageTitle = '検索結果一覧';
 	}
 
+/**
+ * [MOBILE] コンテンツ検索
+ */
+	public function mobile_search() {
+		$this->setAction('search');
+	}
+	
+/**
+ * [SMARTPHONE] コンテンツ検索
+ */
+	public function smartphone_search() {
+		$this->setAction('search');
+	}
+	
 /**
  * 検索キーワードを分解し配列に変換する
  *

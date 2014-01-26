@@ -847,7 +847,16 @@ class BlogHelper extends AppHelper {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
-		return ($this->request->params['plugin'] == 'blog' && $this->request->params['controller'] == 'blog' && $this->request->params['action'] == 'archives' && !$this->getBlogArchiveType());
+		$agentPrefix = Configure::read('BcRequest.agentPrefix');
+		if($agentPrefix) {
+			$agentPrefix .= '_';
+		}
+		return (
+			$this->request->params['plugin'] == 'blog' && 
+			$this->request->params['controller'] == 'blog' && 
+			$this->request->params['action'] == $agentPrefix . 'archives' && 
+			!$this->getBlogArchiveType()
+		);
 	}
 
 /**

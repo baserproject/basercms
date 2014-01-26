@@ -23,8 +23,7 @@ if (empty($this->Paginator)) {
 if (!isset($modules)) {
 	$modules = 8;
 }
-$this->passedArgs['action'] = str_replace('smartphone_', '', $this->passedArgs['action']);
-$this->passedArgs['plugin'] = '';
+$this->request->params['action'] = str_replace('smartphone_', '', $this->request->params['action']);
 ?>
 <?php if ((int) $this->Paginator->counter(array('format' => '%pages%')) > 1): ?>
 	<div class="pagination clearfix">
@@ -33,3 +32,4 @@ $this->passedArgs['plugin'] = '';
 		<?php echo $this->Paginator->next('次へ >', array('class' => 'next'), null, array('class' => 'disabled')) ?>
 	</div>
 <?php endif; ?>
+<?php $this->request->params['action'] = 'smartphone_' . $this->request->params['action'] ?>

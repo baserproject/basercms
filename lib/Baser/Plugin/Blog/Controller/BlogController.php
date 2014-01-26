@@ -97,7 +97,7 @@ class BlogController extends BlogAppController {
 
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries'
+			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries', 'get_authors'
 		);
 
 		$this->BlogContent->recursive = -1;
