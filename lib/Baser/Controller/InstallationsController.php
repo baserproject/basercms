@@ -588,22 +588,21 @@ class InstallationsController extends AppController {
 		/* DBソース取得 */
 		$dbsource = array();
 		$folder = new Folder();
+		$pdoDrivers = PDO::getAvailableDrivers();
 
 		/* MySQL利用可否 */
-		if (function_exists('mysql_connect')) {
+		if (in_array('mysql', $pdoDrivers)) {
 			$dbsource['mysql'] = 'MySQL';
 		}
 
 		/* PostgreSQL利用可否 */
-		if (function_exists('pg_connect')) {
+		if (in_array('pgsql', $pdoDrivers)) {
 			$dbsource['postgres'] = 'PostgreSQL';
 		}
 
 		/* SQLite利用可否チェック */
 		// windowsは一旦非サポート
-		if (class_exists('PDO') && version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=') && (DS != '\\')) {
-
-			$pdoDrivers = PDO::getAvailableDrivers();
+		if (version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=') && (DS != '\\')) {
 			if (in_array('sqlite', $pdoDrivers)) {
 				$dbFolderPath = APP . 'db' . DS . 'sqlite';
 				if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {
