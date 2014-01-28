@@ -484,6 +484,8 @@ DOC_END;
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
+		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
+		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
 		$timeAttributes = array('size' => 8, 'maxlength' => 8);
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
@@ -504,6 +506,7 @@ DOC_END;
 		$_script = <<< DOC_END
 <script type="text/javascript">
 $(function(){
+   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i' });
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
