@@ -585,6 +585,10 @@ class BcBaserHelper extends AppHelper {
 				$this->_View->subDir = $this->_subDir;
 			}
 		}
+		
+		if(isset($options['subDir']) && !isset($data['subDir'])) {
+			$data['subDir'] = $options['subDir'];
+		}
 
 		$out = $this->_View->element($name, $data, $options);
 
