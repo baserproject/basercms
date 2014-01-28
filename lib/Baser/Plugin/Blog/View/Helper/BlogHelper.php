@@ -228,7 +228,7 @@ class BlogHelper extends AppHelper {
  * 
  * @param array $post
  * @return void
- * @access puublic
+ * @access public
  */
 	public function category($post, $options = array()) {
 		echo $this->getCategory($post, $options);
