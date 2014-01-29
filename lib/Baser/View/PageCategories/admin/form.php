@@ -17,7 +17,16 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
+$pageTypes = array();
+if($reflectMobile || $reflectSmartphone) {
+	$pageTypes = array('1' => 'PC');	
+}
+if($reflectMobile) {
+	$pageTypes['2'] = 'モバイル';
+}
+if($reflectSmartphone) {
+	$pageTypes['3'] = 'スマートフォン';
+}
 $owners = $this->BcForm->getControlSource('PageCategory.owner_id');
 ?>
 
@@ -106,7 +115,7 @@ function pageTypeChengeHandler() {
 
 
 <?php echo $this->BcForm->create('PageCategory') ?>
-<?php if (!$pageType): ?>
+<?php if (!$pageTypes): ?>
 	<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
 <?php endif ?>
 <div class="section">
@@ -120,12 +129,12 @@ function pageTypeChengeHandler() {
 				</td>
 			</tr>
 		<?php endif; ?>
-		<?php if ($pageType): ?>
+		<?php if ($pageTypes): ?>
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('PageCategory.page_category_type', 'タイプ') ?></th>
 				<td class="col-input">
-					<?php if ($pageType): ?>
-						<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
+					<?php if ($pageTypes): ?>
+						<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageTypes)) ?>　
 					<?php endif ?>
 				</td>
 			</tr>

@@ -162,24 +162,12 @@ class PagesController extends AppController {
 				$pageCategories += $_pageCategories;
 			}
 
-			if (Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
-				$reflectMobile = true;
-			} else {
-				$reflectMobile = false;
-			}
-			if (Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
-				$reflectSmartphone = true;
-			} else {
-				$reflectSmartphone = false;
-			}
-			$this->set('reflectMobile', $reflectMobile);
-			$this->set('reflectSmartphone', $reflectSmartphone);
-
 			$this->set('search', 'pages_index');
 			$this->set('pageCategories', $pageCategories);
 
 			$this->search = 'pages_index';
 			$template = 'index';
+			
 		} else {
 			switch ($this->request->data['ViewSetting']['page_type']) {
 				case '1':
@@ -201,6 +189,19 @@ class PagesController extends AppController {
 			}
 			$template = 'index_tree';
 		}
+
+		if (Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
+			$reflectMobile = true;
+		} else {
+			$reflectMobile = false;
+		}
+		if (Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
+			$reflectSmartphone = true;
+		} else {
+			$reflectSmartphone = false;
+		}
+		$this->set('reflectMobile', $reflectMobile);
+		$this->set('reflectSmartphone', $reflectSmartphone);
 
 		$this->subMenuElements = array('pages', 'page_categories');
 		$this->pageTitle = '固定ページ一覧';
