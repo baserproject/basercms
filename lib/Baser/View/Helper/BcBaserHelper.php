@@ -585,10 +585,6 @@ class BcBaserHelper extends AppHelper {
 				$this->_View->subDir = $this->_subDir;
 			}
 		}
-		
-		if(isset($options['subDir']) && !isset($data['subDir'])) {
-			$data['subDir'] = $options['subDir'];
-		}
 
 		$out = $this->_View->element($name, $data, $options);
 
@@ -1938,9 +1934,9 @@ END_FLASH;
 			$tag = '';
 			for ($i = 1; $i <= $num; $i++) {
 				$options['num'] = $i;
-				$tag .= $this->_getThemeImage('main_image', $options);
+				$tag .= '<li>' . $this->_getThemeImage('main_image', $options) . '</li>' . "\n";
 			}
-			echo '<ul id="' . $id . '">' . $tag . '</ul>';
+			echo '<ul id="' . $id . '">' . "\n" . $tag . "\n" . '</ul>';
 		} else {
 			echo $this->_getThemeImage('main_image', $options);
 		}
