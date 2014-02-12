@@ -128,7 +128,9 @@ class PagesController extends AppController {
 
 		if ($this->request->data['ViewSetting']['view_type'] == 1) {
 			// 検索条件
-			$conditions = $this->_createAdminIndexConditions($this->request->data);
+			$searchRequestData = $this->request->data;
+			unset($searchRequestData['ViewSetting']);
+			$conditions = $this->_createAdminIndexConditions($searchRequestData);
 
 			$this->paginate = array(
 				'conditions' => $conditions,
