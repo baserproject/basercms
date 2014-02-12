@@ -872,6 +872,7 @@ class PagesController extends AppController {
 		unset($data['Sort']);
 		unset($data['Page']['open']);
 		unset($data['Page']['page_type']);
+		unset($data['ViewSetting']);
 
 		if ($pageType == 1 && !$pageCategoryId) {
 			$pageCategoryId = 'pconly';
