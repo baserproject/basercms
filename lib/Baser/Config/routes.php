@@ -27,12 +27,6 @@ if (Configure::read('BcRequest.asset')) {
 if (BC_INSTALLED || isConsole()) {
 	$isMaintenance = Configure::read('BcRequest.isMaintenance');
 	$isUpdater = Configure::read('BcRequest.isUpdater');
-/**
- * テーマヘルパーのパスを追加する 
- */
-	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
-	App::build(array('View/Helper' => $helperPaths));
 }
 /**
  * Object::cakeError() の為、router.php が読み込まれた事をマークしておく

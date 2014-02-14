@@ -433,3 +433,12 @@ if (Configure::read('debug') == 0) {
 	Configure::write('Cache.check', false);
 	clearViewCache();
 }
+
+/**
+ * テーマヘルパーのパスを追加する 
+ */
+if (BC_INSTALLED || isConsole()) {
+	$helperPaths = App::path('View/Helper');
+	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
+	App::build(array('View/Helper' => $helperPaths));
+}

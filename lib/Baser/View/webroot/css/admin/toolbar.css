@@ -38,7 +38,7 @@ html, body {
 	width:100%;
 	font-size: 12px;
 	border-bottom: 1px solid #444;
-	font-family:"ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック", Arial, sans-serif!important;
+	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif !important;
 }
 #ToolbarInner {
 	padding: 0 30px;

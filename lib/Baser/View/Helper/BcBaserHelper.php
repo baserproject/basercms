@@ -1766,7 +1766,9 @@ END_FLASH;
  * ページをエレメントとして読み込む
  *
  * ※ レイアウトは読み込まない
- * @param int $id
+ * @param string $url
+ * @param array $params
+ * @param array $options
  * @manual
  */
 	public function page($url, $params = array(), $options = array()) {
@@ -1932,9 +1934,9 @@ END_FLASH;
 			$tag = '';
 			for ($i = 1; $i <= $num; $i++) {
 				$options['num'] = $i;
-				$tag .= $this->_getThemeImage('main_image', $options);
+				$tag .= '<li>' . $this->_getThemeImage('main_image', $options) . '</li>' . "\n";
 			}
-			echo '<ul id="' . $id . '">' . $tag . '</ul>';
+			echo '<ul id="' . $id . '">' . "\n" . $tag . "\n" . '</ul>';
 		} else {
 			echo $this->_getThemeImage('main_image', $options);
 		}

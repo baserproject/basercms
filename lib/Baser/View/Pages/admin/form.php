@@ -19,7 +19,16 @@
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
-$pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
+$pageTypes = array();
+if($reflectMobile || $reflectSmartphone) {
+	$pageTypes = array('1' => 'PC');	
+}
+if($reflectMobile) {
+	$pageTypes['2'] = 'モバイル';
+}
+if($reflectSmartphone) {
+	$pageTypes['3'] = 'スマートフォン';
+}
 ?>
 
 

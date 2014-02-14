@@ -292,10 +292,10 @@ class PluginsController extends AppController {
 	public function admin_add($name) {
 		$name = urldecode($name);
 		$dbInited = false;
-
+		$installMessage = '';
+		
 		if (!$this->request->data) {
 
-			$installMessage = '';
 			// TODO 互換性のため古いパスも対応
 			$oldAppConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config' . DS . 'config.php';
 			$appConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config.php';
