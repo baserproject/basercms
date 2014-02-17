@@ -133,7 +133,7 @@ class BcUploadHelper extends FormHelper {
 			throw new BaserException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
 		}
 
-		$settings = $model->actsAs['BcUpload'];
+		$settings = $model->Behaviors->BcUpload->settings[$modelName];
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
 		if (empty($options['value'])) {
@@ -270,7 +270,7 @@ class BcUploadHelper extends FormHelper {
 		list($modelName, $field) = explode('.', $fieldName);
 		$model = ClassRegistry::init($modelName);
 
-		$settings = $model->actsAs['BcUpload'];
+		$settings = $model->Behaviors->BcUpload->settings[$modelName];
 
 		$fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
