@@ -211,9 +211,8 @@ class Message extends MailAppModel {
  */
 	protected function _validSingeErrorCheck() {
 		foreach ($this->validate as $key => $data) {
-
 			// VALID_NOT_EMPTY以外は形式エラーとする
-			if (key($data) != 'notEmpty') {
+			if (is_array($data) && key($data) != 'notEmpty') {
 				if (isset($this->validationErrors[$key])) {
 					$this->invalidate($key . '_format');
 				}
