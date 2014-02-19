@@ -80,8 +80,8 @@ class BcMobileHelper extends Helper {
 			} else {
 				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
 				// nocache タグが残ってしまってエラーになるので除去する
-				$View->output = str_replace('<cake:nocache>', '', $View->output);
-				$View->output = str_replace('</cake:nocache>', '', $View->output);
+				$View->output = str_replace('<!--nocache-->', '', $View->output);
+				$View->output = str_replace('<!--/nocache-->', '', $View->output);
 			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
@@ -97,6 +97,7 @@ class BcMobileHelper extends Helper {
  */
 	public function header() {
 		if (Configure::read('BcRequest.agent') == 'mobile') {
+			$this->_View->response->charset('Shift-JIS');
 			header("Content-type: application/xhtml+xml");
 		}
 	}
