@@ -19,7 +19,7 @@
  */
 ?>
 <!--nocache-->
-	<?php $this->BcBaser->cacheHeader() ?>
+	<?php $this->Feed->cacheHeader() ?>
 <!--/nocache-->
 
 <?php if (!empty($items)): ?>

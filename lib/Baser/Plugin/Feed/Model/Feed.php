@@ -1,10 +1,7 @@
 <?php
-
-// TODO 未検証
-/* SVN FILE: $Id$ */
 /**
- * RSS取得モデルであるRssクラスを継承したクラス
- *
+ * フィード読込モデル
+ * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -12,7 +9,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.models
+ * @package			Baser.Plugin.Feed.Model
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -22,29 +19,33 @@
 /**
  * Include files
  */
-App::uses('Rss', 'Feed.Model');
-// なぜか、サーバーによって、App::uses を利用するとクラスを初期化した瞬間に処理がストップしてしまう
-// include にしておくと大丈夫だった。
-// 再現サーバーは、Ubuntu Apache2 PHP5.2
-//App::uses('SimplePie', 'Feed.Vendor');
-include BASER_PLUGINS . 'Feed' . DS . 'Vendor' . DS . 'simplepie.php';
+App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
 
 /**
- * RSS取得モデルであるRssクラスを継承したクラス
+ * フィード読込モデル
  *
- * @package baser.plugins.feed.models
+ * @package Baser.Plugin.Feed.Model
  */
-class RssEx extends Rss {
-
+class Feed extends FeedAppModel {
+	
+/**
+ * useDbConfig
+ * 
+ * @var string
+ * @access public
+ */
+	public $useDbConfig = false;
+	
 /**
  * キャッシュフォルダー
+ * 
  * @var string
  * @access	public
  */
 	public $cacheFolder = 'views';
-
+	
 /**
- * データを削除する（ログ記録オプション付）
+ * フィードを取得する
  *
  * @param 	string RSSのURL
  * @param 	int 取得する件数
@@ -53,18 +54,20 @@ class RssEx extends Rss {
  * @return array RSSデータ
  * @access public
  */
-	public function findAll($feedUrl, $limit = 10, $cacheExpires = null, $category = null) {
-		// simplepieでフィードを取得する
-		$feed = $this->__getSimplePie($feedUrl, $cacheExpires);
+	public function getFeed($url, $limit = 10, $cacheExpires = null, $category = null) {
+		
+		// simplepie でフィードを取得する
+		$datas = $this->_getFeed($url, $cacheExpires);
 
 		// 指定カテゴリで絞り込む
-		$feed['Items'] = $this->filteringCategory($feed['Items'], $category);
+		$datas['Items'] = $this->_filteringCategory($datas['Items'], $category);
 
-		if (isset($feed['Items']) && $limit && count($feed['Items'] > $limit)) {
-			$feed['Items'] = @array_slice($feed['Items'], 0, $limit);
+		if (isset($datas['Items']) && $limit && count($datas['Items'] > $limit)) {
+			$datas['Items'] = @array_slice($datas['Items'], 0, $limit);
 		}
 
-		return $feed;
+		return $datas;
+		
 	}
 
 /**
@@ -75,7 +78,8 @@ class RssEx extends Rss {
  * @return array $items
  * @access public
  */
-	public function filteringCategory($items, $filterCategory = null) {
+	public function _filteringCategory($items, $filterCategory = null) {
+		
 		if (!$items || !$filterCategory) {
 			return $items;
 		}
@@ -116,36 +120,36 @@ class RssEx extends Rss {
 	}
 
 /**
- * SimplePieでRSSを取得する
+ * SimplePieでフィードを取得する
  *
  * @param string RSSのURL
  * @param string キャッシュ保持期間
  * @return array RSSデータ
- * @access private
  */
-	private function __getSimplePie($url, $cacheExpires = null) {
+	protected function _getFeed($url, $cacheExpires = null) {
+		
 		if (!$url) {
 			return false;
 		}
 		if (Configure::read('Cache.check') == false || Configure::read('debug') > 0) {
 			// キャッシュをクリア
-			clearCache($this->__createCacheHash('', $url), 'views', '.rss');
+			clearCache($this->_createCacheHash('', $url), 'views', '.rss');
 		}
 
 		// キャッシュを取得
-		$cachePath = $this->cacheFolder . $this->__createCacheHash('.rss', $url);
+		$cachePath = $this->cacheFolder . DS . $this->_createCacheHash('.rss', $url);
 		$rssData = cache($cachePath, null, $cacheExpires);
 
 		if (empty($rssData)) {
-			$feed = new SimplePie();
-			$feed->feed_url = $url;
-			$feed->enable_cache(false);
+			$SimplePie = new SimplePie();
+			$SimplePie->set_feed_url($url);
+			$SimplePie->enable_cache(false);
 
 			// 一旦デバッグモードをオフに
 			$debug = Configure::read('debug');
-			Configure::write('debug', 1);
+			Configure::write('debug', 0);
 
-			$ret = $feed->init();
+			$ret = $SimplePie->init();
 
 			Configure::write('debug', $debug);
 
@@ -153,7 +157,7 @@ class RssEx extends Rss {
 				return false;
 			}
 
-			$rssData = $this->__convertSimplePie($feed->get_items());
+			$rssData = $this->_convertSimplePie($SimplePie->get_items());
 
 			// ログインしてなければキャッシュを作成
 			if (!isset($_SESSION['Auth']['User'])) {
@@ -170,7 +174,7 @@ class RssEx extends Rss {
 			return unserialize($rssData);
 		}
 	}
-
+	
 /**
  * SimplePieで取得したデータを表示用に整形する
  * 2009/09/09	ryuring
@@ -180,9 +184,9 @@ class RssEx extends Rss {
  *
  * @param string SimplePieで取得したデータ
  * @return array RSSデータ
- * @access private
  */
-	private function __convertSimplePie($datas) {
+	protected function _convertSimplePie($datas) {
+		
 		if (!$datas) {
 			return null;
 		}
@@ -224,57 +228,27 @@ class RssEx extends Rss {
 
 			$feed['Items'][] = $tmp;
 		}
-
-		//$feed['Channel']['title']['value'] = $datas['info']['title'];
-		//$feed['Channel']['link']['value'] = $datas['info']['link']['alternate'][0];
-		/* if(!empty($datas['info']['description']))
-		  $feed['Channel']['description']['value'] = $datas['info']['description'];
-		  if(!empty($datas['last-modified'])){
-		  $feed['Channel']['pubDate']['value'] = $datas['last-modified'];
-		  } */
-		//$feed['Channel']['generator']['value'] = 'baserCMS';
-		/* if(!empty($datas['info']['language']))
-		  $feed['Channel']['language']['value'] = $datas['info']['language']; */
-
-		/* if(!empty($datas['items'])){
-		  foreach($datas['items'] as $data){
-		  $tmp = array();
-		  $tmp['title']['value'] = $data->data['title'];
-		  $tmp['link']['value'] = $data->data['link']['alternate'][0];
-		  //$tmp['comments']['value'] = '';
-		  if(!empty($data->data['pubdate'])){
-		  $tmp['pubDate']['value'] = date("r",$data->data['pubdate']);
-		  }elseif(!empty($data->data['dc:date'])){
-		  $tmp['pubDate']['value'] = date("r",$data->data['dc:date']);
-		  }
-		  if(!empty($data->data['creator'][0]->name))
-		  $tmp['dc:creator']['value'] = $data->data['creator'][0]->name;
-		  if(!empty($data->data['category'][0]))
-		  $tmp['category']['value'] = $data->data['category'][0];
-		  $tmp['guid']['value'] = @$data->data['guid']['data'];
-		  $tmp['guid']['attributes']['isPermaLink'] = @$data->data['guid']['permalink'];
-		  if(!empty($data->data['description']))
-		  $tmp['description']['value'] = $data->data['description'];
-		  $tmp['wfw:commentRss']['value'] = $data->data['title'];
-
-		  if(!empty($data->data['encoded'])){
-		  $tmp['encoded']['value'] = $data->data['encoded'];
-		  if(preg_match("/(<img.*?src=\"(.*?)\".*?\/>)/s", $tmp['encoded']['value'], $matches)){
-		  $tmp['img']['tag'] = $matches[1];
-		  $tmp['img']['url'] = $matches[2];
-
-		  }else{
-		  $tmp['img']['tag'] = '';
-		  }
-		  }
-
-		  $feed['Items'][] = $tmp;
-
-		  }
-		  }else{
-		  $feed['Items'] = array();
-		  } */
 		return $feed;
+		
 	}
+	
+/**
+ * Creates a unique cache file path by combining all parameters given to a unique MD5 hash
+ *
+ * @param string $ext The extension for the cache file
+ * @return string Returns a unique file path
+ */
+	protected function _createCacheHash($ext = '.txt') {
+		$args = func_get_args();
+		array_shift($args);
 
+		$hashSource = null;
+
+		foreach ($args as $arg) {
+			$hashSource = $hashSource . serialize($arg);
+		}
+
+		return md5($hashSource) . $ext;
+	}
+	
 }

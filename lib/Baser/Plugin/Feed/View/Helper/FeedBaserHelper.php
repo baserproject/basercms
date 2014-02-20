@@ -36,12 +36,12 @@ class FeedBaserHelper extends AppHelper {
  * @access public
  */
 	public function feed($id, $mobile = '') {
-		$url = array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
+		$url = array('mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
 		if ($mobile === '') {
 			$mobile = (Configure::read('BcRequest.agent') == 'mobile');
 		}
 		if ($mobile) {
-			$url['prefix'] = Configure::read('BcAgent.mobile.prefix');
+			$url = array_merge($url, array(Configure::read('BcAgent.mobile.prefix') => true));
 		}
 		echo $this->requestAction($url, array('pass' => array($id)));
 	}

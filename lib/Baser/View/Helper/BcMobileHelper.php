@@ -63,21 +63,10 @@ class BcMobileHelper extends Helper {
 				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
 			}
 
-			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
-			$caching = (
+			if (!(
 				isset($View->Cache) &&
 				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
-			);
-			if ($caching) {
-				$View->Cache->base = $View->base;
-				$View->Cache->here = $View->here;
-				$View->Cache->helpers = $View->helpers;
-				$View->Cache->action = $View->action;
-				$View->Cache->controllerName = $View->name;
-				$View->Cache->layout = $View->layout;
-				$View->Cache->cacheAction = $View->cacheAction;
-				$View->Cache->cache($___viewFn, $View->output, true);
-			} else {
+			)) {
 				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
 				// nocache タグが残ってしまってエラーになるので除去する
 				$View->output = str_replace('<!--nocache-->', '', $View->output);
