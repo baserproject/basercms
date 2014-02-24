@@ -531,12 +531,12 @@ class Message extends MailAppModel {
 			$dbData['mailFields'][$key]['MailField']['before_attachment'] = strip_tags($value['MailField']['before_attachment']);
 			$dbData['mailFields'][$key]['MailField']['after_attachment'] = strip_tags($value['MailField']['after_attachment'], "<br>");
 			$dbData['mailFields'][$key]['MailField']['head'] = strip_tags($value['MailField']['head'], "<br>");
-			$dbData['mailFields'][$key]['MailField']['after_attachment'] = str_replace("<br />", "\n", $dbData['mailFields'][$key]['MailField']['after_attachment']);
-			$dbData['mailFields'][$key]['MailField']['head'] = str_replace('<br />', "", $dbData['mailFields'][$key]['MailField']['head']);
+			$dbData['mailFields'][$key]['MailField']['after_attachment'] = str_replace(array("<br />", "<br>"), "\n", $dbData['mailFields'][$key]['MailField']['after_attachment']);
+			$dbData['mailFields'][$key]['MailField']['head'] = str_replace(array("<br />", "<br>"), "", $dbData['mailFields'][$key]['MailField']['head']);
 		}
 		foreach ($this->mailFields as $mailField) {
 			if (!empty($dbData['message'][$mailField['MailField']['field_name']])) {
-				$dbData['message'][$mailField['MailField']['field_name']] = str_replace('<br />', "\n", $dbData['message'][$mailField['MailField']['field_name']]);
+				$dbData['message'][$mailField['MailField']['field_name']] = str_replace(array("<br />", "<br>"), "\n", $dbData['message'][$mailField['MailField']['field_name']]);
 				//$dbData['message'][$mailField['MailField']['field_name']] = mb_convert_kana($dbData['message'][$mailField['MailField']['field_name']], "K", "UTF-8");
 			}
 			if ($mailField['MailField']['type'] == 'multi_check') {
