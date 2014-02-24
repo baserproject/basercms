@@ -274,11 +274,15 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2013/08/26 ryuring
 		// サブフォルダを追加
+		// 2014/02/24 追記
+		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
 		// >>>
+		$names = array($name);
 		if ($this->subDir) {
-			$name = $this->subDir . DS . $name;
+			array_unshift($names, $this->subDir . DS . $name);
 		}
 		// <<<
+		
 		// CUSTOMIZE ADD 2013/08/27 ryuring
 		// イベントを追加
 		// >>>
@@ -294,13 +298,29 @@ class BcAppView extends View {
 
 		$paths = $this->_paths($plugin);
 		$exts = $this->_getExtensions();
-		foreach ($exts as $ext) {
+		
+		// CUSTOMIZE MODIFY 2014/02/24 ryuring
+		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
+		// >>>
+		/*foreach ($exts as $ext) {
 			foreach ($paths as $path) {
 				if (file_exists($path . 'Elements' . DS . $name . $ext)) {
 					return $path . 'Elements' . DS . $name . $ext;
 				}
 			}
+		}*/
+		// ---
+		foreach($names as $name) {
+			foreach ($exts as $ext) {
+				foreach ($paths as $path) {
+					if (file_exists($path . 'Elements' . DS . $name . $ext)) {
+						return $path . 'Elements' . DS . $name . $ext;
+					}
+				}
+			}
 		}
+		// <<<
+		
 		return false;
 	}
 
