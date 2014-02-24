@@ -540,8 +540,8 @@ class Message extends MailAppModel {
 				//$dbData['message'][$mailField['MailField']['field_name']] = mb_convert_kana($dbData['message'][$mailField['MailField']['field_name']], "K", "UTF-8");
 			}
 			if ($mailField['MailField']['type'] == 'multi_check') {
-				if (!empty($dbData['message'][$mailField['MailField']['field_name']])) {
-					$dbData['message'][$mailField['MailField']['field_name']] = explode("\|", $dbData['message'][$mailField['MailField']['field_name']]);
+				if (!empty($dbData['message'][$mailField['MailField']['field_name']]) && !is_array($dbData['message'][$mailField['MailField']['field_name']])) {
+					$dbData['message'][$mailField['MailField']['field_name']] = explode("|", $dbData['message'][$mailField['MailField']['field_name']]);
 				}
 			}
 		}
