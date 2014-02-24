@@ -831,7 +831,10 @@ class BcManagerComponent extends Component {
  * @param string $dbConfigKeyName
  * @param array $dbConfig 
  */
-	public function initSystemData($dbConfig = null) {
+	public function initSystemData($dbConfig = null, $options = array()) {
+		
+		$options = array_merge(array('excludeUsers' => false), $options);
+		
 		$db = $this->_getDataSource('baser', $dbConfig);
 		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
@@ -903,11 +906,13 @@ class BcManagerComponent extends Component {
 		//======================================================================
 		// ユーザーグループを新しく読み込んだ場合にデータの整合性がとれない可能性がある為
 		//======================================================================
-		if (!$db->truncate('users')) {
-			$this->log('users テーブルの初期化に失敗。');
-			$result = false;
+		if(!$options['excludeUsers']) {
+			if (!$db->truncate('users')) {
+				$this->log('users テーブルの初期化に失敗。');
+				$result = false;
+			}
 		}
-
+		
 		/* site_configs の初期データをチェック＆設定 */
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		if (!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
