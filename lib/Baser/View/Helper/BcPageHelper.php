@@ -84,6 +84,7 @@ class BcPageHelper extends Helper {
 			if (Configure::read('BcRequest.agent')) {
 				$param = Configure::read('BcRequest.agentPrefix') . '/' . $param;
 			}
+			$param = preg_replace("/\.html$/", '', $param);
 			$this->request->data = $this->Page->findByUrl('/' . $param);
 		}
 	}

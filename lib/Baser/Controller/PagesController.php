@@ -552,6 +552,9 @@ class PagesController extends AppController {
  */
 	public function display() {
 		$path = func_get_args();
+		if (is_array($path) && count($path) == 1) {
+			$path = explode('/', $path[0]);
+		}
 
 		$url = '/' . implode('/', $path);
 
