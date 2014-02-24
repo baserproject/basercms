@@ -272,7 +272,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
 			Configure::load($plugin . '.setting');
 		}
-		CakePlugin::bootstrap($plugin);
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach ($eventTargets as $eventTarget) {
