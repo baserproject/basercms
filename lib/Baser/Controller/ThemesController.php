@@ -197,6 +197,10 @@ class ThemesController extends AppController {
 				$result = false;
 				$this->log('ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。');
 			}
+			if(!$User->applyDefaultFavorites($user['User']['id'], $user['User']['user_group_id'])) {
+				$result = false;
+				$this->log('ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。');
+			}
 		}
 
 		// システム基本設定の更新
