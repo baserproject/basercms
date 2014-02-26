@@ -1,3 +1,16 @@
+<?php
+$pageTypes = array();
+if($reflectMobile || $reflectSmartphone) {
+	$pageTypes = array('1' => 'PC');	
+}
+if($reflectMobile) {
+	$pageTypes['2'] = 'モバイル';
+}
+if($reflectSmartphone) {
+	$pageTypes['3'] = 'スマートフォン';
+}
+?>
+
 <script type="text/javascript">
 $(function(){
 	$("input[name='data[ViewSetting][view_type]']").click(function(){
@@ -31,6 +44,8 @@ $(function(){
 <div id="PageIndexUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'pages', 'action' => 'index')) ?></div>
 
 <div class="panel-box">
-	<small>ページタイプ</small> <?php echo $this->BcForm->input('ViewSetting.page_type', array('type' => 'radio', 'options' => array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン'))) ?>　　／　
+<?php if($pageTypes): ?>
+	<small>ページタイプ</small> <?php echo $this->BcForm->input('ViewSetting.page_type', array('type' => 'radio', 'options' => $pageTypes)) ?>　　／　
+<?php endif ?>
 	<small>表示形式</small> <?php echo $this->BcForm->input('ViewSetting.view_type', array('type' => 'radio', 'options' => array('1' => '表', '2' => 'ツリー'))) ?>
 </div>

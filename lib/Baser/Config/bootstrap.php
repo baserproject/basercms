@@ -272,7 +272,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
 			Configure::load($plugin . '.setting');
 		}
-		CakePlugin::bootstrap($plugin);
 		// プラグインイベント登録
 		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
 		foreach ($eventTargets as $eventTarget) {
@@ -432,4 +431,13 @@ if (Configure::read('debug') == 0) {
 } else {
 	Configure::write('Cache.check', false);
 	clearViewCache();
+}
+
+/**
+ * テーマヘルパーのパスを追加する 
+ */
+if (BC_INSTALLED || isConsole()) {
+	$helperPaths = App::path('View/Helper');
+	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
+	App::build(array('View/Helper' => $helperPaths));
 }

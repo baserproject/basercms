@@ -465,9 +465,9 @@ class UsersController extends AppController {
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
 
-		if ($user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
+		if (@$user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 			$editable = false;
-		} elseif ($selfUpdate && $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+		} elseif ($selfUpdate && @$user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			$editable = false;
 		}
 

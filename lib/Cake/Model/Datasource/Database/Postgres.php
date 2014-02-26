@@ -127,7 +127,7 @@ class Postgres extends DboSource {
 				$this->setEncoding($config['encoding']);
 			}
 			if (!empty($config['schema'])) {
-				$this->_execute('SET search_path TO ' . $config['schema']);
+				$this->_execute('SET search_path TO "' . $config['schema'] . '"');
 			}
 			if (!empty($config['settings'])) {
 				foreach ($config['settings'] as $key => $value) {
@@ -848,6 +848,7 @@ class Postgres extends DboSource {
 		);
 
 		$out = str_replace('integer serial', 'serial', $out);
+		$out = str_replace('bigint serial', 'bigserial', $out);
 		if (strpos($out, 'timestamp DEFAULT')) {
 			if (isset($column['null']) && $column['null']) {
 				$out = str_replace('DEFAULT NULL', '', $out);

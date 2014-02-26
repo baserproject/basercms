@@ -19,9 +19,9 @@
  */
 $this->Feed->saveCachetime();
 ?>
-<cake:nocache>
+<!--nocache-->
 	<?php $this->Feed->cacheHeader() ?>
-</cake:nocache>
+<!--/nocache-->
 
 <?php if (!empty($items)): ?>
 	<ul>

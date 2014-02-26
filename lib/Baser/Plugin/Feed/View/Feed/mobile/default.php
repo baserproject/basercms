@@ -18,9 +18,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<cake:nocache>
-	<?php $this->BcBaser->cacheHeader() ?>
-</cake:nocache>
+
 
 <?php if (!empty($items)): ?>
 	<?php foreach ($items as $key => $item): ?>
