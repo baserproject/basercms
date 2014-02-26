@@ -1208,7 +1208,7 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 
-		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
+		$src = BASER_WEBROOT . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		$result = true;
@@ -1668,9 +1668,9 @@ class BcManagerComponent extends Component {
  */
 	public function createAdminAssetsSymlink() {
 		$viewPath = getViewPath();
-		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
-		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
-		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
+		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
+		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';
@@ -1724,9 +1724,9 @@ class BcManagerComponent extends Component {
  */
 	public function deployAdminAssets() {
 		$viewPath = getViewPath();
-		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
-		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
-		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
+		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
+		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';

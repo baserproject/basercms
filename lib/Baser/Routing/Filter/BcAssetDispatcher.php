@@ -87,7 +87,7 @@ class BcAssetDispatcher extends DispatcherFilter {
 		if (file_exists($path . $fileFragment)) {
 			return $path . $fileFragment;
 		} else {
-			$path = BASER_VIEWS . 'webroot' . DS;
+			$path = BASER_WEBROOT;
 			if (file_exists($path . $fileFragment)) {
 				return $path . $fileFragment;
 			}

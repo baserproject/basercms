@@ -94,6 +94,10 @@ define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
  */
 define('BASER_CONSOLES', BASER . 'Console' . DS);
 /**
+ * Baser webroot
+ */
+define('BASER_WEBROOT', BASER . 'webroot' . DS);
+/**
  * Baserテーマ 
  */
 if (is_dir(WWW_ROOT . 'theme')) {
