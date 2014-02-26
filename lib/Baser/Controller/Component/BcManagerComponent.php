@@ -559,7 +559,7 @@ class BcManagerComponent extends Component {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
-		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
+		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
@@ -593,7 +593,7 @@ class BcManagerComponent extends Component {
 			}
 		} else {
 			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
-				$this->log("初期データのロードに失敗しました。");
+				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
 			foreach ($corePlugins as $corePlugin) {
@@ -841,65 +841,35 @@ class BcManagerComponent extends Component {
 
 		/* page_categories の初期データをチェック＆設定 */
 		$PageCategory = ClassRegistry::init('PageCategory');
-		$mobileId = $PageCategory->field('id', array(
-			'PageCategory.parent_id' => null,
-			'PageCategory.name' => 'mobile'
-		));
-		$smartphoneId = $PageCategory->field('id', array(
-			'PageCategory.parent_id' => null,
-			'PageCategory.name' => 'smartphone'
-		));
-		// 一旦削除
-		$PageCategory->deleteAll(array(
-			'PageCategory.parent_id' => null,
-			'or' => array(
-				array('PageCategory.name' => 'mobile'),
-				array('PageCategory.name' => 'smartphone')
-			)), false);
-		// 再登録
-		if (!$db->loadCsv(array('path' => $corePath . DS . 'page_categories.csv', 'encoding' => 'SJIS'))) {
-			$this->log($corePath . DS . 'page_categories.csv の読み込みに失敗。');
-			$result = false;
-		}
-
-		// IDを更新
-		if ($mobileId) {
-			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $mobileId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'mobile'
-				))) {
-				$this->log('page_categories テーブルで、システムデータ mobile の id 更新に失敗。');
-				$result = false;
+		if(!$PageCategory->find('count', array('PageCategory.name' => 'mobile', 'PageCategory.parent_id' => null))) {
+			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
+			foreach($pageCategories as $pageCategory) {
+				if($pageCategory['name'] == 'mobile') {
+					$PageCategory->save($pageCategory);
+					break;
+				}
 			}
 		}
-		if ($smartphoneId) {
-			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $smartphoneId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'smartphone'
-				))) {
-				$this->log('page_categories テーブルで、システムデータ smartphone の id 更新に失敗。');
-				$result = false;
+		if(!$PageCategory->find('count', array('PageCategory.name' => 'smartphone', 'PageCategory.parent_id' => null))) {
+			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
+			foreach($pageCategories as $pageCategory) {
+				if($pageCategory['name'] == 'smartphone') {
+					$PageCategory->save($pageCategory);
+					break;
+				}
 			}
 		}
 
 		/* user_groupsの初期データをチェック＆設定 */
 		$UserGroup = ClassRegistry::init('UserGroup');
-		$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
-		// 一旦削除
-		$UserGroup->delete($adminsId, false);
-		// 再登録
-		if (!$db->loadCsv(array('path' => $corePath . DS . 'user_groups.csv', 'encoding' => 'SJIS'))) {
-			$this->log($corePath . DS . 'user_groups.csv の読み込みに失敗。');
-			$result = false;
-		}
-		// IDを更新
-		if ($adminsId) {
-			if (!$UserGroup->updateAll(
-					array('UserGroup.id' => $adminsId), array('UserGroup.name' => 'admins')
-				)) {
-				$this->log('user_groups テーブルで、システムデータ admins の id 更新に失敗。');
-				$result = false;
+		if(!$UserGroup->find('count', array('UserGroup.name' => 'admins'))) {
+			$userGroups = $db->loadCsvToArray($corePath . DS . 'user_groups.csv', 'SJIS');
+			foreach($userGroups as $userGroup) {
+				if($userGroup['name'] == 'admins') {
+					$UserGroup->save($userGroup);
+					break;
+				}
 			}
-		} else {
-			$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
 		}
 
 		/* users は全てのユーザーを削除 */
@@ -936,10 +906,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
-		if (!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
+	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null) {
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));

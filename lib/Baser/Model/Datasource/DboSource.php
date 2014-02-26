@@ -3935,17 +3935,20 @@ class DboSource extends DataSource {
  * @access public
  */
 	public function loadCsv($options) {
+		
+		$options = array_merge(array(
+			'path'		=> null,
+			'encoding'	=> $this->_dbEncToPhp($this->getEncoding())
+		), $options);
+		
 		extract($options);
-		if (!isset($path)) {
+		
+		if (!$path) {
 			return false;
 		}
-		if (!isset($encoding)) {
-			$encoding = $this->_dbEncToPhp($this->getEncoding());
-		}
-
-		$appEncoding = Configure::read('App.encoding');
+		
 		$table = basename($path, '.csv');
-		$fullTableName = $this->config['prefix'] . $table;
+		$fullTableName = $this->name($this->config['prefix'] . $table);
 		$schema = $this->readSchema(basename($path, '.csv'));
 		if (isset($schema['tables'][$table]['indexes']['PRIMARY']['column'])) {
 			$indexField = $schema['tables'][$table]['indexes']['PRIMARY']['column'];
@@ -3953,51 +3956,76 @@ class DboSource extends DataSource {
 			$indexField = '';
 		}
 
+		$datas = $this->loadCsvToArray($path, $encoding);
+		if($datas) {
+			foreach($datas as $data) {
+				$head = array();
+				$values = array();
+				foreach($data as $key => $value) {
+					// 主キーでデータが空の場合はスキップ
+					if ($key == $indexField && !$value) {
+						continue;
+					}
+					$head[] = $this->name($key);
+					if ($key == 'created' && !$value) {
+						$value = date('Y-m-d H:i:s');
+					}
+					$values[] = $this->value($value, $schema['tables'][$table][$key]['type'], false);
+				}
+				$query = array(
+					'table' => $fullTableName,
+					'fields' => implode(', ', $head),
+					'values' => implode(', ', $values)
+				);
+				$sql = $this->renderStatement('create', $query);
+				if (!$this->execute($sql)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+		
+	}
+	
+/**
+ * CSVよりデータを配列として読み込む
+ * 
+ * @param string $path
+ * @return mixed boolean Or array
+ */
+	public function loadCsvToArray($path, $encoding) {
+		
+		if(!$encoding) {
+			$encoding = $this->_dbEncToPhp($this->getEncoding());
+		}
+		$appEncoding = Configure::read('App.encoding');
+		
 		// ヘッダ取得
 		$fp = fopen($path, 'r');
 		if (!$fp) {
 			return false;
 		}
 
-		$_head = fgetcsv($fp, 10240);
-		foreach ($_head as $value) {
-			$head[] = $this->name($value);
-		}
-
-		while (($_record = fgetcsvReg($fp, 10240)) !== false) {
-
+		$head = fgetcsv($fp, 10240);
+		
+		$datas = array();
+		while (($record = fgetcsvReg($fp, 10240)) !== false) {
 			if ($appEncoding != $encoding) {
-				mb_convert_variables($appEncoding, $encoding, $_record);
+				mb_convert_variables($appEncoding, $encoding, $record);
 			}
-
 			$values = array();
-			// 配列の添え字をフィールド名に変換
-			foreach ($_record as $key => $value) {
-				// 主キーでデータが空の場合はスキップ
-				if ($_head[$key] == $indexField && !$value) {
-					unset($head[$key]);
-					continue;
-				}
-				if ($_head[$key] == 'created' && !$value) {
-					$value = date('Y-m-d H:i:s');
-				}
-				$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
+			foreach ($record as $key => $value) {
+				$values[$head[$key]] = $value;
 			}
-			$query = array(
-				'table' => $this->name($fullTableName),
-				'fields' => implode(', ', $head),
-				'values' => implode(', ', $values)
-			);
-			$sql = $this->renderStatement('create', $query);
-			if (!$this->execute($sql)) {
-				return false;
-			}
+			$datas[] = $values;
 		}
 		fclose($fp);
 
-		return true;
+		return $datas;
+		
 	}
-
+	
 /**
  * CSV用のフィールドデータに変換する
  *
