@@ -1305,6 +1305,37 @@ class BcManagerComponent extends Component {
 	}
 
 /**
+ * files フォルダを初期化する
+ */
+	public function resetFiles() {
+		$result = true;
+		$Folder = new Folder(WWW_ROOT . 'files');
+		$files = $Folder->read(true, true, true);
+		$Folder = null;
+		if(!empty($files[0])) {
+			foreach($files[0] as $file) {
+				$Folder = new Folder();
+				if (!$Folder->delete($file)) {
+					$result = false;
+				}
+				$Folder = null;
+			}
+		}
+		if(!empty($files[1])) {
+			foreach($files[1] as $file) {
+				if(basename($file) != 'empty') {
+					$Folder = new Folder();
+					if (!$Folder->delete($file)) {
+						$result = false;
+					}
+					$Folder = null;
+				}
+			}
+		}
+		return $result;
+	}
+	
+/**
  * baserCMSをリセットする
  * 
  * @param array $dbConfig 
@@ -1339,7 +1370,13 @@ class BcManagerComponent extends Component {
 			$result = false;
 			$this->log('テーマのページテンプレートを初期化できませんでした。');
 		}
-
+		
+		// files フォルダの初期化
+		if (!$this->resetFiles()) {
+			$result = false;
+			$this->log('files フォルダを初期化できませんでした。');
+		}
+		
 		ClassRegistry::flush();
 		clearAllCache();
 
