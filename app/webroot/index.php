@@ -105,10 +105,10 @@ if (!defined('APP_DIR')) {
  *
  */
 if (!defined('WEBROOT_DIR')) {
-	define('WEBROOT_DIR', basename(dirname(__FILE__)));
+	define('WEBROOT_DIR', basename(dirname($fileName)));
 }
 if (!defined('WWW_ROOT')) {
-	define('WWW_ROOT', dirname(__FILE__) . DS);
+	define('WWW_ROOT', dirname($fileName) . DS);
 }
 
 // for built-in server
