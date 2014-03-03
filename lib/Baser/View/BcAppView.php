@@ -179,7 +179,7 @@ class BcAppView extends View {
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => ''));
+		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
 			$name = $event->result === true ? $event->data['name'] : $event->result;
 		}
@@ -270,6 +270,19 @@ class BcAppView extends View {
  */
 	protected function _getElementFileName($name) {
 
+		// CUSTOMIZE ADD 2013/08/27 ryuring
+		// イベントを追加
+		// >>>
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
+		if ($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
+		if ($event !== false) {
+			$name = $event->result === true ? $event->data['name'] : $event->result;
+		}
+		// <<<
+		
 		list($plugin, $name) = $this->pluginSplit($name);
 
 		// CUSTOMIZE ADD 2013/08/26 ryuring
@@ -280,19 +293,6 @@ class BcAppView extends View {
 		$names = array($name);
 		if ($this->subDir) {
 			array_unshift($names, $this->subDir . DS . $name);
-		}
-		// <<<
-		
-		// CUSTOMIZE ADD 2013/08/27 ryuring
-		// イベントを追加
-		// >>>
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => ''));
-		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
-		}
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
-		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
 		}
 		// <<<
 
@@ -340,7 +340,7 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// >>>
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => ''));
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
 			$name = $event->result === true ? $event->data['name'] : $event->result;
 		}

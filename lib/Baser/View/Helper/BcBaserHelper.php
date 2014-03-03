@@ -552,17 +552,17 @@ class BcBaserHelper extends AppHelper {
 			unset($options['plugin']);
 		}
 
-		/*		 * * beforeElement ** */
+		/*** beforeElement ***/
 		$event = $this->dispatchEvent('beforeElement', array(
 			'name' => $name,
 			'data' => $data,
 			'options' => $options
-			), array('layer' => 'View', 'class' => ''));
+			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 
-		/*		 * * Controller.beforeElement ** */
+		/*** Controller.beforeElement ***/
 		$event = $this->dispatchEvent('beforeElement', array(
 			'name' => $name,
 			'data' => $data,
@@ -588,16 +588,16 @@ class BcBaserHelper extends AppHelper {
 
 		$out = $this->_View->element($name, $data, $options);
 
-		/*		 * * afterElement ** */
+		/*** afterElement ***/
 		$event = $this->dispatchEvent('afterElement', array(
 			'name' => $name,
 			'out' => $out
-			), array('layer' => 'View', 'class' => ''));
+			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
 
-		/*		 * * Controller.afterElement ** */
+		/*** Controller.afterElement ***/
 		$event = $this->dispatchEvent('afterElement', array(
 			'name' => $name,
 			'out' => $out
@@ -645,15 +645,15 @@ class BcBaserHelper extends AppHelper {
 
 		$out = $this->getElement('header', $data, $options);
 
-		/*		 * * header ** */
+		/*** header ***/
 		$event = $this->dispatchEvent('header', array(
 			'out' => $out
-			), array('layer' => 'View', 'class' => ''));
+			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
 
-		/*		 * * Controller.header ** */
+		/*** Controller.header ***/
 		$event = $this->dispatchEvent('header', array(
 			'out' => $out
 			), array('layer' => 'View', 'class' => $this->_View->name));
@@ -681,15 +681,15 @@ class BcBaserHelper extends AppHelper {
 
 		$out = $this->getElement('footer', $data, $options);
 
-		/*		 * * footer ** */
+		/*** footer ***/
 		$event = $this->dispatchEvent('footer', array(
 			'out' => $out
-			), array('layer' => 'View', 'class' => ''));
+			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
 
-		/*		 * * Controller.footer ** */
+		/*** Controller.footer ***/
 		$event = $this->dispatchEvent('footer', array(
 			'out' => $out
 			), array('layer' => 'View', 'class' => $this->_View->name));
@@ -990,13 +990,13 @@ class BcBaserHelper extends AppHelper {
 			'ssl' => false
 			), $options);
 
-		/*		 * * beforeGetLink ** */
+		/*** beforeGetLink ***/
 		$event = $this->dispatchEvent('beforeGetLink', array(
 			'title' => $title,
 			'url' => $url,
 			'options' => $options,
 			'confirmMessage' => $confirmMessage
-			), array('class' => 'Html'));
+			), array('class' => 'Html', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
@@ -1080,11 +1080,11 @@ class BcBaserHelper extends AppHelper {
 
 		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
-		/*		 * * afterGetLink ** */
+		/*** afterGetLink ***/
 		$event = $this->dispatchEvent('afterGetLink', array(
 			'url' => $url,
 			'out' => $out
-			), array('class' => 'Html'));
+			), array('class' => 'Html', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}

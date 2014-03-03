@@ -88,7 +88,7 @@ $(function(){
 
 <div id="SelfUpdate" style="display: none"><?php echo $selfUpdate ?></div>
 <div id="AlertMessage" style="display: none"></div>
-<div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', $this->request->data['UserGroup']['id'])) ?></div>
+<div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', @$this->request->data['UserGroup']['id'])) ?></div>
 
 
 <?php echo $this->BcForm->create('User') ?>

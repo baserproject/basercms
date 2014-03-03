@@ -1045,21 +1045,21 @@ DOC_END;
 
 		$this->__id = $this->_getId($model, $options);
 
-		/*		 * * beforeCreate ** */
+		/*** beforeCreate ***/
 		$event = $this->dispatchEvent('beforeCreate', array(
 			'id' => $this->__id,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 		$out = parent::create($model, $options);
 
-		/*		 * * afterCreate ** */
+		/*** afterCreate ***/
 		$event = $this->dispatchEvent('afterCreate', array(
 			'id' => $this->__id,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
@@ -1080,22 +1080,22 @@ DOC_END;
 		$id = $this->__id;
 		$this->__id = null;
 
-		/*		 * * beforeEnd ** */
+		/*** beforeEnd ***/
 		$event = $this->dispatchEvent('beforeEnd', array(
 			'id' => $id,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 
 		$out = parent::end($options);
 
-		/*		 * * afterEnd ** */
+		/*** afterEnd ***/
 		$event = $this->dispatchEvent('afterEnd', array(
 			'id' => $id,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
@@ -1121,11 +1121,11 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
-		/*		 * * beforeInput ** */
+		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeInput', array(
 			'fieldName' => $fieldName,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
@@ -1183,11 +1183,11 @@ DOC_END;
 			$out = $out . $counter . $this->Html->scriptblock($script);
 		}
 
-		/*		 * * afterInput ** */
+		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName' => $fieldName,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
