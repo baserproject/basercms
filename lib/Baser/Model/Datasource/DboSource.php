@@ -3490,10 +3490,8 @@ class DboSource extends DataSource {
 
 		if (!empty($options['tables'][$basename])) {
 			$options = array('tables' => array($basename => $options['tables'][$basename]));
-		} else {
-			// テーブルが存在しなかった場合はtrueを返して終了
-			return true;
 		}
+		
 		$options = array_merge($options, array('name' => $name, 'file' => $file, 'path' => $path));
 
 		$result = $Schema->write($options);
@@ -3662,7 +3660,6 @@ class DboSource extends DataSource {
 				foreach ($alter as $method => $field) {
 					if ($method == 'drop') {
 						unset($compare[$table]['drop']);
-						break;
 					}
 				}
 			}
