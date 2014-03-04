@@ -34,3 +34,6 @@ div.cke_dialog_ui_input_text, .cke_skin_kama div.cke_dialog_ui_input_password {
 .cke_dialog_ui_vbox_child {
 	padding:2px;
 }
+.cke_button_disabled .cke_button_label {
+	opacity: 0.3;
+}
