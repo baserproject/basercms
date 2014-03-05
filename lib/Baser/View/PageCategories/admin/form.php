@@ -104,11 +104,11 @@ function pageTypeChengeHandler() {
 <div id="AjaxControlSources" class="display-none"><?php $this->BcBaser->url(array('controller' => 'page_categories', 'action' => 'ajax_control_sources')) ?></div>
 
 <?php if ($this->request->action == 'admin_edit' && $indexPage): ?>
-	<div class="em-box align-left">1
+	<div class="em-box align-left">
 		<?php if ($indexPage['status']): ?>
-			<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
+			<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri($indexPage['url']), $indexPage['url'], array('target' => '_blank')) ?></strong>
 		<?php else: ?>
-			<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri('/' . $indexPage['url']) ?></strong>
+			<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri($indexPage['url']) ?></strong>
 		<?php endif ?>
 	</div>
 <?php endif ?>
