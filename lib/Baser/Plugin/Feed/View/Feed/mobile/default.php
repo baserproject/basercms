@@ -27,5 +27,5 @@
 		<hr size="1" style="width:100%;height:1px;margin:5px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 	<?php endforeach; ?>
 <?php else: ?>
-	<p style="text-align:center">ー</p>
+	<p style="text-align:center">－</p>
 <?php endif; ?>

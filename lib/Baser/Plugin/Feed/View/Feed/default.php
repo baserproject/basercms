@@ -39,5 +39,5 @@ $this->Feed->saveCachetime();
 		<?php endforeach; ?>
 	</ul>
 <?php else: ?>
-	<p style="text-align:center">ー</p>
+	<p style="text-align:center">－</p>
 <?php endif; ?>
