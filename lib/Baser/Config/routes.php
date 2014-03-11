@@ -206,6 +206,7 @@ if (BC_INSTALLED || isConsole()) {
  */
 	if ($agent) {
 		// プラグイン
+		Router::connect("/{$agentAlias}/:plugin/:controller", array('prefix' => $agentPrefix, 'action' => 'index'), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		// 携帯ノーマル
