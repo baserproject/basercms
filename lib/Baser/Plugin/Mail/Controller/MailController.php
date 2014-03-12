@@ -495,10 +495,10 @@ class MailController extends MailAppController {
 
 		foreach ($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
-			if (!isset($data['Message'][$field])) {
+			if (!isset($data['message'][$field])) {
 				continue;
 			}
-			$value = $data['Message'][$field];
+			$value = $data['message'][$field];
 			// ユーザーメールを取得
 			if ($mailField['MailField']['type'] == 'email' && $value) {
 				$userMail = $value;
@@ -513,10 +513,10 @@ class MailController extends MailAppController {
 
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
 		if (!$userMail) {
-			if (!empty($data['Message']['email'])) {
-				$userMail = $data['Message']['email'];
-			} elseif (!empty($data['Message']['email_1'])) {
-				$userMail = $data['Message']['email_1'];
+			if (!empty($data['message']['email'])) {
+				$userMail = $data['message']['email'];
+			} elseif (!empty($data['message']['email_1'])) {
+				$userMail = $data['message']['email_1'];
 			}
 		}
 
