@@ -76,21 +76,28 @@ class BcFormHelper extends FormHelper {
 	}
 
 /**
- * dateTime 拡張
+ * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
+ *
+ * ### Attributes:
+ *
+ * - `monthNames` If false, 2 digit numbers will be used instead of text.
+ *   If a array, the given array will be used.
+ * - `minYear` The lowest year to use in the year select
+ * - `maxYear` The maximum year to use in the year select
+ * - `interval` The interval for the minutes select. Defaults to 1
+ * - `separator` The contents of the string between select elements. Defaults to '-'
+ * - `empty` - If true, the empty select option is shown. If a string,
+ *   that string is displayed as the empty element.
+ * - `round` - Set to `up` or `down` if you want to force rounding in either direction. Defaults to null.
+ * - `value` | `default` The default value to be used by the input. A value in `$this->data`
+ *   matching the field name will override this value. If no default is provided `time()` will be used.
  *
  * @param string $fieldName Prefix name for the SELECT element
- * @param string $dateFormat DMY, MDY, YMD or NONE.
- * @param string $timeFormat 12, 24, NONE
- * @param string $selected Option which is selected.
- * @param string $attributes array of Attributes
- * 						'monthNames' If set and false numbers will be used for month select instead of text.
- * 						'minYear' The lowest year to use in the year select
- * 						'maxYear' The maximum year to use in the year select
- * 						'interval' The interval for the minutes select. Defaults to 1
- * 						'separator' The contents of the string between select elements. Defaults to '-'
- * @param boolean $showEmpty Whether or not to show an empty default value.
- * @return string The HTML formatted OPTION element
- * @access public
+ * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
+ * @param string $timeFormat 12, 24, or null to not generate time inputs.
+ * @param array|string $attributes array of Attributes
+ * @return string Generated set of select boxes for the date and time formats chosen.
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::dateTime
  */
 	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
 		$attributes += array('empty' => true, 'value' => null);
@@ -109,15 +116,16 @@ class BcFormHelper extends FormHelper {
 
 		if (!empty($attributes['value'])) {
 			list($year, $month, $day, $hour, $min, $meridian) = $this->_getDateTimeValue(
-				$attributes['value'], $timeFormat
+				$attributes['value'],
+				$timeFormat
 			);
 		}
 
 		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 		/* $defaults = array(
-		  'minYear' => null, 'maxYear' => null, 'separator' => '-',
-		  'interval' => 1, 'monthNames' => true, 'round' => null
-		  ); */
+			'minYear' => null, 'maxYear' => null, 'separator' => '-',
+			'interval' => 1, 'monthNames' => true, 'round' => null
+		); */
 		// ---
 		$defaults = array(
 			'minYear' => null, 'maxYear' => null, 'separator' => ' ',
@@ -125,7 +133,7 @@ class BcFormHelper extends FormHelper {
 		);
 		// <<<
 
-		$attributes = array_merge($defaults, (array) $attributes);
+		$attributes = array_merge($defaults, (array)$attributes);
 		if (isset($attributes['minuteInterval'])) {
 			$attributes['interval'] = $attributes['minuteInterval'];
 			unset($attributes['minuteInterval']);
@@ -137,10 +145,6 @@ class BcFormHelper extends FormHelper {
 		$monthNames = $attributes['monthNames'];
 		$round = $attributes['round'];
 		$attributes = array_diff_key($attributes, $defaults);
-
-		if ($timeFormat == 12 && $hour == 12) {
-			$hour = 0;
-		}
 
 		if (!empty($interval) && $interval > 1 && !empty($min)) {
 			$current = new DateTime();
@@ -217,35 +221,41 @@ class BcFormHelper extends FormHelper {
 				// <<<
 				case 'Y':
 					$attrs['Year']['value'] = $year;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->year(
-					  $fieldName, $minYear, $maxYear, $attrs['Year']
-					  ); */
+						$fieldName, $minYear, $maxYear, $attrs['Year']
+					); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
 					$selects[] = $this->year(
 							$fieldName, $minYear, $maxYear, $attrs['Year']
 						) . $suffix;
 					// <<<
+
 					break;
 				case 'M':
 					$attrs['Month']['value'] = $month;
 					$attrs['Month']['monthNames'] = $monthNames;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->month($fieldName, $attrs['Month']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
 					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
 					// <<<
+					
 					break;
 				case 'D':
 					$attrs['Day']['value'] = $day;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->day($fieldName, $attrs['Day']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
 					$selects[] = $this->day($fieldName, $attrs['Day']) . $suffix;
 					// <<<
+
 					break;
 			}
 		}
@@ -257,15 +267,15 @@ class BcFormHelper extends FormHelper {
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$opt .= $this->hour($fieldName, true, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']);
+				$this->minute($fieldName, $attrs['Minute']);
 				break;
 			case '12':
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$attrs['Meridian']['value'] = $meridian;
 				$opt .= $this->hour($fieldName, false, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']) . ' ' .
-					$this->meridian($fieldName, $attrs['Meridian']);
+				$this->minute($fieldName, $attrs['Minute']) . ' ' .
+				$this->meridian($fieldName, $attrs['Meridian']);
 				break;
 		}
 		return $opt;
@@ -533,11 +543,9 @@ DOC_END;
  *
  * @param string $name
  * @param array $options
- * @return array option lists
- * @access private
+ * @return array
  */
-	private function __generateOptions($name, $options = array()) {
-
+	protected function _generateOptions($name, $options = array()) {
 		if (!empty($this->options[$name])) {
 			return $this->options[$name];
 		}
@@ -552,7 +560,7 @@ DOC_END;
 				}
 				$i = 0;
 				while ($i < 60) {
-					$data[$i] = sprintf('%02d', $i);
+					$data[sprintf('%02d', $i)] = sprintf('%02d', $i);
 					$i += $interval;
 				}
 				break;
@@ -585,19 +593,21 @@ DOC_END;
 				}
 				break;
 			case 'month':
-				if ($options['monthNames']) {
-					$data['01'] = __('January');
-					$data['02'] = __('February');
-					$data['03'] = __('March');
-					$data['04'] = __('April');
-					$data['05'] = __('May');
-					$data['06'] = __('June');
-					$data['07'] = __('July');
-					$data['08'] = __('August');
-					$data['09'] = __('September');
-					$data['10'] = __('October');
-					$data['11'] = __('November');
-					$data['12'] = __('December');
+				if ($options['monthNames'] === true) {
+					$data['01'] = __d('cake', 'January');
+					$data['02'] = __d('cake', 'February');
+					$data['03'] = __d('cake', 'March');
+					$data['04'] = __d('cake', 'April');
+					$data['05'] = __d('cake', 'May');
+					$data['06'] = __d('cake', 'June');
+					$data['07'] = __d('cake', 'July');
+					$data['08'] = __d('cake', 'August');
+					$data['09'] = __d('cake', 'September');
+					$data['10'] = __d('cake', 'October');
+					$data['11'] = __d('cake', 'November');
+					$data['12'] = __d('cake', 'December');
+				} elseif (is_array($options['monthNames'])) {
+					$data = $options['monthNames'];
 				} else {
 					for ($m = 1; $m <= 12; $m++) {
 						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
@@ -607,24 +617,28 @@ DOC_END;
 			case 'year':
 				$current = intval(date('Y'));
 
-				if (!isset($options['min'])) {
-					$min = $current - 20;
-				} else {
-					$min = $options['min'];
-				}
+				$min = !isset($options['min']) ? $current - 20 : (int)$options['min'];
+				$max = !isset($options['max']) ? $current + 20 : (int)$options['max'];
 
-				if (!isset($options['max'])) {
-					$max = $current + 20;
-				} else {
-					$max = $options['max'];
-				}
 				if ($min > $max) {
 					list($min, $max) = array($max, $min);
 				}
+				if (
+					!empty($options['value']) &&
+					(int)$options['value'] < $min &&
+					(int)$options['value'] > 0
+				) {
+					$min = (int)$options['value'];
+				} elseif (!empty($options['value']) && (int)$options['value'] > $max) {
+					$max = (int)$options['value'];
+				}
+
 				for ($i = $min; $i <= $max; $i++) {
 					$data[$i] = $i;
 				}
-				$data = array_reverse($data, true);
+				if ($options['order'] !== 'asc') {
+					$data = array_reverse($data, true);
+				}
 				break;
 			// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 			case 'wyear':
@@ -657,8 +671,8 @@ DOC_END;
 				break;
 			// <<<
 		}
-		$this->__options[$name] = $data;
-		return $this->__options[$name];
+		$this->_options[$name] = $data;
+		return $this->_options[$name];
 	}
 
 /**
@@ -741,37 +755,44 @@ DOC_END;
 
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
- * 
+ *
+ * @param array $elements
+ * @param array $parents
+ * @param boolean $showParents
+ * @param array $attributes
  * @return array
- * @access private
  */
-	private function __selectOptions($elements = array(), $selected = null, $parents = array(), $showParents = null, $attributes = array()) {
-
+	protected function _selectOptions($elements = array(), $parents = array(), $showParents = null, $attributes = array()) {
 		$select = array();
-		$attributes = array_merge(array('escape' => true, 'style' => null), $attributes);
-		$selectedIsEmpty = ($selected === '' || $selected === null);
-		$selectedIsArray = is_array($selected);
+		$attributes = array_merge(
+			array('escape' => true, 'style' => null, 'value' => null, 'class' => null),
+			$attributes
+		);
+		$selectedIsEmpty = ($attributes['value'] === '' || $attributes['value'] === null);
+		$selectedIsArray = is_array($attributes['value']);
 
+		$this->_domIdSuffixes = array();
 		foreach ($elements as $name => $title) {
 			$htmlOptions = array();
 			if (is_array($title) && (!isset($title['name']) || !isset($title['value']))) {
 				if (!empty($name)) {
 					if ($attributes['style'] === 'checkbox') {
-						$select[] = $this->Html->_tags['fieldsetend'];
+						$select[] = $this->Html->useTag('fieldsetend');
 					} else {
-						$select[] = $this->Html->_tags['optiongroupend'];
+						$select[] = $this->Html->useTag('optiongroupend');
 					}
 					$parents[] = $name;
 				}
-				$select = array_merge($select, $this->__selectOptions(
-						$title, $selected, $parents, $showParents, $attributes
+				$select = array_merge($select, $this->_selectOptions(
+					$title, $parents, $showParents, $attributes
 				));
 
 				if (!empty($name)) {
+					$name = $attributes['escape'] ? h($name) : $name;
 					if ($attributes['style'] === 'checkbox') {
-						$select[] = sprintf($this->Html->_tags['fieldsetstart'], $name);
+						$select[] = $this->Html->useTag('fieldsetstart', $name);
 					} else {
-						$select[] = sprintf($this->Html->_tags['optiongroup'], $name, '');
+						$select[] = $this->Html->useTag('optiongroup', $name, '');
 					}
 				}
 				$name = null;
@@ -783,7 +804,11 @@ DOC_END;
 			}
 
 			if ($name !== null) {
-				if ((!$selectedIsEmpty && $selected == $name) || ($selectedIsArray && in_array($name, $selected))) {
+				$isNumeric = is_numeric($name);
+				if (
+					(!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
+					($selectedIsArray && in_array((string)$name, $attributes['value'], !$isNumeric))
+				) {
 					if ($attributes['style'] === 'checkbox') {
 						$htmlOptions['checked'] = true;
 					} else {
@@ -794,12 +819,28 @@ DOC_END;
 				if ($showParents || (!in_array($title, $parents))) {
 					$title = ($attributes['escape']) ? h($title) : $title;
 
+					$hasDisabled = !empty($attributes['disabled']);
+					if ($hasDisabled) {
+						$disabledIsArray = is_array($attributes['disabled']);
+						if ($disabledIsArray) {
+							$disabledIsNumeric = is_numeric($name);
+						}
+					}
+					if (
+						$hasDisabled &&
+						$disabledIsArray &&
+						in_array((string)$name, $attributes['disabled'], !$disabledIsNumeric)
+					) {
+						$htmlOptions['disabled'] = 'disabled';
+					}
+					if ($hasDisabled && !$disabledIsArray && $attributes['style'] === 'checkbox') {
+						$htmlOptions['disabled'] = $attributes['disabled'] === true ? 'disabled' : $attributes['disabled'];
+					}
+
 					if ($attributes['style'] === 'checkbox') {
 						$htmlOptions['value'] = $name;
 
-						$tagName = Inflector::camelize(
-								$this->model() . '_' . $this->field() . '_' . Inflector::underscore($name)
-						);
+						$tagName = $attributes['id'] . $this->domIdSuffix($name);
 						$htmlOptions['id'] = $tagName;
 						$label = array('for' => $tagName);
 
@@ -807,25 +848,33 @@ DOC_END;
 							$label['class'] = 'selected';
 						}
 
-						list($name) = array_values($this->__name());
+						$name = $attributes['name'];
 
 						if (empty($attributes['class'])) {
 							$attributes['class'] = 'checkbox';
+						} elseif ($attributes['class'] === 'form-error') {
+							$attributes['class'] = 'checkbox ' . $attributes['class'];
 						}
 						$label = $this->label(null, $title, $label);
-						$item = sprintf(
-							$this->Html->_tags['checkboxmultiple'], $name, $this->Html->_parseAttributes($htmlOptions)
-						);
+						$item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions);
+						
+						// CUSTOMIZE MODIFY 2014/02/24 ryuring
 						// checkboxのdivを外せるオプションを追加
+						// >>>
+						//$select[] = $this->Html->div($attributes['class'], $item . $label);
+						// ---
 						if (isset($attributes['div']) && $attributes['div'] === false) {
 							$select[] = $item . $label;
 						} else {
 							$select[] = $this->Html->div($attributes['class'], $item . $label);
 						}
+						// <<<
+						
 					} else {
-						$select[] = sprintf(
-							$this->Html->_tags['selectoption'], $name, $this->Html->_parseAttributes($htmlOptions), $title
-						);
+						if ($attributes['escape']) {
+							$name = h($name);
+						}
+						$select[] = $this->Html->useTag('selectoption', $name, $htmlOptions, $title);
 					}
 				}
 			}
@@ -996,21 +1045,21 @@ DOC_END;
 
 		$this->__id = $this->_getId($model, $options);
 
-		/*		 * * beforeCreate ** */
+		/*** beforeCreate ***/
 		$event = $this->dispatchEvent('beforeCreate', array(
 			'id' => $this->__id,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 		$out = parent::create($model, $options);
 
-		/*		 * * afterCreate ** */
+		/*** afterCreate ***/
 		$event = $this->dispatchEvent('afterCreate', array(
 			'id' => $this->__id,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
@@ -1031,22 +1080,22 @@ DOC_END;
 		$id = $this->__id;
 		$this->__id = null;
 
-		/*		 * * beforeEnd ** */
+		/*** beforeEnd ***/
 		$event = $this->dispatchEvent('beforeEnd', array(
 			'id' => $id,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
 
 		$out = parent::end($options);
 
-		/*		 * * afterEnd ** */
+		/*** afterEnd ***/
 		$event = $this->dispatchEvent('afterEnd', array(
 			'id' => $id,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;
 		}
@@ -1072,11 +1121,11 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
-		/*		 * * beforeInput ** */
+		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeInput', array(
 			'fieldName' => $fieldName,
 			'options' => $options
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
@@ -1134,11 +1183,11 @@ DOC_END;
 			$out = $out . $counter . $this->Html->scriptblock($script);
 		}
 
-		/*		 * * afterInput ** */
+		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName' => $fieldName,
 			'out' => $out
-			), array('class' => 'Form'));
+			), array('class' => 'Form', 'plugin' => ''));
 
 		if ($event !== false) {
 			$out = $event->result === true ? $event->data['out'] : $event->result;

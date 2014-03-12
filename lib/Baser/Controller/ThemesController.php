@@ -103,11 +103,9 @@ class ThemesController extends AppController {
 			$this->redirect('index');
 		}
 
-		$excludes = array('plugins', 'dblogs');
+		$excludes = array('plugins', 'dblogs', 'users');
 
-		$user = $this->BcAuth->user();
 		$User = ClassRegistry::init('User');
-		$user = $User->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
 
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
@@ -183,18 +181,26 @@ class ThemesController extends AppController {
 		// TODO $this->BcManager->initSystemData() は、$this->Page->createAllPageTemplate() の
 		// 後に呼出さないと $this->Page の実体が何故か AppModel にすりかわってしまい、
 		// createAllPageTemplate メソッドが呼び出せないので注意
-		if (!$this->BcManager->initSystemData()) {
+		if (!$this->BcManager->initSystemData(null, array('excludeUsers' => true))) {
 			$result = false;
 			$this->log('システムデータの初期化に失敗しました。');
 		}
 
 		// ユーザーデータの初期化
 		$UserGroup = ClassRegistry::init('UserGroup');
-		$user['User']['user_group_id'] = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
-		$User->create($user);
-		if (!$User->save()) {
-			$result = false;
-			$this->log('ユーザーデータの初期化に失敗しました。手動でユーザー情報を新しく登録してください。');
+		$adminGroupId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
+		$users = $User->find('all', array('recursive' => -1));
+		foreach($users as $user) {
+			$user['User']['user_group_id'] = $adminGroupId;
+			unset($user['User']['password']);
+			if(!$User->save($user)) {
+				$result = false;
+				$this->log('ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。');
+			}
+			if(!$User->applyDefaultFavorites($user['User']['id'], $user['User']['user_group_id'])) {
+				$result = false;
+				$this->log('ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。');
+			}
 		}
 
 		// システム基本設定の更新

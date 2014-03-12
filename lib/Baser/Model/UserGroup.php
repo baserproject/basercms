@@ -209,5 +209,5 @@ class UserGroup extends AppModel {
 	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
 	}
-
+	
 }

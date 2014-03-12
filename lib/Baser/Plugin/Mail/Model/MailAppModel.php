@@ -58,6 +58,7 @@ class MailAppModel extends BcPluginAppModel {
 		foreach ($datas as $key => $data) {
 			if (!is_array($data)) {
 				$data = str_replace("<br />", "", $data);
+				$data = str_replace("<br>", "", $data);
 				$data = str_replace('&lt;', '<', $data);
 				$data = str_replace('&gt;', '>', $data);
 				$data = str_replace('&amp;', '&', $data);

@@ -15,6 +15,7 @@
 
 App::uses('Model', 'Model');
 App::uses('AppModel', 'Model');
+
 require_once dirname(dirname(__FILE__)) . DS . 'models.php';
 
 /**
@@ -275,6 +276,40 @@ class TranslateBehaviorTest extends CakeTestCase {
 	}
 
 /**
+ * testLocaleSingleCountWithConditions method
+ *
+ * @return void
+ */
+	public function testLocaleSingleCountWithConditions() {
+		$this->loadFixtures('Translate', 'TranslatedItem');
+
+		$TestModel = new TranslatedItem();
+		$TestModel->locale = 'eng';
+		$result = $TestModel->find('all', array(
+			'conditions' => array('slug' => 'first_translated')
+		));
+		$expected = array(
+			array(
+				'TranslatedItem' => array(
+					'id' => 1,
+					'slug' => 'first_translated',
+					'locale' => 'eng',
+					'title' => 'Title #1',
+					'content' => 'Content #1',
+					'translated_article_id' => 1,
+				)
+			)
+		);
+		$this->assertEquals($expected, $result);
+
+		$result = $TestModel->find('count', array(
+			'conditions' => array('slug' => 'first_translated')
+		));
+		$expected = 1;
+		$this->assertEquals($expected, $result);
+	}
+
+/**
  * testLocaleSingleAssociations method
  *
  * @return void
@@ -348,6 +383,31 @@ class TranslateBehaviorTest extends CakeTestCase {
 				),
 				'Title' => array(array('foreign_key' => 3, 'content' => 'Title #3')),
 				'Content' => array(array('foreign_key' => 3, 'content' => 'Content #3'))
+			)
+		);
+		$this->assertEquals($expected, $result);
+	}
+
+/**
+ * Test loading fields with 0 as the translated value.
+ */
+	public function testFetchTranslationsWithZero() {
+		$this->loadFixtures('Translate', 'TranslatedItem');
+
+		$model = new TranslatedItem();
+		$translateModel = $model->translateModel();
+		$translateModel->updateAll(array('content' => "'0'"));
+		$model->locale = 'eng';
+
+		$result = $model->read(null, 1);
+		$expected = array(
+			'TranslatedItem' => array(
+				'id' => 1,
+				'slug' => 'first_translated',
+				'locale' => 'eng',
+				'title' => '0',
+				'content' => '0',
+				'translated_article_id' => 1,
 			)
 		);
 		$this->assertEquals($expected, $result);

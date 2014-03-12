@@ -43,21 +43,23 @@ function baseUrl() {
 	} else {
 		$script = $_SERVER['SCRIPT_FILENAME'];
 		$script = str_replace(docRoot(), '', $script);
-
 		if (BC_DEPLOY_PATTERN == 1) {
-			$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
-			$baseUrl = preg_replace('/app\/webroot\/test\.php/', '', $baseUrl);
+			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
+			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
+			// ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
+			$baseUrl = preg_replace('/index\.php/', '', $baseUrl);
 		} elseif (BC_DEPLOY_PATTERN == 2) {
 			$baseUrl = preg_replace('/index\.php/', '', $script);
 		}
 		$baseUrl = preg_replace("/index$/", '', $baseUrl);
 	}
 
+	$baseUrl = str_replace(DS, '/', $baseUrl);
 	if (!$baseUrl) {
 		$baseUrl = '/';
 	}
-
 	return $baseUrl;
+	
 }
 
 /**
@@ -251,7 +253,6 @@ function getUrlFromEnv() {
 			$aryRequestUri = explode('?', $requestUri);
 			$requestUri = $aryRequestUri[0];
 		}
-
 		if (preg_match('/^' . str_replace('/', '\/', baseUrl()) . '/is', $requestUri)) {
 			$parameter = preg_replace('/^' . str_replace('/', '\/', baseUrl()) . '/is', '', $requestUri);
 		} else {

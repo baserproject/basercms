@@ -474,6 +474,7 @@ class MailController extends MailAppController {
 		// データを整形
 		$data = $this->Message->restoreData($this->Message->convertToDb($this->request->data));
 		$data['message'] = $data['Message'];
+		unset($data['Message']);
 		$data['mailFields'] = $this->dbDatas['mailFields'];
 		$data['mailContents'] = $this->dbDatas['mailContent']['MailContent'];
 		$data['mailConfig'] = $this->dbDatas['mailConfig']['MailConfig'];

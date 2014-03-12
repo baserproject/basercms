@@ -559,7 +559,7 @@ class BcManagerComponent extends Component {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
-		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig, $dbDataPattern)) {
+		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
@@ -593,7 +593,7 @@ class BcManagerComponent extends Component {
 			}
 		} else {
 			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
-				$this->log("初期データのロードに失敗しました。");
+				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
 			foreach ($corePlugins as $corePlugin) {
@@ -831,83 +831,58 @@ class BcManagerComponent extends Component {
  * @param string $dbConfigKeyName
  * @param array $dbConfig 
  */
-	public function initSystemData($dbConfig = null) {
+	public function initSystemData($dbConfig = null, $options = array()) {
+		
+		$options = array_merge(array('excludeUsers' => false), $options);
+		
 		$db = $this->_getDataSource('baser', $dbConfig);
 		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
 
 		/* page_categories の初期データをチェック＆設定 */
 		$PageCategory = ClassRegistry::init('PageCategory');
-		$mobileId = $PageCategory->field('id', array(
-			'PageCategory.parent_id' => null,
-			'PageCategory.name' => 'mobile'
-		));
-		$smartphoneId = $PageCategory->field('id', array(
-			'PageCategory.parent_id' => null,
-			'PageCategory.name' => 'smartphone'
-		));
-		// 一旦削除
-		$PageCategory->deleteAll(array(
-			'PageCategory.parent_id' => null,
-			'or' => array(
-				array('PageCategory.name' => 'mobile'),
-				array('PageCategory.name' => 'smartphone')
-			)), false);
-		// 再登録
-		if (!$db->loadCsv(array('path' => $corePath . DS . 'page_categories.csv', 'encoding' => 'SJIS'))) {
-			$this->log($corePath . DS . 'page_categories.csv の読み込みに失敗。');
-			$result = false;
-		}
-
-		// IDを更新
-		if ($mobileId) {
-			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $mobileId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'mobile'
-				))) {
-				$this->log('page_categories テーブルで、システムデータ mobile の id 更新に失敗。');
-				$result = false;
+		if(!$PageCategory->find('count', array('PageCategory.name' => 'mobile', 'PageCategory.parent_id' => null))) {
+			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
+			foreach($pageCategories as $pageCategory) {
+				if($pageCategory['name'] == 'mobile') {
+					$PageCategory->save($pageCategory);
+					break;
+				}
 			}
 		}
-		if ($smartphoneId) {
-			if (!$PageCategory->updateAll(
-					array('PageCategory.id' => $smartphoneId), array('PageCategory.parent_id' => null, 'PageCategory.name' => 'smartphone'
-				))) {
-				$this->log('page_categories テーブルで、システムデータ smartphone の id 更新に失敗。');
-				$result = false;
+		if(!$PageCategory->find('count', array('PageCategory.name' => 'smartphone', 'PageCategory.parent_id' => null))) {
+			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
+			foreach($pageCategories as $pageCategory) {
+				if($pageCategory['name'] == 'smartphone') {
+					$PageCategory->save($pageCategory);
+					break;
+				}
 			}
 		}
 
 		/* user_groupsの初期データをチェック＆設定 */
 		$UserGroup = ClassRegistry::init('UserGroup');
-		$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
-		// 一旦削除
-		$UserGroup->delete($adminsId, false);
-		// 再登録
-		if (!$db->loadCsv(array('path' => $corePath . DS . 'user_groups.csv', 'encoding' => 'SJIS'))) {
-			$this->log($corePath . DS . 'user_groups.csv の読み込みに失敗。');
-			$result = false;
-		}
-		// IDを更新
-		if ($adminsId) {
-			if (!$UserGroup->updateAll(
-					array('UserGroup.id' => $adminsId), array('UserGroup.name' => 'admins')
-				)) {
-				$this->log('user_groups テーブルで、システムデータ admins の id 更新に失敗。');
-				$result = false;
+		if(!$UserGroup->find('count', array('UserGroup.name' => 'admins'))) {
+			$userGroups = $db->loadCsvToArray($corePath . DS . 'user_groups.csv', 'SJIS');
+			foreach($userGroups as $userGroup) {
+				if($userGroup['name'] == 'admins') {
+					$UserGroup->save($userGroup);
+					break;
+				}
 			}
-		} else {
-			$adminsId = $UserGroup->field('id', array('UserGroup.name' => 'admins'));
 		}
 
 		/* users は全てのユーザーを削除 */
 		//======================================================================
 		// ユーザーグループを新しく読み込んだ場合にデータの整合性がとれない可能性がある為
 		//======================================================================
-		if (!$db->truncate('users')) {
-			$this->log('users テーブルの初期化に失敗。');
-			$result = false;
+		if(!$options['excludeUsers']) {
+			if (!$db->truncate('users')) {
+				$this->log('users テーブルの初期化に失敗。');
+				$result = false;
+			}
 		}
-
+		
 		/* site_configs の初期データをチェック＆設定 */
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		if (!$SiteConfig->updateAll(array('SiteConfig.value' => null), array('SiteConfig.name' => 'email')) ||
@@ -931,10 +906,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null, $dbDataPattern = '') {
-		if (!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
+	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null) {
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
@@ -1208,7 +1180,7 @@ class BcManagerComponent extends Component {
 			$Folder->create($path, 0777);
 		}
 
-		$src = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
+		$src = BASER_WEBROOT . 'img' . DS . 'admin' . DS . 'ckeditor' . DS;
 		$Folder = new Folder($src);
 		$files = $Folder->read(true, true);
 		$result = true;
@@ -1300,6 +1272,37 @@ class BcManagerComponent extends Component {
 	}
 
 /**
+ * files フォルダを初期化する
+ */
+	public function resetFiles() {
+		$result = true;
+		$Folder = new Folder(WWW_ROOT . 'files');
+		$files = $Folder->read(true, true, true);
+		$Folder = null;
+		if(!empty($files[0])) {
+			foreach($files[0] as $file) {
+				$Folder = new Folder();
+				if (!$Folder->delete($file)) {
+					$result = false;
+				}
+				$Folder = null;
+			}
+		}
+		if(!empty($files[1])) {
+			foreach($files[1] as $file) {
+				if(basename($file) != 'empty') {
+					$Folder = new Folder();
+					if (!$Folder->delete($file)) {
+						$result = false;
+					}
+					$Folder = null;
+				}
+			}
+		}
+		return $result;
+	}
+	
+/**
  * baserCMSをリセットする
  * 
  * @param array $dbConfig 
@@ -1334,7 +1337,13 @@ class BcManagerComponent extends Component {
 			$result = false;
 			$this->log('テーマのページテンプレートを初期化できませんでした。');
 		}
-
+		
+		// files フォルダの初期化
+		if (!$this->resetFiles()) {
+			$result = false;
+			$this->log('files フォルダを初期化できませんでした。');
+		}
+		
 		ClassRegistry::flush();
 		clearAllCache();
 
@@ -1668,9 +1677,9 @@ class BcManagerComponent extends Component {
  */
 	public function createAdminAssetsSymlink() {
 		$viewPath = getViewPath();
-		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
-		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
-		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
+		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
+		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';
@@ -1724,9 +1733,9 @@ class BcManagerComponent extends Component {
  */
 	public function deployAdminAssets() {
 		$viewPath = getViewPath();
-		$adminCss = BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin';
-		$adminJs = BASER_VIEWS . 'webroot' . DS . 'js' . DS . 'admin';
-		$adminImg = BASER_VIEWS . 'webroot' . DS . 'img' . DS . 'admin';
+		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
+		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
+		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';

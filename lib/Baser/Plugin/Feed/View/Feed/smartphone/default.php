@@ -18,9 +18,9 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<cake:nocache>
-	<?php $this->BcBaser->cacheHeader() ?>
-</cake:nocache>
+<!--nocache-->
+	<?php $this->Feed->cacheHeader() ?>
+<!--/nocache-->
 
 <?php if (!empty($items)): ?>
 	<?php foreach ($items as $key => $item): ?>
@@ -38,5 +38,5 @@
 		</li>
 	<?php endforeach ?>
 	<?php else: ?>
-	<p style="text-align:center">ー</p>
+	<p style="text-align:center">－</p>
 <?php endif ?>

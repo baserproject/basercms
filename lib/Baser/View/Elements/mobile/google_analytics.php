@@ -20,7 +20,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<cake:nocache>
+<!--nocache-->
 	<?php
 	$baseUrl = $this->BcBaser->getUrl("/mobile/ga");
 	if (!empty($_SERVER["HTTP_REFERER"])) {
@@ -41,4 +41,4 @@
 	$url .= "&guid=ON";
 	echo '<img src="' . str_replace("&", "&amp;", $url) . '" width="1" height="1" />';
 	?>
-</cake:nocache>
+<!--/nocache-->
