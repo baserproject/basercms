@@ -136,6 +136,10 @@ class UsersController extends AppController {
 			$this->notFound();
 		}
 
+		if (!$this->BcAuth->login()) {
+			$this->setMessage('アカウント名、パスワードが間違っています。', true);
+		}
+		
 		$user = $this->BcAuth->user();
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 

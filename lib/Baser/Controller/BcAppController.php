@@ -1129,6 +1129,7 @@ class BcAppController extends Controller {
 		$requestedPrefix = '';
 
 		$userModel = $this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
+		list(, $userModel) = pluginSplit($userModel);
 		if (isset($this->{$userModel})) {
 			$UserClass = $this->{$userModel};
 		} else {

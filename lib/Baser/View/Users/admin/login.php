@@ -24,6 +24,7 @@ $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
 if (!$userModel) {
 	$userModel = 'User';
 }
+list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
 $this->addScript(<<< CSS_END
 <style type="text/css">
