@@ -30,7 +30,7 @@ if (!empty($this->passedArgs['num'])) {
 $links = array();
 foreach ($nums as $num) {
 	if ($currentNum != $num) {
-		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, array('num' => $num))) . '</span>';
+		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, array('num' => $num, 'page' => null))) . '</span>';
 	} else {
 		$links[] = '<span class="current">' . $num . '</span>';
 	}
