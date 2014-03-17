@@ -64,12 +64,12 @@ class BcReplacePrefixComponent extends Component {
 /**
  * Initializes
  *
- * @param Controller $controller
+ * @param Controller $Controller
  * @return void
  * @access public
  */
-	public function initialize(Controller $controller) {
-		$this->_methods = $controller->methods;
+	public function initialize(Controller $Controller) {
+		$this->_methods = $Controller->methods;
 	}
 
 /**
@@ -97,18 +97,18 @@ class BcReplacePrefixComponent extends Component {
  * @return	void
  * @access	public
  */
-	public function startup(Controller $controller) {
-		if (in_array($controller->action, $this->_methods)) {
+	public function startup(Controller $Controller) {
+		if (in_array($Controller->action, $this->_methods)) {
 			return;
 		}
 
-		if (!isset($controller->params['prefix'])) {
+		if (!isset($Controller->request->params['prefix'])) {
 			$requestedPrefix = '';
 		} else {
-			$requestedPrefix = $controller->params['prefix'];
+			$requestedPrefix = $Controller->request->params['prefix'];
 		}
 
-		$pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $controller->action);
+		$pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $Controller->action);
 
 		if (!in_array($pureAction, $this->allowedPureActions)) {
 			return;
@@ -117,21 +117,20 @@ class BcReplacePrefixComponent extends Component {
 			return;
 		}
 
-		$controller->action = $this->replacedPrefix . '_' . $pureAction;
-		$controller->layoutPath = $this->replacedPrefix;	// Baserに依存
-		$controller->subDir = $this->replacedPrefix;		// Baserに依存
+		$Controller->action = $this->replacedPrefix . '_' . $pureAction;
+		$Controller->layoutPath = $this->replacedPrefix;	// Baserに依存
+		$Controller->subDir = $this->replacedPrefix;		// Baserに依存
 
 		if ($requestedPrefix != $this->replacedPrefix) {
 			// viewファイルが存在すればリクエストされたプレフィックスを優先する
 			$existsLoginView = false;
-			$viewPaths = $this->getViewPaths($controller);
+			$viewPaths = $this->getViewPaths($Controller);
 			$prefixPath = str_replace('_', DS, $requestedPrefix);
-			$controllerName = Inflector::underscore($controller->name);
 			foreach ($viewPaths as $path) {
 				if ($prefixPath) {
-					$file = $path . $controllerName . DS . $prefixPath . DS . $pureAction . $controller->ext;
+					$file = $path . $Controller->name . DS . $prefixPath . DS . $pureAction . $Controller->ext;
 				} else {
-					$file = $path . $controllerName . DS . $pureAction . $controller->ext;
+					$file = $path . $Controller->name . DS . $pureAction . $Controller->ext;
 				}
 				if (file_exists($file)) {
 					$existsLoginView = true;
@@ -140,8 +139,8 @@ class BcReplacePrefixComponent extends Component {
 			}
 
 			if ($existsLoginView) {
-				$controller->subDir = $prefixPath;
-				$controller->layoutPath = $prefixPath;
+				$Controller->subDir = $prefixPath;
+				$Controller->layoutPath = $prefixPath;
 			}
 		}
 	}
@@ -153,15 +152,10 @@ class BcReplacePrefixComponent extends Component {
  * @return array paths
  * @access private
  */
-	public function getViewPaths($controller) {
-		$paths = App::path('View');
-
-		if (!empty($controller->theme)) {
-			$count = count($paths);
-			for ($i = 0; $i < $count; $i++) {
-				$themePaths[] = $paths[$i] . 'theme' . DS . $controller->theme . DS;
-			}
-			$paths = array_merge($themePaths, $paths);
+	public function getViewPaths($Controller) {
+		$paths = array_merge(App::path('View', $Controller->plugin), App::path('View'));
+		if (!empty($Controller->theme)) {
+			array_unshift($paths, WWW_ROOT . 'theme' . DS . $Controller->theme . DS);
 		}
 		return $paths;
 	}
