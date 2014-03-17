@@ -136,14 +136,12 @@ class UsersController extends AppController {
 			$this->notFound();
 		}
 
-		if (!$this->BcAuth->login()) {
-			$this->setMessage('アカウント名、パスワードが間違っています。', true);
-		}
-		
-		$user = $this->BcAuth->user();
-		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-
 		if ($this->request->data) {
+			if (!$this->BcAuth->login()) {
+				$this->setMessage('アカウント名、パスワードが間違っています。', true);
+			}
+			$user = $this->BcAuth->user();
+			$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 			if ($user) {
 				if (!empty($this->request->data[$userModel]['saved'])) {
 					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
@@ -159,6 +157,8 @@ class UsersController extends AppController {
 				$BcBaser = new BcBaserHelper(new View());
 				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 			}
+		} else {
+			$user = $this->BcAuth->user();
 		}
 
 		if ($user) {
