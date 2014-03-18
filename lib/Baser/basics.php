@@ -852,3 +852,20 @@ function aa() {
 	}
 	return $a;
 }
+
+/**
+ * 日本語ファイル名対応版basename
+ * 
+ * @param string $str
+ * @param string $suffix
+ * @return type
+ */
+function mb_basename($str, $suffix=null){
+  $tmp = preg_split('/[\/\\\\]/', $str);
+  $res = end($tmp);
+  if(strlen($suffix)){
+    $suffix = preg_quote($suffix);
+    $res = preg_replace("/({$suffix})$/u", "", $res);
+  }
+  return $res;
+}
