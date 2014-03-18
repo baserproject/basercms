@@ -1934,7 +1934,10 @@ END_FLASH;
 			$tag = '';
 			for ($i = 1; $i <= $num; $i++) {
 				$options['num'] = $i;
-				$tag .= '<li>' . $this->_getThemeImage('main_image', $options) . '</li>' . "\n";
+				$themeImage = $this->_getThemeImage('main_image', $options);
+				if($themeImage) {
+					$tag .= '<li>' . $themeImage . '</li>' . "\n";
+				}
 			}
 			echo '<ul id="' . $id . '">' . "\n" . $tag . "\n" . '</ul>';
 		} else {
