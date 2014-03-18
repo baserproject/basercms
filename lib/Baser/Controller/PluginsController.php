@@ -91,17 +91,15 @@ class PluginsController extends AppController {
 
 		// プラグインフォルダーのチェックを行う。
 		$pluginInfos = array();
-		$Folder = new Folder(APP . 'Plugin' . DS);
-		$files = $Folder->read(true, true, true);
-		foreach ($files[0] as $file) {
-			$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);
+		$paths = App::path('Plugin');
+		foreach($paths as $path) {
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, true);
+			foreach ($files[0] as $file) {
+				$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);
+			}
 		}
-		$Folder = new Folder(BASER_PLUGINS);
-		$files = $Folder->read(true, true, true);
-		foreach ($files[0] as $file) {
-			$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file, true);
-		}
-
+		
 		$pluginInfos = array_values($pluginInfos); // Set::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Set::sortの為、逆順に変更
 		$pluginInfos = Set::sort($pluginInfos, '{n}.Plugin.status', 'desc');
@@ -121,7 +119,7 @@ class PluginsController extends AppController {
  * @param string $file
  * @return array 
  */
-	protected function _getPluginInfo($datas, $file, $core = false) {
+	protected function _getPluginInfo($datas, $file) {
 		$plugin = basename($file);
 		$pluginData = array();
 		$exists = false;
@@ -135,7 +133,9 @@ class PluginsController extends AppController {
 
 		// プラグインのバージョンを取得
 		$corePlugins = Configure::read('BcApp.corePlugins');
+		$core = false;
 		if (in_array($plugin, $corePlugins)) {
+			$core = true;
 			$version = $this->getBaserVersion();
 		} else {
 			$version = $this->getBaserVersion($plugin);
@@ -245,18 +245,19 @@ class PluginsController extends AppController {
  * @access private
  */
 	private function __deletePluginFile($pluginName) {
-		$appPath = APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
-		$baserPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+		$paths = App::path('Plugin');
+		foreach($paths as $path) {
+			$pluginPath = $path . $pluginName;
+			$path .= $pluginName . DS . 'Config' . DS . 'sql' . DS;
+			if(is_dir($path)) {
+				break;
+			}
+		}
+		
 		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
 		$folder = new Folder();
 		$folder->delete($tmpPath);
 		$folder->create($tmpPath);
-
-		if (is_dir($appPath)) {
-			$path = $appPath;
-		} else {
-			$path = $baserPath;
-		}
 
 		// インストール用スキーマをdropスキーマとして一時フォルダに移動
 		$folder = new Folder($path);
@@ -276,7 +277,7 @@ class PluginsController extends AppController {
 		$this->Plugin->loadSchema('plugin', $tmpPath);
 
 		// プラグインフォルダを削除
-		$folder->delete(APP . 'Plugin' . DS . $pluginName);
+		$folder->delete($pluginPath);
 
 		// 一時フォルダを削除
 		$folder->delete($tmpPath);
@@ -294,21 +295,16 @@ class PluginsController extends AppController {
 		$dbInited = false;
 		$installMessage = '';
 		
+		$paths = App::path('Plugin');
+
 		if (!$this->request->data) {
 
-			// TODO 互換性のため古いパスも対応
-			$oldAppConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config' . DS . 'config.php';
-			$appConfigPath = APP . DS . 'Plugin' . DS . $name . DS . 'Config.php';
-			if (!file_exists($appConfigPath)) {
-				$appConfigPath = $oldAppConfigPath;
-			}
-			$baserConfigPath = BASER_PLUGINS . $name . DS . 'config.php';
-			if (file_exists($appConfigPath)) {
-				include $appConfigPath;
-			} elseif (file_exists($oldAppConfigPath)) {
-				include $oldAppConfigPath;
-			} elseif (file_exists($baserConfigPath)) {
-				include $baserConfigPath;
+			foreach($paths as $path) {
+				$path .= $name . DS . 'config.php';
+				if (file_exists($path)) {
+					include $path;
+					break;
+				}
 			}
 
 			$this->request->data['Plugin']['name'] = $name;
@@ -334,10 +330,12 @@ class PluginsController extends AppController {
 			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
 
 			if (empty($data['Plugin']['db_inited'])) {
-				if (file_exists(APP . 'Plugin' . DS . $name . DS . 'Config' . DS . 'init.php')) {
-					include APP . 'Plugin' . DS . $name . DS . 'Config' . DS . 'init.php';
-				} elseif (file_exists(BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php')) {
-					include BASER_PLUGINS . $name . DS . 'Config' . DS . 'init.php';
+				foreach($paths as $path) {
+					$path .= $name . DS . 'Config' . DS . 'init.php';
+					if (file_exists($path)) {
+						include $path;
+						break;
+					}
 				}
 			}
 

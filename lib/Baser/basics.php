@@ -586,6 +586,7 @@ function amr($a, $b) {
  *
  * @param string $name
  * @return boolean
+ * @deprecated since version 3.0.2
  */
 function loadPluginConfig($name) {
 
@@ -593,10 +594,7 @@ function loadPluginConfig($name) {
 		return false;
 	}
 	list($plugin, $file) = explode('.', $name);
-	$pluginPaths = array(
-		APP . 'Plugin' . DS,
-		BASER_PLUGINS
-	);
+	$pluginPaths = App::path('Plugin');
 	$config = null;
 	foreach ($pluginPaths as $pluginPath) {
 		$configPath = $pluginPath . $plugin . DS . 'Config' . DS . $file . '.php';
@@ -720,13 +718,16 @@ function getVersion($plugin = '') {
 	if (!$plugin || in_array($plugin, $corePlugins)) {
 		$path = BASER . 'VERSION.txt';
 	} else {
-		$appPath = APP . 'Plugin' . DS . $plugin . DS . 'VERSION.txt';
-		$baserPath = BASER_PLUGINS . $plugin . DS . 'VERSION.txt';
-		if (file_exists($appPath)) {
-			$path = $appPath;
-		} elseif (file_exists($baserPath)) {
-			$path = $baserPath;
-		} else {
+		$paths = App::path('Plugin');
+		$exists = false;
+		foreach($paths as $path) {
+			$path .=  $plugin . DS . 'VERSION.txt';
+			if (file_exists($path)) {
+				$exists = true;
+				break;
+			}
+		}
+		if(!$exists) {
 			return false;
 		}
 	}

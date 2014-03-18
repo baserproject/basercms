@@ -281,18 +281,16 @@ class BcAppModel extends Model {
  * @return 	boolean
  */
 	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
+		
+		$paths = App::path('Plugin');
+		
 		// 初期データフォルダを走査
 		if (!$pluginName) {
 			$path = BASER_CONFIGS . 'sql';
 		} else {
-			$schemaPaths = array(
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
-				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql'
-			);
-			$path = '';
-			foreach ($schemaPaths as $schemaPath) {
-				if (is_dir($schemaPath)) {
-					$path = $schemaPath;
+			foreach ($paths as $path) {
+				$path .=  $pluginName . DS . 'Config' . DS . 'sql';
+				if (is_dir($path)) {
 					break;
 				}
 			}
@@ -302,15 +300,9 @@ class BcAppModel extends Model {
 		}
 
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			$dataPaths = array(
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
-				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default'
-			);
-			$path = '';
-			foreach ($dataPaths as $dataPath) {
-				if (is_dir($dataPath)) {
-					$path = $dataPath;
+			foreach ($paths as $path) {
+				$path .=  $pluginName . DS . 'Config' . DS . 'data' . DS . 'default';
+				if (is_dir($path)) {
 					break;
 				}
 			}

@@ -406,13 +406,15 @@ class UpdatersController extends AppController {
 				return array();
 			}
 		} else {
-			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			if (is_dir($appPath)) {
-				$path = $appPath;
-			} elseif (is_dir($baserPath)) {
-				$path = $baserPath;
-			} else {
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if (is_dir($path)) {
+					break;
+				}
+				$path = null;
+			}
+			if(!$path) {
 				return array();
 			}
 		}
@@ -449,15 +451,16 @@ class UpdatersController extends AppController {
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
 		} else {
-			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			if (is_dir($appPath)) {
-				return $appPath;
-			} elseif (is_dir($baserPath)) {
-				return $baserPath;
-			} else {
-				return false;
+			
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if(is_dir($path)) {
+					return $path;
+				}
 			}
+			return false;
+			
 		}
 	}
 
@@ -612,26 +615,25 @@ class UpdatersController extends AppController {
  * @return string $path or ''
  */
 	protected function _getUpdatePath($version, $plugin = '') {
-		$path = '';
-		$appPluginPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
-		$baserPluginPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
-		$corePath = BASER_CONFIGS . 'update' . DS . $version;
+		
 		if ($plugin) {
-			if (is_dir($appPluginPath)) {
-				$path = $appPluginPath;
-			} elseif ($baserPluginPath) {
-				$path = $baserPluginPath;
-			} else {
-				return false;
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS . $version;
+				if(is_dir($path)) {
+					return $path;
+				}
 			}
+			return false;
 		} else {
+			$corePath = BASER_CONFIGS . 'update' . DS . $version;
 			if (is_dir($corePath)) {
-				$path = $corePath;
+				return $corePath;
 			} else {
 				return false;
 			}
 		}
-		return $path;
+		
 	}
 
 /**

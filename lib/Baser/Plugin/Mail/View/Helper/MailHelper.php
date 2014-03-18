@@ -88,18 +88,14 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getLayoutTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS,
-			APP . 'View' . DS . 'Layouts' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS,
-			BASER_VIEWS . 'Layouts' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= 'Layouts' . DS;
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -132,17 +128,14 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getFormTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Mail' . DS,
-			APP . 'View' . DS . 'Mail' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Mail' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Mail' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatePath) {
+			$templatePath .= 'Mail' . DS;
 			$folder = new Folder($templatePath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -174,18 +167,14 @@ class MailHelper extends AppHelper {
  * @access public
  */
 	public function getMailTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			APP . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			BASER_VIEWS . 'Emails' . DS . 'text' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Emails' . DS . 'text' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= 'Emails' . DS . 'text' . DS;
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
 			$foler = null;

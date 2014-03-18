@@ -103,10 +103,6 @@ class BcBasicsTest extends CakeTestCase {
 		$this->markTestIncomplete();
 	}
 
-	public function testLoadPluginConfig() {
-		$this->markTestIncomplete();
-	}
-
 	public function testAddSessionId() {
 		$this->markTestIncomplete();
 	}
