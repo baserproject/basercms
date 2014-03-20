@@ -783,6 +783,32 @@ class Message extends MailAppModel {
 
 		return $messages;
 	}
+	
+/**
+ * メール受信テーブルを全て再構築
+ * 
+ * @return boolean
+ */
+	public function reconstructionAll() {
+		
+		// メール受信テーブルの作成
+		$PluginContent = ClassRegistry::init('PluginContent');
+		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
+
+		$result = true;
+		foreach ($pluginContents as $pluginContent) {
+			$this->dropTable($pluginContent['PluginContent']['name']);
+			if ($this->createTable($pluginContent['PluginContent']['name'])) {
+				if (!$this->construction($pluginContent['PluginContent']['content_id'])) {
+					$result = false;
+				}
+			} else {
+				$result = false;
+			}
+		}
+		return $result;
+		
+	}
 
 	
 /**

@@ -262,6 +262,7 @@ if (BC_INSTALLED) {
 App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'), array(BASER_PLUGINS))));
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
 	$plugins = getEnablePlugins();
 	$CakeEvent = CakeEventManager::instance();
 	foreach ($plugins as $plugin) {

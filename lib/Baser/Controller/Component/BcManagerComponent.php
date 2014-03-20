@@ -609,9 +609,30 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
+		if(!$this->reconstructionMessage()) {
+			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+			return false;
+		}
+		
 		return true;
 	}
 
+/**
+ * メール受信テーブルの再構築
+ * 
+ * @return boolean
+ */
+	public function reconstructionMessage() {
+		
+		CakePlugin::load('Mail');
+		App::uses('Message', 'Mail.Model');
+		$Message = new Message();
+		if (!$Message->reconstructionAll()) {
+			return false;
+		}
+		return true;
+		
+	}
 /**
  * 全ての初期データセットのリストを取得する
  * 
@@ -818,11 +839,13 @@ class BcManagerComponent extends Component {
 					$Page->fileSave = false;
 					$Page->contentSaving = false;
 					$Page->set($page);
-					$Page->save();
+					if(!$Page->save()) {
+						$result = false;
+					}
 				}
 			}
 		}
-		return true;
+		return $result;
 	}
 
 /**

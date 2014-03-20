@@ -4012,8 +4012,34 @@ class DboSource extends DataSource {
 				mb_convert_variables($appEncoding, $encoding, $record);
 			}
 			$values = array();
-			foreach ($record as $key => $value) {
-				$values[$head[$key]] = $value;
+			// 配列の添え字をフィールド名に変換
+			foreach ($_record as $key => $value) {
+				// 主キーでデータが空の場合はスキップ
+				if ($_head[$key] == $indexField && !$value) {
+					unset($head[$key]);
+					continue;
+				}
+				if ($_head[$key] == 'created' && !$value) {
+					$value = date('Y-m-d H:i:s');
+				}
+				if(isset($schema['tables'][$table][$_head[$key]])) {
+					$values[] = $this->value($value, $schema['tables'][$table][$_head[$key]]['type'], false);
+				} else {
+					unset($head[$key]);
+				}
+			}
+			$query = array(
+				'table' => $this->name($fullTableName),
+				'fields' => implode(', ', $head),
+				'values' => implode(', ', $values)
+			);
+			$sql = $this->renderStatement('create', $query);
+			try {
+				if (!$this->execute($sql)) {
+					return false;
+				}
+			} catch (Exception $e) {
+				return false;
 			}
 			$datas[] = $values;
 		}

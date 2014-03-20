@@ -149,21 +149,11 @@ class ThemesController extends AppController {
 		}
 
 		// メール受信テーブルの作成
-		$PluginContent = ClassRegistry::init('PluginContent');
-		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
-
 		App::uses('Message', 'Mail.Model');
 		$Message = new Message();
-		foreach ($pluginContents as $pluginContent) {
-			if ($Message->createTable($pluginContent['PluginContent']['name'])) {
-				if (!$Message->construction($pluginContent['PluginContent']['content_id'])) {
-					$result = false;
-					$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
-				}
-			} else {
-				$result = false;
-				$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
-			}
+		if (!$Message->reconstructionAll()) {
+			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+			$result = false;
 		}
 
 		clearAllCache();
