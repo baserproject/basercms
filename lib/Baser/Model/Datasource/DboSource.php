@@ -3966,11 +3966,14 @@ class DboSource extends DataSource {
 					if ($key == $indexField && !$value) {
 						continue;
 					}
-					$head[] = $this->name($key);
+					
 					if ($key == 'created' && !$value) {
 						$value = date('Y-m-d H:i:s');
 					}
-					$values[] = $this->value($value, $schema['tables'][$table][$key]['type'], false);
+					if(!empty($schema['tables'][$table][$key]['type'])) {
+						$head[] = $this->name($key);
+						$values[] = $this->value($value, $schema['tables'][$table][$key]['type'], false);
+					}
 				}
 				$query = array(
 					'table' => $fullTableName,

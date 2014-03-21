@@ -148,6 +148,11 @@ class ThemesController extends AppController {
 			}
 		}
 
+		// Filesをデプロイする
+		$this->BcManager->deployFilesAll($dbDataPattern);
+		
+		clearAllCache();
+		
 		// メール受信テーブルの作成
 		App::uses('Message', 'Mail.Model');
 		$Message = new Message();

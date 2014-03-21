@@ -266,7 +266,11 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$plugins = getEnablePlugins();
 	$CakeEvent = CakeEventManager::instance();
 	foreach ($plugins as $plugin) {
-		CakePlugin::load($plugin);
+		try {
+			CakePlugin::load($plugin);
+		} catch (Exception $e) {
+			continue;
+		}
 		$pluginPath = CakePlugin::path($plugin);
 		$config = array(
 			'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),

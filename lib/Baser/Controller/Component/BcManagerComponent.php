@@ -719,23 +719,19 @@ class BcManagerComponent extends Component {
 	}
 
 /**
- * 初期データを読み込む
+ * 初期データのパスを取得する
  * 
- * @param string $dbConfigKeyName
- * @param array $dbConfig
- * @param string $pattern
- * @param string $theme
- * @param string $plugin
- * @return boolean 
+ * @param string $theme テーマ名
+ * @param string $plugin プラグイン名
+ * @param string $pattern データパターン名
+ * @return boolean
  */
-	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
-		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
-
-		// CSVの場合ロックを解除しないとデータの投入に失敗する
-		if ($db->config['datasource'] == 'Database/BcCsv') {
-			$db->reconnect();
+	public function getDefaultDataPath($pattern, $plugin, $theme) {
+		
+		if(!$pattern) {
+			$pattern = 'default';
 		}
-
+		
 		if ($theme == 'core') {
 			if ($plugin == 'core') {
 				$paths = array(
@@ -764,24 +760,42 @@ class BcManagerComponent extends Component {
 			}
 		}
 
-		$pathExists = false;
 		foreach ($paths as $path) {
 			if (is_dir($path)) {
-				$pathExists = true;
+				return $path;
 				break;
 			}
 		}
+		
+		return false;
+		
+	}
+/**
+ * 初期データを読み込む
+ * 
+ * @param string $dbConfigKeyName
+ * @param array $dbConfig
+ * @param string $pattern
+ * @param string $theme
+ * @param string $plugin
+ * @return boolean 
+ */
+	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
+		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 
-		if (!$pathExists) {
+		// CSVの場合ロックを解除しないとデータの投入に失敗する
+		if ($db->config['datasource'] == 'Database/BcCsv') {
+			$db->reconnect();
+		}
+
+		$path = $this->getDefaultDataPath($pattern, $plugin, $theme);
+
+		if (!$path) {
 			$this->log("初期データフォルダが見つかりません。");
 			return false;
 		}
 
-		if ($plugin == 'core') {
-			$corePath = BASER_CONFIGS . 'data' . DS . 'default';
-		} else {
-			$corePath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default';
-		}
+		$corePath = $this->getDefaultDataPath('', $plugin, 'core');
 
 		$Folder = new Folder($corePath);
 		$files = $Folder->read(true, true);
@@ -848,6 +862,55 @@ class BcManagerComponent extends Component {
 		return $result;
 	}
 
+/**
+ * files を全てデプロイする
+ */
+	public function deployFilesAll($dataPattern) {
+		
+		if (!$dataPattern) {
+			$dataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+		}
+
+		if (strpos($dataPattern, '.') === false) {
+			$this->log("データパターンの形式が不正です。");
+			return false;
+		}
+		list($theme, $pattern) = explode('.', $dataPattern);
+		
+		$this->deployFiles($pattern, 'core', $theme);
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		foreach ($corePlugins as $corePlugin) {
+			$this->deployFiles($pattern, $corePlugin, $theme);
+		}	
+		
+	}
+	
+/**
+ * files をデプロイする
+ */
+	public function deployFiles($pattern, $plugin, $theme) {
+		
+		$paths = array(
+			$this->getDefaultDataPath($pattern, $plugin, $theme),
+			$this->getDefaultDataPath('', $plugin, 'core')
+		);
+		$webrootFiles = WWW_ROOT . 'files';
+		foreach($paths as $path) {
+			$path .= DS . 'files';
+			if(is_dir($path)) {
+				$Folder = new Folder();
+				$Folder->copy(array(
+					'to'	=> $webrootFiles,
+					'from'	=> $path,
+					'mode'	=> 0777,
+					'scheme'=> Folder::MERGE
+				));
+				break;
+			}
+		}
+			
+	}
+	
 /**
  * システムデータを初期化する
  * 

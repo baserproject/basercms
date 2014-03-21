@@ -797,7 +797,6 @@ class Message extends MailAppModel {
 
 		$result = true;
 		foreach ($pluginContents as $pluginContent) {
-			$this->dropTable($pluginContent['PluginContent']['name']);
 			if ($this->createTable($pluginContent['PluginContent']['name'])) {
 				if (!$this->construction($pluginContent['PluginContent']['content_id'])) {
 					$result = false;
