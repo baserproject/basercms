@@ -120,10 +120,23 @@ class ThemesController extends AppController {
 			$this->log($dbDataPattern . " の初期データのロードに失敗しました。");
 		}
 
-		/* コアプラグインデータ */
+		/* プラグインデータ */
 		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach ($corePlugins as $corePlugin) {
-			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $corePlugin, $excludes)) {
+		$path = BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern;
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true, false);
+		$plugins = array();
+		if($files[0]) {
+			foreach($files[0] as $file) {
+				if(!in_array($file, $corePlugins) && $file != 'files') {
+					$plugins[] = $file;
+				}
+			}
+		}
+		$plugins = array_merge($corePlugins, $plugins);
+		//p($plugins);
+		foreach ($plugins as $plugin) {
+			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
 				$result = false;
 				$this->log($dbDataPattern . " のプラグインの初期データのロードに失敗しました。");
 			}
@@ -462,12 +475,12 @@ class ThemesController extends AppController {
 		$excludes = array('plugins', 'dblogs', 'users', 'favorites');
 		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
 
-		/* コアプラグインのCSVを生成 */
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach ($corePlugins as $corePlugin) {
-			$Folder->create($tmpDir . $corePlugin);
-			emptyFolder($tmpDir . $corePlugin);
-			$this->_writeCsv('plugin', $corePlugin, $tmpDir . $corePlugin . DS);
+		/* プラグインのCSVを生成 */
+		$plugins = CakePlugin::loaded();
+		foreach ($plugins as $plugin) {
+			$Folder->create($tmpDir . $plugin);
+			emptyFolder($tmpDir . $plugin);
+			$this->_writeCsv('plugin', $plugin, $tmpDir . $plugin . DS);
 		}
 
 		/* site_configsの編集 (email / google_analytics_id / version) */

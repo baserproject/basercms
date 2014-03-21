@@ -796,13 +796,18 @@ class BcManagerComponent extends Component {
 		}
 
 		$corePath = $this->getDefaultDataPath('', $plugin, 'core');
-
-		$Folder = new Folder($corePath);
-		$files = $Folder->read(true, true);
-		$targetTables = $files[1];
-
+		
+		$targetTables = array();
+		if($corePath) {
+			$Folder = new Folder($corePath);
+			$files = $Folder->read(true, true);
+			$targetTables = $files[1];
+		}
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true, true);
+		if(!$targetTables) {
+			$targetTables = $files[1];
+		}
 
 		$result = true;
 
