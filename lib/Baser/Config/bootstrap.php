@@ -42,6 +42,7 @@ App::build(array(
 	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
 	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
 	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
 	'Vendor' => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
 	'Locale' => array_merge(App::path('Locale'), array(BASER_LOCALES)),
 	'Lib' => array_merge(App::path('Lib'), array(BASER_LIBS)),
@@ -259,7 +260,6 @@ if (BC_INSTALLED) {
  * 
  * カレントテーマのプラグインも読み込む
  */
-App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'), array(BASER_PLUGINS))));
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
