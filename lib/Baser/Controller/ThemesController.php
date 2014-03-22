@@ -562,7 +562,7 @@ class ThemesController extends AppController {
 				if (!$db->writeCsv(array(
 						'path' => $path . $table . '.csv',
 						'encoding' => 'SJIS',
-						'init' => true,
+						'init' => false,
 						'plugin' => ($plugin == 'core') ? null : $plugin
 					))) {
 					$result = false;

@@ -1066,9 +1066,11 @@ class BcManagerComponent extends Component {
 			$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		}
 
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach ($corePlugins as $corePlugin) {
-			if (!$this->resetTables('plugin', $dbConfig, $corePlugin, $excludes)) {
+		$Plugin = ClassRegistry::init('Plugin');
+		$plugins = $Plugin->find('all');
+		$plugins = Set::extract('/Plugin/name', $plugins);
+		foreach ($plugins as $plugin) {
+			if (!$this->resetTables('plugin', $dbConfig, $plugin, $excludes)) {
 				$result = false;
 			}
 		}
