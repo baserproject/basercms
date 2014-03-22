@@ -134,7 +134,6 @@ class ThemesController extends AppController {
 			}
 		}
 		$plugins = array_merge($corePlugins, $plugins);
-		//p($plugins);
 		foreach ($plugins as $plugin) {
 			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
 				$result = false;
@@ -515,6 +514,23 @@ class ThemesController extends AppController {
  * @access protected
  */
 	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
+		
+		$pluginTables = array();
+		if($plugin != 'core') {
+			$pluginPath = CakePlugin::path($plugin);
+			$pluginPath .= 'Config' . DS . 'sql';
+			$Folder = new Folder($pluginPath);
+			$files = $Folder->read(true, true, false);
+			$pluginTables = $files[1];
+			foreach($pluginTables as $key => $pluginTable) {
+				if(preg_match('/^(.+)\.php$/', $pluginTable, $matches)) {
+					$pluginTables[$key] = $matches[1];
+				} else {
+					unset($pluginTables[$key]);
+				}
+			}
+		}
+		
 		$pluginKey = Inflector::underscore($plugin);
 		$db = ConnectionManager::getDataSource($configKeyName);
 		$db->cacheSources = false;
@@ -532,7 +548,8 @@ class ThemesController extends AppController {
 
 				if ($pluginKey != 'core') {
 					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
-					if (!preg_match("/^" . $pluginKey . "_([^_].+)$/", $table)) {
+					//if (!preg_match("/^" . $pluginKey . "_([^_].+)$/", $table)) {
+					if(!in_array($table, $pluginTables)) {
 						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
 						if ($pluginKey != 'mail') {
 							continue;
