@@ -18,12 +18,13 @@
  * @license			http://basercms.net/license/index.html
  */
 $types = array(
-	'Layouts' => 'レイアウト',
-	'Elements' => 'エレメント',
-	'etc' => 'コンテンツ',
-	'css' => 'CSS',
-	'img' => 'イメージ',
-	'js' => 'Javascript'
+	'Layouts'	=> 'レイアウト',
+	'Elements'	=> 'エレメント',
+	'Emails'	=> 'Eメール',
+	'etc'		=> 'コンテンツ',
+	'css'		=> 'CSS',
+	'img'		=> 'イメージ',
+	'js'		=> 'Javascript'
 );
 if ($theme == 'core') {
 	$themeFiles = array(0 => array('name' => '', 'title' => 'コア'));

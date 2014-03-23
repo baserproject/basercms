@@ -51,12 +51,15 @@ class ThemeFilesController extends AppController {
  * @var array
  * @public protected
  */
-	protected $_tempalteTypes = array('Layouts' => 'レイアウトテンプレート',
-		'Elements' => 'エレメントテンプレート',
-		'etc' => 'コンテンツテンプレート',
-		'css' => 'スタイルシート',
-		'js' => 'Javascript',
-		'img' => 'イメージ');
+	protected $_tempalteTypes = array(
+		'Layouts'	=> 'レイアウトテンプレート',
+		'Elements'	=> 'エレメントテンプレート',
+		'Emails'	=> 'Eメールテンプレート',
+		'etc'		=> 'コンテンツテンプレート',
+		'css'		=> 'スタイルシート',
+		'js'		=> 'Javascript',
+		'img'		=> 'イメージ'
+	);
 
 /**
  * コンポーネント
@@ -134,9 +137,21 @@ class ThemeFilesController extends AppController {
 			$themeFiles = array();
 			$folders = array();
 			$excludeFolderList = array();
-			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php');
+			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php', 'AppView.php', 'BcAppView.php');
 			if (!$path) {
-				$excludeFolderList = array('css', 'Elements', 'img', 'Layouts', 'Pages', '_notes', 'Helper', 'js');
+				$excludeFolderList = array(
+					'Layouts', 
+					'Elements', 
+					'Emails',
+					'Pages', 
+					'Helper', 
+					'Config',
+					'Plugin',					
+					'img', 
+					'css',
+					'js',
+					'_notes'
+				);
 			}
 			foreach ($files[0] as $file) {
 				if (!in_array($file, $excludeFolderList)) {

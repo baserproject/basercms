@@ -175,9 +175,9 @@ class MailHelper extends AppHelper {
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
 			$templatesPath .= 'Emails' . DS . 'text' . DS;
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
+			$Folder = new Folder($templatesPath);
+			$files = $Folder->read(true, true);
+			$Folder = null;
 			if ($files[1]) {
 				if ($_templates) {
 					$_templates = am($_templates, $files[1]);
