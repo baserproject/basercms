@@ -40,7 +40,7 @@
 				echo $field['before_attachment'];
 			}
 			if (!$field['no_send']) {
-				echo $this->BcText->autoLink(nl2br($this->Maildata->control(
+				echo nl2br($this->BcText->autoLink($this->Maildata->control(
 							$mailField['MailField']['type'], $message['Message'][$mailField['MailField']['field_name']], $this->Mailfield->getOptions($mailField['MailField'])
 				)));
 			}
