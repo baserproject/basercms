@@ -823,7 +823,6 @@ class BcManagerComponent extends Component {
 					$table = basename($file, '.csv');
 					if ($table == $targetTable) {
 						if (!$db->loadCsv(array('path' => $file, 'encoding' => 'SJIS'))) {
-							return false;
 							$this->log($file . ' の読み込みに失敗。');
 							$result = false;
 						} else {
@@ -1090,7 +1089,21 @@ class BcManagerComponent extends Component {
 		$dbConfig = $db->config;
 		$sources = $db->listSources();
 		$result = true;
-		$plugin = Inflector::underscore($plugin);
+		
+		$pluginTables = array();
+		if($plugin != 'core') {
+			$path = CakePlugin::path($plugin);
+			$path .= 'Config' . DS . 'sql';
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, false);
+			if(empty($files[1])) {
+				return true;
+			}
+			foreach($files[1] as $file) {
+				$pluginTables[] = preg_replace('/\.php/', '', $file);
+			}
+		}
+				
 		foreach ($sources as $source) {
 			if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $source, $matches)) {
 				$table = $matches[1];
@@ -1100,9 +1113,9 @@ class BcManagerComponent extends Component {
 					}
 				} else {
 					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
-					if (!preg_match("/^" . $plugin . "_([^_].+)$/", $table)) {
+					if (!in_array($table, $pluginTables)) {
 						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
-						if ($plugin != 'mail') {
+						if ($plugin != 'Mail') {
 							continue;
 						} elseif (!preg_match("/messages$/", $table)) {
 							continue;
