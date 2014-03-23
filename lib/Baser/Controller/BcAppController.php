@@ -228,7 +228,23 @@ class BcAppController extends Controller {
 				$this->notFound();
 			}
 		}
-
+		
+		// $this->request->here の調整
+		// index 省略時の場合は、indexを追加
+		// .html がある場合は削除
+		// $this->request->here は、ビューキャッシュの命名規則に影響する為、
+		// 同一ページによる複数キャッシュの生成を防ぐ
+		if($this->name == 'Pages') {
+			if($this->request->params['pass'][count($this->request->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $this->request->here)) {
+				$this->request->here .= 'index';
+			}
+			$this->request->here = preg_replace('/\.html$/', '', $this->request->here);
+		} else {
+			if($this->request->action == 'index' && !preg_match('/\/index$/', $this->request->here)) {
+				$this->request->here .= 'index';
+			}
+		}
+		
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
