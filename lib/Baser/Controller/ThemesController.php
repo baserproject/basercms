@@ -448,16 +448,57 @@ class ThemesController extends AppController {
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
-		if (!$this->Page->createAllPageTemplate()) {
-			$this->setMessage(
-				'テーマ変更中にページテンプレートの生成に失敗しました。<br />' .
-				'「Pages」フォルダに書き込み権限が付与されていない可能性があります。<br />' .
-				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。', true);
-		} else {
-			$this->setMessage('テーマ「' . $theme . '」を適用しました。');
-		}
 		$this->BcManager->deployAdminAssets();
+		
+		$info = array();
+		$themePath = BASER_THEMES . $theme . DS;
+		
+		$Folder = new Folder($themePath . 'Plugin');
+		$files = $Folder->read(true, true, false);
+		if(!empty($files[0])) {
+			$info = array_merge($info, array(
+				'このテーマはプラグインを同梱しています。',
+				'テーマを正常に動作させる為には、初期データ読込の実行前に、下記のプラグインを有効化してください。'
+			));
+			foreach($files[0] as $file) {
+				$info[] = '	・' . $file;
+			}
+		}
+		
+		$Folder = new Folder($themePath . 'Config' . DS . 'data');
+		$files = $Folder->read(true, true, false);
+		if(!empty($files[0])) {
+			if($info) {
+				$info = array_merge($info, array(''));
+			}
+			$info = array_merge($info, array(
+				'このテーマは初期データを保有しています。',
+				'テーマにあったデータを適用するには、初期データ読込を実行してください。',
+			));
+
+		}
+		
+		if (!$this->Page->createAllPageTemplate()) {
+			$message = array(
+				'テーマ変更中にページテンプレートの生成に失敗しました。',
+				'「Pages」フォルダに書き込み権限が付与されていない可能性があります。',
+				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+			);
+			if($info) {
+				$message = array_merge($message, array(''), $info );
+			}
+			$this->setMessage(implode('<br />', $message), true);
+		} else {
+			$message = array('テーマ「' . $theme . '」を適用しました。');
+			if($info) {
+				$message = array_merge($message, array(''), $info );
+			}
+			
+			$this->setMessage(implode('<br />', $message));
+		}
+		
 		$this->redirect(array('action' => 'index'));
+		
 	}
 
 /**
