@@ -2089,5 +2089,22 @@ END_FLASH;
 	public function themeUrl() {
 		echo $this->getThemeUrl();
 	}
+
+/**
+ * ベースとなるURLを取得する
+ * サブフォルダやスマートURLについて考慮されている事が前提
+ * @return string
+ */
+	public function getBaseUrl() {
+		return $this->base . '/';
+	}
+	
+/**
+ * ベースとなるURLを出力する
+ * サブフォルダやスマートURLについて考慮されている事が前提
+ */
+	public function baseUrl() {
+		echo $this->getBaseUrl();
+	}
 	
 }
