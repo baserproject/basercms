@@ -241,7 +241,7 @@ class Message extends MailAppModel {
 		// エラーが発生しているかチェック
 		foreach ($dists as $key => $dist) {
 			foreach ($dist as $data) {
-				if (isset($this->validationErrors[$data])) {
+				if (isset($this->validationErrors[$data]) && isset($this->validate[$data])) {
 					// VALID_NOT_EMPTY以外は形式エラーとする
 					if (key($this->validate[$data]) != 'notEmpty') {
 						$this->invalidate($key);
