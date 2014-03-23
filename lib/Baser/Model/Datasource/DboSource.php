@@ -1506,7 +1506,7 @@ class DboSource extends DataSource {
 
 		if ($linkModel === null) {
 			return $this->buildStatement(
-					array(
+				array(
 					'fields' => array_unique($queryData['fields']),
 					'table' => $this->fullTableName($model),
 					'alias' => $modelAlias,
@@ -1516,7 +1516,8 @@ class DboSource extends DataSource {
 					'conditions' => $queryData['conditions'],
 					'order' => $queryData['order'],
 					'group' => $queryData['group']
-					), $model
+				),
+				$model
 			);
 		}
 		if ($external && !empty($assocData['finderQuery'])) {
@@ -1537,7 +1538,8 @@ class DboSource extends DataSource {
 			case 'hasOne':
 			case 'belongsTo':
 				$conditions = $this->_mergeConditions(
-					$assocData['conditions'], $this->getConstraint($type, $model, $linkModel, $association, array_merge($assocData, compact('external', 'self')))
+					$assocData['conditions'],
+					$this->getConstraint($type, $model, $linkModel, $association, array_merge($assocData, compact('external', 'self')))
 				);
 
 				if (!$self && $external) {
@@ -1568,7 +1570,7 @@ class DboSource extends DataSource {
 					if (!empty($assocData['order'])) {
 						$queryData['order'][] = $assocData['order'];
 					}
-					if (!in_array($join, $queryData['joins'])) {
+					if (!in_array($join, $queryData['joins'], true)) {
 						$queryData['joins'][] = $join;
 					}
 					return true;
@@ -1621,10 +1623,10 @@ class DboSource extends DataSource {
 					'order' => $assocData['order'],
 					'group' => null,
 					'joins' => array(array(
-							'table' => $joinTbl,
-							'alias' => $joinAssoc,
-							'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $association)
-						))
+						'table' => $joinTbl,
+						'alias' => $joinAssoc,
+						'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $association)
+					))
 				);
 				break;
 		}
@@ -2738,7 +2740,7 @@ class DboSource extends DataSource {
 			if (is_object($model) && $model->isVirtualField($key)) {
 				$key = '(' . $this->_quoteFields($model->getVirtualField($key)) . ')';
 			}
-			list($alias, $field) = pluginSplit($key);
+			list($alias) = pluginSplit($key);
 			if (is_object($model) && $alias !== $model->alias && is_object($model->{$alias}) && $model->{$alias}->isVirtualField($key)) {
 				$key = '(' . $this->_quoteFields($model->{$alias}->getVirtualField($key)) . ')';
 			}
@@ -2836,7 +2838,7 @@ class DboSource extends DataSource {
 			'int' => 1, 'tinyint' => 1, 'smallint' => 1, 'mediumint' => 1, 'integer' => 1, 'bigint' => 1
 		);
 
-		list($real, $type, $length, $offset, $sign, $zerofill) = $result;
+		list($real, $type, $length, $offset, $sign) = $result;
 		$typeArr = $type;
 		$type = $type[0];
 		$length = $length[0];
@@ -3245,13 +3247,12 @@ class DboSource extends DataSource {
 		}
 
 		$isAllFloat = $isAllInt = true;
-		$containsFloat = $containsInt = $containsString = false;
+		$containsInt = $containsString = false;
 		foreach ($value as $valElement) {
 			$valElement = trim($valElement);
 			if (!is_float($valElement) && !preg_match('/^[\d]+\.[\d]+$/', $valElement)) {
 				$isAllFloat = false;
 			} else {
-				$containsFloat = true;
 				continue;
 			}
 			if (!is_int($valElement) && !preg_match('/^[\d]+$/', $valElement)) {
@@ -4181,6 +4182,17 @@ class DboSource extends DataSource {
  * @access protected
  */
 	protected function _dbEncToPhp($enc) {
+		if(is_array($enc)) {
+			if(!empty($enc)) {
+				if(is_array($enc[0])) {
+					$enc = $enc[0][0];
+				} else {
+					$enc = $enc[0];
+				}
+			} else {
+				$enc = '';
+			}
+		}
 		if (!empty($this->_encodingMaps[$enc])) {
 			return $this->_encodingMaps[$enc];
 		} else {

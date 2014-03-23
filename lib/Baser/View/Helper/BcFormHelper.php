@@ -698,13 +698,22 @@ DOC_END;
 		unset($options['hidden']);
 		// <<<
 
-		$options = $this->_initInputField($fieldName, $options);
-		$value = current($this->value());
+		$valueOptions = array();
+		if (isset($options['default'])) {
+			$valueOptions['default'] = $options['default'];
+			unset($options['default']);
+		}
 
-		if (!isset($options['value']) || empty($options['value'])) {
+		$options += array('required' => false);
+		$options = $this->_initInputField($fieldName, $options) + array('hiddenField' => true);
+		$value = current($this->value($valueOptions));
+		$output = '';
+		
+		if (empty($options['value'])) {
 			$options['value'] = 1;
-		} elseif (
-			(!isset($options['checked']) && !empty($value) && $value === $options['value']) ||
+		}
+		if (
+			(!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
 			!empty($options['checked'])
 		) {
 			$options['checked'] = 'checked';
@@ -712,44 +721,34 @@ DOC_END;
 
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
-		/* $hiddenOptions = array(
-		  'id' => $options['id'] . '_', 'name' => $options['name'],
-		  'value' => '0', 'secure' => false
-		  );
-		  if (isset($options['disabled']) && $options['disabled'] == true) {
-		  $hiddenOptions['disabled'] = 'disabled';
-		  }
-		  $output = $this->hidden($fieldName, $hiddenOptions); */
+		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
+		//if ($options['hiddenField']) {
 		// ---
-		if ($hidden) {
+		if ($hidden || $options['hiddenField']) {
+		// <<<
 			$hiddenOptions = array(
-				'id' => $options['id'] . '_', 'name' => $options['name'],
-				'value' => '0', 'secure' => false
+				'id' => $options['id'] . '_',
+				'name' => $options['name'],
+				'value' => ($options['hiddenField'] !== true ? $options['hiddenField'] : '0'),
+				'secure' => false
 			);
-			if (isset($options['disabled']) && $options['disabled'] == true) {
+			if (isset($options['disabled']) && $options['disabled']) {
 				$hiddenOptions['disabled'] = 'disabled';
 			}
 			$output = $this->hidden($fieldName, $hiddenOptions);
-		} else {
-			$output = '';
 		}
-		// <<<
+		unset($options['hiddenField']);
+		
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// >>> label を追加
-		/* return $this->output($output . sprintf(
-		  $this->Html->_tags['checkbox'],
-		  $options['name'],
-		  $this->_parseAttributes($options, array('name'), null, ' ')
-		  )); */
+		//return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
 		// ---
 		if (!empty($options['label'])) {
 			$label = '&nbsp;' . parent::label($fieldName, $options['label']);
 		} else {
 			$label = '';
 		}
-		return $this->output($output . sprintf(
-					$this->Html->_tags['checkbox'], $options['name'], $this->_parseAttributes($options, array('name'), null, ' ')
-			)) . $label;
+		return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null))) . $label;
 		// <<<
 	}
 

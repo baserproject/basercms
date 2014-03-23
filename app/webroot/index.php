@@ -68,6 +68,7 @@ if (!defined('ROOT')) {
 	}
 	// <<<
 }
+
 /**
  * The actual directory name for the "app".
  *

@@ -103,6 +103,8 @@ class Sqlserver extends DboSource {
 /**
  * Magic column name used to provide pagination support for SQLServer 2008
  * which lacks proper limit/offset support.
+ *
+ * @var string
  */
 	const ROW_COUNTER = '_cake_page_rownum_';
 
@@ -199,7 +201,8 @@ class Sqlserver extends DboSource {
 			return $cache;
 		}
 		$fields = array();
-		$table = $this->fullTableName($model, false);
+		$table = $this->fullTableName($model, false, false);
+		$schema = $model->schemaName;
 		$cols = $this->_execute(
 			"SELECT
 				COLUMN_NAME as Field,
@@ -210,7 +213,7 @@ class Sqlserver extends DboSource {
 				COLUMNPROPERTY(OBJECT_ID('" . $table . "'), COLUMN_NAME, 'IsIdentity') as [Key],
 				NUMERIC_SCALE as Size
 			FROM INFORMATION_SCHEMA.COLUMNS
-			WHERE TABLE_NAME = '" . $table . "'"
+			WHERE TABLE_NAME = '" . $table . "'" . ($schema ? " AND TABLE_SCHEMA = '" . $schema . "'" : '')
 		);
 		if (!$cols) {
 			throw new CakeException(__d('cake_dev', 'Could not describe table for %s', $table));

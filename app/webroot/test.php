@@ -2,8 +2,6 @@
 /**
  * Web Access Frontend for TestSuite
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -79,11 +77,11 @@ if (!defined('CAKE_CORE_INCLUDE_PATH')) {
 	if (function_exists('ini_set')) {
 		ini_set('include_path', ROOT . DS . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
 	}
-	if (!include ('Cake' . DS . 'bootstrap.php')) {
+	if (!include 'Cake' . DS . 'bootstrap.php') {
 		$failed = true;
 	}
 } else {
-	if (!include (CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php')) {
+	if (!include CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php') {
 		$failed = true;
 	}
 }
@@ -95,6 +93,13 @@ if (Configure::read('debug') < 1) {
 	throw new NotFoundException(__d('cake_dev', 'Debug setting does not allow access to this url.'));
 }
 
+// CUSTOMIZE MODIFY 2014/03/23 ryuring
+// >>>
+/*require_once CAKE . 'TestSuite' . DS . 'CakeTestSuiteDispatcher.php';
+
+CakeTestSuiteDispatcher::run();*/
+// ---
 require_once BASER_LIBS . 'TestSuite' . DS . 'BaserTestSuiteDispatcher.php';
 
 BaserTestSuiteDispatcher::run();
+// <<<

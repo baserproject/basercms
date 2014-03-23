@@ -232,6 +232,32 @@ class TranslateBehaviorTest extends CakeTestCase {
 			)
 		);
 		$this->assertEquals($expected, $result);
+
+		$result = $TestModel->field('title', array('TranslatedItem.id' => 1));
+		$expected = 'Title #1';
+		$this->assertEquals($expected, $result);
+
+		$result = $TestModel->read('title', 1);
+		$expected = array(
+			'TranslatedItem' => array(
+				'id' => 1,
+				'slug' => 'first_translated',
+				'locale' => 'eng',
+				'title' => 'Title #1',
+				'translated_article_id' => 1,
+			)
+		);
+		$this->assertEquals($expected, $result);
+
+		$result = $TestModel->read('id, title', 1);
+		$expected = array(
+			'TranslatedItem' => array(
+				'id' => 1,
+				'locale' => 'eng',
+				'title' => 'Title #1',
+			)
+		);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -1029,6 +1055,29 @@ class TranslateBehaviorTest extends CakeTestCase {
 		$TestModel->create();
 		$result = $TestModel->save($data);
 		$this->assertFalse(empty($result));
+	}
+
+/**
+ * test restoring fields after temporary binds method
+ *
+ * @return void
+ */
+	public function testFieldsRestoreAfterBind() {
+		$this->loadFixtures('Translate', 'TranslatedItem');
+
+		$TestModel = new TranslatedItem();
+
+		$translations = array('title' => 'Title');
+		$TestModel->bindTranslation($translations);
+
+		$result = $TestModel->find('first');
+		$this->assertArrayHasKey('Title', $result);
+		$this->assertArrayHasKey('content', $result['Title'][0]);
+		$this->assertArrayNotHasKey('title', $result);
+
+		$result = $TestModel->find('first');
+		$this->assertArrayNotHasKey('Title', $result);
+		$this->assertEquals('Title #1', $result['TranslatedItem']['title']);
 	}
 
 /**

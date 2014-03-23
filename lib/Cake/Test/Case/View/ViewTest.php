@@ -708,15 +708,17 @@ class ViewTest extends CakeTestCase {
  * Test that elements can have callbacks
  */
 	public function testElementCallbacks() {
-		$this->getMock('Helper', array(), array($this->View), 'ElementCallbackMockHtmlHelper');
+		$Helper = $this->getMock('Helper', array(), array($this->View), 'ElementCallbackMockHtmlHelper');
 		$this->View->helpers = array('ElementCallbackMockHtml');
 		$this->View->loadHelpers();
+
+		$this->View->Helpers->set('ElementCallbackMockHtml', $Helper);
+		$this->View->ElementCallbackMockHtml = $Helper;
 
 		$this->View->ElementCallbackMockHtml->expects($this->at(0))->method('beforeRender');
 		$this->View->ElementCallbackMockHtml->expects($this->at(1))->method('afterRender');
 
 		$this->View->element('test_element', array(), array('callbacks' => true));
-		$this->mockObjects[] = $this->View->ElementCallbackMockHtml;
 	}
 
 /**
@@ -1024,7 +1026,7 @@ class ViewTest extends CakeTestCase {
 		$this->assertRegExp("/<title>yo what up<\/title>/", $result);
 		$this->assertRegExp("/<p><a href=\"flash\">yo what up<\/a><\/p>/", $result);
 
-		$this->assertTrue($View->render(false, 'flash'));
+		$this->assertNull($View->render(false, 'flash'));
 
 		$this->PostsController->helpers = array('Session', 'Cache', 'Html');
 		$this->PostsController->constructClasses();

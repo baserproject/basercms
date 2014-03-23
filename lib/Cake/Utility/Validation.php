@@ -425,6 +425,12 @@ class Validation {
 				$regex = "/^{$sign}{$dnum}{$exp}$/";
 			}
 		}
+
+		// account for localized floats.
+		$data = localeconv();
+		$check = str_replace($data['thousands_sep'], '', $check);
+		$check = str_replace($data['decimal_point'], '.', $check);
+
 		return self::_check($check, $regex);
 	}
 
@@ -964,7 +970,7 @@ class Validation {
 			$check = $check['error'];
 		}
 
-		return $check === UPLOAD_ERR_OK;
+		return (int)$check === UPLOAD_ERR_OK;
 	}
 
 /**
