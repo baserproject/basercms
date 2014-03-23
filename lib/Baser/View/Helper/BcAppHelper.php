@@ -121,7 +121,7 @@ class BcAppHelper extends Helper {
 					}
 				} else {
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
-					if (property_exists($this->_View, 'adminTheme')) {
+					if (property_exists($this->_View, 'adminTheme') && $this->_View->adminTheme) {
 						$themePath = App::themePath($this->_View->adminTheme);
 						$path = $themePath . 'webroot' . DS . $file;
 						if (file_exists($path)) {
