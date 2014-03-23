@@ -105,7 +105,13 @@ if (!defined('APP_DIR')) {
  *
  */
 if (!defined('WEBROOT_DIR')) {
-	define('WEBROOT_DIR', basename(dirname($fileName)));
+	// CUSTOMIZE MODIFY 2014/03/23 ryuring
+	// webroot 配置の絡みがあるので webroot 固定とする
+	// >>>
+	//define('WEBROOT_DIR', basename(dirname($fileName)));
+	// ---
+	define('WEBROOT_DIR', 'webroot');
+	// <<<
 }
 if (!defined('WWW_ROOT')) {
 	define('WWW_ROOT', dirname($fileName) . DS);

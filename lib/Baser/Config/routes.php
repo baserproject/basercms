@@ -42,27 +42,6 @@ $request = null;
 if (!empty(self::$_requests[0])) {
 	$request = self::$_requests[0];
 }
-// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
-// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
-$dir = Configure::read('App.dir');
-$webroot = Configure::read('App.webroot');
-$baseUrl = Configure::read('App.baseUrl');
-if ($baseUrl) {
-	switch (BC_DEPLOY_PATTERN) {
-		case 1:
-			if (strpos($request->webroot, $dir) === false) {
-				$request->webroot .= $dir . '/';
-			}
-			if (strpos($request->webroot, $webroot) === false) {
-				$request->webroot .= $webroot . '/';
-			}
-			break;
-		case 2:
-			$baseDir = str_replace('index.php', '', $baseUrl);
-			$request->webroot = $baseDir;
-			break;
-	}
-}
 // パラメータ取得
 $parameter = getPureUrl($request);
 

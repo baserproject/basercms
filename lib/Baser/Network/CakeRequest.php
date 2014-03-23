@@ -345,21 +345,13 @@ class CakeRequest implements ArrayAccess {
 		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
 
 		// CUSTOMIZE MODIFY 2013/11/25 ryuring
+		// BC_DEPLOY_PATTERN が 2 の場合は、上位階層に、app/webroot/ という階層を持たない為、
+		// $this->webroot に、 app/webroot/ を付加しない
 		// >>>
 		//if (!empty($base) || !$docRootContainsWebroot) {
 		// ---
-
-		if (!$docRootContainsWebroot) {
-			// サブフォルダに対応
-			$docRootContainsWebroot = (strpos(WWW_ROOT, $dir . DS . $webroot));
-		}
-		if (!$docRootContainsWebroot) {
-			// BC_DEPLOY_PATTERN 2 に対応
-			$docRootContainsWebroot = (strpos(WWW_ROOT, $webroot));
-		}
-
-		if (!empty($base) && !$docRootContainsWebroot) {
-			// <<<
+		if ((!empty($base) || !$docRootContainsWebroot) && BC_DEPLOY_PATTERN != 2) {
+		// <<<
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/';
 			}
