@@ -873,7 +873,14 @@ class BcSqlite extends Sqlite {
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$schema = $Schema->read(array('models' => array($model)));
-		$schema = $schema['tables'][$_table];
+		if(!empty($schema['tables'][$_table])) {
+			$schema = $schema['tables'][$_table];
+		} else {
+			$schema = $schema['tables']['missing'][$_table];
+		}
+		if(!$schema) {
+			return false;
+		}
 
 		$this->execute('BEGIN TRANSACTION;');
 
