@@ -283,7 +283,7 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function deconstructEyeCatchSize($data) {
-		$data['BlogContent']['eye_catch_size'] = serialize(array(
+		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize(array(
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
 			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
@@ -304,7 +304,7 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function constructEyeCatchSize($data) {
-		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
+		$eyeCatchSize = BcUtil::unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];

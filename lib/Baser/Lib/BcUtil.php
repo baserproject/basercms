@@ -61,4 +61,25 @@ class BcUtil extends Object {
 		}
 	}
 
+/**
+ * シリアライズ
+ * 
+ * @param mixed $value
+ * @return string
+ */
+	public static function serialize($value) {
+		return base64_encode(serialize($value));
+	}
+
+/**
+ * アンシリアライズ
+ * base64_decode が前提
+ * 
+ * @param string $value
+ * @return mixed
+ */
+	public static function unserialize($value) {
+		return unserialize(base64_decode($value));
+	}
+
 }

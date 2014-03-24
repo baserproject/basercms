@@ -28,8 +28,8 @@ if (!empty($this->passedArgs['num'])) {
 		<h2><?php echo $name ?></h2>
 	<?php endif ?>
 	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
-	<?php if (unserialize($this->BcBaser->siteConfig['content_categories'])) : ?>
-		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
+	<?php if (BcUtil::unserialize($this->BcBaser->siteConfig['content_categories'])) : ?>
+		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 	<?php endif ?>
 	<?php echo $this->BcForm->input('Content.q') ?>
 	<?php echo $this->BcForm->submit('検索', array('div' => false)) ?>

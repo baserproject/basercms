@@ -161,7 +161,7 @@ class Feed extends FeedAppModel {
 
 			// ログインしてなければキャッシュを作成
 			if (!isset($_SESSION['Auth']['User'])) {
-				cache($cachePath, serialize($rssData));
+				cache($cachePath, BcUtil::serialize($rssData));
 				chmod(CACHE . $cachePath, 0666);
 			}
 
@@ -171,7 +171,7 @@ class Feed extends FeedAppModel {
 				return false;
 			}
 		} else {
-			return unserialize($rssData);
+			return BcUtil::unserialize($rssData);
 		}
 	}
 	

@@ -132,7 +132,7 @@ $(window).load(function() {
 			<p>
 				<small>このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	</small>
 			</p>
-			<?php $favorites = unserialize($this->request->data['UserGroup']['default_favorites']) ?>
+			<?php $favorites = BcUtil::unserialize($this->request->data['UserGroup']['default_favorites']) ?>
 			<?php if ($favorites): ?>
 			<ul class="clearfix">
 				<?php foreach ($favorites as $favorite): ?>

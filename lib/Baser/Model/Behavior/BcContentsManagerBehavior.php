@@ -140,8 +140,8 @@ class BcContentsManagerBehavior extends ModelBehavior {
 			}
 		}
 
-		$siteConfigs['SiteConfig']['content_categories'] = serialize($contentCategories);
-		$siteConfigs['SiteConfig']['content_types'] = serialize($contentTypes);
+		$siteConfigs['SiteConfig']['content_categories'] = BcUtil::serialize($contentCategories);
+		$siteConfigs['SiteConfig']['content_types'] = BcUtil::serialize($contentTypes);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		return $SiteConfig->saveKeyValue($siteConfigs);
 	}
