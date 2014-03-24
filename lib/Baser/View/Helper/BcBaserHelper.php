@@ -621,7 +621,9 @@ class BcBaserHelper extends AppHelper {
  * @manual
  */
 	public function element($name, $data = array(), $options = array()) {
-
+		if(!$data) {
+			$data = array();
+		}
 		$options = array_merge(array(
 			'subDir' => true
 			), $options);
