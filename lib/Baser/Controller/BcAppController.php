@@ -234,7 +234,7 @@ class BcAppController extends Controller {
 		// .html がある場合は削除
 		// $this->request->here は、ビューキャッシュの命名規則に影響する為、
 		// 同一ページによる複数キャッシュの生成を防ぐ
-		if($this->name == 'Pages') {
+		if(!BcUtil::isAdminSystem() && $this->name == 'Pages') {
 			if($this->request->params['pass'][count($this->request->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $this->request->here)) {
 				$this->request->here .= 'index';
 			}

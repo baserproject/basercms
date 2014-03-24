@@ -3380,7 +3380,12 @@ class DboSource extends DataSource {
 					$current = $oldSchemaPath;
 				}
 
-				$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path . $file, 'dropField' => $dropField));
+				try {
+					$result = $this->alterTableBySchema(array('oldPath' => $current, 'newPath' => $path . $file, 'dropField' => $dropField));
+				} catch(Exception $e) {
+					$this->log($e->getMessage());
+					$result = false;
+				}
 				if (!$oldSchemaPath) {
 					unlink($current);
 				}
@@ -3408,7 +3413,7 @@ class DboSource extends DataSource {
 		$path = dirname($filename);
 		$name = basename(Inflector::classify(basename($file)), '.php');
 		$Schema = ClassRegistry::init('CakeSchema');
-		$Schema->connection = $this->connection;
+		$Schema->connection = $this->configKeyName;
 
 		if (empty($path)) {
 			$path = $Schema->path;
@@ -3491,10 +3496,8 @@ class DboSource extends DataSource {
 
 		if (!empty($options['tables'][$basename])) {
 			$options = array('tables' => array($basename => $options['tables'][$basename]));
-		} else {
-			// テーブルが存在しなかった場合はtrueを返して終了
-			return true;
 		}
+		
 		$options = array_merge($options, array('name' => $name, 'file' => $file, 'path' => $path));
 
 		$result = $Schema->write($options);
@@ -3573,6 +3576,9 @@ class DboSource extends DataSource {
 		$old = $Schema->load(array('name' => $oldName, 'path' => $oldDir, 'file' => $oldFile));
 		$new = $Schema->load(array('name' => $newName, 'path' => $newDir, 'file' => $newFile));
 
+		if(!$old || !$new) {
+			return false;
+		}
 		return $this->alterTable(array('old' => $old, 'new' => $new, 'dropField' => $dropField));
 	}
 

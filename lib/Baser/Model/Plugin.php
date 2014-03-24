@@ -163,7 +163,7 @@ class Plugin extends AppModel {
 					}
 
 					$corePlugins = implode('|', Configure::read('BcApp.corePlugins'));
-					if (preg_match('/^(' . $corePlugins . ')/', $table, $matches)) {
+					if (preg_match('/^(' . $corePlugins . ')/', Inflector::camelize($table), $matches)) {
 						$pluginName = $matches[1];
 					}
 
