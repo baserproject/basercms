@@ -622,6 +622,8 @@ class Page extends AppModel {
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
 		$tag = array();
 		$tag[] = '<!-- BaserPageTagBegin -->';
+		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
+		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
 		$tag[] = '<?php $this->BcBaser->setTitle(\'' . $title . '\') ?>';
 		$tag[] = '<?php $this->BcBaser->setDescription(\'' . $description . '\') ?>';
 
