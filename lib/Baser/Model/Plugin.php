@@ -139,8 +139,8 @@ class Plugin extends AppModel {
 				$table = $matches[1];
 				$File = new File($path . DS . $file);
 				$data = $File->read();
-				if (preg_match('/public\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
-					$conType = $matches[1];
+				if (preg_match('/(public|var)\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
+					$conType = $matches[2];
 					$listSources = ${$conType . 'ListSources'};
 					$prefix = ${$conType . 'Prefix'};
 				} else {
