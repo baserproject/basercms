@@ -300,14 +300,12 @@ class BcAppModel extends Model {
 		}
 
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			foreach ($paths as $path) {
-				$path .=  $pluginName . DS . 'Config' . DS . 'data' . DS . 'default';
-				if (is_dir($path)) {
+			foreach ($paths as $_path) {
+				$_path .=  $pluginName . DS . 'Config' . DS . 'data' . DS . 'default';
+				if (is_dir($_path)) {
+					$path = $_path;
 					break;
 				}
-			}
-			if (!$path) {
-				return true;
 			}
 			if ($loadCsv) {
 				return $this->loadCsv($dbConfigName, $path);
