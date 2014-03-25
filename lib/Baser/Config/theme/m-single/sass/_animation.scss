@@ -1,0 +1,102 @@
+// CSS Animations
+// Currently only works in Webkit.
+//
+// Including this submodule sets following defaults for the mixins:
+//
+//     $default-animation-name      : none
+//     $default-animation-duration  : 1s
+//     $default-animation-function  : false
+//     $default-animation-delay     : false
+//     $default-animation-fill-mode : false
+//
+// Override them if you like. Timing-function and delay are set to false for browser defaults (ease, 0s).
+
+$default-animation-name: none !default;
+
+$default-animation-duration: 1s !default;
+
+$default-animation-function: false !default;
+
+$default-animation-delay: false !default;
+
+$default-animation-fill-mode: none !default;
+
+$default-animation-iteration-count: infinite;
+
+// One or more name to animation
+//
+// * for multiple, use a comma-delimited list
+// * also accepts "all" or "none"
+
+@mixin animation-name($names: $default-animation-name) {
+  @include experimental(animation-name, unquote($names),
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+// One or more durations in seconds
+//
+// * for multiple, use a comma-delimited list
+// * these durations will affect the properties in the same list position
+
+@mixin animation-duration($duration: $default-animation-duration) {
+  @if type-of($duration) == string { $duration: unquote($duration); }
+  @include experimental(animation-duration, $duration,
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+// One or more timing functions
+//
+// * [ ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(x1, y1, x2, y2)]
+// * For multiple, use a comma-delimited list
+// * These functions will effect the properties in the same list position
+
+@mixin animation-timing-function($function: $default-animation-function) {
+  @include experimental(animation-timing-function, unquote($function),
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+// One or more animation-delays in seconds
+//
+// * for multiple, use a comma-delimited list
+// * these delays will effect the properties in the same list position
+
+@mixin animation-delay($delay: $default-animation-delay) {
+  @if type-of($delay) == string { $delay: unquote($delay); }
+  @include experimental(animation-delay, $delay,
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+// One or more fill mode
+//
+// * [none | forwards | backwards | both]
+// * For multiple, use a comma-delimited list
+
+@mixin animation-fill-mode($fill-mode: $default-animation-fill-mode) {
+  @include experimental(animation-fill-mode, unquote($fill-mode),
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+@mixin animation-iteration-count($count: $default-animation-iteration-count) {
+  @include experimental(animation-iteration-count, unquote($count),
+    -moz, -webkit, -o, -ms, not -khtml, official
+  );
+}
+
+// animation all-in-one shorthand
+
+@mixin single-animation(
+  $name: $default-animation-name,
+  $duration: $default-animation-duration,
+  $function: $default-animation-function,
+  $delay: $default-animation-delay
+) {
+  @include animation-name($name);
+  @include animation-duration($duration);
+  @if $function { @include animation-timing-function($function); }
+  @if $delay { @include animation-delay($delay); }
+}
